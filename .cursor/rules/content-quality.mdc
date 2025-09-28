@@ -1,0 +1,32 @@
+---
+description: Ensure high-quality interview preparation content
+globs: "*.md"
+alwaysApply: true
+---
+
+# Content Quality Standards
+
+## Russian Translation Quality
+- Provide natural, fluent Russian translations
+- Maintain technical accuracy and appropriate terminology
+- Use contextually appropriate language for Russian speakers
+- Ensure cultural context is suitable for Russian interview preparation
+
+## English Content Standards
+- Write clear, professional English suitable for technical interviews
+- Use standard interview terminology and conventions
+- Include code examples when relevant to the solution
+- Explain concepts at an appropriate technical level
+
+## Code Standards
+- Use English for all code identifiers and comments
+- Include Russian comments only when they add significant value
+- Provide clean, readable, and well-commented code examples
+- Include complexity analysis (Big O notation) for algorithms
+- Use appropriate programming languages for the context
+
+## Content Structure
+- Keep answers complete yet skimmable with clear headings and lists
+- Include follow-up questions and edge cases where relevant
+- Provide external references and source links
+- Maintain consistent formatting throughout the vault

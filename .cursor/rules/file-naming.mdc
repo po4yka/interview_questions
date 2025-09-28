@@ -1,0 +1,27 @@
+---
+description: Enforce proper file naming conventions for interview content
+globs: "*.md"
+alwaysApply: true
+---
+
+# File Naming Convention Rules
+
+## Naming Patterns (MANDATORY)
+- **Questions**: `q-<slug>--<topic>--<difficulty>.md`
+  - Example: `q-two-sum--algorithms--easy.md`
+- **Concepts**: `c-<slug>.md`
+  - Example: `c-hash-map.md`
+- **MOCs**: `moc-<topic>.md`
+  - Example: `moc-algorithms.md`
+
+## Naming Rules
+- Use kebab-case for all filenames
+- Keep filenames short, descriptive, and stable
+- Use English only for filenames
+- Never include numbers in folder names
+- Language variants handled via `aliases` in YAML, not filename changes
+
+## Folder Structure
+- Files belong to exactly one topic folder
+- Use tags/links for cross-cutting concerns
+- Keep hierarchy shallow - rely on YAML/tags/links for organization

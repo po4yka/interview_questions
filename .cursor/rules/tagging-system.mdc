@@ -1,0 +1,27 @@
+---
+description: Enforce consistent English-only tagging system
+globs: "*.md"
+alwaysApply: true
+---
+
+# Tagging System Rules
+
+## Tag Categories
+- **Technical**: `arrays`, `hash-map`, `two-pointers`, `greedy`, `dp`, `graphs`
+- **Platform**: `android/compose`, `android/lifecycle`, `android/architecture`
+- **Difficulty**: `difficulty/easy`, `difficulty/medium`, `difficulty/hard`
+- **Language**: `lang/kotlin`, `lang/java`, `lang/python`
+- **Source**: `leetcode`, `interviewbit`, `system-design`
+
+## Tagging Rules (CRITICAL)
+- Use **English only** for all tags
+- Keep tags short, descriptive, and reusable
+- Use namespaces for controlled vocabularies: `difficulty/easy`, `lang/kotlin`, `platform/android`
+- Do NOT duplicate folder names as tags unless useful for search
+- No leading `#` in YAML tags (use array format: `[tag1, tag2]`)
+
+## Tag Consistency
+- Be consistent with existing tag usage across the vault
+- Use kebab-case for multi-word tags: `hash-map`, `two-pointers`
+- Maintain controlled vocabularies with namespaces
+- Periodically audit and merge near-duplicates (e.g., `hashmap` vs `hash-map`)
