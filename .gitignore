@@ -6,5 +6,7 @@
 .obsidian/community-plugins.json
 .obsidian/graph.json
 .obsidian/canvas.json
+
 .trash/
 
+.obsidian/plugins/**
