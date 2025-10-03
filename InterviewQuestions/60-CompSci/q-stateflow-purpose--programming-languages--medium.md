@@ -1,0 +1,78 @@
+---
+id: 20251003140806
+title: StateFlow purpose / Назначение StateFlow
+aliases: []
+
+# Classification
+topic: programming-languages
+subtopics: [kotlin, coroutines, flow]
+question_kind: theory
+difficulty: medium
+
+# Language & provenance
+original_language: ru
+language_tags: [en, ru]
+source: https://t.me/easy_kotlin/266
+source_note: easy_kotlin Telegram channel
+
+# Workflow & relations
+status: draft
+moc: moc-kotlin
+related:
+  - c-kotlin-coroutines
+  - c-kotlin-flow
+  - c-reactive-programming
+
+# Timestamps
+created: 2025-10-03
+updated: 2025-10-03
+
+# Tags
+tags: [kotlin, coroutines, stateflow, reactive, flow, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
+---
+
+# Question (EN)
+> What is StateFlow used for
+
+# Вопрос (RU)
+> Для чего нужен StateFlow
+
+---
+
+## Answer (EN)
+
+StateFlow is a special type of data flow used in Kotlin and Kotlin Coroutines library. It is designed for state management and real-time data transmission in reactive applications.
+
+StateFlow is based on the data flow concept, similar to LiveData in Android, but with improved coroutine support.
+
+**Main StateFlow features:**
+- **Hot flow**: Always active and stores the last state value
+- **Coroutine support**: Integrated with Kotlin Coroutines for async code
+- **Mutable state**: Through `value` or `emit()` methods
+- **Reactive**: Observers automatically receive updates when state changes
+
+**StateFlow is needed for:**
+- Reactive programming patterns
+- Predictable state management
+- Better integration with Kotlin Coroutines compared to LiveData
+- Type-safe state observing
+
+## Ответ (RU)
+
+StateFlow – это специальный тип потока данных, используемый в Kotlin и библиотеке Kotlin Coroutines. Он предназначен для управления состоянием и передачи данных в реальном времени в реактивных приложениях. StateFlow основан на концепции потоков данных, аналогичной LiveData в Android, но с улучшенной поддержкой сопрограмм. Основные особенности StateFlow: Горячий поток, который всегда активен и хранит последнее значение состояния. Поддержка сопрограмм, интегрирован с Kotlin Coroutines для асинхронного кода. Изменяемое состояние через методы value или emit. StateFlow нужен для реактивного программирования, предсказуемого состояния и лучшей интеграции с Kotlin Coroutines по сравнению с LiveData.
+
+---
+
+## Follow-ups
+- What's the difference between StateFlow and SharedFlow?
+- How does StateFlow compare to LiveData?
+- When should you use MutableStateFlow vs StateFlow?
+
+## References
+- [[c-kotlin-coroutines]]
+- [[c-kotlin-flow]]
+- [[c-reactive-programming]]
+- [[moc-kotlin]]
+
+## Related Questions
+- [[q-flow-flatmap-operator--programming-languages--easy]]

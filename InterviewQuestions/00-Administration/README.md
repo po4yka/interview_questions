@@ -2,6 +2,12 @@
 
 A complete, **bilingual (EN/RU)**, personal Obsidian vault for technical interview preparation across **Algorithms/LeetCode**, **System Design**, **Android**, and **CS** fundamentals. This README describes the **normative rules**, folder layout, metadata schema, templates, tagging and linking conventions, MOCs, Dataview queries, LLM-assisted workflows, and maintenance practices.
 
+> **For LLM Agents**:
+> - **Cursor AI**: Rules are in `../.cursorrules` (auto-loaded)
+> - **General agents**: [AGENTS.md](AGENTS.md) for task instructions
+> - **Quick reference**: [AGENT-CHECKLIST.md](AGENT-CHECKLIST.md) for validation
+> - **Gemini CLI**: [GEMINI.md](GEMINI.md) for command-line workflows
+
 ---
 
 ## 0) Design Goals & Non‑Goals
@@ -36,20 +42,22 @@ A complete, **bilingual (EN/RU)**, personal Obsidian vault for technical intervi
 > Folders encode coarse topics; use YAML/tags/links for everything else.
 
 ```
-📄 README.md (this file)
-📄 Homepage.md
-📁 Concepts            # theory/glossary/definitions referenced across notes
-📁 Algorithms          # coding problems incl. LeetCode-style
-📁 System-Design       # large-scale design, components, trade-offs
-📁 Android             # platform APIs, lifecycle, Compose, perf, tooling
-📁 Behavioral          # optional, non-technical interview topics
-📁 MOCs                # Maps of Content (hub/overview notes)
-📁 Archive             # retired/duplicates/obsolete
+📄 Homepage.md                # vault entry point
+📁 _templates                 # note templates for Q&A, concepts, MOCs
+📁 00-Administration          # vault documentation, README, taxonomy
+📁 10-Concepts                # theory/glossary/definitions referenced across notes
+📁 20-Algorithms              # coding problems incl. LeetCode-style
+📁 30-System-Design           # large-scale design, components, trade-offs
+📁 40-Android                 # platform APIs, lifecycle, Compose, perf, tooling
+📁 50-Behavioral              # optional, non-technical interview topics
+📁 60-CompSci                 # CS fundamentals (OS, networking, databases, etc.)
+📁 90-MOCs                    # Maps of Content (hub/overview notes)
 ```
 
 **Rules:**
 * A file **belongs to exactly one** top-level topic folder.
-* Use **Concepts** for reusable theory; **MOCs** for hub pages per topic.
+* Use **10-Concepts** for reusable theory; **90-MOCs** for hub pages per topic.
+* Folders use numeric prefixes (00, 10, 20, etc.) for consistent sorting.
 
 ---
 
@@ -169,14 +177,15 @@ difficulty: easy                   # easy | medium | hard
 # Language & provenance
 original_language: en              # en | ru
 language_tags: [en, ru]            # which languages are present here
-sources:
-  - url: https://leetcode.com/problems/two-sum/
-    note: Original statement
+source: https://leetcode.com/problems/two-sum/
+source_note: LeetCode original problem
 
 # Workflow & relations
 status: draft                      # draft | reviewed | ready | retired
-moc: [[moc-algorithms]]
-related: [ [ [c-hash-map] ] ]      # links to concepts or other Q&As
+moc: moc-algorithms                # without brackets
+related:                           # list without brackets
+  - c-hash-map
+  - c-array
 
 # Timestamps (ISO8601)
 created: 2025-10-03
@@ -287,7 +296,7 @@ SORT file.name ASC
 ## By Technique
 
 ```dataview
-LIST FROM "Algorithms"
+LIST FROM "20-Algorithms"
 WHERE contains(tags, "two-pointers")
 ```
 
@@ -319,7 +328,7 @@ WHERE contains(tags, "two-pointers")
 **All LeetCode by difficulty**
 ```dataview
 TABLE difficulty, subtopics, status
-FROM "Algorithms"
+FROM "20-Algorithms"
 WHERE contains(tags, "leetcode")
 SORT difficulty ASC, file.name ASC
 ````
@@ -328,7 +337,7 @@ SORT difficulty ASC, file.name ASC
 
 ```dataview
 LIST file.link
-FROM "Android"
+FROM "40-Android"
 WHERE contains(tags, "android/ui-compose")
 ```
 
@@ -358,7 +367,7 @@ SORT updated DESC
 * **Statuses**: `draft` → `reviewed` → `ready` (→ `retired` in Archive).
 * **Timestamps**: Update `updated` on meaningful edits.
 * **Renames**: Prefer `aliases` over filename changes; if renaming, fix backlinks.
-* **Archive**: Move deprecated/duplicates to `99-Archive/` with `status: retired`.
+* **Archive**: Move deprecated/duplicates to `99-Archive/` (when created) with `status: retired`.
 * **Tag Health**: Periodically dedupe (`hashmap` vs `hash-map`) and standardize.
 
 **Quality Checklist (per note)**
