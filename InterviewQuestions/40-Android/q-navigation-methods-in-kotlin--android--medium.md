@@ -1,45 +1,24 @@
 ---
-id: 202510031412
-title: What navigation methods exist in Kotlin / Какие есть способы навигации в Kotlin
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, navigation]
-question_kind: theory
+tags:
+  - navigation
+  - Jetpack Navigation Component
+  - FragmentTransaction
+  - Intent
+  - NavController
+  - NavHostFragment
+  - easy_kotlin
+  - android/navigation
+  - android/ui
+  - android
+  - ui
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/588
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-navigation
-  - c-jetpack-navigation
-  - c-android-intent
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [navigation, Jetpack Navigation Component, FragmentTransaction, Intent, NavController, NavHostFragment, difficulty/medium, easy_kotlin, lang/ru, android/navigation, android/ui]
 ---
 
-# Question (EN)
-> What navigation methods exist in Kotlin
+# Какие есть способы навигации в Kotlin?
 
-# Вопрос (RU)
-> Какие есть способы навигации в Kotlin
+**English**: What navigation methods exist in Kotlin?
 
----
-
-## Answer (EN)
+## Answer
 
 Android provides multiple navigation approaches, from traditional Activity-based navigation to modern Navigation Component. The choice depends on app architecture, complexity, and requirements.
 
@@ -346,25 +325,7 @@ navView.setupWithNavController(navController)
 4. **Handle back navigation** properly
 5. **Test navigation flows** thoroughly
 
-## Ответ (RU)
+## Ответ
 
 Способы навигации в Kotlin: Jetpack Navigation Component — современный способ навигации, основанный на графе навигации и безопасных аргументах. Позволяет легко переходить между фрагментами и активностями, а также управлять состоянием навигации. FragmentTransaction — ручной способ добавления, замены и удаления фрагментов. Navigation через Intent — используется для переключения между активностями или фрагментами внутри приложения или между приложениями. Explicit и Implicit Intents — явные и неявные намерения для навигации между компонентами. NavHostFragment и NavController — связаны с использованием графа навигации для управления фрагментами в приложениях Android.
 
----
-
-## Follow-ups
-- How does Navigation Component handle back stack compared to FragmentTransaction?
-- What are the benefits of using Safe Args over Bundle?
-- How do you implement nested navigation graphs?
-
-## References
-- [[c-android-navigation]]
-- [[c-jetpack-navigation]]
-- [[c-android-intent]]
-- [[c-android-fragments]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-how-navigation-is-implemented-in-android--android--medium]]
-- [[q-navigation-methods-in-android--android--medium]]
-- [[q-pass-data-between-fragments--android--medium]]

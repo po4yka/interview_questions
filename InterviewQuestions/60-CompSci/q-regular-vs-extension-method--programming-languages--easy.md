@@ -1,43 +1,19 @@
 ---
-id: 20251003141217
-title: Regular vs extension method / Обычный и extension метод
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, extension-functions, functions]
-question_kind: theory
+tags:
+  - kotlin
+  - extension-functions
+  - functions
+  - static-methods
+  - easy_kotlin
+  - programming-languages
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1435
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-extensions
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, extension-functions, functions, static-methods, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What is the difference between a regular method and an extension method in Kotlin
+# В чём отличие обычного метода от extension метода в Kotlin
 
-# Вопрос (RU)
-> В чём отличие обычного метода от extension метода в Kotlin
+**English**: What is the difference between a regular method and an extension method in Kotlin?
 
----
-
-## Answer (EN)
+## Answer
 
 ### Regular Method (Member Function)
 
@@ -302,21 +278,7 @@ class Config {
 - Can be overridden
 - Part of class bytecode
 
-## Ответ (RU)
+## Ответ
 
 Extension-функция выглядит как будто добавлена в класс, но на самом деле это статическая функция, которой не требуется менять сам класс. Она даёт синтаксический сахар, не добавляя нового в байткод класса
 
----
-
-## Follow-ups
-- Can extensions be overridden?
-- How to call extension from Java?
-- What are extension properties?
-
-## References
-- [[c-kotlin-extensions]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-extensions-concept--programming-languages--easy]]
-- [[q-kotlin-extensions-basics--programming-languages--easy]]

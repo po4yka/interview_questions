@@ -1,18 +1,14 @@
 ---
-id: "20251003141627"
-title: "Where does the repeated call of composable function come from"
-slug: "where-does-the-repeated-call-of-composable-function-come-from"
-tags: ["Jetpack Compose", "recomposition"]
-topic: "android"
-subtopics: ["android", "ui", "jetpack-compose", "recomposition"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1450"
+tags:
+  - Jetpack Compose
+  - recomposition
+  - android
+  - ui
+  - jetpack-compose
+difficulty: medium
 ---
 
-# Where does the repeated call of composable function come from
+# Where does the repeated call of composable function come from?
 
 ## Question (RU)
 

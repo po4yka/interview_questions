@@ -1,18 +1,14 @@
 ---
-id: "20251003141602"
-title: "What does ViewGroup inherit from"
-slug: "what-does-viewgroup-inherit-from"
-tags: ["viewgroup", "inheritance"]
-topic: "android"
-subtopics: ["android", "ui", "views", "viewgroup"]
-moc: "moc-android"
-status: "draft"
-difficulty: "easy"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1173"
+tags:
+  - viewgroup
+  - inheritance
+  - android
+  - ui
+  - views
+difficulty: medium
 ---
 
-# What does ViewGroup inherit from
+# What does ViewGroup inherit from?
 
 ## Question (RU)
 

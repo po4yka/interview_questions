@@ -1,18 +1,15 @@
 ---
-id: "20251003141619"
-title: "How to draw UI without xml"
-slug: "how-to-draw-ui-without-xml"
-tags: ["Jetpack Compose", "View"]
-topic: "android"
-subtopics: ["android", "ui", "jetpack-compose", "views"]
-moc: "moc-android"
-status: "draft"
-difficulty: "easy"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1356"
+tags:
+  - Jetpack Compose
+  - View
+  - android
+  - ui
+  - jetpack-compose
+  - views
+difficulty: medium
 ---
 
-# How to draw UI without xml
+# How to draw UI without xml?
 
 ## Question (RU)
 

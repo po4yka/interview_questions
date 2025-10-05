@@ -1,19 +1,7 @@
 ---
-id: "20251003141512"
-title: "What can be done through Composer?"
-slug: "chto-mozhno-delat-cherez-composer"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - jetpack-compose
-  - compose
-  - composer
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/939"
+difficulty: medium
 ---
 
 # What can be done through Composer?

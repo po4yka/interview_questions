@@ -1,45 +1,25 @@
 ---
-id: 202510031411302
-title: What is known about RecyclerView / Что известно про RecyclerView
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, recyclerview, layouts, views]
-question_kind: practical
+tags:
+  - recyclerview
+  - adapter
+  - layoutmanager
+  - viewholder
+  - easy_kotlin
+  - android/recyclerview
+  - android/layouts
+  - android/views
+  - android
+  - ui
+  - layouts
+  - views
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/60
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-recyclerview
-  - c-android-adapter
-  - c-android-viewholder
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [recyclerview, adapter, layoutmanager, viewholder, difficulty/easy, easy_kotlin, lang/ru, android/recyclerview, android/layouts, android/views]
 ---
 
-# Question (EN)
-> What is known about RecyclerView
+# Что известно про RecyclerView?
 
-# Вопрос (RU)
-> Что известно про RecyclerView
+**English**: What is known about RecyclerView?
 
----
-
-## Answer (EN)
+## Answer
 
 RecyclerView is a powerful UI component provided by the Android Support Library (or AndroidX in newer versions), designed for displaying dynamic lists of elements. It was introduced as an improved and more flexible replacement for ListView, providing better performance and greater flexibility in creating complex list layouts.
 
@@ -130,24 +110,7 @@ class MyAdapter(private val myDataset: Array<String>) :
 
 RecyclerView is a flexible and performant component for displaying data collections, supporting efficient view reuse, various layouts, animations, and custom decoration settings, making it an indispensable tool for creating modern mobile applications.
 
-## Ответ (RU)
+## Ответ
 
 RecyclerView — это мощный компонент пользовательского интерфейса, предоставляемый библиотекой Android Support Library или AndroidX в более новых версиях, предназначенный для отображения динамических списков элементов. Он был представлен как улучшенная и более гибкая замена ListView, предоставляя лучшую производительность и большую гибкость в создании сложных макетов списков. Основные особенности: 1. Эффективное повторное использование вью: Использует концепцию view holders для эффективного повторного использования элементов списка при прокрутке. Это повышает производительность для больших списков поскольку количество создаваемых объектов вью ограничивается только теми которые видны пользователю. 2. Гибкое отображение элементов: Поддерживает различные компоновки включая линейную, табличную и пользовательские компоновки благодаря LayoutManager API. Это позволяет создавать списки с различными структурами отображения включая сетки и горизонтальные списки. 3. Анимация изменений: Предоставляет встроенную поддержку анимаций для операций добавления удаления и перемещения элементов что позволяет создавать динамичные интерфейсы без значительных затрат времени на реализацию анимаций. 4. Декорации и разделители: С помощью класса ItemDecoration можно легко добавлять разделители между элементами или выполнять другие декоративные настройки. 5. Улучшенная обработка событий нажатий: В отличие от ListView, RecyclerView не имеет встроенного метода для обработки нажатий на элементы Это предоставляет больше гибкости позволяя разработчикам самостоятельно определять и управлять событиями нажатий с учетом специфики своего приложения. Ключевые компоненты: Adapter отвечает за связь данных с вьюхолдерами а также за создание вьюхолдеров. LayoutManager управляет расположением элементов внутри RecyclerView определяя таким образом его общий внешний вид. ViewHolder содержит ссылки на все вью которые необходимо заполнить данными в элементе списка что упрощает доступ к ним и улучшает производительность за счет повторного использования. Пример кода: class MyAdapter(private val myDataset Array<String>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() { class MyViewHolder(val textView TextView) : RecyclerView.ViewHolder(textView) override fun onCreateViewHolder(parent ViewGroup, viewType Int): MyViewHolder { val textView = LayoutInflater.from(parent.context).inflate(R.layout.my_text_view, parent, false) as TextView return My.ViewHolder(textView) } override fun onBindViewHolder(holder MyViewHolder, position Int) { holder.textView.text = myDataset[position] } override fun getItemCount() = myDataset.size } RecyclerView — это гибкий и производительный компонент для отображения коллекций данных поддерживающий эффективное повторное использование вьюх различные компоновки анимации и пользовательскую настройку декораций что делает его незаменимым инструментом для создания современных мобильных приложений
 
----
-
-## Follow-ups
-- How do you implement different view types in a RecyclerView adapter?
-- What is DiffUtil and how does it improve RecyclerView performance?
-- How do you implement pagination with RecyclerView?
-
-## References
-- [[c-android-recyclerview]]
-- [[c-android-adapter]]
-- [[c-android-viewholder]]
-- [[c-android-layoutmanager]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-problems-can-there-be-with-list-items--android--easy]]
-- [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]

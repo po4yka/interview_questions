@@ -1,38 +1,12 @@
 ---
-id: 20251003142003
-title: "SharedFlow vs StateFlow Differences"
-question_ru: "Что такое SharedFlow и чем он отличается от StateFlow"
-question_en: "What is SharedFlow and how does it differ from StateFlow"
-answer_ru: "SharedFlow — это горячий поток, который передаёт данные нескольким подписчикам в реальном времени и может буферизировать значения. StateFlow — поток, который всегда хранит одно последнее значение и отправляет его подписчикам только при изменении состояния."
-answer_en: "SharedFlow is a hot stream that transmits data to multiple subscribers in real-time and can buffer values. StateFlow is a stream that always stores one last value and sends it to subscribers only when the state changes."
 tags:
-  - coroutines
-  - kotlin
-  - async
-  - difficulty-easy
-  - easy_kotlin
-  - lang/ru
-  - SharedFlow
-  - StateFlow
-topic: programming-languages
-subtopics:
-  - kotlin
-  - coroutines
-  - flow
+  - programming-languages
 difficulty: easy
-question_kind: theory
-moc: moc-kotlin
-status: draft
-source: https://t.me/easy_kotlin/837
 ---
 
 # SharedFlow vs StateFlow Differences
 
-## Question (EN)
-
-What is SharedFlow and how does it differ from StateFlow in Kotlin Coroutines?
-
-## Answer (EN)
+## Answer
 
 **SharedFlow** is a hot stream that transmits data to multiple subscribers in real-time and can buffer values.
 
@@ -372,6 +346,6 @@ val converted: StateFlow<Int> = sharedFlow.stateIn(
 
 Что такое SharedFlow и чем он отличается от StateFlow
 
-## Ответ (RU)
+## Ответ
 
 SharedFlow — это горячий поток, который передаёт данные нескольким подписчикам в реальном времени и может буферизировать значения. StateFlow — поток, который всегда хранит одно последнее значение и отправляет его подписчикам только при изменении состояния.

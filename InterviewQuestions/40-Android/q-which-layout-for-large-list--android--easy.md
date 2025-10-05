@@ -1,45 +1,20 @@
 ---
-id: 202510031405
-title: Which layout to choose for a list with a large number of elements / Какой layout выбрать для списка из большого количества элементов
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, recyclerview]
-question_kind: practical
+tags:
+  - recyclerview
+  - layout
+  - easy_kotlin
+  - android/recyclerview
+  - android/ui
+  - android
+  - ui
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/479
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-recyclerview
-  - c-android-listview
-  - c-android-adapter
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [recyclerview, layout, difficulty/easy, easy_kotlin, lang/ru, android/recyclerview, android/ui]
 ---
 
-# Question (EN)
-> Which layout to choose for a list with a large number of elements
+# Какой layout выбрать для списка из большого количества элементов?
 
-# Вопрос (RU)
-> Какой layout выбрать для списка из большого количества элементов
+**English**: Which layout to choose for a list with a large number of elements?
 
----
-
-## Answer (EN)
+## Answer
 
 For displaying lists with a large number of elements in Android, you should use **RecyclerView**. It is the most efficient and recommended component for displaying large datasets in list or grid format.
 
@@ -258,25 +233,7 @@ fun MyList(items: List<String>) {
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 Для списка из большого количества элементов следует использовать RecyclerView. Это наиболее эффективный и рекомендуемый компонент для отображения больших данных в виде списка или сетки в Android
 
----
-
-## Follow-ups
-- How does RecyclerView's ViewHolder pattern improve performance?
-- What is DiffUtil and why is it important for large lists?
-- How do you implement pagination with RecyclerView?
-
-## References
-- [[c-android-recyclerview]]
-- [[c-android-adapter]]
-- [[c-android-viewholder]]
-- [[c-android-diffutil]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-is-known-about-recyclerview--android--easy]]
-- [[q-what-does-itemdecoration-do--android--medium]]
-- [[q-how-animations-work-in-recyclerview--android--medium]]

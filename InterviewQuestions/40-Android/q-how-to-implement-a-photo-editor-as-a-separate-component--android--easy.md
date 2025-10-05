@@ -1,45 +1,25 @@
 ---
-id: 202510031411317
-title: How to implement a photo editor as a separate component / Как реализовать редактор фотографий в качестве отдельного компонента
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, views, fragments]
-question_kind: practical
+tags:
+  - imageview
+  - bitmap
+  - canvas
+  - fragment
+  - activity
+  - easy_kotlin
+  - android/views
+  - android/fragments
+  - android
+  - ui
+  - views
+  - fragments
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/361
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-imageview
-  - c-android-bitmap
-  - c-android-canvas
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [imageview, bitmap, canvas, fragment, activity, difficulty/easy, easy_kotlin, lang/ru, android/views, android/fragments]
 ---
 
-# Question (EN)
-> How to implement a photo editor as a separate component
+# Как реализовать редактор фотографий в качестве отдельного компонента?
 
-# Вопрос (RU)
-> Как реализовать редактор фотографий в качестве отдельного компонента
+**English**: How to implement a photo editor as a separate component?
 
----
-
-## Answer (EN)
+## Answer
 
 Implementing a photo editor in Android as a separate component requires several steps, including creating a user interface for editing, image processing, and the ability to integrate this component into other parts of your application.
 
@@ -459,23 +439,7 @@ To implement a photo editor as a separate component:
 5. **Handle memory** properly by recycling bitmaps
 6. **Save edited images** to MediaStore or cache
 
-## Ответ (RU)
+## Ответ
 
 Реализация редактора фотографий в Android как отдельного компонента требует нескольких шагов, включающих создание пользовательского интерфейса для редактирования, обработку изображений, а также возможность интеграции этого компонента в другие части вашего приложения. 1. Создание пользовательского интерфейса: Пример XML-разметки с ImageView и кнопками для редактирования. 2. Обработка изображений: Использование Bitmap и Canvas или сторонних библиотек для операций с изображениями. Пример кода на Kotlin показывает функции поворота и применения фильтров к изображению. 3. Интеграция компонента: Создание Activity или Fragment для использования редактора. 4. Обработка разных функций редактирования: Интеграция библиотек, таких как GPUImage для фильтров и Ucrop для обрезки.
 
----
-
-## Follow-ups
-- How do you implement undo/redo functionality in a photo editor?
-- What are the best practices for handling large images to avoid OOM errors?
-- How do you implement drawing/annotation features on images?
-
-## References
-- [[c-android-bitmap]]
-- [[c-android-canvas]]
-- [[c-android-imageview]]
-- [[c-android-fragments]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium]]

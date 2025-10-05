@@ -1,45 +1,17 @@
 ---
-id: 202510031411314
-title: When is it better to use png and webp, and when svg / Когда лучше использовать png и webp, а когда svg
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui]
-question_kind: theory
+tags:
+  - image-formats
+  - easy_kotlin
+  - android
+  - ui
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/315
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-image-formats
-  - c-android-vector-drawables
-  - c-android-resources
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [image-formats, difficulty/easy, easy_kotlin, lang/ru]
 ---
 
-# Question (EN)
-> When is it better to use png and webp, and when svg
+# Когда лучше использовать png и webp, а когда svg?
 
-# Вопрос (RU)
-> Когда лучше использовать png и webp, а когда svg
+**English**: When is it better to use png and webp, and when svg?
 
----
-
-## Answer (EN)
+## Answer
 
 Choosing the right image format is important for app performance, file size, and visual quality. Here's when to use each format:
 
@@ -119,6 +91,7 @@ res/
 
 **Conversion command:**
 ```bash
+
 # Convert PNG to WebP (lossless)
 cwebp -lossless input.png -o output.webp
 
@@ -278,6 +251,7 @@ Glide.with(context)
 #### 4. Convert PNG to WebP for Release
 
 ```bash
+
 # Find and convert all PNGs to WebP
 find ./res -name "*.png" -exec cwebp -q 90 {} -o {}.webp \;
 ```
@@ -293,23 +267,7 @@ For modern Android apps, the recommended approach is:
 2. **WebP** for all photographic content and complex images
 3. **PNG** only when WebP is not supported or for legacy compatibility
 
-## Ответ (RU)
+## Ответ
 
 PNG: для простых изображений с прозрачностью и высокой детализацией. WebP: для фотографий и сложных изображений с сжатием без потерь или с потерями. SVG: для векторных изображений, требующих масштабирования без потери качества.
 
----
-
-## Follow-ups
-- How do you convert existing PNG assets to WebP in an Android project?
-- What are the performance implications of using complex vector drawables?
-- How do you implement adaptive icons for Android launchers?
-
-## References
-- [[c-android-image-formats]]
-- [[c-android-vector-drawables]]
-- [[c-android-webp]]
-- [[c-android-resources]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium]]

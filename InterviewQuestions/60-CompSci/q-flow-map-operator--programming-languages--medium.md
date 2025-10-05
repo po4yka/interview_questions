@@ -1,38 +1,12 @@
 ---
-id: 20251003142001
-title: "Flow Map Operator for Type Transformation"
-question_ru: "Чем воспользоваться чтобы преобразовать внутри одного потока данных данные из одного типа в другой"
-question_en: "What to use to transform data from one type to another within a single data stream"
-answer_ru: "Используйте оператор map. Преобразует каждый элемент исходного потока в новый элемент другого типа."
-answer_en: "Use the map operator. It transforms each element of the source stream into a new element of another type."
 tags:
-  - coroutines
-  - kotlin
-  - async
-  - difficulty-medium
-  - easy_kotlin
-  - lang/ru
-  - map
-  - flow
-topic: programming-languages
-subtopics:
-  - kotlin
-  - coroutines
-  - flow
+  - programming-languages
 difficulty: medium
-question_kind: theory
-moc: moc-kotlin
-status: draft
-source: https://t.me/easy_kotlin/789
 ---
 
 # Flow Map Operator for Type Transformation
 
-## Question (EN)
-
-What to use to transform data from one type to another within a single data stream in Kotlin Flow?
-
-## Answer (EN)
+## Answer
 
 Use the **map** operator. It transforms each element of the source stream into a new element of another type.
 
@@ -177,6 +151,6 @@ flowOf(1, 2, 3, 4)
 
 Чем воспользоваться чтобы преобразовать внутри одного потока данных данные из одного типа в другой
 
-## Ответ (RU)
+## Ответ
 
 Используйте оператор map. Преобразует каждый элемент исходного потока в новый элемент другого типа.

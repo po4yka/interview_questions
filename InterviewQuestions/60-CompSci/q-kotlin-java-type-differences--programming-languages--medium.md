@@ -1,44 +1,23 @@
 ---
-id: 20251003141106
-title: Kotlin vs Java type differences / Различия типов в Kotlin и Java
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, java, type-system]
-question_kind: theory
+tags:
+  - kotlin
+  - java
+  - types
+  - comparison
+  - null-safety
+  - type-inference
+  - collections
+  - easy_kotlin
+  - programming-languages
+  - type-system
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/655
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-java-differences
-  - c-type-systems
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, java, types, comparison, null-safety, type-inference, collections, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> How do Kotlin types differ from Java types
+# Чем типы в Kotlin отличаются от типов в Java
 
-# Вопрос (RU)
-> Чем типы в Kotlin отличаются от типов в Java
+**English**: How do Kotlin types differ from Java types?
 
----
-
-## Answer (EN)
+## Answer
 
 | Feature | Kotlin | Java |
 |---------|--------|------|
@@ -77,27 +56,12 @@ if (obj instanceof String) {
 
 **Key differences:**
 1. **Kotlin**: Null safety by default
-2. **Kotlin**: Immutable/mutable collections distinction  
+2. **Kotlin**: Immutable/mutable collections distinction
 3. **Kotlin**: Auto-generated methods for data classes
 4. **Kotlin**: Better type inference
 5. **Kotlin**: Smart casts after type checks
 
-## Ответ (RU)
+## Ответ
 
 В Kotlin по умолчанию переменные не могут быть null, в отличие от Java где все объекты могут быть null...
 
----
-
-## Follow-ups
-- How does Kotlin handle primitive types internally?
-- What are platform types?
-- How to interop between Kotlin and Java types?
-
-## References
-- [[c-kotlin-java-differences]]
-- [[c-type-systems]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-type-system-features--programming-languages--medium]]
-- [[q-kotlin-null-safety--programming-languages--medium]]

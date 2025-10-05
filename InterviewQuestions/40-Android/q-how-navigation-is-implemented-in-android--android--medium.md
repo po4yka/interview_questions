@@ -1,44 +1,20 @@
 ---
-id: 202510031413
-title: How is navigation implemented in Android / Каким образом осуществляется навигация в Android
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, navigation]
-question_kind: theory
+tags:
+  - navigation
+  - gestures
+  - easy_kotlin
+  - android/navigation
+  - android/ui
+  - android
+  - ui
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/603
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-navigation
-  - c-android-system-navigation
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [navigation, gestures, difficulty/medium, easy_kotlin, lang/ru, android/navigation, android/ui]
 ---
 
-# Question (EN)
-> How is navigation implemented in Android
+# Каким образом осуществляется навигация в Android?
 
-# Вопрос (RU)
-> Каким образом осуществляется навигация в Android
+**English**: How is navigation implemented in Android?
 
----
-
-## Answer (EN)
+## Answer
 
 Navigation in Android is implemented through several methods, both at the system level (user navigation between apps) and application level (in-app navigation). The approach depends on Android version and UI patterns.
 
@@ -304,23 +280,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 Навигация в Android осуществляется несколькими способами, в зависимости от версии системы и используемых приложений. Основные методы включают жесты (свайпы, тапы), нажатия на экранные кнопки (на старых версиях), а также использование виртуальных или физических кнопок навигации (Домой, Назад, Последние приложения). Более современные версии Android полагаются преимущественно на жесты для навигации между приложениями и внутри них.
 
----
-
-## Follow-ups
-- How do you implement predictive back gesture correctly?
-- What are the differences between handling navigation on different Android versions?
-- How do you test navigation flows with gesture navigation enabled?
-
-## References
-- [[c-android-navigation]]
-- [[c-android-system-navigation]]
-- [[c-android-back-stack]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-navigation-methods-in-kotlin--android--medium]]
-- [[q-navigation-methods-in-android--android--medium]]

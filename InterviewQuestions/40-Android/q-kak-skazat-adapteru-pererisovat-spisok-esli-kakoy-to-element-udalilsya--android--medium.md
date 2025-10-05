@@ -1,19 +1,7 @@
 ---
-id: "20251003141514"
-title: "How to tell adapter to redraw list if an element was deleted?"
-slug: "kak-skazat-adapteru-pererisovat-spisok-esli-kakoy-to-element-udalilsya"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - recyclerview
-  - adapters
-  - list
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/944"
+difficulty: medium
 ---
 
 # How to tell adapter to redraw list if an element was deleted?

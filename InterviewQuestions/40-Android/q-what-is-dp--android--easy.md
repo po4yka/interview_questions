@@ -1,45 +1,18 @@
 ---
-id: 202510031411306
-title: What is dp / Что такое dp
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui]
-question_kind: theory
+tags:
+  - dp
+  - density-independent pixels
+  - easy_kotlin
+  - android
+  - ui
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/84
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-dp
-  - c-android-screen-density
-  - c-android-dpi
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [dp, density-independent pixels, difficulty/easy, easy_kotlin, lang/ru]
 ---
 
-# Question (EN)
-> What is dp
+# Что такое dp?
 
-# Вопрос (RU)
-> Что такое dp
+**English**: What is dp?
 
----
-
-## Answer (EN)
+## Answer
 
 ### Definition
 
@@ -160,23 +133,7 @@ Using dp ensures:
 - **Predictable layout** that matches your design specifications
 - **Better user experience** with appropriately sized touch targets
 
-## Ответ (RU)
+## Ответ
 
 dp означает density-independent pixels или пиксели не зависящие от плотности Это виртуальная единица измерения которая используется для обеспечения одинакового визуального размера элементов пользовательского интерфейса на экранах с различной плотностью пикселей Это важно поскольку устройства Android могут иметь различные размеры и разрешения экранов и использование dp помогает создать консистентный пользовательский интерфейс на всех этих устройствах
 
----
-
-## Follow-ups
-- How do you programmatically convert between dp and pixels in Android?
-- What are the standard screen density buckets (ldpi, mdpi, hdpi, etc.)?
-- When should you use px instead of dp?
-
-## References
-- [[c-android-dp]]
-- [[c-android-screen-density]]
-- [[c-android-dpi]]
-- [[c-android-resources]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]]

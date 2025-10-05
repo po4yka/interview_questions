@@ -1,44 +1,20 @@
 ---
-id: 20251003141203
-title: Reference types criteria / Критерии ссылочных типов
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, design]
-question_kind: theory
+tags:
+  - kotlin
+  - reference-types
+  - design
+  - best-practices
+  - immutability
+  - easy_kotlin
+  - programming-languages
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1269
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-types
-  - c-kotlin-design-patterns
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, reference-types, design, best-practices, immutability, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What criteria should reference types meet?
+# Каким критериям должны соответствовать ссылочные типы?
 
-# Вопрос (RU)
-> Каким критериям должны соответствовать ссылочные типы?
+**English**: What criteria should reference types meet?
 
----
-
-## Answer (EN)
+## Answer
 
 Reference types in Kotlin should meet the following criteria for good design:
 
@@ -162,22 +138,7 @@ open class BaseEntity {
 | **Size** | Keep lightweight if copied often | Performance |
 | **Inheritance** | Prefer final/sealed | Prevent unwanted subclassing |
 
-## Ответ (RU)
+## Ответ
 
 Ссылочные типы в Kotlin: неизменяемые, если это требуется по архитектуре; nullable или not-null — в зависимости от требований; должны реализовывать equals, hashCode и toString особенно если используются в коллекциях; быть легковесными если часто копируются; желательно final или sealed если поведение фиксировано
 
----
-
-## Follow-ups
-- When should you use data classes vs regular classes?
-- How to make a class thread-safe?
-- What is defensive copying?
-
-## References
-- [[c-kotlin-types]]
-- [[c-kotlin-design-patterns]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-data-classes--programming-languages--easy]]
-- [[q-equals-hashcode-contracts--programming-languages--medium]]

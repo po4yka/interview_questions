@@ -1,18 +1,14 @@
 ---
-id: "20251003141605"
-title: "How to write RecyclerView so that it caches ahead"
-slug: "how-to-write-recyclerview-so-that-it-caches-ahead"
-tags: ["recyclerview", "caching"]
-topic: "android"
-subtopics: ["android", "ui", "recyclerview", "performance"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "practical"
-source: "https://t.me/easy_kotlin/1192"
+tags:
+  - recyclerview
+  - caching
+  - android
+  - ui
+  - performance
+difficulty: medium
 ---
 
-# How to write RecyclerView so that it caches ahead
+# How to write RecyclerView so that it caches ahead?
 
 ## Question (RU)
 

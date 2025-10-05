@@ -1,21 +1,7 @@
 ---
-id: "20251003141519"
-title: "How to create a list similar to RecyclerView in Jetpack Compose?"
-slug: "kak-v-jetpack-compose-sozdat-spisok-analogichnyy-recyclerview"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - jetpack-compose
-  - compose
-  - recyclerview
-  - lists
-  - lazycolumn
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/1020"
+difficulty: medium
 ---
 
 # How to create a list similar to RecyclerView in Jetpack Compose?

@@ -1,44 +1,22 @@
 ---
-id: 20251003141210
-title: Data types in Java and Kotlin / Типы данных в Java и Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, java, types]
-question_kind: theory
+tags:
+  - kotlin
+  - java
+  - data-types
+  - primitives
+  - reference-types
+  - type-system
+  - easy_kotlin
+  - programming-languages
+  - types
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1052
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-type-system
-  - c-java-types
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, java, data-types, primitives, reference-types, type-system, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What data types exist in Java and Kotlin?
+# Какие типы данных существуют в Java и Kotlin?
 
-# Вопрос (RU)
-> Какие типы данных существуют в Java и Kotlin?
+**English**: What data types exist in Java and Kotlin?
 
----
-
-## Answer (EN)
+## Answer
 
 In both Java and Kotlin, data types are divided into **primitive types** and **reference types**, but with important differences.
 
@@ -245,23 +223,7 @@ Any (all types)
 - No autoboxing confusion
 - Methods available on all types
 
-## Ответ (RU)
+## Ответ
 
 В Java и Kotlin типы данных делятся на примитивные и ссылочные. В Java: int, double и тд как примитивы и String, классы объекты массивы интерфейсы как ссылочные типы. В Kotlin: Int Double и тд как обёртки примитивов JVM, String коллекции классы с nullable и nonnullable типами. Kotlin добавляет Unit эквивалент void но объект, и Nothing для функций которые всегда бросают исключение. Также в Kotlin все данные являются объектами
 
----
-
-## Follow-ups
-- What is the difference between Unit and Nothing?
-- How does Kotlin compile to JVM primitives?
-- What is the Any type in Kotlin?
-
-## References
-- [[c-kotlin-type-system]]
-- [[c-java-types]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-java-primitives--programming-languages--medium]]
-- [[q-kotlin-java-type-differences--programming-languages--medium]]
-- [[q-kotlin-nullable-string-declaration--programming-languages--easy]]

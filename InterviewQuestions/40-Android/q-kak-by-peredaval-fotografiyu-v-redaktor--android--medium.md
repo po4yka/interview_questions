@@ -1,23 +1,10 @@
 ---
-id: "20251003141517"
-title: "How would you pass a photo to editor?"
-slug: "kak-by-peredaval-fotografiyu-v-redaktor"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - intent
-  - fileprovider
-  - bitmap
-  - uri
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/977"
+difficulty: medium
 ---
 
-# How would you pass a photo to editor?
+# How would you pass a photo to an editor?
 
 ## EN (expanded)
 

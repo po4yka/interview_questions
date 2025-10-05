@@ -1,43 +1,21 @@
 ---
-id: 20251003140906
-title: Kotlin constants / Константы в Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, fundamentals]
-question_kind: theory
+tags:
+  - kotlin
+  - constants
+  - val
+  - const
+  - immutability
+  - easy_kotlin
+  - programming-languages
+  - fundamentals
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/134
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-fundamentals
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, constants, val, const, immutability, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What are constants and can they be changed
+# Что такое константы и можно ли их изменять?
 
-# Вопрос (RU)
-> Что такое константы и можно ли их изменять
+**English**: What are constants and can they be changed?
 
----
-
-## Answer (EN)
+## Answer
 
 Constants are fixed values that cannot be changed after their definition. They are used to define values that remain unchanged throughout program execution.
 
@@ -60,17 +38,7 @@ const val MAX_SIZE = 100 // Known at compile time
 
 Constants are **immutable** - their value cannot be changed after definition.
 
-## Ответ (RU)
+## Ответ
 
 Константы — это фиксированные значения, которые не могут быть изменены после их определения...
 
----
-
-## Follow-ups
-- What's the difference between val and const val?
-- When should you use const vs val?
-- Can objects referenced by val be mutated?
-
-## References
-- [[c-kotlin-fundamentals]]
-- [[moc-kotlin]]

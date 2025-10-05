@@ -1,45 +1,19 @@
 ---
-id: 202510031411310
-title: What are fragments and why are they more convenient to use instead of multiple activities / Что такое фрагменты и почему их удобнее использовать вместо множества activity
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, fragments]
-question_kind: practical
+tags:
+  - fragments
+  - activity
+  - easy_kotlin
+  - android/fragments
+  - android
+  - ui
 difficulty: hard
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/216
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-fragments
-  - c-android-activity
-  - c-android-performance
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [fragments, activity, difficulty/hard, easy_kotlin, lang/ru, android/fragments]
 ---
 
-# Question (EN)
-> What are fragments and why are they more convenient to use instead of multiple activities
+# Что такое фрагменты и почему их удобнее использовать вместо множества activity?
 
-# Вопрос (RU)
-> Что такое фрагменты и почему их удобнее использовать вместо множества activity
+**English**: What are fragments and why are they more convenient to use instead of multiple activities?
 
----
-
-## Answer (EN)
+## Answer
 
 Fragments are modular UI components that can be embedded in Activities. They represent a portion of the user interface or behavior that can be inserted into an activity. Fragments have their own lifecycle, receive their own input events, and can be added or removed while the activity is running.
 
@@ -335,24 +309,7 @@ Using fragments allows creating **flexible, modular, and efficient applications*
 - Provide better performance than multiple activities
 - Enable smoother transitions and animations
 
-## Ответ (RU)
+## Ответ
 
 Фрагменты — это модули в пользовательском интерфейсе, которые могут быть вложены в активности (Activity). Представляют собой часть пользовательского интерфейса или поведения, которые можно вставить в активность. Они обладают собственным жизненным циклом, получают собственные входные события и могут быть добавлены или удалены при работе активности. Использование фрагментов удобнее, чем использование множества активностей: 1. Модульность способствует более модульному дизайну приложения и позволяет разделить различные функции на независимые компоненты для повторного использования в разных активностях. Например, фрагмент для выбора даты можно использовать как в форме бронирования, так и в профиле пользователя. 2. Адаптивность идеально подходит для создания адаптивных пользовательских интерфейсов на разных устройствах. На планшете можно одновременно отображать несколько фрагментов, а на телефоне — поочередно. 3. Управление жизненным циклом позволяет фрагментам независимо управлять своим состоянием и поведением, что упрощает работу со сложными интерфейсами. 4. Повторное использование кода повышает эффективность разработки и поддержки приложений за счет переиспользования кода в разных частях или даже приложениях. 5. Улучшенная производительность достигается за счет того что управление одной активностью с фрагментами эффективнее чем переключение между множеством активностей. Переключение фрагментов требует меньше ресурсов чем запуск новой активности. 6. Лучшее управление переходами и анимациями предоставляет инструменты для сложных анимаций между фрагментами, создавая плавный пользовательский опыт. Пример: Файл FragmentExample.java и fragment_example.xml показывают как создать фрагмент. Использование фрагментов позволяет создавать гибкие модульные и эффективные приложения, которые лучше адаптируются к разным устройствам упрощают повторное использование компонентов и улучшают управление состоянием приложения.
 
----
-
-## Follow-ups
-- What are the performance implications of using too many nested fragments?
-- How do you handle deep linking with fragments vs activities?
-- When should you use activities instead of fragments?
-
-## References
-- [[c-android-fragments]]
-- [[c-android-activity]]
-- [[c-android-performance]]
-- [[c-android-navigation]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]]
-- [[q-how-did-fragments-appear-and-why-were-they-started-to-be-used--android--hard]]

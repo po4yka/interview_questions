@@ -1,43 +1,21 @@
 ---
-id: 20251003141207
-title: Collection implementations / Реализации коллекций
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, collections]
-question_kind: theory
+tags:
+  - kotlin
+  - collections
+  - implementations
+  - list
+  - set
+  - map
+  - easy_kotlin
+  - programming-languages
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1361
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-collections
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, collections, implementations, list, set, map, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What collection implementations exist
+# Какие есть реализации коллекций?
 
-# Вопрос (RU)
-> Какие есть реализации коллекций
+**English**: What collection implementations exist?
 
----
-
-## Answer (EN)
+## Answer
 
 Kotlin uses Java collection implementations under the hood. Here are the main implementations:
 
@@ -195,21 +173,7 @@ val treeMap = TreeMap<Int, String>()
 
 *Amortized
 
-## Ответ (RU)
+## Ответ
 
 - ArrayList, LinkedList для List интерфейса; HashSet, LinkedHashSet, TreeSet для Set; HashMap, LinkedHashMap, TreeMap для Map
 
----
-
-## Follow-ups
-- What is the difference between mutable and immutable collections?
-- When to use TreeSet vs HashSet?
-- How does HashMap work internally?
-
-## References
-- [[c-kotlin-collections]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-collections-overview--programming-languages--easy]]
-- [[q-hashmap-internals--data-structures--hard]]

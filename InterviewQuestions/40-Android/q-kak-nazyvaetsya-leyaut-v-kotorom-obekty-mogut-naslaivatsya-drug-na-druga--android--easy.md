@@ -1,20 +1,7 @@
 ---
-id: "20251003141505"
-title: "What is the layout called where objects can overlap each other?"
-slug: "kak-nazyvaetsya-leyaut-v-kotorom-obekty-mogut-naslaivatsya-drug-na-druga"
-topic: "android"
-moc: "moc-android"
-difficulty: "easy"
-status: "draft"
 tags:
   - android
-  - ui
-  - jetpack-compose
-  - compose
-  - layouts
-  - framelayout
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/850"
+difficulty: medium
 ---
 
 # What is the layout called where objects can overlap each other?

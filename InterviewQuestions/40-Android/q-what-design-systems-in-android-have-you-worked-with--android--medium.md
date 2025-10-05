@@ -1,45 +1,19 @@
 ---
-id: 202510031411309
-title: What design systems in Android have you worked with / С какими вариантами систем проектирования в Android работал
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui]
-question_kind: practical
+tags:
+  - material design
+  - fluent design system
+  - human interface guidelines
+  - easy_kotlin
+  - android
+  - ui
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/159
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-material-design
-  - c-android-design-systems
-  - c-android-ui-guidelines
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [material design, fluent design system, human interface guidelines, difficulty/medium, easy_kotlin, lang/ru]
 ---
 
-# Question (EN)
-> What design systems in Android have you worked with
+# С какими вариантами систем проектирования в Android работал
 
-# Вопрос (RU)
-> С какими вариантами систем проектирования в Android работал
+**English**: What design systems in Android have you worked with?
 
----
-
-## Answer (EN)
+## Answer
 
 In Android development, several design systems are commonly used to create consistent, polished user interfaces. Here are the main design systems:
 
@@ -232,23 +206,7 @@ object BrandDesignSystem {
 5. Use **design tokens** for maintainability
 6. Consider **platform conventions** when choosing a system
 
-## Ответ (RU)
+## Ответ
 
 В Android-разработке часто используются следующие системы проектирования: Material Design от Google, Fluent Design System от Microsoft и Human Interface Guidelines от Apple. Material Design является стандартным выбором благодаря интеграции с экосистемой Google и Android. Fluent Design System ориентирован на создание интуитивных интерфейсов и может быть адаптирован для Android через стилизацию. Принципы HIG, хотя ориентированы на iOS и macOS, могут быть полезны для кросс-платформенных приложений.
 
----
-
-## Follow-ups
-- How do you implement Material Design 3 (Material You) with dynamic colors?
-- What are the key differences between Material Design 2 and Material Design 3?
-- How do you create a custom design system for an Android app?
-
-## References
-- [[c-android-material-design]]
-- [[c-android-material-3]]
-- [[c-android-theming]]
-- [[c-android-design-tokens]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium]]

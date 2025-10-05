@@ -1,45 +1,19 @@
 ---
-id: 202510031411312
-title: How to organize work with text and images in a delegate / Как организовать работу с текстом и картинками в делегате
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, recyclerview]
-question_kind: practical
+tags:
+  - recyclerview
+  - delegates
+  - easy_kotlin
+  - android/recyclerview
+  - android
+  - ui
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/307
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-recyclerview
-  - c-android-adapter-delegates
-  - c-android-viewholder
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [recyclerview, delegates, difficulty/easy, easy_kotlin, lang/ru, android/recyclerview]
 ---
 
-# Question (EN)
-> How to organize work with text and images in a delegate
+# Как организовать работу с текстом и картинками в делегате?
 
-# Вопрос (RU)
-> Как организовать работу с текстом и картинками в делегате
+**English**: How to organize work with text and images in a delegate?
 
----
-
-## Answer (EN)
+## Answer
 
 For managing text and images in RecyclerView, use **delegates** (also known as Adapter Delegates) which separate display logic for different data types. This simplifies code and improves maintainability.
 
@@ -305,24 +279,7 @@ class TextImageViewHolder(
 4. **Scalability** - Easy to add new item types without modifying existing code
 5. **Type Safety** - Clear type handling with sealed classes
 
-## Ответ (RU)
+## Ответ
 
 Для управления текстом и картинками в RecyclerView используйте делегаты, которые разделяют логику отображения разных типов данных. Это упрощает код и улучшает его поддержку.
 
----
-
-## Follow-ups
-- How do you implement click listeners in adapter delegates?
-- What are the performance benefits of using adapter delegates?
-- How do you handle DiffUtil with multiple view types?
-
-## References
-- [[c-android-recyclerview]]
-- [[c-android-adapter-delegates]]
-- [[c-android-viewholder]]
-- [[c-android-glide]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-is-known-about-recyclerview--android--easy]]
-- [[q-what-problems-can-there-be-with-list-items--android--easy]]

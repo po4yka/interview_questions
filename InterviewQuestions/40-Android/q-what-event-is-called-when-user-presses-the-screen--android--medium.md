@@ -1,18 +1,14 @@
 ---
-id: "20251003141618"
-title: "What event is called when user presses the screen"
-slug: "what-event-is-called-when-user-presses-the-screen"
-tags: ["touch events", "event handling"]
-topic: "android"
-subtopics: ["android", "ui", "touch-events"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1350"
+tags:
+  - touch events
+  - event handling
+  - android
+  - ui
+  - touch-events
+difficulty: medium
 ---
 
-# What event is called when user presses the screen
+# What event is called when user presses the screen?
 
 ## Question (RU)
 

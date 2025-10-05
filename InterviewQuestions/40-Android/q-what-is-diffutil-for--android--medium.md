@@ -1,15 +1,10 @@
 ---
-id: "20251003141609"
-title: "What is DiffUtil for?"
-slug: "what-is-diffutil-for"
-tags: ["recyclerview", "diffutil"]
-topic: "android"
-subtopics: ["android", "ui", "recyclerview", "diffutil"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1255"
+tags:
+  - recyclerview
+  - diffutil
+  - android
+  - ui
+difficulty: medium
 ---
 
 # What is DiffUtil for?

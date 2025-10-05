@@ -1,7 +1,7 @@
 **topic** (ровно один, lower-kebab-case):
 
 ```
-algorithms | data-structures | system-design | android | programming-languages |
+algorithms | data-structures | system-design | android | kotlin | programming-languages |
 architecture-patterns | concurrency | distributed-systems | databases | networking |
 operating-systems | security | performance | testing | devops-ci-cd | cloud |
 debugging | ui-ux-accessibility | behavioral | cs

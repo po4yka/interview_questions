@@ -1,18 +1,14 @@
 ---
-id: "20251003141632"
-title: "Where is composition created for calling composable function"
-slug: "where-is-composition-created-for-calling-composable-function"
-tags: ["Jetpack Compose", "setContent"]
-topic: "android"
-subtopics: ["android", "ui", "jetpack-compose"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1492"
+tags:
+  - Jetpack Compose
+  - setContent
+  - android
+  - ui
+  - jetpack-compose
+difficulty: medium
 ---
 
-# Where is composition created for calling composable function
+# Where is composition created for calling composable function?
 
 ## Question (RU)
 

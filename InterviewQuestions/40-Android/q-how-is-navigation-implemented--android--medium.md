@@ -1,45 +1,18 @@
 ---
-id: 202510031411307
-title: How is navigation implemented / Каким образом осуществляется навигация
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, navigation]
-question_kind: practical
+tags:
+  - navigation
+  - ui
+  - easy_kotlin
+  - android/navigation
+  - android
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/132
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-navigation
-  - c-android-navigation-component
-  - c-android-fragments
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [navigation, ui, difficulty/medium, easy_kotlin, lang/ru, android/navigation]
 ---
 
-# Question (EN)
-> How is navigation implemented
+# Каким образом осуществляется навигация?
 
-# Вопрос (RU)
-> Каким образом осуществляется навигация
+**English**: How is navigation implemented?
 
----
-
-## Answer (EN)
+## Answer
 
 Navigation in software development, particularly in mobile and web development, refers to the process of moving between different parts of an application or site. It's a key aspect of user interface that determines how users interact with the application and how easily they can access necessary information or perform desired actions.
 
@@ -221,24 +194,7 @@ function App() {
 5. Implement **conditional navigation** based on app state
 6. Follow **Material Design** navigation patterns
 
-## Ответ (RU)
+## Ответ
 
 Навигация в контексте разработки ПО, в частности в мобильной и веб-разработке, относится к процессу перехода между различными частями приложения или сайта. Это ключевой аспект пользовательского интерфейса, который определяет, как пользователи взаимодействуют с приложением или сайтом и как легко они могут получить необходимую информацию или выполнить желаемые действия. В веб-разработке навигация обычно осуществляется через гиперссылки, которые ведут пользователя к различным страницам или разделам веб-сайта. Меню навигации, панель хлебных крошек, пагинация и футер используются для навигации на веб-сайтах. В мобильных приложениях используются Tab Bar, Navigation Drawer и Stack Navigation для интуитивно понятной навигации в условиях ограниченного пространства экрана. В одностраничных приложениях (SPA) используется Dynamic Routing и Hash Routing для динамического изменения контента без перезагрузки страницы.
 
----
-
-## Follow-ups
-- What are the advantages of using the Android Navigation Component over manual fragment transactions?
-- How do you implement deep linking with the Navigation Component?
-- What are the different navigation patterns recommended by Material Design?
-
-## References
-- [[c-android-navigation]]
-- [[c-android-navigation-component]]
-- [[c-android-fragments]]
-- [[c-android-deep-linking]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]]
-- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]]

@@ -1,44 +1,20 @@
 ---
-id: 20251003141004
-title: Equality operators in Java vs Kotlin / Операторы равенства в Java и Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, java, operators]
-question_kind: theory
+tags:
+  - kotlin
+  - java
+  - operators
+  - equality
+  - comparison
+  - easy_kotlin
+  - programming-languages
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/421
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-operators
-  - c-java-kotlin-differences
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, java, operators, equality, comparison, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What is the difference between double equals in Java and Kotlin?
+# Чем отличаются двойное равно в Java и Kotlin?
 
-# Вопрос (RU)
-> Чем отличаются двойное равно в Java и Kotlin?
+**English**: What is the difference between double equals in Java and Kotlin?
 
----
-
-## Answer (EN)
+## Answer
 
 In Java and Kotlin, `==` has different semantics:
 
@@ -82,22 +58,7 @@ a === c          // false (different objects)
 
 **Key difference**: Kotlin's `==` is null-safe - `null == null` is true!
 
-## Ответ (RU)
+## Ответ
 
 В Java оператор == проверяет, указывают ли две переменные на один и тот же объект в памяти. Для сравнения значений строк используется метод equals(). В Kotlin оператор == сравнивает значения объектов аналогично методу equals() в Java, а для сравнения ссылок используется оператор ===.
 
----
-
-## Follow-ups
-- How does `==` handle null values in Kotlin?
-- What is string interning?
-- When should you use `===` instead of `==`?
-
-## References
-- [[c-kotlin-operators]]
-- [[c-java-kotlin-differences]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-null-safety--programming-languages--medium]]
-- [[q-equals-hashcode-rules--programming-languages--medium]]

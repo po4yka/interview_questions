@@ -1,45 +1,23 @@
 ---
-id: 202510031404
-title: How do you choose a layout / Каким образом ты выбираешь layout
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, fragments, layouts]
-question_kind: practical
+tags:
+  - fragment
+  - layoutinflater
+  - easy_kotlin
+  - android/fragments
+  - android/layouts
+  - android/ui
+  - android
+  - ui
+  - fragments
+  - layouts
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/476
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-fragments
-  - c-android-layouts
-  - c-android-layoutinflater
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [fragment, layoutinflater, difficulty/easy, easy_kotlin, lang/ru, android/fragments, android/layouts, android/ui]
 ---
 
-# Question (EN)
-> How do you choose a layout
+# Каким образом ты выбираешь layout?
 
-# Вопрос (RU)
-> Каким образом ты выбираешь layout
+**English**: How do you choose a layout?
 
----
-
-## Answer (EN)
+## Answer
 
 In Android fragments, layout selection is performed in the **onCreateView()** method using **LayoutInflater**. This is the standard approach for inflating XML layouts into View objects.
 
@@ -227,25 +205,7 @@ override fun onDestroyView() {
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 Выбор макета для фрагмента осуществляется в методе onCreateView с помощью LayoutInflater. Пример: override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? { return inflater.inflate(R.layout.fragment_example, container, false) }
 
----
-
-## Follow-ups
-- Why should attachToRoot be false when inflating fragment layouts?
-- How does View Binding improve upon findViewById?
-- What are the memory leak risks with fragment view references?
-
-## References
-- [[c-android-fragments]]
-- [[c-android-layoutinflater]]
-- [[c-android-view-binding]]
-- [[c-android-jetpack-compose]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-is-layout-types-and-when-to-use--android--easy]]
-- [[q-fragments-lifecycle-and-activity-attachment--android--hard]]
-- [[q-how-to-start-drawing-ui-in-android--android--easy]]

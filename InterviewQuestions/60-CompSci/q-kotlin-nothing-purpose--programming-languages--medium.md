@@ -1,43 +1,19 @@
 ---
-id: 20251003140903
-title: Nothing type purpose / Назначение типа Nothing
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, type-system]
-question_kind: theory
+tags:
+  - kotlin
+  - nothing
+  - type-system
+  - static-analysis
+  - easy_kotlin
+  - programming-languages
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/33
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-type-system
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, nothing, type-system, static-analysis, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> Why is the Nothing class needed
+# Зачем нужен класс nothing?
 
-# Вопрос (RU)
-> Зачем нужен класс nothing
+**English**: Why is the Nothing class needed?
 
----
-
-## Answer (EN)
+## Answer
 
 The Nothing class has a unique and very specific purpose. It represents a type that has no values and is used to denote operations that never complete normally.
 
@@ -62,20 +38,7 @@ println("This line is unreachable")
 
 Nothing is a type without values used to denote operations that don't have normal completion.
 
-## Ответ (RU)
+## Ответ
 
 Класс Nothing имеет уникальное и очень специфическое назначение...
 
----
-
-## Follow-ups
-- How does Nothing relate to null?
-- What is Nothing? (nullable Nothing)?
-- When does compiler infer Nothing type?
-
-## References
-- [[c-kotlin-type-system]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-any-unit-nothing--programming-languages--medium]]

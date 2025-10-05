@@ -1,45 +1,22 @@
 ---
-id: 202510031411303
-title: How to pass data from one fragment to another / Как передавать данные из одного фрагмента в другой
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, fragments, views]
-question_kind: practical
+tags:
+  - fragments
+  - communication
+  - viewmodel
+  - easy_kotlin
+  - android/fragments
+  - android/views
+  - android
+  - ui
+  - views
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/65
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-fragments
-  - c-android-viewmodel
-  - c-android-bundle
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [fragments, communication, viewmodel, difficulty/medium, easy_kotlin, lang/ru, android/fragments, android/views]
 ---
 
-# Question (EN)
-> How to pass data from one fragment to another
+# Как передавать данные из одного фрагмента в другой?
 
-# Вопрос (RU)
-> Как передавать данные из одного фрагмента в другой
+**English**: How to pass data from one fragment to another?
 
----
-
-## Answer (EN)
+## Answer
 
 Passing data between fragments can be implemented in several ways. It's important to remember that fragments should not directly exchange data with each other. Instead, they should communicate through their parent activity or use a shared ViewModel.
 
@@ -159,24 +136,7 @@ supportFragmentManager.beginTransaction()
 
 The choice of method depends on the specific use case. Modern development often recommends using **ViewModel** for data exchange between fragments, as it promotes creating a reliable and testable application architecture.
 
-## Ответ (RU)
+## Ответ
 
 Передача данных между фрагментами может быть реализована несколькими способами. Важно помнить что фрагменты не должны напрямую обмениваться данными друг с другом. Вместо этого они должны общаться через свою родительскую активность или использовать общий ViewModel. Основные подходы к передаче данных между фрагментами: использование родительской активности как посредника через интерфейс или методы активности. Использование ViewModel для общения между фрагментами. Создайте ViewModel содержащую LiveData или другие обсерваблы для хранения данных. Доступ к этой ViewModel должен быть получен из обоих фрагментов через их родительскую активность. Использование Bundle и аргументов фрагмента для передачи данных при создании нового экземпляра фрагмента. Создайте Bundle и поместите в него данные используйте setArguments для передачи Bundle новому экземпляру фрагмента. В целевом фрагменте извлеките данные из полученного Bundle с помощью метода getArguments. Выбор метода зависит от конкретного случая использования в современной разработке часто рекомендуется использовать ViewModel для обмена данными между фрагментами так как это способствует созданию надежной и тестируемой архитектуры приложения
 
----
-
-## Follow-ups
-- What are the advantages of using ViewModel over other data passing methods?
-- How do you handle fragment result API in modern Android development?
-- What are the lifecycle considerations when sharing data between fragments?
-
-## References
-- [[c-android-fragments]]
-- [[c-android-viewmodel]]
-- [[c-android-livedata]]
-- [[c-android-bundle]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]]
-- [[q-how-do-fragments-exist-and-what-are-they-attached-to-in-activity--android--hard]]

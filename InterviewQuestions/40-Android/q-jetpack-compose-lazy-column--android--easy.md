@@ -1,45 +1,20 @@
 ---
-id: 20251003-140000
-title: Jetpack Compose LazyColumn / LazyColumn в Jetpack Compose
-aliases: [LazyColumn, RecyclerView in Compose, LazyColumn в Jetpack Compose]
-
-# Classification
-topic: android
-subtopics: [ui-compose]
-question_kind: android
+tags:
+  - jetpack-compose
+  - lazy-column
+  - android/ui-compose
+  - easy_kotlin
+  - platform/android
+  - android
+  - ui-compose
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1020
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-jetpack-compose
-  - c-lazy-lists
-  - c-recyclerview
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags (EN only; no leading #)
-tags: [jetpack-compose, lazy-column, android/ui-compose, difficulty/easy, easy_kotlin, lang/ru, platform/android]
 ---
 
-# Question (EN)
-> How to create a RecyclerView-like list in Jetpack Compose
+# Как в Jetpack Compose создать список, аналогичный RecyclerView?
 
-# Вопрос (RU)
-> Как в Jetpack Compose создать список, аналогичный RecyclerView
+**English**: How to create a RecyclerView-like list in Jetpack Compose?
 
----
-
-## Answer (EN)
+## Answer
 
 Use **LazyColumn** or **LazyRow**. They create and display items on demand, saving resources and providing smooth scrolling.
 
@@ -58,7 +33,7 @@ LazyColumn {
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 Используется **LazyColumn** или **LazyRow**. Они создают и отображают элементы по мере необходимости, экономя ресурсы и обеспечивая плавную прокрутку.
 
@@ -77,19 +52,3 @@ LazyColumn {
 }
 ```
 
----
-
-## Follow-ups
-- How to add item animations in LazyColumn?
-- What's the difference between LazyColumn and LazyVerticalGrid?
-- How to implement sticky headers in LazyColumn?
-
-## References
-- [[c-jetpack-compose]]
-- [[c-lazy-lists]]
-- [[c-recyclerview]]
-- [Jetpack Compose Lists Documentation](https://developer.android.com/jetpack/compose/lists)
-
-## Related Questions
-- [[q-recyclerview-basics--android--easy]]
-- [[q-compose-state-management--android--medium]]

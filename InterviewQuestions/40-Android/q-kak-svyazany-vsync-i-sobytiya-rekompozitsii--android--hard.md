@@ -1,21 +1,7 @@
 ---
-id: "20251003141509"
-title: "How are VSYNC and recomposition events related?"
-slug: "kak-svyazany-vsync-i-sobytiya-rekompozitsii"
-topic: "android"
-moc: "moc-android"
-difficulty: "hard"
-status: "draft"
 tags:
   - android
-  - ui
-  - jetpack-compose
-  - compose
-  - vsync
-  - rendering
-  - performance
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/896"
+difficulty: medium
 ---
 
 # How are VSYNC and recomposition events related?

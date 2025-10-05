@@ -1,38 +1,12 @@
 ---
-id: 20251003142004
-title: "Implementing Flow for Shopping Cart Management"
-question_ru: "Как реализовать работу Flow в приложении, когда самому нужно менеджерить всю корзину на телефоне"
-question_en: "How to implement Flow in an application when you need to manage the entire shopping cart on the phone"
-answer_ru: "Используйте Flow для управления состоянием корзины обновляйте данные через методы emit или stateFlow чтобы динамически отслеживать изменения Реализуйте обработку добавления удаления обновления товаров через действия которые изменяют состояние корзины"
-answer_en: "Use Flow to manage cart state, update data through emit or stateFlow methods to dynamically track changes. Implement handling of adding, removing, updating items through actions that change the cart state."
 tags:
-  - coroutines
-  - kotlin
-  - async
-  - difficulty-medium
-  - easy_kotlin
-  - lang/ru
-  - flow
-  - stateFlow
-topic: programming-languages
-subtopics:
-  - kotlin
-  - coroutines
-  - flow
+  - programming-languages
 difficulty: medium
-question_kind: practical
-moc: moc-kotlin
-status: draft
-source: https://t.me/easy_kotlin/839
 ---
 
 # Implementing Flow for Shopping Cart Management
 
-## Question (EN)
-
-How to implement Flow in an application when you need to manage the entire shopping cart on the phone?
-
-## Answer (EN)
+## Answer
 
 Use **Flow** to manage cart state, update data through `emit` or `StateFlow` methods to dynamically track changes. Implement handling of adding, removing, and updating items through actions that change the cart state.
 
@@ -464,6 +438,6 @@ class ShoppingCartManagerTest {
 
 Как реализовать работу Flow в приложении, когда самому нужно менеджерить всю корзину на телефоне
 
-## Ответ (RU)
+## Ответ
 
 Используйте Flow для управления состоянием корзины обновляйте данные через методы emit или stateFlow чтобы динамически отслеживать изменения Реализуйте обработку добавления удаления обновления товаров через действия которые изменяют состояние корзины

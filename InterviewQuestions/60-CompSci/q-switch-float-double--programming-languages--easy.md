@@ -1,44 +1,21 @@
 ---
-id: 20251003141218
-title: Switch with float/double / Switch с float/double
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, switch, float]
-question_kind: theory
+tags:
+  - java
+  - switch
+  - float
+  - double
+  - floating-point
+  - easy_kotlin
+  - programming-languages
+  - kotlin
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1460
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-java-switch
-  - c-floating-point
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [java, switch, float, double, floating-point, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> Does switch() work with double/float
+# Работает ли switch() с double/float?
 
-# Вопрос (RU)
-> Работает ли switch() с double/float?
+**English**: Does switch() work with double/float
 
----
-
-## Answer (EN)
+## Answer
 
 **No**, in Java `switch` does **not** work with `float` and `double`.
 
@@ -219,22 +196,7 @@ System.out.println(sum == 100);  // Always true
 
 **Key point:** `switch` requires **exact equality matching**, which is unreliable for floating-point numbers due to rounding errors.
 
-## Ответ (RU)
+## Ответ
 
 Нет, в Java switch не работает с float и double, так как они подвержены проблемам сравнения с плавающей точкой. switch работает с int, byte, short, char, enum, String, а также с их обёрточными типами.
 
----
-
-## Follow-ups
-- Why do floating-point comparisons fail?
-- What is epsilon comparison?
-- How to handle float ranges in Kotlin when?
-
-## References
-- [[c-java-switch]]
-- [[c-floating-point]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-when-expression--programming-languages--easy]]
-- [[q-floating-point-precision--programming-languages--medium]]

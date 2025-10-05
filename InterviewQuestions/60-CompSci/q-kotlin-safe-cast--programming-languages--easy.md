@@ -1,44 +1,21 @@
 ---
-id: 20251003141003
-title: Safe cast operator in Kotlin / Оператор безопасного приведения в Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, type-safety]
-question_kind: practical
+tags:
+  - kotlin
+  - safe-cast
+  - type-conversion
+  - as?
+  - casting
+  - easy_kotlin
+  - programming-languages
+  - type-safety
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/357
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-type-safety
-  - c-kotlin-null-safety
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, safe-cast, type-conversion, as?, casting, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> How to safely cast Any to String in Kotlin to avoid exceptions
+# Как в Kotlin привести переменную типа Any к типу String безопасно, чтобы избежать исключения?
 
-# Вопрос (RU)
-> Как в Kotlin привести переменную типа Any к типу String безопасно, чтобы избежать исключения
+**English**: How to safely cast Any to String in Kotlin to avoid exceptions?
 
----
-
-## Answer (EN)
+## Answer
 
 Use the **safe cast operator `as?`**, which returns null instead of throwing an exception if the cast is not possible.
 
@@ -73,22 +50,7 @@ val result = any as? String ?: "default"
 - When you want to handle failure gracefully
 - To avoid try-catch blocks for casting
 
-## Ответ (RU)
+## Ответ
 
 Используйте оператор приведения типов `as?`, который возвращает null вместо выброса исключения, если приведение невозможно. Например: val stringValue = anyVariable as? String
 
----
-
-## Follow-ups
-- When should you use `as` vs `as?`?
-- How to handle null results from safe casts?
-- What is `is` operator for type checking?
-
-## References
-- [[c-kotlin-type-safety]]
-- [[c-kotlin-null-safety]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-null-safety--programming-languages--medium]]
-- [[q-kotlin-nullable-string-declaration--programming-languages--easy]]

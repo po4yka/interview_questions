@@ -91,7 +91,7 @@
 
 **Topics** (pick ONE):
 ```
-algorithms, data-structures, system-design, android,
+algorithms, data-structures, system-design, android, kotlin,
 programming-languages, architecture-patterns, concurrency,
 distributed-systems, databases, networking, operating-systems,
 security, performance, testing, devops-ci-cd, cloud, debugging,
@@ -108,6 +108,11 @@ ui-ux-accessibility, behavioral, cs
 - Algorithms → `20-Algorithms/`
 - System Design → `30-System-Design/`
 - Android → `40-Android/`
+- Kotlin → `70-Kotlin/`
+- CompSci → `60-CompSci/`
+- Backend → `50-Backend/`
+- Tools → `80-Tools/`
+- Git → `10-Git/`
 - Concepts → `10-Concepts/`
 - MOCs → `90-MOCs/`
 

@@ -1,18 +1,13 @@
 ---
-id: "20251003141623"
-title: "What are fragments for if there is Activity"
-slug: "what-are-fragments-for-if-there-is-activity"
-tags: ["fragments", "activity"]
-topic: "android"
-subtopics: ["android", "ui", "fragments", "activity"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1408"
+tags:
+  - fragments
+  - activity
+  - android
+  - ui
+difficulty: medium
 ---
 
-# What are fragments for if there is Activity
+# What are fragments for if there is Activity?
 
 ## Question (RU)
 

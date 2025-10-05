@@ -1,38 +1,12 @@
 ---
-id: 20251003142008
-title: "How Suspend Function Detects Suspension"
-question_ru: "Как функция определяет что она suspend'илась"
-question_en: "How does a function determine that it has been suspended"
-answer_ru: "Функция \"узнает\" о приостановке через: - Фрейм Continuation если вызвана другая suspend-функция текущая приостанавливает свое выполнение - Корутинный диспетчер приостановка возможна если выполнение ушло в другой поток withContext - Возвращение специального маркера COROUTINE_SUSPENDED сигнализирует Kotlin Runtime что выполнение отложено"
-answer_en: "The function 'learns' about suspension through: Continuation frame if another suspend function is called, the current one suspends execution. Coroutine dispatcher suspension is possible if execution moved to another thread withContext. Returning special marker COROUTINE_SUSPENDED signals to Kotlin Runtime that execution is deferred."
 tags:
-  - coroutines
-  - kotlin
-  - async
-  - difficulty-hard
-  - easy_kotlin
-  - lang/ru
-  - suspend functions
-topic: programming-languages
-subtopics:
-  - kotlin
-  - coroutines
-  - coroutine-context
-  - suspending-functions
+  - programming-languages
 difficulty: hard
-question_kind: practical
-moc: moc-kotlin
-status: draft
-source: https://t.me/easy_kotlin/888
 ---
 
-# How Suspend Function Detects Suspension
+# How Suspend Function Detects Suspension?
 
-## Question (EN)
-
-How does a suspend function determine that it has been suspended?
-
-## Answer (EN)
+## Answer
 
 The function "learns" about suspension through:
 
@@ -470,6 +444,6 @@ if (condition) { }                    // Regular control flow
 
 Как функция определяет что она suspend'илась
 
-## Ответ (RU)
+## Ответ
 
 Функция "узнает" о приостановке через: - Фрейм Continuation если вызвана другая suspend-функция текущая приостанавливает свое выполнение - Корутинный диспетчер приостановка возможна если выполнение ушло в другой поток withContext - Возвращение специального маркера COROUTINE_SUSPENDED сигнализирует Kotlin Runtime что выполнение отложено

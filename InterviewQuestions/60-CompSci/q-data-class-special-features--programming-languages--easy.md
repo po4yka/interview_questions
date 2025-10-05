@@ -1,43 +1,21 @@
 ---
-id: 20251003141215
-title: Data class special features / Особенности data class
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, data-class, equals]
-question_kind: practical
+tags:
+  - kotlin
+  - data-class
+  - equals
+  - hashcode
+  - tostring
+  - copy
+  - easy_kotlin
+  - programming-languages
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1420
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-data-classes
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, data-class, equals, hashcode, tostring, copy, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What is the special feature of Data Class compared to other Kotlin Classes
+# Какая особенность у Data Class относительно других Kotlin Classes?
 
-# Вопрос (RU)
-> Какая особенность у Data Class относительно других Kotlin Classes
+**English**: What is the special feature of Data Class compared to other Kotlin Classes?
 
----
-
-## Answer (EN)
+## Answer
 
 **Data classes** automatically generate several useful methods that you would otherwise have to write manually:
 
@@ -263,21 +241,7 @@ println(copy.address)  // "" (empty, not "NYC")
 
 **Data classes are convenient for storing data** and greatly simplify working with **immutable structures**.
 
-## Ответ (RU)
+## Ответ
 
 Data Class автоматически генерирует equals, hashCode, toString, copy и componentN функции. Они удобны для хранения данных и значительно упрощают работу с неизменяемыми структурами.
 
----
-
-## Follow-ups
-- Can data classes have methods?
-- What properties are included in generated methods?
-- Can data classes inherit from other classes?
-
-## References
-- [[c-kotlin-data-classes]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-data-classes--programming-languages--easy]]
-- [[q-equals-hashcode-contracts--programming-languages--medium]]

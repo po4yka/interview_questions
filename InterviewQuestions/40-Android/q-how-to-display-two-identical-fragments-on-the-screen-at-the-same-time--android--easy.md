@@ -1,45 +1,18 @@
 ---
-id: 202510031411320
-title: How to display two identical fragments on the screen at the same time / Как на экране одновременно отобразить два одинаковых фрагмента
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, fragments]
-question_kind: practical
+tags:
+  - fragments
+  - ui
+  - easy_kotlin
+  - android/fragments
+  - android
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/406
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-fragments
-  - c-android-fragmentmanager
-  - c-android-layouts
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [fragments, ui, difficulty/easy, easy_kotlin, lang/ru, android/fragments]
 ---
 
-# Question (EN)
-> How to display two identical fragments on the screen at the same time
+# Как на экране одновременно отобразить два одинаковых фрагмента?
 
-# Вопрос (RU)
-> Как на экране одновременно отобразить два одинаковых фрагмента
+**English**: How to display two identical fragments on the screen at the same time?
 
----
-
-## Answer (EN)
+## Answer
 
 To simultaneously display two identical fragments on one screen in an Android application, you need to add two instances of the fragment to different containers in the activity layout. In this case, each fragment will work independently, even if they use the same class.
 
@@ -429,23 +402,7 @@ class CounterFragment : Fragment() {
 
 5. **Communication through Activity** - Fragments can communicate via the parent activity
 
-## Ответ (RU)
+## Ответ
 
 Чтобы одновременно отобразить два одинаковых фрагмента на одном экране в Android-приложении, вам нужно добавить два экземпляра фрагмента в разные контейнеры в макете активности. В этом случае каждый фрагмент будет работать независимо, даже если они используют один и тот же класс. 1. Создайте макет для активности который будет содержать два контейнера для фрагментов. Обычно это делается с помощью FrameLayout или LinearLayout. 2. Создайте класс фрагмента который будет использоваться для отображения обоих экземпляров. 3. Добавьте фрагменты в активность Теперь добавьте два экземпляра фрагмента в вашу активность. 4. Создайте макет для фрагмента Это может быть любой макет, который вы хотите использовать.
 
----
-
-## Follow-ups
-- How do you manage state synchronization between multiple instances of the same fragment?
-- What are the performance implications of displaying multiple fragments simultaneously?
-- How do you handle fragment lifecycle when multiple instances are displayed?
-
-## References
-- [[c-android-fragments]]
-- [[c-android-fragmentmanager]]
-- [[c-android-fragment-transactions]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]]
-- [[q-how-do-fragments-exist-and-what-are-they-attached-to-in-activity--android--hard]]

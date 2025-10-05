@@ -1,18 +1,14 @@
 ---
-id: "20251003141615"
-title: "What is layout performance measured in"
-slug: "what-is-layout-performance-measured-in"
-tags: ["layout", "performance"]
-topic: "android"
-subtopics: ["android", "ui", "performance", "layouts"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1314"
+tags:
+  - layout
+  - performance
+  - android
+  - ui
+  - layouts
+difficulty: medium
 ---
 
-# What is layout performance measured in
+# What is layout performance measured in?
 
 ## Question (RU)
 

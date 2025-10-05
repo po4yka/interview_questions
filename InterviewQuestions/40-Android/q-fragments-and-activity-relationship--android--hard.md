@@ -1,45 +1,20 @@
 ---
-id: 202510031410
-title: How do fragments exist and what are they attached to in Activity / Как существуют и к чему привязаны фрагменты в Activity
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, fragments]
-question_kind: theory
+tags:
+  - activity
+  - fragments
+  - easy_kotlin
+  - android/fragments
+  - android/ui
+  - android
+  - ui
 difficulty: hard
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/506
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-fragments
-  - c-android-activity
-  - c-android-fragment-lifecycle
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [activity, fragments, difficulty/hard, easy_kotlin, lang/ru, android/fragments, android/ui]
 ---
 
-# Question (EN)
-> How do fragments exist and what are they attached to in Activity
+# Как существуют и к чему привязаны фрагменты в Activity?
 
-# Вопрос (RU)
-> Как существуют и к чему привязаны фрагменты в Activity
+**English**: How do fragments exist and what are they attached to in Activity?
 
----
-
-## Answer (EN)
+## Answer
 
 Fragments in Android exist as separate, modular components that are attached to and managed by an Activity. They represent reusable portions of UI with their own lifecycle, which is synchronized with but independent of the host Activity's lifecycle.
 
@@ -275,25 +250,7 @@ class MyFragment : Fragment() {
 5. **ViewGroup-hosted**: Must be attached to a container in Activity layout
 6. **Back stack support**: Enable navigation history management
 
-## Ответ (RU)
+## Ответ
 
 Фрагменты в Android существуют как отдельные компоненты, привязанные к Activity и могут добавляться удаляться или заменяться во время работы приложения Они прикрепляются к Activity которая управляет их жизненным циклом и могут быть переиспользованы на разных экранах Фрагменты зависят от Activity для доступа к контексту и других системных ресурсов а их жизненный цикл синхронизирован с жизненным циклом Activity
 
----
-
-## Follow-ups
-- What happens to fragments when Activity is recreated during configuration changes?
-- How does child FragmentManager differ from Activity's FragmentManager?
-- What are retained fragments and when should they be used?
-
-## References
-- [[c-android-fragments]]
-- [[c-android-activity]]
-- [[c-android-fragment-lifecycle]]
-- [[c-android-fragmentmanager]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-fragments-lifecycle-and-activity-attachment--android--hard]]
-- [[q-how-did-fragments-appear-and-why-were-they-started-to-be-used--android--hard]]
-- [[q-pass-data-between-fragments--android--medium]]

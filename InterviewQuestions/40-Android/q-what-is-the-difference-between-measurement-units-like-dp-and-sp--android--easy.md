@@ -1,45 +1,19 @@
 ---
-id: 202510031411305
-title: What is the difference between measurement units like dp and sp / Чем отличаются единицы измерения например dp от sp
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui]
-question_kind: theory
+tags:
+  - dp
+  - sp
+  - android ui
+  - easy_kotlin
+  - android
+  - ui
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/76
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-dp
-  - c-android-sp
-  - c-android-screen-density
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [dp, sp, android ui, difficulty/easy, easy_kotlin, lang/ru]
 ---
 
-# Question (EN)
-> What is the difference between measurement units like dp and sp
+# Чем отличаются единицы измерения например dp от sp
 
-# Вопрос (RU)
-> Чем отличаются единицы измерения например dp от sp
+**English**: What is the difference between measurement units like dp and sp?
 
----
-
-## Answer (EN)
+## Answer
 
 ### dp (Density-Independent Pixels)
 
@@ -140,23 +114,7 @@ Using **dp** for all UI sizes except text and **sp** for text sizes allows your 
 3. Provide better user experience for users with visual impairments
 4. Follow Android design guidelines and best practices
 
-## Ответ (RU)
+## Ответ
 
 dp (density-independent pixels) используется для размеров макета и элементов интерфейса, обеспечивая одинаковый физический размер на всех устройствах независимо от плотности экрана. sp (scale-independent pixels) используется для размеров шрифтов текста и масштабируется не только с изменением плотности экрана но и в зависимости от пользовательских настроек масштабирования текста. Основное различие в том что sp учитывает предпочтения пользователя по масштабу текста. dp рекомендуется использовать для всех размеров в пользовательском интерфейсе кроме текста. В XML-разметке Android размер текста указывается в sp а другие размеры в dp. Это позволяет оптимизировать приложение для различных устройств и настроек доступности
 
----
-
-## Follow-ups
-- What other measurement units are available in Android (px, pt, in, mm)?
-- How do you convert between dp and pixels programmatically?
-- What happens to layouts when users change their font size settings?
-
-## References
-- [[c-android-dp]]
-- [[c-android-sp]]
-- [[c-android-screen-density]]
-- [[c-android-accessibility]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-is-dp--android--easy]]

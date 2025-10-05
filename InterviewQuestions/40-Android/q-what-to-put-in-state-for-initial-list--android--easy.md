@@ -1,44 +1,21 @@
 ---
-id: 202510031421
-title: What to put in state for displaying the initial list / Что положить в state для отображения первоначального списка
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, state-management]
-question_kind: practical
+tags:
+  - state
+  - data loading
+  - easy_kotlin
+  - android/state-management
+  - android/ui
+  - android
+  - ui
+  - state-management
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/800
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-state-management
-  - c-android-viewmodel
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [state, data loading, difficulty/easy, easy_kotlin, lang/ru, android/state-management, android/ui]
 ---
 
-# Question (EN)
-> What to put in state for displaying the initial list
+# Что положить в state для отображения первоначального списка?
 
-# Вопрос (RU)
-> Что положить в state для отображения первоначального списка
+**English**: What to put in state for displaying the initial list?
 
----
-
-## Answer (EN)
+## Answer
 
 For the initial list state, you can use an **empty list** if data loads asynchronously, or a **pre-prepared static list** if data is known at app startup.
 
@@ -110,24 +87,7 @@ class ListViewModel : ViewModel() {
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 Для отображения первоначального списка в state можно положить пустой массив, если данные загружаются асинхронно, или заранее подготовленный статический список, если данные известны на момент загрузки приложения.
 
----
-
-## Follow-ups
-- How do you handle pagination in list state?
-- What's the difference between using LiveData vs StateFlow for list state?
-- How do you preserve list state during configuration changes?
-
-## References
-- [[c-android-state-management]]
-- [[c-android-viewmodel]]
-- [[c-android-livedata]]
-- [[c-android-stateflow]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-viewmodel-pattern--android--easy]]
-- [[q-which-layout-for-large-list--android--easy]]

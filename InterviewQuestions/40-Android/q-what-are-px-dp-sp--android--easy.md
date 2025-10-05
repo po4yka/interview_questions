@@ -1,18 +1,15 @@
 ---
-id: "20251003141606"
-title: "What are px dp sp"
-slug: "what-are-px-dp-sp"
-tags: ["px", "dp", "sp"]
-topic: "android"
-subtopics: ["android", "ui", "measurement-units"]
-moc: "moc-android"
-status: "draft"
-difficulty: "easy"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1229"
+tags:
+  - px
+  - dp
+  - sp
+  - android
+  - ui
+  - measurement-units
+difficulty: medium
 ---
 
-# What are px dp sp
+# What are px dp sp?
 
 ## Question (RU)
 

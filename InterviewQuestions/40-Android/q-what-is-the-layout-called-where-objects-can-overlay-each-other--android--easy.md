@@ -1,15 +1,12 @@
 ---
-id: "20251003141604"
-title: "What is the layout called where objects can overlay each other?"
-slug: "what-is-the-layout-called-where-objects-can-overlay-each-other"
-tags: ["FrameLayout", "Jetpack Compose"]
-topic: "android"
-subtopics: ["android", "ui", "layouts", "framelayout"]
-moc: "moc-android"
-status: "draft"
-difficulty: "easy"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1188"
+tags:
+  - FrameLayout
+  - Jetpack Compose
+  - android
+  - ui
+  - layouts
+  - framelayout
+difficulty: medium
 ---
 
 # What is the layout called where objects can overlay each other?

@@ -1,15 +1,12 @@
 ---
-id: "20251003141631"
-title: "Is LayoutInflater a singleton and why"
-slug: "is-layoutinflater-a-singleton-and-why"
-tags: ["LayoutInflater", "Context", "Singleton"]
-topic: "android"
-subtopics: ["android", "ui", "layoutinflater"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1486"
+tags:
+  - LayoutInflater
+  - Context
+  - Singleton
+  - android
+  - ui
+  - layoutinflater
+difficulty: medium
 ---
 
 # Is LayoutInflater a singleton and why

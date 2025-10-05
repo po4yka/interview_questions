@@ -1,18 +1,20 @@
 ---
-id: "20251003141608"
-title: "What navigation methods do you know"
-slug: "what-navigation-methods-do-you-know"
-tags: ["navigation", "intent", "fragmentmanager", "jetpack navigation component", "bottom navigation", "tab navigation", "drawerlayout", "deep links", "jetpack compose"]
-topic: "android"
-subtopics: ["android", "ui", "navigation"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1248"
+tags:
+  - navigation
+  - intent
+  - fragmentmanager
+  - jetpack navigation component
+  - bottom navigation
+  - tab navigation
+  - drawerlayout
+  - deep links
+  - jetpack compose
+  - android
+  - ui
+difficulty: medium
 ---
 
-# What navigation methods do you know
+# What navigation methods do you know?
 
 ## Question (RU)
 

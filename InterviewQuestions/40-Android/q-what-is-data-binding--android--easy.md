@@ -1,44 +1,20 @@
 ---
-id: 202510031409
-title: Have you used Data Binding / Использовал Data Binding
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, data-binding]
-question_kind: theory
+tags:
+  - data binding
+  - easy_kotlin
+  - android/data-binding
+  - android/ui
+  - android
+  - ui
+  - data-binding
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/504
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-data-binding
-  - c-android-view-binding
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [data binding, difficulty/easy, easy_kotlin, lang/ru, android/data-binding, android/ui]
 ---
 
-# Question (EN)
-> Have you used Data Binding
+# Использовал Data Binding
 
-# Вопрос (RU)
-> Использовал Data Binding
+**English**: Have you used Data Binding
 
----
-
-## Answer (EN)
+## Answer
 
 **Data Binding** is a library in Android that allows you to bind user interface (UI) components directly to data sources in your app, reducing the amount of boilerplate code needed to synchronize UI with data.
 
@@ -274,24 +250,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 Это библиотека в Android, которая позволяет связывать компоненты пользовательского интерфейса (UI) напрямую с источниками данных, снижая количество шаблонного кода
 
----
-
-## Follow-ups
-- What are the performance implications of Data Binding?
-- When should you use Data Binding vs View Binding?
-- How do you handle complex logic with Data Binding expressions?
-
-## References
-- [[c-android-data-binding]]
-- [[c-android-view-binding]]
-- [[c-android-viewmodel]]
-- [[c-android-livedata]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-viewmodel-pattern--android--easy]]
-- [[q-how-to-choose-layout-for-fragment--android--easy]]

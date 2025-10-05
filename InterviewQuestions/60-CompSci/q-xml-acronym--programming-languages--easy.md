@@ -1,44 +1,19 @@
 ---
-id: 20251003141211
-title: XML acronym / Расшифровка XML
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, xml]
-question_kind: practical
+tags:
+  - xml
+  - markup-language
+  - acronym
+  - easy_kotlin
+  - programming-languages
+  - kotlin
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1400
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-xml
-  - c-data-formats
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [xml, markup-language, acronym, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> How is XML deciphered
+# Как расшифровывается xml?
 
-# Вопрос (RU)
-> Как расшифровывается xml
+**English**: How is XML deciphered?
 
----
-
-## Answer (EN)
+## Answer
 
 **XML** stands for **eXtensible Markup Language** (Расширяемый язык разметки).
 
@@ -151,22 +126,7 @@ In Android development, XML is heavily used:
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 XML — это eXtensible Markup Language (Расширяемый язык разметки).
 
----
-
-## Follow-ups
-- What is the difference between XML and HTML?
-- How to parse XML in Kotlin?
-- What are XML namespaces?
-
-## References
-- [[c-xml]]
-- [[c-data-formats]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-json-vs-xml--programming-languages--easy]]
-- [[q-android-xml-layouts--android--easy]]

@@ -1,44 +1,20 @@
 ---
-id: 20251003141216
-title: Primitive vs reference types / Примитивные и ссылочные типы
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, primitive-types, reference-types]
-question_kind: theory
+tags:
+  - kotlin
+  - java
+  - primitive-types
+  - reference-types
+  - memory
+  - easy_kotlin
+  - programming-languages
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1426
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-types
-  - c-java-primitives
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, java, primitive-types, reference-types, memory, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What is the difference between primitive and reference types
+# В чем разница примитивного и ссылочного типов
 
-# Вопрос (RU)
-> В чем разница примитивного и ссылочного типов
+**English**: What is the difference between primitive and reference types?
 
----
-
-## Answer (EN)
+## Answer
 
 ### Primitive Types
 
@@ -246,22 +222,7 @@ val wrapped = Array<Int>(1000) { 0 }  // Integer[] (less efficient)
 In **Java**: primitives and reference types are clearly separated.
 In **Kotlin**: everything looks like objects, but primitives are used internally when possible.
 
-## Ответ (RU)
+## Ответ
 
 Примитивные типы хранят значения напрямую, не могут быть null и не имеют методов. Ссылочные типы — это объекты которые хранят ссылки на данные в памяти и могут быть null.
 
----
-
-## Follow-ups
-- What is boxing and unboxing?
-- How does Kotlin handle primitives internally?
-- What is the performance difference?
-
-## References
-- [[c-kotlin-types]]
-- [[c-java-primitives]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-java-primitives--programming-languages--medium]]
-- [[q-kotlin-java-data-types--programming-languages--medium]]

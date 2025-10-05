@@ -1,22 +1,7 @@
 ---
-id: "20251003141507"
-title: "How does Compose render on screen?"
-slug: "kak-risuet-compose-na-ekrane"
-topic: "android"
-moc: "moc-android"
-difficulty: "hard"
-status: "draft"
 tags:
   - android
-  - ui
-  - jetpack-compose
-  - compose
-  - layouts
-  - custom-views
-  - drawing
-  - rendering
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/863"
+difficulty: medium
 ---
 
 # How does Compose render on screen?

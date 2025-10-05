@@ -1,45 +1,24 @@
 ---
-id: 202510031402
-title: What is layout, what types exist and when to use them / Что такое layout, какие их виды бывают и когда их использовать
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, layouts]
-question_kind: theory
+tags:
+  - layout
+  - LinearLayout
+  - RelativeLayout
+  - ConstraintLayout
+  - xml
+  - easy_kotlin
+  - android/layouts
+  - android/ui
+  - android
+  - ui
+  - layouts
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/452
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-layouts
-  - c-android-constraintlayout
-  - c-android-linearlayout
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [layout, LinearLayout, RelativeLayout, ConstraintLayout, xml, difficulty/easy, easy_kotlin, lang/ru, android/layouts, android/ui]
 ---
 
-# Question (EN)
-> What is layout, what types exist and when to use them
+# Что такое layout, какие их виды бывают и когда их использовать?
 
-# Вопрос (RU)
-> Что такое layout, какие их виды бывают и когда их использовать
+**English**: What is layout, what types exist and when to use them?
 
----
-
-## Answer (EN)
+## Answer
 
 A **layout** is a way to define the user interface (UI) of an Android application. It describes how interface elements (widgets) are arranged and positioned on the screen. Layouts can be defined using XML files (most common) or programmatically in code.
 
@@ -207,25 +186,7 @@ Arranges children in a grid structure.
 4. **Use include tags** for reusable layouts
 5. **Consider performance** when choosing layout types
 
-## Ответ (RU)
+## Ответ
 
 Это способ определения пользовательского интерфейса (UI) приложения, который описывает как элементы интерфейса виджеты располагаются на экране. Макеты задаются с помощью XML файлов или программно в коде. Виды: LinearLayout Располагает дочерние элементы в виде одной строки или столбца вертикально или горизонтально. Подходит для простых интерфейсов где элементы должны быть расположены один за другим. RelativeLayout Располагает дочерние элементы относительно друг друга или относительно родительского контейнера. Подходит для более сложных интерфейсов где элементы должны быть выровнены относительно других элементов ConstraintLayout Предоставляет гибкую систему ограничения для размещения элементов относительно друг друга и границ контейнера Это мощный и эффективный макет который заменяет сложные вложенные макеты Подходит для сложных интерфейсов где требуется точное позиционирование и выравнивание элементов
 
----
-
-## Follow-ups
-- What is the performance difference between ConstraintLayout and nested LinearLayouts?
-- How do you optimize layout inflation for complex UIs?
-- When should you use programmatic layout creation instead of XML?
-
-## References
-- [[c-android-layouts]]
-- [[c-android-constraintlayout]]
-- [[c-android-linearlayout]]
-- [[c-android-view-hierarchy]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-how-to-choose-layout-for-fragment--android--easy]]
-- [[q-which-layout-for-large-list--android--easy]]
-- [[q-what-is-known-about-recyclerview--android--easy]]

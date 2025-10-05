@@ -1,44 +1,21 @@
 ---
-id: 202510031418
-title: How to break text knowing how many characters fit on screen / Как разбить текст, зная, сколько символов помещается на экране
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, text-rendering]
-question_kind: practical
+tags:
+  - Paint
+  - breakText
+  - easy_kotlin
+  - android/text-rendering
+  - android/ui
+  - android
+  - ui
+  - text-rendering
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/747
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-paint
-  - c-android-text-rendering
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [Paint, breakText, difficulty/easy, easy_kotlin, lang/ru, android/text-rendering, android/ui]
 ---
 
-# Question (EN)
-> How to break text knowing how many characters fit on screen
+# Как разбить текст, зная, сколько символов помещается на экране?
 
-# Вопрос (RU)
-> Как разбить текст, зная, сколько символов помещается на экране
+**English**: How to break text knowing how many characters fit on screen?
 
----
-
-## Answer (EN)
+## Answer
 
 Use the **Paint** class and **breakText()** method to determine how many characters fit in a line based on available width.
 
@@ -131,22 +108,7 @@ class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attr
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 Используйте класс Paint и метод breakText, чтобы определить, сколько символов помещается в строку. Это позволит разбивать текст в зависимости от ширины экрана и используемого шрифта.
 
----
-
-## Follow-ups
-- How does breakText() handle different character widths?
-- What's the performance impact of breaking large texts?
-- How do you handle word wrapping with breakText()?
-
-## References
-- [[c-android-paint]]
-- [[c-android-text-rendering]]
-- [[c-android-canvas]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-view-methods-and-their-purpose--android--medium]]

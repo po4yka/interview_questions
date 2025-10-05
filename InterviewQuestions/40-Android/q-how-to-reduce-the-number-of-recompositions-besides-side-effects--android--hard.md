@@ -1,18 +1,15 @@
 ---
-id: "20251003141620"
-title: "How to reduce the number of recompositions besides side-effects"
-slug: "how-to-reduce-the-number-of-recompositions-besides-side-effects"
-tags: ["Jetpack Compose", "UI Optimization"]
-topic: "android"
-subtopics: ["android", "ui", "jetpack-compose", "performance"]
-moc: "moc-android"
-status: "draft"
-difficulty: "hard"
-question_kind: "practical"
-source: "https://t.me/easy_kotlin/1363"
+tags:
+  - Jetpack Compose
+  - UI Optimization
+  - android
+  - ui
+  - jetpack-compose
+  - performance
+difficulty: medium
 ---
 
-# How to reduce the number of recompositions besides side-effects
+# How to reduce the number of recompositions besides side-effects?
 
 ## Question (RU)
 

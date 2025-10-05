@@ -1,37 +1,12 @@
 ---
-id: 20251003142009
-title: "Default Dispatcher vs IO Dispatcher"
-question_ru: "В чем различие Default диспатчер и IO диспатчер"
-question_en: "What is the difference between Default dispatcher and IO dispatcher"
-answer_ru: "Dispatchers.Default — для тяжёлых вычислений (CPU-операции). Dispatchers.IO — для операций ввода-вывода (сеть, файлы, БД)."
-answer_en: "Dispatchers.Default is for heavy computations (CPU operations). Dispatchers.IO is for I/O operations (network, files, database)."
 tags:
-  - coroutines
-  - kotlin
-  - async
-  - difficulty-medium
-  - easy_kotlin
-  - lang/ru
-  - dispatchers
-topic: programming-languages
-subtopics:
-  - kotlin
-  - coroutines
-  - dispatchers
+  - programming-languages
 difficulty: medium
-question_kind: theory
-moc: moc-kotlin
-status: draft
-source: https://t.me/easy_kotlin/899
 ---
 
 # Default Dispatcher vs IO Dispatcher
 
-## Question (EN)
-
-What is the difference between Default dispatcher and IO dispatcher in Kotlin Coroutines?
-
-## Answer (EN)
+## Answer
 
 **Dispatchers.Default** is for heavy computations (CPU-intensive operations).
 **Dispatchers.IO** is for I/O operations (network requests, file operations, database queries).
@@ -418,6 +393,6 @@ class BestPractices {
 
 В чем различие Default диспатчер и IO диспатчер
 
-## Ответ (RU)
+## Ответ
 
 Dispatchers.Default — для тяжёлых вычислений (CPU-операции). Dispatchers.IO — для операций ввода-вывода (сеть, файлы, БД).

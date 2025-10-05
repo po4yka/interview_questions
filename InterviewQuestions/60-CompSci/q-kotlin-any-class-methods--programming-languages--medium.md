@@ -1,44 +1,22 @@
 ---
-id: 20251003141114
-title: Any class methods in Kotlin / Методы класса Any в Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, type-system, object-methods]
-question_kind: theory
+tags:
+  - kotlin
+  - any
+  - equals
+  - hashcode
+  - tostring
+  - object-methods
+  - easy_kotlin
+  - programming-languages
+  - type-system
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1045
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-type-system
-  - c-object-methods
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, any, equals, hashcode, tostring, object-methods, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What methods exist in Kotlin base class and what do they do
+# Какие в базовом классе Kotlin есть методы и что они делают?
 
-# Вопрос (RU)
-> Какие в базовом классе Kotlin есть методы и что они делают
+**English**: What methods exist in Kotlin base class and what do they do?
 
----
-
-## Answer (EN)
+## Answer
 
 In Kotlin, all classes inherit from `Any` and have **three base methods**:
 
@@ -120,22 +98,7 @@ println(user.toString())    // User(name=John)
 
 **Important**: When overriding `equals()`, you MUST override `hashCode()`!
 
-## Ответ (RU)
+## Ответ
 
 В Kotlin все классы наследуются от Any и имеют три базовых метода: equals(), hashCode() и toString()...
 
----
-
-## Follow-ups
-- What is the equals/hashCode contract?
-- How do data classes implement these methods?
-- When should you override these methods?
-
-## References
-- [[c-kotlin-type-system]]
-- [[c-object-methods]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-equals-hashcode-rules--programming-languages--medium]]
-- [[q-kotlin-any-inheritance--programming-languages--easy]]

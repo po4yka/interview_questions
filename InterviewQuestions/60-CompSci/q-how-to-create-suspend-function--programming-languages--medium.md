@@ -1,37 +1,12 @@
 ---
-id: 20251003142006
-title: "How to Create a Suspend Function"
-question_ru: "Как создать suspend-функцию"
-question_en: "How to create a suspend function"
-answer_ru: "Создать suspend-функцию можно, добавив suspend перед fun. Suspend функции нельзя вызывать напрямую из обычных функций, только из корутин."
-answer_en: "Create a suspend function by adding suspend before fun. Suspend functions cannot be called directly from regular functions, only from coroutines."
 tags:
-  - coroutines
-  - kotlin
-  - async
-  - difficulty-medium
-  - easy_kotlin
-  - lang/ru
-  - suspend function
-topic: programming-languages
-subtopics:
-  - kotlin
-  - coroutines
-  - suspending-functions
+  - programming-languages
 difficulty: medium
-question_kind: practical
-moc: moc-kotlin
-status: draft
-source: https://t.me/easy_kotlin/879
 ---
 
-# How to Create a Suspend Function
+# How to Create a Suspend Function?
 
-## Question (EN)
-
-How to create a suspend function in Kotlin?
-
-## Answer (EN)
+## Answer
 
 Create a suspend function by adding the **suspend** modifier before `fun`. Suspend functions cannot be called directly from regular functions, only from coroutines or other suspend functions.
 
@@ -434,6 +409,6 @@ suspend fun longRunningTask() {
 
 Как создать suspend-функцию
 
-## Ответ (RU)
+## Ответ
 
 Создать suspend-функцию можно, добавив suspend перед fun. Suspend функции нельзя вызывать напрямую из обычных функций, только из корутин.

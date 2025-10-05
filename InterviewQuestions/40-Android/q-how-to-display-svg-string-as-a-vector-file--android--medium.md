@@ -1,18 +1,15 @@
 ---
-id: "20251003141610"
-title: "How to display SVG string as a vector file"
-slug: "how-to-display-svg-string-as-a-vector-file"
-tags: ["svg", "image loading", "file handling"]
-topic: "android"
-subtopics: ["android", "ui", "svg", "image-loading"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "practical"
-source: "https://t.me/easy_kotlin/1261"
+tags:
+  - svg
+  - image loading
+  - file handling
+  - android
+  - ui
+  - image-loading
+difficulty: medium
 ---
 
-# How to display SVG string as a vector file
+# How to display SVG string as a vector file?
 
 ## Question (RU)
 

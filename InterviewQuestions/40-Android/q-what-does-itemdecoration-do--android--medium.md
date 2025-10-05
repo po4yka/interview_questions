@@ -1,44 +1,20 @@
 ---
-id: 202510031406
-title: What does ItemDecoration allow you to do / Что позволяет делать ItemDecoration
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, recyclerview]
-question_kind: theory
+tags:
+  - recyclerview
+  - itemdecoration
+  - easy_kotlin
+  - android/recyclerview
+  - android/ui
+  - android
+  - ui
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/492
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-recyclerview
-  - c-android-itemdecoration
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [recyclerview, itemdecoration, difficulty/medium, easy_kotlin, lang/ru, android/recyclerview, android/ui]
 ---
 
-# Question (EN)
-> What does ItemDecoration allow you to do
+# Что позволяет делать ItemDecoration?
 
-# Вопрос (RU)
-> Что позволяет делать ItemDecoration
+**English**: What does ItemDecoration allow you to do?
 
----
-
-## Answer (EN)
+## Answer
 
 **ItemDecoration** in RecyclerView allows adding visual decorations to list items such as margins, divider lines, borders, and any other visual elements that are not part of the item content itself.
 
@@ -344,24 +320,7 @@ val count = recyclerView.itemDecorationCount
 - **Sticky headers**
 - **Item shadows or overlays**
 
-## Ответ (RU)
+## Ответ
 
 ItemDecoration в RecyclerView позволяет добавлять украшения к элементам списка такие как отступы разделительные линии рамки и любые другие визуальные элементы которые не являются частью содержимого элементов списка
 
----
-
-## Follow-ups
-- How does ItemDecoration differ from adding views directly to item layouts?
-- What are the performance implications of complex ItemDecorations?
-- How do you create sticky headers using ItemDecoration?
-
-## References
-- [[c-android-recyclerview]]
-- [[c-android-itemdecoration]]
-- [[c-android-canvas]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-which-layout-for-large-list--android--easy]]
-- [[q-how-animations-work-in-recyclerview--android--medium]]
-- [[q-what-is-known-about-recyclerview--android--easy]]

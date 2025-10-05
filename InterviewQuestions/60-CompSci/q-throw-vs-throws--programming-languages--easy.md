@@ -1,44 +1,20 @@
 ---
-id: 20251003141213
-title: throw vs throws / Разница между throw и throws
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, exceptions]
-question_kind: theory
+tags:
+  - kotlin
+  - java
+  - exceptions
+  - throw
+  - throws
+  - easy_kotlin
+  - programming-languages
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1410
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-exceptions
-  - c-java-exceptions
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, java, exceptions, throw, throws, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> Difference between throw and throws
+# Разница между throw и throws
 
-# Вопрос (RU)
-> Разница между throw и throws
+**English**: Difference between throw and throws
 
----
-
-## Answer (EN)
+## Answer
 
 The difference between `throw` and `throws` is fundamental in exception handling:
 
@@ -216,22 +192,7 @@ if (age < 0) {
 - Java only (Kotlin uses `@Throws` annotation for interop)
 - Syntax: `throws ExceptionType1, ExceptionType2`
 
-## Ответ (RU)
+## Ответ
 
 throw используется для генерации исключения в конкретном месте кода. throws указывается в сигнатуре метода и сообщает что метод может выбросить исключение (только в Java, в Kotlin нет throws).
 
----
-
-## Follow-ups
-- What are checked vs unchecked exceptions?
-- Why doesn't Kotlin have checked exceptions?
-- How to use @Throws annotation in Kotlin?
-
-## References
-- [[c-kotlin-exceptions]]
-- [[c-java-exceptions]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-checked-unchecked-exceptions--programming-languages--medium]]
-- [[q-exception-handling-kotlin--programming-languages--medium]]

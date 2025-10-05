@@ -1,39 +1,12 @@
 ---
-id: 20251003142007
-title: "Where to Call Suspend Functions"
-question_ru: "Откуда можно запускать suspend-функции"
-question_en: "From where can you call suspend functions"
-answer_ru: "suspend-функции можно запускать только из корутин. Можно вызывать их из: launch {} или async {} в CoroutineScope, другое suspend-функции и runBlocking {} для тестирования в main-потоке"
-answer_en: "Suspend functions can only be called from coroutines. You can call them from: launch {} or async {} in CoroutineScope, other suspend functions, and runBlocking {} for testing in main thread."
 tags:
-  - coroutines
-  - kotlin
-  - async
-  - difficulty-medium
-  - easy_kotlin
-  - lang/ru
-  - suspend functions
-topic: programming-languages
-subtopics:
-  - kotlin
-  - coroutines
-  - coroutine-scope
-  - suspending-functions
-  - builders
+  - programming-languages
 difficulty: medium
-question_kind: practical
-moc: moc-kotlin
-status: draft
-source: https://t.me/easy_kotlin/882
 ---
 
-# Where to Call Suspend Functions
+# Where to Call Suspend Functions?
 
-## Question (EN)
-
-From where can you call suspend functions in Kotlin?
-
-## Answer (EN)
+## Answer
 
 Suspend functions can only be called from **coroutines**. You can call them from:
 - **launch {}** or **async {}** within a CoroutineScope
@@ -484,6 +457,6 @@ suspend fun structuredApproach() = coroutineScope {
 
 Откуда можно запускать suspend-функции
 
-## Ответ (RU)
+## Ответ
 
 suspend-функции можно запускать только из корутин. Можно вызывать их из: launch {} или async {} в CoroutineScope, другое suspend-функции и runBlocking {} для тестирования в main-потоке

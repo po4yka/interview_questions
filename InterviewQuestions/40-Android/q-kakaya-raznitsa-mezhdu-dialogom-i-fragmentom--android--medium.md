@@ -1,18 +1,7 @@
 ---
-id: "20251003141503"
-title: "What is the difference between dialog and fragment?"
-slug: "kakaya-raznitsa-mezhdu-dialogom-i-fragmentom"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - dialog
-  - fragment
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/818"
+difficulty: medium
 ---
 
 # What is the difference between dialog and fragment?

@@ -1,19 +1,7 @@
 ---
-id: "20251003141516"
-title: "How to add fragment synchronously/asynchronously?"
-slug: "kak-dobavit-fragment-sinhronno-asinhronno"
-topic: "android"
-moc: "moc-android"
-difficulty: "hard"
-status: "draft"
 tags:
   - android
-  - ui
-  - fragments
-  - asynchronous
-  - threading
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/972"
+difficulty: medium
 ---
 
 # How to add fragment synchronously/asynchronously?

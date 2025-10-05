@@ -1,18 +1,15 @@
 ---
-id: "20251003141629"
-title: "What is the difference between FragmentManager and FragmentTransaction"
-slug: "what-is-the-difference-between-fragmentmanager-and-fragmenttransaction"
-tags: ["fragment", "fragmentmanager", "fragmenttransaction"]
-topic: "android"
-subtopics: ["android", "ui", "fragments"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1469"
+tags:
+  - fragment
+  - fragmentmanager
+  - fragmenttransaction
+  - android
+  - ui
+  - fragments
+difficulty: medium
 ---
 
-# What is the difference between FragmentManager and FragmentTransaction
+# What is the difference between FragmentManager and FragmentTransaction?
 
 ## Question (RU)
 

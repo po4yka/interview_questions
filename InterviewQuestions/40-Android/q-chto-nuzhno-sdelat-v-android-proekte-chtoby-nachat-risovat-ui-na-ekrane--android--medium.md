@@ -1,20 +1,7 @@
 ---
-id: "20251003141521"
-title: "What needs to be done in Android project to start drawing UI on screen?"
-slug: "chto-nuzhno-sdelat-v-android-proekte-chtoby-nachat-risovat-ui-na-ekrane"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - activity
-  - xml
-  - views
-  - custom-views
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/1089"
+difficulty: medium
 ---
 
 # What needs to be done in Android project to start drawing UI on screen?

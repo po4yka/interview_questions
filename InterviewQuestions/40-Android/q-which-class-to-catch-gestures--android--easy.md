@@ -1,44 +1,20 @@
 ---
-id: 202510031419
-title: Which class can be used to catch different gestures / Какой класс можно использовать что бы ловить разные жесты
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, gestures]
-question_kind: theory
+tags:
+  - GestureDetector
+  - gestures
+  - easy_kotlin
+  - android/gestures
+  - android/ui
+  - android
+  - ui
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/753
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-gestures
-  - c-gesturedetector
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [GestureDetector, gestures, difficulty/easy, easy_kotlin, lang/ru, android/gestures, android/ui]
 ---
 
-# Question (EN)
-> Which class can be used to catch different gestures
+# Какой класс можно использовать что бы ловить разные жесты?
 
-# Вопрос (RU)
-> Какой класс можно использовать что бы ловить разные жесты
+**English**: Which class can be used to catch different gestures?
 
----
-
-## Answer (EN)
+## Answer
 
 Use **GestureDetector** to handle standard gestures like taps, swipes, long presses, double taps, and flings.
 
@@ -126,22 +102,7 @@ class GestureView(context: Context) : View(context) {
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 Чтобы обрабатывать жесты в Android, используйте класс GestureDetector. Он помогает отслеживать стандартные жесты: одиночные нажатия, свайпы, долгие нажатия, двойные касания и т.д.
 
----
-
-## Follow-ups
-- How do you detect custom multi-touch gestures?
-- What's the difference between GestureDetector and ScaleGestureDetector?
-- How do you handle conflicting gestures in nested views?
-
-## References
-- [[c-android-gestures]]
-- [[c-gesturedetector]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-which-event-on-screen-press--android--easy]]
-- [[q-view-methods-and-their-purpose--android--medium]]

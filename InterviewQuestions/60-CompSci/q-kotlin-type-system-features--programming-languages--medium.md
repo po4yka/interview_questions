@@ -1,43 +1,22 @@
 ---
-id: 20251003141105
-title: Kotlin type system features / Особенности системы типов Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, type-system]
-question_kind: theory
+tags:
+  - kotlin
+  - type-system
+  - null-safety
+  - smart-casts
+  - sealed-classes
+  - data-classes
+  - type-inference
+  - easy_kotlin
+  - programming-languages
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/653
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-type-system
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, type-system, null-safety, smart-casts, sealed-classes, data-classes, type-inference, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What Kotlin type system features do you know
+# Какие знаешь особенности системы типов в Kotlin?
 
-# Вопрос (RU)
-> Какие знаешь особенности системы типов в Kotlin
+**English**: What Kotlin type system features do you know?
 
----
-
-## Answer (EN)
+## Answer
 
 Kotlin's type system has several powerful features:
 
@@ -89,21 +68,7 @@ val name = "John" // Type inferred as String
 
 These features make Kotlin code **safer, more concise, and more expressive**.
 
-## Ответ (RU)
+## Ответ
 
 Null Safety (Безопасность null), Коллекции разделение на изменяемые и неизменяемые коллекции, Data Classes автоматическое создание методов equals hashCode и toString, Smart Casts автоматическое приведение типа после проверки с помощью is, Sealed Classes упрощают обработку ограниченных иерархий классов, Выведение типов Kotlin автоматически определяет тип переменной
 
----
-
-## Follow-ups
-- How do smart casts work with nullable types?
-- What are reified type parameters?
-- How does type inference algorithm work?
-
-## References
-- [[c-kotlin-type-system]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-java-type-differences--programming-languages--medium]]
-- [[q-kotlin-null-safety--programming-languages--medium]]

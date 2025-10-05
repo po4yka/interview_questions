@@ -1,44 +1,21 @@
 ---
-id: 20251003141007
-title: Garbage collector basics / Основы сборщика мусора
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, java, memory-management]
-question_kind: theory
+tags:
+  - garbage-collector
+  - gc
+  - memory-management
+  - kotlin
+  - java
+  - performance
+  - easy_kotlin
+  - programming-languages
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/444
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-memory-management
-  - c-garbage-collection
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [garbage-collector, gc, memory-management, kotlin, java, performance, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What is garbage collector
+# Что такое сборщик мусора?
 
-# Вопрос (RU)
-> Что такое сборщик мусора
+**English**: What is garbage collector?
 
----
-
-## Answer (EN)
+## Answer
 
 **Garbage Collector (GC)** is a memory management mechanism that automatically frees unused memory occupied by objects to which there are no more references.
 
@@ -74,21 +51,7 @@ fun createObject() {
 }  // obj becomes unreachable here, eligible for GC
 ```
 
-## Ответ (RU)
+## Ответ
 
 Сборщик мусора (Garbage Collector) — это механизм управления памятью, который автоматически освобождает неиспользуемую память, занятую объектами, к которым больше нет ссылок...
 
----
-
-## Follow-ups
-- What are different GC algorithms?
-- How to optimize for garbage collection?
-- What are memory leaks in GC languages?
-
-## References
-- [[c-memory-management]]
-- [[c-garbage-collection]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-memory-leaks-prevention--programming-languages--medium]]

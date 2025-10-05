@@ -1,18 +1,16 @@
 ---
-id: "20251003141621"
-title: "What needs to be done in Android project to start drawing UI on screen"
-slug: "what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen"
-tags: ["Activity", "XML layout", "AndroidManifest.xml"]
-topic: "android"
-subtopics: ["android", "ui", "activity", "lifecycle"]
-moc: "moc-android"
-status: "draft"
-difficulty: "easy"
-question_kind: "practical"
-source: "https://t.me/easy_kotlin/1365"
+tags:
+  - Activity
+  - XML layout
+  - AndroidManifest.xml
+  - android
+  - ui
+  - activity
+  - lifecycle
+difficulty: medium
 ---
 
-# What needs to be done in Android project to start drawing UI on screen
+# What needs to be done in Android project to start drawing UI on screen?
 
 ## Question (RU)
 

@@ -1,19 +1,7 @@
 ---
-id: "20251003141523"
-title: "Which class can be used to catch different gestures?"
-slug: "kakoy-klass-mozhno-ispolzovat-chto-by-lovit-raznye-zhesty"
-topic: "android"
-moc: "moc-android"
-difficulty: "easy"
-status: "draft"
 tags:
   - android
-  - ui
-  - gestures
-  - touch
-  - gesturedetector
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/1100"
+difficulty: medium
 ---
 
 # Which class can be used to catch different gestures?

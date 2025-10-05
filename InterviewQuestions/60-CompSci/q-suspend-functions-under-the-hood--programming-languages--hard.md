@@ -1,38 +1,12 @@
 ---
-id: 20251003142010
-title: "Suspend Functions Under the Hood"
-question_ru: "Как работают под капотом suspend-функции?"
-question_en: "How do suspend functions work under the hood"
-answer_ru: "Suspend-функции в Kotlin приостанавливают выполнение без блокировки потока. Под капотом: suspend-функция разбивается на несколько частей (continuations). Приостанавливается если выполняется асинхронный код например delay withContext. Продолжается с места остановки когда результат готов"
-answer_en: "Suspend functions in Kotlin pause execution without blocking the thread. Under the hood: suspend function is split into several parts (continuations). It suspends if async code is executed, for example delay, withContext. It continues from the stopping point when the result is ready."
 tags:
-  - coroutines
-  - kotlin
-  - async
-  - difficulty-hard
-  - easy_kotlin
-  - lang/ru
-  - suspend functions
-topic: programming-languages
-subtopics:
-  - kotlin
-  - coroutines
-  - coroutine-context
-  - suspending-functions
+  - programming-languages
 difficulty: hard
-question_kind: practical
-moc: moc-kotlin
-status: draft
-source: https://t.me/easy_kotlin/905
 ---
 
 # Suspend Functions Under the Hood
 
-## Question (EN)
-
-How do suspend functions work under the hood in Kotlin?
-
-## Answer (EN)
+## Answer
 
 Suspend functions in Kotlin pause execution without blocking the thread. Under the hood:
 
@@ -495,6 +469,6 @@ suspend fun example() {
 
 Как работают под капотом suspend-функции?
 
-## Ответ (RU)
+## Ответ
 
 Suspend-функции в Kotlin приостанавливают выполнение без блокировки потока. Под капотом: suspend-функция разбивается на несколько частей (continuations). Приостанавливается если выполняется асинхронный код например delay withContext. Продолжается с места остановки когда результат готов

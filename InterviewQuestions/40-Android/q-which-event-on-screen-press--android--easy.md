@@ -1,44 +1,21 @@
 ---
-id: 202510031422
-title: Which event is triggered when user presses on screen / Какое событие вызывается при нажатии юзера по экрану
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, touch-events]
-question_kind: theory
+tags:
+  - event handling
+  - touch events
+  - easy_kotlin
+  - android/touch-events
+  - android/ui
+  - android
+  - ui
+  - touch-events
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/802
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-touch-events
-  - c-android-motionevent
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [event handling, touch events, difficulty/easy, easy_kotlin, lang/ru, android/touch-events, android/ui]
 ---
 
-# Question (EN)
-> Which event is triggered when user presses on screen
+# Какое событие вызывается при нажатии юзера по экрану?
 
-# Вопрос (RU)
-> Какое событие вызывается при нажатии юзера по экрану
+**English**: Which event is triggered when user presses on screen?
 
----
-
-## Answer (EN)
+## Answer
 
 When a user presses on the screen in Android, the **ACTION_DOWN** event is triggered via **MotionEvent**.
 
@@ -133,23 +110,7 @@ view.setOnTouchListener { v, event ->
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 В Android при нажатии пользователя на экран вызывается событие ACTION_DOWN.
 
----
-
-## Follow-ups
-- How do you handle multi-touch events?
-- What's the difference between onTouchEvent() and setOnTouchListener()?
-- How does touch event propagation work in view hierarchy?
-
-## References
-- [[c-android-touch-events]]
-- [[c-android-motionevent]]
-- [[c-android-gestures]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-which-class-to-catch-gestures--android--easy]]
-- [[q-view-methods-and-their-purpose--android--medium]]

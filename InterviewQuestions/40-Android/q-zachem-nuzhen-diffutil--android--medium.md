@@ -1,20 +1,7 @@
 ---
-id: "20251003141510"
-title: "Why do we need DiffUtil?"
-slug: "zachem-nuzhen-diffutil"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - recyclerview
-  - lists
-  - diffutil
-  - adapters
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/904"
+difficulty: medium
 ---
 
 # Why do we need DiffUtil?

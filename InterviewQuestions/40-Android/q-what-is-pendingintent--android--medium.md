@@ -1,18 +1,15 @@
 ---
-id: "20251003141617"
-title: "What is PendingIntent"
-slug: "what-is-pendingintent"
-tags: ["PendingIntent", "Android Components"]
-topic: "android"
-subtopics: ["android", "ui", "intents", "pending-intent"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1344"
+tags:
+  - PendingIntent
+  - Android Components
+  - android
+  - ui
+  - intents
+  - pending-intent
+difficulty: medium
 ---
 
-# What is PendingIntent
+# What is PendingIntent?
 
 ## Question (RU)
 

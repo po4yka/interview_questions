@@ -1,20 +1,7 @@
 ---
-id: "20251003141506"
-title: "Does state in Compose help avoid race conditions?"
-slug: "pomogaet-li-state-sdelannyy-v-compose-izbezhat-sostoyaniya-gonki"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - jetpack-compose
-  - compose
-  - state-management
-  - concurrency
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/852"
+difficulty: medium
 ---
 
 # Does state in Compose help avoid race conditions?

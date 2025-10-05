@@ -1,45 +1,23 @@
 ---
-id: 202510031408
-title: How to create animations in Android / Как в Android можно сделать анимацию
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, animations]
-question_kind: practical
+tags:
+  - animations
+  - Property Animations
+  - View Animations
+  - Drawable Animations
+  - MotionLayout
+  - easy_kotlin
+  - android/animations
+  - android/ui
+  - android
+  - ui
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/498
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-animations
-  - c-android-property-animations
-  - c-android-motionlayout
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [animations, Property Animations, View Animations, Drawable Animations, MotionLayout, difficulty/medium, easy_kotlin, lang/ru, android/animations, android/ui]
 ---
 
-# Question (EN)
-> How to create animations in Android
+# Как в Android можно сделать анимацию?
 
-# Вопрос (RU)
-> Как в Android можно сделать анимацию
+**English**: How to create animations in Android?
 
----
-
-## Answer (EN)
+## Answer
 
 Android provides several powerful systems for creating animations, each suited for different use cases. The main approaches include Property Animations, View Animations, Drawable Animations, and MotionLayout.
 
@@ -352,24 +330,7 @@ override fun onDestroyView() {
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 В Android анимации можно создавать с помощью Property Animations, View Animations, Drawable Animations и MotionLayout. Для Property Animations используйте ObjectAnimator для анимации свойств объектов. Для View Animations создайте XML-анимацию и примените её через AnimationUtils.loadAnimation. Для Drawable Animations используйте анимацию кадров в XML и запустите её через AnimationDrawable. Для MotionLayout определите анимацию в MotionScene и примените её к элементам интерфейса.
 
----
-
-## Follow-ups
-- What's the difference between View Animations and Property Animations?
-- How do you create performant animations for complex UI transitions?
-- When should you use MotionLayout vs ObjectAnimator?
-
-## References
-- [[c-android-animations]]
-- [[c-android-property-animations]]
-- [[c-android-motionlayout]]
-- [[c-android-transitions]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-how-animations-work-in-recyclerview--android--medium]]
-- [[q-view-methods-and-their-purpose--android--medium]]

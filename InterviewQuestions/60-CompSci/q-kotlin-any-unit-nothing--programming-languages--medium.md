@@ -1,43 +1,21 @@
 ---
-id: 20251003140902
-title: Kotlin special types - Any, Unit, Nothing / Специальные типы в Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, type-system]
-question_kind: theory
+tags:
+  - kotlin
+  - types
+  - any
+  - unit
+  - nothing
+  - type-system
+  - easy_kotlin
+  - programming-languages
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/30
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-type-system
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, types, any, unit, nothing, type-system, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What do you know about Any, Unit, Nothing types in Kotlin?
+# Что известно про типы any, unit, nothing в Kotlin ?
 
-# Вопрос (RU)
-> Что известно про типы any, unit, nothing в Kotlin ?
+**English**: What do you know about Any, Unit, Nothing types in Kotlin?
 
----
-
-## Answer (EN)
+## Answer
 
 There are special types in Kotlin with unique purposes:
 
@@ -66,21 +44,7 @@ fun fail(message: String): Nothing {
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 Существуют специальные типы Any, Unit и Nothing, которые имеют уникальные цели и применения в языке программирования...
 
----
-
-## Follow-ups
-- How does Any differ from Any?
-- When should you explicitly use Unit?
-- What are practical use cases for Nothing?
-
-## References
-- [[c-kotlin-type-system]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-nothing-purpose--programming-languages--medium]]
-- [[q-kotlin-null-safety--programming-languages--medium]]

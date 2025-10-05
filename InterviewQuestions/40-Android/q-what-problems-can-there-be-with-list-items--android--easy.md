@@ -1,45 +1,25 @@
 ---
-id: 202510031411315
-title: What problems can there be with list items / Какие могут быть проблемы с элементами списка
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, recyclerview, views]
-question_kind: practical
+tags:
+  - recyclerview
+  - listview
+  - memory management
+  - performance optimization
+  - diffutil
+  - multithreading
+  - easy_kotlin
+  - android/recyclerview
+  - android/views
+  - android
+  - ui
+  - views
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/336
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-recyclerview
-  - c-android-performance
-  - c-android-memory-management
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [recyclerview, listview, memory management, performance optimization, diffutil, multithreading, difficulty/easy, easy_kotlin, lang/ru, android/recyclerview, android/views]
 ---
 
-# Question (EN)
-> What problems can there be with list items
+# Какие могут быть проблемы с элементами списка?
 
-# Вопрос (RU)
-> Какие могут быть проблемы с элементами списка
+**English**: What problems can there be with list items?
 
----
-
-## Answer (EN)
+## Answer
 
 Problems with list items in Android applications can be diverse. Let's examine some of the most common problems and their solutions.
 
@@ -405,24 +385,7 @@ Common problems and solutions:
 5. **Click issues** → Proper click listener implementation
 6. **Positioning issues** → Use stable IDs
 
-## Ответ (RU)
+## Ответ
 
 Проблемы с элементами списка в Android-приложениях могут быть разнообразными. Давайте рассмотрим некоторые из наиболее распространённых проблем и способы их решения. 1. Переполнение памяти (Out of Memory) - Списки с большим количеством элементов могут вызывать переполнение памяти. Решение: Использовать RecyclerView вместо ListView и библиотеки для загрузки изображений, такие как Glide или Picasso. 2. Медленная прокрутка (Lagging) - Прокрутка может быть медленной из-за долгой отрисовки элементов. Решение: Оптимизировать адаптер списка и использовать ViewHolder паттерн. 3. Неправильное отображение данных (Data Inconsistency) - Если адаптер неправильно управляет обновлением данных. Решение: Использовать DiffUtil для вычисления изменений в данных и обновления только необходимых элементов. 4. Многопоточность (Concurrency Issues) - Если обновление данных происходит из разных потоков без должной синхронизации. Решение: Использовать LiveData или Flow из библиотеки Jetpack для обновления в главном потоке.
 
----
-
-## Follow-ups
-- How do you profile RecyclerView performance using Android Studio tools?
-- What are the best practices for implementing pagination in RecyclerView?
-- How do you handle configuration changes with RecyclerView state?
-
-## References
-- [[c-android-recyclerview]]
-- [[c-android-performance]]
-- [[c-android-diffutil]]
-- [[c-android-memory-management]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-is-known-about-recyclerview--android--easy]]
-- [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]

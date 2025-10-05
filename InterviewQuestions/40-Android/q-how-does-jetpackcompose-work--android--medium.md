@@ -1,15 +1,11 @@
 ---
-id: "20251003141614"
-title: "How does jetpackCompose work?"
-slug: "how-does-jetpackcompose-work"
-tags: ["jetpack compose", "ui framework"]
-topic: "android"
-subtopics: ["android", "ui", "jetpack-compose"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1274"
+tags:
+  - jetpack compose
+  - ui framework
+  - android
+  - ui
+  - jetpack-compose
+difficulty: medium
 ---
 
 # How does jetpackCompose work?

@@ -1,21 +1,7 @@
 ---
-id: "20251003141518"
-title: "Which class should be used to render View in background thread?"
-slug: "kakoy-klass-nuzhno-ispolzovat-chtoby-otrisovyvat-view-v-background-thread"
-topic: "android"
-moc: "moc-android"
-difficulty: "hard"
-status: "draft"
 tags:
   - android
-  - ui
-  - custom-views
-  - drawing
-  - surfaceview
-  - threading
-  - background-thread
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/979"
+difficulty: medium
 ---
 
 # Which class should be used to render View in background thread?

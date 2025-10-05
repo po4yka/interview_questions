@@ -1,45 +1,18 @@
 ---
-id: 20251003-140002
-title: Kotlin Extensions / Расширения в Kotlin
-aliases: [Extensions, Extension Functions, Расширения Kotlin, Функции расширения]
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, extensions]
-question_kind: theory
+tags:
+  - kotlin
+  - extensions
+  - extension-functions
+  - easy_kotlin
+  - programming-languages
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/765
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-extensions
-  - c-extension-functions
-  - c-extension-properties
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags (EN only; no leading #)
-tags: [kotlin, extensions, extension-functions, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What are Extensions?
+# Что такое Extensions?
 
-# Вопрос (RU)
-> Что такое Extensions?
+**English**: What are Extensions?
 
----
-
-## Answer (EN)
+## Answer
 
 The term **'Extensions'** refers to functionality that allows adding new capabilities to existing classes without modifying their source code.
 
@@ -89,7 +62,7 @@ val numbers = listOf(1, 2, 3, 4, 5)
 println(numbers.average())  // 3.0
 ```
 
-## Ответ (RU)
+## Ответ
 
 Термин **'Extensions'** используется для обозначения функциональности, которая позволяет добавлять новые возможности к существующим классам без изменения их исходного кода.
 
@@ -139,20 +112,3 @@ val numbers = listOf(1, 2, 3, 4, 5)
 println(numbers.average())  // 3.0
 ```
 
----
-
-## Follow-ups
-- Can extensions access private members of a class?
-- What's the difference between extension functions and member functions?
-- How do extensions work with inheritance?
-- Can you create generic extension functions?
-
-## References
-- [[c-kotlin-extensions]]
-- [[c-extension-functions]]
-- [[c-extension-properties]]
-- [Kotlin Extensions Documentation](https://kotlinlang.org/docs/extensions.html)
-
-## Related Questions
-- [[q-kotlin-scope-functions--programming-languages--medium]]
-- [[q-kotlin-generics--programming-languages--medium]]

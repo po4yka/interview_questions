@@ -1,18 +1,13 @@
 ---
-id: "20251003141625"
-title: "How to tell adapter to redraw list if an item was deleted"
-slug: "how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted"
-tags: ["adapter", "recyclerview"]
-topic: "android"
-subtopics: ["android", "ui", "recyclerview", "adapter"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "practical"
-source: "https://t.me/easy_kotlin/1436"
+tags:
+  - adapter
+  - recyclerview
+  - android
+  - ui
+difficulty: medium
 ---
 
-# How to tell adapter to redraw list if an item was deleted
+# How to tell adapter to redraw list if an item was deleted?
 
 ## Question (RU)
 

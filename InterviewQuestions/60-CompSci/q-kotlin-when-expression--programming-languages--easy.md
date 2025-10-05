@@ -1,43 +1,20 @@
 ---
-id: 20251003141112
-title: Kotlin when expression / Выражение when в Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, control-flow]
-question_kind: practical
+tags:
+  - kotlin
+  - when
+  - switch
+  - control-flow
+  - pattern-matching
+  - easy_kotlin
+  - programming-languages
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/878
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-control-flow
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, when, switch, control-flow, pattern-matching, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> How to use when in Kotlin instead of switch
+# Как использовать when в Kotlin вместо switch?
 
-# Вопрос (RU)
-> Как использовать when в Kotlin вместо switch
+**English**: How to use when in Kotlin instead of switch?
 
----
-
-## Answer (EN)
+## Answer
 
 `when` in Kotlin replaces Java's `switch` statement and is **much more powerful**.
 
@@ -115,20 +92,7 @@ val result = when (val x = getValue()) {
 - Supports ranges and type checks
 - Exhaustive checking with sealed classes
 
-## Ответ (RU)
+## Ответ
 
 В Kotlin оператор when заменяет switch и позволяет проверять значения. Пример: fun getDayName(day: Int): String { return when (day) { 1 -> "Понедельник" ... } } Также можно использовать when без аргумента и проверять логические выражения.
 
----
-
-## Follow-ups
-- What is exhaustiveness checking?
-- Can when be used without else?
-- How does when work with sealed classes?
-
-## References
-- [[c-kotlin-control-flow]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-sealed-classes-purpose--programming-languages--medium]]

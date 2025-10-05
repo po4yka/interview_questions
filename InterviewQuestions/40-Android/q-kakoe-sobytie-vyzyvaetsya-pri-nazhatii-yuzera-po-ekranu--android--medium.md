@@ -1,18 +1,7 @@
 ---
-id: "20251003141522"
-title: "Which event is triggered when user presses the screen?"
-slug: "kakoe-sobytie-vyzyvaetsya-pri-nazhatii-yuzera-po-ekranu"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - touch-events
-  - event-handling
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/1097"
+difficulty: medium
 ---
 
 # Which event is triggered when user presses the screen?

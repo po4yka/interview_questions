@@ -1,45 +1,20 @@
 ---
-id: 202510031411316
-title: How to fix a bad element layout / Как можно исправить плохой layout элемента
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, layouts]
-question_kind: practical
+tags:
+  - layout
+  - performance
+  - easy_kotlin
+  - android/layouts
+  - android
+  - ui
+  - layouts
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/351
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-layouts
-  - c-android-performance
-  - c-android-viewstub
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [layout, performance, difficulty/easy, easy_kotlin, lang/ru, android/layouts]
 ---
 
-# Question (EN)
-> How to fix a bad element layout
+# Как можно исправить плохой layout элемента?
 
-# Вопрос (RU)
-> Как можно исправить плохой layout элемента
+**English**: How to fix a bad element layout?
 
----
-
-## Answer (EN)
+## Answer
 
 Bad layouts can cause performance issues, rendering delays, and poor user experience. Here are strategies to fix and optimize layouts:
 
@@ -250,6 +225,7 @@ The `<merge>` tag eliminates redundant ViewGroups when using `<include>`.
 #### Systrace
 
 ```bash
+
 # Capture systrace for UI performance
 python systrace.py --time=10 -o trace.html sched gfx view
 ```
@@ -422,23 +398,7 @@ To fix bad layouts:
 8. **Reduce overdraw** - Remove unnecessary backgrounds
 9. **Efficient inflation** - Inflate layouts properly in adapters
 
-## Ответ (RU)
+## Ответ
 
 Уменьшите вложенность макетов, используйте ViewStub для редко используемых элементов, применяйте merge для сокращения уровней вложенности при использовании include, избегайте ненужных атрибутов и переопределений, профилируйте макеты с помощью инструментов. Пример кода ViewStub: <ViewStub android:id="@+id/viewStub" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/your_layout" />. Пример использования merge в your_layout.xml: <merge xmlns:android="http://schemas.android.com/apk/res/android"> <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Label" /> <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Value" /> </merge>
 
----
-
-## Follow-ups
-- How do you use Layout Inspector to identify performance bottlenecks?
-- What are the performance differences between different layout types?
-- How do you implement custom layout managers for RecyclerView?
-
-## References
-- [[c-android-layouts]]
-- [[c-android-constraintlayout]]
-- [[c-android-viewstub]]
-- [[c-android-performance]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium]]

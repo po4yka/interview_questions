@@ -1,18 +1,17 @@
 ---
-id: "20251003141616"
-title: "What are the most important components of Compose"
-slug: "what-are-the-most-important-components-of-compose"
-tags: ["Compose", "Composable functions", "State management", "Modifiers", "Layouts"]
-topic: "android"
-subtopics: ["android", "ui", "jetpack-compose"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1340"
+tags:
+  - Compose
+  - Composable functions
+  - State management
+  - Modifiers
+  - Layouts
+  - android
+  - ui
+  - jetpack-compose
+difficulty: medium
 ---
 
-# What are the most important components of Compose
+# What are the most important components of Compose?
 
 ## Question (RU)
 

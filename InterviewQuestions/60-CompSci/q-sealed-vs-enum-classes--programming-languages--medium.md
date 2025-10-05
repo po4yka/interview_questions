@@ -1,44 +1,20 @@
 ---
-id: 20251003141205
-title: Sealed vs enum classes in Kotlin / Sealed и enum классы в Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, oop]
-question_kind: theory
+tags:
+  - kotlin
+  - sealed-class
+  - enum
+  - comparison
+  - oop
+  - easy_kotlin
+  - programming-languages
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1317
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-sealed-classes
-  - c-kotlin-enums
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, sealed-class, enum, comparison, oop, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What are the differences between sealed and enum classes in Kotlin?
+# Каковы отличия sealed и enum классов в Kotlin?
 
-# Вопрос (RU)
-> Каковы отличия sealed и enum классов в Kotlin?
+**English**: What are the differences between sealed and enum classes in Kotlin?
 
----
-
-## Answer (EN)
+## Answer
 
 ### Key Differences
 
@@ -165,22 +141,7 @@ sealed class TaskResult {
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 sealed class – это ограниченная иерархия классов, где можно создавать разные подклассы с разными свойствами. enum class – это фиксированный набор однотипных объектов, которые не имеют разной структуры. enum class используется для фиксированного набора значений, когда значения не изменятся и у всех одинаковая структура. sealed class используется для сложных состояний с разной структурой, когда у состояний разные параметры и поведение.
 
----
-
-## Follow-ups
-- Can sealed classes have subclasses outside the file?
-- How to add new values to enum at runtime?
-- What is the performance difference?
-
-## References
-- [[c-kotlin-sealed-classes]]
-- [[c-kotlin-enums]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-sealed-classes-purpose--programming-languages--medium]]
-- [[q-kotlin-when-expression--programming-languages--easy]]

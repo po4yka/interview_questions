@@ -1,43 +1,20 @@
 ---
-id: 20251003141204
-title: Init block features in Kotlin / Особенности init блока в Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, oop]
-question_kind: theory
+tags:
+  - kotlin
+  - init
+  - initialization
+  - constructors
+  - oop
+  - easy_kotlin
+  - programming-languages
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1280
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-constructors
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, init, initialization, constructors, oop, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> Are there any features of using init block?
+# Есть какие-то особенности использования init block?
 
-# Вопрос (RU)
-> Есть какие-то особенности использования init block?
+**English**: Are there any features of using init block?
 
----
-
-## Answer (EN)
+## Answer
 
 The `init` block in Kotlin has several important features:
 
@@ -180,21 +157,7 @@ class Database(val url: String) {
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 1. init выполняется при создании экземпляра класса и используется для инициализации. 2. Может быть несколько init блоков выполняемых по порядку. 3. Выполняется перед телом вторичного конструктора. 4. Имеет доступ к параметрам первичного конструктора.
 
----
-
-## Follow-ups
-- What is the difference between init block and constructor?
-- Can init blocks throw exceptions?
-- How to initialize lateinit properties?
-
-## References
-- [[c-kotlin-constructors]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-class-initializers--programming-languages--medium]]
-- [[q-kotlin-lateinit--programming-languages--medium]]

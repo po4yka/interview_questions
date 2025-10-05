@@ -1,44 +1,21 @@
 ---
-id: 202510031411
-title: What methods does View have and what does each do / Какие методы есть у view и что каждый из них делает
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, view]
-question_kind: theory
+tags:
+  - view lifecycle
+  - ui components
+  - easy_kotlin
+  - android/view
+  - android/ui
+  - android
+  - ui
+  - view
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/550
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-view
-  - c-android-view-lifecycle
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [view lifecycle, ui components, difficulty/medium, easy_kotlin, lang/ru, android/view, android/ui]
 ---
 
-# Question (EN)
-> What methods does View have and what does each do
+# Какие методы есть у view и что каждый из них делает?
 
-# Вопрос (RU)
-> Какие методы есть у view и что каждый из них делает
+**English**: What methods does View have and what does each do?
 
----
-
-## Answer (EN)
+## Answer
 
 The Android **View** class provides numerous methods for controlling appearance, behavior, and lifecycle. Understanding these methods is crucial for custom view development and UI optimization.
 
@@ -453,25 +430,7 @@ override fun onDetachedFromWindow() {
 | animate() | Create animations |
 | requestFocus() | Request keyboard focus |
 
-## Ответ (RU)
+## Ответ
 
 onMeasure - определяет размер View. onLayout - отвечает за позиционирование View внутри родительского контейнера. onDraw - отвечает за рисование View. invalidate - используется для перерисовывания View. setOnClickListener - устанавливает слушатель нажатия. setVisibility - управляет видимостью View. getWidth и getHeight - возвращают размеры View. setBackgroundColor - устанавливает цвет фона.
 
----
-
-## Follow-ups
-- What's the difference between invalidate() and requestLayout()?
-- How do you optimize onDraw() for better performance?
-- When should you override onMeasure() vs using layout parameters?
-
-## References
-- [[c-android-view]]
-- [[c-android-view-lifecycle]]
-- [[c-android-custom-views]]
-- [[c-android-canvas]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-how-to-create-animations-in-android--android--medium]]
-- [[q-how-to-start-drawing-ui-in-android--android--easy]]
-- [[q-what-is-layout-types-and-when-to-use--android--easy]]

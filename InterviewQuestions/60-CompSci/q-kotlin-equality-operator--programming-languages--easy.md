@@ -1,44 +1,21 @@
 ---
-id: 20251003141219
-title: Kotlin equality operator / Оператор равенства в Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, equality, equals]
-question_kind: theory
+tags:
+  - kotlin
+  - equality
+  - equals
+  - operators
+  - structural-equality
+  - referential-equality
+  - easy_kotlin
+  - programming-languages
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1485
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-operators
-  - c-kotlin-equality
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, equality, equals, operators, structural-equality, referential-equality, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What happens when you do ==
+# Что происходит когда делаешь ==?
 
-# Вопрос (RU)
-> Что происходит когда делаешь ==?
+**English**: What happens when you do ==?
 
----
-
-## Answer (EN)
+## Answer
 
 In Kotlin, the `==` operator is used for **structural equality** (comparing contents). It calls the `equals()` method under the hood.
 
@@ -301,22 +278,7 @@ s1 == s2   // true (same content) ✓
 - Use `===` (referential equality)
 - Checks if two variables point to same object
 
-## Ответ (RU)
+## Ответ
 
 В Kotlin оператор == используется для структурного сравнения объектов. Оператор == вызывает метод equals(), чтобы проверить содержимое объектов, а не их ссылки.
 
----
-
-## Follow-ups
-- What is the difference between == and ===?
-- How to implement custom equals()?
-- What is the equals/hashCode contract?
-
-## References
-- [[c-kotlin-operators]]
-- [[c-kotlin-equality]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-equals-hashcode-contracts--programming-languages--medium]]
-- [[q-kotlin-java-equality--programming-languages--easy]]

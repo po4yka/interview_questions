@@ -1,45 +1,20 @@
 ---
-id: 202510031411318
-title: How to implement view behavior when it is added to the tree / Как можно реализовать поведение view при ее добавлении в дерево
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, views]
-question_kind: practical
+tags:
+  - view lifecycle
+  - custom view
+  - easy_kotlin
+  - android/views
+  - android
+  - ui
+  - views
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/368
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-views
-  - c-android-view-lifecycle
-  - c-android-custom-views
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [view lifecycle, custom view, difficulty/easy, easy_kotlin, lang/ru, android/views]
 ---
 
-# Question (EN)
-> How to implement view behavior when it is added to the tree
+# Как можно реализовать поведение view при ее добавлении в дерево?
 
-# Вопрос (RU)
-> Как можно реализовать поведение view при ее добавлении в дерево
+**English**: How to implement view behavior when it is added to the tree?
 
----
-
-## Answer (EN)
+## Answer
 
 To implement View behavior when it is added to the view tree in Android, you can use the **`View.onAttachedToWindow()`** method, which is called when a View is added to a window. This method allows you to perform actions when the View becomes visible to the user.
 
@@ -396,23 +371,7 @@ override fun onAttachedToWindow() {
 | Track visibility | `onAttachedToWindow()` → visible, `onDetachedFromWindow()` → invisible |
 | Auto-refresh | `onAttachedToWindow()` → start timer, `onDetachedFromWindow()` → stop timer |
 
-## Ответ (RU)
+## Ответ
 
 Для реализации поведения View при её добавлении в дерево View в Android можно воспользоваться несколькими подходами. Один из наиболее удобных способов — использование метода View.onAttachedToWindow(), который вызывается, когда View добавляется в окно. Этот метод позволяет выполнять какие-либо действия, когда View становится видимой для пользователя. Пример использования: создайте пользовательский класс View и переопределите метод onAttachedToWindow() для выполнения необходимых действий при добавлении View в дерево.
 
----
-
-## Follow-ups
-- What is the difference between onAttachedToWindow() and onFinishInflate()?
-- How do you handle configuration changes in custom views?
-- What are the best practices for cleaning up resources in custom views?
-
-## References
-- [[c-android-views]]
-- [[c-android-view-lifecycle]]
-- [[c-android-custom-views]]
-- [[c-android-window]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium]]

@@ -1,18 +1,16 @@
 ---
-id: "20251003141624"
-title: "How to add custom attributes to custom view"
-slug: "how-to-add-custom-attributes-to-custom-view"
-tags: ["custom view", "attrs.xml", "xml attributes"]
-topic: "android"
-subtopics: ["android", "ui", "custom-views", "attributes"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "practical"
-source: "https://t.me/easy_kotlin/1428"
+tags:
+  - custom view
+  - attrs.xml
+  - xml attributes
+  - android
+  - ui
+  - custom-views
+  - attributes
+difficulty: medium
 ---
 
-# How to add custom attributes to custom view
+# How to add custom attributes to custom view?
 
 ## Question (RU)
 

@@ -1,19 +1,7 @@
 ---
-id: "20251003141504"
-title: "How does Jetpack Compose work?"
-slug: "kak-rabotaet-jetpackcompose"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - jetpack-compose
-  - compose
-  - ui-framework
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/832"
+difficulty: medium
 ---
 
 # How does Jetpack Compose work?

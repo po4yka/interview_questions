@@ -1,45 +1,21 @@
 ---
-id: 202510031407
-title: How are animations done in RecyclerView / Как в RecyclerView делаются анимации
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, recyclerview, animations]
-question_kind: practical
+tags:
+  - recyclerview
+  - animations
+  - easy_kotlin
+  - android/recyclerview
+  - android/animations
+  - android/ui
+  - android
+  - ui
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/495
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-recyclerview
-  - c-android-animations
-  - c-android-itemanimator
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [recyclerview, animations, difficulty/medium, easy_kotlin, lang/ru, android/recyclerview, android/animations, android/ui]
 ---
 
-# Question (EN)
-> How are animations done in RecyclerView
+# Как в RecyclerView делаются анимации?
 
-# Вопрос (RU)
-> Как в RecyclerView делаются анимации
+**English**: How are animations done in RecyclerView?
 
----
-
-## Answer (EN)
+## Answer
 
 RecyclerView provides several ways to implement animations, from simple built-in animations to complex custom animations. Animations can be applied at different levels: item-level, adapter-level, and through custom ItemAnimators.
 
@@ -359,25 +335,7 @@ if (!isReduceMotionEnabled) {
 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 Для добавления анимаций в RecyclerView можно использовать DefaultItemAnimator для стандартных анимаций, установив его через recyclerView.setItemAnimator(new DefaultItemAnimator()). Для пользовательских анимаций создается наследник DefaultItemAnimator, например CustomItemAnimator, где переопределяются методы анимаций. Также анимации можно реализовывать непосредственно в Adapter, устанавливая начальные параметры элемента и запуская анимацию внутри onBindViewHolder.
 
----
-
-## Follow-ups
-- How do you prevent animation jank in RecyclerView with large items?
-- What's the difference between animating in ItemAnimator vs Adapter?
-- How do you coordinate multiple simultaneous item animations?
-
-## References
-- [[c-android-recyclerview]]
-- [[c-android-animations]]
-- [[c-android-itemanimator]]
-- [[c-android-view-animations]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-how-to-create-animations-in-android--android--medium]]
-- [[q-which-layout-for-large-list--android--easy]]
-- [[q-what-does-itemdecoration-do--android--medium]]

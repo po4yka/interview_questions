@@ -1,18 +1,7 @@
 ---
-id: "20251003141502"
-title: "How does dialog differ from other navigation?"
-slug: "chem-dialog-otlichaetsya-ot-ostalnoy-navigatsii"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - dialog
-  - navigation
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/811"
+difficulty: medium
 ---
 
 # How does dialog differ from other navigation?

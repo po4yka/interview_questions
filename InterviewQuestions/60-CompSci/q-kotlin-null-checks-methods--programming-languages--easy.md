@@ -1,43 +1,21 @@
 ---
-id: 20251003141202
-title: Null check methods in Kotlin / Методы проверки на null в Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, null-safety]
-question_kind: practical
+tags:
+  - kotlin
+  - null-safety
+  - null-checks
+  - operators
+  - safe-call
+  - elvis
+  - easy_kotlin
+  - programming-languages
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1184
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-null-safety
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, null-safety, null-checks, operators, safe-call, elvis, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> How to perform null checks?
+# Каким образом осуществлять проверки на null?
 
-# Вопрос (RU)
-> Каким образом осуществлять проверки на null?
+**English**: How to perform null checks?
 
----
-
-## Answer (EN)
+## Answer
 
 Kotlin offers several operators and methods for null checking:
 
@@ -131,21 +109,7 @@ val validEmail = email.takeIf { it.contains("@") }
 - Use `requireNotNull()` for precondition checks
 - Combine operators for concise null handling
 
-## Ответ (RU)
+## Ответ
 
 Kotlin предлагает операторы безопасного вызова (?.), оператор Элвиса (?:), явную проверку через if (x != null), requireNotNull или !! — для гарантии не-null.
 
----
-
-## Follow-ups
-- When should you use `!!` operator?
-- What is smart casting after null check?
-- How to handle nullable types in collections?
-
-## References
-- [[c-kotlin-null-safety]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-nullable-string-declaration--programming-languages--easy]]
-- [[q-kotlin-double-bang--programming-languages--easy]]

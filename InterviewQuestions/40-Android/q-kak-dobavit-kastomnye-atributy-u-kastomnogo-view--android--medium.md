@@ -1,19 +1,7 @@
 ---
-id: "20251003141515"
-title: "How to add custom attributes to custom view?"
-slug: "kak-dobavit-kastomnye-atributy-u-kastomnogo-view"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - custom-views
-  - xml
-  - attributes
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/956"
+difficulty: medium
 ---
 
 # How to add custom attributes to custom view?

@@ -1,45 +1,19 @@
 ---
-id: 202510031411313
-title: How to create chat lists from a UI perspective / Как делать списки чатов с точки зрения UI
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, recyclerview]
-question_kind: practical
+tags:
+  - recyclerview
+  - ui design
+  - easy_kotlin
+  - android/recyclerview
+  - android
+  - ui
 difficulty: hard
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/310
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-recyclerview
-  - c-android-diffutil
-  - c-android-chat-ui
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [recyclerview, ui design, difficulty/hard, easy_kotlin, lang/ru, android/recyclerview]
 ---
 
-# Question (EN)
-> How to create chat lists from a UI perspective
+# Как делать списки чатов с точки зрения UI?
 
-# Вопрос (RU)
-> Как делать списки чатов с точки зрения UI
+**English**: How to create chat lists from a UI perspective?
 
----
-
-## Answer (EN)
+## Answer
 
 Creating chat lists from a UI perspective requires considering multiple aspects to ensure usability, good performance, and attractive appearance.
 
@@ -496,24 +470,7 @@ class ChatListViewModel : ViewModel() {
 7. **Use ViewBinding** for type-safe view access
 8. **Implement swipe actions** for delete/archive
 
-## Ответ (RU)
+## Ответ
 
 Создание списков чатов с точки зрения UI требует учёта множества аспектов, чтобы обеспечить удобство использования, хорошую производительность и красивый внешний вид. Основные шаги: определение данных, создание макетов для элементов списка, создание адаптера для RecyclerView, настройка RecyclerView и управление данными, оптимизация производительности. Для чата можно определить два типа элементов: чат-комнаты и сообщения. Важно использовать RecyclerView с адаптером для отображения элементов списка и оптимизировать производительность с помощью DiffUtil и пагинации.
 
----
-
-## Follow-ups
-- How do you implement real-time updates for chat lists using WebSockets or Firebase?
-- What are the best practices for implementing read receipts and message status indicators?
-- How do you handle offline message queueing and synchronization?
-
-## References
-- [[c-android-recyclerview]]
-- [[c-android-diffutil]]
-- [[c-android-realtime-updates]]
-- [[c-android-chat-ui]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-is-known-about-recyclerview--android--easy]]
-- [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]

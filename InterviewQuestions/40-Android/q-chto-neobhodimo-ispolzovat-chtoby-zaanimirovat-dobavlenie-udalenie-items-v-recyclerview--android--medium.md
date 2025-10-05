@@ -1,22 +1,7 @@
 ---
-id: "20251003141520"
-title: "What needs to be used to animate adding/removing items in RecyclerView?"
-slug: "chto-neobhodimo-ispolzovat-chtoby-zaanimirovat-dobavlenie-udalenie-items-v-recyclerview"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - recyclerview
-  - lists
-  - adapters
-  - animations
-  - itemanimator
-  - diffutil
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/1063"
+difficulty: medium
 ---
 
 # What needs to be used to animate adding/removing items in RecyclerView?

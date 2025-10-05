@@ -1,18 +1,17 @@
 ---
-id: "20251003141622"
-title: "How to create dynamic screens at runtime that were not planned"
-slug: "how-to-create-dynamic-screens-at-runtime-that-were-not-planned"
-tags: ["Jetpack Compose", "Fragment", "RecyclerView", "dynamic UI"]
-topic: "android"
-subtopics: ["android", "ui", "dynamic-ui", "jetpack-compose"]
-moc: "moc-android"
-status: "draft"
-difficulty: "hard"
-question_kind: "practical"
-source: "https://t.me/easy_kotlin/1367"
+tags:
+  - Jetpack Compose
+  - Fragment
+  - RecyclerView
+  - dynamic UI
+  - android
+  - ui
+  - dynamic-ui
+  - jetpack-compose
+difficulty: medium
 ---
 
-# How to create dynamic screens at runtime that were not planned
+# How to create dynamic screens at runtime that were not planned?
 
 ## Question (RU)
 

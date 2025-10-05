@@ -1,44 +1,20 @@
 ---
-id: 20251003141103
-title: Lambdas in Java vs Kotlin / Лямбды в Java и Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, java, lambdas]
-question_kind: theory
+tags:
+  - kotlin
+  - java
+  - lambdas
+  - functional-programming
+  - syntax
+  - easy_kotlin
+  - programming-languages
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/605
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-lambdas
-  - c-functional-programming
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, java, lambdas, functional-programming, syntax, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What are lambdas from syntax perspective in Java and Kotlin?
+# Что такое лямбды с точки зрения синтаксиса в Java и Kotlin?
 
-# Вопрос (RU)
-> Что такое лямбды с точки зрения синтаксиса в Java и Kotlin?
+**English**: What are lambdas from syntax perspective in Java and Kotlin?
 
----
-
-## Answer (EN)
+## Answer
 
 ### Java Lambdas
 
@@ -95,21 +71,7 @@ list.filter { it > 0 }
 
 **Kotlin is more concise** and allows omitting parameters if they can be inferred from context.
 
-## Ответ (RU)
+## Ответ
 
 В Java лямбды — это упрощённый синтаксис для анонимных классов, реализующих функциональный интерфейс. Синтаксис: (параметры) -> { тело }. В Kotlin лямбды представляют собой выражения, передаваемые как функции, с синтаксисом { параметры -> тело }. Kotlin более лаконичен, позволяя опускать параметры, если их можно вывести из контекста.
 
----
-
-## Follow-ups
-- What are higher-order functions?
-- What is SAM conversion in Kotlin?
-- How do closures work?
-
-## References
-- [[c-lambdas]]
-- [[c-functional-programming]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-sam-conversions--programming-languages--medium]]

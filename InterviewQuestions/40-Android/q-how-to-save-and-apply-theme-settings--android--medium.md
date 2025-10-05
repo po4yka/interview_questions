@@ -1,18 +1,13 @@
 ---
-id: "20251003141613"
-title: "How to save and apply theme settings"
-slug: "how-to-save-and-apply-theme-settings"
-tags: ["sharedpreferences", "themes"]
-topic: "android"
-subtopics: ["android", "ui", "themes", "sharedpreferences"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "practical"
-source: "https://t.me/easy_kotlin/1272"
+tags:
+  - sharedpreferences
+  - themes
+  - android
+  - ui
+difficulty: medium
 ---
 
-# How to save and apply theme settings
+# How to save and apply theme settings?
 
 ## Question (RU)
 

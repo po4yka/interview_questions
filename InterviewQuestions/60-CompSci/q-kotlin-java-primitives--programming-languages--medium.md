@@ -1,44 +1,20 @@
 ---
-id: 20251003141206
-title: Primitives in Kotlin and Java / Примитивы в Kotlin и Java
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, java, types]
-question_kind: theory
+tags:
+  - kotlin
+  - java
+  - primitives
+  - types
+  - wrappers
+  - easy_kotlin
+  - programming-languages
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1352
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-type-system
-  - c-java-primitives
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, java, primitives, types, wrappers, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What primitives exist in Kotlin and Java
+# Какие примитивы есть в Kotlin, а какие в Java?
 
-# Вопрос (RU)
-> Какие примитивы есть в Kotlin, а какие в Java
+**English**: What primitives exist in Kotlin and Java?
 
----
-
-## Answer (EN)
+## Answer
 
 ### Java Primitives
 
@@ -185,22 +161,7 @@ val boxedArray: Array<Int> = arrayOf(1)  // Integer[] (wrapper array)
 | **Nullability** | Wrappers only | Explicit `?` suffix |
 | **Compilation** | Primitives vs objects | Optimized to primitives when possible |
 
-## Ответ (RU)
+## Ответ
 
 Java использует примитивные типы: byte, short, int, long, float, double, char, boolean. Kotlin использует обёртки (Int, Double, Boolean и др.), которые компилируются в примитивы при необходимости.
 
----
-
-## Follow-ups
-- When does Kotlin use wrapper classes vs primitives?
-- What is the performance difference?
-- How to create primitive arrays in Kotlin?
-
-## References
-- [[c-kotlin-type-system]]
-- [[c-java-primitives]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-java-type-differences--programming-languages--medium]]
-- [[q-kotlin-java-data-types--programming-languages--medium]]

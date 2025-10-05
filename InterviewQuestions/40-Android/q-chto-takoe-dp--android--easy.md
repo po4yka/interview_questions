@@ -1,19 +1,7 @@
 ---
-id: "20251003141513"
-title: "What is dp?"
-slug: "chto-takoe-dp"
-topic: "android"
-moc: "moc-android"
-difficulty: "easy"
-status: "draft"
 tags:
   - android
-  - ui
-  - units
-  - measurements
-  - dp
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/941"
+difficulty: medium
 ---
 
 # What is dp?

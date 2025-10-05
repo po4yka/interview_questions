@@ -1,43 +1,20 @@
 ---
-id: 20251003141107
-title: Unit singleton in Kotlin / Unit как синглтон в Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, type-system]
-question_kind: theory
+tags:
+  - kotlin
+  - unit
+  - singleton
+  - type-system
+  - void
+  - easy_kotlin
+  - programming-languages
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/683
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-type-system
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, unit, singleton, type-system, void, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> How many Unit instances per application
+# Сколько инстансов Unit на одно приложение
 
-# Вопрос (RU)
-> Сколько инстансов Unit на одно приложение
+**English**: How many Unit instances per application?
 
----
-
-## Answer (EN)
+## Answer
 
 **Unit is a singleton** in Kotlin, meaning there is **only one Unit instance** per entire application.
 
@@ -80,20 +57,7 @@ fun method2() { }         // Same as above (Unit inferred)
 
 **Memory efficiency**: Since it's a singleton, no memory waste from multiple Unit objects.
 
-## Ответ (RU)
+## Ответ
 
 Unit является синглтоном в Kotlin, то есть существует только один экземпляр Unit на всё приложение Это встроенный тип, используемый для обозначения отсутствия значимого значения
 
----
-
-## Follow-ups
-- How does Unit differ from Nothing?
-- Can you explicitly return Unit?
-- Why is Unit an object and not void?
-
-## References
-- [[c-kotlin-type-system]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-any-unit-nothing--programming-languages--medium]]

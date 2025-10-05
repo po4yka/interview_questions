@@ -1,44 +1,21 @@
 ---
-id: 20251003141008
-title: Data and sealed classes combination / Комбинация data и sealed классов
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, oop]
-question_kind: theory
+tags:
+  - kotlin
+  - data-class
+  - sealed-class
+  - type-safety
+  - when-expressions
+  - oop
+  - easy_kotlin
+  - programming-languages
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/494
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-data-classes
-  - c-kotlin-sealed-classes
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, data-class, sealed-class, type-safety, when-expressions, oop, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> Tell me about data classes and sealed classes
+# Расскажи data классы и sealed классы
 
-# Вопрос (RU)
-> Расскажи data классы и sealed классы
+**English**: Tell me about data classes and sealed classes
 
----
-
-## Answer (EN)
+## Answer
 
 ### Data Classes
 
@@ -85,22 +62,7 @@ fun handleResult(result: Result<String>) = when (result) {
 - Clean, maintainable code
 - Perfect for state management
 
-## Ответ (RU)
+## Ответ
 
 Data классы в Kotlin предназначены для хранения данных и автоматически генерируют методы equals(), hashCode(), toString(), а также copy()...
 
----
-
-## Follow-ups
-- Can sealed class be a data class?
-- What are sealed interfaces?
-- How to handle nested sealed hierarchies?
-
-## References
-- [[c-kotlin-data-classes]]
-- [[c-kotlin-sealed-classes]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-sealed-classes-purpose--programming-languages--medium]]
-- [[q-data-class-component-functions--programming-languages--easy]]

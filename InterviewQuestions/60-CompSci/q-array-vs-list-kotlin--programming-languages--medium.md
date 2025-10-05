@@ -1,44 +1,20 @@
 ---
-id: 20251003140901
-title: Array vs List in Kotlin / Различия между массивом и списком в Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, collections]
-question_kind: theory
+tags:
+  - kotlin
+  - array
+  - list
+  - collections
+  - performance
+  - easy_kotlin
+  - programming-languages
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/14
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-collections
-  - c-data-structures
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, array, list, collections, performance, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What is the difference between array and list
+# Чем array отличается от list
 
-# Вопрос (RU)
-> Чем array отличается от list
+**English**: What is the difference between array and list?
 
----
-
-## Answer (EN)
+## Answer
 
 Arrays and lists are data structures for storing sets of elements.
 
@@ -64,21 +40,7 @@ val list = mutableListOf(1, 2, 3)
 list.add(4) // Can grow
 ```
 
-## Ответ (RU)
+## Ответ
 
 Массивы и списки представляют собой структуры данных для хранения наборов элементов. [Full Russian text preserved in source]
 
----
-
-## Follow-ups
-- When should you use Array vs List?
-- What are specialized array types (IntArray, etc.)?
-- How to convert between arrays and lists?
-
-## References
-- [[c-kotlin-collections]]
-- [[c-data-structures]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-linkedlist-arraylist-insert-behavior--programming-languages--medium]]

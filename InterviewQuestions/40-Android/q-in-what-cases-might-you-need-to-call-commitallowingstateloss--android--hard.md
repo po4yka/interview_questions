@@ -1,45 +1,19 @@
 ---
-id: 202510031411319
-title: In what cases might you need to call commitAllowingStateLoss / В каких случаях может понадобиться вызывать commitAllowingStateLoss
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, fragments]
-question_kind: practical
+tags:
+  - fragments
+  - lifecycle
+  - easy_kotlin
+  - android/fragments
+  - android
+  - ui
 difficulty: hard
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/390
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-fragments
-  - c-android-fragment-transactions
-  - c-android-lifecycle
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [fragments, lifecycle, difficulty/hard, easy_kotlin, lang/ru, android/fragments]
 ---
 
-# Question (EN)
-> In what cases might you need to call commitAllowingStateLoss
+# В каких случаях может понадобиться вызывать commitAllowingStateLoss
 
-# Вопрос (RU)
-> В каких случаях может понадобиться вызывать commitAllowingStateLoss
+**English**: In what cases might you need to call commitAllowingStateLoss
 
----
-
-## Answer (EN)
+## Answer
 
 The **`commitAllowingStateLoss()`** method in Android is used to execute fragment transactions even when the activity state has already been saved. It can be useful but should be used with caution as it may lead to state loss.
 
@@ -394,24 +368,7 @@ Use `commitAllowingStateLoss()` when:
 
 **Key principle:** Only use when you understand and accept the consequences of potential state loss.
 
-## Ответ (RU)
+## Ответ
 
 Метод commitAllowingStateLoss() в Android используется для выполнения транзакций фрагментов даже когда состояние активности уже сохранено. Он может быть полезен но следует использовать с осторожностью так как может привести к потере состояния. Рассмотрены ситуации: пользовательская навигация с малой вероятностью возврата операции которые должны быть выполнены немедленно автоматические процессы или системные изменения устранение багов при смене конфигурации. Примеры использования включают переход между фрагментами удаление диалогового фрагмента. Метод позволяет избежать ошибки IllegalStateException при пересоздании активности но с риском потери состояния.
 
----
-
-## Follow-ups
-- What is the difference between commit(), commitNow(), and commitAllowingStateLoss()?
-- How does the Navigation Component handle fragment state during configuration changes?
-- What are the implications of state loss for back stack management?
-
-## References
-- [[c-android-fragments]]
-- [[c-android-fragment-transactions]]
-- [[c-android-lifecycle]]
-- [[c-android-savedinstancestate]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]]
-- [[q-how-do-fragments-exist-and-what-are-they-attached-to-in-activity--android--hard]]

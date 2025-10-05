@@ -1,45 +1,21 @@
 ---
-id: 202510031411321
-title: What should you pay attention to in order to optimize a large list / На что следует обращать внимание, чтобы оптимизировать большой список?
-aliases: []
-
-# Classification
-topic: android
-subtopics: [android, ui, recyclerview, views]
-question_kind: theory
+tags:
+  - recyclerview
+  - viewholder
+  - easy_kotlin
+  - android/recyclerview
+  - android/views
+  - android
+  - ui
+  - views
 difficulty: hard
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/445
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-android
-related:
-  - c-android-recyclerview
-  - c-android-viewholder
-  - c-android-performance
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [recyclerview, viewholder, difficulty/hard, easy_kotlin, lang/ru, android/recyclerview, android/views]
 ---
 
-# Question (EN)
-> What should you pay attention to in order to optimize a large list
+# На что следует обращать внимание, чтобы оптимизировать большой список?
 
-# Вопрос (RU)
-> На что следует обращать внимание, чтобы оптимизировать большой список?
+**English**: What should you pay attention to in order to optimize a large list?
 
----
-
-## Answer (EN)
+## Answer
 
 Optimizing large lists in Android applications is critical for smooth scrolling and good user experience. Here are the key areas to focus on:
 
@@ -532,25 +508,7 @@ To optimize large lists:
 9. **Enable prefetching** - smoother scrolling
 10. **Monitor performance** - use profilers and tools
 
-## Ответ (RU)
+## Ответ
 
 1. Правильное использование ViewHolder в RecyclerView для повторного использования представлений.
 
----
-
-## Follow-ups
-- How do you implement infinite scrolling with Paging 3 library?
-- What tools can you use to profile RecyclerView performance?
-- How do you handle different view types efficiently in a RecyclerView?
-
-## References
-- [[c-android-recyclerview]]
-- [[c-android-viewholder]]
-- [[c-android-diffutil]]
-- [[c-android-paging]]
-- [[c-android-performance]]
-- [[moc-android]]
-
-## Related Questions
-- [[q-what-is-known-about-recyclerview--android--easy]]
-- [[q-what-problems-can-there-be-with-list-items--android--easy]]

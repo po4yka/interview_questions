@@ -1,19 +1,7 @@
 ---
-id: "20251003141501"
-title: "How to display Snackbar or Toast based on results?"
-slug: "po-rezultatam-nuzhno-otobrazit-snackbar-ili-toast-kak-eto-sdelaesh"
-topic: "android"
-moc: "moc-android"
-difficulty: "medium"
-status: "draft"
 tags:
   - android
-  - ui
-  - snackbar
-  - toast
-  - notifications
-date: "2025-10-03"
-source: "https://t.me/easy_kotlin/808"
+difficulty: medium
 ---
 
 # How to display Snackbar or Toast based on results?

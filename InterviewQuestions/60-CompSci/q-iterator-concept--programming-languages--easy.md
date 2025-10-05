@@ -1,44 +1,20 @@
 ---
-id: 20251003141208
-title: Iterator concept / Концепция итератора
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, collections]
-question_kind: theory
+tags:
+  - kotlin
+  - iterator
+  - collections
+  - traversal
+  - design-patterns
+  - easy_kotlin
+  - programming-languages
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1373
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-collections
-  - c-design-patterns
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, iterator, collections, traversal, design-patterns, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What is an iterator
+# Что такое итератор?
 
-# Вопрос (RU)
-> Что такое итератор
+**English**: What is an iterator?
 
----
-
-## Answer (EN)
+## Answer
 
 **Iterator** is an object that allows **element-by-element traversal** of a collection (list, array, set, etc.). It abstracts the underlying structure and provides a uniform way to iterate.
 
@@ -207,22 +183,7 @@ while (iterator.hasNext()) {
 val filtered = list.filter { it % 2 != 0 }
 ```
 
-## Ответ (RU)
+## Ответ
 
 Итератор — это объект, позволяющий поэлементно перебирать коллекцию (список, массив и т.п.). Он обычно предоставляет методы hasNext() и next() и позволяет абстрагироваться от конкретной структуры.
 
----
-
-## Follow-ups
-- What is ListIterator?
-- How to iterate in reverse?
-- What is the difference between Iterator and Iterable?
-
-## References
-- [[c-kotlin-collections]]
-- [[c-design-patterns]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-collection-implementations--programming-languages--easy]]
-- [[q-kotlin-sequences--programming-languages--medium]]

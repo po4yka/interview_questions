@@ -1,43 +1,21 @@
 ---
-id: 20251003141113
-title: Types of generics / Виды дженериков
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, java, generics]
-question_kind: theory
+tags:
+  - generics
+  - type-parameters
+  - variance
+  - bounds
+  - easy_kotlin
+  - programming-languages
+  - kotlin
+  - java
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/996
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-generics
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [generics, type-parameters, variance, bounds, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What types of generics exist
+# Какие виды дженериков есть?
 
-# Вопрос (RU)
-> Какие виды дженериков есть
+**English**: What types of generics exist?
 
----
-
-## Answer (EN)
+## Answer
 
 Generics come in several forms:
 
@@ -77,7 +55,7 @@ fun <T : Number> sum(a: T, b: T): Double {
 
 **Multiple bounds:**
 ```kotlin
-fun <T> process(value: T) 
+fun <T> process(value: T)
     where T : Comparable<T>,
           T : Serializable {
     // T must implement both interfaces
@@ -118,21 +96,7 @@ List     // Java - raw type (deprecated)
 | Contravariance | Consumer | `in T` |
 | Star projection | Unknown type | `List<*>` |
 
-## Ответ (RU)
+## Ответ
 
 - Обобщённые классы class Box<T> \\- Обобщённые методы <T> void print(T t) \\- Ограничения extends, super — для указания границ типов \\- Сырые типы List без параметра — deprecated
 
----
-
-## Follow-ups
-- What is variance in generics?
-- What are reified type parameters in Kotlin?
-- How does type erasure work?
-
-## References
-- [[c-generics]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-generic-function-syntax--programming-languages--easy]]
-- [[q-runtime-generic-access--programming-languages--hard]]

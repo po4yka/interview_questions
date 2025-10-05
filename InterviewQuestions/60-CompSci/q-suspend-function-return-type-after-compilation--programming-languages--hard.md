@@ -1,37 +1,12 @@
 ---
-id: 20251003142005
-title: "Suspend Function Return Type After Compilation"
-question_ru: "Какой будет возвращаемый тип у suspend-функции, которая возвращает String, после компиляции"
-question_en: "What will be the return type of a suspend function that returns String after compilation"
-answer_ru: "Возвращаемый тип становится Any, потому что функция может вернуть либо String, либо корутину в приостановленном состоянии"
-answer_en: "The return type becomes Any because the function can return either String or a coroutine in suspended state."
 tags:
-  - coroutines
-  - kotlin
-  - async
-  - difficulty-hard
-  - easy_kotlin
-  - lang/ru
-  - suspend functions
-topic: programming-languages
-subtopics:
-  - kotlin
-  - coroutines
-  - suspending-functions
+  - programming-languages
 difficulty: hard
-question_kind: practical
-moc: moc-kotlin
-status: draft
-source: https://t.me/easy_kotlin/876
 ---
 
 # Suspend Function Return Type After Compilation
 
-## Question (EN)
-
-What will be the return type of a suspend function that returns String after compilation?
-
-## Answer (EN)
+## Answer
 
 The return type becomes **Any?** (or `Object` in JVM bytecode) because the function can return either the String value or a special marker **COROUTINE_SUSPENDED** to indicate that the coroutine is suspended.
 
@@ -334,6 +309,6 @@ fun <T> func($completion: Continuation<T>): Any?
 
 Какой будет возвращаемый тип у suspend-функции, которая возвращает String, после компиляции
 
-## Ответ (RU)
+## Ответ
 
 Возвращаемый тип становится Any, потому что функция может вернуть либо String, либо корутину в приостановленном состоянии

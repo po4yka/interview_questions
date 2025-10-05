@@ -1,18 +1,16 @@
 ---
-id: "20251003141611"
-title: "What do you know about modifications"
-slug: "what-do-you-know-about-modifications"
-tags: ["modifications", "UI elements", "Jetpack Compose"]
-topic: "android"
-subtopics: ["android", "ui", "jetpack-compose", "modifiers"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1267"
+tags:
+  - modifications
+  - UI elements
+  - Jetpack Compose
+  - android
+  - ui
+  - jetpack-compose
+  - modifiers
+difficulty: medium
 ---
 
-# What do you know about modifications
+# What do you know about modifications?
 
 ## Question (RU)
 

@@ -1,43 +1,18 @@
 ---
-id: 20251003141110
-title: Kotlin extensions basics / Основы расширений в Kotlin
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, extensions]
-question_kind: theory
+tags:
+  - kotlin
+  - extensions
+  - extension-functions
+  - easy_kotlin
+  - programming-languages
 difficulty: easy
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/765
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-extensions
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, extensions, extension-functions, difficulty/easy, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> What are Extensions?
+# Что такое Extensions?
 
-# Вопрос (RU)
-> Что такое Extensions?
+**English**: What are Extensions?
 
----
-
-## Answer (EN)
+## Answer
 
 **Extensions** are functionality that allows **adding new capabilities to existing classes** without modifying their source code or using inheritance.
 
@@ -91,21 +66,7 @@ list.map { it * 2 }       // Extension on List
 - Resolved statically (not polymorphic)
 - Cannot access private members of the class
 
-## Ответ (RU)
+## Ответ
 
 Термин 'Extensions' используется для обозначения функциональности, которая позволяет добавлять новые возможности к существующим классам без изменения их исходного кода.
 
----
-
-## Follow-ups
-- How are extensions implemented under the hood?
-- Can extensions be overridden?
-- What are extension receivers?
-
-## References
-- [[c-kotlin-extensions]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-extensions-overview--programming-languages--easy]]
-- [[q-extension-properties--programming-languages--medium]]

@@ -1,15 +1,13 @@
 ---
-id: "20251003141603"
-title: "What is known about methods that redraw View?"
-slug: "what-is-known-about-methods-that-redraw-view"
-tags: ["invalidate", "requestLayout", "postInvalidate"]
-topic: "android"
-subtopics: ["android", "ui", "views", "rendering"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1180"
+tags:
+  - invalidate
+  - requestLayout
+  - postInvalidate
+  - android
+  - ui
+  - views
+  - rendering
+difficulty: medium
 ---
 
 # What is known about methods that redraw View?

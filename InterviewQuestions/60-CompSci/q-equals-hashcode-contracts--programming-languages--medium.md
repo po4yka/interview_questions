@@ -1,44 +1,21 @@
 ---
-id: 20251003141209
-title: Equals and hashCode contracts / Контракты equals и hashCode
-aliases: []
-
-# Classification
-topic: programming-languages
-subtopics: [kotlin, object-methods]
-question_kind: theory
+tags:
+  - kotlin
+  - equals
+  - hashcode
+  - contract
+  - collections
+  - object-methods
+  - easy_kotlin
+  - programming-languages
 difficulty: medium
-
-# Language & provenance
-original_language: ru
-language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1376
-source_note: easy_kotlin Telegram channel
-
-# Workflow & relations
-status: draft
-moc: moc-kotlin
-related:
-  - c-kotlin-object-methods
-  - c-kotlin-collections
-
-# Timestamps
-created: 2025-10-03
-updated: 2025-10-03
-
-# Tags
-tags: [kotlin, equals, hashcode, contract, collections, object-methods, difficulty/medium, easy_kotlin, lang/ru, programming-languages]
 ---
 
-# Question (EN)
-> Tell me about equals and hashCode contracts
+# Расскажи о контрактах equals и hashCode
 
-# Вопрос (RU)
-> Расскажи о контрактах equals и hashCode
+**English**: Tell me about equals and hashCode contracts
 
----
-
-## Answer (EN)
+## Answer
 
 The `equals()` and `hashCode()` methods are used for **comparing objects** and their **correct operation in collections** (Set, Map).
 
@@ -263,22 +240,7 @@ override fun hashCode() = Objects.hash(property1, property2, property3)
 | Equality → hash | `a==b => hash(a)==hash(b)` | **Must satisfy** |
 | Hash → equality | `hash(a)==hash(b) !=> a==b` | **Not required** |
 
-## Ответ (RU)
+## Ответ
 
 Методы equals() и hashCode() используются для сравнения объектов и их корректной работы в коллекциях (Set, Map). Контракт `equals()` должен: Рефлексивность: a.equals(a) → true (объект равен самому себе). Симметричность: a.equals(b) == b.equals(a). Транзитивность: если a == b и b == c, то a == c. Согласованность: если a == b, то a.equals(b) всегда возвращает одно и же, пока объект не изменится. Сравнение с null всегда даёт false: a.equals(null) == false. Контракт hashCode(): если a.equals(b) то a.hashCode() == b.hashCode().
 
----
-
-## Follow-ups
-- What happens if you override equals but not hashCode?
-- How to implement hashCode efficiently?
-- What is referential equality vs structural equality?
-
-## References
-- [[c-kotlin-object-methods]]
-- [[c-kotlin-collections]]
-- [[moc-kotlin]]
-
-## Related Questions
-- [[q-kotlin-any-class-methods--programming-languages--medium]]
-- [[q-kotlin-data-classes--programming-languages--easy]]

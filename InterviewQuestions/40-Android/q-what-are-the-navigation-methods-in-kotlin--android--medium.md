@@ -1,18 +1,18 @@
 ---
-id: "20251003141601"
-title: "What are the navigation methods in Kotlin"
-slug: "what-are-the-navigation-methods-in-kotlin"
-tags: ["Jetpack Navigation Component", "FragmentTransaction", "Intent", "NavHostFragment", "NavController"]
-topic: "android"
-subtopics: ["android", "ui", "navigation", "fragments"]
-moc: "moc-android"
-status: "draft"
-difficulty: "medium"
-question_kind: "theory"
-source: "https://t.me/easy_kotlin/1151"
+tags:
+  - Jetpack Navigation Component
+  - FragmentTransaction
+  - Intent
+  - NavHostFragment
+  - NavController
+  - android
+  - ui
+  - navigation
+  - fragments
+difficulty: medium
 ---
 
-# What are the navigation methods in Kotlin
+# What are the navigation methods in Kotlin?
 
 ## Question (RU)
 

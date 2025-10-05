@@ -1,18 +1,14 @@
 ---
-id: "20251003141607"
-title: "How to pass parameters to a fragment"
-slug: "how-to-pass-parameters-to-a-fragment"
-tags: ["fragments", "bundle"]
-topic: "android"
-subtopics: ["android", "ui", "fragments", "data-passing"]
-moc: "moc-android"
-status: "draft"
-difficulty: "easy"
-question_kind: "practical"
-source: "https://t.me/easy_kotlin/1231"
+tags:
+  - fragments
+  - bundle
+  - android
+  - ui
+  - data-passing
+difficulty: medium
 ---
 
-# How to pass parameters to a fragment
+# How to pass parameters to a fragment?
 
 ## Question (RU)
 
