@@ -1,6 +1,7 @@
 ---
 id: q-fileprovider-secure-sharing--android--medium--1728115200000
 title: "FileProvider for Secure File Sharing / FileProvider для безопасного обмена файлами"
+topic: android
 aliases:
   - FileProvider for Secure File Sharing
   - FileProvider для безопасного обмена файлами

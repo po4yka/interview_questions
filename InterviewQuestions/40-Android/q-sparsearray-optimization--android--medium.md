@@ -1,6 +1,7 @@
 ---
 id: q-sparsearray-optimization--android--medium--1728115440000
 title: "SparseArray and Optimization / SparseArray и оптимизация"
+topic: android
 aliases:
   - SparseArray and Optimization
   - SparseArray и оптимизация

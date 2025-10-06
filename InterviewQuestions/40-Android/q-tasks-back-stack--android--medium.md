@@ -1,6 +1,7 @@
 ---
 id: tasks-back-stack-1730793900000
 title: Tasks and Back Stack / Задачи и стек возврата
+topic: android
 language_tags:
   - en
   - ru

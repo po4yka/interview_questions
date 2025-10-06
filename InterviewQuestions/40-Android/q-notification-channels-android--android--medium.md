@@ -1,6 +1,7 @@
 ---
 id: q-notification-channels-android--android--medium--1728115260000
 title: "Notification Channels / Каналы уведомлений"
+topic: android
 aliases:
   - Notification Channels
   - Каналы уведомлений

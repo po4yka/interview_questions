@@ -1,6 +1,7 @@
 ---
 id: android-manifest-file-1730794000000
 title: AndroidManifest.xml / AndroidManifest.xml
+topic: android
 language_tags:
   - en
   - ru

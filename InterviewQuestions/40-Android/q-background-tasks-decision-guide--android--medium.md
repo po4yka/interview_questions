@@ -1,6 +1,7 @@
 ---
 id: 202510051234002
 title: "Background Tasks Decision Guide / Руководство по фоновым задачам"
+topic: android
 status: draft
 created: 2025-10-05
 updated: 2025-10-05

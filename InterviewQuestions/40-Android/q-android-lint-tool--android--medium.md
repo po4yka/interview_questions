@@ -1,6 +1,7 @@
 ---
 id: android-lint-tool-1730793600000
 title: Android Lint Tool / Инструмент Android Lint
+topic: android
 language_tags:
   - en
   - ru

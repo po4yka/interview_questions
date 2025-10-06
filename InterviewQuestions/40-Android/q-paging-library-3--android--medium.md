@@ -1,6 +1,7 @@
 ---
 id: paging-library-3-1730793700000
 title: Paging Library 3 / Библиотека Paging 3
+topic: android
 language_tags:
   - en
   - ru

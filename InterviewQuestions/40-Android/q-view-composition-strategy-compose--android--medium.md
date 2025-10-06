@@ -1,6 +1,7 @@
 ---
 id: q-view-composition-strategy-compose--android--medium--1728115560000
 title: "ViewCompositionStrategy in Compose / ViewCompositionStrategy в Compose"
+topic: android
 aliases:
   - ViewCompositionStrategy in Compose
   - ViewCompositionStrategy в Compose

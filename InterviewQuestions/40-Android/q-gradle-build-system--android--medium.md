@@ -1,6 +1,7 @@
 ---
 id: 202510051234005
 title: "Gradle Build System / Система сборки Gradle"
+topic: android
 status: draft
 created: 2025-10-05
 updated: 2025-10-05

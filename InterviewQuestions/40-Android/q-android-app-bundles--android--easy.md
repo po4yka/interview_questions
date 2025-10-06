@@ -1,6 +1,7 @@
 ---
 id: 20251005-143000
 title: "Android App Bundles / Android App Bundle (AAB)"
+topic: android
 original_language: en
 language_tags: [en, ru]
 moc: moc-android

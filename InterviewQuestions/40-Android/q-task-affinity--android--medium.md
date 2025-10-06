@@ -1,6 +1,7 @@
 ---
 id: q-task-affinity--android--medium--1728115500000
 title: "Task Affinity in Android / Task Affinity в Android"
+topic: android
 aliases:
   - Task Affinity in Android
   - Task Affinity в Android

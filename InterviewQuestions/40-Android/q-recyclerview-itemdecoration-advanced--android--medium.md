@@ -1,6 +1,7 @@
 ---
 id: q-recyclerview-itemdecoration-advanced--android--medium--1728115320000
 title: "RecyclerView ItemDecoration Advanced / RecyclerView ItemDecoration продвинутый"
+topic: android
 aliases:
   - RecyclerView ItemDecoration Advanced
   - RecyclerView ItemDecoration продвинутый

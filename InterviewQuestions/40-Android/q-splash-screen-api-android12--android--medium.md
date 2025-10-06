@@ -1,6 +1,7 @@
 ---
 id: splash-screen-api-android12-1730793800000
 title: Splash Screen API (Android 12+) / API Splash Screen (Android 12+)
+topic: android
 language_tags:
   - en
   - ru

@@ -1,6 +1,7 @@
 ---
 id: q-play-feature-delivery-dynamic-modules--android--medium--1728115380000
 title: "Play Feature Delivery and Dynamic Modules / Play Feature Delivery и динамические модули"
+topic: android
 aliases:
   - Play Feature Delivery and Dynamic Modules
   - Play Feature Delivery и динамические модули
