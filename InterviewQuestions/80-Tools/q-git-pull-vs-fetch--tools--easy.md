@@ -29,11 +29,9 @@ updated: 2025-10-03
 # Tags
 tags: [git, fetch, pull, version-control, remote, difficulty/easy, easy_kotlin, lang/ru, tools]
 ---
-
-# Question (EN)
+## Question (EN)
 > Difference between git pull and git fetch
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Разница между git pull и git fetch
 
 ---

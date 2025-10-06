@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, generics, types, variance, type-erasure, difficulty/hard]
 ---
-
-# Question (EN)
+## Question (EN)
 > What do you know about Generics in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что вы знаете об обобщениях (Generics) в Kotlin?
 
 ---

@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, glide, image-loading, caching, bitmap, performance, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > How do image loading libraries like Glide/Fresco work internally?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как работают библиотеки загрузки изображений вроде Glide/Fresco внутри?
 
 ---

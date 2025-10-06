@@ -398,7 +398,6 @@ class JobBestPractices {
 - `job.invokeOnCompletion {}`: Add callback
 
 ---
-
 ## Вопрос (RU)
 
 Для чего нужен объект Job?

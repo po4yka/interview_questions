@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, enum, types, classes, difficulty/easy]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is an Enum in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое Enum в Kotlin?
 
 ---

@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [android, activity, launch-mode, task-management, navigation, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What launch modes do you know?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Какие режимы запуска (launch modes) вы знаете?
 
 ---

@@ -388,7 +388,6 @@ class BestPractices {
 - Blocking APIs
 
 ---
-
 ## Вопрос (RU)
 
 В чем различие Default диспатчер и IO диспатчер

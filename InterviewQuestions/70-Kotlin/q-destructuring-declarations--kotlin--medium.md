@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, destructuring, data-classes, componentN, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What are destructuring declarations in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое деструктурирующие объявления в Kotlin?
 
 ---

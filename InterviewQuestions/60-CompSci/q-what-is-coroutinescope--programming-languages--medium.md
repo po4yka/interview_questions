@@ -360,7 +360,6 @@ class MyRepositoryTest {
 - Cancel scopes to prevent leaks
 
 ---
-
 ## Вопрос (RU)
 
 Что такое CoroutineScope

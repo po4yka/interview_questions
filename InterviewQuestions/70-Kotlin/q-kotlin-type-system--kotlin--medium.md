@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, types, any, nothing, unit, type-system, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What do you know about Any, Nothing, Unit types in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что вы знаете о типах Any, Nothing, Unit в Kotlin?
 
 ---

@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, rxjava, recyclerview, pagination, infinite-scroll, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > How do you implement pagination/infinite scrolling in RecyclerView using RxJava?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как реализовать пагинацию/бесконечную прокрутку в RecyclerView с помощью RxJava?
 
 ---

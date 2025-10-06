@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [system-design, instagram, stories, media, video, architecture, android, difficulty/hard]
 ---
-
-# Question (EN)
+## Question (EN)
 > How would you design the Instagram Stories feature for Android?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как бы вы спроектировали функцию Instagram Stories для Android?
 
 ---

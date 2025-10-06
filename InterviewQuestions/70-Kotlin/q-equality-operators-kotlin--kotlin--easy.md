@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, equality, operators, comparison, difficulty/easy]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the difference between == and === in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > В чем разница между == и === в Kotlin?
 
 ---

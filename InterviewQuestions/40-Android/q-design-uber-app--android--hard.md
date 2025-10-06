@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [system-design, uber, location, real-time, maps, architecture, android, difficulty/hard]
 ---
-
-# Question (EN)
+## Question (EN)
 > How would you design an Uber-like ride-hailing application for Android?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как бы вы спроектировали приложение для вызова такси, подобное Uber, для Android?
 
 ---

@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [android, optimization, app-size, resources, proguard, app-bundles, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What ways do you know to reduce the size of an application?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Какие способы уменьшения размера приложения вы знаете?
 
 ---

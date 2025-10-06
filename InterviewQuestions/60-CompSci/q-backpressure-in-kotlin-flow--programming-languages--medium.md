@@ -456,7 +456,6 @@ class BackPressureBestPractices {
 | **DROP_LATEST** | Drop new values | Rarely used | Low (bounded) |
 
 ---
-
 ## Вопрос (RU)
 
 Что известно про Back Pressure?

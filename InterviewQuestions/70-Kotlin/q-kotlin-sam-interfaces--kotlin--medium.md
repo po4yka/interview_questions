@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, sam, interfaces, functional-programming, lambdas, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What do you know about functional (SAM) interfaces in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что вы знаете о функциональных (SAM) интерфейсах в Kotlin?
 
 ---

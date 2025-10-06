@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, sequences, lazy-evaluation, collections, performance, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What are sequences in Kotlin and how do they differ from Iterables?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое последовательности в Kotlin и чем они отличаются от Iterable?
 
 ---

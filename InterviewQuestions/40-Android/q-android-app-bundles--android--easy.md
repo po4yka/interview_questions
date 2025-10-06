@@ -21,7 +21,6 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 ---
 
 # Android App Bundles / Android App Bundle (AAB)
-
 ## Question (EN)
 What do you know about App Bundles?
 
@@ -60,7 +59,6 @@ Publishing with Android App Bundles helps your users to install your app with th
 - [What do you know about Play Feature Delivery?](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20Play%20Feature%20Delivery.md)
 
 ---
-
 ## Вопрос (RU)
 Что вы знаете об App Bundles?
 

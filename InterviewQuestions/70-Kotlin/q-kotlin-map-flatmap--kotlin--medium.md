@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, collections, map, flatmap, higher-order-functions, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the difference between map() and flatMap() in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > В чем разница между map() и flatMap() в Kotlin?
 
 ---

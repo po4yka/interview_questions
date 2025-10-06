@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, ranges, rangeto, downto, step, iteration, difficulty/easy]
 ---
-
-# Question (EN)
+## Question (EN)
 > What are ranges in Kotlin and how do you use them?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое диапазоны в Kotlin и как их использовать?
 
 ---

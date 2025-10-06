@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, architecture, clean-architecture, layers, separation-of-concerns, difficulty/hard]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is Clean Architecture in Android? How to implement it with layers?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое Clean Architecture в Android? Как реализовать её со слоями?
 
 ---

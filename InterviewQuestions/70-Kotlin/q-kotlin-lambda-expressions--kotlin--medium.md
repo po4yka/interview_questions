@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, lambda-expressions, functional-programming, sam-conversion, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What are lambda expressions in Kotlin and how do they work?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое лямбда-выражения в Kotlin и как они работают?
 
 ---

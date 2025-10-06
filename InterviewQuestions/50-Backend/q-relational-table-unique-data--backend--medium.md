@@ -29,11 +29,9 @@ updated: 2025-10-03
 # Tags
 tags: [database, relational, primary-key, unique-constraints, indexes, difficulty/medium, easy_kotlin, lang/ru, backend]
 ---
-
-# Question (EN)
+## Question (EN)
 > How to store unique information for each element in a relational table
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как в реляционной таблице сохранить уникальную для каждого элемента информацию
 
 ---

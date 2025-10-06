@@ -290,7 +290,6 @@ class ScopeBestPractices {
 | **Typical usage** | Data that must be complete | Optional/independent operations |
 
 ---
-
 ## Вопрос (RU)
 
 В чем разница между coroutineScope и supervisorScope

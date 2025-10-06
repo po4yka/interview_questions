@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, webrtc, voice-call, video-call, real-time, peer-to-peer, difficulty/hard]
 ---
-
-# Question (EN)
+## Question (EN)
 > How would you implement voice and video calling features in an Android application?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как бы вы реализовали функции голосовых и видеозвонков в Android приложении?
 
 ---

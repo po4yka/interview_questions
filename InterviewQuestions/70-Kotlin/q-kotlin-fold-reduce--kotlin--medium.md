@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, collections, functional-programming, fold, reduce, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the difference between fold and reduce in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Какая разница между fold и reduce в Kotlin?
 
 ---

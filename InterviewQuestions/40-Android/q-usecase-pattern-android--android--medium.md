@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, architecture, usecase, clean-architecture, domain-layer, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the UseCase pattern in Android? When and how to implement it?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое паттерн UseCase в Android? Когда и как его реализовать?
 
 ---

@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, extensions, functions, language-features, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What do you know about extensions in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что вы знаете о расширениях в Kotlin?
 
 ---

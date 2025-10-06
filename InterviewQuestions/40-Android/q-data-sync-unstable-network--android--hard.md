@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, networking, sync, offline-first, workmanager, difficulty/hard]
 ---
-
-# Question (EN)
+## Question (EN)
 > How would you handle data synchronization in an Android app with an unstable network connection?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как бы вы обрабатывали синхронизацию данных в Android приложении при нестабильном сетевом соединении?
 
 ---

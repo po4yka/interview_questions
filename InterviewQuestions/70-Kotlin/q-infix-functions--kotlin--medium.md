@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, infix, functions, syntax, operators, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What are infix functions in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое инфиксные функции в Kotlin?
 
 ---

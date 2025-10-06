@@ -452,7 +452,6 @@ suspend fun structuredApproach() = coroutineScope {
 | Regular function | ❌ No | - | Must use builder |
 
 ---
-
 ## Вопрос (RU)
 
 Откуда можно запускать suspend-функции

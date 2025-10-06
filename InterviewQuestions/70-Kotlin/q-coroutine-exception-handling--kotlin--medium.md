@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [kotlin, coroutines, exceptions, error-handling, supervisorscope, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > How does exception handling work in Kotlin Coroutines? What is the difference between coroutineScope and supervisorScope?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как работает обработка исключений в Kotlin корутинах? В чем разница между coroutineScope и supervisorScope?
 
 ---

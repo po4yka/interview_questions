@@ -24,11 +24,9 @@ tags:
   - android
   - difficulty/medium
 ---
-
-# Question (EN)
+## Question (EN)
 > How would you implement a search-as-you-type feature with debouncing using Kotlin coroutines?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как реализовать функцию поиска при вводе с отложенным выполнением (debouncing) используя Kotlin корутины?
 
 ---

@@ -486,7 +486,6 @@ class FlowBestPractices {
 - Rich operator library
 
 ---
-
 ## Вопрос (RU)
 
 Что из себя представляет Flow

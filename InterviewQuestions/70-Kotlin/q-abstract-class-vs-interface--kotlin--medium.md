@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, abstract-class, interface, oop, inheritance, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the difference between abstract class and interface in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > В чем разница между абстрактным классом и интерфейсом в Kotlin?
 
 ---

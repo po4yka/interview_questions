@@ -304,7 +304,6 @@ fun <T> func($completion: Continuation<T>): Any?
 ```
 
 ---
-
 ## Вопрос (RU)
 
 Какой будет возвращаемый тип у suspend-функции, которая возвращает String, после компиляции

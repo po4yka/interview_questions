@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, 20251006-100013, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > How to schedule local notifications at exact time?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как запланировать локальные уведомления на точное время?
 
 ---

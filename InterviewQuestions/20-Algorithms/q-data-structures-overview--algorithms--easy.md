@@ -29,11 +29,9 @@ updated: 2025-10-03
 # Tags
 tags: [data-structures, overview, algorithms/data-structures, algorithms/fundamentals, difficulty/easy, easy_kotlin, lang/ru]
 ---
-
-# Question (EN)
+## Question (EN)
 > Tell me about data structures you know
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Расскажи про какие структуры данных знаешь
 
 ---

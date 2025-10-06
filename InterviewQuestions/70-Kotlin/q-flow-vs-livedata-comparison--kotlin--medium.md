@@ -24,11 +24,9 @@ tags:
   - comparison
   - difficulty/medium
 ---
-
-# Question (EN)
+## Question (EN)
 > What are the differences between Kotlin Flow and LiveData? When should you use each?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > В чем разница между Kotlin Flow и LiveData? Когда следует использовать каждый из них?
 
 ---

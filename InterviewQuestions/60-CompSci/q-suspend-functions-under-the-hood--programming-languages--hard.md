@@ -464,7 +464,6 @@ suspend fun example() {
 7. **Stack Unwinding**: Suspension unwinds the call stack; resumption rebuilds it
 
 ---
-
 ## Вопрос (RU)
 
 Как работают под капотом suspend-функции?

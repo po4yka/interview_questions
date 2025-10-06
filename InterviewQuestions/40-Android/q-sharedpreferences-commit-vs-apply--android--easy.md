@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, sharedpreferences, commit, apply, performance, difficulty/easy]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the difference between commit() and apply() in SharedPreferences?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > В чем разница между commit() и apply() в SharedPreferences?
 
 ---

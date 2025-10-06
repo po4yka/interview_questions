@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, annotation-processing, kapt, ksp, build-performance, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the difference between kapt and KSP? Which one to use?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > В чем разница между kapt и KSP? Какой использовать?
 
 ---

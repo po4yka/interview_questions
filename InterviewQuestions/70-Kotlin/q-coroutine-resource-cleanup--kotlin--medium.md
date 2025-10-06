@@ -23,11 +23,9 @@ tags:
   - cancellation
   - difficulty/medium
 ---
-
-# Question (EN)
+## Question (EN)
 > How do you ensure proper resource cleanup when a coroutine is cancelled?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как обеспечить правильную очистку ресурсов при отмене корутины?
 
 ---

@@ -22,11 +22,9 @@ tags:
   - memory-leaks
   - difficulty/medium
 ---
-
-# Question (EN)
+## Question (EN)
 > What is structured concurrency and why is it important in Android coroutine usage?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое структурированная конкурентность и почему она важна при использовании корутин в Android?
 
 ---

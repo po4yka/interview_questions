@@ -198,7 +198,6 @@ class DelayedContinuation(
 - Efficient resource usage
 
 ---
-
 ## Вопрос (RU)
 
 Каким образом обеспечивается возможность приостановки выполнения suspend-функции

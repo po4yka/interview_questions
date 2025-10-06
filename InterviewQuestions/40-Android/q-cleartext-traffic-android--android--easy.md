@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, 20251006-100011, difficulty/easy]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is cleartext traffic in Android?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое cleartext traffic в Android?
 
 ---

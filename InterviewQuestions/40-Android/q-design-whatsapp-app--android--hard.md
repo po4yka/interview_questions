@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [system-design, whatsapp, messaging, real-time, architecture, scalability, android, difficulty/hard]
 ---
-
-# Question (EN)
+## Question (EN)
 > How would you design a WhatsApp-like messaging application for Android?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как бы вы спроектировали мессенджер, подобный WhatsApp, для Android?
 
 ---

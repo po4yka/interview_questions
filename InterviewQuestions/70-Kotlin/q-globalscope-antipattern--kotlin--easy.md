@@ -23,11 +23,9 @@ tags:
   - memory-leaks
   - difficulty/easy
 ---
-
-# Question (EN)
+## Question (EN)
 > Why should you avoid using GlobalScope in Android applications?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Почему следует избегать использования GlobalScope в Android приложениях?
 
 ---

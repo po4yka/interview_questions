@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, flow, coroutines, async, reactive-streams, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What do you know about Flow in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что вы знаете о Flow в Kotlin?
 
 ---

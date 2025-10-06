@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, coroutines, suspend, blocking, concurrency, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the difference between suspending and blocking in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > В чем разница между приостанавливающими (suspending) и блокирующими (blocking) функциями в Kotlin?
 
 ---

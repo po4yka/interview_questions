@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [kotlin, flow, flatmap, operators, coroutines, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the difference between flatMapConcat, flatMapMerge, and flatMapLatest in Kotlin Flow?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > В чем разница между flatMapConcat, flatMapMerge и flatMapLatest в Kotlin Flow?
 
 ---

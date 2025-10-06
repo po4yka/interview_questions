@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, lazy, lateinit, delegation, initialization, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the difference between lazy and lateinit in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > В чем разница между lazy и lateinit в Kotlin?
 
 ---

@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, coroutines, async, concurrency, structured-concurrency, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What are coroutines in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое корутины в Kotlin?
 
 ---

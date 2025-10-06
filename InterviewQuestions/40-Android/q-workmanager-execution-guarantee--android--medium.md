@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, 20251006-100009, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > How does WorkManager guarantee task execution?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как WorkManager гарантирует выполнение задач?
 
 ---

@@ -23,11 +23,9 @@ tags:
   - comparison
   - difficulty/easy
 ---
-
-# Question (EN)
+## Question (EN)
 > What are the key differences between coroutines and threads in Android development?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Каковы ключевые различия между корутинами и потоками в Android разработке?
 
 ---

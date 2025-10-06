@@ -438,7 +438,6 @@ fun demonstrateThreadBlocking() = runBlocking {
 | **Use case** | Quick non-suspend ops | Coroutine synchronization |
 
 ---
-
 ## Вопрос (RU)
 
 Почему не рекомендуется использовать с корутинами synchronized блок и аналоги таких типов

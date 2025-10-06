@@ -29,11 +29,9 @@ updated: 2025-10-03
 # Tags
 tags: [database, migration, schema-evolution, difficulty/medium, easy_kotlin, lang/ru, backend]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is database migration and what is it used for
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое миграция и для чего она нужна
 
 ---

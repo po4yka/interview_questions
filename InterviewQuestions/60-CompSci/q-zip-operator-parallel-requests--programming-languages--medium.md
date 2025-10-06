@@ -265,7 +265,6 @@ suspend fun fetchWithErrorHandling(): Result<CombinedData> = coroutineScope {
 | **async/await** | Manual parallel execution control | Best for Kotlin coroutines |
 
 ---
-
 ## Вопрос (RU)
 
 Чем воспользоваться когда нужно три разных запроса мапить между собой дернуть одновременно

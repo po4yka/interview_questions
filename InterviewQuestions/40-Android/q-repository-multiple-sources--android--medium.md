@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, architecture, repository, data-layer, caching, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > How to implement Repository pattern with multiple data sources (network, database, cache)?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как реализовать паттерн Repository с несколькими источниками данных (сеть, БД, кэш)?
 
 ---

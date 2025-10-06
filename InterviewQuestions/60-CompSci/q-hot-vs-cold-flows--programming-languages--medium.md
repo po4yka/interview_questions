@@ -288,7 +288,6 @@ class ViewModel {
 | **Resource usage** | New execution per collector | Single execution shared |
 
 ---
-
 ## Вопрос (RU)
 
 В чем отличие горячих и холодных потоков

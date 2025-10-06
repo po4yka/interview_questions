@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, stateflow, sharedflow, flow, hot-flows, coroutines, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What are StateFlow and SharedFlow in Kotlin? What are the differences between them?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое StateFlow и SharedFlow в Kotlin? В чем их отличия?
 
 ---

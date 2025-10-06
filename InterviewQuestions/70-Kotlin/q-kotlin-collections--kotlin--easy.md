@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, collections, list, set, map, data-structures, difficulty/easy]
 ---
-
-# Question (EN)
+## Question (EN)
 > What do you know about Collections in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что вы знаете о коллекциях в Kotlin?
 
 ---

@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, 20251006-100012, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is annotation processing in Android?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое annotation processing в Android?
 
 ---

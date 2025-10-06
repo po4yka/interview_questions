@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, inline-class, value-class, performance, optimization, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What are inline classes (value classes) in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое встроенные классы (value классы) в Kotlin?
 
 ---

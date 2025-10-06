@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, 20251006-100008, difficulty/easy]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is setHasFixedSize(true) in RecyclerView?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое setHasFixedSize(true) в RecyclerView?
 
 ---

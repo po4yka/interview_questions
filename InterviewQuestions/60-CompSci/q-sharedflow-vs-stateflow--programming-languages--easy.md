@@ -341,7 +341,6 @@ val converted: StateFlow<Int> = sharedFlow.stateIn(
 ```
 
 ---
-
 ## Вопрос (RU)
 
 Что такое SharedFlow и чем он отличается от StateFlow

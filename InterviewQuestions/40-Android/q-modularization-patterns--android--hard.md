@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [android, architecture, modularization, design-patterns, coupling, cohesion, dependency-injection, difficulty/hard]
 ---
-
-# Question (EN)
+## Question (EN)
 > What modularization patterns do you know?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Какие паттерны модуляризации вы знаете?
 
 ---

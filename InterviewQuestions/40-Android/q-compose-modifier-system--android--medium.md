@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, jetpack-compose, modifier, ui, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > How does the Modifier system work in Jetpack Compose? Why is order important?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как работает система Modifier в Jetpack Compose? Почему важен порядок?
 
 ---

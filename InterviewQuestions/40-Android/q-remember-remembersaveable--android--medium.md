@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, jetpack-compose, state, remember, remembersaveable, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the difference between remember and rememberSaveable in Jetpack Compose?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > В чем разница между remember и rememberSaveable в Jetpack Compose?
 
 ---

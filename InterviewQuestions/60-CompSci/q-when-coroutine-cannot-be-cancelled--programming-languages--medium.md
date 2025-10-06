@@ -521,7 +521,6 @@ class CancellationBestPractices {
 | Blocking I/O | ❌ No | Use suspending I/O or add checks |
 
 ---
-
 ## Вопрос (RU)
 
 Есть ли случаи, когда не получится отменить корутину

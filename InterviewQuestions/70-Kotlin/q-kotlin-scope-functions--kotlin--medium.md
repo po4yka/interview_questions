@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, scope-functions, let, run, with, apply, also, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What are scope functions in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое функции области видимости (scope functions) в Kotlin?
 
 ---

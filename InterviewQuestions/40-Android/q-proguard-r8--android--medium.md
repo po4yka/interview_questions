@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [android, proguard, r8, optimization, obfuscation, code-shrinking, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What's ProGuard?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое ProGuard?
 
 ---

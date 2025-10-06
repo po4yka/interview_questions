@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, functional-interfaces, type-aliases, sam, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the difference between functional interfaces and type aliases in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > В чем разница между функциональными интерфейсами и псевдонимами типов в Kotlin?
 
 ---

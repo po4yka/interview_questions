@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, apk-size, optimization, build, resources, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What techniques can be used to reduce Android APK size?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Какие техники можно использовать для уменьшения размера Android APK?
 
 ---

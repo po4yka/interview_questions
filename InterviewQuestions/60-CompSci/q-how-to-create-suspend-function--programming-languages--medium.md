@@ -404,7 +404,6 @@ suspend fun longRunningTask() {
 5. ✅ Automatically receives `Continuation` parameter (compiler adds it)
 
 ---
-
 ## Вопрос (RU)
 
 Как создать suspend-функцию

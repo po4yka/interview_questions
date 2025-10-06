@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [kotlin, coroutines, callbacks, suspendcoroutine, async, migration, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > How do you convert callback-based APIs to coroutines in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как конвертировать callback-based API в корутины в Kotlin?
 
 ---

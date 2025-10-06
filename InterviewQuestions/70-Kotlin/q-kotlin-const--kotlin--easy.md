@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, const, compile-time-constants, properties, difficulty/easy]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the `const` keyword in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое ключевое слово `const` в Kotlin?
 
 ---

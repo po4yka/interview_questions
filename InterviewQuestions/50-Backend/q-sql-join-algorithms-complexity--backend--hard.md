@@ -30,11 +30,9 @@ updated: 2025-10-03
 # Tags
 tags: [sql, join, algorithms, complexity, database-performance, difficulty/hard, easy_kotlin, lang/ru, backend]
 ---
-
-# Question (EN)
+## Question (EN)
 > What does the algorithm for querying data from two tables look like and what is its complexity?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как выглядит алгоритм запроса данных из двух таблиц и какая у него сложность?
 
 ---

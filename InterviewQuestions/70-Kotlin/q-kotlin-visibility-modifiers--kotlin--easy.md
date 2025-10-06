@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, visibility, modifiers, access-control, encapsulation, difficulty/easy]
 ---
-
-# Question (EN)
+## Question (EN)
 > What are visibility modifiers in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое модификаторы видимости в Kotlin?
 
 ---

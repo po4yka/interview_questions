@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [kotlin, flow, search, debounce, operators, performance, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > How do you implement instant/real-time search functionality using Kotlin Flow operators?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как реализовать функциональность мгновенного/реального поиска с помощью операторов Kotlin Flow?
 
 ---

@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, 20251006-100010, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > React Native vs Flutter comparison
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Сравнение React Native и Flutter
 
 ---

@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, nested-class, inner-class, classes, oop, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the difference between nested class and inner class in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > В чем разница между вложенным (nested) и внутренним (inner) классом в Kotlin?
 
 ---

@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, networking, http, websocket, sse, long-polling, real-time, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What are the differences between HTTP, Long-Polling, WebSocket, and Server-Sent Events (SSE)? When should each be used?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > В чем разница между HTTP, Long-Polling, WebSocket и Server-Sent Events (SSE)? Когда следует использовать каждый из них?
 
 ---

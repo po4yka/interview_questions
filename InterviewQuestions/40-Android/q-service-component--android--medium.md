@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [android, service, components, background, lifecycle, foreground-service, bound-service, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What's Service?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое Service?
 
 ---

@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, operators, overloading, conventions, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What do you know about operator overloading in Kotlin?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что вы знаете о перегрузке операторов в Kotlin?
 
 ---

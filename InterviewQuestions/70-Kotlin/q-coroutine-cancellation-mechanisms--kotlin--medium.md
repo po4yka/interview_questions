@@ -22,11 +22,9 @@ tags:
   - cancellationexception
   - difficulty/medium
 ---
-
-# Question (EN)
+## Question (EN)
 > How does coroutine cancellation work, and how is it different from canceling a Thread?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Как работает отмена корутин и чем она отличается от отмены потока?
 
 ---

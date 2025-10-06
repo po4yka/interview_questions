@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, architecture, multi-module, gradle, scalability, difficulty/hard]
 ---
-
-# Question (EN)
+## Question (EN)
 > What are best practices for multi-module architecture in Android? When and why to use it?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Какие лучшие практики для мульти-модульной архитектуры в Android? Когда и зачем её использовать?
 
 ---

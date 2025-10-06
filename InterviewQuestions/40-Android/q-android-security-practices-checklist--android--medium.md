@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [android, security, best-practices, ssl, encryption, webview, permissions, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What security best practices do you know?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Какие лучшие практики безопасности вы знаете?
 
 ---

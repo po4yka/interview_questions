@@ -347,7 +347,6 @@ class ErrorHandlingBestPractices {
 | **Best for** | Fire-and-forget | Operations with results |
 
 ---
-
 ## Вопрос (RU)
 
 Есть ли отличия между launch и async в обработке ошибок

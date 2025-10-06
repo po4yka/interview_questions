@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, type-aliases, types, readability, dsl, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What are type aliases in Kotlin and when should you use them?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое псевдонимы типов (type aliases) в Kotlin и когда их использовать?
 
 ---

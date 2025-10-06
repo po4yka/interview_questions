@@ -26,11 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, coroutines, coroutinescope, coroutinecontext, structured-concurrency, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is CoroutineScope and how is it different from CoroutineContext?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое CoroutineScope и чем он отличается от CoroutineContext?
 
 ---

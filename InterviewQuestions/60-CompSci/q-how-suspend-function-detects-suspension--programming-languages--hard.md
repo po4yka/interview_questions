@@ -439,7 +439,6 @@ if (condition) { }                    // Regular control flow
 ```
 
 ---
-
 ## Вопрос (RU)
 
 Как функция определяет что она suspend'илась

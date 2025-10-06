@@ -26,11 +26,9 @@ updated: 2025-10-06
 
 tags: [android, app-startup, jetpack, initialization, performance, difficulty/medium]
 ---
-
-# Question (EN)
+## Question (EN)
 > What is the Android App Startup library and how does it optimize app initialization?
-
-# Вопрос (RU)
+## Вопрос (RU)
 > Что такое библиотека Android App Startup и как она оптимизирует инициализацию приложения?
 
 ---
