@@ -1,6 +1,7 @@
 ---
 tags:
   - programming-languages
+  - kotlin
 difficulty: medium
 ---
 
