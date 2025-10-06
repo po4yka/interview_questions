@@ -1,16 +1,15 @@
 ---
 tags:
-  - layout
+  - ConstraintLayout
   - LinearLayout
   - RelativeLayout
-  - ConstraintLayout
-  - xml
-  - easy_kotlin
+  - android
   - android/layouts
   - android/ui
-  - android
-  - ui
+  - layout
   - layouts
+  - ui
+  - xml
 difficulty: easy
 ---
 

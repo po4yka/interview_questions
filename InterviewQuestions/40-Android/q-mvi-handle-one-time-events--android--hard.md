@@ -1,17 +1,16 @@
 ---
 tags:
   - android
-  - mvi
-  - livedata
-  - viewmodel
-  - sharedflow
-  - stateflow
   - android/architecture-mvi
   - android/lifecycle
-  - easy_kotlin
-  - platform/android
   - architecture-mvi
   - lifecycle
+  - livedata
+  - mvi
+  - platform/android
+  - sharedflow
+  - stateflow
+  - viewmodel
 difficulty: hard
 ---
 

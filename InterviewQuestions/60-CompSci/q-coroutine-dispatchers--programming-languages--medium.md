@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
   - coroutines
   - dispatchers
-  - threading
-  - easy_kotlin
+  - kotlin
   - programming-languages
+  - threading
 difficulty: medium
 ---
 

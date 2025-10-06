@@ -1,15 +1,14 @@
 ---
 tags:
-  - recyclerview
-  - listview
-  - memory management
-  - performance optimization
-  - diffutil
-  - multithreading
-  - easy_kotlin
+  - android
   - android/recyclerview
   - android/views
-  - android
+  - diffutil
+  - listview
+  - memory management
+  - multithreading
+  - performance optimization
+  - recyclerview
   - ui
   - views
 difficulty: easy

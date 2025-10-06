@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - workmanager
-  - background-processing
-  - networking
-  - file-upload
-  - retrofit
   - android/background-processing
-  - easy_kotlin
+  - background-processing
+  - file-upload
+  - networking
+  - retrofit
+  - workmanager
 difficulty: hard
 ---
 

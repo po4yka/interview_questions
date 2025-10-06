@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
+  - collections
   - equals
   - hashcode
-  - collections
+  - kotlin
   - object-comparison
-  - easy_kotlin
   - programming-languages
 difficulty: medium
 ---

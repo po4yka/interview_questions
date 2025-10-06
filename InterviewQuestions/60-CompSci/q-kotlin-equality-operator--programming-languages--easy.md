@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
   - equality
   - equals
+  - kotlin
   - operators
-  - structural-equality
-  - referential-equality
-  - easy_kotlin
   - programming-languages
+  - referential-equality
+  - structural-equality
 difficulty: easy
 ---
 

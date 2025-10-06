@@ -1,9 +1,8 @@
 ---
 tags:
-  - kotlin
-  - extensions
   - extension-functions
-  - easy_kotlin
+  - extensions
+  - kotlin
   - programming-languages
 difficulty: easy
 ---

@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - memory-management
-  - heap-dump
-  - memory-profiler
-  - mat
   - debugging
-  - easy_kotlin
+  - heap-dump
+  - kotlin
+  - mat
+  - memory-management
+  - memory-profiler
   - programming-languages
 difficulty: medium
 ---

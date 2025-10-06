@@ -1,15 +1,14 @@
 ---
 tags:
-  - java
   - access-modifiers
+  - best-practices
   - encapsulation
+  - java
+  - package-private
   - private
+  - programming-languages
   - protected
   - public
-  - package-private
-  - best-practices
-  - easy_kotlin
-  - programming-languages
 difficulty: medium
 ---
 

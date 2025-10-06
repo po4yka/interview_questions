@@ -1,15 +1,14 @@
 ---
 tags:
-  - view
-  - xml layout
-  - event handling
-  - easy_kotlin
-  - android/views
-  - android/layouts
   - android
-  - ui
-  - views
+  - android/layouts
+  - android/views
+  - event handling
   - layouts
+  - ui
+  - view
+  - views
+  - xml layout
 difficulty: medium
 ---
 

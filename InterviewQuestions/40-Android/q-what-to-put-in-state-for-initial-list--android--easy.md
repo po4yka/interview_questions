@@ -1,13 +1,12 @@
 ---
 tags:
-  - state
-  - data loading
-  - easy_kotlin
+  - android
   - android/state-management
   - android/ui
-  - android
-  - ui
+  - data loading
+  - state
   - state-management
+  - ui
 difficulty: easy
 ---
 

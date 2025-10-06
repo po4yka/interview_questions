@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - service
-  - foreground-service
-  - bound-service
-  - started-service
-  - easy_kotlin
-  - android/service
   - android/background-execution
+  - android/service
   - background-execution
+  - bound-service
+  - foreground-service
+  - service
+  - started-service
 difficulty: easy
 ---
 

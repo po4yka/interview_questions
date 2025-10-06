@@ -1,17 +1,16 @@
 ---
 tags:
   - android
-  - storage
+  - android/data-storage
+  - content-providers
+  - data-storage
+  - external-storage
+  - file-system
+  - internal-storage
   - persistence
   - sharedpreferences
   - sqlite
-  - internal-storage
-  - external-storage
-  - content-providers
-  - easy_kotlin
-  - android/data-storage
-  - data-storage
-  - file-system
+  - storage
 difficulty: medium
 ---
 

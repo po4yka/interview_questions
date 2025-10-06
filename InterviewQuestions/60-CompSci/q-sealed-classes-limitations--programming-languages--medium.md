@@ -1,10 +1,9 @@
 ---
 tags:
-  - kotlin
-  - sealed-classes
   - class-hierarchy
-  - easy_kotlin
+  - kotlin
   - programming-languages
+  - sealed-classes
 difficulty: medium
 ---
 

@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
-  - null-safety
-  - null-checks
-  - operators
-  - safe-call
   - elvis
-  - easy_kotlin
+  - kotlin
+  - null-checks
+  - null-safety
+  - operators
   - programming-languages
+  - safe-call
 difficulty: easy
 ---
 

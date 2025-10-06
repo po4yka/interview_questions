@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - data-passing
-  - large-data
-  - intent
-  - file-provider
-  - uri
-  - content-provider
   - android/data-passing
-  - easy_kotlin
+  - content-provider
+  - data-passing
+  - file-provider
+  - intent
+  - large-data
+  - uri
 difficulty: hard
 ---
 

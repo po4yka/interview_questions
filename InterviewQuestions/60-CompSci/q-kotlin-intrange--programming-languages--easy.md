@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
-  - ranges
   - intrange
   - iteration
-  - easy_kotlin
+  - kotlin
   - programming-languages
+  - ranges
 difficulty: easy
 ---
 

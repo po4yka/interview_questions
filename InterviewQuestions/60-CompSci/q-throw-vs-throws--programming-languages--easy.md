@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - java
   - exceptions
+  - java
+  - kotlin
+  - programming-languages
   - throw
   - throws
-  - easy_kotlin
-  - programming-languages
 difficulty: easy
 ---
 

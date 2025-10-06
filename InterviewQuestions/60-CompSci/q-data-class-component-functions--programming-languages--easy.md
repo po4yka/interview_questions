@@ -1,9 +1,8 @@
 ---
 tags:
-  - kotlin
-  - data-class
   - component-functions
-  - easy_kotlin
+  - data-class
+  - kotlin
   - programming-languages
 difficulty: easy
 ---

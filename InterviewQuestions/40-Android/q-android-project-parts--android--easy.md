@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - project-structure
-  - gradle
-  - resources
-  - manifest
-  - assets
   - android/project-structure
-  - easy_kotlin
+  - assets
+  - gradle
+  - manifest
+  - project-structure
+  - resources
 difficulty: easy
 ---
 

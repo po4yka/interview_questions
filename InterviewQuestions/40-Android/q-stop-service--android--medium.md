@@ -1,12 +1,11 @@
 ---
 tags:
   - android
-  - services
-  - service-lifecycle
-  - started-service
-  - bound-service
   - android/services
-  - easy_kotlin
+  - bound-service
+  - service-lifecycle
+  - services
+  - started-service
 difficulty: medium
 ---
 

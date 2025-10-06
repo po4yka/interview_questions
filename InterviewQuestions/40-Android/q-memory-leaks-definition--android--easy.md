@@ -1,12 +1,11 @@
 ---
 tags:
   - android
-  - memory-leaks
-  - garbage-collection
-  - performance
-  - easy_kotlin
   - android/memory-management
+  - garbage-collection
+  - memory-leaks
   - memory-management
+  - performance
 difficulty: easy
 ---
 

@@ -1,13 +1,12 @@
 ---
 tags:
-  - oop
+  - code-reuse
   - composition
-  - has-a
   - design-patterns
   - encapsulation
-  - code-reuse
+  - has-a
+  - oop
   - relationships
-  - easy_kotlin
 difficulty: medium
 ---
 

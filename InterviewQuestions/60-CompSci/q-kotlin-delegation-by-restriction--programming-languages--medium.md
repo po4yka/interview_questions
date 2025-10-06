@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
-  - delegation
   - by-keyword
-  - lazy
   - delegates
-  - easy_kotlin
+  - delegation
+  - kotlin
+  - lazy
   - programming-languages
 difficulty: medium
 ---

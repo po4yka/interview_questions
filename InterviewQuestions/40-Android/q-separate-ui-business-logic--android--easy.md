@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - architecture
-  - clean-architecture
-  - separation-of-concerns
   - android/architecture-clean
-  - easy_kotlin
-  - platform/android
+  - architecture
   - architecture-clean
+  - clean-architecture
+  - platform/android
+  - separation-of-concerns
 difficulty: easy
 ---
 

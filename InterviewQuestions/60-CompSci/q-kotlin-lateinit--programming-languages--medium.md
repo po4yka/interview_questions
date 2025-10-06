@@ -1,12 +1,11 @@
 ---
 tags:
+  - dependency-injection
+  - initialization
   - kotlin
   - lateinit
-  - properties
-  - initialization
-  - dependency-injection
-  - easy_kotlin
   - programming-languages
+  - properties
 difficulty: medium
 ---
 

@@ -1,18 +1,17 @@
 ---
 tags:
   - android
-  - mvvm
-  - mvp
+  - android/architecture-mvp
+  - android/architecture-mvvm
+  - architecture-mvp
+  - architecture-mvvm
   - architecture-patterns
-  - viewmodel
-  - presenter
   - data-binding
   - lifecycle
-  - easy_kotlin
-  - android/architecture-mvvm
-  - android/architecture-mvp
-  - architecture-mvvm
-  - architecture-mvp
+  - mvp
+  - mvvm
+  - presenter
+  - viewmodel
 difficulty: medium
 ---
 

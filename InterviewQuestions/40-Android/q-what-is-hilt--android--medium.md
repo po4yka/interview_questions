@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - dependency-injection
-  - hilt
-  - android/di-hilt
   - android/architecture-clean
-  - easy_kotlin
-  - platform/android
-  - di-hilt
+  - android/di-hilt
   - architecture-clean
+  - dependency-injection
+  - di-hilt
+  - hilt
+  - platform/android
 difficulty: medium
 ---
 

@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - database
-  - sqlite
-  - room
-  - realm
-  - easy_kotlin
   - android/data-storage
   - data-storage
+  - database
+  - realm
+  - room
+  - sqlite
 difficulty: easy
 ---
 

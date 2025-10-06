@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - binder
-  - intent
-  - savedinstancestate
-  - exceptions
-  - ipc
-  - easy_kotlin
   - android/memory-management
+  - binder
+  - exceptions
+  - intent
+  - ipc
+  - savedinstancestate
 difficulty: medium
 ---
 

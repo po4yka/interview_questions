@@ -1,10 +1,9 @@
 ---
 tags:
-  - java
   - inheritance
+  - java
   - object-class
   - oop
-  - easy_kotlin
   - programming-languages
 difficulty: easy
 ---

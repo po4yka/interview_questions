@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - services
-  - foreground-service
-  - background-service
-  - process-priority
-  - android/services
   - android/foreground-service
-  - easy_kotlin
+  - android/services
+  - background-service
+  - foreground-service
+  - process-priority
+  - services
 difficulty: medium
 ---
 

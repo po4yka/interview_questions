@@ -1,13 +1,12 @@
 ---
 tags:
-  - android
   - activity
-  - fragment
-  - jetpack-navigation-component
+  - android
   - android/activity
   - android/fragment
   - android/ui-navigation
-  - easy_kotlin
+  - fragment
+  - jetpack-navigation-component
   - platform/android
   - ui-navigation
 difficulty: medium

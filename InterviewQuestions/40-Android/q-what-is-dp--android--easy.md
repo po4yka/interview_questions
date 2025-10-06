@@ -1,9 +1,8 @@
 ---
 tags:
-  - dp
-  - density-independent pixels
-  - easy_kotlin
   - android
+  - density-independent pixels
+  - dp
   - ui
 difficulty: easy
 ---

@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
-  - coroutines
   - async
   - concurrency
+  - coroutines
+  - kotlin
   - lightweight-threads
-  - easy_kotlin
   - programming-languages
 difficulty: medium
 ---

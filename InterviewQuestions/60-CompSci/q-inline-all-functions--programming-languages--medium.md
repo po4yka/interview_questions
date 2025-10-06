@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - inline-functions
-  - compiler-optimization
-  - easy_kotlin
-  - programming-languages
-  - inline
   - compiler
+  - compiler-optimization
+  - inline
+  - inline-functions
+  - kotlin
+  - programming-languages
 difficulty: medium
 ---
 

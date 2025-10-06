@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - generics
   - functions
+  - generics
+  - kotlin
+  - programming-languages
   - syntax
   - type-parameters
-  - easy_kotlin
-  - programming-languages
 difficulty: easy
 ---
 

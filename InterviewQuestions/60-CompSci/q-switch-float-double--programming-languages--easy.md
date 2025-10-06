@@ -1,13 +1,12 @@
 ---
 tags:
-  - java
-  - switch
-  - float
   - double
+  - float
   - floating-point
-  - easy_kotlin
-  - programming-languages
+  - java
   - kotlin
+  - programming-languages
+  - switch
 difficulty: easy
 ---
 

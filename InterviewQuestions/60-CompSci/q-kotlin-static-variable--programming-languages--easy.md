@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - static
   - companion-object
   - const
   - jvmstatic
-  - easy_kotlin
+  - kotlin
   - programming-languages
+  - static
 difficulty: easy
 ---
 

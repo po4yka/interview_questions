@@ -1,10 +1,9 @@
 ---
 tags:
-  - fragments
   - activity
-  - easy_kotlin
-  - android/fragments
   - android
+  - android/fragments
+  - fragments
   - ui
 difficulty: hard
 ---

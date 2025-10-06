@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - jvm
   - garbage-collection
   - gc-algorithm
-  - reachability
-  - easy_kotlin
+  - jvm
+  - kotlin
   - programming-languages
+  - reachability
 difficulty: easy
 ---
 

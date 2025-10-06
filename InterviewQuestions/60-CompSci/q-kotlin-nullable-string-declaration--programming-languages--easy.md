@@ -1,12 +1,11 @@
 ---
 tags:
   - kotlin
+  - null-safety
   - nullable
+  - programming-languages
   - string
   - syntax
-  - null-safety
-  - easy_kotlin
-  - programming-languages
 difficulty: easy
 ---
 

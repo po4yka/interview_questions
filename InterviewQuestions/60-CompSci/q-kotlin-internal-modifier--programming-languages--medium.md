@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
   - access-modifiers
   - internal
-  - visibility
+  - kotlin
   - module
-  - easy_kotlin
   - programming-languages
+  - visibility
 difficulty: medium
 ---
 

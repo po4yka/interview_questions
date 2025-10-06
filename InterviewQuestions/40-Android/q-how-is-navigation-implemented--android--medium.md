@@ -1,10 +1,9 @@
 ---
 tags:
+  - android
+  - android/navigation
   - navigation
   - ui
-  - easy_kotlin
-  - android/navigation
-  - android
 difficulty: medium
 ---
 

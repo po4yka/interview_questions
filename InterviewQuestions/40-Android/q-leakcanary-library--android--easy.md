@@ -1,13 +1,12 @@
 ---
 tags:
   - android
+  - android/memory-management
+  - debugging-tools
   - leakcanary
   - memory-leaks
-  - debugging-tools
-  - square
-  - easy_kotlin
-  - android/memory-management
   - memory-management
+  - square
   - tools
 difficulty: easy
 ---

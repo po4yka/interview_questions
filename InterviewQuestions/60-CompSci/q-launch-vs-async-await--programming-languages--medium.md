@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
-  - coroutines
-  - launch
   - async
   - await
-  - easy_kotlin
+  - coroutines
+  - kotlin
+  - launch
   - programming-languages
 difficulty: medium
 ---

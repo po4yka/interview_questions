@@ -1,13 +1,12 @@
 ---
 tags:
-  - software-design
-  - configuration
-  - hardcoding
-  - softcoding
-  - maintainability
-  - flexibility
   - best-practices
-  - easy_kotlin
+  - configuration
+  - flexibility
+  - hardcoding
+  - maintainability
+  - softcoding
+  - software-design
 difficulty: medium
 ---
 

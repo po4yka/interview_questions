@@ -1,15 +1,14 @@
 ---
 tags:
   - android
-  - concurrency
+  - android/concurrency
   - async
-  - threading
+  - concurrency
   - coroutines
-  - workmanager
   - executor
   - handler
-  - android/concurrency
-  - easy_kotlin
+  - threading
+  - workmanager
 difficulty: medium
 ---
 

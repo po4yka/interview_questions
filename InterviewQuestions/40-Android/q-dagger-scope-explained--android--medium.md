@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - dependency-injection
-  - dagger
-  - hilt
-  - scope
-  - lifecycle
   - android/dependency-injection
-  - easy_kotlin
+  - dagger
+  - dependency-injection
+  - hilt
+  - lifecycle
+  - scope
 difficulty: medium
 ---
 

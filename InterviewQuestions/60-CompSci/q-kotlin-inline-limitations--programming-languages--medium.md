@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
   - inline
-  - performance
-  - optimization
+  - kotlin
   - lambdas
-  - recursion
-  - easy_kotlin
+  - optimization
+  - performance
   - programming-languages
+  - recursion
 difficulty: medium
 ---
 

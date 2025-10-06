@@ -1,11 +1,10 @@
 ---
 tags:
-  - java
   - equality
   - equals
   - hashcode
+  - java
   - object-comparison
-  - easy_kotlin
   - programming-languages
 difficulty: easy
 ---

@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
   - conversion
-  - type-conversion
   - extension-functions
-  - to-methods
-  - easy_kotlin
-  - programming-languages
   - functions
+  - kotlin
+  - programming-languages
+  - to-methods
+  - type-conversion
 difficulty: medium
 ---
 

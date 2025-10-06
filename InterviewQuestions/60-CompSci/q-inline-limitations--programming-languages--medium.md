@@ -1,9 +1,8 @@
 ---
 tags:
-  - kotlin
-  - inline
   - functions
-  - easy_kotlin
+  - inline
+  - kotlin
   - programming-languages
 difficulty: medium
 ---

@@ -1,12 +1,11 @@
 ---
 tags:
   - android
-  - sharedpreferences
-  - data-storage
-  - persistence
-  - key-value
-  - easy_kotlin
   - android/data-storage
+  - data-storage
+  - key-value
+  - persistence
+  - sharedpreferences
 difficulty: easy
 ---
 

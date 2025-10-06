@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
-  - inline-functions
   - higher-order-functions
-  - lambda-expressions
-  - easy_kotlin
-  - programming-languages
   - inline
+  - inline-functions
+  - kotlin
+  - lambda-expressions
   - performance
+  - programming-languages
 difficulty: medium
 ---
 

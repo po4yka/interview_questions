@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - networking
-  - retrofit
-  - path-parameter
-  - rest-api
-  - get-request
   - android/networking
-  - easy_kotlin
+  - get-request
+  - networking
+  - path-parameter
   - path-parameters
+  - rest-api
+  - retrofit
 difficulty: medium
 ---
 

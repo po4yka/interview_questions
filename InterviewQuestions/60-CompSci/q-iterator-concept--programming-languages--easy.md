@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - iterator
   - collections
-  - traversal
   - design-patterns
-  - easy_kotlin
+  - iterator
+  - kotlin
   - programming-languages
+  - traversal
 difficulty: easy
 ---
 

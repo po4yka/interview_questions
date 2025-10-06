@@ -2,11 +2,10 @@
 tags:
   - garbage-collector
   - gc
-  - memory-management
-  - kotlin
   - java
+  - kotlin
+  - memory-management
   - performance
-  - easy_kotlin
   - programming-languages
 difficulty: medium
 ---

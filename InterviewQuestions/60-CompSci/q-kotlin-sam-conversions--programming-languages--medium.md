@@ -1,11 +1,10 @@
 ---
 tags:
   - kotlin
-  - sam
-  - lambda-functions
-  - easy_kotlin
-  - programming-languages
   - lambda
+  - lambda-functions
+  - programming-languages
+  - sam
 difficulty: medium
 ---
 

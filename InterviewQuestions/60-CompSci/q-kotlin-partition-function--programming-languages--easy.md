@@ -1,9 +1,8 @@
 ---
 tags:
-  - kotlin
   - collections
   - functions
-  - easy_kotlin
+  - kotlin
   - programming-languages
 difficulty: easy
 ---

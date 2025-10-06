@@ -1,17 +1,16 @@
 ---
 tags:
+  - activity
   - android
-  - single-activity
-  - fragments
-  - performance
   - android/activity
   - android/fragment
   - android/performance-startup
-  - easy_kotlin
-  - platform/android
-  - activity
   - fragment
+  - fragments
+  - performance
   - performance-startup
+  - platform/android
+  - single-activity
 difficulty: medium
 ---
 

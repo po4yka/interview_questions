@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
   - extension-functions
   - functions
-  - static-methods
-  - easy_kotlin
+  - kotlin
   - programming-languages
+  - static-methods
 difficulty: easy
 ---
 

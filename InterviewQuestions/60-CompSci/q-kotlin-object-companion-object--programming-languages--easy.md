@@ -1,12 +1,11 @@
 ---
 tags:
+  - companion-object
   - kotlin
   - object
-  - companion-object
+  - programming-languages
   - singleton
   - static-members
-  - easy_kotlin
-  - programming-languages
 difficulty: easy
 ---
 

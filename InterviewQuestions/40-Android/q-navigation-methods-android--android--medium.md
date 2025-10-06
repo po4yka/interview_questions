@@ -1,15 +1,14 @@
 ---
 tags:
-  - android
-  - navigation
   - activity
-  - fragment
-  - navigation-component
-  - jetpack
-  - compose
-  - easy_kotlin
+  - android
   - android/navigation
   - architecture
+  - compose
+  - fragment
+  - jetpack
+  - navigation
+  - navigation-component
   - ui-patterns
 difficulty: medium
 ---

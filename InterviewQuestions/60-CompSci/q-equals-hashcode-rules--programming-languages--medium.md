@@ -1,14 +1,13 @@
 ---
 tags:
+  - collections
+  - contracts
   - equals
   - hashcode
-  - contracts
-  - collections
-  - easy_kotlin
-  - programming-languages
-  - kotlin
   - java
+  - kotlin
   - object-methods
+  - programming-languages
 difficulty: medium
 ---
 

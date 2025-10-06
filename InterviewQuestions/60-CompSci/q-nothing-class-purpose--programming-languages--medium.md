@@ -1,14 +1,13 @@
 ---
 tags:
+  - control-flow
+  - exceptions
   - kotlin
   - nothing
+  - nothing-type
+  - programming-languages
   - type-system
   - unreachable-code
-  - exceptions
-  - control-flow
-  - easy_kotlin
-  - programming-languages
-  - nothing-type
 difficulty: medium
 ---
 

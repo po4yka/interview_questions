@@ -1,11 +1,10 @@
 ---
 tags:
+  - android
+  - android/ui-compose
   - jetpack-compose
   - lazy-column
-  - android/ui-compose
-  - easy_kotlin
   - platform/android
-  - android
   - ui-compose
 difficulty: easy
 ---

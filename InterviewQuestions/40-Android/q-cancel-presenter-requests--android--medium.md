@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - mvp
-  - presenter-view-communication
   - android/architecture-mvi
   - android/lifecycle
-  - easy_kotlin
-  - platform/android
   - architecture-mvi
   - lifecycle
+  - mvp
+  - platform/android
+  - presenter-view-communication
 difficulty: medium
 ---
 

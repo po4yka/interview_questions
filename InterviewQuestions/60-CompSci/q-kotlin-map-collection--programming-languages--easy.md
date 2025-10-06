@@ -1,9 +1,8 @@
 ---
 tags:
-  - kotlin
   - collections
+  - kotlin
   - map
-  - easy_kotlin
   - programming-languages
 difficulty: easy
 ---

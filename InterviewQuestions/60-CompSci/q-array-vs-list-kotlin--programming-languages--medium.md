@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
   - array
-  - list
   - collections
+  - kotlin
+  - list
   - performance
-  - easy_kotlin
   - programming-languages
 difficulty: medium
 ---

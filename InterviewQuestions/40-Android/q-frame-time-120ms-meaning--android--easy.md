@@ -1,13 +1,12 @@
 ---
 tags:
   - android
+  - android/performance
+  - fps
+  - frame-rate
   - performance
   - rendering
-  - frame-rate
-  - fps
   - ui-performance
-  - easy_kotlin
-  - android/performance
 difficulty: easy
 ---
 

@@ -1,15 +1,14 @@
 ---
 tags:
   - android
-  - recyclerview
-  - performance
-  - scrolling
-  - optimization
-  - viewholder
-  - diffutil
-  - android/recyclerview
   - android/performance
-  - easy_kotlin
+  - android/recyclerview
+  - diffutil
+  - optimization
+  - performance
+  - recyclerview
+  - scrolling
+  - viewholder
 difficulty: medium
 ---
 

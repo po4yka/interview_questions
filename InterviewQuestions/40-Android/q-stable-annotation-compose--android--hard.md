@@ -1,16 +1,15 @@
 ---
 tags:
   - android
-  - jetpack-compose
-  - stable-annotation
-  - stability
-  - recomposition
-  - performance
-  - optimization
   - android/jetpack-compose
   - android/performance
-  - easy_kotlin
   - annotations
+  - jetpack-compose
+  - optimization
+  - performance
+  - recomposition
+  - stability
+  - stable-annotation
 difficulty: hard
 ---
 

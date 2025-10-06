@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
-  - coroutines
-  - threads
-  - java
-  - concurrency
   - comparison
-  - easy_kotlin
+  - concurrency
+  - coroutines
+  - java
+  - kotlin
   - programming-languages
+  - threads
 difficulty: medium
 ---
 

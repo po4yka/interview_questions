@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
   - generics
-  - type-erasure
-  - easy_kotlin
+  - kotlin
   - programming-languages
   - reified
+  - type-erasure
 difficulty: hard
 ---
 

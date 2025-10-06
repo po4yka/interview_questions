@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
   - collections
   - implementations
+  - kotlin
   - list
-  - set
   - map
-  - easy_kotlin
   - programming-languages
+  - set
 difficulty: easy
 ---
 

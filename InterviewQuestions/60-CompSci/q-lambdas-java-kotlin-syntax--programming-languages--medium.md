@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - java
-  - lambdas
   - functional-programming
-  - syntax
-  - easy_kotlin
+  - java
+  - kotlin
+  - lambdas
   - programming-languages
+  - syntax
 difficulty: medium
 ---
 

@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
-  - java
   - data-types
+  - java
+  - kotlin
   - primitives
+  - programming-languages
   - reference-types
   - type-system
-  - easy_kotlin
-  - programming-languages
   - types
 difficulty: medium
 ---

@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
-  - interface
   - abstract-class
-  - oop
   - inheritance
-  - easy_kotlin
+  - interface
+  - kotlin
+  - oop
   - programming-languages
 difficulty: medium
 ---

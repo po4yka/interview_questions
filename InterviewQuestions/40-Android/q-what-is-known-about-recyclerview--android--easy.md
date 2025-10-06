@@ -1,16 +1,15 @@
 ---
 tags:
-  - recyclerview
   - adapter
-  - layoutmanager
-  - viewholder
-  - easy_kotlin
-  - android/recyclerview
-  - android/layouts
-  - android/views
   - android
-  - ui
+  - android/layouts
+  - android/recyclerview
+  - android/views
+  - layoutmanager
   - layouts
+  - recyclerview
+  - ui
+  - viewholder
   - views
 difficulty: easy
 ---

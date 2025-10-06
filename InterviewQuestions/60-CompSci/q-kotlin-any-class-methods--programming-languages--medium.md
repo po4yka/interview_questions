@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
   - any
   - equals
   - hashcode
-  - tostring
+  - kotlin
   - object-methods
-  - easy_kotlin
   - programming-languages
+  - tostring
   - type-system
 difficulty: medium
 ---

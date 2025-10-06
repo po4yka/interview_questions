@@ -1,12 +1,11 @@
 ---
 tags:
-  - layout
-  - performance
-  - easy_kotlin
-  - android/layouts
   - android
-  - ui
+  - android/layouts
+  - layout
   - layouts
+  - performance
+  - ui
 difficulty: easy
 ---
 

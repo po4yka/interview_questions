@@ -1,17 +1,16 @@
 ---
 tags:
   - android
-  - recyclerview
-  - performance
+  - android/performance
+  - android/recyclerview
   - chat
+  - diffutil
+  - flow
   - optimization
   - paging
-  - diffutil
+  - performance
+  - recyclerview
   - room
-  - flow
-  - android/recyclerview
-  - android/performance
-  - easy_kotlin
 difficulty: hard
 ---
 

@@ -1,14 +1,13 @@
 ---
 tags:
-  - kotlin
   - collections
+  - immutable
+  - kotlin
   - list
-  - set
   - map
   - mutable
-  - immutable
-  - easy_kotlin
   - programming-languages
+  - set
 difficulty: easy
 ---
 

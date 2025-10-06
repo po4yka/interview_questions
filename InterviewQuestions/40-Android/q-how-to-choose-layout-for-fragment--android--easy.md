@@ -1,15 +1,14 @@
 ---
 tags:
-  - fragment
-  - layoutinflater
-  - easy_kotlin
+  - android
   - android/fragments
   - android/layouts
   - android/ui
-  - android
-  - ui
+  - fragment
   - fragments
+  - layoutinflater
   - layouts
+  - ui
 difficulty: easy
 ---
 

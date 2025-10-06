@@ -1,10 +1,9 @@
 ---
 tags:
-  - kotlin
   - collections
-  - hashmap
   - data structures
-  - easy_kotlin
+  - hashmap
+  - kotlin
   - programming-languages
 difficulty: medium
 ---

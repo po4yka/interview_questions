@@ -2,10 +2,9 @@
 tags:
   - kotlin
   - nothing
-  - type-system
-  - static-analysis
-  - easy_kotlin
   - programming-languages
+  - static-analysis
+  - type-system
 difficulty: medium
 ---
 

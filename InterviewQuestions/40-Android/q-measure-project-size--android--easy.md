@@ -1,15 +1,14 @@
 ---
 tags:
   - android
-  - project-structure
-  - metrics
-  - codebase-size
-  - modules
-  - apk-size
   - android/project-structure
-  - easy_kotlin
-  - project-metrics
+  - apk-size
   - codebase-analysis
+  - codebase-size
+  - metrics
+  - modules
+  - project-metrics
+  - project-structure
 difficulty: easy
 ---
 

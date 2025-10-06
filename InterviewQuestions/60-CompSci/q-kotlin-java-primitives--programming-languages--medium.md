@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
   - java
+  - kotlin
   - primitives
+  - programming-languages
   - types
   - wrappers
-  - easy_kotlin
-  - programming-languages
 difficulty: medium
 ---
 

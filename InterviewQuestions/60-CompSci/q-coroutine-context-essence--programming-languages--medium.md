@@ -1,10 +1,9 @@
 ---
 tags:
-  - kotlin
-  - coroutines
   - context
   - coroutinecontext
-  - easy_kotlin
+  - coroutines
+  - kotlin
   - programming-languages
 difficulty: medium
 ---

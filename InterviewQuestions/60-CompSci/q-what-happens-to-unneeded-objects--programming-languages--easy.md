@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
-  - jvm
-  - garbage-collection
-  - memory-management
   - automatic-memory
-  - easy_kotlin
+  - garbage-collection
+  - jvm
+  - kotlin
+  - memory-management
   - programming-languages
 difficulty: easy
 ---

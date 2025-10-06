@@ -1,11 +1,10 @@
 ---
 tags:
   - android
-  - workmanager
+  - android/background-processing
   - background-processing
   - data-passing
-  - android/background-processing
-  - easy_kotlin
+  - workmanager
 difficulty: medium
 ---
 

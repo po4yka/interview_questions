@@ -1,10 +1,9 @@
 ---
 tags:
-  - recyclerview
-  - delegates
-  - easy_kotlin
-  - android/recyclerview
   - android
+  - android/recyclerview
+  - delegates
+  - recyclerview
   - ui
 difficulty: easy
 ---

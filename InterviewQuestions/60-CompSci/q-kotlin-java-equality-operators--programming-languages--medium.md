@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
-  - java
-  - operators
-  - equality
   - comparison
-  - easy_kotlin
+  - equality
+  - java
+  - kotlin
+  - operators
   - programming-languages
 difficulty: medium
 ---

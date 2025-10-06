@@ -1,13 +1,12 @@
 ---
 tags:
   - Paint
-  - breakText
-  - easy_kotlin
+  - android
   - android/text-rendering
   - android/ui
-  - android
-  - ui
+  - breakText
   - text-rendering
+  - ui
 difficulty: easy
 ---
 

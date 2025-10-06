@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - memory-management
-  - leakcanary
-  - heap-dump
-  - shark
-  - memory-analysis
-  - easy_kotlin
   - android/memory-management
+  - heap-dump
+  - leakcanary
+  - memory-analysis
+  - memory-management
+  - shark
 difficulty: medium
 ---
 

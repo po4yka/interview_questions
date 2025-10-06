@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - service
+  - android/background-execution
+  - android/service
+  - background-execution
   - background-processing
   - long-running-tasks
-  - easy_kotlin
-  - android/service
-  - android/background-execution
-  - background-execution
+  - service
 difficulty: easy
 ---
 

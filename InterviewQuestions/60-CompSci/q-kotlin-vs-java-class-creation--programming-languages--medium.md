@@ -1,14 +1,13 @@
 ---
 tags:
-  - kotlin
-  - java
   - classes
+  - companion-object
   - comparison
   - data-classes
-  - companion-object
-  - properties
-  - easy_kotlin
+  - java
+  - kotlin
   - programming-languages
+  - properties
   - syntax
 difficulty: medium
 ---

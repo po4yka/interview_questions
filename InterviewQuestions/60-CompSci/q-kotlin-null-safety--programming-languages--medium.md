@@ -1,13 +1,12 @@
 ---
 tags:
+  - elvis
   - kotlin
   - null-safety
   - nullable
   - operators
-  - safe-call
-  - elvis
-  - easy_kotlin
   - programming-languages
+  - safe-call
 difficulty: medium
 ---
 

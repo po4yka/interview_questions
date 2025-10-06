@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - services
-  - foreground-service
-  - process-priority
-  - lifecycle
-  - android/services
   - android/foreground-service
-  - easy_kotlin
+  - android/services
+  - foreground-service
+  - lifecycle
+  - process-priority
+  - services
 difficulty: medium
 ---
 

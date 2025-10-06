@@ -1,12 +1,11 @@
 ---
 tags:
   - android
-  - workmanager
-  - background-processing
-  - livedata
-  - coroutines
   - android/background-processing
-  - easy_kotlin
+  - background-processing
+  - coroutines
+  - livedata
+  - workmanager
 difficulty: medium
 ---
 

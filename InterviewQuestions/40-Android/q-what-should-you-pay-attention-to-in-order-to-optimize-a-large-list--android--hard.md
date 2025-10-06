@@ -1,12 +1,11 @@
 ---
 tags:
-  - recyclerview
-  - viewholder
-  - easy_kotlin
+  - android
   - android/recyclerview
   - android/views
-  - android
+  - recyclerview
   - ui
+  - viewholder
   - views
 difficulty: hard
 ---

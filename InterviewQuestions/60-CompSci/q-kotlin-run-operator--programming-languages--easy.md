@@ -1,14 +1,13 @@
 ---
 tags:
-  - kotlin
-  - scope-functions
-  - run
-  - let
   - also
   - apply
-  - with
-  - easy_kotlin
+  - kotlin
+  - let
   - programming-languages
+  - run
+  - scope-functions
+  - with
 difficulty: easy
 ---
 

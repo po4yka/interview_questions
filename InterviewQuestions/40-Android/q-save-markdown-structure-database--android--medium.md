@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - markdown
-  - database
-  - serialization
-  - room
-  - storage
-  - easy_kotlin
   - android/data-storage
   - data-storage
+  - database
+  - markdown
+  - room
+  - serialization
+  - storage
 difficulty: medium
 ---
 

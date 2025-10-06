@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - safe-cast
-  - type-conversion
   - as?
   - casting
-  - easy_kotlin
+  - kotlin
   - programming-languages
+  - safe-cast
+  - type-conversion
   - type-safety
 difficulty: easy
 ---

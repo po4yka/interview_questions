@@ -1,15 +1,14 @@
 ---
 tags:
   - android
-  - dependency-injection
-  - dagger/hilt
-  - koin
-  - android/di-hilt
   - android/architecture-mvi
-  - easy_kotlin
-  - platform/android
-  - di-hilt
+  - android/di-hilt
   - architecture-mvi
+  - dagger/hilt
+  - dependency-injection
+  - di-hilt
+  - koin
+  - platform/android
 difficulty: medium
 ---
 

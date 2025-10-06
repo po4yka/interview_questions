@@ -1,15 +1,14 @@
 ---
 tags:
-  - navigation
-  - Jetpack Navigation Component
   - FragmentTransaction
   - Intent
+  - Jetpack Navigation Component
   - NavController
   - NavHostFragment
-  - easy_kotlin
+  - android
   - android/navigation
   - android/ui
-  - android
+  - navigation
   - ui
 difficulty: medium
 ---

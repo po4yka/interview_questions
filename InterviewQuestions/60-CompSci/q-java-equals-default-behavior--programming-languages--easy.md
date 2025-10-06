@@ -1,12 +1,11 @@
 ---
 tags:
-  - java
-  - equals
-  - object-class
-  - reference-equality
-  - easy_kotlin
-  - programming-languages
   - equality
+  - equals
+  - java
+  - object-class
+  - programming-languages
+  - reference-equality
 difficulty: easy
 ---
 

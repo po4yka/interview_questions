@@ -1,19 +1,18 @@
 ---
 tags:
   - android
-  - viewmodel
-  - livedata
-  - room
-  - workmanager
-  - databinding
-  - paging
-  - navigation
   - android/architecture-clean
   - android/lifecycle
-  - easy_kotlin
-  - platform/android
   - architecture-clean
+  - databinding
   - lifecycle
+  - livedata
+  - navigation
+  - paging
+  - platform/android
+  - room
+  - viewmodel
+  - workmanager
 difficulty: easy
 ---
 

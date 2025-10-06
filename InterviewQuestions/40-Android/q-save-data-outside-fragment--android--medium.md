@@ -1,15 +1,14 @@
 ---
 tags:
   - android
-  - fragments
-  - data-persistence
-  - viewmodel
-  - sharedpreferences
-  - room
-  - easy_kotlin
   - android/data-storage
-  - data-storage
   - architecture
+  - data-persistence
+  - data-storage
+  - fragments
+  - room
+  - sharedpreferences
+  - viewmodel
 difficulty: medium
 ---
 

@@ -1,16 +1,15 @@
 ---
 tags:
   - android
-  - presenter
-  - view
-  - callback
-  - livedata
   - android/architecture-mvi
   - android/lifecycle
-  - easy_kotlin
-  - platform/android
   - architecture-mvi
+  - callback
   - lifecycle
+  - livedata
+  - platform/android
+  - presenter
+  - view
 difficulty: medium
 ---
 

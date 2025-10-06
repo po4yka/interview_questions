@@ -1,14 +1,13 @@
 ---
 tags:
-  - kotlin
+  - classes
   - constructors
-  - primary-constructor
-  - secondary-constructor
   - init-block
   - initialization
-  - easy_kotlin
+  - kotlin
+  - primary-constructor
   - programming-languages
-  - classes
+  - secondary-constructor
 difficulty: medium
 ---
 

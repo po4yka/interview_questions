@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
-  - java
   - abstract-classes
+  - comparison
   - inheritance
   - interfaces
+  - java
+  - kotlin
   - oop
-  - comparison
-  - easy_kotlin
   - programming-languages
 difficulty: medium
 ---

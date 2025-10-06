@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - when
-  - switch
   - control-flow
+  - kotlin
   - pattern-matching
-  - easy_kotlin
   - programming-languages
+  - switch
+  - when
 difficulty: easy
 ---
 

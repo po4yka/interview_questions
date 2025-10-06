@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
   - data-class
+  - kotlin
+  - oop
+  - programming-languages
   - sealed-class
   - type-safety
   - when-expressions
-  - oop
-  - easy_kotlin
-  - programming-languages
 difficulty: medium
 ---
 

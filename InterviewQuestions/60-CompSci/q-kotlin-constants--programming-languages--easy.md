@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
-  - constants
-  - val
   - const
-  - immutability
-  - easy_kotlin
-  - programming-languages
+  - constants
   - fundamentals
+  - immutability
+  - kotlin
+  - programming-languages
+  - val
 difficulty: easy
 ---
 

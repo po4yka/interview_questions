@@ -1,11 +1,10 @@
 ---
 tags:
-  - recyclerview
-  - layout
-  - easy_kotlin
+  - android
   - android/recyclerview
   - android/ui
-  - android
+  - layout
+  - recyclerview
   - ui
 difficulty: easy
 ---

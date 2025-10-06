@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - performance
-  - app-startup
-  - optimization
-  - legacy-code
-  - lazy-init
-  - easy_kotlin
   - android/performance
+  - app-startup
+  - lazy-init
+  - legacy-code
+  - optimization
+  - performance
 difficulty: hard
 ---
 

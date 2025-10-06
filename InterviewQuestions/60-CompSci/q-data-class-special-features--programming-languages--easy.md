@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
+  - copy
   - data-class
   - equals
   - hashcode
-  - tostring
-  - copy
-  - easy_kotlin
+  - kotlin
   - programming-languages
+  - tostring
 difficulty: easy
 ---
 

@@ -1,10 +1,9 @@
 ---
 tags:
-  - kotlin
-  - collections
-  - associateWith
   - associateBy
-  - easy_kotlin
+  - associateWith
+  - collections
+  - kotlin
   - programming-languages
 difficulty: medium
 ---

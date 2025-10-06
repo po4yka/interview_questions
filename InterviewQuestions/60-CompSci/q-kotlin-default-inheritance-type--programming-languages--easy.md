@@ -1,14 +1,13 @@
 ---
 tags:
-  - kotlin
-  - inheritance
-  - final
-  - open
   - class-design
-  - easy_kotlin
-  - programming-languages
   - classes
+  - final
+  - inheritance
   - keywords
+  - kotlin
+  - open
+  - programming-languages
 difficulty: easy
 ---
 

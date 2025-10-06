@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - viewmodel
-  - mvvm
   - android/architecture-mvvm
   - android/lifecycle
-  - easy_kotlin
-  - platform/android
   - architecture-mvvm
   - lifecycle
+  - mvvm
+  - platform/android
+  - viewmodel
 difficulty: easy
 ---
 

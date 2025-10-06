@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
-  - types
   - any
-  - unit
+  - kotlin
   - nothing
-  - type-system
-  - easy_kotlin
   - programming-languages
+  - type-system
+  - types
+  - unit
 difficulty: medium
 ---
 

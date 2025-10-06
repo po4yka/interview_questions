@@ -1,12 +1,11 @@
 ---
 tags:
   - android
+  - android/concurrency
   - concurrency
   - multithreading
-  - threading
   - performance
-  - android/concurrency
-  - easy_kotlin
+  - threading
 difficulty: easy
 ---
 

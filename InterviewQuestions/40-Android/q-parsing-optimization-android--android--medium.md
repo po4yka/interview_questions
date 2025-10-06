@@ -1,15 +1,14 @@
 ---
 tags:
   - android
-  - parsing
-  - optimization
-  - json
-  - xml
-  - moshi
-  - gson
-  - performance
-  - easy_kotlin
   - android/performance
+  - gson
+  - json
+  - moshi
+  - optimization
+  - parsing
+  - performance
+  - xml
 difficulty: medium
 ---
 

@@ -1,14 +1,13 @@
 ---
 tags:
-  - oop
-  - inheritance
-  - composition
   - aggregation
-  - is-a
-  - has-a
+  - composition
   - design-patterns
+  - has-a
+  - inheritance
+  - is-a
+  - oop
   - relationships
-  - easy_kotlin
 difficulty: medium
 ---
 

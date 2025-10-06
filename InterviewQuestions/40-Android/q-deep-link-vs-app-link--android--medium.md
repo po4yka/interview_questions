@@ -1,15 +1,14 @@
 ---
 tags:
   - android
-  - deep-linking
-  - app-links
-  - navigation
-  - uri
-  - https
-  - verification
-  - easy_kotlin
   - android/navigation
   - app-linking
+  - app-links
+  - deep-linking
+  - https
+  - navigation
+  - uri
+  - verification
 difficulty: medium
 ---
 

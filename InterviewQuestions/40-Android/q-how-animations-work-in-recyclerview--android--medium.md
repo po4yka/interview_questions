@@ -1,12 +1,11 @@
 ---
 tags:
-  - recyclerview
-  - animations
-  - easy_kotlin
-  - android/recyclerview
-  - android/animations
-  - android/ui
   - android
+  - android/animations
+  - android/recyclerview
+  - android/ui
+  - animations
+  - recyclerview
   - ui
 difficulty: medium
 ---

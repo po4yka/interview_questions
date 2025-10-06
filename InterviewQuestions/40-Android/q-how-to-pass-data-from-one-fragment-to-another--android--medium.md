@@ -1,13 +1,12 @@
 ---
 tags:
-  - fragments
-  - communication
-  - viewmodel
-  - easy_kotlin
+  - android
   - android/fragments
   - android/views
-  - android
+  - communication
+  - fragments
   - ui
+  - viewmodel
   - views
 difficulty: medium
 ---

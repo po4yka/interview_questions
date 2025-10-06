@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - room
+  - android/data-storage
   - annotation-processing
-  - kapt
-  - ksp
   - code-generation
   - compile-time
-  - easy_kotlin
-  - android/data-storage
+  - kapt
+  - ksp
+  - room
 difficulty: medium
 ---
 

@@ -1,16 +1,15 @@
 ---
 tags:
   - android
-  - components
-  - service
+  - android-components
+  - android/android-components
   - broadcast-receiver
+  - components
   - content-provider
   - fragment
+  - service
   - view
   - viewmodel
-  - easy_kotlin
-  - android/android-components
-  - android-components
 difficulty: easy
 ---
 

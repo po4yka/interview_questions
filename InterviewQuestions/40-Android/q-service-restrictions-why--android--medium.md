@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - services
+  - android/background-processing
   - background-processing
   - battery-optimization
-  - workmanager
   - doze-mode
-  - android/background-processing
-  - easy_kotlin
+  - services
+  - workmanager
 difficulty: medium
 ---
 

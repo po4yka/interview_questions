@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
   - any
   - inheritance
-  - type-hierarchy
+  - kotlin
   - object
-  - easy_kotlin
   - programming-languages
+  - type-hierarchy
   - type-system
 difficulty: easy
 ---

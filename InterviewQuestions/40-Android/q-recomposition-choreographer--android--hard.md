@@ -1,15 +1,14 @@
 ---
 tags:
   - android
-  - jetpack-compose
-  - recomposition
-  - choreographer
-  - vsync
-  - frame-scheduling
-  - performance
   - android/jetpack-compose
   - android/performance
-  - easy_kotlin
+  - choreographer
+  - frame-scheduling
+  - jetpack-compose
+  - performance
+  - recomposition
+  - vsync
 difficulty: hard
 ---
 

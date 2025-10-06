@@ -1,14 +1,13 @@
 ---
 tags:
   - android
+  - android/architecture-patterns
   - architecture-patterns
-  - separation-of-concerns
   - clean-architecture
+  - mvi
   - mvp
   - mvvm
-  - mvi
-  - easy_kotlin
-  - android/architecture-patterns
+  - separation-of-concerns
 difficulty: easy
 ---
 

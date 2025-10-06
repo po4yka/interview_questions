@@ -1,10 +1,9 @@
 ---
 tags:
+  - android
+  - android ui
   - dp
   - sp
-  - android ui
-  - easy_kotlin
-  - android
   - ui
 difficulty: easy
 ---

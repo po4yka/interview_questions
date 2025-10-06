@@ -1,11 +1,10 @@
 ---
 tags:
-  - view lifecycle
-  - custom view
-  - easy_kotlin
-  - android/views
   - android
+  - android/views
+  - custom view
   - ui
+  - view lifecycle
   - views
 difficulty: easy
 ---

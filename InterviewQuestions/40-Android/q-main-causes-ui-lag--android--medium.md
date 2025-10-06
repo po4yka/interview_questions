@@ -1,17 +1,16 @@
 ---
 tags:
   - android
-  - performance
-  - ui
-  - optimization
-  - threading
-  - main-thread
-  - layouts
-  - images
-  - animations
   - android/performance
   - android/ui
-  - easy_kotlin
+  - animations
+  - images
+  - layouts
+  - main-thread
+  - optimization
+  - performance
+  - threading
+  - ui
 difficulty: medium
 ---
 

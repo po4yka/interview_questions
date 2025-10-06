@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - mvp
-  - mvvm
-  - mvi
-  - architecture-patterns
-  - lifecycle
-  - easy_kotlin
   - android/architecture-mvp
   - architecture-mvp
+  - architecture-patterns
+  - lifecycle
+  - mvi
+  - mvp
+  - mvvm
 difficulty: easy
 ---
 

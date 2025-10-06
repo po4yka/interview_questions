@@ -1,11 +1,10 @@
 ---
 tags:
-  - navigation
-  - gestures
-  - easy_kotlin
+  - android
   - android/navigation
   - android/ui
-  - android
+  - gestures
+  - navigation
   - ui
 difficulty: medium
 ---

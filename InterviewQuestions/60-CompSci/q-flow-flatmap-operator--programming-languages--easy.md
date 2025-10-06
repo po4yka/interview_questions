@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
-  - flow
-  - flatmap
-  - operators
-  - reactive
-  - easy_kotlin
-  - programming-languages
   - coroutines
+  - flatmap
+  - flow
+  - kotlin
+  - operators
+  - programming-languages
+  - reactive
 difficulty: easy
 ---
 

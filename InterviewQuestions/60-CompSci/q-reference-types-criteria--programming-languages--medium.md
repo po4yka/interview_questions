@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - reference-types
-  - design
   - best-practices
+  - design
   - immutability
-  - easy_kotlin
+  - kotlin
   - programming-languages
+  - reference-types
 difficulty: medium
 ---
 

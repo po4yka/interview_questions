@@ -1,14 +1,13 @@
 ---
 tags:
-  - animations
-  - Property Animations
-  - View Animations
   - Drawable Animations
   - MotionLayout
-  - easy_kotlin
+  - Property Animations
+  - View Animations
+  - android
   - android/animations
   - android/ui
-  - android
+  - animations
   - ui
 difficulty: medium
 ---

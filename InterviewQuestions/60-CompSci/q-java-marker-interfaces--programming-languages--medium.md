@@ -1,12 +1,11 @@
 ---
 tags:
-  - java
-  - interfaces
-  - marker-interface
-  - serializable
   - cloneable
-  - easy_kotlin
+  - interfaces
+  - java
+  - marker-interface
   - programming-languages
+  - serializable
 difficulty: medium
 ---
 

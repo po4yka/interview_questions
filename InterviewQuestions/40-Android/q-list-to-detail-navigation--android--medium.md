@@ -1,16 +1,15 @@
 ---
 tags:
   - android
-  - navigation
-  - master-detail
-  - intent
-  - bundle
-  - viewmodel
-  - navigation-component
-  - easy_kotlin
   - android/navigation
-  - ui-patterns
+  - bundle
   - data-passing
+  - intent
+  - master-detail
+  - navigation
+  - navigation-component
+  - ui-patterns
+  - viewmodel
 difficulty: medium
 ---
 

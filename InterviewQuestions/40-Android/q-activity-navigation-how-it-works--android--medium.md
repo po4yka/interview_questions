@@ -1,13 +1,12 @@
 ---
 tags:
-  - android
-  - navigation
   - activity
-  - intent
-  - back-stack
-  - lifecycle
-  - easy_kotlin
+  - android
   - android/navigation
+  - back-stack
+  - intent
+  - lifecycle
+  - navigation
 difficulty: medium
 ---
 

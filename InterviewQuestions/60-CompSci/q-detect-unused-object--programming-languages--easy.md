@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - memory-management
-  - weak-reference
   - garbage-collection
+  - kotlin
   - leakcanary
-  - easy_kotlin
+  - memory-management
   - programming-languages
+  - weak-reference
   - weak-references
 difficulty: easy
 ---

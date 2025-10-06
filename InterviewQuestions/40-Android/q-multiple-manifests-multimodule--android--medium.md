@@ -1,15 +1,14 @@
 ---
 tags:
   - android
-  - project-structure
-  - multi-module
   - android-manifest
+  - android/multi-module
+  - android/project-structure
+  - build-system
   - manifest-merging
   - modularization
-  - android/project-structure
-  - android/multi-module
-  - easy_kotlin
-  - build-system
+  - multi-module
+  - project-structure
 difficulty: medium
 ---
 

@@ -1,13 +1,12 @@
 ---
 tags:
-  - event handling
-  - touch events
-  - easy_kotlin
+  - android
   - android/touch-events
   - android/ui
-  - android
-  - ui
+  - event handling
+  - touch events
   - touch-events
+  - ui
 difficulty: easy
 ---
 

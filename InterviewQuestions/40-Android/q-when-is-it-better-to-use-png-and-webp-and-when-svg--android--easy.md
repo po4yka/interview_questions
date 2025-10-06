@@ -1,8 +1,7 @@
 ---
 tags:
-  - image-formats
-  - easy_kotlin
   - android
+  - image-formats
   - ui
 difficulty: easy
 ---

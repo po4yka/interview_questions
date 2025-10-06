@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
-  - when
-  - switch
   - control-flow
   - expressions
-  - easy_kotlin
+  - kotlin
   - programming-languages
+  - switch
   - syntax
+  - when
   - when-expression
 difficulty: easy
 ---

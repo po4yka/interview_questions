@@ -1,13 +1,12 @@
 ---
 tags:
   - android
+  - android/data-storage
+  - comparison
+  - database
+  - orm
   - room
   - sqlite
-  - orm
-  - database
-  - comparison
-  - easy_kotlin
-  - android/data-storage
 difficulty: medium
 ---
 

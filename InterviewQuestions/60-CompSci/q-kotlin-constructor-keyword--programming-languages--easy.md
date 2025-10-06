@@ -1,15 +1,14 @@
 ---
 tags:
-  - kotlin
-  - constructor
-  - primary-constructor
-  - secondary-constructor
-  - initialization
-  - easy_kotlin
-  - programming-languages
-  - syntax
-  - constructors
   - classes
+  - constructor
+  - constructors
+  - initialization
+  - kotlin
+  - primary-constructor
+  - programming-languages
+  - secondary-constructor
+  - syntax
 difficulty: easy
 ---
 

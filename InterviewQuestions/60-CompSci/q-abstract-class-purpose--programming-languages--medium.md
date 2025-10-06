@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
   - abstract-class
-  - oop
   - inheritance
-  - template-method
-  - easy_kotlin
+  - kotlin
+  - oop
   - programming-languages
+  - template-method
 difficulty: medium
 ---
 

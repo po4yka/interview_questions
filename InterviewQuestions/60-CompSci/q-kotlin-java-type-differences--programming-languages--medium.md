@@ -1,15 +1,14 @@
 ---
 tags:
-  - kotlin
-  - java
-  - types
-  - comparison
-  - null-safety
-  - type-inference
   - collections
-  - easy_kotlin
+  - comparison
+  - java
+  - kotlin
+  - null-safety
   - programming-languages
+  - type-inference
   - type-system
+  - types
 difficulty: medium
 ---
 

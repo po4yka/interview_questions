@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
   - collections
+  - kotlin
   - list
-  - sequence
-  - easy_kotlin
   - programming-languages
+  - sequence
 difficulty: medium
 ---
 

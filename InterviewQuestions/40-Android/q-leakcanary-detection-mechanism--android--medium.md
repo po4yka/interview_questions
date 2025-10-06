@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - memory-management
+  - android/memory-management
+  - debugging
   - leakcanary
   - memory-leaks
-  - debugging
+  - memory-management
   - weakreference
-  - easy_kotlin
-  - android/memory-management
 difficulty: medium
 ---
 

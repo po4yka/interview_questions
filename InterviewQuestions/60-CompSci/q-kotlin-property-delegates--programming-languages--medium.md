@@ -1,10 +1,9 @@
 ---
 tags:
-  - kotlin
-  - property-delegates
-  - easy_kotlin
-  - programming-languages
   - delegates
+  - kotlin
+  - programming-languages
+  - property-delegates
 difficulty: medium
 ---
 

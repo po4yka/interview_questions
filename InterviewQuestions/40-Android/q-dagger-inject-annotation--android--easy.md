@@ -1,12 +1,11 @@
 ---
 tags:
   - android
-  - dependency-injection
+  - android/dependency-injection
   - dagger
+  - dependency-injection
   - hilt
   - inject
-  - android/dependency-injection
-  - easy_kotlin
 difficulty: easy
 ---
 

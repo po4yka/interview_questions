@@ -1,16 +1,15 @@
 ---
 tags:
-  - navigation
-  - intent
-  - fragmentmanager
-  - jetpack navigation
-  - bottomnavigationview
-  - tablayout
-  - navhost
-  - easy_kotlin
+  - android
   - android/navigation
   - android/ui
-  - android
+  - bottomnavigationview
+  - fragmentmanager
+  - intent
+  - jetpack navigation
+  - navhost
+  - navigation
+  - tablayout
   - ui
 difficulty: medium
 ---

@@ -1,16 +1,15 @@
 ---
 tags:
-  - kotlin
   - access-modifiers
-  - visibility
-  - public
-  - private
-  - protected
-  - internal
   - encapsulation
-  - easy_kotlin
+  - internal
+  - kotlin
+  - private
   - programming-languages
+  - protected
+  - public
   - syntax
+  - visibility
 difficulty: medium
 ---
 

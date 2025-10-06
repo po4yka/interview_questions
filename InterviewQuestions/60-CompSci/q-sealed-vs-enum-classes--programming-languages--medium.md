@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - sealed-class
-  - enum
   - comparison
+  - enum
+  - kotlin
   - oop
-  - easy_kotlin
   - programming-languages
+  - sealed-class
 difficulty: medium
 ---
 

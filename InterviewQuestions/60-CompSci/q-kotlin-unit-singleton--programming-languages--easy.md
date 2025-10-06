@@ -1,12 +1,11 @@
 ---
 tags:
   - kotlin
-  - unit
+  - programming-languages
   - singleton
   - type-system
+  - unit
   - void
-  - easy_kotlin
-  - programming-languages
 difficulty: easy
 ---
 

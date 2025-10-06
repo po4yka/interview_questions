@@ -1,10 +1,9 @@
 ---
 tags:
-  - java
-  - lambda
   - functional-interface
   - functional-programming
-  - easy_kotlin
+  - java
+  - lambda
   - programming-languages
 difficulty: easy
 ---

@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - networking
-  - retrofit
-  - okhttp
-  - interceptor
-  - authentication
-  - logging
   - android/networking
-  - easy_kotlin
+  - authentication
+  - interceptor
+  - logging
+  - networking
+  - okhttp
+  - retrofit
 difficulty: hard
 ---
 

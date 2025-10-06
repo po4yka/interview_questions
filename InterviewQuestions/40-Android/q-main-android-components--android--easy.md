@@ -1,16 +1,15 @@
 ---
 tags:
-  - android
-  - components
   - activity
-  - service
-  - broadcast-receiver
-  - content-provider
-  - easy_kotlin
+  - android
   - android/activity
-  - android/service
   - android/broadcast-receiver
   - android/content-provider
+  - android/service
+  - broadcast-receiver
+  - components
+  - content-provider
+  - service
 difficulty: easy
 ---
 

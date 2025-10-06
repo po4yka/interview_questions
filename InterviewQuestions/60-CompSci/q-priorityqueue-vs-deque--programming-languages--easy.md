@@ -1,13 +1,12 @@
 ---
 tags:
-  - kotlin
   - collections
-  - queue
-  - priority-queue
-  - deque
   - data-structures
-  - easy_kotlin
+  - deque
+  - kotlin
+  - priority-queue
   - programming-languages
+  - queue
 difficulty: easy
 ---
 

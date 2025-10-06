@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - room
-  - database
-  - sqlite
-  - architecture-components
-  - orm
-  - easy_kotlin
   - android/data-storage
+  - architecture-components
   - data-storage
+  - database
+  - orm
+  - room
+  - sqlite
 difficulty: easy
 ---
 

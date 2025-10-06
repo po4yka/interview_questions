@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - design-patterns
-  - factory-pattern
   - android-framework
   - android/architecture-clean
-  - easy_kotlin
-  - platform/android
   - architecture-clean
+  - design-patterns
+  - factory-pattern
+  - platform/android
 difficulty: medium
 ---
 

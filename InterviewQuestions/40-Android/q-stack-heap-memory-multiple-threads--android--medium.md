@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - memory-management
-  - stack
-  - heap
-  - threading
-  - multithreading
-  - easy_kotlin
   - android/memory-management
+  - heap
+  - memory-management
+  - multithreading
+  - stack
+  - threading
 difficulty: medium
 ---
 

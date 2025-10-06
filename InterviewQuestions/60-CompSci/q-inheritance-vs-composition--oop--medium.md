@@ -1,15 +1,14 @@
 ---
 tags:
-  - oop
-  - inheritance
   - composition
-  - is-a
-  - has-a
   - coupling
-  - flexibility
-  - design-patterns
   - dependency-injection
-  - easy_kotlin
+  - design-patterns
+  - flexibility
+  - has-a
+  - inheritance
+  - is-a
+  - oop
 difficulty: medium
 ---
 

@@ -1,14 +1,13 @@
 ---
 tags:
-  - kotlin
-  - override
-  - open
   - abstract
   - inheritance
-  - polymorphism
-  - easy_kotlin
-  - programming-languages
   - keywords
+  - kotlin
+  - open
+  - override
+  - polymorphism
+  - programming-languages
 difficulty: easy
 ---
 

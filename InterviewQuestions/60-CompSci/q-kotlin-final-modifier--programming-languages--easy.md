@@ -1,14 +1,13 @@
 ---
 tags:
-  - kotlin
-  - final
-  - open
-  - inheritance
   - class-modifiers
-  - easy_kotlin
+  - classes
+  - final
+  - inheritance
+  - kotlin
+  - open
   - programming-languages
   - syntax
-  - classes
 difficulty: easy
 ---
 

@@ -1,11 +1,10 @@
 ---
 tags:
+  - double-bang
   - kotlin
   - not-null-assertion
-  - double-bang
   - null-safety
   - operators
-  - easy_kotlin
   - programming-languages
 difficulty: medium
 ---

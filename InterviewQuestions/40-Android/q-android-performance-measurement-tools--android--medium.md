@@ -1,14 +1,13 @@
 ---
 tags:
   - android
+  - android-profiler
+  - android/performance
+  - benchmark
+  - gpu-rendering
+  - optimization
   - performance
   - profiling
-  - optimization
-  - android-profiler
-  - gpu-rendering
-  - benchmark
-  - easy_kotlin
-  - android/performance
 difficulty: medium
 ---
 

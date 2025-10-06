@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
   - extension-functions
   - extension-properties
-  - easy_kotlin
-  - programming-languages
   - extensions
+  - kotlin
+  - programming-languages
 difficulty: medium
 ---
 

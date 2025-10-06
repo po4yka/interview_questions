@@ -1,14 +1,13 @@
 ---
 tags:
   - android
+  - android/concurrency
   - concurrency
   - handler
   - looper
-  - threading
-  - message-queue
   - main-thread
-  - android/concurrency
-  - easy_kotlin
+  - message-queue
+  - threading
 difficulty: medium
 ---
 

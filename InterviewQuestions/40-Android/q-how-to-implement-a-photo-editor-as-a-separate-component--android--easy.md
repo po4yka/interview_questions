@@ -1,17 +1,16 @@
 ---
 tags:
-  - imageview
+  - activity
+  - android
+  - android/fragments
+  - android/views
   - bitmap
   - canvas
   - fragment
-  - activity
-  - easy_kotlin
-  - android/views
-  - android/fragments
-  - android
+  - fragments
+  - imageview
   - ui
   - views
-  - fragments
 difficulty: easy
 ---
 

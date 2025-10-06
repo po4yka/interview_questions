@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - networking
-  - file-upload
-  - retrofit
-  - okhttp
-  - multipart
   - android/networking
-  - easy_kotlin
+  - file-upload
   - http
+  - multipart
+  - networking
+  - okhttp
+  - retrofit
 difficulty: medium
 ---
 

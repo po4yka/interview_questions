@@ -1,10 +1,9 @@
 ---
 tags:
-  - material design
+  - android
   - fluent design system
   - human interface guidelines
-  - easy_kotlin
-  - android
+  - material design
   - ui
 difficulty: medium
 ---

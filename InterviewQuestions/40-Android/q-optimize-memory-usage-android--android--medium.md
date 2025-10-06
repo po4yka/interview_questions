@@ -1,16 +1,15 @@
 ---
 tags:
   - android
-  - memory-optimization
-  - performance
-  - weakreference
-  - lrucache
-  - glide
-  - easy_kotlin
   - android/memory-management
   - android/performance
+  - glide
+  - lrucache
   - memory-management
+  - memory-optimization
   - optimization
+  - performance
+  - weakreference
 difficulty: medium
 ---
 

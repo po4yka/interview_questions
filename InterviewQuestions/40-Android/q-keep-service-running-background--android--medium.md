@@ -1,15 +1,14 @@
 ---
 tags:
   - android
-  - services
-  - foreground-service
-  - workmanager
-  - jobscheduler
-  - background-processing
+  - android/background-processing
   - android/services
   - android/workmanager
-  - android/background-processing
-  - easy_kotlin
+  - background-processing
+  - foreground-service
+  - jobscheduler
+  - services
+  - workmanager
 difficulty: medium
 ---
 

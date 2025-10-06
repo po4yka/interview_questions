@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - jvm
-  - weak-reference
   - garbage-collection
+  - jvm
+  - kotlin
   - memory-management
-  - easy_kotlin
   - programming-languages
+  - weak-reference
   - weak-references
 difficulty: medium
 ---

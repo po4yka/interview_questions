@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
-  - inline-functions
   - crossinline
-  - easy_kotlin
-  - programming-languages
   - inline
+  - inline-functions
+  - kotlin
+  - programming-languages
 difficulty: hard
 ---
 

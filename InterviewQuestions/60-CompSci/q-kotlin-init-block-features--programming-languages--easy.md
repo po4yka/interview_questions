@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
+  - constructors
   - init
   - initialization
-  - constructors
+  - kotlin
   - oop
-  - easy_kotlin
   - programming-languages
 difficulty: easy
 ---

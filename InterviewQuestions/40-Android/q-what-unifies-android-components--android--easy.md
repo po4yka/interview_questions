@@ -1,15 +1,14 @@
 ---
 tags:
   - android
+  - android-components
+  - android/android-components
+  - android/context
+  - android/manifest
   - components
   - context
   - intent
   - manifest
-  - easy_kotlin
-  - android/android-components
-  - android/context
-  - android/manifest
-  - android-components
 difficulty: easy
 ---
 

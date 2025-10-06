@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
-  - jvm
   - garbage-collection
   - gc-roots
+  - jvm
+  - kotlin
   - memory-management
-  - easy_kotlin
   - programming-languages
 difficulty: medium
 ---

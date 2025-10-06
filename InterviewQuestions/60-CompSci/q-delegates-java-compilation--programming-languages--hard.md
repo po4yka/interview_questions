@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - delegation
-  - kotlin-compiler
-  - easy_kotlin
-  - programming-languages
-  - delegates
   - compilation
+  - delegates
+  - delegation
+  - kotlin
+  - kotlin-compiler
+  - programming-languages
 difficulty: hard
 ---
 

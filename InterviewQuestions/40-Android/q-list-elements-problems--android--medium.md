@@ -1,15 +1,14 @@
 ---
 tags:
   - android
-  - recyclerview
-  - performance
-  - memory
+  - android/performance
+  - android/recyclerview
   - concurrency
   - diffutil
   - livedata
-  - android/recyclerview
-  - android/performance
-  - easy_kotlin
+  - memory
+  - performance
+  - recyclerview
 difficulty: medium
 ---
 

@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - jetpack-compose
-  - state
-  - mutablestate
-  - recomposition
-  - observer-pattern
-  - snapshot-system
   - android/jetpack-compose
-  - easy_kotlin
+  - jetpack-compose
+  - mutablestate
+  - observer-pattern
+  - recomposition
+  - snapshot-system
+  - state
   - state-management
 difficulty: medium
 ---

@@ -1,16 +1,15 @@
 ---
 tags:
-  - kotlin
+  - garbage-collection
   - jvm
+  - kotlin
+  - memory-management
+  - phantom-reference
+  - programming-languages
   - references
-  - weak-reference
   - soft-reference
   - strong-reference
-  - phantom-reference
-  - garbage-collection
-  - easy_kotlin
-  - programming-languages
-  - memory-management
+  - weak-reference
 difficulty: easy
 ---
 

@@ -1,12 +1,11 @@
 ---
 tags:
   - android
-  - intent
+  - android/intents-deeplinks
   - component-communication
   - explicit-intent
   - implicit-intent
-  - easy_kotlin
-  - android/intents-deeplinks
+  - intent
   - intents-deeplinks
 difficulty: easy
 ---

@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
   - java
-  - primitive-types
-  - reference-types
+  - kotlin
   - memory
-  - easy_kotlin
+  - primitive-types
   - programming-languages
+  - reference-types
 difficulty: easy
 ---
 

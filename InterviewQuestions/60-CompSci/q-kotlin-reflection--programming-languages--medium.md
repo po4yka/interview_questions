@@ -1,12 +1,11 @@
 ---
 tags:
   - kotlin
-  - reflection
-  - metaprogramming
-  - runtime
   - kotlin-reflect
-  - easy_kotlin
+  - metaprogramming
   - programming-languages
+  - reflection
+  - runtime
 difficulty: medium
 ---
 

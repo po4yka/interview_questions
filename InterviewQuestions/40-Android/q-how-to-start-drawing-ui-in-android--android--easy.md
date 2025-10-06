@@ -3,12 +3,11 @@ tags:
   - Activity
   - UI
   - XML
-  - easy_kotlin
+  - android
   - android/basics
   - android/ui
-  - android
-  - ui
   - basics
+  - ui
 difficulty: easy
 ---
 

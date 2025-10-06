@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - features
-  - extensions
-  - null-safety
   - coroutines
+  - extensions
+  - features
+  - kotlin
+  - null-safety
   - overview
-  - easy_kotlin
   - programming-languages
 difficulty: easy
 ---

@@ -1,12 +1,11 @@
 ---
 tags:
   - kotlin
+  - oop
+  - programming-languages
   - sealed-classes
   - type-hierarchy
   - when-expressions
-  - oop
-  - easy_kotlin
-  - programming-languages
 difficulty: medium
 ---
 

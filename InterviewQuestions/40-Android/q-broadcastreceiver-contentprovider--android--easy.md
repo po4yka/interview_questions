@@ -1,14 +1,13 @@
 ---
 tags:
   - android
-  - broadcast-receiver
-  - content-provider
-  - intent
-  - data-sharing
-  - system-events
-  - easy_kotlin
   - android/broadcast-receiver
   - android/content-provider
+  - broadcast-receiver
+  - content-provider
+  - data-sharing
+  - intent
+  - system-events
 difficulty: easy
 ---
 

@@ -1,9 +1,8 @@
 ---
 tags:
   - kotlin
-  - sealed-classes
-  - easy_kotlin
   - programming-languages
+  - sealed-classes
 difficulty: medium
 ---
 

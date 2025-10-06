@@ -1,9 +1,8 @@
 ---
 tags:
-  - kotlin
   - collections
   - data structures
-  - easy_kotlin
+  - kotlin
   - programming-languages
 difficulty: medium
 ---

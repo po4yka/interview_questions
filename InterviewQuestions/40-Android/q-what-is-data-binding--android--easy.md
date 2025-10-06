@@ -1,12 +1,11 @@
 ---
 tags:
-  - data binding
-  - easy_kotlin
+  - android
   - android/data-binding
   - android/ui
-  - android
-  - ui
+  - data binding
   - data-binding
+  - ui
 difficulty: easy
 ---
 

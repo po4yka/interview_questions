@@ -1,13 +1,12 @@
 ---
 tags:
   - android
-  - data-passing
+  - android/data-passing
   - bundle
+  - data-passing
   - intent
   - parcelable
   - serializable
-  - android/data-passing
-  - easy_kotlin
 difficulty: medium
 ---
 

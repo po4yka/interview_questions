@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - java
   - abstract
-  - oop
   - inheritance
+  - java
+  - kotlin
+  - oop
   - open
-  - easy_kotlin
   - programming-languages
 difficulty: medium
 ---

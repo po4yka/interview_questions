@@ -1,13 +1,12 @@
 ---
 tags:
-  - view lifecycle
-  - ui components
-  - easy_kotlin
-  - android/view
-  - android/ui
   - android
+  - android/ui
+  - android/view
   - ui
+  - ui components
   - view
+  - view lifecycle
 difficulty: medium
 ---
 

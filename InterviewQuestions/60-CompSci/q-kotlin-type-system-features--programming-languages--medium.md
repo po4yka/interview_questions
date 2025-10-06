@@ -1,14 +1,13 @@
 ---
 tags:
-  - kotlin
-  - type-system
-  - null-safety
-  - smart-casts
-  - sealed-classes
   - data-classes
-  - type-inference
-  - easy_kotlin
+  - kotlin
+  - null-safety
   - programming-languages
+  - sealed-classes
+  - smart-casts
+  - type-inference
+  - type-system
 difficulty: medium
 ---
 

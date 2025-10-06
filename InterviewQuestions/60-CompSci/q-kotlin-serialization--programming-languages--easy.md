@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
-  - serialization
-  - json
   - data-persistence
-  - easy_kotlin
+  - json
+  - kotlin
   - programming-languages
+  - serialization
 difficulty: easy
 ---
 
