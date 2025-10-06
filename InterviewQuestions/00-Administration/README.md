@@ -1,8 +1,8 @@
 # Obsidian Interview Vault — Full README
 
-A complete, **bilingual (EN/RU)**, personal Obsidian vault for technical interview preparation with **840+ notes** across **Android** (248 notes), **CompSci** (209 notes), **Kotlin** (28 notes), **Algorithms**, **System Design**, and more. This README describes the **normative rules**, folder layout, metadata schema, templates, tagging and linking conventions, MOCs, Dataview queries, LLM-assisted workflows, and maintenance practices.
+A complete, **bilingual (EN/RU)**, personal Obsidian vault for technical interview preparation with **840+ notes** across **Android**, **Kotlin**, **CompSci** (design patterns, architecture), **Algorithms**, **System Design**, **Backend**, and **Tools**. This README describes the **normative rules**, folder layout, metadata schema, templates, tagging and linking conventions, MOCs, Dataview queries, LLM-assisted workflows, and maintenance practices.
 
-**Last Updated**: 2025-10-05
+**Last Updated**: 2025-10-06
 
 > **For LLM Agents**:
 > - **Cursor AI**: Rules are in `../.cursorrules` (auto-loaded)
@@ -48,15 +48,14 @@ A complete, **bilingual (EN/RU)**, personal Obsidian vault for technical intervi
 📁 _templates                 # note templates for Q&A, concepts, MOCs
 📁 00-Administration          # vault documentation, README, taxonomy
 📁 10-Concepts                # theory/glossary/definitions referenced across notes
-📁 10-Git                     # Git version control (1 note)
-📁 20-Algorithms              # coding problems incl. LeetCode-style (1 note)
+📁 20-Algorithms              # coding problems incl. LeetCode-style
 📁 30-System-Design           # large-scale design, components, trade-offs
-📁 40-Android                 # platform APIs, lifecycle, Compose, perf, tooling (248 notes)
-📁 50-Backend                 # backend development, APIs, databases (4 notes)
+📁 40-Android                 # platform APIs, lifecycle, Compose, perf, tooling
+📁 50-Backend                 # backend development, APIs, databases
 📁 50-Behavioral              # optional, non-technical interview topics
-📁 60-CompSci                 # CS fundamentals: OS, networking, databases (209 notes)
-📁 70-Kotlin                  # Kotlin language: coroutines, syntax, idioms (28 notes)
-📁 80-Tools                   # development tools and utilities (3 notes)
+📁 60-CompSci                 # CS fundamentals, design patterns, architecture patterns
+📁 70-Kotlin                  # Kotlin language: coroutines, syntax, idioms, Flow
+📁 80-Tools                   # development tools: Git, build systems, CI/CD, IDEs
 📁 90-MOCs                    # Maps of Content (hub/overview notes)
 ```
 
@@ -78,6 +77,7 @@ Use **one** of the following canonical values (lower kebab-case):
 * `kotlin` — Kotlin language: coroutines, flow, syntax, idioms, stdlib.
 * `programming-languages` — other languages (Java, etc.), language comparisons.
 * `architecture-patterns` — MVVM/MVI/Clean, SOLID, modularization.
+* `design-patterns` — creational, structural, behavioral patterns (Singleton, Factory, Observer, etc.).
 * `concurrency` — threads, coroutines, synchronization, actors.
 * `distributed-systems` — consensus, partitioning, replication, queues.
 * `databases` — SQL/NoSQL, indexing, transactions, query plans, ORMs.
@@ -91,6 +91,7 @@ Use **one** of the following canonical values (lower kebab-case):
 * `debugging` — troubleshooting, logs, tracing, crash analysis.
 * `ui-ux-accessibility` — UI principles, accessibility, navigation patterns.
 * `behavioral` — collaboration, leadership, estimation, culture.
+* `tools` — Git, build systems, CI/CD, IDEs, development tools.
 * `cs` — catch-all CS fundamentals **only if nothing else fits**.
 
 > Prefer the **most specific** topic (`networking` over `cs`). Expand detail with `subtopics` and tags.

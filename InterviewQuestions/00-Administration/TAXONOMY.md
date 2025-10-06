@@ -4,7 +4,7 @@
 algorithms | data-structures | system-design | android | kotlin | programming-languages |
 architecture-patterns | concurrency | distributed-systems | databases | networking |
 operating-systems | security | performance | testing | devops-ci-cd | cloud |
-debugging | ui-ux-accessibility | behavioral | cs
+debugging | ui-ux-accessibility | behavioral | tools | cs
 ```
 
 **Android subtopics** (выбирай 1–3, отражай и в тегах как `android/<subtopic>`):

@@ -187,16 +187,17 @@ source_note: easy_kotlin Telegram channel
 
 ## Vault Statistics
 
-**As of 2025-10-05**: 840+ notes total
-- **40-Android**: 248 notes
-- **60-CompSci**: 209 notes
-- **70-Kotlin**: 28 notes
+**As of 2025-10-06**: 840+ notes total
+- **40-Android**: ~280+ notes (includes moved Android questions from CompSci)
+- **70-Kotlin**: ~70+ notes (includes moved Kotlin questions from CompSci)
+- **60-CompSci**: ~90+ notes (design patterns, architecture patterns, OOP)
 - **50-Backend**: 4 notes
-- **80-Tools**: 3 notes
+- **80-Tools**: 3+ notes (includes Git questions)
 - **20-Algorithms**: 1 note
-- **10-Git**: 1 note
 
 All files follow the English-only naming convention.
+
+**Note**: Exact counts may vary as questions are reorganized from `60-CompSci` into appropriate topic folders (`70-Kotlin` and `40-Android`).
 
 ---
 
