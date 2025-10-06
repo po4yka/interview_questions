@@ -1,11 +1,10 @@
 ---
 tags:
-  - kotlin
-  - sealed-classes
-  - abstract-classes
-  - easy_kotlin
-  - programming-languages
   - abstract
+  - abstract-classes
+  - kotlin
+  - programming-languages
+  - sealed-classes
 difficulty: medium
 ---
 

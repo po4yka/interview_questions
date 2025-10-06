@@ -1,9 +1,8 @@
 ---
 tags:
-  - kotlin
   - collections
   - immutability
-  - easy_kotlin
+  - kotlin
   - programming-languages
 difficulty: easy
 ---

@@ -1,16 +1,15 @@
 ---
 tags:
+  - architecture
+  - design-principles
+  - dip
+  - isp
+  - lsp
+  - ocp
+  - oop
   - software-design
   - solid
-  - oop
   - srp
-  - ocp
-  - lsp
-  - isp
-  - dip
-  - design-principles
-  - architecture
-  - easy_kotlin
 difficulty: medium
 ---
 

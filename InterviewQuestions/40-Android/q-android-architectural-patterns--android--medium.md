@@ -2,13 +2,11 @@
 tags:
   - android
   - architecture-patterns
+  - clean-architecture
+  - component-based
   - mvc
   - mvp
   - mvvm
-  - clean-architecture
-  - component-based
-  - easy_kotlin
-  - android/architecture-patterns
 difficulty: medium
 ---
 

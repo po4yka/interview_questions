@@ -1,11 +1,8 @@
 ---
 tags:
-  - GestureDetector
-  - gestures
-  - easy_kotlin
-  - android/gestures
-  - android/ui
   - android
+  - gesture-detector
+  - gestures
   - ui
 difficulty: easy
 ---

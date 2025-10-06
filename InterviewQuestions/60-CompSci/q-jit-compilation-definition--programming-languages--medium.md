@@ -1,14 +1,13 @@
 ---
 tags:
+  - bytecode
+  - compilation
   - jit
   - just-in-time
-  - compilation
   - jvm
-  - performance
-  - optimization
-  - bytecode
   - machine-code
-  - easy_kotlin
+  - optimization
+  - performance
   - programming-languages
 difficulty: medium
 ---

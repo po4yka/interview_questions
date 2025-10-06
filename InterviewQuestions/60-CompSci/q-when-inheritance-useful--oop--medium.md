@@ -7,7 +7,6 @@ tags:
   - design-patterns
   - best-practices
   - polymorphism
-  - easy_kotlin
 difficulty: medium
 ---
 

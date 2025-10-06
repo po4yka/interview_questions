@@ -3,9 +3,7 @@ tags:
   - xml
   - markup-language
   - acronym
-  - easy_kotlin
   - programming-languages
-  - kotlin
 difficulty: easy
 ---
 

@@ -5,7 +5,6 @@ tags:
   - stateflow
   - reactive
   - flow
-  - easy_kotlin
   - programming-languages
 difficulty: medium
 ---

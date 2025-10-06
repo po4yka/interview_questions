@@ -2,16 +2,12 @@
 tags:
   - android
   - async
-  - threading
   - asynctask
-  - handler
-  - executorservice
-  - rxjava
   - coroutines
-  - android/async
-  - android/threading
-  - easy_kotlin
-  - platform/android
+  - executorservice
+  - handler
+  - rxjava
+  - threading
 difficulty: easy
 ---
 

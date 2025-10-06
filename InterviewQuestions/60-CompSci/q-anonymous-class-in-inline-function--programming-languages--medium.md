@@ -1,12 +1,11 @@
 ---
 tags:
-  - kotlin
-  - inline
   - anonymous-classes
-  - object-expressions
+  - inline
+  - kotlin
   - lambdas
+  - object-expressions
   - performance
-  - easy_kotlin
   - programming-languages
 difficulty: medium
 ---

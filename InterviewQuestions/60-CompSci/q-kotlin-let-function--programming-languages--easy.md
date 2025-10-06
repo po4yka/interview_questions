@@ -1,11 +1,10 @@
 ---
 tags:
   - kotlin
-  - scope-functions
   - let
   - null-safety
-  - easy_kotlin
   - programming-languages
+  - scope-functions
 difficulty: easy
 ---
 

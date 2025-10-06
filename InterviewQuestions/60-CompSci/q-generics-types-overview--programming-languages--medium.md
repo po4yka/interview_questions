@@ -1,13 +1,12 @@
 ---
 tags:
+  - bounds
   - generics
+  - java
+  - kotlin
+  - programming-languages
   - type-parameters
   - variance
-  - bounds
-  - easy_kotlin
-  - programming-languages
-  - kotlin
-  - java
 difficulty: medium
 ---
 
