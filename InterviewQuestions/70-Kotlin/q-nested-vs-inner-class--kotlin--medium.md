@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 
 # Workflow & relations
-status: draft
+status: reviewed
 moc: moc-kotlin
 related: []
 

@@ -2,7 +2,7 @@
 id: 202510051234004
 title: "Fragment Basics / Основы Fragment"
 topic: android
-status: draft
+status: reviewed
 created: 2025-10-05
 updated: 2025-10-05
 difficulty: easy

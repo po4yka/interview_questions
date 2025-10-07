@@ -2,7 +2,7 @@
 id: 202510051234001
 title: "ANR (Application Not Responding) / ANR (Приложение не отвечает)"
 topic: android
-status: draft
+status: reviewed
 created: 2025-10-05
 updated: 2025-10-05
 difficulty: medium

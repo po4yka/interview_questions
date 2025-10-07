@@ -6,7 +6,7 @@ language_tags:
   - en
   - ru
 original_language: en
-status: draft
+status: reviewed
 moc: moc-android
 tags:
   - android

@@ -12,7 +12,7 @@ subtopics:
   - performance-rendering
   - debugging
 difficulty: medium
-status: draft
+status: reviewed
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20StrictMode.md
 ---
 
