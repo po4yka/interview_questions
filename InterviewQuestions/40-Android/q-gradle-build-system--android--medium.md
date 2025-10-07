@@ -2,7 +2,7 @@
 id: 202510051234005
 title: "Gradle Build System / Система сборки Gradle"
 topic: android
-status: draft
+status: reviewed
 created: 2025-10-05
 updated: 2025-10-05
 difficulty: medium
