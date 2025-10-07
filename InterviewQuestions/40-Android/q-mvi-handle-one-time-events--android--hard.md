@@ -13,6 +13,7 @@ tags:
   - stateflow
   - viewmodel
 difficulty: hard
+status: draft
 ---
 
 # Как с MVI обрабатывать события, которые не нужно хранить?

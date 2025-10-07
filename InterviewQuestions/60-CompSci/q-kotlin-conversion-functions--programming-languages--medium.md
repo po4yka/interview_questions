@@ -8,6 +8,7 @@ tags:
   - to-methods
   - type-conversion
 difficulty: medium
+status: draft
 ---
 
 # Как в Kotlin называется функция, которая вызывается на объекте для преобразования его в другой тип?

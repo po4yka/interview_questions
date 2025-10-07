@@ -9,6 +9,7 @@ tags:
   - viewholder
   - views
 difficulty: hard
+status: draft
 ---
 
 # На что следует обращать внимание, чтобы оптимизировать большой список?

@@ -6,6 +6,7 @@ tags:
   - kotlin
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # Что известно о делегировании?

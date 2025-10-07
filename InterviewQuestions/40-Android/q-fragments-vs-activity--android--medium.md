@@ -5,6 +5,7 @@ tags:
   - fragments
   - ui-architecture
 difficulty: medium
+status: draft
 ---
 
 # Для чего нужны фрагменты если есть Activity?

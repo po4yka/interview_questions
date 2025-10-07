@@ -7,6 +7,7 @@ tags:
   - memory-management
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Что такое Garbage Collector Roots?

@@ -7,6 +7,7 @@ tags:
   - coroutines
   - workmanager
 difficulty: medium
+status: draft
 ---
 
 # Как реализовать polling в Android?

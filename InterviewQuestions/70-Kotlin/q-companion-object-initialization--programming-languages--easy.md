@@ -2,6 +2,7 @@
 tags:
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # When is companion object initialized?

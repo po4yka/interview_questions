@@ -7,6 +7,7 @@ tags:
   - material design
   - ui
 difficulty: medium
+status: draft
 ---
 
 # С какими вариантами систем проектирования в Android работал

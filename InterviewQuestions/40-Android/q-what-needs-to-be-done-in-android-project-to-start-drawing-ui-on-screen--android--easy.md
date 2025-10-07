@@ -9,6 +9,7 @@ tags:
   - activity
   - lifecycle
 difficulty: medium
+status: draft
 ---
 
 # What needs to be done in Android project to start drawing UI on screen?

@@ -11,6 +11,7 @@ tags:
   - navigation
   - fragments
 difficulty: medium
+status: draft
 ---
 
 # What are the navigation methods in Kotlin?

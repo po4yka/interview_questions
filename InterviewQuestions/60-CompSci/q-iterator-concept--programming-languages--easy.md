@@ -7,6 +7,7 @@ tags:
   - programming-languages
   - traversal
 difficulty: easy
+status: draft
 ---
 
 # Что такое итератор?

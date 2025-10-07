@@ -3,6 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
+status: draft
 ---
 
 # What unites the main components of an Android application?

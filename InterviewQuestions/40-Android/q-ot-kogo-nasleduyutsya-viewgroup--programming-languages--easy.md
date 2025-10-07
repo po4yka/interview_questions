@@ -3,6 +3,7 @@ tags:
   - programming-languages
   - android
 difficulty: easy
+status: draft
 ---
 
 # От кого наследуются ViewGroup

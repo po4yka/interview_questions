@@ -2,6 +2,7 @@
 tags:
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # What keyword is used to create singleton objects in Kotlin?

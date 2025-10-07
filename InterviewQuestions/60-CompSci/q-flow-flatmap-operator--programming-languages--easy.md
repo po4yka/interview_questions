@@ -8,6 +8,7 @@ tags:
   - programming-languages
   - reactive
 difficulty: easy
+status: draft
 ---
 
 # Чем воспользоваться если нужно преобразовать один поток данных в другой поток данных

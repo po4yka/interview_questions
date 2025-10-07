@@ -2,6 +2,7 @@
 tags:
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Describe data classes and sealed classes

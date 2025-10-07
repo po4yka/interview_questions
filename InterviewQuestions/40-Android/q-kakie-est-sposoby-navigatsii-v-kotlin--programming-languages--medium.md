@@ -2,6 +2,7 @@
 tags:
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Какие есть способы навигации в Kotlin?

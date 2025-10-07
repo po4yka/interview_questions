@@ -3,6 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
+status: draft
 ---
 
 # How to create a list similar to RecyclerView in Jetpack Compose?

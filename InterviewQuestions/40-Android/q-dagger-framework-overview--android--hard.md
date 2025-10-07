@@ -10,6 +10,7 @@ tags:
   - di-hilt
   - platform/android
 difficulty: hard
+status: draft
 ---
 
 # Что известно про фреймворк Dagger ?

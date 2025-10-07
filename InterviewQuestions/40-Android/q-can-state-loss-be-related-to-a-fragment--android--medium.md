@@ -3,6 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
+status: draft
 ---
 
 # Can state loss be related to a fragment

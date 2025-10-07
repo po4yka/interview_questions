@@ -8,6 +8,7 @@ tags:
   - data-binding
   - ui
 difficulty: easy
+status: draft
 ---
 
 # Использовал Data Binding

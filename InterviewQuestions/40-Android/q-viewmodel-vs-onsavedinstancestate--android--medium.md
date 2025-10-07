@@ -3,6 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
+status: draft
 ---
 
 # ViewModel vs OnSavedInstanceState

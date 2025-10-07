@@ -3,6 +3,7 @@ tags:
   - programming-languages
   - android
 difficulty: medium
+status: draft
 ---
 
 # Где создается композиция для вызова composable функции?

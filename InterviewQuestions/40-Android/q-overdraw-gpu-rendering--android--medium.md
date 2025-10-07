@@ -9,6 +9,7 @@ tags:
   - optimization
   - difficulty/medium
 difficulty: medium
+status: draft
 ---
 
 # What is Overdraw? / Что такое Overdraw?

@@ -9,6 +9,7 @@ tags:
   - open
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # Какой тип наследования по умолчанию используется для классов в Kotlin?

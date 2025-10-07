@@ -7,6 +7,7 @@ tags:
   - kotlin-compiler
   - programming-languages
 difficulty: hard
+status: draft
 ---
 
 # Как делегаты работают на уровне компиляции Java ?

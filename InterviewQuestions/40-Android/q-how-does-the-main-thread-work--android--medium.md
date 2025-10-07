@@ -3,6 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
+status: draft
 ---
 
 # How does the main thread work?

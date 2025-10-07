@@ -7,6 +7,7 @@ tags:
   - programming-languages
   - reference-equality
 difficulty: easy
+status: draft
 ---
 
 # Как в оригинальном Java equals работает, что он сравнивает?

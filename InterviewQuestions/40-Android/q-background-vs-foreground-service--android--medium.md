@@ -9,6 +9,7 @@ tags:
   - process-priority
   - services
 difficulty: medium
+status: draft
 ---
 
 # Чем background service отличается от foreground service?

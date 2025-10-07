@@ -2,6 +2,7 @@
 tags:
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # Что нужно сделать в Android-проекте чтобы начать рисовать UI на экране?

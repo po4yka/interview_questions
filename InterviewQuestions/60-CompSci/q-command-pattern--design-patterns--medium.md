@@ -6,6 +6,7 @@ tags:
   - gof-patterns
   - action-pattern
 difficulty: medium
+status: draft
 ---
 
 # Command Pattern

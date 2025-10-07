@@ -5,6 +5,7 @@ tags:
   - kotlin
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # Какой механизм позволяет создавать иммутабельные коллекции в Kotlin?

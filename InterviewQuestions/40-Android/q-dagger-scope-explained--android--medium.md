@@ -9,6 +9,7 @@ tags:
   - lifecycle
   - scope
 difficulty: medium
+status: draft
 ---
 
 # Что такое scope в Dagger и как они работают?

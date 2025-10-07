@@ -6,6 +6,7 @@ tags:
   - type-safety
   - runtime-errors
 difficulty: hard
+status: draft
 ---
 
 # Heap Pollution (Загрязнение кучи)

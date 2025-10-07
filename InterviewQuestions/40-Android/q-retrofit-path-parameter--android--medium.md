@@ -10,6 +10,7 @@ tags:
   - rest-api
   - retrofit
 difficulty: medium
+status: draft
 ---
 
 # Как в Ретрофите в гет методе поставить атрибут в путь в конкретном месте?

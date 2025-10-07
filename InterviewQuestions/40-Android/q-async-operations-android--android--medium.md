@@ -11,6 +11,7 @@ tags:
   - threading
   - workmanager
 difficulty: medium
+status: draft
 ---
 
 # Как запустить асинхронные операции в чистом Android?

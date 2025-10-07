@@ -3,6 +3,7 @@ topic: android
 tags:
   - android
 difficulty: hard
+status: draft
 ---
 
 # Why might user data disappear during screen rotation?

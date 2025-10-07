@@ -7,6 +7,7 @@ tags:
   - ui
   - layouts
 difficulty: medium
+status: draft
 ---
 
 # How to change the number of columns in RecyclerView depending on orientation?

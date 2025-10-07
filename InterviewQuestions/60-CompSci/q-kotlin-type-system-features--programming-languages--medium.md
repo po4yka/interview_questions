@@ -9,6 +9,7 @@ tags:
   - type-inference
   - type-system
 difficulty: medium
+status: draft
 ---
 
 # Какие знаешь особенности системы типов в Kotlin?

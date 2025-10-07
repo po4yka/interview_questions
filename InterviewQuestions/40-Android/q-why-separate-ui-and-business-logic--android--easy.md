@@ -10,6 +10,7 @@ tags:
   - mvvm
   - separation-of-concerns
 difficulty: easy
+status: draft
 ---
 
 # Зачем нужно разделять отображение и бизнес-логику?

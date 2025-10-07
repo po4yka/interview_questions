@@ -6,6 +6,7 @@ tags:
   - lambda
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # Какой тип у лямбды в Java?

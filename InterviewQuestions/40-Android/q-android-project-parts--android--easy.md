@@ -9,6 +9,7 @@ tags:
   - project-structure
   - resources
 difficulty: easy
+status: draft
 ---
 
 # Из каких частей состоит проект и какая часть за что отвечает?

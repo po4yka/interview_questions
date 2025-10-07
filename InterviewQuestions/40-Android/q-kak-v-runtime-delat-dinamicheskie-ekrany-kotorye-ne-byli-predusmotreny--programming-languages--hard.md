@@ -3,6 +3,7 @@ tags:
   - programming-languages
   - android
 difficulty: hard
+status: draft
 ---
 
 # Как в runtime делать динамические экраны которые не были предусмотрены?

@@ -9,6 +9,7 @@ tags:
   - oop
   - relationships
 difficulty: medium
+status: draft
 ---
 
 # В чём различия наследования, композиции, агрегации?

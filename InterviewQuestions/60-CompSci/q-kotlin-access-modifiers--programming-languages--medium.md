@@ -11,6 +11,7 @@ tags:
   - syntax
   - visibility
 difficulty: medium
+status: draft
 ---
 
 # Что известно про модификатор доступа?

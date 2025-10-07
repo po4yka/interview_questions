@@ -5,6 +5,7 @@ tags:
   - performance
   - limitations
 difficulty: medium
+status: draft
 ---
 
 # Когда нельзя использовать inline функции?

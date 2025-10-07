@@ -5,6 +5,7 @@ tags:
   - kotlin
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # В чем разница ArrayList, LinkedList, Vector

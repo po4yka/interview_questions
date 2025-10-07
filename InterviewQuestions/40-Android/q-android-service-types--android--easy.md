@@ -10,6 +10,7 @@ tags:
   - service
   - started-service
 difficulty: easy
+status: draft
 ---
 
 # Какие виды сервисов есть в Android?

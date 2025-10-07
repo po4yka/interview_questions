@@ -11,6 +11,7 @@ tags:
   - intent
   - manifest
 difficulty: easy
+status: draft
 ---
 
 # Что объединяет основные компоненты Android-приложения?

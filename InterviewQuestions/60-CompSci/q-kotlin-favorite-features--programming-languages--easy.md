@@ -8,6 +8,7 @@ tags:
   - overview
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # Расскажи про три любимых фичи в Kotlin

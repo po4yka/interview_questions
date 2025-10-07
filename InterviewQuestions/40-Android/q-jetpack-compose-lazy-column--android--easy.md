@@ -8,6 +8,7 @@ tags:
   - platform/android
   - ui-compose
 difficulty: easy
+status: draft
 ---
 
 # Как в Jetpack Compose создать список, аналогичный RecyclerView?

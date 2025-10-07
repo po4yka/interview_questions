@@ -5,6 +5,7 @@ tags:
   - map
   - transformation
 difficulty: easy
+status: draft
 ---
 
 # associateWith() vs associateBy(): создание Map из коллекций

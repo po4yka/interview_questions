@@ -12,6 +12,7 @@ tags:
   - navigation
   - ui
 difficulty: medium
+status: draft
 ---
 
 # Какие есть способы навигации в Kotlin?

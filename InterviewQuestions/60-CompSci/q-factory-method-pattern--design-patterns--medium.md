@@ -6,6 +6,7 @@ tags:
   - factory
   - gof-patterns
 difficulty: medium
+status: draft
 ---
 
 # Factory Method Pattern

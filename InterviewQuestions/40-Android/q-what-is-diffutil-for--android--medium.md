@@ -6,6 +6,7 @@ tags:
   - android
   - ui
 difficulty: medium
+status: draft
 ---
 
 # What is DiffUtil for?

@@ -9,6 +9,7 @@ tags:
   - open
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # Как в Kotlin определить класс, который не может быть унаследован?

@@ -6,6 +6,7 @@ tags:
   - programming-languages
   - sam
 difficulty: medium
+status: draft
 ---
 
 # Как работают SAM (Single Abstract Method)?

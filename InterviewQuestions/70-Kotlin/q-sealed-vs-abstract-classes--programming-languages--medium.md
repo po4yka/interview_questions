@@ -6,6 +6,7 @@ tags:
   - programming-languages
   - sealed-classes
 difficulty: medium
+status: draft
 ---
 
 # В чем отличие sealed классов от абстрактных

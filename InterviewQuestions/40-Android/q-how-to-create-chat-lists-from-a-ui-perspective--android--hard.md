@@ -7,6 +7,7 @@ tags:
   - ui
   - ui design
 difficulty: hard
+status: draft
 ---
 
 # Как делать списки чатов с точки зрения UI?

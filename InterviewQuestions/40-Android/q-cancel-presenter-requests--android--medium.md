@@ -10,6 +10,7 @@ tags:
   - platform/android
   - presenter-view-communication
 difficulty: medium
+status: draft
 ---
 
 # Какие есть механизмы для отмены запросов presenter у view?

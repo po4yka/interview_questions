@@ -13,6 +13,7 @@ tags:
   - ui
   - views
 difficulty: easy
+status: draft
 ---
 
 # Какие могут быть проблемы с элементами списка?

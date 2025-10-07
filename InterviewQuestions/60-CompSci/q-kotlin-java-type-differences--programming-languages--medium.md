@@ -10,6 +10,7 @@ tags:
   - type-system
   - types
 difficulty: medium
+status: draft
 ---
 
 # Чем типы в Kotlin отличаются от типов в Java

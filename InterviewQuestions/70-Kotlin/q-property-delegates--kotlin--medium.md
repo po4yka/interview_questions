@@ -4,6 +4,7 @@ tags:
   - delegates
   - properties
 difficulty: medium
+status: draft
 ---
 
 # В чем особенность делегатов свойств

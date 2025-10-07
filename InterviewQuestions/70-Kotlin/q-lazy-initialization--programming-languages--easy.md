@@ -2,6 +2,7 @@
 tags:
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # What function in Kotlin is used for lazy property initialization?

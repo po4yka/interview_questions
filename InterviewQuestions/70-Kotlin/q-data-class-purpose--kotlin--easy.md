@@ -4,6 +4,7 @@ tags:
   - data-classes
   - code-generation
 difficulty: easy
+status: draft
 ---
 
 # Для чего нужен data class?

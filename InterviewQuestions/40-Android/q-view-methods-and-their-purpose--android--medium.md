@@ -9,6 +9,7 @@ tags:
   - view
   - view lifecycle
 difficulty: medium
+status: draft
 ---
 
 # Какие методы есть у view и что каждый из них делает?

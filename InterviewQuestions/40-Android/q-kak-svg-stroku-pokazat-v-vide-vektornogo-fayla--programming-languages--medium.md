@@ -2,6 +2,7 @@
 tags:
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Как SVG-строку показать в виде векторного файла?

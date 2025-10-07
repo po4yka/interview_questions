@@ -2,6 +2,7 @@
 tags:
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # How to operate with properties in interface?

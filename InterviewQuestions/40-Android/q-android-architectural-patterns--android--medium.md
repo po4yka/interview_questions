@@ -9,6 +9,7 @@ tags:
   - mvp
   - mvvm
 difficulty: medium
+status: draft
 ---
 
 # Какие архитектурные паттерны используются в Android-фреймворке?

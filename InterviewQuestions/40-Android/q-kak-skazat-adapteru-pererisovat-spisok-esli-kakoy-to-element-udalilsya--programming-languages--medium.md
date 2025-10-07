@@ -3,6 +3,7 @@ tags:
   - programming-languages
   - android
 difficulty: medium
+status: draft
 ---
 
 # Как сказать адаптеру перерисовать список, если какой-то элемент удалился?

@@ -7,6 +7,7 @@ tags:
   - programming-languages
   - set
 difficulty: easy
+status: draft
 ---
 
 # рассказать отличия и в каких случаях их использовать list set map

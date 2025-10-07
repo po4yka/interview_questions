@@ -7,6 +7,7 @@ tags:
   - string
   - syntax
 difficulty: easy
+status: draft
 ---
 
 # Как правильно объявить переменную типа nullable String в Kotlin?

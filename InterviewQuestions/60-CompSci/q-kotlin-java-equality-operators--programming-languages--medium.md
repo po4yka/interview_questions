@@ -7,6 +7,7 @@ tags:
   - operators
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Чем отличаются двойное равно в Java и Kotlin?

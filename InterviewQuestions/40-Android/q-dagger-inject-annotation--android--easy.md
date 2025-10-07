@@ -8,6 +8,7 @@ tags:
   - hilt
   - inject
 difficulty: easy
+status: draft
 ---
 
 # Как сообщить Dagger, что мы собираемся что-то инжектить?

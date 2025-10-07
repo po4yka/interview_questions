@@ -4,6 +4,7 @@ tags:
   - android
   - language-features
 difficulty: easy
+status: draft
 ---
 
 # В чем преимущество Kotlin для разработки под Android

@@ -3,6 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
+status: draft
 ---
 
 # How to handle the situation where Activity can open multiple times due to deeplink?

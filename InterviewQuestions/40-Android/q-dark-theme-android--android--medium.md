@@ -9,6 +9,7 @@ tags:
   - material-design
   - difficulty/medium
 difficulty: medium
+status: draft
 ---
 
 # What is Dark Theme in Android? / Что такое темная тема в Android?

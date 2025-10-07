@@ -5,6 +5,7 @@ tags:
   - kotlin
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Бывают ли случаи, когда нельзя использовать inline ?

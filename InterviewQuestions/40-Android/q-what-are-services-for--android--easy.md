@@ -9,6 +9,7 @@ tags:
   - long-running-tasks
   - service
 difficulty: easy
+status: draft
 ---
 
 # Для чего нужны сервисы?

@@ -8,6 +8,7 @@ tags:
   - gradle
   - difficulty/medium
 difficulty: medium
+status: draft
 ---
 
 # Android Modularization / Модуляризация Android

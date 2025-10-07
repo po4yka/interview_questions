@@ -7,6 +7,7 @@ tags:
   - atomic
   - synchronized
 difficulty: medium
+status: draft
 ---
 
 # Atomic vs Synchronized: когда использовать

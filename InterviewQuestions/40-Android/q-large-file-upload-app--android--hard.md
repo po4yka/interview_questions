@@ -9,6 +9,7 @@ tags:
   - retrofit
   - workmanager
 difficulty: hard
+status: draft
 ---
 
 # Как бы реализовал приложение, которое может загружать большие файлы на сервер?

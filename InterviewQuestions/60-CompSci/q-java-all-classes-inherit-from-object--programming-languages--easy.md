@@ -6,6 +6,7 @@ tags:
   - oop
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # От какого объекта наследуются все классы в Java?

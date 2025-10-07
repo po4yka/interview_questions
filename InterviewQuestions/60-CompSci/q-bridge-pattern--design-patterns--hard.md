@@ -6,6 +6,7 @@ tags:
   - gof-patterns
   - abstraction
 difficulty: hard
+status: draft
 ---
 
 # Bridge Pattern

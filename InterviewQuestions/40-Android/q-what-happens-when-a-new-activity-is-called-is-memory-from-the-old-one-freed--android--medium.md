@@ -3,6 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
+status: draft
 ---
 
 # What happens when a new Activity is called? Is memory from the old one freed?

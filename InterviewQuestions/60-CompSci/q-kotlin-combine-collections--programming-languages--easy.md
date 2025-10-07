@@ -4,6 +4,7 @@ tags:
   - kotlin
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # Какая функция Kotlin используется для объединения двух коллекций?

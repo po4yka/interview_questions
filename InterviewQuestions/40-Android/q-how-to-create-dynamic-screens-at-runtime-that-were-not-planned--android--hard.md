@@ -10,6 +10,7 @@ tags:
   - dynamic-ui
   - jetpack-compose
 difficulty: medium
+status: draft
 ---
 
 # How to create dynamic screens at runtime that were not planned?

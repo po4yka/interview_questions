@@ -7,6 +7,7 @@ tags:
   - architecture
   - best-practices
 difficulty: medium
+status: draft
 ---
 
 # State Hoisting в Jetpack Compose

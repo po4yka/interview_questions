@@ -8,6 +8,7 @@ tags:
   - ui
   - fragments
 difficulty: medium
+status: draft
 ---
 
 # What is the difference between FragmentManager and FragmentTransaction?

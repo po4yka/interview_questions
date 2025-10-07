@@ -9,6 +9,7 @@ tags:
   - state-management
   - ui
 difficulty: easy
+status: draft
 ---
 
 # Что положить в state для отображения первоначального списка?

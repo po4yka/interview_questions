@@ -7,6 +7,7 @@ tags:
   - syntax
   - visibility
 difficulty: easy
+status: draft
 ---
 
 # Какой модификатор доступа по умолчанию используется в Kotlin?

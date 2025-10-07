@@ -9,6 +9,7 @@ tags:
   - scope
   - singleton
 difficulty: medium
+status: draft
 ---
 
 # К какому scope привязан Singleton?

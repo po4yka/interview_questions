@@ -7,6 +7,7 @@ tags:
   - oop
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Что такое interface и чем он отличается от абстрактного класса?

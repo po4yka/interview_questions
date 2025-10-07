@@ -6,6 +6,7 @@ tags:
   - gof-patterns
   - surrogate
 difficulty: medium
+status: draft
 ---
 
 # Proxy Pattern

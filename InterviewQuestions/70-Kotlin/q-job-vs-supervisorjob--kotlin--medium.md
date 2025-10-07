@@ -4,6 +4,7 @@ tags:
   - coroutines
   - error-handling
 difficulty: medium
+status: draft
 ---
 
 # В чем отличие между Job и SupervisorJob

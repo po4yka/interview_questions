@@ -11,6 +11,7 @@ tags:
   - services
   - workmanager
 difficulty: medium
+status: draft
 ---
 
 # Что делать если нужно чтобы сервис продолжал работу в фоне?

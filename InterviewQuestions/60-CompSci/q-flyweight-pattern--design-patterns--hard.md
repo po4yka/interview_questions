@@ -6,6 +6,7 @@ tags:
   - gof-patterns
   - memory-optimization
 difficulty: hard
+status: draft
 ---
 
 # Flyweight Pattern

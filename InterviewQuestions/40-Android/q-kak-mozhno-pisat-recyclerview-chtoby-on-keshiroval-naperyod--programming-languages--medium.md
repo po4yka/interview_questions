@@ -3,6 +3,7 @@ tags:
   - programming-languages
   - android
 difficulty: medium
+status: draft
 ---
 
 # Как можно писать RecyclerView, чтобы он кэшировал наперёд?

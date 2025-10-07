@@ -5,6 +5,7 @@ tags:
   - services
   - background-tasks
 difficulty: easy
+status: draft
 ---
 
 # Какие есть виды сервисов?

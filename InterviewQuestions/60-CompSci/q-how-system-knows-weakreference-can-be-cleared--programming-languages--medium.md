@@ -8,6 +8,7 @@ tags:
   - weak-reference
   - weak-references
 difficulty: medium
+status: draft
 ---
 
 # Как система понимает, что WeakReference можно очистить?

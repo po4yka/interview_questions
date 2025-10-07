@@ -7,6 +7,7 @@ tags:
   - ui
   - views
 difficulty: medium
+status: draft
 ---
 
 # What does ViewGroup inherit from?

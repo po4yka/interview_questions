@@ -8,6 +8,7 @@ difficulty: medium
 related:
   - factory-method-pattern
   - builder-pattern
+status: draft
 ---
 
 # Prototype Pattern / Паттерн Прототип

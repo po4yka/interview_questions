@@ -9,6 +9,7 @@ tags:
   - programming-languages
   - secondary-constructor
 difficulty: medium
+status: draft
 ---
 
 # Какие типы конструкторов есть у классов в Kotlin?

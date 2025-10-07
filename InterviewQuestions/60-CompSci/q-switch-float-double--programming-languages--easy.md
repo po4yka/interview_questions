@@ -8,6 +8,7 @@ tags:
   - programming-languages
   - switch
 difficulty: easy
+status: draft
 ---
 
 # Работает ли switch() с double/float?

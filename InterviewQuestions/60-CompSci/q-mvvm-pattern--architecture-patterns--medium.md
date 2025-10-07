@@ -11,6 +11,7 @@ related:
   - mvi-pattern
   - clean-architecture
   - livedata
+status: draft
 ---
 
 # MVVM Pattern / Паттерн MVVM (Model-View-ViewModel)

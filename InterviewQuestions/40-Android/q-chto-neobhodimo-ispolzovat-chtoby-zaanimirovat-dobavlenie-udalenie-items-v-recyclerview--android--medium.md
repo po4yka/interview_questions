@@ -3,6 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
+status: draft
 ---
 
 # What needs to be used to animate adding/removing items in RecyclerView?

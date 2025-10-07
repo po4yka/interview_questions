@@ -5,6 +5,7 @@ tags:
   - kotlin
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # Что такое Extensions?

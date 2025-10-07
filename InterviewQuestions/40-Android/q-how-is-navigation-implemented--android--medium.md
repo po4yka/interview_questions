@@ -6,6 +6,7 @@ tags:
   - navigation
   - ui
 difficulty: medium
+status: draft
 ---
 
 # Каким образом осуществляется навигация?

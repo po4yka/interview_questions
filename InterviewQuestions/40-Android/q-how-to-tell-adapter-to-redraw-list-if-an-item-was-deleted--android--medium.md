@@ -6,6 +6,7 @@ tags:
   - android
   - ui
 difficulty: medium
+status: draft
 ---
 
 # How to tell adapter to redraw list if an item was deleted?

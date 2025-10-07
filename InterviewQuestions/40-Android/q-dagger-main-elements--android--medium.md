@@ -8,6 +8,7 @@ tags:
   - di-hilt
   - platform/android
 difficulty: medium
+status: draft
 ---
 
 # Из каких основных элементов состоит Dagger?

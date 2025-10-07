@@ -8,6 +8,7 @@ tags:
   - performance
   - threading
 difficulty: easy
+status: draft
 ---
 
 # Для чего нужна многопоточность, какие инструменты использовать?

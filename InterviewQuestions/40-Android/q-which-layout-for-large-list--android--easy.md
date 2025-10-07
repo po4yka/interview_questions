@@ -8,6 +8,7 @@ tags:
   - recyclerview
   - ui
 difficulty: easy
+status: draft
 ---
 
 # Какой layout выбрать для списка из большого количества элементов?

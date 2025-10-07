@@ -10,6 +10,7 @@ tags:
   - performance
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Что такое JIT?

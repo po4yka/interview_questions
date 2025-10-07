@@ -9,6 +9,7 @@ tags:
   - hilt
   - scope
 difficulty: medium
+status: draft
 ---
 
 # Какие готовые компоненты с готовым скоупом есть в Dagger Hilt и как модуль добавить к этой компоненте?

@@ -7,6 +7,7 @@ tags:
   - memory-management
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # Что происходит с объектами, которые больше не нужны?

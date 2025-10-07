@@ -7,6 +7,7 @@ tags:
   - state-management
   - unidirectional-data-flow
 difficulty: hard
+status: draft
 ---
 
 # MVI Architecture

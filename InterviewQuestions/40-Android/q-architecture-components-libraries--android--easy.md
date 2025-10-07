@@ -15,6 +15,7 @@ tags:
   - viewmodel
   - workmanager
 difficulty: easy
+status: draft
 ---
 
 # Какие библиотеки есть в Architecture Components?

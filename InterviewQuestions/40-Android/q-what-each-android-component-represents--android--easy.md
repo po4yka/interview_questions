@@ -13,6 +13,7 @@ tags:
   - service
   - view
 difficulty: easy
+status: draft
 ---
 
 # Что из себя представляет каждый компонент Android-приложения?

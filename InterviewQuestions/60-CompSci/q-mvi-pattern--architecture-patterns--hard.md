@@ -10,6 +10,7 @@ related:
   - mvvm-pattern
   - mvp-pattern
   - redux-architecture
+status: draft
 ---
 
 # MVI Pattern / Паттерн MVI (Model-View-Intent)

@@ -6,6 +6,7 @@ tags:
   - executor
   - thread-pool
 difficulty: medium
+status: draft
 ---
 
 # Как работают Executor и ExecutorService?

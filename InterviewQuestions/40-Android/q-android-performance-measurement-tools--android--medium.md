@@ -10,6 +10,7 @@ tags:
   - performance
   - profiling
 difficulty: medium
+status: draft
 ---
 
 # Как определить изменение скорости работы программы после наших действий?

@@ -10,6 +10,7 @@ tags:
   - ui
   - jetpack-compose
 difficulty: medium
+status: draft
 ---
 
 # What are the most important components of Compose?

@@ -8,6 +8,7 @@ tags:
   - programming-languages
   - safe-call
 difficulty: medium
+status: draft
 ---
 
 # Что такое null safety и как это пишется?

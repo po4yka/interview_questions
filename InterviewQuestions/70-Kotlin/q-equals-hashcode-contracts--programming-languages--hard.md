@@ -2,6 +2,7 @@
 tags:
   - programming-languages
 difficulty: hard
+status: draft
 ---
 
 # Tell about equals and hashCode contracts

@@ -8,6 +8,7 @@ tags:
   - mockito
   - quality-assurance
 difficulty: medium
+status: draft
 ---
 
 # Методы тестирования Android приложений

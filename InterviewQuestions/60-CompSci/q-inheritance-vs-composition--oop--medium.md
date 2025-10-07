@@ -10,6 +10,7 @@ tags:
   - is-a
   - oop
 difficulty: medium
+status: draft
 ---
 
 # Какие отличия наследования от композиции?

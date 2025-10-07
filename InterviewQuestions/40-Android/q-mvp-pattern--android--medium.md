@@ -8,6 +8,7 @@ tags:
   - presenter
   - contract
 difficulty: medium
+status: draft
 ---
 
 # MVP Pattern

@@ -10,6 +10,7 @@ tags:
   - rxjava
   - threading
 difficulty: easy
+status: draft
 ---
 
 # Какие асинхронные примитивы используют для обработки данных?

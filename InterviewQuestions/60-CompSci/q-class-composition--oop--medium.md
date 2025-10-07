@@ -8,6 +8,7 @@ tags:
   - oop
   - relationships
 difficulty: medium
+status: draft
 ---
 
 # Что известно о композиции классов?

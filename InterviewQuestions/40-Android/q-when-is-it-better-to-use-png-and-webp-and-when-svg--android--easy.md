@@ -5,6 +5,7 @@ tags:
   - image-formats
   - ui
 difficulty: easy
+status: draft
 ---
 
 # Когда лучше использовать png и webp, а когда svg?

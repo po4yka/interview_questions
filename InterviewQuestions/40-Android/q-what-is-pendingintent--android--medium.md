@@ -8,6 +8,7 @@ tags:
   - intents
   - pending-intent
 difficulty: medium
+status: draft
 ---
 
 # What is PendingIntent?

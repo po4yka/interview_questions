@@ -11,6 +11,7 @@ tags:
   - sharedpreferences
   - viewmodel
 difficulty: medium
+status: draft
 ---
 
 # Каким образом можно сохранить данные за пределами фрагмента?

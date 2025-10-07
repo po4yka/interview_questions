@@ -13,6 +13,7 @@ tags:
   - tablayout
   - ui
 difficulty: medium
+status: draft
 ---
 
 # Какие способы навигации в Android знаешь?

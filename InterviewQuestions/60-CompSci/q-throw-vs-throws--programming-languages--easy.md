@@ -7,6 +7,7 @@ tags:
   - throw
   - throws
 difficulty: easy
+status: draft
 ---
 
 # Разница между throw и throws

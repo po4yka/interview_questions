@@ -4,6 +4,7 @@ tags:
   - coroutines
   - async-programming
 difficulty: medium
+status: draft
 ---
 
 # Что является сущностью корутин контекста?

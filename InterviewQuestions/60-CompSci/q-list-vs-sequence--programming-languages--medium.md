@@ -6,6 +6,7 @@ tags:
   - programming-languages
   - sequence
 difficulty: medium
+status: draft
 ---
 
 # В чем разница между работой с list и работой с sequence

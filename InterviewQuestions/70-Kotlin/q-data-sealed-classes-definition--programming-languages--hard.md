@@ -2,6 +2,7 @@
 tags:
   - programming-languages
 difficulty: hard
+status: draft
 ---
 
 # What are Data Class and Sealed Classes?

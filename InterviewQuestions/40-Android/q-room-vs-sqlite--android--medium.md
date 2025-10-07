@@ -9,6 +9,7 @@ tags:
   - room
   - sqlite
 difficulty: medium
+status: draft
 ---
 
 # В чем разница между Room & SQLite?

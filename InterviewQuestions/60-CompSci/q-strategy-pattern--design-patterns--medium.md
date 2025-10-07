@@ -6,6 +6,7 @@ tags:
   - gof-patterns
   - policy-pattern
 difficulty: medium
+status: draft
 ---
 
 # Strategy Pattern

@@ -3,6 +3,7 @@ tags:
   - programming-languages
   - android
 difficulty: medium
+status: draft
 ---
 
 # Откуда происходит повторный вызов composable функции

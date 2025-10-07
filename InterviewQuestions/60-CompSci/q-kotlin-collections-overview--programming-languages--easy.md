@@ -9,6 +9,7 @@ tags:
   - programming-languages
   - set
 difficulty: easy
+status: draft
 ---
 
 # Какие коллекции знаешь?

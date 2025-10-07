@@ -11,6 +11,7 @@ tags:
   - state
   - state-management
 difficulty: medium
+status: draft
 ---
 
 # Как mutableState сообщает о том, что он изменился?

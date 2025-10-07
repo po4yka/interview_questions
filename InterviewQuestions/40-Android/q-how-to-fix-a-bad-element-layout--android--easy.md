@@ -8,6 +8,7 @@ tags:
   - performance
   - ui
 difficulty: easy
+status: draft
 ---
 
 # Как можно исправить плохой layout элемента?

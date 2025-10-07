@@ -13,6 +13,7 @@ tags:
   - platform/android
   - single-activity
 difficulty: medium
+status: draft
 ---
 
 # Какие у подхода Single Activity этого подхода + и - ?

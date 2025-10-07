@@ -8,6 +8,7 @@ tags:
   - type-parameters
   - variance
 difficulty: medium
+status: draft
 ---
 
 # Какие виды дженериков есть?

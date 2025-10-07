@@ -5,6 +5,7 @@ tags:
   - recyclerview
   - ui-components
 difficulty: medium
+status: draft
 ---
 
 # Что известно про RecyclerView?

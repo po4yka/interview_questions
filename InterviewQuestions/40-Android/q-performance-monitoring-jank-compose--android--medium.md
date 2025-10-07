@@ -8,6 +8,7 @@ tags:
   - profiling
   - optimization
 difficulty: medium
+status: draft
 ---
 
 # Performance Monitoring and Jank Detection in Compose

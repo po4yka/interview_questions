@@ -11,6 +11,7 @@ tags:
   - background-tasks
   - difficulty/medium
 difficulty: medium
+status: draft
 ---
 
 # Multithreading Tools in Android / Инструменты многопоточности в Android

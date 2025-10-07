@@ -6,6 +6,7 @@ tags:
   - programming-languages
   - threading
 difficulty: medium
+status: draft
 ---
 
 # Что знаешь о диспатчерах?

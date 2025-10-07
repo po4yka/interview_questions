@@ -8,6 +8,7 @@ tags:
   - persistence
   - sharedpreferences
 difficulty: easy
+status: draft
 ---
 
 # Что такое SharedPreferences?

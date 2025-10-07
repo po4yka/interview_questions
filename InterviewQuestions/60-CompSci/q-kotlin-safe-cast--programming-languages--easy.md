@@ -8,6 +8,7 @@ tags:
   - type-conversion
   - type-safety
 difficulty: easy
+status: draft
 ---
 
 # Как в Kotlin привести переменную типа Any к типу String безопасно, чтобы избежать исключения?

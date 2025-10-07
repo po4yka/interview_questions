@@ -9,6 +9,7 @@ tags:
   - data-binding
   - lifecycle
 difficulty: medium
+status: draft
 ---
 
 # MVVM Pattern

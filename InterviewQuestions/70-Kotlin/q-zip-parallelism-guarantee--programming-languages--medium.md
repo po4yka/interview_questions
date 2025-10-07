@@ -2,6 +2,7 @@
 tags:
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Will zip guarantee parallel execution of 2 network requests launched for Coroutine

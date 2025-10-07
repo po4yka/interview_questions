@@ -7,6 +7,7 @@ tags:
   - switch
   - when
 difficulty: easy
+status: draft
 ---
 
 # Как использовать when в Kotlin вместо switch?

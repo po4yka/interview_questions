@@ -7,6 +7,7 @@ tags:
   - home-screen
   - difficulty/medium
 difficulty: medium
+status: draft
 ---
 
 # Android Home Screen Widgets / Виджеты главного экрана Android

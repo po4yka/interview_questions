@@ -9,6 +9,7 @@ tags:
   - ipc
   - savedinstancestate
 difficulty: medium
+status: draft
 ---
 
 # Что такое TransactionTooLargeException?

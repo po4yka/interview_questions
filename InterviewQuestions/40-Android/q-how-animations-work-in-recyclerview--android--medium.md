@@ -9,6 +9,7 @@ tags:
   - recyclerview
   - ui
 difficulty: medium
+status: draft
 ---
 
 # Как в RecyclerView делаются анимации?

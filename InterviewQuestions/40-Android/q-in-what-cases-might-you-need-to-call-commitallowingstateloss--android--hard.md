@@ -7,6 +7,7 @@ tags:
   - lifecycle
   - ui
 difficulty: hard
+status: draft
 ---
 
 # В каких случаях может понадобиться вызывать commitAllowingStateLoss

@@ -6,6 +6,7 @@ tags:
   - gestures
   - ui
 difficulty: easy
+status: draft
 ---
 
 # Какой класс можно использовать что бы ловить разные жесты?

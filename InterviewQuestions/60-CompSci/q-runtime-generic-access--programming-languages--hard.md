@@ -6,6 +6,7 @@ tags:
   - reified
   - type-erasure
 difficulty: hard
+status: draft
 ---
 
 # Можно ли получить в runtime доступ к типу дженерика?

@@ -7,6 +7,7 @@ tags:
   - fragments
   - ui
 difficulty: hard
+status: draft
 ---
 
 # Что такое фрагменты и почему их удобнее использовать вместо множества activity?

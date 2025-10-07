@@ -7,6 +7,7 @@ tags:
   - images
   - performance
 difficulty: easy
+status: draft
 ---
 
 # WebP - самый экономичный формат изображений

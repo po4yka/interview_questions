@@ -9,6 +9,7 @@ tags:
   - services
   - workmanager
 difficulty: medium
+status: draft
 ---
 
 # С чем связаны ограничения на запуск сервисов?

@@ -4,6 +4,7 @@ tags:
   - sealed-classes
   - type-safety
 difficulty: medium
+status: draft
 ---
 
 # В чем особенность sealed классов

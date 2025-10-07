@@ -6,6 +6,7 @@ tags:
   - static-analysis
   - type-system
 difficulty: medium
+status: draft
 ---
 
 # Зачем нужен класс nothing?

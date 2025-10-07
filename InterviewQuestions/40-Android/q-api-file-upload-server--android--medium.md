@@ -10,6 +10,7 @@ tags:
   - okhttp
   - retrofit
 difficulty: medium
+status: draft
 ---
 
 # Какое API или другие инструменты будешь использовать для отправления файлов на сервер?

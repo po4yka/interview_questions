@@ -10,6 +10,7 @@ tags:
   - viewmodel
   - views
 difficulty: medium
+status: draft
 ---
 
 # Как передавать данные из одного фрагмента в другой?

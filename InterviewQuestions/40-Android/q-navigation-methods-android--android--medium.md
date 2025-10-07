@@ -12,6 +12,7 @@ tags:
   - navigation-component
   - ui-patterns
 difficulty: medium
+status: draft
 ---
 
 # Какие способы навигации знаешь?

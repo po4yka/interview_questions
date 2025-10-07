@@ -7,6 +7,7 @@ tags:
   - programming-languages
   - properties
 difficulty: medium
+status: draft
 ---
 
 # Что известно о lateinit?

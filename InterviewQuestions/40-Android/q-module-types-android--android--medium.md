@@ -8,6 +8,7 @@ tags:
   - feature-module
   - difficulty/medium
 difficulty: medium
+status: draft
 ---
 
 # Types of Android Modules / Типы модулей Android

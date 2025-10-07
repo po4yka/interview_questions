@@ -8,6 +8,7 @@ tags:
   - di-hilt
   - platform/android
 difficulty: medium
+status: draft
 ---
 
 # Какие особенности инжекта в поле при помощи Dagger?

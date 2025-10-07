@@ -8,6 +8,7 @@ tags:
   - custom-types
   - difficulty/medium
 difficulty: medium
+status: draft
 ---
 
 # Room TypeConverters / TypeConverters в Room

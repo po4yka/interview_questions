@@ -11,6 +11,7 @@ tags:
   - animations
   - ui
 difficulty: medium
+status: draft
 ---
 
 # Как в Android можно сделать анимацию?

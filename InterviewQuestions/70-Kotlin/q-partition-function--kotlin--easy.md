@@ -5,6 +5,7 @@ tags:
   - filtering
   - pair
 difficulty: easy
+status: draft
 ---
 
 # partition(): разделение коллекции на две части

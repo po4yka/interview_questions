@@ -6,6 +6,7 @@ tags:
   - art
   - dalvik
 difficulty: medium
+status: draft
 ---
 
 # Что такое Runtime в контексте Android?

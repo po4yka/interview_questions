@@ -8,6 +8,7 @@ tags:
   - ui
   - layoutinflater
 difficulty: medium
+status: draft
 ---
 
 # Is LayoutInflater a singleton and why

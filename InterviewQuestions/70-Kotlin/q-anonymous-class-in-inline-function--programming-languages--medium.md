@@ -8,6 +8,7 @@ tags:
   - performance
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Можно ли создать анонимный класс внутри inline функции?

@@ -6,6 +6,7 @@ tags:
   - gof-patterns
   - chain-pattern
 difficulty: medium
+status: draft
 ---
 
 # Chain of Responsibility Pattern

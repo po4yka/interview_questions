@@ -8,6 +8,7 @@ tags:
   - message-queue
   - concurrency
 difficulty: medium
+status: draft
 ---
 
 # Handler и Looper: Полное руководство

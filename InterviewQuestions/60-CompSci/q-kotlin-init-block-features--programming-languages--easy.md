@@ -7,6 +7,7 @@ tags:
   - oop
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # Есть какие-то особенности использования init block?

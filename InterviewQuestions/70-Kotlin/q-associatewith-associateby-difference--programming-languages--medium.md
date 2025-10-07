@@ -6,6 +6,7 @@ tags:
   - kotlin
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # В чём разница между функциями коллекций associateWith() и associateBy()

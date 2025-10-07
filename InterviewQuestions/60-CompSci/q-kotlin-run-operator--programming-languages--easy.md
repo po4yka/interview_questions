@@ -9,6 +9,7 @@ tags:
   - scope-functions
   - with
 difficulty: easy
+status: draft
 ---
 
 # Какой оператор в Kotlin исполняет блок кода и возвращает его значение?

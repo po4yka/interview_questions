@@ -6,6 +6,7 @@ tags:
   - android
   - ui
 difficulty: medium
+status: draft
 ---
 
 # How to save and apply theme settings?

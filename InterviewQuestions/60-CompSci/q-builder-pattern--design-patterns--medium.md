@@ -6,6 +6,7 @@ tags:
   - gof-patterns
   - kotlin
 difficulty: medium
+status: draft
 ---
 
 # Builder Pattern

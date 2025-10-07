@@ -7,6 +7,7 @@ tags:
   - type-hierarchy
   - when-expressions
 difficulty: medium
+status: draft
 ---
 
 # Что такое sealed классы и зачем они нужны?

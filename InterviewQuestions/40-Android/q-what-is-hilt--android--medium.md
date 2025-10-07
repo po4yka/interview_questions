@@ -10,6 +10,7 @@ tags:
   - hilt
   - platform/android
 difficulty: medium
+status: draft
 ---
 
 # Что такое Hilt и для чего он используется?

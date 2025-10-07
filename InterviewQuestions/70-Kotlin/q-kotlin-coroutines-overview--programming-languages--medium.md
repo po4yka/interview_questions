@@ -7,6 +7,7 @@ tags:
   - lightweight-threads
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Что известно про корутины?

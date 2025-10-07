@@ -7,6 +7,7 @@ tags:
   - fragments
   - ui
 difficulty: hard
+status: draft
 ---
 
 # Для чего нужны фрагменты если есть Activity?

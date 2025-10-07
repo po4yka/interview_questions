@@ -8,6 +8,7 @@ tags:
   - bundle
   - difficulty/medium
 difficulty: medium
+status: draft
 ---
 
 # Parcelable in Android / Parcelable в Android

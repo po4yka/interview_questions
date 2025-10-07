@@ -6,6 +6,7 @@ tags:
   - kotlin
   - programming-languages
 difficulty: hard
+status: draft
 ---
 
 # Зачем нужен crossinline?

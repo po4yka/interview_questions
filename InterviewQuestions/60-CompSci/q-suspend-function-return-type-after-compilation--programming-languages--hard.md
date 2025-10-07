@@ -2,6 +2,7 @@
 tags:
   - programming-languages
 difficulty: hard
+status: draft
 ---
 
 # Suspend Function Return Type After Compilation

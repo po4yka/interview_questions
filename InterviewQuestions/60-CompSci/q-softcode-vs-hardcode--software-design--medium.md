@@ -8,6 +8,7 @@ tags:
   - softcoding
   - software-design
 difficulty: medium
+status: draft
 ---
 
 # Что такое софткод?

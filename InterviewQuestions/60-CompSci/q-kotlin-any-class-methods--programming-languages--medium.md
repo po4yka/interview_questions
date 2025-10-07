@@ -9,6 +9,7 @@ tags:
   - tostring
   - type-system
 difficulty: medium
+status: draft
 ---
 
 # Какие в базовом классе Kotlin есть методы и что они делают?

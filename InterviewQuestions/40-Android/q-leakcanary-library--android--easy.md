@@ -10,6 +10,7 @@ tags:
   - square
   - tools
 difficulty: easy
+status: draft
 ---
 
 # Какая библиотека используется для нахождения утечек памяти в Android?

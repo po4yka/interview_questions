@@ -8,6 +8,7 @@ tags:
   - recyclerview
   - ui
 difficulty: medium
+status: draft
 ---
 
 # Что позволяет делать ItemDecoration?

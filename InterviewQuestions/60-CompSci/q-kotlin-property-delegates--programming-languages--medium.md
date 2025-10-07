@@ -5,6 +5,7 @@ tags:
   - programming-languages
   - property-delegates
 difficulty: medium
+status: draft
 ---
 
 # В чем особенность делегатов свойств

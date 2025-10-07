@@ -14,6 +14,7 @@ tags:
   - presenter
   - viewmodel
 difficulty: medium
+status: draft
 ---
 
 # Чем MVVM отличается от MVP?

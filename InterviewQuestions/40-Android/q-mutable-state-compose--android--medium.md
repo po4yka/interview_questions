@@ -10,6 +10,7 @@ tags:
   - state
   - state-management
 difficulty: medium
+status: draft
 ---
 
 # Что такое mutable state в Compose?

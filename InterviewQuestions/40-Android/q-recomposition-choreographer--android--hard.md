@@ -11,6 +11,7 @@ tags:
   - recomposition
   - vsync
 difficulty: hard
+status: draft
 ---
 
 # Рекомпозиция происходит в рандомное время или по команде хореографера?

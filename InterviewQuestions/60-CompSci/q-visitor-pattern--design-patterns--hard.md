@@ -6,6 +6,7 @@ tags:
   - gof-patterns
   - double-dispatch
 difficulty: hard
+status: draft
 ---
 
 # Visitor Pattern

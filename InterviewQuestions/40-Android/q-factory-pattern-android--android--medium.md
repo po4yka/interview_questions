@@ -9,6 +9,7 @@ tags:
   - factory-pattern
   - platform/android
 difficulty: medium
+status: draft
 ---
 
 # Можешь привести пример когда android фреймворк использует паттерн Factory

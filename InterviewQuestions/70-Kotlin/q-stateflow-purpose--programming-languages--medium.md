@@ -7,6 +7,7 @@ tags:
   - flow
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Для чего нужен StateFlow?

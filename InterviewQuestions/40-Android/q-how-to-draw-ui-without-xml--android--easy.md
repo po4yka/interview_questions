@@ -8,6 +8,7 @@ tags:
   - jetpack-compose
   - views
 difficulty: medium
+status: draft
 ---
 
 # How to draw UI without xml?

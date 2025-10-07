@@ -6,6 +6,7 @@ tags:
   - programming-languages
   - serialization
 difficulty: easy
+status: draft
 ---
 
 # Что такое сериализация?

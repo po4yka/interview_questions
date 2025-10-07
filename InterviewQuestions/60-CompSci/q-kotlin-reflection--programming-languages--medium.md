@@ -7,6 +7,7 @@ tags:
   - reflection
   - runtime
 difficulty: medium
+status: draft
 ---
 
 # Что такое рефлексия?

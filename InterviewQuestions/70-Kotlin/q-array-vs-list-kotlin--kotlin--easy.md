@@ -4,6 +4,7 @@ tags:
   - collections
   - data-structures
 difficulty: easy
+status: draft
 ---
 
 # Чем array отличается от list

@@ -10,6 +10,7 @@ tags:
   - secondary-constructor
   - syntax
 difficulty: easy
+status: draft
 ---
 
 # Какое ключевое слово используется для объявления параметров конструктора в Kotlin?

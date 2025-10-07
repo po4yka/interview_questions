@@ -10,6 +10,7 @@ tags:
   - serialization
   - storage
 difficulty: medium
+status: draft
 ---
 
 # Как бы ты сохранил структуру Markdown в базу данных/на диск?

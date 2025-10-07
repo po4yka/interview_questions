@@ -8,6 +8,7 @@ tags:
   - programming-languages
   - threads
 difficulty: medium
+status: draft
 ---
 
 # В чем концептуальное отличие корутинов от потоков в Java

@@ -7,6 +7,7 @@ tags:
   - programming-languages
   - syntax
 difficulty: medium
+status: draft
 ---
 
 # Что такое лямбды с точки зрения синтаксиса в Java и Kotlin?

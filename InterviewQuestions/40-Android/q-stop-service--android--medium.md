@@ -8,6 +8,7 @@ tags:
   - services
   - started-service
 difficulty: medium
+status: draft
 ---
 
 # Как остановить сервис?

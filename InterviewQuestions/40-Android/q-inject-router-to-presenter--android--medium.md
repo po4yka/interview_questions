@@ -11,6 +11,7 @@ tags:
   - koin
   - platform/android
 difficulty: medium
+status: draft
 ---
 
 # Что использовать для того чтобы роутер инжектился напрямую в презентер?

@@ -9,6 +9,7 @@ tags:
   - lifecycle
   - navigation
 difficulty: medium
+status: draft
 ---
 
 # Как работает навигация по Activity?

@@ -7,6 +7,7 @@ tags:
   - kotlin
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Можно ли на уровне компилятора сделать все функции inline?

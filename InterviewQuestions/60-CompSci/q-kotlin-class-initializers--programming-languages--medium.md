@@ -9,6 +9,7 @@ tags:
   - programming-languages
   - secondary-constructor
 difficulty: medium
+status: draft
 ---
 
 # Расскажи про инициализаторы в классах в Kotlin

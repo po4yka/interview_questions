@@ -5,6 +5,7 @@ tags:
   - networking
   - http
 difficulty: medium
+status: draft
 ---
 
 # Что используется для работы с сетью в Android?

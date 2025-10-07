@@ -5,6 +5,7 @@ tags:
   - threading
   - ui-thread
 difficulty: medium
+status: draft
 ---
 
 # Какой основной поток выполнения приложения?

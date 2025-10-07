@@ -5,6 +5,7 @@ tags:
   - singleton
   - gof-patterns
 difficulty: easy
+status: draft
 ---
 
 # Singleton Pattern

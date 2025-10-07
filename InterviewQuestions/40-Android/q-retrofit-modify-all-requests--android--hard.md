@@ -10,6 +10,7 @@ tags:
   - okhttp
   - retrofit
 difficulty: hard
+status: draft
 ---
 
 # Как в Ретрофите изменять все запросы?

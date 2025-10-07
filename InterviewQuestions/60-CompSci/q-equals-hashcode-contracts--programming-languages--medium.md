@@ -8,6 +8,7 @@ tags:
   - object-methods
   - programming-languages
 difficulty: medium
+status: draft
 ---
 
 # Расскажи о контрактах equals и hashCode

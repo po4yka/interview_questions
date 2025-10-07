@@ -11,6 +11,7 @@ tags:
   - performance
   - xml
 difficulty: medium
+status: draft
 ---
 
 # Где можно оптимизировать парсинг?

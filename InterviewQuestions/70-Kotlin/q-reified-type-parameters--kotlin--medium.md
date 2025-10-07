@@ -6,6 +6,7 @@ tags:
   - inline-functions
   - type-system
 difficulty: medium
+status: draft
 ---
 
 # Зачем нужен reified в Kotlin?

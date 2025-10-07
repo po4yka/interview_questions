@@ -8,6 +8,7 @@ tags:
   - background-processing
   - multipart
 difficulty: medium
+status: draft
 ---
 
 # Загрузка больших файлов на сервер в Android

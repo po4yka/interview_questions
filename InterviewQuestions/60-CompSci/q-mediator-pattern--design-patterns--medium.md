@@ -6,6 +6,7 @@ tags:
   - gof-patterns
   - coupling
 difficulty: medium
+status: draft
 ---
 
 # Mediator Pattern

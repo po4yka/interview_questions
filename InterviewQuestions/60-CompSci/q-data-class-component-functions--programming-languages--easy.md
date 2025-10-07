@@ -5,6 +5,7 @@ tags:
   - kotlin
   - programming-languages
 difficulty: easy
+status: draft
 ---
 
 # Для чего служит component в data class?

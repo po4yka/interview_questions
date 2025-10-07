@@ -5,6 +5,7 @@ tags:
   - data-storage
   - shared-preferences
 difficulty: easy
+status: draft
 ---
 
 # Что такое SharedPreferences?

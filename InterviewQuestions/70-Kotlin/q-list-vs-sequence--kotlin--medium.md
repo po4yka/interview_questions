@@ -6,6 +6,7 @@ tags:
   - performance
   - lazy-evaluation
 difficulty: medium
+status: draft
 ---
 
 # List vs Sequence: жадные и ленивые коллекции

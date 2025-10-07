@@ -8,6 +8,7 @@ tags:
   - types
   - unit
 difficulty: medium
+status: draft
 ---
 
 # Что известно про типы any, unit, nothing в Kotlin ?

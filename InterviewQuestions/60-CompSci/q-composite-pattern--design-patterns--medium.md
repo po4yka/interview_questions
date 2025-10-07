@@ -6,6 +6,7 @@ tags:
   - gof-patterns
   - tree-structure
 difficulty: medium
+status: draft
 ---
 
 # Composite Pattern

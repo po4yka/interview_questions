@@ -4,6 +4,7 @@ tags:
   - programming-languages
   - sealed-classes
 difficulty: medium
+status: draft
 ---
 
 # В чем особенность sealed классов

@@ -10,6 +10,7 @@ tags:
   - large-data
   - uri
 difficulty: hard
+status: draft
 ---
 
 # Как правильно передать большой объем данных, например картинку, на Activity?

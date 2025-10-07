@@ -7,6 +7,7 @@ tags:
   - data-passing
   - workmanager
 difficulty: medium
+status: draft
 ---
 
 # Как передать и как получить данные из WorkManager?

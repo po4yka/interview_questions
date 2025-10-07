@@ -11,6 +11,7 @@ tags:
   - solid
   - srp
 difficulty: medium
+status: draft
 ---
 
 # Что такое принципы SOLID?

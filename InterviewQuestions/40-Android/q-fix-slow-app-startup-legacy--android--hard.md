@@ -9,6 +9,7 @@ tags:
   - optimization
   - performance
 difficulty: hard
+status: draft
 ---
 
 # Что делать если надо исправить долгий запуск приложения в legacy проекте?

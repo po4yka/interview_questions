@@ -4,6 +4,7 @@ tags:
   - inline-functions
   - performance
 difficulty: medium
+status: draft
 ---
 
 # Что такое inline функции?

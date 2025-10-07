@@ -11,6 +11,7 @@ tags:
   - stability
   - stable-annotation
 difficulty: hard
+status: draft
 ---
 
 # Какие классы будут автоматически выводиться как stable?

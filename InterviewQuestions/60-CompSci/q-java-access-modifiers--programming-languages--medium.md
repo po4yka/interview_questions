@@ -10,6 +10,7 @@ tags:
   - protected
   - public
 difficulty: medium
+status: draft
 ---
 
 # Как лучше всего использовать модификаторы доступа в Java?
