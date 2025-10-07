@@ -1,19 +1,36 @@
 ---
-tags:
-  - anonymous-classes
-  - inline
-  - kotlin
-  - lambdas
-  - object-expressions
-  - performance
-  - programming-languages
+id: anonymous-class-inline-function
+title: Anonymous Class in Inline Function / Анонимный класс в inline функции
+aliases: []
+
+# Classification
+topic: kotlin
+subtopics: [inline, anonymous-classes, lambdas, performance, optimization]
+question_kind: theory
 difficulty: medium
-status: draft
+
+# Language & provenance
+original_language: en
+language_tags: [en, ru]
+source: ""
+source_note: ""
+
+# Workflow & relations
+status: reviewed
+moc: moc-kotlin
+related: []
+
+# Timestamps
+created: 2025-10-06
+updated: 2025-10-06
+
+tags: [kotlin, inline, anonymous-classes, lambdas, object-expressions, performance, difficulty/medium]
 ---
+## Question (EN)
+> Can you create an anonymous class inside an inline function in Kotlin?
 
-# Можно ли создать анонимный класс внутри inline функции?
-
-**English**: Can you create an anonymous class inside an inline function?
+## Вопрос (RU)
+> Можно ли создать анонимный класс внутри inline функции в Kotlin?
 
 ## Answer
 
@@ -409,9 +426,94 @@ fun createHandler(): Handler {
 - Inline → Use lambdas
 - Anonymous classes → Use regular functions
 
-## Ответ
+## Ответ (RU)
 
-Нет, inline function cannot contain object expressions. Если нужно использовать inline, можно передавать лямбду вместо анонимного класса.
+**Нет**, **inline функции не должны содержать object expressions** (анонимные классы). Если нужно использовать inline, используйте **лямбду вместо анонимного класса**.
 
-Да, можно создать анонимный класс внутри inline функции. Однако если этот класс захватывает переменные они не будут инлайновыми и могут повлиять на производительность. Inline функции лучше использовать для лямбда-функций не создающих дополнительных объектов.
+Однако есть нюансы: технически можно написать object expression в inline функции, но это **сводит на нет смысл инлайна** и может вызвать **проблемы с производительностью**, так как object expression всегда создает объект.
+
+### Проблема
+
+**Inline функции** предназначены для устранения создания объектов лямбд путем копирования кода лямбды непосредственно в место вызова.
+
+**Анонимные классы** (object expressions) всегда создают экземпляры объектов, что противоречит цели инлайна.
+
+### Ключевые проблемы
+
+1. **Создает объект** (сводит на нет inline)
+2. **Не может захватывать inline лямбда-параметры**
+3. **Ухудшает производительность** вместо улучшения
+
+### Правильный подход: используйте лямбды
+
+```kotlin
+// ❌ Анонимный класс (создает объект)
+inline fun process(action: (Int) -> Unit) {
+    val handler = object : Handler {
+        override fun handle(value: Int) {
+            action(value)  // ❌ Ошибка!
+        }
+    }
+    handler.handle(42)
+}
+
+// ✅ Лямбда (без создания объекта с inline)
+inline fun process(action: (Int) -> Unit) {
+    action(42)  // Инлайнится напрямую
+}
+```
+
+### Когда нужны анонимные классы
+
+Используйте **обычные функции** (не inline) для анонимных классов:
+
+```kotlin
+// ✅ Обычная функция для анонимного класса
+fun createHandler(): EventHandler {
+    return object : EventHandler {
+        override fun onStart() { println("Started") }
+        override fun onComplete(result: String) { println("Complete: $result") }
+        override fun onError(error: Throwable) { println("Error: ${error.message}") }
+    }
+}
+```
+
+### Обходной путь: noinline
+
+Если необходимо смешать:
+
+```kotlin
+inline fun process(
+    value: Int,
+    noinline complexHandler: (Int) -> Unit  // Помечаем как noinline
+) {
+    val handler = object : Handler {
+        override fun handle() {
+            complexHandler(value)  // Теперь OK
+        }
+    }
+    handler.handle()
+}
+```
+
+**Компромисс:** параметр `complexHandler` теряет преимущество inline.
+
+### Резюме
+
+**Можно ли создавать анонимные классы в inline функциях?**
+
+- **Технически:** Иногда да (компилируется)
+- **Практически:** Нет, сводит на нет смысл
+- **Компилятор:** Часто выдает ошибки при захвате inline параметров
+
+**Решение:**
+- Используйте **лямбды** для single-method интерфейсов (SAM)
+- Используйте **обычные функции**, когда нужны анонимные классы
+- Используйте **noinline** модификатор, если нужно их смешать
+
+**Ключевой принцип:** Inline для **устранения** создания объектов. Анонимные классы **создают** объекты. Они фундаментально несовместимы.
+
+**Best practice:**
+- Inline → Используйте лямбды
+- Анонимные классы → Используйте обычные функции
 

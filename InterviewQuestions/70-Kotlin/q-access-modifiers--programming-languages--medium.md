@@ -1,13 +1,33 @@
 ---
-tags:
-  - programming-languages
+id: access-modifiers-kotlin
+title: Access Modifiers in Kotlin / Модификаторы доступа в Kotlin
+aliases: []
+
+# Classification
+topic: kotlin
+subtopics: [access-modifiers, visibility, encapsulation, oop]
+question_kind: theory
 difficulty: medium
-status: draft
+
+# Language & provenance
+original_language: en
+language_tags: [en, ru]
+source: ""
+source_note: ""
+
+# Workflow & relations
+status: reviewed
+moc: moc-kotlin
+related: []
+
+# Timestamps
+created: 2025-10-06
+updated: 2025-10-06
+
+tags: [kotlin, access-modifiers, visibility, encapsulation, oop, difficulty/medium]
 ---
-
-# What are access modifiers?
-
-**English**: What are access modifiers in Kotlin?
+## Question (EN)
+> What are access modifiers in Kotlin and how do they differ from Java?
 
 ## Answer
 
@@ -370,10 +390,24 @@ fun main() {
 
 ---
 
-## Ответ
+## Вопрос (RU)
+> Что такое модификаторы доступа в Kotlin и чем они отличаются от Java?
 
-### Вопрос
-Что такое модификаторы доступа
+## Ответ (RU)
 
-### Ответ
-Модификаторы доступа (Access Modifiers) — это ключевые слова, которые определяют, кто может видеть и использовать класс, переменную или метод Они помогают инкапсулировать данные и защищать код от неправильного использования
+Модификаторы доступа — это ключевые слова, которые определяют, кто может видеть и использовать класс, переменную или метод. Они помогают инкапсулировать данные и защищать код от неправильного использования.
+
+**Модификаторы доступа в Kotlin:**
+
+1. **private** - виден только внутри того же файла или класса
+2. **protected** - виден в классе и его подклассах
+3. **internal** - виден внутри того же модуля
+4. **public** - виден везде (по умолчанию)
+
+**Ключевые отличия от Java:**
+- В Kotlin **public по умолчанию** (в Java package-private)
+- **internal** модификатор есть только в Kotlin (видимость на уровне модуля)
+- **protected** члены не видны в пакете (в Java видны)
+- На верхнем уровне нельзя использовать **protected**
+
+Все примеры кода из английской версии применимы и к русской версии.

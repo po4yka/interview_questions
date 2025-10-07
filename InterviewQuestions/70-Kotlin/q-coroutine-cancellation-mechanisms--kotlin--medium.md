@@ -11,7 +11,7 @@ language_tags:
   - en
   - ru
 original_language: en
-status: draft
+status: reviewed
 source: Kotlin Coroutines Interview Questions PDF
 tags:
   - kotlin

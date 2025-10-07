@@ -1,11 +1,35 @@
 ---
-tags:
-  - programming-languages
-difficulty: medium
-status: draft
----
+id: 20251006-backpressure-flow
+title: "Back Pressure in Kotlin Flow / Back Pressure в Kotlin Flow"
+aliases: []
 
-# Back Pressure in Kotlin Flow
+# Classification
+topic: kotlin
+subtopics: [flow, backpressure, buffer, conflate, operators]
+question_kind: theory
+difficulty: medium
+
+# Language & provenance
+original_language: en
+language_tags: [en, ru]
+source: https://github.com/amitshekhariitbhu/android-interview-questions
+source_note: Amit Shekhar Android Interview Questions repository
+
+# Workflow & relations
+status: reviewed
+moc: moc-kotlin
+related: [q-kotlin-flow-basics--kotlin--medium, q-debounce-throttle-flow--kotlin--medium]
+
+# Timestamps
+created: 2025-10-06
+updated: 2025-10-07
+
+tags: [kotlin, flow, backpressure, buffer, conflate, operators, difficulty/medium]
+---
+## Question (EN)
+> What is Back Pressure in Kotlin Flow? What strategies exist to handle it?
+## Вопрос (RU)
+> Что такое Back Pressure в Kotlin Flow? Какие стратегии существуют для его обработки?
 
 ## Answer
 
@@ -457,10 +481,462 @@ class BackPressureBestPractices {
 | **DROP_LATEST** | Drop new values | Rarely used | Low (bounded) |
 
 ---
-## Вопрос (RU)
 
-Что известно про Back Pressure?
+## Ответ (RU)
 
-## Ответ
+**Back Pressure** — это механизм контроля потока данных, который предотвращает перегрузку потребителя, когда производитель отправляет данные слишком быстро.
 
-Это механизм контроля потока данных, предотвращающий перегрузку потребителя если источник отправляет данные слишком быстро. В Kotlin Flow и Reactive Streams есть стратегии управления Back Pressure: Buffer – накапливает данные в памяти. Drop – игнорирует избыточные элементы. Latest – хранит только последний элемент. Conflate – объединяет значения для уменьшения нагрузки. Back Pressure нужен для стабильности и предотвращения утечек памяти в асинхронных потоках.
+Kotlin Flow и Reactive Streams имеют стратегии для управления Back Pressure:
+
+- **Buffer**: Накапливает данные в памяти
+- **Drop**: Игнорирует избыточные элементы
+- **Latest**: Хранит только последний элемент
+- **Conflate**: Объединяет значения для уменьшения нагрузки
+
+Back Pressure необходим для стабильности и предотвращения утечек памяти в асинхронных потоках.
+
+### Проблема: Быстрый Производитель, Медленный Потребитель
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+// Проблема: Производитель испускает быстрее, чем потребитель может обработать
+fun problematicFlow() = flow {
+    repeat(100) { i ->
+        println("Испускаю $i")
+        emit(i)
+        delay(10)  // Производитель испускает каждые 10мс
+    }
+}
+
+fun main() = runBlocking {
+    problematicFlow().collect { value ->
+        println("Собираю $value")
+        delay(100)  // Потребитель обрабатывает каждые 100мс
+        // Производитель в 10 раз быстрее потребителя!
+    }
+}
+
+// Без обработки backpressure:
+// - Накопление в памяти
+// - Потенциальный OutOfMemoryError
+// - Потеря данных
+// - Нестабильность системы
+```
+
+### Стратегия 1: buffer() - Накопление Данных
+
+```kotlin
+// Buffer позволяет производителю работать быстрее потребителя
+fun bufferExample() = runBlocking {
+    flow {
+        repeat(10) { i ->
+            println("Испускаю $i в ${System.currentTimeMillis()}")
+            emit(i)
+            delay(100)
+        }
+    }
+    .buffer(capacity = 5)  // Буфер до 5 элементов
+    .collect { value ->
+        println("Собираю $value в ${System.currentTimeMillis()}")
+        delay(500)  // Медленный потребитель
+    }
+}
+
+// С буфером:
+// - Производитель не ждет потребителя
+// - Элементы хранятся в буфере
+// - Производитель приостанавливается при заполнении буфера
+// - Потребитель обрабатывает в своем темпе
+
+// Стратегии емкости буфера
+val flow1 = flowOf(1, 2, 3)
+    .buffer()  // Буфер по умолчанию (64 элемента)
+
+val flow2 = flowOf(1, 2, 3)
+    .buffer(10)  // Буфер на 10 элементов
+
+val flow3 = flowOf(1, 2, 3)
+    .buffer(Channel.UNLIMITED)  // Неограниченный буфер (опасно!)
+
+val flow4 = flowOf(1, 2, 3)
+    .buffer(Channel.RENDEZVOUS)  // Без буфера, ждать потребителя
+```
+
+### Стратегия 2: conflate() - Только Последнее Значение
+
+```kotlin
+// Conflate пропускает промежуточные значения, сохраняет только последнее
+fun conflateExample() = runBlocking {
+    flow {
+        repeat(10) { i ->
+            println("Испускаю $i")
+            emit(i)
+            delay(100)
+        }
+    }
+    .conflate()  // Отбрасываем промежуточные значения
+    .collect { value ->
+        println("Собираю $value")
+        delay(500)  // Медленный потребитель
+    }
+}
+
+// Пример вывода:
+// Испускаю 0
+// Собираю 0
+// Испускаю 1
+// Испускаю 2
+// Испускаю 3
+// Испускаю 4
+// Собираю 4  <- Пропущены 1, 2, 3
+// Испускаю 5
+// ...
+
+// Случай использования: Обновления UI
+fun locationUpdates(): Flow<Location> = flow {
+    while (true) {
+        emit(getCurrentLocation())
+        delay(100)
+    }
+}
+    .conflate()  // Показываем только последнюю локацию
+
+// Случай использования: Цены акций
+fun stockPrices(symbol: String): Flow<Double> = flow {
+    while (true) {
+        emit(fetchPrice(symbol))
+        delay(50)
+    }
+}
+    .conflate()  // Важна только последняя цена
+```
+
+### Стратегия 3: collectLatest() - Отмена Предыдущего Сбора
+
+```kotlin
+// collectLatest отменяет предыдущий сбор при поступлении нового значения
+fun collectLatestExample() = runBlocking {
+    flow {
+        repeat(5) { i ->
+            println("Испускаю $i")
+            emit(i)
+            delay(100)
+        }
+    }
+    .collectLatest { value ->
+        println("Начинаю собирать $value")
+        delay(500)  // Медленная обработка
+        println("Заканчиваю собирать $value")  // Может не выполниться
+    }
+}
+
+// Пример вывода:
+// Испускаю 0
+// Начинаю собирать 0
+// Испускаю 1
+// Начинаю собирать 1  <- Отменен сбор 0
+// Испускаю 2
+// Начинаю собирать 2  <- Отменен сбор 1
+// ...
+// Заканчиваю собирать 4  <- Только последний завершается
+
+// Случай использования: Поисковые запросы
+fun searchFlow(queries: Flow<String>): Flow<List<Result>> =
+    queries.collectLatest { query ->
+        // Отменяем предыдущий поиск при новом запросе
+        performSearch(query)
+    }
+
+// Случай использования: Обновления данных в реальном времени
+fun dataUpdates(): Flow<Data> = dataSource
+    .collectLatest { rawData ->
+        // Отменяем предыдущую обработку
+        processData(rawData)
+    }
+```
+
+### Стратегия 4: Буфер с Обработкой Переполнения
+
+```kotlin
+// Буфер с обработкой переполнения
+suspend fun bufferOverflowStrategies() {
+    val source = flow {
+        repeat(100) { emit(it) }
+    }
+
+    // SUSPEND (по умолчанию): Приостанавливает производителя при заполнении
+    source.buffer(
+        capacity = 10,
+        onBufferOverflow = BufferOverflow.SUSPEND
+    ).collect { /* медленный потребитель */ }
+
+    // DROP_OLDEST: Отбрасывает старые значения при заполнении
+    source.buffer(
+        capacity = 10,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    ).collect { /* медленный потребитель */ }
+
+    // DROP_LATEST: Отбрасывает новые значения при заполнении
+    source.buffer(
+        capacity = 10,
+        onBufferOverflow = BufferOverflow.DROP_LATEST
+    ).collect { /* медленный потребитель */ }
+}
+
+// Реальный пример: Логирование событий
+class EventLogger {
+    private val events = MutableSharedFlow<Event>(
+        replay = 0,
+        extraBufferCapacity = 1000,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    fun logEvent(event: Event) {
+        events.tryEmit(event)  // Не приостанавливается, отбрасывает старое при заполнении
+    }
+
+    fun observeEvents(): Flow<Event> = events
+}
+```
+
+### Стратегия 5: Sample / Throttle
+
+```kotlin
+// sample: Испускает последнее значение через фиксированные интервалы
+fun sampleExample() = runBlocking {
+    flow {
+        repeat(100) { i ->
+            emit(i)
+            delay(10)  // Быстрое испускание
+        }
+    }
+    .sample(100)  // Сэмплирование каждые 100мс
+    .collect { value ->
+        println("Сэмплировано: $value")
+    }
+}
+
+// Вывод: Только значения на интервалах 100мс
+// Сэмплировано: 9
+// Сэмплировано: 19
+// Сэмплировано: 29
+// ...
+
+// Пользовательская реализация sample
+fun <T> Flow<T>.sampleTime(periodMillis: Long): Flow<T> = flow {
+    var lastEmission = 0L
+    collect { value ->
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastEmission >= periodMillis) {
+            emit(value)
+            lastEmission = currentTime
+        }
+    }
+}
+
+// Случай использования: Данные сенсоров
+fun sensorReadings(): Flow<SensorData> = flow {
+    while (true) {
+        emit(readSensor())
+        delay(10)  // Чтение каждые 10мс
+    }
+}
+    .sample(1000)  // Отчет каждую секунду
+```
+
+### Стратегия 6: Debounce
+
+```kotlin
+// debounce: Испускает значение только после периода тишины
+fun debounceExample() = runBlocking {
+    flow {
+        emit(1)
+        delay(50)
+        emit(2)
+        delay(50)
+        emit(3)
+        delay(500)  // Период тишины
+        emit(4)
+    }
+    .debounce(200)  // Ждать 200мс тишины
+    .collect { value ->
+        println("Debounced: $value")
+    }
+}
+
+// Вывод:
+// Debounced: 3  <- После периода тишины
+// Debounced: 4  <- Последнее значение
+
+// Случай использования: Поисковый ввод
+fun searchInput(textChanges: Flow<String>): Flow<List<Result>> =
+    textChanges
+        .debounce(300)  // Ждем, пока пользователь прекратит печатать
+        .filter { it.length >= 3 }
+        .flatMapLatest { query ->
+            performSearch(query)
+        }
+
+// Случай использования: Автосохранение
+fun autoSave(contentChanges: Flow<String>): Flow<Unit> =
+    contentChanges
+        .debounce(2000)  // Сохраняем через 2 секунды после последнего изменения
+        .map { content -> saveToServer(content) }
+```
+
+### Сравнение Стратегий
+
+```kotlin
+suspend fun compareStrategies() = coroutineScope {
+    val source = flow {
+        repeat(10) { i ->
+            println("Испускаю $i")
+            emit(i)
+            delay(100)
+        }
+    }
+
+    println("=== Без backpressure ===")
+    source.collect {
+        delay(500)
+        println("Собираю $it")
+    }
+
+    println("\n=== С buffer ===")
+    source.buffer(3).collect {
+        delay(500)
+        println("Собираю $it")
+    }
+
+    println("\n=== С conflate ===")
+    source.conflate().collect {
+        delay(500)
+        println("Собираю $it")
+    }
+
+    println("\n=== С collectLatest ===")
+    source.collectLatest {
+        println("Начало $it")
+        delay(500)
+        println("Конец $it")
+    }
+}
+```
+
+### Реальный Пример: Менеджер Загрузок
+
+```kotlin
+class DownloadManager {
+    // Быстрые события загрузки, медленные обновления UI
+    private val downloadProgress = MutableSharedFlow<DownloadProgress>(
+        replay = 0,
+        extraBufferCapacity = 100,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    fun observeProgress(): Flow<DownloadProgress> =
+        downloadProgress
+            .conflate()  // UI нужен только последний прогресс
+            .sample(100)  // Обновлять UI макс. 10 раз/секунду
+
+    suspend fun download(url: String) {
+        var bytesDownloaded = 0L
+        val totalBytes = getContentLength(url)
+
+        downloadStream(url).collect { chunk ->
+            bytesDownloaded += chunk.size
+            // Испускаем прогресс (может быть быстрее чем UI может обработать)
+            downloadProgress.emit(
+                DownloadProgress(bytesDownloaded, totalBytes)
+            )
+        }
+    }
+}
+```
+
+### Безопасный для Памяти Паттерн
+
+```kotlin
+// Предотвращаем OOM с ограниченным буфером
+fun safePipeline(): Flow<ProcessedData> = flow {
+    // Быстрый источник данных
+    repeat(1_000_000) { emit(it) }
+}
+    .buffer(capacity = 100)  // Ограниченный буфер
+    .map { data ->
+        // CPU-интенсивная обработка
+        processData(data)
+    }
+    .buffer(capacity = 50)  // Еще один ограниченный буфер
+    .map { intermediate ->
+        // Дополнительная обработка
+        transform(intermediate)
+    }
+
+// Без ограниченных буферов:
+// - Неконтролируемый рост памяти
+// - Потенциальный OOM
+// - Сбой системы
+
+// С ограниченными буферами:
+// - Контролируемое использование памяти
+// - Производитель приостанавливается при заполнении буфера
+// - Стабильная система
+```
+
+### Лучшие Практики
+
+```kotlin
+class BackPressureBestPractices {
+    // ✅ ДЕЛАТЬ: Использовать conflate для обновлений состояния
+    fun userState(): Flow<UserState> =
+        stateUpdates.conflate()
+
+    // ✅ ДЕЛАТЬ: Использовать buffer для пропускной способности
+    fun dataProcessing(): Flow<Result> =
+        dataSource
+            .buffer(100)
+            .map { process(it) }
+
+    // ✅ ДЕЛАТЬ: Использовать debounce для ввода пользователя
+    fun searchQuery(input: Flow<String>): Flow<Results> =
+        input.debounce(300)
+            .flatMapLatest { query -> search(query) }
+
+    // ✅ ДЕЛАТЬ: Использовать sample для высокочастотных событий
+    fun mousePosition(events: Flow<MouseEvent>): Flow<Position> =
+        events.sample(16)  // ~60fps
+
+    // ❌ НЕ ДЕЛАТЬ: Использовать неограниченный буфер
+    fun dangerous(): Flow<Data> =
+        source.buffer(Int.MAX_VALUE)  // Вызовет OOM!
+
+    // ❌ НЕ ДЕЛАТЬ: Полностью игнорировать backpressure
+    fun alsoProblematic(): Flow<Data> =
+        fastSource  // Нет обработки backpressure
+}
+```
+
+### Таблица Сводки
+
+| Стратегия | Поведение | Случай использования | Влияние на память |
+|----------|----------|----------|---------------|
+| **buffer()** | Очередь элементов | Высокая пропускная способность | Среднее (ограниченное) |
+| **conflate()** | Сохранять последнее | Обновления состояния | Низкое |
+| **collectLatest()** | Отменять предыдущее | Отменяемая работа | Низкое |
+| **sample()** | Периодическое испускание | Высокочастотные события | Низкое |
+| **debounce()** | После периода тишины | Ввод пользователя | Низкое |
+| **DROP_OLDEST** | Отбрасывать старые | Логирование событий | Низкое (ограниченное) |
+| **DROP_LATEST** | Отбрасывать новые | Редко используется | Низкое (ограниченное) |
+
+**Резюме**: Back Pressure — критический механизм для управления асинхронными потоками данных в Kotlin Flow. Правильный выбор стратегии (buffer, conflate, collectLatest, sample, debounce) зависит от конкретного случая использования и обеспечивает стабильность системы и эффективное использование памяти.
+
+---
+
+## References
+
+- [Flow - Kotlin Documentation](https://kotlinlang.org/docs/flow.html)
+- [Buffering in Flows - Kotlin Blog](https://kotlinlang.org/docs/flow.html#buffering)
+- [SharedFlow and StateFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
