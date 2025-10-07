@@ -14,7 +14,7 @@ tags:
 subtopics:
   - app-bundle
   - play-console
-status: draft
+status: reviewed
 created: 2025-10-05
 modified: 2025-10-05
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
