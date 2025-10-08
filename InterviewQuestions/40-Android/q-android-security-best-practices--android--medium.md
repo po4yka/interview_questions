@@ -13,7 +13,7 @@ subtopics:
   - keystore-crypto
   - network-security-config
 difficulty: medium
-status: draft
+status: reviewed
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20security%20best%20practices%20you%20know.md
 ---
 
