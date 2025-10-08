@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: draft
+status: reviewed
 moc: moc-android
 related: [recyclerview, rxjava, pagination, paging-library]
 
