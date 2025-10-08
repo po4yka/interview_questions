@@ -9,10 +9,12 @@ tags:
   - recyclerview
   - ui
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Как в RecyclerView делаются анимации?
+# How are animations done in RecyclerView?
+
+**Russian**: Как в RecyclerView делаются анимации?
 
 **English**: How are animations done in RecyclerView?
 

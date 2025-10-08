@@ -1,12 +1,14 @@
 ---
+topic: android
 tags:
-  - programming-languages
   - android
+  - touch-events
+  - ui
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Какое событие вызывается при нажатии юзера по экрану?
+# Which event is called when user touches the screen?
 
 ## Answer
 

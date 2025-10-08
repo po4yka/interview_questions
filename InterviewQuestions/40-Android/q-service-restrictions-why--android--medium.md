@@ -9,10 +9,12 @@ tags:
   - services
   - workmanager
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# С чем связаны ограничения на запуск сервисов?
+# Why are there restrictions on starting services?
+
+**Russian**: С чем связаны ограничения на запуск сервисов?
 
 **English**: Why are there restrictions on starting services?
 

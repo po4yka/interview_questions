@@ -10,7 +10,7 @@ tags:
   - square
   - tools
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какая библиотека используется для нахождения утечек памяти в Android?
@@ -204,4 +204,141 @@ class MyRepository {
 ## Ответ
 
 Популярная библиотека для выявления утечек памяти в Android — **LeakCanary** от Square.
+
+**Установка:**
+
+```kotlin
+// build.gradle (app)
+dependencies {
+    // Только для debug сборок
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
+}
+```
+
+**Возможности:**
+
+- Автоматическое обнаружение утечек Activity/Fragment
+- Нулевая конфигурация - работает из коробки
+- Визуальные трассировки утечек с цепочками удержания
+- Анализ heap dump с библиотекой Shark
+- Только для debug сборок - нет overhead в production
+
+**Как работает:**
+
+LeakCanary автоматически отслеживает жизненный цикл Activity и Fragment. Когда компонент уничтожается, библиотека проверяет, освобождена ли память через 5 секунд. Если объект всё ещё в памяти - это утечка.
+
+**Уведомление об утечке:**
+
+При обнаружении утечки LeakCanary показывает уведомление с информацией:
+- Какой объект утёк
+- Сколько объектов удерживается
+- Сколько памяти занято
+- Полная трассировка утечки
+
+**Наблюдение за пользовательскими объектами:**
+
+```kotlin
+class MyViewModel : ViewModel() {
+    init {
+        // Отслеживание ViewModel на утечки
+        AppWatcher.objectWatcher.watch(
+            watchedObject = this,
+            description = "MyViewModel cleared"
+        )
+    }
+}
+```
+
+**Конфигурация:**
+
+```kotlin
+// Application класс
+class MyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+
+        // Кастомная конфигурация (опционально)
+        val config = AppWatcher.config.copy(
+            watchActivities = true,
+            watchFragments = true,
+            watchViewModels = true,
+            watchDurationMillis = 5000  // Ждать 5с перед проверкой
+        )
+        AppWatcher.config = config
+    }
+}
+```
+
+**Типичные утечки, которые обнаруживает:**
+
+**1. Статическая ссылка на Activity:**
+```kotlin
+companion object {
+    var activity: Activity? = null  // Утечка!
+}
+```
+
+**2. Handler без removeCallbacks:**
+```kotlin
+handler.postDelayed({ /* ... */ }, 60000)  // Утечка если Activity уничтожен
+```
+
+**3. Анонимный внутренний класс:**
+```kotlin
+button.setOnClickListener(object : View.OnClickListener {
+    override fun onClick(v: View?) {
+        // Держит ссылку на Activity - утечка
+    }
+})
+```
+
+**4. Singleton с Context:**
+```kotlin
+object MyManager {
+    private var context: Context? = null  // Утечка если Activity context
+
+    fun init(context: Context) {
+        this.context = context  // Нужно использовать applicationContext
+    }
+}
+```
+
+**Лучшие практики:**
+
+```kotlin
+// Правильно: Используйте LeakCanary только в debug сборках
+dependencies {
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
+    // Нет release implementation!
+}
+
+// Правильно: Исправляйте утечки, показанные LeakCanary
+// Не отключайте LeakCanary чтобы скрыть утечки!
+
+// Правильно: Отслеживайте пользовательские объекты
+class MyRepository {
+    init {
+        if (BuildConfig.DEBUG) {
+            AppWatcher.objectWatcher.watch(this)
+        }
+    }
+}
+```
+
+**Альтернативы:**
+
+| Инструмент | Назначение | Плюсы | Минусы |
+|------------|-----------|-------|--------|
+| **LeakCanary** | Обнаружение утечек | Авто, визуальный, простой | Только debug |
+| **Memory Profiler** (Android Studio) | Ручной анализ | Мощный, детальный | Ручная работа |
+| **MAT (Eclipse)** | Анализ heap dump | Профессиональный | Сложный |
+| **Perfetto** | Трассировка системы | Полная картина | Кривая обучения |
+
+**Резюме:**
+
+- **LeakCanary** от Square - индустриальный стандарт для обнаружения утечек
+- **Нулевая конфигурация** - автоматическое отслеживание Activity/Fragment
+- **Визуальные трассировки** - показывает цепочку удержания
+- **Только debug сборки** - нет overhead в production
+- **Простота использования** - просто добавьте зависимость и запустите
 

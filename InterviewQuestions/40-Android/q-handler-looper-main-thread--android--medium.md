@@ -10,7 +10,7 @@ tags:
   - message-queue
   - threading
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Как можно получить сообщения на главном потоке с помощью Handler и Looper?

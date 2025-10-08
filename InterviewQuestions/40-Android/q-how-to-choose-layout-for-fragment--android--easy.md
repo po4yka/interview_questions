@@ -11,7 +11,7 @@ tags:
   - layouts
   - ui
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Каким образом ты выбираешь layout?

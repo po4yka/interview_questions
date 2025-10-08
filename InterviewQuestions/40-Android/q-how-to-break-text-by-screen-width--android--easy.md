@@ -9,7 +9,7 @@ tags:
   - text-rendering
   - ui
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как разбить текст, зная, сколько символов помещается на экране?

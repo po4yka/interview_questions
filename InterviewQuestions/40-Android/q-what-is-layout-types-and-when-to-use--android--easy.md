@@ -12,7 +12,7 @@ tags:
   - ui
   - xml
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что такое layout, какие их виды бывают и когда их использовать?

@@ -5,9 +5,8 @@ tags:
   - play-feature-delivery
   - dynamic-modules
   - app-bundle
-  - difficulty/medium
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Play Feature Delivery / Play Feature Delivery

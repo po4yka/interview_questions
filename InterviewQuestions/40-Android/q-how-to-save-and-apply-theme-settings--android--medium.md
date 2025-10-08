@@ -1,19 +1,19 @@
 ---
 topic: android
 tags:
-  - sharedpreferences
-  - themes
   - android
+  - themes
+  - dark-mode
+  - sharedpreferences
+  - datastore
   - ui
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # How to save and apply theme settings?
 
-## Question (RU)
-
-Как сохранять и применять настройки темы
+**Russian**: Как сохранять и применять настройки темы?
 
 ## Answer
 
@@ -506,6 +506,10 @@ class ThemeDialog : DialogFragment() {
 }
 ```
 
-## Answer (RU)
+---
+
+# Как сохранять и применять настройки темы
+
+## Ответ
 
 Хранить выбранную тему в SharedPreferences. При старте приложения или Activity применять тему до setContentView. В случае использования DayNight можно использовать AppCompatDelegate.setDefaultNightMode.

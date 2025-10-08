@@ -10,7 +10,7 @@ tags:
   - ksp
   - room
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # В какой момент генерируется код при использовании SQLite?

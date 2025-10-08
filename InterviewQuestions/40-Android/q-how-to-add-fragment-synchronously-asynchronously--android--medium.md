@@ -2,8 +2,10 @@
 topic: android
 tags:
   - android
+  - fragment
+  - fragment-transaction
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # How to add fragment synchronously/asynchronously?

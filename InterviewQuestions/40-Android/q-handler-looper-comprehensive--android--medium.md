@@ -8,10 +8,12 @@ tags:
   - message-queue
   - concurrency
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Handler и Looper: Полное руководство
+# Handler and Looper: Complete guide
+
+**Russian**: Handler и Looper: Полное руководство
 
 **English**: Handler and Looper: Complete guide to Android message threading
 

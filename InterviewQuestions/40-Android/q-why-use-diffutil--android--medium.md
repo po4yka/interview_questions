@@ -1,12 +1,17 @@
 ---
+topic: android
 tags:
-  - programming-languages
   - android
+  - recyclerview
+  - diffutil
+  - performance
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Зачем нужен DiffUtil?
+# Why use DiffUtil?
+
+**Russian**: Зачем нужен DiffUtil?
 
 ## Answer
 

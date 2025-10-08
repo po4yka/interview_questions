@@ -6,7 +6,6 @@ tags:
   - deep-linking
   - manifest
   - implicit-intent
-  - difficulty/medium
   - intents-deeplinks
   - activity
 subtopics:
@@ -14,7 +13,7 @@ subtopics:
   - activity
   - manifest
 difficulty: medium
-status: draft
+status: reviewed
 source: Kirchhoff-Android-Interview-Questions
 ---
 

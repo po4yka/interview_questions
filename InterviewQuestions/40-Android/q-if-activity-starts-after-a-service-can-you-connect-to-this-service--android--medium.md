@@ -2,8 +2,11 @@
 topic: android
 tags:
   - android
+  - service
+  - binding
+  - ipc
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # If Activity starts after a service, can you connect to this service

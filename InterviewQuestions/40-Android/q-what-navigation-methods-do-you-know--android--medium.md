@@ -13,7 +13,7 @@ tags:
   - android
   - ui
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What navigation methods do you know?

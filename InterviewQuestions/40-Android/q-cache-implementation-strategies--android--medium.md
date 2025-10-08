@@ -7,7 +7,7 @@ tags:
   - data-storage
   - optimization
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Как реализовать кэширование в Android?

@@ -8,7 +8,7 @@ tags:
   - mvvm
   - state-management
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What is ViewModel?

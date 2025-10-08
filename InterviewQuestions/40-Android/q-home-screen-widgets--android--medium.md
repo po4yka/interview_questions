@@ -5,9 +5,8 @@ tags:
   - widgets
   - appwidget
   - home-screen
-  - difficulty/medium
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Android Home Screen Widgets / Виджеты главного экрана Android

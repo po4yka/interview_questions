@@ -8,7 +8,7 @@ tags:
   - ui
   - image-loading
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # How to display SVG string as a vector file?

@@ -13,7 +13,7 @@ tags:
   - sqlite
   - storage
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Какие типы хранилищ существуют в Android-приложениях?

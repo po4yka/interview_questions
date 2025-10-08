@@ -9,7 +9,7 @@ tags:
   - views
   - rendering
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What is known about methods that redraw View?

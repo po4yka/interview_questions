@@ -5,7 +5,7 @@ tags:
   - activity
   - lifecycle
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Какие есть методы жизненного цикла Activity и как они отрабатывают?

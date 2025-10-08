@@ -12,7 +12,7 @@ tags:
   - performance
   - weakreference
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Как оптимизировать использование памяти в приложении?

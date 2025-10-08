@@ -10,7 +10,7 @@ tags:
   - basics
   - ui
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что нужно сделать в Android-проекте чтобы начать рисовать UI на экране?

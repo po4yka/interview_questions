@@ -11,7 +11,7 @@ tags:
   - views
   - xml layout
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Что представляет собой view и что отвечает за ее визуальную часть?

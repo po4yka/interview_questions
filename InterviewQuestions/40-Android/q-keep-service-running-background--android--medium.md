@@ -11,10 +11,12 @@ tags:
   - services
   - workmanager
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Что делать если нужно чтобы сервис продолжал работу в фоне?
+# How to keep service running in background?
+
+**Russian**: Что делать если нужно чтобы сервис продолжал работу в фоне?
 
 **English**: What to do if you need a service to continue running in the background?
 

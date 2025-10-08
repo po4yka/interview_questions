@@ -2,13 +2,19 @@
 topic: android
 tags:
   - android
+  - intent
+  - fileprovider
+  - bitmap
+  - image-processing
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# How would you pass a photo to an editor?
+# How to pass a photo to an editor?
 
-## EN (expanded)
+**Russian**: Как бы передавал фотографию в редактор
+
+## Answer
 
 Passing a photo to an editor depends on whether it's an external app or an internal editor within your app.
 

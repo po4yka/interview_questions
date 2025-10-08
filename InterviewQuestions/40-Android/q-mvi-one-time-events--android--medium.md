@@ -7,7 +7,7 @@ tags:
   - state-management
   - events
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # MVI: Обработка одноразовых событий (One-time Events)

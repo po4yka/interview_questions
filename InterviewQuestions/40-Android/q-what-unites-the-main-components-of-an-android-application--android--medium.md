@@ -2,8 +2,13 @@
 topic: android
 tags:
   - android
+  - components
+  - activity
+  - service
+  - broadcastreceiver
+  - contentprovider
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What unites the main components of an Android application?

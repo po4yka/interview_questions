@@ -9,7 +9,7 @@ tags:
   - process-priority
   - services
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Можно ли поднять приоритет процесса?
@@ -513,8 +513,52 @@ jobScheduler.schedule(job)
 4. Пользователь видит **постоянное уведомление**
 
 **Когда использовать:**
-- ✅ Воспроизведение музыки
-- ✅ Навигация/отслеживание местоположения
-- ✅ Скачивание/загрузка файлов
-- ❌ Простые фоновые задачи (используйте WorkManager)
+- Воспроизведение музыки
+- Навигация/отслеживание местоположения
+- Скачивание/загрузка файлов
+- НЕ для простых фоновых задач (используйте WorkManager)
+
+**Пример:**
+
+```kotlin
+class DownloadService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Поднимаем приоритет
+        val notification = createNotification()
+        startForeground(NOTIFICATION_ID, notification)
+
+        // Теперь сервис защищен от уничтожения
+        performDownload()
+
+        return START_NOT_STICKY
+    }
+
+    private fun createNotification(): Notification {
+        val channelId = "download_channel"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "Downloads",
+                NotificationManager.IMPORTANCE_LOW
+            )
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        return NotificationCompat.Builder(this, channelId)
+            .setContentTitle("Downloading")
+            .setContentText("Download in progress...")
+            .setSmallIcon(android.R.drawable.stat_sys_download)
+            .setOngoing(true)
+            .build()
+    }
+}
+```
+
+**Важно:**
+- На Android 8.0+ необходимо вызвать `startForeground()` в течение 5 секунд после запуска сервиса
+- Обязательно требуется видимое уведомление
+- Всегда вызывайте `stopForeground()` и `stopSelf()` когда задача завершена
+- Используйте только когда действительно необходимо - для задач, которые пользователь ожидает увидеть работающими
 

@@ -1,11 +1,15 @@
 ---
+topic: android
 tags:
-  - programming-languages
+  - android
+  - layouts
+  - framelayout
+  - ui
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
-# Как называется лейаут, в котором объекты могут наслаиваться друг на друга?
+# Which layout allows views to overlap?
 
 ## Answer
 

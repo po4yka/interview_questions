@@ -9,10 +9,12 @@ tags:
   - process-priority
   - services
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Чем background service отличается от foreground service?
+# Background service vs Foreground service
+
+**Russian**: Чем background service отличается от foreground service?
 
 **English**: How does background service differ from foreground service?
 

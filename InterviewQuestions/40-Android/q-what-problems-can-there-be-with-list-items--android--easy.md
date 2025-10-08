@@ -6,14 +6,14 @@ tags:
   - android/views
   - diffutil
   - listview
-  - memory management
+  - memory-management
   - multithreading
-  - performance optimization
+  - performance-optimization
   - recyclerview
   - ui
   - views
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какие могут быть проблемы с элементами списка?

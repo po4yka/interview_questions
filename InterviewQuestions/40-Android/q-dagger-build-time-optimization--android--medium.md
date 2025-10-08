@@ -8,7 +8,7 @@ tags:
   - build-optimization
   - performance
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Оптимизация времени сборки с Dagger

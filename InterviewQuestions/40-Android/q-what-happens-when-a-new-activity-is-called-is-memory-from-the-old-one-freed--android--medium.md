@@ -3,7 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What happens when a new Activity is called? Is memory from the old one freed?
@@ -404,7 +404,225 @@ Memory is freed when:
 The old Activity **remains in memory in the back stack** until explicitly finished or killed by the system for memory.
 
 ## Answer (RU)
-Нет, старая Activity:
+
+Когда запускается новая Activity, старая Activity **не освобождает память сразу**. Вместо этого она проходит через переходы жизненного цикла и остаётся в back stack. Система может освободить её память позже при нехватке памяти.
+
+### Что происходит при запуске новой Activity
+
+**Последовательность жизненного цикла:**
+
+```
+До: Activity A работает (состояние RESUMED)
+      ↓
+Пользователь запускает Activity B
+      ↓
+Activity A: onPause()     ← A теряет фокус, всё ещё видима
+      ↓
+Activity B: onCreate()
+Activity B: onStart()
+Activity B: onResume()    ← B теперь в фокусе
+      ↓
+Activity A: onStop()      ← A больше не видима
+      ↓
+Текущее состояние:
+- Activity B: RESUMED (на переднем плане, интерактивна)
+- Activity A: STOPPED (в фоне, в back stack, в памяти)
+```
+
+### Состояние памяти
+
+Когда Activity переходит в состояние STOPPED:
+- Экземпляр Activity остаётся в памяти
+- Все переменные-члены существуют
+- Все выделенные данные остаются
+- ViewModel продолжает существовать
+- Значения сохранены
+
+**onDestroy() НЕ вызывается автоматически** - память НЕ освобождается.
+
+### Поведение Back Stack
+
+```kotlin
+// Сценарий: A → B → C
+
+// Текущий back stack:
+// [ActivityA - STOPPED] ← низ
+// [ActivityB - STOPPED]
+// [ActivityC - RESUMED] ← верх
+//
+// Все три Activity в памяти!
+```
+
+### Когда память ОСВОБОЖДАЕТСЯ
+
+**Сценарий 1: Пользователь нажал Назад**
+
+```kotlin
+// Жизненный цикл:
+// onPause()
+// onStop()
+// onDestroy()  ← Activity уничтожена, память освобождена
+```
+
+**Сценарий 2: Вызван finish()**
+
+```kotlin
+class ActivityB : AppCompatActivity() {
+    fun completeTask() {
+        finish()
+
+        // Немедленно:
+        // onPause()
+        // onStop()
+        // onDestroy() ← Память освобождена
+    }
+}
+```
+
+**Сценарий 3: Системе нужна память**
+
+```kotlin
+// При нехватке памяти:
+// - Может вызвать onDestroy() и убить Activity
+// - Состояние сохранено через onSaveInstanceState()
+// - Память освобождена
+// - При возврате пользователя создаётся новый экземпляр
+```
+
+### Сценарий нехватки памяти
+
+```kotlin
+Back Stack:
+[Activity A - STOPPED] ← Может быть убита для памяти
+[Activity B - STOPPED] ← Может быть убита для памяти
+[Activity C - STOPPED] ← Может быть убита для памяти
+[Activity D - RESUMED] ← Безопасна, на переднем плане
+
+// Система убивает с самой старой (снизу) первой
+// Activity A скорее всего убита первой
+// onDestroy() вызван
+// Память освобождена
+// Состояние сохранено в Bundle
+
+// Когда пользователь возвращается к A:
+// - Создан новый экземпляр
+// - onCreate(savedInstanceState) вызван с сохранённым состоянием
+// - Состояние восстановлено
+```
+
+### Проверка завершения Activity
+
+```kotlin
+class MyActivity : AppCompatActivity() {
+    override fun onDestroy() {
+        super.onDestroy()
+
+        if (isFinishing) {
+            // Пользователь нажал назад или вызван finish()
+            // Activity уничтожена навсегда
+            cleanupResources()
+        } else {
+            // Система убила для памяти
+            // Может быть пересоздана позже
+            // Не делайте постоянную очистку
+        }
+    }
+}
+```
+
+### Оптимизация памяти
+
+```kotlin
+class MemoryEfficientActivity : AppCompatActivity() {
+    private var heavyObject: LargeDataSet? = null
+
+    override fun onStop() {
+        super.onStop()
+
+        // Освобождаем тяжёлые ресурсы когда не видны
+        heavyObject = null
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        // Пересоздаём тяжёлые ресурсы когда снова видны
+        if (heavyObject == null) {
+            heavyObject = loadLargeDataSet()
+        }
+    }
+}
+```
+
+### Выживание ViewModel
+
+```kotlin
+class MyViewModel : ViewModel() {
+    val data = MutableLiveData<String>()
+
+    override fun onCleared() {
+        super.onCleared()
+        // Вызывается только когда Activity ЗАВЕРШЕНА
+        // НЕ вызывается когда Activity просто остановлена
+    }
+}
+
+// ViewModel очищается только когда:
+// - вызван finish()
+// - Пользователь нажал назад (последняя activity)
+// НЕ когда система убивает для памяти
+```
+
+### Таблица состояний памяти
+
+| Состояние | Жизненный цикл | Статус памяти | Может быть убита |
+|-----------|----------------|---------------|------------------|
+| Created | onCreate() → onStart() | Выделена | Нет |
+| Resumed | onResume() | Используется, передний план | Нет |
+| Paused | onPause() | Используется, видима | Нет (редко) |
+| Stopped | onStop() | В памяти, фон | Да |
+| Destroyed | onDestroy() | Освобождена | Н/Д |
+
+### Лучшие практики
+
+```kotlin
+class BestPracticeActivity : AppCompatActivity() {
+    private var bitmap: Bitmap? = null
+
+    override fun onStop() {
+        super.onStop()
+
+        // Освобождаем ресурсоёмкие объекты
+        bitmap?.recycle()
+        bitmap = null
+    }
+
+    // Используем ViewModel для данных которые должны пережить
+    private val viewModel: DataViewModel by viewModels()
+
+    // Сохраняем критичное состояние
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("critical_data", criticalData)
+    }
+}
+```
+
+### Резюме
+
+Когда вызывается новая Activity:
+1. Старая Activity приостанавливается (onPause)
+2. Новая Activity запускается (onCreate → onStart → onResume)
+3. Старая Activity останавливается (onStop)
+4. Старая Activity остаётся в памяти (в back stack)
+5. Память НЕ освобождается сразу
+
+Память освобождается когда:
+- Пользователь нажимает назад (вызывается onDestroy)
+- Вызывается finish()
+- Системе нужна память (может убить остановленные Activity)
+
+Старая Activity **остаётся в памяти в back stack** пока явно не завершена или не убита системой для памяти.
 
 ## Related Topics
 - Activity lifecycle

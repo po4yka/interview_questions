@@ -11,10 +11,12 @@ tags:
   - threading
   - workmanager
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Как запустить асинхронные операции в чистом Android?
+# How to run asynchronous operations in Android?
+
+**Russian**: Как запустить асинхронные операции в чистом Android?
 
 **English**: How to run asynchronous operations in pure Android?
 

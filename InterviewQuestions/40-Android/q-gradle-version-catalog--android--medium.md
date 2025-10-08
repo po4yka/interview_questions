@@ -6,13 +6,12 @@ tags:
   - version-catalog
   - dependency-management
   - toml
-  - difficulty/medium
 subtopics:
   - gradle
   - dependency-management
   - build-variants
 difficulty: medium
-status: draft
+status: reviewed
 source: Kirchhoff repo
 ---
 

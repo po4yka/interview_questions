@@ -10,10 +10,12 @@ tags:
   - state
   - state-management
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Что такое mutable state в Compose?
+# What is MutableState in Compose?
+
+**Russian**: Что такое mutable state в Compose?
 
 **English**: What is MutableState in Compose?
 

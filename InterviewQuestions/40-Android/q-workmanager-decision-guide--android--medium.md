@@ -7,7 +7,7 @@ tags:
   - coroutines
   - service
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # WorkManager vs Coroutines vs Service - Decision Guide

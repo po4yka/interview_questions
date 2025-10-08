@@ -1,12 +1,14 @@
 ---
+topic: android
 tags:
-  - programming-languages
   - android
+  - recyclerview
+  - adapter
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Как сказать адаптеру перерисовать список, если какой-то элемент удалился?
+# How to tell adapter to redraw list when item removed?
 
 ## Answer
 

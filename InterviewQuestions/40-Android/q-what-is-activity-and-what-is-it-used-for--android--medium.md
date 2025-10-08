@@ -2,8 +2,11 @@
 topic: android
 tags:
   - android
+  - activity
+  - lifecycle
+  - ui
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What is Activity and what is it used for?

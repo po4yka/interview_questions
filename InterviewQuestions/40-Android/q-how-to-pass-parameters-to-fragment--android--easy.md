@@ -1,8 +1,12 @@
 ---
+topic: android
 tags:
-  - programming-languages
+  - android
+  - fragment
+  - bundle
+  - arguments
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как передать параметры во фрагмент?

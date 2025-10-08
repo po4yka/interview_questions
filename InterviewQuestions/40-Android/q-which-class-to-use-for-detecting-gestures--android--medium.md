@@ -2,8 +2,11 @@
 topic: android
 tags:
   - android
+  - gestures
+  - ui
+  - touch-events
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Which class can be used to catch different gestures?
