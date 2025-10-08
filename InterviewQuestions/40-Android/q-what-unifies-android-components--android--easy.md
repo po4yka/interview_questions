@@ -11,10 +11,12 @@ tags:
   - intent
   - manifest
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
-# Что объединяет основные компоненты Android-приложения?
+# What unifies Android components?
+
+**Russian**: Что объединяет основные компоненты Android-приложения?
 
 **English**: What unifies the main Android application components?
 

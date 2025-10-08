@@ -1,12 +1,17 @@
 ---
+topic: android
 tags:
-  - programming-languages
   - android
+  - android/views
+  - custom-views
+  - view-rendering
+  - invalidate
+  - requestLayout
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Что известно про методы, которые перерисовывают View?
+# What methods are used to redraw Views?
 
 ## Answer
 

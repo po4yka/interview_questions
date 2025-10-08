@@ -4,15 +4,17 @@ tags:
   - android
   - android/state-management
   - android/ui
-  - data loading
+  - data-loading
   - state
   - state-management
   - ui
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
-# Что положить в state для отображения первоначального списка?
+# What to put in state for initial list?
+
+**Russian**: Что положить в state для отображения первоначального списка?
 
 **English**: What to put in state for displaying the initial list?
 

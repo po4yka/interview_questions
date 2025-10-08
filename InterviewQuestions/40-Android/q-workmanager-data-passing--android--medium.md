@@ -7,10 +7,12 @@ tags:
   - data-passing
   - workmanager
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Как передать и как получить данные из WorkManager?
+# How to pass and receive data from WorkManager?
+
+**Russian**: Как передать и как получить данные из WorkManager?
 
 **English**: How to pass and receive data from WorkManager?
 

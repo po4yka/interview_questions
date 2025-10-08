@@ -11,7 +11,7 @@ tags:
   - project-metrics
   - project-structure
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как можно измерить размер проекта?

@@ -1,12 +1,15 @@
 ---
+topic: android
 tags:
-  - programming-languages
   - android
+  - jetpack-compose
+  - compose
+  - composition
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Где создается композиция для вызова composable функции?
+# Where is composition created for calling composable functions?
 
 ## Answer
 

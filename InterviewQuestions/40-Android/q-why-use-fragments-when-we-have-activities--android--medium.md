@@ -1,11 +1,16 @@
 ---
+topic: android
 tags:
-  - programming-languages
+  - android
+  - android/fragments
+  - android/architecture
+  - fragments
+  - activity
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Для чего нужны фрагменты, если есть Activity?
+# Why use Fragments when we have Activities?
 
 ## Answer
 

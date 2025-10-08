@@ -3,10 +3,10 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# What can be done through Composer?
+# What can be done through Composer in Jetpack Compose?
 
 ## EN (expanded)
 

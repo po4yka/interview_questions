@@ -1,12 +1,17 @@
 ---
+topic: android
 tags:
-  - programming-languages
   - android
+  - recyclerview
+  - caching
+  - prefetching
+  - performance
+  - optimization
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
-# Как можно писать RecyclerView, чтобы он кэшировал наперёд?
+# How to write RecyclerView to cache ahead?
 
 ## Answer
 

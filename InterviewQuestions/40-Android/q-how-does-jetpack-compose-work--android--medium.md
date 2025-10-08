@@ -2,8 +2,12 @@
 topic: android
 tags:
   - android
+  - jetpack-compose
+  - compose
+  - declarative-ui
+  - recomposition
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # How does Jetpack Compose work?

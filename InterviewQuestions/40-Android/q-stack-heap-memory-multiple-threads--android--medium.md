@@ -9,7 +9,7 @@ tags:
   - stack
   - threading
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Изменится ли объём памяти стека/кучи, если в приложении создано несколько потоков?
