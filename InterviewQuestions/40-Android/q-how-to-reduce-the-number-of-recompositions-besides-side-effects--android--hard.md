@@ -8,7 +8,7 @@ tags:
   - jetpack-compose
   - performance
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # How to reduce the number of recompositions besides side-effects?

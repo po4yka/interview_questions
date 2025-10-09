@@ -7,7 +7,7 @@ tags:
   - ui
   - jetpack-compose
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Where does the repeated call of composable function come from?

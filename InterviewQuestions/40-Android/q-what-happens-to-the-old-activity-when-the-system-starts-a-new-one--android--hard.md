@@ -3,7 +3,7 @@ topic: android
 tags:
   - android
 difficulty: hard
-status: draft
+status: reviewed
 ---
 
 # What happens to the old Activity when the system starts a new one?

@@ -9,7 +9,7 @@ tags:
   - intent
   - intents-deeplinks
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что такое Intent?

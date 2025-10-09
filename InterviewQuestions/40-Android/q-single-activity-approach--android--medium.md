@@ -11,7 +11,7 @@ tags:
   - platform/android
   - ui-navigation
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Что означает в Android-разработке подход Single Activity?

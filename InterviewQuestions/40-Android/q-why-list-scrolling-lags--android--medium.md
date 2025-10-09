@@ -11,7 +11,7 @@ tags:
   - scrolling
   - viewholder
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Почему при скролле может тормозить список?

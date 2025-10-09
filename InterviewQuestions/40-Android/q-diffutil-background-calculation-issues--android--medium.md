@@ -7,7 +7,7 @@ tags:
   - performance
   - multithreading
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Проблемы расчета DiffUtil в фоновом потоке

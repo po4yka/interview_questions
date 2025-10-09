@@ -7,7 +7,7 @@ tags:
   - ui
   - jetpack-compose
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Where is composition created for calling composable function?

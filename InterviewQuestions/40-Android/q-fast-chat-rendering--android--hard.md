@@ -13,7 +13,7 @@ tags:
   - recyclerview
   - room
 difficulty: hard
-status: draft
+status: reviewed
 ---
 
 # Как можно гарантировать быструю отрисовку чатов?

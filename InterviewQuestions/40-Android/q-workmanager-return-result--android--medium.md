@@ -8,7 +8,7 @@ tags:
   - livedata
   - workmanager
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Как вернуть результат работы WorkManager в приложение?

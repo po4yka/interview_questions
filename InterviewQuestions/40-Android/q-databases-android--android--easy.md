@@ -9,7 +9,7 @@ tags:
   - room
   - sqlite
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какие базы данных можно использовать в Android?

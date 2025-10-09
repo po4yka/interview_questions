@@ -7,7 +7,7 @@ tags:
   - coroutines
   - lifecycle
 difficulty: hard
-status: draft
+status: reviewed
 ---
 
 # Side-эффекты в Compose: LaunchedEffect vs DisposableEffect

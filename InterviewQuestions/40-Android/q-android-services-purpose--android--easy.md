@@ -5,7 +5,7 @@ tags:
   - services
   - background-operations
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Для чего нужны сервисы?

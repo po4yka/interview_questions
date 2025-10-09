@@ -12,7 +12,7 @@ tags:
   - stability
   - stable-annotation
 difficulty: hard
-status: draft
+status: reviewed
 ---
 
 # Что известно про stable?

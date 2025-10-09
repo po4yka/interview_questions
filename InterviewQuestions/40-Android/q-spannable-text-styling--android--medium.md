@@ -8,7 +8,7 @@ tags:
   - textview
   - difficulty/medium
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Spannable Text in Android / Spannable текст в Android

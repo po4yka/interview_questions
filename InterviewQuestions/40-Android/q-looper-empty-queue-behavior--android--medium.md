@@ -9,7 +9,7 @@ tags:
   - message-queue
   - threading
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Что происходит, когда поток разбирает пустую очередь сообщений с помощью Looper.loop()?
