@@ -7,7 +7,7 @@ tags:
   - fragments
   - ui
 difficulty: hard
-status: draft
+status: reviewed
 ---
 
 # Как появились фрагменты и для чего их начали использовать?

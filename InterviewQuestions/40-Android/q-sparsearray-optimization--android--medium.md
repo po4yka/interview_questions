@@ -7,7 +7,7 @@ aliases:
   - SparseArray и оптимизация
 date_created: 2025-10-05
 date_modified: 2025-10-05
-status: draft
+status: reviewed
 original_language: en
 language_tags:
   - en

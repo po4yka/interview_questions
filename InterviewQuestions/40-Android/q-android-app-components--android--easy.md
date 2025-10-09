@@ -5,7 +5,7 @@ tags:
   - app-architecture
   - components
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какие основные компоненты Android-приложения?

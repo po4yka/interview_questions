@@ -3,7 +3,7 @@ tags:
   - programming-languages
   - android
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Из каких более важных компонентов состоит Compose?

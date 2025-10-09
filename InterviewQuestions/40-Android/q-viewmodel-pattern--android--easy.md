@@ -10,7 +10,7 @@ tags:
   - platform/android
   - viewmodel
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какой архитектурный паттерн реализуется благодаря ViewModel?

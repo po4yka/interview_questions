@@ -8,7 +8,7 @@ tags:
   - fragments
   - ui
 difficulty: hard
-status: draft
+status: reviewed
 ---
 
 # Как существуют и к чему привязаны фрагменты в Activity?

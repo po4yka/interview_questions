@@ -6,7 +6,7 @@ tags:
   - androidx
   - libraries
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что такое Android Jetpack?

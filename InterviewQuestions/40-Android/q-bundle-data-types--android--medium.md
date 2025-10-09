@@ -9,7 +9,7 @@ tags:
   - parcelable
   - serializable
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Что можно положить в Bundle?

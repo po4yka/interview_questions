@@ -10,7 +10,7 @@ tags:
   - mvp
   - mvvm
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Почему многие отказываются от MVP?
