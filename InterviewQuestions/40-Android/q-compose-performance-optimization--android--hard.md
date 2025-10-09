@@ -42,7 +42,7 @@ Performance optimization in Compose focuses on minimizing unnecessary recomposit
 **1. State changes**
 
 ```kotlin
-// ❌ BAD - Recomposes entire screen on any change
+// BAD - Recomposes entire screen on any change
 @Composable
 fun Screen(viewModel: ViewModel) {
     val uiState by viewModel.uiState.collectAsState()
@@ -55,7 +55,7 @@ fun Screen(viewModel: ViewModel) {
     }
 }
 
-// ✅ GOOD - Split state
+// GOOD - Split state
 @Composable
 fun Screen(viewModel: ViewModel) {
     val title by viewModel.title.collectAsState()
@@ -74,7 +74,7 @@ fun Screen(viewModel: ViewModel) {
 **2. Unstable parameters**
 
 ```kotlin
-// ❌ BAD - List is unstable
+// BAD - List is unstable
 @Composable
 fun ItemList(items: List<Item>) {  // Recomposes even if list didn't change
     LazyColumn {
@@ -82,7 +82,7 @@ fun ItemList(items: List<Item>) {  // Recomposes even if list didn't change
     }
 }
 
-// ✅ GOOD - Use @Stable or immutable collections
+// GOOD - Use @Stable or immutable collections
 @Stable
 data class ItemListState(val items: List<Item>)
 
@@ -99,7 +99,7 @@ fun ItemList(state: ItemListState) {  // Skips recomposition if same
 **1. Use keys in lists**
 
 ```kotlin
-// ✅ GOOD - Reuses compositions
+// GOOD - Reuses compositions
 LazyColumn {
     items(
         items = products,
@@ -113,7 +113,7 @@ LazyColumn {
 **2. derivedStateOf for computed values**
 
 ```kotlin
-// ❌ BAD - Recomputes on every scroll
+// BAD - Recomputes on every scroll
 @Composable
 fun MessageList(messages: List<Message>) {
     val listState = rememberLazyListState()
@@ -124,7 +124,7 @@ fun MessageList(messages: List<Message>) {
     }
 }
 
-// ✅ GOOD - Only recomputes when threshold crossed
+// GOOD - Only recomputes when threshold crossed
 @Composable
 fun MessageList(messages: List<Message>) {
     val listState = rememberLazyListState()
@@ -143,7 +143,7 @@ fun MessageList(messages: List<Message>) {
 **3. Lambda stability**
 
 ```kotlin
-// ❌ BAD - New lambda on every recomposition
+// BAD - New lambda on every recomposition
 @Composable
 fun Screen() {
     Button(onClick = { viewModel.action() }) {  // New lambda each time
@@ -151,7 +151,7 @@ fun Screen() {
     }
 }
 
-// ✅ GOOD - Remember lambda
+// GOOD - Remember lambda
 @Composable
 fun Screen() {
     val onClick = remember { { viewModel.action() } }
@@ -160,7 +160,7 @@ fun Screen() {
     }
 }
 
-// ✅ BETTER - Extract to separate function
+// BETTER - Extract to separate function
 @Composable
 fun Screen() {
     Button(onClick = viewModel::action) {  // Stable reference
@@ -188,7 +188,7 @@ class ProductViewModel : ViewModel() {
 **5. Avoid recomposition propagation**
 
 ```kotlin
-// ❌ BAD - Parent passes unstable state
+// BAD - Parent passes unstable state
 @Composable
 fun Parent() {
     var counter by remember { mutableStateOf(0) }
@@ -199,7 +199,7 @@ fun Parent() {
     }
 }
 
-// ✅ GOOD - Hoist state, pass only when needed
+// GOOD - Hoist state, pass only when needed
 @Composable
 fun Parent() {
     var counter by remember { mutableStateOf(0) }
@@ -240,7 +240,7 @@ LazyColumn {
 **2. derivedStateOf для вычисляемых значений**
 
 ```kotlin
-// ✅ ХОРОШО - Пересчитывает только при пересечении порога
+// ХОРОШО - Пересчитывает только при пересечении порога
 val showButton by remember {
     derivedStateOf {
         listState.firstVisibleItemIndex > 0
@@ -251,14 +251,14 @@ val showButton by remember {
 **3. Стабильность лямбд**
 
 ```kotlin
-// ❌ ПЛОХО - Новая лямбда при каждой рекомпозиции
+// ПЛОХО - Новая лямбда при каждой рекомпозиции
 Button(onClick = { viewModel.action() })
 
-// ✅ ХОРОШО - Запомнить лямбду
+// ХОРОШО - Запомнить лямбду
 val onClick = remember { { viewModel.action() } }
 Button(onClick = onClick)
 
-// ✅ ЛУЧШЕ - Ссылка на метод
+// ЛУЧШЕ - Ссылка на метод
 Button(onClick = viewModel::action)
 ```
 

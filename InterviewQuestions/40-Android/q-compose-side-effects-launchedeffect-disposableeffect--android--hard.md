@@ -21,7 +21,7 @@ status: reviewed
 ### Проблема без Side-Effect API
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - выполнится при каждой recomposition
+// НЕПРАВИЛЬНО - выполнится при каждой recomposition
 @Composable
 fun BadExample(userId: Int) {
     val user = repository.getUser(userId) // Вызывается многократно!
@@ -407,10 +407,10 @@ fun OrdersScreen(viewModel: OrdersViewModel) {
 ```kotlin
 @Composable
 fun TodoList(todos: List<Todo>) {
-    // ❌ НЕПРАВИЛЬНО - recomposes при любом изменении todos
+    // НЕПРАВИЛЬНО - recomposes при любом изменении todos
     val completedCount = todos.count { it.completed }
 
-    // ✅ ПРАВИЛЬНО - recomposes только при изменении КОЛИЧЕСТВА completed
+    // ПРАВИЛЬНО - recomposes только при изменении КОЛИЧЕСТВА completed
     val completedCount by remember(todos) {
         derivedStateOf {
             todos.count { it.completed }
@@ -440,13 +440,13 @@ fun Timer(onTimeout: () -> Unit) {
 
 **Без rememberUpdatedState**:
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - будет вызвана СТАРАЯ версия callback
+// НЕПРАВИЛЬНО - будет вызвана СТАРАЯ версия callback
 LaunchedEffect(Unit) {
     delay(5000)
     onTimeout() // Closure захватывает старое значение
 }
 
-// ❌ НЕПРАВИЛЬНО - перезапуск эффекта при каждом изменении
+// НЕПРАВИЛЬНО - перезапуск эффекта при каждом изменении
 LaunchedEffect(onTimeout) {
     delay(5000)
     onTimeout() // Эффект перезапускается, delay начинается заново!
@@ -611,10 +611,10 @@ fun UnsavedChangesScreen() {
 
 ### Распространенные ошибки
 
-#### ❌ Ошибка 1: Бесконечная recomposition
+#### Ошибка 1: Бесконечная recomposition
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО
+// НЕПРАВИЛЬНО
 @Composable
 fun BadExample() {
     var count by remember { mutableStateOf(0) }
@@ -624,7 +624,7 @@ fun BadExample() {
     }
 }
 
-// ✅ ПРАВИЛЬНО
+// ПРАВИЛЬНО
 @Composable
 fun GoodExample() {
     var count by remember { mutableStateOf(0) }
@@ -635,10 +635,10 @@ fun GoodExample() {
 }
 ```
 
-#### ❌ Ошибка 2: Забытый onDispose
+#### Ошибка 2: Забытый onDispose
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - утечка памяти
+// НЕПРАВИЛЬНО - утечка памяти
 @Composable
 fun BadDisposableEffect() {
     DisposableEffect(Unit) {
@@ -648,7 +648,7 @@ fun BadDisposableEffect() {
     }
 }
 
-// ✅ ПРАВИЛЬНО
+// ПРАВИЛЬНО
 @Composable
 fun GoodDisposableEffect() {
     DisposableEffect(Unit) {
@@ -662,10 +662,10 @@ fun GoodDisposableEffect() {
 }
 ```
 
-#### ❌ Ошибка 3: Неправильный ключ
+#### Ошибка 3: Неправильный ключ
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - не перезапустится при изменении userId
+// НЕПРАВИЛЬНО - не перезапустится при изменении userId
 @Composable
 fun BadKey(userId: Int) {
     var user by remember { mutableStateOf<User?>(null) }
@@ -675,7 +675,7 @@ fun BadKey(userId: Int) {
     }
 }
 
-// ✅ ПРАВИЛЬНО - перезапуск при изменении userId
+// ПРАВИЛЬНО - перезапуск при изменении userId
 @Composable
 fun GoodKey(userId: Int) {
     var user by remember { mutableStateOf<User?>(null) }
@@ -691,18 +691,18 @@ fun GoodKey(userId: Int) {
 **1. Используйте правильный API для задачи**
 
 ```kotlin
-// ✅ LaunchedEffect для coroutine работы
+// LaunchedEffect для coroutine работы
 LaunchedEffect(key) {
     val data = repository.getData()
 }
 
-// ✅ DisposableEffect для subscriptions
+// DisposableEffect для subscriptions
 DisposableEffect(key) {
     val listener = createListener()
     onDispose { cleanup(listener) }
 }
 
-// ✅ rememberCoroutineScope для event handlers
+// rememberCoroutineScope для event handlers
 val scope = rememberCoroutineScope()
 Button(onClick = { scope.launch { /* работа */ } })
 ```
@@ -710,7 +710,7 @@ Button(onClick = { scope.launch { /* работа */ } })
 **2. Всегда указывайте правильные ключи**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО - перезапуск при изменении параметров
+// ПРАВИЛЬНО - перезапуск при изменении параметров
 LaunchedEffect(userId, filter) {
     loadData(userId, filter)
 }
@@ -719,7 +719,7 @@ LaunchedEffect(userId, filter) {
 **3. Cleanup в DisposableEffect обязателен**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО
+// ПРАВИЛЬНО
 DisposableEffect(key) {
     setup()
     onDispose { cleanup() } // ОБЯЗАТЕЛЬНО!
@@ -729,7 +729,7 @@ DisposableEffect(key) {
 **4. Используйте rememberUpdatedState для callbacks**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО
+// ПРАВИЛЬНО
 val currentCallback by rememberUpdatedState(callback)
 LaunchedEffect(Unit) {
     delay(5000)

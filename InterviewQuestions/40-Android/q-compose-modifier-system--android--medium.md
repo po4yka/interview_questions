@@ -124,7 +124,7 @@ Modifier
 **Example: Clickable area**
 
 ```kotlin
-// ❌ Small clickable area (only 50dp)
+// Small clickable area (only 50dp)
 Box(
     Modifier
         .size(50.dp)
@@ -132,7 +132,7 @@ Box(
         .clickable { }
 )
 
-// ✅ Large clickable area (82dp = 50 + 2*16)
+// Large clickable area (82dp = 50 + 2*16)
 Box(
     Modifier
         .padding(16.dp)
@@ -144,14 +144,14 @@ Box(
 **Example: Background shape**
 
 ```kotlin
-// ❌ Clip doesn't affect background
+// Clip doesn't affect background
 Box(
     Modifier
         .background(Color.Red)
         .clip(CircleShape)  // Applied after background
 )
 
-// ✅ Rounded background
+// Rounded background
 Box(
     Modifier
         .clip(CircleShape)

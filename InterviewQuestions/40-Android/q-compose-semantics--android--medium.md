@@ -131,7 +131,7 @@ fun ProgressBar(progress: Float) {
 ### Merge Semantics
 
 ```kotlin
-// ❌ BAD - Each text has separate semantics
+// BAD - Each text has separate semantics
 @Composable
 fun UserInfo(user: User) {
     Row {
@@ -141,7 +141,7 @@ fun UserInfo(user: User) {
     // Screen reader announces separately: "John" "Doe"
 }
 
-// ✅ GOOD - Merged semantics
+// GOOD - Merged semantics
 @Composable
 fun UserInfo(user: User) {
     Row(

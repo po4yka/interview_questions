@@ -74,25 +74,25 @@ Field injection only works with mutable fields (`var`, not `val`).
 class MyActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var repository: UserRepository  // ✅ Works with lateinit var
+    lateinit var repository: UserRepository  // Works with lateinit var
 
     @Inject
-    val analytics: Analytics? = null  // ❌ Won't work with val
+    val analytics: Analytics? = null  // Won't work with val
 }
 ```
 
 #### 3. Requires lateinit or Nullable
 
 ```kotlin
-// ✅ GOOD: Using lateinit
+// GOOD: Using lateinit
 @Inject
 lateinit var repository: UserRepository
 
-// ⚠️ ACCEPTABLE: Nullable field
+// ACCEPTABLE: Nullable field
 @Inject
 var analytics: Analytics? = null
 
-// ❌ BAD: Non-null without lateinit
+// BAD: Non-null without lateinit
 @Inject
 var database: AppDatabase  // Compile error
 ```
@@ -104,13 +104,13 @@ Dagger cannot inject private fields.
 ```kotlin
 class MyClass {
     @Inject
-    lateinit var publicRepo: Repository  // ✅ Works
+    lateinit var publicRepo: Repository  // Works
 
     @Inject
-    internal lateinit var internalRepo: Repository  // ✅ Works
+    internal lateinit var internalRepo: Repository  // Works
 
     @Inject
-    private lateinit var privateRepo: Repository  // ❌ Won't work
+    private lateinit var privateRepo: Repository  // Won't work
 }
 ```
 
@@ -145,7 +145,7 @@ class MyReceiver : BroadcastReceiver() {
 #### Constructor Injection (Preferred for Regular Classes)
 
 ```kotlin
-// ✅ BEST for regular classes
+// BEST for regular classes
 class UserRepository @Inject constructor(
     private val api: ApiService,
     private val database: UserDao
@@ -167,7 +167,7 @@ fun testRepository() {
 #### Field Injection (Required for Framework Classes)
 
 ```kotlin
-// ✅ NECESSARY for Activities/Fragments
+// NECESSARY for Activities/Fragments
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var repository: UserRepository
 
@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-// ⚠️ HARDER to test
+// HARDER to test
 @Test
 fun testActivity() {
     // More complex test setup required
@@ -410,7 +410,7 @@ class MyClass @Inject constructor(
 **1. Use Constructor Injection When Possible**
 
 ```kotlin
-// ✅ PREFER constructor injection for regular classes
+// PREFER constructor injection for regular classes
 class UserRepository @Inject constructor(
     private val api: ApiService,
     private val dao: UserDao
@@ -420,7 +420,7 @@ class UserRepository @Inject constructor(
 **2. Use Field Injection for Android Components**
 
 ```kotlin
-// ✅ USE field injection for framework classes
+// USE field injection for framework classes
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var repository: UserRepository
@@ -430,10 +430,10 @@ class MainActivity : AppCompatActivity() {
 **3. Always Use lateinit with @Inject**
 
 ```kotlin
-// ✅ GOOD
+// GOOD
 @Inject lateinit var repository: Repository
 
-// ❌ BAD
+// BAD
 @Inject var repository: Repository? = null
 ```
 
@@ -455,7 +455,7 @@ class MyFragment : Fragment() {
 **5. Use Hilt for Android Components**
 
 ```kotlin
-// ✅ MODERN: Use Hilt
+// MODERN: Use Hilt
 @HiltAndroidApp
 class MyApp : Application()
 
@@ -465,7 +465,7 @@ class MainActivity : AppCompatActivity() {
     // Automatic injection!
 }
 
-// ❌ OLD: Manual Dagger
+// OLD: Manual Dagger
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var repository: Repository
 
@@ -515,9 +515,9 @@ class MainActivityTest {
 | **Use Case** | Android framework classes (Activity, Fragment) |
 
 **When to Use:**
-- ✅ Android components (Activity, Fragment, BroadcastReceiver)
-- ✅ Classes where constructor injection is impossible
-- ❌ Regular classes (prefer constructor injection)
+-  Android components (Activity, Fragment, BroadcastReceiver)
+-  Classes where constructor injection is impossible
+-  Regular classes (prefer constructor injection)
 
 **Best Practice:**
 - Use **constructor injection** for regular classes
