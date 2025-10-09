@@ -15,8 +15,8 @@ status: reviewed
 
 # Dalvik vs ART Runtime
 
-**Сложность**: 🟡 Medium
-**Источник**: Amit Shekhar Android Interview Questions
+**Difficulty**: Medium
+**Source**: Amit Shekhar Android Interview Questions
 
 ## English
 

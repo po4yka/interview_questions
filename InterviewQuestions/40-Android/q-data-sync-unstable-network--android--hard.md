@@ -68,7 +68,7 @@ class OfflineFirstRepository @Inject constructor(
     }
 
     private suspend fun syncData() {
-        syncQueue.getP pendingOperations().forEach { operation ->
+        syncQueue.getPendingOperations().forEach { operation ->
             try {
                 when (operation) {
                     is SyncOperation.Create -> {

@@ -14,8 +14,8 @@ status: reviewed
 
 # Database Encryption in Android
 
-**Сложность**: 🟡 Medium
-**Источник**: Amit Shekhar Android Interview Questions
+**Difficulty**: Medium
+**Source**: Amit Shekhar Android Interview Questions
 
 ## English
 
@@ -35,9 +35,9 @@ SQLCipher is the most popular solution for Room database encryption. It provides
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("net.zetetic:android-database-sqlcipher:4.5.4")
-    implementation("androidx.sqlite:sqlite-ktx:2.4.0")
+    implementation("androidx.room:room-runtime:2.7.0-alpha12")
+    implementation("net.zetetic:android-database-sqlcipher:4.5.6")
+    implementation("androidx.sqlite:sqlite-ktx:2.5.0-alpha11")
 }
 ```
 
