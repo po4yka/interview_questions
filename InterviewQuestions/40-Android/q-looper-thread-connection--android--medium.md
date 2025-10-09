@@ -9,7 +9,7 @@ tags:
   - message-queue
   - threading
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Как Looper связывается с потоком?

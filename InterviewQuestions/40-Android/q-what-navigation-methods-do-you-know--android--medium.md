@@ -1,26 +1,11 @@
 ---
-topic: android
 tags:
-  - navigation
-  - intent
-  - fragmentmanager
-  - jetpack navigation component
-  - bottom navigation
-  - tab navigation
-  - drawerlayout
-  - deep links
-  - jetpack compose
-  - android
-  - ui
+  - programming-languages
 difficulty: medium
 status: reviewed
 ---
 
-# What navigation methods do you know?
-
-## Question (RU)
-
-Какие способы навигации знаешь
+# Какие способы навигации знаешь?
 
 ## Answer
 
@@ -493,6 +478,10 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector)
 5. **Proper back stack management**
 6. **Use appropriate navigation pattern** for your use case
 
-## Answer (RU)
+---
+
+# Какие способы навигации знаешь
+
+## Ответ
 
 В Android есть несколько способов навигации между экранами. Основные способы включают Activity-навигацию через Intent, Fragment-based навигацию с FragmentManager, Navigation Component из Jetpack, Bottom Navigation и Tab Navigation для переключения между экранами через меню навигации, Drawer Navigation с боковым меню DrawerLayout, Deep Links и App Links для навигации через ссылки а также Navigation в Jetpack Compose с использованием NavHost и NavController.

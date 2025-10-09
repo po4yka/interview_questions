@@ -11,7 +11,7 @@ tags:
   - uri
   - verification
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Какие особенности отличия deep link от app link?

@@ -13,7 +13,7 @@ tags:
   - threading
   - ui
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Какие основные причины торможения UI?

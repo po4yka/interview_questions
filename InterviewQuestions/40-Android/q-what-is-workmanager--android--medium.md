@@ -8,7 +8,7 @@ tags:
   - architecture
   - scheduled-tasks
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What is WorkManager?

@@ -5,7 +5,7 @@ tags:
   - fragments
   - lifecycle
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Чем жизненный цикл фрагмента отличается от Activity

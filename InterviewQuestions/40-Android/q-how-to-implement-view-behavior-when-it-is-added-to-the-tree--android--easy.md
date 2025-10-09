@@ -8,7 +8,7 @@ tags:
   - view lifecycle
   - views
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как можно реализовать поведение view при ее добавлении в дерево?

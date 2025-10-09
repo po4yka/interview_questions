@@ -9,7 +9,7 @@ tags:
   - view-hierarchy
   - difficulty/easy
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # What is a View in Android? / Что такое View в Android?

@@ -7,7 +7,7 @@ tags:
   - ui
   - view-hierarchy
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # What's ViewGroup? How are they different from Views?

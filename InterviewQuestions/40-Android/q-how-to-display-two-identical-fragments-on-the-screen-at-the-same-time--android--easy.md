@@ -6,7 +6,7 @@ tags:
   - fragments
   - ui
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как на экране одновременно отобразить два одинаковых фрагмента?

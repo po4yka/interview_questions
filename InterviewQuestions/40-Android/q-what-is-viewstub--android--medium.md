@@ -8,7 +8,7 @@ tags:
   - lazy-loading
   - optimization
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What is ViewStub?

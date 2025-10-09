@@ -13,7 +13,7 @@ tags:
   - ui
   - views
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как реализовать редактор фотографий в качестве отдельного компонента?

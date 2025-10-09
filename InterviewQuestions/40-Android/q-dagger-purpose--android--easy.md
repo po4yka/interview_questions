@@ -6,7 +6,7 @@ tags:
   - dagger
   - di-hilt
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Для чего нужен Dagger ?
