@@ -180,17 +180,6 @@ viewLifecycleOwner.lifecycleScope.launch {
 - ❌ Learning curve
 - ❌ Still uses SQLite under the hood
 
-**Dependencies:**
-
-```kotlin
-// build.gradle
-dependencies {
-    implementation "androidx.room:room-runtime:2.6.0"
-    implementation "androidx.room:room-ktx:2.6.0"
-    ksp "androidx.room:room-compiler:2.6.0"
-}
-```
-
 ---
 
 ## 3. Realm

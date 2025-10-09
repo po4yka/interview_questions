@@ -178,16 +178,6 @@ android {
 - Automatic dependency resolution
 - Transitive dependency support
 
-**Code example:**
-```kotlin
-dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-}
-```
-
 #### 6. Signing
 
 **Definition**: The build system lets you specify signing settings in the build configuration.
@@ -385,11 +375,6 @@ android {
             )
         }
     }
-}
-
-dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
 }
 ```
 

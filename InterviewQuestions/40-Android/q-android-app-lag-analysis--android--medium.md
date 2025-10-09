@@ -549,11 +549,6 @@ class TrackedOperation {
 **4.2 LeakCanary**
 
 ```kotlin
-// build.gradle.kts
-dependencies {
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
-}
-
 // Automatically detects memory leaks in debug builds
 // No additional code needed
 ```

@@ -185,11 +185,6 @@ class SlideInLeftAnimator : DefaultItemAnimator() {
 #### RecyclerView Animators Library
 
 ```kotlin
-// Add dependency
-dependencies {
-    implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
-}
-
 // Usage
 recyclerView.itemAnimator = SlideInUpAnimator()
 // or

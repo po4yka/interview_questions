@@ -267,14 +267,6 @@ android {
         }
     }
 }
-
-dependencies {
-    // Используйте kapt вместо annotationProcessor
-    kapt "com.google.dagger:hilt-compiler:2.48"
-
-    // Не включайте ненужные процессоры
-    // kapt "some.unused.processor:1.0"
-}
 ```
 
 ### 8. Использование KSP (вместо kapt)
@@ -290,14 +282,6 @@ plugins {
 // build.gradle (app level)
 plugins {
     id 'com.google.devtools.ksp'
-}
-
-dependencies {
-    // Заменить kapt на ksp для Hilt (когда доступно)
-    ksp "com.google.dagger:hilt-compiler:2.48"
-
-    // Room уже поддерживает KSP
-    ksp "androidx.room:room-compiler:2.6.0"
 }
 
 // ВАЖНО: Убедитесь что Hilt поддерживает KSP в вашей версии

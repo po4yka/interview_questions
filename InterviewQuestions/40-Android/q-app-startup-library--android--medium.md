@@ -77,11 +77,6 @@ class AnalyticsInitializer : ContentProvider() {
 ### 2. Basic Implementation
 
 ```kotlin
-// build.gradle
-dependencies {
-    implementation "androidx.startup:startup-runtime:1.1.1"
-}
-
 // Step 1: Create Initializer
 class WorkManagerInitializer : Initializer<WorkManager> {
     override fun create(context: Context): WorkManager {
