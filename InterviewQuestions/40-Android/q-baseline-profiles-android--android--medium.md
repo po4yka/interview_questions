@@ -85,10 +85,6 @@ android {
         }
     }
 }
-
-dependencies {
-    implementation("androidx.profileinstaller:profileinstaller:1.3.1")
-}
 ```
 
 **Baseline Profile Module:**
@@ -126,13 +122,6 @@ android {
             }
         }
     }
-}
-
-dependencies {
-    implementation("androidx.test.ext:junit:1.2.1")
-    implementation("androidx.test.espresso:espresso-core:3.6.1")
-    implementation("androidx.test.uiautomator:uiautomator:2.3.0")
-    implementation("androidx.benchmark:benchmark-macro-junit4:1.3.2")
 }
 ```
 
@@ -374,10 +363,6 @@ plugins {
 
 android {
     // ...
-}
-
-dependencies {
-    implementation("androidx.profileinstaller:profileinstaller:1.3.1")
 }
 
 // Library profile will be merged with app profile automatically

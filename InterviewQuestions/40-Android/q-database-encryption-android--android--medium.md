@@ -30,17 +30,6 @@ Database encryption is essential for protecting sensitive user data at rest. And
 
 SQLCipher is the most popular solution for Room database encryption. It provides transparent 256-bit AES encryption.
 
-**Setup:**
-
-```kotlin
-// build.gradle.kts
-dependencies {
-    implementation("androidx.room:room-runtime:2.7.0-alpha12")
-    implementation("net.zetetic:android-database-sqlcipher:4.5.6")
-    implementation("androidx.sqlite:sqlite-ktx:2.5.0-alpha11")
-}
-```
-
 **Implementation:**
 
 ```kotlin
