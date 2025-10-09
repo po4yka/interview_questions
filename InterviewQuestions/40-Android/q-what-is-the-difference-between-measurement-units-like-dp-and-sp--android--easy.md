@@ -7,7 +7,7 @@ tags:
   - sp
   - ui
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Чем отличаются единицы измерения например dp от sp

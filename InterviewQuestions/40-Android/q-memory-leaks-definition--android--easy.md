@@ -8,7 +8,7 @@ tags:
   - memory-management
   - performance
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что такое утечки памяти?

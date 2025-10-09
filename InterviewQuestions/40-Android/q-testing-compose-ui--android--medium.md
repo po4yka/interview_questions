@@ -7,7 +7,7 @@ tags:
   - ui-testing
   - compose-test
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Testing Compose UI

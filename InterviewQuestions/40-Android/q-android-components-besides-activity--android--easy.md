@@ -12,7 +12,7 @@ tags:
   - view
   - viewmodel
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какие компоненты используются помимо activity?

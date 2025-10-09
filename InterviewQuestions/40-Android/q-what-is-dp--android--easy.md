@@ -6,7 +6,7 @@ tags:
   - dp
   - ui
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что такое dp?

@@ -7,7 +7,7 @@ tags:
   - ui
   - performance
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # How to write RecyclerView so that it caches ahead?

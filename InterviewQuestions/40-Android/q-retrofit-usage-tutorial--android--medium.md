@@ -6,7 +6,7 @@ tags:
   - networking
   - tutorial
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Как делать сетевые запросы с помощью Retrofit?

@@ -3,7 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What are Intents for?

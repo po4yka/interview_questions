@@ -2,7 +2,7 @@
 tags:
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Как добавить кастомные атрибуты у кастомного view?

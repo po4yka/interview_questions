@@ -7,7 +7,7 @@ tags:
   - xml-to-compose
   - architecture
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Стратегия миграции большого проекта на Jetpack Compose

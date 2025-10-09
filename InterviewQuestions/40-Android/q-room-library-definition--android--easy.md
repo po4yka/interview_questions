@@ -10,7 +10,7 @@ tags:
   - room
   - sqlite
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что из себя представляет библиотека Room?

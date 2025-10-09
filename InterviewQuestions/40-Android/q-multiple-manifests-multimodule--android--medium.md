@@ -11,7 +11,7 @@ tags:
   - multi-module
   - project-structure
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Для проектов в которых есть несколько модулей, там может быть много Android Manifest'ов, для чего это делается?

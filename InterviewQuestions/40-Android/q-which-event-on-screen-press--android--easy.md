@@ -9,7 +9,7 @@ tags:
   - touch-events
   - ui
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какое событие вызывается при нажатии юзера по экрану?
