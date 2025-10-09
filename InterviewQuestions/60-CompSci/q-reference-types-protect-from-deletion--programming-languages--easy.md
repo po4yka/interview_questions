@@ -24,14 +24,14 @@ status: reviewed
 
 **Java/Kotlin Reference Types:**
 
-**1. Strong Reference (Normal)** ✅ Protects
+**1. Strong Reference (Normal)** - Protects
 
 ```kotlin
 val user = User("John")  // Strong reference
 // Object CANNOT be garbage collected while reference exists
 ```
 
-**2. Weak Reference** ❌ Does NOT Protect
+**2. Weak Reference** - Does NOT Protect
 
 ```kotlin
 import java.lang.ref.WeakReference
@@ -43,7 +43,7 @@ val weakRef = WeakReference(user)
 // Object CAN be garbage collected even though weakRef exists
 ```
 
-**3. Soft Reference** ⚠️ Protects Until Memory Needed
+**3. Soft Reference** WARNING: Protects Until Memory Needed
 
 ```kotlin
 import java.lang.ref.SoftReference
@@ -53,7 +53,7 @@ val softRef = SoftReference(Data())
 // Then it CAN be garbage collected
 ```
 
-**4. Phantom Reference** ❌ Does NOT Protect
+**4. Phantom Reference** - Does NOT Protect
 
 ```kotlin
 import java.lang.ref.PhantomReference
@@ -69,10 +69,10 @@ val phantomRef = PhantomReference(User("John"), queue)
 
 | Reference Type | Protects from GC? | Use Case |
 |----------------|-------------------|----------|
-| **Strong** | ✅ Yes | Normal references |
-| **Soft** | ⚠️ Until low memory | Caches |
-| **Weak** | ❌ No | Break strong reference cycles |
-| **Phantom** | ❌ No | Post-GC cleanup |
+| **Strong** | - Yes | Normal references |
+| **Soft** | WARNING: Until low memory | Caches |
+| **Weak** | - No | Break strong reference cycles |
+| **Phantom** | - No | Post-GC cleanup |
 
 **Examples:**
 
@@ -121,9 +121,9 @@ class ImageCache {
 
 ```kotlin
 fun example() {
-    val strongData = Data()         // ✅ Always in memory
-    val weakData = WeakReference(Data())   // ❌ Can be GC'd anytime
-    val softData = SoftReference(Data())   // ⚠️ GC'd when memory low
+    val strongData = Data()         // - Always in memory
+    val weakData = WeakReference(Data())   // - Can be GC'd anytime
+    val softData = SoftReference(Data())   // WARNING: GC'd when memory low
 
     System.gc()  // Suggest garbage collection
 

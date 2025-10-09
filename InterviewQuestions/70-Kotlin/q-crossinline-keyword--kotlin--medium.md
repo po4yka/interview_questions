@@ -31,7 +31,7 @@ fun caller() {
 
     processItems(items) { item ->
         if (item == "b") {
-            return  // ⚠️ Non-local return - выход из caller(), НЕ из action!
+            return  // WARNING: Non-local return - выход из caller(), НЕ из action!
         }
         println(item)
     }
@@ -62,7 +62,7 @@ fun caller() {
 
     processItemsSafely(items) { item ->
         if (item == "b") {
-            return  // ❌ ОШИБКА КОМПИЛЯЦИИ: return не разрешен
+            return  // - ОШИБКА КОМПИЛЯЦИИ: return не разрешен
             return@processItemsSafely  // ✓ Labeled return OK
         }
         println(item)
@@ -77,7 +77,7 @@ fun caller() {
 #### 1. Лямбда выполняется в другом потоке
 
 ```kotlin
-// ❌ БЕЗ crossinline - ошибка
+// - БЕЗ crossinline - ошибка
 inline fun runInBackground(action: () -> Unit) {
     Thread {
         action()  // ERROR: Can't inline because action может содержать return
@@ -271,7 +271,7 @@ inline fun process(
 ### Ошибки без crossinline
 
 ```kotlin
-// ❌ ОШИБКА - лямбда с return в другом контексте
+// - ОШИБКА - лямбда с return в другом контексте
 inline fun broken(action: () -> Unit) {
     Thread {
         action()  // ERROR: Can't inline 'action' here
@@ -320,8 +320,8 @@ fun test() {
 
 | Модификатор | Non-local return | Можно сохранить | Можно передать | Вызов из других контекстов |
 |-------------|------------------|-----------------|----------------|---------------------------|
-| (обычная лямбда) | ✅ Да | ❌ Нет | ❌ Нет | ❌ Нет |
-| `crossinline` | ❌ Нет | ❌ Нет | ❌ Нет | ✅ Да |
-| `noinline` | ❌ Нет | ✅ Да | ✅ Да | ✅ Да |
+| (обычная лямбда) | - Да | - Нет | - Нет | - Нет |
+| `crossinline` | - Нет | - Нет | - Нет | - Да |
+| `noinline` | - Нет | - Да | - Да | - Да |
 
 **English**: `crossinline` disallows non-local returns from lambda parameters in inline functions. Use when lambda is executed in different context (another thread, nested function, callback). Without `crossinline`, lambda can `return` from outer function, causing unexpected behavior. With `crossinline`, only labeled returns allowed (`return@label`). Required when lambda is: 1) Called from another thread, 2) Called from nested function, 3) Stored for deferred execution, 4) Passed to non-inline function. Prevents bugs from accidental early returns.

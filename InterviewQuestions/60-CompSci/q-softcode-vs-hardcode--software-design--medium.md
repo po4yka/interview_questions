@@ -25,27 +25,27 @@ status: reviewed
 
 **Hardcoding** means writing **fixed values or logic directly in the source code**.
 
-#### ❌ Hardcoded Example
+#### - Hardcoded Example
 
 ```kotlin
 class PaymentProcessor {
     fun calculateFee(amount: Double): Double {
-        // ❌ Fee rate is hardcoded
+        // - Fee rate is hardcoded
         return amount * 0.03  // 3% fee
     }
 
     fun getApiUrl(): String {
-        // ❌ URL is hardcoded
+        // - URL is hardcoded
         return "https://api.payment.com/v1"
     }
 
     fun getMaxRetries(): Int {
-        // ❌ Max retries hardcoded
+        // - Max retries hardcoded
         return 3
     }
 
     fun getSupportedCurrencies(): List<String> {
-        // ❌ Currencies hardcoded
+        // - Currencies hardcoded
         return listOf("USD", "EUR", "GBP")
     }
 }
@@ -63,7 +63,7 @@ class PaymentProcessor {
 
 **Softcoding** means storing **configurable values in external sources**.
 
-#### ✅ Softcoded Example
+#### - Softcoded Example
 
 ```kotlin
 // Configuration stored externally
@@ -95,22 +95,22 @@ class ConfigLoader {
 // Usage
 class PaymentProcessor(private val config: AppConfig) {
     fun calculateFee(amount: Double): Double {
-        // ✅ Fee rate from config
+        // - Fee rate from config
         return amount * config.paymentFeeRate
     }
 
     fun getApiUrl(): String {
-        // ✅ URL from config
+        // - URL from config
         return config.apiUrl
     }
 
     fun getMaxRetries(): Int {
-        // ✅ Max retries from config
+        // - Max retries from config
         return config.maxRetries
     }
 
     fun getSupportedCurrencies(): List<String> {
-        // ✅ Currencies from config
+        // - Currencies from config
         return config.supportedCurrencies
     }
 }
@@ -252,11 +252,11 @@ class DatabaseConfigLoader(private val configDao: ConfigDao) {
 
 ## When to Use Softcode vs Hardcode
 
-### ✅ Use Softcode For:
+### - Use Softcode For:
 
 1. **Configuration values** that may change:
    ```kotlin
-   // ✅ Softcode
+   // - Softcode
    val apiUrl = config.getApiUrl()
    val timeoutMs = config.getTimeout()
    val maxRetries = config.getMaxRetries()
@@ -264,7 +264,7 @@ class DatabaseConfigLoader(private val configDao: ConfigDao) {
 
 2. **Environment-specific values**:
    ```kotlin
-   // ✅ Different per environment
+   // - Different per environment
    val apiUrl = when (BuildConfig.BUILD_TYPE) {
        "debug" -> config.devApiUrl
        "staging" -> config.stagingApiUrl
@@ -274,14 +274,14 @@ class DatabaseConfigLoader(private val configDao: ConfigDao) {
 
 3. **Business rules** that change frequently:
    ```kotlin
-   // ✅ Business team can update
+   // - Business team can update
    val feeRate = remoteConfig.getDouble("payment_fee_rate")
    val minOrderAmount = remoteConfig.getDouble("min_order_amount")
    ```
 
 4. **Feature flags**:
    ```kotlin
-   // ✅ Enable/disable features remotely
+   // - Enable/disable features remotely
    if (remoteConfig.getBoolean("new_checkout_enabled")) {
        showNewCheckout()
    } else {
@@ -291,30 +291,30 @@ class DatabaseConfigLoader(private val configDao: ConfigDao) {
 
 5. **A/B testing parameters**:
    ```kotlin
-   // ✅ Different values for different users
+   // - Different values for different users
    val buttonColor = remoteConfig.getString("button_color_variant")
    ```
 
 6. **Localized content**:
    ```kotlin
-   // ✅ Translations from external source
+   // - Translations from external source
    val welcomeMessage = localizationService.getString("welcome_message")
    ```
 
 ---
 
-### ✅ Use Hardcode For:
+### - Use Hardcode For:
 
 1. **Constants that never change**:
    ```kotlin
-   // ✅ Hardcode - mathematical constants
+   // - Hardcode - mathematical constants
    const val PI = 3.14159265359
    const val SPEED_OF_LIGHT = 299792458  // m/s
    ```
 
 2. **Application structure/logic**:
    ```kotlin
-   // ✅ Hardcode - business logic
+   // - Hardcode - business logic
    fun calculateDiscount(price: Double, quantity: Int): Double {
        return if (quantity >= 10) {
            price * 0.9  // 10% discount for bulk
@@ -326,14 +326,14 @@ class DatabaseConfigLoader(private val configDao: ConfigDao) {
 
 3. **Internal IDs and constants**:
    ```kotlin
-   // ✅ Hardcode - internal constants
+   // - Hardcode - internal constants
    const val REQUEST_CODE_CAMERA = 1001
    const val PERMISSION_REQUEST_CODE = 2001
    ```
 
 4. **View IDs, resource references**:
    ```kotlin
-   // ✅ Hardcode - Android resources
+   // - Hardcode - Android resources
    findViewById<TextView>(R.id.title)
    getString(R.string.app_name)
    ```
@@ -344,14 +344,14 @@ class DatabaseConfigLoader(private val configDao: ConfigDao) {
 
 **Warning:** Too much softcoding can be harmful!
 
-### ❌ BAD: Over-Softcoded
+### - BAD: Over-Softcoded
 
 ```kotlin
-// ❌ Everything is softcoded, even basic logic!
+// - Everything is softcoded, even basic logic!
 class Calculator(private val config: CalculatorConfig) {
 
     fun add(a: Int, b: Int): Int {
-        // ❌ Even basic operators are "configured"
+        // - Even basic operators are "configured"
         return when (config.additionOperator) {
             "plus" -> a + b
             "concat" -> (a.toString() + b.toString()).toInt()
@@ -360,7 +360,7 @@ class Calculator(private val config: CalculatorConfig) {
     }
 
     fun multiply(a: Int, b: Int): Int {
-        // ❌ Absurd configuration
+        // - Absurd configuration
         return when (config.multiplicationStrategy) {
             "repeated_addition" -> {
                 var result = 0
@@ -503,7 +503,7 @@ class CheckoutFragment : Fragment() {
 
 ## Best Practices
 
-### ✅ DO
+### - DO
 
 1. **Use softcode for configurable values**:
    ```kotlin
@@ -528,31 +528,31 @@ class CheckoutFragment : Fragment() {
 
 4. **Use type-safe configs**:
    ```kotlin
-   data class AppConfig(...)  // ✅ Type-safe
+   data class AppConfig(...)  // - Type-safe
    // vs
-   Map<String, Any>  // ❌ Not type-safe
+   Map<String, Any>  // - Not type-safe
    ```
 
 ---
 
-### ❌ DON'T
+### - DON'T
 
 1. **Don't over-softcode**:
    ```kotlin
-   // ❌ Don't softcode basic logic
+   // - Don't softcode basic logic
    if (config.getString("comparison_operator") == "equals") { ... }
    ```
 
 2. **Don't expose sensitive data**:
    ```kotlin
-   // ❌ Don't store secrets in remote config
-   val apiKey = remoteConfig.getString("api_key")  // ❌ Insecure!
+   // - Don't store secrets in remote config
+   val apiKey = remoteConfig.getString("api_key")  // - Insecure!
    ```
 
 3. **Don't softcode everything**:
    ```kotlin
-   // ❌ Constants don't need softcoding
-   const val MAX_USERNAME_LENGTH = 50  // ✅ Hardcode is fine
+   // - Constants don't need softcoding
+   const val MAX_USERNAME_LENGTH = 50  // - Hardcode is fine
    ```
 
 ---

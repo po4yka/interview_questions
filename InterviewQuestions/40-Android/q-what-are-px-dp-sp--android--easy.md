@@ -365,26 +365,26 @@ fun DimensionsInCompose() {
 ### Common Mistakes to Avoid
 
 ```kotlin
-// ❌ WRONG - Using px for UI
+// - WRONG - Using px for UI
 <TextView
     android:layout_width="200px"
     android:textSize="16px" />
 
-// ❌ WRONG - Using dp for text size
+// - WRONG - Using dp for text size
 <TextView
     android:textSize="16dp" />
 
-// ❌ WRONG - Hardcoded pixels in code
+// - WRONG - Hardcoded pixels in code
 textView.textSize = 16f // This is px, not sp!
 
-// ✅ CORRECT - Using dp for layout, sp for text
+// - CORRECT - Using dp for layout, sp for text
 <TextView
     android:layout_width="200dp"
     android:layout_height="50dp"
     android:padding="16dp"
     android:textSize="16sp" />
 
-// ✅ CORRECT - Proper units in code
+// - CORRECT - Proper units in code
 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
 ```
 

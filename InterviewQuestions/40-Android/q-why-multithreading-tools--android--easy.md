@@ -45,7 +45,7 @@ status: reviewed
 If you block the UI thread for too long → **ANR (Application Not Responding)**
 
 ```kotlin
-// ❌ BAD: Blocking UI thread
+// - BAD: Blocking UI thread
 class MainActivity : AppCompatActivity() {
 
     private fun loadData() {
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 ### Solution: Offload to Background Thread
 
 ```kotlin
-// ✅ GOOD: Background thread
+// - GOOD: Background thread
 class MainActivity : AppCompatActivity() {
 
     private fun loadData() {
@@ -96,10 +96,10 @@ class MainActivity : AppCompatActivity() {
 ### 1. Network Requests
 
 ```kotlin
-// ❌ BAD: Network on UI thread
+// - BAD: Network on UI thread
 val response = httpClient.get("https://api.example.com/users")
 
-// ✅ GOOD: Network on background thread
+// - GOOD: Network on background thread
 lifecycleScope.launch(Dispatchers.IO) {
     val response = httpClient.get("https://api.example.com/users")
     withContext(Dispatchers.Main) {
@@ -113,10 +113,10 @@ lifecycleScope.launch(Dispatchers.IO) {
 ### 2. Database Operations
 
 ```kotlin
-// ❌ BAD: Database query on UI thread
+// - BAD: Database query on UI thread
 val users = database.userDao().getAllUsers()
 
-// ✅ GOOD: Database on background thread
+// - GOOD: Database on background thread
 lifecycleScope.launch(Dispatchers.IO) {
     val users = database.userDao().getAllUsers()
     withContext(Dispatchers.Main) {
@@ -130,10 +130,10 @@ lifecycleScope.launch(Dispatchers.IO) {
 ### 3. File I/O
 
 ```kotlin
-// ❌ BAD: File read on UI thread
+// - BAD: File read on UI thread
 val content = File("large_file.txt").readText()
 
-// ✅ GOOD: File I/O on background thread
+// - GOOD: File I/O on background thread
 lifecycleScope.launch(Dispatchers.IO) {
     val content = File("large_file.txt").readText()
     withContext(Dispatchers.Main) {
@@ -147,10 +147,10 @@ lifecycleScope.launch(Dispatchers.IO) {
 ### 4. Image Processing
 
 ```kotlin
-// ❌ BAD: Image decoding on UI thread
+// - BAD: Image decoding on UI thread
 val bitmap = BitmapFactory.decodeFile("large_image.jpg")
 
-// ✅ GOOD: Image processing on background thread
+// - GOOD: Image processing on background thread
 lifecycleScope.launch(Dispatchers.Default) {
     val bitmap = BitmapFactory.decodeFile("large_image.jpg")
     val processed = applyFilters(bitmap)
@@ -166,10 +166,10 @@ lifecycleScope.launch(Dispatchers.Default) {
 ### 5. Parsing Large Data
 
 ```kotlin
-// ❌ BAD: JSON parsing on UI thread
+// - BAD: JSON parsing on UI thread
 val users = Json.decodeFromString<List<User>>(largeJsonString)
 
-// ✅ GOOD: Parsing on background thread
+// - GOOD: Parsing on background thread
 lifecycleScope.launch(Dispatchers.Default) {
     val users = Json.decodeFromString<List<User>>(largeJsonString)
     withContext(Dispatchers.Main) {
@@ -211,10 +211,10 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Advantages:**
-- ✅ Lifecycle-aware (`lifecycleScope`, `viewModelScope`)
-- ✅ Easy cancellation
-- ✅ Structured concurrency
-- ✅ Clean syntax
+- - Lifecycle-aware (`lifecycleScope`, `viewModelScope`)
+- - Easy cancellation
+- - Structured concurrency
+- - Clean syntax
 
 ---
 
@@ -252,9 +252,9 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Advantages:**
-- ✅ Reuses threads efficiently
-- ✅ Configurable pool size
-- ⚠️ No lifecycle awareness (manual cleanup needed)
+- - Reuses threads efficiently
+- - Configurable pool size
+- WARNING: No lifecycle awareness (manual cleanup needed)
 
 ---
 
@@ -280,9 +280,9 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Advantages:**
-- ✅ Simple, no dependencies
-- ⚠️ Creates new thread each time (inefficient)
-- ⚠️ No lifecycle awareness
+- - Simple, no dependencies
+- WARNING: Creates new thread each time (inefficient)
+- WARNING: No lifecycle awareness
 
 ---
 
@@ -327,9 +327,9 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Advantages:**
-- ✅ Sequential task processing
-- ✅ Single background thread
-- ⚠️ Verbose compared to Coroutines
+- - Sequential task processing
+- - Single background thread
+- WARNING: Verbose compared to Coroutines
 
 ---
 
@@ -369,10 +369,10 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 ```
 
 **Advantages:**
-- ✅ Survives app restarts
-- ✅ Constraint-based (network, battery, etc.)
-- ✅ Guaranteed execution
-- ⚠️ Not for immediate tasks (use Coroutines instead)
+- - Survives app restarts
+- - Constraint-based (network, battery, etc.)
+- - Guaranteed execution
+- WARNING: Not for immediate tasks (use Coroutines instead)
 
 ---
 
@@ -404,9 +404,9 @@ repository.getUser("123")
 ```
 
 **Advantages:**
-- ✅ Powerful operators (map, filter, combine, etc.)
-- ✅ Reactive paradigm
-- ⚠️ Steep learning curve
+- - Powerful operators (map, filter, combine, etc.)
+- - Reactive paradigm
+- WARNING: Steep learning curve
 
 ---
 
@@ -447,9 +447,9 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Advantages:**
-- ✅ Lifecycle-aware (no memory leaks)
-- ✅ Automatic UI updates
-- ✅ Thread-safe with `postValue()`
+- - Lifecycle-aware (no memory leaks)
+- - Automatic UI updates
+- - Thread-safe with `postValue()`
 
 ---
 
@@ -486,9 +486,9 @@ lifecycleScope.launch {
 ```
 
 **Advantages:**
-- ✅ Cold streams (lazy evaluation)
-- ✅ Backpressure handling
-- ✅ Integrates with Coroutines
+- - Cold streams (lazy evaluation)
+- - Backpressure handling
+- - Integrates with Coroutines
 
 ---
 
@@ -512,7 +512,7 @@ lifecycleScope.launch {
 ### 1. Use Coroutines for Most Cases
 
 ```kotlin
-// ✅ GOOD
+// - GOOD
 lifecycleScope.launch(Dispatchers.IO) {
     val data = repository.fetchData()
     withContext(Dispatchers.Main) {
@@ -524,7 +524,7 @@ lifecycleScope.launch(Dispatchers.IO) {
 ### 2. Use WorkManager for Background Jobs
 
 ```kotlin
-// ✅ GOOD: For work that must complete even if app is killed
+// - GOOD: For work that must complete even if app is killed
 val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>().build()
 WorkManager.getInstance(context).enqueue(uploadWork)
 ```
@@ -532,10 +532,10 @@ WorkManager.getInstance(context).enqueue(uploadWork)
 ### 3. Don't Block the UI Thread
 
 ```kotlin
-// ❌ BAD
+// - BAD
 val data = database.userDao().getAllUsers() // Blocks UI
 
-// ✅ GOOD
+// - GOOD
 lifecycleScope.launch(Dispatchers.IO) {
     val data = database.userDao().getAllUsers()
 }
@@ -559,10 +559,10 @@ Dispatchers.Main // For updating views
 ## Summary
 
 **Why multithreading?**
-- ✅ Keep UI responsive
-- ✅ Prevent ANR (Application Not Responding)
-- ✅ Improve performance
-- ✅ Handle heavy tasks (network, database, file I/O)
+- - Keep UI responsive
+- - Prevent ANR (Application Not Responding)
+- - Improve performance
+- - Handle heavy tasks (network, database, file I/O)
 
 **Recommended tools:**
 1. **Kotlin Coroutines** - default choice for most async tasks
@@ -572,8 +572,8 @@ Dispatchers.Main // For updating views
 5. **LiveData** - lifecycle-aware data
 
 **Avoid:**
-- ❌ Running heavy tasks on UI thread
-- ❌ Using AsyncTask (deprecated)
+- - Running heavy tasks on UI thread
+- - Using AsyncTask (deprecated)
 
 **Rule of thumb:**
 > If an operation takes more than **16ms** (one frame), run it on a background thread.
@@ -598,7 +598,7 @@ Dispatchers.Main // For updating views
 
 **Рекомендуемый инструмент:**
 ```kotlin
-// ✅ Kotlin Coroutines для большинства случаев
+// - Kotlin Coroutines для большинства случаев
 lifecycleScope.launch(Dispatchers.IO) {
     val data = repository.fetchData()
     withContext(Dispatchers.Main) {
@@ -606,16 +606,16 @@ lifecycleScope.launch(Dispatchers.IO) {
     }
 }
 
-// ✅ WorkManager для гарантированных фоновых задач
+// - WorkManager для гарантированных фоновых задач
 val work = OneTimeWorkRequestBuilder<UploadWorker>().build()
 WorkManager.getInstance(context).enqueue(work)
 ```
 
 **Зачем нужна многопоточность:**
-- ✅ UI остается отзывчивым
-- ✅ Предотвращает ANR (приложение не отвечает)
-- ✅ Улучшает производительность
-- ✅ Обрабатывает тяжёлые задачи (сеть, БД, файлы)
+- - UI остается отзывчивым
+- - Предотвращает ANR (приложение не отвечает)
+- - Улучшает производительность
+- - Обрабатывает тяжёлые задачи (сеть, БД, файлы)
 
 **Правило:**
 > Если операция занимает > **16ms** (один кадр), выполняйте её в фоновом потоке.

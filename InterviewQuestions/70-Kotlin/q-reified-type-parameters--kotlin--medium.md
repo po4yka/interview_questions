@@ -20,12 +20,12 @@ status: reviewed
 ### Проблема: Type Erasure в Java/Kotlin
 
 ```kotlin
-// ❌ НЕ РАБОТАЕТ - тип T стирается во время компиляции
+// - НЕ РАБОТАЕТ - тип T стирается во время компиляции
 fun <T> isInstanceOf(value: Any): Boolean {
     return value is T  // ERROR: Cannot check for instance of erased type
 }
 
-// ❌ НЕ РАБОТАЕТ - нельзя получить Class<T>
+// - НЕ РАБОТАЕТ - нельзя получить Class<T>
 fun <T> createInstance(): T {
     return T::class.java.newInstance()  // ERROR: Cannot use T::class
 }
@@ -288,15 +288,15 @@ inline fun <reified T> getClassName() = T::class.simpleName
 inline fun <reified T> isInstance(obj: Any) = obj is T
 inline fun <reified T> createArray(size: Int) = Array<T?>(size) { null }
 
-// ❌ НЕЛЬЗЯ - функция ДОЛЖНА быть inline
+// - НЕЛЬЗЯ - функция ДОЛЖНА быть inline
 fun <reified T> nonInlineFunction() {}  // ERROR: reified requires inline
 
-// ❌ НЕЛЬЗЯ - virtual/override функции не могут быть inline
+// - НЕЛЬЗЯ - virtual/override функции не могут быть inline
 interface Repository<T> {
     fun <reified T> find(): T  // ERROR: reified не работает с interface methods
 }
 
-// ❌ НЕЛЬЗЯ - параметры функции не могут быть reified
+// - НЕЛЬЗЯ - параметры функции не могут быть reified
 inline fun test(reified param: Any) {}  // ERROR: только type parameters
 ```
 
@@ -406,7 +406,7 @@ val product = create<Product>()  // Product::class.java.newInstance()
 
 4. **Избегайте больших reified функций**
    ```kotlin
-   // ❌ Плохо - большая функция будет копироваться
+   // - Плохо - большая функция будет копироваться
    inline fun <reified T> hugeFunctionWithLotsOfCode() {
        // 100+ строк кода
    }

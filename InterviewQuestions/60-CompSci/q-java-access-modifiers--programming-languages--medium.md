@@ -31,7 +31,7 @@ Use for **all fields** to enforce encapsulation.
 
 ```java
 class User {
-    // ✅ Fields should ALWAYS be private
+    // - Fields should ALWAYS be private
     private String username;
     private String password;
     private int age;
@@ -57,7 +57,7 @@ class Calculator {
         return add(multiply(a, 2), b);
     }
 
-    // ✅ Private helper methods
+    // - Private helper methods
     private int multiply(int x, int y) {
         return x * y;
     }
@@ -73,7 +73,7 @@ class Calculator {
 Use for **utility classes** within the same package.
 
 ```java
-// ✅ Package-private class (no modifier)
+// - Package-private class (no modifier)
 class DatabaseHelper {
     // Only accessible within the same package
     void connect() { }
@@ -97,7 +97,7 @@ public class UserRepository {
 Use **only in abstract classes** for methods that should be overridden.
 
 ```java
-// ✅ Good: protected in abstract class
+// - Good: protected in abstract class
 abstract class Animal {
     protected abstract void makeSound();  // Subclasses must implement
 
@@ -114,10 +114,10 @@ class Dog extends Animal {
 }
 ```
 
-**❌ Avoid `protected` for fields** - breaks encapsulation:
+**- Avoid `protected` for fields** - breaks encapsulation:
 
 ```java
-// ❌ Bad: protected fields
+// - Bad: protected fields
 class Base {
     protected int value;  // Subclasses can access directly
 }
@@ -128,7 +128,7 @@ class Derived extends Base {
     }
 }
 
-// ✅ Good: private fields with protected methods
+// - Good: private fields with protected methods
 class Base {
     private int value;
 
@@ -149,14 +149,14 @@ class Base {
 Use **only for classes/methods** that are part of your public API.
 
 ```java
-// ✅ Public API
+// - Public API
 public class UserService {
     public void createUser(String name) {
         validate(name);
         save(name);
     }
 
-    // ❌ Don't make helpers public
+    // - Don't make helpers public
     private void validate(String name) { }
     private void save(String name) { }
 }
@@ -166,10 +166,10 @@ public class UserService {
 
 | Modifier | Class | Package | Subclass | World | Use When |
 |----------|-------|---------|----------|-------|----------|
-| **private** | ✅ | ❌ | ❌ | ❌ | Encapsulation, helpers |
-| **package-private** | ✅ | ✅ | ❌ | ❌ | Internal utilities |
-| **protected** | ✅ | ✅ | ✅ | ❌ | Inheritance (methods only) |
-| **public** | ✅ | ✅ | ✅ | ✅ | Public API |
+| **private** | - | - | - | - | Encapsulation, helpers |
+| **package-private** | - | - | - | - | Internal utilities |
+| **protected** | - | - | - | - | Inheritance (methods only) |
+| **public** | - | - | - | - | Public API |
 
 **Decision Tree:**
 
@@ -191,17 +191,17 @@ Is it needed outside the class?
 ```java
 // Public API class
 public class BankAccount {
-    // ✅ Private fields - encapsulation
+    // - Private fields - encapsulation
     private String accountNumber;
     private double balance;
 
-    // ✅ Public constructor
+    // - Public constructor
     public BankAccount(String accountNumber) {
         this.accountNumber = accountNumber;
         this.balance = 0.0;
     }
 
-    // ✅ Public methods - API
+    // - Public methods - API
     public void deposit(double amount) {
         if (validateAmount(amount)) {
             balance += amount;
@@ -213,7 +213,7 @@ public class BankAccount {
         return balance;
     }
 
-    // ✅ Private helpers
+    // - Private helpers
     private boolean validateAmount(double amount) {
         return amount > 0;
     }
@@ -223,7 +223,7 @@ public class BankAccount {
     }
 }
 
-// ✅ Package-private utility class
+// - Package-private utility class
 class TransactionLogger {
     static void log(String account, String type, double amount) {
         // Log transaction

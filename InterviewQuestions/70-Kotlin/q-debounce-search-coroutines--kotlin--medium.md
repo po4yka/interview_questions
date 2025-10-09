@@ -38,7 +38,7 @@ tags:
 ### The Problem Without Debouncing
 
 ```kotlin
-// ❌ BAD: API call on every keystroke
+// - BAD: API call on every keystroke
 searchEditText.addTextChangedListener { text ->
     // User types "android" → 7 API calls!
     // "a", "an", "and", "andr", "andro", "androi", "android"
@@ -371,42 +371,42 @@ class SearchViewModelTest {
 ### Best Practices
 
 ```kotlin
-// ✅ DO: Use appropriate debounce delay
+// - DO: Use appropriate debounce delay
 searchQuery.debounce(300) // 300ms is standard for search
 
-// ✅ DO: Filter blank queries
+// - DO: Filter blank queries
 .filter { it.isNotBlank() }
 
-// ✅ DO: Prevent duplicate searches
+// - DO: Prevent duplicate searches
 .distinctUntilChanged()
 
-// ✅ DO: Handle cancellation properly
+// - DO: Handle cancellation properly
 catch (e: CancellationException) {
     throw e // Re-throw cancellation
 }
 
-// ✅ DO: Show loading state
+// - DO: Show loading state
 onEach { _isLoading.value = true }
 
-// ❌ DON'T: Use too short delay
+// - DON'T: Use too short delay
 searchQuery.debounce(50) // Too aggressive
 
-// ❌ DON'T: Use too long delay
+// - DON'T: Use too long delay
 searchQuery.debounce(1000) // Feels unresponsive
 
-// ❌ DON'T: Forget to cancel previous job
+// - DON'T: Forget to cancel previous job
 searchJob = launch { ... } // Lost reference to previous job!
 ```
 
 ### Summary
 
 **Debouncing with Coroutines**:
-- ✅ **Job Cancellation**: Simple pattern, cancel previous search when new input arrives
-- ✅ **delay(300)**: Standard debounce time for search
-- ✅ **Flow.debounce()**: Declarative, operator-based approach
-- ✅ **flatMapLatest**: Automatic cancellation of previous search
-- ✅ **distinctUntilChanged()**: Prevents duplicate searches
-- ✅ **Testable**: Use TestDispatcher and advanceTimeBy()
+- - **Job Cancellation**: Simple pattern, cancel previous search when new input arrives
+- - **delay(300)**: Standard debounce time for search
+- - **Flow.debounce()**: Declarative, operator-based approach
+- - **flatMapLatest**: Automatic cancellation of previous search
+- - **distinctUntilChanged()**: Prevents duplicate searches
+- - **Testable**: Use TestDispatcher and advanceTimeBy()
 
 **Key Pattern**:
 ```kotlin
@@ -428,7 +428,7 @@ searchQuery
 ### Проблема Без Debouncing
 
 ```kotlin
-// ❌ ПЛОХО: Вызов API на каждое нажатие клавиши
+// - ПЛОХО: Вызов API на каждое нажатие клавиши
 searchEditText.addTextChangedListener { text ->
     // Пользователь печатает "android" → 7 вызовов API!
     // "a", "an", "and", "andr", "andro", "androi", "android"
@@ -595,12 +595,12 @@ class SearchViewModel : ViewModel() {
 ### Резюме
 
 **Debouncing с Корутинами**:
-- ✅ **Отмена Job**: Простой паттерн, отмена предыдущего поиска при новом вводе
-- ✅ **delay(300)**: Стандартное время debounce для поиска
-- ✅ **Flow.debounce()**: Декларативный подход на основе операторов
-- ✅ **flatMapLatest**: Автоматическая отмена предыдущего поиска
-- ✅ **distinctUntilChanged()**: Предотвращает дублирующиеся поиски
-- ✅ **Тестируемость**: Используйте TestDispatcher и advanceTimeBy()
+- - **Отмена Job**: Простой паттерн, отмена предыдущего поиска при новом вводе
+- - **delay(300)**: Стандартное время debounce для поиска
+- - **Flow.debounce()**: Декларативный подход на основе операторов
+- - **flatMapLatest**: Автоматическая отмена предыдущего поиска
+- - **distinctUntilChanged()**: Предотвращает дублирующиеся поиски
+- - **Тестируемость**: Используйте TestDispatcher и advanceTimeBy()
 
 **Ключевой Паттерн**:
 ```kotlin

@@ -65,11 +65,11 @@ fun main() {
 ```
 Before:
 [GC Root: root] → [Node(1)] → [Node(2)] → [Node(3)]
-All reachable ✅
+All reachable GOOD
 
 After root.next = null:
 [GC Root: root] → [Node(1)]
-[Node(2)] → [Node(3)]  ← Unreachable ❌ → Will be destroyed
+[Node(2)] → [Node(3)]  ← Unreachable - → Will be destroyed
 ```
 
 **Dead Object Example:**
@@ -113,10 +113,10 @@ fun circularExample() {
 
 | Condition | Result |
 |-----------|--------|
-| Reachable from GC Root | ✅ KEEP (safe from GC) |
-| Unreachable from GC Root | ❌ DESTROY (eligible for GC) |
-| Has references but unreachable | ❌ DESTROY (references don't matter) |
-| Circular references but unreachable | ❌ DESTROY (GC handles this) |
+| Reachable from GC Root | - KEEP (safe from GC) |
+| Unreachable from GC Root | - DESTROY (eligible for GC) |
+| Has references but unreachable | - DESTROY (references don't matter) |
+| Circular references but unreachable | - DESTROY (GC handles this) |
 
 **Summary:**
 

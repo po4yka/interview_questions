@@ -82,15 +82,15 @@ class MarkdownRepository(private val documentDao: DocumentDao) {
 ```
 
 **Pros:**
-- ✅ Simple implementation
-- ✅ Preserves original formatting
-- ✅ Easy to edit
-- ✅ Small storage footprint
+- - Simple implementation
+- - Preserves original formatting
+- - Easy to edit
+- - Small storage footprint
 
 **Cons:**
-- ❌ Can't search by structure (headings, lists, etc.)
-- ❌ Can't query specific elements
-- ❌ Rendering required for display
+- - Can't search by structure (headings, lists, etc.)
+- - Can't query specific elements
+- - Rendering required for display
 
 ---
 
@@ -247,15 +247,15 @@ class MarkdownRepository(
 ```
 
 **Pros:**
-- ✅ Can query structure
-- ✅ Content analysis
-- ✅ Search by element type
-- ✅ Preserves both raw and parsed
+- - Can query structure
+- - Content analysis
+- - Search by element type
+- - Preserves both raw and parsed
 
 **Cons:**
-- ❌ More complex
-- ❌ Larger storage size
-- ❌ Parsing overhead
+- - More complex
+- - Larger storage size
+- - Parsing overhead
 
 ---
 
@@ -320,14 +320,14 @@ class MarkdownViewerFragment : Fragment() {
 ```
 
 **Pros:**
-- ✅ Fast rendering (pre-rendered)
-- ✅ Easy WebView display
-- ✅ CSS styling support
+- - Fast rendering (pre-rendered)
+- - Easy WebView display
+- - CSS styling support
 
 **Cons:**
-- ❌ Editing requires re-parsing
-- ❌ Larger storage
-- ❌ Loses Markdown structure
+- - Editing requires re-parsing
+- - Larger storage
+- - Loses Markdown structure
 
 ---
 
@@ -390,14 +390,14 @@ class MarkdownFileManager(private val context: Context) {
 ```
 
 **Pros:**
-- ✅ Standard file format
-- ✅ Easy export/import
-- ✅ External editor support
-- ✅ Version control friendly
+- - Standard file format
+- - Easy export/import
+- - External editor support
+- - Version control friendly
 
 **Cons:**
-- ❌ No structured queries
-- ❌ File management overhead
+- - No structured queries
+- - File management overhead
 
 ---
 

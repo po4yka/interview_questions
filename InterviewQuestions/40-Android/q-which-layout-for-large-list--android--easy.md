@@ -210,7 +210,7 @@ adapter.submitList(newList)
 | Flexibility | High | Limited |
 | Animations | Built-in | Manual |
 | Layout Options | Multiple | Vertical only |
-| Recommendation | ✅ Preferred | ❌ Deprecated |
+| Recommendation | - Preferred | - Deprecated |
 
 ### When NOT to Use RecyclerView
 

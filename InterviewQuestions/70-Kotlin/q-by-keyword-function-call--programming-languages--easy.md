@@ -294,27 +294,27 @@ fun main() {
 import kotlin.properties.Delegates
 
 class DelegationSummary {
-    // ✅ WORKS: Object
+    // - WORKS: Object
     val value1: String by lazy { "value" }
 
-    // ✅ WORKS: Property
+    // - WORKS: Property
     private val backingList = mutableListOf<String>()
     val list: List<String> by backingList
 
-    // ✅ WORKS: Built-in delegate factory
+    // - WORKS: Built-in delegate factory
     var observed: String by Delegates.observable("") { _, _, _ -> }
 
-    // ✅ WORKS: Constructor that returns delegate
+    // - WORKS: Constructor that returns delegate
     var logged: String by LoggingDelegate("initial")
 
-    // ✅ WORKS: Function that returns delegate
+    // - WORKS: Function that returns delegate
     private fun getDelegate() = lazy { "value" }
     val value2: String by getDelegate()
 
-    // ❌ DOESN'T WORK: Random function call
+    // - DOESN'T WORK: Random function call
     // val value3: String by someFunction()  // Unless it returns a delegate
 
-    // ❌ DOESN'T WORK: Expression that doesn't return delegate
+    // - DOESN'T WORK: Expression that doesn't return delegate
     // val value4: String by "string".uppercase()  // ERROR
 }
 ```

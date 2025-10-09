@@ -427,7 +427,7 @@ fun flowOnExample() = runBlocking {
 
 ```kotlin
 class FlowBestPractices {
-    // ✅ DO: Use Flow for data streams
+    // - DO: Use Flow for data streams
     fun getUserUpdates(): Flow<User> = flow {
         while (true) {
             emit(fetchUser())
@@ -435,32 +435,32 @@ class FlowBestPractices {
         }
     }
 
-    // ✅ DO: Use operators for transformation
+    // - DO: Use operators for transformation
     fun processedData(): Flow<Result> =
         rawData()
             .map { transform(it) }
             .filter { it.isValid }
 
-    // ✅ DO: Handle errors with catch
+    // - DO: Handle errors with catch
     fun safeFlow(): Flow<Data> =
         dataSource()
             .catch { e ->
                 emit(Data.Error(e))
             }
 
-    // ❌ DON'T: Block in flow builder
+    // - DON'T: Block in flow builder
     fun badFlow(): Flow<Int> = flow {
         Thread.sleep(1000)  // BAD: Use delay
         emit(1)
     }
 
-    // ❌ DON'T: Create mutable shared state
+    // - DON'T: Create mutable shared state
     var counter = 0
     fun problematicFlow(): Flow<Int> = flow {
         emit(counter++)  // BAD: Not thread-safe
     }
 
-    // ✅ DO: Use StateFlow/SharedFlow for hot streams
+    // - DO: Use StateFlow/SharedFlow for hot streams
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
 }

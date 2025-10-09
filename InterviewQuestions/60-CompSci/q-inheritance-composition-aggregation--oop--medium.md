@@ -34,7 +34,7 @@ status: reviewed
 ### Example
 
 ```kotlin
-// ✅ Inheritance: Dog IS-A Animal
+// - Inheritance: Dog IS-A Animal
 open class Animal(val name: String) {
     open fun makeSound() {
         println("Some generic animal sound")
@@ -69,13 +69,13 @@ dog.sleep()      // "Buddy is sleeping"
 
 ### When to Use Inheritance
 
-✅ **Use inheritance when:**
+- **Use inheritance when:**
 - Clear **"is-a" relationship** exists (Dog IS-A Animal)
 - Shared behavior across related classes
 - Need polymorphism (treat Dog as Animal)
 - Hierarchy is stable and unlikely to change
 
-❌ **Avoid inheritance when:**
+- **Avoid inheritance when:**
 - No clear "is-a" relationship
 - Need to combine multiple behaviors
 - Hierarchy becomes too deep or complex
@@ -97,7 +97,7 @@ dog.sleep()      // "Buddy is sleeping"
 ### Example
 
 ```kotlin
-// ✅ Composition: Car HAS-A Engine (strong ownership)
+// - Composition: Car HAS-A Engine (strong ownership)
 class Engine(val type: String, val horsepower: Int) {
     fun start() {
         println("Engine $type started")
@@ -168,7 +168,7 @@ car.start()
 ### Example
 
 ```kotlin
-// ✅ Aggregation: Department HAS-A Employee (weak ownership)
+// - Aggregation: Department HAS-A Employee (weak ownership)
 class Employee(
     val id: String,
     val name: String,
@@ -370,14 +370,14 @@ class UserListFragment : Fragment() {
 - Reduces coupling
 
 ```kotlin
-// ❌ BAD: Deep inheritance hierarchy
+// - BAD: Deep inheritance hierarchy
 open class Animal { ... }
 open class Mammal : Animal() { ... }
 open class Carnivore : Mammal() { ... }
 open class Feline : Carnivore() { ... }
 class Cat : Feline() { ... }  // 5 levels deep!
 
-// ✅ GOOD: Composition
+// - GOOD: Composition
 class Cat(
     private val mobility: Mobility,
     private val diet: Diet,
@@ -392,7 +392,7 @@ class Cat(
 ### Use Aggregation for Shared Resources
 
 ```kotlin
-// ✅ Aggregation: Multiple activities can share same database
+// - Aggregation: Multiple activities can share same database
 class DatabaseManager private constructor() {
     companion object {
         val instance: DatabaseManager by lazy { DatabaseManager() }
@@ -413,24 +413,24 @@ class ProductActivity : AppCompatActivity() {
 ## When to Use Each
 
 ### Use Inheritance When:
-✅ Clear "is-a" relationship exists
-✅ Need polymorphism
-✅ Stable hierarchy (unlikely to change)
-✅ Shared behavior across similar classes
+- Clear "is-a" relationship exists
+- Need polymorphism
+- Stable hierarchy (unlikely to change)
+- Shared behavior across similar classes
 
 ### Use Composition When:
-✅ Need "has-a" relationship
-✅ Components are parts of a whole
-✅ Lifecycle is dependent
-✅ Want strong encapsulation
-✅ Need flexibility to change components
+- Need "has-a" relationship
+- Components are parts of a whole
+- Lifecycle is dependent
+- Want strong encapsulation
+- Need flexibility to change components
 
 ### Use Aggregation When:
-✅ Need "has-a" relationship
-✅ Components exist independently
-✅ Lifecycle is independent
-✅ Want to share objects
-✅ Weak coupling is desired
+- Need "has-a" relationship
+- Components exist independently
+- Lifecycle is independent
+- Want to share objects
+- Weak coupling is desired
 
 ---
 

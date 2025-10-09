@@ -81,7 +81,7 @@ inline class Password(val value: String)
 - **Can implement interfaces**
 
 ```kotlin
-// ✅ Valid
+// - Valid
 @JvmInline
 value class Email(val value: String) {
     val domain: String  // Computed property - OK
@@ -90,16 +90,16 @@ value class Email(val value: String) {
     fun isValid(): Boolean = value.contains('@')
 }
 
-// ❌ Invalid
+// - Invalid
 @JvmInline
 value class Invalid(val value: String) {
-    var count: Int = 0  // ❌ Backing field not allowed
+    var count: Int = 0  // - Backing field not allowed
 
-    init {  // ❌ Init block not allowed
+    init {  // - Init block not allowed
         println("Created")
     }
 
-    lateinit var data: String  // ❌ lateinit not allowed
+    lateinit var data: String  // - lateinit not allowed
 }
 ```
 
@@ -107,10 +107,10 @@ value class Invalid(val value: String) {
 
 | Feature | Value Class | Type Alias |
 |---------|-------------|------------|
-| **Creates new type** | ✅ Yes | ❌ No (just a name) |
-| **Type safety** | ✅ Strong | ❌ Weak |
-| **Runtime overhead** | ❌ None (inlined) | ❌ None |
-| **Can have members** | ✅ Yes | ❌ No |
+| **Creates new type** | - Yes | - No (just a name) |
+| **Type safety** | - Strong | - Weak |
+| **Runtime overhead** | - None (inlined) | - None |
+| **Can have members** | - Yes | - No |
 
 ```kotlin
 // Type alias - no type safety
@@ -118,7 +118,7 @@ typealias EmailAlias = String
 typealias PasswordAlias = String
 
 val email: EmailAlias = "user@example.com"
-val password: PasswordAlias = email  // ✅ Compiles! No safety
+val password: PasswordAlias = email  // - Compiles! No safety
 
 // Value class - type safety
 @JvmInline
@@ -127,7 +127,7 @@ value class Email(val value: String)
 value class Password(val value: String)
 
 val email2 = Email("user@example.com")
-val password2: Password = email2  // ❌ Compilation error! Type safe
+val password2: Password = email2  // - Compilation error! Type safe
 ```
 
 ### Use Cases
@@ -148,8 +148,8 @@ fun getProduct(id: ProductId): Product { /* ... */ }
 val userId = UserId(123)
 val productId = ProductId(456)
 
-getUser(userId)  // ✅ OK
-// getUser(productId)  // ❌ Compilation error!
+getUser(userId)  // - OK
+// getUser(productId)  // - Compilation error!
 ```
 
 #### 2. Units of Measurement
@@ -166,7 +166,7 @@ value class Kilometers(val value: Double) {
 }
 
 val distance = Meters(100.0) + Meters(50.0)  // Type-safe
-// val invalid = Meters(100.0) + Kilometers(1.0)  // ❌ Error!
+// val invalid = Meters(100.0) + Kilometers(1.0)  // - Error!
 ```
 
 #### 3. Validated Strings
@@ -238,10 +238,10 @@ val id = UserId("12345")  // Нет дополнительного выделе�
 
 | Функция | Value класс | Псевдоним типа |
 |---------|-------------|----------------|
-| **Создает новый тип** | ✅ Да | ❌ Нет |
-| **Типобезопасность** | ✅ Сильная | ❌ Слабая |
-| **Runtime overhead** | ❌ Нет | ❌ Нет |
-| **Может иметь члены** | ✅ Да | ❌ Нет |
+| **Создает новый тип** | - Да | - Нет |
+| **Типобезопасность** | - Сильная | - Слабая |
+| **Runtime overhead** | - Нет | - Нет |
+| **Может иметь члены** | - Да | - Нет |
 
 ### Производительность
 

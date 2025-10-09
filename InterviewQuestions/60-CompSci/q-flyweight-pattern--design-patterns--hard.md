@@ -290,7 +290,7 @@ Use cases:
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use for large numbers of similar objects
+// - DO: Use for large numbers of similar objects
 class TileMap {
     private val tileFactory = TileFactory()
     private val map = Array(1000) { Array(1000) { TileType.GRASS } }
@@ -308,17 +308,17 @@ class TileMap {
     }
 }
 
-// ✅ DO: Make flyweights immutable
+// - DO: Make flyweights immutable
 data class Tile(val image: String, val walkable: Boolean) {
     fun draw(x: Int, y: Int) { /* ... */ }
 }
 
-// ✅ DO: Use with weak references for cache
+// - DO: Use with weak references for cache
 class ResourceCache {
     private val cache = WeakHashMap<String, Resource>()
 }
 
-// ✅ DO: Combine with Factory pattern
+// - DO: Combine with Factory pattern
 object FontCache {
     private val fonts = mutableMapOf<Pair<String, Int>, Typeface>()
 
@@ -329,9 +329,9 @@ object FontCache {
     }
 }
 
-// ❌ DON'T: Use for mutable objects
-// ❌ DON'T: Use when objects aren't reused
-// ❌ DON'T: Share extrinsic state
+// - DON'T: Use for mutable objects
+// - DON'T: Use when objects aren't reused
+// - DON'T: Share extrinsic state
 ```
 
 **English**: **Flyweight** is a structural pattern that minimizes memory by sharing data among similar objects. **Problem**: Large numbers of similar objects consume excessive memory. **Solution**: Share intrinsic (common) state in flyweights, pass extrinsic (unique) state from client. **Use when**: (1) App uses large numbers of objects, (2) Memory is limited, (3) Objects have shared state. **Android**: Icon/bitmap caching, string pools, typeface cache. **Pros**: memory savings, performance, scalability. **Cons**: complexity, CPU overhead, immutability required. **Examples**: Text editor characters, game particles, tile maps, icon caches.

@@ -70,19 +70,19 @@ class JITExample {
 **Advantages:**
 
 ```kotlin
-// ✅ Fast startup
+// - Fast startup
 // - No compilation during installation
 // - App launches immediately
 
-// ✅ Small storage footprint
+// - Small storage footprint
 // - Only bytecode stored
 // - Compiled code in memory cache
 
-// ✅ Adaptive optimization
+// - Adaptive optimization
 // - Compiles only hot code
 // - Optimizes based on actual usage patterns
 
-// ✅ Quick app updates
+// - Quick app updates
 // - No recompilation needed
 // - Instant deployment
 ```
@@ -90,18 +90,18 @@ class JITExample {
 **Disadvantages:**
 
 ```kotlin
-// ❌ Warm-up time
+// - Warm-up time
 fun firstInteraction() {
     // Slow until JIT compilation kicks in
     heavyComputation() // 1000ns (interpreted)
 }
 
-// ❌ Runtime overhead
+// - Runtime overhead
 // - Profiling adds overhead
 // - Compilation happens during execution
 // - May cause jank
 
-// ❌ Lost on restart
+// - Lost on restart
 // - Compiled code in memory only
 // - Recompilation needed after app restart
 ```
@@ -141,19 +141,19 @@ class AOTExample {
 **Advantages:**
 
 ```kotlin
-// ✅ Instant performance
+// - Instant performance
 // - No warm-up needed
 // - Fast from first launch
 
-// ✅ Predictable performance
+// - Predictable performance
 // - Consistent execution times
 // - No JIT overhead during runtime
 
-// ✅ Persistent optimization
+// - Persistent optimization
 // - Survives app restarts
 // - No recompilation needed
 
-// ✅ Lower battery usage
+// - Lower battery usage
 // - No runtime compilation
 // - Less CPU work during execution
 ```
@@ -161,12 +161,12 @@ class AOTExample {
 **Disadvantages:**
 
 ```kotlin
-// ❌ Slow installation
+// - Slow installation
 // Installation time comparison:
 val jitInstall = 5  // seconds
 val aotInstall = 45 // seconds (9x slower!)
 
-// ❌ Large storage footprint
+// - Large storage footprint
 data class AppSize(
     val dex: Int,  // MB
     val oat: Int   // MB
@@ -177,11 +177,11 @@ val sizes = AppSize(
     oat = 40       // Compiled OAT (2x larger)
 )
 
-// ❌ Slow updates
+// - Slow updates
 // - Recompilation on every update
 // - Delays app availability
 
-// ❌ Compiles unused code
+// - Compiles unused code
 // - All code compiled, even rarely used
 // - Wasted storage and compilation time
 ```
@@ -264,11 +264,11 @@ object HybridBenefits {
     val storageOverhead = 20  // MB (only hot code compiled)
 
     // Best of both worlds:
-    // ✅ Fast installation (like JIT)
-    // ✅ Good startup performance (close to AOT)
-    // ✅ Adaptive optimization (compiles what matters)
-    // ✅ Reasonable storage (only hot paths)
-    // ✅ Fast updates (no full recompilation)
+    // - Fast installation (like JIT)
+    // - Good startup performance (close to AOT)
+    // - Adaptive optimization (compiles what matters)
+    // - Reasonable storage (only hot paths)
+    // - Fast updates (no full recompilation)
 }
 ```
 

@@ -223,7 +223,7 @@ Adapter Pattern in Android:
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use adapter for incompatible interfaces
+// - DO: Use adapter for incompatible interfaces
 interface NewAPI {
     fun fetchData(): Flow<Data>
 }
@@ -235,21 +235,21 @@ class OldAPIAdapter(private val oldAPI: OldAPI) : NewAPI {
     }
 }
 
-// ✅ DO: Keep adapters simple and focused
+// - DO: Keep adapters simple and focused
 class SimpleAdapter(private val adaptee: Adaptee) : Target {
     override fun request() = adaptee.specificRequest()
 }
 
-// ✅ DO: Use for database migration
+// - DO: Use for database migration
 class RoomToRealmAdapter(private val realmDB: Realm) : AppDatabase {
     override fun getUsers() = realmDB.where<User>().findAll()
         .map { it.toRoomEntity() }
 }
 
-// ❌ DON'T: Use adapter for single method translation
+// - DON'T: Use adapter for single method translation
 // Use extension functions instead
 
-// ❌ DON'T: Create adapters with unrelated functionality
+// - DON'T: Create adapters with unrelated functionality
 // Keep adapters focused on interface translation
 ```
 

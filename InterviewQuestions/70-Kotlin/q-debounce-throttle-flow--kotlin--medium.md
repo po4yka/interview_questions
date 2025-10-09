@@ -234,10 +234,10 @@ class ScrollViewModel : ViewModel() {
 //            100ms 100ms 100ms 100ms
 
 // debounce(200ms):
-// → Waits 200ms after "o" → searches "hello" ✅
+// → Waits 200ms after "o" → searches "hello" GOOD
 
 // throttle(200ms):
-// → Searches "h", ignores "e", "l", "l", searches "o" ❌
+// → Searches "h", ignores "e", "l", "l", searches "o" BAD
 // Not useful for search!
 ```
 
@@ -248,10 +248,10 @@ class ScrollViewModel : ViewModel() {
 //                      0ms     50ms    100ms   150ms
 
 // throttle(500ms):
-// → Processes first click, ignores rest for 500ms ✅
+// → Processes first click, ignores rest for 500ms GOOD
 
 // debounce(500ms):
-// → Waits 500ms after LAST click → processes too late ❌
+// → Waits 500ms after LAST click → processes too late BAD
 ```
 
 ### Advanced Implementations
@@ -391,13 +391,13 @@ fun `throttle should emit first value and ignore subsequent`() = runTest {
 **1. Choose appropriate timeout:**
 
 ```kotlin
-// ✅ Search: 300-500ms (feels responsive)
+// - Search: 300-500ms (feels responsive)
 searchQuery.debounce(300)
 
-// ✅ Auto-save: 1000-2000ms (not too frequent)
+// - Auto-save: 1000-2000ms (not too frequent)
 document.debounce(2000)
 
-// ✅ Button click: 500-1000ms (prevents double-click)
+// - Button click: 500-1000ms (prevents double-click)
 button.throttleFirst(1000)
 ```
 
@@ -599,10 +599,10 @@ class LocationService {
 //                        100мс 100мс 100мс 100мс
 
 // debounce(200мс):
-// → Ждет 200мс после "o" → ищет "hello" ✅
+// → Ждет 200мс после "o" → ищет "hello" GOOD
 
 // throttle(200мс):
-// → Ищет "h", игнорирует "e", "l", "l", ищет "o" ❌
+// → Ищет "h", игнорирует "e", "l", "l", ищет "o" BAD
 // Не полезно для поиска!
 ```
 
@@ -613,10 +613,10 @@ class LocationService {
 //                               0мс     50мс    100мс   150мс
 
 // throttle(500мс):
-// → Обрабатывает первый клик, игнорирует остальные на 500мс ✅
+// → Обрабатывает первый клик, игнорирует остальные на 500мс GOOD
 
 // debounce(500мс):
-// → Ждет 500мс после ПОСЛЕДНЕГО клика → обрабатывает слишком поздно ❌
+// → Ждет 500мс после ПОСЛЕДНЕГО клика → обрабатывает слишком поздно BAD
 ```
 
 ### Лучшие практики
@@ -624,13 +624,13 @@ class LocationService {
 **1. Выбирайте подходящий таймаут:**
 
 ```kotlin
-// ✅ Поиск: 300-500мс (ощущается отзывчиво)
+// - Поиск: 300-500мс (ощущается отзывчиво)
 searchQuery.debounce(300)
 
-// ✅ Авто-сохранение: 1000-2000мс (не слишком часто)
+// - Авто-сохранение: 1000-2000мс (не слишком часто)
 document.debounce(2000)
 
-// ✅ Клик по кнопке: 500-1000мс (предотвращает двойной клик)
+// - Клик по кнопке: 500-1000мс (предотвращает двойной клик)
 button.throttleFirst(1000)
 ```
 

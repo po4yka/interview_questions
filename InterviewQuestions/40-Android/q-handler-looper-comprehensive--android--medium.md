@@ -363,7 +363,7 @@ val msg2 = Message.obtain(handler, MSG_UPDATE)  // С handler и what
 val msg3 = Message.obtain(handler, MSG_DATA, data)  // С данными
 
 // ВАЖНО: Не создавать через конструктор!
-// val wrong = Message()  // ❌ НЕПРАВИЛЬНО
+// val wrong = Message()  // НЕПРАВИЛЬНО
 // val correct = Message.obtain()  // ✓ ПРАВИЛЬНО
 ```
 
@@ -470,7 +470,7 @@ class MainActivity : AppCompatActivity() {
 ### 9. Утечки памяти и очистка
 
 ```kotlin
-// ❌ УТЕЧКА ПАМЯТИ
+// УТЕЧКА ПАМЯТИ
 class LeakyActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 

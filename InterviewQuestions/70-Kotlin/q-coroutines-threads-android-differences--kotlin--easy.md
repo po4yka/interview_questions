@@ -52,7 +52,7 @@ tags:
 
 **Threads - Heavyweight**:
 ```kotlin
-// ❌ EXPENSIVE: Creating many threads
+// - EXPENSIVE: Creating many threads
 fun loadData() {
     // Each thread costs ~1-2 MB of memory
     repeat(10000) { i ->
@@ -67,7 +67,7 @@ fun loadData() {
 
 **Coroutines - Lightweight**:
 ```kotlin
-// ✅ CHEAP: Creating many coroutines
+// - CHEAP: Creating many coroutines
 fun loadData() {
     lifecycleScope.launch {
         // Each coroutine costs bytes, not megabytes
@@ -129,7 +129,7 @@ lifecycleScope.launch {
 
 **Threads - Manual Switching**:
 ```kotlin
-// ❌ VERBOSE: Manual thread management
+// - VERBOSE: Manual thread management
 class UserViewModel {
     fun loadUser() {
         Thread {
@@ -152,7 +152,7 @@ class UserViewModel {
 
 **Coroutines - Automatic Switching**:
 ```kotlin
-// ✅ CLEAN: Automatic dispatcher handling
+// - CLEAN: Automatic dispatcher handling
 class UserViewModel : ViewModel() {
     fun loadUser() {
         viewModelScope.launch {
@@ -172,7 +172,7 @@ class UserViewModel : ViewModel() {
 
 **Threads - Hard to Cancel**:
 ```kotlin
-// ❌ DANGEROUS: Thread interruption is risky
+// - DANGEROUS: Thread interruption is risky
 class DataLoader {
     private var thread: Thread? = null
 
@@ -201,7 +201,7 @@ class DataLoader {
 
 **Coroutines - Easy to Cancel**:
 ```kotlin
-// ✅ SAFE: Cooperative cancellation
+// - SAFE: Cooperative cancellation
 class DataLoader {
     private var job: Job? = null
 
@@ -224,7 +224,7 @@ class DataLoader {
 
 **Threads - Manual Management**:
 ```kotlin
-// ❌ LEAK RISK: Must manually track and cancel threads
+// - LEAK RISK: Must manually track and cancel threads
 class MyActivity : AppCompatActivity() {
     private val activeThreads = mutableListOf<Thread>()
 
@@ -253,7 +253,7 @@ class MyActivity : AppCompatActivity() {
 
 **Coroutines - Automatic Management**:
 ```kotlin
-// ✅ NO LEAKS: Automatic lifecycle management
+// - NO LEAKS: Automatic lifecycle management
 class MyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -341,7 +341,7 @@ lifecycleScope.launch {
 
 **Thread Version**:
 ```kotlin
-// ❌ COMPLEX: Thread-based network call
+// - COMPLEX: Thread-based network call
 class UserRepository {
     fun getUser(callback: (User?) -> Unit) {
         Thread {
@@ -371,7 +371,7 @@ repository.getUser { user ->
 
 **Coroutine Version**:
 ```kotlin
-// ✅ SIMPLE: Coroutine-based network call
+// - SIMPLE: Coroutine-based network call
 class UserRepository {
     suspend fun getUser(): User? {
         return withContext(Dispatchers.IO) {
@@ -397,38 +397,38 @@ lifecycleScope.launch {
 ### When to Use Each
 
 **Use Threads When**:
-- ⚠️ Working with Java libraries that require threads
-- ⚠️ Long-running blocking operations (rare - use WorkManager instead)
-- ⚠️ Low-level system programming
+- WARNING: Working with Java libraries that require threads
+- WARNING: Long-running blocking operations (rare - use WorkManager instead)
+- WARNING: Low-level system programming
 
 **Use Coroutines When** (Almost Always on Android):
-- ✅ Network calls
-- ✅ Database operations
-- ✅ File I/O
-- ✅ Image processing
-- ✅ Any async work in Android app
-- ✅ UI updates with background work
-- ✅ Complex concurrent operations
+- - Network calls
+- - Database operations
+- - File I/O
+- - Image processing
+- - Any async work in Android app
+- - UI updates with background work
+- - Complex concurrent operations
 
 ### Summary
 
 **Threads**:
-- ❌ Heavyweight (1-2 MB each)
-- ❌ Expensive context switching
-- ❌ Limited number (~thousands)
-- ❌ Hard to cancel safely
-- ❌ Manual lifecycle management
-- ❌ Verbose thread switching
-- ❌ High memory usage
+- - Heavyweight (1-2 MB each)
+- - Expensive context switching
+- - Limited number (~thousands)
+- - Hard to cancel safely
+- - Manual lifecycle management
+- - Verbose thread switching
+- - High memory usage
 
 **Coroutines**:
-- ✅ Lightweight (bytes each)
-- ✅ Cheap context switching
-- ✅ Virtually unlimited (millions)
-- ✅ Easy, safe cancellation
-- ✅ Automatic lifecycle management
-- ✅ Clean dispatcher switching
-- ✅ Low memory usage
+- - Lightweight (bytes each)
+- - Cheap context switching
+- - Virtually unlimited (millions)
+- - Easy, safe cancellation
+- - Automatic lifecycle management
+- - Clean dispatcher switching
+- - Low memory usage
 
 **Key Takeaway**: On Android, **always prefer coroutines over threads** for async operations. Coroutines are lighter, safer, and integrate seamlessly with Android lifecycle components.
 
@@ -456,7 +456,7 @@ lifecycleScope.launch {
 
 **Потоки - Тяжеловесные**:
 ```kotlin
-// ❌ ДОРОГО: Создание множества потоков
+// - ДОРОГО: Создание множества потоков
 fun loadData() {
     // Каждый поток стоит ~1-2 МБ памяти
     repeat(10000) { i ->
@@ -471,7 +471,7 @@ fun loadData() {
 
 **Корутины - Легковесные**:
 ```kotlin
-// ✅ ДЕШЕВО: Создание множества корутин
+// - ДЕШЕВО: Создание множества корутин
 fun loadData() {
     lifecycleScope.launch {
         // Каждая корутина стоит байты, а не мегабайты
@@ -493,22 +493,22 @@ fun loadData() {
 ### Резюме
 
 **Потоки**:
-- ❌ Тяжеловесные (1-2 МБ каждый)
-- ❌ Дорогое переключение контекста
-- ❌ Ограниченное количество (~тысячи)
-- ❌ Сложно безопасно отменить
-- ❌ Ручное управление жизненным циклом
-- ❌ Многословное переключение потоков
-- ❌ Высокое использование памяти
+- - Тяжеловесные (1-2 МБ каждый)
+- - Дорогое переключение контекста
+- - Ограниченное количество (~тысячи)
+- - Сложно безопасно отменить
+- - Ручное управление жизненным циклом
+- - Многословное переключение потоков
+- - Высокое использование памяти
 
 **Корутины**:
-- ✅ Легковесные (байты каждая)
-- ✅ Дешевое переключение контекста
-- ✅ Практически неограничены (миллионы)
-- ✅ Легкая, безопасная отмена
-- ✅ Автоматическое управление жизненным циклом
-- ✅ Чистое переключение диспетчеров
-- ✅ Низкое использование памяти
+- - Легковесные (байты каждая)
+- - Дешевое переключение контекста
+- - Практически неограничены (миллионы)
+- - Легкая, безопасная отмена
+- - Автоматическое управление жизненным циклом
+- - Чистое переключение диспетчеров
+- - Низкое использование памяти
 
 **Ключевой Вывод**: На Android **всегда предпочитайте корутины потокам** для асинхронных операций. Корутины легче, безопаснее и бесшовно интегрируются с компонентами жизненного цикла Android.
 

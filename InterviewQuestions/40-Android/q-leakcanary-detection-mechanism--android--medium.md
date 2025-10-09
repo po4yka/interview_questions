@@ -135,7 +135,7 @@ No leak, continue monitoring
 ```kotlin
 class MyActivity : AppCompatActivity() {
     companion object {
-        // ❌ Static reference causes leak
+        // - Static reference causes leak
         var leakedActivity: Activity? = null
     }
 
@@ -163,7 +163,7 @@ val weakRef = WeakReference(activity)
 activity = null  // Remove strong reference
 System.gc()
 
-weakRef.get()  // null - object was collected ✅
+weakRef.get()  // null - object was collected GOOD
 
 // Leak case
 companion object {
@@ -177,7 +177,7 @@ val weakRef = WeakReference(activity)
 activity = null  // Local reference removed
 System.gc()
 
-weakRef.get()  // NOT null - static ref holds it ❌
+weakRef.get()  // NOT null - static ref holds it BAD
 ```
 
 **LeakCanary Setup:**

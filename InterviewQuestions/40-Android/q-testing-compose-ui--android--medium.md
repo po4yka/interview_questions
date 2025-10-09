@@ -44,10 +44,10 @@ class LoginScreenTest {
 ```
 
 **createComposeRule**:
-- ✅ Создает isolated тестовую среду
-- ✅ Управляет композицией lifecycle
-- ✅ Синхронизируется с recomposition
-- ✅ Предоставляет finders, assertions, actions
+- - Создает isolated тестовую среду
+- - Управляет композицией lifecycle
+- - Синхронизируется с recomposition
+- - Предоставляет finders, assertions, actions
 
 ### Finders - поиск элементов
 
@@ -130,10 +130,10 @@ fun loginButton_enabled_when_fields_valid() {
 ```
 
 **Почему test tags лучше**:
-- ✅ Не зависят от текста (локализация)
-- ✅ Более стабильны при рефакторинге
-- ✅ Явно показывают testable элементы
-- ✅ Работают быстрее чем text search
+- - Не зависят от текста (локализация)
+- - Более стабильны при рефакторинге
+- - Явно показывают testable элементы
+- - Работают быстрее чем text search
 
 ### Actions - взаимодействие с элементами
 
@@ -508,10 +508,10 @@ fun ListItem(title: String, subtitle: String) {
     }
 }
 
-// ❌ Не найдет - semantics смержены
+// - Не найдет - semantics смержены
 composeTestRule.onNodeWithText("Subtitle").assertExists() // FAIL
 
-// ✅ useUnmergedTree = true
+// - useUnmergedTree = true
 composeTestRule.onNodeWithText("Subtitle", useUnmergedTree = true).assertExists()
 
 // Или отключить merging в Composable
@@ -622,10 +622,10 @@ fun loginScreen_screenshot() {
 ### Best Practices
 
 ```kotlin
-// ✅ 1. Используйте test tags вместо text
+// - 1. Используйте test tags вместо text
 modifier = Modifier.testTag("submit_button")
 
-// ✅ 2. Тестируйте поведение, не реализацию
+// - 2. Тестируйте поведение, не реализацию
 @Test
 fun `clicking submit sends data`() {
     // НЕ тестируем что вызвался viewModel.submit()
@@ -633,28 +633,28 @@ fun `clicking submit sends data`() {
     composeTestRule.onNodeWithText("Success").assertExists()
 }
 
-// ✅ 3. Используйте meaningful test tags
-modifier = Modifier.testTag("email_input") // ✅
-modifier = Modifier.testTag("input1")      // ❌
+// - 3. Используйте meaningful test tags
+modifier = Modifier.testTag("email_input") // GOOD
+modifier = Modifier.testTag("input1")      // BAD
 
-// ✅ 4. waitUntil для async operations
+// - 4. waitUntil для async operations
 composeTestRule.waitUntil {
     composeTestRule.onAllNodesWithTag("item")
         .fetchSemanticsNodes().size == expectedSize
 }
 
-// ✅ 5. Тестируйте accessibility
+// - 5. Тестируйте accessibility
 composeTestRule.onNodeWithTag("icon")
     .assertContentDescriptionEquals("Profile picture")
 
-// ✅ 6. Группируйте related tests
+// - 6. Группируйте related tests
 class LoginScreenTest {
     @Test fun `empty fields show error`() { }
     @Test fun `valid fields enable button`() { }
     @Test fun `clicking login shows loading`() { }
 }
 
-// ✅ 7. Setup в @Before
+// - 7. Setup в @Before
 @Before
 fun setup() {
     composeTestRule.setContent {
@@ -666,33 +666,33 @@ fun setup() {
 ### Common Pitfalls
 
 ```kotlin
-// ❌ 1. Забыли useUnmergedTree
+// - 1. Забыли useUnmergedTree
 composeTestRule.onNodeWithText("Subtitle").assertExists() // Fail если merged
 
-// ✅ Fix
+// - Fix
 composeTestRule.onNodeWithText("Subtitle", useUnmergedTree = true).assertExists()
 
-// ❌ 2. Не ждем async операций
+// - 2. Не ждем async операций
 viewModel.loadData()
 composeTestRule.onNodeWithText("Data").assertExists() // Fail - еще не загружено
 
-// ✅ Fix
+// - Fix
 viewModel.loadData()
 composeTestRule.waitUntil {
     composeTestRule.onAllNodesWithText("Data").fetchSemanticsNodes().isNotEmpty()
 }
 
-// ❌ 3. Тестируем text вместо semantics
+// - 3. Тестируем text вместо semantics
 composeTestRule.onNodeWithText("Submit").performClick()
 // Проблема: сломается при локализации
 
-// ✅ Fix
+// - Fix
 composeTestRule.onNodeWithTag("submit_button").performClick()
 
-// ❌ 4. Забыли mainClock для анимаций
+// - 4. Забыли mainClock для анимаций
 composeTestRule.onNodeWithTag("animated").assertExists() // Fail - анимация еще идет
 
-// ✅ Fix
+// - Fix
 composeTestRule.mainClock.advanceTimeBy(1000)
 composeTestRule.onNodeWithTag("animated").assertExists()
 ```

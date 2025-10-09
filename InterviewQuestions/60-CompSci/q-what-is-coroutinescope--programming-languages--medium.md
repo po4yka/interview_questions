@@ -66,7 +66,7 @@ class MyManager {
 // 1. GlobalScope - application lifetime
 GlobalScope.launch {
     // Runs for entire app lifetime
-    // ⚠️ Use with caution - can cause memory leaks
+    // WARNING: Use with caution - can cause memory leaks
 }
 
 // 2. viewModelScope (Android)
@@ -261,7 +261,7 @@ regularScope.launch {
 
 ```kotlin
 class ScopeBestPractices {
-    // ✅ DO: Use lifecycle-aware scopes in Android
+    // - DO: Use lifecycle-aware scopes in Android
     class GoodViewModel : ViewModel() {
         fun loadData() {
             viewModelScope.launch {  // Tied to ViewModel lifecycle
@@ -270,7 +270,7 @@ class ScopeBestPractices {
         }
     }
 
-    // ❌ DON'T: Use GlobalScope in Android
+    // - DON'T: Use GlobalScope in Android
     class BadViewModel : ViewModel() {
         fun loadData() {
             GlobalScope.launch {  // Leaks when ViewModel is cleared
@@ -279,7 +279,7 @@ class ScopeBestPractices {
         }
     }
 
-    // ✅ DO: Create custom scope with proper cleanup
+    // - DO: Create custom scope with proper cleanup
     class GoodManager {
         private val scope = CoroutineScope(SupervisorJob())
 
@@ -292,7 +292,7 @@ class ScopeBestPractices {
         }
     }
 
-    // ❌ DON'T: Create scope without cleanup mechanism
+    // - DON'T: Create scope without cleanup mechanism
     class BadManager {
         private val scope = CoroutineScope(Dispatchers.Default)
 

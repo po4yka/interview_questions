@@ -173,11 +173,11 @@ scope.launch {
 val context = Job() + Dispatchers.IO
 
 // But you can't launch coroutines without a scope
-// context.launch { } // ❌ Doesn't compile
+// context.launch { } // - Doesn't compile
 
 // You need a scope
 val scope = CoroutineScope(context)
-scope.launch { } // ✅ Works
+scope.launch { } // - Works
 ```
 
 **English Summary**: CoroutineContext is a map-like collection of coroutine elements (Job, Dispatcher, Name, ExceptionHandler). CoroutineScope is a wrapper around CoroutineContext that provides lifecycle management, structured concurrency, and utility functions (launch, async, cancel). Think of context as the configuration data and scope as the manager that uses that configuration.
@@ -242,11 +242,11 @@ public interface CoroutineScope {
 val context = Job() + Dispatchers.IO
 
 // Но нельзя запустить корутины без области
-// context.launch { } // ❌ Не компилируется
+// context.launch { } // - Не компилируется
 
 // Нужна область
 val scope = CoroutineScope(context)
-scope.launch { } // ✅ Работает
+scope.launch { } // - Работает
 ```
 
 **Краткое содержание**: CoroutineContext — это map-подобная коллекция элементов корутины (Job, Dispatcher, Name, Handler). CoroutineScope — это обертка вокруг CoroutineContext, которая предоставляет управление жизненным циклом, структурированный параллелизм и утилитарные функции (launch, async, cancel). Думайте о контексте как о данных конфигурации, а об области как о менеджере, который использует эту конфигурацию.

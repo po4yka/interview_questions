@@ -472,7 +472,7 @@ fun `search debounces user input`() = runTest {
 | `catch` | Handle errors gracefully | Always use |
 | `stateIn` | Share Flow across collectors | WhileSubscribed |
 
-#### ✅ DO:
+#### - DO:
 
 - Use `debounce` to reduce API calls
 - Add minimum character filter
@@ -481,7 +481,7 @@ fun `search debounces user input`() = runTest {
 - Show loading indicators
 - Cache recent searches
 
-#### ❌ DON'T:
+#### - DON'T:
 
 - Don't search on every keystroke
 - Don't ignore cancellation
@@ -551,14 +551,14 @@ val searchResults = _searchQuery
 
 ### Лучшие практики
 
-#### ✅ ДЕЛАЙТЕ:
+#### - ДЕЛАЙТЕ:
 
 - Используйте debounce для сокращения API вызовов
 - Добавляйте фильтр минимальной длины
 - Отменяйте предыдущие поиски через mapLatest
 - Обрабатывайте пустые/ошибочные состояния
 
-#### ❌ НЕ ДЕЛАЙТЕ:
+#### - НЕ ДЕЛАЙТЕ:
 
 - Не ищите при каждом нажатии клавиши
 - Не игнорируйте отмену

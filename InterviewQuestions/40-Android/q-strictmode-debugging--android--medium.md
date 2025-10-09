@@ -226,7 +226,7 @@ if (BuildConfig.DEBUG) {
 
 **Problem:**
 ```kotlin
-// ❌ BAD - Network call on main thread
+// - BAD - Network call on main thread
 fun loadData() {
     val response = httpClient.get("https://api.example.com/data")
 }
@@ -234,7 +234,7 @@ fun loadData() {
 
 **Solution:**
 ```kotlin
-// ✅ GOOD - Move to background thread
+// - GOOD - Move to background thread
 suspend fun loadData() = withContext(Dispatchers.IO) {
     val response = httpClient.get("https://api.example.com/data")
 }
@@ -244,7 +244,7 @@ suspend fun loadData() = withContext(Dispatchers.IO) {
 
 **Problem:**
 ```kotlin
-// ❌ BAD - Reading file on main thread
+// - BAD - Reading file on main thread
 fun loadConfig(): String {
     return File("config.txt").readText()
 }
@@ -252,7 +252,7 @@ fun loadConfig(): String {
 
 **Solution:**
 ```kotlin
-// ✅ GOOD - Move to background thread
+// - GOOD - Move to background thread
 suspend fun loadConfig(): String = withContext(Dispatchers.IO) {
     File("config.txt").readText()
 }
@@ -262,7 +262,7 @@ suspend fun loadConfig(): String = withContext(Dispatchers.IO) {
 
 **Problem:**
 ```kotlin
-// ❌ BAD - Cursor not closed
+// - BAD - Cursor not closed
 fun getUsers(): List<User> {
     val cursor = database.query(...)
     val users = mutableListOf<User>()
@@ -275,7 +275,7 @@ fun getUsers(): List<User> {
 
 **Solution:**
 ```kotlin
-// ✅ GOOD - Close cursor properly
+// - GOOD - Close cursor properly
 fun getUsers(): List<User> {
     database.query(...).use { cursor ->
         val users = mutableListOf<User>()
@@ -393,7 +393,7 @@ if (BuildConfig.DEBUG) {
 
 **Проблема:**
 ```kotlin
-// ❌ ПЛОХО - Сетевой вызов в основном потоке
+// - ПЛОХО - Сетевой вызов в основном потоке
 fun loadData() {
     val response = httpClient.get("https://api.example.com/data")
 }
@@ -401,7 +401,7 @@ fun loadData() {
 
 **Решение:**
 ```kotlin
-// ✅ ХОРОШО - Переместить в фоновый поток
+// - ХОРОШО - Переместить в фоновый поток
 suspend fun loadData() = withContext(Dispatchers.IO) {
     val response = httpClient.get("https://api.example.com/data")
 }
@@ -411,7 +411,7 @@ suspend fun loadData() = withContext(Dispatchers.IO) {
 
 **Проблема:**
 ```kotlin
-// ❌ ПЛОХО - Чтение файла в основном потоке
+// - ПЛОХО - Чтение файла в основном потоке
 fun loadConfig(): String {
     return File("config.txt").readText()
 }
@@ -419,7 +419,7 @@ fun loadConfig(): String {
 
 **Решение:**
 ```kotlin
-// ✅ ХОРОШО - Переместить в фоновый поток
+// - ХОРОШО - Переместить в фоновый поток
 suspend fun loadConfig(): String = withContext(Dispatchers.IO) {
     File("config.txt").readText()
 }
@@ -429,7 +429,7 @@ suspend fun loadConfig(): String = withContext(Dispatchers.IO) {
 
 **Проблема:**
 ```kotlin
-// ❌ ПЛОХО - Курсор не закрыт
+// - ПЛОХО - Курсор не закрыт
 fun getUsers(): List<User> {
     val cursor = database.query(...)
     val users = mutableListOf<User>()
@@ -442,7 +442,7 @@ fun getUsers(): List<User> {
 
 **Решение:**
 ```kotlin
-// ✅ ХОРОШО - Правильно закрыть курсор
+// - ХОРОШО - Правильно закрыть курсор
 fun getUsers(): List<User> {
     database.query(...).use { cursor ->
         val users = mutableListOf<User>()

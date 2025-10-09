@@ -549,14 +549,14 @@ onResume()
 
 **1. Keep onPause() Fast**
 ```kotlin
-// ❌ BAD - Heavy operation in onPause
+// - BAD - Heavy operation in onPause
 override fun onPause() {
     super.onPause()
     database.saveAllData() // TOO SLOW!
     uploadToServer()       // TOO SLOW!
 }
 
-// ✅ GOOD - Fast operation in onPause
+// - GOOD - Fast operation in onPause
 override fun onPause() {
     super.onPause()
     player.pause()
@@ -566,7 +566,7 @@ override fun onPause() {
 
 **2. Use ViewModel for Data**
 ```kotlin
-// ❌ BAD - Lose data on config change
+// - BAD - Lose data on config change
 class MainActivity : AppCompatActivity() {
     private var userData: List<User> = emptyList()
 
@@ -576,7 +576,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD - ViewModel survives config changes
+// - GOOD - ViewModel survives config changes
 class MainActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
 

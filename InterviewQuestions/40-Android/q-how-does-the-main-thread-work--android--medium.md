@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
 When the main thread is blocked for too long:
 
 ```kotlin
-// ❌ BAD: Blocks main thread
+// BAD: Blocks main thread
 class BadActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

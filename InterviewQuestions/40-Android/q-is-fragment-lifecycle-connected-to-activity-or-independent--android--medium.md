@@ -168,17 +168,17 @@ Fragment.onDetach()
 ```kotlin
 // This sequence is IMPOSSIBLE:
 Activity: onPause()
-Fragment: onResume()  // ❌ CANNOT happen!
+Fragment: onResume()  // - CANNOT happen!
 
 // Fragment must be in same or lower state:
 Activity: onResume()
-Fragment: onResume()  // ✅ OK
+Fragment: onResume()  // - OK
 
 Activity: onPause()
-Fragment: onPause()   // ✅ OK
+Fragment: onPause()   // - OK
 
 Activity: onPause()
-Fragment: onStop()    // ✅ OK (Fragment can be lower)
+Fragment: onStop()    // - OK (Fragment can be lower)
 ```
 
 ### Fragment-Specific Lifecycle Events

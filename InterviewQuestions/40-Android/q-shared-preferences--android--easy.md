@@ -193,10 +193,10 @@ override fun onDestroy() {
 
 ### Когда НЕ использовать SharedPreferences
 
-❌ Большие объемы данных - используйте Room/SQLite
-❌ Сложные структуры данных - используйте Room/DataStore
-❌ Чувствительные данные - используйте EncryptedSharedPreferences
-❌ Структурированные данные - используйте Room database
+- Большие объемы данных - используйте Room/SQLite
+- Сложные структуры данных - используйте Room/DataStore
+- Чувствительные данные - используйте EncryptedSharedPreferences
+- Структурированные данные - используйте Room database
 
 ### Безопасное хранение (EncryptedSharedPreferences)
 

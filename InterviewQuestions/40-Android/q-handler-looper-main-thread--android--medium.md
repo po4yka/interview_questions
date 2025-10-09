@@ -396,7 +396,7 @@ fun loadData() {
 ### Problem: Handler with Anonymous Inner Class
 
 ```kotlin
-// ❌ BAD: Potential memory leak
+// BAD: Potential memory leak
 class MainActivity : AppCompatActivity() {
 
     private val handler = object : Handler(Looper.getMainLooper()) {
@@ -413,7 +413,7 @@ class MainActivity : AppCompatActivity() {
 ### Solution 1: WeakReference
 
 ```kotlin
-// ✅ GOOD: Use WeakReference
+// GOOD: Use WeakReference
 class MainActivity : AppCompatActivity() {
 
     private val handler = MyHandler(this)
@@ -438,7 +438,7 @@ class MainActivity : AppCompatActivity() {
 ### Solution 2: Remove Callbacks in onDestroy
 
 ```kotlin
-// ✅ GOOD: Clean up in lifecycle
+// GOOD: Clean up in lifecycle
 class MainActivity : AppCompatActivity() {
 
     private val mainHandler = Handler(Looper.getMainLooper())

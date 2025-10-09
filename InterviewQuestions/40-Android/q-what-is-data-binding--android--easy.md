@@ -206,11 +206,11 @@ class MainActivity : AppCompatActivity() {
 
 | Feature | Data Binding | View Binding |
 |---------|-------------|--------------|
-| Null safety | ✅ | ✅ |
-| Type safety | ✅ | ✅ |
+| Null safety | - | - |
+| Type safety | - | - |
 | Boilerplate | Less | Minimal |
-| Two-way binding | ✅ | ❌ |
-| Expression language | ✅ | ❌ |
+| Two-way binding | - | - |
+| Expression language | - | - |
 | Build time | Slower | Faster |
 | Complexity | Higher | Lower |
 

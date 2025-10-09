@@ -60,7 +60,7 @@ recyclerView.setOnScrollListener { }
 - Чтение/запись больших файлов
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - блокирует UI
+// - НЕПРАВИЛЬНО - блокирует UI
 button.setOnClickListener {
     val data = URL("https://api.example.com/data").readText()  // NetworkOnMainThreadException!
     textView.text = data
@@ -122,7 +122,7 @@ Thread {
 Если main thread заблокирован более чем на 5 секунд, Android покажет диалог **"Application Not Responding" (ANR)**.
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - вызовет ANR
+// - НЕПРАВИЛЬНО - вызовет ANR
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)

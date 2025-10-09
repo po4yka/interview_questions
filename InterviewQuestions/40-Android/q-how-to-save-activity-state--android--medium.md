@@ -349,12 +349,12 @@ class MyFragment : Fragment() {
 
 | Approach | Survives Rotation | Survives Process Death | Survives App Close | Use Case |
 |----------|------------------|----------------------|-------------------|----------|
-| **onSaveInstanceState** | ✅ Yes | ✅ Yes (limited) | ❌ No | Lightweight UI state |
-| **ViewModel (no SavedState)** | ✅ Yes | ❌ No | ❌ No | UI-related data during session |
-| **ViewModel + SavedStateHandle** | ✅ Yes | ✅ Yes | ❌ No | UI state across process death |
-| **SharedPreferences** | ✅ Yes | ✅ Yes | ✅ Yes | User settings, small data |
-| **DataStore** | ✅ Yes | ✅ Yes | ✅ Yes | Settings, preferences (modern) |
-| **Room Database** | ✅ Yes | ✅ Yes | ✅ Yes | Large datasets, complex queries |
+| **onSaveInstanceState** | - Yes | - Yes (limited) | - No | Lightweight UI state |
+| **ViewModel (no SavedState)** | - Yes | - No | - No | UI-related data during session |
+| **ViewModel + SavedStateHandle** | - Yes | - Yes | - No | UI state across process death |
+| **SharedPreferences** | - Yes | - Yes | - Yes | User settings, small data |
+| **DataStore** | - Yes | - Yes | - Yes | Settings, preferences (modern) |
+| **Room Database** | - Yes | - Yes | - Yes | Large datasets, complex queries |
 
 ### 6. Best Practices
 
@@ -493,11 +493,11 @@ class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() 
 
 | Подход | Переживает поворот | Переживает смерть процесса | Переживает закрытие |
 |--------|-------------------|---------------------------|-------------------|
-| onSaveInstanceState | ✅ | ✅ (ограниченно) | ❌ |
-| ViewModel | ✅ | ❌ | ❌ |
-| ViewModel + SavedStateHandle | ✅ | ✅ | ❌ |
-| SharedPreferences/DataStore | ✅ | ✅ | ✅ |
-| Room | ✅ | ✅ | ✅ |
+| onSaveInstanceState | - | - (ограниченно) | - |
+| ViewModel | - | - | - |
+| ViewModel + SavedStateHandle | - | - | - |
+| SharedPreferences/DataStore | - | - | - |
+| Room | - | - | - |
 
 **Лучшая практика:** Используйте ViewModel + SavedStateHandle для UI состояния и DataStore/Room для постоянных данных.
 

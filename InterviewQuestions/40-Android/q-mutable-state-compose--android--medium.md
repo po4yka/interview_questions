@@ -119,12 +119,12 @@ fun UserProfile() {
 
 ## MutableState vs Regular Variables
 
-### ❌ Regular Variable (Doesn't Work)
+### - Regular Variable (Doesn't Work)
 
 ```kotlin
 @Composable
 fun Counter() {
-    var count = 0  // ❌ Regular variable
+    var count = 0  // - Regular variable
 
     Column {
         Text("Count: $count")
@@ -137,12 +137,12 @@ fun Counter() {
 
 **Problem:** `count++` changes the variable, but Compose doesn't know about it, so UI doesn't update.
 
-### ✅ MutableState (Works)
+### - MutableState (Works)
 
 ```kotlin
 @Composable
 fun Counter() {
-    var count by remember { mutableStateOf(0) }  // ✅ MutableState
+    var count by remember { mutableStateOf(0) }  // - MutableState
 
     Column {
         Text("Count: $count")
@@ -164,7 +164,7 @@ fun Counter() {
 ```kotlin
 @Composable
 fun Counter() {
-    var count by mutableStateOf(0)  // ❌ No remember!
+    var count by mutableStateOf(0)  // - No remember!
 
     Column {
         Text("Count: $count")
@@ -185,7 +185,7 @@ fun Counter() {
 ```kotlin
 @Composable
 fun Counter() {
-    var count by remember { mutableStateOf(0) }  // ✅ With remember!
+    var count by remember { mutableStateOf(0) }  // - With remember!
 
     Column {
         Text("Count: $count")
@@ -356,7 +356,7 @@ fun Screen() {
 fun ItemList(items: List<Item>) {
     var filter by remember { mutableStateOf("") }
 
-    // ✅ Only recalculate when items or filter change
+    // - Only recalculate when items or filter change
     val filteredItems by remember {
         derivedStateOf {
             items.filter { it.name.contains(filter, ignoreCase = true) }

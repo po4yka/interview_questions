@@ -316,13 +316,13 @@ Real Life Examples:
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use for undo/redo functionality
+// - DO: Use for undo/redo functionality
 interface UndoableCommand {
     fun execute()
     fun undo()
 }
 
-// ✅ DO: Queue commands for batch processing
+// - DO: Queue commands for batch processing
 class BatchProcessor {
     private val commands = mutableListOf<Command>()
 
@@ -336,21 +336,21 @@ class BatchProcessor {
     }
 }
 
-// ✅ DO: Use coroutines for async commands
+// - DO: Use coroutines for async commands
 interface AsyncCommand {
     suspend fun execute(): Result<Unit>
 }
 
-// ✅ DO: Macro commands for complex operations
+// - DO: Macro commands for complex operations
 class MacroCommand(private val commands: List<Command>) : Command {
     override fun execute() {
         commands.forEach { it.execute() }
     }
 }
 
-// ❌ DON'T: Use for simple method calls
-// ❌ DON'T: Store large data in commands
-// ❌ DON'T: Make commands stateful
+// - DON'T: Use for simple method calls
+// - DON'T: Store large data in commands
+// - DON'T: Make commands stateful
 ```
 
 **English**: **Command** is a behavioral pattern that encapsulates requests as objects, allowing parameterization, queuing, logging, and undo operations. **Problem**: Need to decouple request sender from receiver. **Solution**: Encapsulate requests as command objects with execute() method. **Use when**: (1) Need undo/redo, (2) Queue/log operations, (3) Decouple invoker from receiver. **Android**: Undo/redo in editors, action queuing in ViewModels. **Pros**: decoupling, undo/redo support, command queuing. **Cons**: many classes, complexity. **Examples**: Text editor undo/redo, remote controls, transaction management.

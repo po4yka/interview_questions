@@ -56,7 +56,7 @@ Android uses a **hierarchy of process importance** to decide which processes to 
 ```kotlin
 class DownloadService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // ❌ Background service - can be killed anytime
+        // - Background service - can be killed anytime
         Thread {
             // Long-running download
             for (i in 1..100) {
@@ -84,7 +84,7 @@ class DownloadService : Service() {
     private val NOTIFICATION_ID = 1
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // ✅ Raise priority with startForeground()
+        // - Raise priority with startForeground()
         val notification = createNotification()
         startForeground(NOTIFICATION_ID, notification)
 
@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, DownloadService::class.java)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // ✅ Android 8.0+ requires startForegroundService()
+            // - Android 8.0+ requires startForegroundService()
             startForegroundService(intent)
         } else {
             startService(intent)
@@ -300,7 +300,7 @@ Process Priority: Service Process (Level 3)
 └─────────────────────────────────────┘
 
 System: "Low memory! Kill this service."
-Result: ❌ Service killed, work interrupted
+Result: - Service killed, work interrupted
 ```
 
 ### After startForeground()
@@ -315,7 +315,7 @@ Process Priority: Foreground Process (Level 1)
 └─────────────────────────────────────┘
 
 System: "Low memory! But this is foreground, keep it."
-Result: ✅ Service protected, work continues
+Result: - Service protected, work continues
 ```
 
 ---
@@ -325,7 +325,7 @@ Result: ✅ Service protected, work continues
 ### 1. Process Importance (Read-Only)
 
 ```kotlin
-// ❌ Can't directly set this
+// - Can't directly set this
 // It's determined by Android based on components
 val activityManager = getSystemService(ActivityManager::class.java)
 val processes = activityManager.runningAppProcesses
@@ -377,7 +377,7 @@ class MyActivity : AppCompatActivity() {
 ### 3. JobScheduler (For Background Tasks)
 
 ```kotlin
-// ✅ System manages priority based on constraints
+// - System manages priority based on constraints
 val jobScheduler = getSystemService(JobScheduler::class.java)
 
 val job = JobInfo.Builder(JOB_ID, ComponentName(this, MyJobService::class.java))
@@ -398,10 +398,10 @@ jobScheduler.schedule(job)
 
 1. **Notification Required**
    ```kotlin
-   // ❌ Can't do this on Android 8.0+
+   // - Can't do this on Android 8.0+
    startForeground(NOTIFICATION_ID, null)  // Crashes!
 
-   // ✅ Must provide notification
+   // - Must provide notification
    startForeground(NOTIFICATION_ID, createNotification())
    ```
 
@@ -422,7 +422,7 @@ jobScheduler.schedule(job)
 
 1. **Only Use When Necessary**
    ```kotlin
-   // ❌ DON'T: Foreground service for simple background task
+   // - DON'T: Foreground service for simple background task
    class SimpleTaskService : Service() {
        override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
            startForeground(1, notification)  // Overkill!
@@ -431,7 +431,7 @@ jobScheduler.schedule(job)
        }
    }
 
-   // ✅ DO: Foreground service for user-visible long-running task
+   // - DO: Foreground service for user-visible long-running task
    class NavigationService : Service() {
        override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
            startForeground(1, notification)
@@ -443,7 +443,7 @@ jobScheduler.schedule(job)
 
 2. **Stop Foreground When Done**
    ```kotlin
-   // ✅ Always stop foreground when task completes
+   // - Always stop foreground when task completes
    fun completeTask() {
        stopForeground(STOP_FOREGROUND_REMOVE)  // Remove notification
        stopSelf()  // Stop service
@@ -482,12 +482,12 @@ jobScheduler.schedule(job)
 4. User sees **persistent notification**
 
 **When to use:**
-- ✅ Music playback
-- ✅ Navigation/location tracking
-- ✅ File download/upload (user-initiated)
-- ✅ Active fitness tracking
-- ❌ Simple background tasks (use WorkManager)
-- ❌ Periodic sync (use JobScheduler)
+- - Music playback
+- - Navigation/location tracking
+- - File download/upload (user-initiated)
+- - Active fitness tracking
+- - Simple background tasks (use WorkManager)
+- - Periodic sync (use JobScheduler)
 
 **Other priority influences:**
 - Bound service with foreground activity (inherits priority)

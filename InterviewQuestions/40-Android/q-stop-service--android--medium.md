@@ -48,7 +48,7 @@ class DownloadService : Service() {
             downloadFile()
 
             // Stop service when done
-            stopSelf()  // ✅ Stops this service
+            stopSelf()  // - Stops this service
         }.start()
 
         return START_NOT_STICKY
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun stopDownloadService() {
         val intent = Intent(this, DownloadService::class.java)
-        val stopped = stopService(intent)  // ✅ Stops the service
+        val stopped = stopService(intent)  // - Stops the service
 
         if (stopped) {
             Log.d("MainActivity", "Service stopped successfully")
@@ -112,7 +112,7 @@ class DownloadService : Service() {
             downloadFile(intent?.getStringExtra("url"))
 
             // Stop only this specific start request
-            stopSelf(startId)  // ✅ Stops service if no other startId is active
+            stopSelf(startId)  // - Stops service if no other startId is active
         }.start()
 
         return START_NOT_STICKY
@@ -175,7 +175,7 @@ class MyActivity : AppCompatActivity() {
 
     private fun unbindFromService() {
         if (isBound) {
-            unbindService(connection)  // ✅ Unbind from service
+            unbindService(connection)  // - Unbind from service
             isBound = false
             // Service stops automatically if no other clients are bound
         }
@@ -374,25 +374,25 @@ class HybridService : Service() {
 ```
 Scenario 1: Started only
 startService() → onStartCommand()
-stopService() → onDestroy()  ✅ Stops
+stopService() → onDestroy()  - Stops
 
 Scenario 2: Bound only
 bindService() → onCreate() → onBind()
-unbindService() → onUnbind() → onDestroy()  ✅ Stops
+unbindService() → onUnbind() → onDestroy()  - Stops
 
 Scenario 3: Started + Bound
 startService() → onStartCommand()
 bindService() → onBind()
 unbindService() → onUnbind()
-                  Service still running!  ⚠️
-stopService() → onDestroy()  ✅ Now stops
+                  Service still running!  WARNING
+stopService() → onDestroy()  - Now stops
 
 Scenario 4: Started + Bound (different order)
 startService() → onStartCommand()
 bindService() → onBind()
 stopService() → stopSelf() called
-                Service still running (client bound)!  ⚠️
-unbindService() → onUnbind() → onDestroy()  ✅ Now stops
+                Service still running (client bound)!  WARNING
+unbindService() → onUnbind() → onDestroy()  - Now stops
 ```
 
 ---
@@ -546,26 +546,26 @@ class MainActivity : AppCompatActivity() {
 ### Mistake 1: Not Stopping Foreground State First
 
 ```kotlin
-// ❌ BAD: Stopping service without stopping foreground
+// - BAD: Stopping service without stopping foreground
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     startForeground(NOTIFICATION_ID, notification)
 
     Thread {
         doWork()
-        stopSelf()  // ❌ Notification might remain!
+        stopSelf()  // - Notification might remain!
     }.start()
 
     return START_NOT_STICKY
 }
 
-// ✅ GOOD: Stop foreground first
+// - GOOD: Stop foreground first
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     startForeground(NOTIFICATION_ID, notification)
 
     Thread {
         doWork()
-        stopForeground(STOP_FOREGROUND_REMOVE)  // ✅ Remove notification
-        stopSelf()  // ✅ Then stop service
+        stopForeground(STOP_FOREGROUND_REMOVE)  // - Remove notification
+        stopSelf()  // - Then stop service
     }.start()
 
     return START_NOT_STICKY
@@ -575,21 +575,21 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 ### Mistake 2: Calling stopSelf() Too Early
 
 ```kotlin
-// ❌ BAD: stopSelf() before async work completes
+// - BAD: stopSelf() before async work completes
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     Thread {
         doLongRunningTask()  // 10 seconds
     }.start()
 
-    stopSelf()  // ❌ Service stops immediately, thread might be killed!
+    stopSelf()  // - Service stops immediately, thread might be killed!
     return START_NOT_STICKY
 }
 
-// ✅ GOOD: stopSelf() after work completes
+// - GOOD: stopSelf() after work completes
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     Thread {
         doLongRunningTask()  // 10 seconds
-        stopSelf()  // ✅ Stop after work is done
+        stopSelf()  // - Stop after work is done
     }.start()
 
     return START_NOT_STICKY
@@ -599,18 +599,18 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 ### Mistake 3: Not Handling Bound Service Properly
 
 ```kotlin
-// ❌ BAD: stopSelf() while clients are still bound
+// - BAD: stopSelf() while clients are still bound
 class MyService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         doWork()
-        stopSelf()  // ❌ Won't stop if clients are bound!
+        stopSelf()  // - Won't stop if clients are bound!
         return START_NOT_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder = binder
 }
 
-// ✅ GOOD: Check if service is bound before stopping
+// - GOOD: Check if service is bound before stopping
 class MyService : Service() {
     private var boundClientCount = 0
 
@@ -633,7 +633,7 @@ class MyService : Service() {
 
     private fun checkIfShouldStop() {
         if (boundClientCount == 0) {
-            stopSelf()  // ✅ Safe to stop
+            stopSelf()  // - Safe to stop
         }
     }
 }
@@ -663,10 +663,10 @@ class MyService : Service() {
 - Order doesn't matter - both must happen
 
 **Best practices:**
-1. ✅ Always `stopForeground()` before `stopSelf()` for foreground services
-2. ✅ Use `stopSelf(startId)` to handle multiple start requests
-3. ✅ Clean up resources in `onDestroy()`
-4. ✅ Cancel ongoing work when service stops
+1. - Always `stopForeground()` before `stopSelf()` for foreground services
+2. - Use `stopSelf(startId)` to handle multiple start requests
+3. - Clean up resources in `onDestroy()`
+4. - Cancel ongoing work when service stops
 
 ---
 

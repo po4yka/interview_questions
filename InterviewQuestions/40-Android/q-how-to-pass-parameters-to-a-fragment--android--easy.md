@@ -383,25 +383,25 @@ class SimpleFragment : Fragment() {
 
 ### Best Practices
 
-1. ✅ **Always use Bundle and arguments**
-2. ✅ **Create factory methods** (newInstance) in companion object
-3. ✅ **Extract arguments in onCreate()**, not in constructors
-4. ✅ **Use requireArguments()** for required parameters
-5. ✅ **Use constants** for argument keys
-6. ✅ **Prefer Parcelable** over Serializable for better performance
-7. ✅ **Use Safe Args** with Navigation Component for type safety
-8. ❌ **Never pass data via constructor** - doesn't survive configuration changes
-9. ❌ **Don't use setters** - not safe for configuration changes
+1. - **Always use Bundle and arguments**
+2. - **Create factory methods** (newInstance) in companion object
+3. - **Extract arguments in onCreate()**, not in constructors
+4. - **Use requireArguments()** for required parameters
+5. - **Use constants** for argument keys
+6. - **Prefer Parcelable** over Serializable for better performance
+7. - **Use Safe Args** with Navigation Component for type safety
+8. - **Never pass data via constructor** - doesn't survive configuration changes
+9. - **Don't use setters** - not safe for configuration changes
 
 ### Common Mistakes to Avoid
 
 ```kotlin
-// ❌ WRONG - Using constructor (doesn't survive configuration changes)
+// WRONG - Using constructor (doesn't survive configuration changes)
 class WrongFragment(private val itemId: Int) : Fragment() {
     // This will lose data on configuration change!
 }
 
-// ❌ WRONG - Using setter methods
+// WRONG - Using setter methods
 class WrongFragment : Fragment() {
     private var itemId: Int = 0
 
@@ -410,7 +410,7 @@ class WrongFragment : Fragment() {
     }
 }
 
-// ✅ CORRECT - Using Bundle
+// CORRECT - Using Bundle
 class CorrectFragment : Fragment() {
     companion object {
         private const val ARG_ITEM_ID = "item_id"

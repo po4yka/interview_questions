@@ -279,7 +279,7 @@ val retrofit = Retrofit.Builder()
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use for lazy initialization of expensive objects
+// - DO: Use for lazy initialization of expensive objects
 class LazyImageProxy(private val url: String) : ImageView {
     private val realImage: Bitmap by lazy {
         loadImageFromNetwork(url)
@@ -290,7 +290,7 @@ class LazyImageProxy(private val url: String) : ImageView {
     }
 }
 
-// ✅ DO: Use for access control
+// - DO: Use for access control
 class ProtectedFileProxy(
     private val file: File,
     private val permissions: Permissions
@@ -301,7 +301,7 @@ class ProtectedFileProxy(
     }
 }
 
-// ✅ DO: Use for logging and monitoring
+// - DO: Use for logging and monitoring
 class MonitoringProxy<T>(
     private val real: T,
     private val metrics: MetricsCollector
@@ -313,7 +313,7 @@ class MonitoringProxy<T>(
     }
 }
 
-// ✅ DO: Combine with coroutines for async operations
+// - DO: Combine with coroutines for async operations
 class AsyncCacheProxy(
     private val service: DataService
 ) {
@@ -328,9 +328,9 @@ class AsyncCacheProxy(
     }
 }
 
-// ❌ DON'T: Use for simple pass-through operations
-// ❌ DON'T: Create deep proxy chains
-// ❌ DON'T: Store large amounts of data in caching proxies
+// - DON'T: Use for simple pass-through operations
+// - DON'T: Create deep proxy chains
+// - DON'T: Store large amounts of data in caching proxies
 ```
 
 **English**: **Proxy** is a structural pattern that provides a placeholder to control access to another object. **Problem**: Need to control access, add functionality when accessing objects. **Solution**: Create proxy that implements same interface and delegates to real object while adding extra behavior. **Use when**: (1) Lazy initialization needed, (2) Access control required, (3) Logging/caching desired, (4) Remote object access. **Android**: Image lazy loading, OkHttp interceptors, caching layers. **Pros**: access control, performance optimization, transparent to client. **Cons**: complexity, performance overhead. **Examples**: Lazy image loading, database access control, caching proxy, logging interceptors.

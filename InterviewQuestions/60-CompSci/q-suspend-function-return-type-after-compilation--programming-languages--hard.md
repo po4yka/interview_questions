@@ -197,17 +197,17 @@ public static final Object simpleFunction(Continuation $completion) {
 // This wouldn't work with return type String:
 fun fetchData(cont: Continuation<String>): String {
     if (suspended) {
-        return COROUTINE_SUSPENDED  // ❌ ERROR: Type mismatch
+        return COROUTINE_SUSPENDED  // - ERROR: Type mismatch
     }
-    return "Data"  // ✅ OK
+    return "Data"  // - OK
 }
 
 // Must use Any? to allow both:
 fun fetchData(cont: Continuation<String>): Any? {
     if (suspended) {
-        return COROUTINE_SUSPENDED  // ✅ OK (Any)
+        return COROUTINE_SUSPENDED  // - OK (Any)
     }
-    return "Data"  // ✅ OK (String is subtype of Any)
+    return "Data"  // - OK (String is subtype of Any)
 }
 ```
 

@@ -44,7 +44,7 @@ A class (the same construction process) can delegate to different `Builder` obje
 Also builder solves problem of **telescoping constructors**, when many variants of constructor are created with increasing number of arguments:
 
 ```kotlin
-// ❌ Telescoping Constructor Anti-Pattern
+// - Telescoping Constructor Anti-Pattern
 constructor(firstName: String): this(firstName, "", 0)
 constructor(firstName: String, lastName: String): this(firstName, lastName, 0)
 constructor(firstName: String, lastName: String, age: Int)
@@ -244,7 +244,7 @@ val request = HttpRequest.Builder("https://api.example.com/users")
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use private constructor
+// - DO: Use private constructor
 class Product private constructor(
     val param1: String,
     val param2: Int
@@ -252,24 +252,24 @@ class Product private constructor(
     class Builder { /* ... */ }
 }
 
-// ✅ DO: Return builder from setter methods (fluent interface)
+// - DO: Return builder from setter methods (fluent interface)
 fun param1(value: String) = apply { this.param1 = value }
 
-// ✅ DO: Validate in build() method
+// - DO: Validate in build() method
 fun build(): Product {
     require(param1.isNotBlank()) { "param1 is required" }
     return Product(param1, param2)
 }
 
-// ✅ DO: Use nested Builder class
+// - DO: Use nested Builder class
 class Product {
     class Builder { /* ... */ }
 }
 
-// ❌ DON'T: Use builder for simple data classes
+// - DON'T: Use builder for simple data classes
 // Prefer Kotlin named parameters
 
-// ❌ DON'T: Forget validation
+// - DON'T: Forget validation
 // Build should validate before creating object
 ```
 

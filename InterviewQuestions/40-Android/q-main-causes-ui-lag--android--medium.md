@@ -38,13 +38,13 @@ The main causes of **UI lag** (janky user interface) in Android applications inc
 **Solution:** Execute heavy operations in background threads:
 
 ```kotlin
-// ❌ BAD - Blocks UI thread
+// - BAD - Blocks UI thread
 fun loadData() {
     val data = database.getAllUsers()  // Blocks UI!
     updateUI(data)
 }
 
-// ✅ GOOD - Using Coroutines
+// - GOOD - Using Coroutines
 suspend fun loadData() {
     val data = withContext(Dispatchers.IO) {
         database.getAllUsers()  // Runs on background thread
@@ -52,7 +52,7 @@ suspend fun loadData() {
     updateUI(data)  // Back to main thread
 }
 
-// ✅ GOOD - Using Flow
+// - GOOD - Using Flow
 fun observeUsers() {
     viewModelScope.launch {
         database.getUsersFlow()
@@ -86,7 +86,7 @@ fun observeUsers() {
 **Solution:** Use simpler, flatter layouts:
 
 ```xml
-<!-- ❌ BAD - Deeply nested (4 levels) -->
+<!-- - BAD - Deeply nested (4 levels) -->
 <LinearLayout>
     <RelativeLayout>
         <LinearLayout>
@@ -98,7 +98,7 @@ fun observeUsers() {
     </RelativeLayout>
 </LinearLayout>
 
-<!-- ✅ GOOD - Flat hierarchy (1 level) -->
+<!-- - GOOD - Flat hierarchy (1 level) -->
 <androidx.constraintlayout.widget.ConstraintLayout>
     <TextView
         app:layout_constraintStart_toStartOf="parent"
@@ -132,25 +132,25 @@ fun observeUsers() {
 **Solution:** Use image loading libraries:
 
 ```kotlin
-// ❌ BAD - Manual bitmap loading
+// - BAD - Manual bitmap loading
 val bitmap = BitmapFactory.decodeFile(imagePath)  // Full size!
 imageView.setImageBitmap(bitmap)  // Blocks UI!
 
-// ✅ GOOD - Using Glide
+// - GOOD - Using Glide
 Glide.with(context)
     .load(imageUrl)
     .placeholder(R.drawable.placeholder)
     .error(R.drawable.error)
     .into(imageView)
 
-// ✅ GOOD - Using Coil (Kotlin-first)
+// - GOOD - Using Coil (Kotlin-first)
 imageView.load(imageUrl) {
     crossfade(true)
     placeholder(R.drawable.placeholder)
     transformations(CircleCropTransformation())
 }
 
-// ✅ GOOD - Using Picasso
+// - GOOD - Using Picasso
 Picasso.get()
     .load(imageUrl)
     .resize(200, 200)
@@ -180,24 +180,24 @@ Picasso.get()
 **Solution:** Minimize and batch UI updates:
 
 ```kotlin
-// ❌ BAD - Updates entire list
+// - BAD - Updates entire list
 fun updateAllItems() {
     adapter.notifyDataSetChanged()  // Redraws everything!
 }
 
-// ✅ GOOD - Update specific items
+// - GOOD - Update specific items
 fun updateItem(position: Int) {
     adapter.notifyItemChanged(position)
 }
 
-// ✅ GOOD - Batch updates
+// - GOOD - Batch updates
 fun updateMultipleItems(positions: List<Int>) {
     positions.forEach { position ->
         adapter.notifyItemChanged(position)
     }
 }
 
-// ✅ BEST - Use DiffUtil
+// - BEST - Use DiffUtil
 fun updateList(newList: List<Item>) {
     val diffResult = DiffUtil.calculateDiff(
         MyDiffCallback(oldList, newList)
@@ -238,23 +238,23 @@ fun scheduleUpdate(data: Data) {
 **Solution:** Use hardware-accelerated animations:
 
 ```kotlin
-// ❌ BAD - Layout animation (slow)
+// - BAD - Layout animation (slow)
 TranslateAnimation(0f, 100f, 0f, 0f).apply {
     duration = 300
     view.startAnimation(this)
 }
 
-// ✅ GOOD - ViewPropertyAnimator (hardware-accelerated)
+// - GOOD - ViewPropertyAnimator (hardware-accelerated)
 view.animate()
     .translationX(100f)
     .setDuration(300)
     .start()
 
-// ✅ GOOD - TransitionManager for layout changes
+// - GOOD - TransitionManager for layout changes
 TransitionManager.beginDelayedTransition(container)
 view.visibility = View.VISIBLE
 
-// ✅ GOOD - Jetpack Compose animations
+// - GOOD - Jetpack Compose animations
 AnimatedVisibility(visible = isVisible) {
     Text("Hello")
 }
@@ -391,16 +391,16 @@ if (BuildConfig.DEBUG) {
 
 ## Best Practices
 
-1. ✅ **Keep frame time < 16ms** (60fps)
-2. ✅ **Never block main thread** (use coroutines)
-3. ✅ **Use ConstraintLayout** for complex UIs
-4. ✅ **Use image loading libraries** (Glide, Coil)
-5. ✅ **Batch UI updates** (DiffUtil)
-6. ✅ **Use hardware-accelerated animations**
-7. ✅ **Profile performance** (Systrace, GPU Profiling)
-8. ✅ **Enable StrictMode** in debug builds
-9. ✅ **Fix memory leaks** (LeakCanary)
-10. ✅ **Test on low-end devices**
+1. - **Keep frame time < 16ms** (60fps)
+2. - **Never block main thread** (use coroutines)
+3. - **Use ConstraintLayout** for complex UIs
+4. - **Use image loading libraries** (Glide, Coil)
+5. - **Batch UI updates** (DiffUtil)
+6. - **Use hardware-accelerated animations**
+7. - **Profile performance** (Systrace, GPU Profiling)
+8. - **Enable StrictMode** in debug builds
+9. - **Fix memory leaks** (LeakCanary)
+10. - **Test on low-end devices**
 
 ---
 

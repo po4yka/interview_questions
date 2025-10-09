@@ -414,17 +414,17 @@ process("hello")
 
 ## When JIT Excels
 
-- ✅ Long-running applications (servers, desktop apps)
-- ✅ Workloads with hot paths
-- ✅ Applications with complex object interactions
-- ✅ Cross-platform deployments
+- - Long-running applications (servers, desktop apps)
+- - Workloads with hot paths
+- - Applications with complex object interactions
+- - Cross-platform deployments
 
 ## When AOT is Better
 
-- ✅ Short-lived CLI tools
-- ✅ Embedded systems (limited resources)
-- ✅ Predictable performance requirements
-- ✅ Mobile apps (faster startup)
+- - Short-lived CLI tools
+- - Embedded systems (limited resources)
+- - Predictable performance requirements
+- - Mobile apps (faster startup)
 
 ---
 
@@ -436,15 +436,15 @@ process("hello")
 - Adapts to actual runtime behavior
 
 **Advantages:**
-- ✅ Performance boost for hot code (near-native speed)
-- ✅ Flexible optimization for specific hardware
-- ✅ Adaptive optimization based on profiling
-- ✅ Cross-platform (bytecode is portable)
+- - Performance boost for hot code (near-native speed)
+- - Flexible optimization for specific hardware
+- - Adaptive optimization based on profiling
+- - Cross-platform (bytecode is portable)
 
 **Disadvantages:**
-- ❌ Warmup time (slow start)
-- ❌ Memory overhead (compiler + compiled code)
-- ❌ Unpredictable performance (depends on warmup)
+- - Warmup time (slow start)
+- - Memory overhead (compiler + compiled code)
+- - Unpredictable performance (depends on warmup)
 
 **Used in:**
 - Java/Kotlin (HotSpot JVM)

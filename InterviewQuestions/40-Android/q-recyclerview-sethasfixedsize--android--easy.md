@@ -51,7 +51,7 @@ When you call `setHasFixedSize(true)`, you're informing RecyclerView that:
 ### Performance Impact
 
 ```kotlin
-// ✅ Use when RecyclerView size is fixed
+// - Use when RecyclerView size is fixed
 recyclerView.apply {
     layoutManager = LinearLayoutManager(context)
     adapter = myAdapter
@@ -95,7 +95,7 @@ Better performance
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
 
-recyclerView.setHasFixedSize(true)  // ✅ Safe to use
+recyclerView.setHasFixedSize(true)  // - Safe to use
 ```
 
 2. **RecyclerView has fixed dimensions**
@@ -106,7 +106,7 @@ recyclerView.setHasFixedSize(true)  // ✅ Safe to use
     android:layout_width="match_parent"
     android:layout_height="400dp" />
 
-recyclerView.setHasFixedSize(true)  // ✅ Safe to use
+recyclerView.setHasFixedSize(true)  // - Safe to use
 ```
 
 3. **Inside ConstraintLayout with constraints**
@@ -122,7 +122,7 @@ recyclerView.setHasFixedSize(true)  // ✅ Safe to use
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
-recyclerView.setHasFixedSize(true)  // ✅ Safe to use
+recyclerView.setHasFixedSize(true)  // - Safe to use
 ```
 
 #### DON'T use `setHasFixedSize(true)` when:
@@ -135,7 +135,7 @@ recyclerView.setHasFixedSize(true)  // ✅ Safe to use
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 
-recyclerView.setHasFixedSize(true)  // ❌ Don't use!
+recyclerView.setHasFixedSize(true)  // - Don't use!
 // Size WILL change as items are added/removed
 ```
 
@@ -143,7 +143,7 @@ recyclerView.setHasFixedSize(true)  // ❌ Don't use!
 
 ```kotlin
 // Example: Expandable items that change RecyclerView size
-recyclerView.setHasFixedSize(true)  // ❌ Don't use if items expand/collapse
+recyclerView.setHasFixedSize(true)  // - Don't use if items expand/collapse
 ```
 
 ### Code Examples
@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             this.adapter = adapter
-            setHasFixedSize(true)  // ✅ RecyclerView is match_parent
+            setHasFixedSize(true)  // - RecyclerView is match_parent
         }
 
         adapter.submitList(getUsers())
@@ -188,7 +188,7 @@ class ProductListFragment : Fragment() {
         binding.recyclerView.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = ProductAdapter()
-            setHasFixedSize(true)  // ✅ Size constrained by layout
+            setHasFixedSize(true)  // - Size constrained by layout
         }
     }
 }
@@ -229,7 +229,7 @@ class PerformanceTestActivity : AppCompatActivity() {
         recyclerViewFast.apply {
             layoutManager = LinearLayoutManager(this@PerformanceTestActivity)
             adapter = TestAdapter()
-            setHasFixedSize(true)  // ✅ Faster
+            setHasFixedSize(true)  // - Faster
         }
 
         // Benchmark: Add 1000 items
@@ -294,19 +294,19 @@ class BenchmarkAdapter : RecyclerView.Adapter<BenchmarkAdapter.ViewHolder>() {
 
 | Scenario | setHasFixedSize(true) | setHasFixedSize(false) |
 |----------|----------------------|------------------------|
-| RecyclerView remeasured on item add/remove | ❌ No | ✅ Yes |
-| Parent view hierarchy remeasured | ❌ No | ✅ Yes |
-| Performance with many updates | ✅ Fast | ❌ Slower |
-| Works with wrap_content height | ❌ No | ✅ Yes |
-| Works with match_parent | ✅ Yes | ✅ Yes |
-| Works with fixed dimensions | ✅ Yes | ✅ Yes |
+| RecyclerView remeasured on item add/remove | - No | - Yes |
+| Parent view hierarchy remeasured | - No | - Yes |
+| Performance with many updates | - Fast | - Slower |
+| Works with wrap_content height | - No | - Yes |
+| Works with match_parent | - Yes | - Yes |
+| Works with fixed dimensions | - Yes | - Yes |
 
 ### Best Practices
 
 1. **Use for full-screen lists**
 
 ```kotlin
-// ✅ GOOD
+// - GOOD
 recyclerView.apply {
     layoutManager = LinearLayoutManager(context)
     setHasFixedSize(true)  // RecyclerView is match_parent
@@ -316,7 +316,7 @@ recyclerView.apply {
 2. **Use for fixed-dimension layouts**
 
 ```kotlin
-// ✅ GOOD
+// - GOOD
 recyclerView.apply {
     layoutManager = GridLayoutManager(context, 2)
     setHasFixedSize(true)  // Fixed grid layout
@@ -326,7 +326,7 @@ recyclerView.apply {
 3. **DON'T use with wrap_content**
 
 ```kotlin
-// ❌ BAD
+// - BAD
 <RecyclerView
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
@@ -349,7 +349,7 @@ recyclerView.apply {
 **Mistake 1: Using with wrap_content**
 
 ```kotlin
-// ❌ WRONG
+// - WRONG
 <RecyclerView
     android:layout_height="wrap_content" />
 
@@ -359,7 +359,7 @@ recyclerView.setHasFixedSize(true)  // Inconsistent!
 **Mistake 2: Assuming it affects adapter**
 
 ```kotlin
-// ❌ MISCONCEPTION
+// - MISCONCEPTION
 recyclerView.setHasFixedSize(true)
 // This does NOT mean adapter size is fixed!
 // It means RecyclerView VIEW size is fixed

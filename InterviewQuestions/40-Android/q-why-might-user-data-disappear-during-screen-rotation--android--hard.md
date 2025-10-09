@@ -23,7 +23,7 @@ Android recreates the Activity to:
 ### The Problem
 
 ```kotlin
-// ❌ Data will be lost on rotation
+// - Data will be lost on rotation
 class FormActivity : AppCompatActivity() {
 
     private var userInput: String = ""
@@ -50,8 +50,8 @@ class FormActivity : AppCompatActivity() {
 
     // 📱 Device rotated
     // 🔄 onCreate() called again
-    // ❌ userInput = "" (lost)
-    // ❌ selectedItemPosition = 0 (lost)
+    // - userInput = "" (lost)
+    // - selectedItemPosition = 0 (lost)
 }
 ```
 
@@ -96,7 +96,7 @@ class FormActivity : AppCompatActivity() {
         spinner = findViewById(R.id.spinner)
         checkBox = findViewById(R.id.checkBox)
 
-        // ✅ Restore saved state
+        // - Restore saved state
         savedInstanceState?.let {
             editText.setText(it.getString(KEY_USER_INPUT, ""))
             spinner.setSelection(it.getInt(KEY_SELECTED_POSITION, 0))
@@ -107,7 +107,7 @@ class FormActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        // ✅ Save current state
+        // - Save current state
         outState.putString(KEY_USER_INPUT, editText.text.toString())
         outState.putInt(KEY_SELECTED_POSITION, spinner.selectedItemPosition)
         outState.putBoolean(KEY_CHECKBOX_STATE, checkBox.isChecked)
@@ -153,7 +153,7 @@ class FormActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
 
-        // ✅ ViewModel survives rotation
+        // - ViewModel survives rotation
         // Data automatically preserved
 
         viewModel.userInput.observe(this) { input ->
@@ -207,7 +207,7 @@ class FormActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
 
-        // ✅ Restores automatically
+        // - Restores automatically
         findViewById<EditText>(R.id.editText).apply {
             setText(viewModel.userInput)
             addTextChangedListener { text ->
@@ -221,7 +221,7 @@ class FormActivity : AppCompatActivity() {
 ### Solution 4: retainInstance (Deprecated for Fragments)
 
 ```kotlin
-// ⚠️ Deprecated - use ViewModel instead
+// WARNING: Deprecated - use ViewModel instead
 class DataFragment : Fragment() {
 
     private var data: LargeDataSet? = null
@@ -241,7 +241,7 @@ class DataFragment : Fragment() {
 
 ```xml
 <!-- AndroidManifest.xml -->
-<!-- ⚠️ Not recommended - handle rotation properly instead -->
+<!-- WARNING: Not recommended - handle rotation properly instead -->
 <activity
     android:name=".MainActivity"
     android:configChanges="orientation|screenSize|keyboardHidden">
@@ -302,7 +302,7 @@ Views with IDs automatically save basic state:
 ```kotlin
 class ComplexActivity : AppCompatActivity() {
 
-    // ❌ Need manual save
+    // - Need manual save
     private var userScore: Int = 0
     private var currentLevel: Int = 1
     private lateinit var gameState: GameState
@@ -311,7 +311,7 @@ class ComplexActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        // ✅ Save manually
+        // - Save manually
         outState.putInt("score", userScore)
         outState.putInt("level", currentLevel)
         outState.putParcelable("game_state", gameState)
@@ -321,7 +321,7 @@ class ComplexActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ✅ Restore manually
+        // - Restore manually
         savedInstanceState?.let {
             userScore = it.getInt("score", 0)
             currentLevel = it.getInt("level", 1)
@@ -336,33 +336,33 @@ class ComplexActivity : AppCompatActivity() {
 ### Common Mistakes
 
 ```kotlin
-// ❌ Mistake 1: Not using savedInstanceState
+// - Mistake 1: Not using savedInstanceState
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     // Always initializing with defaults
     var counter = 0 // Lost on rotation!
 }
 
-// ❌ Mistake 2: Calling super after restoring
+// - Mistake 2: Calling super after restoring
 override fun onCreate(savedInstanceState: Bundle?) {
     restoreState(savedInstanceState) // Wrong order!
     super.onCreate(savedInstanceState)
 }
 
-// ❌ Mistake 3: Not calling super in onSaveInstanceState
+// - Mistake 3: Not calling super in onSaveInstanceState
 override fun onSaveInstanceState(outState: Bundle) {
     // super.onSaveInstanceState(outState) // Missing!
     outState.putString("key", "value")
 }
 
-// ❌ Mistake 4: Saving large data in Bundle
+// - Mistake 4: Saving large data in Bundle
 override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     outState.putParcelableArrayList("huge_list", ArrayList(millionItems))
     // TransactionTooLargeException!
 }
 
-// ✅ Correct approach
+// - Correct approach
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
@@ -427,7 +427,7 @@ class RegistrationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
 
-        // ✅ All data preserved on rotation
+        // - All data preserved on rotation
         setupViews()
     }
 

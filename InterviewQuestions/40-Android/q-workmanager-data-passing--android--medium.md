@@ -377,13 +377,13 @@ override suspend fun doWork(): Result {
 **Data size is limited to ~10KB** (10,240 bytes total).
 
 ```kotlin
-// ❌ BAD: Large data
+// - BAD: Large data
 val largeData = workDataOf(
     "large_string" to "A".repeat(20000) // Exceeds limit!
 )
 // Throws: IllegalStateException - Data cannot occupy more than 10240 bytes
 
-// ✅ GOOD: Pass reference instead
+// - GOOD: Pass reference instead
 val data = workDataOf(
     "file_path" to "/path/to/file.txt", // Small reference
     "user_id" to "user123"
@@ -615,10 +615,10 @@ class MainActivity : AppCompatActivity() {
    ```
 
 **Limitations:**
-- ⚠️ Maximum size: ~10KB total
-- ⚠️ Only primitive types and arrays
-- ✅ Use JSON for complex objects
-- ✅ Pass file paths or IDs for large data
+- WARNING: Maximum size: ~10KB total
+- WARNING: Only primitive types and arrays
+- - Use JSON for complex objects
+- - Pass file paths or IDs for large data
 
 ---
 

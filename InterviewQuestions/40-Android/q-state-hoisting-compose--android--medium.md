@@ -21,7 +21,7 @@ status: reviewed
 ### Проблема: Stateful компонент
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - stateful компонент (сложно переиспользовать)
+// - НЕПРАВИЛЬНО - stateful компонент (сложно переиспользовать)
 @Composable
 fun SearchBar() {
     var query by remember { mutableStateOf("") }
@@ -43,7 +43,7 @@ fun SearchBar() {
 ### Решение: State Hoisting
 
 ```kotlin
-// ✅ ПРАВИЛЬНО - stateless компонент (переиспользуемый)
+// - ПРАВИЛЬНО - stateless компонент (переиспользуемый)
 @Composable
 fun SearchBar(
     query: String,
@@ -71,11 +71,11 @@ fun SearchScreen() {
 ```
 
 **Преимущества**:
-- ✅ **Single source of truth** - состояние в одном месте
-- ✅ **Reusability** - компонент можно переиспользовать
-- ✅ **Testability** - легко тестировать
-- ✅ **Predictability** - явный контроль состояния
-- ✅ **Composability** - легко комбинировать
+- - **Single source of truth** - состояние в одном месте
+- - **Reusability** - компонент можно переиспользовать
+- - **Testability** - легко тестировать
+- - **Predictability** - явный контроль состояния
+- - **Composability** - легко комбинировать
 
 ### Принципы State Hoisting
 
@@ -391,10 +391,10 @@ fun Screen() {
 ```
 
 **Когда использовать**:
-- ✅ Простой UI-only state
-- ✅ Не нужен доступ к состоянию извне
-- ✅ Не нужно сохранять состояние
-- ✅ Примеры: animation state, scroll state, expanded/collapsed
+- - Простой UI-only state
+- - Не нужен доступ к состоянию извне
+- - Не нужно сохранять состояние
+- - Примеры: animation state, scroll state, expanded/collapsed
 
 #### Stateless - hoisted состояние
 
@@ -421,11 +421,11 @@ fun Screen() {
 ```
 
 **Когда использовать**:
-- ✅ Нужен контроль состояния извне
-- ✅ Множественное использование
-- ✅ Тестирование
-- ✅ Состояние в ViewModel
-- ✅ Примеры: форма ввода, фильтры, выбранные элементы
+- - Нужен контроль состояния извне
+- - Множественное использование
+- - Тестирование
+- - Состояние в ViewModel
+- - Примеры: форма ввода, фильтры, выбранные элементы
 
 ### Практические примеры
 
@@ -638,7 +638,7 @@ fun ProductList(
 **1. Hoist до нужного уровня**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО - state на правильном уровне
+// - ПРАВИЛЬНО - state на правильном уровне
 @Composable
 fun Screen() {
     var count by remember { mutableStateOf(0) }
@@ -649,7 +649,7 @@ fun Screen() {
     }
 }
 
-// ❌ НЕПРАВИЛЬНО - слишком высоко (ViewModel не нужен)
+// - НЕПРАВИЛЬНО - слишком высоко (ViewModel не нужен)
 @HiltViewModel
 class CounterViewModel : ViewModel() {
     var count by mutableStateOf(0) // Overkill для простого счетчика
@@ -659,14 +659,14 @@ class CounterViewModel : ViewModel() {
 **2. Используйте data class для сложного состояния**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 data class FormState(
     val name: String,
     val email: String,
     val phone: String
 )
 
-// ❌ НЕПРАВИЛЬНО - много отдельных параметров
+// - НЕПРАВИЛЬНО - много отдельных параметров
 @Composable
 fun Form(
     name: String,
@@ -695,11 +695,11 @@ fun SearchBar(
 **4. Не передавайте лишние параметры**
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - передаем весь ViewModel
+// - НЕПРАВИЛЬНО - передаем весь ViewModel
 @Composable
 fun ProductCard(viewModel: ProductViewModel) { }
 
-// ✅ ПРАВИЛЬНО - только нужные данные
+// - ПРАВИЛЬНО - только нужные данные
 @Composable
 fun ProductCard(
     product: Product,

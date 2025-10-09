@@ -92,17 +92,17 @@ internal fun internalFunction() {}  // Visible in same module
 | `public` | Default, visible everywhere | Visible everywhere |
 | `private` | File-level or class-only | Class-only |
 | `protected` | Class + subclasses | Class + subclasses + package |
-| `internal` | Module-level | ❌ No equivalent |
+| `internal` | Module-level | - No equivalent |
 | (no modifier) | Same as `public` | Package-private (default) |
 
 **Visibility Table:**
 
 | Modifier | Same Class | Same File | Subclass | Same Module | Outside Module |
 |----------|------------|-----------|----------|-------------|----------------|
-| `private` | ✅ | ✅ (top-level) | ❌ | ❌ | ❌ |
-| `protected` | ✅ | ❌ | ✅ | ❌ | ❌ |
-| `internal` | ✅ | ✅ | ✅ | ✅ | ❌ |
-| `public` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `private` | - | - (top-level) | - | - | - |
+| `protected` | - | - | - | - | - |
+| `internal` | - | - | - | - | - |
+| `public` | - | - | - | - | - |
 
 **Best Practices:**
 - Use the most restrictive modifier possible

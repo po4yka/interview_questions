@@ -193,21 +193,21 @@ data class UiState(
 - Cannot be `abstract`, `open`, `sealed`, or `inner`
 
 ```kotlin
-// ✅ Valid
+// - Valid
 data class User(val name: String, val age: Int)
 
-// ✅ Valid (var allowed)
+// - Valid (var allowed)
 data class MutableUser(var name: String, var age: Int)
 
-// ❌ Invalid (no parameters)
+// - Invalid (no parameters)
 data class Empty()  // Error!
 
-// ❌ Invalid (parameters not in constructor)
+// - Invalid (parameters not in constructor)
 data class Invalid {
     val name: String = ""  // Error!
 }
 
-// ❌ Invalid (open/abstract)
+// - Invalid (open/abstract)
 open data class OpenUser(val name: String)  // Error!
 ```
 

@@ -72,13 +72,13 @@ fun useAsStar(star: Crate<*>) {
     val anyNullable = star.produce()  // Type is Any?
 
     // Cannot access T's properties - don't know the type
-    // anyNullable.getColor()  // ❌ Error
+    // anyNullable.getColor()  // - Error
 
     // Cannot consume - don't know the type of Crate
-    // star.consume(Fruit())  // ❌ Error
+    // star.consume(Fruit())  // - Error
 
     // Only use T-independent functions
-    star.size()  // ✅ OK
+    star.size()  // - OK
 }
 ```
 
@@ -87,15 +87,15 @@ fun useAsStar(star: Crate<*>) {
 ```kotlin
 fun useAsAny(any: Crate<Any>) {
     // T is known to be Any - can produce
-    val anyNonNull = any.produce()  // ✅ Type is Any
+    val anyNonNull = any.produce()  // - Type is Any
 
     // T is known to be Any - can consume
-    any.consume(Fruit())  // ✅ OK
-    any.consume("String")  // ✅ OK
-    any.consume(42)  // ✅ OK - all are subtypes of Any
+    any.consume(Fruit())  // - OK
+    any.consume("String")  // - OK
+    any.consume(42)  // - OK - all are subtypes of Any
 
     // Can use T-independent functions too
-    any.size()  // ✅ OK
+    any.size()  // - OK
 }
 ```
 
@@ -125,11 +125,11 @@ val firstAny: Any = anyList.first()  // Can be Any (non-null)
 
 ```kotlin
 val unknownMutable: MutableList<*> = mutableListOf("a", "b")
-// unknownMutable.add("c")  // ❌ Cannot add - unknown type
+// unknownMutable.add("c")  // - Cannot add - unknown type
 
 val anyMutable: MutableList<Any> = mutableListOf("a", 2)
-anyMutable.add(3.0)  // ✅ OK - Any accepts everything
-anyMutable.add("d")  // ✅ OK
+anyMutable.add(3.0)  // - OK - Any accepts everything
+anyMutable.add("d")  // - OK
 ```
 
 #### Type Safety Comparison
@@ -212,10 +212,10 @@ fun useAsStar(star: Crate<*>) {
     val anyNullable = star.produce()  // Тип Any?
 
     // Нельзя потреблять
-    // star.consume(Fruit())  // ❌ Ошибка
+    // star.consume(Fruit())  // - Ошибка
 
     // Только T-независимые функции
-    star.size()  // ✅ OK
+    star.size()  // - OK
 }
 ```
 
@@ -224,14 +224,14 @@ fun useAsStar(star: Crate<*>) {
 ```kotlin
 fun useAsAny(any: Crate<Any>) {
     // T известен как Any - может производить
-    val anyNonNull = any.produce()  // ✅ Тип Any
+    val anyNonNull = any.produce()  // - Тип Any
 
     // T известен как Any - может потреблять
-    any.consume(Fruit())  // ✅ OK
-    any.consume("String")  // ✅ OK
-    any.consume(42)  // ✅ OK
+    any.consume(Fruit())  // - OK
+    any.consume("String")  // - OK
+    any.consume(42)  // - OK
 
-    any.size()  // ✅ OK
+    any.size()  // - OK
 }
 ```
 

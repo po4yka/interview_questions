@@ -114,7 +114,7 @@ class UserViewModel : ViewModel() {
 
 **LiveData - Built-in Lifecycle Awareness**:
 ```kotlin
-// ✅ LiveData automatically stops when lifecycle is not active
+// - LiveData automatically stops when lifecycle is not active
 class UserActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
 
@@ -131,7 +131,7 @@ class UserActivity : AppCompatActivity() {
 
 **Flow - Manual Lifecycle Handling Required**:
 ```kotlin
-// ❌ BAD: Flow doesn't respect lifecycle automatically
+// - BAD: Flow doesn't respect lifecycle automatically
 class UserActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
 
@@ -147,7 +147,7 @@ class UserActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD: Use repeatOnLifecycle
+// - GOOD: Use repeatOnLifecycle
 class UserActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
 
@@ -386,20 +386,20 @@ class UserViewModelTest {
 ### When to Use Each
 
 **Use LiveData When**:
-- ✅ Simple UI state management
-- ✅ Working in legacy Android codebase (already using LiveData)
-- ✅ You need lifecycle awareness with minimal boilerplate
-- ✅ Team is unfamiliar with Flow/coroutines
-- ✅ Simple observe-and-update pattern
+- - Simple UI state management
+- - Working in legacy Android codebase (already using LiveData)
+- - You need lifecycle awareness with minimal boilerplate
+- - Team is unfamiliar with Flow/coroutines
+- - Simple observe-and-update pattern
 
 **Use Flow/StateFlow When**:
-- ✅ Complex data transformations (operators needed)
-- ✅ Repository layer (platform-agnostic)
-- ✅ Need backpressure handling
-- ✅ Combining multiple data streams
-- ✅ Modern Kotlin-first codebase
-- ✅ Advanced use cases (debouncing, retry logic, etc.)
-- ✅ Multi-platform projects (KMM)
+- - Complex data transformations (operators needed)
+- - Repository layer (platform-agnostic)
+- - Need backpressure handling
+- - Combining multiple data streams
+- - Modern Kotlin-first codebase
+- - Advanced use cases (debouncing, retry logic, etc.)
+- - Multi-platform projects (KMM)
 
 ### Migration Pattern: LiveData → Flow
 
@@ -464,20 +464,20 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 ### Summary
 
 **LiveData**:
-- ✅ Simple, Android-specific
-- ✅ Built-in lifecycle awareness
-- ✅ Easy to learn
-- ❌ Limited operators
-- ❌ Android-only
-- ❌ Less powerful
+- - Simple, Android-specific
+- - Built-in lifecycle awareness
+- - Easy to learn
+- - Limited operators
+- - Android-only
+- - Less powerful
 
 **Flow/StateFlow**:
-- ✅ Powerful, flexible
-- ✅ Rich operator set
-- ✅ Platform-agnostic
-- ✅ Better testing
-- ❌ Requires manual lifecycle handling
-- ❌ Steeper learning curve
+- - Powerful, flexible
+- - Rich operator set
+- - Platform-agnostic
+- - Better testing
+- - Requires manual lifecycle handling
+- - Steeper learning curve
 
 **Modern Recommendation**: Use **StateFlow/SharedFlow** for new projects, migrate from LiveData when adding complex features or working on repository layer.
 
@@ -548,7 +548,7 @@ lifecycleScope.launch {
 
 **LiveData - Встроенный Учет Жизненного Цикла**:
 ```kotlin
-// ✅ LiveData автоматически останавливается когда lifecycle неактивен
+// - LiveData автоматически останавливается когда lifecycle неактивен
 class UserActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
 
@@ -565,7 +565,7 @@ class UserActivity : AppCompatActivity() {
 
 **Flow - Требуется Ручная Обработка Жизненного Цикла**:
 ```kotlin
-// ❌ ПЛОХО: Flow не учитывает lifecycle автоматически
+// - ПЛОХО: Flow не учитывает lifecycle автоматически
 class UserActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
 
@@ -581,7 +581,7 @@ class UserActivity : AppCompatActivity() {
     }
 }
 
-// ✅ ХОРОШО: Используйте repeatOnLifecycle
+// - ХОРОШО: Используйте repeatOnLifecycle
 class UserActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
 
@@ -603,20 +603,20 @@ class UserActivity : AppCompatActivity() {
 ### Резюме
 
 **LiveData**:
-- ✅ Простой, специфичный для Android
-- ✅ Встроенный учет жизненного цикла
-- ✅ Легко изучить
-- ❌ Ограниченные операторы
-- ❌ Только для Android
-- ❌ Менее мощный
+- - Простой, специфичный для Android
+- - Встроенный учет жизненного цикла
+- - Легко изучить
+- - Ограниченные операторы
+- - Только для Android
+- - Менее мощный
 
 **Flow/StateFlow**:
-- ✅ Мощный, гибкий
-- ✅ Богатый набор операторов
-- ✅ Платформо-независимый
-- ✅ Лучшее тестирование
-- ❌ Требует ручной обработки жизненного цикла
-- ❌ Более крутая кривая обучения
+- - Мощный, гибкий
+- - Богатый набор операторов
+- - Платформо-независимый
+- - Лучшее тестирование
+- - Требует ручной обработки жизненного цикла
+- - Более крутая кривая обучения
 
 **Современная Рекомендация**: Используйте **StateFlow/SharedFlow** для новых проектов, мигрируйте с LiveData при добавлении сложных функций или работе со слоем репозитория.
 

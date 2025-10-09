@@ -37,24 +37,24 @@ suspend fun logEvent(event: String) {
 ### Calling Suspend Functions
 
 ```kotlin
-// ❌ WRONG: Cannot call from regular function
+// - WRONG: Cannot call from regular function
 fun regularFunction() {
     val data = fetchData()  // Compilation error!
 }
 
-// ✅ CORRECT: Call from coroutine builder
+// - CORRECT: Call from coroutine builder
 fun main() = runBlocking {
     val data = fetchData()  // OK - inside runBlocking
     println(data)
 }
 
-// ✅ CORRECT: Call from another suspend function
+// - CORRECT: Call from another suspend function
 suspend fun processData() {
     val data = fetchData()  // OK - suspend calling suspend
     println(data)
 }
 
-// ✅ CORRECT: Call from launch/async
+// - CORRECT: Call from launch/async
 fun loadData() {
     CoroutineScope(Dispatchers.IO).launch {
         val data = fetchData()  // OK - inside launch
@@ -395,14 +395,14 @@ suspend fun longRunningTask() {
 
 ### Key Rules
 
-1. ✅ Add `suspend` modifier before `fun`
-2. ✅ Can only call suspend functions from:
+1. - Add `suspend` modifier before `fun`
+2. - Can only call suspend functions from:
    - Other suspend functions
    - Coroutine builders (`launch`, `async`, `runBlocking`)
    - Coroutine scope extensions
-3. ❌ Cannot call from regular functions directly
-4. ✅ Can use all regular Kotlin features (generics, extensions, inline, etc.)
-5. ✅ Automatically receives `Continuation` parameter (compiler adds it)
+3. - Cannot call from regular functions directly
+4. - Can use all regular Kotlin features (generics, extensions, inline, etc.)
+5. - Automatically receives `Continuation` parameter (compiler adds it)
 
 ---
 ## Вопрос (RU)

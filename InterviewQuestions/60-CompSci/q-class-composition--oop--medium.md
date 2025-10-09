@@ -184,10 +184,10 @@ Some languages like **Java and Kotlin** don't support **multiple class inheritan
 **Composition provides a flexible alternative** to achieve functionality from multiple sources.
 
 ```kotlin
-// ❌ BAD: Can't inherit from multiple classes in Kotlin
+// - BAD: Can't inherit from multiple classes in Kotlin
 // class FlyingCar : Car, Aircraft { }  // Compilation error!
 
-// ✅ GOOD: Use composition
+// - GOOD: Use composition
 class Aircraft {
     fun fly() = println("Flying")
     fun land() = println("Landing")
@@ -226,7 +226,7 @@ fun main() {
 **Kotlin Delegation** makes this even easier:
 
 ```kotlin
-// ✅ BETTER: Kotlin delegation
+// - BETTER: Kotlin delegation
 class FlyingCar(
     private val carCapabilities: Car = Car(),
     private val aircraftCapabilities: Aircraft = Aircraft()
@@ -245,7 +245,7 @@ class FlyingCar(
 Composition provides **greater flexibility** in software design because **changes in one class have less impact** on classes that use its objects.
 
 ```kotlin
-// ✅ Composition: Easy to swap payment methods
+// - Composition: Easy to swap payment methods
 interface PaymentProcessor {
     fun processPayment(amount: Double)
 }
@@ -298,7 +298,7 @@ paypalOrder.placeOrder(200.0)
 ### Inheritance Example
 
 ```kotlin
-// ❌ Inheritance: Rigid hierarchy
+// - Inheritance: Rigid hierarchy
 open class Animal {
     open fun eat() = println("Eating")
     open fun sleep() = println("Sleeping")
@@ -320,7 +320,7 @@ class Cat : Animal() {
 ### Composition Example
 
 ```kotlin
-// ✅ Composition: Flexible behavior
+// - Composition: Flexible behavior
 class EatingBehavior {
     fun eat() = println("Eating")
 }
@@ -427,14 +427,14 @@ class UserActivity : AppCompatActivity() {
 
 ## Best Practices
 
-### ✅ DO
+### - DO
 
 1. **Favor composition over inheritance:**
    ```kotlin
-   // ✅ Composition
+   // - Composition
    class Car(private val engine: Engine)
 
-   // ❌ Inheritance
+   // - Inheritance
    class Car : Engine()  // Car IS-NOT-A Engine!
    ```
 
@@ -462,11 +462,11 @@ class UserActivity : AppCompatActivity() {
 
 ---
 
-### ❌ DON'T
+### - DON'T
 
 1. **Don't create god objects:**
    ```kotlin
-   // ❌ BAD: Too many responsibilities
+   // - BAD: Too many responsibilities
    class UserManager(
        private val validator: Validator,
        private val repository: Repository,
@@ -480,10 +480,10 @@ class UserActivity : AppCompatActivity() {
 
 2. **Don't use inheritance when composition fits better:**
    ```kotlin
-   // ❌ BAD: Car IS-NOT-A Engine
+   // - BAD: Car IS-NOT-A Engine
    class Car : Engine()
 
-   // ✅ GOOD: Car HAS-A Engine
+   // - GOOD: Car HAS-A Engine
    class Car(private val engine: Engine)
    ```
 

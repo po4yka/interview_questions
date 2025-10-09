@@ -23,7 +23,7 @@ It's one of the **simplest ways** to save small amounts of data, such as user se
 
 **Key Characteristics:**
 
-- ✅ **Simple to use** - minimal API
+- - **Simple to use** - minimal API
 - 🔒 **Private by default** - data accessible only within the app
 - 💾 **Persistent** - survives app restarts
 - 📦 **Small data only** - not for large datasets
@@ -62,14 +62,14 @@ val isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false)
 
 ```kotlin
 editor.putString("key", "value")
-editor.apply()  // ✅ Async, doesn't block UI
+editor.apply()  // - Async, doesn't block UI
 ```
 
 **commit() - Synchronous:**
 
 ```kotlin
 editor.putString("key", "value")
-val success = editor.commit()  // ❌ Blocks UI, returns boolean
+val success = editor.commit()  // - Blocks UI, returns boolean
 if (success) {
     // Data saved successfully
 }
@@ -223,10 +223,10 @@ fun SharedPreferences.observeKey(key: String, default: String): Flow<String> = c
 
 **Limitations:**
 
-- ❌ Not suitable for large data (use Room/SQLite)
-- ❌ Not suitable for complex objects (use JSON or Serialization)
-- ❌ Not encrypted by default (use EncryptedSharedPreferences for sensitive data)
-- ❌ Not suitable for structured/relational data
+- - Not suitable for large data (use Room/SQLite)
+- - Not suitable for complex objects (use JSON or Serialization)
+- - Not encrypted by default (use EncryptedSharedPreferences for sensitive data)
+- - Not suitable for structured/relational data
 
 **Security - EncryptedSharedPreferences:**
 

@@ -439,30 +439,30 @@ fun safePipeline(): Flow<ProcessedData> = flow {
 
 ```kotlin
 class BackPressureBestPractices {
-    // ✅ DO: Use conflate for state updates
+    // - DO: Use conflate for state updates
     fun userState(): Flow<UserState> =
         stateUpdates.conflate()
 
-    // ✅ DO: Use buffer for throughput
+    // - DO: Use buffer for throughput
     fun dataProcessing(): Flow<Result> =
         dataSource
             .buffer(100)
             .map { process(it) }
 
-    // ✅ DO: Use debounce for user input
+    // - DO: Use debounce for user input
     fun searchQuery(input: Flow<String>): Flow<Results> =
         input.debounce(300)
             .flatMapLatest { query -> search(query) }
 
-    // ✅ DO: Use sample for high-frequency events
+    // - DO: Use sample for high-frequency events
     fun mousePosition(events: Flow<MouseEvent>): Flow<Position> =
         events.sample(16)  // ~60fps
 
-    // ❌ DON'T: Use unlimited buffer
+    // - DON'T: Use unlimited buffer
     fun dangerous(): Flow<Data> =
         source.buffer(Int.MAX_VALUE)  // Will cause OOM!
 
-    // ❌ DON'T: Ignore backpressure entirely
+    // - DON'T: Ignore backpressure entirely
     fun alsoProblematic(): Flow<Data> =
         fastSource  // No backpressure handling
 }
@@ -890,30 +890,30 @@ fun safePipeline(): Flow<ProcessedData> = flow {
 
 ```kotlin
 class BackPressureBestPractices {
-    // ✅ ДЕЛАТЬ: Использовать conflate для обновлений состояния
+    // - ДЕЛАТЬ: Использовать conflate для обновлений состояния
     fun userState(): Flow<UserState> =
         stateUpdates.conflate()
 
-    // ✅ ДЕЛАТЬ: Использовать buffer для пропускной способности
+    // - ДЕЛАТЬ: Использовать buffer для пропускной способности
     fun dataProcessing(): Flow<Result> =
         dataSource
             .buffer(100)
             .map { process(it) }
 
-    // ✅ ДЕЛАТЬ: Использовать debounce для ввода пользователя
+    // - ДЕЛАТЬ: Использовать debounce для ввода пользователя
     fun searchQuery(input: Flow<String>): Flow<Results> =
         input.debounce(300)
             .flatMapLatest { query -> search(query) }
 
-    // ✅ ДЕЛАТЬ: Использовать sample для высокочастотных событий
+    // - ДЕЛАТЬ: Использовать sample для высокочастотных событий
     fun mousePosition(events: Flow<MouseEvent>): Flow<Position> =
         events.sample(16)  // ~60fps
 
-    // ❌ НЕ ДЕЛАТЬ: Использовать неограниченный буфер
+    // - НЕ ДЕЛАТЬ: Использовать неограниченный буфер
     fun dangerous(): Flow<Data> =
         source.buffer(Int.MAX_VALUE)  // Вызовет OOM!
 
-    // ❌ НЕ ДЕЛАТЬ: Полностью игнорировать backpressure
+    // - НЕ ДЕЛАТЬ: Полностью игнорировать backpressure
     fun alsoProblematic(): Flow<Data> =
         fastSource  // Нет обработки backpressure
 }

@@ -19,14 +19,14 @@ status: reviewed
 
 **Inheritance** is a powerful OOP mechanism, but it should be used carefully. Understanding **when to use** and **when to avoid** inheritance is crucial for good software design.
 
-## When Inheritance IS Useful ✅
+## When Inheritance IS Useful GOOD
 
 ### 1. Code Reuse
 
 **Use inheritance when:** Multiple classes share common behavior and you want to avoid code duplication.
 
 ```kotlin
-// ✅ GOOD: Common behavior in base class
+// - GOOD: Common behavior in base class
 abstract class Shape {
     abstract fun area(): Double
 
@@ -69,7 +69,7 @@ println(circle.isLargerThan(rectangle))  // Reused from Shape
 **Use inheritance when:** You have a clear **taxonomic hierarchy** with natural parent-child relationships.
 
 ```kotlin
-// ✅ GOOD: Clear taxonomy
+// - GOOD: Clear taxonomy
 abstract class Animal(val name: String) {
     abstract fun makeSound()
 
@@ -120,7 +120,7 @@ class Eagle(name: String) : Bird(name) {
 **Use inheritance when:** You need to **treat different objects uniformly** through a common interface.
 
 ```kotlin
-// ✅ GOOD: Polymorphism
+// - GOOD: Polymorphism
 abstract class PaymentMethod {
     abstract fun processPayment(amount: Double)
 }
@@ -169,7 +169,7 @@ payments.forEach { payment ->
 **Use inheritance when:** There's a clear **"IS-A" relationship** conceptually.
 
 ```kotlin
-// ✅ GOOD: Clear IS-A relationship
+// - GOOD: Clear IS-A relationship
 abstract class Vehicle(val brand: String) {
     abstract fun startEngine()
 }
@@ -186,29 +186,29 @@ class Motorcycle(brand: String, val engineCC: Int) : Vehicle(brand) {
     }
 }
 
-// Car IS-A Vehicle ✅
-// Motorcycle IS-A Vehicle ✅
+// Car IS-A Vehicle GOOD
+// Motorcycle IS-A Vehicle GOOD
 ```
 
 **Test:** If you can say "**X IS-A Y**" and it makes sense, inheritance is appropriate.
 
 ---
 
-## When Inheritance IS NOT Useful ❌
+## When Inheritance IS NOT Useful BAD
 
 ### 1. No Clear IS-A Relationship
 
 **Avoid inheritance when:** The "IS-A" relationship doesn't exist conceptually.
 
 ```kotlin
-// ❌ BAD: No IS-A relationship
+// - BAD: No IS-A relationship
 class Employee(val name: String, val salary: Double)
 
 class Car(val model: String) : Employee("", 0.0) {
-    // Car IS-A Employee? No! ❌
+    // Car IS-A Employee? No! BAD
 }
 
-// ✅ GOOD: Use composition instead
+// - GOOD: Use composition instead
 class Car(val model: String) {
     private val owner: Employee? = null  // Car HAS-A Employee
 }
@@ -221,12 +221,12 @@ class Car(val model: String) {
 **Avoid inheritance when:** You need to mix behaviors from multiple sources.
 
 ```kotlin
-// ❌ BAD: Can't inherit from multiple classes
-class FlyingCar : Car, Airplane {  // ❌ Multiple inheritance not allowed!
+// - BAD: Can't inherit from multiple classes
+class FlyingCar : Car, Airplane {  // - Multiple inheritance not allowed!
     // ...
 }
 
-// ✅ GOOD: Use composition
+// - GOOD: Use composition
 class FlyingCar {
     private val carBehavior = Car()
     private val airplaneBehavior = Airplane()
@@ -235,7 +235,7 @@ class FlyingCar {
     fun fly() = airplaneBehavior.fly()
 }
 
-// ✅ BETTER: Use interfaces
+// - BETTER: Use interfaces
 interface Drivable {
     fun drive()
 }
@@ -262,7 +262,7 @@ class FlyingCar : Drivable, Flyable {
 **Avoid inheritance when:** The hierarchy becomes too deep or complex.
 
 ```kotlin
-// ❌ BAD: Deep, complex hierarchy
+// - BAD: Deep, complex hierarchy
 open class Entity
 open class LivingEntity : Entity()
 open class Animal : LivingEntity()
@@ -270,9 +270,9 @@ open class Mammal : Animal()
 open class Carnivore : Mammal()
 open class Feline : Carnivore()
 open class BigCat : Feline()
-class Lion : BigCat()  // 8 levels deep! ❌
+class Lion : BigCat()  // 8 levels deep! BAD
 
-// ✅ GOOD: Flat hierarchy with composition
+// - GOOD: Flat hierarchy with composition
 class Lion(
     private val habitat: Habitat,
     private val diet: Diet,
@@ -297,21 +297,21 @@ class Lion(
 **Avoid inheritance when:** You only want to reuse implementation, not establish a relationship.
 
 ```kotlin
-// ❌ BAD: Inheriting just for code reuse
+// - BAD: Inheriting just for code reuse
 class Logger {
     fun log(message: String) {
         println("[LOG] $message")
     }
 }
 
-class UserService : Logger() {  // ❌ UserService IS-A Logger? No!
+class UserService : Logger() {  // - UserService IS-A Logger? No!
     fun createUser(name: String) {
         log("Creating user: $name")  // Just want to use log()
         // ...
     }
 }
 
-// ✅ GOOD: Use composition
+// - GOOD: Use composition
 class UserService(private val logger: Logger) {
     fun createUser(name: String) {
         logger.log("Creating user: $name")
@@ -327,7 +327,7 @@ class UserService(private val logger: Logger) {
 **Avoid inheritance when:** You need flexibility and runtime behavior changes.
 
 ```kotlin
-// ❌ BAD: Fixed behavior at compile time
+// - BAD: Fixed behavior at compile time
 abstract class Weapon {
     abstract fun attack()
 }
@@ -340,7 +340,7 @@ class Sword : Weapon() {
 
 class Player(weapon: Weapon)  // Stuck with one weapon type
 
-// ✅ GOOD: Strategy pattern with composition
+// - GOOD: Strategy pattern with composition
 interface AttackStrategy {
     fun attack()
 }
@@ -380,7 +380,7 @@ player.attack()  // "Cast spell"
 
 ### Use Inheritance When:
 
-| ✅ Criterion | Example |
+| - Criterion | Example |
 |-------------|---------|
 | **Clear IS-A relationship** | Dog IS-A Animal |
 | **Shared behavior across similar classes** | All shapes can calculate area |
@@ -390,7 +390,7 @@ player.attack()  // "Cast spell"
 
 ### Use Composition/Interfaces When:
 
-| ❌ Avoid Inheritance | ✅ Use Instead |
+| - Avoid Inheritance | - Use Instead |
 |---------------------|---------------|
 | No IS-A relationship | Composition (HAS-A) |
 | Need multiple behaviors | Interfaces + Composition |
@@ -402,34 +402,34 @@ player.attack()  // "Cast spell"
 
 ## Android Examples
 
-### ✅ Good Use of Inheritance
+### - Good Use of Inheritance
 
 ```kotlin
 // Framework inheritance - appropriate
 class MainActivity : AppCompatActivity() {
-    // MainActivity IS-A AppCompatActivity ✅
+    // MainActivity IS-A AppCompatActivity GOOD
 }
 
 class UserViewModel : ViewModel() {
-    // UserViewModel IS-A ViewModel ✅
+    // UserViewModel IS-A ViewModel GOOD
 }
 
 class UserFragment : Fragment() {
-    // UserFragment IS-A Fragment ✅
+    // UserFragment IS-A Fragment GOOD
 }
 ```
 
-### ❌ Bad Use of Inheritance
+### - Bad Use of Inheritance
 
 ```kotlin
-// ❌ BAD: No IS-A relationship
+// - BAD: No IS-A relationship
 class DatabaseHelper : Context() {
-    // DatabaseHelper IS-A Context? No! ❌
+    // DatabaseHelper IS-A Context? No! BAD
 }
 
-// ✅ GOOD: Use composition
+// - GOOD: Use composition
 class DatabaseHelper(private val context: Context) {
-    // DatabaseHelper HAS-A Context ✅
+    // DatabaseHelper HAS-A Context GOOD
 }
 ```
 
@@ -437,7 +437,7 @@ class DatabaseHelper(private val context: Context) {
 
 ## Best Practices
 
-### ✅ Favor Composition Over Inheritance
+### - Favor Composition Over Inheritance
 
 ```kotlin
 // Prefer this (composition)
@@ -447,14 +447,14 @@ class Car(private val engine: Engine)
 class Car : Engine()
 ```
 
-### ✅ Keep Hierarchies Shallow
+### - Keep Hierarchies Shallow
 
 ```kotlin
-// ✅ GOOD: Shallow (2-3 levels max)
+// - GOOD: Shallow (2-3 levels max)
 abstract class Animal
 class Dog : Animal()
 
-// ❌ BAD: Too deep
+// - BAD: Too deep
 abstract class A
 abstract class B : A()
 abstract class C : B()
@@ -462,10 +462,10 @@ abstract class D : C()
 class E : D()
 ```
 
-### ✅ Program to Interfaces
+### - Program to Interfaces
 
 ```kotlin
-// ✅ Prefer interfaces for contracts
+// - Prefer interfaces for contracts
 interface Drawable {
     fun draw()
 }
@@ -484,14 +484,14 @@ abstract class DrawableShape {
 
 ## Summary
 
-### When Inheritance IS Useful ✅
+### When Inheritance IS Useful GOOD
 
 1. **Code reuse** - Shared behavior across related classes
 2. **Class hierarchies** - Clear taxonomic relationships
 3. **Polymorphism** - Treat different objects uniformly
 4. **IS-A relationship** - Conceptually makes sense
 
-### When Inheritance IS NOT Useful ❌
+### When Inheritance IS NOT Useful BAD
 
 1. **No IS-A relationship** - Use composition instead
 2. **Mixing behaviors** - Use interfaces + composition

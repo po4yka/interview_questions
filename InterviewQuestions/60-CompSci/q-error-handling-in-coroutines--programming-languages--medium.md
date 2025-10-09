@@ -143,7 +143,7 @@ suspend fun useResult() {
 
 ```kotlin
 class ErrorHandlingBestPractices {
-    // ✅ DO: Use try-catch for local handling
+    // - DO: Use try-catch for local handling
     suspend fun good1() {
         try {
             riskyOperation()
@@ -152,7 +152,7 @@ class ErrorHandlingBestPractices {
         }
     }
 
-    // ✅ DO: Use CoroutineExceptionHandler at scope level
+    // - DO: Use CoroutineExceptionHandler at scope level
     fun good2() {
         val handler = CoroutineExceptionHandler { _, e -> logError(e) }
         CoroutineScope(SupervisorJob() + handler).launch {
@@ -160,13 +160,13 @@ class ErrorHandlingBestPractices {
         }
     }
 
-    // ✅ DO: Use supervisorScope for independent tasks
+    // - DO: Use supervisorScope for independent tasks
     suspend fun good3() = supervisorScope {
         launch { task1() }  // Errors don't affect task2
         launch { task2() }
     }
 
-    // ❌ DON'T: Swallow exceptions silently
+    // - DON'T: Swallow exceptions silently
     suspend fun bad1() {
         try {
             riskyOperation()

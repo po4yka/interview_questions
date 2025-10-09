@@ -338,13 +338,13 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ❌ DON'T observe with Fragment lifecycle
+        // DON'T observe with Fragment lifecycle
         viewModel.data.observe(this) { data ->
             // This observer stays active even after onDestroyView()!
             textView.text = data // CRASH if textView is null
         }
 
-        // ✅ DO observe with viewLifecycleOwner
+        // DO observe with viewLifecycleOwner
         viewModel.data.observe(viewLifecycleOwner) { data ->
             // Automatically unsubscribed in onDestroyView()
             textView.text = data

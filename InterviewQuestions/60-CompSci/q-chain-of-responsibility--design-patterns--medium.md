@@ -392,7 +392,7 @@ data class Response(val code: Int, val body: String)
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Provide a default handler at the end
+// - DO: Provide a default handler at the end
 class DefaultHandler : Handler {
     override var nextHandler: Handler? = null
     override fun handleRequest(request: String): Boolean {
@@ -401,7 +401,7 @@ class DefaultHandler : Handler {
     }
 }
 
-// ✅ DO: Use for UI event propagation
+// - DO: Use for UI event propagation
 class ViewGroup {
     private val childHandlers = mutableListOf<ViewEventHandler>()
 
@@ -410,7 +410,7 @@ class ViewGroup {
     }
 }
 
-// ✅ DO: Make chain immutable after creation
+// - DO: Make chain immutable after creation
 fun buildChain(): Handler {
     return FirstHandler().apply {
         nextHandler = SecondHandler().apply {
@@ -419,7 +419,7 @@ fun buildChain(): Handler {
     }
 }
 
-// ✅ DO: Use functional approach in Kotlin
+// - DO: Use functional approach in Kotlin
 val validationChain = listOf<(UserData) -> Boolean>(
     { it.email.isNotBlank() },
     { it.password.length >= 8 },
@@ -428,9 +428,9 @@ val validationChain = listOf<(UserData) -> Boolean>(
 
 fun validate(data: UserData) = validationChain.all { it(data) }
 
-// ❌ DON'T: Create circular chains
-// ❌ DON'T: Put business logic in chain construction
-// ❌ DON'T: Make handlers depend on each other
+// - DON'T: Create circular chains
+// - DON'T: Put business logic in chain construction
+// - DON'T: Make handlers depend on each other
 ```
 
 **English**: **Chain of Responsibility** is a behavioral pattern that passes requests through a chain of handlers until one processes it. **Problem**: Need to avoid coupling sender to specific receiver, multiple potential handlers. **Solution**: Chain handlers together, each decides to process or pass to next. **Use when**: (1) Multiple handlers for requests, (2) Avoid complex conditionals, (3) Need flexible, reconfigurable chains. **Android**: View event handling, OkHttp interceptors, validation chains. **Pros**: decoupling, flexibility, dynamic configuration. **Cons**: no guarantee of handling, performance overhead, debugging difficulty. **Examples**: Touch event propagation, HTTP interceptors, validation pipeline, logging chain.

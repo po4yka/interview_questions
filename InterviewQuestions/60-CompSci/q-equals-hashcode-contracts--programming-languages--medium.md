@@ -184,10 +184,10 @@ set.contains(u2)  // false (because hash codes differ!)
 
 **1. Always override both together:**
 ```kotlin
-// ❌ Wrong: Only equals
+// - Wrong: Only equals
 override fun equals(other: Any?) = ...
 
-// ✅ Correct: Both equals and hashCode
+// - Correct: Both equals and hashCode
 override fun equals(other: Any?) = ...
 override fun hashCode() = ...
 ```

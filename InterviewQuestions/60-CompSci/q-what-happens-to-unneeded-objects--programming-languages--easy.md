@@ -109,10 +109,10 @@ fun processData() {
 
 **Benefits:**
 
-✅ **No manual memory management**
-✅ **No memory leaks** (if code is correct)
-✅ **Developer focuses on logic**, not memory
-✅ **Safer** than manual memory management
+- **No manual memory management**
+- **No memory leaks** (if code is correct)
+- **Developer focuses on logic**, not memory
+- **Safer** than manual memory management
 
 **How It Works:**
 

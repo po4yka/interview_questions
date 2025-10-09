@@ -270,7 +270,7 @@ class MainActivity : AppCompatActivity() {
 
 ### When to Use Fragments
 
-✅ **Use Fragments for:**
+- **Use Fragments for:**
 - Bottom/Tab navigation
 - Master-detail layouts
 - Reusable UI components
@@ -278,7 +278,7 @@ class MainActivity : AppCompatActivity() {
 - ViewPager content
 - Dialog-like components
 
-❌ **Use Activities for:**
+- **Use Activities for:**
 - Independent app sections
 - Different task flows
 - External entry points (deep links)

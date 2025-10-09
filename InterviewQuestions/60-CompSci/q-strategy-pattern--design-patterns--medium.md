@@ -258,7 +258,7 @@ fun main() {
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use when you have multiple algorithms for same task
+// - DO: Use when you have multiple algorithms for same task
 interface CompressionStrategy {
     fun compress(data: ByteArray): ByteArray
 }
@@ -271,14 +271,14 @@ class GzipCompression : CompressionStrategy {
     override fun compress(data: ByteArray) = /* GZIP compression */ data
 }
 
-// ✅ DO: Use with dependency injection
+// - DO: Use with dependency injection
 class ImageProcessor @Inject constructor(
     private val compressionStrategy: CompressionStrategy
 ) {
     fun processImage(image: ByteArray) = compressionStrategy.compress(image)
 }
 
-// ✅ DO: Combine with Factory pattern
+// - DO: Combine with Factory pattern
 object StrategyFactory {
     fun getPaymentStrategy(type: PaymentType): PaymentStrategy {
         return when (type) {
@@ -289,7 +289,7 @@ object StrategyFactory {
     }
 }
 
-// ✅ DO: Use functional programming in Kotlin
+// - DO: Use functional programming in Kotlin
 class Processor(private var strategy: (String) -> String) {
     fun process(data: String) = strategy(data)
 }
@@ -300,9 +300,9 @@ val lowercase: (String) -> String = { it.lowercase() }
 val processor = Processor(uppercase)
 processor.process("Hello") // "HELLO"
 
-// ❌ DON'T: Use for single algorithm that never changes
-// ❌ DON'T: Create strategies for trivial operations
-// ❌ DON'T: Mix business logic in strategy selection
+// - DON'T: Use for single algorithm that never changes
+// - DON'T: Create strategies for trivial operations
+// - DON'T: Mix business logic in strategy selection
 ```
 
 **English**: **Strategy** is a behavioral design pattern that defines a family of interchangeable algorithms and allows selecting them at runtime. **Problem**: Need different algorithms for same task, want to avoid complex conditionals. **Solution**: Encapsulate each algorithm in separate strategy class, make them interchangeable. **Use when**: (1) Multiple algorithms for same task, (2) Need runtime algorithm switching, (3) Want to eliminate conditional logic. **Android**: Payment methods, navigation routes, image compression, sorting algorithms. **Pros**: eliminates conditionals, flexible, reusable, maintainable. **Cons**: many classes, complexity with numerous strategies. **Examples**: payment processing, route planning, sorting, compression, validation.

@@ -167,9 +167,9 @@ class DataLoaderFragment : Fragment() {
 // If Fragment worked like Activity:
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.fragment_my) // ❌ Would lose view on rotation
+    setContentView(R.layout.fragment_my) // - Would lose view on rotation
     val textView = findViewById<TextView>(R.id.textView)
-    textView.text = viewModel.data // ❌ Would be called again on rotation
+    textView.text = viewModel.data // - Would be called again on rotation
 }
 ```
 
@@ -269,12 +269,12 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ✅ CORRECT: Observe using viewLifecycleOwner
+        // - CORRECT: Observe using viewLifecycleOwner
         viewModel.data.observe(viewLifecycleOwner) { data ->
             textView.text = data
         }
 
-        // ❌ WRONG: Observe using fragment lifecycle
+        // - WRONG: Observe using fragment lifecycle
         viewModel.data.observe(this) { data ->
             textView.text = data // Memory leak!
         }
@@ -490,9 +490,9 @@ onDestroy called
 ### Wrong: Holding view reference in Fragment
 
 ```kotlin
-// ❌ MEMORY LEAK
+// - MEMORY LEAK
 class BadFragment : Fragment() {
-    private lateinit var textView: TextView // ❌ Holds view reference
+    private lateinit var textView: TextView // - Holds view reference
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -513,7 +513,7 @@ class BadFragment : Fragment() {
 ### Correct: Using ViewBinding
 
 ```kotlin
-// ✅ CORRECT
+// - CORRECT
 class GoodFragment : Fragment() {
     private var _binding: FragmentGoodBinding? = null
     private val binding get() = _binding!!
@@ -534,7 +534,7 @@ class GoodFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // ✅ Release view reference
+        _binding = null // - Release view reference
     }
 }
 ```
@@ -572,16 +572,16 @@ class GoodFragment : Fragment() {
 
 ```kotlin
 class BestPracticeFragment : Fragment() {
-    // ✅ ViewModel initialized in onCreate (survives view destruction)
+    // - ViewModel initialized in onCreate (survives view destruction)
     private val viewModel: MyViewModel by viewModels()
 
-    // ✅ Binding nullable, cleaned up in onDestroyView
+    // - Binding nullable, cleaned up in onDestroyView
     private var _binding: FragmentBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // ✅ Initialize non-UI components here
+        // - Initialize non-UI components here
     }
 
     override fun onCreateView(
@@ -596,7 +596,7 @@ class BestPracticeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ✅ Observe using viewLifecycleOwner
+        // - Observe using viewLifecycleOwner
         viewModel.data.observe(viewLifecycleOwner) { data ->
             binding.textView.text = data
         }
@@ -604,7 +604,7 @@ class BestPracticeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // ✅ Clean up view references
+        // - Clean up view references
         _binding = null
     }
 }
@@ -652,12 +652,12 @@ onCreate() NOT called (Fragment survives)
 
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    // ✅ ПРАВИЛЬНО
+    // - ПРАВИЛЬНО
     viewModel.data.observe(viewLifecycleOwner) { data ->
         textView.text = data // Отписка при onDestroyView()
     }
 
-    // ❌ НЕПРАВИЛЬНО
+    // - НЕПРАВИЛЬНО
     viewModel.data.observe(this) { data ->
         textView.text = data // Утечка памяти!
     }

@@ -219,18 +219,18 @@ object DateParceler : Parceler<Date> {
 |---------|-----------|--------------|
 | **Performance** | ⚡ Fast | 🐌 Slow |
 | **Implementation** | More code (without @Parcelize) | Simple |
-| **Android optimization** | ✅ Yes | ❌ No |
-| **Reflection** | ❌ No | ✅ Yes (slower) |
+| **Android optimization** | - Yes | - No |
+| **Reflection** | - No | - Yes (slower) |
 | **Boilerplate** | With @Parcelize: minimal | Minimal |
 | **Use case** | Android IPC | Java serialization |
 
 **When to use Parcelable:**
 
-- ✅ Passing data between Activities
-- ✅ Passing data between Fragments
-- ✅ Passing data to Services
-- ✅ Saving/restoring state in Bundles
-- ✅ Any Android IPC scenario
+- - Passing data between Activities
+- - Passing data between Fragments
+- - Passing data to Services
+- - Saving/restoring state in Bundles
+- - Any Android IPC scenario
 
 **Best Practices:**
 

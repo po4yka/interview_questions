@@ -244,7 +244,7 @@ class UserRepositoryLiveData {
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Always unregister observers to prevent memory leaks
+// - DO: Always unregister observers to prevent memory leaks
 class MyActivity : AppCompatActivity(), DataObserver {
     override fun onDestroy() {
         repository.removeObserver(this)
@@ -252,16 +252,16 @@ class MyActivity : AppCompatActivity(), DataObserver {
     }
 }
 
-// ✅ DO: Use lifecycle-aware observers in Android
+// - DO: Use lifecycle-aware observers in Android
 viewModel.userData.observe(viewLifecycleOwner) { user ->
     // Automatically unregistered when lifecycle is destroyed
 }
 
-// ✅ DO: Use Flow/LiveData for Android development
+// - DO: Use Flow/LiveData for Android development
 val dataFlow: Flow<Data> = repository.dataFlow
     .flowOn(Dispatchers.IO)
 
-// ✅ DO: Consider using weak references for observers
+// - DO: Consider using weak references for observers
 class WeakObserverList {
     private val observers = mutableListOf<WeakReference<Observer>>()
 
@@ -270,9 +270,9 @@ class WeakObserverList {
     }
 }
 
-// ❌ DON'T: Forget to remove observers
-// ❌ DON'T: Create circular observer dependencies
-// ❌ DON'T: Perform heavy operations in update methods
+// - DON'T: Forget to remove observers
+// - DON'T: Create circular observer dependencies
+// - DON'T: Perform heavy operations in update methods
 ```
 
 **English**: **Observer** is a behavioral design pattern that defines one-to-many dependency between objects so when one object changes state, all dependents are notified automatically. **Problem**: Objects need to be notified of changes without tight coupling. **Solution**: Subject maintains list of observers and notifies them of changes. **Use when**: (1) Changes to one object require changing others, (2) Number of dependent objects is unknown or dynamic, (3) Want to notify objects without knowing who they are. **Android**: LiveData, Flow, StateFlow provide built-in observer pattern. **Pros**: loose coupling, flexibility, broadcast communication. **Cons**: memory leaks if not unregistered, unpredictable update order. **Examples**: UI updates, data binding, event handling, LiveData, Flow.

@@ -307,7 +307,7 @@ fun main() {
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use when you have multiple dimensions of variation
+// - DO: Use when you have multiple dimensions of variation
 interface StorageBackend {
     fun save(data: String)
     fun load(): String
@@ -324,7 +324,7 @@ class UserDataManager(storage: StorageBackend) : DataManager(storage) {
     }
 }
 
-// ✅ DO: Allow runtime selection of implementation
+// - DO: Allow runtime selection of implementation
 class ConfigurableShape(renderer: Renderer) {
     private var currentRenderer = renderer
 
@@ -337,7 +337,7 @@ class ConfigurableShape(renderer: Renderer) {
     }
 }
 
-// ✅ DO: Use for platform-specific implementations
+// - DO: Use for platform-specific implementations
 interface Platform {
     fun showNotification(message: String)
 }
@@ -354,9 +354,9 @@ class IOSPlatform : Platform {
     }
 }
 
-// ❌ DON'T: Use for single implementation
-// ❌ DON'T: Create unnecessary abstractions
-// ❌ DON'T: Couple abstraction to concrete implementation
+// - DON'T: Use for single implementation
+// - DON'T: Create unnecessary abstractions
+// - DON'T: Couple abstraction to concrete implementation
 ```
 
 **English**: **Bridge** is a structural pattern that separates abstraction from implementation, allowing independent development. **Problem**: Want to avoid permanent binding between abstraction and implementation. **Solution**: Create two hierarchies connected by composition - abstraction holds reference to implementor. **Use when**: (1) Abstraction and implementation should vary independently, (2) Need runtime selection of implementation, (3) Avoid class explosion from multiple dimensions. **Android**: Rendering engines, platform-specific code, storage backends. **Pros**: decoupling, flexibility, extensibility. **Cons**: complexity, indirection. **Examples**: Remote controls, rendering APIs, message senders, storage backends.

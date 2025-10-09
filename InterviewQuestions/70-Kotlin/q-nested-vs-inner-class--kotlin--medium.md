@@ -61,7 +61,7 @@ class Outer {
     private val bar: Int = 1
 
     inner class Inner {
-        fun foo() = bar  // ✅ Can access outer's private members
+        fun foo() = bar  // - Can access outer's private members
     }
 }
 
@@ -74,7 +74,7 @@ val demo = Outer().Inner().foo() // == 1
 | Feature | Nested Class | Inner Class |
 |---------|--------------|-------------|
 | **Keyword** | None (default) | `inner` |
-| **Outer class access** | ❌ No | ✅ Yes |
+| **Outer class access** | - No | - Yes |
 | **Instantiation** | `Outer.Nested()` | `outerInstance.Inner()` |
 | **Java equivalent** | Static nested class | Non-static nested class |
 | **Memory** | No reference to outer | Holds reference to outer |
@@ -103,14 +103,14 @@ val demo = Outer().Inner().foo() // == 1
 
 ```kotlin
 class Activity {
-    // ❌ BAD - holds reference to Activity (memory leak risk)
+    // - BAD - holds reference to Activity (memory leak risk)
     inner class BackgroundTask {
         fun doWork() {
             // Can access Activity members
         }
     }
 
-    // ✅ GOOD - no reference to Activity
+    // - GOOD - no reference to Activity
     class StaticHelper {
         fun processData(data: Data) {
             // Independent processing
@@ -148,7 +148,7 @@ class Outer {
     private val bar: Int = 1
 
     inner class Inner {
-        fun foo() = bar  // ✅ Доступ к private членам
+        fun foo() = bar  // - Доступ к private членам
     }
 }
 
@@ -160,7 +160,7 @@ val demo = Outer().Inner().foo()  // Нужен экземпляр Outer!
 | Функция | Nested | Inner |
 |---------|--------|-------|
 | **Ключевое слово** | Нет (по умолчанию) | `inner` |
-| **Доступ к внешнему** | ❌ Нет | ✅ Да |
+| **Доступ к внешнему** | - Нет | - Да |
 | **Создание** | `Outer.Nested()` | `outerInstance.Inner()` |
 | **Java эквивалент** | Static nested class | Non-static nested |
 

@@ -33,7 +33,7 @@ A memory leak occurs when objects are no longer needed but remain referenced, pr
 **Common Causes:**
 
 ```kotlin
-// ❌ BAD: Activity leak via static reference
+// - BAD: Activity leak via static reference
 class LeakyActivity : AppCompatActivity() {
     companion object {
         private var listener: OnDataListener? = null
@@ -52,7 +52,7 @@ class LeakyActivity : AppCompatActivity() {
     }
 }
 
-// ❌ BAD: Handler leak
+// - BAD: Handler leak
 class HandlerLeakActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
@@ -66,7 +66,7 @@ class HandlerLeakActivity : AppCompatActivity() {
     }
 }
 
-// ❌ BAD: Anonymous listener leak
+// - BAD: Anonymous listener leak
 class ListenerLeakActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +82,7 @@ class ListenerLeakActivity : AppCompatActivity() {
     }
 }
 
-// ❌ BAD: Thread leak
+// - BAD: Thread leak
 class ThreadLeakActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,10 +100,10 @@ class ThreadLeakActivity : AppCompatActivity() {
 }
 ```
 
-**✅ Proper Solutions:**
+**- Proper Solutions:**
 
 ```kotlin
-// ✅ GOOD: Use WeakReference
+// - GOOD: Use WeakReference
 class FixedActivity : AppCompatActivity() {
     companion object {
         private var listenerRef: WeakReference<OnDataListener>? = null
@@ -121,7 +121,7 @@ class FixedActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD: Static Handler + WeakReference
+// - GOOD: Static Handler + WeakReference
 class FixedHandlerActivity : AppCompatActivity() {
     private val handler = MyHandler(this)
 
@@ -141,7 +141,7 @@ class FixedHandlerActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD: Proper lifecycle management
+// - GOOD: Proper lifecycle management
 class FixedListenerActivity : AppCompatActivity() {
     private val eventListener = object : EventListener {
         override fun onEvent(event: Event) {
@@ -160,7 +160,7 @@ class FixedListenerActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD: Lifecycle-aware coroutines
+// - GOOD: Lifecycle-aware coroutines
 class CoroutineActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -175,7 +175,7 @@ class CoroutineActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD: ViewModel for data retention
+// - GOOD: ViewModel for data retention
 class ViewModelActivity : AppCompatActivity() {
     private val viewModel: MyViewModel by viewModels()
 
@@ -198,7 +198,7 @@ OOM occurs when the app tries to allocate more memory than available.
 **Common Causes:**
 
 ```kotlin
-// ❌ BAD: Loading large bitmaps
+// - BAD: Loading large bitmaps
 class OOMActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -210,7 +210,7 @@ class OOMActivity : AppCompatActivity() {
     }
 }
 
-// ❌ BAD: Excessive object allocation
+// - BAD: Excessive object allocation
 fun processLargeDataset() {
     val results = mutableListOf<Result>()
 
@@ -221,7 +221,7 @@ fun processLargeDataset() {
     // OOM if dataset too large
 }
 
-// ❌ BAD: Memory leak accumulation
+// - BAD: Memory leak accumulation
 class LeakyService : Service() {
     companion object {
         private val leakedActivities = mutableListOf<Activity>()
@@ -235,10 +235,10 @@ class LeakyService : Service() {
 }
 ```
 
-**✅ Solutions:**
+**- Solutions:**
 
 ```kotlin
-// ✅ GOOD: Proper bitmap loading
+// - GOOD: Proper bitmap loading
 class OptimizedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -286,7 +286,7 @@ class OptimizedActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD: Process data in chunks
+// - GOOD: Process data in chunks
 suspend fun processLargeDataset() = withContext(Dispatchers.Default) {
     val results = mutableListOf<Result>()
     val chunkSize = 1000
@@ -306,7 +306,7 @@ suspend fun processLargeDataset() = withContext(Dispatchers.Default) {
     results
 }
 
-// ✅ GOOD: Use Sequence for lazy evaluation
+// - GOOD: Use Sequence for lazy evaluation
 fun processLargeDatasetLazy(): Sequence<Result> {
     return sequence {
         repeat(1_000_000) {
@@ -447,7 +447,7 @@ class BitmapManager {
 **4.2 Context References**
 
 ```kotlin
-// ❌ BAD: Storing Activity context
+// - BAD: Storing Activity context
 class BadSingleton private constructor(context: Context) {
     companion object {
         private var instance: BadSingleton? = null
@@ -461,7 +461,7 @@ class BadSingleton private constructor(context: Context) {
     }
 }
 
-// ✅ GOOD: Using Application context
+// - GOOD: Using Application context
 class GoodSingleton private constructor(context: Context) {
     companion object {
         private var instance: GoodSingleton? = null
@@ -479,7 +479,7 @@ class GoodSingleton private constructor(context: Context) {
 **4.3 Observable Patterns**
 
 ```kotlin
-// ✅ GOOD: Lifecycle-aware observers
+// - GOOD: Lifecycle-aware observers
 class DataObserver : AppCompatActivity() {
     private val viewModel: DataViewModel by viewModels()
 
@@ -493,7 +493,7 @@ class DataObserver : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD: Manual lifecycle management
+// - GOOD: Manual lifecycle management
 class ManualObserver : AppCompatActivity() {
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.Main + job)

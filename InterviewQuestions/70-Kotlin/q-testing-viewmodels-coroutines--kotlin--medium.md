@@ -35,7 +35,7 @@ class UserViewModel(
     }
 }
 
-// ❌ НЕПРАВИЛЬНЫЙ тест - не ждет завершения корутины
+// - НЕПРАВИЛЬНЫЙ тест - не ждет завершения корутины
 @Test
 fun `load user updates state`() {
     val viewModel = UserViewModel(fakeRepository)
@@ -52,7 +52,7 @@ fun `load user updates state`() {
 ### Решение: runTest и TestDispatcher
 
 ```kotlin
-// ✅ ПРАВИЛЬНЫЙ тест
+// - ПРАВИЛЬНЫЙ тест
 class UserViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -72,10 +72,10 @@ class UserViewModelTest {
 ```
 
 **runTest**:
-- ✅ Автоматически ждет завершения всех корутин
-- ✅ Предоставляет `TestScope` и `TestDispatcher`
-- ✅ Пропускает `delay()` мгновенно
-- ✅ Контролирует виртуальное время
+- - Автоматически ждет завершения всех корутин
+- - Предоставляет `TestScope` и `TestDispatcher`
+- - Пропускает `delay()` мгновенно
+- - Контролирует виртуальное время
 
 ### MainDispatcherRule - для viewModelScope
 
@@ -112,9 +112,9 @@ class UserViewModelTest {
 ```
 
 **MainDispatcherRule**:
-- ✅ Заменяет `Dispatchers.Main` на `TestDispatcher`
-- ✅ Работает с `viewModelScope` (который использует Main)
-- ✅ Автоматический cleanup в `@After`
+- - Заменяет `Dispatchers.Main` на `TestDispatcher`
+- - Работает с `viewModelScope` (который использует Main)
+- - Автоматический cleanup в `@After`
 
 ### StandardTestDispatcher vs UnconfinedTestDispatcher
 
@@ -170,7 +170,7 @@ class UserViewModel(
         )
 }
 
-// ✅ Тест Flow
+// - Тест Flow
 @Test
 fun `users flow emits repository data`() = runTest {
     // Given
@@ -228,7 +228,7 @@ class TimerViewModel : ViewModel() {
     }
 }
 
-// ✅ Тест с виртуальным временем
+// - Тест с виртуальным временем
 @Test
 fun `timer increments every second`() = runTest {
     val viewModel = TimerViewModel()
@@ -279,7 +279,7 @@ class UserViewModel(
     }
 }
 
-// ✅ Тест успешной загрузки
+// - Тест успешной загрузки
 @Test
 fun `load user success updates state correctly`() = runTest {
     val fakeRepository = FakeUserRepository()
@@ -295,7 +295,7 @@ fun `load user success updates state correctly`() = runTest {
     assertEquals(UiState.Success(expectedUser), states.last())
 }
 
-// ✅ Тест ошибки
+// - Тест ошибки
 @Test
 fun `load user failure updates state with error`() = runTest {
     val fakeRepository = FakeUserRepository()
@@ -312,7 +312,7 @@ fun `load user failure updates state with error`() = runTest {
 ### Fake Repository
 
 ```kotlin
-// ✅ Тестовый repository
+// - Тестовый repository
 class FakeUserRepository : UserRepository {
     private var result: Result<User>? = null
     private val usersFlow = MutableStateFlow<List<User>>(emptyList())
@@ -358,7 +358,7 @@ class DashboardViewModel(
     }
 }
 
-// ✅ Тест параллельной загрузки
+// - Тест параллельной загрузки
 @Test
 fun `loadDashboard loads all data in parallel`() = runTest {
     val viewModel = DashboardViewModel(
@@ -400,7 +400,7 @@ class SearchViewModel(
     }
 }
 
-// ✅ Тест отмены
+// - Тест отмены
 @Test
 fun `new search cancels previous search`() = runTest {
     val viewModel = SearchViewModel(fakeSearchRepo)
@@ -418,7 +418,7 @@ fun `new search cancels previous search`() = runTest {
     verify(fakeSearchRepo, times(1)).search(any()) // Только один вызов
 }
 
-// ✅ Тест debounce
+// - Тест debounce
 @Test
 fun `search debounces input`() = runTest {
     val viewModel = SearchViewModel(fakeSearchRepo)
@@ -457,7 +457,7 @@ class EventsViewModel : ViewModel() {
     }
 }
 
-// ✅ Тест SharedFlow
+// - Тест SharedFlow
 @Test
 fun `events are emitted to flow`() = runTest {
     val viewModel = EventsViewModel()
@@ -500,7 +500,7 @@ class ImageViewModel(
     }
 }
 
-// ✅ Тест withContext
+// - Тест withContext
 @Test
 fun `processImage uses Default dispatcher`() = runTest {
     val viewModel = ImageViewModel(fakeImageProcessor)
@@ -517,7 +517,7 @@ fun `processImage uses Default dispatcher`() = runTest {
 ### Common Pitfalls
 
 ```kotlin
-// ❌ 1. Забыли runTest
+// - 1. Забыли runTest
 @Test
 fun `bad test - no runTest`() {
     val viewModel = UserViewModel(fakeRepository)
@@ -526,7 +526,7 @@ fun `bad test - no runTest`() {
     assertEquals(expected, viewModel.user.value)
 }
 
-// ✅ Fix: используйте runTest
+// - Fix: используйте runTest
 @Test
 fun `good test - with runTest`() = runTest {
     val viewModel = UserViewModel(fakeRepository)
@@ -534,14 +534,14 @@ fun `good test - with runTest`() = runTest {
     assertEquals(expected, viewModel.user.value)
 }
 
-// ❌ 2. Не настроили Main dispatcher
+// - 2. Не настроили Main dispatcher
 @Test
 fun `bad test - no main dispatcher`() = runTest {
     // viewModelScope использует Dispatchers.Main
     val viewModel = UserViewModel(fakeRepository) // CRASH!
 }
 
-// ✅ Fix: используйте MainDispatcherRule
+// - Fix: используйте MainDispatcherRule
 @get:Rule
 val mainDispatcherRule = MainDispatcherRule()
 
@@ -550,7 +550,7 @@ fun `good test - with main dispatcher`() = runTest {
     val viewModel = UserViewModel(fakeRepository) // OK
 }
 
-// ❌ 3. Не продвинули время
+// - 3. Не продвинули время
 @Test
 fun `bad test - no advance time`() = runTest {
     val dispatcher = StandardTestDispatcher(testScheduler)
@@ -563,7 +563,7 @@ fun `bad test - no advance time`() = runTest {
     assertEquals(expected, viewModel.user.value)
 }
 
-// ✅ Fix: advanceUntilIdle()
+// - Fix: advanceUntilIdle()
 @Test
 fun `good test - advance time`() = runTest {
     val dispatcher = StandardTestDispatcher(testScheduler)
@@ -580,17 +580,17 @@ fun `good test - advance time`() = runTest {
 ### Best Practices
 
 ```kotlin
-// ✅ 1. Используйте runTest
+// - 1. Используйте runTest
 @Test
 fun test() = runTest {
     // ...
 }
 
-// ✅ 2. Настройте Main dispatcher
+// - 2. Настройте Main dispatcher
 @get:Rule
 val mainDispatcherRule = MainDispatcherRule()
 
-// ✅ 3. Используйте Fake repositories
+// - 3. Используйте Fake repositories
 class FakeUserRepository : UserRepository {
     private var users = listOf<User>()
 
@@ -601,7 +601,7 @@ class FakeUserRepository : UserRepository {
     override suspend fun getUsers() = users
 }
 
-// ✅ 4. Тестируйте состояния, не реализацию
+// - 4. Тестируйте состояния, не реализацию
 @Test
 fun `load user updates state`() = runTest {
     viewModel.loadUser(1)
@@ -610,7 +610,7 @@ fun `load user updates state`() = runTest {
     assertEquals(expectedUser, viewModel.user.value)
 }
 
-// ✅ 5. Используйте turbine для Flow
+// - 5. Используйте turbine для Flow
 @Test
 fun `test flow emissions`() = runTest {
     viewModel.users.test {
@@ -620,7 +620,7 @@ fun `test flow emissions`() = runTest {
     }
 }
 
-// ✅ 6. Проверяйте sequence состояний
+// - 6. Проверяйте sequence состояний
 @Test
 fun `load user goes through loading state`() = runTest {
     val states = mutableListOf<UiState>()

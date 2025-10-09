@@ -187,13 +187,13 @@ val handler = CoroutineExceptionHandler { _, e ->
 }
 
 launch(handler) {
-    // ✅ Handler works here (root coroutine)
+    // - Handler works here (root coroutine)
     throw Exception("Error")
 }
 
 launch {
     launch(handler) {
-        // ❌ Handler doesn't work (child coroutine)
+        // - Handler doesn't work (child coroutine)
         throw Exception("Error")
     }
 }
@@ -351,7 +351,7 @@ scope.launch {  // Parent
 
     launch {  // Child 2
         delay(1000)
-        println("Still running")  // ✅ Continues
+        println("Still running")  // - Continues
     }
 }
 ```

@@ -330,26 +330,26 @@ supportFragmentManager.commitTransaction(now = true) {
 ### Common Pitfalls
 
 ```kotlin
-// ❌ BAD: Can't use back stack with commitNow()
+// BAD: Can't use back stack with commitNow()
 supportFragmentManager.beginTransaction()
     .add(R.id.container, MyFragment())
     .addToBackStack(null)
     .commitNow() // IllegalStateException!
 
-// ✅ GOOD: Use commit() with back stack
+// GOOD: Use commit() with back stack
 supportFragmentManager.beginTransaction()
     .add(R.id.container, MyFragment())
     .addToBackStack(null)
     .commit()
 
-// ❌ BAD: Assuming fragment available immediately
+// BAD: Assuming fragment available immediately
 supportFragmentManager.beginTransaction()
     .add(R.id.container, MyFragment())
     .commit()
 val fragment = supportFragmentManager
     .findFragmentById(R.id.container) // null!
 
-// ✅ GOOD: Execute pending or use commitNow()
+// GOOD: Execute pending or use commitNow()
 supportFragmentManager.beginTransaction()
     .add(R.id.container, MyFragment())
     .commit()

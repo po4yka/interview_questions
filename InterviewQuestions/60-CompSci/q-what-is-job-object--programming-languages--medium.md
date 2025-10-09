@@ -342,7 +342,7 @@ fun jobHierarchy() = runBlocking {
 
 ```kotlin
 class JobBestPractices {
-    // ✅ DO: Store job for lifecycle management
+    // - DO: Store job for lifecycle management
     class GoodManager {
         private val job = SupervisorJob()
         private val scope = CoroutineScope(job + Dispatchers.Default)
@@ -356,13 +356,13 @@ class JobBestPractices {
         }
     }
 
-    // ✅ DO: Use cancelAndJoin for clean shutdown
+    // - DO: Use cancelAndJoin for clean shutdown
     suspend fun goodShutdown(job: Job) {
         job.cancelAndJoin()  // Cancel and wait
         println("Clean shutdown complete")
     }
 
-    // ❌ DON'T: Forget to clean up jobs
+    // - DON'T: Forget to clean up jobs
     class BadManager {
         fun start() {
             GlobalScope.launch {  // No way to cancel
@@ -372,7 +372,7 @@ class JobBestPractices {
         // Memory leak!
     }
 
-    // ❌ DON'T: Ignore job completion
+    // - DON'T: Ignore job completion
     fun badExample() = runBlocking {
         launch {
             // Long running work

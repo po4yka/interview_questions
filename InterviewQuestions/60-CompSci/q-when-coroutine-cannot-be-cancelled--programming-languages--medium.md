@@ -20,7 +20,7 @@ Yes, there are three main cases when cancellation doesn't work:
 ```kotlin
 import kotlinx.coroutines.*
 
-// ❌ Cannot cancel - uses Thread.sleep (blocking)
+// - Cannot cancel - uses Thread.sleep (blocking)
 fun blockingExample() = runBlocking {
     val job = launch {
         try {
@@ -48,7 +48,7 @@ fun blockingExample() = runBlocking {
 // Finally block
 // Done
 
-// ✅ SOLUTION: Use delay instead
+// - SOLUTION: Use delay instead
 fun cooperativeExample() = runBlocking {
     val job = launch {
         try {
@@ -79,7 +79,7 @@ fun cooperativeExample() = runBlocking {
 ### Case 2: NonCancellable Context
 
 ```kotlin
-// ❌ Cannot cancel - uses NonCancellable
+// - Cannot cancel - uses NonCancellable
 fun nonCancellableExample() = runBlocking {
     val job = launch(NonCancellable) {
         repeat(5) { i ->
@@ -124,7 +124,7 @@ suspend fun performCleanup() {
 ### Case 3: No Cooperation - CPU-Intensive Loop
 
 ```kotlin
-// ❌ Cannot cancel - no suspension points or checks
+// - Cannot cancel - no suspension points or checks
 fun cpuIntensiveNonCooperative() = runBlocking {
     val job = launch {
         var i = 0
@@ -142,7 +142,7 @@ fun cpuIntensiveNonCooperative() = runBlocking {
     println("Done")
 }
 
-// ✅ SOLUTION 1: Check isActive
+// - SOLUTION 1: Check isActive
 fun cpuIntensiveCooperative1() = runBlocking {
     val job = launch {
         var i = 0
@@ -158,7 +158,7 @@ fun cpuIntensiveCooperative1() = runBlocking {
     println("Done")
 }
 
-// ✅ SOLUTION 2: Call yield()
+// - SOLUTION 2: Call yield()
 fun cpuIntensiveCooperative2() = runBlocking {
     val job = launch {
         var i = 0
@@ -177,7 +177,7 @@ fun cpuIntensiveCooperative2() = runBlocking {
     println("Done")
 }
 
-// ✅ SOLUTION 3: Use ensureActive()
+// - SOLUTION 3: Use ensureActive()
 fun cpuIntensiveCooperative3() = runBlocking {
     val job = launch {
         var i = 0
@@ -200,7 +200,7 @@ fun cpuIntensiveCooperative3() = runBlocking {
 ### Case 4: Infinite Loop Without Checks
 
 ```kotlin
-// ❌ Cannot cancel - infinite loop with blocking
+// - Cannot cancel - infinite loop with blocking
 fun infiniteBlockingLoop() = runBlocking {
     val job = launch {
         while (true) {
@@ -213,7 +213,7 @@ fun infiniteBlockingLoop() = runBlocking {
     job.cancel()  // Won't work
 }
 
-// ✅ SOLUTION: Use delay and isActive
+// - SOLUTION: Use delay and isActive
 fun infiniteCooperativeLoop() = runBlocking {
     val job = launch {
         while (isActive) {
@@ -231,7 +231,7 @@ fun infiniteCooperativeLoop() = runBlocking {
 ### Case 5: Blocking I/O
 
 ```kotlin
-// ❌ Cannot cancel during blocking I/O
+// - Cannot cancel during blocking I/O
 fun blockingIO() = runBlocking {
     val job = launch {
         val file = File("large_file.txt")
@@ -243,7 +243,7 @@ fun blockingIO() = runBlocking {
     job.cancel()  // File read continues
 }
 
-// ✅ SOLUTION: Use interruptible I/O
+// - SOLUTION: Use interruptible I/O
 fun interruptibleIO() = runBlocking {
     val job = launch(Dispatchers.IO) {
         withContext(Dispatchers.IO) {
@@ -310,7 +310,7 @@ suspend fun cooperativeWork5() {
 ### Real-World Example: Image Processing
 
 ```kotlin
-// ❌ Non-cooperative image processing
+// - Non-cooperative image processing
 suspend fun processImagesNonCooperative(images: List<Bitmap>) {
     for (image in images) {
         // Long blocking operation
@@ -319,7 +319,7 @@ suspend fun processImagesNonCooperative(images: List<Bitmap>) {
     }
 }
 
-// ✅ Cooperative image processing
+// - Cooperative image processing
 suspend fun processImagesCooperative(images: List<Bitmap>) {
     for (image in images) {
         ensureActive()  // Check before processing each image
@@ -331,7 +331,7 @@ suspend fun processImagesCooperative(images: List<Bitmap>) {
     }
 }
 
-// ✅ Even better: Check during processing
+// - Even better: Check during processing
 suspend fun processImageCooperative(image: Bitmap): Bitmap {
     return withContext(Dispatchers.Default) {
         val width = image.width
@@ -449,31 +449,31 @@ class CancellationTest {
 
 ```kotlin
 class CancellationBestPractices {
-    // ✅ DO: Use delay instead of Thread.sleep
+    // - DO: Use delay instead of Thread.sleep
     suspend fun good1() {
         delay(1000)  // Checks cancellation
     }
 
-    // ❌ DON'T: Use blocking sleep
+    // - DON'T: Use blocking sleep
     suspend fun bad1() {
         Thread.sleep(1000)  // Ignores cancellation
     }
 
-    // ✅ DO: Check isActive in loops
+    // - DO: Check isActive in loops
     suspend fun good2() {
         while (isActive) {
             doWork()
         }
     }
 
-    // ❌ DON'T: Ignore cancellation in loops
+    // - DON'T: Ignore cancellation in loops
     suspend fun bad2() {
         while (true) {  // Never checks cancellation
             doWork()
         }
     }
 
-    // ✅ DO: Call yield() in CPU-intensive work
+    // - DO: Call yield() in CPU-intensive work
     suspend fun good3() {
         repeat(1_000_000) { i ->
             if (i % 1000 == 0) yield()
@@ -481,14 +481,14 @@ class CancellationBestPractices {
         }
     }
 
-    // ❌ DON'T: Long running without cooperation
+    // - DON'T: Long running without cooperation
     suspend fun bad3() {
         repeat(1_000_000) {
             compute()  // No cancellation checks
         }
     }
 
-    // ✅ DO: Use NonCancellable only for cleanup
+    // - DO: Use NonCancellable only for cleanup
     suspend fun good4() {
         try {
             doWork()
@@ -499,7 +499,7 @@ class CancellationBestPractices {
         }
     }
 
-    // ❌ DON'T: Use NonCancellable for regular work
+    // - DON'T: Use NonCancellable for regular work
     suspend fun bad4() {
         withContext(NonCancellable) {
             doWork()  // Cannot be cancelled!
@@ -512,14 +512,14 @@ class CancellationBestPractices {
 
 | Scenario | Cancellable? | Solution |
 |----------|--------------|----------|
-| `delay()` | ✅ Yes | Built-in cooperation |
-| `Thread.sleep()` | ❌ No | Use `delay()` instead |
-| `while(isActive)` | ✅ Yes | Checks cancellation |
-| `while(true)` | ❌ No | Check `isActive` or call `yield()` |
-| `NonCancellable` context | ❌ No | By design (use only for cleanup) |
-| CPU-intensive with `yield()` | ✅ Yes | Cooperative |
-| CPU-intensive without checks | ❌ No | Add `yield()` or `ensureActive()` |
-| Blocking I/O | ❌ No | Use suspending I/O or add checks |
+| `delay()` | - Yes | Built-in cooperation |
+| `Thread.sleep()` | - No | Use `delay()` instead |
+| `while(isActive)` | - Yes | Checks cancellation |
+| `while(true)` | - No | Check `isActive` or call `yield()` |
+| `NonCancellable` context | - No | By design (use only for cleanup) |
+| CPU-intensive with `yield()` | - Yes | Cooperative |
+| CPU-intensive without checks | - No | Add `yield()` or `ensureActive()` |
+| Blocking I/O | - No | Use suspending I/O or add checks |
 
 ---
 ## Вопрос (RU)

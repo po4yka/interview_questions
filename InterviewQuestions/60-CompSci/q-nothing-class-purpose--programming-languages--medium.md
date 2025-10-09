@@ -104,12 +104,12 @@ fun handleResult(result: Result): String {
 Using `Nothing` to indicate that a function does not return and should not complete makes the code **more understandable** for other developers, facilitating understanding of application logic.
 
 ```kotlin
-// ✅ Clear intent - function never returns
+// - Clear intent - function never returns
 fun crash(message: String): Nothing {
     throw RuntimeException(message)
 }
 
-// ❌ Unclear - looks like it might return normally
+// - Unclear - looks like it might return normally
 fun crash(message: String) {
     throw RuntimeException(message)
 }
@@ -351,11 +351,11 @@ fun findUser(id: Int): User {
 - Validation helpers
 
 **Benefits:**
-- ✅ Better compiler analysis
-- ✅ Smart casts
-- ✅ Code optimization
-- ✅ Clearer intent
-- ✅ Type safety
+- - Better compiler analysis
+- - Smart casts
+- - Code optimization
+- - Clearer intent
+- - Type safety
 
 **Remember:** `Nothing` indicates "this never completes normally" - it either throws an exception or runs forever.
 

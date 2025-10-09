@@ -49,8 +49,8 @@ fun Counter() {
     }
 }
 
-// ✅ Survives: Recomposition
-// ❌ Lost on: Configuration change, process death
+// - Survives: Recomposition
+// - Lost on: Configuration change, process death
 ```
 
 ### rememberSaveable - Survives Configuration Changes
@@ -65,7 +65,7 @@ fun Counter() {
     }
 }
 
-// ✅ Survives: Recomposition, rotation, process death
+// - Survives: Recomposition, rotation, process death
 // Saved to Bundle automatically
 ```
 
@@ -73,9 +73,9 @@ fun Counter() {
 
 | Feature | remember | rememberSaveable |
 |---------|----------|------------------|
-| **Recomposition** | ✅ Survives | ✅ Survives |
-| **Config change** | ❌ Lost | ✅ Survives |
-| **Process death** | ❌ Lost | ✅ Survives |
+| **Recomposition** | - Survives | - Survives |
+| **Config change** | - Lost | - Survives |
+| **Process death** | - Lost | - Survives |
 | **Types supported** | Any | Parcelable/Serializable/primitives |
 | **Performance** | Faster | Slightly slower (serialization) |
 
@@ -156,8 +156,8 @@ fun Counter() {
     }
 }
 
-// ✅ Переживает: Рекомпозицию
-// ❌ Теряется при: Изменении конфигурации, смерти процесса
+// - Переживает: Рекомпозицию
+// - Теряется при: Изменении конфигурации, смерти процесса
 ```
 
 ### rememberSaveable - Переживает изменения конфигурации
@@ -172,7 +172,7 @@ fun Counter() {
     }
 }
 
-// ✅ Переживает: Рекомпозицию, поворот, смерть процесса
+// - Переживает: Рекомпозицию, поворот, смерть процесса
 // Сохраняется в Bundle автоматически
 ```
 

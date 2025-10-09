@@ -75,9 +75,9 @@ class CachedRepository(
 ```
 
 **Benefits:**
-- ✅ Eliminates boilerplate
-- ✅ Composition over inheritance
-- ✅ Can override specific methods
+- - Eliminates boilerplate
+- - Composition over inheritance
+- - Can override specific methods
 
 ### Property Delegation
 

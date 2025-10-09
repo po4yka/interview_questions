@@ -259,7 +259,7 @@ println("Thread state: ${looperThread.state}")
 - **Instant wake-up** when message arrives
 
 ```kotlin
-// ❌ BAD: Busy-waiting (wastes CPU)
+// - BAD: Busy-waiting (wastes CPU)
 while (true) {
     if (queue.hasMessages()) {
         processMessage(queue.next())
@@ -267,7 +267,7 @@ while (true) {
     // Continuously checks → 100% CPU usage!
 }
 
-// ✅ GOOD: Looper's approach (efficient)
+// - GOOD: Looper's approach (efficient)
 while (true) {
     val msg = queue.next() // Blocks in epoll_wait (0% CPU when idle)
     if (msg == null) break
@@ -442,10 +442,10 @@ class MyService : Service() {
    - `quit()` or `quitSafely()` is called
 
 **Key characteristics:**
-- ✅ **Efficient**: 0% CPU when idle
-- ✅ **Responsive**: Instant wake-up on new message
-- ✅ **Persistent**: Thread stays alive for future work
-- ✅ **Safe**: Managed by Android framework
+- - **Efficient**: 0% CPU when idle
+- - **Responsive**: Instant wake-up on new message
+- - **Persistent**: Thread stays alive for future work
+- - **Safe**: Managed by Android framework
 
 **Stopping Looper:**
 ```kotlin

@@ -155,11 +155,11 @@ fun readFile(path: String) {
 
 **1. Using throws in Kotlin:**
 ```kotlin
-// ❌ Wrong - throws doesn't exist in Kotlin
+// - Wrong - throws doesn't exist in Kotlin
 fun readFile() throws IOException {  // Compilation error!
 }
 
-// ✅ Correct - just throw if needed
+// - Correct - just throw if needed
 fun readFile() {
     throw IOException("Error")
 }
@@ -167,12 +167,12 @@ fun readFile() {
 
 **2. Forgetting throw keyword:**
 ```java
-// ❌ Wrong - just creating exception, not throwing
+// - Wrong - just creating exception, not throwing
 if (age < 0) {
     new IllegalArgumentException("Invalid");  // Does nothing!
 }
 
-// ✅ Correct - actually throw it
+// - Correct - actually throw it
 if (age < 0) {
     throw new IllegalArgumentException("Invalid");
 }

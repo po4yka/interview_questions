@@ -252,11 +252,11 @@ keytool -list -v -keystore upload-keystore.jks -alias upload
 
 Play App Signing is essential for modern Android app distribution:
 
-✅ **Security**: Google manages app signing key securely
-✅ **Flexibility**: Separate upload key can be reset
-✅ **App Bundle**: Required for Android App Bundle features
-✅ **Key Upgrade**: Can upgrade to stronger cryptographic keys
-✅ **Peace of Mind**: Google's infrastructure protects signing key
+- **Security**: Google manages app signing key securely
+- **Flexibility**: Separate upload key can be reset
+- **App Bundle**: Required for Android App Bundle features
+- **Key Upgrade**: Can upgrade to stronger cryptographic keys
+- **Peace of Mind**: Google's infrastructure protects signing key
 
 **Always use Play App Signing for new apps, and migrate existing apps when possible.**
 
@@ -375,10 +375,10 @@ Play App Signing использует **два ключа**: **ключ подп
 
 Play App Signing необходим для современного распространения приложений Android:
 
-✅ **Безопасность**: Google безопасно управляет ключом подписи приложения
-✅ **Гибкость**: Отдельный ключ загрузки может быть сброшен
-✅ **App Bundle**: Требуется для функций Android App Bundle
-✅ **Обновление ключа**: Можно обновить до более сильных криптографических ключей
-✅ **Спокойствие**: Инфраструктура Google защищает ключ подписи
+- **Безопасность**: Google безопасно управляет ключом подписи приложения
+- **Гибкость**: Отдельный ключ загрузки может быть сброшен
+- **App Bundle**: Требуется для функций Android App Bundle
+- **Обновление ключа**: Можно обновить до более сильных криптографических ключей
+- **Спокойствие**: Инфраструктура Google защищает ключ подписи
 
 **Всегда используйте Play App Signing для новых приложений и мигрируйте существующие приложения, когда это возможно.**

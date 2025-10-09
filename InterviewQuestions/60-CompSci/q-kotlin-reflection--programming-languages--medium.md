@@ -247,7 +247,7 @@ val name = nameProp?.get(person)
 
 **Pros & Cons:**
 
-| Pros ✅ | Cons ❌ |
+| Pros - | Cons - |
 |---------|---------|
 | Dynamic behavior | Performance overhead |
 | Generic frameworks | Type safety lost |
@@ -256,14 +256,14 @@ val name = nameProp?.get(person)
 
 **When to Use:**
 
-✅ **Use reflection for:**
+- **Use reflection for:**
 - Serialization libraries (Gson, Jackson)
 - Dependency injection (Dagger, Koin)
 - Testing frameworks
 - ORM libraries
 - Generic utilities
 
-❌ **Avoid reflection for:**
+- **Avoid reflection for:**
 - Performance-critical code
 - Simple tasks (use direct access)
 - Production code (use compile-time alternatives)

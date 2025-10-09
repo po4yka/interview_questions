@@ -22,7 +22,7 @@ status: reviewed
 ```kotlin
 @Composable
 fun CounterWithRemember() {
-    // ❌ Потеряется при повороте экрана!
+    // - Потеряется при повороте экрана!
     var count by remember { mutableStateOf(0) }
 
     Column {
@@ -35,17 +35,17 @@ fun CounterWithRemember() {
 ```
 
 **Поведение**:
-- ✅ Переживает recomposition
-- ❌ **Теряется** при configuration change (rotation, language change, etc.)
-- ❌ **Теряется** при process death
-- ✅ Быстрое, без сериализации
+- - Переживает recomposition
+- - **Теряется** при configuration change (rotation, language change, etc.)
+- - **Теряется** при process death
+- - Быстрое, без сериализации
 
 ### rememberSaveable - Сохранение в Bundle
 
 ```kotlin
 @Composable
 fun CounterWithRememberSaveable() {
-    // ✅ Сохранится при повороте экрана!
+    // - Сохранится при повороте экрана!
     var count by rememberSaveable { mutableStateOf(0) }
 
     Column {
@@ -58,18 +58,18 @@ fun CounterWithRememberSaveable() {
 ```
 
 **Поведение**:
-- ✅ Переживает recomposition
-- ✅ **Переживает** configuration changes
-- ✅ **Переживает** process death (в некоторых случаях)
-- ⚠️ Требует типы, поддерживающие Bundle (Parcelable/Serializable)
+- - Переживает recomposition
+- - **Переживает** configuration changes
+- - **Переживает** process death (в некоторых случаях)
+- WARNING: Требует типы, поддерживающие Bundle (Parcelable/Serializable)
 
 ### Сравнительная таблица
 
 | Аспект | remember | rememberSaveable |
 |--------|----------|------------------|
-| **Recomposition** | ✅ Сохраняется | ✅ Сохраняется |
-| **Configuration change** | ❌ Теряется | ✅ Сохраняется |
-| **Process death** | ❌ Теряется | ✅ Сохраняется* |
+| **Recomposition** | - Сохраняется | - Сохраняется |
+| **Configuration change** | - Теряется | - Сохраняется |
+| **Process death** | - Теряется | - Сохраняется* |
 | **Поддерживаемые типы** | Любые | Bundle-compatible |
 | **Производительность** | ⚡ Быстрее | 🐢 Медленнее (сериализация) |
 | **Лимит размера** | Нет | 1MB (Bundle limit) |
@@ -84,7 +84,7 @@ fun CounterWithRememberSaveable() {
 ```kotlin
 @Composable
 fun AutoSupportedTypes() {
-    // ✅ Все эти типы работают из коробки
+    // - Все эти типы работают из коробки
     var text by rememberSaveable { mutableStateOf("") }           // String
     var count by rememberSaveable { mutableStateOf(0) }           // Int
     var price by rememberSaveable { mutableStateOf(0.0) }         // Double
@@ -220,13 +220,13 @@ fun ShoppingCart() {
 ```kotlin
 @Composable
 fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
-    // ✅ ViewModel переживает configuration changes
+    // - ViewModel переживает configuration changes
     val query by viewModel.query.collectAsState()
 
-    // ❌ НЕ НУЖЕН rememberSaveable для ViewModel state
+    // - НЕ НУЖЕН rememberSaveable для ViewModel state
     // ViewModel уже переживает rotation!
 
-    // ✅ rememberSaveable для локального UI состояния
+    // - rememberSaveable для локального UI состояния
     var isFilterExpanded by rememberSaveable { mutableStateOf(false) }
     var selectedTab by rememberSaveable { mutableStateOf(0) }
 
@@ -255,7 +255,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
 
 ### Когда использовать remember
 
-**✅ Используйте remember для**:
+**- Используйте remember для**:
 
 1. **Временного UI состояния** (не важно потерять):
 
@@ -283,12 +283,12 @@ fun AnimatedButton() {
 ```kotlin
 @Composable
 fun ExpensiveComputationExample() {
-    // ✅ remember для expensive objects
+    // - remember для expensive objects
     val expensiveObject = remember {
         ExpensiveObject() // Создается один раз
     }
 
-    // ❌ НЕ НУЖЕН rememberSaveable - слишком дорого сериализовать
+    // - НЕ НУЖЕН rememberSaveable - слишком дорого сериализовать
 }
 ```
 
@@ -301,13 +301,13 @@ fun DataScreen(viewModel: DataViewModel) {
     val data by viewModel.data.collectAsState()
 
     // Локальное состояние для navigation
-    val navController = rememberNavController() // ✅ remember OK
+    val navController = rememberNavController() // - remember OK
 }
 ```
 
 ### Когда использовать rememberSaveable
 
-**✅ Используйте rememberSaveable для**:
+**- Используйте rememberSaveable для**:
 
 1. **Пользовательский input** (формы, поиск):
 
@@ -424,12 +424,12 @@ fun ExpandableCard(title: String, content: String) {
 ```kotlin
 @Composable
 fun LargeDataExample() {
-    // ❌ НЕПРАВИЛЬНО - может превысить 1MB Bundle limit
+    // - НЕПРАВИЛЬНО - может превысить 1MB Bundle limit
     var largeList by rememberSaveable {
         mutableStateOf(List(10000) { "Item $it" })
     }
 
-    // ✅ ПРАВИЛЬНО - сохранить в ViewModel или Database
+    // - ПРАВИЛЬНО - сохранить в ViewModel или Database
     val viewModel: DataViewModel = hiltViewModel()
     val largeList by viewModel.items.collectAsState()
 }
@@ -440,12 +440,12 @@ fun LargeDataExample() {
 ```kotlin
 @Composable
 fun NonSerializableExample() {
-    // ❌ НЕПРАВИЛЬНО - Bitmap не Parcelable
+    // - НЕПРАВИЛЬНО - Bitmap не Parcelable
     var image by rememberSaveable {
         mutableStateOf<Bitmap?>(null)
     }
 
-    // ✅ ПРАВИЛЬНО - сохранить URI вместо Bitmap
+    // - ПРАВИЛЬНО - сохранить URI вместо Bitmap
     var imageUri by rememberSaveable {
         mutableStateOf<String?>(null)
     }
@@ -494,7 +494,7 @@ fun TabScreen(initialTab: Int) {
 **1. Используйте rememberSaveable для пользовательского input**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО - пользователь не потеряет введенный текст
+// - ПРАВИЛЬНО - пользователь не потеряет введенный текст
 @Composable
 fun CommentInput() {
     var comment by rememberSaveable { mutableStateOf("") }
@@ -505,7 +505,7 @@ fun CommentInput() {
 **2. Используйте remember для производительности**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО - expensive объект создается один раз
+// - ПРАВИЛЬНО - expensive объект создается один раз
 @Composable
 fun VideoPlayer() {
     val exoPlayer = remember { ExoPlayer.Builder(context).build() }
@@ -519,10 +519,10 @@ fun VideoPlayer() {
 **3. Не используйте rememberSaveable для больших данных**
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО
+// - НЕПРАВИЛЬНО
 var products by rememberSaveable { mutableStateOf(emptyList<Product>()) }
 
-// ✅ ПРАВИЛЬНО - используйте ViewModel + Repository
+// - ПРАВИЛЬНО - используйте ViewModel + Repository
 val viewModel: ProductsViewModel = hiltViewModel()
 val products by viewModel.products.collectAsState()
 ```

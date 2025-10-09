@@ -599,23 +599,23 @@ class FlowTypeTest {
 #### 8. **Best Practices**
 
 ```kotlin
-// ✅ Use TestDispatchers
+// - Use TestDispatchers
 @get:Rule
 val mainDispatcherRule = MainDispatcherRule()
 
-// ✅ Use runTest for coroutine tests
+// - Use runTest for coroutine tests
 @Test
 fun test() = runTest {
     // Test code
 }
 
-// ✅ Use Turbine for Flow testing
+// - Use Turbine for Flow testing
 flow.test {
     assertEquals(expected, awaitItem())
     awaitComplete()
 }
 
-// ✅ Inject dispatchers for testability
+// - Inject dispatchers for testability
 class MyViewModel(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
@@ -624,7 +624,7 @@ class MyViewModel(
     }
 }
 
-// ✅ Test error cases
+// - Test error cases
 @Test
 fun `handles error gracefully`() = runTest {
     coEvery { repository.getData() } throws NetworkException()
@@ -634,7 +634,7 @@ fun `handles error gracefully`() = runTest {
     }
 }
 
-// ✅ Verify timing with virtual time
+// - Verify timing with virtual time
 @Test
 fun `debounce timing`() = runTest {
     viewModel.onInput("test")
@@ -645,22 +645,22 @@ fun `debounce timing`() = runTest {
     coVerify(exactly = 1) { repository.search("test") }
 }
 
-// ❌ Don't use Thread.sleep in tests
+// - Don't use Thread.sleep in tests
 @Test
 fun badTest() = runTest {
-    Thread.sleep(1000) // ❌ Wrong!
-    testScheduler.advanceTimeBy(1000) // ✅ Correct
+    Thread.sleep(1000) // - Wrong!
+    testScheduler.advanceTimeBy(1000) // - Correct
 }
 
-// ❌ Don't forget to advance time
+// - Don't forget to advance time
 @Test
 fun badTest2() = runTest {
     launch {
         delay(1000)
         doSomething()
     }
-    // ❌ Test finishes before coroutine executes
-    // ✅ Need: testScheduler.advanceUntilIdle()
+    // - Test finishes before coroutine executes
+    // - Need: testScheduler.advanceUntilIdle()
 }
 ```
 
@@ -668,11 +668,11 @@ fun badTest2() = runTest {
 
 **1. Not using TestDispatchers:**
 ```kotlin
-// ❌ Uses real Dispatchers.Main
+// - Uses real Dispatchers.Main
 @Test
 fun test() = runBlocking { ... }
 
-// ✅ Uses TestDispatcher
+// - Uses TestDispatcher
 @Test
 fun test() = runTest { ... }
 ```
@@ -682,10 +682,10 @@ fun test() = runTest { ... }
 @Test
 fun test() = runTest {
     launch { delay(1000); doWork() }
-    // ❌ Assertion fails, delay not advanced
+    // - Assertion fails, delay not advanced
     verify { doWork() }
 
-    // ✅ Advance time first
+    // - Advance time first
     testScheduler.advanceTimeBy(1000)
     verify { doWork() }
 }
@@ -695,9 +695,9 @@ fun test() = runTest {
 ```kotlin
 @Test
 fun test() = runTest {
-    flow.collect { ... } // ❌ Hangs if flow never completes
+    flow.collect { ... } // - Hangs if flow never completes
 
-    flow.take(1).test { ... } // ✅ Completes after 1 item
+    flow.take(1).test { ... } // - Completes after 1 item
 }
 ```
 

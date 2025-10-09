@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // ❌ On rotation, username, password, and isLoggingIn are LOST!
+    // - On rotation, username, password, and isLoggingIn are LOST!
 }
 ```
 
@@ -69,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
 **Problem:**
 
 ```xml
-<!-- ❌ BAD: EditText without android:id -->
+<!-- - BAD: EditText without android:id -->
 <EditText
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -79,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
 **Solution:**
 
 ```xml
-<!-- ✅ GOOD: EditText with android:id -->
+<!-- - GOOD: EditText with android:id -->
 <EditText
     android:id="@+id/nameField"
     android:layout_width="match_parent"
@@ -113,7 +113,7 @@ class UserListActivity : AppCompatActivity() {
         }
     }
 
-    // ❌ On rotation, users list is lost
+    // - On rotation, users list is lost
     // Network call is made AGAIN unnecessarily
 }
 ```
@@ -143,7 +143,7 @@ class UserListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_list)
 
-        // ✅ Data survives rotation
+        // - Data survives rotation
         // Network call happens ONCE
         viewModel.users.observe(this) { users ->
             displayUsers(users)
@@ -172,7 +172,7 @@ class GameActivity : AppCompatActivity() {
         scoreText.text = "Score: $score"
     }
 
-    // ❌ No onSaveInstanceState() implementation
+    // - No onSaveInstanceState() implementation
     // All game state lost on rotation!
 }
 ```
@@ -201,7 +201,7 @@ class GameActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        // ✅ Save state before destruction
+        // - Save state before destruction
         outState.putInt("SCORE", score)
         outState.putInt("LEVEL", level)
         outState.putString("PLAYER_NAME", playerName)
@@ -230,7 +230,7 @@ class DownloadActivity : AppCompatActivity() {
         }
     }
 
-    // ❌ On rotation:
+    // - On rotation:
     // - downloadJob reference is lost
     // - Download continues but UI can't update
     // - No way to track download progress
@@ -269,7 +269,7 @@ class DownloadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_download)
 
-        // ✅ Download survives rotation
+        // - Download survives rotation
         viewModel.downloadProgress.observe(this) { progress ->
             progressBar.progress = progress
             progressText.text = "$progress%"
@@ -307,7 +307,7 @@ class UserFragment : Fragment() {
         }
     }
 
-    // ❌ userData lost on configuration change
+    // - userData lost on configuration change
 }
 ```
 
@@ -327,7 +327,7 @@ class UserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ✅ Data survives rotation
+        // - Data survives rotation
         viewModel.user.observe(viewLifecycleOwner) { user ->
             displayUser(user)
         }
@@ -339,7 +339,7 @@ class UserFragment : Fragment() {
 
 ## Complete Example: Data Loss vs. Proper Handling
 
-### ❌ Bad Example (Data Lost)
+### - Bad Example (Data Lost)
 
 ```kotlin
 class BadActivity : AppCompatActivity() {
@@ -375,7 +375,7 @@ class BadActivity : AppCompatActivity() {
 
 ---
 
-### ✅ Good Example (Data Preserved)
+### - Good Example (Data Preserved)
 
 ```kotlin
 class GoodViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -440,10 +440,10 @@ class GoodActivity : AppCompatActivity() {
 ```
 
 **After rotation:**
-- ✅ `counter` value preserved
-- ✅ `userName` preserved
-- ✅ `selectedItems` list intact
-- ✅ User experience seamless
+- - `counter` value preserved
+- - `userName` preserved
+- - `selectedItems` list intact
+- - User experience seamless
 
 ---
 
@@ -559,14 +559,14 @@ fun testRotation() {
 
 ## Best Practices
 
-1. ✅ **Use ViewModel** for all UI-related data
-2. ✅ **Add SavedStateHandle** for critical state that must survive process death
-3. ✅ **Add android:id** to all Views that hold user input
-4. ✅ **Use persistent storage** (DataStore, Room) for data that should survive app restart
-5. ✅ **Test with rotation** during development
-6. ✅ **Enable "Don't keep activities"** during testing
-7. ❌ **Don't rely on** Activity/Fragment instance variables for important state
-8. ❌ **Don't make** unnecessary network calls after rotation
+1. - **Use ViewModel** for all UI-related data
+2. - **Add SavedStateHandle** for critical state that must survive process death
+3. - **Add android:id** to all Views that hold user input
+4. - **Use persistent storage** (DataStore, Room) for data that should survive app restart
+5. - **Test with rotation** during development
+6. - **Enable "Don't keep activities"** during testing
+7. - **Don't rely on** Activity/Fragment instance variables for important state
+8. - **Don't make** unnecessary network calls after rotation
 
 ---
 
@@ -631,19 +631,19 @@ This ensures data survives both configuration changes and process death.
 
 **1. Данные не сохранены**
 ```kotlin
-// ❌ Данные теряются при повороте
+// - Данные теряются при повороте
 private var username: String = ""
 private var score: Int = 0
 ```
 
 **2. EditText без android:id**
 ```xml
-<!-- ❌ Состояние не сохраняется -->
+<!-- - Состояние не сохраняется -->
 <EditText
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 
-<!-- ✅ Состояние сохраняется автоматически -->
+<!-- - Состояние сохраняется автоматически -->
 <EditText
     android:id="@+id/nameField"
     android:layout_width="match_parent"
@@ -652,12 +652,12 @@ private var score: Int = 0
 
 **3. Не используется ViewModel**
 ```kotlin
-// ❌ БЕЗ ViewModel - данные теряются
+// - БЕЗ ViewModel - данные теряются
 class BadActivity : AppCompatActivity() {
     private var users: List<User> = emptyList()
 }
 
-// ✅ С ViewModel - данные сохраняются
+// - С ViewModel - данные сохраняются
 class GoodActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
 }
@@ -698,10 +698,10 @@ override fun onSaveInstanceState(outState: Bundle) {
 
 ### Лучшие практики
 
-1. ✅ Используйте **ViewModel** для UI данных
-2. ✅ Добавьте **SavedStateHandle** для критического состояния
-3. ✅ Добавляйте **android:id** ко всем View с пользовательским вводом
-4. ✅ Используйте **постоянное хранилище** (DataStore, Room) для долгосрочных данных
-5. ✅ Тестируйте с поворотом экрана
-6. ❌ Не полагайтесь на переменные экземпляра Activity/Fragment
+1. - Используйте **ViewModel** для UI данных
+2. - Добавьте **SavedStateHandle** для критического состояния
+3. - Добавляйте **android:id** ко всем View с пользовательским вводом
+4. - Используйте **постоянное хранилище** (DataStore, Room) для долгосрочных данных
+5. - Тестируйте с поворотом экрана
+6. - Не полагайтесь на переменные экземпляра Activity/Fragment
 

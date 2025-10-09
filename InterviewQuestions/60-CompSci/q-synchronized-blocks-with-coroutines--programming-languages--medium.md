@@ -20,7 +20,7 @@ There are three main reasons:
 ```kotlin
 import kotlinx.coroutines.*
 
-// ❌ BAD: Using synchronized with coroutines
+// - BAD: Using synchronized with coroutines
 class BadExample {
     private var counter = 0
 
@@ -51,7 +51,7 @@ fun synchronizedBlocking() = runBlocking {
     launch(Dispatchers.Default) {
         synchronized(lock) {
             println("Thread: ${Thread.currentThread().name}")
-            delay(1000)  // ❌ Blocks thread while waiting
+            delay(1000)  // - Blocks thread while waiting
             println("Done")
         }
     }
@@ -93,7 +93,7 @@ fun cancellationProblem() = runBlocking {
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-// ✅ GOOD: Using Mutex
+// - GOOD: Using Mutex
 class GoodExample {
     private var counter = 0
     private val mutex = Mutex()
@@ -125,7 +125,7 @@ class Counter {
     private var count = 0
     private val mutex = Mutex()
 
-    // ❌ synchronized: Blocks thread
+    // - synchronized: Blocks thread
     fun incrementSynchronized() {
         synchronized(this) {
             count++
@@ -133,7 +133,7 @@ class Counter {
         // Thread is blocked while holding lock
     }
 
-    // ✅ Mutex: Suspends coroutine
+    // - Mutex: Suspends coroutine
     suspend fun incrementMutex() {
         mutex.withLock {
             count++
@@ -185,7 +185,7 @@ fun mutexCancellation() = runBlocking {
     }
 
     delay(1200)
-    job.cancel()  // ✅ Cancels properly
+    job.cancel()  // - Cancels properly
     println("Cancelled")
 }
 ```
@@ -240,7 +240,7 @@ class ConfinedCounter {
 ### Real-World Example: Shared Resource
 
 ```kotlin
-// ❌ BAD: Using synchronized
+// - BAD: Using synchronized
 class BadResourceManager {
     private val resources = mutableListOf<Resource>()
 
@@ -253,7 +253,7 @@ class BadResourceManager {
     }
 }
 
-// ✅ GOOD: Using Mutex
+// - GOOD: Using Mutex
 class GoodResourceManager {
     private val resources = mutableListOf<Resource>()
     private val mutex = Mutex()
@@ -312,7 +312,7 @@ class BankAccount {
 ### When synchronized Might Be Acceptable
 
 ```kotlin
-// ⚠️ OK if: Protecting non-suspending code
+// WARNING: OK if: Protecting non-suspending code
 class CacheManager {
     private val cache = mutableMapOf<String, String>()
 
@@ -330,7 +330,7 @@ class CacheManager {
         }
     }
 
-    // ❌ NOT OK: Long-running or suspending operation
+    // - NOT OK: Long-running or suspending operation
     suspend fun fetchAndCache(key: String): String {
         synchronized(cache) {  // BAD
             delay(1000)  // Can't use suspend functions in synchronized
@@ -346,7 +346,7 @@ class CacheManager {
 
 ```kotlin
 class SynchronizationBestPractices {
-    // ✅ DO: Use Mutex for coroutine synchronization
+    // - DO: Use Mutex for coroutine synchronization
     private val mutex = Mutex()
     private var sharedState = 0
 
@@ -356,14 +356,14 @@ class SynchronizationBestPractices {
         }
     }
 
-    // ✅ DO: Use atomic types for simple counters
+    // - DO: Use atomic types for simple counters
     private val atomicCounter = AtomicInteger(0)
 
     fun good2() {
         atomicCounter.incrementAndGet()
     }
 
-    // ✅ DO: Use single-threaded dispatcher for confinement
+    // - DO: Use single-threaded dispatcher for confinement
     private val singleThread = newSingleThreadContext("MyThread")
 
     suspend fun good3() {
@@ -373,7 +373,7 @@ class SynchronizationBestPractices {
         }
     }
 
-    // ❌ DON'T: Use synchronized in coroutines
+    // - DON'T: Use synchronized in coroutines
     fun bad1() = runBlocking {
         launch {
             synchronized(this@SynchronizationBestPractices) {  // BAD
@@ -382,7 +382,7 @@ class SynchronizationBestPractices {
         }
     }
 
-    // ❌ DON'T: Block threads in coroutines
+    // - DON'T: Block threads in coroutines
     suspend fun bad2() {
         synchronized(this) {  // BAD
             delay(1000)  // Won't compile - can't call suspend in synchronized

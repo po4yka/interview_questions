@@ -244,7 +244,7 @@ class CompressionDecorator(
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use for adding cross-cutting concerns
+// - DO: Use for adding cross-cutting concerns
 class LoggingDecorator(private val service: ApiService) : ApiService by service {
     override fun fetchData() {
         Log.d("API", "Fetching data...")
@@ -254,21 +254,21 @@ class LoggingDecorator(private val service: ApiService) : ApiService by service 
     }
 }
 
-// ✅ DO: Chain decorators for multiple behaviors
+// - DO: Chain decorators for multiple behaviors
 val decoratedService = CachingDecorator(
     LoggingDecorator(
         RealApiService()
     )
 )
 
-// ✅ DO: Use Kotlin delegation for cleaner code
+// - DO: Use Kotlin delegation for cleaner code
 class RetryDecorator(
     private val service: NetworkService
 ) : NetworkService by service {
     override suspend fun request() = retry(3) { service.request() }
 }
 
-// ✅ DO: Keep decorators focused on single responsibility
+// - DO: Keep decorators focused on single responsibility
 class MetricsDecorator(service: Service) : ServiceDecorator(service) {
     override fun execute() {
         val start = System.currentTimeMillis()
@@ -278,9 +278,9 @@ class MetricsDecorator(service: Service) : ServiceDecorator(service) {
     }
 }
 
-// ❌ DON'T: Use for fundamentally different behaviors
-// ❌ DON'T: Create overly complex decoration chains
-// ❌ DON'T: Modify core object state in decorators
+// - DON'T: Use for fundamentally different behaviors
+// - DON'T: Create overly complex decoration chains
+// - DON'T: Modify core object state in decorators
 ```
 
 **English**: **Decorator** is a structural design pattern that dynamically adds behaviors to objects by wrapping them in decorator objects. **Problem**: Need to add functionality without modifying existing classes or creating many subclasses. **Solution**: Wrap objects in decorators that add behavior while maintaining the same interface. **Use when**: (1) Need to add responsibilities at runtime, (2) Want to avoid subclass explosion, (3) Enhancing legacy code. **Kotlin**: Use delegation (`by` keyword) for cleaner decorators. **Pros**: runtime flexibility, composition over inheritance, Open-Closed Principle. **Cons**: many small classes, order matters, complexity. **Examples**: Java I/O streams, text formatting, caching layers, logging wrappers.

@@ -76,11 +76,11 @@ All components must be declared in the manifest:
 All components are **created and managed by the Android system**, not by the developer:
 
 ```kotlin
-// ❌ You don't do this:
+// - You don't do this:
 val activity = MainActivity()
 activity.onCreate()
 
-// ✅ System does this:
+// - System does this:
 // startActivity(Intent(this, MainActivity::class.java))
 // System creates and calls lifecycle methods
 ```

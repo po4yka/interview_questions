@@ -129,7 +129,7 @@ val words = listOf("apple", "banana", "cherry", "apricot", "blueberry")
 val wordsByFirstLetter = words.associateBy { it.first() }
 println(wordsByFirstLetter)
 // {a=apricot, b=blueberry, c=cherry}
-// ⚠️ Последнее значение выигрывает при коллизии!
+// WARNING: Последнее значение выигрывает при коллизии!
 
 // Альтернатива с groupBy (сохраняет все)
 val groupedByFirstLetter = words.groupBy { it.first() }
@@ -250,18 +250,18 @@ largeList.find { it == 50000 }  // ~10ms
 **1. Используйте associateBy для быстрого доступа по ключу**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 val usersById = users.associateBy { it.id }
 val user = usersById[userId]  // O(1)
 
-// ❌ НЕПРАВИЛЬНО
+// - НЕПРАВИЛЬНО
 val user = users.find { it.id == userId }  // O(n)
 ```
 
 **2. Используйте associateWith для создания конфигураций**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 val permissions = listOf("READ", "WRITE", "DELETE")
     .associateWith { false }  // Все по умолчанию false
 

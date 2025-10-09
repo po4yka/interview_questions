@@ -246,27 +246,27 @@ fun UserScreen(
 ### Best Practices
 
 ```kotlin
-// ✅ DO: Single source of truth
+// - DO: Single source of truth
 data class ScreenState(
     val data: List<Item> = emptyList(),
     val isLoading: Boolean = false,
     val error: String? = null
 )
 
-// ✅ DO: Expose immutable data to View
+// - DO: Expose immutable data to View
 private val _state = MutableStateFlow(ScreenState())
 val state: StateFlow<ScreenState> = _state.asStateFlow()
 
-// ✅ DO: Use ViewModelScope for coroutines
+// - DO: Use ViewModelScope for coroutines
 viewModelScope.launch {
     // Coroutine code
 }
 
-// ❌ DON'T: Hold View reference in ViewModel
-class BadViewModel(private val view: Activity) : ViewModel() // ❌
+// - DON'T: Hold View reference in ViewModel
+class BadViewModel(private val view: Activity) : ViewModel() // BAD
 
-// ❌ DON'T: Put Android framework dependencies in ViewModel
-class BadViewModel(private val context: Context) : ViewModel() // ❌
+// - DON'T: Put Android framework dependencies in ViewModel
+class BadViewModel(private val context: Context) : ViewModel() // BAD
 ```
 
 **English**: **MVVM (Model-View-ViewModel)** is an architectural pattern that separates UI development from business logic. **Components**: (1) Model - data and business logic, (2) View - UI components that observe ViewModel, (3) ViewModel - manages UI state, survives configuration changes. **Key feature**: bi-directional data binding between View and ViewModel. **Advantages**: maintainability, testability, lifecycle awareness, no View reference in ViewModel. **Disadvantages**: can be overkill for simple UIs, learning curve for reactive programming. Widely used in modern Android with Jetpack components (ViewModel, LiveData, StateFlow).

@@ -110,7 +110,7 @@ fun getSystemService(name: String): Any? {
 ### Best Practices
 
 ```kotlin
-// ✅ GOOD: Reuse in adapter
+// - GOOD: Reuse in adapter
 class MyAdapter(
     private val inflater: LayoutInflater,
     private val items: List<Item>
@@ -125,7 +125,7 @@ class MyAdapter(
 // Usage
 val adapter = MyAdapter(LayoutInflater.from(context), items)
 
-// ❌ BAD: Creating new inflater each time
+// - BAD: Creating new inflater each time
 class BadAdapter(private val items: List<Item>) : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

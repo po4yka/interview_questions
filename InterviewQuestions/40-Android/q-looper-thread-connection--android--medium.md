@@ -367,11 +367,11 @@ looper.quitSafely()
 ### 1. Calling Looper.prepare() Twice
 
 ```kotlin
-// ❌ CRASH: RuntimeException
+// - CRASH: RuntimeException
 class BadThread : Thread() {
     override fun run() {
         Looper.prepare()
-        Looper.prepare() // ❌ Only one Looper per thread!
+        Looper.prepare() // - Only one Looper per thread!
     }
 }
 ```
@@ -379,15 +379,15 @@ class BadThread : Thread() {
 ### 2. Using Handler Before Looper.prepare()
 
 ```kotlin
-// ❌ CRASH: RuntimeException
+// - CRASH: RuntimeException
 class BadThread : Thread() {
     override fun run() {
-        val handler = Handler(Looper.myLooper()!!) // ❌ Looper is null!
+        val handler = Handler(Looper.myLooper()!!) // - Looper is null!
         Looper.prepare()
     }
 }
 
-// ✅ CORRECT
+// - CORRECT
 class GoodThread : Thread() {
     override fun run() {
         Looper.prepare()
@@ -400,12 +400,12 @@ class GoodThread : Thread() {
 ### 3. Not Calling Looper.loop()
 
 ```kotlin
-// ❌ BAD: Looper created but not started
+// - BAD: Looper created but not started
 class BadThread : Thread() {
     override fun run() {
         Looper.prepare()
         val handler = Handler(Looper.myLooper()!!)
-        // ❌ Missing Looper.loop() - messages won't be processed!
+        // - Missing Looper.loop() - messages won't be processed!
     }
 }
 ```
@@ -413,7 +413,7 @@ class BadThread : Thread() {
 ### 4. Accessing Handler Before It's Ready
 
 ```kotlin
-// ❌ RACE CONDITION
+// - RACE CONDITION
 class WorkerThread : Thread() {
     lateinit var handler: Handler
 
@@ -426,9 +426,9 @@ class WorkerThread : Thread() {
 
 val thread = WorkerThread()
 thread.start()
-thread.handler.sendEmptyMessage(1) // ❌ May crash if handler not initialized yet!
+thread.handler.sendEmptyMessage(1) // - May crash if handler not initialized yet!
 
-// ✅ SOLUTION: Use CountDownLatch (see complete example above)
+// - SOLUTION: Use CountDownLatch (see complete example above)
 ```
 
 ---

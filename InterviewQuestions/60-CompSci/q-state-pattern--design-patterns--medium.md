@@ -373,7 +373,7 @@ Real World Examples:
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use sealed classes in Kotlin
+// - DO: Use sealed classes in Kotlin
 sealed class ConnectionState {
     object Disconnected : ConnectionState()
     object Connecting : ConnectionState()
@@ -381,7 +381,7 @@ sealed class ConnectionState {
     data class Failed(val error: String) : ConnectionState()
 }
 
-// ✅ DO: Use with StateFlow for reactive updates
+// - DO: Use with StateFlow for reactive updates
 class ConnectionManager {
     private val _state = MutableStateFlow<ConnectionState>(ConnectionState.Disconnected)
     val state: StateFlow<ConnectionState> = _state.asStateFlow()
@@ -397,14 +397,14 @@ class ConnectionManager {
     }
 }
 
-// ✅ DO: Define clear state transitions
+// - DO: Define clear state transitions
 interface State {
     fun nextState(): State?
 }
 
-// ❌ DON'T: Use for simple boolean flags
-// ❌ DON'T: Make states mutable
-// ❌ DON'T: Put business logic in context
+// - DON'T: Use for simple boolean flags
+// - DON'T: Make states mutable
+// - DON'T: Put business logic in context
 ```
 
 **English**: **State** is a behavioral pattern that allows an object to change its behavior when internal state changes. **Problem**: Complex conditionals for state-specific behavior. **Solution**: Encapsulate each state in separate class, delegate behavior to current state. **Use when**: (1) Object behavior depends on state, (2) Many states with different behaviors, (3) Want to avoid complex conditionals. **Android**: UI states with sealed classes, media player, network connection states. **Pros**: eliminates conditionals, easy to add states, cleaner code. **Cons**: many classes, complexity for simple states. **Examples**: Media player, order processing, connection states, UI states.

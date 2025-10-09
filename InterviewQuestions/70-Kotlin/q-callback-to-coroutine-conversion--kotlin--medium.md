@@ -319,7 +319,7 @@ fun FusedLocationProviderClient.locationFlow(
 
 ### 6. Best Practices
 
-#### ✅ DO:
+#### - DO:
 
 ```kotlin
 // 1. Use suspendCancellableCoroutine for better cancellation support
@@ -363,7 +363,7 @@ fun streamData(): Flow<Data> = callbackFlow {
 }
 ```
 
-#### ❌ DON'T:
+#### - DON'T:
 
 ```kotlin
 // Don't use suspendCoroutine for cancellable operations
@@ -563,14 +563,14 @@ fun uploadFileFlow(file: File): Flow<UploadResult> = callbackFlow {
 
 ### Лучшие практики
 
-#### ✅ ДЕЛАЙТЕ:
+#### - ДЕЛАЙТЕ:
 
 - Используйте `suspendCancellableCoroutine` для отменяемых операций
 - Обрабатывайте edge cases (множественные вызовы resume)
 - Используйте Flow для потоковых данных
 - Всегда реализуйте `awaitClose` в `callbackFlow`
 
-#### ❌ НЕ ДЕЛАЙТЕ:
+#### - НЕ ДЕЛАЙТЕ:
 
 - Не используйте `suspendCoroutine` для отменяемых операций
 - Не вызывайте resume несколько раз

@@ -601,13 +601,13 @@ class ChunkedFileUploadWorker(
    ```
 
 **Best practices:**
-- ✅ Use WorkManager for guaranteed execution
-- ✅ Show progress notifications
-- ✅ Handle network errors with retry
-- ✅ Use chunked upload for large files (>100MB)
-- ✅ Add constraints (network, battery)
-- ✅ Compress files before upload if possible
-- ✅ Clean up cache files after upload
+- - Use WorkManager for guaranteed execution
+- - Show progress notifications
+- - Handle network errors with retry
+- - Use chunked upload for large files (>100MB)
+- - Add constraints (network, battery)
+- - Compress files before upload if possible
+- - Clean up cache files after upload
 
 ---
 

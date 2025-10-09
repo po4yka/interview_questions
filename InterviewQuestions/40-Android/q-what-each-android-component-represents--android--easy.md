@@ -111,13 +111,13 @@ startActivity(intent)
 
 | Component | Purpose | Has UI | Example |
 |-----------|---------|--------|---------|
-| Activity | Screen | ✅ Yes | Login screen |
-| Service | Background work | ❌ No | Music player |
-| BroadcastReceiver | Events | ❌ No | Network change |
-| ContentProvider | Data sharing | ❌ No | Contacts |
-| Fragment | UI portion | ✅ Yes | Tab content |
-| View | UI element | ✅ Yes | Button, TextView |
-| Intent | Messaging | ❌ No | Start Activity |
+| Activity | Screen | - Yes | Login screen |
+| Service | Background work | - No | Music player |
+| BroadcastReceiver | Events | - No | Network change |
+| ContentProvider | Data sharing | - No | Contacts |
+| Fragment | UI portion | - Yes | Tab content |
+| View | UI element | - Yes | Button, TextView |
+| Intent | Messaging | - No | Start Activity |
 
 ## Ответ
 

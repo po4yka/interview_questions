@@ -22,40 +22,40 @@ status: reviewed
 ```kotlin
 // Обычная функция - блокирует поток
 fun loadUser(id: Int): User {
-    Thread.sleep(1000) // ❌ Блокирует поток!
+    Thread.sleep(1000) // - Блокирует поток!
     return database.getUser(id)
 }
 
 // Suspend функция - НЕ блокирует поток
 suspend fun loadUser(id: Int): User {
-    delay(1000) // ✅ Приостанавливает корутину, освобождает поток
+    delay(1000) // - Приостанавливает корутину, освобождает поток
     return database.getUser(id)
 }
 ```
 
 **Ключевые отличия**:
-- ❌ **Обычная функция**: блокирует поток → другие задачи ждут
-- ✅ **Suspend функция**: освобождает поток → другие задачи выполняются
+- - **Обычная функция**: блокирует поток → другие задачи ждут
+- - **Suspend функция**: освобождает поток → другие задачи выполняются
 
 ### Правила использования suspend функций
 
 ```kotlin
 class UserRepository {
-    // ✅ Suspend функцию можно вызвать из другой suspend функции
+    // - Suspend функцию можно вызвать из другой suspend функции
     suspend fun getUser(id: Int): User {
         return apiService.fetchUser(id) // fetchUser - тоже suspend
     }
 
-    // ✅ Или из coroutine scope
+    // - Или из coroutine scope
     fun loadUserInBackground(id: Int) {
         viewModelScope.launch {
             val user = getUser(id) // OK внутри корутины
         }
     }
 
-    // ❌ НЕЛЬЗЯ вызвать из обычной функции
+    // - НЕЛЬЗЯ вызвать из обычной функции
     fun getUserSync(id: Int): User {
-        return getUser(id) // ❌ Compilation error!
+        return getUser(id) // - Compilation error!
     }
 }
 ```
@@ -155,7 +155,7 @@ suspend fun loadUser(id: Int) {
 ### suspendCoroutine vs suspendCancellableCoroutine
 
 ```kotlin
-// ❌ НЕ отменяемая - может привести к утечкам
+// - НЕ отменяемая - может привести к утечкам
 suspend fun downloadFile(url: String): File = suspendCoroutine { continuation ->
     networkClient.download(url, object : DownloadCallback {
         override fun onComplete(file: File) {
@@ -165,7 +165,7 @@ suspend fun downloadFile(url: String): File = suspendCoroutine { continuation ->
     // Проблема: если корутина отменена, callback все равно выполнится!
 }
 
-// ✅ Отменяемая - правильный подход
+// - Отменяемая - правильный подход
 suspend fun downloadFile(url: String): File = suspendCancellableCoroutine { continuation ->
     val call = networkClient.download(url, object : DownloadCallback {
         override fun onComplete(file: File) {
@@ -360,20 +360,20 @@ suspend fun fetchWithRetry(url: String, maxAttempts: Int = 3): String {
 
 ### Ошибки и Best Practices
 
-#### ❌ НЕПРАВИЛЬНО: Блокирующие операции в suspend функциях
+#### - НЕПРАВИЛЬНО: Блокирующие операции в suspend функциях
 
 ```kotlin
 suspend fun loadData(): String {
-    Thread.sleep(1000) // ❌ Блокирует поток!
+    Thread.sleep(1000) // - Блокирует поток!
     return "data"
 }
 ```
 
-#### ✅ ПРАВИЛЬНО: Используйте suspend-friendly альтернативы
+#### - ПРАВИЛЬНО: Используйте suspend-friendly альтернативы
 
 ```kotlin
 suspend fun loadData(): String {
-    delay(1000) // ✅ Приостанавливает, не блокирует
+    delay(1000) // - Приостанавливает, не блокирует
     return "data"
 }
 
@@ -386,22 +386,22 @@ suspend fun processImage(bitmap: Bitmap): Bitmap {
 }
 ```
 
-#### ❌ НЕПРАВИЛЬНО: runBlocking в production коде
+#### - НЕПРАВИЛЬНО: runBlocking в production коде
 
 ```kotlin
 fun loadUserSync(id: Int): User {
-    return runBlocking { // ❌ Блокирует поток!
+    return runBlocking { // - Блокирует поток!
         userRepository.getUser(id)
     }
 }
 ```
 
-#### ✅ ПРАВИЛЬНО: Используйте coroutine scope
+#### - ПРАВИЛЬНО: Используйте coroutine scope
 
 ```kotlin
 class UserViewModel : ViewModel() {
     fun loadUser(id: Int) {
-        viewModelScope.launch { // ✅ Асинхронно
+        viewModelScope.launch { // - Асинхронно
             val user = userRepository.getUser(id)
             _user.value = user
         }
@@ -409,7 +409,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-#### ❌ НЕПРАВИЛЬНО: Ненужный suspend modifier
+#### - НЕПРАВИЛЬНО: Ненужный suspend modifier
 
 ```kotlin
 // Не делает ничего suspend - модификатор не нужен
@@ -418,7 +418,7 @@ suspend fun calculateSum(a: Int, b: Int): Int {
 }
 ```
 
-#### ✅ ПРАВИЛЬНО: suspend только если действительно приостанавливает
+#### - ПРАВИЛЬНО: suspend только если действительно приостанавливает
 
 ```kotlin
 // Обычная функция - нет suspend операций
@@ -564,12 +564,12 @@ class UserRepositoryTest {
 ```kotlin
 class ExpensiveResource {
     private val _data = lazy {
-        // ❌ Проблема: lazy не поддерживает suspend
+        // - Проблема: lazy не поддерживает suspend
         expensiveInitialization()
     }
 }
 
-// ✅ Решение: suspend lazy
+// - Решение: suspend lazy
 class ExpensiveResource {
     private val mutex = Mutex()
     private var _data: Data? = null
@@ -688,7 +688,7 @@ suspend fun example() {
 #### 1. Забыли обработать отмену
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО
+// - НЕПРАВИЛЬНО
 suspend fun longRunningTask() {
     repeat(1000) {
         processItem(it) // Не проверяет отмену!
@@ -696,7 +696,7 @@ suspend fun longRunningTask() {
     }
 }
 
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 suspend fun longRunningTask() {
     repeat(1000) {
         ensureActive() // Проверяет отмену
@@ -709,7 +709,7 @@ suspend fun longRunningTask() {
 #### 2. Неправильный exception handling
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - глотает CancellationException
+// - НЕПРАВИЛЬНО - глотает CancellationException
 suspend fun fetchData() {
     try {
         apiService.getData()
@@ -718,7 +718,7 @@ suspend fun fetchData() {
     }
 }
 
-// ✅ ПРАВИЛЬНО - пробрасывает CancellationException
+// - ПРАВИЛЬНО - пробрасывает CancellationException
 suspend fun fetchData() {
     try {
         apiService.getData()

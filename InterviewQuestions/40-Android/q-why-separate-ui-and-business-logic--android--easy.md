@@ -26,7 +26,7 @@ Separating UI and business logic is a fundamental principle of good software arc
 **1. Testability**
 
 ```kotlin
-// ❌ Bad: Logic mixed with UI
+// - Bad: Logic mixed with UI
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-// ✅ Good: Logic separated in ViewModel
+// - Good: Logic separated in ViewModel
 class UserViewModel : ViewModel() {
     fun getActiveUsers(): List<User> {
         return repository.getAllUsers()
@@ -145,17 +145,17 @@ class GetUsersUseCase(private val repository: UserRepository) {
 
 **Benefits Summary:**
 
-✅ **Testable**: Can test business logic without UI
-✅ **Maintainable**: Changes are isolated
-✅ **Reusable**: Logic works across different UIs
-✅ **Scalable**: Easier to grow codebase
-✅ **Readable**: Code is organized and clear
-✅ **Flexible**: Easy to change UI or logic independently
+- **Testable**: Can test business logic without UI
+- **Maintainable**: Changes are isolated
+- **Reusable**: Logic works across different UIs
+- **Scalable**: Easier to grow codebase
+- **Readable**: Code is organized and clear
+- **Flexible**: Easy to change UI or logic independently
 
 **Anti-Pattern (Avoid):**
 
 ```kotlin
-// ❌ Everything in Activity
+// - Everything in Activity
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

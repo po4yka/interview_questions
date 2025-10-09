@@ -21,7 +21,7 @@ status: reviewed
 ### Проблема
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - событие в State
+// - НЕПРАВИЛЬНО - событие в State
 data class UiState(
     val isLoading: Boolean = false,
     val data: List<Item> = emptyList(),
@@ -303,17 +303,17 @@ LaunchedEffect(uiState.toastEvent) {
 
 | Подход | Pros | Cons | Use Case |
 |--------|------|------|----------|
-| **SharedFlow** | ✅ Идиоматично для Flow<br>✅ Replay control<br>✅ Multiple subscribers | ⚠️ Чуть сложнее API | ✅ Рекомендуется для Compose |
-| **Channel** | ✅ Простой API<br>✅ FIFO гарантия | ⚠️ Только один subscriber | ✅ Простые случаи |
-| **SingleLiveEvent** | ✅ Работает с LiveData<br>✅ Lifecycle-aware | ❌ Устаревший подход<br>❌ Thread-safety issues | ⚠️ Legacy проекты |
-| **Event Wrapper** | ✅ Все в одном State | ❌ Boilerplate код<br>❌ Мутабельный hasBeenHandled | ⚠️ Простые приложения |
+| **SharedFlow** | - Идиоматично для Flow<br>- Replay control<br>- Multiple subscribers | WARNING: Чуть сложнее API | - Рекомендуется для Compose |
+| **Channel** | - Простой API<br>- FIFO гарантия | WARNING: Только один subscriber | - Простые случаи |
+| **SingleLiveEvent** | - Работает с LiveData<br>- Lifecycle-aware | - Устаревший подход<br>- Thread-safety issues | WARNING: Legacy проекты |
+| **Event Wrapper** | - Все в одном State | - Boilerplate код<br>- Мутабельный hasBeenHandled | WARNING: Простые приложения |
 
 ### Best Practices
 
 **1. Разделяйте State и Events**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 data class UiState(
     val data: List<Item>,        // Состояние
     val isLoading: Boolean        // Состояние
@@ -324,7 +324,7 @@ sealed class UiEvent {
     object NavigateBack : UiEvent()                     // Событие
 }
 
-// ❌ НЕПРАВИЛЬНО - смешивание
+// - НЕПРАВИЛЬНО - смешивание
 data class UiState(
     val data: List<Item>,
     val isLoading: Boolean,
@@ -336,7 +336,7 @@ data class UiState(
 **2. Используйте правильный scope для подписки**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО - repeatOnLifecycle
+// - ПРАВИЛЬНО - repeatOnLifecycle
 viewLifecycleOwner.lifecycleScope.launch {
     viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
         viewModel.events.collect { event ->
@@ -345,7 +345,7 @@ viewLifecycleOwner.lifecycleScope.launch {
     }
 }
 
-// ❌ НЕПРАВИЛЬНО - события могут потеряться
+// - НЕПРАВИЛЬНО - события могут потеряться
 lifecycleScope.launch {
     viewModel.events.collect { event ->
         handleEvent(event)  // Не вызовется если Fragment в background

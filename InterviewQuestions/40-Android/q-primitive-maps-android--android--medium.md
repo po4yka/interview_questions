@@ -20,7 +20,7 @@ status: reviewed
 ### Проблема автоупаковки в стандартных Map
 
 ```kotlin
-// ❌ ПЛОХО: Стандартный HashMap с автоупаковкой
+// - ПЛОХО: Стандартный HashMap с автоупаковкой
 val standardMap = HashMap<Int, String>() // Int упаковывается в Integer
 
 for (i in 0..1000) {
@@ -47,7 +47,7 @@ Android SDK предоставляет оптимизированные колл
 ```kotlin
 import android.util.SparseArray
 
-// ✅ ХОРОШО: SparseArray для Int → Object
+// - ХОРОШО: SparseArray для Int → Object
 val userCache = SparseArray<User>()
 
 userCache.put(1, User("Alice", 25))
@@ -91,7 +91,7 @@ if (userCache.indexOfKey(1) >= 0) {
 ```kotlin
 import android.util.SparseIntArray
 
-// ✅ ХОРОШО: SparseIntArray для Int → Int
+// - ХОРОШО: SparseIntArray для Int → Int
 val scores = SparseIntArray()
 
 scores.put(101, 95) // userId → score
@@ -142,7 +142,7 @@ class ViewCountTracker {
 ```kotlin
 import android.util.SparseBooleanArray
 
-// ✅ ХОРОШО: SparseBooleanArray для Int → Boolean
+// - ХОРОШО: SparseBooleanArray для Int → Boolean
 val selectedItems = SparseBooleanArray()
 
 // Отметить элементы как выбранные
@@ -225,7 +225,7 @@ class RecyclerViewAdapter(private val items: List<String>) :
 ```kotlin
 import android.util.LongSparseArray
 
-// ✅ ХОРОШО: LongSparseArray для Long → Object
+// - ХОРОШО: LongSparseArray для Long → Object
 val timestampCache = LongSparseArray<Event>()
 
 data class Event(val name: String, val data: String)
@@ -376,7 +376,7 @@ val dbIdToObject = LongSparseArray<DatabaseEntity>()
 #### 1. Производительность для больших коллекций
 
 ```kotlin
-// ⚠️ ВАЖНО: SparseArray медленнее для больших коллекций
+// WARNING: ВАЖНО: SparseArray медленнее для больших коллекций
 // SparseArray использует бинарный поиск: O(log n)
 // HashMap использует хэш-таблицу: O(1)
 
@@ -399,17 +399,17 @@ class SizeRecommendation {
 #### 2. Несортированные ключи
 
 ```kotlin
-// ⚠️ SparseArray оптимизирован для последовательных ключей
+// WARNING: SparseArray оптимизирован для последовательных ключей
 // Лучший случай: 0, 1, 2, 3, 4...
 // Худший случай: 1000, 5, 999, 2, 888...
 
-// ✅ ХОРОШО: Последовательные ключи
+// - ХОРОШО: Последовательные ключи
 val sequential = SparseArray<String>()
 for (i in 0..100) {
     sequential.put(i, "Value $i")
 }
 
-// ❌ ПЛОХО: Случайные ключи
+// - ПЛОХО: Случайные ключи
 val random = SparseArray<String>()
 val randomKeys = listOf(1000, 5, 999, 2, 888, 42, 777)
 randomKeys.forEach { key ->
@@ -421,9 +421,9 @@ randomKeys.forEach { key ->
 #### 3. Не thread-safe
 
 ```kotlin
-// ⚠️ SparseArray НЕ THREAD-SAFE!
+// WARNING: SparseArray НЕ THREAD-SAFE!
 
-// ❌ ПЛОХО: Небезопасное использование в многопоточной среде
+// - ПЛОХО: Небезопасное использование в многопоточной среде
 val sharedArray = SparseArray<String>()
 
 thread {
@@ -435,7 +435,7 @@ thread {
 }
 // Может привести к ConcurrentModificationException
 
-// ✅ ХОРОШО: Использовать синхронизацию
+// - ХОРОШО: Использовать синхронизацию
 class ThreadSafeSparseArray<E> {
     private val array = SparseArray<E>()
     private val lock = Any()

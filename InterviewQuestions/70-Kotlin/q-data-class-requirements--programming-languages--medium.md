@@ -58,22 +58,22 @@ fun main() {
 **Invalid data class examples:**
 
 ```kotlin
-// ❌ ERROR: No parameters in primary constructor
+// - ERROR: No parameters in primary constructor
 // data class Empty()  // Compilation error
 
-// ❌ ERROR: Parameter not marked as val or var
+// - ERROR: Parameter not marked as val or var
 // data class Invalid(name: String)  // Compilation error
 
-// ❌ ERROR: Cannot be abstract
+// - ERROR: Cannot be abstract
 // abstract data class AbstractData(val value: Int)  // Compilation error
 
-// ❌ ERROR: Cannot be open
+// - ERROR: Cannot be open
 // open data class OpenData(val value: Int)  // Compilation error
 
-// ❌ ERROR: Cannot be sealed
+// - ERROR: Cannot be sealed
 // sealed data class SealedData(val value: Int)  // Compilation error
 
-// ❌ ERROR: Cannot be inner
+// - ERROR: Cannot be inner
 // class Outer {
 //     inner data class InnerData(val value: Int)  // Compilation error
 // }

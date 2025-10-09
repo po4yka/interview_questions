@@ -187,11 +187,11 @@ Room validates SQL queries **at compile time**, catching errors early:
 ```kotlin
 @Dao
 interface UserDao {
-    // ❌ Compile error: Table "usres" doesn't exist (typo!)
+    // - Compile error: Table "usres" doesn't exist (typo!)
     @Query("SELECT * FROM usres")
     fun getAllUsers(): Flow<List<User>>
 
-    // ❌ Compile error: Column "age" doesn't exist in User entity
+    // - Compile error: Column "age" doesn't exist in User entity
     @Query("SELECT * FROM users WHERE age > :minAge")
     fun getUsersOlderThan(minAge: Int): List<User>
 }
@@ -317,9 +317,9 @@ data class Product(...)  // Unchanged - not reprocessed!
 ```
 
 **Benefits:**
-- ✅ Faster builds (only changed files)
-- ✅ Better IDE performance
-- ✅ Reduced compilation time
+- - Faster builds (only changed files)
+- - Better IDE performance
+- - Reduced compilation time
 
 ---
 
@@ -348,11 +348,11 @@ app/build/generated/ksp/debug/kotlin/
 
 | Aspect | kapt | KSP |
 |--------|------|-----|
-| **Speed** | Slower | 2x faster ✅ |
-| **API** | Java | Kotlin ✅ |
-| **Incremental** | Limited | Full ✅ |
-| **Maturity** | Mature | Modern ✅ |
-| **Room Support** | Full | Full ✅ |
+| **Speed** | Slower | 2x faster - |
+| **API** | Java | Kotlin - |
+| **Incremental** | Limited | Full - |
+| **Maturity** | Mature | Modern - |
+| **Room Support** | Full | Full - |
 
 **Recommendation:** Use **KSP** for new projects (faster, better Kotlin support)
 
@@ -361,11 +361,11 @@ app/build/generated/ksp/debug/kotlin/
 ## Summary
 
 **When does code generation happen?**
-- ✅ **Compile time** (not runtime!)
-- ✅ Using **kapt** or **KSP** annotation processors
-- ✅ Generates DAO implementations, Database implementations
-- ✅ Validates SQL queries at compile time
-- ✅ Errors caught during compilation, not at runtime
+- - **Compile time** (not runtime!)
+- - Using **kapt** or **KSP** annotation processors
+- - Generates DAO implementations, Database implementations
+- - Validates SQL queries at compile time
+- - Errors caught during compilation, not at runtime
 
 **Process:**
 1. Write Room annotations (`@Entity`, `@Dao`, `@Query`)

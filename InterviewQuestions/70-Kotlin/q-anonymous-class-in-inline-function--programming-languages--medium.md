@@ -51,12 +51,12 @@ However, there are nuances: while you can technically write an object expression
 ## Compilation Error Case
 
 ```kotlin
-// ❌ COMPILATION ERROR in some contexts
+// - COMPILATION ERROR in some contexts
 inline fun process(value: Int, action: (Int) -> Unit) {
     // Trying to create anonymous class
     val handler = object : EventHandler {
         override fun handle() {
-            action(value)  // ❌ Cannot capture inline parameter
+            action(value)  // - Cannot capture inline parameter
         }
     }
     handler.handle()
@@ -77,7 +77,7 @@ Error: Inline lambda parameter 'action' captured in non-inline lambda
 ### Example 1: Object Expression Without Capturing
 
 ```kotlin
-// ⚠️ COMPILES but defeats inline purpose
+// WARNING: COMPILES but defeats inline purpose
 inline fun createHandler(): EventHandler {
     return object : EventHandler {
         override fun handle() {
@@ -95,7 +95,7 @@ inline fun createHandler(): EventHandler {
 **Better approach:**
 
 ```kotlin
-// ✅ BETTER - Regular function
+// - BETTER - Regular function
 fun createHandler(): EventHandler {
     return object : EventHandler {
         override fun handle() {
@@ -110,7 +110,7 @@ fun createHandler(): EventHandler {
 ### Example 2: Object Expression with Captured Variables
 
 ```kotlin
-// ⚠️ PROBLEMATIC
+// WARNING: PROBLEMATIC
 inline fun processWithHandler(value: Int) {
     val handler = object : EventHandler {
         override fun handle() {
@@ -133,17 +133,17 @@ inline fun processWithHandler(value: Int) {
 ### Replace Anonymous Class with Lambda
 
 ```kotlin
-// ❌ Anonymous class (creates object)
+// - Anonymous class (creates object)
 inline fun process(action: (Int) -> Unit) {
     val handler = object : Handler {
         override fun handle(value: Int) {
-            action(value)  // ❌ Error!
+            action(value)  // - Error!
         }
     }
     handler.handle(42)
 }
 
-// ✅ Lambda (no object allocation with inline)
+// - Lambda (no object allocation with inline)
 inline fun process(action: (Int) -> Unit) {
     action(42)  // Inlined directly
 }
@@ -224,7 +224,7 @@ interface EventHandler {
     fun onError(error: Throwable)
 }
 
-// ✅ Use regular function (not inline)
+// - Use regular function (not inline)
 fun registerHandler(): EventHandler {
     return object : EventHandler {
         override fun onStart() {
@@ -303,7 +303,7 @@ for (i in 0 until 1000) {
 inline fun repeat(times: Int, action: () -> Unit) {
     val wrapper = object : Runnable {
         override fun run() {
-            action()  // ❌ If this compiles, defeats inline
+            action()  // - If this compiles, defeats inline
         }
     }
     for (i in 0 until times) {
@@ -336,7 +336,7 @@ fun repeat(times: Int, action: () -> Unit) {
 
 ## Best Practices
 
-### ✅ DO
+### - DO
 
 1. **Use lambdas with inline functions:**
 
@@ -375,12 +375,12 @@ inline fun process(
 
 ---
 
-### ❌ DON'T
+### - DON'T
 
 1. **Don't mix inline with anonymous classes:**
 
 ```kotlin
-// ❌ BAD
+// - BAD
 inline fun process() {
     val obj = object : Handler { ... }  // Defeats purpose
 }
@@ -389,12 +389,12 @@ inline fun process() {
 2. **Don't use inline for functions that must create objects:**
 
 ```kotlin
-// ❌ BAD
+// - BAD
 inline fun createHandler(): Handler {
     return object : Handler { ... }  // No benefit from inline
 }
 
-// ✅ GOOD
+// - GOOD
 fun createHandler(): Handler {
     return object : Handler { ... }
 }
@@ -447,17 +447,17 @@ fun createHandler(): Handler {
 ### Правильный подход: используйте лямбды
 
 ```kotlin
-// ❌ Анонимный класс (создает объект)
+// - Анонимный класс (создает объект)
 inline fun process(action: (Int) -> Unit) {
     val handler = object : Handler {
         override fun handle(value: Int) {
-            action(value)  // ❌ Ошибка!
+            action(value)  // - Ошибка!
         }
     }
     handler.handle(42)
 }
 
-// ✅ Лямбда (без создания объекта с inline)
+// - Лямбда (без создания объекта с inline)
 inline fun process(action: (Int) -> Unit) {
     action(42)  // Инлайнится напрямую
 }
@@ -468,7 +468,7 @@ inline fun process(action: (Int) -> Unit) {
 Используйте **обычные функции** (не inline) для анонимных классов:
 
 ```kotlin
-// ✅ Обычная функция для анонимного класса
+// - Обычная функция для анонимного класса
 fun createHandler(): EventHandler {
     return object : EventHandler {
         override fun onStart() { println("Started") }

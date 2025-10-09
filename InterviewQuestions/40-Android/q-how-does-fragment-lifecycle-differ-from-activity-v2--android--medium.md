@@ -409,7 +409,7 @@ fragmentTransaction.setMaxLifecycle(fragment, Lifecycle.State.STARTED)
 ### Common Lifecycle Mistakes
 
 ```kotlin
-// ❌ WRONG: Accessing view in onCreate
+// WRONG: Accessing view in onCreate
 class WrongFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -418,7 +418,7 @@ class WrongFragment : Fragment() {
     }
 }
 
-// ✅ CORRECT: Access view in onViewCreated
+// CORRECT: Access view in onViewCreated
 class CorrectFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -427,7 +427,7 @@ class CorrectFragment : Fragment() {
     }
 }
 
-// ❌ WRONG: Not clearing binding
+// WRONG: Not clearing binding
 class LeakyFragment : Fragment() {
     private var _binding: FragmentBinding? = null
     private val binding get() = _binding!!
@@ -438,7 +438,7 @@ class LeakyFragment : Fragment() {
     }
 }
 
-// ✅ CORRECT: Clear binding
+// CORRECT: Clear binding
 class SafeFragment : Fragment() {
     private var _binding: FragmentBinding? = null
     private val binding get() = _binding!!

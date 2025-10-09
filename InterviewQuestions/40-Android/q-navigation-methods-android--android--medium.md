@@ -55,9 +55,9 @@ fun launchActivity() {
 ```
 
 **Use cases:**
-- ✅ Different app sections (Login → Main → Settings)
-- ✅ External app integration
-- ❌ Not recommended for in-app navigation (use Fragments instead)
+- - Different app sections (Login → Main → Settings)
+- - External app integration
+- - Not recommended for in-app navigation (use Fragments instead)
 
 ---
 
@@ -107,9 +107,9 @@ supportFragmentManager.beginTransaction()
 ```
 
 **Use cases:**
-- ✅ In-app navigation within single Activity
-- ✅ Master-detail layouts
-- ✅ Tab content switching
+- - In-app navigation within single Activity
+- - Master-detail layouts
+- - Tab content switching
 
 ---
 
@@ -179,11 +179,11 @@ class DetailFragment : Fragment() {
 ```
 
 **Benefits:**
-- ✅ Visual navigation graph
-- ✅ Type-safe arguments (with Safe Args plugin)
-- ✅ Automatic back stack management
-- ✅ Deep link support
-- ✅ Transition animations
+- - Visual navigation graph
+- - Type-safe arguments (with Safe Args plugin)
+- - Automatic back stack management
+- - Deep link support
+- - Transition animations
 
 ---
 
@@ -269,9 +269,9 @@ TabLayoutMediator(tabLayout, viewPager) { tab, position ->
 ```
 
 **Use cases:**
-- ✅ Top-level app sections
-- ✅ Tab-based content
-- ✅ Quick access navigation
+- - Top-level app sections
+- - Tab-based content
+- - Quick access navigation
 
 ---
 
@@ -343,9 +343,9 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Use cases:**
-- ✅ Many navigation destinations
-- ✅ Secondary features
-- ✅ Settings, about, help
+- - Many navigation destinations
+- - Secondary features
+- - Settings, about, help
 
 ---
 
@@ -407,9 +407,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ```
 
 **Use cases:**
-- ✅ External navigation (from web, emails, notifications)
-- ✅ Shareable content
-- ✅ Marketing campaigns
+- - External navigation (from web, emails, notifications)
+- - Shareable content
+- - Marketing campaigns
 
 ---
 
@@ -511,14 +511,14 @@ fun MainScreen() {
 
 | Method | Use Case | Complexity | Modern? |
 |--------|----------|------------|---------|
-| **Activity (Intent)** | App sections, external | Low | ❌ Legacy |
-| **Fragment (FragmentManager)** | In-app navigation | Medium | ⚠️ Manual |
-| **Navigation Component** | Fragment navigation | Medium | ✅ Recommended |
-| **Bottom Navigation** | Top-level tabs | Low | ✅ Common |
-| **Tab Navigation** | Swipeable sections | Low | ✅ Common |
-| **Drawer Navigation** | Many destinations | Medium | ✅ Common |
-| **Deep Links** | External/shareable | High | ✅ Modern |
-| **Compose Navigation** | Compose UI | Medium | ✅ Modern |
+| **Activity (Intent)** | App sections, external | Low | - Legacy |
+| **Fragment (FragmentManager)** | In-app navigation | Medium | WARNING: Manual |
+| **Navigation Component** | Fragment navigation | Medium | - Recommended |
+| **Bottom Navigation** | Top-level tabs | Low | - Common |
+| **Tab Navigation** | Swipeable sections | Low | - Common |
+| **Drawer Navigation** | Many destinations | Medium | - Common |
+| **Deep Links** | External/shareable | High | - Modern |
+| **Compose Navigation** | Compose UI | Medium | - Modern |
 
 ---
 

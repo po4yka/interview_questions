@@ -437,12 +437,12 @@ class C : A, B {
 | Feature | Java | Kotlin |
 |---------|------|--------|
 | **Abstract methods** | Yes | Yes |
-| **Abstract properties** | ❌ No (use methods) | ✅ Yes |
+| **Abstract properties** | - No (use methods) | - Yes |
 | **Interface default methods** | Yes (Java 8+) | Yes |
-| **Interface properties** | ❌ No | ✅ Yes (with getters) |
-| **Primary constructor** | ❌ No | ✅ Yes |
+| **Interface properties** | - No | - Yes (with getters) |
+| **Primary constructor** | - No | - Yes |
 | **Default visibility** | Package-private | Public |
-| **Multiple inheritance** | ❌ No (classes) <br> ✅ Yes (interfaces) | ❌ No (classes) <br> ✅ Yes (interfaces) |
+| **Multiple inheritance** | - No (classes) <br> - Yes (interfaces) | - No (classes) <br> - Yes (interfaces) |
 | **Syntax verbosity** | More verbose | More concise |
 
 ---

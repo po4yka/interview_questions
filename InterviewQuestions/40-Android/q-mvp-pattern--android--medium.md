@@ -267,31 +267,31 @@ class UserPresenter(
 ### Best Practices
 
 ```kotlin
-// ✅ DO: Use Contract interface
+// - DO: Use Contract interface
 interface ScreenContract {
     interface View { /* view methods */ }
     interface Presenter { /* presenter methods */ }
 }
 
-// ✅ DO: Detach View in onDestroy
+// - DO: Detach View in onDestroy
 override fun onDestroy() {
     super.onDestroy()
     presenter.detachView()
 }
 
-// ✅ DO: Null-check before calling View
+// - DO: Null-check before calling View
 view?.showData(data)
 
-// ✅ DO: Cancel ongoing operations on detach
+// - DO: Cancel ongoing operations on detach
 override fun detachView() {
     job.cancel()
     view = null
 }
 
-// ❌ DON'T: Create God Presenter with too many responsibilities
+// - DON'T: Create God Presenter with too many responsibilities
 // Split into multiple Presenters if needed
 
-// ❌ DON'T: Forget to detach View
+// - DON'T: Forget to detach View
 // This causes memory leaks
 ```
 

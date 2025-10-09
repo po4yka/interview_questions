@@ -33,7 +33,7 @@ val data = Data()  // Strong reference
 val weakRef = WeakReference(data)
 
 // data is reachable through strong reference
-// weakRef.get() != null ✅
+// weakRef.get() != null GOOD
 ```
 
 **2. Strong References Removed:**
@@ -45,7 +45,7 @@ val weakRef = WeakReference(Data())
 
 System.gc()  // Suggest GC run
 
-// weakRef.get() == null ❌ (may be cleared)
+// weakRef.get() == null - (may be cleared)
 ```
 
 **GC Algorithm for Weak References:**
@@ -93,13 +93,13 @@ fun example() {
     var data: Data? = Data()
     cache.put("key1", data!!)
 
-    println(cache.get("key1"))  // Data object ✅
+    println(cache.get("key1"))  // Data object GOOD
 
     data = null  // Remove strong reference
 
     System.gc()  // Suggest GC
 
-    println(cache.get("key1"))  // null ❌ (GC cleared it)
+    println(cache.get("key1"))  // null - (GC cleared it)
 }
 ```
 
@@ -112,7 +112,7 @@ val weakRef = WeakReference(strongRef)
 
 // GC runs:
 // 1. strongRef keeps Data alive
-// 2. weakRef.get() returns Data ✅
+// 2. weakRef.get() returns Data GOOD
 
 // Scenario 2: No strong reference
 val weakRef = WeakReference(Data())
@@ -120,16 +120,16 @@ val weakRef = WeakReference(Data())
 // GC runs:
 // 1. No strong reference to Data
 // 2. GC clears WeakReference
-// 3. weakRef.get() returns null ❌
+// 3. weakRef.get() returns null BAD
 ```
 
 **Reachability States:**
 
 | Object State | Strong Ref | Weak Ref | GC Action |
 |-------------|------------|----------|-----------|
-| Strongly reachable | ✅ Yes | Optional | Keep object |
-| Weakly reachable | ❌ No | ✅ Yes | Clear WeakRef, GC object |
-| Unreachable | ❌ No | ❌ No | GC object |
+| Strongly reachable | - Yes | Optional | Keep object |
+| Weakly reachable | - No | - Yes | Clear WeakRef, GC object |
+| Unreachable | - No | - No | GC object |
 
 **Practical Example:**
 

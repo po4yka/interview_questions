@@ -258,12 +258,12 @@ val payment = PaymentMethod.create("card", "1234-5678-9012-3456")
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use for creating different variants of same type
+// - DO: Use for creating different variants of same type
 abstract class TransportFactory {
     abstract fun createTransport(): Transport
 }
 
-// ✅ DO: Combine with Template Method
+// - DO: Combine with Template Method
 abstract class Creator {
     fun operation() {
         val product = factoryMethod()
@@ -273,7 +273,7 @@ abstract class Creator {
     abstract fun factoryMethod(): Product
 }
 
-// ✅ DO: Use sealed classes in Kotlin
+// - DO: Use sealed classes in Kotlin
 sealed class Result<out T> {
     data class Success<T>(val data: T) : Result<T>()
     data class Error(val message: String) : Result<Nothing>()
@@ -284,10 +284,10 @@ sealed class Result<out T> {
     }
 }
 
-// ❌ DON'T: Use for creating families of objects
+// - DON'T: Use for creating families of objects
 // Use Abstract Factory instead
 
-// ❌ DON'T: Overcomplicate simple object creation
+// - DON'T: Overcomplicate simple object creation
 // Direct instantiation is fine for simple cases
 ```
 

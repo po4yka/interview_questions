@@ -167,7 +167,7 @@ fun toggleFeature(enabled: Boolean) {
 
 ### 6. Common Mistakes
 
-#### ❌ DON'T:
+#### - DON'T:
 
 ```kotlin
 // Don't use commit() on main thread for non-critical data
@@ -189,7 +189,7 @@ prefs.edit().putString("key", "value1").apply()
 val value = prefs.getString("key", null) // May not be "value1" yet!
 ```
 
-#### ✅ DO:
+#### - DO:
 
 ```kotlin
 // Use apply() for most cases

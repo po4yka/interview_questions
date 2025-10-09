@@ -81,10 +81,10 @@ class MyContentProvider : ContentProvider() {
 
 | Component | Purpose | Has UI | Example Use Case |
 |-----------|---------|--------|------------------|
-| Activity | UI screen | ✅ Yes | Login screen |
-| Service | Background work | ❌ No | Music player |
-| BroadcastReceiver | Event listener | ❌ No | Battery alerts |
-| ContentProvider | Data sharing | ❌ No | Contact list |
+| Activity | UI screen | - Yes | Login screen |
+| Service | Background work | - No | Music player |
+| BroadcastReceiver | Event listener | - No | Battery alerts |
+| ContentProvider | Data sharing | - No | Contact list |
 
 All components declared in **AndroidManifest.xml**.
 

@@ -207,7 +207,7 @@ typealias Email = String
 typealias PhoneNumber = String
 
 val email: Email = "user@example.com"
-val phone: PhoneNumber = email  // ✅ Compiles! No type safety
+val phone: PhoneNumber = email  // - Compiles! No type safety
 
 // If you need real type safety, use value classes:
 @JvmInline
@@ -216,7 +216,7 @@ value class Email(val value: String)
 value class PhoneNumber(val value: String)
 
 val email2 = Email("user@example.com")
-val phone2: PhoneNumber = email2  // ❌ Compilation error! Real type safety
+val phone2: PhoneNumber = email2  // - Compilation error! Real type safety
 ```
 
 ### Best Practices
@@ -312,7 +312,7 @@ typealias Email = String
 typealias PhoneNumber = String
 
 val email: Email = "user@example.com"
-val phone: PhoneNumber = email  // ✅ Компилируется! Нет типобезопасности
+val phone: PhoneNumber = email  // - Компилируется! Нет типобезопасности
 
 // Для реальной типобезопасности используйте value классы:
 @JvmInline
@@ -321,7 +321,7 @@ value class Email(val value: String)
 value class PhoneNumber(val value: String)
 
 val email2 = Email("user@example.com")
-val phone2: PhoneNumber = email2  // ❌ Ошибка компиляции! Реальная типобезопасность
+val phone2: PhoneNumber = email2  // - Ошибка компиляции! Реальная типобезопасность
 ```
 
 **Краткое содержание**: Псевдонимы типов предоставляют альтернативные имена для существующих типов, улучшая читаемость кода без создания новых типов. Полезны для сокращения длинных обобщенных типов, именования функциональных типов и создания DSL. Однако не обеспечивают типобезопасность - для этого используйте value классы.

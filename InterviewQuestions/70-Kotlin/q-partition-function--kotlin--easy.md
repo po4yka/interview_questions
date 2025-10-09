@@ -320,24 +320,24 @@ groupB.forEach { showFeatureB(it) }
 
 ### Best Practices
 
-**✅ Используйте partition когда:**
+**- Используйте partition когда:**
 
 1. Нужны обе группы (matching и non-matching)
 2. Хотите избежать двух проходов по коллекции
 3. Важна производительность для больших коллекций
 
-**❌ НЕ используйте partition когда:**
+**- НЕ используйте partition когда:**
 
 1. Нужна только одна группа (используйте `filter`)
 2. Нужно разделить на >2 группы (используйте `groupBy`)
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - нужна только одна группа
+// - НЕПРАВИЛЬНО - нужна только одна группа
 val (valid, _) = data.partition { it.isValid() }
 // Лучше использовать filter
 val valid = data.filter { it.isValid() }
 
-// ❌ НЕПРАВИЛЬНО - нужно >2 групп
+// - НЕПРАВИЛЬНО - нужно >2 групп
 val (low, notLow) = items.partition { it.priority < 5 }
 val (medium, high) = notLow.partition { it.priority < 8 }
 // Лучше использовать groupBy

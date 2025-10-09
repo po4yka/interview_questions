@@ -109,22 +109,22 @@ val syncList = Collections.synchronizedList(ArrayList<String>())
 ### When to Use What
 
 **ArrayList**:
-- ✅ Default choice for most use cases
-- ✅ Frequent access by index
-- ✅ Iteration over elements
-- ✅ Append operations
-- ❌ Frequent insertions/deletions in middle
+- - Default choice for most use cases
+- - Frequent access by index
+- - Iteration over elements
+- - Append operations
+- - Frequent insertions/deletions in middle
 
 **LinkedList**:
-- ✅ Frequent insertions/deletions at beginning/end
-- ✅ Queue or Deque operations
-- ✅ Frequent insertions/deletions in middle (if you have node reference)
-- ❌ Random access by index
-- ❌ Iteration (slower due to pointer chasing)
+- - Frequent insertions/deletions at beginning/end
+- - Queue or Deque operations
+- - Frequent insertions/deletions in middle (if you have node reference)
+- - Random access by index
+- - Iteration (slower due to pointer chasing)
 
 **Vector**:
-- ❌ Don't use in new code
-- ✅ Only for legacy code compatibility
+- - Don't use in new code
+- - Only for legacy code compatibility
 - Use `Collections.synchronizedList()` or `CopyOnWriteArrayList` instead
 
 ### Code Examples

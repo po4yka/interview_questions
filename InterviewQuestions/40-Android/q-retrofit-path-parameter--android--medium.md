@@ -510,13 +510,13 @@ viewModel.loadMovie("tt0111161")  // The Shawshank Redemption
 ### Mistake 1: Forgetting Placeholder
 
 ```kotlin
-// ❌ BAD: No placeholder in URL
+// - BAD: No placeholder in URL
 @GET("users/id")
 suspend fun getUser(@Path("id") userId: String): Response<User>
 
 // URL: https://api.example.com/users/id (literal "id", not replaced!)
 
-// ✅ GOOD: Use placeholder
+// - GOOD: Use placeholder
 @GET("users/{id}")
 suspend fun getUser(@Path("id") userId: String): Response<User>
 
@@ -528,12 +528,12 @@ suspend fun getUser(@Path("id") userId: String): Response<User>
 ### Mistake 2: Mismatched Names
 
 ```kotlin
-// ❌ BAD: Placeholder name doesn't match @Path value
+// - BAD: Placeholder name doesn't match @Path value
 @GET("users/{userId}")
 suspend fun getUser(@Path("id") userId: String): Response<User>
 // Error: No path parameter {id} found
 
-// ✅ GOOD: Names match
+// - GOOD: Names match
 @GET("users/{userId}")
 suspend fun getUser(@Path("userId") userId: String): Response<User>
 ```
@@ -543,12 +543,12 @@ suspend fun getUser(@Path("userId") userId: String): Response<User>
 ### Mistake 3: Using @Query for Path Parameters
 
 ```kotlin
-// ❌ BAD: Using @Query for path parameter
+// - BAD: Using @Query for path parameter
 @GET("users")
 suspend fun getUser(@Query("id") userId: String): Response<User>
 // URL: https://api.example.com/users?id=123 (wrong!)
 
-// ✅ GOOD: Use @Path for path parameters
+// - GOOD: Use @Path for path parameters
 @GET("users/{id}")
 suspend fun getUser(@Path("id") userId: String): Response<User>
 // URL: https://api.example.com/users/123

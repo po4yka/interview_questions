@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ❌ Delayed runnable holds Activity reference
+        // - Delayed runnable holds Activity reference
         handler.postDelayed({
             // This holds MainActivity even after destruction
             updateUI()
@@ -182,7 +182,7 @@ Retained size: 3.2 MB
 **1. Static Reference Leak:**
 ```kotlin
 companion object {
-    var activity: Activity? = null  // ❌
+    var activity: Activity? = null  // BAD
 }
 ```
 
@@ -197,7 +197,7 @@ GC Root: Class object
 ```kotlin
 class MyActivity : AppCompatActivity() {
     inner class MyTask : AsyncTask<Void, Void, Void>() {
-        // ❌ Holds implicit reference to MyActivity
+        // - Holds implicit reference to MyActivity
     }
 }
 ```
@@ -214,7 +214,7 @@ GC Root: Thread
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    // ❌ Anonymous class holds Activity reference
+    // - Anonymous class holds Activity reference
     someService.addListener(object : Listener {
         override fun onEvent() {
             updateUI()

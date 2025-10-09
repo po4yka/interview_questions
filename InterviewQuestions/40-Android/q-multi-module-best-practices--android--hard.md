@@ -88,10 +88,10 @@ dependencies {
 **1. Feature modules should NOT depend on each other**
 
 ```kotlin
-// ❌ BAD - Feature depends on feature
+// - BAD - Feature depends on feature
 // :feature:auth -> :feature:profile  // NO!
 
-// ✅ GOOD - Features depend on core/data only
+// - GOOD - Features depend on core/data only
 // :feature:auth -> :core:ui
 // :feature:auth -> :data:user
 // :feature:profile -> :core:ui
@@ -192,10 +192,10 @@ dependencies {
 **1. Feature модули НЕ должны зависеть друг от друга**
 
 ```kotlin
-// ❌ ПЛОХО - Feature зависит от feature
+// - ПЛОХО - Feature зависит от feature
 // :feature:auth -> :feature:profile  // НЕТ!
 
-// ✅ ХОРОШО - Features зависят только от core/data
+// - ХОРОШО - Features зависят только от core/data
 // :feature:auth -> :core:ui
 // :feature:auth -> :data:user
 ```

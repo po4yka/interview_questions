@@ -20,17 +20,17 @@ status: reviewed
 
 | Критерий | WorkManager | Coroutines | Service (Foreground) |
 |----------|-------------|------------|---------------------|
-| **Гарантия выполнения** | ✅ Да, даже после reboot | ❌ Нет | ⚠️ Пока процесс жив |
-| **Работает при закрытом приложении** | ✅ Да | ❌ Нет | ⚠️ Foreground - да |
-| **Constraints** (WiFi, charging) | ✅ Да | ❌ Нет | ❌ Нет |
-| **Retry/backoff** | ✅ Автоматически | ❌ Вручную | ❌ Вручную |
-| **Периодические задачи** | ✅ Да (min 15 min) | ❌ Нет | ⚠️ Вручную |
+| **Гарантия выполнения** | - Да, даже после reboot | - Нет | WARNING: Пока процесс жив |
+| **Работает при закрытом приложении** | - Да | - Нет | WARNING: Foreground - да |
+| **Constraints** (WiFi, charging) | - Да | - Нет | - Нет |
+| **Retry/backoff** | - Автоматически | - Вручную | - Вручную |
+| **Периодические задачи** | - Да (min 15 min) | - Нет | WARNING: Вручную |
 | **Use case** | Deferrable гарантированная работа | Async операции в UI | Long-running foreground |
 
 ### Когда использовать WorkManager
 
 ```kotlin
-// ✅ Загрузка файлов - должна завершиться
+// - Загрузка файлов - должна завершиться
 class UploadWorker(
     context: Context,
     params: WorkerParameters
@@ -82,10 +82,10 @@ fun scheduleUpload(fileUri: String) {
 - 🔔 Периодические задачи (sync каждые N часов)
 
 **Гарантии WorkManager**:
-- ✅ Выполнится даже если приложение закрыто
-- ✅ Переживет reboot устройства
-- ✅ Автоматические retry при сбое
-- ✅ Батарейно-эффективно (соблюдает Doze Mode)
+- - Выполнится даже если приложение закрыто
+- - Переживет reboot устройства
+- - Автоматические retry при сбое
+- - Батарейно-эффективно (соблюдает Doze Mode)
 
 ### Когда использовать Coroutines
 
@@ -94,7 +94,7 @@ class ProductsViewModel(
     private val repository: ProductsRepository
 ) : ViewModel() {
 
-    // ✅ Загрузка данных для UI
+    // - Загрузка данных для UI
     fun loadProducts() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -109,7 +109,7 @@ class ProductsViewModel(
         }
     }
 
-    // ✅ Параллельные запросы
+    // - Параллельные запросы
     suspend fun loadDashboard() = coroutineScope {
         val products = async { repository.getProducts() }
         val orders = async { repository.getOrders() }
@@ -122,7 +122,7 @@ class ProductsViewModel(
         )
     }
 
-    // ✅ Flow для real-time данных
+    // - Flow для real-time данных
     val orders: StateFlow<List<Order>> = repository.observeOrders()
         .stateIn(
             scope = viewModelScope,
@@ -141,10 +141,10 @@ class ProductsViewModel(
 - ⚡ Любая работа привязанная к lifecycle компонента
 
 **Ограничения Coroutines**:
-- ❌ Отменяются при закрытии приложения
-- ❌ Не переживут process death
-- ❌ Нет retry/backoff из коробки
-- ❌ Нет constraints (WiFi, charging)
+- - Отменяются при закрытии приложения
+- - Не переживут process death
+- - Нет retry/backoff из коробки
+- - Нет constraints (WiFi, charging)
 
 ### Когда использовать Foreground Service
 
@@ -198,17 +198,17 @@ fun startMusicPlayer() {
 - 🎥 Video recording
 
 **Требования Foreground Service**:
-- ✅ **ОБЯЗАТЕЛЬНО** показывать notification
-- ⚠️ Пользователь видит что приложение работает
-- ✅ Может работать пока приложение закрыто
-- ⚠️ Система может убить при низкой памяти
+- - **ОБЯЗАТЕЛЬНО** показывать notification
+- WARNING: Пользователь видит что приложение работает
+- - Может работать пока приложение закрыто
+- WARNING: Система может убить при низкой памяти
 
 ### Сравнение на примерах
 
 #### Пример 1: Загрузка файла
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - Coroutines
+// - НЕПРАВИЛЬНО - Coroutines
 // Проблема: отменится при закрытии приложения
 fun uploadFile(file: File) {
     viewModelScope.launch {
@@ -216,7 +216,7 @@ fun uploadFile(file: File) {
     }
 }
 
-// ✅ ПРАВИЛЬНО - WorkManager
+// - ПРАВИЛЬНО - WorkManager
 // Гарантия: загрузка завершится даже если приложение закрыто
 fun uploadFile(file: File) {
     val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
@@ -235,7 +235,7 @@ fun uploadFile(file: File) {
 #### Пример 2: Периодическая синхронизация
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - Coroutines с while loop
+// - НЕПРАВИЛЬНО - Coroutines с while loop
 // Проблема: убьется при закрытии приложения
 fun startSync() {
     viewModelScope.launch {
@@ -246,7 +246,7 @@ fun startSync() {
     }
 }
 
-// ✅ ПРАВИЛЬНО - WorkManager
+// - ПРАВИЛЬНО - WorkManager
 // Гарантия: будет работать в background
 fun schedulePeriodicSync() {
     val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(
@@ -271,14 +271,14 @@ fun schedulePeriodicSync() {
 #### Пример 3: Music Player
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - WorkManager
+// - НЕПРАВИЛЬНО - WorkManager
 // Проблема: WorkManager для deferrable работы, не для long-running
 fun playMusic() {
     val playWork = OneTimeWorkRequestBuilder<MusicWorker>().build()
     WorkManager.getInstance(context).enqueue(playWork)
 }
 
-// ✅ ПРАВИЛЬНО - Foreground Service
+// - ПРАВИЛЬНО - Foreground Service
 // Пользователь видит что музыка играет
 class MusicPlayerService : Service() {
     override fun onCreate() {
@@ -296,7 +296,7 @@ class MusicPlayerService : Service() {
 #### Пример 4: Загрузка данных для UI
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - WorkManager
+// - НЕПРАВИЛЬНО - WorkManager
 // Проблема: overkill для UI данных
 fun loadProducts() {
     val loadWork = OneTimeWorkRequestBuilder<LoadProductsWorker>().build()
@@ -304,7 +304,7 @@ fun loadProducts() {
     // Как получить результат для UI?
 }
 
-// ✅ ПРАВИЛЬНО - Coroutines
+// - ПРАВИЛЬНО - Coroutines
 fun loadProducts() {
     viewModelScope.launch {
         _isLoading.value = true
@@ -381,7 +381,7 @@ class MyApplication : Application() {
 ### WorkManager Best Practices
 
 ```kotlin
-// ✅ Unique work - предотвращает дубликаты
+// - Unique work - предотвращает дубликаты
 fun scheduleUpload(fileId: String) {
     val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
         .setInputData(workDataOf("file_id" to fileId))
@@ -394,7 +394,7 @@ fun scheduleUpload(fileId: String) {
     )
 }
 
-// ✅ Chaining - последовательная работа
+// - Chaining - последовательная работа
 fun processAndUpload(imageUri: String) {
     val compressWork = OneTimeWorkRequestBuilder<CompressImageWorker>()
         .setInputData(workDataOf("image_uri" to imageUri))
@@ -409,7 +409,7 @@ fun processAndUpload(imageUri: String) {
         .enqueue()
 }
 
-// ✅ Observing work status
+// - Observing work status
 fun observeUploadStatus(workId: UUID) {
     WorkManager.getInstance(context)
         .getWorkInfoByIdLiveData(workId)
@@ -423,7 +423,7 @@ fun observeUploadStatus(workId: UUID) {
         }
 }
 
-// ✅ Progress updates
+// - Progress updates
 class UploadWorker(context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
 
@@ -444,7 +444,7 @@ class UploadWorker(context: Context, params: WorkerParameters) :
 ### Coroutines Best Practices
 
 ```kotlin
-// ✅ Используйте правильный scope
+// - Используйте правильный scope
 class MyViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch { // Автоматически отменится
@@ -453,14 +453,14 @@ class MyViewModel : ViewModel() {
     }
 }
 
-// ✅ withContext для смены диспетчера
+// - withContext для смены диспетчера
 suspend fun loadFromDisk() {
     withContext(Dispatchers.IO) {
         file.readText()
     }
 }
 
-// ✅ Обрабатывайте ошибки
+// - Обрабатывайте ошибки
 viewModelScope.launch {
     try {
         val data = repository.getData()
@@ -470,7 +470,7 @@ viewModelScope.launch {
     }
 }
 
-// ✅ async для параллельных операций
+// - async для параллельных операций
 suspend fun loadMultiple() = coroutineScope {
     val user = async { userRepo.getUser() }
     val posts = async { postsRepo.getPosts() }
@@ -482,7 +482,7 @@ suspend fun loadMultiple() = coroutineScope {
 ### Service Best Practices
 
 ```kotlin
-// ✅ Всегда используйте Foreground для long-running
+// - Всегда используйте Foreground для long-running
 class TrackingService : Service() {
     override fun onCreate() {
         super.onCreate()

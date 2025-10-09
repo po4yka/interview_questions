@@ -26,7 +26,7 @@ Yes, **inline cannot be used** if the function contains **large blocks of code**
 **Problem:** Inlining copies function code to every call site.
 
 ```kotlin
-// ❌ BAD - Large function body
+// - BAD - Large function body
 inline fun processLargeData(data: List<Int>) {
     // 100+ lines of complex logic
     val step1 = data.map { it * 2 }
@@ -42,7 +42,7 @@ repeat(10) {
     processLargeData(listOf(1, 2, 3))
 }
 
-// ✅ GOOD - Regular function
+// - GOOD - Regular function
 fun processLargeData(data: List<Int>) {
     // Large code, called once
 }
@@ -61,10 +61,10 @@ fun processLargeData(data: List<Int>) {
 **Problem:** Inlining creates infinite copy loop.
 
 ```kotlin
-// ❌ COMPILATION ERROR - Cannot inline recursive function
+// - COMPILATION ERROR - Cannot inline recursive function
 inline fun factorial(n: Int): Int {
     return if (n <= 1) 1
-    else n * factorial(n - 1)  // ❌ Error: Cannot inline recursive call
+    else n * factorial(n - 1)  // - Error: Cannot inline recursive call
 }
 ```
 
@@ -87,7 +87,7 @@ Error: Inline function 'factorial' cannot be recursive
 **Solution:** Don't use `inline` for recursive functions:
 
 ```kotlin
-// ✅ GOOD - Regular function
+// - GOOD - Regular function
 fun factorial(n: Int): Int {
     return if (n <= 1) 1
     else n * factorial(n - 1)
@@ -101,14 +101,14 @@ fun factorial(n: Int): Int {
 **Problem:** Lambdas passed to non-inline functions or stored create objects.
 
 ```kotlin
-// ❌ BAD - Lambda cannot be inlined
+// - BAD - Lambda cannot be inlined
 inline fun processData(data: List<Int>, action: (Int) -> Unit) {
     // Passing lambda to non-inline function
     data.forEach(action)  // forEach is inline, OK
 
     // Storing lambda - creates object!
-    val storedAction = action  // ❌ Capturing creates object
-    someList.add(storedAction)  // ❌ Cannot inline
+    val storedAction = action  // - Capturing creates object
+    someList.add(storedAction)  // - Cannot inline
 }
 ```
 
@@ -120,7 +120,7 @@ Error: Illegal usage of inline-parameter 'action'
 **Workaround:** Use `noinline`:
 
 ```kotlin
-// ✅ GOOD - Mark lambda as noinline
+// - GOOD - Mark lambda as noinline
 inline fun processData(
     data: List<Int>,
     noinline action: (Int) -> Unit  // Won't be inlined
@@ -137,7 +137,7 @@ inline fun processData(
 **Problem:** Captured variables in lambdas can cause issues.
 
 ```kotlin
-// ⚠️ CAREFUL - Capturing variables
+// WARNING: CAREFUL - Capturing variables
 inline fun repeat(times: Int, action: () -> Unit) {
     for (i in 0 until times) {
         action()  // Fine
@@ -176,10 +176,10 @@ for (i in 0 until 5) {
 **When it becomes a problem:**
 
 ```kotlin
-// ❌ PROBLEM - Returns lambda that captures variables
+// - PROBLEM - Returns lambda that captures variables
 inline fun createCounter(): () -> Int {
     var count = 0
-    return { count++ }  // ❌ Cannot inline returned lambda
+    return { count++ }  // - Cannot inline returned lambda
 }
 ```
 
@@ -196,13 +196,13 @@ Error: Inline function cannot contain reified type parameters
 
 ```kotlin
 abstract class Base {
-    // ❌ COMPILATION ERROR - Abstract cannot be inline
-    abstract inline fun process()  // ❌ No body to inline
+    // - COMPILATION ERROR - Abstract cannot be inline
+    abstract inline fun process()  // - No body to inline
 }
 
 open class Parent {
-    // ❌ COMPILATION ERROR - Open cannot be inline
-    open inline fun calculate() {  // ❌ Can be overridden
+    // - COMPILATION ERROR - Open cannot be inline
+    open inline fun calculate() {  // - Can be overridden
         // ...
     }
 }
@@ -214,7 +214,7 @@ open class Parent {
 
 ```kotlin
 abstract class Base {
-    abstract fun process()  // ✅ OK
+    abstract fun process()  // - OK
 }
 ```
 
@@ -225,7 +225,7 @@ abstract class Base {
 **Correct usage:**
 
 ```kotlin
-// ✅ OK - inline with reified
+// - OK - inline with reified
 inline fun <reified T> isInstanceOf(value: Any): Boolean {
     return value is T
 }
@@ -234,9 +234,9 @@ inline fun <reified T> isInstanceOf(value: Any): Boolean {
 **Problematic usage:**
 
 ```kotlin
-// ❌ PROBLEM - Returning lambda with reified type
+// - PROBLEM - Returning lambda with reified type
 inline fun <reified T> createChecker(): (Any) -> Boolean {
-    return { it is T }  // ❌ Cannot return lambda using reified type
+    return { it is T }  // - Cannot return lambda using reified type
 }
 ```
 
@@ -317,7 +317,7 @@ fun main() {
 
 ## When TO Use Inline
 
-✅ **Good use cases:**
+- **Good use cases:**
 
 1. **Higher-order functions with lambdas:**
 
@@ -364,19 +364,19 @@ inline fun List<Int>.sumByCustom(selector: (Int) -> Int): Int {
 
 **Cannot use inline when:**
 
-1. ❌ **Large function bodies** - causes code bloat
-2. ❌ **Recursive functions** - infinite inlining
-3. ❌ **Storing lambdas** - lambda must be invoked inline
-4. ❌ **Returning lambdas** - escaping context
-5. ❌ **Virtual/abstract functions** - no body to inline
-6. ❌ **Called primarily from Java** - inline ignored
+1. - **Large function bodies** - causes code bloat
+2. - **Recursive functions** - infinite inlining
+3. - **Storing lambdas** - lambda must be invoked inline
+4. - **Returning lambdas** - escaping context
+5. - **Virtual/abstract functions** - no body to inline
+6. - **Called primarily from Java** - inline ignored
 
 **Should use inline when:**
 
-1. ✅ Small higher-order functions with lambdas
-2. ✅ Functions with reified type parameters
-3. ✅ Performance-critical small utilities
-4. ✅ Eliminating lambda object allocation
+1. - Small higher-order functions with lambdas
+2. - Functions with reified type parameters
+3. - Performance-critical small utilities
+4. - Eliminating lambda object allocation
 
 **Key principle:** Only inline **small functions** with **lambda parameters** where **eliminating lambda objects** provides meaningful performance benefit.
 

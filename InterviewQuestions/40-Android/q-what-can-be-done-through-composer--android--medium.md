@@ -406,7 +406,7 @@ fun ComposerLifecycle() {
 ### What You Shouldn't Do
 
 ```kotlin
-// ❌ Don't try to manually control recomposition
+// - Don't try to manually control recomposition
 @Composable
 fun ManualControl() {
     var count by remember { mutableStateOf(0) }
@@ -415,7 +415,7 @@ fun ManualControl() {
     Text("Count: $count")
 }
 
-// ❌ Don't store mutable state outside of remember
+// - Don't store mutable state outside of remember
 var globalState = 0 // Won't trigger recomposition
 
 @Composable
@@ -423,7 +423,7 @@ fun WrongStateManagement() {
     Text("Count: $globalState") // Won't update
 }
 
-// ✅ Let Composer manage state
+// - Let Composer manage state
 @Composable
 fun CorrectStateManagement() {
     var count by remember { mutableStateOf(0) }

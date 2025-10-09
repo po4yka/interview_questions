@@ -430,12 +430,12 @@ fun cancelPendingIntent(context: Context) {
 
 ### Best Practices
 
-1. ✅ **Use FLAG_IMMUTABLE** when possible (Android 12+ requirement)
-2. ✅ **Use unique request codes** to distinguish different PendingIntents
-3. ✅ **Include FLAG_UPDATE_CURRENT** to update existing PendingIntent
-4. ✅ **Cancel PendingIntents** when no longer needed
-5. ❌ **Avoid FLAG_MUTABLE** unless absolutely necessary
-6. ✅ **Set explicit intents** for security
+1. - **Use FLAG_IMMUTABLE** when possible (Android 12+ requirement)
+2. - **Use unique request codes** to distinguish different PendingIntents
+3. - **Include FLAG_UPDATE_CURRENT** to update existing PendingIntent
+4. - **Cancel PendingIntents** when no longer needed
+5. - **Avoid FLAG_MUTABLE** unless absolutely necessary
+6. - **Set explicit intents** for security
 
 ## Answer (RU)
 

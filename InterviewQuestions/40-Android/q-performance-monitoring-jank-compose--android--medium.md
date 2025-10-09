@@ -45,10 +45,10 @@ fun Counter() {
     var count by remember { mutableStateOf(0) }
 
     Column {
-        // ✅ Recompose только когда count изменяется
+        // - Recompose только когда count изменяется
         Text("Count: $count")
 
-        // ❌ ПРОБЛЕМА: всегда recompose при каждом изменении
+        // - ПРОБЛЕМА: всегда recompose при каждом изменении
         Text("Current time: ${System.currentTimeMillis()}")
 
         Button(onClick = { count++ }) {
@@ -88,7 +88,7 @@ fun ProductsList(products: List<Product>) {
 ### remember - избегаем лишних вычислений
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - вычисляется каждый recompose
+// - НЕПРАВИЛЬНО - вычисляется каждый recompose
 @Composable
 fun ExpensiveComponent(items: List<Item>) {
     val processedItems = items.map { processItem(it) } // Каждый раз!
@@ -100,7 +100,7 @@ fun ExpensiveComponent(items: List<Item>) {
     }
 }
 
-// ✅ ПРАВИЛЬНО - кэшируем результат
+// - ПРАВИЛЬНО - кэшируем результат
 @Composable
 fun ExpensiveComponent(items: List<Item>) {
     val processedItems = remember(items) {
@@ -118,7 +118,7 @@ fun ExpensiveComponent(items: List<Item>) {
 ### derivedStateOf - вычисляемый state
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - каждое изменение listState → recompose
+// - НЕПРАВИЛЬНО - каждое изменение listState → recompose
 @Composable
 fun ScrollableList() {
     val listState = rememberLazyListState()
@@ -139,7 +139,7 @@ fun ScrollableList() {
     }
 }
 
-// ✅ ПРАВИЛЬНО - derivedStateOf для условий
+// - ПРАВИЛЬНО - derivedStateOf для условий
 @Composable
 fun ScrollableList() {
     val listState = rememberLazyListState()
@@ -168,7 +168,7 @@ fun ScrollableList() {
 ### Stability - ключ к оптимизации
 
 ```kotlin
-// ❌ НЕСТАБИЛЬНЫЙ класс - всегда recompose
+// - НЕСТАБИЛЬНЫЙ класс - всегда recompose
 data class User(
     val name: String,
     val posts: MutableList<Post> // Mutable = unstable!
@@ -180,7 +180,7 @@ fun UserProfile(user: User) {
     Text(user.name)
 }
 
-// ✅ СТАБИЛЬНЫЙ класс - recompose только при изменении
+// - СТАБИЛЬНЫЙ класс - recompose только при изменении
 @Immutable // или @Stable
 data class User(
     val name: String,
@@ -233,7 +233,7 @@ class SearchQuery {
 ### LazyColumn/LazyRow оптимизация
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - нестабильный key
+// - НЕПРАВИЛЬНО - нестабильный key
 @Composable
 fun ProductsList(products: List<Product>) {
     LazyColumn {
@@ -243,7 +243,7 @@ fun ProductsList(products: List<Product>) {
     }
 }
 
-// ✅ ПРАВИЛЬНО - стабильный unique key
+// - ПРАВИЛЬНО - стабильный unique key
 @Composable
 fun ProductsList(products: List<Product>) {
     LazyColumn {
@@ -256,7 +256,7 @@ fun ProductsList(products: List<Product>) {
     }
 }
 
-// ✅ ПРАВИЛЬНО - contentType для mixed lists
+// - ПРАВИЛЬНО - contentType для mixed lists
 @Composable
 fun MixedList(items: List<ListItem>) {
     LazyColumn {
@@ -284,7 +284,7 @@ fun MixedList(items: List<ListItem>) {
 ### Modifier reuse
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - новый Modifier каждый recompose
+// - НЕПРАВИЛЬНО - новый Modifier каждый recompose
 @Composable
 fun BadComponent() {
     Column(
@@ -297,7 +297,7 @@ fun BadComponent() {
     }
 }
 
-// ✅ ПРАВИЛЬНО - переиспользуем Modifier
+// - ПРАВИЛЬНО - переиспользуем Modifier
 private val containerModifier = Modifier
     .fillMaxSize()
     .padding(16.dp)
@@ -310,7 +310,7 @@ fun GoodComponent() {
     }
 }
 
-// ✅ Или remember для dynamic modifiers
+// - Или remember для dynamic modifiers
 @Composable
 fun DynamicComponent(backgroundColor: Color) {
     val containerModifier = remember(backgroundColor) {
@@ -480,7 +480,7 @@ fun ProductItem(product: Product) {
 ### Common Performance Issues
 
 ```kotlin
-// ❌ 1. Lambda в parameters создает новый объект
+// - 1. Lambda в parameters создает новый объект
 @Composable
 fun BadButton() {
     Button(
@@ -490,7 +490,7 @@ fun BadButton() {
     }
 }
 
-// ✅ Fix: remember lambda
+// - Fix: remember lambda
 @Composable
 fun GoodButton(viewModel: CounterViewModel) {
     val onClick = remember(viewModel) {
@@ -502,7 +502,7 @@ fun GoodButton(viewModel: CounterViewModel) {
     }
 }
 
-// ❌ 2. Чтение State в composable без необходимости
+// - 2. Чтение State в composable без необходимости
 @Composable
 fun BadComponent(state: AppState) {
     // Recompose при ЛЮБОМ изменении AppState!
@@ -513,7 +513,7 @@ fun BadComponent(state: AppState) {
     Text(user.name) // Используем только user!
 }
 
-// ✅ Fix: read only необходимый state
+// - Fix: read only необходимый state
 @Composable
 fun GoodComponent(state: AppState) {
     val userName = state.user.name // Только имя
@@ -521,7 +521,7 @@ fun GoodComponent(state: AppState) {
     Text(userName)
 }
 
-// ❌ 3. Expensive вычисления без remember
+// - 3. Expensive вычисления без remember
 @Composable
 fun BadList(items: List<Item>) {
     val sortedItems = items.sortedBy { it.name } // Каждый recompose!
@@ -533,7 +533,7 @@ fun BadList(items: List<Item>) {
     }
 }
 
-// ✅ Fix: remember вычисления
+// - Fix: remember вычисления
 @Composable
 fun GoodList(items: List<Item>) {
     val sortedItems = remember(items) {
@@ -547,7 +547,7 @@ fun GoodList(items: List<Item>) {
     }
 }
 
-// ❌ 4. State hoisting без необходимости
+// - 4. State hoisting без необходимости
 @Composable
 fun BadScreen() {
     var query by remember { mutableStateOf("") }
@@ -559,7 +559,7 @@ fun BadScreen() {
     }
 }
 
-// ✅ Fix: держите state максимально близко
+// - Fix: держите state максимально близко
 @Composable
 fun GoodScreen() {
     Column {
@@ -584,37 +584,37 @@ Android Studio → Tools → Layout Inspector
 ### Performance Best Practices
 
 ```kotlin
-// ✅ 1. Используйте @Stable/@Immutable
+// - 1. Используйте @Stable/@Immutable
 @Immutable
 data class Product(val id: Int, val name: String)
 
-// ✅ 2. remember для expensive вычислений
+// - 2. remember для expensive вычислений
 val processed = remember(data) { processData(data) }
 
-// ✅ 3. derivedStateOf для вычисляемого state
+// - 3. derivedStateOf для вычисляемого state
 val showButton by remember { derivedStateOf { scrollState.value > 100 } }
 
-// ✅ 4. key в LazyColumn
+// - 4. key в LazyColumn
 items(products, key = { it.id }) { product -> }
 
-// ✅ 5. Избегайте чтения State без необходимости
-// ❌ val all = state.everything
-// ✅ val needed = state.specificField
+// - 5. Избегайте чтения State без необходимости
+// - val all = state.everything
+// - val needed = state.specificField
 
-// ✅ 6. Переиспользуйте Modifiers
+// - 6. Переиспользуйте Modifiers
 private val cardModifier = Modifier.fillMaxWidth().padding(8.dp)
 
-// ✅ 7. Используйте contentType для mixed lists
+// - 7. Используйте contentType для mixed lists
 contentType = { item -> item::class.simpleName }
 
-// ✅ 8. Lazy composition где возможно
-LazyColumn { items { } } // ✅
-Column { items.forEach { } } // ❌ для больших списков
+// - 8. Lazy composition где возможно
+LazyColumn { items { } } // GOOD
+Column { items.forEach { } } // - для больших списков
 
-// ✅ 9. Профилируйте регулярно
+// - 9. Профилируйте регулярно
 // Macrobenchmark тесты в CI/CD
 
-// ✅ 10. Мониторьте jank в production
+// - 10. Мониторьте jank в production
 // Firebase Performance Monitoring, Custom analytics
 ```
 

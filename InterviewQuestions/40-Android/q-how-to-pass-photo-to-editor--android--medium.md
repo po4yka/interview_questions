@@ -443,11 +443,11 @@ fun PhotoEditor(
 ### Common Pitfalls
 
 ```kotlin
-// ❌ BAD: Large bitmap via Intent
+// - BAD: Large bitmap via Intent
 val bitmap = BitmapFactory.decodeFile(largefile)
 intent.putExtra("bitmap", bitmap) // TransactionTooLargeException!
 
-// ✅ GOOD: Use URI
+// - GOOD: Use URI
 val uri = FileProvider.getUriForFile(context, authority, file)
 intent.putExtra("uri", uri.toString())
 ```

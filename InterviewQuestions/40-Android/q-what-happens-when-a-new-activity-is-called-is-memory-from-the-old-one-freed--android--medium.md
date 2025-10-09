@@ -92,14 +92,14 @@ class ActivityA : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        // ✅ Activity instance still in memory
-        // ✅ All member variables still exist
-        // ✅ largeData still allocated
-        // ✅ viewModel still exists
-        // ✅ userScore value preserved
+        // - Activity instance still in memory
+        // - All member variables still exist
+        // - largeData still allocated
+        // - viewModel still exists
+        // - userScore value preserved
     }
 
-    // ❌ onDestroy() NOT called yet
+    // - onDestroy() NOT called yet
     // Memory NOT freed automatically
 }
 ```
@@ -281,7 +281,7 @@ class MemoryEfficientActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
 
-        // ✅ Release heavy resources when not visible
+        // - Release heavy resources when not visible
         heavyObject = null
 
         // Suggest garbage collection (not guaranteed)
@@ -291,7 +291,7 @@ class MemoryEfficientActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        // ✅ Recreate heavy resources when visible again
+        // - Recreate heavy resources when visible again
         if (heavyObject == null) {
             heavyObject = loadLargeDataSet()
         }
@@ -300,7 +300,7 @@ class MemoryEfficientActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        // ✅ Final cleanup
+        // - Final cleanup
         heavyObject = null
     }
 }
@@ -361,25 +361,25 @@ class BestPracticeActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
 
-        // ✅ Release memory-heavy resources
+        // - Release memory-heavy resources
         bitmap?.recycle()
         bitmap = null
 
-        // ✅ Cancel background operations
+        // - Cancel background operations
         disposables.clear()
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        // ✅ Final cleanup
+        // - Final cleanup
         disposables.dispose()
     }
 
-    // ✅ Use ViewModel for data that should survive
+    // - Use ViewModel for data that should survive
     private val viewModel: DataViewModel by viewModels()
 
-    // ✅ Save critical state
+    // - Save critical state
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("critical_data", criticalData)

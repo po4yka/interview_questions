@@ -62,19 +62,19 @@ data class User(
 ```kotlin
 @Dao
 interface UserDao {
-    // ❌ Bad: Returns all data
+    // Bad: Returns all data
     @Query("SELECT * FROM users WHERE city = :city")
     fun getUsersByCity(city: String): List<User>
 
-    // ✅ Good: Returns only needed columns
+    // Good: Returns only needed columns
     @Query("SELECT id, name, email FROM users WHERE city = :city")
     fun getUserNamesByCity(city: String): List<UserNameEmail>
 
-    // ✅ Good: Use LIMIT for pagination
+    // Good: Use LIMIT for pagination
     @Query("SELECT * FROM users ORDER BY created_at DESC LIMIT :limit OFFSET :offset")
     fun getUsersPaged(limit: Int, offset: Int): List<User>
 
-    // ✅ Good: Use compiled statements
+    // Good: Use compiled statements
     @Query("SELECT * FROM users WHERE id IN (:userIds)")
     fun getUsersByIds(userIds: List<Long>): List<User>
 }
@@ -132,7 +132,7 @@ class OrderRepository(
     private val userDao: UserDao,
     private val orderDao: OrderDao
 ) {
-    // ✅ Wrap multiple operations in transaction
+    // Wrap multiple operations in transaction
     suspend fun createOrderWithUser(user: User, order: Order) =
         database.withTransaction {
             val userId = userDao.insert(user)
@@ -192,7 +192,7 @@ abstract class AppDatabase : RoomDatabase() {
 #### 7. **Optimize Database Structure**
 
 ```kotlin
-// ❌ Bad: Storing JSON as String
+// Bad: Storing JSON as String
 @Entity(tableName = "users")
 data class User(
     @PrimaryKey val id: Long,
@@ -200,7 +200,7 @@ data class User(
     val addressJson: String // JSON string
 )
 
-// ✅ Good: Normalized structure
+// Good: Normalized structure
 @Entity(tableName = "users")
 data class User(
     @PrimaryKey val id: Long,
@@ -267,7 +267,7 @@ val db = Room.databaseBuilder(
 #### 10. **Avoid Main Thread Operations**
 
 ```kotlin
-// ✅ Use Coroutines
+// Use Coroutines
 class UserViewModel(private val repository: UserRepository) : ViewModel() {
     val users = repository.getAllUsers()
         .cachedIn(viewModelScope)
@@ -279,7 +279,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
     }
 }
 
-// ✅ Use Flow for reactive updates
+// Use Flow for reactive updates
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users")

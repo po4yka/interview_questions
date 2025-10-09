@@ -190,16 +190,16 @@ class MyFragment : Fragment() {
 ### Common Mistakes to Avoid
 
 ```kotlin
-// ❌ WRONG - attachToRoot = true
+// WRONG - attachToRoot = true
 return inflater.inflate(R.layout.fragment_example, container, true)
 
-// ✅ CORRECT - attachToRoot = false
+// CORRECT - attachToRoot = false
 return inflater.inflate(R.layout.fragment_example, container, false)
 
-// ❌ WRONG - Not cleaning up binding
+// WRONG - Not cleaning up binding
 private val binding: FragmentExampleBinding? = null // Memory leak
 
-// ✅ CORRECT - Clean up in onDestroyView
+// CORRECT - Clean up in onDestroyView
 override fun onDestroyView() {
     super.onDestroyView()
     _binding = null

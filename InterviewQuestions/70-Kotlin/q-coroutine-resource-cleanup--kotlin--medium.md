@@ -37,7 +37,7 @@ tags:
 ### The Problem: Resources and Cancellation
 
 ```kotlin
-// ❌ PROBLEM: Resource leak on cancellation
+// - PROBLEM: Resource leak on cancellation
 val job = lifecycleScope.launch {
     val file = File("data.txt").outputStream()
 
@@ -65,7 +65,7 @@ job.cancel() // File remains open → resource leak!
 **Basic Pattern**: Use `try-finally` to guarantee cleanup.
 
 ```kotlin
-// ✅ GOOD: Guaranteed cleanup
+// - GOOD: Guaranteed cleanup
 val job = lifecycleScope.launch {
     val file = File("data.txt").outputStream()
 
@@ -99,7 +99,7 @@ job.join()   // Wait for cleanup to complete
 **Kotlin's use()**: Automatically closes `Closeable` resources.
 
 ```kotlin
-// ✅ BEST: Automatic resource management
+// - BEST: Automatic resource management
 val job = lifecycleScope.launch {
     File("data.txt").outputStream().use { file ->
         repeat(1000) { i ->
@@ -125,7 +125,7 @@ job.join()
 **Problem**: Cleanup code that suspends can be cancelled.
 
 ```kotlin
-// ❌ PROBLEM: Cleanup itself can be cancelled
+// - PROBLEM: Cleanup itself can be cancelled
 val job = lifecycleScope.launch {
     val connection = openDatabaseConnection()
 
@@ -144,7 +144,7 @@ job.cancel()
 **Solution**: Use `NonCancellable` context for cleanup.
 
 ```kotlin
-// ✅ GOOD: Cleanup cannot be cancelled
+// - GOOD: Cleanup cannot be cancelled
 val job = lifecycleScope.launch {
     val connection = openDatabaseConnection()
 
@@ -175,7 +175,7 @@ job.join() // Waits for NonCancellable block to finish
 **Pattern**: Nested try-finally or multiple use blocks.
 
 ```kotlin
-// ✅ GOOD: Multiple resources with use()
+// - GOOD: Multiple resources with use()
 val job = lifecycleScope.launch {
     FileInputStream("input.txt").use { input ->
         FileOutputStream("output.txt").use { output ->
@@ -185,7 +185,7 @@ val job = lifecycleScope.launch {
     }
 }
 
-// ✅ GOOD: Multiple resources with nested try-finally
+// - GOOD: Multiple resources with nested try-finally
 val job = lifecycleScope.launch {
     val input = FileInputStream("input.txt")
     try {
@@ -290,7 +290,7 @@ val job = lifecycleScope.launch {
 
 **Pattern 1: File Operations**:
 ```kotlin
-// ✅ Reading file with cleanup
+// - Reading file with cleanup
 suspend fun readFile(path: String): String {
     return File(path).inputStream().use { stream ->
         stream.bufferedReader().use { reader ->
@@ -299,7 +299,7 @@ suspend fun readFile(path: String): String {
     }
 }
 
-// ✅ Writing file with cleanup
+// - Writing file with cleanup
 suspend fun writeFile(path: String, content: String) {
     File(path).outputStream().use { stream ->
         stream.bufferedWriter().use { writer ->
@@ -311,7 +311,7 @@ suspend fun writeFile(path: String, content: String) {
 
 **Pattern 2: Network Connections**:
 ```kotlin
-// ✅ HTTP request with cleanup
+// - HTTP request with cleanup
 suspend fun fetchData(url: String): String {
     val connection = URL(url).openConnection() as HttpURLConnection
 
@@ -375,24 +375,24 @@ val job = lifecycleScope.launch {
 ### Best Practices
 
 ```kotlin
-// ✅ DO: Use use() for Closeable resources
+// - DO: Use use() for Closeable resources
 file.use { it.write(data) }
 
-// ✅ DO: Use try-finally for cleanup
+// - DO: Use try-finally for cleanup
 try {
     work()
 } finally {
     cleanup()
 }
 
-// ✅ DO: Use NonCancellable for critical cleanup
+// - DO: Use NonCancellable for critical cleanup
 finally {
     withContext(NonCancellable) {
         criticalCleanup()
     }
 }
 
-// ✅ DO: Close resources in reverse order of acquisition
+// - DO: Close resources in reverse order of acquisition
 try {
     val r1 = acquire1()
     try {
@@ -403,16 +403,16 @@ try {
     } finally { r1.close() }
 }
 
-// ❌ DON'T: Forget cleanup code
+// - DON'T: Forget cleanup code
 val file = openFile()
 work(file) // If cancelled, file not closed!
 
-// ❌ DON'T: Swallow CancellationException in cleanup
+// - DON'T: Swallow CancellationException in cleanup
 catch (e: CancellationException) {
     // Don't ignore it!
 }
 
-// ❌ DON'T: Perform long operations in finally without NonCancellable
+// - DON'T: Perform long operations in finally without NonCancellable
 finally {
     delay(5000) // Can be cancelled!
     cleanup()   // Might not run!
@@ -448,12 +448,12 @@ class FileProcessorTest {
 ### Summary
 
 **Resource Cleanup in Coroutines**:
-- ✅ **try-finally**: Guaranteed cleanup on cancellation
-- ✅ **use()**: Automatic cleanup for `Closeable` resources
-- ✅ **NonCancellable**: Cleanup that cannot be interrupted
-- ✅ **job.join()**: Wait for cleanup to complete after cancel
-- ✅ **Nested cleanup**: Handle multiple resources correctly
-- ✅ **Re-throw CancellationException**: Don't swallow it
+- - **try-finally**: Guaranteed cleanup on cancellation
+- - **use()**: Automatic cleanup for `Closeable` resources
+- - **NonCancellable**: Cleanup that cannot be interrupted
+- - **job.join()**: Wait for cleanup to complete after cancel
+- - **Nested cleanup**: Handle multiple resources correctly
+- - **Re-throw CancellationException**: Don't swallow it
 
 **Key Pattern**:
 ```kotlin
@@ -482,7 +482,7 @@ try {
 ### Проблема: Ресурсы и Отмена
 
 ```kotlin
-// ❌ ПРОБЛЕМА: Утечка ресурсов при отмене
+// - ПРОБЛЕМА: Утечка ресурсов при отмене
 val job = lifecycleScope.launch {
     val file = File("data.txt").outputStream()
 
@@ -510,7 +510,7 @@ job.cancel() // Файл остается открытым → утечка ре
 **Базовый Паттерн**: Используйте `try-finally` для гарантированной очистки.
 
 ```kotlin
-// ✅ ХОРОШО: Гарантированная очистка
+// - ХОРОШО: Гарантированная очистка
 val job = lifecycleScope.launch {
     val file = File("data.txt").outputStream()
 
@@ -544,7 +544,7 @@ job.join()   // Ждем завершения очистки
 **use() из Kotlin**: Автоматически закрывает `Closeable` ресурсы.
 
 ```kotlin
-// ✅ ЛУЧШЕ ВСЕГО: Автоматическое управление ресурсами
+// - ЛУЧШЕ ВСЕГО: Автоматическое управление ресурсами
 val job = lifecycleScope.launch {
     File("data.txt").outputStream().use { file ->
         repeat(1000) { i ->
@@ -570,7 +570,7 @@ job.join()
 **Проблема**: Код очистки, который приостанавливается, может быть отменен.
 
 ```kotlin
-// ❌ ПРОБЛЕМА: Сама очистка может быть отменена
+// - ПРОБЛЕМА: Сама очистка может быть отменена
 val job = lifecycleScope.launch {
     val connection = openDatabaseConnection()
 
@@ -589,7 +589,7 @@ job.cancel()
 **Решение**: Используйте контекст `NonCancellable` для очистки.
 
 ```kotlin
-// ✅ ХОРОШО: Очистка не может быть отменена
+// - ХОРОШО: Очистка не может быть отменена
 val job = lifecycleScope.launch {
     val connection = openDatabaseConnection()
 
@@ -618,12 +618,12 @@ job.join() // Ждет завершения блока NonCancellable
 ### Резюме
 
 **Очистка Ресурсов в Корутинах**:
-- ✅ **try-finally**: Гарантированная очистка при отмене
-- ✅ **use()**: Автоматическая очистка для `Closeable` ресурсов
-- ✅ **NonCancellable**: Очистка, которую нельзя прервать
-- ✅ **job.join()**: Ждать завершения очистки после отмены
-- ✅ **Вложенная очистка**: Корректно обрабатывать несколько ресурсов
-- ✅ **Перебрасывать CancellationException**: Не проглатывать его
+- - **try-finally**: Гарантированная очистка при отмене
+- - **use()**: Автоматическая очистка для `Closeable` ресурсов
+- - **NonCancellable**: Очистка, которую нельзя прервать
+- - **job.join()**: Ждать завершения очистки после отмены
+- - **Вложенная очистка**: Корректно обрабатывать несколько ресурсов
+- - **Перебрасывать CancellationException**: Не проглатывать его
 
 **Ключевой Паттерн**:
 ```kotlin

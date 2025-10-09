@@ -29,7 +29,7 @@ Room provides abstraction over SQLite with the goal of:
 - 🛡️ **Type safety** - compile-time SQL verification
 - 📝 **Less boilerplate** - reduces manual code
 - 🔗 **Easy integration** with LiveData, Flow, and RxJava
-- ✅ **SQL query validation** at compile time
+- - **SQL query validation** at compile time
 - 🏗️ **Architecture support** - works with MVVM, Clean Architecture
 
 **Three Main Components:**

@@ -24,19 +24,19 @@ If an item was deleted from the list, you need to: (1) Remove it from the data l
 ```kotlin
 class MyAdapter(private val items: MutableList<Item>) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
-    // ❌ BAD: Refreshes entire list, no animations
+    // - BAD: Refreshes entire list, no animations
     fun removeItemBad(position: Int) {
         items.removeAt(position)
         notifyDataSetChanged() // Inefficient!
     }
 
-    // ✅ GOOD: Only updates affected item
+    // - GOOD: Only updates affected item
     fun removeItem(position: Int) {
         items.removeAt(position)
         notifyItemRemoved(position) // Smooth animation
     }
 
-    // ✅ BETTER: Also updates subsequent items
+    // - BETTER: Also updates subsequent items
     fun removeItemWithRange(position: Int) {
         items.removeAt(position)
         notifyItemRemoved(position)
@@ -249,20 +249,20 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 | Method | Animation | Performance | Use Case |
 |--------|-----------|-------------|----------|
-| `notifyDataSetChanged()` | ❌ No | ❌ Poor | Avoid if possible |
-| `notifyItemRemoved()` | ✅ Yes | ✅ Good | Single item delete |
-| `notifyItemRangeRemoved()` | ✅ Yes | ✅ Good | Multiple items |
-| `DiffUtil` | ✅ Yes | ✅ Best | Complex changes |
-| `ListAdapter` | ✅ Yes | ✅ Best | Recommended |
+| `notifyDataSetChanged()` | - No | - Poor | Avoid if possible |
+| `notifyItemRemoved()` | - Yes | - Good | Single item delete |
+| `notifyItemRangeRemoved()` | - Yes | - Good | Multiple items |
+| `DiffUtil` | - Yes | - Best | Complex changes |
+| `ListAdapter` | - Yes | - Best | Recommended |
 
 ### Best Practices
 
-1. ✅ Use `notifyItemRemoved()` for single deletions
-2. ✅ Use `ListAdapter` with DiffUtil for modern apps
-3. ✅ Avoid `notifyDataSetChanged()` - no animations
-4. ✅ Update data model BEFORE calling notify
-5. ✅ Use `notifyItemRangeChanged()` to update positions
-6. ✅ Implement undo functionality for better UX
+1. - Use `notifyItemRemoved()` for single deletions
+2. - Use `ListAdapter` with DiffUtil for modern apps
+3. - Avoid `notifyDataSetChanged()` - no animations
+4. - Update data model BEFORE calling notify
+5. - Use `notifyItemRangeChanged()` to update positions
+6. - Implement undo functionality for better UX
 
 ## Answer (RU)
 

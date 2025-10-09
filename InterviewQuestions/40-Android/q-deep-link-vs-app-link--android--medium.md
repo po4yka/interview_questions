@@ -113,13 +113,13 @@ adb shell am start -W -a android.intent.action.VIEW \
 **Problems with Deep Links:**
 
 ```kotlin
-// ❌ Problem 1: Disambiguation dialog
+// Problem 1: Disambiguation dialog
 // If multiple apps claim "myapp://" scheme, user sees chooser
 
-// ❌ Problem 2: No verification
+// Problem 2: No verification
 // Malicious app can register same scheme and intercept links
 
-// ❌ Problem 3: Not clickable in web browsers
+// Problem 3: Not clickable in web browsers
 // Custom schemes don't work in web content
 ```
 
@@ -240,15 +240,15 @@ adb shell pm verify-app-links --re-verify com.example.myapp
 **Benefits of App Links:**
 
 ```kotlin
-// ✅ Benefit 1: Direct opening (no chooser dialog)
+// Benefit 1: Direct opening (no chooser dialog)
 // User clicks https://example.com/product/123
 // → App opens directly (if installed)
 // → Otherwise, opens in browser
 
-// ✅ Benefit 2: Verified security
+// Benefit 2: Verified security
 // Only YOUR app can handle YOUR domain
 
-// ✅ Benefit 3: Works everywhere
+// Benefit 3: Works everywhere
 // Clickable in web browsers, emails, SMS, social media
 ```
 

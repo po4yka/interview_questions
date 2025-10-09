@@ -94,16 +94,16 @@ override fun onDestroy() {
 | Lifecycle | Manual | Automatic | Automatic |
 | Reactive | Poor | Good | Excellent |
 | State | Scattered | ViewModel | Single State |
-| Jetpack Support | ❌ | ✅ | ✅ |
+| Jetpack Support | - | - | - |
 
 **Summary:**
 
 MVP is being abandoned because:
-- ❌ Too much boilerplate code
-- ❌ Hard to scale
-- ❌ Poor async/reactive support
-- ❌ Manual lifecycle management
-- ✅ Better alternatives exist (MVVM, MVI)
+- - Too much boilerplate code
+- - Hard to scale
+- - Poor async/reactive support
+- - Manual lifecycle management
+- - Better alternatives exist (MVVM, MVI)
 
 Modern Android development favors **MVVM** with LiveData/Flow and Coroutines.
 

@@ -35,27 +35,27 @@ java.lang.OutOfMemoryError: Failed to allocate a 12345678 byte allocation
 ### Causes
 
 ```kotlin
-// ❌ BAD - Loading full-resolution images
+// - BAD - Loading full-resolution images
 class PhotoAdapter : RecyclerView.Adapter<PhotoAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Loads full 4K image into memory!
         val bitmap = BitmapFactory.decodeFile(photos[position].path)
-        holder.imageView.setImageBitmap(bitmap)  // ❌ OOM!
+        holder.imageView.setImageBitmap(bitmap)  // - OOM!
     }
 }
 
-// ❌ BAD - ListView without ViewHolder
+// - BAD - ListView without ViewHolder
 class BadAdapter : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         // Creates new view every time!
         val view = layoutInflater.inflate(R.layout.item, parent, false)
         // ... findViewById every time
-        return view  // ❌ Memory leak, no recycling
+        return view  // - Memory leak, no recycling
     }
 }
 ```
 
-### ✅ Solution: Use RecyclerView + Image Libraries
+### - Solution: Use RecyclerView + Image Libraries
 
 ```kotlin
 class PhotoAdapter : RecyclerView.Adapter<PhotoAdapter.ViewHolder>() {
@@ -73,7 +73,7 @@ class PhotoAdapter : RecyclerView.Adapter<PhotoAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val photo = photos[position]
 
-        // ✅ Glide handles memory automatically
+        // - Glide handles memory automatically
         Glide.with(holder.itemView.context)
             .load(photo.path)
             .override(400, 400)  // Resize to display size
@@ -118,26 +118,26 @@ Log.d("Memory", "Available: ${availableMemory / 1024 / 1024}MB")
 ### Causes
 
 ```kotlin
-// ❌ BAD - Heavy operations in onBindViewHolder
+// - BAD - Heavy operations in onBindViewHolder
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val item = items[position]
 
-    // ❌ Complex calculations
+    // - Complex calculations
     val processedText = item.text
         .split(" ")
         .map { it.uppercase() }
         .joinToString(" ")
     holder.textView.text = processedText
 
-    // ❌ Synchronous network request
+    // - Synchronous network request
     val response = api.getUserDetails(item.userId).execute()  // BLOCKS!
     holder.userName.text = response.body()?.name
 
-    // ❌ Database query
+    // - Database query
     val count = database.getCommentCount(item.id)  // BLOCKS!
     holder.commentCount.text = count.toString()
 
-    // ❌ Complex view operations
+    // - Complex view operations
     holder.itemView.layoutParams.height =
         calculateComplexHeight(item)  // Triggers layout pass!
 }
@@ -145,7 +145,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 **Result:** UI freezes during scroll.
 
-### ✅ Solution: Optimize Adapter
+### - Solution: Optimize Adapter
 
 ```kotlin
 // Pre-process data in ViewModel/Repository
@@ -155,9 +155,9 @@ class ItemViewModel : ViewModel() {
             rawItems.map { item ->
                 ProcessedItem(
                     id = item.id,
-                    processedText = item.text.uppercase(),  // ✅ Pre-processed
-                    userName = item.userName,  // ✅ Already fetched
-                    commentCount = item.commentCount  // ✅ Already counted
+                    processedText = item.text.uppercase(),  // - Pre-processed
+                    userName = item.userName,  // - Already fetched
+                    commentCount = item.commentCount  // - Already counted
                 )
             }
         }
@@ -168,13 +168,13 @@ class ItemViewModel : ViewModel() {
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val item = items[position]
 
-    // ✅ Only setting data - fast!
+    // - Only setting data - fast!
     holder.binding.apply {
         textView.text = item.processedText
         userName.text = item.userName
         commentCount.text = item.commentCount.toString()
 
-        // ✅ Async image loading
+        // - Async image loading
         Glide.with(root.context)
             .load(item.imageUrl)
             .into(imageView)
@@ -193,30 +193,30 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ### Cause: Incorrect Data Updates
 
 ```kotlin
-// ❌ BAD - Direct list modification
+// - BAD - Direct list modification
 class BadAdapter(private val items: MutableList<Item>) :
     RecyclerView.Adapter<ViewHolder>() {
 
     fun addItem(item: Item) {
         items.add(item)
-        // ❌ Forgot to notify!
+        // - Forgot to notify!
     }
 
     fun updateItem(position: Int, item: Item) {
         items[position] = item
-        notifyDataSetChanged()  // ❌ Inefficient, loses scroll position
+        notifyDataSetChanged()  // - Inefficient, loses scroll position
     }
 }
 
 // Usage
-adapter.items.clear()  // ❌ Modifying internal state directly!
+adapter.items.clear()  // - Modifying internal state directly!
 adapter.items.addAll(newItems)
-// ❌ Forgot to call notifyDataSetChanged()
+// - Forgot to call notifyDataSetChanged()
 ```
 
 **Result:** UI doesn't update or shows stale data.
 
-### ✅ Solution: Use DiffUtil for Accurate Updates
+### - Solution: Use DiffUtil for Accurate Updates
 
 ```kotlin
 class ItemAdapter : ListAdapter<Item, ItemAdapter.ViewHolder>(ItemDiffCallback()) {
@@ -250,7 +250,7 @@ class ItemAdapter : ListAdapter<Item, ItemAdapter.ViewHolder>(ItemDiffCallback()
 }
 
 // Usage - DiffUtil calculates changes automatically
-adapter.submitList(newItems)  // ✅ Correct updates!
+adapter.submitList(newItems)  // - Correct updates!
 ```
 
 **Benefits:**
@@ -275,16 +275,16 @@ java.util.ConcurrentModificationException
 ### Cause: Unsafe Thread Access
 
 ```kotlin
-// ❌ BAD - Updating from background thread
+// - BAD - Updating from background thread
 class UnsafeAdapter(private val items: MutableList<Item>) :
     RecyclerView.Adapter<ViewHolder>() {
 
     fun loadDataInBackground() {
         Thread {
             val newItems = api.fetchItems()  // Background thread
-            items.clear()  // ❌ Modifying from background thread!
+            items.clear()  // - Modifying from background thread!
             items.addAll(newItems)
-            notifyDataSetChanged()  // ❌ Called from background thread! CRASH!
+            notifyDataSetChanged()  // - Called from background thread! CRASH!
         }.start()
     }
 }
@@ -296,7 +296,7 @@ android.view.ViewRootImpl$CalledFromWrongThreadException:
 Only the original thread that created a view hierarchy can touch its views.
 ```
 
-### ✅ Solution: Use LiveData/Flow with Lifecycle
+### - Solution: Use LiveData/Flow with Lifecycle
 
 ```kotlin
 // ViewModel - background work happens here
@@ -327,15 +327,15 @@ class ItemListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ✅ Updates always on main thread
+        // - Updates always on main thread
         viewModel.items.observe(viewLifecycleOwner) { items ->
-            adapter.submitList(items)  // ✅ Safe!
+            adapter.submitList(items)  // - Safe!
         }
 
         // Or with Flow
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.itemsFlow.collect { items ->
-                adapter.submitList(items)  // ✅ Safe!
+                adapter.submitList(items)  // - Safe!
             }
         }
     }
@@ -383,25 +383,25 @@ class ItemAdapter : RecyclerView.Adapter<ViewHolder>() {
 ### 2. Handle Click Events Safely
 
 ```kotlin
-// ❌ BAD - Position can change
+// - BAD - Position can change
 holder.itemView.setOnClickListener {
-    val item = items[position]  // ❌ Position may be stale!
+    val item = items[position]  // - Position may be stale!
     onClick(item)
 }
 
-// ✅ GOOD - Use bindingAdapterPosition
+// - GOOD - Use bindingAdapterPosition
 holder.itemView.setOnClickListener {
     val position = holder.bindingAdapterPosition
     if (position != RecyclerView.NO_POSITION) {
-        val item = items[position]  // ✅ Current position
+        val item = items[position]  // - Current position
         onClick(item)
     }
 }
 
-// ✅ BETTER - Use item-based callbacks
+// - BETTER - Use item-based callbacks
 holder.itemView.setOnClickListener {
     val item = getItem(holder.bindingAdapterPosition)
-    onClick(item)  // ✅ Type-safe
+    onClick(item)  // - Type-safe
 }
 ```
 
@@ -414,7 +414,7 @@ class ItemViewHolder(val binding: ItemBinding) : RecyclerView.ViewHolder(binding
         binding.apply {
             title.text = item.title
 
-            // ✅ Use View click listener (no lambda capture)
+            // - Use View click listener (no lambda capture)
             root.setOnClickListener {
                 onClick(item)
             }
@@ -422,7 +422,7 @@ class ItemViewHolder(val binding: ItemBinding) : RecyclerView.ViewHolder(binding
     }
 
     fun unbind() {
-        // ✅ Clear references if needed
+        // - Clear references if needed
         binding.root.setOnClickListener(null)
         Glide.with(binding.imageView).clear(binding.imageView)
     }

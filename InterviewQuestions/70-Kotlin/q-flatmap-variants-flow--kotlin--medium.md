@@ -82,9 +82,9 @@ fun flatMapConcat() {
 ```
 
 **Characteristics:**
-- ✅ **Preserves order** - emissions in same order as source
-- ✅ **Sequential** - one inner flow at a time
-- ❌ **Slower** - waits for each flow to complete
+- - **Preserves order** - emissions in same order as source
+- - **Sequential** - one inner flow at a time
+- - **Slower** - waits for each flow to complete
 - **Use when**: Order matters, operations must be sequential
 
 ### flatMapMerge - Concurrent Execution
@@ -119,9 +119,9 @@ fun flatMapMerge() {
 ```
 
 **Characteristics:**
-- ❌ **Order not preserved** - emissions can be interleaved
-- ✅ **Concurrent** - multiple flows run in parallel
-- ✅ **Faster** - doesn't wait for completion
+- - **Order not preserved** - emissions can be interleaved
+- - **Concurrent** - multiple flows run in parallel
+- - **Faster** - doesn't wait for completion
 - **Use when**: Speed matters, order doesn't matter
 
 ### flatMapLatest - Cancel Previous
@@ -157,9 +157,9 @@ fun flatMapLatest() {
 ```
 
 **Characteristics:**
-- ❌ **Cancels previous** - only latest flow completes
-- ✅ **Most recent data** - always shows latest
-- ✅ **Efficient** - doesn't waste resources on outdated data
+- - **Cancels previous** - only latest flow completes
+- - **Most recent data** - always shows latest
+- - **Efficient** - doesn't waste resources on outdated data
 - **Use when**: Only latest result matters (search, autocomplete)
 
 ### Real-World Examples
@@ -432,9 +432,9 @@ fun flatMapConcat() {
 ```
 
 **Характеристики:**
-- ✅ **Сохраняет порядок** - эмиссии в том же порядке что и источник
-- ✅ **Последовательно** - один внутренний flow за раз
-- ❌ **Медленнее** - ждет завершения каждого flow
+- - **Сохраняет порядок** - эмиссии в том же порядке что и источник
+- - **Последовательно** - один внутренний flow за раз
+- - **Медленнее** - ждет завершения каждого flow
 - **Использовать когда**: Важен порядок, операции должны быть последовательными
 
 ### flatMapMerge - Конкурентное выполнение
@@ -469,9 +469,9 @@ fun flatMapMerge() {
 ```
 
 **Характеристики:**
-- ❌ **Порядок не сохраняется** - эмиссии могут чередоваться
-- ✅ **Конкурентно** - множественные flows работают параллельно
-- ✅ **Быстрее** - не ждет завершения
+- - **Порядок не сохраняется** - эмиссии могут чередоваться
+- - **Конкурентно** - множественные flows работают параллельно
+- - **Быстрее** - не ждет завершения
 - **Использовать когда**: Важна скорость, порядок не важен
 
 ### flatMapLatest - Отмена предыдущего
@@ -507,9 +507,9 @@ fun flatMapLatest() {
 ```
 
 **Характеристики:**
-- ❌ **Отменяет предыдущий** - только последний flow завершается
-- ✅ **Самые свежие данные** - всегда показывает последнее
-- ✅ **Эффективно** - не тратит ресурсы на устаревшие данные
+- - **Отменяет предыдущий** - только последний flow завершается
+- - **Самые свежие данные** - всегда показывает последнее
+- - **Эффективно** - не тратит ресурсы на устаревшие данные
 - **Использовать когда**: Важен только последний результат (поиск, автозаполнение)
 
 ### Примеры из реальной практики

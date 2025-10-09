@@ -329,14 +329,14 @@ val request = HttpRequest().run {
 
 ## When to Use run
 
-✅ **Use `run` when:**
+- **Use `run` when:**
 - You need to execute a block and return result
 - Working with `this` context (not `it`)
 - Performing transformations
 - Null safety with `?.run`
 - Scoping intermediate variables
 
-❌ **Avoid `run` when:**
+- **Avoid `run` when:**
 - You want to return the object itself (use `apply`)
 - You need explicit parameter (use `let`)
 - No transformation needed (use `also` for side effects)

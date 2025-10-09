@@ -333,13 +333,13 @@ Instead, Room encourages:
 
 **Common Use Cases:**
 
-- ✅ Date/Time types (Date, LocalDateTime, Instant)
-- ✅ Enums
-- ✅ UUIDs
-- ✅ Lists and Sets
-- ✅ Custom objects (via JSON)
-- ✅ BigDecimal for currency
-- ✅ Custom value classes
+- - Date/Time types (Date, LocalDateTime, Instant)
+- - Enums
+- - UUIDs
+- - Lists and Sets
+- - Custom objects (via JSON)
+- - BigDecimal for currency
+- - Custom value classes
 
 **Summary:**
 

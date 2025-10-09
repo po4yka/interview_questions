@@ -28,43 +28,43 @@ Performance optimization requires a systematic approach across multiple areas. H
 #### 1. **App Startup Optimization**
 
 ```kotlin
-// ✅ Application class optimization
+// - Application class optimization
 class OptimizedApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // ✅ DO: Critical initialization only
+        // - DO: Critical initialization only
         initializeCrashReporting()
 
-        // ✅ DO: Defer non-critical work
+        // - DO: Defer non-critical work
         lifecycleScope.launch {
             initializeAnalytics()
             initializeAdSDK()
         }
 
-        // ❌ DON'T: Heavy work on main thread
+        // - DON'T: Heavy work on main thread
         // loadConfiguration() // Blocking I/O
         // initializeAllLibraries() // Too much work
     }
 
-    // ✅ Use App Startup library
+    // - Use App Startup library
     // Automatically initializes dependencies in correct order
 }
 
-// ✅ Lazy initialization
+// - Lazy initialization
 class LazyComponents {
     val database by lazy { createDatabase() }
     val imageLoader by lazy { ImageLoader.create() }
     val analytics by lazy { Analytics.initialize() }
 }
 
-// ✅ Splash screen with windowBackground
+// - Splash screen with windowBackground
 // res/values/styles.xml
 <style name="SplashTheme" parent="Theme.App">
     <item name="android:windowBackground">@drawable/splash</item>
 </style>
 
-// ✅ Use Baseline Profiles
+// - Use Baseline Profiles
 // Pre-compile critical startup code
 // See q-baseline-profiles-android--android--medium.md
 ```
@@ -82,8 +82,8 @@ class LazyComponents {
 #### 2. **UI Rendering Optimization**
 
 ```kotlin
-// ✅ Flatten view hierarchy
-// ❌ BAD: Deep nesting
+// - Flatten view hierarchy
+// - BAD: Deep nesting
 <LinearLayout>
     <RelativeLayout>
         <FrameLayout>
@@ -94,14 +94,14 @@ class LazyComponents {
     </RelativeLayout>
 </LinearLayout>
 
-// ✅ GOOD: Flat hierarchy with ConstraintLayout
+// - GOOD: Flat hierarchy with ConstraintLayout
 <ConstraintLayout>
     <TextView
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 </ConstraintLayout>
 
-// ✅ BEST: Jetpack Compose
+// - BEST: Jetpack Compose
 @Composable
 fun OptimizedScreen() {
     Column {
@@ -112,20 +112,20 @@ fun OptimizedScreen() {
     }
 }
 
-// ✅ Avoid overdraw
+// - Avoid overdraw
 class OverdrawOptimization {
-    // ❌ Multiple backgrounds drawing over each other
+    // - Multiple backgrounds drawing over each other
     // <LinearLayout android:background="@color/white">
     //     <View android:background="@color/gray" />
     // </LinearLayout>
 
-    // ✅ Remove unnecessary backgrounds
+    // - Remove unnecessary backgrounds
     // <LinearLayout> <!-- No background -->
     //     <View android:background="@color/gray" />
     // </LinearLayout>
 }
 
-// ✅ ViewStub for rarely shown views
+// - ViewStub for rarely shown views
 <ViewStub
     android:id="@+id/stub_rarely_used"
     android:layout="@layout/rarely_used"
@@ -134,7 +134,7 @@ class OverdrawOptimization {
 // Inflate only when needed
 binding.stubRarelyUsed.inflate()
 
-// ✅ Merge tag to eliminate redundant layouts
+// - Merge tag to eliminate redundant layouts
 <merge xmlns:android="...">
     <TextView ... />
     <Button ... />
@@ -157,7 +157,7 @@ binding.stubRarelyUsed.inflate()
 class OptimizedAdapter : ListAdapter<Item, ViewHolder>(DIFF_CALLBACK) {
 
     init {
-        // ✅ Enable stable IDs
+        // - Enable stable IDs
         setHasStableIds(true)
     }
 
@@ -166,7 +166,7 @@ class OptimizedAdapter : ListAdapter<Item, ViewHolder>(DIFF_CALLBACK) {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // ✅ Use ViewBinding (faster than findViewById)
+        // - Use ViewBinding (faster than findViewById)
         val binding = ItemBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -176,7 +176,7 @@ class OptimizedAdapter : ListAdapter<Item, ViewHolder>(DIFF_CALLBACK) {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // ✅ Keep lightweight - no heavy operations
+        // - Keep lightweight - no heavy operations
         holder.bind(getItem(position))
     }
 
@@ -186,7 +186,7 @@ class OptimizedAdapter : ListAdapter<Item, ViewHolder>(DIFF_CALLBACK) {
         fun bind(item: Item) {
             binding.title.text = item.title
 
-            // ✅ Async image loading
+            // - Async image loading
             Glide.with(binding.root.context)
                 .load(item.imageUrl)
                 .placeholder(R.drawable.placeholder)
@@ -202,7 +202,7 @@ class OptimizedAdapter : ListAdapter<Item, ViewHolder>(DIFF_CALLBACK) {
     }
 }
 
-// ✅ Configure RecyclerView
+// - Configure RecyclerView
 recyclerView.apply {
     layoutManager = LinearLayoutManager(context).apply {
         isItemPrefetchEnabled = true
@@ -212,11 +212,11 @@ recyclerView.apply {
     setHasFixedSize(true)
     setItemViewCacheSize(20)
 
-    // ✅ Shared RecycledViewPool for nested RecyclerViews
+    // - Shared RecycledViewPool for nested RecyclerViews
     setRecycledViewPool(sharedViewPool)
 }
 
-// ✅ Use Paging 3 for large lists
+// - Use Paging 3 for large lists
 val pager = Pager(
     config = PagingConfig(pageSize = 50, prefetchDistance = 10),
     pagingSourceFactory = { repository.getPagingSource() }
@@ -236,19 +236,19 @@ val pager = Pager(
 #### 4. **Memory Optimization**
 
 ```kotlin
-// ✅ Image optimization
+// - Image optimization
 class ImageOptimization {
     fun loadImage(imageView: ImageView, url: String) {
         Glide.with(imageView.context)
             .load(url)
-            .override(imageView.width, imageView.height) // ✅ Resize
-            .diskCacheStrategy(DiskCacheStrategy.ALL)   // ✅ Cache
+            .override(imageView.width, imageView.height) // - Resize
+            .diskCacheStrategy(DiskCacheStrategy.ALL)   // - Cache
             .placeholder(R.drawable.placeholder)
             .error(R.drawable.error)
             .into(imageView)
     }
 
-    // ✅ Bitmap sampling for large images
+    // - Bitmap sampling for large images
     suspend fun loadLargeBitmap(path: String, reqWidth: Int, reqHeight: Int): Bitmap {
         return withContext(Dispatchers.IO) {
             BitmapFactory.Options().run {
@@ -264,15 +264,15 @@ class ImageOptimization {
     }
 }
 
-// ✅ Leak prevention
+// - Leak prevention
 class LeakPrevention : AppCompatActivity() {
-    // ✅ Use ViewModel for data retention
+    // - Use ViewModel for data retention
     private val viewModel: MyViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ✅ Lifecycle-aware observers
+        // - Lifecycle-aware observers
         viewModel.data.observe(this) { data ->
             updateUI(data)
         }
@@ -280,23 +280,23 @@ class LeakPrevention : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // ✅ Clean up resources
+        // - Clean up resources
         cleanup()
     }
 }
 
-// ✅ Use LeakCanary
+// - Use LeakCanary
 // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
 
-// ✅ Memory-efficient collections
+// - Memory-efficient collections
 class CollectionOptimization {
-    // ❌ HashMap for primitive keys
+    // - HashMap for primitive keys
     val map = HashMap<Int, String>()
 
-    // ✅ SparseArray for int keys
+    // - SparseArray for int keys
     val sparse = SparseIntArray()
 
-    // ✅ ArrayMap for small maps (<1000 items)
+    // - ArrayMap for small maps (<1000 items)
     val arrayMap = ArrayMap<String, String>()
 }
 ```
@@ -316,23 +316,23 @@ class CollectionOptimization {
 ```kotlin
 @Dao
 interface OptimizedDao {
-    // ✅ Use indices
+    // - Use indices
     @Query("SELECT * FROM users WHERE email = :email")
     suspend fun getUserByEmail(email: String): User?
 
-    // ✅ Select only needed columns
+    // - Select only needed columns
     @Query("SELECT id, name FROM users")
     suspend fun getUserNames(): List<UserName>
 
-    // ✅ Use pagination
+    // - Use pagination
     @Query("SELECT * FROM users ORDER BY id")
     fun getUsersPaged(): PagingSource<Int, User>
 
-    // ✅ Batch operations
+    // - Batch operations
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(users: List<User>)
 
-    // ✅ Use transactions
+    // - Use transactions
     @Transaction
     suspend fun complexOperation() {
         // Multiple operations in single transaction
@@ -348,7 +348,7 @@ interface OptimizedDao {
 )
 data class User(...)
 
-// ✅ Enable WAL mode (default in Room)
+// - Enable WAL mode (default in Room)
 val db = Room.databaseBuilder(context, AppDatabase::class.java, "db")
     .setJournalMode(JournalMode.WRITE_AHEAD_LOGGING)
     .build()
@@ -367,62 +367,62 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "db")
 #### 6. **Network Optimization**
 
 ```kotlin
-// ✅ Efficient API calls
+// - Efficient API calls
 interface ApiService {
-    // ✅ Request only needed data
+    // - Request only needed data
     @GET("users/{id}")
     suspend fun getUser(
         @Path("id") id: String,
-        @Query("fields") fields: String = "id,name,email" // ✅ Field filtering
+        @Query("fields") fields: String = "id,name,email" // - Field filtering
     ): User
 
-    // ✅ Pagination
+    // - Pagination
     @GET("articles")
     suspend fun getArticles(
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int = 50
     ): List<Article>
 
-    // ✅ Compression
+    // - Compression
     // OkHttp automatically handles gzip
 }
 
-// ✅ Configure OkHttp
+// - Configure OkHttp
 val client = OkHttpClient.Builder()
-    .cache(Cache(context.cacheDir, 10L * 1024 * 1024)) // ✅ 10MB cache
+    .cache(Cache(context.cacheDir, 10L * 1024 * 1024)) // - 10MB cache
     .connectTimeout(30, TimeUnit.SECONDS)
     .readTimeout(30, TimeUnit.SECONDS)
-    .addInterceptor(CachingInterceptor()) // ✅ Cache responses
+    .addInterceptor(CachingInterceptor()) // - Cache responses
     .build()
 
-// ✅ Implement caching
+// - Implement caching
 class CachingInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val response = chain.proceed(request)
 
         return response.newBuilder()
-            .header("Cache-Control", "public, max-age=300") // ✅ 5 min cache
+            .header("Cache-Control", "public, max-age=300") // - 5 min cache
             .build()
     }
 }
 
-// ✅ Offline-first architecture
+// - Offline-first architecture
 class OfflineFirstRepository(
     private val apiService: ApiService,
     private val dao: ArticleDao
 ) {
     fun getArticles(): Flow<List<Article>> = flow {
-        // ✅ Emit cached data first
+        // - Emit cached data first
         emit(dao.getAllArticles())
 
-        // ✅ Fetch from network
+        // - Fetch from network
         try {
             val articles = apiService.getArticles()
             dao.insertAll(articles)
             emit(dao.getAllArticles())
         } catch (e: Exception) {
-            // ✅ Continue with cached data
+            // - Continue with cached data
         }
     }
 }
@@ -441,7 +441,7 @@ class OfflineFirstRepository(
 #### 7. **Battery Optimization**
 
 ```kotlin
-// ✅ Use WorkManager for background tasks
+// - Use WorkManager for background tasks
 class SyncWorker(context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
 
@@ -455,7 +455,7 @@ class SyncWorker(context: Context, params: WorkerParameters) :
     }
 }
 
-// ✅ Schedule with constraints
+// - Schedule with constraints
 val constraints = Constraints.Builder()
     .setRequiredNetworkType(NetworkType.CONNECTED)
     .setRequiresBatteryNotLow(true)
@@ -468,20 +468,20 @@ val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
 
 WorkManager.getInstance(context).enqueue(syncWork)
 
-// ✅ Location updates optimization
+// - Location updates optimization
 fusedLocationClient.requestLocationUpdates(
     LocationRequest.create().apply {
-        interval = 60_000 // ✅ 1 minute (not every second)
+        interval = 60_000 // - 1 minute (not every second)
         fastestInterval = 30_000
-        priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY // ✅ Not HIGH_ACCURACY
+        priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY // - Not HIGH_ACCURACY
     },
     locationCallback,
     Looper.getMainLooper()
 )
 
-// ✅ Use JobScheduler/WorkManager instead of AlarmManager
-// ✅ Batch network requests
-// ✅ Avoid wakelocks when possible
+// - Use JobScheduler/WorkManager instead of AlarmManager
+// - Batch network requests
+// - Avoid wakelocks when possible
 ```
 
 **Checklist:**
@@ -499,7 +499,7 @@ fusedLocationClient.requestLocationUpdates(
 // build.gradle.kts
 
 android {
-    // ✅ Enable R8
+    // - Enable R8
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -511,14 +511,14 @@ android {
         }
     }
 
-    // ✅ Enable build cache
+    // - Enable build cache
     buildCache {
         local {
             isEnabled = true
         }
     }
 
-    // ✅ Split APKs by ABI
+    // - Split APKs by ABI
     splits {
         abi {
             isEnable = true
@@ -528,16 +528,16 @@ android {
         }
     }
 
-    // ✅ Use Android App Bundle
+    // - Use Android App Bundle
     // Automatically splits by density, language, ABI
 }
 
-// ✅ Dependency optimization
+// - Dependency optimization
 dependencies {
-    // ❌ Avoid bloated libraries
+    // - Avoid bloated libraries
     // implementation("com.google.guava:guava:31.1-android")
 
-    // ✅ Use lightweight alternatives
+    // - Use lightweight alternatives
     implementation("androidx.collection:collection-ktx:1.3.0")
 }
 ```
@@ -555,7 +555,7 @@ dependencies {
 ### Monitoring and Profiling
 
 ```kotlin
-// ✅ Performance monitoring
+// - Performance monitoring
 class PerformanceMonitor {
     fun trackPerformance() {
         // Firebase Performance

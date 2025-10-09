@@ -164,14 +164,14 @@ for (i in list.indices) {
 ```kotlin
 val list = mutableListOf(1, 2, 3, 4, 5)
 
-// ❌ Wrong: Modifying collection while iterating
+// - Wrong: Modifying collection while iterating
 for (element in list) {
     if (element % 2 == 0) {
         list.remove(element)  // ConcurrentModificationException!
     }
 }
 
-// ✅ Correct: Use iterator.remove()
+// - Correct: Use iterator.remove()
 val iterator = list.iterator()
 while (iterator.hasNext()) {
     if (iterator.next() % 2 == 0) {
@@ -179,7 +179,7 @@ while (iterator.hasNext()) {
     }
 }
 
-// ✅ Alternative: Filter to new list
+// - Alternative: Filter to new list
 val filtered = list.filter { it % 2 != 0 }
 ```
 

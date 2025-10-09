@@ -33,11 +33,11 @@ dependencies {
 
 **Features:**
 
-✅ **Automatic detection** of Activity/Fragment leaks
-✅ **Zero configuration** - works out of the box
-✅ **Visual leak traces** with retention chains
-✅ **Heap dump analysis** with Shark library
-✅ **Debug builds only** - no production overhead
+- **Automatic detection** of Activity/Fragment leaks
+- **Zero configuration** - works out of the box
+- **Visual leak traces** with retention chains
+- **Heap dump analysis** with Shark library
+- **Debug builds only** - no production overhead
 
 **How It Works:**
 
@@ -142,20 +142,20 @@ class MyApp : Application() {
 **1. Static Activity Reference:**
 ```kotlin
 companion object {
-    var activity: Activity? = null  // ❌ Leak!
+    var activity: Activity? = null  // - Leak!
 }
 ```
 
 **2. Handler without removeCallbacks:**
 ```kotlin
-handler.postDelayed({ /* ... */ }, 60000)  // ❌ Leak if Activity destroyed
+handler.postDelayed({ /* ... */ }, 60000)  // - Leak if Activity destroyed
 ```
 
 **3. Anonymous Inner Class:**
 ```kotlin
 button.setOnClickListener(object : View.OnClickListener {
     override fun onClick(v: View?) {
-        // Holds Activity reference ❌
+        // Holds Activity reference BAD
     }
 })
 ```
@@ -163,7 +163,7 @@ button.setOnClickListener(object : View.OnClickListener {
 **4. Singleton with Context:**
 ```kotlin
 object MyManager {
-    private var context: Context? = null  // ❌ Leak if Activity context
+    private var context: Context? = null  // - Leak if Activity context
 
     fun init(context: Context) {
         this.context = context  // Should use applicationContext
@@ -174,16 +174,16 @@ object MyManager {
 **Best Practices:**
 
 ```kotlin
-// ✅ GOOD - Use LeakCanary in debug builds only
+// - GOOD - Use LeakCanary in debug builds only
 dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
     // No release implementation!
 }
 
-// ✅ GOOD - Fix leaks shown by LeakCanary
+// - GOOD - Fix leaks shown by LeakCanary
 // Don't just disable LeakCanary to hide leaks!
 
-// ✅ GOOD - Watch custom objects
+// - GOOD - Watch custom objects
 class MyRepository {
     init {
         if (BuildConfig.DEBUG) {

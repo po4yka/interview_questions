@@ -405,7 +405,7 @@ class ProductRepository @Inject constructor(
 
 ### 10. Best Practices
 
-#### ✅ DO:
+#### - DO:
 
 ```kotlin
 // Use coroutineScope for structured concurrency
@@ -431,7 +431,7 @@ suspend fun fetchIndependent() = supervisorScope {
 }
 ```
 
-#### ❌ DON'T:
+#### - DON'T:
 
 ```kotlin
 // Don't use GlobalScope
@@ -546,13 +546,13 @@ class ThrottledApiClient(maxConcurrent: Int = 5) {
 
 ### Лучшие практики
 
-#### ✅ ДЕЛАЙТЕ:
+#### - ДЕЛАЙТЕ:
 
 - Используйте `coroutineScope` для структурированной конкурентности
 - Обрабатывайте ошибки должным образом
 - Используйте `supervisorScope` когда сбои независимы
 
-#### ❌ НЕ ДЕЛАЙТЕ:
+#### - НЕ ДЕЛАЙТЕ:
 
 - Не используйте GlobalScope
 - Не игнорируйте отмену

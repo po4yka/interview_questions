@@ -437,7 +437,7 @@ class BadAdapter : RecyclerView.Adapter<ViewHolder>() {
     fun updateItems(newItems: List<Item>) {
         items.clear()
         items.addAll(newItems)
-        notifyDataSetChanged() // ❌ Refreshes entire list, no animations
+        notifyDataSetChanged() // - Refreshes entire list, no animations
     }
 }
 ```
@@ -446,19 +446,19 @@ class BadAdapter : RecyclerView.Adapter<ViewHolder>() {
 ```kotlin
 class GoodAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
     fun updateItems(newItems: List<Item>) {
-        submitList(newItems) // ✅ Only updates changed items, smooth animations
+        submitList(newItems) // - Only updates changed items, smooth animations
     }
 }
 ```
 
 ### Best Practices
 
-1. ✅ **Use ListAdapter** for simple cases
-2. ✅ **Use AsyncListDiffer** for large lists (>100 items)
-3. ✅ **Implement payloads** for partial updates
-4. ✅ **Use data class** for automatic equality checks
-5. ✅ **Run on background thread** for heavy calculations
-6. ❌ **Don't use notifyDataSetChanged()** when you can use DiffUtil
+1. - **Use ListAdapter** for simple cases
+2. - **Use AsyncListDiffer** for large lists (>100 items)
+3. - **Implement payloads** for partial updates
+4. - **Use data class** for automatic equality checks
+5. - **Run on background thread** for heavy calculations
+6. - **Don't use notifyDataSetChanged()** when you can use DiffUtil
 
 ### Summary
 

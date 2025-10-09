@@ -157,16 +157,16 @@ val permissions = userIds.associateWith { userId ->
 ### Common Use Cases
 
 **associateBy**:
-- ✅ Creating ID → Entity maps
-- ✅ Indexing collections for fast lookup
-- ✅ Converting lists to dictionaries
-- ✅ Grouping by unique key
+- - Creating ID → Entity maps
+- - Indexing collections for fast lookup
+- - Converting lists to dictionaries
+- - Grouping by unique key
 
 **associateWith**:
-- ✅ Adding computed properties to elements
-- ✅ Creating element → metadata maps
-- ✅ Caching calculated values
-- ✅ Enriching data with additional info
+- - Adding computed properties to elements
+- - Creating element → metadata maps
+- - Caching calculated values
+- - Enriching data with additional info
 
 ### Important Notes
 

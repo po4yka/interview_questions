@@ -137,7 +137,7 @@ Automatic memory management significantly reduces risks of errors such as:
 **Memory leaks** - memory is allocated but not freed:
 
 ```kotlin
-// ✅ GOOD - No manual memory management needed
+// - GOOD - No manual memory management needed
 class UserCache {
     private val cache = mutableListOf<User>()
 
@@ -153,7 +153,7 @@ class UserCache {
 **Double free** - memory is freed more than once:
 
 ```c
-// ❌ C/C++ problem (doesn't exist in GC languages)
+// - C/C++ problem (doesn't exist in GC languages)
 free(ptr);
 free(ptr);  // Double free - crash!
 ```
@@ -161,7 +161,7 @@ free(ptr);  // Double free - crash!
 **Use after free** - accessing freed memory:
 
 ```c
-// ❌ C/C++ problem (doesn't exist in GC languages)
+// - C/C++ problem (doesn't exist in GC languages)
 free(ptr);
 *ptr = 10;  // Use after free - undefined behavior!
 ```
@@ -171,7 +171,7 @@ free(ptr);
 No need to spend time on explicit memory management, which simplifies the development process.
 
 ```kotlin
-// ✅ Kotlin - Simple, safe
+// - Kotlin - Simple, safe
 fun createUsers(): List<User> {
     return listOf(
         User("Alice"),
@@ -179,7 +179,7 @@ fun createUsers(): List<User> {
     )
 }  // Objects live as long as needed, then GC collects them
 
-// ❌ C - Manual memory management
+// - C - Manual memory management
 // User* create_users(int* count) {
 //     User* users = (User*)malloc(2 * sizeof(User));
 //     // ... initialize users
@@ -210,9 +210,9 @@ fun processFrame() {
 }
 
 // Result: Inconsistent frame times
-// Frame 1: 16ms ✅
-// Frame 2: 45ms ❌ (GC pause)
-// Frame 3: 16ms ✅
+// Frame 1: 16ms GOOD
+// Frame 2: 45ms - (GC pause)
+// Frame 3: 16ms GOOD
 ```
 
 **Stop-the-World (STW) Pauses:**
@@ -326,7 +326,7 @@ runtime.GC()
 Reuse objects instead of creating new ones:
 
 ```kotlin
-// ❌ BAD - Creates garbage
+// - BAD - Creates garbage
 fun processItems(items: List<Item>) {
     for (item in items) {
         val result = Result()  // New object each iteration
@@ -334,7 +334,7 @@ fun processItems(items: List<Item>) {
     }
 }
 
-// ✅ GOOD - Reuse object
+// - GOOD - Reuse object
 fun processItems(items: List<Item>) {
     val result = Result()  // Created once
     for (item in items) {
@@ -347,7 +347,7 @@ fun processItems(items: List<Item>) {
 ### 2. Avoid Unnecessary Allocations
 
 ```kotlin
-// ❌ BAD - Creates string garbage
+// - BAD - Creates string garbage
 fun buildMessage(count: Int): String {
     var msg = ""
     for (i in 0 until count) {
@@ -356,7 +356,7 @@ fun buildMessage(count: Int): String {
     return msg
 }
 
-// ✅ GOOD - Single allocation
+// - GOOD - Single allocation
 fun buildMessage(count: Int): String {
     return buildString {
         for (i in 0 until count) {
@@ -369,13 +369,13 @@ fun buildMessage(count: Int): String {
 ### 3. Use Sequences for Large Collections
 
 ```kotlin
-// ❌ BAD - Creates intermediate collections
+// - BAD - Creates intermediate collections
 val result = list
     .filter { it > 10 }      // Intermediate list
     .map { it * 2 }          // Another intermediate list
     .take(5)                 // Another intermediate list
 
-// ✅ GOOD - Lazy evaluation, no intermediate collections
+// - GOOD - Lazy evaluation, no intermediate collections
 val result = list.asSequence()
     .filter { it > 10 }
     .map { it * 2 }
@@ -394,14 +394,14 @@ val result = list.asSequence()
 - Uses mark-and-sweep (and variations) algorithms
 
 **Advantages:**
-- ✅ Eliminates memory leaks
-- ✅ Prevents double-free errors
-- ✅ Simplifies development
+- - Eliminates memory leaks
+- - Prevents double-free errors
+- - Simplifies development
 
 **Disadvantages:**
-- ❌ Unpredictable pauses (Stop-the-World)
-- ❌ CPU and memory overhead
-- ❌ Can impact performance
+- - Unpredictable pauses (Stop-the-World)
+- - CPU and memory overhead
+- - Can impact performance
 
 **Best practices:**
 - Minimize object allocations

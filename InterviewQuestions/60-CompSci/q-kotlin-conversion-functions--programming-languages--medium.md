@@ -123,8 +123,8 @@ val double: Double = byte.toDouble()
 
 // No automatic widening in Kotlin!
 val x: Int = 100
-// val y: Long = x  // ❌ Compilation error
-val y: Long = x.toLong()  // ✅ Explicit conversion required
+// val y: Long = x  // - Compilation error
+val y: Long = x.toLong()  // - Explicit conversion required
 ```
 
 ---
@@ -147,7 +147,7 @@ val double = s.toDouble()       // 123.0
 // Safe conversion
 val invalid = "abc"
 val num1 = invalid.toIntOrNull()     // null (doesn't throw)
-val num2 = invalid.toInt()           // ❌ NumberFormatException
+val num2 = invalid.toInt()           // - NumberFormatException
 ```
 
 ---
@@ -266,13 +266,13 @@ val value: Double = temp()  // Calling invoke()
 ### 1. Use Descriptive Names
 
 ```kotlin
-// ✅ GOOD - Clear intent
+// - GOOD - Clear intent
 fun User.toDto(): UserDto
 fun UserDto.toEntity(): User
 fun String.toBase64(): String
 fun ByteArray.toHexString(): String
 
-// ❌ BAD - Unclear
+// - BAD - Unclear
 fun User.convert(): UserDto
 fun transform(user: User): UserDto
 ```
@@ -280,17 +280,17 @@ fun transform(user: User): UserDto
 ### 2. Null Safety with Conversions
 
 ```kotlin
-// ✅ GOOD - Use xxxOrNull for safe conversions
+// - GOOD - Use xxxOrNull for safe conversions
 val age = ageString.toIntOrNull() ?: 0
 
-// ❌ RISKY - Can throw exception
+// - RISKY - Can throw exception
 val age = ageString.toInt()  // NumberFormatException if invalid
 ```
 
 ### 3. Extension Functions for Domain Conversions
 
 ```kotlin
-// ✅ GOOD - Extension function
+// - GOOD - Extension function
 fun Order.toOrderResponse(): OrderResponse {
     return OrderResponse(/* ... */)
 }
@@ -298,7 +298,7 @@ fun Order.toOrderResponse(): OrderResponse {
 // Usage reads naturally
 val response = order.toOrderResponse()
 
-// ❌ Less natural - utility function
+// - Less natural - utility function
 fun convertOrderToResponse(order: Order): OrderResponse {
     return OrderResponse(/* ... */)
 }

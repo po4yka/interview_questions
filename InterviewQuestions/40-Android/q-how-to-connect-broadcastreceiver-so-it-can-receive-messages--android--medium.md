@@ -55,10 +55,10 @@ class BootReceiver : BroadcastReceiver() {
 ```
 
 **Characteristics**:
-- ✅ Receives broadcasts even when app is not running
-- ✅ Survives app restarts
-- ❌ Limited in Android 8.0+ (background execution limits)
-- ❌ Cannot be enabled/disabled at runtime easily
+-  Receives broadcasts even when app is not running
+-  Survives app restarts
+-  Limited in Android 8.0+ (background execution limits)
+-  Cannot be enabled/disabled at runtime easily
 
 ### Method 2: Dynamic Registration (Code)
 
@@ -103,10 +103,10 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Characteristics**:
-- ✅ Works in Android 8.0+ without restrictions
-- ✅ Can be enabled/disabled dynamically
-- ❌ Only receives broadcasts while registered
-- ❌ Must manually unregister to avoid leaks
+-  Works in Android 8.0+ without restrictions
+-  Can be enabled/disabled dynamically
+-  Only receives broadcasts while registered
+-  Must manually unregister to avoid leaks
 
 ### Method 3: Context-Registered Receiver (ContextCompat)
 
@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity() {
 For internal app broadcasts only:
 
 ```kotlin
-// ⚠️ Deprecated - use LiveData or Flow instead
+// WARNING: Deprecated - use LiveData or Flow instead
 class SenderActivity : AppCompatActivity() {
 
     fun sendLocalBroadcast() {

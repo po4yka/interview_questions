@@ -350,7 +350,7 @@ When to use:
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use for stable object structure with changing operations
+// - DO: Use for stable object structure with changing operations
 interface DocumentElement {
     fun accept(visitor: DocumentVisitor)
 }
@@ -366,7 +366,7 @@ class WordCountVisitor : DocumentVisitor { /* ... */ }
 class SpellCheckVisitor : DocumentVisitor { /* ... */ }
 class ExportVisitor : DocumentVisitor { /* ... */ }
 
-// ✅ DO: Use with composite pattern
+// - DO: Use with composite pattern
 interface FileSystemNode {
     fun accept(visitor: FileSystemVisitor)
 }
@@ -376,7 +376,7 @@ class FileSystemVisitor {
     fun visitDirectory(dir: Directory) { /* ... */ }
 }
 
-// ✅ DO: Provide default implementations
+// - DO: Provide default implementations
 abstract class BaseVisitor : ShapeVisitor {
     override fun visit(circle: Circle) {}
     override fun visit(square: Square) {}
@@ -389,9 +389,9 @@ class SpecificVisitor : BaseVisitor() {
     }
 }
 
-// ❌ DON'T: Use when object structure changes frequently
-// ❌ DON'T: Use for simple operations
-// ❌ DON'T: Modify element state in visitors
+// - DON'T: Use when object structure changes frequently
+// - DON'T: Use for simple operations
+// - DON'T: Modify element state in visitors
 ```
 
 **English**: **Visitor** is a behavioral pattern that allows adding new operations to object structure without modifying classes. **Problem**: Need to perform various operations on stable object structure. **Solution**: Define visitor with operation methods for each element type, elements accept visitors and dispatch to appropriate method. **Use when**: (1) Need to add operations without modifying classes, (2) Many unrelated operations, (3) Object structure stable but operations change. **Android**: View traversal, validation, serialization, rendering. **Pros**: separation of concerns, easy to add operations, centralized logic. **Cons**: hard to add new element types, complexity. **Examples**: Shape calculations, document processing, expression evaluation, view validation.

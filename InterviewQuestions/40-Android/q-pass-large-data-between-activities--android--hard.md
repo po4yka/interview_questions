@@ -34,7 +34,7 @@ This prevents **TransactionTooLargeException** (Intent size limit ~1MB).
 ### Why You Can't Pass Large Data Directly
 
 ```kotlin
-// ❌ BAD: Pass bitmap directly
+// - BAD: Pass bitmap directly
 val bitmap = BitmapFactory.decodeResource(resources, R.drawable.large_image)
 val intent = Intent(this, ViewImageActivity::class.java)
 intent.putExtra("image", bitmap)  // TransactionTooLargeException!
@@ -453,11 +453,11 @@ startActivity(intent)
 
 | Method | Pros | Cons | Best For |
 |--------|------|------|----------|
-| **File + URI** | ✅ Secure, standard, works across apps | Need FileProvider setup | Images, documents, any files |
-| **ViewModel** | ✅ Simple, lifecycle-aware | ❌ Cleared on config change/destroy | Same Activity/task only |
-| **Database + ID** | ✅ Persistent, multiple access | Need database setup | Persistent data |
-| **Singleton** | ✅ Very simple | ❌ Memory leaks risk | Temporary, small apps |
-| **ContentProvider** | ✅ Share with other apps | Complex setup | Cross-app sharing |
+| **File + URI** | - Secure, standard, works across apps | Need FileProvider setup | Images, documents, any files |
+| **ViewModel** | - Simple, lifecycle-aware | - Cleared on config change/destroy | Same Activity/task only |
+| **Database + ID** | - Persistent, multiple access | Need database setup | Persistent data |
+| **Singleton** | - Very simple | - Memory leaks risk | Temporary, small apps |
+| **ContentProvider** | - Share with other apps | Complex setup | Cross-app sharing |
 
 ---
 
@@ -551,19 +551,19 @@ class ViewImageActivity : AppCompatActivity() {
 ### 1. Choose the Right Method
 
 ```kotlin
-// ✅ File + URI: For images, videos, documents
+// - File + URI: For images, videos, documents
 fun shareFile(file: File) {
     val uri = FileProvider.getUriForFile(context, authority, file)
     intent.putExtra("fileUri", uri.toString())
 }
 
-// ✅ Database + ID: For persistent structured data
+// - Database + ID: For persistent structured data
 fun shareData(data: MyData) {
     val id = database.insert(data)
     intent.putExtra("dataId", id)
 }
 
-// ✅ ViewModel: For temporary sharing in same task
+// - ViewModel: For temporary sharing in same task
 viewModel.setData(largeData)
 startActivity(intent)  // No data in Intent
 ```

@@ -25,7 +25,7 @@ status: reviewed
 Without ViewModel, data is lost on screen rotation.
 
 ```kotlin
-// ❌ BAD: Data lost on rotation
+// - BAD: Data lost on rotation
 class MainActivity : AppCompatActivity() {
     private var counter = 0  // Lost on rotation!
 
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD: ViewModel survives rotation
+// - GOOD: ViewModel survives rotation
 class MainActivity : AppCompatActivity() {
     private val viewModel: CounterViewModel by viewModels()
 
@@ -71,7 +71,7 @@ class CounterViewModel : ViewModel() {
 ViewModel separates UI logic from business logic.
 
 ```kotlin
-// ❌ BAD: Everything in Activity
+// - BAD: Everything in Activity
 class UserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,7 +91,7 @@ class UserActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD: Business logic in ViewModel
+// - GOOD: Business logic in ViewModel
 class UserActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
 

@@ -271,19 +271,19 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 
 ### Problems Fragments Solved
 
-✅ **Multi-screen layouts**: Different layouts for phones/tablets
-✅ **Code reuse**: Same UI component in multiple places
-✅ **Modular architecture**: Separate concerns into independent modules
-✅ **Navigation**: Built-in back stack management
-✅ **Lifecycle management**: Independent lifecycle from Activity
+- **Multi-screen layouts**: Different layouts for phones/tablets
+- **Code reuse**: Same UI component in multiple places
+- **Modular architecture**: Separate concerns into independent modules
+- **Navigation**: Built-in back stack management
+- **Lifecycle management**: Independent lifecycle from Activity
 
 ### Fragment Challenges
 
-⚠️ **Complex lifecycle**: Many lifecycle methods to understand
-⚠️ **Configuration changes**: Requires careful state management
-⚠️ **Transaction timing**: Illegal state exceptions if not careful
-⚠️ **Memory leaks**: View references must be cleaned up
-⚠️ **Nested fragments**: Can become complex
+- **Complex lifecycle**: Many lifecycle methods to understand
+- **Configuration changes**: Requires careful state management
+- **Transaction timing**: Illegal state exceptions if not careful
+- **Memory leaks**: View references must be cleaned up
+- **Nested fragments**: Can become complex
 
 ### Alternatives Today
 
@@ -392,19 +392,19 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 
 ### Какие проблемы решили фрагменты
 
-✅ **Мультиэкранные макеты**: Разные layout для телефонов/планшетов
-✅ **Переиспользование кода**: Один UI компонент в нескольких местах
-✅ **Модульная архитектура**: Разделение ответственности на независимые модули
-✅ **Навигация**: Встроенное управление back stack
-✅ **Lifecycle management**: Независимый жизненный цикл от Activity
+- **Мультиэкранные макеты**: Разные layout для телефонов/планшетов
+- **Переиспользование кода**: Один UI компонент в нескольких местах
+- **Модульная архитектура**: Разделение ответственности на независимые модули
+- **Навигация**: Встроенное управление back stack
+- **Lifecycle management**: Независимый жизненный цикл от Activity
 
 ### Вызовы при работе с фрагментами
 
-⚠️ **Сложный lifecycle**: Много методов жизненного цикла
-⚠️ **Configuration changes**: Требует аккуратного управления состоянием
-⚠️ **Тайминг транзакций**: IllegalStateException при неосторожности
-⚠️ **Утечки памяти**: Необходимо очищать ссылки на View
-⚠️ **Вложенные фрагменты**: Могут усложнять код
+- **Сложный lifecycle**: Много методов жизненного цикла
+- **Configuration changes**: Требует аккуратного управления состоянием
+- **Тайминг транзакций**: IllegalStateException при неосторожности
+- **Утечки памяти**: Необходимо очищать ссылки на View
+- **Вложенные фрагменты**: Могут усложнять код
 
 ### Альтернативы сегодня
 

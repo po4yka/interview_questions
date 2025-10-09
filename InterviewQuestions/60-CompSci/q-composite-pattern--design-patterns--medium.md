@@ -272,7 +272,7 @@ When to use:
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use for tree structures
+// - DO: Use for tree structures
 interface UIComponent {
     fun render(): String
     fun onClick()
@@ -291,12 +291,12 @@ class Panel : UIComponent {
     override fun onClick() { children.forEach { it.onClick() } }
 }
 
-// ✅ DO: Use with Iterator pattern for traversal
+// - DO: Use with Iterator pattern for traversal
 class CompositeIterator(root: FileSystemComponent) : Iterator<FileSystemComponent> {
     // Implementation
 }
 
-// ✅ DO: Consider using sealed classes in Kotlin
+// - DO: Consider using sealed classes in Kotlin
 sealed class MenuItem {
     abstract val title: String
 
@@ -304,9 +304,9 @@ sealed class MenuItem {
     data class SubMenu(override val title: String, val items: List<MenuItem>) : MenuItem()
 }
 
-// ❌ DON'T: Use for fundamentally different types
-// ❌ DON'T: Make all operations mandatory in component interface
-// ❌ DON'T: Allow adding leafs to leafs
+// - DON'T: Use for fundamentally different types
+// - DON'T: Make all operations mandatory in component interface
+// - DON'T: Allow adding leafs to leafs
 ```
 
 **English**: **Composite** is a structural pattern that composes objects into tree structures to represent part-whole hierarchies, allowing uniform treatment of individual and composite objects. **Problem**: Need to represent tree structures and treat parts/wholes uniformly. **Solution**: Define component interface, implement with leaves (individual) and composites (containers). **Use when**: (1) Tree structures, (2) Part-whole hierarchies, (3) Want uniform treatment. **Android**: View hierarchy, menu structures, drawable layers. **Pros**: flexibility, simplified client code, scalability. **Cons**: complexity, performance overhead. **Examples**: View hierarchy, file system, organizational chart, menu structures.

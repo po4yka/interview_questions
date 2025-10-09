@@ -266,7 +266,7 @@ fun <T> Deferred<T>.getOrNull(): T? = try {
 Похожие, но разные концепции:
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - SupervisorJob не работает с async
+// - НЕПРАВИЛЬНО - SupervisorJob не работает с async
 val scope = CoroutineScope(SupervisorJob())
 scope.launch {
     val a = async { throw Exception("Error") }
@@ -276,7 +276,7 @@ scope.launch {
     println(b.await())
 }
 
-// ✅ ПРАВИЛЬНО - supervisorScope
+// - ПРАВИЛЬНО - supervisorScope
 suspend fun correct() = supervisorScope {
     val a = async { throw Exception("Error") }
     val b = async { delay(1000); "Success" }
@@ -386,7 +386,7 @@ fun `supervisorScope continues on failure`() = runTest {
 **1. Используйте coroutineScope для связанных операций**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО - все данные нужны для результата
+// - ПРАВИЛЬНО - все данные нужны для результата
 suspend fun loadOrder(orderId: Int) = coroutineScope {
     val order = async { orderRepo.getOrder(orderId) }
     val customer = async { customerRepo.getCustomer(order.await().customerId) }
@@ -399,7 +399,7 @@ suspend fun loadOrder(orderId: Int) = coroutineScope {
 **2. Используйте supervisorScope для независимых задач**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО - виджеты независимы
+// - ПРАВИЛЬНО - виджеты независимы
 suspend fun loadHomeScreen() = supervisorScope {
     launch { loadBanner() }
     launch { loadCategories() }
@@ -410,7 +410,7 @@ suspend fun loadHomeScreen() = supervisorScope {
 **3. Не смешивайте стратегии**
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - непонятное поведение
+// - НЕПРАВИЛЬНО - непонятное поведение
 suspend fun mixed() = supervisorScope {
     val a = async {
         coroutineScope {

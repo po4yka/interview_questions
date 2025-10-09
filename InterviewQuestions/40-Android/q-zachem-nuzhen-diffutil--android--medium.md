@@ -23,7 +23,7 @@ class SimpleAdapter : RecyclerView.Adapter<SimpleAdapter.ViewHolder>() {
 
     fun updateItems(newItems: List<String>) {
         items = newItems
-        notifyDataSetChanged() // ❌ Inefficient!
+        notifyDataSetChanged() // - Inefficient!
         // Redraws ALL items, even unchanged ones
         // No animations
         // Poor performance
@@ -54,9 +54,9 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 
         items = newItems
         diffResult.dispatchUpdatesTo(this)
-        // ✅ Only updates changed items
-        // ✅ Smooth animations
-        // ✅ Maintains scroll position
+        // - Only updates changed items
+        // - Smooth animations
+        // - Maintains scroll position
     }
 
     class ItemDiffCallback(

@@ -297,11 +297,11 @@ class UserListFragment : Fragment() {
 
 | Method | Persistence | Survives Rotation | Survives Process Death | Use Case |
 |--------|-------------|-------------------|------------------------|----------|
-| **SharedPreferences** | ✅ Permanent | ✅ Yes | ✅ Yes | Settings, flags |
-| **Room Database** | ✅ Permanent | ✅ Yes | ✅ Yes | Structured data |
-| **ViewModel** | ❌ Temporary | ✅ Yes | ❌ No | UI state |
-| **SavedStateHandle** | ✅ Limited | ✅ Yes | ✅ Yes | UI state (small) |
-| **Files** | ✅ Permanent | ✅ Yes | ✅ Yes | Documents, media |
+| **SharedPreferences** | - Permanent | - Yes | - Yes | Settings, flags |
+| **Room Database** | - Permanent | - Yes | - Yes | Structured data |
+| **ViewModel** | - Temporary | - Yes | - No | UI state |
+| **SavedStateHandle** | - Limited | - Yes | - Yes | UI state (small) |
+| **Files** | - Permanent | - Yes | - Yes | Documents, media |
 
 ## Best Practices
 

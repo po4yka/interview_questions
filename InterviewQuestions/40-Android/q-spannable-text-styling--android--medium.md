@@ -35,9 +35,9 @@ When using spans, you will work with one of the following classes:
 
 | Class | Text Mutable | Markup Mutable | Internal Structure | Use Case |
 |-------|--------------|----------------|-------------------|----------|
-| **SpannedString** | ❌ No | ❌ No | Linear array | Just reading, not setting |
-| **SpannableString** | ❌ No | ✅ Yes | Linear array | Setting small number of spans (<~10) |
-| **SpannableStringBuilder** | ✅ Yes | ✅ Yes | Interval tree | Setting text and spans, or many spans (>~10) |
+| **SpannedString** | - No | - No | Linear array | Just reading, not setting |
+| **SpannableString** | - No | - Yes | Linear array | Setting small number of spans (<~10) |
+| **SpannableStringBuilder** | - Yes | - Yes | Interval tree | Setting text and spans, or many spans (>~10) |
 
 **Which one to use?**
 - Just reading (not setting text or spans)? → **SpannedString**
@@ -449,9 +449,9 @@ Spannable позволяет:
 
 | Класс | Текст изменяемый | Разметка изменяемая | Использование |
 |-------|------------------|---------------------|---------------|
-| **SpannedString** | ❌ Нет | ❌ Нет | Только чтение |
-| **SpannableString** | ❌ Нет | ✅ Да | Небольшое количество spans (<~10) |
-| **SpannableStringBuilder** | ✅ Да | ✅ Да | Установка текста и spans, или много spans (>~10) |
+| **SpannedString** | - Нет | - Нет | Только чтение |
+| **SpannableString** | - Нет | - Да | Небольшое количество spans (<~10) |
+| **SpannableStringBuilder** | - Да | - Да | Установка текста и spans, или много spans (>~10) |
 
 **Базовый пример:**
 

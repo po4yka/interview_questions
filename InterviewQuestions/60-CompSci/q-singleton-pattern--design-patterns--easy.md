@@ -154,13 +154,13 @@ Common uses:
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use object declaration for simple singletons
+// - DO: Use object declaration for simple singletons
 object AppConfig {
     var apiKey: String = ""
     var baseUrl: String = ""
 }
 
-// ✅ DO: Use lazy initialization for expensive objects
+// - DO: Use lazy initialization for expensive objects
 class ImageCache private constructor(context: Context) {
     companion object {
         @Volatile private var instance: ImageCache? = null
@@ -174,11 +174,11 @@ class ImageCache private constructor(context: Context) {
     }
 }
 
-// ✅ DO: Use Dependency Injection instead when possible
+// - DO: Use Dependency Injection instead when possible
 class MyRepository(private val api: ApiService) // Injected, not singleton
 
-// ❌ DON'T: Use singleton for objects that should have different lifecycles
-// ❌ DON'T: Store Activity/Context references in singletons (memory leaks!)
+// - DON'T: Use singleton for objects that should have different lifecycles
+// - DON'T: Store Activity/Context references in singletons (memory leaks!)
 ```
 
 **English**: **Singleton** is a creational design pattern that ensures a class has only one instance and provides global access to it. **Problem**: Need to ensure only one instance exists and provide easy access. **Solution**: Private constructor, static instance, and static factory method. **Use when**: (1) Exactly one instance is needed, (2) Instance must be accessible globally, (3) Lazy initialization is desired. **Kotlin**: Use `object` declaration or companion object with lazy initialization. **Pros**: controlled access, memory efficient, global access. **Cons**: global state, hidden dependencies, difficult to test. **Examples**: Database helper, network manager, configuration, analytics tracker.

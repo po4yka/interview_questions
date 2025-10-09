@@ -24,13 +24,13 @@ status: reviewed
 **1. Minimize Static Variables**
 
 ```kotlin
-// ❌ BAD - Static reference leaks
+// - BAD - Static reference leaks
 companion object {
     var context: Context? = null
     val userList = mutableListOf<User>()  // Never released
 }
 
-// ✅ GOOD - Use application context or avoid statics
+// - GOOD - Use application context or avoid statics
 companion object {
     lateinit var appContext: Context  // Application context OK
 }
@@ -41,12 +41,12 @@ companion object {
 Properly manage references to contexts and activities.
 
 ```kotlin
-// ❌ BAD - Activity leak
+// - BAD - Activity leak
 class MyTask(private val activity: Activity) : AsyncTask<>() {
     // Holds Activity reference
 }
 
-// ✅ GOOD - Use WeakReference
+// - GOOD - Use WeakReference
 class MyTask(activity: Activity) : AsyncTask<>() {
     private val activityRef = WeakReference(activity)
 
@@ -79,7 +79,7 @@ class ImageCache {
 Replace with static nested classes.
 
 ```kotlin
-// ❌ BAD - Implicit Activity reference
+// - BAD - Implicit Activity reference
 class MyActivity : AppCompatActivity() {
     inner class MyRunnable : Runnable {
         override fun run() {
@@ -88,7 +88,7 @@ class MyActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD - Static nested class
+// - GOOD - Static nested class
 class MyActivity : AppCompatActivity() {
     class MyRunnable(private val activityRef: WeakReference<MyActivity>) : Runnable {
         override fun run() {
@@ -146,13 +146,13 @@ dependencies {
 **8. Use Glide or Picasso for Images**
 
 ```kotlin
-// ✅ Glide - automatic memory management
+// - Glide - automatic memory management
 Glide.with(context)
     .load(imageUrl)
     .placeholder(R.drawable.placeholder)
     .into(imageView)
 
-// ✅ Picasso - similar benefits
+// - Picasso - similar benefits
 Picasso.get()
     .load(imageUrl)
     .resize(800, 600)  // Optimize size
@@ -224,14 +224,14 @@ class MyActivity : AppCompatActivity() {
 
 | Practice | Description |
 |----------|-------------|
-| ✅ Avoid statics | Or use application context only |
-| ✅ Fix leaks | Use WeakReference, proper cleanup |
-| ✅ Use LruCache | For in-memory caching |
-| ✅ Optimize images | Load at required size |
-| ✅ Use image libraries | Glide, Picasso, Coil |
-| ✅ Profile regularly | Android Profiler, LeakCanary |
-| ✅ Release resources | onDestroy, onPause |
-| ✅ Avoid inner classes | Use static nested + WeakReference |
+| - Avoid statics | Or use application context only |
+| - Fix leaks | Use WeakReference, proper cleanup |
+| - Use LruCache | For in-memory caching |
+| - Optimize images | Load at required size |
+| - Use image libraries | Glide, Picasso, Coil |
+| - Profile regularly | Android Profiler, LeakCanary |
+| - Release resources | onDestroy, onPause |
+| - Avoid inner classes | Use static nested + WeakReference |
 
 **Summary:**
 

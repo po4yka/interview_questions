@@ -153,19 +153,19 @@ class MainActivity : AppCompatActivity() {
 
         val button = findViewById<Button>(R.id.myButton)
 
-        // ❌ Без SAM - многословно
+        // - Без SAM - многословно
         button.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
                 Toast.makeText(this@MainActivity, "Clicked!", Toast.LENGTH_SHORT).show()
             }
         })
 
-        // ✅ С SAM - кратко
+        // - С SAM - кратко
         button.setOnClickListener { v ->
             Toast.makeText(this, "Clicked!", Toast.LENGTH_SHORT).show()
         }
 
-        // ✅ Еще короче (параметр не используется)
+        // - Еще короче (параметр не используется)
         button.setOnClickListener {
             Toast.makeText(this, "Clicked!", Toast.LENGTH_SHORT).show()
         }
@@ -298,16 +298,16 @@ process(StringMapper { it.uppercase() })  // SAM
 **1. Только для интерфейсов с одним абстрактным методом**
 
 ```kotlin
-// ❌ НЕ SAM - два метода
+// - НЕ SAM - два метода
 interface MultiMethod {
     fun method1()
     fun method2()
 }
 
-// ❌ Не работает SAM-конверсия
+// - Не работает SAM-конверсия
 val obj = MultiMethod { ... }  // ERROR
 
-// ✅ SAM - один метод
+// - SAM - один метод
 fun interface SingleMethod {
     fun method()
 }
@@ -318,7 +318,7 @@ val obj = SingleMethod { ... }  // OK
 **2. Дефолтные методы не считаются абстрактными**
 
 ```kotlin
-// ✅ SAM - только один АБСТРАКТНЫЙ метод
+// - SAM - только один АБСТРАКТНЫЙ метод
 fun interface Processor {
     fun process(input: String): String
 
@@ -334,14 +334,14 @@ val processor = Processor { it.uppercase() }  // OK
 **3. Kotlin интерфейсы требуют `fun interface`**
 
 ```kotlin
-// ❌ Обычный Kotlin интерфейс - НЕТ SAM
+// - Обычный Kotlin интерфейс - НЕТ SAM
 interface Transformer {
     fun transform(input: String): String
 }
 
 val t = Transformer { it.uppercase() }  // ERROR
 
-// ✅ fun interface - SAM работает
+// - fun interface - SAM работает
 fun interface Transformer {
     fun transform(input: String): String
 }
@@ -355,7 +355,7 @@ val t = Transformer { it.uppercase() }  // OK
 // Java интерфейс (из библиотеки)
 // interface Runnable { void run(); }
 
-// ✅ SAM работает без fun
+// - SAM работает без fun
 val runnable = Runnable { println("Running") }  // OK
 ```
 
@@ -396,7 +396,7 @@ setHandler { println("Clicked") }
 **1. Используйте `fun interface` для Kotlin SAM**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 fun interface Mapper<T, R> {
     fun map(input: T): R
 }
@@ -407,7 +407,7 @@ val stringToInt = Mapper<String, Int> { it.length }
 **2. SAM для Java interop**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО - работа с Java API
+// - ПРАВИЛЬНО - работа с Java API
 executor.submit {
     doWork()
 }
@@ -420,7 +420,7 @@ button.setOnClickListener {
 **3. Function types для чистого Kotlin**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО - чистый Kotlin
+// - ПРАВИЛЬНО - чистый Kotlin
 fun processItems(items: List<String>, transform: (String) -> String) {
     items.forEach { println(transform(it)) }
 }

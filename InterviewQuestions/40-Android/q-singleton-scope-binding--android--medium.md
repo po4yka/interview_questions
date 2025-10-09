@@ -167,7 +167,7 @@ userComponent = null // Instance will be garbage collected
 ### NOT a True Singleton
 
 ```kotlin
-// ❌ WRONG UNDERSTANDING
+// - WRONG UNDERSTANDING
 @Singleton
 class Database @Inject constructor() {
     // This is NOT Java's singleton pattern!
@@ -231,7 +231,7 @@ class FragmentViewModel @Inject constructor()
 ### Singleton Can Cause Memory Leaks
 
 ```kotlin
-// ❌ BAD: Singleton holding Activity reference
+// - BAD: Singleton holding Activity reference
 @Singleton
 class Analytics @Inject constructor(
     private val activity: Activity // LEAK!
@@ -240,7 +240,7 @@ class Analytics @Inject constructor(
     // But @Singleton keeps reference
 }
 
-// ✅ GOOD: Use Application Context
+// - GOOD: Use Application Context
 @Singleton
 class Analytics @Inject constructor(
     @ApplicationContext private val context: Context
@@ -254,7 +254,7 @@ class Analytics @Inject constructor(
 ### Proper Scope Matching
 
 ```kotlin
-// ✅ GOOD: Match scope to lifecycle
+// - GOOD: Match scope to lifecycle
 @Singleton
 class NetworkClient // Lives for app
 
@@ -264,7 +264,7 @@ class Presenter // Lives for Activity
 @FragmentScoped
 class ViewModel // Lives for Fragment
 
-// ❌ BAD: Scope mismatch
+// - BAD: Scope mismatch
 @Singleton
 class ActivityPresenter // Activity data in app-level scope = leak!
 ```
@@ -312,24 +312,24 @@ class RepositoryTest {
 - In custom Dagger: Depends on when component is created/destroyed
 
 **Key points:**
-- ✅ One instance **per component**
-- ✅ Lives as long as component lives
-- ❌ NOT a true global singleton
-- ❌ Can cause memory leaks if misused
+- - One instance **per component**
+- - Lives as long as component lives
+- - NOT a true global singleton
+- - Can cause memory leaks if misused
 
 **Best practices:**
 ```kotlin
-// ✅ Application-wide resources
+// - Application-wide resources
 @Singleton
 class AppDatabase
 
-// ✅ Use Application Context
+// - Use Application Context
 @Singleton
 class Analytics @Inject constructor(
     @ApplicationContext private val context: Context
 )
 
-// ❌ Don't hold Activity references
+// - Don't hold Activity references
 @Singleton
 class Bad @Inject constructor(
     private val activity: Activity // LEAK!
@@ -360,7 +360,7 @@ class UserRepository @Inject constructor(
 ```
 
 **Важные моменты:**
-- ✅ Один экземпляр **на компонент**
-- ✅ Живет столько, сколько живет компонент
-- ❌ Может вызвать утечки памяти при неправильном использовании
+- - Один экземпляр **на компонент**
+- - Живет столько, сколько живет компонент
+- - Может вызвать утечки памяти при неправильном использовании
 

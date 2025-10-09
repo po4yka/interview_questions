@@ -74,11 +74,11 @@ class MoreDerived : Derived() {
 
 | Approach | Syntax | Inheritable? |
 |----------|--------|-------------|
-| Default (final) | `class MyClass` | ❌ No |
-| Explicit final | `final class MyClass` | ❌ No (redundant) |
-| Open | `open class MyClass` | ✅ Yes |
-| Abstract | `abstract class MyClass` | ✅ Yes (always open) |
-| Sealed | `sealed class MyClass` | ✅ Limited (same file/package) |
+| Default (final) | `class MyClass` | - No |
+| Explicit final | `final class MyClass` | - No (redundant) |
+| Open | `open class MyClass` | - Yes |
+| Abstract | `abstract class MyClass` | - Yes (always open) |
+| Sealed | `sealed class MyClass` | - Limited (same file/package) |
 
 **Best practice:**
 - Don't use explicit `final` keyword (it's the default)

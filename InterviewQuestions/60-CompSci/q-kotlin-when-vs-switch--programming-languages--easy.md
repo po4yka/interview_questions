@@ -107,13 +107,13 @@ when (x) {
 | Feature | Java `switch` | Kotlin `when` |
 |---------|---------------|---------------|
 | Syntax | `switch (x) { case 1: }` | `when (x) { 1 -> }` |
-| Multiple values | ❌ | ✅ `1, 2, 3 ->` |
-| Ranges | ❌ | ✅ `in 1..10 ->` |
-| Type checks | ❌ | ✅ `is String ->` |
-| Conditions | ❌ | ✅ `x > 0 ->` |
-| Expression | ✅ (Java 14+) | ✅ Always |
-| Fall-through | ✅ (default) | ❌ Not allowed |
-| `break` | ✅ Required | ❌ Not needed |
+| Multiple values | - | - `1, 2, 3 ->` |
+| Ranges | - | - `in 1..10 ->` |
+| Type checks | - | - `is String ->` |
+| Conditions | - | - `x > 0 ->` |
+| Expression | - (Java 14+) | - Always |
+| Fall-through | - (default) | - Not allowed |
+| `break` | - Required | - Not needed |
 
 **Summary:**
 `when` is Kotlin's replacement for `switch`, offering more flexibility, safety, and expressiveness.

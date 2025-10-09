@@ -68,10 +68,10 @@ int result = multiply.calculate(5, 3);  // 15
 
 **Key Points:**
 
-✅ **@FunctionalInterface** annotation (optional but recommended)
-✅ **Exactly one abstract method** required
-✅ Can have **default** and **static** methods
-✅ Lambda provides implementation of the single abstract method
+- **@FunctionalInterface** annotation (optional but recommended)
+- **Exactly one abstract method** required
+- Can have **default** and **static** methods
+- Lambda provides implementation of the single abstract method
 
 **Examples:**
 

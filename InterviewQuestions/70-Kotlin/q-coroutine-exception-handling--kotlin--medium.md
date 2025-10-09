@@ -74,7 +74,7 @@ viewModelScope.launch {
 ```kotlin
 viewModelScope.launch {
     try {
-        val result = suspendingFunction()  // ✅ Caught
+        val result = suspendingFunction()  // - Caught
     } catch (e: Exception) {
         handleError(e)
     }
@@ -87,7 +87,7 @@ viewModelScope.launch {
 viewModelScope.launch {
     try {
         launch {
-            throw Exception("Failed")  // ❌ NOT caught
+            throw Exception("Failed")  // - NOT caught
         }
     } catch (e: Exception) {
         // Never reached!
@@ -250,7 +250,7 @@ fun loadDashboard() {
 **1. Use supervisorScope for independent parallel tasks**
 
 ```kotlin
-// ✅ GOOD - Independent tasks
+// - GOOD - Independent tasks
 supervisorScope {
     launch { loadProducts() }
     launch { loadCategories() }
@@ -261,7 +261,7 @@ supervisorScope {
 **2. Use coroutineScope for dependent sequential tasks**
 
 ```kotlin
-// ✅ GOOD - Sequential steps
+// - GOOD - Sequential steps
 coroutineScope {
     val user = getUser()
     val profile = getProfile(user.id)
@@ -272,7 +272,7 @@ coroutineScope {
 **3. Handle exceptions at appropriate level**
 
 ```kotlin
-// ✅ GOOD - Handle at UI level
+// - GOOD - Handle at UI level
 viewModelScope.launch {
     try {
         val data = repository.getData()
@@ -326,7 +326,7 @@ viewModelScope.launch {
 ```kotlin
 viewModelScope.launch {
     try {
-        val result = suspendingFunction()  // ✅ Поймано
+        val result = suspendingFunction()  // - Поймано
     } catch (e: Exception) {
         handleError(e)
     }
@@ -339,7 +339,7 @@ viewModelScope.launch {
 viewModelScope.launch {
     try {
         launch {
-            throw Exception("Failed")  // ❌ НЕ поймано
+            throw Exception("Failed")  // - НЕ поймано
         }
     } catch (e: Exception) {
         // Никогда не достигается!
@@ -438,7 +438,7 @@ suspend fun processOrder(order: Order) = coroutineScope {
 **1. Используйте supervisorScope для независимых параллельных задач**
 
 ```kotlin
-// ✅ ХОРОШО - Независимые задачи
+// - ХОРОШО - Независимые задачи
 supervisorScope {
     launch { loadProducts() }
     launch { loadCategories() }
@@ -449,7 +449,7 @@ supervisorScope {
 **2. Используйте coroutineScope для зависимых последовательных задач**
 
 ```kotlin
-// ✅ ХОРОШО - Последовательные шаги
+// - ХОРОШО - Последовательные шаги
 coroutineScope {
     val user = getUser()
     val profile = getProfile(user.id)

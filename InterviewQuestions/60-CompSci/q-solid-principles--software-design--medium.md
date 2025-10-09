@@ -32,10 +32,10 @@ These principles were formulated and popularized by **Robert C. Martin (Uncle Bo
 
 **Meaning:** Each class should have **one responsibility** and do **one thing well**.
 
-#### ❌ BAD: Multiple Responsibilities
+#### - BAD: Multiple Responsibilities
 
 ```kotlin
-// ❌ Class handles both user data AND persistence
+// - Class handles both user data AND persistence
 class User(
     var name: String,
     var email: String
@@ -44,18 +44,18 @@ class User(
         return email.contains("@")
     }
 
-    // ❌ Database logic in User class
+    // - Database logic in User class
     fun saveToDatabase() {
         val db = Database.getInstance()
         db.execute("INSERT INTO users VALUES ('$name', '$email')")
     }
 
-    // ❌ Email sending logic in User class
+    // - Email sending logic in User class
     fun sendWelcomeEmail() {
         EmailService.send(email, "Welcome!")
     }
 
-    // ❌ Logging in User class
+    // - Logging in User class
     fun logActivity() {
         Logger.log("User $name performed action")
     }
@@ -67,17 +67,17 @@ class User(
 - Email sending changes affect User class
 - Testing is difficult (must mock database, email service, logger)
 
-#### ✅ GOOD: Single Responsibility
+#### - GOOD: Single Responsibility
 
 ```kotlin
-// ✅ User class - only user data
+// - User class - only user data
 data class User(
     val id: String,
     val name: String,
     val email: String
 )
 
-// ✅ UserValidator - only validation
+// - UserValidator - only validation
 class UserValidator {
     fun validateEmail(email: String): Boolean {
         return email.matches(Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"))
@@ -88,7 +88,7 @@ class UserValidator {
     }
 }
 
-// ✅ UserRepository - only data persistence
+// - UserRepository - only data persistence
 class UserRepository(private val database: Database) {
     suspend fun save(user: User) {
         database.userDao().insert(user)
@@ -99,7 +99,7 @@ class UserRepository(private val database: Database) {
     }
 }
 
-// ✅ UserNotificationService - only notifications
+// - UserNotificationService - only notifications
 class UserNotificationService(private val emailService: EmailService) {
     suspend fun sendWelcomeEmail(user: User) {
         emailService.send(
@@ -110,7 +110,7 @@ class UserNotificationService(private val emailService: EmailService) {
     }
 }
 
-// ✅ UserActivityLogger - only logging
+// - UserActivityLogger - only logging
 class UserActivityLogger(private val logger: Logger) {
     fun logUserAction(user: User, action: String) {
         logger.info("User ${user.name} (${user.id}): $action")
@@ -131,10 +131,10 @@ class UserActivityLogger(private val logger: Logger) {
 
 **Meaning:** You should be able to **add new functionality** without **changing existing code**.
 
-#### ❌ BAD: Modification Required
+#### - BAD: Modification Required
 
 ```kotlin
-// ❌ Adding new payment method requires modifying this class
+// - Adding new payment method requires modifying this class
 class PaymentProcessor {
     fun processPayment(type: String, amount: Double) {
         when (type) {
@@ -146,7 +146,7 @@ class PaymentProcessor {
                 println("Processing PayPal payment: $amount")
                 // PayPal logic
             }
-            // ❌ To add Bitcoin, must modify this class!
+            // - To add Bitcoin, must modify this class!
             "bitcoin" -> {
                 println("Processing Bitcoin payment: $amount")
                 // Bitcoin logic
@@ -157,15 +157,15 @@ class PaymentProcessor {
 }
 ```
 
-#### ✅ GOOD: Open for Extension
+#### - GOOD: Open for Extension
 
 ```kotlin
-// ✅ Abstract interface - closed for modification
+// - Abstract interface - closed for modification
 interface PaymentMethod {
     fun processPayment(amount: Double)
 }
 
-// ✅ Concrete implementations - extend functionality
+// - Concrete implementations - extend functionality
 class CreditCardPayment : PaymentMethod {
     override fun processPayment(amount: Double) {
         println("Processing credit card payment: $amount")
@@ -180,7 +180,7 @@ class PayPalPayment : PaymentMethod {
     }
 }
 
-// ✅ Adding Bitcoin doesn't modify existing code
+// - Adding Bitcoin doesn't modify existing code
 class BitcoinPayment : PaymentMethod {
     override fun processPayment(amount: Double) {
         println("Processing Bitcoin payment: $amount")
@@ -188,7 +188,7 @@ class BitcoinPayment : PaymentMethod {
     }
 }
 
-// ✅ PaymentProcessor uses abstraction
+// - PaymentProcessor uses abstraction
 class PaymentProcessor {
     fun processPayment(paymentMethod: PaymentMethod, amount: Double) {
         paymentMethod.processPayment(amount)
@@ -198,7 +198,7 @@ class PaymentProcessor {
 // Usage
 val processor = PaymentProcessor()
 processor.processPayment(CreditCardPayment(), 100.0)
-processor.processPayment(BitcoinPayment(), 50.0)  // ✅ No modification needed
+processor.processPayment(BitcoinPayment(), 50.0)  // - No modification needed
 ```
 
 **Benefits:**
@@ -214,7 +214,7 @@ processor.processPayment(BitcoinPayment(), 50.0)  // ✅ No modification needed
 
 **Meaning:** If class `B` extends class `A`, you should be able to replace `A` with `B` without breaking the program.
 
-#### ❌ BAD: Violates LSP
+#### - BAD: Violates LSP
 
 ```kotlin
 open class Bird {
@@ -229,31 +229,31 @@ class Sparrow : Bird() {
     }
 }
 
-// ❌ Penguin can't fly, violates LSP!
+// - Penguin can't fly, violates LSP!
 class Penguin : Bird() {
     override fun fly() {
         throw UnsupportedOperationException("Penguins can't fly!")
     }
 }
 
-// ❌ This code breaks with Penguin
+// - This code breaks with Penguin
 fun makeBirdFly(bird: Bird) {
     bird.fly()  // Throws exception if bird is Penguin!
 }
 
-makeBirdFly(Sparrow())  // ✅ Works
-makeBirdFly(Penguin())  // ❌ Throws exception!
+makeBirdFly(Sparrow())  // - Works
+makeBirdFly(Penguin())  // - Throws exception!
 ```
 
-#### ✅ GOOD: Follows LSP
+#### - GOOD: Follows LSP
 
 ```kotlin
-// ✅ Base abstraction without fly
+// - Base abstraction without fly
 abstract class Bird {
     abstract fun move()
 }
 
-// ✅ Separate interface for flying birds
+// - Separate interface for flying birds
 interface Flyable {
     fun fly()
 }
@@ -278,19 +278,19 @@ class Penguin : Bird() {
     }
 }
 
-// ✅ Functions work with appropriate abstractions
+// - Functions work with appropriate abstractions
 fun makeBirdMove(bird: Bird) {
-    bird.move()  // ✅ Works for all birds
+    bird.move()  // - Works for all birds
 }
 
 fun makeFlyableFly(flyable: Flyable) {
-    flyable.fly()  // ✅ Only accepts flying birds
+    flyable.fly()  // - Only accepts flying birds
 }
 
-makeBirdMove(Sparrow())  // ✅ Works
-makeBirdMove(Penguin())  // ✅ Works
-makeFlyableFly(Sparrow())  // ✅ Works
-// makeFlyableFly(Penguin())  // ❌ Compile error - Penguin is not Flyable
+makeBirdMove(Sparrow())  // - Works
+makeBirdMove(Penguin())  // - Works
+makeFlyableFly(Sparrow())  // - Works
+// makeFlyableFly(Penguin())  // - Compile error - Penguin is not Flyable
 ```
 
 **Benefits:**
@@ -306,10 +306,10 @@ makeFlyableFly(Sparrow())  // ✅ Works
 
 **Meaning:** **Many small, specific interfaces** are better than **one large, general interface**.
 
-#### ❌ BAD: Fat Interface
+#### - BAD: Fat Interface
 
 ```kotlin
-// ❌ Large interface with many responsibilities
+// - Large interface with many responsibilities
 interface Worker {
     fun work()
     fun eat()
@@ -318,38 +318,38 @@ interface Worker {
     fun attendMeeting()
 }
 
-// ❌ Robot doesn't eat or sleep!
+// - Robot doesn't eat or sleep!
 class Robot : Worker {
     override fun work() {
         println("Robot working")
     }
 
     override fun eat() {
-        // ❌ Robots don't eat!
+        // - Robots don't eat!
         throw UnsupportedOperationException("Robots don't eat")
     }
 
     override fun sleep() {
-        // ❌ Robots don't sleep!
+        // - Robots don't sleep!
         throw UnsupportedOperationException("Robots don't sleep")
     }
 
     override fun getSalary() {
-        // ❌ Robots don't get paid!
+        // - Robots don't get paid!
         throw UnsupportedOperationException("Robots don't get salary")
     }
 
     override fun attendMeeting() {
-        // ❌ Robots don't attend meetings!
+        // - Robots don't attend meetings!
         throw UnsupportedOperationException("Robots don't attend meetings")
     }
 }
 ```
 
-#### ✅ GOOD: Segregated Interfaces
+#### - GOOD: Segregated Interfaces
 
 ```kotlin
-// ✅ Small, focused interfaces
+// - Small, focused interfaces
 interface Workable {
     fun work()
 }
@@ -370,7 +370,7 @@ interface MeetingAttendee {
     fun attendMeeting()
 }
 
-// ✅ Human implements all interfaces
+// - Human implements all interfaces
 class Human : Workable, Eatable, Sleepable, Payable, MeetingAttendee {
     override fun work() {
         println("Human working")
@@ -393,14 +393,14 @@ class Human : Workable, Eatable, Sleepable, Payable, MeetingAttendee {
     }
 }
 
-// ✅ Robot only implements relevant interfaces
+// - Robot only implements relevant interfaces
 class Robot : Workable {
     override fun work() {
         println("Robot working")
     }
 }
 
-// ✅ Manager has different interface combination
+// - Manager has different interface combination
 class Manager : Workable, Eatable, Sleepable, Payable, MeetingAttendee {
     override fun work() {
         println("Manager managing")
@@ -439,10 +439,10 @@ class Manager : Workable, Eatable, Sleepable, Payable, MeetingAttendee {
 
 **Meaning:** **Depend on interfaces**, not concrete implementations.
 
-#### ❌ BAD: Direct Dependency on Implementation
+#### - BAD: Direct Dependency on Implementation
 
 ```kotlin
-// ❌ Concrete implementation
+// - Concrete implementation
 class MySQLDatabase {
     fun save(data: String) {
         println("Saving to MySQL: $data")
@@ -453,9 +453,9 @@ class MySQLDatabase {
     }
 }
 
-// ❌ UserService depends directly on MySQLDatabase
+// - UserService depends directly on MySQLDatabase
 class UserService {
-    private val database = MySQLDatabase()  // ❌ Tightly coupled!
+    private val database = MySQLDatabase()  // - Tightly coupled!
 
     fun saveUser(user: String) {
         database.save(user)
@@ -466,19 +466,19 @@ class UserService {
     }
 }
 
-// ❌ Can't switch to PostgreSQL without modifying UserService!
+// - Can't switch to PostgreSQL without modifying UserService!
 ```
 
-#### ✅ GOOD: Dependency on Abstraction
+#### - GOOD: Dependency on Abstraction
 
 ```kotlin
-// ✅ Abstract interface
+// - Abstract interface
 interface Database {
     fun save(data: String)
     fun fetch(id: String): String
 }
 
-// ✅ Concrete implementations
+// - Concrete implementations
 class MySQLDatabase : Database {
     override fun save(data: String) {
         println("Saving to MySQL: $data")
@@ -509,8 +509,8 @@ class MongoDBDatabase : Database {
     }
 }
 
-// ✅ UserService depends on abstraction via dependency injection
-class UserService(private val database: Database) {  // ✅ Injected dependency
+// - UserService depends on abstraction via dependency injection
+class UserService(private val database: Database) {  // - Injected dependency
 
     fun saveUser(user: String) {
         database.save(user)
@@ -526,7 +526,7 @@ val mysqlService = UserService(MySQLDatabase())
 val postgresService = UserService(PostgreSQLDatabase())
 val mongoService = UserService(MongoDBDatabase())
 
-// ✅ Easy to test with mock
+// - Easy to test with mock
 class MockDatabase : Database {
     override fun save(data: String) {
         // Mock implementation

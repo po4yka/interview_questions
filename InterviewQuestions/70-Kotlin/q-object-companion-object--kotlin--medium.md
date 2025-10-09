@@ -43,7 +43,7 @@ DatabaseManager.close()
 - Не может иметь конструктор с параметрами
 
 ```kotlin
-// ❌ Неправильно
+// - Неправильно
 object Config(val apiKey: String)  // Ошибка компиляции!
 
 // ✓ Правильно

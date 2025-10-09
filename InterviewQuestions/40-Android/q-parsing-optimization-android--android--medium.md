@@ -25,12 +25,12 @@ status: reviewed
 Use XmlPullParser instead of DOM for XML.
 
 ```kotlin
-// ❌ BAD - DOM loads entire document
+// - BAD - DOM loads entire document
 val factory = DocumentBuilderFactory.newInstance()
 val builder = factory.newDocumentBuilder()
 val doc = builder.parse(inputStream)  // Loads all in memory
 
-// ✅ GOOD - Streaming parser
+// - GOOD - Streaming parser
 val parser = Xml.newPullParser()
 parser.setInput(inputStream, null)
 
@@ -46,12 +46,12 @@ while (parser.next() != XmlPullParser.END_DOCUMENT) {
 **2. Reduce String Conversions**
 
 ```kotlin
-// ❌ BAD - Multiple conversions
+// - BAD - Multiple conversions
 val jsonString = response.body?.string()
 val data = jsonString?.let { JSONObject(it) }
 val value = data?.getString("key")
 
-// ✅ GOOD - Direct stream parsing
+// - GOOD - Direct stream parsing
 val data = JSONObject(response.body?.charStream())
 ```
 
@@ -139,7 +139,7 @@ val user = json.decodeFromString<User>(jsonString)
 **5. Optimize Large Lists:**
 
 ```kotlin
-// ❌ BAD - Parse all at once
+// - BAD - Parse all at once
 fun parseAllUsers(json: String): List<User> {
     val array = JSONArray(json)
     return (0 until array.length()).map {
@@ -147,7 +147,7 @@ fun parseAllUsers(json: String): List<User> {
     }
 }
 
-// ✅ GOOD - Lazy parsing with sequence
+// - GOOD - Lazy parsing with sequence
 fun parseUsersLazy(json: String): Sequence<User> = sequence {
     val array = JSONArray(json)
     for (i in 0 until array.length()) {

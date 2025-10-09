@@ -146,7 +146,7 @@ interface Counter {
         set(value) { field = value }
 }
 
-// ❌ Won't compile - interfaces can't have backing fields
+// - Won't compile - interfaces can't have backing fields
 // Use abstract class instead for true state
 ```
 
@@ -166,7 +166,7 @@ abstract class Repository {
 
 **Multiple Interfaces vs Abstract Class:**
 ```kotlin
-// ✅ Can implement multiple interfaces
+// - Can implement multiple interfaces
 interface Serializable
 interface Comparable<T>
 interface Cloneable
@@ -176,7 +176,7 @@ class Data : Serializable, Comparable<Data>, Cloneable {
     override fun clone(): Any = this
 }
 
-// ❌ Can only extend one abstract class
+// - Can only extend one abstract class
 abstract class BaseViewModel
 abstract class BaseRepository
 // class MyClass : BaseViewModel(), BaseRepository()  // Won't compile
@@ -286,7 +286,7 @@ interface Counter {
         set(value) { field = value }
 }
 
-// ❌ Не скомпилируется - интерфейсы не могут иметь backing fields
+// - Не скомпилируется - интерфейсы не могут иметь backing fields
 // Используйте абстрактный класс для настоящего состояния
 ```
 
@@ -306,7 +306,7 @@ abstract class Repository {
 
 **Множественные интерфейсы vs Абстрактный класс:**
 ```kotlin
-// ✅ Можно реализовать несколько интерфейсов
+// - Можно реализовать несколько интерфейсов
 interface Serializable
 interface Comparable<T>
 interface Cloneable
@@ -316,7 +316,7 @@ class Data : Serializable, Comparable<Data>, Cloneable {
     override fun clone(): Any = this
 }
 
-// ❌ Можно наследовать только один абстрактный класс
+// - Можно наследовать только один абстрактный класс
 abstract class BaseViewModel
 abstract class BaseRepository
 // class MyClass : BaseViewModel(), BaseRepository()  // Не скомпилируется

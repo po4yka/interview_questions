@@ -14,7 +14,7 @@ ViewModel guarantees state preservation until the Activity finishes completely o
 
 ### ViewModel Lifetime Guarantees
 
-#### ✅ Survives (Data Preserved)
+#### - Survives (Data Preserved)
 
 1. **Configuration Changes**:
    ```kotlin
@@ -41,7 +41,7 @@ ViewModel guarantees state preservation until the Activity finishes completely o
    - Activity moved to background but process alive
    - Another Activity started on top
 
-#### ❌ Does Not Survive (Data Lost)
+#### - Does Not Survive (Data Lost)
 
 1. **Activity.finish() Called**:
    ```kotlin
@@ -148,10 +148,10 @@ class MyViewModel : ViewModel() {
 
 | Misconception | Reality |
 |---------------|---------|
-| ViewModel survives app restart | ❌ Lost on process death |
-| ViewModel survives back press | ❌ Cleared when Activity finishes |
-| ViewModel is singleton | ❌ Scoped to Activity/Fragment |
-| ViewModel thread-safe by default | ❌ Must implement thread safety |
+| ViewModel survives app restart | - Lost on process death |
+| ViewModel survives back press | - Cleared when Activity finishes |
+| ViewModel is singleton | - Scoped to Activity/Fragment |
+| ViewModel thread-safe by default | - Must implement thread safety |
 
 ## Answer (RU)
 ViewModel сохраняет данные до тех пор, пока связанная Activity или Fragment не будут уничтожены навсегда Например данные сохраняются при изменении конфигурации например поворот экрана но удаляются если приложение закрывается или выгружается из памяти

@@ -62,10 +62,10 @@ class MyFragment : Fragment() {
 **3. Check for Strong References**
 
 Object is unused when:
-- ❌ No local variables reference it
-- ❌ No static fields reference it
-- ❌ No other objects reference it
-- ✅ Only WeakReferences exist
+- - No local variables reference it
+- - No static fields reference it
+- - No other objects reference it
+- - Only WeakReferences exist
 
 **Example:**
 

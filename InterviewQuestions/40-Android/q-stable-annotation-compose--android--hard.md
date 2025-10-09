@@ -58,7 +58,7 @@ class User(private val name: String) {
 val user1 = User("Alice")
 val user2 = User("Alice")
 
-user1 == user2  // ✅ Always true (consistent equals)
+user1 == user2  // - Always true (consistent equals)
 ```
 
 **Contract:** If `a.equals(b)` returns `true`, it will **always** return `true` for those same instances.
@@ -106,12 +106,12 @@ class MutableCounter {
 ### Case 1: Class Compose Can't Infer
 
 ```kotlin
-// ❌ Compose can't infer stability (interface)
+// - Compose can't infer stability (interface)
 interface Repository {
     val data: String
 }
 
-// ✅ Annotate to help Compose
+// - Annotate to help Compose
 @Stable
 interface Repository {
     val data: String
@@ -127,10 +127,10 @@ fun DataDisplay(repository: Repository) {
 ### Case 2: External Classes
 
 ```kotlin
-// ❌ Third-party class, Compose can't infer
+// - Third-party class, Compose can't infer
 class ThirdPartyData(val value: String)
 
-// ✅ Wrap and annotate
+// - Wrap and annotate
 @Stable
 class StableThirdPartyData(private val data: ThirdPartyData) {
     val value: String get() = data.value
@@ -195,7 +195,7 @@ class UserViewModel {
     val user: StateFlow<User> = _user.asStateFlow()
 
     fun updateUser(newUser: User) {
-        _user.value = newUser  // ✅ Change is observable
+        _user.value = newUser  // - Change is observable
     }
 }
 ```
@@ -238,16 +238,16 @@ val product = Product("1", "Laptop", 999.99)
 ProductCard(product)  // Composes
 
 // Second call with SAME instance
-ProductCard(product)  // ✅ SKIPPED (product stable and unchanged)
+ProductCard(product)  // - SKIPPED (product stable and unchanged)
 
 // Third call with EQUAL instance
-ProductCard(Product("1", "Laptop", 999.99))  // ✅ SKIPPED (equals() returns true)
+ProductCard(Product("1", "Laptop", 999.99))  // - SKIPPED (equals() returns true)
 ```
 
 ### Without @Stable
 
 ```kotlin
-// ❌ No @Stable annotation
+// - No @Stable annotation
 class UnstableProduct(
     val id: String,
     val name: String,
@@ -265,7 +265,7 @@ fun ProductCard(product: UnstableProduct) {
 val product = UnstableProduct("1", "Laptop", 999.99)
 
 ProductCard(product)  // Composes
-ProductCard(product)  // ❌ RECOMPOSES (Compose can't trust stability)
+ProductCard(product)  // - RECOMPOSES (Compose can't trust stability)
 ```
 
 ---
@@ -349,7 +349,7 @@ fun SearchScreen() {
 // Third-party library class
 class ExternalConfig(val timeout: Int, val retries: Int)
 
-// ✅ Wrap and annotate
+// - Wrap and annotate
 @Stable
 class AppConfig(
     private val external: ExternalConfig
@@ -385,7 +385,7 @@ fun ConfigDisplay(config: AppConfig) {
 ### Mistake 1: @Stable Without equals()
 
 ```kotlin
-// ❌ BAD: @Stable but no proper equals()
+// - BAD: @Stable but no proper equals()
 @Stable
 class User(val id: String, val name: String)
 // Uses default equals() (referential equality)
@@ -400,7 +400,7 @@ user1 == user2  // false (different instances)
 
 **Fix:**
 ```kotlin
-// ✅ GOOD: @Stable with proper equals()
+// - GOOD: @Stable with proper equals()
 @Stable
 data class User(val id: String, val name: String)
 // data class provides structural equals()
@@ -414,10 +414,10 @@ user1 == user2  // true (same values)
 ### Mistake 2: @Stable with Mutable State
 
 ```kotlin
-// ❌ BAD: @Stable but mutable without notification
+// - BAD: @Stable but mutable without notification
 @Stable
 class Counter {
-    var count: Int = 0  // ❌ Mutable but doesn't notify Compose!
+    var count: Int = 0  // - Mutable but doesn't notify Compose!
 
     fun increment() {
         count++  // Compose doesn't know about this change!
@@ -427,10 +427,10 @@ class Counter {
 
 **Fix:**
 ```kotlin
-// ✅ GOOD: @Stable with observable mutable state
+// - GOOD: @Stable with observable mutable state
 @Stable
 class Counter {
-    var count by mutableStateOf(0)  // ✅ Notifies Compose
+    var count by mutableStateOf(0)  // - Notifies Compose
         private set
 
     fun increment() {

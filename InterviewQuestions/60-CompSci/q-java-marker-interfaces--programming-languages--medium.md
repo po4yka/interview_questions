@@ -105,9 +105,9 @@ if (list instanceof RandomAccess) {
 
 **Why Use Marker Interfaces?**
 
-✅ **Type checking** at compile time
-✅ **Metadata** about object capabilities
-✅ **Framework integration** (e.g., serialization)
+- **Type checking** at compile time
+- **Metadata** about object capabilities
+- **Framework integration** (e.g., serialization)
 
 **Example Without Marker:**
 
@@ -119,7 +119,7 @@ class Person {
 
 Person person = new Person("John");
 ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("person.dat"));
-out.writeObject(person);  // ❌ NotSerializableException
+out.writeObject(person);  // - NotSerializableException
 ```
 
 **Custom Marker Interface:**

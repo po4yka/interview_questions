@@ -108,9 +108,9 @@ dependencies {
 **1. Type safety:**
 
 ```kotlin
-// ✅ GOOD - Compile error if wrong type
+// GOOD - Compile error if wrong type
 android {
-    compileSdk = "34"  // ❌ Compile error: Type mismatch
+    compileSdk = "34"  // Compile error: Type mismatch
 }
 
 // Groovy - No error until runtime
@@ -204,9 +204,9 @@ dependencies {
 **1. Типобезопасность:**
 
 ```kotlin
-// ✅ ХОРОШО - Ошибка компиляции если неправильный тип
+// ХОРОШО - Ошибка компиляции если неправильный тип
 android {
-    compileSdk = "34"  // ❌ Ошибка компиляции: Type mismatch
+    compileSdk = "34"  // Ошибка компиляции: Type mismatch
 }
 ```
 

@@ -20,9 +20,9 @@ status: reviewed
 
 | Builder | Возвращает | Блокирует поток | Результат | Use case |
 |---------|------------|-----------------|-----------|----------|
-| **launch** | `Job` | ❌ Нет | Нет (fire-and-forget) | Фоновые задачи без результата |
-| **async** | `Deferred<T>` | ❌ Нет | ✅ Да через `await()` | Параллельные вычисления с результатом |
-| **runBlocking** | `T` | ✅ **ДА** | ✅ Да напрямую | Тесты, main функция, блокирующий bridge |
+| **launch** | `Job` | - Нет | Нет (fire-and-forget) | Фоновые задачи без результата |
+| **async** | `Deferred<T>` | - Нет | - Да через `await()` | Параллельные вычисления с результатом |
+| **runBlocking** | `T` | - **ДА** | - Да напрямую | Тесты, main функция, блокирующий bridge |
 
 ### launch - Fire and Forget
 
@@ -38,10 +38,10 @@ fun loadUserInBackground() {
 ```
 
 **Характеристики launch**:
-- ❌ Не возвращает результат
-- ✅ Возвращает `Job` для управления lifecycle
-- ❌ Не блокирует вызывающий поток
-- ✅ Исключения пробрасываются в parent scope
+- - Не возвращает результат
+- - Возвращает `Job` для управления lifecycle
+- - Не блокирует вызывающий поток
+- - Исключения пробрасываются в parent scope
 - 📝 Use case: фоновая работа, обновление UI, side effects
 
 #### Примеры использования launch
@@ -145,10 +145,10 @@ suspend fun loadDashboard(): DashboardData = coroutineScope {
 ```
 
 **Характеристики async**:
-- ✅ Возвращает результат через `Deferred<T>`
-- ✅ Можно получить результат через `await()`
-- ❌ Не блокирует вызывающий поток до вызова `await()`
-- ✅ Исключения выбрасываются при вызове `await()`
+- - Возвращает результат через `Deferred<T>`
+- - Можно получить результат через `await()`
+- - Не блокирует вызывающий поток до вызова `await()`
+- - Исключения выбрасываются при вызове `await()`
 - 📝 Use case: параллельные вычисления, где нужен результат
 
 #### Примеры использования async
@@ -226,22 +226,22 @@ fun main() = runBlocking { // Блокирует main поток
 ```
 
 **Характеристики runBlocking**:
-- ✅ Возвращает результат напрямую
-- ✅ **БЛОКИРУЕТ** вызывающий поток до завершения
-- ❌ НЕ для production кода
-- ✅ Для тестов и main функции
+- - Возвращает результат напрямую
+- - **БЛОКИРУЕТ** вызывающий поток до завершения
+- - НЕ для production кода
+- - Для тестов и main функции
 - 📝 Use case: мост между синхронным и асинхронным кодом
 
 #### Когда использовать runBlocking
 
 ```kotlin
-// ✅ 1. Main функция
+// - 1. Main функция
 fun main() = runBlocking {
     val app = MyApplication()
     app.start()
 }
 
-// ✅ 2. Unit тесты (но лучше runTest)
+// - 2. Unit тесты (но лучше runTest)
 @Test
 fun `test user loading`() = runBlocking {
     val repository = UserRepository()
@@ -249,7 +249,7 @@ fun `test user loading`() = runBlocking {
     assertEquals("Alice", user.name)
 }
 
-// ✅ 3. Migration legacy code
+// - 3. Migration legacy code
 class LegacyService {
     fun getUserSync(id: Int): User = runBlocking {
         // Временное решение для интеграции с suspend функциями
@@ -257,10 +257,10 @@ class LegacyService {
     }
 }
 
-// ❌ НИКОГДА не используйте в Android UI коде!
+// - НИКОГДА не используйте в Android UI коде!
 class BadViewModel : ViewModel() {
     fun loadUser(id: Int) {
-        val user = runBlocking { // ❌❌❌ Блокирует UI поток!
+        val user = runBlocking { // BADBAD- Блокирует UI поток!
             userRepository.getUser(id)
         }
         _user.value = user
@@ -275,7 +275,7 @@ class DataLoader(
     private val repository: DataRepository,
     private val scope: CoroutineScope
 ) {
-    // ❌ launch - результат не возвращается
+    // - launch - результат не возвращается
     fun loadWithLaunch() {
         scope.launch {
             val data = repository.loadData()
@@ -284,7 +284,7 @@ class DataLoader(
         // Возвращается сразу, data еще не загружена
     }
 
-    // ✅ async - можно получить результат
+    // - async - можно получить результат
     fun loadWithAsync(): Deferred<Data> {
         return scope.async {
             repository.loadData()
@@ -292,7 +292,7 @@ class DataLoader(
         // Возвращается Deferred<Data>, результат через await()
     }
 
-    // ❌ runBlocking - блокирует поток
+    // - runBlocking - блокирует поток
     fun loadWithRunBlocking(): Data {
         return runBlocking {
             repository.loadData()
@@ -300,7 +300,7 @@ class DataLoader(
         // Возвращается только после загрузки, поток ЗАБЛОКИРОВАН
     }
 
-    // ✅ Правильный подход - suspend функция
+    // - Правильный подход - suspend функция
     suspend fun loadData(): Data {
         return repository.loadData()
     }
@@ -320,10 +320,10 @@ class ViewModel {
             val data = deferred.await() // Получаем результат
         }
 
-        // ❌ runBlocking - НЕ ДЕЛАЙТЕ ТАК
+        // - runBlocking - НЕ ДЕЛАЙТЕ ТАК
         val data = loader.loadWithRunBlocking() // Блокирует UI!
 
-        // ✅ Правильно - suspend функция
+        // - Правильно - suspend функция
         viewModelScope.launch {
             val data = loader.loadData()
         }
@@ -334,24 +334,24 @@ class ViewModel {
 ### launch vs async - когда что использовать
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - async без await()
+// - НЕПРАВИЛЬНО - async без await()
 viewModelScope.launch {
     async { loadUsers() } // Результат игнорируется!
     async { loadPosts() }
 }
 
-// ✅ ПРАВИЛЬНО - launch для fire-and-forget
+// - ПРАВИЛЬНО - launch для fire-and-forget
 viewModelScope.launch {
     launch { loadUsers() }
     launch { loadPosts() }
 }
 
-// ❌ НЕПРАВИЛЬНО - launch когда нужен результат
+// - НЕПРАВИЛЬНО - launch когда нужен результат
 viewModelScope.launch {
     launch { userRepository.getUser(1) } // Как получить User?
 }
 
-// ✅ ПРАВИЛЬНО - async когда нужен результат
+// - ПРАВИЛЬНО - async когда нужен результат
 viewModelScope.launch {
     val user = async { userRepository.getUser(1) }.await()
 }
@@ -563,7 +563,7 @@ fun loadWithLaunch() {
 #### 1. Используйте launch для side effects
 
 ```kotlin
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 viewModelScope.launch {
     analyticsService.logEvent("screen_viewed")
     cacheService.warmUpCache()
@@ -573,7 +573,7 @@ viewModelScope.launch {
 #### 2. Используйте async для параллельных вычислений
 
 ```kotlin
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 suspend fun calculateComplexResult() = coroutineScope {
     val part1 = async { calculatePart1() }
     val part2 = async { calculatePart2() }
@@ -586,12 +586,12 @@ suspend fun calculateComplexResult() = coroutineScope {
 #### 3. НЕ используйте runBlocking в production
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО
+// - НЕПРАВИЛЬНО
 fun loadUser(id: Int): User = runBlocking {
     userRepository.getUser(id)
 }
 
-// ✅ ПРАВИЛЬНО - сделайте suspend функцию
+// - ПРАВИЛЬНО - сделайте suspend функцию
 suspend fun loadUser(id: Int): User {
     return userRepository.getUser(id)
 }
@@ -608,12 +608,12 @@ fun loadUser(id: Int) {
 #### 4. Всегда await() результаты async
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - async без await
+// - НЕПРАВИЛЬНО - async без await
 scope.launch {
     async { loadData() } // Результат потерян!
 }
 
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 scope.launch {
     val data = async { loadData() }.await()
 }

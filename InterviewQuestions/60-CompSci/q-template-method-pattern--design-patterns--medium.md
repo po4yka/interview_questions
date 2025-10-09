@@ -351,7 +351,7 @@ class UserListViewModel(
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Mark template method as final
+// - DO: Mark template method as final
 abstract class DataProcessor {
     final fun process(data: String) {
         validate(data)
@@ -360,7 +360,7 @@ abstract class DataProcessor {
     }
 }
 
-// ✅ DO: Provide reasonable defaults for hooks
+// - DO: Provide reasonable defaults for hooks
 abstract class BaseActivity : AppCompatActivity() {
     final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -374,7 +374,7 @@ abstract class BaseActivity : AppCompatActivity() {
     protected open fun setupListeners() {} // Optional hook
 }
 
-// ✅ DO: Use for algorithms with common structure
+// - DO: Use for algorithms with common structure
 abstract class AuthenticationFlow {
     fun authenticate(credentials: Credentials) {
         val validated = validateCredentials(credentials)
@@ -384,13 +384,13 @@ abstract class AuthenticationFlow {
     }
 }
 
-// ❌ DON'T: Put business logic in template method
+// - DON'T: Put business logic in template method
 // Keep it focused on orchestration
 
-// ❌ DON'T: Make template method overrideable
+// - DON'T: Make template method overrideable
 // It defeats the purpose
 
-// ❌ DON'T: Have too many abstract methods
+// - DON'T: Have too many abstract methods
 // Consider Strategy pattern instead
 ```
 

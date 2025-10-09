@@ -29,12 +29,12 @@ suspend fun coroutineScopeExample() = coroutineScope {
 
     launch {
         delay(200)
-        println("Task 2")  // ❌ Never prints - cancelled
+        println("Task 2")  // - Never prints - cancelled
     }
 
     launch {
         delay(300)
-        println("Task 3")  // ❌ Never prints - cancelled
+        println("Task 3")  // - Never prints - cancelled
     }
 }
 
@@ -57,12 +57,12 @@ suspend fun supervisorScopeExample() = supervisorScope {
 
     launch {
         delay(200)
-        println("Task 2")  // ✅ Prints - not cancelled
+        println("Task 2")  // - Prints - not cancelled
     }
 
     launch {
         delay(300)
-        println("Task 3")  // ✅ Prints - not cancelled
+        println("Task 3")  // - Prints - not cancelled
     }
 }
 
@@ -123,7 +123,7 @@ suspend fun badInitialization() = coroutineScope {
     launch { initializeAnalytics() }
     launch { loadUserPreferences() }
     launch { syncData() }
-    // If analytics fails, everything stops! ❌
+    // If analytics fails, everything stops! BAD
 }
 
 // Good: Using supervisorScope for independent tasks
@@ -151,7 +151,7 @@ suspend fun goodInitialization() = supervisorScope {
             logError("Sync failed", e)
         }
     }
-    // Each task can fail independently ✅
+    // Each task can fail independently GOOD
 }
 ```
 
@@ -165,7 +165,7 @@ suspend fun coroutineScopePropagation() {
             launch { throw Exception("Error!") }
         }
     } catch (e: Exception) {
-        println("Caught: ${e.message}")  // ✅ Catches exception
+        println("Caught: ${e.message}")  // - Catches exception
     }
 }
 
@@ -176,7 +176,7 @@ suspend fun supervisorScopePropagation() {
             launch { throw Exception("Error!") }  // Silent failure
         }
     } catch (e: Exception) {
-        println("Caught: ${e.message}")  // ❌ Not caught!
+        println("Caught: ${e.message}")  // - Not caught!
     }
 }
 
@@ -188,7 +188,7 @@ suspend fun supervisorWithHandler() {
 
     supervisorScope {
         launch(handler) {
-            throw Exception("Error!")  // ✅ Caught by handler
+            throw Exception("Error!")  // - Caught by handler
         }
     }
 }
@@ -238,7 +238,7 @@ suspend fun supervisorScopeWaiting() {
 
 ```kotlin
 class ScopeBestPractices {
-    // ✅ Use coroutineScope for dependent operations
+    // - Use coroutineScope for dependent operations
     suspend fun fetchCompleteUser(id: Int): User = coroutineScope {
         val basicInfo = async { fetchBasicInfo(id) }
         val detailedInfo = async { fetchDetailedInfo(id) }
@@ -247,7 +247,7 @@ class ScopeBestPractices {
         // Need both - if one fails, cancel all
     }
 
-    // ✅ Use supervisorScope for independent operations
+    // - Use supervisorScope for independent operations
     suspend fun loadWidgets(): List<Widget> = supervisorScope {
         val widgets = mutableListOf<Widget>()
 
@@ -271,7 +271,7 @@ class ScopeBestPractices {
         // Independent widgets - one failure doesn't affect others
     }
 
-    // ❌ Don't use supervisorScope if tasks are dependent
+    // - Don't use supervisorScope if tasks are dependent
     suspend fun badExample() = supervisorScope {
         val userId = async { getUserId() }  // May fail silently
         val userData = async { getUserData(userId.await()) }  // Will fail if userId failed

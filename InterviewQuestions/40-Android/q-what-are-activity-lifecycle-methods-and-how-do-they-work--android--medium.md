@@ -480,13 +480,13 @@ class TimingActivity : AppCompatActivity() {
 ### Common Mistakes
 
 ```kotlin
-// ❌ WRONG: Long operation in onCreate
+// - WRONG: Long operation in onCreate
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     Thread.sleep(5000) // Blocks UI!
 }
 
-// ✅ CORRECT: Use background thread
+// - CORRECT: Use background thread
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     lifecycleScope.launch {
@@ -496,13 +496,13 @@ override fun onCreate(savedInstanceState: Bundle?) {
     }
 }
 
-// ❌ WRONG: Not saving state
+// - WRONG: Not saving state
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     counter = 0 // Lost on configuration change
 }
 
-// ✅ CORRECT: Save and restore state
+// - CORRECT: Save and restore state
 override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     outState.putInt("counter", counter)

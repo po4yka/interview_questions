@@ -336,7 +336,7 @@ Real-world example of mediator pattern:
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use for complex component interactions
+// - DO: Use for complex component interactions
 class OrderFlowMediator(
     private val ui: UI,
     private val validator: Validator,
@@ -352,12 +352,12 @@ class OrderFlowMediator(
     }
 }
 
-// ✅ DO: Keep mediator focused
+// - DO: Keep mediator focused
 interface NotificationMediator {
     fun notify(event: String, data: Any)
 }
 
-// ✅ DO: Use with Observer pattern
+// - DO: Use with Observer pattern
 class EventBus : Mediator {
     private val subscribers = mutableMapOf<String, MutableList<(Any) -> Unit>>()
 
@@ -370,9 +370,9 @@ class EventBus : Mediator {
     }
 }
 
-// ❌ DON'T: Put business logic in mediator
-// ❌ DON'T: Make mediator know about all component details
-// ❌ DON'T: Use for simple component interactions
+// - DON'T: Put business logic in mediator
+// - DON'T: Make mediator know about all component details
+// - DON'T: Use for simple component interactions
 ```
 
 **English**: **Mediator** is a behavioral pattern that reduces coupling by having objects communicate through a mediator instead of directly. **Problem**: Tight coupling between interacting objects. **Solution**: Create mediator object that encapsulates interactions, objects communicate through it. **Use when**: (1) Complex communication between components, (2) Want loose coupling, (3) Need centralized control. **Android**: Chat apps, form validation, ViewModel coordinating repositories. **Pros**: reduced coupling, centralized control, reusability. **Cons**: god object risk, single point of failure. **Examples**: Chat room, UI form validation, air traffic control, event bus.

@@ -26,8 +26,8 @@ Useful for hiding implementation between layers or when using multi-module archi
 
 **Key Features:**
 
-- ✅ Visible **within the same module**
-- ❌ **Not visible** in other modules
+- - Visible **within the same module**
+- - **Not visible** in other modules
 - 🏗️ **Module** = Gradle/Maven/IntelliJ module
 - 🔒 **Encapsulation** between modules
 
@@ -44,10 +44,10 @@ internal fun log(message: String) {
 }
 
 class UserRepository {
-    private val db = DatabaseHelper()  // ✅ OK - same module
+    private val db = DatabaseHelper()  // - OK - same module
 
     fun getUser(id: Int) {
-        log("Getting user $id")  // ✅ OK - same module
+        log("Getting user $id")  // - OK - same module
         db.connect()
     }
 }
@@ -74,7 +74,7 @@ internal class NetworkClient {
 
 // Public API of the module
 class ApiService {
-    private val client = NetworkClient()  // ✅ OK - same module
+    private val client = NetworkClient()  // - OK - same module
 
     fun getData(): String {
         return client.makeRequest("https://api.example.com")
@@ -86,10 +86,10 @@ class ApiService {
 ```kotlin
 class MainActivity {
     fun loadData() {
-        val api = ApiService()  // ✅ OK - public class
+        val api = ApiService()  // - OK - public class
         api.getData()
 
-        // ❌ ERROR - NetworkClient is internal to :core module
+        // - ERROR - NetworkClient is internal to :core module
         val client = NetworkClient()  // Compilation error
     }
 }
@@ -162,7 +162,7 @@ internal object StringUtils {
 // Public API uses internal utils
 class TextFormatter {
     fun formatName(name: String): String {
-        return StringUtils.capitalize(name)  // ✅ OK
+        return StringUtils.capitalize(name)  // - OK
     }
 }
 ```
@@ -203,12 +203,12 @@ MyClass.processData$module_name();  // Mangled name
 
 **Best Practices:**
 
-✅ **Use internal when:**
+- **Use internal when:**
 - Building multi-module project
 - Want to hide implementation from other modules
 - Creating library with public API
 
-❌ **Don't use internal when:**
+- **Don't use internal when:**
 - Single-module project (use private instead)
 - Need visibility across modules (use public)
 - Targeting Java consumers (use public or private)

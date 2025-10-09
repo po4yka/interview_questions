@@ -273,24 +273,24 @@ class DataManager(factory: DataStorageFactory) {
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use when you need families of related objects
+// - DO: Use when you need families of related objects
 interface UIFactory {
     fun createButton(): Button
     fun createCheckbox(): Checkbox
     fun createTextfield(): TextField
 }
 
-// ✅ DO: Make factories interchangeable
+// - DO: Make factories interchangeable
 fun createUI(factory: UIFactory) {
     val button = factory.createButton()
     val checkbox = factory.createCheckbox()
     // UI components are guaranteed to be compatible
 }
 
-// ❌ DON'T: Use for single product creation
+// - DON'T: Use for single product creation
 // Use Factory Method instead
 
-// ❌ DON'T: Create factories with unrelated products
+// - DON'T: Create factories with unrelated products
 // Products should be from the same "family"
 ```
 

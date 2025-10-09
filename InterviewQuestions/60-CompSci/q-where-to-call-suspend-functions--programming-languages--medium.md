@@ -19,8 +19,8 @@ Suspend functions can only be called from **coroutines**. You can call them from
 ```kotlin
 // Suspend function calling another suspend function
 suspend fun fetchUserData(userId: Int): UserData {
-    val profile = fetchUserProfile(userId)  // ✅ OK
-    val settings = fetchUserSettings(userId)  // ✅ OK
+    val profile = fetchUserProfile(userId)  // - OK
+    val settings = fetchUserSettings(userId)  // - OK
     return UserData(profile, settings)
 }
 
@@ -43,7 +43,7 @@ import kotlinx.coroutines.*
 fun loadDataInBackground() {
     // Create a coroutine scope
     CoroutineScope(Dispatchers.IO).launch {
-        // ✅ OK: Inside launch coroutine builder
+        // - OK: Inside launch coroutine builder
         val data = fetchData()
         println("Data: $data")
     }
@@ -53,7 +53,7 @@ fun loadDataInBackground() {
 class MyViewModel : ViewModel() {
     fun loadUser(userId: Int) {
         viewModelScope.launch {
-            // ✅ OK: Inside viewModelScope.launch
+            // - OK: Inside viewModelScope.launch
             val user = fetchUser(userId)
             _userState.value = user
         }
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-            // ✅ OK: Inside lifecycleScope.launch
+            // - OK: Inside lifecycleScope.launch
             val data = loadInitialData()
             updateUI(data)
         }
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 suspend fun loadParallelData(): CombinedData = coroutineScope {
-    // ✅ OK: Inside coroutineScope and async
+    // - OK: Inside coroutineScope and async
     val userData = async { fetchUserData(1) }
     val postsData = async { fetchPostsData(1) }
     val settingsData = async { fetchSettings() }
@@ -93,7 +93,7 @@ suspend fun loadParallelData(): CombinedData = coroutineScope {
 fun parallelFetch() {
     CoroutineScope(Dispatchers.IO).launch {
         val deferred = async {
-            // ✅ OK: Inside async
+            // - OK: Inside async
             fetchData()
         }
         val result = deferred.await()
@@ -107,7 +107,7 @@ fun parallelFetch() {
 ```kotlin
 // Main function
 fun main() = runBlocking {
-    // ✅ OK: Inside runBlocking
+    // - OK: Inside runBlocking
     val data = fetchData()
     println("Data: $data")
 }
@@ -116,7 +116,7 @@ fun main() = runBlocking {
 class MyRepositoryTest {
     @Test
     fun testFetchUser() = runBlocking {
-        // ✅ OK: Inside runBlocking for testing
+        // - OK: Inside runBlocking for testing
         val repository = MyRepository()
         val user = repository.fetchUser(1)
         assertEquals("User 1", user.name)
@@ -125,7 +125,7 @@ class MyRepositoryTest {
 
 // Bridge between regular and suspend code (use sparingly)
 fun regularFunction(): String = runBlocking {
-    // ✅ OK but not recommended: Blocks the thread
+    // - OK but not recommended: Blocks the thread
     fetchData()
 }
 ```
@@ -134,7 +134,7 @@ fun regularFunction(): String = runBlocking {
 
 ```kotlin
 suspend fun performComplexOperation() {
-    // ✅ OK: Inside coroutineScope
+    // - OK: Inside coroutineScope
     coroutineScope {
         val task1 = async { fetchData1() }
         val task2 = async { fetchData2() }
@@ -147,7 +147,7 @@ suspend fun performComplexOperation() {
 }
 
 suspend fun performIndependentTasks() {
-    // ✅ OK: Inside supervisorScope
+    // - OK: Inside supervisorScope
     supervisorScope {
         launch { performTask1() }
         launch { performTask2() }  // Won't be cancelled if task1 fails
@@ -159,7 +159,7 @@ suspend fun performIndependentTasks() {
 
 ```kotlin
 suspend fun saveToDatabase(data: String) {
-    // ✅ OK: Inside withContext
+    // - OK: Inside withContext
     withContext(Dispatchers.IO) {
         val validated = validateData(data)  // suspend call
         database.save(validated)
@@ -168,7 +168,7 @@ suspend fun saveToDatabase(data: String) {
 
 suspend fun processOnMain(data: String) {
     withContext(Dispatchers.Main) {
-        // ✅ OK: Switch to main thread and call suspend
+        // - OK: Switch to main thread and call suspend
         val processed = processData(data)
         updateUI(processed)
     }
@@ -179,7 +179,7 @@ suspend fun processOnMain(data: String) {
 
 ```kotlin
 fun getUserFlow(): Flow<User> = flow {
-    // ✅ OK: Inside flow builder
+    // - OK: Inside flow builder
     val user = fetchUser(1)  // suspend call
     emit(user)
 
@@ -188,7 +188,7 @@ fun getUserFlow(): Flow<User> = flow {
 }
 
 fun dataStream(): Flow<String> = channelFlow {
-    // ✅ OK: Inside channelFlow
+    // - OK: Inside channelFlow
     repeat(5) { i ->
         val data = fetchData()  // suspend call
         send(data)
@@ -200,27 +200,27 @@ fun dataStream(): Flow<String> = channelFlow {
 ### 8. Cannot Call from Regular Functions
 
 ```kotlin
-// ❌ WRONG: Cannot call from regular function
+// - WRONG: Cannot call from regular function
 fun regularFunction() {
-    val data = fetchData()  // ❌ Compilation error!
+    val data = fetchData()  // - Compilation error!
     // "Suspend function 'fetchData' should be called only from a coroutine or another suspend function"
 }
 
-// ✅ SOLUTION 1: Make function suspend
+// - SOLUTION 1: Make function suspend
 suspend fun suspendFunction() {
-    val data = fetchData()  // ✅ OK
+    val data = fetchData()  // - OK
 }
 
-// ✅ SOLUTION 2: Use coroutine builder
+// - SOLUTION 2: Use coroutine builder
 fun regularFunctionFixed() {
     CoroutineScope(Dispatchers.IO).launch {
-        val data = fetchData()  // ✅ OK
+        val data = fetchData()  // - OK
     }
 }
 
-// ✅ SOLUTION 3: Use runBlocking (blocks thread, avoid in production)
+// - SOLUTION 3: Use runBlocking (blocks thread, avoid in production)
 fun regularFunctionBlocking() = runBlocking {
-    val data = fetchData()  // ✅ OK but blocks
+    val data = fetchData()  // - OK but blocks
 }
 ```
 
@@ -241,13 +241,13 @@ suspend fun fetchUser(id: Int): String {
     return "User $id"
 }
 
-// 1. ✅ From other suspend function
+// 1. - From other suspend function
 suspend fun example1() {
     val data = fetchData()
     println(data)
 }
 
-// 2. ✅ From launch
+// 2. - From launch
 fun example2() {
     CoroutineScope(Dispatchers.IO).launch {
         val data = fetchData()
@@ -255,7 +255,7 @@ fun example2() {
     }
 }
 
-// 3. ✅ From async
+// 3. - From async
 fun example3() {
     CoroutineScope(Dispatchers.IO).launch {
         val deferred = async { fetchData() }
@@ -263,19 +263,19 @@ fun example3() {
     }
 }
 
-// 4. ✅ From runBlocking
+// 4. - From runBlocking
 fun example4() = runBlocking {
     val data = fetchData()
     println(data)
 }
 
-// 5. ✅ From coroutineScope
+// 5. - From coroutineScope
 suspend fun example5() = coroutineScope {
     val data = fetchData()
     println(data)
 }
 
-// 6. ✅ From withContext
+// 6. - From withContext
 suspend fun example6() {
     withContext(Dispatchers.IO) {
         val data = fetchData()
@@ -283,13 +283,13 @@ suspend fun example6() {
     }
 }
 
-// 7. ✅ From flow
+// 7. - From flow
 fun example7(): Flow<String> = flow {
     val data = fetchData()
     emit(data)
 }
 
-// 8. ✅ From suspend lambda
+// 8. - From suspend lambda
 fun example8(action: suspend () -> Unit) {
     CoroutineScope(Dispatchers.IO).launch {
         action()  // Call suspend lambda
@@ -298,7 +298,7 @@ fun example8(action: suspend () -> Unit) {
 
 fun useExample8() {
     example8 {
-        val data = fetchData()  // ✅ OK
+        val data = fetchData()  // - OK
         println(data)
     }
 }
@@ -313,8 +313,8 @@ class UserViewModel : ViewModel() {
     val user: StateFlow<User?> = _user.asStateFlow()
 
     fun loadUser(id: Int) {
-        viewModelScope.launch {  // ✅ Coroutine scope
-            val userData = fetchUser(id)  // ✅ Can call suspend
+        viewModelScope.launch {  // - Coroutine scope
+            val userData = fetchUser(id)  // - Can call suspend
             _user.value = userData
         }
     }
@@ -322,18 +322,18 @@ class UserViewModel : ViewModel() {
 
 // Repository pattern
 class UserRepository {
-    suspend fun getUser(id: Int): User {  // ✅ Suspend function
-        return withContext(Dispatchers.IO) {  // ✅ Can call suspend
-            api.fetchUser(id)  // ✅ Can call suspend
+    suspend fun getUser(id: Int): User {  // - Suspend function
+        return withContext(Dispatchers.IO) {  // - Can call suspend
+            api.fetchUser(id)  // - Can call suspend
         }
     }
 }
 
 // Use case pattern
 class LoadUserUseCase(private val repository: UserRepository) {
-    suspend operator fun invoke(id: Int): Result<User> {  // ✅ Suspend
+    suspend operator fun invoke(id: Int): Result<User> {  // - Suspend
         return try {
-            Result.success(repository.getUser(id))  // ✅ Can call suspend
+            Result.success(repository.getUser(id))  // - Can call suspend
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -345,8 +345,8 @@ class LoadUserUseCase(private val repository: UserRepository) {
 fun UserScreen(userId: Int) {
     val user by remember { mutableStateOf<User?>(null) }
 
-    LaunchedEffect(userId) {  // ✅ Coroutine scope
-        user = fetchUser(userId)  // ✅ Can call suspend
+    LaunchedEffect(userId) {  // - Coroutine scope
+        user = fetchUser(userId)  // - Can call suspend
     }
 
     // UI rendering...
@@ -360,7 +360,7 @@ fun UserScreen(userId: Int) {
 class MyViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
-            val data = fetchData()  // ✅ OK
+            val data = fetchData()  // - OK
         }
     }
 }
@@ -369,7 +369,7 @@ class MyViewModel : ViewModel() {
 class MyActivity : AppCompatActivity() {
     fun loadData() {
         lifecycleScope.launch {
-            val data = fetchData()  // ✅ OK
+            val data = fetchData()  // - OK
         }
     }
 }
@@ -377,7 +377,7 @@ class MyActivity : AppCompatActivity() {
 // 3. GlobalScope - application lifetime (use with caution)
 fun someFunction() {
     GlobalScope.launch {
-        val data = fetchData()  // ✅ OK but not recommended
+        val data = fetchData()  // - OK but not recommended
     }
 }
 
@@ -387,7 +387,7 @@ class MyManager {
 
     fun loadData() {
         scope.launch {
-            val data = fetchData()  // ✅ OK
+            val data = fetchData()  // - OK
         }
     }
 
@@ -400,7 +400,7 @@ class MyManager {
 ### Best Practices
 
 ```kotlin
-// ✅ DO: Use appropriate scope
+// - DO: Use appropriate scope
 class GoodExample : ViewModel() {
     fun loadUser() {
         viewModelScope.launch {  // Automatically cancelled when ViewModel clears
@@ -409,7 +409,7 @@ class GoodExample : ViewModel() {
     }
 }
 
-// ❌ DON'T: Use GlobalScope unnecessarily
+// - DON'T: Use GlobalScope unnecessarily
 class BadExample {
     fun loadUser() {
         GlobalScope.launch {  // Leaks if object is destroyed
@@ -418,7 +418,7 @@ class BadExample {
     }
 }
 
-// ✅ DO: Handle errors
+// - DO: Handle errors
 fun properErrorHandling() {
     CoroutineScope(Dispatchers.IO).launch {
         try {
@@ -429,7 +429,7 @@ fun properErrorHandling() {
     }
 }
 
-// ✅ DO: Use structured concurrency
+// - DO: Use structured concurrency
 suspend fun structuredApproach() = coroutineScope {
     // Child coroutines are automatically managed
     val result1 = async { fetchData() }
@@ -443,14 +443,14 @@ suspend fun structuredApproach() = coroutineScope {
 
 | Context | Can Call Suspend? | Blocks Thread? | Use Case |
 |---------|-------------------|----------------|----------|
-| Another suspend function | ✅ Yes | No | Sequential suspend calls |
-| `launch {}` | ✅ Yes | No | Fire-and-forget |
-| `async {}` | ✅ Yes | No | Parallel execution with result |
-| `runBlocking {}` | ✅ Yes | **Yes** | Tests, main function |
-| `coroutineScope {}` | ✅ Yes | No | Structured concurrency |
-| `withContext {}` | ✅ Yes | No | Change dispatcher |
-| `flow {}` | ✅ Yes | No | Stream of values |
-| Regular function | ❌ No | - | Must use builder |
+| Another suspend function | - Yes | No | Sequential suspend calls |
+| `launch {}` | - Yes | No | Fire-and-forget |
+| `async {}` | - Yes | No | Parallel execution with result |
+| `runBlocking {}` | - Yes | **Yes** | Tests, main function |
+| `coroutineScope {}` | - Yes | No | Structured concurrency |
+| `withContext {}` | - Yes | No | Change dispatcher |
+| `flow {}` | - Yes | No | Stream of values |
+| Regular function | - No | - | Must use builder |
 
 ---
 ## Вопрос (RU)

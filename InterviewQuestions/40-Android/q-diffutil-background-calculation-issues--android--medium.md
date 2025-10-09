@@ -23,7 +23,7 @@ status: reviewed
 **Проблема**: DiffUtil может дать некорректные результаты из-за изменений в списке во время вычисления diff.
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - данные могут измениться во время расчета
+// НЕПРАВИЛЬНО - данные могут измениться во время расчета
 class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
     private var users: MutableList<User> = mutableListOf()
 
@@ -88,7 +88,7 @@ class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
 **Проблема**: Тяжелые операции в `areContentsTheSame()` замедляют расчет даже в фоне.
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - тяжелые вычисления в callback
+// НЕПРАВИЛЬНО - тяжелые вычисления в callback
 class MessageCallback(
     private val oldList: List<Message>,
     private val newList: List<Message>
@@ -145,7 +145,7 @@ class MessageCallback(
 **Проблема**: DiffUtil имеет сложность O(N*M), что становится медленным для больших списков.
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - DiffUtil для 10,000+ элементов
+// НЕПРАВИЛЬНО - DiffUtil для 10,000+ элементов
 fun updateLargeList(newItems: List<Item>) {
     // Будет очень медленно!
     val diffResult = DiffUtil.calculateDiff(
@@ -202,7 +202,7 @@ class ItemAdapter : RecyclerView.Adapter<ItemViewHolder>() {
 **Проблема**: Множественные вызовы `calculateDiff()` могут перекрываться и давать неверный результат.
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - несколько одновременных обновлений
+// НЕПРАВИЛЬНО - несколько одновременных обновлений
 class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
     fun updateUsers(newUsers: List<User>) {
         // Если вызвать дважды подряд, будет race condition!
@@ -272,7 +272,7 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(
 **Проблема**: Данные меняются между `calculateDiff()` и `dispatchUpdatesTo()`.
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - данные могут измениться
+// НЕПРАВИЛЬНО - данные могут измениться
 class ChatAdapter : RecyclerView.Adapter<MessageViewHolder>() {
     private var messages: MutableList<Message> = mutableListOf()
 
@@ -325,7 +325,7 @@ class ChatAdapter : RecyclerView.Adapter<MessageViewHolder>() {
 **Проблема**: Некорректное сравнение объектов приводит к лишним обновлениям.
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - нет equals/hashCode
+// НЕПРАВИЛЬНО - нет equals/hashCode
 class User(
     val id: Int,
     var name: String,
@@ -378,7 +378,7 @@ class User(
 ### 7. Проблемы с памятью при больших списках
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - держим ссылки на старые списки
+// НЕПРАВИЛЬНО - держим ссылки на старые списки
 class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
     private val updateHistory = mutableListOf<List<User>>()
 

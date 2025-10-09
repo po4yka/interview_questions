@@ -38,7 +38,7 @@ Check all dependencies and libraries used in the project to understand if they c
 Check which objects are initialized at startup and assess if they're all truly necessary at this stage.
 
 ```kotlin
-// ❌ BAD - Everything initialized at startup
+// BAD - Everything initialized at startup
 class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
@@ -60,7 +60,7 @@ Check if large resources (images, files) are loaded at startup.
 **Move non-critical initialization to later stages:**
 
 ```kotlin
-// ✅ GOOD - Lazy initialization
+// GOOD - Lazy initialization
 class MyApplication : Application() {
     // Initialize only critical components
     override fun onCreate() {
@@ -125,7 +125,7 @@ object AppModule {
 **Move heavy logic from startup Activity:**
 
 ```kotlin
-// ❌ BAD
+// BAD
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD
+// GOOD
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
 
@@ -223,14 +223,14 @@ class MyApp : Application() {
 
 **Summary Checklist:**
 
-- ✅ Profile startup with Android Profiler
-- ✅ Move non-critical init to lazy/background
-- ✅ Use async operations for heavy tasks
-- ✅ Implement dependency injection
-- ✅ Cache frequently used data
-- ✅ Optimize resources (images, assets)
-- ✅ Defer library initialization
-- ✅ Measure improvements with benchmarks
+-  Profile startup with Android Profiler
+-  Move non-critical init to lazy/background
+-  Use async operations for heavy tasks
+-  Implement dependency injection
+-  Cache frequently used data
+-  Optimize resources (images, assets)
+-  Defer library initialization
+-  Measure improvements with benchmarks
 
 ## Ответ
 

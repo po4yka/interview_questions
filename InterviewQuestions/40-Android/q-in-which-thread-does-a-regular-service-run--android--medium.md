@@ -37,10 +37,10 @@ class MyService : Service() {
         // This also runs on MAIN THREAD
         Log.d("Service", "onStartCommand on thread: ${Thread.currentThread().name}")
 
-        // ❌ BAD: This will block the UI thread
+        // - BAD: This will block the UI thread
         // Thread.sleep(10000)  // ANR will occur!
 
-        // ✅ GOOD: Offload to background thread
+        // - GOOD: Offload to background thread
         Thread {
             // Heavy work here
             performLongRunningOperation()
@@ -102,7 +102,7 @@ class DataSyncService : Service() {
 #### 2. IntentService (Deprecated but Educational)
 
 ```kotlin
-// ⚠️ IntentService is DEPRECATED since API 30
+// WARNING: IntentService is DEPRECATED since API 30
 // But shows how background threading worked
 
 class DownloadService : IntentService("DownloadService") {
@@ -484,7 +484,7 @@ class DownloadWorker(
 ### Common Mistakes
 
 ```kotlin
-// ❌ WRONG: Assuming service runs on background thread
+// - WRONG: Assuming service runs on background thread
 class BadService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // This BLOCKS the main thread - causes ANR!
@@ -495,7 +495,7 @@ class BadService : Service() {
     }
 }
 
-// ✅ CORRECT: Explicitly use background thread
+// - CORRECT: Explicitly use background thread
 class GoodService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         lifecycleScope.launch(Dispatchers.IO) {

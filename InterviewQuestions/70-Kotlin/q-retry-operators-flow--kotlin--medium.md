@@ -403,17 +403,17 @@ fun `retryWhen should apply exponential backoff`() = runTest {
 **1. Always use predicate to filter exceptions**
 
 ```kotlin
-// ✅ GOOD - Only retry network errors
+// - GOOD - Only retry network errors
 .retry(3) { it is IOException }
 
-// ❌ BAD - Retries all exceptions
+// - BAD - Retries all exceptions
 .retry(3)
 ```
 
 **2. Implement exponential backoff for retryWhen**
 
 ```kotlin
-// ✅ GOOD - Exponential backoff
+// - GOOD - Exponential backoff
 .retryWhen { cause, attempt ->
     if (attempt < 5) {
         delay(1000 * (2.0.pow(attempt.toInt())).toLong())
@@ -421,7 +421,7 @@ fun `retryWhen should apply exponential backoff`() = runTest {
     } else false
 }
 
-// ❌ BAD - No delay, hammers server
+// - BAD - No delay, hammers server
 .retryWhen { cause, attempt ->
     attempt < 5
 }
@@ -430,10 +430,10 @@ fun `retryWhen should apply exponential backoff`() = runTest {
 **3. Set maximum retry attempts**
 
 ```kotlin
-// ✅ GOOD - Limited retries
+// - GOOD - Limited retries
 .retry(3) { it is IOException }
 
-// ❌ BAD - Infinite retries can cause issues
+// - BAD - Infinite retries can cause issues
 .retry { it is IOException }
 ```
 
@@ -637,17 +637,17 @@ class ProductViewModel : ViewModel() {
 **1. Всегда используйте предикат для фильтрации исключений**
 
 ```kotlin
-// ✅ ХОРОШО - Только сетевые ошибки
+// - ХОРОШО - Только сетевые ошибки
 .retry(3) { it is IOException }
 
-// ❌ ПЛОХО - Повторяет все исключения
+// - ПЛОХО - Повторяет все исключения
 .retry(3)
 ```
 
 **2. Реализуйте экспоненциальную задержку для retryWhen**
 
 ```kotlin
-// ✅ ХОРОШО - Экспоненциальная задержка
+// - ХОРОШО - Экспоненциальная задержка
 .retryWhen { cause, attempt ->
     if (attempt < 5) {
         delay(1000 * (2.0.pow(attempt.toInt())).toLong())
@@ -659,10 +659,10 @@ class ProductViewModel : ViewModel() {
 **3. Устанавливайте максимальное количество попыток**
 
 ```kotlin
-// ✅ ХОРОШО - Ограниченные повторы
+// - ХОРОШО - Ограниченные повторы
 .retry(3) { it is IOException }
 
-// ❌ ПЛОХО - Бесконечные повторы могут вызвать проблемы
+// - ПЛОХО - Бесконечные повторы могут вызвать проблемы
 .retry { it is IOException }
 ```
 

@@ -117,19 +117,19 @@ if (p1.hashCode() == p2.hashCode()) {
 **Common Mistakes:**
 
 ```java
-// ❌ Wrong: Using == for String comparison
+// - Wrong: Using == for String comparison
 String s1 = new String("test");
 String s2 = new String("test");
 if (s1 == s2) {  // false - different objects
     // Won't execute
 }
 
-// ✅ Correct: Using equals() for String comparison
+// - Correct: Using equals() for String comparison
 if (s1.equals(s2)) {  // true - same content
     // Will execute
 }
 
-// ❌ Wrong: Overriding equals() without hashCode()
+// - Wrong: Overriding equals() without hashCode()
 class Bad {
     @Override
     public boolean equals(Object obj) {

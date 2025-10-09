@@ -27,7 +27,7 @@ status: reviewed
 ```kotlin
 import kotlinx.coroutines.*
 
-// ✅ Good use of Dispatchers.Default
+// - Good use of Dispatchers.Default
 suspend fun parseJsonData(json: String): List<User> = withContext(Dispatchers.Default) {
     // CPU-intensive parsing
     val users = mutableListOf<User>()
@@ -70,7 +70,7 @@ suspend fun findPrimes(n: Int): List<Int> = withContext(Dispatchers.Default) {
 import kotlinx.coroutines.*
 import java.io.File
 
-// ✅ Good use of Dispatchers.IO
+// - Good use of Dispatchers.IO
 suspend fun fetchUserFromNetwork(userId: Int): User = withContext(Dispatchers.IO) {
     // Network request (blocking I/O)
     api.getUser(userId)
@@ -120,19 +120,19 @@ fun main() = runBlocking {
 ### When to Use Each
 
 ```kotlin
-// ❌ WRONG: CPU-intensive on IO dispatcher
+// - WRONG: CPU-intensive on IO dispatcher
 suspend fun badExample1() = withContext(Dispatchers.IO) {
     // This blocks an IO thread for CPU work
     (1..1_000_000).sum()  // Should use Dispatchers.Default
 }
 
-// ❌ WRONG: I/O operation on Default dispatcher
+// - WRONG: I/O operation on Default dispatcher
 suspend fun badExample2() = withContext(Dispatchers.Default) {
     // This blocks a CPU thread for I/O
     File("data.txt").readText()  // Should use Dispatchers.IO
 }
 
-// ✅ CORRECT: Use appropriate dispatchers
+// - CORRECT: Use appropriate dispatchers
 suspend fun goodExample() {
     // I/O operation on IO dispatcher
     val fileContent = withContext(Dispatchers.IO) {
@@ -250,7 +250,7 @@ suspend fun multipleBlockingCalls() = coroutineScope {
     CombinedData(user.await(), posts.await(), settings.await())
 }
 
-// ❌ Default dispatcher should avoid blocking
+// - Default dispatcher should avoid blocking
 suspend fun badBlocking() = withContext(Dispatchers.Default) {
     Thread.sleep(1000)  // BAD: Blocks precious CPU thread
     // Use delay() or Dispatchers.IO instead
@@ -342,29 +342,29 @@ suspend fun compareDispatchers() {
 
 ```kotlin
 class BestPractices {
-    // ✅ DO: Use IO for network
+    // - DO: Use IO for network
     suspend fun fetchFromNetwork() = withContext(Dispatchers.IO) {
         api.getData()
     }
 
-    // ✅ DO: Use Default for computation
+    // - DO: Use Default for computation
     suspend fun calculateResult(data: List<Int>) = withContext(Dispatchers.Default) {
         data.map { it * it }.sum()
     }
 
-    // ✅ DO: Switch dispatchers as needed
+    // - DO: Switch dispatchers as needed
     suspend fun pipeline() {
         val data = withContext(Dispatchers.IO) { fetchData() }
         val result = withContext(Dispatchers.Default) { process(data) }
         withContext(Dispatchers.IO) { save(result) }
     }
 
-    // ❌ DON'T: Use Default for blocking I/O
+    // - DON'T: Use Default for blocking I/O
     suspend fun badPractice1() = withContext(Dispatchers.Default) {
         File("data.txt").readText()  // BAD
     }
 
-    // ❌ DON'T: Use IO for CPU-heavy work unnecessarily
+    // - DON'T: Use IO for CPU-heavy work unnecessarily
     suspend fun badPractice2() = withContext(Dispatchers.IO) {
         (1..1_000_000).map { it * it }  // BAD
     }

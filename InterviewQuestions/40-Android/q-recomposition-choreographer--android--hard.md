@@ -132,7 +132,7 @@ Without Choreographer (random timing):
 State changes:  ─┬───┬─┬───┬──────┬─┬───
 Recomposition:   └┬──└┬└┬──└┬─────└┬└┬──
 VSYNC:          ────┴────┴────┴────┴────
-Result: Janky, inconsistent frame timing ❌
+Result: Janky, inconsistent frame timing BAD
 ```
 
 With Choreographer (VSYNC-aligned):
@@ -140,7 +140,7 @@ With Choreographer (VSYNC-aligned):
 State changes:  ─┬───┬─┬───┬──────┬─┬───
 Recomposition:   [batched]  [batched]
 VSYNC:          ────┴────┴────┴────┴────
-Result: Smooth, consistent 60fps ✅
+Result: Smooth, consistent 60fps GOOD
 ```
 
 ### 2. Battery Efficiency
@@ -190,7 +190,7 @@ fun MultiStateUpdate() {
 0ms:    count++ → recompose → render
 1ms:    name = "Updated" → recompose → render
 2ms:    enabled = !enabled → recompose → render
-Result: 3 separate recomposition/render cycles ❌
+Result: 3 separate recomposition/render cycles BAD
 ```
 
 **With Choreographer batching:**
@@ -200,7 +200,7 @@ Result: 3 separate recomposition/render cycles ❌
 2ms:    enabled = !enabled
 3ms:    Choreographer: "UI needs redraw"
 16.67ms: VSYNC → recompose all changes at once → render
-Result: 1 batched recomposition/render cycle ✅
+Result: 1 batched recomposition/render cycle GOOD
 ```
 
 **Benefit:** Prevents unnecessary intermediate frames.
@@ -276,7 +276,7 @@ fun PerformanceExample() {
 
     Column {
         // Fast recomposition (< 1ms)
-        Text("Count: $count")  // ✅ Fits in 16.67ms budget
+        Text("Count: $count")  // - Fits in 16.67ms budget
 
         Button(onClick = { count++ }) {
             Text("Increment")
@@ -289,7 +289,7 @@ fun PerformanceExample() {
 ```
 VSYNC 1 (0ms):    Idle
 VSYNC 2 (16.67ms): User clicks → count++
-VSYNC 3 (33.34ms): Recompose Text (1ms) + Render → ✅ Displayed
+VSYNC 3 (33.34ms): Recompose Text (1ms) + Render → - Displayed
 ```
 
 ### Dropped Frames (Jank)
@@ -302,7 +302,7 @@ fun SlowRecomposition() {
     Column {
         // Expensive computation during composition
         val result = remember(count) {
-            Thread.sleep(20)  // ❌ 20ms > 16.67ms budget
+            Thread.sleep(20)  // - 20ms > 16.67ms budget
             count * 2
         }
         Text("Result: $result")
@@ -318,7 +318,7 @@ fun SlowRecomposition() {
 ```
 VSYNC 1 (0ms):     Idle
 VSYNC 2 (16.67ms): User clicks → count++
-VSYNC 3 (33.34ms): Recompose starts... still working... ❌ MISSED DEADLINE
+VSYNC 3 (33.34ms): Recompose starts... still working... - MISSED DEADLINE
 VSYNC 4 (50.01ms): Recompose completes + Render → Displayed (delayed!)
 ```
 
@@ -348,8 +348,8 @@ fun Counter() {
     }
 }
 
-// 60Hz: Recomposition has 16.67ms budget → Easy ✅
-// 120Hz: Recomposition has 8.33ms budget → Must be faster! ⚠️
+// 60Hz: Recomposition has 16.67ms budget → Easy GOOD
+// 120Hz: Recomposition has 8.33ms budget → Must be faster! WARNING
 ```
 
 ---
@@ -361,8 +361,8 @@ fun Counter() {
 **Settings → Developer Options → Profile GPU Rendering → On screen as bars**
 
 **Green line at 16ms (60Hz):**
-- Bars below green = 60fps ✅
-- Bars above green = dropped frames ❌
+- Bars below green = 60fps GOOD
+- Bars above green = dropped frames BAD
 
 ```
 Frame time bars:

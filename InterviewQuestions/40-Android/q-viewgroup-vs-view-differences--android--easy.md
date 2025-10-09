@@ -192,7 +192,7 @@ class CustomContainer @JvmOverloads constructor(
 | Aspect | View | ViewGroup |
 |--------|------|-----------|
 | **Purpose** | Display content and handle user input | Container for organizing other views |
-| **Can have children?** | ❌ No | ✅ Yes |
+| **Can have children?** | - No | - Yes |
 | **Inheritance** | Extends `Object` | Extends `View` |
 | **Visibility** | Visible (draws content) | Usually invisible (container) |
 | **Examples** | TextView, Button, ImageView | LinearLayout, RelativeLayout, FrameLayout |

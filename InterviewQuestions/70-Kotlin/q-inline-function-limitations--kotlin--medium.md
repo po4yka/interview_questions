@@ -21,13 +21,13 @@ status: reviewed
 Inline функция встраивает код лямбды в место вызова, поэтому нельзя сохранить лямбду для отложенного выполнения.
 
 ```kotlin
-// ❌ ОШИБКА КОМПИЛЯЦИИ
+// - ОШИБКА КОМПИЛЯЦИИ
 inline fun processData(callback: () -> Unit) {
     val storedCallback = callback  // ERROR: Illegal usage of inline-parameter
     // Нельзя сохранить callback для использования позже
 }
 
-// ❌ ОШИБКА
+// - ОШИБКА
 inline fun deferExecution(action: () -> Unit) {
     val deferredAction = action
     Handler(Looper.getMainLooper()).post(deferredAction)  // ERROR
@@ -48,7 +48,7 @@ inline fun processDataNow(callback: () -> Unit) {
 ### 2. Нельзя передать лямбду в обычную (не-inline) функцию
 
 ```kotlin
-// ❌ ОШИБКА КОМПИЛЯЦИИ
+// - ОШИБКА КОМПИЛЯЦИИ
 inline fun withLogging(action: () -> Unit) {
     log("Starting")
     executeInBackground(action)  // ERROR: Illegal usage
@@ -79,7 +79,7 @@ fun withLogging(action: () -> Unit) {
 Встраивание рекурсивной функции привело бы к бесконечному росту кода.
 
 ```kotlin
-// ❌ ОШИБКА КОМПИЛЯЦИИ
+// - ОШИБКА КОМПИЛЯЦИИ
 inline fun factorial(n: Int): Int {  // ERROR: Inline function cannot be recursive
     return if (n <= 1) 1 else n * factorial(n - 1)
 }
@@ -100,7 +100,7 @@ tailrec fun factorial(n: Int, acc: Int = 1): Int {
 Inline функции копируют свой код в каждое место вызова, что может значительно увеличить размер APK.
 
 ```kotlin
-// ❌ ПЛОХАЯ ПРАКТИКА - большая inline функция
+// - ПЛОХАЯ ПРАКТИКА - большая inline функция
 inline fun processUserData(user: User, callback: (Result) -> Unit) {
     // 100+ строк кода
     val validatedUser = validateUser(user)
@@ -131,7 +131,7 @@ fun processUserData(user: User, callback: (Result) -> Unit) {
 ### 5. Функции с высоким порядком вызовов
 
 ```kotlin
-// ❌ ПЛОХАЯ ПРАКТИКА - inline функция вызывается очень часто
+// - ПЛОХАЯ ПРАКТИКА - inline функция вызывается очень часто
 inline fun log(message: String) {
     println("[${System.currentTimeMillis()}] $message")
 }
@@ -150,7 +150,7 @@ fun log(message: String) {
 ### 6. Функции с reified типами без необходимости
 
 ```kotlin
-// ❌ ИЗБЫТОЧНО - reified без реальной необходимости
+// - ИЗБЫТОЧНО - reified без реальной необходимости
 inline fun <reified T> createInstance(): T {
     // Просто создаем объект, reified не нужен
     return T::class.java.newInstance()
@@ -177,7 +177,7 @@ context.startActivity<MainActivity>()  // Без явного .java
 Inline функции встраиваются в клиентский код, что усложняет обновление библиотеки.
 
 ```kotlin
-// ❌ ПЛОХАЯ ПРАКТИКА - inline в public API библиотеки
+// - ПЛОХАЯ ПРАКТИКА - inline в public API библиотеки
 // library version 1.0
 inline fun processRequest(url: String, callback: (Response) -> Unit) {
     // Реализация версии 1.0
@@ -207,7 +207,7 @@ fun processRequest(url: String, callback: (Response) -> Unit) {
 ### 8. Функции с внутренними/private зависимостями
 
 ```kotlin
-// ❌ ОШИБКА - inline функция обращается к private полю
+// - ОШИБКА - inline функция обращается к private полю
 class UserManager {
     private val cache = mutableMapOf<Int, User>()
 
@@ -239,7 +239,7 @@ class UserManager {
 ### 9. Функции с non-local returns в сложных конструкциях
 
 ```kotlin
-// ❌ СЛОЖНО ДЛЯ ПОНИМАНИЯ
+// - СЛОЖНО ДЛЯ ПОНИМАНИЯ
 inline fun processItems(items: List<String>) {
     items.forEach { item ->
         if (item.isEmpty()) {
@@ -268,7 +268,7 @@ fun processItems(items: List<String>) {
 ### 10. Когда производительность не критична
 
 ```kotlin
-// ❌ ИЗБЫТОЧНО - inline без выигрыша в производительности
+// - ИЗБЫТОЧНО - inline без выигрыша в производительности
 inline fun formatUserName(firstName: String, lastName: String): String {
     return "$firstName $lastName"
 }
@@ -327,13 +327,13 @@ inline fun buildUser(init: UserBuilder.() -> Unit): User {
 
 | Ситуация | Можно inline? | Причина |
 |----------|---------------|---------|
-| Маленькая функция с лямбдой | ✅ Да | Оптимизация |
-| Большая функция (50+ строк) | ❌ Нет | Раздувание кода |
-| Рекурсивная функция | ❌ Нет | Бесконечное встраивание |
-| Функция с reified типом | ✅ Да | Необходимо inline |
-| Public API библиотеки | ⚠️ Осторожно | Проблемы с обновлениями |
-| Сохранение лямбды | ❌ Нет | Используйте noinline |
-| Часто вызываемая функция | ⚠️ Зависит | Баланс размера/скорости |
+| Маленькая функция с лямбдой | - Да | Оптимизация |
+| Большая функция (50+ строк) | - Нет | Раздувание кода |
+| Рекурсивная функция | - Нет | Бесконечное встраивание |
+| Функция с reified типом | - Да | Необходимо inline |
+| Public API библиотеки | WARNING: Осторожно | Проблемы с обновлениями |
+| Сохранение лямбды | - Нет | Используйте noinline |
+| Часто вызываемая функция | WARNING: Зависит | Баланс размера/скорости |
 
 ### Использование noinline и crossinline
 

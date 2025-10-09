@@ -394,13 +394,13 @@ class CustomButton @JvmOverloads constructor(
 
 ### Best Practices
 
-1. ✅ **Always recycle TypedArray** with `typedArray.recycle()`
-2. ✅ **Provide default values** for all attributes
-3. ✅ **Use appropriate format** for each attribute type
-4. ✅ **Document attributes** with comments in attrs.xml
-5. ✅ **Group related attributes** in same styleable
-6. ✅ **Support theme attributes** for consistency
-7. ✅ **Validate attribute values** (e.g., progress 0-100)
+1. - **Always recycle TypedArray** with `typedArray.recycle()`
+2. - **Provide default values** for all attributes
+3. - **Use appropriate format** for each attribute type
+4. - **Document attributes** with comments in attrs.xml
+5. - **Group related attributes** in same styleable
+6. - **Support theme attributes** for consistency
+7. - **Validate attribute values** (e.g., progress 0-100)
 
 ---
 

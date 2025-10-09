@@ -28,19 +28,19 @@ status: reviewed
 ### Dispatchers.IO - для I/O операций
 
 ```kotlin
-// ✅ Network запросы
+// - Network запросы
 suspend fun loadUser(id: Int): User = withContext(Dispatchers.IO) {
     apiService.getUser(id) // Блокирующий HTTP call
 }
 
-// ✅ Чтение файлов
+// - Чтение файлов
 suspend fun readConfig(): Config = withContext(Dispatchers.IO) {
     File("config.json").readText().let { json ->
         Json.decodeFromString(it)
     }
 }
 
-// ✅ Database операции
+// - Database операции
 suspend fun saveUser(user: User) = withContext(Dispatchers.IO) {
     database.userDao().insert(user)
 }
@@ -55,22 +55,22 @@ suspend fun saveUser(user: User) = withContext(Dispatchers.IO) {
 ### Dispatchers.Default - для CPU работы
 
 ```kotlin
-// ✅ Парсинг больших JSON
+// - Парсинг больших JSON
 suspend fun parseData(json: String): Data = withContext(Dispatchers.Default) {
     Json.decodeFromString<Data>(json) // CPU-intensive
 }
 
-// ✅ Сортировка больших списков
+// - Сортировка больших списков
 suspend fun sortUsers(users: List<User>): List<User> = withContext(Dispatchers.Default) {
     users.sortedBy { it.name }
 }
 
-// ✅ Обработка изображений
+// - Обработка изображений
 suspend fun processImage(bitmap: Bitmap): Bitmap = withContext(Dispatchers.Default) {
     applyFilters(bitmap) // CPU-intensive
 }
 
-// ✅ Шифрование
+// - Шифрование
 suspend fun encryptData(data: ByteArray): ByteArray = withContext(Dispatchers.Default) {
     cipher.doFinal(data)
 }
@@ -194,27 +194,27 @@ class UserRepository(
 ### Когда использовать IO
 
 ```kotlin
-// ✅ Network запросы
+// - Network запросы
 withContext(Dispatchers.IO) {
     httpClient.get("https://api.com/data")
 }
 
-// ✅ Чтение/запись файлов
+// - Чтение/запись файлов
 withContext(Dispatchers.IO) {
     File("data.txt").writeText("content")
 }
 
-// ✅ Database операции
+// - Database операции
 withContext(Dispatchers.IO) {
     database.query("SELECT * FROM users")
 }
 
-// ✅ SharedPreferences (хоть и быстро, но I/O)
+// - SharedPreferences (хоть и быстро, но I/O)
 withContext(Dispatchers.IO) {
     preferences.edit().putString("key", "value").commit()
 }
 
-// ✅ Блокирующие системные вызовы
+// - Блокирующие системные вызовы
 withContext(Dispatchers.IO) {
     Thread.sleep(1000) // Блокирующая операция
 }
@@ -223,32 +223,32 @@ withContext(Dispatchers.IO) {
 ### Когда использовать Default
 
 ```kotlin
-// ✅ Парсинг JSON/XML
+// - Парсинг JSON/XML
 withContext(Dispatchers.Default) {
     Json.decodeFromString<User>(jsonString)
 }
 
-// ✅ Сортировка больших коллекций
+// - Сортировка больших коллекций
 withContext(Dispatchers.Default) {
     list.sortedWith(complexComparator)
 }
 
-// ✅ Обработка изображений
+// - Обработка изображений
 withContext(Dispatchers.Default) {
     bitmap.applyColorFilter()
 }
 
-// ✅ Шифрование/дешифрование
+// - Шифрование/дешифрование
 withContext(Dispatchers.Default) {
     cipher.encrypt(data)
 }
 
-// ✅ Сложные вычисления
+// - Сложные вычисления
 withContext(Dispatchers.Default) {
     calculateComplexFormula(params)
 }
 
-// ✅ Маппинг больших структур данных
+// - Маппинг больших структур данных
 withContext(Dispatchers.Default) {
     users.map { it.toDto() }
 }
@@ -256,10 +256,10 @@ withContext(Dispatchers.Default) {
 
 ### Ошибки и антипаттерны
 
-#### ❌ Использование IO для CPU работы
+#### - Использование IO для CPU работы
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - забивает IO pool
+// - НЕПРАВИЛЬНО - забивает IO pool
 suspend fun sortLargeList(items: List<Int>): List<Int> = withContext(Dispatchers.IO) {
     items.sorted() // CPU-intensive, не I/O!
 }
@@ -269,16 +269,16 @@ suspend fun sortLargeList(items: List<Int>): List<Int> = withContext(Dispatchers
 // - Другие I/O операции могут ждать
 // - Неоптимальное использование ресурсов
 
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 suspend fun sortLargeList(items: List<Int>): List<Int> = withContext(Dispatchers.Default) {
     items.sorted()
 }
 ```
 
-#### ❌ Использование Default для I/O
+#### - Использование Default для I/O
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - блокирует CPU threads
+// - НЕПРАВИЛЬНО - блокирует CPU threads
 suspend fun loadFile(): String = withContext(Dispatchers.Default) {
     File("data.txt").readText() // Блокирующий I/O!
 }
@@ -288,25 +288,25 @@ suspend fun loadFile(): String = withContext(Dispatchers.Default) {
 // - Если таких операций много - thread starvation
 // - CPU threads должны ВЫЧИСЛЯТЬ, не ждать
 
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 suspend fun loadFile(): String = withContext(Dispatchers.IO) {
     File("data.txt").readText()
 }
 ```
 
-#### ❌ Nested withContext без необходимости
+#### - Nested withContext без необходимости
 
 ```kotlin
-// ❌ Избыточные переключения контекста
+// - Избыточные переключения контекста
 suspend fun processData() = withContext(Dispatchers.IO) {
     val data = loadData() // Уже в IO
 
-    withContext(Dispatchers.IO) { // ❌ Уже в IO!
+    withContext(Dispatchers.IO) { // - Уже в IO!
         saveData(data)
     }
 }
 
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 suspend fun processData() = withContext(Dispatchers.IO) {
     val data = loadData()
     saveData(data) // Уже в правильном контексте
@@ -340,8 +340,8 @@ class MainActivity : AppCompatActivity() {
 
 **Dispatchers.Main** (Android/UI):
 - 📱 Выполняется на **Main/UI потоке**
-- ⚠️ НЕЛЬЗЯ делать тяжелую работу
-- ✅ Только UI обновления
+- WARNING: НЕЛЬЗЯ делать тяжелую работу
+- - Только UI обновления
 - 🔄 Возврат на Main после withContext автоматический в viewModelScope/lifecycleScope
 
 ### Thread Pool Exhaustion
@@ -352,7 +352,7 @@ suspend fun riskyOperation() = coroutineScope {
     // Запускаем 100 CPU-intensive задач
     (1..100).map {
         async(Dispatchers.Default) {
-            Thread.sleep(10000) // ❌ Блокирует поток!
+            Thread.sleep(10000) // - Блокирует поток!
             heavyComputation()
         }
     }.awaitAll()
@@ -363,7 +363,7 @@ suspend fun riskyOperation() = coroutineScope {
 // - Остальные 96 ждут
 // - Thread starvation!
 
-// ✅ Решение 1: используйте IO для блокирующих операций
+// - Решение 1: используйте IO для блокирующих операций
 suspend fun fixedWithIO() = coroutineScope {
     (1..100).map {
         async(Dispatchers.IO) {
@@ -373,17 +373,17 @@ suspend fun fixedWithIO() = coroutineScope {
     }.awaitAll()
 }
 
-// ✅ Решение 2: используйте suspend вместо блокировки
+// - Решение 2: используйте suspend вместо блокировки
 suspend fun fixedWithSuspend() = coroutineScope {
     (1..100).map {
         async(Dispatchers.Default) {
-            delay(10000) // ✅ Не блокирует!
+            delay(10000) // - Не блокирует!
             heavyComputation()
         }
     }.awaitAll()
 }
 
-// ✅ Решение 3: ограничьте параллелизм
+// - Решение 3: ограничьте параллелизм
 suspend fun fixedWithLimit() {
     (1..100).chunked(4).forEach { chunk ->
         chunk.map {
@@ -476,11 +476,11 @@ suspend fun complexWorkflow() {
 flow {
     emit(loadFromDisk()) // Откуда выполняется?
 }
-.flowOn(Dispatchers.IO) // ✅ Все выше flowOn - на IO
+.flowOn(Dispatchers.IO) // - Все выше flowOn - на IO
 .map { data ->
-    parseData(data) // ❌ Выполняется на том же диспетчере что и collect
+    parseData(data) // - Выполняется на том же диспетчере что и collect
 }
-.flowOn(Dispatchers.Default) // ✅ map теперь на Default
+.flowOn(Dispatchers.Default) // - map теперь на Default
 .collect { parsed ->
     updateUI(parsed) // Выполняется на диспетчере вызывающего (Main)
 }

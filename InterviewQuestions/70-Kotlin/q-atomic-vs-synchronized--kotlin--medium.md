@@ -61,11 +61,11 @@ repeat(1000) {
 ```
 
 **Когда использовать Atomic:**
-- ✅ Простой счетчик
-- ✅ Флаг (boolean)
-- ✅ Одиночная ссылка
-- ✅ Операция читай-изменяй-запиши для ОДНОЙ переменной
-- ✅ Compare-and-swap логика
+- - Простой счетчик
+- - Флаг (boolean)
+- - Одиночная ссылка
+- - Операция читай-изменяй-запиши для ОДНОЙ переменной
+- - Compare-and-swap логика
 
 ### Synchronized — для сложных операций
 
@@ -105,18 +105,18 @@ class BankAccount {
 ```
 
 **Когда использовать Synchronized:**
-- ✅ Работа с несколькими переменными
-- ✅ Сложная логика (if-else, циклы)
-- ✅ Вызов методов внутри критической секции
-- ✅ Нужна взаимная исключительность (mutual exclusion)
-- ✅ Работа с коллекциями
+- - Работа с несколькими переменными
+- - Сложная логика (if-else, циклы)
+- - Вызов методов внутри критической секции
+- - Нужна взаимная исключительность (mutual exclusion)
+- - Работа с коллекциями
 
 ### Примеры использования
 
 #### Пример 1: Счетчик (Atomic лучше)
 
 ```kotlin
-// ✅ Atomic - идеально для счетчика
+// - Atomic - идеально для счетчика
 class RequestCounter {
     private val count = AtomicLong(0)
 
@@ -127,7 +127,7 @@ class RequestCounter {
     fun getCount() = count.get()
 }
 
-// ❌ Synchronized - избыточно
+// - Synchronized - избыточно
 class RequestCounter {
     private var count = 0L
     private val lock = Any()
@@ -143,7 +143,7 @@ class RequestCounter {
 #### Пример 2: Cache с TTL (Synchronized лучше)
 
 ```kotlin
-// ✅ Synchronized - нужен для сложной логики
+// - Synchronized - нужен для сложной логики
 class Cache<K, V>(private val ttlMs: Long) {
     private data class Entry<V>(
         val value: V,
@@ -179,7 +179,7 @@ class Cache<K, V>(private val ttlMs: Long) {
 #### Пример 3: Флаг состояния (Atomic проще)
 
 ```kotlin
-// ✅ Atomic - для простого флага
+// - Atomic - для простого флага
 class ConnectionManager {
     private val isConnected = AtomicBoolean(false)
 
@@ -204,7 +204,7 @@ class ConnectionManager {
 #### Пример 4: Transfer между аккаунтами (Synchronized обязателен)
 
 ```kotlin
-// ✅ Synchronized - работа с несколькими объектами
+// - Synchronized - работа с несколькими объектами
 class Bank {
     fun transfer(from: BankAccount, to: BankAccount, amount: Int) {
         // Блокируем ОБА аккаунта в фиксированном порядке (избежать deadlock)
@@ -225,7 +225,7 @@ class Bank {
     }
 }
 
-// ❌ Atomic НЕ ПОМОЖЕТ - нужна координация между аккаунтами
+// - Atomic НЕ ПОМОЖЕТ - нужна координация между аккаунтами
 ```
 
 ### Performance сравнение
@@ -328,7 +328,7 @@ class CASExample {
 Для Android — используйте высокоуровневые абстракции:
 
 ```kotlin
-// ✅ Корутины с Mutex
+// - Корутины с Mutex
 class SafeCache {
     private val cache = mutableMapOf<String, String>()
     private val mutex = Mutex()
@@ -346,7 +346,7 @@ class SafeCache {
     }
 }
 
-// ✅ Actor для sequential processing
+// - Actor для sequential processing
 @OptIn(ObsoleteCoroutinesApi::class)
 fun cacheActor() = actor<CacheCommand> {
     val cache = mutableMapOf<String, String>()
@@ -370,7 +370,7 @@ sealed class CacheCommand {
 **1. Предпочитайте Atomic для простых случаев**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 class Statistics {
     private val requestCount = AtomicLong(0)
     private val errorCount = AtomicLong(0)
@@ -388,7 +388,7 @@ class Statistics {
 **2. Используйте Synchronized для сложной логики**
 
 ```kotlin
-// ✅ ПРАВИЛЬНО
+// - ПРАВИЛЬНО
 class ResourcePool<T>(private val factory: () -> T) {
     private val available = mutableListOf<T>()
     private val lock = Any()
@@ -410,7 +410,7 @@ class ResourcePool<T>(private val factory: () -> T) {
 **3. Избегайте смешивания**
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - смешивание подходов
+// - НЕПРАВИЛЬНО - смешивание подходов
 class BadExample {
     private val atomicCount = AtomicInteger(0)
     private var syncCount = 0
@@ -428,7 +428,7 @@ class BadExample {
 **4. В Android используйте корутины**
 
 ```kotlin
-// ✅ ЛУЧШИЙ ПОДХОД для Android
+// - ЛУЧШИЙ ПОДХОД для Android
 class DataRepository {
     private val cache = mutableMapOf<String, Data>()
 
@@ -445,9 +445,9 @@ class DataRepository {
 | **Операции** | Одиночные | Множественные |
 | **Переменные** | Одна | Несколько |
 | **Performance** | ⚡ Быстрее | 🐢 Медленнее |
-| **Сложность логики** | ❌ Простая только | ✅ Любая |
-| **Lock-free** | ✅ Да | ❌ Нет |
-| **Deadlock риск** | ✅ Нет | ⚠️ Возможен |
+| **Сложность логики** | - Простая только | - Любая |
+| **Lock-free** | - Да | - Нет |
+| **Deadlock риск** | - Нет | WARNING: Возможен |
 | **Use case** | Счетчики, флаги | Кэши, коллекции |
 
 **English**: Use **Atomic** variables (`AtomicInteger`, `AtomicReference`) for single operations on single variable (counters, flags) - lock-free, ~2x faster. Use **synchronized** for complex operations or multiple variables (caches, collections, multiple steps) - ensures mutual exclusion. Atomic uses CAS (Compare-And-Swap) loop. For Android, prefer coroutines with `Mutex` or `actor` pattern. Don't mix approaches. Atomic: simple & fast. Synchronized: complex & safe.

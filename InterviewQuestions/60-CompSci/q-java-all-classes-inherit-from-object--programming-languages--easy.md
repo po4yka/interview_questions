@@ -112,14 +112,14 @@ synchronized (obj) {
 
 | Method | Purpose | Override? |
 |--------|---------|-----------|
-| toString() | String representation | ✅ Recommended |
-| equals() | Logical equality | ✅ Often needed |
-| hashCode() | Hash value | ✅ With equals() |
-| clone() | Copy object | ⚠️ If Cloneable |
-| getClass() | Runtime type | ❌ Final |
-| wait() | Thread wait | ❌ Final |
-| notify() | Wake thread | ❌ Final |
-| finalize() | Cleanup | ⚠️ Deprecated |
+| toString() | String representation | - Recommended |
+| equals() | Logical equality | - Often needed |
+| hashCode() | Hash value | - With equals() |
+| clone() | Copy object | WARNING: If Cloneable |
+| getClass() | Runtime type | - Final |
+| wait() | Thread wait | - Final |
+| notify() | Wake thread | - Final |
+| finalize() | Cleanup | WARNING: Deprecated |
 
 **Example:**
 
@@ -150,10 +150,10 @@ class User {
 
 **Summary:**
 
-- ✅ **All Java classes** inherit from Object
-- ✅ **Implicit inheritance** if not specified
-- ✅ **Common methods** available to all objects
-- ✅ **Override** toString(), equals(), hashCode() as needed
+- - **All Java classes** inherit from Object
+- - **Implicit inheritance** if not specified
+- - **Common methods** available to all objects
+- - **Override** toString(), equals(), hashCode() as needed
 
 ## Ответ
 

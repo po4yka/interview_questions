@@ -132,13 +132,13 @@ Thread: [==A=][=Other=][==A==][==B=][=Other=][==B==]
 ### Practical Example
 
 ```kotlin
-// ❌ Blocking - freezes UI
+// - Blocking - freezes UI
 fun loadData() {
     val data = networkCall()  // UI thread BLOCKED
     updateUI(data)
 }
 
-// ✅ Suspending - UI stays responsive
+// - Suspending - UI stays responsive
 suspend fun loadData() {
     val data = networkCall()  // Coroutine SUSPENDED, UI thread FREE
     updateUI(data)

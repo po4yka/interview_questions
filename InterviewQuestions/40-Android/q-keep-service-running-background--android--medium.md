@@ -37,15 +37,15 @@ Each has different guarantees, restrictions, and use cases.
 ### When to Use
 
 **Use foreground service when:**
-- ✅ Task is **user-initiated** and **time-sensitive**
-- ✅ User **expects** the task to continue (music playback, navigation)
-- ✅ Task requires **immediate execution**
-- ✅ You can show a **persistent notification**
+- - Task is **user-initiated** and **time-sensitive**
+- - User **expects** the task to continue (music playback, navigation)
+- - Task requires **immediate execution**
+- - You can show a **persistent notification**
 
 **Don't use when:**
-- ❌ Task is **deferrable** (can wait until better conditions)
-- ❌ User is **unaware** of the task
-- ❌ Task is **periodic** (daily sync, etc.)
+- - Task is **deferrable** (can wait until better conditions)
+- - User is **unaware** of the task
+- - Task is **periodic** (daily sync, etc.)
 
 ---
 
@@ -165,10 +165,10 @@ class MainActivity : AppCompatActivity() {
 ### When to Use
 
 **Use WorkManager when:**
-- ✅ Task is **deferrable** (can wait for optimal conditions)
-- ✅ Task should **survive app restarts**
-- ✅ You need **guaranteed execution** (even after device reboot)
-- ✅ You care about **battery optimization**
+- - Task is **deferrable** (can wait for optimal conditions)
+- - Task should **survive app restarts**
+- - You need **guaranteed execution** (even after device reboot)
+- - You care about **battery optimization**
 
 **Examples:**
 - Uploading logs to server
@@ -331,10 +331,10 @@ dependencies {
 ### When to Use
 
 **Use JobScheduler when:**
-- ✅ Task requires **specific conditions** (network type, charging, idle)
-- ✅ Task is **not time-critical**
-- ✅ You want **system to optimize** execution time
-- ✅ You don't need WorkManager features (chaining, unique work)
+- - Task requires **specific conditions** (network type, charging, idle)
+- - Task is **not time-critical**
+- - You want **system to optimize** execution time
+- - You don't need WorkManager features (chaining, unique work)
 
 **Note:** WorkManager uses JobScheduler internally on Android 6.0+, so WorkManager is usually preferred.
 
@@ -508,7 +508,7 @@ uploadManager.uploadFile(fileUrl, isUrgent = false)  // WorkManager
 ### 1. Choose the Right Tool
 
 ```kotlin
-// ❌ BAD: Foreground service for periodic sync
+// - BAD: Foreground service for periodic sync
 class PeriodicSyncService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startForeground(1, notification)  // User doesn't need to see this!
@@ -517,7 +517,7 @@ class PeriodicSyncService : Service() {
     }
 }
 
-// ✅ GOOD: WorkManager for periodic sync
+// - GOOD: WorkManager for periodic sync
 val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
     .build()
 WorkManager.getInstance(context).enqueue(syncRequest)
@@ -547,7 +547,7 @@ fun startBackgroundTask() {
 ### 3. Stop Services When Done
 
 ```kotlin
-// ✅ Always stop service when task completes
+// - Always stop service when task completes
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     CoroutineScope(Dispatchers.IO).launch {
         try {

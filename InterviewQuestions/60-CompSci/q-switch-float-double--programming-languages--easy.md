@@ -57,7 +57,7 @@ System.out.println(sum == 1.0); // false!
 **Java switch works with:**
 
 ```java
-// ✅ Primitive integer types
+// - Primitive integer types
 byte b = 1;
 switch (b) { /* ... */ }
 
@@ -68,32 +68,32 @@ int i = 1;
 switch (i) { /* ... */ }
 
 long l = 1L;
-switch (l) { /* ... */ }  // ⚠️ Java 7+, earlier versions don't support long
+switch (l) { /* ... */ }  // WARNING: Java 7+, earlier versions don't support long
 
 char c = 'A';
 switch (c) { /* ... */ }
 
-// ✅ Wrapper types (auto-unboxing)
+// - Wrapper types (auto-unboxing)
 Integer num = 1;
 switch (num) { /* ... */ }
 
-// ✅ Enum types
+// - Enum types
 enum Day { MONDAY, TUESDAY }
 Day day = Day.MONDAY;
 switch (day) { /* ... */ }
 
-// ✅ String (Java 7+)
+// - String (Java 7+)
 String text = "hello";
 switch (text) { /* ... */ }
 
-// ❌ Floating-point NOT supported
+// - Floating-point NOT supported
 // float f = 1.0f;
 // switch (f) { /* ... */ }  // Compilation error!
 
 // double d = 1.0;
 // switch (d) { /* ... */ }  // Compilation error!
 
-// ❌ Boolean NOT supported
+// - Boolean NOT supported
 // boolean flag = true;
 // switch (flag) { /* ... */ }  // Compilation error!
 ```
@@ -185,14 +185,14 @@ System.out.println(sum == 100);  // Always true
 
 | Type | switch Support | Reason |
 |------|---------------|--------|
-| `byte`, `short`, `int`, `long` | ✅ Yes | Exact equality |
-| `char` | ✅ Yes | Exact equality |
-| Wrapper classes | ✅ Yes | Auto-unboxing to primitives |
-| `enum` | ✅ Yes | Fixed set of values |
-| `String` | ✅ Yes (Java 7+) | String equality well-defined |
-| `float`, `double` | ❌ No | Floating-point precision issues |
-| `boolean` | ❌ No | Only 2 values (use if-else) |
-| Objects | ❌ No (except String, enum) | No general equality |
+| `byte`, `short`, `int`, `long` | - Yes | Exact equality |
+| `char` | - Yes | Exact equality |
+| Wrapper classes | - Yes | Auto-unboxing to primitives |
+| `enum` | - Yes | Fixed set of values |
+| `String` | - Yes (Java 7+) | String equality well-defined |
+| `float`, `double` | - No | Floating-point precision issues |
+| `boolean` | - No | Only 2 values (use if-else) |
+| Objects | - No (except String, enum) | No general equality |
 
 **Key point:** `switch` requires **exact equality matching**, which is unreliable for floating-point numbers due to rounding errors.
 

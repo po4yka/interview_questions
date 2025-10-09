@@ -74,7 +74,7 @@ val car = Car(Engine())
 The child class is **tightly coupled** to the parent class. Changes in the parent affect all children.
 
 ```kotlin
-// ❌ Strong coupling
+// - Strong coupling
 open class Parent {
     open fun method1() = println("Parent method 1")
     open fun method2() = println("Parent method 2")
@@ -96,7 +96,7 @@ class Child : Parent() {
 Objects are **loosely coupled**. Changes in composed objects have minimal impact.
 
 ```kotlin
-// ✅ Loose coupling
+// - Loose coupling
 interface Engine {
     fun start()
 }
@@ -129,7 +129,7 @@ val gasCar = Car(GasEngine())
 The relationship is **static** - defined when you write the code.
 
 ```kotlin
-// ❌ Fixed behavior
+// - Fixed behavior
 class Warrior : Fighter() {
     // Always uses Fighter behavior
     // Cannot change at runtime
@@ -144,7 +144,7 @@ val warrior = Warrior()
 Behavior can be **changed dynamically** at runtime.
 
 ```kotlin
-// ✅ Dynamic behavior
+// - Dynamic behavior
 interface AttackStrategy {
     fun attack()
 }
@@ -170,7 +170,7 @@ val character = Character(SwordAttack())
 character.attack()  // "Swing sword"
 
 character.changeStrategy(MagicAttack())
-character.attack()  // "Cast spell"  ✅ Behavior changed!
+character.attack()  // "Cast spell"  - Behavior changed!
 ```
 
 ---
@@ -182,7 +182,7 @@ character.attack()  // "Cast spell"  ✅ Behavior changed!
 Must test parent and child together. Hard to mock parent behavior.
 
 ```kotlin
-// ❌ Hard to test
+// - Hard to test
 open class DatabaseService {
     open fun save(data: String) {
         // Real database call
@@ -206,7 +206,7 @@ class UserService : DatabaseService() {
 Can easily inject mocks/fakes.
 
 ```kotlin
-// ✅ Easy to test
+// - Easy to test
 interface DatabaseService {
     fun save(data: String)
 }
@@ -243,7 +243,7 @@ userService.createUser("Alice")  // Uses mock, no real database!
 Most languages (Java, Kotlin) don't support multiple inheritance.
 
 ```kotlin
-// ❌ Multiple inheritance not allowed
+// - Multiple inheritance not allowed
 class FlyingCar : Car, Airplane {  // Compilation error!
     // ...
 }
@@ -254,7 +254,7 @@ class FlyingCar : Car, Airplane {  // Compilation error!
 Can easily combine behaviors from multiple sources.
 
 ```kotlin
-// ✅ Multiple composition
+// - Multiple composition
 class FlyingCar(
     private val carEngine: CarEngine,
     private val wings: Wings,
@@ -365,7 +365,7 @@ class Car(
 ### Inheritance Approach (Traditional)
 
 ```kotlin
-// ❌ Inheritance: Tightly coupled
+// - Inheritance: Tightly coupled
 abstract class BaseActivity : AppCompatActivity() {
     protected val logger = Logger()
 
@@ -402,7 +402,7 @@ class ProductActivity : BaseActivity() {
 ### Composition Approach (Modern)
 
 ```kotlin
-// ✅ Composition: Loose coupling with dependency injection
+// - Composition: Loose coupling with dependency injection
 interface Logger {
     fun log(message: String)
 }
@@ -445,7 +445,7 @@ class UserActivity : AppCompatActivity() {
 
 ## When to Use Each
 
-### Use Inheritance ✅
+### Use Inheritance GOOD
 
 - Clear **IS-A** relationship
 - Need **polymorphism** (treat Dog as Animal)
@@ -453,13 +453,13 @@ class UserActivity : AppCompatActivity() {
 - **Stable hierarchy** (won't change often)
 
 ```kotlin
-// ✅ Good use of inheritance
+// - Good use of inheritance
 class MainActivity : AppCompatActivity() {
     // MainActivity IS-A AppCompatActivity
 }
 ```
 
-### Use Composition ✅
+### Use Composition GOOD
 
 - **HAS-A** relationship
 - Need **flexibility**
@@ -468,7 +468,7 @@ class MainActivity : AppCompatActivity() {
 - Combining **multiple behaviors**
 
 ```kotlin
-// ✅ Good use of composition
+// - Good use of composition
 class OrderService(
     private val paymentProcessor: PaymentProcessor,
     private val emailService: EmailService,
@@ -483,14 +483,14 @@ class OrderService(
 ## Best Practice: Favor Composition Over Inheritance
 
 ```kotlin
-// ❌ Avoid: Inheritance for code reuse
+// - Avoid: Inheritance for code reuse
 class UserService : Logger() {
     fun createUser(name: String) {
         log("Creating user: $name")  // Inheriting log()
     }
 }
 
-// ✅ Prefer: Composition with dependency injection
+// - Prefer: Composition with dependency injection
 class UserService(private val logger: Logger) {
     fun createUser(name: String) {
         logger.log("Creating user: $name")  // Composing logger

@@ -22,7 +22,7 @@ status: reviewed
 
 The `by` keyword requires an **instance**, not an expression that creates an instance.
 
-❌ **Incorrect - Cannot call constructor:**
+- **Incorrect - Cannot call constructor:**
 ```kotlin
 interface Printer {
     fun print()
@@ -32,11 +32,11 @@ class ConsolePrinter : Printer {
     override fun print() = println("Printing...")
 }
 
-// ❌ ERROR: Cannot call constructor
+// - ERROR: Cannot call constructor
 class Document : Printer by ConsolePrinter()  // Compilation error
 ```
 
-✅ **Correct - Pass an instance:**
+- **Correct - Pass an instance:**
 ```kotlin
 // Option 1: Pass as constructor parameter
 class Document(printer: Printer) : Printer by printer
@@ -60,18 +60,18 @@ class Document : Printer by printerInstance {
 
 **Property Delegation - Same Rule:**
 
-❌ **Cannot call function:**
+- **Cannot call function:**
 ```kotlin
-// ❌ ERROR
+// - ERROR
 val name: String by lazy()  // Compilation error
 ```
 
-✅ **Correct - lazy is a function that returns delegate:**
+- **Correct - lazy is a function that returns delegate:**
 ```kotlin
-// ✅ CORRECT - lazy{} returns ReadOnlyProperty delegate
+// - CORRECT - lazy{} returns ReadOnlyProperty delegate
 val name: String by lazy { "Alice" }
 
-// ✅ CORRECT - observable() returns delegate
+// - CORRECT - observable() returns delegate
 var age: Int by Delegates.observable(0) { _, old, new ->
     println("Age changed from $old to $new")
 }
@@ -131,23 +131,23 @@ println(user.name)    // Getting name = Alice
 
 ```kotlin
 class Example {
-    // ✅ lazy - returns delegate
+    // - lazy - returns delegate
     val lazyValue: String by lazy { "Computed once" }
 
-    // ✅ observable - returns delegate
+    // - observable - returns delegate
     var observedValue: Int by Delegates.observable(0) { _, old, new ->
         println("Changed from $old to $new")
     }
 
-    // ✅ vetoable - returns delegate
+    // - vetoable - returns delegate
     var vetoableValue: Int by Delegates.vetoable(0) { _, old, new ->
         new > old  // Only allow increases
     }
 
-    // ✅ notNull - returns delegate
+    // - notNull - returns delegate
     var notNullValue: String by Delegates.notNull()
 
-    // ✅ Custom delegate instance
+    // - Custom delegate instance
     var customValue: String by LoggedProperty("Initial")
 }
 ```
@@ -168,8 +168,8 @@ class Document : Printer by object : Printer {
 
 **Summary:**
 
-- ❌ **Cannot**: `by ConstructorCall()` or `by functionCall()`
-- ✅ **Must**: `by existingInstance` or `by delegateFunction { ... }`
+- - **Cannot**: `by ConstructorCall()` or `by functionCall()`
+- - **Must**: `by existingInstance` or `by delegateFunction { ... }`
 - **Reason**: `by` expects a delegate **instance**, not a creation expression
 - **Exception**: Functions like `lazy {}` return delegates, so `by lazy {}` works
 

@@ -46,7 +46,7 @@ Classes in Jetpack Compose are automatically considered **stable** if they are:
 ### 1. Primitive Types
 
 ```kotlin
-// ✅ Automatically stable
+// - Automatically stable
 Int, Long, Short, Byte
 Float, Double
 Boolean
@@ -57,7 +57,7 @@ String
 ### 2. Immutable Data Classes with Stable Properties
 
 ```kotlin
-// ✅ Automatically stable
+// - Automatically stable
 data class User(
     val id: String,      // Stable (String)
     val name: String,    // Stable (String)
@@ -82,11 +82,11 @@ fun UserCard(user: User) {  // user parameter is stable
 ### 1. Mutable Properties (var)
 
 ```kotlin
-// ❌ NOT stable - has var
+// - NOT stable - has var
 data class User(
     val id: String,
-    var name: String,    // ❌ Mutable!
-    var age: Int         // ❌ Mutable!
+    var name: String,    // - Mutable!
+    var age: Int         // - Mutable!
 )
 
 @Composable
@@ -100,28 +100,28 @@ fun UserCard(user: User) {
 ### 2. Mutable Collections
 
 ```kotlin
-// ❌ NOT stable - MutableList is mutable
+// - NOT stable - MutableList is mutable
 data class UserList(
-    val users: MutableList<User>  // ❌ Mutable collection!
+    val users: MutableList<User>  // - Mutable collection!
 )
 
-// ✅ Stable - List is immutable interface
+// - Stable - List is immutable interface
 data class UserList(
-    val users: List<User>  // ✅ Immutable collection
+    val users: List<User>  // - Immutable collection
 )
 ```
 
 ### 3. Non-Stable Property Types
 
 ```kotlin
-// ❌ NOT stable - contains unstable type
+// - NOT stable - contains unstable type
 data class UserProfile(
     val user: User,
-    val settings: MutableSettings  // ❌ MutableSettings is unstable
+    val settings: MutableSettings  // - MutableSettings is unstable
 )
 
 class MutableSettings {
-    var darkMode: Boolean = false  // ❌ Mutable property
+    var darkMode: Boolean = false  // - Mutable property
 }
 ```
 
@@ -132,31 +132,31 @@ class MutableSettings {
 ### Rule 1: All Properties Must Be Stable
 
 ```kotlin
-// ✅ Stable - all properties stable
+// - Stable - all properties stable
 data class Point(
     val x: Int,      // Stable
     val y: Int       // Stable
 )
 
-// ❌ NOT stable - contains unstable property
+// - NOT stable - contains unstable property
 data class Screen(
     val title: String,           // Stable
-    val users: MutableList<User> // ❌ Unstable!
+    val users: MutableList<User> // - Unstable!
 )
 ```
 
 ### Rule 2: Immutability Required
 
 ```kotlin
-// ✅ Stable - all val
+// - Stable - all val
 data class Config(
     val timeout: Int,
     val retryCount: Int
 )
 
-// ❌ NOT stable - has var
+// - NOT stable - has var
 data class Config(
-    var timeout: Int,     // ❌ Mutable
+    var timeout: Int,     // - Mutable
     val retryCount: Int
 )
 ```
@@ -164,10 +164,10 @@ data class Config(
 ### Rule 3: Structural Equality
 
 ```kotlin
-// ✅ Stable - data class has structural equals()
+// - Stable - data class has structural equals()
 data class User(val id: String, val name: String)
 
-// ❌ NOT stable - regular class uses referential equals()
+// - NOT stable - regular class uses referential equals()
 class User(val id: String, val name: String)
 // Need to override equals() and hashCode()
 ```
@@ -220,7 +220,7 @@ fun UserCard(user: User) {  // User is stable
 }
 
 // If same user instance passed:
-UserCard(user)  // Compose SKIPS recomposition ✅
+UserCard(user)  // Compose SKIPS recomposition GOOD
 ```
 
 ```kotlin
@@ -231,7 +231,7 @@ fun UserCard(user: UnstableUser) {  // UnstableUser is unstable
 }
 
 // Even if same user instance passed:
-UserCard(user)  // Compose CANNOT skip recomposition ❌
+UserCard(user)  // Compose CANNOT skip recomposition BAD
                 // Must recompose every time
 ```
 
@@ -242,13 +242,13 @@ UserCard(user)  // Compose CANNOT skip recomposition ❌
 ### Option 1: Use Data Classes with val
 
 ```kotlin
-// ❌ Unstable
+// - Unstable
 class User(
     var name: String,
     var age: Int
 )
 
-// ✅ Stable
+// - Stable
 data class User(
     val name: String,
     val age: Int
@@ -258,19 +258,19 @@ data class User(
 ### Option 2: Use Immutable Collections
 
 ```kotlin
-// ❌ Unstable - MutableList
+// - Unstable - MutableList
 data class Team(
     val name: String,
     val members: MutableList<User>
 )
 
-// ✅ Stable - List (immutable interface)
+// - Stable - List (immutable interface)
 data class Team(
     val name: String,
     val members: List<User>
 )
 
-// ✅ Also stable - ImmutableList from kotlinx.collections.immutable
+// - Also stable - ImmutableList from kotlinx.collections.immutable
 data class Team(
     val name: String,
     val members: ImmutableList<User>
@@ -308,7 +308,7 @@ class Settings(
 ### Pattern 1: Immutable Data Classes
 
 ```kotlin
-// ✅ Stable pattern
+// - Stable pattern
 data class Product(
     val id: String,
     val name: String,
@@ -329,7 +329,7 @@ fun ProductCard(product: Product) {
 ### Pattern 2: Collections
 
 ```kotlin
-// ✅ Stable - using List (immutable interface)
+// - Stable - using List (immutable interface)
 data class ShoppingCart(
     val items: List<Product>
 )
@@ -337,7 +337,7 @@ data class ShoppingCart(
 // Update by creating new instance
 val newCart = cart.copy(items = cart.items + newProduct)
 
-// ✅ Better - using ImmutableList
+// - Better - using ImmutableList
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -352,12 +352,12 @@ val newCart = cart.copy(items = cart.items.add(newProduct))
 ### Pattern 3: State Management
 
 ```kotlin
-// ❌ Unstable - mutable state
+// - Unstable - mutable state
 class UserViewModel : ViewModel() {
-    var user = User("", "", 0)  // ❌ Mutable
+    var user = User("", "", 0)  // - Mutable
 }
 
-// ✅ Stable - immutable with StateFlow
+// - Stable - immutable with StateFlow
 class UserViewModel : ViewModel() {
     private val _user = MutableStateFlow(User("", "", 0))
     val user: StateFlow<User> = _user.asStateFlow()
@@ -375,7 +375,7 @@ class UserViewModel : ViewModel() {
 ### Nested Stable Classes
 
 ```kotlin
-// ✅ All stable
+// - All stable
 data class Address(
     val street: String,
     val city: String,
@@ -385,12 +385,12 @@ data class Address(
 data class User(
     val id: String,
     val name: String,
-    val address: Address  // ✅ Address is stable
+    val address: Address  // - Address is stable
 )
 
 data class Company(
     val name: String,
-    val employees: List<User>  // ✅ List of stable Users
+    val employees: List<User>  // - List of stable Users
 )
 
 @Composable
@@ -410,9 +410,9 @@ fun CompanyCard(company: Company) {
 ## Unstable Class Example
 
 ```kotlin
-// ❌ Unstable - has var
+// - Unstable - has var
 data class Counter(
-    var count: Int  // ❌ Mutable property
+    var count: Int  // - Mutable property
 )
 
 @Composable
@@ -428,13 +428,13 @@ val counter = Counter(0)
 CounterDisplay(counter)  // Displays "Count: 0"
 
 counter.count = 5  // Modified in place
-CounterDisplay(counter)  // ❌ Compose doesn't know it changed!
+CounterDisplay(counter)  // - Compose doesn't know it changed!
                          // Might still show "Count: 0"
 ```
 
 **Fix:**
 ```kotlin
-// ✅ Stable - use val and create new instances
+// - Stable - use val and create new instances
 data class Counter(
     val count: Int
 )
@@ -450,7 +450,7 @@ var counter by remember { mutableStateOf(Counter(0)) }
 CounterDisplay(counter)
 
 // Update by creating new instance
-counter = Counter(counter.count + 1)  // ✅ New instance
+counter = Counter(counter.count + 1)  // - New instance
 CounterDisplay(counter)  // Updates correctly
 ```
 
@@ -459,16 +459,16 @@ CounterDisplay(counter)  // Updates correctly
 ## Summary
 
 **Automatically stable classes:**
-- ✅ **Data classes** with only `val` properties
-- ✅ **All properties are stable types** (String, Int, etc.)
-- ✅ **Immutable collections** (List, not MutableList)
-- ✅ **No mutable state**
+- - **Data classes** with only `val` properties
+- - **All properties are stable types** (String, Int, etc.)
+- - **Immutable collections** (List, not MutableList)
+- - **No mutable state**
 
 **NOT stable:**
-- ❌ Classes with `var` properties
-- ❌ MutableList, MutableSet, MutableMap
-- ❌ Non-data classes without proper equals()
-- ❌ Classes containing unstable types
+- - Classes with `var` properties
+- - MutableList, MutableSet, MutableMap
+- - Non-data classes without proper equals()
+- - Classes containing unstable types
 
 **Benefits of stability:**
 - **Skip recomposition** when parameters unchanged

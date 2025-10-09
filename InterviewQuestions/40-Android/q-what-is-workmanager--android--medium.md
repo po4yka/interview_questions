@@ -22,9 +22,9 @@ status: reviewed
 **WorkManager** is an API that makes it easy to schedule **deferrable, asynchronous tasks** that are expected to run **even if the app exits or the device restarts**.
 
 The WorkManager API is a suitable and recommended replacement for all previous Android background scheduling APIs, including:
-- ❌ **FirebaseJobDispatcher** (deprecated)
-- ❌ **GcmNetworkManager** (deprecated)
-- ❌ **JobScheduler** (complex, API 21+)
+- - **FirebaseJobDispatcher** (deprecated)
+- - **GcmNetworkManager** (deprecated)
+- - **JobScheduler** (complex, API 21+)
 
 WorkManager incorporates the features of its predecessors in a modern, consistent API that works back to **API level 14** while also being conscious of battery life.
 
@@ -33,9 +33,9 @@ WorkManager incorporates the features of its predecessors in a modern, consisten
 WorkManager handles **background work** that needs to run when various constraints are met, regardless of whether the application process is alive or not.
 
 Background work can be started:
-- ✅ When the app is in the **background**
-- ✅ When the app is in the **foreground**
-- ✅ When the app starts in the foreground but goes to the **background**
+- - When the app is in the **background**
+- - When the app is in the **foreground**
+- - When the app starts in the foreground but goes to the **background**
 
 **Regardless of what the application is doing, background work should continue to execute, or be restarted if Android kills its process.**
 
@@ -176,9 +176,9 @@ WorkManager.getInstance(context)
 ### 5. Built-In Threading Interoperability
 
 WorkManager integrates seamlessly with:
-- ✅ **Kotlin Coroutines** (`CoroutineWorker`)
-- ✅ **RxJava** (`RxWorker`)
-- ✅ **ListenableFuture** (`ListenableFutureWorker`)
+- - **Kotlin Coroutines** (`CoroutineWorker`)
+- - **RxJava** (`RxWorker`)
+- - **ListenableFuture** (`ListenableFutureWorker`)
 
 You have the flexibility to plug in your own asynchronous APIs.
 
@@ -305,7 +305,7 @@ val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(
     .build()
 ```
 
-⚠️ **Important**: Minimum periodic interval is **15 minutes**.
+WARNING: **Important**: Minimum periodic interval is **15 minutes**.
 
 ### 4. WorkManager
 
@@ -521,7 +521,7 @@ WorkManager.getInstance(context).enqueueUniqueWork(
 
 ## When to Use WorkManager
 
-✅ **Use WorkManager for**:
+- **Use WorkManager for**:
 - 📤 **File uploads** that must complete
 - 🔄 **Data synchronization** with server
 - 📊 **Sending analytics/logs**
@@ -530,7 +530,7 @@ WorkManager.getInstance(context).enqueueUniqueWork(
 - 📅 **Periodic tasks** (every N hours)
 - 🔔 **Scheduling notifications**
 
-❌ **Don't use WorkManager for**:
+- **Don't use WorkManager for**:
 - ⏱️ **Precise timing** (use AlarmManager)
 - 🎵 **Long-running foreground work** (use Foreground Service)
 - 📱 **Immediate UI updates** (use Coroutines)
@@ -541,14 +541,14 @@ WorkManager.getInstance(context).enqueueUniqueWork(
 **WorkManager** is a Jetpack library for **deferrable, guaranteed background work**:
 
 **Key features**:
-- ✅ Works even if app closes or device reboots
-- ✅ Constraint-based execution (WiFi, charging, etc.)
-- ✅ Automatic retry with backoff
-- ✅ Work chaining (sequential and parallel)
-- ✅ Built-in threading (Coroutines, RxJava)
-- ✅ Unique work (prevent duplicates)
-- ✅ Observable status (LiveData/Flow)
-- ✅ Battery-efficient (respects Doze mode)
+- - Works even if app closes or device reboots
+- - Constraint-based execution (WiFi, charging, etc.)
+- - Automatic retry with backoff
+- - Work chaining (sequential and parallel)
+- - Built-in threading (Coroutines, RxJava)
+- - Unique work (prevent duplicates)
+- - Observable status (LiveData/Flow)
+- - Battery-efficient (respects Doze mode)
 
 **Core components**:
 1. **Worker** - Defines the task
@@ -628,7 +628,7 @@ WorkManager автоматически выбирает лучший вариа�
 
 ### Когда использовать WorkManager
 
-✅ **Используйте WorkManager для**:
+- **Используйте WorkManager для**:
 - Загрузка файлов, которая должна завершиться
 - Синхронизация данных с сервером
 - Отправка аналитики/логов
@@ -636,7 +636,7 @@ WorkManager автоматически выбирает лучший вариа�
 - Обработка/сжатие изображений
 - Периодические задачи (каждые N часов)
 
-❌ **Не используйте WorkManager для**:
+- **Не используйте WorkManager для**:
 - Точного времени (используйте AlarmManager)
 - Длительной работы на переднем плане (используйте Foreground Service)
 - Немедленных обновлений UI (используйте Coroutines)

@@ -37,7 +37,7 @@ fun launchErrorExample() = runBlocking {
         }
         job.join()
     } catch (e: Exception) {
-        // ❌ Won't catch here!
+        // - Won't catch here!
         println("Caught: ${e.message}")
     }
     // Exception propagates to parent scope
@@ -65,9 +65,9 @@ fun asyncErrorExample() = runBlocking {
     }
 
     try {
-        deferred.await()  // ✅ Exception thrown here
+        deferred.await()  // - Exception thrown here
     } catch (e: Exception) {
-        println("Caught: ${e.message}")  // ✅ Catches here!
+        println("Caught: ${e.message}")  // - Catches here!
     }
 
     println("Program continues")  // Continues execution
@@ -103,7 +103,7 @@ fun compareErrorHandling() = runBlocking {
             throw Exception("Launch error")
         }.join()
     } catch (e: Exception) {
-        println("Outer catch: ${e.message}")  // ❌ Not caught
+        println("Outer catch: ${e.message}")  // - Not caught
     }
 
     println("\n=== async error ===")
@@ -112,7 +112,7 @@ fun compareErrorHandling() = runBlocking {
             throw Exception("Async error")
         }.await()
     } catch (e: Exception) {
-        println("Outer catch: ${e.message}")  // ✅ Caught!
+        println("Outer catch: ${e.message}")  // - Caught!
     }
 }
 ```
@@ -258,7 +258,7 @@ suspend fun supervisorExample() = supervisorScope {
 
     launch {
         delay(100)
-        println("Task 2 completes")  // ✅ Still runs
+        println("Task 2 completes")  // - Still runs
     }
 }
 
@@ -279,7 +279,7 @@ suspend fun supervisorAsync() = supervisorScope {
         "Failed"
     }
 
-    val data2 = result2.await()  // ✅ Succeeds
+    val data2 = result2.await()  // - Succeeds
 
     Pair(data1, data2)  // ("Failed", "Success")
 }
@@ -289,7 +289,7 @@ suspend fun supervisorAsync() = supervisorScope {
 
 ```kotlin
 class ErrorHandlingBestPractices {
-    // ✅ DO: Use try-catch with async.await()
+    // - DO: Use try-catch with async.await()
     suspend fun good1() = coroutineScope {
         try {
             val result = async { riskyOperation() }.await()
@@ -299,7 +299,7 @@ class ErrorHandlingBestPractices {
         }
     }
 
-    // ✅ DO: Use CoroutineExceptionHandler with launch
+    // - DO: Use CoroutineExceptionHandler with launch
     fun good2() = viewModelScope.launch {
         val handler = CoroutineExceptionHandler { _, exception ->
             handleError(exception)
@@ -310,26 +310,26 @@ class ErrorHandlingBestPractices {
         }
     }
 
-    // ✅ DO: Use supervisorScope for independent tasks
+    // - DO: Use supervisorScope for independent tasks
     suspend fun good3() = supervisorScope {
         launch { task1() }  // Errors don't affect task2
         launch { task2() }
     }
 
-    // ❌ DON'T: Expect to catch launch errors with try-catch
+    // - DON'T: Expect to catch launch errors with try-catch
     suspend fun bad1() {
         try {
             launch {
                 throw Exception("Error")
             }.join()
         } catch (e: Exception) {
-            // ❌ Won't catch!
+            // - Won't catch!
         }
     }
 
-    // ❌ DON'T: Use async without handling await() errors
+    // - DON'T: Use async without handling await() errors
     suspend fun bad2() {
-        val result = async { riskyOperation() }.await()  // ❌ Uncaught error
+        val result = async { riskyOperation() }.await()  // - Uncaught error
         process(result)
     }
 }

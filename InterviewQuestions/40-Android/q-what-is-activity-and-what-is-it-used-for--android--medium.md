@@ -382,13 +382,13 @@ class PhotoViewerActivity : AppCompatActivity() {
 
 ### When to Use Activity
 
-✅ **Use Activity for**:
+- **Use Activity for**:
 - Distinct screens in your app
 - Entry points from other apps
 - Different task flows
 - Full-screen experiences
 
-❌ **Don't use Activity for**:
+- **Don't use Activity for**:
 - Sub-sections of a screen (use Fragments)
 - Temporary UI overlays (use DialogFragment)
 - Background operations (use Service/WorkManager)

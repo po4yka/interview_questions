@@ -78,7 +78,7 @@ abstract class AppDatabase : RoomDatabase() {
 **SQLite - Manual strings:**
 
 ```kotlin
-// ❌ No compile-time validation
+// - No compile-time validation
 fun getUser(userId: Int): User? {
     val db = dbHelper.readableDatabase
 
@@ -107,7 +107,7 @@ fun getUser(userId: Int): User? {
 ```kotlin
 @Dao
 interface UserDao {
-    // ✅ Compile-time SQL validation
+    // - Compile-time SQL validation
     @Query("SELECT * FROM users WHERE id = :userId")
     suspend fun getUser(userId: Int): User?
 
@@ -196,7 +196,7 @@ fun getUsers(): List<User> {
 ```kotlin
 @Dao
 interface UserDao {
-    // ✅ Automatically updates UI when data changes
+    // - Automatically updates UI when data changes
     @Query("SELECT * FROM users")
     fun getAllUsers(): Flow<List<User>>
 
@@ -220,7 +220,7 @@ viewLifecycleOwner.lifecycleScope.launch {
 **SQLite - No type safety:**
 
 ```kotlin
-// ❌ Easy to make mistakes
+// - Easy to make mistakes
 fun getUser(id: Int): User {
     val cursor = db.rawQuery("SELECT * FROM users WHERE id = ?", arrayOf(id.toString()))
     cursor.moveToFirst()
@@ -240,7 +240,7 @@ fun getUser(id: Int): User {
 ```kotlin
 @Dao
 interface UserDao {
-    // ✅ Compile-time type checking
+    // - Compile-time type checking
     @Query("SELECT * FROM users WHERE id = :userId")
     suspend fun getUser(userId: Int): User?  // Returns typed object
 }
@@ -339,13 +339,13 @@ fun testGetUser() = runTest {
 |---------|--------|------|
 | **Abstraction** | Low-level | High-level ORM |
 | **Boilerplate** | High | Low |
-| **SQL Validation** | Runtime | Compile-time ✅ |
-| **Type Safety** | No | Yes ✅ |
-| **CRUD Operations** | Manual ContentValues | Annotations ✅ |
-| **Reactive (Flow/LiveData)** | No | Yes ✅ |
-| **Coroutines Support** | No | Yes ✅ |
-| **Migrations** | Manual | Structured ✅ |
-| **Testing** | Difficult | Easy ✅ |
+| **SQL Validation** | Runtime | Compile-time - |
+| **Type Safety** | No | Yes - |
+| **CRUD Operations** | Manual ContentValues | Annotations - |
+| **Reactive (Flow/LiveData)** | No | Yes - |
+| **Coroutines Support** | No | Yes - |
+| **Migrations** | Manual | Structured - |
+| **Testing** | Difficult | Easy - |
 | **Performance** | Fast | Fast (same - uses SQLite) |
 | **Dependencies** | Built-in | Jetpack library |
 | **Learning Curve** | SQL knowledge | Annotations + SQL |

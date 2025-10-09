@@ -41,14 +41,14 @@ In a single-module app, **one AndroidManifest.xml** contains everything:
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.app">
 
-    <!-- ❌ All permissions mixed together -->
+    <!-- - All permissions mixed together -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.LOCATION" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application>
-        <!-- ❌ All components mixed together -->
+        <!-- - All components mixed together -->
         <activity android:name=".LoginActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".CameraActivity" />
@@ -97,11 +97,11 @@ project/
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.feature.login">
 
-    <!-- ✅ Only permissions needed by login feature -->
+    <!-- - Only permissions needed by login feature -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
-        <!-- ✅ Only login-related components -->
+        <!-- - Only login-related components -->
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
@@ -127,14 +127,14 @@ project/
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.feature.camera">
 
-    <!-- ✅ Camera-specific permissions -->
+    <!-- - Camera-specific permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
 
     <application>
-        <!-- ✅ Camera-related components -->
+        <!-- - Camera-related components -->
         <activity
             android:name=".CameraActivity"
             android:exported="false"
@@ -162,12 +162,12 @@ project/
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.feature.map">
 
-    <!-- ✅ Location permissions -->
+    <!-- - Location permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application>
-        <!-- ✅ Map-related components -->
+        <!-- - Map-related components -->
         <activity
             android:name=".MapActivity"
             android:exported="false" />
@@ -194,7 +194,7 @@ project/
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.core.network">
 
-    <!-- ✅ Network permissions for all features using this module -->
+    <!-- - Network permissions for all features using this module -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -211,7 +211,7 @@ project/
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.app">
 
-    <!-- ✅ Only app-level configuration -->
+    <!-- - Only app-level configuration -->
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -281,7 +281,7 @@ Build Process:
 <!-- app/AndroidManifest.xml -->
 <activity
     android:name="com.example.feature.login.LoginActivity"
-    android:screenOrientation="landscape" />  <!-- ✅ Overrides portrait -->
+    android:screenOrientation="landscape" />  <!-- - Overrides portrait -->
 ```
 
 **Result:** `screenOrientation="landscape"` (app wins)
@@ -363,7 +363,7 @@ dependencies {
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.app">
 
-    <!-- ✅ Merged from all modules -->
+    <!-- - Merged from all modules -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -425,10 +425,10 @@ dependencies {
 ```kotlin
 // app/build.gradle.kts
 dependencies {
-    // implementation(project(":feature:camera"))  // ✅ Just comment out
+    // implementation(project(":feature:camera"))  // - Just comment out
 }
 
-// ✅ Camera permissions and components automatically removed from merged manifest!
+// - Camera permissions and components automatically removed from merged manifest!
 ```
 
 ---
@@ -445,7 +445,7 @@ Which module needs LOCATION permission?
 
 **Before (monolithic):**
 ```xml
-<!-- ❌ Unclear which feature needs what -->
+<!-- - Unclear which feature needs what -->
 <uses-permission android:name="android.permission.CAMERA" />
 <uses-permission android:name="android.permission.LOCATION" />
 ```
@@ -453,10 +453,10 @@ Which module needs LOCATION permission?
 **After (modular):**
 ```xml
 <!-- feature-camera/AndroidManifest.xml -->
-<uses-permission android:name="android.permission.CAMERA" />  <!-- ✅ Clear! -->
+<uses-permission android:name="android.permission.CAMERA" />  <!-- - Clear! -->
 
 <!-- feature-map/AndroidManifest.xml -->
-<uses-permission android:name="android.permission.LOCATION" />  <!-- ✅ Clear! -->
+<uses-permission android:name="android.permission.LOCATION" />  <!-- - Clear! -->
 ```
 
 ---
@@ -495,7 +495,7 @@ dependencies {
 <!-- feature-profile/AndroidManifest.xml -->
 <activity
     android:name="com.example.feature.login.LoginActivity"
-    android:screenOrientation="landscape" />  <!-- ❌ Conflict! -->
+    android:screenOrientation="landscape" />  <!-- - Conflict! -->
 ```
 
 **Error:**
@@ -555,7 +555,7 @@ from feature-profile conflicts with value=portrait from feature-login
 
 ```xml
 <!-- app/AndroidManifest.xml -->
-<!-- ✅ Only app-level config, no feature-specific items -->
+<!-- - Only app-level config, no feature-specific items -->
 <manifest>
     <application
         android:name=".MyApplication"
@@ -577,7 +577,7 @@ from feature-profile conflicts with value=portrait from feature-login
 ### 2. Module Self-Sufficiency
 
 ```xml
-<!-- ✅ Each module declares everything it needs -->
+<!-- - Each module declares everything it needs -->
 <!-- feature-camera/AndroidManifest.xml -->
 <manifest>
     <uses-permission android:name="android.permission.CAMERA" />
@@ -596,7 +596,7 @@ from feature-profile conflicts with value=portrait from feature-login
 
 ```xml
 <!-- core-network/AndroidManifest.xml -->
-<!-- ✅ Library modules: only permissions, NO <application> -->
+<!-- - Library modules: only permissions, NO <application> -->
 <manifest>
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
@@ -622,10 +622,10 @@ from feature-profile conflicts with value=portrait from feature-login
    - Conflicts handled with merge tools
 
 **Benefits:**
-- ✅ **Modular independence** - modules are self-contained
-- ✅ **Clear ownership** - easy to see what each module needs
-- ✅ **Reusability** - modules can be reused across projects
-- ✅ **Maintainability** - remove module = remove all its manifest entries
+- - **Modular independence** - modules are self-contained
+- - **Clear ownership** - easy to see what each module needs
+- - **Reusability** - modules can be reused across projects
+- - **Maintainability** - remove module = remove all its manifest entries
 
 **Best practices:**
 - Keep main app manifest minimal

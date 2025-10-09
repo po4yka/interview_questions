@@ -87,16 +87,16 @@ class MainActivity : AppCompatActivity() {
 **When ViewModel is cleared**:
 ```kotlin
 // ViewModel survives:
-// ✅ Screen rotation
-// ✅ Language change
-// ✅ Dark mode toggle
-// ✅ Activity in background
+// - Screen rotation
+// - Language change
+// - Dark mode toggle
+// - Activity in background
 
 // ViewModel is lost:
-// ❌ finish() called
-// ❌ Back button pressed (last activity)
-// ❌ Process death
-// ❌ User force-stops app
+// - finish() called
+// - Back button pressed (last activity)
+// - Process death
+// - User force-stops app
 ```
 
 ### onSaveInstanceState - Process Death Survival
@@ -143,14 +143,14 @@ class MainActivity : AppCompatActivity() {
 **When onSaveInstanceState is called**:
 ```kotlin
 // Called when:
-// ✅ Configuration change (rotation, etc.)
-// ✅ Activity going to background
-// ✅ Before process death
-// ✅ System needs to reclaim memory
+// - Configuration change (rotation, etc.)
+// - Activity going to background
+// - Before process death
+// - System needs to reclaim memory
 
 // NOT called when:
-// ❌ User presses back (Activity finishing)
-// ❌ finish() called explicitly
+// - User presses back (Activity finishing)
+// - finish() called explicitly
 ```
 
 ### Combining Both Approaches (Recommended)
@@ -224,7 +224,7 @@ class MainActivity : AppCompatActivity() {
 ### Data Size Limitations
 
 ```kotlin
-// ❌ BAD: Large data in onSaveInstanceState
+// - BAD: Large data in onSaveInstanceState
 override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
 
@@ -233,13 +233,13 @@ override fun onSaveInstanceState(outState: Bundle) {
     outState.putByteArray("image", largeBitmap.toByteArray()) // Several MB
 }
 
-// ✅ GOOD: Use ViewModel for large data
+// - GOOD: Use ViewModel for large data
 class MyViewModel : ViewModel() {
     val users = MutableLiveData<List<User>>() // Any size
     val bitmap = MutableLiveData<Bitmap>() // Any size
 }
 
-// ✅ GOOD: Only save reference in Bundle
+// - GOOD: Only save reference in Bundle
 override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     outState.putInt("user_id", currentUserId) // Just the ID
@@ -338,24 +338,24 @@ class ProductActivity : AppCompatActivity() {
 
 ```
 Choose ViewModel when:
-✅ Storing large datasets
-✅ Holding references to repositories
-✅ Running background operations
-✅ Complex business logic
-✅ Data shared across fragments
-✅ Only need to survive config changes
+- Storing large datasets
+- Holding references to repositories
+- Running background operations
+- Complex business logic
+- Data shared across fragments
+- Only need to survive config changes
 
 Choose onSaveInstanceState when:
-✅ Critical UI state (scroll position, text input)
-✅ Small primitive values
-✅ Must survive process death
-✅ User-entered data not yet saved
-✅ Temporary selection state
+- Critical UI state (scroll position, text input)
+- Small primitive values
+- Must survive process death
+- User-entered data not yet saved
+- Temporary selection state
 
 Use SavedStateHandle when:
-✅ Need both ViewModel AND process death survival
-✅ Want type-safe state management
-✅ Building production apps (recommended)
+- Need both ViewModel AND process death survival
+- Want type-safe state management
+- Building production apps (recommended)
 ```
 
 ### Common Patterns

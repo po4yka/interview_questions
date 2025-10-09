@@ -110,11 +110,11 @@ class Book(val isbn: String, val title: String) {
 
 | Collection | Uses hashCode() | Uses equals() |
 |------------|-----------------|---------------|
-| HashSet | ✅ Yes | ✅ Yes |
-| HashMap | ✅ Yes | ✅ Yes |
-| LinkedHashSet | ✅ Yes | ✅ Yes |
-| ArrayList | ❌ No | ✅ Yes (for contains) |
-| TreeSet | ❌ No | ❌ No (uses Comparable) |
+| HashSet | - Yes | - Yes |
+| HashMap | - Yes | - Yes |
+| LinkedHashSet | - Yes | - Yes |
+| ArrayList | - No | - Yes (for contains) |
+| TreeSet | - No | - No (uses Comparable) |
 
 **Summary:**
 

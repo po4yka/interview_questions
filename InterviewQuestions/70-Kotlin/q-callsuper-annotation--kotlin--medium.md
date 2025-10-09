@@ -54,17 +54,17 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 }
 
-// ✅ ХОРОШО: Вызов super в переопределённом методе
+// - ХОРОШО: Вызов super в переопределённом методе
 class GoodActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState) // ✅ Вызов super
+        super.onCreate(savedInstanceState) // - Вызов super
         setContentView(R.layout.activity_main)
         setupUI()
     }
 
     override fun initialize() {
-        super.initialize() // ✅ Вызов super
+        super.initialize() // - Вызов super
         setupAdditionalComponents()
     }
 
@@ -77,18 +77,18 @@ class GoodActivity : BaseActivity() {
     }
 }
 
-// ❌ ПЛОХО: Пропущен вызов super
+// - ПЛОХО: Пропущен вызов super
 class BadActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // ❌ ОШИБКА: Нет super.onCreate()
+        // - ОШИБКА: Нет super.onCreate()
         // Android Studio выдаст предупреждение:
         // "Overriding method should call super.onCreate"
         setContentView(R.layout.activity_main)
     }
 
     override fun initialize() {
-        // ❌ ОШИБКА: Нет super.initialize()
+        // - ОШИБКА: Нет super.initialize()
         // Базовая инициализация не будет выполнена
         setupAdditionalComponents()
     }
@@ -129,7 +129,7 @@ abstract class BaseFragment : Fragment() {
 class LeakyFragment : BaseFragment() {
 
     override fun onDestroy() {
-        // ❌ Нет super.onDestroy()
+        // - Нет super.onDestroy()
         // Результат: disposables не очистятся → утечка памяти
         cleanup()
     }
@@ -139,11 +139,11 @@ class LeakyFragment : BaseFragment() {
     }
 }
 
-// ✅ Правильный вариант
+// - Правильный вариант
 class ProperFragment : BaseFragment() {
 
     override fun onDestroy() {
-        super.onDestroy() // ✅ Очистка disposables и analytics
+        super.onDestroy() // - Очистка disposables и analytics
         cleanup()
     }
 
@@ -194,12 +194,12 @@ class UserViewModel : BaseViewModel() {
     private val userRepository = UserRepository()
 
     override fun initialize() {
-        super.initialize() // ✅ Критически важно для errorHandler
+        super.initialize() // - Критически важно для errorHandler
         loadUsers()
     }
 
     override fun onCleared() {
-        super.onCleared() // ✅ Очищает errorHandler
+        super.onCleared() // - Очищает errorHandler
         userRepository.cleanup()
     }
 
@@ -276,12 +276,12 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> :
 class UserAdapter : BaseAdapter<User, UserAdapter.UserViewHolder>() {
 
     override fun setItems(newItems: List<User>) {
-        super.setItems(newItems) // ✅ Важно: обновляет адаптер
+        super.setItems(newItems) // - Важно: обновляет адаптер
         logItemsUpdate(newItems.size)
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        super.onBindViewHolder(holder, position) // ✅ Устанавливает click listener
+        super.onBindViewHolder(holder, position) // - Устанавливает click listener
         val user = items[position]
         holder.bind(user)
     }
@@ -357,12 +357,12 @@ class CircleView @JvmOverloads constructor(
     private var radius = 0f
 
     override fun setup() {
-        super.setup() // ✅ Инициализирует paint
+        super.setup() // - Инициализирует paint
         paint.color = Color.RED
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh) // ✅ Логирует изменение
+        super.onSizeChanged(w, h, oldw, oldh) // - Логирует изменение
         radius = minOf(w, h) / 2f
     }
 
@@ -411,12 +411,12 @@ class UserRepository : BaseRepository() {
     private val cache = mutableMapOf<Int, User>()
 
     override fun initialize() {
-        super.initialize() // ✅ Важно для disposables
+        super.initialize() // - Важно для disposables
         loadInitialData()
     }
 
     override fun cleanup() {
-        super.cleanup() // ✅ Очищает disposables
+        super.cleanup() // - Очищает disposables
         cache.clear()
     }
 
@@ -470,18 +470,18 @@ open class Parent {
 
 class Child : Parent() {
 
-    // ✅ Переопределение без вызова super - OK для method1
+    // - Переопределение без вызова super - OK для method1
     override fun method1() {
         println("Child method1 - no super call")
     }
 
-    // ✅ ХОРОШО: Вызов super для method2 с @CallSuper
+    // - ХОРОШО: Вызов super для method2 с @CallSuper
     override fun method2() {
         super.method2() // Обязательно из-за @CallSuper
         println("Child method2")
     }
 
-    // ❌ ПЛОХО: Если забыть super для method2
+    // - ПЛОХО: Если забыть super для method2
     // override fun method2() {
     //     println("Child method2 - forgot super!")
     //     // Android Studio предупредит:
@@ -513,13 +513,13 @@ abstract class Level2Activity : Level1Activity() {
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState) // ✅ Вызывает Level1
+        super.onCreate(savedInstanceState) // - Вызывает Level1
         Log.d("Level2", "onCreate")
     }
 
     @CallSuper
     override fun setupLevel1() {
-        super.setupLevel1() // ✅ Вызывает Level1
+        super.setupLevel1() // - Вызывает Level1
         Log.d("Level2", "Setup Level 1 from Level 2")
     }
 
@@ -532,17 +532,17 @@ abstract class Level2Activity : Level1Activity() {
 class ConcreteActivity : Level2Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState) // ✅ Вызывает Level2 → Level1
+        super.onCreate(savedInstanceState) // - Вызывает Level2 → Level1
         Log.d("Concrete", "onCreate")
     }
 
     override fun setupLevel1() {
-        super.setupLevel1() // ✅ Вызывает Level2 → Level1
+        super.setupLevel1() // - Вызывает Level2 → Level1
         Log.d("Concrete", "Setup Level 1 from Concrete")
     }
 
     override fun setupLevel2() {
-        super.setupLevel2() // ✅ Вызывает Level2
+        super.setupLevel2() // - Вызывает Level2
         Log.d("Concrete", "Setup Level 2 from Concrete")
     }
 }
@@ -574,7 +574,7 @@ class TrackedActivity : AppCompatActivity(), Trackable {
     }
 
     override fun trackEvent(eventName: String) {
-        // super.trackEvent(eventName) // ⚠️ Не обязательно для интерфейсов
+        // super.trackEvent(eventName) // WARNING: Не обязательно для интерфейсов
         // Но если забыли, базовая аналитика не выполнится
         Log.d("TrackedActivity", "Custom tracking: $eventName")
     }
@@ -584,7 +584,7 @@ class TrackedActivity : AppCompatActivity(), Trackable {
 class ProperTrackedActivity : AppCompatActivity(), Trackable {
 
     override fun trackEvent(eventName: String) {
-        super.trackEvent(eventName) // ✅ Вызывает базовую аналитику
+        super.trackEvent(eventName) // - Вызывает базовую аналитику
         // Дополнительная кастомная логика
         sendToFirebase(eventName)
     }
@@ -642,13 +642,13 @@ class UserPresenter : BasePresenter<UserView>() {
     private val disposables = CompositeDisposable()
 
     override fun attachView(view: UserView) {
-        super.attachView(view) // ✅ Устанавливает isAttached и this.view
+        super.attachView(view) // - Устанавливает isAttached и this.view
         loadUsers()
     }
 
     override fun detachView() {
         disposables.clear() // Очистка перед detach
-        super.detachView() // ✅ Очищает view и isAttached
+        super.detachView() // - Очищает view и isAttached
     }
 
     private fun loadUsers() {
@@ -678,7 +678,7 @@ abstract class BaseClass {
 
 class ChildClass : BaseClass() {
 
-    // ❌ Lint warning:
+    // - Lint warning:
     // "Overriding method should call super.requiredMethod"
     override fun requiredMethod() {
         println("Child implementation - forgot super!")

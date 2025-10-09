@@ -45,7 +45,7 @@ tags:
 
 **Problem Without Structured Concurrency**:
 ```kotlin
-// ❌ BAD: Unstructured approach
+// - BAD: Unstructured approach
 class MyActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +64,7 @@ class MyActivity : Activity() {
 
 **Solution With Structured Concurrency**:
 ```kotlin
-// ✅ GOOD: Structured approach
+// - GOOD: Structured approach
 class MyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -207,11 +207,11 @@ class MyActivity : AppCompatActivity() {
 ### Best Practices
 
 ```kotlin
-// ✅ DO: Use scoped builders
+// - DO: Use scoped builders
 viewModelScope.launch { /* ... */ }
 lifecycleScope.launch { /* ... */ }
 
-// ✅ DO: Create custom scopes tied to lifecycle
+// - DO: Create custom scopes tied to lifecycle
 class MyRepository {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -220,10 +220,10 @@ class MyRepository {
     }
 }
 
-// ❌ DON'T: Use GlobalScope
+// - DON'T: Use GlobalScope
 GlobalScope.launch { /* ... */ } // Ignores lifecycle!
 
-// ❌ DON'T: Launch unscoped coroutines
+// - DON'T: Launch unscoped coroutines
 CoroutineScope(Dispatchers.Main).launch { /* ... */ }
 // No lifecycle tie - must cancel manually
 ```
@@ -231,11 +231,11 @@ CoroutineScope(Dispatchers.Main).launch { /* ... */ }
 ### Summary
 
 **Structured concurrency** ensures:
-- ✅ Coroutines tied to scopes
-- ✅ Automatic cancellation when scope ends
-- ✅ Predictable error propagation
-- ✅ No memory leaks
-- ✅ Clean resource management
+- - Coroutines tied to scopes
+- - Automatic cancellation when scope ends
+- - Predictable error propagation
+- - No memory leaks
+- - Clean resource management
 
 In Android, this means using `viewModelScope`, `lifecycleScope`, or custom scopes rather than `GlobalScope` or unscoped launches.
 
@@ -257,7 +257,7 @@ In Android, this means using `viewModelScope`, `lifecycleScope`, or custom scope
 
 **Проблема Без Структурированной Конкурентности**:
 ```kotlin
-// ❌ ПЛОХО: Неструктурированный подход
+// - ПЛОХО: Неструктурированный подход
 class MyActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -276,7 +276,7 @@ class MyActivity : Activity() {
 
 **Решение Со Структурированной Конкурентностью**:
 ```kotlin
-// ✅ ХОРОШО: Структурированный подход
+// - ХОРОШО: Структурированный подход
 class MyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -376,11 +376,11 @@ viewModelScope.launch {
 ### Резюме
 
 **Структурированная конкурентность** гарантирует:
-- ✅ Корутины привязаны к областям
-- ✅ Автоматическая отмена при завершении области
-- ✅ Предсказуемое распространение ошибок
-- ✅ Отсутствие утечек памяти
-- ✅ Чистое управление ресурсами
+- - Корутины привязаны к областям
+- - Автоматическая отмена при завершении области
+- - Предсказуемое распространение ошибок
+- - Отсутствие утечек памяти
+- - Чистое управление ресурсами
 
 В Android это означает использование `viewModelScope`, `lifecycleScope` или пользовательских областей вместо `GlobalScope` или неограниченных запусков.
 

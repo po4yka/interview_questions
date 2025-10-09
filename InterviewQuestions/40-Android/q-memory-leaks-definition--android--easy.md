@@ -36,7 +36,7 @@ Memory leaks lead to **increased memory consumption** and **degraded app perform
 **1. Static References to Activity:**
 
 ```kotlin
-// ❌ Memory Leak
+// - Memory Leak
 class MyActivity : AppCompatActivity() {
     companion object {
         var instance: Activity? = null  // Static reference
@@ -52,7 +52,7 @@ class MyActivity : AppCompatActivity() {
 **2. Anonymous Inner Classes:**
 
 ```kotlin
-// ❌ Memory Leak
+// - Memory Leak
 class MyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +71,7 @@ class MyActivity : AppCompatActivity() {
 **3. Handler Leaks:**
 
 ```kotlin
-// ❌ Memory Leak
+// - Memory Leak
 class MyActivity : AppCompatActivity() {
     private val handler = Handler()
 
@@ -90,7 +90,7 @@ class MyActivity : AppCompatActivity() {
 **4. Listener Not Removed:**
 
 ```kotlin
-// ❌ Memory Leak
+// - Memory Leak
 class MyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,7 +128,7 @@ debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
 **Prevention:**
 
 ```kotlin
-// ✅ GOOD - Proper cleanup
+// - GOOD - Proper cleanup
 class MyActivity : AppCompatActivity() {
     private val disposables = CompositeDisposable()
 

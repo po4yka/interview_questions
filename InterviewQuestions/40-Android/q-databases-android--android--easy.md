@@ -85,15 +85,15 @@ fun getUsers(): List<User> {
 ```
 
 **Pros:**
-- ✅ Built-in, no dependencies
-- ✅ Full SQL power
-- ✅ Lightweight
+-  Built-in, no dependencies
+-  Full SQL power
+-  Lightweight
 
 **Cons:**
-- ❌ Lots of boilerplate
-- ❌ No compile-time SQL validation
-- ❌ Manual cursor handling
-- ❌ No type safety
+-  Lots of boilerplate
+-  No compile-time SQL validation
+-  Manual cursor handling
+-  No type safety
 
 ---
 
@@ -103,7 +103,7 @@ fun getUsers(): List<User> {
 
 **Characteristics:**
 - 🎯 Type-safe database access
-- ✅ Compile-time SQL validation
+-  Compile-time SQL validation
 - 🔄 LiveData/Flow support
 - 📝 Annotation-based
 
@@ -168,17 +168,17 @@ viewLifecycleOwner.lifecycleScope.launch {
 ```
 
 **Pros:**
-- ✅ Type-safe API
-- ✅ Compile-time SQL validation
-- ✅ Less boilerplate
-- ✅ LiveData/Flow integration
-- ✅ Automatic migrations
-- ✅ Coroutines support
+-  Type-safe API
+-  Compile-time SQL validation
+-  Less boilerplate
+-  LiveData/Flow integration
+-  Automatic migrations
+-  Coroutines support
 
 **Cons:**
-- ❌ Annotation processing overhead
-- ❌ Learning curve
-- ❌ Still uses SQLite under the hood
+-  Annotation processing overhead
+-  Learning curve
+-  Still uses SQLite under the hood
 
 ---
 
@@ -235,18 +235,18 @@ realm.close()
 ```
 
 **Pros:**
-- ✅ Very fast (faster than SQLite for some operations)
-- ✅ Object-oriented (no SQL)
-- ✅ Reactive queries
-- ✅ Cross-platform (iOS, Android, etc.)
-- ✅ Built-in encryption
-- ✅ Cloud sync (Realm Sync)
+-  Very fast (faster than SQLite for some operations)
+-  Object-oriented (no SQL)
+-  Reactive queries
+-  Cross-platform (iOS, Android, etc.)
+-  Built-in encryption
+-  Cloud sync (Realm Sync)
 
 **Cons:**
-- ❌ External dependency
-- ❌ Larger library size
-- ❌ Proprietary format
-- ❌ Migration can be complex
+-  External dependency
+-  Larger library size
+-  Proprietary format
+-  Migration can be complex
 
 **Dependencies:**
 

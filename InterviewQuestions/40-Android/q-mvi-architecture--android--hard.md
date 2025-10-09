@@ -639,36 +639,36 @@ class LoginViewModelTest {
 ### Best Practices
 
 ```kotlin
-// ✅ 1. Единое иммутабельное состояние
+// - 1. Единое иммутабельное состояние
 data class ScreenState(
     val data: List<Item>,
     val isLoading: Boolean,
     val error: String?
 )
 
-// ✅ 2. Все action через Intent
+// - 2. Все action через Intent
 sealed class ScreenIntent {
     object Load : ScreenIntent()
     data class ItemClicked(val id: Int) : ScreenIntent()
 }
 
-// ✅ 3. Side effects через Channel
+// - 3. Side effects через Channel
 private val _sideEffect = Channel<SideEffect>()
 val sideEffect = _sideEffect.receiveAsFlow()
 
-// ✅ 4. Используйте data class copy
+// - 4. Используйте data class copy
 _state.value = _state.value.copy(isLoading = true)
 
-// ✅ 5. Reducer - чистые функции
+// - 5. Reducer - чистые функции
 fun reduce(state: State, intent: Intent): State = when (intent) {
     // Pure transformation
 }
 
-// ❌ НЕ мутируйте state
-_state.value.items.add(item) // ❌ Мутация!
+// - НЕ мутируйте state
+_state.value.items.add(item) // - Мутация!
 _state.value = _state.value.copy(
     items = _state.value.items + item
-) // ✅ Новый объект
+) // - Новый объект
 ```
 
 **English**: **MVI (Model-View-Intent)** is an architecture pattern with **unidirectional data flow**, where UI state is immutable and changes only through explicit Intents.

@@ -26,10 +26,10 @@ Reducing recompositions in Jetpack Compose improves performance. Besides side ef
 ```kotlin
 @Composable
 fun ExpensiveCalculation(items: List<Item>) {
-    // ❌ BAD: Recalculates on every recomposition
+    // - BAD: Recalculates on every recomposition
     val result = items.map { it.value * 2 }.sum()
 
-    // ✅ GOOD: Only recalculates when items change
+    // - GOOD: Only recalculates when items change
     val result = remember(items) {
         items.map { it.value * 2 }.sum()
     }
@@ -46,10 +46,10 @@ fun SearchScreen() {
     var query by remember { mutableStateOf("") }
     val items = remember { List(1000) { "Item $it" } }
 
-    // ❌ BAD: Filters on every recomposition
+    // - BAD: Filters on every recomposition
     val filteredItems = items.filter { it.contains(query, ignoreCase = true) }
 
-    // ✅ GOOD: Only filters when query changes
+    // - GOOD: Only filters when query changes
     val filteredItems by remember {
         derivedStateOf {
             items.filter { it.contains(query, ignoreCase = true) }
@@ -83,13 +83,13 @@ fun UserList(users: List<User>) {
 ### 4. Stable Data Classes
 
 ```kotlin
-// ❌ UNSTABLE: Compose can't determine if changed
+// - UNSTABLE: Compose can't determine if changed
 data class User(
     val name: String,
     val friends: MutableList<String> // Mutable collection
 )
 
-// ✅ STABLE: Compose can optimize
+// - STABLE: Compose can optimize
 @Immutable // or @Stable
 data class User(
     val name: String,
@@ -107,7 +107,7 @@ data class User(
 ### 5. Avoid Lambdas in Composable Parameters
 
 ```kotlin
-// ❌ BAD: Creates new lambda on each recomposition
+// - BAD: Creates new lambda on each recomposition
 @Composable
 fun ParentScreen(viewModel: ViewModel) {
     ChildScreen(
@@ -115,7 +115,7 @@ fun ParentScreen(viewModel: ViewModel) {
     )
 }
 
-// ✅ GOOD: Stable reference
+// - GOOD: Stable reference
 @Composable
 fun ParentScreen(viewModel: ViewModel) {
     val onClick = remember { { viewModel.handleClick() } }
@@ -123,7 +123,7 @@ fun ParentScreen(viewModel: ViewModel) {
     ChildScreen(onClick = onClick)
 }
 
-// ✅ BETTER: Use rememberUpdatedState for changing values
+// - BETTER: Use rememberUpdatedState for changing values
 @Composable
 fun ParentScreen(count: Int, onComplete: () -> Unit) {
     val currentOnComplete by rememberUpdatedState(onComplete)
@@ -137,7 +137,7 @@ fun ParentScreen(count: Int, onComplete: () -> Unit) {
 ### 6. Hoist State Appropriately
 
 ```kotlin
-// ❌ BAD: Too much state in parent causes many recompositions
+// - BAD: Too much state in parent causes many recompositions
 @Composable
 fun BadParent() {
     var text1 by remember { mutableStateOf("") }
@@ -150,7 +150,7 @@ fun BadParent() {
     }
 }
 
-// ✅ GOOD: Move state closer to usage
+// - GOOD: Move state closer to usage
 @Composable
 fun GoodParent() {
     Column {
@@ -172,7 +172,7 @@ fun TextFieldWithState() {
 ```kotlin
 // Add dependency: implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
-// ❌ BAD: Mutable list
+// - BAD: Mutable list
 @Composable
 fun MutableListExample(items: MutableList<String>) {
     LazyColumn {
@@ -182,7 +182,7 @@ fun MutableListExample(items: MutableList<String>) {
     }
 }
 
-// ✅ GOOD: Immutable list
+// - GOOD: Immutable list
 @Composable
 fun ImmutableListExample(items: ImmutableList<String>) {
     LazyColumn {
@@ -226,7 +226,7 @@ data class Config(
 ### 9. Avoid Unnecessary State Reads
 
 ```kotlin
-// ❌ BAD: Reads state in composition
+// - BAD: Reads state in composition
 @Composable
 fun BadCounter() {
     val count = remember { mutableStateOf(0) }
@@ -239,7 +239,7 @@ fun BadCounter() {
     }
 }
 
-// ✅ GOOD: Read state only where needed
+// - GOOD: Read state only where needed
 @Composable
 fun GoodCounter() {
     val count = remember { mutableStateOf(0) }
@@ -313,16 +313,16 @@ fun DynamicList(items: List<Item>, selectedId: String) {
 
 ### Performance Checklist
 
-1. ✅ Use `remember` for expensive calculations
-2. ✅ Use `derivedStateOf` for derived state
-3. ✅ Use stable `key()` in lists
-4. ✅ Make data classes `@Immutable` or `@Stable`
-5. ✅ Use immutable collections
-6. ✅ Hoist state appropriately (not too high)
-7. ✅ Avoid creating lambdas in composable body
-8. ✅ Read state only where needed
-9. ✅ Use `rememberSaveable` for persistence
-10. ✅ Minimize state dependencies
+1. - Use `remember` for expensive calculations
+2. - Use `derivedStateOf` for derived state
+3. - Use stable `key()` in lists
+4. - Make data classes `@Immutable` or `@Stable`
+5. - Use immutable collections
+6. - Hoist state appropriately (not too high)
+7. - Avoid creating lambdas in composable body
+8. - Read state only where needed
+9. - Use `rememberSaveable` for persistence
+10. - Minimize state dependencies
 
 ### Debugging Recompositions
 

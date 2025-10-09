@@ -40,9 +40,9 @@ tags:
 **Cancellation Points**:
 ```kotlin
 // Coroutine checks for cancellation at these points:
-delay(1000)           // ✅ Checks cancellation
-yield()               // ✅ Checks cancellation
-withContext(IO) { }   // ✅ Checks cancellation
+delay(1000)           // - Checks cancellation
+yield()               // - Checks cancellation
+withContext(IO) { }   // - Checks cancellation
 // Any suspending function from kotlinx.coroutines
 ```
 
@@ -82,7 +82,7 @@ println("Job canceled")
 
 **Problem - CPU-intensive loop**:
 ```kotlin
-// ❌ BAD: Won't cancel promptly
+// - BAD: Won't cancel promptly
 val job = launch {
     var nextPrintTime = System.currentTimeMillis()
     var i = 0
@@ -101,7 +101,7 @@ job.cancel() // Cancellation won't work immediately!
 
 **Solution 1 - Check isActive**:
 ```kotlin
-// ✅ GOOD: Manual cancellation check
+// - GOOD: Manual cancellation check
 val job = launch {
     var nextPrintTime = System.currentTimeMillis()
     var i = 0
@@ -126,7 +126,7 @@ job.cancel()
 
 **Solution 2 - Use yield()**:
 ```kotlin
-// ✅ GOOD: Periodic yield() for cancellation
+// - GOOD: Periodic yield() for cancellation
 val job = launch {
     repeat(1000) { i ->
         // Heavy computation here
@@ -284,36 +284,36 @@ job.cancel() // Safe, predictable cancellation
 ### Best Practices
 
 ```kotlin
-// ✅ DO: Check isActive in long-running loops
+// - DO: Check isActive in long-running loops
 while (isActive) {
     performWork()
 }
 
-// ✅ DO: Use yield() in CPU-intensive work
+// - DO: Use yield() in CPU-intensive work
 repeat(1000) {
     heavyComputation()
     yield()
 }
 
-// ✅ DO: Clean up in finally blocks
+// - DO: Clean up in finally blocks
 try {
     useResource()
 } finally {
     cleanupResource()
 }
 
-// ✅ DO: Let CancellationException propagate
+// - DO: Let CancellationException propagate
 catch (e: CancellationException) {
     cleanup()
     throw e // Re-throw!
 }
 
-// ❌ DON'T: Ignore cancellation
+// - DON'T: Ignore cancellation
 while (true) { // No cancellation check!
     doWork()
 }
 
-// ❌ DON'T: Swallow CancellationException
+// - DON'T: Swallow CancellationException
 catch (e: CancellationException) {
     // Don't just ignore it!
 }
@@ -322,11 +322,11 @@ catch (e: CancellationException) {
 ### Summary
 
 **Coroutine cancellation** is:
-- ✅ **Cooperative** - requires coroutine to check
-- ✅ **Safe** - predictable, won't corrupt state
-- ✅ **Structured** - parent cancels all children
-- ✅ **Clean** - finally blocks always run
-- ✅ **Explicit** - uses `isActive`, `yield()`, suspension points
+- - **Cooperative** - requires coroutine to check
+- - **Safe** - predictable, won't corrupt state
+- - **Structured** - parent cancels all children
+- - **Clean** - finally blocks always run
+- - **Explicit** - uses `isActive`, `yield()`, suspension points
 
 **Different from threads**:
 - Threads: Preemptive, risky, immediate
@@ -345,9 +345,9 @@ catch (e: CancellationException) {
 **Точки Отмены**:
 ```kotlin
 // Корутина проверяет отмену в этих точках:
-delay(1000)           // ✅ Проверяет отмену
-yield()               // ✅ Проверяет отмену
-withContext(IO) { }   // ✅ Проверяет отмену
+delay(1000)           // - Проверяет отмену
+yield()               // - Проверяет отмену
+withContext(IO) { }   // - Проверяет отмену
 // Любая приостанавливающая функция из kotlinx.coroutines
 ```
 
@@ -387,7 +387,7 @@ println("Job отменен")
 
 **Проблема - CPU-интенсивный цикл**:
 ```kotlin
-// ❌ ПЛОХО: Не отменится быстро
+// - ПЛОХО: Не отменится быстро
 val job = launch {
     var nextPrintTime = System.currentTimeMillis()
     var i = 0
@@ -406,7 +406,7 @@ job.cancel() // Отмена не сработает сразу!
 
 **Решение 1 - Проверка isActive**:
 ```kotlin
-// ✅ ХОРОШО: Ручная проверка отмены
+// - ХОРОШО: Ручная проверка отмены
 val job = launch {
     var nextPrintTime = System.currentTimeMillis()
     var i = 0
@@ -426,7 +426,7 @@ job.cancel()
 
 **Решение 2 - Использование yield()**:
 ```kotlin
-// ✅ ХОРОШО: Периодический yield() для отмены
+// - ХОРОШО: Периодический yield() для отмены
 val job = launch {
     repeat(1000) { i ->
         // Тяжелые вычисления
@@ -517,11 +517,11 @@ parent.join()
 ### Резюме
 
 **Отмена корутин**:
-- ✅ **Кооперативная** - требует проверки корутиной
-- ✅ **Безопасная** - предсказуемая, не повреждает состояние
-- ✅ **Структурированная** - родитель отменяет всех потомков
-- ✅ **Чистая** - finally блоки всегда выполняются
-- ✅ **Явная** - использует `isActive`, `yield()`, точки приостановки
+- - **Кооперативная** - требует проверки корутиной
+- - **Безопасная** - предсказуемая, не повреждает состояние
+- - **Структурированная** - родитель отменяет всех потомков
+- - **Чистая** - finally блоки всегда выполняются
+- - **Явная** - использует `isActive`, `yield()`, точки приостановки
 
 **Отличия от потоков**:
 - Потоки: Преемптивная, рискованная, немедленная

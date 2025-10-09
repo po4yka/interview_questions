@@ -34,12 +34,12 @@ Per-process limit shared across all transactions
 **1. Large Intent Data:**
 
 ```kotlin
-// ❌ BAD - May cause TransactionTooLargeException
+// - BAD - May cause TransactionTooLargeException
 val intent = Intent(this, DetailActivity::class.java)
 
 // Passing large bitmap
 val largeBitmap = getBitmapFromCamera()  // e.g., 5 MB
-intent.putExtra("image", largeBitmap)  // ❌ CRASH!
+intent.putExtra("image", largeBitmap)  // - CRASH!
 
 startActivity(intent)
 ```
@@ -52,24 +52,24 @@ android.os.TransactionTooLargeException: data parcel size 5242880 bytes
 **2. Large Bundle in Fragment:**
 
 ```kotlin
-// ❌ BAD
+// - BAD
 val fragment = MyFragment()
 val bundle = Bundle()
 
 // Adding large data
 bundle.putSerializable("userList", largeUserList)  // 2 MB
-fragment.arguments = bundle  // ❌ CRASH!
+fragment.arguments = bundle  // - CRASH!
 ```
 
 **3. onSaveInstanceState with Large Data:**
 
 ```kotlin
-// ❌ BAD
+// - BAD
 override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
 
     // Saving large bitmap
-    outState.putParcelable("screenshot", largeScreenshot)  // ❌ CRASH!
+    outState.putParcelable("screenshot", largeScreenshot)  // - CRASH!
 }
 ```
 
@@ -78,7 +78,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 **1. Pass ID Instead of Object**
 
 ```kotlin
-// ✅ GOOD - Pass ID, not entire object
+// - GOOD - Pass ID, not entire object
 val intent = Intent(this, DetailActivity::class.java)
 intent.putExtra("user_id", userId)  // Just an Int
 startActivity(intent)
@@ -91,7 +91,7 @@ val user = database.getUserById(userId)  // Load from DB
 **2. Use Persistent Storage**
 
 ```kotlin
-// ✅ GOOD - Save to file/database
+// - GOOD - Save to file/database
 val imageFile = File(cacheDir, "temp_image.jpg")
 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, FileOutputStream(imageFile))
 
@@ -107,7 +107,7 @@ val bitmap = BitmapFactory.decodeFile(imagePath)
 **3. Use ViewModel for Fragments**
 
 ```kotlin
-// ✅ GOOD - Share data via ViewModel
+// - GOOD - Share data via ViewModel
 class SharedViewModel : ViewModel() {
     val userData = MutableLiveData<List<User>>()
 }
@@ -142,7 +142,7 @@ class MyFragment : Fragment() {
 **4. Singleton/Application Scope**
 
 ```kotlin
-// ✅ GOOD - Temporary storage
+// - GOOD - Temporary storage
 object DataHolder {
     var tempBitmap: Bitmap? = null
 }
@@ -159,7 +159,7 @@ DataHolder.tempBitmap = null  // Clean up
 **5. onSaveInstanceState - Save Only Essential Data**
 
 ```kotlin
-// ✅ GOOD - Save minimal state
+// - GOOD - Save minimal state
 override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
 
@@ -209,7 +209,7 @@ if (sizeInMB > 0.5) {
 
 **Best Practices:**
 
-| ❌ Don't | ✅ Do |
+| - Don't | - Do |
 |----------|-------|
 | Pass large Bitmaps | Pass file path or ID |
 | Pass entire lists | Pass query params to reload |
@@ -220,7 +220,7 @@ if (sizeInMB > 0.5) {
 **Alternative: Content URIs**
 
 ```kotlin
-// ✅ GOOD - Use ContentUri for images
+// - GOOD - Use ContentUri for images
 val imageUri = FileProvider.getUriForFile(
     context,
     "$packageName.fileprovider",

@@ -56,17 +56,17 @@ class LocationService : Service() {
 
 **Characteristics:**
 
-- ✅ Runs **in background**
-- ❌ **No UI**
-- ✅ Works when **app closed**
-- ✅ **Long-running** operations
+- - Runs **in background**
+- - **No UI**
+- - Works when **app closed**
+- - **Long-running** operations
 
 **Important Notes:**
 
-⚠️ Services are **resource-intensive**
-⚠️ Impact **battery life**
-⚠️ Use carefully and minimize usage
-✅ Consider **WorkManager** for modern apps
+WARNING: Services are **resource-intensive**
+WARNING: Impact **battery life**
+WARNING: Use carefully and minimize usage
+- Consider **WorkManager** for modern apps
 
 **Modern Alternative:**
 

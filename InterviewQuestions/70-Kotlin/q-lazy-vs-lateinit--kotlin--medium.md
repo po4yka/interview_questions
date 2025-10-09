@@ -78,9 +78,9 @@ class DemoClass {
 | Feature | lazy | lateinit |
 |---------|------|----------|
 | **Property type** | `val` only | `var` only |
-| **Primitive types** | ✅ Can use | ❌ Cannot use |
-| **Nullable** | ✅ Can use | ❌ Cannot use |
-| **Thread safety** | ✅ Thread safe by default | ❌ Not thread safe |
+| **Primitive types** | - Can use | - Cannot use |
+| **Nullable** | - Can use | - Cannot use |
+| **Thread safety** | - Thread safe by default | - Not thread safe |
 | **Initialization** | Only from initializer lambda | From anywhere |
 | **Initialization check** | N/A (always initialized) | `::property.isInitialized` |
 | **When initialized** | On first access | Manually before use |
@@ -158,9 +158,9 @@ class DemoClass {
 | Функция | lazy | lateinit |
 |---------|------|----------|
 | **Тип свойства** | Только `val` | Только `var` |
-| **Примитивные типы** | ✅ Можно | ❌ Нельзя |
-| **Nullable** | ✅ Можно | ❌ Нельзя |
-| **Потокобезопасность** | ✅ По умолчанию | ❌ Нет |
+| **Примитивные типы** | - Можно | - Нельзя |
+| **Nullable** | - Можно | - Нельзя |
+| **Потокобезопасность** | - По умолчанию | - Нет |
 | **Инициализация** | Только из лямбды | Откуда угодно |
 
 **Краткое содержание**: lazy для val свойств, потокобезопасный, поддерживает примитивы/nullable, инициализируется при первом доступе. lateinit для var свойств, не потокобезопасный, только не-null не-примитивы, инициализируется вручную.

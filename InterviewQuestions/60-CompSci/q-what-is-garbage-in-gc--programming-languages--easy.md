@@ -20,9 +20,9 @@ status: reviewed
 **Definition:**
 
 An object is garbage if:
-- ✅ It's in heap memory
-- ✅ No active references point to it
-- ✅ Unreachable from any GC Root
+- - It's in heap memory
+- - No active references point to it
+- - Unreachable from any GC Root
 
 **Example:**
 

@@ -205,7 +205,7 @@ suspend fun fetchUser(id: Int): User {
 **1. Сетевые операции в фоновом потоке**
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - в main thread
+// - НЕПРАВИЛЬНО - в main thread
 button.setOnClickListener {
     val data = fetchData()  // NetworkOnMainThreadException!
 }
@@ -239,7 +239,7 @@ button.setOnClickListener {
 // Android 9+ блокирует cleartext (HTTP) по умолчанию
 // Используйте HTTPS!
 const val BASE_URL = "https://api.example.com/"  // ✓
-const val BASE_URL = "http://api.example.com/"   // ❌
+const val BASE_URL = "http://api.example.com/"   // BAD
 ```
 
 **4. Обработка ошибок**

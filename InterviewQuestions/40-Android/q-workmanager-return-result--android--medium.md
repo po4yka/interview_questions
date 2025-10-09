@@ -576,11 +576,11 @@ workManager.getWorkInfoByIdLiveData(workRequest.id)
 - **`workInfo.outputData`** - Extract values
 
 **Best practices:**
-- ✅ Use ViewModel to separate concerns
-- ✅ Use StateFlow for modern reactive approach
-- ✅ Serialize complex objects to JSON
-- ✅ Handle all work states (ENQUEUED, RUNNING, SUCCEEDED, FAILED, CANCELLED)
-- ✅ Use `setProgress()` for progress updates (API 29+)
+- - Use ViewModel to separate concerns
+- - Use StateFlow for modern reactive approach
+- - Serialize complex objects to JSON
+- - Handle all work states (ENQUEUED, RUNNING, SUCCEEDED, FAILED, CANCELLED)
+- - Use `setProgress()` for progress updates (API 29+)
 
 ---
 

@@ -214,7 +214,7 @@ fun main() = runBlocking {
 ### When to Use SharedFlow
 
 ```kotlin
-// ✅ Use SharedFlow for:
+// - Use SharedFlow for:
 
 // 1. Event broadcasting (button clicks, navigation)
 class NavigationEvents {
@@ -254,7 +254,7 @@ class SearchQuery {
 ### When to Use StateFlow
 
 ```kotlin
-// ✅ Use StateFlow for:
+// - Use StateFlow for:
 
 // 1. UI State management
 class ScreenViewModel {

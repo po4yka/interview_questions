@@ -26,7 +26,7 @@ List scrolling can lag due to **performance issues in RecyclerView** implementat
 
 **Problem:** Not using ViewHolder pattern or using it incorrectly.
 
-### ❌ BAD: No ViewHolder (ListView pattern)
+### - BAD: No ViewHolder (ListView pattern)
 
 ```kotlin
 // Old ListView approach - SLOW
@@ -34,7 +34,7 @@ class MyAdapter : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: layoutInflater.inflate(R.layout.item, parent, false)
 
-        // findViewById called every time! ❌
+        // findViewById called every time! BAD
         val title = view.findViewById<TextView>(R.id.title)
         val description = view.findViewById<TextView>(R.id.description)
         val image = view.findViewById<ImageView>(R.id.image)
@@ -50,7 +50,7 @@ class MyAdapter : BaseAdapter() {
 
 **Problem:** findViewById() called on every scroll.
 
-### ✅ GOOD: Proper ViewHolder
+### - GOOD: Proper ViewHolder
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
@@ -78,7 +78,7 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
 **Benefit:** findViewById() called only once per ViewHolder.
 
-### ✅ BETTER: ViewBinding
+### - BETTER: ViewBinding
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
@@ -110,21 +110,21 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
 **Problem:** Long-running operations block UI during scrolling.
 
-### ❌ BAD: Heavy operations in onBindViewHolder
+### - BAD: Heavy operations in onBindViewHolder
 
 ```kotlin
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val item = items[position]
 
-    // ❌ Synchronous image loading - BLOCKS UI!
+    // - Synchronous image loading - BLOCKS UI!
     val bitmap = BitmapFactory.decodeFile(item.imagePath)
     holder.image.setImageBitmap(bitmap)
 
-    // ❌ Data processing - SLOW!
+    // - Data processing - SLOW!
     val processedData = item.data.map { it.process() }
     holder.description.text = processedData.joinToString()
 
-    // ❌ Database query - BLOCKS UI!
+    // - Database query - BLOCKS UI!
     val relatedItems = database.getRelatedItems(item.id)
     holder.relatedCount.text = relatedItems.size.toString()
 }
@@ -132,22 +132,22 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 **Result:** Scrolling stutters on every item.
 
-### ✅ GOOD: Async operations with libraries
+### - GOOD: Async operations with libraries
 
 ```kotlin
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val item = items[position]
 
-    // ✅ Async image loading with Glide
+    // - Async image loading with Glide
     Glide.with(holder.itemView.context)
         .load(item.imagePath)
         .placeholder(R.drawable.placeholder)
         .into(holder.image)
 
-    // ✅ Use pre-processed data
+    // - Use pre-processed data
     holder.description.text = item.processedDescription
 
-    // ✅ Use cached/pre-fetched data
+    // - Use cached/pre-fetched data
     holder.relatedCount.text = item.relatedItemsCount.toString()
 }
 ```
@@ -160,13 +160,13 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 **Problem:** Loading images without proper library support.
 
-### ❌ BAD: Manual image loading
+### - BAD: Manual image loading
 
 ```kotlin
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val item = items[position]
 
-    // ❌ No caching, no resizing
+    // - No caching, no resizing
     Thread {
         val bitmap = BitmapFactory.decodeFile(item.imagePath)
         holder.itemView.post {
@@ -182,7 +182,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 - Thread creation overhead
 - Full-resolution images
 
-### ✅ GOOD: Using Glide
+### - GOOD: Using Glide
 
 ```kotlin
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -204,7 +204,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 - Lifecycle awareness
 - Thread pool management
 
-### ✅ GOOD: Using Coil (Kotlin-first)
+### - GOOD: Using Coil (Kotlin-first)
 
 ```kotlin
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -225,7 +225,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 **Problem:** Deeply nested layouts cause slow inflation and rendering.
 
-### ❌ BAD: Complex nested layout
+### - BAD: Complex nested layout
 
 ```xml
 <!-- item_complex.xml - 5 levels deep! -->
@@ -245,7 +245,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 **Result:** Slow layout inflation on every scroll.
 
-### ✅ GOOD: Flat ConstraintLayout
+### - GOOD: Flat ConstraintLayout
 
 ```xml
 <!-- item_simple.xml - 1 level only! -->
@@ -281,42 +281,42 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 **Problem:** Redrawing entire list instead of specific items.
 
-### ❌ BAD: Full list refresh
+### - BAD: Full list refresh
 
 ```kotlin
 fun updateData(newItems: List<Item>) {
     items = newItems
-    notifyDataSetChanged()  // ❌ Redraws EVERYTHING!
+    notifyDataSetChanged()  // - Redraws EVERYTHING!
 }
 
 fun addItem(item: Item) {
     items = items + item
-    notifyDataSetChanged()  // ❌ Redraws entire list for 1 item!
+    notifyDataSetChanged()  // - Redraws entire list for 1 item!
 }
 ```
 
 **Result:** All visible items re-rendered, scrolling resets.
 
-### ✅ GOOD: Granular updates
+### - GOOD: Granular updates
 
 ```kotlin
 fun addItem(item: Item) {
     items = items + item
-    notifyItemInserted(items.size - 1)  // ✅ Only new item animated
+    notifyItemInserted(items.size - 1)  // - Only new item animated
 }
 
 fun removeItem(position: Int) {
     items = items.toMutableList().also { it.removeAt(position) }
-    notifyItemRemoved(position)  // ✅ Only removed item animated
+    notifyItemRemoved(position)  // - Only removed item animated
 }
 
 fun updateItem(position: Int, item: Item) {
     items = items.toMutableList().also { it[position] = item }
-    notifyItemChanged(position)  // ✅ Only changed item updated
+    notifyItemChanged(position)  // - Only changed item updated
 }
 ```
 
-### ✅ BEST: DiffUtil
+### - BEST: DiffUtil
 
 ```kotlin
 fun updateData(newItems: List<Item>) {
@@ -335,11 +335,11 @@ fun updateData(newItems: List<Item>) {
 
     val diffResult = DiffUtil.calculateDiff(diffCallback)
     items = newItems
-    diffResult.dispatchUpdatesTo(this)  // ✅ Optimal updates!
+    diffResult.dispatchUpdatesTo(this)  // - Optimal updates!
 }
 ```
 
-### ✅ EVEN BETTER: ListAdapter (DiffUtil built-in)
+### - EVEN BETTER: ListAdapter (DiffUtil built-in)
 
 ```kotlin
 class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(ItemDiffCallback()) {
@@ -358,7 +358,7 @@ class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(ItemDiffCallback()) {
 }
 
 // Usage
-adapter.submitList(newItems)  // ✅ DiffUtil automatically applied!
+adapter.submitList(newItems)  // - DiffUtil automatically applied!
 ```
 
 ---
@@ -367,13 +367,13 @@ adapter.submitList(newItems)  // ✅ DiffUtil automatically applied!
 
 **Problem:** Reloading data on every scroll.
 
-### ❌ BAD: No caching
+### - BAD: No caching
 
 ```kotlin
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val item = items[position]
 
-    // ❌ Loads from network every time!
+    // - Loads from network every time!
     viewModelScope.launch {
         val details = api.getItemDetails(item.id)
         holder.details.text = details
@@ -383,7 +383,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 **Result:** Network request for every visible item on scroll.
 
-### ✅ GOOD: LiveData caching
+### - GOOD: LiveData caching
 
 ```kotlin
 class ItemViewModel : ViewModel() {
@@ -408,7 +408,7 @@ viewModel.items.observe(viewLifecycleOwner) { items ->
 }
 ```
 
-### ✅ GOOD: Repository pattern with caching
+### - GOOD: Repository pattern with caching
 
 ```kotlin
 class ItemRepository(
@@ -450,7 +450,7 @@ class ItemRepository(
 
 ## Best Practices
 
-### ✅ DO
+### - DO
 
 1. **Use RecyclerView.ViewHolder** or ViewBinding
 2. **Keep onBindViewHolder simple** (only set data, no computation)
@@ -466,16 +466,16 @@ class ItemRepository(
    ```
 10. **Profile performance** (Systrace, GPU Profiling)
 
-### ❌ DON'T
+### - DON'T
 
-1. ❌ Use findViewById in onBindViewHolder
-2. ❌ Load images synchronously
-3. ❌ Perform database queries in onBindViewHolder
-4. ❌ Process data in onBindViewHolder
-5. ❌ Use notifyDataSetChanged() for small updates
-6. ❌ Create complex nested layouts
-7. ❌ Allocate objects in onBindViewHolder
-8. ❌ Use large uncompressed images
+1. - Use findViewById in onBindViewHolder
+2. - Load images synchronously
+3. - Perform database queries in onBindViewHolder
+4. - Process data in onBindViewHolder
+5. - Use notifyDataSetChanged() for small updates
+6. - Create complex nested layouts
+7. - Allocate objects in onBindViewHolder
+8. - Use large uncompressed images
 
 ---
 

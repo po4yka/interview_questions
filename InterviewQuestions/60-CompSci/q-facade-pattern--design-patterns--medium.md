@@ -299,7 +299,7 @@ Use Cases of Facade Pattern:
 ## Best Practices
 
 ```kotlin
-// ✅ DO: Use facade for complex subsystems
+// - DO: Use facade for complex subsystems
 class PaymentFacade(
     private val validator: CardValidator,
     private val processor: PaymentProcessor,
@@ -313,20 +313,20 @@ class PaymentFacade(
     }
 }
 
-// ✅ DO: Keep facade focused
+// - DO: Keep facade focused
 class NetworkFacade {
     suspend fun get(url: String): String { /* ... */ }
     suspend fun post(url: String, body: String): String { /* ... */ }
 }
 
-// ✅ DO: Allow direct subsystem access when needed
+// - DO: Allow direct subsystem access when needed
 class SystemFacade {
     val advancedFeatures: AdvancedSubsystem get() = subsystem
 }
 
-// ❌ DON'T: Make facade a god object
-// ❌ DON'T: Put business logic in facade
-// ❌ DON'T: Use facade for simple systems
+// - DON'T: Make facade a god object
+// - DON'T: Put business logic in facade
+// - DON'T: Use facade for simple systems
 ```
 
 **English**: **Facade** is a structural pattern that provides a simplified interface to complex subsystems. **Problem**: Complex system is hard to use. **Solution**: Create facade that wraps subsystems and provides simple methods. **Use when**: (1) Complex subsystem needs simple interface, (2) Want to reduce dependencies, (3) Layering system. **Android**: Network + cache + error handling, database operations. **Pros**: simplification, decoupling, easier maintenance. **Cons**: added complexity, reduced flexibility. **Examples**: Home theater system, API facade, database facade.

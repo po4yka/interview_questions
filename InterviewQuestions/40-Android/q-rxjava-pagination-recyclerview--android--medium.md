@@ -393,7 +393,7 @@ class RetryablePaginationRepository @Inject constructor(
 
 ### 7. Best Practices
 
-#### ✅ DO:
+#### - DO:
 
 ```kotlin
 // Use proper dispose management
@@ -419,7 +419,7 @@ if (items.isEmpty() && !isLoading) {
 }
 ```
 
-#### ❌ DON'T:
+#### - DON'T:
 
 ```kotlin
 // Don't forget to dispose
@@ -501,14 +501,14 @@ class PaginationScrollListener(
 
 ### Лучшие практики
 
-#### ✅ ДЕЛАЙТЕ:
+#### - ДЕЛАЙТЕ:
 
 - Управляйте подписками через CompositeDisposable
 - Обрабатывайте состояния загрузки
 - Реализуйте pull-to-refresh
 - Добавляйте индикаторы загрузки
 
-#### ❌ НЕ ДЕЛАЙТЕ:
+#### - НЕ ДЕЛАЙТЕ:
 
 - Не забывайте dispose подписки
 - Не загружайте когда уже идет загрузка

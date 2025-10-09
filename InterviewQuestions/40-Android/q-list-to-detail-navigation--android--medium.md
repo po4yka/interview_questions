@@ -369,10 +369,10 @@ findNavController().navigate(uri)
 **1. Pass only necessary data:**
 
 ```kotlin
-// ❌ BAD - Pass entire list
+// - BAD - Pass entire list
 intent.putParcelableArrayListExtra("USERS", ArrayList(allUsers))
 
-// ✅ GOOD - Pass only ID
+// - GOOD - Pass only ID
 intent.putExtra("USER_ID", userId)
 
 // Load full data in detail screen

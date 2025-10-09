@@ -135,25 +135,25 @@ class ProfileViewModel(
 
 ### When to Use UseCases
 
-**✅ Use when:**
+**- Use when:**
 - Complex business logic
 - Multiple repositories involved
 - Logic reused across ViewModels
 - Need clear separation of concerns
 
-**❌ Don't use when:**
+**- Don't use when:**
 - Simple repository calls
 - One-to-one mapping to repository
 - Adds unnecessary layer
 
 ```kotlin
-// ❌ BAD - Unnecessary UseCase
+// - BAD - Unnecessary UseCase
 class GetProductsUseCase(private val repo: ProductRepository) {
     suspend operator fun invoke() = repo.getProducts()
 }
 // Better: Call repository directly from ViewModel
 
-// ✅ GOOD - Complex logic
+// - GOOD - Complex logic
 class PurchaseProductUseCase(
     private val productRepo: ProductRepository,
     private val paymentRepo: PaymentRepository,
@@ -203,13 +203,13 @@ class UserViewModel(
 
 ### Когда использовать UseCases
 
-**✅ Использовать когда:**
+**- Использовать когда:**
 - Сложная бизнес-логика
 - Задействовано несколько repositories
 - Логика переиспользуется между ViewModels
 - Нужно четкое разделение обязанностей
 
-**❌ Не использовать когда:**
+**- Не использовать когда:**
 - Простые вызовы repository
 - Один к одному с repository
 - Добавляет ненужный слой

@@ -224,16 +224,16 @@ The book describes **23 classic design patterns** across the three categories.
 ## Best Practices
 
 **When to use design patterns**:
-- ✅ When facing a recurring design problem
-- ✅ When you need to communicate design decisions clearly
-- ✅ When you want proven solutions to common problems
-- ✅ When working in a team that understands patterns
+- - When facing a recurring design problem
+- - When you need to communicate design decisions clearly
+- - When you want proven solutions to common problems
+- - When working in a team that understands patterns
 
 **When NOT to use**:
-- ❌ Don't force patterns where they don't fit
-- ❌ Don't over-engineer simple solutions
-- ❌ Don't use patterns just to show off knowledge
-- ❌ Don't use patterns if the team doesn't understand them
+- - Don't force patterns where they don't fit
+- - Don't over-engineer simple solutions
+- - Don't use patterns just to show off knowledge
+- - Don't use patterns if the team doesn't understand them
 
 **English**: Design patterns are general, reusable solutions to commonly occurring problems in software design. They are divided into **three fundamental groups**: (1) **Behavioral** - focus on object interactions and communication (Observer, Strategy, Command, etc.), (2) **Creational** - focus on object creation mechanisms (Singleton, Factory, Builder, etc.), (3) **Structural** - focus on composing objects into larger structures (Adapter, Decorator, Facade, etc.). Patterns provide proven development paradigms, improve code communication, and speed up development. Original 23 patterns documented by Gang of Four (GoF) in 1994.
 

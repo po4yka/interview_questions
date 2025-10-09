@@ -31,10 +31,10 @@ ViewStub is used for **performance optimization** when you have:
 - Heavy views that should only be created **when necessary**
 
 **Benefits**:
-- ✅ Reduces initial layout inflation time
-- ✅ Saves memory (views not created until needed)
-- ✅ Improves app startup performance
-- ✅ Better for layouts with conditional sections
+- - Reduces initial layout inflation time
+- - Saves memory (views not created until needed)
+- - Improves app startup performance
+- - Better for layouts with conditional sections
 
 ### Basic XML Example
 
@@ -125,7 +125,7 @@ stub.visibility = View.VISIBLE
 val inflatedView: View = findViewById(R.id.subTree)
 ```
 
-⚠️ **Important**: After inflation, you cannot use the ViewStub reference anymore. You must use the `inflatedId` to find the inflated view.
+WARNING: **Important**: After inflation, you cannot use the ViewStub reference anymore. You must use the `inflatedId` to find the inflated view.
 
 ### ViewStub Attributes
 
@@ -313,7 +313,7 @@ if (user.isPremium) {
 |---------|----------|---------|-------|
 | **Inflation** | Lazy (on demand) | Immediate | Immediate |
 | **Performance** | Better (if not always needed) | Standard | Better (flattens hierarchy) |
-| **Runtime control** | ✅ Yes | ❌ No | ❌ No |
+| **Runtime control** | - Yes | - No | - No |
 | **Memory usage** | Lower (until inflated) | Higher | Higher |
 | **Use case** | Conditional views | Reusable layouts | Reduce view hierarchy |
 
@@ -337,13 +337,13 @@ if (user.isPremium) {
 
 ### Best Practices
 
-✅ **Do**:
+- **Do**:
 - Use ViewStub for complex layouts that are conditionally shown
 - Use for error states, empty states, loading indicators
 - Use for premium/advanced features shown to subset of users
 - Cache reference to inflated view if you need to show/hide multiple times
 
-❌ **Don't**:
+- **Don't**:
 - Use for views that are always visible
 - Try to inflate the same ViewStub twice (will crash)
 - Keep reference to ViewStub after inflation
@@ -416,11 +416,11 @@ With ViewStub:
 
 **ViewStub** is a lightweight, invisible, zero-sized view used for **lazy inflation** of layouts:
 
-- ✅ **Performance**: Only inflates when needed
-- ✅ **Memory**: Saves memory for unused views
-- ✅ **Use cases**: Error states, conditional features, expandable sections
-- ⚠️ **One-time**: Can only be inflated once
-- ⚠️ **Replacement**: ViewStub is removed after inflation
+- - **Performance**: Only inflates when needed
+- - **Memory**: Saves memory for unused views
+- - **Use cases**: Error states, conditional features, expandable sections
+- WARNING: **One-time**: Can only be inflated once
+- WARNING: **Replacement**: ViewStub is removed after inflation
 - 📝 **Best practice**: Cache inflated view reference for show/hide
 
 **When to use**:
@@ -498,16 +498,16 @@ val inflated: View = stub.inflate()
 |-------------|----------|---------|-------|
 | **Инфляция** | Ленивая (по требованию) | Немедленная | Немедленная |
 | **Производительность** | Лучше (если не всегда нужен) | Стандартная | Лучше (уплощает иерархию) |
-| **Управление в runtime** | ✅ Да | ❌ Нет | ❌ Нет |
+| **Управление в runtime** | - Да | - Нет | - Нет |
 | **Использование памяти** | Ниже (до инфляции) | Выше | Выше |
 
 ### Важные моменты
 
-- ✅ Можно инфлятить только **один раз**
-- ⚠️ ViewStub **удаляется** после инфляции
+- - Можно инфлятить только **один раз**
+- WARNING: ViewStub **удаляется** после инфляции
 - 📝 Кешируйте ссылку на созданный view для многократного показа/скрытия
-- ✅ Используйте для сложных layouts, показываемых условно
-- ❌ Не используйте для всегда видимого контента
+- - Используйте для сложных layouts, показываемых условно
+- - Не используйте для всегда видимого контента
 
 ### Резюме
 

@@ -126,10 +126,10 @@ class Constants {
         const val APP_NAME = "MyApp"
         const val PI = 3.14159
 
-        // ❌ Cannot use const with computed values
+        // - Cannot use const with computed values
         // const val TIMESTAMP = System.currentTimeMillis()  // Error
 
-        // ✅ Use val instead
+        // - Use val instead
         val TIMESTAMP = System.currentTimeMillis()
     }
 }
@@ -235,12 +235,12 @@ String regular = MyClass.Companion.regularMethod();  // Through Companion
 
 **Summary:**
 
-- ❌ **No `static` keyword** in Kotlin
-- ✅ **companion object** - most common approach
-- ✅ **Top-level** - for file-level constants/functions
-- ✅ **@JvmField / @JvmStatic** - Java interop
-- ✅ **const val** - compile-time constants
-- ✅ **object** - singleton pattern
+- - **No `static` keyword** in Kotlin
+- - **companion object** - most common approach
+- - **Top-level** - for file-level constants/functions
+- - **@JvmField / @JvmStatic** - Java interop
+- - **const val** - compile-time constants
+- - **object** - singleton pattern
 
 ## Ответ
 
