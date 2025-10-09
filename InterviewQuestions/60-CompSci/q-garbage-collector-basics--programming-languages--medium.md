@@ -8,7 +8,7 @@ tags:
   - performance
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Что такое сборщик мусора?

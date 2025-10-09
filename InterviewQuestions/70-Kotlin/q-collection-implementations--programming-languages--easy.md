@@ -8,7 +8,7 @@ tags:
   - programming-languages
   - set
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какие есть реализации коллекций?

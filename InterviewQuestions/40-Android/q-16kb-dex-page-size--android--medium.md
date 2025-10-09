@@ -150,15 +150,15 @@ tasks.register("analyzeDexAlignment") {
 
 #### 3. **Solutions and Workarounds**
 
-**3.1 Upgrade to Android Gradle Plugin 8.1+**
+**3.1 Upgrade to Android Gradle Plugin 8.2+**
 
 ```kotlin
 // build.gradle.kts (project level)
 plugins {
-    id("com.android.application") version "8.1.0" apply false
+    id("com.android.application") version "8.7.0" apply false
 }
 
-// AGP 8.1+ automatically handles 16KB page alignment
+// AGP 8.2+ automatically handles 16KB page alignment
 // No additional configuration needed
 ```
 
@@ -206,12 +206,8 @@ android {
         }
     }
 
-    // Configure DEX options
-    dexOptions {
-        preDexLibraries = true
-        maxProcessCount = 8
-        javaMaxHeapSize = "4g"
-    }
+    // Note: dexOptions is deprecated in modern AGP
+    // DEX configuration is now handled automatically
 }
 ```
 
@@ -402,7 +398,7 @@ fun `release APK size is within acceptable range`() {
 ```kotlin
 // ✅ DO: Use latest Android Gradle Plugin
 plugins {
-    id("com.android.application") version "8.2.0"
+    id("com.android.application") version "8.7.0"
 }
 
 // ✅ DO: Enable R8 full mode
@@ -455,7 +451,7 @@ android {
 #### 7. **Verification Checklist**
 
 **Pre-Release:**
-- [ ] Build with latest AGP (8.1+)
+- [ ] Build with latest AGP (8.2+)
 - [ ] Compare debug vs release APK sizes
 - [ ] Analyze with APK Analyzer
 - [ ] Check for unexpected size increases
@@ -488,7 +484,7 @@ android {
 - Creates wasted padding space
 
 **How to fix?**
-- Upgrade to AGP 8.1+ (automatic fix)
+- Upgrade to AGP 8.2+ (automatic fix)
 - Configure R8 properly (older AGP)
 - Use App Bundle
 - Monitor APK size
@@ -539,10 +535,10 @@ android {
 
 #### Решения:
 
-**1. Обновите AGP до 8.1+:**
+**1. Обновите AGP до 8.2+:**
 ```kotlin
 plugins {
-    id("com.android.application") version "8.2.0"
+    id("com.android.application") version "8.7.0"
 }
 // Автоматически обрабатывает выравнивание
 ```

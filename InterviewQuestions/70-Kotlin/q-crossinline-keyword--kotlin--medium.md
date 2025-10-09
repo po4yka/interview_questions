@@ -5,7 +5,7 @@ tags:
   - lambda
   - non-local-returns
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Зачем нужен crossinline?

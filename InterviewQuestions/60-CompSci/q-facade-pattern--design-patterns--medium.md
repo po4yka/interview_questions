@@ -5,7 +5,7 @@ tags:
   - facade
   - gof-patterns
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Facade Pattern

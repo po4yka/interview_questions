@@ -6,7 +6,7 @@ tags:
   - functional-interface
   - java-interop
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # SAM (Single Abstract Method) конверсии

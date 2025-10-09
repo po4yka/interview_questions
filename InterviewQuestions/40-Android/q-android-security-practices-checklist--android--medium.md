@@ -74,7 +74,7 @@ When sharing data between two apps that you control or own, use *signature-based
 
 ### Disallow access to your app's content providers
 
-Unless you intend to send data from your app to a different app that you don't own, you should explicitly disallow other developers' apps from accessing the `ContentProvider` objects that your app contains. This setting is particularly important if your app can be installed on devices running Android 4.1.1 (API level 16) or lower, as the `android:exported` attribute of the `<provider>` element is `true` by default on those versions of Android.
+Unless you intend to send data from your app to a different app that you don't own, you should explicitly disallow other developers' apps from accessing the `ContentProvider` objects that your app contains. **Note:** Starting with Android 12 (API level 31), you must explicitly declare `android:exported` for activities, services, and broadcast receivers that use intent filters. This is a build-time requirement.
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -175,11 +175,16 @@ channel[1].postMessage(WebMessage("My secure message"))
 - **Store only non-sensitive data in cache files**: To provide quicker access to non-sensitive app data, store it in the device's cache. For caches larger than 1 MB in size, use `getExternalCacheDir()`; otherwise, use `getCacheDir()`. Each method provides you with the `File` object that contains your app's cached data
 - **Use SharedPreferences in private mode**: When using `getSharedPreferences()` to create or access your app's `SharedPreferences` objects, use `MODE_PRIVATE`. That way, only your app can access the information within the shared preferences file
 
-### Other
+### Modern Security Practices (2024-2025)
 
-- **Code Obfuscation**: Protect the source code by making it unintelligible for both humans and decompiler. All this, while preserving its entire operations during the compilation. The purpose of the obfuscation process is to give an impenetrable code. It promotes the confidentiality of all intellectual properties against reverse engineering
-- **Data encryption**: Mobile app security involves securing all kinds of stored data on the mobile device. It includes the source code as well as the data transmitted between the application and the back-end server. The execution of certificate pinning helps affirm the backend Web service certificate for the application. High-level data encryption is one of the best android mobile app security practices. It protects the valuable data from hackers
-- **Regular Updation And Testing**: Hackers detect vulnerabilities in software and exploit, while developers repair the breach, which causes hackers to discover another weakness. Although Google cannot avoid the development of these vulnerabilities, it effectively updates the Android OS to counter the detected problems. However, these measures will not be useful if the software is not up-to-date. Penetration testing is another method for server-side checks
+- **Code Obfuscation with R8**: Use R8 (replaces ProGuard) for modern code shrinking and obfuscation. Enable `isMinifyEnabled = true` and `isShrinkResources = true` in release builds
+- **Data Encryption with Jetpack Security**: Use `EncryptedSharedPreferences` and `EncryptedFile` for secure data storage (API 23+). These provide automatic encryption using AES256-GCM
+- **Biometric Authentication**: Use `BiometricPrompt` for secure user authentication instead of custom implementations. Supports fingerprint, face, and iris authentication
+- **Certificate Pinning**: Use OkHttp's `CertificatePinner` or Network Security Configuration to prevent man-in-the-middle attacks
+- **Dependency Management**: Keep dependencies up-to-date using Dependabot or Renovate. Monitor security advisories from Google and library maintainers
+- **Target Latest SDK**: Target latest Android SDK (targetSdk 35 for 2025) to benefit from latest security features and privacy improvements
+- **Static Analysis**: Use Android Lint, Detekt, and other static analysis tools to detect security vulnerabilities early
+- **Penetration Testing**: Perform regular penetration testing and security audits, especially before major releases
 
 ## Ответ (RU)
 
@@ -323,11 +328,16 @@ channel[1].postMessage(WebMessage("Мое защищенное сообщени�
 - **Храните только не конфиденциальные данные в файлах кэша**: Для обеспечения более быстрого доступа к не конфиденциальным данным приложения храните их в кэше устройства. Для кэшей размером более 1 МБ используйте `getExternalCacheDir()`; в противном случае используйте `getCacheDir()`. Каждый метод предоставляет вам объект `File`, содержащий кэшированные данные вашего приложения
 - **Используйте SharedPreferences в приватном режиме**: При использовании `getSharedPreferences()` для создания или доступа к объектам `SharedPreferences` вашего приложения используйте `MODE_PRIVATE`. Таким образом, только ваше приложение может получить доступ к информации в файле общих настроек
 
-### Другое
+### Современные практики безопасности (2024-2025)
 
-- **Обфускация кода**: Защитите исходный код, сделав его неразборчивым как для людей, так и для декомпилятора. Все это при сохранении всех его операций во время компиляции. Цель процесса обфускации - дать непроницаемый код. Это способствует конфиденциальности всей интеллектуальной собственности от обратной разработки
-- **Шифрование данных**: Безопасность мобильного приложения включает в себя защиту всех видов хранимых данных на мобильном устройстве. Это включает исходный код, а также данные, передаваемые между приложением и серверной частью. Выполнение закрепления сертификата помогает подтвердить сертификат веб-службы бэкенда для приложения. Высокоуровневое шифрование данных - это одна из лучших практик безопасности мобильных приложений Android. Это защищает ценные данные от хакеров
-- **Регулярное обновление и тестирование**: Хакеры обнаруживают уязвимости в программном обеспечении и эксплуатируют их, в то время как разработчики исправляют брешь, что заставляет хакеров обнаруживать другую слабость. Хотя Google не может избежать появления этих уязвимостей, он эффективно обновляет ОС Android для противодействия обнаруженным проблемам. Однако эти меры не будут полезны, если программное обеспечение не обновлено. Тестирование на проникновение - это еще один метод для проверок на стороне сервера
+- **Обфускация кода с R8**: Используйте R8 (заменяет ProGuard) для современного сжатия и обфускации кода. Включите `isMinifyEnabled = true` и `isShrinkResources = true` в релизных сборках
+- **Шифрование данных с Jetpack Security**: Используйте `EncryptedSharedPreferences` и `EncryptedFile` для безопасного хранения данных (API 23+). Они обеспечивают автоматическое шифрование с использованием AES256-GCM
+- **Биометрическая аутентификация**: Используйте `BiometricPrompt` для безопасной аутентификации пользователя вместо пользовательских реализаций. Поддерживает отпечаток пальца, лицо и радужку глаза
+- **Закрепление сертификатов**: Используйте `CertificatePinner` из OkHttp или Network Security Configuration для предотвращения атак man-in-the-middle
+- **Управление зависимостями**: Поддерживайте зависимости в актуальном состоянии с помощью Dependabot или Renovate. Отслеживайте уведомления о безопасности от Google и разработчиков библиотек
+- **Последний SDK**: Используйте последний Android SDK (targetSdk 35 для 2025) для получения последних функций безопасности и улучшений конфиденциальности
+- **Статический анализ**: Используйте Android Lint, Detekt и другие инструменты статического анализа для раннего обнаружения уязвимостей безопасности
+- **Тестирование на проникновение**: Проводите регулярное тестирование на проникновение и аудиты безопасности, особенно перед крупными релизами
 
 ---
 

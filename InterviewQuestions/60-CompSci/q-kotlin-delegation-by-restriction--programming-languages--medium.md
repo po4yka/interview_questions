@@ -7,7 +7,7 @@ tags:
   - lazy
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Можно ли после by вызвать функцию или конструктор?

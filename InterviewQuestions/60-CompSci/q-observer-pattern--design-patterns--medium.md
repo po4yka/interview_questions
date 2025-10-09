@@ -6,7 +6,7 @@ tags:
   - gof-patterns
   - publish-subscribe
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Observer Pattern

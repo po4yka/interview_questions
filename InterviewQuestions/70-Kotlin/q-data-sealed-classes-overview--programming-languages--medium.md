@@ -2,7 +2,7 @@
 tags:
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What is known about data classes and sealed classes?

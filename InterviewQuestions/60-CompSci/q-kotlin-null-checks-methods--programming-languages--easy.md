@@ -8,7 +8,7 @@ tags:
   - programming-languages
   - safe-call
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Каким образом осуществлять проверки на null?

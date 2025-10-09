@@ -9,7 +9,7 @@ tags:
   - object-methods
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Какие существуют правила для методов equals и hashcode?

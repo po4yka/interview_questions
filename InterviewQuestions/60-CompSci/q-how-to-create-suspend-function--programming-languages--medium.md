@@ -2,7 +2,7 @@
 tags:
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # How to Create a Suspend Function?

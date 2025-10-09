@@ -6,7 +6,7 @@ tags:
   - bytecode
   - advanced
 difficulty: hard
-status: draft
+status: reviewed
 ---
 
 # Как делегаты работают на уровне компиляции?

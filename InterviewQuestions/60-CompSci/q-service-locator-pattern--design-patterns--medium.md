@@ -10,7 +10,7 @@ related:
   - dependency-injection
   - singleton-pattern
   - factory-pattern
-status: draft
+status: reviewed
 ---
 
 # Service Locator Pattern / Паттерн Локатор Служб

@@ -9,7 +9,7 @@ difficulty: medium
 related:
   - command-pattern
   - state-pattern
-status: draft
+status: reviewed
 ---
 
 # Memento Pattern / Паттерн Хранитель

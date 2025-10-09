@@ -7,7 +7,7 @@ tags:
   - singleton
   - static-members
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что такое object / companion object?

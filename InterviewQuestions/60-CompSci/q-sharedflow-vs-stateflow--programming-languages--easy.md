@@ -2,7 +2,7 @@
 tags:
   - programming-languages
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # SharedFlow vs StateFlow Differences

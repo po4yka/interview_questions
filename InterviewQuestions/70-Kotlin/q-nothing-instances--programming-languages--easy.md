@@ -2,7 +2,7 @@
 tags:
   - programming-languages
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # How many instance types does Nothing have?

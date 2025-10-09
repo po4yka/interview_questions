@@ -9,7 +9,7 @@ tags:
   - when
   - when-expression
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какой оператор используется вместо switch в Kotlin?

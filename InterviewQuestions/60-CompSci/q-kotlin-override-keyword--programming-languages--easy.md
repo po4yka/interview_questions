@@ -9,7 +9,7 @@ tags:
   - polymorphism
   - programming-languages
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какое ключевое слово используется для определения метода, который должен быть переопределен в подклассе?

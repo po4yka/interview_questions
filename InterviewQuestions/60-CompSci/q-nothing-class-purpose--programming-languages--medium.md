@@ -9,7 +9,7 @@ tags:
   - type-system
   - unreachable-code
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Зачем нужен класс Nothing?

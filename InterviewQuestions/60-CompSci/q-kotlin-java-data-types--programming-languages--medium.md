@@ -9,7 +9,7 @@ tags:
   - type-system
   - types
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Какие типы данных существуют в Java и Kotlin?

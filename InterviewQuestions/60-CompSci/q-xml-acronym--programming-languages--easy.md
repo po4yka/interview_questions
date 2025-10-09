@@ -5,7 +5,7 @@ tags:
   - acronym
   - programming-languages
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как расшифровывается xml?

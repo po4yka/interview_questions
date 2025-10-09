@@ -3,7 +3,7 @@ tags:
   - programming-languages
   - kotlin
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # В чем отличие между job и supervisor job

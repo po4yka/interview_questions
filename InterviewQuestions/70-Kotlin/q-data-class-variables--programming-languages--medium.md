@@ -2,7 +2,7 @@
 tags:
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What variables can be used in data class?

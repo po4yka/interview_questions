@@ -5,7 +5,7 @@ tags:
   - kotlin
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Как будут вести себя linked list и array list, если вставить в них элемент?

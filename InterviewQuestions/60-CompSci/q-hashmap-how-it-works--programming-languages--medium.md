@@ -6,7 +6,7 @@ tags:
   - kotlin
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Как работает HashMap?

@@ -6,7 +6,7 @@ tags:
   - gof-patterns
   - wrapper
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Adapter Pattern

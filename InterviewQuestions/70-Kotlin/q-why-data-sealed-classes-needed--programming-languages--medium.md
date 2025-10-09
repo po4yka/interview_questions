@@ -2,7 +2,7 @@
 tags:
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Why are Data Class and Sealed Classes needed?

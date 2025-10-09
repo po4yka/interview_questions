@@ -8,7 +8,7 @@ difficulty: medium
 related:
   - composite-pattern
   - visitor-pattern
-status: draft
+status: reviewed
 ---
 
 # Iterator Pattern / Паттерн Итератор

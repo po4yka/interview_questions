@@ -2,7 +2,7 @@
 tags:
   - programming-languages
 difficulty: hard
-status: draft
+status: reviewed
 ---
 
 # Why are equals and hashcode methods needed?

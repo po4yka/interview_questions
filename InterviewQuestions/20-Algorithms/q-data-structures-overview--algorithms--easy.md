@@ -16,7 +16,7 @@ source: https://t.me/easy_kotlin/478
 source_note: easy_kotlin Telegram channel
 
 # Workflow & relations
-status: draft
+status: reviewed
 moc: moc-algorithms
 related:
   - c-data-structures

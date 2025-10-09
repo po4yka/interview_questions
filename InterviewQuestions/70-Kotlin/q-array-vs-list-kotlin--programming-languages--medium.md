@@ -7,7 +7,7 @@ tags:
   - performance
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Чем array отличается от list

@@ -16,7 +16,7 @@ source: https://t.me/easy_kotlin/1399
 source_note: easy_kotlin Telegram channel
 
 # Workflow & relations
-status: draft
+status: reviewed
 moc: moc-tools
 related:
   - c-git

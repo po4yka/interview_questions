@@ -7,7 +7,7 @@ tags:
   - programming-languages
   - reachability
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как сборщик мусора понимает что объект можно уничтожить?

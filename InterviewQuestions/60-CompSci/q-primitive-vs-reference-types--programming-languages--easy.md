@@ -7,7 +7,7 @@ tags:
   - programming-languages
   - reference-types
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # В чем разница примитивного и ссылочного типов

@@ -7,7 +7,7 @@ tags:
   - unit
   - void
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Сколько инстансов Unit на одно приложение

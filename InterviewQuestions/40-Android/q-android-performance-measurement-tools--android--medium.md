@@ -51,8 +51,11 @@ Provides tools for analyzing app performance through CPU, Memory tabs and others
 Allows quantitative assessment of improvements.
 
 ```kotlin
-// build.gradle
-androidTestImplementation "androidx.benchmark:benchmark-junit4:1.2.0"
+// build.gradle.kts
+androidTestImplementation("androidx.benchmark:benchmark-junit4:1.3.2")
+
+// For startup and jank testing (Macrobenchmark)
+androidTestImplementation("androidx.benchmark:benchmark-macro-junit4:1.3.2")
 
 // Benchmark test
 @RunWith(AndroidJUnit4::class)
@@ -104,14 +107,19 @@ if (BuildConfig.DEBUG) {
 }
 ```
 
-**6. Systrace**
+**6. Perfetto (replaces Systrace)**
 
-Allows collecting system performance traces.
+Modern system performance tracing tool. Systrace is deprecated in favor of Perfetto.
 
 ```bash
+# Record trace with Perfetto (Android 10+)
+adb shell perfetto \
+  -c - --txt \
+  -o /data/misc/perfetto-traces/trace \
+  < config.pbtxt
 
-# Command line
-python systrace.py --time=10 -o trace.html sched gfx view wm am app
+# Or use System Tracing in Android Studio:
+# Run → Profile → CPU → System Trace
 
 # In code - custom trace sections
 Trace.beginSection("MyOperation")
@@ -155,9 +163,10 @@ class PerformanceTest {
 | **GPU Rendering** | Frame time visualization | UI performance |
 | **Android Profiler** | Detailed analysis | CPU, Memory, Network |
 | **Benchmark** | Quantitative testing | Comparing implementations |
+| **Macrobenchmark** | Startup/jank testing | App-level performance |
 | **Logcat** | Quick measurements | Specific operations |
 | **StrictMode** | Main thread violations | Development debugging |
-| **Systrace** | System-level traces | Deep performance analysis |
+| **Perfetto** | System-level traces | Deep performance analysis |
 
 All these methods allow comparing data before and after optimization to assess program performance changes.
 

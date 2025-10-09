@@ -179,11 +179,11 @@ dependencies {
 ```kotlin
 // build.gradle.kts
 plugins {
-    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
+    id("com.google.devtools.ksp") version "2.1.0-1.0.29"
 }
 
 dependencies {
-    ksp("androidx.room:room-compiler:2.6.0")
+    ksp("androidx.room:room-compiler:2.7.0-alpha12")
 }
 ```
 
@@ -419,8 +419,8 @@ plugins {
 
 dependencies {
     implementation(project(":annotations"))
-    implementation("com.google.devtools.ksp:symbol-processing-api:1.9.0-1.0.13")
-    implementation("com.squareup:kotlinpoet:1.14.2")
+    implementation("com.google.devtools.ksp:symbol-processing-api:2.1.0-1.0.29")
+    implementation("com.squareup:kotlinpoet:1.18.1")
 }
 
 // processor/src/main/kotlin/com/example/BindViewProcessorProvider.kt
@@ -607,18 +607,18 @@ plugins {
 }
 
 dependencies {
-    kapt("androidx.room:room-compiler:2.6.0")
-    kapt("com.google.dagger:hilt-compiler:2.48")
+    kapt("androidx.room:room-compiler:2.7.0-alpha12")
+    kapt("com.google.dagger:hilt-compiler:2.54.1")
 }
 
 // After (KSP)
 plugins {
-    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
+    id("com.google.devtools.ksp") version "2.1.0-1.0.29"
 }
 
 dependencies {
-    ksp("androidx.room:room-compiler:2.6.0")
-    ksp("com.google.dagger:hilt-compiler:2.48")
+    ksp("androidx.room:room-compiler:2.7.0-alpha12")
+    ksp("com.google.dagger:hilt-compiler:2.54.1")
 }
 
 // Update imports in code

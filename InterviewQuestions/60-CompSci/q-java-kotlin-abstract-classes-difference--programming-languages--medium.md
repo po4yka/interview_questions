@@ -9,7 +9,7 @@ tags:
   - oop
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Какое главное отличие между Java и Kotlin касательно абстрактных классов, методов?

@@ -6,7 +6,7 @@ tags:
   - programming-languages
   - static-methods
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # В чём отличие обычного метода от extension метода в Kotlin

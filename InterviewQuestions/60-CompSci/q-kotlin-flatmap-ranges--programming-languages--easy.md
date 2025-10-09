@@ -6,7 +6,7 @@ tags:
   - programming-languages
   - ranges
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какой результат выполнения выражения val result = (1..3).flatMap { listOf(it, it * 2) }?

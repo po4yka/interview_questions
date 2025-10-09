@@ -5,7 +5,7 @@ tags:
   - map
   - programming-languages
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Расскажи про коллекцию Map

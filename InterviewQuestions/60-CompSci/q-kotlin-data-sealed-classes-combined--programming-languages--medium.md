@@ -8,7 +8,7 @@ tags:
   - type-safety
   - when-expressions
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Расскажи data классы и sealed классы

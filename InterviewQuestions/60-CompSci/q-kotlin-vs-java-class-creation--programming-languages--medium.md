@@ -10,7 +10,7 @@ tags:
   - properties
   - syntax
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Что при создании классов в Kotlin изменились по сравнению с Java?

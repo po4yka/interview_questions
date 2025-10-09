@@ -7,7 +7,7 @@ tags:
   - programming-languages
   - serializable
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Перечислите маркерные интерфейсы

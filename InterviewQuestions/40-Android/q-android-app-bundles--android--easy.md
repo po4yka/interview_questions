@@ -31,7 +31,9 @@ An *Android App Bundle* is a publishing format that includes all your app's comp
 
 Google Play uses your app bundle to generate and serve optimized APKs for each device configuration, so only the code and resources that are needed for a specific device are downloaded to run your app. You no longer have to build, sign, and manage multiple APKs to optimize support for different devices, and users get smaller, more-optimized downloads.
 
-When you use the app bundle format to publish your app, you can also optionally take advantage of [Play Feature Delivery](https://developer.android.com/guide/playcore/feature-delivery), which allows you to add *feature modules* to your app project. These modules contain features and resources that are only included with your app based on conditions that you specify, or are available later at runtime for download [Using the Play Core Library](https://developer.android.com/guide/playcore).
+When you use the app bundle format to publish your app, you can also optionally take advantage of [Play Feature Delivery](https://developer.android.com/guide/playcore/feature-delivery), which allows you to add *feature modules* to your app project. These modules contain features and resources that are only included with your app based on conditions that you specify, or are available later at runtime for download.
+
+**Note:** Since August 2021, AAB format is **mandatory** for all new apps published to Google Play. APK format is only supported for existing apps and testing tracks.
 
 ### What's the difference between AABs and APKs?
 App bundles are only for publishing and cannot be installed on Android devices. The Android package (APK) is Android's installable, executable format for apps. App bundles must be processed by a distributor into APKs so that they can be installed on devices.
@@ -55,6 +57,59 @@ Publishing with Android App Bundles helps your users to install your app with th
 - [What a new publishing format means for the future of Android](https://medium.com/googleplaydev/what-a-new-publishing-format-means-for-the-future-of-android-2e34981793a)
 - [Building your first app bundle](https://medium.com/androiddevelopers/building-your-first-app-bundle-bbcd228bf631)
 
+### Modern AAB Development (2024-2025)
+
+**Testing AABs Locally:**
+```bash
+# Generate universal APK set for testing
+bundletool build-apks --bundle=app-release.aab \
+  --output=app.apks \
+  --mode=universal
+
+# Install on connected device
+bundletool install-apks --apks=app.apks
+
+# Test specific device configuration
+bundletool build-apks --bundle=app-release.aab \
+  --output=app.apks \
+  --connected-device
+```
+
+**Modern Dependencies (Play Core Library is deprecated):**
+```kotlin
+// Use Play Feature Delivery KTX
+implementation("com.google.android.play:feature-delivery:2.1.0")
+implementation("com.google.android.play:feature-delivery-ktx:2.1.0")
+
+// For asset packs
+implementation("com.google.android.play:asset-delivery:2.2.0")
+implementation("com.google.android.play:asset-delivery-ktx:2.2.0")
+
+// Note: com.google.android.play:core is deprecated
+// Migrate to specific feature libraries instead
+```
+
+**AAB Configuration:**
+```kotlin
+// build.gradle.kts
+android {
+    bundle {
+        language {
+            // Enable split by language
+            enableSplit = true
+        }
+        density {
+            // Enable split by screen density
+            enableSplit = true
+        }
+        abi {
+            // Enable split by ABI
+            enableSplit = true
+        }
+    }
+}
+```
+
 ### Related Topics
 - [What do you know about Play Feature Delivery?](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20Play%20Feature%20Delivery.md)
 
@@ -69,7 +124,9 @@ Publishing with Android App Bundles helps your users to install your app with th
 
 Google Play использует ваш app bundle для генерации и предоставления оптимизированных APK для каждой конфигурации устройства, так что только код и ресурсы, необходимые для конкретного устройства, загружаются для запуска вашего приложения. Вам больше не нужно создавать, подписывать и управлять несколькими APK для оптимизации поддержки различных устройств, а пользователи получают меньшие, более оптимизированные загрузки.
 
-Когда вы используете формат app bundle для публикации вашего приложения, вы также можете опционально воспользоваться [Play Feature Delivery](https://developer.android.com/guide/playcore/feature-delivery), который позволяет добавлять *модули функций* в проект вашего приложения. Эти модули содержат функции и ресурсы, которые включаются в ваше приложение только на основе условий, которые вы указываете, или доступны позже во время выполнения для загрузки [используя библиотеку Play Core](https://developer.android.com/guide/playcore).
+Когда вы используете формат app bundle для публикации вашего приложения, вы также можете опционально воспользоваться [Play Feature Delivery](https://developer.android.com/guide/playcore/feature-delivery), который позволяет добавлять *модули функций* в проект вашего приложения. Эти модули содержат функции и ресурсы, которые включаются в ваше приложение только на основе условий, которые вы указываете, или доступны позже во время выполнения для загрузки.
+
+**Важно:** С августа 2021 года формат AAB **обязателен** для всех новых приложений в Google Play. Формат APK поддерживается только для существующих приложений и тестовых треков.
 
 ### В чем разница между AAB и APK?
 App bundles предназначены только для публикации и не могут быть установлены на устройства Android. Android package (APK) - это устанавливаемый, исполняемый формат Android для приложений. App bundles должны быть обработаны дистрибьютором в APK, чтобы они могли быть установлены на устройствах.

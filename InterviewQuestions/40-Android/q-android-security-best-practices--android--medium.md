@@ -65,7 +65,7 @@ When sharing data between two apps that you control or own, use *signature-based
 
 ## Disallow access to your app's content providers
 
-Unless you intend to send data from your app to a different app that you don't own, you should explicitly disallow other developers' apps from accessing the `ContentProvider` objects that your app contains. This setting is particularly important if your app can be installed on devices running Android 4.1.1 (API level 16) or lower, as the `android:exported` attribute of the `<provider>` element is `true` by default on those versions of Android.
+Unless you intend to send data from your app to a different app that you don't own, you should explicitly disallow other developers' apps from accessing the `ContentProvider` objects that your app contains. **Note:** Starting with Android 12 (API level 31), you must explicitly declare `android:exported` for activities, services, and broadcast receivers that use intent filters. This is a build-time requirement.
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -184,21 +184,115 @@ To provide quicker access to non-sensitive app data, store it in the device's ca
 
 When using `getSharedPreferences()` to create or access your app's `SharedPreferences` objects, use `MODE_PRIVATE`. That way, only your app can access the information within the shared preferences file.
 
-## Other Best Practices
+## Modern Security Practices (2024-2025)
 
-### Code Obfuscation
+### Code Obfuscation with R8
 
-Protect the source code by making it unintelligible for both humans and decompiler. All this, while preserving its entire operations during the compilation. The purpose of the obfuscation process is to give an impenetrable code. It promotes the confidentiality of all intellectual properties against reverse engineering.
+Protect the source code by making it unintelligible for both humans and decompilers. R8 (replaces ProGuard) provides modern code shrinking and obfuscation.
 
-### Data encryption
+```kotlin
+// build.gradle.kts
+android {
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+}
+```
 
-Mobile app security involves securing all kinds of stored data on the mobile device. It includes the source code as well as the data transmitted between the application and the back-end server. The execution of certificate pinning helps affirm the backend Web service certificate for the application. High-level data encryption is one of the best android mobile app security practices. It protects the valuable data from hackers.
+### Data Encryption with Jetpack Security
 
-### Regular Updation And Testing
+Use `EncryptedSharedPreferences` and `EncryptedFile` for secure data storage.
 
-Hackers detect vulnerabilities in software and exploit, while developers repair the breach, which causes hackers to discover another weakness. Although Google cannot avoid the development of these vulnerabilities, it effectively updates the Android OS to counter the detected problems. However, these measures will not be useful if the software is not up-to-date. Penetration testing is another method for server-side checks.
+```kotlin
+// EncryptedSharedPreferences (API 23+)
+val masterKey = MasterKey.Builder(context)
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    .build()
 
-## Ответ
+val encryptedPrefs = EncryptedSharedPreferences.create(
+    context,
+    "secure_prefs",
+    masterKey,
+    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+)
+
+encryptedPrefs.edit()
+    .putString("api_key", "secret_value")
+    .apply()
+
+// EncryptedFile
+val encryptedFile = EncryptedFile.Builder(
+    context,
+    File(filesDir, "secure_data.txt"),
+    masterKey,
+    EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
+).build()
+
+encryptedFile.openFileOutput().use { output ->
+    output.write("Sensitive data".toByteArray())
+}
+```
+
+### Biometric Authentication
+
+Use `BiometricPrompt` for secure user authentication.
+
+```kotlin
+val biometricPrompt = BiometricPrompt(
+    this,
+    executor,
+    object : BiometricPrompt.AuthenticationCallback() {
+        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+            // User authenticated successfully
+        }
+
+        override fun onAuthenticationFailed() {
+            // Authentication failed
+        }
+    }
+)
+
+val promptInfo = BiometricPrompt.PromptInfo.Builder()
+    .setTitle("Biometric Authentication")
+    .setSubtitle("Log in using your biometric credential")
+    .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+    .build()
+
+biometricPrompt.authenticate(promptInfo)
+```
+
+### Certificate Pinning
+
+Prevent man-in-the-middle attacks by pinning SSL certificates.
+
+```kotlin
+// OkHttp certificate pinning
+val certificatePinner = CertificatePinner.Builder()
+    .add("api.example.com", "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+    .build()
+
+val client = OkHttpClient.Builder()
+    .certificatePinner(certificatePinner)
+    .build()
+```
+
+### Regular Updates And Testing
+
+- Keep dependencies up-to-date (use Dependabot, Renovate)
+- Target latest Android SDK (targetSdk 35 for 2025)
+- Perform penetration testing
+- Use static analysis tools (Android Lint, Detekt)
+- Monitor security advisories
+
+## Ответ (RU)
 
 ## Показать выбор приложения
 
@@ -334,19 +428,101 @@ channel[1].postMessage(WebMessage("My secure message"))
 
 При использовании `getSharedPreferences()` для создания или доступа к объектам `SharedPreferences` вашего приложения используйте `MODE_PRIVATE`. Таким образом, только ваше приложение может получить доступ к информации в файле общих настроек.
 
-## Другие лучшие практики
+## Современные практики безопасности (2024-2025)
 
-### Обфускация кода
+### Обфускация кода с R8
 
-Защитите исходный код, сделав его непонятным как для людей, так и для декомпилятора, сохраняя при этом все его операции во время компиляции. Цель процесса обфускации - дать непроницаемый код. Это способствует конфиденциальности всей интеллектуальной собственности от обратной разработки.
+Защитите исходный код с помощью R8 (заменяет ProGuard) - современного инструмента сжатия и обфускации кода.
 
-### Шифрование данных
+```kotlin
+// build.gradle.kts
+android {
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+}
+```
 
-Безопасность мобильного приложения включает защиту всех видов сохраненных данных на мобильном устройстве. Это включает исходный код, а также данные, передаваемые между приложением и серверной частью. Высокоуровневое шифрование данных - одна из лучших практик безопасности мобильных приложений Android.
+### Шифрование данных с Jetpack Security
+
+Используйте `EncryptedSharedPreferences` и `EncryptedFile` для безопасного хранения данных.
+
+```kotlin
+// EncryptedSharedPreferences (API 23+)
+val masterKey = MasterKey.Builder(context)
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    .build()
+
+val encryptedPrefs = EncryptedSharedPreferences.create(
+    context,
+    "secure_prefs",
+    masterKey,
+    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+)
+
+encryptedPrefs.edit()
+    .putString("api_key", "secret_value")
+    .apply()
+```
+
+### Биометрическая аутентификация
+
+Используйте `BiometricPrompt` для безопасной аутентификации пользователя.
+
+```kotlin
+val biometricPrompt = BiometricPrompt(
+    this,
+    executor,
+    object : BiometricPrompt.AuthenticationCallback() {
+        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+            // Пользователь успешно аутентифицирован
+        }
+
+        override fun onAuthenticationFailed() {
+            // Аутентификация не удалась
+        }
+    }
+)
+
+val promptInfo = BiometricPrompt.PromptInfo.Builder()
+    .setTitle("Биометрическая аутентификация")
+    .setSubtitle("Войдите, используя биометрические данные")
+    .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+    .build()
+
+biometricPrompt.authenticate(promptInfo)
+```
+
+### Закрепление сертификатов
+
+Предотвращайте атаки man-in-the-middle с помощью закрепления SSL сертификатов.
+
+```kotlin
+// OkHttp certificate pinning
+val certificatePinner = CertificatePinner.Builder()
+    .add("api.example.com", "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+    .build()
+
+val client = OkHttpClient.Builder()
+    .certificatePinner(certificatePinner)
+    .build()
+```
 
 ### Регулярное обновление и тестирование
 
-Хакеры обнаруживают уязвимости в программном обеспечении и эксплуатируют их, в то время как разработчики исправляют брешь, что заставляет хакеров обнаруживать другую слабость. Тестирование на проникновение - еще один метод для проверок на стороне сервера.
+- Поддерживайте зависимости в актуальном состоянии (Dependabot, Renovate)
+- Используйте последний Android SDK (targetSdk 35 для 2025)
+- Проводите тестирование на проникновение
+- Используйте инструменты статического анализа (Android Lint, Detekt)
+- Отслеживайте уведомления о безопасности
 
 ## Links
 

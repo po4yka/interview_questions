@@ -7,7 +7,7 @@ tags:
   - programming-languages
   - sealed-class
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Каковы отличия sealed и enum классов в Kotlin?

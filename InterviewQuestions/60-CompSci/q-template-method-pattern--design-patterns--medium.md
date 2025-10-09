@@ -6,7 +6,7 @@ tags:
   - gof-patterns
   - hook-method
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Template Method Pattern

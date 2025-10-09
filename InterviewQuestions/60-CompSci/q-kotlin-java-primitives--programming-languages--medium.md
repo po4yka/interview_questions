@@ -7,7 +7,7 @@ tags:
   - types
   - wrappers
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Какие примитивы есть в Kotlin, а какие в Java?

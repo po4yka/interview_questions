@@ -7,7 +7,7 @@ tags:
   - lifecyclescope
   - android
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # viewModelScope vs lifecycleScope

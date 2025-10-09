@@ -8,7 +8,7 @@ tags:
   - best-practices
   - polymorphism
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # В каких случаях наследование полезно, а в каких нет?

@@ -11,7 +11,7 @@ tags:
   - strong-reference
   - weak-reference
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Все ли виды ссылок защищают объект от удаления?

@@ -8,7 +8,7 @@ tags:
   - programming-languages
   - val
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что такое константы и можно ли их изменять?

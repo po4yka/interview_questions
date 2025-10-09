@@ -9,7 +9,7 @@ tags:
   - programming-languages
   - syntax
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какой модификатор в Kotlin делает класс нерасширяемым?

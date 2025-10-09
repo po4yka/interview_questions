@@ -10,7 +10,7 @@ related:
   - mvvm-pattern
   - mvi-pattern
   - clean-architecture
-status: draft
+status: reviewed
 ---
 
 # MVP Pattern / Паттерн MVP (Model-View-Presenter)

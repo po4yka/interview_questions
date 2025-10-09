@@ -2,7 +2,7 @@
 tags:
   - programming-languages
 difficulty: hard
-status: draft
+status: reviewed
 ---
 
 # What is object / companion object?

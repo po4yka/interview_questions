@@ -2,7 +2,7 @@
 tags:
   - programming-languages
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # How to programmatically prohibit creating a class object?

@@ -25,12 +25,19 @@ status: reviewed
 ```kotlin
 // Синхронизация данных в фоне
 class DataSyncService : Service() {
+    private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        lifecycleScope.launch(Dispatchers.IO) {
+        serviceScope.launch {
             syncDataWithServer()
             stopSelf(startId)
         }
         return START_NOT_STICKY
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceScope.cancel()
     }
 }
 ```
@@ -67,16 +74,23 @@ class MusicPlayerService : Service() {
 
 ```kotlin
 class DownloadService : Service() {
+    private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val fileUrl = intent?.getStringExtra("FILE_URL")
 
-        lifecycleScope.launch(Dispatchers.IO) {
+        serviceScope.launch {
             downloadFile(fileUrl)
             sendBroadcast(Intent(ACTION_DOWNLOAD_COMPLETE))
             stopSelf(startId)
         }
 
         return START_NOT_STICKY
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceScope.cancel()
     }
 
     private suspend fun downloadFile(url: String?) {

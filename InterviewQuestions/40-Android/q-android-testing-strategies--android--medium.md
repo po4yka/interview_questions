@@ -443,15 +443,16 @@ android {
 }
 
 // Detekt configuration (detekt.yml)
+// build.gradle.kts
 detekt {
     buildUponDefaultConfig = true
     allRules = false
-    config = files("$projectDir/config/detekt.yml")
+    config.setFrom(files("$projectDir/config/detekt.yml"))
 
     reports {
-        html.enabled = true
-        xml.enabled = true
-        txt.enabled = true
+        html.required.set(true)
+        xml.required.set(true)
+        txt.required.set(true)
     }
 }
 

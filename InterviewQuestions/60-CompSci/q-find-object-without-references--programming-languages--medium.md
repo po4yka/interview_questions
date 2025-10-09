@@ -8,7 +8,7 @@ tags:
   - memory-profiler
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Как найти объект, если на него нет ссылок?

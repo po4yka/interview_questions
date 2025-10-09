@@ -5,7 +5,7 @@ tags:
   - programming-languages
   - sealed-classes
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Какие есть ограничения у sealed классов?

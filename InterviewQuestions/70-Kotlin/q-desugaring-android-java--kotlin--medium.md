@@ -6,7 +6,7 @@ tags:
   - compilation
   - backward-compatibility
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Desugaring в Android

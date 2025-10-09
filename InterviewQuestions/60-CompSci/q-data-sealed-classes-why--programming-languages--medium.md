@@ -5,7 +5,7 @@ tags:
   - programming-languages
   - sealed-classes
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Зачем нужны Data Class и Sealed Classes?

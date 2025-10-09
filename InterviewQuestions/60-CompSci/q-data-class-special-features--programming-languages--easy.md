@@ -8,7 +8,7 @@ tags:
   - programming-languages
   - tostring
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какая особенность у Data Class относительно других Kotlin Classes?

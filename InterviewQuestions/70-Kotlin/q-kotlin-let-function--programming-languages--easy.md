@@ -6,7 +6,7 @@ tags:
   - programming-languages
   - scope-functions
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Для чего нужен let?

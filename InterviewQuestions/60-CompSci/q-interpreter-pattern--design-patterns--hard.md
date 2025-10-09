@@ -9,7 +9,7 @@ difficulty: hard
 related:
   - composite-pattern
   - visitor-pattern
-status: draft
+status: reviewed
 ---
 
 # Interpreter Pattern / Паттерн Интерпретатор

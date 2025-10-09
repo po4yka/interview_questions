@@ -6,7 +6,7 @@ tags:
   - programming-languages
   - ranges
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что такое IntRange?

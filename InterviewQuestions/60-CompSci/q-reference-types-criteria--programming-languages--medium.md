@@ -7,7 +7,7 @@ tags:
   - programming-languages
   - reference-types
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Каким критериям должны соответствовать ссылочные типы?

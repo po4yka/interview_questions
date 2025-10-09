@@ -8,7 +8,7 @@ tags:
   - programming-languages
   - recursion
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Бывают ли случаи, когда нельзя использовать inline?

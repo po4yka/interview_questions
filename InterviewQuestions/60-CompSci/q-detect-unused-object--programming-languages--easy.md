@@ -8,7 +8,7 @@ tags:
   - weak-reference
   - weak-references
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как по объекту понять что он не используется?

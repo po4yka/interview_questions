@@ -7,7 +7,7 @@ tags:
   - structural-patterns
   - behavioral-patterns
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Types of Design Patterns

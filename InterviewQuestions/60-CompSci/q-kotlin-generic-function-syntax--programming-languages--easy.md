@@ -7,7 +7,7 @@ tags:
   - syntax
   - type-parameters
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какой синтаксис используется для объявления обобщенной функции в Kotlin?

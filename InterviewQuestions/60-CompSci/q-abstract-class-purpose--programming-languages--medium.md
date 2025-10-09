@@ -7,7 +7,7 @@ tags:
   - programming-languages
   - template-method
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Что такое абстрактный класс и для чего он используется?

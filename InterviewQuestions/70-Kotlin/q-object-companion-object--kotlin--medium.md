@@ -4,7 +4,7 @@ tags:
   - object-oriented
   - singleton
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Что такое object / companion object?

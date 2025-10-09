@@ -7,7 +7,7 @@ tags:
   - object-comparison
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Зачем нужны методы equals и hashcode?

@@ -7,7 +7,7 @@ tags:
   - object-comparison
   - programming-languages
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как сравниваются объекты в Java?

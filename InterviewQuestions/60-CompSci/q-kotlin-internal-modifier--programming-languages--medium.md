@@ -7,7 +7,7 @@ tags:
   - programming-languages
   - visibility
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Что известно про internal?

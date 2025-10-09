@@ -7,7 +7,7 @@ tags:
   - operators
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Что известно о double bang (!!)?

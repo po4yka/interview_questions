@@ -6,7 +6,7 @@ tags:
   - memory-management
   - programming-languages
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # О каком мусоре идет речь в сборщике мусора?

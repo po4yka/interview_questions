@@ -9,7 +9,7 @@ tags:
   - memory-management
   - programming-languages
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что такое сборщик мусора?

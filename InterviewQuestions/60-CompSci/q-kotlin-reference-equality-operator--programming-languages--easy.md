@@ -7,7 +7,7 @@ tags:
   - reference-equality
   - structural-equality
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какой оператор используется для проверки равенства ссылок в Kotlin?

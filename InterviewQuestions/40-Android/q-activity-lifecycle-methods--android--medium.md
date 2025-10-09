@@ -322,17 +322,21 @@ class ModernActivity : AppCompatActivity() {
     }
 }
 
-class MyLifecycleObserver : LifecycleObserver {
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
+// Modern approach: Use DefaultLifecycleObserver instead of deprecated @OnLifecycleEvent
+class MyLifecycleObserver : DefaultLifecycleObserver {
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
         // Автоматически вызывается при onResume()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onPause() {
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
         // Автоматически вызывается при onPause()
     }
 }
+
+// Note: @OnLifecycleEvent annotation is deprecated since Lifecycle 2.4.0
+// Use DefaultLifecycleObserver interface for better type safety
 ```
 
-**English**: Activity lifecycle methods are callbacks invoked by Android system during state changes: `onCreate()` (initialization, called once), `onStart()` (becomes visible), `onResume()` (foreground, interactive), `onPause()` (loses focus, save data quickly), `onStop()` (no longer visible, release resources), `onRestart()` (resuming after stop), `onDestroy()` (final cleanup). Proper management prevents resource leaks and ensures smooth UX.
+**English**: Activity lifecycle methods are callbacks invoked by Android system during state changes: `onCreate()` (initialization, called once), `onStart()` (becomes visible), `onResume()` (foreground, interactive), `onPause()` (loses focus, save data quickly), `onStop()` (no longer visible, release resources), `onRestart()` (resuming after stop), `onDestroy()` (final cleanup). Proper management prevents resource leaks and ensures smooth UX. **Important:** `onDestroy()` may not be called if system kills process - use `onSaveInstanceState()` for critical data. Modern approach: use `DefaultLifecycleObserver` (not deprecated `@OnLifecycleEvent`).

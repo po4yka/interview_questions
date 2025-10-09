@@ -6,7 +6,7 @@ tags:
   - gof-patterns
   - state-machine
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # State Pattern

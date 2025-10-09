@@ -6,7 +6,7 @@ tags:
   - viewmodel
   - unit-testing
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Testing ViewModels with Coroutines

@@ -8,7 +8,7 @@ tags:
   - programming-languages
   - queue
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какова разница между PriorityQueue и Deque?

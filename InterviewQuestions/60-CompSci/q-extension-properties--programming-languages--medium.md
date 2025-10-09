@@ -6,7 +6,7 @@ tags:
   - programming-languages
   - properties
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Свойства какого вида можно добавить как расширение

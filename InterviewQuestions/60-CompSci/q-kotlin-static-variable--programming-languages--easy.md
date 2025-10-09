@@ -7,7 +7,7 @@ tags:
   - programming-languages
   - static
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как сделать статическую переменную?

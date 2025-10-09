@@ -6,7 +6,7 @@ tags:
   - best-practices
   - lifecycle
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Аннотация @CallSuper

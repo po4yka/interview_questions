@@ -6,7 +6,7 @@ tags:
   - threading
   - concurrency
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Dispatchers.IO vs Dispatchers.Default

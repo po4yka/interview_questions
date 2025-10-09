@@ -7,7 +7,7 @@ tags:
   - launch
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Чем launch отличается от async/await ?

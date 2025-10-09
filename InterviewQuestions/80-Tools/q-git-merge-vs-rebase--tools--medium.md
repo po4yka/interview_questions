@@ -13,7 +13,7 @@ language_tags:
   - en
   - ru
 original_language: ru
-status: draft
+status: reviewed
 tags:
   - git
   - merge

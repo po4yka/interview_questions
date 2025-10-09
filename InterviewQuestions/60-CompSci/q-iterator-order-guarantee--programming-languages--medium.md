@@ -5,7 +5,7 @@ tags:
   - kotlin
   - programming-languages
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # После перебирания данных итератором, гарантируется ли очередность получения этих данных?

@@ -6,7 +6,7 @@ tags:
   - error-handling
   - structured-concurrency
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # coroutineScope vs supervisorScope: обработка ошибок

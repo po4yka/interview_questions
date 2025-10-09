@@ -8,7 +8,7 @@ tags:
   - type-hierarchy
   - type-system
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Все классы Kotlin наследуются от Any

@@ -6,7 +6,7 @@ tags:
   - concurrency
   - cps
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Suspend Functions - Deep Dive

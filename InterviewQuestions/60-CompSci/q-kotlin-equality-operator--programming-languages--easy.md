@@ -8,7 +8,7 @@ tags:
   - referential-equality
   - structural-equality
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что происходит когда делаешь ==?
