@@ -6,7 +6,7 @@ tags:
   - networking
   - rest-api
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Что из себя представляет Retrofit?

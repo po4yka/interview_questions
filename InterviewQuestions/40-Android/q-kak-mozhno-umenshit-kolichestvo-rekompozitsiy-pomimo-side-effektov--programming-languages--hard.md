@@ -3,7 +3,7 @@ tags:
   - programming-languages
   - android
 difficulty: hard
-status: draft
+status: reviewed
 ---
 
 # Как можно уменьшить количество рекомпозиций помимо side-эффектов?

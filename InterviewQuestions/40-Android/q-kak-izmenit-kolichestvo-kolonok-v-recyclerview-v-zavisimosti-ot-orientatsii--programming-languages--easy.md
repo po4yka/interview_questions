@@ -3,7 +3,7 @@ tags:
   - programming-languages
   - android
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как изменить количество колонок в RecyclerView в зависимости от ориентации?

@@ -11,7 +11,7 @@ tags:
   - performance
   - recyclerview
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Какие могут быть проблемы с элементами списка?
