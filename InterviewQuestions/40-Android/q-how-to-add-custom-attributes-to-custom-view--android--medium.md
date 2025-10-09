@@ -9,7 +9,7 @@ tags:
   - custom-views
   - attributes
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # How to add custom attributes to custom view?

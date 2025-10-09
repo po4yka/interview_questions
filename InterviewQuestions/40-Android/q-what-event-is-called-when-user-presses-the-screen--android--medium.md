@@ -7,7 +7,7 @@ tags:
   - ui
   - touch-events
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What event is called when user presses the screen?

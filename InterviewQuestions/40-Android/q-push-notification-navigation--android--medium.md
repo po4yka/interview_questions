@@ -7,7 +7,7 @@ tags:
   - navigation
   - deeplink
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Как открыть Activity или Fragment из push уведомления?

@@ -12,7 +12,7 @@ tags:
   - ui-patterns
   - viewmodel
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # С помощью чего делается переход со списков на деталки?

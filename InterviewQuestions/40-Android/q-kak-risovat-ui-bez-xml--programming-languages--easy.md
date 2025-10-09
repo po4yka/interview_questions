@@ -3,7 +3,7 @@ tags:
   - programming-languages
   - android
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как рисовать UI без xml?

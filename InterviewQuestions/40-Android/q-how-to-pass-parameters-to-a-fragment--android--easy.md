@@ -7,7 +7,7 @@ tags:
   - ui
   - data-passing
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # How to pass parameters to a fragment?

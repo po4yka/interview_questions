@@ -9,7 +9,7 @@ tags:
   - memory-management
   - weakreference
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Как LeakCanary понимает что произошла утечка памяти?

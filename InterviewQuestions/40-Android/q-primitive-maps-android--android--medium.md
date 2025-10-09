@@ -6,7 +6,7 @@ tags:
   - collections
   - memory-optimization
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Примитивные коллекции Map в Android

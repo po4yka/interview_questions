@@ -12,7 +12,7 @@ tags:
   - content-provider
   - service
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Какие основные компоненты Android-приложения?

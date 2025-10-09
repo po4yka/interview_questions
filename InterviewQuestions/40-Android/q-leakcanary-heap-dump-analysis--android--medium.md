@@ -9,7 +9,7 @@ tags:
   - memory-management
   - shark
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Как понять что в дампе есть утечка?

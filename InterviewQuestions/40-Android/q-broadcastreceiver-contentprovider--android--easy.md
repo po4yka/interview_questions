@@ -10,7 +10,7 @@ tags:
   - intent
   - system-events
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что известно про ресиверы и контент-провайдеры?

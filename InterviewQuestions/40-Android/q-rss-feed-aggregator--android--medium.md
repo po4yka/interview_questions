@@ -7,7 +7,7 @@ tags:
   - workmanager
   - room
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Реализация RSS-агрегатора на Android

@@ -13,7 +13,7 @@ tags:
   - viewholder
   - views
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Что известно про RecyclerView?

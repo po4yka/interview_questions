@@ -7,7 +7,7 @@ tags:
   - recyclerview
   - ui
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Как организовать работу с текстом и картинками в делегате?

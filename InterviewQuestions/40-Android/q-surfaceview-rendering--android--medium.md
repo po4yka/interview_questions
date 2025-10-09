@@ -9,7 +9,7 @@ tags:
   - threading
   - difficulty/medium
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What is SurfaceView? / Что такое SurfaceView?

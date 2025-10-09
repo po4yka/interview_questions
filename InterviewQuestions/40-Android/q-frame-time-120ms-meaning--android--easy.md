@@ -9,7 +9,7 @@ tags:
   - rendering
   - ui-performance
 difficulty: easy
-status: draft
+status: reviewed
 ---
 
 # Если профайлер показывает тебе что какой-нибудь фрейм занял 120 миллисекунд, что это значит?

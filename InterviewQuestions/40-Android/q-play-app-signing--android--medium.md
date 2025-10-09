@@ -10,7 +10,7 @@ tags:
   - app-bundle
   - difficulty/medium
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What is Play App Signing? / Что такое Play App Signing?

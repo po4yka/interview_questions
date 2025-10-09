@@ -12,7 +12,7 @@ tags:
   - presenter
   - view
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # После получения результата внутри Presenter как сообщить об этом View
