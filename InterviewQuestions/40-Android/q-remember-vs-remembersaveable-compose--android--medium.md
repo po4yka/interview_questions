@@ -6,7 +6,7 @@ tags:
   - state-management
   - configuration-changes
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # Remember vs RememberSaveable в Compose

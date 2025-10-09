@@ -6,7 +6,7 @@ tags:
   - android
   - ui
 difficulty: medium
-status: draft
+status: reviewed
 ---
 
 # What are fragments for if there is Activity?
