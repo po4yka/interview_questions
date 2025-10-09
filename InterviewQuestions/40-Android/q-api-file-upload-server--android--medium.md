@@ -45,23 +45,7 @@ For uploading files to a server in Android, you can use several APIs and librari
 
 ### Implementation
 
-#### 1. Add Dependencies
-
-```kotlin
-// build.gradle.kts
-dependencies {
-    // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
-
-    // OkHttp (for logging)
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-}
-```
-
----
-
-#### 2. Define API Interface
+#### 1. Define API Interface
 
 ```kotlin
 interface FileUploadApi {

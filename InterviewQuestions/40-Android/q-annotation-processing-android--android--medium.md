@@ -158,10 +158,6 @@ class UserDao_Impl(private val db: RoomDatabase) : UserDao {
 plugins {
     id("kotlin-kapt")
 }
-
-dependencies {
-    kapt("androidx.room:room-compiler:2.6.0")
-}
 ```
 
 **Pros:**
@@ -180,10 +176,6 @@ dependencies {
 // build.gradle.kts
 plugins {
     id("com.google.devtools.ksp") version "2.1.0-1.0.29"
-}
-
-dependencies {
-    ksp("androidx.room:room-compiler:2.7.0-alpha12")
 }
 ```
 
@@ -291,13 +283,6 @@ annotation class BindView(val id: Int)
 plugins {
     id("java-library")
     id("org.jetbrains.kotlin.jvm")
-}
-
-dependencies {
-    implementation(project(":annotations"))
-    implementation("com.google.auto.service:auto-service:1.1.1")
-    kapt("com.google.auto.service:auto-service:1.1.1")
-    implementation("com.squareup:kotlinpoet:1.14.2")
 }
 
 // processor/src/main/java/com/example/BindViewProcessor.kt
@@ -415,12 +400,6 @@ class MainActivity_ViewBinding {
 plugins {
     id("java-library")
     id("org.jetbrains.kotlin.jvm")
-}
-
-dependencies {
-    implementation(project(":annotations"))
-    implementation("com.google.devtools.ksp:symbol-processing-api:2.1.0-1.0.29")
-    implementation("com.squareup:kotlinpoet:1.18.1")
 }
 
 // processor/src/main/kotlin/com/example/BindViewProcessorProvider.kt
@@ -606,19 +585,9 @@ plugins {
     id("kotlin-kapt")
 }
 
-dependencies {
-    kapt("androidx.room:room-compiler:2.7.0-alpha12")
-    kapt("com.google.dagger:hilt-compiler:2.54.1")
-}
-
 // After (KSP)
 plugins {
     id("com.google.devtools.ksp") version "2.1.0-1.0.29"
-}
-
-dependencies {
-    ksp("androidx.room:room-compiler:2.7.0-alpha12")
-    ksp("com.google.dagger:hilt-compiler:2.54.1")
 }
 
 // Update imports in code
