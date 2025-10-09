@@ -1,3 +1,16 @@
+---
+topic: android
+tags:
+  - android
+  - performance
+  - baseline-profiles
+  - aot
+  - optimization
+  - app-startup
+difficulty: medium
+status: reviewed
+---
+
 # Baseline Profiles in Android
 
 **Сложность**: 🟡 Medium

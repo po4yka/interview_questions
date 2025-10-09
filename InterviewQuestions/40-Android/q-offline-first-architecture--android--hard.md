@@ -1,3 +1,17 @@
+---
+topic: android
+tags:
+  - android
+  - architecture
+  - offline-first
+  - networking
+  - sync
+  - room
+  - workmanager
+difficulty: hard
+status: reviewed
+---
+
 # How to Implement Offline-First Architecture in Android
 
 **Сложность**: 🔴 Hard

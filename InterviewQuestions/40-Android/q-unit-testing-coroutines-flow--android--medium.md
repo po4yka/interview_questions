@@ -1,3 +1,17 @@
+---
+topic: android
+tags:
+  - android
+  - testing
+  - coroutines
+  - flow
+  - unit-testing
+  - turbine
+  - mockk
+difficulty: medium
+status: reviewed
+---
+
 # Unit Testing with Coroutines and Flow
 
 **Сложность**: 🟡 Medium

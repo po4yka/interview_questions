@@ -1,3 +1,16 @@
+---
+topic: android
+tags:
+  - android
+  - build-optimization
+  - gradle
+  - kotlin
+  - ksp
+  - performance
+difficulty: medium
+status: reviewed
+---
+
 # Android Build Optimization
 
 **Сложность**: 🟡 Medium

@@ -1,3 +1,17 @@
+---
+topic: android
+tags:
+  - android
+  - performance
+  - app-startup
+  - cold-start
+  - warm-start
+  - hot-start
+  - optimization
+difficulty: medium
+status: reviewed
+---
+
 # Hot, Warm, and Cold App Start in Android
 
 **Сложность**: 🟡 Medium

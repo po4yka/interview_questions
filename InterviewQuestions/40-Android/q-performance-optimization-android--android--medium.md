@@ -1,3 +1,16 @@
+---
+topic: android
+tags:
+  - android
+  - performance
+  - optimization
+  - performance-rendering
+  - performance-memory
+  - checklist
+difficulty: medium
+status: reviewed
+---
+
 # App Performance Optimization Checklist for Android
 
 **Сложность**: 🟡 Medium

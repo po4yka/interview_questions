@@ -1,3 +1,17 @@
+---
+topic: android
+tags:
+  - android
+  - jit
+  - aot
+  - compilation
+  - art
+  - performance
+  - baseline-profiles
+difficulty: medium
+status: reviewed
+---
+
 # JIT vs AOT Compilation in Android
 
 **Сложность**: 🟡 Medium

@@ -1,3 +1,18 @@
+---
+topic: android
+tags:
+  - android
+  - dalvik
+  - art
+  - runtime
+  - jit
+  - aot
+  - compilation
+  - performance
+difficulty: medium
+status: reviewed
+---
+
 # Dalvik vs ART Runtime
 
 **Сложность**: 🟡 Medium

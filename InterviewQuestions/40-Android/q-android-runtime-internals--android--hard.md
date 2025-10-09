@@ -1,3 +1,18 @@
+---
+topic: android
+tags:
+  - android
+  - art
+  - runtime
+  - jit
+  - aot
+  - dex
+  - compilation
+  - performance
+difficulty: hard
+status: reviewed
+---
+
 # Android Runtime Internals
 
 **Сложность**: 🔴 Hard

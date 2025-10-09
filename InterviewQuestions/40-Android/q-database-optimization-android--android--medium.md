@@ -1,3 +1,17 @@
+---
+topic: android
+tags:
+  - android
+  - database
+  - room
+  - performance
+  - optimization
+  - sql
+  - indexing
+difficulty: medium
+status: reviewed
+---
+
 # Database Optimization Techniques in Android
 
 **Сложность**: 🟡 Medium

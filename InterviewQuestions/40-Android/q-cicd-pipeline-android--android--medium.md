@@ -1,3 +1,17 @@
+---
+topic: android
+tags:
+  - android
+  - cicd
+  - github-actions
+  - automation
+  - testing
+  - deployment
+  - gradle
+difficulty: medium
+status: reviewed
+---
+
 # CI/CD Pipeline for Android
 
 **Сложность**: 🟡 Medium

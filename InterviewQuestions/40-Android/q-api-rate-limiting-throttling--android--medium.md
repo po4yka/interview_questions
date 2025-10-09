@@ -1,3 +1,17 @@
+---
+topic: android
+tags:
+  - android
+  - networking
+  - api
+  - rate-limiting
+  - throttling
+  - retrofit
+  - okhttp
+difficulty: medium
+status: reviewed
+---
+
 # API Rate Limiting and Throttling in Android
 
 **Сложность**: 🟡 Medium

@@ -1,3 +1,17 @@
+---
+topic: android
+tags:
+  - android
+  - memory
+  - memory-leak
+  - oom
+  - performance-memory
+  - leakcanary
+  - debugging
+difficulty: medium
+status: reviewed
+---
+
 # Memory Leak vs OutOfMemoryError in Android
 
 **Сложность**: 🟡 Medium

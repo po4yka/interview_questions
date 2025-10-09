@@ -1,3 +1,17 @@
+---
+topic: android
+tags:
+  - android
+  - networking
+  - websockets
+  - sse
+  - firebase
+  - fcm
+  - real-time
+difficulty: medium
+status: reviewed
+---
+
 # How to Implement Real-Time Updates in Android
 
 **Сложность**: 🟡 Medium

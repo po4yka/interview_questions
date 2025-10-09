@@ -1,3 +1,17 @@
+---
+topic: android
+tags:
+  - android
+  - database
+  - encryption
+  - security
+  - sqlcipher
+  - room
+  - keystore
+difficulty: medium
+status: reviewed
+---
+
 # Database Encryption in Android
 
 **Сложность**: 🟡 Medium

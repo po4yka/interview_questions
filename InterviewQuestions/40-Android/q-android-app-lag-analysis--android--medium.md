@@ -1,3 +1,17 @@
+---
+topic: android
+tags:
+  - android
+  - performance
+  - performance-rendering
+  - performance-memory
+  - ui
+  - profiling
+  - strictmode
+difficulty: medium
+status: reviewed
+---
+
 # Why Does Android App Lag? Analysis and Solutions
 
 **Сложность**: 🟡 Medium
