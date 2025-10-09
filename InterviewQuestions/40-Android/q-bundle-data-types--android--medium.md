@@ -355,7 +355,7 @@ val fragment = UserFragment.newInstance(
 **Problem:** Bundle has a size limit (~1MB total for Intent).
 
 ```kotlin
-// ❌ BAD: Large bitmap in Bundle
+// BAD: Large bitmap in Bundle
 val bitmap = BitmapFactory.decodeResource(resources, R.drawable.large_image)
 bundle.putParcelable("image", bitmap)  // May crash with TransactionTooLargeException!
 ```
@@ -363,7 +363,7 @@ bundle.putParcelable("image", bitmap)  // May crash with TransactionTooLargeExce
 **Solution:** Pass references instead:
 
 ```kotlin
-// ✅ GOOD: Pass URI or path
+// GOOD: Pass URI or path
 val imageUri = saveImageToCache(bitmap)
 bundle.putString("imageUri", imageUri.toString())
 
@@ -381,14 +381,14 @@ bundle.putInt("imageResId", R.drawable.large_image)
 - **Android-optimized**: Designed for Android
 
 ```kotlin
-// ✅ GOOD: Parcelable (fast)
+// GOOD: Parcelable (fast)
 @Parcelize
 data class User(
     val id: String,
     val name: String
 ) : Parcelable
 
-// ❌ ACCEPTABLE: Serializable (slower, but simpler)
+// ACCEPTABLE: Serializable (slower, but simpler)
 data class User(
     val id: String,
     val name: String
@@ -400,7 +400,7 @@ data class User(
 ### 3. Don't Store Complex Objects
 
 ```kotlin
-// ❌ BAD: Complex objects with heavy state
+// BAD: Complex objects with heavy state
 val bundle = Bundle()
 bundle.putSerializable("database", database)  // Database connection
 bundle.putParcelable("context", applicationContext)  // Context
@@ -417,7 +417,7 @@ bundle.putSerializable("viewModel", viewModel)  // ViewModel
 ### 4. For Large Data, Use Alternative Mechanisms
 
 ```kotlin
-// ✅ GOOD: Save to file and pass path
+// GOOD: Save to file and pass path
 fun passLargeData(data: ByteArray) {
     val file = File(cacheDir, "large_data.bin")
     file.writeBytes(data)
@@ -426,7 +426,7 @@ fun passLargeData(data: ByteArray) {
     bundle.putString("dataPath", file.absolutePath)
 }
 
-// ✅ GOOD: Use ViewModel for shared data
+// GOOD: Use ViewModel for shared data
 class SharedViewModel : ViewModel() {
     val largeData = MutableLiveData<Bitmap>()
 }
@@ -439,7 +439,7 @@ sharedViewModel.largeData.observe(viewLifecycleOwner) { bitmap ->
     // Use bitmap
 }
 
-// ✅ GOOD: Use singleton or dependency injection
+// GOOD: Use singleton or dependency injection
 object DataHolder {
     var currentImage: Bitmap? = null
 }
@@ -465,11 +465,11 @@ bundle.putInt("imageId", imageId)
 **Size limit:** ~1MB total (TransactionTooLargeException if exceeded)
 
 **Best practices:**
-1. ✅ Use **Parcelable** over Serializable (10x faster)
-2. ✅ For **large data** (images, files), pass **URI or path**
-3. ✅ For **shared data** between Fragments, use **ViewModel**
-4. ❌ Don't pass: Contexts, ViewModels, Database connections
-5. ❌ Don't exceed: 1MB size limit
+1. Use **Parcelable** over Serializable (10x faster)
+2. For **large data** (images, files), pass **URI or path**
+3. For **shared data** between Fragments, use **ViewModel**
+4. Don't pass: Contexts, ViewModels, Database connections
+5. Don't exceed: 1MB size limit
 
 **Alternatives for large data:**
 - File storage + pass path

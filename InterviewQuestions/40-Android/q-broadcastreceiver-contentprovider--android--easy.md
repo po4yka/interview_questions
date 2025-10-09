@@ -51,11 +51,11 @@ class NetworkReceiver : BroadcastReceiver() {
 ```
 
 **System Events Examples:**
-- 📱 Network change
-- 📧 SMS received
-- 🔋 Battery low
-- ✈️ Airplane mode change
-- 📶 WiFi state change
+- Network change
+- SMS received
+- Battery low
+- Airplane mode change
+- WiFi state change
 
 **ContentProvider** - Data Sharing Interface
 
@@ -90,11 +90,11 @@ class ContactsProvider : ContentProvider() {
 ```
 
 **Built-in ContentProviders:**
-- 📇 **Contacts**: Contact list
-- 🖼️ **MediaStore**: Gallery images/videos
-- 📅 **Calendar**: Calendar events
-- 📞 **CallLog**: Call history
-- 📝 **Settings**: System settings
+- **Contacts**: Contact list
+- **MediaStore**: Gallery images/videos
+- **Calendar**: Calendar events
+- **CallLog**: Call history
+- **Settings**: System settings
 
 **Accessing ContentProvider:**
 

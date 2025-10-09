@@ -22,7 +22,7 @@ The most common cause - committing Fragment transaction after Activity has saved
 class MainActivity : AppCompatActivity() {
 
     fun replaceFragment() {
-        // ❌ This can throw IllegalStateException if called after onSaveInstanceState()
+        // This can throw IllegalStateException if called after onSaveInstanceState()
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, MyFragment())
             .commit()
@@ -87,7 +87,7 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ❌ These won't survive process death
+        // These won't survive process death
         userName = "John"
         userAge = 25
     }
@@ -160,7 +160,7 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 class FragmentA : Fragment() {
 
-    // ✅ Survives back stack recreation
+    // Survives back stack recreation
     private val viewModel: MyViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -190,7 +190,7 @@ class MyFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ❌ Lost on configuration change
+        // Lost on configuration change
         expensiveData = loadLargeDataSet()
     }
 }
@@ -214,7 +214,7 @@ class MyFragment : Fragment() {
 class MyFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance = true // ⚠️ Deprecated, use ViewModel
+        retainInstance = true // Deprecated, use ViewModel
     }
 }
 ```
@@ -260,7 +260,7 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ✅ Use viewLifecycleOwner, not this (Fragment lifecycle)
+        // Use viewLifecycleOwner, not this (Fragment lifecycle)
         viewModel.data.observe(viewLifecycleOwner) { data ->
             binding.textView.text = data
         }
@@ -282,7 +282,7 @@ class MyFragment : Fragment() {
             // This can cause IllegalStateException
             childFragmentManager.beginTransaction()
                 .replace(R.id.child_container, ChildFragment())
-                .commit() // ❌ Can crash
+                .commit() // Can crash
         }
     }
 }
@@ -297,7 +297,7 @@ class MyFragment : Fragment() {
             if (viewLifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 childFragmentManager.beginTransaction()
                     .replace(R.id.child_container, ChildFragment())
-                    .commit() // ✅ Safe
+                    .commit() // Safe
             }
         }
     }

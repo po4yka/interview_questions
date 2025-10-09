@@ -489,13 +489,13 @@ class MainActivity : AppCompatActivity() {
 
 | Method | Use Case | Lifecycle Aware | Cancellation | Learning Curve |
 |--------|----------|----------------|--------------|----------------|
-| **Coroutines** | General async | ✅ Yes | ✅ Easy | Medium |
-| **ExecutorService** | Thread pool | ❌ No | ⚠️ Manual | Low |
-| **HandlerThread** | Sequential tasks | ❌ No | ⚠️ Manual | Low |
-| **WorkManager** | Background jobs | ✅ Yes | ✅ Easy | Medium |
-| **AsyncTask** | ❌ Deprecated | ❌ No | ❌ Poor | Low |
-| **Thread** | Simple tasks | ❌ No | ❌ No | Low |
-| **RxJava** | Reactive streams | ❌ No | ✅ Easy | High |
+| **Coroutines** | General async | Yes | Easy | Medium |
+| **ExecutorService** | Thread pool | No | Manual | Low |
+| **HandlerThread** | Sequential tasks | No | Manual | Low |
+| **WorkManager** | Background jobs | Yes | Easy | Medium |
+| **AsyncTask** | Deprecated | No | Poor | Low |
+| **Thread** | Simple tasks | No | No | Low |
+| **RxJava** | Reactive streams | No | Easy | High |
 
 ---
 
@@ -504,7 +504,7 @@ class MainActivity : AppCompatActivity() {
 ### 1. Use Coroutines for Most Cases
 
 ```kotlin
-// ✅ GOOD: Coroutines with lifecycle scope
+// GOOD: Coroutines with lifecycle scope
 lifecycleScope.launch {
     val data = withContext(Dispatchers.IO) {
         repository.fetchData()
@@ -516,7 +516,7 @@ lifecycleScope.launch {
 ### 2. Use WorkManager for Background Jobs
 
 ```kotlin
-// ✅ GOOD: WorkManager for deferrable, guaranteed work
+// GOOD: WorkManager for deferrable, guaranteed work
 val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
     .setConstraints(Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -529,10 +529,10 @@ WorkManager.getInstance(context).enqueue(uploadWork)
 ### 3. Avoid AsyncTask
 
 ```kotlin
-// ❌ BAD: AsyncTask (deprecated)
+// BAD: AsyncTask (deprecated)
 class MyTask : AsyncTask<Void, Void, String>() { ... }
 
-// ✅ GOOD: Coroutines
+// GOOD: Coroutines
 lifecycleScope.launch {
     val result = withContext(Dispatchers.IO) { doWork() }
     updateUI(result)
@@ -542,7 +542,7 @@ lifecycleScope.launch {
 ### 4. Clean Up Resources
 
 ```kotlin
-// ✅ GOOD: Proper cleanup
+// GOOD: Proper cleanup
 class MainActivity : AppCompatActivity() {
 
     private val executor = Executors.newSingleThreadExecutor()
@@ -596,7 +596,7 @@ class MainActivity : AppCompatActivity() {
 **Рекомендуемые подходы:**
 
 ```kotlin
-// ✅ Kotlin Coroutines (для большинства случаев)
+// Kotlin Coroutines (для большинства случаев)
 lifecycleScope.launch {
     val data = withContext(Dispatchers.IO) {
         repository.fetchData()
@@ -604,11 +604,11 @@ lifecycleScope.launch {
     updateUI(data)
 }
 
-// ✅ WorkManager (для гарантированных фоновых задач)
+// WorkManager (для гарантированных фоновых задач)
 val work = OneTimeWorkRequestBuilder<UploadWorker>().build()
 WorkManager.getInstance(context).enqueue(work)
 
-// ✅ ExecutorService (для совместимости с Java)
+// ExecutorService (для совместимости с Java)
 val executor = Executors.newSingleThreadExecutor()
 executor.execute {
     val result = doWork()
@@ -617,6 +617,6 @@ executor.execute {
 ```
 
 **Избегайте:**
-- ❌ AsyncTask (deprecated в API 30)
-- ⚠️ Сырые Thread (сложно управлять)
+- AsyncTask (deprecated в API 30)
+- Сырые Thread (сложно управлять)
 

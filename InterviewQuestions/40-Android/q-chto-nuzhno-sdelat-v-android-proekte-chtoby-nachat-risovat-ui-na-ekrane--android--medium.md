@@ -392,14 +392,14 @@ class MainActivity : AppCompatActivity() {
 ### Common Mistakes
 
 ```kotlin
-// ❌ BAD: Accessing views before setContentView
+// BAD: Accessing views before setContentView
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     val textView = findViewById<TextView>(R.id.textView) // null!
     setContentView(R.layout.activity_main)
 }
 
-// ✅ GOOD: Set content view first
+// GOOD: Set content view first
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)

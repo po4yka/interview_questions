@@ -14,7 +14,7 @@ status: reviewed
 
 # CI/CD Pipeline for Android
 
-**Сложность**: 🟡 Medium
+**Сложность**: Medium
 **Источник**: Amit Shekhar Android Interview Questions
 
 ## English

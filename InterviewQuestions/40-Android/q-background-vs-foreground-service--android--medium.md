@@ -30,7 +30,7 @@ status: reviewed
 
 | Aspect | Background Service | Foreground Service |
 |--------|-------------------|-------------------|
-| **Notification** | No notification | **Required** persistent notification |
+| **Notification** | No notification | Required persistent notification |
 | **Priority** | Low (can be killed) | High (protected from being killed) |
 | **User awareness** | Hidden from user | User sees notification |
 | **System behavior** | Kills when memory is low | Preserves as long as possible |
@@ -49,7 +49,7 @@ A **background service** runs **without user awareness** and has **low priority*
 class BackgroundSyncService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // ❌ Background service - can be killed anytime
+        // Background service - can be killed anytime
         Thread {
             syncData()  // May be interrupted!
             stopSelf()
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
     private fun startBackgroundService() {
         val intent = Intent(this, BackgroundSyncService::class.java)
 
-        // ❌ On Android 8.0+, this might throw IllegalStateException
+        // On Android 8.0+, this might throw IllegalStateException
         // if app is in background!
         startService(intent)
     }
@@ -115,7 +115,7 @@ class ForegroundDownloadService : Service() {
     private val NOTIFICATION_ID = 1
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // ✅ Foreground service - protected from being killed
+        // Foreground service - protected from being killed
         startForeground(NOTIFICATION_ID, createNotification())
 
         Thread {
@@ -199,7 +199,7 @@ Process Priority Hierarchy (Low to High):
 ├─────────────────────────────────────┤
 │ 4. Cached Process                   │
 ├─────────────────────────────────────┤
-│ 3. Service Process  ← Background    │ ← Can be killed when memory is low
+│ 3. Service Process (Background)     │ Can be killed when memory is low
 ├─────────────────────────────────────┤
 │ 2. Visible Process                  │
 ├─────────────────────────────────────┤
@@ -227,7 +227,7 @@ Process Priority Hierarchy (Low to High):
 ├─────────────────────────────────────┤
 │ 2. Visible Process                  │
 ├─────────────────────────────────────┤
-│ 1. Foreground Process ← Foreground  │ ← Highest priority, protected
+│ 1. Foreground Process (Foreground)  │ Highest priority, protected
 └─────────────────────────────────────┘
 ```
 
@@ -251,7 +251,7 @@ class MusicPlayerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_PLAY -> {
-                // ✅ Foreground service with notification
+                // Foreground service with notification
                 startForeground(NOTIFICATION_ID, createNotification("Playing"))
                 playMusic()
             }
@@ -336,7 +336,7 @@ class MusicPlayerService : Service() {
 ### Example 2: Data Sync (Background Service → WorkManager)
 
 ```kotlin
-// ❌ DON'T: Background service (restricted on Android 8.0+)
+// DON'T: Background service (restricted on Android 8.0+)
 class SyncService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Thread {
@@ -349,7 +349,7 @@ class SyncService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 }
 
-// ✅ DO: Use WorkManager instead
+// DO: Use WorkManager instead
 class SyncWorker(
     context: Context,
     params: WorkerParameters
@@ -406,7 +406,7 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 
 ### Use Foreground Service When:
 
-**✅ Use foreground service when:**
+**Use foreground service when:**
 
 1. **User-Visible Task**
    ```kotlin
@@ -542,7 +542,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 ### Mistake 1: Using Background Service on Android 8.0+
 
 ```kotlin
-// ❌ BAD: Doesn't work on Android 8.0+
+// BAD: Doesn't work on Android 8.0+
 class MainActivity : AppCompatActivity() {
     private fun syncData() {
         startService(Intent(this, SyncService::class.java))
@@ -550,7 +550,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD: Use WorkManager
+// GOOD: Use WorkManager
 class MainActivity : AppCompatActivity() {
     private fun syncData() {
         val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>().build()
@@ -562,21 +562,21 @@ class MainActivity : AppCompatActivity() {
 ### Mistake 2: Not Calling startForeground() Fast Enough
 
 ```kotlin
-// ❌ BAD: Delay before startForeground()
+// BAD: Delay before startForeground()
 class MyService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Thread {
             Thread.sleep(10000)  // 10 seconds delay
-            startForeground(NOTIFICATION_ID, notification)  // ❌ Too late! Service killed
+            startForeground(NOTIFICATION_ID, notification)  // Too late! Service killed
         }.start()
         return START_NOT_STICKY
     }
 }
 
-// ✅ GOOD: Call startForeground() immediately
+// GOOD: Call startForeground() immediately
 class MyService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(NOTIFICATION_ID, notification)  // ✅ Within 5 seconds
+        startForeground(NOTIFICATION_ID, notification)  // Within 5 seconds
         Thread {
             doLongRunningTask()
             stopForeground(STOP_FOREGROUND_REMOVE)
@@ -590,16 +590,16 @@ class MyService : Service() {
 ### Mistake 3: Using Foreground Service for Deferrable Tasks
 
 ```kotlin
-// ❌ BAD: Foreground service for periodic sync
+// BAD: Foreground service for periodic sync
 class PeriodicSyncService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(NOTIFICATION_ID, notification)  // ❌ User sees unnecessary notification
+        startForeground(NOTIFICATION_ID, notification)  // User sees unnecessary notification
         syncData()
         return START_STICKY
     }
 }
 
-// ✅ GOOD: Use WorkManager for periodic tasks
+// GOOD: Use WorkManager for periodic tasks
 val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
     .setConstraints(
         Constraints.Builder()
@@ -633,11 +633,11 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 
 ```
 Is the task user-visible and time-sensitive?
-├─ YES → Foreground Service
-└─ NO → Is the task deferrable?
-    ├─ YES → WorkManager
-    └─ NO → Consider if truly necessary
-        └─ If yes, likely needs Foreground Service
+|-- YES → Foreground Service
+└-- NO → Is the task deferrable?
+    |-- YES → WorkManager
+    └-- NO → Consider if truly necessary
+        └-- If yes, likely needs Foreground Service
 ```
 
 **Best practice:** Avoid background services on Android 8.0+. Use:

@@ -498,12 +498,12 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 
 | Mechanism | Cancels Work | Memory Safe | Complexity | Recommended |
 |-----------|--------------|-------------|------------|-------------|
-| Weak References | ❌ No | ✅ Yes | Low | No |
-| Lifecycle-Aware | ❌ No | ✅ Yes | Medium | No |
-| RxJava Disposables | ✅ Yes | ✅ Yes | High | Legacy code |
-| Coroutines + Job | ✅ Yes | ✅ Yes | Medium | ✅ Yes |
-| Boolean Flags | ❌ No | ⚠️ Partial | Low | No |
-| Callback Management | ⚠️ Partial | ✅ Yes | Medium | No |
+| Weak References | No | Yes | Low | No |
+| Lifecycle-Aware | No | Yes | Medium | No |
+| RxJava Disposables | Yes | Yes | High | Legacy code |
+| Coroutines + Job | Yes | Yes | Medium | Yes |
+| Boolean Flags | No | Partial | Low | No |
+| Callback Management | Partial | Yes | Medium | No |
 
 ### Best Practices
 

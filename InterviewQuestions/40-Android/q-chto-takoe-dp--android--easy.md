@@ -319,20 +319,20 @@ fun ResponsiveLayout() {
 ### Common Mistakes
 
 ```kotlin
-// ❌ BAD: Using px
+// BAD: Using px
 textView.layoutParams.width = 100 // This is px!
 
-// ✅ GOOD: Using dp
+// GOOD: Using dp
 val widthPx = (100 * density).toInt()
 textView.layoutParams.width = widthPx
 ```
 
 ```xml
-<!-- ❌ BAD: Inconsistent spacing -->
+<!-- BAD: Inconsistent spacing -->
 <View
     android:layout_margin="13dp" />
 
-<!-- ✅ GOOD: Use multiples of 4dp or 8dp -->
+<!-- GOOD: Use multiples of 4dp or 8dp -->
 <View
     android:layout_margin="12dp" />
 ```
