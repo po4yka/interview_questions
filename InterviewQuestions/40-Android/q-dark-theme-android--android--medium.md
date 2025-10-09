@@ -307,13 +307,13 @@ fun MyScreen() {
 ## Summary
 
 To properly support Dark theme:
-1. ✅ Inherit from `DayNight` theme
-2. ✅ Use theme attributes instead of hardcoded colors
-3. ✅ Provide alternative resources in `values-night/`
-4. ✅ Test thoroughly in both light and dark modes
-5. ✅ Handle notifications and widgets correctly
-6. ✅ Allow users to choose theme preference
-7. ✅ Follow Material Design dark theme guidelines
+1. Inherit from `DayNight` theme
+2. Use theme attributes instead of hardcoded colors
+3. Provide alternative resources in `values-night/`
+4. Test thoroughly in both light and dark modes
+5. Handle notifications and widgets correctly
+6. Allow users to choose theme preference
+7. Follow Material Design dark theme guidelines
 
 **Source**: [Dark theme](https://developer.android.com/guide/topics/ui/look-and-feel/darktheme)
 
@@ -406,10 +406,10 @@ To properly support Dark theme:
 ## Резюме
 
 Для правильной поддержки темной темы:
-1. ✅ Наследуйтесь от темы `DayNight`
-2. ✅ Используйте атрибуты темы вместо жестко заданных цветов
-3. ✅ Предоставьте альтернативные ресурсы в `values-night/`
-4. ✅ Тщательно тестируйте в обоих режимах
-5. ✅ Правильно обрабатывайте уведомления и виджеты
-6. ✅ Позвольте пользователям выбирать предпочтение темы
-7. ✅ Следуйте руководствам Material Design для темной темы
+1. Наследуйтесь от темы `DayNight`
+2. Используйте атрибуты темы вместо жестко заданных цветов
+3. Предоставьте альтернативные ресурсы в `values-night/`
+4. Тщательно тестируйте в обоих режимах
+5. Правильно обрабатывайте уведомления и виджеты
+6. Позвольте пользователям выбирать предпочтение темы
+7. Следуйте руководствам Material Design для темной темы

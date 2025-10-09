@@ -268,7 +268,7 @@ class MyWorker(
 
 ## Best Practices
 
-### ✅ DO: Constructor Injection
+### DO: Constructor Injection
 
 ```kotlin
 class UserRepository @Inject constructor(
@@ -278,21 +278,21 @@ class UserRepository @Inject constructor(
 }
 ```
 
-### ❌ DON'T: Field Injection for Regular Classes
+### DON'T: Field Injection for Regular Classes
 
 ```kotlin
-// ❌ BAD
+// BAD
 class UserRepository {
     @Inject lateinit var api: ApiService // Hard to test
 }
 
-// ✅ GOOD
+// GOOD
 class UserRepository @Inject constructor(
     private val api: ApiService
 )
 ```
 
-### ✅ DO: Use @Provides for Interfaces
+### DO: Use @Provides for Interfaces
 
 ```kotlin
 @Module

@@ -305,15 +305,15 @@ class UserRepository @Inject constructor(
 ### 1. Use Appropriate Scope
 
 ```kotlin
-// ✅ GOOD: Singleton for app-wide resources
+// GOOD: Singleton for app-wide resources
 @Singleton
 class AppDatabase
 
-// ✅ GOOD: ActivityScoped for UI-related logic
+// GOOD: ActivityScoped for UI-related logic
 @ActivityScoped
 class Presenter
 
-// ❌ BAD: Singleton for Activity-specific data
+// BAD: Singleton for Activity-specific data
 @Singleton
 class ActivityViewModel // Memory leak!
 ```
@@ -321,13 +321,13 @@ class ActivityViewModel // Memory leak!
 ### 2. Avoid Memory Leaks
 
 ```kotlin
-// ❌ BAD: Activity in Singleton scope
+// BAD: Activity in Singleton scope
 @Singleton
 class BadRepository @Inject constructor(
     private val activity: Activity // Leaks Activity!
 )
 
-// ✅ GOOD: Use Application Context
+// GOOD: Use Application Context
 @Singleton
 class GoodRepository @Inject constructor(
     @ApplicationContext private val context: Context
@@ -363,10 +363,10 @@ class ApiClient // Lives for entire app
 3. Dagger reuses instance within that scope
 
 **Key rules:**
-- ✅ One scope per component
-- ✅ Child scope narrower than parent
-- ✅ Match scope to lifecycle
-- ❌ Don't leak long-lived references
+- One scope per component
+- Child scope narrower than parent
+- Match scope to lifecycle
+- Don't leak long-lived references
 
 **Common scopes:**
 - `@Singleton` - Application lifetime
@@ -403,8 +403,8 @@ class Presenter @Inject constructor(
 ```
 
 **Правила:**
-- ✅ Один scope на компонент
-- ✅ Дочерний scope уже родительского
-- ✅ Соответствие scope жизненному циклу
-- ❌ Не утекайте долгоживущие ссылки
+- Один scope на компонент
+- Дочерний scope уже родительского
+- Соответствие scope жизненному циклу
+- Не утекайте долгоживущие ссылки
 
