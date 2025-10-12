@@ -825,7 +825,7 @@ class UserViewModel : ViewModel() {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How does CoroutineExceptionHandler interact with structured concurrency?
 2. Can you install multiple CoroutineExceptionHandlers in a coroutine hierarchy?

@@ -745,7 +745,7 @@ suspend fun correct5() = suspendCancellableCoroutine<String> { cont ->
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How do you convert a listener with multiple callbacks (onStart, onProgress, onComplete) to suspend function?
 2. What happens if you call resume() after the coroutine has been cancelled?

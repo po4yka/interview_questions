@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-150005"
 title: "delay() vs Thread.sleep(): what's the difference?"
 description: "Understanding the fundamental differences between suspending delay() and blocking Thread.sleep() in Kotlin coroutines, including thread usage and performance implications"
@@ -640,7 +641,7 @@ fun legacyCode() {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. Can you use `delay()` outside of a coroutine context?
 2. What happens if you call `Thread.sleep()` on the Main dispatcher in Android?

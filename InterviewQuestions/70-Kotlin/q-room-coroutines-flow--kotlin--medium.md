@@ -288,7 +288,7 @@ interface UserDao {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. **How to handle database migrations with coroutines?**
 2. **When to use Flow vs suspend in DAO?**

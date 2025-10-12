@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-170006"
 title: "Job state machine and state transitions / Job машина состояний и переходы"
 subtopics:
@@ -1544,7 +1545,7 @@ fun demonstrateCancellingState() = runBlocking {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. What happens to child coroutines when parent transitions from Completing to Completed?
 2. How does SupervisorJob affect state transitions between parent and children?

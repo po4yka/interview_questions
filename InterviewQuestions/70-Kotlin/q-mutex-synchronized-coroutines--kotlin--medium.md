@@ -1035,7 +1035,7 @@ class UserProfileViewModel : ViewModel() {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How does Mutex handle coroutine cancellation compared to synchronized blocks?
 2. Can you implement a fair Mutex using Channel in Kotlin coroutines?

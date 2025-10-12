@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-170008"
 title: "Testing coroutine timing: advanceTimeBy vs advanceUntilIdle / Тестирование таймингов корутин"
 subtopics:
@@ -1290,7 +1291,7 @@ Flow операторы с временем (`debounce`, `sample`, `delay`) те
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. What's the difference between `advanceUntilIdle()` and `advanceTimeBy(Long.MAX_VALUE)`?
 2. How do you test infinite loops with `delay()` without hanging the test?

@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-170004"
 title: "flowOn operator and context switching in flows / flowOn оператор и переключение контекста"
 description: "Deep dive into flowOn operator, how it changes upstream execution context, buffering behavior, and performance implications"
@@ -984,7 +985,7 @@ flow {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How does flowOn's internal buffer handle backpressure when the downstream collector is slower than upstream emissions?
 

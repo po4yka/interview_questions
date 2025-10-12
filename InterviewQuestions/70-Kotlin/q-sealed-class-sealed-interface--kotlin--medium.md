@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-150012"
 title: "Sealed classes vs sealed interfaces in Kotlin"
 description: "Comprehensive guide to sealed classes and sealed interfaces covering exhaustive when expressions, hierarchy, comparison with enums, and Kotlin 1.5+ features"
@@ -181,7 +182,7 @@ fun handleNetworkResult(result: NetworkResult<String>) {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. Can sealed classes have protected constructors?
 2. How do sealed classes work across different modules?

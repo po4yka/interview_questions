@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-150003"
 title: "SupervisorJob: when and why to use it?"
 description: "Comprehensive guide to SupervisorJob in Kotlin coroutines, covering independent failure handling, comparison with regular Job, and real-world use cases in Android development"
@@ -809,7 +810,7 @@ class SupervisorJobTest {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. Can you use both regular Job and SupervisorJob in the same coroutine hierarchy?
 2. What happens if the parent scope has SupervisorJob but a child creates a regular Job?

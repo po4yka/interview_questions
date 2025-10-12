@@ -755,7 +755,7 @@ fun goodTest() = runTest {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How do you test code that uses multiple dispatchers (IO, Main, Default)?
 2. What's the relationship between TestScope and TestDispatcher?

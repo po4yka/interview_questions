@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-170005"
 title: "NonCancellable context for critical cleanup operations / NonCancellable контекст для критических операций"
 description: "Complete guide to using NonCancellable context for cleanup, when to use it, risks, and best practices with real examples"
@@ -898,7 +899,7 @@ suspend fun cleanupWithoutSuspend() {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How does NonCancellable interact with CoroutineExceptionHandler? Are exceptions in NonCancellable blocks handled differently?
 

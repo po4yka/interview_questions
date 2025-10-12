@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 tags:
   - abstract
   - inheritance

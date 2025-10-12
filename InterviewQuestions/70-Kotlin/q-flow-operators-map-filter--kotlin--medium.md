@@ -46,7 +46,7 @@ Comprehensive answer for question 140018.
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. **Follow-up question 1**
 2. **Follow-up question 2**

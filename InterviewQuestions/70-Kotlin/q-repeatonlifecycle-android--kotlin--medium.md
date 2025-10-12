@@ -442,7 +442,7 @@ viewLifecycleOwner.lifecycleScope.launch {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. **When to use STARTED vs CREATED state?**
 2. **How does repeatOnLifecycle differ from launchWhenStarted?**

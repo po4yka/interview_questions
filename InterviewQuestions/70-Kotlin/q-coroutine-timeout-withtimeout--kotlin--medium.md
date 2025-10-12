@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-150006"
 title: "How to handle timeouts in coroutines: withTimeout vs withTimeoutOrNull"
 description: "Comprehensive guide to timeout handling in Kotlin coroutines, covering withTimeout, withTimeoutOrNull, TimeoutCancellationException, and practical patterns"
@@ -259,7 +260,7 @@ suspend fun fetchStocks(): String {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. What happens to the coroutine after a timeout occurs?
 2. Can you recover partial results before timeout?

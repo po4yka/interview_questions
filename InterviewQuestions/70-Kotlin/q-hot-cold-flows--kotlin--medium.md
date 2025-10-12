@@ -70,7 +70,7 @@ val hotFlow = MutableSharedFlow<Int>()
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. **What is SharingStarted strategy?**
 2. **How to convert cold to hot?**

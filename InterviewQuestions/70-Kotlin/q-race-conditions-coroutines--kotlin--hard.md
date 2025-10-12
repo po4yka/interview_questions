@@ -845,7 +845,7 @@ launch { val value = channel.receive() }
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How do you detect data races in Kotlin/JVM vs Kotlin/Native?
 2. What's the performance impact of different synchronization strategies?

@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-150004"
 title: "Comparison of all coroutine builders: launch, async, runBlocking, withContext, coroutineScope, supervisorScope"
 description: "Comprehensive comparison of Kotlin coroutine builders covering return types, blocking vs suspending behavior, use cases, and performance implications"
@@ -808,7 +809,7 @@ Kotlin предоставляет несколько строителей кор
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. When would you use `async` over `withContext` despite the overhead?
 2. Can you nest different coroutine builders, and what are the implications?

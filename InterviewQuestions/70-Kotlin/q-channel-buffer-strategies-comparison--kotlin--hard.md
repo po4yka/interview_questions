@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-170007"
 title: "Channel buffer strategies: RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED / Стратегии буферизации каналов"
 subtopics:
@@ -1558,7 +1559,7 @@ Kotlin корутины каналы поддерживают несколько
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How do you measure the optimal buffer size for a Channel.BUFFERED in production?
 2. What happens if you use Channel.UNLIMITED with a slow consumer that never catches up?

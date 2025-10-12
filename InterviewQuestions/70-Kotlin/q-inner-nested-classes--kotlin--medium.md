@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-150014"
 title: "Inner vs nested classes in Kotlin"
 description: "Comprehensive guide to Inner vs nested classes in Kotlin covering concepts, patterns, best practices, and real-world examples"
@@ -125,7 +126,7 @@ date_updated: "2025-10-12"
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. [Technical follow-up question related to implementation details]
 2. [Question about edge cases and advanced scenarios]

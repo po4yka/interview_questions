@@ -787,7 +787,7 @@ fun main() = runBlocking {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How do you debug coroutines that suspend across multiple threads?
 2. What's the performance impact of enabling debug mode in production?

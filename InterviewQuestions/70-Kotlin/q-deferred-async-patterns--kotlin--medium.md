@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-170001"
 title: "Deferred and async patterns deep dive / Deferred и async паттерны подробно"
 description: "Complete guide to Deferred<T>, async patterns, parallel execution, and advanced async/await usage in Kotlin coroutines"
@@ -1477,7 +1478,7 @@ class AsyncTests {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How does `Deferred` handle cancellation differently from regular `Job`? What happens to awaiting coroutines when a `Deferred` is cancelled?
 

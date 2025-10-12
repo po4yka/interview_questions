@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-170002"
 title: "Creating custom CoroutineDispatchers with limitedParallelism / Создание кастомных диспетчеров"
 description: "Deep dive into creating custom dispatchers, limitedParallelism API, thread pool sizing, and resource-specific dispatchers"
@@ -1320,7 +1321,7 @@ suspend fun goodChoice() = withContext(Dispatchers.Default) {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How does `limitedParallelism()` internally implement concurrency limiting without creating new threads? What synchronization primitives does it use?
 

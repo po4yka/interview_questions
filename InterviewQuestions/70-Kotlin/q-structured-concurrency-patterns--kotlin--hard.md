@@ -169,7 +169,7 @@ private suspend fun task3() {}
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. **How does cancellation propagate in structured concurrency?**
 2. **When to use supervisorScope vs coroutineScope?**

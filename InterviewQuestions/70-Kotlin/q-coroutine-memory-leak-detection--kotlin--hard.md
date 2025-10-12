@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-170009"
 title: "Detecting and preventing coroutine memory leaks / Обнаружение и предотвращение утечек памяти"
 subtopics:
@@ -1347,7 +1348,7 @@ LeakCanary 2.x имеет встроенную поддержку корутин
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How do you detect a memory leak caused by a coroutine that completes eventually but takes too long?
 2. What's the difference between a memory leak and a memory retention issue in coroutines?

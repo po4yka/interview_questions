@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-150001"
 title: "What is a Job and its lifecycle in Kotlin coroutines?"
 description: "A comprehensive guide to understanding Job and its lifecycle states in Kotlin coroutines, including parent-child relationships and cancellation mechanisms"
@@ -849,7 +850,7 @@ fun Job.getDetailedState(): String {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How does SupervisorJob differ from a regular Job in terms of child failure handling?
 2. What happens to a Job when its parent is cancelled while it's in the COMPLETING state?

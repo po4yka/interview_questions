@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-150007"
 title: "What are CoroutineContext elements and how do they combine?"
 description: "Comprehensive guide to What are CoroutineContext elements and how do they combine? in Kotlin coroutines"
@@ -43,7 +44,7 @@ date_updated: "2025-10-12"
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. [Related technical question 1]
 2. [Related technical question 2]

@@ -755,7 +755,7 @@ fun getUserName(userId: String, continuation: Continuation<String>): Any? {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How does the Kotlin compiler optimize state machines for suspend functions without suspension points?
 2. Can you explain the difference between ContinuationImpl and BaseContinuationImpl?

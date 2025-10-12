@@ -187,7 +187,7 @@ StateFlow и SharedFlow - горячие Flow типы для Android.
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. **How to collect StateFlow in Activity/Fragment?**
 2. **What is replay cache in SharedFlow?**

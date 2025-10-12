@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-170003"
 title: "SharedFlow replay cache and buffer configuration / SharedFlow replay cache и конфигурация буфера"
 description: "Complete guide to SharedFlow configuration: replay cache, buffer capacity, overflow strategies, and performance implications"
@@ -1245,7 +1246,7 @@ val lowMemory = MutableSharedFlow<LargeObject>(
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How does SharedFlow's replay cache interact with Flow operators like `distinctUntilChanged()` or `filter()`? Are replay values subject to these transformations?
 

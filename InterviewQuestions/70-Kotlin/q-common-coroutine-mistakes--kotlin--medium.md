@@ -921,7 +921,7 @@ dependencies {
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How do you implement custom CoroutineScope with proper lifecycle management?
 2. What tools exist for detecting coroutine-related memory leaks?

@@ -767,7 +767,7 @@ Kotlin Flow предоставляет несколько билдеров (`flo
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How do you convert a Flow to a Channel and vice versa?
 2. What's the difference between buffer strategies in channelFlow?

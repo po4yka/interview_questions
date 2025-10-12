@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-150008"
 title: "Parent-child relationships in structured concurrency"
 description: "Comprehensive guide to Parent-child relationships in structured concurrency in Kotlin coroutines"
@@ -43,7 +44,7 @@ date_updated: "2025-10-12"
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. [Related technical question 1]
 2. [Related technical question 2]

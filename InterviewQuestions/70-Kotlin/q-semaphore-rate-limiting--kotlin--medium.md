@@ -949,7 +949,7 @@ class DatabaseConnectionPool(
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. How would you implement a token bucket rate limiter using Semaphore?
 2. What's the difference between fair and unfair semaphores in terms of performance?

@@ -1,4 +1,5 @@
 ---
+topic: kotlin
 id: "20251012-150011"
 title: "Data classes in Kotlin: features, limitations, and best practices"
 description: "Comprehensive guide to Kotlin data classes covering generated methods, copy(), componentN(), destructuring, limitations, and when to use them"
@@ -383,7 +384,7 @@ object Loading : Result<Nothing>()
 
 ---
 
-## Follow-up Questions
+## Follow-ups
 
 1. Why can't data classes be open or abstract?
 2. How does copy() handle deep copying of nested objects?
