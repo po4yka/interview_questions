@@ -173,4 +173,9 @@ val demo = Outer().Inner().foo()  // Нужен экземпляр Outer!
 - [Understanding Nested and Inner Classes in Kotlin](https://medium.com/@sandeepkella23/understanding-nested-and-inner-classes-in-kotlin-ae1c4d699053)
 
 ## Related Questions
-- [[q-object-companion-object--kotlin--medium]]
+
+### Related (Medium)
+- [[q-inner-nested-classes--kotlin--medium]] - Classes
+- [[q-class-initialization-order--kotlin--medium]] - Classes
+- [[q-enum-class-advanced--kotlin--medium]] - Classes
+- [[q-value-classes-inline-classes--kotlin--medium]] - Classes

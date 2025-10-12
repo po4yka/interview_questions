@@ -61,4 +61,36 @@ Comprehensive answer for question 140019.
 
 ## Related Questions
 
-- Related question links
+### Prerequisites (Easier)
+- [[q-flow-basics--kotlin--easy]] - Flow
+
+### Related (Medium)
+- [[q-statein-sharein-flow--kotlin--medium]] - Flow
+- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+- [[q-hot-cold-flows--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+### Prerequisites (Easier)
+- [[q-flow-basics--kotlin--easy]] - Flow
+
+### Related (Medium)
+- [[q-statein-sharein-flow--kotlin--medium]] - Flow
+- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+- [[q-hot-cold-flows--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+### Prerequisites (Easier)
+- [[q-flow-basics--kotlin--easy]] - Flow
+
+### Related (Medium)
+- [[q-statein-sharein-flow--kotlin--medium]] - Flow
+- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+- [[q-hot-cold-flows--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines

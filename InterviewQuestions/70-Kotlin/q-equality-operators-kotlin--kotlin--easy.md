@@ -126,4 +126,16 @@ println(list1 === list1)  // true - тот же объект
 - [Equality - Kotlin Documentation](https://kotlinlang.org/docs/reference/equality.html)
 
 ## Related Questions
-- [[q-equals-hashcode-purpose--kotlin--medium]]
+
+### Advanced (Harder)
+- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+- [[q-flow-operators--kotlin--medium]] - Flow
+### Advanced (Harder)
+- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+- [[q-flow-operators--kotlin--medium]] - Flow
+### Advanced (Harder)
+- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+- [[q-flow-operators--kotlin--medium]] - Flow

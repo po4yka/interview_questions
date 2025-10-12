@@ -1171,8 +1171,37 @@ MyApp/
 - [Baseline Profiles](https://developer.android.com/topic/performance/baselineprofiles)
 
 ## Related Questions
-- How to generate and use baseline profiles?
-- What is the App Startup library?
-- How to detect and fix jank?
-- How to optimize Gradle build times?
-- What are CompilationMode options in Macrobenchmark?
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-memory-leak-detection--performance--medium]] - Performance
+- [[q-jank-detection-frame-metrics--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-memory-leak-detection--performance--medium]] - Performance
+- [[q-jank-detection-frame-metrics--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-memory-leak-detection--performance--medium]] - Performance
+- [[q-jank-detection-frame-metrics--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

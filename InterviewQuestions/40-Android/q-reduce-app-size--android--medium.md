@@ -361,8 +361,37 @@ android {
 - [Minimizing APK Size: Techniques for Shrinking Android App Size](https://diegomarcher.medium.com/minimizing-apk-size-techniques-for-shrinking-android-app-size-7a4c5eefbd46)
 
 ## Related Questions
-- What do you know about App Bundles?
-- What do you know about Play Feature Delivery?
-- What do you know about Lint?
-- What do you know about downloadable fonts?
-- What is ProGuard and R8?
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+- [[q-app-size-optimization--performance--medium]] - Performance
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+- [[q-app-size-optimization--performance--medium]] - Performance
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+- [[q-app-size-optimization--performance--medium]] - Performance
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

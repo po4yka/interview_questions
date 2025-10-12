@@ -155,8 +155,34 @@ Since Android modules come with overhead, preferably, you'd want to use the Kotl
 - [Common modularization patterns](https://developer.android.com/topic/modularization/patterns)
 
 ## Related Questions
-- What do you know about Version catalog?
-- What do you know about Play Feature Delivery?
-- What do you know about App Bundles?
-- What is the difference between coupling and cohesion?
-- How to implement dependency injection in modular architecture?
+
+### Prerequisites (Easier)
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-clean-architecture-android--android--hard]] - Architecture
+- [[q-design-instagram-stories--android--hard]] - Media
+### Prerequisites (Easier)
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-clean-architecture-android--android--hard]] - Architecture
+- [[q-design-instagram-stories--android--hard]] - Media
+### Prerequisites (Easier)
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-clean-architecture-android--android--hard]] - Architecture
+- [[q-design-instagram-stories--android--hard]] - Media

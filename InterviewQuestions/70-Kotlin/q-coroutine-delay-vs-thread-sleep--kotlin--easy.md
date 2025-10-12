@@ -661,6 +661,45 @@ fun legacyCode() {
 
 ## Related Questions
 
+### Prerequisites (Easier)
+- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
+
+### Related (Same Level)
+- [[q-suspending-vs-blocking--kotlin--medium]] - Coroutines
+- [[q-coroutine-virtual-time--kotlin--medium]] - Coroutines
+- [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
+- [[q-coroutine-cancellation-cooperation--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
+- [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutines
+### Prerequisites (Easier)
+- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
+
+### Related (Same Level)
+- [[q-suspending-vs-blocking--kotlin--medium]] - Coroutines
+- [[q-coroutine-virtual-time--kotlin--medium]] - Coroutines
+- [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
+- [[q-coroutine-cancellation-cooperation--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
+- [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutines
+### Prerequisites (Easier)
+- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
+
+### Related (Same Level)
+- [[q-suspending-vs-blocking--kotlin--medium]] - Coroutines
+- [[q-coroutine-virtual-time--kotlin--medium]] - Coroutines
+- [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
+- [[q-coroutine-cancellation-cooperation--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
+- [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutines
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
 

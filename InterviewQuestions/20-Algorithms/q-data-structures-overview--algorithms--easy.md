@@ -82,5 +82,10 @@ Each data structure has its own characteristics and is used depending on the alg
 - [[moc-algorithms]]
 
 ## Related Questions
-- [[q-linkedlist-arraylist-insert-behavior--programming-languages--medium]]
-- [[q-hashmap-how-it-works--programming-languages--medium]]
+
+### Related (Easy)
+- [[q-kotlin-collections--kotlin--easy]] - Collections
+### Related (Easy)
+- [[q-kotlin-collections--kotlin--easy]] - Collections
+### Related (Easy)
+- [[q-kotlin-collections--kotlin--easy]] - Collections

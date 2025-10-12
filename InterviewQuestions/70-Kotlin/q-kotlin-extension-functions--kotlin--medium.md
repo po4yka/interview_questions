@@ -286,4 +286,10 @@ Example().printFunctionType(1)
 - [Bad Kotlin Extensions](https://krossovochkin.com/posts/2021_01_25_bad_kotlin_extensions/)
 
 ## Related Questions
-- [[q-kotlin-scope-functions--kotlin--medium]]
+
+### Related (Medium)
+- [[q-infix-functions--kotlin--medium]] - Infix
+- [[q-kotlin-operator-overloading--kotlin--medium]] - Operators
+
+### Advanced (Harder)
+- [[q-kotlin-extension-functions-advanced--kotlin--hard]] - kotlin extension functions advanced 

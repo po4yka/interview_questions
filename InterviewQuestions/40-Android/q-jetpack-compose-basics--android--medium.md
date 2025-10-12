@@ -1333,6 +1333,39 @@ fun LoadDataExample(userId: String) {
 ## Related Questions
 
 ### Prerequisites (Easier)
+- [[q-jetpack-compose-lazy-column--android--easy]] - jetpack compose lazy column 
+
+### Related (Medium)
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
+- [[q-remember-remembersaveable--android--medium]] - Jetpack Compose
+- [[q-compose-semantics--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Prerequisites (Easier)
+- [[q-jetpack-compose-lazy-column--android--easy]] - jetpack compose lazy column 
+
+### Related (Medium)
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
+- [[q-remember-remembersaveable--android--medium]] - Jetpack Compose
+- [[q-compose-semantics--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Prerequisites (Easier)
+- [[q-jetpack-compose-lazy-column--android--easy]] - jetpack compose lazy column 
+
+### Related (Medium)
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
+- [[q-remember-remembersaveable--android--medium]] - Jetpack Compose
+- [[q-compose-semantics--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Prerequisites (Easier)
 - [[q-jetpack-compose-lazy-column--android--easy]] - LazyColumn for lists
 
 ### Compose Fundamentals (Medium)

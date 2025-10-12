@@ -344,3 +344,26 @@ fun safeInvalidate() {
 ## Ответ (RU)
 
 invalidate() — помечает View на перерисовку (вызов onDraw). requestLayout() — вызывает перерасчёт размеров и размещения (onMeasure, onLayout). postInvalidate() — отложенная перерисовка из не-UI потока.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-what-is-known-about-recyclerview--android--easy]] - what is known about
+
+### Related (Medium)
+- [[q-what-methods-redraw-views--android--medium]] - what methods redraw views 
+- [[q-what-is-known-about-view-lifecycles--android--medium]] - what is known about
+### Prerequisites (Easier)
+- [[q-what-is-known-about-recyclerview--android--easy]] - what is known about
+
+### Related (Medium)
+- [[q-what-methods-redraw-views--android--medium]] - what methods redraw views 
+- [[q-what-is-known-about-view-lifecycles--android--medium]] - what is known about
+### Prerequisites (Easier)
+- [[q-what-is-known-about-recyclerview--android--easy]] - what is known about
+
+### Related (Medium)
+- [[q-what-methods-redraw-views--android--medium]] - what methods redraw views 
+- [[q-what-is-known-about-view-lifecycles--android--medium]] - what is known about

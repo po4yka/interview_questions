@@ -437,4 +437,28 @@ fun ListScreen(
 - [Compose Navigation](https://developer.android.com/jetpack/compose/navigation)
 
 ## Related Questions
-- [[q-jetpack-compose-basics--android--medium]]
+
+### Related (Medium)
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
+- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
+- [[q-compose-semantics--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
+- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
+- [[q-compose-semantics--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
+- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
+- [[q-compose-semantics--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

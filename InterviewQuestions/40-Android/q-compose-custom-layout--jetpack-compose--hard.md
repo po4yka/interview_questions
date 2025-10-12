@@ -593,6 +593,22 @@ Composable `Layout` - это основа для всех layouts в Compose. О
 
 ## Related Questions
 
+### Prerequisites (Easier)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - compose modifier order performance 
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - compose navigation advanced   jetpack
+- [[q-compose-remember-derived-state--jetpack-compose--medium]] - compose remember derived state 
+
+### Related (Hard)
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - compose side effects advanced 
+- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization 
+### Prerequisites (Easier)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - compose modifier order performance 
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - compose navigation advanced   jetpack
+- [[q-compose-remember-derived-state--jetpack-compose--medium]] - compose remember derived state 
+
+### Related (Hard)
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - compose side effects advanced 
+- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization 
 ### Hub
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
 

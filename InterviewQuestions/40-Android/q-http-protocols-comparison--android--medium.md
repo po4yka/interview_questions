@@ -676,7 +676,34 @@ SSE позволяет серверам отправлять данные кли
 - [HTTP Long Polling](https://javascript.info/long-polling)
 
 ## Related Questions
-- How to implement WebSocket in Android?
-- What is the best protocol for chat applications?
-- How to handle WebSocket reconnection?
-- When to use Server-Sent Events vs WebSocket?
+
+### Related (Medium)
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
+
+### Advanced (Harder)
+- [[q-implement-voice-video-call--android--hard]] - Webrtc
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
+
+### Advanced (Harder)
+- [[q-implement-voice-video-call--android--hard]] - Webrtc
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
+
+### Advanced (Harder)
+- [[q-implement-voice-video-call--android--hard]] - Webrtc
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

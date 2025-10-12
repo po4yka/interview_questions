@@ -44,8 +44,30 @@ tags: [android, 20251006-100010, difficulty/medium]
 ---
 
 ## Related Questions
-- Related question 1
-- Related question 2
 
+### Prerequisites (Easier)
+- [[q-equality-operators-kotlin--kotlin--easy]] - Equality
+
+### Related (Medium)
+- [[q-functional-interfaces-vs-type-aliases--kotlin--medium]] - Functional Interfaces
+
+### Advanced (Harder)
+- [[q-kotlin-multiplatform-overview--kotlin--hard]] - Kotlin Multiplatform
+### Prerequisites (Easier)
+- [[q-equality-operators-kotlin--kotlin--easy]] - Equality
+
+### Related (Medium)
+- [[q-functional-interfaces-vs-type-aliases--kotlin--medium]] - Functional Interfaces
+
+### Advanced (Harder)
+- [[q-kotlin-multiplatform-overview--kotlin--hard]] - Kotlin Multiplatform
+### Prerequisites (Easier)
+- [[q-equality-operators-kotlin--kotlin--easy]] - Equality
+
+### Related (Medium)
+- [[q-functional-interfaces-vs-type-aliases--kotlin--medium]] - Functional Interfaces
+
+### Advanced (Harder)
+- [[q-kotlin-multiplatform-overview--kotlin--hard]] - Kotlin Multiplatform
 ## References
 - [Android Documentation](https://developer.android.com)

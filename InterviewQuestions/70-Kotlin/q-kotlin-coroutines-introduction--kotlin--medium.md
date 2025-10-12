@@ -175,6 +175,36 @@ suspend fun preparePost(): Token {
 
 ## Related Questions
 
+### Related (Medium)
+- [[q-parallel-network-calls-coroutines--kotlin--medium]] - Coroutines
+- [[q-deferred-async-patterns--kotlin--medium]] - Coroutines
+- [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
+- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-actor-pattern--kotlin--hard]] - Coroutines
+- [[q-fan-in-fan-out--kotlin--hard]] - Coroutines
+- [[q-structured-concurrency-patterns--kotlin--hard]] - Coroutines
+### Related (Medium)
+- [[q-parallel-network-calls-coroutines--kotlin--medium]] - Coroutines
+- [[q-deferred-async-patterns--kotlin--medium]] - Coroutines
+- [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
+- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-actor-pattern--kotlin--hard]] - Coroutines
+- [[q-fan-in-fan-out--kotlin--hard]] - Coroutines
+- [[q-structured-concurrency-patterns--kotlin--hard]] - Coroutines
+### Related (Medium)
+- [[q-parallel-network-calls-coroutines--kotlin--medium]] - Coroutines
+- [[q-deferred-async-patterns--kotlin--medium]] - Coroutines
+- [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
+- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-actor-pattern--kotlin--hard]] - Coroutines
+- [[q-fan-in-fan-out--kotlin--hard]] - Coroutines
+- [[q-structured-concurrency-patterns--kotlin--hard]] - Coroutines
 ### Prerequisites (Easier)
 - [[q-what-is-coroutine--kotlin--easy]] - Basic coroutine concepts
 - [[q-coroutine-builders-basics--kotlin--easy]] - launch, async, runBlocking

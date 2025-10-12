@@ -381,4 +381,19 @@ class UserViewModel : BaseViewModel() {
 - [Abstract Methods and Classes - Oracle](https://docs.oracle.com/javase/tutorial/java/IandI/abstract.html)
 
 ## Related Questions
-- [[q-sealed-classes--kotlin--medium]]
+
+### Related (Medium)
+- [[q-class-initialization-order--kotlin--medium]] - Classes
+- [[q-enum-class-advanced--kotlin--medium]] - Classes
+- [[q-nested-vs-inner-class--kotlin--medium]] - Nested Class
+- [[q-value-classes-inline-classes--kotlin--medium]] - Classes
+### Related (Medium)
+- [[q-class-initialization-order--kotlin--medium]] - Classes
+- [[q-enum-class-advanced--kotlin--medium]] - Classes
+- [[q-nested-vs-inner-class--kotlin--medium]] - Nested Class
+- [[q-value-classes-inline-classes--kotlin--medium]] - Classes
+### Related (Medium)
+- [[q-class-initialization-order--kotlin--medium]] - Classes
+- [[q-enum-class-advanced--kotlin--medium]] - Classes
+- [[q-nested-vs-inner-class--kotlin--medium]] - Nested Class
+- [[q-value-classes-inline-classes--kotlin--medium]] - Classes

@@ -220,6 +220,30 @@ fun testButton() {
 
 ## Related Questions
 
+### Related (Medium)
+- [[q-compose-testing--android--medium]] - Jetpack Compose
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
+- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-compose-testing--android--medium]] - Jetpack Compose
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
+- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-compose-testing--android--medium]] - Jetpack Compose
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
+- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
 ### Hub
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
 

@@ -217,4 +217,34 @@ dependencies {
 - [Guide to Android app modularization](https://developer.android.com/topic/modularization)
 
 ## Related Questions
-- [[q-clean-architecture-android--android--hard]]
+
+### Prerequisites (Easier)
+- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Gradle
+
+### Related (Hard)
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-whatsapp-app--android--hard]] - Messaging
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-modularization-patterns--android--hard]] - Architecture
+### Prerequisites (Easier)
+- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Gradle
+
+### Related (Hard)
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-whatsapp-app--android--hard]] - Messaging
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-modularization-patterns--android--hard]] - Architecture
+### Prerequisites (Easier)
+- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Gradle
+
+### Related (Hard)
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-whatsapp-app--android--hard]] - Messaging
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-modularization-patterns--android--hard]] - Architecture

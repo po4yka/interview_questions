@@ -82,4 +82,13 @@ Kotlin позволяет контролировать видимость сим
 - [Kotlin Basics: Visibility Modifiers](https://medium.com/@HugoMatilla/kotlin-basics-visibility-modifiers-public-internal-protected-and-private-c3bf972aee11)
 
 ## Related Questions
-- [[q-kotlin-enum-classes--kotlin--easy]]
+
+### Advanced (Harder)
+- [[q-access-modifiers--programming-languages--medium]] - Access Modifiers
+- [[q-visibility-modifiers-kotlin--kotlin--medium]] - Classes
+### Advanced (Harder)
+- [[q-access-modifiers--programming-languages--medium]] - Access Modifiers
+- [[q-visibility-modifiers-kotlin--kotlin--medium]] - Classes
+### Advanced (Harder)
+- [[q-access-modifiers--programming-languages--medium]] - Access Modifiers
+- [[q-visibility-modifiers-kotlin--kotlin--medium]] - Classes

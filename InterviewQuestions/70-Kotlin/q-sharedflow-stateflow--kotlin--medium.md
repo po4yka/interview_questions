@@ -831,6 +831,33 @@ class BadViewModel : ViewModel() {
 
 ## Related Questions
 
+### Related (Medium)
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
+- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
+- [[q-stateflow-sharedflow-differences--kotlin--medium]] - Stateflow
+- [[q-sharedflow-replay-buffer-config--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-actor-pattern--kotlin--hard]] - Coroutines
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+### Related (Medium)
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
+- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
+- [[q-stateflow-sharedflow-differences--kotlin--medium]] - Stateflow
+- [[q-sharedflow-replay-buffer-config--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-actor-pattern--kotlin--hard]] - Coroutines
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+### Related (Medium)
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
+- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
+- [[q-stateflow-sharedflow-differences--kotlin--medium]] - Stateflow
+- [[q-sharedflow-replay-buffer-config--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-actor-pattern--kotlin--hard]] - Coroutines
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 

@@ -972,8 +972,37 @@ class MemoryLeakException(leakTrace: String) : Exception("Memory leak detected:\
 - [Avoiding Memory Leaks](https://developer.android.com/topic/performance/memory-overview)
 
 ## Related Questions
-- How to use Memory Profiler effectively?
-- What are lifecycle-aware components?
-- How to optimize bitmap memory usage?
-- What is the difference between WeakReference and SoftReference?
-- How to detect leaks in production?
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-jank-detection-frame-metrics--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-jank-detection-frame-metrics--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-jank-detection-frame-metrics--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

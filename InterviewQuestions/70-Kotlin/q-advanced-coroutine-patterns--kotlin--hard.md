@@ -947,6 +947,16 @@ GlobalScope.launch {
 
 ## Related Questions
 
+### Prerequisites (Easier)
+- [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines
+- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
+- [[q-coroutine-builders-basics--kotlin--easy]] - Coroutines
+
+### Related (Hard)
+- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
+- [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutines
+- [[q-flow-performance--kotlin--hard]] - Coroutines
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
 

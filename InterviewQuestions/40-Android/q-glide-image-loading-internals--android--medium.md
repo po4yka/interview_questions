@@ -359,11 +359,13 @@ Glide.with(context) // Lifecycle-aware
 ---
 
 ## Related Questions
-- How to optimize Bitmap memory usage?
-- What is LruCache?
-- How does Glide handle lifecycle?
-- What are image transformations?
 
+### Related (Medium)
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+### Related (Medium)
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+### Related (Medium)
+- [[q-repository-multiple-sources--android--medium]] - Architecture
 ## References
 - [Glide Documentation](https://bumptech.github.io/glide/)
 - [Coil Documentation](https://coil-kt.github.io/coil/)

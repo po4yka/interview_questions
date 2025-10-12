@@ -264,6 +264,36 @@ class UserRepositoryImpl(
 ## Related Questions
 
 ### Prerequisites (Easier)
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-repository-pattern--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-modularization-patterns--android--hard]] - Architecture
+- [[q-design-instagram-stories--android--hard]] - Media
+### Prerequisites (Easier)
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-repository-pattern--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-modularization-patterns--android--hard]] - Architecture
+- [[q-design-instagram-stories--android--hard]] - Media
+### Prerequisites (Easier)
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-repository-pattern--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-modularization-patterns--android--hard]] - Architecture
+- [[q-design-instagram-stories--android--hard]] - Media
+### Prerequisites (Easier)
 - [[q-architecture-components-libraries--android--easy]] - Architecture Components overview
 - [[q-viewmodel-pattern--android--easy]] - ViewModel pattern basics
 

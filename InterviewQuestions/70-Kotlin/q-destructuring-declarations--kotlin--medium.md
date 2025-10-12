@@ -210,4 +210,6 @@ Data классы автоматически генерируют `component1()`
 - [Kotlin Destructuring Declarations](https://www.kotlindevelopment.com/destructuring-declarations/)
 
 ## Related Questions
-- [[q-data-class-purpose--kotlin--easy]]
+
+### Related (Medium)
+- [[q-infix-functions--kotlin--medium]] - Infix

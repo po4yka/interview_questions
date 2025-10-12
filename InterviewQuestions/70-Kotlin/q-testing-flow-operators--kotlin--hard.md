@@ -1271,6 +1271,30 @@ fun `debounce эмитит только после тихого периода`(
 
 ## Related Questions
 
+### Prerequisites (Easier)
+- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+- [[q-flow-operators--kotlin--medium]] - Flow
+
+### Related (Hard)
+- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
+- [[q-flow-testing-advanced--kotlin--hard]] - Flow
+### Prerequisites (Easier)
+- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+- [[q-flow-operators--kotlin--medium]] - Flow
+
+### Related (Hard)
+- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
+- [[q-flow-testing-advanced--kotlin--hard]] - Flow
+### Prerequisites (Easier)
+- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+- [[q-flow-operators--kotlin--medium]] - Flow
+
+### Related (Hard)
+- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
+- [[q-flow-testing-advanced--kotlin--hard]] - Flow
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 

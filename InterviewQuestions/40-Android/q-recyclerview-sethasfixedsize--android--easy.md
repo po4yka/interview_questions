@@ -422,10 +422,19 @@ adapter.removeItem()  // Still works fine
 ---
 
 ## Related Questions
-- How to optimize RecyclerView performance?
-- What are RecyclerView best practices?
-- What is ViewHolder pattern in RecyclerView?
 
+### Advanced (Harder)
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+### Advanced (Harder)
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+### Advanced (Harder)
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
 ## References
 - [RecyclerView Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView#setHasFixedSize(boolean))
 - [RecyclerView Performance](https://developer.android.com/topic/performance/rendering/recyclerview)

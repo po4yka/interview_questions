@@ -180,3 +180,14 @@ Separation of concerns is a key principle of Clean Architecture, MVP, MVVM, and 
 ## Ответ (RU)
 Разделение UI и бизнес-логики делает код понятнее, тестируемее и проще в поддержке. Это ключевой принцип Clean Architecture и паттернов MVP, MVVM, MVI.
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-separate-ui-business-logic--android--easy]] - separate ui business logic 
+### Related (Easy)
+- [[q-separate-ui-business-logic--android--easy]] - separate ui business logic 
+### Related (Easy)
+- [[q-separate-ui-business-logic--android--easy]] - separate ui business logic 

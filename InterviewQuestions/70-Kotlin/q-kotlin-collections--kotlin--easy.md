@@ -87,4 +87,25 @@ Below is a diagram of the Kotlin collection interfaces:
 - [Kotlin Collections Overview](https://kotlinlang.org/docs/reference/collections-overview.html)
 
 ## Related Questions
-- [[q-kotlin-generics--kotlin--hard]]
+
+### Related (Easy)
+- [[q-data-structures-overview--algorithms--easy]] - Data Structures
+
+### Advanced (Harder)
+- [[q-kotlin-collections--kotlin--medium]] - Collections
+- [[q-kotlin-map-flatmap--kotlin--medium]] - Collections
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+### Related (Easy)
+- [[q-data-structures-overview--algorithms--easy]] - Data Structures
+
+### Advanced (Harder)
+- [[q-kotlin-collections--kotlin--medium]] - Collections
+- [[q-kotlin-map-flatmap--kotlin--medium]] - Collections
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+### Related (Easy)
+- [[q-data-structures-overview--algorithms--easy]] - Data Structures
+
+### Advanced (Harder)
+- [[q-kotlin-collections--kotlin--medium]] - Collections
+- [[q-kotlin-map-flatmap--kotlin--medium]] - Collections
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines

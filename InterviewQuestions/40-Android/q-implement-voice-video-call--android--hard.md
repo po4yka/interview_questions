@@ -720,7 +720,31 @@ fun VideoCallScreen(
 - [Agora WebRTC Guide](https://docs.agora.io/en/video-calling/overview/product-overview)
 
 ## Related Questions
-- What is WebRTC and how does it work?
-- How to handle NAT traversal in P2P connections?
-- What is the difference between STUN and TURN servers?
-- How to optimize video quality based on network conditions?
+
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-parallel-network-calls-coroutines--kotlin--medium]] - Coroutines
+
+### Related (Hard)
+- [[q-design-instagram-stories--android--hard]] - Media
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-whatsapp-app--android--hard]] - Messaging
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-parallel-network-calls-coroutines--kotlin--medium]] - Coroutines
+
+### Related (Hard)
+- [[q-design-instagram-stories--android--hard]] - Media
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-whatsapp-app--android--hard]] - Messaging
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-parallel-network-calls-coroutines--kotlin--medium]] - Coroutines
+
+### Related (Hard)
+- [[q-design-instagram-stories--android--hard]] - Media
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-whatsapp-app--android--hard]] - Messaging

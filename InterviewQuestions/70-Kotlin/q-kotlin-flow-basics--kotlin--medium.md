@@ -273,6 +273,19 @@ try {
 ## Related Questions
 
 ### Prerequisites (Easier)
+- [[q-flow-basics--kotlin--easy]] - Flow
+
+### Related (Medium)
+- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+- [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
+- [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Coroutines
+
+### Advanced (Harder)
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
+- [[q-flow-backpressure--kotlin--hard]] - Flow
+### Prerequisites (Easier)
 - [[q-flow-basics--kotlin--easy]] - Flow basics and creation
 - [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Cold flow fundamentals
 

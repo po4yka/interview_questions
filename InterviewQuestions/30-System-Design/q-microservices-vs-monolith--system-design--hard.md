@@ -620,3 +620,29 @@ class OrderModuleImpl(
 8. What is the Strangler Fig pattern for migrating to microservices?
 9. How do you handle authentication and authorization in microservices?
 10. What are the deployment strategies for microservices (blue-green, canary)?
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+
+### Related (Hard)
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
+### Prerequisites (Easier)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+
+### Related (Hard)
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
+### Prerequisites (Easier)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+
+### Related (Hard)
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system

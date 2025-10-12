@@ -534,6 +534,30 @@ fun DebugExample() {
 
 ## Related Questions
 
+### Related (Medium)
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - compose navigation advanced   jetpack
+- [[q-compose-remember-derived-state--jetpack-compose--medium]] - compose remember derived state 
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - compose custom layout   jetpack
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - compose side effects advanced 
+- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization 
+### Related (Medium)
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - compose navigation advanced   jetpack
+- [[q-compose-remember-derived-state--jetpack-compose--medium]] - compose remember derived state 
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - compose custom layout   jetpack
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - compose side effects advanced 
+- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization 
+### Related (Medium)
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - compose navigation advanced   jetpack
+- [[q-compose-remember-derived-state--jetpack-compose--medium]] - compose remember derived state 
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - compose custom layout   jetpack
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - compose side effects advanced 
+- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization 
 ### Hub
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
 

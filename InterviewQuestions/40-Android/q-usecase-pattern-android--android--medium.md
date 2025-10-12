@@ -223,6 +223,30 @@ class UserViewModel(
 
 ## Related Questions
 
+### Related (Medium)
+- [[q-repository-pattern--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Advanced (Harder)
+- [[q-clean-architecture-android--android--hard]] - Architecture
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+### Related (Medium)
+- [[q-repository-pattern--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Advanced (Harder)
+- [[q-clean-architecture-android--android--hard]] - Architecture
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+### Related (Medium)
+- [[q-repository-pattern--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Advanced (Harder)
+- [[q-clean-architecture-android--android--hard]] - Architecture
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
 ### Hub
 - [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
 

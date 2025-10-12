@@ -749,3 +749,29 @@ class InstagramShardRouter(
 8. How do you monitor and maintain sharded databases?
 9. What are the backup and recovery strategies for sharded systems?
 10. How do you handle hotspots in sharded databases?
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+
+### Related (Hard)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+### Prerequisites (Easier)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+
+### Related (Hard)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+### Prerequisites (Easier)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+
+### Related (Hard)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system

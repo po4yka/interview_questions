@@ -542,3 +542,14 @@ val found = findUserById(users, 5)  // User(5, "Charlie")
 8. How do you implement binary search on a linked list?
 9. What is interpolation search and its complexity?
 10. How do you find the kth smallest element in sorted matrix?
+
+---
+
+## Related Questions
+
+### Advanced (Harder)
+- [[q-binary-search-trees-bst--algorithms--hard]] - binary search trees bst 
+### Advanced (Harder)
+- [[q-binary-search-trees-bst--algorithms--hard]] - binary search trees bst 
+### Advanced (Harder)
+- [[q-binary-search-trees-bst--algorithms--hard]] - binary search trees bst 

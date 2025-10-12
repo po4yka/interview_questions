@@ -1186,6 +1186,33 @@ fun `поиск обновляет результаты - с turbine`() = runTes
 
 ## Related Questions
 
+### Related (Medium)
+- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
+- [[q-stateflow-sharedflow-differences--kotlin--medium]] - Stateflow
+- [[q-sharedflow-stateflow--kotlin--medium]] - Flow
+- [[q-testing-viewmodel-coroutines--kotlin--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+- [[q-flow-testing-advanced--kotlin--hard]] - Flow
+### Related (Medium)
+- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
+- [[q-stateflow-sharedflow-differences--kotlin--medium]] - Stateflow
+- [[q-sharedflow-stateflow--kotlin--medium]] - Flow
+- [[q-testing-viewmodel-coroutines--kotlin--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+- [[q-flow-testing-advanced--kotlin--hard]] - Flow
+### Related (Medium)
+- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
+- [[q-stateflow-sharedflow-differences--kotlin--medium]] - Stateflow
+- [[q-sharedflow-stateflow--kotlin--medium]] - Flow
+- [[q-testing-viewmodel-coroutines--kotlin--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+- [[q-flow-testing-advanced--kotlin--hard]] - Flow
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 

@@ -516,3 +516,19 @@ inline fun process(
 - Inline → Используйте лямбды
 - Анонимные классы → Используйте обычные функции
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-inline-classes-value-classes--kotlin--medium]] - Inline Class
+- [[q-kotlin-inline-functions--kotlin--medium]] - Inline Functions
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-app-startup-optimization--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

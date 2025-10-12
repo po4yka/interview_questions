@@ -725,3 +725,35 @@ suspend fun updateUser(user: User) {
 8. What is polyglot persistence and when to use it?
 9. How do secondary indexes work in NoSQL databases?
 10. What are the security considerations for SQL vs NoSQL?
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+- [[q-load-balancing-strategies--system-design--medium]] - load balancing strategies   system
+- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
+
+### Advanced (Harder)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
+### Related (Medium)
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+- [[q-load-balancing-strategies--system-design--medium]] - load balancing strategies   system
+- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
+
+### Advanced (Harder)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
+### Related (Medium)
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+- [[q-load-balancing-strategies--system-design--medium]] - load balancing strategies   system
+- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
+
+### Advanced (Harder)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system

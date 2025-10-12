@@ -584,8 +584,34 @@ After: 3 minutes (4x faster with caching)
 - [Version Catalogs](https://docs.gradle.org/current/userguide/platforms.html)
 
 ## Related Questions
-- How to migrate from KAPT to KSP?
-- What is configuration cache?
-- How to modularize an Android app?
-- What are version catalogs?
-- How to profile Gradle builds?
+
+### Related (Medium)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Gradle
+- [[q-app-size-optimization--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-modularization-patterns--android--hard]] - Architecture
+### Related (Medium)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Gradle
+- [[q-app-size-optimization--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-modularization-patterns--android--hard]] - Architecture
+### Related (Medium)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Gradle
+- [[q-app-size-optimization--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-modularization-patterns--android--hard]] - Architecture

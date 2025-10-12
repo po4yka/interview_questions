@@ -253,4 +253,19 @@ fun main() {
 - [SAM Conversions in Kotlin](https://www.baeldung.com/kotlin/sam-conversions)
 
 ## Related Questions
-- [[q-kotlin-extension-functions--kotlin--medium]]
+
+### Related (Medium)
+- [[q-functional-interfaces-vs-type-aliases--kotlin--medium]] - Functional Interfaces
+- [[q-kotlin-fold-reduce--kotlin--medium]] - Collections
+- [[q-kotlin-higher-order-functions--kotlin--medium]] - Higher Order Functions
+- [[q-kotlin-lambda-expressions--kotlin--medium]] - Lambda Expressions
+### Related (Medium)
+- [[q-functional-interfaces-vs-type-aliases--kotlin--medium]] - Functional Interfaces
+- [[q-kotlin-fold-reduce--kotlin--medium]] - Collections
+- [[q-kotlin-higher-order-functions--kotlin--medium]] - Higher Order Functions
+- [[q-kotlin-lambda-expressions--kotlin--medium]] - Lambda Expressions
+### Related (Medium)
+- [[q-functional-interfaces-vs-type-aliases--kotlin--medium]] - Functional Interfaces
+- [[q-kotlin-fold-reduce--kotlin--medium]] - Collections
+- [[q-kotlin-higher-order-functions--kotlin--medium]] - Higher Order Functions
+- [[q-kotlin-lambda-expressions--kotlin--medium]] - Lambda Expressions

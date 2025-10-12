@@ -381,7 +381,34 @@ class PaginatedSyncManager {
 - [Room Database](https://developer.android.com/training/data-storage/room)
 
 ## Related Questions
-- What is offline-first architecture?
-- How to use WorkManager for sync?
-- How to handle conflicts in distributed systems?
-- What is the best way to queue failed operations?
+
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-implement-voice-video-call--android--hard]] - Webrtc
+- [[q-modularization-patterns--android--hard]] - Architecture
+- [[q-clean-architecture-android--android--hard]] - Architecture
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-implement-voice-video-call--android--hard]] - Webrtc
+- [[q-modularization-patterns--android--hard]] - Architecture
+- [[q-clean-architecture-android--android--hard]] - Architecture
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-implement-voice-video-call--android--hard]] - Webrtc
+- [[q-modularization-patterns--android--hard]] - Architecture
+- [[q-clean-architecture-android--android--hard]] - Architecture

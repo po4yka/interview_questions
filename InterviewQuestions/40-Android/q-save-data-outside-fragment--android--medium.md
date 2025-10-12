@@ -370,3 +370,17 @@ Fragment → ViewModel → Repository → (Room + SharedPreferences + Files)
 ## Ответ (RU)
 Для сохранения данных за пределами фрагмента в Android можно использовать несколько методов. Основные способы включают SharedPreferences, базы данных SQLite, Room, файлы и ViewModel с ViewModelFactory. SharedPreference используется для хранения небольших порций данных в виде пар ключ значение. Это удобно для хранения настроек пользователя или состояния приложения. SQLite это встроенная реляционная база данных которая позволяет хранить структурированные данные для работы с ней используются sql запросы. Room это библиотека которая упрощает работу с sqlite предоставляя абстракцию в виде аннотаций и dao data access objects.
 
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] - how to pass data
+- [[q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium]] - how can data be
+### Related (Medium)
+- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] - how to pass data
+- [[q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium]] - how can data be
+### Related (Medium)
+- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] - how to pass data
+- [[q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium]] - how can data be

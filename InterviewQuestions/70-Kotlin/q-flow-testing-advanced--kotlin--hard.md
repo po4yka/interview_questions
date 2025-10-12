@@ -710,6 +710,14 @@ fun `test search debouncing`() = runTest {
 
 ## Related Questions
 
+### Prerequisites (Easier)
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
+- [[q-testing-viewmodel-coroutines--kotlin--medium]] - Testing
+- [[q-catch-operator-flow--kotlin--medium]] - Flow
+
+### Related (Hard)
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 

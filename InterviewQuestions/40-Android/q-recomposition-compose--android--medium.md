@@ -757,6 +757,30 @@ fun GoodExample(viewModel: ViewModel) {
 
 ## Related Questions
 
+### Related (Medium)
+- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
+- [[q-remember-remembersaveable--android--medium]] - Jetpack Compose
+- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
+- [[q-compose-semantics--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
+- [[q-remember-remembersaveable--android--medium]] - Jetpack Compose
+- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
+- [[q-compose-semantics--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
+- [[q-remember-remembersaveable--android--medium]] - Jetpack Compose
+- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
+- [[q-compose-semantics--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
 ### Hub
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
 

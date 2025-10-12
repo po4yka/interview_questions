@@ -750,3 +750,35 @@ Hash(IP клиента) % Количество серверов = Индекс �
 8. Explain the difference between active-active and active-passive load balancing
 9. How do you prevent session loss during server maintenance with load balancers?
 10. What metrics should you monitor to evaluate load balancer performance?
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
+
+### Advanced (Harder)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
+### Related (Medium)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
+
+### Advanced (Harder)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
+### Related (Medium)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
+
+### Advanced (Harder)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system

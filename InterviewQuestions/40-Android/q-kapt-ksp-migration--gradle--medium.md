@@ -533,8 +533,28 @@ tasks.withType<KspTask> {
 - [Hilt with KSP](https://dagger.dev/dev-guide/ksp.html)
 
 ## Related Questions
-- What is annotation processing?
-- How to optimize Gradle build times?
-- What is incremental compilation?
-- How to use Room with KSP?
-- What are the benefits of KSP over KAPT?
+
+### Related (Medium)
+- [[q-kapt-vs-ksp--android--medium]] - Annotation Processing
+- [[q-annotation-processing-android--android--medium]] - Annotations
+- [[q-annotation-processing--android--medium]] - Annotation Processing
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-kapt-vs-ksp--android--medium]] - Annotation Processing
+- [[q-annotation-processing-android--android--medium]] - Annotations
+- [[q-annotation-processing--android--medium]] - Annotation Processing
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-kapt-vs-ksp--android--medium]] - Annotation Processing
+- [[q-annotation-processing-android--android--medium]] - Annotations
+- [[q-annotation-processing--android--medium]] - Annotation Processing
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

@@ -938,8 +938,37 @@ fun MainScreen() {
 - [Perfetto Tracing](https://perfetto.dev/)
 
 ## Related Questions
-- How to use macrobenchmark for startup testing?
-- What are baseline profiles?
-- How to measure startup time in production?
-- What is the difference between cold, warm, and hot startup?
-- How to defer initialization with WorkManager?
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-app-startup-library--android--medium]] - App Startup
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-app-size-optimization--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-app-startup-library--android--medium]] - App Startup
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-app-size-optimization--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-app-startup-library--android--medium]] - App Startup
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-app-size-optimization--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

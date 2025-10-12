@@ -68,3 +68,14 @@ class CustomView(context: Context) : View(context) {
 ## Ответ (RU)
 Чтобы начать рисовать пользовательский интерфейс (UI) на экране в Android-проекте, необходимо выполнить несколько шагов. Сначала создайте Android-проект в Android Studio с шаблоном «Empty Activity». Затем настройте макет, используя XML-файл в каталоге res/layout. Пример простого макета с TextView и Button. Подключите макет к активности через метод setContentView() в Activity классе. Если нужно нарисовать что-то вручную, создайте свой View и переопределите метод onDraw(). Для запуска приложения используйте Run в Android Studio.
 
+
+---
+
+## Related Questions
+
+### Advanced (Harder)
+- [[q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy]] - what needs to be
+### Advanced (Harder)
+- [[q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy]] - what needs to be
+### Advanced (Harder)
+- [[q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy]] - what needs to be

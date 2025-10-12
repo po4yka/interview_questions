@@ -648,8 +648,34 @@ Firebase Cloud Messaging (FCM) доставляет уведомления:
 - [Room Database Guide](https://developer.android.com/training/data-storage/room)
 
 ## Related Questions
-- How to implement WebSocket in Android?
-- What is offline-first architecture?
-- How to implement end-to-end encryption?
-- How to optimize battery usage in messaging apps?
-- What is the Signal Protocol?
+
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-instagram-stories--android--hard]] - Media
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-instagram-stories--android--hard]] - Media
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-instagram-stories--android--hard]] - Media
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-data-sync-unstable-network--android--hard]] - Networking

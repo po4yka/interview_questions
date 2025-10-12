@@ -255,4 +255,10 @@ fun useAsAny(any: Crate<Any>) {
 - [Generics: in, out, where - Kotlin Documentation](https://kotlinlang.org/docs/generics.html)
 
 ## Related Questions
-- [[q-kotlin-generics--kotlin--hard]]
+
+### Related (Hard)
+- [[q-kotlin-generics--kotlin--hard]] - Generics
+### Related (Hard)
+- [[q-kotlin-generics--kotlin--hard]] - Generics
+### Related (Hard)
+- [[q-kotlin-generics--kotlin--hard]] - Generics

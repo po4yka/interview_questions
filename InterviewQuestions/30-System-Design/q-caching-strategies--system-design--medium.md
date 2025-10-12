@@ -728,3 +728,35 @@ class ProductService(
 8. Explain CDN caching and edge caching strategies
 9. What are the security considerations for caching sensitive data?
 10. How do you implement cache sharding?
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+- [[q-load-balancing-strategies--system-design--medium]] - load balancing strategies   system
+- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
+
+### Advanced (Harder)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
+### Related (Medium)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+- [[q-load-balancing-strategies--system-design--medium]] - load balancing strategies   system
+- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
+
+### Advanced (Harder)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
+### Related (Medium)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
+- [[q-load-balancing-strategies--system-design--medium]] - load balancing strategies   system
+- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
+
+### Advanced (Harder)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system

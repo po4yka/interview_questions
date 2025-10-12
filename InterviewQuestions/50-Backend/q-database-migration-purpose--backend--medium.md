@@ -71,4 +71,28 @@ Migrations ensure smooth transitions while preserving data integrity and applica
 - [[moc-backend]]
 
 ## Related Questions
-- [[q-relational-table-unique-data--backend--medium]]
+
+### Related (Medium)
+- [[q-virtual-tables-disadvantages--backend--medium]] - Databases
+- [[q-relational-table-unique-data--backend--medium]] - Databases
+- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
+- [[q-callback-to-coroutine-conversion--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-sql-join-algorithms-complexity--backend--hard]] - Databases
+### Related (Medium)
+- [[q-virtual-tables-disadvantages--backend--medium]] - Databases
+- [[q-relational-table-unique-data--backend--medium]] - Databases
+- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
+- [[q-callback-to-coroutine-conversion--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-sql-join-algorithms-complexity--backend--hard]] - Databases
+### Related (Medium)
+- [[q-virtual-tables-disadvantages--backend--medium]] - Databases
+- [[q-relational-table-unique-data--backend--medium]] - Databases
+- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
+- [[q-callback-to-coroutine-conversion--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-sql-join-algorithms-complexity--backend--hard]] - Databases

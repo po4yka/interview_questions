@@ -269,6 +269,30 @@ fun CustomButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
 
 ## Related Questions
 
+### Related (Medium)
+- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-compose-semantics--android--medium]] - Jetpack Compose
+- [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-compose-semantics--android--medium]] - Jetpack Compose
+- [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-compose-semantics--android--medium]] - Jetpack Compose
+- [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
 ### Hub
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
 

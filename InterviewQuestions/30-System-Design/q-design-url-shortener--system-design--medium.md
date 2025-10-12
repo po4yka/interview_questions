@@ -630,3 +630,35 @@ class MetricsService {
 8. How do you implement geographic routing for lower latency?
 9. How do you backup and recover URL mappings?
 10. How do you handle duplicate custom aliases across users?
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-load-balancing-strategies--system-design--medium]] - load balancing strategies   system
+- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
+
+### Advanced (Harder)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
+### Related (Medium)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-load-balancing-strategies--system-design--medium]] - load balancing strategies   system
+- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
+
+### Advanced (Harder)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
+### Related (Medium)
+- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
+- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
+- [[q-load-balancing-strategies--system-design--medium]] - load balancing strategies   system
+- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
+
+### Advanced (Harder)
+- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system

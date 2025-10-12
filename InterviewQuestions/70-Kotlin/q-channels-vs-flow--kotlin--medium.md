@@ -823,6 +823,19 @@ eventBus.publish(AppEvent.UserLoggedIn(123))
 
 ## Related Questions
 
+### Prerequisites (Easier)
+- [[q-flow-basics--kotlin--easy]] - Flow
+
+### Related (Medium)
+- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+- [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
+- [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Coroutines
+
+### Advanced (Harder)
+- [[q-select-expression-channels--kotlin--hard]] - Coroutines
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 

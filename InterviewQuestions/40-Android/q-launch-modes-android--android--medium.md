@@ -168,6 +168,10 @@ The activity can only be running as the root activity of the task, the first act
 - [Understand Android Activity's launchMode: standard, singleTop, singleTask and singleInstance](https://inthecheesefactory.com/blog/understand-android-activity-launchmode/en)
 
 ## Related Questions
-- What do you know about taskAffinity?
-- What are Intent flags?
-- How does the Android back stack work?
+
+### Related (Medium)
+- [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose
+### Related (Medium)
+- [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose
+### Related (Medium)
+- [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose

@@ -1232,6 +1232,10 @@ class SafeViewModel : ViewModel() {
 
 ## Related Questions
 
+### Prerequisites (Easier)
+- [[q-viewmodel-coroutines-lifecycle--kotlin--medium]] - Coroutines
+- [[q-room-coroutines-flow--kotlin--medium]] - Coroutines
+- [[q-coroutine-job-lifecycle--kotlin--medium]] - Coroutines
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
 

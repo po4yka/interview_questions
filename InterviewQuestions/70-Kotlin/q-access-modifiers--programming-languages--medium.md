@@ -410,3 +410,32 @@ fun main() {
 - На верхнем уровне нельзя использовать **protected**
 
 Все примеры кода из английской версии применимы и к русской версии.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-kotlin-visibility-modifiers--kotlin--easy]] - Visibility
+
+### Related (Medium)
+- [[q-visibility-modifiers-kotlin--kotlin--medium]] - Classes
+- [[q-value-classes-inline-classes--kotlin--medium]] - Classes
+- [[q-delegation-by-keyword--kotlin--medium]] - Classes
+- [[q-class-initialization-order--kotlin--medium]] - Classes
+### Prerequisites (Easier)
+- [[q-kotlin-visibility-modifiers--kotlin--easy]] - Visibility
+
+### Related (Medium)
+- [[q-visibility-modifiers-kotlin--kotlin--medium]] - Classes
+- [[q-value-classes-inline-classes--kotlin--medium]] - Classes
+- [[q-delegation-by-keyword--kotlin--medium]] - Classes
+- [[q-class-initialization-order--kotlin--medium]] - Classes
+### Prerequisites (Easier)
+- [[q-kotlin-visibility-modifiers--kotlin--easy]] - Visibility
+
+### Related (Medium)
+- [[q-visibility-modifiers-kotlin--kotlin--medium]] - Classes
+- [[q-value-classes-inline-classes--kotlin--medium]] - Classes
+- [[q-delegation-by-keyword--kotlin--medium]] - Classes
+- [[q-class-initialization-order--kotlin--medium]] - Classes

@@ -283,6 +283,18 @@ class ViewModel : ViewModel() {
 
 ## Related Questions
 
+### Prerequisites (Easier)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-app-size-optimization--performance--medium]] - Performance
+### Prerequisites (Easier)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-app-size-optimization--performance--medium]] - Performance
+### Prerequisites (Easier)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-app-size-optimization--performance--medium]] - Performance
 ### Hub
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
 

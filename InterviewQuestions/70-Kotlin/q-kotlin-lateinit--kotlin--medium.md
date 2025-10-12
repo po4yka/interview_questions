@@ -148,4 +148,31 @@ if (foo::bar.isInitialized) {
 - [Lateinit and Lazy Property in Kotlin](https://medium.com/@guruprasadhegde4/lateinit-and-lazy-property-in-kotlin-8776c67878a0)
 
 ## Related Questions
-- [[q-kotlin-null-safety--kotlin--medium]]
+
+### Prerequisites (Easier)
+- [[q-kotlin-properties--kotlin--easy]] - Properties
+- [[q-kotlin-init-block--kotlin--easy]] - Init Block
+- [[q-kotlin-constructors--kotlin--easy]] - Constructors
+
+### Related (Medium)
+- [[q-lazy-vs-lateinit--kotlin--medium]] - Lazy
+- [[q-kotlin-null-safety--kotlin--medium]] - Null Safety
+- [[q-app-startup-library--android--medium]] - App Startup
+### Prerequisites (Easier)
+- [[q-kotlin-properties--kotlin--easy]] - Properties
+- [[q-kotlin-init-block--kotlin--easy]] - Init Block
+- [[q-kotlin-constructors--kotlin--easy]] - Constructors
+
+### Related (Medium)
+- [[q-lazy-vs-lateinit--kotlin--medium]] - Lazy
+- [[q-kotlin-null-safety--kotlin--medium]] - Null Safety
+- [[q-app-startup-library--android--medium]] - App Startup
+### Prerequisites (Easier)
+- [[q-kotlin-properties--kotlin--easy]] - Properties
+- [[q-kotlin-init-block--kotlin--easy]] - Init Block
+- [[q-kotlin-constructors--kotlin--easy]] - Constructors
+
+### Related (Medium)
+- [[q-lazy-vs-lateinit--kotlin--medium]] - Lazy
+- [[q-kotlin-null-safety--kotlin--medium]] - Null Safety
+- [[q-app-startup-library--android--medium]] - App Startup

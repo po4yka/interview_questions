@@ -171,3 +171,26 @@ WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
 **English**: Main thread (UI thread) is responsible for handling UI operations and user events in Android. It uses an event loop (Looper + MessageQueue) to process events. Long operations (network, database, heavy computations) must run on background threads to avoid ANR (Application Not Responding) dialog after 5 seconds.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - what is the main
+
+### Related (Medium)
+- [[q-handler-looper-main-thread--android--medium]] - handler looper main thread 
+- [[q-how-does-the-main-thread-work--android--medium]] - how does the main
+### Prerequisites (Easier)
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - what is the main
+
+### Related (Medium)
+- [[q-handler-looper-main-thread--android--medium]] - handler looper main thread 
+- [[q-how-does-the-main-thread-work--android--medium]] - how does the main
+### Prerequisites (Easier)
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - what is the main
+
+### Related (Medium)
+- [[q-handler-looper-main-thread--android--medium]] - handler looper main thread 
+- [[q-how-does-the-main-thread-work--android--medium]] - how does the main

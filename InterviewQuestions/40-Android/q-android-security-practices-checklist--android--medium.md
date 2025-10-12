@@ -348,7 +348,28 @@ channel[1].postMessage(WebMessage("Мое защищенное сообщени�
 - [Android App Security Best Practices](https://quickbirdstudios.com/blog/android-app-security-best-practices/)
 
 ## Related Questions
-- What is ProGuard and R8?
-- How to implement certificate pinning in Android?
-- What are the different types of Android permissions?
-- How to secure network communications in Android?
+
+### Prerequisites (Easier)
+- [[q-cleartext-traffic-android--android--easy]] - Security
+
+### Related (Medium)
+- [[q-android-security-best-practices--android--medium]] - android security best practices 
+
+### Advanced (Harder)
+- [[q-modularization-patterns--android--hard]] - Architecture
+### Prerequisites (Easier)
+- [[q-cleartext-traffic-android--android--easy]] - Security
+
+### Related (Medium)
+- [[q-android-security-best-practices--android--medium]] - android security best practices 
+
+### Advanced (Harder)
+- [[q-modularization-patterns--android--hard]] - Architecture
+### Prerequisites (Easier)
+- [[q-cleartext-traffic-android--android--easy]] - Security
+
+### Related (Medium)
+- [[q-android-security-best-practices--android--medium]] - android security best practices 
+
+### Advanced (Harder)
+- [[q-modularization-patterns--android--hard]] - Architecture

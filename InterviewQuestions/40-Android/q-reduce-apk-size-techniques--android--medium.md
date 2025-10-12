@@ -400,7 +400,28 @@ class APKSizeOptimization {
 - [WebP Images](https://developer.android.com/studio/write/convert-webp)
 
 ## Related Questions
-- What is R8 and how does it work?
-- How to use Android App Bundle?
-- What is the difference between ProGuard and R8?
-- How to analyze APK size?
+
+### Related (Medium)
+- [[q-reduce-app-size--android--medium]] - Optimization
+- [[q-app-size-optimization--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-reduce-app-size--android--medium]] - Optimization
+- [[q-app-size-optimization--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-reduce-app-size--android--medium]] - Optimization
+- [[q-app-size-optimization--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

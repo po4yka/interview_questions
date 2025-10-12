@@ -260,6 +260,16 @@ scope.launch { } // - Работает
 
 ## Related Questions
 
+### Related (Medium)
+- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Coroutines
+- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Coroutines
+- [[q-coroutine-parent-child-relationship--kotlin--medium]] - Coroutines
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-structured-concurrency-patterns--kotlin--hard]] - Coroutines
+- [[q-coroutine-context-detailed--kotlin--hard]] - Coroutines
+- [[q-structured-concurrency--kotlin--hard]] - Coroutines
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
 

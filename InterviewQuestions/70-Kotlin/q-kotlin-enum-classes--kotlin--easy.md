@@ -128,4 +128,16 @@ println(redColor.description()) // Вывод: Red color
 - [Enums in Kotlin](https://www.baeldung.com/kotlin/enum)
 
 ## Related Questions
-- [[q-kotlin-type-system--kotlin--medium]]
+
+### Advanced (Harder)
+- [[q-value-classes-inline-classes--kotlin--medium]] - Classes
+- [[q-inner-nested-classes--kotlin--medium]] - Classes
+- [[q-enum-class-advanced--kotlin--medium]] - Classes
+### Advanced (Harder)
+- [[q-value-classes-inline-classes--kotlin--medium]] - Classes
+- [[q-inner-nested-classes--kotlin--medium]] - Classes
+- [[q-enum-class-advanced--kotlin--medium]] - Classes
+### Advanced (Harder)
+- [[q-value-classes-inline-classes--kotlin--medium]] - Classes
+- [[q-inner-nested-classes--kotlin--medium]] - Classes
+- [[q-enum-class-advanced--kotlin--medium]] - Classes

@@ -454,3 +454,17 @@ Total @Provides: 80
 - [ ] Оптимизировать Multibindings
 
 **English**: Optimize Dagger build time by: 1) **Use Hilt** instead of Dagger, 2) **Enable incremental kapt** (`kapt.incremental.apt=true`), 3) **Split large modules** into smaller ones, 4) **Use @Binds** instead of @Provides (generates less code), 5) **Migrate to KSP** when available (faster than kapt), 6) **Use Provider<T>** for lazy initialization, 7) **Minimize Singleton scopes**, 8) **Remove unused dependencies**, 9) **Configure gradle.properties** (parallel, caching), 10) **Use AssistedInject** for runtime params. Typical improvement: 50-70% faster builds. Check Build Analyzer to identify bottlenecks.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-android-build-optimization--android--medium]] - android build optimization   android 
+- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+### Related (Medium)
+- [[q-android-build-optimization--android--medium]] - android build optimization   android 
+- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+### Related (Medium)
+- [[q-android-build-optimization--android--medium]] - android build optimization   android 
+- [[q-build-optimization-gradle--gradle--medium]] - Gradle

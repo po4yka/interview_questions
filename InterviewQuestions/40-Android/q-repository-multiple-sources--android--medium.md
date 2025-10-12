@@ -295,6 +295,33 @@ class NewsRepository(
 
 ## Related Questions
 
+### Related (Medium)
+- [[q-repository-pattern--android--medium]] - Architecture
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-glide-image-loading-internals--android--medium]] - Glide
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-modularization-patterns--android--hard]] - Architecture
+### Related (Medium)
+- [[q-repository-pattern--android--medium]] - Architecture
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-glide-image-loading-internals--android--medium]] - Glide
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-modularization-patterns--android--hard]] - Architecture
+### Related (Medium)
+- [[q-repository-pattern--android--medium]] - Architecture
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-glide-image-loading-internals--android--medium]] - Glide
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-modularization-patterns--android--hard]] - Architecture
 ### Hub
 - [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
 

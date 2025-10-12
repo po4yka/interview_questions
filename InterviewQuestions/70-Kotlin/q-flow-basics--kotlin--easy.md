@@ -526,6 +526,18 @@ fun calculate(x: Int): Int  // Лучше чем Flow<Int>
 
 ## Related Questions
 
+### Advanced (Harder)
+- [[q-kotlin-flow-basics--kotlin--medium]] - Flow
+- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+### Advanced (Harder)
+- [[q-kotlin-flow-basics--kotlin--medium]] - Flow
+- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+### Advanced (Harder)
+- [[q-kotlin-flow-basics--kotlin--medium]] - Flow
+- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 

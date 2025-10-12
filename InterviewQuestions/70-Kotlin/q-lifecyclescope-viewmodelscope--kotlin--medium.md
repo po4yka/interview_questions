@@ -527,6 +527,33 @@ viewModelScope.launch {
 
 ## Related Questions
 
+### Related (Medium)
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
+- [[q-testing-viewmodel-coroutines--kotlin--medium]] - Testing
+- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
+- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-lifecycle-aware-coroutines--kotlin--hard]] - Coroutines
+- [[q-channel-pipelines--kotlin--hard]] - Channels
+### Related (Medium)
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
+- [[q-testing-viewmodel-coroutines--kotlin--medium]] - Testing
+- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
+- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-lifecycle-aware-coroutines--kotlin--hard]] - Coroutines
+- [[q-channel-pipelines--kotlin--hard]] - Channels
+### Related (Medium)
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
+- [[q-testing-viewmodel-coroutines--kotlin--medium]] - Testing
+- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
+- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Coroutines
+
+### Advanced (Harder)
+- [[q-lifecycle-aware-coroutines--kotlin--hard]] - Coroutines
+- [[q-channel-pipelines--kotlin--hard]] - Channels
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
 

@@ -701,8 +701,37 @@ jobs:
 - [Macrobenchmark](https://developer.android.com/topic/performance/benchmarking/macrobenchmark-overview)
 
 ## Related Questions
-- How to use Macrobenchmark?
-- What is AOT compilation?
-- How to measure app startup time?
-- What is JIT compilation?
-- How to optimize app performance?
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-app-size-optimization--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-memory-leak-detection--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-app-size-optimization--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-memory-leak-detection--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Related (Medium)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-app-size-optimization--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-memory-leak-detection--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

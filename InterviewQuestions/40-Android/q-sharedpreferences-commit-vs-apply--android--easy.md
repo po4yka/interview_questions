@@ -272,10 +272,28 @@ suspend fun savePreference(value: String) {
 ---
 
 ## Related Questions
-- What is DataStore Preferences?
-- How to use SharedPreferences?
-- What is ANR in Android?
 
+### Related (Easy)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Advanced (Harder)
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+### Related (Easy)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Advanced (Harder)
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+### Related (Easy)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
+### Advanced (Harder)
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
 ## References
 - [SharedPreferences Documentation](https://developer.android.com/reference/android/content/SharedPreferences)
 - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore)

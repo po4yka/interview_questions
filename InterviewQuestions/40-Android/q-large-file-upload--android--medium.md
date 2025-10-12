@@ -538,3 +538,23 @@ val constraints = Constraints.Builder()
 ```
 
 **English**: Upload large files using **WorkManager + Retrofit** for guaranteed background execution. Use **Multipart** for files < 50MB, **chunked upload** for larger files (5MB chunks). Implement progress tracking with **UploadProgressInterceptor**, resumable uploads with progress persistence, foreground service notification. Configure OkHttp with increased timeouts (60s read/write). Use constraints for WiFi-only uploads. Retry with exponential backoff on failure. Save upload progress in SharedPreferences for resume capability.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-api-file-upload-server--android--medium]] - api file upload server 
+
+### Advanced (Harder)
+- [[q-large-file-upload-app--android--hard]] - large file upload app 
+### Related (Medium)
+- [[q-api-file-upload-server--android--medium]] - api file upload server 
+
+### Advanced (Harder)
+- [[q-large-file-upload-app--android--hard]] - large file upload app 
+### Related (Medium)
+- [[q-api-file-upload-server--android--medium]] - api file upload server 
+
+### Advanced (Harder)
+- [[q-large-file-upload-app--android--hard]] - large file upload app 

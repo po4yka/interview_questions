@@ -233,4 +233,25 @@ android {
 - [Gradle Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
 
 ## Related Questions
-- [[q-gradle-basics--android--easy]]
+
+### Related (Medium)
+- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+- [[q-proguard-r8--android--medium]] - Build Tools
+- [[q-annotation-processing--android--medium]] - Annotation Processing
+
+### Advanced (Harder)
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+### Related (Medium)
+- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+- [[q-proguard-r8--android--medium]] - Build Tools
+- [[q-annotation-processing--android--medium]] - Annotation Processing
+
+### Advanced (Harder)
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+### Related (Medium)
+- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+- [[q-proguard-r8--android--medium]] - Build Tools
+- [[q-annotation-processing--android--medium]] - Annotation Processing
+
+### Advanced (Harder)
+- [[q-multi-module-best-practices--android--hard]] - Architecture

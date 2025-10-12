@@ -303,9 +303,30 @@ class WorkManagerInitializer : Initializer<WorkManager> {
 ---
 
 ## Related Questions
-- What is ContentProvider?
-- How to optimize app startup time?
-- What is Application.onCreate()?
 
+### Related (Medium)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-app-size-optimization--performance--medium]] - Performance
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-app-size-optimization--performance--medium]] - Performance
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+### Related (Medium)
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-app-size-optimization--performance--medium]] - Performance
+- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
 ## References
 - [App Startup Documentation](https://developer.android.com/topic/libraries/app-startup)

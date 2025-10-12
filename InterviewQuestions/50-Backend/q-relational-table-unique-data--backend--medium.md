@@ -80,4 +80,22 @@ To store unique information for each element in a relational table, unique keys 
 - [[moc-backend]]
 
 ## Related Questions
-- [[q-database-migration-purpose--backend--medium]]
+
+### Related (Medium)
+- [[q-virtual-tables-disadvantages--backend--medium]] - Databases
+- [[q-database-migration-purpose--backend--medium]] - Databases
+
+### Advanced (Harder)
+- [[q-sql-join-algorithms-complexity--backend--hard]] - Databases
+### Related (Medium)
+- [[q-virtual-tables-disadvantages--backend--medium]] - Databases
+- [[q-database-migration-purpose--backend--medium]] - Databases
+
+### Advanced (Harder)
+- [[q-sql-join-algorithms-complexity--backend--hard]] - Databases
+### Related (Medium)
+- [[q-virtual-tables-disadvantages--backend--medium]] - Databases
+- [[q-database-migration-purpose--backend--medium]] - Databases
+
+### Advanced (Harder)
+- [[q-sql-join-algorithms-complexity--backend--hard]] - Databases

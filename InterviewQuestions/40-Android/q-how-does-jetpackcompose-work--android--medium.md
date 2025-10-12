@@ -944,3 +944,20 @@ Jetpack Compose работает через:
 5. **Эффективное измерение, layout и отрисовку**
 
 Магия в **умной перекомпозиции** - Compose выполняет повторно только те функции, которые зависят от изменённого состояния, делая его высокопроизводительным.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-how-does-the-main-thread-work--android--medium]] - how does the main
+- [[q-how-does-jetpack-compose-work--android--medium]] - how does jetpack compose
+- [[q-how-does-activity-lifecycle-work--android--medium]] - how does activity lifecycle
+### Related (Medium)
+- [[q-how-does-the-main-thread-work--android--medium]] - how does the main
+- [[q-how-does-jetpack-compose-work--android--medium]] - how does jetpack compose
+- [[q-how-does-activity-lifecycle-work--android--medium]] - how does activity lifecycle
+### Related (Medium)
+- [[q-how-does-the-main-thread-work--android--medium]] - how does the main
+- [[q-how-does-jetpack-compose-work--android--medium]] - how does jetpack compose
+- [[q-how-does-activity-lifecycle-work--android--medium]] - how does activity lifecycle

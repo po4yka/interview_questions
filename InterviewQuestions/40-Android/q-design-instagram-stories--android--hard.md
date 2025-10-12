@@ -796,8 +796,34 @@ Instagram Stories - это сложная функция, включающая �
 - [Video Compression Techniques](https://developer.android.com/guide/topics/media/mediacodec)
 
 ## Related Questions
-- How to implement video player in Android?
-- What is the best way to compress videos?
-- How to implement image filters in Android?
-- How to optimize media caching?
-- What is ExoPlayer and when to use it?
+
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-whatsapp-app--android--hard]] - Messaging
+- [[q-implement-voice-video-call--android--hard]] - Webrtc
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-whatsapp-app--android--hard]] - Messaging
+- [[q-implement-voice-video-call--android--hard]] - Webrtc
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+- [[q-repository-multiple-sources--android--medium]] - Architecture
+
+### Related (Hard)
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-whatsapp-app--android--hard]] - Messaging
+- [[q-implement-voice-video-call--android--hard]] - Webrtc
+- [[q-data-sync-unstable-network--android--hard]] - Networking
