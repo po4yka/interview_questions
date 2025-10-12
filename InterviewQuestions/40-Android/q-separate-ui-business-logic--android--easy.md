@@ -9,15 +9,14 @@ tags:
   - platform/android
   - separation-of-concerns
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Зачем нужно разделять отображение и бизнес-логику?
 
 **English**: Why do we need to separate presentation and business logic?
 
-## Answer
-
+## Answer (EN)
 Separating presentation (UI) and business logic is a fundamental principle of software architecture. This separation improves code quality, testability, maintainability, and team collaboration.
 
 ### Why Separate UI and Business Logic?
@@ -606,8 +605,7 @@ class UserActivity : AppCompatActivity() {
 | **Team collaboration** | Blocking dependencies | Parallel work |
 | **Code clarity** | Mixed concerns | Single responsibility |
 
-## Ответ
-
+## Ответ (RU)
 Разделение отображения (UI) и бизнес-логики - это фундаментальный принцип архитектуры программного обеспечения. Это разделение улучшает качество кода, тестируемость, поддерживаемость и командную работу.
 
 ### Зачем разделять UI и бизнес-логику?

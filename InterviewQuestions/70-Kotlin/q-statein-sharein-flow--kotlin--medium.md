@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [kotlin, flow, coroutines, statein, sharein, hot-flow, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What are stateIn and shareIn operators in Kotlin Flow? When to use each?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое операторы stateIn и shareIn в Kotlin Flow? Когда использовать каждый?
 
 ---
@@ -653,5 +653,5 @@ class SearchViewModel : ViewModel() {
 - [SharedFlow vs StateFlow](https://elizarov.medium.com/shared-flows-broadcast-channels-899b675e805c)
 
 ## Related Questions
-- [[q-stateflow-sharedflow--kotlin--medium]]
-- [[q-cold-hot-flow--kotlin--medium]]
+- [[q-stateflow-sharedflow-differences--kotlin--medium]]
+- [[q-cold-vs-hot-flows--kotlin--medium]]

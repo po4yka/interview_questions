@@ -9,20 +9,23 @@ tags:
   - retrofit
   - okhttp
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # API Rate Limiting and Throttling in Android
 
-**Сложность**: 🟡 Medium
+**Сложность**: Medium
 **Источник**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> How do you implement API rate limiting and throttling on the client side in Android? What strategies prevent exceeding server limits?
 
-### Question
-How do you implement API rate limiting and throttling on the client side in Android? What strategies prevent exceeding server limits?
+# Вопрос (RU)
+> Как реализовать ограничение скорости API и троттлинг на стороне клиента в Android? Какие стратегии предотвращают превышение лимитов сервера?
 
-### Answer
+---
+
+## Answer (EN)
 
 API rate limiting prevents clients from exceeding allowed request quotas, protecting servers from overload and ensuring fair resource distribution. Client-side throttling improves app efficiency and reduces server load.
 
@@ -543,12 +546,7 @@ object NetworkModule {
 
 ---
 
-## Русский
-
-### Вопрос
-Как реализовать ограничение скорости API и throttling на стороне клиента в Android? Какие стратегии предотвращают превышение лимитов сервера?
-
-### Ответ
+## Ответ (RU)
 
 Ограничение скорости API предотвращает превышение разрешенных квот запросов, защищая серверы от перегрузки.
 

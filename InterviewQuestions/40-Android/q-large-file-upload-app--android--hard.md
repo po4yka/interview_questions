@@ -9,15 +9,14 @@ tags:
   - retrofit
   - workmanager
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Как бы реализовал приложение, которое может загружать большие файлы на сервер?
 
 **English**: How would you implement an app that can upload large files to a server?
 
-## Answer
-
+## Answer (EN)
 To implement reliable **large file upload**, consider:
 
 1. **WorkManager** for guaranteed background execution
@@ -611,8 +610,7 @@ class ChunkedFileUploadWorker(
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Для реализации надежной **загрузки больших файлов**:
 
 1. **WorkManager** - гарантированное выполнение в фоне

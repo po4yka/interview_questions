@@ -328,5 +328,5 @@ launch(parentContext) {
 - [Coroutine Context](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
 
 ## Related Questions
-- [[q-coroutine-dispatchers--kotlin--medium]]
-- [[q-structured-concurrency--kotlin--hard]]
+- [[q-dispatchers-types--kotlin--medium]]
+- [[q-structured-concurrency-kotlin--kotlin--medium]]

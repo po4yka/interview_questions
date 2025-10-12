@@ -7,15 +7,14 @@ tags:
   - state-management
   - unidirectional-data-flow
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # MVI Architecture
 
 **English**: Explain the MVI (Model-View-Intent) architecture pattern. How does it differ from MVVM?
 
-## Answer
-
+## Answer (EN)
 **MVI (Model-View-Intent)** - архитектурный паттерн с **unidirectional data flow** (однонаправленным потоком данных), где UI состояние иммутабельно и изменяется только через явные намерения (Intents).
 
 ### Компоненты MVI

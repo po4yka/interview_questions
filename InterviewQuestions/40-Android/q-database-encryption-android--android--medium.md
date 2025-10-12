@@ -9,7 +9,7 @@ tags:
   - room
   - keystore
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Database Encryption in Android
@@ -17,13 +17,19 @@ status: reviewed
 **Difficulty**: Medium
 **Source**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> 
 
-### Question
+# Вопрос (RU)
+> 
+
+---
+
+## Answer (EN)
+# Question (EN)
 How do you implement database encryption in Android? What are the best practices and available libraries?
 
-### Answer
-
+## Answer (EN)
 Database encryption is essential for protecting sensitive user data at rest. Android provides several options for encrypting databases, each with different trade-offs.
 
 #### 1. **SQLCipher for Room**
@@ -451,13 +457,13 @@ class EncryptedDatabaseTest {
 
 ---
 
-## Русский
 
-### Вопрос
+
+## Ответ (RU)
+# Вопрос (RU)
 Как реализовать шифрование базы данных в Android? Каковы лучшие практики и доступные библиотеки?
 
-### Ответ
-
+## Ответ (RU)
 Шифрование базы данных необходимо для защиты конфиденциальных пользовательских данных в состоянии покоя. Android предоставляет несколько вариантов шифрования баз данных с различными компромиссами.
 
 #### 1. **SQLCipher для Room**

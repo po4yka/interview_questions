@@ -6,24 +6,33 @@ tags:
   - gof-patterns
   - chain-pattern
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Chain of Responsibility Pattern
 
-**English**: What is the Chain of Responsibility pattern? When and why should it be used?
+# Question (EN)
+> What is the Chain of Responsibility pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Chain of Responsibility? Когда и зачем его использовать?
+
+---
+
+## Answer (EN)
+
 
 **Chain of Responsibility (Цепочка обязанностей)** - это поведенческий паттерн проектирования, который позволяет передавать запросы последовательно по цепочке обработчиков. Каждый последующий обработчик решает, может ли он обработать запрос сам и стоит ли передавать запрос дальше по цепи.
 
-### Определение
+### Definition
+
 
 Chain of Responsibility is a design pattern in which **a request is passed sequentially through a chain of potential handlers until one of them handles the request**. Each handler in the chain has a chance to either process the request or pass it to the next handler. The client doesn't need to know which handler will actually deal with the request — it simply sends it into the chain.
 
 This pattern decouples the client from the specific receiver that performs the action, following the Open/Closed Principle by allowing new handlers to be added without modifying existing code.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 What problems can the Chain of Responsibility design pattern solve?
 
@@ -31,7 +40,8 @@ What problems can the Chain of Responsibility design pattern solve?
 2. **It should be possible that more than one receiver can handle a request**
 3. **Implementing a request directly within the class is inflexible** - Couples the class to a particular receiver
 
-### Решение
+### Solution
+
 
 Define a **chain of receiver objects** having the responsibility, depending on run-time conditions, to either **handle a request or forward it to the next receiver** on the chain (if any).
 
@@ -362,7 +372,8 @@ data class Request(val url: String, val headers: Map<String, String> = emptyMap(
 data class Response(val code: Int, val body: String)
 ```
 
-### Объяснение
+### Explanation
+
 
 **Explanation**:
 
@@ -376,6 +387,7 @@ data class Response(val code: Int, val body: String)
 
 ### Pros (Преимущества)
 
+
 1. **Decoupling** - Sender doesn't need to know which handler processes request
 2. **Flexibility** - Can add/remove/reorder handlers easily
 3. **Single Responsibility** - Each handler handles one type of request
@@ -383,6 +395,7 @@ data class Response(val code: Int, val body: String)
 5. **Open/Closed Principle** - New handlers without modifying existing code
 
 ### Cons (Недостатки)
+
 
 1. **No guarantee of handling** - Request might not be handled at all
 2. **Performance overhead** - Request passes through multiple handlers
@@ -450,3 +463,57 @@ fun validate(data: UserData) = validationChain.all { it(data) }
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+Chain of Responsibility is a design pattern in which **a request is passed sequentially through a chain of potential handlers until one of them handles the request**. Each handler in the chain has a chance to either process the request or pass it to the next handler. The client doesn't need to know which handler will actually deal with the request — it simply sends it into the chain.
+
+This pattern decouples the client from the specific receiver that performs the action, following the Open/Closed Principle by allowing new handlers to be added without modifying existing code.
+
+### Проблемы, которые решает
+
+
+What problems can the Chain of Responsibility design pattern solve?
+
+1. **Coupling the sender of a request to its receiver should be avoided**
+2. **It should be possible that more than one receiver can handle a request**
+3. **Implementing a request directly within the class is inflexible** - Couples the class to a particular receiver
+
+### Решение
+
+
+Define a **chain of receiver objects** having the responsibility, depending on run-time conditions, to either **handle a request or forward it to the next receiver** on the chain (if any).
+
+This enables us to send a request to a chain of receivers without having to know which one handles the request. The request gets passed along the chain until a receiver handles the request. The sender of a request is no longer coupled to a particular receiver.
+
+### Объяснение
+
+
+**Explanation**:
+
+- **Handler interface** declares methods for handling and chaining
+- **Concrete handlers** check if they can handle request, otherwise pass to next
+- **Chain** is built by linking handlers together
+- **Android**: View event handling, OkHttp interceptors, validation chains
+- Each handler can **modify** the request or **stop** the chain
+
+### Pros (Преимущества)
+
+
+1. **Decoupling** - Sender doesn't need to know which handler processes request
+2. **Flexibility** - Can add/remove/reorder handlers easily
+3. **Single Responsibility** - Each handler handles one type of request
+4. **Dynamic configuration** - Chain can be modified at runtime
+5. **Open/Closed Principle** - New handlers without modifying existing code
+
+### Cons (Недостатки)
+
+
+1. **No guarantee of handling** - Request might not be handled at all
+2. **Performance overhead** - Request passes through multiple handlers
+3. **Debugging difficulty** - Hard to track request flow
+4. **Runtime complexity** - Dynamic chains can be hard to manage

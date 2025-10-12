@@ -15,16 +15,20 @@ tags:
   - viewmodel
   - workmanager
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # What libraries are in Architecture Components?
 
-**Russian**: Какие библиотеки есть в Architecture Components?
+# Question (EN)
+> What libraries are in Architecture Components?
 
-**English**: What libraries are in Architecture Components?
+# Вопрос (RU)
+> Какие библиотеки есть в Architecture Components?
 
-## Answer
+---
+
+## Answer (EN)
 
 Android Architecture Components is a collection of libraries designed to help build robust, testable, and maintainable apps. The main libraries include:
 
@@ -672,7 +676,7 @@ fun AppNavigation() {
 
 ---
 
-## Ответ
+## Ответ (RU)
 
 Android Architecture Components - это набор библиотек, разработанных для создания надежных, тестируемых и поддерживаемых приложений. Основные библиотеки:
 

@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [android, activity, launch-mode, task-management, navigation, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What launch modes do you know?
-## Вопрос (RU)
+# Вопрос (RU)
 > Какие режимы запуска (launch modes) вы знаете?
 
 ---

@@ -8,15 +8,14 @@ tags:
   - services
   - started-service
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как остановить сервис?
 
 **English**: How to stop a service?
 
-## Answer
-
+## Answer (EN)
 The method to stop a service depends on **how it was started**:
 
 1. **Started Service** (via `startService()`):
@@ -670,8 +669,7 @@ class MyService : Service() {
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Способ остановки сервиса зависит от **типа сервиса**:
 
 ### **Started Service** (`startService()`)

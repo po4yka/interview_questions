@@ -9,20 +9,23 @@ tags:
   - hot-start
   - optimization
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Hot, Warm, and Cold App Start in Android
 
-**Сложность**: 🟡 Medium
+**Сложность**: Medium
 **Источник**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> What are the differences between hot, warm, and cold app starts in Android? How do you optimize each type?
 
-### Question
-What are the differences between hot, warm, and cold app starts in Android? How do you optimize each type?
+# Вопрос (RU)
+> В чем разница между горячим, теплым и холодным запуском приложения в Android? Как оптимизировать каждый тип?
 
-### Answer
+---
+
+## Answer (EN)
 
 App startup time directly impacts user experience. Android categorizes app launches into three types based on what's already in memory and what needs to be loaded.
 
@@ -597,12 +600,7 @@ adb shell am start -W com.example.app/.MainActivity
 
 ---
 
-## Русский
-
-### Вопрос
-В чём различия между hot, warm и cold запуском приложения в Android? Как оптимизировать каждый тип?
-
-### Ответ
+## Ответ (RU)
 
 Время запуска приложения напрямую влияет на пользовательский опыт. Android категоризирует запуски на три типа.
 

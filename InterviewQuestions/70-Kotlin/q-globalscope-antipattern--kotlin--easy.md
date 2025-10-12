@@ -12,7 +12,7 @@ language_tags:
   - en
   - ru
 original_language: en
-status: reviewed
+status: draft
 source: Kotlin Coroutines Interview Questions PDF
 tags:
   - kotlin
@@ -23,9 +23,9 @@ tags:
   - memory-leaks
   - difficulty/easy
 ---
-## Question (EN)
+# Question (EN)
 > Why should you avoid using GlobalScope in Android applications?
-## Вопрос (RU)
+# Вопрос (RU)
 > Почему следует избегать использования GlobalScope в Android приложениях?
 
 ---
@@ -57,7 +57,7 @@ GlobalScope.launch {
 **Problem 1: Memory Leaks**
 
 ```kotlin
-// - BAD: Memory leak risk
+// BAD: Memory leak risk
 class UserProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +89,7 @@ class UserProfileActivity : AppCompatActivity() {
 **Problem 2: Wasted Resources**
 
 ```kotlin
-// - BAD: Wasted network/CPU resources
+// BAD: Wasted network/CPU resources
 class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,7 +117,7 @@ class SearchActivity : AppCompatActivity() {
 **Problem 3: Unhandled Exceptions**
 
 ```kotlin
-// - BAD: Exceptions can crash the app
+// BAD: Exceptions can crash the app
 GlobalScope.launch {
     // If this throws an exception, it might not be caught
     riskyOperation()
@@ -130,7 +130,7 @@ GlobalScope.launch {
 **Problem 4: Testing Difficulties**
 
 ```kotlin
-// - BAD: Hard to test
+// BAD: Hard to test
 class UserViewModel {
     fun loadUser() {
         GlobalScope.launch {
@@ -156,7 +156,7 @@ fun testLoadUser() {
 **Solution 1: Use lifecycleScope (Activities/Fragments)**
 
 ```kotlin
-// - GOOD: Tied to Activity lifecycle
+// GOOD: Tied to Activity lifecycle
 class UserProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -180,7 +180,7 @@ class UserProfileActivity : AppCompatActivity() {
 **Solution 2: Use viewModelScope (ViewModels)**
 
 ```kotlin
-// - GOOD: Tied to ViewModel lifecycle
+// GOOD: Tied to ViewModel lifecycle
 class UserViewModel : ViewModel() {
     private val _userData = MutableStateFlow<User?>(null)
     val userData: StateFlow<User?> = _userData
@@ -205,7 +205,7 @@ class UserViewModel : ViewModel() {
 **Solution 3: Use repeatOnLifecycle for Flow collection**
 
 ```kotlin
-// - BEST: Lifecycle-aware Flow collection
+// BEST: Lifecycle-aware Flow collection
 class UserProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -246,7 +246,7 @@ class AnalyticsManager {
 **But Even Here, Better Alternatives Exist**:
 
 ```kotlin
-// - BETTER: Custom application-scoped coroutine
+// BETTER: Custom application-scoped coroutine
 class MyApplication : Application() {
     val applicationScope = CoroutineScope(
         SupervisorJob() + Dispatchers.Default
@@ -283,20 +283,20 @@ class AnalyticsManager(private val scope: CoroutineScope) {
 | **Resource Waste** | Possible | Prevented |
 | **Testing** | Difficult | Easy (inject dispatcher) |
 | **Exception Handling** | Global default | Scope-specific handler |
-| **Android Best Practice** | - Anti-pattern | - Recommended |
+| **Android Best Practice** | Anti-pattern | Recommended |
 
 ### Common Mistakes and Fixes
 
 **Mistake 1: Background work after user leaves**
 
 ```kotlin
-// - BAD
+// BAD
 GlobalScope.launch {
     delay(10000) // 10 second delay
     showNotification()
 }
 
-// - GOOD - Use WorkManager for deferrable work
+// GOOD - Use WorkManager for deferrable work
 val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
     .setInitialDelay(10, TimeUnit.SECONDS)
     .build()
@@ -307,14 +307,14 @@ WorkManager.getInstance(context).enqueue(workRequest)
 **Mistake 2: Fire-and-forget network calls**
 
 ```kotlin
-// - BAD
+// BAD
 fun sendAnalytics() {
     GlobalScope.launch {
         api.sendEvent(event)
     }
 }
 
-// - GOOD - Tie to appropriate scope
+// GOOD - Tie to appropriate scope
 class MyViewModel : ViewModel() {
     fun sendAnalytics() {
         viewModelScope.launch {
@@ -327,17 +327,17 @@ class MyViewModel : ViewModel() {
 ### Summary
 
 **Why Avoid GlobalScope**:
-- - Causes memory leaks (holds Activity/Fragment references)
-- - Wastes resources (continues after component destroyed)
-- - Hard to test (can't inject TestDispatcher)
-- - Uncontrolled lifecycle (runs until app dies)
-- - Exception handling issues (global crash handler)
+- Causes memory leaks (holds Activity/Fragment references)
+- Wastes resources (continues after component destroyed)
+- Hard to test (can't inject TestDispatcher)
+- Uncontrolled lifecycle (runs until app dies)
+- Exception handling issues (global crash handler)
 
 **Use Instead**:
-- - `lifecycleScope` for Activities/Fragments
-- - `viewModelScope` for ViewModels
-- - Custom scopes with clear lifecycle ownership
-- - `WorkManager` for background tasks that outlive UI
+- `lifecycleScope` for Activities/Fragments
+- `viewModelScope` for ViewModels
+- Custom scopes with clear lifecycle ownership
+- `WorkManager` for background tasks that outlive UI
 
 **Key Principle**: **Always tie coroutines to a lifecycle-aware scope**. If you think you need GlobalScope, you probably need a better architecture or WorkManager instead.
 
@@ -370,7 +370,7 @@ GlobalScope.launch {
 **Проблема 1: Утечки Памяти**
 
 ```kotlin
-// - ПЛОХО: Риск утечки памяти
+// ПЛОХО: Риск утечки памяти
 class UserProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -402,7 +402,7 @@ class UserProfileActivity : AppCompatActivity() {
 **Проблема 2: Потраченные Ресурсы**
 
 ```kotlin
-// - ПЛОХО: Потеря сетевых/CPU ресурсов
+// ПЛОХО: Потеря сетевых/CPU ресурсов
 class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -430,7 +430,7 @@ class SearchActivity : AppCompatActivity() {
 **Проблема 3: Необработанные Исключения**
 
 ```kotlin
-// - ПЛОХО: Исключения могут крэшить приложение
+// ПЛОХО: Исключения могут крэшить приложение
 GlobalScope.launch {
     // Если это выбросит исключение, оно может не быть перехвачено
     riskyOperation()
@@ -443,7 +443,7 @@ GlobalScope.launch {
 **Проблема 4: Сложности с Тестированием**
 
 ```kotlin
-// - ПЛОХО: Сложно тестировать
+// ПЛОХО: Сложно тестировать
 class UserViewModel {
     fun loadUser() {
         GlobalScope.launch {
@@ -469,7 +469,7 @@ fun testLoadUser() {
 **Решение 1: Использовать lifecycleScope (Activity/Fragment)**
 
 ```kotlin
-// - ХОРОШО: Привязано к жизненному циклу Activity
+// ХОРОШО: Привязано к жизненному циклу Activity
 class UserProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -493,7 +493,7 @@ class UserProfileActivity : AppCompatActivity() {
 **Решение 2: Использовать viewModelScope (ViewModel)**
 
 ```kotlin
-// - ХОРОШО: Привязано к жизненному циклу ViewModel
+// ХОРОШО: Привязано к жизненному циклу ViewModel
 class UserViewModel : ViewModel() {
     private val _userData = MutableStateFlow<User?>(null)
     val userData: StateFlow<User?> = _userData
@@ -518,7 +518,7 @@ class UserViewModel : ViewModel() {
 **Решение 3: Использовать repeatOnLifecycle для сбора Flow**
 
 ```kotlin
-// - ЛУЧШЕ ВСЕГО: Сбор Flow с учетом жизненного цикла
+// ЛУЧШЕ ВСЕГО: Сбор Flow с учетом жизненного цикла
 class UserProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -559,7 +559,7 @@ class AnalyticsManager {
 **Но Даже Здесь Есть Лучшие Альтернативы**:
 
 ```kotlin
-// - ЛУЧШЕ: Пользовательская область уровня приложения
+// ЛУЧШЕ: Пользовательская область уровня приложения
 class MyApplication : Application() {
     val applicationScope = CoroutineScope(
         SupervisorJob() + Dispatchers.Default
@@ -589,17 +589,17 @@ class AnalyticsManager(private val scope: CoroutineScope) {
 ### Резюме
 
 **Почему Избегать GlobalScope**:
-- - Вызывает утечки памяти (держит ссылки на Activity/Fragment)
-- - Тратит ресурсы (продолжает после уничтожения компонента)
-- - Сложно тестировать (нельзя внедрить TestDispatcher)
-- - Неконтролируемый жизненный цикл (работает пока приложение живо)
-- - Проблемы с обработкой исключений (глобальный обработчик крэшей)
+- Вызывает утечки памяти (держит ссылки на Activity/Fragment)
+- Тратит ресурсы (продолжает после уничтожения компонента)
+- Сложно тестировать (нельзя внедрить TestDispatcher)
+- Неконтролируемый жизненный цикл (работает пока приложение живо)
+- Проблемы с обработкой исключений (глобальный обработчик крэшей)
 
 **Используйте Вместо**:
-- - `lifecycleScope` для Activity/Fragment
-- - `viewModelScope` для ViewModel
-- - Пользовательские области с четким владением жизненным циклом
-- - `WorkManager` для фоновых задач, переживающих UI
+- `lifecycleScope` для Activity/Fragment
+- `viewModelScope` для ViewModel
+- Пользовательские области с четким владением жизненным циклом
+- `WorkManager` для фоновых задач, переживающих UI
 
 **Ключевой Принцип**: **Всегда привязывайте корутины к области, учитывающей жизненный цикл**. Если вы думаете, что вам нужен GlobalScope, вам, вероятно, нужна лучшая архитектура или WorkManager.
 

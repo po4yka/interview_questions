@@ -8,7 +8,7 @@ tags:
   - architecture-components
   - memory-leaks
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Why was the Lifecycle library created?
@@ -17,8 +17,7 @@ status: reviewed
 
 **English**: Why was the Lifecycle library created?
 
-## Answer
-
+## Answer (EN)
 The Lifecycle library was created to solve **fundamental problems** with lifecycle management in Android:
 
 1. **Memory leaks** - Components didn't automatically cleanup when lifecycle ended
@@ -668,8 +667,7 @@ lifecycle.addObserver(myObserver)
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Библиотека Lifecycle была создана для решения **фундаментальных проблем** управления жизненным циклом в Android:
 
 1. **Утечки памяти** - компоненты не очищались автоматически при завершении lifecycle

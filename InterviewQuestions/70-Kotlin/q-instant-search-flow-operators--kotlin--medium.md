@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: [flow-operators, debounce, search-optimization, performance]
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [kotlin, flow, search, debounce, operators, performance, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > How do you implement instant/real-time search functionality using Kotlin Flow operators?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как реализовать функциональность мгновенного/реального поиска с помощью операторов Kotlin Flow?
 
 ---

@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [kotlin, flow, debounce, throttle, operators, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What is the difference between debounce and throttle in Kotlin Flow? When to use each?
-## Вопрос (RU)
+# Вопрос (RU)
 > В чем разница между debounce и throttle в Kotlin Flow? Когда использовать каждый?
 
 ---

@@ -2,14 +2,20 @@
 tags:
   - programming-languages
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # What are Data Class and Sealed Classes?
 
-**English**: What are Data Class and Sealed Classes in Kotlin?
+# Question (EN)
+> What are Data Class and Sealed Classes in Kotlin? Explain their characteristics, use cases, and provide comprehensive examples.
 
-## Answer
+# Вопрос (RU)
+> Что такое Data Class и Sealed Classes в Kotlin? Объясните их характеристики, применения и приведите подробные примеры.
+
+---
+
+## Answer (EN)
 
 **Data Class:**
 A special type of class designed for storing data. The main purpose is to hold data without performing any additional logic. Declared using the `data` keyword.
@@ -407,10 +413,354 @@ fun main() {
 
 ---
 
-## Ответ
+## Ответ (RU)
 
-### Вопрос
-Что такое Data Class и Sealed Classes
+### Data Class
 
-### Ответ
-Data Class — Это специальный тип класса, предназначенный для хранения данных. Основная цель таких классов — содержать данные и не выполнять никакой дополнительной логики. Для объявления используется ключевое слово data. Особенности data class: Автоматическая генерация методов: Kotlin автоматически генерирует методы equals(), hashCode(), и toString(), а также copy() и компонентные функции (componentN()), которые облегчают работу с объектами. Использование: Data class широко используется для передачи данных между компонентами программы, в моделях MVC или MVVM, в DTO (Data Transfer Objects) и POJO (Plain Old Java Object) в Java-экосистеме. Sealed Class Это класс, который ограничивает возможность наследования. Другими словами, такие классы позволяют определять ограниченные иерархии классов, где все возможные подклассы известны во время компиляции. Это особенно полезно в сочетании с паттерном when, так как компилятор может проверить, обработаны ли все возможные случаи. Особенности: Ограниченное наследование: Все подклассы данного класса должны быть объявлены в том же файле, что и sealed класс. Использование с `when`: Идеально подходят для использования в выражениях when, поскольку Kotlin знает все возможные подклассы и может гарантировать, что все случаи обработаны.
+**Data Class** — специальный тип класса, предназначенный для хранения данных. Основная цель — содержать данные без выполнения дополнительной логики. Объявляется с ключевым словом `data`.
+
+**Ключевые особенности data class:**
+
+1. **Автоматическая генерация методов**: Kotlin автоматически генерирует:
+   - `equals()` — сравнение по содержимому
+   - `hashCode()` — для hash-коллекций
+   - `toString()` — строковое представление
+   - `copy()` — создание копий с изменениями
+   - `componentN()` — компонентные функции для деструктуризации
+
+2. **Использование**:
+   - Передача данных между компонентами программы
+   - Модели в MVC или MVVM
+   - DTO (Data Transfer Objects)
+   - POJO (Plain Old Java Objects)
+
+3. **Требования**:
+   - Минимум один параметр в primary constructor
+   - Все параметры должны быть `val` или `var`
+
+**Пример data class:**
+```kotlin
+data class Product(
+    val id: Int,
+    val name: String,
+    val price: Double,
+    val category: String
+)
+
+val laptop = Product(1, "MacBook Pro", 2499.99, "Electronics")
+
+// Автоматический toString()
+println(laptop)
+// Product(id=1, name=MacBook Pro, price=2499.99, category=Electronics)
+
+// Автоматический equals() - сравнение по содержимому
+val laptop2 = Product(1, "MacBook Pro", 2499.99, "Electronics")
+println(laptop == laptop2)  // true
+
+// Автоматический hashCode() - работает в hash-коллекциях
+val productSet = setOf(laptop, laptop2)
+println("Set size: ${productSet.size}")  // 1 (дубликаты удалены)
+
+// copy() метод - создание изменённых копий
+val discountedLaptop = laptop.copy(price = 1999.99)
+println(discountedLaptop)
+// Product(id=1, name=MacBook Pro, price=1999.99, category=Electronics)
+
+// Деструктуризация с componentN()
+val (id, name, price, category) = laptop
+println("$name стоит $$price")  // MacBook Pro стоит $2499.99
+```
+
+**Data class в MVC/MVVM:**
+```kotlin
+// Model слой
+data class User(
+    val id: Int,
+    val username: String,
+    val email: String,
+    val firstName: String,
+    val lastName: String,
+    val isActive: Boolean
+) {
+    // Дополнительные методы можно добавлять
+    fun getFullName() = "$firstName $lastName"
+}
+
+// DTO для API
+data class CreateUserRequest(
+    val username: String,
+    val email: String,
+    val password: String,
+    val firstName: String,
+    val lastName: String
+)
+
+data class UserResponse(
+    val success: Boolean,
+    val user: User?,
+    val message: String
+)
+
+// ViewModel
+class UserViewModel {
+    private var currentUser: User? = null
+
+    fun createUser(request: CreateUserRequest): UserResponse {
+        val newUser = User(
+            id = 1,
+            username = request.username,
+            email = request.email,
+            firstName = request.firstName,
+            lastName = request.lastName,
+            isActive = true
+        )
+        currentUser = newUser
+
+        return UserResponse(
+            success = true,
+            user = newUser,
+            message = "Пользователь создан успешно"
+        )
+    }
+
+    fun updateUserEmail(newEmail: String): User? {
+        currentUser = currentUser?.copy(email = newEmail)
+        return currentUser
+    }
+}
+```
+
+### Sealed Class
+
+**Sealed Class** — класс, который ограничивает наследование. Позволяет определять ограниченные иерархии классов, где все возможные подклассы известны во время компиляции. Особенно полезен с паттерном `when`, так как компилятор может проверить, что все случаи обработаны.
+
+**Ключевые особенности:**
+
+1. **Ограниченное наследование**: Все подклассы должны быть объявлены в том же файле, что и sealed класс (или в том же модуле в Kotlin 1.5+)
+
+2. **Использование с `when`**: Идеально подходят для `when` выражений, поскольку Kotlin знает все возможные подклассы и может гарантировать exhaustive checking
+
+3. **Типобезопасность**: Обеспечивает compile-time безопасность для представления конечного набора типов
+
+**Пример sealed class:**
+```kotlin
+// Sealed class иерархия
+sealed class Shape {
+    data class Circle(val radius: Double) : Shape()
+    data class Rectangle(val width: Double, val height: Double) : Shape()
+    data class Triangle(val base: Double, val height: Double) : Shape()
+    object Unknown : Shape()
+}
+
+// Расчёт площади - компилятор проверяет все случаи
+fun calculateArea(shape: Shape): Double {
+    return when (shape) {
+        is Shape.Circle -> Math.PI * shape.radius * shape.radius
+        is Shape.Rectangle -> shape.width * shape.height
+        is Shape.Triangle -> 0.5 * shape.base * shape.height
+        Shape.Unknown -> 0.0
+        // else не нужен - компилятор знает все подклассы
+    }
+}
+
+val shapes = listOf(
+    Shape.Circle(5.0),
+    Shape.Rectangle(4.0, 6.0),
+    Shape.Triangle(3.0, 4.0),
+    Shape.Unknown
+)
+
+shapes.forEach { shape ->
+    println("Фигура: $shape")
+    println("Площадь: ${calculateArea(shape)}")
+}
+```
+
+**Sealed class для навигации:**
+```kotlin
+sealed class Screen {
+    object Home : Screen()
+    object Profile : Screen()
+    data class UserDetails(val userId: Int) : Screen()
+    data class Settings(val section: String) : Screen()
+    object Login : Screen()
+}
+
+// Типобезопасная навигация
+fun navigate(screen: Screen) {
+    when (screen) {
+        Screen.Home -> println("Навигация на главный экран")
+        Screen.Profile -> println("Навигация на профиль")
+        is Screen.UserDetails -> {
+            println("Навигация к пользователю ${screen.userId}")
+        }
+        is Screen.Settings -> {
+            println("Навигация в настройки: ${screen.section}")
+        }
+        Screen.Login -> println("Навигация на вход")
+        // Ошибка компиляции если пропущен случай!
+    }
+}
+```
+
+**Продвинутый пример: Sealed class для API ответов:**
+```kotlin
+// Универсальный sealed class для API результатов
+sealed class ApiResponse<out T> {
+    data class Success<T>(
+        val data: T,
+        val statusCode: Int = 200,
+        val headers: Map<String, String> = emptyMap()
+    ) : ApiResponse<T>()
+
+    data class Error(
+        val statusCode: Int,
+        val message: String,
+        val errors: List<String> = emptyList()
+    ) : ApiResponse<Nothing>()
+
+    object Loading : ApiResponse<Nothing>()
+
+    object NotAuthenticated : ApiResponse<Nothing>()
+}
+
+// Domain модели
+data class Article(
+    val id: Int,
+    val title: String,
+    val content: String,
+    val author: String,
+    val publishedAt: Long
+)
+
+// API сервис
+class ArticleService {
+    fun fetchArticles(): ApiResponse<List<Article>> {
+        return try {
+            val articles = listOf(
+                Article(1, "Основы Kotlin", "Изучаем Kotlin...", "Алиса", System.currentTimeMillis()),
+                Article(2, "Продвинутый Kotlin", "Глубокое погружение...", "Боб", System.currentTimeMillis())
+            )
+            ApiResponse.Success(
+                data = articles,
+                statusCode = 200,
+                headers = mapOf("Content-Type" to "application/json")
+            )
+        } catch (e: Exception) {
+            ApiResponse.Error(500, "Ошибка сервера", listOf(e.message ?: "Неизвестная ошибка"))
+        }
+    }
+}
+
+// UI обработчик
+fun displayArticles(response: ApiResponse<List<Article>>) {
+    when (response) {
+        is ApiResponse.Success -> {
+            println("Успешно! Статус: ${response.statusCode}")
+            response.data.forEach { article ->
+                println("${article.title} от ${article.author}")
+            }
+        }
+        is ApiResponse.Error -> {
+            println("Ошибка ${response.statusCode}: ${response.message}")
+            response.errors.forEach { println("  - $it") }
+        }
+        ApiResponse.Loading -> {
+            println("Загрузка статей...")
+        }
+        ApiResponse.NotAuthenticated -> {
+            println("Войдите чтобы просмотреть статьи")
+        }
+    }
+}
+```
+
+### Комбинирование Data Class и Sealed Class
+
+**Очень распространённый паттерн - sealed class с data подклассами:**
+```kotlin
+// Управление состоянием формы
+data class FormData(
+    val username: String = "",
+    val email: String = "",
+    val password: String = ""
+)
+
+sealed class FormState {
+    object Initial : FormState()
+    data class Editing(val data: FormData) : FormState()
+    data class Validating(val data: FormData) : FormState()
+    data class Valid(val data: FormData) : FormState()
+    data class Invalid(val data: FormData, val errors: List<String>) : FormState()
+    data class Submitting(val data: FormData) : FormState()
+    data class Submitted(val data: FormData, val userId: Int) : FormState()
+}
+
+fun validateForm(data: FormData): FormState {
+    val errors = mutableListOf<String>()
+
+    if (data.username.length < 3) {
+        errors.add("Имя пользователя должно быть не менее 3 символов")
+    }
+    if (!data.email.contains("@")) {
+        errors.add("Неверный email адрес")
+    }
+    if (data.password.length < 8) {
+        errors.add("Пароль должен быть не менее 8 символов")
+    }
+
+    return if (errors.isEmpty()) {
+        FormState.Valid(data)
+    } else {
+        FormState.Invalid(data, errors)
+    }
+}
+
+fun handleFormState(state: FormState) {
+    when (state) {
+        FormState.Initial -> {
+            println("Форма готова к вводу")
+        }
+        is FormState.Editing -> {
+            println("Редактирование формы: ${state.data.username}")
+        }
+        is FormState.Validating -> {
+            println("Валидация формы...")
+        }
+        is FormState.Valid -> {
+            println("Форма валидна! Готова к отправке")
+        }
+        is FormState.Invalid -> {
+            println("Ошибки в форме:")
+            state.errors.forEach { println("  - $it") }
+        }
+        is FormState.Submitting -> {
+            println("Отправка формы для ${state.data.username}...")
+        }
+        is FormState.Submitted -> {
+            println("Форма отправлена! ID пользователя: ${state.userId}")
+        }
+    }
+}
+```
+
+### Сравнительная таблица
+
+| Характеристика | Data Class | Sealed Class |
+|----------------|-----------|--------------|
+| **Назначение** | Хранение данных | Ограниченная иерархия типов |
+| **Автогенерация** | equals, hashCode, toString, copy, componentN | Нет |
+| **Наследование** | Может быть final или open | Всегда open для подклассов |
+| **Подклассы** | Не ограничены | Ограничены файлом/модулем |
+| **Применение** | Модели, DTOs, POJOs | Состояния, результаты, события |
+| **When exhaustive** | Нет | Да |
+| **Деструктуризация** | Да (componentN) | Нет (только у data подклассов) |
+| **copy()** | Да | Нет (только у data подклассов) |
+
+### Краткий ответ
+
+**Data Class**: Специальный класс для хранения данных. Автоматически генерирует `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()`. Требования: минимум один параметр в primary constructor, все параметры `val`/`var`. Используется для моделей данных, DTOs, API responses, MVC/MVVM моделей.
+
+**Sealed Class**: Ограничивает наследование одним файлом/модулем. Создаёт типобезопасные иерархии с exhaustive when-проверками. Все подклассы известны на этапе компиляции. Используется для UI состояний (Loading/Success/Error), Result типов, навигационных событий, command паттернов.
+
+**Комбинирование**: Очень распространён паттерн sealed класса с data подклассами для управления состояниями с данными (например, `sealed class UiState` с `data class Success(val data: T)`).

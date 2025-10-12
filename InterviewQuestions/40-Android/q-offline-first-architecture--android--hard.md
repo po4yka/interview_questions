@@ -9,7 +9,7 @@ tags:
   - room
   - workmanager
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # How to Implement Offline-First Architecture in Android
@@ -17,13 +17,19 @@ status: reviewed
 **Сложность**: 🔴 Hard
 **Источник**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> 
 
-### Question
+# Вопрос (RU)
+> 
+
+---
+
+## Answer (EN)
+# Question (EN)
 How do you design and implement an offline-first architecture in Android? What are the key components, patterns, and best practices?
 
-### Answer
-
+## Answer (EN)
 Offline-first architecture ensures apps work seamlessly without network connectivity, syncing data when connection is available. This approach improves user experience, reduces data usage, and provides resilience to network failures.
 
 #### 1. **Architecture Overview**
@@ -660,13 +666,13 @@ fun NetworkStatusIndicator(status: NetworkStatus) {
 
 ---
 
-## Русский
 
-### Вопрос
+
+## Ответ (RU)
+# Вопрос (RU)
 Как спроектировать и реализовать offline-first архитектуру в Android? Каковы ключевые компоненты, паттерны и лучшие практики?
 
-### Ответ
-
+## Ответ (RU)
 Offline-first архитектура обеспечивает бесперебойную работу приложений без сетевого подключения, синхронизируя данные при доступности соединения.
 
 #### Ключевые компоненты:

@@ -11,7 +11,7 @@ subtopics:
   - dependency-management
   - build-variants
 difficulty: medium
-status: reviewed
+status: draft
 source: Kirchhoff repo
 ---
 
@@ -21,8 +21,7 @@ source: Kirchhoff repo
 
 **Russian**: Что вы знаете о Gradle Version Catalog?
 
-## Answer
-
+## Answer (EN)
 **Gradle version catalogs** enable you to add and maintain dependencies and plugins in a scalable way. Using Gradle version catalogs makes managing dependencies and plugins easier when you have multiple modules. Instead of hardcoding dependency names and versions in individual build files and updating each entry whenever you need to upgrade a dependency, you can create a central **version catalog** of dependencies that various modules can reference in a type-safe way with Android Studio assistance.
 
 ## Advantages of Version Catalogs
@@ -311,8 +310,7 @@ When migrating to version catalogs:
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 **Gradle Version Catalog** - это механизм для управления зависимостями и плагинами в масштабируемом виде. Вместо жесткого кодирования имен и версий зависимостей в отдельных файлах сборки, можно создать центральный каталог версий, на который различные модули могут ссылаться типобезопасным способом с поддержкой автодополнения в Android Studio.
 
 ## Преимущества Version Catalog

@@ -12,7 +12,7 @@ language_tags:
   - en
   - ru
 original_language: en
-status: reviewed
+status: draft
 source: Kotlin Coroutines Interview Questions PDF
 tags:
   - kotlin
@@ -23,9 +23,9 @@ tags:
   - cancellation
   - difficulty/medium
 ---
-## Question (EN)
+# Question (EN)
 > How do you ensure proper resource cleanup when a coroutine is cancelled?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как обеспечить правильную очистку ресурсов при отмене корутины?
 
 ---

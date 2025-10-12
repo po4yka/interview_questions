@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [android, optimization, app-size, resources, proguard, app-bundles, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What ways do you know to reduce the size of an application?
-## Вопрос (RU)
+# Вопрос (RU)
 > Какие способы уменьшения размера приложения вы знаете?
 
 ---

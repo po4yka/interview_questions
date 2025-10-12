@@ -262,4 +262,4 @@ class UserRepositoryImpl(
 - [Guide to app architecture](https://developer.android.com/topic/architecture)
 
 ## Related Questions
-- [[q-mvvm--android--medium]]
+- [[q-mvvm-pattern--android--medium]]

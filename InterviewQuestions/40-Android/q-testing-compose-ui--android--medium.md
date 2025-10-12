@@ -7,15 +7,14 @@ tags:
   - ui-testing
   - compose-test
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Testing Compose UI
 
 **English**: How do you test Jetpack Compose UI? What are the key APIs and best practices?
 
-## Answer
-
+## Answer (EN)
 **Compose UI testing** использует декларативный API для поиска, взаимодействия и верификации composable функций.
 
 ### Основной setup

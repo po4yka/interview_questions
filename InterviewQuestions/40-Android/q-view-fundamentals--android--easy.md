@@ -9,15 +9,14 @@ tags:
   - view-hierarchy
   - difficulty/easy
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # What is a View in Android? / Что такое View в Android?
 
 **English**: What's View?
 
-## Answer
-
+## Answer (EN)
 `View` represents the **basic building block for user interface components** in Android. A View occupies a rectangular area on the screen and is responsible for drawing and event handling.
 
 **View is the base class for widgets**, which are used to create interactive UI components such as:
@@ -366,8 +365,7 @@ class CustomView @JvmOverloads constructor(
 - [View](https://developer.android.com/reference/android/view/View)
 - [The life cycle of a view in Android](https://proandroiddev.com/the-life-cycle-of-a-view-in-android-6a2c4665b95e)
 
-## Ответ
-
+## Ответ (RU)
 `View` представляет собой **основной строительный блок для компонентов пользовательского интерфейса** в Android. View занимает прямоугольную область на экране и отвечает за отрисовку и обработку событий.
 
 **View является базовым классом для виджетов**, которые используются для создания интерактивных UI компонентов, таких как:

@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: [video-streaming, image-processing, caching, offline-first]
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [system-design, instagram, stories, media, video, architecture, android, difficulty/hard]
 ---
-## Question (EN)
+# Question (EN)
 > How would you design the Instagram Stories feature for Android?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как бы вы спроектировали функцию Instagram Stories для Android?
 
 ---

@@ -8,15 +8,14 @@ tags:
   - architecture
   - scheduled-tasks
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is WorkManager?
 
 **Russian**: Что такое WorkManager?
 
-## Answer
-
+## Answer (EN)
 ### Definition
 
 **WorkManager** is an API that makes it easy to schedule **deferrable, asynchronous tasks** that are expected to run **even if the app exits or the device restarts**.

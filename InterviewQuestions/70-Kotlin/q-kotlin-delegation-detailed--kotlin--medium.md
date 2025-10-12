@@ -465,4 +465,4 @@ class User {
 
 ## Related Questions
 - [[q-kotlin-delegation--programming-languages--easy]]
-- [[q-lazy-lateinit-kotlin--kotlin--medium]]
+- [[q-lazy-vs-lateinit--kotlin--medium]]

@@ -6,15 +6,14 @@ tags:
   - collections
   - memory-optimization
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Примитивные коллекции Map в Android
 
 **English**: Primitive Map Collections in Android (SparseArray, SparseIntArray, SparseBooleanArray, LongSparseArray)
 
-## Answer
-
+## Answer (EN)
 В Android существуют специализированные Map-коллекции, которые позволяют хранить примитивные типы данных без автоупаковки (boxing), что значительно улучшает производительность и снижает потребление памяти. Обычные `HashMap<Int, Int>` в Kotlin используют автоупаковку примитивов в объекты (Integer), что увеличивает потребление памяти и замедляет работу приложения.
 
 ### Проблема автоупаковки в стандартных Map

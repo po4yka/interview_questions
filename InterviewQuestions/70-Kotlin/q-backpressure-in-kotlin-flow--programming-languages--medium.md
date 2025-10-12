@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: [q-kotlin-flow-basics--kotlin--medium, q-debounce-throttle-flow--kotlin--medium]
 
@@ -26,13 +26,12 @@ updated: 2025-10-07
 
 tags: [kotlin, flow, backpressure, buffer, conflate, operators, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What is Back Pressure in Kotlin Flow? What strategies exist to handle it?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое Back Pressure в Kotlin Flow? Какие стратегии существуют для его обработки?
 
-## Answer
-
+## Answer (EN)
 **Back Pressure** is a data flow control mechanism that prevents consumer overload when the producer sends data too quickly.
 
 Kotlin Flow and Reactive Streams have strategies for managing Back Pressure:

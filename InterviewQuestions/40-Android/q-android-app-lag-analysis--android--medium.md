@@ -9,20 +9,20 @@ tags:
   - profiling
   - strictmode
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Why Does Android App Lag? Analysis and Solutions
 
-**Сложность**: 🟡 Medium
-**Источник**: Amit Shekhar Android Interview Questions
+# Question (EN)
+> Why does an Android app lag? How do you identify and fix performance issues causing UI stuttering and slowness?
 
-## English
+# Вопрос (RU)
+> Почему Android-приложение тормозит? Как выявить и исправить проблемы производительности, вызывающие зависания UI и медленную работу?
 
-### Question
-Why does an Android app lag? How do you identify and fix performance issues causing UI stuttering and slowness?
+---
 
-### Answer
+## Answer (EN)
 
 App lag occurs when the UI thread is blocked or frame rendering exceeds 16ms (60 FPS target). Understanding root causes and using proper diagnostic tools is essential for smooth user experience.
 
@@ -587,12 +587,7 @@ class TrackedOperation {
 
 ---
 
-## Русский
-
-### Вопрос
-Почему Android-приложение тормозит? Как выявить и исправить проблемы производительности, вызывающие подтормаживания UI?
-
-### Ответ
+## Ответ (RU)
 
 Торможение приложения возникает, когда UI-поток блокируется или рендеринг кадра превышает 16ms (цель 60 FPS).
 

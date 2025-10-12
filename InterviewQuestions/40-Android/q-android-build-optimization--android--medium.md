@@ -8,20 +8,20 @@ tags:
   - ksp
   - performance
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Android Build Optimization
 
-**Сложность**: 🟡 Medium
-**Источник**: Amit Shekhar Android Interview Questions
+# Question (EN)
+> How do you optimize Android build times? What are the best practices and techniques to speed up Gradle builds?
 
-## English
+# Вопрос (RU)
+> Как оптимизировать время сборки Android? Какие есть best practices и техники для ускорения Gradle-сборок?
 
-### Question
-How do you optimize Android build times? What are the best practices and techniques to speed up Gradle builds?
+---
 
-### Answer
+## Answer (EN)
 
 Build optimization is crucial for developer productivity. Long build times slow down development iterations, testing, and CI/CD pipelines. A comprehensive optimization strategy can reduce build times by 50-80%.
 
@@ -602,12 +602,7 @@ buildTypes {
 
 ---
 
-## Русский
-
-### Вопрос
-Как оптимизировать время сборки Android? Каковы лучшие практики и техники ускорения Gradle сборок?
-
-### Ответ
+## Ответ (RU)
 
 Оптимизация сборки критична для продуктивности разработчиков. Комплексная стратегия может сократить время на 50-80%.
 

@@ -11,15 +11,20 @@ tags:
   - solid
   - srp
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что такое принципы SOLID?
 
-**English**: What are the SOLID principles?
+# Question (EN)
+> What are the SOLID principles?
 
-## Answer
+# Вопрос (RU)
+> Что такое принципы SOLID?
 
+---
+
+## Answer (EN)
 **SOLID** is an acronym for **five fundamental principles of object-oriented programming and design** that improve code **readability, scalability, maintainability**, and simplify **testing and refactoring**.
 
 These principles were formulated and popularized by **Robert C. Martin (Uncle Bob)**.
@@ -718,8 +723,7 @@ class UserViewModel(
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Принципы SOLID — это пять основных принципов объектно-ориентированного программирования и проектирования, направленные на улучшение читаемости, масштабируемости и поддерживаемости кода, а также упрощение его тестирования и рефакторинга.
 
 Эти принципы были сформулированы и популяризированы Робертом Мартином (Uncle Bob) и являются акронимом:

@@ -9,15 +9,14 @@ tags:
   - process-priority
   - services
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Можно ли поднять приоритет процесса?
 
 **English**: Can you raise the priority of a process?
 
-## Answer
-
+## Answer (EN)
 **Yes**, you can raise the priority of a process in Android using **`startForeground()`** in Services. This makes the service run as a **foreground service**, ensuring it has **high priority** and is protected from being killed by the system.
 
 ---
@@ -502,8 +501,7 @@ jobScheduler.schedule(job)
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 **Да**, можно поднять приоритет процесса используя **`startForeground()`** в сервисах. Это позволяет сервису работать как **foreground service**, обеспечивая его **высокий приоритет** и защиту от уничтожения системой.
 
 **Как это работает:**

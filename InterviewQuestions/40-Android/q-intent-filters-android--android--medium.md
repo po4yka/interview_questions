@@ -13,7 +13,7 @@ subtopics:
   - activity
   - manifest
 difficulty: medium
-status: reviewed
+status: draft
 source: Kirchhoff-Android-Interview-Questions
 ---
 
@@ -23,8 +23,7 @@ source: Kirchhoff-Android-Interview-Questions
 
 **Russian**: Что вы знаете о фильтрах намерений в Android?
 
-## Answer
-
+## Answer (EN)
 **Intent Filter** is an expression in an app's manifest file that specifies the type of intents that a component would like to receive. It allows components to declare their capabilities and enables implicit intent resolution in Android.
 
 An app component can have multiple intent filters, each describing different capabilities. Without intent filters, a component can only be started with explicit intents.
@@ -442,8 +441,7 @@ For HTTPS URLs that should open directly in your app, use `android:autoVerify="t
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 **Intent Filter** - это выражение в манифесте приложения, которое определяет типы намерений (intents), которые компонент готов принимать. Он позволяет компонентам объявлять свои возможности и обеспечивает разрешение неявных намерений в Android.
 
 Компонент приложения может иметь несколько фильтров намерений, каждый из которых описывает различные возможности. Без фильтров намерений компонент может быть запущен только с помощью явных намерений.

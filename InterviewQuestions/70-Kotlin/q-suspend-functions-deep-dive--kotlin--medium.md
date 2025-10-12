@@ -6,15 +6,14 @@ tags:
   - concurrency
   - cps
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Suspend Functions - Deep Dive
 
 **English**: Explain how suspend functions work in Kotlin coroutines. What does the `suspend` keyword do?
 
-## Answer
-
+## Answer (EN)
 **Suspend функции** - это функции, которые могут **приостанавливать** (suspend) выполнение без блокировки потока. Ключевое слово `suspend` превращает функцию в state machine, позволяя ей останавливаться в определенных точках и возобновляться позже на любом потоке.
 
 ### Что делает suspend keyword

@@ -7,14 +7,26 @@ tags:
   - data-storage
   - optimization
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как реализовать кэширование в Android?
 
-**English**: How to implement caching in Android?
+# Question (EN)
+> How to implement caching in Android?
 
-## Answer
+# Вопрос (RU)
+> Как реализовать кэширование в Android?
+
+---
+
+## Answer (EN)
+
+Android caching strategies: **SharedPreferences** for simple key-value data, **Room Database** for structured data with TTL, **Retrofit + OkHttp** for HTTP caching with offline support, **Glide** for image caching, **LruCache** for in-memory caching, **DataStore** for preferences. Patterns: Cache-Aside (lazy load), Write-Through (update cache + source), Write-Behind (async writes), Refresh-Ahead (proactive refresh). Multi-level caching: Memory → Disk → Network. Implement TTL, cache invalidation, and monitoring for optimal performance.
+
+---
+
+## Ответ (RU)
 
 Создание кэша в Android приложении помогает улучшить производительность и UX, сохраняя данные локально для быстрого доступа. В зависимости от типа данных и потребностей приложения, можно использовать различные методы кэширования.
 
@@ -638,5 +650,3 @@ class CacheMetrics {
     }
 }
 ```
-
-**English**: Android caching strategies: **SharedPreferences** for simple key-value data, **Room Database** for structured data with TTL, **Retrofit + OkHttp** for HTTP caching with offline support, **Glide** for image caching, **LruCache** for in-memory caching, **DataStore** for preferences. Patterns: Cache-Aside (lazy load), Write-Through (update cache + source), Write-Behind (async writes), Refresh-Ahead (proactive refresh). Multi-level caching: Memory → Disk → Network. Implement TTL, cache invalidation, and monitoring for optimal performance.

@@ -9,7 +9,7 @@ tags:
   - turbine
   - mockk
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Unit Testing with Coroutines and Flow
@@ -17,13 +17,19 @@ status: reviewed
 **Сложность**: 🟡 Medium
 **Источник**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> 
 
-### Question
+# Вопрос (RU)
+> 
+
+---
+
+## Answer (EN)
+# Question (EN)
 How do you write unit tests for Kotlin Coroutines and Flow? What are the best practices and common pitfalls?
 
-### Answer
-
+## Answer (EN)
 Testing coroutines and Flow requires special consideration for asynchronous operations, test dispatchers, and timing control. Proper testing ensures code reliability and maintainability.
 
 #### 1. **Setup and Dependencies**
@@ -703,13 +709,13 @@ fun test() = runTest {
 
 ---
 
-## Русский
 
-### Вопрос
+
+## Ответ (RU)
+# Вопрос (RU)
 Как писать unit-тесты для Kotlin Coroutines и Flow? Каковы лучшие практики и распространённые ошибки?
 
-### Ответ
-
+## Ответ (RU)
 Тестирование корутин и Flow требует особого внимания к асинхронным операциям.
 
 #### Ключевые концепции:

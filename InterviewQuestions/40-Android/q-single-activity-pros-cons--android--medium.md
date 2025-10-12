@@ -13,15 +13,14 @@ tags:
   - platform/android
   - single-activity
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие у подхода Single Activity этого подхода + и - ?
 
 **English**: What are the pros and cons of the Single Activity approach?
 
-## Answer
-
+## Answer (EN)
 The **Single Activity approach** means using **one main Activity** for the entire application, with all screens represented as **Fragments**. This contrasts with the traditional multi-Activity approach where each screen is a separate Activity.
 
 ### Architecture Comparison
@@ -516,8 +515,7 @@ No Fragments needed - just composable functions!
 **Verdict:**
 Single Activity is the **modern Android standard** (especially with Navigation Component and Compose), but requires understanding Fragment lifecycle and best practices.
 
-## Ответ
-
+## Ответ (RU)
 **Подход Single Activity** означает использование **одной основной Activity** для всего приложения, где все экраны представлены как **Fragment**. Это противоположность традиционному подходу с множеством Activity, где каждый экран - отдельная Activity.
 
 ### Плюсы (Advantages)

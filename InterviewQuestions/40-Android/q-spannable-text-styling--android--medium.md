@@ -8,15 +8,14 @@ tags:
   - textview
   - difficulty/medium
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Spannable Text in Android / Spannable текст в Android
 
 **English**: What is Spannable?
 
-## Answer
-
+## Answer (EN)
 **Spannable** is an interface for text to which **markup objects can be attached and detached**. It's used for **styling text** at runtime, allowing you to apply formatting to whole paragraphs or specific parts of text.
 
 Spannable enables you to:
@@ -429,8 +428,7 @@ fun formatMessage(username: String, message: String, timestamp: Long): Spannable
 - [Android Spannable documentation](https://developer.android.com/reference/android/text/Spannable)
 - [Spantastic text styling with Spans](https://medium.com/androiddevelopers/spantastic-text-styling-with-spans-17b0c16b4568)
 
-## Ответ
-
+## Ответ (RU)
 **Spannable** — это интерфейс для текста, к которому можно **прикреплять и открепять объекты разметки**. Он используется для **стилизации текста** во время выполнения, позволяя применять форматирование к целым абзацам или конкретным частям текста.
 
 Spannable позволяет:

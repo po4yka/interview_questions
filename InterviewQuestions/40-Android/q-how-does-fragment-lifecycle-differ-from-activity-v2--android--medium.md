@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How does Fragment lifecycle differ from Activity?
 
-## Answer
-
+## Answer (EN)
 Fragment lifecycle is more complex than Activity lifecycle because **Fragments have additional lifecycle states related to their View and their attachment to an Activity**. Fragments have 11 lifecycle callbacks compared to Activity's 7.
 
 ### Key Differences
@@ -485,7 +484,7 @@ class SafeFragment : Fragment() {
 4. Fragment can be on **back stack** with destroyed views
 5. Fragment requires careful **memory leak prevention** (binding cleanup)
 
-## Answer (RU)
+## Ответ (RU)
 
 Жизненный цикл Fragment сложнее, чем у Activity, потому что Fragment имеет дополнительные состояния, связанные с View и прикреплением к Activity. У Fragment 11 коллбэков жизненного цикла против 7 у Activity.
 

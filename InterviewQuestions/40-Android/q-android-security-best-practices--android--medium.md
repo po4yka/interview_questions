@@ -13,17 +13,21 @@ subtopics:
   - keystore-crypto
   - network-security-config
 difficulty: medium
-status: reviewed
+status: draft
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20security%20best%20practices%20you%20know.md
 ---
 
 # Android Security Best Practices / Лучшие практики безопасности Android
 
-**English**: What security best practices do you know?
+# Question (EN)
+> What security best practices do you know?
 
-**Russian**: Какие лучшие практики безопасности вы знаете?
+# Вопрос (RU)
+> Какие лучшие практики безопасности вы знаете?
 
-## Answer
+---
+
+## Answer (EN)
 
 ## Show an app chooser
 
@@ -291,6 +295,8 @@ val client = OkHttpClient.Builder()
 - Perform penetration testing
 - Use static analysis tools (Android Lint, Detekt)
 - Monitor security advisories
+
+---
 
 ## Ответ (RU)
 

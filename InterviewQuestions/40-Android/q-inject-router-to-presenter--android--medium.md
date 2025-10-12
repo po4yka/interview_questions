@@ -11,7 +11,7 @@ tags:
   - koin
   - platform/android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to inject Router directly into Presenter?
@@ -20,8 +20,7 @@ status: reviewed
 
 **English**: What to use to inject router directly into presenter?
 
-## Answer
-
+## Answer (EN)
 To inject a router into a presenter, use **Dependency Injection (DI)** frameworks:
 
 1. **Hilt** (recommended) - Official Android DI
@@ -666,8 +665,7 @@ class Presenter @Inject constructor(
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Для внедрения роутера в презентер используйте **Dependency Injection (DI)**:
 
 1. **Hilt** (рекомендуется) - официальный Android DI

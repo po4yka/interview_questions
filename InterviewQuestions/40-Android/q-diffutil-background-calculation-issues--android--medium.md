@@ -7,15 +7,14 @@ tags:
   - performance
   - multithreading
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Проблемы расчета DiffUtil в фоновом потоке
 
 **English**: When does DiffUtil background calculation work poorly?
 
-## Answer
-
+## Answer (EN)
 Расчет DiffUtil в фоновом потоке может работать плохо при следующих условиях, которые приводят к некорректным результатам, проблемам производительности или race conditions.
 
 ### 1. Модификация данных во время расчета

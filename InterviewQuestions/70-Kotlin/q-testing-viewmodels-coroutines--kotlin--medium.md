@@ -6,15 +6,14 @@ tags:
   - viewmodel
   - unit-testing
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Testing ViewModels with Coroutines
 
 **English**: How do you properly test ViewModels that use coroutines? What are the common patterns and pitfalls?
 
-## Answer
-
+## Answer (EN)
 Тестирование **ViewModel** с корутинами требует специальной настройки для контроля выполнения корутин и времени в тестовой среде.
 
 ### Основная проблема

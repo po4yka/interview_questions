@@ -7,15 +7,14 @@ tags:
   - navigation
   - deeplink
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как открыть Activity или Fragment из push уведомления?
 
 **English**: How to open a specific Activity or Fragment from a push notification?
 
-## Answer
-
+## Answer (EN)
 Чтобы открыть нужную Activity или фрагмент из push-уведомления в Android, необходимо настроить обработку данных из уведомления и создать Intent с правильной навигацией.
 
 ### 1. Настройка Firebase Cloud Messaging (FCM)

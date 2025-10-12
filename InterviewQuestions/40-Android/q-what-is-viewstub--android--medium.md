@@ -8,15 +8,14 @@ tags:
   - lazy-loading
   - optimization
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is ViewStub?
 
 **Russian**: Что такое ViewStub?
 
-## Answer
-
+## Answer (EN)
 ### Definition
 
 A **ViewStub** is an **invisible, zero-sized View** that can be used to **lazily inflate layout resources at runtime**.

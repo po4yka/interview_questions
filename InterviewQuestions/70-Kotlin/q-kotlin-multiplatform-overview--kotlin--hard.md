@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [kotlin, kotlin-multiplatform, kmp, cross-platform, native, difficulty/hard]
 ---
-## Question (EN)
+# Question (EN)
 > Kotlin Multiplatform - How does it work?
-## Вопрос (RU)
+# Вопрос (RU)
 > Kotlin Multiplatform - Как это работает?
 
 ---

@@ -7,15 +7,14 @@ tags:
   - architecture
   - best-practices
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # State Hoisting в Jetpack Compose
 
 **English**: What is state hoisting in Jetpack Compose and why is it considered a best practice for building reusable components?
 
-## Answer
-
+## Answer (EN)
 **State hoisting** (подъем состояния) — это паттерн в Compose, где состояние перемещается из компонента наверх к его caller. Компонент становится **stateless** (без состояния), получая значение и callback для изменения. Это делает компоненты переиспользуемыми, тестируемыми и предсказуемыми.
 
 ### Проблема: Stateful компонент

@@ -8,14 +8,26 @@ tags:
   - mockito
   - quality-assurance
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Методы тестирования Android приложений
 
-**English**: What testing methods are used in Android besides UI tests?
+# Question (EN)
+> What testing methods are used in Android besides UI tests?
 
-## Answer
+# Вопрос (RU)
+> Какие методы тестирования используются в Android кроме UI тестов?
+
+---
+
+## Answer (EN)
+
+Android testing strategies include: **Unit tests** (JUnit, Mockito for logic), **Integration tests** (Robolectric, Room tests for module interaction), **UI tests** (Espresso, UI Automator for end-to-end flows), **Regression tests** (automated suites), **Performance tests** (Profiler, Benchmark), **Static analysis** (Lint, Detekt, SonarQube), **Security tests** (ProGuard, certificate pinning), **Snapshot tests** (Screenshot testing). Follow testing pyramid: 70% unit, 20% integration, 10% UI. Use Given-When-Then pattern for clear tests.
+
+---
+
+## Ответ (RU)
 
 Для проверки кода на наличие багов в Android приложениях кроме UI тестов применяются различные виды тестирования и инструменты. Эти методы помогают обнаружить ошибки на разных уровнях и стадиях разработки.
 
@@ -638,5 +650,3 @@ android {
 // Integration: 50-60%
 // UI tests: 20-30%
 ```
-
-**English**: Android testing strategies include: **Unit tests** (JUnit, Mockito for logic), **Integration tests** (Robolectric, Room tests for module interaction), **UI tests** (Espresso, UI Automator for end-to-end flows), **Regression tests** (automated suites), **Performance tests** (Profiler, Benchmark), **Static analysis** (Lint, Detekt, SonarQube), **Security tests** (ProGuard, certificate pinning), **Snapshot tests** (Screenshot testing). Follow testing pyramid: 70% unit, 20% integration, 10% UI. Use Given-When-Then pattern for clear tests.

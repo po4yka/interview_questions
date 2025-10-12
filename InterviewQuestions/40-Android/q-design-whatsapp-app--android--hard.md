@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: [real-time-updates, websocket, database-design, offline-first]
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [system-design, whatsapp, messaging, real-time, architecture, scalability, android, difficulty/hard]
 ---
-## Question (EN)
+# Question (EN)
 > How would you design a WhatsApp-like messaging application for Android?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как бы вы спроектировали мессенджер, подобный WhatsApp, для Android?
 
 ---

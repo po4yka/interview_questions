@@ -6,15 +6,14 @@ tags:
   - appwidget
   - home-screen
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Android Home Screen Widgets / Виджеты главного экрана Android
 
 **English**: What's a Widget?
 
-## Answer
-
+## Answer (EN)
 **Home screen widgets** are broadcast receivers that provide **interactive components** primarily used on the Android home screen. They typically display some kind of data and allow the user to perform actions with them.
 
 Widgets are mini app views that can be embedded in other applications (like the home screen) and receive periodic updates. They provide users with quick access to app functionality without opening the full app.
@@ -447,8 +446,7 @@ class WidgetUpdateService : Service() {
 - [App widgets overview](https://developer.android.com/guide/topics/appwidgets/overview)
 - [Android widgets tutorial](https://www.vogella.com/tutorials/AndroidWidgets/article.html)
 
-## Ответ
-
+## Ответ (RU)
 **Виджеты главного экрана** — это broadcast receivers, которые предоставляют **интерактивные компоненты**, в основном используемые на главном экране Android. Они обычно отображают какие-то данные и позволяют пользователю выполнять с ними действия.
 
 Виджеты — это мини-представления приложений, которые могут быть встроены в другие приложения (например, главный экран) и получать периодические обновления. Они предоставляют пользователям быстрый доступ к функциональности приложения без открытия полного приложения.

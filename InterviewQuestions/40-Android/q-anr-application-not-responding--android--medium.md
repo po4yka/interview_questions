@@ -2,7 +2,7 @@
 id: 202510051234001
 title: "ANR (Application Not Responding) / ANR (Приложение не отвечает)"
 topic: android
-status: reviewed
+status: draft
 created: 2025-10-05
 updated: 2025-10-05
 difficulty: medium
@@ -36,7 +36,15 @@ connections: []
 
 # ANR (Application Not Responding) / ANR (Приложение не отвечает)
 
-## English
+# Question (EN)
+> What is ANR (Application Not Responding)?
+
+# Вопрос (RU)
+> Что такое ANR (Application Not Responding)?
+
+---
+
+## Answer (EN)
 
 ### Definition
 
@@ -152,7 +160,7 @@ override fun onCreate(savedInstanceState: Bundle) {
 
 ---
 
-## Русский
+## Ответ (RU)
 
 ### Определение
 

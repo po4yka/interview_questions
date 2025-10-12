@@ -3,15 +3,14 @@ topic: android
 tags:
   - android
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Why user data may disappear on screen rotation?
 
 **Russian**: Почему пользовательские данные могут исчезнуть при повороте экрана?
 
-## Answer
-
+## Answer (EN)
 User data disappears on screen rotation because **Android destroys and recreates the Activity** during configuration changes. If the state isn't properly saved and restored, all transient data (variables, user input, UI state) is lost.
 
 ### Why Activity is Recreated
@@ -611,8 +610,7 @@ This ensures data survives both configuration changes and process death.
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Пользовательские данные исчезают при повороте экрана, потому что **Android уничтожает и пересоздаёт Activity** при изменении конфигурации. Если состояние не сохранено должным образом, все временные данные (переменные, пользовательский ввод, UI состояние) теряются.
 
 ### Почему Activity пересоздаётся

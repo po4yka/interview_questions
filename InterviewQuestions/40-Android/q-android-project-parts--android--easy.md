@@ -9,14 +9,28 @@ tags:
   - project-structure
   - resources
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Из каких частей состоит проект и какая часть за что отвечает?
 
-**English**: What parts make up an Android project and what is each part responsible for?
+# Question (EN)
+> What parts make up an Android project and what is each part responsible for?
 
-## Answer
+# Вопрос (RU)
+> Из каких частей состоит Android-проект и какая часть за что отвечает?
+
+---
+
+## Answer (EN)
+
+Android project structure includes: **app module** (main code), **manifests** (AndroidManifest.xml - app configuration), **java/kotlin** (source code), **res** (resources - layouts, drawables, strings, values), **assets** (raw files), **Gradle Scripts** (build configuration), and **libs** (external libraries).
+
+**Key folders**: src/main/java (code), res/layout (UI), res/values (strings/colors/dimensions), res/drawable (images), AndroidManifest.xml (app declaration).
+
+---
+
+## Ответ (RU)
 
 An Android project consists of:
 
@@ -649,8 +663,7 @@ sdk.dir=/Users/username/Library/Android/sdk
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Проект Android состоит из:
 
 - **`src/`** — исходный код (Kotlin/Java)

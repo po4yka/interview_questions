@@ -8,7 +8,7 @@ tags:
   - background-work
   - foreground-service
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What are services used for?
@@ -17,8 +17,7 @@ status: reviewed
 
 **English**: What are services used for?
 
-## Answer
-
+## Answer (EN)
 **Services** are Android components used for **long-running operations in the background** without a user interface. Main use cases:
 
 1. **Music playback** - play music while app is in background
@@ -683,8 +682,7 @@ alarmManager.setExact(
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 **Сервисы** используются для **длительных операций в фоне** без пользовательского интерфейса. Основные случаи использования:
 
 1. **Воспроизведение музыки** - играть музыку в фоне

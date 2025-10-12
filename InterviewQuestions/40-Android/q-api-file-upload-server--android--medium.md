@@ -10,14 +10,20 @@ tags:
   - okhttp
   - retrofit
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какое API или другие инструменты будешь использовать для отправления файлов на сервер?
 
-**English**: What API or tools would you use for uploading files to a server?
+# Question (EN)
+> What API or tools would you use for uploading files to a server?
 
-## Answer
+# Вопрос (RU)
+> Какое API или другие инструменты будешь использовать для отправления файлов на сервер?
+
+---
+
+## Answer (EN)
 
 For uploading files to a server in Android, you can use several APIs and libraries:
 
@@ -34,12 +40,12 @@ For uploading files to a server in Android, you can use several APIs and librari
 ### Why Retrofit?
 
 **Advantages:**
-- ✅ Type-safe API declarations
-- ✅ Automatic JSON/XML conversion
-- ✅ Built on top of OkHttp (powerful)
-- ✅ Easy multipart file upload
-- ✅ Coroutines support
-- ✅ Extensive documentation
+- Type-safe API declarations
+- Automatic JSON/XML conversion
+- Built on top of OkHttp (powerful)
+- Easy multipart file upload
+- Coroutines support
+- Extensive documentation
 
 ---
 
@@ -639,7 +645,7 @@ suspend fun compressImage(file: File): File = withContext(Dispatchers.IO) {
 
 ---
 
-## Ответ
+## Ответ (RU)
 
 Для отправки файлов на сервер в Android можно использовать:
 

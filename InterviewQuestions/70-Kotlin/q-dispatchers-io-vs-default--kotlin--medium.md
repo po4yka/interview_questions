@@ -6,14 +6,36 @@ tags:
   - threading
   - concurrency
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Dispatchers.IO vs Dispatchers.Default
 
-**English**: What's the difference between Dispatchers.IO and Dispatchers.Default? When should you use each?
+# Question (EN)
+> What's the difference between Dispatchers.IO and Dispatchers.Default? When should you use each?
 
-## Answer
+# Вопрос (RU)
+> В чём разница между Dispatchers.IO и Dispatchers.Default? Когда использовать каждый из них?
+
+---
+
+## Answer (EN)
+
+**Dispatchers.IO** and **Dispatchers.Default** are two thread pools optimized for different workloads:
+
+**Dispatchers.IO**: For I/O-bound operations (network, disk, database). Thread pool size: 64+ threads (expandable). Use for: HTTP requests, file read/write, database queries, blocking system calls. Threads spend time waiting (not using CPU).
+
+**Dispatchers.Default**: For CPU-bound computations. Thread pool size: number of CPU cores (4-8). Use for: JSON parsing, sorting large lists, image processing, encryption, complex calculations. Threads actively use CPU.
+
+**Why different sizes**: IO operations block threads waiting for responses (network/disk), so many threads OK - they don't burden CPU. CPU operations fully utilize cores, so more threads than cores = context switching overhead.
+
+**Common mistakes**: Using IO for CPU work (wastes IO pool), using Default for I/O (thread starvation risk), unnecessary nested withContext, blocking threads with Thread.sleep.
+
+**Best practices**: Use IO for all blocking operations. Use Default for computations. Combine dispatchers in workflows (download on IO, parse on Default, save on IO). Use `limitedParallelism()` for custom pools. In tests, runTest replaces all dispatchers with TestDispatcher.
+
+---
+
+## Ответ (RU)
 
 **Dispatchers.IO** и **Dispatchers.Default** - два предустановленных диспетчера для выполнения корутин на разных thread pools с разными характеристиками:
 
@@ -47,10 +69,10 @@ suspend fun saveUser(user: User) = withContext(Dispatchers.IO) {
 ```
 
 **Характеристики Dispatchers.IO**:
-- 📊 Размер пула: **64 потока** (по умолчанию, можно увеличить)
-- ⏸️ Оптимизирован для **блокирующих** I/O операций
-- 🔄 Динамически расширяется при необходимости
-- ⚡ Потоки проводят много времени в состоянии ожидания (waiting)
+- Размер пула: **64 потока** (по умолчанию, можно увеличить)
+- Оптимизирован для **блокирующих** I/O операций
+- Динамически расширяется при необходимости
+- Потоки проводят много времени в состоянии ожидания (waiting)
 
 ### Dispatchers.Default - для CPU работы
 
@@ -77,10 +99,10 @@ suspend fun encryptData(data: ByteArray): ByteArray = withContext(Dispatchers.De
 ```
 
 **Характеристики Dispatchers.Default**:
-- 📊 Размер пула: **равен количеству CPU ядер** (обычно 4-8)
-- 💻 Оптимизирован для **CPU-intensive** вычислений
-- 🚫 НЕ расширяется динамически
-- ⚡ Потоки активно используют CPU
+- Размер пула: **равен количеству CPU ядер** (обычно 4-8)
+- Оптимизирован для **CPU-intensive** вычислений
+- НЕ расширяется динамически
+- Потоки активно используют CPU
 
 ### Почему размер пула разный?
 
@@ -339,10 +361,10 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Dispatchers.Main** (Android/UI):
-- 📱 Выполняется на **Main/UI потоке**
+- Выполняется на **Main/UI потоке**
 - WARNING: НЕЛЬЗЯ делать тяжелую работу
-- - Только UI обновления
-- 🔄 Возврат на Main после withContext автоматический в viewModelScope/lifecycleScope
+- Только UI обновления
+- Возврат на Main после withContext автоматический в viewModelScope/lifecycleScope
 
 ### Thread Pool Exhaustion
 
@@ -575,16 +597,4 @@ class RepositoryTest {
     }
 }
 ```
-
-**English**: **Dispatchers.IO** and **Dispatchers.Default** are two thread pools optimized for different workloads:
-
-**Dispatchers.IO**: For I/O-bound operations (network, disk, database). Thread pool size: 64+ threads (expandable). Use for: HTTP requests, file read/write, database queries, blocking system calls. Threads spend time waiting (not using CPU).
-
-**Dispatchers.Default**: For CPU-bound computations. Thread pool size: number of CPU cores (4-8). Use for: JSON parsing, sorting large lists, image processing, encryption, complex calculations. Threads actively use CPU.
-
-**Why different sizes**: IO operations block threads waiting for responses (network/disk), so many threads OK - they don't burden CPU. CPU operations fully utilize cores, so more threads than cores = context switching overhead.
-
-**Common mistakes**: Using IO for CPU work (wastes IO pool), using Default for I/O (thread starvation risk), unnecessary nested withContext, blocking threads with Thread.sleep.
-
-**Best practices**: Use IO for all blocking operations. Use Default for computations. Combine dispatchers in workflows (download on IO → parse on Default → save on IO). Use `limitedParallelism()` for custom pools. In tests, runTest replaces all dispatchers with TestDispatcher.
 

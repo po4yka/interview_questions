@@ -9,7 +9,7 @@ tags:
   - fcm
   - real-time
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to Implement Real-Time Updates in Android
@@ -17,13 +17,19 @@ status: reviewed
 **Сложность**: 🟡 Medium
 **Источник**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> 
 
-### Question
+# Вопрос (RU)
+> 
+
+---
+
+## Answer (EN)
+# Question (EN)
 How do you implement real-time updates in Android applications? What are the available technologies and best practices?
 
-### Answer
-
+## Answer (EN)
 Real-time updates enable instant data synchronization between server and client, essential for chat apps, collaborative tools, live feeds, and notifications. There are several approaches with different trade-offs.
 
 #### 1. **WebSockets**
@@ -626,13 +632,13 @@ fun ChatScreen(viewModel: ChatViewModel = hiltViewModel()) {
 
 ---
 
-## Русский
 
-### Вопрос
+
+## Ответ (RU)
+# Вопрос (RU)
 Как реализовать обновления в реальном времени в Android-приложениях? Какие доступны технологии и лучшие практики?
 
-### Ответ
-
+## Ответ (RU)
 Обновления в реальном времени обеспечивают мгновенную синхронизацию данных между сервером и клиентом.
 
 #### Технологии:

@@ -7,7 +7,7 @@ tags:
   - fragments
   - lifecycle
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Why Fragment needs separate callback for UI creation?
@@ -16,8 +16,7 @@ status: reviewed
 
 **English**: Why does Fragment have a separate callback for UI creation?
 
-## Answer
-
+## Answer (EN)
 Fragments have separate lifecycle callbacks (`onCreate()` vs `onCreateView()`) because:
 
 1. **Fragment can exist without a UI** (headless fragments)
@@ -612,8 +611,7 @@ class BestPracticeFragment : Fragment() {
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Фрагменты имеют отдельные callback'и для lifecycle (`onCreate()` vs `onCreateView()`) потому что:
 
 1. **Фрагмент может существовать без UI** (headless fragments)

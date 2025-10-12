@@ -2,7 +2,7 @@
 id: 202510051234004
 title: "Fragment Basics / Основы Fragment"
 topic: android
-status: reviewed
+status: draft
 created: 2025-10-05
 updated: 2025-10-05
 difficulty: easy
@@ -35,8 +35,15 @@ connections: []
 
 # Fragment Basics / Основы Fragment
 
-## English
+# Question (EN)
+> 
 
+# Вопрос (RU)
+> 
+
+---
+
+## Answer (EN)
 ### Definition
 
 A `Fragment` represents a reusable portion of your app's UI. A fragment defines and manages its own layout, has its own lifecycle, and can handle its own input events.
@@ -185,8 +192,9 @@ class MyFragment : Fragment() {
 
 ---
 
-## Русский
 
+
+## Ответ (RU)
 ### Определение
 
 `Fragment` представляет собой многократно используемую часть UI вашего приложения. Фрагмент определяет и управляет своим собственным макетом, имеет свой собственный жизненный цикл и может обрабатывать свои собственные события ввода.

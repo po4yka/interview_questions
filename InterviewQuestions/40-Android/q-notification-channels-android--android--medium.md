@@ -7,7 +7,7 @@ aliases:
   - Каналы уведомлений
 date_created: 2025-10-05
 date_modified: 2025-10-05
-status: reviewed
+status: draft
 original_language: en
 language_tags:
   - en
@@ -31,14 +31,12 @@ source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/A
 
 # Notification Channels / Каналы уведомлений
 
-## EN
-
-### Question
+# Question (EN)
+> 
 
 What do you know about notification channels?
 
-### Answer
-
+## Answer (EN)
 A notification is a message that Android displays outside your app's UI to provide the user with reminders, communication from other people, or other timely information from your app. Users can tap the notification to open your app or take an action directly from the notification.
 
 ### Notification Usage
@@ -174,14 +172,12 @@ Notifications should not be the primary communication channel with your users, a
 
 ---
 
-## RU
-
-### Вопрос
+# Вопрос (RU)
+> 
 
 Что вы знаете о каналах уведомлений?
 
-### Ответ
-
+## Ответ (RU)
 Уведомление - это сообщение, которое Android отображает вне пользовательского интерфейса вашего приложения, чтобы предоставить пользователю напоминания, сообщения от других людей или другую своевременную информацию из вашего приложения. Пользователи могут нажать на уведомление, чтобы открыть ваше приложение или выполнить действие непосредственно из уведомления.
 
 ### Использование уведомлений

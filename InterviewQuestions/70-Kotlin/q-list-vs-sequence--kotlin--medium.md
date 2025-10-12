@@ -6,14 +6,69 @@ tags:
   - performance
   - lazy-evaluation
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # List vs Sequence: жадные и ленивые коллекции
 
-**English**: Difference between List and Sequence in Kotlin
+# Question (EN)
+> What is the difference between List and Sequence in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> В чём разница между List и Sequence в Kotlin?
+
+---
+
+## Answer (EN)
+
+**List** is an eager collection where operations execute immediately on all elements, creating intermediate collections. **Sequence** is a lazy collection where operations execute per-element through the entire chain without intermediate collections.
+
+**Key differences:**
+
+| Aspect | List | Sequence |
+|--------|------|----------|
+| **Execution** | Eager (immediate) | Lazy (on-demand) |
+| **Intermediate collections** | Created | Not created |
+| **Memory** | More | Less |
+| **Small data (<100)** | Faster | Slower (overhead) |
+| **Large data (>1000)** | Slower | Faster |
+| **Operation chains (3+)** | Slower | Faster |
+| **Early termination** | Processes all | Stops early |
+
+**Use List for:**
+- Small collections (<100 elements)
+- Single operations
+- Need intermediate results
+- Require size/indexing
+
+**Use Sequence for:**
+- Large collections (>1000 elements)
+- Operation chains (3+ operations)
+- Early termination (first, take, any)
+- File processing
+- Infinite data (generateSequence)
+
+**Performance example:**
+```kotlin
+// List - processes ALL 1M elements
+(1..1_000_000)
+    .map { it * 2 }      // 1M operations
+    .filter { it > 1000 } // 1M operations
+    .take(10)
+
+// Sequence - processes only ~500 elements
+(1..1_000_000).asSequence()
+    .map { it * 2 }
+    .filter { it > 1000 }
+    .take(10)             // Stops after finding 10
+    .toList()
+```
+
+Sequence is ~30-40x faster for large data with early stops. Terminal operations (toList, first, sum) trigger execution. Avoid converting Sequence to List mid-chain.
+
+---
+
+## Ответ (RU)
 
 **List** — жадная (eager) коллекция, где операции выполняются **немедленно** над **всеми** элементами сразу. **Sequence** — ленивая (lazy) коллекция, где операции выполняются **по требованию** для каждого элемента через цепочку. List создает промежуточные коллекции, Sequence обрабатывает элементы один за другим.
 
@@ -492,6 +547,3 @@ val result = largeDataset.asSequence()
 // - ПРАВИЛЬНО - простой map без цепочки
 val names = users.map { it.name }
 ```
-
-**English**: **List** is eager collection - operations execute immediately on all elements, creating intermediate collections. **Sequence** is lazy collection - operations execute per-element through entire chain, no intermediate collections. Use **List** for: small collections (<100), need intermediate results, single operations. Use **Sequence** for: large collections (>1000), operation chains (3+), early termination (first, take), infinite data (generateSequence). Sequence is ~30-40x faster for large data with early stops. Terminal operations (toList, first) trigger execution. Avoid converting Sequence to List mid-chain. Sequences don't cache - recompute on each terminal operation.
-

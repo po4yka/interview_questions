@@ -9,16 +9,20 @@ tags:
   - process-priority
   - services
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Background service vs Foreground service
 
-**Russian**: Чем background service отличается от foreground service?
+# Question (EN)
+> How does background service differ from foreground service?
 
-**English**: How does background service differ from foreground service?
+# Вопрос (RU)
+> Чем background service отличается от foreground service?
 
-## Answer
+---
+
+## Answer (EN)
 
 **Background service** runs in the background and **can be killed** by the system when resources are low.
 
@@ -647,7 +651,7 @@ Is the task user-visible and time-sensitive?
 
 ---
 
-## Ответ
+## Ответ (RU)
 
 **Background service** работает в фоне и **может быть остановлен системой** при нехватке ресурсов.
 

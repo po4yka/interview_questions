@@ -13,15 +13,14 @@ tags:
   - recyclerview
   - room
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Как можно гарантировать быструю отрисовку чатов?
 
 **English**: How can you guarantee fast chat rendering?
 
-## Answer
-
+## Answer (EN)
 To ensure **fast chat rendering without lags**, you need to optimize:
 
 1. **RecyclerView** (ViewHolder, DiffUtil, Payloads)
@@ -619,8 +618,7 @@ binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Чтобы чат работал быстро и без лагов, нужно:
 
 1. **Оптимизировать RecyclerView** - ViewHolder, DiffUtil, Payloads для частичных обновлений

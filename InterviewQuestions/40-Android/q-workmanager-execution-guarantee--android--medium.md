@@ -6,15 +6,14 @@ tags:
   - background-tasks
   - reliability
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How does WorkManager guarantee task execution?
 
 **Russian**: Как WorkManager гарантирует выполнение задач?
 
-## Answer
-
+## Answer (EN)
 WorkManager guarantees task execution through a combination of persistent storage, system constraints monitoring, and integration with various Android background execution mechanisms. It ensures that work will execute even if the app exits or the device restarts.
 
 ### Core Guarantees
@@ -537,8 +536,7 @@ fun scheduleUpload(context: Context, filePath: String) {
 - Periodic work runs reliably at intervals
 - Integration with foreground services for urgent work
 
-## Ответ
-
+## Ответ (RU)
 WorkManager гарантирует выполнение задач через комбинацию постоянного хранилища, мониторинга системных ограничений и интеграции с различными механизмами фонового выполнения Android.
 
 ### Основные гарантии

@@ -7,14 +7,56 @@ tags:
   - runblocking
   - coroutine-builders
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Launch vs Async vs RunBlocking
 
-**English**: What's the difference between `launch`, `async`, and `runBlocking` coroutine builders?
+# Question (EN)
+> What's the difference between `launch`, `async`, and `runBlocking` coroutine builders?
 
-## Answer
+# Вопрос (RU)
+> В чём разница между корутинными билдерами `launch`, `async` и `runBlocking`?
+
+---
+
+## Answer (EN)
+
+**launch**, **async**, and **runBlocking** are three main coroutine builders with different purposes:
+
+| Builder | Returns | Blocks thread | Result | Use case |
+|---------|---------|---------------|--------|----------|
+| **launch** | `Job` | No | No (fire-and-forget) | Background tasks without results |
+| **async** | `Deferred<T>` | No | Yes via `await()` | Parallel computations with results |
+| **runBlocking** | `T` | **YES** | Yes directly | Tests, main function, blocking bridge |
+
+**launch**: Use for side effects, UI updates, background work where result isn't needed.
+**async**: Use for parallel API calls, computations needing results, concurrent operations.
+**runBlocking**: Use ONLY for tests (prefer `runTest`), main function. NEVER in Android UI code.
+
+**Key difference in parallel execution:**
+```kotlin
+// launch - fire and forget
+scope.launch { loadUsers() }
+scope.launch { loadPosts() }
+// How to get results? Only via StateFlow/callbacks
+
+// async - parallel with results
+val users = async { loadUsers() }
+val posts = async { loadPosts() }
+val data = Data(users.await(), posts.await())  // Results available!
+
+// runBlocking - BLOCKS thread
+runBlocking {
+    val users = loadUsers()  // Thread BLOCKED until done
+}
+```
+
+**Exception handling**: launch (immediate in scope), async (at await()), runBlocking (synchronous).
+
+---
+
+## Ответ (RU)
 
 **Launch**, **async**, и **runBlocking** - три основных способа запуска корутин, каждый с разным назначением:
 
@@ -38,11 +80,11 @@ fun loadUserInBackground() {
 ```
 
 **Характеристики launch**:
-- - Не возвращает результат
-- - Возвращает `Job` для управления lifecycle
-- - Не блокирует вызывающий поток
-- - Исключения пробрасываются в parent scope
-- 📝 Use case: фоновая работа, обновление UI, side effects
+- Не возвращает результат
+- Возвращает `Job` для управления lifecycle
+- Не блокирует вызывающий поток
+- Исключения пробрасываются в parent scope
+- Use case: фоновая работа, обновление UI, side effects
 
 #### Примеры использования launch
 
@@ -145,11 +187,11 @@ suspend fun loadDashboard(): DashboardData = coroutineScope {
 ```
 
 **Характеристики async**:
-- - Возвращает результат через `Deferred<T>`
-- - Можно получить результат через `await()`
-- - Не блокирует вызывающий поток до вызова `await()`
-- - Исключения выбрасываются при вызове `await()`
-- 📝 Use case: параллельные вычисления, где нужен результат
+- Возвращает результат через `Deferred<T>`
+- Можно получить результат через `await()`
+- Не блокирует вызывающий поток до вызова `await()`
+- Исключения выбрасываются при вызове `await()`
+- Use case: параллельные вычисления, где нужен результат
 
 #### Примеры использования async
 
@@ -226,11 +268,11 @@ fun main() = runBlocking { // Блокирует main поток
 ```
 
 **Характеристики runBlocking**:
-- - Возвращает результат напрямую
-- - **БЛОКИРУЕТ** вызывающий поток до завершения
-- - НЕ для production кода
-- - Для тестов и main функции
-- 📝 Use case: мост между синхронным и асинхронным кодом
+- Возвращает результат напрямую
+- **БЛОКИРУЕТ** вызывающий поток до завершения
+- НЕ для production кода
+- Для тестов и main функции
+- Use case: мост между синхронным и асинхронным кодом
 
 #### Когда использовать runBlocking
 
@@ -682,19 +724,3 @@ class DataLoaderTest {
     }
 }
 ```
-
-**English**: **launch**, **async**, and **runBlocking** are three main coroutine builders with different purposes:
-
-**launch**: Returns `Job`, doesn't block thread, no result value (fire-and-forget). Use for: background tasks without results, UI updates, side effects. Exceptions propagate to parent scope.
-
-**async**: Returns `Deferred<T>`, doesn't block thread until `await()`, returns result. Use for: parallel computations with results, multiple concurrent API calls, first-successful-result patterns. Exceptions thrown at `await()`.
-
-**runBlocking**: Returns result directly, **BLOCKS** calling thread until completion. Use ONLY for: tests (prefer `runTest`), main function, bridging sync/async code. NEVER use in Android UI code.
-
-**Key differences**:
-- Time to complete 3 sequential 500ms tasks: launch (500ms parallel), async (500ms parallel with results), runBlocking (1500ms if sequential, blocks thread)
-- Exception handling: launch (immediate in scope), async (at await()), runBlocking (synchronous)
-- Result access: launch (none, use StateFlow/callbacks), async (await()), runBlocking (direct return)
-
-**Best practices**: Use launch for side effects. Use async for parallel computations needing results. Never runBlocking in production. Always await() async results. Handle CancellationException properly. Prefer suspend functions over runBlocking bridges.
-

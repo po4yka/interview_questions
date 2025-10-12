@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: [coroutines, suspend-functions, continuation, callback-hell]
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [kotlin, coroutines, callbacks, suspendcoroutine, async, migration, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > How do you convert callback-based APIs to coroutines in Kotlin?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как конвертировать callback-based API в корутины в Kotlin?
 
 ---

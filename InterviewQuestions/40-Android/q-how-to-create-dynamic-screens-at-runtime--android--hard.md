@@ -10,17 +10,16 @@ tags:
   - dynamic-ui
   - jetpack-compose
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to create dynamic screens at runtime?
 
-## Question (RU)
+# Вопрос (RU)
 
 Как в runtime делать динамические экраны которые не были предусмотрены
 
-## Answer
-
+## Answer (EN)
 To create dynamic screens at runtime in Android: Load configuration from server (JSON/XML), use Fragment/View factories, generate UI from description, or use Jetpack Compose/RecyclerView with different ViewTypes.
 
 ### 1. Server-Driven UI with JSON
@@ -368,7 +367,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 }
 ```
 
-## Answer (RU)
+## Ответ (RU)
 
 Для создания динамических экранов в runtime в Android существует несколько подходов:
 

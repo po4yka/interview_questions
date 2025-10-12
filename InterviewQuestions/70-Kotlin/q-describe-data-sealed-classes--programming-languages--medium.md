@@ -2,14 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Describe data classes and sealed classes
 
-**English**: Describe data classes and sealed classes in Kotlin.
+# Question (EN)
+> Describe data classes and sealed classes in Kotlin. What are their key features and use cases?
 
-## Answer
+# Вопрос (RU)
+> Опишите data классы и sealed классы в Kotlin. Каковы их ключевые особенности и применения?
+
+---
+
+## Answer (EN)
 
 **Data Classes:**
 Data classes in Kotlin are designed for storing data and automatically generate methods such as `equals()`, `hashCode()`, `toString()`, and `copy()`. They are ideal for creating POJO/POCO objects (Plain Old Java/C# Objects).
@@ -447,10 +453,340 @@ fun main() {
 
 ---
 
-## Ответ
+## Ответ (RU)
 
-### Вопрос
-Расскажи data классы и sealed классы.
+### Data классы
 
-### Ответ
-Data классы в Kotlin предназначены для хранения данных и автоматически генерируют методы, такие как equals(), hashCode(), toString() и copy(). Они идеально подходят для создания POJO/POCO объектов. Sealed классы используются для представления ограниченного набора типов, похожих на перечисления, но с возможностью иметь классы с разными свойствами и методами. Это помогает обеспечить безопасное использование при работе с типами во время компиляции, улучшая обработку ошибок и логику ветвления.
+**Data классы** в Kotlin предназначены для хранения данных и автоматически генерируют методы: `equals()`, `hashCode()`, `toString()` и `copy()`. Они идеально подходят для создания POJO/POCO объектов (Plain Old Java/C# Objects).
+
+**Ключевые особенности data классов:**
+- Автоматическая генерация utility методов
+- Встроенная поддержка деструктуризации (destructuring declarations)
+- Поддержка immutability с `val` свойствами
+- Простое копирование объектов с изменениями через `copy()`
+- Идеальны для DTOs, моделей и value objects
+
+**Пример:**
+```kotlin
+data class User(
+    val id: Int,
+    val username: String,
+    val email: String,
+    val age: Int
+)
+
+val user = User(1, "alice", "alice@example.com", 30)
+
+// Автоматический toString()
+println(user)
+// User(id=1, username=alice, email=alice@example.com, age=30)
+
+// Автоматический equals()
+val sameUser = User(1, "alice", "alice@example.com", 30)
+println(user == sameUser)  // true
+
+// copy() для создания изменённых экземпляров
+val olderUser = user.copy(age = 31)
+println(olderUser)
+// User(id=1, username=alice, email=alice@example.com, age=31)
+
+// Деструктуризация
+val (id, username, email, age) = user
+println("Пользователь $username, возраст $age лет")
+```
+
+**Data класс как POJO/DTO:**
+```kotlin
+// API response модель
+data class LoginResponse(
+    val success: Boolean,
+    val token: String?,
+    val userId: Int?,
+    val message: String,
+    val expiresAt: Long?
+)
+
+// Request модель
+data class LoginRequest(
+    val username: String,
+    val password: String,
+    val rememberMe: Boolean = false
+)
+
+// Domain модель
+data class UserProfile(
+    val id: Int,
+    val firstName: String,
+    val lastName: String,
+    val email: String,
+    val phoneNumber: String?,
+    val address: Address?
+)
+
+data class Address(
+    val street: String,
+    val city: String,
+    val state: String,
+    val zipCode: String,
+    val country: String
+)
+```
+
+### Sealed классы
+
+**Sealed классы** используются для представления ограниченного набора типов, похожих на перечисления, но с возможностью иметь классы с разными свойствами и методами. Это обеспечивает безопасное использование при работе с типами во время компиляции, улучшая обработку ошибок и логику ветвления.
+
+**Ключевые особенности sealed классов:**
+- Ограниченные иерархии классов
+- Compile-time exhaustiveness checking в `when` выражениях
+- Типобезопасное представление конечного состояния
+- Идеальны для управления состоянием и Result типов
+- Все подклассы должны быть в том же файле/модуле
+
+**Пример:**
+```kotlin
+// Sealed класс для представления различных состояний
+sealed class NetworkState {
+    object Idle : NetworkState()
+    object Loading : NetworkState()
+    data class Success(val data: String, val timestamp: Long) : NetworkState()
+    data class Error(val exception: Throwable, val retryable: Boolean) : NetworkState()
+}
+
+// Функция, обрабатывающая все возможные состояния
+fun handleNetworkState(state: NetworkState) {
+    when (state) {  // else не нужен - компилятор знает все случаи
+        NetworkState.Idle -> {
+            println("Сеть в состоянии ожидания")
+        }
+        NetworkState.Loading -> {
+            println("Загрузка данных...")
+        }
+        is NetworkState.Success -> {
+            println("Успех! Данные: ${state.data}")
+            println("Получено в: ${state.timestamp}")
+        }
+        is NetworkState.Error -> {
+            println("Ошибка: ${state.exception.message}")
+            if (state.retryable) {
+                println("Можно повторить операцию")
+            }
+        }
+    }
+}
+```
+
+**Sealed класс с разными свойствами:**
+```kotlin
+// Типы платежных методов - каждый с разными свойствами
+sealed class PaymentMethod {
+    data class CreditCard(
+        val cardNumber: String,
+        val cardholderName: String,
+        val expiryMonth: Int,
+        val expiryYear: Int,
+        val cvv: String
+    ) : PaymentMethod()
+
+    data class PayPal(
+        val email: String,
+        val verified: Boolean
+    ) : PaymentMethod()
+
+    data class BankTransfer(
+        val accountNumber: String,
+        val bankName: String,
+        val routingNumber: String
+    ) : PaymentMethod()
+
+    object Cash : PaymentMethod()
+
+    data class Cryptocurrency(
+        val walletAddress: String,
+        val currency: String
+    ) : PaymentMethod()
+}
+
+fun processPayment(method: PaymentMethod, amount: Double) {
+    when (method) {
+        is PaymentMethod.CreditCard -> {
+            println("Обработка платежа кредитной картой на $$amount")
+            println("Карта оканчивается на: ${method.cardNumber.takeLast(4)}")
+            println("Владелец: ${method.cardholderName}")
+        }
+        is PaymentMethod.PayPal -> {
+            println("Обработка PayPal платежа на $$amount")
+            println("PayPal аккаунт: ${method.email}")
+            if (!method.verified) {
+                println("Предупреждение: Аккаунт не верифицирован")
+            }
+        }
+        is PaymentMethod.BankTransfer -> {
+            println("Обработка банковского перевода на $$amount")
+            println("Банк: ${method.bankName}")
+            println("Счёт: ${method.accountNumber}")
+        }
+        PaymentMethod.Cash -> {
+            println("Обработка наличного платежа на $$amount")
+            println("Подготовьте точную сумму")
+        }
+        is PaymentMethod.Cryptocurrency -> {
+            println("Обработка криптовалютного платежа на $$amount")
+            println("Валюта: ${method.currency}")
+            println("Кошелёк: ${method.walletAddress}")
+        }
+    }
+}
+```
+
+### Комбинирование data классов с sealed классами
+
+**Универсальный Result тип:**
+```kotlin
+// Универсальный result тип используя sealed класс и data классы
+sealed class Result<out T> {
+    data class Success<T>(val value: T) : Result<T>()
+    data class Failure(val error: Error) : Result<Nothing>()
+    object Loading : Result<Nothing>()
+}
+
+// Типы ошибок
+data class Error(
+    val code: Int,
+    val message: String,
+    val details: Map<String, String> = emptyMap()
+)
+
+// Domain модели
+data class Article(
+    val id: Int,
+    val title: String,
+    val content: String,
+    val author: String,
+    val publishedAt: Long
+)
+
+// Service слой
+class ArticleService {
+    fun fetchArticle(id: Int): Result<Article> {
+        return try {
+            if (id > 0) {
+                Result.Success(
+                    Article(
+                        id = id,
+                        title = "Лучшие практики Kotlin",
+                        content = "Вот несколько лучших практик...",
+                        author = "Иван Иванов",
+                        publishedAt = System.currentTimeMillis()
+                    )
+                )
+            } else {
+                Result.Failure(
+                    Error(404, "Статья не найдена", mapOf("article_id" to id.toString()))
+                )
+            }
+        } catch (e: Exception) {
+            Result.Failure(
+                Error(500, "Ошибка сервера", mapOf("exception" to e.message.orEmpty()))
+            )
+        }
+    }
+}
+
+// UI слой
+fun displayArticle(result: Result<Article>) {
+    when (result) {
+        is Result.Success -> {
+            val article = result.value
+            println("Заголовок: ${article.title}")
+            println("Автор: ${article.author}")
+            println("Содержание: ${article.content}")
+        }
+        is Result.Failure -> {
+            println("Ошибка ${result.error.code}: ${result.error.message}")
+            if (result.error.details.isNotEmpty()) {
+                println("Детали: ${result.error.details}")
+            }
+        }
+        Result.Loading -> {
+            println("Загрузка статьи...")
+        }
+    }
+}
+```
+
+**Реальный пример: Валидация формы:**
+```kotlin
+// Данные формы (data класс)
+data class RegistrationForm(
+    val username: String,
+    val email: String,
+    val password: String,
+    val confirmPassword: String,
+    val agreeToTerms: Boolean
+)
+
+// Результат валидации (sealed класс)
+sealed class ValidationResult {
+    data class Valid(val form: RegistrationForm) : ValidationResult()
+    data class Invalid(val errors: List<ValidationError>) : ValidationResult()
+}
+
+// Типы ошибок (data класс)
+data class ValidationError(
+    val field: String,
+    val message: String
+)
+
+fun validateRegistration(form: RegistrationForm): ValidationResult {
+    val errors = mutableListOf<ValidationError>()
+
+    if (form.username.length < 3) {
+        errors.add(ValidationError("username", "Имя пользователя должно быть не менее 3 символов"))
+    }
+
+    if (!form.email.contains("@") || !form.email.contains(".")) {
+        errors.add(ValidationError("email", "Неверный формат email"))
+    }
+
+    if (form.password.length < 8) {
+        errors.add(ValidationError("password", "Пароль должен быть не менее 8 символов"))
+    }
+
+    if (form.password != form.confirmPassword) {
+        errors.add(ValidationError("confirmPassword", "Пароли не совпадают"))
+    }
+
+    if (!form.agreeToTerms) {
+        errors.add(ValidationError("agreeToTerms", "Необходимо согласие с условиями"))
+    }
+
+    return if (errors.isEmpty()) {
+        ValidationResult.Valid(form)
+    } else {
+        ValidationResult.Invalid(errors)
+    }
+}
+
+fun handleValidation(result: ValidationResult) {
+    when (result) {
+        is ValidationResult.Valid -> {
+            println("Форма валидна!")
+            println("Регистрация пользователя: ${result.form.username}")
+            println("Email: ${result.form.email}")
+        }
+        is ValidationResult.Invalid -> {
+            println("Форма содержит ${result.errors.size} ошибок:")
+            result.errors.forEach { error ->
+                println("  - ${error.field}: ${error.message}")
+            }
+        }
+    }
+}
+```
+
+### Краткий ответ
+
+**Data классы**: Предназначены для хранения данных. Автоматически генерируют `equals()`, `hashCode()`, `toString()`, `copy()` и компонентные функции. Идеальны для POJO/POCO объектов, DTOs, моделей данных и value objects. Поддерживают деструктуризацию и простое копирование с изменениями.
+
+**Sealed классы**: Представляют ограниченный набор типов. Ограничивают наследование одним файлом/модулем. Обеспечивают compile-time exhaustiveness checking в `when` выражениях. Идеальны для управления состоянием, Result типов, навигационных событий и представления конечных множеств состояний. Комбинируются с data классами для создания мощных type-safe API.

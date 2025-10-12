@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [kotlin, flow, retry, error-handling, operators, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What are Retry and RetryWhen operators in Kotlin Flow? How do they work?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое операторы Retry и RetryWhen в Kotlin Flow? Как они работают?
 
 ---
@@ -675,5 +675,5 @@ class ProductViewModel : ViewModel() {
 - [Retry Operators](https://elizarov.medium.com/kotlin-flows-and-coroutines-256260fb3bdb)
 
 ## Related Questions
-- [[q-flow-error-handling--kotlin--medium]]
+- [[q-flow-exception-handling--kotlin--medium]]
 - [[q-catch-operator-flow--kotlin--medium]]

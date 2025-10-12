@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: [location-tracking, real-time-updates, websocket, maps-integration]
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [system-design, uber, location, real-time, maps, architecture, android, difficulty/hard]
 ---
-## Question (EN)
+# Question (EN)
 > How would you design an Uber-like ride-hailing application for Android?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как бы вы спроектировали приложение для вызова такси, подобное Uber, для Android?
 
 ---

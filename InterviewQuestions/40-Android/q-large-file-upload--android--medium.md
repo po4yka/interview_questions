@@ -8,15 +8,14 @@ tags:
   - background-processing
   - multipart
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Загрузка больших файлов на сервер в Android
 
 **English**: How to upload large files to server in Android?
 
-## Answer
-
+## Answer (EN)
 Для реализации загрузки больших файлов необходимо учитывать: асинхронную обработку, устойчивость к изменениям конфигурации (rotation), восстановление после неудач, отображение прогресса и работу в фоновом режиме.
 
 ### 1. WorkManager + Retrofit (рекомендуемый подход)

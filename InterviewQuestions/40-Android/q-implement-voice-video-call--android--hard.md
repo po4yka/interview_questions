@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: [webrtc, real-time-communication, websocket, media-streaming]
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, webrtc, voice-call, video-call, real-time, peer-to-peer, difficulty/hard]
 ---
-## Question (EN)
+# Question (EN)
 > How would you implement voice and video calling features in an Android application?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как бы вы реализовали функции голосовых и видеозвонков в Android приложении?
 
 ---

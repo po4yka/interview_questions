@@ -7,14 +7,42 @@ tags:
   - lifecyclescope
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # viewModelScope vs lifecycleScope
 
-**English**: What's the difference between viewModelScope and lifecycleScope? When should you use each?
+# Question (EN)
+> What's the difference between viewModelScope and lifecycleScope? When should you use each?
 
-## Answer
+# Вопрос (RU)
+> В чём разница между viewModelScope и lifecycleScope? Когда использовать каждый из них?
+
+---
+
+## Answer (EN)
+
+**viewModelScope** and **lifecycleScope** are lifecycle-aware coroutine scopes that auto-cancel coroutines when their owner is destroyed:
+
+**viewModelScope**: Bound to ViewModel, cancelled on `onCleared()`. **Survives configuration changes** (rotation). Use for: business logic, data loading, Flow collections, long-running tasks. Requires `lifecycle-viewmodel-ktx`.
+
+**lifecycleScope**: Bound to Activity/Fragment, cancelled on `ON_DESTROY`. **Does NOT survive rotation**. Use for: UI updates, one-time events, animations. Requires `lifecycle-runtime-ktx`.
+
+**Key difference**: On screen rotation, viewModelScope continues running (same ViewModel instance), lifecycleScope cancels and restarts (new Activity/Fragment).
+
+**Best practices**:
+- Use viewModelScope for data/logic
+- Use lifecycleScope with `repeatOnLifecycle(STARTED)` for UI updates
+- In Fragments, always use `viewLifecycleOwner.lifecycleScope` not `lifecycleScope`
+- Never use GlobalScope (creates leaks)
+- Create custom scope for Services
+- Handle exceptions with try-catch or CoroutineExceptionHandler
+
+**repeatOnLifecycle**: Stops collection in onStop(), resumes in onStart(). Prevents crashes from updating UI in background. Essential for Fragments to avoid view lifecycle issues.
+
+---
+
+## Ответ (RU)
 
 **viewModelScope** и **lifecycleScope** - lifecycle-aware coroutine scopes, автоматически отменяющие корутины при уничтожении связанного компонента:
 
@@ -65,10 +93,10 @@ class UserViewModel(
 ```
 
 **Характеристики viewModelScope**:
-- 🔄 **Переживает configuration changes** (rotation, language change)
-- 🗑️ Отменяется только при `onCleared()` (когда Activity/Fragment окончательно уничтожается)
-- - Идеален для **business logic** и загрузки данных
-- 📦 Требует зависимость: `androidx.lifecycle:lifecycle-viewmodel-ktx`
+- **Переживает configuration changes** (rotation, language change)
+- Отменяется только при `onCleared()` (когда Activity/Fragment окончательно уничтожается)
+- Идеален для **business logic** и загрузки данных
+- Требует зависимость: `androidx.lifecycle:lifecycle-viewmodel-ktx`
 
 ### lifecycleScope - для Activity/Fragment
 
@@ -100,10 +128,10 @@ class UserActivity : AppCompatActivity() {
 ```
 
 **Характеристики lifecycleScope**:
-- - **НЕ переживает configuration changes** (отменяется при rotation)
-- 🗑️ Отменяется при `ON_DESTROY`
-- - Идеален для **UI операций** и one-time events
-- 📦 Требует зависимость: `androidx.lifecycle:lifecycle-runtime-ktx`
+- **НЕ переживает configuration changes** (отменяется при rotation)
+- Отменяется при `ON_DESTROY`
+- Идеален для **UI операций** и one-time events
+- Требует зависимость: `androidx.lifecycle:lifecycle-runtime-ktx`
 
 ### Что происходит при rotation
 
@@ -118,7 +146,7 @@ class MyViewModel : ViewModel() {
             }
         }
     }
-    // - При rotation корутина ПРОДОЛЖАЕТ работать
+    // При rotation корутина ПРОДОЛЖАЕТ работать
 }
 
 // Activity
@@ -132,7 +160,7 @@ class MyActivity : AppCompatActivity() {
                 println("Activity: $i")
             }
         }
-        // - При rotation корутина ОТМЕНЯЕТСЯ и запускается заново
+        // При rotation корутина ОТМЕНЯЕТСЯ и запускается заново
     }
 }
 ```
@@ -148,8 +176,8 @@ Activity: 1
 // [ROTATION]
 
 // После rotation:
-ViewModel: 2        // - Продолжает с того же места
-Activity: 0         // - Начинает сначала (новый onCreate)
+ViewModel: 2        // Продолжает с того же места
+Activity: 0         // Начинает сначала (новый onCreate)
 ViewModel: 3
 Activity: 1
 ```
@@ -161,14 +189,14 @@ class ProductsViewModel(
     private val repository: ProductRepository
 ) : ViewModel() {
 
-    // - 1. Загрузка данных
+    // 1. Загрузка данных
     fun loadProducts() {
         viewModelScope.launch {
             _products.value = repository.getProducts()
         }
     }
 
-    // - 2. Continuous data streams
+    // 2. Continuous data streams
     init {
         viewModelScope.launch {
             repository.observeProducts()
@@ -178,7 +206,7 @@ class ProductsViewModel(
         }
     }
 
-    // - 3. Long-running operations
+    // 3. Long-running operations
     fun syncData() {
         viewModelScope.launch {
             while (isActive) {
@@ -188,7 +216,7 @@ class ProductsViewModel(
         }
     }
 
-    // - 4. Business logic
+    // 4. Business logic
     fun checkout(cart: Cart) {
         viewModelScope.launch {
             val orderId = repository.createOrder(cart)
@@ -218,14 +246,14 @@ class ProductsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // - 1. Collecting UI state
+        // 1. Collecting UI state
         lifecycleScope.launch {
             viewModel.products.collect { products ->
                 adapter.submitList(products) // UI update
             }
         }
 
-        // - 2. One-time UI events
+        // 2. One-time UI events
         lifecycleScope.launch {
             viewModel.events.collect { event ->
                 when (event) {
@@ -235,13 +263,13 @@ class ProductsActivity : AppCompatActivity() {
             }
         }
 
-        // - 3. Animation
+        // 3. Animation
         lifecycleScope.launch {
             animateView()
         }
     }
 
-    // - 4. UI-only operations
+    // 4. UI-only operations
     private fun showLoadingDialog() {
         lifecycleScope.launch {
             delay(300) // Debounce
@@ -266,7 +294,7 @@ class ProductsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // - ПРОБЛЕМА с обычным lifecycleScope:
+        // ПРОБЛЕМА с обычным lifecycleScope:
         lifecycleScope.launch {
             viewModel.products.collect { products ->
                 // Продолжает работать даже когда Fragment в background!
@@ -274,7 +302,7 @@ class ProductsFragment : Fragment() {
             }
         }
 
-        // - ПРАВИЛЬНО - repeatOnLifecycle
+        // ПРАВИЛЬНО - repeatOnLifecycle
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.products.collect { products ->
@@ -288,10 +316,10 @@ class ProductsFragment : Fragment() {
 ```
 
 **repeatOnLifecycle**:
-- - Автоматически **останавливает** collection при onStop()
-- - Автоматически **возобновляет** при onStart()
-- - Экономит ресурсы когда UI не видим
-- - Предотвращает crash при обновлении UI в background
+- Автоматически **останавливает** collection при onStop()
+- Автоматически **возобновляет** при onStart()
+- Экономит ресурсы когда UI не видим
+- Предотвращает crash при обновлении UI в background
 
 ### Lifecycle states
 
@@ -326,7 +354,7 @@ class MyFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // - НЕ ИСПОЛЬЗУЙТЕ lifecycle в Fragment!
+        // НЕ ИСПОЛЬЗУЙТЕ lifecycle в Fragment!
         lifecycleScope.launch {
             // Проблема: Fragment lifecycle != View lifecycle
             // Fragment переживает view recreation!
@@ -336,7 +364,7 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // - ПРАВИЛЬНО - viewLifecycleOwner
+        // ПРАВИЛЬНО - viewLifecycleOwner
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.data.collect { data ->
                 binding.textView.text = data
@@ -360,7 +388,7 @@ class LoginViewModel(
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState = _loginState.asStateFlow()
 
-    // - viewModelScope - переживет rotation
+    // viewModelScope - переживет rotation
     fun login(email: String, password: String) {
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
@@ -374,7 +402,7 @@ class LoginViewModel(
         }
     }
 
-    // - viewModelScope - long-running work
+    // viewModelScope - long-running work
     fun keepSessionAlive() {
         viewModelScope.launch {
             while (isActive) {
@@ -393,7 +421,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // - lifecycleScope - UI updates
+        // lifecycleScope - UI updates
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.loginState.collect { state ->
@@ -412,7 +440,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        // - lifecycleScope - UI event
+        // lifecycleScope - UI event
         loginButton.setOnClickListener {
             lifecycleScope.launch {
                 val email = emailInput.text.toString()
@@ -472,7 +500,7 @@ class MusicPlayerService : Service() {
 ### GlobalScope - когда НЕ использовать
 
 ```kotlin
-// - НИКОГДА не используйте GlobalScope
+// НИКОГДА не используйте GlobalScope
 class BadViewModel : ViewModel() {
     fun loadData() {
         GlobalScope.launch {
@@ -486,7 +514,7 @@ class BadViewModel : ViewModel() {
     }
 }
 
-// - ПРАВИЛЬНО
+// ПРАВИЛЬНО
 class GoodViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
@@ -634,7 +662,7 @@ class ActivityTest {
 ### Best Practices
 
 ```kotlin
-// - 1. ViewModel - viewModelScope
+// 1. ViewModel - viewModelScope
 class GoodViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
@@ -643,7 +671,7 @@ class GoodViewModel : ViewModel() {
     }
 }
 
-// - 2. Activity/Fragment - lifecycleScope + repeatOnLifecycle
+// 2. Activity/Fragment - lifecycleScope + repeatOnLifecycle
 class GoodFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -654,7 +682,7 @@ class GoodFragment : Fragment() {
     }
 }
 
-// - 3. Service - custom scope
+// 3. Service - custom scope
 class GoodService : Service() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
@@ -664,25 +692,12 @@ class GoodService : Service() {
     }
 }
 
-// - 4. НЕ смешивайте scopes
+// 4. НЕ смешивайте scopes
 class BadViewModel : ViewModel() {
     fun loadData() {
-        lifecycleScope.launch { // - lifecycleScope не доступен в ViewModel!
+        lifecycleScope.launch { // lifecycleScope не доступен в ViewModel!
             repository.getData()
         }
     }
 }
 ```
-
-**English**: **viewModelScope** and **lifecycleScope** are lifecycle-aware coroutine scopes that auto-cancel coroutines when their owner is destroyed:
-
-**viewModelScope**: Bound to ViewModel, cancelled on `onCleared()`. **Survives configuration changes** (rotation). Use for: business logic, data loading, Flow collections, long-running tasks. Requires `lifecycle-viewmodel-ktx`.
-
-**lifecycleScope**: Bound to Activity/Fragment, cancelled on `ON_DESTROY`. **Does NOT survive rotation**. Use for: UI updates, one-time events, animations. Requires `lifecycle-runtime-ktx`.
-
-**Key difference**: On screen rotation, viewModelScope continues running (same ViewModel instance), lifecycleScope cancels and restarts (new Activity/Fragment).
-
-**Best practices**: Use viewModelScope for data/logic. Use lifecycleScope with `repeatOnLifecycle(STARTED)` for UI updates. In Fragments, always use `viewLifecycleOwner.lifecycleScope` not `lifecycleScope`. Never use GlobalScope (creates leaks). Create custom scope for Services. Handle exceptions with try-catch or CoroutineExceptionHandler.
-
-**repeatOnLifecycle**: Stops collection in onStop(), resumes in onStart(). Prevents crashes from updating UI in background. Essential for Fragments to avoid view lifecycle issues.
-

@@ -10,12 +10,21 @@ related:
   - dependency-injection
   - singleton-pattern
   - factory-pattern
-status: reviewed
+status: draft
 ---
 
 # Service Locator Pattern / Паттерн Локатор Служб
 
-## English
+# Question (EN)
+> What is the Service Locator pattern? When and why should it be used?
+
+# Вопрос (RU)
+> Что такое паттерн Service Locator? Когда и зачем его следует использовать?
+
+---
+
+## Answer (EN)
+
 
 ### Definition
 The **Service Locator pattern** is a design pattern used to encapsulate the processes involved in obtaining a service with a strong abstraction layer. This pattern uses a central registry known as the "service locator", which on request returns the information necessary to perform a certain task. Proponents of the pattern say the approach simplifies component-based applications where all dependencies are cleanly listed at the beginning of the whole application design, consequently making traditional dependency injection a more complex way of connecting objects.
@@ -187,7 +196,9 @@ Avoid the Service Locator pattern when:
 
 ---
 
-## Русский
+
+
+## Ответ (RU)
 
 ### Определение
 **Паттерн Локатор Служб** - это паттерн проектирования, используемый для инкапсуляции процессов, связанных с получением службы с сильным уровнем абстракции. Этот паттерн использует центральный реестр, известный как "локатор служб", который по запросу возвращает информацию, необходимую для выполнения определенной задачи. Сторонники паттерна говорят, что подход упрощает компонентные приложения, где все зависимости четко перечислены в начале всего дизайна приложения, следовательно, делая традиционное внедрение зависимостей более сложным способом соединения объектов.

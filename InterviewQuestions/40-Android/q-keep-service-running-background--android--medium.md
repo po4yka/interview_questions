@@ -11,7 +11,7 @@ tags:
   - services
   - workmanager
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to keep service running in background?
@@ -20,8 +20,7 @@ status: reviewed
 
 **English**: What to do if you need a service to continue running in the background?
 
-## Answer
-
+## Answer (EN)
 To keep a service running in the background, choose the right approach based on your needs:
 
 1. **`startForegroundService()`** - For high-priority tasks that need user awareness
@@ -597,8 +596,7 @@ Is task user-initiated and time-sensitive?
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Для продолжения работы сервиса в фоне используйте:
 
 1. **`startForegroundService()`** - для задач с высоким приоритетом, требующих уведомления пользователя

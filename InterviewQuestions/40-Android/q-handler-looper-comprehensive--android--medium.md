@@ -8,7 +8,7 @@ tags:
   - message-queue
   - concurrency
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Handler and Looper: Complete guide
@@ -17,8 +17,7 @@ status: reviewed
 
 **English**: Handler and Looper: Complete guide to Android message threading
 
-## Answer
-
+## Answer (EN)
 Handler и Looper — это фундаментальные компоненты Android для организации межпоточного взаимодействия и обработки сообщений в очереди.
 
 ### 1. Архитектура Handler-Looper-MessageQueue

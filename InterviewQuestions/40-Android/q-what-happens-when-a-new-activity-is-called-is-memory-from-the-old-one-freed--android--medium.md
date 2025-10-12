@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What happens when a new Activity is called? Is memory from the old one freed?
 
-## Answer
-
+## Answer (EN)
 When a new Activity is called, the old Activity does **not** immediately have its memory freed. Instead, it goes through lifecycle transitions and stays in the back stack. The system may free its memory later under memory pressure.
 
 ### What Happens When New Activity Starts
@@ -403,7 +402,7 @@ Memory is freed when:
 
 The old Activity **remains in memory in the back stack** until explicitly finished or killed by the system for memory.
 
-## Answer (RU)
+## Ответ (RU)
 
 Когда запускается новая Activity, старая Activity **не освобождает память сразу**. Вместо этого она проходит через переходы жизненного цикла и остаётся в back stack. Система может освободить её память позже при нехватке памяти.
 

@@ -466,5 +466,5 @@ coroutineScope {
 - [CoroutineExceptionHandler](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-exception-handler/)
 
 ## Related Questions
-- [[q-coroutinescope-supervisorscope--kotlin--medium]]
+- [[q-coroutinescope-vs-supervisorscope--kotlin--medium]]
 - [[q-structured-concurrency--kotlin--hard]]

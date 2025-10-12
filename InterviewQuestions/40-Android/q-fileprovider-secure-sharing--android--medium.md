@@ -7,7 +7,7 @@ aliases:
   - FileProvider для безопасного обмена файлами
 date_created: 2025-10-05
 date_modified: 2025-10-05
-status: reviewed
+status: draft
 original_language: en
 language_tags:
   - en
@@ -32,14 +32,12 @@ source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/A
 
 # FileProvider for Secure File Sharing / FileProvider для безопасного обмена файлами
 
-## EN
-
-### Question
+# Question (EN)
+> 
 
 What do you know about FileProvider?
 
-### Answer
-
+## Answer (EN)
 `FileProvider` is a special subclass of `ContentProvider` that facilitates secure sharing of files associated with an app by creating a `content://` `Uri` for a file instead of a `file:///` `Uri`.
 
 A content URI allows you to grant read and write access using temporary access permissions. When you create an `Intent` containing a content URI, in order to send the content URI to a client app, you can also call `Intent.setFlags()` to add permissions. These permissions are available to the client app for as long as the stack for a receiving `Activity` is active. For an `Intent` going to a `Service`, the permissions are available as long as the `Service` is running.
@@ -129,14 +127,12 @@ Permissions granted in an `Intent` remain in effect while the stack of the recei
 
 ---
 
-## RU
-
-### Вопрос
+# Вопрос (RU)
+> 
 
 Что вы знаете о FileProvider?
 
-### Ответ
-
+## Ответ (RU)
 `FileProvider` - это специальный подкласс `ContentProvider`, который облегчает безопасный обмен файлами, связанными с приложением, путем создания `content://` `Uri` для файла вместо `file:///` `Uri`.
 
 Content URI позволяет предоставлять доступ на чтение и запись с использованием временных разрешений доступа. Когда вы создаете `Intent`, содержащий content URI, для отправки content URI клиентскому приложению, вы также можете вызвать `Intent.setFlags()` для добавления разрешений. Эти разрешения доступны клиентскому приложению до тех пор, пока активен стек принимающей `Activity`. Для `Intent`, направленного в `Service`, разрешения доступны до тех пор, пока работает `Service`.

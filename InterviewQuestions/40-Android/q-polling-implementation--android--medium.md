@@ -7,15 +7,14 @@ tags:
   - coroutines
   - workmanager
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как реализовать polling в Android?
 
 **English**: How to implement polling in Android?
 
-## Answer
-
+## Answer (EN)
 Polling — это техника периодического получения обновленных данных с сервера. В Android можно использовать различные подходы в зависимости от требований к частоте опроса, надежности и энергоэффективности.
 
 ### 1. Coroutines + Flow (рекомендуется для UI)

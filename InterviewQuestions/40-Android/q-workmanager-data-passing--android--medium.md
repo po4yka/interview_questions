@@ -7,7 +7,7 @@ tags:
   - data-passing
   - workmanager
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to pass and receive data from WorkManager?
@@ -16,8 +16,7 @@ status: reviewed
 
 **English**: How to pass and receive data from WorkManager?
 
-## Answer
-
+## Answer (EN)
 Data is passed using a special **Data** container:
 
 1. **Pass data IN:** Use `setInputData(workDataOf(...))` when creating WorkRequest
@@ -622,8 +621,7 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Данные передаются с помощью специального контейнера **Data**:
 
 1. **Передача IN:** `setInputData(workDataOf(...))` при создании WorkRequest

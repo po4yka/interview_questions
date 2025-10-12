@@ -8,15 +8,14 @@ tags:
   - profiling
   - optimization
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Performance Monitoring and Jank Detection in Compose
 
 **English**: How do you detect and fix performance issues (jank) in Jetpack Compose apps?
 
-## Answer
-
+## Answer (EN)
 **Jank** - это "замирания" UI когда frame rate падает ниже 60fps (16.67ms per frame). В Compose главные причины: избыточные recompositions, медленные вычисления, неоптимизированные списки.
 
 ### Что такое Jank?

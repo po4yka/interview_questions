@@ -10,15 +10,14 @@ tags:
   - okhttp
   - retrofit
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Как в Ретрофите изменять все запросы?
 
 **English**: How to modify all requests globally in Retrofit?
 
-## Answer
-
+## Answer (EN)
 In Retrofit, you can modify all requests globally using **Interceptor** (перехватчик) in OkHttp. This allows you to add or modify headers, query parameters, authentication, logging, and more.
 
 **Common uses:**
@@ -666,8 +665,7 @@ val retrofit = Retrofit.Builder()
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 В Retrofit можно изменять все запросы глобально с помощью **Interceptor (перехватчика)** в OkHttp.
 
 **Основные примеры:**

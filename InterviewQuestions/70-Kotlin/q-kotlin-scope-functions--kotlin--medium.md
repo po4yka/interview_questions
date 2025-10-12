@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, scope-functions, let, run, with, apply, also, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What are scope functions in Kotlin?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое функции области видимости (scope functions) в Kotlin?
 
 ---

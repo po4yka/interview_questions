@@ -10,15 +10,14 @@ tags:
   - large-data
   - uri
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Как правильно передать большой объем данных, например картинку, на Activity?
 
 **English**: How to properly pass large data (e.g., an image) between Activities?
 
-## Answer
-
+## Answer (EN)
 **Don't** pass large data through `Intent.putExtra()` or `Bundle`. Instead:
 
 1. **Save data** to file system, cache, or database
@@ -641,8 +640,7 @@ revokeUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 **Не передавайте** большие данные через `Intent.putExtra()` или `Bundle`. Вместо этого:
 
 1. **Сохраните данные** в файловую систему, кэш или базу данных

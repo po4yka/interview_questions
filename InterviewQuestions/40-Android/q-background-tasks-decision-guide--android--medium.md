@@ -2,7 +2,7 @@
 id: 202510051234002
 title: "Background Tasks Decision Guide / Руководство по фоновым задачам"
 topic: android
-status: reviewed
+status: draft
 created: 2025-10-05
 updated: 2025-10-05
 difficulty: medium
@@ -36,7 +36,15 @@ connections: []
 
 # Background Tasks Decision Guide / Руководство по фоновым задачам
 
-## English
+# Question (EN)
+> What is a background task and how should it be performed?
+
+# Вопрос (RU)
+> Что такое фоновая задача и как она должна выполняться?
+
+---
+
+## Answer (EN)
 
 ### Definition
 
@@ -152,7 +160,7 @@ Sometimes an app needs to do background work in response to a trigger:
 
 ---
 
-## Русский
+## Ответ (RU)
 
 ### Определение
 

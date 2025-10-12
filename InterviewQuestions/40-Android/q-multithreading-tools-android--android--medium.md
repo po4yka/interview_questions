@@ -11,15 +11,14 @@ tags:
   - background-tasks
   - difficulty/medium
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Multithreading Tools in Android / Инструменты многопоточности в Android
 
 **English**: What tools for multithreading do you know?
 
-## Answer
-
+## Answer (EN)
 Android provides several tools and APIs for handling multithreading and asynchronous operations. Here's a comprehensive overview of the main tools:
 
 ## 1. AsyncTask (Deprecated)
@@ -297,8 +296,7 @@ For new Android development:
 - **JobScheduler** - Lower-level API, WorkManager is preferred
 - **Looper & HandlerThread** - For creating background threads with message queue
 
-## Ответ
-
+## Ответ (RU)
 Android предоставляет несколько инструментов и API для обработки многопоточности и асинхронных операций. Вот полный обзор основных инструментов:
 
 ## 1. AsyncTask (Устарел)

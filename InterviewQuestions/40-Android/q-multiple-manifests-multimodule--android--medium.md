@@ -11,15 +11,14 @@ tags:
   - multi-module
   - project-structure
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Для проектов в которых есть несколько модулей, там может быть много Android Manifest'ов, для чего это делается?
 
 **English**: In multi-module projects, there can be many AndroidManifest files. Why is this done?
 
-## Answer
-
+## Answer (EN)
 In multi-module projects, each module can have its own **AndroidManifest.xml** to:
 
 1. **Declare module-specific dependencies** (`uses-permission`, `uses-feature`)
@@ -639,8 +638,7 @@ from feature-profile conflicts with value=portrait from feature-login
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 В многомодульных проектах каждый модуль может иметь свой **AndroidManifest.xml**, чтобы:
 
 1. **Задавать зависимости** (`uses-permission`, `uses-feature`) для конкретного модуля

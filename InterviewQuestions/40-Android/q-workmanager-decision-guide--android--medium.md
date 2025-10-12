@@ -7,15 +7,14 @@ tags:
   - coroutines
   - service
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # WorkManager vs Coroutines vs Service - Decision Guide
 
 **English**: When should you use WorkManager vs Coroutines vs Service for background work?
 
-## Answer
-
+## Answer (EN)
 **WorkManager**, **Coroutines**, и **Service** решают разные задачи фоновой работы:
 
 | Критерий | WorkManager | Coroutines | Service (Foreground) |

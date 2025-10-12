@@ -56,180 +56,6 @@ WHERE status
 GROUP BY status
 SORT length(rows) DESC
 ```
-
----
-
-## Quick Navigation by Topic
-
-### Android Development
-
-```dataview
-TABLE WITHOUT ID
-    file.link as "Question",
-    difficulty as "Difficulty",
-    join(list(subtopics)[0], ", ") as "Primary Subtopic"
-FROM "40-Android"
-WHERE topic = "android"
-SORT difficulty ASC, file.name ASC
-LIMIT 20
-```
-
-[View all Android questions →](40-Android)
-
----
-
-### Kotlin Language
-
-```dataview
-TABLE WITHOUT ID
-    file.link as "Question",
-    difficulty as "Difficulty",
-    join(list(subtopics)[0], ", ") as "Primary Subtopic"
-FROM "70-Kotlin"
-WHERE topic = "kotlin"
-SORT difficulty ASC, file.name ASC
-LIMIT 20
-```
-
-[View all Kotlin questions →](70-Kotlin)
-
----
-
-### Architecture & Design Patterns
-
-```dataview
-TABLE WITHOUT ID
-    file.link as "Question",
-    difficulty as "Difficulty",
-    topic as "Category"
-FROM "60-CompSci"
-WHERE topic = "architecture-patterns" OR topic = "design-patterns"
-SORT difficulty ASC, file.name ASC
-```
-
----
-
-### System Design
-
-```dataview
-TABLE WITHOUT ID
-    file.link as "Question",
-    difficulty as "Difficulty",
-    join(list(subtopics), ", ") as "Topics"
-FROM "40-Android"
-WHERE topic = "system-design"
-SORT file.name ASC
-```
-
----
-
-### Algorithms & Data Structures
-
-```dataview
-TABLE WITHOUT ID
-    file.link as "Question",
-    difficulty as "Difficulty"
-FROM "20-Algorithms"
-WHERE topic = "algorithms"
-SORT difficulty ASC, file.name ASC
-```
-
----
-
-### Backend & Databases
-
-```dataview
-TABLE WITHOUT ID
-    file.link as "Question",
-    difficulty as "Difficulty",
-    join(list(subtopics), ", ") as "Subtopics"
-FROM "50-Backend"
-WHERE topic = "backend"
-SORT difficulty ASC, file.name ASC
-```
-
----
-
-### Tools & Git
-
-```dataview
-TABLE WITHOUT ID
-    file.link as "Question",
-    difficulty as "Difficulty"
-FROM "80-Tools"
-WHERE topic = "tools"
-SORT difficulty ASC, file.name ASC
-```
-
----
-
-## Advanced Search & Filters
-
-### Recently Added (Last 30 Days)
-
-```dataview
-TABLE WITHOUT ID
-    file.link as "Question",
-    topic as "Topic",
-    difficulty as "Difficulty",
-    dateformat(file.ctime, "yyyy-MM-dd") as "Created"
-FROM "40-Android" OR "70-Kotlin" OR "60-CompSci" OR "20-Algorithms" OR "50-Backend" OR "80-Tools"
-WHERE file.ctime >= date(today) - dur(30 days)
-SORT file.ctime DESC
-LIMIT 30
-```
-
----
-
-### Hard Questions by Topic
-
-```dataview
-TABLE WITHOUT ID
-    file.link as "Question",
-    topic as "Topic",
-    join(list(subtopics), ", ") as "Subtopics"
-FROM "40-Android" OR "70-Kotlin" OR "60-CompSci" OR "20-Algorithms" OR "50-Backend" OR "80-Tools"
-WHERE difficulty = "hard"
-SORT topic ASC, file.name ASC
-```
-
----
-
-### Drafts Pending Review
-
-```dataview
-TABLE WITHOUT ID
-    file.link as "Question",
-    topic as "Topic",
-    difficulty as "Difficulty",
-    dateformat(file.ctime, "yyyy-MM-dd") as "Created"
-FROM "40-Android" OR "70-Kotlin" OR "60-CompSci" OR "20-Algorithms" OR "50-Backend" OR "80-Tools"
-WHERE status = "draft"
-SORT file.ctime DESC
-LIMIT 50
-```
-
----
-
-## Study Paths
-
-### Junior Level Track
-**Focus**: Easy Android, Kotlin basics, fundamental patterns
-- Activity lifecycle, basic coroutines, fundamental design patterns
-- Estimated: ~200 easy-level questions
-
-### Mid Level Track
-**Focus**: Medium Android/Kotlin, architecture patterns, system design basics
-- Jetpack Compose, Flow operators, MVVM/MVI, performance optimization
-- Estimated: ~500 medium-level questions
-
-### Senior+ Level Track
-**Focus**: Hard Android/Kotlin, system design, advanced patterns
-- Multi-module architecture, scalability, complex coroutines, KMP
-- Estimated: ~150 hard-level questions
-
----
-
 ## Quick Links
 
 ### Documentation
@@ -266,52 +92,231 @@ GROUP BY true
 
 ---
 
-## Progress Tracking
+## 🔗 Link Health Monitor
 
-### Completion Rate by Topic
+### Broken Links Detection
 
-```dataview
-TABLE WITHOUT ID
-    topic as "Topic",
-    length(rows) as "Total",
-    length(filter(rows, (r) => r.status = "ready")) as "Ready",
-    length(filter(rows, (r) => r.status = "reviewed")) as "Reviewed",
-    length(filter(rows, (r) => r.status = "draft")) as "Draft",
-    round((length(filter(rows, (r) => r.status = "ready")) / length(rows)) * 100) + "%" as "Completion %"
-FROM "40-Android" OR "70-Kotlin" OR "60-CompSci" OR "20-Algorithms" OR "50-Backend" OR "80-Tools"
-WHERE topic
-GROUP BY topic
-SORT length(rows) DESC
+```dataviewjs
+// Find all files with broken wikilinks
+const files = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci" or "20-Algorithms" or "50-Backend" or "80-Tools" or "90-MOCs"')
+    .where(p => p.file.path.endsWith('.md'));
+
+let brokenLinks = [];
+let totalLinks = 0;
+let brokenCount = 0;
+
+for (let file of files) {
+    const content = await dv.io.load(file.file.path);
+    if (!content) continue;
+
+    // Find all wikilinks [[...]]
+    const wikilinkRegex = /\[\[([^\]|]+)(\|[^\]]+)?\]\]/g;
+    let match;
+
+    while ((match = wikilinkRegex.exec(content)) !== null) {
+        totalLinks++;
+        const linkTarget = match[1].trim();
+
+        // Check if target exists (try with and without .md extension)
+        const targetExists = dv.page(linkTarget) ||
+                           dv.page(linkTarget + '.md') ||
+                           dv.pages().find(p => p.file.name === linkTarget);
+
+        if (!targetExists) {
+            brokenCount++;
+            brokenLinks.push({
+                source: file.file.name,
+                target: linkTarget,
+                path: file.file.path
+            });
+        }
+    }
+}
+
+// Display results
+dv.header(3, `📊 Summary`);
+dv.paragraph(`**Total Links**: ${totalLinks} | **Broken**: ${brokenCount} | **Health**: ${Math.round((totalLinks - brokenCount) / totalLinks * 100)}%`);
+
+if (brokenCount > 0) {
+    dv.header(3, `❌ Broken Links (${brokenCount})`);
+
+    // Group by source file
+    const grouped = {};
+    for (let link of brokenLinks) {
+        if (!grouped[link.source]) {
+            grouped[link.source] = [];
+        }
+        grouped[link.source].push(link.target);
+    }
+
+    // Display top 10 files with most broken links
+    const sorted = Object.entries(grouped)
+        .sort((a, b) => b[1].length - a[1].length)
+        .slice(0, 10);
+
+    dv.table(
+        ["Source File", "Broken Links", "Count"],
+        sorted.map(([source, targets]) => [
+            `[[${source}]]`,
+            targets.slice(0, 3).map(t => `\`${t}\``).join(", ") + (targets.length > 3 ? "..." : ""),
+            targets.length
+        ])
+    );
+
+    dv.paragraph(`*Showing top 10 files. See [Link Analysis Report](LINK_ANALYSIS_REPORT.md) for complete list.*`);
+} else {
+    dv.paragraph("✅ **All links are healthy!**");
+}
 ```
 
----
+### Missing Cross-References
 
-## Vault Highlights
+```dataviewjs
+// Find related questions that should link to each other but don't
+const files = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci"')
+    .where(p => p.file.path.startsWith('q-'));
 
-- **Total Questions**: 580+ markdown files (as of 2025-10-06)
-- **Topics Covered**: 7 main categories
-- **Bilingual**: 100% EN/RU coverage target
-- **Difficulty Range**: Easy to Hard (Junior to Staff+)
-- **Sources**: Kirchhoff + Amit Shekhar repositories
-- **Quality**: Standardized template compliance
-- **NEW**: System Design category (12 questions)
+let suggestions = [];
 
----
+for (let file of files) {
+    if (!file.subtopics) continue;
 
-## Recent Updates
+    // Find files with overlapping subtopics
+    const related = files.where(f =>
+        f.file.path !== file.file.path &&
+        f.subtopics &&
+        f.subtopics.some(st => file.subtopics.includes(st))
+    );
 
-### 2025-10-06
-- Completed all source repositories import (167 new questions)
-- Executed comprehensive cleanup (242 files cleaned)
-- Removed all redundant difficulty tags
-- Template compliance achieved
-- Created comprehensive Homepage with Dataview analytics
+    for (let rel of related) {
+        // Check if they already link to each other
+        const content = await dv.io.load(file.file.path);
+        if (!content || content.includes(`[[${rel.file.name}]]`)) continue;
 
-### 2025-10-05
-- Imported Kirchhoff repository (111 questions)
-- Imported Amit Shekhar repository (56 questions)
-- Created System Design category
-- Full bilingual coverage with AI translation
+        suggestions.push({
+            from: file.file.name,
+            to: rel.file.name,
+            commonTopics: file.subtopics.filter(st => rel.subtopics.includes(st)),
+            fromTopic: file.topic,
+            toTopic: rel.topic
+        });
+    }
+}
+
+dv.header(3, `💡 Suggested Cross-References`);
+
+if (suggestions.length > 0) {
+    // Show top 15 suggestions (files with most overlapping topics)
+    const topSuggestions = suggestions
+        .sort((a, b) => b.commonTopics.length - a.commonTopics.length)
+        .slice(0, 15);
+
+    dv.table(
+        ["From", "To", "Common Topics", "Count"],
+        topSuggestions.map(s => [
+            `[[${s.from}]]`,
+            `[[${s.to}]]`,
+            s.commonTopics.slice(0, 2).map(t => `\`${t}\``).join(", "),
+            s.commonTopics.length
+        ])
+    );
+
+    dv.paragraph(`*Found ${suggestions.length} potential cross-references. Showing top 15.*`);
+} else {
+    dv.paragraph("✅ No obvious missing cross-references detected.");
+}
+```
+
+### Orphan Files (No Incoming Links)
+
+```dataviewjs
+// Find files with no incoming links
+const allFiles = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci" or "20-Algorithms" or "50-Backend" or "80-Tools"')
+    .where(p => p.file.path.endsWith('.md'));
+
+const filesWithLinks = new Set();
+
+// Check all files for outgoing links
+for (let file of allFiles) {
+    const content = await dv.io.load(file.file.path);
+    if (!content) continue;
+
+    const wikilinkRegex = /\[\[([^\]|]+)(\|[^\]]+)?\]\]/g;
+    let match;
+
+    while ((match = wikilinkRegex.exec(content)) !== null) {
+        const linkTarget = match[1].trim();
+        filesWithLinks.add(linkTarget);
+        filesWithLinks.add(linkTarget + '.md');
+    }
+}
+
+// Find orphans
+const orphans = allFiles
+    .where(f => !filesWithLinks.has(f.file.name) && !filesWithLinks.has(f.file.name.replace('.md', '')))
+    .sort(f => f.file.name, 'asc')
+    .slice(0, 20);
+
+dv.header(3, `🏝️ Orphan Files (No Incoming Links)`);
+
+if (orphans.length > 0) {
+    dv.table(
+        ["File", "Topic", "Difficulty"],
+        orphans.map(f => [
+            `[[${f.file.name}]]`,
+            f.topic || "N/A",
+            f.difficulty || "N/A"
+        ])
+    );
+    dv.paragraph(`*Showing first 20 orphans. These files might need cross-references.*`);
+} else {
+    dv.paragraph("✅ No orphan files found!");
+}
+```
+
+### Files Without Related Questions Section
+
+```dataviewjs
+// Find files that don't have a "Related Questions" section
+const files = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci"')
+    .where(p => p.file.path.startsWith('q-'));
+
+let filesWithoutRelated = [];
+
+for (let file of files) {
+    const content = await dv.io.load(file.file.path);
+    if (!content) continue;
+
+    // Check if file has "Related Questions" section
+    if (!content.includes('## Related Questions')) {
+        filesWithoutRelated.push({
+            name: file.file.name,
+            topic: file.topic,
+            difficulty: file.difficulty,
+            path: file.file.path
+        });
+    }
+}
+
+dv.header(3, `📝 Files Missing Related Questions Section`);
+
+if (filesWithoutRelated.length > 0) {
+    const sample = filesWithoutRelated.slice(0, 15);
+
+    dv.table(
+        ["File", "Topic", "Difficulty"],
+        sample.map(f => [
+            `[[${f.name}]]`,
+            f.topic || "N/A",
+            f.difficulty || "N/A"
+        ])
+    );
+
+    dv.paragraph(`*Found ${filesWithoutRelated.length} files. Showing first 15. Consider adding related questions to improve navigation.*`);
+} else {
+    dv.paragraph("✅ All files have Related Questions sections!");
+}
+```
 
 ---
 
@@ -323,9 +328,4 @@ SORT length(rows) DESC
 4. **Use tags**: Each question has detailed tags for granular filtering
 5. **Bilingual learning**: Switch between EN/RU sections for better understanding
 6. **System Design**: Start with easy questions, progress to hard architectural challenges
-
----
-
-**Last Updated**: 2025-10-06 | **Vault Status**: Production Ready
-
-*This homepage is powered by [Obsidian Dataview](https://blacksmithgu.github.io/obsidian-dataview/)*
+7. **Monitor link health**: Check the Link Health Monitor section regularly

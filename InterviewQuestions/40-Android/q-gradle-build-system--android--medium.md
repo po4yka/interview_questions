@@ -2,7 +2,7 @@
 id: 202510051234005
 title: "Gradle Build System / Система сборки Gradle"
 topic: android
-status: reviewed
+status: draft
 created: 2025-10-05
 updated: 2025-10-05
 difficulty: medium
@@ -37,8 +37,15 @@ connections: []
 
 # Gradle Build System / Система сборки Gradle
 
-## English
+# Question (EN)
+> 
 
+# Вопрос (RU)
+> 
+
+---
+
+## Answer (EN)
 ### What is Gradle?
 
 Gradle is an open-source build automation tool flexible enough to build almost any type of software. Gradle makes few assumptions about what you're trying to build or how to build it. This makes Gradle particularly flexible.
@@ -407,8 +414,9 @@ sdk.dir=/Users/username/Library/Android/sdk
 
 ---
 
-## Русский
 
+
+## Ответ (RU)
 ### Что такое Gradle?
 
 Gradle - это инструмент автоматизации сборки с открытым исходным кодом, достаточно гибкий для сборки почти любого типа программного обеспечения. Gradle делает мало предположений о том, что вы пытаетесь собрать или как это собрать. Это делает Gradle особенно гибким.

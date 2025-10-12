@@ -7,15 +7,14 @@ tags:
   - coroutines
   - lifecycle
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Side-эффекты в Compose: LaunchedEffect vs DisposableEffect
 
 **English**: What are side-effect APIs in Compose, and when would you use LaunchedEffect vs DisposableEffect?
 
-## Answer
-
+## Answer (EN)
 **Side-effects** в Jetpack Compose — это операции, которые выполняются вне обычного цикла recomposition и могут взаимодействовать с внешним миром (API calls, database, sensors, etc.). Compose предоставляет специальные API для безопасного управления side-effects с учетом жизненного цикла.
 
 ### Проблема без Side-Effect API
