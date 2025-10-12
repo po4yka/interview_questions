@@ -416,3 +416,17 @@ This enables clients to (1) reuse (share) Flyweight objects and (2) pass in extr
 2. **CPU trade-off** - Saves RAM but may use more CPU for lookups
 3. **Immutability** - Flyweights must be immutable
 4. **Thread safety** - Factory must be thread-safe
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Advanced Patterns
+- [[q-bridge-pattern--design-patterns--hard]] - Bridge pattern
+- [[q-interpreter-pattern--design-patterns--hard]] - Interpreter pattern
+- [[q-visitor-pattern--design-patterns--hard]] - Visitor pattern
+

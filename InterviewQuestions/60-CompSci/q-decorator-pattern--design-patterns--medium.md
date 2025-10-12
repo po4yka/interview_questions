@@ -376,3 +376,24 @@ Don't use it if:
 3. **Order matters** - Decorator order affects final behavior
 4. **Debugging difficulty** - Stack traces become deeper
 5. **Instantiation complexity** - Creating heavily decorated objects is verbose
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+- [[q-facade-pattern--design-patterns--medium]] - Facade pattern
+- [[q-proxy-pattern--design-patterns--medium]] - Proxy pattern
+- [[q-composite-pattern--design-patterns--medium]] - Composite pattern
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+

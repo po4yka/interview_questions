@@ -598,3 +598,19 @@ Jetpack Compose предоставляет несколько API для side-э
 5. Предпочитайте produceState для чистой конвертации async → State
 6. SideEffect только для синхронизации, не для async работы
 7. Тестируйте side effects с проверкой корректной очистки
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
+- [[q-compose-performance-optimization--android--hard]] - Performance optimization
+

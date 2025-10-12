@@ -368,3 +368,25 @@ This makes subject and observers **loosely coupled**. Subject and observers have
 3. **Performance overhead** - Notifying many observers can be expensive
 4. **Complex debugging** - Hard to track which observer caused what change
 5. **Cascade updates** - Can lead to complex update chains that are hard to understand
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+- [[q-command-pattern--design-patterns--medium]] - Command pattern
+- [[q-template-method-pattern--design-patterns--medium]] - Template Method pattern
+- [[q-iterator-pattern--design-patterns--medium]] - Iterator pattern
+- [[q-state-pattern--design-patterns--medium]] - State pattern
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+

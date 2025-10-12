@@ -1271,7 +1271,12 @@ fun `debounce эмитит только после тихого периода`(
 
 ## Related Questions
 
-- [[q-testing-coroutines-runtest--kotlin--medium]] - runTest basics
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Testing StateFlow/SharedFlow
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow operators explained
-- [[q-debounce-throttle-flow--kotlin--medium]] - Debounce and throttle patterns
+### Hub
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+
+### Related (Hard)
+- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
+- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
+- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
+- [[q-flow-operators-deep-dive--kotlin--hard]] - Deep dive into operators
+- [[q-flow-performance--kotlin--hard]] - Performance optimization

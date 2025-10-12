@@ -276,3 +276,17 @@ Singleton - это порождающий паттерн проектирова�
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+- [[q-abstract-factory-pattern--design-patterns--medium]] - Abstract Factory pattern
+- [[q-builder-pattern--design-patterns--medium]] - Builder pattern
+

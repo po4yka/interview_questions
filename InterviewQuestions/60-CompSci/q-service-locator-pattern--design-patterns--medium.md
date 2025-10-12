@@ -380,3 +380,12 @@ class UserManager {
 
 **Source:** Kirchhoff-Android-Interview-Questions
 **Attribution:** Content adapted from the Kirchhoff repository
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+

@@ -420,3 +420,24 @@ To act as a substitute for a subject, a proxy must implement the **`Subject`** i
 3. **Design complexity** - Requires good understanding of use case
 4. **Testing overhead** - More components to test
 5. **Memory concerns** - Caching proxies can cause memory issues if not managed properly
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+- [[q-decorator-pattern--design-patterns--medium]] - Decorator pattern
+- [[q-facade-pattern--design-patterns--medium]] - Facade pattern
+- [[q-composite-pattern--design-patterns--medium]] - Composite pattern
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+

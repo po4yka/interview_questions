@@ -524,3 +524,19 @@ stable class ProductViewModel {
 - Compose может **пропустить рекомпозицию**, если параметры не изменились
 - Меньше перерисовок = лучшая производительность
 
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
+- [[q-compose-performance-optimization--android--hard]] - Performance optimization
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts
+

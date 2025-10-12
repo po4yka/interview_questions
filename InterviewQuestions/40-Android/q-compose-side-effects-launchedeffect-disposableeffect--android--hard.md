@@ -738,3 +738,24 @@ LaunchedEffect(Unit) {
 
 **English**: Compose provides side-effect APIs for safely managing effects outside recomposition: **LaunchedEffect** - launches coroutines (auto-cancels on dispose/key change), use for API calls, Flow collection. **DisposableEffect** - manages subscriptions with mandatory onDispose cleanup, use for LocationManager, sensors, listeners. **SideEffect** - runs after each recomposition for syncing with non-Compose code. **rememberCoroutineScope** - event-driven coroutine launch (onClick). **produceState** - converts suspend/Flow to State. **derivedStateOf** - computed state (optimization). **rememberUpdatedState** - always-current values in callbacks. Key differences: LaunchedEffect auto-cleanup (coroutines), DisposableEffect explicit cleanup (subscriptions). Always specify correct keys for restart behavior.
 
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Medium)
+- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
+- [[q-mutable-state-compose--android--medium]] - MutableState basics
+- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
+
+### Advanced (Harder)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+

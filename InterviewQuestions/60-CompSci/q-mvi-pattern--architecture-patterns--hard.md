@@ -137,3 +137,16 @@ MVI работает совершенно иначе по сравнению с�
 
 **Source:** Kirchhoff-Android-Interview-Questions
 **Attribution:** Content adapted from the Kirchhoff repository
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Architecture Patterns
+- [[q-mvvm-pattern--architecture-patterns--medium]] - MVVM pattern
+- [[q-mvp-pattern--architecture-patterns--medium]] - MVP pattern
+

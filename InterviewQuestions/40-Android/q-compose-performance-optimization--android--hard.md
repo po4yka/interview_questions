@@ -282,4 +282,13 @@ class ViewModel : ViewModel() {
 - [Compose Performance](https://developer.android.com/jetpack/compose/performance)
 
 ## Related Questions
-- [[q-recomposition-compose--android--medium]]
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts

@@ -495,3 +495,25 @@ This makes a class independent of how state-specific behavior is implemented. Ne
 2. **Many classes** - Each state needs a class
 3. **State coupling** - States need to know about each other
 4. **Complexity** - Can be hard to track state transitions
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+- [[q-observer-pattern--design-patterns--medium]] - Observer pattern
+- [[q-command-pattern--design-patterns--medium]] - Command pattern
+- [[q-template-method-pattern--design-patterns--medium]] - Template Method pattern
+- [[q-iterator-pattern--design-patterns--medium]] - Iterator pattern
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+

@@ -449,3 +449,25 @@ The Command Pattern is especially useful for:
 2. **Complexity** - More complex for simple operations
 3. **Memory overhead** - Storing command history uses memory
 4. **Indirection** - Extra layer of indirection
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+- [[q-observer-pattern--design-patterns--medium]] - Observer pattern
+- [[q-template-method-pattern--design-patterns--medium]] - Template Method pattern
+- [[q-iterator-pattern--design-patterns--medium]] - Iterator pattern
+- [[q-state-pattern--design-patterns--medium]] - State pattern
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+

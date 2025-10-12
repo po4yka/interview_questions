@@ -482,3 +482,24 @@ fun ItemRow(item: Item) {
 Как в Jetpack Compose создать список, аналогичный RecyclerView
 
 Используется LazyColumn или LazyRow. Они создают и отображают элементы по мере необходимости, экономя ресурсы и обеспечивая плавную прокрутку
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Medium)
+- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
+- [[q-mutable-state-compose--android--medium]] - MutableState basics
+- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
+- [[q-compose-remember-derived-state--jetpack-compose--medium]] - Derived state patterns
+
+### Advanced (Harder)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+

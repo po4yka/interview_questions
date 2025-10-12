@@ -501,3 +501,19 @@ fun UserDisplay(user: StableUserData) { // Теперь пропускается
 С правильным пропуском: только 1 перекомпонуется (~0.1ms)
 
 **Улучшение производительности в 1000 раз!**
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Hard)
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
+- [[q-compose-performance-optimization--android--hard]] - Performance optimization
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts
+

@@ -498,3 +498,24 @@ ViewModel — это Android Architecture Component для управления 
 - [Using ViewModels to Retain State on Android - Nutrient](https://www.nutrient.io/blog/using-viewmodels-to-retain-state-on-android/)
 - [View Model Creation in Android - ProAndroidDev](https://proandroiddev.com/view-model-creation-in-android-android-architecture-components-kotlin-ce9f6b93a46b)
 - [Dive deep into Android's ViewModel - Medium](https://medium.com/android-news/dive-deep-into-androids-viewmodel-android-architecture-components-e0a7ded26f70)
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+
+### Related (Medium)
+- [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
+- [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - ViewModel vs onSavedInstanceState
+
+### Advanced (Harder)
+- [[q-mvi-architecture--android--hard]] - MVI architecture pattern
+- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
+- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
+

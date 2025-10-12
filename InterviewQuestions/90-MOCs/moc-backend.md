@@ -44,6 +44,15 @@ LIMIT 50
 ## By Subtopic
 
 ### Databases
+
+**Key Questions**:
+
+#### Database Fundamentals
+- [[q-relational-table-unique-data--backend--medium]] - Relational table unique data
+- [[q-database-migration-purpose--backend--medium]] - Database migration purpose
+- [[q-virtual-tables-disadvantages--backend--medium]] - Virtual tables disadvantages
+
+**All Database Questions:**
 ```dataview
 TABLE difficulty, status
 FROM "50-Backend"
@@ -52,6 +61,13 @@ SORT difficulty ASC, file.name ASC
 ```
 
 ### SQL & Query Optimization
+
+**Key Questions**:
+
+#### SQL Performance
+- [[q-sql-join-algorithms-complexity--backend--hard]] - SQL join algorithms and complexity
+
+**All SQL Questions:**
 ```dataview
 TABLE difficulty, status
 FROM "50-Backend"

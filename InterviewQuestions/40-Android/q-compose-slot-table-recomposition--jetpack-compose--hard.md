@@ -723,3 +723,19 @@ Compose использует **идентичность на основе поз
 4. **Понимайте область перекомпозиции**
 
 Slot Table обеспечивает производительность Compose, позволяя перекомпоновать только то, что изменилось.
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+- [[q-compose-performance-optimization--android--hard]] - Performance optimization
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts
+

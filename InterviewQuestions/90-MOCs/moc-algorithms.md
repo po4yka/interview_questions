@@ -44,6 +44,13 @@ LIMIT 50
 ## By Subtopic
 
 ### Data Structures
+
+**Key Questions**:
+
+#### Data Structures Fundamentals
+- [[q-data-structures-overview--algorithms--easy]] - Data structures overview
+
+**All Data Structure Questions:**
 ```dataview
 TABLE difficulty, status
 FROM "20-Algorithms"

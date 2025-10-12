@@ -391,3 +391,23 @@ val foodOrder = FoodOrder.Builder()
 2. **May hamper/complicate dependency injection** - DI frameworks often work with constructors
 3. **More code** - Requires creating builder class and methods
 4. **Overkill for simple objects** - Kotlin named parameters are often better
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+- [[q-abstract-factory-pattern--design-patterns--medium]] - Abstract Factory pattern
+- [[q-prototype-pattern--design-patterns--medium]] - Prototype pattern
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+

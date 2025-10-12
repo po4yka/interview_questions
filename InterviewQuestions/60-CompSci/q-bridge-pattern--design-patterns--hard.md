@@ -441,3 +441,17 @@ When to Use Bridge Pattern:
 1. **Increased complexity** - More classes and interfaces
 2. **Indirection** - Extra layer of abstraction
 3. **Design overhead** - Requires careful design upfront
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Advanced Patterns
+- [[q-interpreter-pattern--design-patterns--hard]] - Interpreter pattern
+- [[q-visitor-pattern--design-patterns--hard]] - Visitor pattern
+- [[q-flyweight-pattern--design-patterns--hard]] - Flyweight pattern
+

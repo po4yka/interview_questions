@@ -257,3 +257,24 @@ fun StyledComponent() {
 Как работает jetpackCompose?
 
 Jetpack Compose – это декларативный UI-фреймворк от Google для создания интерфейсов в Android. Вместо традиционных XML + View в Compose используется функции-компоненты, которые описывают UI. Главные принципы работы Jetpack Compose: декларативный подход – UI создаётся через функции, без XML. Реактивность – UI автоматически обновляется, если данные изменились. Компонентный подход – UI состоит из маленьких, переиспользуемых функций. Composable-функции (@Composable) – основной строительный блок Compose.
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Medium)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
+- [[q-mutable-state-compose--android--medium]] - MutableState basics
+- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
+- [[q-compose-remember-derived-state--jetpack-compose--medium]] - Derived state patterns
+
+### Advanced (Harder)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+

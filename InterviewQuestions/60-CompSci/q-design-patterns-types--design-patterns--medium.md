@@ -390,3 +390,49 @@ class MediaAdapter(private val mp4Player: Mp4Player) : MediaPlayer {
     }
 }
 ```
+
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-singleton-pattern--design-patterns--easy]] - Singleton pattern
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+- [[q-abstract-factory-pattern--design-patterns--medium]] - Abstract Factory pattern
+- [[q-builder-pattern--design-patterns--medium]] - Builder pattern
+- [[q-prototype-pattern--design-patterns--medium]] - Prototype pattern
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+- [[q-decorator-pattern--design-patterns--medium]] - Decorator pattern
+- [[q-facade-pattern--design-patterns--medium]] - Facade pattern
+- [[q-proxy-pattern--design-patterns--medium]] - Proxy pattern
+- [[q-composite-pattern--design-patterns--medium]] - Composite pattern
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+- [[q-observer-pattern--design-patterns--medium]] - Observer pattern
+- [[q-command-pattern--design-patterns--medium]] - Command pattern
+- [[q-template-method-pattern--design-patterns--medium]] - Template Method pattern
+- [[q-iterator-pattern--design-patterns--medium]] - Iterator pattern
+- [[q-state-pattern--design-patterns--medium]] - State pattern
+- [[q-chain-of-responsibility--design-patterns--medium]] - Chain of Responsibility
+- [[q-mediator-pattern--design-patterns--medium]] - Mediator pattern
+- [[q-memento-pattern--design-patterns--medium]] - Memento pattern
+
+### Other Patterns
+- [[q-service-locator-pattern--design-patterns--medium]] - Service Locator pattern
+
+### Advanced Patterns (Harder)
+- [[q-bridge-pattern--design-patterns--hard]] - Bridge pattern
+- [[q-interpreter-pattern--design-patterns--hard]] - Interpreter pattern
+- [[q-visitor-pattern--design-patterns--hard]] - Visitor pattern
+- [[q-flyweight-pattern--design-patterns--hard]] - Flyweight pattern
+
+### Architecture Patterns
+- [[q-mvvm-pattern--architecture-patterns--medium]] - MVVM pattern
+- [[q-mvp-pattern--architecture-patterns--medium]] - MVP pattern
+- [[q-mvi-pattern--architecture-patterns--hard]] - MVI pattern

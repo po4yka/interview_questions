@@ -834,3 +834,21 @@ class LocationObserver : DefaultLifecycleObserver {
 - ViewBinding для views
 - Jetpack Compose для UI (заменяет Fragments + Data Binding)
 
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+
+### Same Level (Easy)
+- [[q-viewmodel-pattern--android--easy]] - ViewModel pattern basics
+
+### Next Steps (Medium)
+- [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
+- [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
+- [[q-what-is-viewmodel--android--medium]] - What is ViewModel
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
+

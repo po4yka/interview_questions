@@ -328,5 +328,12 @@ launch(parentContext) {
 - [Coroutine Context](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
 
 ## Related Questions
-- [[q-dispatchers-types--kotlin--medium]]
-- [[q-structured-concurrency-kotlin--kotlin--medium]]
+
+### Hub
+- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
+
+### Related (Hard)
+- [[q-advanced-coroutine-patterns--kotlin--hard]] - Advanced patterns
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization
+- [[q-lifecycle-aware-coroutines--kotlin--hard]] - Lifecycle-aware patterns
+- [[q-coroutine-profiling--kotlin--hard]] - Profiling and debugging

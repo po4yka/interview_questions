@@ -380,3 +380,19 @@ fun DeferredRead() {
 Как рисует Compose на экране
 
 Jetpack Compose использует асинхронный рендеринг, который проходит несколько этапов: 1. Композиция – анализ и построение дерева UI. 2. Составление Layout – расчет размеров и позиций элементов. 3. Рендеринг – отрисовка UI через Canvas и GPU.
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
+- [[q-compose-performance-optimization--android--hard]] - Performance optimization
+

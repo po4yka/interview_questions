@@ -542,3 +542,24 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 
 **English**: **remember** stores state in memory - survives recomposition but lost on configuration change (rotation). **rememberSaveable** stores state in Bundle - survives configuration changes and process death. Use **remember** for: temporary UI state, performance-critical objects, ViewModel-managed state. Use **rememberSaveable** for: user input (forms, search), scroll position, selected items, expanded/collapsed state. Limitations: rememberSaveable requires Bundle-compatible types (Parcelable/Serializable), has 1MB size limit, slower (serialization overhead). For custom types, implement Parcelable or create custom Saver. Don't use rememberSaveable for large data - use ViewModel instead.
 
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Medium)
+- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
+- [[q-mutable-state-compose--android--medium]] - MutableState basics
+- [[q-compose-remember-derived-state--jetpack-compose--medium]] - Derived state patterns
+
+### Advanced (Harder)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+

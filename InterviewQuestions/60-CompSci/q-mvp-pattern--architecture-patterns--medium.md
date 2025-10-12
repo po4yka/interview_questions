@@ -324,3 +324,16 @@ data class User(val name: String, val email: String)
 
 **Source:** Kirchhoff-Android-Interview-Questions
 **Attribution:** Content adapted from the Kirchhoff repository
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Architecture Patterns
+- [[q-mvvm-pattern--architecture-patterns--medium]] - MVVM pattern
+- [[q-mvi-pattern--architecture-patterns--hard]] - MVI pattern
+

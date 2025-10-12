@@ -947,9 +947,20 @@ class UserViewModel @Inject constructor(
 
 ## Related Questions
 
-- [[q-repository-multiple-sources--android--medium]]
-- [[q-clean-architecture-android--android--hard]]
-- [[q-mvvm-pattern--android--medium]]
+### Hub
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+
+### Related (Medium)
+- [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
+- [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
+- [[q-what-is-viewmodel--android--medium]] - What is ViewModel
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation
+
+### Advanced (Harder)
+- [[q-mvi-architecture--android--hard]] - MVI architecture pattern
+- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
+- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
 
 ## References
 

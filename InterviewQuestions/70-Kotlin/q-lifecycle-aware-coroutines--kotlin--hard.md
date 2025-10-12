@@ -1231,11 +1231,15 @@ class SafeViewModel : ViewModel() {
 ---
 
 ## Related Questions
-- [[q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]]
-- [[q-structured-concurrency-kotlin--kotlin--medium]]
-- [[q-coroutine-cancellation-mechanisms--kotlin--medium]]
-- [[q-testing-viewmodels-coroutines--kotlin--medium]]
-- [[q-kotlin-coroutines-introduction--kotlin--medium]]
+
+### Hub
+- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
+
+### Related (Hard)
+- [[q-coroutine-context-detailed--kotlin--hard]] - Deep dive into CoroutineContext
+- [[q-advanced-coroutine-patterns--kotlin--hard]] - Advanced patterns
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization
+- [[q-coroutine-profiling--kotlin--hard]] - Profiling and debugging
 
 ## References
 - [Lifecycle-aware coroutines](https://developer.android.com/topic/libraries/architecture/coroutines)

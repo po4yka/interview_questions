@@ -395,3 +395,25 @@ The Strategy Design Pattern can be useful in various scenarios:
 3. **Overhead** - May introduce overhead when simple conditional would suffice
 4. **Client awareness** - Clients must be aware of different strategies
 5. **Strategy selection logic** - Need to implement strategy selection logic
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Behavioral Patterns
+- [[q-observer-pattern--design-patterns--medium]] - Observer pattern
+- [[q-command-pattern--design-patterns--medium]] - Command pattern
+- [[q-template-method-pattern--design-patterns--medium]] - Template Method pattern
+- [[q-iterator-pattern--design-patterns--medium]] - Iterator pattern
+- [[q-state-pattern--design-patterns--medium]] - State pattern
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+

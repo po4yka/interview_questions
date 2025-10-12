@@ -947,10 +947,14 @@ GlobalScope.launch {
 
 ## Related Questions
 
-- [[q-actor-pattern--kotlin--hard]]
-- [[q-fan-in-fan-out--kotlin--hard]]
-- [[q-structured-concurrency--kotlin--hard]]
-- [[q-flow-backpressure--kotlin--hard]]
+### Hub
+- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
+
+### Related (Hard)
+- [[q-coroutine-context-detailed--kotlin--hard]] - Deep dive into CoroutineContext
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization
+- [[q-lifecycle-aware-coroutines--kotlin--hard]] - Lifecycle-aware patterns
+- [[q-coroutine-profiling--kotlin--hard]] - Profiling and debugging
 
 ## MOC Links
 

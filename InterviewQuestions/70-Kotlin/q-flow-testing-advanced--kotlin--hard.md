@@ -709,5 +709,13 @@ fun `test search debouncing`() = runTest {
 - [Testing Flows - Android Developers](https://developer.android.com/kotlin/flow/test)
 
 ## Related Questions
-- [[q-kotlin-flow-basics--kotlin--medium]]
-- [[q-testing-viewmodels-coroutines--kotlin--medium]]
+
+### Hub
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+
+### Related (Hard)
+- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
+- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
+- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
+- [[q-flow-operators-deep-dive--kotlin--hard]] - Deep dive into operators
+- [[q-flow-performance--kotlin--hard]] - Performance optimization

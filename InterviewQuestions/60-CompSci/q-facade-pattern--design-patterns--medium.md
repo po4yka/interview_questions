@@ -411,3 +411,24 @@ Key Points of the Facade Pattern:
 3. **Overengineering** - Unnecessary for simple systems
 4. **Potential Performance Overhead** - Extra indirection layer
 5. **God Object Risk** - Facade can become too large
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+- [[q-decorator-pattern--design-patterns--medium]] - Decorator pattern
+- [[q-proxy-pattern--design-patterns--medium]] - Proxy pattern
+- [[q-composite-pattern--design-patterns--medium]] - Composite pattern
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+

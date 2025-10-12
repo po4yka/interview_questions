@@ -213,3 +213,23 @@ Cloned Character: GameCharacter(name=Knight, weapon=Sword, level=5)
 
 **Source:** Kirchhoff-Android-Interview-Questions
 **Attribution:** Content adapted from the Kirchhoff repository
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+- [[q-abstract-factory-pattern--design-patterns--medium]] - Abstract Factory pattern
+- [[q-builder-pattern--design-patterns--medium]] - Builder pattern
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+

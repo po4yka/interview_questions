@@ -23,3 +23,21 @@ ViewModel implements the MVVM (Model-View-ViewModel) pattern. ViewModel is respo
 ## Ответ (RU)
 Благодаря ViewModel реализуется паттерн MVVM (Model-View-ViewModel). ViewModel отвечает за управление данными и бизнес-логикой, изолируя их от View, что упрощает тестирование и обеспечивает разделение ответственности между слоями.
 
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+
+### Same Level (Easy)
+- [[q-architecture-components-libraries--android--easy]] - Architecture Components overview
+
+### Next Steps (Medium)
+- [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
+- [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
+- [[q-what-is-viewmodel--android--medium]] - What is ViewModel
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
+

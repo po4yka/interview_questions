@@ -257,3 +257,25 @@ Clean Code
 
 **Source:** Kirchhoff-Android-Interview-Questions
 **Attribution:** Content adapted from the Kirchhoff repository
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+- [[q-observer-pattern--design-patterns--medium]] - Observer pattern
+- [[q-command-pattern--design-patterns--medium]] - Command pattern
+- [[q-template-method-pattern--design-patterns--medium]] - Template Method pattern
+- [[q-state-pattern--design-patterns--medium]] - State pattern
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+

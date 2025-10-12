@@ -526,10 +526,17 @@ fun calculate(x: Int): Int  // Лучше чем Flow<Int>
 
 ## Related Questions
 
-- [[q-hot-cold-flows--kotlin--medium]]
-- [[q-sharedflow-stateflow--kotlin--medium]]
-- [[q-flow-exception-handling--kotlin--medium]]
-- [[q-flow-operators-deep-dive--kotlin--hard]]
+### Hub
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+
+### Same Level (Easy)
+- [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Cold flow fundamentals
+
+### Next Steps (Medium)
+- [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
+- [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
+- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
+- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
 
 ## MOC Links
 

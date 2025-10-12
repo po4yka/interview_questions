@@ -262,4 +262,28 @@ class UserRepositoryImpl(
 - [Guide to app architecture](https://developer.android.com/topic/architecture)
 
 ## Related Questions
-- [[q-mvvm-pattern--android--medium]]
+
+### Prerequisites (Easier)
+- [[q-architecture-components-libraries--android--easy]] - Architecture Components overview
+- [[q-viewmodel-pattern--android--easy]] - ViewModel pattern basics
+
+### MVVM & ViewModel (Medium)
+- [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
+- [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
+- [[q-what-is-viewmodel--android--medium]] - What is ViewModel
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - ViewModel vs onSavedInstanceState
+
+### Patterns & Layers (Medium)
+- [[q-repository-pattern--android--medium]] - Repository pattern
+- [[q-repository-multiple-sources--android--medium]] - Repository with multiple sources
+- [[q-usecase-pattern-android--android--medium]] - Use Case pattern
+- [[q-mvi-one-time-events--android--medium]] - MVI one-time events
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing ViewModels with Turbine
+
+### Advanced Architecture (Harder)
+- [[q-mvi-architecture--android--hard]] - MVI architecture pattern
+- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
+- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
+- [[q-kmm-architecture--multiplatform--hard]] - KMM architecture patterns

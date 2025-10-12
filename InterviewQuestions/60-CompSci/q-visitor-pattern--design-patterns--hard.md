@@ -492,3 +492,17 @@ Motivation for Using the Visitor Pattern:
 3. **Tight Coupling** - Visitors need to know all element types
 4. **More Classes** - Can clutter codebase
 5. **Not Ideal for Frequent Changes** - Adding element types is difficult
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Advanced Patterns
+- [[q-bridge-pattern--design-patterns--hard]] - Bridge pattern
+- [[q-interpreter-pattern--design-patterns--hard]] - Interpreter pattern
+- [[q-flyweight-pattern--design-patterns--hard]] - Flyweight pattern
+

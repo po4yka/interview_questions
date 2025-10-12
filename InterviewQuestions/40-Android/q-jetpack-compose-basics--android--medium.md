@@ -1331,12 +1331,46 @@ fun LoadDataExample(userId: String) {
 ---
 
 ## Related Questions
-- [[q-compose-remember-derived-state--jetpack-compose--medium]]
-- [[q-compose-side-effects-advanced--jetpack-compose--hard]]
-- [[q-compose-stability-skippability--jetpack-compose--hard]]
-- [[q-how-does-jetpack-compose-work--android--medium]]
-- [[q-compose-performance-optimization--android--hard]]
 
+### Prerequisites (Easier)
+- [[q-jetpack-compose-lazy-column--android--easy]] - LazyColumn for lists
+
+### Compose Fundamentals (Medium)
+- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
+- [[q-mutable-state-compose--android--medium]] - MutableState basics
+- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
+- [[q-compose-remember-derived-state--jetpack-compose--medium]] - Derived state patterns
+- [[q-state-hoisting-compose--android--medium]] - State hoisting principles
+- [[q-recomposition-compose--android--medium]] - Understanding recomposition
+- [[q-compose-modifier-system--android--medium]] - Modifier system
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Modifier order & performance
+
+### UI & Components (Medium)
+- [[q-compose-side-effects-launchedeffect-disposableeffect--android--hard]] - LaunchedEffect & DisposableEffect
+- [[q-compose-semantics--android--medium]] - Semantics for accessibility
+- [[q-compose-gesture-detection--jetpack-compose--medium]] - Gesture detection
+- [[q-compose-custom-animations--jetpack-compose--medium]] - Custom animations
+- [[q-animated-visibility-vs-content--jetpack-compose--medium]] - AnimatedVisibility vs Content
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation patterns
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - CompositionLocal patterns
+- [[q-compose-testing--android--medium]] - Compose testing basics
+- [[q-testing-compose-ui--android--medium]] - UI testing strategies
+- [[q-migration-to-compose--android--medium]] - Migration to Compose
+- [[q-accessibility-compose--accessibility--medium]] - Accessibility in Compose
+
+### Advanced (Harder)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
+- [[q-compose-performance-optimization--android--hard]] - Performance optimization
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - Advanced side effects
+- [[q-compositionlocal-compose--android--hard]] - CompositionLocal deep dive
+- [[q-compose-compiler-plugin--jetpack-compose--hard]] - Compiler plugin internals
+- [[q-kak-risuet-compose-na-ekrane--android--hard]] - Compose drawing internals
 ## References
 - [Jetpack Compose Documentation](https://developer.android.com/jetpack/compose)
 - [Compose Basics](https://developer.android.com/jetpack/compose/tutorial)

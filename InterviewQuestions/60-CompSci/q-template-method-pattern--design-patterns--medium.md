@@ -479,3 +479,25 @@ The template method is used in frameworks for the following reasons:
 3. **Liskov Substitution** - Can violate if subclass changes behavior significantly
 4. **Maintenance** - More classes to maintain
 5. **Rigid structure** - Template method defines fixed sequence
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+- [[q-observer-pattern--design-patterns--medium]] - Observer pattern
+- [[q-command-pattern--design-patterns--medium]] - Command pattern
+- [[q-iterator-pattern--design-patterns--medium]] - Iterator pattern
+- [[q-state-pattern--design-patterns--medium]] - State pattern
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+

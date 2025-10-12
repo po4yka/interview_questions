@@ -1132,3 +1132,17 @@ KMM позволяет значительное переиспользовани
 - **Integration**: Нативные UI frameworks, shared ViewModels
 
 Ключевые моменты: правильные границы, Swift-friendly APIs, lifecycle management, platform-specific оптимизации.
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+
+### Related (Hard)
+- [[q-mvi-architecture--android--hard]] - MVI architecture pattern
+- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
+- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
+

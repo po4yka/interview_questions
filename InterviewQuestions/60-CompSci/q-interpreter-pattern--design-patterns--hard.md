@@ -252,3 +252,17 @@ Julie is a married woman? true
 
 **Source:** Kirchhoff-Android-Interview-Questions
 **Attribution:** Content adapted from the Kirchhoff repository
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Advanced Patterns
+- [[q-bridge-pattern--design-patterns--hard]] - Bridge pattern
+- [[q-visitor-pattern--design-patterns--hard]] - Visitor pattern
+- [[q-flyweight-pattern--design-patterns--hard]] - Flyweight pattern
+

@@ -828,3 +828,19 @@ fun Greeting(
 Используйте Compose Compiler Reports или декомпилируйте байткод в Android Studio для просмотра трансформированного кода.
 
 Понимание этих трансформаций помогает писать более эффективные Compose функции и отлаживать проблемы с производительностью.
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
+- [[q-compose-performance-optimization--android--hard]] - Performance optimization
+

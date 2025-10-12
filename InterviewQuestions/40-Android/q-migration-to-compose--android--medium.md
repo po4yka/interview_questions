@@ -493,3 +493,24 @@ fun CustomChart(data: List<DataPoint>) {
 ```
 
 **English**: Migrate large project to Compose using **hybrid approach**: 1) Add **ComposeView** inside existing XML layouts, 2) Use **AndroidView** for XML views inside Compose, 3) **Modular migration** - migrate feature modules one by one, 4) Create Compose **Design System** in parallel with XML, 5) New features Compose-only, 6) Gradual screen migration (simple → complex), 7) Test after each phase. Timeline: 9-13 months for 50+ screen app. Start with leaf components, progress bottom-up. Keep both XML and Compose during transition.
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Medium)
+- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
+- [[q-mutable-state-compose--android--medium]] - MutableState basics
+- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
+
+### Advanced (Harder)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+

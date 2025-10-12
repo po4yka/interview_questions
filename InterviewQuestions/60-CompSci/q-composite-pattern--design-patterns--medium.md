@@ -392,3 +392,24 @@ This enables clients to work through the Component interface to treat Leaf and C
 2. **Performance overhead** - Extra layers of abstraction
 3. **Limited functionality** - Best for similar objects in hierarchy
 4. **Overly general** - Component interface may be too general
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+- [[q-decorator-pattern--design-patterns--medium]] - Decorator pattern
+- [[q-facade-pattern--design-patterns--medium]] - Facade pattern
+- [[q-proxy-pattern--design-patterns--medium]] - Proxy pattern
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+

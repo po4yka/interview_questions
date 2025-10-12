@@ -730,3 +730,17 @@ Offline-first архитектура обеспечивает бесперебо
 - Индикация сетевого подключения
 - Offline-индикаторы
 - Обработка ошибок
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+
+### Related (Hard)
+- [[q-mvi-architecture--android--hard]] - MVI architecture pattern
+- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
+- [[q-kmm-architecture--multiplatform--hard]] - KMM architecture patterns
+

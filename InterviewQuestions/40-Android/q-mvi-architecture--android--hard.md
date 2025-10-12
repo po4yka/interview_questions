@@ -684,3 +684,17 @@ _state.value = _state.value.copy(
 
 **Testing**: Easy to test reducers (pure functions). Test state transitions (Intent → new State). Test side effects separately. Verify immutability.
 
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+
+### Related (Hard)
+- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
+- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
+- [[q-kmm-architecture--multiplatform--hard]] - KMM architecture patterns
+

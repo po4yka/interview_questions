@@ -380,3 +380,24 @@ Adapter made it compatible with three-pin socket!
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Structural Patterns
+- [[q-decorator-pattern--design-patterns--medium]] - Decorator pattern
+- [[q-facade-pattern--design-patterns--medium]] - Facade pattern
+- [[q-proxy-pattern--design-patterns--medium]] - Proxy pattern
+- [[q-composite-pattern--design-patterns--medium]] - Composite pattern
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+

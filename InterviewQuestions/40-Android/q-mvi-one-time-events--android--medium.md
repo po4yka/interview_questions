@@ -378,3 +378,24 @@ fun `when load fails should emit error event`() = runTest {
 ```
 
 **English**: In MVI, handle one-time events (toasts, navigation) separately from State. Use **SharedFlow** with `replay = 0` (recommended for Compose), **Channel** for simpler cases, **SingleLiveEvent** for LiveData legacy projects, or **Event wrapper** with consumed flag. State should only contain persistent UI data. Events are ephemeral and consumed once. Collect events in `LaunchedEffect` (Compose) or `repeatOnLifecycle` (Views). Test events with `turbine` or manual collection.
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+
+### Related (Medium)
+- [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
+- [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
+- [[q-what-is-viewmodel--android--medium]] - What is ViewModel
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation
+
+### Advanced (Harder)
+- [[q-mvi-architecture--android--hard]] - MVI architecture pattern
+- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
+- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
+

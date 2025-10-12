@@ -501,3 +501,19 @@ CounterDisplay(counter)  // Updates correctly
 3. Создавайте новые экземпляры вместо мутации
 4. При необходимости используйте @Stable аннотацию
 
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
+- [[q-compose-performance-optimization--android--hard]] - Performance optimization
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts
+

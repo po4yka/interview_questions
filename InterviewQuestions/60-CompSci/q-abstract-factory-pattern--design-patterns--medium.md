@@ -396,3 +396,23 @@ This makes a class **independent of how its objects are created**. A class may b
 1. **Can lead to many classes** - Can lead to a large number of concrete classes if there are many families of objects
 2. **Complexity** - Can be overly complex for simple systems
 3. **Rigidity** - Supporting new kinds of products requires extending the factory interface, which involves changing the AbstractFactory class and all of its subclasses
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Creational Patterns
+- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
+- [[q-builder-pattern--design-patterns--medium]] - Builder pattern
+- [[q-prototype-pattern--design-patterns--medium]] - Prototype pattern
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+

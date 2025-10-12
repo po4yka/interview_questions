@@ -708,3 +708,24 @@ fun ProductCard(
 
 **English**: **State hoisting** moves state from a component up to its caller, making the component stateless (receives value + callback). Benefits: single source of truth, reusability, testability, predictability. Pattern: `value` + `onValueChange` callback. Hoist state to **lowest common ancestor** of all components needing it. Three levels: local UI state (no hoisting), screen-level state (remember), ViewModel state (StateFlow). Use stateless composables for: forms, filters, selections, reusable components. Use stateful composables for: simple UI-only state, animations, scroll. State holder classes (`@Stable`) for complex state logic. Best practices: hoist to appropriate level, use data class for complex state, provide defaults, don't pass entire ViewModel.
 
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+### Related (Medium)
+- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
+- [[q-mutable-state-compose--android--medium]] - MutableState basics
+- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
+
+### Advanced (Harder)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-stable-classes-compose--android--hard]] - @Stable annotation
+- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+

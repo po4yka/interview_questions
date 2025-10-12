@@ -374,3 +374,23 @@ This enables the creation of subclasses that can change the way in which an obje
 2. **Slight performance impacts** - Due to polymorphism
 3. **Clients need knowledge of specific subclasses** - To instantiate creators
 4. **May lead to unnecessary complexity** - If applied too broadly
+
+
+---
+
+## Related Questions
+
+### Hub
+- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+
+### Creational Patterns
+- [[q-abstract-factory-pattern--design-patterns--medium]] - Abstract Factory pattern
+- [[q-builder-pattern--design-patterns--medium]] - Builder pattern
+- [[q-prototype-pattern--design-patterns--medium]] - Prototype pattern
+
+### Structural Patterns
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+
+### Behavioral Patterns
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+
