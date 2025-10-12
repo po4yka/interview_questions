@@ -11,15 +11,14 @@ tags:
   - recomposition
   - vsync
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Рекомпозиция происходит в рандомное время или по команде хореографера?
 
 **English**: Does recomposition happen at random times or on command from Choreographer?
 
-## Answer
-
+## Answer (EN)
 Recomposition is **controlled by Android Choreographer**, which works with **VSYNC**.
 
 **Process:**
@@ -437,8 +436,7 @@ fun DeferredExample() {
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Рекомпозиция управляется **Android Choreographer**, который работает с **VSYNC**.
 
 **Процесс:**

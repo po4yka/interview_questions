@@ -9,15 +9,14 @@ tags:
   - factory-pattern
   - platform/android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Можешь привести пример когда android фреймворк использует паттерн Factory
 
 **English**: Can you give an example of when the Android framework uses the Factory pattern
 
-## Answer
-
+## Answer (EN)
 Yes, the Android Framework extensively uses the Factory pattern throughout its APIs. Here are the most prominent examples:
 
 ### 1. LayoutInflater (Factory Method Pattern)
@@ -471,8 +470,7 @@ val dialog = dialogFactory.createConfirmDialog(
 dialog.show()
 ```
 
-## Ответ
-
+## Ответ (RU)
 Да, Android Framework активно использует паттерн Factory в различных API. Самые известные примеры:
 
 **LayoutInflater (Фабричный метод)** - создаёт View из XML. Вместо ручного создания объектов View, система предоставляет фабричный метод inflate(), который создаёт экземпляры View на основе XML-тегов.

@@ -9,7 +9,7 @@ tags:
   - sql
   - indexing
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Database Optimization Techniques in Android
@@ -17,13 +17,19 @@ status: reviewed
 **Сложность**: 🟡 Medium
 **Источник**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> 
 
-### Question
+# Вопрос (RU)
+> 
+
+---
+
+## Answer (EN)
+# Question (EN)
 What are the best practices and techniques for database optimization in Android applications?
 
-### Answer
-
+## Answer (EN)
 Database optimization is crucial for Android app performance, especially when dealing with large datasets or frequent database operations. Here are comprehensive optimization techniques:
 
 #### 1. **Indexing Strategy**
@@ -373,13 +379,13 @@ class UserCache {
 
 ---
 
-## Русский
 
-### Вопрос
+
+## Ответ (RU)
+# Вопрос (RU)
 Каковы лучшие практики и техники оптимизации базы данных в Android-приложениях?
 
-### Ответ
-
+## Ответ (RU)
 Оптимизация базы данных критически важна для производительности Android-приложений, особенно при работе с большими объемами данных или частых операциях с базой данных. Вот комплексные техники оптимизации:
 
 #### 1. **Стратегия индексирования**

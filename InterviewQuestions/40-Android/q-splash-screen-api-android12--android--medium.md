@@ -6,7 +6,7 @@ language_tags:
   - en
   - ru
 original_language: en
-status: reviewed
+status: draft
 moc: moc-android
 tags:
   - android
@@ -29,8 +29,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 
 **Русский**: Что вы знаете об API Splash Screen?
 
-## Answer
-
+## Answer (EN)
 **English**:
 
 The **Splash Screen** is the first screen visible to the user when the application is launched. This is an important screen where the user gets the first impression of the application.

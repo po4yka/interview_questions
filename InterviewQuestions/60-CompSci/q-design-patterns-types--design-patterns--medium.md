@@ -7,24 +7,33 @@ tags:
   - structural-patterns
   - behavioral-patterns
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Types of Design Patterns
 
-**English**: What are the main types of design patterns? Describe each category and provide examples.
+# Question (EN)
+> What are the main types of design patterns? Describe each category and provide examples.
 
-## Answer
+# Вопрос (RU)
+> Какие основные типы паттернов проектирования? Опишите каждую категорию и приведите примеры.
+
+---
+
+## Answer (EN)
+
 
 **Design Patterns (Паттерны проектирования)** - это общие, переиспользуемые решения часто встречающихся проблем в определенном контексте при проектировании программного обеспечения.
 
-### Что такое Design Patterns?
+### What are Design Patterns?
+
 
 Design patterns is a general, reusable solution to a commonly occurring problem within a given context in software design. It is not a finished design that can be transformed directly into source or machine code. Rather, it is a **description or template** for how to solve a problem that can be used in many different situations.
 
 Design patterns are formalized best practices that the programmer can use to solve common problems when designing an application or system.
 
-### Ключевые характеристики
+### Key Characteristics
+
 
 Object-oriented design patterns typically show relationships and interactions between classes or objects, without specifying the final application classes or objects that are involved.
 
@@ -35,7 +44,8 @@ Object-oriented design patterns typically show relationships and interactions be
 - Speed up the development process
 - Help prevent subtle issues that cause major problems
 
-### Три основные группы паттернов
+### Three Main Groups of Patterns
+
 
 Design patterns are divided into **three fundamental groups**:
 
@@ -70,7 +80,8 @@ Behavioral patterns describe interactions between objects and focus on how objec
 | **Template Method** | Defer the exact steps of an algorithm to a subclass |
 | **Visitor** | Defines a new operation to a class without change |
 
-### Примеры использования
+### Usage Examples
+
 
 ```kotlin
 // Observer Pattern Example
@@ -119,7 +130,8 @@ Creational patterns are used to create objects for a suitable class that serves 
 | **Prototype** | A fully initialized instance to be copied or cloned |
 | **Singleton** | A class of which only a single instance can exist |
 
-### Примеры использования
+### Usage Examples
+
 
 ```kotlin
 // Singleton Pattern Example
@@ -178,7 +190,8 @@ Structural patterns form larger structures from individual parts, generally of d
 | **Flyweight** | A fine-grained instance used for efficient sharing |
 | **Proxy** | An object representing another object |
 
-### Примеры использования
+### Usage Examples
+
 
 ```kotlin
 // Adapter Pattern Example
@@ -251,3 +264,129 @@ The book describes **23 classic design patterns** across the three categories.
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### What are Design Patterns?
+
+
+Design patterns is a general, reusable solution to a commonly occurring problem within a given context in software design. It is not a finished design that can be transformed directly into source or machine code. Rather, it is a **description or template** for how to solve a problem that can be used in many different situations.
+
+Design patterns are formalized best practices that the programmer can use to solve common problems when designing an application or system.
+
+### Ключевые характеристики
+
+
+Object-oriented design patterns typically show relationships and interactions between classes or objects, without specifying the final application classes or objects that are involved.
+
+**Benefits**:
+- Patterns allow developers to communicate using well-known, well understood names for software interactions
+- Common design patterns can be improved over time, making them more robust than ad-hoc designs
+- Provide proven development paradigms
+- Speed up the development process
+- Help prevent subtle issues that cause major problems
+
+### Three Main Groups of Patterns
+
+
+Design patterns are divided into **three fundamental groups**:
+
+1. **Behavioral** (Поведенческие)
+2. **Creational** (Порождающие)
+3. **Structural** (Структурные)
+
+### Usage Examples
+
+
+```kotlin
+// Observer Pattern Example
+interface Observer {
+    fun update(message: String)
+}
+
+class ConcreteObserver(private val name: String) : Observer {
+    override fun update(message: String) {
+        println("$name received: $message")
+    }
+}
+
+class Subject {
+    private val observers = mutableListOf<Observer>()
+
+    fun attach(observer: Observer) {
+        observers.add(observer)
+    }
+
+    fun notifyObservers(message: String) {
+        observers.forEach { it.update(message) }
+    }
+}
+```
+
+### Usage Examples
+
+
+```kotlin
+// Singleton Pattern Example
+object DatabaseConnection {
+    init {
+        println("Database initialized")
+    }
+
+    fun query(sql: String) {
+        println("Executing: $sql")
+    }
+}
+
+// Factory Method Pattern Example
+interface Product {
+    fun use()
+}
+
+class ConcreteProductA : Product {
+    override fun use() = println("Using Product A")
+}
+
+class ConcreteProductB : Product {
+    override fun use() = println("Using Product B")
+}
+
+abstract class Creator {
+    abstract fun factoryMethod(): Product
+}
+
+class CreatorA : Creator() {
+    override fun factoryMethod() = ConcreteProductA()
+}
+```
+
+### Usage Examples
+
+
+```kotlin
+// Adapter Pattern Example
+interface MediaPlayer {
+    fun play(filename: String)
+}
+
+class Mp3Player : MediaPlayer {
+    override fun play(filename: String) {
+        println("Playing MP3: $filename")
+    }
+}
+
+class Mp4Player {
+    fun playMp4(filename: String) {
+        println("Playing MP4: $filename")
+    }
+}
+
+class MediaAdapter(private val mp4Player: Mp4Player) : MediaPlayer {
+    override fun play(filename: String) {
+        if (filename.endsWith(".mp4")) {
+            mp4Player.playMp4(filename)
+        }
+    }
+}
+```

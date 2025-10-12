@@ -8,15 +8,14 @@ tags:
   - performance
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как можно исправить плохой layout элемента?
 
 **English**: How to fix a bad element layout?
 
-## Answer
-
+## Answer (EN)
 Bad layouts can cause performance issues, rendering delays, and poor user experience. Here are strategies to fix and optimize layouts:
 
 ### 1. Reduce Layout Nesting
@@ -399,7 +398,6 @@ To fix bad layouts:
 8. **Reduce overdraw** - Remove unnecessary backgrounds
 9. **Efficient inflation** - Inflate layouts properly in adapters
 
-## Ответ
-
+## Ответ (RU)
 Уменьшите вложенность макетов, используйте ViewStub для редко используемых элементов, применяйте merge для сокращения уровней вложенности при использовании include, избегайте ненужных атрибутов и переопределений, профилируйте макеты с помощью инструментов. Пример кода ViewStub: <ViewStub android:id="@+id/viewStub" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/your_layout" />. Пример использования merge в your_layout.xml: <merge xmlns:android="http://schemas.android.com/apk/res/android"> <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Label" /> <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Value" /> </merge>
 

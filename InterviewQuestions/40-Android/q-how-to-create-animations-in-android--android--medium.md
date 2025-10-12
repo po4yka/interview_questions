@@ -11,15 +11,14 @@ tags:
   - animations
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как в Android можно сделать анимацию?
 
 **English**: How to create animations in Android?
 
-## Answer
-
+## Answer (EN)
 Android provides several powerful systems for creating animations, each suited for different use cases. The main approaches include Property Animations, View Animations, Drawable Animations, and MotionLayout.
 
 ### 1. Property Animations (Modern Approach)
@@ -331,7 +330,6 @@ override fun onDestroyView() {
 }
 ```
 
-## Ответ
-
+## Ответ (RU)
 В Android анимации можно создавать с помощью Property Animations, View Animations, Drawable Animations и MotionLayout. Для Property Animations используйте ObjectAnimator для анимации свойств объектов. Для View Animations создайте XML-анимацию и примените её через AnimationUtils.loadAnimation. Для Drawable Animations используйте анимацию кадров в XML и запустите её через AnimationDrawable. Для MotionLayout определите анимацию в MotionScene и примените её к элементам интерфейса.
 

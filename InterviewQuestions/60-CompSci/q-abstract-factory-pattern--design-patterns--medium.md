@@ -6,22 +6,31 @@ tags:
   - factory
   - gof-patterns
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Abstract Factory Pattern
 
-**English**: What is the Abstract Factory pattern? When and why should it be used?
+# Question (EN)
+> What is the Abstract Factory pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Abstract Factory? Когда и зачем его использовать?
+
+---
+
+## Answer (EN)
+
 
 **Abstract Factory (Абстрактная фабрика)** - это порождающий паттерн проектирования, целью которого является предоставление единого интерфейса для создания семейств связанных объектов с одной темой, но без раскрытия конкретной реализации.
 
-### Определение
+### Definition
+
 
 The Abstract Factory is a software design pattern whose goal is to provide a **single interface to create families of objects with the same theme** but without exposing the concrete implementation.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 It may be used to solve problems such as:
 
@@ -29,7 +38,8 @@ It may be used to solve problems such as:
 2. **How can a class be independent of how the objects that it requires are created?**
 3. **How can families of related or dependent objects be created?**
 
-### Почему это проблема?
+### Why is this a problem?
+
 
 Creating objects directly within the class that requires the objects is inflexible:
 - Doing so **commits the class to particular objects**
@@ -37,7 +47,8 @@ Creating objects directly within the class that requires the objects is inflexib
 - Prevents the class from being reusable if other objects are required
 - Makes the class difficult to test because real objects cannot be replaced with mock objects
 
-### Решение
+### Solution
+
 
 The pattern describes how to solve such problems:
 
@@ -46,7 +57,8 @@ The pattern describes how to solve such problems:
 
 This makes a class **independent of how its objects are created**. A class may be configured with a factory object, which it uses to create objects, and the factory object can be exchanged at runtime.
 
-### Когда использовать?
+### When to Use?
+
 
 **When to Use Abstract Factory Pattern**?
 
@@ -133,7 +145,8 @@ Displaying Dark Theme Button
 Displaying Dark Theme Window
 ```
 
-### Объяснение примера
+### Example Explanation
+
 
 **Explanation**:
 
@@ -231,6 +244,7 @@ class DataManager(factory: DataStorageFactory) {
 
 ### Pros (Преимущества)
 
+
 1. **Ensures compatibility** - Created objects are compatible and belong to the same family
 2. **Promotes decoupling** - Makes it easier to introduce new families of objects without modifying existing code
 3. **Enforces consistency** - Enforces a consistent interface for creating objects, enhancing maintainability and readability
@@ -238,6 +252,7 @@ class DataManager(factory: DataStorageFactory) {
 5. **Easy to exchange product families** - Because the factory creates all objects from one family, it's easy to swap families
 
 ### Cons (Недостатки)
+
 
 1. **Can lead to many classes** - Can lead to a large number of concrete classes if there are many families of objects
 2. **Complexity** - Can be overly complex for simple systems
@@ -309,3 +324,75 @@ fun createUI(factory: UIFactory) {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+The Abstract Factory is a software design pattern whose goal is to provide a **single interface to create families of objects with the same theme** but without exposing the concrete implementation.
+
+### Проблемы, которые решает
+
+
+It may be used to solve problems such as:
+
+1. **How can an application be independent of how its objects are created?**
+2. **How can a class be independent of how the objects that it requires are created?**
+3. **How can families of related or dependent objects be created?**
+
+### Почему это проблема?
+
+
+Creating objects directly within the class that requires the objects is inflexible:
+- Doing so **commits the class to particular objects**
+- Makes it impossible to change the instantiation later without changing the class
+- Prevents the class from being reusable if other objects are required
+- Makes the class difficult to test because real objects cannot be replaced with mock objects
+
+### Решение
+
+
+The pattern describes how to solve such problems:
+
+1. **Encapsulate object creation** in a separate (factory) object by defining and implementing an interface for creating objects
+2. **Delegate object creation** to a factory object instead of creating objects directly
+
+This makes a class **independent of how its objects are created**. A class may be configured with a factory object, which it uses to create objects, and the factory object can be exchanged at runtime.
+
+### Когда использовать?
+
+
+**When to Use Abstract Factory Pattern**?
+
+- The **client is independent** of how we create and compose the objects in the system
+- The system consists of **multiple families of objects**, and these families are designed to be used together
+- We need a **run-time value to construct a particular dependency**
+
+### Объяснение примера
+
+
+**Explanation**:
+
+- `Button` and `Window` are **abstract product interfaces** representing UI components
+- `LightButton`, `LightWindow`, `DarkButton`, and `DarkWindow` are **concrete implementations** of these products, tailored for specific themes
+- `GUIFactory` is the **Abstract Factory interface** which declares methods for creating products
+- `LightThemeFactory` and `DarkThemeFactory` are **concrete factories** that instantiate theme-specific UI components
+- The **client code** (`main` function) uses an abstract factory to create UI components, ensuring they match the chosen theme
+
+### Pros (Преимущества)
+
+
+1. **Ensures compatibility** - Created objects are compatible and belong to the same family
+2. **Promotes decoupling** - Makes it easier to introduce new families of objects without modifying existing code
+3. **Enforces consistency** - Enforces a consistent interface for creating objects, enhancing maintainability and readability
+4. **Isolation** - Isolates concrete classes from the client
+5. **Easy to exchange product families** - Because the factory creates all objects from one family, it's easy to swap families
+
+### Cons (Недостатки)
+
+
+1. **Can lead to many classes** - Can lead to a large number of concrete classes if there are many families of objects
+2. **Complexity** - Can be overly complex for simple systems
+3. **Rigidity** - Supporting new kinds of products requires extending the factory interface, which involves changing the AbstractFactory class and all of its subclasses

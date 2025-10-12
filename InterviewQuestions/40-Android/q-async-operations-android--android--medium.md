@@ -11,16 +11,20 @@ tags:
   - threading
   - workmanager
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to run asynchronous operations in Android?
 
-**Russian**: Как запустить асинхронные операции в чистом Android?
+# Question (EN)
+> How to run asynchronous operations in pure Android?
 
-**English**: How to run asynchronous operations in pure Android?
+# Вопрос (RU)
+> Как запустить асинхронные операции в чистом Android?
 
-## Answer
+---
+
+## Answer (EN)
 
 Android provides **multiple ways** to run asynchronous operations:
 
@@ -576,12 +580,12 @@ class MainActivity : AppCompatActivity() {
    - Simple but no lifecycle awareness
 
 **Avoid:**
-- ❌ AsyncTask (deprecated)
-- ⚠️ Raw Thread (hard to manage)
+- AsyncTask (deprecated)
+- Raw Thread (hard to manage)
 
 ---
 
-## Ответ
+## Ответ (RU)
 
 В Android существует **несколько способов** запуска асинхронных операций:
 

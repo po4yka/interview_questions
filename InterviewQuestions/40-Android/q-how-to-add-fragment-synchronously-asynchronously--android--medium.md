@@ -5,7 +5,7 @@ tags:
   - fragment
   - fragment-transaction
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to add fragment synchronously/asynchronously?

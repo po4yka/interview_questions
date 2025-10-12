@@ -16,7 +16,7 @@ source: https://t.me/easy_kotlin/631
 source_note: easy_kotlin Telegram channel
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-backend
 related:
   - c-sql-queries
@@ -30,9 +30,9 @@ updated: 2025-10-03
 # Tags
 tags: [sql, join, algorithms, complexity, database-performance, difficulty/hard, easy_kotlin, lang/ru, backend]
 ---
-## Question (EN)
+# Question (EN)
 > What does the algorithm for querying data from two tables look like and what is its complexity?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как выглядит алгоритм запроса данных из двух таблиц и какая у него сложность?
 
 ---

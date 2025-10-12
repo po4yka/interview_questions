@@ -7,14 +7,20 @@ tags:
   - oop
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Есть какие-то особенности использования init block?
 
-**English**: Are there any features of using init block?
+# Question (EN)
+> Are there any features of using init block?
 
-## Answer
+# Вопрос (RU)
+> Есть какие-то особенности использования init block?
+
+---
+
+## Answer (EN)
 
 The `init` block in Kotlin has several important features:
 
@@ -157,7 +163,9 @@ class Database(val url: String) {
 }
 ```
 
-## Ответ
+---
+
+## Ответ (RU)
 
 1. init выполняется при создании экземпляра класса и используется для инициализации. 2. Может быть несколько init блоков выполняемых по порядку. 3. Выполняется перед телом вторичного конструктора. 4. Имеет доступ к параметрам первичного конструктора.
 

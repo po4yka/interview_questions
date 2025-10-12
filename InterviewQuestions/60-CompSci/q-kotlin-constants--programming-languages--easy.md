@@ -8,14 +8,20 @@ tags:
   - programming-languages
   - val
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое константы и можно ли их изменять?
 
-**English**: What are constants and can they be changed?
+# Question (EN)
+> What are constants and can they be changed?
 
-## Answer
+# Вопрос (RU)
+> Что такое константы и можно ли их изменять?
+
+---
+
+## Answer (EN)
 
 Constants are fixed values that cannot be changed after their definition. They are used to define values that remain unchanged throughout program execution.
 
@@ -38,7 +44,28 @@ const val MAX_SIZE = 100 // Known at compile time
 
 Constants are **immutable** - their value cannot be changed after definition.
 
-## Ответ
+---
 
-Константы — это фиксированные значения, которые не могут быть изменены после их определения...
+## Ответ (RU)
+
+Константы — это фиксированные значения, которые не могут быть изменены после их определения. Они используются для определения значений, которые остаются неизменными на протяжении всего выполнения программы.
+
+**В Kotlin:**
+
+- **`val`**: Неизменяемая переменная (только для чтения), значение присваивается один раз во время выполнения
+```kotlin
+val name = "John" // Нельзя переназначить
+```
+
+- **`const val`**: Константа времени компиляции (должна быть на верхнем уровне или в object, только примитивы или String)
+```kotlin
+const val MAX_SIZE = 100 // Известна во время компиляции
+```
+
+**Ключевые различия:**
+- `val` может быть инициализирована во время выполнения
+- `const val` должна быть известна во время компиляции
+- `const val` может использоваться только с примитивными типами и String
+
+Константы **неизменяемы** — их значение не может быть изменено после определения.
 

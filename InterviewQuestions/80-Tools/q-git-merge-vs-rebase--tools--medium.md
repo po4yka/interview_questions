@@ -13,7 +13,7 @@ language_tags:
   - en
   - ru
 original_language: ru
-status: reviewed
+status: draft
 tags:
   - git
   - merge
@@ -23,9 +23,9 @@ tags:
   - tools
   - difficulty/medium
 ---
-## Question (EN)
+# Question (EN)
 > What is the difference between git merge and git rebase?
-## Вопрос (RU)
+# Вопрос (RU)
 > В чем разница между git merge и git rebase?
 
 ---

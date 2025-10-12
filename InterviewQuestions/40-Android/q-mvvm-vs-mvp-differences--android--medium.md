@@ -14,15 +14,14 @@ tags:
   - presenter
   - viewmodel
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Чем MVVM отличается от MVP?
 
 **English**: What is the difference between MVVM and MVP?
 
-## Answer
-
+## Answer (EN)
 **MVVM (Model-View-ViewModel)** and **MVP (Model-View-Presenter)** are both architectural patterns for separating concerns, but they differ in how components interact.
 
 **Key Differences:**
@@ -161,7 +160,6 @@ class MainActivity : AppCompatActivity() {
 
 **Conclusion:** MVVM is generally preferred for modern Android development due to better lifecycle awareness, automatic data binding, and official Jetpack support.
 
-## Ответ
-
+## Ответ (RU)
 MVVM использует привязку данных для автоматического обновления View, что упрощает управление интерфейсом. MVP требует явного управления View через Presenter.
 

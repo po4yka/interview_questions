@@ -6,7 +6,7 @@ language_tags:
   - en
   - ru
 original_language: en
-status: reviewed
+status: draft
 moc: moc-android
 tags:
   - android
@@ -25,13 +25,15 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 
 # AndroidManifest.xml / AndroidManifest.xml
 
-**English**: What is AndroidManifest?
+# Question (EN)
+> What is AndroidManifest.xml?
 
-**Русский**: Что такое AndroidManifest?
+# Вопрос (RU)
+> Что такое AndroidManifest.xml?
 
-## Answer
+---
 
-**English**:
+## Answer (EN)
 
 The **AndroidManifest.xml** file contains information of your package, including components of the application such as activities, services, broadcast receivers, content providers, etc.
 
@@ -131,7 +133,9 @@ The declaration of the application. This element contains subelements that decla
 </application>
 ```
 
-**Русский**:
+---
+
+## Ответ (RU)
 
 Файл **AndroidManifest.xml** содержит информацию о вашем пакете, включая компоненты приложения, такие как activities, services, broadcast receivers, content providers и т.д.
 

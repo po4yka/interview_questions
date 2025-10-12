@@ -3,13 +3,12 @@ tags:
   - programming-languages
   - android
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как изменить количество колонок в RecyclerView в зависимости от ориентации?
 
-## Answer
-
+## Answer (EN)
 You can use **GridLayoutManager** and set the number of columns dynamically based on screen orientation.
 
 ### Basic Implementation
@@ -132,6 +131,5 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 
 # Как изменить количество колонок в RecyclerView в зависимости от ориентации
 
-## Ответ
-
+## Ответ (RU)
 Ты можешь использовать GridLayoutManager и задать количество колонок динамически

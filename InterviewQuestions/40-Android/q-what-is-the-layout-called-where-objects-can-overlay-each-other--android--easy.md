@@ -8,17 +8,16 @@ tags:
   - layouts
   - framelayout
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is the layout called where objects can overlay each other?
 
-## Question (RU)
+# Вопрос (RU)
 
 Как называется лейаут, в котором объекты могут наслаиваться друг на друга?
 
-## Answer
-
+## Answer (EN)
 In Android, there are two main approaches for creating layouts where UI elements can overlay each other: **FrameLayout** (traditional View system) and **Box** (Jetpack Compose).
 
 ### FrameLayout (Traditional View System)
@@ -435,6 +434,6 @@ fun AdvancedBoxExample() {
 - Use `layout_gravity` (FrameLayout) or `Modifier.align()` (Box) for positioning
 - Common uses: badges, overlays, floating buttons, loading indicators
 
-## Answer (RU)
+## Ответ (RU)
 
 Такой тип называется FrameLayout в Android или Box в Jetpack Compose.

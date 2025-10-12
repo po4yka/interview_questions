@@ -6,15 +6,14 @@ tags:
   - navigation
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Каким образом осуществляется навигация?
 
 **English**: How is navigation implemented?
 
-## Answer
-
+## Answer (EN)
 Navigation in software development, particularly in mobile and web development, refers to the process of moving between different parts of an application or site. It's a key aspect of user interface that determines how users interact with the application and how easily they can access necessary information or perform desired actions.
 
 ### Web Development Navigation
@@ -195,7 +194,6 @@ function App() {
 5. Implement **conditional navigation** based on app state
 6. Follow **Material Design** navigation patterns
 
-## Ответ
-
+## Ответ (RU)
 Навигация в контексте разработки ПО, в частности в мобильной и веб-разработке, относится к процессу перехода между различными частями приложения или сайта. Это ключевой аспект пользовательского интерфейса, который определяет, как пользователи взаимодействуют с приложением или сайтом и как легко они могут получить необходимую информацию или выполнить желаемые действия. В веб-разработке навигация обычно осуществляется через гиперссылки, которые ведут пользователя к различным страницам или разделам веб-сайта. Меню навигации, панель хлебных крошек, пагинация и футер используются для навигации на веб-сайтах. В мобильных приложениях используются Tab Bar, Navigation Drawer и Stack Navigation для интуитивно понятной навигации в условиях ограниченного пространства экрана. В одностраничных приложениях (SPA) используется Dynamic Routing и Hash Routing для динамического изменения контента без перезагрузки страницы.
 

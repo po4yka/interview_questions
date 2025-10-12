@@ -8,13 +8,12 @@ tags:
   - broadcastreceiver
   - contentprovider
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What unites the main components of an Android application?
 
-## Answer
-
+## Answer (EN)
 The main Android components (Activity, Service, BroadcastReceiver, ContentProvider) share several fundamental characteristics that unite them in the Android framework.
 
 ### Four Main Components
@@ -313,7 +312,7 @@ Main Android components are united by:
 6. **Process execution** - run in application process
 7. **Permission system** - consistent security model
 
-## Answer (RU)
+## Ответ (RU)
 Все компоненты Android управляются системой через Context. Они взаимодействуют через Intent, который передает команды и данные. Каждый компонент регистрируется в AndroidManifest.xml.
 
 ## Related Topics

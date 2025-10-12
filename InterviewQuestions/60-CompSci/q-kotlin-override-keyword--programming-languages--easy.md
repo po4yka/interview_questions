@@ -9,14 +9,20 @@ tags:
   - polymorphism
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какое ключевое слово используется для определения метода, который должен быть переопределен в подклассе?
 
-**English**: Which keyword is used to define a method that must be overridden in a subclass?
+# Question (EN)
+> Which keyword is used to define a method that must be overridden in a subclass?
 
-## Answer
+# Вопрос (RU)
+> Какое ключевое слово используется для определения метода, который должен быть переопределен в подклассе?
+
+---
+
+## Answer (EN)
 
 In Kotlin, the **`override` keyword** is used to override a method from a parent class. However, to make a method overridable, the parent class method must be marked with **`open`**.
 
@@ -70,7 +76,9 @@ class Derived : Base() {
 - Kotlin: `override` is mandatory (keyword)
 - Kotlin requires parent methods to be `open` or `abstract`
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Kotlin ключевое слово `override` используется для переопределения метода из родительского класса. Однако, чтобы метод можно было переопределить, метод родительского класса должен быть помечен как `open` или `abstract`.
 

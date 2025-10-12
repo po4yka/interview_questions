@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, equality, operators, comparison, difficulty/easy]
 ---
-## Question (EN)
+# Question (EN)
 > What is the difference between == and === in Kotlin?
-## Вопрос (RU)
+# Вопрос (RU)
 > В чем разница между == и === в Kotlin?
 
 ---

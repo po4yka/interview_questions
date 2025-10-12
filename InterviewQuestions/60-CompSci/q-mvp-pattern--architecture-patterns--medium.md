@@ -10,12 +10,21 @@ related:
   - mvvm-pattern
   - mvi-pattern
   - clean-architecture
-status: reviewed
+status: draft
 ---
 
 # MVP Pattern / Паттерн MVP (Model-View-Presenter)
 
-## English
+# Question (EN)
+> What is the MVP pattern? When and why should it be used?
+
+# Вопрос (RU)
+> Что такое паттерн MVP? Когда и зачем его следует использовать?
+
+---
+
+## Answer (EN)
+
 
 ### Definition
 MVP is an architectural pattern engineered to facilitate automated unit testing and improve the separation of concerns in presentation logic.
@@ -157,7 +166,9 @@ data class User(val name: String, val email: String)
 
 ---
 
-## Русский
+
+
+## Ответ (RU)
 
 ### Определение
 MVP - это архитектурный паттерн, разработанный для упрощения автоматизированного unit-тестирования и улучшения разделения ответственности в логике представления.

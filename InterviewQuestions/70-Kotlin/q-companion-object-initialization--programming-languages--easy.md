@@ -2,14 +2,20 @@
 tags:
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # When is companion object initialized?
 
-**English**: When is companion object initialized in Kotlin?
+# Question (EN)
+> When is a companion object initialized in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Когда инициализируется companion object в Kotlin?
+
+---
+
+## Answer (EN)
 
 A companion object is initialized **lazily when first accessed**. It is initialized on the first access to any of its members (properties or functions), including when the companion object itself is referenced.
 
@@ -364,10 +370,48 @@ fun main() {
 
 ---
 
-## Ответ
+## Ответ (RU)
 
-### Вопрос
-Когда инициализируется companion object
+Companion object инициализируется **лениво при первом доступе**. Он инициализируется при первом обращении к любому из его членов (свойствам или функциям), включая случаи, когда происходит обращение к самому companion object.
 
-### Ответ
-companion object инициализируется при первом доступе к нему. Он инициализируется лениво, то есть при первом обращении к любому из его членов.
+**Ключевые моменты:**
+- Инициализация при первом доступе (ленивая инициализация)
+- Потокобезопасна по умолчанию
+- Инициализируется только один раз за весь жизненный цикл приложения
+- Инициализация происходит до первого использования любого члена companion
+- Аналогично статическим блокам инициализации в Java
+
+**НЕ инициализируется когда:**
+- Просто создается экземпляр содержащего класса (если члены companion не используются)
+- Класс загружен, но члены companion object не используются
+
+### Пример базовой инициализации
+
+```kotlin
+class MyClass {
+    companion object {
+        init {
+            println("Companion object initialized!")
+        }
+        val value = "Hello"
+    }
+
+    init {
+        println("MyClass instance created!")
+    }
+}
+
+fun main() {
+    val instance = MyClass()  // Выведет: "MyClass instance created!"
+    println(MyClass.value)     // Выведет: "Companion object initialized!" затем "Hello"
+    println(MyClass.value)     // Выведет только: "Hello" (уже инициализирован)
+}
+```
+
+### Важные особенности
+
+1. **Один companion на все экземпляры** - companion object инициализируется один раз, независимо от количества созданных экземпляров класса
+
+2. **Ленивая загрузка** - если companion object содержит дорогостоящие операции, они не выполнятся, пока не понадобятся
+
+3. **Потокобезопасность** - инициализация гарантированно произойдет только один раз, даже при многопоточном доступе

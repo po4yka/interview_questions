@@ -9,14 +9,20 @@ tags:
   - programming-languages
   - secondary-constructor
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие типы конструкторов есть у классов в Kotlin?
 
-**English**: What types of constructors do classes in Kotlin have?
+# Question (EN)
+> What types of constructors do classes in Kotlin have?
 
-## Answer
+# Вопрос (RU)
+> Какие типы конструкторов есть у классов в Kotlin?
+
+---
+
+## Answer (EN)
 
 Kotlin has two types of constructors: **primary constructors** and **secondary constructors**.
 
@@ -140,7 +146,9 @@ val user = User("Alice", 30)
 - Use secondary constructors only when necessary
 - Keep initialization logic in `init` blocks
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Kotlin есть первичные и вторичные конструкторы. Первичный конструктор объявляется вместе с классом и может принимать параметры для инициализации свойств класса. Вторичные конструкторы объявляются внутри класса с ключевым словом constructor и предоставляют дополнительные способы инициализации класса.
 

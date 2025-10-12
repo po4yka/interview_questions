@@ -8,15 +8,14 @@ tags:
   - recyclerview
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что позволяет делать ItemDecoration?
 
 **English**: What does ItemDecoration allow you to do?
 
-## Answer
-
+## Answer (EN)
 **ItemDecoration** in RecyclerView allows adding visual decorations to list items such as margins, divider lines, borders, and any other visual elements that are not part of the item content itself.
 
 ### Key Capabilities
@@ -321,7 +320,6 @@ val count = recyclerView.itemDecorationCount
 - **Sticky headers**
 - **Item shadows or overlays**
 
-## Ответ
-
+## Ответ (RU)
 ItemDecoration в RecyclerView позволяет добавлять украшения к элементам списка такие как отступы разделительные линии рамки и любые другие визуальные элементы которые не являются частью содержимого элементов списка
 

@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Until what point does ViewModel guarantee state preservation
 
-## Answer
-
+## Answer (EN)
 ViewModel guarantees state preservation until the Activity finishes completely or the process is killed. It survives configuration changes like screen rotation but does not survive process termination.
 
 ### ViewModel Lifetime Guarantees
@@ -153,7 +152,7 @@ class MyViewModel : ViewModel() {
 | ViewModel is singleton | - Scoped to Activity/Fragment |
 | ViewModel thread-safe by default | - Must implement thread safety |
 
-## Answer (RU)
+## Ответ (RU)
 ViewModel сохраняет данные до тех пор, пока связанная Activity или Fragment не будут уничтожены навсегда Например данные сохраняются при изменении конфигурации например поворот экрана но удаляются если приложение закрывается или выгружается из памяти
 
 ## Related Topics

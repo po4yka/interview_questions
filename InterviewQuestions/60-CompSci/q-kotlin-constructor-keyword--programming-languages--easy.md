@@ -10,14 +10,20 @@ tags:
   - secondary-constructor
   - syntax
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какое ключевое слово используется для объявления параметров конструктора в Kotlin?
 
-**English**: Which keyword is used to declare constructor parameters in Kotlin?
+# Question (EN)
+> Which keyword is used to declare constructor parameters in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Какое ключевое слово используется для объявления параметров конструктора в Kotlin?
+
+---
+
+## Answer (EN)
 
 In Kotlin, the **`constructor` keyword** is used to declare **secondary constructors**. However, for **primary constructors**, no keyword is needed — the parameters are declared directly in the class header.
 
@@ -96,7 +102,9 @@ class Internal private constructor(val id: Int)
 - Secondary constructor: Always use `constructor` keyword
 - Use `constructor` for primary only when adding annotations/modifiers
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Kotlin ключевое слово `constructor` используется для объявления вторичных конструкторов. Для первичного конструктора ключевое слово не требуется — параметры объявляются непосредственно в заголовке класса.
 

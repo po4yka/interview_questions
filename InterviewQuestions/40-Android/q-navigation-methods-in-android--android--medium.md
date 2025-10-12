@@ -13,15 +13,14 @@ tags:
   - tablayout
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие способы навигации в Android знаешь?
 
 **English**: What navigation methods in Android do you know?
 
-## Answer
-
+## Answer (EN)
 Android provides several navigation methods:
 
 1. **Activity navigation via Intent**
@@ -63,7 +62,6 @@ val deepLink = NavDeepLinkBuilder(context)
     .createPendingIntent()
 ```
 
-## Ответ
-
+## Ответ (RU)
 В Android есть несколько способов навигации между экранами. Основные методы включают: 1) Activity-навигация через Intent; 2) Fragment-based навигация с использованием FragmentManager; 3) Navigation Component из Jetpack; 4) Bottom/Tab Navigation с BottomNavigationView или TabLayout; 5) Drawer Navigation через Navigation Drawer; 6) Deep Links и App Links для перехода по ссылкам; и 7) Navigation в Jetpack Compose с NavHost и NavController.
 

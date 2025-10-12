@@ -3,7 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to tell adapter to redraw list if an element was deleted?

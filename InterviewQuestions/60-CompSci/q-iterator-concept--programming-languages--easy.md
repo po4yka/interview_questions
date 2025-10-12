@@ -7,14 +7,20 @@ tags:
   - programming-languages
   - traversal
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое итератор?
 
-**English**: What is an iterator?
+# Question (EN)
+> What is an iterator?
 
-## Answer
+# Вопрос (RU)
+> Что такое итератор?
+
+---
+
+## Answer (EN)
 
 **Iterator** is an object that allows **element-by-element traversal** of a collection (list, array, set, etc.). It abstracts the underlying structure and provides a uniform way to iterate.
 
@@ -183,7 +189,9 @@ while (iterator.hasNext()) {
 val filtered = list.filter { it % 2 != 0 }
 ```
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Итератор — это объект, позволяющий поэлементно перебирать коллекцию (список, массив и т.п.). Он обычно предоставляет методы hasNext() и next() и позволяет абстрагироваться от конкретной структуры.
 

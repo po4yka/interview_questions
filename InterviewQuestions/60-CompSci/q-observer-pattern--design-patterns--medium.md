@@ -6,22 +6,31 @@ tags:
   - gof-patterns
   - publish-subscribe
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Observer Pattern
 
-**English**: What is the Observer pattern? When and why should it be used?
+# Question (EN)
+> What is the Observer pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Observer? Когда и зачем его следует использовать?
+
+---
+
+## Answer (EN)
+
 
 **Observer (Наблюдатель)** - это поведенческий паттерн проектирования, который определяет зависимость типа "один ко многим" между объектами таким образом, что при изменении состояния одного объекта все зависящие от него объекты уведомляются об этом и обновляются автоматически.
 
-### Определение
+### Definition
+
 
 The observer pattern is a software design pattern in which an object, named the **subject**, maintains a list of its dependents, called **observers**, and notifies them automatically of any state changes, usually by calling one of their methods.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 The Observer pattern addresses the following problems:
 
@@ -29,11 +38,13 @@ The Observer pattern addresses the following problems:
 2. **It should be ensured that when one object changes state, an open-ended number of dependent objects are updated automatically**
 3. **It should be possible that one object can notify an open-ended number of other objects**
 
-### Почему это проблема?
+### Why is this a problem?
+
 
 Defining a one-to-many dependency between objects by defining one object (subject) that updates the state of dependent objects directly is inflexible because it couples the subject to particular dependent objects. Tightly coupled objects can be hard to implement in some scenarios, and hard to reuse because they refer to and know about many different objects with different interfaces.
 
-### Решение
+### Solution
+
 
 The observer pattern proposes the following solution:
 
@@ -213,7 +224,8 @@ class UserRepositoryLiveData {
 }
 ```
 
-### Объяснение примера
+### Example Explanation
+
 
 **Explanation**:
 
@@ -227,6 +239,7 @@ class UserRepositoryLiveData {
 
 ### Pros (Преимущества)
 
+
 1. **Loose coupling** - Provides a loosely coupled design between objects that interact
 2. **Flexibility** - Observers can be added/removed at runtime
 3. **Broadcast communication** - Subject doesn't need to know about specific observers
@@ -234,6 +247,7 @@ class UserRepositoryLiveData {
 5. **Open/Closed Principle** - Can introduce new observers without modifying the subject
 
 ### Cons (Недостатки)
+
 
 1. **Memory leaks** - Can cause memory leaks (Lapsed listener problem) if observers aren't properly unregistered
 2. **Unexpected updates** - Observers may receive updates in unpredictable order
@@ -291,3 +305,66 @@ class WeakObserverList {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+The observer pattern is a software design pattern in which an object, named the **subject**, maintains a list of its dependents, called **observers**, and notifies them automatically of any state changes, usually by calling one of their methods.
+
+### Проблемы, которые решает
+
+
+The Observer pattern addresses the following problems:
+
+1. **A one-to-many dependency between objects should be defined without making the objects tightly coupled**
+2. **It should be ensured that when one object changes state, an open-ended number of dependent objects are updated automatically**
+3. **It should be possible that one object can notify an open-ended number of other objects**
+
+### Почему это проблема?
+
+
+Defining a one-to-many dependency between objects by defining one object (subject) that updates the state of dependent objects directly is inflexible because it couples the subject to particular dependent objects. Tightly coupled objects can be hard to implement in some scenarios, and hard to reuse because they refer to and know about many different objects with different interfaces.
+
+### Решение
+
+
+The observer pattern proposes the following solution:
+
+- Define **`Subject`** and **`Observer`** objects
+- When a subject changes state, all registered observers are notified and updated automatically (and probably asynchronously)
+
+The sole responsibility of a subject is to maintain a list of observers and to notify them of state changes by calling their `update()` operation. The responsibility of observers is to register (and unregister) themselves on a subject and to update their state when they are notified.
+
+This makes subject and observers **loosely coupled**. Subject and observers have no explicit knowledge of each other. Observers can be added and removed independently at run-time.
+
+### Объяснение примера
+
+
+**Explanation**:
+
+- **`Observer` interface** defines the contract for objects that want to be notified
+- **`Subject`** maintains a list of observers and notifies them when state changes
+- **Concrete observers** implement the update logic for handling notifications
+- In Android, **LiveData and Flow** provide built-in observer pattern implementation
+- **ViewModel** often acts as the subject, UI components as observers
+
+### Pros (Преимущества)
+
+
+1. **Loose coupling** - Provides a loosely coupled design between objects that interact
+2. **Flexibility** - Observers can be added/removed at runtime
+3. **Broadcast communication** - Subject doesn't need to know about specific observers
+4. **Reusability** - Subject and observer classes can be reused independently
+5. **Open/Closed Principle** - Can introduce new observers without modifying the subject
+
+### Cons (Недостатки)
+
+
+1. **Memory leaks** - Can cause memory leaks (Lapsed listener problem) if observers aren't properly unregistered
+2. **Unexpected updates** - Observers may receive updates in unpredictable order
+3. **Performance overhead** - Notifying many observers can be expensive
+4. **Complex debugging** - Hard to track which observer caused what change
+5. **Cascade updates** - Can lead to complex update chains that are hard to understand

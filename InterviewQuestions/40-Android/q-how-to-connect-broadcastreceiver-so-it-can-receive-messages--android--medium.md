@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to connect BroadcastReceiver so it can receive messages?
 
-## Answer
-
+## Answer (EN)
 BroadcastReceiver can be registered in two ways: statically in AndroidManifest.xml or dynamically in code. Each method has different use cases and lifecycle behaviors.
 
 ### Method 1: Static Registration (Manifest)
@@ -457,7 +456,7 @@ class EventBus {
 }
 ```
 
-## Answer (RU)
+## Ответ (RU)
 Подключение BroadcastReceiver в Android состоит из двух основных шагов: создание самого ресивера и его регистрация. Ресивер можно зарегистрировать как статически в манифесте, так и динамически в коде. Создание BroadcastReceiver: создайте класс, который наследуется от BroadcastReceiver и переопределите метод onReceive. Регистрация ресивера: статическая регистрация в манифесте - добавьте элемент <receiver> с соответствующим intent-filter. Динамическая регистрация в коде - используйте registerReceiver и unregisterReceiver в соответствующих жизненных циклах активности.
 
 ## Related Topics

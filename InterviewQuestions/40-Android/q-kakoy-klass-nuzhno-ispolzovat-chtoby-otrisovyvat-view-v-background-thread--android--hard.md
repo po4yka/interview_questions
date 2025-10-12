@@ -3,14 +3,14 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Which class should be used to render View in background thread?
 
 ## EN (expanded)
 
-### Answer: SurfaceView
+## Answer (EN)
 
 **SurfaceView** provides a dedicated drawing surface that can be rendered from a background thread. It's designed for high-performance graphics operations that would be too heavy for the main UI thread.
 

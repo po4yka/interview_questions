@@ -8,14 +8,20 @@ tags:
   - programming-languages
   - recursion
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Бывают ли случаи, когда нельзя использовать inline?
 
-**English**: Are there cases when inline cannot be used?
+# Question (EN)
+> Are there cases when inline cannot be used?
 
-## Answer
+# Вопрос (RU)
+> Бывают ли случаи, когда нельзя использовать inline?
+
+---
+
+## Answer (EN)
 
 Yes, **inline cannot be used** if the function contains **large blocks of code** or **recursion**, as this will increase the size of compiled code. Also, **inline functions are not suitable** for passing or returning lambdas that capture variables from the context. This can lead to errors or significant increase in memory consumption.
 
@@ -364,25 +370,27 @@ inline fun List<Int>.sumByCustom(selector: (Int) -> Int): Int {
 
 **Cannot use inline when:**
 
-1. - **Large function bodies** - causes code bloat
-2. - **Recursive functions** - infinite inlining
-3. - **Storing lambdas** - lambda must be invoked inline
-4. - **Returning lambdas** - escaping context
-5. - **Virtual/abstract functions** - no body to inline
-6. - **Called primarily from Java** - inline ignored
+1. **Large function bodies** - causes code bloat
+2. **Recursive functions** - infinite inlining
+3. **Storing lambdas** - lambda must be invoked inline
+4. **Returning lambdas** - escaping context
+5. **Virtual/abstract functions** - no body to inline
+6. **Called primarily from Java** - inline ignored
 
 **Should use inline when:**
 
-1. - Small higher-order functions with lambdas
-2. - Functions with reified type parameters
-3. - Performance-critical small utilities
-4. - Eliminating lambda object allocation
+1. Small higher-order functions with lambdas
+2. Functions with reified type parameters
+3. Performance-critical small utilities
+4. Eliminating lambda object allocation
 
 **Key principle:** Only inline **small functions** with **lambda parameters** where **eliminating lambda objects** provides meaningful performance benefit.
 
 **Memory impact:** Captured variables in non-inlined lambdas cause boxing and increased memory usage.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Да, inline нельзя использовать, если функция содержит большие блоки кода или рекурсию, так как это увеличит размер скомпилированного кода. Также inline-функции не подходят для передачи или возврата лямбд, которые захватывают переменные из контекста. Это может привести к ошибкам или значительному увеличению потребления памяти.
 

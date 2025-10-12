@@ -10,15 +10,14 @@ tags:
   - message-queue
   - threading
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как можно получить сообщения на главном потоке с помощью Handler и Looper?
 
 **English**: How can you receive messages on the main thread using Handler and Looper?
 
-## Answer
-
+## Answer (EN)
 In Android, to handle messages on the main thread, use **Handler** and **Looper**:
 
 1. Create a **Handler** bound to the main thread's **Looper** via `Looper.getMainLooper()`
@@ -498,8 +497,7 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 В Android для обработки сообщений на главном потоке используют **Handler** и **Looper**:
 
 1. Создайте **Handler**, привязанный к Looper главного потока через `Looper.getMainLooper()`

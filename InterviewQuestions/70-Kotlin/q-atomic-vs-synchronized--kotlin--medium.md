@@ -7,15 +7,14 @@ tags:
   - atomic
   - synchronized
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Atomic vs Synchronized: когда использовать
 
 **English**: When to use atomic variables vs synchronized?
 
-## Answer
-
+## Answer (EN)
 **Atomic** переменные (`AtomicInteger`, `AtomicReference`) и **synchronized** блоки — два способа обеспечить потокобезопасность. Используются в разных ситуациях в зависимости от сложности операций.
 
 ### Atomic Variables — для простых операций

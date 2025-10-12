@@ -4,14 +4,51 @@ tags:
   - inline-functions
   - performance
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что такое inline функции?
 
-**English**: What are inline functions in Kotlin?
+# Question (EN)
+> What are inline functions in Kotlin and why use them?
 
-## Answer
+# Вопрос (RU)
+> Что такое inline функции в Kotlin и зачем они нужны?
+
+---
+
+## Answer (EN)
+
+Inline functions insert their code directly at the call site during compilation instead of creating a new call stack.
+
+**Benefits:**
+1. **Reduces overhead** - no function call stack, better performance
+2. **Avoids lambda object allocation** - lambdas are inlined, reducing GC pressure
+3. **Enables reified type parameters** - runtime type checking with `reified`
+
+**Example:**
+```kotlin
+inline fun measureTime(block: () -> Unit) {
+    val start = System.currentTimeMillis()
+    block()
+    val end = System.currentTimeMillis()
+    println("Time: ${end - start}ms")
+}
+
+// After compilation, becomes:
+val start = System.currentTimeMillis()
+performOperation()  // code inlined directly!
+val end = System.currentTimeMillis()
+println("Time: ${end - start}ms")
+```
+
+**Use cases:** Higher-order functions with lambda parameters (filter, map), reified generics, performance-critical code.
+
+**Modifiers:** `noinline` (disables inlining for specific parameter), `crossinline` (prevents non-local returns).
+
+---
+
+## Ответ (RU)
 
 Inline функции — это специальный тип функций, при компиляции которых код функции встраивается в место её вызова вместо создания нового стека вызовов.
 
@@ -131,5 +168,3 @@ inline fun runInThread(crossinline block: () -> Unit) {
     }.start()
 }
 ```
-
-**English**: Inline functions insert function code directly at call site instead of creating a new call stack. This reduces overhead, improves performance with lambdas (avoids object creation), and enables reified type parameters for runtime type checking. Standard library functions like `filter`, `map` are inline.

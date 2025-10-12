@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: [q-kotlin-flow-basics--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, stateflow, sharedflow, flow, hot-flows, coroutines, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What are StateFlow and SharedFlow in Kotlin? What are the differences between them?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое StateFlow и SharedFlow в Kotlin? В чем их отличия?
 
 ---

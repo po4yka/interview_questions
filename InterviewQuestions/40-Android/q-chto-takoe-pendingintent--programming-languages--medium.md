@@ -3,12 +3,20 @@ tags:
   - programming-languages
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что такое PendingIntent?
 
-## Answer
+# Question (EN)
+> What is PendingIntent?
+
+# Вопрос (RU)
+> Что такое PendingIntent?
+
+---
+
+## Answer (EN)
 
 **PendingIntent** is a wrapper around an Intent that allows other components or applications to execute that Intent with your app's permissions, even when your app is not currently active. It's a token that you give to another application which allows the foreign application to use your application's permissions to execute a predefined piece of code.
 
@@ -421,17 +429,15 @@ fun cancelPendingIntent(context: Context) {
 
 ### Best Practices
 
-1. ✅ **Use FLAG_IMMUTABLE** when possible (Android 12+ requirement)
-2. ✅ **Use unique request codes** to distinguish different PendingIntents
-3. ✅ **Include FLAG_UPDATE_CURRENT** to update existing PendingIntent
-4. ✅ **Cancel PendingIntents** when no longer needed
-5. ❌ **Avoid FLAG_MUTABLE** unless absolutely necessary
-6. ✅ **Set explicit intents** for security
+1. **Use FLAG_IMMUTABLE** when possible (Android 12+ requirement)
+2. **Use unique request codes** to distinguish different PendingIntents
+3. **Include FLAG_UPDATE_CURRENT** to update existing PendingIntent
+4. **Cancel PendingIntents** when no longer needed
+5. **Avoid FLAG_MUTABLE** unless absolutely necessary
+6. **Set explicit intents** for security
 
 ---
 
-# Что такое PendingIntent
-
-## Ответ
+## Ответ (RU)
 
 PendingIntent — это обёртка над Intent, позволяющая другим компонентам выполнить Intent от имени вашего приложения даже если оно сейчас не активно. Используется в уведомлениях, для запуска BroadcastReceiver или Service и в AlarmManager.

@@ -7,15 +7,14 @@ tags:
   - lazyrow
   - recyclerview
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to create a list like RecyclerView in Jetpack Compose?
 
 **Russian**: Как в Jetpack Compose создать список аналогичный RecyclerView?
 
-## Answer
-
+## Answer (EN)
 In Jetpack Compose, **LazyColumn** and **LazyRow** replace RecyclerView. They efficiently create and display items on demand, similar to RecyclerView's recycling behavior.
 
 ### Basic LazyColumn

@@ -10,15 +10,14 @@ tags:
   - app-bundle
   - difficulty/medium
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is Play App Signing? / Что такое Play App Signing?
 
 **English**: What's Play App Signing?
 
-## Answer
-
+## Answer (EN)
 **Play App Signing** is a service where Google manages and protects your app's signing key and uses it to sign optimized, distribution APKs that are generated from your app bundles. Play App Signing stores your app signing key on Google's secure infrastructure and offers upgrade options to increase security.
 
 ## Key Concepts
@@ -264,8 +263,7 @@ Play App Signing is essential for modern Android app distribution:
 - [Play App Signing](https://developer.android.com/studio/publish/app-signing#app-signing-google-play)
 - [Use Play App Signing](https://support.google.com/googleplay/android-developer/answer/9842756)
 
-## Ответ
-
+## Ответ (RU)
 **Play App Signing** — это сервис, в котором Google управляет и защищает ключ подписи вашего приложения и использует его для подписи оптимизированных дистрибутивных APK, которые генерируются из ваших app bundle. Play App Signing хранит ключ подписи приложения в защищённой инфраструктуре Google и предлагает варианты обновления для повышения безопасности.
 
 ## Ключевые концепции

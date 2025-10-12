@@ -9,17 +9,16 @@ tags:
   - jetpack-compose
   - modifiers
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What do you know about modifications?
 
-## Question (RU)
+# Вопрос (RU)
 
 Что знаешь о модификациях
 
-## Answer
-
+## Answer (EN)
 In Android development, "modifications" typically refers to **Modifiers** in Jetpack Compose - a powerful system for customizing the appearance and behavior of UI elements. Modifiers are one of the core concepts in Compose.
 
 ### 1. What are Compose Modifiers?
@@ -570,6 +569,6 @@ Modifiers in Jetpack Compose are essential for:
 - **Effects** - animations, transformations
 - **Customization** - create reusable UI patterns
 
-## Answer (RU)
+## Ответ (RU)
 
 Модификации могут означать разные вещи в зависимости от контекста. В Android-разработке чаще всего речь идёт о следующих типах модификаций: 1. Модификация данных (изменение состояния) Это изменение переменных, объектов и структур данных во время работы приложения. 2. Модификация UI (Compose Modifiers) В Jetpack Compose модификации используются для изменения внешнего вида и поведения UI-элементов. 3. Модификация кода (рефакторинг, оптимизация) В программировании модификация кода означает его улучшение без изменения основной логики. 4. Модификация системы (кастомные прошивки, рут-изменения) Это изменения в самой операционной системе Android.

@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: [recyclerview, rxjava, pagination, paging-library]
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, rxjava, recyclerview, pagination, infinite-scroll, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > How do you implement pagination/infinite scrolling in RecyclerView using RxJava?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как реализовать пагинацию/бесконечную прокрутку в RecyclerView с помощью RxJava?
 
 ---

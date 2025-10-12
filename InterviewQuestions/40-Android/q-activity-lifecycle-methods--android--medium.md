@@ -5,14 +5,35 @@ tags:
   - activity
   - lifecycle
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие есть методы жизненного цикла Activity и как они отрабатывают?
 
-**English**: What Activity lifecycle methods exist and how do they work?
+# Question (EN)
+> What Activity lifecycle methods exist and how do they work?
 
-## Answer
+# Вопрос (RU)
+> Какие есть методы жизненного цикла Activity и как они отрабатывают?
+
+---
+
+## Answer (EN)
+
+Activity lifecycle methods are a set of callbacks called by Android when Activity state changes. They provide control over app behavior during creation, stopping, resuming, or destruction.
+
+**Main lifecycle methods:**
+- `onCreate()`: Initialize Activity (create UI, bind data) - called ONCE
+- `onStart()`: Activity becomes visible - called MULTIPLE times
+- `onResume()`: Activity in foreground, user can interact
+- `onPause()`: Activity losing focus, user leaving
+- `onStop()`: Activity no longer visible
+- `onDestroy()`: Activity being destroyed
+- `onRestart()`: Activity restarting from stopped state
+
+---
+
+## Ответ (RU)
 
 Методы жизненного цикла Activity представляют собой набор коллбэков, которые вызываются системой Android при изменении состояния Activity. Эти методы предоставляют возможность управлять поведением приложения при создании, остановке, восстановлении или уничтожении.
 

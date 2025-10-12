@@ -7,14 +7,20 @@ tags:
   - programming-languages
   - reference-types
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Каким критериям должны соответствовать ссылочные типы?
 
-**English**: What criteria should reference types meet?
+# Question (EN)
+> What criteria should reference types meet?
 
-## Answer
+# Вопрос (RU)
+> Каким критериям должны соответствовать ссылочные типы?
+
+---
+
+## Answer (EN)
 
 Reference types in Kotlin should meet the following criteria for good design:
 
@@ -138,7 +144,9 @@ open class BaseEntity {
 | **Size** | Keep lightweight if copied often | Performance |
 | **Inheritance** | Prefer final/sealed | Prevent unwanted subclassing |
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Ссылочные типы в Kotlin: неизменяемые, если это требуется по архитектуре; nullable или not-null — в зависимости от требований; должны реализовывать equals, hashCode и toString особенно если используются в коллекциях; быть легковесными если часто копируются; желательно final или sealed если поведение фиксировано
 

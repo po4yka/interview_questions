@@ -5,14 +5,20 @@ tags:
   - kotlin
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое Extensions?
 
-**English**: What are Extensions?
+# Question (EN)
+> What are Extensions?
 
-## Answer
+# Вопрос (RU)
+> Что такое Extensions?
+
+---
+
+## Answer (EN)
 
 **Extensions** in Kotlin allow you to **add new functionality to existing classes** without modifying their source code or using inheritance.
 
@@ -225,7 +231,9 @@ fun MyClass.tryAccess() {
 }
 ```
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Термин 'Extensions' используется для обозначения функциональности, которая позволяет добавлять новые возможности к существующим классам без изменения их исходного кода.
 

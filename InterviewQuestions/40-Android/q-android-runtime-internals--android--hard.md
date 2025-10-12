@@ -10,20 +10,23 @@ tags:
   - compilation
   - performance
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Android Runtime Internals
 
-**Сложность**: 🔴 Hard
+**Сложность**: Hard
 **Источник**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> How does the Android Runtime (ART) work internally? Explain the bytecode execution, compilation, and memory management processes.
 
-### Question
-How does the Android Runtime (ART) work internally? Explain the bytecode execution, compilation, and memory management processes.
+# Вопрос (RU)
+> Как работает Android Runtime (ART) внутри? Объясните выполнение байткода, компиляцию и управление памятью.
 
-### Answer
+---
+
+## Answer (EN)
 
 ART is the managed runtime environment that executes Android app code. Understanding its internals helps optimize app performance and troubleshoot issues.
 
@@ -618,12 +621,7 @@ class ProfilingExample {
 
 ---
 
-## Русский
-
-### Вопрос
-Как работает Android Runtime (ART) внутри? Объясните выполнение байткода, компиляцию и управление памятью.
-
-### Ответ
+## Ответ (RU)
 
 ART - managed runtime среда для выполнения Android-приложений.
 

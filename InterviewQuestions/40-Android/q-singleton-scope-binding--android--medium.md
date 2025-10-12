@@ -9,15 +9,14 @@ tags:
   - scope
   - singleton
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # К какому scope привязан Singleton?
 
 **English**: What scope is @Singleton bound to?
 
-## Answer
-
+## Answer (EN)
 **@Singleton** is bound to the **lifetime of the component** that uses it.
 
 - **In Dagger:** Lives as long as the Component exists
@@ -338,8 +337,7 @@ class Bad @Inject constructor(
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 **@Singleton** привязан к **времени жизни компонента**, в котором он используется.
 
 - **В Dagger:** Живет, пока существует Component

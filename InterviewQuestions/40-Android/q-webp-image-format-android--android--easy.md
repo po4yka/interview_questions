@@ -7,15 +7,14 @@ tags:
   - images
   - performance
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # WebP - самый экономичный формат изображений
 
 **English**: WebP - most efficient image format for Android
 
-## Ответ
-
+## Ответ (RU)
 **WebP** — это современный формат изображений, разработанный Google, который обеспечивает превосходное сжатие по сравнению с PNG и JPEG при сохранении высокого качества. WebP является стандартом де-факто для оптимизации изображений в Android-приложениях.
 
 ### Преимущества WebP

@@ -7,14 +7,20 @@ tags:
   - syntax
   - type-parameters
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какой синтаксис используется для объявления обобщенной функции в Kotlin?
 
-**English**: What syntax is used to declare a generic function in Kotlin?
+# Question (EN)
+> What syntax is used to declare a generic function in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Какой синтаксис используется для объявления обобщенной функции в Kotlin?
+
+---
+
+## Answer (EN)
 
 To declare a generic function in Kotlin, use angle brackets `<T>` before the function name:
 
@@ -51,7 +57,9 @@ val name = identity("Hello")     // T inferred as String
 - Before function name: `fun <T> name()`
 - Before extension receiver: `fun <T> T.extension()`
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Для объявления обобщенной функции в Kotlin используется синтаксис: fun <T> functionName() { ... }
 

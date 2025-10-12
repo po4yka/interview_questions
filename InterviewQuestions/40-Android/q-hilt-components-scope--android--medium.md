@@ -9,15 +9,14 @@ tags:
   - hilt
   - scope
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие готовые компоненты с готовым скоупом есть в Dagger Hilt и как модуль добавить к этой компоненте?
 
 **English**: What ready-made components with scopes are in Dagger Hilt, and how to add a module to a component?
 
-## Answer
-
+## Answer (EN)
 Hilt provides **predefined components** for Application, Activity, Fragment, ViewModel, and other Android levels.
 
 **To add module:** Use **`@InstallIn(ComponentName::class)`** annotation.
@@ -491,8 +490,7 @@ object MyModule {
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Hilt предоставляет **готовые компоненты** для Application, Activity, Fragment, ViewModel и других уровней Android.
 
 **Чтобы добавить модуль:** Используйте аннотацию **`@InstallIn(ComponentName::class)`**.

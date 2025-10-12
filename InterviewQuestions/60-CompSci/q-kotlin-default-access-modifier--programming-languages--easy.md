@@ -7,14 +7,20 @@ tags:
   - syntax
   - visibility
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какой модификатор доступа по умолчанию используется в Kotlin?
 
-**English**: What is the default access modifier in Kotlin?
+# Question (EN)
+> What is the default access modifier in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Какой модификатор доступа по умолчанию используется в Kotlin?
+
+---
+
+## Answer (EN)
 
 The default access modifier in Kotlin is **`public`**. If you don't specify any visibility modifier, the declaration is public.
 
@@ -58,7 +64,9 @@ val counter = 0  // public property
 - Java: package-private (no modifier) by default
 - Kotlin has `internal` (module visibility) instead of package-private
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Модификатор доступа по умолчанию в Kotlin — это `public`. Если не указан модификатор видимости, объявление является публичным.
 

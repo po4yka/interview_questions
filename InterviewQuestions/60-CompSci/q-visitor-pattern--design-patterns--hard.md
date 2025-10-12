@@ -6,28 +6,38 @@ tags:
   - gof-patterns
   - double-dispatch
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Visitor Pattern
 
-**English**: What is the Visitor pattern? When and why should it be used?
+# Question (EN)
+> What is the Visitor pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Visitor? Когда и зачем его следует использовать?
+
+---
+
+## Answer (EN)
+
 
 **Visitor (Посетитель)** - это поведенческий паттерн проектирования, который позволяет добавлять новые операции к группе связанных классов без изменения их структуры. Он особенно полезен, когда у вас есть стабильный набор классов, но нужно выполнять различные операции над ними.
 
-### Определение
+### Definition
+
 
 The Visitor design pattern is a behavioral pattern that **allows you to add new operations to a group of related classes without modifying their structures**. It is particularly useful when you have a stable set of classes but need to perform various operations on them, making it easy to extend functionality without altering the existing codebase.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 What problems can the Visitor design pattern solve?
 
 - **It should be possible to define a new operation for (some) classes of an object structure without changing the classes**
 
-### Решение
+### Solution
+
 
 What solution does the Visitor design pattern describe?
 
@@ -37,7 +47,8 @@ What solution does the Visitor design pattern describe?
 
 This makes it possible to create new operations independently from the classes of an object structure by adding new visitor objects.
 
-### Мотивация использования
+### Motivation for Use
+
 
 Motivation for Using the Visitor Pattern:
 
@@ -309,7 +320,8 @@ fun main() {
 }
 ```
 
-### Объяснение
+### Explanation
+
 
 **Explanation**:
 
@@ -332,6 +344,7 @@ When to use:
 
 ### Pros (Преимущества)
 
+
 1. **Separation of Concerns** - Operations separated from objects
 2. **Easy to Add New Features** - Create new visitor classes
 3. **Centralized Logic** - All operations in one place
@@ -340,6 +353,7 @@ When to use:
 6. **Open/Closed Principle** - Add operations without modifying elements
 
 ### Cons (Недостатки)
+
 
 1. **Added Complexity** - Extra classes and double dispatch
 2. **Challenging to Add New Objects** - Requires changes to all visitors
@@ -410,3 +424,71 @@ class SpecificVisitor : BaseVisitor() {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+The Visitor design pattern is a behavioral pattern that **allows you to add new operations to a group of related classes without modifying their structures**. It is particularly useful when you have a stable set of classes but need to perform various operations on them, making it easy to extend functionality without altering the existing codebase.
+
+### Проблемы, которые решает
+
+
+What problems can the Visitor design pattern solve?
+
+- **It should be possible to define a new operation for (some) classes of an object structure without changing the classes**
+
+### Решение
+
+
+What solution does the Visitor design pattern describe?
+
+1. **Define a separate (visitor) object** that implements an operation to be performed on elements of an object structure
+2. **Clients traverse the object structure** and call a dispatching operation `accept(visitor)` on an element
+3. **The visitor object then performs the operation** on the element ("visits the element")
+
+This makes it possible to create new operations independently from the classes of an object structure by adding new visitor objects.
+
+### Мотивация использования
+
+
+Motivation for Using the Visitor Pattern:
+
+1. **Separation of Concerns** - Separates algorithm from object structure
+2. **Extensibility** - Define new operations without changing element classes
+3. **Improved Maintainability** - Centralizes related behavior in visitor
+4. **Enhanced Flexibility** - Define operations without modifying element classes
+5. **Decoupling** - Decouples operations from object structure
+
+### Объяснение
+
+
+**Explanation**:
+
+- **Element** interface has `accept(visitor)` method
+- **Concrete elements** pass themselves to visitor's visit method
+- **Visitor** interface has visit method for each element type
+- **Concrete visitors** implement operations for each element
+- **Double dispatch** - operation depends on both visitor and element type
+- **Android**: View traversal, validation, rendering, serialization
+
+### Pros (Преимущества)
+
+
+1. **Separation of Concerns** - Operations separated from objects
+2. **Easy to Add New Features** - Create new visitor classes
+3. **Centralized Logic** - All operations in one place
+4. **Easier Maintenance** - Update visitor, not all object classes
+5. **Type Safety** - Each visitor method is type-specific
+6. **Open/Closed Principle** - Add operations without modifying elements
+
+### Cons (Недостатки)
+
+
+1. **Added Complexity** - Extra classes and double dispatch
+2. **Challenging to Add New Objects** - Requires changes to all visitors
+3. **Tight Coupling** - Visitors need to know all element types
+4. **More Classes** - Can clutter codebase
+5. **Not Ideal for Frequent Changes** - Adding element types is difficult

@@ -8,15 +8,14 @@ tags:
   - hilt
   - inject
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как сообщить Dagger, что мы собираемся что-то инжектить?
 
 **English**: How to tell Dagger we're going to inject something?
 
-## Answer
-
+## Answer (EN)
 Use **`@Inject`** annotation on:
 
 1. **Constructor** - For class creation
@@ -335,8 +334,7 @@ abstract class RepositoryModule {
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Используйте аннотацию **`@Inject`** на:
 
 1. **Конструкторе** - для создания класса

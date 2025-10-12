@@ -6,15 +6,14 @@ tags:
   - fragments
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как на экране одновременно отобразить два одинаковых фрагмента?
 
 **English**: How to display two identical fragments on the screen at the same time?
 
-## Answer
-
+## Answer (EN)
 To simultaneously display two identical fragments on one screen in an Android application, you need to add two instances of the fragment to different containers in the activity layout. In this case, each fragment will work independently, even if they use the same class.
 
 ### Steps to Display Two Identical Fragments
@@ -403,7 +402,6 @@ class CounterFragment : Fragment() {
 
 5. **Communication through Activity** - Fragments can communicate via the parent activity
 
-## Ответ
-
+## Ответ (RU)
 Чтобы одновременно отобразить два одинаковых фрагмента на одном экране в Android-приложении, вам нужно добавить два экземпляра фрагмента в разные контейнеры в макете активности. В этом случае каждый фрагмент будет работать независимо, даже если они используют один и тот же класс. 1. Создайте макет для активности который будет содержать два контейнера для фрагментов. Обычно это делается с помощью FrameLayout или LinearLayout. 2. Создайте класс фрагмента который будет использоваться для отображения обоих экземпляров. 3. Добавьте фрагменты в активность Теперь добавьте два экземпляра фрагмента в вашу активность. 4. Создайте макет для фрагмента Это может быть любой макет, который вы хотите использовать.
 

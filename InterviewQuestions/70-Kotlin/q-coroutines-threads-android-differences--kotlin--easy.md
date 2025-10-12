@@ -12,7 +12,7 @@ language_tags:
   - en
   - ru
 original_language: en
-status: reviewed
+status: draft
 source: Kotlin Coroutines Interview Questions PDF
 tags:
   - kotlin
@@ -23,9 +23,9 @@ tags:
   - comparison
   - difficulty/easy
 ---
-## Question (EN)
+# Question (EN)
 > What are the key differences between coroutines and threads in Android development?
-## Вопрос (RU)
+# Вопрос (RU)
 > Каковы ключевые различия между корутинами и потоками в Android разработке?
 
 ---

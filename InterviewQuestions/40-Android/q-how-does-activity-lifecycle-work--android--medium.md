@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How is Fragment lifecycle connected with Activity?
 
-## Answer
-
+## Answer (EN)
 Fragment lifecycle is **tightly coupled** with Activity lifecycle. When Activity lifecycle changes, it triggers corresponding Fragment lifecycle callbacks. However, Fragment has **additional lifecycle states** that Activity doesn't have.
 
 ### Lifecycle Dependency Diagram

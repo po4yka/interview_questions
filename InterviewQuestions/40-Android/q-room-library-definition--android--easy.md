@@ -10,15 +10,14 @@ tags:
   - room
   - sqlite
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что из себя представляет библиотека Room?
 
 **English**: What is the Room library?
 
-## Answer
-
+## Answer (EN)
 **Room** is a **database management library** that serves as an **abstraction layer over SQLite** for convenient database access.
 
 This library is part of **Android Architecture Components** introduced by Google to simplify development of stable and performant applications.
@@ -191,7 +190,6 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "app-db")
 - **Integration**: LiveData, Flow, RxJava, Coroutines
 - **Benefits**: Clean API, reduced errors, easier testing
 
-## Ответ
-
+## Ответ (RU)
 Room — это библиотека управления базами данных, которая служит абстрактным слоем над SQLite для удобного доступа к базе данных. Эта библиотека является частью Android Architecture Components, представленных Google для упрощения разработки стабильных и производительных приложений. Room предоставляет абстракцию над SQLite с целью обеспечения более чистого доступа к базе данных, сохраняя при этом полную мощь SQLite. Основные возможности: типобезопасность, уменьшение шаблонного кода, легкая интеграция с LiveData и RxJava и проверка SQL-запросов во время компиляции. Основные компоненты: Database, Entity и DAO.
 

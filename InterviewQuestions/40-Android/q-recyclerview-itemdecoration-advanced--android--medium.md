@@ -7,7 +7,7 @@ aliases:
   - RecyclerView ItemDecoration продвинутый
 date_created: 2025-10-05
 date_modified: 2025-10-05
-status: reviewed
+status: draft
 original_language: en
 language_tags:
   - en
@@ -32,14 +32,12 @@ source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/A
 
 # RecyclerView ItemDecoration Advanced / RecyclerView ItemDecoration продвинутый
 
-## EN
-
-### Question
+# Question (EN)
+> 
 
 What do you know about RecyclerView ItemDecoration?
 
-### Answer
-
+## Answer (EN)
 An ItemDecoration allows the application to add a special drawing and layout offset to specific item views from the adapter's data set. This can be useful for drawing dividers between items, highlights, visual grouping boundaries and more.
 
 All ItemDecorations are drawn in the order they were added, before the item views (in `onDraw()`) and after the items (in `onDrawOver(Canvas, RecyclerView, RecyclerView.State)`).
@@ -131,14 +129,12 @@ ItemDecoration is commonly used for:
 
 ---
 
-## RU
-
-### Вопрос
+# Вопрос (RU)
+> 
 
 Что вы знаете о RecyclerView ItemDecoration?
 
-### Ответ
-
+## Ответ (RU)
 ItemDecoration позволяет приложению добавлять специальную отрисовку и смещение макета к конкретным представлениям элементов из набора данных адаптера. Это может быть полезно для рисования разделителей между элементами, выделений, границ визуального группирования и многого другого.
 
 Все ItemDecoration отрисовываются в порядке их добавления, перед представлениями элементов (в `onDraw()`) и после элементов (в `onDrawOver(Canvas, RecyclerView, RecyclerView.State)`).

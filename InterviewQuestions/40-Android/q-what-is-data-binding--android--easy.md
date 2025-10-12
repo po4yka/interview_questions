@@ -8,15 +8,14 @@ tags:
   - data-binding
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Использовал Data Binding
 
 **English**: Have you used Data Binding
 
-## Answer
-
+## Answer (EN)
 **Data Binding** is a library in Android that allows you to bind user interface (UI) components directly to data sources in your app, reducing the amount of boilerplate code needed to synchronize UI with data.
 
 ### Key Features
@@ -251,7 +250,6 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-## Ответ
-
+## Ответ (RU)
 Это библиотека в Android, которая позволяет связывать компоненты пользовательского интерфейса (UI) напрямую с источниками данных, снижая количество шаблонного кода
 

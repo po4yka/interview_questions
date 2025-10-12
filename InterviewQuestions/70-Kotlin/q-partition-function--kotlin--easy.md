@@ -5,15 +5,14 @@ tags:
   - filtering
   - pair
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # partition(): разделение коллекции на две части
 
 **English**: partition() function in Kotlin collections
 
-## Answer
-
+## Answer (EN)
 `partition()` делит коллекцию на **два списка**: первый содержит элементы, соответствующие условию (`true`), второй — не соответствующие (`false`). Возвращает `Pair<List, List>`. Удобно для фильтрации без потери "невалидных" элементов.
 
 ### Базовое использование

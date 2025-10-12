@@ -9,14 +9,20 @@ tags:
   - object-methods
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие существуют правила для методов equals и hashcode?
 
-**English**: What rules exist for equals and hashCode methods?
+# Question (EN)
+> What rules exist for equals and hashCode methods?
 
-## Answer
+# Вопрос (RU)
+> Какие существуют правила для методов equals и hashcode?
+
+---
+
+## Answer (EN)
 
 Methods `equals()` and `hashCode()` are important for correct operation of collections such as HashSet, HashMap, and HashTable.
 
@@ -34,7 +40,23 @@ Methods `equals()` and `hashCode()` are important for correct operation of colle
 
 **Golden rule**: When you override `equals()`, you MUST override `hashCode()`!
 
-## Ответ
+---
 
-Методы equals(Object obj) и hashCode() имеют важное значение для корректной работы коллекций...
+## Ответ (RU)
+
+Методы `equals()` и `hashCode()` имеют важное значение для корректной работы коллекций, таких как HashSet, HashMap и HashTable.
+
+**Контракт equals():**
+1. **Рефлексивность**: `x.equals(x)` должен возвращать true
+2. **Симметричность**: Если `x.equals(y)` возвращает true, то `y.equals(x)` должен возвращать true
+3. **Транзитивность**: Если `x.equals(y)` и `y.equals(z)` возвращают true, то `x.equals(z)` должен возвращать true
+4. **Согласованность**: Множественные вызовы возвращают одинаковый результат, если данные не изменились
+5. **Сравнение с null**: `x.equals(null)` должен возвращать false
+
+**Контракт hashCode():**
+1. **Внутренняя согласованность**: hashCode должен возвращать одно и то же значение, если объект не изменился
+2. **Согласованность с equals**: Если `x.equals(y)` возвращает true, то `x.hashCode() == y.hashCode()` должен быть true
+3. **Необязательное различие**: Разные объекты могут иметь одинаковый hashCode (коллизии допустимы), но лучшая производительность достигается при разных значениях
+
+**Золотое правило**: Когда вы переопределяете `equals()`, вы ДОЛЖНЫ переопределить `hashCode()`!
 

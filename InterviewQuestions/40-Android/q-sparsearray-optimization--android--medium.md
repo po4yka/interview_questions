@@ -7,7 +7,7 @@ aliases:
   - SparseArray и оптимизация
 date_created: 2025-10-05
 date_modified: 2025-10-05
-status: reviewed
+status: draft
 original_language: en
 language_tags:
   - en
@@ -31,14 +31,12 @@ source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/A
 
 # SparseArray and Optimization / SparseArray и оптимизация
 
-## EN
-
-### Question
+# Question (EN)
+> 
 
 What do you know about SparseArray?
 
-### Answer
-
+## Answer (EN)
 `SparseArray` maps integers to Objects and, unlike a normal array of Objects, its indices can contain gaps. `SparseArray` is intended to be more memory-efficient than a `HashMap`, because it avoids auto-boxing keys and its data structure doesn't rely on an extra entry object for each mapping.
 
 Note that this container keeps its mappings in an array data structure, using a binary search to find keys. The implementation is not intended to be appropriate for data structures that may contain large numbers of items. It is generally slower than a `HashMap` because lookups require a binary search, and adds and removes require inserting and deleting entries in the array. For containers holding up to hundreds of items, the performance difference is less than 50%.
@@ -120,14 +118,12 @@ Android provides several variants of SparseArray:
 
 ---
 
-## RU
-
-### Вопрос
+# Вопрос (RU)
+> 
 
 Что вы знаете о SparseArray?
 
-### Ответ
-
+## Ответ (RU)
 `SparseArray` отображает целые числа на объекты и, в отличие от обычного массива объектов, его индексы могут содержать пропуски. `SparseArray` предназначен для более эффективного использования памяти, чем `HashMap`, поскольку он избегает автоупаковки ключей, а его структура данных не зависит от дополнительного объекта записи для каждого отображения.
 
 Обратите внимание, что этот контейнер хранит свои отображения в структуре данных массива, используя бинарный поиск для нахождения ключей. Реализация не предназначена для структур данных, которые могут содержать большое количество элементов. Обычно она медленнее, чем `HashMap`, потому что поиск требует бинарного поиска, а добавление и удаление требуют вставки и удаления записей в массиве. Для контейнеров, содержащих до сотен элементов, разница в производительности составляет менее 50%.

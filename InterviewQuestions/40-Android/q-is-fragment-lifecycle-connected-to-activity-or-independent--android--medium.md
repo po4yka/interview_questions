@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Is Fragment lifecycle connected to Activity or independent
 
-## Answer
-
+## Answer (EN)
 The Fragment lifecycle is **connected to and dependent on** its host Activity's lifecycle, but Fragments also have their own additional lifecycle states and callbacks.
 
 ### Relationship: Connected, Not Independent
@@ -409,8 +408,7 @@ class DependentFragment : Fragment() {
 4. Fragment has **two lifecycles**: Fragment lifecycle and View lifecycle
 5. Use **viewLifecycleOwner** for view-related observations
 
-## Ответ
-
+## Ответ (RU)
 Жизненный цикл Fragment **связан и зависит от** жизненного цикла Activity-хоста, но Fragment также имеет свои дополнительные состояния и коллбэки.
 
 ### Связь: Зависимый, не независимый

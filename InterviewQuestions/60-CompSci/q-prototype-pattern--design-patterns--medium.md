@@ -8,12 +8,21 @@ difficulty: medium
 related:
   - factory-method-pattern
   - builder-pattern
-status: reviewed
+status: draft
 ---
 
 # Prototype Pattern / Паттерн Прототип
 
-## English
+# Question (EN)
+> What is the Prototype pattern? When and why should it be used?
+
+# Вопрос (RU)
+> Что такое паттерн Прототип? Когда и зачем его следует использовать?
+
+---
+
+## Answer (EN)
+
 
 ### Definition
 The Prototype Design Pattern is a creational pattern that enables the creation of new objects by copying an existing object. Prototype allows us to hide the complexity of making new instances from the client. The existing object acts as a prototype and contains the state of the object.
@@ -101,7 +110,9 @@ Cloned Character: GameCharacter(name=Knight, weapon=Sword, level=5)
 
 ---
 
-## Русский
+
+
+## Ответ (RU)
 
 ### Определение
 Паттерн проектирования Прототип - это порождающий паттерн, который позволяет создавать новые объекты путем копирования существующего объекта. Прототип позволяет скрыть сложность создания новых экземпляров от клиента. Существующий объект действует как прототип и содержит состояние объекта.

@@ -7,15 +7,14 @@ tags:
   - recyclerview
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как организовать работу с текстом и картинками в делегате?
 
 **English**: How to organize work with text and images in a delegate?
 
-## Answer
-
+## Answer (EN)
 For managing text and images in RecyclerView, use **delegates** (also known as Adapter Delegates) which separate display logic for different data types. This simplifies code and improves maintainability.
 
 ### What are Adapter Delegates?
@@ -280,7 +279,6 @@ class TextImageViewHolder(
 4. **Scalability** - Easy to add new item types without modifying existing code
 5. **Type Safety** - Clear type handling with sealed classes
 
-## Ответ
-
+## Ответ (RU)
 Для управления текстом и картинками в RecyclerView используйте делегаты, которые разделяют логику отображения разных типов данных. Это упрощает код и улучшает его поддержку.
 

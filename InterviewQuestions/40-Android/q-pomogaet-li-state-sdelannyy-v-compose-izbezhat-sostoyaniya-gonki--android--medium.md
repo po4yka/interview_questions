@@ -3,7 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Does state in Compose help avoid race conditions?

@@ -5,15 +5,14 @@ tags:
   - networking
   - http
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что используется для работы с сетью в Android?
 
 **English**: What is used for network operations in Android?
 
-## Answer
-
+## Answer (EN)
 Для работы с сетью в Android используются различные библиотеки и инструменты, обеспечивающие выполнение сетевых запросов, обработку ответов и управление асинхронными операциями.
 
 ### Основные инструменты

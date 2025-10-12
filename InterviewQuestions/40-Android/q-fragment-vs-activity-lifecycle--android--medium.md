@@ -5,15 +5,14 @@ tags:
   - fragments
   - lifecycle
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Чем жизненный цикл фрагмента отличается от Activity
 
 **English**: How does Fragment lifecycle differ from Activity lifecycle?
 
-## Answer
-
+## Answer (EN)
 Жизненный цикл фрагмента похож на жизненный цикл активити, но имеет дополнительные состояния и события, отражающие его уникальную способность быть добавленным, удалённым, заменённым или восстановленным в рамках активити.
 
 ### Основные отличия

@@ -6,7 +6,7 @@ tags:
   - animations
   - itemanimator
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What needs to be used to animate adding/removing items in RecyclerView?

@@ -9,15 +9,14 @@ tags:
   - long-running-tasks
   - service
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Для чего нужны сервисы?
 
 **English**: What are services for?
 
-## Answer
-
+## Answer (EN)
 **Services** are used for **long-running background operations** that don't require user interaction.
 
 **Key Use Cases:**
@@ -76,7 +75,6 @@ val workRequest = OneTimeWorkRequestBuilder<MyWorker>().build()
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
-## Ответ
-
+## Ответ (RU)
 Сервисы предназначены для выполнения длительных фоновых операций без взаимодействия с пользователем. Используются для: воспроизведения музыки, обработки сетевых запросов, выполнения периодических задач.
 

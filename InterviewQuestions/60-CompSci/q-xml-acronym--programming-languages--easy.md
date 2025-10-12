@@ -5,14 +5,20 @@ tags:
   - acronym
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как расшифровывается xml?
 
-**English**: How is XML deciphered?
+# Question (EN)
+> How is XML deciphered?
 
-## Answer
+# Вопрос (RU)
+> Как расшифровывается xml?
+
+---
+
+## Answer (EN)
 
 **XML** stands for **eXtensible Markup Language** (Расширяемый язык разметки).
 
@@ -125,7 +131,9 @@ In Android development, XML is heavily used:
 }
 ```
 
-## Ответ
+---
+
+## Ответ (RU)
 
 XML — это eXtensible Markup Language (Расширяемый язык разметки).
 

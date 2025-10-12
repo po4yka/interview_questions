@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # In which thread does a regular service run
 
-## Answer
-
+## Answer (EN)
 **A regular Service runs in the main thread (UI thread) by default**, not in a separate background thread. This is a common misconception. Services do not automatically run on background threads.
 
 ### Key Points
@@ -509,7 +508,7 @@ class GoodService : Service() {
 }
 ```
 
-## Answer (RU)
+## Ответ (RU)
 
 Обычный Service запускается в главном потоке (main thread/UI thread) по умолчанию, а не в отдельном фоновом потоке. Это распространённое заблуждение. Все методы жизненного цикла Service (onCreate(), onStartCommand(), onBind()) выполняются в главном потоке. Для выполнения длительных операций (сетевые запросы, работа с базой данных, файловые операции) необходимо вручную создавать фоновые потоки, использовать корутины или WorkManager. Блокировка главного потока приведёт к ANR (Application Not Responding).
 

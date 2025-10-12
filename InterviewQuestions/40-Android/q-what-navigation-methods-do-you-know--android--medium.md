@@ -2,13 +2,12 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие способы навигации знаешь?
 
-## Answer
-
+## Answer (EN)
 Android offers multiple navigation methods for moving between screens and managing app flow. Each method serves specific use cases and architectural patterns.
 
 ### 1. Activity Navigation via Intent
@@ -482,6 +481,5 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector)
 
 # Какие способы навигации знаешь
 
-## Ответ
-
+## Ответ (RU)
 В Android есть несколько способов навигации между экранами. Основные способы включают Activity-навигацию через Intent, Fragment-based навигацию с FragmentManager, Navigation Component из Jetpack, Bottom Navigation и Tab Navigation для переключения между экранами через меню навигации, Drawer Navigation с боковым меню DrawerLayout, Deep Links и App Links для навигации через ссылки а также Navigation в Jetpack Compose с использованием NavHost и NavController.

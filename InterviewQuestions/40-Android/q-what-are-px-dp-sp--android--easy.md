@@ -8,17 +8,16 @@ tags:
   - ui
   - measurement-units
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What are px dp sp?
 
-## Question (RU)
+# Вопрос (RU)
 
 Что такое px dp sp
 
-## Answer
-
+## Answer (EN)
 Android uses three main measurement units for defining UI dimensions: **px** (pixels), **dp** (density-independent pixels), and **sp** (scale-independent pixels). Understanding these units is crucial for creating layouts that work across different screen sizes and densities.
 
 ### 1. px (Pixels)
@@ -395,6 +394,6 @@ textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
 - **sp** - Scale-independent pixels, use ONLY for text size (respects user font settings)
 - Always use **dp** for layouts and **sp** for text to ensure proper scaling and accessibility
 
-## Answer (RU)
+## Ответ (RU)
 
 px (пиксели) – физические точки экрана. dp (density-independent pixels) – абстрактная единица измерения, которая адаптируется под плотность экрана. sp (scale-independent pixels) – масштабируемые пиксели для текста. px не зависит от плотности экрана, dp адаптируется под плотность экрана для UI размеров, sp учитывает настройки шрифта пользователя и используется только для текста. Примеры использования в XML и Kotlin приведены.

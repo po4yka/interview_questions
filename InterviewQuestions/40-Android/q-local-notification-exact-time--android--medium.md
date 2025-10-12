@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, 20251006-100013, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > How to schedule local notifications at exact time?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как запланировать локальные уведомления на точное время?
 
 ---

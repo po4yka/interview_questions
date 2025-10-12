@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, jetpack-compose, navigation, compose-navigation, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > How does Navigation work in Jetpack Compose? Explain NavHost, NavController, and navigation arguments.
-## Вопрос (RU)
+# Вопрос (RU)
 > Как работает навигация в Jetpack Compose? Объясните NavHost, NavController и навигационные аргументы.
 
 ---

@@ -11,7 +11,7 @@ subtopics:
   - ui-compose
   - ui-state
 difficulty: hard
-status: reviewed
+status: draft
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20CompositionLocal.md
 ---
 
@@ -21,8 +21,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/An
 
 **Russian**: Что вы знаете о CompositionLocal?
 
-## Answer
-
+## Answer (EN)
 Usually in Compose, data flows down through the UI tree as parameters to each composable function. This makes a composable's dependencies explicit. This can however be cumbersome for data that is very frequently and widely used such as colors or type styles. See the following example:
 
 ```kotlin
@@ -159,8 +158,7 @@ If the value provided to the `CompositionLocal` is highly unlikely to change or 
 
 Think of Composition Locals as part of your UI toolkit, not as a general dependency injection mechanism. They shine when dealing with UI-related values that naturally follow your component hierarchy, but shouldn't be used to bypass proper architecture patterns or hide important dependencies.
 
-## Ответ
-
+## Ответ (RU)
 Обычно в Compose данные передаются вниз по дереву UI в качестве параметров каждой composable функции. Это делает зависимости composable явными. Однако это может быть неудобно для данных, которые используются очень часто и широко, таких как цвета или стили типографики.
 
 Чтобы не передавать эти данные в качестве явной зависимости параметра большинству composables, **Compose предлагает** `CompositionLocal`, **который позволяет создавать именованные объекты с областью видимости дерева, которые могут использоваться как неявный способ передачи данных через дерево UI**.

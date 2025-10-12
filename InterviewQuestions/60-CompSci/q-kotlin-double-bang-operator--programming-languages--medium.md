@@ -7,14 +7,20 @@ tags:
   - operators
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что известно о double bang (!!)?
 
-**English**: What do you know about double bang (!!)?
+# Question (EN)
+> What do you know about double bang (!!)?
 
-## Answer
+# Вопрос (RU)
+> Что известно о double bang (!!)?
+
+---
+
+## Answer (EN)
 
 The `!!` operator (not-null assertion) is used to **explicitly indicate that a value is not null**.
 
@@ -69,7 +75,9 @@ fun process(input: String?) {
 
 **Best practice:** Avoid `!!` and use safer alternatives like `?.`, `?:`, or proper null checks.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Оператор !! используется для явного указания, что значение не null. При использовании !! если значение оказывается null выбрасывается исключение KotlinNullPointerException. Рекомендуется избегать !! и использовать безопасные вызовы (?.) или оператор ?: для обработки null.
 

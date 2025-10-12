@@ -9,7 +9,7 @@ tags:
   - state-management
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # What to put in state for initial list?
@@ -18,8 +18,7 @@ status: reviewed
 
 **English**: What to put in state for displaying the initial list?
 
-## Answer
-
+## Answer (EN)
 For the initial list state, you can use an **empty list** if data loads asynchronously, or a **pre-prepared static list** if data is known at app startup.
 
 ### Async Loading Approach
@@ -90,7 +89,6 @@ class ListViewModel : ViewModel() {
 }
 ```
 
-## Ответ
-
+## Ответ (RU)
 Для отображения первоначального списка в state можно положить пустой массив, если данные загружаются асинхронно, или заранее подготовленный статический список, если данные известны на момент загрузки приложения.
 

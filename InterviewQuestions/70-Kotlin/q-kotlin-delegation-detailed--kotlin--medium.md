@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [kotlin, delegation, by-keyword, delegates, patterns, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > Explain the delegation pattern in Kotlin in detail. What are class delegation and property delegation?
-## Вопрос (RU)
+# Вопрос (RU)
 > Объясните паттерн делегирования в Kotlin детально. Что такое делегирование классов и делегирование свойств?
 
 ---

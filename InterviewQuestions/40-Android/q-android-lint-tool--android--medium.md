@@ -6,7 +6,7 @@ language_tags:
   - en
   - ru
 original_language: en
-status: reviewed
+status: draft
 moc: moc-android
 tags:
   - android
@@ -25,13 +25,15 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 
 # Android Lint Tool / Инструмент Android Lint
 
-**English**: What do you know about Lint?
+# Question (EN)
+> What do you know about Android Lint?
 
-**Русский**: Что вы знаете о Lint?
+# Вопрос (RU)
+> Что вы знаете о Lint в Android?
 
-## Answer
+---
 
-**English**:
+## Answer (EN)
 
 Android Studio provides a code scanning tool called **lint** that can help you to identify and correct problems with the structural quality of your code without your having to execute the app or write test cases. Each problem detected by the tool is reported with a description message and a severity level, so that you can quickly prioritize the critical improvements that need to be made. Also, you can lower the severity level of a problem to ignore issues that are not relevant to your project, or raise the severity level to highlight specific problems.
 
@@ -107,7 +109,9 @@ android {
 }
 ```
 
-**Русский**:
+---
+
+## Ответ (RU)
 
 Android Studio предоставляет инструмент сканирования кода под названием **lint**, который может помочь вам выявить и исправить проблемы со структурным качеством кода без необходимости запуска приложения или написания тестов. Каждая проблема, обнаруженная инструментом, сообщается с описанием и уровнем серьезности, чтобы вы могли быстро определить приоритетность критических улучшений. Вы также можете понизить уровень серьезности проблемы, чтобы игнорировать вопросы, не относящиеся к вашему проекту, или повысить уровень серьезности, чтобы выделить конкретные проблемы.
 

@@ -12,16 +12,28 @@ tags:
   - view
   - viewmodel
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какие компоненты используются помимо activity?
 
-**English**: What components are used besides Activity?
+# Question (EN)
+> What components are used in Android besides Activity?
 
-## Answer
+# Вопрос (RU)
+> Какие компоненты используются в Android помимо Activity?
 
-Besides Activity, Android uses several other **key components**, each playing a unique role in creating functional mobile applications.
+---
+
+## Answer (EN)
+
+Besides Activity, Android uses: **Service** (background tasks), **Broadcast Receiver** (system events), **Content Provider** (data sharing), **Fragment** (UI modularization), **ViewModel** (UI state management), **View** (UI building blocks), and **Application** (app-wide state).
+
+---
+
+## Ответ (RU)
+
+Помимо Activity, Android использует несколько других **ключевых компонентов**, каждый из которых играет уникальную роль в создании функциональных мобильных приложений.
 
 **Main Components:**
 
@@ -126,7 +138,6 @@ class ProfileViewModel : ViewModel() {
 - **View**: Custom UI components
 - **ViewModel**: UI data lifecycle management
 
-## Ответ
-
+## Ответ (RU)
 Помимо Activity используется ряд других ключевых компонентов: Service (фоновые операции), Broadcast Receiver (широковещательные сообщения), Content Provider (обмен данными), Fragment (модульные секции UI), View (строительный блок UI), ViewModel (управление данными UI).
 

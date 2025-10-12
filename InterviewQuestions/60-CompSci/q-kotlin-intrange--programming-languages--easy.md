@@ -6,14 +6,20 @@ tags:
   - programming-languages
   - ranges
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое IntRange?
 
-**English**: What is IntRange?
+# Question (EN)
+> What is IntRange?
 
-## Answer
+# Вопрос (RU)
+> Что такое IntRange?
+
+---
+
+## Answer (EN)
 
 `IntRange` is a **range of integers** defined by start, end, and step values. It's used for iterations and checking if a number is within a range.
 
@@ -86,7 +92,9 @@ val evens = range.filter { it % 2 == 0 }  // [2, 4, 6, 8, 10]
 
 **IntRange** is part of Kotlin's progression types along with `LongRange`, `CharRange`, etc.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Это диапазон целых чисел заданный началом концом и шагом Он используется для итераций и проверки вхождения числа в диапазон
 

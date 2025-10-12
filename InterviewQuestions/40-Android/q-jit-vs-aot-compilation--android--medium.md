@@ -9,7 +9,7 @@ tags:
   - performance
   - baseline-profiles
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # JIT vs AOT Compilation in Android
@@ -17,13 +17,19 @@ status: reviewed
 **Сложность**: 🟡 Medium
 **Источник**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> 
 
-### Question
+# Вопрос (RU)
+> 
+
+---
+
+## Answer (EN)
+# Question (EN)
 What are the differences between JIT and AOT compilation in Android? How does Android use both strategies?
 
-### Answer
-
+## Answer (EN)
 JIT (Just-In-Time) and AOT (Ahead-Of-Time) are compilation strategies for converting bytecode to machine code. Modern Android uses a hybrid approach combining both for optimal performance.
 
 #### 1. **JIT Compilation (Just-In-Time)**
@@ -508,13 +514,13 @@ object CompilationStrategy {
 
 ---
 
-## Русский
 
-### Вопрос
+
+## Ответ (RU)
+# Вопрос (RU)
 В чём различия между JIT и AOT компиляцией в Android? Как Android использует обе стратегии?
 
-### Ответ
-
+## Ответ (RU)
 JIT (Just-In-Time) и AOT (Ahead-Of-Time) - стратегии компиляции байткода в машинный код. Современный Android использует гибридный подход.
 
 #### JIT (Just-In-Time):

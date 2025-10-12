@@ -7,14 +7,20 @@ tags:
   - lazy
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Можно ли после by вызвать функцию или конструктор?
 
-**English**: Can you call a function or constructor after `by`?
+# Question (EN)
+> Can you call a function or constructor after `by`?
 
-## Answer
+# Вопрос (RU)
+> Можно ли после by вызвать функцию или конструктор?
+
+---
+
+## Answer (EN)
 
 **No**, you cannot call functions or constructors after `by`. The `by` keyword expects a **ready object** that implements an interface or delegates a property.
 
@@ -168,12 +174,14 @@ class Document : Printer by object : Printer {
 
 **Summary:**
 
-- - **Cannot**: `by ConstructorCall()` or `by functionCall()`
-- - **Must**: `by existingInstance` or `by delegateFunction { ... }`
+- **Cannot**: `by ConstructorCall()` or `by functionCall()`
+- **Must**: `by existingInstance` or `by delegateFunction { ... }`
 - **Reason**: `by` expects a delegate **instance**, not a creation expression
 - **Exception**: Functions like `lazy {}` return delegates, so `by lazy {}` works
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Нет, после `by` нельзя вызывать функции или конструкторы. `by` ожидает готовый объект, который реализует интерфейс или делегирует свойство.
 

@@ -6,15 +6,14 @@ tags:
   - state-management
   - configuration-changes
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Remember vs RememberSaveable в Compose
 
 **English**: What's the difference between remember and rememberSaveable in Compose for preserving state across configuration changes?
 
-## Answer
-
+## Answer (EN)
 `remember` сохраняет состояние **только в памяти** во время composition, теряя его при configuration changes (поворот экрана). `rememberSaveable` сохраняет состояние в **Bundle**, переживая configuration changes как `onSaveInstanceState`.
 
 ### remember - Сохранение в памяти

@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [kotlin, coroutines, coroutinecontext, dispatchers, job, difficulty/hard]
 ---
-## Question (EN)
+# Question (EN)
 > What is CoroutineContext in Kotlin? How does it work and what are its key elements?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое CoroutineContext в Kotlin? Как он работает и какие его ключевые элементы?
 
 ---

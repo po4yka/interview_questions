@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, jetpack-compose, modifier, ui, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > How does the Modifier system work in Jetpack Compose? Why is order important?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как работает система Modifier в Jetpack Compose? Почему важен порядок?
 
 ---

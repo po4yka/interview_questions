@@ -7,14 +7,20 @@ tags:
   - programming-languages
   - serializable
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Перечислите маркерные интерфейсы
 
-**English**: List marker interfaces in Java
+# Question (EN)
+> List marker interfaces in Java
 
-## Answer
+# Вопрос (RU)
+> Перечислите маркерные интерфейсы
+
+---
+
+## Answer (EN)
 
 **Marker interfaces** contain **no methods**, but indicate object behavior or capability.
 
@@ -166,7 +172,9 @@ class Transaction {
 
 Marker interfaces have **no methods** but provide **type information** and **behavioral capability indicators**.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Маркерные интерфейсы не содержат методов, но обозначают поведение объекта.
 

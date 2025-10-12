@@ -9,7 +9,7 @@ tags:
   - deployment
   - gradle
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # CI/CD Pipeline for Android
@@ -17,12 +17,15 @@ status: reviewed
 **Сложность**: Medium
 **Источник**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> How do you set up a CI/CD (Continuous Integration/Continuous Deployment) pipeline for Android? What are the key stages and best practices?
 
-### Question
-How do you set up a CI/CD (Continuous Integration/Continuous Deployment) pipeline for Android? What are the key stages and best practices?
+# Вопрос (RU)
+> Как настроить CI/CD пайплайн для Android?
 
-### Answer
+---
+
+## Answer (EN)
 
 A robust CI/CD pipeline automates building, testing, and deploying Android apps, ensuring code quality and faster releases. Modern pipelines use GitHub Actions, GitLab CI, Jenkins, or Bitrise.
 
@@ -584,12 +587,7 @@ RUN ./gradlew assembleDebug
 
 ---
 
-## Русский
-
-### Вопрос
-Как настроить CI/CD (Continuous Integration/Continuous Deployment) pipeline для Android? Каковы ключевые этапы и лучшие практики?
-
-### Ответ
+## Ответ (RU)
 
 Надёжный CI/CD pipeline автоматизирует сборку, тестирование и развертывание Android-приложений.
 

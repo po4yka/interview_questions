@@ -9,14 +9,20 @@ tags:
   - open
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какой тип наследования по умолчанию используется для классов в Kotlin?
 
-**English**: What is the default inheritance type for classes in Kotlin?
+# Question (EN)
+> What is the default inheritance type for classes in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Какой тип наследования по умолчанию используется для классов в Kotlin?
+
+---
+
+## Answer (EN)
 
 In Kotlin, **all classes are `final` by default**, meaning they cannot be inherited. To make a class inheritable, you must explicitly mark it with the **`open` keyword**.
 
@@ -85,7 +91,9 @@ class Error : Result()
 - Consider `sealed` for controlled hierarchies
 - Use `abstract` when subclasses must implement behavior
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Kotlin все классы по умолчанию являются финальными, то есть они не могут быть наследованы. Для того чтобы класс можно было наследовать, его необходимо объявить с ключевым словом `open`.
 

@@ -10,15 +10,14 @@ tags:
   - mvvm
   - separation-of-concerns
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Зачем нужно разделять отображение и бизнес-логику?
 
 **English**: Why is it necessary to separate UI and business logic?
 
-## Answer
-
+## Answer (EN)
 Separating UI and business logic is a fundamental principle of good software architecture.
 
 **Key Reasons:**
@@ -178,7 +177,6 @@ class MainActivity : AppCompatActivity() {
 
 Separation of concerns is a key principle of Clean Architecture, MVP, MVVM, and MVI patterns. It makes code more testable, maintainable, and professional.
 
-## Ответ
-
+## Ответ (RU)
 Разделение UI и бизнес-логики делает код понятнее, тестируемее и проще в поддержке. Это ключевой принцип Clean Architecture и паттернов MVP, MVVM, MVI.
 

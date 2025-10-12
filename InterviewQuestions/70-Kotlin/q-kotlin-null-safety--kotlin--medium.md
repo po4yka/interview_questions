@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, null-safety, nullability, types, safe-calls, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > Describe nullability and null safety in Kotlin
-## Вопрос (RU)
+# Вопрос (RU)
 > Опишите nullability и null-безопасность в Kotlin
 
 ---

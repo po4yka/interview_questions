@@ -7,17 +7,16 @@ tags:
   - ui
   - jetpack-compose
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Where does the repeated call of composable function come from?
 
-## Question (RU)
+# Вопрос (RU)
 
 Откуда происходит повторный вызов composable функции
 
-## Answer
-
+## Answer (EN)
 The repeated call comes from the **recomposition** mechanism. Compose automatically calls the function again if the state associated with this function has changed.
 
 ### How Recomposition Works
@@ -120,6 +119,6 @@ fun OptimizedRecomposition() {
 }
 ```
 
-## Answer (RU)
+## Ответ (RU)
 
 Повторный вызов происходит из механизма recomposition. Compose автоматически вызывает функцию снова, если состояние связанное с этой функцией изменилось

@@ -8,14 +8,20 @@ tags:
   - referential-equality
   - structural-equality
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что происходит когда делаешь ==?
 
-**English**: What happens when you do ==?
+# Question (EN)
+> What happens when you do ==?
 
-## Answer
+# Вопрос (RU)
+> Что происходит когда делаешь ==?
+
+---
+
+## Answer (EN)
 
 In Kotlin, the `==` operator is used for **structural equality** (comparing contents). It calls the `equals()` method under the hood.
 
@@ -278,7 +284,9 @@ s1 == s2   // true (same content) ✓
 - Use `===` (referential equality)
 - Checks if two variables point to same object
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Kotlin оператор == используется для структурного сравнения объектов. Оператор == вызывает метод equals(), чтобы проверить содержимое объектов, а не их ссылки.
 

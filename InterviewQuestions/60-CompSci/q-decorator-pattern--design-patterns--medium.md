@@ -6,22 +6,30 @@ tags:
   - gof-patterns
   - wrapper
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Decorator Pattern
 
-**English**: What is the Decorator pattern? When and why should it be used?
+# Question (EN)
+> What is the Decorator pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Decorator? Когда и зачем его использовать?
 
-**Decorator (Декоратор)** - это структурный паттерн проектирования, который позволяет динамически добавлять объектам новую функциональность, оборачивая их в полезные "обёртки". Он предоставляет гибкую альтернативу наследованию для расширения функциональности.
+---
 
-### Определение
+## Answer (EN)
+
+
+
+### Definition
+
 
 The Decorator Design Pattern is a structural design pattern that **allows behavior to be added to individual objects dynamically**, without affecting the behavior of other objects from the same class. It involves creating a set of decorator classes that are used to wrap concrete components.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 The decorator pattern provides a flexible alternative to subclassing for extending functionality. When using subclassing, different subclasses extend a class in different ways, but an extension is bound to the class at compile-time and can't be changed at run-time.
 
@@ -30,7 +38,8 @@ The decorator pattern allows responsibilities to be added (and removed from) an 
 1. Implementing the interface of the extended (decorated) object (**`Component`**) transparently by forwarding all requests to it
 2. Performing additional functionality before or after forwarding a request
 
-### Когда использовать?
+### When to Use?
+
 
 The Decorator Pattern works best when you need to add features to objects without changing their core structure. Use it for:
 
@@ -211,7 +220,8 @@ class CompressionDecorator(
 }
 ```
 
-### Объяснение примера
+### Example Explanation
+
 
 **Explanation**:
 
@@ -226,6 +236,7 @@ class CompressionDecorator(
 
 ### Pros (Преимущества)
 
+
 1. **Open-Closed Principle** - Can add functionality without modifying existing code
 2. **Flexibility** - Add/remove responsibilities at runtime
 3. **Reusable code** - Decorators are reusable components
@@ -234,6 +245,7 @@ class CompressionDecorator(
 6. **Dynamic behavior** - Can apply or remove decorators at runtime
 
 ### Cons (Недостатки)
+
 
 1. **Complexity** - Nesting decorators can make code hard to understand
 2. **Many small classes** - Can lead to proliferation of classes
@@ -300,3 +312,67 @@ class MetricsDecorator(service: Service) : ServiceDecorator(service) {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+The Decorator Design Pattern is a structural design pattern that **allows behavior to be added to individual objects dynamically**, without affecting the behavior of other objects from the same class. It involves creating a set of decorator classes that are used to wrap concrete components.
+
+### Проблемы, которые решает
+
+
+The decorator pattern provides a flexible alternative to subclassing for extending functionality. When using subclassing, different subclasses extend a class in different ways, but an extension is bound to the class at compile-time and can't be changed at run-time.
+
+The decorator pattern allows responsibilities to be added (and removed from) an object dynamically at run-time by:
+
+1. Implementing the interface of the extended (decorated) object (**`Component`**) transparently by forwarding all requests to it
+2. Performing additional functionality before or after forwarding a request
+
+### Когда использовать?
+
+
+The Decorator Pattern works best when you need to add features to objects without changing their core structure. Use it for:
+
+1. **Adding or removing behaviors at runtime**
+2. **Enhancing legacy systems without touching their code**
+3. **Avoiding an explosion of subclasses**
+
+Don't use it if:
+
+1. **Objects' core functionality changes often**
+2. **You need to modify object internals**
+3. **You already have many small, similar classes**
+
+### Объяснение примера
+
+
+**Explanation**:
+
+- **`Coffee`** is the main object interface, defining methods to get cost and description
+- **`BasicCoffee`** is a concrete component that implements the Coffee interface
+- **`CoffeeDecorator`** is an abstract decorator that implements Coffee and wraps another Coffee object
+- **Concrete decorators** (`MilkDecorator`, `SugarDecorator`) add their respective features
+- **Kotlin delegation** (`by` keyword) simplifies decorator implementation
+- **Android**: Text formatting, input streams, caching layers use decorators
+
+### Pros (Преимущества)
+
+
+1. **Open-Closed Principle** - Can add functionality without modifying existing code
+2. **Flexibility** - Add/remove responsibilities at runtime
+3. **Reusable code** - Decorators are reusable components
+4. **Composition over inheritance** - Avoids deep class hierarchies
+5. **Single Responsibility** - Each decorator handles one specific feature
+6. **Dynamic behavior** - Can apply or remove decorators at runtime
+
+### Cons (Недостатки)
+
+
+1. **Complexity** - Nesting decorators can make code hard to understand
+2. **Many small classes** - Can lead to proliferation of classes
+3. **Order matters** - Decorator order affects final behavior
+4. **Debugging difficulty** - Stack traces become deeper
+5. **Instantiation complexity** - Creating heavily decorated objects is verbose

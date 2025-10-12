@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # SharedFlow vs StateFlow Differences
 
-## Answer
+# Question (EN)
+> What are the differences between SharedFlow and StateFlow?
+
+# Вопрос (RU)
+> Какие различия между SharedFlow и StateFlow?
+
+---
+
+## Answer (EN)
 
 **SharedFlow** is a hot stream that transmits data to multiple subscribers in real-time and can buffer values.
 
@@ -342,10 +350,7 @@ val converted: StateFlow<Int> = sharedFlow.stateIn(
 ```
 
 ---
-## Вопрос (RU)
 
-Что такое SharedFlow и чем он отличается от StateFlow
-
-## Ответ
+## Ответ (RU)
 
 SharedFlow — это горячий поток, который передаёт данные нескольким подписчикам в реальном времени и может буферизировать значения. StateFlow — поток, который всегда хранит одно последнее значение и отправляет его подписчикам только при изменении состояния.

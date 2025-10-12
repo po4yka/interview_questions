@@ -8,15 +8,14 @@ tags:
   - feature-module
   - difficulty/medium
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Types of Android Modules / Типы модулей Android
 
 **English**: What types of modules do you know?
 
-## Answer
-
+## Answer (EN)
 In Android modularization, there are several types of modules, each serving a specific purpose in the app's architecture:
 
 **1. Data Modules**
@@ -173,8 +172,7 @@ Test modules are Android modules that are used for testing purposes only. The mo
 
 **Source**: [Types of modules](https://developer.android.com/topic/modularization/patterns#types-of-modules)
 
-## Ответ
-
+## Ответ (RU)
 В модуляризации Android существует несколько типов модулей, каждый из которых служит определённой цели в архитектуре приложения:
 
 **1. Data модули (Модули данных)**

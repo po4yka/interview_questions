@@ -5,15 +5,14 @@ tags:
   - threading
   - ui-thread
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какой основной поток выполнения приложения?
 
 **English**: What is the main execution thread in an Android application?
 
-## Answer
-
+## Answer (EN)
 Основной поток выполнения приложения, также известный как **UI-поток (User Interface Thread)** или **Main Thread**, играет ключевую роль в функционировании Android приложения.
 
 ### Основные характеристики

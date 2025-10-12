@@ -9,15 +9,14 @@ tags:
   - optimization
   - difficulty/medium
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is Overdraw? / Что такое Overdraw?
 
 **English**: What is Overdraw?
 
-## Answer
-
+## Answer (EN)
 An app may draw the same pixel more than once within a single frame, an event called **overdraw**. Overdraw is usually unnecessary and best eliminated. It manifests itself as a performance problem by wasting GPU time to render pixels that don't contribute to what the user sees on the screen.
 
 **Understanding Overdraw:**
@@ -113,8 +112,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 **Source**: [Reduce overdraw](https://developer.android.com/topic/performance/rendering/overdraw)
 
-## Ответ
-
+## Ответ (RU)
 Приложение может рисовать один и тот же пиксель более одного раза в пределах одного кадра — это событие называется **overdraw** (избыточная отрисовка). Overdraw обычно не нужен и его лучше устранить. Он проявляется как проблема производительности, тратя время GPU на рендеринг пикселей, которые не вносят вклад в то, что пользователь видит на экране.
 
 **Понимание Overdraw:**

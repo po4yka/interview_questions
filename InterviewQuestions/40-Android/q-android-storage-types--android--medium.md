@@ -13,18 +13,24 @@ tags:
   - sqlite
   - storage
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие типы хранилищ существуют в Android-приложениях?
 
-**English**: What types of storage exist in Android applications?
+# Question (EN)
+> What types of storage exist in Android applications?
 
-## Answer
+# Вопрос (RU)
+> Какие типы хранилищ существуют в Android-приложениях?
+
+---
+
+## Answer (EN)
 
 Android applications have **several types of data storage**, each suitable for different scenarios and data requirements.
 
-## Main Storage Types
+### Main Storage Types
 
 ### 1. SharedPreferences
 
@@ -54,10 +60,10 @@ val isDarkMode = prefs.getBoolean("dark_mode", false)
 ```
 
 **Characteristics:**
-- ✅ Simple API
-- ✅ Persistent across app sessions
-- ❌ Not suitable for large data
-- ❌ Not suitable for complex objects
+- Simple API
+- Persistent across app sessions
+- Not suitable for large data
+- Not suitable for complex objects
 
 ---
 
@@ -72,9 +78,9 @@ val isDarkMode = prefs.getBoolean("dark_mode", false)
 - User-generated files that should be private
 
 **Characteristics:**
-- 🔒 **Private**: Only accessible by your app
-- 🗑️ **Auto-deleted**: Removed when app is uninstalled
-- 📍 **Location**: `/data/data/<package_name>/files/`
+- **Private**: Only accessible by your app
+- **Auto-deleted**: Removed when app is uninstalled
+- **Location**: `/data/data/<package_name>/files/`
 
 **Example:**
 
@@ -124,9 +130,9 @@ context.codeCacheDir  // /data/data/<package>/code_cache/
 - Files shared with other apps
 
 **Characteristics:**
-- 📂 **Accessible**: Can be accessed by other apps (if public)
-- 💾 **Persistent**: Survives app uninstall (public directories)
-- 🔓 **Requires permissions** (on older Android versions)
+- **Accessible**: Can be accessed by other apps (if public)
+- **Persistent**: Survives app uninstall (public directories)
+- **Requires permissions** (on older Android versions)
 
 **Scoped Storage (Android 10+):**
 
@@ -227,11 +233,11 @@ val users = db.userDao().searchUsers("%john%")
 ```
 
 **Characteristics:**
-- ✅ ACID transactions
-- ✅ Complex queries with SQL
-- ✅ Relationships and joins
-- ✅ Indexing for performance
-- 📍 **Location**: `/data/data/<package_name>/databases/`
+- ACID transactions
+- Complex queries with SQL
+- Relationships and joins
+- Indexing for performance
+- **Location**: `/data/data/<package_name>/databases/`
 
 ---
 
@@ -298,7 +304,7 @@ class MyContentProvider : ContentProvider() {
 
 ---
 
-## Storage Comparison Table
+### Storage Comparison Table
 
 | Storage Type | Size Limit | Accessibility | Persistence | Use Case |
 |--------------|------------|---------------|-------------|----------|
@@ -326,7 +332,7 @@ if (data is small key-value pairs) {
 }
 ```
 
-## Modern Best Practices
+### Modern Best Practices
 
 **1. DataStore (replacement for SharedPreferences):**
 
@@ -367,7 +373,7 @@ val syncWorkRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
     .build()
 ```
 
-## Summary
+### Summary
 
 **5 main storage types in Android:**
 
@@ -383,7 +389,9 @@ val syncWorkRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
 - Sharing needs
 - Query complexity
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Android-приложениях существует несколько типов хранилищ данных, каждый из которых подходит для различных сценариев и требований к данным. Основные типы хранилищ данных в Android включают: 1. SharedPreferences - используется для хранения пар ключ-значение и идеально подходит для хранения небольших данных таких как настройки пользователя предпочтения и конфигурации. 2. Internal Storage - хранение данных внутри внутренней памяти устройства подходит для хранения приватных данных которые должны быть доступны только внутри приложения. 3. External Storage - хранение данных на внешней памяти устройства (SD-карта или внешняя память устройства) используется для хранения данных которые должны быть доступны за пределами приложения например мультимедийные файлы фотографии видео. 4. SQLite Database - полноценная реляционная база данных встроенная в Android идеально подходит для хранения структурированных данных с отношениями запросами и транзакциями. 5. Content Providers - механизм для обмена данными между приложениями используется для предоставления доступа к данным одного приложения другим приложениям часто используется для доступа к системным данным таким как контакты изображения и видео.
 

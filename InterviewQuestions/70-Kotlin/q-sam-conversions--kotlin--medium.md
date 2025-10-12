@@ -6,15 +6,14 @@ tags:
   - functional-interface
   - java-interop
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # SAM (Single Abstract Method) конверсии
 
 **English**: SAM (Single Abstract Method) conversions in Kotlin
 
-## Answer
-
+## Answer (EN)
 **SAM-конверсии** позволяют использовать **лямбда-функции** вместо объектов классов/интерфейсов с **одним абстрактным методом**. Это делает код более кратким и читабельным при работе с Java API или функциональными интерфейсами. Вместо создания анонимного класса можно передать лямбду.
 
 ### Что такое SAM интерфейс

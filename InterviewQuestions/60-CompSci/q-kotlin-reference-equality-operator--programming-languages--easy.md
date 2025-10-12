@@ -7,14 +7,20 @@ tags:
   - reference-equality
   - structural-equality
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какой оператор используется для проверки равенства ссылок в Kotlin?
 
-**English**: Which operator is used to check reference equality in Kotlin?
+# Question (EN)
+> Which operator is used to check reference equality in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Какой оператор используется для проверки равенства ссылок в Kotlin?
+
+---
+
+## Answer (EN)
 
 In Kotlin, the **`===` operator** is used to check **reference equality** (also called referential equality). It checks whether two variables point to the same object in memory.
 
@@ -64,7 +70,9 @@ user1 === user3  // true (same reference)
 - Kotlin `===` ≈ Java `==`
 - Kotlin's `==` is null-safe, Java's `==` checks references
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Kotlin для проверки равенства ссылок используется оператор `===`. Этот оператор проверяет, ссылаются ли две переменные на один и тот же объект в памяти. В отличие от оператора `==`, который проверяет равенство значений объектов.
 

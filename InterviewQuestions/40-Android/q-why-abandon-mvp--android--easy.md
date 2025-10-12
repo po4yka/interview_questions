@@ -10,15 +10,14 @@ tags:
   - mvp
   - mvvm
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Почему многие отказываются от MVP?
 
 **English**: Why do many developers abandon MVP?
 
-## Answer
-
+## Answer (EN)
 Many Android developers are moving away from MVP for several reasons:
 
 **1. Too Much Boilerplate**
@@ -107,7 +106,6 @@ MVP is being abandoned because:
 
 Modern Android development favors **MVVM** with LiveData/Flow and Coroutines.
 
-## Ответ
-
+## Ответ (RU)
 Требует много шаблонного кода. Сложно масштабировать. Не очень гибко при асинхронных данных. Современные альтернативы (MVVM, MVI) лучше сочетаются с LiveData, Flow, State и coroutines.
 

@@ -7,15 +7,14 @@ tags:
   - state-management
   - events
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # MVI: Обработка одноразовых событий (One-time Events)
 
 **English**: How to handle one-time events in MVI architecture?
 
-## Answer
-
+## Answer (EN)
 В MVI (Model-View-Intent) State должен быть immutable и содержать только UI состояние. Но некоторые события (navigation, toasts, snackbars) не должны сохраняться в State и повторяться при пересоздании экрана. Существует несколько паттернов для их обработки.
 
 ### Проблема

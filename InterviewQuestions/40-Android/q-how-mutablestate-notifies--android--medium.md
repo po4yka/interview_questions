@@ -11,15 +11,14 @@ tags:
   - state
   - state-management
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как mutableState сообщает о том, что он изменился?
 
 **English**: How does MutableState notify that it has changed?
 
-## Answer
-
+## Answer (EN)
 Each **MutableState** has **subscribers** that are **automatically notified** about changes. When the value is updated, Compose **sends a signal** to trigger recomposition for those UI elements that use this state.
 
 ## Notification Mechanism
@@ -427,8 +426,7 @@ Recomposition (Action)
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Каждый **MutableState** имеет **подписчиков**, которые автоматически уведомляются об изменениях. При обновлении значения Compose отправляет сигнал о необходимости рекомпозиции тем элементам, которые используют это состояние.
 
 **Механизм:**

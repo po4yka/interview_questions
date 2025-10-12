@@ -6,15 +6,14 @@ tags:
   - networking
   - tutorial
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как делать сетевые запросы с помощью Retrofit?
 
 **English**: How to make network requests with Retrofit?
 
-## Answer
-
+## Answer (EN)
 Retrofit — это type-safe HTTP клиент для Android и Java. Вот пошаговое руководство по его использованию.
 
 ### Шаг 1: Добавление зависимостей

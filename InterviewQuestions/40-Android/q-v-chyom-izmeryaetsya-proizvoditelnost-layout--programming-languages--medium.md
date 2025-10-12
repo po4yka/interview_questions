@@ -2,13 +2,12 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # В чём измеряется производительность layout
 
-## Answer
-
+## Answer (EN)
 Layout performance in Android is measured in **milliseconds (ms)** of rendering time, specifically tracking the time spent in three main phases: **measure**, **layout**, and **draw**. Additionally, in modern Android development, we measure **recomposition count** and **frame drops**.
 
 ### 1. Three Phases of Rendering
@@ -423,6 +422,5 @@ object PerformanceThresholds {
 
 # В чём измеряется производительность layout
 
-## Ответ
-
+## Ответ (RU)
 Производительность измеряется в миллисекундах времени отрисовки (measure, layout, draw). Также учитывается количество операций пересчёта и перекомпоновки. В Jetpack Compose оценивается количеством recomposition и snapshot изменений.

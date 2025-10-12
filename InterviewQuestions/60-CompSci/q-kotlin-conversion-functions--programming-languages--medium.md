@@ -8,14 +8,20 @@ tags:
   - to-methods
   - type-conversion
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как в Kotlin называется функция, которая вызывается на объекте для преобразования его в другой тип?
 
-**English**: What is the function called in Kotlin that is invoked on an object to convert it to another type?
+# Question (EN)
+> What is the function called in Kotlin that is invoked on an object to convert it to another type?
 
-## Answer
+# Вопрос (RU)
+> Как в Kotlin называется функция, которая вызывается на объекте для преобразования его в другой тип?
+
+---
+
+## Answer (EN)
 
 The function that is called on an object to convert it to another type in Kotlin is called an **extension function**. However, if you mean converting one data type to another, this can be implemented through a **converter function** or a method that returns a new object of the required type.
 
@@ -343,7 +349,9 @@ val dtos = users.toDtos()
 
 **Best practice:** Use extension functions with `toXxx()` naming for clear, readable conversions.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Функция, которая вызывается на объекте для преобразования его в другой тип в Kotlin называется функцией расширения. Однако, если вы имеете в виду преобразование одного типа данных в другой тип, то это может быть реализовано через функцию-конвертер или метод, который возвращает новый объект нужного типа.
 

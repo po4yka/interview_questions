@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Suspend Functions Under the Hood
 
-## Answer
+# Question (EN)
+> How do suspend functions work under the hood?
+
+# Вопрос (RU)
+> Как работают suspend-функции под капотом?
+
+---
+
+## Answer (EN)
 
 Suspend functions in Kotlin pause execution without blocking the thread. Under the hood:
 
@@ -465,10 +473,8 @@ suspend fun example() {
 7. **Stack Unwinding**: Suspension unwinds the call stack; resumption rebuilds it
 
 ---
-## Вопрос (RU)
 
-Как работают под капотом suspend-функции?
 
-## Ответ
+## Ответ (RU)
 
 Suspend-функции в Kotlin приостанавливают выполнение без блокировки потока. Под капотом: suspend-функция разбивается на несколько частей (continuations). Приостанавливается если выполняется асинхронный код например delay withContext. Продолжается с места остановки когда результат готов

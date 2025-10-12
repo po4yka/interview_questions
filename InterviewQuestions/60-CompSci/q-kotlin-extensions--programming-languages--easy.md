@@ -5,14 +5,20 @@ tags:
   - kotlin
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое Extensions?
 
-**English**: What are Extensions?
+# Question (EN)
+> What are Extensions?
 
-## Answer
+# Вопрос (RU)
+> Что такое Extensions?
+
+---
+
+## Answer (EN)
 
 The term **'Extensions'** refers to functionality that allows adding new capabilities to existing classes without modifying their source code.
 
@@ -62,7 +68,9 @@ val numbers = listOf(1, 2, 3, 4, 5)
 println(numbers.average())  // 3.0
 ```
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Термин **'Extensions'** используется для обозначения функциональности, которая позволяет добавлять новые возможности к существующим классам без изменения их исходного кода.
 

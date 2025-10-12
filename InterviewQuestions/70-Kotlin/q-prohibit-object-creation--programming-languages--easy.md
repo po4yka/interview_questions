@@ -2,15 +2,14 @@
 tags:
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # How to programmatically prohibit creating a class object?
 
 **English**: How to programmatically prohibit creating a class object in Kotlin?
 
-## Answer
-
+## Answer (EN)
 Make the constructor private to prohibit external object creation. This is used in the Singleton pattern or utility classes (e.g., Math).
 
 **Techniques:**
@@ -401,10 +400,9 @@ fun main() {
 
 ---
 
-## Ответ
-
-### Вопрос
+## Ответ (RU)
+# Вопрос (RU)
 Как программно запретить создание объекта класса
 
-### Ответ
+## Ответ (RU)
 Сделать приватный конструктор, чтобы запретить внешнее создание объекта. Используется в паттерне Singleton или Utility-классах например Math

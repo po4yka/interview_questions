@@ -9,15 +9,14 @@ tags:
   - text-rendering
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как разбить текст, зная, сколько символов помещается на экране?
 
 **English**: How to break text knowing how many characters fit on screen?
 
-## Answer
-
+## Answer (EN)
 Use the **Paint** class and **breakText()** method to determine how many characters fit in a line based on available width.
 
 ### Using breakText()
@@ -109,7 +108,6 @@ class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attr
 }
 ```
 
-## Ответ
-
+## Ответ (RU)
 Используйте класс Paint и метод breakText, чтобы определить, сколько символов помещается в строку. Это позволит разбивать текст в зависимости от ширины экрана и используемого шрифта.
 

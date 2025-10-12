@@ -6,33 +6,44 @@ tags:
   - gof-patterns
   - state-machine
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # State Pattern
 
-**English**: What is the State pattern? When and why should it be used?
+# Question (EN)
+> What is the State pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн State? Когда и зачем его следует использовать?
+
+---
+
+## Answer (EN)
+
 
 **State (Состояние)** - это поведенческий паттерн проектирования, который позволяет объекту изменять своё поведение в зависимости от внутреннего состояния. При этом создается впечатление, что изменился класс объекта.
 
-### Определение
+### Definition
+
 
 The state pattern is a behavioral software design pattern that **allows an object to alter its behavior when its internal state changes**. This pattern encapsulates varying behavior for the same object based on its internal state, providing a cleaner way for an object to change its behavior at runtime without resorting to conditional statements.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 The state pattern is set to solve two main problems:
 
 1. **An object should change its behavior when its internal state changes**
 2. **State-specific behavior should be defined independently** - Adding new states should not affect the behavior of existing states
 
-### Почему это проблема?
+### Why is this a problem?
+
 
 Implementing state-specific behavior directly within a class is inflexible because it commits the class to a particular behavior and makes it impossible to add a new state or change the behavior of an existing state later without changing the class.
 
-### Решение
+### Solution
+
 
 The pattern describes two solutions:
 
@@ -334,7 +345,8 @@ class Order(private var state: OrderState = OrderState.Pending) {
 }
 ```
 
-### Объяснение
+### Explanation
+
 
 **Explanation**:
 
@@ -357,6 +369,7 @@ Real World Examples:
 
 ### Pros (Преимущества)
 
+
 1. **Single Responsibility** - Each state is in separate class
 2. **Open/Closed Principle** - Easy to add new states
 3. **Eliminates conditionals** - No complex if-else chains
@@ -364,6 +377,7 @@ Real World Examples:
 5. **Easy to understand** - Clear state transitions
 
 ### Cons (Недостатки)
+
 
 1. **Overkill for simple states** - Too complex for few states
 2. **Many classes** - Each state needs a class
@@ -422,3 +436,62 @@ interface State {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+The state pattern is a behavioral software design pattern that **allows an object to alter its behavior when its internal state changes**. This pattern encapsulates varying behavior for the same object based on its internal state, providing a cleaner way for an object to change its behavior at runtime without resorting to conditional statements.
+
+### Проблемы, которые решает
+
+
+The state pattern is set to solve two main problems:
+
+1. **An object should change its behavior when its internal state changes**
+2. **State-specific behavior should be defined independently** - Adding new states should not affect the behavior of existing states
+
+### Почему это проблема?
+
+
+Implementing state-specific behavior directly within a class is inflexible because it commits the class to a particular behavior and makes it impossible to add a new state or change the behavior of an existing state later without changing the class.
+
+### Решение
+
+
+The pattern describes two solutions:
+
+1. **Define separate (state) objects** that encapsulate state-specific behavior for each state
+2. **A class delegates state-specific behavior** to its current state object instead of implementing it directly
+
+This makes a class independent of how state-specific behavior is implemented. New states can be added by defining new state classes. A class can change its behavior at run-time by changing its current state object.
+
+### Объяснение
+
+
+**Explanation**:
+
+- **State interface** defines methods for handling state-specific behavior
+- **Concrete states** implement specific behavior for each state
+- **Context** maintains reference to current state and delegates behavior
+- **State transitions** happen within state classes themselves
+- **Android**: UI states with sealed classes, media player states, order processing
+
+### Pros (Преимущества)
+
+
+1. **Single Responsibility** - Each state is in separate class
+2. **Open/Closed Principle** - Easy to add new states
+3. **Eliminates conditionals** - No complex if-else chains
+4. **Cleaner code** - State-specific behavior is localized
+5. **Easy to understand** - Clear state transitions
+
+### Cons (Недостатки)
+
+
+1. **Overkill for simple states** - Too complex for few states
+2. **Many classes** - Each state needs a class
+3. **State coupling** - States need to know about each other
+4. **Complexity** - Can be hard to track state transitions

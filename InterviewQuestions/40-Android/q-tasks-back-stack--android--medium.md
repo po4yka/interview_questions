@@ -6,7 +6,7 @@ language_tags:
   - en
   - ru
 original_language: en
-status: reviewed
+status: draft
 moc: moc-android
 tags:
   - android
@@ -30,8 +30,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 
 **Русский**: Что вы знаете о задачах и стеке возврата?
 
-## Answer
-
+## Answer (EN)
 **English**:
 
 A **task** is a collection of activities that users interact with when trying to do something in your app. These activities are arranged in a stack called the **back stack** in the order in which each activity is opened.

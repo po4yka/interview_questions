@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: [bitmap-handling, caching, memory-optimization, glide]
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, glide, image-loading, caching, bitmap, performance, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > How do image loading libraries like Glide/Fresco work internally?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как работают библиотеки загрузки изображений вроде Glide/Fresco внутри?
 
 ---

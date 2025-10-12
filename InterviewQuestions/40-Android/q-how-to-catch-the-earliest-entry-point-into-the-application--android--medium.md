@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to catch the earliest entry point into the application?
 
-## Answer
-
+## Answer (EN)
 The earliest entry point in an Android application is the `Application.onCreate()` method, which is called before any Activity, Service, or other application components are created. However, ContentProvider initialization happens even earlier.
 
 ### Application.onCreate() - Standard Entry Point
@@ -307,7 +306,7 @@ class MyApplication : Application() {
 }
 ```
 
-## Answer (RU)
+## Ответ (RU)
 Для Android точка входа — это метод onCreate класса Application. Его можно переопределить для выполнения начальной логики. В некоторых случаях может понадобиться использование ContentProvider, который инициализируется до Application
 
 ## Related Topics

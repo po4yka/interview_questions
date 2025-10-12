@@ -7,14 +7,20 @@ tags:
   - reflection
   - runtime
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что такое рефлексия?
 
-**English**: What is reflection?
+# Question (EN)
+> What is reflection?
 
-## Answer
+# Вопрос (RU)
+> Что такое рефлексия?
+
+---
+
+## Answer (EN)
 
 **Reflection** is a mechanism that allows a program to **inspect and modify its own structure** (classes, methods, fields) at runtime.
 
@@ -247,7 +253,7 @@ val name = nameProp?.get(person)
 
 **Pros & Cons:**
 
-| Pros - | Cons - |
+| Pros | Cons |
 |---------|---------|
 | Dynamic behavior | Performance overhead |
 | Generic frameworks | Type safety lost |
@@ -277,7 +283,9 @@ val name = nameProp?.get(person)
 - **Use cases**: Serialization, DI, testing, ORMs
 - **Dependency**: `kotlin-reflect` library required
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Рефлексия — это механизм, позволяющий программе исследовать и изменять свою структуру (классы, методы, поля) во время выполнения. Он позволяет вызывать приватные методы, создавать экземпляры классов по имени и т.д. Это мощный, но небезопасный и затратный по производительности инструмент.
 

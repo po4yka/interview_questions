@@ -7,14 +7,20 @@ tags:
   - singleton
   - static-members
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое object / companion object?
 
-**English**: What is object / companion object?
+# Question (EN)
+> What is object / companion object?
 
-## Answer
+# Вопрос (RU)
+> Что такое object / companion object?
+
+---
+
+## Answer (EN)
 
 **object** and **companion object** are used to implement various patterns and functionalities, including singleton pattern, declaring static members/functions, and creating objects without explicit instantiation.
 
@@ -184,7 +190,9 @@ Database.connect()  // Access via class name
 - **companion object**: Inside class declaration
 - Both eliminate need for explicit instantiation
 
-## Ответ
+---
+
+## Ответ (RU)
 
 **object** и **companion object** используются для реализации различных паттернов и функциональностей, включая паттерн одиночка (singleton), объявление статических членов и функций, а также для реализации объектов без необходимости явного создания экземпляра класса.
 

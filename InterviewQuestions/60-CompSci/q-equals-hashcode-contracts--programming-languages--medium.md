@@ -8,14 +8,20 @@ tags:
   - object-methods
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Расскажи о контрактах equals и hashCode
 
-**English**: Tell me about equals and hashCode contracts
+# Question (EN)
+> Tell me about equals and hashCode contracts
 
-## Answer
+# Вопрос (RU)
+> Расскажи о контрактах equals и hashCode
+
+---
+
+## Answer (EN)
 
 The `equals()` and `hashCode()` methods are used for **comparing objects** and their **correct operation in collections** (Set, Map).
 
@@ -240,7 +246,9 @@ override fun hashCode() = Objects.hash(property1, property2, property3)
 | Equality → hash | `a==b => hash(a)==hash(b)` | **Must satisfy** |
 | Hash → equality | `hash(a)==hash(b) !=> a==b` | **Not required** |
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Методы equals() и hashCode() используются для сравнения объектов и их корректной работы в коллекциях (Set, Map). Контракт `equals()` должен: Рефлексивность: a.equals(a) → true (объект равен самому себе). Симметричность: a.equals(b) == b.equals(a). Транзитивность: если a == b и b == c, то a == c. Согласованность: если a == b, то a.equals(b) всегда возвращает одно и же, пока объект не изменится. Сравнение с null всегда даёт false: a.equals(null) == false. Контракт hashCode(): если a.equals(b) то a.hashCode() == b.hashCode().
 

@@ -10,14 +10,28 @@ tags:
   - rxjava
   - threading
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какие асинхронные примитивы используют для обработки данных?
 
-**English**: What async primitives are used for data processing?
+# Question (EN)
+> What async primitives are used for data processing in Android?
 
-## Answer
+# Вопрос (RU)
+> Какие асинхронные примитивы используют для обработки данных в Android?
+
+---
+
+## Answer (EN)
+
+Android provides several async primitives: **Thread** (basic), **Handler/Looper** (message passing), **AsyncTask** (deprecated), **ExecutorService** (thread pools), **Coroutines** (modern, recommended), **RxJava** (reactive streams), and **WorkManager** (background tasks).
+
+**Modern recommendation**: Use Kotlin Coroutines with Flow for most async operations.
+
+---
+
+## Ответ (RU)
 
 Async primitives in Android are used to perform background tasks without blocking the main UI thread, ensuring smooth app operation and preventing ANR (Application Not Responding) errors.
 
@@ -369,7 +383,6 @@ WorkManager.getInstance(context).enqueue(uploadWork)
 
 For new Android development, prefer Coroutines + Flow + WorkManager combination.
 
-## Ответ
-
+## Ответ (RU)
 Асинхронные примитивы в Android используются для выполнения задач в фоновом режиме, чтобы не блокировать основной поток пользовательского интерфейса (UI) и обеспечивать плавную работу приложений. Основные асинхронные примитивы включают: AsyncTask, Handler и Looper, ExecutorService и Future, RxJava и Coroutines.
 

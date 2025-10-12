@@ -7,14 +7,20 @@ tags:
   - programming-languages
   - properties
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что известно о lateinit?
 
-**English**: What do you know about lateinit?
+# Question (EN)
+> What do you know about lateinit?
 
-## Answer
+# Вопрос (RU)
+> Что известно о lateinit?
+
+---
+
+## Answer (EN)
 
 `lateinit` is used for **deferred initialization** of properties in Kotlin.
 
@@ -84,7 +90,9 @@ if (::name.isInitialized) {
 - Cannot be used in primary constructor
 - Cannot be used with primitive types
 
-## Ответ
+---
+
+## Ответ (RU)
 
 1. lateinit используется для откладывания инициализации переменных (только для var и только ссылочных типов). 2. Поле помечается как lateinit и должно быть инициализировано до первого использования, иначе выбрасывается UninitializedPropertyAccessException. 3. Это полезно в случаях, когда инициализация зависит от внешних условий (например, DI или тестирование).
 

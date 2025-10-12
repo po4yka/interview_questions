@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Why Not Use Synchronized Blocks with Coroutines?
 
-## Answer
+# Question (EN)
+> Why should you not use synchronized blocks with coroutines?
+
+# Вопрос (RU)
+> Почему не следует использовать synchronized блоки с корутинами?
+
+---
+
+## Answer (EN)
 
 There are three main reasons:
 
@@ -439,10 +447,8 @@ fun demonstrateThreadBlocking() = runBlocking {
 | **Use case** | Quick non-suspend ops | Coroutine synchronization |
 
 ---
-## Вопрос (RU)
 
-Почему не рекомендуется использовать с корутинами synchronized блок и аналоги таких типов
 
-## Ответ
+## Ответ (RU)
 
 1. synchronized блоки в Java/Kotlin работают на уровне потоков, а не корутин – это разные механизмы синхронизации.\", \"2. Блокировка потоков замедляет работу – Mutex работает в асинхронном стиле, не блокируя потоки.\", \"3. Глобальные synchronized блоки не учитывают отмену корутин – если корутина отменена, synchronized не освобощает ресурс

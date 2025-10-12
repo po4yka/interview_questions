@@ -8,15 +8,14 @@ tags:
   - datastore
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to save and apply theme settings?
 
 **Russian**: Как сохранять и применять настройки темы?
 
-## Answer
-
+## Answer (EN)
 Saving and applying theme settings in Android involves storing user preferences and applying them before the UI is rendered. The key is to apply the theme **before** `setContentView()` is called.
 
 ### 1. Basic Theme Switching with SharedPreferences
@@ -510,6 +509,5 @@ class ThemeDialog : DialogFragment() {
 
 # Как сохранять и применять настройки темы
 
-## Ответ
-
+## Ответ (RU)
 Хранить выбранную тему в SharedPreferences. При старте приложения или Activity применять тему до setContentView. В случае использования DayNight можно использовать AppCompatDelegate.setDefaultNightMode.

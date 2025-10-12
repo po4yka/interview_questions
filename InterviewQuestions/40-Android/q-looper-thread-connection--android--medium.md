@@ -9,15 +9,14 @@ tags:
   - message-queue
   - threading
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как Looper связывается с потоком?
 
 **English**: How does Looper connect to a thread?
 
-## Answer
-
+## Answer (EN)
 **Looper** connects to a thread using two key methods:
 
 1. **`Looper.prepare()`** - Creates a Looper for the current thread
@@ -474,8 +473,7 @@ thread.handler.sendEmptyMessage(1) // - May crash if handler not initialized yet
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 **Looper** связывается с потоком через методы:
 
 1. **`Looper.prepare()`** - Создает Looper для текущего потока

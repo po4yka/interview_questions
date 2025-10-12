@@ -9,15 +9,14 @@ tags:
   - viewholder
   - views
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # На что следует обращать внимание, чтобы оптимизировать большой список?
 
 **English**: What should you pay attention to in order to optimize a large list?
 
-## Answer
-
+## Answer (EN)
 Optimizing large lists in Android applications is critical for smooth scrolling and good user experience. Here are the key areas to focus on:
 
 ### 1. Proper Use of ViewHolder in RecyclerView
@@ -509,7 +508,6 @@ To optimize large lists:
 9. **Enable prefetching** - smoother scrolling
 10. **Monitor performance** - use profilers and tools
 
-## Ответ
-
+## Ответ (RU)
 1. Правильное использование ViewHolder в RecyclerView для повторного использования представлений.
 

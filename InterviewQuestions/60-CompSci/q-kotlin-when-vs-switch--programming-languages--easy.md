@@ -9,14 +9,20 @@ tags:
   - when
   - when-expression
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какой оператор используется вместо switch в Kotlin?
 
-**English**: Which operator is used instead of switch in Kotlin?
+# Question (EN)
+> Which operator is used instead of switch in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Какой оператор используется вместо switch в Kotlin?
+
+---
+
+## Answer (EN)
 
 In Kotlin, the **`when` expression** is used instead of `switch`. It is a more powerful tool with support for values, ranges, conditions, and multiple branches.
 
@@ -107,18 +113,20 @@ when (x) {
 | Feature | Java `switch` | Kotlin `when` |
 |---------|---------------|---------------|
 | Syntax | `switch (x) { case 1: }` | `when (x) { 1 -> }` |
-| Multiple values | - | - `1, 2, 3 ->` |
-| Ranges | - | - `in 1..10 ->` |
-| Type checks | - | - `is String ->` |
-| Conditions | - | - `x > 0 ->` |
-| Expression | - (Java 14+) | - Always |
-| Fall-through | - (default) | - Not allowed |
-| `break` | - Required | - Not needed |
+| Multiple values | - | `1, 2, 3 ->` |
+| Ranges | - | `in 1..10 ->` |
+| Type checks | - | `is String ->` |
+| Conditions | - | `x > 0 ->` |
+| Expression | (Java 14+) | Always |
+| Fall-through | (default) | Not allowed |
+| `break` | Required | Not needed |
 
 **Summary:**
 `when` is Kotlin's replacement for `switch`, offering more flexibility, safety, and expressiveness.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Kotlin switch заменён на when. Это более мощный инструмент с поддержкой значений, диапазонов, условий и множественных веток.
 

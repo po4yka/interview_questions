@@ -3,12 +3,20 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is dp?
 
-## EN (expanded)
+# Question (EN)
+> What is dp (density-independent pixel)?
+
+# Вопрос (RU)
+> Что такое dp?
+
+---
+
+## Answer (EN)
 
 ### Definition
 
@@ -359,7 +367,7 @@ Log.d("Screen", "Density: ${density}x ($densityDpi dpi)")
 
 ---
 
-## RU (original)
+## Ответ (RU)
 
 Что такое dp
 

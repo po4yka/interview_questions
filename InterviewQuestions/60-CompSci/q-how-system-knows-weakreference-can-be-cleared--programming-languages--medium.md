@@ -8,14 +8,20 @@ tags:
   - weak-reference
   - weak-references
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как система понимает, что WeakReference можно очистить?
 
-**English**: How does the system know that WeakReference can be cleared?
+# Question (EN)
+> How does the system know that WeakReference can be cleared?
 
-## Answer
+# Вопрос (RU)
+> Как система понимает, что WeakReference можно очистить?
+
+---
+
+## Answer (EN)
 
 The system uses the **garbage collector (GC)** to determine when a WeakReference can be cleared.
 
@@ -172,7 +178,9 @@ The GC determines WeakReference can be cleared when:
 - Object is **ONLY weakly reachable**
 - GC run occurs (mark & sweep)
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Система определяет, что WeakReference можно очистить, используя механизм сборщика мусора. Если объект достижим только через слабые ссылки (нет сильных ссылок), GC очищает WeakReference.
 

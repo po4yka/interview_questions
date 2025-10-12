@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: [application-class, initialization, performance-optimization]
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, app-startup, jetpack, initialization, performance, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What is the Android App Startup library and how does it optimize app initialization?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое библиотека Android App Startup и как она оптимизирует инициализацию приложения?
 
 ---

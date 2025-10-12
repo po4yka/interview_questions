@@ -9,14 +9,20 @@ tags:
   - oop
   - relationships
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # В чём различия наследования, композиции, агрегации?
 
-**English**: What are the differences between inheritance, composition, and aggregation?
+# Question (EN)
+> What are the differences between inheritance, composition, and aggregation?
 
-## Answer
+# Вопрос (RU)
+> В чём различия наследования, композиции, агрегации?
+
+---
+
+## Answer (EN)
 
 **Inheritance**, **Composition**, and **Aggregation** are three fundamental relationships in object-oriented programming for modeling connections between classes.
 
@@ -458,7 +464,7 @@ class ProductActivity : AppCompatActivity() {
 
 ---
 
-## Ответ
+## Ответ (RU)
 
 **Наследование** — это механизм в объектно-ориентированном программировании, позволяющий одному классу наследовать свойства и методы другого класса. Основные черты: иерархия классов, полиморфизм и связанность.
 

@@ -2,14 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What variables can be used in data class?
 
-**English**: What variables can be used in data class in Kotlin?
+# Question (EN)
+> What variables can be used in a data class in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Какие переменные можно использовать в data class в Kotlin?
+
+---
+
+## Answer (EN)
 
 In a data class, you can only use properties declared in the primary constructor with `val` or `var`. These properties automatically participate in `equals()`, `hashCode()`, `toString()`, `copy()`, and `componentN()` functions. Other properties (declared in the class body) are not considered part of the class data.
 
@@ -364,10 +370,78 @@ fun main() {
 
 ---
 
-## Ответ
+## Ответ (RU)
 
-### Вопрос
-Какие переменные можно использовать в data class
+В data class можно использовать только свойства, объявленные в первичном конструкторе с `val` или `var`. Эти свойства автоматически участвуют в `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()`. Другие свойства (объявленные в теле класса) не считаются частью данных класса.
 
-### Ответ
-В data class можно использовать только свойства, объявленные в первичном конструкторе val или var Эти свойства автоматически участвуют в equals hashCode toString copy и componentN Остальные свойства не считаются частью данных класса
+**Ключевые правила:**
+- Параметры первичного конструктора должны быть помечены `val` или `var`
+- Только свойства первичного конструктора используются в автогенерируемых методах
+- Свойства в теле класса исключаются из `equals()`, `hashCode()`, `toString()`, `copy()`
+- Требуется хотя бы один параметр в первичном конструкторе
+
+### Пример
+
+**Базовый data class:**
+```kotlin
+data class User(
+    val id: Int,           // Включается во все методы
+    val name: String,      // Включается во все методы
+    var email: String      // Включается (var разрешен)
+)
+```
+
+**Свойства в теле класса (НЕ участвуют):**
+```kotlin
+data class Product(
+    val id: Int,
+    val name: String
+) {
+    var discount: Double = 0.0  // НЕ участвует в equals, hashCode, toString, copy
+    var quantity: Int = 0       // НЕ участвует
+}
+
+val p1 = Product(1, "Laptop")
+p1.discount = 100.0
+
+val p2 = Product(1, "Laptop")
+p2.discount = 50.0  // Другая скидка
+
+println(p1 == p2)  // true! (discount не сравнивается)
+println(p1)        // Product(id=1, name=Laptop) - без discount
+val copy = p1.copy()
+println(copy.discount)  // 0.0 (не скопирован!)
+```
+
+**Правильный подход** - все важные данные в конструкторе:
+```kotlin
+data class BetterProduct(
+    val id: Int,
+    val name: String,
+    val discount: Double = 0.0,  // В конструкторе
+    val quantity: Int = 0         // В конструкторе
+)
+
+val p1 = BetterProduct(1, "Laptop", 100.0, 5)
+val p2 = BetterProduct(1, "Laptop", 50.0, 3)
+
+println(p1 == p2)  // false (все свойства сравниваются)
+println(p1)        // Показывает все свойства
+val copy = p1.copy(quantity = 10)
+println(copy.discount)  // 100.0 (сохранен!)
+```
+
+**Когда использовать свойства в теле:**
+- Для метаданных, которые не должны влиять на равенство объектов
+- Для временных/вычисляемых значений
+- Для кэшей и счетчиков
+
+```kotlin
+data class CachedData(
+    val key: String,
+    val value: String
+) {
+    var accessCount: Int = 0    // Метаданные
+    var lastAccessed: Long = 0  // Не часть данных
+}
+```

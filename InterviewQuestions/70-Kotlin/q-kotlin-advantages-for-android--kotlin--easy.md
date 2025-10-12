@@ -4,14 +4,44 @@ tags:
   - android
   - language-features
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # В чем преимущество Kotlin для разработки под Android
 
-**English**: What are the advantages of Kotlin for Android development?
+# Question (EN)
+> What are the advantages of Kotlin for Android development?
 
-## Answer
+# Вопрос (RU)
+> В чём преимущества Kotlin для разработки под Android?
+
+---
+
+## Answer (EN)
+
+Kotlin is a statically-typed language fully compatible with Java and optimized for Android development.
+
+**Key advantages:**
+1. **Concise syntax** - less boilerplate code (data classes, property access)
+2. **Null safety** - nullable/non-nullable types prevent NullPointerException at compile time
+3. **Extension functions** - add methods to existing classes without inheritance
+4. **Functional programming** - lambdas, higher-order functions, immutable collections
+5. **Full Java interoperability** - use all Java libraries, mix Kotlin and Java code
+6. **Excellent tooling** - first-class Android Studio support
+7. **Coroutines** - simplify async programming without callback hell
+8. **Official Google support** - officially supported since 2017
+
+**Example of conciseness:**
+```kotlin
+// Kotlin - 1 line
+data class User(val name: String, val age: Int)
+
+// Java equivalent - 20+ lines
+```
+
+---
+
+## Ответ (RU)
 
 Kotlin представляет собой статически типизированный язык программирования, который полностью совместим с Java и оптимизирован для разработки под Android.
 
@@ -82,5 +112,3 @@ lifecycleScope.launch {
 **8. Официальная поддержка Google**
 
 С 2017 года Kotlin является официально поддерживаемым языком для разработки Android.
-
-**English**: Kotlin advantages for Android: concise syntax, null safety, extension functions, functional programming support, full Java interoperability, excellent IDE support, coroutines for async programming, and official Google support since 2017.

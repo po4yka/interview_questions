@@ -9,15 +9,14 @@ tags:
   - ipc
   - savedinstancestate
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что такое TransactionTooLargeException?
 
 **English**: What is TransactionTooLargeException?
 
-## Answer
-
+## Answer (EN)
 **TransactionTooLargeException** is an exception that occurs if transmitted data **exceeds the 1MB limit** in Binder.
 
 Most often the error appears when passing large objects through **Intent**, **Bundle**, or **onSaveInstanceState**.
@@ -250,8 +249,7 @@ val bitmap = contentResolver.openInputStream(imageUri)?.use {
   - Use singleton for temporary data
   - Save only essential state
 
-## Ответ
-
+## Ответ (RU)
 **TransactionTooLargeException** — это исключение, которое возникает если передаваемые данные превышают лимит **1MB в Binder**.
 
 Чаще всего ошибка появляется при передаче больших объектов через **Intent**, **Bundle**, **onSaveInstanceState**.

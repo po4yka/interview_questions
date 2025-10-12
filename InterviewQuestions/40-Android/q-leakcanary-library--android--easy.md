@@ -10,15 +10,14 @@ tags:
   - square
   - tools
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какая библиотека используется для нахождения утечек памяти в Android?
 
 **English**: What library is used for finding memory leaks in Android?
 
-## Answer
-
+## Answer (EN)
 The popular library for detecting memory leaks in Android is **LeakCanary** by Square.
 
 **Setup:**
@@ -201,8 +200,7 @@ class MyRepository {
 - **Debug builds only** - no production overhead
 - **Easy to use** - just add dependency and run
 
-## Ответ
-
+## Ответ (RU)
 Популярная библиотека для выявления утечек памяти в Android — **LeakCanary** от Square.
 
 **Установка:**

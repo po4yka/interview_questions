@@ -13,15 +13,14 @@ tags:
   - ui
   - views
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как реализовать редактор фотографий в качестве отдельного компонента?
 
 **English**: How to implement a photo editor as a separate component?
 
-## Answer
-
+## Answer (EN)
 Implementing a photo editor in Android as a separate component requires several steps, including creating a user interface for editing, image processing, and the ability to integrate this component into other parts of your application.
 
 ### 1. Create User Interface
@@ -440,7 +439,6 @@ To implement a photo editor as a separate component:
 5. **Handle memory** properly by recycling bitmaps
 6. **Save edited images** to MediaStore or cache
 
-## Ответ
-
+## Ответ (RU)
 Реализация редактора фотографий в Android как отдельного компонента требует нескольких шагов, включающих создание пользовательского интерфейса для редактирования, обработку изображений, а также возможность интеграции этого компонента в другие части вашего приложения. 1. Создание пользовательского интерфейса: Пример XML-разметки с ImageView и кнопками для редактирования. 2. Обработка изображений: Использование Bitmap и Canvas или сторонних библиотек для операций с изображениями. Пример кода на Kotlin показывает функции поворота и применения фильтров к изображению. 3. Интеграция компонента: Создание Activity или Fragment для использования редактора. 4. Обработка разных функций редактирования: Интеграция библиотек, таких как GPUImage для фильтров и Ucrop для обрезки.
 

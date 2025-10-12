@@ -8,20 +8,23 @@ tags:
   - optimization
   - app-startup
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Baseline Profiles in Android
 
-**Сложность**: 🟡 Medium
+**Сложность**: Medium
 **Источник**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> What are Baseline Profiles in Android? How do they improve app performance and how do you generate them?
 
-### Question
-What are Baseline Profiles in Android? How do they improve app performance and how do you generate them?
+# Вопрос (RU)
+> Что такое Baseline Profiles в Android? Как они улучшают производительность приложения и как их генерировать?
 
-### Answer
+---
+
+## Answer (EN)
 
 Baseline Profiles are a performance optimization feature that tells the Android Runtime (ART) which code paths to pre-compile (AOT) ahead of time, reducing app startup time and jank during critical user journeys.
 
@@ -481,16 +484,11 @@ class PerformanceMonitor {
 - [ ] Benchmark before/after
 - [ ] Include in library modules
 - [ ] Monitor performance metrics
-- [ ] Update documentation with regeneration steps
+- Update documentation with regeneration steps
 
 ---
 
-## Русский
-
-### Вопрос
-Что такое Baseline Profiles в Android? Как они улучшают производительность и как их генерировать?
-
-### Ответ
+## Ответ (RU)
 
 Baseline Profiles - это оптимизация производительности, которая сообщает Android Runtime (ART), какой код следует предварительно скомпилировать (AOT), сокращая время запуска приложения.
 

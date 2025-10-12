@@ -6,13 +6,12 @@ tags:
   - framelayout
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Which layout allows views to overlap?
 
-## Answer
-
+## Answer (EN)
 In Android, there are two main approaches for creating layouts where UI elements can overlay each other: **FrameLayout** (traditional View system) and **Box** (Jetpack Compose).
 
 ### FrameLayout (Traditional View System)
@@ -433,6 +432,5 @@ fun AdvancedBoxExample() {
 
 # Как называется лейаут, в котором объекты могут наслаиваться друг на друга?
 
-## Ответ
-
+## Ответ (RU)
 Такой тип называется FrameLayout в Android или Box в Jetpack Compose.

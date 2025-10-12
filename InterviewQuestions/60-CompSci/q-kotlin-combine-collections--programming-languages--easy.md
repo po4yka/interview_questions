@@ -4,18 +4,26 @@ tags:
   - kotlin
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какая функция Kotlin используется для объединения двух коллекций?
 
-**English**: What Kotlin function is used to combine two collections?
+# Question (EN)
+> What Kotlin function is used to combine two collections?
 
-## Answer
+# Вопрос (RU)
+> Какая функция Kotlin используется для объединения двух коллекций?
+
+---
+
+## Answer (EN)
 
 The + operator (plus function)
 
-## Ответ
+---
+
+## Ответ (RU)
 
 +
 

@@ -8,14 +8,20 @@ tags:
   - type-safety
   - when-expressions
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Расскажи data классы и sealed классы
 
-**English**: Tell me about data classes and sealed classes
+# Question (EN)
+> Tell me about data classes and sealed classes
 
-## Answer
+# Вопрос (RU)
+> Расскажи data классы и sealed классы
+
+---
+
+## Answer (EN)
 
 ### Data Classes
 
@@ -62,7 +68,52 @@ fun handleResult(result: Result<String>) = when (result) {
 - Clean, maintainable code
 - Perfect for state management
 
-## Ответ
+---
 
-Data классы в Kotlin предназначены для хранения данных и автоматически генерируют методы equals(), hashCode(), toString(), а также copy()...
+## Ответ (RU)
+
+### Data классы
+
+Data классы предназначены для **хранения данных** и автоматически генерируют полезные методы:
+- `equals()` - равенство на основе значений
+- `hashCode()` - согласованное хеширование
+- `toString()` - читаемое строковое представление
+- `copy()` - создание модифицированных копий
+
+```kotlin
+data class User(val name: String, val age: Int)
+
+val user1 = User("John", 30)
+val user2 = user1.copy(age = 31)
+```
+
+### Sealed классы
+
+Sealed классы представляют **ограниченные иерархии наследования**, где все возможные подклассы известны во время компиляции:
+
+```kotlin
+sealed class Result<out T> {
+    data class Success<T>(val data: T) : Result<T>()
+    data class Error(val error: String) : Result<Nothing>()
+    object Loading : Result<Nothing>()
+}
+```
+
+### Комбинация обоих
+
+Вместе они создают **типобезопасные и легко управляемые структуры данных**, особенно для выражений `when`:
+
+```kotlin
+fun handleResult(result: Result<String>) = when (result) {
+    is Result.Success -> println("Data: ${result.data}")
+    is Result.Error -> println("Error: ${result.error}")
+    Result.Loading -> println("Loading...")
+}  // Исчерпывающе - компилятор проверяет все случаи!
+```
+
+**Преимущества комбинации:**
+- Типобезопасность во время компиляции
+- Исчерпывающие when-выражения
+- Чистый, поддерживаемый код
+- Идеально для управления состоянием
 

@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Zip Operator for Parallel Request Mapping
 
-## Answer
+# Question (EN)
+> How do you use the zip operator for parallel request mapping?
+
+# Вопрос (RU)
+> Как использовать оператор zip для отображения параллельных запросов?
+
+---
+
+## Answer (EN)
 
 Use **zip** operator (available in RxJava, Kotlin Flow, and coroutines). It combines multiple data streams executing them in parallel and returns their results in a single stream.
 
@@ -266,10 +274,8 @@ suspend fun fetchWithErrorHandling(): Result<CombinedData> = coroutineScope {
 | **async/await** | Manual parallel execution control | Best for Kotlin coroutines |
 
 ---
-## Вопрос (RU)
 
-Чем воспользоваться когда нужно три разных запроса мапить между собой дернуть одновременно
 
-## Ответ
+## Ответ (RU)
 
 Используйте zip например в RxJava Объединяет несколько потоков данных выполняя их параллельно и возвращает их результаты в одном потоке

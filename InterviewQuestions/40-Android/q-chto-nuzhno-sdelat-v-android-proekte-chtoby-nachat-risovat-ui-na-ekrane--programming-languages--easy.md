@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что нужно сделать в Android-проекте чтобы начать рисовать UI на экране?
 
-## Answer
+# Question (EN)
+> What needs to be done in an Android project to start drawing UI on the screen?
+
+# Вопрос (RU)
+> Что нужно сделать в Android-проекте, чтобы начать рисовать UI на экране?
+
+---
+
+## Answer (EN)
 
 To display UI on screen in Android, you need: (1) Create an Activity as entry point, (2) Set content view with XML layout or programmatic View, (3) Declare the Activity in AndroidManifest.xml as LAUNCHER. When the device launches, the system calls `onCreate()` and UI is attached to screen.
 
@@ -185,8 +193,6 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
-# Что нужно сделать в Android-проекте чтобы начать рисовать UI на экране
-
-## Ответ
+## Ответ (RU)
 
 Минимальные шаги: создать Activity как точку входа для UI установить content view в виде XML или программно созданного View убедиться что в манифесте указана MainActivity как LAUNCHER при запуске устройства система вызывает onCreate() и в этот момент UI привязывается к экрану

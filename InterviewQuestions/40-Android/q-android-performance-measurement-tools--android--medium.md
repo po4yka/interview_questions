@@ -10,14 +10,28 @@ tags:
   - performance
   - profiling
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как определить изменение скорости работы программы после наших действий?
 
-**English**: How to measure program performance changes after our actions?
+# Question (EN)
+> How to measure program performance changes after our actions in Android?
 
-## Answer
+# Вопрос (RU)
+> Как определить изменение скорости работы программы после наших действий в Android?
+
+---
+
+## Answer (EN)
+
+Android provides several tools for performance measurement: **Profile GPU Rendering** (frame timing visualization), **Android Profiler** (CPU, memory, network, energy), **Benchmarking library** (Jetpack Macrobenchmark and Microbenchmark), **Systrace/Perfetto** (system-wide tracing), and **StrictMode** (detecting slow operations on main thread).
+
+**Recommended approach**: Use combination of Android Profiler for real-time analysis, Macrobenchmark for app startup/jank metrics, and Perfetto for deep system-level investigation.
+
+---
+
+## Ответ (RU)
 
 To measure program performance changes, you can use the following tools:
 
@@ -170,8 +184,7 @@ class PerformanceTest {
 
 All these methods allow comparing data before and after optimization to assess program performance changes.
 
-## Ответ
-
+## Ответ (RU)
 Для определения изменения скорости работы программы можно использовать следующие инструменты:
 
 - **Profile GPU Rendering** - показывает время отрисовки кадров и позволяет выявить тяжелые кадры

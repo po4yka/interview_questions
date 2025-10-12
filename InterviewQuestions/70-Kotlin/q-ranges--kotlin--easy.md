@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, ranges, rangeto, downto, step, iteration, difficulty/easy]
 ---
-## Question (EN)
+# Question (EN)
 > What are ranges in Kotlin and how do you use them?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое диапазоны в Kotlin и как их использовать?
 
 ---

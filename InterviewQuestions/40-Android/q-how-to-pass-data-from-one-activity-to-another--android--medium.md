@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to pass data from one Activity to another?
 
-## Answer
-
+## Answer (EN)
 Data can be passed between Activities in Android using several methods, with Intent extras being the most common approach.
 
 ### 1. Intent Extras (Primitive Types)
@@ -292,7 +291,7 @@ intent.putExtra(IntentKeys.USER_ID, userId)
 val userId = intent.getIntExtra(IntentKeys.USER_ID, -1)
 ```
 
-## Answer (RU)
+## Ответ (RU)
 В Android передача данных между Activity осуществляется через механизм Intent. Intent — это объект, который позволяет передавать данные и запускать компоненты, такие как Activity, Service и BroadcastReceiver. Передача данных с одной Activity на другую: 1. Создание Intent и добавление данных - В первой Activity создайте Intent и добавьте данные, которые хотите передать, используя методы putExtra. 2 Получение данных во второй Activity - Во второй Activity получите Intent, который запустил эту Activity, и извлеките данные из него. Передача объектов (Parcelable): Если вам нужно передать сложные объекты, вы можете использовать интерфейс Parcelable.
 
 ## Related Topics

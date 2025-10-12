@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Error Handling Methods in Coroutines
 
-## Answer
+# Question (EN)
+> What methods are known for error handling in coroutines?
+
+# Вопрос (RU)
+> Какие известны способы обработки ошибок в корутинах?
+
+---
+
+## Answer (EN)
 
 There are several ways to handle errors in coroutines:
 
@@ -178,10 +186,7 @@ class ErrorHandlingBestPractices {
 ```
 
 ---
-## Вопрос (RU)
 
-Какие известны способы обработки ошибок в корутинах
-
-## Ответ
+## Ответ (RU)
 
 1. Try-catch внутри launch {} или async {} – локальная обработка ошибок.\",

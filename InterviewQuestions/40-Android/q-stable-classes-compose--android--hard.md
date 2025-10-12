@@ -11,15 +11,14 @@ tags:
   - stability
   - stable-annotation
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Какие классы будут автоматически выводиться как stable?
 
 **English**: Which classes are automatically inferred as stable in Jetpack Compose?
 
-## Answer
-
+## Answer (EN)
 Classes in Jetpack Compose are automatically considered **stable** if they are:
 - **Data classes**
 - **Immutable** (all properties are `val`)
@@ -484,8 +483,7 @@ CounterDisplay(counter)  // Updates correctly
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Классы в Jetpack Compose автоматически считаются **stable**, если они:
 - **Data классы**
 - **Неизменяемые (immutable)** - все свойства `val`

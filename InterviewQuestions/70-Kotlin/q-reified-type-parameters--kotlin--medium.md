@@ -6,15 +6,14 @@ tags:
   - inline-functions
   - type-system
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Зачем нужен reified в Kotlin?
 
 **English**: What is `reified` for in Kotlin?
 
-## Answer
-
+## Answer (EN)
 `reified` — это модификатор для параметров типа в inline функциях, который позволяет сохранить информацию о типе во время выполнения (runtime). Обычно в JVM generic типы стираются (type erasure), но `reified` позволяет обращаться к типу как к обычному классу внутри функции.
 
 ### Проблема: Type Erasure в Java/Kotlin

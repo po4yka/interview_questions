@@ -9,20 +9,20 @@ tags:
   - r8
   - proguard
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # 16 KB DEX Page Size Issue in Android
 
-**Сложность**: 🟡 Medium
-**Источник**: Amit Shekhar Android Interview Questions
+# Question (EN)
+> What is the 16 KB DEX page size issue in Android? How does it affect app performance and what can developers do about it?
 
-## English
+# Вопрос (RU)
+> Что такое проблема 16 КБ страниц DEX в Android? Как это влияет на производительность приложения и что могут сделать разработчики?
 
-### Question
-What is the 16 KB DEX page size issue in Android? How does it affect app performance and what can developers do about it?
+---
 
-### Answer
+## Answer (EN)
 
 The 16 KB DEX page size issue is a memory alignment problem affecting Android 6.0+ that can cause significant app bloat and performance degradation when apps are optimized with R8/ProGuard. Understanding and mitigating this issue is crucial for app size optimization.
 
@@ -496,12 +496,7 @@ android {
 
 ---
 
-## Русский
-
-### Вопрос
-Что такое проблема 16 KB DEX page size в Android? Как это влияет на производительность приложения и что могут сделать разработчики?
-
-### Ответ
+## Ответ (RU)
 
 16 KB DEX page size - проблема выравнивания памяти в Android 6.0+, которая может значительно увеличить размер APK.
 

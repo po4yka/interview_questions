@@ -4,15 +4,14 @@ tags:
   - delegates
   - properties
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # В чем особенность делегатов свойств
 
 **English**: What is special about property delegates in Kotlin?
 
-## Answer
-
+## Answer (EN)
 Делегаты свойств (Property Delegates) — это мощная функциональность Kotlin, позволяющая делегировать выполнение операций получения и установки значения свойства другому объекту.
 
 ### Основная идея

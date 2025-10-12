@@ -8,15 +8,14 @@ tags:
   - performance
   - threading
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Для чего нужна многопоточность, какие инструменты использовать?
 
 **English**: Why is multithreading needed and which tools should be used?
 
-## Answer
-
+## Answer (EN)
 **Multithreading** allows executing **heavy tasks** without blocking the UI thread.
 
 **Main purpose:** Keep the UI responsive by offloading work to background threads.
@@ -580,8 +579,7 @@ Dispatchers.Main // For updating views
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 **Многопоточность** позволяет выполнять **тяжёлые задачи** без блокировки UI потока.
 
 **Основная цель:** Сохранить отзывчивость UI, перенося работу в фоновые потоки.

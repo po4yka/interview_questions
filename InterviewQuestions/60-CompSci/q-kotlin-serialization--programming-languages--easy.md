@@ -6,14 +6,20 @@ tags:
   - programming-languages
   - serialization
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое сериализация?
 
-**English**: What is serialization?
+# Question (EN)
+> What is serialization?
 
-## Answer
+# Вопрос (RU)
+> Что такое сериализация?
+
+---
+
+## Answer (EN)
 
 **Serialization** is the process of converting an object into a byte stream to save its state or transmit it over a network.
 
@@ -188,7 +194,9 @@ dependencies {
 - **Common formats**: JSON, Binary, Parcelable
 - **Kotlin**: Use `@Serializable` annotation
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Сериализация – это процесс преобразования объекта в поток байтов для сохранения его состояния или передачи его через сеть. Это нужно, чтобы можно было хранить объекты в файлы, базы данных или передавать их между разными компонентами приложения или даже разными приложениями.
 

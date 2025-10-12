@@ -9,15 +9,14 @@ tags:
   - optimization
   - performance
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Что делать если надо исправить долгий запуск приложения в legacy проекте?
 
 **English**: What to do if you need to fix slow app startup in a legacy project?
 
-## Answer
-
+## Answer (EN)
 **1. Analysis and Data Collection**
 
 Use profiling tools to collect data on execution time of different code parts during app startup.
@@ -232,8 +231,7 @@ class MyApp : Application() {
 -  Defer library initialization
 -  Measure improvements with benchmarks
 
-## Ответ
-
+## Ответ (RU)
 **Анализ и сбор данных:** Используйте инструменты профилирования для сбора данных о времени выполнения различных частей кода при запуске приложения. Проанализируйте логи чтобы найти узкие места.
 
 **Идентификация проблемных зон:** Проверьте какие объекты инициализируются при старте и оцените действительно ли все они необходимы на этом этапе.

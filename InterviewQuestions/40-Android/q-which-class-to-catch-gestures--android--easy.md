@@ -6,15 +6,14 @@ tags:
   - gestures
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какой класс можно использовать что бы ловить разные жесты?
 
 **English**: Which class can be used to catch different gestures?
 
-## Answer
-
+## Answer (EN)
 Use **GestureDetector** to handle standard gestures like taps, swipes, long presses, double taps, and flings.
 
 ### Basic Usage
@@ -101,7 +100,6 @@ class GestureView(context: Context) : View(context) {
 }
 ```
 
-## Ответ
-
+## Ответ (RU)
 Чтобы обрабатывать жесты в Android, используйте класс GestureDetector. Он помогает отслеживать стандартные жесты: одиночные нажатия, свайпы, долгие нажатия, двойные касания и т.д.
 

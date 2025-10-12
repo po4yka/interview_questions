@@ -7,14 +7,20 @@ tags:
   - string
   - syntax
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как правильно объявить переменную типа nullable String в Kotlin?
 
-**English**: How to correctly declare a nullable String variable in Kotlin?
+# Question (EN)
+> How to correctly declare a nullable String variable in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Как правильно объявить переменную типа nullable String в Kotlin?
+
+---
+
+## Answer (EN)
 
 In Kotlin, to declare a nullable String variable, use the **`?` operator** after the data type.
 
@@ -39,7 +45,9 @@ var nonNullable: String = "Hello"
 nonNullable = null  // Compilation error!
 ```
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Kotlin для объявления переменной типа nullable String используется оператор ?. после типа данных. Например: var name: String? = null
 

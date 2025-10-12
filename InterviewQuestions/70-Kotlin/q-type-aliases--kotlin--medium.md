@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: [q-kotlin-generics--kotlin--hard]
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, type-aliases, types, readability, dsl, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What are type aliases in Kotlin and when should you use them?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое псевдонимы типов (type aliases) в Kotlin и когда их использовать?
 
 ---

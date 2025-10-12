@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Default Dispatcher vs IO Dispatcher
 
-## Answer
+# Question (EN)
+> What is the difference between Default dispatcher and IO dispatcher?
+
+# Вопрос (RU)
+> В чем различие Default диспатчер и IO диспатчер?
+
+---
+
+## Answer (EN)
 
 **Dispatchers.Default** is for heavy computations (CPU-intensive operations).
 **Dispatchers.IO** is for I/O operations (network requests, file operations, database queries).
@@ -389,10 +397,7 @@ class BestPractices {
 - Blocking APIs
 
 ---
-## Вопрос (RU)
 
-В чем различие Default диспатчер и IO диспатчер
-
-## Ответ
+## Ответ (RU)
 
 Dispatchers.Default — для тяжёлых вычислений (CPU-операции). Dispatchers.IO — для операций ввода-вывода (сеть, файлы, БД).

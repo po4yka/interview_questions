@@ -11,15 +11,14 @@ tags:
   - layouts
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Каким образом ты выбираешь layout?
 
 **English**: How do you choose a layout?
 
-## Answer
-
+## Answer (EN)
 In Android fragments, layout selection is performed in the **onCreateView()** method using **LayoutInflater**. This is the standard approach for inflating XML layouts into View objects.
 
 ### Basic Layout Inflation
@@ -206,7 +205,6 @@ override fun onDestroyView() {
 }
 ```
 
-## Ответ
-
+## Ответ (RU)
 Выбор макета для фрагмента осуществляется в методе onCreateView с помощью LayoutInflater. Пример: override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? { return inflater.inflate(R.layout.fragment_example, container, false) }
 

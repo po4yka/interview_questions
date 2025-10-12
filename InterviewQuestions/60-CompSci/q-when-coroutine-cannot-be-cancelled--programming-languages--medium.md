@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # When Coroutine Cannot Be Cancelled?
 
-## Answer
+# Question (EN)
+> When can a coroutine not be cancelled?
+
+# Вопрос (RU)
+> Когда корутина не может быть отменена?
+
+---
+
+## Answer (EN)
 
 Yes, there are three main cases when cancellation doesn't work:
 
@@ -522,10 +530,8 @@ class CancellationBestPractices {
 | Blocking I/O | - No | Use suspending I/O or add checks |
 
 ---
-## Вопрос (RU)
 
-Есть ли случаи, когда не получится отменить корутину
 
-## Ответ
+## Ответ (RU)
 
 Да, есть три основных случая: 1. Блокирующий код – если внутри корутины используется блокирующая операция (Thread.sleep(), while(true) {}), она не реагирует на отмену. 2. Отмена родительской корутины не отменяет launch(NonCancellable) – если корутина запущена с NonCancellable, она игнорирует отмену. 3. Отмена не срабатывает, если корутина не проверяет isActive или yield() – долгие вычисления без точек приостановки не дадут корутине завершиться.

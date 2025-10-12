@@ -6,14 +6,50 @@ tags:
   - compilation
   - backward-compatibility
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Desugaring в Android
 
-**English**: Desugaring in Android - backward compatibility transformation
+# Question (EN)
+> What is desugaring in Android and how does it work?
 
-## Ответ
+# Вопрос (RU)
+> Что такое desugaring в Android и как он работает?
+
+---
+
+## Answer (EN)
+
+Desugaring is the process of transforming modern language syntax into simpler code compatible with older platform versions. In Android, this means converting new Java and Kotlin features into code that works on legacy Android Runtime versions.
+
+**What it enables:**
+- Java 8+ features (lambdas, method references, default interface methods)
+- Modern APIs (java.time, Stream API, Optional) on Android 5.0+ (API 21+)
+- Writing modern code while maintaining backward compatibility
+
+**How to enable:**
+```gradle
+android {
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
+}
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+}
+```
+
+**Trade-offs:**
+- Adds 100-300 KB to APK size
+- Slight performance overhead
+- Minimum Android 5.0 (API 21)
+
+**When to use:** Need java.time or Stream API on devices below Android 8.0, acceptable APK size increase.
+
+---
+
+## Ответ (RU)
 
 **Desugaring** — это процесс преобразования современного синтаксиса языка программирования в более простой код, совместимый со старыми версиями платформы. В контексте Android это означает трансформацию новых возможностей Java и Kotlin в код, который может работать на устаревших версиях Android Runtime.
 
@@ -377,5 +413,3 @@ Desugaring — это мощный инструмент, который позв
 - Если minSdkVersion уже 26+ (тогда desugaring не нужен)
 - Если критичен размер APK
 - Если используете альтернативные библиотеки (ThreeTenABP)
-
-**English**: Desugaring is the process of transforming modern language syntax into simpler code compatible with older platform versions. In Android, this means converting new Java and Kotlin features into code that works on legacy Android Runtime versions. It enables using Java 8+ features (lambdas, Stream API, Optional, java.time) on Android 5.0+ devices. Core Library Desugaring adds 100-300 KB to APK size but allows writing modern, readable code while maintaining backward compatibility. Enable it via `coreLibraryDesugaringEnabled true` in build.gradle and add the desugar_jdk_libs dependency.

@@ -7,7 +7,7 @@ aliases:
   - Play Feature Delivery и динамические модули
 date_created: 2025-10-05
 date_modified: 2025-10-05
-status: reviewed
+status: draft
 original_language: en
 language_tags:
   - en
@@ -32,14 +32,12 @@ source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/A
 
 # Play Feature Delivery and Dynamic Modules / Play Feature Delivery и динамические модули
 
-## EN
-
-### Question
+# Question (EN)
+> 
 
 What do you know about Play Feature Delivery?
 
-### Answer
-
+## Answer (EN)
 Google Play's app serving model uses Android App Bundles to generate and serve optimized APKs for each user's device configuration, so users download only the code and resources they need to run your app.
 
 Play Feature Delivery uses advanced capabilities of app bundles, allowing certain features of your app to be delivered conditionally or downloaded on demand. To do that, first you need to separate these features from your base app into feature modules.
@@ -127,14 +125,12 @@ With feature modules, you can improve build speed and engineering velocity and e
 
 ---
 
-## RU
-
-### Вопрос
+# Вопрос (RU)
+> 
 
 Что вы знаете о Play Feature Delivery?
 
-### Ответ
-
+## Ответ (RU)
 Модель обслуживания приложений Google Play использует Android App Bundles для генерации и предоставления оптимизированных APK для конфигурации устройства каждого пользователя, поэтому пользователи загружают только код и ресурсы, необходимые для запуска вашего приложения.
 
 Play Feature Delivery использует расширенные возможности app bundles, позволяя определенным функциям вашего приложения доставляться условно или загружаться по требованию. Для этого сначала необходимо отделить эти функции от базового приложения в модули функций.

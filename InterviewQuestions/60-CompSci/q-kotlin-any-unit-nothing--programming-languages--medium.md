@@ -8,14 +8,20 @@ tags:
   - types
   - unit
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что известно про типы any, unit, nothing в Kotlin ?
 
-**English**: What do you know about Any, Unit, Nothing types in Kotlin?
+# Question (EN)
+> What do you know about Any, Unit, Nothing types in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Что известно про типы any, unit, nothing в Kotlin ?
+
+---
+
+## Answer (EN)
 
 There are special types in Kotlin with unique purposes:
 
@@ -44,7 +50,34 @@ fun fail(message: String): Nothing {
 }
 ```
 
-## Ответ
+---
 
-Существуют специальные типы Any, Unit и Nothing, которые имеют уникальные цели и применения в языке программирования...
+## Ответ (RU)
+
+В Kotlin существуют специальные типы с уникальными целями:
+
+### Any
+- Корневой тип для всех ненулевых типов в Kotlin (аналог Object в Java)
+- Любой объект, кроме null, наследуется от Any
+- Используется там, где требуется представление любого возможного значения, кроме null
+- Определяет базовые методы: `equals()`, `hashCode()`, `toString()`
+
+### Unit
+- Аналог `void` в Java, но в отличие от void, это полноценный объект
+- Функции, которые не возвращают значимый результат, на самом деле возвращают Unit
+- Используется для обозначения того, что функция выполняет действие, но не возвращает значение
+- Хотя тип возврата Unit обычно опускается, его можно указать явно
+
+### Nothing
+- Тип, который не имеет значений
+- Используется для обозначения "невозможности" - ситуаций, когда функция никогда не завершается нормально
+- Функция может зацикливаться навсегда или всегда выбрасывать исключение
+- Указывает, что данная точка кода недостижима
+
+**Пример:**
+```kotlin
+fun fail(message: String): Nothing {
+    throw IllegalArgumentException(message)
+}
+```
 

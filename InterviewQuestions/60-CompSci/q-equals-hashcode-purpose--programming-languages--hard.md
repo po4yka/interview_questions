@@ -2,14 +2,20 @@
 tags:
   - programming-languages
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Why are equals and hashcode methods needed?
 
-**English**: Why are equals and hashcode methods needed in Kotlin and Java?
+# Question (EN)
+> Why are equals and hashcode methods needed in Kotlin and Java?
 
-## Answer
+# Вопрос (RU)
+> Зачем нужны методы equals и hashcode в Kotlin и Java?
+
+---
+
+## Answer (EN)
 
 The `equals()` and `hashCode()` methods play a central role in object comparison and management in collections:
 
@@ -116,10 +122,5 @@ fun main() {
 
 ---
 
-## Ответ
-
-### Вопрос
-Зачем нужны методы equals и hashcode
-
-### Ответ
+## Ответ (RU)
 Методы equals() и hashCode() играют центральную роль в сравнении объектов и управлении ими в коллекциях. Метод equals(Object obj) определяет равенство объектов по содержимому вместо сравнения ссылок. Метод hashCode() возвращает хеш-код объекта для использования в хеш-таблицах. Соблюдение контракта между equals() и hashCode() критически важно для правильной работы коллекций, основанных на хеш-таблицах.

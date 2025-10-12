@@ -2,14 +2,20 @@
 tags:
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # What function in Kotlin is used for lazy property initialization?
 
-**English**: What function in Kotlin is used for lazy property initialization?
+# Question (EN)
+> What function in Kotlin is used for lazy property initialization?
 
-## Answer
+# Вопрос (RU)
+> Какая функция в Kotlin используется для ленивой инициализации свойства?
+
+---
+
+## Answer (EN)
 
 The `lazy` function is used for lazy property initialization in Kotlin.
 
@@ -287,10 +293,48 @@ fun main() {
 
 ---
 
-## Ответ
+## Ответ (RU)
 
-### Вопрос
-Какая функция в Kotlin используется для ленивой инициализации свойства
+Функция `lazy` используется для ленивой инициализации свойств в Kotlin.
 
-### Ответ
-lazy
+**Ключевые характеристики:**
+- Свойство инициализируется только при первом обращении
+- Значение вычисляется и кэшируется при первом доступе
+- Потокобезопасна по умолчанию (можно настроить)
+- Должна использоваться с `val` (read-only свойством)
+- Возвращает делегат, реализующий ленивую инициализацию
+- Снижает потребление памяти и улучшает производительность при запуске
+
+**Синтаксис:**
+```kotlin
+val propertyName: Type by lazy {
+    // Код инициализации
+    value
+}
+```
+
+**Пример:**
+```kotlin
+class User {
+    val profile: String by lazy {
+        println("Вычисление профиля...")
+        "Профиль пользователя"
+    }
+}
+
+val user = User()
+println("Пользователь создан")
+// profile ещё не вычислен
+
+println(user.profile)  // Вычисление профиля... Профиль пользователя
+println(user.profile)  // Профиль пользователя (без вычисления)
+```
+
+**Режимы потокобезопасности:**
+- `LazyThreadSafetyMode.SYNCHRONIZED` (по умолчанию) - потокобезопасный
+- `LazyThreadSafetyMode.PUBLICATION` - множественное вычисление, но одно значение
+- `LazyThreadSafetyMode.NONE` - не потокобезопасный, самый быстрый
+
+**lazy vs lateinit:**
+- `lazy`: используется с `val`, инициализация при первом доступе, с инициализатором
+- `lateinit`: используется с `var`, должна быть инициализирована до использования, без инициализатора

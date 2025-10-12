@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # When can the system restart a service?
 
-## Answer
-
+## Answer (EN)
 The Android system can restart a service after it has been killed, depending on the return value from `onStartCommand()` and the service type. Understanding when and how services restart is crucial for building robust Android applications.
 
 ### Service Restart Behavior by Return Value
@@ -331,7 +330,7 @@ The system can restart a service based on:
 
 **Modern recommendation:** For guaranteed background work, use WorkManager instead of services.
 
-## Answer (RU)
+## Ответ (RU)
 Система Android может перезапустить сервис в нескольких случаях, особенно если это касается долгосрочных или критически важных задач, которые должны продолжаться даже если приложение было закрыто или убито системой. Использование START_STICKY позволяет системе перезапустить сервис если он был убит. Использование START_REDELIVER_INTENT также позволяет системе перезапустить сервис если он был убит но с повторной доставкой последнего Intent. Foreground сервисы имеют более высокий приоритет и менее вероятно будут убиты системой но если это произойдет система постарается их перезапустить
 
 ## Related Topics

@@ -7,15 +7,14 @@ tags:
   - fragments
   - ui
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Как появились фрагменты и для чего их начали использовать?
 
 **English**: How did fragments appear and why were they started to be used?
 
-## Answer
-
+## Answer (EN)
 Fragments were introduced in **Android 3.0 (Honeycomb)** in **2011** to address the challenge of supporting tablets and creating flexible, reusable UI components. This was a significant architectural addition driven by the need for adaptive UIs across different screen sizes.
 
 ### Historical Context
@@ -315,8 +314,7 @@ Fragments were created to solve the tablet UI problem in 2011, providing:
 
 They remain a fundamental part of Android development, though Jetpack Compose is gradually reducing their necessity for new projects.
 
-## Ответ
-
+## Ответ (RU)
 **Фрагменты появились в Android 3.0 (Honeycomb) в 2011 году** для решения проблемы поддержки планшетов и создания гибких, переиспользуемых UI компонентов. Это было значительное архитектурное дополнение, обусловленное необходимостью адаптивного UI для разных размеров экранов.
 
 ### Исторический контекст

@@ -8,15 +8,14 @@ tags:
   - navigation
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Каким образом осуществляется навигация в Android?
 
 **English**: How is navigation implemented in Android?
 
-## Answer
-
+## Answer (EN)
 Navigation in Android is implemented through several methods, both at the system level (user navigation between apps) and application level (in-app navigation). The approach depends on Android version and UI patterns.
 
 ### System-Level Navigation
@@ -281,7 +280,6 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-## Ответ
-
+## Ответ (RU)
 Навигация в Android осуществляется несколькими способами, в зависимости от версии системы и используемых приложений. Основные методы включают жесты (свайпы, тапы), нажатия на экранные кнопки (на старых версиях), а также использование виртуальных или физических кнопок навигации (Домой, Назад, Последние приложения). Более современные версии Android полагаются преимущественно на жесты для навигации между приложениями и внутри них.
 

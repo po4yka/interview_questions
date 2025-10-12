@@ -4,15 +4,14 @@ tags:
   - sealed-classes
   - type-safety
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # В чем особенность sealed классов
 
 **English**: What is special about sealed classes in Kotlin?
 
-## Answer
-
+## Answer (EN)
 Особенность запечатанных (sealed) классов заключается в ограничении иерархии наследования: все их подклассы должны быть объявлены в том же файле, что и сам запечатанный класс.
 
 ### Основная идея

@@ -8,15 +8,14 @@ tags:
   - presenter
   - contract
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # MVP Pattern
 
 **English**: What is the MVP (Model-View-Presenter) architectural pattern? Explain its components and how it differs from other patterns.
 
-## Answer
-
+## Answer (EN)
 **MVP (Model-View-Presenter)** - архитектурный паттерн, разработанный для облегчения автоматизированного модульного тестирования и улучшения разделения ответственности в презентационной логике.
 
 ### Компоненты MVP

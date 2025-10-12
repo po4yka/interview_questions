@@ -2,15 +2,14 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Why are Data Class and Sealed Classes needed?
 
 **English**: Why are Data Class and Sealed Classes needed in Kotlin?
 
-## Answer
-
+## Answer (EN)
 **Data Class** are designed for storing data and automatically provide a number of useful methods, which simplifies development and reduces boilerplate code.
 
 **Main reasons for using Data Class:**
@@ -420,10 +419,9 @@ fun main() {
 
 ---
 
-## Ответ
-
-### Вопрос
+## Ответ (RU)
+# Вопрос (RU)
 Зачем нужны Data Class и Sealed Classes?
 
-### Ответ
+## Ответ (RU)
 Data Class предназначены для хранения данных и автоматически предоставляют ряд полезных методов, что упрощает разработку и уменьшает объем шаблонного кода. Основные причины использования Data Class: Сокращение кода, Упрощение передачи данных и Поддержка неизменяемости. Sealed Class используются для определения закрытых иерархий классов, где все потомки известны и ограничены. Они полезны по следующим причинам: Полное покрытие случаев в `when`, Ограниченное наследование и Инкапсуляция.

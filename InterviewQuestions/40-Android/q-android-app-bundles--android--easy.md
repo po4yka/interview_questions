@@ -14,14 +14,14 @@ tags:
 subtopics:
   - app-bundle
   - play-console
-status: reviewed
+status: draft
 created: 2025-10-05
 modified: 2025-10-05
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
 ---
 
 # Android App Bundles / Android App Bundle (AAB)
-## Question (EN)
+# Question (EN)
 What do you know about App Bundles?
 
 ## Answer (EN)
@@ -114,7 +114,7 @@ android {
 - [What do you know about Play Feature Delivery?](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20Play%20Feature%20Delivery.md)
 
 ---
-## Вопрос (RU)
+# Вопрос (RU)
 Что вы знаете об App Bundles?
 
 ## Ответ (RU)

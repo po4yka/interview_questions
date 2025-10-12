@@ -8,15 +8,14 @@ tags:
   - di-hilt
   - platform/android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Из каких основных элементов состоит Dagger?
 
 **English**: What are the main elements of Dagger?
 
-## Answer
-
+## Answer (EN)
 Dagger is built around several core elements that work together to provide dependency injection. The main components are:
 
 ### 1. Component (@Component)
@@ -403,8 +402,7 @@ class MainActivity : AppCompatActivity() {
 - **@Inject** = marks what to inject
 - **Qualifier** = differentiates same types
 
-## Ответ
-
+## Ответ (RU)
 Dagger состоит из нескольких основных элементов:
 
 ### 1. Component (@Component)

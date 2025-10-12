@@ -10,14 +10,20 @@ tags:
   - platform/android
   - presenter-view-communication
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие есть механизмы для отмены запросов presenter у view?
 
-**English**: What mechanisms exist for canceling Presenter requests to View?
+# Question (EN)
+> What mechanisms exist for canceling Presenter requests to View?
 
-## Answer
+# Вопрос (RU)
+> Какие есть механизмы для отмены запросов presenter у view?
+
+---
+
+## Answer (EN)
 
 In MVP (Model-View-Presenter) architecture, when the Presenter sends requests to the View, it's crucial to cancel these requests when the View is destroyed or becomes inactive to prevent crashes, memory leaks, and unnecessary work.
 
@@ -550,7 +556,9 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В архитектуре MVP (Model-View-Presenter), когда Presenter отправляет запросы к View, важно иметь возможность отменять эти запросы. Основные механизмы:
 

@@ -6,14 +6,34 @@ tags:
   - executor
   - thread-pool
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как работают Executor и ExecutorService?
 
-**English**: How does Executor and ExecutorService work?
+# Question (EN)
+> How does Executor and ExecutorService work in Java?
 
-## Answer
+# Вопрос (RU)
+> Как работают Executor и ExecutorService в Java?
+
+---
+
+## Answer (EN)
+
+**Executor** is a basic interface with `execute(Runnable)` method for task execution. **ExecutorService** extends it with lifecycle management (`shutdown()`, `awaitTermination()`) and result-returning methods (`submit(Callable)`, `invokeAll()`, `invokeAny()`).
+
+**Types:**
+- **FixedThreadPool**: Fixed number of threads for controlled parallelism
+- **CachedThreadPool**: Dynamic thread creation, reuses idle threads
+- **SingleThreadExecutor**: One thread for sequential execution
+- **ScheduledThreadPool**: Delayed and periodic task execution
+
+**Future** represents async result with `get()`, `cancel()`, `isDone()`. **ThreadPoolExecutor** allows custom configuration (core/max pool size, queue, rejection policies). Always call `shutdown()` and handle exceptions in tasks.
+
+---
+
+## Ответ (RU)
 
 `Executor` — это интерфейс из библиотеки `java.util.concurrent`, который представляет собой абстракцию для запуска задач. Он позволяет отделить создание задач от их выполнения, обеспечивая гибкость и контроль над выполнением параллельных операций.
 
@@ -455,5 +475,3 @@ CompletableFuture<String> future = CompletableFuture.supplyAsync(
     executor
 ).thenApply(s -> s + " World");
 ```
-
-**English**: **Executor** is a basic interface with `execute(Runnable)` method. **ExecutorService** extends it with lifecycle management (`shutdown()`, `awaitTermination()`) and result-returning methods (`submit(Callable)`, `invokeAll()`, `invokeAny()`). Types: **FixedThreadPool** (fixed threads), **CachedThreadPool** (dynamic, reuses threads), **SingleThreadExecutor** (sequential), **ScheduledThreadPool** (delayed/periodic). **Future** represents async result with `get()`, `cancel()`, `isDone()`. **ThreadPoolExecutor** allows custom config (core/max size, queue, rejection policy). Always call `shutdown()` and handle exceptions in tasks.

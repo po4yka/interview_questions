@@ -11,15 +11,14 @@ tags:
   - scrolling
   - viewholder
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Почему при скролле может тормозить список?
 
 **English**: Why might list scrolling lag?
 
-## Answer
-
+## Answer (EN)
 List scrolling can lag due to **performance issues in RecyclerView** implementation. The main causes are:
 
 ## 1. Incorrect ViewHolder Usage
@@ -532,8 +531,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: List<
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Причины торможения списка при скролле:
 
 1. **Неправильное использование ViewHolder в RecyclerView** - findViewById вызывается каждый раз.

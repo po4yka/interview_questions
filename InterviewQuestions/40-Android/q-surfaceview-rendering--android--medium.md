@@ -9,15 +9,14 @@ tags:
   - threading
   - difficulty/medium
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is SurfaceView? / Что такое SurfaceView?
 
 **English**: What is SurfaceView?
 
-## Answer
-
+## Answer (EN)
 `SurfaceView` is a special view that provides a dedicated drawing surface embedded inside of a view hierarchy. Unlike regular views, `SurfaceView` can be updated on a background thread, making it ideal for high-performance rendering scenarios.
 
 **Key Characteristics:**
@@ -155,8 +154,7 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 
 **Source**: [SurfaceView](https://developer.android.com/reference/android/view/SurfaceView)
 
-## Ответ
-
+## Ответ (RU)
 `SurfaceView` — это специальное представление, которое предоставляет выделенную поверхность для рисования, встроенную в иерархию представлений. В отличие от обычных представлений, `SurfaceView` может обновляться в фоновом потоке, что делает его идеальным для сценариев высокопроизводительного рендеринга.
 
 **Ключевые характеристики:**

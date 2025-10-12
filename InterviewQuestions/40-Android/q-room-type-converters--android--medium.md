@@ -8,15 +8,14 @@ tags:
   - custom-types
   - difficulty/medium
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Room TypeConverters / TypeConverters в Room
 
 **English**: What do you know about Converters in Room?
 
-## Answer
-
+## Answer (EN)
 **Room TypeConverters** are methods that tell Room how to convert **custom types to and from known types** that Room can persist in the database. They enable you to store custom data types in a single database column.
 
 Room doesn't know how to persist custom types by default, so you need to provide type converters using the `@TypeConverter` annotation.
@@ -352,8 +351,7 @@ Instead, Room encourages:
 
 **Source**: [Referencing complex data using Room](https://developer.android.com/training/data-storage/room/referencing-data)
 
-## Ответ
-
+## Ответ (RU)
 **Room TypeConverters** — это методы, которые сообщают Room, как преобразовывать **пользовательские типы в известные типы** и обратно, чтобы Room мог сохранять их в базе данных. Они позволяют хранить пользовательские типы данных в одном столбце базы данных.
 
 Room не знает, как сохранять пользовательские типы по умолчанию, поэтому необходимо предоставить конвертеры типов с помощью аннотации `@TypeConverter`.

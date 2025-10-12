@@ -7,14 +7,20 @@ tags:
   - types
   - wrappers
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие примитивы есть в Kotlin, а какие в Java?
 
-**English**: What primitives exist in Kotlin and Java?
+# Question (EN)
+> What primitives exist in Kotlin and Java?
 
-## Answer
+# Вопрос (RU)
+> Какие примитивы есть в Kotlin, а какие в Java?
+
+---
+
+## Answer (EN)
 
 ### Java Primitives
 
@@ -161,7 +167,9 @@ val boxedArray: Array<Int> = arrayOf(1)  // Integer[] (wrapper array)
 | **Nullability** | Wrappers only | Explicit `?` suffix |
 | **Compilation** | Primitives vs objects | Optimized to primitives when possible |
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Java использует примитивные типы: byte, short, int, long, float, double, char, boolean. Kotlin использует обёртки (Int, Double, Boolean и др.), которые компилируются в примитивы при необходимости.
 

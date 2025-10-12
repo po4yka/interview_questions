@@ -6,23 +6,29 @@ tags:
   - memory-management
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # О каком мусоре идет речь в сборщике мусора?
 
-**English**: What is "garbage" in garbage collector?
+# Question (EN)
+> What is "garbage" in garbage collector?
 
-## Answer
+# Вопрос (RU)
+> О каком мусоре идет речь в сборщике мусора?
+
+---
+
+## Answer (EN)
 
 **"Garbage"** in garbage collection refers to **objects in memory that are no longer used and unreachable from GC Roots**.
 
 **Definition:**
 
 An object is garbage if:
-- - It's in heap memory
-- - No active references point to it
-- - Unreachable from any GC Root
+- It's in heap memory
+- No active references point to it
+- Unreachable from any GC Root
 
 **Example:**
 
@@ -95,7 +101,9 @@ val data = ByteArray(1000)
 
 **Garbage** = objects in memory that are **no longer needed** and **unreachable** from GC Roots. GC automatically frees this memory.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Это объекты в памяти, которые больше не используются и недостижимы из корневых объектов. Сборщик мусора освобождает эти объекты, чтобы уменьшить использование памяти.
 

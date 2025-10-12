@@ -8,14 +8,20 @@ tags:
   - programming-languages
   - tostring
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какая особенность у Data Class относительно других Kotlin Classes?
 
-**English**: What is the special feature of Data Class compared to other Kotlin Classes?
+# Question (EN)
+> What is the special feature of Data Class compared to other Kotlin Classes?
 
-## Answer
+# Вопрос (RU)
+> Какая особенность у Data Class относительно других Kotlin Classes?
+
+---
+
+## Answer (EN)
 
 **Data classes** automatically generate several useful methods that you would otherwise have to write manually:
 
@@ -241,7 +247,9 @@ println(copy.address)  // "" (empty, not "NYC")
 
 **Data classes are convenient for storing data** and greatly simplify working with **immutable structures**.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Data Class автоматически генерирует equals, hashCode, toString, copy и componentN функции. Они удобны для хранения данных и значительно упрощают работу с неизменяемыми структурами.
 

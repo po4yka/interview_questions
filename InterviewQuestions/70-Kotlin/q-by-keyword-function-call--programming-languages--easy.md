@@ -2,22 +2,29 @@
 tags:
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Can you call a function or constructor after by
 
-**English**: Can you call a function or constructor after the `by` keyword in Kotlin?
+# Question (EN)
+> Can you call a function or constructor after the `by` keyword in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Можно ли вызывать функцию или конструктор после ключевого слова `by` в Kotlin?
 
-No, you cannot call functions or constructors after `by`. The `by` keyword expects a ready-made object that implements an interface or delegates a property.
+---
+
+## Answer (EN)
+
+Yes, you can call constructors after `by`. The `by` keyword expects an expression that evaluates to a delegate object, which means you can call constructors, functions, or use any expression that returns an appropriate delegate.
 
 **Important:**
-- `by` requires an expression that evaluates to an object
-- The object must be available at the point of delegation
-- You can use a property, parameter, or expression that returns an object
-- You cannot use a constructor call directly (but you can wrap it in a function or property)
+- `by` requires an expression that evaluates to a delegate object
+- You can call constructors that return delegate instances (most common)
+- You can call functions that return delegates
+- You can use properties, parameters, or any expression that returns a valid delegate
+- The key is that the expression must evaluate to an object with the proper delegation contract
 
 ### Code Examples
 
@@ -25,7 +32,7 @@ No, you cannot call functions or constructors after `by`. The `by` keyword expec
 
 ```kotlin
 class Example {
-    // CORRECT: by expects ready object
+    // CORRECT: by calls function that returns delegate
     val lazyValue: String by lazy { "Computed value" }
 
     // CORRECT: delegation to parameter
@@ -37,16 +44,18 @@ class Example {
     private val backingList = mutableListOf<String>()
     val items: List<String> by backingList
 
-    // ERROR: Cannot call constructor
-    // val map: MutableMap<String, Any> by HashMap()  // WRONG!
+    // Note: Property delegation requires specific delegate contract
+    // Maps don't implement property delegate contract directly
+    // Use observable/vetoable delegates or custom delegates instead
 
-    // CORRECT: Use property
-    private val backingMap = HashMap<String, Any>()
-    val map: MutableMap<String, Any> by backingMap  // Correct
+    // CORRECT: Use observable delegate
+    var count: Int by Delegates.observable(0) { _, old, new ->
+        println("Count changed: $old -> $new")
+    }
 }
 ```
 
-**Interface delegation - CORRECT vs WRONG:**
+**Interface delegation - All CORRECT approaches:**
 
 ```kotlin
 interface Printer {
@@ -59,21 +68,20 @@ class ConsolePrinter : Printer {
     }
 }
 
-// WRONG: Cannot use constructor directly
-// class Document : Printer by ConsolePrinter()  // ERROR!
-
-// CORRECT: Use object or property
+// CORRECT: Use object reference
 object DefaultPrinter : Printer {
     override fun print(message: String) {
         println("[DEFAULT] $message")
     }
 }
 
-class Document1 : Printer by DefaultPrinter  // OK - object
+class Document1 : Printer by DefaultPrinter  // OK - object reference
 
+// CORRECT: Use parameter
 class Document2(printer: Printer) : Printer by printer  // OK - parameter
 
-class Document3 : Printer by ConsolePrinter()  // Actually OK in this case!
+// CORRECT: Call constructor directly
+class Document3 : Printer by ConsolePrinter()  // OK - constructor call!
 
 fun main() {
     val doc1 = Document1()
@@ -91,20 +99,20 @@ fun main() {
 
 ```kotlin
 class LazyExample {
-    // CORRECT: lazy returns a delegate
+    // CORRECT: lazy function call returns a delegate
     val value1: String by lazy { "Lazy value" }
 
-    // CORRECT: can call function that returns delegate
+    // CORRECT: can call function with parameters that returns delegate
     val value2: String by lazy(LazyThreadSafetyMode.NONE) {
         "Thread-unsafe lazy value"
     }
 
-    // WRONG: Cannot call random function
-    // val value3: String by getValue()  // ERROR if getValue doesn't return delegate
+    // WRONG: Random function call that doesn't return a delegate
+    // val value3: String by getValue()  // ERROR if getValue returns String instead of delegate
 
-    // CORRECT: Function returns proper delegate
+    // CORRECT: Function that returns proper delegate
     private fun getDelegate() = lazy { "From function" }
-    val value4: String by getDelegate()
+    val value4: String by getDelegate()  // Function call is OK
 }
 
 fun main() {
@@ -180,15 +188,13 @@ class LoggingDelegate<T>(private var value: T) : ReadWriteProperty<Any?, T> {
 }
 
 class Example {
-    // WRONG: Cannot call function directly
-    // var name: String by LoggingDelegate("Initial")  // May or may not work
+    // CORRECT: Constructor call that returns delegate instance
+    var name: String by LoggingDelegate("Alice")  // Constructor call is OK!
+    var age: Int by LoggingDelegate(30)  // Constructor call is OK!
 
-    // CORRECT: The above actually works because constructor returns delegate
-
-    // More explicit version:
+    // CORRECT: Function call that returns delegate
     private fun createLoggingDelegate(initial: String) = LoggingDelegate(initial)
-    var name: String by LoggingDelegate("Alice")  // Works
-    var age: Int by LoggingDelegate(30)  // Works
+    var email: String by createLoggingDelegate("test@example.com")  // Function call is OK!
 }
 
 fun main() {
@@ -288,43 +294,73 @@ fun main() {
 }
 ```
 
-**Summary - What works:**
+**Summary - What works with `by`:**
 
 ```kotlin
 import kotlin.properties.Delegates
 
 class DelegationSummary {
-    // - WORKS: Object
+    // - WORKS: Function call returning delegate
     val value1: String by lazy { "value" }
 
-    // - WORKS: Property
+    // - WORKS: Property reference
     private val backingList = mutableListOf<String>()
     val list: List<String> by backingList
 
-    // - WORKS: Built-in delegate factory
+    // - WORKS: Function call with built-in delegate factory
     var observed: String by Delegates.observable("") { _, _, _ -> }
 
-    // - WORKS: Constructor that returns delegate
+    // - WORKS: Constructor call that returns delegate
     var logged: String by LoggingDelegate("initial")
 
-    // - WORKS: Function that returns delegate
+    // - WORKS: Function call that returns delegate
     private fun getDelegate() = lazy { "value" }
     val value2: String by getDelegate()
 
-    // - DOESN'T WORK: Random function call
-    // val value3: String by someFunction()  // Unless it returns a delegate
+    // - DOESN'T WORK: Function call that doesn't return a delegate
+    // val value3: String by someFunction()  // ERROR if someFunction() returns String
 
-    // - DOESN'T WORK: Expression that doesn't return delegate
-    // val value4: String by "string".uppercase()  // ERROR
+    // - DOESN'T WORK: Expression that doesn't return a delegate
+    // val value4: String by "string".uppercase()  // ERROR - String is not a delegate
 }
 ```
 
 ---
 
-## Ответ
+## Ответ (RU)
 
-### Вопрос
-Можно ли после by вызвать функцию или конструктор
+Да, после `by` можно вызывать конструкторы. Ключевое слово `by` ожидает выражение, которое возвращает объект-делегат, а значит можно вызывать конструкторы, функции или использовать любое выражение, возвращающее подходящий делегат.
 
-### Ответ
-Нет, после by нельзя вызывать функции или конструкторы. by ожидает готовый объект, который реализует интерфейс или делегирует свойство.
+**Важно:**
+- `by` требует выражение, которое возвращает объект-делегат
+- Можно вызывать конструкторы, возвращающие экземпляры делегатов (наиболее частый случай)
+- Можно вызывать функции, возвращающие делегаты
+- Можно использовать свойства, параметры или любое выражение, возвращающее подходящий делегат
+- Ключевое требование: выражение должно возвращать объект с правильным контрактом делегирования
+
+### Что работает с `by`
+
+```kotlin
+// ✓ РАБОТАЕТ: Вызов функции, возвращающей делегат
+val value1: String by lazy { "value" }
+
+// ✓ РАБОТАЕТ: Ссылка на свойство
+private val backingList = mutableListOf<String>()
+val list: List<String> by backingList
+
+// ✓ РАБОТАЕТ: Вызов функции со встроенной фабрикой делегатов
+var observed: String by Delegates.observable("") { _, _, _ -> }
+
+// ✓ РАБОТАЕТ: Вызов конструктора, возвращающего делегат
+var logged: String by LoggingDelegate("initial")
+
+// ✓ РАБОТАЕТ: Вызов функции, возвращающей делегат
+private fun getDelegate() = lazy { "value" }
+val value2: String by getDelegate()
+
+// ✗ НЕ РАБОТАЕТ: Вызов функции, не возвращающей делегат
+// val value3: String by someFunction()  // ОШИБКА, если someFunction() возвращает String
+
+// ✗ НЕ РАБОТАЕТ: Выражение, не возвращающее делегат
+// val value4: String by "string".uppercase()  // ОШИБКА - String не является делегатом
+```

@@ -8,15 +8,14 @@ tags:
   - bundle
   - difficulty/medium
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Parcelable in Android / Parcelable в Android
 
 **English**: What do you know about Parcelable?
 
-## Answer
-
+## Answer (EN)
 **Parcelable** is an Android interface used for **passing data between components** (activities, fragments, services). It's the Android-optimized analog of Java's `Serializable` interface, specifically designed for mobile devices. It assumes a certain structure and way of processing data for efficient inter-process communication.
 
 **Key Characteristics:**
@@ -258,8 +257,7 @@ object DateParceler : Parceler<Date> {
 - [Android Parcelable documentation](https://developer.android.com/reference/android/os/Parcelable)
 - [Using Parcelable guide](https://guides.codepath.com/android/using-parcelable)
 
-## Ответ
-
+## Ответ (RU)
 **Parcelable** — это Android интерфейс, используемый для **передачи данных между компонентами** (активности, фрагменты, сервисы). Это оптимизированный для Android аналог Java интерфейса `Serializable`, специально разработанный для мобильных устройств.
 
 **Основные характеристики:**

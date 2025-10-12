@@ -9,15 +9,14 @@ tags:
   - room
   - sqlite
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # В чем разница между Room & SQLite?
 
 **English**: What is the difference between Room and SQLite?
 
-## Answer
-
+## Answer (EN)
 **SQLite** is a **low-level relational database** that requires **manual SQL queries**.
 
 **Room** is a **wrapper/ORM (Object-Relational Mapping) layer over SQLite** that provides a **convenient API with annotations**, supports **LiveData and Flow**, and enables **automatic data migration**.
@@ -429,7 +428,6 @@ class UserRepository(private val userDao: UserDao) {
 
 **Recommendation:** Use **Room** for modern Android development. It provides better safety, less code, and easier maintenance while maintaining SQLite's performance.
 
-## Ответ
-
+## Ответ (RU)
 SQLite – низкоуровневая реляционная база данных, требует SQL-запросов вручную. Room – надстройка над SQLite, предоставляет удобный API с аннотациями, поддерживает LiveData, Flow и автоматическую миграцию данных. Room упрощает работу с базой и делает код читаемым, но внутри все равно использует SQLite.
 

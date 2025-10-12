@@ -3,15 +3,14 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to save Activity state?
 
 **English**: How to save Activity state?
 
-## Answer
-
+## Answer (EN)
 Android provides multiple mechanisms to save and restore Activity state across configuration changes (like screen rotation) and process death. The choice depends on the data type, size, and persistence requirements.
 
 ### 1. onSaveInstanceState() / onRestoreInstanceState()
@@ -451,8 +450,7 @@ class ComprehensiveActivity : AppCompatActivity() {
 - Use `DataStore` or `Room` for persistent data
 - Avoid relying solely on `onSaveInstanceState()` (limited data size)
 
-## Ответ
-
+## Ответ (RU)
 Android предоставляет несколько механизмов для сохранения и восстановления состояния Activity.
 
 ### 1. onSaveInstanceState() / onRestoreInstanceState()

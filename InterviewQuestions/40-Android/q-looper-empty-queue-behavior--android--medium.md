@@ -9,15 +9,14 @@ tags:
   - message-queue
   - threading
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что происходит, когда поток разбирает пустую очередь сообщений с помощью Looper.loop()?
 
 **English**: What happens when a thread processes an empty message queue with Looper.loop()?
 
-## Answer
-
+## Answer (EN)
 When `Looper.loop()` processes an **empty message queue**, the thread:
 
 1. **Blocks** (enters waiting state)
@@ -455,8 +454,7 @@ looper.quitSafely()  // Graceful quit, process pending
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Когда поток разбирает **пустую очередь сообщений** с помощью `Looper.loop()`, он:
 
 1. **Блокируется** (переходит в состояние ожидания)

@@ -8,17 +8,16 @@ tags:
   - ui
   - image-loading
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to display SVG string as a vector file?
 
-## Question (RU)
+# Вопрос (RU)
 
 Как SVG-строку показать в виде векторного файла
 
-## Answer
-
+## Answer (EN)
 There are several approaches to display an SVG string as a vector image in Android. The methods range from using specialized libraries to converting the SVG to native Android vector drawables.
 
 ### 1. Using AndroidSVG Library
@@ -459,6 +458,6 @@ class SvgNetworkActivity : AppCompatActivity() {
 5. **Consider memory usage** when converting to bitmap
 6. **Use appropriate image size** to avoid scaling issues
 
-## Answer (RU)
+## Ответ (RU)
 
 Сохранить строку как *.svg в файл и загрузить через SvgDecoder, Использовать библиотеки (Glide, Coil, androidsvg), Преобразовать в Drawable и отобразить через ImageView

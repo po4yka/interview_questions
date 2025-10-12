@@ -6,13 +6,12 @@ tags:
   - binding
   - ipc
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # If Activity starts after a service, can you connect to this service
 
-## Answer
-
+## Answer (EN)
 Yes, an Activity can bind to a running service using the binding mechanism, regardless of when the service was started. This allows the Activity to interact with the service, receive data, and send commands.
 
 ### Binding to a Service
@@ -97,7 +96,7 @@ class MyActivity : AppCompatActivity() {
 - Handle `null` service reference after unbinding
 - Use `BIND_AUTO_CREATE` to ensure service is running
 
-## Answer (RU)
+## Ответ (RU)
 Да, в Android можно подключиться к сервису после его запуска и взаимодействовать с ним через механизм привязки binding. Это достигается с помощью метода bindService. Привязка к сервису позволяет активити или другому компоненту взаимодействовать с уже запущенным сервисом, получать данные от него или отправлять команды
 
 ## Related Topics

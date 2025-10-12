@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Where to Call Suspend Functions?
 
-## Answer
+# Question (EN)
+> Where can you call suspend functions?
+
+# Вопрос (RU)
+> Где можно вызывать suspend-функции?
+
+---
+
+## Answer (EN)
 
 Suspend functions can only be called from **coroutines**. You can call them from:
 - **launch {}** or **async {}** within a CoroutineScope
@@ -453,10 +461,8 @@ suspend fun structuredApproach() = coroutineScope {
 | Regular function | - No | - | Must use builder |
 
 ---
-## Вопрос (RU)
 
-Откуда можно запускать suspend-функции
 
-## Ответ
+## Ответ (RU)
 
 suspend-функции можно запускать только из корутин. Можно вызывать их из: launch {} или async {} в CoroutineScope, другое suspend-функции и runBlocking {} для тестирования в main-потоке

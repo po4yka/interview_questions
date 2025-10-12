@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Suspend Function Return Type After Compilation
 
-## Answer
+# Question (EN)
+> What is the return type of a suspend function after compilation?
+
+# Вопрос (RU)
+> Каким становится тип возврата suspend-функции после компиляции?
+
+---
+
+## Answer (EN)
 
 The return type becomes **Any?** (or `Object` in JVM bytecode) because the function can return either the String value or a special marker **COROUTINE_SUSPENDED** to indicate that the coroutine is suspended.
 
@@ -305,10 +313,8 @@ fun <T> func($completion: Continuation<T>): Any?
 ```
 
 ---
-## Вопрос (RU)
 
-Какой будет возвращаемый тип у suspend-функции, которая возвращает String, после компиляции
 
-## Ответ
+## Ответ (RU)
 
 Возвращаемый тип становится Any, потому что функция может вернуть либо String, либо корутину в приостановленном состоянии

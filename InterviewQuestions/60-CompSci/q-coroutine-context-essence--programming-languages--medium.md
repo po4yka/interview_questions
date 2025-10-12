@@ -6,14 +6,20 @@ tags:
   - kotlin
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что является сущностью корутин контекста?
 
-**English**: What is the essence of coroutine context?
+# Question (EN)
+> What is the essence of coroutine context?
 
-## Answer
+# Вопрос (RU)
+> Что является сущностью корутин контекста?
+
+---
+
+## Answer (EN)
 
 The essence of coroutine context is **CoroutineContext**. It is a key part of the coroutine mechanism that defines various aspects of coroutine behavior, including its scheduling policy, exception handling rules, and other settings.
 
@@ -27,7 +33,9 @@ It represents a set of various elements, each responsible for specific functiona
 
 These elements can be combined using the `+` operator to create a complete context.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Сущностью контекста корутины является CoroutineContext. Это ключевая часть механизма корутин, которая определяет различные аспекты поведения корутины, включая её политику планирования, правила обработки исключений и другие настройки. Представляет собой набор различных элементов, каждый из которых отвечает за определённую функциональность в жизненном цикле корутины. Основные элементы: Job, Dispatcher, CoroutineExceptionHandler и CoroutineName.
 

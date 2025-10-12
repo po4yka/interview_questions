@@ -11,7 +11,7 @@ language_tags:
   - en
   - ru
 original_language: en
-status: reviewed
+status: draft
 source: Kotlin Coroutines Interview Questions PDF
 tags:
   - kotlin
@@ -22,9 +22,9 @@ tags:
   - memory-leaks
   - difficulty/medium
 ---
-## Question (EN)
+# Question (EN)
 > What is structured concurrency and why is it important in Android coroutine usage?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое структурированная конкурентность и почему она важна при использовании корутин в Android?
 
 ---

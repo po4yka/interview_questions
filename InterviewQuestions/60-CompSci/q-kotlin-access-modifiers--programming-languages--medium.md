@@ -11,14 +11,20 @@ tags:
   - syntax
   - visibility
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что известно про модификатор доступа?
 
-**English**: What is known about access modifiers?
+# Question (EN)
+> What is known about access modifiers?
 
-## Answer
+# Вопрос (RU)
+> Что известно про модификатор доступа?
+
+---
+
+## Answer (EN)
 
 Access modifiers control the visibility of classes, methods, interfaces, and variables in your code. They are essential language features that help manage encapsulation by limiting data and method visibility.
 
@@ -111,7 +117,9 @@ internal fun internalFunction() {}  // Visible in same module
 - Use `public` only for public APIs
 - Use `protected` sparingly (breaks encapsulation)
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Модификаторы доступа используются для управления доступом к классам, методам, интерфейсам и переменным в вашем коде. Это важные элементы языка, которые помогают управлять инкапсуляцией в программе, ограничивая видимость данных и методов. Существуют четыре основных модификатора доступа: public, private, protected, internal.
 

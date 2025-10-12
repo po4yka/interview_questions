@@ -9,14 +9,20 @@ tags:
   - parcelable
   - serializable
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что можно положить в Bundle?
 
-**English**: What can be put in a Bundle?
+# Question (EN)
+> What can be put in a Bundle?
 
-## Answer
+# Вопрос (RU)
+> Что можно положить в Bundle?
+
+---
+
+## Answer (EN)
 
 You can pass **primitive data types** and **serializable objects** in a Bundle:
 
@@ -479,7 +485,7 @@ bundle.putInt("imageId", imageId)
 
 ---
 
-## Ответ
+## Ответ (RU)
 
 В Bundle можно передавать **примитивные типы данных** и **сериализуемые объекты**:
 

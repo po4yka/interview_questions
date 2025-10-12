@@ -10,7 +10,7 @@ tags:
   - compilation
   - performance
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Dalvik vs ART Runtime
@@ -18,13 +18,19 @@ status: reviewed
 **Difficulty**: Medium
 **Source**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> 
 
-### Question
+# Вопрос (RU)
+> 
+
+---
+
+## Answer (EN)
+# Question (EN)
 What are the differences between Dalvik and ART runtimes in Android? Why did Android migrate from Dalvik to ART?
 
-### Answer
-
+## Answer (EN)
 Dalvik and ART (Android Runtime) are execution environments for running Android applications. ART replaced Dalvik starting from Android 5.0 (Lollipop) to improve performance, battery life, and developer experience.
 
 #### 1. **Dalvik Virtual Machine (Legacy)**
@@ -472,13 +478,13 @@ adb shell dumpsys package com.example.app | grep -A 1 "Dexopt state"
 
 ---
 
-## Русский
 
-### Вопрос
+
+## Ответ (RU)
+# Вопрос (RU)
 В чём различия между Dalvik и ART runtime в Android? Почему Android мигрировал с Dalvik на ART?
 
-### Ответ
-
+## Ответ (RU)
 Dalvik и ART (Android Runtime) - это среды выполнения для запуска Android-приложений. ART заменил Dalvik начиная с Android 5.0 (Lollipop).
 
 #### Dalvik (Legacy):

@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: [proguard-r8, build-optimization, app-bundles]
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, apk-size, optimization, build, resources, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What techniques can be used to reduce Android APK size?
-## Вопрос (RU)
+# Вопрос (RU)
 > Какие техники можно использовать для уменьшения размера Android APK?
 
 ---

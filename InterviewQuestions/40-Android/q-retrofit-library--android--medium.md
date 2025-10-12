@@ -6,15 +6,14 @@ tags:
   - networking
   - rest-api
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что из себя представляет Retrofit?
 
 **English**: What is Retrofit?
 
-## Answer
-
+## Answer (EN)
 Retrofit — это типобезопасный HTTP-клиент, разработанный компанией Square для Android и Java. Этот инструмент предназначен для упрощения процесса отправки сетевых запросов к RESTful API и обработки ответов сервера.
 
 ### Основные характеристики

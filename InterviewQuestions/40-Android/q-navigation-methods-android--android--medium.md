@@ -12,15 +12,14 @@ tags:
   - navigation-component
   - ui-patterns
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие способы навигации знаешь?
 
 **English**: What navigation methods do you know?
 
-## Answer
-
+## Answer (EN)
 Android provides **several navigation methods** for moving between screens. The main methods include **Activity navigation**, **Fragment navigation**, **Navigation Component**, **Bottom/Tab Navigation**, **Drawer Navigation**, **Deep Links**, and **Jetpack Compose Navigation**.
 
 ## 1. Activity Navigation (Intent-based)
@@ -539,7 +538,6 @@ fun MainScreen() {
 - **Compose Navigation** for Compose-based apps
 - **Fragments over Activities** for in-app navigation
 
-## Ответ
-
+## Ответ (RU)
 В Android есть несколько способов навигации между экранами. Основные методы включают: 1) Activity-навигация с использованием Intent. 2) Fragment-навигация через FragmentManager. 3) Navigation Component (Jetpack). 4) Bottom Navigation / Tab Navigation с использованием BottomNavigationView или TabLayout. 5) Drawer Navigation (Navigation Drawer) через DrawerLayout. 6) Deep Links и App Links для навигации через ссылки. 7) Navigation в Jetpack Compose с использованием NavHost и NavController.
 

@@ -6,31 +6,40 @@ tags:
   - gof-patterns
   - abstraction
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Bridge Pattern
 
-**English**: What is the Bridge pattern? When and why should it be used?
+# Question (EN)
+> What is the Bridge pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Bridge? Когда и зачем его использовать?
 
-**Bridge (Мост)** - это структурный паттерн проектирования, который разделяет один или несколько классов на две отдельные иерархии — абстракцию и реализацию, позволяя изменять их независимо друг от друга.
+---
 
-### Определение
+## Answer (EN)
+
+
+
+### Definition
+
 
 Bridge is a structural design pattern that **lets you split a large class or a set of closely related classes into two separate hierarchies—abstraction and implementation—which can be developed independently** of each other.
 
 This pattern involves an interface which acts as a bridge which makes the functionality of concrete classes independent from interface implementer classes. Both types of classes can be altered structurally without affecting each other.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 The Bridge design pattern solves problems like:
 
 1. **An abstraction and its implementation should be defined and extended independently from each other**
 2. **A compile-time binding between an abstraction and its implementation should be avoided** so that an implementation can be selected at run-time
 
-### Когда использовать?
+### When to Use?
+
 
 When to Use Bridge Pattern:
 
@@ -278,7 +287,8 @@ fun main() {
 }
 ```
 
-### Объяснение
+### Explanation
+
 
 **Explanation**:
 
@@ -292,6 +302,7 @@ fun main() {
 
 ### Pros (Преимущества)
 
+
 1. **Decoupling** - Abstraction and implementation are independent
 2. **Improved Extensibility** - Extend hierarchies independently
 3. **Enhanced Flexibility** - Change implementation without modifying abstraction
@@ -299,6 +310,7 @@ fun main() {
 5. **Open/Closed Principle** - Open for extension, closed for modification
 
 ### Cons (Недостатки)
+
 
 1. **Increased complexity** - More classes and interfaces
 2. **Indirection** - Extra layer of abstraction
@@ -374,3 +386,58 @@ class IOSPlatform : Platform {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+Bridge is a structural design pattern that **lets you split a large class or a set of closely related classes into two separate hierarchies—abstraction and implementation—which can be developed independently** of each other.
+
+This pattern involves an interface which acts as a bridge which makes the functionality of concrete classes independent from interface implementer classes. Both types of classes can be altered structurally without affecting each other.
+
+### Проблемы, которые решает
+
+
+The Bridge design pattern solves problems like:
+
+1. **An abstraction and its implementation should be defined and extended independently from each other**
+2. **A compile-time binding between an abstraction and its implementation should be avoided** so that an implementation can be selected at run-time
+
+### Когда использовать?
+
+
+When to Use Bridge Pattern:
+
+1. **Avoid permanent binding** between abstraction and implementation
+2. **Both abstraction and implementation should be extensible** through subclassing
+3. **Changes in implementation shouldn't impact clients**
+4. **Share implementation among multiple objects** and hide implementation details
+
+### Объяснение
+
+
+**Explanation**:
+
+- **Implementor** (Device, Renderer, MessageSender) defines implementation interface
+- **Abstraction** (RemoteControl, Shape, Message) contains reference to implementor
+- **Concrete implementors** provide actual implementations
+- **Refined abstractions** extend base abstraction with more features
+- **Decoupling** allows changing implementations without affecting abstractions
+
+### Pros (Преимущества)
+
+
+1. **Decoupling** - Abstraction and implementation are independent
+2. **Improved Extensibility** - Extend hierarchies independently
+3. **Enhanced Flexibility** - Change implementation without modifying abstraction
+4. **Runtime binding** - Can switch implementations at runtime
+5. **Open/Closed Principle** - Open for extension, closed for modification
+
+### Cons (Недостатки)
+
+
+1. **Increased complexity** - More classes and interfaces
+2. **Indirection** - Extra layer of abstraction
+3. **Design overhead** - Requires careful design upfront

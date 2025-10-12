@@ -8,14 +8,20 @@ tags:
   - softcoding
   - software-design
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что такое софткод?
 
-**English**: What is softcode?
+# Question (EN)
+> What is softcode?
 
-## Answer
+# Вопрос (RU)
+> Что такое софткод?
+
+---
+
+## Answer (EN)
 
 **Softcode (Soft Coding)** is a programming approach where **program logic is stored in configuration files, databases, or other external sources** rather than being **hardcoded** (hard-coded) directly in the code.
 
@@ -573,7 +579,7 @@ class CheckoutFragment : Fragment() {
 
 ---
 
-## Ответ
+## Ответ (RU)
 
 Софткод (Softcode, Soft Coding) — это подход к программированию, при котором логика программы хранится в конфигурационных файлах, базе данных или других внешних источниках, а не жёстко (hardcoded) прописана в коде.
 

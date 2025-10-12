@@ -7,15 +7,14 @@ tags:
   - workmanager
   - room
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Реализация RSS-агрегатора на Android
 
 **English**: How to implement RSS feed aggregator on Android?
 
-## Answer
-
+## Answer (EN)
 RSS-агрегатор собирает и отображает ленты из нескольких источников. Необходимо: парсинг XML, локальное хранение, фоновое обновление, уведомления о новых постах.
 
 ### Архитектура

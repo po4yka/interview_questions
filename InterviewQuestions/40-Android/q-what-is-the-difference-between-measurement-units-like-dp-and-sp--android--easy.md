@@ -7,15 +7,14 @@ tags:
   - sp
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Чем отличаются единицы измерения например dp от sp
 
 **English**: What is the difference between measurement units like dp and sp?
 
-## Answer
-
+## Answer (EN)
 ### dp (Density-Independent Pixels)
 
 **dp** is used for layout and UI element sizes, providing the same physical size on all devices regardless of screen density.
@@ -115,7 +114,6 @@ Using **dp** for all UI sizes except text and **sp** for text sizes allows your 
 3. Provide better user experience for users with visual impairments
 4. Follow Android design guidelines and best practices
 
-## Ответ
-
+## Ответ (RU)
 dp (density-independent pixels) используется для размеров макета и элементов интерфейса, обеспечивая одинаковый физический размер на всех устройствах независимо от плотности экрана. sp (scale-independent pixels) используется для размеров шрифтов текста и масштабируется не только с изменением плотности экрана но и в зависимости от пользовательских настроек масштабирования текста. Основное различие в том что sp учитывает предпочтения пользователя по масштабу текста. dp рекомендуется использовать для всех размеров в пользовательском интерфейсе кроме текста. В XML-разметке Android размер текста указывается в sp а другие размеры в dp. Это позволяет оптимизировать приложение для различных устройств и настроек доступности
 

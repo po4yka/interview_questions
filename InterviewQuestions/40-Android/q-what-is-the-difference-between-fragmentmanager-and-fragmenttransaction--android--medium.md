@@ -8,17 +8,16 @@ tags:
   - ui
   - fragments
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is the difference between FragmentManager and FragmentTransaction?
 
-## Question (RU)
+# Вопрос (RU)
 
 В чём разница между FragmentManager и FragmentTransaction
 
-## Answer
-
+## Answer (EN)
 **FragmentManager** manages fragments: adding, finding, back stack. **FragmentTransaction** is used to perform operations with fragments (add, replace, remove). It's like a database transaction applied to UI. Transaction is created via `FragmentManager.beginTransaction()` and applied via `commit()`.
 
 ### FragmentManager
@@ -153,6 +152,6 @@ transaction.commitNowAllowingStateLoss()
 | Always available | Created via beginTransaction() |
 | Query operations | Modify operations |
 
-## Answer (RU)
+## Ответ (RU)
 
 FragmentManager управляет фрагментами: добавление, поиск, стек возврата. FragmentTransaction используется для выполнения операций с фрагментами (добавление, замена, удаление). Это как транзакция базы данных применяемая к UI. Transaction создаётся через FragmentManager.beginTransaction() и применяется через commit()

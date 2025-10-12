@@ -9,15 +9,14 @@ tags:
   - memory-management
   - shark
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как понять что в дампе есть утечка?
 
 **English**: How to find a leak in a heap dump?
 
-## Answer
-
+## Answer (EN)
 If an object was not freed after attempts to trigger garbage collection, LeakCanary creates a **heap dump**. LeakCanary uses the **Shark library** to analyze the heap dump.
 
 **Process:**
@@ -255,8 +254,7 @@ Leak trace:
 4. **Finds retention chains** from GC roots to leaked objects
 5. **Reports leak** with reference chain and retained size
 
-## Ответ
-
+## Ответ (RU)
 Если объект не был освобожден после попыток вызвать сборку мусора, LeakCanary создает **дамп памяти**.
 
 LeakCanary использует библиотеку **Shark** для анализа дампа памяти. Он проверяет все объекты в куче и их ссылки.

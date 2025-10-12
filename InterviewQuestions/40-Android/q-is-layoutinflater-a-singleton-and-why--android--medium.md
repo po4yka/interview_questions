@@ -8,17 +8,16 @@ tags:
   - ui
   - layoutinflater
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Is LayoutInflater a singleton and why
 
-## Question (RU)
+# Вопрос (RU)
 
 Является ли LayoutInflater синглтоном и почему
 
-## Answer
-
+## Answer (EN)
 No, **LayoutInflater is not a singleton**, but can be obtained as a scope-dependent object (`getSystemService`) in Context. However, it can be reused as it doesn't store state between calls.
 
 ### How LayoutInflater Works
@@ -136,7 +135,7 @@ class BadAdapter(private val items: List<Item>) : RecyclerView.Adapter<ViewHolde
 }
 ```
 
-## Answer (RU)
+## Ответ (RU)
 
 **Нет, LayoutInflater не является синглтоном**, но он кэшируется на уровне каждого Context. Это означает, что разные Context'ы имеют свои собственные экземпляры LayoutInflater, но в рамках одного Context возвращается один и тот же экземпляр.
 

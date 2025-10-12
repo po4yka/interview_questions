@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to handle the situation where Activity can open multiple times due to deeplink?
 
-## Answer
-
+## Answer (EN)
 When using deeplinks, an Activity can be launched multiple times creating duplicate instances in the back stack. This can be prevented using launch modes, Intent flags, and proper deeplink configuration.
 
 ### Problem Scenario
@@ -387,7 +386,7 @@ class ProductActivity : AppCompatActivity() {
 6. **Consider Trampoline pattern** for complex routing
 7. **Log deeplink handling** for debugging
 
-## Answer (RU)
+## Ответ (RU)
 Чтобы избежать множественного открытия одного и того же Activity при использовании deeplink, можно настроить launchMode в AndroidManifest.xml. Например, установите launchMode="singleTop" или "singleTask", чтобы предотвратить создание новых экземпляров. Также используйте флаги в интентах, такие как FLAG_ACTIVITY_CLEAR_TOP и FLAG_ACTIVITY_SINGLE_TOP. Переопределяйте метод onNewIntent() для обработки новых данных, если Activity уже существует в стеке задач.
 
 ## Related Topics

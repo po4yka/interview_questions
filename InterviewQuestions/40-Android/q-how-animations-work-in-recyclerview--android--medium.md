@@ -9,7 +9,7 @@ tags:
   - recyclerview
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How are animations done in RecyclerView?
@@ -18,8 +18,7 @@ status: reviewed
 
 **English**: How are animations done in RecyclerView?
 
-## Answer
-
+## Answer (EN)
 RecyclerView provides several ways to implement animations, from simple built-in animations to complex custom animations. Animations can be applied at different levels: item-level, adapter-level, and through custom ItemAnimators.
 
 ### 1. Using DefaultItemAnimator
@@ -333,7 +332,6 @@ if (!isReduceMotionEnabled) {
 }
 ```
 
-## Ответ
-
+## Ответ (RU)
 Для добавления анимаций в RecyclerView можно использовать DefaultItemAnimator для стандартных анимаций, установив его через recyclerView.setItemAnimator(new DefaultItemAnimator()). Для пользовательских анимаций создается наследник DefaultItemAnimator, например CustomItemAnimator, где переопределяются методы анимаций. Также анимации можно реализовывать непосредственно в Adapter, устанавливая начальные параметры элемента и запуская анимацию внутри onBindViewHolder.
 

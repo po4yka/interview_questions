@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: [coroutines, async-await, structured-concurrency, networking]
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [kotlin, coroutines, async, parallel, networking, performance, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > How do you make multiple network calls in parallel using Kotlin coroutines?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как выполнить несколько сетевых запросов параллельно с помощью Kotlin корутин?
 
 ---

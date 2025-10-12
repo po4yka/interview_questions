@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What are Intents for?
 
-## Answer
-
+## Answer (EN)
 Intents are the fundamental messaging objects in Android used for communication between app components. They serve as the primary mechanism for starting activities, services, broadcasting messages, and passing data.
 
 ### Core Purposes of Intents
@@ -433,7 +432,7 @@ Intents are used for:
 - **Explicit**: Targets specific component by name
 - **Implicit**: System finds suitable component based on action/data
 
-## Answer (RU)
+## Ответ (RU)
 Intents нужны для взаимодействия компонентов приложения: запуска Activity, Service, передачи данных или отправки Broadcast. Они являются основным способом коммуникации между модулями и приложениями в Android
 
 ## Related Topics

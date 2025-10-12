@@ -5,13 +5,12 @@ tags:
   - touch-events
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Which event is called when user touches the screen?
 
-## Answer
-
+## Answer (EN)
 When a user presses the screen in Android, the system calls a series of touch event methods. The main events are: **dispatchTouchEvent()**, **onInterceptTouchEvent()** (for ViewGroups), **onTouchEvent()**, and if configured, **onClick()**.
 
 ### Touch Event Flow
@@ -368,6 +367,5 @@ Key points:
 
 # Какое событие вызывается при нажатии юзера по экрану
 
-## Ответ
-
+## Ответ (RU)
 Система вызывает: dispatchTouchEvent() — распределяет событие. onTouchEvent() — обрабатывает вью, если не перехвачено. onClick() — вызывается, если был ACTION_UP без движения.

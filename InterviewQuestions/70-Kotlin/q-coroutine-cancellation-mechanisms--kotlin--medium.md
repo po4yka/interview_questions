@@ -11,7 +11,7 @@ language_tags:
   - en
   - ru
 original_language: en
-status: reviewed
+status: draft
 source: Kotlin Coroutines Interview Questions PDF
 tags:
   - kotlin
@@ -22,9 +22,9 @@ tags:
   - cancellationexception
   - difficulty/medium
 ---
-## Question (EN)
+# Question (EN)
 > How does coroutine cancellation work, and how is it different from canceling a Thread?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как работает отмена корутин и чем она отличается от отмены потока?
 
 ---

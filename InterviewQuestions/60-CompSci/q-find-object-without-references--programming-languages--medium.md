@@ -8,14 +8,20 @@ tags:
   - memory-profiler
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как найти объект, если на него нет ссылок?
 
-**English**: How to find an object if there are no references to it?
+# Question (EN)
+> How to find an object if there are no references to it?
 
-## Answer
+# Вопрос (RU)
+> Как найти объект, если на него нет ссылок?
+
+---
+
+## Answer (EN)
 
 Finding objects without references is challenging because they're normally garbage collected. However, you can analyze them using **memory profiling tools**.
 
@@ -138,7 +144,9 @@ class LeakDetector {
 - Use **LeakCanary** for automatic detection
 - Find **dominators** and **GC Root paths**
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Создайте дамп памяти в Android Studio ("Dump Java heap"). Используйте Memory Analyzer Tool (MAT) для анализа. Ищите "Unreachable objects" и "Dominators". LeakCanary автоматически обнаруживает утечки.
 

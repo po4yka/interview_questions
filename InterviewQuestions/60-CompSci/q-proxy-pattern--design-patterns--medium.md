@@ -6,29 +6,39 @@ tags:
   - gof-patterns
   - surrogate
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Proxy Pattern
 
-**English**: What is the Proxy pattern? When and why should it be used?
+# Question (EN)
+> What is the Proxy pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Proxy? Когда и зачем его следует использовать?
+
+---
+
+## Answer (EN)
+
 
 **Proxy (Заместитель)** - это структурный паттерн проектирования, который предоставляет объект-заместитель, контролирующий доступ к другому объекту. Прокси перехватывает обращения и может добавлять дополнительную функциональность до или после передачи вызова оригинальному объекту.
 
-### Определение
+### Definition
+
 
 The Proxy Design Pattern is a structural design pattern that uses a **placeholder object to control access to another object**. Instead of interacting directly with the main object, the client talks to the proxy, which then manages the interaction. This is useful for controlling access, lazy initialization, logging, or adding security checks.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 What problems can the Proxy design pattern solve?
 
 1. **The access to an object should be controlled**
 2. **Additional functionality should be provided when accessing an object**
 
-### Решение
+### Solution
+
 
 Define a separate **`Proxy`** object that:
 
@@ -248,7 +258,8 @@ val retrofit = Retrofit.Builder()
     .build()
 ```
 
-### Объяснение
+### Explanation
+
 
 **Explanation**:
 
@@ -262,6 +273,7 @@ val retrofit = Retrofit.Builder()
 
 ### Pros (Преимущества)
 
+
 1. **Separation of Concerns** - Separates business logic from auxiliary responsibilities
 2. **Performance optimization** - Lazy initialization and caching improve performance
 3. **Access control** - Can control and validate access to objects
@@ -269,6 +281,7 @@ val retrofit = Retrofit.Builder()
 5. **Open/Closed Principle** - Can add new proxies without changing existing code
 
 ### Cons (Недостатки)
+
 
 1. **Additional complexity** - Extra layer of indirection
 2. **Performance overhead** - Slight performance cost from indirection
@@ -350,3 +363,60 @@ class AsyncCacheProxy(
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+The Proxy Design Pattern is a structural design pattern that uses a **placeholder object to control access to another object**. Instead of interacting directly with the main object, the client talks to the proxy, which then manages the interaction. This is useful for controlling access, lazy initialization, logging, or adding security checks.
+
+### Проблемы, которые решает
+
+
+What problems can the Proxy design pattern solve?
+
+1. **The access to an object should be controlled**
+2. **Additional functionality should be provided when accessing an object**
+
+### Решение
+
+
+Define a separate **`Proxy`** object that:
+
+- Can be used as a substitute for another object (**`Subject`**)
+- Implements additional functionality to control the access to this subject
+
+This makes it possible to work through a Proxy object to perform additional functionality when accessing a subject, like checking access rights, caching, or logging.
+
+To act as a substitute for a subject, a proxy must implement the **`Subject`** interface. Clients can't tell whether they work with a subject or its proxy.
+
+### Объяснение
+
+
+**Explanation**:
+
+- **`Database`** is the common interface for RealDatabase and ProxyDatabase
+- **RealDatabase** performs the real operations
+- **ProxyDatabase** controls access, adds logging, restricts certain queries
+- **Android**: Lazy loading images, caching network responses, access control
+- **OkHttp Interceptors** are a perfect example of Proxy pattern
+
+### Pros (Преимущества)
+
+
+1. **Separation of Concerns** - Separates business logic from auxiliary responsibilities
+2. **Performance optimization** - Lazy initialization and caching improve performance
+3. **Access control** - Can control and validate access to objects
+4. **Transparent to client** - Client doesn't need to know about the proxy
+5. **Open/Closed Principle** - Can add new proxies without changing existing code
+
+### Cons (Недостатки)
+
+
+1. **Additional complexity** - Extra layer of indirection
+2. **Performance overhead** - Slight performance cost from indirection
+3. **Design complexity** - Requires good understanding of use case
+4. **Testing overhead** - More components to test
+5. **Memory concerns** - Caching proxies can cause memory issues if not managed properly

@@ -9,14 +9,20 @@ tags:
   - programming-languages
   - syntax
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какой модификатор в Kotlin делает класс нерасширяемым?
 
-**English**: Which modifier makes a class non-extendable in Kotlin?
+# Question (EN)
+> Which modifier makes a class non-extendable in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Какой модификатор в Kotlin делает класс нерасширяемым?
+
+---
+
+## Answer (EN)
 
 In Kotlin, the `final` modifier makes a class non-extendable. However, **all classes in Kotlin are `final` by default**. To make a class extendable, you must explicitly use the `open` keyword.
 
@@ -45,7 +51,9 @@ class Derived : OpenClass()
 - This design encourages composition over inheritance
 - Sealed classes are another way to control inheritance hierarchy
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Kotlin модификатор `final` делает класс нерасширяемым. Однако все классы в Kotlin являются `final` по умолчанию. Чтобы сделать класс расширяемым, необходимо явно использовать ключевое слово `open`.
 

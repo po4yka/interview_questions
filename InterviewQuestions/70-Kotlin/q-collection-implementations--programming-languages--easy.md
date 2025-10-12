@@ -8,14 +8,20 @@ tags:
   - programming-languages
   - set
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какие есть реализации коллекций?
 
-**English**: What collection implementations exist?
+# Question (EN)
+> What collection implementations are available in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Какие реализации коллекций доступны в Kotlin?
+
+---
+
+## Answer (EN)
 
 Kotlin uses Java collection implementations under the hood. Here are the main implementations:
 
@@ -173,7 +179,59 @@ val treeMap = TreeMap<Int, String>()
 
 *Amortized
 
-## Ответ
+---
 
-- ArrayList, LinkedList для List интерфейса; HashSet, LinkedHashSet, TreeSet для Set; HashMap, LinkedHashMap, TreeMap для Map
+## Ответ (RU)
+
+Kotlin использует реализации коллекций Java. Основные реализации:
+
+### List (Списки)
+
+- **ArrayList** - массив с изменяемым размером (по умолчанию для mutableListOf)
+  - Быстрый доступ по индексу O(1)
+  - Медленная вставка/удаление в середине O(n)
+
+- **LinkedList** - двусвязный список
+  - Быстрая вставка/удаление O(1)
+  - Медленный доступ по индексу O(n)
+
+### Set (Множества)
+
+- **HashSet** - хеш-таблица, без гарантий порядка
+  - Быстрые операции O(1)
+
+- **LinkedHashSet** - хеш-таблица + связный список (по умолчанию для mutableSetOf)
+  - Быстрые операции O(1)
+  - Сохраняет порядок вставки
+
+- **TreeSet** - красно-черное дерево, отсортированное
+  - Операции O(log n)
+  - Элементы автоматически сортируются
+
+### Map (Словари)
+
+- **HashMap** - хеш-таблица для пар ключ-значение
+  - Быстрые операции O(1)
+  - Нет гарантий порядка
+
+- **LinkedHashMap** - хеш-таблица + связный список (по умолчанию для mutableMapOf)
+  - Быстрые операции O(1)
+  - Сохраняет порядок вставки
+
+- **TreeMap** - красно-черное дерево, отсортированное по ключам
+  - Операции O(log n)
+  - Ключи автоматически сортируются
+
+### Когда что использовать
+
+| Задача | Реализация |
+|--------|------------|
+| Список по умолчанию | ArrayList |
+| Частая вставка в середину | LinkedList |
+| Уникальные элементы | HashSet |
+| Уникальные + порядок | LinkedHashSet |
+| Уникальные + сортировка | TreeSet |
+| Ключ-значение | HashMap |
+| Ключ-значение + порядок | LinkedHashMap |
+| Ключ-значение + сортировка | TreeMap |
 

@@ -9,15 +9,14 @@ tags:
   - lifecycle
   - scope
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что такое scope в Dagger и как они работают?
 
 **English**: What is scope in Dagger and how do they work?
 
-## Answer
-
+## Answer (EN)
 **Scopes** in Dagger control the **lifetime** of dependencies. They ensure objects are reused within a specific lifecycle, preventing unnecessary object creation.
 
 **Key concepts:**
@@ -376,8 +375,7 @@ class ApiClient // Lives for entire app
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 **Scope** в Dagger управляет **временем жизни** зависимостей. Они обеспечивают переиспользование объектов в рамках определенного жизненного цикла.
 
 **Основные концепции:**

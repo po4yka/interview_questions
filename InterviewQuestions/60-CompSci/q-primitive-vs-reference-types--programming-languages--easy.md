@@ -7,14 +7,20 @@ tags:
   - programming-languages
   - reference-types
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # В чем разница примитивного и ссылочного типов
 
-**English**: What is the difference between primitive and reference types?
+# Question (EN)
+> What is the difference between primitive and reference types?
 
-## Answer
+# Вопрос (RU)
+> В чем разница примитивного и ссылочного типов?
+
+---
+
+## Answer (EN)
 
 ### Primitive Types
 
@@ -222,7 +228,9 @@ val wrapped = Array<Int>(1000) { 0 }  // Integer[] (less efficient)
 In **Java**: primitives and reference types are clearly separated.
 In **Kotlin**: everything looks like objects, but primitives are used internally when possible.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Примитивные типы хранят значения напрямую, не могут быть null и не имеют методов. Ссылочные типы — это объекты которые хранят ссылки на данные в памяти и могут быть null.
 

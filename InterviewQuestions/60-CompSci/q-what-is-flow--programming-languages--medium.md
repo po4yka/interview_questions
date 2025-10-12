@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is Flow in Kotlin?
 
-## Answer
+# Question (EN)
+> What is Flow in Kotlin?
+
+# Вопрос (RU)
+> Что такое Flow в Kotlin?
+
+---
+
+## Answer (EN)
 
 **Flow** is an async data stream that works like List but lazily.
 
@@ -487,10 +495,8 @@ class FlowBestPractices {
 - Rich operator library
 
 ---
-## Вопрос (RU)
 
-Что из себя представляет Flow
 
-## Ответ
+## Ответ (RU)
 
 Это асинхронный поток данных, который работает как List, но лениво. Особенности: выдает значения последовательно – одно за другим не блокирует поток – работает с suspend-функциями поддерживает cancel() – может быть остановлен в любой момент позволяет работать с бесконечными потоками – полезно для сетевых запросов БД UI-событий

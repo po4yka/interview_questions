@@ -6,15 +6,14 @@ tags:
   - dynamic-modules
   - app-bundle
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Play Feature Delivery / Play Feature Delivery
 
 **English**: What do you know about Play Feature Delivery?
 
-## Answer
-
+## Answer (EN)
 **Play Feature Delivery** uses advanced capabilities of Android App Bundles, allowing certain features of your app to be **delivered conditionally or downloaded on demand**. This enables you to reduce initial download size and deliver features only when needed.
 
 Google Play's app serving model uses Android App Bundles to generate and serve optimized APKs for each user's device configuration, so users download only the code and resources they need to run your app.
@@ -321,8 +320,7 @@ dependencies {
 
 **Source**: [Overview of Play Feature Delivery](https://developer.android.com/guide/playcore/feature-delivery)
 
-## Ответ
-
+## Ответ (RU)
 **Play Feature Delivery** использует расширенные возможности Android App Bundles, позволяя доставлять определённые функции приложения **условно или по требованию**. Это позволяет уменьшить размер первоначальной загрузки и доставлять функции только когда они нужны.
 
 Google Play использует Android App Bundles для генерации и доставки оптимизированных APK для каждой конфигурации устройства пользователя, поэтому пользователи загружают только необходимый код и ресурсы.

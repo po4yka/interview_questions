@@ -8,14 +8,20 @@ tags:
   - programming-languages
   - safe-call
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Каким образом осуществлять проверки на null?
 
-**English**: How to perform null checks?
+# Question (EN)
+> How to perform null checks?
 
-## Answer
+# Вопрос (RU)
+> Каким образом осуществлять проверки на null?
+
+---
+
+## Answer (EN)
 
 Kotlin offers several operators and methods for null checking:
 
@@ -109,7 +115,9 @@ val validEmail = email.takeIf { it.contains("@") }
 - Use `requireNotNull()` for precondition checks
 - Combine operators for concise null handling
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Kotlin предлагает операторы безопасного вызова (?.), оператор Элвиса (?:), явную проверку через if (x != null), requireNotNull или !! — для гарантии не-null.
 

@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Implementing Flow for Shopping Cart Management
 
-## Answer
+# Question (EN)
+> How to implement Flow in an application when you need to manage the entire shopping cart on the phone?
+
+# Вопрос (RU)
+> Как реализовать работу Flow в приложении, когда самому нужно менеджерить всю корзину на телефоне?
+
+---
+
+## Answer (EN)
 
 Use **Flow** to manage cart state, update data through `emit` or `StateFlow` methods to dynamically track changes. Implement handling of adding, removing, and updating items through actions that change the cart state.
 
@@ -434,10 +442,7 @@ class ShoppingCartManagerTest {
 ```
 
 ---
-## Вопрос (RU)
 
-Как реализовать работу Flow в приложении, когда самому нужно менеджерить всю корзину на телефоне
-
-## Ответ
+## Ответ (RU)
 
 Используйте Flow для управления состоянием корзины обновляйте данные через методы emit или stateFlow чтобы динамически отслеживать изменения Реализуйте обработку добавления удаления обновления товаров через действия которые изменяют состояние корзины

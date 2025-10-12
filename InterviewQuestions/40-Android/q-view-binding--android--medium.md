@@ -11,7 +11,7 @@ subtopics:
   - gradle
   - build-variants
 difficulty: medium
-status: reviewed
+status: draft
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20View%20Binding.md
 ---
 
@@ -21,8 +21,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/An
 
 **Russian**: Что вы знаете о View Binding?
 
-## Answer
-
+## Answer (EN)
 View binding is a feature that allows you to more easily write code that interacts with views. Once view binding is enabled in a module, it generates a `binding class` for each XML layout file present in that module. An instance of a binding class contains direct references to all views that have an ID in the corresponding layout.
 
 In most cases, view binding replaces `findViewById`.
@@ -131,8 +130,7 @@ View binding has important advantages over using `findViewById`:
 - **Null safety**: Since view binding creates direct references to views, there's no risk of a null pointer exception due to an invalid view ID. Additionally, when a view is only present in some configurations of a layout, the field containing its reference in the binding class is marked with `@Nullable`.
 - **Type safety**: The fields in each binding class have types matching the views they reference in the XML file. This means that there's no risk of a class cast exception.
 
-## Ответ
-
+## Ответ (RU)
 View binding - это функция, которая позволяет легче писать код, взаимодействующий с представлениями. После включения view binding в модуле, генерируется `класс привязки` для каждого XML файла макета, присутствующего в этом модуле. Экземпляр класса привязки содержит прямые ссылки на все представления с ID в соответствующем макете.
 
 В большинстве случаев view binding заменяет `findViewById`.

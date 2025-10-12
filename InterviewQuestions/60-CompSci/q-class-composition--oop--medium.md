@@ -8,14 +8,20 @@ tags:
   - oop
   - relationships
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что известно о композиции классов?
 
-**English**: What is known about class composition?
+# Question (EN)
+> What is known about class composition?
 
-## Answer
+# Вопрос (RU)
+> Что известно о композиции классов?
+
+---
+
+## Answer (EN)
 
 **Class composition** is a fundamental principle of object-oriented programming used to model relationships between objects. In composition, **one class includes objects of other classes as its fields**, achieving more complex functionality through combining behaviors and properties of these objects.
 
@@ -509,8 +515,7 @@ class UserActivity : AppCompatActivity() {
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Композиция классов — это один из фундаментальных принципов объектно-ориентированного программирования, который используется для моделирования отношений между объектами. В контексте композиции один класс включает в себя один или несколько объектов других классов в качестве своих полей, тем самым достигая более сложной функциональности через комбинирование поведений и свойств этих объектов.
 
 **Основные аспекты:**

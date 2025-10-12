@@ -10,14 +10,20 @@ tags:
   - type-system
   - types
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Чем типы в Kotlin отличаются от типов в Java
 
-**English**: How do Kotlin types differ from Java types?
+# Question (EN)
+> How do Kotlin types differ from Java types?
 
-## Answer
+# Вопрос (RU)
+> Чем типы в Kotlin отличаются от типов в Java
+
+---
+
+## Answer (EN)
 
 | Feature | Kotlin | Java |
 |---------|--------|------|
@@ -61,7 +67,49 @@ if (obj instanceof String) {
 4. **Kotlin**: Better type inference
 5. **Kotlin**: Smart casts after type checks
 
-## Ответ
+---
 
-В Kotlin по умолчанию переменные не могут быть null, в отличие от Java где все объекты могут быть null...
+## Ответ (RU)
+
+| Особенность | Kotlin | Java |
+|---------|--------|------|
+| **Null Safety** | Переменные не могут быть null по умолчанию (`String` vs `String?`) | Все объекты могут быть null |
+| **Коллекции** | Четкое разделение: `List` vs `MutableList` | Нет различия (все изменяемые) |
+| **Data классы** | Автоматическая генерация методов с `data class` | Требуется ручная реализация |
+| **Вывод типов** | Обширный: `val x = 10` | Ограниченный (локальные переменные с `var`) |
+| **Умные приведения** | Автоматические после проверки `is` | Явное приведение после `instanceof` |
+| **Примитивные типы** | Нет примитивов (унифицированная система типов) | Отдельные примитивы (`int`) и обертки (`Integer`) |
+
+**Примеры:**
+
+```kotlin
+// Kotlin
+val name: String = "John"        // Не может быть null
+val nullable: String? = null     // Явно nullable
+val list = listOf(1, 2, 3)       // Неизменяемый
+val x = 10                       // Тип выводится
+
+if (obj is String) {
+    println(obj.length)          // Автоматическое приведение
+}
+```
+
+```java
+// Java
+String name = "John";             // Может быть null
+String nullable = null;           // Нет различия
+List<Integer> list = List.of(1, 2, 3); // Может быть изменен через рефлексию
+int x = 10;                       // Нужно указать тип
+
+if (obj instanceof String) {
+    println(((String) obj).length()); // Явное приведение
+}
+```
+
+**Ключевые различия:**
+1. **Kotlin**: Null safety по умолчанию
+2. **Kotlin**: Разделение изменяемых/неизменяемых коллекций
+3. **Kotlin**: Автогенерация методов для data классов
+4. **Kotlin**: Лучший вывод типов
+5. **Kotlin**: Умные приведения после проверок типов
 

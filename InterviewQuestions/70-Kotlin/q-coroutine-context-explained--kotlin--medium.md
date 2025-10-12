@@ -16,7 +16,7 @@ source: ""
 source_note: ""
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,10 +26,10 @@ updated: 2025-10-06
 
 tags: [kotlin, coroutines, coroutine-context, async-programming, concurrency, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What is CoroutineContext and what are its main elements?
 
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое CoroutineContext и какие у него основные элементы?
 
 ---

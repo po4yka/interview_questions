@@ -11,15 +11,14 @@ tags:
   - uri
   - verification
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие особенности отличия deep link от app link?
 
 **English**: What are the differences between deep links and app links?
 
-## Answer
-
+## Answer (EN)
 **Deep Link** works through a **custom URI scheme** (e.g., `myapp://`) and requires `intent-filter` configuration.
 
 **App Link** uses **HTTP/HTTPS URLs** and requires **domain ownership verification** through the `assetlinks.json` file.
@@ -438,7 +437,6 @@ fun checkAppLinkStatus(packageName: String) {
 
 **Best practice:** Use **App Links** for production apps with web presence, fall back to Deep Links for older Android versions.
 
-## Ответ
-
+## Ответ (RU)
 Deep link работает через схему URI например myapp требует настройки intent-filter. App link использует HTTP HTTPS ссылки и требует подтверждения владения доменом через файл assetlinks.json.
 

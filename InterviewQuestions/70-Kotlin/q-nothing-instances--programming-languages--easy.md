@@ -2,14 +2,20 @@
 tags:
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # How many instance types does Nothing have?
 
-**English**: How many instance types does the Nothing type have in Kotlin?
+# Question (EN)
+> How many instances does the Nothing type have in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Сколько экземпляров имеет тип Nothing в Kotlin?
+
+---
+
+## Answer (EN)
 
 **Nothing has no instances.** It is an uninhabited type that cannot be instantiated.
 
@@ -245,10 +251,179 @@ fun main() {
 
 ---
 
-## Ответ
+## Ответ (RU)
 
-### Вопрос
-Сколько типов инстансов у Nothing
+**Nothing не имеет экземпляров.** Это необитаемый тип (uninhabited type), который невозможно проинстанцировать.
 
-### Ответ
-Nothing не имеет инстансов.
+**Ключевые характеристики:**
+- Nothing — тип, который не имеет значений
+- Является подтипом всех типов (bottom type в теории типов)
+- Используется для функций, которые никогда не возвращаются нормально
+- Используется для выражений, которые никогда не завершаются
+- Часто используется в функциях, которые всегда выбрасывают исключения или выполняются бесконечно
+
+**Когда используется Nothing:**
+- Функции, которые всегда выбрасывают исключения (`throw`, `error()`, `TODO()`)
+- Функции с бесконечными циклами
+- Выражения, которые никогда не производят значение
+- Как параметр типа для пустых коллекций
+
+### Примеры кода
+
+**Функции, возвращающие Nothing:**
+
+```kotlin
+// Функция всегда выбрасывает исключение - возвращает Nothing
+fun fail(message: String): Nothing {
+    throw IllegalStateException(message)
+}
+
+// Функция с бесконечным циклом - возвращает Nothing
+fun infiniteLoop(): Nothing {
+    while (true) {
+        println("Работаю вечно...")
+        Thread.sleep(1000)
+    }
+}
+
+// Встроенные функции, возвращающие Nothing
+fun demonstrateBuiltIn() {
+    TODO("Ещё не реализовано")  // Возвращает Nothing
+    error("Что-то пошло не так")  // Возвращает Nothing
+}
+```
+
+**Nothing в иерархии типов:**
+
+```kotlin
+fun processValue(value: String?): Int {
+    // Nothing - подтип Int, поэтому компилируется
+    val length: Int = value?.length ?: fail("Значение null")
+    return length
+}
+
+fun getUser(id: Int): User {
+    // Nothing - подтип User
+    return findUser(id) ?: error("Пользователь не найден")
+}
+
+data class User(val id: Int, val name: String)
+```
+
+**Nothing с when-выражениями:**
+
+```kotlin
+sealed class Result {
+    data class Success(val value: Int) : Result()
+    data class Error(val message: String) : Result()
+}
+
+fun handleResult(result: Result): Int {
+    return when (result) {
+        is Result.Success -> result.value
+        is Result.Error -> error(result.message)  // Возвращает Nothing
+    }
+}
+```
+
+**Nothing в коллекциях:**
+
+```kotlin
+// Пустой список имеет тип List<Nothing>
+val emptyList: List<Nothing> = emptyList()
+
+// Nothing - подтип всех типов
+val strings: List<String> = emptyList  // Работает!
+val numbers: List<Int> = emptyList     // Работает!
+val users: List<User> = emptyList      // Работает!
+
+// listOf() возвращает List<Nothing> когда пуст
+val empty = listOf()
+```
+
+**Nothing? (nullable Nothing):**
+
+```kotlin
+// Nothing? может содержать только null
+val nothingNullable: Nothing? = null
+
+// Это единственное допустимое значение для Nothing?
+// val invalid: Nothing? = something  // Другое значение невозможно!
+
+// Часто используется как параметр типа для функций, возвращающих null
+fun alwaysNull(): Nothing? = null
+```
+
+**Nothing vs Unit:**
+
+```kotlin
+// Unit: Функция завершается нормально, ничего полезного не возвращает
+fun printMessage(msg: String): Unit {
+    println(msg)
+    // Неявно возвращает Unit
+}
+
+// Nothing: Функция никогда не завершается нормально
+fun failWithError(msg: String): Nothing {
+    throw Exception(msg)
+    // Никогда не возвращается
+}
+
+fun demonstrateDifference() {
+    // Unit функция завершается
+    printMessage("Hello")  // Печатает и продолжает
+    println("После printMessage")
+
+    // Nothing функция никогда не возвращается
+    // failWithError("Error")  // Выбросит исключение
+    // println("После failWithError")  // Недостижимый код
+}
+```
+
+**Вывод типов с Nothing:**
+
+```kotlin
+fun checkValue(value: Int?): Int {
+    // Компилятор знает, что если value null, fail() выбросит исключение
+    // Поэтому тип возврата выводится как Int (не Int?)
+    return value ?: fail("Значение не может быть null")
+}
+
+fun fail(message: String): Nothing {
+    throw IllegalArgumentException(message)
+}
+```
+
+**Практическое использование с TODO():**
+
+```kotlin
+interface UserRepository {
+    fun getUser(id: Int): User
+    fun saveUser(user: User)
+    fun deleteUser(id: Int): Boolean
+}
+
+class UserRepositoryImpl : UserRepository {
+    override fun getUser(id: Int): User {
+        TODO("Реализовать запрос к БД")  // Возвращает Nothing
+    }
+
+    override fun saveUser(user: User) {
+        TODO("Реализовать операцию сохранения")
+    }
+
+    override fun deleteUser(id: Int): Boolean {
+        TODO("Реализовать операцию удаления")
+    }
+}
+```
+
+### Краткий ответ
+
+Nothing имеет **ноль экземпляров**. Это необитаемый тип (bottom type), который:
+- Не может быть проинстанцирован
+- Является подтипом всех типов
+- Используется для функций, которые никогда не возвращаются (`throw`, `error()`, `TODO()`)
+- Используется для пустых коллекций (`emptyList()` возвращает `List<Nothing>`)
+
+Nothing? может иметь только одно значение: `null`.

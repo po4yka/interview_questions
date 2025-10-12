@@ -4,14 +4,46 @@ tags:
   - object-comparison
   - hashmap
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Зачем нужны методы equals и hashcode?
 
-**English**: Why are equals and hashCode methods needed?
+# Question (EN)
+> Why are equals() and hashCode() methods needed in Kotlin/Java?
 
-## Answer
+# Вопрос (RU)
+> Зачем нужны методы equals() и hashCode() в Kotlin/Java?
+
+---
+
+## Answer (EN)
+
+`equals()` and `hashCode()` are fundamental methods for object comparison and collection management.
+
+**equals()**: Defines object equality by content instead of reference comparison. Without it, `==` compares only references (memory addresses).
+
+**hashCode()**: Returns a hash code for use in hash-based collections (HashMap, HashSet). Enables fast lookups in O(1) time.
+
+**Critical contract**: If `a.equals(b)` is true, then `a.hashCode()` must equal `b.hashCode()`. Violating this breaks hash-based collections.
+
+**Example of broken implementation:**
+```kotlin
+class User(val name: String) {
+    override fun equals(other: Any?) = (other as? User)?.name == name
+    // Missing hashCode()! HashMap won't work correctly
+}
+
+val map = hashMapOf<User, String>()
+map[User("Alice")] = "Engineer"
+println(map[User("Alice")])  // null - broken!
+```
+
+**Correct solution**: Use data classes - they auto-generate both methods correctly.
+
+---
+
+## Ответ (RU)
 
 Методы `equals()` и `hashCode()` играют центральную роль в сравнении объектов и управлении ими в коллекциях.
 
@@ -136,5 +168,3 @@ val userRoles = hashMapOf<User, String>()
 userRoles[User("Alice", 30)] = "Engineer"
 println(userRoles[User("Alice", 30)])  // "Engineer"
 ```
-
-**English**: `equals()` defines object equality by content instead of reference comparison. `hashCode()` returns a hash code for use in hash-based collections. The contract is critical: equal objects must have equal hash codes. Data classes automatically implement both correctly.

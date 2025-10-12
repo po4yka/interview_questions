@@ -10,14 +10,20 @@ tags:
   - service
   - started-service
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какие виды сервисов есть в Android?
 
-**English**: What types of services are there in Android?
+# Question (EN)
+> What types of services are there in Android?
 
-## Answer
+# Вопрос (RU)
+> Какие виды сервисов есть в Android?
+
+---
+
+## Answer (EN)
 
 **Three main types of services:**
 
@@ -74,9 +80,9 @@ bindService(Intent(this, MusicService::class.java), connection, BIND_AUTO_CREATE
 
 | Type | Notification | User Interaction | Use Case |
 |------|--------------|------------------|----------|
-| Started | ❌ No | ❌ No | Data sync |
-| Foreground | ✅ Yes | ✅ Visible | Music player |
-| Bound | ❌ No | ✅ Client-server | API calls |
+| Started | No | No | Data sync |
+| Foreground | Yes | Visible | Music player |
+| Bound | No | Client-server | API calls |
 
 **Summary:**
 
@@ -84,7 +90,9 @@ bindService(Intent(this, MusicService::class.java), connection, BIND_AUTO_CREATE
 - **Foreground**: Ongoing notifications (music, location)
 - **Bound**: Client-server interaction within app
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Android есть три основных вида сервисов: обычные (Started Service), фоновые с уведомлением (Foreground Service) и привязанные (Bound Service).
 

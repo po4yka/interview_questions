@@ -8,17 +8,16 @@ tags:
   - jetpack-compose
   - performance
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to reduce the number of recompositions besides side-effects?
 
-## Question (RU)
+# Вопрос (RU)
 
 Как можно уменьшить количество рекомпозиций помимо side-эффектов
 
-## Answer
-
+## Answer (EN)
 Reducing recompositions in Jetpack Compose improves performance. Besides side effects, use `remember`, `derivedStateOf`, `key`, stable data classes, immutable collections, and proper state management.
 
 ### 1. Use remember for Expensive Calculations
@@ -339,6 +338,6 @@ fun RecompositionCounter() {
 }
 ```
 
-## Answer (RU)
+## Ответ (RU)
 
 Использовать remember, derivedStateOf, key и мемоизацию функций. Также важно следить, чтобы State не обновлялся без необходимости, а структура UI не пересоздавалась без причины

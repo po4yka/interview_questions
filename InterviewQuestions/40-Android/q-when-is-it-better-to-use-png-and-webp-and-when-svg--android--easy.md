@@ -5,15 +5,14 @@ tags:
   - image-formats
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Когда лучше использовать png и webp, а когда svg?
 
 **English**: When is it better to use png and webp, and when svg?
 
-## Answer
-
+## Answer (EN)
 Choosing the right image format is important for app performance, file size, and visual quality. Here's when to use each format:
 
 ### PNG (Portable Network Graphics)
@@ -268,7 +267,6 @@ For modern Android apps, the recommended approach is:
 2. **WebP** for all photographic content and complex images
 3. **PNG** only when WebP is not supported or for legacy compatibility
 
-## Ответ
-
+## Ответ (RU)
 PNG: для простых изображений с прозрачностью и высокой детализацией. WebP: для фотографий и сложных изображений с сжатием без потерь или с потерями. SVG: для векторных изображений, требующих масштабирования без потери качества.
 

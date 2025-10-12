@@ -3,7 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is the difference between dialog and fragment?

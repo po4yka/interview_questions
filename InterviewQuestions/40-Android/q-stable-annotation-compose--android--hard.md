@@ -12,15 +12,14 @@ tags:
   - stability
   - stable-annotation
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Что известно про stable?
 
 **English**: What is known about @Stable?
 
-## Answer
-
+## Answer (EN)
 **`@Stable`** is an annotation in Compose that indicates an **object is stable** and its **properties don't change spontaneously**. This helps Compose **efficiently determine when UI needs to be redrawn**, reducing unnecessary recompositions.
 
 ---
@@ -508,8 +507,7 @@ stable class ProductViewModel {
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 **`@Stable`** - это аннотация в Compose, которая указывает, что объект **стабилен** и его свойства **не изменяются спонтанно**. Это помогает Compose эффективно определять, когда нужно перерисовывать UI, уменьшая количество лишних перерисовок.
 
 **Контракт стабильности:**

@@ -2,7 +2,7 @@
 id: 202510051234003
 title: "Context in Android / Context в Android"
 topic: android
-status: reviewed
+status: draft
 created: 2025-10-05
 updated: 2025-10-05
 difficulty: medium
@@ -35,8 +35,15 @@ connections: []
 
 # Context in Android / Context в Android
 
-## English
+# Question (EN)
+> 
 
+# Вопрос (RU)
+> 
+
+---
+
+## Answer (EN)
 ### Definition
 
 `Context` is the interface to global information about an application environment. This is an abstract class whose implementation is provided by the Android system. It allows access to application-specific resources and classes, as well as up-calls for application-level operations such as launching activities, broadcasting and receiving intents, etc.
@@ -180,8 +187,9 @@ class MyRepository(private val activityContext: Activity) {
 
 ---
 
-## Русский
 
+
+## Ответ (RU)
 ### Определение
 
 `Context` - это интерфейс к глобальной информации о среде приложения. Это абстрактный класс, реализация которого предоставляется системой Android. Он позволяет получить доступ к ресурсам и классам, специфичным для приложения, а также к операциям уровня приложения, таким как запуск активностей, отправка и получение интентов и т.д.

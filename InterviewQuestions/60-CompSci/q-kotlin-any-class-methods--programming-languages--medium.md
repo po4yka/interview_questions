@@ -9,14 +9,20 @@ tags:
   - tostring
   - type-system
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие в базовом классе Kotlin есть методы и что они делают?
 
-**English**: What methods exist in Kotlin base class and what do they do?
+# Question (EN)
+> What methods exist in Kotlin base class and what do they do?
 
-## Answer
+# Вопрос (RU)
+> Какие в базовом классе Kotlin есть методы и что они делают?
+
+---
+
+## Answer (EN)
 
 In Kotlin, all classes inherit from `Any` and have **three base methods**:
 
@@ -98,7 +104,87 @@ println(user.toString())    // User(name=John)
 
 **Important**: When overriding `equals()`, you MUST override `hashCode()`!
 
-## Ответ
+---
 
-В Kotlin все классы наследуются от Any и имеют три базовых метода: equals(), hashCode() и toString()...
+## Ответ (RU)
+
+В Kotlin все классы наследуются от `Any` и имеют **три базовых метода**:
+
+### 1. equals(other: Any?): Boolean
+
+Сравнивает объекты на **структурное равенство**:
+
+```kotlin
+open fun equals(other: Any?): Boolean
+```
+
+**Поведение по умолчанию**: Сравнивает ссылки (как `===`)
+**Поведение в data class**: Сравнивает все свойства
+
+```kotlin
+class Person(val name: String)
+
+val p1 = Person("John")
+val p2 = Person("John")
+
+p1.equals(p2)  // false (по умолчанию: равенство ссылок)
+p1 == p2       // false (то же, что equals)
+
+data class User(val name: String)
+
+val u1 = User("John")
+val u2 = User("John")
+
+u1 == u2       // true (data class: равенство значений)
+```
+
+### 2. hashCode(): Int
+
+Генерирует **хэш-код** на основе объекта:
+
+```kotlin
+open fun hashCode(): Int
+```
+
+**Поведение по умолчанию**: На основе адреса в памяти
+**Поведение в data class**: На основе значений свойств
+
+**Контракт**: Если `a.equals(b)`, то `a.hashCode() == b.hashCode()`
+
+```kotlin
+val person = Person("John")
+val hash = person.hashCode()  // На основе адреса в памяти
+
+val user = User("John")
+val hash2 = user.hashCode()   // На основе значения name
+```
+
+### 3. toString(): String
+
+Возвращает **строковое представление** объекта:
+
+```kotlin
+open fun toString(): String
+```
+
+**Поведение по умолчанию**: `ClassName@hashCode`
+**Поведение в data class**: `ClassName(property1=value1, property2=value2)`
+
+```kotlin
+val person = Person("John")
+println(person.toString())  // Person@1a2b3c4d
+
+val user = User("John")
+println(user.toString())    // User(name=John)
+```
+
+**Резюме:**
+
+| Метод | По умолчанию | Data Class |
+|--------|-------------|------------|
+| `equals()` | Равенство ссылок | Равенство значений |
+| `hashCode()` | Адрес в памяти | Хэш свойств |
+| `toString()` | ClassName@hash | ClassName(props) |
+
+**Важно**: При переопределении `equals()` вы ДОЛЖНЫ переопределить `hashCode()`!
 

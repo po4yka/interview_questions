@@ -7,15 +7,14 @@ tags:
   - xml-to-compose
   - architecture
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Стратегия миграции большого проекта на Jetpack Compose
 
 **English**: Migration strategy for large project to Jetpack Compose
 
-## Answer
-
+## Answer (EN)
 Миграция большого проекта на Compose требует поэтапного подхода, минимизирующего риски и позволяющего продолжать разработку новых фич во время миграции.
 
 ### Рекомендуемая стратегия: Гибридный подход

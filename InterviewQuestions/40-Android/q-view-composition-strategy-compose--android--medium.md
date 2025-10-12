@@ -7,7 +7,7 @@ aliases:
   - ViewCompositionStrategy в Compose
 date_created: 2025-10-05
 date_modified: 2025-10-05
-status: reviewed
+status: draft
 original_language: en
 language_tags:
   - en
@@ -32,14 +32,12 @@ source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/A
 
 # ViewCompositionStrategy in Compose / ViewCompositionStrategy в Compose
 
-## EN
-
-### Question
+# Question (EN)
+> 
 
 What do you know about ViewCompositionStrategy?
 
-### Answer
-
+## Answer (EN)
 `ViewCompositionStrategy` defines when the Composition should be disposed. The default, `ViewCompositionStrategy.Default`, disposes the Composition when the underlying `ComposeView` detaches from the window, unless it is part of a pooling container such as a `RecyclerView`. In a single-Activity Compose-only app, this default behavior is what you would want, however, if you are incrementally adding Compose in your codebase, this behavior may cause state loss in some scenarios.
 
 To change the `ViewCompositionStrategy`, call the `setViewCompositionStrategy()` method and provide a different strategy.
@@ -104,14 +102,12 @@ composeView.setViewCompositionStrategy(
 
 ---
 
-## RU
-
-### Вопрос
+# Вопрос (RU)
+> 
 
 Что вы знаете о ViewCompositionStrategy?
 
-### Ответ
-
+## Ответ (RU)
 `ViewCompositionStrategy` определяет, когда Composition должна быть уничтожена. По умолчанию, `ViewCompositionStrategy.Default`, уничтожает Composition, когда базовый `ComposeView` отсоединяется от окна, если только он не является частью контейнера с пулом, такого как `RecyclerView`. В одноактивити приложении, использующем только Compose, это поведение по умолчанию является желаемым, однако, если вы постепенно добавляете Compose в вашу кодовую базу, это поведение может вызвать потерю состояния в некоторых сценариях.
 
 Чтобы изменить `ViewCompositionStrategy`, вызовите метод `setViewCompositionStrategy()` и предоставьте другую стратегию.

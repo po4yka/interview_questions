@@ -5,29 +5,39 @@ tags:
   - facade
   - gof-patterns
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Facade Pattern
 
-**English**: What is the Facade pattern? When and why should it be used?
+# Question (EN)
+> What is the Facade pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Facade? Когда и зачем его использовать?
+
+---
+
+## Answer (EN)
+
 
 **Facade (Фасад)** - это структурный паттерн проектирования, который предоставляет простой интерфейс к сложной системе классов, библиотеке или фреймворку. Фасад скрывает сложность системы и предоставляет клиенту простой способ взаимодействия.
 
-### Определение
+### Definition
+
 
 Facade pattern is a structural design pattern whose purpose is to **hide internal complexity behind a single interface that appears simple from the outside**. It provides a simplified interface to a complex subsystem.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 What problems can the Facade design pattern solve?
 
 1. **To make a complex subsystem easier to use, a simple interface should be provided for a set of interfaces in the subsystem**
 2. **The dependencies on a subsystem should be minimized**
 
-### Ключевые моменты
+### Key Points
+
 
 Key Points of the Facade Pattern:
 
@@ -260,7 +270,8 @@ fun main() {
 }
 ```
 
-### Объяснение
+### Explanation
+
 
 **Explanation**:
 
@@ -282,6 +293,7 @@ Use Cases of Facade Pattern:
 
 ### Pros (Преимущества)
 
+
 1. **Simplified Interface** - Makes complex systems easy to use
 2. **Reduced Coupling** - Clients depend on facade, not subsystems
 3. **Encapsulation** - Hides implementation details
@@ -289,6 +301,7 @@ Use Cases of Facade Pattern:
 5. **Easier Testing** - Can mock the facade instead of all subsystems
 
 ### Cons (Недостатки)
+
 
 1. **Increased Complexity** - Additional abstraction layer
 2. **Reduced Flexibility** - May limit access to advanced features
@@ -345,3 +358,56 @@ class SystemFacade {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+Facade pattern is a structural design pattern whose purpose is to **hide internal complexity behind a single interface that appears simple from the outside**. It provides a simplified interface to a complex subsystem.
+
+### Проблемы, которые решает
+
+
+What problems can the Facade design pattern solve?
+
+1. **To make a complex subsystem easier to use, a simple interface should be provided for a set of interfaces in the subsystem**
+2. **The dependencies on a subsystem should be minimized**
+
+### Key Points
+
+
+Key Points of the Facade Pattern:
+
+1. **Simplification** - Provides a simplified interface to a complex system of classes
+2. **Decoupling** - Decouples the client code from the internal workings of the system
+3. **Easier Maintenance** - Allows for easier maintenance, as changes in underlying subsystems don't directly affect client code
+
+### Объяснение
+
+
+**Explanation**:
+
+- **Subsystems** (Lights, Blinds, Projector, MoviePlayer) are complex individual components
+- **Facade** (HomeTheaterFacade) provides simple methods (`watchMovie()`, `endMovie()`) that orchestrate multiple subsystems
+- **Client** only interacts with the facade, not the complex subsystems
+- In Android, facades simplify complex operations like network + cache + error handling
+
+### Pros (Преимущества)
+
+
+1. **Simplified Interface** - Makes complex systems easy to use
+2. **Reduced Coupling** - Clients depend on facade, not subsystems
+3. **Encapsulation** - Hides implementation details
+4. **Improved Maintainability** - Changes to subsystems don't affect clients
+5. **Easier Testing** - Can mock the facade instead of all subsystems
+
+### Cons (Недостатки)
+
+
+1. **Increased Complexity** - Additional abstraction layer
+2. **Reduced Flexibility** - May limit access to advanced features
+3. **Overengineering** - Unnecessary for simple systems
+4. **Potential Performance Overhead** - Extra indirection layer
+5. **God Object Risk** - Facade can become too large

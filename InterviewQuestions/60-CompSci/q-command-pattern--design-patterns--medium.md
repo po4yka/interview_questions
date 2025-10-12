@@ -6,22 +6,31 @@ tags:
   - gof-patterns
   - action-pattern
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Command Pattern
 
-**English**: What is the Command pattern? When and why should it be used?
+# Question (EN)
+> What is the Command pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Command? Когда и зачем его использовать?
+
+---
+
+## Answer (EN)
+
 
 **Command (Команда)** - это поведенческий паттерн проектирования, который превращает запросы в объекты, позволяя передавать их как аргументы при вызове методов, ставить запросы в очередь, логировать их, а также поддерживать отмену операций.
 
-### Определение
+### Definition
+
 
 The Command Pattern is a behavioral design pattern that **turns a request into a stand-alone object that contains all the information about the request**. This transformation allows you to parameterize methods with different requests, queue requests, log their execution, and support undo operations. It decouples the object that invokes an action from the object that performs the action.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 Using the command design pattern can solve these problems:
 
@@ -29,7 +38,8 @@ Using the command design pattern can solve these problems:
 2. **It should be possible to configure an object (that invokes a request) with a request**
 3. **Implementing a request directly into a class is inflexible** - Couples the class to a particular request at compile-time
 
-### Решение
+### Solution
+
 
 Using the command design pattern describes the following solution:
 
@@ -38,7 +48,8 @@ Using the command design pattern describes the following solution:
 
 This enables one to configure a class with a command object that is used to perform a request. The class is no longer coupled to a particular request and has no knowledge of how the request is carried out.
 
-### Когда особенно полезен?
+### When is it especially useful?
+
 
 The Command Pattern is especially useful for:
 
@@ -275,7 +286,8 @@ class UserViewModel(
 }
 ```
 
-### Объяснение
+### Explanation
+
 
 **Explanation**:
 
@@ -299,6 +311,7 @@ Real Life Examples:
 
 ### Pros (Преимущества)
 
+
 1. **Decoupling** - Separates invoker from receiver
 2. **Reusability** - Commands can be reused and combined
 3. **Undo/Redo** - Easy to implement undo/redo
@@ -307,6 +320,7 @@ Real Life Examples:
 6. **Macro commands** - Combine multiple commands
 
 ### Cons (Недостатки)
+
 
 1. **Increased classes** - Each command needs a class
 2. **Complexity** - More complex for simple operations
@@ -368,3 +382,70 @@ class MacroCommand(private val commands: List<Command>) : Command {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+The Command Pattern is a behavioral design pattern that **turns a request into a stand-alone object that contains all the information about the request**. This transformation allows you to parameterize methods with different requests, queue requests, log their execution, and support undo operations. It decouples the object that invokes an action from the object that performs the action.
+
+### Проблемы, которые решает
+
+
+Using the command design pattern can solve these problems:
+
+1. **Coupling the invoker of a request to a particular request should be avoided** - Hard-wired requests should be avoided
+2. **It should be possible to configure an object (that invokes a request) with a request**
+3. **Implementing a request directly into a class is inflexible** - Couples the class to a particular request at compile-time
+
+### Решение
+
+
+Using the command design pattern describes the following solution:
+
+- Define separate **(command) objects that encapsulate a request**
+- A class **delegates a request to a command object** instead of implementing a particular request directly
+
+This enables one to configure a class with a command object that is used to perform a request. The class is no longer coupled to a particular request and has no knowledge of how the request is carried out.
+
+### When is it especially useful?
+
+
+The Command Pattern is especially useful for:
+
+1. **Decoupling** - Decouples the object that requests an operation (invoker) from the one that performs it (receiver)
+2. **Reusability** - Commands can be reused and combined in complex scenarios
+3. **History and Undo** - Allows for history and undo features (crucial in text editors, drawing apps)
+4. **Logging** - Commands can be logged for debugging and auditing purposes
+5. **Queueing** - Commands can be queued and executed later
+
+### Объяснение
+
+
+**Explanation**:
+
+- **Command interface** declares `execute()` method
+- **Concrete commands** encapsulate action and receiver
+- **Invoker** (RemoteControl, CommandManager) executes commands
+- **Receiver** (Light, TextEditor) performs the actual work
+- **Android**: Useful for undo/redo, action queuing, transaction management
+
+### Pros (Преимущества)
+
+
+1. **Decoupling** - Separates invoker from receiver
+2. **Reusability** - Commands can be reused and combined
+3. **Undo/Redo** - Easy to implement undo/redo
+4. **Logging** - Commands can be logged for auditing
+5. **Queueing** - Commands can be queued and executed later
+6. **Macro commands** - Combine multiple commands
+
+### Cons (Недостатки)
+
+
+1. **Increased classes** - Each command needs a class
+2. **Complexity** - More complex for simple operations
+3. **Memory overhead** - Storing command history uses memory
+4. **Indirection** - Extra layer of indirection

@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, jetpack-compose, semantics, accessibility, testing, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What are Semantics in Jetpack Compose? How are they used for accessibility and testing?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое Semantics в Jetpack Compose? Как они используются для доступности и тестирования?
 
 ---

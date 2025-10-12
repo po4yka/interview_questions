@@ -10,14 +10,20 @@ tags:
   - intent
   - system-events
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что известно про ресиверы и контент-провайдеры?
 
-**English**: What are BroadcastReceiver and ContentProvider?
+# Question (EN)
+> What are BroadcastReceiver and ContentProvider?
 
-## Answer
+# Вопрос (RU)
+> Что известно про ресиверы и контент-провайдеры?
+
+---
+
+## Answer (EN)
 
 Two important Android components for **system events** and **data sharing**.
 
@@ -125,7 +131,9 @@ cursor?.use {
 - **BroadcastReceiver**: Listens to system/app broadcasts via Intent
 - **ContentProvider**: Provides structured data access for inter-app communication
 
-## Ответ
+---
+
+## Ответ (RU)
 
 **BroadcastReceiver** принимает сообщения (интенты) от системы или приложений, например при смене сети или получении SMS.
 

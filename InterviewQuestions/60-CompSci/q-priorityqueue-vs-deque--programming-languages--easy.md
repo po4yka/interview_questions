@@ -8,14 +8,20 @@ tags:
   - programming-languages
   - queue
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какова разница между PriorityQueue и Deque?
 
-**English**: What is the difference between PriorityQueue and Deque?
+# Question (EN)
+> What is the difference between PriorityQueue and Deque?
 
-## Answer
+# Вопрос (RU)
+> Какова разница между PriorityQueue и Deque?
+
+---
+
+## Answer (EN)
 
 **PriorityQueue** is a data structure where elements are processed by priority instead of insertion order. Elements with higher priority are dequeued first, regardless of when they were added.
 
@@ -26,7 +32,9 @@ status: reviewed
 - **Access patterns**: PriorityQueue only allows access to the highest-priority element, Deque allows access from both ends
 - **Use cases**: PriorityQueue for task scheduling, event processing; Deque for implementing stacks, queues, or sliding window algorithms
 
-## Ответ
+---
+
+## Ответ (RU)
 
 PriorityQueue — структура данных, где элементы обрабатываются по приоритету вместо порядка добавления. Deque (двусторонняя очередь) позволяет добавлять и удалять элементы с обеих сторон, поддерживая поведение как стека, так и очереди.
 

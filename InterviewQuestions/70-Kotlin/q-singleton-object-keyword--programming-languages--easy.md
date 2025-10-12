@@ -2,15 +2,14 @@
 tags:
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # What keyword is used to create singleton objects in Kotlin?
 
 **English**: What keyword is used to create singleton objects (singleton) in Kotlin?
 
-## Answer
-
+## Answer (EN)
 The `object` keyword is used to create singleton objects in Kotlin.
 
 **Key characteristics:**
@@ -185,10 +184,9 @@ fun main() {
 
 ---
 
-## Ответ
-
-### Вопрос
+## Ответ (RU)
+# Вопрос (RU)
 Какой ключевое слово используется для создания объектов-одиночек (singleton) в Kotlin?
 
-### Ответ
+## Ответ (RU)
 object

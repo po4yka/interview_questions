@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to register BroadcastReceiver to receive messages?
 
-## Answer
-
+## Answer (EN)
 There are **two ways** to register a BroadcastReceiver in Android:
 
 1. **Dynamically in code** (Runtime registration) - Recommended for most cases
@@ -470,8 +469,7 @@ unregisterReceiver(receiver)
 - Consider modern alternatives: WorkManager, Flow, NetworkCallback
 - Use appropriate permissions for sensitive broadcasts
 
-## Ответ
-
+## Ответ (RU)
 Существует **два способа** регистрации BroadcastReceiver в Android:
 
 ### 1. Динамическая регистрация (Рекомендуется)

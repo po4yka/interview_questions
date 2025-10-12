@@ -5,15 +5,14 @@ tags:
   - performance
   - limitations
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Когда нельзя использовать inline функции?
 
 **English**: When can't you use inline functions?
 
-## Answer
-
+## Answer (EN)
 Хотя `inline` функции повышают производительность за счет встраивания кода, существуют случаи, когда их использование невозможно, нежелательно или даже вредно.
 
 ### 1. Нельзя сохранить лямбду в переменную

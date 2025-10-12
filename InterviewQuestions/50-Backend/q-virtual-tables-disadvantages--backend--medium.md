@@ -16,7 +16,7 @@ source: https://t.me/easy_kotlin/639
 source_note: easy_kotlin Telegram channel
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-backend
 related:
   - c-database-performance
@@ -29,9 +29,9 @@ updated: 2025-10-03
 # Tags
 tags: [database, virtual-tables, views, performance, difficulty/medium, easy_kotlin, lang/ru, backend]
 ---
-## Question (EN)
+# Question (EN)
 > What are the disadvantages of virtual tables
-## Вопрос (RU)
+# Вопрос (RU)
 > Какой минус есть у виртуальных таблиц
 
 ---

@@ -10,15 +10,14 @@ tags:
   - rest-api
   - retrofit
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как в Ретрофите в гет методе поставить атрибут в путь в конкретном месте?
 
 **English**: How to put a parameter in a specific place in the path for a GET method in Retrofit?
 
-## Answer
-
+## Answer (EN)
 In Retrofit, to pass a value into a specific place in the URL for a GET request, use the **`@Path`** annotation.
 
 **Steps:**
@@ -603,8 +602,7 @@ getPosts(@Path("id") id: String, @Query("page") page: Int)
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 В Retrofit, чтобы передать значение в определённое место URL-адреса для GET-запроса, используйте аннотацию **`@Path`**.
 
 **Шаги:**

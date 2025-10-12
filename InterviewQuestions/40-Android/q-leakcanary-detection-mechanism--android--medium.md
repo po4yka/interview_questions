@@ -9,15 +9,14 @@ tags:
   - memory-management
   - weakreference
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как LeakCanary понимает что произошла утечка памяти?
 
 **English**: How does LeakCanary understand that a memory leak occurred?
 
-## Answer
-
+## Answer (EN)
 LeakCanary detects memory leaks through the following process:
 
 **1. Integration with Component Lifecycle**
@@ -214,8 +213,7 @@ class MyViewModel : ViewModel() {
 4. **Leak Detection** - If WeakReference.get() != null → leak!
 5. **Heap Dump** - Creates dump for detailed analysis
 
-## Ответ
-
+## Ответ (RU)
 LeakCanary понимает, что произошла утечка памяти следующим образом:
 
 1. **Интеграция с жизненным циклом компонентов** - инструмент отслеживает уничтожение Activity и Fragment через наблюдателей

@@ -3,7 +3,7 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How does Compose render on screen?

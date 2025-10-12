@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What are Activity lifecycle methods and how do they work?
 
-## Answer
-
+## Answer (EN)
 Activity lifecycle methods are callback functions that the Android system calls at different stages of an Activity's life. Understanding these methods is crucial for proper resource management, state preservation, and creating a smooth user experience.
 
 ### The Activity Lifecycle
@@ -509,7 +508,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 }
 ```
 
-## Answer (RU)
+## Ответ (RU)
 
 Методы жизненного цикла Activity — это колбэк-функции, которые Android система вызывает на разных этапах жизни Activity. Понимание этих методов критически важно для правильного управления ресурсами, сохранения состояния и создания плавного пользовательского опыта.
 

@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Error Handling Differences: Launch vs Async
 
-## Answer
+# Question (EN)
+> Are errors handled differently in launch and async?
+
+# Вопрос (RU)
+> Обрабатываются ли ошибки по-разному в launch и async?
+
+---
+
+## Answer (EN)
 
 Yes, **errors (Exceptions) are handled differently** in launch and async:
 
@@ -348,10 +356,7 @@ class ErrorHandlingBestPractices {
 | **Best for** | Fire-and-forget | Operations with results |
 
 ---
-## Вопрос (RU)
 
-Есть ли отличия между launch и async в обработке ошибок
-
-## Ответ
+## Ответ (RU)
 
 Да, ошибки (Exceptions) обрабатываются по-разному в launch и async! Ошибки в `launch` – падают сразу. Launch сразу выбрасывает исключение, и если нет try-catch, корутина завершает родительский CoroutineScope. В `async` ошибка не выбрасывается сразу, а сохраняется в Deferred<T>. Она появится только при вызове await().

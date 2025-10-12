@@ -7,14 +7,20 @@ tags:
   - memory-management
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что такое Garbage Collector Roots?
 
-**English**: What are Garbage Collector Roots?
+# Question (EN)
+> What are Garbage Collector Roots?
 
-## Answer
+# Вопрос (RU)
+> Что такое Garbage Collector Roots?
+
+---
+
+## Answer (EN)
 
 **Garbage Collector (GC) Roots** are the starting points that the garbage collector uses to determine which objects are reachable (alive) and which can be garbage collected.
 
@@ -104,7 +110,9 @@ object Cache {
 
 GC Roots are the **starting points** for garbage collection. Objects reachable from GC Roots are **kept alive**. Objects not reachable are **garbage** and will be collected.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Garbage Collector Roots — это набор объектов, которые используются как отправные точки для определения достижимых объектов. Включают: локальные переменные активных потоков, статические поля классов и JNI ссылки.
 

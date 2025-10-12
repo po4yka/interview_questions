@@ -9,15 +9,14 @@ tags:
   - room
   - sqlite
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какие базы данных можно использовать в Android?
 
 **English**: What databases can be used in Android?
 
-## Answer
-
+## Answer (EN)
 Android applications can use **three main database options**: **SQLite**, **Room**, and **Realm**.
 
 ## 1. SQLite
@@ -341,7 +340,6 @@ val config = RealmConfiguration.Builder()
 
 **Recommendation:** Use **Room** for most Android projects. It provides the best balance of ease of use, performance, and integration with Android architecture components.
 
-## Ответ
-
+## Ответ (RU)
 В Android приложениях можно использовать SQLite, Room и Realm. SQLite является встроенной реляционной базой данных Android. Room предоставляет слой абстракции поверх SQLite и облегчает работу с базой данных. Realm - современная база данных для мобильных приложений.
 

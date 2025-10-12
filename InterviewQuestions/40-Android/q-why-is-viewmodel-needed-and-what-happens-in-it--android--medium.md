@@ -7,7 +7,7 @@ tags:
   - mvvm
   - architecture
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Why is ViewModel needed and what happens in it?

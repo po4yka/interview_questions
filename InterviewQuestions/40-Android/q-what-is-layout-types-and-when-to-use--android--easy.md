@@ -12,15 +12,14 @@ tags:
   - ui
   - xml
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое layout, какие их виды бывают и когда их использовать?
 
 **English**: What is layout, what types exist and when to use them?
 
-## Answer
-
+## Answer (EN)
 A **layout** is a way to define the user interface (UI) of an Android application. It describes how interface elements (widgets) are arranged and positioned on the screen. Layouts can be defined using XML files (most common) or programmatically in code.
 
 ### Common Layout Types
@@ -187,7 +186,6 @@ Arranges children in a grid structure.
 4. **Use include tags** for reusable layouts
 5. **Consider performance** when choosing layout types
 
-## Ответ
-
+## Ответ (RU)
 Это способ определения пользовательского интерфейса (UI) приложения, который описывает как элементы интерфейса виджеты располагаются на экране. Макеты задаются с помощью XML файлов или программно в коде. Виды: LinearLayout Располагает дочерние элементы в виде одной строки или столбца вертикально или горизонтально. Подходит для простых интерфейсов где элементы должны быть расположены один за другим. RelativeLayout Располагает дочерние элементы относительно друг друга или относительно родительского контейнера. Подходит для более сложных интерфейсов где элементы должны быть выровнены относительно других элементов ConstraintLayout Предоставляет гибкую систему ограничения для размещения элементов относительно друг друга и границ контейнера Это мощный и эффективный макет который заменяет сложные вложенные макеты Подходит для сложных интерфейсов где требуется точное позиционирование и выравнивание элементов
 

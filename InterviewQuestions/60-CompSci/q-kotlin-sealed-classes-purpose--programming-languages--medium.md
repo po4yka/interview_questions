@@ -7,14 +7,20 @@ tags:
   - type-hierarchy
   - when-expressions
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что такое sealed классы и зачем они нужны?
 
-**English**: What are sealed classes and why are they needed?
+# Question (EN)
+> What are sealed classes and why are they needed?
 
-## Answer
+# Вопрос (RU)
+> Что такое sealed классы и зачем они нужны?
+
+---
+
+## Answer (EN)
 
 Sealed classes in Kotlin allow **restricting the set of subclasses** that can be created for a class, providing a strict, closed hierarchy.
 
@@ -49,7 +55,40 @@ when (result) {
 - Better than using multiple nullable fields
 - Perfect for state machines, API responses, navigation
 
-## Ответ
+---
 
-Sealed классы в Kotlin позволяют ограничить набор подклассов, которые могут быть созданы для этого класса, обеспечивая строгую иерархию...
+## Ответ (RU)
+
+Sealed классы в Kotlin позволяют **ограничить набор подклассов**, которые могут быть созданы для класса, обеспечивая строгую, закрытую иерархию.
+
+**Зачем они нужны:**
+
+1. **Конечный набор состояний**: Идеально подходят для данных, которые могут иметь ограниченное число состояний
+```kotlin
+sealed class Result<out T> {
+    data class Success<T>(val data: T) : Result<T>()
+    data class Error(val message: String) : Result<Nothing>()
+    object Loading : Result<Nothing>()
+}
+```
+
+2. **Исчерпывающие when-выражения**: Компилятор проверяет, что все случаи охвачены
+```kotlin
+when (result) {
+    is Result.Success -> showData(result.data)
+    is Result.Error -> showError(result.message)
+    Result.Loading -> showLoading()
+    // 'else' не нужен - компилятор знает все случаи!
+}
+```
+
+3. **Типобезопасность**: Все возможные типы известны во время компиляции
+
+4. **Лучше, чем enum**: Могут иметь разные свойства и методы для каждого подкласса
+
+**Преимущества:**
+- Код более безопасен и понятен
+- Компилятор помогает отловить пропущенные случаи
+- Лучше, чем использовать несколько nullable полей
+- Идеально для конечных автоматов, ответов API, навигации
 

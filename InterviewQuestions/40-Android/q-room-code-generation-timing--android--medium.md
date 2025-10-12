@@ -10,15 +10,14 @@ tags:
   - ksp
   - room
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # В какой момент генерируется код при использовании SQLite?
 
 **English**: When is code generated when using SQLite/Room?
 
-## Answer
-
+## Answer (EN)
 If you use **Room** (ORM for SQLite), code is generated **at compile time** using **Annotation Processing** (**kapt**) or **KSP** (Kotlin Symbol Processing).
 
 **SQLite** itself does not generate code - it's a runtime database library. However, when using **Room** as an abstraction layer over SQLite, Room's annotation processor generates implementation code during compilation.
@@ -378,7 +377,6 @@ app/build/generated/ksp/debug/kotlin/
 
 **Room over SQLite:** Generates code at compile time via kapt/KSP
 
-## Ответ
-
+## Ответ (RU)
 Если используешь Room (ORM для SQLite), то код генерируется на этапе компиляции с помощью Annotation Processing (kapt) или KSP. Если используешь kapt (Annotation Processor) или KSP, то код генерируется во время компиляции.
 

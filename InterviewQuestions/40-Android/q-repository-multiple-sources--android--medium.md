@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, architecture, repository, data-layer, caching, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > How to implement Repository pattern with multiple data sources (network, database, cache)?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как реализовать паттерн Repository с несколькими источниками данных (сеть, БД, кэш)?
 
 ---

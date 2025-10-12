@@ -3,12 +3,20 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What needs to be done in Android project to start drawing UI on screen?
 
-## EN (expanded)
+# Question (EN)
+> What needs to be done in an Android project to start drawing UI on the screen?
+
+# Вопрос (RU)
+> Что нужно сделать в Android-проекте, чтобы начать рисовать UI на экране?
+
+---
+
+## Answer (EN)
 
 To start drawing UI on screen in an Android project, you need to follow several fundamental steps:
 
@@ -409,7 +417,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ---
 
-## RU (original)
+## Ответ (RU)
 
 Что нужно сделать в Android-проекте чтобы начать рисовать UI на экране?
 

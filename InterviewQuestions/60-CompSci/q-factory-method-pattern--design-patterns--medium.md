@@ -6,22 +6,31 @@ tags:
   - factory
   - gof-patterns
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Factory Method Pattern
 
-**English**: What is the Factory Method pattern? How does it differ from Abstract Factory?
+# Question (EN)
+> What is the Factory Method pattern? How does it differ from Abstract Factory?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Factory Method? Чем он отличается от Abstract Factory?
+
+---
+
+## Answer (EN)
+
 
 **Factory Method (Фабричный метод)** - это порождающий паттерн проектирования, который предоставляет интерфейс для создания объектов в суперклассе, но позволяет подклассам изменять тип создаваемых объектов.
 
-### Определение
+### Definition
+
 
 The Factory Method pattern is a creational design pattern that provides an interface for creating objects in a superclass but allows subclasses to alter the type of objects that will be created. It defines a method for creating objects, which subclasses can then override to change the type of objects that will be created.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 The factory method design pattern solves problems such as:
 
@@ -30,7 +39,8 @@ The factory method design pattern solves problems such as:
 
 This enables the creation of subclasses that can change the way in which an object is created (for example, by redefining which class to instantiate).
 
-### Когда использовать?
+### When to Use?
+
 
 **When to use Factory Method Design Pattern?**
 
@@ -98,7 +108,8 @@ Creator: Working with Product Type A
 Creator: Working with Product Type B
 ```
 
-### Объяснение
+### Explanation
+
 
 **Explanation**:
 
@@ -217,6 +228,7 @@ interface UIFactory {
 
 ### Pros (Преимущества)
 
+
 1. **Separates creation logic from client code** - Improving flexibility
 2. **New product types can be added easily** - Open/Closed Principle
 3. **Simplifies unit testing** - By allowing mock class creation
@@ -224,6 +236,7 @@ interface UIFactory {
 5. **Hides specific product classes from clients** - Reducing dependency
 
 ### Cons (Недостатки)
+
 
 1. **Adds more classes and interfaces** - Which can complicate maintenance
 2. **Slight performance impacts** - Due to polymorphism
@@ -306,3 +319,58 @@ sealed class Result<out T> {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+The Factory Method pattern is a creational design pattern that provides an interface for creating objects in a superclass but allows subclasses to alter the type of objects that will be created. It defines a method for creating objects, which subclasses can then override to change the type of objects that will be created.
+
+### Проблемы, которые решает
+
+
+The factory method design pattern solves problems such as:
+
+1. **How can an object's subclasses redefine its subsequent and distinct implementation?** The pattern involves creation of a factory method within the superclass that defers the object's creation to a subclass's factory method
+2. **How can an object's instantiation be deferred to a subclass?** Create an object by calling a factory method instead of directly calling a constructor
+
+This enables the creation of subclasses that can change the way in which an object is created (for example, by redefining which class to instantiate).
+
+### Когда использовать?
+
+
+**When to use Factory Method Design Pattern?**
+
+- A class **cannot predict the type** of objects it needs to create
+- A class wants its **subclasses to specify** the objects it creates
+- Classes **delegate responsibility** to one of multiple helper subclasses, and you aim to keep the information about which helper subclass is the delegate within a specific scope or location
+
+### Объяснение
+
+
+**Explanation**:
+
+- `Product` is an interface representing the **abstract product**
+- `ConcreteProductA` and `ConcreteProductB` are **concrete implementations** of the `Product`
+- `Creator` is an abstract class with an **abstract `factoryMethod`** which returns an object of type `Product`
+- `ConcreteCreatorA` and `ConcreteCreatorB` are **subclasses of Creator** that override the `factoryMethod` to produce `ConcreteProductA` and `ConcreteProductB` respectively
+- In the client code (`main` function), instead of directly instantiating the product, we use the concrete creators' `factoryMethod` to get the product
+
+### Pros (Преимущества)
+
+
+1. **Separates creation logic from client code** - Improving flexibility
+2. **New product types can be added easily** - Open/Closed Principle
+3. **Simplifies unit testing** - By allowing mock class creation
+4. **Centralizes object creation logic** - Across the application
+5. **Hides specific product classes from clients** - Reducing dependency
+
+### Cons (Недостатки)
+
+
+1. **Adds more classes and interfaces** - Which can complicate maintenance
+2. **Slight performance impacts** - Due to polymorphism
+3. **Clients need knowledge of specific subclasses** - To instantiate creators
+4. **May lead to unnecessary complexity** - If applied too broadly

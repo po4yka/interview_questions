@@ -6,14 +6,61 @@ tags:
   - bytecode
   - advanced
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Как делегаты работают на уровне компиляции?
 
-**English**: How do Kotlin delegates work at the compilation level?
+# Question (EN)
+> How do Kotlin delegates work at the compilation level? What bytecode and auxiliary structures are generated?
 
-## Answer
+# Вопрос (RU)
+> Как делегаты Kotlin работают на уровне компиляции? Какой bytecode и вспомогательные структуры генерируются?
+
+---
+
+## Answer (EN)
+
+Kotlin property delegates use the `by` keyword to delegate getter/setter logic to another object. At compilation level, the Kotlin compiler generates:
+
+1. **Hidden delegate field** (`property$delegate`) - stores the delegate instance
+2. **Property metadata** (`$$delegatedProperties` array) - contains `KProperty` objects with reflection metadata
+3. **Accessor methods** (getters/setters) - call `delegate.getValue()` and `delegate.setValue()`
+
+**Example:**
+```kotlin
+// Kotlin code
+class Example {
+    var value: String by StringDelegate()
+}
+
+// Compiles to (simplified Java):
+public final class Example {
+    private final StringDelegate value$delegate = new StringDelegate();
+
+    static final KProperty[] $$delegatedProperties = ...;
+
+    public final String getValue() {
+        return value$delegate.getValue(this, $$delegatedProperties[0]);
+    }
+
+    public final void setValue(String value) {
+        value$delegate.setValue(this, $$delegatedProperties[0], value);
+    }
+}
+```
+
+**Common delegates:**
+- `lazy`: Creates `Lazy` wrapper with synchronized initialization
+- `observable`: Creates `ObservableProperty` with change callback
+- `vetoable`: Creates `ObservableProperty` with validation
+- Map delegates: Use `MapsKt.getValue()` directly
+
+**Performance:** Delegated properties are ~10ns vs ~1ns for direct field access due to method calls and metadata passing.
+
+---
+
+## Ответ (RU)
 
 Kotlin property delegates (делегированные свойства) используют ключевое слово `by` для делегирования логики геттеров/сеттеров другому объекту. На уровне компиляции в Java компилятор Kotlin генерирует вспомогательные поля, классы и методы доступа.
 
@@ -492,5 +539,3 @@ class Delegated {
 // Normal.value (get):     ~1 ns
 // Delegated.value (get):  ~10 ns (из-за вызова метода + metadata)
 ```
-
-**English**: Kotlin property delegates compile to: 1) **Hidden delegate field** (`property$delegate`) storing delegate instance, 2) **Property metadata** (`$$delegatedProperties` array with `KProperty` objects), 3) **Accessor methods** (getters/setters) that call `delegate.getValue()` and `delegate.setValue()`. Compiler generates auxiliary classes and method calls. `lazy` creates `Lazy` wrapper with synchronized initialization. `observable` creates `ObservableProperty` with change callback. `provideDelegate` customizes delegate creation. Map delegates use map directly via `MapsKt.getValue()`. Performance overhead: ~10ns vs ~1ns for direct field access due to method calls and metadata passing.

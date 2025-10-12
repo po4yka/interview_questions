@@ -7,14 +7,20 @@ tags:
   - unit
   - void
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Сколько инстансов Unit на одно приложение
 
-**English**: How many Unit instances per application?
+# Question (EN)
+> How many Unit instances per application?
 
-## Answer
+# Вопрос (RU)
+> Сколько инстансов Unit на одно приложение
+
+---
+
+## Answer (EN)
 
 **Unit is a singleton** in Kotlin, meaning there is **only one Unit instance** per entire application.
 
@@ -57,7 +63,9 @@ fun method2() { }         // Same as above (Unit inferred)
 
 **Memory efficiency**: Since it's a singleton, no memory waste from multiple Unit objects.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Unit является синглтоном в Kotlin, то есть существует только один экземпляр Unit на всё приложение Это встроенный тип, используемый для обозначения отсутствия значимого значения
 

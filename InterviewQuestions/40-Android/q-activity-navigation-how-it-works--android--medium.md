@@ -9,14 +9,33 @@ tags:
   - lifecycle
   - navigation
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как работает навигация по Activity?
 
-**English**: How does Activity navigation work?
+# Question (EN)
+> How does Activity navigation work in Android?
 
-## Answer
+# Вопрос (RU)
+> Как работает навигация по Activity в Android?
+
+---
+
+## Answer (EN)
+
+Navigation between Activities in Android is managed through Intents, back stack, and task management.
+
+**Main mechanisms:**
+- **Explicit Intents**: Launch specific Activity by class name
+- **Implicit Intents**: Declare general operation, system chooses appropriate component
+- **Back Stack**: Manages Activity history (LIFO - last in, first out)
+- **Task Management**: Groups related Activities together
+- **Launch Modes**: Control how Activities are instantiated (standard, singleTop, singleTask, singleInstance)
+
+---
+
+## Ответ (RU)
 
 Navigation between different **Activities** in an Android application is an important aspect of managing the user interface flow. Each Activity can be viewed as **a separate screen** with its own user interface. Navigation between them allows users to move from one task to another.
 
@@ -353,7 +372,6 @@ findNavController().navigateUp()
 - Prefer Fragments over Activities for in-app navigation
 - Handle `onNewIntent()` when using SINGLE_TOP
 
-## Ответ
-
+## Ответ (RU)
 Навигация между различными Activity в Android-приложении представляет собой важный аспект управления потоком пользовательского интерфейса. Можно рассматривать как отдельный экран с пользовательским интерфейсом. Навигация между ними позволяет пользователям переходить от одного задания к другому. Основные механизмы навигации: Интенты (Intents): Явные интенты используются, когда вы знаете конкретное Activity которое хотите запустить. Они прямо указывают на класс Activity который необходимо открыть. Неявные интенты не указывают прямо на класс Activity вместо этого они объявляют общую операцию которую должно выполнить приложение и позволяют системе определить наиболее подходящий компонент для её выполнения. Жизненный цикл и управление переходами: Каждое имеет свой жизненный цикл который критически важен для правильной реализации навигации между активностями особенно когда нужно обрабатывать сохранение и восстановление данных. Закрытие Activity: Для возврата к предыдущему можно использовать finish(). Использование флагов интента: могут включать различные флаги для управления историей активностей и поведением переходов. Навигационные компоненты: Современные приложения на Android часто используют Navigation Component который упрощает реализацию навигации между фрагментами и активностями.
 

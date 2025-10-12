@@ -3,12 +3,20 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Can a service communicate with the user
 
-## Answer
+# Question (EN)
+> Can a service communicate with the user?
+
+# Вопрос (RU)
+> Может ли сервис взаимодействовать с пользователем?
+
+---
+
+## Answer (EN)
 
 A Service cannot directly interact with the user interface since it runs in the background without UI. However, it can communicate with users **indirectly** through several mechanisms.
 
@@ -350,7 +358,10 @@ class MainActivity : AppCompatActivity() {
 5. **Handle UI thread properly**: Use `runOnUiThread()` or `Handler`
 6. **Clean up callbacks**: Prevent memory leaks in bound services
 
-## Answer (RU)
+---
+
+## Ответ (RU)
+
 Сервис напрямую не взаимодействует с пользователем, так как он работает в фоновом режиме. Однако он может отправлять уведомления или использовать BroadcastReceiver для передачи информации Activity
 
 ## Related Topics

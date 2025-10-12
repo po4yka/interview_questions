@@ -8,15 +8,14 @@ tags:
   - view lifecycle
   - views
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как можно реализовать поведение view при ее добавлении в дерево?
 
 **English**: How to implement view behavior when it is added to the tree?
 
-## Answer
-
+## Answer (EN)
 To implement View behavior when it is added to the view tree in Android, you can use the **`View.onAttachedToWindow()`** method, which is called when a View is added to a window. This method allows you to perform actions when the View becomes visible to the user.
 
 ### Understanding View Attachment Lifecycle
@@ -372,7 +371,6 @@ override fun onAttachedToWindow() {
 | Track visibility | `onAttachedToWindow()` → visible, `onDetachedFromWindow()` → invisible |
 | Auto-refresh | `onAttachedToWindow()` → start timer, `onDetachedFromWindow()` → stop timer |
 
-## Ответ
-
+## Ответ (RU)
 Для реализации поведения View при её добавлении в дерево View в Android можно воспользоваться несколькими подходами. Один из наиболее удобных способов — использование метода View.onAttachedToWindow(), который вызывается, когда View добавляется в окно. Этот метод позволяет выполнять какие-либо действия, когда View становится видимой для пользователя. Пример использования: создайте пользовательский класс View и переопределите метод onAttachedToWindow() для выполнения необходимых действий при добавлении View в дерево.
 

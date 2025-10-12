@@ -11,14 +11,20 @@ tags:
   - strong-reference
   - weak-reference
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Все ли виды ссылок защищают объект от удаления?
 
-**English**: Do all types of references protect an object from deletion?
+# Question (EN)
+> Do all types of references protect an object from deletion?
 
-## Answer
+# Вопрос (RU)
+> Все ли виды ссылок защищают объект от удаления?
+
+---
+
+## Answer (EN)
 
 **No, not all reference types protect objects from garbage collection.**
 
@@ -140,7 +146,9 @@ fun example() {
 - **Soft Reference**: Protects until low memory
 - **Phantom Reference**: Does NOT protect (for post-GC cleanup)
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Нет, не все ссылки защищают объект от удаления. Strong Reference защищает объект, Weak Reference не защищает и позволяет удалить объект. Soft Reference удаляет объект только при нехватке памяти, а Phantom Reference используется для действий после удаления.
 

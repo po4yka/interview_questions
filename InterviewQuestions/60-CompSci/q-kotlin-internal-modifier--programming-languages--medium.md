@@ -7,14 +7,20 @@ tags:
   - programming-languages
   - visibility
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что известно про internal?
 
-**English**: What is known about internal?
+# Question (EN)
+> What is known about internal?
 
-## Answer
+# Вопрос (RU)
+> Что известно про internal?
+
+---
+
+## Answer (EN)
 
 `internal` is an access modifier for **module-level visibility**.
 
@@ -221,7 +227,9 @@ MyClass.processData$module_name();  // Mangled name
 - Useful for **multi-module architecture**
 - **Encapsulates** implementation details
 
-## Ответ
+---
+
+## Ответ (RU)
 
 `internal` — это уровень доступа для всего модуля. Модуль — это обычно компиляционная единица: одна сборка Gradle, Maven или IntelliJ.
 

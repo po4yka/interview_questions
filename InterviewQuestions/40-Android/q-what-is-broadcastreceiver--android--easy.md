@@ -7,13 +7,12 @@ tags:
   - system-events
   - intent
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # What is BroadcastReceiver?
 
-## Answer
-
+## Answer (EN)
 **BroadcastReceiver** is one of the fundamental Android components that allows applications to **receive and respond to system-wide or app-specific broadcast messages**. It acts as a listener for Intent broadcasts sent by the Android system or other applications.
 
 ### Core Concept
@@ -433,8 +432,7 @@ class AppUpdateReceiver : BroadcastReceiver() {
 - Use LocalBroadcastManager for internal broadcasts
 - Consider WorkManager for background tasks on Android 8.0+
 
-## Ответ
-
+## Ответ (RU)
 **BroadcastReceiver** - это один из фундаментальных компонентов Android, который позволяет приложениям **получать и реагировать на широковещательные сообщения** от системы или других приложений.
 
 ### Основная концепция

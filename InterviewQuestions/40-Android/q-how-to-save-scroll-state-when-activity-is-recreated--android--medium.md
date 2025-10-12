@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to save scroll state when Activity is recreated?
 
-## Answer
-
+## Answer (EN)
 When an Activity is recreated due to configuration changes or process death, scroll position in ScrollView or RecyclerView is reset. This can be prevented by saving and restoring scroll state.
 
 ### Method 1: ScrollView with onSaveInstanceState
@@ -390,7 +389,7 @@ class MainActivity : AppCompatActivity() {
 4. **Save in onPause()**: For ViewModel approach
 5. **Test process death**: Enable "Don't keep activities"
 
-## Answer (RU)
+## Ответ (RU)
 При пересоздании Activity состояние ScrollView или RecyclerView сбрасывается. Чтобы этого избежать, можно сохранить и восстановить позицию скролла. Использование onSaveInstanceState() позволяет сохранять данные в Bundle перед уничтожением Activity и восстанавливать их. Для RecyclerView можно использовать встроенный механизм сохранения состояния через LinearLayoutManager.
 
 ## Related Topics

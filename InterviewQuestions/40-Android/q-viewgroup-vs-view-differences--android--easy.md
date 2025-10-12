@@ -7,15 +7,14 @@ tags:
   - ui
   - view-hierarchy
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # What's ViewGroup? How are they different from Views?
 
 **Russian**: Что такое ViewGroup? Чем они отличаются от View?
 
-## Answer
-
+## Answer (EN)
 ### What is ViewGroup?
 
 A **ViewGroup** is a special view that can **contain other views** (called children). The view group is the base class for layouts and views containers. This class also defines the `ViewGroup.LayoutParams` class which serves as the base class for layouts parameters.

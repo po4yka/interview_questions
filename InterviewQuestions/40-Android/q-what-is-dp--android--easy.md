@@ -6,15 +6,14 @@ tags:
   - dp
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое dp?
 
 **English**: What is dp?
 
-## Answer
-
+## Answer (EN)
 ### Definition
 
 **dp** stands for **density-independent pixels**. It's a virtual unit of measurement that ensures consistent visual size of UI elements across screens with different pixel densities.
@@ -134,7 +133,6 @@ Using dp ensures:
 - **Predictable layout** that matches your design specifications
 - **Better user experience** with appropriately sized touch targets
 
-## Ответ
-
+## Ответ (RU)
 dp означает density-independent pixels или пиксели не зависящие от плотности Это виртуальная единица измерения которая используется для обеспечения одинакового визуального размера элементов пользовательского интерфейса на экранах с различной плотностью пикселей Это важно поскольку устройства Android могут иметь различные размеры и разрешения экранов и использование dp помогает создать консистентный пользовательский интерфейс на всех этих устройствах
 

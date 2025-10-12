@@ -2,15 +2,14 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is serialization?
 
 **English**: What is serialization in Kotlin and programming in general?
 
-## Answer
-
+## Answer (EN)
 Serialization is the process of converting an object into a stream of bytes to save its state or transmit it over a network. This is necessary to:
 - Store objects in files or databases
 - Transfer objects between different application components
@@ -368,10 +367,9 @@ fun main() {
 
 ---
 
-## Ответ
-
-### Вопрос
+## Ответ (RU)
+# Вопрос (RU)
 Что такое сериализация
 
-### Ответ
+## Ответ (RU)
 Сериализация – это процесс преобразования объекта в поток байтов для сохранения его состояния или передачи его через сеть. Это нужно, чтобы можно было хранить объекты в файлы, базы данных или передавать их между разными компонентами приложения или даже разными приложениями.

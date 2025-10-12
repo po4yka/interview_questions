@@ -9,14 +9,20 @@ tags:
   - programming-languages
   - secondary-constructor
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Расскажи про инициализаторы в классах в Kotlin
 
-**English**: Tell me about class initializers in Kotlin
+# Question (EN)
+> Tell me about class initializers in Kotlin
 
-## Answer
+# Вопрос (RU)
+> Расскажи про инициализаторы в классах в Kotlin
+
+---
+
+## Answer (EN)
 
 Kotlin has several initialization mechanisms:
 
@@ -103,7 +109,92 @@ class Example(val param: String) {
 - Init blocks run before secondary constructor body
 - Properties can be initialized in init blocks
 
-## Ответ
+---
 
-В Kotlin инициализаторы используются для выполнения кода при создании экземпляра класса. Первичный конструктор объявляется в заголовке класса и используется для основной инициализации. Вторичные конструкторы объявляются с помощью constructor...
+## Ответ (RU)
+
+В Kotlin есть несколько механизмов инициализации:
+
+### 1. Первичный конструктор (Primary Constructor)
+
+Объявляется в заголовке класса, используется для основной инициализации:
+
+```kotlin
+class Person(val name: String, val age: Int) {
+    // Свойства инициализируются из первичного конструктора
+}
+```
+
+### 2. Блоки init
+
+Выполняются при вызове первичного конструктора, может быть несколько:
+
+```kotlin
+class Person(val name: String) {
+    init {
+        println("First init block: $name")
+    }
+
+    val nameLength: Int
+
+    init {
+        nameLength = name.length
+        println("Second init block")
+    }
+}
+```
+
+### 3. Вторичные конструкторы (Secondary Constructors)
+
+Объявляются с ключевым словом `constructor`, должны вызывать первичный конструктор:
+
+```kotlin
+class Person(val name: String) {
+    var age: Int = 0
+
+    constructor(name: String, age: Int) : this(name) {
+        this.age = age
+    }
+}
+```
+
+**Порядок инициализации:**
+
+1. Параметры первичного конструктора
+2. Инициализаторы свойств (в порядке объявления)
+3. Блоки init (в порядке объявления)
+4. Тело вторичного конструктора
+
+**Пример, показывающий порядок:**
+```kotlin
+class Example(val param: String) {
+    val prop1 = "Property 1".also { println("1: $it") }
+
+    init {
+        println("2: First init block")
+    }
+
+    val prop2 = "Property 2".also { println("3: $it") }
+
+    init {
+        println("4: Second init block")
+    }
+
+    constructor(param: String, extra: String) : this(param) {
+        println("5: Secondary constructor")
+    }
+}
+
+// Вывод при вызове вторичного конструктора:
+// 1: Property 1
+// 2: First init block
+// 3: Property 2
+// 4: Second init block
+// 5: Secondary constructor
+```
+
+**Важные правила:**
+- Если есть первичный конструктор, вторичный должен вызвать его через `this(...)`
+- Блоки init выполняются до тела вторичного конструктора
+- Свойства могут быть инициализированы в блоках init
 

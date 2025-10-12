@@ -8,15 +8,14 @@ tags:
   - build-optimization
   - performance
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Оптимизация времени сборки с Dagger
 
 **English**: How to minimize Dagger's impact on build time?
 
-## Answer
-
+## Answer (EN)
 Для минимизации влияния Dagger на время сборки можно воспользоваться несколькими стратегиями и практиками, которые помогут оптимизировать процесс компиляции.
 
 ### 1. Использование Hilt вместо Dagger

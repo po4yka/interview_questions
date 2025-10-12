@@ -7,14 +7,20 @@ tags:
   - memory-management
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что происходит с объектами, которые больше не нужны?
 
-**English**: What happens to objects that are no longer needed?
+# Question (EN)
+> What happens to objects that are no longer needed?
 
-## Answer
+# Вопрос (RU)
+> Что происходит с объектами, которые больше не нужны?
+
+---
+
+## Answer (EN)
 
 Objects that are no longer needed are **automatically deleted by the garbage collector (GC)**, freeing memory for new objects.
 
@@ -159,7 +165,9 @@ Unneeded objects (no active references) are:
 
 This is automatic memory management in Kotlin/Java!
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Объекты, которые больше не имеют активных ссылок, считаются мусором. Такие объекты автоматически удаляются сборщиком мусора, освобождая память для новых объектов. Это происходит в фоновом режиме и не требует прямого вмешательства разработчика.
 

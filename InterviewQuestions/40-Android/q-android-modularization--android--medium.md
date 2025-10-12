@@ -8,14 +8,20 @@ tags:
   - gradle
   - difficulty/medium
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Android Modularization / Модуляризация Android
 
-**English**: Describe Android modularization in general
+# Question (EN)
+> Describe Android modularization in general
 
-## Answer
+# Вопрос (RU)
+> Опишите модуляризацию Android в целом
+
+---
+
+## Answer (EN)
 
 **Android modularization** is a practice of organizing a codebase into **loosely coupled and self-contained parts** where each part is a module. A project with multiple Gradle modules is known as a **multi-module project**.
 
@@ -81,7 +87,9 @@ app/
 
 **Source**: [Guide to Android app modularization](https://developer.android.com/topic/modularization)
 
-## Ответ
+---
+
+## Ответ (RU)
 
 **Модуляризация Android** — это практика организации кодовой базы на слабо связанные и самодостаточные части, где каждая часть является модулем. Проект с несколькими модулями Gradle называется многомодульным проектом.
 

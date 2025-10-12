@@ -16,7 +16,7 @@ source: ""
 source_note: ""
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,11 +26,10 @@ updated: 2025-10-06
 
 tags: [kotlin, access-modifiers, visibility, encapsulation, oop, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What are access modifiers in Kotlin and how do they differ from Java?
 
-## Answer
-
+## Answer (EN)
 Access modifiers are keywords that define who can see and use a class, variable, or method. They help encapsulate data and protect code from improper use.
 
 **Kotlin access modifiers:**
@@ -390,7 +389,7 @@ fun main() {
 
 ---
 
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое модификаторы доступа в Kotlin и чем они отличаются от Java?
 
 ## Ответ (RU)

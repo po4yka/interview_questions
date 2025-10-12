@@ -9,7 +9,7 @@ tags:
   - services
   - workmanager
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Why are there restrictions on starting services?
@@ -18,8 +18,7 @@ status: reviewed
 
 **English**: Why are there restrictions on starting services?
 
-## Answer
-
+## Answer (EN)
 Service restrictions are related to **battery optimization** and **performance**:
 
 1. **Battery life** - Long-running background services drain battery
@@ -506,8 +505,7 @@ startForegroundService(Intent(this, MyService::class.java))
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Ограничения на запуск сервисов связаны с **оптимизацией энергопотребления** и **производительности**:
 
 1. **Батарея** - Долгоживущие фоновые сервисы разряжают батарею

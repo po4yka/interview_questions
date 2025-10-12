@@ -8,12 +8,21 @@ difficulty: medium
 related:
   - composite-pattern
   - visitor-pattern
-status: reviewed
+status: draft
 ---
 
 # Iterator Pattern / Паттерн Итератор
 
-## English
+# Question (EN)
+> What is the Iterator pattern?
+
+# Вопрос (RU)
+> Что такое паттерн Итератор?
+
+---
+
+## Answer (EN)
+
 
 ### Definition
 The Iterator design pattern is a behavioral design pattern that provides a way to access the elements of an aggregate object (like a list) sequentially without exposing its underlying representation. It defines a separate object, called an iterator, which encapsulates the details of traversing the elements of the aggregate, allowing the aggregate to change its internal structure without affecting the way its elements are accessed.
@@ -122,7 +131,9 @@ Clean Code
 
 ---
 
-## Русский
+
+
+## Ответ (RU)
 
 ### Определение
 Паттерн проектирования Итератор - это поведенческий паттерн проектирования, который предоставляет способ последовательного доступа к элементам агрегатного объекта (например, списка) без раскрытия его внутреннего представления. Он определяет отдельный объект, называемый итератором, который инкапсулирует детали обхода элементов агрегата, позволяя агрегату изменять свою внутреннюю структуру, не влияя на способ доступа к его элементам.

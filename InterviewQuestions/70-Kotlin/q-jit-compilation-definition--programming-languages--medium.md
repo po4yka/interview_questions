@@ -10,15 +10,14 @@ tags:
   - performance
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что такое JIT?
 
 **English**: What is JIT?
 
-## Answer
-
+## Answer (EN)
 **JIT (Just-In-Time compilation)** is a technology where **bytecode is compiled into machine code during runtime** (while the program is executing), rather than before execution.
 
 ## How It Works
@@ -455,7 +454,6 @@ process("hello")
 
 **Best for:** Long-running applications that benefit from runtime profiling and adaptive optimization.
 
-## Ответ
-
+## Ответ (RU)
 JIT (Just-In-Time compilation) — технология, при которой байткод компилируется в машинный код прямо во время выполнения. Плюсы: повышение производительности на часто вызываемом коде и гибкая оптимизация под конкретное устройство. Используется в Java, Dalvik и некоторых JavaScript-движках.
 

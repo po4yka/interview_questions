@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, gradle, kotlin-dsl, groovy, build-tools, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What are the differences between Gradle Kotlin DSL and Groovy? When to use each?
-## Вопрос (RU)
+# Вопрос (RU)
 > Какие различия между Gradle Kotlin DSL и Groovy? Когда использовать каждый?
 
 ---

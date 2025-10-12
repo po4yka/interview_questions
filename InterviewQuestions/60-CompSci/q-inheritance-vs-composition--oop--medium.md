@@ -10,14 +10,20 @@ tags:
   - is-a
   - oop
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие отличия наследования от композиции?
 
-**English**: What are the differences between inheritance and composition?
+# Question (EN)
+> What are the differences between inheritance and composition?
 
-## Answer
+# Вопрос (RU)
+> Какие отличия наследования от композиции?
+
+---
+
+## Answer (EN)
 
 **Inheritance** is when one class **extends** another, inheriting its behavior (IS-A relationship).
 
@@ -526,7 +532,7 @@ Composition is considered **more flexible and less coupled** than inheritance, m
 
 ---
 
-## Ответ
+## Ответ (RU)
 
 **Наследование** — это когда один класс расширяет другой, наследуя его поведение (отношение IS-A).
 

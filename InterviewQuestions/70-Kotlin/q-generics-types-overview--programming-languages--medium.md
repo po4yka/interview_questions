@@ -8,14 +8,20 @@ tags:
   - type-parameters
   - variance
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие виды дженериков есть?
 
-**English**: What types of generics exist?
+# Question (EN)
+> What types of generics exist in Kotlin and Java?
 
-## Answer
+# Вопрос (RU)
+> Какие виды дженериков существуют в Kotlin и Java?
+
+---
+
+## Answer (EN)
 
 Generics come in several forms:
 
@@ -96,7 +102,86 @@ List     // Java - raw type (deprecated)
 | Contravariance | Consumer | `in T` |
 | Star projection | Unknown type | `List<*>` |
 
-## Ответ
+---
 
-- Обобщённые классы class Box<T> \\- Обобщённые методы <T> void print(T t) \\- Ограничения extends, super — для указания границ типов \\- Сырые типы List без параметра — deprecated
+## Ответ (RU)
+
+Дженерики существуют в нескольких формах:
+
+### 1. Обобщённые классы (Generic Classes)
+Классы с параметрами типа:
+```kotlin
+class Box<T>(val value: T)
+
+val intBox = Box<Int>(42)
+val stringBox = Box("Hello")
+```
+
+### 2. Обобщённые методы/функции (Generic Methods/Functions)
+Методы с собственными параметрами типа:
+```kotlin
+fun <T> identity(value: T): T {
+    return value
+}
+
+fun <T> List<T>.second(): T {
+    return this[1]
+}
+```
+
+### 3. Ограничения типов (Type Bounds/Constraints)
+
+**Верхние границы** (`extends` в Java, `:` в Kotlin):
+```kotlin
+// Kotlin
+fun <T : Number> sum(a: T, b: T): Double {
+    return a.toDouble() + b.toDouble()
+}
+
+// Java
+<T extends Number> double sum(T a, T b)
+```
+
+**Множественные границы:**
+```kotlin
+fun <T> process(value: T)
+    where T : Comparable<T>,
+          T : Serializable {
+    // T должен реализовывать оба интерфейса
+}
+```
+
+### 4. Аннотации вариантности (Variance Annotations)
+
+**Ковариантность** (`out` в Kotlin, `extends` в Java):
+```kotlin
+interface Producer<out T> {  // Может только производить T
+    fun produce(): T
+}
+```
+
+**Контравариантность** (`in` в Kotlin, `super` в Java):
+```kotlin
+interface Consumer<in T> {   // Может только потреблять T
+    fun consume(item: T)
+}
+```
+
+### 5. Звездочная проекция (Star Projection) / Сырые типы (Raw Types)
+```kotlin
+List<*>  // Kotlin - звездочная проекция
+List     // Java - сырой тип (deprecated)
+```
+
+**Резюме:**
+
+| Тип | Назначение | Пример |
+|------|---------|---------|
+| Обобщённый класс | Параметризованный класс | `Box<T>` |
+| Обобщённый метод | Параметризованный метод | `<T> T identity(T)` |
+| Верхняя граница | Ограничение подтипом | `<T : Number>` |
+| Нижняя граница | Только в Java | `<T super Integer>` |
+| Ковариантность | Производитель | `out T` |
+| Контравариантность | Потребитель | `in T` |
+| Звездочная проекция | Неизвестный тип | `List<*>` |
 

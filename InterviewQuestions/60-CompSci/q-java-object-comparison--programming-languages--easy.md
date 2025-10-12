@@ -7,14 +7,20 @@ tags:
   - object-comparison
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как сравниваются объекты в Java?
 
-**English**: How are objects compared in Java?
+# Question (EN)
+> How are objects compared in Java?
 
-## Answer
+# Вопрос (RU)
+> Как сравниваются объекты в Java?
+
+---
+
+## Answer (EN)
 
 Java provides **two ways** to compare objects:
 
@@ -153,7 +159,9 @@ class Bad {
 - When overriding `.equals()`, **always override `.hashCode()`**
 - Follow the equals/hashCode **contract** for correct behavior
 
-## Ответ
+---
+
+## Ответ (RU)
 
 По умолчанию через `==` — сравнение ссылок (адресов). Через `.equals()` — логическое сравнение содержимого. При переопределении `.equals()` рекомендуется также переопределить `.hashCode()`.
 

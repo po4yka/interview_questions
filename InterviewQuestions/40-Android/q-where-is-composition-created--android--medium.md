@@ -6,13 +6,12 @@ tags:
   - compose
   - composition
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Where is composition created for calling composable functions?
 
-## Answer
-
+## Answer (EN)
 Composition is created inside the **setContent** function, which sets the entry point for composable functions in Activity or Fragment. It initiates interface rendering and state management.
 
 ### setContent in Activity
@@ -113,6 +112,5 @@ fun CompositionLifecycle() {
 
 # Где создается композиция для вызова composable функции
 
-## Ответ
-
+## Ответ (RU)
 Композиция создаётся внутри функции setContent, которая задает точку входа для composable функций в Activity или Fragment. Она инициирует рендеринг интерфейса и управление состоянием.

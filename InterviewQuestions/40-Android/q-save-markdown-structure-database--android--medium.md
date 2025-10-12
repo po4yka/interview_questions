@@ -10,15 +10,14 @@ tags:
   - serialization
   - storage
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как бы ты сохранил структуру Markdown в базу данных/на диск?
 
 **English**: How would you save Markdown structure to a database/disk?
 
-## Answer
-
+## Answer (EN)
 Saving Markdown structure depends on your application's goals. There are several approaches with different trade-offs.
 
 ## Approach 1: Store as Plain Text (Simplest)
@@ -471,7 +470,6 @@ class MarkdownRepository(
 - **Complex app**: Hybrid - raw Markdown + HTML cache + metadata
 - **Large documents**: File storage + database index
 
-## Ответ
-
+## Ответ (RU)
 Сохранение структуры Markdown зависит от целей приложения. Варианты: хранить как обычный текст в базе или файле, парсить Markdown в JSON и сохранять структуру с помощью Room + TypeConverter или конвертировать Markdown в HTML и хранить. Примеры кода на Kotlin/Android с использованием SQLite, Room и файлового хранения.
 

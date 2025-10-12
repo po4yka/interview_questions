@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What does the Lifecycle library do?
 
-## Answer
-
+## Answer (EN)
 The **Lifecycle library** provides classes and interfaces to build **lifecycle-aware components** that automatically adjust their behavior based on the current lifecycle state of Activities and Fragments. It helps prevent memory leaks, crashes, and improves code organization.
 
 ### Core Components

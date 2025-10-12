@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: [q-kotlin-coroutines-introduction--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium]
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, coroutines, suspend, blocking, concurrency, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What is the difference between suspending and blocking in Kotlin?
-## Вопрос (RU)
+# Вопрос (RU)
 > В чем разница между приостанавливающими (suspending) и блокирующими (blocking) функциями в Kotlin?
 
 ---

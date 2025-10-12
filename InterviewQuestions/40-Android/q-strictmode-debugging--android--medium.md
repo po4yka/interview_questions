@@ -12,7 +12,7 @@ subtopics:
   - performance-rendering
   - debugging
 difficulty: medium
-status: reviewed
+status: draft
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20StrictMode.md
 ---
 
@@ -22,8 +22,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/An
 
 **Russian**: Что такое StrictMode?
 
-## Answer
-
+## Answer (EN)
 `StrictMode` is a developer tool which detects things you might be doing by accident and brings them to your attention so you can fix them.
 
 `StrictMode` is most commonly used to catch accidental disk or network access on the application's main thread, where UI operations are received and animations take place. Keeping disk and network operations off the main thread makes for much smoother, more responsive applications. By keeping your application's main thread responsive, you also prevent ANR dialogs from being shown to users.
@@ -287,8 +286,7 @@ fun getUsers(): List<User> {
 }
 ```
 
-## Ответ
-
+## Ответ (RU)
 `StrictMode` - это инструмент разработчика, который обнаруживает вещи, которые вы можете делать случайно, и обращает на них ваше внимание, чтобы вы могли их исправить.
 
 `StrictMode` чаще всего используется для обнаружения случайного доступа к диску или сети в основном потоке приложения, где принимаются операции UI и происходят анимации. Вынос дисковых и сетевых операций из основного потока делает приложения более плавными и отзывчивыми. Сохраняя основной поток вашего приложения отзывчивым, вы также предотвращаете показ диалогов ANR пользователям.

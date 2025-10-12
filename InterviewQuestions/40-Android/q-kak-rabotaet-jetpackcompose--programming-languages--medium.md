@@ -3,13 +3,12 @@ tags:
   - programming-languages
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как работает jetpackCompose?
 
-## Answer
-
+## Answer (EN)
 Jetpack Compose is Google's modern declarative UI toolkit for building native Android interfaces. Instead of XML layouts and imperative View manipulation, Compose uses composable functions to describe the UI.
 
 ### Core Principles
@@ -471,6 +470,5 @@ The magic is in the **smart recomposition** - Compose only re-executes functions
 
 # Как работает jetpackCompose?
 
-## Ответ
-
+## Ответ (RU)
 Jetpack Compose – это декларативный UI-фреймворк от Google для создания интерфейсов в Android. Вместо традиционных XML + View в Compose используется функции-компоненты, которые описывают UI. Главные принципы работы Jetpack Compose: декларативный подход – UI создаётся через функции, без XML. Реактивность – UI автоматически обновляется, если данные изменились. Компонентный подход – UI состоит из маленьких, переиспользуемых функций. Composable-функции (@Composable) – основной строительный блок Compose.

@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, lateinit, properties, initialization, null-safety, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What do you know about `lateinit` in Kotlin?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что вы знаете о `lateinit` в Kotlin?
 
 ---

@@ -6,17 +6,16 @@ tags:
   - android
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is DiffUtil for?
 
-## Question (RU)
+# Вопрос (RU)
 
 Зачем нужен DiffUtil?
 
-## Answer
-
+## Answer (EN)
 **DiffUtil** is a utility class in Android that calculates the difference between two lists and outputs a list of update operations that convert the first list into the second one. It's primarily used with RecyclerView to efficiently update only changed items instead of refreshing the entire list.
 
 ### Why Use DiffUtil?
@@ -471,6 +470,6 @@ class GoodAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
 | AsyncListDiffer | Background thread calculation |
 | Payloads | Partial updates for better performance |
 
-## Answer (RU)
+## Ответ (RU)
 
 DiffUtil — это утилита для быстрого обновления списков в RecyclerView. Она сравнивает старый и новый список и находит различия, чтобы обновлять только изменённые элементы, а не весь список.

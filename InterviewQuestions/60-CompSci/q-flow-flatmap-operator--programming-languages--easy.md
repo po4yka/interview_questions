@@ -8,14 +8,20 @@ tags:
   - programming-languages
   - reactive
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Чем воспользоваться если нужно преобразовать один поток данных в другой поток данных
 
-**English**: What to use if you need to transform one data stream into another data stream?
+# Question (EN)
+> What to use if you need to transform one data stream into another data stream?
 
-## Answer
+# Вопрос (RU)
+> Чем воспользоваться если нужно преобразовать один поток данных в другой поток данных?
+
+---
+
+## Answer (EN)
 
 Use the **flatMap** operator. It transforms elements from one stream into another stream.
 
@@ -37,7 +43,9 @@ flow {
 - `flatMapMerge` - concurrent processing
 - `flatMapLatest` - cancel previous when new arrives
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Используйте оператор flatMap. Преобразует элементы из одного потока в другой поток Пример из потока URL в поток содержимого страниц
 

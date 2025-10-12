@@ -9,15 +9,14 @@ tags:
   - data-binding
   - lifecycle
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # MVVM Pattern
 
 **English**: What is the MVVM (Model-View-ViewModel) architectural pattern? Explain its components and advantages.
 
-## Answer
-
+## Answer (EN)
 **MVVM (Model-View-ViewModel)** - архитектурный паттерн, который обеспечивает разделение разработки пользовательского интерфейса от бизнес-логики или backend-логики (модели), так что представление не зависит от какой-либо конкретной платформы модели.
 
 ### Компоненты MVVM

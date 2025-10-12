@@ -11,15 +11,14 @@ tags:
   - performance
   - xml
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Где можно оптимизировать парсинг?
 
 **English**: Where can parsing be optimized?
 
-## Answer
-
+## Answer (EN)
 **1. Use Streaming Processing**
 
 Use XmlPullParser instead of DOM for XML.
@@ -221,8 +220,7 @@ parserparseStream(stream).collect { item ->
 5. Parse large lists lazily
 6. Parse on background thread
 
-## Ответ
-
+## Ответ (RU)
 1. Использовать потоковую обработку (например, XmlPullParser вместо DOM)
 2. Уменьшить количество преобразований строк
 3. Кешировать результаты парсинга для повторного использования

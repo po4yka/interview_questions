@@ -8,15 +8,14 @@ tags:
   - livedata
   - workmanager
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как вернуть результат работы WorkManager в приложение?
 
 **English**: How to return a result from WorkManager to the app?
 
-## Answer
-
+## Answer (EN)
 To return a result from **WorkManager**, use:
 
 1. **`Result.success(outputData)`** in Worker to return data
@@ -584,8 +583,7 @@ workManager.getWorkInfoByIdLiveData(workRequest.id)
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Чтобы вернуть результат из **WorkManager**:
 
 1. **В Worker:** Возвращаем `Result.success(outputData)` с данными

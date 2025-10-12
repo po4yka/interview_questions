@@ -9,15 +9,14 @@ tags:
   - touch-events
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какое событие вызывается при нажатии юзера по экрану?
 
 **English**: Which event is triggered when user presses on screen?
 
-## Answer
-
+## Answer (EN)
 When a user presses on the screen in Android, the **ACTION_DOWN** event is triggered via **MotionEvent**.
 
 ### Touch Event Sequence
@@ -111,7 +110,6 @@ view.setOnTouchListener { v, event ->
 }
 ```
 
-## Ответ
-
+## Ответ (RU)
 В Android при нажатии пользователя на экран вызывается событие ACTION_DOWN.
 

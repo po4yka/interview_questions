@@ -12,7 +12,7 @@ subtopics:
   - storage
   - serialization
 difficulty: medium
-status: reviewed
+status: draft
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20you%20know%20about%20DataStore.md
 ---
 
@@ -22,8 +22,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/An
 
 **Russian**: Что вы знаете о DataStore?
 
-## Answer
-
+## Answer (EN)
 Jetpack DataStore is a data storage solution that allows you to store key-value pairs or typed objects with protocol buffers. DataStore uses Kotlin coroutines and Flow to store data asynchronously, consistently, and transactionally.
 
 ## Preferences DataStore and Proto DataStore
@@ -171,8 +170,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 This way, DataStore asynchronously reads the data and caches it in memory. Later synchronous reads using `runBlocking()` may be faster or may avoid a disk I/O operation altogether if the initial read has completed.
 
-## Ответ
-
+## Ответ (RU)
 Jetpack DataStore - это решение для хранения данных, которое позволяет сохранять пары ключ-значение или типизированные объекты с использованием protocol buffers. DataStore использует Kotlin корутины и Flow для асинхронного, согласованного и транзакционного хранения данных.
 
 ### Preferences DataStore и Proto DataStore

@@ -7,14 +7,20 @@ tags:
   - switch
   - when
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как использовать when в Kotlin вместо switch?
 
-**English**: How to use when in Kotlin instead of switch?
+# Question (EN)
+> How to use when in Kotlin instead of switch?
 
-## Answer
+# Вопрос (RU)
+> Как использовать when в Kotlin вместо switch?
+
+---
+
+## Answer (EN)
 
 `when` in Kotlin replaces Java's `switch` statement and is **much more powerful**.
 
@@ -92,7 +98,9 @@ val result = when (val x = getValue()) {
 - Supports ranges and type checks
 - Exhaustive checking with sealed classes
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Kotlin оператор when заменяет switch и позволяет проверять значения. Пример: fun getDayName(day: Int): String { return when (day) { 1 -> "Понедельник" ... } } Также можно использовать when без аргумента и проверять логические выражения.
 

@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, operators, overloading, conventions, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What do you know about operator overloading in Kotlin?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что вы знаете о перегрузке операторов в Kotlin?
 
 ---

@@ -10,17 +10,16 @@ tags:
   - ui
   - jetpack-compose
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What are the most important components of Compose?
 
-## Question (RU)
+# Вопрос (RU)
 
 Из каких более важных компонентов состоит Compose
 
-## Answer
-
+## Answer (EN)
 Jetpack Compose consists of several core components that work together to create a declarative UI framework. Understanding these components is essential for effective Compose development.
 
 ### 1. Composable Functions
@@ -592,6 +591,6 @@ The most important Compose components:
 9. **Navigation** - Screen transitions
 10. **Animations** - Built-in animation support
 
-## Answer (RU)
+## Ответ (RU)
 
 Compose состоит из следующих более важных компонентов: Composable функции, которые описывают UI; State управляет состоянием компонентов; Modifiers применяются для настройки внешнего вида и поведения; Layouts определяют структуру расположения элементов на экране и Recomposition механизм обновления интерфейса при изменении состояния

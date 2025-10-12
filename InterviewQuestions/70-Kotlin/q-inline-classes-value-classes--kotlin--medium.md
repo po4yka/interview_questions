@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: [q-type-aliases--kotlin--medium]
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, inline-class, value-class, performance, optimization, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What are inline classes (value classes) in Kotlin?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое встроенные классы (value классы) в Kotlin?
 
 ---

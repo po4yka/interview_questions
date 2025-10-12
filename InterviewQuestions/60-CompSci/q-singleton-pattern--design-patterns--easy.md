@@ -5,22 +5,31 @@ tags:
   - singleton
   - gof-patterns
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Singleton Pattern
 
-**English**: What is the Singleton pattern? When and why should it be used?
+# Question (EN)
+> What is the Singleton pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Singleton? Когда и зачем его использовать?
+
+---
+
+## Answer (EN)
+
 
 **Singleton (Одиночка)** - это порождающий паттерн проектирования, который гарантирует, что класс имеет только один экземпляр, и предоставляет глобальную точку доступа к этому экземпляру.
 
-### Определение
+### Definition
+
 
 Singleton pattern is a software design pattern that **restricts the instantiation of a class to one "single" instance**. This is useful when exactly one object is needed to coordinate actions across the system. The term comes from the mathematical concept of a singleton.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 The singleton design pattern solves problems like:
 
@@ -29,7 +38,8 @@ The singleton design pattern solves problems like:
 3. **How can a class control its instantiation?**
 4. **How can the number of instances of a class be restricted?**
 
-### Решение
+### Solution
+
 
 To create the singleton class, we need to have:
 
@@ -112,7 +122,8 @@ class CacheManager private constructor() {
 }
 ```
 
-### Объяснение примера
+### Example Explanation
+
 
 **Explanation**:
 
@@ -136,6 +147,7 @@ Common uses:
 
 ### Pros (Преимущества)
 
+
 1. **Controlled access** - Provides controlled access to the sole instance
 2. **Memory efficiency** - Saves memory as only one instance exists
 3. **Global access point** - Easy access from anywhere in the application
@@ -143,6 +155,7 @@ Common uses:
 5. **Thread safety** - Can be implemented to be thread-safe
 
 ### Cons (Недостатки)
+
 
 1. **Global state** - Creates global state which can make testing difficult
 2. **Hidden dependencies** - Classes using singleton have hidden dependencies
@@ -182,6 +195,71 @@ class MyRepository(private val api: ApiService) // Injected, not singleton
 ```
 
 **English**: **Singleton** is a creational design pattern that ensures a class has only one instance and provides global access to it. **Problem**: Need to ensure only one instance exists and provide easy access. **Solution**: Private constructor, static instance, and static factory method. **Use when**: (1) Exactly one instance is needed, (2) Instance must be accessible globally, (3) Lazy initialization is desired. **Kotlin**: Use `object` declaration or companion object with lazy initialization. **Pros**: controlled access, memory efficient, global access. **Cons**: global state, hidden dependencies, difficult to test. **Examples**: Database helper, network manager, configuration, analytics tracker.
+
+---
+
+
+
+## Ответ (RU)
+
+### Определение
+
+
+Singleton pattern is a software design pattern that **restricts the instantiation of a class to one "single" instance**. This is useful when exactly one object is needed to coordinate actions across the system. The term comes from the mathematical concept of a singleton.
+
+### Проблемы, которые решает
+
+
+The singleton design pattern solves problems like:
+
+1. **How can it be ensured that a class has only one instance?**
+2. **How can the sole instance of a class be accessed easily?**
+3. **How can a class control its instantiation?**
+4. **How can the number of instances of a class be restricted?**
+
+### Решение
+
+
+To create the singleton class, we need to have:
+
+- **Static member**: It gets memory only once because of static, it contains the instance of the Singleton class
+- **Private constructor**: It will prevent to instantiate the Singleton class from outside the class
+- **Static factory method**: This provides the global point of access to the Singleton object and returns the instance to the caller
+
+### Объяснение примера
+
+
+**Explanation**:
+
+- **Object declaration** in Kotlin automatically creates a thread-safe singleton
+- **Companion object** with lazy initialization provides thread-safe singleton with double-checked locking
+- **`@Volatile`** ensures visibility of changes to the instance variable across threads
+- **`synchronized`** block ensures only one thread can create the instance
+- **`by lazy`** delegate provides built-in thread-safe lazy initialization
+
+### Pros (Преимущества)
+
+
+1. **Controlled access** - Provides controlled access to the sole instance
+2. **Memory efficiency** - Saves memory as only one instance exists
+3. **Global access point** - Easy access from anywhere in the application
+4. **Lazy initialization** - Instance can be created when first needed
+5. **Thread safety** - Can be implemented to be thread-safe
+
+### Cons (Недостатки)
+
+
+1. **Global state** - Creates global state which can make testing difficult
+2. **Hidden dependencies** - Classes using singleton have hidden dependencies
+3. **Violates Single Responsibility** - Controls both its own creation and business logic
+4. **Difficult to test** - Hard to mock in unit tests
+5. **Concurrency issues** - Requires careful synchronization in multithreaded environments
+6. **Violates Dependency Inversion** - Tight coupling to concrete implementation
+
+
+Singleton - это порождающий паттерн проектирования, который гарантирует, что класс имеет только один экземпляр, и предоставляет глобальную точку доступа к этому экземпляру.
+
+---
 
 ## Links
 

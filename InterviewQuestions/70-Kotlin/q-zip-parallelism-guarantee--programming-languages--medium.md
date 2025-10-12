@@ -2,15 +2,14 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Will zip guarantee parallel execution of 2 network requests launched for Coroutine
 
 **English**: Will zip guarantee parallel execution of 2 network requests launched for Coroutine?
 
-## Answer
-
+## Answer (EN)
 No, zip itself does not guarantee parallelism. If you just write zip(firstCall(), secondCall()), both calls will start sequentially, and zip will just combine their results. To get parallelism: Launch both calls through async. Then pass their await() to zip.
 
 **Detailed explanation:**
@@ -56,10 +55,9 @@ suspend fun getCombinedData() = coroutineScope {
 
 ---
 
-## Ответ
-
-### Вопрос
+## Ответ (RU)
+# Вопрос (RU)
 Будет ли zip гарантировать параллельность выполнения 2 запросов в сеть, запущенных для Coroutine?
 
-### Ответ
+## Ответ (RU)
 Нет, zip сам по себе не гарантирует параллельность. Если ты просто напишешь zip(firstCall(), secondCall()), оба вызова начнутся последовательно, и zip просто объединит их результаты. Чтобы получить параллельность: - Запусти оба вызова через async. - Затем передай их await() в zip.

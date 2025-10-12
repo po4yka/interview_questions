@@ -12,15 +12,14 @@ tags:
   - performance
   - weakreference
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как оптимизировать использование памяти в приложении?
 
 **English**: How to optimize memory usage in an application?
 
-## Answer
-
+## Answer (EN)
 **1. Minimize Static Variables**
 
 ```kotlin
@@ -244,7 +243,6 @@ class MyActivity : AppCompatActivity() {
 - Use Glide/Picasso for images
 - Load images at optimal size
 
-## Ответ
-
+## Ответ (RU)
 Минимизируйте использование статических переменных. Избегайте утечек памяти, правильно управляя ссылками на контексты и активности. Используйте слабые ссылки (WeakReference) для больших объектов. Избегайте внутренних классов в Activity, заменяя их статическими вложенными классами. Применяйте LruCache для кэширования данных в памяти. Профилируйте приложение с помощью Android Studio Profiler и LeakCanary. Используйте Glide или Picasso для загрузки и кэширования изображений. Управляйте крупными объектами и загружайте изображения оптимального размера.
 

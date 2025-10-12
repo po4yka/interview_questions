@@ -9,15 +9,14 @@ tags:
   - view
   - view lifecycle
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие методы есть у view и что каждый из них делает?
 
 **English**: What methods does View have and what does each do?
 
-## Answer
-
+## Answer (EN)
 The Android **View** class provides numerous methods for controlling appearance, behavior, and lifecycle. Understanding these methods is crucial for custom view development and UI optimization.
 
 ### Measurement and Layout Methods
@@ -431,7 +430,6 @@ override fun onDetachedFromWindow() {
 | animate() | Create animations |
 | requestFocus() | Request keyboard focus |
 
-## Ответ
-
+## Ответ (RU)
 onMeasure - определяет размер View. onLayout - отвечает за позиционирование View внутри родительского контейнера. onDraw - отвечает за рисование View. invalidate - используется для перерисовывания View. setOnClickListener - устанавливает слушатель нажатия. setVisibility - управляет видимостью View. getWidth и getHeight - возвращают размеры View. setBackgroundColor - устанавливает цвет фона.
 

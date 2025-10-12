@@ -6,22 +6,31 @@ tags:
   - gof-patterns
   - memory-optimization
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Flyweight Pattern
 
-**English**: What is the Flyweight pattern? When and why should it be used?
+# Question (EN)
+> What is the Flyweight pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Flyweight? Когда и зачем его использовать?
+
+---
+
+## Answer (EN)
+
 
 **Flyweight (Легковес/Приспособленец)** - это структурный паттерн проектирования, который позволяет использовать разделяемые объекты одновременно в большом количестве, вместо создания отдельного объекта для каждого случая. Приспособленец экономит память за счёт разделения общего состояния, вынесенного в один объект, между множеством объектов.
 
-### Определение
+### Definition
+
 
 A flyweight is an object that **minimizes memory usage by sharing as much data as possible with other similar objects**. It's a way to use objects in large numbers when a simple repeated representation would use an unacceptable amount of memory. Often some parts of the object state can be shared, and it's common practice to hold them in external data structures and pass them temporarily when used.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 The flyweight design pattern solves problems like:
 
@@ -30,7 +39,8 @@ The flyweight design pattern solves problems like:
 
 When representing large text documents, for example, creating an object for each character would result in a huge number of objects that could not be processed efficiently.
 
-### Решение
+### Solution
+
 
 Define **`Flyweight`** objects that:
 
@@ -251,7 +261,8 @@ fun main() {
 }
 ```
 
-### Объяснение
+### Explanation
+
 
 **Explanation**:
 
@@ -275,12 +286,14 @@ Use cases:
 
 ### Pros (Преимущества)
 
+
 1. **Memory savings** - Drastically reduces memory usage
 2. **Performance** - Fewer objects to create and garbage collect
 3. **Scalability** - Can handle large numbers of objects
 4. **Centralized management** - Factory controls object lifecycle
 
 ### Cons (Недостатки)
+
 
 1. **Complexity** - Separating intrinsic/extrinsic state is complex
 2. **CPU trade-off** - Saves RAM but may use more CPU for lookups
@@ -348,3 +361,58 @@ object FontCache {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+A flyweight is an object that **minimizes memory usage by sharing as much data as possible with other similar objects**. It's a way to use objects in large numbers when a simple repeated representation would use an unacceptable amount of memory. Often some parts of the object state can be shared, and it's common practice to hold them in external data structures and pass them temporarily when used.
+
+### Проблемы, которые решает
+
+
+The flyweight design pattern solves problems like:
+
+1. **Large numbers of objects should be supported efficiently**
+2. **Creating large numbers of objects should be avoided**
+
+When representing large text documents, for example, creating an object for each character would result in a huge number of objects that could not be processed efficiently.
+
+### Решение
+
+
+Define **`Flyweight`** objects that:
+
+- Store **intrinsic (invariant) state** that can be shared
+- Provide an interface through which **extrinsic (variant) state** can be passed in
+
+This enables clients to (1) reuse (share) Flyweight objects and (2) pass in extrinsic state when they invoke a Flyweight operation. This greatly reduces the number of physically created objects.
+
+### Объяснение
+
+
+**Explanation**:
+
+- **Intrinsic state** (Character glyph, Particle appearance) is shared in flyweight
+- **Extrinsic state** (position, velocity) is passed by client
+- **Factory** manages flyweight pool, ensures sharing
+- **Memory savings** - Instead of 1000 objects, only few shared types
+- **Android**: Icon caches, string pools, typeface caching
+
+### Pros (Преимущества)
+
+
+1. **Memory savings** - Drastically reduces memory usage
+2. **Performance** - Fewer objects to create and garbage collect
+3. **Scalability** - Can handle large numbers of objects
+4. **Centralized management** - Factory controls object lifecycle
+
+### Cons (Недостатки)
+
+
+1. **Complexity** - Separating intrinsic/extrinsic state is complex
+2. **CPU trade-off** - Saves RAM but may use more CPU for lookups
+3. **Immutability** - Flyweights must be immutable
+4. **Thread safety** - Factory must be thread-safe

@@ -6,7 +6,7 @@ language_tags:
   - en
   - ru
 original_language: en
-status: reviewed
+status: draft
 moc: moc-android
 tags:
   - android
@@ -28,8 +28,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 
 **Русский**: Что вы знаете о библиотеке Paging?
 
-## Answer
-
+## Answer (EN)
 **English**:
 
 The **Paging Library** helps you load and display small chunks of data at a time. Loading partial data on demand reduces usage of network bandwidth and system resources.

@@ -11,12 +11,21 @@ related:
   - mvi-pattern
   - clean-architecture
   - livedata
-status: reviewed
+status: draft
 ---
 
 # MVVM Pattern / Паттерн MVVM (Model-View-ViewModel)
 
-## English
+# Question (EN)
+> What is the MVVM pattern? When and why should it be used?
+
+# Вопрос (RU)
+> Что такое паттерн MVVM? Когда и зачем его следует использовать?
+
+---
+
+## Answer (EN)
+
 
 ### Definition
 **Model-View-ViewModel (MVVM)** is a software architectural pattern that facilitates the separation of the development of the UI from the development of the business logic or back-end logic (the model) so that the view is not dependent on any specific model platform.
@@ -144,7 +153,9 @@ MVVM in Android is typically implemented using:
 
 ---
 
-## Русский
+
+
+## Ответ (RU)
 
 ### Определение
 **Model-View-ViewModel (MVVM)** - это программный архитектурный паттерн, который облегчает разделение разработки UI от разработки бизнес-логики или бэкенд-логики (модели), так что представление не зависит от какой-либо конкретной платформы модели.

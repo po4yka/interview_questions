@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to Create a Suspend Function?
 
-## Answer
+# Question (EN)
+> How to create a suspend function?
+
+# Вопрос (RU)
+> Как создать suspend функцию?
+
+---
+
+## Answer (EN)
 
 Create a suspend function by adding the **suspend** modifier before `fun`. Suspend functions cannot be called directly from regular functions, only from coroutines or other suspend functions.
 
@@ -405,10 +413,7 @@ suspend fun longRunningTask() {
 5. - Automatically receives `Continuation` parameter (compiler adds it)
 
 ---
-## Вопрос (RU)
 
-Как создать suspend-функцию
-
-## Ответ
+## Ответ (RU)
 
 Создать suspend-функцию можно, добавив suspend перед fun. Suspend функции нельзя вызывать напрямую из обычных функций, только из корутин.

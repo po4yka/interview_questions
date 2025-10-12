@@ -8,17 +8,16 @@ tags:
   - intents
   - pending-intent
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is PendingIntent?
 
-## Question (RU)
+# Вопрос (RU)
 
 Что такое PendingIntent
 
-## Answer
-
+## Answer (EN)
 **PendingIntent** is a wrapper around an Intent that allows other components or applications to execute that Intent with your app's permissions, even when your app is not currently active. It's a token that you give to another application which allows the foreign application to use your application's permissions to execute a predefined piece of code.
 
 ### Key Characteristics
@@ -437,6 +436,6 @@ fun cancelPendingIntent(context: Context) {
 5. - **Avoid FLAG_MUTABLE** unless absolutely necessary
 6. - **Set explicit intents** for security
 
-## Answer (RU)
+## Ответ (RU)
 
 PendingIntent — это обёртка над Intent, позволяющая другим компонентам выполнить Intent от имени вашего приложения даже если оно сейчас не активно. Используется в уведомлениях, для запуска BroadcastReceiver или Service и в AlarmManager.

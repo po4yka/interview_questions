@@ -6,18 +6,25 @@ tags:
   - gof-patterns
   - hook-method
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Template Method Pattern
 
-**English**: What is the Template Method pattern? When and why should it be used?
+# Question (EN)
+> What is the Template Method pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Template Method? Когда и зачем его следует использовать?
 
-**Template Method (Шаблонный метод)** - это поведенческий паттерн проектирования, который определяет скелет алгоритма в базовом классе, позволяя подклассам переопределять отдельные шаги алгоритма, не изменяя его общую структуру.
+---
 
-### Определение
+## Answer (EN)
+
+
+
+### Definition
+
 
 The template method is a method in a superclass (usually an abstract superclass) that **defines the skeleton of an operation in terms of a number of high-level steps**. These steps are themselves implemented by additional *helper methods* in the same class as the template method.
 
@@ -27,14 +34,16 @@ The *helper methods* may be either:
 
 The intent is to define the overall structure of the operation, while allowing subclasses to refine or redefine certain steps.
 
-### Основные компоненты
+### Main Components
+
 
 This pattern has two main parts:
 
 1. **Template method** - Implemented in a base class, contains code for invariant parts of the algorithm. Calls helper methods for variant parts
 2. **Subclasses** - Override empty or variant parts with specific algorithms. **Must not override the template method itself**
 
-### Почему используется?
+### Why is it Used?
+
 
 The template method is used in frameworks for the following reasons:
 
@@ -320,7 +329,8 @@ class UserListViewModel(
 }
 ```
 
-### Объяснение
+### Explanation
+
 
 **Explanation**:
 
@@ -334,6 +344,7 @@ class UserListViewModel(
 
 ### Pros (Преимущества)
 
+
 1. **Code reuse** - Common code in one place
 2. **Control over algorithm** - Subclasses can't change overall structure
 3. **Easy to extend** - Add new variations without changing algorithm
@@ -341,6 +352,7 @@ class UserListViewModel(
 5. **Open/Closed Principle** - Open for extension through subclasses
 
 ### Cons (Недостатки)
+
 
 1. **Limited flexibility** - Clients can only change certain parts
 2. **Inheritance required** - Requires extending a class
@@ -407,3 +419,63 @@ abstract class AuthenticationFlow {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+The template method is a method in a superclass (usually an abstract superclass) that **defines the skeleton of an operation in terms of a number of high-level steps**. These steps are themselves implemented by additional *helper methods* in the same class as the template method.
+
+The *helper methods* may be either:
+- **Abstract methods** - Subclasses are required to provide concrete implementations
+- **Hook methods** - Have empty bodies in the superclass, subclasses can optionally override them
+
+The intent is to define the overall structure of the operation, while allowing subclasses to refine or redefine certain steps.
+
+### Основные компоненты
+
+
+This pattern has two main parts:
+
+1. **Template method** - Implemented in a base class, contains code for invariant parts of the algorithm. Calls helper methods for variant parts
+2. **Subclasses** - Override empty or variant parts with specific algorithms. **Must not override the template method itself**
+
+### Почему используется?
+
+
+The template method is used in frameworks for the following reasons:
+
+1. **Lets subclasses implement varying behavior** - Through overriding of hook methods
+2. **Avoids duplication** - General workflow implemented once in abstract class, variations in subclasses
+3. **Controls specialization points** - If subclasses could override template method, they could make radical changes to workflow
+
+### Объяснение
+
+
+**Explanation**:
+
+- **Template method** (`execute()`, `loadData()`, `generateReport()`) defines algorithm structure
+- **Abstract methods** must be implemented by subclasses
+- **Hook methods** can optionally be overridden
+- **Concrete methods** are the same for all subclasses
+- **Android**: Base ViewModels, Fragment lifecycles, data loading patterns
+
+### Pros (Преимущества)
+
+
+1. **Code reuse** - Common code in one place
+2. **Control over algorithm** - Subclasses can't change overall structure
+3. **Easy to extend** - Add new variations without changing algorithm
+4. **Inversion of Control** - Framework calls subclass methods, not vice versa
+5. **Open/Closed Principle** - Open for extension through subclasses
+
+### Cons (Недостатки)
+
+
+1. **Limited flexibility** - Clients can only change certain parts
+2. **Inheritance required** - Requires extending a class
+3. **Liskov Substitution** - Can violate if subclass changes behavior significantly
+4. **Maintenance** - More classes to maintain
+5. **Rigid structure** - Template method defines fixed sequence

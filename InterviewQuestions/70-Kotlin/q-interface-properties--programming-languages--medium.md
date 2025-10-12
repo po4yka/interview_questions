@@ -2,14 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to operate with properties in interface?
 
-**English**: How to operate with properties in interface in Kotlin?
+# Question (EN)
+> How to operate with properties in interfaces in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Как работать со свойствами в интерфейсах в Kotlin?
+
+---
+
+## Answer (EN)
 
 In an interface, you can declare `val` or `var` properties without initialization. For properties with `get`, the implementation can be in the interface through a custom getter. For `var` with `set`, the implementation must be in the class, as interfaces do not have state and cannot use backing fields (`field`).
 
@@ -415,10 +421,13 @@ fun main() {
 
 ---
 
-## Ответ
+## Ответ (RU)
 
-### Вопрос
-Как в interface оперировать со свойствами
+В интерфейсе можно объявить `val` или `var` свойства без инициализации. Для свойств с `get` реализация может быть в интерфейсе через кастомный геттер. Для `var` с `set` реализация должна быть в классе, так как интерфейсы не имеют состояния и не могут использовать backing fields (`field`).
 
-### Ответ
-В интерфейсе можно объявить val или var без инициализации. Для свойств с get реализация может быть в интерфейсе через кастомный геттер. Для var с set реализация должна быть в классе, так как интерфейсы не имеют состояния и не могут использовать field.
+**Ключевые правила:**
+- Свойства интерфейса не могут иметь backing fields
+- Могут иметь кастомные геттеры в интерфейсе
+- Свойства `var` могут объявлять сеттеры, но нуждаются в реализации в классе
+- Свойства могут быть абстрактными (без реализации) или иметь реализацию по умолчанию
+- Можно переопределять свойства в реализующих классах

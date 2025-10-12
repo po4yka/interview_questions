@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Hot vs Cold Flows
 
-## Answer
+# Question (EN)
+> What is the difference between Hot and Cold Flows?
+
+# Вопрос (RU)
+> В чем разница между Hot и Cold Flows?
+
+---
+
+## Answer (EN)
 
 **Cold flows** start generating data only after subscription (lazy).
 Examples: Flow, Observable
@@ -289,10 +297,7 @@ class ViewModel {
 | **Resource usage** | New execution per collector | Single execution shared |
 
 ---
-## Вопрос (RU)
 
-В чем отличие горячих и холодных потоков
-
-## Ответ
+## Ответ (RU)
 
 Холодные (cold) — начинают генерировать данные только после подписки Например Flow Observable Горячие (hot) — генерируют данные независимо от подписчиков Например SharedFlow LiveData Broadcast

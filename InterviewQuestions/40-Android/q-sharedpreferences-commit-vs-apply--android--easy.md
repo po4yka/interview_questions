@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: [datastore, shared-preferences, data-storage]
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, sharedpreferences, commit, apply, performance, difficulty/easy]
 ---
-## Question (EN)
+# Question (EN)
 > What is the difference between commit() and apply() in SharedPreferences?
-## Вопрос (RU)
+# Вопрос (RU)
 > В чем разница между commit() и apply() в SharedPreferences?
 
 ---

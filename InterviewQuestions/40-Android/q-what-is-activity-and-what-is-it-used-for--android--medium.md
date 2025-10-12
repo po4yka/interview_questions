@@ -6,13 +6,12 @@ tags:
   - lifecycle
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is Activity and what is it used for?
 
-## Answer
-
+## Answer (EN)
 Activity is a core component of an Android application that provides a user interface with which users can interact to perform various actions such as dialing a phone, viewing photos, sending emails, etc. Each Activity represents a single screen with a user interface.
 
 ### Activity as a Page in a Book
@@ -393,7 +392,7 @@ class PhotoViewerActivity : AppCompatActivity() {
 - Temporary UI overlays (use DialogFragment)
 - Background operations (use Service/WorkManager)
 
-## Answer (RU)
+## Ответ (RU)
 Это компонент приложения, который предоставляет пользовательский интерфейс (UI), с которым пользователи могут взаимодействовать для выполнения различных действий, таких как набор номера телефона, просмотр фотографий, отправка электронной почты и т. д. Каждая активность представляет собой один экран с пользовательским интерфейсом. Если представить приложение как книгу, то активность будет одной страницей этой книги. Основное назначение: предоставление интерфейса пользователя, взаимодействие с пользователем, управление жизненным циклом, переход между экранами и взаимодействие с другими компонентами приложения.
 
 ## Related Topics

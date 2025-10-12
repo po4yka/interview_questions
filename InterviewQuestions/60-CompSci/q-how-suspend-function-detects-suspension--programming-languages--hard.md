@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # How Suspend Function Detects Suspension?
 
-## Answer
+# Question (EN)
+> How does a suspend function detect suspension?
+
+# Вопрос (RU)
+> Как suspend функция определяет приостановку?
+
+---
+
+## Answer (EN)
 
 The function "learns" about suspension through:
 
@@ -440,10 +448,7 @@ if (condition) { }                    // Regular control flow
 ```
 
 ---
-## Вопрос (RU)
 
-Как функция определяет что она suspend'илась
-
-## Ответ
+## Ответ (RU)
 
 Функция "узнает" о приостановке через: - Фрейм Continuation если вызвана другая suspend-функция текущая приостанавливает свое выполнение - Корутинный диспетчер приостановка возможна если выполнение ушло в другой поток withContext - Возвращение специального маркера COROUTINE_SUSPENDED сигнализирует Kotlin Runtime что выполнение отложено

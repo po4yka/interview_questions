@@ -7,14 +7,20 @@ tags:
   - programming-languages
   - reference-equality
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как в оригинальном Java equals работает, что он сравнивает?
 
-**English**: How does the original Java equals work, what does it compare?
+# Question (EN)
+> How does the original Java equals work, what does it compare?
 
-## Answer
+# Вопрос (RU)
+> Как в оригинальном Java equals работает, что он сравнивает?
+
+---
+
+## Answer (EN)
 
 In the original Java `Object` class, the **`equals()` method by default compares object references** (reference equality).
 
@@ -146,7 +152,9 @@ box1 == box2;       // false - different references
 - When overriding `equals()`, **always override `hashCode()`** too
 - Built-in classes like String, ArrayList override `equals()` for content comparison
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В оригинальном Java метод `equals` класса Object по умолчанию сравнивает **ссылки на объекты** (ссылочное равенство). Для пользовательских классов метод `equals` переопределяют, чтобы сравнивать содержимое объектов.
 

@@ -7,13 +7,12 @@ tags:
   - ui-thread
   - looper
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # What is the main application execution thread?
 
-## Answer
-
+## Answer (EN)
 The main application execution thread in Android is called the **Main Thread** (also known as the **UI Thread**). It's the thread where all UI operations and component lifecycle callbacks are executed.
 
 ### Key Characteristics
@@ -198,8 +197,7 @@ Log.d("Thread", "ID: ${currentThread.id}") // 1 (usually)
 - Use Coroutines to switch threads easily
 - Keep main thread responsive (<16ms per frame)
 
-## Ответ
-
+## Ответ (RU)
 Главный поток выполнения приложения в Android называется **Main Thread** (также известный как **UI Thread**). Это поток, в котором выполняются все операции с UI и обратные вызовы жизненного цикла компонентов.
 
 ### Ключевые характеристики

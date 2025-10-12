@@ -6,14 +6,20 @@ tags:
   - programming-languages
   - static-methods
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # В чём отличие обычного метода от extension метода в Kotlin
 
-**English**: What is the difference between a regular method and an extension method in Kotlin?
+# Question (EN)
+> What is the difference between a regular method and an extension method in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> В чём отличие обычного метода от extension метода в Kotlin
+
+---
+
+## Answer (EN)
 
 ### Regular Method (Member Function)
 
@@ -278,7 +284,9 @@ class Config {
 - Can be overridden
 - Part of class bytecode
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Extension-функция выглядит как будто добавлена в класс, но на самом деле это статическая функция, которой не требуется менять сам класс. Она даёт синтаксический сахар, не добавляя нового в байткод класса
 

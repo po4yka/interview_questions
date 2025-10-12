@@ -13,15 +13,14 @@ tags:
   - service
   - view
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что из себя представляет каждый компонент Android-приложения?
 
 **English**: What does each Android application component represent?
 
-## Answer
-
+## Answer (EN)
 Android applications are built from several **main components**, each with specific tasks and features. These components **interact with each other** and the operating system to create a functional application.
 
 **Main Components:**
@@ -119,8 +118,7 @@ startActivity(intent)
 | View | UI element | - Yes | Button, TextView |
 | Intent | Messaging | - No | Start Activity |
 
-## Ответ
-
+## Ответ (RU)
 В Android приложения строятся из нескольких основных компонентов, каждый из которых имеет свои специфические задачи и особенности. Эти компоненты взаимодействуют друг с другом и с операционной системой для создания функционального приложения.
 
 **Основные компоненты:** Activity (пользовательский интерфейс), Service (фоновые операции), Broadcast Receiver (системные события), Content Provider (обмен данными), Fragment (часть UI), View (строительный блок UI), Intent (связь между компонентами).

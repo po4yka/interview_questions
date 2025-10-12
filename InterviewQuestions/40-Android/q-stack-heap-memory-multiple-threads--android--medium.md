@@ -9,15 +9,14 @@ tags:
   - stack
   - threading
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Изменится ли объём памяти стека/кучи, если в приложении создано несколько потоков?
 
 **English**: Will stack/heap memory size change if multiple threads are created in the app?
 
-## Answer
-
+## Answer (EN)
 **Yes**, **stack size will change**, but **heap size will remain unchanged** (though load on it will increase).
 
 **Stack Memory:**
@@ -63,8 +62,7 @@ Heap:                 512 MB (shared)
 - **Heap**: All threads share heap → heap size **unchanged**, load increases
 - **Per thread**: ~1 MB stack overhead
 
-## Ответ
-
+## Ответ (RU)
 **Да**, объём **стека изменится**, а вот объём **кучи останется неизменным**, но нагрузка на неё увеличится.
 
 Каждый поток получает свой собственный стек (~1 MB), поэтому больше потоков = больше памяти стека. Куча же общая для всех потоков.

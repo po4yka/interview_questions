@@ -6,14 +6,20 @@ tags:
   - oop
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # От какого объекта наследуются все классы в Java?
 
-**English**: From which object do all classes in Java inherit?
+# Question (EN)
+> From which object do all classes in Java inherit?
 
-## Answer
+# Вопрос (RU)
+> От какого объекта наследуются все классы в Java?
+
+---
+
+## Answer (EN)
 
 In Java, **all classes implicitly inherit from the Object class** if no other inheritance is explicitly specified.
 
@@ -150,12 +156,14 @@ class User {
 
 **Summary:**
 
-- - **All Java classes** inherit from Object
-- - **Implicit inheritance** if not specified
-- - **Common methods** available to all objects
-- - **Override** toString(), equals(), hashCode() as needed
+- **All Java classes** inherit from Object
+- **Implicit inheritance** if not specified
+- **Common methods** available to all objects
+- **Override** toString(), equals(), hashCode() as needed
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Java все классы неявно наследуются от класса **Object**, если явно не указано другое наследование.
 

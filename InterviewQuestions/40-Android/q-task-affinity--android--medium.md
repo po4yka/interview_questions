@@ -7,7 +7,7 @@ aliases:
   - Task Affinity в Android
 date_created: 2025-10-05
 date_modified: 2025-10-05
-status: reviewed
+status: draft
 original_language: en
 language_tags:
   - en
@@ -33,14 +33,12 @@ source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/A
 
 # Task Affinity in Android / Task Affinity в Android
 
-## EN
-
-### Question
+# Question (EN)
+> 
 
 What do you know about taskAffinity?
 
-### Answer
-
+## Answer (EN)
 The `taskAffinity` is the attribute that is declared in the AndroidManifest file.
 
 An *affinity* indicates which task an activity "prefers" to belong to. By default, all the activities from the same app have an affinity for each other: they "prefer" to be in the same task.
@@ -89,14 +87,12 @@ Common use cases for taskAffinity include:
 
 ---
 
-## RU
-
-### Вопрос
+# Вопрос (RU)
+> 
 
 Что вы знаете о taskAffinity?
 
-### Ответ
-
+## Ответ (RU)
 `taskAffinity` - это атрибут, который объявляется в файле AndroidManifest.
 
 *Affinity* (сродство) указывает, к какой задаче активность "предпочитает" принадлежать. По умолчанию все активности из одного приложения имеют сродство друг к другу: они "предпочитают" находиться в одной задаче.

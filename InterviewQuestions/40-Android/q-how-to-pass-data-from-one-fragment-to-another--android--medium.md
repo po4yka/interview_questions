@@ -10,15 +10,14 @@ tags:
   - viewmodel
   - views
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как передавать данные из одного фрагмента в другой?
 
 **English**: How to pass data from one fragment to another?
 
-## Answer
-
+## Answer (EN)
 Passing data between fragments can be implemented in several ways. It's important to remember that fragments should not directly exchange data with each other. Instead, they should communicate through their parent activity or use a shared ViewModel.
 
 ### Main Approaches to Passing Data Between Fragments
@@ -137,7 +136,6 @@ supportFragmentManager.beginTransaction()
 
 The choice of method depends on the specific use case. Modern development often recommends using **ViewModel** for data exchange between fragments, as it promotes creating a reliable and testable application architecture.
 
-## Ответ
-
+## Ответ (RU)
 Передача данных между фрагментами может быть реализована несколькими способами. Важно помнить что фрагменты не должны напрямую обмениваться данными друг с другом. Вместо этого они должны общаться через свою родительскую активность или использовать общий ViewModel. Основные подходы к передаче данных между фрагментами: использование родительской активности как посредника через интерфейс или методы активности. Использование ViewModel для общения между фрагментами. Создайте ViewModel содержащую LiveData или другие обсерваблы для хранения данных. Доступ к этой ViewModel должен быть получен из обоих фрагментов через их родительскую активность. Использование Bundle и аргументов фрагмента для передачи данных при создании нового экземпляра фрагмента. Создайте Bundle и поместите в него данные используйте setArguments для передачи Bundle новому экземпляру фрагмента. В целевом фрагменте извлеките данные из полученного Bundle с помощью метода getArguments. Выбор метода зависит от конкретного случая использования в современной разработке часто рекомендуется использовать ViewModel для обмена данными между фрагментами так как это способствует созданию надежной и тестируемой архитектуры приложения
 

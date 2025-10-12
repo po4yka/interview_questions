@@ -3,14 +3,28 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Can state loss be related to a fragment
 
-## Answer
+# Question (EN)
+> Can state loss be related to a fragment?
+
+# Вопрос (RU)
+> Может ли потеря состояния быть связана с фрагментом?
+
+---
+
+## Answer (EN)
 
 Yes, Fragment state loss is a common issue in Android development. It can occur in several scenarios related to Fragment lifecycle, transactions, and parent Activity state management.
+
+---
+
+## Ответ (RU)
+
+Да, потеря состояния Fragment - это распространенная проблема в Android разработке. Она может возникать при коммите транзакции после вызова onSaveInstanceState(), при изменении конфигурации, при использовании commit() вместо commitAllowingStateLoss(), и при неправильной работе с backstack.
 
 ### When Fragment State Loss Occurs
 
@@ -407,7 +421,7 @@ class UserFragment : Fragment() {
 6. **Avoid commitAllowingStateLoss**: Unless state loss is acceptable
 7. **Test process death**: Use "Don't keep activities" developer option
 
-## Answer (RU)
+## Ответ (RU)
 Да, потеря состояния может быть связана с фрагментами в Android. Это связано со сложным жизненным циклом фрагмента, удалением View системой, проблемами с менеджером фрагментов и неправильным использованием savedInstanceState. Для предотвращения потери состояния рекомендуется использовать onSaveInstanceState, ViewModel и правильно работать с FragmentManager.
 
 ## Related Topics

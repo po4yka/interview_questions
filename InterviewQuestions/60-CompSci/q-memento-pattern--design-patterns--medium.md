@@ -9,12 +9,21 @@ difficulty: medium
 related:
   - command-pattern
   - state-pattern
-status: reviewed
+status: draft
 ---
 
 # Memento Pattern / Паттерн Хранитель
 
-## English
+# Question (EN)
+> What is the Memento pattern? When and why should it be used?
+
+# Вопрос (RU)
+> Что такое паттерн Хранитель? Когда и зачем его следует использовать?
+
+---
+
+## Answer (EN)
+
 
 ### Definition
 The Memento design pattern is a powerful behavioral pattern that provides a way to capture and restore an object's internal state. It allows objects to be saved and restored without violating encapsulation principles.
@@ -113,7 +122,9 @@ After undo: State #1
 
 ---
 
-## Русский
+
+
+## Ответ (RU)
 
 ### Определение
 Паттерн проектирования Хранитель - это мощный поведенческий паттерн, который предоставляет способ захвата и восстановления внутреннего состояния объекта. Он позволяет сохранять и восстанавливать объекты без нарушения принципов инкапсуляции.

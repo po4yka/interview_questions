@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - adapted from functional interfaces content
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, lambda-expressions, functional-programming, sam-conversion, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What are lambda expressions in Kotlin and how do they work?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое лямбда-выражения в Kotlin и как они работают?
 
 ---

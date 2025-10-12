@@ -11,15 +11,14 @@ tags:
   - performance
   - recyclerview
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие могут быть проблемы с элементами списка?
 
 **English**: What problems can occur with list elements?
 
-## Answer
-
+## Answer (EN)
 List elements in Android applications can experience various problems affecting **memory**, **performance**, **data consistency**, and **concurrency**. Here are the most common issues and their solutions:
 
 ## 1. Out of Memory (OOM) Errors
@@ -474,8 +473,7 @@ class MemoryMonitoringAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Проблемы с элементами списка в Android-приложениях:
 
 1. **Переполнение памяти (Out of Memory)** - Списки с большим количеством элементов могут вызывать переполнение памяти. Решение: Использовать RecyclerView вместо ListView и библиотеки для загрузки изображений, такие как Glide или Picasso.

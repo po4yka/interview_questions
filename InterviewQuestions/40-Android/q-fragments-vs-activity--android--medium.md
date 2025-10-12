@@ -5,15 +5,14 @@ tags:
   - fragments
   - ui-architecture
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Для чего нужны фрагменты если есть Activity?
 
 **English**: Why use Fragments if we have Activities?
 
-## Answer
-
+## Answer (EN)
 Фрагменты (Fragments) представляют собой модульные части пользовательского интерфейса в Activity, которые имеют собственный жизненный цикл, получают собственные входящие события и могут быть добавлены или удалены при выполнении активности.
 
 ### Основные преимущества фрагментов

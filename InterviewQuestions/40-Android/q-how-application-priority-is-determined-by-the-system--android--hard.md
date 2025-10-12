@@ -6,13 +6,12 @@ tags:
   - memory-management
   - lifecycle
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # How application priority is determined by the system?
 
-## Answer
-
+## Answer (EN)
 Android determines application priority based on the **importance hierarchy** of processes, which affects **Low Memory Killer (LMK)** decisions and CPU/resource allocation. The system classifies processes into five main priority levels.
 
 ### Process Priority Hierarchy
@@ -445,7 +444,7 @@ EMPTY (1000)         → No components, killed first
 - LRU order within same priority level
 - Foreground processes rarely killed
 
-## Answer (RU)
+## Ответ (RU)
 
 Android определяет приоритет приложения на основе **иерархии важности процессов**, что влияет на решения **Low Memory Killer (LMK)** и распределение ресурсов.
 

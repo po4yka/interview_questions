@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # CoroutineScope vs SupervisorScope
 
-## Answer
+# Question (EN)
+> What is the difference between coroutineScope and supervisorScope?
+
+# Вопрос (RU)
+> В чем разница между coroutineScope и supervisorScope?
+
+---
+
+## Answer (EN)
 
 Both create a new scope, but differ in error handling:
 
@@ -291,10 +299,7 @@ class ScopeBestPractices {
 | **Typical usage** | Data that must be complete | Optional/independent operations |
 
 ---
-## Вопрос (RU)
 
-В чем разница между coroutineScope и supervisorScope
-
-## Ответ
+## Ответ (RU)
 
 Оба создают новый scope, но различие в обработке ошибок: coroutineScope {} – если одна дочерняя корутина упадет, отменяются все остальные. supervisorScope {} – если одна корутина упадет, остальные продолжают работу.

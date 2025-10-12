@@ -9,7 +9,7 @@ tags:
   - leakcanary
   - debugging
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Memory Leak vs OutOfMemoryError in Android
@@ -17,13 +17,19 @@ status: reviewed
 **Сложность**: 🟡 Medium
 **Источник**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> 
 
-### Question
+# Вопрос (RU)
+> 
+
+---
+
+## Answer (EN)
+# Question (EN)
 What is the difference between a memory leak and OutOfMemoryError in Android? How do you detect and fix them?
 
-### Answer
-
+## Answer (EN)
 Memory leaks and OutOfMemoryErrors are related but distinct issues. Memory leaks gradually consume memory, potentially leading to OutOfMemoryError crashes.
 
 #### 1. **Memory Leak**
@@ -539,13 +545,13 @@ class ManualObserver : AppCompatActivity() {
 
 ---
 
-## Русский
 
-### Вопрос
+
+## Ответ (RU)
+# Вопрос (RU)
 В чём разница между утечкой памяти и OutOfMemoryError в Android? Как их обнаружить и исправить?
 
-### Ответ
-
+## Ответ (RU)
 Утечки памяти и OutOfMemoryError - связанные, но различные проблемы.
 
 #### Утечка памяти:

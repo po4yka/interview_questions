@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: [q-kotlin-generics--kotlin--hard]
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, generics, star-projection, variance, type-safety, difficulty/hard]
 ---
-## Question (EN)
+# Question (EN)
 > What is the difference between `*` (star projection) and `Any` in Kotlin generics?
-## Вопрос (RU)
+# Вопрос (RU)
 > В чем разница между `*` (звездная проекция) и `Any` в обобщениях Kotlin?
 
 ---

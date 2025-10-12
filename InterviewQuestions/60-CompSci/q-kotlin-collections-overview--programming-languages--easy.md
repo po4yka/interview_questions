@@ -9,14 +9,20 @@ tags:
   - programming-languages
   - set
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какие коллекции знаешь?
 
-**English**: What collections do you know?
+# Question (EN)
+> What collections do you know?
 
-## Answer
+# Вопрос (RU)
+> Какие коллекции знаешь?
+
+---
+
+## Answer (EN)
 
 In Kotlin there are **immutable (read-only)** and **mutable** collections:
 
@@ -51,7 +57,9 @@ val mutableMap = mutableMapOf("key" to "value")
 
 **Note**: "Immutable" means read-only reference, not necessarily immutable data.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Kotlin есть неизменяемые и изменяемые коллекции. Неизменяемые включают List, Set и Map. Изменяемые - MutableList, MutableSet и MutableMap. Также существуют специализированные коллекции: ArrayList, HashSet и HashMap.
 

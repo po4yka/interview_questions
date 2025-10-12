@@ -7,15 +7,14 @@ tags:
   - bitmap
   - image-processing
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to pass a photo to an editor?
 
 **Russian**: Как бы передавал фотографию в редактор
 
-## Answer
-
+## Answer (EN)
 Passing a photo to an editor depends on whether it's an external app or an internal editor within your app.
 
 ### 1. External Editor (Another App)

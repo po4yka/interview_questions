@@ -13,15 +13,14 @@ tags:
   - threading
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие основные причины торможения UI?
 
 **English**: What are the main causes of UI lag?
 
-## Answer
-
+## Answer (EN)
 The main causes of **UI lag** (janky user interface) in Android applications include:
 
 ### 1. Heavy Operations on Main Thread
@@ -404,8 +403,7 @@ if (BuildConfig.DEBUG) {
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Основные причины торможения пользовательского интерфейса (UI) в Android-приложениях:
 
 1. **Тяжелые операции в главном потоке** - Решение: Выполнять тяжелые операции в фоновом потоке, используя Kotlin Coroutines или WorkManager (AsyncTask устарел).

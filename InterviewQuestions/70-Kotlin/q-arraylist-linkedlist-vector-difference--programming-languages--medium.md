@@ -5,15 +5,14 @@ tags:
   - kotlin
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # В чем разница ArrayList, LinkedList, Vector
 
 **English**: What is the difference between ArrayList, LinkedList, Vector?
 
-## Answer
-
+## Answer (EN)
 These are three different `List` implementations with distinct characteristics.
 
 ### ArrayList
@@ -165,8 +164,7 @@ val cowList = CopyOnWriteArrayList<String>()
 val concurrentQueue = ConcurrentLinkedQueue<String>()
 ```
 
-## Ответ
-
+## Ответ (RU)
 ArrayList - динамический массив с быстрым доступом по индексу O(1), но медленными вставками/удалениями в середине O(n). LinkedList - двусвязный список с быстрыми вставками/удалениями O(1), но медленным доступом по индексу O(n). Vector - устаревшая синхронизированная версия ArrayList, медленнее из-за блокировок.
 
 Используйте ArrayList по умолчанию, LinkedList для очередей и частых вставок/удалений, Vector не используйте (замените на Collections.synchronizedList() или CopyOnWriteArrayList).

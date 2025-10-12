@@ -7,14 +7,20 @@ tags:
   - programming-languages
   - static
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как сделать статическую переменную?
 
-**English**: How to create a static variable?
+# Question (EN)
+> How to create a static variable?
 
-## Answer
+# Вопрос (RU)
+> Как сделать статическую переменную?
+
+---
+
+## Answer (EN)
 
 Kotlin **does not have** the `static` keyword, but there are several equivalents:
 
@@ -235,14 +241,16 @@ String regular = MyClass.Companion.regularMethod();  // Through Companion
 
 **Summary:**
 
-- - **No `static` keyword** in Kotlin
-- - **companion object** - most common approach
-- - **Top-level** - for file-level constants/functions
-- - **@JvmField / @JvmStatic** - Java interop
-- - **const val** - compile-time constants
-- - **object** - singleton pattern
+- **No `static` keyword** in Kotlin
+- **companion object** - most common approach
+- **Top-level** - for file-level constants/functions
+- **@JvmField / @JvmStatic** - Java interop
+- **const val** - compile-time constants
+- **object** - singleton pattern
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Kotlin не имеет ключевого слова `static`, но есть эквиваленты:
 - Использовать **companion object** внутри класса

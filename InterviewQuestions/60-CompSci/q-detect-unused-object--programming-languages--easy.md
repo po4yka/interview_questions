@@ -8,14 +8,20 @@ tags:
   - weak-reference
   - weak-references
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как по объекту понять что он не используется?
 
-**English**: How to detect that an object is no longer used?
+# Question (EN)
+> How to detect that an object is no longer used?
 
-## Answer
+# Вопрос (RU)
+> Как по объекту понять что он не используется?
+
+---
+
+## Answer (EN)
 
 **Methods to detect unused objects:**
 
@@ -98,7 +104,9 @@ fun testGarbageCollection() {
 - Use **LeakCanary** for automatic leak detection in Android
 - Ensure **no strong references** exist for object to be collected
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Используйте WeakReference для определения был ли объект освобожден сборщиком мусора. Также проверьте отсутствие сильных ссылок и используйте ObjectWatcher из LeakCanary для отслеживания.
 

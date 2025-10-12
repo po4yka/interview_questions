@@ -5,15 +5,14 @@ tags:
   - services
   - background-tasks
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какие есть виды сервисов?
 
 **English**: What types of services exist in Android?
 
-## Answer
-
+## Answer (EN)
 В Android существуют следующие основные виды сервисов:
 
 ### 1. Foreground Service

@@ -2,14 +2,20 @@
 tags:
   - programming-languages
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # What is object / companion object?
 
-**English**: What is object / companion object in Kotlin?
+# Question (EN)
+> What is `object` / `companion object` in Kotlin? Explain their characteristics, differences, and advanced use cases.
 
-## Answer
+# Вопрос (RU)
+> Что такое `object` / `companion object` в Kotlin? Объясните их характеристики, различия и продвинутые случаи использования.
+
+---
+
+## Answer (EN)
 
 `object` and `companion object` are used to implement various patterns and functionalities in Kotlin:
 
@@ -214,10 +220,278 @@ fun main() {
 
 ---
 
-## Ответ
+## Ответ (RU)
 
-### Вопрос
-Что такое object / companion object ?
+`object` и `companion object` используются для реализации различных паттернов и функциональностей в Kotlin:
 
-### Ответ
-object и companion object используются для реализации различных паттернов и функциональностей, включая паттерн одиночка singleton объявление статических членов и функций а также для реализации объектов без необходимости явного создания экземпляра класса. object используется для создания одиночного экземпляра класса то есть реализации паттерна одиночка singleton. companion object используется внутри класса и служит для объявления членов класса доступных без создания экземпляра этого класса аналогично статическим членам.
+### object declaration (объявление object)
+
+**Характеристики:**
+- Используется для создания единственного экземпляра класса (паттерн Singleton)
+- Потокобезопасен по умолчанию
+- Ленивая инициализация при первом обращении
+- Не может иметь конструкторов (создаётся автоматически)
+- Может наследоваться от классов и реализовывать интерфейсы
+
+**Пример простого singleton:**
+```kotlin
+object DatabaseConnection {
+    private var isConnected = false
+
+    fun connect() {
+        if (!isConnected) {
+            println("Подключение к БД...")
+            isConnected = true
+        }
+    }
+
+    fun disconnect() {
+        if (isConnected) {
+            println("Отключение от БД...")
+            isConnected = false
+        }
+    }
+}
+
+// Использование
+DatabaseConnection.connect()
+DatabaseConnection.disconnect()
+```
+
+**Object с наследованием и интерфейсами:**
+```kotlin
+interface ClickListener {
+    fun onClick()
+}
+
+open class BaseLogger {
+    open fun log(message: String) {
+        println("Log: $message")
+    }
+}
+
+object Logger : BaseLogger(), ClickListener {
+    override fun log(message: String) {
+        println("[${System.currentTimeMillis()}] $message")
+    }
+
+    override fun onClick() {
+        log("Нажата кнопка")
+    }
+}
+
+// Использование
+Logger.log("Приложение запущено")
+Logger.onClick()
+```
+
+### companion object (объект-компаньон)
+
+**Характеристики:**
+- Объявляется внутри класса
+- Используется для членов, доступных без создания экземпляра класса
+- Аналог статических членов в Java
+- Может реализовывать интерфейсы
+- Может иметь extension-функции
+- Только один companion object на класс
+- Может иметь имя (опционально)
+
+**Пример со статико-подобными членами:**
+```kotlin
+class User(val id: Int, val name: String) {
+    companion object {
+        private var nextId = 1
+
+        // Фабричный метод
+        fun create(name: String): User {
+            return User(nextId++, name)
+        }
+
+        // Константы
+        const val MIN_NAME_LENGTH = 3
+        const val MAX_NAME_LENGTH = 50
+    }
+
+    init {
+        require(name.length >= MIN_NAME_LENGTH) {
+            "Имя слишком короткое"
+        }
+    }
+}
+
+// Использование
+val user1 = User.create("Alice")
+val user2 = User.create("Bob")
+
+println("${user1.name} имеет ID ${user1.id}")  // Alice имеет ID 1
+println("${user2.name} имеет ID ${user2.id}")  // Bob имеет ID 2
+```
+
+**Именованный companion object:**
+```kotlin
+class MyClass {
+    companion object Factory {
+        fun create(): MyClass = MyClass()
+    }
+}
+
+// Можно вызывать с именем или без
+val obj1 = MyClass.create()           // Используя companion object
+val obj2 = MyClass.Factory.create()   // Используя имя companion object
+```
+
+**Companion object с интерфейсом:**
+```kotlin
+interface JsonSerializer {
+    fun toJson(): String
+}
+
+class Person(val name: String, val age: Int) {
+    companion object : JsonSerializer {
+        override fun toJson(): String {
+            return """{"type": "Person"}"""
+        }
+
+        fun fromJson(json: String): Person {
+            // Парсинг JSON и создание Person
+            return Person("Неизвестно", 0)
+        }
+    }
+
+    fun toJson(): String {
+        return """{"name": "$name", "age": $age}"""
+    }
+}
+
+// Использование
+val person = Person("Alice", 30)
+println(person.toJson())              // Метод экземпляра
+println(Person.toJson())               // Метод companion object
+val newPerson = Person.fromJson("{}")  // Фабричный метод
+```
+
+**Анонимный object (object expression):**
+```kotlin
+interface OnClickListener {
+    fun onClick()
+    fun onLongClick()
+}
+
+fun setClickListener(listener: OnClickListener) {
+    listener.onClick()
+}
+
+// Анонимный объект (как anonymous inner class в Java)
+setClickListener(object : OnClickListener {
+    override fun onClick() {
+        println("Нажато!")
+    }
+
+    override fun onLongClick() {
+        println("Длинное нажатие!")
+    }
+})
+```
+
+**Расширение companion object:**
+```kotlin
+class Person(val name: String) {
+    companion object {
+        // Члены companion object
+    }
+}
+
+// Extension-функция для companion object
+fun Person.Companion.createDefault(): Person {
+    return Person("Имя по умолчанию")
+}
+
+// Использование
+val person = Person.createDefault()
+println(person.name)  // Имя по умолчанию
+```
+
+### Ключевые различия
+
+| Характеристика | object | companion object |
+|----------------|--------|------------------|
+| **Расположение** | Отдельная сущность | Внутри класса |
+| **Доступ** | Через имя object | Через имя класса |
+| **Назначение** | Singleton паттерн | "Статические" члены |
+| **Количество** | Один на объявление | Один на класс (опционально) |
+| **Конструктор** | Не может иметь | Не может иметь |
+| **Наследование** | Может наследоваться | Может реализовывать интерфейсы |
+| **Инициализация** | Ленивая | При загрузке класса |
+| **Extension** | Нет | Да (можно расширять) |
+
+### Когда использовать
+
+**Используйте object когда:**
+- Нужен единственный экземпляр (Singleton)
+- Создаёте утилитный класс
+- Реализуете глобальный менеджер
+- Создаёте константы на уровне модуля
+
+**Используйте companion object когда:**
+- Нужны фабричные методы
+- Создаёте константы внутри класса
+- Нужны "статические" члены, связанные с классом
+- Реализуете паттерн Factory
+
+### Продвинутые примеры
+
+**Singleton с инициализацией:**
+```kotlin
+object AppConfig {
+    private val properties = mutableMapOf<String, String>()
+
+    init {
+        // Выполняется один раз при первом обращении
+        println("Инициализация AppConfig")
+        loadProperties()
+    }
+
+    private fun loadProperties() {
+        properties["api_url"] = "https://api.example.com"
+        properties["timeout"] = "30"
+    }
+
+    fun get(key: String): String? = properties[key]
+}
+
+// Первое обращение инициализирует объект
+val apiUrl = AppConfig.get("api_url")
+```
+
+**Companion object для DSL:**
+```kotlin
+class HtmlBuilder {
+    private val elements = mutableListOf<String>()
+
+    fun tag(name: String, content: String) {
+        elements.add("<$name>$content</$name>")
+    }
+
+    fun build(): String = elements.joinToString("\n")
+
+    companion object {
+        fun html(init: HtmlBuilder.() -> Unit): String {
+            val builder = HtmlBuilder()
+            builder.init()
+            return builder.build()
+        }
+    }
+}
+
+// Использование DSL
+val page = HtmlBuilder.html {
+    tag("h1", "Заголовок")
+    tag("p", "Параграф")
+}
+```
+
+### Краткий ответ
+
+**object**: Создаёт потокобезопасный singleton с ленивой инициализацией. Используется для одиночных экземпляров, утилит, глобальных менеджеров. Может наследоваться и реализовывать интерфейсы.
+
+**companion object**: Объявляет статико-подобные члены внутри класса, доступные через имя класса. Используется для фабричных методов, констант, "статических" функций. Может реализовывать интерфейсы и иметь extension-функции. Один на класс, может быть именованным.

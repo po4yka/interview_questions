@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How does the main thread work?
 
-## Answer
-
+## Answer (EN)
 The main thread (also called UI thread) is the central thread in Android that handles UI rendering, user input events, and component lifecycle callbacks. Understanding how it works is crucial for building responsive applications.
 
 ### Main Thread Responsibilities
@@ -239,7 +238,7 @@ if (isMainThread()) {
 
 The main thread operates on a message queue pattern (Looper), processing events sequentially. Blocking operations must be moved to background threads to prevent ANR and maintain smooth UI performance (60fps = 16ms budget per frame).
 
-## Answer (RU)
+## Ответ (RU)
 Это центральный поток, который отвечает за управление пользовательским интерфейсом приложения. Этот поток критически важен, потому что именно он обрабатывает все действия пользовательского интерфейса, включая отрисовку вьюх (views), обработку взаимодействий пользователя и выполнение анимаций. Также основной поток обрабатывает системные вызовы, такие как события жизненного цикла активности. Работа основной поток: обработка событий, выполнение задач связанных с пользовательским интерфейсом, цикл событий (Looper), запрет на тяжелые операции.
 
 ## Related Topics

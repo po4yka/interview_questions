@@ -8,14 +8,20 @@ tags:
   - overview
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Расскажи про три любимых фичи в Kotlin
 
-**English**: Tell me about three favorite Kotlin features
+# Question (EN)
+> Tell me about three favorite Kotlin features
 
-## Answer
+# Вопрос (RU)
+> Расскажи про три любимых фичи в Kotlin
+
+---
+
+## Answer (EN)
 
 Three favorite Kotlin features:
 
@@ -49,7 +55,39 @@ suspend fun fetchData() {
 - **Null Safety**: Prevents most runtime crashes
 - **Coroutines**: Simplifies async programming dramatically
 
-## Ответ
+---
 
-Три любимые фичи в Kotlin: Extension Functions для добавления новых функций к существующим классам без их изменения, Null Safety для защиты от NullPointerException и упрощенного управления null-значениями, а также Coroutines для удобной работы с асинхронным кодом и многопоточностью...
+## Ответ (RU)
+
+Три любимые фичи Kotlin:
+
+### 1. Функции-расширения (Extension Functions)
+Добавляют новые функции к существующим классам без их изменения или использования наследования/паттернов:
+```kotlin
+fun String.addExclamation() = this + "!"
+"Hello".addExclamation()  // "Hello!"
+```
+
+### 2. Null Safety
+Защита от NullPointerException на уровне языка с явными nullable типами:
+```kotlin
+var name: String = "John"    // Не может быть null
+var nullable: String? = null // Может быть null
+nullable?.length             // Безопасный вызов
+```
+
+### 3. Корутины (Coroutines)
+Удобная работа с асинхронным кодом и многопоточностью с простым синтаксисом, похожим на синхронный:
+```kotlin
+suspend fun fetchData() {
+    val data = withContext(Dispatchers.IO) {
+        // Асинхронная операция
+    }
+}
+```
+
+**Почему эти функции важны:**
+- **Расширения**: Переиспользование кода без сложности наследования
+- **Null Safety**: Предотвращает большинство runtime ошибок
+- **Корутины**: Значительно упрощает асинхронное программирование
 

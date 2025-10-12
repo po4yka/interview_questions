@@ -8,14 +8,20 @@ tags:
   - type-hierarchy
   - type-system
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Все классы Kotlin наследуются от Any
 
-**English**: All Kotlin classes inherit from Any
+# Question (EN)
+> All Kotlin classes inherit from Any
 
-## Answer
+# Вопрос (RU)
+> Все классы Kotlin наследуются от Any
+
+---
+
+## Answer (EN)
 
 In Kotlin, **all classes by default inherit from the `Any` class**. This class is the root (base) class for all other classes in Kotlin. It is analogous to the `Object` class in Java.
 
@@ -55,7 +61,9 @@ Any (root)
 
 **Note**: For nullable types, the root is `Any?`
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Kotlin все классы по умолчанию наследуются от класса Any. Этот класс является корневым (базовым) классом для всех других классов в Kotlin. Он аналогичен классу Object в Java.
 

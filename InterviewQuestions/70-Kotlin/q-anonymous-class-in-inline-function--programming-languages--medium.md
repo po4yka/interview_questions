@@ -16,7 +16,7 @@ source: ""
 source_note: ""
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,14 +26,13 @@ updated: 2025-10-06
 
 tags: [kotlin, inline, anonymous-classes, lambdas, object-expressions, performance, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > Can you create an anonymous class inside an inline function in Kotlin?
 
-## Вопрос (RU)
+# Вопрос (RU)
 > Можно ли создать анонимный класс внутри inline функции в Kotlin?
 
-## Answer
-
+## Answer (EN)
 **No**, **inline functions cannot contain object expressions** (anonymous classes). If you need to use inline, you can pass a **lambda instead of an anonymous class**.
 
 However, there are nuances: while you can technically write an object expression in an inline function, it **defeats the purpose** of inlining and can cause **performance issues** because the object expression creates an actual object allocation.

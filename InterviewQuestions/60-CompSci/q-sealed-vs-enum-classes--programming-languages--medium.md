@@ -7,14 +7,20 @@ tags:
   - programming-languages
   - sealed-class
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Каковы отличия sealed и enum классов в Kotlin?
 
-**English**: What are the differences between sealed and enum classes in Kotlin?
+# Question (EN)
+> What are the differences between sealed and enum classes in Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Каковы отличия sealed и enum классов в Kotlin?
+
+---
+
+## Answer (EN)
 
 ### Key Differences
 
@@ -141,7 +147,9 @@ sealed class TaskResult {
 }
 ```
 
-## Ответ
+---
+
+## Ответ (RU)
 
 sealed class – это ограниченная иерархия классов, где можно создавать разные подклассы с разными свойствами. enum class – это фиксированный набор однотипных объектов, которые не имеют разной структуры. enum class используется для фиксированного набора значений, когда значения не изменятся и у всех одинаковая структура. sealed class используется для сложных состояний с разной структурой, когда у состояний разные параметры и поведение.
 

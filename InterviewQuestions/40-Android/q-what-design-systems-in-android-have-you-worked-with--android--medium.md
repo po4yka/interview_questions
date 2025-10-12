@@ -7,15 +7,14 @@ tags:
   - material design
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # С какими вариантами систем проектирования в Android работал
 
 **English**: What design systems in Android have you worked with?
 
-## Answer
-
+## Answer (EN)
 In Android development, several design systems are commonly used to create consistent, polished user interfaces. Here are the main design systems:
 
 ### 1. Material Design (Google)
@@ -207,7 +206,6 @@ object BrandDesignSystem {
 5. Use **design tokens** for maintainability
 6. Consider **platform conventions** when choosing a system
 
-## Ответ
-
+## Ответ (RU)
 В Android-разработке часто используются следующие системы проектирования: Material Design от Google, Fluent Design System от Microsoft и Human Interface Guidelines от Apple. Material Design является стандартным выбором благодаря интеграции с экосистемой Google и Android. Fluent Design System ориентирован на создание интуитивных интерфейсов и может быть адаптирован для Android через стилизацию. Принципы HIG, хотя ориентированы на iOS и macOS, могут быть полезны для кросс-платформенных приложений.
 

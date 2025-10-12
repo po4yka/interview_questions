@@ -8,15 +8,14 @@ tags:
   - memory-management
   - performance
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое утечки памяти?
 
 **English**: What are memory leaks?
 
-## Answer
-
+## Answer (EN)
 **Memory leaks** occur when an object in memory is **no longer used** but remains **inaccessible to the garbage collector** due to active references to it.
 
 This can happen due to **cyclic references** or **improperly managed resources**.
@@ -160,7 +159,6 @@ class MyActivity : AppCompatActivity() {
 - **Detection**: LeakCanary, Memory Profiler
 - **Prevention**: Proper resource cleanup
 
-## Ответ
-
+## Ответ (RU)
 Утечки памяти происходят, когда объект в памяти больше не используется, но остаётся недоступным для сборщика мусора из-за активных ссылок на него. Это может случиться из-за циклических ссылок или неправильно управляемых ресурсов. Утечки памяти приводят к увеличению потребления памяти и ухудшению производительности приложения.
 

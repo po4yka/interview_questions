@@ -4,15 +4,14 @@ tags:
   - collections
   - data-structures
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Чем array отличается от list
 
 **English**: What is the difference between array and list in Kotlin?
 
-## Answer
-
+## Answer (EN)
 Массивы и списки представляют собой структуры данных для хранения наборов элементов.
 
 ### Основные различия

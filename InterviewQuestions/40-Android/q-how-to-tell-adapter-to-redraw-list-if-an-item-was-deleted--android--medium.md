@@ -6,17 +6,16 @@ tags:
   - android
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to tell adapter to redraw list if an item was deleted?
 
-## Question (RU)
+# Вопрос (RU)
 
 Как сказать адаптеру перерисовать список, если какой-то элемент удалился
 
-## Answer
-
+## Answer (EN)
 If an item was deleted from the list, you need to: (1) Remove it from the data list, (2) Tell Adapter to redraw only changed items using specific notify methods.
 
 ### 1. Basic Approaches
@@ -264,6 +263,6 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 5. - Use `notifyItemRangeChanged()` to update positions
 6. - Implement undo functionality for better UX
 
-## Answer (RU)
+## Ответ (RU)
 
 Если удалился элемент из списка, нужно: Удалить его из списка данных. Сообщить Adapter, чтобы он перерисовал только изменённые элементы.

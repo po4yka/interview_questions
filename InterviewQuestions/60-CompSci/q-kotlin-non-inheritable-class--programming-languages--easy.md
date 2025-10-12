@@ -9,14 +9,20 @@ tags:
   - open
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как в Kotlin определить класс, который не может быть унаследован?
 
-**English**: How to define a class in Kotlin that cannot be inherited?
+# Question (EN)
+> How to define a class in Kotlin that cannot be inherited?
 
-## Answer
+# Вопрос (RU)
+> Как в Kotlin определить класс, который не может быть унаследован?
+
+---
+
+## Answer (EN)
 
 In Kotlin, to define a class that **cannot be inherited**, you simply declare it **without the `open` keyword**. All classes in Kotlin are `final` by default.
 
@@ -85,7 +91,9 @@ class MoreDerived : Derived() {
 - Just omit `open` to make a class non-inheritable
 - This is the recommended approach for most classes
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Kotlin для определения класса, который не может быть унаследован, используется ключевое слово 'final'. По умолчанию все классы в Kotlin являются финальными и не могут быть унаследованы без явного указания 'open'. Таким образом, чтобы определить класс который не может быть унаследован достаточно просто объявить его без ключевого слова 'open'.
 

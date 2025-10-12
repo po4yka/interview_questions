@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Suspend Function Suspension Mechanism
 
-## Answer
+# Question (EN)
+> How does the suspension mechanism work in suspend functions?
+
+# Вопрос (RU)
+> Как работает механизм приостановки в suspend-функциях?
+
+---
+
+## Answer (EN)
 
 When execution of a suspend function is suspended:
 
@@ -199,10 +207,8 @@ class DelayedContinuation(
 - Efficient resource usage
 
 ---
-## Вопрос (RU)
 
-Каким образом обеспечивается возможность приостановки выполнения suspend-функции
 
-## Ответ
+## Ответ (RU)
 
 Когда выполнение suspend-функции приостанавливается состояние функции сохраняется в continuation-объекте а текущий поток освобождается Позже выполнение возобновляется с этого же места как будто ничего не происходило Это реализовано через стейт-машину и трансформацию кода компилятором Kotlin

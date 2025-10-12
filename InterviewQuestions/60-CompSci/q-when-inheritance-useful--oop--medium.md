@@ -8,14 +8,20 @@ tags:
   - best-practices
   - polymorphism
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # В каких случаях наследование полезно, а в каких нет?
 
-**English**: When is inheritance useful, and when is it not?
+# Question (EN)
+> When is inheritance useful, and when is it not?
 
-## Answer
+# Вопрос (RU)
+> В каких случаях наследование полезно, а в каких нет?
+
+---
+
+## Answer (EN)
 
 **Inheritance** is a powerful OOP mechanism, but it should be used carefully. Understanding **when to use** and **when to avoid** inheritance is crucial for good software design.
 
@@ -507,7 +513,7 @@ Use inheritance **sparingly** and only when there's a **clear, stable IS-A relat
 
 ---
 
-## Ответ
+## Ответ (RU)
 
 Наследование полезно для:
 - **Повторного использования кода** - когда классы имеют общее поведение

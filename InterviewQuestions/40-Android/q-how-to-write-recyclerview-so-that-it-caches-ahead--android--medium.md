@@ -7,17 +7,16 @@ tags:
   - ui
   - performance
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to write RecyclerView so that it caches ahead?
 
-## Question (RU)
+# Вопрос (RU)
 
 Как можно писать RecyclerView, чтобы он кэшировал наперёд
 
-## Answer
-
+## Answer (EN)
 RecyclerView provides several mechanisms for caching items ahead to improve scrolling performance and user experience. Here are the main approaches:
 
 ### 1. setItemViewCacheSize() - View Caching
@@ -422,6 +421,6 @@ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 })
 ```
 
-## Answer (RU)
+## Ответ (RU)
 
 1. Использовать setItemViewCacheSize для кэширования определённого количества элементов. 2. Включить предзагрузку данных с помощью RecyclerView.OnScrollListener. 3. Реализовать Prefetching через LinearLayoutManager или RecyclerView.LayoutManager.

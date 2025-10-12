@@ -6,22 +6,26 @@ tags:
   - gof-patterns
   - wrapper
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Adapter Pattern
 
-**English**: What is the Adapter pattern? When and why should it be used?
+# Question (EN)
+> What is the Adapter pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Adapter? Когда и зачем его использовать?
 
-**Adapter (Адаптер)** - это структурный паттерн проектирования, который позволяет объектам с несовместимыми интерфейсами работать вместе. Он действует как мост между двумя классами с разными интерфейсами.
+---
 
-### Определение
+## Answer (EN)
+
+### Definition
 
 The adapter pattern is a structural design pattern that **permits two somewhat incompatible interfaces to work together**. It acts as a bridge between two classes with different interfaces, allowing them to work together seamlessly.
 
-### Проблемы, которые решает
+### Problems it Solves
 
 The adapter design pattern solves problems like:
 
@@ -29,11 +33,11 @@ The adapter design pattern solves problems like:
 2. **How can classes that have incompatible interfaces work together?**
 3. **How can an alternative interface be provided for a class?**
 
-### Почему это проблема?
+### Why is this a problem?
 
 Often an (already existing) class cannot be reused only because its interface does not conform to the interface clients require.
 
-### Решение
+### Solution
 
 The adapter design pattern describes how to solve such problems:
 
@@ -42,7 +46,7 @@ The adapter design pattern describes how to solve such problems:
 
 The key idea is to work through a separate adapter that adapts the interface of an (already existing) class without changing it. Clients don't know whether they work with a target class directly or through an adapter.
 
-## Ключевые характеристики
+### Key Characteristics
 
 Key Characteristics:
 
@@ -50,7 +54,7 @@ Key Characteristics:
 2. **Reusability** - Promotes code reusability by allowing different classes to work together without modifying their code
 3. **Flexibility** - Makes it easy to introduce new types of data sources or components
 
-## Пример: Basic Adapter
+### Example: Basic Adapter
 
 ```kotlin
 // Target interface
@@ -183,7 +187,7 @@ fun main() {
 }
 ```
 
-### Объяснение примера
+### Example Explanation
 
 **Explanation**:
 
@@ -193,7 +197,7 @@ fun main() {
 - In Android, **RecyclerView.Adapter** is a classic example - it adapts data to ViewHolder items
 - The **payment adapter** shows how to integrate legacy systems with modern interfaces
 
-## Применение в Android
+### Android Use Cases
 
 Adapter Pattern in Android:
 
@@ -202,9 +206,9 @@ Adapter Pattern in Android:
 3. **ViewPager Adapters** - Adapt pages for ViewPager to display fragments or views
 4. **Database Adapters** - Adapt between different database systems or APIs
 
-## Преимущества и недостатки
+### Pros and Cons
 
-### Pros (Преимущества)
+**Pros:**
 
 1. **Code reusability** - Reuse existing code without modifying it
 2. **Single Responsibility** - Separates interface conversion from business logic
@@ -212,7 +216,7 @@ Adapter Pattern in Android:
 4. **Open/Closed Principle** - Can introduce new adapters without changing existing code
 5. **Decoupling** - Decouples client from specific implementations
 
-### Cons (Недостатки)
+**Cons:**
 
 1. **Increased complexity** - Adds extra layer of abstraction
 2. **Performance overhead** - Additional indirection may impact performance slightly
@@ -267,6 +271,112 @@ class RoomToRealmAdapter(private val realmDB: Realm) : AppDatabase {
 - [Adapter](https://refactoring.guru/design-patterns/adapter)
 - [Adapter Design Pattern](https://sourcemaking.com/design_patterns/adapter)
 - [Adapter Software Pattern Kotlin Examples](https://softwarepatterns.com/kotlin/adapter-software-pattern-kotlin-example)
+
+## Ответ (RU)
+
+**Adapter (Адаптер)** - это структурный паттерн проектирования, который позволяет объектам с несовместимыми интерфейсами работать вместе. Он действует как мост между двумя классами с разными интерфейсами.
+
+### Определение
+
+Adapter - это структурный паттерн, который **позволяет двум несовместимым интерфейсам работать вместе**. Он действует как мост между двумя классами с разными интерфейсами, позволяя им работать вместе без проблем.
+
+### Проблемы, которые решает
+
+Паттерн Adapter решает такие проблемы как:
+
+1. **Как можно переиспользовать класс, который не имеет интерфейса, требуемого клиентом?**
+2. **Как классы с несовместимыми интерфейсами могут работать вместе?**
+3. **Как предоставить альтернативный интерфейс для класса?**
+
+### Почему это проблема?
+
+Часто (уже существующий) класс не может быть переиспользован только потому, что его интерфейс не соответствует интерфейсу, который требуется клиентам.
+
+### Решение
+
+Паттерн Adapter описывает, как решить такие проблемы:
+
+- Определите отдельный класс **`adapter`**, который конвертирует (несовместимый) интерфейс класса (**`adaptee`**) в другой интерфейс (**`target`**), требуемый клиентами
+- Работайте через **`adapter`**, чтобы работать с (переиспользовать) классы, которые не имеют требуемого интерфейса
+
+Ключевая идея - работать через отдельный адаптер, который адаптирует интерфейс (уже существующего) класса без его изменения. Клиенты не знают, работают ли они с целевым классом напрямую или через адаптер.
+
+### Ключевые характеристики
+
+1. **Конвертация интерфейсов** - Преобразует интерфейс класса в другой интерфейс, ожидаемый клиентами
+2. **Переиспользуемость** - Способствует переиспользованию кода, позволяя различным классам работать вместе без изменения их кода
+3. **Гибкость** - Упрощает внедрение новых типов источников данных или компонентов
+
+### Пример: Basic Adapter
+
+```kotlin
+// Target interface
+interface ThreePinSocket {
+    fun acceptThreePinPlug()
+}
+
+// Adaptee
+class TwoPinPlug {
+    fun insertTwoPinPlug() {
+        println("Two-pin plug inserted!")
+    }
+}
+
+// Adapter
+class PlugAdapter(private val plug: TwoPinPlug) : ThreePinSocket {
+    override fun acceptThreePinPlug() {
+        plug.insertTwoPinPlug()
+        println("Adapter made it compatible with three-pin socket!")
+    }
+}
+
+fun main() {
+    val twoPinPlug = TwoPinPlug()
+    val adapter = PlugAdapter(twoPinPlug)
+    adapter.acceptThreePinPlug()
+}
+```
+
+**Вывод**:
+```
+Two-pin plug inserted!
+Adapter made it compatible with three-pin socket!
+```
+
+### Объяснение примера
+
+**Объяснение**:
+
+- **`ThreePinSocket`** - это целевой интерфейс, который ожидает наш клиент
+- **`TwoPinPlug`** - это adaptee – существующая функциональность, которую мы хотим адаптировать
+- **`PlugAdapter`** - это класс-адаптер, который реализует целевой интерфейс и оборачивает adaptee
+- В Android **RecyclerView.Adapter** - классический пример - он адаптирует данные в элементы ViewHolder
+- **Payment adapter** показывает, как интегрировать legacy системы с современными интерфейсами
+
+### Применение в Android
+
+1. **RecyclerView Adapters** - Преобразуют данные в элементы ViewHolder для эффективного отображения
+2. **ListView Adapters** - Адаптируют данные для компонентов ListView и GridView
+3. **ViewPager Adapters** - Адаптируют страницы для ViewPager для отображения фрагментов или views
+4. **Database Adapters** - Адаптируют между различными системами баз данных или API
+
+### Преимущества и недостатки
+
+**Преимущества:**
+
+1. **Переиспользование кода** - Переиспользование существующего кода без его изменения
+2. **Единая ответственность** - Отделяет конвертацию интерфейса от бизнес-логики
+3. **Гибкость** - Можно легко менять адаптеры для поддержки различных интерфейсов
+4. **Принцип открытости/закрытости** - Можно внедрять новые адаптеры без изменения существующего кода
+5. **Разделение** - Отделяет клиента от конкретных реализаций
+
+**Недостатки:**
+
+1. **Увеличенная сложность** - Добавляет дополнительный слой абстракции
+2. **Издержки производительности** - Дополнительная косвенность может немного влиять на производительность
+3. **Сложности с поддержкой** - Множество адаптеров может стать обременительным
+4. **Риск избыточной инженерии** - Может быть ненужным для тривиальных изменений
+5. **Ограниченная область** - Может переводить только два интерфейса за раз
 
 ---
 *Source: Kirchhoff Android Interview Questions*

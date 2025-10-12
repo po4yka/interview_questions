@@ -9,14 +9,20 @@ tags:
   - scope-functions
   - with
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какой оператор в Kotlin исполняет блок кода и возвращает его значение?
 
-**English**: Which operator in Kotlin executes a block of code and returns its value?
+# Question (EN)
+> Which operator in Kotlin executes a block of code and returns its value?
 
-## Answer
+# Вопрос (RU)
+> Какой оператор в Kotlin исполняет блок кода и возвращает его значение?
+
+---
+
+## Answer (EN)
 
 The **`run`** operator (scope function) in Kotlin executes a block of code and returns its result value.
 
@@ -369,7 +375,9 @@ val request = HttpRequest().run {
 - `also`: Returns object, uses `it`
 - `with`: Returns result, uses `this` (not extension)
 
-## Ответ
+---
+
+## Ответ (RU)
 
 run
 

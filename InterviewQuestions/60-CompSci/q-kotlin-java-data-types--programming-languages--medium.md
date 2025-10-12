@@ -9,14 +9,20 @@ tags:
   - type-system
   - types
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие типы данных существуют в Java и Kotlin?
 
-**English**: What data types exist in Java and Kotlin?
+# Question (EN)
+> What data types exist in Java and Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Какие типы данных существуют в Java и Kotlin?
+
+---
+
+## Answer (EN)
 
 In both Java and Kotlin, data types are divided into **primitive types** and **reference types**, but with important differences.
 
@@ -223,7 +229,9 @@ Any (all types)
 - No autoboxing confusion
 - Methods available on all types
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Java и Kotlin типы данных делятся на примитивные и ссылочные. В Java: int, double и тд как примитивы и String, классы объекты массивы интерфейсы как ссылочные типы. В Kotlin: Int Double и тд как обёртки примитивов JVM, String коллекции классы с nullable и nonnullable типами. Kotlin добавляет Unit эквивалент void но объект, и Nothing для функций которые всегда бросают исключение. Также в Kotlin все данные являются объектами
 

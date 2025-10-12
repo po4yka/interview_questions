@@ -16,7 +16,7 @@ source: https://t.me/easy_kotlin/283
 source_note: easy_kotlin Telegram channel
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-tools
 related:
   - c-git
@@ -29,9 +29,9 @@ updated: 2025-10-03
 # Tags
 tags: [git, rebase, squash, version-control, difficulty/medium, easy_kotlin, lang/ru, tools]
 ---
-## Question (EN)
+# Question (EN)
 > How to combine multiple commits into one in Git
-## Вопрос (RU)
+# Вопрос (RU)
 > Как объединить несколько коммитов в один в Git
 
 ---

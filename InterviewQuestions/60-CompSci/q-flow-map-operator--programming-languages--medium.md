@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Flow Map Operator for Type Transformation
 
-## Answer
+# Question (EN)
+> What to use to transform data from one type to another within a single data stream?
+
+# Вопрос (RU)
+> Чем воспользоваться чтобы преобразовать внутри одного потока данных данные из одного типа в другой?
+
+---
+
+## Answer (EN)
 
 Use the **map** operator. It transforms each element of the source stream into a new element of another type.
 
@@ -147,10 +155,7 @@ flowOf(1, 2, 3, 4)
 - Use `mapLatest` if only the latest result matters
 
 ---
-## Вопрос (RU)
 
-Чем воспользоваться чтобы преобразовать внутри одного потока данных данные из одного типа в другой
-
-## Ответ
+## Ответ (RU)
 
 Используйте оператор map. Преобразует каждый элемент исходного потока в новый элемент другого типа.

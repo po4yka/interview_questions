@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is CoroutineScope?
 
-## Answer
+# Question (EN)
+> What is CoroutineScope?
+
+# Вопрос (RU)
+> Что такое CoroutineScope?
+
+---
+
+## Answer (EN)
 
 **CoroutineScope** is an area/context in which coroutines execute in Kotlin. It defines the coroutine lifecycle and allows cancelling them when the scope finishes.
 
@@ -361,10 +369,8 @@ class MyRepositoryTest {
 - Cancel scopes to prevent leaks
 
 ---
-## Вопрос (RU)
 
-Что такое CoroutineScope
 
-## Ответ
+## Ответ (RU)
 
 Это область, в которой выполняются корутины в Kotlin. Определяет жизненный цикл корутин и позволяет отменять их при завершении scope. GlobalScope – живет все время работы приложения, но редко используется. viewModelScope – в ViewModel, отменяется при уничтожении ViewModel. lifecycleScope – в Activity/Fragment, отменяется при уничтожении UI.

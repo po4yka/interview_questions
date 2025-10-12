@@ -6,22 +6,30 @@ tags:
   - gof-patterns
   - tree-structure
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Composite Pattern
 
-**English**: What is the Composite pattern? When and why should it be used?
+# Question (EN)
+> What is the Composite pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Composite? Когда и зачем его использовать?
 
-**Composite (Компоновщик)** - это структурный паттерн проектирования, который позволяет сгруппировать объекты в древовидную структуру для представления иерархии "часть-целое". Компоновщик позволяет клиентам обращаться к отдельным объектам и к группам объектов одинаково.
+---
 
-### Определение
+## Answer (EN)
+
+
+
+### Definition
+
 
 The Composite Design Pattern is a structural design pattern that **lets you compose objects into tree-like structures to represent part-whole hierarchies**. It allows clients to treat individual objects and compositions of objects uniformly.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 The composite design pattern solves problems like:
 
@@ -29,7 +37,8 @@ The composite design pattern solves problems like:
 2. **Represent a part-whole hierarchy as tree structure**
 3. **Avoid having to treat `Part` and `Whole` objects separately** - This complicates client code
 
-### Решение
+### Solution
+
 
 Solutions the Composite design pattern describes:
 
@@ -233,7 +242,8 @@ fun main() {
 }
 ```
 
-### Объяснение
+### Explanation
+
 
 **Explanation**:
 
@@ -256,6 +266,7 @@ When to use:
 
 ### Pros (Преимущества)
 
+
 1. **Flexibility** - Easy to add new component types
 2. **Simplified client code** - Treat individual and composite objects the same
 3. **Improved scalability** - Build complex hierarchies easily
@@ -263,6 +274,7 @@ When to use:
 5. **Open/Closed Principle** - Add new components without changing existing code
 
 ### Cons (Недостатки)
+
 
 1. **Increased complexity** - More complex for simple cases
 2. **Performance overhead** - Extra layers of abstraction
@@ -324,3 +336,59 @@ sealed class MenuItem {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+The Composite Design Pattern is a structural design pattern that **lets you compose objects into tree-like structures to represent part-whole hierarchies**. It allows clients to treat individual objects and compositions of objects uniformly.
+
+### Проблемы, которые решает
+
+
+The composite design pattern solves problems like:
+
+1. **Represent a part-whole hierarchy so that clients can treat part and whole objects uniformly**
+2. **Represent a part-whole hierarchy as tree structure**
+3. **Avoid having to treat `Part` and `Whole` objects separately** - This complicates client code
+
+### Решение
+
+
+Solutions the Composite design pattern describes:
+
+- Define a unified **`Component`** interface for part (`Leaf`) objects and whole (`Composite`) objects
+- Individual **`Leaf`** objects implement the Component interface directly
+- **`Composite`** objects forward requests to their child components
+
+This enables clients to work through the Component interface to treat Leaf and Composite objects uniformly. Composite objects forward requests recursively downwards the tree structure.
+
+### Объяснение
+
+
+**Explanation**:
+
+- **`Employee`/`ViewComponent`** is the component interface providing uniform methods
+- **`Developer`/`TextView`** is a leaf that implements the interface directly
+- **`Manager`/`LinearLayout`** is a composite containing list of components
+- Composite forwards operations to children, aggregating results
+- **Android**: View hierarchy (ViewGroup/View), menu structures, drawable layers
+
+### Pros (Преимущества)
+
+
+1. **Flexibility** - Easy to add new component types
+2. **Simplified client code** - Treat individual and composite objects the same
+3. **Improved scalability** - Build complex hierarchies easily
+4. **Reduced coupling** - Clients don't know if working with leaf or composite
+5. **Open/Closed Principle** - Add new components without changing existing code
+
+### Cons (Недостатки)
+
+
+1. **Increased complexity** - More complex for simple cases
+2. **Performance overhead** - Extra layers of abstraction
+3. **Limited functionality** - Best for similar objects in hierarchy
+4. **Overly general** - Component interface may be too general

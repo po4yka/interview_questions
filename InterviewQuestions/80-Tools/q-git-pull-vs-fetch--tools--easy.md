@@ -16,7 +16,7 @@ source: https://t.me/easy_kotlin/1399
 source_note: easy_kotlin Telegram channel
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-tools
 related:
   - c-git
@@ -29,9 +29,9 @@ updated: 2025-10-03
 # Tags
 tags: [git, fetch, pull, version-control, remote, difficulty/easy, easy_kotlin, lang/ru, tools]
 ---
-## Question (EN)
+# Question (EN)
 > Difference between git pull and git fetch
-## Вопрос (RU)
+# Вопрос (RU)
 > Разница между git pull и git fetch
 
 ---

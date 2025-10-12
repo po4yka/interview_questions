@@ -6,14 +6,28 @@ tags:
   - art
   - dalvik
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что такое Runtime в контексте Android?
 
-**English**: What is Runtime in Android context?
+# Question (EN)
+> What is Runtime in Android context?
 
-## Answer
+# Вопрос (RU)
+> Что такое Runtime в контексте Android?
+
+---
+
+## Answer (EN)
+
+Android Runtime (ART) is the execution environment for Android apps. It replaced Dalvik VM from Android 5.0. ART uses **AOT (Ahead-of-Time) compilation** converting DEX bytecode to native code at install time, improving performance. Key features: improved GC, better debugging, optimized app startup.
+
+**Dalvik vs ART**: Dalvik used JIT (Just-In-Time), ART uses AOT + JIT hybrid since Android 7.0 for optimal performance and install time balance.
+
+---
+
+## Ответ (RU)
 
 Runtime в контексте Android — это среда выполнения приложений, которая отвечает за выполнение кода, управление памятью и взаимодействие с операционной системой.
 

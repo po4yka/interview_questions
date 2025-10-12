@@ -7,14 +7,20 @@ tags:
   - programming-languages
   - reachability
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как сборщик мусора понимает что объект можно уничтожить?
 
-**English**: How does garbage collector know that an object can be destroyed?
+# Question (EN)
+> How does garbage collector know that an object can be destroyed?
 
-## Answer
+# Вопрос (RU)
+> Как сборщик мусора понимает что объект можно уничтожить?
+
+---
+
+## Answer (EN)
 
 The garbage collector uses **reachability analysis** to determine if an object can be destroyed.
 
@@ -122,7 +128,9 @@ fun circularExample() {
 
 GC uses **reachability analysis from GC Roots**. If an object cannot be reached through any chain of references from a GC Root, it's considered **dead** and will be destroyed.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Сборщик мусора использует анализ ссылок. Объект считается 'мёртвым', если на него нет доступных ссылок из корневых объектов. GC обходит все достижимые объекты, начиная с корневых. Недостижимые объекты считаются мусором и удаляются.
 

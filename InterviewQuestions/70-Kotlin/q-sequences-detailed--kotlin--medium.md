@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: [q-kotlin-collections--kotlin--easy, q-list-vs-sequence--kotlin--medium]
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, sequences, lazy-evaluation, collections, performance, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What are sequences in Kotlin and how do they differ from Iterables?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое последовательности в Kotlin и чем они отличаются от Iterable?
 
 ---

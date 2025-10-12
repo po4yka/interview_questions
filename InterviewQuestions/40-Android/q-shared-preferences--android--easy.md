@@ -5,15 +5,14 @@ tags:
   - data-storage
   - shared-preferences
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое SharedPreferences?
 
 **English**: What is SharedPreferences?
 
-## Answer
-
+## Answer (EN)
 SharedPreferences представляет собой механизм для хранения и извлечения простых данных в форме пар ключ-значение. Это один из самых простых способов сохранения небольших объемов данных, таких как пользовательские настройки или состояние приложения между сессиями.
 
 ### Основные особенности

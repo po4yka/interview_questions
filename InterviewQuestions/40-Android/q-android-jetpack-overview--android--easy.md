@@ -6,14 +6,28 @@ tags:
   - androidx
   - libraries
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое Android Jetpack?
 
-**English**: What is Android Jetpack?
+# Question (EN)
+> What is Android Jetpack?
 
-## Answer
+# Вопрос (RU)
+> Что такое Android Jetpack?
+
+---
+
+## Answer (EN)
+
+Android Jetpack is a suite of libraries, tools, and guidance from Google to simplify Android development. It provides modern architecture components (ViewModel, LiveData, Room, Navigation), follows best practices, reduces boilerplate code, and ensures backward compatibility through AndroidX.
+
+**Key categories**: Foundation (AppCompat, KTX), Architecture (Lifecycle, Navigation, Room, ViewModel), Behavior (Notifications, Permissions, Work Manager), UI (Animations, Compose, Fragment).
+
+---
+
+## Ответ (RU)
 
 Android Jetpack — это набор библиотек, инструментов и рекомендаций от Google, предназначенных для упрощения разработки высококачественных Android-приложений. Jetpack помогает разработчикам следовать лучшим практикам, сокращает количество шаблонного кода и делает разработку проще и быстрее.
 

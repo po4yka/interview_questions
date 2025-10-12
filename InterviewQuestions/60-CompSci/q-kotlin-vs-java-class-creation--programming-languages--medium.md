@@ -10,14 +10,20 @@ tags:
   - properties
   - syntax
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что при создании классов в Kotlin изменились по сравнению с Java?
 
-**English**: What changed when creating classes in Kotlin compared to Java?
+# Question (EN)
+> What changed when creating classes in Kotlin compared to Java?
 
-## Answer
+# Вопрос (RU)
+> Что при создании классов в Kotlin изменились по сравнению с Java?
+
+---
+
+## Answer (EN)
 
 Kotlin introduced several significant changes and simplifications when creating classes compared to Java. Here are the main differences:
 
@@ -196,7 +202,9 @@ class Error(val message: String) : Result()
 
 Kotlin's design emphasizes **conciseness**, **safety**, and **expressiveness**, reducing boilerplate while maintaining readability.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 При создании классов по сравнению с Java произошли несколько значительных изменений и упрощений. Kotlin предлагает более лаконичный и выразительный синтаксис, что делает код более читаемым и удобным. Объявление классов и конструкторов в Kotlin упрощено, например: class Person(val name: String, val age: Int). Для статических членов используется companion object вместо static. Kotlin предоставляет data классы, которые автоматически генерируют методы equals(), hashCode(), toString(), copy(), и componentN(). Свойства объявляются напрямую, и методы доступа генерируются автоматически.
 

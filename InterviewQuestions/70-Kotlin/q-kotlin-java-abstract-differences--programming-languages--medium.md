@@ -8,15 +8,14 @@ tags:
   - open
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какое главное отличие между Java и Kotlin касательно абстрактных классов и методов?
 
 **English**: What is the main difference between Java and Kotlin regarding abstract classes and methods?
 
-## Answer
-
+## Answer (EN)
 The main difference is how **overriding** is handled:
 
 ### Java
@@ -62,7 +61,6 @@ abstract class Animal {
 
 This makes Kotlin's inheritance model **more explicit and intentional**.
 
-## Ответ
-
+## Ответ (RU)
 В Kotlin абстрактные классы и методы по умолчанию open, что позволяет их переопределять без явного указания модификатора open. В Java абстрактные методы всегда подразумевают переопределение, а обычные методы должны быть явно помечены abstract или final.
 

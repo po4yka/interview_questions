@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: []
 
@@ -27,11 +27,11 @@ updated: 2025-10-06
 tags: [android, 20251006-100008, difficulty/easy, recyclerview, performance]
 ---
 
-## Question (EN)
+# Question (EN)
 
 > What is setHasFixedSize(true) in RecyclerView?
 
-## Вопрос (RU)
+# Вопрос (RU)
 
 > Что такое setHasFixedSize(true) в RecyclerView?
 

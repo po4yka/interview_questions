@@ -3,10 +3,9 @@ topic: android
 tags:
   - android
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Why Fragment callbacks differ from Activity callbacks?
 
-## Answer
-
+## Answer (EN)

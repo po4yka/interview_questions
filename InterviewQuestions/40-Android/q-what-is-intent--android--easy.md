@@ -9,15 +9,14 @@ tags:
   - intent
   - intents-deeplinks
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое Intent?
 
 **English**: What is Intent?
 
-## Answer
-
+## Answer (EN)
 **Intent** is a messaging object used to **communicate between Android components** (Activity, Service, BroadcastReceiver) and between apps.
 
 **Types:**
@@ -82,7 +81,6 @@ val age = intent.getIntExtra("age", 0)
 
 Intent is the **glue** that connects Android components, allowing them to communicate and pass data.
 
-## Ответ
-
+## Ответ (RU)
 Intent — это механизм для связи между компонентами приложения или между приложениями. Позволяет запускать Activity, Service, отправлять broadcast и передавать данные.
 

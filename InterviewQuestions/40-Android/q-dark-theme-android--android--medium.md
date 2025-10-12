@@ -9,15 +9,14 @@ tags:
   - material-design
   - difficulty/medium
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is Dark Theme in Android? / Что такое темная тема в Android?
 
 **English**: What's dark theme?
 
-## Answer
-
+## Answer (EN)
 Dark theme is available in Android 10 (API level 29) and higher. It provides an alternative color scheme that uses dark backgrounds instead of light ones, offering several important benefits.
 
 ## Benefits of Dark Theme
@@ -317,8 +316,7 @@ To properly support Dark theme:
 
 **Source**: [Dark theme](https://developer.android.com/guide/topics/ui/look-and-feel/darktheme)
 
-## Ответ
-
+## Ответ (RU)
 Темная тема доступна в Android 10 (API level 29) и выше. Она предоставляет альтернативную цветовую схему, использующую темные фоны вместо светлых, предлагая несколько важных преимуществ.
 
 ## Преимущества темной темы

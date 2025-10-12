@@ -6,22 +6,30 @@ tags:
   - gof-patterns
   - policy-pattern
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Strategy Pattern
 
-**English**: What is the Strategy pattern? When and why should it be used?
+# Question (EN)
+> What is the Strategy pattern? When and why should it be used?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Strategy? Когда и зачем его следует использовать?
 
-**Strategy (Стратегия)** - это поведенческий паттерн проектирования, который определяет семейство алгоритмов, инкапсулирует каждый из них и делает их взаимозаменяемыми. Стратегия позволяет изменять алгоритмы независимо от клиентов, которые ими пользуются.
+---
 
-### Определение
+## Answer (EN)
+
+
+
+### Definition
+
 
 The Strategy Design Pattern is a behavioral design pattern that **allows you to define a family of algorithms or behaviors, put each of them in a separate class, and make them interchangeable at runtime**. This pattern is useful when you want to dynamically change the behavior of a class without modifying its code.
 
-### Ключевые характеристики
+### Key Characteristics
+
 
 This pattern exhibits several key characteristics:
 
@@ -30,7 +38,8 @@ This pattern exhibits several key characteristics:
 3. **Enables dynamic behavior switching** - Clients can switch between different strategies at runtime
 4. **Promotes object collaboration** - Context delegates execution to a strategy object
 
-### Когда использовать?
+### When to Use?
+
 
 The Strategy Design Pattern can be useful in various scenarios:
 
@@ -226,7 +235,8 @@ fun main() {
 }
 ```
 
-### Объяснение примера
+### Example Explanation
+
 
 **Explanation**:
 
@@ -240,6 +250,7 @@ fun main() {
 
 ### Pros (Преимущества)
 
+
 1. **Eliminates conditional logic** - Reduces complex if-else or when statements
 2. **Enhances flexibility** - Easy to add/modify algorithms without affecting client code
 3. **Promotes reusability** - Each algorithm is standalone and reusable
@@ -248,6 +259,7 @@ fun main() {
 6. **Runtime flexibility** - Can switch strategies at runtime
 
 ### Cons (Недостатки)
+
 
 1. **Increased number of classes** - Each algorithm requires a separate class
 2. **Complexity** - Can introduce complexity with numerous strategies
@@ -322,3 +334,64 @@ processor.process("Hello") // "HELLO"
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+The Strategy Design Pattern is a behavioral design pattern that **allows you to define a family of algorithms or behaviors, put each of them in a separate class, and make them interchangeable at runtime**. This pattern is useful when you want to dynamically change the behavior of a class without modifying its code.
+
+### Ключевые характеристики
+
+
+This pattern exhibits several key characteristics:
+
+1. **Defines a family of algorithms** - Encapsulates multiple algorithms/behaviors into separate classes (strategies)
+2. **Encapsulates behaviors** - Each strategy encapsulates a specific behavior or algorithm
+3. **Enables dynamic behavior switching** - Clients can switch between different strategies at runtime
+4. **Promotes object collaboration** - Context delegates execution to a strategy object
+
+### Когда использовать?
+
+
+The Strategy Design Pattern can be useful in various scenarios:
+
+1. **Sorting algorithms** - Different sorting algorithms encapsulated into strategies
+2. **Validation rules** - Different validation rules as separate strategies
+3. **Text formatting** - Different formatting strategies
+4. **Database access** - Different database access strategies
+5. **Payment strategy** - Different payment methods as strategies
+6. **Navigation apps** - Different routes based on travel mode (driving, biking, walking)
+7. **Image compression** - Users can choose different compression algorithms
+
+### Объяснение примера
+
+
+**Explanation**:
+
+- **`RouteStrategy`** defines a contract that all strategies (algorithms) must follow
+- **Concrete strategies** (`DrivingStrategy`, `WalkingStrategy`) encapsulate specific algorithms
+- **`Navigator`** (context class) maintains a reference to a strategy object and can switch between strategies
+- Client can easily switch between different strategies without changing the context implementation
+- **Android**: Payment processing, image filters, data validation, network retry strategies
+
+### Pros (Преимущества)
+
+
+1. **Eliminates conditional logic** - Reduces complex if-else or when statements
+2. **Enhances flexibility** - Easy to add/modify algorithms without affecting client code
+3. **Promotes reusability** - Each algorithm is standalone and reusable
+4. **Improves maintainability** - Encapsulating algorithms separately makes code easier to maintain
+5. **Open/Closed Principle** - Open for extension, closed for modification
+6. **Runtime flexibility** - Can switch strategies at runtime
+
+### Cons (Недостатки)
+
+
+1. **Increased number of classes** - Each algorithm requires a separate class
+2. **Complexity** - Can introduce complexity with numerous strategies
+3. **Overhead** - May introduce overhead when simple conditional would suffice
+4. **Client awareness** - Clients must be aware of different strategies
+5. **Strategy selection logic** - Need to implement strategy selection logic

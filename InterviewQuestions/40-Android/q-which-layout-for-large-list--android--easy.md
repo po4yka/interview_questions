@@ -8,15 +8,14 @@ tags:
   - recyclerview
   - ui
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какой layout выбрать для списка из большого количества элементов?
 
 **English**: Which layout to choose for a list with a large number of elements?
 
-## Answer
-
+## Answer (EN)
 For displaying lists with a large number of elements in Android, you should use **RecyclerView**. It is the most efficient and recommended component for displaying large datasets in list or grid format.
 
 ### Why RecyclerView?
@@ -234,7 +233,6 @@ fun MyList(items: List<String>) {
 }
 ```
 
-## Ответ
-
+## Ответ (RU)
 Для списка из большого количества элементов следует использовать RecyclerView. Это наиболее эффективный и рекомендуемый компонент для отображения больших данных в виде списка или сетки в Android
 

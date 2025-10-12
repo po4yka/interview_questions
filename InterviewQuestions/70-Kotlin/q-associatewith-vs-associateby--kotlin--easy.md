@@ -5,15 +5,14 @@ tags:
   - map
   - transformation
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # associateWith() vs associateBy(): создание Map из коллекций
 
 **English**: Difference between associateWith() and associateBy()
 
-## Answer
-
+## Answer (EN)
 `associateBy()` создает `Map`, где **ключи** вычисляются из элементов, а **значениями** становятся сами элементы. `associateWith()` делает наоборот — элементы становятся **ключами**, а **значения** вычисляются.
 
 ### associateBy — элемент становится значением

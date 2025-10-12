@@ -9,15 +9,14 @@ tags:
   - rendering
   - ui-performance
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Если профайлер показывает тебе что какой-нибудь фрейм занял 120 миллисекунд, что это значит?
 
 **English**: If profiler shows that a frame took 120 milliseconds, what does it mean?
 
-## Answer
-
+## Answer (EN)
 If the profiler shows that rendering a frame took **120 milliseconds**, this means the frame **executed too long**, which leads to **freezes and lags** in the user interface.
 
 **Frame Budget:**
@@ -166,8 +165,7 @@ Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallba
 - **Solution**: Move work off main thread, optimize rendering, use async operations
 - **Target**: Keep frames under 16ms for smooth 60 fps
 
-## Ответ
-
+## Ответ (RU)
 Если профайлер показывает что рендеринг какого-либо фрейма занял 120 миллисекунд это означает что этот фрейм выполнялся слишком долго что приводит к фризам и лагам в пользовательском интерфейсе.
 
 Цель: 60 fps = 16.67ms на фрейм

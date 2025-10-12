@@ -6,14 +6,30 @@ tags:
   - error-handling
   - structured-concurrency
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # coroutineScope vs supervisorScope: обработка ошибок
 
-**English**: Difference between coroutineScope and supervisorScope
+# Question (EN)
+> What is the difference between coroutineScope and supervisorScope in Kotlin coroutines?
 
-## Answer
+# Вопрос (RU)
+> В чём разница между coroutineScope и supervisorScope в корутинах Kotlin?
+
+---
+
+## Answer (EN)
+
+`coroutineScope` and `supervisorScope` are builder functions for creating nested coroutine scopes. The main difference is **error handling**: in `coroutineScope`, if one child coroutine fails, all others are cancelled (fail-fast). In `supervisorScope`, other children continue executing (fail-tolerant).
+
+**Use cases:**
+- **coroutineScope**: All-or-nothing operations - transactions, critical data loading where all pieces are required
+- **supervisorScope**: Independent tasks - dashboard widgets, metrics collection where partial success is acceptable
+
+**Key difference**: In `coroutineScope`, one try-catch wraps the entire block. In `supervisorScope`, you need try-catch on each `await()` call. Note that `SupervisorJob` doesn't work properly with `async` - use `supervisorScope` instead.
+
+## Ответ (RU)
 
 `coroutineScope` и `supervisorScope` — это функции-билдеры для создания вложенных корутинных scope. Главное различие — **обработка ошибок**: в `coroutineScope` падение одной дочерней корутины отменяет все остальные, в `supervisorScope` остальные продолжают работать.
 
@@ -420,6 +436,3 @@ suspend fun mixed() = supervisorScope {
     }
 }
 ```
-
-**English**: `coroutineScope` creates scope where **any child failure cancels all** siblings (fail-fast). `supervisorScope` creates scope where **children are independent** - one failure doesn't cancel others (fail-tolerant). Use `coroutineScope` for all-or-nothing operations (transactions, critical data loading). Use `supervisorScope` for independent tasks (dashboard widgets, metrics collection). In `coroutineScope`, one try-catch wraps entire block. In `supervisorScope`, need try-catch on each `await()`. `SupervisorJob` doesn't work with `async` - use `supervisorScope` instead.
-

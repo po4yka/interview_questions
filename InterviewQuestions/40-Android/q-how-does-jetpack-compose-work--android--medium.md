@@ -7,7 +7,7 @@ tags:
   - declarative-ui
   - recomposition
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How does Jetpack Compose work?

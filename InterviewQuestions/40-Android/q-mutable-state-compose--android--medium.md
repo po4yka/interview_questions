@@ -10,7 +10,7 @@ tags:
   - state
   - state-management
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is MutableState in Compose?
@@ -19,8 +19,7 @@ status: reviewed
 
 **English**: What is MutableState in Compose?
 
-## Answer
-
+## Answer (EN)
 **`MutableState<T>`** is a **wrapper for storing state** in Jetpack Compose that **automatically tracks changes** and **triggers recomposition** when the value changes.
 
 ## MutableState Overview
@@ -448,8 +447,7 @@ Button(
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 **MutableState<T>** – это обертка для хранения состояния в Jetpack Compose, которая автоматически отслеживает изменения и инициирует рекомпозицию.
 
 **Основные характеристики:**

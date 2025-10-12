@@ -9,17 +9,16 @@ tags:
   - custom-views
   - attributes
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to add custom attributes to custom view?
 
-## Question (RU)
+# Вопрос (RU)
 
 Как добавить кастомные атрибуты у кастомного view
 
-## Answer
-
+## Answer (EN)
 To add custom attributes to a Custom View, you need to: (1) create `attrs.xml` and describe attributes, (2) add them to styleable, (3) retrieve values in Custom View constructor, (4) use attributes in XML or Kotlin.
 
 ### 1. Define Attributes in attrs.xml
@@ -413,6 +412,6 @@ class CustomButton @JvmOverloads constructor(
 6. ✅ **Support theme attributes** for consistency
 7. ✅ **Validate attribute values** (e.g., progress 0-100)
 
-## Answer (RU)
+## Ответ (RU)
 
 Чтобы добавить кастомные атрибуты в Custom View нужно создать attrs.xml и описать атрибуты добавить их в styleable и получить в Custom View использовать атрибуты в XML или Kotlin

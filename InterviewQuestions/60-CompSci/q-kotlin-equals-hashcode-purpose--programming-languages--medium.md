@@ -7,14 +7,20 @@ tags:
   - object-comparison
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Зачем нужны методы equals и hashcode?
 
-**English**: Why do we need equals and hashCode methods?
+# Question (EN)
+> Why do we need equals and hashCode methods?
 
-## Answer
+# Вопрос (RU)
+> Зачем нужны методы equals и hashcode?
+
+---
+
+## Answer (EN)
 
 Methods `equals()` and `hashCode()` play a **central role** in comparing objects and managing them in collections.
 
@@ -124,7 +130,9 @@ class Book(val isbn: String, val title: String) {
 - **Critical for**: HashSet, HashMap, LinkedHashSet
 - **data class**: Auto-generates both methods
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Методы `equals()` и `hashCode()` играют центральную роль в сравнении объектов и управлении ими в коллекциях.
 

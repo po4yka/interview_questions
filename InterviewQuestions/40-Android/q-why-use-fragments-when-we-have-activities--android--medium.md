@@ -7,13 +7,12 @@ tags:
   - fragments
   - activity
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Why use Fragments when we have Activities?
 
-## Answer
-
+## Answer (EN)
 Fragments are used to create reusable UI components that can be embedded in different Activities. They allow more flexible interface management and separation into individual parts, improving app modularity. Fragments can be dynamically added or removed at runtime, simplifying interface adaptation for different devices. Unlike Activities, fragments can share resources within a single screen.
 
 ### Why Fragments When We Have Activities?
@@ -302,6 +301,5 @@ class MainActivity : AppCompatActivity() {
 
 # Для чего нужны фрагменты, если есть Activity
 
-## Ответ
-
+## Ответ (RU)
 Фрагменты используются для создания многоразовых компонентов пользовательского интерфейса, которые могут быть встроены в различные Activity. Они позволяют более гибко управлять интерфейсом и разделять его на отдельные части, что улучшает модульность приложения. Фрагменты могут быть динамически добавлены или удалены во время выполнения, что упрощает адаптацию интерфейса под разные устройства. В отличие от Activity, фрагменты могут совместно использовать ресурсы внутри одного экрана.

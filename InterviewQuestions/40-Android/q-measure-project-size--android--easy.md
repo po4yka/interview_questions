@@ -11,15 +11,14 @@ tags:
   - project-metrics
   - project-structure
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как можно измерить размер проекта?
 
 **English**: How can you measure project size?
 
-## Answer
-
+## Answer (EN)
 Project size can be measured in several ways:
 1. **Lines of Code (LOC)** - Total source code lines
 2. **Number of Modules** - Modularization level
@@ -512,8 +511,7 @@ android {
 
 ---
 
-## Ответ
-
+## Ответ (RU)
 Размер проекта можно измерить несколькими способами:
 
 1. **Строки кода (LOC)** - общее количество строк исходного кода

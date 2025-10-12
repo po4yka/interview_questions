@@ -6,14 +6,20 @@ tags:
   - lambda
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какой тип у лямбды в Java?
 
-**English**: What type does a lambda have in Java?
+# Question (EN)
+> What type does a lambda have in Java?
 
-## Answer
+# Вопрос (RU)
+> Какой тип у лямбды в Java?
+
+---
+
+## Answer (EN)
 
 In Java, lambda expressions have a type called **functional interface**.
 
@@ -94,7 +100,9 @@ boolean isValid = emailValidator.validate("test@example.com");  // true
 
 Lambda expressions in Java have the type of a **functional interface** - an interface with exactly one abstract method that the lambda implements.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Java лямбда-выражения имеют тип, который называется **функциональным интерфейсом**. Функциональный интерфейс — это интерфейс, который содержит только один абстрактный метод. Этот интерфейс может также содержать статические и по умолчанию (default) методы, но он должен иметь только один абстрактный метод, который определяет тип лямбда-выражения.
 

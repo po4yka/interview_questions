@@ -8,14 +8,20 @@ tags:
   - type-conversion
   - type-safety
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как в Kotlin привести переменную типа Any к типу String безопасно, чтобы избежать исключения?
 
-**English**: How to safely cast Any to String in Kotlin to avoid exceptions?
+# Question (EN)
+> How to safely cast Any to String in Kotlin to avoid exceptions?
 
-## Answer
+# Вопрос (RU)
+> Как в Kotlin привести переменную типа Any к типу String безопасно, чтобы избежать исключения?
+
+---
+
+## Answer (EN)
 
 Use the **safe cast operator `as?`**, which returns null instead of throwing an exception if the cast is not possible.
 
@@ -50,7 +56,9 @@ val result = any as? String ?: "default"
 - When you want to handle failure gracefully
 - To avoid try-catch blocks for casting
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Используйте оператор приведения типов `as?`, который возвращает null вместо выброса исключения, если приведение невозможно. Например: val stringValue = anyVariable as? String
 

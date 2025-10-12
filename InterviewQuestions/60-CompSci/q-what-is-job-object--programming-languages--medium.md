@@ -2,12 +2,20 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is the Job Object For?
 
-## Answer
+# Question (EN)
+> What is the Job Object for?
+
+# Вопрос (RU)
+> Для чего нужен объект Job?
+
+---
+
+## Answer (EN)
 
 **Job** is an element for managing coroutine lifecycle. With it you can:
 
@@ -399,10 +407,7 @@ class JobBestPractices {
 - `job.invokeOnCompletion {}`: Add callback
 
 ---
-## Вопрос (RU)
 
-Для чего нужен объект Job?
-
-## Ответ
+## Ответ (RU)
 
 Job — это элемент управления жизненным циклом корутины. С его помощью можно: отменять корутину; отслеживать завершение; объединять с другими задачами; управлять родительскими и дочерними корутинами.

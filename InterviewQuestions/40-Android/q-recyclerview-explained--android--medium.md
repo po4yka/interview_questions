@@ -5,15 +5,14 @@ tags:
   - recyclerview
   - ui-components
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что известно про RecyclerView?
 
 **English**: What do you know about RecyclerView?
 
-## Answer
-
+## Answer (EN)
 RecyclerView — это мощный компонент пользовательского интерфейса, предоставляемый библиотекой AndroidX, предназначенный для отображения динамических списков элементов. Он был представлен как улучшенная и более гибкая замена ListView.
 
 ### Основные особенности

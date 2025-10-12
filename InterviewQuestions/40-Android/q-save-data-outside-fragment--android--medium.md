@@ -11,15 +11,14 @@ tags:
   - sharedpreferences
   - viewmodel
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Каким образом можно сохранить данные за пределами фрагмента?
 
 **English**: How can you save data outside a fragment?
 
-## Answer
-
+## Answer (EN)
 To save data **outside a fragment** (so it persists beyond the fragment's lifecycle), you can use several methods depending on your requirements.
 
 ## Main Approaches
@@ -368,7 +367,6 @@ class UserRepository(
 **Recommended architecture:**
 Fragment → ViewModel → Repository → (Room + SharedPreferences + Files)
 
-## Ответ
-
+## Ответ (RU)
 Для сохранения данных за пределами фрагмента в Android можно использовать несколько методов. Основные способы включают SharedPreferences, базы данных SQLite, Room, файлы и ViewModel с ViewModelFactory. SharedPreference используется для хранения небольших порций данных в виде пар ключ значение. Это удобно для хранения настроек пользователя или состояния приложения. SQLite это встроенная реляционная база данных которая позволяет хранить структурированные данные для работы с ней используются sql запросы. Room это библиотека которая упрощает работу с sqlite предоставляя абстракцию в виде аннотаций и dao data access objects.
 

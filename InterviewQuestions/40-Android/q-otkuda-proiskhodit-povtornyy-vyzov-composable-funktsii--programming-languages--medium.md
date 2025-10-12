@@ -3,13 +3,12 @@ tags:
   - programming-languages
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Откуда происходит повторный вызов composable функции
 
-## Answer
-
+## Answer (EN)
 The repeated call comes from the **recomposition** mechanism. Compose automatically calls the function again if the state associated with this function has changed.
 
 ### How Recomposition Works
@@ -116,6 +115,5 @@ fun OptimizedRecomposition() {
 
 # Откуда происходит повторный вызов composable функции
 
-## Ответ
-
+## Ответ (RU)
 Повторный вызов происходит из механизма recomposition. Compose автоматически вызывает функцию снова, если состояние связанное с этой функцией изменилось

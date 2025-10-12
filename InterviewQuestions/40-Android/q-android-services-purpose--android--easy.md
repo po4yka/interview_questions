@@ -5,14 +5,28 @@ tags:
   - services
   - background-operations
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Для чего нужны сервисы?
 
-**English**: What are services used for in Android?
+# Question (EN)
+> What are services used for in Android?
 
-## Answer
+# Вопрос (RU)
+> Для чего нужны сервисы?
+
+---
+
+## Answer (EN)
+
+Services are used for long-running background operations without UI: **background tasks** (data sync), **media playback**, **network operations** (downloads/uploads), **external device communication** (GPS, Bluetooth), **periodic tasks** (scheduled updates), and **providing functionality to other apps** via bound services.
+
+**Modern recommendations** (Android 8.0+): Use Foreground Services for user-visible operations, WorkManager for deferred background tasks, JobScheduler for system tasks, and AlarmManager for time-precise tasks. Must be carefully planned to minimize resource consumption and battery drain.
+
+---
+
+## Ответ (RU)
 
 Сервисы предназначены для выполнения длительных или фоновых операций, не требующих взаимодействия с пользователем. Они работают в фоновом режиме и могут выполнять различные задачи, даже когда пользовательский интерфейс приложения не активен или когда приложение закрыто.
 
@@ -170,7 +184,7 @@ class RemoteService : Service() {
 **Ресурсоёмкость**: Сервисы могут быть ресурсоемкими, их использование должно быть тщательно спланировано.
 
 ```kotlin
-// ❌ Неэффективно - постоянно работающий сервис
+// Неэффективно - постоянно работающий сервис
 class InefficientService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         while (true) {
@@ -181,7 +195,7 @@ class InefficientService : Service() {
     }
 }
 
-// ✓ Эффективно - периодическая задача через WorkManager
+// Эффективно - периодическая задача через WorkManager
 val workRequest = PeriodicWorkRequestBuilder<CheckWorker>(
     15, TimeUnit.MINUTES
 ).build()
@@ -196,5 +210,3 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - **WorkManager** - для отложенных фоновых задач
 - **JobScheduler** - для системных задач
 - **AlarmManager** - для точных по времени задач
-
-**English**: Services are used for long-running background operations without UI: background tasks (data sync), media playback, network operations (downloads/uploads), external device communication (GPS, Bluetooth), periodic tasks (scheduled updates), and providing functionality to other apps via bound services. Must be carefully planned to minimize resource consumption and battery drain.

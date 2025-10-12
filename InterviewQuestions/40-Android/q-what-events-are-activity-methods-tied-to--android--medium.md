@@ -3,17 +3,16 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What events are Activity methods tied to?
 
-## Question (RU)
+# Вопрос (RU)
 
 К каким событиям привязаны методы Activity?
 
-## Answer
-
+## Answer (EN)
 Activity lifecycle methods are tied to specific system events that occur during an Activity's lifetime. These methods allow developers to respond to state changes and manage resources appropriately.
 
 ### Activity Lifecycle Events and Methods
@@ -614,8 +613,7 @@ override fun onStop() {
 | **onDestroy()** | Destroyed | Finishing or config change | Release all resources |
 | **onRestart()** | Restarting | Returning from stopped | Refresh data |
 
-## Ответ
-
+## Ответ (RU)
 Методы жизненного цикла Activity привязаны к конкретным системным событиям, которые происходят в течение жизни Activity. Эти методы позволяют разработчикам реагировать на изменения состояния и правильно управлять ресурсами.
 
 ### Основные события и методы

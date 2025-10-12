@@ -12,15 +12,14 @@ tags:
   - ui-patterns
   - viewmodel
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # С помощью чего делается переход со списков на деталки?
 
 **English**: How do you implement navigation from a list to detail screens?
 
-## Answer
-
+## Answer (EN)
 To implement transitions from a **list** to an **item detail screen** in Android, you use **Intent**, **Bundle**, **ViewModel**, and navigation tools such as **Navigation Component**.
 
 The basic approach uses **Intent and Bundle** to pass data between Activities. The modern approach involves using **Navigation Component** with a navigation graph and passing data through arguments.
@@ -431,7 +430,6 @@ class UserDetailFragment : Fragment() {
 - **Pass IDs, not objects** - load full data in detail screen
 - **Use ViewModel** for data management
 
-## Ответ
-
+## Ответ (RU)
 Для реализации переходов от списка к экрану деталей элемента в Android используются Intent, Bundle, ViewModel и инструменты навигации такие как Navigation Component. Базовый способ - использование Intent и Bundle для передачи данных между активностями. Современный подход предполагает использование Navigation Component с графом навигации и передачей данных через аргументы.
 

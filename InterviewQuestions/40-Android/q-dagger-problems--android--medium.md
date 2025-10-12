@@ -8,15 +8,14 @@ tags:
   - di-hilt
   - platform/android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие проблемы есть у Dagger?
 
 **English**: What problems does Dagger have?
 
-## Answer
-
+## Answer (EN)
 Dagger is a powerful dependency injection framework, but it comes with several challenges and limitations that developers face in real-world projects.
 
 ### 1. Steep Learning Curve
@@ -391,8 +390,7 @@ class MainActivity : AppCompatActivity() {
 
 **Recommendation:** For new Android projects, consider using **Hilt** instead of Dagger directly. Hilt solves most of these problems while building on top of Dagger's proven foundation.
 
-## Ответ
-
+## Ответ (RU)
 Dagger имеет ряд проблем: **Крутая кривая обучения** - сложные концепции и архитектура. **Долгая компиляция** - генерация кода увеличивает время сборки. **Загадочные ошибки** - сложно отлаживать ошибки компиляции. **Код-шаблон** - требуется много модулей, компонентов, скоупов. **Сложность компонентов** - трудно поддерживать большие DI-графы. **Сложность тестирования** - требуется сложная настройка тестов. **Нет автообнаружения** - нужно вручную регистрировать зависимости. **Управление скоупами** - легко создать несоответствия. **Интеграция с Android** - требуется ручная настройка для Activity, Fragment.
 
 **Рекомендация:** Для новых Android-проектов лучше использовать **Hilt** вместо Dagger напрямую.

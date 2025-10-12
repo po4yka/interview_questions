@@ -7,15 +7,14 @@ tags:
   - ui
   - ui design
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Как делать списки чатов с точки зрения UI?
 
 **English**: How to create chat lists from a UI perspective?
 
-## Answer
-
+## Answer (EN)
 Creating chat lists from a UI perspective requires considering multiple aspects to ensure usability, good performance, and attractive appearance.
 
 ### Main Steps
@@ -471,7 +470,6 @@ class ChatListViewModel : ViewModel() {
 7. **Use ViewBinding** for type-safe view access
 8. **Implement swipe actions** for delete/archive
 
-## Ответ
-
+## Ответ (RU)
 Создание списков чатов с точки зрения UI требует учёта множества аспектов, чтобы обеспечить удобство использования, хорошую производительность и красивый внешний вид. Основные шаги: определение данных, создание макетов для элементов списка, создание адаптера для RecyclerView, настройка RecyclerView и управление данными, оптимизация производительности. Для чата можно определить два типа элементов: чат-комнаты и сообщения. Важно использовать RecyclerView с адаптером для отображения элементов списка и оптимизировать производительность с помощью DiffUtil и пагинации.
 

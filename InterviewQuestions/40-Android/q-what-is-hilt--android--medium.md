@@ -10,15 +10,14 @@ tags:
   - hilt
   - platform/android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is Hilt?
 
 **Russian**: Что такое Hilt и для чего он используется?
 
-## Answer
-
+## Answer (EN)
 **Hilt** is a dependency injection (DI) framework developed by Google specifically for Android. It's built on top of **Dagger** and designed to simplify dependency injection setup in Android applications by reducing boilerplate code and providing standardized patterns for Android components.
 
 ### What is Dependency Injection?
@@ -575,8 +574,7 @@ object DatabaseModule {
 - Integrating with Jetpack libraries
 - Need testable architecture
 
-## Ответ
-
+## Ответ (RU)
 **Hilt** — это фреймворк для внедрения зависимостей (Dependency Injection, DI), разработанный командой Google специально для платформы Android. Он основан на популярном DI фреймворке Dagger и предназначен для упрощения процесса внедрения зависимостей в Android-приложениях.
 
 ### Основные возможности

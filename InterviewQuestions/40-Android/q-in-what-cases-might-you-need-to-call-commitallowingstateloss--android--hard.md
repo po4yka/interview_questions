@@ -7,15 +7,14 @@ tags:
   - lifecycle
   - ui
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # В каких случаях может понадобиться вызывать commitAllowingStateLoss
 
 **English**: In what cases might you need to call commitAllowingStateLoss
 
-## Answer
-
+## Answer (EN)
 The **`commitAllowingStateLoss()`** method in Android is used to execute fragment transactions even when the activity state has already been saved. It can be useful but should be used with caution as it may lead to state loss.
 
 ### Understanding the Problem
@@ -369,7 +368,6 @@ Use `commitAllowingStateLoss()` when:
 
 **Key principle:** Only use when you understand and accept the consequences of potential state loss.
 
-## Ответ
-
+## Ответ (RU)
 Метод commitAllowingStateLoss() в Android используется для выполнения транзакций фрагментов даже когда состояние активности уже сохранено. Он может быть полезен но следует использовать с осторожностью так как может привести к потере состояния. Рассмотрены ситуации: пользовательская навигация с малой вероятностью возврата операции которые должны быть выполнены немедленно автоматические процессы или системные изменения устранение багов при смене конфигурации. Примеры использования включают переход между фрагментами удаление диалогового фрагмента. Метод позволяет избежать ошибки IllegalStateException при пересоздании активности но с риском потери состояния.
 

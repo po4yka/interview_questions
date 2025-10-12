@@ -4,14 +4,53 @@ tags:
   - object-oriented
   - singleton
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что такое object / companion object?
 
-**English**: What are object and companion object in Kotlin?
+# Question (EN)
+> What are `object` and `companion object` in Kotlin? What are their differences and use cases?
 
-## Answer
+# Вопрос (RU)
+> Что такое `object` и `companion object` в Kotlin? В чём их различия и когда их использовать?
+
+---
+
+## Answer (EN)
+
+`object` and `companion object` are Kotlin features for implementing various patterns without explicit instantiation:
+
+**object**: Creates a singleton (single instance). Accessed by name. Thread-safe lazy initialization. Use for: singletons, utility classes, constants.
+
+**companion object**: Declares static-like members inside a class. Accessed via class name. Use for: factory methods, constants, static utility functions within a class context.
+
+**Key differences:**
+- **object**: Standalone entity, accessed by its own name
+- **companion object**: Lives inside a class, accessed via class name
+- **object**: One per declaration
+- **companion object**: One per class (optional)
+
+**Example:**
+```kotlin
+// object - singleton
+object DatabaseManager {
+    fun executeQuery(sql: String) { }
+}
+DatabaseManager.executeQuery("SELECT *")
+
+// companion object - factory pattern
+class User private constructor(val name: String) {
+    companion object {
+        fun create(name: String) = User(name)
+    }
+}
+val user = User.create("Alice")
+```
+
+---
+
+## Ответ (RU)
 
 `object` и `companion object` используются для реализации различных паттернов и функциональностей, включая паттерн одиночка (singleton), объявление статических членов и функций, а также для реализации объектов без необходимости явного создания экземпляра класса.
 
@@ -43,10 +82,10 @@ DatabaseManager.close()
 - Не может иметь конструктор с параметрами
 
 ```kotlin
-// - Неправильно
+// Неправильно
 object Config(val apiKey: String)  // Ошибка компиляции!
 
-// ✓ Правильно
+// Правильно
 object Config {
     const val API_KEY = "your_api_key"
 }
@@ -185,5 +224,3 @@ fun MyClass.Companion.bar() = "bar"
 MyClass.foo()  // "foo" - обычный метод
 MyClass.bar()  // "bar" - расширение
 ```
-
-**English**: `object` creates a singleton (single instance class) accessed by its name. `companion object` declares static-like members inside a class, accessible via class name without instance creation. Use `object` for singletons and utilities, `companion object` for factory methods and constants.

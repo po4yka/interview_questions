@@ -2,13 +2,12 @@
 tags:
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие есть способы навигации в Kotlin?
 
-## Answer
-
+## Answer (EN)
 Navigation in Android/Kotlin applications can be implemented using several approaches, each suitable for different use cases and architectures.
 
 ### 1. Jetpack Navigation Component
@@ -281,6 +280,5 @@ fun createDeepLink(itemId: Int): PendingIntent {
 
 # Какие есть способы навигации в Kotlin
 
-## Ответ
-
+## Ответ (RU)
 Способы навигации в Kotlin: Jetpack Navigation Component — современный способ навигации, основанный на графе навигации и безопасных аргументах. Позволяет легко переходить между фрагментами и активностями, а также управлять состоянием навигации. FragmentTransaction — ручной способ добавления, замены и удаления фрагментов. Navigation через Intent — используется для переключения между активностями или фрагментами внутри приложения или между приложениями. Explicit и Implicit Intents — явные и неявные намерения для навигации между компонентами. NavHostFragment и NavController — связаны с использованием графа навигации для управления фрагментами в приложениях Android.

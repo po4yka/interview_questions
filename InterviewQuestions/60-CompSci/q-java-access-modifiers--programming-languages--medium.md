@@ -10,14 +10,20 @@ tags:
   - protected
   - public
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Как лучше всего использовать модификаторы доступа в Java?
 
-**English**: How to best use access modifiers in Java?
+# Question (EN)
+> How to best use access modifiers in Java?
 
-## Answer
+# Вопрос (RU)
+> Как лучше всего использовать модификаторы доступа в Java?
+
+---
+
+## Answer (EN)
 
 Java has **four access modifiers**: `private`, package-private (no modifier), `protected`, and `public`.
 
@@ -242,7 +248,9 @@ class TransactionLogger {
 - **Principle**: **Most restrictive** access possible
 - **Encapsulation**: Never expose fields directly (use getters/setters with validation)
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Java есть четыре модификатора доступа: `private`, package-private (без модификатора), `protected` и `public`.
 

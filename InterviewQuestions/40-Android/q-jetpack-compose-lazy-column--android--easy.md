@@ -8,15 +8,14 @@ tags:
   - platform/android
   - ui-compose
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как в Jetpack Compose создать список, аналогичный RecyclerView?
 
 **English**: How to create a RecyclerView-like list in Jetpack Compose?
 
-## Answer
-
+## Answer (EN)
 Use **LazyColumn** or **LazyRow**. They create and display items on demand, saving resources and providing smooth scrolling.
 
 **Key points**:
@@ -34,8 +33,7 @@ LazyColumn {
 }
 ```
 
-## Ответ
-
+## Ответ (RU)
 Используется **LazyColumn** или **LazyRow**. Они создают и отображают элементы по мере необходимости, экономя ресурсы и обеспечивая плавную прокрутку.
 
 **Ключевые моменты**:

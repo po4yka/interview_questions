@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: [q-kotlin-lateinit--kotlin--medium, q-property-delegates--kotlin--medium]
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, lazy, lateinit, delegation, initialization, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What is the difference between lazy and lateinit in Kotlin?
-## Вопрос (RU)
+# Вопрос (RU)
 > В чем разница между lazy и lateinit в Kotlin?
 
 ---

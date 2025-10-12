@@ -3,13 +3,12 @@ tags:
   - programming-languages
   - android
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Как рисовать UI без xml?
 
-## Answer
-
+## Answer (EN)
 In Android, you can create UI without XML using **Jetpack Compose** (modern, declarative approach) or **programmatic View creation** (traditional approach).
 
 ### 1. Jetpack Compose (Recommended)
@@ -234,6 +233,5 @@ class HybridActivity : AppCompatActivity() {
 
 # Как рисовать UI без xml
 
-## Ответ
-
+## Ответ (RU)
 В Android можно создавать интерфейс без XML с помощью Jetpack Compose или программного кода (View в Kotlin/Java).

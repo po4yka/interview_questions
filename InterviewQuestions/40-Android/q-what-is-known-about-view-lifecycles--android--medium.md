@@ -6,15 +6,14 @@ tags:
   - lifecycle
   - ui
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What is known about View lifecycles?
 
 **Russian**: Что известно о жизненном цикле View?
 
-## Answer
-
+## Answer (EN)
 The View lifecycle in Android describes the sequence of method calls from view creation to destruction. Understanding this lifecycle is crucial for managing resources, handling configuration changes, and optimizing performance.
 
 ### View Lifecycle Stages
@@ -513,8 +512,7 @@ override fun onDraw(canvas: Canvas) {
 - Clean up resources in onDetachedFromWindow()
 - Avoid allocations in onDraw()
 
-## Ответ
-
+## Ответ (RU)
 Жизненный цикл View в Android описывает последовательность вызовов методов от создания до уничтожения представления.
 
 ### Основные этапы жизненного цикла

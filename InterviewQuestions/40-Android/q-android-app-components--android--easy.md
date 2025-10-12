@@ -5,14 +5,31 @@ tags:
   - app-architecture
   - components
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какие основные компоненты Android-приложения?
 
-**English**: What are the main components of an Android application?
+# Question (EN)
+> What are the main components of an Android application?
 
-## Answer
+# Вопрос (RU)
+> Какие основные компоненты Android-приложения?
+
+---
+
+## Answer (EN)
+
+The four fundamental building blocks of Android applications:
+
+1. **Activity** - UI component representing a single screen
+2. **Service** - Background component for long-running operations
+3. **Broadcast Receiver** - Responds to system-wide broadcast announcements
+4. **Content Provider** - Manages shared app data and provides data access interface
+
+---
+
+## Ответ (RU)
 
 Основные компоненты Android-приложения включают:
 

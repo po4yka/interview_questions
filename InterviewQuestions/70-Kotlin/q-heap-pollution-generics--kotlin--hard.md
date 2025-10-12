@@ -6,14 +6,37 @@ tags:
   - type-safety
   - runtime-errors
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Heap Pollution (Загрязнение кучи)
 
-**English**: Heap pollution - type safety violation with generics at runtime
+# Question (EN)
+> What is heap pollution in Kotlin/Java generics? How does it occur and how can you prevent it?
 
-## Ответ
+# Вопрос (RU)
+> Что такое heap pollution (загрязнение кучи) в дженериках Kotlin/Java? Как это происходит и как можно предотвратить?
+
+---
+
+## Answer (EN)
+
+**Heap pollution** occurs when an object of incorrect type appears in memory due to improper generics usage and type erasure in Java/Kotlin. It causes `ClassCastException` at runtime despite successful compilation.
+
+**Causes**: Mixing raw types with generic types, using unchecked casts, or creating generic arrays without `reified`. Type information is lost at runtime due to type erasure.
+
+**Prevention strategies**:
+- Use `inline` + `reified` to preserve type information
+- Prefer `List<T>` over `Array<T>`
+- Avoid raw types (types without generics)
+- Use sealed classes for heterogeneous data
+- Don't suppress compiler warnings without understanding risks
+- Use immutable collections when possible
+- Pass `KClass<T>` for creating typed arrays
+
+---
+
+## Ответ (RU)
 
 **Heap pollution** (загрязнение кучи) — это ситуация, когда в памяти (heap) оказывается объект несоответствующего типа из-за неправильного использования дженериков. Это происходит из-за стирания типов (type erasure) в Java/Kotlin и может привести к `ClassCastException` во время выполнения программы, несмотря на успешную компиляцию.
 
@@ -419,5 +442,3 @@ fun test() {
 5. Не подавляйте предупреждения компилятора без понимания
 6. Используйте неизменяемые коллекции
 7. Передавайте `KClass<T>` для создания типизированных массивов
-
-**English**: Heap pollution occurs when an object of incorrect type appears in memory due to improper generics usage and type erasure in Java/Kotlin. It causes `ClassCastException` at runtime despite successful compilation. Happens when mixing raw types with generic types, using unchecked casts, or creating generic arrays without `reified`. Prevent by: using `inline` + `reified`, preferring `List<T>` over `Array<T>`, avoiding raw types, using sealed classes for heterogeneous data, and not suppressing compiler warnings without understanding the risks.

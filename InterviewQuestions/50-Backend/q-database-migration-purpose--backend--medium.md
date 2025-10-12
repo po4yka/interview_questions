@@ -16,7 +16,7 @@ source: https://t.me/easy_kotlin/184
 source_note: easy_kotlin Telegram channel
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-backend
 related:
   - c-database-design
@@ -29,9 +29,9 @@ updated: 2025-10-03
 # Tags
 tags: [database, migration, schema-evolution, difficulty/medium, easy_kotlin, lang/ru, backend]
 ---
-## Question (EN)
+# Question (EN)
 > What is database migration and what is it used for
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое миграция и для чего она нужна
 
 ---

@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, architecture, usecase, clean-architecture, domain-layer, difficulty/medium]
 ---
-## Question (EN)
+# Question (EN)
 > What is the UseCase pattern in Android? When and how to implement it?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое паттерн UseCase в Android? Когда и как его реализовать?
 
 ---

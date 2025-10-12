@@ -6,22 +6,31 @@ tags:
   - gof-patterns
   - kotlin
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Builder Pattern
 
-**English**: What is the Builder pattern? When should it be used and how does it solve the telescoping constructor problem?
+# Question (EN)
+> What is the Builder pattern? When should it be used and how does it solve the telescoping constructor problem?
 
-## Answer
+# Вопрос (RU)
+> Что такое паттерн Builder? Когда его использовать и как он решает проблему телескопических конструкторов?
+
+---
+
+## Answer (EN)
+
 
 **Builder (Строитель)** - это порождающий паттерн проектирования, который позволяет конструировать сложные объекты шаг за шагом. Паттерн позволяет создавать различные типы и представления объекта используя один и тот же код конструирования.
 
-### Определение
+### Definition
+
 
 Builder is a creational design pattern that lets you construct complex objects step by step. The pattern allows you to produce different types and representations of an object using the same construction code.
 
-### Проблемы, которые решает
+### Problems it Solves
+
 
 The builder design pattern solves problems like:
 
@@ -30,7 +39,8 @@ The builder design pattern solves problems like:
 
 Creating and assembling the parts of a complex object directly within a class is inflexible. It commits the class to creating a particular representation of the complex object and makes it impossible to change the representation later independently from (without having to change) the class.
 
-### Решение
+### Solution
+
 
 The builder design pattern describes how to solve such problems:
 
@@ -52,7 +62,7 @@ constructor(firstName: String, lastName: String, age: Int)
 
 Technically they allow you to use the constructor with just enough arguments you want to set, but in practice **adding a new field to the class forces you to modify each constructor**.
 
-### Пример: Kotlin-style Builder
+### Example: Kotlin-style Builder
 
 ```kotlin
 class FoodOrder private constructor(
@@ -155,6 +165,7 @@ This is often preferred in Kotlin for simple cases, but Builder is still useful 
 
 ### Advantages (Преимущества)
 
+
 1. **Allows you to vary a product's internal representation** - Can create different representations using the same build process
 2. **Encapsulates code for construction and representation** - Construction code is separated from business logic
 3. **Provides control over the steps of the construction process** - Can execute construction steps in a specific order
@@ -162,6 +173,7 @@ This is often preferred in Kotlin for simple cases, but Builder is still useful 
 5. **Readable code** - Fluent interface makes code self-documenting
 
 ### Disadvantages (Недостатки)
+
 
 1. **Builder classes must be mutable** - Goes against immutability principles
 2. **May hamper/complicate dependency injection** - DI frameworks often work with constructors
@@ -288,3 +300,94 @@ class Product {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+
+## Ответ (RU)
+
+### Определение
+
+
+Builder is a creational design pattern that lets you construct complex objects step by step. The pattern allows you to produce different types and representations of an object using the same construction code.
+
+### Проблемы, которые решает
+
+
+The builder design pattern solves problems like:
+
+1. **How can a class (the same construction process) create different representations of a complex object?**
+2. **How can a class that includes creating a complex object be simplified?**
+
+Creating and assembling the parts of a complex object directly within a class is inflexible. It commits the class to creating a particular representation of the complex object and makes it impossible to change the representation later independently from (without having to change) the class.
+
+### Решение
+
+
+The builder design pattern describes how to solve such problems:
+
+1. **Encapsulate creating and assembling** the parts of a complex object in a separate `Builder` object
+2. **A class delegates object creation** to a `Builder` object instead of creating the objects directly
+
+A class (the same construction process) can delegate to different `Builder` objects to create different representations of a complex object.
+
+### Пример: Kotlin-style Builder
+
+
+```kotlin
+class FoodOrder private constructor(
+    val bread: String = "Flat bread",
+    val condiments: String?,
+    val meat: String?,
+    val fish: String?
+) {
+
+    data class Builder(
+        var bread: String? = null,
+        var condiments: String? = null,
+        var meat: String? = null,
+        var fish: String? = null
+    ) {
+
+        fun bread(bread: String) = apply { this.bread = bread }
+        fun condiments(condiments: String) = apply { this.condiments = condiments }
+        fun meat(meat: String) = apply { this.meat = meat }
+        fun fish(fish: String) = apply { this.fish = fish }
+
+        fun build() = FoodOrder(
+            bread ?: "Flat bread",
+            condiments,
+            meat,
+            fish
+        )
+
+        fun randomBuild() = bread(bread ?: "dry")
+            .condiments(condiments ?: "pepper")
+            .meat(meat ?: "beef")
+            .fish(fish ?: "Tilapia")
+            .build()
+    }
+}
+
+// Usage
+val foodOrder = FoodOrder.Builder()
+    .bread("white bread")
+    .meat("bacon")
+    .condiments("olive oil")
+    .build()
+```
+
+### Advantages (Преимущества)
+
+
+1. **Allows you to vary a product's internal representation** - Can create different representations using the same build process
+2. **Encapsulates code for construction and representation** - Construction code is separated from business logic
+3. **Provides control over the steps of the construction process** - Can execute construction steps in a specific order
+4. **Avoids telescoping constructors** - No need for multiple constructor overloads
+5. **Readable code** - Fluent interface makes code self-documenting
+
+### Disadvantages (Недостатки)
+
+
+1. **Builder classes must be mutable** - Goes against immutability principles
+2. **May hamper/complicate dependency injection** - DI frameworks often work with constructors
+3. **More code** - Requires creating builder class and methods
+4. **Overkill for simple objects** - Kotlin named parameters are often better

@@ -4,14 +4,49 @@ tags:
   - coroutines
   - error-handling
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # В чем отличие между Job и SupervisorJob
 
-**English**: What is the difference between Job and SupervisorJob?
+# Question (EN)
+> What is the difference between Job and SupervisorJob in Kotlin coroutines?
 
-## Answer
+# Вопрос (RU)
+> В чём отличие между Job и SupervisorJob в корутинах Kotlin?
+
+---
+
+## Answer (EN)
+
+`Job` and `SupervisorJob` manage coroutine lifecycle with different exception handling strategies.
+
+**Job**: Error in one child coroutine cancels ALL sibling coroutines (fail-fast).
+
+**SupervisorJob**: Error in one child coroutine does NOT cancel siblings (fail-tolerant).
+
+**Example:**
+```kotlin
+// Job - one failure cancels all
+val job = Job()
+scope.launch { doTask1() }  // Will be cancelled
+scope.launch { throw Error() }  // Fails
+scope.launch { doTask3() }  // Will be cancelled
+
+// SupervisorJob - failures are isolated
+val supervisorJob = SupervisorJob()
+scope.launch { doTask1() }  // Continues
+scope.launch { throw Error() }  // Only this fails
+scope.launch { doTask3() }  // Continues
+```
+
+**Use cases:**
+- **Job**: Related operations where all must succeed (transactions, loading user profile)
+- **SupervisorJob**: Independent background tasks (syncing photos, contacts, messages)
+
+---
+
+## Ответ (RU)
 
 `Job` и `SupervisorJob` являются ключевыми понятиями, связанными с управлением жизненным циклом сопрограмм (корутин). Основное отличие заключается в обработке исключений в иерархии корутин.
 
@@ -108,5 +143,3 @@ class BackgroundSyncManager {
     }
 }
 ```
-
-**English**: Job cancels all child coroutines if one fails. SupervisorJob allows child coroutines to fail independently without affecting siblings. Use Job for related operations (all-or-nothing), SupervisorJob for independent tasks.

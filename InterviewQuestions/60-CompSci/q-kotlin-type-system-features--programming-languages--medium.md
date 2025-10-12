@@ -9,14 +9,20 @@ tags:
   - type-inference
   - type-system
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие знаешь особенности системы типов в Kotlin?
 
-**English**: What Kotlin type system features do you know?
+# Question (EN)
+> What Kotlin type system features do you know?
 
-## Answer
+# Вопрос (RU)
+> Какие знаешь особенности системы типов в Kotlin?
+
+---
+
+## Answer (EN)
 
 Kotlin's type system has several powerful features:
 
@@ -68,7 +74,9 @@ val name = "John" // Type inferred as String
 
 These features make Kotlin code **safer, more concise, and more expressive**.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Null Safety (Безопасность null), Коллекции разделение на изменяемые и неизменяемые коллекции, Data Classes автоматическое создание методов equals hashCode и toString, Smart Casts автоматическое приведение типа после проверки с помощью is, Sealed Classes упрощают обработку ограниченных иерархий классов, Выведение типов Kotlin автоматически определяет тип переменной
 

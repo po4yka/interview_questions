@@ -7,14 +7,20 @@ tags:
   - programming-languages
   - syntax
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Что такое лямбды с точки зрения синтаксиса в Java и Kotlin?
 
-**English**: What are lambdas from syntax perspective in Java and Kotlin?
+# Question (EN)
+> What are lambdas from syntax perspective in Java and Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Что такое лямбды с точки зрения синтаксиса в Java и Kotlin?
+
+---
+
+## Answer (EN)
 
 ### Java Lambdas
 
@@ -71,7 +77,9 @@ list.filter { it > 0 }
 
 **Kotlin is more concise** and allows omitting parameters if they can be inferred from context.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Java лямбды — это упрощённый синтаксис для анонимных классов, реализующих функциональный интерфейс. Синтаксис: (параметры) -> { тело }. В Kotlin лямбды представляют собой выражения, передаваемые как функции, с синтаксисом { параметры -> тело }. Kotlin более лаконичен, позволяя опускать параметры, если их можно вывести из контекста.
 

@@ -8,7 +8,7 @@ tags:
   - performance-memory
   - checklist
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # App Performance Optimization Checklist for Android
@@ -16,13 +16,19 @@ status: reviewed
 **Сложность**: 🟡 Medium
 **Источник**: Amit Shekhar Android Interview Questions
 
-## English
+# Question (EN)
+> 
 
-### Question
+# Вопрос (RU)
+> 
+
+---
+
+## Answer (EN)
+# Question (EN)
 What is a comprehensive checklist for optimizing Android app performance? What are the key areas to focus on?
 
-### Answer
-
+## Answer (EN)
 Performance optimization requires a systematic approach across multiple areas. Here's a comprehensive checklist covering startup, runtime, memory, network, and rendering performance.
 
 #### 1. **App Startup Optimization**
@@ -594,13 +600,13 @@ class PerformanceMonitor {
 
 ---
 
-## Русский
 
-### Вопрос
+
+## Ответ (RU)
+# Вопрос (RU)
 Каков комплексный чек-лист оптимизации производительности Android-приложения? На какие ключевые области сосредоточиться?
 
-### Ответ
-
+## Ответ (RU)
 Оптимизация производительности требует системного подхода.
 
 #### Основные области:

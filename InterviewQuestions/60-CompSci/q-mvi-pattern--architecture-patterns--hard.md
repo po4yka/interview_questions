@@ -10,12 +10,21 @@ related:
   - mvvm-pattern
   - mvp-pattern
   - redux-architecture
-status: reviewed
+status: draft
 ---
 
 # MVI Pattern / Паттерн MVI (Model-View-Intent)
 
-## English
+# Question (EN)
+> What is the MVI pattern? When and why should it be used?
+
+# Вопрос (RU)
+> Что такое паттерн MVI? Когда и зачем его следует использовать?
+
+---
+
+## Answer (EN)
+
 
 ### Definition
 **MVI** stands for **Model-View-Intent**. MVI is one of the newest architecture patterns for Android, inspired by the unidirectional and cyclical nature of the Cycle.js framework.
@@ -63,7 +72,9 @@ However, nothing is perfect, and there are some drawbacks you should be aware of
 
 ---
 
-## Русский
+
+
+## Ответ (RU)
 
 ### Определение
 **MVI** означает **Model-View-Intent** (Модель-Представление-Намерение). MVI - это один из новейших архитектурных паттернов для Android, вдохновленный однонаправленной и циклической природой фреймворка Cycle.js.

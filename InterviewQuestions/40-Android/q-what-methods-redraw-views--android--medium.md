@@ -8,13 +8,12 @@ tags:
   - invalidate
   - requestLayout
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What methods are used to redraw Views?
 
-## Answer
-
+## Answer (EN)
 Android provides several methods to trigger View redrawing and layout recalculation. Understanding when and how to use each method is crucial for efficient UI updates.
 
 ### 1. invalidate()
@@ -341,6 +340,5 @@ fun safeInvalidate() {
 
 # Что известно про методы, которые перерисовывают View?
 
-## Ответ
-
+## Ответ (RU)
 invalidate() — помечает View на перерисовку (вызов onDraw). requestLayout() — вызывает перерасчёт размеров и размещения (onMeasure, onLayout). postInvalidate() — отложенная перерисовка из не-UI потока.

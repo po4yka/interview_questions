@@ -9,14 +9,20 @@ tags:
   - oop
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какое главное отличие между Java и Kotlin касательно абстрактных классов, методов?
 
-**English**: What are the main differences between Java and Kotlin regarding abstract classes and methods?
+# Question (EN)
+> What are the main differences between Java and Kotlin regarding abstract classes and methods?
 
-## Answer
+# Вопрос (RU)
+> Какое главное отличие между Java и Kotlin касательно абстрактных классов, методов?
+
+---
+
+## Answer (EN)
 
 Both **Java** and **Kotlin** support concepts of abstract classes and methods, but there are certain differences in approaches and capabilities related to these concepts in each language.
 
@@ -531,7 +537,9 @@ class Circle(color: String, val radius: Double) : Shape(color) {
 
 **Best practice:** Prefer interfaces with default implementations over abstract classes when you don't need to share state.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Java и Kotlin оба поддерживают концепции абстрактных классов и методов, но существуют определенные различия в подходах и возможностях, связанных с этими концепциями в каждом из языков. Рассмотрим ключевые отличия: 1. Синтаксис и использование - Java использует ключевое слово abstract для объявления абстрактных классов и методов. Абстрактные методы не могут иметь реализации в абстрактном классе. - Kotlin также использует ключевое слово abstract для объявления абстрактных классов и методов. Основное отличие в том, что Kotlin поддерживает свойства которые могут быть абстрактными. 2. Наследование и реализация - Java не поддерживает множественное наследование классов поэтому классы могут наследовать только один абстрактный класс. - Kotlin вводит понятие интерфейсов которые могут содержать реализацию по умолчанию и класс может реализовывать несколько интерфейсов. Это предоставляет большую гибкость по сравнению с Java. 3. Модификаторы доступа по умолчанию - В Java, если он не указан по умолчанию он имеет уровень доступа package-private. - В Kotlin, если он не указан по умолчанию он является public.
 

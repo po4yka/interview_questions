@@ -16,7 +16,7 @@ source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-android
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-06
 
 tags: [android, jetpack-compose, performance, optimization, recomposition, difficulty/hard]
 ---
-## Question (EN)
+# Question (EN)
 > How to optimize performance in Jetpack Compose? What causes unnecessary recomposition and how to avoid it?
-## Вопрос (RU)
+# Вопрос (RU)
 > Как оптимизировать производительность в Jetpack Compose? Что вызывает ненужную рекомпозицию и как её избежать?
 
 ---

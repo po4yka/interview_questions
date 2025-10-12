@@ -12,15 +12,14 @@ tags:
   - content-provider
   - service
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Какие основные компоненты Android-приложения?
 
 **English**: What are the main Android application components?
 
-## Answer
-
+## Answer (EN)
 The **four main Android components** are:
 
 **1. Activity** - UI Screen
@@ -88,7 +87,6 @@ class MyContentProvider : ContentProvider() {
 
 All components declared in **AndroidManifest.xml**.
 
-## Ответ
-
+## Ответ (RU)
 Основные компоненты: Activity (экран UI), Services (фоновые операции), Broadcast Receivers (события), Content Providers (обмен данными).
 

@@ -8,14 +8,20 @@ tags:
   - programming-languages
   - switch
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Работает ли switch() с double/float?
 
-**English**: Does switch() work with double/float
+# Question (EN)
+> Does switch() work with double/float?
 
-## Answer
+# Вопрос (RU)
+> Работает ли switch() с double/float?
+
+---
+
+## Answer (EN)
 
 **No**, in Java `switch` does **not** work with `float` and `double`.
 
@@ -196,7 +202,9 @@ System.out.println(sum == 100);  // Always true
 
 **Key point:** `switch` requires **exact equality matching**, which is unreliable for floating-point numbers due to rounding errors.
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Нет, в Java switch не работает с float и double, так как они подвержены проблемам сравнения с плавающей точкой. switch работает с int, byte, short, char, enum, String, а также с их обёрточными типами.
 

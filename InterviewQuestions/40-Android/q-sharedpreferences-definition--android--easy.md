@@ -8,15 +8,14 @@ tags:
   - persistence
   - sharedpreferences
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Что такое SharedPreferences?
 
 **English**: What is SharedPreferences?
 
-## Answer
-
+## Answer (EN)
 **SharedPreferences** is a mechanism for **storing and retrieving simple data** in the form of **key-value pairs**.
 
 It's one of the **simplest ways** to save small amounts of data, such as user settings or application state between sessions.
@@ -260,7 +259,6 @@ encryptedPrefs.edit {
 - **Limitations**: Not for large/complex/sensitive data
 - **Security**: Use EncryptedSharedPreferences for sensitive data
 
-## Ответ
-
+## Ответ (RU)
 SharedPreferences представляет собой механизм для хранения и извлечения простых данных в форме пар ключ-значение. Это один из самых простых способов сохранения небольших объемов данных, таких как пользовательские настройки или состояние приложения между сессиями использования приложения. Подходят для сохранения приватных данных доступных только внутри приложения. Основные особенности: Простота использования, частная доступность данных и применение для хранения настроек пользователя или флагов состояния. Для работы с SharedPreferences необходимо получить экземпляр через getSharedPreferences(String name, int mode) или getPreferences(int mode). Данные записываются через SharedPreferences.Editor и сохраняются с помощью apply() или commit().
 

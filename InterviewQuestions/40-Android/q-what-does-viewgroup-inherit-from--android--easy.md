@@ -7,17 +7,16 @@ tags:
   - ui
   - views
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # What does ViewGroup inherit from?
 
-## Question (RU)
+# Вопрос (RU)
 
 От кого наследуются ViewGroup
 
-## Answer
-
+## Answer (EN)
 `ViewGroup` is a subclass of the `View` class, which serves as the base for all user interface elements in Android. Understanding this inheritance hierarchy is fundamental to Android UI development.
 
 ### Inheritance Hierarchy
@@ -221,6 +220,6 @@ setViewProperties(linearLayout) // Works because LinearLayout extends ViewGroup 
 - All layouts (LinearLayout, RelativeLayout, etc.) extend ViewGroup
 - This inheritance provides a consistent, unified API for all UI components
 
-## Answer (RU)
+## Ответ (RU)
 
 ViewGroup является наследником класса View, который является базовым для всех элементов пользовательского интерфейса. ViewGroup выступает как контейнер для других View, предоставляя им общую структуру и управление дочерними элементами.

@@ -3,12 +3,20 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How does dialog differ from other navigation?
 
-## EN (expanded)
+# Question (EN)
+> How does dialog differ from other navigation?
+
+# Вопрос (RU)
+> Чем dialog отличается от остальной навигации?
+
+---
+
+## Answer (EN)
 
 ### Dialog vs Navigation
 
@@ -109,8 +117,6 @@ fun MyScreen() {
 
 ---
 
-## RU (original)
-
-Чем диалог отличается от остальной навигации
+## Ответ (RU)
 
 Это всплывающее окно, которое используется для отображения временной информации или получения пользовательского ввода, не изменяя основной стек навигации. В отличие от переходов между экранами, диалог не заменяет текущий экран, а отображается поверх него, не влияя на состояние приложения

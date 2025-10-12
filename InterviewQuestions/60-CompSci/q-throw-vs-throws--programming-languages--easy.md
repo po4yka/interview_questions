@@ -7,14 +7,20 @@ tags:
   - throw
   - throws
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Разница между throw и throws
 
-**English**: Difference between throw and throws
+# Question (EN)
+> Difference between throw and throws
 
-## Answer
+# Вопрос (RU)
+> Разница между throw и throws
+
+---
+
+## Answer (EN)
 
 The difference between `throw` and `throws` is fundamental in exception handling:
 
@@ -192,7 +198,9 @@ if (age < 0) {
 - Java only (Kotlin uses `@Throws` annotation for interop)
 - Syntax: `throws ExceptionType1, ExceptionType2`
 
-## Ответ
+---
+
+## Ответ (RU)
 
 throw используется для генерации исключения в конкретном месте кода. throws указывается в сигнатуре метода и сообщает что метод может выбросить исключение (только в Java, в Kotlin нет throws).
 

@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # ViewModel vs OnSavedInstanceState
 
-## Answer
-
+## Answer (EN)
 ViewModel and onSaveInstanceState are both mechanisms for preserving data across Activity/Fragment lifecycle events, but they serve different purposes and have different survival guarantees.
 
 ### Key Differences
@@ -394,7 +393,7 @@ class FeedViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
 
 **Best Practice**: Combine ViewModel with SavedStateHandle for robust state management that handles both configuration changes and process death.
 
-## Answer (RU)
+## Ответ (RU)
 ViewModel и onSaveInstanceState служат для сохранения данных при изменении конфигурации активности или фрагмента. ViewModel используется для хранения и управления данными, связанных с UI, которые сохраняются при изменении конфигурации. onSaveInstanceState() используется для сохранения данных в Bundle, который система автоматически передаёт при пересоздании Activity или Fragment. ViewModel хранит данные в памяти до полного уничтожения Activity или Fragment и удобен для сложных объектов. onSaveInstanceState сохраняет данные даже при завершении процесса и подходит для небольших данных.
 
 ## Related Topics

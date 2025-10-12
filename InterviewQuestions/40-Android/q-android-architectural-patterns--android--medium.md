@@ -9,14 +9,28 @@ tags:
   - mvp
   - mvvm
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие архитектурные паттерны используются в Android-фреймворке?
 
-**English**: What architectural patterns are used in Android framework?
+# Question (EN)
+> What architectural patterns are used in Android framework?
 
-## Answer
+# Вопрос (RU)
+> Какие архитектурные паттерны используются в Android-фреймворке?
+
+---
+
+## Answer (EN)
+
+Android development uses several architectural patterns: MVC (early, rarely used), MVP (Model-View-Presenter), MVVM (Model-View-ViewModel with data binding), MVI (Model-View-Intent for unidirectional data flow), and Clean Architecture (layered approach with dependency inversion).
+
+**Modern recommendation**: MVVM with Clean Architecture and Android Architecture Components (ViewModel, LiveData/StateFlow, Repository pattern).
+
+---
+
+## Ответ (RU)
 
 Android development uses several architectural patterns to organize code, separate concerns, and improve testability. Each pattern has evolved to address specific challenges in Android development.
 
@@ -580,7 +594,6 @@ app/
 
 **Current Best Practice:** MVVM + Clean Architecture (when needed) + Jetpack Compose
 
-## Ответ
-
+## Ответ (RU)
 В разработке Android-приложений применяются следующие архитектурные паттерны: MVC, MVP, MVVM, Clean Architecture, Component-Based Architecture.
 

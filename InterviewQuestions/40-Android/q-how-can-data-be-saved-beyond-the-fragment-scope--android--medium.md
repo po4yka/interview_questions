@@ -3,13 +3,12 @@ topic: android
 tags:
   - android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How can data be saved beyond the fragment scope?
 
-## Answer
-
+## Answer (EN)
 Data can be saved beyond Fragment scope using several approaches, each with different lifetime characteristics and use cases.
 
 ### 1. ViewModel
@@ -147,7 +146,7 @@ class MyFragment : Fragment() {
 4. **Avoid memory leaks**: Don't hold Fragment references in ViewModels or Application
 5. **Consider data sensitivity**: Use encrypted storage for sensitive data
 
-## Answer (RU)
+## Ответ (RU)
 1. ViewModel: данные сохраняются в памяти до разрушения связанной Activity.
 
 ## Related Topics

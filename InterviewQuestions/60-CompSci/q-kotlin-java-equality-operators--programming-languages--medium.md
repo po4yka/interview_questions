@@ -7,14 +7,20 @@ tags:
   - operators
   - programming-languages
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Чем отличаются двойное равно в Java и Kotlin?
 
-**English**: What is the difference between double equals in Java and Kotlin?
+# Question (EN)
+> What is the difference between double equals in Java and Kotlin?
 
-## Answer
+# Вопрос (RU)
+> Чем отличаются двойное равно в Java и Kotlin?
+
+---
+
+## Answer (EN)
 
 In Java and Kotlin, `==` has different semantics:
 
@@ -58,7 +64,9 @@ a === c          // false (different objects)
 
 **Key difference**: Kotlin's `==` is null-safe - `null == null` is true!
 
-## Ответ
+---
+
+## Ответ (RU)
 
 В Java оператор == проверяет, указывают ли две переменные на один и тот же объект в памяти. Для сравнения значений строк используется метод equals(). В Kotlin оператор == сравнивает значения объектов аналогично методу equals() в Java, а для сравнения ссылок используется оператор ===.
 

@@ -8,15 +8,14 @@ tags:
   - di-hilt
   - platform/android
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # Какие особенности инжекта в поле при помощи Dagger?
 
 **English**: What are the features of field injection using Dagger?
 
-## Answer
-
+## Answer (EN)
 Field injection in Dagger allows automatic dependency injection into class fields using the `@Inject` annotation. This approach has specific characteristics, advantages, and limitations compared to constructor and method injection.
 
 ### Field Injection Basics
@@ -524,8 +523,7 @@ class MainActivityTest {
 - Use **field injection** only for Android framework classes
 - Use **Hilt** to simplify field injection setup
 
-## Ответ
-
+## Ответ (RU)
 Инжект в поле через Dagger позволяет автоматически внедрять зависимости в поля класса с помощью аннотации `@Inject`. Этот подход имеет специфические характеристики и ограничения.
 
 ### Основные особенности

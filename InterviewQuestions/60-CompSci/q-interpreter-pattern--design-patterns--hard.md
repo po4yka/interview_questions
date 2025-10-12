@@ -9,12 +9,21 @@ difficulty: hard
 related:
   - composite-pattern
   - visitor-pattern
-status: reviewed
+status: draft
 ---
 
 # Interpreter Pattern / Паттерн Интерпретатор
 
-## English
+# Question (EN)
+> What is the Interpreter pattern?
+
+# Вопрос (RU)
+> Что такое паттерн Интерпретатор?
+
+---
+
+## Answer (EN)
+
 
 ### Definition
 The Interpreter design pattern is a behavioral design pattern that defines a way to interpret and evaluate language grammar or expressions. It provides a mechanism to evaluate sentences in a language by representing their grammar as a set of classes. Each class represents a rule or expression in the grammar, and the pattern allows these classes to be composed hierarchically to interpret complex expressions.
@@ -122,7 +131,9 @@ Julie is a married woman? true
 
 ---
 
-## Русский
+
+
+## Ответ (RU)
 
 ### Определение
 Паттерн проектирования Интерпретатор - это поведенческий паттерн проектирования, который определяет способ интерпретации и оценки грамматики или выражений языка. Он предоставляет механизм для оценки предложений на языке путем представления их грамматики в виде набора классов. Каждый класс представляет правило или выражение в грамматике, и паттерн позволяет этим классам быть скомпонованными иерархически для интерпретации сложных выражений.

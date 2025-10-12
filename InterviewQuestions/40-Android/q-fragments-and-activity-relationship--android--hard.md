@@ -8,15 +8,14 @@ tags:
   - fragments
   - ui
 difficulty: hard
-status: reviewed
+status: draft
 ---
 
 # Как существуют и к чему привязаны фрагменты в Activity?
 
 **English**: How do fragments exist and what are they attached to in Activity?
 
-## Answer
-
+## Answer (EN)
 Fragments in Android exist as separate, modular components that are attached to and managed by an Activity. They represent reusable portions of UI with their own lifecycle, which is synchronized with but independent of the host Activity's lifecycle.
 
 ### Fragment Attachment Mechanism
@@ -251,7 +250,6 @@ class MyFragment : Fragment() {
 5. **ViewGroup-hosted**: Must be attached to a container in Activity layout
 6. **Back stack support**: Enable navigation history management
 
-## Ответ
-
+## Ответ (RU)
 Фрагменты в Android существуют как отдельные компоненты, привязанные к Activity и могут добавляться удаляться или заменяться во время работы приложения Они прикрепляются к Activity которая управляет их жизненным циклом и могут быть переиспользованы на разных экранах Фрагменты зависят от Activity для доступа к контексту и других системных ресурсов а их жизненный цикл синхронизирован с жизненным циклом Activity
 

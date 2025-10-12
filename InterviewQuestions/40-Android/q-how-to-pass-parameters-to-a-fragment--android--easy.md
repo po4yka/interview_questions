@@ -7,17 +7,16 @@ tags:
   - ui
   - data-passing
 difficulty: medium
-status: reviewed
+status: draft
 ---
 
 # How to pass parameters to a fragment?
 
-## Question (RU)
+# Вопрос (RU)
 
 Как передать параметры во фрагмент
 
-## Answer
-
+## Answer (EN)
 The recommended and safe way to pass parameters to a Fragment in Android is using **Bundle** with the fragment's `arguments` property. This approach is supported by the Android system and survives configuration changes.
 
 ### 1. Basic Approach - Using Bundle
@@ -426,6 +425,6 @@ class CorrectFragment : Fragment() {
 }
 ```
 
-## Answer (RU)
+## Ответ (RU)
 
 Рекомендуемый способ: создать Bundle, положить туда параметры через putString или putInt и установить arguments фрагменту. В onCreate() извлечь через requireArguments(). Это безопасный способ, поддерживаемый Android-системой

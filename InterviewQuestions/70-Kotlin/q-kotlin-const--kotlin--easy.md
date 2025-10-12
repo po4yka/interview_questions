@@ -16,7 +16,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
 related: []
 
@@ -26,9 +26,9 @@ updated: 2025-10-05
 
 tags: [kotlin, const, compile-time-constants, properties, difficulty/easy]
 ---
-## Question (EN)
+# Question (EN)
 > What is the `const` keyword in Kotlin?
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое ключевое слово `const` в Kotlin?
 
 ---

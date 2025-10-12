@@ -5,18 +5,26 @@ tags:
   - kotlin
   - programming-languages
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Для чего служит component в data class?
 
-**English**: What are component functions used for in data class?
+# Question (EN)
+> What are component functions used for in data class?
 
-## Answer
+# Вопрос (RU)
+> Для чего служит component в data class?
+
+---
+
+## Answer (EN)
 
 componentN functions facilitate access to data class properties, especially when using destructuring syntax. They allow you to destructure data class instances into separate variables: val (name, age) = person, where name corresponds to component1() and age to component2().
 
-## Ответ
+---
+
+## Ответ (RU)
 
 Функции componentN служат для облегчения доступа к свойствам data class особенно при использовании синтаксиса деструктуризации
 

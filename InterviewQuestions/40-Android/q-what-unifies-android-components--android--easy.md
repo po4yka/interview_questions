@@ -11,7 +11,7 @@ tags:
   - intent
   - manifest
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # What unifies Android components?
@@ -20,8 +20,7 @@ status: reviewed
 
 **English**: What unifies the main Android application components?
 
-## Answer
-
+## Answer (EN)
 Main Android components are unified by **three key aspects**:
 
 **1. Context** - Resource Access
@@ -169,8 +168,7 @@ contentResolver.query(
 2. **Manifest**: All declared in AndroidManifest.xml
 3. **Intent**: All communicate via Intent messaging
 
-## Ответ
-
+## Ответ (RU)
 Основные компоненты Android-приложения объединяет то, что они все наследуют или получают **Context** для доступа к ресурсам и системным сервисам, объявляются в **AndroidManifest.xml** и взаимодействуют друг с другом через **Intent**.
 
 Основные компоненты включают: Activity, Fragment, Service, BroadcastReceiver и ContentProvider.

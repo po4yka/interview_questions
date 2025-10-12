@@ -4,14 +4,39 @@ tags:
   - data-classes
   - code-generation
 difficulty: easy
-status: reviewed
+status: draft
 ---
 
 # Для чего нужен data class?
 
-**English**: What is a data class used for?
+# Question (EN)
+> What is a data class in Kotlin and what is it used for?
 
-## Answer
+# Вопрос (RU)
+> Что такое data class в Kotlin и для чего он нужен?
+
+---
+
+## Answer (EN)
+
+Data classes in Kotlin are designed for holding data. They automatically generate boilerplate methods that would otherwise need to be manually written:
+- `equals()` - compares objects by content
+- `hashCode()` - generates hash for collections
+- `toString()` - string representation
+- `componentN()` - enables destructuring
+- `copy()` - creates copy with modified fields
+
+```kotlin
+data class User(val name: String, val age: Int)
+
+val user1 = User("Alice", 30)
+val user2 = user1.copy(age = 31)  // Copy with different age
+val (name, age) = user1  // Destructuring
+```
+
+Data classes reduce boilerplate code, simplify model creation, improve readability, and ensure correct collection behavior.
+
+## Ответ (RU)
 
 Классы данных предназначены для хранения данных. Основная их задача — упростить создание классов, которые будут использоваться преимущественно для хранения данных, не добавляя при этом лишнего шаблонного кода.
 
@@ -45,5 +70,3 @@ println("$name is $age years old")
 - Упрощает создание моделей данных
 - Повышает читабельность кода
 - Обеспечивает корректную работу с коллекциями (благодаря equals/hashCode)
-
-**English**: Data classes are designed for storing data. Their main purpose is to simplify the creation of classes primarily used for data storage without adding boilerplate code. Kotlin automatically generates `equals()`, `hashCode()`, `toString()`, `componentN()`, and `copy()` functions for data classes.
