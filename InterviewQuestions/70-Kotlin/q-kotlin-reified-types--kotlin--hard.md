@@ -18,48 +18,62 @@ status: draft
 
 ## Answer (EN)
 
-Reified type parameters preserve type information at runtime in inline functions, overcoming Java's type erasure.
+**Reified type parameters** in Kotlin, used with `inline` functions, preserve generic type information at runtime, which is normally lost due to Java's type erasure. This allows for runtime type checks (`is T`), casting (`as T`), and accessing the `T::class.java` of a generic type `T`.
 
-### Problem: Type Erasure
+**Use cases:**
+- Type-safe JSON parsing (e.g., `gson.fromJson<User>(json)`)
+- Creating generic factories for Android components (e.g., `newFragment<MyFragment>()`)
+- Type-safe builders and DSLs
+
+**Limitations:**
+- Can only be used on `inline` functions.
+- Cannot be used for class or property type parameters.
+- Cannot be used to create new instances of `T` directly (e.g., `T()`).
+
+## Ответ (RU)
+
+**Reified параметры типа** в Kotlin, используемые с `inline` функциями, сохраняют информацию о generic типе во время выполнения, которая обычно теряется из-за стирания типов в Java. Это позволяет выполнять проверки типов во время выполнения (`is T`), приведения типов (`as T`) и получать доступ к `T::class.java` для generic типа `T`.
+
+### Проблема: Стирание типов (Type Erasure)
 
 ```kotlin
-// Doesn't work - type erased at runtime
+// Не работает - тип стирается во время выполнения
 fun <T> isInstance(value: Any): Boolean {
-    return value is T  //  Cannot check type T
+    return value is T  //  Невозможно проверить тип T
 }
 
-// Workaround: Pass class explicitly
+// Обходной путь: передать класс явно
 fun <T> isInstance(value: Any, clazz: Class<T>): Boolean {
-    return clazz.isInstance(value)  //  Works but verbose
+    return clazz.isInstance(value)  //  Работает, но многословно
 }
 ```
 
-### Solution: Reified
+### Решение: Reified
 
 ```kotlin
-// Reified - type available at runtime
+// Reified - тип доступен во время выполнения
 inline fun <reified T> isInstance(value: Any): Boolean {
-    return value is T  //  Works!
+    return value is T  //  Работает!
 }
 
-// Usage
+// Использование
 isInstance<String>("hello")  // true
 isInstance<Int>("hello")     // false
 ```
 
-### Type-Safe JSON Parsing
+### Безопасный для типов парсинг JSON
 
 ```kotlin
 inline fun <reified T> String.parseJson(): T {
     return Json.decodeFromString<T>(this)
 }
 
-// Usage
+// Использование
 val user: User = jsonString.parseJson()
 val users: List<User> = jsonString.parseJson()
 ```
 
-### Fragment/Activity Creation
+### Создание Fragment/Activity
 
 ```kotlin
 inline fun <reified T : Fragment> newFragment(args: Bundle? = null): T {
@@ -68,10 +82,10 @@ inline fun <reified T : Fragment> newFragment(args: Bundle? = null): T {
     }
 }
 
-// Usage
+// Использование
 val fragment = newFragment<UserFragment>()
 
-// Type-safe Intent
+// Безопасный для типов Intent
 inline fun <reified T : Activity> Context.startActivity(extras: Bundle? = null) {
     val intent = Intent(this, T::class.java).apply {
         extras?.let { putExtras(it) }
@@ -79,11 +93,11 @@ inline fun <reified T : Activity> Context.startActivity(extras: Bundle? = null) 
     startActivity(intent)
 }
 
-// Usage
+// Использование
 context.startActivity<MainActivity>()
 ```
 
-### ViewModel Factory
+### Фабрика ViewModel
 
 ```kotlin
 inline fun <reified VM : ViewModel> Fragment.viewModels(
@@ -96,64 +110,27 @@ inline fun <reified VM : ViewModel> Fragment.viewModels(
     )
 }
 
-// Usage
+// Использование
 class MyFragment : Fragment() {
     val viewModel: MyViewModel by viewModels()
 }
 ```
 
-### Type-Safe Builder
-
-```kotlin
-inline fun <reified T> buildList(builder: MutableList<T>.() -> Unit): List<T> {
-    return mutableListOf<T>().apply(builder)
-}
-
-// Usage
-val strings = buildList<String> {
-    add("a")
-    add("b")
-    // add(1)  //  Compile error
-}
-```
-
-### Limitations
-
-1. **Must be inline function**
-2. **Cannot be used in class type parameters**
-3. **Cannot be passed to non-inline functions**
-4. **Increases bytecode size** (inlining)
-5. **Cannot create instances** without reflection
-
-```kotlin
-//  NOT ALLOWED
-class Container<reified T>  // Can't use in class
-
-fun <reified T> create(): T = T()  // Can't create instance
-
-inline fun <reified T> process() {
-    nonInlineFunction<T>()  // Can't pass to non-inline
-}
-```
-
-### Best Practices
-
-1. **Use for type checks and casts**
-2. **Keep inline functions small**
-3. **Document performance impact**
-4. **Prefer explicit Class<T> for Android APIs**
-5. **Test bytecode size impact**
-
-## Ответ (RU)
-
-Reified type parameters сохраняют информацию о типе в runtime в inline функциях, преодолевая type erasure Java.
-
-[Полные примеры type-safe JSON parsing, Fragment creation, ViewModel factory и builders приведены в английском разделе]
-
 ### Ограничения
 
-1. **Должна быть inline функция**
-2. **Нельзя использовать в class type parameters**
-3. **Нельзя передать в non-inline функции**
-4. **Увеличивает размер bytecode**
-5. **Нельзя создать экземпляр** без reflection
+1.  **Должна быть inline функция**
+2.  **Нельзя использовать в параметрах типа класса**
+3.  **Нельзя передать в не-inline функции**
+4.  **Увеличивает размер байт-кода** (из-за встраивания)
+5.  **Нельзя создать экземпляр** без рефлексии
+
+```kotlin
+//  ЗАПРЕЩЕНО
+class Container<reified T>  // Нельзя использовать в классе
+
+fun <reified T> create(): T = T()  // Нельзя создать экземпляр
+
+inline fun <reified T> process() {
+    nonInlineFunction<T>()  // Нельзя передать в не-inline функцию
+}
+```

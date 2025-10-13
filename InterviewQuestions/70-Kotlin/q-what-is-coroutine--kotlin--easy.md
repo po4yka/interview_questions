@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, advanced, patterns]
+subtopics: [coroutines, concurrency, async]
 question_kind: theory
 difficulty: easy
 
@@ -13,108 +13,134 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 source: internal
-source_note: Comprehensive Kotlin Coroutines Guide - Question 140026
+source_note: Comprehensive Kotlin Coroutines Guide
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-coroutines-vs-threads--programming-languages--medium, q-suspend-functions-basics--kotlin--easy, q-coroutine-scope-basics--kotlin--easy]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, difficulty/medium]
+tags: [kotlin, coroutines, concurrency, async, difficulty/easy]
 ---
+
 # Question (EN)
-> Kotlin Coroutines advanced topic 140026
+> What is a coroutine in Kotlin? Explain its basic concepts and how it differs from a thread.
 
 # Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140026
+> Что такое корутина в Kotlin? Объясните её основные концепции и чем она отличается от потока.
 
 ---
 
 ## Answer (EN)
 
-Comprehensive answer for question 140026.
+A **coroutine** is an instance of **suspendable computation**. It is conceptually similar to a thread, in that it takes a block of code to run that works concurrently with the rest of the code. However, a coroutine is not bound to any particular thread. It may suspend its execution in one thread and resume in another one.
+
+### Key Concepts
+
+1.  **Suspendable**: A coroutine can be suspended (paused) at certain points without blocking the underlying thread. This is the core feature that makes them so efficient.
+2.  **Lightweight**: You can run thousands or even millions of coroutines on a single thread, whereas threads are expensive to create and maintain.
+3.  **Structured Concurrency**: Coroutines are launched within a `CoroutineScope`, which allows for better management of their lifecycle, cancellation, and error handling.
+
+### Coroutine vs. Thread
+
+| Feature | Coroutine | Thread |
+| :--- | :--- | :--- |
+| **Resource Cost** | Very cheap (lightweight) | Expensive (heavyweight) |
+| **Blocking** | Non-blocking (suspends) | Blocking |
+| **Management** | Managed by the Kotlin runtime | Managed by the Operating System |
+| **Creation** | Fast | Slow |
+| **Context Switching**| Fast (in-process) | Slow (OS-level) |
+
+### Example
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun main() = runBlocking { // Creates a CoroutineScope
+    println("Main program starts: ${Thread.currentThread().name}")
+
+    launch { // Launches a new coroutine
+        println("Fake work starts: ${Thread.currentThread().name}")
+        delay(1000) // Suspends the coroutine for 1 second
+        println("Fake work finished: ${Thread.currentThread().name}")
+    }
+
+    println("Main program continues: ${Thread.currentThread().name}")
+    delay(2000) // Wait for the coroutine to finish
+    println("Main program ends: ${Thread.currentThread().name}")
+}
+```
+
+**Output:**
+```
+Main program starts: main
+Main program continues: main
+Fake work starts: main
+Fake work finished: main
+Main program ends: main
+```
+
+In this example, `delay()` is a `suspend` function. When the coroutine calls `delay()`, it is suspended, but the `main` thread is not blocked and can continue its work.
 
 ---
 
 ## Ответ (RU)
 
-Полный ответ на вопрос 140026.
+**Корутина** (или сопрограмма) — это экземпляр **приостанавливаемого вычисления**. Концептуально она похожа на поток, так как выполняет блок кода параллельно с остальной частью программы. Однако корутина не привязана к какому-либо конкретному потоку. Она может приостановить свое выполнение в одном потоке и возобновить в другом.
 
----
+### Ключевые концепции
 
-## Follow-ups
+1.  **Приостанавливаемость (Suspendable)**: Корутину можно приостановить в определенных точках, не блокируя при этом основной поток. Это ключевая особенность, делающая их такими эффективными.
+2.  **Легковесность**: Вы можете запустить тысячи или даже миллионы корутин в одном потоке, в то время как потоки дороги в создании и поддержании.
+3.  **Структурированный параллелизм (Structured Concurrency)**: Корутины запускаются в пределах `CoroutineScope`, что позволяет лучше управлять их жизненным циклом, отменой и обработкой ошибок.
 
-1. **Follow-up question 1**
-2. **Follow-up question 2**
+### Корутина vs. Поток
+
+| Характеристика | Корутина | Поток |
+| :--- | :--- | :--- |
+| **Затраты ресурсов**| Очень дешевые (легковесные) | Дорогие (тяжеловесные) |
+| **Блокировка** | Неблокирующие (приостанавливаются)| Блокирующие |
+| **Управление** | Управляются средой выполнения Kotlin | Управляются операционной системой |
+| **Создание** | Быстрое | Медленное |
+| **Переключение контекста**| Быстрое (внутри процесса) | Медленное (на уровне ОС) |
+
+### Пример
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun main() = runBlocking { // Создает CoroutineScope
+    println("Основная программа стартует: ${Thread.currentThread().name}")
+
+    launch { // Запускает новую корутину
+        println("Фейковая работа стартует: ${Thread.currentThread().name}")
+        delay(1000) // Приостанавливает корутину на 1 секунду
+        println("Фейковая работа завершена: ${Thread.currentThread().name}")
+    }
+
+    println("Основная программа продолжается: ${Thread.currentThread().name}")
+    delay(2000) // Ждем завершения корутины
+    println("Основная программа завершается: ${Thread.currentThread().name}")
+}
+```
+
+**Вывод:**
+```
+Основная программа стартует: main
+Основная программа продолжается: main
+Фейковая работа стартует: main
+Фейковая работа завершена: main
+Основная программа завершается: main
+```
+
+В этом примере `delay()` — это `suspend` функция. Когда корутина вызывает `delay()`, она приостанавливается, но поток `main` не блокируется и может продолжать свою работу.
 
 ---
 
 ## References
 
 - [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
-
----
-
-## Related Questions
-
-### Related (Easy)
-- [[q-coroutine-builders-basics--kotlin--easy]] - Coroutines
-- [[q-coroutine-scope-basics--kotlin--easy]] - Coroutines
-- [[q-suspend-functions-basics--kotlin--easy]] - Coroutines
-- [[q-launch-vs-async--kotlin--easy]] - Coroutines
-
-### Advanced (Harder)
-- [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
-### Related (Easy)
-- [[q-coroutine-builders-basics--kotlin--easy]] - Coroutines
-- [[q-coroutine-scope-basics--kotlin--easy]] - Coroutines
-- [[q-suspend-functions-basics--kotlin--easy]] - Coroutines
-- [[q-launch-vs-async--kotlin--easy]] - Coroutines
-
-### Advanced (Harder)
-- [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
-### Related (Easy)
-- [[q-coroutine-builders-basics--kotlin--easy]] - Coroutines
-- [[q-coroutine-scope-basics--kotlin--easy]] - Coroutines
-- [[q-suspend-functions-basics--kotlin--easy]] - Coroutines
-- [[q-launch-vs-async--kotlin--easy]] - Coroutines
-
-### Advanced (Harder)
-- [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
-### Hub
-- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
-
-### Same Level (Easy)
-- [[q-coroutine-builders-basics--kotlin--easy]] - launch, async, runBlocking
-- [[q-coroutine-scope-basics--kotlin--easy]] - CoroutineScope fundamentals
-- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - delay() vs Thread.sleep()
-- [[q-coroutines-threads-android-differences--kotlin--easy]] - Coroutines vs Threads on Android
-
-### Next Steps (Medium)
-- [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
-- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
-
-### Hub
-- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
-
-### Same Level (Easy)
-- [[q-coroutine-builders-basics--kotlin--easy]] - Coroutine builders
-- [[q-coroutine-scope-basics--kotlin--easy]] - CoroutineScope basics
-- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - delay() vs Thread.sleep()
-- [[q-coroutines-threads-android-differences--kotlin--easy]] - Coroutines vs Threads
-
-### Next Steps (Medium)
-- [[q-suspend-functions-basics--kotlin--easy]] - Suspend functions
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers
-- [[q-structured-concurrency-kotlin--kotlin--medium]] - Structured concurrency

@@ -102,11 +102,15 @@ class UserValidator {
 // - UserRepository - only data persistence
 class UserRepository(private val database: Database) {
     suspend fun save(user: User) {
-        database.userDao().insert(user)
+        database.userDao().insert(user.toEntity())
     }
 
     suspend fun findById(id: String): User? {
-        return database.userDao().findById(id)
+        return database.userDao().findById(id)?.toDomain()
+    }
+
+    suspend fun findAll(): List<User> {
+        return userDao.findAll().map { it.toDomain() }
     }
 }
 
@@ -625,7 +629,7 @@ class EmailValidationRule : ValidationRule<String> {
 
 class NameValidationRule : ValidationRule<String> {
     override fun validate(value: String): Boolean {
-        return value.isNotBlank() && value.length >= 2
+        return value.isNotBlank() && name.length >= 2
     }
 
     override fun errorMessage() = "Name must be at least 2 characters"

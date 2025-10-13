@@ -13,6 +13,9 @@ related_questions: []
 
 # How is Fragment lifecycle connected with Activity?
 
+# Вопрос (RU)
+Как жизненный цикл фрагмента связан с активностью?
+
 ## Answer (EN)
 Fragment lifecycle is **tightly coupled** with Activity lifecycle. When Activity lifecycle changes, it triggers corresponding Fragment lifecycle callbacks. However, Fragment has **additional lifecycle states** that Activity doesn't have.
 
@@ -485,20 +488,63 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 **English Summary**: Fragment lifecycle is synchronized with Activity lifecycle but has additional states. Fragment callbacks occur after Activity callbacks when starting up (onCreate → onStart → onResume) and before Activity callbacks when shutting down (onPause → onStop → onDestroy). Fragment has separate view lifecycle (onCreateView → onDestroyView) independent of Fragment lifecycle. Use viewLifecycleOwner for view-related LiveData/Flow observations to prevent memory leaks. Fragment lifecycle never exceeds Activity lifecycle - if Activity is PAUSED, Fragment is also PAUSED.
 
+## Ответ (RU)
+Жизненный цикл фрагмента **тесно связан** с жизненным циклом активности. Когда изменяется жизненный цикл активности, это вызывает соответствующие обратные вызовы жизненного цикла фрагмента. Однако у фрагмента есть **дополнительные состояния жизненного цикла**, которых нет у активности.
 
----
+### Ключевые правила жизненного цикла
 
-## Related Questions
+**1. Жизненный цикл фрагмента никогда не превышает жизненный цикл активности:**
+```kotlin
+// Фрагмент может быть в состоянии STARTED, только когда активность в состоянии STARTED
+// Фрагмент может быть в состоянии RESUMED, только когда активность в состоянии RESUMED
+```
 
-### Prerequisites (Easier)
-- [[q-viewmodel-pattern--android--easy]] - Lifecycle
+**2. Обратные вызовы фрагмента происходят ПОСЛЕ обратных вызовов активности при запуске:**
+```
+Activity.onCreate() → Fragment.onCreate()
+Activity.onStart() → Fragment.onStart()
+Activity.onResume() → Fragment.onResume()
+```
 
-### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
-- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
+**3. Обратные вызовы фрагмента происходят ПЕРЕД обратными вызовами активности при остановке:**
+```
+Fragment.onPause() → Activity.onPause()
+Fragment.onStop() → Activity.onStop()
+Fragment.onDestroy() → Activity.onDestroy()
+```
+
+### Раздельный жизненный цикл View
+
+У фрагмента есть **отдельный жизненный цикл для его View**:
+
+```kotlin
+// Жизненный цикл фрагмента:        onCreate → onDestroy
+// Жизненный цикл View:           onCreateView → onDestroyView
+```
+
+### ViewLifecycleOwner
+
+У фрагмента **два владельца жизненного цикла:**
+
+```kotlin
+class MyFragment : Fragment() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // НЕПРАВИЛЬНО: наблюдать с жизненным циклом фрагмента
+        viewModel.data.observe(this) { /* ... */ }
+
+        // ПРАВИЛЬНО: наблюдать с viewLifecycleOwner
+        viewModel.data.observe(viewLifecycleOwner) { /* ... */ }
+    }
+}
+```
+
+### Лучшие практики
+
+**1. Используйте `viewLifecycleOwner` для операций, связанных с View.**
+**2. Обнуляйте ссылки на View в `onDestroyView()`.**
+**3. Инициализируйте в соответствующих обратных вызовах.**
 
 ---
 

@@ -1,18 +1,206 @@
 ---
 topic: kotlin
+subtopics: [sealed-classes, enums, when-expression]
 tags:
   - kotlin
   - sealed-classes
   - type-safety
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-kotlin
+related_questions:
+  - q-sealed-class-sealed-interface--kotlin--medium.md
 ---
 
-# В чем особенность sealed классов
+# What is special about sealed classes in Kotlin?
 
-**English**: What is special about sealed classes in Kotlin?
+# Вопрос (RU)
+> В чем особенность sealed классов
 
 ## Answer (EN)
+
+The special feature of sealed classes is the restriction of the inheritance hierarchy: all their subclasses must be declared in the same file as the sealed class itself.
+
+### Main Idea
+
+Sealed classes are ideal for creating restricted class hierarchies where you need to strictly control the set of possible subtypes, especially when modeling states or operation results.
+
+```kotlin
+// Sealed class for modeling UI states
+sealed class UiState {
+    object Loading : UiState()
+    data class Success(val data: List<User>) : UiState()
+    data class Error(val message: String) : UiState()
+}
+```
+
+### Advantages with `when`
+
+The compiler knows all possible subtypes, so no `else` branch is needed.
+
+```kotlin
+fun handleState(state: UiState) {
+    when (state) {
+        is UiState.Loading -> showLoading()
+        is UiState.Success -> showData(state.data)
+        is UiState.Error -> showError(state.message)
+        // no else needed - compiler knows all variants!
+    }
+}
+```
+
+If you add a new subtype:
+
+```kotlin
+sealed class UiState {
+    object Loading : UiState()
+    data class Success(val data: List<User>) : UiState()
+    data class Error(val message: String) : UiState()
+    object Empty : UiState()  // New subtype
+}
+
+// The compiler will show an error in all `when` expressions without handling Empty!
+```
+
+### Use Cases
+
+#### 1. Modeling Operation Results
+
+```kotlin
+sealed class Result<out T> {
+    data class Success<T>(val value: T) : Result<T>()
+    data class Error(val exception: Exception) : Result<Nothing>()
+    object Loading : Result<Nothing>()
+}
+
+// Usage
+suspend fun loadUser(id: Int): Result<User> {
+    return try {
+        val user = apiService.getUser(id)
+        Result.Success(user)
+    } catch (e: Exception) {
+        Result.Error(e)
+    }
+}
+
+// In ViewModel
+viewModelScope.launch {
+    _uiState.value = Result.Loading
+    val result = loadUser(123)
+    _uiState.value = result
+}
+
+// In UI
+result.observe(this) { result ->
+    when (result) {
+        is Result.Loading -> showProgressBar()
+        is Result.Success -> updateUI(result.value)
+        is Result.Error -> showError(result.exception.message)
+    }
+}
+```
+
+#### 2. Modeling Network Requests
+
+```kotlin
+sealed class NetworkResponse<out T> {
+    data class Success<T>(val data: T) : NetworkResponse<T>()
+    data class HttpError(val code: Int, val message: String) : NetworkResponse<Nothing>()
+    data class NetworkError(val exception: IOException) : NetworkResponse<Nothing>()
+    object Timeout : NetworkResponse<Nothing>()
+}
+
+suspend fun fetchData(): NetworkResponse<List<Item>> {
+    return try {
+        val response = apiCall()
+        when {
+            response.isSuccessful -> NetworkResponse.Success(response.body()!!)
+            response.code() == 404 -> NetworkResponse.HttpError(404, "Not Found")
+            else -> NetworkResponse.HttpError(response.code(), response.message())
+        }
+    } catch (e: SocketTimeoutException) {
+        NetworkResponse.Timeout
+    } catch (e: IOException) {
+        NetworkResponse.NetworkError(e)
+    }
+}
+```
+
+#### 3. Navigation Events
+
+```kotlin
+sealed class NavigationEvent {
+    object Back : NavigationEvent()
+    data class ToDetail(val itemId: Int) : NavigationEvent()
+    data class ToProfile(val userId: Int) : NavigationEvent()
+    object ToSettings : NavigationEvent()
+}
+
+class NavigationViewModel : ViewModel() {
+    private val _navigationEvent = MutableLiveData<NavigationEvent>()
+    val navigationEvent: LiveData<NavigationEvent> = _navigationEvent
+
+    fun onItemClicked(itemId: Int) {
+        _navigationEvent.value = NavigationEvent.ToDetail(itemId)
+    }
+
+    fun onBackPressed() {
+        _navigationEvent.value = NavigationEvent.Back
+    }
+}
+
+// In Fragment
+viewModel.navigationEvent.observe(viewLifecycleOwner) { event ->
+    when (event) {
+        is NavigationEvent.Back -> findNavController().navigateUp()
+        is NavigationEvent.ToDetail -> navigateToDetail(event.itemId)
+        is NavigationEvent.ToProfile -> navigateToProfile(event.userId)
+        is NavigationEvent.ToSettings -> navigateToSettings()
+    }
+}
+```
+
+### Sealed class vs Enum
+
+| Aspect | Enum | Sealed Class |
+|---|---|---|
+| **Instances** | Single | Multiple |
+| **Data** | Same for all | Different for each subtype |
+| **Inheritance** | Not possible | Possible |
+| **Use case** | Fixed set of values | Hierarchy of related types |
+
+```kotlin
+// Enum - fixed values
+enum class Status {
+    LOADING, SUCCESS, ERROR
+}
+
+// Sealed class - different data for each subtype
+sealed class Status {
+    object Loading : Status()
+    data class Success(val data: String) : Status()
+    data class Error(val message: String, val code: Int) : Status()
+}
+```
+
+### Sealed interface (Kotlin 1.5+)
+
+```kotlin
+sealed interface Action {
+    data class Click(val x: Int, val y: Int) : Action
+    data class Scroll(val delta: Int) : Action
+    object Refresh : Action
+}
+
+// A class can implement multiple sealed interfaces
+class MyAction : Action, AnotherInterface {
+    // ...
+}
+```
+
+## Ответ (RU)
 Особенность запечатанных (sealed) классов заключается в ограничении иерархии наследования: все их подклассы должны быть объявлены в том же файле, что и сам запечатанный класс.
 
 ### Основная идея
@@ -94,98 +282,6 @@ result.observe(this) { result ->
 }
 ```
 
-#### 2. Моделирование сетевых запросов
-
-```kotlin
-sealed class NetworkResponse<out T> {
-    data class Success<T>(val data: T) : NetworkResponse<T>()
-    data class HttpError(val code: Int, val message: String) : NetworkResponse<Nothing>()
-    data class NetworkError(val exception: IOException) : NetworkResponse<Nothing>()
-    object Timeout : NetworkResponse<Nothing>()
-}
-
-suspend fun fetchData(): NetworkResponse<List<Item>> {
-    return try {
-        val response = apiCall()
-        when {
-            response.isSuccessful -> NetworkResponse.Success(response.body()!!)
-            response.code() == 404 -> NetworkResponse.HttpError(404, "Not Found")
-            else -> NetworkResponse.HttpError(response.code(), response.message())
-        }
-    } catch (e: SocketTimeoutException) {
-        NetworkResponse.Timeout
-    } catch (e: IOException) {
-        NetworkResponse.NetworkError(e)
-    }
-}
-```
-
-#### 3. Навигационные события
-
-```kotlin
-sealed class NavigationEvent {
-    object Back : NavigationEvent()
-    data class ToDetail(val itemId: Int) : NavigationEvent()
-    data class ToProfile(val userId: Int) : NavigationEvent()
-    object ToSettings : NavigationEvent()
-}
-
-class NavigationViewModel : ViewModel() {
-    private val _navigationEvent = MutableLiveData<NavigationEvent>()
-    val navigationEvent: LiveData<NavigationEvent> = _navigationEvent
-
-    fun onItemClicked(itemId: Int) {
-        _navigationEvent.value = NavigationEvent.ToDetail(itemId)
-    }
-
-    fun onBackPressed() {
-        _navigationEvent.value = NavigationEvent.Back
-    }
-}
-
-// В Fragment
-viewModel.navigationEvent.observe(viewLifecycleOwner) { event ->
-    when (event) {
-        is NavigationEvent.Back -> findNavController().navigateUp()
-        is NavigationEvent.ToDetail -> navigateToDetail(event.itemId)
-        is NavigationEvent.ToProfile -> navigateToProfile(event.userId)
-        is NavigationEvent.ToSettings -> navigateToSettings()
-    }
-}
-```
-
-#### 4. Формы и валидация
-
-```kotlin
-sealed class ValidationResult {
-    object Valid : ValidationResult()
-    sealed class Invalid : ValidationResult() {
-        object EmptyField : Invalid()
-        object TooShort : Invalid()
-        object InvalidFormat : Invalid()
-        data class Custom(val message: String) : Invalid()
-    }
-}
-
-fun validateEmail(email: String): ValidationResult {
-    return when {
-        email.isBlank() -> ValidationResult.Invalid.EmptyField
-        email.length < 5 -> ValidationResult.Invalid.TooShort
-        !email.contains("@") -> ValidationResult.Invalid.InvalidFormat
-        else -> ValidationResult.Valid
-    }
-}
-
-val result = validateEmail(userInput)
-when (result) {
-    is ValidationResult.Valid -> submitForm()
-    is ValidationResult.Invalid.EmptyField -> showError("Email cannot be empty")
-    is ValidationResult.Invalid.TooShort -> showError("Email too short")
-    is ValidationResult.Invalid.InvalidFormat -> showError("Invalid email format")
-    is ValidationResult.Invalid.Custom -> showError(result.message)
-}
-```
-
 ### Sealed class vs Enum
 
 | Аспект | Enum | Sealed Class |
@@ -223,5 +319,3 @@ class MyAction : Action, AnotherInterface {
     // ...
 }
 ```
-
-**English**: Sealed classes restrict class hierarchy - all subclasses must be declared in the same file. Ideal for modeling states and results with exhaustive `when` expressions (no `else` needed). Compiler knows all possible subtypes, providing compile-time safety. Unlike enums, sealed classes can have multiple instances and different data for each subtype.

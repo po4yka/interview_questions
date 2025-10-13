@@ -17,6 +17,9 @@ created: 2025-10-11
 # Question (EN)
 Explain Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). How would you use it to implement a plugin architecture or feature module system?
 
+# Вопрос (RU)
+Объясните Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). Как бы вы использовали это для реализации плагинной архитектуры или системы feature-модулей?
+
 ## Answer (EN)
 ### Overview
 
@@ -950,6 +953,206 @@ class PluginManager @Inject constructor(
 3. Use `@Multibinds` for optional collections
 4. Handle individual element failures gracefully
 5. Consider lazy initialization for performance
+
+## Ответ (RU)
+### Обзор
+
+**Multibinding** в Dagger/Hilt позволяет связывать несколько значений в коллекцию (Set или Map), которую можно внедрить как единую зависимость. Это невероятно полезно для плагинных архитектур, модулей с фичами и расширяемых систем, где вы хотите добавлять функциональность без изменения существующего кода.
+
+### Типы Multibinding
+
+1. **@IntoSet** - Добавляет один элемент в `Set`.
+2. **@ElementsIntoSet** - Добавляет несколько элементов в `Set`.
+3. **@IntoMap** - Добавляет одну запись в `Map`.
+4. **@Multibinds** - Объявляет пустую коллекцию, которую можно внедрить.
+
+### Базовый пример с @IntoSet
+
+```kotlin
+// Интерфейс для плагинов
+interface Plugin {
+    val name: String
+    fun initialize(context: Context)
+}
+
+// Реализации плагинов
+class AnalyticsPlugin @Inject constructor() : Plugin {
+    override val name = "Аналитика"
+    override fun initialize(context: Context) {
+        println("Инициализация плагина аналитики")
+    }
+}
+
+// ... другие плагины
+
+// Модуль, предоставляющий плагины
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class PluginModule {
+
+    @Binds
+    @IntoSet
+    abstract fun bindAnalyticsPlugin(plugin: AnalyticsPlugin): Plugin
+
+    // ... другие привязки
+}
+
+// Использование - внедрение всего набора
+@Singleton
+class PluginManager @Inject constructor(
+    private val plugins: Set<@JvmSuppressWildcards Plugin>
+) {
+    fun initializeAll(context: Context) {
+        plugins.forEach { plugin ->
+            println("Инициализация плагина: ${plugin.name}")
+            plugin.initialize(context)
+        }
+    }
+}
+```
+
+### @IntoMap с пользовательскими ключами
+
+Карты требуют аннотации ключа.
+
+```kotlin
+// Пользовательская аннотация ключа
+@MapKey
+annotation class FeatureKey(val value: String)
+
+// Интерфейс фичи
+interface Feature {
+    val id: String
+    fun open(context: Context)
+}
+
+// ... реализации фич
+
+// Модуль, предоставляющий фичи
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class FeatureModule {
+
+    @Binds
+    @IntoMap
+    @FeatureKey("profile")
+    abstract fun bindProfileFeature(feature: ProfileFeature): Feature
+    
+    // ... другие привязки
+}
+
+// Использование
+@Singleton
+class FeatureRegistry @Inject constructor(
+    private val features: Map<String, @JvmSuppressWildcards Feature>
+) {
+    fun openFeature(id: String, context: Context) {
+        features[id]?.open(context)
+    }
+}
+```
+
+### @Multibinds для опциональных зависимостей
+
+Иногда нужно внедрить пустую коллекцию, если нет привязок.
+
+```kotlin
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class InterceptorModule {
+
+    // Объявляет пустой набор, который можно внедрить, даже если нет привязок
+    @Multibinds
+    abstract fun bindInterceptors(): Set<Interceptor>
+}
+
+// Использование
+@Singleton
+class ApiClient @Inject constructor(
+    private val interceptors: Set<@JvmSuppressWildcards Interceptor>
+) {
+    // interceptors будет пустым набором, если нет привязок
+}
+```
+
+### Реальный пример: Система плагинов для навигации
+
+```kotlin
+// ... (код как в английской версии, с переведенными строками)
+```
+
+### Продвинутый уровень: Система модулей с фичами
+
+```kotlin
+// ... (код как в английской версии, с переведенными строками)
+```
+
+### Multibinding для Map с ClassKey
+
+Использование `@ClassKey` для поиска по типу.
+
+```kotlin
+// ... (код как в английской версии)
+```
+
+### Multibinding с квалификаторами
+
+Разные наборы/карты с квалификаторами.
+
+```kotlin
+// ... (код как в английской версии)
+```
+
+### Пример из продакшена: Шина событий с подписчиками
+
+```kotlin
+// ... (код как в английской версии, с переведенными строками)
+```
+
+### Лучшие практики
+
+1.  **Используйте `@JvmSuppressWildcards` для Kotlin.**
+2.  **Предпочитайте абстрактные `@Binds` вместо `@Provides`.**
+3.  **Используйте `@Multibinds` для опциональных коллекций.**
+4.  **Упорядочивайте с помощью приоритета, когда это необходимо.**
+5.  **Обрабатывайте ошибки в потребителях мультибайндинга.**
+
+### Соображения по производительности
+
+1.  **Set vs List**: Мультибайндинг всегда создает `Set<T>` или `Map<K, V>`, никогда `List<T>`.
+2.  **Ленивая инициализация**: Элементы создаются сразу, если не использовать `Lazy<T>` или `Provider<T>`.
+3.  **Память**: Все привязанные экземпляры хранятся в памяти.
+
+### Резюме
+
+**Мультибайндинг в Dagger/Hilt** позволяет связывать несколько значений в коллекции:
+
+**Типы**:
+- `@IntoSet` - один элемент в `Set`
+- `@ElementsIntoSet` - несколько элементов в `Set`
+- `@IntoMap` - одна запись в `Map` (требует аннотацию ключа)
+- `@Multibinds` - объявляет пустую коллекцию
+
+**Сценарии использования**:
+- Архитектуры плагинов
+- Системы модулей с фичами
+- Паттерны подписчиков на события
+- Цепочки перехватчиков (interceptors)
+- Динамическая навигация
+- Адаптеры `RecyclerView` с несколькими типами представлений
+
+**Преимущества**:
+- Принцип открытости/закрытости
+- Не нужно изменять существующий код для добавления фич
+- Легко включать/отключать фичи
+- Тестируемость
+
+**Лучшие практики**:
+1.  Используйте `@JvmSuppressWildcards` в Kotlin.
+2.  Предпочитайте `@Binds` вместо `@Provides`.
+3.  Используйте `@Multibinds` для опциональных коллекций.
+4.  Корректно обрабатывайте сбои отдельных элементов.
+5.  Рассмотрите ленивую инициализацию для повышения производительности.
 
 ---
 
