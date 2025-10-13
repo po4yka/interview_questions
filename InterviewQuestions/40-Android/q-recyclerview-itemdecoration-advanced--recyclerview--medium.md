@@ -1,4 +1,5 @@
 ---
+topic: android
 tags:
   - recyclerview
   - itemdecoration
@@ -6,6 +7,17 @@ tags:
   - ui
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions:
+  - q-recyclerview-sethasfixedsize--android--easy
+  - q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
+  - q-rxjava-pagination-recyclerview--android--medium
+  - q-how-to-create-list-like-recyclerview-in-compose--android--medium
+  - q-recyclerview-itemdecoration-advanced--android--medium
+  - q-how-animations-work-in-recyclerview--android--medium
+  - q-recyclerview-async-list-differ--recyclerview--medium
 ---
 
 # RecyclerView ItemDecoration Advanced

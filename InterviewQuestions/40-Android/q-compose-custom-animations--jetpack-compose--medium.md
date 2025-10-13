@@ -1,4 +1,6 @@
 ---
+topic: android
+subtopics: [jetpack-compose, animations]
 tags:
   - jetpack-compose
   - animations
@@ -7,6 +9,19 @@ tags:
   - animation-specs
 difficulty: medium
 status: draft
+moc: moc-android
+date_created: 2025-10-13
+date_updated: 2025-10-13
+related_questions:
+  - q-jetpack-compose-basics--android--medium
+  - q-how-does-jetpack-compose-work--android--medium
+  - q-what-are-the-most-important-components-of-compose--android--medium
+  - q-how-to-create-list-like-recyclerview-in-compose--android--medium
+  - q-mutable-state-compose--android--medium
+  - q-remember-vs-remembersaveable-compose--android--medium
+  - q-compose-stability-skippability--jetpack-compose--hard
+  - q-stable-classes-compose--android--hard
+  - q-stable-annotation-compose--android--hard
 ---
 
 # Custom Animations with Animatable and animate*AsState

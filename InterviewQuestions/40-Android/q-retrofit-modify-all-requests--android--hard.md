@@ -11,6 +11,14 @@ tags:
   - retrofit
 difficulty: hard
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions:
+  - q-http-protocols-comparison--android--medium
+  - q-retrofit-call-adapter-advanced--networking--medium
+  - q-retrofit-usage-tutorial--android--medium
+  - q-data-sync-unstable-network--android--hard
 ---
 
 # Как в Ретрофите изменять все запросы?

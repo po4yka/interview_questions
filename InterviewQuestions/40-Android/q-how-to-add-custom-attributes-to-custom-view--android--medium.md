@@ -4,6 +4,18 @@ tags:
   - android
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions:
+  - q-recyclerview-sethasfixedsize--android--easy
+  - q-viewmodel-pattern--android--easy
+  - q-what-is-known-about-methods-that-redraw-view--android--medium
+  - q-testing-viewmodels-turbine--testing--medium
+  - q-rxjava-pagination-recyclerview--android--medium
+  - q-what-is-viewmodel--android--medium
+  - q-how-to-create-list-like-recyclerview-in-compose--android--medium
+  - q-compose-custom-layout--jetpack-compose--hard
 ---
 
 # How to add custom attributes to custom view?

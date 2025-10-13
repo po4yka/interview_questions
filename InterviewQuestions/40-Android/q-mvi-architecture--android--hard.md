@@ -15,6 +15,21 @@ status: draft
 **English**: Explain the MVI (Model-View-Intent) architecture pattern. How does it differ from MVVM?
 
 ## Answer (EN)
+**MVI (Model-View-Intent)** is an architecture pattern with **unidirectional data flow**, where UI state is immutable and changes only through explicit Intents.
+
+**Components**: (1) **Intent** - user actions/events, (2) **Model** - single immutable UI state, (3) **View** - renders UI from Model, (4) **Processor/Reducer** - processes Intent → creates new Model.
+
+**Key principles**: Single source of truth (one State object). Immutability (state.copy()). Unidirectional flow (Intent → Processor → Model → View). Pure functions (reducers). Predictability (same Intent + State = same Result).
+
+**vs MVVM**: MVI has single state vs multiple LiveData/StateFlow. MVI uses Intent-based updates vs direct method calls. MVI has unidirectional vs bi-directional flow. MVI provides better predictability and testability but requires more boilerplate.
+
+**Side effects**: Use Channel/SharedFlow for one-time events (navigation, toasts). State for UI representation, SideEffect for actions.
+
+**Patterns**: Reducer pattern for pure state transformations. Middleware for cross-cutting concerns (logging, analytics). Time travel debugging (state history). Nested states for complex screens.
+
+**Testing**: Easy to test reducers (pure functions). Test state transitions (Intent → new State). Test side effects separately. Verify immutability.
+
+## Ответ (RU)
 **MVI (Model-View-Intent)** - архитектурный паттерн с **unidirectional data flow** (однонаправленным потоком данных), где UI состояние иммутабельно и изменяется только через явные намерения (Intents).
 
 ### Компоненты MVI
@@ -669,21 +684,6 @@ _state.value = _state.value.copy(
     items = _state.value.items + item
 ) // - Новый объект
 ```
-
-**English**: **MVI (Model-View-Intent)** is an architecture pattern with **unidirectional data flow**, where UI state is immutable and changes only through explicit Intents.
-
-**Components**: (1) **Intent** - user actions/events, (2) **Model** - single immutable UI state, (3) **View** - renders UI from Model, (4) **Processor/Reducer** - processes Intent → creates new Model.
-
-**Key principles**: Single source of truth (one State object). Immutability (state.copy()). Unidirectional flow (Intent → Processor → Model → View). Pure functions (reducers). Predictability (same Intent + State = same Result).
-
-**vs MVVM**: MVI has single state vs multiple LiveData/StateFlow. MVI uses Intent-based updates vs direct method calls. MVI has unidirectional vs bi-directional flow. MVI provides better predictability and testability but requires more boilerplate.
-
-**Side effects**: Use Channel/SharedFlow for one-time events (navigation, toasts). State for UI representation, SideEffect for actions.
-
-**Patterns**: Reducer pattern for pure state transformations. Middleware for cross-cutting concerns (logging, analytics). Time travel debugging (state history). Nested states for complex screens.
-
-**Testing**: Easy to test reducers (pure functions). Test state transitions (Intent → new State). Test side effects separately. Verify immutability.
-
 
 
 ---

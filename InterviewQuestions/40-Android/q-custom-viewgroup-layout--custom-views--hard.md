@@ -824,121 +824,234 @@ class FlowLayoutTest {
 
 ## Ответ (RU)
 
-Создание **пользовательского ViewGroup** сложнее, чем простого View, потому что нужно управлять как своим собственным измерением/компоновкой, так и измерением/компоновкой всех дочерних view. Это требует понимания двухпроходного алгоритма компоновки.
+Создание **пользовательского ViewGroup** сложнее, чем простого пользовательского View, потому что вам нужно обрабатывать как собственное измерение/расположение, так и измерение/расположение всех дочерних представлений. Это требует понимания двухпроходного алгоритма компоновки.
 
 ### Процесс компоновки ViewGroup
 
 ```
 Родительский ViewGroup
     ↓
-1. onMeasure() - Измерить всех детей, затем себя
+1. onMeasure() - Измерить всех дочерних элементов, затем измерить себя
     ↓
-2. onLayout() - Позиционировать всех детей на основе измерений
+2. onLayout() - Расположить все дочерние элементы на основе измерений
     ↓
-Дети измерены и позиционированы
+Дочерние элементы измерены и расположены
 ```
 
-### Пример: FlowLayout
+---
 
-**FlowLayout** располагает детей в горизонтальные ряды, переносясь на следующий ряд при нехватке места (как HTML flexbox с flex-wrap).
+### Ключевые концепции
+
+**1. Проход измерения** (onMeasure):
+- Родитель измеряет каждый дочерний элемент с помощью `child.measure()`
+- Затем родитель измеряет себя на основе размеров дочерних элементов
+- Необходимо вызвать `setMeasuredDimension()`
+
+**2. Проход компоновки** (onLayout):
+- Родитель располагает каждый дочерний элемент с помощью `child.layout()`
+- Дочерние элементы получают свою позицию в координатах родителя
+
+---
+
+### Базовый шаблон пользовательского ViewGroup
 
 ```kotlin
-class FlowLayout @JvmOverloads constructor(
+class BasicCustomLayout @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null
-) : ViewGroup(context, attrs) {
-
-    var horizontalSpacing: Int = 0
-    var verticalSpacing: Int = 0
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ViewGroup(context, attrs, defStyleAttr) {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val availableWidth = MeasureSpec.getSize(widthMeasureSpec) -
-                            paddingLeft - paddingRight
-
-        var currentRowWidth = 0
-        var currentRowHeight = 0
-        var totalHeight = 0
-
-        // Измерить каждого ребенка
+        // Шаг 1: Измерить все дочерние элементы
         for (i in 0 until childCount) {
             val child = getChildAt(i)
-            if (child.visibility == GONE) continue
-
-            measureChild(child, widthMeasureSpec, heightMeasureSpec)
-
-            val childWidth = child.measuredWidth
-            val childHeight = child.measuredHeight
-
-            // Проверить, нужно ли перенести на новый ряд
-            if (currentRowWidth + childWidth > availableWidth && currentRowWidth > 0) {
-                // Начать новый ряд
-                totalHeight += currentRowHeight + verticalSpacing
-                currentRowWidth = childWidth
-                currentRowHeight = childHeight
-            } else {
-                // Добавить к текущему ряду
-                currentRowWidth += childWidth + horizontalSpacing
-                currentRowHeight = max(currentRowHeight, childHeight)
+            if (child.visibility != GONE) {
+                measureChild(child, widthMeasureSpec, heightMeasureSpec)
             }
         }
 
-        totalHeight += currentRowHeight
+        // Шаг 2: Рассчитать собственный размер на основе дочерних элементов
+        val desiredWidth = calculateDesiredWidth()
+        val desiredHeight = calculateDesiredHeight()
+
+        // Шаг 3: Определить и установить размер
         setMeasuredDimension(
-            MeasureSpec.getSize(widthMeasureSpec),
-            resolveSize(totalHeight + paddingTop + paddingBottom, heightMeasureSpec)
+            resolveSize(desiredWidth, widthMeasureSpec),
+            resolveSize(desiredHeight, heightMeasureSpec)
         )
     }
 
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        val availableWidth = r - l - paddingLeft - paddingRight
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        // Расположить каждый дочерний элемент
         var currentX = paddingLeft
         var currentY = paddingTop
-        var currentRowHeight = 0
 
         for (i in 0 until childCount) {
             val child = getChildAt(i)
-            if (child.visibility == GONE) continue
-
-            val childWidth = child.measuredWidth
-            val childHeight = child.measuredHeight
-
-            // Проверить перенос
-            if (currentX + childWidth > paddingLeft + availableWidth &&
-                currentX > paddingLeft) {
-                currentX = paddingLeft
-                currentY += currentRowHeight + verticalSpacing
-                currentRowHeight = 0
+            if (child.visibility != GONE) {
+                child.layout(
+                    currentX,
+                    currentY,
+                    currentX + child.measuredWidth,
+                    currentY + child.measuredHeight
+                )
+                currentX += child.measuredWidth
             }
-
-            // Позиционировать ребенка
-            child.layout(
-                currentX,
-                currentY,
-                currentX + childWidth,
-                currentY + childHeight
-            )
-
-            currentX += childWidth + horizontalSpacing
-            currentRowHeight = max(currentRowHeight, childHeight)
         }
+    }
+
+    private fun calculateDesiredWidth(): Int {
+        // Реализация зависит от логики компоновки
+        return 0
+    }
+
+    private fun calculateDesiredHeight(): Int {
+        // Реализация зависит от логики компоновки
+        return 0
     }
 }
 ```
 
-### Ключевые правила
+---
 
-1. **Всегда измеряйте детей перед собой**
-2. **Всегда вызывайте setMeasuredDimension()**
-3. **Пропускайте GONE детей**
-4. **Используйте resolveSize() для wrap_content**
-5. **Поддерживайте RTL layouts**
-6. **Кэшируйте вычисления для производительности**
+### Полная реализация FlowLayout
 
-### Вспомогательные методы
+**FlowLayout** располагает дочерние элементы в горизонтальные ряды, перенося их на следующий ряд, когда не хватает места (подобно flexbox в HTML с flex-wrap).
 
-- `measureChild()` - Простое измерение
-- `measureChildWithMargins()` - Учитывает margins
-- `resolveSize()` - Разрешить финальный размер
+```kotlin
+/**
+ * FlowLayout - Располагает дочерние элементы в ряды, с переносом при необходимости
+ *
+ * Особенности:
+ * - Автоматический перенос на новый ряд
+ * - Горизонтальные и вертикальные отступы
+ * - Поддержка margins
+ * - Учитывает видимость дочерних элементов (пропускает GONE)
+ */
+class FlowLayout @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ViewGroup(context, attrs, defStyleAttr) {
+
+    // ... (код как в английской версии)
+}
+```
+
+**attrs.xml:**
+```xml
+<resources>
+    <declare-styleable name="FlowLayout">
+        <attr name="horizontalSpacing" format="dimension" />
+        <attr name="verticalSpacing" format="dimension" />
+    </declare-styleable>
+</resources>
+```
+
+---
+
+### Пример использования
+
+**XML:**
+```xml
+<com.example.ui.FlowLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:horizontalSpacing="8dp"
+    app:verticalSpacing="8dp"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Тег 1"
+        android:background="@drawable/tag_background" />
+    <!-- ... -->
+</com.example.ui.FlowLayout>
+```
+
+**Программно:**
+```kotlin
+// ... (код как в английской версии)
+```
+
+---
+
+### Продвинутый уровень: Пользовательские LayoutParams
+
+```kotlin
+// ... (код как в английской версии)
+```
+
+---
+
+### Реальный пример: StaggeredLayout
+
+Более сложная компоновка, создающая сетку в стиле Pinterest.
+
+```kotlin
+// ... (код как в английской версии)
+```
+
+---
+
+### Вспомогательные методы измерения
+
+```kotlin
+// ... (код как в английской версии)
+```
+
+---
+
+### Лучшие практики
+
+**1. Всегда измеряйте дочерние элементы перед родительским**
+**2. Пропускайте дочерние элементы с видимостью GONE**
+**3. Используйте `resolveSize` для `wrap_content`/`match_parent`**
+**4. Поддерживайте RTL-компоновки**
+**5. Оптимизируйте производительность**
+
+---
+
+### Распространенные ошибки
+
+**Забыли вызвать `setMeasuredDimension()`**
+**Не измерили дочерние элементы**
+**Вызов `requestLayout()` в `onLayout()`**
+
+---
+
+### Тестирование пользовательского ViewGroup
+
+```kotlin
+// ... (код как в английской версии)
+```
+
+---
+
+### Резюме
+
+**Создание пользовательского ViewGroup:**
+
+1.  **Переопределите `onMeasure()`**
+    *   Измерьте все дочерние элементы
+    *   Рассчитайте собственный размер
+    *   Вызовите `setMeasuredDimension()`
+2.  **Переопределите `onLayout()`**
+    *   Расположите все дочерние элементы с помощью `child.layout()`
+    *   Используйте измеренные размеры из `onMeasure`
+3.  **Поддерживайте `LayoutParams`**
+    *   Переопределите методы `generateLayoutParams()`
+    *   Поддерживайте `MarginLayoutParams` или пользовательские параметры
+
+**Ключевые правила:**
+- Всегда измеряйте дочерние элементы перед родительским
+- Всегда вызывайте `setMeasuredDimension()`
+- Пропускайте дочерние элементы с видимостью `GONE`
+- Используйте `resolveSize()` для `wrap_content`
+- Поддерживайте RTL-компоновки
+- Кэшируйте вычисления для производительности
 
 ---
 

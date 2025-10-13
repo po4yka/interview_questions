@@ -11,6 +11,15 @@ tags:
   - sqlite
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions:
+  - q-sharedpreferences-commit-vs-apply--android--easy
+  - q-sharedpreferences-definition--android--easy
+  - q-room-code-generation-timing--android--medium
+  - q-room-transactions-dao--room--medium
+  - q-room-paging3-integration--room--medium
 ---
 
 # Что из себя представляет библиотека Room?

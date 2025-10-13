@@ -762,26 +762,285 @@ sealed class Status {
 
 ---
 
-## Russian Version
+### Подробный ответ
 
-### Постановка задачи
+---
 
-Sealed классы в Kotlin обеспечивают типобезопасное представление ограниченных иерархий классов. Они идеальны для моделирования UI состояний, событий навигации и результатов API в Android архитектурных паттернах как MVI и MVVM.
+### ОСНОВЫ SEALED КЛАССОВ
 
-**Вопрос:** Что такое sealed классы и sealed интерфейсы? Как использовать их для управления состоянием? Какие преимущества перед enums и наследованием?
+**Определение:**
+```kotlin
+sealed class Result<out T> {
+    data class Success<T>(val data: T) : Result<T>()
+    data class Error(val exception: Exception) : Result<Nothing>()
+    data object Loading : Result<Nothing>()
+}
 
-### Ключевые выводы
+// Использование с исчерпывающим when
+fun <T> handleResult(result: Result<T>) {
+    when (result) {
+        is Result.Success -> println("Данные: ${result.data}")
+        is Result.Error -> println("Ошибка: ${result.exception.message}")
+        is Result.Loading -> println("Загрузка...")
+    }
+    // else не нужен - компилятор обеспечивает исчерпываемость
+}
+```
 
-1. **Sealed классы** ограничивают иерархии типов известными подтипами
-2. **Exhaustive when** - компилятор гарантирует обработку всех случаев
-3. **Моделирование UI состояний** - паттерн Idle, Loading, Success, Error
-4. **MVI паттерн** - Intent, State, Effect с sealed классами
-5. **Network responses** - типобезопасная обработка ошибок
-6. **События навигации** - структурированная навигация
-7. **Sealed интерфейсы** (Kotlin 1.5+) позволяют множественное наследование
-8. **Лучше чем enums** - могут хранить данные и иметь методы
-9. **data object** (Kotlin 1.7+) для singleton sealed подклассов
-10. **Типобезопасность** - невозможные состояния становятся невозможными
+**Ключевые особенности:**
+```
+ Ограниченная иерархия типов
+ Все подклассы определены в том же файле (или вложены)
+ Исчерпывающие выражения when
+ Типобезопасное моделирование состояний
+ Лучше, чем enums (могут хранить данные)
+ Лучше, чем абстрактные классы (исчерпываемость)
+```
+
+---
+
+### МОДЕЛИРОВАНИЕ UI СОСТОЯНИЯ
+
+```kotlin
+sealed interface UiState<out T> {
+    data object Idle : UiState<Nothing>
+    data object Loading : UiState<Nothing>
+    data class Success<T>(val data: T) : UiState<T>
+    data class Error(val message: String, val throwable: Throwable? = null) : UiState<Nothing>
+}
+
+// Пример: экран профиля пользователя
+data class UserProfile(
+    val id: String,
+    val name: String,
+    val email: String,
+    val avatarUrl: String
+)
+
+class ProfileViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow<UiState<UserProfile>>(UiState.Idle)
+    val uiState: StateFlow<UiState<UserProfile>> = _uiState.asStateFlow()
+
+    fun loadProfile(userId: String) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+
+            try {
+                val profile = userRepository.getProfile(userId)
+                _uiState.value = UiState.Success(profile)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(
+                    message = "Не удалось загрузить профиль",
+                    throwable = e
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ProfileScreen(viewModel: ProfileViewModel) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    when (val state = uiState) {
+        is UiState.Idle -> {
+            // Показать начальное состояние
+            Button(onClick = { viewModel.loadProfile("123") }) {
+                Text("Загрузить профиль")
+            }
+        }
+
+        is UiState.Loading -> {
+            CircularProgressIndicator()
+        }
+
+        is UiState.Success -> {
+            ProfileContent(profile = state.data)
+        }
+
+        is UiState.Error -> {
+            ErrorMessage(
+                message = state.message,
+                onRetry = { viewModel.loadProfile("123") }
+            )
+        }
+    }
+}
+```
+
+---
+
+### SEALED ИНТЕРФЕЙСЫ (Kotlin 1.5+)
+
+```kotlin
+// Sealed интерфейс позволяет множественное наследование
+sealed interface Response
+
+sealed interface ApiResponse : Response {
+    data class Success(val data: String) : ApiResponse
+    data class Failure(val error: String) : ApiResponse
+}
+
+sealed interface CacheResponse : Response {
+    data class Hit(val data: String) : CacheResponse
+    data object Miss : CacheResponse
+}
+
+// Класс может реализовывать несколько sealed интерфейсов
+data class HybridResponse(
+    val apiData: String,
+    val cacheHit: Boolean
+) : ApiResponse, CacheResponse
+
+// Использование
+fun handleResponse(response: Response) {
+    when (response) {
+        is ApiResponse.Success -> println("API Успех: ${response.data}")
+        is ApiResponse.Failure -> println("API Ошибка: ${response.error}")
+        is CacheResponse.Hit -> println("Кэш Попадание: ${response.data}")
+        is CacheResponse.Miss -> println("Кэш Промах")
+        is HybridResponse -> println("Гибрид: ${response.apiData}")
+    }
+}
+```
+
+---
+
+### ПАТТЕРН MVI С SEALED КЛАССАМИ
+
+```kotlin
+// Intent - Действия пользователя
+sealed interface ProfileIntent {
+    data class LoadProfile(val userId: String) : ProfileIntent
+    data object RefreshProfile : ProfileIntent
+    data class UpdateBio(val bio: String) : ProfileIntent
+    data object Logout : ProfileIntent
+}
+
+// State - Состояние UI
+sealed interface ProfileState {
+    data object Idle : ProfileState
+    data object Loading : ProfileState
+    data class Content(
+        val profile: UserProfile,
+        val isRefreshing: Boolean = false
+    ) : ProfileState
+    data class Error(val message: String) : ProfileState
+}
+
+// Effect - Одноразовые события
+sealed interface ProfileEffect {
+    data class ShowToast(val message: String) : ProfileEffect
+    data object NavigateToLogin : ProfileEffect
+    data class NavigateToSettings(val userId: String) : ProfileEffect
+}
+
+// ... (остальной код ViewModel и Composable как в английской версии, с переведенными строками)
+```
+
+---
+
+### МОДЕЛИРОВАНИЕ СЕТЕВЫХ ОТВЕТОВ
+
+```kotlin
+sealed class NetworkResult<out T> {
+    data class Success<T>(val data: T) : NetworkResult<T>()
+
+    sealed class Error : NetworkResult<Nothing>() {
+        data class HttpError(val code: Int, val message: String) : Error()
+        data class NetworkError(val exception: IOException) : Error()
+        data class UnknownError(val throwable: Throwable) : Error()
+    }
+
+    data object Loading : NetworkResult<Nothing>()
+}
+
+// ... (остальной код UserRepository и ViewModel как в английской версии, с переведенными строками)
+```
+
+---
+
+### СОБЫТИЯ НАВИГАЦИИ
+
+```kotlin
+sealed interface NavigationEvent {
+    data object NavigateBack : NavigationEvent
+
+    sealed interface NavigateToScreen : NavigationEvent {
+        data class Profile(val userId: String) : NavigateToScreen
+        data class Settings(val section: String? = null) : NavigateToScreen
+        data class Detail(val itemId: String, val title: String) : NavigateToScreen
+        data object Home : NavigateToScreen
+    }
+
+    sealed interface ExternalNavigation : NavigationEvent {
+        data class OpenUrl(val url: String) : ExternalNavigation
+        data class ShareText(val text: String) : ExternalNavigation
+        data class OpenEmail(val email: String) : ExternalNavigation
+    }
+}
+
+// ... (остальной код NavigationViewModel и Composable как в английской версии)
+```
+
+---
+
+### ВАЛИДАЦИЯ ФОРМ
+
+```kotlin
+sealed interface ValidationResult {
+    data object Valid : ValidationResult
+
+    sealed interface Invalid : ValidationResult {
+        data class FieldError(val field: String, val message: String) : Invalid
+        data class MultipleErrors(val errors: List<FieldError>) : Invalid
+    }
+}
+
+// ... (остальной код FormValidator и Composable как в английской версии, с переведенными строками)
+```
+
+---
+
+### ОБРАБОТКА РАЗРЕШЕНИЙ
+
+```kotlin
+sealed interface PermissionState {
+    data object NotRequested : PermissionState
+    data object Granted : PermissionState
+
+    sealed interface Denied : PermissionState {
+        data object DeniedOnce : Denied
+        data object PermanentlyDenied : Denied
+    }
+
+    data object Requesting : PermissionState
+}
+
+// ... (остальной код PermissionManager и Composable как в английской версии, с переведенными строками)
+```
+
+---
+
+### SEALED КЛАСС VS ENUM
+
+```kotlin
+// Enum - ограниченные возможности
+enum class Status {
+    SUCCESS,
+    ERROR,
+    LOADING
+}
+// Не может хранить данные, не может иметь подклассы
+
+// Sealed класс - гибкий
+sealed class Status {
+    data class Success(val data: String) : Status()
+    data class Error(val exception: Exception) : Status()
+    data object Loading : Status()
+}
+// Может хранить разные данные, типобезопасен
+```
 
 ## Follow-ups
 
