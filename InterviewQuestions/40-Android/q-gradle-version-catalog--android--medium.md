@@ -549,3 +549,20 @@ dependencies {
 - [Sharing dependency versions between projects](https://docs.gradle.org/current/userguide/platforms.html)
 - [Using Version Catalog on Android projects](https://proandroiddev.com/using-version-catalog-on-android-projects-82d88d2f79e5)
 - [Is the New Gradle Version Catalog Worth It for Your Android Projects?](https://molidevwrites.com/is-the-new-gradle-version-catalog-worth-it-for-your-android-projects/)
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-gradle-basics--android--easy]] - Build
+
+### Related (Medium)
+- [[q-build-optimization-gradle--gradle--medium]] - Build
+- [[q-kapt-ksp-migration--gradle--medium]] - Build
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Build
+- [[q-gradle-build-system--android--medium]] - Build
+- [[q-dagger-build-time-optimization--android--medium]] - Build
+
+### Advanced (Harder)
+- [[q-kotlin-dsl-builders--kotlin--hard]] - Build

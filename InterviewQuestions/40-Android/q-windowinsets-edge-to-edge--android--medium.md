@@ -69,24 +69,24 @@ fun Activity.enableEdgeToEdge() {
 **What edge-to-edge does:**
 ```
 Before edge-to-edge:
-┌─────────────────┐
-│   Status Bar    │ ← System managed
-├─────────────────┤
-│                 │
-│   App Content   │ ← Your content here
-│                 │
-├─────────────────┤
-│  Navigation Bar │ ← System managed
-└─────────────────┘
+
+   Status Bar     ← System managed
+
+                 
+   App Content    ← Your content here
+                 
+
+  Navigation Bar  ← System managed
+
 
 After edge-to-edge:
-┌─────────────────┐
-│   Status Bar    │ ← Transparent, you draw behind
-│                 │
-│   App Content   │ ← Your content fills entire screen
-│                 │
-│  Navigation Bar │ ← Transparent, you draw behind
-└─────────────────┘
+
+   Status Bar     ← Transparent, you draw behind
+                 
+   App Content    ← Your content fills entire screen
+                 
+  Navigation Bar  ← Transparent, you draw behind
+
 ```
 
 ---
@@ -247,7 +247,7 @@ fun KeyboardHandlingExample() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .imePadding()  // ✅ Automatically handle keyboard
+            .imePadding()  //  Automatically handle keyboard
     ) {
         // Content that scrolls above keyboard
         LazyColumn(

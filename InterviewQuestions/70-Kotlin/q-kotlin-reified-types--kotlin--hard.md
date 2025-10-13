@@ -25,12 +25,12 @@ Reified type parameters preserve type information at runtime in inline functions
 ```kotlin
 // Doesn't work - type erased at runtime
 fun <T> isInstance(value: Any): Boolean {
-    return value is T  // ❌ Cannot check type T
+    return value is T  //  Cannot check type T
 }
 
 // Workaround: Pass class explicitly
 fun <T> isInstance(value: Any, clazz: Class<T>): Boolean {
-    return clazz.isInstance(value)  // ✅ Works but verbose
+    return clazz.isInstance(value)  //  Works but verbose
 }
 ```
 
@@ -39,7 +39,7 @@ fun <T> isInstance(value: Any, clazz: Class<T>): Boolean {
 ```kotlin
 // Reified - type available at runtime
 inline fun <reified T> isInstance(value: Any): Boolean {
-    return value is T  // ✅ Works!
+    return value is T  //  Works!
 }
 
 // Usage
@@ -113,7 +113,7 @@ inline fun <reified T> buildList(builder: MutableList<T>.() -> Unit): List<T> {
 val strings = buildList<String> {
     add("a")
     add("b")
-    // add(1)  // ❌ Compile error
+    // add(1)  //  Compile error
 }
 ```
 
@@ -126,7 +126,7 @@ val strings = buildList<String> {
 5. **Cannot create instances** without reflection
 
 ```kotlin
-// ❌ NOT ALLOWED
+//  NOT ALLOWED
 class Container<reified T>  // Can't use in class
 
 fun <reified T> create(): T = T()  // Can't create instance

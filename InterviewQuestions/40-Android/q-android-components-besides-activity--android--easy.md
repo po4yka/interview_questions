@@ -141,3 +141,27 @@ class ProfileViewModel : ViewModel() {
 ## Ответ (RU)
 Помимо Activity используется ряд других ключевых компонентов: Service (фоновые операции), Broadcast Receiver (широковещательные сообщения), Content Provider (обмен данными), Fragment (модульные секции UI), View (строительный блок UI), ViewModel (управление данными UI).
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity

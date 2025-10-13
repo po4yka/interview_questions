@@ -91,37 +91,37 @@ class MainActivity : AppCompatActivity() {
 ### Диаграмма жизненного цикла
 
 ```
-┌─────────────┐
-│   Created   │
-└──────┬──────┘
-       │
+
+   Created   
+
+       
        ↓
    onCreate()
-       │
+       
        ↓
-   onStart() ←──────────┐
-       │                │
-       ↓                │
+   onStart() ←
+                       
+       ↓                
    onResume()      onRestart()
-       │                │
-       ↓                │
-   ┌─────────┐         │
-   │ RUNNING │         │
-   └────┬────┘         │
-        │              │
-        ↓              │
-   onPause()           │
-        │              │
-        ↓              │
-   onStop() ───────────┘
-        │
+                       
+       ↓                
+            
+    RUNNING          
+            
+                      
+        ↓              
+   onPause()           
+                      
+        ↓              
+   onStop() 
+        
         ↓
    onDestroy()
-        │
+        
         ↓
-   ┌─────────┐
-   │Destroyed│
-   └─────────┘
+   
+   Destroyed
+   
 ```
 
 ### Сценарии использования
@@ -308,25 +308,25 @@ class FormActivity : AppCompatActivity() {
 ### Важные правила
 
 **onCreate():**
-- ✅ Инициализация UI (setContentView)
-- ✅ Создание объектов
-- ✅ Привязка данных
-- ❌ Длительные операции (использовать фоновые потоки)
+-  Инициализация UI (setContentView)
+-  Создание объектов
+-  Привязка данных
+-  Длительные операции (использовать фоновые потоки)
 
 **onPause():**
-- ✅ Сохранение критичных данных
-- ✅ Остановка анимаций
-- ❌ Длительные операции (метод должен выполниться быстро!)
+-  Сохранение критичных данных
+-  Остановка анимаций
+-  Длительные операции (метод должен выполниться быстро!)
 
 **onStop():**
-- ✅ Освобождение ресурсов
-- ✅ Отмена регистрации слушателей
-- ✅ Остановка фоновых задач
+-  Освобождение ресурсов
+-  Отмена регистрации слушателей
+-  Остановка фоновых задач
 
 **onDestroy():**
-- ✅ Финальная очистка
-- ✅ Освобождение всех ресурсов
-- ⚠️ Может не вызваться (system kill)
+-  Финальная очистка
+-  Освобождение всех ресурсов
+-  Может не вызваться (system kill)
 
 ### Современный подход с Lifecycle
 
@@ -361,3 +361,31 @@ class MyLifecycleObserver : DefaultLifecycleObserver {
 ```
 
 **English**: Activity lifecycle methods are callbacks invoked by Android system during state changes: `onCreate()` (initialization, called once), `onStart()` (becomes visible), `onResume()` (foreground, interactive), `onPause()` (loses focus, save data quickly), `onStop()` (no longer visible, release resources), `onRestart()` (resuming after stop), `onDestroy()` (final cleanup). Proper management prevents resource leaks and ensures smooth UX. **Important:** `onDestroy()` may not be called if system kills process - use `onSaveInstanceState()` for critical data. Modern approach: use `DefaultLifecycleObserver` (not deprecated `@OnLifecycleEvent`).
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-viewmodel-pattern--android--easy]] - Lifecycle
+
+### Related (Medium)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
+- [[q-how-does-activity-lifecycle-work--android--medium]] - Lifecycle, Activity
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-viewmodel-pattern--android--easy]] - Lifecycle
+
+### Related (Medium)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
+- [[q-how-does-activity-lifecycle-work--android--medium]] - Lifecycle, Activity

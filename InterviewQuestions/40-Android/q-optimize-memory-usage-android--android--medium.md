@@ -13,6 +13,10 @@ tags:
   - weakreference
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Как оптимизировать использование памяти в приложении?
@@ -246,3 +250,18 @@ class MyActivity : AppCompatActivity() {
 ## Ответ (RU)
 Минимизируйте использование статических переменных. Избегайте утечек памяти, правильно управляя ссылками на контексты и активности. Используйте слабые ссылки (WeakReference) для больших объектов. Избегайте внутренних классов в Activity, заменяя их статическими вложенными классами. Применяйте LruCache для кэширования данных в памяти. Профилируйте приложение с помощью Android Studio Profiler и LeakCanary. Используйте Glide или Picasso для загрузки и кэширования изображений. Управляйте крупными объектами и загружайте изображения оптимального размера.
 
+
+---
+
+## Related Questions
+
+### Computer Science Fundamentals
+- [[q-primitive-vs-reference-types--programming-languages--easy]] - Memory Management
+- [[q-reference-types-criteria--programming-languages--medium]] - Memory Management
+- [[q-kotlin-reference-equality-operator--programming-languages--easy]] - Memory Management
+- [[q-reference-types-protect-from-deletion--programming-languages--easy]] - Memory Management
+
+### Kotlin Language Features
+- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Memory Management
+- [[q-coroutine-memory-leaks--kotlin--hard]] - Memory Management
+- [[q-kotlin-native--kotlin--hard]] - Memory Management

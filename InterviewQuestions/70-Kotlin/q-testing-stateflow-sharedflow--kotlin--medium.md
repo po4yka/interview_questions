@@ -1016,7 +1016,7 @@ fun `multiple collectors don't duplicate work`() = runTest {
 ### Best Practices
 
 ```kotlin
-// ✅ DO: Use turbine for cleaner tests
+//  DO: Use turbine for cleaner tests
 @Test
 fun goodTest() = runTest {
     viewModel.state.test {
@@ -1024,7 +1024,7 @@ fun goodTest() = runTest {
     }
 }
 
-// ❌ DON'T: Manually manage collection jobs
+//  DON'T: Manually manage collection jobs
 @Test
 fun badTest() = runTest {
     val items = mutableListOf<State>()
@@ -1033,14 +1033,14 @@ fun badTest() = runTest {
     job.cancel() // Easy to forget!
 }
 
-// ✅ DO: Test StateFlow current value directly
+//  DO: Test StateFlow current value directly
 @Test
 fun goodTest() {
     viewModel.action()
     assertEquals(expected, viewModel.state.value)
 }
 
-// ❌ DON'T: Collect StateFlow just to read current value
+//  DON'T: Collect StateFlow just to read current value
 @Test
 fun badTest() = runTest {
     viewModel.state.test {
@@ -1049,14 +1049,14 @@ fun badTest() = runTest {
     }
 }
 
-// ✅ DO: Use UnconfinedTestDispatcher for simple tests
+//  DO: Use UnconfinedTestDispatcher for simple tests
 @get:Rule
 val mainDispatcherRule = MainDispatcherRule(UnconfinedTestDispatcher())
 
-// ❌ DON'T: Use StandardTestDispatcher for simple state tests
+//  DON'T: Use StandardTestDispatcher for simple state tests
 // (It's fine, just unnecessary complexity)
 
-// ✅ DO: Cancel collection jobs
+//  DO: Cancel collection jobs
 @Test
 fun goodTest() = runTest {
     flow.test {
@@ -1065,13 +1065,13 @@ fun goodTest() = runTest {
     }
 }
 
-// ✅ DO: Use fake repositories
+//  DO: Use fake repositories
 class FakeRepository : Repository {
     var result: Result<Data>? = null
     override suspend fun getData() = result!!.getOrThrow()
 }
 
-// ❌ DON'T: Use Mockito for suspend functions
+//  DON'T: Use Mockito for suspend functions
 // (Can work, but fakes are cleaner)
 ```
 

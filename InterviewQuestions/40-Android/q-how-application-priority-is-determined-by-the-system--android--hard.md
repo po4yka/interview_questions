@@ -211,7 +211,7 @@ Android's Low Memory Killer uses **oom_adj** (Out-Of-Memory adjustment) scores:
 
 ```
 Priority         oom_adj     When killed
-────────────────────────────────────────
+
 Foreground       0           Last resort (critical)
 Visible          100-200     Rarely
 Perceptible      200-250     If needed for foreground
@@ -460,7 +460,7 @@ Android определяет приоритет приложения на осн
 
 ```
 Приоритет      oom_adj    Когда убивается
-────────────────────────────────────────
+
 Foreground     0          В крайнем случае
 Visible        100-200    Редко
 Service        300-400    При нехватке памяти
@@ -475,3 +475,15 @@ Empty          1000       Немедленно
 - Выполнение компонентов (BroadcastReceiver, ContentProvider)
 - Bound services наследуют приоритет связанного компонента
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-anr-application-not-responding--android--medium]] - Fundamentals
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
+
+### Related (Hard)
+- [[q-kotlin-context-receivers--kotlin--hard]] - Fundamentals

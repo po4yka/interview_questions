@@ -42,7 +42,7 @@ val user = createInstance(User::class.java)
 ### Решение: reified + inline
 
 ```kotlin
-// ✓ С reified - тип доступен в runtime
+//  С reified - тип доступен в runtime
 inline fun <reified T> isInstanceOf(value: Any): Boolean {
     return value is T  // OK!
 }
@@ -71,7 +71,7 @@ fun <T> List<*>.filterByType(clazz: Class<T>): List<T> {
 val numbers = listOf<Any>(1, "two", 3, "four", 5)
 val ints = numbers.filterByType(Int::class.java)  // Громоздко
 
-// ✓ С reified - встроено в Kotlin
+//  С reified - встроено в Kotlin
 inline fun <reified T> List<*>.filterIsInstance(): List<T> {
     return this.filterIsInstance(T::class.java)
 }
@@ -91,7 +91,7 @@ fun <T> parseJson(json: String, type: Class<T>): T {
 
 val user = parseJson(jsonString, User::class.java)  // Повторяющийся код
 
-// ✓ С reified - чище
+//  С reified - чище
 inline fun <reified T> Gson.fromJson(json: String): T {
     return fromJson(json, T::class.java)
 }
@@ -126,7 +126,7 @@ fun <T : Parcelable> Intent.getParcelableExtraCompat(
 
 val user = intent.getParcelableExtraCompat("user", User::class.java)
 
-// ✓ С reified - элегантно
+//  С reified - элегантно
 inline fun <reified T : Parcelable> Intent.getParcelableExtraCompat(
     key: String
 ): T? {
@@ -150,7 +150,7 @@ val location = intent.getParcelableExtraCompat<Location>("location")
 val intent = Intent(context, UserDetailActivity::class.java)
 context.startActivity(intent)
 
-// ✓ С reified - DSL стиль
+//  С reified - DSL стиль
 inline fun <reified T : Activity> Context.startActivity(
     configureIntent: Intent.() -> Unit = {}
 ) {
@@ -174,7 +174,7 @@ context.startActivity<MainActivity>()
 // Без reified - многословно
 val viewModel = ViewModelProvider(this)[UserViewModel::class.java]
 
-// ✓ С reified extension
+//  С reified extension
 inline fun <reified VM : ViewModel> ComponentActivity.viewModel(): Lazy<VM> {
     return lazy {
         ViewModelProvider(this)[VM::class.java]
@@ -283,7 +283,7 @@ fun test() {
 ### Ограничения reified
 
 ```kotlin
-// ✓ МОЖНО
+//  МОЖНО
 inline fun <reified T> getClassName() = T::class.simpleName
 inline fun <reified T> isInstance(obj: Any) = obj is T
 inline fun <reified T> createArray(size: Int) = Array<T?>(size) { null }

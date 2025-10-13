@@ -29,13 +29,13 @@ A data module usually contains a repository, data sources and model classes. The
 ```kotlin
 // Example data module structure
 :core:data:user
-├── repository/
-│   └── UserRepository.kt (public API)
-├── datasource/
-│   ├── UserRemoteDataSource.kt (internal)
-│   └── UserLocalDataSource.kt (internal)
-└── model/
-    └── User.kt
+ repository/
+    UserRepository.kt (public API)
+ datasource/
+    UserRemoteDataSource.kt (internal)
+    UserLocalDataSource.kt (internal)
+ model/
+     User.kt
 ```
 
 **2. Feature Modules**
@@ -47,12 +47,12 @@ Features are associated with screens or destinations in your app. Therefore, the
 ```kotlin
 // Example feature module structure
 :feature:profile
-├── ProfileScreen.kt
-├── ProfileViewModel.kt
-├── ProfileUiState.kt
-└── components/
-    ├── ProfileHeader.kt
-    └── ProfileSettings.kt
+ ProfileScreen.kt
+ ProfileViewModel.kt
+ ProfileUiState.kt
+ components/
+     ProfileHeader.kt
+     ProfileSettings.kt
 ```
 
 **3. App Modules**
@@ -62,12 +62,12 @@ App modules are an entry point to the application. They depend on feature module
 ```kotlin
 // Example app module structure
 :app
-├── MainActivity.kt
-├── MyApplication.kt
-├── navigation/
-│   └── NavGraph.kt
-└── di/
-    └── AppModule.kt
+ MainActivity.kt
+ MyApplication.kt
+ navigation/
+    NavGraph.kt
+ di/
+     AppModule.kt
 ```
 
 If your app targets multiple device types, such as auto, wear or TV, define an app module per each. This helps separate platform specific dependencies.
@@ -87,43 +87,43 @@ Common modules, also known as core modules, contain code that other modules freq
 
 ```kotlin
 :core:ui
-├── theme/
-│   ├── Color.kt
-│   ├── Theme.kt
-│   └── Type.kt
-└── components/
-    ├── Button.kt
-    ├── TextField.kt
-    └── Card.kt
+ theme/
+    Color.kt
+    Theme.kt
+    Type.kt
+ components/
+     Button.kt
+     TextField.kt
+     Card.kt
 ```
 
 - **Analytics module**: Tracking is often dictated by business requirements with little consideration to the software architecture. Analytics trackers are often used in many unrelated components. If that's the case for you, it might be a good idea to have a dedicated analytics module
 
 ```kotlin
 :core:analytics
-└── AnalyticsTracker.kt
+ AnalyticsTracker.kt
 ```
 
 - **Network module**: When many modules require a network connection, you might consider having a module dedicated to providing a http client. It is especially useful when your client requires custom configuration
 
 ```kotlin
 :core:network
-├── RetrofitClient.kt
-├── NetworkConfig.kt
-└── interceptors/
-    └── AuthInterceptor.kt
+ RetrofitClient.kt
+ NetworkConfig.kt
+ interceptors/
+     AuthInterceptor.kt
 ```
 
 - **Utility module**: Utilities, also known as helpers, are usually small pieces of code that are reused across the application. Examples of utilities include testing helpers, a currency formatting function, email validator or a custom operator
 
 ```kotlin
 :core:common
-├── extensions/
-│   ├── StringExt.kt
-│   └── DateExt.kt
-└── utils/
-    ├── EmailValidator.kt
-    └── CurrencyFormatter.kt
+ extensions/
+    StringExt.kt
+    DateExt.kt
+ utils/
+     EmailValidator.kt
+     CurrencyFormatter.kt
 ```
 
 **5. Test Modules**
@@ -142,24 +142,24 @@ Test modules are Android modules that are used for testing purposes only. The mo
 
 ```kotlin
 :core:testing
-├── fakes/
-│   ├── FakeUserRepository.kt
-│   └── FakeNetworkDataSource.kt
-├── rules/
-│   └── MainDispatcherRule.kt
-└── data/
-    └── TestData.kt
+ fakes/
+    FakeUserRepository.kt
+    FakeNetworkDataSource.kt
+ rules/
+    MainDispatcherRule.kt
+ data/
+     TestData.kt
 ```
 
 **Module Dependency Example:**
 
 ```
 :app
-  └── depends on :feature:login, :feature:home
-      └── :feature:login depends on :core:data:auth, :core:ui
-          └── :core:data:auth depends on :core:network, :core:database
-              └── :core:network (no dependencies)
-              └── :core:database (no dependencies)
+   depends on :feature:login, :feature:home
+       :feature:login depends on :core:data:auth, :core:ui
+           :core:data:auth depends on :core:network, :core:database
+               :core:network (no dependencies)
+               :core:database (no dependencies)
 ```
 
 **Summary:**

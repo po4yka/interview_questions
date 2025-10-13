@@ -472,3 +472,19 @@ The magic is in the **smart recomposition** - Compose only re-executes functions
 
 ## Ответ (RU)
 Jetpack Compose – это декларативный UI-фреймворк от Google для создания интерфейсов в Android. Вместо традиционных XML + View в Compose используется функции-компоненты, которые описывают UI. Главные принципы работы Jetpack Compose: декларативный подход – UI создаётся через функции, без XML. Реактивность – UI автоматически обновляется, если данные изменились. Компонентный подход – UI состоит из маленьких, переиспользуемых функций. Composable-функции (@Composable) – основной строительный блок Compose.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-how-does-jetpackcompose-work--android--medium]] - Compose, Jetpack
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-jetpack-compose-basics--android--medium]] - Compose, Jetpack
+
+### Advanced (Harder)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose, Jetpack

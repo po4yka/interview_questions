@@ -416,3 +416,17 @@ if (BuildConfig.DEBUG) {
 
 5. **Неоптимизированные анимации** - Решение: Использовать ViewPropertyAnimator или TransitionManager для более плавных анимаций, ограничить количество одновременно выполняемых анимаций.
 
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-dagger-build-time-optimization--android--medium]] - Performance, Ui
+- [[q-build-optimization-gradle--gradle--medium]] - Performance, Ui
+- [[q-android-build-optimization--android--medium]] - Performance, Ui
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Performance

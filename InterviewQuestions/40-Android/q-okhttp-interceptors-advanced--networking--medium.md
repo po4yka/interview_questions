@@ -434,10 +434,10 @@ class DetailedLoggingInterceptor(
         val logBody = level == Level.BODY
 
         // Log request
-        logger.log("╔═══════════════════════════════════════════════════════════════")
-        logger.log("║ REQUEST")
-        logger.log("╠═══════════════════════════════════════════════════════════════")
-        logger.log("║ ${request.method} ${request.url}")
+        logger.log("")
+        logger.log(" REQUEST")
+        logger.log("")
+        logger.log(" ${request.method} ${request.url}")
 
         if (logHeaders) {
             val headers = request.headers
@@ -446,7 +446,7 @@ class DetailedLoggingInterceptor(
             }
 
             if (logBody && request.body != null) {
-                logger.log("╟───────────────────────────────────────────────────────────────")
+                logger.log("")
                 val buffer = Buffer()
                 request.body!!.writeTo(buffer)
 
@@ -454,10 +454,10 @@ class DetailedLoggingInterceptor(
                     ?: StandardCharsets.UTF_8
 
                 if (buffer.isProbablyUtf8()) {
-                    logger.log("║ Body: ${buffer.readString(charset)}")
-                    logger.log("║ Body Size: ${request.body!!.contentLength()} bytes")
+                    logger.log(" Body: ${buffer.readString(charset)}")
+                    logger.log(" Body Size: ${request.body!!.contentLength()} bytes")
                 } else {
-                    logger.log("║ Body: (binary ${request.body!!.contentLength()} bytes)")
+                    logger.log(" Body: (binary ${request.body!!.contentLength()} bytes)")
                 }
             }
         }
@@ -468,22 +468,22 @@ class DetailedLoggingInterceptor(
         try {
             response = chain.proceed(request)
         } catch (e: Exception) {
-            logger.log("╠═══════════════════════════════════════════════════════════════")
-            logger.log("║ EXCEPTION")
-            logger.log("╠═══════════════════════════════════════════════════════════════")
-            logger.log("║ ${e.javaClass.simpleName}: ${e.message}")
-            logger.log("╚═══════════════════════════════════════════════════════════════")
+            logger.log("")
+            logger.log(" EXCEPTION")
+            logger.log("")
+            logger.log(" ${e.javaClass.simpleName}: ${e.message}")
+            logger.log("")
             throw e
         }
 
         val durationMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime)
 
         // Log response
-        logger.log("╠═══════════════════════════════════════════════════════════════")
-        logger.log("║ RESPONSE")
-        logger.log("╠═══════════════════════════════════════════════════════════════")
-        logger.log("║ ${response.code} ${response.message} (${durationMs}ms)")
-        logger.log("║ ${response.request.url}")
+        logger.log("")
+        logger.log(" RESPONSE")
+        logger.log("")
+        logger.log(" ${response.code} ${response.message} (${durationMs}ms)")
+        logger.log(" ${response.request.url}")
 
         if (logHeaders) {
             val headers = response.headers
@@ -492,7 +492,7 @@ class DetailedLoggingInterceptor(
             }
 
             if (logBody && response.promisesBody()) {
-                logger.log("╟───────────────────────────────────────────────────────────────")
+                logger.log("")
 
                 val source = response.body!!.source()
                 source.request(Long.MAX_VALUE)
@@ -512,23 +512,23 @@ class DetailedLoggingInterceptor(
                     ?: StandardCharsets.UTF_8
 
                 if (!buffer.isProbablyUtf8()) {
-                    logger.log("║ Body: (binary ${buffer.size} bytes)")
+                    logger.log(" Body: (binary ${buffer.size} bytes)")
                 } else {
                     if (buffer.size != 0L) {
                         val body = buffer.clone().readString(charset)
-                        logger.log("║ Body: $body")
+                        logger.log(" Body: $body")
                     }
 
                     if (gzippedLength != null) {
-                        logger.log("║ Body Size: ${buffer.size} bytes (gzipped: $gzippedLength bytes)")
+                        logger.log(" Body Size: ${buffer.size} bytes (gzipped: $gzippedLength bytes)")
                     } else {
-                        logger.log("║ Body Size: ${buffer.size} bytes")
+                        logger.log(" Body Size: ${buffer.size} bytes")
                     }
                 }
             }
         }
 
-        logger.log("╚═══════════════════════════════════════════════════════════════")
+        logger.log("")
 
         return response
     }
@@ -536,10 +536,10 @@ class DetailedLoggingInterceptor(
     private fun logHeader(name: String, value: String) {
         // Redact sensitive headers
         val redactedValue = when (name.lowercase()) {
-            "authorization", "cookie", "set-cookie" -> "██████"
+            "authorization", "cookie", "set-cookie" -> ""
             else -> value
         }
-        logger.log("║ $name: $redactedValue")
+        logger.log(" $name: $redactedValue")
     }
 
     private fun Buffer.isProbablyUtf8(): Boolean {
@@ -1248,3 +1248,21 @@ class OkHttpClientFactory(
 - **Кеширование**: Оффлайн поддержка и оптимизация
 - **Отладка**: Подробное логирование
 - **Тестирование**: Тестируемый сетевой слой
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-graphql-vs-rest--networking--easy]] - Networking
+
+### Related (Medium)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+- [[q-network-error-handling-strategies--networking--medium]] - Networking
+- [[q-graphql-apollo-android--networking--medium]] - Networking
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-network-request-deduplication--networking--hard]] - Networking

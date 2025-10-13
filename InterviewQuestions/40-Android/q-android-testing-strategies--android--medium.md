@@ -557,11 +557,11 @@ class ScreenshotTest : ScreenshotTest {
 
 | Тип теста | Скорость | Покрытие | Надежность | Инструменты | Когда использовать |
 |-----------|----------|----------|------------|-------------|-------------------|
-| **Unit** | ⚡⚡⚡ Быстрые | ⭐ Низкое | ⭐⭐⭐ Высокая | JUnit, Mockito | Бизнес-логика, утилиты |
-| **Integration** | ⚡⚡ Средние | ⭐⭐ Среднее | ⭐⭐⭐ Высокая | Robolectric, Room | Взаимодействие модулей |
-| **UI** | ⚡ Медленные | ⭐⭐⭐ Высокое | ⭐⭐ Средняя | Espresso, UI Automator | E2E сценарии |
-| **Snapshot** | ⚡⚡ Средние | ⭐⭐ Среднее | ⭐⭐ Средняя | Shot, Paparazzi | Визуальная регрессия |
-| **Performance** | ⚡ Медленные | ⭐ Низкое | ⭐⭐ Средняя | Profiler, Benchmark | Оптимизация |
+| **Unit** |  Быстрые |  Низкое |  Высокая | JUnit, Mockito | Бизнес-логика, утилиты |
+| **Integration** |  Средние |  Среднее |  Высокая | Robolectric, Room | Взаимодействие модулей |
+| **UI** |  Медленные |  Высокое |  Средняя | Espresso, UI Automator | E2E сценарии |
+| **Snapshot** |  Средние |  Среднее |  Средняя | Shot, Paparazzi | Визуальная регрессия |
+| **Performance** |  Медленные |  Низкое |  Средняя | Profiler, Benchmark | Оптимизация |
 
 ### Best Practices
 
@@ -576,7 +576,7 @@ Unit Tests (70%)
 ```
 
 ```kotlin
-// ✓ ПРАВИЛЬНО - большинство тестов на уровне Unit
+//  ПРАВИЛЬНО - большинство тестов на уровне Unit
 class UserRepositoryTest {
     @Test fun getAllUsers() { /* ... */ }
     @Test fun getUserById() { /* ... */ }
@@ -585,13 +585,13 @@ class UserRepositoryTest {
     @Test fun deleteUser() { /* ... */ }
 }
 
-// ✓ ПРАВИЛЬНО - меньше интеграционных тестов
+//  ПРАВИЛЬНО - меньше интеграционных тестов
 class UserDaoIntegrationTest {
     @Test fun insertAndRetrieve() { /* ... */ }
     @Test fun complexQuery() { /* ... */ }
 }
 
-// ✓ ПРАВИЛЬНО - минимум UI тестов для критических флоу
+//  ПРАВИЛЬНО - минимум UI тестов для критических флоу
 class LoginFlowUITest {
     @Test fun successfulLoginFlow() { /* ... */ }
 }
@@ -600,7 +600,7 @@ class LoginFlowUITest {
 **2. Изоляция тестов**
 
 ```kotlin
-// ✓ ПРАВИЛЬНО - каждый тест независим
+//  ПРАВИЛЬНО - каждый тест независим
 @Test
 fun test1() {
     val repository = createRepository()
@@ -613,7 +613,7 @@ fun test2() {
     // Test logic - не зависит от test1
 }
 
-// ❌ НЕПРАВИЛЬНО - тесты зависят друг от друга
+//  НЕПРАВИЛЬНО - тесты зависят друг от друга
 private var sharedRepository: Repository? = null
 
 @Test
@@ -650,3 +650,17 @@ android {
 // Integration: 50-60%
 // UI tests: 20-30%
 ```
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing
+- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+- [[q-screenshot-snapshot-testing--testing--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-coroutines-flow--testing--hard]] - Testing

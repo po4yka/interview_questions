@@ -69,22 +69,22 @@ kotlin {
 **2. Directory Structure**
 ```
 shared/src/
-├── commonMain/kotlin/
-├── commonTest/kotlin/          # Shared tests (run on all platforms)
-│   ├── repository/
-│   │   └── TaskRepositoryTest.kt
-│   ├── usecase/
-│   │   └── CreateTaskUseCaseTest.kt
-│   └── util/
-│       └── TestHelpers.kt
-├── androidUnitTest/kotlin/     # Android-specific tests
-│   ├── database/
-│   │   └── TaskDatabaseTest.kt
-│   └── util/
-│       └── AndroidTestHelpers.kt
-└── iosTest/kotlin/             # iOS-specific tests
-    └── database/
-        └── TaskDatabaseTest.kt
+ commonMain/kotlin/
+ commonTest/kotlin/          # Shared tests (run on all platforms)
+    repository/
+       TaskRepositoryTest.kt
+    usecase/
+       CreateTaskUseCaseTest.kt
+    util/
+        TestHelpers.kt
+ androidUnitTest/kotlin/     # Android-specific tests
+    database/
+       TaskDatabaseTest.kt
+    util/
+        AndroidTestHelpers.kt
+ iosTest/kotlin/             # iOS-specific tests
+     database/
+         TaskDatabaseTest.kt
 ```
 
 #### Unit Testing in commonTest
@@ -916,3 +916,17 @@ KMM тестирование обеспечивает comprehensive testing:
 - **Integration**: End-to-end тесты
 
 Ключевые моменты: максимизировать shared tests, proper test doubles, coroutine testing, high coverage в shared логике.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing
+- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+- [[q-screenshot-snapshot-testing--testing--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-coroutines-flow--testing--hard]] - Testing

@@ -132,12 +132,12 @@ git merge feature  # Just moves main pointer to F'
 | **Merge commit** | Created | Not created |
 | **Commit hashes** | Preserved | Changed (new) |
 | **Conflicts** | Resolved once | May occur for each commit |
-| **For published branches** | ✅ Safe | ⚠️ Dangerous (rewrites history) |
-| **For local branches** | ✅ OK | ✅ OK |
+| **For published branches** |  Safe |  Dangerous (rewrites history) |
+| **For local branches** |  OK |  OK |
 
 ### When to Use Merge
 
-**✅ Use merge when:**
+** Use merge when:**
 
 1. **Working in a team** — don't rewrite published history
 ```bash
@@ -159,7 +159,7 @@ git merge feature  # History preserved
 
 ### When to Use Rebase
 
-**✅ Use rebase when:**
+** Use rebase when:**
 
 1. **Local branch** — not yet published
 ```bash
@@ -240,10 +240,10 @@ git rebase --abort
 
 ### Dangers of Rebase
 
-**❌ DO NOT rebase published branches!**
+** DO NOT rebase published branches!**
 
 ```bash
-# ❌ DANGEROUS - others already downloaded this branch
+#  DANGEROUS - others already downloaded this branch
 git checkout feature
 git rebase main
 git push --force  # Rewrites history!
@@ -259,11 +259,11 @@ git pull  # ERROR: diverged histories
 > **Never rebase public history**
 
 ```bash
-# ✅ OK - local branch
+#  OK - local branch
 git checkout my-feature
 git rebase main
 
-# ❌ NOT OK - public branch
+#  NOT OK - public branch
 git checkout main
 git rebase feature  # DON'T DO THIS!
 ```
@@ -456,12 +456,12 @@ git merge feature  # Просто передвинет указатель main �
 | **Merge commit** | Создается | Не создается |
 | **Хеши коммитов** | Сохраняются | Изменяются (новые) |
 | **Конфликты** | Решаются один раз | Могут возникнуть для каждого коммита |
-| **Для опубликованных веток** | ✅ Безопасно | ⚠️ Опасно (переписывает историю) |
-| **Для локальных веток** | ✅ OK | ✅ OK |
+| **Для опубликованных веток** |  Безопасно |  Опасно (переписывает историю) |
+| **Для локальных веток** |  OK |  OK |
 
 ### Когда использовать merge
 
-**✅ Используйте merge когда:**
+** Используйте merge когда:**
 
 1. **Работа в команде** — не переписывайте опубликованную историю
 ```bash
@@ -483,7 +483,7 @@ git merge feature  # История сохранена
 
 ### Когда использовать rebase
 
-**✅ Используйте rebase когда:**
+** Используйте rebase когда:**
 
 1. **Локальная ветка** — еще не опубликована
 ```bash
@@ -564,10 +564,10 @@ git rebase --abort
 
 ### Опасности rebase
 
-**❌ НЕ делайте rebase для опубликованных веток!**
+** НЕ делайте rebase для опубликованных веток!**
 
 ```bash
-# ❌ ОПАСНО - другие уже скачали эту ветку
+#  ОПАСНО - другие уже скачали эту ветку
 git checkout feature
 git rebase main
 git push --force  # Переписывает историю!
@@ -583,11 +583,11 @@ git pull  # ERROR: diverged histories
 > **Не делайте rebase публичной истории**
 
 ```bash
-# ✅ OK - локальная ветка
+#  OK - локальная ветка
 git checkout my-feature
 git rebase main
 
-# ❌ НЕ OK - публичная ветка
+#  НЕ OK - публичная ветка
 git checkout main
 git rebase feature  # НЕ ДЕЛАЙТЕ ТАК!
 ```

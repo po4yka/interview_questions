@@ -48,24 +48,24 @@ The separate code layers of MVVM are:
 ### MVVM Diagram
 
 ```
-┌─────────────┐
-│    View     │ ◄──── User Interaction
-│ (Activity/  │
-│  Fragment)  │
-└──────┬──────┘
-       │ observes
-       │ (LiveData/Flow)
-       ▼
-┌─────────────┐
-│  ViewModel  │
-│             │
-└──────┬──────┘
-       │ uses
-       ▼
-┌─────────────┐
-│    Model    │
-│ (Repository)│
-└─────────────┘
+
+    View       User Interaction
+ (Activity/  
+  Fragment)  
+
+        observes
+        (LiveData/Flow)
+       
+
+  ViewModel  
+             
+
+        uses
+       
+
+    Model    
+ (Repository)
+
 ```
 
 ### Важные особенности MVVM

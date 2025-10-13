@@ -433,3 +433,21 @@ override fun onDetachedFromWindow() {
 ## Ответ (RU)
 onMeasure - определяет размер View. onLayout - отвечает за позиционирование View внутри родительского контейнера. onDraw - отвечает за рисование View. invalidate - используется для перерисовывания View. setOnClickListener - устанавливает слушатель нажатия. setVisibility - управляет видимостью View. getWidth и getHeight - возвращают размеры View. setBackgroundColor - устанавливает цвет фона.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Related (Medium)
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- [[q-what-is-viewmodel--android--medium]] - View
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

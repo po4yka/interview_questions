@@ -253,3 +253,31 @@ class MyFragment : Fragment() {
 ## Ответ (RU)
 Фрагменты в Android существуют как отдельные компоненты, привязанные к Activity и могут добавляться удаляться или заменяться во время работы приложения Они прикрепляются к Activity которая управляет их жизненным циклом и могут быть переиспользованы на разных экранах Фрагменты зависят от Activity для доступа к контексту и других системных ресурсов а их жизненный цикл синхронизирован с жизненным циклом Activity
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity, Fragment
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Activity, Fragment
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+
+### Related (Hard)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
+- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] - Activity, Fragment
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity, Fragment
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Activity, Fragment
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+
+### Related (Hard)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
+- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] - Activity, Fragment
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment

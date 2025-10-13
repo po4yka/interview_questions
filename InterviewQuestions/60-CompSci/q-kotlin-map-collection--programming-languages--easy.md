@@ -1,4 +1,5 @@
 ---
+topic: programming-languages
 tags:
   - collections
   - kotlin
@@ -6,6 +7,10 @@ tags:
   - programming-languages
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-programming-languages
+related_questions: []
 ---
 
 # Расскажи про коллекцию Map
@@ -28,3 +33,18 @@ Map is a collection of key-value pairs. Each key is unique, while values can rep
 
 Map – это коллекция пар ключ-значение. Каждый ключ уникален, а значения могут повторяться. В Kotlin Map не наследуется от Collection, но является частью стандартных коллекций.
 
+
+---
+
+## Related Questions
+
+### Android Implementation
+- [[q-kak-izmenit-kolichestvo-kolonok-v-recyclerview-v-zavisimosti-ot-orientatsii--programming-languages--easy]] - Data Structures
+
+### Kotlin Language Features
+- [[q-collection-implementations--programming-languages--easy]] - Data Structures
+- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
+- [[q-arraylist-linkedlist-vector-difference--programming-languages--medium]] - Data Structures
+- [[q-kotlin-immutable-collections--programming-languages--easy]] - Data Structures
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+- [[q-kotlin-map-flatmap--kotlin--medium]] - Data Structures

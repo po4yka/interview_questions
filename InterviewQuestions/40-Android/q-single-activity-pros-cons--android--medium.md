@@ -28,20 +28,20 @@ The **Single Activity approach** means using **one main Activity** for the entir
 **Traditional Multi-Activity:**
 ```
 App
-├── MainActivity (Home screen)
-├── ProfileActivity (Profile screen)
-├── SettingsActivity (Settings screen)
-└── DetailActivity (Detail screen)
+ MainActivity (Home screen)
+ ProfileActivity (Profile screen)
+ SettingsActivity (Settings screen)
+ DetailActivity (Detail screen)
 ```
 
 **Single Activity:**
 ```
 App
-└── MainActivity
-    ├── HomeFragment
-    ├── ProfileFragment
-    ├── SettingsFragment
-    └── DetailFragment
+ MainActivity
+     HomeFragment
+     ProfileFragment
+     SettingsFragment
+     DetailFragment
 ```
 
 ### Implementation Example
@@ -446,11 +446,11 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 // All screens share bottom navigation
 MainActivity
-├── FeedFragment (bottom nav: Home)
-├── SearchFragment (bottom nav: Search)
-├── NotificationsFragment (bottom nav: Notifications)
-├── ProfileFragment (bottom nav: Profile)
-└── DetailFragments (no bottom nav, but same Activity)
+ FeedFragment (bottom nav: Home)
+ SearchFragment (bottom nav: Search)
+ NotificationsFragment (bottom nav: Notifications)
+ ProfileFragment (bottom nav: Profile)
+ DetailFragments (no bottom nav, but same Activity)
 ```
 
 **Not ideal for:**
@@ -572,3 +572,20 @@ Single Activity is the **modern Android standard** (especially with Navigation C
 
 Single Activity - это **современный Android стандарт** (особенно с Navigation Component и Compose), но требует понимания Fragment lifecycle и best practices.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-android-components-besides-activity--android--easy]] - Activity
+
+### Related (Medium)
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Activity
+- [[q-activity-lifecycle-methods--android--medium]] - Activity
+- [[q-what-is-activity-and-what-is-it-used-for--android--medium]] - Activity
+
+### Advanced (Harder)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity

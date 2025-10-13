@@ -177,22 +177,22 @@ class Builder {
 
 ```
 Need to operate on object?
-│
-├─ Want to return the object itself?
-│  ├─ Need object as receiver (this)?
-│  │  └─ Use APPLY (configuration)
-│  └─ Need object as argument (it)?
-│     └─ Use ALSO (side effects, logging)
-│
-└─ Want to return different result?
-   ├─ Have object to operate on?
-   │  ├─ As receiver (this)?
-   │  │  └─ Use RUN (init + compute)
-   │  └─ As argument (it)?
-   │     └─ Use LET (transform, null safety)
-   │
-   └─ Object from outside scope?
-      └─ Use WITH (group calls)
+
+ Want to return the object itself?
+   Need object as receiver (this)?
+     Use APPLY (configuration)
+   Need object as argument (it)?
+      Use ALSO (side effects, logging)
+
+ Want to return different result?
+    Have object to operate on?
+      As receiver (this)?
+        Use RUN (init + compute)
+      As argument (it)?
+         Use LET (transform, null safety)
+   
+    Object from outside scope?
+       Use WITH (group calls)
 ```
 
 ### Common Patterns

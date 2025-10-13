@@ -1,4 +1,6 @@
 ---
+topic: programming-languages
+subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 tags:
   - cloneable
   - interfaces
@@ -8,6 +10,10 @@ tags:
   - serializable
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-programming-languages
+related_questions: []
 ---
 
 # Перечислите маркерные интерфейсы
@@ -184,3 +190,17 @@ Marker interfaces have **no methods** but provide **type information** and **beh
 - **Remote** — используется для удалённых вызовов
 - **RandomAccess** — для коллекций с быстрым доступом по индексу
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-java-all-classes-inherit-from-object--programming-languages--easy]] - Inheritance
+- [[q-kotlin-enum-classes--kotlin--easy]] - Enums
+
+### Related (Medium)
+- [[q-when-inheritance-useful--oop--medium]] - Inheritance
+- [[q-inheritance-vs-composition--oop--medium]] - Inheritance
+- [[q-inheritance-composition-aggregation--oop--medium]] - Inheritance
+- [[q-class-composition--oop--medium]] - Inheritance

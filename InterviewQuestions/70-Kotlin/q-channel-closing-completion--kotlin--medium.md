@@ -617,7 +617,7 @@ class ChannelClosureTests {
 ```kotlin
 class BestPractices {
 
-    // ✅ GOOD: Always close in finally
+    //  GOOD: Always close in finally
     suspend fun goodClosePattern() {
         val channel = Channel<Int>()
 
@@ -632,7 +632,7 @@ class BestPractices {
         }
     }
 
-    // ❌ BAD: Forgot to close
+    //  BAD: Forgot to close
     suspend fun badNoClose() {
         val channel = Channel<Int>()
 
@@ -648,7 +648,7 @@ class BestPractices {
         }
     }
 
-    // ✅ GOOD: Use produce builder
+    //  GOOD: Use produce builder
     suspend fun goodProduceBuilder() {
         val numbers = produce {
             repeat(10) { send(it) }
@@ -660,7 +660,7 @@ class BestPractices {
         }
     }
 
-    // ✅ GOOD: Handle close errors
+    //  GOOD: Handle close errors
     suspend fun goodErrorHandling() {
         val channel = Channel<Int>()
 
@@ -673,7 +673,7 @@ class BestPractices {
         }
     }
 
-    // ❌ BAD: Closing multiple times
+    //  BAD: Closing multiple times
     suspend fun badMultipleClose() {
         val channel = Channel<Int>()
 
@@ -682,7 +682,7 @@ class BestPractices {
         channel.close(IllegalStateException()) // Ignored!
     }
 
-    // ✅ GOOD: Close after all producers finish
+    //  GOOD: Close after all producers finish
     suspend fun goodMultipleProducers() {
         val channel = Channel<Int>()
 
@@ -698,7 +698,7 @@ class BestPractices {
         channel.close() // Close after all done
     }
 
-    // ✅ GOOD: Cancel on error
+    //  GOOD: Cancel on error
     suspend fun goodCancelOnError() = coroutineScope {
         val channel = Channel<Int>()
 
@@ -754,7 +754,7 @@ channel.cancel() // Все операции прекращаются
 ### Лучшие практики
 
 ```kotlin
-// ✅ Всегда закрывать в finally
+//  Всегда закрывать в finally
 launch {
     try {
         channel.send(1)
@@ -763,13 +763,13 @@ launch {
     }
 }
 
-// ✅ Использовать produce builder
+//  Использовать produce builder
 val numbers = produce {
     send(1)
     // Автоматическое закрытие
 }
 
-// ✅ Использовать for loop вместо receive()
+//  Использовать for loop вместо receive()
 for (value in channel) {
     // Автоматическая обработка закрытия
 }

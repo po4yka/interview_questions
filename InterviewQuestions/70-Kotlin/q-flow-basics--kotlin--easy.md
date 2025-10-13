@@ -268,7 +268,7 @@ class SearchViewModel : ViewModel() {
 
 ### When to Use Flow
 
-#### ✅ Use Flow for:
+####  Use Flow for:
 
 ```kotlin
 // 1. Streaming data
@@ -292,7 +292,7 @@ fun loadWithRetry(): Flow<Data> = flow {
 }.retry(3) { it is IOException }
 ```
 
-#### ❌ Don't use Flow for:
+####  Don't use Flow for:
 
 ```kotlin
 // Single value - use suspend function instead
@@ -336,16 +336,16 @@ flow {
 // Don't collect in viewmodel
 class BadViewModel : ViewModel() {
     init {
-        repository.data.collect { }  // ❌ No scope
+        repository.data.collect { }  //  No scope
     }
 }
 
 // Don't expose MutableStateFlow
-val state = MutableStateFlow<State>()  // ❌ Mutable
+val state = MutableStateFlow<State>()  //  Mutable
 
 // Use regular function for single values
-fun getUser(): Flow<User>  // ❌ Overkill
-suspend fun getUser(): User  // ✓ Better
+fun getUser(): Flow<User>  //  Overkill
+suspend fun getUser(): User  //  Better
 ```
 
 ---
@@ -491,7 +491,7 @@ class UserRepository(private val api: ApiService) {
 
 ### Когда использовать Flow
 
-#### ✅ Использовать Flow для:
+####  Использовать Flow для:
 
 ```kotlin
 // 1. Потоковые данные
@@ -506,7 +506,7 @@ fun countDown(from: Int): Flow<Int> = flow {
 }
 ```
 
-#### ❌ Не использовать Flow для:
+####  Не использовать Flow для:
 
 ```kotlin
 // Одно значение - использовать suspend функцию

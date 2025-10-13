@@ -177,3 +177,33 @@ class MainActivity : AppCompatActivity() {
 | **Производительность** | Хорошая | Отличная |
 
 **English**: RecyclerView is a powerful, flexible UI component for displaying dynamic lists with efficient view recycling via ViewHolder pattern. Supports multiple layouts (linear, grid, staggered), built-in animations, custom decorations, and better performance than ListView through mandatory ViewHolder usage.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
+- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
+- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui

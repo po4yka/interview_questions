@@ -83,8 +83,8 @@ fun Counter() {
 
 ```
 Global Snapshot (ID: 1)
-├─ count: MutableState(0)
-└─ observers: [Counter composable]
+ count: MutableState(0)
+ observers: [Counter composable]
 
 User clicks button:
   1. Create new snapshot (ID: 2)
@@ -192,7 +192,7 @@ Without `derivedStateOf`, recomposition happens when **any** observed state chan
 ```kotlin
 @Composable
 fun SearchResults(query: String, items: List<Item>) {
-    // ❌ PROBLEM: Recomposes on EVERY query change
+    //  PROBLEM: Recomposes on EVERY query change
     val filteredItems = items.filter { item ->
         item.name.contains(query, ignoreCase = true)
     }
@@ -219,7 +219,7 @@ fun SearchResults(query: String, items: List<Item>) {
 ```kotlin
 @Composable
 fun SearchResults(query: String, items: List<Item>) {
-    // ✅ SOLUTION: Only recomposes when result changes
+    //  SOLUTION: Only recomposes when result changes
     val filteredItems by remember(items) {
         derivedStateOf {
             items.filter { item ->
@@ -244,17 +244,17 @@ User types "Hello":
 Type "H":
   → Query: "H"
   → Compute: filter() → [Item1, Item2]
-  → Result changed → Recompose ✅
+  → Result changed → Recompose 
 
 Type "He":
   → Query: "He"
   → Compute: filter() → [Item1, Item2]
-  → Result SAME → Skip recomposition ❌
+  → Result SAME → Skip recomposition 
 
 Type "Hel":
   → Query: "Hel"
   → Compute: filter() → [Item1]
-  → Result changed → Recompose ✅
+  → Result changed → Recompose 
 ```
 
 ---
@@ -367,7 +367,7 @@ fun ShoppingCart(items: List<CartItem>) {
     var discountCode by remember { mutableStateOf("") }
     var taxRate by remember { mutableStateOf(0.08) }
 
-    // ✅ Derived state: only recomposes when total changes
+    //  Derived state: only recomposes when total changes
     val subtotal by remember {
         derivedStateOf {
             items.sumOf { it.price * it.quantity }
@@ -617,20 +617,20 @@ fun nestedSnapshots() {
 **Don't use for simple operations:**
 
 ```kotlin
-// ❌ DON'T: Overkill for simple property access
+//  DON'T: Overkill for simple property access
 val name by derivedStateOf { user.firstName }
 
-// ✅ DO: Direct access
+//  DO: Direct access
 val name = user.firstName
 ```
 
 **Don't use when remember is sufficient:**
 
 ```kotlin
-// ❌ DON'T: Unnecessary complexity
+//  DON'T: Unnecessary complexity
 val doubled by derivedStateOf { value * 2 }
 
-// ✅ DO: remember is simpler
+//  DO: remember is simpler
 val doubled = remember(value) { value * 2 }
 ```
 
@@ -689,26 +689,26 @@ val snapshot = Snapshot.takeMutableSnapshot(
 **1. Use remember with derivedStateOf:**
 
 ```kotlin
-// ✅ DO: Cache the derived state
+//  DO: Cache the derived state
 val result by remember {
     derivedStateOf { computation() }
 }
 
-// ❌ DON'T: Create new derived state each time
+//  DON'T: Create new derived state each time
 val result by derivedStateOf { computation() }
 ```
 
 **2. Consider computation cost:**
 
 ```kotlin
-// ✅ GOOD: Expensive computation worth optimizing
+//  GOOD: Expensive computation worth optimizing
 val filtered by remember {
     derivedStateOf {
         items.filter { heavyPredicate(it) }
     }
 }
 
-// ❌ OVERKILL: Trivial computation
+//  OVERKILL: Trivial computation
 val doubled by remember {
     derivedStateOf { value * 2 }
 }
@@ -717,12 +717,12 @@ val doubled by remember {
 **3. Be aware of object identity:**
 
 ```kotlin
-// ❌ PROBLEM: New list every time (always "different")
+//  PROBLEM: New list every time (always "different")
 val result by derivedStateOf {
     listOf(1, 2, 3) // New list instance
 }
 
-// ✅ SOLUTION: Use stable collections
+//  SOLUTION: Use stable collections
 val result by derivedStateOf {
     persistentListOf(1, 2, 3) // Structural equality
 }
@@ -793,3 +793,18 @@ val filteredItems by remember {
 4. Профилируйте перед оптимизацией
 
 Система снимков и derivedStateOf обеспечивают эффективную перекомпозицию в Compose.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - Compose, Jetpack

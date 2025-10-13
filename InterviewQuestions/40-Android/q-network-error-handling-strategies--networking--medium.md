@@ -1262,3 +1262,21 @@ class UserViewModel(
 - **Интеллект**: Разные стратегии для разных ошибок
 - **Отладку**: Правильное логирование
 - **Поддерживаемость**: Централизованная логика
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-graphql-vs-rest--networking--easy]] - Networking
+
+### Related (Medium)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+- [[q-okhttp-interceptors-advanced--networking--medium]] - Networking
+- [[q-network-operations-android--android--medium]] - Networking
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-network-request-deduplication--networking--hard]] - Networking

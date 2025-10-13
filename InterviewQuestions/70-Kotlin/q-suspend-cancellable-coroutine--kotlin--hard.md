@@ -71,8 +71,8 @@ suspend fun cancellableSuspend() = suspendCancellableCoroutine<String> { cont ->
 
 | Feature | suspendCoroutine | suspendCancellableCoroutine |
 |---------|------------------|----------------------------|
-| **Cancellation** | ❌ Not supported | ✅ Supported |
-| **invokeOnCancellation** | ❌ Not available | ✅ Available |
+| **Cancellation** |  Not supported |  Supported |
+| **invokeOnCancellation** |  Not available |  Available |
 | **Performance** | Slightly faster | Recommended |
 | **Use case** | Quick tests, non-cancellable ops | **Production code** |
 
@@ -210,7 +210,7 @@ job.cancel() // Cancels OkHttp call automatically
 **Problem: Race condition between callback and cancellation**
 
 ```kotlin
-// ❌ WRONG: Can resume twice
+//  WRONG: Can resume twice
 suspend fun racyOperation(): String = suspendCancellableCoroutine { cont ->
     val operation = startAsyncOp { result ->
         cont.resume(result) // May be called after cancellation!
@@ -226,7 +226,7 @@ suspend fun racyOperation(): String = suspendCancellableCoroutine { cont ->
 **Solution: Check isActive and use atomic flag**
 
 ```kotlin
-// ✅ CORRECT: Resume exactly once
+//  CORRECT: Resume exactly once
 suspend fun safeOperation(): String = suspendCancellableCoroutine { cont ->
     val resumed = AtomicBoolean(false)
 
@@ -245,7 +245,7 @@ suspend fun safeOperation(): String = suspendCancellableCoroutine { cont ->
     }
 }
 
-// ✅ BETTER: Use cont.isActive
+//  BETTER: Use cont.isActive
 suspend fun safeOperation2(): String = suspendCancellableCoroutine { cont ->
     val operation = startAsyncOp { result ->
         if (cont.isActive) { // Only resume if not cancelled
@@ -559,14 +559,14 @@ class SuspendTest {
 **Mistake 1: Not checking isActive before resume**
 
 ```kotlin
-// ❌ WRONG
+//  WRONG
 suspend fun mistake1() = suspendCancellableCoroutine<String> { cont ->
     asyncOp { result ->
         cont.resume(result) // May throw if cancelled!
     }
 }
 
-// ✅ CORRECT
+//  CORRECT
 suspend fun correct1() = suspendCancellableCoroutine<String> { cont ->
     asyncOp { result ->
         if (cont.isActive) {
@@ -579,7 +579,7 @@ suspend fun correct1() = suspendCancellableCoroutine<String> { cont ->
 **Mistake 2: Forgetting invokeOnCancellation**
 
 ```kotlin
-// ❌ WRONG: No cleanup
+//  WRONG: No cleanup
 suspend fun mistake2() = suspendCancellableCoroutine<String> { cont ->
     val request = api.startRequest { result ->
         cont.resume(result)
@@ -587,7 +587,7 @@ suspend fun mistake2() = suspendCancellableCoroutine<String> { cont ->
     // Request continues even if coroutine cancelled!
 }
 
-// ✅ CORRECT: Clean up
+//  CORRECT: Clean up
 suspend fun correct2() = suspendCancellableCoroutine<String> { cont ->
     val request = api.startRequest { result ->
         cont.resume(result)
@@ -601,7 +601,7 @@ suspend fun correct2() = suspendCancellableCoroutine<String> { cont ->
 **Mistake 3: Resuming multiple times**
 
 ```kotlin
-// ❌ WRONG: Can resume twice
+//  WRONG: Can resume twice
 suspend fun mistake3() = suspendCancellableCoroutine<String> { cont ->
     asyncOp { result ->
         cont.resume(result)
@@ -611,7 +611,7 @@ suspend fun mistake3() = suspendCancellableCoroutine<String> { cont ->
     }
 }
 
-// ✅ CORRECT: Resume once
+//  CORRECT: Resume once
 suspend fun correct3() = suspendCancellableCoroutine<String> { cont ->
     asyncOp { result ->
         if (cont.isActive) cont.resume(result)
@@ -625,7 +625,7 @@ suspend fun correct3() = suspendCancellableCoroutine<String> { cont ->
 **Mistake 4: Not handling null body in Retrofit**
 
 ```kotlin
-// ❌ WRONG: Crashes on null body
+//  WRONG: Crashes on null body
 suspend fun <T> Call<T>.await(): T = suspendCancellableCoroutine { cont ->
     enqueue(object : Callback<T> {
         override fun onResponse(call: Call<T>, response: Response<T>) {
@@ -637,7 +637,7 @@ suspend fun <T> Call<T>.await(): T = suspendCancellableCoroutine { cont ->
     })
 }
 
-// ✅ CORRECT: Handle null
+//  CORRECT: Handle null
 suspend fun <T> Call<T>.await(): T = suspendCancellableCoroutine { cont ->
     enqueue(object : Callback<T> {
         override fun onResponse(call: Call<T>, response: Response<T>) {
@@ -658,7 +658,7 @@ suspend fun <T> Call<T>.await(): T = suspendCancellableCoroutine { cont ->
 **Mistake 5: Using suspendCoroutine instead of suspendCancellableCoroutine**
 
 ```kotlin
-// ❌ WRONG: No cancellation support
+//  WRONG: No cancellation support
 suspend fun mistake5() = suspendCoroutine<String> { cont ->
     longRunningOperation { result ->
         cont.resume(result)
@@ -666,7 +666,7 @@ suspend fun mistake5() = suspendCoroutine<String> { cont ->
     // Can't cancel longRunningOperation!
 }
 
-// ✅ CORRECT: Cancellation support
+//  CORRECT: Cancellation support
 suspend fun correct5() = suspendCancellableCoroutine<String> { cont ->
     val operation = longRunningOperation { result ->
         if (cont.isActive) cont.resume(result)
@@ -679,16 +679,16 @@ suspend fun correct5() = suspendCancellableCoroutine<String> { cont ->
 
 ### Best Practices
 
-1. ✅ **Always use suspendCancellableCoroutine** in production code
-2. ✅ **Always implement invokeOnCancellation** for cleanup
-3. ✅ **Check cont.isActive** before resuming
-4. ✅ **Resume exactly once** - use atomic flags if needed
-5. ✅ **Handle all error cases** - don't leave continuation hanging
-6. ✅ **Test cancellation scenarios** - verify cleanup happens
-7. ✅ **Make thread-safe** - CancellableContinuation handles this
-8. ✅ **Document suspension points** - help future maintainers
-9. ✅ **Use Result wrapper for expected errors** - vs exceptions
-10. ✅ **Close resources** in invokeOnCancellation
+1.  **Always use suspendCancellableCoroutine** in production code
+2.  **Always implement invokeOnCancellation** for cleanup
+3.  **Check cont.isActive** before resuming
+4.  **Resume exactly once** - use atomic flags if needed
+5.  **Handle all error cases** - don't leave continuation hanging
+6.  **Test cancellation scenarios** - verify cleanup happens
+7.  **Make thread-safe** - CancellableContinuation handles this
+8.  **Document suspension points** - help future maintainers
+9.  **Use Result wrapper for expected errors** - vs exceptions
+10.  **Close resources** in invokeOnCancellation
 
 ### When to Use This Pattern
 

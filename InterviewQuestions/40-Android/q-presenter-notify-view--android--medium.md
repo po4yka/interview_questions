@@ -25,3 +25,21 @@ Through an interface: Presenter calls interface methods that View implements. Us
 ## Ответ (RU)
 Через интерфейс: Presenter вызывает методы интерфейса который реализует View С помощью callback-ов: View предоставляет Presenter-у callback который вызывается при обновлении данных Через LiveData если используется MVVM: Presenter может обновить данные которые View наблюдает
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Related (Medium)
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- [[q-what-is-viewmodel--android--medium]] - View
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

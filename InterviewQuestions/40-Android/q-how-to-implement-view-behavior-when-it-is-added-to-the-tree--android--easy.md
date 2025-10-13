@@ -374,3 +374,16 @@ override fun onAttachedToWindow() {
 ## Ответ (RU)
 Для реализации поведения View при её добавлении в дерево View в Android можно воспользоваться несколькими подходами. Один из наиболее удобных способов — использование метода View.onAttachedToWindow(), который вызывается, когда View добавляется в окно. Этот метод позволяет выполнять какие-либо действия, когда View становится видимой для пользователя. Пример использования: создайте пользовательский класс View и переопределите метод onAttachedToWindow() для выполнения необходимых действий при добавлении View в дерево.
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Advanced (Harder)
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View

@@ -44,16 +44,16 @@ tags: [kotlin, coroutines, android, lifecycle, lifecyclescope, viewmodelscope, d
 /**
  * lifecycleScope vs viewModelScope
  *
- * ┌────────────────────┬─────────────────────┬─────────────────────┐
- * │ Feature            │ lifecycleScope      │ viewModelScope      │
- * ├────────────────────┼─────────────────────┼─────────────────────┤
- * │ Available in       │ Activity, Fragment  │ ViewModel           │
- * │ Cancelled when     │ onDestroy()         │ onCleared()         │
- * │ Survives rotation  │ NO                  │ YES                 │
- * │ Use for            │ UI operations       │ Business logic      │
- * │ Lifecycle states   │ Aware of all states │ Only cleared state  │
- * │ Tied to            │ View lifecycle      │ ViewModel lifecycle │
- * └────────────────────┴─────────────────────┴─────────────────────┘
+ * 
+ *  Feature             lifecycleScope       viewModelScope      
+ * 
+ *  Available in        Activity, Fragment   ViewModel           
+ *  Cancelled when      onDestroy()          onCleared()         
+ *  Survives rotation   NO                   YES                 
+ *  Use for             UI operations        Business logic      
+ *  Lifecycle states    Aware of all states  Only cleared state  
+ *  Tied to             View lifecycle       ViewModel lifecycle 
+ * 
  */
 
 // lifecycleScope Example
@@ -111,7 +111,7 @@ class UserViewModel : ViewModel() {
 ```kotlin
 class ScopeUsageExamples {
 
-    // ✅ USE lifecycleScope for: UI animations
+    //  USE lifecycleScope for: UI animations
     class AnimationFragment : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
@@ -126,7 +126,7 @@ class ScopeUsageExamples {
         }
     }
 
-    // ✅ USE viewModelScope for: Data loading
+    //  USE viewModelScope for: Data loading
     class DataViewModel : ViewModel() {
         private val _data = MutableStateFlow<List<String>>(emptyList())
         val data = _data.asStateFlow()
@@ -144,7 +144,7 @@ class ScopeUsageExamples {
         }
     }
 
-    // ✅ USE lifecycleScope for: One-time UI events
+    //  USE lifecycleScope for: One-time UI events
     class EventFragment : Fragment() {
         private val viewModel: EventViewModel by viewModels()
 
@@ -319,7 +319,7 @@ class ConfigurationChanges {
 ```kotlin
 class BestPractices {
 
-    // ✅ GOOD: Use repeatOnLifecycle for collecting Flows
+    //  GOOD: Use repeatOnLifecycle for collecting Flows
     class GoodFlowCollection : Fragment() {
         private val viewModel: MyViewModel by viewModels()
 
@@ -339,7 +339,7 @@ class BestPractices {
         }
     }
 
-    // ❌ BAD: Collecting without lifecycle awareness
+    //  BAD: Collecting without lifecycle awareness
     class BadFlowCollection : Fragment() {
         private val viewModel: MyViewModel by viewModels()
 
@@ -358,7 +358,7 @@ class BestPractices {
         }
     }
 
-    // ✅ GOOD: Business logic in ViewModel
+    //  GOOD: Business logic in ViewModel
     class GoodArchitecture : ViewModel() {
         fun saveData(data: String) {
             viewModelScope.launch {
@@ -372,7 +372,7 @@ class BestPractices {
         }
     }
 
-    // ❌ BAD: Business logic in Activity
+    //  BAD: Business logic in Activity
     class BadArchitecture : AppCompatActivity() {
         fun saveData(data: String) {
             lifecycleScope.launch {

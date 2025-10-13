@@ -355,7 +355,7 @@ launch(CoroutineName("Coroutine-1")) {
 
 ```kotlin
 class LeakyViewModel : ViewModel() {
-    // ❌ BAD: Using GlobalScope
+    //  BAD: Using GlobalScope
     fun loadData() {
         GlobalScope.launch {
             while (true) {
@@ -688,16 +688,16 @@ fun debugTest() = runTest {
 
 ### Best Practices
 
-1. ✅ **Always enable debug mode** in development
-2. ✅ **Name all coroutines** using CoroutineName
-3. ✅ **Add structured logging** at suspension points
-4. ✅ **Use timeouts** to detect stuck coroutines
-5. ✅ **Track active coroutines** in debug builds
-6. ✅ **Use IntelliJ IDEA's coroutine debugger**
-7. ✅ **Monitor with LeakCanary** in Android
-8. ✅ **Profile regularly** to catch performance issues
-9. ✅ **Write tests** with explicit timing
-10. ✅ **Document suspension points** in complex flows
+1.  **Always enable debug mode** in development
+2.  **Name all coroutines** using CoroutineName
+3.  **Add structured logging** at suspension points
+4.  **Use timeouts** to detect stuck coroutines
+5.  **Track active coroutines** in debug builds
+6.  **Use IntelliJ IDEA's coroutine debugger**
+7.  **Monitor with LeakCanary** in Android
+8.  **Profile regularly** to catch performance issues
+9.  **Write tests** with explicit timing
+10.  **Document suspension points** in complex flows
 
 ### Key Takeaways
 

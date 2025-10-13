@@ -583,12 +583,12 @@ class ProperAnimationView : View {
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        // ✅ Start animations when attached
+        //  Start animations when attached
         startAnimation()
     }
 
     override fun onDetachedFromWindow() {
-        // ✅ Cancel animations when detached
+        //  Cancel animations when detached
         animator?.cancel()
         animator = null
         super.onDetachedFromWindow()
@@ -599,11 +599,11 @@ class ProperAnimationView : View {
 
         when (visibility) {
             VISIBLE -> {
-                // ✅ Resume animation when visible
+                //  Resume animation when visible
                 startAnimation()
             }
             INVISIBLE, GONE -> {
-                // ✅ Pause animation when invisible
+                //  Pause animation when invisible
                 animator?.pause()
             }
         }
@@ -694,16 +694,16 @@ class AnimationTest {
 ```kotlin
 override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    animator?.cancel() // ✅ Prevent memory leaks
+    animator?.cancel() //  Prevent memory leaks
 }
 ```
 
 **2. Use appropriate interpolators**
 ```kotlin
-// ✅ DO - Natural motion
+//  DO - Natural motion
 animator.interpolator = DecelerateInterpolator()
 
-// ❌ DON'T - Linear looks mechanical
+//  DON'T - Linear looks mechanical
 animator.interpolator = LinearInterpolator()
 ```
 
@@ -817,11 +817,11 @@ class AnimatedProgressBar : View {
 ```kotlin
 override fun onAttachedToWindow() {
     super.onAttachedToWindow()
-    startAnimation() // ✅ Запуск при присоединении
+    startAnimation() //  Запуск при присоединении
 }
 
 override fun onDetachedFromWindow() {
-    animator?.cancel() // ✅ Отмена при отсоединении
+    animator?.cancel() //  Отмена при отсоединении
     super.onDetachedFromWindow()
 }
 ```
@@ -832,3 +832,21 @@ override fun onDetachedFromWindow() {
 - Минимизируйте область invalidation
 - Выбирайте подходящие интерполяторы
 - Тестируйте на слабых устройствах
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Related (Medium)
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- [[q-what-is-viewmodel--android--medium]] - View
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

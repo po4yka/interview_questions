@@ -55,7 +55,7 @@ class CounterView @JvmOverloads constructor(
         invalidate()
     }
 
-    // ✅ Save state
+    //  Save state
     override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
 
@@ -66,7 +66,7 @@ class CounterView @JvmOverloads constructor(
         return savedState
     }
 
-    // ✅ Restore state
+    //  Restore state
     override fun onRestoreInstanceState(state: Parcelable?) {
         if (state is SavedState) {
             super.onRestoreInstanceState(state.superState)
@@ -77,7 +77,7 @@ class CounterView @JvmOverloads constructor(
         }
     }
 
-    // ✅ Custom SavedState class
+    //  Custom SavedState class
     private class SavedState : BaseSavedState {
         var count: Int = 0
 
@@ -115,7 +115,7 @@ State saving requires a unique view ID.
 
 ```kotlin
 init {
-    // ✅ Check if ID is set
+    //  Check if ID is set
     if (id == View.NO_ID) {
         Log.w("CounterView", "View must have an ID to save state")
         // Optionally assign a default ID
@@ -126,13 +126,13 @@ init {
 
 **XML:**
 ```xml
-<!-- ✅ With ID - state will be saved -->
+<!--  With ID - state will be saved -->
 <com.example.ui.CounterView
     android:id="@+id/counter"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" />
 
-<!-- ❌ Without ID - state will be lost! -->
+<!--  Without ID - state will be lost! -->
 <com.example.ui.CounterView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" />
@@ -243,7 +243,7 @@ class ModernView : View {
         }
     }
 
-    // ✅ Much simpler with @Parcelize!
+    //  Much simpler with @Parcelize!
     @Parcelize
     data class SavedState(
         val superState: Parcelable?,
@@ -358,10 +358,10 @@ For large data, don't save in view state—use ViewModel instead.
 ```kotlin
 class LargeDataView : View {
 
-    // ❌ DON'T save large data in view state
+    //  DON'T save large data in view state
     // private val largeList = List(10000) { /* ... */ }
 
-    // ✅ DO save reference/ID only
+    //  DO save reference/ID only
     private var dataSetId: String? = null
 
     override fun onSaveInstanceState(): Parcelable {
@@ -525,7 +525,7 @@ class StateRestorationTest {
 
 ### 10. Common Mistakes
 
-**❌ Not calling super:**
+** Not calling super:**
 ```kotlin
 override fun onSaveInstanceState(): Parcelable {
     // Missing super call!
@@ -533,15 +533,15 @@ override fun onSaveInstanceState(): Parcelable {
 }
 ```
 
-**✅ Always call super:**
+** Always call super:**
 ```kotlin
 override fun onSaveInstanceState(): Parcelable {
-    val superState = super.onSaveInstanceState() // ✅
+    val superState = super.onSaveInstanceState() // 
     return SavedState(superState, progress)
 }
 ```
 
-**❌ No view ID:**
+** No view ID:**
 ```xml
 <!-- State won't be saved! -->
 <com.example.ui.CounterView
@@ -549,7 +549,7 @@ override fun onSaveInstanceState(): Parcelable {
     android:layout_height="wrap_content" />
 ```
 
-**✅ With ID:**
+** With ID:**
 ```xml
 <com.example.ui.CounterView
     android:id="@+id/counter"
@@ -557,19 +557,19 @@ override fun onSaveInstanceState(): Parcelable {
     android:layout_height="wrap_content" />
 ```
 
-**❌ Saving too much data:**
+** Saving too much data:**
 ```kotlin
 data class SavedState(
     val superState: Parcelable?,
-    val hugeList: List<LargeObject> // ❌ TransactionTooLargeException!
+    val hugeList: List<LargeObject> //  TransactionTooLargeException!
 ) : BaseSavedState(superState), Parcelable
 ```
 
-**✅ Save references only:**
+** Save references only:**
 ```kotlin
 data class SavedState(
     val superState: Parcelable?,
-    val dataId: String // ✅ Just the ID
+    val dataId: String //  Just the ID
 ) : BaseSavedState(superState), Parcelable
 ```
 
@@ -579,7 +579,7 @@ data class SavedState(
 
 **1. Always save critical UI state**
 ```kotlin
-// ✅ Save user input, selections, scroll position
+//  Save user input, selections, scroll position
 override fun onSaveInstanceState(): Parcelable {
     val superState = super.onSaveInstanceState()
     return SavedState(superState, selectedIndex, scrollY, inputText)
@@ -588,7 +588,7 @@ override fun onSaveInstanceState(): Parcelable {
 
 **2. Don't save transient state**
 ```kotlin
-// ❌ Don't save temporary UI states
+//  Don't save temporary UI states
 // - Loading indicators
 // - Error messages (should be recomputed)
 // - Temporary animations
@@ -631,26 +631,26 @@ This simulates process death on every background.
 ### 12. State Saving Checklist
 
 **Required:**
-- ✅ Override `onSaveInstanceState()`
-- ✅ Override `onRestoreInstanceState()`
-- ✅ Call `super.onSaveInstanceState()`
-- ✅ Wrap super state in custom state
-- ✅ View must have unique ID
-- ✅ Implement Parcelable correctly
+-  Override `onSaveInstanceState()`
+-  Override `onRestoreInstanceState()`
+-  Call `super.onSaveInstanceState()`
+-  Wrap super state in custom state
+-  View must have unique ID
+-  Implement Parcelable correctly
 
 **Recommended:**
-- ✅ Use `@Parcelize` for simplicity
-- ✅ Keep state size small (< 50KB)
-- ✅ Test with "Don't keep activities"
-- ✅ Test rotation in all screens
-- ✅ Use ViewModel for large/complex data
+-  Use `@Parcelize` for simplicity
+-  Keep state size small (< 50KB)
+-  Test with "Don't keep activities"
+-  Test rotation in all screens
+-  Use ViewModel for large/complex data
 
 **Avoid:**
-- ❌ Saving transient UI state
-- ❌ Saving data available from other sources
-- ❌ Exceeding size limits
-- ❌ Forgetting to call super
-- ❌ Views without IDs
+-  Saving transient UI state
+-  Saving data available from other sources
+-  Exceeding size limits
+-  Forgetting to call super
+-  Views without IDs
 
 ---
 
@@ -731,13 +731,13 @@ class CounterView : View {
 
 **View должен иметь уникальный ID:**
 ```xml
-<!-- ✅ С ID - состояние сохранится -->
+<!--  С ID - состояние сохранится -->
 <com.example.ui.CounterView
     android:id="@+id/counter"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" />
 
-<!-- ❌ Без ID - состояние потеряется! -->
+<!--  Без ID - состояние потеряется! -->
 <com.example.ui.CounterView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" />
@@ -745,24 +745,24 @@ class CounterView : View {
 
 ### Что сохранять
 
-✅ **Сохранять:**
+ **Сохранять:**
 - Пользовательский ввод и выборы
 - Позиции прокрутки
 - Раскрытые/свёрнутые состояния
 - Состояние custom view (прогресс, цвета и т.д.)
 
-❌ **НЕ сохранять:**
+ **НЕ сохранять:**
 - Временные состояния (индикаторы загрузки)
 - Большие наборы данных (использовать ViewModel)
 - Данные, доступные из других источников
 
 ### Checklist
 
-- ✅ Переопределить `onSaveInstanceState()`
-- ✅ Переопределить `onRestoreInstanceState()`
-- ✅ Вызвать `super.onSaveInstanceState()`
-- ✅ Обернуть super state в custom state
-- ✅ View должен иметь уникальный ID
-- ✅ Корректно реализовать Parcelable
-- ✅ Использовать `@Parcelize` для упрощения
-- ✅ Держать размер состояния малым (< 50KB)
+-  Переопределить `onSaveInstanceState()`
+-  Переопределить `onRestoreInstanceState()`
+-  Вызвать `super.onSaveInstanceState()`
+-  Обернуть super state в custom state
+-  View должен иметь уникальный ID
+-  Корректно реализовать Parcelable
+-  Использовать `@Parcelize` для упрощения
+-  Держать размер состояния малым (< 50KB)

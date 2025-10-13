@@ -223,3 +223,21 @@ setViewProperties(linearLayout) // Works because LinearLayout extends ViewGroup 
 ## Ответ (RU)
 
 ViewGroup является наследником класса View, который является базовым для всех элементов пользовательского интерфейса. ViewGroup выступает как контейнер для других View, предоставляя им общую структуру и управление дочерними элементами.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- [[q-what-is-viewmodel--android--medium]] - View
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

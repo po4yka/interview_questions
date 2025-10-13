@@ -10,6 +10,10 @@ tags:
   - shark
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Как понять что в дампе есть утечка?
@@ -87,20 +91,20 @@ The retention chain shows which objects and references prevent garbage collector
 **Example Leak Trace:**
 
 ```
-┌───────────────────────────────────────────────┐
-│ LEAK FOUND                                     │
-├───────────────────────────────────────────────┤
-│                                                │
-│ GC Root: Local variable in thread             │
-│     ↓                                          │
-│ MyApplication (instance)                       │
-│     ↓ static MyApplication.sInstance           │
-│ MainActivity (instance)                        │
-│     ↓ leaking                                  │
-│                                                │
-│ Leak: MainActivity leaked!                     │
-│ Retained: 2.5 MB                               │
-└───────────────────────────────────────────────┘
+
+ LEAK FOUND                                     
+
+                                                
+ GC Root: Local variable in thread             
+     ↓                                          
+ MyApplication (instance)                       
+     ↓ static MyApplication.sInstance           
+ MainActivity (instance)                        
+     ↓ leaking                                  
+                                                
+ Leak: MainActivity leaked!                     
+ Retained: 2.5 MB                               
+
 ```
 
 **Leak Detection Logic:**
@@ -225,14 +229,14 @@ override fun onCreate(savedInstanceState: Bundle?) {
 **LeakCanary Report Example:**
 
 ```
-════════════════════════════════════════════════
+
 HEAP ANALYSIS RESULT
-════════════════════════════════════════════════
+
 
 1 APPLICATION LEAKS
 
 Leak pattern: Activity retained by static field
-────────────────────────────────────────────────
+
 * GC ROOT static MyApp.sInstance
 * MyApp
   ↓ MyApp.currentActivity
@@ -243,7 +247,7 @@ Retained: 5.4 MB
 Leak trace:
   MyApp.currentActivity is holding MainActivity
   Fix: Set MyApp.currentActivity = null in onDestroy()
-════════════════════════════════════════════════
+
 ```
 
 **Summary:**
@@ -263,3 +267,18 @@ Shark проверяет какие ссылки удерживают объек
 
 Цепочка удержания показывает какие объекты и ссылки не позволяют сборщику мусора освободить память.
 
+
+---
+
+## Related Questions
+
+### Kotlin Language Features
+- [[q-heap-pollution-generics--kotlin--hard]] - Data Structures
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+- [[q-kotlin-native--kotlin--hard]] - Memory Management
+- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Memory Management
+
+### Related Algorithms
+- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Data Structures
+- [[q-advanced-graph-algorithms--algorithms--hard]] - Data Structures
+- [[q-binary-search-trees-bst--algorithms--hard]] - Data Structures

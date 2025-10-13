@@ -58,48 +58,48 @@ A `Job` can be in one of the following states:
 ### State Transition Diagram (Text-Based)
 
 ```
-                      ┌─────────────┐
-                      │     New     │ (LAZY only)
-                      │  (initial)  │
-                      └──────┬──────┘
-                             │ start()
-                             ▼
-                      ┌─────────────┐
-         ┌───────────▶│   Active    │◀──────────┐
-         │            │ (executing) │           │
-         │            └──────┬──────┘           │
-         │                   │                  │
-         │                   │ body done        │
-         │                   ▼                  │
-         │            ┌─────────────┐           │
-         │            │ Completing  │           │
-         │            │(wait kids)  │           │
-         │            └──────┬──────┘           │
-         │                   │                  │
-         │                   │ all children     │
-         │                   │ complete         │
-         │                   ▼                  │
-         │            ┌─────────────┐           │
-         │            │  Completed  │           │
-         │            │  (success)  │           │
-         │            └─────────────┘           │
-         │                                      │
-         │  cancel()                            │
-         │                                      │
-         └────────────┐                         │
-                      ▼                         │
-               ┌─────────────┐                 │
-               │ Cancelling  │                 │
-               │(finally,    │─────────────────┘
-               │ wait kids)  │ children done
-               └──────┬──────┘
-                      │
-                      │ finally done
-                      ▼
-               ┌─────────────┐
-               │  Cancelled  │
-               │ (terminal)  │
-               └─────────────┘
+                      
+                           New      (LAZY only)
+                        (initial)  
+                      
+                              start()
+                             
+                      
+            Active    
+                      (executing)            
+                                
+                                              
+                             body done        
+                                              
+                                
+                      Completing             
+                     (wait kids)             
+                                
+                                              
+                             all children     
+                             complete         
+                                              
+                                
+                       Completed             
+                       (success)             
+                                
+                                               
+           cancel()                            
+                                               
+                                  
+                                               
+                                
+                Cancelling                   
+               (finally,    
+                wait kids)   children done
+               
+                      
+                       finally done
+                      
+               
+                 Cancelled  
+                (terminal)  
+               
 ```
 
 ### State 1: New (CoroutineStart.LAZY only)
@@ -1236,48 +1236,48 @@ Kotlin корутины `Job` — это конечный автомат с 6 р
 ### Диаграмма переходов состояний (текстовая)
 
 ```
-                      ┌─────────────┐
-                      │     New     │ (только LAZY)
-                      │ (начальное) │
-                      └──────┬──────┘
-                             │ start()
-                             ▼
-                      ┌─────────────┐
-         ┌───────────▶│   Active    │◀──────────┐
-         │            │(выполнение) │           │
-         │            └──────┬──────┘           │
-         │                   │                  │
-         │                   │ тело завершено   │
-         │                   ▼                  │
-         │            ┌─────────────┐           │
-         │            │ Completing  │           │
-         │            │(ожид. детей)│           │
-         │            └──────┬──────┘           │
-         │                   │                  │
-         │                   │ все дети         │
-         │                   │ завершены        │
-         │                   ▼                  │
-         │            ┌─────────────┐           │
-         │            │  Completed  │           │
-         │            │   (успех)   │           │
-         │            └─────────────┘           │
-         │                                      │
-         │  cancel()                            │
-         │                                      │
-         └────────────┐                         │
-                      ▼                         │
-               ┌─────────────┐                 │
-               │ Cancelling  │                 │
-               │(finally,    │─────────────────┘
-               │ ожид. детей)│ дети завершены
-               └──────┬──────┘
-                      │
-                      │ finally выполнен
-                      ▼
-               ┌─────────────┐
-               │  Cancelled  │
-               │(терминальное)│
-               └─────────────┘
+                      
+                           New      (только LAZY)
+                       (начальное) 
+                      
+                              start()
+                             
+                      
+            Active    
+                     (выполнение)            
+                                
+                                              
+                             тело завершено   
+                                              
+                                
+                      Completing             
+                     (ожид. детей)           
+                                
+                                              
+                             все дети         
+                             завершены        
+                                              
+                                
+                       Completed             
+                        (успех)              
+                                
+                                               
+           cancel()                            
+                                               
+                                  
+                                               
+                                
+                Cancelling                   
+               (finally,    
+                ожид. детей) дети завершены
+               
+                      
+                       finally выполнен
+                      
+               
+                 Cancelled  
+               (терминальное)
+               
 ```
 
 ### Состояние 1: New (только CoroutineStart.LAZY)

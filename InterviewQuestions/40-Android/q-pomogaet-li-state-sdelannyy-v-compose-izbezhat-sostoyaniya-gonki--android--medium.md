@@ -266,3 +266,19 @@ class MyViewModel : ViewModel() {
 Помогает ли state, сделанный в Compose, избежать состояния гонки
 
 Нет, MutableState в Compose не гарантирует потокобезопасность. Если несколько потоков одновременно модифицируют состояние, это может привести к состоянию гонки
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose
+- [[q-accessibility-compose--accessibility--medium]] - Compose
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose
+
+### Advanced (Harder)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
+- [[q-compose-performance-optimization--android--hard]] - Compose

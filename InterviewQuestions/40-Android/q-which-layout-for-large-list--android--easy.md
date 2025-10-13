@@ -236,3 +236,16 @@ fun MyList(items: List<String>) {
 ## Ответ (RU)
 Для списка из большого количества элементов следует использовать RecyclerView. Это наиболее эффективный и рекомендуемый компонент для отображения больших данных в виде списка или сетки в Android
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Advanced (Harder)
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View

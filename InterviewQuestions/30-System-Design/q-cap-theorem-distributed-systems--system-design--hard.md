@@ -47,7 +47,7 @@ When designing distributed systems, you cannot have all three guarantees simulta
            /\
           /  \
          /    \
-        /  ⚠️  \
+        /    \
        /  Pick  \
       /   Only   \
      /     2      \
@@ -75,7 +75,7 @@ Read(x) from Node2 → Must return 5 (not old value)
 - System remains operational
 
 ```
-Request → Node1 (down) → Node2 responds ✓
+Request → Node1 (down) → Node2 responds 
 All requests get responses, even if nodes fail
 ```
 
@@ -109,10 +109,10 @@ Can't communicate, but both sides still work
 
 ```
 Real-world CAP:
-Pick one ──────┐
-               │
-        ┌──────┴──────┐
-        │             │
+Pick one 
+               
+        
+                     
        CP            AP
   (Consistent)  (Available)
   but may       but may be
@@ -525,7 +525,7 @@ Examples:
            /\
           /  \
          /    \
-        /  ⚠️  \
+        /    \
        / Выбери \
       /  только  \
      /     2      \
@@ -614,3 +614,16 @@ Examples:
 8. Explain the two-phase commit (2PC) protocol and its limitations
 9. What is the Saga pattern for distributed transactions?
 10. How do consensus algorithms (Raft, Paxos) relate to CAP theorem?
+
+---
+
+## Related Questions
+
+### Android Implementation
+- [[q-when-can-the-system-restart-a-service--android--medium]] - Networking
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+- [[q-network-error-handling-strategies--networking--medium]] - Networking
+- [[q-api-file-upload-server--android--medium]] - Networking
+- [[q-okhttp-interceptors-advanced--networking--medium]] - Networking

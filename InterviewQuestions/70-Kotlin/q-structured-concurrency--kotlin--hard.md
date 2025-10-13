@@ -434,8 +434,8 @@ fun demonstrateJobHierarchy() = runBlocking {
 
 // Job hierarchy:
 // parentJob
-//   ├── child1
-//   └── child2
+//    child1
+//    child2
 ```
 
 ### Comparison Table

@@ -68,7 +68,7 @@ dependencies {
 
 #### 2. Before: Traditional Initialization
 
-**❌ SLOW: Multiple ContentProviders**
+** SLOW: Multiple ContentProviders**
 
 ```kotlin
 // Traditional approach - each library adds a ContentProvider
@@ -112,7 +112,7 @@ class AnalyticsInitProvider : ContentProvider() {
 // Result: 4 providers × 25ms average = 100ms added to startup
 ```
 
-**❌ SLOW: Application.onCreate() doing everything**
+** SLOW: Application.onCreate() doing everything**
 
 ```kotlin
 class MyApplication : Application() {
@@ -136,7 +136,7 @@ class MyApplication : Application() {
 
 #### 3. After: App Startup Library
 
-**✅ OPTIMIZED: Consolidated initialization**
+** OPTIMIZED: Consolidated initialization**
 
 **Step 1: Create Initializers**
 

@@ -198,12 +198,12 @@ imageView.setImageDrawable(drawable)
 
 ```
 Is it a photograph or complex raster image?
-├─ Yes → Use WebP (lossy compression)
-└─ No → Is it a simple icon or geometric shape?
-    ├─ Yes → Use Vector Drawable (SVG)
-    └─ No → Does it need transparency?
-        ├─ Yes → Use WebP (lossless) or PNG
-        └─ No → Use WebP (lossy)
+ Yes → Use WebP (lossy compression)
+ No → Is it a simple icon or geometric shape?
+     Yes → Use Vector Drawable (SVG)
+     No → Does it need transparency?
+         Yes → Use WebP (lossless) or PNG
+         No → Use WebP (lossy)
 ```
 
 ### Best Practices

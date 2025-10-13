@@ -190,3 +190,35 @@ findNavController().navigate(R.id.action_to_detail)
 ```
 
 **English**: Fragments provide modularity (break complex UI into manageable parts), reusability (use in multiple activities), adaptive interfaces (support different screen sizes), independent lifecycle management, simplified inter-component communication, and dynamic UI capabilities. Modern Android navigation is built on fragments.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity, Fragment
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Activity, Fragment
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Activity, Fragment
+- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Activity, Fragment
+
+### Advanced (Harder)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
+- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
+- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] - Activity, Fragment
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity, Fragment
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Activity, Fragment
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Activity, Fragment
+- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Activity, Fragment
+
+### Advanced (Harder)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
+- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
+- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] - Activity, Fragment

@@ -8,6 +8,10 @@ tags:
   - optimization
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Как реализовать кэширование в Android?
@@ -650,3 +654,22 @@ class CacheMetrics {
     }
 }
 ```
+
+---
+
+## Related Questions
+
+### Computer Science Fundamentals
+- [[q-list-vs-sequence--programming-languages--medium]] - Data Structures
+
+### Kotlin Language Features
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+
+### Related Algorithms
+- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Data Structures
+- [[q-advanced-graph-algorithms--algorithms--hard]] - Data Structures
+- [[q-binary-search-trees-bst--algorithms--hard]] - Data Structures
+- [[q-sorting-algorithms-comparison--algorithms--medium]] - Data Structures
+
+### System Design Concepts
+- [[q-message-queues-event-driven--system-design--medium]] - Data Structures

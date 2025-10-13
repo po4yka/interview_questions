@@ -196,13 +196,13 @@ Regardless of which AI tool you use:
 
 | Feature | Cursor | Claude Code | Gemini CLI | ChatGPT |
 |---------|--------|-------------|------------|---------|
-| Auto-loads rules | ✅ | ❌ | ❌ | ❌ |
-| File operations | ✅ | ✅ | ⚠️ | ❌ |
-| Batch tasks | ⚠️ | ✅ | ✅ | ⚠️ |
-| Inline editing | ✅ | ✅ | ❌ | ❌ |
-| Speed | ⚡⚡ | ⚡⚡ | ⚡⚡⚡ | ⚡ |
+| Auto-loads rules |  |  |  |  |
+| File operations |  |  |  |  |
+| Batch tasks |  |  |  |  |
+| Inline editing |  |  |  |  |
+| Speed |  |  |  |  |
 | Context window | Large | Large | Medium | Medium |
-| Scripting | ❌ | ⚠️ | ✅ | ❌ |
+| Scripting |  |  |  |  |
 | Cost | Paid | Paid | Paid | Free/Paid |
 
 ---

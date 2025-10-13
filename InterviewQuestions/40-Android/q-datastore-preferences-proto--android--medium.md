@@ -283,3 +283,21 @@ override fun onCreate(savedInstanceState: Bundle?) {
 - [Prefer Storing Data with Jetpack DataStore](https://android-developers.googleblog.com/2020/09/prefer-storing-data-with-jetpack.html)
 - [Working with Preferences DataStore](https://developer.android.com/codelabs/android-preferences-datastore#0)
 - [Working with Proto DataStore](https://developer.android.com/codelabs/android-proto-datastore#0)
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-sharedpreferences-definition--android--easy]] - Storage
+
+### Related (Medium)
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-transactions-dao--room--medium]] - Storage
+- [[q-room-paging3-integration--room--medium]] - Storage
+- [[q-android-storage-types--android--medium]] - Storage
+- [[q-room-type-converters-advanced--room--medium]] - Storage
+
+### Advanced (Harder)
+- [[q-room-fts-full-text-search--room--hard]] - Storage

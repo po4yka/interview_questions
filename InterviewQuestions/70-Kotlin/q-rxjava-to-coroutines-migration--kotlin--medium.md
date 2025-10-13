@@ -1349,7 +1349,7 @@ suspend fun <T> Flow<T>.test(validate: suspend FlowTurbine<T>.() -> Unit) {
 ### Phase 1: New Features Only
 
 ```kotlin
-// ✅ New features use coroutines
+//  New features use coroutines
 class NewFeatureRepository(private val api: NewApi) {
     suspend fun loadNewData(): Data {
         return withContext(Dispatchers.IO) {
@@ -1358,7 +1358,7 @@ class NewFeatureRepository(private val api: NewApi) {
     }
 }
 
-// ⚠️ Existing features stay RxJava
+//  Existing features stay RxJava
 class LegacyRepository(private val api: LegacyApi) {
     fun loadOldData(): Single<Data> {
         return api.getData()
@@ -1417,8 +1417,8 @@ class UserRepository(private val api: UserApi) {
 }
 
 // Remove RxJava dependencies from build.gradle
-// implementation 'io.reactivex.rxjava3:rxjava:3.1.5' ❌
-// implementation 'io.reactivex.rxjava3:rxandroid:3.0.0' ❌
+// implementation 'io.reactivex.rxjava3:rxjava:3.1.5' 
+// implementation 'io.reactivex.rxjava3:rxandroid:3.0.0' 
 ```
 
 ---
@@ -1428,12 +1428,12 @@ class UserRepository(private val api: UserApi) {
 ### 1. Forgetting flowOn for Flow
 
 ```kotlin
-// ❌ Wrong: Flow executes on collector's dispatcher
+//  Wrong: Flow executes on collector's dispatcher
 fun observeData(): Flow<Data> = flow {
     emit(database.getData()) // Runs on Main if collected from Main!
 }
 
-// ✅ Correct: Use flowOn
+//  Correct: Use flowOn
 fun observeData(): Flow<Data> = flow {
     emit(database.getData())
 }.flowOn(Dispatchers.IO)
@@ -1442,14 +1442,14 @@ fun observeData(): Flow<Data> = flow {
 ### 2. Using runBlocking in Production
 
 ```kotlin
-// ❌ Wrong: Blocks thread
+//  Wrong: Blocks thread
 fun loadUser(userId: String): User {
     return runBlocking {
         api.getUser(userId)
     }
 }
 
-// ✅ Correct: Use suspend
+//  Correct: Use suspend
 suspend fun loadUser(userId: String): User {
     return api.getUser(userId)
 }
@@ -1458,14 +1458,14 @@ suspend fun loadUser(userId: String): User {
 ### 3. Not Handling Cancellation
 
 ```kotlin
-// ❌ Wrong: Doesn't handle cancellation properly
+//  Wrong: Doesn't handle cancellation properly
 try {
     val user = api.getUser(userId)
 } catch (e: Exception) {
     // CancellationException caught here!
 }
 
-// ✅ Correct: Re-throw CancellationException
+//  Correct: Re-throw CancellationException
 try {
     val user = api.getUser(userId)
 } catch (e: CancellationException) {
@@ -1478,14 +1478,14 @@ try {
 ### 4. Using GlobalScope
 
 ```kotlin
-// ❌ Wrong: Unstructured concurrency
+//  Wrong: Unstructured concurrency
 fun loadData() {
     GlobalScope.launch {
         val data = api.getData()
     }
 }
 
-// ✅ Correct: Use proper scope
+//  Correct: Use proper scope
 class MyViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
@@ -1498,10 +1498,10 @@ class MyViewModel : ViewModel() {
 ### 5. Mixing Hot and Cold Flows
 
 ```kotlin
-// ❌ Wrong: Confusing SharedFlow (hot) with Flow (cold)
+//  Wrong: Confusing SharedFlow (hot) with Flow (cold)
 val flow: Flow<Data> = MutableSharedFlow<Data>() // Type mismatch conceptually
 
-// ✅ Correct: Use appropriate type
+//  Correct: Use appropriate type
 val sharedFlow: SharedFlow<Data> = MutableSharedFlow<Data>()
 val coldFlow: Flow<Data> = flow { emit(Data()) }
 ```
@@ -1513,7 +1513,7 @@ val coldFlow: Flow<Data> = flow { emit(Data()) }
 ### 1. Start with New Features
 
 ```kotlin
-// ✅ Good: New features use coroutines
+//  Good: New features use coroutines
 class NewRepository(private val api: NewApi) {
     suspend fun fetchNewData(): Data = withContext(Dispatchers.IO) {
         api.getData()
@@ -1524,7 +1524,7 @@ class NewRepository(private val api: NewApi) {
 ### 2. Use Interop for Gradual Migration
 
 ```kotlin
-// ✅ Good: Wrap RxJava with coroutines
+//  Good: Wrap RxJava with coroutines
 import kotlinx.coroutines.rx3.await
 
 suspend fun migrateGradually() {
@@ -1548,7 +1548,7 @@ fun `test with coroutines`() = runTest {
 ### 4. Use StateFlow for State Management
 
 ```kotlin
-// ✅ Good: StateFlow for UI state
+//  Good: StateFlow for UI state
 class ViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -1561,7 +1561,7 @@ class ViewModel : ViewModel() {
 /**
  * User Repository
  *
- * Migration Status: ✅ Migrated to Coroutines
+ * Migration Status:  Migrated to Coroutines
  * Migrated on: 2024-01-15
  * Migrated by: @username
  *

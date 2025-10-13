@@ -532,3 +532,14 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **English**: To open Activity/Fragment from push notification: 1) Setup FCM service with `onMessageReceived()`, 2) Create PendingIntent with navigation extras (`putExtra()`), 3) Handle intent in MainActivity `onCreate()` and `onNewIntent()`, 4) Use Navigation Component or direct Activity launch, 5) Support deep links (`myapp://notification/detail?id=123`), 6) Create proper back stack with `TaskStackBuilder`, 7) Request notification permission on Android 13+. Notification payload includes `data` field with screen/item_id for navigation.?
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation
+- [[q-compose-navigation-advanced--android--medium]] - Navigation
+- [[q-activity-navigation-how-it-works--android--medium]] - Navigation
+- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation
+- [[q-what-navigation-methods-do-you-know--android--medium]] - Navigation

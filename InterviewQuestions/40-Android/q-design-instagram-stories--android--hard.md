@@ -62,36 +62,36 @@ Instagram Stories is a complex feature involving media capture, processing, stor
 ### 2. High-Level Architecture
 
 ```
-┌─────────────────────┐
-│   Android Client    │
-│  ┌──────────────┐   │
-│  │ Camera       │   │
-│  │ Media Editor │   │
-│  │ Story Viewer │   │
-│  └──────────────┘   │
-└──────────┬──────────┘
-           │
-           ├─── REST API (Upload/Download)
-           ├─── CDN (Media Delivery)
-           └─── WebSocket (Real-time updates)
-           │
-┌──────────▼──────────┐
-│   Backend Services  │
-│  ┌──────────────┐   │
-│  │ Media        │   │
-│  │ Processing   │   │
-│  │ Service      │   │
-│  └──────────────┘   │
-│  ┌──────────────┐   │
-│  │ Story        │   │
-│  │ Expiration   │   │
-│  │ Worker       │   │
-│  └──────────────┘   │
-└─────────────────────┘
-           │
-           ├─── Object Storage (S3)
-           ├─── Database (Stories metadata)
-           └─── Cache (Redis)
+
+   Android Client    
+     
+   Camera          
+   Media Editor    
+   Story Viewer    
+     
+
+           
+            REST API (Upload/Download)
+            CDN (Media Delivery)
+            WebSocket (Real-time updates)
+           
+
+   Backend Services  
+     
+   Media           
+   Processing      
+   Service         
+     
+     
+   Story           
+   Expiration      
+   Worker          
+     
+
+           
+            Object Storage (S3)
+            Database (Stories metadata)
+            Cache (Redis)
 ```
 
 ### 3. Android App Architecture

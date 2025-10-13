@@ -43,7 +43,7 @@ class IconButton @JvmOverloads constructor(
 ) : View(context, attrs) {
 
     init {
-        // ✅ Set content description
+        //  Set content description
         contentDescription = "Save button"
 
         // Or read from XML
@@ -87,7 +87,7 @@ Make views focusable for keyboard/screen reader navigation.
 class CustomButton : View {
 
     init {
-        // ✅ Make focusable
+        //  Make focusable
         isFocusable = true
         isClickable = true
 
@@ -125,7 +125,7 @@ class ToggleSwitch @JvmOverloads constructor(
         set(value) {
             field = value
 
-            // ✅ Update state description
+            //  Update state description
             stateDescription = if (value) {
                 "On"
             } else {
@@ -171,10 +171,10 @@ class CustomSlider @JvmOverloads constructor(
     override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(info)
 
-        // ✅ Set class name for TalkBack
+        //  Set class name for TalkBack
         info.className = SeekBar::class.java.name
 
-        // ✅ Add range info for slider
+        //  Add range info for slider
         info.rangeInfo = AccessibilityNodeInfo.RangeInfo.obtain(
             AccessibilityNodeInfo.RangeInfo.RANGE_TYPE_FLOAT,
             min,
@@ -182,11 +182,11 @@ class CustomSlider @JvmOverloads constructor(
             value
         )
 
-        // ✅ Add actions
+        //  Add actions
         info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_FORWARD)
         info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_BACKWARD)
 
-        // ✅ Set content description with current value
+        //  Set content description with current value
         info.contentDescription = "Slider, ${value.toInt()} percent"
     }
 
@@ -301,7 +301,7 @@ class ProgressIndicator : View {
             field = value
 
             if (oldValue != value) {
-                // ✅ Send progress changed event
+                //  Send progress changed event
                 sendAccessibilityEvent(
                     AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED
                 )
@@ -345,7 +345,7 @@ class AccessibleButton : View {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-        // ✅ Ensure minimum touch target size
+        //  Ensure minimum touch target size
         val width = max(measuredWidth, minTouchTargetSize)
         val height = max(measuredHeight, minTouchTargetSize)
 
@@ -439,13 +439,13 @@ class AccessibleRatingBar @JvmOverloads constructor(
         set(value) {
             field = value.coerceIn(0, 5)
 
-            // ✅ Update state description
+            //  Update state description
             stateDescription = "$rating out of 5 stars"
 
-            // ✅ Announce change
+            //  Announce change
             announceForAccessibility("Rating changed to $rating stars")
 
-            // ✅ Send accessibility event
+            //  Send accessibility event
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED)
 
             invalidate()
@@ -454,12 +454,12 @@ class AccessibleRatingBar @JvmOverloads constructor(
     var maxRating: Int = 5
 
     init {
-        // ✅ Make focusable and clickable
+        //  Make focusable and clickable
         isFocusable = true
         isClickable = true
         importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
 
-        // ✅ Set initial content description
+        //  Set initial content description
         contentDescription = "Rating bar"
         stateDescription = "$rating out of $maxRating stars"
     }
@@ -467,10 +467,10 @@ class AccessibleRatingBar @JvmOverloads constructor(
     override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(info)
 
-        // ✅ Set class for TalkBack
+        //  Set class for TalkBack
         info.className = RatingBar::class.java.name
 
-        // ✅ Add range info
+        //  Add range info
         info.rangeInfo = AccessibilityNodeInfo.RangeInfo.obtain(
             AccessibilityNodeInfo.RangeInfo.RANGE_TYPE_INT,
             0f,
@@ -478,7 +478,7 @@ class AccessibleRatingBar @JvmOverloads constructor(
             rating.toFloat()
         )
 
-        // ✅ Add actions
+        //  Add actions
         if (rating < maxRating) {
             info.addAction(
                 AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_FORWARD
@@ -587,68 +587,68 @@ class AccessibilityTest {
 ### 11. Best Practices Checklist
 
 **Content:**
-- ✅ Provide meaningful content descriptions
-- ✅ Keep descriptions concise (< 30 words)
-- ✅ Update descriptions when content changes
-- ✅ Don't include view type in description ("button" is redundant)
+-  Provide meaningful content descriptions
+-  Keep descriptions concise (< 30 words)
+-  Update descriptions when content changes
+-  Don't include view type in description ("button" is redundant)
 
 **Navigation:**
-- ✅ Make interactive elements focusable
-- ✅ Provide logical focus order
-- ✅ Support keyboard navigation
-- ✅ Ensure 48dp × 48dp minimum touch target
+-  Make interactive elements focusable
+-  Provide logical focus order
+-  Support keyboard navigation
+-  Ensure 48dp × 48dp minimum touch target
 
 **State:**
-- ✅ Announce state changes
-- ✅ Use stateDescription for current state
-- ✅ Send appropriate accessibility events
+-  Announce state changes
+-  Use stateDescription for current state
+-  Send appropriate accessibility events
 
 **Actions:**
-- ✅ Expose custom actions via AccessibilityNodeInfo
-- ✅ Implement performAccessibilityAction()
-- ✅ Provide clear action labels
+-  Expose custom actions via AccessibilityNodeInfo
+-  Implement performAccessibilityAction()
+-  Provide clear action labels
 
 **Visual:**
-- ✅ 4.5:1 minimum contrast ratio (WCAG AA)
-- ✅ Don't rely on color alone
-- ✅ Provide text alternatives for icons
-- ✅ Support dynamic text sizing
+-  4.5:1 minimum contrast ratio (WCAG AA)
+-  Don't rely on color alone
+-  Provide text alternatives for icons
+-  Support dynamic text sizing
 
 ---
 
 ### 12. Common Mistakes
 
-**❌ Missing content description:**
+** Missing content description:**
 ```kotlin
 // Bad - no description
 val icon = IconView(context)
 ```
 
-**✅ With content description:**
+** With content description:**
 ```kotlin
 val icon = IconView(context).apply {
     contentDescription = "Settings"
 }
 ```
 
-**❌ Redundant information:**
+** Redundant information:**
 ```kotlin
 contentDescription = "Save button button" // "button" is redundant
 ```
 
-**✅ Concise description:**
+** Concise description:**
 ```kotlin
 contentDescription = "Save"
 ```
 
-**❌ Not announcing changes:**
+** Not announcing changes:**
 ```kotlin
 fun updateProgress(value: Int) {
     progress = value // Silent change
 }
 ```
 
-**✅ Announcing changes:**
+** Announcing changes:**
 ```kotlin
 fun updateProgress(value: Int) {
     progress = value
@@ -746,12 +746,12 @@ override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo) {
 
 ### Checklist доступности
 
-- ✅ Предоставить осмысленные content descriptions
-- ✅ Сделать интерактивные элементы focusable
-- ✅ Объявлять изменения состояния
-- ✅ Минимальный размер касания 48dp × 48dp
-- ✅ Минимальный контраст 4.5:1
-- ✅ Поддержка клавиатурной навигации
+-  Предоставить осмысленные content descriptions
+-  Сделать интерактивные элементы focusable
+-  Объявлять изменения состояния
+-  Минимальный размер касания 48dp × 48dp
+-  Минимальный контраст 4.5:1
+-  Поддержка клавиатурной навигации
 
 ### Тестирование
 
@@ -759,3 +759,21 @@ override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo) {
 - Автоматизированное тестирование с Espresso
 - Приложение Accessibility Scanner
 - Реальные пользователи с ограниченными возможностями
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Related (Medium)
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-accessibility-compose--accessibility--medium]] - Accessibility
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- [[q-what-is-viewmodel--android--medium]] - View
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

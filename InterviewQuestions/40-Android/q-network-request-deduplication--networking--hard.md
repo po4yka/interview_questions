@@ -1151,3 +1151,15 @@ class OptimizedUserRepository(
 - Debouncing для пользовательского ввода
 - Throttling для частых событий
 - LRU кеширование с TTL
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+
+### Related (Hard)
+- [[q-data-sync-unstable-network--android--hard]] - Networking

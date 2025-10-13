@@ -282,3 +282,19 @@ API планирования задач - более гибкий вариант
 - [Kotlin Coroutines](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Kotlin/What%20are%20coroutines.md)
 - [WorkManager](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What's%20WorkManager.md)
 - [Foreground Services](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20Foreground%20Services.md)
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
+
+### Related (Medium)
+- [[q-dagger-build-time-optimization--android--medium]] - Ui
+- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
+- [[q-build-optimization-gradle--gradle--medium]] - Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
+- [[q-testing-compose-ui--android--medium]] - Ui

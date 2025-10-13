@@ -43,7 +43,7 @@ Exception handling in Flows is crucial for building robust applications. Kotlin 
 Flow follows the **exception transparency** principle: exceptions can only be caught downstream, not upstream of where they occur.
 
 ```kotlin
-// ❌ Wrong: catch cannot handle upstream exceptions
+//  Wrong: catch cannot handle upstream exceptions
 flow {
     emit(1)
     throw Exception("Error in flow")
@@ -51,7 +51,7 @@ flow {
 .catch { /* This catches the exception */ }
 .map { it * 2 } // If exception here, catch above won't handle it
 
-// ✅ Correct: catch handles exceptions from upstream
+//  Correct: catch handles exceptions from upstream
 flow {
     emit(1)
     throw Exception("Error in flow")
@@ -542,10 +542,10 @@ class UserViewModel : ViewModel() {
 
 1. **Always use catch for critical flows**:
    ```kotlin
-   // ❌ Unhandled exception crashes app
+   //  Unhandled exception crashes app
    flow { emit(api.getData()) }.collect()
 
-   // ✅ Graceful error handling
+   //  Graceful error handling
    flow { emit(api.getData()) }
        .catch { emit(defaultData) }
        .collect()
@@ -553,7 +553,7 @@ class UserViewModel : ViewModel() {
 
 2. **Place catch after all transformations**:
    ```kotlin
-   // ✅ Catches all upstream exceptions
+   //  Catches all upstream exceptions
    flow { }
        .map { }
        .filter { }
@@ -563,11 +563,11 @@ class UserViewModel : ViewModel() {
 
 3. **Don't catch in collect block**:
    ```kotlin
-   // ❌ Wrong: catch doesn't handle this
+   //  Wrong: catch doesn't handle this
    .catch { }
    .collect { throw Exception() }
 
-   // ✅ Correct: handle in onEach
+   //  Correct: handle in onEach
    .onEach { if (invalid) throw Exception() }
    .catch { }
    .collect()
@@ -592,11 +592,11 @@ class UserViewModel : ViewModel() {
 
 1. **Catching exceptions in collect**:
    ```kotlin
-   // ❌ catch operator won't handle this
+   //  catch operator won't handle this
    .catch { emit(default) }
    .collect { throw Exception() }
 
-   // ✅ Use onEach instead
+   //  Use onEach instead
    .onEach { if (error) throw Exception() }
    .catch { emit(default) }
    .collect()
@@ -604,28 +604,28 @@ class UserViewModel : ViewModel() {
 
 2. **Infinite retry**:
    ```kotlin
-   // ❌ Will retry forever
+   //  Will retry forever
    .retry { true }
 
-   // ✅ Limit retries
+   //  Limit retries
    .retry(3) { it is IOException }
    ```
 
 3. **Not considering error types**:
    ```kotlin
-   // ❌ Retries even on auth errors
+   //  Retries even on auth errors
    .retry(5)
 
-   // ✅ Only retry recoverable errors
+   //  Only retry recoverable errors
    .retry(5) { it is IOException }
    ```
 
 4. **Missing timeout**:
    ```kotlin
-   // ❌ Can hang forever
+   //  Can hang forever
    .retry(3)
 
-   // ✅ Add timeout
+   //  Add timeout
    .timeout(30.seconds)
    .retry(3)
    ```
@@ -641,7 +641,7 @@ class UserViewModel : ViewModel() {
 Flow следует принципу **прозрачности исключений**: исключения можно поймать только ниже по потоку, а не выше места их возникновения.
 
 ```kotlin
-// ❌ Неправильно: catch не может обработать исключения выше по потоку
+//  Неправильно: catch не может обработать исключения выше по потоку
 flow {
     emit(1)
     throw Exception("Ошибка")
@@ -649,7 +649,7 @@ flow {
 .catch { /* Это ловит исключение */ }
 .map { it * 2 } // Если исключение здесь, catch выше не обработает
 
-// ✅ Правильно
+//  Правильно
 flow { emit(1) }
 .map { it * 2 }
 .catch { /* Это ловит исключения из flow и map */ }
@@ -895,10 +895,10 @@ fun <T> Flow<T>.withRobustErrorHandling(
 
 1. **Всегда используйте catch для критичных потоков**:
    ```kotlin
-   // ❌ Необработанное исключение крашит приложение
+   //  Необработанное исключение крашит приложение
    flow { emit(api.getData()) }.collect()
 
-   // ✅ Изящная обработка ошибок
+   //  Изящная обработка ошибок
    flow { emit(api.getData()) }
        .catch { emit(defaultData) }
        .collect()
@@ -931,11 +931,11 @@ fun <T> Flow<T>.withRobustErrorHandling(
 
 1. **Ловля исключений в collect**:
    ```kotlin
-   // ❌ catch не обработает это
+   //  catch не обработает это
    .catch { emit(default) }
    .collect { throw Exception() }
 
-   // ✅ Используйте onEach
+   //  Используйте onEach
    .onEach { if (error) throw Exception() }
    .catch { emit(default) }
    .collect()
@@ -943,19 +943,19 @@ fun <T> Flow<T>.withRobustErrorHandling(
 
 2. **Бесконечный retry**:
    ```kotlin
-   // ❌ Будет повторять вечно
+   //  Будет повторять вечно
    .retry { true }
 
-   // ✅ Ограничьте повторы
+   //  Ограничьте повторы
    .retry(3) { it is IOException }
    ```
 
 3. **Отсутствие timeout**:
    ```kotlin
-   // ❌ Может зависнуть навсегда
+   //  Может зависнуть навсегда
    .retry(3)
 
-   // ✅ Добавьте timeout
+   //  Добавьте timeout
    .timeout(30.seconds).retry(3)
    ```
 

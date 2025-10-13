@@ -38,13 +38,13 @@ Application Layer:
 DEX Bytecode (.dex files)
   ↓
 ART Runtime Components:
-  ├─ Class Loader
-  ├─ Bytecode Verifier
-  ├─ Interpreter
-  ├─ JIT Compiler
-  ├─ AOT Compiler (dex2oat)
-  ├─ Garbage Collector
-  └─ Memory Manager
+   Class Loader
+   Bytecode Verifier
+   Interpreter
+   JIT Compiler
+   AOT Compiler (dex2oat)
+   Garbage Collector
+   Memory Manager
   ↓
 Native Code Execution
   ↓
@@ -83,17 +83,17 @@ method public add(II)I
 
 ```
 DEX File Format:
-├─ Header
-├─ String IDs (string pool)
-├─ Type IDs (types/classes)
-├─ Proto IDs (method prototypes)
-├─ Field IDs
-├─ Method IDs
-├─ Class Definitions
-├─ Call Site IDs (Android 8+)
-├─ Method Handles (Android 8+)
-├─ Data Section
-└─ Link Data
+ Header
+ String IDs (string pool)
+ Type IDs (types/classes)
+ Proto IDs (method prototypes)
+ Field IDs
+ Method IDs
+ Class Definitions
+ Call Site IDs (Android 8+)
+ Method Handles (Android 8+)
+ Data Section
+ Link Data
 ```
 
 #### 3. **Class Loading Process**
@@ -253,22 +253,22 @@ Install APK
 Extract DEX files
   ↓
 dex2oat compiler
-  ├─ Parse DEX
-  ├─ Build compiler IR
-  ├─ Optimize (if profile available)
-  ├─ Generate machine code
-  └─ Create OAT file
+   Parse DEX
+   Build compiler IR
+   Optimize (if profile available)
+   Generate machine code
+   Create OAT file
   ↓
 Store OAT file (/data/app/.../oat/)
 
 // OAT file format:
 OAT File:
-├─ OAT Header
-├─ DEX files (embedded)
-├─ OAT DEX files (metadata)
-├─ Native code (compiled methods)
-├─ QuickInfo (method offsets)
-└─ Bitmap (compilation status)
+ OAT Header
+ DEX files (embedded)
+ OAT DEX files (metadata)
+ Native code (compiled methods)
+ QuickInfo (method offsets)
+ Bitmap (compilation status)
 
 // Compilation modes:
 enum class CompilationFilter {

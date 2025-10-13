@@ -24,9 +24,9 @@ Handler и Looper — это фундаментальные компоненты
 
 ```
 Thread
-  └── Looper
-      └── MessageQueue
-          └── Message / Runnable
+   Looper
+       MessageQueue
+           Message / Runnable
 
 Handler (отправляет) → MessageQueue (хранит) → Looper (обрабатывает)
 ```
@@ -363,7 +363,7 @@ val msg3 = Message.obtain(handler, MSG_DATA, data)  // С данными
 
 // ВАЖНО: Не создавать через конструктор!
 // val wrong = Message()  // НЕПРАВИЛЬНО
-// val correct = Message.obtain()  // ✓ ПРАВИЛЬНО
+// val correct = Message.obtain()  //  ПРАВИЛЬНО
 ```
 
 ### 7. Управление очередью сообщений
@@ -483,7 +483,7 @@ class LeakyActivity : AppCompatActivity() {
     }
 }
 
-// ✓ ПРАВИЛЬНО - static Handler + WeakReference
+//  ПРАВИЛЬНО - static Handler + WeakReference
 class SafeActivity : AppCompatActivity() {
 
     private val handler = SafeHandler(this)
@@ -524,7 +524,7 @@ class SafeActivity : AppCompatActivity() {
     }
 }
 
-// ✓ АЛЬТЕРНАТИВА - Lifecycle-aware подход
+//  АЛЬТЕРНАТИВА - Lifecycle-aware подход
 class ModernActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 

@@ -283,3 +283,14 @@ class MyActivity : AppCompatActivity() {
 ## Ответ (RU)
 Навигация в Android осуществляется несколькими способами, в зависимости от версии системы и используемых приложений. Основные методы включают жесты (свайпы, тапы), нажатия на экранные кнопки (на старых версиях), а также использование виртуальных или физических кнопок навигации (Домой, Назад, Последние приложения). Более современные версии Android полагаются преимущественно на жесты для навигации между приложениями и внутри них.
 
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation
+- [[q-compose-navigation-advanced--android--medium]] - Navigation
+- [[q-activity-navigation-how-it-works--android--medium]] - Navigation
+- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation
+- [[q-what-navigation-methods-do-you-know--android--medium]] - Navigation

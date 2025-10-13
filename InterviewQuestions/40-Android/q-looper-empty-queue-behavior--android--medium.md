@@ -215,35 +215,35 @@ println("Thread state: ${looperThread.state}")
 ### 1. Queue is Empty
 
 ```
-┌─────────────────────────┐
-│ Looper.loop()           │
-│   ↓                     │
-│ MessageQueue.next()     │
-│   ↓                     │
-│ nativePollOnce()        │ ← Thread BLOCKS here
-│   (waiting...)          │    (epoll_wait in native code)
-└─────────────────────────┘
+
+ Looper.loop()           
+   ↓                     
+ MessageQueue.next()     
+   ↓                     
+ nativePollOnce()         ← Thread BLOCKS here
+   (waiting...)              (epoll_wait in native code)
+
 ```
 
 ### 2. Message Arrives
 
 ```
-┌─────────────────────────┐
-│ Handler.sendMessage()   │ ← From any thread
-│   ↓                     │
-│ MessageQueue.enqueue()  │
-│   ↓                     │
-│ nativeWake()            │ ← Wakes up Looper thread
-└─────────────────────────┘
 
-┌─────────────────────────┐
-│ nativePollOnce() WAKES  │
-│   ↓                     │
-│ MessageQueue.next()     │
-│   returns Message       │
-│   ↓                     │
-│ Handler.dispatchMessage │ ← Process message
-└─────────────────────────┘
+ Handler.sendMessage()    ← From any thread
+   ↓                     
+ MessageQueue.enqueue()  
+   ↓                     
+ nativeWake()             ← Wakes up Looper thread
+
+
+
+ nativePollOnce() WAKES  
+   ↓                     
+ MessageQueue.next()     
+   returns Message       
+   ↓                     
+ Handler.dispatchMessage  ← Process message
+
 ```
 
 ---

@@ -379,14 +379,14 @@ class ResponsiveShotTest {
 
 | Feature | Paparazzi | Shot |
 |---------|-----------|------|
-| **Speed** | ⚡ Fast (JVM) | 🐌 Slow (Device) |
-| **Setup** | ✅ Simple | ⚠️ Requires device |
-| **CI** | ✅ No emulator needed | ⚠️ Needs emulator |
-| **Accuracy** | ⚠️ Simulated rendering | ✅ Real device rendering |
-| **Compose** | ✅ Full support | ✅ Full support |
-| **Views** | ✅ Supported | ✅ Supported |
-| **Animations** | ❌ Limited | ✅ Full support |
-| **Hardware** | ❌ No real hardware | ✅ Real hardware |
+| **Speed** |  Fast (JVM) |  Slow (Device) |
+| **Setup** |  Simple |  Requires device |
+| **CI** |  No emulator needed |  Needs emulator |
+| **Accuracy** |  Simulated rendering |  Real device rendering |
+| **Compose** |  Full support |  Full support |
+| **Views** |  Supported |  Supported |
+| **Animations** |  Limited |  Full support |
+| **Hardware** |  No real hardware |  Real hardware |
 
 ---
 
@@ -491,7 +491,7 @@ class UserProfileScreenshotSuite {
 **Problem: Non-deterministic rendering**
 
 ```kotlin
-// ❌ BAD: Animations cause different screenshots
+//  BAD: Animations cause different screenshots
 @Test
 fun animatedButton() {
     paparazzi.snapshot {
@@ -499,7 +499,7 @@ fun animatedButton() {
     }
 }
 
-// ✅ GOOD: Disable animations
+//  GOOD: Disable animations
 @Test
 fun animatedButton() {
     paparazzi.snapshot {
@@ -515,7 +515,7 @@ fun animatedButton() {
 **Problem: Timestamps/dynamic content**
 
 ```kotlin
-// ❌ BAD: Timestamp changes every time
+//  BAD: Timestamp changes every time
 @Test
 fun messageView() {
     paparazzi.snapshot {
@@ -526,7 +526,7 @@ fun messageView() {
     }
 }
 
-// ✅ GOOD: Fixed timestamp
+//  GOOD: Fixed timestamp
 @Test
 fun messageView() {
     paparazzi.snapshot {
@@ -579,7 +579,7 @@ jobs:
 **1. Test critical UI components:**
 
 ```kotlin
-// ✅ DO: Test reusable components
+//  DO: Test reusable components
 @Test fun testButton()
 @Test fun testCard()
 @Test fun testNavigationBar()
@@ -588,7 +588,7 @@ jobs:
 **2. Test multiple states:**
 
 ```kotlin
-// ✅ DO: Test all states
+//  DO: Test all states
 @Test fun loading()
 @Test fun success()
 @Test fun error()
@@ -598,18 +598,18 @@ jobs:
 **3. Use descriptive names:**
 
 ```kotlin
-// ✅ DO: Clear names
+//  DO: Clear names
 paparazzi.snapshot("user_profile_light_phone_portrait") { }
 
-// ❌ DON'T: Vague names
+//  DON'T: Vague names
 paparazzi.snapshot("test1") { }
 ```
 
 **4. Keep tests fast:**
 
 ```kotlin
-// ✅ DO: Use Paparazzi for most tests
-// ⚠️ DO: Use Shot only for critical flows
+//  DO: Use Paparazzi for most tests
+//  DO: Use Shot only for critical flows
 ```
 
 ---
@@ -656,3 +656,17 @@ paparazzi.snapshot("test1") { }
 4. Держите тесты быстрыми (предпочитайте Paparazzi)
 
 Screenshot тестирование предотвращает визуальные регрессии и поддерживает консистентность UI.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing
+- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+- [[q-fakes-vs-mocks-testing--testing--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-coroutines-flow--testing--hard]] - Testing

@@ -1138,3 +1138,21 @@ suspend fun insertUsersGood(users: List<User>) {
 - **Производительность**: В 25-100 раз быстрее отдельных операций
 
 Всегда используйте транзакции для операций, которые должны поддерживать согласованность между несколькими таблицами или записями.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-room-library-definition--android--easy]] - Storage
+
+### Related (Medium)
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-paging3-integration--room--medium]] - Storage
+- [[q-room-type-converters-advanced--room--medium]] - Storage
+- [[q-room-vs-sqlite--android--medium]] - Storage
+- [[q-room-type-converters--android--medium]] - Storage
+
+### Advanced (Harder)
+- [[q-room-fts-full-text-search--room--hard]] - Storage

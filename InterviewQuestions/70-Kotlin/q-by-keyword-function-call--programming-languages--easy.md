@@ -342,26 +342,26 @@ class DelegationSummary {
 ### Что работает с `by`
 
 ```kotlin
-// ✓ РАБОТАЕТ: Вызов функции, возвращающей делегат
+//  РАБОТАЕТ: Вызов функции, возвращающей делегат
 val value1: String by lazy { "value" }
 
-// ✓ РАБОТАЕТ: Ссылка на свойство
+//  РАБОТАЕТ: Ссылка на свойство
 private val backingList = mutableListOf<String>()
 val list: List<String> by backingList
 
-// ✓ РАБОТАЕТ: Вызов функции со встроенной фабрикой делегатов
+//  РАБОТАЕТ: Вызов функции со встроенной фабрикой делегатов
 var observed: String by Delegates.observable("") { _, _, _ -> }
 
-// ✓ РАБОТАЕТ: Вызов конструктора, возвращающего делегат
+//  РАБОТАЕТ: Вызов конструктора, возвращающего делегат
 var logged: String by LoggingDelegate("initial")
 
-// ✓ РАБОТАЕТ: Вызов функции, возвращающей делегат
+//  РАБОТАЕТ: Вызов функции, возвращающей делегат
 private fun getDelegate() = lazy { "value" }
 val value2: String by getDelegate()
 
-// ✗ НЕ РАБОТАЕТ: Вызов функции, не возвращающей делегат
+//  НЕ РАБОТАЕТ: Вызов функции, не возвращающей делегат
 // val value3: String by someFunction()  // ОШИБКА, если someFunction() возвращает String
 
-// ✗ НЕ РАБОТАЕТ: Выражение, не возвращающее делегат
+//  НЕ РАБОТАЕТ: Выражение, не возвращающее делегат
 // val value4: String by "string".uppercase()  // ОШИБКА - String не является делегатом
 ```

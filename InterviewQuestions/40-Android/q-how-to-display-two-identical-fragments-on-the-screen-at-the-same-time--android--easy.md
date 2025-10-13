@@ -405,3 +405,16 @@ class CounterFragment : Fragment() {
 ## Ответ (RU)
 Чтобы одновременно отобразить два одинаковых фрагмента на одном экране в Android-приложении, вам нужно добавить два экземпляра фрагмента в разные контейнеры в макете активности. В этом случае каждый фрагмент будет работать независимо, даже если они используют один и тот же класс. 1. Создайте макет для активности который будет содержать два контейнера для фрагментов. Обычно это делается с помощью FrameLayout или LinearLayout. 2. Создайте класс фрагмента который будет использоваться для отображения обоих экземпляров. 3. Добавьте фрагменты в активность Теперь добавьте два экземпляра фрагмента в вашу активность. 4. Создайте макет для фрагмента Это может быть любой макет, который вы хотите использовать.
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment
+- [[q-fragment-basics--android--easy]] - Fragment
+
+### Advanced (Harder)
+- [[q-save-data-outside-fragment--android--medium]] - Fragment
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Fragment
+- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Fragment

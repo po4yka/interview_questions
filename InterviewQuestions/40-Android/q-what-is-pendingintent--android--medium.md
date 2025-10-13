@@ -439,3 +439,23 @@ fun cancelPendingIntent(context: Context) {
 ## Ответ (RU)
 
 PendingIntent — это обёртка над Intent, позволяющая другим компонентам выполнить Intent от имени вашего приложения даже если оно сейчас не активно. Используется в уведомлениях, для запуска BroadcastReceiver или Service и в AlarmManager.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Fundamentals
+- [[q-what-unifies-android-components--android--easy]] - Fundamentals
+
+### Related (Medium)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-chto-takoe-pendingintent--programming-languages--medium]] - Fundamentals
+- [[q-intent-filters-android--android--medium]] - Fundamentals
+- [[q-anr-application-not-responding--android--medium]] - Fundamentals
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Fundamentals
+- [[q-kotlin-context-receivers--kotlin--hard]] - Fundamentals

@@ -47,8 +47,8 @@ class FormActivity : AppCompatActivity() {
         }
     }
 
-    // 📱 Device rotated
-    // 🔄 onCreate() called again
+    //  Device rotated
+    //  onCreate() called again
     // - userInput = "" (lost)
     // - selectedItemPosition = 0 (lost)
 }

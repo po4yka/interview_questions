@@ -105,3 +105,31 @@ Fragments offer flexibility in organizing and reusing UI parts in Android applic
 ## Ответ (RU)
 Фрагменты (Fragments) представляют собой модульные части пользовательского интерфейса в Activity которые имеют собственный жизненный цикл получают собственные входящие события и могут быть добавлены или удалены при выполнении активности Например в рамках работы с динамическим интерфейсом Несмотря на то что Activity может выполнять большинство задач по взаимодействию с пользователем использование фрагментов предоставляет несколько важных преимуществ 1 Модульность Фрагменты позволяют разбить сложный пользовательский интерфейс на управляемые части что облегчает разработку и поддержку Каждый фрагмент может быть разработан и оттестирован независимо от других а затем комбинироваться в различных комбинациях для создания адаптивного интерфейса приложения 2 Переиспользование компонентов Фрагменты можно использовать в нескольких активностях что способствует повторному использованию кода Например фрагмент с формой для ввода может использоваться как в Activity для создания нового объекта так и для его редактирования 3 Адаптивный интерфейс Использование фрагментов упрощает создание адаптивных интерфейсов которые корректно работают на устройствах с различными размерами экранов и ориентациями Например на планшетах можно одновременно отображать несколько фрагментов в то время как на смартфонах отображать их поочерёдно 4 Управление жизненным циклом Фрагменты имеют собственный жизненный цикл но при этом тесно связаны с жизненным циклом хост-Activity Это позволяет управлять поведением фрагментов в зависимости от состояния активности обеспечивая эффективное управление ресурсами 5 Упрощение обработки взаимодействий Фрагменты могут взаимодействовать друг с другом через Activity что позволяет организовать обмен данными и событиями между различными частями пользовательского интерфейса без необходимости создавать сложные механизмы взаимодействия 6 Поддержка динамических и гибких интерфейсов Фрагменты можно добавлять удалять заменять и выполнять с ними другие действия во время выполнения активности что позволяет создавать динамические и гибкие пользовательские интерфейсы адаптирующиеся к действиям пользователя Фрагменты предлагают гибкость в организации и повторном использовании частей пользовательского интерфейса в Android-приложениях позволяя создавать модульные адаптивные и эффективно управляемые интерфейсы что делает их незаменимыми даже в присутствии Activity
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity, Fragment
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Activity, Fragment
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+
+### Related (Hard)
+- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
+- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] - Activity, Fragment
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity, Fragment
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Activity, Fragment
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+
+### Related (Hard)
+- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
+- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] - Activity, Fragment
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment

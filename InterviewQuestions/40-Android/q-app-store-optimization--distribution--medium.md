@@ -36,64 +36,64 @@ App Store Optimization (ASO) is critical for app discovery and conversion in Goo
     <!-- Structure: Hook → Features → Benefits → Call to Action -->
     <string name="play_store_full_description">
         <![CDATA[
-🚀 TaskFlow - The Ultimate Productivity App
+ TaskFlow - The Ultimate Productivity App
 
 Transform the way you manage tasks and projects with TaskFlow, the intuitive task manager designed for professionals and teams.
 
-✨ KEY FEATURES
+ KEY FEATURES
 
-📋 Smart Task Management
+ Smart Task Management
 • Create tasks with subtasks, priorities, and deadlines
 • Organize with custom tags and categories
 • Quick task capture with voice input
 • Recurring tasks and reminders
 
-👥 Team Collaboration
+ Team Collaboration
 • Share projects with team members
 • Assign tasks and track progress
 • Real-time sync across devices
 • Comment and attach files
 
-📊 Productivity Analytics
+ Productivity Analytics
 • Track time spent on tasks
 • Visualize productivity trends
 • Generate weekly reports
 • Set and achieve goals
 
-🎨 Customization
+ Customization
 • Multiple themes (Light, Dark, AMOLED)
 • Flexible widgets
 • Custom notification sounds
 • Personalized productivity tips
 
-🔒 Privacy & Security
+ Privacy & Security
 • End-to-end encryption
 • Offline mode
 • Biometric lock
 • No ads, ever
 
-💎 PREMIUM FEATURES
+ PREMIUM FEATURES
 • Unlimited projects
 • Advanced analytics
 • Priority support
 • Cloud backup
 
-🌟 WHY TASKFLOW?
+ WHY TASKFLOW?
 
-✓ Beautiful Material Design 3 interface
-✓ Lightning-fast performance
-✓ Works offline
-✓ Regular updates and new features
-✓ Privacy-focused (no data selling)
+ Beautiful Material Design 3 interface
+ Lightning-fast performance
+ Works offline
+ Regular updates and new features
+ Privacy-focused (no data selling)
 
-📱 Perfect for:
+ Perfect for:
 • Busy professionals
 • Students
 • Freelancers
 • Project managers
 • Anyone who wants to get more done
 
-🆓 Download TaskFlow now and start your productivity journey!
+ Download TaskFlow now and start your productivity journey!
 
 Premium subscription details:
 • Monthly: $4.99
@@ -483,9 +483,9 @@ enum class StoreLanguage(
     ITALIAN("it-IT", "Italiano (Italia)", MarketSize.MEDIUM),
     PORTUGUESE_BR("pt-BR", "Português (Brasil)", MarketSize.LARGE),
     RUSSIAN("ru-RU", "Русский (Россия)", MarketSize.LARGE),
-    JAPANESE("ja-JP", "日本語 (日本)", MarketSize.LARGE),
-    KOREAN("ko-KR", "한국어 (대한민국)", MarketSize.MEDIUM),
-    CHINESE_SIMPLIFIED("zh-CN", "简体中文 (中国)", MarketSize.LARGE),
+    JAPANESE("ja-JP", " ()", MarketSize.LARGE),
+    KOREAN("ko-KR", " ()", MarketSize.MEDIUM),
+    CHINESE_SIMPLIFIED("zh-CN", " ()", MarketSize.LARGE),
     HINDI("hi-IN", "हिन्दी (भारत)", MarketSize.LARGE),
     ARABIC("ar", "العربية", MarketSize.MEDIUM)
 }
@@ -498,25 +498,25 @@ enum class MarketSize { SMALL, MEDIUM, LARGE }
     <string name="play_store_short_desc">Управляйте задачами, повышайте продуктивность</string>
     <string name="play_store_full_description">
         <![CDATA[
-🚀 TaskFlow - Лучший менеджер задач
+ TaskFlow - Лучший менеджер задач
 
 Измените подход к управлению задачами с TaskFlow - интуитивным приложением для профессионалов и команд.
 
-✨ ОСНОВНЫЕ ФУНКЦИИ
+ ОСНОВНЫЕ ФУНКЦИИ
 
-📋 Умное управление задачами
+ Умное управление задачами
 • Создавайте задачи с подзадачами и приоритетами
 • Организуйте с помощью тегов и категорий
 • Быстрое создание задач голосом
 • Повторяющиеся задачи и напоминания
 
-👥 Командная работа
+ Командная работа
 • Делитесь проектами с коллегами
 • Назначайте задачи и отслеживайте прогресс
 • Синхронизация в реальном времени
 • Комментарии и файлы
 
-📊 Аналитика продуктивности
+ Аналитика продуктивности
 • Отслеживайте время на задачи
 • Визуализируйте тренды
 • Еженедельные отчеты
@@ -996,3 +996,19 @@ ASO требует постоянной оптимизации:
 - **Итерация**: Регулярные обновления на основе метрик
 
 Ключевые моменты: исследование ключевых слов, качество визуалов, культурная адаптация, решения на основе данных.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-dagger-build-time-optimization--android--medium]] - Performance
+- [[q-performance-optimization-android--android--medium]] - Performance
+- [[q-android-build-optimization--android--medium]] - Performance
+- [[q-build-optimization-gradle--gradle--medium]] - Performance
+- [[q-app-startup-optimization--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Performance
+- [[q-canvas-drawing-optimization--custom-views--hard]] - Performance
+- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - Performance

@@ -535,13 +535,13 @@ class NotificationManager @Inject constructor(
 
 1. **Prefer Standard Injection**
    ```kotlin
-   // ✅ GOOD - Use standard injection when possible
+   //  GOOD - Use standard injection when possible
    @AndroidEntryPoint
    class MyActivity : AppCompatActivity() {
        @Inject lateinit var repository: Repository
    }
 
-   // ❌ AVOID - Don't use Entry Points unnecessarily
+   //  AVOID - Don't use Entry Points unnecessarily
    class MyActivity : AppCompatActivity() {
        private lateinit var repository: Repository
 
@@ -555,7 +555,7 @@ class NotificationManager @Inject constructor(
 
 2. **Minimize Entry Point Surface**
    ```kotlin
-   // ✅ GOOD - Specific, minimal interface
+   //  GOOD - Specific, minimal interface
    @EntryPoint
    @InstallIn(SingletonComponent::class)
    interface WorkerEntryPoint {
@@ -563,7 +563,7 @@ class NotificationManager @Inject constructor(
        fun database(): AppDatabase
    }
 
-   // ❌ BAD - Exposing too many dependencies
+   //  BAD - Exposing too many dependencies
    @EntryPoint
    @InstallIn(SingletonComponent::class)
    interface GodEntryPoint {
@@ -579,7 +579,7 @@ class NotificationManager @Inject constructor(
 
 3. **Cache Entry Point Access**
    ```kotlin
-   // ✅ GOOD - Cache the dependency, not the accessor
+   //  GOOD - Cache the dependency, not the accessor
    class MyContentProvider : ContentProvider() {
        private val repository: Repository by lazy {
            val entryPoint = EntryPointAccessors.fromApplication(
@@ -595,7 +595,7 @@ class NotificationManager @Inject constructor(
        }
    }
 
-   // ❌ BAD - Repeated accessor calls
+   //  BAD - Repeated accessor calls
    class MyContentProvider : ContentProvider() {
        override fun query(...): Cursor? {
            val entryPoint = EntryPointAccessors.fromApplication(
@@ -610,21 +610,21 @@ class NotificationManager @Inject constructor(
 
 4. **Use Appropriate Component Scope**
    ```kotlin
-   // ✅ GOOD - SingletonComponent for app-wide dependencies
+   //  GOOD - SingletonComponent for app-wide dependencies
    @EntryPoint
    @InstallIn(SingletonComponent::class)
    interface AppEntryPoint {
        fun database(): AppDatabase
    }
 
-   // ✅ GOOD - ActivityComponent for activity-scoped dependencies
+   //  GOOD - ActivityComponent for activity-scoped dependencies
    @EntryPoint
    @InstallIn(ActivityComponent::class)
    interface ActivityEntryPoint {
        fun activityTracker(): ActivityTracker
    }
 
-   // ❌ BAD - Wrong scope
+   //  BAD - Wrong scope
    @EntryPoint
    @InstallIn(ActivityComponent::class) // Activity scope!
    interface BadEntryPoint {
@@ -634,7 +634,7 @@ class NotificationManager @Inject constructor(
 
 5. **Error Handling**
    ```kotlin
-   // ✅ GOOD - Handle potential errors
+   //  GOOD - Handle potential errors
    class MyContentProvider : ContentProvider() {
        private val repository: Repository? by lazy {
            try {
@@ -663,7 +663,7 @@ class NotificationManager @Inject constructor(
 
 1. **Using Entry Points in Hilt-Managed Classes**
    ```kotlin
-   // ❌ BAD - Activity already supports @Inject
+   //  BAD - Activity already supports @Inject
    @AndroidEntryPoint
    class MyActivity : AppCompatActivity() {
        private lateinit var repository: Repository
@@ -675,7 +675,7 @@ class NotificationManager @Inject constructor(
        }
    }
 
-   // ✅ GOOD - Use standard injection
+   //  GOOD - Use standard injection
    @AndroidEntryPoint
    class MyActivity : AppCompatActivity() {
        @Inject lateinit var repository: Repository
@@ -684,7 +684,7 @@ class NotificationManager @Inject constructor(
 
 2. **Incorrect Component Scope**
    ```kotlin
-   // ❌ BAD - ContentProvider needs SingletonComponent
+   //  BAD - ContentProvider needs SingletonComponent
    @EntryPoint
    @InstallIn(ActivityComponent::class) // Wrong!
    interface MyEntryPoint {
@@ -702,7 +702,7 @@ class NotificationManager @Inject constructor(
        }
    }
 
-   // ✅ GOOD
+   //  GOOD
    @EntryPoint
    @InstallIn(SingletonComponent::class)
    interface MyEntryPoint {
@@ -712,7 +712,7 @@ class NotificationManager @Inject constructor(
 
 3. **Memory Leaks with Wrong Scope**
    ```kotlin
-   // ❌ BAD - Leaking Activity reference
+   //  BAD - Leaking Activity reference
    @EntryPoint
    @InstallIn(ActivityComponent::class)
    interface ActivityEntryPoint {
@@ -733,7 +733,7 @@ class NotificationManager @Inject constructor(
        }
    }
 
-   // ✅ GOOD - Use appropriate scope
+   //  GOOD - Use appropriate scope
    @EntryPoint
    @InstallIn(SingletonComponent::class)
    interface ServiceEntryPoint {
@@ -794,17 +794,17 @@ class ContentProviderTest {
 **Hilt Entry Points** are interfaces that provide access to Hilt dependencies in classes where automatic injection isn't possible:
 
 **When to use**:
-- ✅ Content Providers
-- ✅ WorkManager Workers (before Hilt 2.31)
-- ✅ Firebase Services
-- ✅ Third-party library initialization
-- ✅ Custom views with complex inflation
-- ✅ Multi-process components
+-  Content Providers
+-  WorkManager Workers (before Hilt 2.31)
+-  Firebase Services
+-  Third-party library initialization
+-  Custom views with complex inflation
+-  Multi-process components
 
 **When NOT to use**:
-- ❌ Activities, Fragments, Services (use `@AndroidEntryPoint`)
-- ❌ ViewModels (use `@HiltViewModel`)
-- ❌ Any Hilt-managed class
+-  Activities, Fragments, Services (use `@AndroidEntryPoint`)
+-  ViewModels (use `@HiltViewModel`)
+-  Any Hilt-managed class
 
 **Key differences from standard injection**:
 - Manual retrieval vs automatic injection
@@ -1332,13 +1332,13 @@ class NotificationManager @Inject constructor(
 
 1. **Предпочитайте стандартную инъекцию**
    ```kotlin
-   // ✅ ХОРОШО — используйте стандартную инъекцию, когда возможно
+   //  ХОРОШО — используйте стандартную инъекцию, когда возможно
    @AndroidEntryPoint
    class MyActivity : AppCompatActivity() {
        @Inject lateinit var repository: Repository
    }
 
-   // ❌ ИЗБЕГАЙТЕ — не используйте Entry Points без необходимости
+   //  ИЗБЕГАЙТЕ — не используйте Entry Points без необходимости
    class MyActivity : AppCompatActivity() {
        private lateinit var repository: Repository
 
@@ -1352,7 +1352,7 @@ class NotificationManager @Inject constructor(
 
 2. **Минимизируйте поверхность Entry Point**
    ```kotlin
-   // ✅ ХОРОШО — конкретный, минимальный интерфейс
+   //  ХОРОШО — конкретный, минимальный интерфейс
    @EntryPoint
    @InstallIn(SingletonComponent::class)
    interface WorkerEntryPoint {
@@ -1360,7 +1360,7 @@ class NotificationManager @Inject constructor(
        fun database(): AppDatabase
    }
 
-   // ❌ ПЛОХО — слишком много зависимостей
+   //  ПЛОХО — слишком много зависимостей
    @EntryPoint
    @InstallIn(SingletonComponent::class)
    interface GodEntryPoint {
@@ -1376,7 +1376,7 @@ class NotificationManager @Inject constructor(
 
 3. **Кешируйте доступ к Entry Point**
    ```kotlin
-   // ✅ ХОРОШО — кешируйте зависимость, а не accessor
+   //  ХОРОШО — кешируйте зависимость, а не accessor
    class MyContentProvider : ContentProvider() {
        private val repository: Repository by lazy {
            val entryPoint = EntryPointAccessors.fromApplication(
@@ -1392,7 +1392,7 @@ class NotificationManager @Inject constructor(
        }
    }
 
-   // ❌ ПЛОХО — повторные вызовы accessor
+   //  ПЛОХО — повторные вызовы accessor
    class MyContentProvider : ContentProvider() {
        override fun query(...): Cursor? {
            val entryPoint = EntryPointAccessors.fromApplication(
@@ -1407,21 +1407,21 @@ class NotificationManager @Inject constructor(
 
 4. **Используйте подходящий scope компонента**
    ```kotlin
-   // ✅ ХОРОШО — SingletonComponent для app-wide зависимостей
+   //  ХОРОШО — SingletonComponent для app-wide зависимостей
    @EntryPoint
    @InstallIn(SingletonComponent::class)
    interface AppEntryPoint {
        fun database(): AppDatabase
    }
 
-   // ✅ ХОРОШО — ActivityComponent для activity-scoped зависимостей
+   //  ХОРОШО — ActivityComponent для activity-scoped зависимостей
    @EntryPoint
    @InstallIn(ActivityComponent::class)
    interface ActivityEntryPoint {
        fun activityTracker(): ActivityTracker
    }
 
-   // ❌ ПЛОХО — неправильный scope
+   //  ПЛОХО — неправильный scope
    @EntryPoint
    @InstallIn(ActivityComponent::class) // Activity scope!
    interface BadEntryPoint {
@@ -1431,7 +1431,7 @@ class NotificationManager @Inject constructor(
 
 5. **Обработка ошибок**
    ```kotlin
-   // ✅ ХОРОШО — обрабатывайте потенциальные ошибки
+   //  ХОРОШО — обрабатывайте потенциальные ошибки
    class MyContentProvider : ContentProvider() {
        private val repository: Repository? by lazy {
            try {
@@ -1460,7 +1460,7 @@ class NotificationManager @Inject constructor(
 
 1. **Использование Entry Points в Hilt-управляемых классах**
    ```kotlin
-   // ❌ ПЛОХО — Activity уже поддерживает @Inject
+   //  ПЛОХО — Activity уже поддерживает @Inject
    @AndroidEntryPoint
    class MyActivity : AppCompatActivity() {
        private lateinit var repository: Repository
@@ -1472,7 +1472,7 @@ class NotificationManager @Inject constructor(
        }
    }
 
-   // ✅ ХОРОШО — используйте стандартную инъекцию
+   //  ХОРОШО — используйте стандартную инъекцию
    @AndroidEntryPoint
    class MyActivity : AppCompatActivity() {
        @Inject lateinit var repository: Repository
@@ -1481,7 +1481,7 @@ class NotificationManager @Inject constructor(
 
 2. **Неправильный scope компонента**
    ```kotlin
-   // ❌ ПЛОХО — ContentProvider нужен SingletonComponent
+   //  ПЛОХО — ContentProvider нужен SingletonComponent
    @EntryPoint
    @InstallIn(ActivityComponent::class) // Неправильно!
    interface MyEntryPoint {
@@ -1499,7 +1499,7 @@ class NotificationManager @Inject constructor(
        }
    }
 
-   // ✅ ХОРОШО
+   //  ХОРОШО
    @EntryPoint
    @InstallIn(SingletonComponent::class)
    interface MyEntryPoint {
@@ -1509,7 +1509,7 @@ class NotificationManager @Inject constructor(
 
 3. **Утечки памяти с неправильным scope**
    ```kotlin
-   // ❌ ПЛОХО — утечка ссылки на Activity
+   //  ПЛОХО — утечка ссылки на Activity
    @EntryPoint
    @InstallIn(ActivityComponent::class)
    interface ActivityEntryPoint {
@@ -1530,7 +1530,7 @@ class NotificationManager @Inject constructor(
        }
    }
 
-   // ✅ ХОРОШО — используйте подходящий scope
+   //  ХОРОШО — используйте подходящий scope
    @EntryPoint
    @InstallIn(SingletonComponent::class)
    interface ServiceEntryPoint {
@@ -1591,17 +1591,17 @@ class ContentProviderTest {
 **Hilt Entry Points** — это интерфейсы, предоставляющие доступ к Hilt-зависимостям в классах, где автоматическая инъекция невозможна:
 
 **Когда использовать**:
-- ✅ Content Provider
-- ✅ WorkManager Worker (до Hilt 2.31)
-- ✅ Firebase Services
-- ✅ Инициализация сторонних библиотек
-- ✅ Кастомные view со сложным надувом
-- ✅ Многопроцессные компоненты
+-  Content Provider
+-  WorkManager Worker (до Hilt 2.31)
+-  Firebase Services
+-  Инициализация сторонних библиотек
+-  Кастомные view со сложным надувом
+-  Многопроцессные компоненты
 
 **Когда НЕ использовать**:
-- ❌ Activity, Fragment, Service (используйте `@AndroidEntryPoint`)
-- ❌ ViewModel (используйте `@HiltViewModel`)
-- ❌ Любой Hilt-управляемый класс
+-  Activity, Fragment, Service (используйте `@AndroidEntryPoint`)
+-  ViewModel (используйте `@HiltViewModel`)
+-  Любой Hilt-управляемый класс
 
 **Ключевые отличия от стандартной инъекции**:
 - Ручное получение vs автоматическая инъекция

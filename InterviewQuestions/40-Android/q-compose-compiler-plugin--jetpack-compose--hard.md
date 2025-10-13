@@ -196,12 +196,12 @@ fun UserCard(
 
 ```
 $changed = 0b00000101
-           ││││││││
-           │││││││└─ bit 0: name changed
-           ││││││└── bit 1: age unchanged
-           │││││└─── bit 2: email changed
-           ││││└──── bit 3-6: reserved
-           │││└───── bit 7: uncertain/default params
+           
+            bit 0: name changed
+            bit 1: age unchanged
+            bit 2: email changed
+            bit 3-6: reserved
+            bit 7: uncertain/default params
 ```
 
 ---
@@ -670,13 +670,13 @@ inline fun InlineComposable(
 **1. Trust the compiler:**
 
 ```kotlin
-// ✅ DO: Let compiler handle parameters
+//  DO: Let compiler handle parameters
 @Composable
 fun MyComposable(data: Data) {
     // Compiler automatically tracks changes
 }
 
-// ❌ DON'T: Manually track changes
+//  DON'T: Manually track changes
 @Composable
 fun MyComposable(data: Data) {
     var cached by remember { mutableStateOf(data) }
@@ -705,14 +705,14 @@ fun NotSkippable(user: User) {
 **3. Use composition locals efficiently:**
 
 ```kotlin
-// ✅ DO: Compiler tracks composition local reads
+//  DO: Compiler tracks composition local reads
 @Composable
 fun UseLocal() {
     val value = LocalValue.current
     Text(value)
 }
 
-// ❌ DON'T: Reading in multiple places
+//  DON'T: Reading in multiple places
 @Composable
 fun IneffcientLocal() {
     Text(LocalValue.current) // Read 1

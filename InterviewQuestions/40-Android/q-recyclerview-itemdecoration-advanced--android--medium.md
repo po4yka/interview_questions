@@ -223,3 +223,33 @@ ItemDecoration обычно используется для:
 - Создания границ визуального группирования
 - Добавления заголовков или разделителей секций
 - Рисования пользовательских декораций или наложений
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
+- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui
+- [[q-recyclerview-diffutil-advanced--recyclerview--medium]] - View, Ui
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
+- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui
+- [[q-recyclerview-diffutil-advanced--recyclerview--medium]] - View, Ui

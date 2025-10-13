@@ -570,17 +570,17 @@ Clean Architecture + MVVM/MVI + Jetpack Compose + Hilt
 
 ```
 app/
-├── di/                  (Dependency Injection - Hilt modules)
-├── data/
-│   ├── local/          (Room, SharedPreferences)
-│   ├── remote/         (Retrofit, APIs)
-│   └── repository/     (Repository implementations)
-├── domain/
-│   ├── model/          (Domain entities)
-│   └── usecase/        (Business logic)
-└── presentation/
-    ├── ui/             (Compose screens or Fragments)
-    └── viewmodel/      (ViewModels)
+ di/                  (Dependency Injection - Hilt modules)
+ data/
+    local/          (Room, SharedPreferences)
+    remote/         (Retrofit, APIs)
+    repository/     (Repository implementations)
+ domain/
+    model/          (Domain entities)
+    usecase/        (Business logic)
+ presentation/
+     ui/             (Compose screens or Fragments)
+     viewmodel/      (ViewModels)
 ```
 
 ### Summary

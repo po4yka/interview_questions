@@ -36,3 +36,15 @@ status: draft
 **Примечание**: Устарел с API 30. Рекомендуется использовать WorkManager или JobIntentService.
 
 **English**: Android service types: **Foreground Service** (user-visible operations with notification), **Background Service** (non-visible operations, restricted since Android 8.0), **Bound Service** (allows component binding and interaction), and **IntentService** (deprecated, use WorkManager instead).
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-android-service-types--android--easy]] - Service
+
+### Advanced (Harder)
+- [[q-service-component--android--medium]] - Service
+- [[q-foreground-service-types--background--medium]] - Service
+- [[q-when-can-the-system-restart-a-service--android--medium]] - Service

@@ -397,3 +397,21 @@ class UserViewModel(
 ```
 
 **English**: Retrofit usage steps: 1) Add dependencies (Retrofit + converter), 2) Create data models, 3) Define API interface with annotations (@GET, @POST, @Path, @Query, @Body), 4) Create Retrofit instance with baseUrl and converter, 5) Use in ViewModel with coroutines, 6) Observe in Activity/Fragment. Supports form-urlencoded, multipart uploads, headers, and error handling with sealed classes.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-graphql-vs-rest--networking--easy]] - Networking
+
+### Related (Medium)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+- [[q-retrofit-path-parameter--android--medium]] - Networking
+- [[q-retrofit-library--android--medium]] - Networking
+- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-retrofit-modify-all-requests--android--hard]] - Networking

@@ -481,7 +481,7 @@ fun CarouselLayout(
 ```kotlin
 // WRONG: Multiple measurements
 val placeable1 = measurable.measure(constraints1)
-val placeable2 = measurable.measure(constraints2)  // ❌ Second measurement!
+val placeable2 = measurable.measure(constraints2)  //  Second measurement!
 
 // CORRECT: Single measurement
 val placeable = measurable.measure(constraints)
@@ -500,7 +500,7 @@ val relaxedConstraints = constraints.copy(minWidth = 0, minHeight = 0)
 ```kotlin
 // WRONG: Creating list in layout
 layout(width, height) {
-    val positions = mutableListOf<Int>()  // ❌ Allocation
+    val positions = mutableListOf<Int>()  //  Allocation
     // ...
 }
 

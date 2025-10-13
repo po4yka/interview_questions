@@ -364,13 +364,13 @@ data class User(
 
 **Невалидные примеры:**
 ```kotlin
-// ❌ ОШИБКА: Нет параметров в первичном конструкторе
+//  ОШИБКА: Нет параметров в первичном конструкторе
 // data class Empty()
 
-// ❌ ОШИБКА: Параметр не помечен как val или var
+//  ОШИБКА: Параметр не помечен как val или var
 // data class Invalid(name: String)
 
-// ❌ ОШИБКА: Не может быть abstract, open, sealed, inner
+//  ОШИБКА: Не может быть abstract, open, sealed, inner
 // abstract data class AbstractData(val value: Int)
 // open data class OpenData(val value: Int)
 // sealed data class SealedData(val value: Int)

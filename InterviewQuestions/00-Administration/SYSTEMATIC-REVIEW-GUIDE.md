@@ -335,7 +335,7 @@ The script produces:
 
 ## Example: High-Quality Senior-Level Answer
 
-### ❌ Before (Insufficient)
+###  Before (Insufficient)
 
 ```markdown
 ## Answer (EN)
@@ -351,7 +351,7 @@ val stateFlow = MutableStateFlow(0)
 StateFlow это observable flow который эмитит текущее и новое состояние.
 ```
 
-### ✅ After (Senior Level)
+###  After (Senior Level)
 
 ```markdown
 ## Answer (EN)
@@ -445,13 +445,13 @@ lifecycleScope.launch {
 StateFlow is conflated, so rapid updates may be dropped:
 
 ```kotlin
-// ❌ May lose intermediate values
+//  May lose intermediate values
 _counter.value = 1
 _counter.value = 2
 _counter.value = 3
 // Collector might only see 3
 
-// ✅ Use SharedFlow for events that shouldn't be missed
+//  Use SharedFlow for events that shouldn't be missed
 private val _events = MutableSharedFlow<Event>()
 val events: SharedFlow<Event> = _events.asSharedFlow()
 ```
@@ -460,10 +460,10 @@ val events: SharedFlow<Event> = _events.asSharedFlow()
 
 **1. Don't use StateFlow for one-time events:**
 ```kotlin
-// ❌ Wrong - events may be missed or re-triggered
+//  Wrong - events may be missed or re-triggered
 _uiState.value = UiState.ShowToast("Error")
 
-// ✅ Use SharedFlow or Channel for events
+//  Use SharedFlow or Channel for events
 _events.emit(Event.ShowToast("Error"))
 ```
 
@@ -471,12 +471,12 @@ _events.emit(Event.ShowToast("Error"))
 ```kotlin
 data class State(val items: List<String>)
 
-// ❌ Won't emit - same List instance
+//  Won't emit - same List instance
 _state.value = State(items)
 items.add("new")
 _state.value = State(items)  // No emission!
 
-// ✅ Create new instance
+//  Create new instance
 _state.value = State(items.toList())
 ```
 
@@ -492,7 +492,7 @@ _state.value = State(items.toList())
 ### Use QUESTION-REVIEW-TRACKER.md
 
 Update the tracker after each review session:
-- Mark reviewed questions with ✅
+- Mark reviewed questions with 
 - Update progress percentages
 - Note questions needing major revision
 - Track time spent

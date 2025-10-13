@@ -41,7 +41,7 @@ Coroutine cancellation is **cooperative** - coroutines must check for cancellati
 ### Why Cancellation is Cooperative
 
 ```kotlin
-// ❌ Non-cooperative - cannot be cancelled
+//  Non-cooperative - cannot be cancelled
 val job = launch {
     var i = 0
     while (i < 1000000) {
@@ -55,7 +55,7 @@ job.cancel() // Has no effect - coroutine continues!
 job.join()
 println("Job still running...")
 
-// ✅ Cooperative - can be cancelled
+//  Cooperative - can be cancelled
 val job = launch {
     var i = 0
     while (i < 1000000) {
@@ -166,7 +166,7 @@ launch {
 `CancellationException` is special - it must be re-thrown after cleanup.
 
 ```kotlin
-// ✅ Correct - re-throw CancellationException
+//  Correct - re-throw CancellationException
 suspend fun downloadFile(url: String): File = coroutineScope {
     val tempFile = createTempFile()
 
@@ -185,7 +185,7 @@ suspend fun downloadFile(url: String): File = coroutineScope {
     }
 }
 
-// ❌ Wrong - swallows CancellationException
+//  Wrong - swallows CancellationException
 suspend fun broken() {
     try {
         doWork()
@@ -402,7 +402,7 @@ onPause {
 
 1. **Always check cancellation in loops**:
    ```kotlin
-   // ✅ Cancellable
+   //  Cancellable
    while (isActive) {
        doWork()
    }
@@ -457,12 +457,12 @@ onPause {
 
 1. **Never checking cancellation**:
    ```kotlin
-   // ❌ Cannot be cancelled
+   //  Cannot be cancelled
    while (true) {
        doWork()
    }
 
-   // ✅ Cancellable
+   //  Cancellable
    while (isActive) {
        doWork()
    }
@@ -470,14 +470,14 @@ onPause {
 
 2. **Swallowing CancellationException**:
    ```kotlin
-   // ❌ Breaks cancellation
+   //  Breaks cancellation
    try {
        doWork()
    } catch (e: Exception) {
        log(e) // Catches CancellationException!
    }
 
-   // ✅ Preserve cancellation
+   //  Preserve cancellation
    try {
        doWork()
    } catch (e: Exception) {
@@ -488,14 +488,14 @@ onPause {
 
 3. **Suspending in finally without NonCancellable**:
    ```kotlin
-   // ❌ Will throw CancellationException
+   //  Will throw CancellationException
    try {
        doWork()
    } finally {
        saveState() // Suspending function throws!
    }
 
-   // ✅ Use NonCancellable
+   //  Use NonCancellable
    try {
        doWork()
    } finally {
@@ -507,12 +507,12 @@ onPause {
 
 4. **Not yielding in tight loops**:
    ```kotlin
-   // ❌ Starves other coroutines
+   //  Starves other coroutines
    repeat(1000000) {
        calculate()
    }
 
-   // ✅ Cooperative
+   //  Cooperative
    repeat(1000000) {
        yield()
        calculate()
@@ -570,7 +570,7 @@ launch {
 ### Обработка CancellationException
 
 ```kotlin
-// ✅ Правильно - перебросить CancellationException
+//  Правильно - перебросить CancellationException
 try {
     doWork()
 } catch (e: CancellationException) {
@@ -580,7 +580,7 @@ try {
     handleError(e)
 }
 
-// ❌ Неправильно - проглатывает отмену
+//  Неправильно - проглатывает отмену
 try {
     doWork()
 } catch (e: Exception) { // Ловит CancellationException!
@@ -699,20 +699,20 @@ suspend fun startSync() = coroutineScope {
 
 1. **Не проверка отмены**:
    ```kotlin
-   // ❌ Нельзя отменить
+   //  Нельзя отменить
    while (true) { doWork() }
 
-   // ✅ Можно отменить
+   //  Можно отменить
    while (isActive) { doWork() }
    ```
 
 2. **Проглатывание CancellationException**:
    ```kotlin
-   // ❌ Ломает отмену
+   //  Ломает отмену
    try { doWork() }
    catch (e: Exception) { log(e) }
 
-   // ✅ Сохранить отмену
+   //  Сохранить отмену
    catch (e: Exception) {
        if (e is CancellationException) throw e
        log(e)

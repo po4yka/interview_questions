@@ -10,6 +10,10 @@ tags:
   - views
 difficulty: hard
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # На что следует обращать внимание, чтобы оптимизировать большой список?
@@ -511,3 +515,20 @@ To optimize large lists:
 ## Ответ (RU)
 1. Правильное использование ViewHolder в RecyclerView для повторного использования представлений.
 
+
+---
+
+## Related Questions
+
+### Computer Science Fundamentals
+- [[q-list-vs-sequence--programming-languages--medium]] - Data Structures
+
+### Kotlin Language Features
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+- [[q-list-vs-sequence--kotlin--medium]] - Data Structures
+
+### Related Algorithms
+- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Data Structures
+- [[q-advanced-graph-algorithms--algorithms--hard]] - Data Structures
+- [[q-binary-search-trees-bst--algorithms--hard]] - Data Structures
+- [[q-sorting-algorithms-comparison--algorithms--medium]] - Data Structures

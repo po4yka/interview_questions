@@ -660,7 +660,7 @@ class ErrorHandlingTest {
 ### TURBINE VS MANUAL TESTING
 
 ```kotlin
-// ❌ Manual testing - verbose and error-prone
+//  Manual testing - verbose and error-prone
 @Test
 fun `manual flow testing`() = runTest {
     val flow = flowOf(1, 2, 3)
@@ -676,7 +676,7 @@ fun `manual flow testing`() = runTest {
     assertEquals(listOf(1, 2, 3), results)
 }
 
-// ✅ Turbine - concise and readable
+//  Turbine - concise and readable
 @Test
 fun `turbine flow testing`() = runTest {
     val flow = flowOf(1, 2, 3)
@@ -697,7 +697,7 @@ fun `turbine flow testing`() = runTest {
 ```kotlin
 class FlowTestingBestPractices {
 
-    // ✅ Always call awaitComplete or cancelAndIgnoreRemainingEvents
+    //  Always call awaitComplete or cancelAndIgnoreRemainingEvents
     @Test
     fun `proper cleanup`() = runTest {
         val flow = flowOf(1, 2, 3)
@@ -706,11 +706,11 @@ class FlowTestingBestPractices {
             assertEquals(1, awaitItem())
             assertEquals(2, awaitItem())
             assertEquals(3, awaitItem())
-            awaitComplete()  // ✅ Proper cleanup
+            awaitComplete()  //  Proper cleanup
         }
     }
 
-    // ✅ Use StandardTestDispatcher for time control
+    //  Use StandardTestDispatcher for time control
     @Test
     fun `use test dispatcher`() = runTest {
         val flow = flow {
@@ -726,7 +726,7 @@ class FlowTestingBestPractices {
         }
     }
 
-    // ✅ Test state transitions
+    //  Test state transitions
     @Test
     fun `test state transitions`() = runTest {
         val stateFlow = MutableStateFlow<UiState>(UiState.Loading)
@@ -743,7 +743,7 @@ class FlowTestingBestPractices {
         }
     }
 
-    // ✅ Test error scenarios
+    //  Test error scenarios
     @Test
     fun `test error scenarios`() = runTest {
         val flow = flow {
@@ -758,7 +758,7 @@ class FlowTestingBestPractices {
         }
     }
 
-    // ✅ Use expectNoEvents for debouncing
+    //  Use expectNoEvents for debouncing
     @Test
     fun `test debouncing`() = runTest {
         val flow = MutableSharedFlow<Int>()
@@ -828,3 +828,17 @@ class FlowTestingBestPractices {
 8. What are best practices for testing StateFlow vs SharedFlow?
 9. How do you test flows in multi-module projects?
 10. What are alternatives to Turbine for Flow testing?
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing
+- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+- [[q-screenshot-snapshot-testing--testing--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-coroutines-flow--testing--hard]] - Testing

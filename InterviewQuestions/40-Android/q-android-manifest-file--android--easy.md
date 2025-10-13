@@ -239,3 +239,18 @@ The declaration of the application. This element contains subelements that decla
 
 - [App Manifest Overview](https://developer.android.com/guide/topics/manifest/manifest-intro)
 - [Application Manifest File Android](https://www.geeksforgeeks.org/application-manifest-file-android/)
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Fundamentals
+- [[q-what-unifies-android-components--android--easy]] - Fundamentals
+- [[q-android-components-besides-activity--android--easy]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-intent-filters-android--android--medium]] - Fundamentals
+- [[q-anr-application-not-responding--android--medium]] - Fundamentals

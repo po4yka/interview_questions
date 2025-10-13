@@ -57,13 +57,13 @@ verify { repository.getUser(any()) }
 ```kotlin
 // Regular mock - throws exception for unmocked calls
 val mock = mockk<UserRepository>()
-mock.getUserCount() // ❌ MockKException: no answer found
+mock.getUserCount() //  MockKException: no answer found
 
 // Relaxed mock - returns default values
 val relaxedMock = mockk<UserRepository>(relaxed = true)
-relaxedMock.getUserCount() // ✅ Returns 0
-relaxedMock.getUserName() // ✅ Returns ""
-relaxedMock.getUser() // ✅ Returns null
+relaxedMock.getUserCount() //  Returns 0
+relaxedMock.getUserName() //  Returns ""
+relaxedMock.getUser() //  Returns null
 
 // Can still override specific methods
 every { relaxedMock.getUser(1) } returns User("John")
@@ -94,7 +94,7 @@ mock.getMap() // emptyMap()
 **When to use relaxed:**
 
 ```kotlin
-// ✅ GOOD: Testing one specific method
+//  GOOD: Testing one specific method
 @Test
 fun testUpdateUser() {
     val repository = mockk<UserRepository>(relaxed = true)
@@ -107,7 +107,7 @@ fun testUpdateUser() {
     verify { repository.updateUser(any()) }
 }
 
-// ❌ BAD: Need precise control
+//  BAD: Need precise control
 @Test
 fun testAllMethods() {
     val repository = mockk<UserRepository>(relaxed = true)
@@ -560,15 +560,15 @@ fun testConstructorMock() {
 
 | Feature | MockK | Mockito |
 |---------|-------|---------|
-| **Kotlin syntax** | ✅ Native | ⚠️ Java-style |
-| **Suspend functions** | ✅ Built-in | ❌ Requires kotlin-mockito |
-| **Extension functions** | ✅ Supported | ❌ Not supported |
-| **Object mocking** | ✅ Built-in | ❌ Requires PowerMock |
-| **Top-level functions** | ✅ Supported | ❌ Not supported |
-| **Final classes** | ✅ Works by default | ⚠️ Needs mockito-inline |
-| **DSL style** | ✅ every/verify | ⚠️ when/verify |
-| **Relaxed mocks** | ✅ Built-in | ⚠️ Manual configuration |
-| **Coroutine support** | ✅ coEvery/coVerify | ⚠️ Limited |
+| **Kotlin syntax** |  Native |  Java-style |
+| **Suspend functions** |  Built-in |  Requires kotlin-mockito |
+| **Extension functions** |  Supported |  Not supported |
+| **Object mocking** |  Built-in |  Requires PowerMock |
+| **Top-level functions** |  Supported |  Not supported |
+| **Final classes** |  Works by default |  Needs mockito-inline |
+| **DSL style** |  every/verify |  when/verify |
+| **Relaxed mocks** |  Built-in |  Manual configuration |
+| **Coroutine support** |  coEvery/coVerify |  Limited |
 
 ---
 
@@ -577,11 +577,11 @@ fun testConstructorMock() {
 **1. Use relaxed mocks judiciously:**
 
 ```kotlin
-// ✅ DO: Relaxed for dependencies you don't test
+//  DO: Relaxed for dependencies you don't test
 @RelaxedMockK
 lateinit var logger: Logger
 
-// ❌ DON'T: Relaxed for main dependencies
+//  DON'T: Relaxed for main dependencies
 @MockK // Better: explicit mocking
 lateinit var repository: UserRepository
 ```
@@ -589,21 +589,21 @@ lateinit var repository: UserRepository
 **2. Prefer mockk over spy when possible:**
 
 ```kotlin
-// ✅ DO: Mock when you need full control
+//  DO: Mock when you need full control
 val mock = mockk<UserRepository>()
 
-// ⚠️ USE SPARINGLY: Spy when you need partial mocking
+//  USE SPARINGLY: Spy when you need partial mocking
 val spy = spyk(UserRepository())
 ```
 
 **3. Use annotations for cleaner tests:**
 
 ```kotlin
-// ✅ DO: Use annotations
+//  DO: Use annotations
 @MockK lateinit var repository: UserRepository
 @InjectMockKs lateinit var viewModel: UserViewModel
 
-// ❌ DON'T: Manual setup when annotations work
+//  DON'T: Manual setup when annotations work
 val repository = mockk<UserRepository>()
 val viewModel = UserViewModel(repository)
 ```
@@ -661,3 +661,17 @@ MockK лучше для Kotlin благодаря нативному синта�
 4. Очищайте моки между тестами
 
 MockK — предпочтительный выбор для Kotlin проектов.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing
+- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+- [[q-screenshot-snapshot-testing--testing--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-coroutines-flow--testing--hard]] - Testing

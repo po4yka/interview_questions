@@ -320,35 +320,35 @@ viewModel.data.observe(viewLifecycleOwner) { data ->
 
 ```
 onCreate()
-  ├─ UI creation
-  ├─ State initialization
-  └─ Everything together
+   UI creation
+   State initialization
+   Everything together
 ↓
 onDestroy()
-  └─ Everything destroyed together
+   Everything destroyed together
 ```
 
 ### Fragment Lifecycle (Complex)
 
 ```
 onCreate()
-  └─ Fragment instance created (no view)
+   Fragment instance created (no view)
 ↓
 onCreateView()
-  └─ View created
+   View created
 ↓
 onViewCreated()
-  └─ View ready to use
+   View ready to use
 ↓
 [Fragment visible]
 ↓
 onDestroyView()
-  └─ View destroyed (Fragment still alive!)
+   View destroyed (Fragment still alive!)
 ↓
 [Can recreate view: onCreateView() again]
 ↓
 onDestroy()
-  └─ Fragment destroyed
+   Fragment destroyed
 ```
 
 ---
@@ -689,3 +689,21 @@ class MyFragment : Fragment() {
 - Уничтожать views когда не видны (память)
 - Сохранять состояние Fragment (данные, ViewModel)
 - Быстро пересоздавать views когда нужно
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-save-data-outside-fragment--android--medium]] - Fragment
+- [[q-dagger-build-time-optimization--android--medium]] - Ui
+- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-save-data-outside-fragment--android--medium]] - Fragment
+- [[q-dagger-build-time-optimization--android--medium]] - Ui
+- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui

@@ -626,3 +626,21 @@ api.getPost("123", "456")
 - Автоматическое URL-кодирование (используйте `encoded = true` для отключения)
 - Для идентификации ресурсов используйте `@Path`, для фильтров - `@Query`
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-graphql-vs-rest--networking--easy]] - Networking
+
+### Related (Medium)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+- [[q-retrofit-usage-tutorial--android--medium]] - Networking
+- [[q-retrofit-library--android--medium]] - Networking
+- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-retrofit-modify-all-requests--android--hard]] - Networking

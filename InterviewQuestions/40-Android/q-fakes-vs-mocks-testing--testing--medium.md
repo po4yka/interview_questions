@@ -387,7 +387,7 @@ class UserWithPostsTest {
 **Use Stubs:**
 
 ```kotlin
-// ✅ Simple predetermined response
+//  Simple predetermined response
 class TimeStub : TimeProvider {
     override fun currentTime() = 1234567890L
 }
@@ -396,7 +396,7 @@ class TimeStub : TimeProvider {
 **Use Mocks:**
 
 ```kotlin
-// ✅ Verify specific interaction
+//  Verify specific interaction
 @Test
 fun `clicking save calls repository`() {
     val repository = mockk<UserRepository>(relaxed = true)
@@ -411,7 +411,7 @@ fun `clicking save calls repository`() {
 **Use Fakes:**
 
 ```kotlin
-// ✅ Complex behavior, multiple tests
+//  Complex behavior, multiple tests
 class UserFlowTest {
     private val repository = FakeUserRepository()
 
@@ -514,13 +514,13 @@ fun `loading with slow network shows loading state`() = runTest {
 **1. Prefer fakes for complex dependencies:**
 
 ```kotlin
-// ✅ DO: Fake for stateful dependencies
+//  DO: Fake for stateful dependencies
 class FakeUserRepository : UserRepository {
     private val users = mutableMapOf<Int, User>()
     // Full implementation
 }
 
-// ❌ DON'T: Mock for complex state
+//  DON'T: Mock for complex state
 val mock = mockk<UserRepository>()
 every { mock.getUser(1) } returns user1
 every { mock.getUser(2) } returns user2
@@ -530,7 +530,7 @@ every { mock.getUser(2) } returns user2
 **2. Use mocks for external dependencies:**
 
 ```kotlin
-// ✅ DO: Mock external APIs
+//  DO: Mock external APIs
 val api = mockk<ExternalApi>()
 coEvery { api.fetchData() } returns data
 ```
@@ -538,13 +538,13 @@ coEvery { api.fetchData() } returns data
 **3. Fakes should be simple:**
 
 ```kotlin
-// ✅ DO: In-memory implementation
+//  DO: In-memory implementation
 class FakeRepository {
     private val data = mutableMapOf<Int, Item>()
     // Simple CRUD
 }
 
-// ❌ DON'T: Complex business logic in fake
+//  DON'T: Complex business logic in fake
 class FakeRepository {
     // Complex validation, caching, threading...
     // This is basically a second implementation!
@@ -554,7 +554,7 @@ class FakeRepository {
 **4. Test your fakes:**
 
 ```kotlin
-// ✅ DO: Test the fake itself
+//  DO: Test the fake itself
 class FakeUserRepositoryTest {
     @Test
     fun `save and retrieve user works`() {
@@ -606,3 +606,17 @@ Fake содержит in-memory хранилище и полную реализ�
 4. Тестируйте сами fakes
 
 Правильный выбор тестового дублера упрощает тесты и делает их более поддерживаемыми.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing
+- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+- [[q-screenshot-snapshot-testing--testing--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-coroutines-flow--testing--hard]] - Testing

@@ -176,10 +176,10 @@ open app/build/reports/jacoco/jacocoTestReport/html/index.html
 
 ```
 Package: com.example.data
-├─ Class: UserRepository (85% coverage)
-│  ├─ getUser() - 100% ✅
-│  ├─ updateUser() - 90% ⚠️ (missing error branch)
-│  └─ deleteUser() - 0% ❌ (not tested)
+ Class: UserRepository (85% coverage)
+   getUser() - 100% 
+   updateUser() - 90%  (missing error branch)
+   deleteUser() - 0%  (not tested)
 ```
 
 ### Identifying Coverage Gaps
@@ -413,3 +413,17 @@ class CoverageReporter {
 8. **Не жертвуйте качеством ради процентов**
 9. **Тестируйте edge cases и ошибки**
 10. **Интегрируйте в CI/CD**
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing
+- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+- [[q-screenshot-snapshot-testing--testing--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-coroutines-flow--testing--hard]] - Testing

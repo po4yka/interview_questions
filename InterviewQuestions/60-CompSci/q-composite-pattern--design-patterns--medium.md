@@ -197,7 +197,7 @@ class File(
     override fun getSize() = size
 
     override fun print(indent: String) {
-        println("$indent📄 $name ($size bytes)")
+        println("$indent $name ($size bytes)")
     }
 }
 
@@ -216,7 +216,7 @@ class Directory(private val name: String) : FileSystemComponent {
     override fun getSize(): Long = contents.sumOf { it.getSize() }
 
     override fun print(indent: String) {
-        println("$indent📁 $name/")
+        println("$indent $name/")
         contents.forEach { it.print("$indent  ") }
     }
 }

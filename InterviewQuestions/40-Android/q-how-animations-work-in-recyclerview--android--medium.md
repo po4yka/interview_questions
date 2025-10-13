@@ -335,3 +335,33 @@ if (!isReduceMotionEnabled) {
 ## Ответ (RU)
 Для добавления анимаций в RecyclerView можно использовать DefaultItemAnimator для стандартных анимаций, установив его через recyclerView.setItemAnimator(new DefaultItemAnimator()). Для пользовательских анимаций создается наследник DefaultItemAnimator, например CustomItemAnimator, где переопределяются методы анимаций. Также анимации можно реализовывать непосредственно в Adapter, устанавливая начальные параметры элемента и запуская анимацию внутри onBindViewHolder.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui
+- [[q-recyclerview-diffutil-advanced--recyclerview--medium]] - View, Ui
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui
+- [[q-recyclerview-diffutil-advanced--recyclerview--medium]] - View, Ui

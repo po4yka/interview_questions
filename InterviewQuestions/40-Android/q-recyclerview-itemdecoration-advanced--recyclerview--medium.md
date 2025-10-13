@@ -566,10 +566,10 @@ recyclerView.addItemDecoration(decoration)
 
 **1. Cache Paint objects**
 ```kotlin
-// ✅ DO - Create once
+//  DO - Create once
 private val paint = Paint()
 
-// ❌ DON'T - Create in onDraw
+//  DON'T - Create in onDraw
 override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
     val paint = Paint() // BAD - allocates every draw!
 }
@@ -577,13 +577,13 @@ override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.St
 
 **2. Limit drawing operations**
 ```kotlin
-// ✅ DO - Only draw visible items
+//  DO - Only draw visible items
 for (i in 0 until parent.childCount) {
     val child = parent.getChildAt(i)
     // Draw only for this child
 }
 
-// ❌ DON'T - Loop through all items
+//  DON'T - Loop through all items
 for (position in 0 until adapter.itemCount) {
     // BAD - draws even non-visible items
 }
@@ -601,12 +601,12 @@ recyclerView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
 
 **1. Use getItemOffsets for spacing**
 ```kotlin
-// ✅ DO - Use getItemOffsets for spacing
+//  DO - Use getItemOffsets for spacing
 override fun getItemOffsets(outRect: Rect, ...) {
     outRect.bottom = spacing
 }
 
-// ❌ DON'T - Add spacing in layout
+//  DON'T - Add spacing in layout
 ```
 
 **2. onDraw vs onDrawOver**
@@ -634,10 +634,10 @@ override fun onDrawOver(...) {
 
 **4. Invalidate efficiently**
 ```kotlin
-// ✅ DO - Invalidate only decorations
+//  DO - Invalidate only decorations
 recyclerView.invalidateItemDecorations()
 
-// ❌ DON'T - Invalidate entire RecyclerView
+//  DON'T - Invalidate entire RecyclerView
 recyclerView.invalidate()
 ```
 
@@ -764,3 +764,33 @@ class StickyHeaderDecoration : RecyclerView.ItemDecoration() {
 - `onDrawOver()` для украшений НАД элементами
 - Кэшировать сложные вычисления
 - Эффективно invalidate
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
+- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
+- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui

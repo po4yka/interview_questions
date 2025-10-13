@@ -43,26 +43,26 @@ Choosing between monolithic and microservices architecture is a fundamental arch
 Single, unified application where all components are tightly coupled and deployed as one unit.
 
 ```
-┌────────────────────────────────────┐
-│      Monolithic Application        │
-│                                    │
-│  ┌──────────┐  ┌──────────┐      │
-│  │   UI     │  │   API    │      │
-│  └──────────┘  └──────────┘      │
-│                                    │
-│  ┌────────────────────────────┐  │
-│  │    Business Logic          │  │
-│  │  - User Management         │  │
-│  │  - Order Processing        │  │
-│  │  - Payment                 │  │
-│  │  - Inventory               │  │
-│  │  - Notifications           │  │
-│  └────────────────────────────┘  │
-│                                    │
-│  ┌────────────────────────────┐  │
-│  │    Single Database         │  │
-│  └────────────────────────────┘  │
-└────────────────────────────────────┘
+
+      Monolithic Application        
+                                    
+          
+     UI          API          
+          
+                                    
+    
+      Business Logic            
+    - User Management           
+    - Order Processing          
+    - Payment                   
+    - Inventory                 
+    - Notifications             
+    
+                                    
+    
+      Single Database           
+    
+
        Single Deployment Unit
 ```
 
@@ -108,7 +108,7 @@ class PaymentService(private val paymentRepo: PaymentRepository) {
 // All deployed together as single JAR/WAR
 ```
 
-**✅ Pros:**
+** Pros:**
 - **Simple development** - Single codebase, easy to understand
 - **Easy debugging** - Single process, stack traces work
 - **ACID transactions** - Database transactions across all modules
@@ -116,7 +116,7 @@ class PaymentService(private val paymentRepo: PaymentRepository) {
 - **Simple deployment** - Single artifact to deploy
 - **No distributed systems complexity**
 
-**❌ Cons:**
+** Cons:**
 - **Scalability** - Must scale entire app (can't scale parts)
 - **Technology lock-in** - One language/framework for everything
 - **Deployment risk** - Small change requires full redeployment
@@ -132,18 +132,18 @@ class PaymentService(private val paymentRepo: PaymentRepository) {
 Application composed of small, independent services that communicate over the network.
 
 ```
-┌──────────────────────────────────────────────┐
-│              API Gateway/Load Balancer        │
-└────┬─────────┬──────────┬──────────┬─────────┘
-     │         │          │          │
-┌────▼──────┐ ┌▼────────┐ ┌▼────────┐ ┌▼─────────┐
-│ User      │ │ Order   │ │Inventory│ │ Payment  │
-│ Service   │ │ Service │ │ Service │ │ Service  │
-└────┬──────┘ └┬────────┘ └┬────────┘ └┬─────────┘
-     │         │           │           │
-┌────▼──────┐ ┌▼────────┐ ┌▼────────┐ ┌▼─────────┐
-│ User DB   │ │Order DB │ │Inv. DB  │ │Payment DB│
-└───────────┘ └─────────┘ └─────────┘ └──────────┘
+
+              API Gateway/Load Balancer        
+
+                                  
+   
+ User        Order    Inventory  Payment  
+ Service     Service   Service   Service  
+   
+                                    
+   
+ User DB    Order DB  Inv. DB   Payment DB
+   
 
 Each service: Independent deployment, scaling, database
 ```
@@ -215,7 +215,7 @@ interface UserServiceClient {
 // - Payment Service: Go + MySQL
 ```
 
-**✅ Pros:**
+** Pros:**
 - **Independent scaling** - Scale only what needs scaling
 - **Technology flexibility** - Different languages/frameworks per service
 - **Fault isolation** - One service failure doesn't bring down everything
@@ -223,7 +223,7 @@ interface UserServiceClient {
 - **Team autonomy** - Teams own entire services
 - **Easier to understand** - Each service is small and focused
 
-**❌ Cons:**
+** Cons:**
 - **Complexity** - Distributed system challenges (network, latency, failures)
 - **No ACID transactions** - Distributed transactions are hard
 - **Network overhead** - Inter-service communication adds latency
@@ -255,7 +255,7 @@ interface UserServiceClient {
 
 ### When to Use Monolith
 
-✅ **Monolith is better when:**
+ **Monolith is better when:**
 
 1. **Small team** (< 10 developers)
 2. **Simple application**
@@ -278,7 +278,7 @@ interface UserServiceClient {
 
 ### When to Use Microservices
 
-✅ **Microservices are better when:**
+ **Microservices are better when:**
 
 1. **Large team** (multiple teams)
 2. **Complex domain** (multiple bounded contexts)
@@ -334,40 +334,40 @@ class PaymentService { /* ... */ }
 **Strangler Fig Pattern:**
 ```
 Step 1: Start with Monolith
-┌───────────────┐
-│   Monolith    │
-│  - Users      │
-│  - Orders     │
-│  - Payments   │
-└───────────────┘
+
+   Monolith    
+  - Users      
+  - Orders     
+  - Payments   
+
 
 Step 2: Extract one service
-┌───────────────┐  ┌────────────┐
-│   Monolith    │  │ Payment    │
-│  - Users      │  │ Service    │
-│  - Orders     │  │ (NEW)      │
-└───────────────┘  └────────────┘
+  
+   Monolith       Payment    
+  - Users         Service    
+  - Orders        (NEW)      
+  
 
 Step 3: Extract another
-┌───────────────┐  ┌────────────┐
-│   Monolith    │  │ Payment    │
-│  - Users      │  │ Service    │
-└───────────────┘  └────────────┘
-                   ┌────────────┐
-                   │ Order      │
-                   │ Service    │
-                   │ (NEW)      │
-                   └────────────┘
+  
+   Monolith       Payment    
+  - Users         Service    
+  
+                   
+                    Order      
+                    Service    
+                    (NEW)      
+                   
 
 Step 4: Complete migration
-┌────────────┐  ┌────────────┐
-│ User       │  │ Payment    │
-│ Service    │  │ Service    │
-└────────────┘  └────────────┘
-┌────────────┐
-│ Order      │
-│ Service    │
-└────────────┘
+  
+ User          Payment    
+ Service       Service    
+  
+
+ Order      
+ Service    
+
 ```
 
 ---
@@ -443,13 +443,13 @@ class OrderService(
 **Solution: API Gateway Pattern**
 ```
 Client
-  │
-  ▼
-┌─────────────┐
-│ API Gateway │  Single entry point
-└──┬──┬────┬──┘
-   │  │    │
-   ▼  ▼    ▼
+  
+  
+
+ API Gateway   Single entry point
+
+         
+         
  User Order Payment  (Internal services)
 ```
 
@@ -543,14 +543,14 @@ class OrderModuleImpl(
 **Что это?**
 Единое унифицированное приложение, где все компоненты тесно связаны и развёртываются как одна единица.
 
-**✅ Плюсы:**
+** Плюсы:**
 - **Простая разработка** - Единая кодовая база
 - **Легкая отладка** - Единый процесс
 - **ACID транзакции** - Транзакции БД across модулей
 - **Производительность** - Нет сетевых накладных расходов
 - **Простое развёртывание** - Один артефакт
 
-**❌ Минусы:**
+** Минусы:**
 - **Масштабируемость** - Нужно масштабировать всё приложение
 - **Технологическая привязка** - Один язык/фреймворк
 - **Риск развёртывания** - Малое изменение требует полного передеплоя
@@ -562,7 +562,7 @@ class OrderModuleImpl(
 **Что это?**
 Приложение, состоящее из небольших независимых сервисов, которые общаются по сети.
 
-**✅ Плюсы:**
+** Плюсы:**
 - **Независимое масштабирование**
 - **Технологическая гибкость**
 - **Изоляция сбоев**
@@ -570,7 +570,7 @@ class OrderModuleImpl(
 - **Автономия команд**
 - **Легче понять** - Каждый сервис небольшой
 
-**❌ Минусы:**
+** Минусы:**
 - **Сложность** - Задачи распределённых систем
 - **Нет ACID транзакций**
 - **Сетевые накладные расходы**
@@ -579,7 +579,7 @@ class OrderModuleImpl(
 
 ### Когда использовать монолит
 
-✅ **Монолит лучше когда:**
+ **Монолит лучше когда:**
 1. **Малая команда** (< 10 разработчиков)
 2. **Простое приложение**
 3. **Быстрый выход на рынок** критичен
@@ -589,7 +589,7 @@ class OrderModuleImpl(
 
 ### Когда использовать микросервисы
 
-✅ **Микросервисы лучше когда:**
+ **Микросервисы лучше когда:**
 1. **Большая команда** (множество команд)
 2. **Сложный домен**
 3. **Разные потребности масштабирования**

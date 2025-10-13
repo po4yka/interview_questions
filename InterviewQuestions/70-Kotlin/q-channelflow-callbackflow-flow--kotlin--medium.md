@@ -104,7 +104,7 @@ fetchPages().collect { items ->
 **Cannot emit concurrently:**
 
 ```kotlin
-// ❌ ERROR: Flow invariant is violated
+//  ERROR: Flow invariant is violated
 fun concurrentFlow(): Flow<Int> = flow {
     launch {
         emit(1) // ERROR: emit() called from different coroutine
@@ -242,7 +242,7 @@ locationUpdates(locationManager)
 **awaitClose is mandatory:**
 
 ```kotlin
-// ❌ WRONG: No awaitClose
+//  WRONG: No awaitClose
 fun badCallbackFlow() = callbackFlow {
     val listener = { data: String ->
         trySend(data)
@@ -251,7 +251,7 @@ fun badCallbackFlow() = callbackFlow {
     // Missing awaitClose - listener never removed!
 }
 
-// ✅ CORRECT: With awaitClose
+//  CORRECT: With awaitClose
 fun goodCallbackFlow() = callbackFlow {
     val listener = { data: String ->
         trySend(data)
@@ -600,14 +600,14 @@ class FakeListener {
 **Pitfall 1: Using flow{} for concurrent emissions**
 
 ```kotlin
-// ❌ WRONG: Crashes
+//  WRONG: Crashes
 fun concurrentEmit() = flow {
     launch {
         emit(1) // ERROR: Flow invariant violated
     }
 }
 
-// ✅ CORRECT: Use channelFlow
+//  CORRECT: Use channelFlow
 fun concurrentEmit() = channelFlow {
     launch {
         send(1) // OK
@@ -618,14 +618,14 @@ fun concurrentEmit() = channelFlow {
 **Pitfall 2: Forgetting awaitClose in callbackFlow**
 
 ```kotlin
-// ❌ WRONG: Listener leak
+//  WRONG: Listener leak
 fun leakyFlow() = callbackFlow {
     val listener = { trySend(it) }
     api.register(listener)
     // Listener never unregistered!
 }
 
-// ✅ CORRECT: awaitClose
+//  CORRECT: awaitClose
 fun cleanFlow() = callbackFlow {
     val listener = { trySend(it) }
     api.register(listener)
@@ -636,14 +636,14 @@ fun cleanFlow() = callbackFlow {
 **Pitfall 3: Using emit() in callbacks**
 
 ```kotlin
-// ❌ WRONG: emit is suspend, can't use in callback
+//  WRONG: emit is suspend, can't use in callback
 fun badFlow() = callbackFlow {
     val listener = { data: String ->
         emit(data) // ERROR: suspend function in non-suspend callback
     }
 }
 
-// ✅ CORRECT: Use trySend()
+//  CORRECT: Use trySend()
 fun goodFlow() = callbackFlow {
     val listener = { data: String ->
         trySend(data) // Non-suspending
@@ -654,14 +654,14 @@ fun goodFlow() = callbackFlow {
 **Pitfall 4: Not checking trySend() result**
 
 ```kotlin
-// ⚠️ WARNING: Silently drops if buffer full
+//  WARNING: Silently drops if buffer full
 callbackFlow {
     val listener = { data: String ->
         trySend(data) // Drops if buffer full!
     }
 }
 
-// ✅ BETTER: Handle failure
+//  BETTER: Handle failure
 callbackFlow {
     val listener = { data: String ->
         trySend(data).onFailure {
@@ -670,7 +670,7 @@ callbackFlow {
     }
 }
 
-// ✅ BEST: Use channel buffer strategy
+//  BEST: Use channel buffer strategy
 callbackFlow {
     val listener = { data: String ->
         trySend(data)
@@ -682,14 +682,14 @@ callbackFlow {
 
 ```
 Need to emit values?
-├─ Sequential emissions?
-│  └─ Use flow{}
-│
-├─ Concurrent emissions from multiple coroutines?
-│  └─ Use channelFlow{}
-│
-└─ Emissions from callbacks/listeners?
-   └─ Use callbackFlow{}
+ Sequential emissions?
+   Use flow{}
+
+ Concurrent emissions from multiple coroutines?
+   Use channelFlow{}
+
+ Emissions from callbacks/listeners?
+    Use callbackFlow{}
 ```
 
 **Examples:**

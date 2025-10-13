@@ -49,26 +49,26 @@ Implementing voice and video calling in Android typically uses **WebRTC (Web Rea
 
 **Architecture:**
 ```
-┌─────────────┐                    ┌─────────────┐
-│  Caller     │                    │  Callee     │
-│  Device     │                    │  Device     │
-└──────┬──────┘                    └──────┬──────┘
-       │                                  │
-       ├──── Signaling (WebSocket) ──────┤
-       │      (Offer/Answer/ICE)          │
-       │                                  │
-       └──── Media (WebRTC P2P) ─────────┘
+                    
+  Caller                           Callee     
+  Device                           Device     
+                    
+                                         
+        Signaling (WebSocket) 
+             (Offer/Answer/ICE)          
+                                         
+        Media (WebRTC P2P) 
               (Audio/Video Stream)
 
-┌──────────────────┐
-│ Signaling Server │  (WebSocket/Socket.IO)
-│ (Your Backend)   │
-└──────────────────┘
 
-┌──────────────────┐
-│ STUN/TURN Server │  (Google/Twilio/Custom)
-│ (NAT Traversal)  │
-└──────────────────┘
+ Signaling Server   (WebSocket/Socket.IO)
+ (Your Backend)   
+
+
+
+ STUN/TURN Server   (Google/Twilio/Custom)
+ (NAT Traversal)  
+
 ```
 
 ### 2. Implementation

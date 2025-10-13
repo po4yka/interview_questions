@@ -80,7 +80,7 @@ Array: [2, 7, 11, 15]  Target: 9
 
 Step 1: 2 + 15 = 17 > 9  → R--
 Step 2: 2 + 11 = 13 > 9  → R--
-Step 3: 2 + 7 = 9  ✓     → Found!
+Step 3: 2 + 7 = 9       → Found!
 ```
 
 ---
@@ -337,7 +337,7 @@ String: "abcabcbb"
 
 Window: "a"     → length = 1
 Window: "ab"    → length = 2
-Window: "abc"   → length = 3 ✓
+Window: "abc"   → length = 3 
 Window: "abca"  → Duplicate 'a'! Shrink: "bca"
 Window: "bcab"  → Duplicate 'b'! Shrink: "cab"
 ...
@@ -465,18 +465,18 @@ println(totalFruit(fruits))  // 5 ([2,3,2,2] or [1,2,1,2])
 ### Pattern Recognition
 
 **Use Two Pointers when:**
-- ✅ Array/string is sorted
-- ✅ Need to find pair with target sum
-- ✅ Removing duplicates in-place
-- ✅ Reversing/palindrome checking
-- ✅ Cycle detection
+-  Array/string is sorted
+-  Need to find pair with target sum
+-  Removing duplicates in-place
+-  Reversing/palindrome checking
+-  Cycle detection
 
 **Use Sliding Window when:**
-- ✅ Finding substring/subarray with condition
-- ✅ "Longest/Shortest/Maximum" subarray problems
-- ✅ "Contains all of" problems
-- ✅ Fixed or variable window size
-- ✅ Consecutive elements matter
+-  Finding substring/subarray with condition
+-  "Longest/Shortest/Maximum" subarray problems
+-  "Contains all of" problems
+-  Fixed or variable window size
+-  Consecutive elements matter
 
 ---
 
@@ -497,7 +497,7 @@ fun maxSumBruteForce(arr: IntArray, k: Int): Int {
     
     return maxSum
 }
-// Time: O(n*k) ❌
+// Time: O(n*k) 
 
 // Sliding window
 fun maxSumOptimized(arr: IntArray, k: Int): Int {
@@ -511,7 +511,7 @@ fun maxSumOptimized(arr: IntArray, k: Int): Int {
     
     return maxSum
 }
-// Time: O(n) ✅
+// Time: O(n) 
 ```
 
 ---

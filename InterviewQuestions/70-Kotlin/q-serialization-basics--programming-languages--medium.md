@@ -354,7 +354,7 @@ fun main() {
     val restoredTasks = Json.decodeFromString<List<Task>>(jsonString)
     println("\nRestored tasks:")
     restoredTasks.forEach { task ->
-        val status = if (task.completed) "✓" else "○"
+        val status = if (task.completed) "" else ""
         println("$status ${task.title}")
     }
 

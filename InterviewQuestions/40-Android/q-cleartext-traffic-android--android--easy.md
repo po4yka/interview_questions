@@ -41,7 +41,7 @@ tags: [android, 20251006-100011, difficulty/easy]
 
 **Cleartext (HTTP):** Data sent without encryption
 ```
-Client ─── HTTP (plaintext) ───> Server
+Client  HTTP (plaintext) > Server
 Request: GET /api/user HTTP/1.1
          Host: example.com
          Authorization: Bearer secret_token  ← Visible to attackers!
@@ -49,7 +49,7 @@ Request: GET /api/user HTTP/1.1
 
 **Encrypted (HTTPS):** Data encrypted with TLS/SSL
 ```
-Client ─── HTTPS (encrypted) ───> Server
+Client  HTTPS (encrypted) > Server
 Request: [encrypted data]  ← Protected from eavesdropping
 ```
 
@@ -100,7 +100,7 @@ Request: [encrypted data]  ← Protected from eavesdropping
 </application>
 ```
 
-**⚠️ Warning:** This allows cleartext for ALL domains - insecure!
+** Warning:** This allows cleartext for ALL domains - insecure!
 
 ### Production Best Practices
 
@@ -163,13 +163,13 @@ java.net.UnknownServiceException: CLEARTEXT communication to example.com not per
 
 ### Security Recommendations
 
-**✅ DO:**
+** DO:**
 - Use HTTPS everywhere in production
 - Implement certificate pinning for sensitive APIs
 - Use Network Security Configuration for granular control
 - Allow cleartext only for localhost/development servers
 
-**❌ DON'T:**
+** DON'T:**
 - Use `android:usesCleartextTraffic="true"` in production
 - Send sensitive data over HTTP
 - Allow cleartext for production APIs
@@ -190,7 +190,7 @@ java.net.UnknownServiceException: CLEARTEXT communication to example.com not per
 
 **Cleartext (HTTP):** Данные без шифрования
 ```
-Клиент ─── HTTP (открытый текст) ───> Сервер
+Клиент  HTTP (открытый текст) > Сервер
 Запрос: GET /api/user HTTP/1.1
         Host: example.com
         Authorization: Bearer secret_token  ← Видно атакующим!
@@ -198,7 +198,7 @@ java.net.UnknownServiceException: CLEARTEXT communication to example.com not per
 
 **Зашифрованный (HTTPS):** Данные зашифрованы TLS/SSL
 ```
-Клиент ─── HTTPS (зашифрованные данные) ───> Сервер
+Клиент  HTTPS (зашифрованные данные) > Сервер
 Запрос: [зашифрованные данные]  ← Защищено от прослушивания
 ```
 
@@ -249,7 +249,7 @@ java.net.UnknownServiceException: CLEARTEXT communication to example.com not per
 </application>
 ```
 
-**⚠️ Предупреждение:** Это разрешает cleartext для ВСЕХ доменов - небезопасно!
+** Предупреждение:** Это разрешает cleartext для ВСЕХ доменов - небезопасно!
 
 ### Лучшие практики для продакшена
 
@@ -312,13 +312,13 @@ java.net.UnknownServiceException: CLEARTEXT communication to example.com not per
 
 ### Рекомендации по безопасности
 
-**✅ ДЕЛАТЬ:**
+** ДЕЛАТЬ:**
 - Использовать HTTPS везде в продакшене
 - Реализовать certificate pinning для чувствительных API
 - Использовать Network Security Configuration для детального контроля
 - Разрешать cleartext только для localhost/серверов разработки
 
-**❌ НЕ ДЕЛАТЬ:**
+** НЕ ДЕЛАТЬ:**
 - Использовать `android:usesCleartextTraffic="true"` в продакшене
 - Отправлять чувствительные данные через HTTP
 - Разрешать cleartext для production API

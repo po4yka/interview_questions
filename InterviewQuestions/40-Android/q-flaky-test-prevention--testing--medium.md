@@ -27,7 +27,7 @@ Flaky tests are tests that sometimes pass and sometimes fail without code change
 @Test
 fun flakyTest_raceCondition() {
     viewModel.loadData()
-    Thread.sleep(100)  // ❌ Unreliable timing
+    Thread.sleep(100)  //  Unreliable timing
     assertEquals("Data", viewModel.data.value)
 }
 
@@ -35,7 +35,7 @@ fun flakyTest_raceCondition() {
 @Test
 fun stableTest_properAsync() = runTest {
     viewModel.loadData()
-    advanceUntilIdle()  // ✅ Wait for coroutines to complete
+    advanceUntilIdle()  //  Wait for coroutines to complete
     assertEquals("Data", viewModel.data.value)
 }
 ```
@@ -45,7 +45,7 @@ fun stableTest_properAsync() = runTest {
 // FLAKY: Shared mutable state
 class FlakyTest {
     companion object {
-        var counter = 0  // ❌ Shared across tests
+        var counter = 0  //  Shared across tests
     }
 
     @Test
@@ -63,7 +63,7 @@ class FlakyTest {
 
 // STABLE: Isolated state
 class StableTest {
-    private var counter = 0  // ✅ Fresh instance per test
+    private var counter = 0  //  Fresh instance per test
 
     @Test
     fun test1() {
@@ -85,20 +85,20 @@ class StableTest {
 @Test
 fun flakyTest_randomData() {
     val value = Random.nextInt()
-    assertTrue(value > 0)  // ❌ Fails ~50% of time
+    assertTrue(value > 0)  //  Fails ~50% of time
 }
 
 // STABLE: Deterministic data
 @Test
 fun stableTest_fixedData() {
     val value = 42
-    assertTrue(value > 0)  // ✅ Always passes
+    assertTrue(value > 0)  //  Always passes
 }
 
 // Or use seeded random for controlled randomness
 @Test
 fun stableTest_seededRandom() {
-    val random = Random(12345)  // ✅ Same sequence every run
+    val random = Random(12345)  //  Same sequence every run
     val value = random.nextInt(100)
     assertTrue(value >= 0)
 }
@@ -109,7 +109,7 @@ fun stableTest_seededRandom() {
 // FLAKY: Real network call
 @Test
 fun flakyTest_realNetwork() {
-    val response = apiService.getUser("123")  // ❌ Can timeout, fail
+    val response = apiService.getUser("123")  //  Can timeout, fail
     assertEquals("John", response.name)
 }
 
@@ -119,7 +119,7 @@ fun stableTest_mockedNetwork() = runTest {
     val mockApi = mockk<ApiService>()
     coEvery { mockApi.getUser("123") } returns User("123", "John")
 
-    val response = mockApi.getUser("123")  // ✅ Always returns same data
+    val response = mockApi.getUser("123")  //  Always returns same data
     assertEquals("John", response.name)
 }
 ```
@@ -135,7 +135,7 @@ class OrderDependentTests {
 
     @Test
     fun test2_getUser() {
-        // ❌ Assumes test1 ran first
+        //  Assumes test1 ran first
         val user = database.getUser("1")
         assertEquals("John", user?.name)
     }
@@ -157,7 +157,7 @@ class IndependentTests {
 
     @Test
     fun test2_getUser() {
-        // ✅ Setup own data
+        //  Setup own data
         database.insert(User("2", "Jane"))
         val user = database.getUser("2")
         assertEquals("Jane", user?.name)
@@ -174,7 +174,7 @@ class IndependentTests {
 fun flakyTest_uiUpdate() {
     composeTestRule.setContent { MyScreen() }
     composeTestRule.onNodeWithTag("button").performClick()
-    composeTestRule.onNodeWithText("Updated").assertExists()  // ❌ May not update yet
+    composeTestRule.onNodeWithText("Updated").assertExists()  //  May not update yet
 }
 
 // STABLE: Wait for condition
@@ -190,7 +190,7 @@ fun stableTest_waitForUpdate() {
             .isNotEmpty()
     }
 
-    composeTestRule.onNodeWithText("Updated").assertExists()  // ✅ Waits for condition
+    composeTestRule.onNodeWithText("Updated").assertExists()  //  Waits for condition
 }
 ```
 
@@ -200,14 +200,14 @@ fun stableTest_waitForUpdate() {
 @Test
 fun flakyTest_coroutineNotComplete() = runTest {
     viewModel.loadData()
-    assertEquals(LoadState.Success, viewModel.state.value)  // ❌ May still be loading
+    assertEquals(LoadState.Success, viewModel.state.value)  //  May still be loading
 }
 
 // STABLE: Advance time
 @Test
 fun stableTest_coroutineComplete() = runTest {
     viewModel.loadData()
-    advanceUntilIdle()  // ✅ Wait for all coroutines
+    advanceUntilIdle()  //  Wait for all coroutines
     assertEquals(LoadState.Success, viewModel.state.value)
 }
 ```
@@ -219,7 +219,7 @@ fun stableTest_coroutineComplete() = runTest {
 fun flakyTest_animationRunning() {
     composeTestRule.setContent { AnimatedScreen() }
     composeTestRule.onNodeWithTag("animated").assertExists()
-    // ❌ Animation may still be running
+    //  Animation may still be running
 }
 
 // STABLE: Control time
@@ -228,7 +228,7 @@ fun stableTest_animationControlled() {
     composeTestRule.mainClock.autoAdvance = false
     composeTestRule.setContent { AnimatedScreen() }
 
-    composeTestRule.mainClock.advanceTimeBy(500)  // ✅ Control animation timing
+    composeTestRule.mainClock.advanceTimeBy(500)  //  Control animation timing
     composeTestRule.waitForIdle()
 
     composeTestRule.onNodeWithTag("animated").assertExists()
@@ -251,7 +251,7 @@ class ProperCleanupTest {
 
     @After
     fun tearDown() {
-        // ✅ Always cleanup
+        //  Always cleanup
         database.close()
         tempFile.delete()
     }
@@ -280,12 +280,12 @@ class ModernCleanupTest {
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class IsolatedTests {
-    // ✅ New instance per test method
+    //  New instance per test method
     private val repository = TestRepository()
 
     @Before
     fun resetState() {
-        repository.clear()  // ✅ Clean slate
+        repository.clear()  //  Clean slate
     }
 
     @Test
@@ -510,3 +510,17 @@ Flaky тесты - это тесты которые иногда проходя�
 13. **Контролируйте время** с TestDispatcher
 14. **Документируйте известный flakiness**
 15. **Тестируйте многократно** для выявления
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing
+- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+- [[q-screenshot-snapshot-testing--testing--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-coroutines-flow--testing--hard]] - Testing

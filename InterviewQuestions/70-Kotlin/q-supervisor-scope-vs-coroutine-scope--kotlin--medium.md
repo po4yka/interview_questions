@@ -408,7 +408,7 @@ val handler = CoroutineExceptionHandler { _, exception ->
     println("Caught: ${exception.message}")
 }
 
-// ✅ Works with supervisorScope
+//  Works with supervisorScope
 supervisorScope {
     launch(handler) {
         throw Exception("Task failed")
@@ -416,7 +416,7 @@ supervisorScope {
     // Handler catches exception
 }
 
-// ❌ Doesn't work with coroutineScope
+//  Doesn't work with coroutineScope
 coroutineScope {
     launch(handler) {
         throw Exception("Task failed")
@@ -429,16 +429,16 @@ coroutineScope {
 
 ```
 Do all operations need to succeed?
-├─ Yes → coroutineScope
-│   └─ One failure cancels all
-│
-└─ No → supervisorScope
-    └─ Operations are independent
-        ├─ Need all results?
-        │   └─ Wrap each in try-catch
-        │
-        └─ OK with partial results?
-            └─ Collect successful results
+ Yes → coroutineScope
+    One failure cancels all
+
+ No → supervisorScope
+     Operations are independent
+         Need all results?
+            Wrap each in try-catch
+        
+         OK with partial results?
+             Collect successful results
 ```
 
 ### Best Practices
@@ -474,14 +474,14 @@ Do all operations need to succeed?
 
 4. **Don't mix scopes unnecessarily**:
    ```kotlin
-   // ❌ Confusing
+   //  Confusing
    coroutineScope {
        supervisorScope {
            // ...
        }
    }
 
-   // ✅ Pick one based on requirements
+   //  Pick one based on requirements
    supervisorScope {
        // All children independent
    }
@@ -491,14 +491,14 @@ Do all operations need to succeed?
 
 1. **Not handling exceptions in supervisorScope**:
    ```kotlin
-   // ❌ Exception printed but not handled
+   //  Exception printed but not handled
    supervisorScope {
        launch {
            throw Exception("Oops")
        }
    }
 
-   // ✅ Explicit handling
+   //  Explicit handling
    supervisorScope {
        launch {
            try {
@@ -512,14 +512,14 @@ Do all operations need to succeed?
 
 2. **Using coroutineScope for independent tasks**:
    ```kotlin
-   // ❌ One widget failure kills all
+   //  One widget failure kills all
    coroutineScope {
        launch { loadWeather() }
        launch { loadNews() }
        launch { loadStocks() }
    }
 
-   // ✅ Independent failures
+   //  Independent failures
    supervisorScope {
        launch { try { loadWeather() } catch(e: Exception) {} }
        launch { try { loadNews() } catch(e: Exception) {} }
@@ -529,13 +529,13 @@ Do all operations need to succeed?
 
 3. **Expecting CoroutineExceptionHandler to work with coroutineScope**:
    ```kotlin
-   // ❌ Handler not called
+   //  Handler not called
    val handler = CoroutineExceptionHandler { _, e -> }
    coroutineScope {
        launch(handler) { throw Exception() }
    }
 
-   // ✅ Use try-catch instead
+   //  Use try-catch instead
    coroutineScope {
        try {
            launch { throw Exception() }
@@ -673,11 +673,11 @@ suspend fun aggregateUserData(userId: Int) = supervisorScope {
 
 ```
 Все операции должны успешно завершиться?
-├─ Да → coroutineScope
-│   └─ Одна ошибка отменяет все
-│
-└─ Нет → supervisorScope
-    └─ Операции независимы
+ Да → coroutineScope
+    Одна ошибка отменяет все
+
+ Нет → supervisorScope
+     Операции независимы
 ```
 
 ### Лучшие практики
@@ -700,12 +700,12 @@ suspend fun aggregateUserData(userId: Int) = supervisorScope {
 
 1. **Не обработка исключений в supervisorScope**:
    ```kotlin
-   // ❌ Исключение напечатано но не обработано
+   //  Исключение напечатано но не обработано
    supervisorScope {
        launch { throw Exception() }
    }
 
-   // ✅ Явная обработка
+   //  Явная обработка
    supervisorScope {
        launch {
            try { doWork() }
@@ -716,13 +716,13 @@ suspend fun aggregateUserData(userId: Int) = supervisorScope {
 
 2. **coroutineScope для независимых задач**:
    ```kotlin
-   // ❌ Одна ошибка убивает все
+   //  Одна ошибка убивает все
    coroutineScope {
        launch { loadWeather() }
        launch { loadNews() }
    }
 
-   // ✅ Независимые ошибки
+   //  Независимые ошибки
    supervisorScope {
        launch { try { loadWeather() } catch(e: Exception) {} }
        launch { try { loadNews() } catch(e: Exception) {} }

@@ -503,13 +503,13 @@ private fun SharedTransitionScope.PhotoDetail(
 **1. Use unique keys:**
 
 ```kotlin
-// ✅ DO: Unique keys per element
+//  DO: Unique keys per element
 .sharedElement(
     rememberSharedContentState(key = "item-${item.id}"),
     animatedVisibilityScope = scope
 )
 
-// ❌ DON'T: Reuse keys
+//  DON'T: Reuse keys
 .sharedElement(
     rememberSharedContentState(key = "item"),
     animatedVisibilityScope = scope
@@ -519,7 +519,7 @@ private fun SharedTransitionScope.PhotoDetail(
 **2. Handle non-shared content properly:**
 
 ```kotlin
-// ✅ DO: Skip or animate non-shared content
+//  DO: Skip or animate non-shared content
 .skipToLookaheadSize() // Skip to final size
 .animateBounds() // Animate bounds
 ```
@@ -527,7 +527,7 @@ private fun SharedTransitionScope.PhotoDetail(
 **3. Consider content scale:**
 
 ```kotlin
-// ✅ DO: Match content scale
+//  DO: Match content scale
 // Source: ContentScale.Crop
 // Target: ContentScale.Fit
 // Result: Smooth transition
@@ -571,3 +571,18 @@ SharedTransitionLayout можно интегрировать с Jetpack Navigati
 4. Используйте подходящие bounds transforms для естественного движения
 
 Shared element transitions делают навигацию плавной и понятной для пользователей.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - Compose, Jetpack

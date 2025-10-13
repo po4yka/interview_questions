@@ -40,11 +40,11 @@ There are many specialized subclasses of views that act as:
 
 ```
 ViewGroup (Root Layout - LinearLayout)
-├── TextView (Header)
-├── ViewGroup (Nested Layout - RelativeLayout)
-│   ├── ImageView (Icon)
-│   └── TextView (Description)
-└── Button (Action Button)
+ TextView (Header)
+ ViewGroup (Nested Layout - RelativeLayout)
+    ImageView (Icon)
+    TextView (Description)
+ Button (Action Button)
 ```
 
 ## Using Views
@@ -501,3 +501,16 @@ View могут иметь связанный с ними целочисленн
 - **requestLayout()** для изменений размера/позиции, **invalidate()** для визуальных изменений
 - Используйте **слушателей** для ответа на взаимодействия пользователя
 - **ViewGroup** - это специальный view, который может содержать другие view
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Advanced (Harder)
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View

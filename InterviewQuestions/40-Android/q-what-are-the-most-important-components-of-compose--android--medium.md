@@ -549,31 +549,31 @@ fun Animations() {
 
 ```
 Compose Runtime
-    ├── Composable Functions (@Composable)
-    ├── State Management (remember, mutableStateOf)
-    │   ├── State Hoisting
-    │   ├── ViewModel Integration
-    │   └── State Flow/LiveData
-    ├── Modifiers (size, padding, click, etc.)
-    ├── Layouts
-    │   ├── Column, Row, Box
-    │   ├── LazyColumn, LazyRow
-    │   └── Custom Layouts
-    ├── Recomposition Engine
-    ├── Effect Handlers
-    │   ├── LaunchedEffect
-    │   ├── DisposableEffect
-    │   └── SideEffect
-    ├── Material Components
-    │   ├── Button, Text, Card
-    │   ├── TextField, Checkbox
-    │   └── Scaffold, TopAppBar
-    ├── Theme System
-    │   ├── Colors
-    │   ├── Typography
-    │   └── Shapes
-    ├── Navigation
-    └── Animations
+     Composable Functions (@Composable)
+     State Management (remember, mutableStateOf)
+        State Hoisting
+        ViewModel Integration
+        State Flow/LiveData
+     Modifiers (size, padding, click, etc.)
+     Layouts
+        Column, Row, Box
+        LazyColumn, LazyRow
+        Custom Layouts
+     Recomposition Engine
+     Effect Handlers
+        LaunchedEffect
+        DisposableEffect
+        SideEffect
+     Material Components
+        Button, Text, Card
+        TextField, Checkbox
+        Scaffold, TopAppBar
+     Theme System
+        Colors
+        Typography
+        Shapes
+     Navigation
+     Animations
 ```
 
 ### Summary

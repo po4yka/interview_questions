@@ -139,3 +139,21 @@ The choice of method depends on the specific use case. Modern development often 
 ## Ответ (RU)
 Передача данных между фрагментами может быть реализована несколькими способами. Важно помнить что фрагменты не должны напрямую обмениваться данными друг с другом. Вместо этого они должны общаться через свою родительскую активность или использовать общий ViewModel. Основные подходы к передаче данных между фрагментами: использование родительской активности как посредника через интерфейс или методы активности. Использование ViewModel для общения между фрагментами. Создайте ViewModel содержащую LiveData или другие обсерваблы для хранения данных. Доступ к этой ViewModel должен быть получен из обоих фрагментов через их родительскую активность. Использование Bundle и аргументов фрагмента для передачи данных при создании нового экземпляра фрагмента. Создайте Bundle и поместите в него данные используйте setArguments для передачи Bundle новому экземпляру фрагмента. В целевом фрагменте извлеките данные из полученного Bundle с помощью метода getArguments. Выбор метода зависит от конкретного случая использования в современной разработке часто рекомендуется использовать ViewModel для обмена данными между фрагментами так как это способствует созданию надежной и тестируемой архитектуры приложения
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment
+- [[q-fragment-basics--android--easy]] - Fragment
+
+### Related (Medium)
+- [[q-save-data-outside-fragment--android--medium]] - Fragment
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - Fragment
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment
+- [[q-how-to-pass-parameters-to-a-fragment--android--easy]] - Fragment
+
+### Advanced (Harder)
+- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - Fragment

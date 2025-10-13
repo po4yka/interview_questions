@@ -73,16 +73,16 @@ interface ApiService {
 - **Latency**: Round-trip time for each request
 
 **Pros:**
-✓ Simple and widely supported
-✓ Cacheable responses
-✓ Works through firewalls and proxies
-✓ Scalable for stateless operations
+ Simple and widely supported
+ Cacheable responses
+ Works through firewalls and proxies
+ Scalable for stateless operations
 
 **Cons:**
-✗ Not suitable for real-time updates
-✗ Client must poll for new data
-✗ High latency for frequent updates
-✗ Inefficient for continuous data flow
+ Not suitable for real-time updates
+ Client must poll for new data
+ High latency for frequent updates
+ Inefficient for continuous data flow
 
 **Use Cases:**
 - REST APIs
@@ -142,16 +142,16 @@ class LongPollingClient @Inject constructor(
 - **Fallback**: Works where WebSocket might be blocked
 
 **Pros:**
-✓ Near real-time updates
-✓ Works through most firewalls
-✓ Compatible with HTTP/1.1
-✓ Simple server implementation
+ Near real-time updates
+ Works through most firewalls
+ Compatible with HTTP/1.1
+ Simple server implementation
 
 **Cons:**
-✗ High resource usage on server
-✗ Latency between polls
-✗ Overhead of HTTP headers
-✗ Not truly bidirectional
+ High resource usage on server
+ Latency between polls
+ Overhead of HTTP headers
+ Not truly bidirectional
 
 **Use Cases:**
 - Chat applications (fallback)
@@ -230,18 +230,18 @@ class WebSocketClient @Inject constructor(
 - **Real-time**: Instant message delivery
 
 **Pros:**
-✓ True real-time, bidirectional
-✓ Low latency
-✓ Minimal overhead after handshake
-✓ Efficient for high-frequency updates
-✓ Binary and text support
+ True real-time, bidirectional
+ Low latency
+ Minimal overhead after handshake
+ Efficient for high-frequency updates
+ Binary and text support
 
 **Cons:**
-✗ More complex to implement
-✗ May be blocked by proxies/firewalls
-✗ Requires connection management
-✗ State management complexity
-✗ Doesn't work with HTTP caching
+ More complex to implement
+ May be blocked by proxies/firewalls
+ Requires connection management
+ State management complexity
+ Doesn't work with HTTP caching
 
 **Use Cases:**
 - Real-time chat applications
@@ -406,18 +406,18 @@ class SSEManager @Inject constructor() {
 - **Event IDs**: Track last received event
 
 **Pros:**
-✓ Simple to implement
-✓ Automatic reconnection
-✓ Event IDs for reliability
-✓ Works through HTTP proxies
-✓ Text-based format
-✓ Built-in browser support
+ Simple to implement
+ Automatic reconnection
+ Event IDs for reliability
+ Works through HTTP proxies
+ Text-based format
+ Built-in browser support
 
 **Cons:**
-✗ Unidirectional (server to client only)
-✗ Text data only (no binary)
-✗ Limited browser connections (6 per domain)
-✗ Less efficient than WebSocket for bidirectional
+ Unidirectional (server to client only)
+ Text data only (no binary)
+ Limited browser connections (6 per domain)
+ Less efficient than WebSocket for bidirectional
 
 **Use Cases:**
 - Live news feeds
@@ -440,7 +440,7 @@ class SSEManager @Inject constructor() {
 | **Real-time** | No | Near real-time | Yes | Yes |
 | **Binary Data** | Yes | Yes | Yes | No |
 | **Complexity** | Low | Medium | High | Low |
-| **Firewall** | ✓ | ✓ | Sometimes | ✓ |
+| **Firewall** |  |  | Sometimes |  |
 | **Scalability** | High | Low | Medium | Medium |
 
 ### Performance Comparison
@@ -569,17 +569,17 @@ WebSocket обеспечивает полнодуплексную двунапр
 - **Реальное время**: Мгновенная доставка сообщений
 
 **Преимущества:**
-✓ Настоящий real-time, двунаправленный
-✓ Низкая задержка
-✓ Минимальные накладные расходы после рукопожатия
-✓ Эффективен для частых обновлений
-✓ Поддержка бинарных и текстовых данных
+ Настоящий real-time, двунаправленный
+ Низкая задержка
+ Минимальные накладные расходы после рукопожатия
+ Эффективен для частых обновлений
+ Поддержка бинарных и текстовых данных
 
 **Недостатки:**
-✗ Более сложная реализация
-✗ Может блокироваться прокси/файрволами
-✗ Требует управления соединением
-✗ Сложность управления состоянием
+ Более сложная реализация
+ Может блокироваться прокси/файрволами
+ Требует управления соединением
+ Сложность управления состоянием
 
 **Когда использовать:** Реал-тайм чаты, живые спортивные счета, многопользовательские игры, торговые платформы, совместное редактирование, отслеживание местоположения.
 
@@ -595,16 +595,16 @@ SSE позволяет серверам отправлять данные кли
 - **Event ID**: Отслеживание последнего полученного события
 
 **Преимущества:**
-✓ Простая реализация
-✓ Автоматическое переподключение
-✓ Event ID для надежности
-✓ Работает через HTTP прокси
-✓ Текстовый формат
+ Простая реализация
+ Автоматическое переподключение
+ Event ID для надежности
+ Работает через HTTP прокси
+ Текстовый формат
 
 **Недостатки:**
-✗ Однонаправленный (только сервер → клиент)
-✗ Только текстовые данные (нет бинарных)
-✗ Менее эффективен чем WebSocket для двунаправленной связи
+ Однонаправленный (только сервер → клиент)
+ Только текстовые данные (нет бинарных)
+ Менее эффективен чем WebSocket для двунаправленной связи
 
 **Когда использовать:** Живые новостные ленты, обновления цен акций, уведомления социальных сетей, панели мониторинга сервера.
 

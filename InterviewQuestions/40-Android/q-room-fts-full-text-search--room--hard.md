@@ -1052,3 +1052,12 @@ override fun onCreate(db: SupportSQLiteDatabase) {
 - **Булевы операторы**: Поддержка сложных запросов (AND, OR, NOT)
 - **Префиксное сопоставление**: Функциональность автодополнения
 - **Триггеры**: Автоматическая синхронизация FTS
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-transactions-dao--room--medium]] - Storage
+- [[q-room-paging3-integration--room--medium]] - Storage

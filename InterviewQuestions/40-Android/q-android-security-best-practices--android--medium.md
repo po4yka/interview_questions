@@ -536,3 +536,14 @@ val client = OkHttpClient.Builder()
 - [Security Tips](https://developer.android.com/training/articles/security-tips)
 - [Android App Security Best Practices - RishabhSoft](https://www.rishabhsoft.com/blog/android-app-security-best-practices)
 - [Android App Security Best Practices - QuickBird Studios](https://quickbirdstudios.com/blog/android-app-security-best-practices/)
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-encrypted-file-storage--security--medium]] - Security
+- [[q-database-encryption-android--android--medium]] - Security
+- [[q-runtime-permissions-best-practices--permissions--medium]] - Security
+- [[q-app-security-best-practices--security--medium]] - Security

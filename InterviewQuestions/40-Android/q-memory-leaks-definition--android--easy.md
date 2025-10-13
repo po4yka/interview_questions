@@ -9,6 +9,10 @@ tags:
   - performance
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Что такое утечки памяти?
@@ -106,11 +110,11 @@ class MyActivity : AppCompatActivity() {
 
 **Effects of Memory Leaks:**
 
-- 📈 **Memory usage grows** over time
-- 💥 **OutOfMemoryError** crashes
-- 🐌 **App slowdown** and lag
-- 🔋 **Battery drain**
-- ❄️ **UI freezes**
+-  **Memory usage grows** over time
+-  **OutOfMemoryError** crashes
+-  **App slowdown** and lag
+-  **Battery drain**
+-  **UI freezes**
 
 **Detection:**
 
@@ -162,3 +166,18 @@ class MyActivity : AppCompatActivity() {
 ## Ответ (RU)
 Утечки памяти происходят, когда объект в памяти больше не используется, но остаётся недоступным для сборщика мусора из-за активных ссылок на него. Это может случиться из-за циклических ссылок или неправильно управляемых ресурсов. Утечки памяти приводят к увеличению потребления памяти и ухудшению производительности приложения.
 
+
+---
+
+## Related Questions
+
+### Computer Science Fundamentals
+- [[q-primitive-vs-reference-types--programming-languages--easy]] - Memory Management
+- [[q-reference-types-criteria--programming-languages--medium]] - Memory Management
+- [[q-kotlin-reference-equality-operator--programming-languages--easy]] - Memory Management
+- [[q-reference-types-protect-from-deletion--programming-languages--easy]] - Memory Management
+- [[q-find-object-without-references--programming-languages--medium]] - Memory Management
+
+### Kotlin Language Features
+- [[q-coroutine-memory-leaks--kotlin--hard]] - Memory Management
+- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Memory Management

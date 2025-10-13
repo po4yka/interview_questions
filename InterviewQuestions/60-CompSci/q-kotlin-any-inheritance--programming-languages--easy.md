@@ -53,10 +53,10 @@ obj.hashCode()
 **Type hierarchy:**
 ```
 Any (root)
-├── String
-├── Int
-├── List<T>
-└── YourCustomClass
+ String
+ Int
+ List<T>
+ YourCustomClass
 ```
 
 **Note**: For nullable types, the root is `Any?`

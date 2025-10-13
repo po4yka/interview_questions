@@ -80,8 +80,8 @@ android.nonFinalResIds=true
 // build.gradle.kts (project level)
 buildscript {
     // Use specific versions, not '+' or 'latest'
-    val kotlinVersion = "1.9.20"  // ✅ Specific version
-    // val kotlinVersion = "1.9.+" // ❌ Dynamic version
+    val kotlinVersion = "1.9.20"  //  Specific version
+    // val kotlinVersion = "1.9.+" //  Dynamic version
 
     repositories {
         // Order matters - most used first
@@ -230,24 +230,24 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 // In build.gradle.kts
 dependencies {
-    // ✅ Use implementation instead of api when possible
+    //  Use implementation instead of api when possible
     implementation(libs.androidx.core)
 
-    // ❌ Avoid large dependencies if not needed
+    //  Avoid large dependencies if not needed
     // implementation("com.google.guava:guava:32.1.3-android")  // 2.7 MB
 
-    // ✅ Use specific modules
+    //  Use specific modules
     implementation("androidx.compose.ui:ui:1.5.4")  // Only UI, not all Compose
 
-    // ✅ Exclude transitive dependencies you don't need
+    //  Exclude transitive dependencies you don't need
     implementation("com.squareup.retrofit2:retrofit:2.9.0") {
         exclude(group = "com.squareup.okio", module = "okio")
     }
 
-    // ✅ Use debugImplementation for debug-only deps
+    //  Use debugImplementation for debug-only deps
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
 
-    // ✅ Don't duplicate dependencies
+    //  Don't duplicate dependencies
     // Check: ./gradlew :app:dependencies
 }
 ```
@@ -386,8 +386,8 @@ plugins {
 
 // Use KSP instead of Kapt when possible
 dependencies {
-    ksp(libs.hilt.compiler)      // ✅ Faster
-    // kapt(libs.hilt.compiler)  // ❌ Slower
+    ksp(libs.hilt.compiler)      //  Faster
+    // kapt(libs.hilt.compiler)  //  Slower
 }
 ```
 
@@ -465,7 +465,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          cache: 'gradle'  # ✅ Enable caching
+          cache: 'gradle'  #  Enable caching
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
@@ -483,7 +483,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew assembleDebug --parallel --build-cache --configuration-cache
 
-      # ✅ Only run necessary tasks
+      #  Only run necessary tasks
       - name: Run unit tests (only changed modules)
         run: ./gradlew testDebugUnitTest --parallel
 ```
@@ -492,8 +492,8 @@ jobs:
 
 ```bash
 # Use specific tasks instead of building everything
-./gradlew :app:assembleDebug          # ✅ Only app module
-# ./gradlew build                      # ❌ Builds all modules
+./gradlew :app:assembleDebug          #  Only app module
+# ./gradlew build                      #  Builds all modules
 
 # Use --dry-run to see what will execute
 ./gradlew assembleDebug --dry-run
@@ -514,25 +514,25 @@ jobs:
 #### 9. **Quick Wins Checklist**
 
 ```kotlin
-// ✅ Enable in gradle.properties
+//  Enable in gradle.properties
 org.gradle.parallel=true              // 20-40% faster
 org.gradle.caching=true               // 30-50% faster (incremental)
 org.gradle.configuration-cache=true   // 10-30% faster
 org.gradle.vfs.watch=true            // 5-15% faster
 org.gradle.jvmargs=-Xmx4096m         // Prevent OOM, faster GC
 
-// ✅ In build.gradle.kts
+//  In build.gradle.kts
 android.nonTransitiveRClass=true      // Faster R class generation
 kapt.useBuildCache=true              // Cache annotation processing
 ksp instead of kapt                  // 2x faster annotation processing
 
-// ✅ Development workflow
+//  Development workflow
 Use specific build variants          // Don't build all
 Modularize project                   // Parallel compilation
 Disable lint in debug                // Run only in CI
 Use build scans                      // Identify bottlenecks
 
-// ✅ Dependencies
+//  Dependencies
 Remove unused dependencies           // Less to compile
 Use implementation over api          // Smaller recompilation scope
 Version catalog                      // Faster resolution
@@ -563,10 +563,10 @@ val buildComparison = listOf(
 
 **1. Configuration time too long:**
 ```kotlin
-// ❌ Don't resolve dependencies at configuration time
+//  Don't resolve dependencies at configuration time
 val myDeps = configurations.implementation.resolve()  // Slow!
 
-// ✅ Do it at execution time
+//  Do it at execution time
 tasks.register("myTask") {
     doLast {
         val myDeps = configurations.implementation.resolve()  // Fast
@@ -576,7 +576,7 @@ tasks.register("myTask") {
 
 **2. Too many variants:**
 ```kotlin
-// ❌ Excessive build types and flavors
+//  Excessive build types and flavors
 productFlavors {
     create("dev") { ... }
     create("staging") { ... }
@@ -588,7 +588,7 @@ buildTypes {
 }
 // = 6 variants, slow
 
-// ✅ Minimize variants or use build parameters
+//  Minimize variants or use build parameters
 ```
 
 **3. Large dependencies:**
@@ -664,3 +664,18 @@ org.gradle.jvmargs=-Xmx4096m         # Больше памяти
 | **Улучшение** | **78%** | **93%** |
 
 Систематическая оптимизация всех областей даёт максимальный эффект.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-dagger-build-time-optimization--android--medium]] - Performance, Build
+- [[q-build-optimization-gradle--gradle--medium]] - Performance, Build
+- [[q-gradle-build-system--android--medium]] - Build, Ui
+- [[q-main-causes-ui-lag--android--medium]] - Performance, Ui
+- [[q-performance-optimization-android--android--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-kotlin-dsl-builders--kotlin--hard]] - Build, Ui
+- [[q-compose-performance-optimization--android--hard]] - Performance

@@ -587,10 +587,10 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 **Decision flowchart:**
 ```
 Is task user-initiated and time-sensitive?
-├─ YES → Foreground Service
-└─ NO → Is task deferrable?
-    ├─ YES → WorkManager
-    └─ NO → Consider task necessity
+ YES → Foreground Service
+ NO → Is task deferrable?
+     YES → WorkManager
+     NO → Consider task necessity
         (Most tasks are deferrable!)
 ```
 
@@ -608,3 +608,20 @@ Is task user-initiated and time-sensitive?
 - **WorkManager**: синхронизация данных, загрузка в фоне, периодические задачи
 - **JobScheduler**: системно-оптимизированные периодические задачи
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-android-service-types--android--easy]] - Service
+
+### Related (Medium)
+- [[q-service-component--android--medium]] - Service
+- [[q-foreground-service-types--background--medium]] - Service
+- [[q-when-can-the-system-restart-a-service--android--medium]] - Service
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Service
+- [[q-background-vs-foreground-service--android--medium]] - Service
+
+### Advanced (Harder)
+- [[q-service-lifecycle-binding--background--hard]] - Service

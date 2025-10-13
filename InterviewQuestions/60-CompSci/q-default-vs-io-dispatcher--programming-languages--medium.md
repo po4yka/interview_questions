@@ -1,8 +1,14 @@
 ---
+topic: programming-languages
+subtopics: ["computer-science", "fundamentals"]
 tags:
   - programming-languages
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-programming-languages
+related_questions: []
 ---
 
 # Default Dispatcher vs IO Dispatcher
@@ -401,3 +407,18 @@ class BestPractices {
 ## Ответ (RU)
 
 Dispatchers.Default — для тяжёлых вычислений (CPU-операции). Dispatchers.IO — для операций ввода-вывода (сеть, файлы, БД).
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-xml-acronym--programming-languages--easy]] - Computer Science
+- [[q-data-structures-overview--algorithms--easy]] - Data Structures
+
+### Related (Medium)
+- [[q-clean-code-principles--software-engineering--medium]] - Computer Science
+- [[q-oop-principles-deep-dive--computer-science--medium]] - Computer Science
+
+### Advanced (Harder)
+- [[q-os-fundamentals-concepts--computer-science--hard]] - Computer Science

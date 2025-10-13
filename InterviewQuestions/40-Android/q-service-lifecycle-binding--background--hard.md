@@ -929,3 +929,21 @@ Services — фундаментальные Android-компоненты для 
 - **Foreground Services**: обязательны для видимой пользователю работы на Android 12+
 
 Ключевые моменты: правильное управление жизненным циклом, соответствие требованиям foreground service, надежная обработка ошибок, эффективный дизайн IPC.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-service-component--android--medium]] - Service
+- [[q-testing-viewmodels-turbine--testing--medium]] - Lifecycle
+- [[q-what-is-viewmodel--android--medium]] - Lifecycle
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-service-component--android--medium]] - Service
+- [[q-testing-viewmodels-turbine--testing--medium]] - Lifecycle
+- [[q-what-is-viewmodel--android--medium]] - Lifecycle

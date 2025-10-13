@@ -1009,3 +1009,14 @@ Runtime разрешения требуют:
 - Одно разрешение за раз
 - Использование системного UI
 - Аналитика конверсии разрешений
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-encrypted-file-storage--security--medium]] - Security
+- [[q-database-encryption-android--android--medium]] - Security
+- [[q-app-security-best-practices--security--medium]] - Security
+- [[q-android14-permissions--permissions--medium]] - Security

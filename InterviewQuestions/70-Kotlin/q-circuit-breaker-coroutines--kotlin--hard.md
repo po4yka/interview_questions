@@ -76,19 +76,19 @@ The Circuit Breaker pattern prevents an application from repeatedly trying to ex
 The Circuit Breaker pattern is inspired by electrical circuit breakers that automatically stop the flow of electricity when a fault is detected.
 
 ```
-┌─────────────┐         ┌─────────────┐         ┌─────────────┐
-│   Client    │────────▶│   Circuit   │────────▶│   Service   │
-│             │         │   Breaker   │         │  (Backend)  │
-└─────────────┘         └─────────────┘         └─────────────┘
-                              │
-                              │ Monitors failures
-                              │ Controls access
-                              │ Manages state
-                              ▼
-                        ┌────────────┐
-                        │   State    │
-                        │  Machine   │
-                        └────────────┘
+                  
+   Client       Circuit      Service   
+                         Breaker              (Backend)  
+                  
+                              
+                               Monitors failures
+                               Controls access
+                               Manages state
+                              
+                        
+                           State    
+                          Machine   
+                        
 ```
 
 ### Why Use Circuit Breaker?
@@ -96,7 +96,7 @@ The Circuit Breaker pattern is inspired by electrical circuit breakers that auto
 **Problem without Circuit Breaker:**
 
 ```kotlin
-// ❌ Without circuit breaker - keeps hammering failing service
+//  Without circuit breaker - keeps hammering failing service
 class PaymentService(private val api: PaymentApi) {
     suspend fun processPayment(payment: Payment): Result<PaymentResponse> {
         return try {
@@ -117,7 +117,7 @@ class PaymentService(private val api: PaymentApi) {
 **Solution with Circuit Breaker:**
 
 ```kotlin
-// ✅ With circuit breaker - fails fast when service is down
+//  With circuit breaker - fails fast when service is down
 class PaymentService(
     private val api: PaymentApi,
     private val circuitBreaker: CircuitBreaker
@@ -141,16 +141,16 @@ class PaymentService(
 ### State: Closed (Normal Operation)
 
 ```
-┌─────────────────────────────────────────┐
-│         CLOSED State                    │
-│  (Normal Operation)                     │
-│                                         │
-│  • All requests pass through            │
-│  • Failures are counted                 │
-│  • Success resets failure counter       │
-│  • When failures exceed threshold:      │
-│    → Transition to OPEN                 │
-└─────────────────────────────────────────┘
+
+         CLOSED State                    
+  (Normal Operation)                     
+                                         
+  • All requests pass through            
+  • Failures are counted                 
+  • Success resets failure counter       
+  • When failures exceed threshold:      
+    → Transition to OPEN                 
+
 ```
 
 **Code Example:**
@@ -177,16 +177,16 @@ sealed class CircuitBreakerState {
 ### State: Open (Failing)
 
 ```
-┌─────────────────────────────────────────┐
-│         OPEN State                      │
-│  (Service is Down)                      │
-│                                         │
-│  • All requests fail immediately        │
-│  • No calls to backend service          │
-│  • Failure counter is at maximum        │
-│  • After timeout period:                │
-│    → Transition to HALF_OPEN            │
-└─────────────────────────────────────────┘
+
+         OPEN State                      
+  (Service is Down)                      
+                                         
+  • All requests fail immediately        
+  • No calls to backend service          
+  • Failure counter is at maximum        
+  • After timeout period:                
+    → Transition to HALF_OPEN            
+
 ```
 
 **Code Example:**
@@ -206,17 +206,17 @@ sealed class CircuitBreakerState {
 ### State: Half-Open (Testing)
 
 ```
-┌─────────────────────────────────────────┐
-│         HALF_OPEN State                 │
-│  (Testing Recovery)                     │
-│                                         │
-│  • Limited requests pass through        │
-│  • Testing if service recovered         │
-│  • On success:                          │
-│    → Transition to CLOSED               │
-│  • On failure:                          │
-│    → Transition back to OPEN            │
-└─────────────────────────────────────────┘
+
+         HALF_OPEN State                 
+  (Testing Recovery)                     
+                                         
+  • Limited requests pass through        
+  • Testing if service recovered         
+  • On success:                          
+    → Transition to CLOSED               
+  • On failure:                          
+    → Transition back to OPEN            
+
 ```
 
 **Code Example:**
@@ -243,36 +243,36 @@ sealed class CircuitBreakerState {
 ## State Transition Diagram
 
 ```
-                    ┌─────────────┐
-                    │   CLOSED    │◀─────────────────┐
-                    │  (Normal)   │                  │
-                    └──────┬──────┘                  │
-                           │                         │
-                           │ Failure threshold       │ Success threshold
-                           │ exceeded                │ in HALF_OPEN
-                           │                         │
-                           ▼                         │
-                    ┌─────────────┐                  │
-                    │    OPEN     │                  │
-                    │  (Failing)  │                  │
-                    └──────┬──────┘                  │
-                           │                         │
-                           │ Timeout period          │
-                           │ elapsed                 │
-                           │                         │
-                           ▼                         │
-                    ┌─────────────┐                  │
-                    │  HALF_OPEN  │──────────────────┘
-                    │  (Testing)  │
-                    └──────┬──────┘
-                           │
-                           │ Failure
-                           │
-                           ▼
-                    ┌─────────────┐
-                    │    OPEN     │
-                    │  (Failing)  │
-                    └─────────────┘
+                    
+                       CLOSED    
+                      (Normal)                     
+                                      
+                                                    
+                            Failure threshold        Success threshold
+                            exceeded                 in HALF_OPEN
+                                                    
+                                                    
+                                      
+                        OPEN                       
+                      (Failing)                    
+                                      
+                                                    
+                            Timeout period          
+                            elapsed                 
+                                                    
+                                                    
+                                      
+                      HALF_OPEN  
+                      (Testing)  
+                    
+                           
+                            Failure
+                           
+                           
+                    
+                        OPEN     
+                      (Failing)  
+                    
 ```
 
 **State Transitions:**

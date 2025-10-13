@@ -171,7 +171,7 @@ fun dispatchBehavior() {
 lifecycleScope.launch(Dispatchers.Main) {
     // We're on main thread
     withContext(Dispatchers.Main.immediate) {
-        updateUI() // ✅ Immediate execution
+        updateUI() //  Immediate execution
     }
 }
 
@@ -181,7 +181,7 @@ lifecycleScope.launch(Dispatchers.IO) {
     val data = fetchData()
 
     withContext(Dispatchers.Main.immediate) {
-        updateUI(data) // ❌ Must dispatch (same as Main)
+        updateUI(data) //  Must dispatch (same as Main)
     }
 }
 
@@ -192,7 +192,7 @@ lifecycleScope.launch(Dispatchers.Main) {
 
         withContext(Dispatchers.Main.immediate) {
             // Was on IO, must dispatch to Main
-            updateUI(data) // ❌ Must dispatch
+            updateUI(data) //  Must dispatch
         }
     }
 }
@@ -207,7 +207,7 @@ class UserRepository(
     private val apiService: ApiService,
     private val userDao: UserDao
 ) {
-    // ❌ BAD: Always uses Main (unnecessary dispatches)
+    //  BAD: Always uses Main (unnecessary dispatches)
     suspend fun getUserBad(userId: String): User = withContext(Dispatchers.Main) {
         // Fetch from network
         val user = withContext(Dispatchers.IO) {
@@ -222,7 +222,7 @@ class UserRepository(
         user
     }
 
-    // ✅ GOOD: Uses Main.immediate to avoid unnecessary dispatch
+    //  GOOD: Uses Main.immediate to avoid unnecessary dispatch
     suspend fun getUserGood(userId: String): User {
         // Fetch from network
         val user = withContext(Dispatchers.IO) {
@@ -237,7 +237,7 @@ class UserRepository(
         return user
     }
 
-    // ✅ BETTER: Caller handles dispatcher
+    //  BETTER: Caller handles dispatcher
     suspend fun getUserBetter(userId: String): User {
         return withContext(Dispatchers.IO) {
             apiService.getUser(userId)
@@ -353,7 +353,7 @@ class DataRepository {
         // Flow runs on Default dispatcher
 }
 
-// ❌ BAD: Unnecessary dispatch
+//  BAD: Unnecessary dispatch
 fun collectDataBad(repository: DataRepository) {
     lifecycleScope.launch(Dispatchers.Main) {
         repository.observeData()
@@ -366,7 +366,7 @@ fun collectDataBad(repository: DataRepository) {
     }
 }
 
-// ✅ GOOD: Use immediate to avoid dispatch
+//  GOOD: Use immediate to avoid dispatch
 fun collectDataGood(repository: DataRepository) {
     lifecycleScope.launch(Dispatchers.Main) {
         repository.observeData()
@@ -379,7 +379,7 @@ fun collectDataGood(repository: DataRepository) {
     }
 }
 
-// ✅ BETTER: No withContext needed, already on Main
+//  BETTER: No withContext needed, already on Main
 fun collectDataBetter(repository: DataRepository) {
     lifecycleScope.launch(Dispatchers.Main) {
         repository.observeData()
@@ -634,7 +634,7 @@ class MainImmediateTest {
 **When to use each:**
 
 ```kotlin
-// ✅ PREFER Main.immediate for:
+//  PREFER Main.immediate for:
 
 // 1. Returning to Main after background work
 withContext(Dispatchers.IO) {
@@ -667,7 +667,7 @@ lifecycleScope.launch {
     }
 }
 
-// ✅ Use regular Main for:
+//  Use regular Main for:
 
 // 1. When you specifically want to defer execution
 launch(Dispatchers.Main) {
@@ -697,21 +697,21 @@ lifecycleScope.launch(Dispatchers.Main) {
 **Common mistakes:**
 
 ```kotlin
-// ❌ Mistake 1: Using Main when immediate would be better
+//  Mistake 1: Using Main when immediate would be better
 viewModelScope.launch {
     withContext(Dispatchers.Main) { // viewModelScope is already Main!
         updateState()
     }
 }
 
-// ✅ Fix: Use immediate
+//  Fix: Use immediate
 viewModelScope.launch {
     withContext(Dispatchers.Main.immediate) {
         updateState()
     }
 }
 
-// ❌ Mistake 2: Unnecessary withContext
+//  Mistake 2: Unnecessary withContext
 lifecycleScope.launch {
     // Already on Main from lifecycleScope
     withContext(Dispatchers.Main.immediate) {
@@ -719,17 +719,17 @@ lifecycleScope.launch {
     }
 }
 
-// ✅ Fix: Remove withContext
+//  Fix: Remove withContext
 lifecycleScope.launch {
     updateUI() // Already on Main
 }
 
-// ❌ Mistake 3: Using immediate for initial launch
+//  Mistake 3: Using immediate for initial launch
 lifecycleScope.launch(Dispatchers.Main.immediate) {
     // Don't use immediate for launch, use Main
 }
 
-// ✅ Fix: Use Main for launch
+//  Fix: Use Main for launch
 lifecycleScope.launch(Dispatchers.Main) {
     // Use Main for launching
 }

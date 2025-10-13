@@ -26,34 +26,34 @@ Automated testing in CI/CD ensures code quality and catches regressions before t
 ### Test Types in CI/CD
 
 ```
-┌─────────────────────────────────────────────────────┐
-│              Test Pyramid in CI                      │
-├─────────────────────────────────────────────────────┤
-│                                                      │
-│                    ▲                                 │
-│                   ╱ ╲     E2E Tests                 │
-│                  ╱   ╲    (Slowest, Most Expensive) │
-│                 ╱     ╲                              │
-│                ╱───────╲                             │
-│               ╱         ╲   Integration Tests       │
-│              ╱           ╲  (Medium Speed/Cost)     │
-│             ╱             ╲                          │
-│            ╱───────────────╲                         │
-│           ╱                 ╲  Unit Tests            │
-│          ╱                   ╲ (Fast, Cheap)         │
-│         ╱                     ╲                       │
-│        ╱───────────────────────╲                     │
-│                                                      │
-└─────────────────────────────────────────────────────┘
+
+              Test Pyramid in CI                      
+
+                                                      
+                                                     
+                         E2E Tests                 
+                         (Slowest, Most Expensive) 
+                                                    
+                                             
+                           Integration Tests       
+                           (Medium Speed/Cost)     
+                                                    
+                                     
+                              Unit Tests            
+                              (Fast, Cheap)         
+                                                     
+                             
+                                                      
+
 ```
 
 ### 1. Unit Tests in CI (Fast & Easy)
 
 **Characteristics:**
-- ⚡ Fast (milliseconds to seconds)
-- 💰 Cheap (no special hardware)
-- ✅ Always run in CI
-- 🎯 High confidence per test
+-  Fast (milliseconds to seconds)
+-  Cheap (no special hardware)
+-  Always run in CI
+-  High confidence per test
 
 **build.gradle.kts**:
 
@@ -166,22 +166,22 @@ jobs:
 ### 2. Instrumented Tests in CI (Challenging)
 
 **Challenges:**
-1. ❌ Requires Android device or emulator
-2. ❌ Slow (minutes to hours)
-3. ❌ Expensive (macOS runners for hardware acceleration)
-4. ❌ Flaky (timing issues, animation delays)
-5. ❌ Resource intensive (memory, CPU)
+1.  Requires Android device or emulator
+2.  Slow (minutes to hours)
+3.  Expensive (macOS runners for hardware acceleration)
+4.  Flaky (timing issues, animation delays)
+5.  Resource intensive (memory, CPU)
 
 **Solutions:**
 
 #### Solution 1: Firebase Test Lab (Recommended)
 
 **Advantages:**
-- ✅ Real devices
-- ✅ Fast parallel execution
-- ✅ No emulator management
-- ✅ Test on multiple devices/APIs
-- ✅ Screenshots & videos
+-  Real devices
+-  Fast parallel execution
+-  No emulator management
+-  Test on multiple devices/APIs
+-  Screenshots & videos
 
 **GitHub Actions with Firebase Test Lab**:
 
@@ -254,10 +254,10 @@ jobs:
 #### Solution 2: GitHub Actions with Emulator
 
 **Advantages:**
-- ✅ Free (within limits)
-- ✅ No external dependencies
-- ❌ Slow on Linux runners
-- ✅ Fast on macOS runners (hardware acceleration)
+-  Free (within limits)
+-  No external dependencies
+-  Slow on Linux runners
+-  Fast on macOS runners (hardware acceleration)
 
 **GitHub Actions with Emulator (macOS)**:
 
@@ -350,9 +350,9 @@ jobs:
 #### Solution 3: Gradle Managed Devices (GMD)
 
 **Advantages:**
-- ✅ Consistent environments
-- ✅ No manual emulator management
-- ✅ Gradle caching support
+-  Consistent environments
+-  No manual emulator management
+-  Gradle caching support
 
 **build.gradle.kts**:
 
@@ -573,9 +573,9 @@ jobs:
 ### 4. Screenshot Testing
 
 **Advantages:**
-- ✅ Visual regression detection
-- ✅ Catch UI bugs automatically
-- ✅ Documentation of UI states
+-  Visual regression detection
+-  Catch UI bugs automatically
+-  Documentation of UI states
 
 **Using Paparazzi (Robolectric-based)**:
 
@@ -749,7 +749,7 @@ strategy:
 
 1. **Run Unit Tests Always, Instrumented Conditionally**
    ```yaml
-   # ✅ GOOD - Unit tests on every push
+   #  GOOD - Unit tests on every push
    on:
      push:
        branches: [ main, develop ]
@@ -765,7 +765,7 @@ strategy:
 
 2. **Use Test Tags to Control Execution**
    ```kotlin
-   // ✅ GOOD - Tag expensive tests
+   //  GOOD - Tag expensive tests
    @LargeTest
    @Test
    fun expensiveIntegrationTest() {
@@ -778,7 +778,7 @@ strategy:
 
 3. **Disable Animations in Tests**
    ```kotlin
-   // ✅ GOOD - Disable animations for reliable tests
+   //  GOOD - Disable animations for reliable tests
    @Before
    fun disableAnimations() {
        val context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -798,7 +798,7 @@ strategy:
 
 4. **Use Hermetic Tests**
    ```kotlin
-   // ✅ GOOD - Self-contained tests
+   //  GOOD - Self-contained tests
    @Test
    fun testWithMockData() {
        val mockData = createMockData()
@@ -806,7 +806,7 @@ strategy:
        assertEquals(expected, result)
    }
 
-   // ❌ BAD - Depends on external state
+   //  BAD - Depends on external state
    @Test
    fun testWithRealAPI() {
        val result = apiClient.fetchData() // Network call!
@@ -817,10 +817,10 @@ strategy:
 ### Summary
 
 **Test types in CI:**
-- ✅ **Unit tests**: Always run, fast, cheap
-- ✅ **Instrumented tests**: Run on main branch or nightly, slow, expensive
-- ✅ **Screenshot tests**: Run on PRs, catch visual regressions
-- ✅ **Compose UI tests**: Can run with Robolectric (fast) or emulator (slow)
+-  **Unit tests**: Always run, fast, cheap
+-  **Instrumented tests**: Run on main branch or nightly, slow, expensive
+-  **Screenshot tests**: Run on PRs, catch visual regressions
+-  **Compose UI tests**: Can run with Robolectric (fast) or emulator (slow)
 
 **Instrumented test solutions:**
 1. **Firebase Test Lab**: Best for production (real devices, parallel, expensive)
@@ -852,10 +852,10 @@ strategy:
 ### Резюме
 
 **Типы тестов в CI:**
-- ✅ **Unit-тесты**: Всегда запускаются, быстрые, дешёвые
-- ✅ **Instrumented-тесты**: Запускаются на main-ветке или ночные билды, медленные, дорогие
-- ✅ **Screenshot-тесты**: Запускаются на PR, ловят визуальные регрессии
-- ✅ **Compose UI тесты**: Можно запускать с Robolectric (быстро) или эмулятором (медленно)
+-  **Unit-тесты**: Всегда запускаются, быстрые, дешёвые
+-  **Instrumented-тесты**: Запускаются на main-ветке или ночные билды, медленные, дорогие
+-  **Screenshot-тесты**: Запускаются на PR, ловят визуальные регрессии
+-  **Compose UI тесты**: Можно запускать с Robolectric (быстро) или эмулятором (медленно)
 
 **Решения для instrumented-тестов:**
 1. **Firebase Test Lab**: Лучше для production (реальные устройства, параллельно, дорого)
@@ -875,3 +875,17 @@ strategy:
 - Отключать анимации в тестах
 - Использовать теги для управления выполнением
 - Писать hermetic (самодостаточные) тесты
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing
+- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+- [[q-screenshot-snapshot-testing--testing--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-coroutines-flow--testing--hard]] - Testing

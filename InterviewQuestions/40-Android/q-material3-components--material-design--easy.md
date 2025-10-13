@@ -562,20 +562,20 @@ fun AppTheme(
 
 **1. Use semantic color roles**
 ```kotlin
-// ✅ DO - Use semantic roles
+//  DO - Use semantic roles
 Card(
     colors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceVariant
     )
 )
 
-// ❌ DON'T - Hardcode colors
+//  DON'T - Hardcode colors
 Card(colors = CardDefaults.cardColors(containerColor = Color(0xFFE8DEF8)))
 ```
 
 **2. Respect dynamic theming**
 ```kotlin
-// ✅ Enable dynamic color when available
+//  Enable dynamic color when available
 val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
     dynamicLightColorScheme(context)
 } else {
@@ -700,3 +700,19 @@ val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
     lightColorScheme()
 }
 ```
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+- [[q-what-unifies-android-components--android--easy]] - Fundamentals
+- [[q-android-components-besides-activity--android--easy]] - Fundamentals
+- [[q-main-android-components--android--easy]] - Fundamentals
+- [[q-android-app-components--android--easy]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
+- [[q-hilt-components-scope--android--medium]] - Fundamentals

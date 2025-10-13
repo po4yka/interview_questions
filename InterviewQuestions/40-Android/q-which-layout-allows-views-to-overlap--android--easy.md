@@ -434,3 +434,16 @@ fun AdvancedBoxExample() {
 
 ## Ответ (RU)
 Такой тип называется FrameLayout в Android или Box в Jetpack Compose.
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Advanced (Harder)
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View

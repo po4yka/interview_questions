@@ -420,3 +420,18 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 
 Они остаются фундаментальной частью Android разработки, хотя Jetpack Compose постепенно снижает их необходимость в новых проектах.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-save-data-outside-fragment--android--medium]] - Fragment
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Fragment
+- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Fragment
+
+### Related (Hard)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Fragment
+- [[q-fragments-and-activity-relationship--android--hard]] - Fragment
+- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] - Fragment
+- [[q-how-did-fragments-appear-and-why-were-they-started-to-be-used--android--hard]] - Fragment

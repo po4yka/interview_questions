@@ -515,13 +515,13 @@ class CartViewModelTest {
 **1. Always await initial emission for StateFlow:**
 
 ```kotlin
-// ✅ DO
+//  DO
 viewModel.uiState.test {
     assertEquals(UiState.Initial, awaitItem()) // Initial value
     // ... test logic
 }
 
-// ❌ DON'T (will fail)
+//  DON'T (will fail)
 viewModel.uiState.test {
     viewModel.load()
     assertEquals(UiState.Loading, awaitItem()) // Misses initial!
@@ -531,13 +531,13 @@ viewModel.uiState.test {
 **2. Use cancelAndIgnoreRemainingEvents:**
 
 ```kotlin
-// ✅ DO
+//  DO
 test {
     assertEquals(expected, awaitItem())
     cancelAndIgnoreRemainingEvents()
 }
 
-// ❌ DON'T (test may hang)
+//  DON'T (test may hang)
 test {
     assertEquals(expected, awaitItem())
     // Missing cancel - test waits forever
@@ -547,11 +547,11 @@ test {
 **3. Test state and events separately or together:**
 
 ```kotlin
-// ✅ GOOD: Separate tests
+//  GOOD: Separate tests
 @Test fun testState()
 @Test fun testEvents()
 
-// ✅ ALSO GOOD: Together when related
+//  ALSO GOOD: Together when related
 @Test fun testStateAndEvents()
 ```
 

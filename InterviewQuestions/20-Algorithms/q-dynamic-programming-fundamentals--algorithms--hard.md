@@ -46,8 +46,8 @@ Dynamic Programming (DP) is a powerful technique for solving optimization proble
 4. Reusing stored results
 
 **Key Properties:**
-- ✅ **Optimal Substructure** - optimal solution contains optimal solutions to subproblems
-- ✅ **Overlapping Subproblems** - same subproblems solved multiple times
+-  **Optimal Substructure** - optimal solution contains optimal solutions to subproblems
+-  **Overlapping Subproblems** - same subproblems solved multiple times
 
 ---
 
@@ -79,20 +79,20 @@ println(fibRecursive(40)) // Takes forever!
 **Why so slow?**
 ```
 fib(5)
-├─ fib(4)
-│  ├─ fib(3)
-│  │  ├─ fib(2)
-│  │  │  ├─ fib(1)
-│  │  │  └─ fib(0)
-│  │  └─ fib(1)
-│  └─ fib(2)  ← Recalculated!
-│     ├─ fib(1)
-│     └─ fib(0)
-└─ fib(3)  ← Recalculated!
-   ├─ fib(2)
-   │  ├─ fib(1)
-   │  └─ fib(0)
-   └─ fib(1)
+ fib(4)
+   fib(3)
+     fib(2)
+       fib(1)
+       fib(0)
+     fib(1)
+   fib(2)  ← Recalculated!
+      fib(1)
+      fib(0)
+ fib(3)  ← Recalculated!
+    fib(2)
+      fib(1)
+      fib(0)
+    fib(1)
 
 fib(2) calculated 3 times!
 fib(3) calculated 2 times!
@@ -548,8 +548,8 @@ fun dpTopDown(n: Int, memo: MutableMap<Int, Int> = mutableMapOf()): Int {
     return result
 }
 
-// ✅ Pros: Intuitive, only computes needed states
-// ❌ Cons: Recursion overhead, stack overflow risk
+//  Pros: Intuitive, only computes needed states
+//  Cons: Recursion overhead, stack overflow risk
 ```
 
 **Bottom-Up (Tabulation):**
@@ -568,8 +568,8 @@ fun dpBottomUp(n: Int): Int {
     return dp[n]
 }
 
-// ✅ Pros: No recursion, better performance
-// ❌ Cons: Computes all states, less intuitive
+//  Pros: No recursion, better performance
+//  Cons: Computes all states, less intuitive
 ```
 
 ---

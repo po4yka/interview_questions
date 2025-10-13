@@ -46,18 +46,18 @@ tags: [android, architecture, multi-module, gradle, scalability, difficulty/hard
 
 ```
 app/
-├── app/                    # Main app module
-├── feature/
-│   ├── auth/              # Authentication feature
-│   ├── profile/           # Profile feature
-│   └── settings/          # Settings feature
-├── core/
-│   ├── ui/                # Shared UI components
-│   ├── network/           # Network layer
-│   └── database/          # Database layer
-└── data/
-    ├── user/              # User data
-    └── products/          # Products data
+ app/                    # Main app module
+ feature/
+    auth/              # Authentication feature
+    profile/           # Profile feature
+    settings/          # Settings feature
+ core/
+    ui/                # Shared UI components
+    network/           # Network layer
+    database/          # Database layer
+ data/
+     user/              # User data
+     products/          # Products data
 ```
 
 ### Module Structure

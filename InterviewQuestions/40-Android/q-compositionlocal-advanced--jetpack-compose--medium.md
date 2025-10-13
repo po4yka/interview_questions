@@ -139,9 +139,9 @@ fun Child2() {
 ```
 
 **When counter changes:**
-- ✅ `Parent` recomposes (owns the state)
-- ✅ `Child1` recomposes (reads `LocalCounter.current`)
-- ❌ `Child2` does NOT recompose (never reads value)
+-  `Parent` recomposes (owns the state)
+-  `Child1` recomposes (reads `LocalCounter.current`)
+-  `Child2` does NOT recompose (never reads value)
 
 ---
 
@@ -184,9 +184,9 @@ fun Child2() {
 ```
 
 **When config changes:**
-- ✅ `Parent` recomposes
-- ✅ `Child1` recomposes (entire subtree recomposes)
-- ✅ `Child2` recomposes (entire subtree recomposes, even though it doesn't read the value!)
+-  `Parent` recomposes
+-  `Child1` recomposes (entire subtree recomposes)
+-  `Child2` recomposes (entire subtree recomposes, even though it doesn't read the value!)
 
 ---
 
@@ -418,10 +418,10 @@ fun NestedProviders() {
 
 ### Anti-Patterns
 
-#### ❌ DON'T: Use CompositionLocal for simple parameter passing
+####  DON'T: Use CompositionLocal for simple parameter passing
 
 ```kotlin
-// ❌ BAD: Unnecessary CompositionLocal
+//  BAD: Unnecessary CompositionLocal
 val LocalName = compositionLocalOf { "" }
 
 @Composable
@@ -437,7 +437,7 @@ fun Child() {
     Text(name)
 }
 
-// ✅ GOOD: Just pass parameters
+//  GOOD: Just pass parameters
 @Composable
 fun Parent(name: String) {
     Child(name)
@@ -451,10 +451,10 @@ fun Child(name: String) {
 
 ---
 
-#### ❌ DON'T: Use CompositionLocal for business logic
+####  DON'T: Use CompositionLocal for business logic
 
 ```kotlin
-// ❌ BAD: Business logic in CompositionLocal
+//  BAD: Business logic in CompositionLocal
 val LocalRepository = compositionLocalOf<UserRepository> {
     error("No repository")
 }
@@ -466,7 +466,7 @@ fun UserScreen() {
     Text(user.name)
 }
 
-// ✅ GOOD: Use ViewModel
+//  GOOD: Use ViewModel
 @Composable
 fun UserScreen(viewModel: UserViewModel) {
     val user by viewModel.user.collectAsState()
@@ -476,10 +476,10 @@ fun UserScreen(viewModel: UserViewModel) {
 
 ---
 
-#### ❌ DON'T: Overuse staticCompositionLocalOf
+####  DON'T: Overuse staticCompositionLocalOf
 
 ```kotlin
-// ❌ BAD: Using static for frequently changing value
+//  BAD: Using static for frequently changing value
 val LocalSelectedTab = staticCompositionLocalOf { 0 }
 
 @Composable
@@ -492,7 +492,7 @@ fun TabScreen() {
     }
 }
 
-// ✅ GOOD: Use dynamic CompositionLocal or state hoisting
+//  GOOD: Use dynamic CompositionLocal or state hoisting
 val LocalSelectedTab = compositionLocalOf { 0 }
 ```
 
@@ -667,29 +667,29 @@ fun testComposableWithDefaultTheme() {
 **1. Choose the right type:**
 
 ```kotlin
-// ✅ DO: Use compositionLocalOf for runtime values
+//  DO: Use compositionLocalOf for runtime values
 val LocalTheme = compositionLocalOf { Theme.Light }
 
-// ✅ DO: Use staticCompositionLocalOf for constants
+//  DO: Use staticCompositionLocalOf for constants
 val LocalApiUrl = staticCompositionLocalOf { "https://api.example.com" }
 ```
 
 **2. Provide meaningful defaults or errors:**
 
 ```kotlin
-// ✅ DO: Clear error message
+//  DO: Clear error message
 val LocalUser = compositionLocalOf<User?> {
     error("LocalUser not provided. Wrap content with UserProvider.")
 }
 
-// ❌ DON'T: Silent failure
+//  DON'T: Silent failure
 val LocalUser = compositionLocalOf<User?> { null }
 ```
 
 **3. Use for cross-cutting concerns:**
 
 ```kotlin
-// ✅ GOOD use cases:
+//  GOOD use cases:
 - Theming (colors, typography, shapes)
 - Localization (strings, formatters)
 - Accessibility (font scaling, contrast)
@@ -697,7 +697,7 @@ val LocalUser = compositionLocalOf<User?> { null }
 - Navigation (back handler, nav controller)
 - Dependency injection (repositories, but sparingly)
 
-// ❌ BAD use cases:
+//  BAD use cases:
 - Simple data passing (use parameters)
 - Business logic (use ViewModels)
 - Screen state (use state hoisting)

@@ -473,3 +473,12 @@ class ChatListViewModel : ViewModel() {
 ## Ответ (RU)
 Создание списков чатов с точки зрения UI требует учёта множества аспектов, чтобы обеспечить удобство использования, хорошую производительность и красивый внешний вид. Основные шаги: определение данных, создание макетов для элементов списка, создание адаптера для RecyclerView, настройка RecyclerView и управление данными, оптимизация производительности. Для чата можно определить два типа элементов: чат-комнаты и сообщения. Важно использовать RecyclerView с адаптером для отображения элементов списка и оптимизировать производительность с помощью DiffUtil и пагинации.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
+- [[q-dagger-build-time-optimization--android--medium]] - Ui
+- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui

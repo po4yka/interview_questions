@@ -371,14 +371,14 @@ class AuthRepositoryTest {
 
 #### Choose Koin When:
 
-✅ **Kotlin Multiplatform** - Need shared code iOS/Android/Web
-✅ **Fast Iteration** - Prototype or MVP development
-✅ **Small/Medium App** - < 50 modules, < 500K lines
-✅ **Team Experience** - Junior/mid-level team
-✅ **Build Performance** - Build time is critical bottleneck
-✅ **Dynamic Configuration** - Need runtime module switching
-✅ **Quick Learning** - Need team productive in days
-✅ **Testing Focus** - Frequent mock/fake swapping
+ **Kotlin Multiplatform** - Need shared code iOS/Android/Web
+ **Fast Iteration** - Prototype or MVP development
+ **Small/Medium App** - < 50 modules, < 500K lines
+ **Team Experience** - Junior/mid-level team
+ **Build Performance** - Build time is critical bottleneck
+ **Dynamic Configuration** - Need runtime module switching
+ **Quick Learning** - Need team productive in days
+ **Testing Focus** - Frequent mock/fake swapping
 
 **Example Projects:**
 - MVP/Prototype apps
@@ -389,14 +389,14 @@ class AuthRepositoryTest {
 
 #### Choose Hilt When:
 
-✅ **Android Only** - No multiplatform requirements
-✅ **Large Scale** - > 50 modules, > 500K lines
-✅ **Type Safety** - Want compile-time guarantees
-✅ **Performance Critical** - Every millisecond matters
-✅ **Experienced Team** - Team knows Dagger/DI patterns
-✅ **Long-Term Maintenance** - App will live 5+ years
-✅ **Complex Dependencies** - Many scopes and qualifiers
-✅ **Google Ecosystem** - Using other Jetpack libraries
+ **Android Only** - No multiplatform requirements
+ **Large Scale** - > 50 modules, > 500K lines
+ **Type Safety** - Want compile-time guarantees
+ **Performance Critical** - Every millisecond matters
+ **Experienced Team** - Team knows Dagger/DI patterns
+ **Long-Term Maintenance** - App will live 5+ years
+ **Complex Dependencies** - Many scopes and qualifiers
+ **Google Ecosystem** - Using other Jetpack libraries
 
 **Example Projects:**
 - Enterprise applications
@@ -735,25 +735,25 @@ class AuthViewModel @Inject constructor(
 
 #### Выбирайте Koin когда:
 
-✅ **Kotlin Multiplatform** - нужен общий код iOS/Android/Web
-✅ **Быстрая итерация** - прототип или MVP
-✅ **Малое/среднее приложение** - < 50 модулей
-✅ **Опыт команды** - junior/mid-level команда
-✅ **Производительность сборки** - время сборки критично
-✅ **Динамичная конфигурация** - нужно переключение модулей в runtime
-✅ **Быстрое обучение** - команда должна быть продуктивна за дни
-✅ **Фокус на тестирование** - частая замена mock/fake
+ **Kotlin Multiplatform** - нужен общий код iOS/Android/Web
+ **Быстрая итерация** - прототип или MVP
+ **Малое/среднее приложение** - < 50 модулей
+ **Опыт команды** - junior/mid-level команда
+ **Производительность сборки** - время сборки критично
+ **Динамичная конфигурация** - нужно переключение модулей в runtime
+ **Быстрое обучение** - команда должна быть продуктивна за дни
+ **Фокус на тестирование** - частая замена mock/fake
 
 #### Выбирайте Hilt когда:
 
-✅ **Только Android** - нет multiplatform требований
-✅ **Большой масштаб** - > 50 модулей, > 500K строк
-✅ **Типобезопасность** - нужны compile-time гарантии
-✅ **Критична производительность** - каждая миллисекунда важна
-✅ **Опытная команда** - команда знает Dagger/DI паттерны
-✅ **Долгосрочная поддержка** - приложение проживёт 5+ лет
-✅ **Сложные зависимости** - много scope и qualifiers
-✅ **Экосистема Google** - использование других Jetpack библиотек
+ **Только Android** - нет multiplatform требований
+ **Большой масштаб** - > 50 модулей, > 500K строк
+ **Типобезопасность** - нужны compile-time гарантии
+ **Критична производительность** - каждая миллисекунда важна
+ **Опытная команда** - команда знает Dagger/DI паттерны
+ **Долгосрочная поддержка** - приложение проживёт 5+ лет
+ **Сложные зависимости** - много scope и qualifiers
+ **Экосистема Google** - использование других Jetpack библиотек
 
 ### Бенчмарки производительности
 

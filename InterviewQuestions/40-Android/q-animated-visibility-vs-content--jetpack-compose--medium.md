@@ -425,9 +425,9 @@ fun SettingsScreen() {
 |---------|-------------------|-----------------|-----------|
 | **Primary use** | Show/hide | State-based content | Simple switching |
 | **Animations** | Enter/Exit | Custom per transition | Fade only |
-| **Direction control** | ✅ Yes | ✅ Yes | ❌ No |
-| **Size animation** | ✅ Yes | ✅ Yes | ❌ No |
-| **Child animations** | ✅ Yes | ❌ No | ❌ No |
+| **Direction control** |  Yes |  Yes |  No |
+| **Size animation** |  Yes |  Yes |  No |
+| **Child animations** |  Yes |  No |  No |
 | **API complexity** | Medium | High | Low |
 | **Flexibility** | High | Highest | Low |
 | **Common use case** | Collapsible sections | Screen transitions | Tab content |
@@ -438,19 +438,19 @@ fun SettingsScreen() {
 
 **Use AnimatedVisibility when:**
 ```kotlin
-// ✅ Toggling visibility
+//  Toggling visibility
 var showMenu by remember { mutableStateOf(false) }
 AnimatedVisibility(visible = showMenu) {
     DropdownMenu()
 }
 
-// ✅ Expand/collapse
+//  Expand/collapse
 var expanded by remember { mutableStateOf(false) }
 AnimatedVisibility(visible = expanded) {
     DetailedContent()
 }
 
-// ✅ Conditional UI elements
+//  Conditional UI elements
 AnimatedVisibility(visible = hasError) {
     ErrorMessage()
 }
@@ -460,7 +460,7 @@ AnimatedVisibility(visible = hasError) {
 
 **Use AnimatedContent when:**
 ```kotlin
-// ✅ Multiple states with different content
+//  Multiple states with different content
 AnimatedContent(targetState = loadingState) { state ->
     when (state) {
         Loading -> LoadingSpinner()
@@ -469,7 +469,7 @@ AnimatedContent(targetState = loadingState) { state ->
     }
 }
 
-// ✅ Directional transitions
+//  Directional transitions
 AnimatedContent(
     targetState = currentPage,
     transitionSpec = {
@@ -483,7 +483,7 @@ AnimatedContent(
     PageContent(page)
 }
 
-// ✅ Form wizards
+//  Form wizards
 AnimatedContent(targetState = step) { currentStep ->
     when (currentStep) {
         1 -> PersonalInfoForm()
@@ -497,7 +497,7 @@ AnimatedContent(targetState = step) { currentStep ->
 
 **Use Crossfade when:**
 ```kotlin
-// ✅ Simple tab switching
+//  Simple tab switching
 Crossfade(targetState = selectedTab) { tab ->
     when (tab) {
         Tab.Home -> HomeContent()
@@ -506,12 +506,12 @@ Crossfade(targetState = selectedTab) { tab ->
     }
 }
 
-// ✅ Image switching
+//  Image switching
 Crossfade(targetState = currentImageUrl) { imageUrl ->
     AsyncImage(model = imageUrl, contentDescription = null)
 }
 
-// ✅ Simple content swap
+//  Simple content swap
 Crossfade(targetState = isLoggedIn) { loggedIn ->
     if (loggedIn) {
         MainApp()
@@ -603,7 +603,7 @@ sealed class LoadState {
 **1. Choose based on use case:**
 
 ```kotlin
-// ✅ DO: Match animation to intent
+//  DO: Match animation to intent
 AnimatedVisibility(visible = expanded) // Reveal/hide
 AnimatedContent(targetState = step)    // State changes
 Crossfade(targetState = tab)          // Simple switch
@@ -612,13 +612,13 @@ Crossfade(targetState = tab)          // Simple switch
 **2. Consider performance:**
 
 ```kotlin
-// ✅ AnimatedVisibility: Most efficient
+//  AnimatedVisibility: Most efficient
 // Only one content tree, show/hide
 
-// ⚠️ AnimatedContent: Creates new content
+//  AnimatedContent: Creates new content
 // Old and new content exist during transition
 
-// ✅ Crossfade: Lightweight
+//  Crossfade: Lightweight
 // Simple fade, minimal overhead
 ```
 
@@ -707,8 +707,8 @@ Compose предоставляет три основных API для перех
 |---------|-------------------|-----------------|-----------|
 | **Основное использование** | Показ/скрытие | Контент на основе состояния | Простое переключение |
 | **Анимации** | Появление/Исчезновение | Пользовательские для перехода | Только затухание |
-| **Контроль направления** | ✅ Да | ✅ Да | ❌ Нет |
-| **Анимация размера** | ✅ Да | ✅ Да | ❌ Нет |
+| **Контроль направления** |  Да |  Да |  Нет |
+| **Анимация размера** |  Да |  Да |  Нет |
 | **Сложность API** | Средняя | Высокая | Низкая |
 | **Гибкость** | Высокая | Наивысшая | Низкая |
 

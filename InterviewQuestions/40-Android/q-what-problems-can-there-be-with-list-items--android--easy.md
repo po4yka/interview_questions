@@ -14,6 +14,10 @@ tags:
   - views
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Какие могут быть проблемы с элементами списка?
@@ -388,3 +392,22 @@ Common problems and solutions:
 ## Ответ (RU)
 Проблемы с элементами списка в Android-приложениях могут быть разнообразными. Давайте рассмотрим некоторые из наиболее распространённых проблем и способы их решения. 1. Переполнение памяти (Out of Memory) - Списки с большим количеством элементов могут вызывать переполнение памяти. Решение: Использовать RecyclerView вместо ListView и библиотеки для загрузки изображений, такие как Glide или Picasso. 2. Медленная прокрутка (Lagging) - Прокрутка может быть медленной из-за долгой отрисовки элементов. Решение: Оптимизировать адаптер списка и использовать ViewHolder паттерн. 3. Неправильное отображение данных (Data Inconsistency) - Если адаптер неправильно управляет обновлением данных. Решение: Использовать DiffUtil для вычисления изменений в данных и обновления только необходимых элементов. 4. Многопоточность (Concurrency Issues) - Если обновление данных происходит из разных потоков без должной синхронизации. Решение: Использовать LiveData или Flow из библиотеки Jetpack для обновления в главном потоке.
 
+
+---
+
+## Related Questions
+
+### Computer Science Fundamentals
+- [[q-list-vs-sequence--programming-languages--medium]] - Data Structures
+
+### Kotlin Language Features
+- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
+- [[q-array-vs-list-kotlin--kotlin--easy]] - Data Structures
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+- [[q-list-vs-sequence--kotlin--medium]] - Data Structures
+
+### Related Algorithms
+- [[q-sorting-algorithms-comparison--algorithms--medium]] - Data Structures
+
+### System Design Concepts
+- [[q-message-queues-event-driven--system-design--medium]] - Data Structures

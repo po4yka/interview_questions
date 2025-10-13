@@ -26,7 +26,7 @@ status: draft
 ### The Problem: Blocking UI Thread
 
 ```kotlin
-// ❌ PROBLEM - Blocks UI thread
+//  PROBLEM - Blocks UI thread
 class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
     private var items = emptyList<Item>()
 
@@ -55,7 +55,7 @@ class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
 ```kotlin
 class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 
-    // ✅ AsyncListDiffer handles threading automatically
+    //  AsyncListDiffer handles threading automatically
     private val differ = AsyncListDiffer(this, DiffCallback())
 
     // Access current list
@@ -143,7 +143,7 @@ Update UI (smooth!)
 **ListAdapter (built on AsyncListDiffer):**
 
 ```kotlin
-// ✅ ListAdapter is simpler
+//  ListAdapter is simpler
 class SimpleAdapter : ListAdapter<Item, SimpleAdapter.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -186,7 +186,7 @@ adapter.submitList(items) // Same API as AsyncListDiffer!
 **submitList() is thread-safe:**
 
 ```kotlin
-// ✅ Safe to call from any thread
+//  Safe to call from any thread
 viewModel.items.observe(lifecycleOwner) { items ->
     adapter.submitList(items) // Can be called from background thread
 }
@@ -195,7 +195,7 @@ viewModel.items.observe(lifecycleOwner) { items ->
 **But list itself must not be mutated:**
 
 ```kotlin
-// ❌ BAD - Mutable list
+//  BAD - Mutable list
 val items = mutableListOf<Item>()
 adapter.submitList(items)
 
@@ -203,7 +203,7 @@ adapter.submitList(items)
 items.add(Item()) // DANGER! List is being diffed in background
 adapter.submitList(items) // May crash or produce incorrect results
 
-// ✅ GOOD - Immutable list
+//  GOOD - Immutable list
 val items = listOf<Item>(...)
 adapter.submitList(items)
 
@@ -219,7 +219,7 @@ adapter.submitList(newItems) // Safe!
 **Problem: Modifying list during diff:**
 
 ```kotlin
-// ❌ UNSAFE
+//  UNSAFE
 class UnsafeViewModel : ViewModel() {
     private val _items = MutableLiveData<MutableList<Item>>()
     val items: LiveData<MutableList<Item>> = _items
@@ -234,7 +234,7 @@ class UnsafeViewModel : ViewModel() {
 **Solution 1: Use immutable lists**
 
 ```kotlin
-// ✅ SAFE - Immutable
+//  SAFE - Immutable
 class SafeViewModel : ViewModel() {
     private val _items = MutableLiveData<List<Item>>()
     val items: LiveData<List<Item>> = _items
@@ -249,7 +249,7 @@ class SafeViewModel : ViewModel() {
 **Solution 2: Make defensive copy**
 
 ```kotlin
-// ✅ SAFE - Defensive copy
+//  SAFE - Defensive copy
 adapter.submitList(items.toList()) // Creates copy
 ```
 
@@ -670,11 +670,11 @@ class AsyncAdapterTest {
 
 **1. Use immutable lists**
 ```kotlin
-// ✅ DO
+//  DO
 val newList = currentList + newItem
 adapter.submitList(newList)
 
-// ❌ DON'T
+//  DON'T
 val list = mutableListOf<Item>()
 adapter.submitList(list)
 list.add(item) // Dangerous!
@@ -682,7 +682,7 @@ list.add(item) // Dangerous!
 
 **2. Prefer ListAdapter**
 ```kotlin
-// ✅ DO - Simpler
+//  DO - Simpler
 class MyAdapter : ListAdapter<Item, ViewHolder>(DiffCallback())
 
 // Only use AsyncListDiffer for custom needs
@@ -690,12 +690,12 @@ class MyAdapter : ListAdapter<Item, ViewHolder>(DiffCallback())
 
 **3. Use commit callback wisely**
 ```kotlin
-// ✅ DO - Scroll after update
+//  DO - Scroll after update
 adapter.submitList(items) {
     recyclerView.scrollToPosition(0)
 }
 
-// ❌ DON'T - Heavy work in callback
+//  DON'T - Heavy work in callback
 adapter.submitList(items) {
     // Heavy operation - blocks UI!
 }
@@ -703,7 +703,7 @@ adapter.submitList(items) {
 
 **4. Debounce rapid updates**
 ```kotlin
-// ✅ DO - Debounce user input
+//  DO - Debounce user input
 searchView.onQueryTextChange { query ->
     viewModel.search(query) // Debounced in ViewModel
 }
@@ -756,7 +756,7 @@ searchView.onQueryTextChange { query ->
 ### Проблема: Блокировка UI потока
 
 ```kotlin
-// ❌ ПРОБЛЕМА - Блокирует UI поток
+//  ПРОБЛЕМА - Блокирует UI поток
 fun updateData(newItems: List<Item>) {
     val diffResult = DiffUtil.calculateDiff(
         ItemDiffCallback(items, newItems)
@@ -772,7 +772,7 @@ fun updateData(newItems: List<Item>) {
 ```kotlin
 class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 
-    // ✅ AsyncListDiffer обрабатывает потоки автоматически
+    //  AsyncListDiffer обрабатывает потоки автоматически
     private val differ = AsyncListDiffer(this, DiffCallback())
 
     fun submitList(newList: List<Item>) {
@@ -803,7 +803,7 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 **ListAdapter (построен на AsyncListDiffer):**
 
 ```kotlin
-// ✅ ListAdapter проще
+//  ListAdapter проще
 class SimpleAdapter : ListAdapter<Item, ViewHolder>(DiffCallback()) {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
@@ -820,7 +820,7 @@ adapter.submitList(items) // Тот же API!
 **submitList() потокобезопасен:**
 
 ```kotlin
-// ✅ Безопасно вызывать из любого потока
+//  Безопасно вызывать из любого потока
 viewModel.items.observe(lifecycleOwner) { items ->
     adapter.submitList(items)
 }
@@ -829,12 +829,12 @@ viewModel.items.observe(lifecycleOwner) { items ->
 **Но сам список не должен мутировать:**
 
 ```kotlin
-// ❌ ПЛОХО - Изменяемый список
+//  ПЛОХО - Изменяемый список
 val items = mutableListOf<Item>()
 adapter.submitList(items)
 items.add(Item()) // ОПАСНО!
 
-// ✅ ХОРОШО - Неизменяемый список
+//  ХОРОШО - Неизменяемый список
 val items = listOf<Item>(...)
 adapter.submitList(items)
 val newItems = items + Item() // Создать новый список
@@ -855,3 +855,33 @@ adapter.submitList(newItems) // Безопасно!
 - Частые обновления
 - Нужен плавный UX
 - Требуется фоновая обработка
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
+- [[q-recyclerview-diffutil-advanced--recyclerview--medium]] - View, Ui
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
+- [[q-recyclerview-diffutil-advanced--recyclerview--medium]] - View, Ui

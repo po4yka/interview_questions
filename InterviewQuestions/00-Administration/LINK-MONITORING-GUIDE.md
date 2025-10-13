@@ -5,13 +5,13 @@
 
 ---
 
-## 🎯 Overview
+##  Overview
 
 Your vault now has a comprehensive automated link monitoring system built with **Dataview** and **DataviewJS**. This system automatically detects broken links, orphan files, missing cross-references, and structural issues.
 
 ---
 
-## 📁 Monitoring Tools
+##  Monitoring Tools
 
 ### 1. **LINK-MONITOR.md** (Quick Check)
 **Location**: Vault root
@@ -60,7 +60,7 @@ Your vault now has a comprehensive automated link monitoring system built with *
 
 ---
 
-## 🚀 How to Use
+##  How to Use
 
 ### Daily Workflow
 
@@ -93,7 +93,7 @@ Your vault now has a comprehensive automated link monitoring system built with *
 
 ---
 
-## 📊 Understanding Health Metrics
+##  Understanding Health Metrics
 
 ### Overall Health Score (0-100%)
 
@@ -107,7 +107,7 @@ Overall Health = (Link Integrity × 50%) +
 **Ranges**:
 - 🟢 **90-100%**: Excellent - Vault is in great shape
 - 🟡 **70-89%**: Good - Minor improvements needed
-- 🔴 **Below 70%**: Needs Work - Focus on broken links
+-  **Below 70%**: Needs Work - Focus on broken links
 
 ### Link Integrity
 
@@ -144,7 +144,7 @@ Overall Health = (Link Integrity × 50%) +
 
 ---
 
-## 🔍 What Each Monitor Detects
+##  What Each Monitor Detects
 
 ### 1. Broken Links
 **Definition**: Wikilinks `[[target]]` that point to non-existent files
@@ -152,13 +152,13 @@ Overall Health = (Link Integrity × 50%) +
 **Example**:
 ```markdown
 ## Related Questions
-- [[q-kotlin-inline-functions--kotlin--medium]]  ❌ File doesn't exist
-- [[q-flow-vs-livedata-comparison--kotlin--medium]]  ✅ File exists
+- [[q-kotlin-inline-functions--kotlin--medium]]   File doesn't exist
+- [[q-flow-vs-livedata-comparison--kotlin--medium]]   File exists
 ```
 
 **Detection**: Checks all `[[...]]` patterns and verifies target exists
 
-**Priority**: High 🔴
+**Priority**: High 
 
 ---
 
@@ -215,7 +215,7 @@ Overall Health = (Link Integrity × 50%) +
 
 ---
 
-## 💡 Best Practices
+##  Best Practices
 
 ### 1. Check Health Regularly
 - **Daily**: Quick glance at Homepage or LINK-MONITOR
@@ -237,19 +237,19 @@ Priority 4: Structure → Enhances quality
 
 ### 4. Prevent Issues
 **When creating new files**:
-- ✅ Add "Related Questions" section with at least 2-3 links
-- ✅ Link from at least one existing file
-- ✅ Include proper frontmatter (topic, subtopics, tags)
-- ✅ Add references to documentation
+-  Add "Related Questions" section with at least 2-3 links
+-  Link from at least one existing file
+-  Include proper frontmatter (topic, subtopics, tags)
+-  Add references to documentation
 
 **When renaming files**:
-- ⚠️ Check for incoming links first
-- ⚠️ Update all references
-- ⚠️ Re-run health check after
+-  Check for incoming links first
+-  Update all references
+-  Re-run health check after
 
 ---
 
-## 🛠️ Troubleshooting
+##  Troubleshooting
 
 ### "Dataview queries not showing"
 
@@ -285,7 +285,7 @@ Priority 4: Structure → Enhances quality
 
 ---
 
-## 📈 Sample Improvement Workflow
+##  Sample Improvement Workflow
 
 ### Week 1: Initial Assessment
 1. Open LINK-HEALTH-DASHBOARD.md
@@ -309,11 +309,11 @@ Priority 4: Structure → Enhances quality
 2. Include references in 15 files
 3. New health score: 92% (+7%)
 
-**Result**: 72% → 92% in one month! 🎉
+**Result**: 72% → 92% in one month! 
 
 ---
 
-## 🎓 Learning Resources
+##  Learning Resources
 
 ### Understanding Dataview Queries
 
@@ -338,7 +338,7 @@ for (let file of files) {
 
 ---
 
-## 🔄 Maintenance Checklist
+##  Maintenance Checklist
 
 ### Monthly
 - [ ] Review LINK-HEALTH-DASHBOARD.md
@@ -355,7 +355,7 @@ for (let file of files) {
 
 ---
 
-## 📞 Quick Reference
+##  Quick Reference
 
 | Need | Open This | Location |
 |------|-----------|----------|
@@ -367,6 +367,6 @@ for (let file of files) {
 
 ---
 
-**System Status**: ✅ Fully Operational
+**System Status**:  Fully Operational
 **Last Updated**: 2025-10-12
 **Maintained By**: Automated Dataview queries

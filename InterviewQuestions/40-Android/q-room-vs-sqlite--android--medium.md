@@ -431,3 +431,21 @@ class UserRepository(private val userDao: UserDao) {
 ## Ответ (RU)
 SQLite – низкоуровневая реляционная база данных, требует SQL-запросов вручную. Room – надстройка над SQLite, предоставляет удобный API с аннотациями, поддерживает LiveData, Flow и автоматическую миграцию данных. Room упрощает работу с базой и делает код читаемым, но внутри все равно использует SQLite.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-room-library-definition--android--easy]] - Storage
+
+### Related (Medium)
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-transactions-dao--room--medium]] - Storage
+- [[q-room-paging3-integration--room--medium]] - Storage
+- [[q-room-type-converters-advanced--room--medium]] - Storage
+- [[q-room-type-converters--android--medium]] - Storage
+
+### Advanced (Harder)
+- [[q-room-fts-full-text-search--room--hard]] - Storage

@@ -687,3 +687,20 @@ class MyService : Service() {
 ### **Смешанный сервис** (Started + Bound)
 - Необходимо **отвязать всех клиентов** И **вызвать stopSelf()/stopService()**
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-android-service-types--android--easy]] - Service
+
+### Related (Medium)
+- [[q-service-component--android--medium]] - Service
+- [[q-foreground-service-types--background--medium]] - Service
+- [[q-when-can-the-system-restart-a-service--android--medium]] - Service
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Service
+- [[q-keep-service-running-background--android--medium]] - Service
+
+### Advanced (Harder)
+- [[q-service-lifecycle-binding--background--hard]] - Service

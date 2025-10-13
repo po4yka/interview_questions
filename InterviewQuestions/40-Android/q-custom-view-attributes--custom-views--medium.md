@@ -657,7 +657,7 @@ class CustomProgressBarTest {
 
 **1. Always recycle TypedArray**
 ```kotlin
-// ✅ DO
+//  DO
 context.theme.obtainStyledAttributes(attrs, R.styleable.CustomView).apply {
     try {
         // Read attributes
@@ -666,7 +666,7 @@ context.theme.obtainStyledAttributes(attrs, R.styleable.CustomView).apply {
     }
 }
 
-// ❌ DON'T forget to recycle
+//  DON'T forget to recycle
 val a = context.theme.obtainStyledAttributes(attrs, R.styleable.CustomView)
 // Read attributes
 // Missing recycle() - memory leak!
@@ -674,15 +674,15 @@ val a = context.theme.obtainStyledAttributes(attrs, R.styleable.CustomView)
 
 **2. Provide defaults**
 ```kotlin
-progress = getFloat(R.styleable.ProgressBar_progress, 0f) // ✅ Has default
+progress = getFloat(R.styleable.ProgressBar_progress, 0f) //  Has default
 ```
 
 **3. Use meaningful names**
 ```kotlin
-// ✅ DO
+//  DO
 <attr name="progressColor" format="color" />
 
-// ❌ DON'T
+//  DON'T
 <attr name="color1" format="color" />
 ```
 
@@ -847,3 +847,21 @@ class CustomProgressBar @JvmOverloads constructor(
 - Валидируйте значения атрибутов
 - Поддерживайте темы
 - Документируйте атрибуты
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Related (Medium)
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- [[q-what-is-viewmodel--android--medium]] - View
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

@@ -215,20 +215,20 @@ class ChannelVsFlowComparison {
 /**
  * CHANNEL vs FLOW Detailed Comparison
  *
- * ┌─────────────────────┬─────────────────────┬─────────────────────┐
- * │ Feature             │ Channel             │ Flow                │
- * ├─────────────────────┼─────────────────────┼─────────────────────┤
- * │ Stream Type         │ Hot                 │ Cold                │
- * │ Activation          │ Immediate           │ On collection       │
- * │ Collectors          │ Single (compete)    │ Multiple (all)      │
- * │ Value Sharing       │ One-to-one          │ One-to-many         │
- * │ Buffering           │ Explicit            │ Implicit            │
- * │ Backpressure        │ Manual              │ Automatic           │
- * │ Exception Handling  │ Try-catch           │ Operators           │
- * │ Cancellation        │ Manual              │ Automatic           │
- * │ Lifecycle           │ Independent         │ Tied to collector   │
- * │ Use Case            │ Communication       │ Reactive streams    │
- * └─────────────────────┴─────────────────────┴─────────────────────┘
+ * 
+ *  Feature              Channel              Flow                
+ * 
+ *  Stream Type          Hot                  Cold                
+ *  Activation           Immediate            On collection       
+ *  Collectors           Single (compete)     Multiple (all)      
+ *  Value Sharing        One-to-one           One-to-many         
+ *  Buffering            Explicit             Implicit            
+ *  Backpressure         Manual               Automatic           
+ *  Exception Handling   Try-catch            Operators           
+ *  Cancellation         Manual               Automatic           
+ *  Lifecycle            Independent          Tied to collector   
+ *  Use Case             Communication        Reactive streams    
+ * 
  */
 
 // Practical demonstration
@@ -634,7 +634,7 @@ class PerformanceComparison {
 ```kotlin
 class Patterns {
 
-    // ✅ GOOD: Use Channel for communication
+    //  GOOD: Use Channel for communication
     class GoodChannelUsage {
         private val commands = Channel<Command>()
 
@@ -648,7 +648,7 @@ class Patterns {
         }
     }
 
-    // ❌ BAD: Using Channel where Flow is better
+    //  BAD: Using Channel where Flow is better
     class BadChannelUsage {
         private val data = Channel<Data>()
 
@@ -659,7 +659,7 @@ class Patterns {
         // Should use Flow instead!
     }
 
-    // ✅ GOOD: Use Flow for reactive streams
+    //  GOOD: Use Flow for reactive streams
     class GoodFlowUsage {
         fun observeData(): Flow<Data> = flow {
             while (true) {
@@ -673,7 +673,7 @@ class Patterns {
         private fun fetchData(): Data = Data(0)
     }
 
-    // ❌ BAD: Using Flow for commands
+    //  BAD: Using Flow for commands
     class BadFlowUsage {
         private val commands = MutableSharedFlow<Command>()
 

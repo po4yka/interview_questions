@@ -553,13 +553,13 @@ class TaskDatabaseImpl(
 
 **1. Avoid Shared Mutable State**
 ```kotlin
-// ❌ Bad - Mutable shared state
+//  Bad - Mutable shared state
 object GlobalState {
     var currentUser: User? = null  // Not thread-safe
     val tasks = mutableListOf<Task>()  // Not thread-safe
 }
 
-// ✅ Good - Immutable state with flows
+//  Good - Immutable state with flows
 class AppState {
     private val _currentUser = MutableStateFlow<User?>(null)
     val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
@@ -579,7 +579,7 @@ class AppState {
 
 **2. Proper Error Handling**
 ```kotlin
-// ❌ Bad - Swallowing exceptions
+//  Bad - Swallowing exceptions
 suspend fun getTasks(): List<Task> {
     return try {
         api.fetchTasks()
@@ -588,7 +588,7 @@ suspend fun getTasks(): List<Task> {
     }
 }
 
-// ✅ Good - Propagate errors properly
+//  Good - Propagate errors properly
 suspend fun getTasks(): Result<List<Task>> {
     return try {
         val tasks = api.fetchTasks()
@@ -602,7 +602,7 @@ suspend fun getTasks(): Result<List<Task>> {
 
 **3. Resource Cleanup**
 ```kotlin
-// ❌ Bad - No cleanup
+//  Bad - No cleanup
 class ViewModel {
     private val scope = CoroutineScope(Dispatchers.Main)
 
@@ -613,7 +613,7 @@ class ViewModel {
     }
 }
 
-// ✅ Good - Proper lifecycle management
+//  Good - Proper lifecycle management
 class ViewModel {
     private val scope = CoroutineScope(
         Dispatchers.Main + SupervisorJob()
@@ -636,14 +636,14 @@ class ViewModel {
 // Avoid excessive JNI calls on Android
 // or Objective-C interop on iOS
 
-// ❌ Bad - Frequent platform calls
+//  Bad - Frequent platform calls
 fun processItems(items: List<Item>) {
     items.forEach { item ->
         platformSpecificLogging(item.id)  // Called 1000 times
     }
 }
 
-// ✅ Good - Batch platform calls
+//  Good - Batch platform calls
 fun processItems(items: List<Item>) {
     val itemIds = items.map { it.id }
     platformSpecificLogging(itemIds.joinToString())  // Called once
@@ -845,20 +845,20 @@ Production-ready KMM требует тщательного внимания к s
 #### Частые ошибки
 
 1. **Shared Mutable State**:
-   - ❌ var в object
-   - ✅ StateFlow
+   -  var в object
+   -  StateFlow
 
 2. **Swallowing Exceptions**:
-   - ❌ catch { return null }
-   - ✅ Result<T> + crash reporting
+   -  catch { return null }
+   -  Result<T> + crash reporting
 
 3. **Memory Leaks**:
-   - ❌ No scope.cancel()
-   - ✅ Lifecycle-aware cleanup
+   -  No scope.cancel()
+   -  Lifecycle-aware cleanup
 
 4. **Excessive Platform Calls**:
-   - ❌ Loop с platform call
-   - ✅ Batch operations
+   -  Loop с platform call
+   -  Batch operations
 
 #### CI/CD
 

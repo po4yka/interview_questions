@@ -90,3 +90,19 @@ All components declared in **AndroidManifest.xml**.
 ## Ответ (RU)
 Основные компоненты: Activity (экран UI), Services (фоновые операции), Broadcast Receivers (события), Content Providers (обмен данными).
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Fundamentals
+- [[q-what-unifies-android-components--android--easy]] - Fundamentals
+- [[q-android-components-besides-activity--android--easy]] - Fundamentals
+- [[q-material3-components--material-design--easy]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
+- [[q-hilt-components-scope--android--medium]] - Fundamentals

@@ -575,16 +575,16 @@ fun LoadingIndicator() {
 **1. Choose the right API:**
 
 ```kotlin
-// ✅ Simple state-driven: animate*AsState
+//  Simple state-driven: animate*AsState
 val size by animateDpAsState(if (expanded) 100.dp else 50.dp)
 
-// ✅ Sequential/complex: Animatable
+//  Sequential/complex: Animatable
 LaunchedEffect(key) {
     animatable.animateTo(0.5f)
     animatable.animateTo(1f)
 }
 
-// ✅ Coordinated multiple properties: updateTransition
+//  Coordinated multiple properties: updateTransition
 val transition = updateTransition(state)
 val size by transition.animateDp { ... }
 val color by transition.animateColor { ... }
@@ -593,25 +593,25 @@ val color by transition.animateColor { ... }
 **2. Use springs for natural motion:**
 
 ```kotlin
-// ✅ DO: Springs feel natural
+//  DO: Springs feel natural
 spring(
     dampingRatio = Spring.DampingRatioMediumBouncy,
     stiffness = Spring.StiffnessMedium
 )
 
-// ⚠️ Consider: Tween for precise timing
+//  Consider: Tween for precise timing
 tween(durationMillis = 300)
 ```
 
 **3. Consider performance:**
 
 ```kotlin
-// ✅ Efficient: Animate layout-independent properties
+//  Efficient: Animate layout-independent properties
 .scale(scale)
 .alpha(alpha)
 .rotation(degrees)
 
-// ⚠️ Expensive: Layout-dependent animations
+//  Expensive: Layout-dependent animations
 .size(animatedSize) // Triggers layout
 .padding(animatedPadding) // Triggers layout
 ```

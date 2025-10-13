@@ -866,16 +866,16 @@ Comprehensive Android security requires:
 - **Regular Audits**: Security scanning and penetration testing
 
 **OWASP Mobile Top 10 Coverage**:
-1. Improper Platform Usage ✓
-2. Insecure Data Storage ✓
-3. Insecure Communication ✓
-4. Insecure Authentication ✓
-5. Insufficient Cryptography ✓
-6. Insecure Authorization ✓
-7. Client Code Quality ✓
-8. Code Tampering ✓
-9. Reverse Engineering ✓
-10. Extraneous Functionality ✓
+1. Improper Platform Usage 
+2. Insecure Data Storage 
+3. Insecure Communication 
+4. Insecure Authentication 
+5. Insufficient Cryptography 
+6. Insecure Authorization 
+7. Client Code Quality 
+8. Code Tampering 
+9. Reverse Engineering 
+10. Extraneous Functionality 
 
 **Security Maturity Levels**:
 - **Level 1**: Basic HTTPS and encryption
@@ -989,3 +989,14 @@ class RuntimeSecurityChecker {
 - **Регулярные аудиты**: Сканирование, тестирование
 
 **Покрытие OWASP Mobile Top 10**: Все 10 категорий уязвимостей покрыты защитными мерами.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-encrypted-file-storage--security--medium]] - Security
+- [[q-database-encryption-android--android--medium]] - Security
+- [[q-runtime-permissions-best-practices--permissions--medium]] - Security
+- [[q-data-encryption-at-rest--security--medium]] - Security

@@ -1,4 +1,6 @@
 ---
+topic: programming-languages
+subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 tags:
   - inheritance
   - java
@@ -7,6 +9,10 @@ tags:
   - programming-languages
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-programming-languages
+related_questions: []
 ---
 
 # От какого объекта наследуются все классы в Java?
@@ -167,3 +173,15 @@ class User {
 
 В Java все классы неявно наследуются от класса **Object**, если явно не указано другое наследование.
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-kotlin-enum-classes--kotlin--easy]] - Enums
+
+### Advanced (Harder)
+- [[q-java-marker-interfaces--programming-languages--medium]] - Inheritance
+- [[q-when-inheritance-useful--oop--medium]] - Inheritance
+- [[q-inheritance-vs-composition--oop--medium]] - Inheritance

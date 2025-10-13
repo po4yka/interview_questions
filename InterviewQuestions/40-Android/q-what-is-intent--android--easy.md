@@ -84,3 +84,18 @@ Intent is the **glue** that connects Android components, allowing them to commun
 ## Ответ (RU)
 Intent — это механизм для связи между компонентами приложения или между приложениями. Позволяет запускать Activity, Service, отправлять broadcast и передавать данные.
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Fundamentals
+- [[q-what-unifies-android-components--android--easy]] - Fundamentals
+- [[q-android-components-besides-activity--android--easy]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-intent-filters-android--android--medium]] - Fundamentals
+- [[q-anr-application-not-responding--android--medium]] - Fundamentals

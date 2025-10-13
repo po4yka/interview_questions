@@ -71,11 +71,11 @@ dependencies {
 ### 1. Work Constraints
 
 Declaratively define the **optimal conditions** for your work to run using Work Constraints. For example, run only when:
-- 📶 Device has **network connection** (Wi-Fi or cellular)
-- 🔋 Device is **charging**
-- 🔋 Battery is **not low**
-- 💾 Device has **sufficient storage space**
-- 📱 Device is **idle** (Doze mode)
+-  Device has **network connection** (Wi-Fi or cellular)
+-  Device is **charging**
+-  Battery is **not low**
+-  Device has **sufficient storage space**
+-  Device is **idle** (Doze mode)
 
 ```kotlin
 val constraints = Constraints.Builder()
@@ -521,19 +521,19 @@ WorkManager.getInstance(context).enqueueUniqueWork(
 ## When to Use WorkManager
 
 - **Use WorkManager for**:
-- 📤 **File uploads** that must complete
-- 🔄 **Data synchronization** with server
-- 📊 **Sending analytics/logs**
-- 🗑️ **Cache cleanup** / old data deletion
-- 📷 **Image processing/compression**
-- 📅 **Periodic tasks** (every N hours)
-- 🔔 **Scheduling notifications**
+-  **File uploads** that must complete
+-  **Data synchronization** with server
+-  **Sending analytics/logs**
+-  **Cache cleanup** / old data deletion
+-  **Image processing/compression**
+-  **Periodic tasks** (every N hours)
+-  **Scheduling notifications**
 
 - **Don't use WorkManager for**:
-- ⏱️ **Precise timing** (use AlarmManager)
-- 🎵 **Long-running foreground work** (use Foreground Service)
-- 📱 **Immediate UI updates** (use Coroutines)
-- ⚡ **Real-time processing** (use Service or Coroutines)
+- ⏱ **Precise timing** (use AlarmManager)
+-  **Long-running foreground work** (use Foreground Service)
+-  **Immediate UI updates** (use Coroutines)
+-  **Real-time processing** (use Service or Coroutines)
 
 ## Summary
 

@@ -42,19 +42,19 @@ A complete, **bilingual (EN/RU)**, personal Obsidian vault for technical intervi
 > Folders encode coarse topics; use YAML/tags/links for everything else.
 
 ```
-📄 Homepage.md                # vault entry point
-📁 _templates                 # note templates for Q&A, concepts, MOCs
-📁 00-Administration          # vault documentation, README, taxonomy
-📁 10-Concepts                # theory/glossary/definitions referenced across notes
-📁 20-Algorithms              # coding problems incl. LeetCode-style
-📁 30-System-Design           # large-scale design, components, trade-offs
-📁 40-Android                 # platform APIs, lifecycle, Compose, perf, tooling
-📁 50-Backend                 # backend development, APIs, databases
-📁 50-Behavioral              # optional, non-technical interview topics
-📁 60-CompSci                 # CS fundamentals, design patterns, architecture patterns
-📁 70-Kotlin                  # Kotlin language: coroutines, syntax, idioms, Flow
-📁 80-Tools                   # development tools: Git, build systems, CI/CD, IDEs
-📁 90-MOCs                    # Maps of Content (hub/overview notes)
+ Homepage.md                # vault entry point
+ _templates                 # note templates for Q&A, concepts, MOCs
+ 00-Administration          # vault documentation, README, taxonomy
+ 10-Concepts                # theory/glossary/definitions referenced across notes
+ 20-Algorithms              # coding problems incl. LeetCode-style
+ 30-System-Design           # large-scale design, components, trade-offs
+ 40-Android                 # platform APIs, lifecycle, Compose, perf, tooling
+ 50-Backend                 # backend development, APIs, databases
+ 50-Behavioral              # optional, non-technical interview topics
+ 60-CompSci                 # CS fundamentals, design patterns, architecture patterns
+ 70-Kotlin                  # Kotlin language: coroutines, syntax, idioms, Flow
+ 80-Tools                   # development tools: Git, build systems, CI/CD, IDEs
+ 90-MOCs                    # Maps of Content (hub/overview notes)
 ```
 
 **Rules:**

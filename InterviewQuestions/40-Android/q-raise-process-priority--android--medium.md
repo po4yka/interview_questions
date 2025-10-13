@@ -28,17 +28,17 @@ status: draft
 Android uses a **hierarchy of process importance** to decide which processes to keep when memory is low:
 
 ```
-┌─────────────────────────────────────┐
-│ 1. Foreground Process (Highest)    │ ← Active UI or foreground service
-├─────────────────────────────────────┤
-│ 2. Visible Process                  │ ← Visible but not in focus
-├─────────────────────────────────────┤
-│ 3. Service Process                  │ ← Running service (background)
-├─────────────────────────────────────┤
-│ 4. Cached Process                   │ ← Recently used, no active components
-├─────────────────────────────────────┤
-│ 5. Empty Process (Lowest)           │ ← No components, killed first
-└─────────────────────────────────────┘
+
+ 1. Foreground Process (Highest)     ← Active UI or foreground service
+
+ 2. Visible Process                   ← Visible but not in focus
+
+ 3. Service Process                   ← Running service (background)
+
+ 4. Cached Process                    ← Recently used, no active components
+
+ 5. Empty Process (Lowest)            ← No components, killed first
+
 ```
 
 **System behavior:**
@@ -292,11 +292,11 @@ class MusicPlayerService : Service() {
 
 ```
 Process Priority: Service Process (Level 3)
-┌─────────────────────────────────────┐
-│ App Process                         │
-│ └── DownloadService                 │
-│     └── Background work             │
-└─────────────────────────────────────┘
+
+ App Process                         
+  DownloadService                 
+      Background work             
+
 
 System: "Low memory! Kill this service."
 Result: - Service killed, work interrupted
@@ -306,12 +306,12 @@ Result: - Service killed, work interrupted
 
 ```
 Process Priority: Foreground Process (Level 1)
-┌─────────────────────────────────────┐
-│ App Process                         │
-│ └── DownloadService (Foreground)    │
-│     ├── Notification visible        │
-│     └── Protected work              │
-└─────────────────────────────────────┘
+
+ App Process                         
+  DownloadService (Foreground)    
+      Notification visible        
+      Protected work              
+
 
 System: "Low memory! But this is foreground, keep it."
 Result: - Service protected, work continues

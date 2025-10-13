@@ -18,12 +18,12 @@ Fragments **cannot exist without an Activity**. Their lifecycle is tightly bound
 ```kotlin
 // Activity lifecycle drives Fragment lifecycle
 Activity.onCreate()
-    └─> Fragment.onAttach()
-        └─> Fragment.onCreate()
-            └─> Fragment.onCreateView()
-                └─> Fragment.onViewCreated()
-                    └─> Fragment.onStart()
-                        └─> Fragment.onResume()
+    > Fragment.onAttach()
+        > Fragment.onCreate()
+            > Fragment.onCreateView()
+                > Fragment.onViewCreated()
+                    > Fragment.onStart()
+                        > Fragment.onResume()
 ```
 
 ### Fragment Lifecycle States
@@ -421,12 +421,12 @@ Fragment **не может существовать без Activity**. Их жи
 
 ```
 Activity.onCreate()
-    └─> Fragment.onAttach()      // Уникально для Fragment
-        └─> Fragment.onCreate()
-            └─> Fragment.onCreateView()    // Уникально для Fragment
-                └─> Fragment.onViewCreated()   // Уникально для Fragment
-                    └─> Fragment.onStart()
-                        └─> Fragment.onResume()
+    > Fragment.onAttach()      // Уникально для Fragment
+        > Fragment.onCreate()
+            > Fragment.onCreateView()    // Уникально для Fragment
+                > Fragment.onViewCreated()   // Уникально для Fragment
+                    > Fragment.onStart()
+                        > Fragment.onResume()
 ```
 
 ### Как Activity влияет на Fragment
@@ -507,3 +507,51 @@ class ModernFragment : Fragment() {
 3. Fragment никогда не может быть **активнее** Activity
 4. Fragment имеет **два lifecycle**: Fragment и View
 5. Используйте **viewLifecycleOwner** для наблюдений связанных с View
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
+
+### Advanced (Harder)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
+- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
+
+### Advanced (Harder)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
+- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
+
+### Advanced (Harder)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
+- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment

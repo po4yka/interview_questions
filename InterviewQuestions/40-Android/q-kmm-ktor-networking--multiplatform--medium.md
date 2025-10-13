@@ -1041,3 +1041,21 @@ Ktor обеспечивает полнофункциональный networking:
 - **Testable**: Mock engine для unit tests
 
 Ключевые моменты: правильная обработка ошибок, retry стратегии, authentication management, platform-specific оптимизации.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-graphql-vs-rest--networking--easy]] - Networking
+
+### Related (Medium)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+- [[q-network-error-handling-strategies--networking--medium]] - Networking
+- [[q-okhttp-interceptors-advanced--networking--medium]] - Networking
+- [[q-graphql-apollo-android--networking--medium]] - Networking
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-network-request-deduplication--networking--hard]] - Networking

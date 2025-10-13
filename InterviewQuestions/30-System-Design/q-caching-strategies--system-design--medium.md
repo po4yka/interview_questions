@@ -45,17 +45,17 @@ Caching is one of the most effective ways to improve system performance. However
 - **10-100x faster!**
 
 **Benefits:**
-- ✅ Reduced latency
-- ✅ Lower database load
-- ✅ Better scalability
-- ✅ Cost savings
+-  Reduced latency
+-  Lower database load
+-  Better scalability
+-  Cost savings
 
 ```
 Without Cache:          With Cache:
-Client → DB (100ms)     Client → Cache (1ms) ✓
-Client → DB (100ms)     Client → Cache (1ms) ✓
-Client → DB (100ms)     Client → DB (100ms) → Cache ✓
-                        Client → Cache (1ms) ✓
+Client → DB (100ms)     Client → Cache (1ms) 
+Client → DB (100ms)     Client → Cache (1ms) 
+Client → DB (100ms)     Client → DB (100ms) → Cache 
+                        Client → Cache (1ms) 
 ```
 
 ---
@@ -71,27 +71,27 @@ Client → DB (100ms)     Client → DB (100ms) → Cache ✓
 4. Return data
 
 ```
-┌─────────┐
-│  App    │
-└────┬────┘
-     │ 1. Check cache
-     ▼
-┌─────────┐     Cache Miss
-│  Cache  │ ────────────────┐
-└─────────┘                 │
-                            │ 2. Load from DB
-                   ┌────────▼────────┐
-                   │    Database     │
-                   └────────┬────────┘
-                            │ 3. Write to cache
-┌─────────┐                │
-│  Cache  │ ◄──────────────┘
-└─────────┘
-     │ 4. Return data
-     ▼
-┌─────────┐
-│  App    │
-└─────────┘
+
+  App    
+
+      1. Check cache
+     
+     Cache Miss
+  Cache   
+                 
+                             2. Load from DB
+                   
+                       Database     
+                   
+                             3. Write to cache
+                
+  Cache   
+
+      4. Return data
+     
+
+  App    
+
 ```
 
 **Implementation:**
@@ -119,12 +119,12 @@ class UserService(
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Only cache what's actually needed
 - Cache failure doesn't break system
 - Simple to implement
 
-**❌ Cons:**
+** Cons:**
 - Cache miss penalty (3 network calls: check cache, DB, write cache)
 - Potential for stale data
 - Cache warming needed
@@ -141,17 +141,17 @@ class UserService(
 - Application only talks to cache
 
 ```
-┌─────────┐
-│  App    │ ────────► Only talks to cache
-└─────────┘
-                ┌───────────────┐
-                │  Cache Layer  │
-                │  (Redis)      │
-                └───────┬───────┘
-                        │ Automatically fetches on miss
-                ┌───────▼───────┐
-                │   Database    │
-                └───────────────┘
+
+  App      Only talks to cache
+
+                
+                  Cache Layer  
+                  (Redis)      
+                
+                         Automatically fetches on miss
+                
+                   Database    
+                
 ```
 
 **Implementation:**
@@ -181,12 +181,12 @@ val user = cache.get("user:$userId") {
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Cleaner application code
 - Cache logic centralized
 - Consistent loading pattern
 
-**❌ Cons:**
+** Cons:**
 - Cache becomes critical dependency
 - More complex cache layer
 
@@ -203,29 +203,29 @@ val user = cache.get("user:$userId") {
 
 ```
 Write Operation:
-┌─────────┐
-│  App    │ Write user
-└────┬────┘
-     │
-     ▼
-┌────────────┐
-│   Cache    │ 1. Write to cache
-└────┬───────┘
-     │ 2. Write to DB
-     ▼
-┌────────────┐
-│  Database  │
-└────────────┘
+
+  App     Write user
+
+     
+     
+
+   Cache     1. Write to cache
+
+      2. Write to DB
+     
+
+  Database  
+
 
 Read Operation:
-┌─────────┐
-│  App    │ Read user
-└────┬────┘
-     │
-     ▼
-┌────────────┐
-│   Cache    │ Always has fresh data ✓
-└────────────┘
+
+  App     Read user
+
+     
+     
+
+   Cache     Always has fresh data 
+
 ```
 
 **Implementation:**
@@ -256,12 +256,12 @@ class UserService(
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Cache always has fresh data
 - No stale reads
 - Good for read-heavy after writes
 
-**❌ Cons:**
+** Cons:**
 - Slower writes (2 operations)
 - Writes to cache items that may never be read
 - Cache failure affects writes
@@ -279,24 +279,24 @@ class UserService(
 
 ```
 Write Operation:
-┌─────────┐
-│  App    │ Write user (fast!)
-└────┬────┘
-     │
-     ▼
-┌────────────┐
-│   Cache    │ 1. Write to cache (immediate)
-└────┬───────┘
-     │ 2. Async queue
-     ▼
-┌────────────┐
-│   Queue    │
-└────┬───────┘
-     │ 3. Background worker writes to DB
-     ▼
-┌────────────┐
-│  Database  │
-└────────────┘
+
+  App     Write user (fast!)
+
+     
+     
+
+   Cache     1. Write to cache (immediate)
+
+      2. Async queue
+     
+
+   Queue    
+
+      3. Background worker writes to DB
+     
+
+  Database  
+
 ```
 
 **Implementation:**
@@ -340,12 +340,12 @@ class WriteBackCache(
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Extremely fast writes
 - Can batch database writes
 - Reduces database load
 
-**❌ Cons:**
+** Cons:**
 - Data loss risk if cache fails before DB write
 - Complex implementation
 - Eventual consistency
@@ -475,29 +475,29 @@ class CacheWarmer(
 #### 4. Multi-Level Caching
 
 ```
-┌──────────────────────────────────────┐
-│  Client Browser (L1 Cache)           │
-│  - HTML, CSS, JS cached locally      │
-└──────────┬───────────────────────────┘
-           │
-┌──────────▼───────────────────────────┐
-│  CDN (L2 Cache)                      │
-│  - Static assets, images             │
-└──────────┬───────────────────────────┘
-           │
-┌──────────▼───────────────────────────┐
-│  Application Server L3 (In-Memory)   │
-│  - Hot data in local cache           │
-└──────────┬───────────────────────────┘
-           │
-┌──────────▼───────────────────────────┐
-│  Redis (L4 Distributed Cache)        │
-│  - Shared across all servers         │
-└──────────┬───────────────────────────┘
-           │
-┌──────────▼───────────────────────────┐
-│  Database                            │
-└──────────────────────────────────────┘
+
+  Client Browser (L1 Cache)           
+  - HTML, CSS, JS cached locally      
+
+           
+
+  CDN (L2 Cache)                      
+  - Static assets, images             
+
+           
+
+  Application Server L3 (In-Memory)   
+  - Hot data in local cache           
+
+           
+
+  Redis (L4 Distributed Cache)        
+  - Shared across all servers         
+
+           
+
+  Database                            
+
 ```
 
 **Implementation:**
@@ -656,12 +656,12 @@ class ProductService(
 3. Записывает в кеш для следующего раза
 4. Возвращает данные
 
-**✅ Плюсы:**
+** Плюсы:**
 - Кешируется только то, что действительно нужно
 - Сбой кеша не ломает систему
 - Просто реализовать
 
-**❌ Минусы:**
+** Минусы:**
 - Штраф за промах кеша (3 сетевых вызова)
 - Возможны устаревшие данные
 - Нужен прогрев кеша
@@ -675,12 +675,12 @@ class ProductService(
 - Данные всегда синхронизированы
 - Медленнее записи, но кеш всегда свежий
 
-**✅ Плюсы:**
+** Плюсы:**
 - В кеше всегда свежие данные
 - Нет устаревших чтений
 - Хорошо для частого чтения после записи
 
-**❌ Минусы:**
+** Минусы:**
 - Медленнее запись (2 операции)
 - Записи в кеш элементов, которые могут никогда не прочитаться
 
@@ -693,12 +693,12 @@ class ProductService(
 - Асинхронная запись в БД позже
 - Самая быстрая запись, но риск потери данных
 
-**✅ Плюсы:**
+** Плюсы:**
 - Чрезвычайно быстрые записи
 - Можно батчить записи в БД
 - Снижает нагрузку на БД
 
-**❌ Минусы:**
+** Минусы:**
 - Риск потери данных при сбое кеша
 - Сложная реализация
 - Eventual consistency

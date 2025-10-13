@@ -523,3 +523,18 @@ Android Keystore System - наиболее безопасный способ х�
 - Изучите регуляторные требования
 - Реализуйте политики хранения данных
 - Предоставьте экспорт данных
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-sharedpreferences-definition--android--easy]] - Storage
+
+### Related (Medium)
+- [[q-encrypted-file-storage--security--medium]] - Storage, Security
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-save-markdown-structure-database--android--medium]] - Storage
+- [[q-database-optimization-android--android--medium]] - Storage
+- [[q-room-database-migrations--room--medium]] - Storage

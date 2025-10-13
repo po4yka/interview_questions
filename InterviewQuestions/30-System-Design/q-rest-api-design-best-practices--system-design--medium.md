@@ -53,7 +53,7 @@ Designing a good REST API is crucial for building maintainable, scalable, and de
 
 #### Use Nouns, Not Verbs
 
-❌ **Bad:**
+ **Bad:**
 ```
 GET  /getUsers
 POST /createUser
@@ -61,7 +61,7 @@ POST /updateUser/123
 POST /deleteUser/123
 ```
 
-✅ **Good:**
+ **Good:**
 ```
 GET    /users          # Get all users
 POST   /users          # Create user
@@ -72,13 +72,13 @@ DELETE /users/123      # Delete user
 
 #### Use Plural Nouns
 
-❌ **Bad:**
+ **Bad:**
 ```
 /user/123
 /order/456
 ```
 
-✅ **Good:**
+ **Good:**
 ```
 /users/123
 /orders/456
@@ -161,11 +161,11 @@ class UserController(private val userService: UserService) {
 
 | Method | Purpose | Idempotent | Safe | Request Body | Response Body |
 |--------|---------|------------|------|--------------|---------------|
-| **GET** | Retrieve resource | ✅ Yes | ✅ Yes | ❌ No | ✅ Yes |
-| **POST** | Create resource | ❌ No | ❌ No | ✅ Yes | ✅ Yes |
-| **PUT** | Replace resource | ✅ Yes | ❌ No | ✅ Yes | ✅ Yes |
-| **PATCH** | Partial update | ❌ No | ❌ No | ✅ Yes | ✅ Yes |
-| **DELETE** | Delete resource | ✅ Yes | ❌ No | ❌ No | ❌ No |
+| **GET** | Retrieve resource |  Yes |  Yes |  No |  Yes |
+| **POST** | Create resource |  No |  No |  Yes |  Yes |
+| **PUT** | Replace resource |  Yes |  No |  Yes |  Yes |
+| **PATCH** | Partial update |  No |  No |  Yes |  Yes |
+| **DELETE** | Delete resource |  Yes |  No |  No |  No |
 
 **Idempotent** = Multiple identical requests have same effect as single request
 
@@ -719,13 +719,13 @@ sealed class BatchResult<T> {
 
 #### Используйте существительные, не глаголы
 
-❌ **Плохо:**
+ **Плохо:**
 ```
 GET  /getUsers
 POST /createUser
 ```
 
-✅ **Хорошо:**
+ **Хорошо:**
 ```
 GET    /users          # Получить всех пользователей
 POST   /users          # Создать пользователя
@@ -759,3 +759,18 @@ DELETE /users/123      # Удалить пользователя
 8. How do you handle long-running operations in REST APIs?
 9. What are the best practices for API error handling?
 10. How do you implement API pagination (offset vs cursor-based)?
+
+---
+
+## Related Questions
+
+### Android Implementation
+- [[q-when-can-the-system-restart-a-service--android--medium]] - Networking
+- [[q-graphql-vs-rest--networking--easy]] - Networking
+- [[q-api-file-upload-server--android--medium]] - Networking
+- [[q-splash-screen-api-android12--android--medium]] - Networking
+- [[q-data-encryption-at-rest--security--medium]] - Networking
+- [[q-privacy-sandbox-topics-api--privacy--medium]] - Networking
+
+### Kotlin Language Features
+- [[q-retrofit-coroutines-best-practices--kotlin--medium]] - Networking

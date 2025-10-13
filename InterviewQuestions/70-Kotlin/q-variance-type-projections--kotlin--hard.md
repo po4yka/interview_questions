@@ -34,8 +34,8 @@ Producer - can only produce (return) values:
 ```kotlin
 // Declaration-site covariance
 interface Producer<out T> {
-    fun produce(): T          // ✅ Can return T
-    // fun consume(item: T)   // ❌ Cannot accept T as parameter
+    fun produce(): T          //  Can return T
+    // fun consume(item: T)   //  Cannot accept T as parameter
 }
 
 class StringProducer : Producer<String> {
@@ -44,7 +44,7 @@ class StringProducer : Producer<String> {
 
 fun example() {
     val stringProducer: Producer<String> = StringProducer()
-    val anyProducer: Producer<Any> = stringProducer // ✅ Covariant
+    val anyProducer: Producer<Any> = stringProducer //  Covariant
 }
 ```
 
@@ -52,7 +52,7 @@ fun example() {
 
 ```kotlin
 val strings: List<String> = listOf("a", "b")
-val objects: List<Any> = strings // ✅ List is covariant
+val objects: List<Any> = strings //  List is covariant
 ```
 
 ---
@@ -64,8 +64,8 @@ Consumer - can only consume (accept) values:
 ```kotlin
 // Declaration-site contravariance
 interface Consumer<in T> {
-    fun consume(item: T)      // ✅ Can accept T
-    // fun produce(): T       // ❌ Cannot return T
+    fun consume(item: T)      //  Can accept T
+    // fun produce(): T       //  Cannot return T
 }
 
 class AnyConsumer : Consumer<Any> {
@@ -76,7 +76,7 @@ class AnyConsumer : Consumer<Any> {
 
 fun example() {
     val anyConsumer: Consumer<Any> = AnyConsumer()
-    val stringConsumer: Consumer<String> = anyConsumer // ✅ Contravariant
+    val stringConsumer: Consumer<String> = anyConsumer //  Contravariant
 }
 ```
 
@@ -87,7 +87,7 @@ class Person(val name: String) : Comparable<Any> {
     override fun compareTo(other: Any): Int = 0
 }
 
-val person: Comparable<Person> = Person("John") // ✅ Contravariant
+val person: Comparable<Person> = Person("John") //  Contravariant
 ```
 
 ---
@@ -104,7 +104,7 @@ interface Box<T> {
 
 fun example() {
     val stringBox: Box<String> = StringBox()
-    // val anyBox: Box<Any> = stringBox // ❌ Invariant
+    // val anyBox: Box<Any> = stringBox //  Invariant
 }
 ```
 

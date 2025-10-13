@@ -139,48 +139,48 @@ class MyFragment : Fragment() {
 ### Visual Lifecycle Flow
 
 ```
-┌─────────────────────────────────────────┐
-│         Activity onCreate()              │
-└──────────────┬──────────────────────────┘
+
+         Activity onCreate()              
+
                ↓
-┌─────────────────────────────────────────┐
-│      Fragment onAttach(context)          │
-│      Fragment onCreate(bundle)           │
-│      Fragment onCreateView()             │
-│      Fragment onViewCreated()            │
-└──────────────┬──────────────────────────┘
+
+      Fragment onAttach(context)          
+      Fragment onCreate(bundle)           
+      Fragment onCreateView()             
+      Fragment onViewCreated()            
+
                ↓
-┌─────────────────────────────────────────┐
-│         Activity onStart()               │
-│         Fragment onStart()               │
-└──────────────┬──────────────────────────┘
+
+         Activity onStart()               
+         Fragment onStart()               
+
                ↓
-┌─────────────────────────────────────────┐
-│         Activity onResume()              │
-│         Fragment onResume()              │
-└──────────────┬──────────────────────────┘
+
+         Activity onResume()              
+         Fragment onResume()              
+
                ↓
          [RUNNING STATE]
                ↓
-┌─────────────────────────────────────────┐
-│         Fragment onPause()               │
-│         Activity onPause()               │
-└──────────────┬──────────────────────────┘
+
+         Fragment onPause()               
+         Activity onPause()               
+
                ↓
-┌─────────────────────────────────────────┐
-│         Fragment onStop()                │
-│         Activity onStop()                │
-└──────────────┬──────────────────────────┘
+
+         Fragment onStop()                
+         Activity onStop()                
+
                ↓
-┌─────────────────────────────────────────┐
-│      Fragment onDestroyView()            │
-│      Fragment onDestroy()                │
-│      Fragment onDetach()                 │
-└──────────────┬──────────────────────────┘
+
+      Fragment onDestroyView()            
+      Fragment onDestroy()                
+      Fragment onDetach()                 
+
                ↓
-┌─────────────────────────────────────────┐
-│         Activity onDestroy()             │
-└─────────────────────────────────────────┘
+
+         Activity onDestroy()             
+
 ```
 
 ### Real-World Example: Fragment Transaction Lifecycle
@@ -513,3 +513,51 @@ class SafeFragment : Fragment() {
 - ViewLifecycleOwner
 - Memory leak prevention
 - Fragment communication
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
+- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
+
+### Advanced (Harder)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
+- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
+- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
+
+### Advanced (Harder)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
+- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
+- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
+
+### Advanced (Harder)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
+- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment

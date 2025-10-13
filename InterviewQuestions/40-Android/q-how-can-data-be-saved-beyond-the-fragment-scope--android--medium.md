@@ -155,3 +155,21 @@ class MyFragment : Fragment() {
 - SavedStateHandle
 - Repository pattern
 - SharedPreferences vs DataStore
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment
+- [[q-fragment-basics--android--easy]] - Fragment
+
+### Related (Medium)
+- [[q-save-data-outside-fragment--android--medium]] - Fragment
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - Fragment
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment
+- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] - Fragment
+
+### Advanced (Harder)
+- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - Fragment

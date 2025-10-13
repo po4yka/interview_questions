@@ -32,12 +32,12 @@ The 16 KB DEX page size issue is a memory alignment problem affecting Android 6.
 
 ```
 DEX File Structure:
-├─ Header
-├─ String Pool
-├─ Type IDs
-├─ Method IDs    ← Problem area
-├─ Class Definitions
-└─ Code Section
+ Header
+ String Pool
+ Type IDs
+ Method IDs    ← Problem area
+ Class Definitions
+ Code Section
 
 Memory Pages:
 - Android uses 4 KB pages for most allocations
@@ -369,7 +369,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '📦 APK Size: ${{ steps.apk-size.outputs.size }}'
+              body: ' APK Size: ${{ steps.apk-size.outputs.size }}'
             })
 ```
 
@@ -396,12 +396,12 @@ fun `release APK size is within acceptable range`() {
 #### 6. **Best Practices**
 
 ```kotlin
-// ✅ DO: Use latest Android Gradle Plugin
+//  DO: Use latest Android Gradle Plugin
 plugins {
     id("com.android.application") version "8.7.0"
 }
 
-// ✅ DO: Enable R8 full mode
+//  DO: Enable R8 full mode
 android {
     buildTypes {
         release {
@@ -415,13 +415,13 @@ android {
     }
 }
 
-// ✅ DO: Monitor APK size in CI/CD
+//  DO: Monitor APK size in CI/CD
 // See CI/CD section above
 
-// ✅ DO: Use App Bundle instead of APK
+//  DO: Use App Bundle instead of APK
 // Android App Bundle automatically optimizes for device configuration
 
-// ✅ DO: Remove unused resources
+//  DO: Remove unused resources
 android {
     buildTypes {
         release {
@@ -430,7 +430,7 @@ android {
     }
 }
 
-// ✅ DO: Split APKs by configuration
+//  DO: Split APKs by configuration
 android {
     splits {
         density {
@@ -442,10 +442,10 @@ android {
     }
 }
 
-// ❌ DON'T: Ignore APK size growth
-// ❌ DON'T: Use outdated AGP versions
-// ❌ DON'T: Skip R8 optimization
-// ❌ DON'T: Forget to test on real devices
+//  DON'T: Ignore APK size growth
+//  DON'T: Use outdated AGP versions
+//  DON'T: Skip R8 optimization
+//  DON'T: Forget to test on real devices
 ```
 
 #### 7. **Verification Checklist**
@@ -562,3 +562,20 @@ android.enableR8.fullMode=true
 - Используйте App Bundle
 
 Правильная конфигурация может уменьшить размер APK на 10-40% по сравнению с неоптимизированной сборкой.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-gradle-basics--android--easy]] - Build
+
+### Related (Medium)
+- [[q-dagger-build-time-optimization--android--medium]] - Build
+- [[q-android-build-optimization--android--medium]] - Build
+- [[q-proguard-r8--android--medium]] - Build
+- [[q-build-optimization-gradle--gradle--medium]] - Build
+- [[q-kapt-ksp-migration--gradle--medium]] - Build
+
+### Advanced (Harder)
+- [[q-kotlin-dsl-builders--kotlin--hard]] - Build

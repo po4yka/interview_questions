@@ -737,14 +737,14 @@ Certificate pinning provides:
 - **Attack Detection**: Identify attempted man-in-the-middle attacks
 
 **Implementation Checklist:**
-- ✅ Pin leaf and intermediate certificates
-- ✅ Include backup pins for rotation
-- ✅ Set expiration dates
-- ✅ Monitor certificate expiration
-- ✅ Test with proxy tools
-- ✅ Handle failures gracefully
-- ✅ Log pinning failures
-- ✅ Plan rotation strategy
+-  Pin leaf and intermediate certificates
+-  Include backup pins for rotation
+-  Set expiration dates
+-  Monitor certificate expiration
+-  Test with proxy tools
+-  Handle failures gracefully
+-  Log pinning failures
+-  Plan rotation strategy
 
 Use certificate pinning for apps handling sensitive data: banking, healthcare, messaging, payments.
 
@@ -947,12 +947,23 @@ class CertificatePinningTest {
 - **Обнаружение атак**: Идентификация попыток man-in-the-middle
 
 **Контрольный список:**
-- ✅ Закрепить leaf и intermediate сертификаты
-- ✅ Включить резервные pins
-- ✅ Установить даты истечения
-- ✅ Мониторить истечение сертификатов
-- ✅ Тестировать с прокси
-- ✅ Gracefully обрабатывать сбои
-- ✅ Логировать сбои закрепления
+-  Закрепить leaf и intermediate сертификаты
+-  Включить резервные pins
+-  Установить даты истечения
+-  Мониторить истечение сертификатов
+-  Тестировать с прокси
+-  Gracefully обрабатывать сбои
+-  Логировать сбои закрепления
 
 Используйте закрепление сертификатов для приложений с чувствительными данными: банкинг, здравоохранение, мессенджеры, платежи.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-encrypted-file-storage--security--medium]] - Security
+- [[q-database-encryption-android--android--medium]] - Security
+- [[q-app-security-best-practices--security--medium]] - Security
+- [[q-data-encryption-at-rest--security--medium]] - Security

@@ -44,31 +44,31 @@ Client: "Here's data" → Server (instant send)
 ### WebSocket Lifecycle
 
 ```
-┌─────────────┐
-│   CLOSED    │ ← Initial state
-└──────┬──────┘
-       │ connect()
+
+   CLOSED     ← Initial state
+
+        connect()
        ↓
-┌─────────────┐
-│ CONNECTING  │ ← Opening handshake
-└──────┬──────┘
-       │ onOpen()
+
+ CONNECTING   ← Opening handshake
+
+        onOpen()
        ↓
-┌─────────────┐
-│  CONNECTED  │ ← Active communication
-└──────┬──────┘
-       │ onMessage(), send()
-       │ ping/pong heartbeat
-       │
-       ├─→ Network issue → DISCONNECTED
-       ├─→ Manual close() → CLOSING → CLOSED
-       └─→ onFailure() → DISCONNECTED
+
+  CONNECTED   ← Active communication
+
+        onMessage(), send()
+        ping/pong heartbeat
+       
+       → Network issue → DISCONNECTED
+       → Manual close() → CLOSING → CLOSED
+       → onFailure() → DISCONNECTED
                 ↓
-       ┌─────────────┐
-       │DISCONNECTED │
-       └──────┬──────┘
-              │ Auto-reconnect (exponential backoff)
-              └─→ CONNECTING
+       
+       DISCONNECTED 
+       
+               Auto-reconnect (exponential backoff)
+              → CONNECTING
 ```
 
 ### Complete WebSocket Client Implementation
@@ -960,31 +960,31 @@ Master WebSocket to build responsive, real-time Android applications.
 ### Жизненный цикл WebSocket
 
 ```
-┌─────────────┐
-│   CLOSED    │ ← Начальное состояние
-└──────┬──────┘
-       │ connect()
+
+   CLOSED     ← Начальное состояние
+
+        connect()
        ↓
-┌─────────────┐
-│ CONNECTING  │ ← Открытие handshake
-└──────┬──────┘
-       │ onOpen()
+
+ CONNECTING   ← Открытие handshake
+
+        onOpen()
        ↓
-┌─────────────┐
-│  CONNECTED  │ ← Активная коммуникация
-└──────┬──────┘
-       │ onMessage(), send()
-       │ ping/pong heartbeat
-       │
-       ├─→ Сетевая проблема → DISCONNECTED
-       ├─→ Ручной close() → CLOSING → CLOSED
-       └─→ onFailure() → DISCONNECTED
+
+  CONNECTED   ← Активная коммуникация
+
+        onMessage(), send()
+        ping/pong heartbeat
+       
+       → Сетевая проблема → DISCONNECTED
+       → Ручной close() → CLOSING → CLOSED
+       → onFailure() → DISCONNECTED
                 ↓
-       ┌─────────────┐
-       │DISCONNECTED │
-       └──────┬──────┘
-              │ Авто-переподключение
-              └─→ CONNECTING
+       
+       DISCONNECTED 
+       
+               Авто-переподключение
+              → CONNECTING
 ```
 
 ### Полная реализация WebSocket клиента

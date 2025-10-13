@@ -60,7 +60,7 @@ fun isNotNull(value: Any?): Boolean {
 
 fun example(name: String?) {
     if (isNotNull(name)) {
-        // ❌ Smart cast is impossible!
+        //  Smart cast is impossible!
         // Compiler doesn't know isNotNull guarantees non-null
         println(name.length) // Error: Only safe calls are allowed
     }
@@ -86,7 +86,7 @@ fun isNotNull(value: Any?): Boolean {
 
 fun example(name: String?) {
     if (isNotNull(name)) {
-        // ✅ Smart cast works!
+        //  Smart cast works!
         println(name.length) // name is smart-cast to String
     }
 }
@@ -178,10 +178,10 @@ fun example() {
     val name: String
 
     myRun {
-        name = "John" // ✅ Compiler knows name is initialized
+        name = "John" //  Compiler knows name is initialized
     }
 
-    println(name) // ✅ No need for lateinit or nullable
+    println(name) //  No need for lateinit or nullable
 }
 ```
 
@@ -265,10 +265,10 @@ fun example() {
     val name: String
 
     "John".let {
-        name = it // ✅ Compiler knows it's initialized
+        name = it //  Compiler knows it's initialized
     }
 
-    println(name) // ✅ Definite initialization
+    println(name) //  Definite initialization
 }
 ```
 
@@ -441,7 +441,7 @@ fun example() {
         // Compiler knows data is initialized
     }
 
-    println(data) // ✅ No error
+    println(data) //  No error
 }
 ```
 
@@ -477,7 +477,7 @@ fun example() {
 ```kotlin
 @OptIn(ExperimentalContracts::class)
 fun isNotNull(value: Any?): Boolean {
-    contract { // ✅ Must be first
+    contract { //  Must be first
         returns(true) implies (value != null)
     }
     println("Checking...") // Other code after
@@ -488,12 +488,12 @@ fun isNotNull(value: Any?): Boolean {
 **2. Contract cannot depend on runtime values:**
 
 ```kotlin
-// ❌ INVALID: Cannot use runtime value
+//  INVALID: Cannot use runtime value
 @OptIn(ExperimentalContracts::class)
 fun isValid(value: Int?, threshold: Int): Boolean {
     contract {
         returns(true) implies (value != null)
-        // ❌ Cannot reference threshold
+        //  Cannot reference threshold
     }
     return value != null && value > threshold
 }
@@ -502,7 +502,7 @@ fun isValid(value: Int?, threshold: Int): Boolean {
 **3. Contracts are not verified:**
 
 ```kotlin
-// ⚠️ WARNING: Contract lies!
+//  WARNING: Contract lies!
 @OptIn(ExperimentalContracts::class)
 fun alwaysFalse(value: Any?): Boolean {
     contract {
@@ -527,7 +527,7 @@ fun example(name: String?) {
 **1. Only use contracts when necessary:**
 
 ```kotlin
-// ✅ DO: Contract needed for smart cast
+//  DO: Contract needed for smart cast
 @OptIn(ExperimentalContracts::class)
 fun isNotNull(value: Any?): Boolean {
     contract {
@@ -536,7 +536,7 @@ fun isNotNull(value: Any?): Boolean {
     return value != null
 }
 
-// ❌ DON'T: Contract not needed
+//  DON'T: Contract not needed
 @OptIn(ExperimentalContracts::class)
 fun add(a: Int, b: Int): Int {
     contract { } // Pointless
@@ -547,7 +547,7 @@ fun add(a: Int, b: Int): Int {
 **2. Ensure contracts are truthful:**
 
 ```kotlin
-// ✅ DO: Honest contract
+//  DO: Honest contract
 @OptIn(ExperimentalContracts::class)
 fun isPositive(value: Int?): Boolean {
     contract {
@@ -556,7 +556,7 @@ fun isPositive(value: Int?): Boolean {
     return value != null && value > 0 // Guarantees non-null
 }
 
-// ❌ DON'T: Lying contract
+//  DON'T: Lying contract
 @OptIn(ExperimentalContracts::class)
 fun isPositive(value: Int?): Boolean {
     contract {
@@ -569,7 +569,7 @@ fun isPositive(value: Int?): Boolean {
 **3. Use for validation functions:**
 
 ```kotlin
-// ✅ GOOD use cases
+//  GOOD use cases
 - isNotNull(value)
 - isValidEmail(email)
 - isInRange(value, min, max)

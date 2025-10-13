@@ -483,3 +483,14 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector)
 
 ## Ответ (RU)
 В Android есть несколько способов навигации между экранами. Основные способы включают Activity-навигацию через Intent, Fragment-based навигацию с FragmentManager, Navigation Component из Jetpack, Bottom Navigation и Tab Navigation для переключения между экранами через меню навигации, Drawer Navigation с боковым меню DrawerLayout, Deep Links и App Links для навигации через ссылки а также Navigation в Jetpack Compose с использованием NavHost и NavController.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation
+- [[q-compose-navigation-advanced--android--medium]] - Navigation
+- [[q-activity-navigation-how-it-works--android--medium]] - Navigation
+- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation
+- [[q-how-navigation-is-implemented-in-android--android--medium]] - Navigation

@@ -1246,41 +1246,41 @@ class FanOutFanInTest {
 **Mistakes to avoid:**
 
 ```kotlin
-// ❌ BAD: Forgetting to close channel (workers hang forever)
+//  BAD: Forgetting to close channel (workers hang forever)
 val channel = Channel<Int>()
 launch {
     repeat(10) { channel.send(it) }
     // Missing: channel.close()
 }
 
-// ✅ GOOD: Always close channels when done producing
+//  GOOD: Always close channels when done producing
 val channel = Channel<Int>()
 launch {
     repeat(10) { channel.send(it) }
     channel.close() // Signal completion
 }
 
-// ❌ BAD: Not using SupervisorJob (one failure kills all workers)
+//  BAD: Not using SupervisorJob (one failure kills all workers)
 val scope = CoroutineScope(Dispatchers.Default + Job())
 
-// ✅ GOOD: Use SupervisorJob for independent worker failures
+//  GOOD: Use SupervisorJob for independent worker failures
 val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
-// ❌ BAD: Blocking channel send in tight loop
+//  BAD: Blocking channel send in tight loop
 for (i in 1..1000000) {
     channel.send(i) // May suspend frequently
 }
 
-// ✅ GOOD: Use buffered channel or trySend
+//  GOOD: Use buffered channel or trySend
 val channel = Channel<Int>(Channel.BUFFERED)
 for (i in 1..1000000) {
     channel.send(i) // Better throughput
 }
 
-// ❌ BAD: Creating too many workers
+//  BAD: Creating too many workers
 val numWorkers = 1000 // Way too many!
 
-// ✅ GOOD: Match worker count to workload
+//  GOOD: Match worker count to workload
 val numWorkers = Runtime.getRuntime().availableProcessors()
 ```
 

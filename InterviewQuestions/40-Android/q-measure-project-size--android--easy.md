@@ -140,19 +140,19 @@ include(":feature:settings")
 
 ```
 project/
-├── app/                    ← Main app module
-├── core/
-│   ├── network/           ← Networking library
-│   ├── database/          ← Database layer
-│   ├── ui/                ← Shared UI components
-│   └── utils/             ← Utility functions
-├── feature/
-│   ├── login/             ← Login feature
-│   ├── profile/           ← Profile feature
-│   ├── chat/              ← Chat feature
-│   └── settings/          ← Settings feature
-└── test/
-    └── shared/            ← Shared test utilities
+ app/                    ← Main app module
+ core/
+    network/           ← Networking library
+    database/          ← Database layer
+    ui/                ← Shared UI components
+    utils/             ← Utility functions
+ feature/
+    login/             ← Login feature
+    profile/           ← Profile feature
+    chat/              ← Chat feature
+    settings/          ← Settings feature
+ test/
+     shared/            ← Shared test utilities
 ```
 
 **Total:** 12 modules

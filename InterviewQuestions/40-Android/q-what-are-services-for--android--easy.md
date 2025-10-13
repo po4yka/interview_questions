@@ -78,3 +78,15 @@ WorkManager.getInstance(context).enqueue(workRequest)
 ## Ответ (RU)
 Сервисы предназначены для выполнения длительных фоновых операций без взаимодействия с пользователем. Используются для: воспроизведения музыки, обработки сетевых запросов, выполнения периодических задач.
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-android-services-purpose--android--easy]] - Service
+
+### Advanced (Harder)
+- [[q-service-component--android--medium]] - Service
+- [[q-what-are-services-used-for--android--medium]] - Service
+- [[q-foreground-service-types--background--medium]] - Service

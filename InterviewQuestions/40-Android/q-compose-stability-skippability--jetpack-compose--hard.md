@@ -33,7 +33,7 @@ A composable is **skippable** if all of the following conditions are met:
 4. **Returns Unit** (or is a non-restartable composable)
 
 ```kotlin
-// ✅ SKIPPABLE - all parameters are primitives (stable)
+//  SKIPPABLE - all parameters are primitives (stable)
 @Composable
 fun Counter(count: Int, onIncrement: () -> Unit) {
     Button(onClick = onIncrement) {
@@ -41,7 +41,7 @@ fun Counter(count: Int, onIncrement: () -> Unit) {
     }
 }
 
-// ❌ NOT SKIPPABLE - unstable parameter
+//  NOT SKIPPABLE - unstable parameter
 data class User(var name: String) // var makes it unstable
 
 @Composable
@@ -49,7 +49,7 @@ fun UserProfile(user: User) { // Will always recompose
     Text(user.name)
 }
 
-// ✅ SKIPPABLE - immutable data class
+//  SKIPPABLE - immutable data class
 data class ImmutableUser(val name: String) // val makes it stable
 
 @Composable
@@ -85,36 +85,36 @@ A type is **stable** if the Compose compiler can guarantee that:
 - Abstract classes
 
 ```kotlin
-// ✅ STABLE - all properties are val and stable types
+//  STABLE - all properties are val and stable types
 data class StableUser(
     val id: Int,
     val name: String,
     val email: String
 )
 
-// ❌ UNSTABLE - has var property
+//  UNSTABLE - has var property
 data class UnstableUser(
     val id: Int,
     var name: String, // var makes entire class unstable
     val email: String
 )
 
-// ❌ UNSTABLE - has mutable collection
+//  UNSTABLE - has mutable collection
 data class UnstableUserList(
     val users: MutableList<String> // Mutable collection is unstable
 )
 
-// ✅ STABLE - immutable collection
+//  STABLE - immutable collection
 data class StableUserList(
     val users: List<String> // Immutable List is stable
 )
 
-// ❌ UNSTABLE - interface
+//  UNSTABLE - interface
 interface UserData {
     val name: String
 }
 
-// ❌ UNSTABLE - uses unstable interface
+//  UNSTABLE - uses unstable interface
 @Composable
 fun UserDisplay(user: UserData) { // Will recompose every time
     Text(user.name)
@@ -177,7 +177,7 @@ fun CounterDisplay(counter: Counter) { // Skippable!
 **Warning: @Stable is a contract** - if you lie to the compiler, you'll get incorrect skipping behavior and bugs:
 
 ```kotlin
-// ⚠️ INCORRECT - lying about stability
+//  INCORRECT - lying about stability
 @Stable
 data class LyingUser(
     var name: String // This is mutable but we claimed stable!
@@ -238,7 +238,7 @@ restartable scheme("[androidx.compose.ui.UiComposable]") fun UserProfile(
 **Problem: ViewModel parameters are unstable**
 
 ```kotlin
-// ❌ UNSTABLE - ViewModel is a class, not guaranteed stable
+//  UNSTABLE - ViewModel is a class, not guaranteed stable
 class UserViewModel : ViewModel() {
     val userState = mutableStateOf(User())
 }
@@ -287,7 +287,7 @@ fun UserScreenContainer(viewModel: UserViewModel) {
 **Problem: List causing unnecessary recompositions**
 
 ```kotlin
-// ❌ UNSTABLE - MutableList is unstable
+//  UNSTABLE - MutableList is unstable
 @Composable
 fun UserList(users: MutableList<User>) { // NOT skippable
     LazyColumn {
@@ -304,7 +304,7 @@ fun UserList(users: MutableList<User>) { // NOT skippable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-// ✅ STABLE - ImmutableList is stable
+//  STABLE - ImmutableList is stable
 @Composable
 fun UserList(users: ImmutableList<User>) { // Skippable!
     LazyColumn {
@@ -363,20 +363,20 @@ Button(onClick = { user = User("Bob") }) { // Lambda captures user
 1. **Use immutable data classes** for Compose parameters
 
 ```kotlin
-// ✅ DO
+//  DO
 data class User(val name: String, val age: Int)
 
-// ❌ DON'T
+//  DON'T
 data class User(var name: String, var age: Int)
 ```
 
 2. **Use kotlinx-collections-immutable** for lists
 
 ```kotlin
-// ✅ DO
+//  DO
 fun getUsers(): ImmutableList<User> = persistentListOf(...)
 
-// ❌ DON'T
+//  DON'T
 fun getUsers(): List<User> = mutableListOf(...) // Still unstable!
 ```
 
@@ -429,7 +429,7 @@ Composable-функция **может быть пропущена**, если �
 4. **Возвращает Unit** (или является неперезапускаемой composable)
 
 ```kotlin
-// ✅ ПРОПУСКАЕТСЯ - все параметры примитивы (стабильны)
+//  ПРОПУСКАЕТСЯ - все параметры примитивы (стабильны)
 @Composable
 fun Counter(count: Int, onIncrement: () -> Unit) {
     Button(onClick = onIncrement) {
@@ -437,7 +437,7 @@ fun Counter(count: Int, onIncrement: () -> Unit) {
     }
 }
 
-// ❌ НЕ ПРОПУСКАЕТСЯ - нестабильный параметр
+//  НЕ ПРОПУСКАЕТСЯ - нестабильный параметр
 data class User(var name: String) // var делает его нестабильным
 
 @Composable

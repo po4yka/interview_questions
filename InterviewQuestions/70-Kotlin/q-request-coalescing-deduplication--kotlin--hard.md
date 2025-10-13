@@ -80,35 +80,35 @@ Request coalescing (also called request deduplication or request collapsing) is 
 
 ```
 WITHOUT Coalescing:
-┌──────────┐     Request 1      ┌──────────┐
-│  Client  │───────────────────▶│          │
-│    A     │◀───────────────────│          │
-└──────────┘                    │          │
-┌──────────┐     Request 2      │          │
-│  Client  │───────────────────▶│ Backend  │
-│    B     │◀───────────────────│          │
-└──────────┘                    │          │
-┌──────────┐     Request 3      │          │
-│  Client  │───────────────────▶│          │
-│    C     │◀───────────────────│          │
-└──────────┘                    └──────────┘
+     Request 1      
+  Client            
+    A               
+                              
+     Request 2                
+  Client   Backend  
+    B               
+                              
+     Request 3                
+  Client            
+    C               
+                    
 
 Result: 3 identical backend calls
 
 
 WITH Coalescing:
-┌──────────┐                    ┌──────────┐
-│  Client  │───┐                │          │
-│    A     │◀──┤                │          │
-└──────────┘   │                │          │
-┌──────────┐   │  Single        │          │
-│  Client  │───┼──Request───────▶ Backend  │
-│    B     │◀──┤                │          │
-└──────────┘   │                │          │
-┌──────────┐   │                │          │
-│  Client  │───┘                │          │
-│    C     │◀───────────────────│          │
-└──────────┘                    └──────────┘
+                    
+  Client                            
+    A                               
+                             
+     Single                  
+  Client  Request Backend  
+    B                               
+                             
+                             
+  Client                            
+    C               
+                    
 
 Result: 1 backend call, 3 clients get result
 ```
@@ -128,7 +128,7 @@ Result: 1 backend call, 3 clients get result
 ### Scenario: User Profile Loading
 
 ```kotlin
-// ❌ PROBLEM: Multiple components load same user profile
+//  PROBLEM: Multiple components load same user profile
 class UserProfileScreen : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Component 1: Header loads user
@@ -215,38 +215,38 @@ class RequestCoalescer<K, V> {
 
 ```
 Request 1 arrives
-    │
-    ├─▶ Check inFlightRequests[key]
-    │   └─▶ Not found
-    │
-    ├─▶ Create Deferred
-    │   └─▶ Store in inFlightRequests[key]
-    │
-    ├─▶ Execute operation
-    │
-    ▼
+    
+     Check inFlightRequests[key]
+        Not found
+    
+     Create Deferred
+        Store in inFlightRequests[key]
+    
+     Execute operation
+    
+    
 Request 2 arrives (same key)
-    │
-    ├─▶ Check inFlightRequests[key]
-    │   └─▶ Found! Deferred exists
-    │
-    ├─▶ await() on existing Deferred
-    │   └─▶ No new operation executed
-    │
-    ▼
+    
+     Check inFlightRequests[key]
+        Found! Deferred exists
+    
+     await() on existing Deferred
+        No new operation executed
+    
+    
 Request 3 arrives (same key)
-    │
-    ├─▶ Check inFlightRequests[key]
-    │   └─▶ Found! Same Deferred
-    │
-    ├─▶ await() on existing Deferred
-    │
-    ▼
+    
+     Check inFlightRequests[key]
+        Found! Same Deferred
+    
+     await() on existing Deferred
+    
+    
 Operation completes
-    │
-    ├─▶ All 3 requests receive result
-    │
-    └─▶ Cleanup: remove from inFlightRequests
+    
+     All 3 requests receive result
+    
+     Cleanup: remove from inFlightRequests
 ```
 
 ---
@@ -707,18 +707,18 @@ data class CoalescerConfig(
 ```kotlin
 // COALESCING: Multiple identical requests → Single execution
 class Coalescing {
-    // Request 1: getUser("123")  ─┐
-    // Request 2: getUser("123")  ─┼─▶ Single API call: getUser("123")
-    // Request 3: getUser("123")  ─┘
+    // Request 1: getUser("123")  
+    // Request 2: getUser("123")   Single API call: getUser("123")
+    // Request 3: getUser("123")  
     //
     // All 3 get same result
 }
 
 // BATCHING: Multiple different requests → Single batch execution
 class Batching {
-    // Request 1: getUser("123")  ─┐
-    // Request 2: getUser("456")  ─┼─▶ Single API call: getUsers(["123", "456", "789"])
-    // Request 3: getUser("789")  ─┘
+    // Request 1: getUser("123")  
+    // Request 2: getUser("456")   Single API call: getUsers(["123", "456", "789"])
+    // Request 3: getUser("789")  
     //
     // Each gets their specific result
 }
@@ -1473,11 +1473,11 @@ val imageLoader = ImageLoader.Builder(context)
 
 ## Best Practices
 
-### Do's ✅
+### Do's 
 
 1. **Use for expensive, idempotent operations**
    ```kotlin
-   // ✅ Good
+   //  Good
    coalescer.execute("user:$userId") {
        api.getUser(userId) // Expensive, idempotent
    }
@@ -1485,7 +1485,7 @@ val imageLoader = ImageLoader.Builder(context)
 
 2. **Choose appropriate keys**
    ```kotlin
-   // ✅ Good - Unique, deterministic keys
+   //  Good - Unique, deterministic keys
    coalescer.execute("user:$userId:$includeDetails") {
        api.getUser(userId, includeDetails)
    }
@@ -1493,7 +1493,7 @@ val imageLoader = ImageLoader.Builder(context)
 
 3. **Handle failures gracefully**
    ```kotlin
-   // ✅ Good
+   //  Good
    try {
        coalescer.execute(key) { operation() }
    } catch (e: Exception) {
@@ -1504,24 +1504,24 @@ val imageLoader = ImageLoader.Builder(context)
 
 4. **Monitor metrics**
    ```kotlin
-   // ✅ Good
+   //  Good
    val metrics = coalescer.getMetrics()
    Log.d("Metrics", "Coalescing rate: ${metrics.getCoalescingRate()}%")
    ```
 
 5. **Implement timeouts**
    ```kotlin
-   // ✅ Good
+   //  Good
    withTimeout(5000) {
        coalescer.execute(key) { operation() }
    }
    ```
 
-### Don'ts ❌
+### Don'ts 
 
 1. **Don't coalesce non-idempotent operations**
    ```kotlin
-   // ❌ Bad - Side effects!
+   //  Bad - Side effects!
    coalescer.execute("payment") {
        api.processPayment() // Creates duplicate payments!
    }
@@ -1529,7 +1529,7 @@ val imageLoader = ImageLoader.Builder(context)
 
 2. **Don't use for mutations**
    ```kotlin
-   // ❌ Bad
+   //  Bad
    coalescer.execute("update-user") {
        api.updateUser(user) // Should not be coalesced
    }
@@ -1537,11 +1537,11 @@ val imageLoader = ImageLoader.Builder(context)
 
 3. **Don't ignore cleanup**
    ```kotlin
-   // ❌ Bad - Memory leak
+   //  Bad - Memory leak
    val coalescer = RequestCoalescer<String, Data>()
    // Never cleaned up!
 
-   // ✅ Good
+   //  Good
    class MyRepository : Closeable {
        private val coalescer = RequestCoalescer<String, Data>()
 
@@ -1553,10 +1553,10 @@ val imageLoader = ImageLoader.Builder(context)
 
 4. **Don't use overly broad keys**
    ```kotlin
-   // ❌ Bad - Too broad
+   //  Bad - Too broad
    coalescer.execute("all-users") { api.getAllUsers() }
 
-   // ✅ Good - Specific
+   //  Good - Specific
    coalescer.execute("user:$userId") { api.getUser(userId) }
    ```
 
@@ -1635,7 +1635,7 @@ data class CoalescerStats(
 ### 1. Coalescing Non-Idempotent Operations
 
 ```kotlin
-// ❌ WRONG: Payment processing should NOT be coalesced
+//  WRONG: Payment processing should NOT be coalesced
 class PaymentService(private val coalescer: RequestCoalescer<String, Payment>) {
     suspend fun processPayment(orderId: String, amount: Double): Payment {
         return coalescer.execute("payment:$orderId") {
@@ -1644,7 +1644,7 @@ class PaymentService(private val coalescer: RequestCoalescer<String, Payment>) {
     }
 }
 
-// ✅ CORRECT: Don't coalesce mutations
+//  CORRECT: Don't coalesce mutations
 class PaymentService(private val api: PaymentApi) {
     suspend fun processPayment(orderId: String, amount: Double): Payment {
         return api.processPayment(orderId, amount) // Each call is independent
@@ -1655,7 +1655,7 @@ class PaymentService(private val api: PaymentApi) {
 ### 2. Memory Leaks from Unbounded Maps
 
 ```kotlin
-// ❌ WRONG: No cleanup
+//  WRONG: No cleanup
 class LeakyCoalescer<K, V> {
     private val requests = ConcurrentHashMap<K, Deferred<V>>()
 
@@ -1672,7 +1672,7 @@ class LeakyCoalescer<K, V> {
     }
 }
 
-// ✅ CORRECT: Cleanup after completion
+//  CORRECT: Cleanup after completion
 class ProperCoalescer<K, V> {
     private val requests = ConcurrentHashMap<K, Deferred<V>>()
 
@@ -1695,7 +1695,7 @@ class ProperCoalescer<K, V> {
 ### 3. Ignoring Cancellation
 
 ```kotlin
-// ❌ WRONG: Doesn't handle cancellation
+//  WRONG: Doesn't handle cancellation
 suspend fun execute(key: K, operation: suspend () -> V): V {
     val deferred = async {
         operation()
@@ -1704,7 +1704,7 @@ suspend fun execute(key: K, operation: suspend () -> V): V {
     return deferred.await() // If cancelled, entry stays in map
 }
 
-// ✅ CORRECT: Cleanup on cancellation
+//  CORRECT: Cleanup on cancellation
 suspend fun execute(key: K, operation: suspend () -> V): V = coroutineScope {
     val deferred = async {
         try {

@@ -1,4 +1,6 @@
 ---
+topic: architecture-patterns
+subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 tags:
   - oop
   - inheritance
@@ -9,6 +11,10 @@ tags:
   - polymorphism
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-architecture-patterns
+related_questions: []
 ---
 
 # В каких случаях наследование полезно, а в каких нет?
@@ -531,3 +537,17 @@ Use inheritance **sparingly** and only when there's a **clear, stable IS-A relat
 
 **Правило:** "Предпочитайте композицию наследованию"
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-java-all-classes-inherit-from-object--programming-languages--easy]] - Inheritance
+- [[q-kotlin-enum-classes--kotlin--easy]] - Enums
+
+### Related (Medium)
+- [[q-inheritance-vs-composition--oop--medium]] - Inheritance
+- [[q-inheritance-composition-aggregation--oop--medium]] - Inheritance
+- [[q-class-composition--oop--medium]] - Inheritance
+- [[q-java-marker-interfaces--programming-languages--medium]] - Inheritance

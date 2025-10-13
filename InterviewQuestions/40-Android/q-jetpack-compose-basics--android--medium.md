@@ -143,7 +143,7 @@ fun Counter() {
 // Without remember - WRONG!
 @Composable
 fun BrokenCounter() {
-    var count by mutableStateOf(0)  // ❌ Resets to 0 on every recomposition!
+    var count by mutableStateOf(0)  //  Resets to 0 on every recomposition!
 
     Button(onClick = { count++ }) {
         Text("Count: $count")  // Always shows 0

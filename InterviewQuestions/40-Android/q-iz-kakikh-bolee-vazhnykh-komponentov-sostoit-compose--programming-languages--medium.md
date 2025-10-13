@@ -538,31 +538,31 @@ fun Animations() {
 
 ```
 Compose Runtime
-    ├── Composable Functions (@Composable)
-    ├── State Management (remember, mutableStateOf)
-    │   ├── State Hoisting
-    │   ├── ViewModel Integration
-    │   └── State Flow/LiveData
-    ├── Modifiers (size, padding, click, etc.)
-    ├── Layouts
-    │   ├── Column, Row, Box
-    │   ├── LazyColumn, LazyRow
-    │   └── Custom Layouts
-    ├── Recomposition Engine
-    ├── Effect Handlers
-    │   ├── LaunchedEffect
-    │   ├── DisposableEffect
-    │   └── SideEffect
-    ├── Material Components
-    │   ├── Button, Text, Card
-    │   ├── TextField, Checkbox
-    │   └── Scaffold, TopAppBar
-    ├── Theme System
-    │   ├── Colors
-    │   ├── Typography
-    │   └── Shapes
-    ├── Navigation
-    └── Animations
+     Composable Functions (@Composable)
+     State Management (remember, mutableStateOf)
+        State Hoisting
+        ViewModel Integration
+        State Flow/LiveData
+     Modifiers (size, padding, click, etc.)
+     Layouts
+        Column, Row, Box
+        LazyColumn, LazyRow
+        Custom Layouts
+     Recomposition Engine
+     Effect Handlers
+        LaunchedEffect
+        DisposableEffect
+        SideEffect
+     Material Components
+        Button, Text, Card
+        TextField, Checkbox
+        Scaffold, TopAppBar
+     Theme System
+        Colors
+        Typography
+        Shapes
+     Navigation
+     Animations
 ```
 
 ### Summary
@@ -586,3 +586,19 @@ The most important Compose components:
 
 ## Ответ (RU)
 Compose состоит из следующих более важных компонентов: Composable функции, которые описывают UI; State управляет состоянием компонентов; Modifiers применяются для настройки внешнего вида и поведения; Layouts определяют структуру расположения элементов на экране и Recomposition механизм обновления интерфейса при изменении состояния
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose
+- [[q-accessibility-compose--accessibility--medium]] - Compose
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose
+
+### Advanced (Harder)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
+- [[q-compose-performance-optimization--android--hard]] - Compose

@@ -836,45 +836,45 @@ class RetryTest {
 **Do's:**
 
 ```kotlin
-// ✅ Use exponential backoff for network requests
+//  Use exponential backoff for network requests
 flow { fetchFromApi() }
     .retryWithExponentialBackoff()
 
-// ✅ Add jitter to prevent thundering herd
+//  Add jitter to prevent thundering herd
 .retryWithExponentialBackoff(
     config = RetryConfig(jitterFactor = 0.1)
 )
 
-// ✅ Set max delay to avoid very long waits
+//  Set max delay to avoid very long waits
 RetryConfig(maxDelayMs = 60000)
 
-// ✅ Only retry retriable errors
+//  Only retry retriable errors
 .retry { it is IOException }
 
-// ✅ Combine with timeout
+//  Combine with timeout
 .timeout(5000)
 .retryWithExponentialBackoff()
 
-// ✅ Log retry attempts for monitoring
+//  Log retry attempts for monitoring
 .retryWithLogging(config, logger)
 ```
 
 **Don'ts:**
 
 ```kotlin
-// ❌ Don't retry immediately without delay
+//  Don't retry immediately without delay
 .retry(10) // Hammers the server
 
-// ❌ Don't retry forever
+//  Don't retry forever
 .retry(Long.MAX_VALUE) // Never gives up
 
-// ❌ Don't retry non-retriable errors
+//  Don't retry non-retriable errors
 .retry { true } // Retries everything
 
-// ❌ Don't forget max delay
+//  Don't forget max delay
 RetryConfig(multiplier = 10.0) // Can lead to hours of waiting
 
-// ❌ Don't ignore exceptions after retry
+//  Don't ignore exceptions after retry
 .retry(3)
 // Missing .catch { }
 ```

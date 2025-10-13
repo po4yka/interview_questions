@@ -1,4 +1,6 @@
 ---
+topic: programming-languages
+subtopics: ["java", "jvm", "language-features"]
 tags:
   - functional-interface
   - functional-programming
@@ -7,6 +9,10 @@ tags:
   - programming-languages
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-programming-languages
+related_questions: []
 ---
 
 # Какой тип у лямбды в Java?
@@ -106,3 +112,16 @@ Lambda expressions in Java have the type of a **functional interface** - an inte
 
 В Java лямбда-выражения имеют тип, который называется **функциональным интерфейсом**. Функциональный интерфейс — это интерфейс, который содержит только один абстрактный метод. Этот интерфейс может также содержать статические и по умолчанию (default) методы, но он должен иметь только один абстрактный метод, который определяет тип лямбда-выражения.
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-java-equals-default-behavior--programming-languages--easy]] - Java
+- [[q-java-object-comparison--programming-languages--easy]] - Java
+
+### Advanced (Harder)
+- [[q-java-access-modifiers--programming-languages--medium]] - Java
+- [[q-kotlin-operator-overloading--kotlin--medium]] - Operators
+- [[q-kotlin-extension-functions--kotlin--medium]] - Extensions

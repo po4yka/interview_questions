@@ -264,3 +264,19 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 ## Ответ (RU)
 Если удалился элемент из списка, нужно: Удалить его из списка данных. Сообщить Adapter, чтобы он перерисовал только изменённые элементы.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
+
+### Related (Medium)
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
+- [[q-dagger-build-time-optimization--android--medium]] - Ui
+- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
+- [[q-build-optimization-gradle--gradle--medium]] - Ui
+- [[q-testing-compose-ui--android--medium]] - Ui

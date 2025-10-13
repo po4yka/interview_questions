@@ -62,27 +62,27 @@ Designing a WhatsApp-like messaging application involves multiple components wor
 ### 2. High-Level Architecture
 
 ```
-┌─────────────────┐
-│  Android Client │
-└────────┬────────┘
-         │
-         ├─── WebSocket (Real-time messaging)
-         ├─── REST API (User profile, media upload)
-         └─── Push Notifications (FCM)
-         │
-┌────────▼────────┐
-│  Load Balancer  │
-└────────┬────────┘
-         │
-┌────────▼────────┐
-│  Application    │
-│  Servers        │ ← Message Queue (Kafka/RabbitMQ)
-└────────┬────────┘
-         │
-         ├─── User Database (PostgreSQL/MySQL)
-         ├─── Message Database (Cassandra/MongoDB)
-         ├─── Cache Layer (Redis)
-         └─── File Storage (S3/CDN)
+
+  Android Client 
+
+         
+          WebSocket (Real-time messaging)
+          REST API (User profile, media upload)
+          Push Notifications (FCM)
+         
+
+  Load Balancer  
+
+         
+
+  Application    
+  Servers         ← Message Queue (Kafka/RabbitMQ)
+
+         
+          User Database (PostgreSQL/MySQL)
+          Message Database (Cassandra/MongoDB)
+          Cache Layer (Redis)
+          File Storage (S3/CDN)
 ```
 
 ### 3. Android App Architecture
@@ -304,10 +304,10 @@ class MessageStatusTracker @Inject constructor(
                 .collect { status ->
                     when (status) {
                         MessageStatus.SENDING -> updateUI(messageId, "Sending...")
-                        MessageStatus.SENT -> updateUI(messageId, "✓")
-                        MessageStatus.DELIVERED -> updateUI(messageId, "✓✓")
-                        MessageStatus.READ -> updateUI(messageId, "✓✓ (blue)")
-                        MessageStatus.FAILED -> updateUI(messageId, "❌")
+                        MessageStatus.SENT -> updateUI(messageId, "")
+                        MessageStatus.DELIVERED -> updateUI(messageId, "")
+                        MessageStatus.READ -> updateUI(messageId, " (blue)")
+                        MessageStatus.FAILED -> updateUI(messageId, "")
                     }
                 }
         }

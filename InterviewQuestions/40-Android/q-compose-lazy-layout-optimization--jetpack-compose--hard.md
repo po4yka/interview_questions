@@ -47,7 +47,7 @@ fun GoodList(items: List<Item>) {
     LazyColumn {
         items(
             items = items,
-            key = { item -> item.id }  // ✅ Stable unique key
+            key = { item -> item.id }  //  Stable unique key
         ) { item ->
             ItemRow(item)
         }
@@ -72,22 +72,22 @@ fun GoodList(items: List<Item>) {
 
 **Key selection guidelines**:
 ```kotlin
-// ✅ GOOD: Database ID
+//  GOOD: Database ID
 items(users, key = { it.id }) { ... }
 
-// ✅ GOOD: Composite key for uniqueness
+//  GOOD: Composite key for uniqueness
 items(messages, key = { "${it.userId}_${it.timestamp}" }) { ... }
 
-// ❌ BAD: Index (changes when list changes)
+//  BAD: Index (changes when list changes)
 items(items.size) { index ->
     val item = items[index]
     // index is not stable!
 }
 
-// ❌ BAD: Non-unique property
+//  BAD: Non-unique property
 items(users, key = { it.name }) { ... }  // Names can duplicate!
 
-// ❌ BAD: Mutable property
+//  BAD: Mutable property
 items(users, key = { it.lastSeenTime }) { ... }  // Changes over time!
 ```
 
@@ -200,7 +200,7 @@ fun StableList(items: List<Item>) {
 fun BadNestedLazy() {
     LazyColumn {
         items(categories) { category ->
-            LazyRow {  // ❌ Nested lazy layout
+            LazyRow {  //  Nested lazy layout
                 items(category.items) { item ->
                     ItemCard(item)
                 }
@@ -494,34 +494,34 @@ fun MessageRow(
 
 **1. Missing keys**:
 ```kotlin
-// ❌ No keys - poor performance on updates
+//  No keys - poor performance on updates
 items(list) { item -> ItemRow(item) }
 
-// ✅ With keys
+//  With keys
 items(list, key = { it.id }) { item -> ItemRow(item) }
 ```
 
 **2. Non-unique keys**:
 ```kotlin
-// ❌ Index as key (changes when list reorders)
+//  Index as key (changes when list reorders)
 itemsIndexed(list) { index, item ->
     key(index) { ItemRow(item) }
 }
 
-// ✅ Stable ID as key
+//  Stable ID as key
 items(list, key = { it.id }) { item -> ItemRow(item) }
 ```
 
 **3. Heavy composition**:
 ```kotlin
-// ❌ Heavy operations in composition
+//  Heavy operations in composition
 @Composable
 fun HeavyItem(item: Item) {
     val processed = processHeavyData(item.data)  // Blocking!
     ItemRow(processed)
 }
 
-// ✅ Defer to LaunchedEffect
+//  Defer to LaunchedEffect
 @Composable
 fun OptimizedItem(item: Item) {
     var processed by remember { mutableStateOf<ProcessedData?>(null) }
@@ -574,3 +574,35 @@ LazyColumn и LazyRow - высоко оптимизированные composable
 8. **Тестируйте на больших данных** (1000+ элементов)
 9. **Мониторьте производительность** с Layout Inspector
 10. **Профилируйте прокрутку** с frame timing
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Performance, Compose
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-performance-optimization--android--hard]] - Performance, Compose
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - Compose, Jetpack
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Performance, Compose
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-performance-optimization--android--hard]] - Performance, Compose
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - Compose, Jetpack

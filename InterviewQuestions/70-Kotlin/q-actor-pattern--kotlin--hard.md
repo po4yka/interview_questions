@@ -51,24 +51,24 @@ The **Actor pattern** is a concurrency model where actors are isolated units tha
 ### Actor Model Architecture
 
 ```
-┌─────────────────────────────────────┐
-│            Actor                    │
-│  ┌──────────────────────────────┐  │
-│  │     Private State            │  │
-│  │  (only actor can access)     │  │
-│  └──────────────────────────────┘  │
-│              ▲                      │
-│              │                      │
-│  ┌───────────┴──────────────────┐  │
-│  │   Message Processing Loop    │  │
-│  │   (processes one at a time)  │  │
-│  └───────────▲──────────────────┘  │
-│              │                      │
-│  ┌───────────┴──────────────────┐  │
-│  │      Mailbox (Channel)       │  │
-│  └──────────────────────────────┘  │
-└──────────────▲──────────────────────┘
-               │
+
+            Actor                    
+    
+       Private State              
+    (only actor can access)       
+    
+                                    
+                                    
+    
+     Message Processing Loop      
+     (processes one at a time)    
+    
+                                    
+    
+        Mailbox (Channel)         
+    
+
+               
           Messages from
           external senders
 ```

@@ -11,6 +11,10 @@ tags:
   - tools
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Какая библиотека используется для нахождения утечек памяти в Android?
@@ -59,38 +63,38 @@ Application.registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbac
 When a leak is detected, LeakCanary shows a notification:
 
 ```
-┌──────────────────────────────────┐
-│  🐛 LeakCanary                    │
-├──────────────────────────────────┤
-│  MainActivity has leaked          │
-│                                   │
-│  1 retained object                │
-│  Retaining 2.5 MB                 │
-│                                   │
-│  Tap to see leak trace            │
-└──────────────────────────────────┘
+
+   LeakCanary                    
+
+  MainActivity has leaked          
+                                   
+  1 retained object                
+  Retaining 2.5 MB                 
+                                   
+  Tap to see leak trace            
+
 ```
 
 **Leak Trace Example:**
 
 ```
-┌─────────────────────────────────────────┐
-│ REFERENCES UNDERLINED are the leak      │
-│ cause                                    │
-├─────────────────────────────────────────┤
-│                                          │
-│ GC Root: System class                    │
-│     ↓ static MyApplication.sInstance     │
-│ MyApplication instance                   │
-│     ↓ MyApplication.activityManager      │
-│ ActivityManager instance                 │
-│     ↓ ActivityManager.currentActivity    │
-│ ════════════════════════════════════════ │
-│ MainActivity instance                    │
-│ ════════════════════════════════════════ │
-│   Leaking: YES (Activity#mDestroyed=true)│
-│   Retaining 2.5 MB in 1234 objects       │
-└─────────────────────────────────────────┘
+
+ REFERENCES UNDERLINED are the leak      
+ cause                                    
+
+                                          
+ GC Root: System class                    
+     ↓ static MyApplication.sInstance     
+ MyApplication instance                   
+     ↓ MyApplication.activityManager      
+ ActivityManager instance                 
+     ↓ ActivityManager.currentActivity    
+  
+ MainActivity instance                    
+  
+   Leaking: YES (Activity#mDestroyed=true)
+   Retaining 2.5 MB in 1234 objects       
+
 ```
 
 **Watch Custom Objects:**
@@ -340,3 +344,18 @@ class MyRepository {
 - **Только debug сборки** - нет overhead в production
 - **Простота использования** - просто добавьте зависимость и запустите
 
+
+---
+
+## Related Questions
+
+### Computer Science Fundamentals
+- [[q-primitive-vs-reference-types--programming-languages--easy]] - Memory Management
+- [[q-reference-types-criteria--programming-languages--medium]] - Memory Management
+- [[q-kotlin-reference-equality-operator--programming-languages--easy]] - Memory Management
+- [[q-reference-types-protect-from-deletion--programming-languages--easy]] - Memory Management
+- [[q-find-object-without-references--programming-languages--medium]] - Memory Management
+- [[q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium]] - Memory Management
+
+### Kotlin Language Features
+- [[q-kotlin-native--kotlin--hard]] - Memory Management

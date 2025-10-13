@@ -210,3 +210,15 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - **WorkManager** - для отложенных фоновых задач
 - **JobScheduler** - для системных задач
 - **AlarmManager** - для точных по времени задач
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-what-are-services-for--android--easy]] - Service
+
+### Advanced (Harder)
+- [[q-service-component--android--medium]] - Service
+- [[q-what-are-services-used-for--android--medium]] - Service
+- [[q-foreground-service-types--background--medium]] - Service

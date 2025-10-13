@@ -1,4 +1,6 @@
 ---
+topic: programming-languages
+subtopics: ["java", "jvm", "language-features"]
 tags:
   - access-modifiers
   - best-practices
@@ -11,6 +13,10 @@ tags:
   - public
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-programming-languages
+related_questions: []
 ---
 
 # Как лучше всего использовать модификаторы доступа в Java?
@@ -181,15 +187,15 @@ public class UserService {
 
 ```
 Is it needed outside the class?
-├─ No → private
-└─ Yes
-    ├─ Needed outside the package?
-    │   ├─ No → package-private (no modifier)
-    │   └─ Yes
-    │       ├─ Only for subclasses?
-    │       │   └─ Yes → protected
-    │       └─ For everyone?
-    │           └─ Yes → public
+ No → private
+ Yes
+     Needed outside the package?
+        No → package-private (no modifier)
+        Yes
+            Only for subclasses?
+               Yes → protected
+            For everyone?
+                Yes → public
 ```
 
 **Complete Example:**
@@ -262,3 +268,16 @@ class TransactionLogger {
 
 Лучше всего **ограничивать доступ** настолько, насколько это возможно.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-java-equals-default-behavior--programming-languages--easy]] - Java
+- [[q-java-object-comparison--programming-languages--easy]] - Java
+- [[q-java-lambda-type--programming-languages--easy]] - Java
+
+### Related (Medium)
+- [[q-kotlin-operator-overloading--kotlin--medium]] - Operators
+- [[q-kotlin-extension-functions--kotlin--medium]] - Extensions

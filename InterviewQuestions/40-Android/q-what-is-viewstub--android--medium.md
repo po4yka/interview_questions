@@ -420,7 +420,7 @@ With ViewStub:
 - - **Use cases**: Error states, conditional features, expandable sections
 - WARNING: **One-time**: Can only be inflated once
 - WARNING: **Replacement**: ViewStub is removed after inflation
-- 📝 **Best practice**: Cache inflated view reference for show/hide
+-  **Best practice**: Cache inflated view reference for show/hide
 
 **When to use**:
 - Complex layouts shown conditionally
@@ -504,7 +504,7 @@ val inflated: View = stub.inflate()
 
 - - Можно инфлятить только **один раз**
 - WARNING: ViewStub **удаляется** после инфляции
-- 📝 Кешируйте ссылку на созданный view для многократного показа/скрытия
+-  Кешируйте ссылку на созданный view для многократного показа/скрытия
 - - Используйте для сложных layouts, показываемых условно
 - - Не используйте для всегда видимого контента
 
@@ -521,3 +521,21 @@ ViewStub — это легковесный, невидимый view нулево
 - [ViewStub - Android Developers](https://developer.android.com/reference/android/view/ViewStub)
 - [How to use View Stub in Android - Stack Overflow](https://stackoverflow.com/questions/11577777/how-to-use-view-stub-in-android)
 - [ViewStub: On-Demand Inflate View - ProAndroidDev](https://proandroiddev.com/viewstub-on-demand-inflate-view-or-inflate-lazily-layout-resource-e56b8c39398b)
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- [[q-what-is-viewmodel--android--medium]] - View
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

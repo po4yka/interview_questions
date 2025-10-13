@@ -292,3 +292,14 @@ fun createDeepLink(itemId: Int): PendingIntent {
 ## Ответ (RU)
 
 Способы навигации в Kotlin: Jetpack Navigation Component — современный способ навигации, основанный на графе навигации и безопасных аргументах. Позволяет легко переходить между фрагментами и активностями, а также управлять состоянием навигации. FragmentTransaction — ручной способ добавления, замены и удаления фрагментов. Navigation через Intent — используется для переключения между активностями или фрагментами внутри приложения или между приложениями. Explicit и Implicit Intents — явные и неявные намерения для навигации между компонентами. NavHostFragment и NavController — связаны с использованием графа навигации для управления фрагментами в приложениях Android.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation
+- [[q-compose-navigation-advanced--android--medium]] - Navigation
+- [[q-activity-navigation-how-it-works--android--medium]] - Navigation
+- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation
+- [[q-what-navigation-methods-do-you-know--android--medium]] - Navigation

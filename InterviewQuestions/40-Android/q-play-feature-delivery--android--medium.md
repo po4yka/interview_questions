@@ -147,11 +147,11 @@ Consider an app that allows users to buy and sell goods in an online marketplace
 
 ```
 :app (base module)
-├── :feature:login (install-time)
-├── :feature:browse (install-time)
-├── :feature:sell (on-demand - only for sellers)
-├── :feature:payment (on-demand - only when needed)
-└── :feature:ar-preview (conditional - AR-capable devices only)
+ :feature:login (install-time)
+ :feature:browse (install-time)
+ :feature:sell (on-demand - only for sellers)
+ :feature:payment (on-demand - only when needed)
+ :feature:ar-preview (conditional - AR-capable devices only)
 ```
 
 **Monitoring Download Progress:**
@@ -294,11 +294,11 @@ dependencies {
 
 **Benefits:**
 
-- 📉 **Reduced initial download size** — users download only what they need
-- 📦 **Modular architecture** — better code organization
-- 🎯 **Targeted delivery** — features only for specific devices/conditions
-- 💾 **Storage savings** — users can uninstall unused features
-- 🚀 **Faster updates** — update individual modules without updating entire app
+-  **Reduced initial download size** — users download only what they need
+-  **Modular architecture** — better code organization
+-  **Targeted delivery** — features only for specific devices/conditions
+-  **Storage savings** — users can uninstall unused features
+-  **Faster updates** — update individual modules without updating entire app
 
 **Use Cases:**
 
@@ -413,11 +413,11 @@ splitInstallManager.startInstall(request)
 
 ```
 :app (базовый модуль)
-├── :feature:login (install-time)
-├── :feature:browse (install-time)
-├── :feature:sell (on-demand - только для продавцов)
-├── :feature:payment (on-demand - только при необходимости)
-└── :feature:ar-preview (conditional - только AR-устройства)
+ :feature:login (install-time)
+ :feature:browse (install-time)
+ :feature:sell (on-demand - только для продавцов)
+ :feature:payment (on-demand - только при необходимости)
+ :feature:ar-preview (conditional - только AR-устройства)
 ```
 
 **Мониторинг прогресса загрузки:**

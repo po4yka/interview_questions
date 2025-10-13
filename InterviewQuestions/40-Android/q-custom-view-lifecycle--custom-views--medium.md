@@ -27,7 +27,7 @@ Understanding the **Custom View lifecycle** is crucial for building efficient, p
 ```
 Constructor → onAttachedToWindow → onMeasure → onLayout → onDraw → onDetachedFromWindow
      ↑              ↓                   ↑           ↑         ↑              ↓
-     └──────────────┴───────────────────┴───────────┴─────────┴──────────────┘
+     
                          (Can repeat multiple times)
 ```
 
@@ -48,11 +48,11 @@ class CustomProgressBar @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    // ✅ DO: Read XML attributes here
-    // ✅ DO: Initialize Paint objects
-    // ✅ DO: Set up default values
-    // ❌ DON'T: Access view dimensions (they're 0)
-    // ❌ DON'T: Start animations or background work
+    //  DO: Read XML attributes here
+    //  DO: Initialize Paint objects
+    //  DO: Set up default values
+    //  DON'T: Access view dimensions (they're 0)
+    //  DON'T: Start animations or background work
 
     private val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -112,10 +112,10 @@ Called when the view is attached to a window and becomes part of the view hierar
 override fun onAttachedToWindow() {
     super.onAttachedToWindow()
 
-    // ✅ DO: Start animations
-    // ✅ DO: Register listeners
-    // ✅ DO: Start background tasks
-    // ✅ DO: Access ViewTreeObserver
+    //  DO: Start animations
+    //  DO: Register listeners
+    //  DO: Start background tasks
+    //  DO: Access ViewTreeObserver
 
     // Start animation when view is attached
     valueAnimator = ValueAnimator.ofFloat(0f, progress).apply {
@@ -149,12 +149,12 @@ Called to determine the size requirements of the view. Can be called multiple ti
 
 ```kotlin
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    // ✅ DO: Calculate desired dimensions
-    // ✅ DO: Consider padding
-    // ✅ DO: Respect measure spec modes
-    // ✅ DO: Call setMeasuredDimension()
-    // ❌ DON'T: Draw anything
-    // ❌ DON'T: Access child positions
+    //  DO: Calculate desired dimensions
+    //  DO: Consider padding
+    //  DO: Respect measure spec modes
+    //  DO: Call setMeasuredDimension()
+    //  DON'T: Draw anything
+    //  DON'T: Access child positions
 
     val desiredWidth = 200.dpToPx()
     val desiredHeight = 50.dpToPx()
@@ -217,10 +217,10 @@ Called when the view size changes (after onMeasure, before onLayout).
 override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     super.onSizeChanged(w, h, oldw, oldh)
 
-    // ✅ DO: Recalculate positions based on new size
-    // ✅ DO: Recreate bitmaps/shaders
-    // ✅ DO: Update Path objects
-    // ❌ DON'T: Call requestLayout() (infinite loop!)
+    //  DO: Recalculate positions based on new size
+    //  DO: Recreate bitmaps/shaders
+    //  DO: Update Path objects
+    //  DON'T: Call requestLayout() (infinite loop!)
 
     // Recreate gradient shader with new dimensions
     gradientShader = LinearGradient(
@@ -257,10 +257,10 @@ Called to assign positions to child views (for ViewGroups). Simple Views don't n
 ```kotlin
 // For ViewGroup subclasses only
 override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-    // ✅ DO: Position child views
-    // ✅ DO: Call child.layout() for each child
-    // ❌ DON'T: Measure children (do in onMeasure)
-    // ❌ DON'T: Draw anything
+    //  DO: Position child views
+    //  DO: Call child.layout() for each child
+    //  DON'T: Measure children (do in onMeasure)
+    //  DON'T: Draw anything
 
     var currentX = paddingLeft
     val currentY = paddingTop
@@ -300,11 +300,11 @@ Called to render the view's content. This is where the magic happens!
 override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
 
-    // ✅ DO: Draw view content
-    // ✅ DO: Use pre-allocated objects (Paint, Path, Rect)
-    // ❌ DON'T: Allocate objects (causes GC pressure)
-    // ❌ DON'T: Call requestLayout() or invalidate() directly
-    // ❌ DON'T: Perform heavy calculations
+    //  DO: Draw view content
+    //  DO: Use pre-allocated objects (Paint, Path, Rect)
+    //  DON'T: Allocate objects (causes GC pressure)
+    //  DON'T: Call requestLayout() or invalidate() directly
+    //  DON'T: Perform heavy calculations
 
     val width = width.toFloat()
     val height = height.toFloat()
@@ -333,7 +333,7 @@ class OptimizedCustomView @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    // ✅ Pre-allocate objects
+    //  Pre-allocate objects
     private val paint = Paint()
     private val bounds = RectF()
     private val path = Path()
@@ -341,11 +341,11 @@ class OptimizedCustomView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        // ❌ DON'T allocate in onDraw!
+        //  DON'T allocate in onDraw!
         // val paint = Paint() // BAD!
         // val bounds = RectF() // BAD!
 
-        // ✅ Reuse pre-allocated objects
+        //  Reuse pre-allocated objects
         bounds.set(0f, 0f, width.toFloat(), height.toFloat())
         canvas.drawRect(bounds, paint)
     }
@@ -386,10 +386,10 @@ Called when view is removed from window.
 
 ```kotlin
 override fun onDetachedFromWindow() {
-    // ✅ DO: Cancel animations
-    // ✅ DO: Unregister listeners
-    // ✅ DO: Stop background work
-    // ✅ DO: Release resources
+    //  DO: Cancel animations
+    //  DO: Unregister listeners
+    //  DO: Stop background work
+    //  DO: Release resources
 
     valueAnimator?.cancel()
     viewTreeObserver.removeOnGlobalLayoutListener(layoutListener)
@@ -631,13 +631,13 @@ class GaugeView @JvmOverloads constructor(
 
 **1. Constructor**
 ```kotlin
-// ✅ DO
+//  DO
 init {
     paint.color = Color.BLUE
     paint.strokeWidth = 10f
 }
 
-// ❌ DON'T
+//  DON'T
 init {
     val w = width // 0!
     val h = height // 0!
@@ -646,7 +646,7 @@ init {
 
 **2. onMeasure**
 ```kotlin
-// ✅ DO
+//  DO
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     val size = calculateDesiredSize()
     setMeasuredDimension(
@@ -655,7 +655,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     )
 }
 
-// ❌ DON'T forget to call setMeasuredDimension
+//  DON'T forget to call setMeasuredDimension
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     // Missing setMeasuredDimension() - CRASH!
 }
@@ -663,13 +663,13 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
 **3. onDraw**
 ```kotlin
-// ✅ DO - Pre-allocate
+//  DO - Pre-allocate
 private val paint = Paint()
 override fun onDraw(canvas: Canvas) {
     canvas.drawCircle(x, y, radius, paint)
 }
 
-// ❌ DON'T - Allocate in onDraw
+//  DON'T - Allocate in onDraw
 override fun onDraw(canvas: Canvas) {
     val paint = Paint() // GC pressure!
     canvas.drawCircle(x, y, radius, paint)
@@ -678,14 +678,14 @@ override fun onDraw(canvas: Canvas) {
 
 **4. Cleanup**
 ```kotlin
-// ✅ DO
+//  DO
 override fun onDetachedFromWindow() {
     animator?.cancel()
     listener?.unregister()
     super.onDetachedFromWindow()
 }
 
-// ❌ DON'T forget cleanup
+//  DON'T forget cleanup
 override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
     // Animator still running - leak!
@@ -723,7 +723,7 @@ override fun onDetachedFromWindow() {
 ```
 Constructor → onAttachedToWindow → onMeasure → onLayout → onDraw → onDetachedFromWindow
      ↑              ↓                   ↑           ↑         ↑              ↓
-     └──────────────┴───────────────────┴───────────┴─────────┴──────────────┘
+     
                          (Может повторяться много раз)
 ```
 
@@ -733,7 +733,7 @@ Constructor → onAttachedToWindow → onMeasure → onLayout → onDraw → onD
 - Инициализация Paint объектов
 - Чтение XML атрибутов
 - Установка значений по умолчанию
-- ❌ НЕ обращайтесь к width/height (они равны 0)
+-  НЕ обращайтесь к width/height (они равны 0)
 
 **2. onAttachedToWindow()**
 - Запуск анимаций
@@ -751,7 +751,7 @@ Constructor → onAttachedToWindow → onMeasure → onLayout → onDraw → onD
 - Пересоздание Bitmap/Shader
 - Обновление Path объектов
 - Пересчет границ рисования
-- ❌ НЕ вызывайте requestLayout() (бесконечный цикл!)
+-  НЕ вызывайте requestLayout() (бесконечный цикл!)
 
 **5. onLayout()** (только для ViewGroup)
 - Позиционирование дочерних view
@@ -759,8 +759,8 @@ Constructor → onAttachedToWindow → onMeasure → onLayout → onDraw → onD
 
 **6. onDraw()**
 - Отрисовка содержимого view
-- ❌ НЕ выделяйте объекты (GC давление!)
-- ✅ Используйте предварительно выделенные объекты
+-  НЕ выделяйте объекты (GC давление!)
+-  Используйте предварительно выделенные объекты
 
 **7. onDetachedFromWindow()**
 - Отмена анимаций
@@ -837,3 +837,37 @@ class CustomProgressBar @JvmOverloads constructor(
 |-------|-------------------|-------------------|-----------|
 | `invalidate()` | Только визуальное изменение | Быстро | onDraw |
 | `requestLayout()` | Изменение размера/позиции | Медленнее | onMeasure → onLayout → onDraw |
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-viewmodel-pattern--android--easy]] - Lifecycle, View
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Lifecycle, View
+- [[q-what-is-viewmodel--android--medium]] - Lifecycle, View
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - Lifecycle, View
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - Lifecycle, View
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - Lifecycle, View
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-viewmodel-pattern--android--easy]] - Lifecycle, View
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Lifecycle, View
+- [[q-what-is-viewmodel--android--medium]] - Lifecycle, View
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - Lifecycle, View
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - Lifecycle, View
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - Lifecycle, View
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

@@ -197,3 +197,14 @@ function App() {
 ## Ответ (RU)
 Навигация в контексте разработки ПО, в частности в мобильной и веб-разработке, относится к процессу перехода между различными частями приложения или сайта. Это ключевой аспект пользовательского интерфейса, который определяет, как пользователи взаимодействуют с приложением или сайтом и как легко они могут получить необходимую информацию или выполнить желаемые действия. В веб-разработке навигация обычно осуществляется через гиперссылки, которые ведут пользователя к различным страницам или разделам веб-сайта. Меню навигации, панель хлебных крошек, пагинация и футер используются для навигации на веб-сайтах. В мобильных приложениях используются Tab Bar, Navigation Drawer и Stack Navigation для интуитивно понятной навигации в условиях ограниченного пространства экрана. В одностраничных приложениях (SPA) используется Dynamic Routing и Hash Routing для динамического изменения контента без перезагрузки страницы.
 
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation
+- [[q-compose-navigation-advanced--android--medium]] - Navigation
+- [[q-activity-navigation-how-it-works--android--medium]] - Navigation
+- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation
+- [[q-what-navigation-methods-do-you-know--android--medium]] - Navigation

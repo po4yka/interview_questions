@@ -10,6 +10,10 @@ tags:
   - debugging
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Memory Leak vs OutOfMemoryError in Android
@@ -608,3 +612,18 @@ class ManualObserver : AppCompatActivity() {
 - Тестируйте с LeakCanary
 - Оптимизируйте изображения
 - Обрабатывайте данные частями
+
+---
+
+## Related Questions
+
+### Computer Science Fundamentals
+- [[q-primitive-vs-reference-types--programming-languages--easy]] - Memory Management
+- [[q-reference-types-criteria--programming-languages--medium]] - Memory Management
+- [[q-kotlin-reference-equality-operator--programming-languages--easy]] - Memory Management
+- [[q-reference-types-protect-from-deletion--programming-languages--easy]] - Memory Management
+
+### Kotlin Language Features
+- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Memory Management
+- [[q-coroutine-memory-leaks--kotlin--hard]] - Memory Management
+- [[q-kotlin-native--kotlin--hard]] - Memory Management

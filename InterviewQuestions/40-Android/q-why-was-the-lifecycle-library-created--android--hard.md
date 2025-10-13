@@ -598,11 +598,11 @@ fun testLocationObserver() {
 
 ```
 Activity/Fragment
-    ├─ Manages LocationManager lifecycle
-    ├─ Manages NetworkClient lifecycle
-    ├─ Manages DatabaseObserver lifecycle
-    ├─ Manages WebSocket lifecycle
-    └─ All logic mixed together
+     Manages LocationManager lifecycle
+     Manages NetworkClient lifecycle
+     Manages DatabaseObserver lifecycle
+     Manages WebSocket lifecycle
+     All logic mixed together
 ```
 
 **Problems**: God object, hard to test, easy to forget cleanup.
@@ -611,13 +611,13 @@ Activity/Fragment
 
 ```
 Activity/Fragment
-    └─ Just adds observers
+     Just adds observers
 
 Separate Components:
-    ├─ LocationObserver (manages itself)
-    ├─ NetworkObserver (manages itself)
-    ├─ DatabaseObserver (manages itself)
-    └─ WebSocketObserver (manages itself)
+     LocationObserver (manages itself)
+     NetworkObserver (manages itself)
+     DatabaseObserver (manages itself)
+     WebSocketObserver (manages itself)
 ```
 
 **Benefits**: Single responsibility, easy to test, automatic cleanup.
@@ -775,3 +775,15 @@ lifecycle.addObserver(myObserver)
 ```
 
 **Резюме**: Lifecycle библиотека устранила утечки памяти, крэши, boilerplate код и упростила тестирование, введя lifecycle-aware компоненты, которые автоматически реагируют на изменения жизненного цикла.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Lifecycle
+- [[q-what-is-viewmodel--android--medium]] - Lifecycle
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - Lifecycle
+
+### Related (Hard)
+- [[q-service-lifecycle-binding--background--hard]] - Lifecycle

@@ -23,10 +23,10 @@ It's one of the **simplest ways** to save small amounts of data, such as user se
 **Key Characteristics:**
 
 - - **Simple to use** - minimal API
-- 🔒 **Private by default** - data accessible only within the app
-- 💾 **Persistent** - survives app restarts
-- 📦 **Small data only** - not for large datasets
-- 🎯 **Perfect for**: User preferences, settings, flags, tokens
+-  **Private by default** - data accessible only within the app
+-  **Persistent** - survives app restarts
+-  **Small data only** - not for large datasets
+-  **Perfect for**: User preferences, settings, flags, tokens
 
 **Suitable For:**
 
@@ -262,3 +262,16 @@ encryptedPrefs.edit {
 ## Ответ (RU)
 SharedPreferences представляет собой механизм для хранения и извлечения простых данных в форме пар ключ-значение. Это один из самых простых способов сохранения небольших объемов данных, таких как пользовательские настройки или состояние приложения между сессиями использования приложения. Подходят для сохранения приватных данных доступных только внутри приложения. Основные особенности: Простота использования, частная доступность данных и применение для хранения настроек пользователя или флагов состояния. Для работы с SharedPreferences необходимо получить экземпляр через getSharedPreferences(String name, int mode) или getPreferences(int mode). Данные записываются через SharedPreferences.Editor и сохраняются с помощью apply() или commit().
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-room-library-definition--android--easy]] - Storage
+
+### Advanced (Harder)
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-transactions-dao--room--medium]] - Storage
+- [[q-room-paging3-integration--room--medium]] - Storage

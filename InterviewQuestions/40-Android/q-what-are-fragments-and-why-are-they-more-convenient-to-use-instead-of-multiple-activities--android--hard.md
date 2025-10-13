@@ -312,3 +312,31 @@ Using fragments allows creating **flexible, modular, and efficient applications*
 ## Ответ (RU)
 Фрагменты — это модули в пользовательском интерфейсе, которые могут быть вложены в активности (Activity). Представляют собой часть пользовательского интерфейса или поведения, которые можно вставить в активность. Они обладают собственным жизненным циклом, получают собственные входные события и могут быть добавлены или удалены при работе активности. Использование фрагментов удобнее, чем использование множества активностей: 1. Модульность способствует более модульному дизайну приложения и позволяет разделить различные функции на независимые компоненты для повторного использования в разных активностях. Например, фрагмент для выбора даты можно использовать как в форме бронирования, так и в профиле пользователя. 2. Адаптивность идеально подходит для создания адаптивных пользовательских интерфейсов на разных устройствах. На планшете можно одновременно отображать несколько фрагментов, а на телефоне — поочередно. 3. Управление жизненным циклом позволяет фрагментам независимо управлять своим состоянием и поведением, что упрощает работу со сложными интерфейсами. 4. Повторное использование кода повышает эффективность разработки и поддержки приложений за счет переиспользования кода в разных частях или даже приложениях. 5. Улучшенная производительность достигается за счет того что управление одной активностью с фрагментами эффективнее чем переключение между множеством активностей. Переключение фрагментов требует меньше ресурсов чем запуск новой активности. 6. Лучшее управление переходами и анимациями предоставляет инструменты для сложных анимаций между фрагментами, создавая плавный пользовательский опыт. Пример: Файл FragmentExample.java и fragment_example.xml показывают как создать фрагмент. Использование фрагментов позволяет создавать гибкие модульные и эффективные приложения, которые лучше адаптируются к разным устройствам упрощают повторное использование компонентов и улучшают управление состоянием приложения.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Activity, Fragment
+- [[q-fragments-vs-activity--android--medium]] - Activity, Fragment
+
+### Related (Hard)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
+- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
+- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Activity, Fragment
+- [[q-fragments-vs-activity--android--medium]] - Activity, Fragment
+
+### Related (Hard)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
+- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment

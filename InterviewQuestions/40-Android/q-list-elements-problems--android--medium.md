@@ -12,6 +12,10 @@ tags:
   - recyclerview
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Какие могут быть проблемы с элементами списка?
@@ -484,3 +488,20 @@ class MemoryMonitoringAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 4. **Многопоточность (Concurrency Issues)** - Если обновление данных происходит из разных потоков без должной синхронизации. Решение: Использовать LiveData или Flow из библиотеки Jetpack для обновления данных в главном потоке.
 
+
+---
+
+## Related Questions
+
+### Computer Science Fundamentals
+- [[q-list-vs-sequence--programming-languages--medium]] - Data Structures
+
+### Kotlin Language Features
+- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
+- [[q-array-vs-list-kotlin--kotlin--easy]] - Data Structures
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+- [[q-list-vs-sequence--kotlin--medium]] - Data Structures
+
+### Related Algorithms
+- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Data Structures
+- [[q-advanced-graph-algorithms--algorithms--hard]] - Data Structures

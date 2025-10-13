@@ -22,45 +22,45 @@ KMM and React Native represent contrasting philosophies: native-first with share
 
 **React Native Architecture**
 ```
-┌─────────────────────────────────────┐
-│      JavaScript Layer (React)        │
-│   - UI Components (JSX)              │
-│   - Business Logic                   │
-│   - State Management (Redux/MobX)   │
-│   Running in JavaScriptCore/Hermes  │
-└─────────────────────────────────────┘
+
+      JavaScript Layer (React)        
+   - UI Components (JSX)              
+   - Business Logic                   
+   - State Management (Redux/MobX)   
+   Running in JavaScriptCore/Hermes  
+
                 ↓
-       ┌──────────────┐
-       │   JS Bridge  │  ← Performance bottleneck
-       └──────────────┘
+       
+          JS Bridge    ← Performance bottleneck
+       
                 ↓
-┌─────────────────────────────────────┐
-│      Native Modules                  │
-│   Android: Java/Kotlin modules       │
-│   iOS: Objective-C/Swift modules     │
-└─────────────────────────────────────┘
+
+      Native Modules                  
+   Android: Java/Kotlin modules       
+   iOS: Objective-C/Swift modules     
+
                 ↓
-┌─────────────────────────────────────┐
-│      Platform SDKs                   │
-│   Android SDK / iOS SDK              │
-└─────────────────────────────────────┘
+
+      Platform SDKs                   
+   Android SDK / iOS SDK              
+
 ```
 
 **KMM Architecture** (Already covered, for comparison)
 ```
-┌─────────────────────────────────────┐
-│      Native UI Layer                 │
-│   Android: Compose/Views             │
-│   iOS: SwiftUI/UIKit                 │
-│   No bridge - direct platform code   │
-└─────────────────────────────────────┘
+
+      Native UI Layer                 
+   Android: Compose/Views             
+   iOS: SwiftUI/UIKit                 
+   No bridge - direct platform code   
+
                 ↓
-┌─────────────────────────────────────┐
-│      Shared Kotlin Code              │
-│   - Business Logic                   │
-│   - Data Layer                       │
-│   Compiles to native code            │
-└─────────────────────────────────────┘
+
+      Shared Kotlin Code              
+   - Business Logic                   
+   - Data Layer                       
+   Compiles to native code            
+
 ```
 
 #### Bridge Overhead Analysis
@@ -191,10 +191,10 @@ const getTasks = async (): Promise<Task[]> => {
 };
 
 // Problems:
-// ❌ No compile-time type checking across bridge
-// ❌ Manual JSON parsing/serialization
-// ❌ Runtime type errors
-// ❌ Refactoring nightmare
+//  No compile-time type checking across bridge
+//  Manual JSON parsing/serialization
+//  Runtime type errors
+//  Refactoring nightmare
 ```
 
 **KMM Type Safety**
@@ -237,10 +237,10 @@ tasks.forEach { (task: Task) in
 }
 
 // Benefits:
-// ✅ Compile-time type checking
-// ✅ No manual parsing
-// ✅ Safe refactoring
-// ✅ IDE autocomplete everywhere
+//  Compile-time type checking
+//  No manual parsing
+//  Safe refactoring
+//  IDE autocomplete everywhere
 ```
 
 #### UI Development Comparison
@@ -299,7 +299,7 @@ const TaskListScreen = () => {
           onPress={() => toggleTask(item.id)}
         >
           <Text style={styles.taskTitle}>{item.title}</Text>
-          <Text>{item.completed ? '✓' : '○'}</Text>
+          <Text>{item.completed ? '' : ''}</Text>
         </TouchableOpacity>
       )}
     />
@@ -371,7 +371,7 @@ fun TaskItem(task: Task, onClick: () -> Unit) {
             text = task.title,
             style = MaterialTheme.typography.bodyLarge
         )
-        Text(text = if (task.completed) "✓" else "○")
+        Text(text = if (task.completed) "" else "")
     }
 }
 
@@ -402,7 +402,7 @@ struct TaskRow: View {
             Text(task.title)
                 .font(.body)
             Spacer()
-            Text(task.completed ? "✓" : "○")
+            Text(task.completed ? "" : "")
         }
         .padding()
         .onTapGesture(perform: onTap)
@@ -478,18 +478,18 @@ Advantage: KMM 2-3x faster startup
 **React Native DX**
 ```javascript
 // Pros:
-// ✅ Hot reload (instant UI updates)
-// ✅ Large JavaScript ecosystem (npm)
-// ✅ React knowledge transferable
-// ✅ Chrome DevTools debugging
-// ✅ Widely adopted (mature)
+//  Hot reload (instant UI updates)
+//  Large JavaScript ecosystem (npm)
+//  React knowledge transferable
+//  Chrome DevTools debugging
+//  Widely adopted (mature)
 
 // Cons:
-// ❌ Bridge debugging complexity
-// ❌ Native module development required
-// ❌ Type safety issues across bridge
-// ❌ "JS fatigue" (package churn)
-// ❌ Upgrading can break apps
+//  Bridge debugging complexity
+//  Native module development required
+//  Type safety issues across bridge
+//  "JS fatigue" (package churn)
+//  Upgrading can break apps
 
 // Example: Hot reload
 // Save file → Instant UI update (1-2s)
@@ -499,18 +499,18 @@ Advantage: KMM 2-3x faster startup
 **KMM DX**
 ```kotlin
 // Pros:
-// ✅ Type-safe across platforms
-// ✅ Native IDE support (Android Studio, Xcode)
-// ✅ No bridge complexity
-// ✅ Kotlin language features (coroutines, null safety)
-// ✅ Gradual adoption possible
+//  Type-safe across platforms
+//  Native IDE support (Android Studio, Xcode)
+//  No bridge complexity
+//  Kotlin language features (coroutines, null safety)
+//  Gradual adoption possible
 
 // Cons:
-// ❌ Slower build times (native compilation)
-// ❌ Separate UI implementations
-// ❌ Smaller ecosystem (growing)
-// ❌ Need iOS/Android expertise
-// ❌ More complex project setup
+//  Slower build times (native compilation)
+//  Separate UI implementations
+//  Smaller ecosystem (growing)
+//  Need iOS/Android expertise
+//  More complex project setup
 
 // Example: Code change
 // Save file → Full rebuild (30-60s Android, 40-80s iOS)
@@ -657,34 +657,34 @@ Benefits: Faster new feature development
 
 **Choose React Native:**
 ```javascript
-✅ Team expertise in JavaScript/React
-✅ Need very fast prototyping/MVPs
-✅ Hot reload essential for productivity
-✅ Web version planned (React Native Web)
-✅ Consistent UI across platforms acceptable
-✅ Large JavaScript ecosystem valuable
-✅ Mature solution needed today
+ Team expertise in JavaScript/React
+ Need very fast prototyping/MVPs
+ Hot reload essential for productivity
+ Web version planned (React Native Web)
+ Consistent UI across platforms acceptable
+ Large JavaScript ecosystem valuable
+ Mature solution needed today
 
-❌ Performance-critical application
-❌ Need latest platform features immediately
-❌ Type safety critical
-❌ Complex native integrations
+ Performance-critical application
+ Need latest platform features immediately
+ Type safety critical
+ Complex native integrations
 ```
 
 **Choose KMM:**
 ```kotlin
-✅ Team expertise in Kotlin/Native
-✅ Native UI/UX critical
-✅ Performance critical (animations, media)
-✅ Type safety important
-✅ Existing Android app to expand to iOS
-✅ Want gradual adoption
-✅ Need immediate platform feature access
+ Team expertise in Kotlin/Native
+ Native UI/UX critical
+ Performance critical (animations, media)
+ Type safety important
+ Existing Android app to expand to iOS
+ Want gradual adoption
+ Need immediate platform feature access
 
-❌ Very small team (<3 devs)
-❌ Need fastest possible MVP
-❌ JavaScript/React expertise only
-❌ Consistent UI across platforms required
+ Very small team (<3 devs)
+ Need fastest possible MVP
+ JavaScript/React expertise only
+ Consistent UI across platforms required
 ```
 
 #### Real-World Examples
@@ -760,18 +760,18 @@ KMM и React Native представляют контрастные филосо
 #### Development Experience
 
 **React Native**:
-- ✅ Hot reload (instant)
-- ✅ Large ecosystem (npm)
-- ✅ React knowledge
-- ❌ Bridge complexity
-- ❌ Native module development
+-  Hot reload (instant)
+-  Large ecosystem (npm)
+-  React knowledge
+-  Bridge complexity
+-  Native module development
 
 **KMM**:
-- ✅ Type-safe
-- ✅ Native IDEs
-- ✅ No bridge
-- ❌ Slower builds
-- ❌ Separate UI implementations
+-  Type-safe
+-  Native IDEs
+-  No bridge
+-  Slower builds
+-  Separate UI implementations
 
 #### Performance
 

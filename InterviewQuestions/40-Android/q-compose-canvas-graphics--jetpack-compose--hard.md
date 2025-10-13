@@ -64,11 +64,11 @@ fun BasicCanvas() {
 
 **Key concepts:**
 ```
-✅ Canvas provides DrawScope
-✅ DrawScope has drawing functions
-✅ Coordinates: (0,0) is top-left
-✅ Uses pixels, not dp (convert with .toPx())
-✅ Recomposes when state changes
+ Canvas provides DrawScope
+ DrawScope has drawing functions
+ Coordinates: (0,0) is top-left
+ Uses pixels, not dp (convert with .toPx())
+ Recomposes when state changes
 ```
 
 ---
@@ -768,16 +768,16 @@ fun GraphicsLayerExample() {
 **graphicsLayer vs drawWithContent:**
 ```
 graphicsLayer:
-✅ Hardware-accelerated
-✅ Better performance for transforms
-✅ Doesn't trigger recomposition
-✅ Use for: rotation, scale, translation, alpha
+ Hardware-accelerated
+ Better performance for transforms
+ Doesn't trigger recomposition
+ Use for: rotation, scale, translation, alpha
 
 drawWithContent:
-✅ Access to Canvas/DrawScope
-✅ Custom drawing operations
-✅ More flexible
-✅ Use for: custom effects, clipping, complex drawing
+ Access to Canvas/DrawScope
+ Custom drawing operations
+ More flexible
+ Use for: custom effects, clipping, complex drawing
 ```
 
 ---
@@ -789,7 +789,7 @@ drawWithContent:
 ```kotlin
 @Composable
 fun OptimizedPathCanvas() {
-    // ✅ Good: Path created once
+    //  Good: Path created once
     val path = remember {
         Path().apply {
             moveTo(100f, 100f)
@@ -807,7 +807,7 @@ fun OptimizedPathCanvas() {
 @Composable
 fun UnoptimizedPathCanvas() {
     Canvas(modifier = Modifier.size(300.dp)) {
-        // ❌ Bad: Path recreated on every recomposition
+        //  Bad: Path recreated on every recomposition
         val path = Path().apply {
             moveTo(100f, 100f)
             lineTo(200f, 200f)
@@ -824,7 +824,7 @@ fun UnoptimizedPathCanvas() {
 #### 2. DrawBehind vs Canvas
 
 ```kotlin
-// ✅ Better performance: drawBehind
+//  Better performance: drawBehind
 @Composable
 fun DrawBehindExample() {
     Box(
@@ -839,7 +839,7 @@ fun DrawBehindExample() {
     )
 }
 
-// ❌ Slightly worse: Canvas composable
+//  Slightly worse: Canvas composable
 @Composable
 fun CanvasExample() {
     Canvas(modifier = Modifier.size(100.dp)) {
@@ -854,14 +854,14 @@ fun CanvasExample() {
 **When to use each:**
 ```
 drawBehind:
-✅ Drawing behind content
-✅ Simple decorations
-✅ Slightly better performance
+ Drawing behind content
+ Simple decorations
+ Slightly better performance
 
 Canvas:
-✅ Complex custom drawing
-✅ Interactive graphics
-✅ Need full control
+ Complex custom drawing
+ Interactive graphics
+ Need full control
 ```
 
 ---
@@ -941,3 +941,18 @@ Jetpack Compose предоставляет мощные Canvas API для кас
 8. What are the limitations of Canvas in Compose?
 9. How do you test Canvas drawing code?
 10. What is the relationship between Canvas and Modifier.drawWithCache?
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - Compose, Jetpack

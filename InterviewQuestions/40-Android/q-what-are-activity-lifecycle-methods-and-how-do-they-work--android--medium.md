@@ -14,37 +14,37 @@ Activity lifecycle methods are callback functions that the Android system calls 
 ### The Activity Lifecycle
 
 ```
-┌─────────────────────┐
-│   Activity Launched │
-└──────────┬──────────┘
+
+   Activity Launched 
+
            ↓
-     ┌──────────┐
-     │onCreate()│ ← Activity is being created
-     └────┬─────┘
+     
+     onCreate() ← Activity is being created
+     
           ↓
-     ┌──────────┐
-     │onStart() │ ← Activity is becoming visible
-     └────┬─────┘
+     
+     onStart()  ← Activity is becoming visible
+     
           ↓
-     ┌───────────┐
-     │onResume() │ ← Activity is in foreground and interactive
-     └────┬──────┘
+     
+     onResume()  ← Activity is in foreground and interactive
+     
           ↓
-   ┌──────────────┐
-   │ Running State│
-   └──────┬───────┘
+   
+    Running State
+   
           ↓
-     ┌──────────┐
-     │onPause() │ ← Activity is losing focus
-     └────┬─────┘
+     
+     onPause()  ← Activity is losing focus
+     
           ↓
-     ┌──────────┐
-     │onStop()  │ ← Activity is no longer visible
-     └────┬─────┘
+     
+     onStop()   ← Activity is no longer visible
+     
           ↓
-     ┌────────────┐
-     │onDestroy() │ ← Activity is being destroyed
-     └────────────┘
+     
+     onDestroy()  ← Activity is being destroyed
+     
 ```
 
 ### Complete Lifecycle Methods
@@ -535,3 +535,31 @@ override fun onSaveInstanceState(outState: Bundle) {
 - Configuration changes
 - Lifecycle-aware components
 - Process death
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-viewmodel-pattern--android--easy]] - Lifecycle
+
+### Related (Medium)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
+- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
+- [[q-how-does-activity-lifecycle-work--android--medium]] - Lifecycle, Activity
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-viewmodel-pattern--android--easy]] - Lifecycle
+
+### Related (Medium)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
+- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
+- [[q-how-does-activity-lifecycle-work--android--medium]] - Lifecycle, Activity

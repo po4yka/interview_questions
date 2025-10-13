@@ -162,7 +162,7 @@ class MyRepository(private val context: Context) {
 
 #### 1. Activity Leaks - Static References
 
-**❌ LEAK: Static reference to Activity**
+** LEAK: Static reference to Activity**
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity() {
 // MainActivity class → static instance field → MainActivity instance → Context
 ```
 
-**✅ FIX: Use Application Context or WeakReference**
+** FIX: Use Application Context or WeakReference**
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
@@ -206,7 +206,7 @@ class MainActivity : AppCompatActivity() {
 
 #### 2. Activity Leaks - Inner Classes
 
-**❌ LEAK: Non-static inner class holds Activity reference**
+** LEAK: Non-static inner class holds Activity reference**
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
@@ -230,7 +230,7 @@ class MainActivity : AppCompatActivity() {
 // Handler → MessageQueue → Message → Runnable → MainActivity instance
 ```
 
-**✅ FIX: Static inner class with WeakReference**
+** FIX: Static inner class with WeakReference**
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
@@ -267,7 +267,7 @@ class MainActivity : AppCompatActivity() {
 
 #### 3. Activity Leaks - Listeners and Callbacks
 
-**❌ LEAK: Listener not unregistered**
+** LEAK: Listener not unregistered**
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
@@ -300,7 +300,7 @@ class MainActivity : AppCompatActivity() {
 // LocationManager (system service) → LocationListener → MainActivity
 ```
 
-**✅ FIX: Unregister listeners in lifecycle callbacks**
+** FIX: Unregister listeners in lifecycle callbacks**
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
@@ -350,7 +350,7 @@ class MainActivity : AppCompatActivity() {
 
 #### 4. Fragment Leaks - View References
 
-**❌ LEAK: Fragment holds view references after onDestroyView**
+** LEAK: Fragment holds view references after onDestroyView**
 ```kotlin
 class MyFragment : Fragment() {
 
@@ -378,7 +378,7 @@ class MyFragment : Fragment() {
 // Fragment → TextView/RecyclerView → destroyed View hierarchy
 ```
 
-**✅ FIX: Clear view references or use ViewBinding**
+** FIX: Clear view references or use ViewBinding**
 ```kotlin
 class MyFragment : Fragment() {
 
@@ -452,7 +452,7 @@ class MyFragment : Fragment(R.layout.fragment_my) {
 
 #### 5. ViewModel Leaks - Context References
 
-**❌ LEAK: ViewModel holds Activity context**
+** LEAK: ViewModel holds Activity context**
 ```kotlin
 class MyViewModel(
     private val context: Context  // LEAK: If this is Activity context
@@ -477,7 +477,7 @@ class MainActivity : AppCompatActivity() {
 // ViewModel (survives config change) → Context (Activity) → entire Activity
 ```
 
-**✅ FIX: Use Application context or AndroidViewModel**
+** FIX: Use Application context or AndroidViewModel**
 ```kotlin
 // Option 1: Use Application context
 class MyViewModel(
@@ -518,7 +518,7 @@ class MainActivity : AppCompatActivity() {
 
 #### 6. ViewModel Leaks - LiveData Observers
 
-**❌ LEAK: Forever observer not removed**
+** LEAK: Forever observer not removed**
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
@@ -538,7 +538,7 @@ class MainActivity : AppCompatActivity() {
 // LiveData → Observer → Activity
 ```
 
-**✅ FIX: Use lifecycle-aware observe or remove observer**
+** FIX: Use lifecycle-aware observe or remove observer**
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
@@ -570,7 +570,7 @@ class MainActivity : AppCompatActivity() {
 
 #### 7. Coroutine Leaks - Unscoped Launches
 
-**❌ LEAK: GlobalScope keeps references alive**
+** LEAK: GlobalScope keeps references alive**
 ```kotlin
 class MyFragment : Fragment() {
 
@@ -592,7 +592,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**✅ FIX: Use lifecycle scopes**
+** FIX: Use lifecycle scopes**
 ```kotlin
 class MyFragment : Fragment() {
 
@@ -627,7 +627,7 @@ class MyViewModel : ViewModel() {
 
 #### 8. Bitmap and Large Object Leaks
 
-**❌ LEAK: Bitmaps not recycled**
+** LEAK: Bitmaps not recycled**
 ```kotlin
 class ImageCache {
     companion object {
@@ -643,7 +643,7 @@ class ImageCache {
 }
 ```
 
-**✅ FIX: Use LruCache with size limit**
+** FIX: Use LruCache with size limit**
 ```kotlin
 class ImageCache {
     companion object {

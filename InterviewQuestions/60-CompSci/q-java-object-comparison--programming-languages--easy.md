@@ -1,4 +1,6 @@
 ---
+topic: programming-languages
+subtopics: ["java", "jvm", "language-features"]
 tags:
   - equality
   - equals
@@ -8,6 +10,10 @@ tags:
   - programming-languages
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-programming-languages
+related_questions: []
 ---
 
 # Как сравниваются объекты в Java?
@@ -165,3 +171,16 @@ class Bad {
 
 По умолчанию через `==` — сравнение ссылок (адресов). Через `.equals()` — логическое сравнение содержимого. При переопределении `.equals()` рекомендуется также переопределить `.hashCode()`.
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-java-equals-default-behavior--programming-languages--easy]] - Java
+- [[q-java-lambda-type--programming-languages--easy]] - Java
+
+### Advanced (Harder)
+- [[q-java-access-modifiers--programming-languages--medium]] - Java
+- [[q-kotlin-operator-overloading--kotlin--medium]] - Operators
+- [[q-kotlin-extension-functions--kotlin--medium]] - Extensions

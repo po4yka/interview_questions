@@ -139,32 +139,32 @@ compose.experimental {
 **2. Directory Structure**
 ```
 project/
-├── composeApp/
-│   ├── src/
-│   │   ├── commonMain/
-│   │   │   ├── kotlin/
-│   │   │   │   └── com/example/
-│   │   │   │       ├── App.kt
-│   │   │   │       ├── ui/
-│   │   │   │       │   ├── screens/
-│   │   │   │       │   ├── components/
-│   │   │   │       │   └── theme/
-│   │   │   │       └── navigation/
-│   │   │   └── resources/
-│   │   │       ├── drawable/
-│   │   │       ├── font/
-│   │   │       └── values/
-│   │   ├── androidMain/
-│   │   ├── iosMain/
-│   │   ├── desktopMain/
-│   │   └── jsMain/
-│   └── build.gradle.kts
-├── androidApp/
-│   └── src/main/kotlin/MainActivity.kt
-├── iosApp/
-│   └── iosApp/ContentView.swift
-└── desktopApp/
-    └── src/jvmMain/kotlin/main.kt
+ composeApp/
+    src/
+       commonMain/
+          kotlin/
+             com/example/
+                 App.kt
+                 ui/
+                    screens/
+                    components/
+                    theme/
+                 navigation/
+          resources/
+              drawable/
+              font/
+              values/
+       androidMain/
+       iosMain/
+       desktopMain/
+       jsMain/
+    build.gradle.kts
+ androidApp/
+    src/main/kotlin/MainActivity.kt
+ iosApp/
+    iosApp/ContentView.swift
+ desktopApp/
+     src/jvmMain/kotlin/main.kt
 ```
 
 #### Shared UI Components
@@ -1118,11 +1118,11 @@ Compose Multiplatform расширяет Kotlin Multiplatform для sharing UI 
 #### Shared UI
 
 **Что можно делить**:
-- ✅ UI компоненты
-- ✅ Screens
-- ✅ Navigation
-- ✅ Themes
-- ✅ Layouts
+-  UI компоненты
+-  Screens
+-  Navigation
+-  Themes
+-  Layouts
 
 **Platform-specific**:
 - Entry points (Activity, UIViewController, Window)
@@ -1218,3 +1218,18 @@ Compose Multiplatform обеспечивает UI code sharing:
 - **Limitations**: Platform behaviors, performance
 
 Ключевые моменты: правильная абстракция, platform conventions, responsive design, оптимизация производительности, тестирование на всех платформах.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
+- [[q-compose-performance-optimization--android--hard]] - Compose
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose

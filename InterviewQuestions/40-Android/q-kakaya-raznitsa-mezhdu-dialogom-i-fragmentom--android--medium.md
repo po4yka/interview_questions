@@ -150,3 +150,23 @@ fun UserProfileScreen(
 Какая разница между диалогом и фрагментом
 
 Это небольшое окно для взаимодействия с пользователем (например, подтверждение действия), которое закрывается после выполнения задачи. Фрагмент – это независимый компонент интерфейса, который может содержать сложные элементы и использоваться для создания динамических экранов, заменяя их в активности.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment
+- [[q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy]] - Fragment
+
+### Related (Medium)
+- [[q-save-data-outside-fragment--android--medium]] - Fragment
+- [[q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]] - Fragment
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - Fragment
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment
+
+### Advanced (Harder)
+- [[q-fragments-history-and-purpose--android--hard]] - Fragment
+- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - Fragment
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Fragment

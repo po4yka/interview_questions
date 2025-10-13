@@ -460,7 +460,7 @@ class DataViewModel : ViewModel() {
 ### Performance Considerations
 
 ```kotlin
-// ❌ Bad: Multiple collectors each make network call
+//  Bad: Multiple collectors each make network call
 class BadRepository {
     fun getUsers(): Flow<List<User>> = flow {
         emit(api.getUsers()) // Called per collector!
@@ -471,7 +471,7 @@ class BadRepository {
 val users1 = repository.getUsers()
 val users2 = repository.getUsers() // Another network call!
 
-// ✅ Good: Share single network call
+//  Good: Share single network call
 class GoodRepository(scope: CoroutineScope) {
     val users: StateFlow<List<User>> = flow {
         emit(api.getUsers()) // Called once
@@ -531,38 +531,38 @@ val users2 = repository.users // No extra call
 
 1. **Not using hot flows for expensive operations**:
    ```kotlin
-   // ❌ Each screen rotation makes new network call
+   //  Each screen rotation makes new network call
    val data = flow { emit(api.fetchData()) }
 
-   // ✅ Network call survives rotation
+   //  Network call survives rotation
    val data = flow { emit(api.fetchData()) }
        .stateIn(viewModelScope, WhileSubscribed(5000), emptyList())
    ```
 
 2. **Using Eagerly when WhileSubscribed is better**:
    ```kotlin
-   // ❌ Flow active even when app in background
+   //  Flow active even when app in background
    .shareIn(scope, SharingStarted.Eagerly, 1)
 
-   // ✅ Flow stops when no subscribers (saves resources)
+   //  Flow stops when no subscribers (saves resources)
    .shareIn(scope, SharingStarted.WhileSubscribed(5000), 1)
    ```
 
 3. **Forgetting initial value with stateIn**:
    ```kotlin
-   // ❌ Compilation error - no initial value
+   //  Compilation error - no initial value
    .stateIn(scope, SharingStarted.Lazily)
 
-   // ✅ Provide appropriate default
+   //  Provide appropriate default
    .stateIn(scope, SharingStarted.Lazily, emptyList())
    ```
 
 4. **Memory leaks with wrong scope**:
    ```kotlin
-   // ❌ Flow never stops - GlobalScope leaks
+   //  Flow never stops - GlobalScope leaks
    .shareIn(GlobalScope, SharingStarted.Eagerly, 1)
 
-   // ✅ Flow lifecycle tied to ViewModel
+   //  Flow lifecycle tied to ViewModel
    .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
    ```
 
@@ -797,20 +797,20 @@ class SearchViewModel : ViewModel() {
 
 1. **Не использование горячих потоков для дорогих операций**:
    ```kotlin
-   // ❌ Каждый поворот - новый сетевой вызов
+   //  Каждый поворот - новый сетевой вызов
    val data = flow { emit(api.fetchData()) }
 
-   // ✅ Сетевой вызов переживает поворот
+   //  Сетевой вызов переживает поворот
    val data = flow { emit(api.fetchData()) }
        .stateIn(viewModelScope, WhileSubscribed(5000), emptyList())
    ```
 
 2. **Утечки памяти с неправильным scope**:
    ```kotlin
-   // ❌ Поток никогда не останавливается
+   //  Поток никогда не останавливается
    .shareIn(GlobalScope, SharingStarted.Eagerly, 1)
 
-   // ✅ Жизненный цикл привязан к ViewModel
+   //  Жизненный цикл привязан к ViewModel
    .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
    ```
 

@@ -67,11 +67,11 @@ fun Counter() {
 
 ```
 Group 0: Counter (composable function)
-├─ Slot 0: MutableState(0)           // remember { mutableStateOf(0) }
-├─ Group 1: Button (composable)
-│  ├─ Slot 1: Lambda (onClick)
-│  └─ Group 2: Text (composable)
-│     └─ Slot 2: "Count: 0"
+ Slot 0: MutableState(0)           // remember { mutableStateOf(0) }
+ Group 1: Button (composable)
+   Slot 1: Lambda (onClick)
+   Group 2: Text (composable)
+      Slot 2: "Count: 0"
 ```
 
 **2. When State Changes:**
@@ -87,11 +87,11 @@ Compose runtime:
 
 ```
 Group 0: Counter (RECOMPOSE)
-├─ Slot 0: MutableState(1)           // Value changed
-├─ Group 1: Button (SKIP - no changes)
-│  ├─ Slot 1: Lambda (same)
-│  └─ Group 2: Text (RECOMPOSE)
-│     └─ Slot 2: "Count: 1"         // Updated
+ Slot 0: MutableState(1)           // Value changed
+ Group 1: Button (SKIP - no changes)
+   Slot 1: Lambda (same)
+   Group 2: Text (RECOMPOSE)
+      Slot 2: "Count: 1"         // Updated
 ```
 
 ---
@@ -283,13 +283,13 @@ fun App() {
 
 ```
 Group 0: App
-├─ Slot 0: MutableState(counter=0)
-├─ Slot 1: MutableState(name="Alice")
-├─ Group 1: Text - observes Slot 0
-├─ Group 2: Text - observes Slot 1
-├─ Group 3: Button - observes Slot 0
-│  └─ Group 3.1: Text - observes Slot 0
-└─ Group 4: Text - no observations
+ Slot 0: MutableState(counter=0)
+ Slot 1: MutableState(name="Alice")
+ Group 1: Text - observes Slot 0
+ Group 2: Text - observes Slot 1
+ Group 3: Button - observes Slot 0
+   Group 3.1: Text - observes Slot 0
+ Group 4: Text - no observations
 ```
 
 **When `counter` changes:**
@@ -299,12 +299,12 @@ counter++ // Triggers invalidation
 ```
 
 **Recomposition:**
-- Group 0 (App): ✅ Recompose (owns the state)
-- Group 1: ✅ Recompose (reads counter)
-- Group 2: ❌ Skip (only reads name)
-- Group 3: ✅ Recompose (reads counter)
-  - Group 3.1: ✅ Recompose (reads counter)
-- Group 4: ❌ Skip (no dependencies)
+- Group 0 (App):  Recompose (owns the state)
+- Group 1:  Recompose (reads counter)
+- Group 2:  Skip (only reads name)
+- Group 3:  Recompose (reads counter)
+  - Group 3.1:  Recompose (reads counter)
+- Group 4:  Skip (no dependencies)
 
 ---
 
@@ -441,14 +441,14 @@ fun EfficientList(items: List<Item>) {
 **1. Use stable keys for collections:**
 
 ```kotlin
-// ✅ DO
+//  DO
 items.forEach { item ->
     key(item.id) {
         ItemView(item)
     }
 }
 
-// ❌ DON'T (position-based)
+//  DON'T (position-based)
 items.forEach { item ->
     ItemView(item)
 }
@@ -457,7 +457,7 @@ items.forEach { item ->
 **2. Minimize state reads:**
 
 ```kotlin
-// ❌ DON'T (reads state multiple times)
+//  DON'T (reads state multiple times)
 @Composable
 fun UserProfile(userState: State<User>) {
     Text(userState.value.name)    // Read 1
@@ -465,7 +465,7 @@ fun UserProfile(userState: State<User>) {
     Text(userState.value.phone)   // Read 3
 }
 
-// ✅ DO (read once)
+//  DO (read once)
 @Composable
 fun UserProfile(userState: State<User>) {
     val user = userState.value    // Single read
@@ -478,7 +478,7 @@ fun UserProfile(userState: State<User>) {
 **3. Use remember for expensive computations:**
 
 ```kotlin
-// ✅ DO (computed once, stored in slot)
+//  DO (computed once, stored in slot)
 @Composable
 fun ExpensiveView(data: List<Int>) {
     val sorted = remember(data) {
@@ -522,7 +522,7 @@ fun SeparateComposable(value: Int) {
 **Problem: State lost during recomposition**
 
 ```kotlin
-// ❌ BAD: Conditional composable without key
+//  BAD: Conditional composable without key
 @Composable
 fun ConditionalView(showA: Boolean) {
     if (showA) {
@@ -532,7 +532,7 @@ fun ConditionalView(showA: Boolean) {
     }
 }
 
-// ✅ GOOD: Use keys
+//  GOOD: Use keys
 @Composable
 fun ConditionalView(showA: Boolean) {
     if (showA) {
@@ -661,11 +661,11 @@ fun Counter() {
 
 ```
 Группа 0: Counter (composable функция)
-├─ Слот 0: MutableState(0)           // remember { mutableStateOf(0) }
-├─ Группа 1: Button (composable)
-│  ├─ Слот 1: Lambda (onClick)
-│  └─ Группа 2: Text (composable)
-│     └─ Слот 2: "Count: 0"
+ Слот 0: MutableState(0)           // remember { mutableStateOf(0) }
+ Группа 1: Button (composable)
+   Слот 1: Lambda (onClick)
+   Группа 2: Text (composable)
+      Слот 2: "Count: 0"
 ```
 
 ### Отслеживание перекомпозиции

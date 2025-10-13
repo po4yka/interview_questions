@@ -138,14 +138,14 @@ Improvement: 47.7% faster (89.5s → 46.8s)
 
 **KSP-supported libraries (2024):**
 ```kotlin
-// ✅ Full KSP support
+//  Full KSP support
 - Room 2.6.0+
 - Hilt 2.44+
 - Moshi 1.14.0+ (with moshi-kotlin-codegen)
 - Glide 4.14.0+
 - Auto-generated code libraries
 
-// ⚠️ Partial or no KSP support
+//  Partial or no KSP support
 - Some Dagger modules (use Hilt instead)
 - Legacy annotation processors
 ```
@@ -321,10 +321,10 @@ ls -la app/build/generated/source/kapt/debug/
 
 # Example generated files:
 app/build/generated/source/kapt/debug/
-├── com/example/
-│   ├── AppDatabase_Impl.java
-│   ├── UserDao_Impl.java
-│   └── MainActivity_GeneratedInjector.java
+ com/example/
+    AppDatabase_Impl.java
+    UserDao_Impl.java
+    MainActivity_GeneratedInjector.java
 ```
 
 **After migration (KSP):**
@@ -337,10 +337,10 @@ ls -la app/build/generated/ksp/debug/kotlin/
 
 # Example generated files:
 app/build/generated/ksp/debug/kotlin/
-├── com/example/
-│   ├── AppDatabase_Impl.kt
-│   ├── UserDao_Impl.kt
-│   └── MainActivity_GeneratedInjector.kt
+ com/example/
+    AppDatabase_Impl.kt
+    UserDao_Impl.kt
+    MainActivity_GeneratedInjector.kt
 ```
 
 **Compare generated code:**

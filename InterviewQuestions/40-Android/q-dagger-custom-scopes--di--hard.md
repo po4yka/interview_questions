@@ -64,7 +64,7 @@ class RequestHelper @Inject constructor() {
 Sometimes Hilt's built-in scopes don't match your app's architecture:
 
 ```kotlin
-// ❌ Problem: User session doesn't match any built-in scope
+//  Problem: User session doesn't match any built-in scope
 // - Not @Singleton (user can log out)
 // - Not @ActivityScoped (survives Activity recreation)
 // - Not @ActivityRetainedScoped (survives app restart with saved state)
@@ -581,26 +581,26 @@ class RequestHandler @Inject constructor() {
 
 ```kotlin
 // Scenario 1: Heavy object that should be reused
-@Singleton // ✅ GOOD - Created once, reused
+@Singleton //  GOOD - Created once, reused
 class HeavyImageProcessor @Inject constructor() {
     private val cache = LruCache<String, Bitmap>(100)
     // Expensive to create, should be singleton
 }
 
 // Scenario 2: Lightweight, stateless helper
-class UrlFormatter @Inject constructor() { // ✅ GOOD - Unscoped, cheap to create
+class UrlFormatter @Inject constructor() { //  GOOD - Unscoped, cheap to create
     fun format(url: String): String = url.trim().lowercase()
 }
 
 // Scenario 3: Stateful per-activity tracker
-@ActivityScoped // ✅ GOOD - One per activity
+@ActivityScoped //  GOOD - One per activity
 class ActivityLifecycleTracker @Inject constructor(
     private val analytics: Analytics
 ) {
     private var startTime: Long = 0
 }
 
-// ❌ BAD - Singleton for stateful per-activity data
+//  BAD - Singleton for stateful per-activity data
 @Singleton // BAD - Will leak Activity data across activities!
 class ActivityLifecycleTracker @Inject constructor() {
     private var startTime: Long = 0 // Shared across all activities!
@@ -780,29 +780,29 @@ class UserScopeTest {
 
 1. **Use Built-in Scopes First**
    ```kotlin
-   // ✅ GOOD - Use built-in scope if it matches
+   //  GOOD - Use built-in scope if it matches
    @Singleton
    class AppConfig @Inject constructor()
 
-   // ❌ BAD - Don't create custom scope unnecessarily
+   //  BAD - Don't create custom scope unnecessarily
    @CustomAppScope
    class AppConfig @Inject constructor()
    ```
 
 2. **Scope Should Match Lifecycle**
    ```kotlin
-   // ✅ GOOD - UserScope matches user session lifecycle
+   //  GOOD - UserScope matches user session lifecycle
    @UserScope
    class UserSettings @Inject constructor()
 
-   // ❌ BAD - Singleton for per-user data will leak
+   //  BAD - Singleton for per-user data will leak
    @Singleton
    class UserSettings @Inject constructor()
    ```
 
 3. **Manage Scope Lifecycle Explicitly**
    ```kotlin
-   // ✅ GOOD - Explicit create/destroy
+   //  GOOD - Explicit create/destroy
    fun onLogin() {
        userComponentManager.createUserSession()
    }
@@ -811,7 +811,7 @@ class UserScopeTest {
        userComponentManager.destroyUserSession()
    }
 
-   // ❌ BAD - Forgetting to destroy causes memory leaks
+   //  BAD - Forgetting to destroy causes memory leaks
    fun onLogin() {
        userComponentManager.createUserSession()
        // Never destroyed!
@@ -820,10 +820,10 @@ class UserScopeTest {
 
 4. **Don't Over-scope**
    ```kotlin
-   // ✅ GOOD - Unscoped for lightweight, stateless
+   //  GOOD - Unscoped for lightweight, stateless
    class JsonParser @Inject constructor()
 
-   // ❌ BAD - Unnecessary scope
+   //  BAD - Unnecessary scope
    @Singleton
    class JsonParser @Inject constructor()
    ```
@@ -845,13 +845,13 @@ class UserScopeTest {
 
 1. **Memory Leaks from Not Destroying Scope**
    ```kotlin
-   // ❌ BAD - Scope never destroyed
+   //  BAD - Scope never destroyed
    fun onCreate() {
        featureComponentManager.create() // Created
        // Never destroyed - memory leak!
    }
 
-   // ✅ GOOD - Scope destroyed
+   //  GOOD - Scope destroyed
    fun onCreate() {
        featureComponentManager.create()
    }
@@ -863,13 +863,13 @@ class UserScopeTest {
 
 2. **Wrong Scope for Data**
    ```kotlin
-   // ❌ BAD - Activity-scoped data in Singleton
+   //  BAD - Activity-scoped data in Singleton
    @Singleton
    class CurrentScreenTracker @Inject constructor() {
        var currentScreen: String = "" // Wrong scope!
    }
 
-   // ✅ GOOD - Activity-scoped
+   //  GOOD - Activity-scoped
    @ActivityScoped
    class CurrentScreenTracker @Inject constructor() {
        var currentScreen: String = ""
@@ -878,12 +878,12 @@ class UserScopeTest {
 
 3. **Forgetting @Scope Annotation**
    ```kotlin
-   // ❌ BAD - Missing @UserScope
+   //  BAD - Missing @UserScope
    class UserSettings @Inject constructor() {
        // Will be unscoped even though you want UserScope!
    }
 
-   // ✅ GOOD
+   //  GOOD
    @UserScope
    class UserSettings @Inject constructor()
    ```
@@ -893,11 +893,11 @@ class UserScopeTest {
 **Custom scopes** in Dagger/Hilt allow you to create dependencies with custom lifetimes:
 
 **When to use custom scopes:**
-- ✅ User session (login to logout)
-- ✅ Multi-step flows (checkout, onboarding)
-- ✅ Feature modules with state
-- ✅ Conversation/chat scopes
-- ✅ Any custom lifecycle not covered by built-in scopes
+-  User session (login to logout)
+-  Multi-step flows (checkout, onboarding)
+-  Feature modules with state
+-  Conversation/chat scopes
+-  Any custom lifecycle not covered by built-in scopes
 
 **Key concepts:**
 - `@Scope` annotation - Marks scope
@@ -949,11 +949,11 @@ Hilt предоставляет эти стандартные scopes:
 **Кастомные scopes** в Dagger/Hilt позволяют создавать зависимости с кастомным lifetime:
 
 **Когда использовать кастомные scopes:**
-- ✅ Пользовательская сессия (от логина до логаута)
-- ✅ Многошаговые процессы (checkout, onboarding)
-- ✅ Feature-модули с состоянием
-- ✅ Conversation/chat scopes
-- ✅ Любой кастомный жизненный цикл, не покрытый встроенными scopes
+-  Пользовательская сессия (от логина до логаута)
+-  Многошаговые процессы (checkout, onboarding)
+-  Feature-модули с состоянием
+-  Conversation/chat scopes
+-  Любой кастомный жизненный цикл, не покрытый встроенными scopes
 
 **Ключевые концепции:**
 - `@Scope` аннотация — маркирует scope

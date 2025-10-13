@@ -84,9 +84,9 @@ Composer builds and maintains the composition tree:
 fun TreeBuilding() {
     // Composer builds:
     // Column
-    //   ├─ UserHeader
-    //   ├─ UserContent
-    //   └─ UserActions
+    //    UserHeader
+    //    UserContent
+    //    UserActions
     Column {
         UserHeader()
         UserContent()
@@ -438,3 +438,19 @@ fun CorrectStateManagement() {
 Что можно делать через Composer
 
 Это внутренний компонент Compose, отвечающий за управление состоянием и рендерингом. Через него Compose отслеживает изменения в UI и обновляет только те элементы, которые изменились. Он также управляет процессом recomposition
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-how-does-jetpackcompose-work--android--medium]] - Compose
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose
+- [[q-accessibility-compose--accessibility--medium]] - Compose
+
+### Advanced (Harder)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
+- [[q-compose-performance-optimization--android--hard]] - Compose

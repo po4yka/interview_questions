@@ -179,12 +179,12 @@ Only inline functions can use `reified`, allowing access to type information at 
 ```kotlin
 // Without reified - doesn't work
 fun <T> isInstanceOf(value: Any): Boolean {
-    return value is T  // ❌ Error: Cannot check for erased type
+    return value is T  //  Error: Cannot check for erased type
 }
 
 // With inline + reified - works!
 inline fun <reified T> isInstanceOf(value: Any): Boolean {
-    return value is T  // ✅ Type check works!
+    return value is T  //  Type check works!
 }
 
 // Practical examples
@@ -225,7 +225,7 @@ val result = findFirstNegative(listOf(1, 2, -3, 4))
 fun findFirstNegativeCustom(numbers: List<Int>): Int? {
     myForEach(numbers) { number ->  // myForEach is NOT inline
         if (number < 0) {
-            return number  // ❌ Error: 'return' not allowed here
+            return number  //  Error: 'return' not allowed here
         }
     }
     return null
@@ -430,8 +430,8 @@ inline fun performOperation(
     inlinedAction: () -> Unit,
     noinline notInlinedAction: () -> Unit
 ) {
-    inlinedAction()  // ✅ Inlined at call site
-    notInlinedAction()  // ❌ Not inlined, treated as regular lambda
+    inlinedAction()  //  Inlined at call site
+    notInlinedAction()  //  Not inlined, treated as regular lambda
 }
 ```
 
@@ -503,7 +503,7 @@ inline fun runInThread(crossinline block: () -> Unit) {
 fun test() {
     runInThread {
         println("In thread")
-        // return  // ❌ Compiler error: 'return' not allowed here
+        // return  //  Compiler error: 'return' not allowed here
     }
     println("After runInThread")  // Always executes
 }
@@ -622,14 +622,14 @@ inline fun largeFunction(block: () -> Unit) {
 
 ```kotlin
 open class Base {
-    // ❌ Error: inline functions can't be open
+    //  Error: inline functions can't be open
     open inline fun operation(block: () -> Unit) {
         block()
     }
 }
 
 interface Processor {
-    // ❌ Error: inline functions can't be abstract
+    //  Error: inline functions can't be abstract
     inline fun process(data: String): String
 }
 ```
@@ -643,7 +643,7 @@ class MyClass {
     private val secret = "hidden"
 
     inline fun accessSecret() {
-        println(secret)  // ❌ Error when inlined at external call site
+        println(secret)  //  Error when inlined at external call site
     }
 }
 ```
@@ -651,7 +651,7 @@ class MyClass {
 #### 4. Recursive Inline Functions
 
 ```kotlin
-// ❌ Warning: Recursive inline function may cause stack overflow
+//  Warning: Recursive inline function may cause stack overflow
 inline fun factorial(n: Int): Int {
     return if (n <= 1) 1 else n * factorial(n - 1)
 }
@@ -756,7 +756,7 @@ fun benchmarkMemoryAllocation() {
 
 ### When to Use Inline Functions
 
-✅ **DO use inline for**:
+ **DO use inline for**:
 - Higher-order functions with lambda parameters
 - Functions that need reified type parameters
 - Small utility functions (1-3 lines)
@@ -764,7 +764,7 @@ fun benchmarkMemoryAllocation() {
 - DSL builders
 - Resource management (use, synchronized)
 
-❌ **DON'T use inline for**:
+ **DON'T use inline for**:
 - Large functions (increases code size)
 - Virtual functions (open, override, abstract)
 - Recursive functions
@@ -775,13 +775,13 @@ fun benchmarkMemoryAllocation() {
 
 1. **Inline small, frequently-called functions**:
 ```kotlin
-// ✅ Good
+//  Good
 inline fun <T> T.applyIf(condition: Boolean, block: T.() -> Unit): T {
     if (condition) block()
     return this
 }
 
-// ❌ Bad - too large to inline
+//  Bad - too large to inline
 inline fun processLargeData(data: List<String>, transform: (String) -> String): List<String> {
     val result = mutableListOf<String>()
     // 50+ lines of processing logic
@@ -824,13 +824,13 @@ inline fun publicUtility(action: () -> Unit) {
 #### 1. Over-inlining
 
 ```kotlin
-// ❌ Bad - large function, rarely called
+//  Bad - large function, rarely called
 inline fun generateReport(data: List<Data>, formatter: (Data) -> String): String {
     // 200 lines of complex logic
     // ...
 }
 
-// ✅ Good - small, frequently called
+//  Good - small, frequently called
 inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
     var sum = 0L
     for (element in this) {
@@ -843,12 +843,12 @@ inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
 #### 2. Forgetting noinline
 
 ```kotlin
-// ❌ Doesn't compile
+//  Doesn't compile
 inline fun registerHandler(handler: () -> Unit) {
     handlers.add(handler)  // Error: can't store inlined lambda
 }
 
-// ✅ Correct
+//  Correct
 inline fun registerHandler(noinline handler: () -> Unit) {
     handlers.add(handler)
 }
@@ -857,12 +857,12 @@ inline fun registerHandler(noinline handler: () -> Unit) {
 #### 3. Unnecessary crossinline
 
 ```kotlin
-// ❌ Unnecessary - lambda not used in different context
+//  Unnecessary - lambda not used in different context
 inline fun simpleOperation(crossinline block: () -> Unit) {
     block()  // Called directly, crossinline not needed
 }
 
-// ✅ Correct
+//  Correct
 inline fun simpleOperation(block: () -> Unit) {
     block()
 }
@@ -1083,12 +1083,12 @@ class MemoryTest {
 ```kotlin
 // Без reified - не работает
 fun <T> isInstanceOf(value: Any): Boolean {
-    return value is T  // ❌ Ошибка: Невозможно проверить стертый тип
+    return value is T  //  Ошибка: Невозможно проверить стертый тип
 }
 
 // С inline + reified - работает!
 inline fun <reified T> isInstanceOf(value: Any): Boolean {
-    return value is T  // ✅ Проверка типа работает!
+    return value is T  //  Проверка типа работает!
 }
 
 // Практические примеры
@@ -1228,8 +1228,8 @@ inline fun performOperation(
     inlinedAction: () -> Unit,
     noinline notInlinedAction: () -> Unit
 ) {
-    inlinedAction()  // ✅ Встраивается в место вызова
-    notInlinedAction()  // ❌ Не встраивается, обрабатывается как обычная лямбда
+    inlinedAction()  //  Встраивается в место вызова
+    notInlinedAction()  //  Не встраивается, обрабатывается как обычная лямбда
 }
 ```
 
@@ -1281,7 +1281,7 @@ inline fun runInThread(crossinline block: () -> Unit) {
 fun test() {
     runInThread {
         println("В потоке")
-        // return  // ❌ Ошибка компилятора: 'return' здесь не разрешен
+        // return  //  Ошибка компилятора: 'return' здесь не разрешен
     }
     println("После runInThread")  // Всегда выполняется
 }
@@ -1315,7 +1315,7 @@ inline fun largeFunction(block: () -> Unit) {
 
 ```kotlin
 open class Base {
-    // ❌ Ошибка: inline функции не могут быть open
+    //  Ошибка: inline функции не могут быть open
     open inline fun operation(block: () -> Unit) {
         block()
     }
@@ -1374,7 +1374,7 @@ fun benchmarkInlinePerformance() {
 
 ### Когда использовать Inline функции
 
-✅ **ИСПОЛЬЗУЙТЕ inline для**:
+ **ИСПОЛЬЗУЙТЕ inline для**:
 - Функций высшего порядка с параметрами-лямбдами
 - Функций, нуждающихся в реифицированных параметрах типов
 - Маленьких утилитарных функций (1-3 строки)
@@ -1382,7 +1382,7 @@ fun benchmarkInlinePerformance() {
 - DSL построителей
 - Управления ресурсами (use, synchronized)
 
-❌ **НЕ используйте inline для**:
+ **НЕ используйте inline для**:
 - Больших функций (увеличивает размер кода)
 - Виртуальных функций (open, override, abstract)
 - Рекурсивных функций
@@ -1402,12 +1402,12 @@ fun benchmarkInlinePerformance() {
 #### 1. Избыточное встраивание
 
 ```kotlin
-// ❌ Плохо - большая функция, редко вызывается
+//  Плохо - большая функция, редко вызывается
 inline fun generateReport(data: List<Data>, formatter: (Data) -> String): String {
     // 200 строк сложной логики
 }
 
-// ✅ Хорошо - маленькая, часто вызывается
+//  Хорошо - маленькая, часто вызывается
 inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
     var sum = 0L
     for (element in this) {
@@ -1420,12 +1420,12 @@ inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
 #### 2. Забытый noinline
 
 ```kotlin
-// ❌ Не компилируется
+//  Не компилируется
 inline fun registerHandler(handler: () -> Unit) {
     handlers.add(handler)  // Ошибка: нельзя сохранить встроенную лямбду
 }
 
-// ✅ Правильно
+//  Правильно
 inline fun registerHandler(noinline handler: () -> Unit) {
     handlers.add(handler)
 }
@@ -1434,12 +1434,12 @@ inline fun registerHandler(noinline handler: () -> Unit) {
 #### 3. Ненужный crossinline
 
 ```kotlin
-// ❌ Ненужный - лямбда не используется в другом контексте
+//  Ненужный - лямбда не используется в другом контексте
 inline fun simpleOperation(crossinline block: () -> Unit) {
     block()  // Вызывается напрямую, crossinline не нужен
 }
 
-// ✅ Правильно
+//  Правильно
 inline fun simpleOperation(block: () -> Unit) {
     block()
 }

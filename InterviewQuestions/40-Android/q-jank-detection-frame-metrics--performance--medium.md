@@ -290,7 +290,7 @@ class ModernJankMonitor : AppCompatActivity() {
 
 #### 1. Overdraw
 
-**❌ Problem: Multiple layers rendering**
+** Problem: Multiple layers rendering**
 
 ```xml
 <!-- Multiple backgrounds causing overdraw -->
@@ -307,7 +307,7 @@ class ModernJankMonitor : AppCompatActivity() {
 </LinearLayout>
 ```
 
-**✅ Solution: Remove unnecessary backgrounds**
+** Solution: Remove unnecessary backgrounds**
 
 ```xml
 <!-- Single background layer -->
@@ -332,7 +332,7 @@ Developer Options → Debug GPU Overdraw → Show overdraw areas
 
 #### 2. Layout Complexity
 
-**❌ Problem: Deeply nested layouts**
+** Problem: Deeply nested layouts**
 
 ```xml
 <LinearLayout>
@@ -349,7 +349,7 @@ Developer Options → Debug GPU Overdraw → Show overdraw areas
 <!-- Hierarchy depth: 6 levels, slow measure/layout -->
 ```
 
-**✅ Solution: Flatten with ConstraintLayout**
+** Solution: Flatten with ConstraintLayout**
 
 ```xml
 <androidx.constraintlayout.widget.ConstraintLayout>
@@ -362,7 +362,7 @@ Developer Options → Debug GPU Overdraw → Show overdraw areas
 
 #### 3. RecyclerView Jank
 
-**❌ Problem: Expensive bind operations**
+** Problem: Expensive bind operations**
 
 ```kotlin
 class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -386,7 +386,7 @@ class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-**✅ Solution: Async operations and caching**
+** Solution: Async operations and caching**
 
 ```kotlin
 class OptimizedAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -426,7 +426,7 @@ class OptimizedAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 #### 4. View Inflation Jank
 
-**❌ Problem: Inflating views on demand**
+** Problem: Inflating views on demand**
 
 ```kotlin
 // Inflate complex view when needed
@@ -440,7 +440,7 @@ button.setOnClickListener {
 }
 ```
 
-**✅ Solution: ViewStub for lazy inflation**
+** Solution: ViewStub for lazy inflation**
 
 ```xml
 <!-- activity_main.xml -->
@@ -489,13 +489,13 @@ chrome trace.html
 **Example Analysis:**
 ```
 Frame 145: 28ms (JANK - missed deadline)
-├─ Input: 0.2ms ✓
-├─ Animation: 0.5ms ✓
-├─ Measure/Layout: 14.3ms ✗ (TOO SLOW)
-│  └─ RecyclerView.onMeasure: 12.8ms
-│     └─ Adapter.onBindViewHolder: 11.2ms (BOTTLENECK)
-├─ Draw: 8.1ms ✗ (SLOW)
-└─ Sync: 4.9ms ✓
+ Input: 0.2ms 
+ Animation: 0.5ms 
+ Measure/Layout: 14.3ms  (TOO SLOW)
+   RecyclerView.onMeasure: 12.8ms
+      Adapter.onBindViewHolder: 11.2ms (BOTTLENECK)
+ Draw: 8.1ms  (SLOW)
+ Sync: 4.9ms 
 
 Action: Optimize onBindViewHolder - move work off main thread
 ```

@@ -309,15 +309,15 @@ fun main() = runBlocking {
 
     // Tenant 1 operations
     launch(tenant1) {
-        val docs = repo.getDocuments() // ✅ Works
-        repo.createDocument(Document("new-doc")) // ✅ Works
+        val docs = repo.getDocuments() //  Works
+        repo.createDocument(Document("new-doc")) //  Works
     }
 
     // Tenant 2 operations
     launch(tenant2) {
-        val docs = repo.getDocuments() // ✅ Works
+        val docs = repo.getDocuments() //  Works
         try {
-            repo.createDocument(Document("new-doc")) // ❌ Fails
+            repo.createDocument(Document("new-doc")) //  Fails
         } catch (e: SecurityException) {
             println("Error: ${e.message}")
         }
@@ -510,10 +510,10 @@ suspend fun logInfo(message: String) {
 
 1. **Make context elements immutable**:
    ```kotlin
-   // ✅ Immutable data class
+   //  Immutable data class
    data class RequestId(val id: String) : AbstractCoroutineContextElement(RequestId)
 
-   // ❌ Mutable properties
+   //  Mutable properties
    class RequestId(var id: String) : AbstractCoroutineContextElement(RequestId)
    ```
 
@@ -526,10 +526,10 @@ suspend fun logInfo(message: String) {
 
 3. **Use meaningful names**:
    ```kotlin
-   // ✅ Clear purpose
+   //  Clear purpose
    val CoroutineContext.requestId: String?
 
-   // ❌ Unclear
+   //  Unclear
    val CoroutineContext.id: String?
    ```
 
@@ -558,7 +558,7 @@ suspend fun logInfo(message: String) {
 
 1. **Modifying shared mutable context**:
    ```kotlin
-   // ❌ Mutable state in context
+   //  Mutable state in context
    class Counter(var count: Int) : AbstractCoroutineContextElement(Counter) {
        companion object Key : CoroutineContext.Key<Counter>
    }
@@ -571,10 +571,10 @@ suspend fun logInfo(message: String) {
 
 2. **Forgetting Key companion object**:
    ```kotlin
-   // ❌ Missing Key - won't compile properly
+   //  Missing Key - won't compile properly
    class MyContext : AbstractCoroutineContextElement(???)
 
-   // ✅ With Key
+   //  With Key
    class MyContext : AbstractCoroutineContextElement(MyContext) {
        companion object Key : CoroutineContext.Key<MyContext>
    }
@@ -582,7 +582,7 @@ suspend fun logInfo(message: String) {
 
 3. **Context leaks with GlobalScope**:
    ```kotlin
-   // ❌ Context lost when using GlobalScope
+   //  Context lost when using GlobalScope
    withContext(RequestId("123")) {
        GlobalScope.launch {
            // RequestId is lost here!
@@ -590,7 +590,7 @@ suspend fun logInfo(message: String) {
        }
    }
 
-   // ✅ Use coroutineScope to preserve context
+   //  Use coroutineScope to preserve context
    withContext(RequestId("123")) {
        coroutineScope {
            launch {
@@ -602,10 +602,10 @@ suspend fun logInfo(message: String) {
 
 4. **Not handling missing context gracefully**:
    ```kotlin
-   // ❌ Assumes context exists
+   //  Assumes context exists
    val requestId = coroutineContext[RequestId]!!.id // Crashes if null
 
-   // ✅ Handle missing context
+   //  Handle missing context
    val requestId = coroutineContext.requestId ?: generateRequestId()
    ```
 
@@ -820,7 +820,7 @@ fun main() = runBlocking {
     val repo = DocumentRepository()
 
     launch(tenant1) {
-        val docs = repo.getDocuments() // ✅ Работает
+        val docs = repo.getDocuments() //  Работает
     }
 }
 ```
@@ -856,10 +856,10 @@ fun traceLog(message: String) {
 
 1. **Делайте элементы контекста неизменяемыми**:
    ```kotlin
-   // ✅ Неизменяемый data class
+   //  Неизменяемый data class
    data class RequestId(val id: String) : AbstractCoroutineContextElement(RequestId)
 
-   // ❌ Изменяемые свойства
+   //  Изменяемые свойства
    class RequestId(var id: String) : AbstractCoroutineContextElement(RequestId)
    ```
 
@@ -872,10 +872,10 @@ fun traceLog(message: String) {
 
 3. **Используйте понятные имена**:
    ```kotlin
-   // ✅ Понятная цель
+   //  Понятная цель
    val CoroutineContext.requestId: String?
 
-   // ❌ Неясно
+   //  Неясно
    val CoroutineContext.id: String?
    ```
 
@@ -883,7 +883,7 @@ fun traceLog(message: String) {
 
 1. **Изменение разделяемого изменяемого контекста**:
    ```kotlin
-   // ❌ Изменяемое состояние в контексте
+   //  Изменяемое состояние в контексте
    class Counter(var count: Int) : AbstractCoroutineContextElement(Counter) {
        companion object Key : CoroutineContext.Key<Counter>
    }
@@ -896,14 +896,14 @@ fun traceLog(message: String) {
 
 2. **Утечка контекста с GlobalScope**:
    ```kotlin
-   // ❌ Контекст потерян при использовании GlobalScope
+   //  Контекст потерян при использовании GlobalScope
    withContext(RequestId("123")) {
        GlobalScope.launch {
            println(coroutineContext.requestId) // null
        }
    }
 
-   // ✅ Используйте coroutineScope для сохранения контекста
+   //  Используйте coroutineScope для сохранения контекста
    withContext(RequestId("123")) {
        coroutineScope {
            launch {

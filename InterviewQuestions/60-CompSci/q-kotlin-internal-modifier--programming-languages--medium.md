@@ -34,8 +34,8 @@ Useful for hiding implementation between layers or when using multi-module archi
 
 - - Visible **within the same module**
 - - **Not visible** in other modules
-- 🏗️ **Module** = Gradle/Maven/IntelliJ module
-- 🔒 **Encapsulation** between modules
+-  **Module** = Gradle/Maven/IntelliJ module
+-  **Encapsulation** between modules
 
 **Example:**
 
@@ -63,10 +63,10 @@ class UserRepository {
 
 ```
 project/
-├── core/  (module)
-│   └── NetworkClient.kt
-└── app/  (module)
-    └── MainActivity.kt
+ core/  (module)
+    NetworkClient.kt
+ app/  (module)
+     MainActivity.kt
 ```
 
 **core/NetworkClient.kt:**

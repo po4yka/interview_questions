@@ -33,24 +33,24 @@ To implement reliable **large file upload**, consider:
 ### Architecture
 
 ```
-┌─────────────┐
-│   Activity  │ ← User selects file
-└──────┬──────┘
-       │ Enqueue upload
+
+   Activity   ← User selects file
+
+        Enqueue upload
        ↓
-┌─────────────┐
-│ WorkManager │ ← Schedules upload work
-└──────┬──────┘
-       │ Executes in background
+
+ WorkManager  ← Schedules upload work
+
+        Executes in background
        ↓
-┌─────────────┐
-│FileUploadWorker│ ← Uploads via Retrofit
-└──────┬──────┘
-       │ Shows progress notification
+
+FileUploadWorker ← Uploads via Retrofit
+
+        Shows progress notification
        ↓
-┌─────────────┐
-│   Server    │ ← Receives file
-└─────────────┘
+
+   Server     ← Receives file
+
 ```
 
 ---

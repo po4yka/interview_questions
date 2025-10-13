@@ -43,25 +43,25 @@ Kotlin provides a rich set of collection types and operations that make data man
 
 ```
 Collections Hierarchy:
-┌────────────────────┐
-│    Iterable<T>     │
-└────────┬───────────┘
-         │
-    ┌────┴──────┬──────────┐
-    │           │          │
-┌───▼───┐  ┌───▼───┐  ┌───▼───┐
-│ List  │  │  Set  │  │  Map  │
-└───┬───┘  └───┬───┘  └───┬───┘
-    │          │          │
-┌───▼─────────┐│          │
-│ MutableList ││          │
-└─────────────┘│          │
-         ┌─────▼──────┐   │
-         │ MutableSet │   │
-         └────────────┘   │
-                    ┌─────▼──────┐
-                    │ MutableMap │
-                    └────────────┘
+
+    Iterable<T>     
+
+         
+    
+                         
+    
+ List      Set      Map  
+    
+                        
+          
+ MutableList           
+          
+            
+          MutableSet    
+            
+                    
+                     MutableMap 
+                    
 ```
 
 ### List - Ordered Collection

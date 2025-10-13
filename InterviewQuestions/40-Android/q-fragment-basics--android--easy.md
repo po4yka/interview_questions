@@ -352,3 +352,15 @@ class MyFragment : Fragment() {
 - [Vogella: Building dynamic user interfaces in Android with fragments](https://www.vogella.com/tutorials/AndroidFragments/article.html)
 - [Square: Advocating Against Android Fragments](https://developer.squareup.com/blog/advocating-against-android-fragments/)
 - [Medium: 7 Common Mistakes Easily Made with Android Fragment](https://medium.com/mobile-app-development-publication/7-common-mistakes-easily-made-with-android-fragment-6fc85c44e783)
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment
+
+### Advanced (Harder)
+- [[q-save-data-outside-fragment--android--medium]] - Fragment
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - Fragment

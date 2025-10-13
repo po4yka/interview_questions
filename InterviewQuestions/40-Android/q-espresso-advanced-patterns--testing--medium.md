@@ -520,3 +520,17 @@ Espresso - это фреймворк для UI тестирования View-bas
 8. **Используйте осмысленные описания** в custom matchers
 9. **Очищайте IdlingResources** в finally блоках
 10. **Держите тесты независимыми** и атомарными
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing
+- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+- [[q-screenshot-snapshot-testing--testing--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-coroutines-flow--testing--hard]] - Testing

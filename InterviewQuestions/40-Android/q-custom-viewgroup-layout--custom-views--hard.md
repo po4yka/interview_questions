@@ -600,9 +600,9 @@ child.measure(childWidthSpec, childHeightSpec)
 
 | Method | Respects Padding | Respects Margins | Use Case |
 |--------|-----------------|------------------|----------|
-| `measureChild` | ✅ Yes | ❌ No | Simple layouts |
-| `measureChildWithMargins` | ✅ Yes | ✅ Yes | Most layouts |
-| Manual `measure()` | ❌ No | ❌ No | Full control |
+| `measureChild` |  Yes |  No | Simple layouts |
+| `measureChildWithMargins` |  Yes |  Yes | Most layouts |
+| Manual `measure()` |  No |  No | Full control |
 
 ---
 
@@ -611,7 +611,7 @@ child.measure(childWidthSpec, childHeightSpec)
 **1. Always measure children before self**
 ```kotlin
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    // ✅ Measure children first
+    //  Measure children first
     for (i in 0 until childCount) {
         measureChild(getChildAt(i), widthMeasureSpec, heightMeasureSpec)
     }
@@ -627,20 +627,20 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 ```kotlin
 for (i in 0 until childCount) {
     val child = getChildAt(i)
-    if (child.visibility == GONE) continue // ✅ Skip
+    if (child.visibility == GONE) continue //  Skip
     // Process child
 }
 ```
 
 **3. Use resolveSize for wrap_content/match_parent**
 ```kotlin
-// ✅ DO
+//  DO
 setMeasuredDimension(
     resolveSize(desiredWidth, widthMeasureSpec),
     resolveSize(desiredHeight, heightMeasureSpec)
 )
 
-// ❌ DON'T ignore measure spec
+//  DON'T ignore measure spec
 setMeasuredDimension(desiredWidth, desiredHeight)
 ```
 
@@ -700,7 +700,7 @@ class OptimizedViewGroup : ViewGroup {
 
 ### Common Pitfalls
 
-**❌ Forgetting to call setMeasuredDimension()**
+** Forgetting to call setMeasuredDimension()**
 ```kotlin
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     // Measure children...
@@ -708,7 +708,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 }
 ```
 
-**❌ Not measuring children**
+** Not measuring children**
 ```kotlin
 override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
     val child = getChildAt(0)
@@ -717,7 +717,7 @@ override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
 }
 ```
 
-**❌ Calling requestLayout() in onLayout()**
+** Calling requestLayout() in onLayout()**
 ```kotlin
 override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
     // ...
@@ -939,3 +939,15 @@ class FlowLayout @JvmOverloads constructor(
 - `measureChild()` - Простое измерение
 - `measureChildWithMargins()` - Учитывает margins
 - `resolveSize()` - Разрешить финальный размер
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+
+### Related (Hard)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

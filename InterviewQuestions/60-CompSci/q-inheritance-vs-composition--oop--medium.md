@@ -1,4 +1,6 @@
 ---
+topic: architecture-patterns
+subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 tags:
   - composition
   - coupling
@@ -11,6 +13,10 @@ tags:
   - oop
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-architecture-patterns
+related_questions: []
 ---
 
 # Какие отличия наследования от композиции?
@@ -551,3 +557,17 @@ Composition is considered **more flexible and less coupled** than inheritance, m
 
 **Правило:** Предпочитайте композицию наследованию для большей гибкости и тестируемости.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-java-all-classes-inherit-from-object--programming-languages--easy]] - Inheritance
+- [[q-kotlin-enum-classes--kotlin--easy]] - Enums
+
+### Related (Medium)
+- [[q-when-inheritance-useful--oop--medium]] - Inheritance
+- [[q-inheritance-composition-aggregation--oop--medium]] - Inheritance
+- [[q-class-composition--oop--medium]] - Inheritance
+- [[q-java-marker-interfaces--programming-languages--medium]] - Inheritance

@@ -102,7 +102,7 @@ class HtmlTag { /* ... */ }
 html {
     tag("div") {
         tag("p") {
-            // ❌ Cannot access outer html scope directly
+            //  Cannot access outer html scope directly
             // Prevents: html { }
         }
     }
@@ -271,22 +271,22 @@ class Builder { /* ... */ }
 **2. Extension lambdas with receivers:**
 
 ```kotlin
-// ✅ DO: Lambda with receiver
+//  DO: Lambda with receiver
 fun tag(name: String, block: Tag.() -> Unit)
 
-// ❌ DON'T: Regular lambda
+//  DON'T: Regular lambda
 fun tag(name: String, block: (Tag) -> Unit)
 ```
 
 **3. Type-safe builders:**
 
 ```kotlin
-// ✅ DO: Type constraints
+//  DO: Type constraints
 fun Container.button(text: String, onClick: () -> Unit) {
     add(Button(text, onClick))
 }
 
-// ❌ DON'T: Accept any type
+//  DON'T: Accept any type
 fun Container.add(component: Any)
 ```
 

@@ -416,11 +416,11 @@ class OptimizedActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        // ❌ Don't do heavy work here
+        //  Don't do heavy work here
         // loadDataFromNetwork()
         // processLargeDataset()
 
-        // ✅ Only update UI if needed
+        //  Only update UI if needed
         refreshUIIfNeeded()
     }
 

@@ -29,7 +29,7 @@ How do you ensure sufficient color contrast for accessibility? What are WCAG con
 
 ```
 WCAG 2.1 Contrast Ratios:
-─────────────────────────────────────────────
+
 Level AA (Minimum):
   - Normal text (< 18pt):      4.5:1
   - Large text (≥ 18pt/14pt bold): 3:1
@@ -39,10 +39,10 @@ Level AAA (Enhanced):
   - Large text:                4.5:1
 
 Examples:
-  Black on White:     21:1  ✅ (Excellent)
-  #757575 on White:    4.6:1  ✅ (Passes AA)
-  #959595 on White:    2.8:1  ❌ (Fails AA)
-  Blue (#007AFF) on White: 4.5:1  ✅ (Passes AA)
+  Black on White:     21:1   (Excellent)
+  #757575 on White:    4.6:1   (Passes AA)
+  #959595 on White:    2.8:1   (Fails AA)
+  Blue (#007AFF) on White: 4.5:1   (Passes AA)
 ```
 
 ### Calculating Contrast Ratio
@@ -134,7 +134,7 @@ println("Passes WCAG AA: $passes")
 @Composable
 fun MaterialColorExample() {
     MaterialTheme {
-        // ✅ GOOD - Material 3 automatically ensures contrast
+        //  GOOD - Material 3 automatically ensures contrast
         Surface(
             color = MaterialTheme.colorScheme.primary
         ) {
@@ -153,7 +153,7 @@ fun MaterialColorExample() {
             )
         }
 
-        // ❌ BAD - Manual colors without contrast check
+        //  BAD - Manual colors without contrast check
         Surface(color = Color(0xFFCCCCCC)) {
             Text(
                 text = "Button",
@@ -242,23 +242,23 @@ fun testMaterialThemeContrast() {
 **1. Gray text on light background**:
 
 ```kotlin
-// ❌ BAD - Insufficient contrast
+//  BAD - Insufficient contrast
 Text(
     text = "Secondary info",
     color = Color(0xFFCCCCCC), // Light gray
     modifier = Modifier.background(Color.White)
 )
-// Contrast: 1.6:1 ❌
+// Contrast: 1.6:1 
 
-// ✅ GOOD - Sufficient contrast
+//  GOOD - Sufficient contrast
 Text(
     text = "Secondary info",
     color = Color(0xFF757575), // Medium gray
     modifier = Modifier.background(Color.White)
 )
-// Contrast: 4.6:1 ✅
+// Contrast: 4.6:1 
 
-// ✅ BETTER - Use Material colors
+//  BETTER - Use Material colors
 Text(
     text = "Secondary info",
     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -269,7 +269,7 @@ Text(
 **2. Blue links on white background**:
 
 ```kotlin
-// ❌ BAD - Light blue, insufficient contrast
+//  BAD - Light blue, insufficient contrast
 Text(
     text = "Click here",
     color = Color(0xFF4FC3F7), // Light blue
@@ -277,9 +277,9 @@ Text(
         .clickable { }
         .background(Color.White)
 )
-// Contrast: 2.9:1 ❌
+// Contrast: 2.9:1 
 
-// ✅ GOOD - Darker blue
+//  GOOD - Darker blue
 Text(
     text = "Click here",
     color = Color(0xFF0277BD), // Dark blue
@@ -287,9 +287,9 @@ Text(
         .clickable { }
         .background(Color.White)
 )
-// Contrast: 4.5:1 ✅
+// Contrast: 4.5:1 
 
-// ✅ BETTER - Use Material colors
+//  BETTER - Use Material colors
 Text(
     text = "Click here",
     color = MaterialTheme.colorScheme.primary,
@@ -302,7 +302,7 @@ Text(
 **3. Status indicators relying only on color**:
 
 ```kotlin
-// ❌ BAD - Only color differentiation
+//  BAD - Only color differentiation
 Row {
     Text("Success", color = Color.Green)
     Text("Warning", color = Color.Yellow)
@@ -312,7 +312,7 @@ Row {
 // 1. Color blind users can't distinguish
 // 2. May not have sufficient contrast
 
-// ✅ GOOD - Add icons + sufficient contrast
+//  GOOD - Add icons + sufficient contrast
 Row {
     Row {
         Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF2E7D32)) // Dark green
@@ -328,7 +328,7 @@ Row {
     }
 }
 
-// ✅ BETTER - Use Material semantic colors
+//  BETTER - Use Material semantic colors
 Row {
     Row {
         Icon(Icons.Default.CheckCircle, null, tint = MaterialTheme.colorScheme.tertiary)
@@ -344,7 +344,7 @@ Row {
 **4. Disabled states**:
 
 ```kotlin
-// ❌ BAD - Disabled text might not have contrast
+//  BAD - Disabled text might not have contrast
 Button(
     onClick = {},
     enabled = false,
@@ -357,7 +357,7 @@ Button(
 }
 // May not meet 4.5:1 ratio
 
-// ✅ GOOD - Material provides accessible disabled states
+//  GOOD - Material provides accessible disabled states
 Button(
     onClick = {},
     enabled = false
@@ -375,19 +375,19 @@ Button(
 ```kotlin
 @Composable
 fun DarkThemeContrast() {
-    // ❌ BAD - Same colors in both themes
+    //  BAD - Same colors in both themes
     val textColor = Color.Black
     val backgroundColor = Color.White
     // Inverted in dark theme = poor contrast!
 
-    // ✅ GOOD - Different colors per theme
+    //  GOOD - Different colors per theme
     val textColor = if (isSystemInDarkTheme()) {
         Color(0xFFE0E0E0) // Light gray for dark theme
     } else {
         Color(0xFF212121) // Dark gray for light theme
     }
 
-    // ✅ BETTER - Use Material dynamic colors
+    //  BETTER - Use Material dynamic colors
     Text(
         text = "Content",
         color = MaterialTheme.colorScheme.onBackground,
@@ -505,7 +505,7 @@ fun ColorBlindnessPreview() {
 **Design for color blindness:**
 
 ```kotlin
-// ❌ BAD - Only color to convey meaning
+//  BAD - Only color to convey meaning
 @Composable
 fun BadStatus() {
     Row {
@@ -519,7 +519,7 @@ fun BadStatus() {
 }
 // Red and green look the same to color blind users!
 
-// ✅ GOOD - Use icons + color
+//  GOOD - Use icons + color
 @Composable
 fun GoodStatus() {
     Row {
@@ -532,7 +532,7 @@ fun GoodStatus() {
     }
 }
 
-// ✅ BETTER - Use patterns + icons + color
+//  BETTER - Use patterns + icons + color
 @Composable
 fun BestStatus(isOnline: Boolean) {
     Row {
@@ -557,7 +557,7 @@ fun BestStatus(isOnline: Boolean) {
 ### Focus Indicators
 
 ```kotlin
-// ✅ GOOD - Visible focus indicator with sufficient contrast
+//  GOOD - Visible focus indicator with sufficient contrast
 @Composable
 fun FocusableButton() {
     var isFocused by remember { mutableStateOf(false) }
@@ -583,14 +583,14 @@ fun FocusableButton() {
 
 1. **Use Material Color Roles**
    ```kotlin
-   // ✅ GOOD - Guaranteed contrast
+   //  GOOD - Guaranteed contrast
    Text(
        text = "Content",
        color = MaterialTheme.colorScheme.onPrimary,
        modifier = Modifier.background(MaterialTheme.colorScheme.primary)
    )
 
-   // ❌ BAD - Manual colors without checking
+   //  BAD - Manual colors without checking
    Text(
        text = "Content",
        color = Color.White,
@@ -600,26 +600,26 @@ fun FocusableButton() {
 
 2. **Test with Accessibility Scanner**
    ```
-   ✅ Run Accessibility Scanner on every screen
-   ✅ Fix all contrast violations
-   ✅ Re-test after fixes
+    Run Accessibility Scanner on every screen
+    Fix all contrast violations
+    Re-test after fixes
    ```
 
 3. **Don't Rely on Color Alone**
    ```kotlin
-   // ✅ GOOD - Icons + text + color
+   //  GOOD - Icons + text + color
    Row {
        Icon(Icons.Default.Error, null)
        Text("Error message", color = Color.Red)
    }
 
-   // ❌ BAD - Only color
+   //  BAD - Only color
    Text("Error message", color = Color.Red)
    ```
 
 4. **Test in Dark Mode**
    ```kotlin
-   // ✅ GOOD - Test both themes
+   //  GOOD - Test both themes
    @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
    @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
    @Composable
@@ -632,7 +632,7 @@ fun FocusableButton() {
 
 5. **Automate Contrast Checks**
    ```kotlin
-   // ✅ GOOD - Test contrast in CI
+   //  GOOD - Test contrast in CI
    @Test
    fun testAllColorPairsHaveSufficientContrast() {
        val colorPairs = listOf(
@@ -732,3 +732,14 @@ fun FocusableButton() {
 - Добавлять иконки к цветным индикаторам
 - Тестировать с симуляторами дальтонизма
 - Проверять соотношение 4.5:1 для всего текста
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-accessibility-compose--accessibility--medium]] - Accessibility
+- [[q-accessibility-testing--accessibility--medium]] - Accessibility
+- [[q-custom-view-accessibility--custom-views--medium]] - Accessibility
+- [[q-accessibility-talkback--accessibility--medium]] - Accessibility
+- [[q-accessibility-text-scaling--accessibility--medium]] - Accessibility

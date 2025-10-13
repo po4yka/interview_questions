@@ -35,21 +35,21 @@ status: draft
 
 **Problem:** Object allocation triggers garbage collection, causing frame drops.
 
-**❌ BAD - Allocates on every frame:**
+** BAD - Allocates on every frame:**
 ```kotlin
 override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
 
-    // ❌ Allocates new Paint every frame!
+    //  Allocates new Paint every frame!
     val paint = Paint().apply {
         color = Color.BLUE
         strokeWidth = 10f
     }
 
-    // ❌ Allocates new Rect every frame!
+    //  Allocates new Rect every frame!
     val rect = Rect(0, 0, width, height)
 
-    // ❌ Allocates new Path every frame!
+    //  Allocates new Path every frame!
     val path = Path().apply {
         moveTo(0f, 0f)
         lineTo(width.toFloat(), height.toFloat())
@@ -59,10 +59,10 @@ override fun onDraw(canvas: Canvas) {
 }
 ```
 
-**✅ GOOD - Pre-allocate and reuse:**
+** GOOD - Pre-allocate and reuse:**
 ```kotlin
 class OptimizedView : View {
-    // ✅ Allocate once, reuse forever
+    //  Allocate once, reuse forever
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.BLUE
         strokeWidth = 10f
@@ -76,7 +76,7 @@ class OptimizedView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        // ✅ Reuse pre-allocated objects
+        //  Reuse pre-allocated objects
         rect.set(0, 0, width, height)
         path.reset()
         path.moveTo(0f, 0f)
@@ -232,7 +232,7 @@ override fun onDraw(canvas: Canvas) {
     val clipBounds = canvas.clipBounds
 
     for (item in items) {
-        // ✅ Skip items outside visible area
+        //  Skip items outside visible area
         if (!item.bounds.intersect(clipBounds)) {
             continue
         }
@@ -344,7 +344,7 @@ class StarView : View {
 ```kotlin
 class OptimizedPaintView : View {
 
-    // ✅ Pre-allocate and configure
+    //  Pre-allocate and configure
     private val fillPaint = Paint().apply {
         style = Paint.Style.FILL
         color = Color.BLUE
@@ -394,7 +394,7 @@ class OptimizedPaintView : View {
 
 **Avoid unnecessary save/restore** - they're expensive.
 
-**❌ SLOW:**
+** SLOW:**
 ```kotlin
 override fun onDraw(canvas: Canvas) {
     for (item in items) {
@@ -407,7 +407,7 @@ override fun onDraw(canvas: Canvas) {
 }
 ```
 
-**✅ FASTER - Use saveLayer sparingly:**
+** FASTER - Use saveLayer sparingly:**
 ```kotlin
 override fun onDraw(canvas: Canvas) {
     for (item in items) {
@@ -421,7 +421,7 @@ override fun onDraw(canvas: Canvas) {
 }
 ```
 
-**✅ FASTEST - No save/restore:**
+** FASTEST - No save/restore:**
 ```kotlin
 private val tempMatrix = Matrix()
 
@@ -450,11 +450,11 @@ class SlowChartView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        // ❌ Allocations in onDraw
+        //  Allocations in onDraw
         val paint = Paint()
         val path = Path()
 
-        // ❌ Draw everything, even off-screen
+        //  Draw everything, even off-screen
         path.moveTo(0f, dataPoints[0].second.toFloat())
         for ((x, y) in dataPoints) {
             path.lineTo(x.toFloat(), y.toFloat())
@@ -462,7 +462,7 @@ class SlowChartView : View {
 
         canvas.drawPath(path, paint)
 
-        // ❌ Draw all data point circles
+        //  Draw all data point circles
         for ((x, y) in dataPoints) {
             canvas.drawCircle(x.toFloat(), y.toFloat(), 5f, paint)
         }
@@ -474,7 +474,7 @@ class SlowChartView : View {
 ```kotlin
 class FastChartView : View {
 
-    // ✅ Pre-allocate
+    //  Pre-allocate
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = 3f
@@ -490,7 +490,7 @@ class FastChartView : View {
     private val linePath = Path()
     private val dataPoints = List(1000) { it to random() * 1000 }
 
-    // ✅ Bitmap cache for static content
+    //  Bitmap cache for static content
     private var cachedBitmap: Bitmap? = null
     private var needsRedraw = true
 
@@ -506,29 +506,29 @@ class FastChartView : View {
 
         val bitmap = cachedBitmap ?: return
 
-        // ✅ Only redraw when data changes
+        //  Only redraw when data changes
         if (needsRedraw) {
             val cacheCanvas = Canvas(bitmap)
             drawChart(cacheCanvas)
             needsRedraw = false
         }
 
-        // ✅ Fast bitmap blit
+        //  Fast bitmap blit
         canvas.drawBitmap(bitmap, 0f, 0f, null)
     }
 
     private fun drawChart(canvas: Canvas) {
-        // ✅ Clip to visible region
+        //  Clip to visible region
         val clipBounds = canvas.clipBounds
 
-        // ✅ Only draw visible points
+        //  Only draw visible points
         val visiblePoints = dataPoints.filter { (x, _) ->
             x >= clipBounds.left && x <= clipBounds.right
         }
 
         if (visiblePoints.isEmpty()) return
 
-        // ✅ Reuse path
+        //  Reuse path
         linePath.reset()
         linePath.moveTo(visiblePoints[0].first.toFloat(), visiblePoints[0].second.toFloat())
 
@@ -538,7 +538,7 @@ class FastChartView : View {
 
         canvas.drawPath(linePath, linePaint)
 
-        // ✅ Draw points with batching
+        //  Draw points with batching
         for ((x, y) in visiblePoints) {
             canvas.drawCircle(x.toFloat(), y.toFloat(), 4f, pointPaint)
         }
@@ -604,23 +604,23 @@ python systrace.py --time=10 gfx view
 ### 10. Best Practices Checklist
 
 **Memory:**
-- ✅ Pre-allocate Paint, Path, Rect objects
-- ✅ Reuse objects with reset() methods
-- ✅ Recycle bitmaps in onDetachedFromWindow()
-- ❌ Never allocate in onDraw()
+-  Pre-allocate Paint, Path, Rect objects
+-  Reuse objects with reset() methods
+-  Recycle bitmaps in onDetachedFromWindow()
+-  Never allocate in onDraw()
 
 **Drawing:**
-- ✅ Use hardware layers for animations
-- ✅ Cache complex static content to bitmap
-- ✅ Clip to visible regions
-- ✅ Disable unnecessary Paint features
-- ❌ Don't save/restore unnecessarily
+-  Use hardware layers for animations
+-  Cache complex static content to bitmap
+-  Clip to visible regions
+-  Disable unnecessary Paint features
+-  Don't save/restore unnecessarily
 
 **Performance:**
-- ✅ Target < 5ms for onDraw()
-- ✅ Use Trace.beginSection() for profiling
-- ✅ Test on low-end devices
-- ✅ Monitor frame rate with GPU rendering
+-  Target < 5ms for onDraw()
+-  Use Trace.beginSection() for profiling
+-  Test on low-end devices
+-  Monitor frame rate with GPU rendering
 
 ---
 
@@ -632,7 +632,7 @@ class HighPerformanceWaveView @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    // ✅ Pre-allocated objects
+    //  Pre-allocated objects
     private val wavePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = Color.BLUE
@@ -641,12 +641,12 @@ class HighPerformanceWaveView @JvmOverloads constructor(
     private val wavePath = Path()
     private val matrix = Matrix()
 
-    // ✅ Cached calculations
+    //  Cached calculations
     private var amplitude = 0f
     private var wavelength = 0f
     private var phase = 0f
 
-    // ✅ Animation with hardware layer
+    //  Animation with hardware layer
     private val animator = ValueAnimator.ofFloat(0f, 2 * PI.toFloat()).apply {
         duration = 2000
         repeatCount = ValueAnimator.INFINITE
@@ -657,14 +657,14 @@ class HighPerformanceWaveView @JvmOverloads constructor(
     }
 
     init {
-        // ✅ Enable hardware acceleration
+        //  Enable hardware acceleration
         setLayerType(LAYER_TYPE_HARDWARE, null)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
-        // ✅ Cache calculations on size change
+        //  Cache calculations on size change
         amplitude = h / 4f
         wavelength = w / 2f
     }
@@ -684,11 +684,11 @@ class HighPerformanceWaveView @JvmOverloads constructor(
 
         Trace.beginSection("WaveView.onDraw")
 
-        // ✅ Reuse path
+        //  Reuse path
         wavePath.reset()
         wavePath.moveTo(0f, height / 2f)
 
-        // ✅ Optimized wave calculation
+        //  Optimized wave calculation
         val step = 10f // Trade accuracy for performance
         var x = 0f
         while (x <= width) {
@@ -747,13 +747,13 @@ class HighPerformanceWaveView @JvmOverloads constructor(
 **1. Никогда не выделяйте объекты в onDraw()**
 
 ```kotlin
-// ❌ ПЛОХО
+//  ПЛОХО
 override fun onDraw(canvas: Canvas) {
     val paint = Paint() // Выделение на каждый кадр!
     val rect = Rect() // Выделение на каждый кадр!
 }
 
-// ✅ ХОРОШО
+//  ХОРОШО
 class OptimizedView : View {
     private val paint = Paint() // Выделить один раз
     private val rect = Rect()
@@ -818,3 +818,17 @@ override fun onDraw(canvas: Canvas) {
 - 60 FPS (16.67ms/кадр)
 - Ноль аллокаций на кадр
 - Плавные анимации без рывков
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-what-is-layout-performance-measured-in--android--medium]] - Performance, View
+- [[q-dagger-build-time-optimization--android--medium]] - Performance
+- [[q-performance-optimization-android--android--medium]] - Performance
+
+### Related (Hard)
+- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - Performance, View
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View
+- [[q-compose-performance-optimization--android--hard]] - Performance

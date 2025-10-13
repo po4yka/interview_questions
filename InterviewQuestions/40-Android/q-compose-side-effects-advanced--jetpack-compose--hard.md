@@ -207,17 +207,17 @@ fun <T> Flow<T>.collectAsStateWithLifecycle(
 
 ```
 Do you need coroutines?
-├─ YES
-│  ├─ Converting to State?
-│  │  └─ Use produceState
-│  └─ General async work?
-│     └─ Use LaunchedEffect
-│
-└─ NO
-   ├─ Need cleanup?
-   │  └─ Use DisposableEffect
-   └─ Just syncing state?
-      └─ Use SideEffect
+ YES
+   Converting to State?
+     Use produceState
+   General async work?
+      Use LaunchedEffect
+
+ NO
+    Need cleanup?
+      Use DisposableEffect
+    Just syncing state?
+       Use SideEffect
 ```
 
 ### Complete Location Tracking Implementation
@@ -568,17 +568,17 @@ Jetpack Compose предоставляет несколько API для side-э
 
 ```
 Нужны корутины?
-├─ ДА
-│  ├─ Конвертация в State?
-│  │  └─ Используйте produceState
-│  └─ Общая async работа?
-│     └─ Используйте LaunchedEffect
-│
-└─ НЕТ
-   ├─ Нужна очистка?
-   │  └─ Используйте DisposableEffect
-   └─ Просто синхронизация state?
-      └─ Используйте SideEffect
+ ДА
+   Конвертация в State?
+     Используйте produceState
+   Общая async работа?
+      Используйте LaunchedEffect
+
+ НЕТ
+    Нужна очистка?
+      Используйте DisposableEffect
+    Просто синхронизация state?
+       Используйте SideEffect
 ```
 
 [Полная реализация отслеживания местоположения приведена в английском разделе]

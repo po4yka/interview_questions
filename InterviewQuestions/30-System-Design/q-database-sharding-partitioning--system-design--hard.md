@@ -45,20 +45,20 @@ As your database grows, a single server can't handle all the load. Sharding and 
 
 ```
 Partitioning (Vertical Scaling):
-┌─────────────────────────────┐
-│     Single Database Server   │
-│  ┌────────┐  ┌────────┐     │
-│  │Part 1  │  │Part 2  │     │
-│  │2020    │  │2021    │     │
-│  └────────┘  └────────┘     │
-└─────────────────────────────┘
+
+     Single Database Server   
+         
+  Part 1    Part 2       
+  2020      2021         
+         
+
 
 Sharding (Horizontal Scaling):
-┌──────────┐  ┌──────────┐  ┌──────────┐
-│ Shard 1  │  │ Shard 2  │  │ Shard 3  │
-│ Users    │  │ Users    │  │ Users    │
-│ 1-1000   │  │1001-2000 │  │2001-3000 │
-└──────────┘  └──────────┘  └──────────┘
+    
+ Shard 1     Shard 2     Shard 3  
+ Users       Users       Users    
+ 1-1000     1001-2000   2001-3000 
+    
  Server 1      Server 2      Server 3
 ```
 
@@ -97,13 +97,13 @@ SELECT * FROM orders
 WHERE created_at BETWEEN '2024-01-01' AND '2024-12-31';
 ```
 
-**✅ Pros:**
+** Pros:**
 - Easy to implement
 - Simple queries
 - Easy to add/remove partitions (drop old data)
 - Good for time-series data
 
-**❌ Cons:**
+** Cons:**
 - Can create hotspots (recent data gets all writes)
 - Uneven distribution if ranges not balanced
 
@@ -145,12 +145,12 @@ user_id=102 → hash % 4 = 2 → users_2
 user_id=103 → hash % 4 = 3 → users_3
 ```
 
-**✅ Pros:**
+** Pros:**
 - Even distribution
 - No hotspots
 - Predictable performance
 
-**❌ Cons:**
+** Cons:**
 - Range queries scan all partitions
 - Hard to rebalance (adding partitions requires rehashing)
 
@@ -177,12 +177,12 @@ CREATE TABLE products_food PARTITION OF products
     FOR VALUES IN ('food', 'beverages', 'snacks');
 ```
 
-**✅ Pros:**
+** Pros:**
 - Logical grouping
 - Easy to query by category
 - Can isolate important data
 
-**❌ Cons:**
+** Cons:**
 - Uneven distribution if categories imbalanced
 - Need to know values upfront
 
@@ -226,11 +226,11 @@ class UserService(private val shardRouter: RangeShardRouter) {
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Simple to implement
 - Range queries efficient (query single shard)
 
-**❌ Cons:**
+** Cons:**
 - Hotspots on new data (all new users go to latest shard)
 - Unbalanced load
 
@@ -270,12 +270,12 @@ class OrderService(private val shardRouter: HashShardRouter) {
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Even distribution
 - No hotspots
 - Simple logic
 
-**❌ Cons:**
+** Cons:**
 - Adding/removing shards requires data migration
 - Queries by non-shard-key require querying all shards
 - No range query support
@@ -340,18 +340,18 @@ Not 100% like simple hash!
 
 Ring visualization:
     0°
-    │
-270°├─90°   Shards distributed around ring
-    │       with virtual nodes
+    
+270°90°   Shards distributed around ring
+           with virtual nodes
    180°
 ```
 
-**✅ Pros:**
+** Pros:**
 - Minimal data movement when adding/removing shards
 - Even distribution with virtual nodes
 - Handles dynamic topology
 
-**❌ Cons:**
+** Cons:**
 - More complex implementation
 - Still can't do range queries easily
 
@@ -386,12 +386,12 @@ class UserService(private val geoRouter: GeoShardRouter) {
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Low latency (data close to users)
 - Regulatory compliance (GDPR - data in EU)
 - Fault isolation by region
 
-**❌ Cons:**
+** Cons:**
 - Uneven distribution by population
 - Cross-region queries expensive
 - Complex to manage
@@ -404,7 +404,7 @@ class UserService(private val geoRouter: GeoShardRouter) {
 
 **Problem:** Can't JOIN across different databases
 
-❌ **Bad (doesn't work):**
+ **Bad (doesn't work):**
 ```sql
 -- Can't join users and orders if on different shards
 SELECT u.name, o.total
@@ -413,7 +413,7 @@ JOIN orders o ON u.user_id = o.user_id
 WHERE u.user_id = 123;
 ```
 
-✅ **Solution: Application-level joins**
+ **Solution: Application-level joins**
 ```kotlin
 suspend fun getUserWithOrders(userId: Long): UserWithOrders {
     val userShard = userShardRouter.getShard(userId)
@@ -428,7 +428,7 @@ suspend fun getUserWithOrders(userId: Long): UserWithOrders {
 }
 ```
 
-✅ **Solution: Denormalization**
+ **Solution: Denormalization**
 ```kotlin
 // Store user data in orders table (duplicate)
 data class Order(
@@ -452,7 +452,7 @@ suspend fun getOrderWithUser(orderId: Long): Order {
 
 **Problem:** ACID transactions don't work across shards
 
-❌ **Bad (doesn't work):**
+ **Bad (doesn't work):**
 ```kotlin
 // Can't have atomic transaction across shards
 transaction {
@@ -462,7 +462,7 @@ transaction {
 // If orderShard fails, userShard already committed!
 ```
 
-✅ **Solution: Saga Pattern**
+ **Solution: Saga Pattern**
 ```kotlin
 class TransferSaga(
     private val userShardRouter: ShardRouter,
@@ -500,7 +500,7 @@ Shard 2: IDs 1, 2, 3, 4...  ← Collision!
 Shard 3: IDs 1, 2, 3, 4...
 ```
 
-✅ **Solution 1: UUID**
+ **Solution 1: UUID**
 ```kotlin
 data class User(
     val id: UUID = UUID.randomUUID(),  // Globally unique
@@ -509,7 +509,7 @@ data class User(
 )
 ```
 
-✅ **Solution 2: Snowflake ID**
+ **Solution 2: Snowflake ID**
 ```kotlin
 // Twitter Snowflake: 64-bit ID
 // [Timestamp 41 bits][Datacenter 5 bits][Machine 5 bits][Sequence 12 bits]
@@ -549,7 +549,7 @@ val idGen = SnowflakeIdGenerator(datacenterId = 1, machineId = 1)
 val userId = idGen.nextId()  // 1234567890123456789
 ```
 
-✅ **Solution 3: Database sequences with offset**
+ **Solution 3: Database sequences with offset**
 ```sql
 -- Shard 1: Sequence starts at 1, increments by 1000
 CREATE SEQUENCE user_id_seq_1 START 1 INCREMENT BY 1000;
@@ -660,11 +660,11 @@ class InstagramShardRouter(
 
 | Factor | Range | Hash | Consistent Hash | Geographic |
 |--------|-------|------|-----------------|------------|
-| **Even distribution** | ❌ | ✅ | ✅ | ❌ |
-| **Range queries** | ✅ | ❌ | ❌ | ✅ |
-| **Add/remove shards** | ✅ | ❌ | ✅ | ❌ |
+| **Even distribution** |  |  |  |  |
+| **Range queries** |  |  |  |  |
+| **Add/remove shards** |  |  |  |  |
 | **Complexity** | Low | Low | High | Medium |
-| **Hotspots** | ⚠️ Yes | ✅ No | ✅ No | ⚠️ Yes |
+| **Hotspots** |  Yes |  No |  No |  Yes |
 | **Use case** | Time-series | Even load | Dynamic | Multi-region |
 
 ---
@@ -704,22 +704,22 @@ class InstagramShardRouter(
 #### 1. Range-Based Sharding (По диапазону)
 **Распределение по диапазону ID**
 
-**✅ Плюсы:**
+** Плюсы:**
 - Просто реализовать
 - Эффективные range queries
 
-**❌ Минусы:**
+** Минусы:**
 - Hotspots на новых данных
 - Несбалансированная нагрузка
 
 #### 2. Hash-Based Sharding (По хешу)
 **Использование хеш-функции**
 
-**✅ Плюсы:**
+** Плюсы:**
 - Равномерное распределение
 - Нет hotspots
 
-**❌ Минусы:**
+** Минусы:**
 - Сложно добавлять/удалять шарды
 - Нет поддержки range queries
 

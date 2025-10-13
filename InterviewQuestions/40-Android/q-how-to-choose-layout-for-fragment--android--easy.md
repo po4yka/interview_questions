@@ -208,3 +208,29 @@ override fun onDestroyView() {
 ## Ответ (RU)
 Выбор макета для фрагмента осуществляется в методе onCreateView с помощью LayoutInflater. Пример: override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? { return inflater.inflate(R.layout.fragment_example, container, false) }
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Advanced (Harder)
+- [[q-save-data-outside-fragment--android--medium]] - Fragment
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Advanced (Harder)
+- [[q-save-data-outside-fragment--android--medium]] - Fragment
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View

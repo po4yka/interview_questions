@@ -146,15 +146,15 @@ fun AdaptiveColumnsGrid() {
 **Adaptive vs Fixed:**
 ```
 GridCells.Fixed(3):
-✅ Predictable column count
-✅ Works well for uniform content
-❌ May look bad on different screen sizes
+ Predictable column count
+ Works well for uniform content
+ May look bad on different screen sizes
 
 GridCells.Adaptive(120.dp):
-✅ Responsive across screen sizes
-✅ Better for different devices
-✅ Columns adjust automatically
-❌ Column count varies
+ Responsive across screen sizes
+ Better for different devices
+ Columns adjust automatically
+ Column count varies
 ```
 
 ---
@@ -492,7 +492,7 @@ fun AnimatedGridItems() {
         ) {
             items(
                 count = items.size,
-                key = { items[it].id }  // ✅ Required for animations
+                key = { items[it].id }  //  Required for animations
             ) { index ->
                 val item = items[index]
 
@@ -500,7 +500,7 @@ fun AnimatedGridItems() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(item.height.dp)
-                        .animateItemPlacement()  // ✅ Animate reordering
+                        .animateItemPlacement()  //  Animate reordering
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -753,7 +753,7 @@ fun OptimizedGrid(items: List<Item>) {
     ) {
         items(
             count = items.size,
-            key = { items[it].id }  // ✅ Essential for performance
+            key = { items[it].id }  //  Essential for performance
         ) { index ->
             ItemCard(items[index])
         }
@@ -766,7 +766,7 @@ fun OptimizedGrid(items: List<Item>) {
 #### 2. Avoid Heavy Computations in Item Content
 
 ```kotlin
-// ❌ Bad: Heavy computation in item
+//  Bad: Heavy computation in item
 @Composable
 fun BadGridItem(data: ComplexData) {
     val processedData = processData(data)  // Called on every recomposition!
@@ -774,7 +774,7 @@ fun BadGridItem(data: ComplexData) {
     Card { /* Use processedData */ }
 }
 
-// ✅ Good: Computation outside or memoized
+//  Good: Computation outside or memoized
 @Composable
 fun GoodGridItem(data: ComplexData) {
     val processedData = remember(data) {
@@ -798,7 +798,7 @@ fun OptimizedHeterogeneousGrid(items: List<GridContent>) {
         items(
             count = items.size,
             key = { items[it].id },
-            contentType = { items[it]::class }  // ✅ Helps reuse composition
+            contentType = { items[it]::class }  //  Helps reuse composition
         ) { index ->
             when (val item = items[index]) {
                 is GridContent.Photo -> PhotoItem(item)
@@ -944,3 +944,19 @@ LazyVerticalGrid, LazyHorizontalGrid и LazyStaggeredGrid - важные composa
 8. What are the best practices for image loading in grids?
 9. How do you handle item selection in LazyGrid?
 10. What is the relationship between LazyGrid and Paging 3?
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-jetpack-compose-basics--android--medium]] - Compose, Jetpack
+- [[q-compose-gesture-detection--jetpack-compose--medium]] - Compose, Jetpack
+
+### Advanced (Harder)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose, Jetpack

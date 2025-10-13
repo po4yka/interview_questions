@@ -434,10 +434,10 @@ class HttpURLConnectionUploader {
 
 | Aspect | Retrofit | OkHttp | HttpURLConnection |
 |--------|----------|--------|-------------------|
-| **Ease of use** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
+| **Ease of use** |  |  |  |
 | **Type safety** | Yes | No | No |
 | **Coroutines** | Built-in | Manual | Manual |
-| **Progress tracking** | Via OkHttp | ✅ Easy | ✅ Manual |
+| **Progress tracking** | Via OkHttp |  Easy |  Manual |
 | **Dependencies** | Retrofit + OkHttp | OkHttp | None |
 | **Flexibility** | Medium | High | High |
 | **Boilerplate** | Low | Medium | High |
@@ -661,3 +661,20 @@ suspend fun compressImage(file: File): File = withContext(Dispatchers.IO) {
 - Использовать `MultipartBody.Part` для файлов
 - Обрабатывать прогресс загрузки через OkHttp Interceptor
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-graphql-vs-rest--networking--easy]] - Networking
+
+### Related (Medium)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-splash-screen-api-android12--android--medium]] - Networking
+- [[q-server-sent-events-sse--networking--medium]] - Networking
+- [[q-privacy-sandbox-topics-api--privacy--medium]] - Networking
+- [[q-api-rate-limiting-throttling--android--medium]] - Networking
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking

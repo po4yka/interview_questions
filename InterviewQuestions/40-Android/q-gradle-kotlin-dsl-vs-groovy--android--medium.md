@@ -96,8 +96,8 @@ dependencies {
 | Feature | Kotlin DSL | Groovy |
 |---------|-----------|--------|
 | **File extension** | .gradle.kts | .gradle |
-| **Type safety** | ✅ Compile-time | ❌ Runtime only |
-| **IDE support** | ✅ Autocomplete, refactoring | ⚠️ Limited |
+| **Type safety** |  Compile-time |  Runtime only |
+| **IDE support** |  Autocomplete, refactoring |  Limited |
 | **Performance** | Slower first build | Faster first build |
 | **Syntax** | More verbose | More concise |
 | **String quotes** | Required ("") | Optional |
@@ -115,7 +115,7 @@ android {
 
 // Groovy - No error until runtime
 android {
-    compileSdk "34"  // ⚠️ Works but wrong type
+    compileSdk "34"  //  Works but wrong type
 }
 ```
 
@@ -194,8 +194,8 @@ dependencies {
 | Функция | Kotlin DSL | Groovy |
 |---------|-----------|--------|
 | **Расширение файла** | .gradle.kts | .gradle |
-| **Типобезопасность** | ✅ Во время компиляции | ❌ Только во время выполнения |
-| **Поддержка IDE** | ✅ Автодополнение, рефакторинг | ⚠️ Ограниченная |
+| **Типобезопасность** |  Во время компиляции |  Только во время выполнения |
+| **Поддержка IDE** |  Автодополнение, рефакторинг |  Ограниченная |
 | **Синтаксис** | Более многословный | Более лаконичный |
 | **Присваивание** | = обязательно | = опционально |
 

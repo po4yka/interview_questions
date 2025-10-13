@@ -50,20 +50,20 @@ The **expect/actual** mechanism in Kotlin Multiplatform (KMP) allows you to writ
 ### How expect/actual Works
 
 ```
-┌─────────────────────────────────────┐
-│         commonMain                   │
-│  ┌────────────────────────────┐    │
-│  │  expect fun getPlatform()  │    │
-│  │  expect class Storage      │    │
-│  └────────────────────────────┘    │
-└──────────────┬──────────────────────┘
-               │
-      ┌────────┴────────┐
-      │                 │
-┌─────▼──────┐   ┌─────▼──────┐
-│ androidMain│   │  iosMain   │
-│ actual impl│   │ actual impl│
-└────────────┘   └────────────┘
+
+         commonMain                   
+      
+    expect fun getPlatform()      
+    expect class Storage          
+      
+
+               
+      
+                       
+   
+ androidMain     iosMain   
+ actual impl    actual impl
+   
 ```
 
 ### expect/actual Functions
@@ -737,24 +737,24 @@ class AndroidPlatformTest {
 
 ```
 myproject/
-├── commonMain/
-│   └── kotlin/
-│       ├── Platform.kt        (expect declarations)
-│       ├── Storage.kt         (expect class)
-│       └── Logger.kt          (expect object)
-├── androidMain/
-│   └── kotlin/
-│       ├── Platform.kt        (actual implementations)
-│       ├── Storage.kt         (actual class)
-│       └── Logger.kt          (actual object)
-├── iosMain/
-│   └── kotlin/
-│       ├── Platform.kt        (actual implementations)
-│       ├── Storage.kt         (actual class)
-│       └── Logger.kt          (actual object)
-└── commonTest/
-    └── kotlin/
-        └── PlatformTest.kt    (common tests)
+ commonMain/
+    kotlin/
+        Platform.kt        (expect declarations)
+        Storage.kt         (expect class)
+        Logger.kt          (expect object)
+ androidMain/
+    kotlin/
+        Platform.kt        (actual implementations)
+        Storage.kt         (actual class)
+        Logger.kt          (actual object)
+ iosMain/
+    kotlin/
+        Platform.kt        (actual implementations)
+        Storage.kt         (actual class)
+        Logger.kt          (actual object)
+ commonTest/
+     kotlin/
+         PlatformTest.kt    (common tests)
 ```
 
 ---
@@ -1043,24 +1043,24 @@ expect abstract class ComplexBase {
 
 ```
 myproject/
-├── commonMain/
-│   └── kotlin/
-│       ├── Platform.kt        (expect объявления)
-│       ├── Storage.kt         (expect class)
-│       └── Logger.kt          (expect object)
-├── androidMain/
-│   └── kotlin/
-│       ├── Platform.kt        (actual реализации)
-│       ├── Storage.kt         (actual class)
-│       └── Logger.kt          (actual object)
-├── iosMain/
-│   └── kotlin/
-│       ├── Platform.kt        (actual реализации)
-│       ├── Storage.kt         (actual class)
-│       └── Logger.kt          (actual object)
-└── commonTest/
-    └── kotlin/
-        └── PlatformTest.kt    (общие тесты)
+ commonMain/
+    kotlin/
+        Platform.kt        (expect объявления)
+        Storage.kt         (expect class)
+        Logger.kt          (expect object)
+ androidMain/
+    kotlin/
+        Platform.kt        (actual реализации)
+        Storage.kt         (actual class)
+        Logger.kt          (actual object)
+ iosMain/
+    kotlin/
+        Platform.kt        (actual реализации)
+        Storage.kt         (actual class)
+        Logger.kt          (actual object)
+ commonTest/
+     kotlin/
+         PlatformTest.kt    (общие тесты)
 ```
 
 ---

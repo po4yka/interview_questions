@@ -21,8 +21,8 @@ status: draft
 ### Что такое Jank?
 
 ```
-Perfect: ████████████████████ 60fps (16.67ms per frame)
-Jank:    ████  ████    ████   Пропущенные frames
+Perfect:  60fps (16.67ms per frame)
+Jank:             Пропущенные frames
          ^            ^
          Задержка!    Видимое замирание
 ```
@@ -58,9 +58,9 @@ fun Counter() {
 ```
 
 **Layout Inspector показывает**:
-- 🔥 Красные границы - recomposed компоненты
-- 📊 Количество recompositions
-- ⏱️ Время выполнения
+-  Красные границы - recomposed компоненты
+-  Количество recompositions
+- ⏱ Время выполнения
 
 ### Recomposition Profiling
 
@@ -639,3 +639,19 @@ Column { items.forEach { } } // - для больших списков
 
 **Production monitoring**: Use Baseline Profiles for AOT compilation. FrameMetrics API for runtime jank detection. Firebase Performance Monitoring. Custom analytics for jank events. Macrobenchmark in CI/CD.
 
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Performance, Compose
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose
+- [[q-accessibility-compose--accessibility--medium]] - Compose
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Performance, Compose
+- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - Performance, Compose
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose

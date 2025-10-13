@@ -94,7 +94,7 @@ val scope = CoroutineScope(supervisorJob)
 scope.launch {
     // Дочерняя корутина 1
     delay(100)
-    println("Child 1 completed")  // ✓ Выполнится
+    println("Child 1 completed")  //  Выполнится
 }
 
 scope.launch {
@@ -105,7 +105,7 @@ scope.launch {
 scope.launch {
     // Дочерняя корутина 3
     delay(200)
-    println("Child 3 completed")  // ✓ Выполнится
+    println("Child 3 completed")  //  Выполнится
 }
 
 // Результат: Только Child 2 завершится с ошибкой, остальные продолжат работу

@@ -235,3 +235,17 @@ class HybridActivity : AppCompatActivity() {
 
 ## Ответ (RU)
 В Android можно создавать интерфейс без XML с помощью Jetpack Compose или программного кода (View в Kotlin/Java).
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
+
+### Advanced (Harder)
+- [[q-dagger-build-time-optimization--android--medium]] - Ui
+- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
+- [[q-build-optimization-gradle--gradle--medium]] - Ui

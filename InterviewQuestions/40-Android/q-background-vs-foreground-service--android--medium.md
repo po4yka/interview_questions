@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, ForegroundDownloadService::class.java)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // ✅ Must use startForegroundService() on Android 8.0+
+            //  Must use startForegroundService() on Android 8.0+
             startForegroundService(intent)
         } else {
             startService(intent)
@@ -198,17 +198,17 @@ class MainActivity : AppCompatActivity() {
 
 ```
 Process Priority Hierarchy (Low to High):
-┌─────────────────────────────────────┐
-│ 5. Empty Process                    │
-├─────────────────────────────────────┤
-│ 4. Cached Process                   │
-├─────────────────────────────────────┤
-│ 3. Service Process (Background)     │ Can be killed when memory is low
-├─────────────────────────────────────┤
-│ 2. Visible Process                  │
-├─────────────────────────────────────┤
-│ 1. Foreground Process               │
-└─────────────────────────────────────┘
+
+ 5. Empty Process                    
+
+ 4. Cached Process                   
+
+ 3. Service Process (Background)      Can be killed when memory is low
+
+ 2. Visible Process                  
+
+ 1. Foreground Process               
+
 ```
 
 **Background service:**
@@ -222,17 +222,17 @@ Process Priority Hierarchy (Low to High):
 
 ```
 Process Priority Hierarchy (Low to High):
-┌─────────────────────────────────────┐
-│ 5. Empty Process                    │
-├─────────────────────────────────────┤
-│ 4. Cached Process                   │
-├─────────────────────────────────────┤
-│ 3. Service Process                  │
-├─────────────────────────────────────┤
-│ 2. Visible Process                  │
-├─────────────────────────────────────┤
-│ 1. Foreground Process (Foreground)  │ Highest priority, protected
-└─────────────────────────────────────┘
+
+ 5. Empty Process                    
+
+ 4. Cached Process                   
+
+ 3. Service Process                  
+
+ 2. Visible Process                  
+
+ 1. Foreground Process (Foreground)   Highest priority, protected
+
 ```
 
 **Foreground service:**
@@ -399,7 +399,7 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 
 ### Use Background Service When:
 
-**⚠️ Note:** Background services are **highly restricted** on Android 8.0+. Consider using **WorkManager** or **JobScheduler** instead.
+** Note:** Background services are **highly restricted** on Android 8.0+. Consider using **WorkManager** or **JobScheduler** instead.
 
 **Rare cases:**
 - App is in foreground
@@ -528,11 +528,11 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 - Must use WorkManager or exact alarms for background starts
 
 ```kotlin
-// ❌ May throw ForegroundServiceStartNotAllowedException on Android 12+
+//  May throw ForegroundServiceStartNotAllowedException on Android 12+
 // if app is in background
 startForegroundService(intent)
 
-// ✅ Use WorkManager instead
+//  Use WorkManager instead
 val workRequest = OneTimeWorkRequestBuilder<MyWorker>()
     .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
     .build()
@@ -638,10 +638,10 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 ```
 Is the task user-visible and time-sensitive?
 |-- YES → Foreground Service
-└-- NO → Is the task deferrable?
+-- NO → Is the task deferrable?
     |-- YES → WorkManager
-    └-- NO → Consider if truly necessary
-        └-- If yes, likely needs Foreground Service
+    -- NO → Consider if truly necessary
+        -- If yes, likely needs Foreground Service
 ```
 
 **Best practice:** Avoid background services on Android 8.0+. Use:
@@ -670,3 +670,20 @@ Is the task user-visible and time-sensitive?
 - **Foreground Service**: музыка, навигация, загрузки (пользователь должен знать)
 - **Background Service**: почти никогда на Android 8.0+ (используйте WorkManager)
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-android-service-types--android--easy]] - Service
+
+### Related (Medium)
+- [[q-service-component--android--medium]] - Service
+- [[q-foreground-service-types--background--medium]] - Service
+- [[q-when-can-the-system-restart-a-service--android--medium]] - Service
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Service
+- [[q-keep-service-running-background--android--medium]] - Service
+
+### Advanced (Harder)
+- [[q-service-lifecycle-binding--background--hard]] - Service

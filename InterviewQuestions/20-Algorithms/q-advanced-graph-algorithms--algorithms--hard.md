@@ -381,19 +381,19 @@ println("Total weight: $totalWeight")
 All edges sorted by weight:
 (0-2:1), (1-2:2), (3-4:2), (0-1:4), (1-3:5), (2-3:8), (2-4:10)
 
-Step 1: Add 0-2 (weight 1) ✓
+Step 1: Add 0-2 (weight 1) 
   Sets: {0,2}, {1}, {3}, {4}
 
-Step 2: Add 1-2 (weight 2) ✓
+Step 2: Add 1-2 (weight 2) 
   Sets: {0,1,2}, {3}, {4}
 
-Step 3: Add 3-4 (weight 2) ✓
+Step 3: Add 3-4 (weight 2) 
   Sets: {0,1,2}, {3,4}
 
-Step 4: Add 0-1 (weight 4) ✗ (already connected)
+Step 4: Add 0-1 (weight 4)  (already connected)
   Skip
 
-Step 5: Add 1-3 (weight 5) ✓
+Step 5: Add 1-3 (weight 5) 
   Sets: {0,1,2,3,4}
 
 Done! 4 edges selected (V-1 = 4)
@@ -462,16 +462,16 @@ println("MST Total Weight: ${mst.sumOf { it.weight }}")  // 9
 **Kruskal vs Prim:**
 ```
 Kruskal's:
-✅ Better for sparse graphs (few edges)
-✅ Easier to implement
-✅ Works on disconnected graphs
-❌ Requires sorting all edges
+ Better for sparse graphs (few edges)
+ Easier to implement
+ Works on disconnected graphs
+ Requires sorting all edges
 
 Prim's:
-✅ Better for dense graphs (many edges)
-✅ Can stop early if partial MST needed
-✅ More efficient with adjacency matrix
-❌ Must start from a specific vertex
+ Better for dense graphs (many edges)
+ Can stop early if partial MST needed
+ More efficient with adjacency matrix
+ Must start from a specific vertex
 ```
 
 ---
@@ -678,16 +678,16 @@ if (distances != null) {
 **Bellman-Ford vs Dijkstra:**
 ```
 Bellman-Ford:
-✅ Works with negative weights
-✅ Detects negative cycles
-✅ Simpler to implement
-❌ Slower: O(V * E)
+ Works with negative weights
+ Detects negative cycles
+ Simpler to implement
+ Slower: O(V * E)
 
 Dijkstra:
-✅ Faster: O((V+E) log V)
-✅ More efficient for most cases
-❌ Fails with negative weights
-❌ Cannot detect negative cycles
+ Faster: O((V+E) log V)
+ More efficient for most cases
+ Fails with negative weights
+ Cannot detect negative cycles
 ```
 
 ---
@@ -745,32 +745,32 @@ val algorithms = listOf(
 **When to use each:**
 ```
 Use Dijkstra when:
-✅ Single source shortest path
-✅ Non-negative weights
-✅ Need best performance
-✅ Sparse or dense graphs
+ Single source shortest path
+ Non-negative weights
+ Need best performance
+ Sparse or dense graphs
 
 Use Bellman-Ford when:
-✅ Negative edge weights exist
-✅ Need to detect negative cycles
-✅ Simple implementation preferred
-✅ Graph is not too large
+ Negative edge weights exist
+ Need to detect negative cycles
+ Simple implementation preferred
+ Graph is not too large
 
 Use Floyd-Warshall when:
-✅ Need all-pairs shortest paths
-✅ Dense graphs (many edges)
-✅ Graph is small (V ≤ 400)
-✅ Negative weights allowed
+ Need all-pairs shortest paths
+ Dense graphs (many edges)
+ Graph is small (V ≤ 400)
+ Negative weights allowed
 
 Use Kruskal's MST when:
-✅ Sparse graphs
-✅ Edges already sorted
-✅ Union-Find available
+ Sparse graphs
+ Edges already sorted
+ Union-Find available
 
 Use Prim's MST when:
-✅ Dense graphs
-✅ Adjacency list representation
-✅ Need to start from specific vertex
+ Dense graphs
+ Adjacency list representation
+ Need to start from specific vertex
 ```
 
 ---
@@ -964,3 +964,20 @@ class FlightNetwork {
 8. What is the Johnson's algorithm for all-pairs shortest paths?
 9. How do you implement bidirectional Dijkstra?
 10. What are the trade-offs between adjacency matrix and adjacency list for these algorithms?
+
+---
+
+## Related Questions
+
+### Android Implementation
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - Data Structures
+- [[q-recyclerview-diffutil-advanced--recyclerview--medium]] - Data Structures
+- [[q-opengl-advanced-rendering--graphics--medium]] - Data Structures
+- [[q-recyclerview-itemdecoration-advanced--recyclerview--medium]] - Data Structures
+- [[q-compose-canvas-graphics--jetpack-compose--hard]] - Data Structures
+
+### Kotlin Language Features
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+
+### System Design Concepts
+- [[q-message-queues-event-driven--system-design--medium]] - Data Structures

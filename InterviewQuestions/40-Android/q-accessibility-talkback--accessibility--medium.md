@@ -186,7 +186,7 @@ fun FocusManagementExample() {
 **Problem: Too many individual elements**:
 
 ```kotlin
-// ❌ BAD - Each element announced separately
+//  BAD - Each element announced separately
 @Composable
 fun ProductCard(product: Product) {
     Card(modifier = Modifier.clickable { /* view product */ }) {
@@ -210,7 +210,7 @@ fun ProductCard(product: Product) {
 **Solution: Merge semantics**:
 
 ```kotlin
-// ✅ GOOD - Single announcement
+//  GOOD - Single announcement
 @Composable
 fun ProductCard(product: Product) {
     Card(
@@ -357,14 +357,14 @@ fun AccessibleList(items: List<Item>) {
 @Composable
 fun DecorativeElementsExample() {
     Row {
-        // ❌ BAD - Decorative image with description
+        //  BAD - Decorative image with description
         Image(
             painter = painterResource(R.drawable.decorative_pattern),
             contentDescription = "Decorative pattern", // Wrong!
             modifier = Modifier.size(100.dp)
         )
 
-        // ✅ GOOD - Decorative image without description
+        //  GOOD - Decorative image without description
         Image(
             painter = painterResource(R.drawable.decorative_pattern),
             contentDescription = null, // Ignored by TalkBack
@@ -425,7 +425,7 @@ fun SearchResults(
 
 @Composable
 fun Timer(seconds: Int) {
-    // ❌ BAD - Announces every second
+    //  BAD - Announces every second
     Text(
         text = "$seconds seconds",
         modifier = Modifier.semantics {
@@ -433,7 +433,7 @@ fun Timer(seconds: Int) {
         }
     )
 
-    // ✅ GOOD - Only announce important milestones
+    //  GOOD - Only announce important milestones
     Text(text = "$seconds seconds")
 
     if (seconds in listOf(60, 30, 10, 5, 4, 3, 2, 1)) {
@@ -621,18 +621,18 @@ fun AccessibleNavigation() {
 **Manual testing checklist**:
 
 ```
-✅ Enable TalkBack (Settings → Accessibility → TalkBack)
-✅ Navigate with swipe gestures
-✅ Verify all interactive elements are reachable
-✅ Check content descriptions are meaningful
-✅ Test custom actions (swipe down then right)
-✅ Verify focus order makes sense
-✅ Check that state changes are announced
-✅ Test forms and error messages
-✅ Verify dialogs trap focus
-✅ Test with different text sizes
-✅ Test with different display sizes
-✅ Test RTL layout (if supported)
+ Enable TalkBack (Settings → Accessibility → TalkBack)
+ Navigate with swipe gestures
+ Verify all interactive elements are reachable
+ Check content descriptions are meaningful
+ Test custom actions (swipe down then right)
+ Verify focus order makes sense
+ Check that state changes are announced
+ Test forms and error messages
+ Verify dialogs trap focus
+ Test with different text sizes
+ Test with different display sizes
+ Test RTL layout (if supported)
 ```
 
 **Automated testing**:
@@ -680,23 +680,23 @@ fun testFocusOrder() {
 
 1. **Missing content descriptions**
    ```kotlin
-   // ❌ BAD
+   //  BAD
    Icon(Icons.Default.Delete, contentDescription = "")
 
-   // ✅ GOOD
+   //  GOOD
    Icon(Icons.Default.Delete, contentDescription = "Delete item")
    ```
 
 2. **Redundant descriptions**
    ```kotlin
-   // ❌ BAD
+   //  BAD
    Button(onClick = {}) {
        Text("Submit", modifier = Modifier.semantics {
            contentDescription = "Submit button" // Redundant!
        })
    }
 
-   // ✅ GOOD
+   //  GOOD
    Button(onClick = {}) {
        Text("Submit") // Button role is implicit
    }
@@ -704,7 +704,7 @@ fun testFocusOrder() {
 
 3. **Too many separate elements**
    ```kotlin
-   // ❌ BAD - 5 separate announcements
+   //  BAD - 5 separate announcements
    Row {
        Icon(Icons.Default.Star, "Star")
        Icon(Icons.Default.Star, "Star")
@@ -713,7 +713,7 @@ fun testFocusOrder() {
        Icon(Icons.Default.StarHalf, "Half star")
    }
 
-   // ✅ GOOD - Single announcement
+   //  GOOD - Single announcement
    Row(modifier = Modifier.semantics(mergeDescendants = true) {
        contentDescription = "4.5 stars"
    }) {
@@ -724,14 +724,14 @@ fun testFocusOrder() {
 
 4. **Poor focus order**
    ```kotlin
-   // ❌ BAD - Illogical order
+   //  BAD - Illogical order
    Column {
        Text("Step 3")
        Text("Step 1")
        Text("Step 2")
    }
 
-   // ✅ GOOD - Logical order
+   //  GOOD - Logical order
    Column {
        Text("Step 1")
        Text("Step 2")
@@ -811,3 +811,14 @@ fun testFocusOrder() {
 - Проверяйте, что все элементы доступны
 - Проверяйте логичность focus order
 - Тестируйте правильность работы пользовательских действий
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-accessibility-compose--accessibility--medium]] - Accessibility
+- [[q-accessibility-testing--accessibility--medium]] - Accessibility
+- [[q-custom-view-accessibility--custom-views--medium]] - Accessibility
+- [[q-accessibility-color-contrast--accessibility--medium]] - Accessibility
+- [[q-accessibility-text-scaling--accessibility--medium]] - Accessibility

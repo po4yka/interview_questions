@@ -178,7 +178,7 @@ gemini "List all notes in 40-Android/ with status=draft."
 
 ### 1. Bilingual = Same File
 ```yaml
-# ✅ CORRECT
+#  CORRECT
 # File: q-two-sum--algorithms--easy.md
 # Question (EN)
 Given an array...
@@ -186,56 +186,56 @@ Given an array...
 # Вопрос (RU)
 Дан массив...
 
-# ❌ WRONG - Don't create separate files
+#  WRONG - Don't create separate files
 # q-two-sum-en.md and q-two-sum-ru.md
 ```
 
 ### 2. Tags = English Only
 ```yaml
-# ✅ CORRECT
+#  CORRECT
 tags: [leetcode, arrays, hash-map, difficulty/easy]
 
-# ❌ WRONG
+#  WRONG
 tags: [leetcode, массивы, хеш-таблица]
 ```
 
 ### 3. Topic = Exactly One from TAXONOMY.md
 ```yaml
-# ✅ CORRECT
+#  CORRECT
 topic: algorithms
 
-# ❌ WRONG
+#  WRONG
 topic: [algorithms, data-structures]  # Only ONE
 topic: coding  # Invalid - not in TAXONOMY.md
 ```
 
 ### 4. Android Subtopics → Tags
 ```yaml
-# ✅ CORRECT (for Android notes)
+#  CORRECT (for Android notes)
 topic: android
 subtopics: [ui-compose, lifecycle]
 tags: [android/ui-compose, android/lifecycle, difficulty/medium]
 
-# ❌ WRONG
+#  WRONG
 # Missing android/* tags
 ```
 
 ### 5. Status = draft (for agent-created)
 ```yaml
-# ✅ CORRECT
+#  CORRECT
 status: draft  # Always for Gemini-created/modified notes
 
-# ❌ WRONG
+#  WRONG
 status: ready  # Only humans set this
 ```
 
 ### 6. Links Required
 ```yaml
-# ✅ CORRECT
+#  CORRECT
 moc: [[moc-algorithms]]
 related: [[c-hash-map], [c-array], [q-three-sum--algorithms--medium]]
 
-# ❌ WRONG
+#  WRONG
 moc: []  # Must link to MOC
 related: []  # Should link to concepts
 ```
@@ -469,35 +469,35 @@ gemini "Find notes with Russian in tags (should be English only)"
 ## Error Prevention
 
 ### Before Creating Note:
-1. ✅ Check TAXONOMY.md for valid topic
-2. ✅ Determine correct folder (matches topic)
-3. ✅ Use kebab-case English filename
-4. ✅ Include both EN and RU sections
-5. ✅ Set status: draft
-6. ✅ Add MOC and concept links
+1.  Check TAXONOMY.md for valid topic
+2.  Determine correct folder (matches topic)
+3.  Use kebab-case English filename
+4.  Include both EN and RU sections
+5.  Set status: draft
+6.  Add MOC and concept links
 
 ### Before Submitting:
-1. ✅ YAML complete and valid
-2. ✅ Tags are English-only
-3. ✅ For Android: subtopics → android/* tags
-4. ✅ File in correct folder
-5. ✅ Both languages present
-6. ✅ Links to ≥1 concept, ≥1 MOC
+1.  YAML complete and valid
+2.  Tags are English-only
+3.  For Android: subtopics → android/* tags
+4.  File in correct folder
+5.  Both languages present
+6.  Links to ≥1 concept, ≥1 MOC
 
 ---
 
 ## Quick Checklist
 
 **Every Q&A note must have:**
-- ✅ Both `# Question (EN)` and `# Вопрос (RU)`
-- ✅ Both `## Answer (EN)` and `## Ответ (RU)`
-- ✅ Valid `topic` from TAXONOMY.md
-- ✅ `status: draft`
-- ✅ English-only tags
-- ✅ `moc: [[moc-<topic>]]`
-- ✅ `related: [[c-...], ...]`
-- ✅ For Android: `android/<subtopic>` tags matching `subtopics`
-- ✅ File in correct folder matching `topic`
+-  Both `# Question (EN)` and `# Вопрос (RU)`
+-  Both `## Answer (EN)` and `## Ответ (RU)`
+-  Valid `topic` from TAXONOMY.md
+-  `status: draft`
+-  English-only tags
+-  `moc: [[moc-<topic>]]`
+-  `related: [[c-...], ...]`
+-  For Android: `android/<subtopic>` tags matching `subtopics`
+-  File in correct folder matching `topic`
 
 ---
 

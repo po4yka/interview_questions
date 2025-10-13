@@ -94,7 +94,7 @@ This is crucial: `catch` only catches exceptions from upstream operators, NOT fr
 flow {
     throw RuntimeException("Upstream error")
 }.catch { e ->
-    println("Caught: ${e.message}")  // ✅ Catches this
+    println("Caught: ${e.message}")  //  Catches this
 }.collect { value ->
     println(value)
 }
@@ -103,7 +103,7 @@ flow {
 flow {
     emit(1)
 }.catch { e ->
-    println("Caught: ${e.message}")  // ❌ Does NOT catch this
+    println("Caught: ${e.message}")  //  Does NOT catch this
 }.collect { value ->
     throw RuntimeException("Downstream error")  // Propagates to caller
 }
@@ -575,7 +575,7 @@ flow {
 flow {
     throw RuntimeException("Ошибка upstream")
 }.catch { e ->
-    println("Поймано: ${e.message}")  // ✅ Ловит это
+    println("Поймано: ${e.message}")  //  Ловит это
 }.collect { value ->
     println(value)
 }
@@ -584,7 +584,7 @@ flow {
 flow {
     emit(1)
 }.catch { e ->
-    println("Поймано: ${e.message}")  // ❌ НЕ ловит это
+    println("Поймано: ${e.message}")  //  НЕ ловит это
 }.collect { value ->
     throw RuntimeException("Ошибка downstream")  // Распространяется на вызывающего
 }

@@ -657,66 +657,66 @@ sealed class LiveUpdatesUiState {
 
 #### Use SSE When:
 
-✅ **One-Way Communication Needed**
+ **One-Way Communication Needed**
 - Server pushes updates to clients
 - No need for client to send messages back
 - Examples: notifications, live scores, stock prices
 
-✅ **Simple Implementation Required**
+ **Simple Implementation Required**
 - Built on standard HTTP
 - Native browser support
 - Easy to debug with standard tools
 
-✅ **Automatic Reconnection Important**
+ **Automatic Reconnection Important**
 - Built-in reconnection with exponential backoff
 - Event ID resumption support
 - No manual retry logic needed
 
-✅ **Proxy/Firewall Friendly**
+ **Proxy/Firewall Friendly**
 - Works through standard HTTP infrastructure
 - No special port requirements
 - Corporate firewall compatible
 
-✅ **Text-Based Data**
+ **Text-Based Data**
 - UTF-8 encoded messages
 - JSON data structures
 - No binary data requirements
 
 #### Use WebSocket When:
 
-✅ **Bidirectional Communication Required**
+ **Bidirectional Communication Required**
 - Client and server both send messages
 - Real-time interactions
 - Examples: chat apps, gaming, collaborative editing
 
-✅ **Low Latency Critical**
+ **Low Latency Critical**
 - Microsecond-level latency requirements
 - High-frequency updates
 - Examples: trading platforms, multiplayer games
 
-✅ **Binary Data Transfer**
+ **Binary Data Transfer**
 - Efficient binary protocol
 - Image/video streaming
 - Large data transfers
 
-✅ **Custom Protocol Needed**
+ **Custom Protocol Needed**
 - Full control over message format
 - Custom handshake requirements
 - Protocol-level optimizations
 
 #### Use Polling When:
 
-✅ **Simple Updates Sufficient**
+ **Simple Updates Sufficient**
 - Infrequent updates (> 30 seconds)
 - Not latency-sensitive
 - Examples: email checking, weather updates
 
-✅ **No Persistent Connection Support**
+ **No Persistent Connection Support**
 - Server limitations
 - Load balancer restrictions
 - Legacy infrastructure
 
-✅ **Stateless Preferred**
+ **Stateless Preferred**
 - Each request independent
 - Easy horizontal scaling
 - Simple load balancing
@@ -1092,46 +1092,46 @@ class SseClient(private val okHttpClient: OkHttpClient) {
 
 #### Используйте SSE когда:
 
-✅ **Нужна односторонняя связь**
+ **Нужна односторонняя связь**
 - Сервер отправляет обновления клиентам
 - Нет необходимости клиенту отправлять сообщения обратно
 - Примеры: уведомления, live счета, цены акций
 
-✅ **Требуется простая реализация**
+ **Требуется простая реализация**
 - Построен на стандартном HTTP
 - Нативная поддержка браузерами
 - Легко отлаживать стандартными инструментами
 
-✅ **Важно автоматическое переподключение**
+ **Важно автоматическое переподключение**
 - Встроенное переподключение с экспоненциальной задержкой
 - Поддержка возобновления по ID события
 - Не нужна ручная логика повторов
 
 #### Используйте WebSocket когда:
 
-✅ **Требуется двунаправленная связь**
+ **Требуется двунаправленная связь**
 - Клиент и сервер оба отправляют сообщения
 - Взаимодействие в реальном времени
 - Примеры: чат приложения, игры, совместное редактирование
 
-✅ **Критична низкая задержка**
+ **Критична низкая задержка**
 - Требования к задержке на уровне микросекунд
 - Высокочастотные обновления
 - Примеры: торговые платформы, мультиплеер игры
 
-✅ **Передача бинарных данных**
+ **Передача бинарных данных**
 - Эффективный бинарный протокол
 - Стриминг изображений/видео
 - Большие передачи данных
 
 #### Используйте Polling когда:
 
-✅ **Достаточно простых обновлений**
+ **Достаточно простых обновлений**
 - Нечастые обновления (> 30 секунд)
 - Не критична задержка
 - Примеры: проверка почты, обновления погоды
 
-✅ **Нет поддержки постоянного соединения**
+ **Нет поддержки постоянного соединения**
 - Ограничения сервера
 - Ограничения балансировщика нагрузки
 - Легаси инфраструктура
@@ -1235,3 +1235,21 @@ Server-Sent Events обеспечивают:
 **Выбирайте WebSocket для**: чат приложений, игр, совместного редактирования, двунаправленной связи в реальном времени
 
 **Выбирайте Polling для**: нечастых обновлений, легаси систем, простых реализаций
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-graphql-vs-rest--networking--easy]] - Networking
+
+### Related (Medium)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+- [[q-network-error-handling-strategies--networking--medium]] - Networking
+- [[q-api-file-upload-server--android--medium]] - Networking
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-network-request-deduplication--networking--hard]] - Networking

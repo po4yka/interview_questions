@@ -1,4 +1,6 @@
 ---
+topic: architecture-patterns
+subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 tags:
   - aggregation
   - composition
@@ -10,6 +12,10 @@ tags:
   - relationships
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-architecture-patterns
+related_questions: []
 ---
 
 # В чём различия наследования, композиции, агрегации?
@@ -253,25 +259,25 @@ designDept.addEmployee(bob)
 Animal (parent)
    ↑
    |
-   ├── Dog (child)
-   ├── Cat (child)
-   └── Bird (child)
+    Dog (child)
+    Cat (child)
+    Bird (child)
 ```
 
 ### Composition (Car owns Engine)
 ```
 Car
- ├── Engine     (owned, dies with Car)
- ├── Transmission (owned, dies with Car)
- └── Wheels     (owned, dies with Car)
+  Engine     (owned, dies with Car)
+  Transmission (owned, dies with Car)
+  Wheels     (owned, dies with Car)
 ```
 
 ### Aggregation (Department uses Employees)
 ```
 Department
- ├── Employee (independent, survives)
- ├── Employee (independent, survives)
- └── Employee (independent, survives)
+  Employee (independent, survives)
+  Employee (independent, survives)
+  Employee (independent, survives)
 ```
 
 ---
@@ -474,3 +480,17 @@ class ProductActivity : AppCompatActivity() {
 
 Выбор между наследованием, композицией и агрегацией зависит от конкретной задачи и требуемой гибкости архитектуры программного обеспечения. Как правило, рекомендуется использовать композицию или агрегацию для большей гибкости и меньшей связанности компонентов, в то время как наследование лучше подходит для случаев, когда чётко определена иерархическая модель с общим поведением.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-java-all-classes-inherit-from-object--programming-languages--easy]] - Inheritance
+- [[q-kotlin-enum-classes--kotlin--easy]] - Enums
+
+### Related (Medium)
+- [[q-when-inheritance-useful--oop--medium]] - Inheritance
+- [[q-inheritance-vs-composition--oop--medium]] - Inheritance
+- [[q-class-composition--oop--medium]] - Inheritance
+- [[q-java-marker-interfaces--programming-languages--medium]] - Inheritance

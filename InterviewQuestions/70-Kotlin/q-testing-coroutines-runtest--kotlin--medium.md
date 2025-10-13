@@ -61,7 +61,7 @@ class UserViewModel(private val repository: UserRepository) {
     }
 }
 
-// ❌ WRONG: Test will fail or take forever
+//  WRONG: Test will fail or take forever
 @Test
 fun `load user - wrong approach`() {
     val repository = UserRepository()
@@ -85,7 +85,7 @@ fun `load user - wrong approach`() {
 ### Solution: runTest and Virtual Time
 
 ```kotlin
-// ✅ CORRECT: Using runTest
+//  CORRECT: Using runTest
 @Test
 fun `load user - correct approach`() = runTest {
     val repository = FakeUserRepository()
@@ -833,43 +833,43 @@ fun `collect with take`() = runTest {
 ### Best Practices
 
 ```kotlin
-// ✅ DO: Use runTest for all coroutine tests
+//  DO: Use runTest for all coroutine tests
 @Test
 fun goodTest() = runTest {
     // Test code
 }
 
-// ❌ DON'T: Use runBlocking in tests
+//  DON'T: Use runBlocking in tests
 @Test
 fun badTest() = runBlocking { // Slow, doesn't skip delays
     delay(1000) // Actually waits 1 second!
 }
 
-// ✅ DO: Use MainDispatcherRule for ViewModels
+//  DO: Use MainDispatcherRule for ViewModels
 class ViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 }
 
-// ❌ DON'T: Forget to set Main dispatcher
+//  DON'T: Forget to set Main dispatcher
 @Test
 fun badViewModelTest() = runTest {
     val viewModel = MyViewModel() // CRASH: Dispatchers.Main not set!
 }
 
-// ✅ DO: Use fake repositories
+//  DO: Use fake repositories
 class FakeRepository : Repository {
     var result: Result<Data>? = null
     override suspend fun getData() = result!!.getOrThrow()
 }
 
-// ❌ DON'T: Use real repositories in unit tests
+//  DON'T: Use real repositories in unit tests
 @Test
 fun badTest() = runTest {
     val repo = RealRepository(apiService) // Network calls in unit tests!
 }
 
-// ✅ DO: Advance time explicitly with StandardTestDispatcher
+//  DO: Advance time explicitly with StandardTestDispatcher
 @Test
 fun goodTest() = runTest {
     launch { delay(100) }
@@ -877,14 +877,14 @@ fun goodTest() = runTest {
     // Assertions
 }
 
-// ❌ DON'T: Assume immediate execution with StandardTestDispatcher
+//  DON'T: Assume immediate execution with StandardTestDispatcher
 @Test
 fun badTest() = runTest {
     launch { /* code */ }
     // Assertions here - coroutine not executed yet!
 }
 
-// ✅ DO: Test state sequences
+//  DO: Test state sequences
 @Test
 fun goodTest() = runTest {
     val states = mutableListOf<State>()
@@ -899,7 +899,7 @@ fun goodTest() = runTest {
     job.cancel()
 }
 
-// ✅ DO: Use currentTime to verify timing
+//  DO: Use currentTime to verify timing
 @Test
 fun goodTest() = runTest {
     val start = currentTime
@@ -1002,7 +1002,7 @@ class UserViewModel(private val repository: UserRepository) {
     }
 }
 
-// ❌ НЕПРАВИЛЬНО: Тест провалится или зависнет
+//  НЕПРАВИЛЬНО: Тест провалится или зависнет
 @Test
 fun `load user - неправильный подход`() {
     val repository = UserRepository()
@@ -1024,7 +1024,7 @@ fun `load user - неправильный подход`() {
 ### Решение: runTest и виртуальное время
 
 ```kotlin
-// ✅ ПРАВИЛЬНО: Использование runTest
+//  ПРАВИЛЬНО: Использование runTest
 @Test
 fun `load user - правильный подход`() = runTest {
     val repository = FakeUserRepository()

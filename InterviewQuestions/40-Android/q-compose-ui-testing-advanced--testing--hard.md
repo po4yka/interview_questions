@@ -708,3 +708,45 @@ class CompleteScreenTest {
 8. **Мокируйте зависимости** с Hilt или manual injection
 9. **Держите тесты изолированными**
 10. **Тестируйте пользовательские потоки**, не детали реализации
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose, Ui
+- [[q-testing-compose-ui--android--medium]] - Compose, Testing
+- [[q-compose-testing--android--medium]] - Compose, Testing
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
+- [[q-compose-performance-optimization--android--hard]] - Compose
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose, Ui
+- [[q-testing-compose-ui--android--medium]] - Compose, Testing
+- [[q-compose-testing--android--medium]] - Compose, Testing
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
+- [[q-compose-performance-optimization--android--hard]] - Compose
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose, Ui
+- [[q-testing-compose-ui--android--medium]] - Compose, Testing
+- [[q-compose-testing--android--medium]] - Compose, Testing
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
+- [[q-compose-performance-optimization--android--hard]] - Compose

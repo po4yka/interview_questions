@@ -69,18 +69,18 @@ Result: Fast startup from first launch
 
 ```
 MyApp/
-├── app/                          # Main app module
-├── benchmark/                    # Macrobenchmark module (from earlier)
-├── baseline-profile/             # New profile generation module
-│   ├── build.gradle.kts
-│   └── src/
-│       └── main/
-│           └── AndroidManifest.xml
-│       └── androidTest/
-│           └── java/
-│               └── com/example/baselineprofile/
-│                   └── BaselineProfileGenerator.kt
-└── settings.gradle.kts
+ app/                          # Main app module
+ benchmark/                    # Macrobenchmark module (from earlier)
+ baseline-profile/             # New profile generation module
+    build.gradle.kts
+    src/
+        main/
+            AndroidManifest.xml
+        androidTest/
+            java/
+                com/example/baselineprofile/
+                    BaselineProfileGenerator.kt
+ settings.gradle.kts
 ```
 
 #### 2. Add Baseline Profile Module

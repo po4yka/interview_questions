@@ -45,7 +45,7 @@ What are side effects in Jetpack Compose and how do coroutines integrate with th
 **Why side effects matter:**
 
 ```kotlin
-// ❌ BAD: Side effect executed on every recomposition
+//  BAD: Side effect executed on every recomposition
 @Composable
 fun BadExample() {
     // This runs every time the composable recomposes!
@@ -54,7 +54,7 @@ fun BadExample() {
     Text("Hello")
 }
 
-// ✅ GOOD: Side effect executed once
+//  GOOD: Side effect executed once
 @Composable
 fun GoodExample() {
     LaunchedEffect(Unit) {
@@ -735,13 +735,13 @@ class EventViewModel : ViewModel() {
 **Mistakes to avoid:**
 
 ```kotlin
-// ❌ BAD: Side effect on every recomposition
+//  BAD: Side effect on every recomposition
 @Composable
 fun BadExample1() {
     fetchData() // Called on EVERY recomposition!
 }
 
-// ✅ GOOD: Wrap in LaunchedEffect
+//  GOOD: Wrap in LaunchedEffect
 @Composable
 fun GoodExample1() {
     LaunchedEffect(Unit) {
@@ -749,7 +749,7 @@ fun GoodExample1() {
     }
 }
 
-// ❌ BAD: Blocking operation in composable
+//  BAD: Blocking operation in composable
 @Composable
 fun BadExample2() {
     val data = runBlocking {
@@ -758,7 +758,7 @@ fun BadExample2() {
     Text(data)
 }
 
-// ✅ GOOD: Use produceState or LaunchedEffect
+//  GOOD: Use produceState or LaunchedEffect
 @Composable
 fun GoodExample2() {
     val data by produceState<String?>(null) {
@@ -767,7 +767,7 @@ fun GoodExample2() {
     data?.let { Text(it) }
 }
 
-// ❌ BAD: Forgetting key in LaunchedEffect
+//  BAD: Forgetting key in LaunchedEffect
 @Composable
 fun BadExample3(userId: String) {
     LaunchedEffect(Unit) {
@@ -776,7 +776,7 @@ fun BadExample3(userId: String) {
     }
 }
 
-// ✅ GOOD: Include dependencies in keys
+//  GOOD: Include dependencies in keys
 @Composable
 fun GoodExample3(userId: String) {
     LaunchedEffect(userId) {
@@ -784,7 +784,7 @@ fun GoodExample3(userId: String) {
     }
 }
 
-// ❌ BAD: Not cleaning up resources
+//  BAD: Not cleaning up resources
 @Composable
 fun BadExample4() {
     val listener = LocationListener { }
@@ -792,7 +792,7 @@ fun BadExample4() {
     // Never removed!
 }
 
-// ✅ GOOD: Use DisposableEffect for cleanup
+//  GOOD: Use DisposableEffect for cleanup
 @Composable
 fun GoodExample4() {
     DisposableEffect(Unit) {
@@ -909,7 +909,7 @@ fun testArticleLoading() = runTest {
 **Почему side effects важны:**
 
 ```kotlin
-// ❌ ПЛОХО: Side effect выполняется при каждой рекомпозиции
+//  ПЛОХО: Side effect выполняется при каждой рекомпозиции
 @Composable
 fun BadExample() {
     // Это выполняется каждый раз при рекомпозиции!
@@ -918,7 +918,7 @@ fun BadExample() {
     Text("Привет")
 }
 
-// ✅ ХОРОШО: Side effect выполняется один раз
+//  ХОРОШО: Side effect выполняется один раз
 @Composable
 fun GoodExample() {
     LaunchedEffect(Unit) {

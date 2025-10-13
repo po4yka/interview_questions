@@ -24,50 +24,50 @@ KMM and Flutter represent fundamentally different approaches to cross-platform d
 
 **KMM Architecture**
 ```
-┌─────────────────────────────────────┐
-│         Platform-Specific UI         │
-│   Android: Compose/Views             │
-│   iOS: SwiftUI/UIKit                 │
-└─────────────────────────────────────┘
+
+         Platform-Specific UI         
+   Android: Compose/Views             
+   iOS: SwiftUI/UIKit                 
+
                 ↓
-┌─────────────────────────────────────┐
-│      Shared Business Logic           │
-│   - Domain Layer (Use Cases)         │
-│   - Data Layer (Repositories)        │
-│   - Network Layer (Ktor)             │
-│   - Database (SQLDelight)            │
-│   Written in Kotlin                  │
-└─────────────────────────────────────┘
+
+      Shared Business Logic           
+   - Domain Layer (Use Cases)         
+   - Data Layer (Repositories)        
+   - Network Layer (Ktor)             
+   - Database (SQLDelight)            
+   Written in Kotlin                  
+
                 ↓
-┌─────────────────────────────────────┐
-│      Platform-Specific APIs          │
-│   Android: Android SDK               │
-│   iOS: iOS SDK (via Kotlin/Native)  │
-└─────────────────────────────────────┘
+
+      Platform-Specific APIs          
+   Android: Android SDK               
+   iOS: iOS SDK (via Kotlin/Native)  
+
 ```
 
 **Flutter Architecture**
 ```
-┌─────────────────────────────────────┐
-│         Flutter Framework            │
-│   - Widgets (UI Components)          │
-│   - Business Logic (Dart)            │
-│   - State Management                 │
-│   Written in Dart                    │
-└─────────────────────────────────────┘
+
+         Flutter Framework            
+   - Widgets (UI Components)          
+   - Business Logic (Dart)            
+   - State Management                 
+   Written in Dart                    
+
                 ↓
-┌─────────────────────────────────────┐
-│         Flutter Engine               │
-│   - Skia Graphics Engine             │
-│   - Dart Runtime                     │
-│   - Platform Channels                │
-└─────────────────────────────────────┘
+
+         Flutter Engine               
+   - Skia Graphics Engine             
+   - Dart Runtime                     
+   - Platform Channels                
+
                 ↓
-┌─────────────────────────────────────┐
-│      Platform-Specific APIs          │
-│   Android: Android Embedder          │
-│   iOS: iOS Embedder                  │
-└─────────────────────────────────────┘
+
+      Platform-Specific APIs          
+   Android: Android Embedder          
+   iOS: iOS Embedder                  
+
 ```
 
 **2. Code Sharing Comparison**
@@ -255,10 +255,10 @@ class ImageProcessor {
 // Requires mixed skillset
 
 Team Composition:
-├── Kotlin Developers (Shared logic) - 2-3 devs
-├── Android Developers (Android UI) - 2-3 devs
-├── iOS Developers (iOS UI) - 2-3 devs
-└── Total: 6-9 developers
+ Kotlin Developers (Shared logic) - 2-3 devs
+ Android Developers (Android UI) - 2-3 devs
+ iOS Developers (iOS UI) - 2-3 devs
+ Total: 6-9 developers
 
 Skills Required:
 - Kotlin (mandatory for shared code)
@@ -267,14 +267,14 @@ Skills Required:
 - Platform-specific knowledge
 
 Pros:
-✅ Native expertise for each platform
-✅ Best-in-class platform experiences
-✅ Access to latest platform features immediately
+ Native expertise for each platform
+ Best-in-class platform experiences
+ Access to latest platform features immediately
 
 Cons:
-❌ Need developers skilled in multiple platforms
-❌ Coordination overhead between teams
-❌ UI implementation duplicated
+ Need developers skilled in multiple platforms
+ Coordination overhead between teams
+ UI implementation duplicated
 ```
 
 **Flutter Team**
@@ -282,8 +282,8 @@ Cons:
 // Single skillset team
 
 Team Composition:
-├── Flutter Developers - 3-5 devs
-└── Total: 3-5 developers
+ Flutter Developers - 3-5 devs
+ Total: 3-5 developers
 
 Skills Required:
 - Dart language
@@ -291,15 +291,15 @@ Skills Required:
 - Basic platform knowledge (for plugins)
 
 Pros:
-✅ Smaller team size
-✅ Single codebase for UI
-✅ Faster feature development
-✅ Consistent UI across platforms
+ Smaller team size
+ Single codebase for UI
+ Faster feature development
+ Consistent UI across platforms
 
 Cons:
-❌ Less native platform expertise
-❌ May compromise on platform conventions
-❌ Dependency on Flutter community for platform features
+ Less native platform expertise
+ May compromise on platform conventions
+ Dependency on Flutter community for platform features
 ```
 
 **2. Development Velocity**
@@ -381,14 +381,14 @@ actual class LocationManager {
 }
 
 // Pros:
-// ✅ Zero overhead
-// ✅ Immediate access to new platform features
-// ✅ Full control over implementation
-// ✅ Type-safe platform APIs
+//  Zero overhead
+//  Immediate access to new platform features
+//  Full control over implementation
+//  Type-safe platform APIs
 
 // Cons:
-// ❌ Need to implement twice
-// ❌ Requires platform expertise
+//  Need to implement twice
+//  Requires platform expertise
 ```
 
 **Flutter - Platform Channels**
@@ -435,14 +435,14 @@ class LocationPlugin: NSObject, FlutterPlugin {
 }
 
 // Pros:
-// ✅ Consistent API from Dart
-// ✅ Single implementation for most features
+//  Consistent API from Dart
+//  Single implementation for most features
 
 // Cons:
-// ❌ Serialization overhead
-// ❌ Delayed access to new platform features
-// ❌ Type safety lost across bridge
-// ❌ Need platform channels for native features
+//  Serialization overhead
+//  Delayed access to new platform features
+//  Type safety lost across bridge
+//  Need platform channels for native features
 ```
 
 **2. Third-Party Libraries**
@@ -465,13 +465,13 @@ dependencies {
 }
 
 // Pros:
-// ✅ Access to entire Android/iOS ecosystems
-// ✅ No wrapper needed for platform libraries
-// ✅ Use best-of-breed libraries per platform
+//  Access to entire Android/iOS ecosystems
+//  No wrapper needed for platform libraries
+//  Use best-of-breed libraries per platform
 
 // Cons:
-// ❌ May need separate libraries per platform
-// ❌ Different APIs to learn
+//  May need separate libraries per platform
+//  Different APIs to learn
 ```
 
 **Flutter Ecosystem**
@@ -487,14 +487,14 @@ dependencies:
   # Single API for both platforms
 
 // Pros:
-// ✅ Large pub.dev ecosystem (40,000+ packages)
-// ✅ Single package for both platforms
-// ✅ Consistent APIs
+//  Large pub.dev ecosystem (40,000+ packages)
+//  Single package for both platforms
+//  Consistent APIs
 
 // Cons:
-// ❌ Some native libraries not available
-// ❌ Quality varies across packages
-// ❌ May lag behind platform features
+//  Some native libraries not available
+//  Quality varies across packages
+//  May lag behind platform features
 ```
 
 #### Use Case Decision Matrix
@@ -513,10 +513,10 @@ Priorities:
 - Integration with platform services
 
 KMM Advantage:
-✅ True native UI
-✅ Immediate platform API access
-✅ Platform security features
-✅ Familiar to platform users
+ True native UI
+ Immediate platform API access
+ Platform security features
+ Familiar to platform users
 ```
 
 2. **Existing Native Apps**
@@ -536,10 +536,10 @@ Migration Strategy:
 4. Gradual, low-risk migration
 
 KMM Advantage:
-✅ Incremental adoption
-✅ Keep existing Android code
-✅ Share only business logic
-✅ No UI rewrite needed
+ Incremental adoption
+ Keep existing Android code
+ Share only business logic
+ No UI rewrite needed
 ```
 
 3. **Performance-Critical Apps**
@@ -554,10 +554,10 @@ Requirements:
 - Minimal latency
 
 KMM Advantage:
-✅ Direct Metal/Vulkan access
-✅ Zero bridge overhead
-✅ Platform-optimized algorithms
-✅ Native memory management
+ Direct Metal/Vulkan access
+ Zero bridge overhead
+ Platform-optimized algorithms
+ Native memory management
 ```
 
 **Choose Flutter When:**
@@ -574,10 +574,10 @@ Priorities:
 - Limited budget
 
 Flutter Advantage:
-✅ Single codebase for UI
-✅ Hot reload for fast iteration
-✅ Rich widget library
-✅ Smaller team needed
+ Single codebase for UI
+ Hot reload for fast iteration
+ Rich widget library
+ Smaller team needed
 ```
 
 2. **Consistent Brand Experience**
@@ -592,10 +592,10 @@ Requirements:
 - Designer-driven UI
 
 Flutter Advantage:
-✅ Pixel-perfect custom UI
-✅ Same UI on all platforms
-✅ Advanced animation system
-✅ No platform UI constraints
+ Pixel-perfect custom UI
+ Same UI on all platforms
+ Advanced animation system
+ No platform UI constraints
 ```
 
 3. **Multi-Platform Beyond Mobile**
@@ -609,10 +609,10 @@ Target Platforms:
 - Windows, Mac, Linux
 
 Flutter Advantage:
-✅ Single codebase for 6+ platforms
-✅ Consistent experience everywhere
-✅ Web support out of box
-✅ Desktop support stable
+ Single codebase for 6+ platforms
+ Consistent experience everywhere
+ Web support out of box
+ Desktop support stable
 ```
 
 #### Migration Scenarios
@@ -623,21 +623,21 @@ Flutter Advantage:
 
 Phase 1: Extract data layer
 shared/
-  └── data/
-      ├── repository/
-      ├── network/
-      └── database/
+   data/
+       repository/
+       network/
+       database/
 
 Phase 2: Extract domain layer
 shared/
-  └── domain/
-      ├── model/
-      └── usecase/
+   domain/
+       model/
+       usecase/
 
 Phase 3: Share ViewModels (optional)
 shared/
-  └── presentation/
-      └── viewmodel/
+   presentation/
+       viewmodel/
 
 Keep Native:
 - UI components
@@ -679,11 +679,11 @@ Code Reuse: 90-95%
 
 // Example: Clean separation
 commonMain/
-  └── domain/  // Pure business logic
+   domain/  // Pure business logic
 androidMain/
-  └── ui/      // Android-specific UI
+   ui/      // Android-specific UI
 iosMain/
-  └── ui/      // iOS-specific UI
+   ui/      // iOS-specific UI
 ```
 
 **Flutter Best Practices**
@@ -831,16 +831,16 @@ KMM и Flutter представляют фундаментально разны�
 #### Platform Integration
 
 **KMM**:
-- ✅ Прямой доступ к native APIs
-- ✅ Zero overhead
-- ✅ Мгновенный доступ к новым features
-- ❌ Нужно реализовывать дважды
+-  Прямой доступ к native APIs
+-  Zero overhead
+-  Мгновенный доступ к новым features
+-  Нужно реализовывать дважды
 
 **Flutter**:
-- ✅ Единый API из Dart
-- ✅ Consistent interface
-- ❌ Platform channel overhead
-- ❌ Задержка с новыми platform features
+-  Единый API из Dart
+-  Consistent interface
+-  Platform channel overhead
+-  Задержка с новыми platform features
 
 #### Use Cases
 

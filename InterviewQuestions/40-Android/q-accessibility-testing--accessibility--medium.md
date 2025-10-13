@@ -37,26 +37,26 @@ Installation:
 3. Tap floating action button to scan screen
 
 What it checks:
-✅ Touch target sizes (minimum 48dp)
-✅ Content descriptions
-✅ Text contrast ratios
-✅ Clickable items
-✅ Content labeling
-✅ Implementation suggestions
+ Touch target sizes (minimum 48dp)
+ Content descriptions
+ Text contrast ratios
+ Clickable items
+ Content labeling
+ Implementation suggestions
 ```
 
 **Scanner findings example**:
 ```
-❌ Item 1: "Touch target too small"
+ Item 1: "Touch target too small"
    - Current: 32dp x 32dp
    - Minimum: 48dp x 48dp
    - Suggestion: Increase button size or add padding
 
-❌ Item 2: "Missing contentDescription"
+ Item 2: "Missing contentDescription"
    - Element: ImageButton
    - Suggestion: Add contentDescription
 
-❌ Item 3: "Low contrast ratio"
+ Item 3: "Low contrast ratio"
    - Current: 2.1:1
    - Minimum: 4.5:1 (WCAG AA)
    - Suggestion: Increase contrast or use different colors
@@ -86,28 +86,28 @@ android {
 **Common lint warnings**:
 
 ```xml
-<!-- ❌ Missing contentDescription -->
+<!--  Missing contentDescription -->
 <ImageView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/icon" />
 <!-- Warning: [ContentDescription] Missing contentDescription attribute on image -->
 
-<!-- ✅ GOOD -->
+<!--  GOOD -->
 <ImageView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/icon"
     android:contentDescription="@string/icon_description" />
 
-<!-- ❌ Touch target too small -->
+<!--  Touch target too small -->
 <ImageButton
     android:layout_width="24dp"
     android:layout_height="24dp"
     android:src="@drawable/icon" />
 <!-- Warning: [TouchTargetSizeCheck] Touch target is 24x24dp, should be at least 48x48dp -->
 
-<!-- ✅ GOOD -->
+<!--  GOOD -->
 <ImageButton
     android:layout_width="48dp"
     android:layout_height="48dp"
@@ -669,7 +669,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '❌ Accessibility tests failed. Please review the results.'
+              body: ' Accessibility tests failed. Please review the results.'
             })
 ```
 
@@ -677,54 +677,54 @@ jobs:
 
 1. **Run accessibility tests in CI**
    ```kotlin
-   // ✅ GOOD - Catch issues early
+   //  GOOD - Catch issues early
    ./gradlew testDebugUnitTest connectedDebugAndroidTest
 
-   // ❌ BAD - Only manual testing
+   //  BAD - Only manual testing
    ```
 
 2. **Test with real assistive technologies**
    ```
-   ✅ Test with TalkBack enabled
-   ✅ Test with large text sizes
-   ✅ Test with high contrast mode
-   ✅ Test with display scaling
-   ✅ Test with Switch Access
+    Test with TalkBack enabled
+    Test with large text sizes
+    Test with high contrast mode
+    Test with display scaling
+    Test with Switch Access
    ```
 
 3. **Automate repetitive checks**
    ```kotlin
-   // ✅ GOOD - Automated checks
+   //  GOOD - Automated checks
    @Test
    fun testAllImagesHaveContentDescriptions() {
        // Automated check for all ImageViews
    }
 
-   // ❌ BAD - Manual only
+   //  BAD - Manual only
    ```
 
 4. **Test early and often**
    ```
-   ✅ Add accessibility tests from the start
-   ✅ Run tests on every commit
-   ✅ Include in PR reviews
+    Add accessibility tests from the start
+    Run tests on every commit
+    Include in PR reviews
    ```
 
 5. **Get user feedback**
    ```
-   ✅ Test with users who rely on assistive technology
-   ✅ Conduct usability studies
-   ✅ Gather feedback through support channels
+    Test with users who rely on assistive technology
+    Conduct usability studies
+    Gather feedback through support channels
    ```
 
 ### Summary
 
 **Testing approaches:**
-1. ✅ **Manual testing** - TalkBack, Scanner, real devices
-2. ✅ **Automated testing** - Espresso, Compose Test, Robolectric
-3. ✅ **Lint checks** - Catch issues at build time
-4. ✅ **CI/CD integration** - Run tests automatically
-5. ✅ **User testing** - Feedback from real users
+1.  **Manual testing** - TalkBack, Scanner, real devices
+2.  **Automated testing** - Espresso, Compose Test, Robolectric
+3.  **Lint checks** - Catch issues at build time
+4.  **CI/CD integration** - Run tests automatically
+5.  **User testing** - Feedback from real users
 
 **Key tools:**
 - **Accessibility Scanner** - Visual UI analysis
@@ -759,11 +759,11 @@ jobs:
 ### Резюме
 
 **Подходы к тестированию:**
-1. ✅ **Ручное тестирование** — TalkBack, Scanner, реальные устройства
-2. ✅ **Автоматизированное тестирование** — Espresso, Compose Test, Robolectric
-3. ✅ **Lint-проверки** — отлов проблем на этапе сборки
-4. ✅ **Интеграция с CI/CD** — автоматический запуск тестов
-5. ✅ **Тестирование с пользователями** — обратная связь от реальных пользователей
+1.  **Ручное тестирование** — TalkBack, Scanner, реальные устройства
+2.  **Автоматизированное тестирование** — Espresso, Compose Test, Robolectric
+3.  **Lint-проверки** — отлов проблем на этапе сборки
+4.  **Интеграция с CI/CD** — автоматический запуск тестов
+5.  **Тестирование с пользователями** — обратная связь от реальных пользователей
 
 **Ключевые инструменты:**
 - **Accessibility Scanner** — визуальный анализ UI
@@ -786,3 +786,17 @@ jobs:
 - Падать сборку при нарушениях доступности
 - Загружать отчёты для review
 - Комментировать PR при падениях
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing
+- [[q-accessibility-compose--accessibility--medium]] - Accessibility
+- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-coroutines-flow--testing--hard]] - Testing

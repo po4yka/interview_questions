@@ -70,38 +70,38 @@ Designing an Uber-like application involves complex real-time location tracking,
 ### 2. High-Level Architecture
 
 ```
-┌──────────────┐        ┌──────────────┐
-│  Rider App   │        │  Driver App  │
-└──────┬───────┘        └──────┬───────┘
-       │                       │
-       ├───────────┬───────────┤
-       │           │           │
-       ├── REST API (Ride management)
-       ├── WebSocket (Real-time location)
-       ├── Google Maps API
-       └── Payment Gateway
-       │
-┌──────▼──────────────────────┐
-│    Load Balancer/API Gateway│
-└──────┬──────────────────────┘
-       │
-┌──────▼──────────────────────┐
-│  Microservices Architecture │
-│  ┌────────────────────────┐ │
-│  │ Location Service       │ │
-│  │ Matching Service       │ │
-│  │ Ride Service           │ │
-│  │ Payment Service        │ │
-│  │ Notification Service   │ │
-│  │ Pricing Service        │ │
-│  └────────────────────────┘ │
-└─────────────────────────────┘
-       │
-       ├─── Geospatial DB (Redis GeoHash)
-       ├─── Relational DB (PostgreSQL)
-       ├─── Message Queue (Kafka)
-       ├─── Cache (Redis)
-       └─── Maps Service (Google Maps)
+        
+  Rider App             Driver App  
+        
+                              
+       
+                             
+        REST API (Ride management)
+        WebSocket (Real-time location)
+        Google Maps API
+        Payment Gateway
+       
+
+    Load Balancer/API Gateway
+
+       
+
+  Microservices Architecture 
+   
+   Location Service        
+   Matching Service        
+   Ride Service            
+   Payment Service         
+   Notification Service    
+   Pricing Service         
+   
+
+       
+        Geospatial DB (Redis GeoHash)
+        Relational DB (PostgreSQL)
+        Message Queue (Kafka)
+        Cache (Redis)
+        Maps Service (Google Maps)
 ```
 
 ### 3. Android App Architecture

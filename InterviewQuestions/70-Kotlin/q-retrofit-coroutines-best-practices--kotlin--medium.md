@@ -73,19 +73,19 @@ Retrofit with Kotlin Coroutines provides a modern, efficient way to handle netwo
 
 ```kotlin
 interface ApiService {
-    // ✅ Modern approach: suspend function
+    //  Modern approach: suspend function
     @GET("users/{id}")
     suspend fun getUser(@Path("id") userId: String): User
 
-    // ✅ With Response wrapper for headers/status
+    //  With Response wrapper for headers/status
     @GET("users/{id}")
     suspend fun getUserWithResponse(@Path("id") userId: String): Response<User>
 
-    // ❌ Old approach: Call<T> (not needed with coroutines)
+    //  Old approach: Call<T> (not needed with coroutines)
     @GET("users/{id}")
     fun getUserOld(@Path("id") userId: String): Call<User>
 
-    // ✅ Multiple suspend operations
+    //  Multiple suspend operations
     @POST("users")
     suspend fun createUser(@Body user: UserRequest): User
 
@@ -95,14 +95,14 @@ interface ApiService {
     @DELETE("users/{id}")
     suspend fun deleteUser(@Path("id") id: String): Unit
 
-    // ✅ Query parameters
+    //  Query parameters
     @GET("users")
     suspend fun getUsers(
         @Query("page") page: Int,
         @Query("limit") limit: Int
     ): List<User>
 
-    // ✅ Headers
+    //  Headers
     @GET("profile")
     suspend fun getProfile(@Header("Authorization") token: String): Profile
 }
@@ -1639,22 +1639,22 @@ val okHttpClient = OkHttpClient.Builder()
 
 ## Best Practices Checklist
 
-### Do's ✅
+### Do's 
 
 1. **Use suspend functions instead of Call&lt;T&gt;**
    ```kotlin
-   // ✅ Good
+   //  Good
    @GET("users/{id}")
    suspend fun getUser(@Path("id") id: String): User
 
-   // ❌ Avoid
+   //  Avoid
    @GET("users/{id}")
    fun getUser(@Path("id") id: String): Call<User>
    ```
 
 2. **Handle cancellation properly**
    ```kotlin
-   // ✅ Good
+   //  Good
    try {
        val user = api.getUser(id)
    } catch (e: CancellationException) {
@@ -1666,12 +1666,12 @@ val okHttpClient = OkHttpClient.Builder()
 
 3. **Use appropriate dispatcher**
    ```kotlin
-   // ✅ Good - Retrofit already uses background thread
+   //  Good - Retrofit already uses background thread
    suspend fun getUser(id: String): User {
        return api.getUser(id) // No withContext needed
    }
 
-   // ✅ Good - Only for database operations
+   //  Good - Only for database operations
    suspend fun getUserFromDb(id: String): User {
        return withContext(Dispatchers.IO) {
            userDao.getUser(id)
@@ -1681,7 +1681,7 @@ val okHttpClient = OkHttpClient.Builder()
 
 4. **Implement proper timeout configuration**
    ```kotlin
-   // ✅ Good
+   //  Good
    val okHttpClient = OkHttpClient.Builder()
        .connectTimeout(30, TimeUnit.SECONDS)
        .readTimeout(30, TimeUnit.SECONDS)
@@ -1691,7 +1691,7 @@ val okHttpClient = OkHttpClient.Builder()
 
 5. **Use structured concurrency for parallel requests**
    ```kotlin
-   // ✅ Good
+   //  Good
    suspend fun loadData() = coroutineScope {
        val user = async { api.getUser() }
        val posts = async { api.getPosts() }
@@ -1701,7 +1701,7 @@ val okHttpClient = OkHttpClient.Builder()
 
 6. **Implement proper error handling**
    ```kotlin
-   // ✅ Good
+   //  Good
    sealed class Result<out T> {
        data class Success<T>(val data: T) : Result<T>()
        data class Error(val exception: Throwable) : Result<Nothing>()
@@ -1710,7 +1710,7 @@ val okHttpClient = OkHttpClient.Builder()
 
 7. **Cache with Room for offline support**
    ```kotlin
-   // ✅ Good
+   //  Good
    suspend fun getUser(id: String) = flow {
        emit(userDao.getUser(id)) // Emit cached
        val fresh = api.getUser(id)
@@ -1720,23 +1720,23 @@ val okHttpClient = OkHttpClient.Builder()
 
 8. **Use Flow for reactive streams**
    ```kotlin
-   // ✅ Good
+   //  Good
    fun observeUser(id: String): Flow<User> =
        userDao.observeUser(id)
    ```
 
-### Don'ts ❌
+### Don'ts 
 
 1. **Don't use Call&lt;T&gt; with coroutines**
    ```kotlin
-   // ❌ Bad
+   //  Bad
    val call = api.getUser(id)
    call.enqueue(object : Callback<User> { ... })
    ```
 
 2. **Don't ignore cancellation**
    ```kotlin
-   // ❌ Bad
+   //  Bad
    try {
        val user = api.getUser(id)
    } catch (e: Exception) {
@@ -1746,12 +1746,12 @@ val okHttpClient = OkHttpClient.Builder()
 
 3. **Don't use GlobalScope**
    ```kotlin
-   // ❌ Bad
+   //  Bad
    GlobalScope.launch {
        val user = api.getUser(id)
    }
 
-   // ✅ Good
+   //  Good
    viewModelScope.launch {
        val user = api.getUser(id)
    }
@@ -1759,7 +1759,7 @@ val okHttpClient = OkHttpClient.Builder()
 
 4. **Don't use runBlocking in production code**
    ```kotlin
-   // ❌ Bad
+   //  Bad
    fun getUser(id: String): User {
        return runBlocking {
            api.getUser(id)
@@ -1769,12 +1769,12 @@ val okHttpClient = OkHttpClient.Builder()
 
 5. **Don't forget to handle errors**
    ```kotlin
-   // ❌ Bad
+   //  Bad
    suspend fun getUser(id: String): User {
        return api.getUser(id) // What if it fails?
    }
 
-   // ✅ Good
+   //  Good
    suspend fun getUser(id: String): Result<User> {
        return try {
            Result.Success(api.getUser(id))
@@ -1786,10 +1786,10 @@ val okHttpClient = OkHttpClient.Builder()
 
 6. **Don't use synchronous OkHttp calls**
    ```kotlin
-   // ❌ Bad
+   //  Bad
    val response = okHttpClient.newCall(request).execute()
 
-   // ✅ Good
+   //  Good
    suspend fun makeRequest() {
        api.getUser(id)
    }
@@ -1797,7 +1797,7 @@ val okHttpClient = OkHttpClient.Builder()
 
 7. **Don't create new Retrofit instance for each request**
    ```kotlin
-   // ❌ Bad
+   //  Bad
    fun getApi(): ApiService {
        return Retrofit.Builder()
            .baseUrl(BASE_URL)
@@ -1805,7 +1805,7 @@ val okHttpClient = OkHttpClient.Builder()
            .create(ApiService::class.java)
    }
 
-   // ✅ Good - Singleton
+   //  Good - Singleton
    object RetrofitClient {
        val api: ApiService = Retrofit.Builder()
            .baseUrl(BASE_URL)
@@ -2164,7 +2164,7 @@ object RepositoryModule {
 ### 1. Not Re-throwing CancellationException
 
 ```kotlin
-// ❌ Wrong
+//  Wrong
 try {
     val user = api.getUser(id)
 } catch (e: Exception) {
@@ -2172,7 +2172,7 @@ try {
     Log.e("Error", "Failed", e)
 }
 
-// ✅ Correct
+//  Correct
 try {
     val user = api.getUser(id)
 } catch (e: CancellationException) {
@@ -2185,14 +2185,14 @@ try {
 ### 2. Using withContext(Dispatchers.IO) for Retrofit
 
 ```kotlin
-// ❌ Wrong - Unnecessary dispatcher switch
+//  Wrong - Unnecessary dispatcher switch
 suspend fun getUser(id: String): User {
     return withContext(Dispatchers.IO) {
         api.getUser(id) // Retrofit already uses background thread
     }
 }
 
-// ✅ Correct
+//  Correct
 suspend fun getUser(id: String): User {
     return api.getUser(id)
 }
@@ -2201,11 +2201,11 @@ suspend fun getUser(id: String): User {
 ### 3. Not Handling Response Body Null
 
 ```kotlin
-// ❌ Wrong
+//  Wrong
 val response = api.getUserWithResponse(id)
 val user = response.body()!! // Can throw NPE!
 
-// ✅ Correct
+//  Correct
 val response = api.getUserWithResponse(id)
 val user = response.body() ?: throw Exception("Empty response body")
 ```
@@ -2213,14 +2213,14 @@ val user = response.body() ?: throw Exception("Empty response body")
 ### 4. Forgetting to Close Error Body
 
 ```kotlin
-// ❌ Wrong - Memory leak
+//  Wrong - Memory leak
 val response = api.getUserWithResponse(id)
 if (!response.isSuccessful) {
     val error = response.errorBody()?.string()
     // errorBody not closed!
 }
 
-// ✅ Correct
+//  Correct
 val response = api.getUserWithResponse(id)
 if (!response.isSuccessful) {
     response.errorBody()?.use { errorBody ->
@@ -2232,7 +2232,7 @@ if (!response.isSuccessful) {
 ### 5. Creating Multiple Retrofit Instances
 
 ```kotlin
-// ❌ Wrong
+//  Wrong
 class UserRepository {
     private fun getApi(): ApiService {
         return Retrofit.Builder()
@@ -2242,7 +2242,7 @@ class UserRepository {
     }
 }
 
-// ✅ Correct - Singleton
+//  Correct - Singleton
 object RetrofitClient {
     val api: ApiService by lazy {
         Retrofit.Builder()
@@ -2256,10 +2256,10 @@ object RetrofitClient {
 ### 6. Not Implementing Proper Timeout
 
 ```kotlin
-// ❌ Wrong - Using default timeouts (10 seconds)
+//  Wrong - Using default timeouts (10 seconds)
 val okHttpClient = OkHttpClient.Builder().build()
 
-// ✅ Correct
+//  Correct
 val okHttpClient = OkHttpClient.Builder()
     .connectTimeout(30, TimeUnit.SECONDS)
     .readTimeout(30, TimeUnit.SECONDS)
@@ -2270,14 +2270,14 @@ val okHttpClient = OkHttpClient.Builder()
 ### 7. Blocking Main Thread with runBlocking
 
 ```kotlin
-// ❌ Wrong
+//  Wrong
 fun onCreate() {
     val user = runBlocking {
         api.getUser("123")
     } // Blocks UI thread!
 }
 
-// ✅ Correct
+//  Correct
 fun onCreate() {
     lifecycleScope.launch {
         val user = api.getUser("123")
@@ -2395,15 +2395,15 @@ Retrofit с Kotlin корутинами предоставляет соврем�
 
 ```kotlin
 interface ApiService {
-    // ✅ Современный подход: suspend функция
+    //  Современный подход: suspend функция
     @GET("users/{id}")
     suspend fun getUser(@Path("id") userId: String): User
 
-    // ✅ С Response обёрткой для заголовков/статуса
+    //  С Response обёрткой для заголовков/статуса
     @GET("users/{id}")
     suspend fun getUserWithResponse(@Path("id") userId: String): Response<User>
 
-    // ❌ Старый подход: Call<T> (не нужен с корутинами)
+    //  Старый подход: Call<T> (не нужен с корутинами)
     @GET("users/{id}")
     fun getUserOld(@Path("id") userId: String): Call<User>
 }

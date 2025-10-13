@@ -10,6 +10,10 @@ tags:
   - strictmode
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Why Does Android App Lag? Analysis and Solutions
@@ -31,7 +35,7 @@ App lag occurs when the UI thread is blocked or frame rendering exceeds 16ms (60
 **1.1 Main Thread Blocking**
 
 ```kotlin
-// ❌ BAD: Blocking main thread
+//  BAD: Blocking main thread
 class BadViewModel : ViewModel() {
     fun loadData() {
         // This blocks UI thread!
@@ -47,7 +51,7 @@ class BadViewModel : ViewModel() {
     }
 }
 
-// ✅ GOOD: Async operations
+//  GOOD: Async operations
 class GoodViewModel(
     private val repository: UserRepository
 ) : ViewModel() {
@@ -79,7 +83,7 @@ class GoodViewModel(
 **1.2 Memory Issues**
 
 ```kotlin
-// ❌ BAD: Memory leak causing lag
+//  BAD: Memory leak causing lag
 class LeakyActivity : AppCompatActivity() {
     companion object {
         // Static reference keeps Activity alive!
@@ -96,7 +100,7 @@ class LeakyActivity : AppCompatActivity() {
     }
 }
 
-// ✅ GOOD: Proper lifecycle management
+//  GOOD: Proper lifecycle management
 class ProperActivity : AppCompatActivity() {
     private lateinit var viewModel: DataViewModel
 
@@ -117,7 +121,7 @@ class ProperActivity : AppCompatActivity() {
 **1.3 Overdraw and Complex Layouts**
 
 ```kotlin
-// ❌ BAD: Deep view hierarchy
+//  BAD: Deep view hierarchy
 <LinearLayout>
     <RelativeLayout>
         <FrameLayout>
@@ -128,14 +132,14 @@ class ProperActivity : AppCompatActivity() {
     </RelativeLayout>
 </LinearLayout>
 
-// ✅ GOOD: Flat hierarchy
+//  GOOD: Flat hierarchy
 <ConstraintLayout>
     <TextView
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 </ConstraintLayout>
 
-// ✅ BETTER: Compose (no XML overhead)
+//  BETTER: Compose (no XML overhead)
 @Composable
 fun OptimizedScreen() {
     Text(
@@ -361,10 +365,10 @@ recyclerView.apply {
 **3.2 Image Loading Optimization**
 
 ```kotlin
-// ❌ BAD: Loading large images
+//  BAD: Loading large images
 imageView.setImageBitmap(BitmapFactory.decodeFile(largeImagePath))
 
-// ✅ GOOD: Proper image loading
+//  GOOD: Proper image loading
 class ImageLoader {
     fun loadOptimized(
         imageView: ImageView,
@@ -455,15 +459,15 @@ class OptimizedActivity : AppCompatActivity() {
 ```kotlin
 @Dao
 interface UserDao {
-    // ❌ BAD: Loading all data at once
+    //  BAD: Loading all data at once
     @Query("SELECT * FROM users")
     fun getAllUsers(): List<User>
 
-    // ✅ GOOD: Pagination
+    //  GOOD: Pagination
     @Query("SELECT * FROM users ORDER BY id LIMIT :limit OFFSET :offset")
     suspend fun getUsersPaged(limit: Int, offset: Int): List<User>
 
-    // ✅ BETTER: PagingSource
+    //  BETTER: PagingSource
     @Query("SELECT * FROM users ORDER BY id")
     fun getUsersPagingSource(): PagingSource<Int, User>
 
@@ -649,3 +653,18 @@ class TrackedOperation {
 - Асинхронная загрузка
 - Sampling больших изображений
 - Кэширование
+
+---
+
+## Related Questions
+
+### Backend Concepts
+- [[q-virtual-tables-disadvantages--backend--medium]] - Performance
+- [[q-sql-join-algorithms-complexity--backend--hard]] - Performance
+
+### Kotlin Language Features
+- [[q-deferred-async-patterns--kotlin--medium]] - Performance
+- [[q-channel-buffering-strategies--kotlin--hard]] - Performance
+- [[q-custom-dispatchers-limited-parallelism--kotlin--hard]] - Performance
+- [[q-kotlin-inline-functions--kotlin--medium]] - Performance
+- [[q-instant-search-flow-operators--kotlin--medium]] - Performance

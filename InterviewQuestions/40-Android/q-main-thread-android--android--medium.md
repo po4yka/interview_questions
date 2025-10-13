@@ -65,7 +65,7 @@ button.setOnClickListener {
     textView.text = data
 }
 
-// ✓ ПРАВИЛЬНО - выполнить в фоновом потоке
+//  ПРАВИЛЬНО - выполнить в фоновом потоке
 button.setOnClickListener {
     lifecycleScope.launch(Dispatchers.IO) {
         val data = URL("https://api.example.com/data").readText()
@@ -129,7 +129,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
     Thread.sleep(6000)  // ANR!
 }
 
-// ✓ ПРАВИЛЬНО - длительные операции в фоне
+//  ПРАВИЛЬНО - длительные операции в фоне
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)

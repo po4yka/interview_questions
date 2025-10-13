@@ -25,11 +25,11 @@ This library is part of **Android Architecture Components** introduced by Google
 **Key Benefits:**
 
 Room provides abstraction over SQLite with the goal of:
-- 🛡️ **Type safety** - compile-time SQL verification
-- 📝 **Less boilerplate** - reduces manual code
-- 🔗 **Easy integration** with LiveData, Flow, and RxJava
+-  **Type safety** - compile-time SQL verification
+-  **Less boilerplate** - reduces manual code
+-  **Easy integration** with LiveData, Flow, and RxJava
 - - **SQL query validation** at compile time
-- 🏗️ **Architecture support** - works with MVVM, Clean Architecture
+-  **Architecture support** - works with MVVM, Clean Architecture
 
 **Three Main Components:**
 
@@ -193,3 +193,16 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "app-db")
 ## Ответ (RU)
 Room — это библиотека управления базами данных, которая служит абстрактным слоем над SQLite для удобного доступа к базе данных. Эта библиотека является частью Android Architecture Components, представленных Google для упрощения разработки стабильных и производительных приложений. Room предоставляет абстракцию над SQLite с целью обеспечения более чистого доступа к базе данных, сохраняя при этом полную мощь SQLite. Основные возможности: типобезопасность, уменьшение шаблонного кода, легкая интеграция с LiveData и RxJava и проверка SQL-запросов во время компиляции. Основные компоненты: Database, Entity и DAO.
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-sharedpreferences-definition--android--easy]] - Storage
+
+### Advanced (Harder)
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-transactions-dao--room--medium]] - Storage
+- [[q-room-paging3-integration--room--medium]] - Storage

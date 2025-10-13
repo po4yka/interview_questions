@@ -11,6 +11,10 @@ tags:
   - profiling
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Как определить изменение скорости работы программы после наших действий?
@@ -194,3 +198,16 @@ All these methods allow comparing data before and after optimization to assess p
 - **StrictMode** - помогает обнаружить операции, замедляющие работу приложения в главном потоке
 - **Systrace** - позволяет собирать трассировки производительности системы
 
+
+---
+
+## Related Questions
+
+### Kotlin Language Features
+- [[q-deferred-async-patterns--kotlin--medium]] - Performance
+- [[q-inline-value-classes-performance--kotlin--medium]] - Performance
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance
+- [[q-sequences-vs-collections-performance--kotlin--medium]] - Performance
+- [[q-flow-performance--kotlin--hard]] - Performance
+- [[q-dispatcher-performance--kotlin--hard]] - Performance
+- [[q-channel-buffering-strategies--kotlin--hard]] - Performance

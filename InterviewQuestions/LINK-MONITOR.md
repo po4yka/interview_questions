@@ -1,10 +1,10 @@
-# 🔍 Quick Link Monitor
+#  Quick Link Monitor
 
 **Quick Status Check** - Auto-updates when opened
 
 ---
 
-## ⚡ Quick Health Check
+##  Quick Health Check
 
 ```dataviewjs
 const files = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci" or "20-Algorithms" or "50-Backend" or "80-Tools"')
@@ -29,21 +29,21 @@ for (let file of files) {
 }
 
 const health = totalLinks > 0 ? Math.round(((totalLinks - brokenLinks) / totalLinks) * 100) : 100;
-const emoji = health >= 90 ? '🟢' : health >= 70 ? '🟡' : '🔴';
+const emoji = health >= 90 ? '🟢' : health >= 70 ? '🟡' : '';
 
 dv.paragraph(`# ${emoji} ${health}%`);
 dv.paragraph(`**${totalLinks}** total links | **${brokenLinks}** broken | **${totalLinks - brokenLinks}** valid`);
 
 if (brokenLinks > 0) {
-    dv.paragraph(`⚠️ **${brokenLinks} broken links need attention**`);
+    dv.paragraph(` **${brokenLinks} broken links need attention**`);
 } else {
-    dv.paragraph(`✅ **All links are healthy!**`);
+    dv.paragraph(` **All links are healthy!**`);
 }
 ```
 
 ---
 
-## 📋 Today's Top Issues
+##  Today's Top Issues
 
 ```dataviewjs
 const files = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci"')
@@ -74,7 +74,7 @@ const topIssues = Object.entries(brokenByTarget)
     .slice(0, 5);
 
 if (topIssues.length > 0) {
-    dv.header(3, "🔥 Top 5 Missing Files");
+    dv.header(3, " Top 5 Missing Files");
     dv.table(
         ["Missing File", "References"],
         topIssues.map(([file, count]) => [
@@ -83,13 +83,13 @@ if (topIssues.length > 0) {
         ])
     );
 } else {
-    dv.paragraph("✅ No issues!");
+    dv.paragraph(" No issues!");
 }
 ```
 
 ---
 
-## 🔗 Full Reports
+##  Full Reports
 
 - **[Link Health Dashboard](00-Administration/LINK-HEALTH-DASHBOARD.md)** - Comprehensive analysis
 - **[Homepage](Homepage.md)** - Link Health Monitor section

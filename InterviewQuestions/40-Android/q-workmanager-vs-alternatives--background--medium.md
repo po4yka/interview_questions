@@ -23,24 +23,24 @@ Android provides multiple APIs for background work, each with different capabili
 
 | API | Best For | Guarantees | Survives | Timing | Constraints |
 |-----|----------|------------|----------|---------|-------------|
-| **WorkManager** | Deferrable guaranteed work | ✅ Guaranteed | Reboots, app updates | Flexible | Network, battery, storage |
-| **AlarmManager** | Time-critical tasks | ✅ Exact timing | Reboots | Exact or window | None |
-| **JobScheduler** | Scheduled background work | ✅ Guaranteed | Reboots | Flexible | Network, charging, idle |
-| **Foreground Service** | User-visible ongoing work | ⚠️ User can stop | While running | Immediate | None |
-| **Coroutines** | Short async tasks | ❌ Not guaranteed | Only while app alive | Immediate | None |
+| **WorkManager** | Deferrable guaranteed work |  Guaranteed | Reboots, app updates | Flexible | Network, battery, storage |
+| **AlarmManager** | Time-critical tasks |  Exact timing | Reboots | Exact or window | None |
+| **JobScheduler** | Scheduled background work |  Guaranteed | Reboots | Flexible | Network, charging, idle |
+| **Foreground Service** | User-visible ongoing work |  User can stop | While running | Immediate | None |
+| **Coroutines** | Short async tasks |  Not guaranteed | Only while app alive | Immediate | None |
 
 ### WorkManager
 
 **Use when:**
-- ✅ Work must eventually complete (guaranteed)
-- ✅ Work can be deferred (flexible timing)
-- ✅ Need to respect constraints (network, battery)
-- ✅ Work should survive app restart/update
+-  Work must eventually complete (guaranteed)
+-  Work can be deferred (flexible timing)
+-  Need to respect constraints (network, battery)
+-  Work should survive app restart/update
 
 **Don't use when:**
-- ❌ Need exact timing (use AlarmManager)
-- ❌ User must see it running (use Foreground Service)
-- ❌ Very time-sensitive (use AlarmManager)
+-  Need exact timing (use AlarmManager)
+-  User must see it running (use Foreground Service)
+-  Very time-sensitive (use AlarmManager)
 
 **Example: Photo backup**
 
@@ -96,14 +96,14 @@ class PhotoBackupWorker @AssistedInject constructor(
 ### AlarmManager
 
 **Use when:**
-- ✅ Need exact timing (within seconds)
-- ✅ Time-critical operations
-- ✅ Alarm clock, reminders, scheduled tasks
+-  Need exact timing (within seconds)
+-  Time-critical operations
+-  Alarm clock, reminders, scheduled tasks
 
 **Don't use when:**
-- ❌ Can be deferred (use WorkManager)
-- ❌ Need network/battery constraints (use WorkManager)
-- ❌ Just need periodic sync (use WorkManager)
+-  Can be deferred (use WorkManager)
+-  Need network/battery constraints (use WorkManager)
+-  Just need periodic sync (use WorkManager)
 
 **Example: Medication reminder**
 
@@ -227,13 +227,13 @@ alarmManager.setWindow(
 ### JobScheduler
 
 **Use when:**
-- ✅ API 21+ only (no backward compatibility needed)
-- ✅ Need constraints (network, charging, idle)
-- ✅ Can be deferred
+-  API 21+ only (no backward compatibility needed)
+-  Need constraints (network, charging, idle)
+-  Can be deferred
 
 **Don't use when:**
-- ❌ Need to support older Android versions (use WorkManager)
-- ❌ WorkManager provides everything you need
+-  Need to support older Android versions (use WorkManager)
+-  WorkManager provides everything you need
 
 **Note:** WorkManager uses JobScheduler internally on API 23+, so prefer WorkManager for better API and backward compatibility.
 
@@ -292,15 +292,15 @@ class CleanupJobService : JobService() {
 ### Foreground Service
 
 **Use when:**
-- ✅ User must know work is happening
-- ✅ Work cannot be interrupted
-- ✅ Long-running operations (minutes to hours)
-- ✅ Music playback, navigation, file download
+-  User must know work is happening
+-  Work cannot be interrupted
+-  Long-running operations (minutes to hours)
+-  Music playback, navigation, file download
 
 **Don't use when:**
-- ❌ Work can be deferred (use WorkManager)
-- ❌ Quick background task (use Coroutines)
-- ❌ Don't need to show notification
+-  Work can be deferred (use WorkManager)
+-  Quick background task (use Coroutines)
+-  Don't need to show notification
 
 **Example: Music player**
 
@@ -404,13 +404,13 @@ fun startMusicPlayback() {
 ### Coroutines (No Guarantee)
 
 **Use when:**
-- ✅ Quick async operations
-- ✅ App is in foreground
-- ✅ OK if work doesn't complete
+-  Quick async operations
+-  App is in foreground
+-  OK if work doesn't complete
 
 **Don't use when:**
-- ❌ Work must complete (use WorkManager)
-- ❌ App might be killed (use WorkManager)
+-  Work must complete (use WorkManager)
+-  App might be killed (use WorkManager)
 
 **Example: Quick API call**
 
@@ -450,109 +450,109 @@ class HomeViewModel @Inject constructor(
 
 ```
 Need to show notification to user?
-├─ YES → Foreground Service
-└─ NO
-    ├─ Must happen at exact time?
-    │   ├─ YES → AlarmManager
-    │   └─ NO
-    │       ├─ Must complete even if app killed?
-    │       │   ├─ YES → WorkManager
-    │       │   └─ NO → Coroutines
-    │       └─ Need constraints (WiFi, battery)?
-    │           └─ YES → WorkManager
+ YES → Foreground Service
+ NO
+     Must happen at exact time?
+        YES → AlarmManager
+        NO
+            Must complete even if app killed?
+               YES → WorkManager
+               NO → Coroutines
+            Need constraints (WiFi, battery)?
+                YES → WorkManager
 ```
 
 ### Comparison Table
 
 | Feature | WorkManager | AlarmManager | JobScheduler | Foreground Service | Coroutines |
 |---------|-------------|--------------|--------------|-------------------|------------|
-| **Guaranteed execution** | ✅ | ✅ | ✅ | ⚠️ | ❌ |
-| **Exact timing** | ❌ | ✅ | ❌ | ✅ | ✅ |
-| **Survives reboot** | ✅ | ✅ | ✅ | ❌ | ❌ |
-| **Survives app kill** | ✅ | ✅ | ✅ | ⚠️ | ❌ |
-| **Network constraint** | ✅ | ❌ | ✅ | ❌ | ❌ |
-| **Battery constraint** | ✅ | ❌ | ✅ | ❌ | ❌ |
-| **Backward compatibility** | ✅ API 14+ | ✅ | ❌ API 21+ | ✅ | ✅ |
-| **User visibility** | ❌ | ❌ | ❌ | ✅ Required | ❌ |
+| **Guaranteed execution** |  |  |  |  |  |
+| **Exact timing** |  |  |  |  |  |
+| **Survives reboot** |  |  |  |  |  |
+| **Survives app kill** |  |  |  |  |  |
+| **Network constraint** |  |  |  |  |  |
+| **Battery constraint** |  |  |  |  |  |
+| **Backward compatibility** |  API 14+ |  |  API 21+ |  |  |
+| **User visibility** |  |  |  |  Required |  |
 | **Min interval** | 15 min | None | 15 min | N/A | N/A |
-| **Battery friendly** | ✅ | ⚠️ | ✅ | ❌ | ✅ |
+| **Battery friendly** |  |  |  |  |  |
 
 ### Real-World Use Cases
 
 **WorkManager:**
 ```
-✅ Sync app data when WiFi available
-✅ Backup photos overnight
-✅ Upload logs to server
-✅ Clean old cache files
-✅ Process images for upload
-✅ Send analytics events in batch
+ Sync app data when WiFi available
+ Backup photos overnight
+ Upload logs to server
+ Clean old cache files
+ Process images for upload
+ Send analytics events in batch
 ```
 
 **AlarmManager:**
 ```
-✅ Alarm clock app
-✅ Medication reminders
-✅ Calendar event notifications
-✅ Recurring bill reminders
-✅ Scheduled report generation
+ Alarm clock app
+ Medication reminders
+ Calendar event notifications
+ Recurring bill reminders
+ Scheduled report generation
 ```
 
 **Foreground Service:**
 ```
-✅ Music/podcast playback
-✅ GPS navigation
-✅ File downloads (user-initiated)
-✅ Video call
-✅ Fitness tracking
-✅ Live location sharing
+ Music/podcast playback
+ GPS navigation
+ File downloads (user-initiated)
+ Video call
+ Fitness tracking
+ Live location sharing
 ```
 
 **Coroutines:**
 ```
-✅ Load data for UI
-✅ Quick API calls
-✅ Image loading
-✅ Form validation
-✅ Database queries (while app active)
+ Load data for UI
+ Quick API calls
+ Image loading
+ Form validation
+ Database queries (while app active)
 ```
 
 ### Best Practices
 
 1. **Prefer WorkManager for Background Work**
    ```kotlin
-   // ✅ GOOD - WorkManager for sync
+   //  GOOD - WorkManager for sync
    WorkManager.getInstance(context)
        .enqueueUniquePeriodicWork(...)
 
-   // ❌ BAD - AlarmManager for periodic sync
+   //  BAD - AlarmManager for periodic sync
    alarmManager.setRepeating(...)
    ```
 
 2. **Use AlarmManager Only for Exact Timing**
    ```kotlin
-   // ✅ GOOD - Alarm clock
+   //  GOOD - Alarm clock
    alarmManager.setExact(...)
 
-   // ❌ BAD - Data sync (use WorkManager)
+   //  BAD - Data sync (use WorkManager)
    alarmManager.setRepeating(...)
    ```
 
 3. **Foreground Service Only When Visible**
    ```kotlin
-   // ✅ GOOD - Music playback
+   //  GOOD - Music playback
    startForeground(notification)
 
-   // ❌ BAD - Silent data sync
+   //  BAD - Silent data sync
    startForeground(notification) // User sees notification!
    ```
 
 4. **Coroutines for UI-Related Work**
    ```kotlin
-   // ✅ GOOD - Load data for screen
+   //  GOOD - Load data for screen
    viewModelScope.launch { loadData() }
 
-   // ❌ BAD - Upload file (use WorkManager)
+   //  BAD - Upload file (use WorkManager)
    viewModelScope.launch { uploadFile() } // Might be killed!
    ```
 

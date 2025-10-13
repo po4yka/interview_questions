@@ -39,21 +39,21 @@ When you have multiple servers handling requests, you need a **load balancer** t
 #### What is Load Balancing?
 
 **Load Balancing** distributes incoming network traffic across multiple servers to ensure:
-- ✅ No single server is overwhelmed
-- ✅ High availability (if one server fails, others continue)
-- ✅ Better performance and response times
-- ✅ Efficient resource utilization
+-  No single server is overwhelmed
+-  High availability (if one server fails, others continue)
+-  Better performance and response times
+-  Efficient resource utilization
 
 ```
-                    ┌──────────────────┐
-Clients ──────────► │  Load Balancer   │
-                    └────────┬─────────┘
-                             │
-            ┌────────────────┼────────────────┐
-            │                │                │
-        ┌───▼───┐        ┌───▼───┐       ┌───▼───┐
-        │Server1│        │Server2│       │Server3│
-        └───────┘        └───────┘       └───────┘
+                    
+Clients    Load Balancer   
+                    
+                             
+            
+                                            
+                       
+        Server1        Server2       Server3
+                       
 ```
 
 #### Load Balancing Algorithms
@@ -89,13 +89,13 @@ val targetServer = lb.getNextServer()
 targetServer.handle(request)
 ```
 
-**✅ Pros:**
+** Pros:**
 - Simple to implement
 - Fair distribution
 - No server state needed
 - Works well when all servers have equal capacity
 
-**❌ Cons:**
+** Cons:**
 - Ignores server load (busy servers get same traffic as idle)
 - Ignores server capacity differences
 - No consideration for request complexity
@@ -153,12 +153,12 @@ val lb = WeightedRoundRobinLoadBalancer(
 )
 ```
 
-**✅ Pros:**
+** Pros:**
 - Handles heterogeneous servers
 - Fair according to capacity
 - Simple to configure
 
-**❌ Cons:**
+** Cons:**
 - Still ignores current load
 - Requires manual weight tuning
 
@@ -210,12 +210,12 @@ class LeastConnectionsLoadBalancer(private val servers: List<Server>) {
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Considers current server load
 - Better for long-lived connections
 - Handles heterogeneous workloads
 
-**❌ Cons:**
+** Cons:**
 - Connection count ≠ actual load
 - Requires state tracking
 - Slightly more overhead
@@ -299,12 +299,12 @@ class ConsistentHashLoadBalancer(private val servers: List<Server>) {
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Session persistence without storing session state
 - Good for caching (same client = same server = cache hits)
 - No session replication needed
 
-**❌ Cons:**
+** Cons:**
 - Uneven distribution if few clients
 - Server removal affects some clients
 - Can't handle server capacity differences
@@ -367,12 +367,12 @@ class LeastResponseTimeLoadBalancer(private val servers: List<Server>) {
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Most responsive to actual server performance
 - Adapts to changing conditions
 - Best user experience
 
-**❌ Cons:**
+** Cons:**
 - Complex implementation
 - Requires health monitoring
 - More computational overhead
@@ -395,12 +395,12 @@ class RandomLoadBalancer(private val servers: List<Server>) {
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Simple
 - No state needed
 - Surprisingly effective at scale
 
-**❌ Cons:**
+** Cons:**
 - Can create imbalance with few requests
 - No intelligence
 
@@ -507,12 +507,12 @@ resource "aws_lb_target_group" "app" {
 
 ```
 Layer 7 Load Balancer (ALB):
-┌─────────────────────────────────┐
-│  /api/*     → API servers       │
-│  /static/*  → CDN/Static server │
-│  /admin/*   → Admin servers     │
-│  User-Agent → Mobile/Web servers│
-└─────────────────────────────────┘
+
+  /api/*     → API servers       
+  /static/*  → CDN/Static server 
+  /admin/*   → Admin servers     
+  User-Agent → Mobile/Web servers
+
 ```
 
 #### Health Checks
@@ -581,10 +581,10 @@ class HealthCheckLoadBalancer(
 #### Что такое балансировка нагрузки?
 
 **Балансировка нагрузки** распределяет входящий сетевой трафик между несколькими серверами для обеспечения:
-- ✅ Ни один сервер не перегружен
-- ✅ Высокая доступность (если один сервер падает, другие продолжают работать)
-- ✅ Лучшая производительность и время отклика
-- ✅ Эффективное использование ресурсов
+-  Ни один сервер не перегружен
+-  Высокая доступность (если один сервер падает, другие продолжают работать)
+-  Лучшая производительность и время отклика
+-  Эффективное использование ресурсов
 
 #### Алгоритмы балансировки нагрузки
 
@@ -601,13 +601,13 @@ class HealthCheckLoadBalancer(
 ...
 ```
 
-**✅ Плюсы:**
+** Плюсы:**
 - Простая реализация
 - Справедливое распределение
 - Не требуется состояние сервера
 - Хорошо работает когда все серверы имеют равную мощность
 
-**❌ Минусы:**
+** Минусы:**
 - Игнорирует загрузку сервера
 - Игнорирует различия в мощности серверов
 - Не учитывает сложность запросов
@@ -626,12 +626,12 @@ class HealthCheckLoadBalancer(
 Сервер 3 (вес=1) → получает 1 запрос за цикл
 ```
 
-**✅ Плюсы:**
+** Плюсы:**
 - Обрабатывает разнородные серверы
 - Справедливо согласно мощности
 - Просто настроить
 
-**❌ Минусы:**
+** Минусы:**
 - Все еще игнорирует текущую загрузку
 - Требует ручной настройки весов
 
@@ -655,12 +655,12 @@ class HealthCheckLoadBalancer(
 Сервер 3: 7 соединений
 ```
 
-**✅ Плюсы:**
+** Плюсы:**
 - Учитывает текущую загрузку сервера
 - Лучше для долгоживущих соединений
 - Обрабатывает неоднородные workloads
 
-**❌ Минусы:**
+** Минусы:**
 - Количество соединений ≠ реальная нагрузка
 - Требуется отслеживание состояния
 - Немного больше overhead
@@ -680,12 +680,12 @@ Hash(IP клиента) % Количество серверов = Индекс �
 Клиент 192.168.1.11 → Hash → Сервер 1 (всегда)
 ```
 
-**✅ Плюсы:**
+** Плюсы:**
 - Персистентность сессии без хранения состояния
 - Хорошо для кеширования
 - Не нужна репликация сессий
 
-**❌ Минусы:**
+** Минусы:**
 - Неравномерное распределение при малом количестве клиентов
 - Удаление сервера влияет на некоторых клиентов
 
@@ -700,12 +700,12 @@ Hash(IP клиента) % Количество серверов = Индекс �
 
 **Как работает:** Отправляет трафик на сервер с наименьшим временем отклика и наименьшим количеством соединений.
 
-**✅ Плюсы:**
+** Плюсы:**
 - Наиболее отзывчив к реальной производительности
 - Адаптируется к изменяющимся условиям
 - Лучший пользовательский опыт
 
-**❌ Минусы:**
+** Минусы:**
 - Сложная реализация
 - Требуется мониторинг здоровья
 - Больше вычислительных затрат

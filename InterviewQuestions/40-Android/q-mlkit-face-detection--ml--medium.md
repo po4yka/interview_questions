@@ -459,10 +459,10 @@ private fun DrawScope.drawExpressionLabel(
     scaleY: Float
 ) {
     val text = when (expressions.expression) {
-        Expression.HAPPY -> "😊 Smiling"
-        Expression.EYES_CLOSED -> "😴 Eyes Closed"
-        Expression.WINKING -> "😉 Winking"
-        Expression.NEUTRAL -> "😐 Neutral"
+        Expression.HAPPY -> " Smiling"
+        Expression.EYES_CLOSED -> " Eyes Closed"
+        Expression.WINKING -> " Winking"
+        Expression.NEUTRAL -> " Neutral"
     }
 
     // Draw label background

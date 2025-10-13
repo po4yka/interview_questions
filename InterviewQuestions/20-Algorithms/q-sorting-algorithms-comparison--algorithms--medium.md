@@ -41,14 +41,14 @@ Sorting is one of the most fundamental operations in computer science. Understan
 
 | Algorithm | Best | Average | Worst | Space | Stable | In-Place |
 |-----------|------|---------|-------|-------|--------|----------|
-| **Bubble Sort** | O(n) | O(n²) | O(n²) | O(1) | ✅ Yes | ✅ Yes |
-| **Selection Sort** | O(n²) | O(n²) | O(n²) | O(1) | ❌ No | ✅ Yes |
-| **Insertion Sort** | O(n) | O(n²) | O(n²) | O(1) | ✅ Yes | ✅ Yes |
-| **Merge Sort** | O(n log n) | O(n log n) | O(n log n) | O(n) | ✅ Yes | ❌ No |
-| **Quick Sort** | O(n log n) | O(n log n) | O(n²) | O(log n) | ❌ No | ✅ Yes |
-| **Heap Sort** | O(n log n) | O(n log n) | O(n log n) | O(1) | ❌ No | ✅ Yes |
-| **Counting Sort** | O(n+k) | O(n+k) | O(n+k) | O(k) | ✅ Yes | ❌ No |
-| **Radix Sort** | O(nk) | O(nk) | O(nk) | O(n+k) | ✅ Yes | ❌ No |
+| **Bubble Sort** | O(n) | O(n²) | O(n²) | O(1) |  Yes |  Yes |
+| **Selection Sort** | O(n²) | O(n²) | O(n²) | O(1) |  No |  Yes |
+| **Insertion Sort** | O(n) | O(n²) | O(n²) | O(1) |  Yes |  Yes |
+| **Merge Sort** | O(n log n) | O(n log n) | O(n log n) | O(n) |  Yes |  No |
+| **Quick Sort** | O(n log n) | O(n log n) | O(n²) | O(log n) |  No |  Yes |
+| **Heap Sort** | O(n log n) | O(n log n) | O(n log n) | O(1) |  No |  Yes |
+| **Counting Sort** | O(n+k) | O(n+k) | O(n+k) | O(k) |  Yes |  No |
+| **Radix Sort** | O(nk) | O(nk) | O(nk) | O(n+k) |  Yes |  No |
 
 **Stable** = Preserves relative order of equal elements
 **In-Place** = Requires O(1) extra space
@@ -134,13 +134,13 @@ fun partitionRandomPivot(arr: IntArray, low: Int, high: Int): Int {
 }
 ```
 
-**✅ When to use:**
+** When to use:**
 - General-purpose sorting
 - Average case O(n log n)
 - In-place sorting needed
 - **Default choice** for most cases
 
-**❌ When NOT to use:**
+** When NOT to use:**
 - Need guaranteed O(n log n) worst case
 - Need stable sort
 - Stack overflow concerns (deep recursion)
@@ -213,13 +213,13 @@ Merge:
 - **Best/Average/Worst:** O(n log n) - guaranteed!
 - **Space:** O(n) - needs temporary arrays
 
-**✅ When to use:**
+** When to use:**
 - Need **stable** sort
 - Need **guaranteed** O(n log n)
 - Sorting linked lists (no random access needed)
 - External sorting (large files)
 
-**❌ When NOT to use:**
+** When NOT to use:**
 - Space is limited (O(n) extra space)
 - Need in-place sorting
 
@@ -280,12 +280,12 @@ println(arr.contentToString())  // [5, 6, 7, 11, 12, 13]
 - **Best/Average/Worst:** O(n log n) - guaranteed!
 - **Space:** O(1) - in-place
 
-**✅ When to use:**
+** When to use:**
 - Need guaranteed O(n log n) with O(1) space
 - Partial sorting (find k largest/smallest)
 - Priority queue implementation
 
-**❌ When NOT to use:**
+** When NOT to use:**
 - Need stable sort
 - Cache efficiency important (poor locality)
 
@@ -340,13 +340,13 @@ println(arr.contentToString())  // [5, 6, 11, 12, 13]
 - **Average/Worst:** O(n²)
 - **Space:** O(1)
 
-**✅ When to use:**
+** When to use:**
 - **Small arrays** (< 10-20 elements)
 - **Nearly sorted** data (best case O(n))
 - **Online** sorting (elements arrive one at a time)
 - Used in **Timsort** hybrid algorithm
 
-**❌ When NOT to use:**
+** When NOT to use:**
 - Large arrays
 - Random data
 
@@ -396,13 +396,13 @@ println(sorted.contentToString())  // [1, 2, 2, 3, 3, 4, 8]
 - **Time:** O(n + k) where k = range of values
 - **Space:** O(k)
 
-**✅ When to use:**
+** When to use:**
 - **Small range** of integers (k ≈ n)
 - Positive integers only
 - Need **stable** sort
 - **Linear time** possible
 
-**❌ When NOT to use:**
+** When NOT to use:**
 - Large range (k >> n)
 - Floating point numbers
 - Objects (use comparison-based)
@@ -461,7 +461,7 @@ println(arr.contentToString())  // [2, 24, 45, 66, 75, 90, 170, 802]
 - **Time:** O(nk) where k = number of digits
 - **Space:** O(n + k)
 
-**✅ When to use:**
+** When to use:**
 - Fixed-length integers
 - Strings of same length
 - Need stable sort
@@ -501,27 +501,27 @@ people.sortedBy { it.age }
 
 ```
 Need to sort?
-│
-├─ Small array (< 20)?
-│  └─ Insertion Sort (O(n²) but fast constant)
-│
-├─ Nearly sorted?
-│  └─ Insertion Sort (O(n) best case)
-│
-├─ Need stable?
-│  ├─ Need guaranteed O(n log n)?
-│  │  └─ Merge Sort
-│  └─ Average case OK?
-│     └─ TimSort (built-in)
-│
-├─ Integers with small range?
-│  └─ Counting Sort (O(n + k))
-│
-├─ Limited space?
-│  └─ Heap Sort (O(1) space, O(n log n) time)
-│
-└─ General purpose?
-   └─ Quick Sort (average O(n log n), in-place)
+
+ Small array (< 20)?
+   Insertion Sort (O(n²) but fast constant)
+
+ Nearly sorted?
+   Insertion Sort (O(n) best case)
+
+ Need stable?
+   Need guaranteed O(n log n)?
+     Merge Sort
+   Average case OK?
+      TimSort (built-in)
+
+ Integers with small range?
+   Counting Sort (O(n + k))
+
+ Limited space?
+   Heap Sort (O(1) space, O(n log n) time)
+
+ General purpose?
+    Quick Sort (average O(n log n), in-place)
 ```
 
 ---
@@ -586,10 +586,10 @@ val custom = products.sortedWith { a, b ->
 
 | Алгоритм | Лучший | Средний | Худший | Память | Стабильный |
 |----------|--------|---------|--------|--------|------------|
-| **Quick Sort** | O(n log n) | O(n log n) | O(n²) | O(log n) | ❌ Нет |
-| **Merge Sort** | O(n log n) | O(n log n) | O(n log n) | O(n) | ✅ Да |
-| **Heap Sort** | O(n log n) | O(n log n) | O(n log n) | O(1) | ❌ Нет |
-| **Insertion Sort** | O(n) | O(n²) | O(n²) | O(1) | ✅ Да |
+| **Quick Sort** | O(n log n) | O(n log n) | O(n²) | O(log n) |  Нет |
+| **Merge Sort** | O(n log n) | O(n log n) | O(n log n) | O(n) |  Да |
+| **Heap Sort** | O(n log n) | O(n log n) | O(n log n) | O(1) |  Нет |
+| **Insertion Sort** | O(n) | O(n²) | O(n²) | O(1) |  Да |
 
 ### Ключевые выводы
 
@@ -614,3 +614,20 @@ val custom = products.sortedWith { a, b ->
 8. What is external sorting for large files?
 9. How do you find the kth largest element without full sorting?
 10. What is the Dutch National Flag problem?
+
+---
+
+## Related Questions
+
+### Android Implementation
+- [[q-compose-canvas-graphics--jetpack-compose--hard]] - Data Structures
+- [[q-cache-implementation-strategies--android--medium]] - Data Structures
+- [[q-graphql-vs-rest--networking--easy]] - Data Structures
+- [[q-recomposition-choreographer--android--hard]] - Data Structures
+- [[q-android-security-practices-checklist--android--medium]] - Data Structures
+
+### Kotlin Language Features
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+
+### System Design Concepts
+- [[q-message-queues-event-driven--system-design--medium]] - Data Structures

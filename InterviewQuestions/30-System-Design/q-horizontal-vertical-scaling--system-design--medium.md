@@ -48,11 +48,11 @@ As your application grows and needs to handle more traffic, you need strategies 
 
 ```
 Before:     After:
-┌────────┐  ┌────────┐
-│ 4 CPU  │  │ 16 CPU │
-│ 16 GB  │→ │ 128 GB │
-│ 500 GB │  │ 2 TB   │
-└────────┘  └────────┘
+  
+ 4 CPU     16 CPU 
+ 16 GB  →  128 GB 
+ 500 GB    2 TB   
+  
 Single Server
 ```
 
@@ -67,9 +67,9 @@ Single Server
 
 ```
 Before:          After:
-┌────────┐      ┌────────┐ ┌────────┐ ┌────────┐
-│Server 1│  →   │Server 1│ │Server 2│ │Server 3│
-└────────┘      └────────┘ └────────┘ └────────┘
+        
+Server 1  →   Server 1 Server 2 Server 3
+        
               Load Balancer distributes traffic
 ```
 
@@ -89,7 +89,7 @@ Before:          After:
 
 #### When to Use Vertical Scaling
 
-✅ **Good for:**
+ **Good for:**
 - **Databases** - especially RDBMS (PostgreSQL, MySQL) where distributed writes are complex
 - **Legacy applications** - that can't be easily distributed
 - **Single-threaded workloads** - that benefit from faster CPU
@@ -120,7 +120,7 @@ Stack Overflow primarily uses vertical scaling for their SQL Server:
 
 #### When to Use Horizontal Scaling
 
-✅ **Good for:**
+ **Good for:**
 - **Web servers** - stateless HTTP servers scale perfectly
 - **API services** - RESTful APIs with load balancing
 - **Microservices** - designed for distribution
@@ -172,34 +172,34 @@ def create_order(order_data):
 Most production systems use **both**:
 
 ```
-┌─────────────────────────────────────────┐
-│         Load Balancer (ALB)             │
-└─────────────┬───────────────────────────┘
-              │
-    ┌─────────┴─────────┬─────────────┐
-    │                   │             │
-┌───▼────┐         ┌────▼───┐    ┌───▼────┐
-│Web Srv1│         │Web Srv2│    │Web Srv3│  ← Horizontal
-│(small) │         │(small) │    │(small) │
-└───┬────┘         └────┬───┘    └───┬────┘
-    │                   │            │
-    └───────────┬───────┴────────────┘
-                │
-        ┌───────▼────────┐
-        │  Cache (Redis) │ ← Horizontal (cluster)
-        └───────┬────────┘
-                │
-        ┌───────▼────────┐
-        │  Primary DB    │ ← Vertical (large instance)
-        │  (m5.4xlarge)  │
-        └───────┬────────┘
-                │
-    ┌───────────┴───────────┐
-    │                       │
-┌───▼──────┐         ┌──────▼───┐
-│Read      │         │Read      │  ← Horizontal
-│Replica 1 │         │Replica 2 │
-└──────────┘         └──────────┘
+
+         Load Balancer (ALB)             
+
+              
+    
+                                    
+             
+Web Srv1         Web Srv2    Web Srv3  ← Horizontal
+(small)          (small)     (small) 
+             
+                                   
+    
+                
+        
+          Cache (Redis)  ← Horizontal (cluster)
+        
+                
+        
+          Primary DB     ← Vertical (large instance)
+          (m5.4xlarge)  
+        
+                
+    
+                           
+         
+Read               Read        ← Horizontal
+Replica 1          Replica 2 
+         
 ```
 
 **Scaling Strategy by Tier:**
@@ -227,32 +227,32 @@ Notice: Exponential cost growth
 10x t3.medium = $300/month
 - 20 vCPU total, 40GB RAM
 - Same cost as 1x t3.2xlarge but:
-  ✅ More total resources
-  ✅ High availability
-  ✅ Better fault tolerance
-  ✅ Can scale gradually
+   More total resources
+   High availability
+   Better fault tolerance
+   Can scale gradually
 ```
 
 #### Limitations & Challenges
 
 **Vertical Scaling Limits:**
 ```
-❌ Hardware ceiling: Largest AWS instance is 448 vCPU, 24TB RAM
-❌ Downtime for upgrades
-❌ No redundancy
-❌ Cost grows exponentially
-❌ Single point of failure
+ Hardware ceiling: Largest AWS instance is 448 vCPU, 24TB RAM
+ Downtime for upgrades
+ No redundancy
+ Cost grows exponentially
+ Single point of failure
 ```
 
 **Horizontal Scaling Challenges:**
 ```
-⚠️ Distributed data consistency
-⚠️ Session management (need sticky sessions or external store)
-⚠️ File storage (need S3/shared storage)
-⚠️ Complex deployment
-⚠️ Network latency between servers
-⚠️ Load balancer required
-⚠️ More operational complexity
+ Distributed data consistency
+ Session management (need sticky sessions or external store)
+ File storage (need S3/shared storage)
+ Complex deployment
+ Network latency between servers
+ Load balancer required
+ More operational complexity
 ```
 
 #### Real-World System Design
@@ -341,30 +341,30 @@ spec:
 
 ```
 Start: Need to scale?
-│
-├─ Is it a database?
-│  ├─ Yes → Start with VERTICAL
-│  │         (Add read replicas for horizontal)
-│  └─ No → Continue
-│
-├─ Is the application stateless?
-│  ├─ Yes → HORIZONTAL SCALING
-│  │         (Web servers, APIs, microservices)
-│  └─ No → Can you make it stateless?
-│            ├─ Yes → Refactor → HORIZONTAL
-│            └─ No → VERTICAL (or redesign)
-│
-├─ Budget constraints?
-│  ├─ Limited → HORIZONTAL (cheaper)
-│  └─ Flexible → Consider VERTICAL first (simpler)
-│
-├─ Need high availability?
-│  ├─ Yes → HORIZONTAL (redundancy)
-│  └─ No → Either works
-│
-└─ Quick fix needed?
-   ├─ Yes → VERTICAL (faster to implement)
-   └─ No → HORIZONTAL (better long-term)
+
+ Is it a database?
+   Yes → Start with VERTICAL
+           (Add read replicas for horizontal)
+   No → Continue
+
+ Is the application stateless?
+   Yes → HORIZONTAL SCALING
+           (Web servers, APIs, microservices)
+   No → Can you make it stateless?
+             Yes → Refactor → HORIZONTAL
+             No → VERTICAL (or redesign)
+
+ Budget constraints?
+   Limited → HORIZONTAL (cheaper)
+   Flexible → Consider VERTICAL first (simpler)
+
+ Need high availability?
+   Yes → HORIZONTAL (redundancy)
+   No → Either works
+
+ Quick fix needed?
+    Yes → VERTICAL (faster to implement)
+    No → HORIZONTAL (better long-term)
 ```
 
 ### Key Takeaways
@@ -404,11 +404,11 @@ Start: Need to scale?
 
 ```
 До:         После:
-┌────────┐  ┌────────┐
-│ 4 CPU  │  │ 16 CPU │
-│ 16 GB  │→ │ 128 GB │
-│ 500 GB │  │ 2 TB   │
-└────────┘  └────────┘
+  
+ 4 CPU     16 CPU 
+ 16 GB  →  128 GB 
+ 500 GB    2 TB   
+  
 Один сервер
 ```
 
@@ -423,9 +423,9 @@ Start: Need to scale?
 
 ```
 До:              После:
-┌────────┐      ┌────────┐ ┌────────┐ ┌────────┐
-│Сервер 1│  →   │Сервер 1│ │Сервер 2│ │Сервер 3│
-└────────┘      └────────┘ └────────┘ └────────┘
+        
+Сервер 1  →   Сервер 1 Сервер 2 Сервер 3
+        
            Балансировщик распределяет трафик
 ```
 
@@ -445,7 +445,7 @@ Start: Need to scale?
 
 #### Когда использовать вертикальное масштабирование
 
-✅ **Подходит для:**
+ **Подходит для:**
 - **Баз данных** - особенно RDBMS (PostgreSQL, MySQL), где распределённые записи сложны
 - **Legacy приложений** - которые нельзя легко распределить
 - **Однопоточных workload** - которые выигрывают от более быстрого CPU
@@ -467,7 +467,7 @@ Start: Need to scale?
 
 #### Когда использовать горизонтальное масштабирование
 
-✅ **Подходит для:**
+ **Подходит для:**
 - **Веб-серверов** - stateless HTTP серверы отлично масштабируются
 - **API сервисов** - RESTful API с балансировкой нагрузки
 - **Микросервисов** - спроектированы для распределения
@@ -498,33 +498,33 @@ def get_user(user_id):
 Большинство production систем используют **оба подхода**:
 
 ```
-┌─────────────────────────────────────────┐
-│      Балансировщик нагрузки (ALB)       │
-└─────────────┬───────────────────────────┘
-              │
-    ┌─────────┴─────────┬─────────────┐
-    │                   │             │
-┌───▼────┐         ┌────▼───┐    ┌───▼────┐
-│Веб-сер1│         │Веб-сер2│    │Веб-сер3│  ← Горизонтально
-│(малый) │         │(малый) │    │(малый) │
-└───┬────┘         └────┬───┘    └───┬────┘
-    └───────────┬───────┴────────────┘
-                │
-        ┌───────▼────────┐
-        │  Кэш (Redis)   │ ← Горизонтально (кластер)
-        └───────┬────────┘
-                │
-        ┌───────▼────────┐
-        │ Основная БД    │ ← Вертикально (большой инстанс)
-        │ (m5.4xlarge)   │
-        └───────┬────────┘
-                │
-    ┌───────────┴───────────┐
-    │                       │
-┌───▼──────┐         ┌──────▼───┐
-│Read      │         │Read      │  ← Горизонтально
-│Replica 1 │         │Replica 2 │
-└──────────┘         └──────────┘
+
+      Балансировщик нагрузки (ALB)       
+
+              
+    
+                                    
+             
+Веб-сер1         Веб-сер2    Веб-сер3  ← Горизонтально
+(малый)          (малый)     (малый) 
+             
+    
+                
+        
+          Кэш (Redis)    ← Горизонтально (кластер)
+        
+                
+        
+         Основная БД     ← Вертикально (большой инстанс)
+         (m5.4xlarge)   
+        
+                
+    
+                           
+         
+Read               Read        ← Горизонтально
+Replica 1          Replica 2 
+         
 ```
 
 **Стратегия масштабирования по уровням:**

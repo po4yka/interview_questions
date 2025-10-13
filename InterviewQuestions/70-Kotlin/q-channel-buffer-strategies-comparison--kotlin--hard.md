@@ -1042,20 +1042,20 @@ UNLIMITED WARNING:
 
 ```
 Do you need ALL values consumed?
-├─ Yes
-│  ├─ Can producer wait for consumer?
-│  │  ├─ Yes → Use RENDEZVOUS or BUFFERED
-│  │  └─ No, producer must never block
-│  │     ├─ Producer sends bounded amount → UNLIMITED (with caution)
-│  │     └─ Producer unbounded → ERROR: Need backpressure!
-│  └─ No, only latest value matters
-│     └─ Use CONFLATED
-│
-└─ How much buffering do you need?
-   ├─ None (strict synchronization) → RENDEZVOUS
-   ├─ Small (default) → BUFFERED
-   ├─ Custom amount → Channel(N)
-   └─ Producer rate unknown → UNLIMITED (DANGEROUS)
+ Yes
+   Can producer wait for consumer?
+     Yes → Use RENDEZVOUS or BUFFERED
+     No, producer must never block
+        Producer sends bounded amount → UNLIMITED (with caution)
+        Producer unbounded → ERROR: Need backpressure!
+   No, only latest value matters
+      Use CONFLATED
+
+ How much buffering do you need?
+    None (strict synchronization) → RENDEZVOUS
+    Small (default) → BUFFERED
+    Custom amount → Channel(N)
+    Producer rate unknown → UNLIMITED (DANGEROUS)
 ```
 
 ### Real-World Examples
@@ -1532,20 +1532,20 @@ Kotlin корутины каналы поддерживают несколько
 
 ```
 Нужны ВСЕ значения для потребления?
-├─ Да
-│  ├─ Может ли производитель ждать потребителя?
-│  │  ├─ Да → Используйте RENDEZVOUS или BUFFERED
-│  │  └─ Нет, производитель никогда не должен блокироваться
-│  │     ├─ Производитель отправляет ограниченное количество → UNLIMITED (с осторожностью)
-│  │     └─ Производитель неограничен → ОШИБКА: Нужно противодавление!
-│  └─ Нет, важно только последнее значение
-│     └─ Используйте CONFLATED
-│
-└─ Сколько буферизации вам нужно?
-   ├─ Никакой (строгая синхронизация) → RENDEZVOUS
-   ├─ Небольшая (по умолчанию) → BUFFERED
-   ├─ Пользовательское количество → Channel(N)
-   └─ Скорость производителя неизвестна → UNLIMITED (ОПАСНО)
+ Да
+   Может ли производитель ждать потребителя?
+     Да → Используйте RENDEZVOUS или BUFFERED
+     Нет, производитель никогда не должен блокироваться
+        Производитель отправляет ограниченное количество → UNLIMITED (с осторожностью)
+        Производитель неограничен → ОШИБКА: Нужно противодавление!
+   Нет, важно только последнее значение
+      Используйте CONFLATED
+
+ Сколько буферизации вам нужно?
+    Никакой (строгая синхронизация) → RENDEZVOUS
+    Небольшая (по умолчанию) → BUFFERED
+    Пользовательское количество → Channel(N)
+    Скорость производителя неизвестна → UNLIMITED (ОПАСНО)
 ```
 
 ### Рекомендации для продакшена

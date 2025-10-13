@@ -197,13 +197,13 @@ Box(
         .background(Color.Blue)
         .padding(16.dp)
         .clickable { }
-        .size(100.dp)  // ❌ Late constraint
+        .size(100.dp)  //  Late constraint
 )
 
 // EFFICIENT: Size constraint early
 Box(
     modifier = Modifier
-        .size(100.dp)  // ✅ Early constraint
+        .size(100.dp)  //  Early constraint
         .background(Color.Blue)
         .padding(16.dp)
         .clickable { }
@@ -239,13 +239,13 @@ Box(
 Column(
     modifier = Modifier
         .size(200.dp)
-        .verticalScroll(rememberScrollState())  // ❌ After size
+        .verticalScroll(rememberScrollState())  //  After size
 ) { /* content */ }
 
 // EFFICIENT: Size constraint after scroll
 Column(
     modifier = Modifier
-        .verticalScroll(rememberScrollState())  // ✅ Before size
+        .verticalScroll(rememberScrollState())  //  Before size
         .size(200.dp)
 ) { /* content */ }
 ```
@@ -260,7 +260,7 @@ Column(
 fun BadExample() {
     repeat(100) {
         Box(
-            modifier = Modifier  // ❌ New instance each time
+            modifier = Modifier  //  New instance each time
                 .size(48.dp)
                 .background(Color.Blue)
                 .padding(8.dp)
@@ -279,7 +279,7 @@ fun GoodExample() {
     }
 
     repeat(100) {
-        Box(modifier = sharedModifier)  // ✅ Reuse instance
+        Box(modifier = sharedModifier)  //  Reuse instance
     }
 }
 ```

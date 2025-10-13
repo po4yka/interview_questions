@@ -397,3 +397,21 @@ class MyApplication : Application() {
 
 **English Summary**: Lifecycle library provides **lifecycle-aware components** that automatically respond to Activity/Fragment lifecycle changes. Core: Lifecycle (state), LifecycleOwner (Activity/Fragment), LifecycleObserver (observer). Use DefaultLifecycleObserver for modern approach. States: INITIALIZED, CREATED, STARTED, RESUMED, DESTROYED. Events: ON_CREATE, ON_START, ON_RESUME, ON_PAUSE, ON_STOP, ON_DESTROY. Benefits: prevents memory leaks, reduces boilerplate, improves testability, enables reusability. LiveData is lifecycle-aware by default. Use ProcessLifecycleOwner for app-level lifecycle. Works seamlessly with coroutines (lifecycleScope, viewModelScope).
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-viewmodel-pattern--android--easy]] - Lifecycle
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Lifecycle
+- [[q-what-is-viewmodel--android--medium]] - Lifecycle
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - Lifecycle
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - Lifecycle
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - Lifecycle
+
+### Advanced (Harder)
+- [[q-service-lifecycle-binding--background--hard]] - Lifecycle
+- [[q-why-was-the-lifecycle-library-created--android--hard]] - Lifecycle

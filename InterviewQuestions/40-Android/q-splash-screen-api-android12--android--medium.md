@@ -357,3 +357,20 @@ class RoutingActivity : Activity() {
 - [Migrate your splash screen implementation to Android 12 and later](https://developer.android.com/develop/ui/views/launch/splash-screen/migrate)
 - [Splash screens](https://developer.android.com/develop/ui/views/launch/splash-screen)
 - [Add a splash screen](https://developer.android.com/training/wearables/apps/splash-screen)
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-graphql-vs-rest--networking--easy]] - Networking
+
+### Related (Medium)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-api-file-upload-server--android--medium]] - Networking
+- [[q-privacy-sandbox-topics-api--privacy--medium]] - Networking
+- [[q-api-rate-limiting-throttling--android--medium]] - Networking
+- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking

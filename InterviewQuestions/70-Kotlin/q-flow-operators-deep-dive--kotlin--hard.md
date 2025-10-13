@@ -436,8 +436,8 @@ suspend fun benchmarkFlatMapVariants() {
 2. **Control concurrency**:
    ```kotlin
    // Avoid unbounded concurrency
-   .flatMapMerge(concurrency = Int.MAX_VALUE) // ❌ Dangerous
-   .flatMapMerge(concurrency = 10) // ✅ Controlled
+   .flatMapMerge(concurrency = Int.MAX_VALUE) //  Dangerous
+   .flatMapMerge(concurrency = 10) //  Controlled
    ```
 
 3. **Consider resource limits**:
@@ -464,18 +464,18 @@ suspend fun benchmarkFlatMapVariants() {
 
 1. **Using flatMapConcat when flatMapMerge is needed**:
    ```kotlin
-   // ❌ Slow: processes 1000 items sequentially
+   //  Slow: processes 1000 items sequentially
    (1..1000).asFlow()
        .flatMapConcat { fetchData(it) }
 
-   // ✅ Fast: processes 10 at a time
+   //  Fast: processes 10 at a time
    (1..1000).asFlow()
        .flatMapMerge(10) { fetchData(it) }
    ```
 
 2. **Forgetting cancellation with flatMapLatest**:
    ```kotlin
-   // ❌ Resources leak if not cancellation-aware
+   //  Resources leak if not cancellation-aware
    searchQuery.flatMapLatest { query ->
        flow {
            val connection = openConnection() // Not cancelled!
@@ -483,7 +483,7 @@ suspend fun benchmarkFlatMapVariants() {
        }
    }
 
-   // ✅ Properly cancellable
+   //  Properly cancellable
    searchQuery.flatMapLatest { query ->
        flow {
            val connection = openConnection()
@@ -498,10 +498,10 @@ suspend fun benchmarkFlatMapVariants() {
 
 3. **Not configuring concurrency**:
    ```kotlin
-   // ❌ Default concurrency might be too high or low
+   //  Default concurrency might be too high or low
    .flatMapMerge { ... }
 
-   // ✅ Explicitly set based on use case
+   //  Explicitly set based on use case
    .flatMapMerge(concurrency = 3) { ... }
    ```
 
@@ -747,8 +747,8 @@ fun <T> Flow<T>.rateLimit(
 2. **Контролируйте конкурентность**:
    ```kotlin
    // Избегайте неограниченной конкурентности
-   .flatMapMerge(concurrency = Int.MAX_VALUE) // ❌ Опасно
-   .flatMapMerge(concurrency = 10) // ✅ Контролируемо
+   .flatMapMerge(concurrency = Int.MAX_VALUE) //  Опасно
+   .flatMapMerge(concurrency = 10) //  Контролируемо
    ```
 
 3. **Обрабатывайте ошибки правильно**:
@@ -763,19 +763,19 @@ fun <T> Flow<T>.rateLimit(
 
 1. **Использование flatMapConcat вместо flatMapMerge**:
    ```kotlin
-   // ❌ Медленно: обработка 1000 элементов последовательно
+   //  Медленно: обработка 1000 элементов последовательно
    (1..1000).asFlow().flatMapConcat { fetchData(it) }
 
-   // ✅ Быстро: обработка 10 одновременно
+   //  Быстро: обработка 10 одновременно
    (1..1000).asFlow().flatMapMerge(10) { fetchData(it) }
    ```
 
 2. **Не настройка конкурентности**:
    ```kotlin
-   // ❌ Конкурентность по умолчанию может быть слишком большой
+   //  Конкурентность по умолчанию может быть слишком большой
    .flatMapMerge { ... }
 
-   // ✅ Явно установлено в зависимости от случая
+   //  Явно установлено в зависимости от случая
    .flatMapMerge(concurrency = 3) { ... }
    ```
 

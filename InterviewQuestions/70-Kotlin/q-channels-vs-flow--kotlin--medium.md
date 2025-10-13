@@ -544,12 +544,12 @@ val flow = flow { emit(data) }
 
 4. **Prefer Flow for transformations**:
    ```kotlin
-   // ✅ Flow is better for this
+   //  Flow is better for this
    flow { emit(data) }
        .map { transform(it) }
        .filter { isValid(it) }
 
-   // ❌ Awkward with channels
+   //  Awkward with channels
    val ch1 = Channel<Data>()
    val ch2 = Channel<Transformed>()
    // Manual piping needed
@@ -559,12 +559,12 @@ val flow = flow { emit(data) }
 
 1. **Forgetting to close channels**:
    ```kotlin
-   // ❌ Leak
+   //  Leak
    val ch = Channel<Int>()
    ch.send(1)
    // Never closed!
 
-   // ✅ Always close
+   //  Always close
    val ch = Channel<Int>()
    try { ch.send(1) }
    finally { ch.close() }
@@ -572,21 +572,21 @@ val flow = flow { emit(data) }
 
 2. **Using UNLIMITED carelessly**:
    ```kotlin
-   // ❌ OutOfMemoryError risk
+   //  OutOfMemoryError risk
    val ch = Channel<ByteArray>(Channel.UNLIMITED)
    repeat(1000000) { ch.send(ByteArray(1024)) }
 
-   // ✅ Use bounded capacity
+   //  Use bounded capacity
    val ch = Channel<ByteArray>(100)
    ```
 
 3. **Wrong choice for use case**:
    ```kotlin
-   // ❌ Channel for data transformation
+   //  Channel for data transformation
    val ch = Channel<Int>()
    launch { for (i in ch) process(i) }
 
-   // ✅ Flow for data transformation
+   //  Flow for data transformation
    flowOf(1,2,3).map { process(it) }.collect()
    ```
 
@@ -792,23 +792,23 @@ eventBus.publish(AppEvent.UserLoggedIn(123))
 
 1. **Забывание закрытия каналов**:
    ```kotlin
-   // ❌ Утечка
+   //  Утечка
    val ch = Channel<Int>()
    ch.send(1)
    // Никогда не закрыт!
 
-   // ✅ Всегда закрывать
+   //  Всегда закрывать
    try { ch.send(1) }
    finally { ch.close() }
    ```
 
 2. **Небрежное использование UNLIMITED**:
    ```kotlin
-   // ❌ Риск OutOfMemoryError
+   //  Риск OutOfMemoryError
    val ch = Channel<ByteArray>(Channel.UNLIMITED)
    repeat(1000000) { ch.send(ByteArray(1024)) }
 
-   // ✅ Используйте ограниченную емкость
+   //  Используйте ограниченную емкость
    val ch = Channel<ByteArray>(100)
    ```
 

@@ -101,19 +101,19 @@ public interface CoroutineScope {
 ### Visual Representation
 
 ```
-┌──────────────────────────────────────┐
-│        CoroutineScope                │
-│  ┌────────────────────────────────┐  │
-│  │    CoroutineContext            │  │
-│  │  ┌──────────┐  ┌────────────┐ │  │
-│  │  │   Job    │  │ Dispatcher │ │  │
-│  │  └──────────┘  └────────────┘ │  │
-│  │  ┌──────────┐  ┌────────────┐ │  │
-│  │  │   Name   │  │  Handler   │ │  │
-│  │  └──────────┘  └────────────┘ │  │
-│  └────────────────────────────────┘  │
-│  + launch(), async(), cancel()       │
-└──────────────────────────────────────┘
+
+        CoroutineScope                
+    
+      CoroutineContext              
+         
+       Job       Dispatcher    
+         
+         
+       Name       Handler      
+         
+    
+  + launch(), async(), cancel()       
+
 ```
 
 ### Practical Examples

@@ -643,7 +643,7 @@ fun `parallel execution saves time`() = runTest {
 ### Virtual Time Gotchas
 
 ```kotlin
-// ❌ WRONG: Using Thread.sleep
+//  WRONG: Using Thread.sleep
 @Test
 fun `wrong - Thread sleep`() = runTest {
     launch {
@@ -655,7 +655,7 @@ fun `wrong - Thread sleep`() = runTest {
     // Test hangs or takes 1 second
 }
 
-// ✅ CORRECT: Using delay
+//  CORRECT: Using delay
 @Test
 fun `correct - delay`() = runTest {
     launch {
@@ -666,7 +666,7 @@ fun `correct - delay`() = runTest {
     advanceTimeBy(1000) // Works instantly
 }
 
-// ❌ WRONG: Real time API
+//  WRONG: Real time API
 @Test
 fun `wrong - System.currentTimeMillis`() = runTest {
     val start = System.currentTimeMillis() // Real time!
@@ -677,7 +677,7 @@ fun `wrong - System.currentTimeMillis`() = runTest {
     assertTrue(duration < 100) // Actually took < 100ms real time
 }
 
-// ✅ CORRECT: Virtual time
+//  CORRECT: Virtual time
 @Test
 fun `correct - currentTime`() = runTest {
     val start = currentTime // Virtual time
@@ -688,7 +688,7 @@ fun `correct - currentTime`() = runTest {
     assertEquals(1000, duration)
 }
 
-// ❌ WRONG: Blocking APIs
+//  WRONG: Blocking APIs
 @Test
 fun `wrong - blocking API`() = runTest {
     launch {
@@ -698,7 +698,7 @@ fun `wrong - blocking API`() = runTest {
     advanceUntilIdle() // Doesn't help
 }
 
-// ✅ CORRECT: Suspending APIs
+//  CORRECT: Suspending APIs
 @Test
 fun `correct - suspending API`() = runTest {
     launch {

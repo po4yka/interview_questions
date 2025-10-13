@@ -828,7 +828,7 @@ sealed class SearchUiState {
 ### Operator Chaining Best Practices
 
 ```kotlin
-// ✅ Good: Clear, readable pipeline
+//  Good: Clear, readable pipeline
 fun processData(input: Flow<RawData>): Flow<ProcessedData> =
     input
         .filter { it.isValid() }
@@ -836,7 +836,7 @@ fun processData(input: Flow<RawData>): Flow<ProcessedData> =
         .distinctUntilChanged()
         .catch { emit(ProcessedData.empty()) }
 
-// ❌ Bad: Too complex, hard to test
+//  Bad: Too complex, hard to test
 fun processData(input: Flow<RawData>): Flow<ProcessedData> =
     input.filter { data ->
         data.value > 0 && data.timestamp > System.currentTimeMillis() - 1000
@@ -1224,7 +1224,7 @@ class SearchViewModel(
 ### Лучшие практики
 
 ```kotlin
-// ✅ Хорошо: Ясный, читаемый конвейер
+//  Хорошо: Ясный, читаемый конвейер
 fun processData(input: Flow<RawData>): Flow<ProcessedData> =
     input
         .filter { it.isValid() }
@@ -1232,7 +1232,7 @@ fun processData(input: Flow<RawData>): Flow<ProcessedData> =
         .distinctUntilChanged()
         .catch { emit(ProcessedData.empty()) }
 
-// ❌ Плохо: Слишком сложно, трудно тестировать
+//  Плохо: Слишком сложно, трудно тестировать
 fun processData(input: Flow<RawData>): Flow<ProcessedData> =
     input.filter { data ->
         data.value > 0 && data.timestamp > System.currentTimeMillis() - 1000

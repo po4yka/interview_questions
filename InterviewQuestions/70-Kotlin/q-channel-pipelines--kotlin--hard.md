@@ -958,16 +958,16 @@ fun CoroutineScope.safeProcessor(
 
 1. **Unbounded channels causing OOM**:
 ```kotlin
-// ❌ Bad - can consume all memory
+//  Bad - can consume all memory
 val channel = Channel<Data>(capacity = Channel.UNLIMITED)
 
-// ✅ Good - bounded buffer
+//  Good - bounded buffer
 val channel = Channel<Data>(capacity = 100)
 ```
 
 2. **Not closing channels**:
 ```kotlin
-// ❌ Bad - consumer waits forever
+//  Bad - consumer waits forever
 fun producer(): ReceiveChannel<Int> = Channel<Int>().apply {
     GlobalScope.launch {
         send(1)
@@ -975,7 +975,7 @@ fun producer(): ReceiveChannel<Int> = Channel<Int>().apply {
     }
 }
 
-// ✅ Good - channel closed
+//  Good - channel closed
 fun producer() = GlobalScope.produce {
     send(1)
 }  // Automatically closed
@@ -983,13 +983,13 @@ fun producer() = GlobalScope.produce {
 
 3. **Blocking operations in pipeline**:
 ```kotlin
-// ❌ Bad - blocks coroutine thread
+//  Bad - blocks coroutine thread
 fun processSync(item: Int): Int {
     Thread.sleep(100)  // Blocking!
     return item * 2
 }
 
-// ✅ Good - suspending
+//  Good - suspending
 suspend fun processAsync(item: Int): Int {
     delay(100)  // Non-blocking
     return item * 2

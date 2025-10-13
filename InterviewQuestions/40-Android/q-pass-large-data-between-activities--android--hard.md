@@ -655,3 +655,15 @@ revokeUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 Это предотвращает ошибку **TransactionTooLargeException** (лимит Intent ~1MB).
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-how-to-pass-data-from-one-activity-to-another--android--medium]] - Activity
+- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Activity
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
+
+### Related (Hard)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity

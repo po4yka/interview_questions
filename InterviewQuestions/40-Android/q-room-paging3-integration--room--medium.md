@@ -1028,3 +1028,21 @@ Paging 3 с Room предоставляет мощные возможности 
 - **Поддержка Compose**: Интеграция LazyColumn с collectAsLazyPagingItems()
 - **Трансформации**: filter, map, insertSeparators на paging данных
 - **Производительность**: Эффективное использование памяти и плавная прокрутка
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-room-library-definition--android--easy]] - Storage
+
+### Related (Medium)
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-transactions-dao--room--medium]] - Storage
+- [[q-room-type-converters-advanced--room--medium]] - Storage
+- [[q-room-vs-sqlite--android--medium]] - Storage
+- [[q-room-type-converters--android--medium]] - Storage
+
+### Advanced (Harder)
+- [[q-room-fts-full-text-search--room--hard]] - Storage

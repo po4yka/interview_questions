@@ -395,3 +395,17 @@ class ProductActivity : AppCompatActivity() {
 - Deep linking
 - Navigation Component
 - onNewIntent()
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-activity-navigation-how-it-works--android--medium]] - Navigation, Activity
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation
+- [[q-compose-navigation-advanced--android--medium]] - Navigation
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
+
+### Advanced (Harder)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity

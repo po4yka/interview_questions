@@ -463,13 +463,13 @@ fun `test conflate drops intermediate values`() = runTest {
 
 2. **Use Turbine for cleaner Flow tests**:
    ```kotlin
-   // ✅ Clean with Turbine
+   //  Clean with Turbine
    flow.test {
        assertEquals(1, awaitItem())
        awaitComplete()
    }
 
-   // ❌ Manual collection is verbose
+   //  Manual collection is verbose
    val results = mutableListOf<Int>()
    flow.collect { results.add(it) }
    assertEquals(listOf(1), results)
@@ -513,7 +513,7 @@ fun `test conflate drops intermediate values`() = runTest {
 
 1. **Not using runTest**:
    ```kotlin
-   // ❌ Real delays
+   //  Real delays
    @Test
    fun test() {
        runBlocking {
@@ -521,7 +521,7 @@ fun `test conflate drops intermediate values`() = runTest {
        }
    }
 
-   // ✅ Virtual time
+   //  Virtual time
    @Test
    fun test() = runTest {
        delay(1000) // Instant
@@ -538,10 +538,10 @@ fun `test conflate drops intermediate values`() = runTest {
        }
 
        flow.test {
-           // ❌ Will timeout without advancing
+           //  Will timeout without advancing
            awaitItem()
 
-           // ✅ Advance time first
+           //  Advance time first
            advanceTimeBy(100)
            awaitItem()
        }
@@ -550,12 +550,12 @@ fun `test conflate drops intermediate values`() = runTest {
 
 3. **Forgetting awaitComplete**:
    ```kotlin
-   // ❌ Doesn't verify completion
+   //  Doesn't verify completion
    flow.test {
        assertEquals(1, awaitItem())
    }
 
-   // ✅ Verifies flow completes
+   //  Verifies flow completes
    flow.test {
        assertEquals(1, awaitItem())
        awaitComplete()

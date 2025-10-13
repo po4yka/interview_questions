@@ -170,7 +170,7 @@ fun destructuringExamples() {
 #### Data Class Requirements
 
 ```kotlin
-// ✅ Valid data classes
+//  Valid data classes
 
 // 1. Primary constructor must have at least one parameter
 data class ValidData1(val value: String)
@@ -188,7 +188,7 @@ data class ValidData4(val id: Int) {
     val computed: String = "ID: $id"
 }
 
-// ❌ Invalid data classes
+//  Invalid data classes
 
 // Cannot be abstract
 // abstract data class InvalidData1(val value: String) // Error
@@ -301,20 +301,20 @@ data class Success(val data: List<String>) : UiState()
 data class Error(val message: String) : UiState()
 
 // 5. Keep data classes simple and focused
-// ✅ Good: Simple data container
+//  Good: Simple data container
 data class UserProfile(
     val id: String,
     val name: String,
     val email: String
 )
 
-// ❌ Bad: Business logic in data class
+//  Bad: Business logic in data class
 data class BadUser(val id: String, val name: String) {
     fun validateEmail(): Boolean { /* logic */ return true }
     fun sendNotification() { /* logic */ }
 }
 
-// ✅ Better: Separate concerns
+//  Better: Separate concerns
 data class User(val id: String, val name: String, val email: String)
 
 class UserService {

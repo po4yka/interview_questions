@@ -92,7 +92,7 @@ GROUP BY true
 
 ---
 
-## 🔗 Link Health Monitor
+##  Link Health Monitor
 
 ### Broken Links Detection
 
@@ -134,11 +134,11 @@ for (let file of files) {
 }
 
 // Display results
-dv.header(3, `📊 Summary`);
+dv.header(3, ` Summary`);
 dv.paragraph(`**Total Links**: ${totalLinks} | **Broken**: ${brokenCount} | **Health**: ${Math.round((totalLinks - brokenCount) / totalLinks * 100)}%`);
 
 if (brokenCount > 0) {
-    dv.header(3, `❌ Broken Links (${brokenCount})`);
+    dv.header(3, ` Broken Links (${brokenCount})`);
 
     // Group by source file
     const grouped = {};
@@ -165,7 +165,7 @@ if (brokenCount > 0) {
 
     dv.paragraph(`*Showing top 10 files. See [Link Analysis Report](LINK_ANALYSIS_REPORT.md) for complete list.*`);
 } else {
-    dv.paragraph("✅ **All links are healthy!**");
+    dv.paragraph(" **All links are healthy!**");
 }
 ```
 
@@ -203,7 +203,7 @@ for (let file of files) {
     }
 }
 
-dv.header(3, `💡 Suggested Cross-References`);
+dv.header(3, ` Suggested Cross-References`);
 
 if (suggestions.length > 0) {
     // Show top 15 suggestions (files with most overlapping topics)
@@ -223,7 +223,7 @@ if (suggestions.length > 0) {
 
     dv.paragraph(`*Found ${suggestions.length} potential cross-references. Showing top 15.*`);
 } else {
-    dv.paragraph("✅ No obvious missing cross-references detected.");
+    dv.paragraph(" No obvious missing cross-references detected.");
 }
 ```
 
@@ -257,7 +257,7 @@ const orphans = allFiles
     .sort(f => f.file.name, 'asc')
     .slice(0, 20);
 
-dv.header(3, `🏝️ Orphan Files (No Incoming Links)`);
+dv.header(3, ` Orphan Files (No Incoming Links)`);
 
 if (orphans.length > 0) {
     dv.table(
@@ -270,7 +270,7 @@ if (orphans.length > 0) {
     );
     dv.paragraph(`*Showing first 20 orphans. These files might need cross-references.*`);
 } else {
-    dv.paragraph("✅ No orphan files found!");
+    dv.paragraph(" No orphan files found!");
 }
 ```
 
@@ -298,7 +298,7 @@ for (let file of files) {
     }
 }
 
-dv.header(3, `📝 Files Missing Related Questions Section`);
+dv.header(3, ` Files Missing Related Questions Section`);
 
 if (filesWithoutRelated.length > 0) {
     const sample = filesWithoutRelated.slice(0, 15);
@@ -314,7 +314,7 @@ if (filesWithoutRelated.length > 0) {
 
     dv.paragraph(`*Found ${filesWithoutRelated.length} files. Showing first 15. Consider adding related questions to improve navigation.*`);
 } else {
-    dv.paragraph("✅ All files have Related Questions sections!");
+    dv.paragraph(" All files have Related Questions sections!");
 }
 ```
 

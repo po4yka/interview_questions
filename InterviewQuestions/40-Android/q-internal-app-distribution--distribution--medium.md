@@ -127,7 +127,7 @@ tasks.register("distributeToQa") {
     finalizedBy("appDistributionUploadQa")
 
     doLast {
-        println("✅ QA build distributed successfully")
+        println(" QA build distributed successfully")
         println("Testers will receive notification via email")
     }
 }
@@ -140,7 +140,7 @@ tasks.register("distributeToStaging") {
     finalizedBy("appDistributionUploadStaging")
 
     doLast {
-        println("✅ Staging build distributed successfully")
+        println(" Staging build distributed successfully")
     }
 }
 
@@ -224,7 +224,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "🚀 *New Build Distributed*\n*Branch:* ${{ github.ref }}\n*Build:* #${{ github.run_number }}\n*Commit:* ${GITHUB_SHA::7}"
+                    "text": " *New Build Distributed*\n*Branch:* ${{ github.ref }}\n*Build:* #${{ github.run_number }}\n*Commit:* ${GITHUB_SHA::7}"
                   }
                 }
               ]
@@ -574,7 +574,7 @@ class PlayConsoleUploader @Inject constructor(
             // Commit the edit
             publisher.edits().commit(packageName, editId).execute()
 
-            println("✅ Successfully uploaded to Internal Testing track")
+            println(" Successfully uploaded to Internal Testing track")
         } catch (e: Exception) {
             // Abort edit on failure
             publisher.edits().delete(packageName, editId).execute()
@@ -911,3 +911,13 @@ Key considerations: automation, segmented test groups, meaningful release notes,
 - **CI/CD Integration**: Автоматизированный build и distribution
 
 Ключевые моменты: автоматизация, сегментированные группы, meaningful release notes, легкий feedback, comprehensive monitoring.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-app-store-optimization--distribution--medium]] - Distribution
+- [[q-alternative-distribution--distribution--medium]] - Distribution
+- [[q-play-store-publishing--distribution--medium]] - Distribution
+- [[q-android-app-bundles--android--easy]] - Distribution

@@ -658,16 +658,16 @@ fun ScreenWithFAB() {
 
 **1. Use standard durations**
 ```kotlin
-// ✅ DO - Use Material durations
+//  DO - Use Material durations
 animationSpec = tween(durationMillis = 300)
 
-// ❌ DON'T - Random durations
+//  DON'T - Random durations
 animationSpec = tween(durationMillis = 237)
 ```
 
 **2. Apply appropriate easing**
 ```kotlin
-// ✅ DO - Emphasized for important transitions
+//  DO - Emphasized for important transitions
 enter = slideInVertically(
     animationSpec = tween(
         durationMillis = 300,
@@ -675,18 +675,18 @@ enter = slideInVertically(
     )
 )
 
-// ❌ DON'T - Linear easing (feels mechanical)
+//  DON'T - Linear easing (feels mechanical)
 animationSpec = tween(easing = LinearEasing)
 ```
 
 **3. Provide keys for list animations**
 ```kotlin
-// ✅ DO
+//  DO
 items(items, key = { it.id }) { item ->
     // Content
 }
 
-// ❌ DON'T
+//  DON'T
 items(items) { item -> // No key
     // Content
 }
@@ -706,10 +706,10 @@ val duration = (300 * scale).toInt()
 
 **5. Avoid excessive motion**
 ```kotlin
-// ✅ DO - Subtle, meaningful
+//  DO - Subtle, meaningful
 fadeIn(tween(300))
 
-// ❌ DON'T - Overly complex
+//  DON'T - Overly complex
 fadeIn() + slideIn() + scaleIn() + rotateIn() // Too much!
 ```
 

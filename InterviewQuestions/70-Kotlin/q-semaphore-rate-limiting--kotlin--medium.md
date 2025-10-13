@@ -538,21 +538,21 @@ class HttpException(private val statusCode: Int, message: String) : Exception(me
 ```kotlin
 val semaphore = Semaphore(3)
 
-// ❌ BAD: Manual acquire/release
+//  BAD: Manual acquire/release
 suspend fun badExample() {
     semaphore.acquire()
     performOperation() // Exception here leaks permit!
     semaphore.release()
 }
 
-// ✅ GOOD: withPermit handles cleanup
+//  GOOD: withPermit handles cleanup
 suspend fun goodExample() {
     semaphore.withPermit {
         performOperation() // Exception here automatically releases permit
     }
 }
 
-// ❌ BAD: Try-catch without finally
+//  BAD: Try-catch without finally
 suspend fun badWithTryCatch() {
     try {
         semaphore.acquire()
@@ -563,7 +563,7 @@ suspend fun badWithTryCatch() {
     }
 }
 
-// ✅ GOOD: Manual acquire with try-finally
+//  GOOD: Manual acquire with try-finally
 suspend fun manualAcquireCorrect() {
     semaphore.acquire()
     try {
@@ -749,14 +749,14 @@ class SemaphoreTest {
 
 #### Best Practices
 
-1. ✅ Always use `withPermit` instead of manual acquire/release
-2. ✅ Size permits based on resource limits (connections, API limits)
-3. ✅ Monitor and adjust permits based on system performance
-4. ✅ Use separate semaphores for different resource types
-5. ✅ Combine with other rate limiting strategies (token bucket)
-6. ✅ Test concurrent access thoroughly
-7. ✅ Log permit acquisition for debugging
-8. ✅ Consider fair vs unfair based on requirements
+1.  Always use `withPermit` instead of manual acquire/release
+2.  Size permits based on resource limits (connections, API limits)
+3.  Monitor and adjust permits based on system performance
+4.  Use separate semaphores for different resource types
+5.  Combine with other rate limiting strategies (token bucket)
+6.  Test concurrent access thoroughly
+7.  Log permit acquisition for debugging
+8.  Consider fair vs unfair based on requirements
 
 ### When to Use Semaphore
 

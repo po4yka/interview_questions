@@ -57,18 +57,18 @@ fun <T> handleResult(result: Result<T>) {
         is Result.Error -> println("Error: ${result.exception.message}")
         is Result.Loading -> println("Loading...")
     }
-    // No else needed - compiler ensures exhaustiveness ✅
+    // No else needed - compiler ensures exhaustiveness 
 }
 ```
 
 **Key features:**
 ```
-✅ Restricted type hierarchy
-✅ All subclasses defined in same file (or nested)
-✅ Exhaustive when expressions
-✅ Type-safe state modeling
-✅ Better than enums (can hold data)
-✅ Better than abstract classes (exhaustiveness)
+ Restricted type hierarchy
+ All subclasses defined in same file (or nested)
+ Exhaustive when expressions
+ Type-safe state modeling
+ Better than enums (can hold data)
+ Better than abstract classes (exhaustiveness)
 ```
 
 ---
@@ -728,7 +728,7 @@ fun CameraScreen() {
 ### SEALED CLASS VS ENUM
 
 ```kotlin
-// ❌ Enum - limited capabilities
+//  Enum - limited capabilities
 enum class Status {
     SUCCESS,
     ERROR,
@@ -736,7 +736,7 @@ enum class Status {
 }
 // Can't hold data, can't have subclasses
 
-// ✅ Sealed class - flexible
+//  Sealed class - flexible
 sealed class Status {
     data class Success(val data: String) : Status()
     data class Error(val exception: Exception) : Status()

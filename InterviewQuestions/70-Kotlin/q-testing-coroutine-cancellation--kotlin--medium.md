@@ -819,7 +819,7 @@ fun `onCompletion detects cancellation`() = runTest {
 ### Best Practices
 
 ```kotlin
-// ✅ DO: Use ensureActive for CPU-intensive work
+//  DO: Use ensureActive for CPU-intensive work
 suspend fun processData(data: List<Int>) = coroutineScope {
     data.map { item ->
         ensureActive()
@@ -827,7 +827,7 @@ suspend fun processData(data: List<Int>) = coroutineScope {
     }
 }
 
-// ❌ DON'T: Ignore cancellation
+//  DON'T: Ignore cancellation
 suspend fun badProcess(data: List<Int>) {
     data.forEach { item ->
         // No cancellation check!
@@ -835,7 +835,7 @@ suspend fun badProcess(data: List<Int>) {
     }
 }
 
-// ✅ DO: Use NonCancellable for cleanup
+//  DO: Use NonCancellable for cleanup
 try {
     // Main work
 } finally {
@@ -844,14 +844,14 @@ try {
     }
 }
 
-// ❌ DON'T: Suppress CancellationException
+//  DON'T: Suppress CancellationException
 try {
     delay(1000)
 } catch (e: CancellationException) {
     // Don't catch and ignore!
 }
 
-// ✅ DO: Rethrow CancellationException
+//  DO: Rethrow CancellationException
 try {
     delay(1000)
 } catch (e: CancellationException) {
@@ -859,12 +859,12 @@ try {
     throw e // MUST rethrow
 }
 
-// ✅ DO: Use use() for resources
+//  DO: Use use() for resources
 resource.use {
     // Automatic cleanup on cancellation
 }
 
-// ✅ DO: Test cancellation timing
+//  DO: Test cancellation timing
 @Test
 fun test() = runTest {
     val job = launch { /* ... */ }

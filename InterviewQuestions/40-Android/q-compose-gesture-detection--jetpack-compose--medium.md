@@ -420,19 +420,19 @@ fun GesturePropagation() {
 **1. Use appropriate gesture detectors:**
 
 ```kotlin
-// ✅ DO: Use built-in detectors
+//  DO: Use built-in detectors
 .pointerInput(Unit) {
     detectTapGestures { /* ... */ }
     detectDragGestures { /* ... */ }
 }
 
-// ❌ DON'T: Roll your own unless necessary
+//  DON'T: Roll your own unless necessary
 ```
 
 **2. Remember to consume events:**
 
 ```kotlin
-// ✅ DO: Consume to prevent propagation
+//  DO: Consume to prevent propagation
 onDrag = { change, dragAmount ->
     change.consume()
     // handle drag
@@ -442,7 +442,7 @@ onDrag = { change, dragAmount ->
 **3. Use keys for pointer input:**
 
 ```kotlin
-// ✅ DO: Reset gesture when key changes
+//  DO: Reset gesture when key changes
 .pointerInput(itemId) {
     detectTapGestures { /* ... */ }
 }

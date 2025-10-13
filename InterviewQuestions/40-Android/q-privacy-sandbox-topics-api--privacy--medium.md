@@ -817,3 +817,20 @@ Privacy Sandbox для Android — это инициатива Google по ул�
 ### Резюме
 
 Privacy Sandbox Topics API обеспечивает рекламу на основе интересов без cross-app отслеживания. Темы вычисляются на устройстве, хранятся локально и делятся только с приложениями, которые их наблюдали. Правильная реализация требует согласия пользователя, четких privacy контролов, contextual fallback и строгого соблюдения принципов приватности.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-graphql-vs-rest--networking--easy]] - Networking
+
+### Related (Medium)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-api-file-upload-server--android--medium]] - Networking
+- [[q-splash-screen-api-android12--android--medium]] - Networking
+- [[q-api-rate-limiting-throttling--android--medium]] - Networking
+- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking

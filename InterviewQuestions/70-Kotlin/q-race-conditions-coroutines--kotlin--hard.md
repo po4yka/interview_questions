@@ -89,7 +89,7 @@ launch {
 class BankAccount {
     private var balance = 100
 
-    // ❌ RACE CONDITION
+    //  RACE CONDITION
     suspend fun withdraw(amount: Int): Boolean {
         if (balance >= amount) { // Check
             delay(10) // Simulate processing
@@ -130,7 +130,7 @@ class BankAccount {
     private val mutex = Mutex()
     private var balance = 100
 
-    // ✅ CORRECT
+    //  CORRECT
     suspend fun withdraw(amount: Int): Boolean {
         return mutex.withLock {
             if (balance >= amount) {
@@ -152,7 +152,7 @@ class BankAccount {
 ```kotlin
 var counter = 0
 
-// ❌ RACE CONDITION
+//  RACE CONDITION
 repeat(1000) {
     launch {
         counter++ // Read-modify-write
@@ -219,7 +219,7 @@ repeat(1000) {
 **Problem:** Multiple coroutines modifying shared state.
 
 ```kotlin
-// ❌ DANGEROUS
+//  DANGEROUS
 class UserCache {
     private val cache = mutableMapOf<String, User>()
 
@@ -546,7 +546,7 @@ launch {
 **@Volatile:** Ensures visibility across threads, but NOT atomicity.
 
 ```kotlin
-// ❌ STILL RACY
+//  STILL RACY
 @Volatile
 var counter = 0
 
@@ -559,7 +559,7 @@ launch { repeat(1000) { counter++ } }
 **When to use @Volatile:**
 
 ```kotlin
-// ✅ CORRECT: Simple flag
+//  CORRECT: Simple flag
 @Volatile
 var isRunning = false
 
@@ -641,7 +641,7 @@ fun `stress test 100 times`() {
 **Problem: Concurrent login/logout**
 
 ```kotlin
-// ❌ RACY
+//  RACY
 class SessionManager {
     private var currentUser: User? = null
     private var loginTime: Long = 0
@@ -671,7 +671,7 @@ launch { manager.logout() }
 **Solution:**
 
 ```kotlin
-// ✅ SAFE
+//  SAFE
 class SessionManager {
     private val mutex = Mutex()
     private var session: Session? = null
@@ -706,7 +706,7 @@ data class Session(
 **Problem: Lost cache updates**
 
 ```kotlin
-// ❌ RACY
+//  RACY
 class ImageCache {
     private val cache = mutableMapOf<String, Bitmap>()
 
@@ -727,7 +727,7 @@ launch { cache.getImage("url1") } // Downloads again!
 **Solution: Deferred result**
 
 ```kotlin
-// ✅ SAFE
+//  SAFE
 class ImageCache {
     private val mutex = Mutex()
     private val cache = mutableMapOf<String, Bitmap>()
@@ -792,16 +792,16 @@ launch { val value = channel.receive() }
 
 ### Best Practices for Concurrent Code
 
-1. ✅ **Minimize shared mutable state** - Prefer immutable data
-2. ✅ **Use thread-safe collections** - ConcurrentHashMap, etc.
-3. ✅ **Synchronize access** - Mutex, Atomic, confined dispatcher
-4. ✅ **Make operations atomic** - Combine check-then-act in lock
-5. ✅ **Use StateFlow for UI state** - Atomic updates
-6. ✅ **Document thread-safety** - Annotate thread-safe classes
-7. ✅ **Test concurrency** - Stress tests, multiple iterations
-8. ✅ **Code review** - Check for race patterns
-9. ✅ **Use actor pattern** - For complex state machines
-10. ✅ **Profile and measure** - Ensure synchronization isn't bottleneck
+1.  **Minimize shared mutable state** - Prefer immutable data
+2.  **Use thread-safe collections** - ConcurrentHashMap, etc.
+3.  **Synchronize access** - Mutex, Atomic, confined dispatcher
+4.  **Make operations atomic** - Combine check-then-act in lock
+5.  **Use StateFlow for UI state** - Atomic updates
+6.  **Document thread-safety** - Annotate thread-safe classes
+7.  **Test concurrency** - Stress tests, multiple iterations
+8.  **Code review** - Check for race patterns
+9.  **Use actor pattern** - For complex state machines
+10.  **Profile and measure** - Ensure synchronization isn't bottleneck
 
 ### Key Takeaways
 

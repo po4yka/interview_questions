@@ -631,13 +631,13 @@ fun testHotFlow() = runTest {
 **1. Use runTest for all coroutine tests:**
 
 ```kotlin
-// ✅ DO
+//  DO
 @Test
 fun test() = runTest {
     // Test code
 }
 
-// ❌ DON'T
+//  DON'T
 @Test
 fun test() {
     runBlocking {
@@ -649,11 +649,11 @@ fun test() {
 **2. Set Main dispatcher for ViewModels:**
 
 ```kotlin
-// ✅ DO: Use rule
+//  DO: Use rule
 @get:Rule
 val mainDispatcherRule = MainDispatcherRule()
 
-// ❌ DON'T: Manual setup
+//  DON'T: Manual setup
 @Before
 fun setUp() {
     Dispatchers.setMain(testDispatcher)
@@ -663,13 +663,13 @@ fun setUp() {
 **3. Use Turbine for Flow testing:**
 
 ```kotlin
-// ✅ DO: Clean with Turbine
+//  DO: Clean with Turbine
 flow.test {
     assertEquals(1, awaitItem())
     awaitComplete()
 }
 
-// ❌ DON'T: Manual collection
+//  DON'T: Manual collection
 val emissions = mutableListOf<Int>()
 val job = launch {
     flow.collect { emissions.add(it) }
@@ -680,7 +680,7 @@ job.cancel()
 **4. Test both state and events:**
 
 ```kotlin
-// ✅ DO: Test both flows
+//  DO: Test both flows
 viewModel.uiState.test { /* ... */ }
 viewModel.events.test { /* ... */ }
 ```
@@ -721,3 +721,12 @@ viewModel.events.test { /* ... */ }
 4. Тестируйте как состояние, так и события
 
 Правильное тестирование корутин и Flow обеспечивает надежность асинхронного кода.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing

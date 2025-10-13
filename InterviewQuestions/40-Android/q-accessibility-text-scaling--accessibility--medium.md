@@ -27,24 +27,24 @@ How do you support dynamic text sizing and display scaling for accessibility? Wh
 ### SP vs DP Units
 
 ```kotlin
-// ✅ GOOD - Text size in sp (scales with user preference)
+//  GOOD - Text size in sp (scales with user preference)
 Text(
     text = "Hello World",
     fontSize = 16.sp // Scales with accessibility settings
 )
 
-// ❌ BAD - Text size in dp (does NOT scale)
+//  BAD - Text size in dp (does NOT scale)
 Text(
     text = "Hello World",
     fontSize = 16.dp // Fixed size, ignores user preferences
 )
 
-// ✅ GOOD - Non-text elements in dp
+//  GOOD - Non-text elements in dp
 Box(
     modifier = Modifier.size(48.dp) // Touch target, doesn't scale
 )
 
-// ❌ BAD - Touch targets in sp
+//  BAD - Touch targets in sp
 Box(
     modifier = Modifier.size(48.sp) // Will become huge at large text sizes
 )
@@ -58,7 +58,7 @@ Box(
 
 ```
 Scaling factors in Android:
-─────────────────────────────────
+
 Small:    0.85x  (85%)
 Default:  1.00x  (100%)
 Large:    1.15x  (115%)
@@ -72,7 +72,7 @@ Huge:     2.00x  (200%)  ← Target for testing
 **Problem: Text overflow at large sizes**:
 
 ```kotlin
-// ❌ BAD - Text gets cut off
+//  BAD - Text gets cut off
 @Composable
 fun BadProfile() {
     Row(
@@ -105,7 +105,7 @@ fun BadProfile() {
 **Solution 1: Remove fixed heights**:
 
 ```kotlin
-// ✅ GOOD - Height adapts to content
+//  GOOD - Height adapts to content
 @Composable
 fun GoodProfile() {
     Row(
@@ -138,7 +138,7 @@ fun GoodProfile() {
 **Solution 2: Use Column when needed**:
 
 ```kotlin
-// ✅ GOOD - Switch to vertical layout at large scales
+//  GOOD - Switch to vertical layout at large scales
 @Composable
 fun AdaptiveProfile() {
     val configuration = LocalConfiguration.current
@@ -274,11 +274,11 @@ val CustomTypography = Typography(
 2. Set to "Largest" or "Huge"
 3. Open your app
 4. Verify:
-   ✅ All text is readable
-   ✅ No text is cut off
-   ✅ Touch targets still work
-   ✅ Layouts don't overlap
-   ✅ Scrolling works properly
+    All text is readable
+    No text is cut off
+    Touch targets still work
+    Layouts don't overlap
+    Scrolling works properly
 ```
 
 **Programmatic testing**:
@@ -375,7 +375,7 @@ class TextScalingTest {
 **1. Fixed heights cutting off text**:
 
 ```kotlin
-// ❌ BAD
+//  BAD
 Card(
     modifier = Modifier
         .fillMaxWidth()
@@ -384,7 +384,7 @@ Card(
     Text("This text might get cut off at large scaling")
 }
 
-// ✅ GOOD
+//  GOOD
 Card(
     modifier = Modifier
         .fillMaxWidth()
@@ -397,20 +397,20 @@ Card(
 **2. maxLines causing truncation**:
 
 ```kotlin
-// ❌ BAD - Text truncated at large sizes
+//  BAD - Text truncated at large sizes
 Text(
     text = "Important message that needs to be fully visible",
     maxLines = 1, // Only shows one line!
     overflow = TextOverflow.Ellipsis
 )
 
-// ✅ GOOD - Allow wrapping
+//  GOOD - Allow wrapping
 Text(
     text = "Important message that needs to be fully visible"
     // No maxLines - wraps naturally
 )
 
-// ✅ ALSO GOOD - Use only when truncation is acceptable
+//  ALSO GOOD - Use only when truncation is acceptable
 Text(
     text = "Optional secondary info",
     maxLines = 2,
@@ -425,7 +425,7 @@ Text(
 **3. Icons not scaling with text**:
 
 ```kotlin
-// ❌ BAD - Icon doesn't scale
+//  BAD - Icon doesn't scale
 Row {
     Icon(
         imageVector = Icons.Default.Info,
@@ -438,7 +438,7 @@ Row {
     )
 }
 
-// ✅ GOOD - Icon scales with text
+//  GOOD - Icon scales with text
 Row {
     Icon(
         imageVector = Icons.Default.Info,
@@ -453,7 +453,7 @@ Row {
     )
 }
 
-// ✅ BETTER - Use LocalTextStyle
+//  BETTER - Use LocalTextStyle
 @Composable
 fun ScalingIcon() {
     val textStyle = LocalTextStyle.current
@@ -478,13 +478,13 @@ fun ScalingIcon() {
 **4. Touch targets too close together**:
 
 ```kotlin
-// ❌ BAD - Touch targets overlap at large text
+//  BAD - Touch targets overlap at large text
 Row {
     TextButton(onClick = {}) { Text("Cancel") }
     TextButton(onClick = {}) { Text("OK") }
 }
 
-// ✅ GOOD - Add spacing
+//  GOOD - Add spacing
 Row(
     horizontalArrangement = Arrangement.spacedBy(16.dp)
 ) {
@@ -492,7 +492,7 @@ Row(
     TextButton(onClick = {}) { Text("OK") }
 }
 
-// ✅ BETTER - Switch to Column at large scales
+//  BETTER - Switch to Column at large scales
 @Composable
 fun AdaptiveButtons() {
     val fontScale = LocalDensity.current.fontScale
@@ -525,7 +525,7 @@ fun AdaptiveButtons() {
 
 ```
 Settings → Display → Display size
-────────────────────────────────
+
 Small:   0.85x
 Default: 1.00x
 Large:   1.15x
@@ -592,33 +592,33 @@ fun ResponsiveLayout() {
 
 1. **Always use sp for text**
    ```kotlin
-   // ✅ GOOD
+   //  GOOD
    fontSize = 16.sp
 
-   // ❌ BAD
+   //  BAD
    fontSize = 16.dp
    ```
 
 2. **Avoid fixed heights**
    ```kotlin
-   // ✅ GOOD
+   //  GOOD
    modifier = Modifier.wrapContentHeight()
 
-   // ❌ BAD
+   //  BAD
    modifier = Modifier.height(80.dp)
    ```
 
 3. **Test at 200% scaling**
    ```
-   ✅ Test every screen at 200% text scaling
-   ✅ Verify no text is cut off
-   ✅ Verify touch targets still work
-   ✅ Verify layouts don't overlap
+    Test every screen at 200% text scaling
+    Verify no text is cut off
+    Verify touch targets still work
+    Verify layouts don't overlap
    ```
 
 4. **Consider adaptive layouts**
    ```kotlin
-   // ✅ GOOD - Adapt to large text
+   //  GOOD - Adapt to large text
    if (fontScale > 1.3f) {
        Column { /* Vertical layout */ }
    } else {
@@ -628,7 +628,7 @@ fun ResponsiveLayout() {
 
 5. **Use Material Typography**
    ```kotlin
-   // ✅ GOOD - Consistent scaling
+   //  GOOD - Consistent scaling
    Text(
        text = "Title",
        style = MaterialTheme.typography.titleLarge
@@ -696,3 +696,14 @@ fun ResponsiveLayout() {
 - Автоматизированное: Устанавливать fontScale в тестах
 - Screenshot-тестирование на разных масштабах
 - Проверять accessibility в CI/CD
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-accessibility-compose--accessibility--medium]] - Accessibility
+- [[q-accessibility-testing--accessibility--medium]] - Accessibility
+- [[q-custom-view-accessibility--custom-views--medium]] - Accessibility
+- [[q-accessibility-color-contrast--accessibility--medium]] - Accessibility
+- [[q-accessibility-talkback--accessibility--medium]] - Accessibility

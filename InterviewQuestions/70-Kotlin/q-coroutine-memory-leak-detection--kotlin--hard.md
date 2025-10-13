@@ -732,18 +732,18 @@ HEAP ANALYSIS RESULT
 1 APPLICATION LEAKS
 
 Leak 1:
-┬─
-│ GC Root: Thread
-│
-├─ Thread name: DefaultDispatcher-worker-1
-│
-├─ CoroutineScope instance
-│
-├─ LeakyActivity instance
-│    Leaking: YES (Activity destroyed but not GC'd)
-│    Retained size: 8.5 MB
-│
-╰→ View hierarchy (leaked)
+
+ GC Root: Thread
+
+ Thread name: DefaultDispatcher-worker-1
+
+ CoroutineScope instance
+
+ LeakyActivity instance
+    Leaking: YES (Activity destroyed but not GC'd)
+    Retained size: 8.5 MB
+
+→ View hierarchy (leaked)
 
 LEAK TRACE:
 GlobalScope.launch -> LeakyActivity -> ViewRoot -> Views
@@ -1150,39 +1150,39 @@ class ActivityLeakTest {
 ```kotlin
 // Checklist for code review:
 
-// ❌ GlobalScope usage
+//  GlobalScope usage
 GlobalScope.launch { }
 
-// ❌ Custom scope without cancellation
+//  Custom scope without cancellation
 class MyClass {
     private val scope = CoroutineScope(Job())
     // Missing: fun cleanup() { scope.cancel() }
 }
 
-// ❌ Capturing Activity/View in long operations
+//  Capturing Activity/View in long operations
 lifecycleScope.launch {
     delay(60000)
     activity.updateUI() // BAD: holds Activity for 1 minute
 }
 
-// ❌ Flow collection without lifecycle awareness
+//  Flow collection without lifecycle awareness
 GlobalScope.launch {
     flow.collect { } // BAD: never cancelled
 }
 
-// ✅ Lifecycle-aware scope
+//  Lifecycle-aware scope
 lifecycleScope.launch { }
 
-// ✅ ViewModel scope
+//  ViewModel scope
 viewModelScope.launch { }
 
-// ✅ Proper cancellation
+//  Proper cancellation
 private val scope = CoroutineScope(Job())
 fun cleanup() {
     scope.cancel()
 }
 
-// ✅ Lifecycle-aware Flow collection
+//  Lifecycle-aware Flow collection
 lifecycleScope.launch {
     repeatOnLifecycle(Lifecycle.State.STARTED) {
         flow.collect { }

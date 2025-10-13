@@ -62,22 +62,22 @@ val result = numbers
 ### Performance Comparison
 
 **Collections:**
-- ✅ Fast for small datasets
-- ✅ Simple, predictable
-- ❌ Creates intermediate collections
-- ❌ Processes all elements
+-  Fast for small datasets
+-  Simple, predictable
+-  Creates intermediate collections
+-  Processes all elements
 
 **Sequences:**
-- ✅ Efficient for large datasets
-- ✅ No intermediate collections
-- ✅ Short-circuits early
-- ❌ Overhead for small datasets
+-  Efficient for large datasets
+-  No intermediate collections
+-  Short-circuits early
+-  Overhead for small datasets
 
 ---
 
 ### When to Use Sequences
 
-**✅ Large datasets:**
+** Large datasets:**
 
 ```kotlin
 // Process 1 million items
@@ -91,7 +91,7 @@ largeList.asSequence()
     .toList()
 ```
 
-**✅ Multiple chained operations:**
+** Multiple chained operations:**
 
 ```kotlin
 // Many transformations
@@ -103,7 +103,7 @@ list.asSequence()
     .toList()
 ```
 
-**✅ Early termination:**
+** Early termination:**
 
 ```kotlin
 // Stops after finding first
@@ -116,7 +116,7 @@ list.asSequence()
 
 ### When to Use Collections
 
-**✅ Small datasets:**
+** Small datasets:**
 
 ```kotlin
 // 10 items - collection is faster
@@ -125,14 +125,14 @@ listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
     .map { it * 2 }
 ```
 
-**✅ Single operation:**
+** Single operation:**
 
 ```kotlin
 // Just one transformation
 list.map { it * 2 }
 ```
 
-**✅ Multiple terminal operations:**
+** Multiple terminal operations:**
 
 ```kotlin
 val seq = list.asSequence().filter { it > 0 }

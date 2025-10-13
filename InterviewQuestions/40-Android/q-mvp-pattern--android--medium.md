@@ -46,24 +46,24 @@ MVP is an architectural pattern engineered to facilitate automated unit testing 
 ### MVP Diagram
 
 ```
-┌─────────────┐
-│    View     │ ◄──── User Interaction
-│ (Activity/  │
-│  Fragment)  │
-└──────┬──────┘
-       │ calls
-       │ notifies
-       ▼
-┌─────────────┐
-│  Presenter  │
-│             │
-└──────┬──────┘
-       │ uses
-       ▼
-┌─────────────┐
-│    Model    │
-│ (Repository)│
-└─────────────┘
+
+    View       User Interaction
+ (Activity/  
+  Fragment)  
+
+        calls
+        notifies
+       
+
+  Presenter  
+             
+
+        uses
+       
+
+    Model    
+ (Repository)
+
 ```
 
 ### Contract Interface

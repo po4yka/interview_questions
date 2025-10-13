@@ -24,10 +24,10 @@ Android applications can use **three main database options**: **SQLite**, **Room
 **Built-in relational database** for Android. Lightweight, serverless, self-contained.
 
 **Characteristics:**
-- 🏗️ Built into Android
-- 📝 Requires manual SQL queries
-- ⚙️ Low-level API
-- 🔧 More boilerplate code
+-  Built into Android
+-  Requires manual SQL queries
+-  Low-level API
+-  More boilerplate code
 
 **Example:**
 
@@ -101,10 +101,10 @@ fun getUsers(): List<User> {
 **Abstraction layer over SQLite** from Android Jetpack. Recommended by Google.
 
 **Characteristics:**
-- 🎯 Type-safe database access
+-  Type-safe database access
 -  Compile-time SQL validation
-- 🔄 LiveData/Flow support
-- 📝 Annotation-based
+-  LiveData/Flow support
+-  Annotation-based
 
 **Example:**
 
@@ -186,10 +186,10 @@ viewLifecycleOwner.lifecycleScope.launch {
 **Modern mobile database** - object-oriented, fast, reactive.
 
 **Characteristics:**
-- 🚀 Fast performance
-- 🔄 Reactive queries
-- 📱 Mobile-first design
-- 🌐 Cloud sync support
+-  Fast performance
+-  Reactive queries
+-  Mobile-first design
+-  Cloud sync support
 
 **Example:**
 
@@ -269,13 +269,13 @@ apply plugin: 'realm-android'
 |---------|--------|------|-------|
 | **Type** | Relational | Relational (ORM) | Object DB |
 | **Boilerplate** | High | Low | Low |
-| **Type Safety** | ❌ No | ✅ Yes | ✅ Yes |
+| **Type Safety** |  No |  Yes |  Yes |
 | **SQL Knowledge** | Required | Required | Not required |
-| **Reactive** | ❌ No | ✅ Flow/LiveData | ✅ Yes |
+| **Reactive** |  No |  Flow/LiveData |  Yes |
 | **Performance** | Good | Good | Excellent |
 | **Size** | Built-in | Small | Large |
 | **Learning Curve** | Medium | Medium | Medium |
-| **Cloud Sync** | ❌ No | ❌ No | ✅ Yes |
+| **Cloud Sync** |  No |  No |  Yes |
 
 ## Which to Choose?
 
@@ -284,7 +284,7 @@ apply plugin: 'realm-android'
 - No external dependencies
 - Simple use case
 
-**Use Room if:** ⭐ **Recommended**
+**Use Room if:**  **Recommended**
 - Building modern Android app
 - Want type safety and less boilerplate
 - Using Jetpack components
@@ -335,7 +335,7 @@ val config = RealmConfiguration.Builder()
 **Three main databases for Android:**
 
 1. **SQLite** - Built-in relational database, manual SQL
-2. **Room** - Abstraction over SQLite, type-safe, recommended ⭐
+2. **Room** - Abstraction over SQLite, type-safe, recommended 
 3. **Realm** - Modern object database, fast, reactive
 
 **Recommendation:** Use **Room** for most Android projects. It provides the best balance of ease of use, performance, and integration with Android architecture components.
@@ -343,3 +343,17 @@ val config = RealmConfiguration.Builder()
 ## Ответ (RU)
 В Android приложениях можно использовать SQLite, Room и Realm. SQLite является встроенной реляционной базой данных Android. Room предоставляет слой абстракции поверх SQLite и облегчает работу с базой данных. Realm - современная база данных для мобильных приложений.
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-sharedpreferences-definition--android--easy]] - Storage
+- [[q-room-library-definition--android--easy]] - Storage
+
+### Advanced (Harder)
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-transactions-dao--room--medium]] - Storage
+- [[q-room-paging3-integration--room--medium]] - Storage

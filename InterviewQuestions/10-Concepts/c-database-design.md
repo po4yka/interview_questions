@@ -30,14 +30,14 @@ Database design is the process of organizing data according to a database model.
 
 #### First Normal Form (1NF)
 ```sql
--- ❌ NOT 1NF: Multiple values in single field
+--  NOT 1NF: Multiple values in single field
 CREATE TABLE students (
     id INT PRIMARY KEY,
     name VARCHAR(100),
     courses VARCHAR(500)  -- "Math,Physics,Chemistry"
 );
 
--- ✅ 1NF: Atomic values
+--  1NF: Atomic values
 CREATE TABLE students (
     id INT PRIMARY KEY,
     name VARCHAR(100)
@@ -59,7 +59,7 @@ CREATE TABLE student_courses (
 
 #### Second Normal Form (2NF)
 ```sql
--- ❌ NOT 2NF: Partial dependency
+--  NOT 2NF: Partial dependency
 CREATE TABLE order_items (
     order_id INT,
     product_id INT,
@@ -69,7 +69,7 @@ CREATE TABLE order_items (
     PRIMARY KEY (order_id, product_id)
 );
 
--- ✅ 2NF: No partial dependencies
+--  2NF: No partial dependencies
 CREATE TABLE products (
     product_id INT PRIMARY KEY,
     product_name VARCHAR(100),
@@ -92,7 +92,7 @@ CREATE TABLE order_items (
 
 #### Third Normal Form (3NF)
 ```sql
--- ❌ NOT 3NF: Transitive dependency
+--  NOT 3NF: Transitive dependency
 CREATE TABLE employees (
     emp_id INT PRIMARY KEY,
     name VARCHAR(100),
@@ -101,7 +101,7 @@ CREATE TABLE employees (
     department_location VARCHAR(100)  -- Transitive dependency
 );
 
--- ✅ 3NF: No transitive dependencies
+--  3NF: No transitive dependencies
 CREATE TABLE departments (
     department_id INT PRIMARY KEY,
     department_name VARCHAR(100),
@@ -556,7 +556,7 @@ CREATE TABLE orders_denormalized (
 ### 1. Multi-Column Attributes
 
 ```sql
--- ❌ BAD: Multiple similar columns
+--  BAD: Multiple similar columns
 CREATE TABLE contacts (
     contact_id INT PRIMARY KEY,
     phone1 VARCHAR(20),
@@ -565,7 +565,7 @@ CREATE TABLE contacts (
     phone4 VARCHAR(20)
 );
 
--- ✅ GOOD: Separate table
+--  GOOD: Separate table
 CREATE TABLE contact_phones (
     contact_id INT,
     phone VARCHAR(20),
@@ -578,7 +578,7 @@ CREATE TABLE contact_phones (
 ### 2. Using Strings for Everything
 
 ```sql
--- ❌ BAD: String for everything
+--  BAD: String for everything
 CREATE TABLE orders (
     order_id VARCHAR(50),      -- Should be INT/BIGINT
     total VARCHAR(50),         -- Should be DECIMAL
@@ -586,7 +586,7 @@ CREATE TABLE orders (
     is_paid VARCHAR(10)        -- Should be BOOLEAN
 );
 
--- ✅ GOOD: Appropriate types
+--  GOOD: Appropriate types
 CREATE TABLE orders (
     order_id BIGINT PRIMARY KEY,
     total DECIMAL(10,2),
@@ -598,13 +598,13 @@ CREATE TABLE orders (
 ### 3. Not Using Foreign Keys
 
 ```sql
--- ❌ BAD: No referential integrity
+--  BAD: No referential integrity
 CREATE TABLE orders (
     order_id INT PRIMARY KEY,
     user_id INT  -- Just a number, no constraint
 );
 
--- ✅ GOOD: Enforce referential integrity
+--  GOOD: Enforce referential integrity
 CREATE TABLE orders (
     order_id INT PRIMARY KEY,
     user_id INT NOT NULL,

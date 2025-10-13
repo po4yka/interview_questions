@@ -28,11 +28,11 @@ View (base class)
   ↓
 ViewGroup (container)
   ↓
-  ├─ LinearLayout
-  ├─ RelativeLayout
-  ├─ ConstraintLayout
-  ├─ FrameLayout
-  └─ ... other layouts
+   LinearLayout
+   RelativeLayout
+   ConstraintLayout
+   FrameLayout
+   ... other layouts
 ```
 
 ![View hierarchy](https://raw.githubusercontent.com/Kirchhoff-/Android-Interview-Questions/master/Android/res/view_hierarchy.png)
@@ -262,3 +262,16 @@ ViewGroup наследуется от View и добавляет возможн�
 - [ViewGroup - Android Developers](https://developer.android.com/reference/android/view/ViewGroup)
 - [Difference between View and ViewGroup in Android - Stack Overflow](https://stackoverflow.com/questions/27352476/difference-between-view-and-viewgroup-in-android)
 - [The life cycle of a view in Android - ProAndroidDev](https://proandroiddev.com/the-life-cycle-of-a-view-in-android-6a2c4665b95e)
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Advanced (Harder)
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View

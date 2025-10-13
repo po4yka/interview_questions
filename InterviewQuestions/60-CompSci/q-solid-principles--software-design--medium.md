@@ -1,4 +1,6 @@
 ---
+topic: architecture-patterns
+subtopics: ["design-principles", "best-practices", "architecture"]
 tags:
   - architecture
   - design-principles
@@ -12,6 +14,10 @@ tags:
   - srp
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-architecture-patterns
+related_questions: []
 ---
 
 # Что такое принципы SOLID?
@@ -736,3 +742,17 @@ class UserViewModel(
 
 SOLID — это набор рекомендаций для разработки гибкого, масштабируемого и поддерживаемого ПО с использованием объектно-ориентированного подхода.
 
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-softcode-vs-hardcode--software-design--medium]] - Design Principles
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+
+### Advanced (Harder)
+- [[q-modularization-patterns--android--hard]] - Architecture
+- [[q-design-instagram-stories--android--hard]] - Media
+- [[q-design-uber-app--android--hard]] - Location

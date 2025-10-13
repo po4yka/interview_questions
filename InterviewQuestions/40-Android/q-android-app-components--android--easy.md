@@ -84,3 +84,19 @@ class MyContentProvider : ContentProvider() {
 ```
 
 **English**: The main Android app components are: **Activity** (UI screen), **Services** (background operations), **Broadcast Receivers** (system event listeners), and **Content Providers** (data sharing between apps).
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+- [[q-what-unifies-android-components--android--easy]] - Fundamentals
+- [[q-android-components-besides-activity--android--easy]] - Fundamentals
+- [[q-main-android-components--android--easy]] - Fundamentals
+- [[q-material3-components--material-design--easy]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
+- [[q-hilt-components-scope--android--medium]] - Fundamentals

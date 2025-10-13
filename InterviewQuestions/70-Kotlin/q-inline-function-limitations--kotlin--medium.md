@@ -33,13 +33,13 @@ inline fun deferExecution(action: () -> Unit) {
     Handler(Looper.getMainLooper()).post(deferredAction)  // ERROR
 }
 
-// ✓ ПРАВИЛЬНО - использовать noinline
+//  ПРАВИЛЬНО - использовать noinline
 inline fun processData(noinline callback: () -> Unit) {
     val storedCallback = callback  // OK
     Handler(Looper.getMainLooper()).post(storedCallback)
 }
 
-// ✓ ПРАВИЛЬНО - выполнить inline лямбду сразу
+//  ПРАВИЛЬНО - выполнить inline лямбду сразу
 inline fun processDataNow(callback: () -> Unit) {
     callback()  // OK - прямой вызов
 }
@@ -59,14 +59,14 @@ fun executeInBackground(task: () -> Unit) {
     Thread { task() }.start()
 }
 
-// ✓ ПРАВИЛЬНО - использовать noinline
+//  ПРАВИЛЬНО - использовать noinline
 inline fun withLogging(noinline action: () -> Unit) {
     log("Starting")
     executeInBackground(action)  // OK
     log("Finished")
 }
 
-// ✓ АЛЬТЕРНАТИВА - не использовать inline
+//  АЛЬТЕРНАТИВА - не использовать inline
 fun withLogging(action: () -> Unit) {
     log("Starting")
     executeInBackground(action)
@@ -84,12 +84,12 @@ inline fun factorial(n: Int): Int {  // ERROR: Inline function cannot be recursi
     return if (n <= 1) 1 else n * factorial(n - 1)
 }
 
-// ✓ ПРАВИЛЬНО - убрать inline
+//  ПРАВИЛЬНО - убрать inline
 fun factorial(n: Int): Int {
     return if (n <= 1) 1 else n * factorial(n - 1)
 }
 
-// ✓ АЛЬТЕРНАТИВА - tailrec вместо inline
+//  АЛЬТЕРНАТИВА - tailrec вместо inline
 tailrec fun factorial(n: Int, acc: Int = 1): Int {
     return if (n <= 1) acc else factorial(n - 1, n * acc)
 }
@@ -119,7 +119,7 @@ processUserData(user1) { }  // +100 строк в bytecode
 processUserData(user2) { }  // +100 строк в bytecode
 processUserData(user3) { }  // +100 строк в bytecode
 
-// ✓ ПРАВИЛЬНО - большие функции НЕ делать inline
+//  ПРАВИЛЬНО - большие функции НЕ делать inline
 fun processUserData(user: User, callback: (Result) -> Unit) {
     // Код выполняется только в одном месте
     // Все вызовы ссылаются на одну функцию
@@ -141,7 +141,7 @@ repeat(10_000) {
     log("Iteration $it")  // Раздутие кода!
 }
 
-// ✓ ПРАВИЛЬНО - обычная функция
+//  ПРАВИЛЬНО - обычная функция
 fun log(message: String) {
     println("[${System.currentTimeMillis()}] $message")
 }
@@ -156,7 +156,7 @@ inline fun <reified T> createInstance(): T {
     return T::class.java.newInstance()
 }
 
-// ✓ ПРАВИЛЬНО - использовать reified только когда нужен тип в runtime
+//  ПРАВИЛЬНО - использовать reified только когда нужен тип в runtime
 inline fun <reified T> Gson.fromJson(json: String): T {
     // Reified нужен чтобы передать T::class.java в Gson
     return fromJson(json, T::class.java)
@@ -195,7 +195,7 @@ inline fun processRequest(url: String, callback: (Response) -> Unit) {
 // Проблема: приложения, скомпилированные с 1.0, используют СТАРЫЙ код
 // даже если обновили библиотеку до 1.1!
 
-// ✓ ПРАВИЛЬНО - обычная функция в public API
+//  ПРАВИЛЬНО - обычная функция в public API
 fun processRequest(url: String, callback: (Response) -> Unit) {
     val response = httpClient.get(url)
     callback(response)
@@ -217,7 +217,7 @@ class UserManager {
     }
 }
 
-// ✓ ПРАВИЛЬНО - убрать inline или сделать cache internal
+//  ПРАВИЛЬНО - убрать inline или сделать cache internal
 class UserManager {
     internal val cache = mutableMapOf<Int, User>()
 
@@ -226,7 +226,7 @@ class UserManager {
     }
 }
 
-// ✓ АЛЬТЕРНАТИВА - не использовать inline
+//  АЛЬТЕРНАТИВА - не использовать inline
 class UserManager {
     private val cache = mutableMapOf<Int, User>()
 
@@ -254,7 +254,7 @@ fun caller() {
     println("After processItems")  // НЕ ВЫПОЛНИТСЯ если есть пустая строка!
 }
 
-// ✓ ПРАВИЛЬНО - использовать явные return или не inline
+//  ПРАВИЛЬНО - использовать явные return или не inline
 fun processItems(items: List<String>) {
     items.forEach { item ->
         if (item.isEmpty()) {
@@ -276,7 +276,7 @@ inline fun formatUserName(firstName: String, lastName: String): String {
 // Вызывается 1 раз при загрузке профиля
 val name = formatUserName(user.first, user.last)
 
-// ✓ ПРАВИЛЬНО - обычная функция
+//  ПРАВИЛЬНО - обычная функция
 fun formatUserName(firstName: String, lastName: String): String {
     return "$firstName $lastName"
 }
@@ -290,7 +290,7 @@ fun formatUserName(firstName: String, lastName: String): String {
 ### Когда СТОИТ использовать inline
 
 ```kotlin
-// ✓ ПРАВИЛЬНО - inline для higher-order функций
+//  ПРАВИЛЬНО - inline для higher-order функций
 inline fun <T> measureTime(block: () -> T): Pair<T, Long> {
     val start = System.currentTimeMillis()
     val result = block()
@@ -298,7 +298,7 @@ inline fun <T> measureTime(block: () -> T): Pair<T, Long> {
     return result to time
 }
 
-// ✓ ПРАВИЛЬНО - inline с reified
+//  ПРАВИЛЬНО - inline с reified
 inline fun <reified T> Intent.getParcelableExtraCompat(key: String): T? {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         getParcelableExtra(key, T::class.java)
@@ -308,14 +308,14 @@ inline fun <reified T> Intent.getParcelableExtraCompat(key: String): T? {
     }
 }
 
-// ✓ ПРАВИЛЬНО - маленькие утилиты с лямбдами
+//  ПРАВИЛЬНО - маленькие утилиты с лямбдами
 inline fun <R> synchronized(lock: Any, block: () -> R): R {
     kotlin.synchronized(lock) {
         return block()
     }
 }
 
-// ✓ ПРАВИЛЬНО - DSL builders
+//  ПРАВИЛЬНО - DSL builders
 inline fun buildUser(init: UserBuilder.() -> Unit): User {
     val builder = UserBuilder()
     builder.init()

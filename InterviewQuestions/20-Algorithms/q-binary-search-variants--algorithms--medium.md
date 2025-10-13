@@ -68,7 +68,7 @@ println(binarySearch(arr, 6))   // -1
 Array: [1, 3, 5, 7, 9, 11, 13]  Target: 7
 
 Step 1: left=0, right=6, mid=3
-        arr[3]=7 == target ✓  Found!
+        arr[3]=7 == target   Found!
 
 Array: [1, 3, 5, 7, 9, 11, 13]  Target: 6
 
@@ -437,8 +437,8 @@ if (arr.isEmpty()) return -1
 if (arr.size == 1) return if (arr[0] == target) 0 else -1
 
 // 3. Overflow in mid calculation
-// ❌ Bad: val mid = (left + right) / 2  // Overflow possible
-// ✅ Good: val mid = left + (right - left) / 2
+//  Bad: val mid = (left + right) / 2  // Overflow possible
+//  Good: val mid = left + (right - left) / 2
 
 // 4. Off-by-one errors
 // Use left <= right (not left < right) for exact match

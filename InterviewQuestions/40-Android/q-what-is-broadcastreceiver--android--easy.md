@@ -467,3 +467,15 @@ BroadcastReceiver работает по принципу publish-subscribe (из
 3. Используйте LocalBroadcastManager для внутренней коммуникации
 4. На Android 8.0+ используйте WorkManager вместо manifest-registered receivers
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-broadcastreceiver-contentprovider--android--easy]] - Broadcast
+
+### Advanced (Harder)
+- [[q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]] - Broadcast
+- [[q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium]] - Broadcast
+- [[q-kotlin-context-receivers--kotlin--hard]] - Broadcast

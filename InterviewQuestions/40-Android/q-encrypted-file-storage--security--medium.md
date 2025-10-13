@@ -1159,3 +1159,17 @@ EncryptedFile API обеспечивает:
 Используйте для: конфиденциальных документов, пользовательских данных, загруженных файлов, кэшированных учетных данных, приватных фото/видео.
 
 **Накладные расходы**: 5-15% на шифрование/дешифрование, незначительны для большинства случаев.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+
+### Related (Medium)
+- [[q-database-encryption-android--android--medium]] - Storage, Security
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-android-storage-types--android--medium]] - Storage
+- [[q-app-security-best-practices--security--medium]] - Security
+- [[q-data-encryption-at-rest--security--medium]] - Security

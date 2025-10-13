@@ -547,3 +547,17 @@ class MyReceiver : BroadcastReceiver() {
 - **WorkManager** - для фоновой работы
 - **Flow/LiveData** - для событий внутри приложения
 - **NetworkCallback** - для изменений сети
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-broadcastreceiver-contentprovider--android--easy]] - Broadcast
+- [[q-what-is-broadcastreceiver--android--easy]] - Broadcast
+
+### Related (Medium)
+- [[q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium]] - Broadcast
+
+### Advanced (Harder)
+- [[q-kotlin-context-receivers--kotlin--hard]] - Broadcast

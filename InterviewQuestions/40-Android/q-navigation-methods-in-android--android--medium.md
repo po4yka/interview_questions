@@ -65,3 +65,14 @@ val deepLink = NavDeepLinkBuilder(context)
 ## Ответ (RU)
 В Android есть несколько способов навигации между экранами. Основные методы включают: 1) Activity-навигация через Intent; 2) Fragment-based навигация с использованием FragmentManager; 3) Navigation Component из Jetpack; 4) Bottom/Tab Navigation с BottomNavigationView или TabLayout; 5) Drawer Navigation через Navigation Drawer; 6) Deep Links и App Links для перехода по ссылкам; и 7) Navigation в Jetpack Compose с NavHost и NavController.
 
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation
+- [[q-compose-navigation-advanced--android--medium]] - Navigation
+- [[q-activity-navigation-how-it-works--android--medium]] - Navigation
+- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation
+- [[q-what-navigation-methods-do-you-know--android--medium]] - Navigation

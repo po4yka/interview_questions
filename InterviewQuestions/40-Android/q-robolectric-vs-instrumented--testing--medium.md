@@ -51,11 +51,11 @@ class MainActivityTest {
 ```
 
 **Key characteristics:**
-- ✅ Runs on JVM (fast)
-- ✅ No device needed
-- ✅ Works in CI without emulator
-- ⚠️ Simulated Android (not real)
-- ⚠️ May have subtle differences from real device
+-  Runs on JVM (fast)
+-  No device needed
+-  Works in CI without emulator
+-  Simulated Android (not real)
+-  May have subtle differences from real device
 
 ---
 
@@ -81,12 +81,12 @@ class MainActivityInstrumentedTest {
 ```
 
 **Key characteristics:**
-- ✅ Real Android environment
-- ✅ Tests actual device behavior
-- ✅ Hardware sensors, GPS, camera
-- ❌ Slow (requires device/emulator)
-- ❌ Requires emulator/device for CI
-- ❌ Flaky (environment-dependent)
+-  Real Android environment
+-  Tests actual device behavior
+-  Hardware sensors, GPS, camera
+-  Slow (requires device/emulator)
+-  Requires emulator/device for CI
+-  Flaky (environment-dependent)
 
 ---
 
@@ -112,7 +112,7 @@ Instrumented: 8 minutes
 
 ### When to Use Robolectric
 
-**✅ GOOD use cases:**
+** GOOD use cases:**
 
 **1. ViewModel tests with Android dependencies:**
 
@@ -195,7 +195,7 @@ class IntentTest {
 
 ### When to Use Instrumented Tests
 
-**✅ GOOD use cases:**
+** GOOD use cases:**
 
 **1. Complex UI interactions:**
 
@@ -296,15 +296,15 @@ class FirebaseTest {
 
 | Aspect | Robolectric | Instrumented |
 |--------|-------------|--------------|
-| **Speed** | ⚡ Fast (1-10s) | 🐌 Slow (10-60s+) |
-| **Setup** | ✅ Simple | ⚠️ Requires device |
-| **CI Integration** | ✅ Easy | ⚠️ Needs emulator |
-| **Reliability** | ✅ Consistent | ⚠️ Can be flaky |
-| **Real device** | ❌ Simulated | ✅ Real |
-| **Hardware** | ❌ Mocked | ✅ Real sensors |
-| **Debugging** | ✅ IDE breakpoints | ⚠️ ADB/Logcat |
-| **Coverage** | ⚠️ Framework only | ✅ Full stack |
-| **Android versions** | ⚠️ Limited | ✅ All versions |
+| **Speed** |  Fast (1-10s) |  Slow (10-60s+) |
+| **Setup** |  Simple |  Requires device |
+| **CI Integration** |  Easy |  Needs emulator |
+| **Reliability** |  Consistent |  Can be flaky |
+| **Real device** |  Simulated |  Real |
+| **Hardware** |  Mocked |  Real sensors |
+| **Debugging** |  IDE breakpoints |  ADB/Logcat |
+| **Coverage** |  Framework only |  Full stack |
+| **Android versions** |  Limited |  All versions |
 
 ---
 
@@ -428,7 +428,7 @@ class UserProfileE2ETest {
 **1. Start with unit tests:**
 
 ```kotlin
-// ✅ DO: Test business logic without Android
+//  DO: Test business logic without Android
 class UserRepositoryTest {
     @Test
     fun getUser_returnsUser() = runTest {
@@ -442,7 +442,7 @@ class UserRepositoryTest {
 **2. Use Robolectric for integration:**
 
 ```kotlin
-// ✅ DO: Test Android components quickly
+//  DO: Test Android components quickly
 @RunWith(RobolectricTestRunner::class)
 class FragmentIntegrationTest {
     @Test
@@ -456,7 +456,7 @@ class FragmentIntegrationTest {
 **3. Reserve instrumented for critical paths:**
 
 ```kotlin
-// ✅ DO: E2E tests for critical flows
+//  DO: E2E tests for critical flows
 @RunWith(AndroidJUnit4::class)
 class CheckoutFlowTest {
     @Test
@@ -526,3 +526,17 @@ Robolectric симулирует Android framework на JVM. Быстрые, р�
 4. Комбинируйте оба подхода для оптимального покрытия
 
 Правильная стратегия тестирования обеспечивает быструю обратную связь и высокое качество.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing
+- [[q-screenshot-snapshot-testing--testing--medium]] - Testing
+- [[q-fakes-vs-mocks-testing--testing--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-coroutines-flow--testing--hard]] - Testing

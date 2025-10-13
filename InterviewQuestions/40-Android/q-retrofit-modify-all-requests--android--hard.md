@@ -36,7 +36,7 @@ An **Interceptor** is a mechanism in OkHttp that intercepts network requests/res
 ```
 Client → Interceptor → Network → Server
        ↑              ↓
-       └─────────────┘
+       
     Can modify request/response
 ```
 
@@ -698,3 +698,15 @@ val retrofit = Retrofit.Builder()
 
 **Порядок важен:** перехватчики выполняются в порядке добавления.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+- [[q-retrofit-usage-tutorial--android--medium]] - Networking
+
+### Related (Hard)
+- [[q-data-sync-unstable-network--android--hard]] - Networking

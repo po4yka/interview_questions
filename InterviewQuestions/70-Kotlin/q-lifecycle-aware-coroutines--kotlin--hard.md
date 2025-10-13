@@ -42,7 +42,7 @@ Lifecycle-aware coroutines automatically manage coroutine cancellation based on 
 ### The Problem Without Lifecycle Awareness
 
 ```kotlin
-// ❌ BAD: Manual lifecycle management
+//  BAD: Manual lifecycle management
 class OldFragment : Fragment() {
     private var job: Job? = null
 
@@ -143,19 +143,19 @@ class ProductViewModel(
     private val repository: ProductRepository
 ) : ViewModel() {
 
-    // ✅ Good: Use StateFlow for UI state
+    //  Good: Use StateFlow for UI state
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products: StateFlow<List<Product>> = _products.asStateFlow()
 
-    // ✅ Good: Use SharedFlow for one-time events
+    //  Good: Use SharedFlow for one-time events
     private val _events = MutableSharedFlow<ProductEvent>()
     val events: SharedFlow<ProductEvent> = _events.asSharedFlow()
 
-    // ✅ Good: Expose flows directly
+    //  Good: Expose flows directly
     val searchResults: Flow<List<Product>> = repository.searchProducts()
         .flowOn(Dispatchers.IO)
 
-    // ✅ Good: Launch coroutines in viewModelScope
+    //  Good: Launch coroutines in viewModelScope
     fun loadProducts() {
         viewModelScope.launch {
             try {
@@ -167,7 +167,7 @@ class ProductViewModel(
         }
     }
 
-    // ✅ Good: Use async for parallel operations
+    //  Good: Use async for parallel operations
     fun loadMultipleCategories() {
         viewModelScope.launch {
             val electronics = async { repository.getCategory("electronics") }
@@ -179,7 +179,7 @@ class ProductViewModel(
         }
     }
 
-    // ✅ Good: Handle cancellation
+    //  Good: Handle cancellation
     fun searchProducts(query: String) {
         viewModelScope.launch {
             try {
@@ -209,7 +209,7 @@ class WeatherViewModel(
     val weather: StateFlow<WeatherState> = _weather.asStateFlow()
 
     init {
-        // ✅ Survives configuration changes
+        //  Survives configuration changes
         loadWeather()
     }
 
@@ -238,7 +238,7 @@ class WeatherFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ✅ Collects from same ViewModel instance after rotation
+        //  Collects from same ViewModel instance after rotation
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.weather.collect { state ->
                 updateUI(state)
@@ -258,7 +258,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ✅ Cancelled when Fragment destroyed
+        //  Cancelled when Fragment destroyed
         viewLifecycleOwner.lifecycleScope.launch {
             // Perform operation
             val userData = loadUserData()
@@ -266,7 +266,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    // ❌ BAD: Using Fragment's lifecycleScope
+    //  BAD: Using Fragment's lifecycleScope
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -276,7 +276,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    // ✅ GOOD: Using viewLifecycleOwner.lifecycleScope
+    //  GOOD: Using viewLifecycleOwner.lifecycleScope
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.data.collect { data ->
@@ -299,7 +299,7 @@ class ImportantFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-            // ⚠️ Lives as long as Fragment
+            //  Lives as long as Fragment
             // Not cancelled when view destroyed
         }
     }
@@ -310,7 +310,7 @@ class ImportantFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            // ✅ Cancelled when view destroyed
+            //  Cancelled when view destroyed
             // Restarted when view recreated
         }
     }
@@ -329,7 +329,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ✅ Cancelled when Activity destroyed
+        //  Cancelled when Activity destroyed
         lifecycleScope.launch {
             // Safe to update UI
             val data = loadData()
@@ -361,7 +361,7 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ✅ BEST PRACTICE: Use repeatOnLifecycle for Flow collection
+        //  BEST PRACTICE: Use repeatOnLifecycle for Flow collection
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 // This block runs when STARTED
@@ -378,20 +378,20 @@ class NewsFragment : Fragment() {
 **Why repeatOnLifecycle is important**:
 
 ```kotlin
-// ❌ BAD: Without repeatOnLifecycle
+//  BAD: Without repeatOnLifecycle
 class BadFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.dataFlow.collect { data ->
-                updateUI(data)  // ❌ Runs even when app in background!
+                updateUI(data)  //  Runs even when app in background!
             }
         }
     }
 }
 
-// ✅ GOOD: With repeatOnLifecycle
+//  GOOD: With repeatOnLifecycle
 class GoodFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -399,7 +399,7 @@ class GoodFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.dataFlow.collect { data ->
-                    updateUI(data)  // ✅ Only runs when visible
+                    updateUI(data)  //  Only runs when visible
                 }
             }
         }
@@ -417,7 +417,7 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ✅ Collect multiple flows
+        //  Collect multiple flows
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 // All these collectors start together
@@ -496,7 +496,7 @@ class MyFragment : Fragment() {
 #### Surviving Configuration Changes
 
 ```kotlin
-// ✅ ViewModel survives configuration changes
+//  ViewModel survives configuration changes
 class DataViewModel(
     private val repository: DataRepository
 ) : ViewModel() {
@@ -553,7 +553,7 @@ class CheckoutViewModel(
     private val orderRepository: OrderRepository
 ) : ViewModel() {
 
-    // ✅ Survives process death
+    //  Survives process death
     private val cartItems: MutableStateFlow<List<CartItem>> =
         savedStateHandle.getStateFlow("cart_items", emptyList())
 
@@ -605,7 +605,7 @@ sealed class CheckoutState {
 #### Common Memory Leak Scenarios
 
 ```kotlin
-// ❌ BAD: GlobalScope leaks
+//  BAD: GlobalScope leaks
 class LeakyViewModel : ViewModel() {
     fun loadData() {
         GlobalScope.launch {
@@ -615,7 +615,7 @@ class LeakyViewModel : ViewModel() {
     }
 }
 
-// ✅ GOOD: viewModelScope
+//  GOOD: viewModelScope
 class SafeViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
@@ -625,9 +625,9 @@ class SafeViewModel : ViewModel() {
     }
 }
 
-// ❌ BAD: Reference to Activity/Fragment
+//  BAD: Reference to Activity/Fragment
 class LeakyViewModel(
-    private val activity: Activity  // ❌ Holds Activity reference!
+    private val activity: Activity  //  Holds Activity reference!
 ) : ViewModel() {
     fun showMessage() {
         viewModelScope.launch {
@@ -637,7 +637,7 @@ class LeakyViewModel(
     }
 }
 
-// ✅ GOOD: Use events
+//  GOOD: Use events
 class SafeViewModel : ViewModel() {
     private val _events = MutableSharedFlow<ViewEvent>()
     val events: SharedFlow<ViewEvent> = _events.asSharedFlow()
@@ -650,7 +650,7 @@ class SafeViewModel : ViewModel() {
     }
 }
 
-// ❌ BAD: Fragment collecting in onCreate
+//  BAD: Fragment collecting in onCreate
 class LeakyFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -663,7 +663,7 @@ class LeakyFragment : Fragment() {
     }
 }
 
-// ✅ GOOD: Fragment collecting with viewLifecycleOwner
+//  GOOD: Fragment collecting with viewLifecycleOwner
 class SafeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -901,7 +901,7 @@ class MainDispatcherRule(
 
 1. **Use viewModelScope for business logic**
 ```kotlin
-// ✅ Repository calls
+//  Repository calls
 viewModelScope.launch {
     val data = repository.fetchData()
 }
@@ -909,7 +909,7 @@ viewModelScope.launch {
 
 2. **Use viewLifecycleOwner.lifecycleScope in Fragments**
 ```kotlin
-// ✅ For UI updates
+//  For UI updates
 viewLifecycleOwner.lifecycleScope.launch {
     viewModel.data.collect { updateUI(it) }
 }
@@ -917,7 +917,7 @@ viewLifecycleOwner.lifecycleScope.launch {
 
 3. **Use repeatOnLifecycle for Flow collection**
 ```kotlin
-// ✅ Start/stop based on lifecycle
+//  Start/stop based on lifecycle
 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
     flow.collect { }
 }
@@ -925,16 +925,16 @@ viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
 4. **Never use GlobalScope**
 ```kotlin
-// ❌ Memory leak
+//  Memory leak
 GlobalScope.launch { }
 
-// ✅ Proper scope
+//  Proper scope
 viewModelScope.launch { }
 ```
 
 5. **Handle configuration changes with ViewModel**
 ```kotlin
-// ✅ Survives rotation
+//  Survives rotation
 class MyViewModel : ViewModel() {
     val data = repository.getData()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
@@ -943,7 +943,7 @@ class MyViewModel : ViewModel() {
 
 6. **Save important state**
 ```kotlin
-// ✅ Survives process death
+//  Survives process death
 class MyViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -960,7 +960,7 @@ class MyViewModel(
 ### Проблема без учета жизненного цикла
 
 ```kotlin
-// ❌ ПЛОХО: Ручное управление жизненным циклом
+//  ПЛОХО: Ручное управление жизненным циклом
 class OldFragment : Fragment() {
     private var job: Job? = null
 
@@ -1026,15 +1026,15 @@ class ProductViewModel(
     private val repository: ProductRepository
 ) : ViewModel() {
 
-    // ✅ Хорошо: Использовать StateFlow для состояния UI
+    //  Хорошо: Использовать StateFlow для состояния UI
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products: StateFlow<List<Product>> = _products.asStateFlow()
 
-    // ✅ Хорошо: Использовать SharedFlow для одноразовых событий
+    //  Хорошо: Использовать SharedFlow для одноразовых событий
     private val _events = MutableSharedFlow<ProductEvent>()
     val events: SharedFlow<ProductEvent> = _events.asSharedFlow()
 
-    // ✅ Хорошо: Запускать корутины в viewModelScope
+    //  Хорошо: Запускать корутины в viewModelScope
     fun loadProducts() {
         viewModelScope.launch {
             try {
@@ -1056,14 +1056,14 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ✅ Отменяется когда Fragment уничтожен
+        //  Отменяется когда Fragment уничтожен
         viewLifecycleOwner.lifecycleScope.launch {
             val userData = loadUserData()
             updateUI(userData)
         }
     }
 
-    // ❌ ПЛОХО: Использование lifecycleScope Fragment
+    //  ПЛОХО: Использование lifecycleScope Fragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -1084,7 +1084,7 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ✅ ЛУЧШАЯ ПРАКТИКА: Использовать repeatOnLifecycle для сбора Flow
+        //  ЛУЧШАЯ ПРАКТИКА: Использовать repeatOnLifecycle для сбора Flow
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 // Этот блок выполняется когда STARTED
@@ -1101,20 +1101,20 @@ class NewsFragment : Fragment() {
 **Почему repeatOnLifecycle важен**:
 
 ```kotlin
-// ❌ ПЛОХО: Без repeatOnLifecycle
+//  ПЛОХО: Без repeatOnLifecycle
 class BadFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.dataFlow.collect { data ->
-                updateUI(data)  // ❌ Выполняется даже когда приложение в фоне!
+                updateUI(data)  //  Выполняется даже когда приложение в фоне!
             }
         }
     }
 }
 
-// ✅ ХОРОШО: С repeatOnLifecycle
+//  ХОРОШО: С repeatOnLifecycle
 class GoodFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -1122,7 +1122,7 @@ class GoodFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.dataFlow.collect { data ->
-                    updateUI(data)  // ✅ Выполняется только когда видимо
+                    updateUI(data)  //  Выполняется только когда видимо
                 }
             }
         }
@@ -1135,7 +1135,7 @@ class GoodFragment : Fragment() {
 #### Переживание изменений конфигурации
 
 ```kotlin
-// ✅ ViewModel переживает изменения конфигурации
+//  ViewModel переживает изменения конфигурации
 class DataViewModel(
     private val repository: DataRepository
 ) : ViewModel() {
@@ -1182,7 +1182,7 @@ class CheckoutViewModel(
     private val orderRepository: OrderRepository
 ) : ViewModel() {
 
-    // ✅ Переживает process death
+    //  Переживает process death
     private val cartItems: MutableStateFlow<List<CartItem>> =
         savedStateHandle.getStateFlow("cart_items", emptyList())
 
@@ -1198,7 +1198,7 @@ class CheckoutViewModel(
 ### Предотвращение утечек памяти
 
 ```kotlin
-// ❌ ПЛОХО: GlobalScope создает утечки
+//  ПЛОХО: GlobalScope создает утечки
 class LeakyViewModel : ViewModel() {
     fun loadData() {
         GlobalScope.launch {
@@ -1208,7 +1208,7 @@ class LeakyViewModel : ViewModel() {
     }
 }
 
-// ✅ ХОРОШО: viewModelScope
+//  ХОРОШО: viewModelScope
 class SafeViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {

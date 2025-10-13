@@ -44,7 +44,7 @@ Testing coroutines requires special test dispatchers that control time and execu
 | **Execution** | Queues coroutines | Executes immediately |
 | **Control** | Manual advancement | Auto-advances |
 | **Virtual time** | Full control | Limited control |
-| **Default in runTest** | ✅ Yes (since 1.6) | ❌ No |
+| **Default in runTest** |  Yes (since 1.6) |  No |
 | **Use case** | Most tests | Tests needing immediate execution |
 
 #### StandardTestDispatcher Behavior
@@ -596,13 +596,13 @@ fun collectStateFlow() = runTest {
 **5. Test virtual time, not real time:**
 
 ```kotlin
-// ❌ BAD: Real delays
+//  BAD: Real delays
 @Test
 fun badTest() = runBlocking {
     delay(1000) // Actually waits 1 second!
 }
 
-// ✅ GOOD: Virtual time
+//  GOOD: Virtual time
 @Test
 fun goodTest() = runTest {
     delay(1000) // Instant (virtual time)
@@ -614,7 +614,7 @@ fun goodTest() = runTest {
 **Mistake 1: Forgetting advanceUntilIdle()**
 
 ```kotlin
-// ❌ WRONG: Coroutine not executed
+//  WRONG: Coroutine not executed
 @Test
 fun badTest() = runTest {
     var value = 0
@@ -623,7 +623,7 @@ fun badTest() = runTest {
     assertEquals(1, value) // FAILS: value is still 0
 }
 
-// ✅ CORRECT
+//  CORRECT
 @Test
 fun goodTest() = runTest {
     var value = 0
@@ -638,13 +638,13 @@ fun goodTest() = runTest {
 **Mistake 2: Using runBlocking in tests:**
 
 ```kotlin
-// ❌ WRONG: Real time delays
+//  WRONG: Real time delays
 @Test
 fun badTest() = runBlocking {
     delay(1000) // Blocks thread for 1 second
 }
 
-// ✅ CORRECT: Virtual time
+//  CORRECT: Virtual time
 @Test
 fun goodTest() = runTest {
     delay(1000) // Instant
@@ -654,7 +654,7 @@ fun goodTest() = runTest {
 **Mistake 3: Not using backgroundScope for collectors:**
 
 ```kotlin
-// ❌ WRONG: Collection blocks test
+//  WRONG: Collection blocks test
 @Test
 fun badTest() = runTest {
     launch {
@@ -665,7 +665,7 @@ fun badTest() = runTest {
     advanceUntilIdle()
 }
 
-// ✅ CORRECT: Use backgroundScope
+//  CORRECT: Use backgroundScope
 @Test
 fun goodTest() = runTest {
     backgroundScope.launch {
@@ -679,7 +679,7 @@ fun goodTest() = runTest {
 **Mistake 4: Mixing real and virtual time:**
 
 ```kotlin
-// ❌ WRONG: Thread.sleep is real time
+//  WRONG: Thread.sleep is real time
 @Test
 fun badTest() = runTest {
     launch {
@@ -688,7 +688,7 @@ fun badTest() = runTest {
     advanceTimeBy(1000) // Doesn't help
 }
 
-// ✅ CORRECT: Use delay
+//  CORRECT: Use delay
 @Test
 fun goodTest() = runTest {
     launch {

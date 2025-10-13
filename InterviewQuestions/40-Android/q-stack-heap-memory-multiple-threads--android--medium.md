@@ -10,6 +10,10 @@ tags:
   - threading
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Изменится ли объём памяти стека/кучи, если в приложении создано несколько потоков?
@@ -67,3 +71,16 @@ Heap:                 512 MB (shared)
 
 Каждый поток получает свой собственный стек (~1 MB), поэтому больше потоков = больше памяти стека. Куча же общая для всех потоков.
 
+
+---
+
+## Related Questions
+
+### Kotlin Language Features
+- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Concurrency
+- [[q-channel-pipelines--kotlin--hard]] - Concurrency
+- [[q-coroutines-vs-threads--programming-languages--medium]] - Concurrency
+- [[q-deferred-async-patterns--kotlin--medium]] - Concurrency
+- [[q-produce-actor-builders--kotlin--medium]] - Concurrency
+- [[q-actor-pattern--kotlin--hard]] - Concurrency
+- [[q-testing-viewmodel-coroutines--kotlin--medium]] - Concurrency

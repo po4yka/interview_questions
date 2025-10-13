@@ -650,17 +650,17 @@ val platformModule = module {
 // Koin - Simple, Kotlin-first, Multiplatform
 
 // Pros:
-// ✅ Works on all platforms (Android, iOS, Desktop, Web)
-// ✅ No code generation
-// ✅ Easy to set up
-// ✅ Runtime DI (flexible)
-// ✅ DSL-based configuration
-// ✅ Great for KMM
+//  Works on all platforms (Android, iOS, Desktop, Web)
+//  No code generation
+//  Easy to set up
+//  Runtime DI (flexible)
+//  DSL-based configuration
+//  Great for KMM
 
 // Cons:
-// ❌ Runtime resolution (no compile-time safety)
-// ❌ Slightly slower than Dagger
-// ❌ Runtime errors for missing dependencies
+//  Runtime resolution (no compile-time safety)
+//  Slightly slower than Dagger
+//  Runtime errors for missing dependencies
 
 val koinModule = module {
     single { TaskRepository(get(), get()) }
@@ -681,16 +681,16 @@ class TaskViewModel(
 // Dagger/Hilt - Android only, compile-time safety
 
 // Pros:
-// ✅ Compile-time verification
-// ✅ Better performance
-// ✅ Type-safe
-// ✅ No runtime overhead
+//  Compile-time verification
+//  Better performance
+//  Type-safe
+//  No runtime overhead
 
 // Cons:
-// ❌ Android only (doesn't work on iOS)
-// ❌ Complex setup
-// ❌ Longer build times (annotation processing)
-// ❌ Boilerplate code
+//  Android only (doesn't work on iOS)
+//  Complex setup
+//  Longer build times (annotation processing)
+//  Boilerplate code
 
 // Android - Use Hilt
 @HiltAndroidApp
@@ -738,16 +738,16 @@ class IOSDependencies {
 // Manual DI - Full control, no framework
 
 // Pros:
-// ✅ Complete control
-// ✅ No framework dependency
-// ✅ Easy to understand
-// ✅ Works everywhere
+//  Complete control
+//  No framework dependency
+//  Easy to understand
+//  Works everywhere
 
 // Cons:
-// ❌ Lots of boilerplate
-// ❌ Manual lifecycle management
-// ❌ No scope management
-// ❌ Tedious to maintain
+//  Lots of boilerplate
+//  Manual lifecycle management
+//  No scope management
+//  Tedious to maintain
 
 class DependencyContainer {
     // Singletons
@@ -871,40 +871,40 @@ KMM dependency injection требует унифицированного под�
 #### Koin для KMM
 
 **Преимущества**:
-- ✅ Работает на всех платформах
-- ✅ Нет code generation
-- ✅ Простая настройка
-- ✅ Kotlin DSL
-- ✅ Runtime DI
+-  Работает на всех платформах
+-  Нет code generation
+-  Простая настройка
+-  Kotlin DSL
+-  Runtime DI
 
 **Недостатки**:
-- ❌ Runtime resolution
-- ❌ Нет compile-time safety
-- ❌ Runtime errors
+-  Runtime resolution
+-  Нет compile-time safety
+-  Runtime errors
 
 #### Dagger/Hilt
 
 **Преимущества**:
-- ✅ Compile-time verification
-- ✅ Лучшая производительность
-- ✅ Type-safe
+-  Compile-time verification
+-  Лучшая производительность
+-  Type-safe
 
 **Недостатки**:
-- ❌ Только Android
-- ❌ Не работает на iOS
-- ❌ Сложная настройка
+-  Только Android
+-  Не работает на iOS
+-  Сложная настройка
 
 #### Manual DI
 
 **Преимущества**:
-- ✅ Полный контроль
-- ✅ Без framework
-- ✅ Работает везде
+-  Полный контроль
+-  Без framework
+-  Работает везде
 
 **Недостатки**:
-- ❌ Много boilerplate
-- ❌ Manual lifecycle
-- ❌ Трудно поддерживать
+-  Много boilerplate
+-  Manual lifecycle
+-  Трудно поддерживать
 
 #### Platform-Specific Dependencies
 

@@ -465,3 +465,17 @@ class EventBus {
 - System broadcasts
 - WorkManager (modern alternative)
 - LocalBroadcastManager
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-broadcastreceiver-contentprovider--android--easy]] - Broadcast
+- [[q-what-is-broadcastreceiver--android--easy]] - Broadcast
+
+### Related (Medium)
+- [[q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]] - Broadcast
+
+### Advanced (Harder)
+- [[q-kotlin-context-receivers--kotlin--hard]] - Broadcast

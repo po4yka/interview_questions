@@ -54,15 +54,15 @@ pixels = dp × (device dpi / 160)
 ### Visual Comparison
 
 ```
-┌─────────────────────────────────┐
-│     Same Physical Size          │
-├─────────────────────────────────┤
-│ ldpi:   75px  (100dp)          │
-│ mdpi:   100px (100dp)          │
-│ hdpi:   150px (100dp)          │
-│ xhdpi:  200px (100dp)          │
-│ xxhdpi: 300px (100dp)          │
-└─────────────────────────────────┘
+
+     Same Physical Size          
+
+ ldpi:   75px  (100dp)          
+ mdpi:   100px (100dp)          
+ hdpi:   150px (100dp)          
+ xhdpi:  200px (100dp)          
+ xxhdpi: 300px (100dp)          
+
 ```
 
 ### Density Buckets

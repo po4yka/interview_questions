@@ -1,4 +1,6 @@
 ---
+topic: programming-languages
+subtopics: ["java", "jvm", "language-features"]
 tags:
   - equality
   - equals
@@ -8,6 +10,10 @@ tags:
   - reference-equality
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-programming-languages
+related_questions: []
 ---
 
 # Как в оригинальном Java equals работает, что он сравнивает?
@@ -60,7 +66,7 @@ System.out.println(p1 == p3);       // true - same reference
 
 ```java
 // These are identical for default equals():
-obj1.equals(obj2)  ⟷  obj1 == obj2
+obj1.equals(obj2)    obj1 == obj2
 ```
 
 **Overriding equals() for Content Comparison:**
@@ -158,3 +164,16 @@ box1 == box2;       // false - different references
 
 В оригинальном Java метод `equals` класса Object по умолчанию сравнивает **ссылки на объекты** (ссылочное равенство). Для пользовательских классов метод `equals` переопределяют, чтобы сравнивать содержимое объектов.
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-java-object-comparison--programming-languages--easy]] - Java
+- [[q-java-lambda-type--programming-languages--easy]] - Java
+
+### Advanced (Harder)
+- [[q-java-access-modifiers--programming-languages--medium]] - Java
+- [[q-kotlin-operator-overloading--kotlin--medium]] - Operators
+- [[q-kotlin-extension-functions--kotlin--medium]] - Extensions

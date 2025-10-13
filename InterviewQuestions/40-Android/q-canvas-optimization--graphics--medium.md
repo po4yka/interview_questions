@@ -1,4 +1,5 @@
 ---
+topic: android
 tags:
   - android
   - canvas
@@ -8,6 +9,10 @@ tags:
   - optimization
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Canvas Optimization and Custom Drawing
@@ -886,3 +891,18 @@ invalidate(left, top, right, bottom)
 ### Резюме
 
 Оптимизация Canvas критически важна для плавных пользовательских view и анимаций. Ключевые техники включают переиспользование объектов, аппаратное ускорение, частичную инвалидацию, кеширование путей и эффективную обработку bitmap. Понимание ограничений аппаратного ускорения и использование соответствующих типов слоёв обеспечивает оптимальную производительность для различных операций рисования.
+
+---
+
+## Related Questions
+
+### Kotlin Language Features
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+- [[q-deferred-async-patterns--kotlin--medium]] - Performance
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance
+- [[q-channel-buffering-strategies--kotlin--hard]] - Performance
+- [[q-custom-dispatchers-limited-parallelism--kotlin--hard]] - Performance
+- [[q-kotlin-inline-functions--kotlin--medium]] - Performance
+
+### Related Algorithms
+- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Data Structures

@@ -41,7 +41,7 @@ tags: [kotlin, coroutines, android, lifecycle, repeatonlifecycle, flow, difficul
 ### The Problem: Memory Leaks with Flows
 
 ```kotlin
-// ❌ BAD: Potential memory leak
+//  BAD: Potential memory leak
 class BadFragment : Fragment() {
     private val viewModel: MyViewModel by viewModels()
     
@@ -73,7 +73,7 @@ class BadFragment : Fragment() {
 ### Solution: repeatOnLifecycle
 
 ```kotlin
-// ✅ GOOD: Safe Flow collection
+//  GOOD: Safe Flow collection
 class GoodFragment : Fragment() {
     private val viewModel: MyViewModel by viewModels()
     
@@ -155,7 +155,7 @@ class LifecycleExample : Fragment() {
 class ComparisonExample : Fragment() {
     private val viewModel: FlowViewModel by viewModels()
     
-    // ❌ launchWhenStarted (DEPRECATED)
+    //  launchWhenStarted (DEPRECATED)
     fun withLaunchWhenStarted() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.dataFlow.collect { data ->
@@ -167,7 +167,7 @@ class ComparisonExample : Fragment() {
         }
     }
     
-    // ✅ repeatOnLifecycle (RECOMMENDED)
+    //  repeatOnLifecycle (RECOMMENDED)
     fun withRepeatOnLifecycle() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -256,7 +256,7 @@ class MultipleFlowsExample : Fragment() {
 ```kotlin
 class BestPractices {
     
-    // ✅ Use STARTED for UI updates
+    //  Use STARTED for UI updates
     class UIUpdateFragment : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             viewLifecycleOwner.lifecycleScope.launch {
@@ -267,7 +267,7 @@ class BestPractices {
         }
     }
     
-    // ✅ Use CREATED for data that survives backgrounding
+    //  Use CREATED for data that survives backgrounding
     class DataFragment : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             viewLifecycleOwner.lifecycleScope.launch {
@@ -278,7 +278,7 @@ class BestPractices {
         }
     }
     
-    // ✅ Use viewLifecycleOwner in Fragments
+    //  Use viewLifecycleOwner in Fragments
     class CorrectLifecycleOwner : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             // GOOD: viewLifecycleOwner

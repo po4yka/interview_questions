@@ -226,3 +226,18 @@ parserparseStream(stream).collect { item ->
 3. Кешировать результаты парсинга для повторного использования
 4. Использовать специализированные библиотеки (Moshi, Gson)
 
+
+---
+
+## Related Questions
+
+### Backend Concepts
+- [[q-virtual-tables-disadvantages--backend--medium]] - Performance
+- [[q-sql-join-algorithms-complexity--backend--hard]] - Performance
+
+### Kotlin Language Features
+- [[q-deferred-async-patterns--kotlin--medium]] - Performance
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance
+- [[q-channel-buffering-strategies--kotlin--hard]] - Performance
+- [[q-custom-dispatchers-limited-parallelism--kotlin--hard]] - Performance
+- [[q-kotlin-inline-functions--kotlin--medium]] - Performance

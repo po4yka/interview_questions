@@ -43,12 +43,12 @@ Choosing between SQL and NoSQL databases is one of the most important decisions 
 **Examples:** PostgreSQL, MySQL, Oracle, SQL Server, MariaDB
 
 **Key Characteristics:**
-- ✅ **ACID** transactions (Atomicity, Consistency, Isolation, Durability)
-- ✅ **Schema-based** - fixed table structure
-- ✅ **Relationships** via foreign keys
-- ✅ **SQL** query language (standardized)
-- ✅ **Joins** across tables
-- ✅ **Strong consistency**
+-  **ACID** transactions (Atomicity, Consistency, Isolation, Durability)
+-  **Schema-based** - fixed table structure
+-  **Relationships** via foreign keys
+-  **SQL** query language (standardized)
+-  **Joins** across tables
+-  **Strong consistency**
 
 ```sql
 -- SQL Example: E-commerce schema
@@ -181,23 +181,23 @@ class BankService(private val dataSource: DataSource) {
 
 #### When to Use SQL
 
-✅ **Strong Consistency Required:**
+ **Strong Consistency Required:**
 - Financial transactions
 - Inventory management
 - Booking systems
 - Order processing
 
-✅ **Complex Relationships:**
+ **Complex Relationships:**
 - Multiple JOINs needed
 - Referential integrity important
 - Normalized data model
 
-✅ **Ad-hoc Queries:**
+ **Ad-hoc Queries:**
 - Business intelligence
 - Reporting
 - Analytics
 
-✅ **ACID Guarantees:**
+ **ACID Guarantees:**
 - Data integrity critical
 - Transactions required
 
@@ -326,13 +326,13 @@ class UserRepository(private val database: MongoDatabase) {
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Flexible schema (add fields anytime)
 - Fast reads (denormalized)
 - Intuitive data model
 - Horizontal scaling (sharding)
 
-**❌ Cons:**
+** Cons:**
 - Data duplication
 - No JOIN support
 - Weak consistency by default
@@ -416,13 +416,13 @@ class ProductRepository(private val dynamoDb: DynamoDbClient) {
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Extremely fast (sub-millisecond)
 - Simple data model
 - Infinite scalability
 - Low latency
 
-**❌ Cons:**
+** Cons:**
 - Limited query capabilities
 - No complex queries
 - Data duplication needed
@@ -486,13 +486,13 @@ class SensorRepository(private val session: CqlSession) {
 }
 ```
 
-**✅ Pros:**
+** Pros:**
 - Extremely high write throughput
 - Horizontal scalability
 - No single point of failure
 - Time-series optimized
 
-**❌ Cons:**
+** Cons:**
 - Limited query patterns
 - Eventual consistency
 - Data modeling complex
@@ -503,36 +503,36 @@ class SensorRepository(private val session: CqlSession) {
 ### Decision Framework
 
 ```
-┌─────────────────────────────────────────┐
-│  Do you need ACID transactions?         │
-│  (banking, inventory, bookings)         │
-└───────────┬─────────────────────────────┘
-            │
-    ┌───────┴───────┐
-    │ YES           │ NO
-    ▼               ▼
-  ┌────┐      ┌──────────────────────────┐
-  │SQL │      │ Is data highly related?  │
-  └────┘      │ (many JOINs needed)      │
-              └───────┬──────────────────┘
-                      │
-              ┌───────┴───────┐
-              │ YES           │ NO
-              ▼               ▼
-            ┌────┐      ┌──────────────────────────┐
-            │SQL │      │ What's primary workload? │
-            └────┘      └───────┬──────────────────┘
-                                │
-                    ┌───────────┼───────────┐
-                    │           │           │
+
+  Do you need ACID transactions?         
+  (banking, inventory, bookings)         
+
+            
+    
+     YES            NO
+                   
+        
+  SQL        Is data highly related?  
+         (many JOINs needed)      
+              
+                      
+              
+               YES            NO
+                             
+                  
+            SQL        What's primary workload? 
+                  
+                                
+                    
+                                          
                   Read      Write       Key-Value
                   Heavy     Heavy       Lookups
-                    │           │           │
-                    ▼           ▼           ▼
-                ┌────────┐ ┌──────────┐ ┌───────┐
-                │MongoDB │ │Cassandra │ │Redis/ │
-                │        │ │          │ │DynamoDB│
-                └────────┘ └──────────┘ └───────┘
+                                          
+                                          
+                  
+                MongoDB  Cassandra  Redis/ 
+                                    DynamoDB
+                  
 ```
 
 ---
@@ -542,18 +542,18 @@ class SensorRepository(private val session: CqlSession) {
 **E-commerce Platform (Polyglot Persistence):**
 
 ```
-┌─────────────────────────────────────────┐
-│         Application Layer               │
-└────┬────────┬──────────┬─────────┬──────┘
-     │        │          │         │
-     ▼        ▼          ▼         ▼
-┌─────────┐ ┌────────┐ ┌────────┐ ┌──────────┐
-│PostgreSQL│ │MongoDB │ │ Redis  │ │Elasticsearch│
-│         │ │        │ │        │ │          │
-│Users    │ │Product │ │Sessions│ │Search    │
-│Orders   │ │Catalog │ │Cart    │ │Index     │
-│Payments │ │Reviews │ │Cache   │ │          │
-└─────────┘ └────────┘ └────────┘ └──────────┘
+
+         Application Layer               
+
+                                
+                                
+   
+PostgreSQL MongoDB   Redis   Elasticsearch
+                                      
+Users     Product  Sessions Search    
+Orders    Catalog  Cart     Index     
+Payments  Reviews  Cache              
+   
     SQL       NoSQL      KV Store    Search
 ```
 
@@ -661,12 +661,12 @@ suspend fun updateUser(user: User) {
 **Примеры:** PostgreSQL, MySQL, Oracle, SQL Server, MariaDB
 
 **Ключевые характеристики:**
-- ✅ **ACID** транзакции
-- ✅ **Schema-based** - фиксированная структура таблиц
-- ✅ **Связи** через внешние ключи
-- ✅ **SQL** язык запросов (стандартизированный)
-- ✅ **JOIN** между таблицами
-- ✅ **Строгая консистентность**
+-  **ACID** транзакции
+-  **Schema-based** - фиксированная структура таблиц
+-  **Связи** через внешние ключи
+-  **SQL** язык запросов (стандартизированный)
+-  **JOIN** между таблицами
+-  **Строгая консистентность**
 
 #### NoSQL базы данных
 

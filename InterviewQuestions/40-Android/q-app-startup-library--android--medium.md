@@ -213,7 +213,7 @@ class FirebaseInitializer : Initializer<FirebaseApp> {
 
 ### 6. Best Practices
 
-#### ✅ DO:
+####  DO:
 ```kotlin
 // Keep initializers lightweight
 class QuickInitializer : Initializer<MyComponent> {
@@ -234,7 +234,7 @@ override fun create(context: Context): Analytics {
 }
 ```
 
-#### ❌ DON'T:
+####  DON'T:
 ```kotlin
 // Don't do heavy work
 class BadInitializer : Initializer<Database> {

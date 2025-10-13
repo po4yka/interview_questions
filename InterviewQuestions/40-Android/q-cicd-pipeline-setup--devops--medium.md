@@ -26,49 +26,49 @@ A **CI/CD (Continuous Integration/Continuous Deployment) pipeline** automates th
 ### Essential CI/CD Pipeline Stages
 
 ```
-┌─────────────┐
-│   Commit    │
-└──────┬──────┘
-       │
-┌──────▼──────────┐
-│  1. Build       │  ← Compile code, resolve dependencies
-└──────┬──────────┘
-       │
-┌──────▼──────────┐
-│  2. Unit Tests  │  ← Fast, isolated tests
-└──────┬──────────┘
-       │
-┌──────▼──────────┐
-│  3. Lint/Static │  ← Code quality checks
-│     Analysis    │
-└──────┬──────────┘
-       │
-┌──────▼──────────┐
-│  4. UI Tests    │  ← Instrumented tests (optional in CI)
-└──────┬──────────┘
-       │
-┌──────▼──────────┐
-│  5. Build APK/  │  ← Release builds
-│     Bundle      │
-└──────┬──────────┘
-       │
-┌──────▼──────────┐
-│  6. Sign        │  ← Sign release artifacts
-└──────┬──────────┘
-       │
-┌──────▼──────────┐
-│  7. Deploy      │  ← Upload to Play Store, Firebase, etc.
-└─────────────────┘
+
+   Commit    
+
+       
+
+  1. Build         ← Compile code, resolve dependencies
+
+       
+
+  2. Unit Tests    ← Fast, isolated tests
+
+       
+
+  3. Lint/Static   ← Code quality checks
+     Analysis    
+
+       
+
+  4. UI Tests      ← Instrumented tests (optional in CI)
+
+       
+
+  5. Build APK/    ← Release builds
+     Bundle      
+
+       
+
+  6. Sign          ← Sign release artifacts
+
+       
+
+  7. Deploy        ← Upload to Play Store, Firebase, etc.
+
 ```
 
 ### GitHub Actions Setup
 
 **Advantages:**
-- ✅ Free for public repos, generous free tier for private
-- ✅ Native GitHub integration
-- ✅ Large marketplace of actions
-- ✅ Good performance
-- ✅ Easy YAML syntax
+-  Free for public repos, generous free tier for private
+-  Native GitHub integration
+-  Large marketplace of actions
+-  Good performance
+-  Easy YAML syntax
 
 **.github/workflows/android-ci.yml**:
 
@@ -250,10 +250,10 @@ jobs:
 ### GitLab CI Setup
 
 **Advantages:**
-- ✅ Integrated with GitLab
-- ✅ Built-in Docker registry
-- ✅ Excellent UI for pipeline visualization
-- ✅ Self-hosted options
+-  Integrated with GitLab
+-  Built-in Docker registry
+-  Excellent UI for pipeline visualization
+-  Self-hosted options
 
 **.gitlab-ci.yml**:
 
@@ -417,10 +417,10 @@ deploy_firebase:
 ### Jenkins Setup
 
 **Advantages:**
-- ✅ Highly customizable
-- ✅ Self-hosted control
-- ✅ Extensive plugin ecosystem
-- ❌ More complex setup
+-  Highly customizable
+-  Self-hosted control
+-  Extensive plugin ecosystem
+-  More complex setup
 
 **Jenkinsfile**:
 
@@ -663,7 +663,7 @@ platform :android do
 
   error do |lane, exception|
     slack(
-      message: "❌ Lane #{lane} failed: #{exception.message}",
+      message: " Lane #{lane} failed: #{exception.message}",
       success: false
     )
   end
@@ -755,7 +755,7 @@ jobs:
 
 1. **Cache Dependencies**
    ```yaml
-   # ✅ GOOD - Cache Gradle dependencies
+   #  GOOD - Cache Gradle dependencies
    - uses: actions/cache@v3
      with:
        path: |
@@ -763,13 +763,13 @@ jobs:
          ~/.gradle/wrapper
        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
 
-   # ❌ BAD - No caching, slow builds
+   #  BAD - No caching, slow builds
    - run: ./gradlew build
    ```
 
 2. **Fail Fast**
    ```yaml
-   # ✅ GOOD - Run quick checks first
+   #  GOOD - Run quick checks first
    jobs:
      lint:
        runs-on: ubuntu-latest
@@ -788,23 +788,23 @@ jobs:
        steps:
          - run: ./gradlew assembleDebug
 
-   # ❌ BAD - Build first, then discover lint errors
+   #  BAD - Build first, then discover lint errors
    ```
 
 3. **Secure Secrets**
    ```yaml
-   # ✅ GOOD - Use secrets management
+   #  GOOD - Use secrets management
    env:
      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
 
-   # ❌ BAD - Hardcoded secrets
+   #  BAD - Hardcoded secrets
    env:
      KEYSTORE_PASSWORD: "my-password"
    ```
 
 4. **Parallel Jobs**
    ```yaml
-   # ✅ GOOD - Run independent jobs in parallel
+   #  GOOD - Run independent jobs in parallel
    jobs:
      lint:
        runs-on: ubuntu-latest
@@ -812,7 +812,7 @@ jobs:
        runs-on: ubuntu-latest
      # Both run in parallel
 
-   # ❌ BAD - Sequential execution
+   #  BAD - Sequential execution
    jobs:
      lint:
        runs-on: ubuntu-latest
@@ -823,7 +823,7 @@ jobs:
 
 5. **Use Build Matrix for Multi-API Testing**
    ```yaml
-   # ✅ GOOD - Test multiple configurations
+   #  GOOD - Test multiple configurations
    strategy:
      matrix:
        api-level: [29, 30, 31, 33]
@@ -839,13 +839,13 @@ jobs:
 ### Summary
 
 **Essential CI/CD stages for Android:**
-1. ✅ Build (compile, resolve dependencies)
-2. ✅ Unit Tests (fast feedback)
-3. ✅ Lint/Static Analysis (code quality)
-4. ✅ UI Tests (confidence in UI)
-5. ✅ Build Artifacts (APK/AAB)
-6. ✅ Sign (release artifacts)
-7. ✅ Deploy (Play Store, Firebase)
+1.  Build (compile, resolve dependencies)
+2.  Unit Tests (fast feedback)
+3.  Lint/Static Analysis (code quality)
+4.  UI Tests (confidence in UI)
+5.  Build Artifacts (APK/AAB)
+6.  Sign (release artifacts)
+7.  Deploy (Play Store, Firebase)
 
 **Platform choice:**
 - **GitHub Actions**: Best for GitHub projects, easy setup, good free tier
@@ -874,13 +874,13 @@ jobs:
 ### Резюме
 
 **Основные этапы CI/CD для Android:**
-1. ✅ Сборка (компиляция, разрешение зависимостей)
-2. ✅ Unit-тесты (быстрая обратная связь)
-3. ✅ Lint/статический анализ (качество кода)
-4. ✅ UI-тесты (уверенность в UI)
-5. ✅ Сборка артефактов (APK/AAB)
-6. ✅ Подпись (релизные артефакты)
-7. ✅ Развёртывание (Play Store, Firebase)
+1.  Сборка (компиляция, разрешение зависимостей)
+2.  Unit-тесты (быстрая обратная связь)
+3.  Lint/статический анализ (качество кода)
+4.  UI-тесты (уверенность в UI)
+5.  Сборка артефактов (APK/AAB)
+6.  Подпись (релизные артефакты)
+7.  Развёртывание (Play Store, Firebase)
 
 **Выбор платформы:**
 - **GitHub Actions**: Лучше для GitHub-проектов, простая настройка, хороший бесплатный тарий

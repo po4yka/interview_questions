@@ -283,3 +283,17 @@ override fun onCreate(savedInstanceState: Bundle) {
 - [Android Developer Docs: Keep your app responsive](https://developer.android.com/topic/performance/anrs/keep-your-app-responsive)
 - [Medium: Android - Tackling Application Not Responding (ANRs)](https://medium.com/codex/android-tackling-application-not-responding-anrs-3c91360cd023)
 - [Medium: How to resolve ANR issue in the Android System](https://medium.com/make-android/how-to-resolve-anr-issue-in-the-android-system-0d2eff3205f9)
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-dagger-build-time-optimization--android--medium]] - Performance
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-performance-optimization-android--android--medium]] - Performance
+- [[q-build-optimization-gradle--gradle--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Performance

@@ -31,26 +31,26 @@ Data is passed using a special **Data** container:
 WorkManager uses **`Data`** class for passing data:
 
 ```
-┌─────────────┐
-│  Activity   │
-└──────┬──────┘
-       │ workDataOf("key" -> value)
+
+  Activity   
+
+        workDataOf("key" -> value)
        ↓
-┌─────────────┐
-│ WorkRequest │ ← setInputData()
-└──────┬──────┘
-       │
+
+ WorkRequest  ← setInputData()
+
+       
        ↓
-┌─────────────┐
-│   Worker    │ ← inputData.getString("key")
-│             │
-│   doWork()  │ → Result.success(workDataOf("result" -> value))
-└──────┬──────┘
-       │
+
+   Worker     ← inputData.getString("key")
+             
+   doWork()   → Result.success(workDataOf("result" -> value))
+
+       
        ↓
-┌─────────────┐
-│  Activity   │ ← workInfo.outputData.getString("result")
-└─────────────┘
+
+  Activity    ← workInfo.outputData.getString("result")
+
 ```
 
 ---

@@ -139,3 +139,27 @@ cursor?.use {
 
 **ContentProvider** предоставляет структурированный способ доступа к данным, используется для обмена данными между приложениями (например, контакты, галерея).
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-what-is-broadcastreceiver--android--easy]] - Broadcast
+
+### Advanced (Harder)
+- [[q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]] - Broadcast
+- [[q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium]] - Broadcast
+- [[q-kotlin-context-receivers--kotlin--hard]] - Broadcast
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-what-is-broadcastreceiver--android--easy]] - Broadcast
+
+### Advanced (Harder)
+- [[q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]] - Broadcast
+- [[q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium]] - Broadcast
+- [[q-kotlin-context-receivers--kotlin--hard]] - Broadcast

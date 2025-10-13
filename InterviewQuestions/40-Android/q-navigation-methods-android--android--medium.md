@@ -527,7 +527,7 @@ fun MainScreen() {
 
 1. **Activity Navigation** - Intent-based, for app sections
 2. **Fragment Navigation** - FragmentManager, in-app navigation
-3. **Navigation Component** - Declarative, type-safe, visual graph ⭐
+3. **Navigation Component** - Declarative, type-safe, visual graph 
 4. **Bottom/Tab Navigation** - Quick access to top-level destinations
 5. **Drawer Navigation** - Side menu for many destinations
 6. **Deep Links/App Links** - URI-based, external navigation
@@ -541,3 +541,14 @@ fun MainScreen() {
 ## Ответ (RU)
 В Android есть несколько способов навигации между экранами. Основные методы включают: 1) Activity-навигация с использованием Intent. 2) Fragment-навигация через FragmentManager. 3) Navigation Component (Jetpack). 4) Bottom Navigation / Tab Navigation с использованием BottomNavigationView или TabLayout. 5) Drawer Navigation (Navigation Drawer) через DrawerLayout. 6) Deep Links и App Links для навигации через ссылки. 7) Navigation в Jetpack Compose с использованием NavHost и NavController.
 
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation
+- [[q-compose-navigation-advanced--android--medium]] - Navigation
+- [[q-activity-navigation-how-it-works--android--medium]] - Navigation
+- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation
+- [[q-what-navigation-methods-do-you-know--android--medium]] - Navigation

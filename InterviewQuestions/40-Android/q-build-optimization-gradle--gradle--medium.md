@@ -155,7 +155,7 @@ Improvement: 10-15x faster configuration
 **Fix common issues:**
 
 ```kotlin
-// ❌ BAD: Accessing System.getenv at configuration time
+//  BAD: Accessing System.getenv at configuration time
 val apiKey = System.getenv("API_KEY") // Breaks configuration cache
 
 android {
@@ -164,7 +164,7 @@ android {
     }
 }
 
-// ✅ GOOD: Use providers to defer evaluation
+//  GOOD: Use providers to defer evaluation
 val apiKeyProvider: Provider<String> = providers.environmentVariable("API_KEY")
 
 android {
@@ -220,16 +220,16 @@ Second build (cached): 15 seconds (8x faster)
 **Project structure:**
 ```
 MyApp/
-├── app/                    # Main app (depends on features)
-├── core/
-│   ├── core-ui/           # Shared UI components
-│   ├── core-data/         # Data layer
-│   └── core-common/       # Common utilities
-├── feature/
-│   ├── feature-home/      # Home feature
-│   ├── feature-profile/   # Profile feature
-│   └── feature-settings/  # Settings feature
-└── buildSrc/              # Build logic
+ app/                    # Main app (depends on features)
+ core/
+    core-ui/           # Shared UI components
+    core-data/         # Data layer
+    core-common/       # Common utilities
+ feature/
+    feature-home/      # Home feature
+    feature-profile/   # Profile feature
+    feature-settings/  # Settings feature
+ buildSrc/              # Build logic
 ```
 
 **Benefits:**

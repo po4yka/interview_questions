@@ -269,21 +269,21 @@ When starting a new project, Android Studio automatically creates Gradle files b
 #### Project File Structure
 
 ```
-└── MyApp/                    # Project
-    ├── build.gradle.kts      # Top-level build file
-    ├── settings.gradle.kts   # Settings file
-    └── app/                  # Module
-        ├── build.gradle.kts  # Module-level build file
-        ├── libs/
-        └── src/
-            └── main/         # Source set
-                ├── java/
-                │   └── com.example.myapp
-                ├── res/
-                │   ├── drawable/
-                │   ├── values/
-                │   └── ...
-                └── AndroidManifest.xml
+ MyApp/                    # Project
+     build.gradle.kts      # Top-level build file
+     settings.gradle.kts   # Settings file
+     app/                  # Module
+         build.gradle.kts  # Module-level build file
+         libs/
+         src/
+             main/         # Source set
+                 java/
+                    com.example.myapp
+                 res/
+                    drawable/
+                    values/
+                    ...
+                 AndroidManifest.xml
 ```
 
 #### 1. The Gradle Settings File
@@ -650,21 +650,21 @@ android {
 #### Структура файлов проекта
 
 ```
-└── MyApp/                    # Проект
-    ├── build.gradle.kts      # Файл сборки верхнего уровня
-    ├── settings.gradle.kts   # Файл настроек
-    └── app/                  # Модуль
-        ├── build.gradle.kts  # Файл сборки уровня модуля
-        ├── libs/
-        └── src/
-            └── main/         # Набор источников
-                ├── java/
-                │   └── com.example.myapp
-                ├── res/
-                │   ├── drawable/
-                │   ├── values/
-                │   └── ...
-                └── AndroidManifest.xml
+ MyApp/                    # Проект
+     build.gradle.kts      # Файл сборки верхнего уровня
+     settings.gradle.kts   # Файл настроек
+     app/                  # Модуль
+         build.gradle.kts  # Файл сборки уровня модуля
+         libs/
+         src/
+             main/         # Набор источников
+                 java/
+                    com.example.myapp
+                 res/
+                    drawable/
+                    values/
+                    ...
+                 AndroidManifest.xml
 ```
 
 #### 1. Файл настроек Gradle
@@ -809,3 +809,21 @@ sdk.dir=/Users/username/Library/Android/sdk
 - [Build Type, Product Flavor, Build Variant](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/Build%20Type%2C%20Product%20Flavor%2C%20Build%20Variant.md)
 - [ProGuard](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What's%20Proguard.md)
 - [App Bundles](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20App%20Bundles.md)
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
+
+### Related (Medium)
+- [[q-dagger-build-time-optimization--android--medium]] - Build, Ui
+- [[q-build-optimization-gradle--gradle--medium]] - Build, Ui
+- [[q-android-build-optimization--android--medium]] - Build, Ui
+- [[q-kapt-ksp-migration--gradle--medium]] - Build
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Build
+
+### Advanced (Harder)
+- [[q-kotlin-dsl-builders--kotlin--hard]] - Build, Ui

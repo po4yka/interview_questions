@@ -514,14 +514,14 @@ class ExampleService : Service() {
 1. **Start foreground ASAP**
 
 ```kotlin
-// ✅ GOOD - Start foreground immediately
+//  GOOD - Start foreground immediately
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     startForeground(NOTIFICATION_ID, createNotification())
     doWork()
     return START_STICKY
 }
 
-// ❌ BAD - Delay before startForeground
+//  BAD - Delay before startForeground
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     doWork() // If this takes > 5 seconds, ANR!
     startForeground(NOTIFICATION_ID, createNotification())
@@ -532,14 +532,14 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 2. **Use appropriate service type**
 
 ```kotlin
-// ✅ GOOD - Correct type for use case
+//  GOOD - Correct type for use case
 startForeground(
     id,
     notification,
     ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK // Music player
 )
 
-// ❌ BAD - Wrong type
+//  BAD - Wrong type
 startForeground(
     id,
     notification,
@@ -550,27 +550,27 @@ startForeground(
 3. **Stop when done**
 
 ```kotlin
-// ✅ GOOD - Stop when work complete
+//  GOOD - Stop when work complete
 private fun finishWork() {
     stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
 }
 
-// ❌ BAD - Never stop
+//  BAD - Never stop
 // Service runs forever
 ```
 
 4. **Handle cancellation**
 
 ```kotlin
-// ✅ GOOD - Handle task cancellation
+//  GOOD - Handle task cancellation
 override fun onDestroy() {
     super.onDestroy()
     job?.cancel() // Cancel ongoing work
     cleanup()
 }
 
-// ❌ BAD - No cleanup
+//  BAD - No cleanup
 override fun onDestroy() {
     super.onDestroy()
     // Work continues after service destroyed!
@@ -580,7 +580,7 @@ override fun onDestroy() {
 5. **Request permissions at runtime**
 
 ```kotlin
-// ✅ GOOD - Check permissions before starting
+//  GOOD - Check permissions before starting
 private fun startLocationService() {
     if (hasLocationPermission()) {
         startForegroundService(Intent(this, LocationService::class.java))
@@ -589,7 +589,7 @@ private fun startLocationService() {
     }
 }
 
-// ❌ BAD - Start without checking
+//  BAD - Start without checking
 private fun startLocationService() {
     startForegroundService(Intent(this, LocationService::class.java))
     // Crashes if permission not granted!
@@ -645,14 +645,14 @@ class MusicServiceTest {
 **Issue 1: ANR after 5 seconds**
 
 ```kotlin
-// ❌ BAD - Long initialization before startForeground
+//  BAD - Long initialization before startForeground
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     initializeHeavyResources() // Takes 10 seconds - ANR!
     startForeground(NOTIFICATION_ID, notification)
     return START_STICKY
 }
 
-// ✅ GOOD - startForeground immediately
+//  GOOD - startForeground immediately
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     startForeground(NOTIFICATION_ID, notification)
     CoroutineScope(Dispatchers.IO).launch {
@@ -665,13 +665,13 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 **Issue 2: ForegroundServiceStartNotAllowedException (Android 12+)**
 
 ```kotlin
-// ❌ BAD - Start from background without exemption
+//  BAD - Start from background without exemption
 fun startServiceFromBackground() {
     context.startForegroundService(Intent(context, MyService::class.java))
     // Throws ForegroundServiceStartNotAllowedException on Android 12+
 }
 
-// ✅ GOOD - Check if can start
+//  GOOD - Check if can start
 fun startServiceSafely() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         // Use WorkManager instead
@@ -688,10 +688,10 @@ fun startServiceSafely() {
 **Issue 3: Missing permission crash**
 
 ```kotlin
-// ❌ BAD - Missing manifest permission
+//  BAD - Missing manifest permission
 // Crashes on Android 14+
 
-// ✅ GOOD - Add permission to manifest
+//  GOOD - Add permission to manifest
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 ```
@@ -773,3 +773,20 @@ fun startServiceSafely() {
 - `microphone` — Запись аудио
 - `phoneCall` — VoIP-звонки
 - `shortService` — Быстрые задачи < 3 мин
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-android-service-types--android--easy]] - Service
+
+### Related (Medium)
+- [[q-service-component--android--medium]] - Service
+- [[q-when-can-the-system-restart-a-service--android--medium]] - Service
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Service
+- [[q-keep-service-running-background--android--medium]] - Service
+- [[q-background-vs-foreground-service--android--medium]] - Service
+
+### Advanced (Harder)
+- [[q-service-lifecycle-binding--background--hard]] - Service

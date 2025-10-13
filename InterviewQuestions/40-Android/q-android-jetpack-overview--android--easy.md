@@ -449,11 +449,11 @@ android.enableJetifier=true
 **Шаг 2: Заменить старые компоненты**
 
 ```kotlin
-// ❌ Старый код
+//  Старый код
 import android.support.v7.app.AppCompatActivity
 import android.arch.lifecycle.ViewModel
 
-// ✓ Новый код
+//  Новый код
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 ```
@@ -461,7 +461,7 @@ import androidx.lifecycle.ViewModel
 **Шаг 3: Внедрить Architecture Components**
 
 ```kotlin
-// ❌ До (хранение данных в Activity)
+//  До (хранение данных в Activity)
 class MainActivity : AppCompatActivity() {
     private var users: List<User>? = null
 
@@ -472,7 +472,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-// ✓ После (ViewModel)
+//  После (ViewModel)
 class MainActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
 
@@ -488,3 +488,12 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **English**: Android Jetpack is a suite of libraries, tools, and guidance from Google for building high-quality Android apps. It includes **Architecture Components** (ViewModel, LiveData, Room), **Navigation** component, **WorkManager** for background tasks, **DataStore** (SharedPreferences replacement), **Paging** for large datasets, **Hilt** for DI, and **Compose** for modern UI. Benefits: backward compatibility, best practices, less boilerplate, lifecycle-aware components. All libraries use `androidx.*` namespace and work together seamlessly.
+
+---
+
+## Related Questions
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Jetpack, View
+- [[q-adaptive-layouts-compose--jetpack-compose--hard]] - Jetpack, View
+- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - Jetpack, View

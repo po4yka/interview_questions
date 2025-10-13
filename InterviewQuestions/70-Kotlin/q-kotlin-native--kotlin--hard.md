@@ -51,25 +51,25 @@ tags: [kotlin, kotlin-native, multiplatform, interop, cinterop, ios, native, dif
 ### Kotlin/Native Architecture
 
 ```
-┌──────────────────────────────────────┐
-│       Kotlin Source Code              │
-└───────────────┬──────────────────────┘
-                │
-        ┌───────▼────────┐
-        │  Kotlin/Native  │
-        │    Compiler     │
-        └───────┬─────────┘
-                │
-    ┌───────────┴───────────┐
-    │                       │
-┌───▼─────┐           ┌────▼────┐
-│  LLVM   │           │  LLVM   │
-│  iOS    │           │  macOS  │
-└───┬─────┘           └────┬────┘
-    │                      │
-┌───▼──────┐         ┌─────▼────┐
-│ .framework│         │  Binary  │
-└──────────┘         └──────────┘
+
+       Kotlin Source Code              
+
+                
+        
+          Kotlin/Native  
+            Compiler     
+        
+                
+    
+                           
+           
+  LLVM                LLVM   
+  iOS                 macOS  
+           
+                          
+         
+ .framework           Binary  
+         
 ```
 
 ### Basic Kotlin/Native Project

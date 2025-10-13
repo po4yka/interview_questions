@@ -29,7 +29,7 @@ Activity.dispatchTouchEvent()
     ↓
 ViewGroup.dispatchTouchEvent()
     ↓
-ViewGroup.onInterceptTouchEvent() → true? ─→ ViewGroup.onTouchEvent()
+ViewGroup.onInterceptTouchEvent() → true? → ViewGroup.onTouchEvent()
     ↓ false                                        ↓
 Child.dispatchTouchEvent()                    consumed?
     ↓                                              ↓
@@ -722,7 +722,7 @@ class TouchFeedbackView @JvmOverloads constructor(
 ```kotlin
 override fun onTouchEvent(event: MotionEvent): Boolean {
     when (event.action) {
-        MotionEvent.ACTION_DOWN -> return true // ✅ Important!
+        MotionEvent.ACTION_DOWN -> return true //  Important!
         // ...
     }
     return super.onTouchEvent(event)
@@ -802,7 +802,7 @@ Activity.dispatchTouchEvent()
     ↓
 ViewGroup.dispatchTouchEvent()
     ↓
-ViewGroup.onInterceptTouchEvent() → true? ─→ ViewGroup.onTouchEvent()
+ViewGroup.onInterceptTouchEvent() → true? → ViewGroup.onTouchEvent()
     ↓ false
 Child.dispatchTouchEvent()
     ↓
@@ -866,3 +866,21 @@ override fun onTouchEvent(event: MotionEvent): Boolean {
 - Обрабатывайте ACTION_CANCEL
 - Используйте `requestDisallowInterceptTouchEvent()` для предотвращения перехвата родителем
 - Предоставляйте визуальную/тактильную обратную связь
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- [[q-what-is-viewmodel--android--medium]] - View
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

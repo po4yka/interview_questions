@@ -41,23 +41,23 @@ Image loading libraries like Glide, Fresco, and Coil solve complex problems rela
 
 ```kotlin
 // High-level overview of Glide architecture
-┌─────────────────────────────────────────────┐
-│           Glide Request Manager             │
-│  (Lifecycle-aware request management)       │
-└──────────────────┬──────────────────────────┘
-                   │
-┌──────────────────▼──────────────────────────┐
-│         Request Coordinator & Engine        │
-│    (Job scheduling, deduplication)          │
-└──────────────────┬──────────────────────────┘
-                   │
-       ┌───────────┼───────────┐
-       │           │           │
-┌──────▼──────┐ ┌──▼──────┐ ┌──▼──────┐
-│ Memory      │ │ Disk    │ │ Network │
-│ Cache       │ │ Cache   │ │ Fetcher │
-│ (LruCache)  │ │ (DiskLRU│ │ (OkHttp)│
-└─────────────┘ └─────────┘ └─────────┘
+
+           Glide Request Manager             
+  (Lifecycle-aware request management)       
+
+                   
+
+         Request Coordinator & Engine        
+    (Job scheduling, deduplication)          
+
+                   
+       
+                             
+  
+ Memory        Disk      Network 
+ Cache         Cache     Fetcher 
+ (LruCache)    (DiskLRU  (OkHttp)
+  
 ```
 
 ### 2. Loading Pipeline

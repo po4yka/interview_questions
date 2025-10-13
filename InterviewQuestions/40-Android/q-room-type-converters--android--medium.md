@@ -510,3 +510,21 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "app-db")
 **Резюме:**
 
 TypeConverters — это методы для преобразования пользовательских типов в типы, совместимые с базой данных, и обратно. Используйте аннотацию @TypeConverter для методов преобразования и @TypeConverters для регистрации. Можно применять на уровне базы данных, сущности, DAO или свойства. Распространённые случаи: Date, Enum, List, JSON объекты, UUID.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-room-library-definition--android--easy]] - Storage
+
+### Related (Medium)
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-transactions-dao--room--medium]] - Storage
+- [[q-room-paging3-integration--room--medium]] - Storage
+- [[q-room-type-converters-advanced--room--medium]] - Storage
+- [[q-room-vs-sqlite--android--medium]] - Storage
+
+### Advanced (Harder)
+- [[q-room-fts-full-text-search--room--hard]] - Storage

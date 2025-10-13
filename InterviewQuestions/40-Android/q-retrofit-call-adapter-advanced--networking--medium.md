@@ -1251,3 +1251,41 @@ class UserViewModel(
 - **Гибкость**: Поддержка Call, suspend, Flow
 - **UX**: Понятные сообщения об ошибках
 - **Поддерживаемость**: Централизованная логика ошибок
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
+
+### Related (Medium)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-dagger-build-time-optimization--android--medium]] - Ui
+- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
+- [[q-build-optimization-gradle--gradle--medium]] - Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
+
+### Related (Medium)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-dagger-build-time-optimization--android--medium]] - Ui
+- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
+- [[q-build-optimization-gradle--gradle--medium]] - Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking

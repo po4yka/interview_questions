@@ -48,13 +48,13 @@ This comprehensive guide explores what structured concurrency is, common violati
 
 ```
 Scope
-  ├─ Parent Coroutine
-  │   ├─ Child Coroutine 1
-  │   │   ├─ Grandchild 1.1
-  │   │   └─ Grandchild 1.2
-  │   └─ Child Coroutine 2
-  │       └─ Grandchild 2.1
-  └─ All complete together
+   Parent Coroutine
+      Child Coroutine 1
+         Grandchild 1.1
+         Grandchild 1.2
+      Child Coroutine 2
+          Grandchild 2.1
+   All complete together
 ```
 
 #### Example: Structured vs Unstructured
@@ -1236,7 +1236,7 @@ class UncancelledScopeDetector : Detector(), SourceCodeScanner {
 /**
  * Code Review Checklist for Structured Concurrency
  *
- * ❌ RED FLAGS:
+ *  RED FLAGS:
  * - GlobalScope.launch
  * - GlobalScope.async
  * - CoroutineScope(Job()) without cancellation
@@ -1244,7 +1244,7 @@ class UncancelledScopeDetector : Detector(), SourceCodeScanner {
  * - Coroutines launched in constructors
  * - No clear lifecycle for scope
  *
- * ✅ GREEN FLAGS:
+ *  GREEN FLAGS:
  * - viewModelScope.launch
  * - lifecycleScope.launch
  * - Suspend functions in Repository/UseCase

@@ -678,3 +678,17 @@ ViewModel переживает изменения конфигурации (по
 - Командная работа: параллельная работа команд
 - Чистота кода: принцип единственной ответственности
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
+
+### Advanced (Harder)
+- [[q-dagger-build-time-optimization--android--medium]] - Ui
+- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
+- [[q-build-optimization-gradle--gradle--medium]] - Ui

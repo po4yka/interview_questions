@@ -337,14 +337,14 @@ suspend fun benchmark(
 
 /*
 Typical Results:
-┌─────────────────┬──────────┬─────────────┬─────────────┐
-│ Strategy        │ Duration │ Throughput  │ Items Lost  │
-├─────────────────┼──────────┼─────────────┼─────────────┤
-│ No Strategy     │ 11000ms  │ 91 items/s  │ 0           │
-│ Buffer(64)      │ 10100ms  │ 99 items/s  │ 0           │
-│ Conflate        │ 1100ms   │ 909 items/s │ ~900        │
-│ CollectLatest   │ 1010ms   │ 990 items/s │ ~999        │
-└─────────────────┴──────────┴─────────────┴─────────────┘
+
+ Strategy         Duration  Throughput   Items Lost  
+
+ No Strategy      11000ms   91 items/s   0           
+ Buffer(64)       10100ms   99 items/s   0           
+ Conflate         1100ms    909 items/s  ~900        
+ CollectLatest    1010ms    990 items/s  ~999        
+
 */
 ```
 
@@ -482,13 +482,13 @@ highFrequencyData()
 
 2. **Configure buffer size appropriately**:
    ```kotlin
-   // ❌ Too small - producer often blocked
+   //  Too small - producer often blocked
    .buffer(1)
 
-   // ❌ Too large - memory issues
+   //  Too large - memory issues
    .buffer(100000)
 
-   // ✅ Reasonable size based on data size and rate
+   //  Reasonable size based on data size and rate
    .buffer(100)
    ```
 
@@ -522,32 +522,32 @@ highFrequencyData()
 
 1. **Using conflate when all values needed**:
    ```kotlin
-   // ❌ Bank transactions - can't skip!
+   //  Bank transactions - can't skip!
    transactions().conflate().collect { process(it) }
 
-   // ✅ Use buffer to process all
+   //  Use buffer to process all
    transactions().buffer(100).collect { process(it) }
    ```
 
 2. **collectLatest with important side effects**:
    ```kotlin
-   // ❌ File saves may be cancelled
+   //  File saves may be cancelled
    updates().collectLatest { saveToFile(it) }
 
-   // ✅ Use regular collect
+   //  Use regular collect
    updates().collect { saveToFile(it) }
    ```
 
 3. **Not considering cancellation in collectLatest**:
    ```kotlin
-   // ❌ Resource leak if cancelled
+   //  Resource leak if cancelled
    .collectLatest { value ->
        val connection = openConnection()
        processWithConnection(connection, value)
        // Connection not closed if cancelled!
    }
 
-   // ✅ Proper cleanup
+   //  Proper cleanup
    .collectLatest { value ->
        val connection = openConnection()
        try {
@@ -693,13 +693,13 @@ suspend fun processLargeFile(file: File) {
 
 2. **Настройте размер буфера правильно**:
    ```kotlin
-   // ❌ Слишком мал
+   //  Слишком мал
    .buffer(1)
 
-   // ❌ Слишком велик
+   //  Слишком велик
    .buffer(100000)
 
-   // ✅ Разумный размер
+   //  Разумный размер
    .buffer(100)
    ```
 
@@ -707,19 +707,19 @@ suspend fun processLargeFile(file: File) {
 
 1. **Использование conflate когда нужны все значения**:
    ```kotlin
-   // ❌ Банковские транзакции - нельзя пропускать!
+   //  Банковские транзакции - нельзя пропускать!
    transactions().conflate().collect { process(it) }
 
-   // ✅ Используйте buffer
+   //  Используйте buffer
    transactions().buffer(100).collect { process(it) }
    ```
 
 2. **collectLatest с важными побочными эффектами**:
    ```kotlin
-   // ❌ Сохранения в файл могут быть отменены
+   //  Сохранения в файл могут быть отменены
    updates().collectLatest { saveToFile(it) }
 
-   // ✅ Используйте обычный collect
+   //  Используйте обычный collect
    updates().collect { saveToFile(it) }
    ```
 

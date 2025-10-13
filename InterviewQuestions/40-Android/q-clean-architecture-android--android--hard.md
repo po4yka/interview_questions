@@ -44,13 +44,13 @@ tags: [android, architecture, clean-architecture, layers, separation-of-concerns
 **3. Presentation** - UI (ViewModel, Compose)
 
 ```
-┌─────────────────────────────────┐
-│     Presentation Layer          │  ← UI, ViewModel
-├─────────────────────────────────┤
-│       Data Layer                │  ← Repository, API, DB
-├─────────────────────────────────┤
-│      Domain Layer               │  ← Use Cases, Entities
-└─────────────────────────────────┘
+
+     Presentation Layer            ← UI, ViewModel
+
+       Data Layer                  ← Repository, API, DB
+
+      Domain Layer                 ← Use Cases, Entities
+
 
 Dependencies flow: Presentation → Data → Domain
 ```

@@ -217,25 +217,25 @@ val biometricOrCredential = BiometricPrompt.PromptInfo.Builder()
 **When to use each:**
 ```
 BIOMETRIC_STRONG:
-✅ Financial transactions
-✅ Accessing encrypted data
-✅ High security requirements
-✅ Use with CryptoObject
+ Financial transactions
+ Accessing encrypted data
+ High security requirements
+ Use with CryptoObject
 
 BIOMETRIC_WEAK:
-✅ Quick app unlock
-✅ Non-critical operations
-✅ Better availability
+ Quick app unlock
+ Non-critical operations
+ Better availability
 
 DEVICE_CREDENTIAL:
-✅ Fallback option
-✅ When biometric not available
-✅ Wider device support
+ Fallback option
+ When biometric not available
+ Wider device support
 
 BIOMETRIC_STRONG | DEVICE_CREDENTIAL:
-✅ Best user experience
-✅ Automatic fallback
-✅ Recommended for most cases
+ Best user experience
+ Automatic fallback
+ Recommended for most cases
 ```
 
 ---
@@ -264,8 +264,8 @@ class CryptoAuthenticator(private val context: Context) {
         )
             .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
             .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-            .setUserAuthenticationRequired(true)  // ✅ Requires biometric
-            .setInvalidatedByBiometricEnrollment(true)  // ✅ Invalidate on new biometric
+            .setUserAuthenticationRequired(true)  //  Requires biometric
+            .setInvalidatedByBiometricEnrollment(true)  //  Invalidate on new biometric
             .build()
 
         keyGenerator.init(keyGenParameterSpec)

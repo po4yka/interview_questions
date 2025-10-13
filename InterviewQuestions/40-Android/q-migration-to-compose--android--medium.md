@@ -186,15 +186,15 @@ fun LegacyRecyclerView(items: List<Item>) {
 
 ```
 app/
-├── feature-auth/          ← Мигрировать первым (небольшой модуль)
-│   ├── xml/              (старый код)
-│   └── compose/          (новый код)
-├── feature-profile/       ← Мигрировать вторым
-├── feature-feed/          ← Мигрировать третьим
-├── feature-messaging/     ← Оставить на потом (сложный)
-└── core/
-    ├── ui-xml/           (общие XML компоненты)
-    └── ui-compose/       (общие Compose компоненты)
+ feature-auth/          ← Мигрировать первым (небольшой модуль)
+    xml/              (старый код)
+    compose/          (новый код)
+ feature-profile/       ← Мигрировать вторым
+ feature-feed/          ← Мигрировать третьим
+ feature-messaging/     ← Оставить на потом (сложный)
+ core/
+     ui-xml/           (общие XML компоненты)
+     ui-compose/       (общие Compose компоненты)
 ```
 
 #### Пример модуля после миграции
@@ -448,7 +448,7 @@ fun HeavyList(items: List<Item>) {
     // - Плохо - пересоздается каждый раз
     val sorted = items.sortedBy { it.name }
 
-    // ✓ Хорошо - кэшируется
+    //  Хорошо - кэшируется
     val sorted = remember(items) {
         items.sortedBy { it.name }
     }

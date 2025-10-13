@@ -278,7 +278,7 @@ class BestPracticesViewModel : ViewModel() {
 
     data class State(val data: String = "")
 
-    // ✅ GOOD: Launch in viewModelScope
+    //  GOOD: Launch in viewModelScope
     fun goodLaunch() {
         viewModelScope.launch {
             val result = fetchData()
@@ -286,7 +286,7 @@ class BestPracticesViewModel : ViewModel() {
         }
     }
 
-    // ❌ BAD: Creating own scope
+    //  BAD: Creating own scope
     private val customScope = CoroutineScope(Dispatchers.Main)
     fun badCustomScope() {
         customScope.launch {
@@ -294,7 +294,7 @@ class BestPracticesViewModel : ViewModel() {
         }
     }
 
-    // ✅ GOOD: Using Dispatchers for heavy work
+    //  GOOD: Using Dispatchers for heavy work
     fun goodDispatchers() {
         viewModelScope.launch {
             val data = withContext(Dispatchers.IO) {
@@ -305,7 +305,7 @@ class BestPracticesViewModel : ViewModel() {
         }
     }
 
-    // ❌ BAD: Blocking main thread
+    //  BAD: Blocking main thread
     fun badBlocking() {
         viewModelScope.launch {
             val data = runBlocking { // DON'T DO THIS!
@@ -314,7 +314,7 @@ class BestPracticesViewModel : ViewModel() {
         }
     }
 
-    // ✅ GOOD: Cancellable operations
+    //  GOOD: Cancellable operations
     fun goodCancellable() {
         viewModelScope.launch {
             repeat(100) { i ->
@@ -324,7 +324,7 @@ class BestPracticesViewModel : ViewModel() {
         }
     }
 
-    // ✅ GOOD: One-shot events with Channel
+    //  GOOD: One-shot events with Channel
     private val _events = Channel<Event>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
 
@@ -535,14 +535,14 @@ class MainDispatcherRule(
 ```kotlin
 class AntiPatterns : ViewModel() {
 
-    // ❌ BAD: Exposing MutableStateFlow
+    //  BAD: Exposing MutableStateFlow
     val badState = MutableStateFlow("data")
 
-    // ✅ GOOD: Expose read-only StateFlow
+    //  GOOD: Expose read-only StateFlow
     private val _goodState = MutableStateFlow("data")
     val goodState: StateFlow<String> = _goodState.asStateFlow()
 
-    // ❌ BAD: Not handling cancellation
+    //  BAD: Not handling cancellation
     fun badCancellation() {
         viewModelScope.launch {
             while (true) { // Infinite loop, ignores cancellation
@@ -551,7 +551,7 @@ class AntiPatterns : ViewModel() {
         }
     }
 
-    // ✅ GOOD: Respecting cancellation
+    //  GOOD: Respecting cancellation
     fun goodCancellation() {
         viewModelScope.launch {
             while (isActive) {
@@ -560,7 +560,7 @@ class AntiPatterns : ViewModel() {
         }
     }
 
-    // ❌ BAD: Launching in init without lifecycle awareness
+    //  BAD: Launching in init without lifecycle awareness
     init {
         viewModelScope.launch {
             // This runs even if Activity is not visible
@@ -568,7 +568,7 @@ class AntiPatterns : ViewModel() {
         }
     }
 
-    // ✅ GOOD: Let UI collect when ready
+    //  GOOD: Let UI collect when ready
     val dataFlow: Flow<String> = flow {
         emit("data")
     }.stateIn(
@@ -604,18 +604,18 @@ ViewModel с корутинами обеспечивает мощный патт
 
 ```kotlin
 class MyViewModel : ViewModel() {
-    // ✅ Использовать viewModelScope
+    //  Использовать viewModelScope
     fun loadData() {
         viewModelScope.launch {
             // Автоматическая отмена
         }
     }
 
-    // ✅ StateFlow для состояния UI
+    //  StateFlow для состояния UI
     private val _state = MutableStateFlow(State())
     val state = _state.asStateFlow()
 
-    // ✅ Обработка ошибок
+    //  Обработка ошибок
     fun load() {
         viewModelScope.launch {
             try {

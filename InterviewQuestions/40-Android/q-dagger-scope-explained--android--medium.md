@@ -123,22 +123,22 @@ interface FragmentComponent {
 ### Component Hierarchy
 
 ```
-┌────────────────────┐
-│   AppComponent     │ @Singleton
-│  (Application)     │
-└──────────┬─────────┘
-           │ depends on
+
+   AppComponent      @Singleton
+  (Application)     
+
+            depends on
            ↓
-┌────────────────────┐
-│ ActivityComponent  │ @ActivityScope
-│   (Activity)       │
-└──────────┬─────────┘
-           │ depends on
+
+ ActivityComponent   @ActivityScope
+   (Activity)       
+
+            depends on
            ↓
-┌────────────────────┐
-│ FragmentComponent  │ @FragmentScope
-│   (Fragment)       │
-└────────────────────┘
+
+ FragmentComponent   @FragmentScope
+   (Fragment)       
+
 ```
 
 **Rules:**
@@ -336,7 +336,7 @@ class GoodRepository @Inject constructor(
 ### 3. Match Scope to Lifecycle
 
 ```kotlin
-// ✅ GOOD
+//  GOOD
 @ActivityScoped
 class ActivityPresenter // Lives with Activity
 

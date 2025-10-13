@@ -638,16 +638,16 @@ val colorScheme = when {
     dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
         dynamicLightColorScheme(context)
     }
-    else -> LightColorScheme // ✅ Fallback
+    else -> LightColorScheme //  Fallback
 }
 ```
 
 **2. Use semantic color roles**
 ```kotlin
-// ✅ DO
+//  DO
 Text(color = MaterialTheme.colorScheme.onSurface)
 
-// ❌ DON'T
+//  DON'T
 Text(color = Color.Black)
 ```
 

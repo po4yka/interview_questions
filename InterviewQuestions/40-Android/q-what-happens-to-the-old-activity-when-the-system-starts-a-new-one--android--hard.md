@@ -80,3 +80,15 @@ The behavior can also be controlled via `android:launchMode` in AndroidManifest.
 - LaunchMode
 - onNewIntent()
 - onSaveInstanceState()
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
+- [[q-single-activity-pros-cons--android--medium]] - Activity
+
+### Related (Hard)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity

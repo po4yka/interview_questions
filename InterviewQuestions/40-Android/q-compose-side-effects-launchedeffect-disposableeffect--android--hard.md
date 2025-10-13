@@ -258,13 +258,13 @@ fun LifecycleAwareComponent() {
 ```kotlin
 @Composable
 fun ComparisonExample(userId: Int) {
-    // ✅ LaunchedEffect - для coroutine работы
+    //  LaunchedEffect - для coroutine работы
     LaunchedEffect(userId) {
         val user = repository.getUser(userId) // suspend function
         // Автоматически отменится при dispose
     }
 
-    // ✅ DisposableEffect - для подписок
+    //  DisposableEffect - для подписок
     DisposableEffect(userId) {
         val listener = createListener()
         subscriptionManager.subscribe(listener)

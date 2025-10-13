@@ -67,14 +67,14 @@ Some common pitfalls are as follows:
 
 ```
 app/
-├── :app (app module)
-├── :feature:news
-├── :feature:profile
-├── :feature:settings
-├── :core:data
-├── :core:network
-├── :core:database
-└── :core:ui
+ :app (app module)
+ :feature:news
+ :feature:profile
+ :feature:settings
+ :core:data
+ :core:network
+ :core:database
+ :core:ui
 ```
 
 **Summary:**

@@ -20,10 +20,10 @@ status: draft
 
 **Key Characteristics:**
 
-- ⚡ **Faster than Serializable** — optimized for Android's IPC (Inter-Process Communication)
-- 📦 **Used with Intents and Bundles** — standard way to pass objects between components
-- 🔧 **Requires implementation** — needs specific methods to be implemented
-- 🎯 **Type-safe** — compile-time checking of data types
+-  **Faster than Serializable** — optimized for Android's IPC (Inter-Process Communication)
+-  **Used with Intents and Bundles** — standard way to pass objects between components
+-  **Requires implementation** — needs specific methods to be implemented
+-  **Type-safe** — compile-time checking of data types
 
 **Basic Implementation:**
 
@@ -216,7 +216,7 @@ object DateParceler : Parceler<Date> {
 
 | Feature | Parcelable | Serializable |
 |---------|-----------|--------------|
-| **Performance** | ⚡ Fast | 🐌 Slow |
+| **Performance** |  Fast |  Slow |
 | **Implementation** | More code (without @Parcelize) | Simple |
 | **Android optimization** | - Yes | - No |
 | **Reflection** | - No | - Yes (slower) |

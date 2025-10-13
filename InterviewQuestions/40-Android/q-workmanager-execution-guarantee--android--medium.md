@@ -163,7 +163,7 @@ WorkManager tracks work through various states to ensure execution:
                     ↓
                 RUNNING
                     ↓
-        ┌───────────┼───────────┐
+        
         ↓           ↓           ↓
     SUCCEEDED    FAILED     CANCELLED
 

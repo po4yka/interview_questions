@@ -430,3 +430,19 @@ object PerformanceThresholds {
 ## Ответ (RU)
 
 Производительность измеряется в миллисекундах времени отрисовки (measure, layout, draw). Также учитывается количество операций пересчёта и перекомпоновки. В Jetpack Compose оценивается количеством recomposition и snapshot изменений.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Performance
+- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-performance-optimization-android--android--medium]] - Performance
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - Performance, View
+- [[q-canvas-drawing-optimization--custom-views--hard]] - Performance, View
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

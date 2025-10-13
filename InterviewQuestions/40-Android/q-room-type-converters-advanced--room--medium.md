@@ -1097,3 +1097,21 @@ class GoodConverters {
 - **Null Safety**: Правильная обработка null в преобразованиях
 
 Выбирайте стратегию сериализации на основе сложности данных, требований к производительности и ограничений размера хранилища.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-room-library-definition--android--easy]] - Storage
+
+### Related (Medium)
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-transactions-dao--room--medium]] - Storage
+- [[q-room-paging3-integration--room--medium]] - Storage
+- [[q-room-vs-sqlite--android--medium]] - Storage
+- [[q-room-type-converters--android--medium]] - Storage
+
+### Advanced (Harder)
+- [[q-room-fts-full-text-search--room--hard]] - Storage

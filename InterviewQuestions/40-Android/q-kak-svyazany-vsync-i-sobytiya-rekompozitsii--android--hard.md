@@ -73,7 +73,7 @@ Frame displayed on screen
 ```
 Time (ms):  0    16.6   33.2   49.8   66.4
             |     |      |      |      |
-VSYNC:      ●     ●      ●      ●      ●
+VSYNC:                             
             |     |      |      |      |
 Frame 1:    [Render-----------------]
 Frame 2:          [Render-----------------]
@@ -149,11 +149,11 @@ At 60Hz, each frame has 16.6ms budget:
 
 ```kotlin
 Frame Budget (60Hz): 16.6ms
-├─ Composition: ~2-3ms
-├─ Layout: ~2-3ms
-├─ Drawing: ~2-3ms
-├─ GPU Rendering: ~8-10ms
-└─ Buffer time: ~2ms
+ Composition: ~2-3ms
+ Layout: ~2-3ms
+ Drawing: ~2-3ms
+ GPU Rendering: ~8-10ms
+ Buffer time: ~2ms
 ```
 
 **Example of staying within budget:**

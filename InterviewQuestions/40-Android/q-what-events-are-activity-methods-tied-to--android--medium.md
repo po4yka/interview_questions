@@ -18,23 +18,23 @@ Activity lifecycle methods are tied to specific system events that occur during 
 ### Activity Lifecycle Events and Methods
 
 ```
-┌─────────────────────────────────────────────┐
-│         Activity Lifecycle Events            │
-└─────────────────────────────────────────────┘
 
-onCreate() ──────► Activity is created
+         Activity Lifecycle Events            
+
+
+onCreate()  Activity is created
     ↓
-onStart() ───────► Activity becomes visible
+onStart()  Activity becomes visible
     ↓
-onResume() ──────► Activity gains focus, user can interact
+onResume()  Activity gains focus, user can interact
     ↓
 [Activity Running]
     ↓
-onPause() ───────► Another activity comes to foreground
+onPause()  Another activity comes to foreground
     ↓
-onStop() ────────► Activity no longer visible
+onStop()  Activity no longer visible
     ↓
-onDestroy() ─────► Activity is destroyed
+onDestroy()  Activity is destroyed
 ```
 
 ### Detailed Event Mapping
@@ -669,3 +669,20 @@ onPause() → onStop() → onSaveInstanceState() → onDestroy() → onCreate() 
 **Нажатие кнопки Назад:**
 onPause() → onStop() → onDestroy()
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-android-components-besides-activity--android--easy]] - Activity
+
+### Related (Medium)
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
+- [[q-single-activity-pros-cons--android--medium]] - Activity
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Activity
+- [[q-activity-lifecycle-methods--android--medium]] - Activity
+
+### Advanced (Harder)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity

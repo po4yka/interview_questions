@@ -54,12 +54,12 @@ In Android's class hierarchy, `Context` is the root class. Notably, `Activity` i
 
 ```
 Context (abstract class)
-    ├── ContextWrapper
-    │   ├── Application
-    │   ├── Service
-    │   └── ContextThemeWrapper
-    │       └── Activity
-    └── ... other implementations
+     ContextWrapper
+        Application
+        Service
+        ContextThemeWrapper
+            Activity
+     ... other implementations
 ```
 
 ### Primary Context Implementations
@@ -200,12 +200,12 @@ class MyRepository(private val activityContext: Activity) {
 
 ```
 Context (абстрактный класс)
-    ├── ContextWrapper
-    │   ├── Application
-    │   ├── Service
-    │   └── ContextThemeWrapper
-    │       └── Activity
-    └── ... другие реализации
+     ContextWrapper
+        Application
+        Service
+        ContextThemeWrapper
+            Activity
+     ... другие реализации
 ```
 
 ### Основные реализации Context
@@ -344,3 +344,23 @@ class MyRepository(private val activityContext: Activity) {
 - [Android Context Needs Isolation](https://www.techyourchance.com/android-context-needs-isolation/)
 - [Using Context Theme Wrapper on Android](https://ataulm.com/2019/11/20/using-context-theme-wrapper.html)
 - [Medium: Activity Context vs Application Context: A Deep Dive](https://medium.com/@mahmoud.alkateb22/activity-context-vs-application-context-a-deep-dive-into-android-development-94fc41233de7)
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Fundamentals
+- [[q-what-unifies-android-components--android--easy]] - Fundamentals
+
+### Related (Medium)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-intent-filters-android--android--medium]] - Fundamentals
+- [[q-anr-application-not-responding--android--medium]] - Fundamentals
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
+- [[q-what-are-intents-for--android--medium]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-kotlin-context-receivers--kotlin--hard]] - Fundamentals
+- [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Fundamentals

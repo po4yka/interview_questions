@@ -144,20 +144,20 @@ class MainActivity : ComponentActivity() {
 
 ```
 app/
-├── src/
-│   └── main/
-│       ├── java/com/example/myapp/
-│       │   └── MainActivity.kt
-│       ├── res/
-│       │   ├── layout/
-│       │   │   └── activity_main.xml
-│       │   ├── values/
-│       │   │   ├── strings.xml
-│       │   │   └── themes.xml
-│       │   └── mipmap/
-│       │       └── ic_launcher.png
-│       └── AndroidManifest.xml
-└── build.gradle
+ src/
+    main/
+        java/com/example/myapp/
+           MainActivity.kt
+        res/
+           layout/
+              activity_main.xml
+           values/
+              strings.xml
+              themes.xml
+           mipmap/
+               ic_launcher.png
+        AndroidManifest.xml
+ build.gradle
 ```
 
 ### UI Lifecycle
@@ -196,3 +196,17 @@ class MainActivity : AppCompatActivity() {
 ## Ответ (RU)
 
 Минимальные шаги: создать Activity как точку входа для UI установить content view в виде XML или программно созданного View убедиться что в манифесте указана MainActivity как LAUNCHER при запуске устройства система вызывает onCreate() и в этот момент UI привязывается к экрану
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
+
+### Advanced (Harder)
+- [[q-dagger-build-time-optimization--android--medium]] - Ui
+- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
+- [[q-build-optimization-gradle--gradle--medium]] - Ui

@@ -6,7 +6,7 @@ aliases:
   - SparseArray and Optimization
   - SparseArray и оптимизация
 date_created: 2025-10-05
-date_modified: 2025-10-05
+date_modified: 2025-10-13
 status: draft
 original_language: en
 language_tags:
@@ -26,6 +26,7 @@ tags:
   - memory-optimization
   - difficulty/medium
 moc: moc-android
+related_questions: []
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20SparseArray.md"
 ---
 
@@ -202,3 +203,18 @@ Android предоставляет несколько вариантов SparseA
 - `SparseIntArray` - отображает int на int
 - `SparseLongArray` - отображает int на long
 - `LongSparseArray<E>` - отображает long на Object
+
+---
+
+## Related Questions
+
+### Kotlin Language Features
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+- [[q-deferred-async-patterns--kotlin--medium]] - Performance
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance
+- [[q-channel-buffering-strategies--kotlin--hard]] - Performance
+- [[q-custom-dispatchers-limited-parallelism--kotlin--hard]] - Performance
+- [[q-kotlin-inline-functions--kotlin--medium]] - Performance
+
+### Related Algorithms
+- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Data Structures

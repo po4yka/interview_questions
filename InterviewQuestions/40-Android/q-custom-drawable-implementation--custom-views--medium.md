@@ -64,7 +64,7 @@ class CircleDrawable : Drawable() {
             invalidateSelf() // Request redraw
         }
 
-    // ✅ Main drawing method
+    //  Main drawing method
     override fun draw(canvas: Canvas) {
         val bounds = bounds
         val centerX = bounds.centerX().toFloat()
@@ -74,23 +74,23 @@ class CircleDrawable : Drawable() {
         canvas.drawCircle(centerX, centerY, radius, paint)
     }
 
-    // ✅ Set opacity (required)
+    //  Set opacity (required)
     override fun setAlpha(alpha: Int) {
         paint.alpha = alpha
         invalidateSelf()
     }
 
-    // ✅ Set color filter (required)
+    //  Set color filter (required)
     override fun setColorFilter(colorFilter: ColorFilter?) {
         paint.colorFilter = colorFilter
         invalidateSelf()
     }
 
-    // ✅ Return opacity (required)
+    //  Return opacity (required)
     @Deprecated("Deprecated in Java", ReplaceWith("PixelFormat.TRANSLUCENT"))
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 
-    // ✅ Intrinsic size (optional)
+    //  Intrinsic size (optional)
     override fun getIntrinsicWidth(): Int = 48.dpToPx()
     override fun getIntrinsicHeight(): Int = 48.dpToPx()
 
@@ -127,7 +127,7 @@ class RectangleDrawable : Drawable() {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     override fun draw(canvas: Canvas) {
-        // ✅ Always use bounds, never hardcode coordinates
+        //  Always use bounds, never hardcode coordinates
         val bounds = bounds
 
         // Draw within bounds
@@ -150,7 +150,7 @@ class RectangleDrawable : Drawable() {
         )
     }
 
-    // ✅ React to bounds changes
+    //  React to bounds changes
     override fun onBoundsChange(bounds: Rect) {
         super.onBoundsChange(bounds)
 
@@ -217,10 +217,10 @@ class StatefulButtonDrawable : Drawable() {
         )
     }
 
-    // ✅ Declare which states this drawable handles
+    //  Declare which states this drawable handles
     override fun isStateful(): Boolean = true
 
-    // ✅ Handle state changes
+    //  Handle state changes
     override fun onStateChange(state: IntArray): Boolean {
         val oldColor = paint.color
 
@@ -302,7 +302,7 @@ class SpinnerDrawable : Drawable(), Animatable {
         canvas.restore()
     }
 
-    // ✅ Animatable interface
+    //  Animatable interface
     override fun start() {
         if (!isRunning) {
             isRunning = true
@@ -663,13 +663,13 @@ imageView.setImageDrawable(drawable)
 
 **1. Always use bounds, never hardcode**
 ```kotlin
-// ✅ DO
+//  DO
 override fun draw(canvas: Canvas) {
     val bounds = bounds
     canvas.drawRect(bounds, paint)
 }
 
-// ❌ DON'T
+//  DON'T
 override fun draw(canvas: Canvas) {
     canvas.drawRect(0f, 0f, 100f, 100f, paint) // Hardcoded!
 }
@@ -677,7 +677,7 @@ override fun draw(canvas: Canvas) {
 
 **2. Implement required methods**
 ```kotlin
-// ✅ Must implement these 3 methods
+//  Must implement these 3 methods
 override fun setAlpha(alpha: Int)
 override fun setColorFilter(colorFilter: ColorFilter?)
 override fun getOpacity(): Int
@@ -689,13 +689,13 @@ var color: Int = Color.BLUE
     set(value) {
         field = value
         paint.color = value
-        invalidateSelf() // ✅ Request redraw
+        invalidateSelf() //  Request redraw
     }
 ```
 
 **4. Pre-allocate objects**
 ```kotlin
-// ✅ DO - Allocate once
+//  DO - Allocate once
 private val paint = Paint()
 private val path = Path()
 
@@ -704,7 +704,7 @@ override fun draw(canvas: Canvas) {
     // ...
 }
 
-// ❌ DON'T - Allocate in draw()
+//  DON'T - Allocate in draw()
 override fun draw(canvas: Canvas) {
     val paint = Paint() // Allocates every draw!
 }
@@ -781,7 +781,7 @@ class CircleDrawable : Drawable() {
         color = Color.BLUE
     }
 
-    // ✅ Основной метод отрисовки
+    //  Основной метод отрисовки
     override fun draw(canvas: Canvas) {
         val bounds = bounds
         val centerX = bounds.centerX().toFloat()
@@ -791,19 +791,19 @@ class CircleDrawable : Drawable() {
         canvas.drawCircle(centerX, centerY, radius, paint)
     }
 
-    // ✅ Установить прозрачность (обязательно)
+    //  Установить прозрачность (обязательно)
     override fun setAlpha(alpha: Int) {
         paint.alpha = alpha
         invalidateSelf()
     }
 
-    // ✅ Установить цветовой фильтр (обязательно)
+    //  Установить цветовой фильтр (обязательно)
     override fun setColorFilter(colorFilter: ColorFilter?) {
         paint.colorFilter = colorFilter
         invalidateSelf()
     }
 
-    // ✅ Вернуть прозрачность (обязательно)
+    //  Вернуть прозрачность (обязательно)
     @Deprecated("Deprecated in Java")
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 }
@@ -813,7 +813,7 @@ class CircleDrawable : Drawable() {
 
 ```kotlin
 override fun draw(canvas: Canvas) {
-    // ✅ Всегда использовать bounds, никогда не hardcode координаты
+    //  Всегда использовать bounds, никогда не hardcode координаты
     val bounds = bounds
     canvas.drawRect(bounds, paint)
 }
@@ -840,3 +840,21 @@ override fun onBoundsChange(bounds: Rect) {
 - Обрабатывать изменения bounds
 - Поддерживать tinting
 - Предоставлять intrinsic size
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- [[q-what-is-viewmodel--android--medium]] - View
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

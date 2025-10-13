@@ -23,7 +23,7 @@ status: draft
 Hilt упрощает настройку и сокращает boilerplate код, что ускоряет компиляцию.
 
 ```kotlin
-// ❌ Dagger - много кода, медленная компиляция
+//  Dagger - много кода, медленная компиляция
 @Component(modules = [NetworkModule::class, DatabaseModule::class, RepositoryModule::class])
 @Singleton
 interface AppComponent {
@@ -39,7 +39,7 @@ class NetworkModule {
     fun provideRetrofit(): Retrofit { /* ... */ }
 }
 
-// ✓ Hilt - меньше кода, быстрее компилируется
+//  Hilt - меньше кода, быстрее компилируется
 @HiltAndroidApp
 class MyApplication : Application()
 
@@ -62,7 +62,7 @@ object NetworkModule {
 Разбейте большие модули на несколько меньших, логически связанных компонентов.
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - один огромный модуль
+//  НЕПРАВИЛЬНО - один огромный модуль
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -74,7 +74,7 @@ object AppModule {
     // ... еще 46 методов
 }
 
-// ✓ ПРАВИЛЬНО - разделенные модули
+//  ПРАВИЛЬНО - разделенные модули
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -138,7 +138,7 @@ object ProfileFeatureModule {
 ### 4. Избегание избыточных зависимостей
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - слишком много зависимостей в конструкторе
+//  НЕПРАВИЛЬНО - слишком много зависимостей в конструкторе
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val userRepo: UserRepository,
@@ -153,7 +153,7 @@ class MainViewModel @Inject constructor(
     // Dagger генерирует много кода для всех этих зависимостей
 }
 
-// ✓ ПРАВИЛЬНО - использовать Facade или UseCase паттерн
+//  ПРАВИЛЬНО - использовать Facade или UseCase паттерн
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val mainUseCases: MainUseCases
@@ -177,7 +177,7 @@ class MainUseCases @Inject constructor(
 `@Binds` генерирует меньше кода чем `@Provides`.
 
 ```kotlin
-// ❌ МЕДЛЕННЕЕ - @Provides
+//  МЕДЛЕННЕЕ - @Provides
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
@@ -188,7 +188,7 @@ object RepositoryModule {
     }
 }
 
-// ✓ БЫСТРЕЕ - @Binds
+//  БЫСТРЕЕ - @Binds
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
@@ -203,7 +203,7 @@ abstract class RepositoryModule {
 Используйте минимально необходимые scope'ы.
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - слишком много singleton'ов
+//  НЕПРАВИЛЬНО - слишком много singleton'ов
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -216,7 +216,7 @@ object AppModule {
     fun provideFormatter(): DateFormatter = DateFormatter() // Тоже не нужен
 }
 
-// ✓ ПРАВИЛЬНО - используйте @Unscoped или подходящий scope
+//  ПРАВИЛЬНО - используйте @Unscoped или подходящий scope
 @Module
 @InstallIn(ActivityComponent::class)
 object ActivityModule {
@@ -313,7 +313,7 @@ implementation("some.library:name:1.0") {
 ### 10. Ленивая инициализация
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО - все создается сразу
+//  НЕПРАВИЛЬНО - все создается сразу
 @Singleton
 class HeavyService @Inject constructor(
     private val database: AppDatabase,
@@ -328,7 +328,7 @@ class HeavyService @Inject constructor(
     }
 }
 
-// ✓ ПРАВИЛЬНО - ленивая инициализация
+//  ПРАВИЛЬНО - ленивая инициализация
 @Singleton
 class HeavyService @Inject constructor(
     private val databaseProvider: Provider<AppDatabase>,
@@ -348,7 +348,7 @@ class HeavyService @Inject constructor(
 Избегайте фабрик которые требуют много generated кода.
 
 ```kotlin
-// ❌ МЕДЛЕННЕЕ - ручная фабрика
+//  МЕДЛЕННЕЕ - ручная фабрика
 interface UserViewModelFactory {
     fun create(userId: Int): UserViewModel
 }
@@ -362,7 +362,7 @@ abstract class ViewModelModule {
     ): UserViewModelFactory
 }
 
-// ✓ БЫСТРЕЕ - AssistedInject
+//  БЫСТРЕЕ - AssistedInject
 class UserViewModel @AssistedInject constructor(
     private val repository: UserRepository,
     @Assisted private val userId: Int
@@ -388,7 +388,7 @@ class UserActivity : AppCompatActivity() {
 ### 12. Минимизация Multibindings
 
 ```kotlin
-// ❌ МЕДЛЕННО - слишком много bindings
+//  МЕДЛЕННО - слишком много bindings
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class FeatureModule {
@@ -403,7 +403,7 @@ abstract class FeatureModule {
     // ... 50+ bindings
 }
 
-// ✓ БЫСТРЕЕ - группировка или использование Map
+//  БЫСТРЕЕ - группировка или использование Map
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class FeatureModule {

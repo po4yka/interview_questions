@@ -132,3 +132,21 @@ class BadAdapter(private val items: List<Item>) : RecyclerView.Adapter<ViewHolde
 
 ## Ответ (RU)
 Нет, LayoutInflater — не синглтон, но может быть получен как скоуп-зависимый объект (getSystemService) в Context. Однако его можно переиспользовать, так как он не хранит состояния между вызовами
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- [[q-what-is-viewmodel--android--medium]] - View
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

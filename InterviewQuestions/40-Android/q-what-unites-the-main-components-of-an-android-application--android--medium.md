@@ -20,10 +20,10 @@ The main Android components (Activity, Service, BroadcastReceiver, ContentProvid
 
 ```
 Android Application Components
-├── Activity        → UI screens
-├── Service         → Background operations
-├── BroadcastReceiver → System/app events
-└── ContentProvider   → Data sharing
+ Activity        → UI screens
+ Service         → Background operations
+ BroadcastReceiver → System/app events
+ ContentProvider   → Data sharing
 ```
 
 ### Common Characteristics
@@ -321,3 +321,20 @@ Main Android components are united by:
 - Context and Application
 - Component lifecycles
 - Process management
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Fundamentals
+- [[q-what-unifies-android-components--android--easy]] - Fundamentals
+
+### Related (Medium)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-anr-application-not-responding--android--medium]] - Fundamentals
+- [[q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Fundamentals

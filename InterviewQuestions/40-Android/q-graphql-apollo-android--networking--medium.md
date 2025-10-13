@@ -1635,3 +1635,21 @@ Apollo Android обеспечивает:
 - **Обработка ошибок**: Разделение GraphQL и сетевых ошибок
 
 GraphQL + Apollo отлично подходит для сложных требований к данным, real-time функций и строго типизированных API.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-graphql-vs-rest--networking--easy]] - Networking
+
+### Related (Medium)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+- [[q-network-error-handling-strategies--networking--medium]] - Networking
+- [[q-okhttp-interceptors-advanced--networking--medium]] - Networking
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-network-request-deduplication--networking--hard]] - Networking

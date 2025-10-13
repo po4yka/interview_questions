@@ -395,3 +395,22 @@ val syncWorkRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
 
 В Android-приложениях существует несколько типов хранилищ данных, каждый из которых подходит для различных сценариев и требований к данным. Основные типы хранилищ данных в Android включают: 1. SharedPreferences - используется для хранения пар ключ-значение и идеально подходит для хранения небольших данных таких как настройки пользователя предпочтения и конфигурации. 2. Internal Storage - хранение данных внутри внутренней памяти устройства подходит для хранения приватных данных которые должны быть доступны только внутри приложения. 3. External Storage - хранение данных на внешней памяти устройства (SD-карта или внешняя память устройства) используется для хранения данных которые должны быть доступны за пределами приложения например мультимедийные файлы фотографии видео. 4. SQLite Database - полноценная реляционная база данных встроенная в Android идеально подходит для хранения структурированных данных с отношениями запросами и транзакциями. 5. Content Providers - механизм для обмена данными между приложениями используется для предоставления доступа к данным одного приложения другим приложениям часто используется для доступа к системным данным таким как контакты изображения и видео.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-sharedpreferences-definition--android--easy]] - Storage
+- [[q-room-library-definition--android--easy]] - Storage
+
+### Related (Medium)
+- [[q-encrypted-file-storage--security--medium]] - Storage
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-transactions-dao--room--medium]] - Storage
+- [[q-room-paging3-integration--room--medium]] - Storage
+- [[q-room-type-converters-advanced--room--medium]] - Storage
+
+### Advanced (Harder)
+- [[q-room-fts-full-text-search--room--hard]] - Storage

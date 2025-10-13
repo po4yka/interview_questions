@@ -19,11 +19,11 @@ status: draft
 **Spannable** is an interface for text to which **markup objects can be attached and detached**. It's used for **styling text** at runtime, allowing you to apply formatting to whole paragraphs or specific parts of text.
 
 Spannable enables you to:
-- 🎨 Change text color
-- 👆 Make text clickable
-- 📏 Scale text size
-- 🎯 Draw custom bullet points
-- 📐 Change line height
+-  Change text color
+-  Make text clickable
+-  Scale text size
+-  Draw custom bullet points
+-  Change line height
 - **Bold, italic, underline** formatting
 - Background colors
 - Custom fonts and typefaces

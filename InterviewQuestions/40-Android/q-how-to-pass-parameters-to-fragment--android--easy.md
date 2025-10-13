@@ -426,3 +426,16 @@ class CorrectFragment : Fragment() {
 
 ## Ответ (RU)
 Рекомендуемый способ: создать Bundle, положить туда параметры через putString или putInt и установить arguments фрагменту. В onCreate() извлечь через requireArguments(). Это безопасный способ, поддерживаемый Android-системой
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment
+- [[q-fragment-basics--android--easy]] - Fragment
+
+### Advanced (Harder)
+- [[q-save-data-outside-fragment--android--medium]] - Fragment
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - Fragment

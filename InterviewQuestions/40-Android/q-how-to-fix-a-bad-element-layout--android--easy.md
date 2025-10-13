@@ -401,3 +401,16 @@ To fix bad layouts:
 ## Ответ (RU)
 Уменьшите вложенность макетов, используйте ViewStub для редко используемых элементов, применяйте merge для сокращения уровней вложенности при использовании include, избегайте ненужных атрибутов и переопределений, профилируйте макеты с помощью инструментов. Пример кода ViewStub: <ViewStub android:id="@+id/viewStub" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/your_layout" />. Пример использования merge в your_layout.xml: <merge xmlns:android="http://schemas.android.com/apk/res/android"> <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Label" /> <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Value" /> </merge>
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Advanced (Harder)
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View

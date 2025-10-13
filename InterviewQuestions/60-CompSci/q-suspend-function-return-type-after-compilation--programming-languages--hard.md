@@ -303,12 +303,12 @@ when (internalResult) {
 // 4. Suspension point tracking
 
 suspend fun original(x: Int): String
-// ⬇️ Transformed to ⬇️
+//  Transformed to 
 fun original(x: Int, $completion: Continuation<String>): Any?
 
 // Generic pattern:
 suspend fun <T> func(): T
-// ⬇️ Becomes ⬇️
+//  Becomes 
 fun <T> func($completion: Continuation<T>): Any?
 ```
 

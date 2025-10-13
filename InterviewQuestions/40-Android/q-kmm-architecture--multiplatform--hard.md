@@ -147,45 +147,45 @@ android {
 **2. Directory Structure**
 ```
 project/
-├── androidApp/              # Android-specific app
-│   ├── src/main/
-│   │   ├── kotlin/
-│   │   │   └── com/taskflow/android/
-│   │   │       ├── MainActivity.kt
-│   │   │       ├── ui/
-│   │   │       └── di/
-│   │   └── res/
-│   └── build.gradle.kts
-├── iosApp/                  # iOS Xcode project
-│   ├── iosApp/
-│   │   ├── ContentView.swift
-│   │   ├── TaskListView.swift
-│   │   └── ViewModel/
-│   └── iosApp.xcodeproj
-└── shared/                  # Shared Kotlin code
-    ├── src/
-    │   ├── commonMain/kotlin/
-    │   │   └── com/taskflow/shared/
-    │   │       ├── domain/
-    │   │       │   ├── model/
-    │   │       │   ├── repository/
-    │   │       │   └── usecase/
-    │   │       ├── data/
-    │   │       │   ├── remote/
-    │   │       │   ├── local/
-    │   │       │   └── repository/
-    │   │       ├── Platform.kt
-    │   │       └── di/
-    │   ├── commonTest/kotlin/
-    │   ├── androidMain/kotlin/
-    │   │   └── com/taskflow/shared/
-    │   │       ├── PlatformAndroid.kt
-    │   │       └── database/
-    │   └── iosMain/kotlin/
-    │       └── com/taskflow/shared/
-    │           ├── PlatformIOS.kt
-    │           └── database/
-    └── build.gradle.kts
+ androidApp/              # Android-specific app
+    src/main/
+       kotlin/
+          com/taskflow/android/
+              MainActivity.kt
+              ui/
+              di/
+       res/
+    build.gradle.kts
+ iosApp/                  # iOS Xcode project
+    iosApp/
+       ContentView.swift
+       TaskListView.swift
+       ViewModel/
+    iosApp.xcodeproj
+ shared/                  # Shared Kotlin code
+     src/
+        commonMain/kotlin/
+           com/taskflow/shared/
+               domain/
+                  model/
+                  repository/
+                  usecase/
+               data/
+                  remote/
+                  local/
+                  repository/
+               Platform.kt
+               di/
+        commonTest/kotlin/
+        androidMain/kotlin/
+           com/taskflow/shared/
+               PlatformAndroid.kt
+               database/
+        iosMain/kotlin/
+            com/taskflow/shared/
+                PlatformIOS.kt
+                database/
+     build.gradle.kts
 ```
 
 #### Expect/Actual Mechanism
@@ -1062,19 +1062,19 @@ actual fun generateUUID() = NSUUID().UUIDString
 #### Shared код
 
 **Что делить**:
-- ✅ Domain models
-- ✅ Repository interfaces & implementations
-- ✅ Use cases
-- ✅ Network layer (Ktor)
-- ✅ Database (SQLDelight)
-- ✅ Business logic
-- ✅ ViewModels (для iOS)
+-  Domain models
+-  Repository interfaces & implementations
+-  Use cases
+-  Network layer (Ktor)
+-  Database (SQLDelight)
+-  Business logic
+-  ViewModels (для iOS)
 
 **Что НЕ делить**:
-- ❌ UI компоненты
-- ❌ Platform lifecycle
-- ❌ Navigation
-- ❌ Permissions handling
+-  UI компоненты
+-  Platform lifecycle
+-  Navigation
+-  Permissions handling
 
 #### Интеграция
 

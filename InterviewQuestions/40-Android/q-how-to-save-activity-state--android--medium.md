@@ -499,3 +499,20 @@ class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() 
 
 **Лучшая практика:** Используйте ViewModel + SavedStateHandle для UI состояния и DataStore/Room для постоянных данных.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-android-components-besides-activity--android--easy]] - Activity
+
+### Related (Medium)
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
+- [[q-single-activity-pros-cons--android--medium]] - Activity
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Activity
+- [[q-activity-lifecycle-methods--android--medium]] - Activity
+
+### Advanced (Harder)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity

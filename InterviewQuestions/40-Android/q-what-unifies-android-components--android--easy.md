@@ -130,26 +130,26 @@ contentResolver.query(
 **Unified Component Diagram:**
 
 ```
-┌─────────────────────────────────────────┐
-│        AndroidManifest.xml              │
-│  (All components declared here)         │
-└─────────────────────────────────────────┘
-                    │
-        ┌───────────┼───────────┐
-        │           │           │
-    ┌───▼───┐   ┌──▼───┐   ┌──▼──────┐
-    │Activity│   │Service│  │Receiver │
-    └───┬───┘   └──┬───┘   └──┬──────┘
-        │          │           │
-        │    All inherit/receive Context
-        │          │           │
-        └──────────┼───────────┘
-                   │
-        ┌──────────▼───────────┐
-        │   Context & Intent   │
-        │  (Unified access &   │
-        │   communication)     │
-        └──────────────────────┘
+
+        AndroidManifest.xml              
+  (All components declared here)         
+
+                    
+        
+                              
+          
+    Activity   Service  Receiver 
+          
+                             
+            All inherit/receive Context
+                             
+        
+                   
+        
+           Context & Intent   
+          (Unified access &   
+           communication)     
+        
 ```
 
 **Main Components Included:**
@@ -173,3 +173,19 @@ contentResolver.query(
 
 Основные компоненты включают: Activity, Fragment, Service, BroadcastReceiver и ContentProvider.
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+- [[q-android-components-besides-activity--android--easy]] - Fundamentals
+- [[q-main-android-components--android--easy]] - Fundamentals
+- [[q-material3-components--material-design--easy]] - Fundamentals
+- [[q-android-app-components--android--easy]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
+- [[q-hilt-components-scope--android--medium]] - Fundamentals

@@ -1,4 +1,5 @@
 ---
+topic: programming-languages
 tags:
   - collections
   - immutable
@@ -10,6 +11,10 @@ tags:
   - set
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-programming-languages
+related_questions: []
 ---
 
 # Какие коллекции знаешь?
@@ -63,3 +68,18 @@ val mutableMap = mutableMapOf("key" to "value")
 
 В Kotlin есть неизменяемые и изменяемые коллекции. Неизменяемые включают List, Set и Map. Изменяемые - MutableList, MutableSet и MutableMap. Также существуют специализированные коллекции: ArrayList, HashSet и HashMap.
 
+
+---
+
+## Related Questions
+
+### Android Implementation
+- [[q-kak-izmenit-kolichestvo-kolonok-v-recyclerview-v-zavisimosti-ot-orientatsii--programming-languages--easy]] - Data Structures
+
+### Kotlin Language Features
+- [[q-kotlin-immutable-collections--programming-languages--easy]] - Data Structures
+- [[q-collection-implementations--programming-languages--easy]] - Data Structures
+- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
+- [[q-arraylist-linkedlist-vector-difference--programming-languages--medium]] - Data Structures
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+- [[q-kotlin-collections--kotlin--easy]] - Data Structures

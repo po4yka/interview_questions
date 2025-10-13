@@ -313,3 +313,17 @@ Fake - это рабочая реализация с упрощенным пов
 5. **Тестируйте с разными конфигурациями**
 6. **Очищайте состояние fakes** между тестами
 7. **Держите fakes синхронизированными** с реальными реализациями
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+- [[q-testing-compose-ui--android--medium]] - Testing
+- [[q-compose-testing--android--medium]] - Testing
+- [[q-dagger-build-time-optimization--android--medium]] - Dependency Injection
+- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+
+### Advanced (Harder)
+- [[q-testing-coroutines-flow--testing--hard]] - Testing

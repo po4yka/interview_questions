@@ -1044,3 +1044,21 @@ interface StudentCourseDao {
 - **@Transaction**: Обеспечение атомарных операций
 - **Indices**: Оптимизация производительности запросов
 - **Cascade**: Контроль поведения при удалении/обновлении
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-room-library-definition--android--easy]] - Storage
+
+### Related (Medium)
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-transactions-dao--room--medium]] - Storage
+- [[q-room-paging3-integration--room--medium]] - Storage
+- [[q-room-type-converters-advanced--room--medium]] - Storage
+- [[q-room-vs-sqlite--android--medium]] - Storage
+
+### Advanced (Harder)
+- [[q-room-fts-full-text-search--room--hard]] - Storage

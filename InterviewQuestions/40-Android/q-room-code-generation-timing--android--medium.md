@@ -167,12 +167,12 @@ public class UserDao_Impl implements UserDao {
 
 ```
 app/build/generated/
-  ├── ksp/          # If using KSP
-  │   └── kotlin/
-  │       └── UserDao_Impl.kt
-  └── source/kapt/  # If using kapt
-      └── debug/
-          └── UserDao_Impl.java
+   ksp/          # If using KSP
+      kotlin/
+          UserDao_Impl.kt
+   source/kapt/  # If using kapt
+       debug/
+           UserDao_Impl.java
 ```
 
 ---
@@ -335,10 +335,10 @@ data class Product(...)  // Unchanged - not reprocessed!
 
 ```
 app/build/generated/ksp/debug/kotlin/
-└── com/example/app/database/
-    ├── UserDao_Impl.kt
-    ├── AppDatabase_Impl.kt
-    └── User_Dao_Impl.kt
+ com/example/app/database/
+     UserDao_Impl.kt
+     AppDatabase_Impl.kt
+     User_Dao_Impl.kt
 ```
 
 ---
@@ -380,3 +380,21 @@ app/build/generated/ksp/debug/kotlin/
 ## Ответ (RU)
 Если используешь Room (ORM для SQLite), то код генерируется на этапе компиляции с помощью Annotation Processing (kapt) или KSP. Если используешь kapt (Annotation Processor) или KSP, то код генерируется во время компиляции.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-room-library-definition--android--easy]] - Storage
+
+### Related (Medium)
+- [[q-room-transactions-dao--room--medium]] - Storage
+- [[q-room-paging3-integration--room--medium]] - Storage
+- [[q-room-type-converters-advanced--room--medium]] - Storage
+- [[q-room-vs-sqlite--android--medium]] - Storage
+- [[q-room-type-converters--android--medium]] - Storage
+
+### Advanced (Harder)
+- [[q-room-fts-full-text-search--room--hard]] - Storage

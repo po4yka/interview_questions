@@ -693,7 +693,7 @@ fun CustomAdaptiveLayout() {
 ### BEST PRACTICES
 
 ```kotlin
-// ✅ Use window size classes for major layout decisions
+//  Use window size classes for major layout decisions
 @Composable
 fun BestPracticeLayout() {
     val windowSizeClass = calculateWindowSizeClass(LocalContext.current as Activity)
@@ -705,7 +705,7 @@ fun BestPracticeLayout() {
     }
 }
 
-// ✅ Use BoxWithConstraints for fine-grained control
+//  Use BoxWithConstraints for fine-grained control
 @Composable
 fun FineGrainedLayout() {
     BoxWithConstraints {
@@ -719,7 +719,7 @@ fun FineGrainedLayout() {
     }
 }
 
-// ✅ Provide reasonable defaults
+//  Provide reasonable defaults
 @Composable
 fun SafeLayout() {
     val windowSizeClass = calculateWindowSizeClass(LocalContext.current as Activity)
@@ -728,11 +728,11 @@ fun SafeLayout() {
         WindowWidthSizeClass.Compact -> CompactLayout()
         WindowWidthSizeClass.Medium -> MediumLayout()
         WindowWidthSizeClass.Expanded -> ExpandedLayout()
-        else -> CompactLayout()  // ✅ Default fallback
+        else -> CompactLayout()  //  Default fallback
     }
 }
 
-// ✅ Test on different screen sizes
+//  Test on different screen sizes
 // Use preview with different devices
 @Preview(device = Devices.PHONE)
 @Preview(device = Devices.TABLET)
@@ -793,3 +793,33 @@ fun AdaptivePreview() {
 8. What are best practices for adaptive images?
 9. How do you implement adaptive dialogs?
 10. What is the performance impact of adaptive layouts?
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - Compose, Jetpack
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
+
+### Related (Hard)
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - Compose, Jetpack

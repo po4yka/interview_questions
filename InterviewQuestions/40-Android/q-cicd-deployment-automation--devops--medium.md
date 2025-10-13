@@ -242,7 +242,7 @@ platform :android do
 
     # Post to Slack
     slack(
-      message: "✅ Internal build uploaded successfully!",
+      message: " Internal build uploaded successfully!",
       channel: "#releases",
       success: true,
       default_payloads: [:git_branch, :git_author, :last_git_commit_message]
@@ -263,7 +263,7 @@ platform :android do
     )
 
     slack(
-      message: "🚀 Build promoted to Alpha!",
+      message: " Build promoted to Alpha!",
       channel: "#releases"
     )
   end
@@ -281,7 +281,7 @@ platform :android do
     )
 
     slack(
-      message: "📦 Build promoted to Beta!",
+      message: " Build promoted to Beta!",
       channel: "#releases"
     )
   end
@@ -300,7 +300,7 @@ platform :android do
     )
 
     slack(
-      message: "🎉 Build promoted to Production (10% rollout)!",
+      message: " Build promoted to Production (10% rollout)!",
       channel: "#releases",
       payload: {
         "Version" => get_version_name(),
@@ -324,7 +324,7 @@ platform :android do
     )
 
     slack(
-      message: "📈 Production rollout increased to #{(rollout_percentage.to_f * 100).to_i}%",
+      message: " Production rollout increased to #{(rollout_percentage.to_f * 100).to_i}%",
       channel: "#releases"
     )
   end
@@ -344,7 +344,7 @@ platform :android do
     )
 
     slack(
-      message: "🔥 Build distributed via Firebase!",
+      message: " Build distributed via Firebase!",
       channel: "#qa"
     )
   end
@@ -372,7 +372,7 @@ platform :android do
   # Error handling
   error do |lane, exception|
     slack(
-      message: "❌ #{lane} failed: #{exception.message}",
+      message: " #{lane} failed: #{exception.message}",
       success: false,
       channel: "#releases"
     )
@@ -546,7 +546,7 @@ jobs:
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          text: '🚀 New release ${{ github.ref_name }} deployed to Play Store!'
+          text: ' New release ${{ github.ref_name }} deployed to Play Store!'
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
         if: always()
 ```
@@ -557,27 +557,27 @@ jobs:
 
 ```
 fastlane/metadata/android/
-├── en-US/
-│   ├── title.txt                      # App title (max 50 chars)
-│   ├── short_description.txt          # Short description (max 80 chars)
-│   ├── full_description.txt           # Full description (max 4000 chars)
-│   ├── video.txt                      # YouTube video URL
-│   ├── changelogs/
-│   │   ├── 123.txt                    # Changelog for version code 123
-│   │   └── 124.txt
-│   └── images/
-│       ├── icon.png
-│       ├── featureGraphic.png
-│       ├── phoneScreenshots/
-│       │   ├── 1_home.png
-│       │   ├── 2_profile.png
-│       │   └── 3_settings.png
-│       └── tenInchScreenshots/
-│           └── 1_tablet.png
-└── ru-RU/
-    ├── title.txt
-    ├── short_description.txt
-    └── full_description.txt
+ en-US/
+    title.txt                      # App title (max 50 chars)
+    short_description.txt          # Short description (max 80 chars)
+    full_description.txt           # Full description (max 4000 chars)
+    video.txt                      # YouTube video URL
+    changelogs/
+       123.txt                    # Changelog for version code 123
+       124.txt
+    images/
+        icon.png
+        featureGraphic.png
+        phoneScreenshots/
+           1_home.png
+           2_profile.png
+           3_settings.png
+        tenInchScreenshots/
+            1_tablet.png
+ ru-RU/
+     title.txt
+     short_description.txt
+     full_description.txt
 ```
 
 **Upload metadata with Fastlane**:
@@ -691,11 +691,11 @@ end
 
 1. **Never Commit Secrets**
    ```bash
-   # ✅ GOOD - Use CI secrets
+   #  GOOD - Use CI secrets
    env:
      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
 
-   # ❌ BAD - Hardcoded secrets
+   #  BAD - Hardcoded secrets
    signingConfigs {
        release {
            storePassword "my-password"
@@ -705,30 +705,30 @@ end
 
 2. **Always Test Before Production**
    ```ruby
-   # ✅ GOOD - Gradual rollout
+   #  GOOD - Gradual rollout
    internal → alpha → beta → production (10%) → production (100%)
 
-   # ❌ BAD - Direct to production
+   #  BAD - Direct to production
    internal → production (100%)
    ```
 
 3. **Automate Version Bumping**
    ```bash
-   # ✅ GOOD - Automated versioning
+   #  GOOD - Automated versioning
    versionCode = getGitCommitCount()
    versionName = getGitTag()
 
-   # ❌ BAD - Manual versioning
+   #  BAD - Manual versioning
    versionCode = 42 // Remember to increment!
    ```
 
 4. **Use Conventional Commits**
    ```bash
-   # ✅ GOOD - Structured commits
+   #  GOOD - Structured commits
    git commit -m "feat(auth): add biometric login"
    git commit -m "fix(cart): prevent crash on empty cart"
 
-   # ❌ BAD - Unstructured commits
+   #  BAD - Unstructured commits
    git commit -m "updates"
    git commit -m "fixes"
    ```
@@ -737,7 +737,7 @@ end
    ```ruby
    # Check crash rate before increasing rollout
    if crash_rate > 1%
-     puts "⚠️ High crash rate detected, halting rollout"
+     puts " High crash rate detected, halting rollout"
      # Optionally: rollback or halt release
    else
      increase_rollout(percentage: "0.5")
@@ -747,12 +747,12 @@ end
 ### Summary
 
 **Automated deployment pipeline:**
-1. ✅ **Code signing** - Keystore management, CI secrets
-2. ✅ **Versioning** - Git tags, semantic versioning, auto-increment
-3. ✅ **Release tracks** - Internal → Alpha → Beta → Production
-4. ✅ **Release notes** - Generated from conventional commits
-5. ✅ **Deployment** - Fastlane automation, gradual rollout
-6. ✅ **Monitoring** - Track metrics, halt on issues
+1.  **Code signing** - Keystore management, CI secrets
+2.  **Versioning** - Git tags, semantic versioning, auto-increment
+3.  **Release tracks** - Internal → Alpha → Beta → Production
+4.  **Release notes** - Generated from conventional commits
+5.  **Deployment** - Fastlane automation, gradual rollout
+6.  **Monitoring** - Track metrics, halt on issues
 
 **Key tools:**
 - **Fastlane** - Deployment automation
@@ -777,12 +777,12 @@ end
 ### Резюме
 
 **Автоматизированный pipeline деплоя:**
-1. ✅ **Подпись кода** — управление keystore, CI-секреты
-2. ✅ **Версионирование** — git-теги, semantic versioning, авто-инкремент
-3. ✅ **Треки релизов** — Internal → Alpha → Beta → Production
-4. ✅ **Release notes** — генерация из conventional commits
-5. ✅ **Деплой** — автоматизация Fastlane, постепенный rollout
-6. ✅ **Мониторинг** — отслеживание метрик, остановка при проблемах
+1.  **Подпись кода** — управление keystore, CI-секреты
+2.  **Версионирование** — git-теги, semantic versioning, авто-инкремент
+3.  **Треки релизов** — Internal → Alpha → Beta → Production
+4.  **Release notes** — генерация из conventional commits
+5.  **Деплой** — автоматизация Fastlane, постепенный rollout
+6.  **Мониторинг** — отслеживание метрик, остановка при проблемах
 
 **Ключевые инструменты:**
 - **Fastlane** — автоматизация деплоя

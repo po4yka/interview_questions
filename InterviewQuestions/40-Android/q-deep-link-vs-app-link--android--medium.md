@@ -28,7 +28,7 @@ status: draft
 | Feature | Deep Link | App Link |
 |---------|-----------|----------|
 | **Scheme** | Custom (`myapp://`) | HTTPS only (`https://`) |
-| **Verification** | None | Domain verification required ✅ |
+| **Verification** | None | Domain verification required  |
 | **User Experience** | Shows app chooser dialog | Opens app directly |
 | **Android Version** | All versions | Android 6.0+ (API 23+) |
 | **Security** | Low (anyone can claim scheme) | High (verified ownership) |
@@ -41,11 +41,11 @@ status: draft
 
 ### Characteristics
 
-- ✅ Custom URI scheme (e.g., `myapp://`, `mydomain://`)
-- ✅ Works on all Android versions
-- ✅ Simple setup (no server configuration)
-- ❌ Not verified - any app can claim the same scheme
-- ❌ Shows disambiguation dialog if multiple apps handle the URI
+-  Custom URI scheme (e.g., `myapp://`, `mydomain://`)
+-  Works on all Android versions
+-  Simple setup (no server configuration)
+-  Not verified - any app can claim the same scheme
+-  Shows disambiguation dialog if multiple apps handle the URI
 
 ### Implementation
 
@@ -128,13 +128,13 @@ adb shell am start -W -a android.intent.action.VIEW \
 
 ### Characteristics
 
-- ✅ Uses HTTPS URLs (standard web links)
-- ✅ Verified domain ownership
-- ✅ Opens app directly (no disambiguation dialog)
-- ✅ Clickable in web browsers and emails
-- ✅ Secure - only verified app can handle the domain
-- ❌ Android 6.0+ only (API 23+)
-- ❌ Requires server configuration (assetlinks.json)
+-  Uses HTTPS URLs (standard web links)
+-  Verified domain ownership
+-  Opens app directly (no disambiguation dialog)
+-  Clickable in web browsers and emails
+-  Secure - only verified app can handle the domain
+-  Android 6.0+ only (API 23+)
+-  Requires server configuration (assetlinks.json)
 
 ### Implementation
 
@@ -267,9 +267,9 @@ Android:
   4. App opens
 
 Issues:
-  ❌ Disambiguation dialog (poor UX)
-  ❌ Any app can claim "myapp://" scheme
-  ❌ Not clickable in web browsers
+   Disambiguation dialog (poor UX)
+   Any app can claim "myapp://" scheme
+   Not clickable in web browsers
 ```
 
 ### App Link Flow
@@ -279,14 +279,14 @@ User clicks: https://www.example.com/product/123
 
 Android:
   1. Check if domain is verified for any app
-  2. If verified app found → Open app directly ✅
+  2. If verified app found → Open app directly 
   3. If app not installed → Open in browser
   4. No disambiguation dialog
 
 Benefits:
-  ✅ Direct app opening (better UX)
-  ✅ Verified ownership (secure)
-  ✅ Works in browsers, emails, etc.
+   Direct app opening (better UX)
+   Verified ownership (secure)
+   Works in browsers, emails, etc.
 ```
 
 ---

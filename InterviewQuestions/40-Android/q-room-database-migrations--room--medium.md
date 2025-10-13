@@ -766,3 +766,21 @@ class MigrationTest {
 - **Обрабатывать failures** с fallback стратегиями
 
 Всегда предоставляйте пути миграций для production приложений, тщательно тестируйте и никогда не используйте деструктивные миграции в production без крайней необходимости.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-room-library-definition--android--easy]] - Storage
+
+### Related (Medium)
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-transactions-dao--room--medium]] - Storage
+- [[q-room-paging3-integration--room--medium]] - Storage
+- [[q-room-type-converters-advanced--room--medium]] - Storage
+- [[q-save-markdown-structure-database--android--medium]] - Storage
+
+### Advanced (Harder)
+- [[q-room-fts-full-text-search--room--hard]] - Storage

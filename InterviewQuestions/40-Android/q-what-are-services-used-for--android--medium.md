@@ -794,3 +794,21 @@ bindService() → onCreate() → onBind() → [Running] → unbindService() → 
 4. Предпочитайте WorkManager для фоновой работы
 
 **Резюме**: Сервисы нужны для длительных фоновых операций. Foreground Service для операций, о которых пользователь должен знать (музыка, навигация). Для большинства фоновых задач используйте WorkManager.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-what-are-services-for--android--easy]] - Service
+- [[q-android-services-purpose--android--easy]] - Service
+
+### Related (Medium)
+- [[q-service-component--android--medium]] - Service
+- [[q-foreground-service-types--background--medium]] - Service
+- [[q-when-can-the-system-restart-a-service--android--medium]] - Service
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Service
+- [[q-keep-service-running-background--android--medium]] - Service
+
+### Advanced (Harder)
+- [[q-service-lifecycle-binding--background--hard]] - Service

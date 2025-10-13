@@ -79,7 +79,7 @@ process(UserId(123)) // Just passes 123 as Int
 
 ### When to Use
 
-**✅ Type-safe primitives:**
+** Type-safe primitives:**
 
 ```kotlin
 @JvmInline
@@ -93,10 +93,10 @@ fun calculateSpeed(distance: Meters, time: Seconds): Double {
 }
 
 // Cannot mix up units:
-// calculateSpeed(Seconds(10), Meters(100)) // ❌ Compile error!
+// calculateSpeed(Seconds(10), Meters(100)) //  Compile error!
 ```
 
-**✅ API keys, IDs:**
+** API keys, IDs:**
 
 ```kotlin
 @JvmInline
@@ -117,11 +117,11 @@ fun authenticate(apiKey: ApiKey, token: SessionToken) {
 **1. Single property:**
 
 ```kotlin
-// ✅ Valid
+//  Valid
 @JvmInline
 value class Name(val value: String)
 
-// ❌ Invalid
+//  Invalid
 @JvmInline
 value class Person(val name: String, val age: Int) // Multiple properties
 ```
@@ -134,7 +134,7 @@ val id2 = UserId(123)
 
 // No object identity
 // id1 === id2 // Cannot compare by reference
-id1 == id2 // ✅ Value equality
+id1 == id2 //  Value equality
 ```
 
 **3. Boxing scenarios:**

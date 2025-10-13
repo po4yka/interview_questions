@@ -130,9 +130,9 @@ suspend fun demonstrateCompletionCases(type: CompletionType) {
         }
             .onCompletion { cause ->
                 when (cause) {
-                    null -> println("✓ Completed successfully")
-                    is CancellationException -> println("✗ Cancelled: ${cause.message}")
-                    else -> println("✗ Failed: ${cause.message}")
+                    null -> println(" Completed successfully")
+                    is CancellationException -> println(" Cancelled: ${cause.message}")
+                    else -> println(" Failed: ${cause.message}")
                 }
             }
             .catch { e ->
@@ -278,20 +278,20 @@ suspend fun flowLifecycle() {
 **Lifecycle diagram:**
 
 ```
-┌─────────────┐
-│   onStart   │ → Initialization
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│  emissions  │ → onEach → collect
-│   (loop)    │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│onCompletion │ → Cleanup
-└─────────────┘
+
+   onStart    → Initialization
+
+       
+       
+
+  emissions   → onEach → collect
+   (loop)    
+
+       
+       
+
+onCompletion  → Cleanup
+
 ```
 
 #### 5. Production Example: Resource Cleanup
@@ -650,7 +650,7 @@ suspend fun declarativeErrorHandling() {
 **Important limitation:**
 
 ```kotlin
-// ❌ This does NOT work - onCompletion cannot emit
+//  This does NOT work - onCompletion cannot emit
 suspend fun cannotEmitInOnCompletion() {
     flow {
         emit(1)
@@ -658,14 +658,14 @@ suspend fun cannotEmitInOnCompletion() {
     }
         .onCompletion {
             // This will throw UnsupportedOperationException
-            // emit(3) // ❌ Cannot emit
+            // emit(3) //  Cannot emit
         }
         .collect { value ->
             println("Value: $value")
         }
 }
 
-// ✅ Use catch to emit recovery values
+//  Use catch to emit recovery values
 suspend fun emitInCatch() {
     flow {
         emit(1)
@@ -674,7 +674,7 @@ suspend fun emitInCatch() {
     }
         .catch { e ->
             println("Error: ${e.message}")
-            emit(-1) // ✅ Can emit in catch
+            emit(-1) //  Can emit in catch
         }
         .onCompletion { cause ->
             println("Completed with cause: $cause")

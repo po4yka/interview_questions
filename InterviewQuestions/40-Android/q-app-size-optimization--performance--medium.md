@@ -221,11 +221,11 @@ WebP images: 4.6MB (70% reduction)
 **Before: Multiple PNG densities**
 ```
 res/
-├── drawable-mdpi/icon.png (2KB)
-├── drawable-hdpi/icon.png (4KB)
-├── drawable-xhdpi/icon.png (8KB)
-├── drawable-xxhdpi/icon.png (16KB)
-└── drawable-xxxhdpi/icon.png (32KB)
+ drawable-mdpi/icon.png (2KB)
+ drawable-hdpi/icon.png (4KB)
+ drawable-xhdpi/icon.png (8KB)
+ drawable-xxhdpi/icon.png (16KB)
+ drawable-xxxhdpi/icon.png (32KB)
 Total: 62KB for one icon
 ```
 
@@ -269,10 +269,10 @@ android {
 **Before: Universal APK with all ABIs**
 ```
 APK contains:
-├── lib/armeabi-v7a/libnative.so (4.2MB)
-├── lib/arm64-v8a/libnative.so (5.1MB)
-├── lib/x86/libnative.so (6.8MB)
-└── lib/x86_64/libnative.so (7.3MB)
+ lib/armeabi-v7a/libnative.so (4.2MB)
+ lib/arm64-v8a/libnative.so (5.1MB)
+ lib/x86/libnative.so (6.8MB)
+ lib/x86_64/libnative.so (7.3MB)
 Total: 23.4MB
 ```
 
@@ -515,17 +515,17 @@ Select: app/build/outputs/apk/release/app-release.apk
 **What to look for:**
 ```
 Size breakdown:
-├── classes.dex: 8.2MB
-│   └── Check for duplicate classes
-├── resources.arsc: 1.8MB
-│   └── Check for unused resources
-├── res/: 12.4MB
-│   ├── drawable/: 8.6MB (optimize images)
-│   ├── layout/: 1.2MB
-│   └── values/: 2.6MB (many translations?)
-├── lib/: 15.6MB
-│   └── Check for unnecessary ABIs
-└── META-INF/: 0.2MB
+ classes.dex: 8.2MB
+    Check for duplicate classes
+ resources.arsc: 1.8MB
+    Check for unused resources
+ res/: 12.4MB
+    drawable/: 8.6MB (optimize images)
+    layout/: 1.2MB
+    values/: 2.6MB (many translations?)
+ lib/: 15.6MB
+    Check for unnecessary ABIs
+ META-INF/: 0.2MB
 ```
 
 ### Complete Optimization Example

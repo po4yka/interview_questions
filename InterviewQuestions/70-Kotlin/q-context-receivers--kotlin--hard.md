@@ -42,7 +42,7 @@ fun String.shout(): String {
 **Limitation:** Only ONE receiver type allowed:
 
 ```kotlin
-// ❌ Cannot have multiple receivers traditionally
+//  Cannot have multiple receivers traditionally
 class Logger { fun log(message: String) { println(message) } }
 class Config { val prefix = "[APP]" }
 
@@ -423,7 +423,7 @@ class OuterBuilder {
 **2. Provide convenience functions:**
 
 ```kotlin
-// ✅ DO: Provide helper
+//  DO: Provide helper
 fun buildHtml(block: context(HtmlDocument) () -> Unit): String {
     val document = HtmlDocument()
     block(document)
@@ -443,13 +443,13 @@ val html = buildHtml {
 **3. Don't overuse:**
 
 ```kotlin
-// ❌ DON'T: Too many contexts
+//  DON'T: Too many contexts
 context(Logger, Database, Cache, Config, Metrics, Auth, EmailService)
 fun complexFunction() {
     // Too complex!
 }
 
-// ✅ DO: Group related contexts
+//  DO: Group related contexts
 class ServiceContext(
     val logger: Logger,
     val database: Database,

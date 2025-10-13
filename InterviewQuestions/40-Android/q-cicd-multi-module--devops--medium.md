@@ -21,9 +21,9 @@ How do you optimize CI/CD for multi-module Android projects? How do you detect a
 ### Overview
 
 Multi-module projects present unique CI/CD challenges:
-- ❌ Building all modules takes too long
-- ❌ Running all tests is expensive
-- ❌ Deploying unchanged modules wastes resources
+-  Building all modules takes too long
+-  Running all tests is expensive
+-  Deploying unchanged modules wastes resources
 
 **Solution**: Detect affected modules and build/test only what changed.
 
@@ -31,18 +31,18 @@ Multi-module projects present unique CI/CD challenges:
 
 ```
 app (app module)
-├── feature:home
-│   ├── core:ui
-│   ├── core:data
-│   └── core:domain
-├── feature:profile
-│   ├── core:ui
-│   ├── core:data
-│   └── core:domain
-├── feature:settings
-│   └── core:ui
-└── core:network
-    └── core:common
+ feature:home
+    core:ui
+    core:data
+    core:domain
+ feature:profile
+    core:ui
+    core:data
+    core:domain
+ feature:settings
+    core:ui
+ core:network
+     core:common
 
 If core:data changes:
   → Rebuild: core:data, feature:home, feature:profile, app
@@ -474,19 +474,19 @@ jobs:
 **Project structure**:
 ```
 root/
-├── app/
-├── feature/
-│   ├── home/
-│   ├── profile/
-│   └── settings/
-├── core/
-│   ├── data/
-│   ├── domain/
-│   ├── ui/
-│   └── network/
-└── buildSrc/
-    └── src/main/kotlin/
-        └── Dependencies.kt
+ app/
+ feature/
+    home/
+    profile/
+    settings/
+ core/
+    data/
+    domain/
+    ui/
+    network/
+ buildSrc/
+     src/main/kotlin/
+         Dependencies.kt
 ```
 
 **buildSrc/src/main/kotlin/AffectedModulesTask.kt**:
@@ -704,7 +704,7 @@ jobs:
 
 1. **Always Build Root/App Module**
    ```yaml
-   # ✅ GOOD - Always verify app assembles
+   #  GOOD - Always verify app assembles
    - name: Build app module
      run: ./gradlew :app:assemble
 
@@ -713,7 +713,7 @@ jobs:
 
 2. **Cache Aggressively**
    ```yaml
-   # ✅ GOOD - Multi-layer caching
+   #  GOOD - Multi-layer caching
    - uses: actions/cache@v3
      with:
        path: |
@@ -725,10 +725,10 @@ jobs:
 
 3. **Parallelize When Possible**
    ```bash
-   # ✅ GOOD - Build modules in parallel
+   #  GOOD - Build modules in parallel
    ./gradlew assemble --parallel --max-workers=4
 
-   # ❌ BAD - Sequential builds
+   #  BAD - Sequential builds
    ./gradlew :module1:assemble
    ./gradlew :module2:assemble
    ```
@@ -751,11 +751,11 @@ jobs:
 ### Summary
 
 **Strategies for multi-module CI/CD:**
-1. ✅ **Affected module detection** - Build only what changed
-2. ✅ **Module-level caching** - Reuse unchanged builds
-3. ✅ **Parallel execution** - Build modules in parallel
-4. ✅ **Configuration cache** - Skip configuration phase
-5. ✅ **Remote build cache** - Share cache across team
+1.  **Affected module detection** - Build only what changed
+2.  **Module-level caching** - Reuse unchanged builds
+3.  **Parallel execution** - Build modules in parallel
+4.  **Configuration cache** - Skip configuration phase
+5.  **Remote build cache** - Share cache across team
 
 **Key optimizations:**
 - Detect changed files with git diff
@@ -779,11 +779,11 @@ jobs:
 ### Резюме
 
 **Стратегии для мульти-модульного CI/CD:**
-1. ✅ **Обнаружение затронутых модулей** — собирать только то, что изменилось
-2. ✅ **Кеширование на уровне модулей** — переиспользовать неизменённые сборки
-3. ✅ **Параллельное выполнение** — собирать модули параллельно
-4. ✅ **Configuration cache** — пропускать фазу конфигурации
-5. ✅ **Удалённый build cache** — делиться кешем между командой
+1.  **Обнаружение затронутых модулей** — собирать только то, что изменилось
+2.  **Кеширование на уровне модулей** — переиспользовать неизменённые сборки
+3.  **Параллельное выполнение** — собирать модули параллельно
+4.  **Configuration cache** — пропускать фазу конфигурации
+5.  **Удалённый build cache** — делиться кешем между командой
 
 **Ключевые оптимизации:**
 - Обнаруживать изменённые файлы с git diff

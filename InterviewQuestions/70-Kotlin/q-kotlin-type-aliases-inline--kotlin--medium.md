@@ -38,8 +38,8 @@ fun getProduct(id: ProductId): Product { ... }
 val userId: UserId = "user123"
 val email: Email = "user@example.com"
 
-sendEmail(userId)  // ✅ Compiles! Type aliases don't provide safety
-getUser(email)     // ✅ Compiles! They're all just String
+sendEmail(userId)  //  Compiles! Type aliases don't provide safety
+getUser(email)     //  Compiles! They're all just String
 ```
 
 **Characteristics**:
@@ -85,8 +85,8 @@ fun sendEmail(email: Email) { ... }
 val userId = UserId("user123")
 val email = Email("user@example.com")
 
-sendEmail(userId)  // ❌ Compile error! Type mismatch
-getUser(email)     // ❌ Compile error! Type mismatch
+sendEmail(userId)  //  Compile error! Type mismatch
+getUser(email)     //  Compile error! Type mismatch
 ```
 
 **Characteristics**:
@@ -265,20 +265,20 @@ val id = UserId("123")  // 40 bytes (String) + 16 bytes (UserId object) = 56 byt
 
 ```
 Need type abstraction?
-│
-├─ Just for readability?
-│  └─ Use TYPE ALIAS
-│     (Complex generics, function types)
-│
-├─ Need type safety?
-│  │
-│  ├─ Single value wrapper?
-│  │  └─ Use INLINE CLASS
-│  │     (IDs, primitive wrappers, units)
-│  │
-│  └─ Multiple properties OR inheritance?
-│     └─ Use WRAPPER CLASS
-│        (Domain models, complex types)
+
+ Just for readability?
+   Use TYPE ALIAS
+     (Complex generics, function types)
+
+ Need type safety?
+  
+   Single value wrapper?
+     Use INLINE CLASS
+       (IDs, primitive wrappers, units)
+  
+   Multiple properties OR inheritance?
+      Use WRAPPER CLASS
+        (Domain models, complex types)
 ```
 
 ### Real-World Examples

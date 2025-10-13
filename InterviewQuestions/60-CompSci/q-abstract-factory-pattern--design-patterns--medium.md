@@ -261,28 +261,28 @@ class DataManager(factory: DataStorageFactory) {
 ## UML Diagram
 
 ```
-┌─────────────────┐
-│  Client         │
-└────────┬────────┘
-         │ uses
-         ▼
-┌─────────────────┐
-│ AbstractFactory │
-│ + createProductA│
-│ + createProductB│
-└────────┬────────┘
-         │
-         ├──────────────────┐
-         ▼                  ▼
-┌──────────────┐   ┌──────────────┐
-│ConcreteFactory1│   │ConcreteFactory2│
-└──────┬───────┘   └──────┬───────┘
-       │                  │
-       │ creates          │ creates
-       ▼                  ▼
-┌──────────────┐   ┌──────────────┐
-│ProductA1     │   │ProductA2     │
-└──────────────┘   └──────────────┘
+
+  Client         
+
+          uses
+         
+
+ AbstractFactory 
+ + createProductA
+ + createProductB
+
+         
+         
+                           
+   
+ConcreteFactory1   ConcreteFactory2
+   
+                         
+        creates           creates
+                         
+   
+ProductA1        ProductA2     
+   
 ```
 
 ## Best Practices

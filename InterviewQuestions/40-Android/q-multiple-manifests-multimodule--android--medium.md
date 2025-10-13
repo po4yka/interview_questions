@@ -73,16 +73,16 @@ Each module declares **only its own requirements**:
 
 ```
 project/
-├── app/
-│   └── src/main/AndroidManifest.xml          ← Main app manifest
-├── feature-login/
-│   └── src/main/AndroidManifest.xml          ← Login module manifest
-├── feature-camera/
-│   └── src/main/AndroidManifest.xml          ← Camera module manifest
-├── feature-map/
-│   └── src/main/AndroidManifest.xml          ← Map module manifest
-└── core-network/
-    └── src/main/AndroidManifest.xml          ← Network module manifest
+ app/
+    src/main/AndroidManifest.xml          ← Main app manifest
+ feature-login/
+    src/main/AndroidManifest.xml          ← Login module manifest
+ feature-camera/
+    src/main/AndroidManifest.xml          ← Camera module manifest
+ feature-map/
+    src/main/AndroidManifest.xml          ← Map module manifest
+ core-network/
+     src/main/AndroidManifest.xml          ← Network module manifest
 ```
 
 ---
@@ -246,17 +246,17 @@ Build Process:
 ==============
 
 1. Collect manifests:
-   ├── app/AndroidManifest.xml
-   ├── feature-login/AndroidManifest.xml
-   ├── feature-camera/AndroidManifest.xml
-   ├── feature-map/AndroidManifest.xml
-   └── core-network/AndroidManifest.xml
+    app/AndroidManifest.xml
+    feature-login/AndroidManifest.xml
+    feature-camera/AndroidManifest.xml
+    feature-map/AndroidManifest.xml
+    core-network/AndroidManifest.xml
 
 2. Merge manifests (priority: app > features > libraries):
-   └── Merged manifest with all components and permissions
+    Merged manifest with all components and permissions
 
 3. Generate final AndroidManifest.xml:
-   └── app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
+    app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 ```
 
 ---
@@ -314,28 +314,28 @@ cat app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 
 ```
 project/
-├── app/
-│   ├── build.gradle.kts
-│   └── src/main/AndroidManifest.xml
-│
-├── core/
-│   ├── network/
-│   │   ├── build.gradle.kts
-│   │   └── src/main/AndroidManifest.xml
-│   └── database/
-│       ├── build.gradle.kts
-│       └── src/main/AndroidManifest.xml
-│
-└── feature/
-    ├── login/
-    │   ├── build.gradle.kts
-    │   └── src/main/AndroidManifest.xml
-    ├── camera/
-    │   ├── build.gradle.kts
-    │   └── src/main/AndroidManifest.xml
-    └── map/
-        ├── build.gradle.kts
-        └── src/main/AndroidManifest.xml
+ app/
+    build.gradle.kts
+    src/main/AndroidManifest.xml
+
+ core/
+    network/
+       build.gradle.kts
+       src/main/AndroidManifest.xml
+    database/
+        build.gradle.kts
+        src/main/AndroidManifest.xml
+
+ feature/
+     login/
+        build.gradle.kts
+        src/main/AndroidManifest.xml
+     camera/
+        build.gradle.kts
+        src/main/AndroidManifest.xml
+     map/
+         build.gradle.kts
+         src/main/AndroidManifest.xml
 ```
 
 ---
@@ -656,3 +656,23 @@ from feature-profile conflicts with value=portrait from feature-login
 - Приоритет: app > feature модули > библиотеки
 - Результат: `app/build/intermediates/merged_manifests/debug/AndroidManifest.xml`
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Fundamentals
+- [[q-what-unifies-android-components--android--easy]] - Fundamentals
+
+### Related (Medium)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-intent-filters-android--android--medium]] - Fundamentals
+- [[q-anr-application-not-responding--android--medium]] - Fundamentals
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
+- [[q-what-are-intents-for--android--medium]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Fundamentals
+- [[q-kotlin-context-receivers--kotlin--hard]] - Fundamentals

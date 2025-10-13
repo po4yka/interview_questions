@@ -73,12 +73,12 @@ fun scheduleUpload(fileUri: String) {
 ```
 
 **Используйте WorkManager для**:
-- 📤 Загрузка файлов/данных (upload)
-- 📥 Синхронизация данных с сервером
-- 📊 Отправка аналитики/логов
-- 🗑️ Очистка кэша/старых данных
-- 📷 Обработка/сжатие изображений
-- 🔔 Периодические задачи (sync каждые N часов)
+-  Загрузка файлов/данных (upload)
+-  Синхронизация данных с сервером
+-  Отправка аналитики/логов
+-  Очистка кэша/старых данных
+-  Обработка/сжатие изображений
+-  Периодические задачи (sync каждые N часов)
 
 **Гарантии WorkManager**:
 - - Выполнится даже если приложение закрыто
@@ -132,12 +132,12 @@ class ProductsViewModel(
 ```
 
 **Используйте Coroutines для**:
-- 🎨 Загрузка данных для UI
-- 🔄 Async операции во время работы приложения
-- 📡 Network запросы для экрана
-- 💾 Database операции
-- 🎬 Flow-based real-time данных
-- ⚡ Любая работа привязанная к lifecycle компонента
+-  Загрузка данных для UI
+-  Async операции во время работы приложения
+-  Network запросы для экрана
+-  Database операции
+-  Flow-based real-time данных
+-  Любая работа привязанная к lifecycle компонента
 
 **Ограничения Coroutines**:
 - - Отменяются при закрытии приложения
@@ -189,12 +189,12 @@ fun startMusicPlayer() {
 ```
 
 **Используйте Foreground Service для**:
-- 🎵 Music/audio player
-- 📍 Location tracking
-- 🏃 Fitness tracking
-- 📞 VoIP calls
-- 📥 Active downloads с прогрессом
-- 🎥 Video recording
+-  Music/audio player
+-  Location tracking
+-  Fitness tracking
+-  VoIP calls
+-  Active downloads с прогрессом
+-  Video recording
 
 **Требования Foreground Service**:
 - - **ОБЯЗАТЕЛЬНО** показывать notification
@@ -517,17 +517,17 @@ class TrackingService : Service() {
 
 ```
 Нужна ли гарантия выполнения после закрытия приложения?
-├─ ДА: Можно отложить выполнение?
-│   ├─ ДА: WorkManager
-│   └─ НЕТ: Пользователь должен видеть уведомление?
-│       ├─ ДА: Foreground Service
-│       └─ НЕТ: WorkManager с Expedited Work
-│
-└─ НЕТ: Нужен немедленный результат для UI?
-    ├─ ДА: Coroutines (viewModelScope/lifecycleScope)
-    └─ НЕТ: Периодическая работа?
-        ├─ ДА (< 15 min): Coroutines с delay
-        └─ ДА (≥ 15 min): WorkManager Periodic
+ ДА: Можно отложить выполнение?
+    ДА: WorkManager
+    НЕТ: Пользователь должен видеть уведомление?
+        ДА: Foreground Service
+        НЕТ: WorkManager с Expedited Work
+
+ НЕТ: Нужен немедленный результат для UI?
+     ДА: Coroutines (viewModelScope/lifecycleScope)
+     НЕТ: Периодическая работа?
+         ДА (< 15 min): Coroutines с delay
+         ДА (≥ 15 min): WorkManager Periodic
 ```
 
 ### Migration примеры
@@ -575,3 +575,19 @@ fun downloadInBackground(url: String) {
 
 **Common mistakes**: Using Coroutines for uploads (won't complete if app closes). Using WorkManager for UI data (overkill). Using WorkManager for music player (use Foreground Service). Not using constraints with WorkManager.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
+
+### Related (Medium)
+- [[q-dagger-build-time-optimization--android--medium]] - Ui
+- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
+- [[q-build-optimization-gradle--gradle--medium]] - Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
+- [[q-testing-compose-ui--android--medium]] - Ui

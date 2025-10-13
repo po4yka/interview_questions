@@ -60,15 +60,15 @@ fun main() = runBlocking {
 #### Key Principles
 
 **CEH works ONLY on:**
-1. ✅ **Root coroutines** (direct children of CoroutineScope)
-2. ✅ **launch** (fire-and-forget coroutines)
-3. ✅ **actor** (channel-based actors)
+1.  **Root coroutines** (direct children of CoroutineScope)
+2.  **launch** (fire-and-forget coroutines)
+3.  **actor** (channel-based actors)
 
 **CEH does NOT work on:**
-1. ❌ **async** (exceptions handled by await())
-2. ❌ **Child coroutines** (exceptions propagate to parent)
-3. ❌ **runBlocking** (exceptions thrown directly)
-4. ❌ **supervisorScope children** (need own CEH)
+1.  **async** (exceptions handled by await())
+2.  **Child coroutines** (exceptions propagate to parent)
+3.  **runBlocking** (exceptions thrown directly)
+4.  **supervisorScope children** (need own CEH)
 
 #### CEH with launch (Works)
 
@@ -80,7 +80,7 @@ fun main() = runBlocking {
         println("CEH caught: ${exception.message}")
     }
 
-    // ✅ WORKS: launch with CEH
+    //  WORKS: launch with CEH
     val job = launch(handler) {
         throw RuntimeException("Exception in launch")
     }
@@ -102,7 +102,7 @@ fun main() = runBlocking {
         println("CEH caught: ${exception.message}")
     }
 
-    // ❌ DOES NOT WORK: async with CEH
+    //  DOES NOT WORK: async with CEH
     val deferred = async(handler) {
         throw RuntimeException("Exception in async")
     }
@@ -550,13 +550,13 @@ launch(handler + CoroutineName("FetchUser")) {
 **5. Don't rely on CEH alone:**
 
 ```kotlin
-// ❌ BAD: No error handling, relying on CEH
+//  BAD: No error handling, relying on CEH
 launch(handler) {
     val data = api.fetchData()
     updateUI(data)
 }
 
-// ✅ GOOD: Explicit error handling + CEH as backup
+//  GOOD: Explicit error handling + CEH as backup
 launch(handler) {
     try {
         val data = api.fetchData()
@@ -646,7 +646,7 @@ class CEHTest {
 **Mistake 1: Installing CEH on child coroutines**
 
 ```kotlin
-// ❌ WRONG: CEH on child has no effect
+//  WRONG: CEH on child has no effect
 launch {
     val handler = CoroutineExceptionHandler { _, exception ->
         println("This won't be called")
@@ -661,7 +661,7 @@ launch {
 **Mistake 2: Using CEH with async**
 
 ```kotlin
-// ❌ WRONG: CEH doesn't work with async
+//  WRONG: CEH doesn't work with async
 val handler = CoroutineExceptionHandler { _, exception ->
     println("Not called")
 }
@@ -674,13 +674,13 @@ async(handler) {
 **Mistake 3: Relying only on CEH**
 
 ```kotlin
-// ❌ WRONG: No explicit error handling
+//  WRONG: No explicit error handling
 launch(handler) {
     val data = api.fetchData() // What if this fails?
     updateUI(data)
 }
 
-// ✅ CORRECT: Explicit + CEH
+//  CORRECT: Explicit + CEH
 launch(handler) {
     try {
         val data = api.fetchData()
@@ -721,15 +721,15 @@ launch(handler) {
 #### Ключевые принципы
 
 **CEH работает ТОЛЬКО на:**
-1. ✅ **Корневых корутинах** (прямых потомках CoroutineScope)
-2. ✅ **launch** (корутины "запустить и забыть")
-3. ✅ **actor** (акторы на основе каналов)
+1.  **Корневых корутинах** (прямых потомках CoroutineScope)
+2.  **launch** (корутины "запустить и забыть")
+3.  **actor** (акторы на основе каналов)
 
 **CEH НЕ работает на:**
-1. ❌ **async** (исключения обрабатываются через await())
-2. ❌ **Дочерних корутинах** (исключения распространяются к родителю)
-3. ❌ **runBlocking** (исключения выбрасываются напрямую)
-4. ❌ **Потомках supervisorScope** (нужен собственный CEH)
+1.  **async** (исключения обрабатываются через await())
+2.  **Дочерних корутинах** (исключения распространяются к родителю)
+3.  **runBlocking** (исключения выбрасываются напрямую)
+4.  **Потомках supervisorScope** (нужен собственный CEH)
 
 #### CEH с launch (Работает)
 
@@ -741,7 +741,7 @@ fun main() = runBlocking {
         println("CEH поймал: ${exception.message}")
     }
 
-    // ✅ РАБОТАЕТ: launch с CEH
+    //  РАБОТАЕТ: launch с CEH
     val job = launch(handler) {
         throw RuntimeException("Исключение в launch")
     }
@@ -763,7 +763,7 @@ fun main() = runBlocking {
         println("CEH поймал: ${exception.message}")
     }
 
-    // ❌ НЕ РАБОТАЕТ: async с CEH
+    //  НЕ РАБОТАЕТ: async с CEH
     val deferred = async(handler) {
         throw RuntimeException("Исключение в async")
     }

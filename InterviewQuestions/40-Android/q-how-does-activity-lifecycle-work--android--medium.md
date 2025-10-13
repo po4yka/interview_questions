@@ -15,27 +15,27 @@ Fragment lifecycle is **tightly coupled** with Activity lifecycle. When Activity
 
 ```
 Activity State          Fragment State
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 onCreate()
-                 ───►   onAttach()
-                 ───►   onCreate()
-                 ───►   onCreateView()
-                 ───►   onViewCreated()
-                 ───►   onStart()
+                    onAttach()
+                    onCreate()
+                    onCreateView()
+                    onViewCreated()
+                    onStart()
 
-onStart()        ───►   [Fragment onStart already called]
+onStart()           [Fragment onStart already called]
 
-onResume()       ───►   onResume()
+onResume()          onResume()
 
 [Activity running, Fragment active]
 
-onPause()        ───►   onPause()
+onPause()           onPause()
 
-onStop()         ───►   onStop()
+onStop()            onStop()
 
-onDestroy()      ───►   onDestroyView()
-                 ───►   onDestroy()
-                 ───►   onDetach()
+onDestroy()         onDestroyView()
+                    onDestroy()
+                    onDetach()
 ```
 
 ### Key Lifecycle Rules
@@ -480,3 +480,31 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 **English Summary**: Fragment lifecycle is synchronized with Activity lifecycle but has additional states. Fragment callbacks occur after Activity callbacks when starting up (onCreate → onStart → onResume) and before Activity callbacks when shutting down (onPause → onStop → onDestroy). Fragment has separate view lifecycle (onCreateView → onDestroyView) independent of Fragment lifecycle. Use viewLifecycleOwner for view-related LiveData/Flow observations to prevent memory leaks. Fragment lifecycle never exceeds Activity lifecycle - if Activity is PAUSED, Fragment is also PAUSED.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-viewmodel-pattern--android--easy]] - Lifecycle
+
+### Related (Medium)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
+- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-viewmodel-pattern--android--easy]] - Lifecycle
+
+### Related (Medium)
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
+- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity

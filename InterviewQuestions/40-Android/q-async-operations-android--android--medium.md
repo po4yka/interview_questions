@@ -363,10 +363,10 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 
 ## 5. AsyncTask (Deprecated)
 
-**⚠️ Deprecated in API 30 - Use Coroutines instead.**
+** Deprecated in API 30 - Use Coroutines instead.**
 
 ```kotlin
-// ❌ DEPRECATED - DO NOT USE
+//  DEPRECATED - DO NOT USE
 class DownloadTask : AsyncTask<String, Int, String>() {
 
     override fun doInBackground(vararg params: String): String {

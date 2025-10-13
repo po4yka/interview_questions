@@ -23,10 +23,10 @@ status: draft
 
 ```
 MyApp/
-├── build.gradle.kts          (Project-level)
-├── settings.gradle.kts
-├── app/
-│   └── build.gradle.kts      (Module-level)
+ build.gradle.kts          (Project-level)
+ settings.gradle.kts
+ app/
+    build.gradle.kts      (Module-level)
 ```
 
 ### Project-level build.gradle
@@ -180,3 +180,12 @@ buildTypes {
 
 - [Gradle Build Configuration](https://developer.android.com/build)
 - [Configure Your Build](https://developer.android.com/studio/build)
+
+---
+
+## Related Questions
+
+### Advanced (Harder)
+- [[q-build-optimization-gradle--gradle--medium]] - Build
+- [[q-kapt-ksp-migration--gradle--medium]] - Build
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Build

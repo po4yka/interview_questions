@@ -404,14 +404,32 @@ class CustomButton @JvmOverloads constructor(
 
 ### Best Practices
 
-1. ✅ **Always recycle TypedArray** with `typedArray.recycle()`
-2. ✅ **Provide default values** for all attributes
-3. ✅ **Use appropriate format** for each attribute type
-4. ✅ **Document attributes** with comments in attrs.xml
-5. ✅ **Group related attributes** in same styleable
-6. ✅ **Support theme attributes** for consistency
-7. ✅ **Validate attribute values** (e.g., progress 0-100)
+1.  **Always recycle TypedArray** with `typedArray.recycle()`
+2.  **Provide default values** for all attributes
+3.  **Use appropriate format** for each attribute type
+4.  **Document attributes** with comments in attrs.xml
+5.  **Group related attributes** in same styleable
+6.  **Support theme attributes** for consistency
+7.  **Validate attribute values** (e.g., progress 0-100)
 
 ## Ответ (RU)
 
 Чтобы добавить кастомные атрибуты в Custom View нужно создать attrs.xml и описать атрибуты добавить их в styleable и получить в Custom View использовать атрибуты в XML или Kotlin
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View
+- [[q-viewmodel-pattern--android--easy]] - View
+
+### Related (Medium)
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- [[q-what-is-viewmodel--android--medium]] - View
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - View

@@ -28,17 +28,17 @@ Each **MutableState** has **subscribers** that are **automatically notified** ab
 `MutableState` uses the **Observer pattern** with Compose's **Snapshot system**.
 
 ```
-┌──────────────┐
-│ MutableState │
-│   (Subject)  │
-└──────┬───────┘
-       │
-       │ notifies
+
+ MutableState 
+   (Subject)  
+
+       
+        notifies
        ↓
-┌──────────────────┐
-│   Subscribers    │
-│  (Composables)   │
-└──────────────────┘
+
+   Subscribers    
+  (Composables)   
+
 ```
 
 ---
@@ -56,7 +56,7 @@ fun Counter() {
 
     Column {
         // Reading count subscribes this Text to count changes
-        Text("Count: $count")  // 👀 SUBSCRIBES to count
+        Text("Count: $count")  //  SUBSCRIBES to count
 
         Button(onClick = { count++ }) {
             Text("Increment")
@@ -197,7 +197,7 @@ class MutableStateImpl<T>(private var _value: T) : MutableState<T> {
 fun CounterScreen() {
     var count by remember { mutableStateOf(0) }
 
-    println("CounterScreen composing")  // 🔍 This runs only ONCE
+    println("CounterScreen composing")  //  This runs only ONCE
 
     Column {
         // These subscribe to `count`
@@ -347,7 +347,7 @@ fun ExpensiveScreen() {
 
 @Composable
 fun ExpensiveComponent() {
-    println("ExpensiveComponent composing")  // 🔍 Only prints once
+    println("ExpensiveComponent composing")  //  Only prints once
     // Heavy computation here
     LazyColumn {
         items(10000) { index ->

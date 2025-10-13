@@ -21,12 +21,12 @@ How do you make Jetpack Compose UIs accessible? What are the key considerations 
 ### Overview
 
 **Accessibility in Compose** ensures your app is usable by people with disabilities. Key aspects:
-- ✅ Screen reader support (TalkBack)
-- ✅ Content descriptions for non-text elements
-- ✅ Semantic properties for meaningful navigation
-- ✅ Touch target sizes (minimum 48dp)
-- ✅ Sufficient color contrast
-- ✅ Custom accessibility actions
+-  Screen reader support (TalkBack)
+-  Content descriptions for non-text elements
+-  Semantic properties for meaningful navigation
+-  Touch target sizes (minimum 48dp)
+-  Sufficient color contrast
+-  Custom accessibility actions
 
 ### Basic Accessibility in Compose
 
@@ -37,11 +37,11 @@ How do you make Jetpack Compose UIs accessible? What are the key considerations 
 fun AccessibleImage() {
     Image(
         painter = painterResource(R.drawable.profile_photo),
-        contentDescription = "User profile photo", // ✅ GOOD
+        contentDescription = "User profile photo", //  GOOD
         modifier = Modifier.size(64.dp)
     )
 
-    // ❌ BAD - Decorative images should use null
+    //  BAD - Decorative images should use null
     Image(
         painter = painterResource(R.drawable.background_pattern),
         contentDescription = null, // Decorative, no semantic meaning
@@ -53,7 +53,7 @@ fun AccessibleImage() {
 fun AccessibleIcon() {
     Icon(
         imageVector = Icons.Default.Favorite,
-        contentDescription = "Add to favorites", // ✅ Action description
+        contentDescription = "Add to favorites", //  Action description
         modifier = Modifier.clickable { /* ... */ }
     )
 }
@@ -63,7 +63,7 @@ fun AccessibleButton() {
     IconButton(onClick = { /* delete */ }) {
         Icon(
             imageVector = Icons.Default.Delete,
-            contentDescription = "Delete item" // ✅ Clear action
+            contentDescription = "Delete item" //  Clear action
         )
     }
 }
@@ -223,7 +223,7 @@ fun ProductCard(product: Product) {
             .fillMaxWidth()
             .clickable { /* View product */ }
             .semantics(mergeDescendants = true) {
-                // ✅ GOOD - Single announcement
+                //  GOOD - Single announcement
                 contentDescription = buildString {
                     append(product.name)
                     append(", ")
@@ -267,7 +267,7 @@ fun SemanticExamples() {
         modifier = Modifier
             .clickable { /* ... */ }
             .clearAndSetSemantics {
-                // ✅ Completely override child semantics
+                //  Completely override child semantics
                 contentDescription = "Settings button"
                 role = Role.Button
             }
@@ -281,7 +281,7 @@ fun SemanticExamples() {
         modifier = Modifier
             .clickable { /* ... */ }
             .semantics(mergeDescendants = true) {
-                // ✅ Merge with children: "Icon, Settings"
+                //  Merge with children: "Icon, Settings"
                 // Can add additional properties
             }
     ) {
@@ -293,7 +293,7 @@ fun SemanticExamples() {
     Row(
         modifier = Modifier.clickable { /* ... */ }
     ) {
-        // ❌ TalkBack announces each child individually
+        //  TalkBack announces each child individually
         Icon(Icons.Default.Settings, contentDescription = "Icon")
         Text("Settings")
     }
@@ -351,7 +351,7 @@ sealed class DownloadState {
 ```kotlin
 @Composable
 fun AccessibleIconButton() {
-    // ✅ GOOD - Minimum 48dp touch target
+    //  GOOD - Minimum 48dp touch target
     IconButton(
         onClick = { /* ... */ },
         modifier = Modifier
@@ -367,7 +367,7 @@ fun AccessibleIconButton() {
         )
     }
 
-    // ❌ BAD - Too small
+    //  BAD - Too small
     Icon(
         imageVector = Icons.Default.Delete,
         contentDescription = "Delete",
@@ -376,7 +376,7 @@ fun AccessibleIconButton() {
             .clickable { /* ... */ }
     )
 
-    // ✅ GOOD - Use padding to increase touch target
+    //  GOOD - Use padding to increase touch target
     Icon(
         imageVector = Icons.Default.Delete,
         contentDescription = "Delete",
@@ -396,7 +396,7 @@ fun AccessibleIconButton() {
 @Composable
 fun AccessibleScreen() {
     Column {
-        // ✅ Mark as heading for navigation
+        //  Mark as heading for navigation
         Text(
             text = "Settings",
             style = MaterialTheme.typography.headlineLarge,
@@ -453,7 +453,7 @@ fun ChartWithAccessibility(data: List<DataPoint>) {
             .fillMaxWidth()
             .height(200.dp)
             .semantics {
-                // ✅ Provide text alternative for screen readers
+                //  Provide text alternative for screen readers
                 contentDescription = buildString {
                     append("Sales chart showing ")
                     append("${data.size} data points. ")
@@ -510,7 +510,7 @@ fun LiveSearchResults(
             label = { Text("Search") }
         )
 
-        // ✅ Announce result count changes
+        //  Announce result count changes
         Text(
             text = when {
                 isLoading -> "Searching..."
@@ -564,7 +564,7 @@ fun AccessibleForm() {
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics {
-                    // ✅ Additional context
+                    //  Additional context
                     contentDescription = "Full Name, required field"
                 }
         )
@@ -584,7 +584,7 @@ fun AccessibleForm() {
                 .fillMaxWidth()
                 .semantics {
                     if (emailError != null) {
-                        // ✅ Announce error
+                        //  Announce error
                         error(emailError!!)
                     }
                 }
@@ -614,7 +614,7 @@ fun AccessibleForm() {
                     role = Role.Checkbox
                 )
                 .semantics(mergeDescendants = true) {
-                    // ✅ Merge checkbox and text
+                    //  Merge checkbox and text
                 }
         ) {
             Checkbox(
@@ -708,23 +708,23 @@ fun testAccessibility_customAction() {
 
 1. **Always Provide Content Descriptions**
    ```kotlin
-   // ✅ GOOD
+   //  GOOD
    Icon(Icons.Default.Search, contentDescription = "Search")
 
-   // ❌ BAD
+   //  BAD
    Icon(Icons.Default.Search, contentDescription = "Search icon")
    // Don't say "icon" - it's redundant
 
-   // ✅ GOOD - Describe action, not appearance
+   //  GOOD - Describe action, not appearance
    Icon(Icons.Default.Delete, contentDescription = "Delete item")
 
-   // ❌ BAD
+   //  BAD
    Icon(Icons.Default.Delete, contentDescription = "Trash can")
    ```
 
 2. **Use Semantic Roles**
    ```kotlin
-   // ✅ GOOD
+   //  GOOD
    Box(
        modifier = Modifier
            .clickable { /* ... */ }
@@ -736,7 +736,7 @@ fun testAccessibility_customAction() {
 
 3. **Group Related Content**
    ```kotlin
-   // ✅ GOOD - Group related elements
+   //  GOOD - Group related elements
    Card(
        modifier = Modifier.semantics(mergeDescendants = true) {
            contentDescription = "Product card: iPhone 15, $999"
@@ -745,7 +745,7 @@ fun testAccessibility_customAction() {
        // Product details
    }
 
-   // ❌ BAD - Each element announced separately
+   //  BAD - Each element announced separately
    Card {
        Text("iPhone 15") // Announces: "iPhone 15"
        Text("$999")      // Announces: "$999"
@@ -754,7 +754,7 @@ fun testAccessibility_customAction() {
 
 4. **Minimum Touch Targets**
    ```kotlin
-   // ✅ GOOD - 48dp minimum
+   //  GOOD - 48dp minimum
    IconButton(
        onClick = { },
        modifier = Modifier.size(48.dp)
@@ -762,7 +762,7 @@ fun testAccessibility_customAction() {
        Icon(Icons.Default.Delete, "Delete", Modifier.size(24.dp))
    }
 
-   // ❌ BAD - Too small
+   //  BAD - Too small
    Icon(
        Icons.Default.Delete,
        "Delete",
@@ -772,24 +772,24 @@ fun testAccessibility_customAction() {
 
 5. **Test with TalkBack**
    ```
-   ✅ Enable TalkBack and test your app
-   ✅ Navigate using swipe gestures
-   ✅ Verify all interactive elements are reachable
-   ✅ Check that descriptions are clear and concise
-   ✅ Test custom actions from TalkBack menu
+    Enable TalkBack and test your app
+    Navigate using swipe gestures
+    Verify all interactive elements are reachable
+    Check that descriptions are clear and concise
+    Test custom actions from TalkBack menu
    ```
 
 ### Summary
 
 **Key accessibility features in Compose:**
-- ✅ **Content descriptions** - Describe images, icons, buttons
-- ✅ **Semantic properties** - Role, state, actions
-- ✅ **Merge descendants** - Group related content
-- ✅ **Custom actions** - Additional TalkBack menu items
-- ✅ **Headings** - Structure content for navigation
-- ✅ **Live regions** - Announce dynamic changes
-- ✅ **Touch targets** - Minimum 48dp
-- ✅ **State descriptions** - Loading, error states
+-  **Content descriptions** - Describe images, icons, buttons
+-  **Semantic properties** - Role, state, actions
+-  **Merge descendants** - Group related content
+-  **Custom actions** - Additional TalkBack menu items
+-  **Headings** - Structure content for navigation
+-  **Live regions** - Announce dynamic changes
+-  **Touch targets** - Minimum 48dp
+-  **State descriptions** - Loading, error states
 
 **Testing accessibility:**
 - Enable TalkBack and test manually
@@ -813,14 +813,14 @@ fun testAccessibility_customAction() {
 ### Резюме
 
 **Ключевые функции доступности в Compose:**
-- ✅ **Content descriptions** — описывают изображения, иконки, кнопки
-- ✅ **Semantic properties** — роль, состояние, действия
-- ✅ **Merge descendants** — группируют связанный контент
-- ✅ **Custom actions** — дополнительные элементы меню TalkBack
-- ✅ **Headings** — структурируют контент для навигации
-- ✅ **Live regions** — объявляют динамические изменения
-- ✅ **Touch targets** — минимум 48dp
-- ✅ **State descriptions** — состояния загрузки, ошибок
+-  **Content descriptions** — описывают изображения, иконки, кнопки
+-  **Semantic properties** — роль, состояние, действия
+-  **Merge descendants** — группируют связанный контент
+-  **Custom actions** — дополнительные элементы меню TalkBack
+-  **Headings** — структурируют контент для навигации
+-  **Live regions** — объявляют динамические изменения
+-  **Touch targets** — минимум 48dp
+-  **State descriptions** — состояния загрузки, ошибок
 
 **Тестирование доступности:**
 - Включите TalkBack и тестируйте вручную

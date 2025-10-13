@@ -45,18 +45,18 @@ Synchronous communication between services creates tight coupling and can lead t
 ```
 Producer → [Queue] → Consumer
 
-┌──────────┐         ┌───────┐         ┌──────────┐
-│ Producer │ ──────→ │ Queue │ ──────→ │ Consumer │
-└──────────┘         └───────┘         └──────────┘
+                  
+ Producer  →  Queue  →  Consumer 
+                  
    (Sends)          (Stores)           (Processes)
 ```
 
 **Benefits:**
-- ✅ **Decoupling** - Producer/consumer independent
-- ✅ **Scalability** - Add more consumers to handle load
-- ✅ **Reliability** - Messages persisted if consumer fails
-- ✅ **Async processing** - Don't block producer
-- ✅ **Load leveling** - Handle traffic spikes
+-  **Decoupling** - Producer/consumer independent
+-  **Scalability** - Add more consumers to handle load
+-  **Reliability** - Messages persisted if consumer fails
+-  **Async processing** - Don't block producer
+-  **Load leveling** - Handle traffic spikes
 
 ---
 
@@ -109,9 +109,9 @@ class EmailConsumer {
 One message → Multiple consumers (all receive copy)
 
 ```
-                    ┌→ Consumer 1 (Email)
-Producer → [Topic] ─┼→ Consumer 2 (SMS)
-                    └→ Consumer 3 (Push)
+                    → Consumer 1 (Email)
+Producer → [Topic] → Consumer 2 (SMS)
+                    → Consumer 3 (Push)
 ```
 
 **Use case:** Event notifications (user registered → send email, update analytics, send welcome)
@@ -259,9 +259,9 @@ class OrderProcessor {
 **Architecture:**
 ```
 Producers → Topic (partitioned) → Consumer Groups
-           ├─ Partition 0
-           ├─ Partition 1
-           └─ Partition 2
+            Partition 0
+            Partition 1
+            Partition 2
 ```
 
 **Implementation:**
@@ -332,9 +332,9 @@ class OrderEventConsumer {
 // Guarantees ordering within partition
 
 Producer:
-  userId=123 → Partition 0 ┐
-  userId=456 → Partition 1 ├─ Ordering preserved per partition
-  userId=123 → Partition 0 ┘
+  userId=123 → Partition 0 
+  userId=456 → Partition 1  Ordering preserved per partition
+  userId=123 → Partition 0 
 
 Consumer Group:
   Consumer 1 → Partition 0  (processes userId=123 in order)
@@ -691,11 +691,11 @@ class NotificationEventConsumer {
 **Message Queue** = Паттерн асинхронной коммуникации, где производители отправляют сообщения в очередь, а потребители обрабатывают их независимо.
 
 **Преимущества:**
-- ✅ **Разделение** - Producer/consumer независимы
-- ✅ **Масштабируемость** - Добавить больше consumers для обработки нагрузки
-- ✅ **Надёжность** - Сообщения сохраняются при сбое consumer
-- ✅ **Async обработка** - Не блокировать producer
-- ✅ **Выравнивание нагрузки** - Обработка пиков трафика
+-  **Разделение** - Producer/consumer независимы
+-  **Масштабируемость** - Добавить больше consumers для обработки нагрузки
+-  **Надёжность** - Сообщения сохраняются при сбое consumer
+-  **Async обработка** - Не блокировать producer
+-  **Выравнивание нагрузки** - Обработка пиков трафика
 
 ### Популярные системы очередей сообщений
 
@@ -731,3 +731,20 @@ class NotificationEventConsumer {
 8. How do you handle schema evolution in event-driven systems?
 9. What is the outbox pattern for reliable event publishing?
 10. How do you monitor and debug event-driven architectures?
+
+---
+
+## Related Questions
+
+### Android Implementation
+- [[q-compose-canvas-graphics--jetpack-compose--hard]] - Data Structures
+- [[q-cache-implementation-strategies--android--medium]] - Data Structures
+
+### Kotlin Language Features
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+
+### Related Algorithms
+- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Data Structures
+- [[q-advanced-graph-algorithms--algorithms--hard]] - Data Structures
+- [[q-binary-search-trees-bst--algorithms--hard]] - Data Structures
+- [[q-sorting-algorithms-comparison--algorithms--medium]] - Data Structures

@@ -74,7 +74,7 @@ CREATE INDEX idx_users_hash
 ### When NOT to Index
 
 ```sql
--- ❌ Don't index:
+--  Don't index:
 -- 1. Small tables (full scan is faster)
 -- 2. Columns with low cardinality
 CREATE INDEX idx_users_gender ON users(gender);  -- Only 2-3 values, not useful
@@ -115,18 +115,18 @@ SELECT * FROM orders WHERE user_id = 123;
 ### Avoiding N+1 Queries
 
 ```sql
--- ❌ N+1 Problem (1 query + N queries for each user)
+--  N+1 Problem (1 query + N queries for each user)
 SELECT * FROM users LIMIT 10;  -- 1 query
 -- Then in application code:
 -- for each user: SELECT * FROM orders WHERE user_id = ?  -- N queries
 
--- ✅ Solution: JOIN
+--  Solution: JOIN
 SELECT u.*, o.order_id, o.total_amount, o.order_date
 FROM users u
 LEFT JOIN orders o ON u.user_id = o.user_id
 WHERE u.user_id IN (1, 2, 3, 4, 5);
 
--- ✅ Solution: Separate batch query
+--  Solution: Separate batch query
 SELECT * FROM users LIMIT 10;
 SELECT * FROM orders WHERE user_id IN (1, 2, 3, 4, 5);
 ```
@@ -134,30 +134,30 @@ SELECT * FROM orders WHERE user_id IN (1, 2, 3, 4, 5);
 ### Query Rewriting
 
 ```sql
--- ❌ Slow: Function on indexed column
+--  Slow: Function on indexed column
 SELECT * FROM users WHERE YEAR(created_at) = 2025;
 
--- ✅ Fast: Use range
+--  Fast: Use range
 SELECT * FROM users
 WHERE created_at >= '2025-01-01'
   AND created_at < '2026-01-01';
 
--- ❌ Slow: OR conditions
+--  Slow: OR conditions
 SELECT * FROM products WHERE category = 'A' OR category = 'B';
 
--- ✅ Fast: IN
+--  Fast: IN
 SELECT * FROM products WHERE category IN ('A', 'B');
 
--- ❌ Slow: Wildcard at start
+--  Slow: Wildcard at start
 SELECT * FROM users WHERE email LIKE '%@gmail.com';
 
--- ✅ Fast: Wildcard at end (can use index)
+--  Fast: Wildcard at end (can use index)
 SELECT * FROM users WHERE email LIKE 'john%';
 
--- ❌ Slow: NOT IN with subquery
+--  Slow: NOT IN with subquery
 SELECT * FROM users WHERE user_id NOT IN (SELECT user_id FROM banned_users);
 
--- ✅ Fast: LEFT JOIN with NULL check
+--  Fast: LEFT JOIN with NULL check
 SELECT u.*
 FROM users u
 LEFT JOIN banned_users b ON u.user_id = b.user_id
@@ -167,18 +167,18 @@ WHERE b.user_id IS NULL;
 ### Pagination
 
 ```sql
--- ❌ Slow for large offsets
+--  Slow for large offsets
 SELECT * FROM posts
 ORDER BY created_at DESC
 LIMIT 10 OFFSET 10000;  -- Must scan 10,010 rows
 
--- ✅ Fast: Keyset pagination
+--  Fast: Keyset pagination
 SELECT * FROM posts
 WHERE created_at < '2025-01-01 12:00:00'
 ORDER BY created_at DESC
 LIMIT 10;
 
--- ✅ Alternative: Store last ID
+--  Alternative: Store last ID
 SELECT * FROM posts
 WHERE post_id < 12345
 ORDER BY post_id DESC
@@ -192,12 +192,12 @@ LIMIT 10;
 ### Batch Operations
 
 ```sql
--- ❌ Slow: Multiple INSERTs
+--  Slow: Multiple INSERTs
 INSERT INTO users (name, email) VALUES ('User1', 'user1@example.com');
 INSERT INTO users (name, email) VALUES ('User2', 'user2@example.com');
 -- ... repeat 1000 times
 
--- ✅ Fast: Batch INSERT
+--  Fast: Batch INSERT
 INSERT INTO users (name, email) VALUES
     ('User1', 'user1@example.com'),
     ('User2', 'user2@example.com'),
@@ -205,7 +205,7 @@ INSERT INTO users (name, email) VALUES
     -- ... up to 1000 rows
     ('User1000', 'user1000@example.com');
 
--- ✅ Fast: Batch UPDATE
+--  Fast: Batch UPDATE
 UPDATE users
 SET is_premium = true
 WHERE user_id IN (1, 2, 3, 4, 5, ..., 1000);

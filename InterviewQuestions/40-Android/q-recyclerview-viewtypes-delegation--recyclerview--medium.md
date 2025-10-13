@@ -635,7 +635,7 @@ class FeedAdapter(
 **1. View recycling across different types**
 
 ```kotlin
-// ✅ DO - RecyclerView pools views by type
+//  DO - RecyclerView pools views by type
 override fun getItemViewType(position: Int): Int {
     // Consistent types improve recycling
     return when (getItem(position)) {
@@ -671,7 +671,7 @@ childRecyclerView.setRecycledViewPool(sharedPool)
 **4. Optimize view inflation**
 
 ```kotlin
-// ✅ DO - Cache inflater
+//  DO - Cache inflater
 private val inflater = LayoutInflater.from(parent.context)
 
 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -686,13 +686,13 @@ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.
 
 **1. Use sealed classes for type safety**
 ```kotlin
-// ✅ Compiler ensures all types handled
+//  Compiler ensures all types handled
 sealed class ListItem { /* ... */ }
 ```
 
 **2. Separate ViewHolder creation logic**
 ```kotlin
-// ✅ Factory methods in ViewHolder
+//  Factory methods in ViewHolder
 companion object {
     fun create(parent: ViewGroup): ViewHolder { /* ... */ }
 }
@@ -700,19 +700,19 @@ companion object {
 
 **3. Use delegation for complex adapters**
 ```kotlin
-// ✅ Each delegate handles one type
+//  Each delegate handles one type
 val delegates = listOf(HeaderDelegate(), UserDelegate(), /* ... */)
 ```
 
 **4. Implement efficient DiffUtil**
 ```kotlin
-// ✅ Use stable IDs
+//  Use stable IDs
 override fun areItemsTheSame(old: Item, new: Item) = old.id == new.id
 ```
 
 **5. Consider view pool optimization**
 ```kotlin
-// ✅ Set appropriate pool sizes
+//  Set appropriate pool sizes
 pool.setMaxRecycledViews(TYPE, appropriate_size)
 ```
 
@@ -837,3 +837,33 @@ private val inflater = LayoutInflater.from(parent.context)
 3. Используйте делегирование для сложных адаптеров
 4. Реализуйте эффективный DiffUtil
 5. Оптимизируйте пул view
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
+- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
+- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui

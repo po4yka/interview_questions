@@ -433,3 +433,14 @@ class UserDetailFragment : Fragment() {
 ## Ответ (RU)
 Для реализации переходов от списка к экрану деталей элемента в Android используются Intent, Bundle, ViewModel и инструменты навигации такие как Navigation Component. Базовый способ - использование Intent и Bundle для передачи данных между активностями. Современный подход предполагает использование Navigation Component с графом навигации и передачей данных через аргументы.
 
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation
+- [[q-compose-navigation-advanced--android--medium]] - Navigation
+- [[q-activity-navigation-how-it-works--android--medium]] - Navigation
+- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation
+- [[q-what-navigation-methods-do-you-know--android--medium]] - Navigation

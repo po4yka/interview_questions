@@ -21,12 +21,12 @@ What are the advanced features of WorkManager? Explain work constraints, periodi
 ### Overview
 
 **WorkManager** is the recommended solution for deferrable, guaranteed background work. Advanced features:
-- ✅ Constraints (network, battery, storage)
-- ✅ Periodic work (minimum 15 minutes)
-- ✅ Work chaining (sequential and parallel)
-- ✅ Unique work (ExistingWorkPolicy)
-- ✅ Survives app updates and device reboots
-- ✅ Automatic retry with backoff policies
+-  Constraints (network, battery, storage)
+-  Periodic work (minimum 15 minutes)
+-  Work chaining (sequential and parallel)
+-  Unique work (ExistingWorkPolicy)
+-  Survives app updates and device reboots
+-  Automatic retry with backoff policies
 
 ### Work Constraints
 
@@ -169,9 +169,9 @@ WorkManager.getInstance(context)
 Interval: 1 hour, Flex: 15 minutes
 
 Timeline:
-0:00 ───────────────────────────────────── 1:00
+0:00  1:00
      [    Maintenance Window    ]
-     └──────────────┘
+     
                     0:45         1:00
 
 Work can run anywhere between 0:45 and 1:00
@@ -282,7 +282,7 @@ WorkManager.getInstance(context)
 //              → Task 2 \
 //     Task 1B /          → Task 4
 //                        /
-//     Task 3 ──────────→
+//     Task 3 →
 
 val chain1 = WorkManager.getInstance(context)
     .beginWith(listOf(task1A, task1B))
@@ -728,35 +728,35 @@ fun cancelSync() {
 
 1. **Use Constraints for Battery/Network**
    ```kotlin
-   // ✅ GOOD - Respect user's data/battery
+   //  GOOD - Respect user's data/battery
    Constraints.Builder()
        .setRequiredNetworkType(NetworkType.UNMETERED)
        .setRequiresBatteryNotLow(true)
        .build()
 
-   // ❌ BAD - No constraints for large uploads
+   //  BAD - No constraints for large uploads
    OneTimeWorkRequestBuilder<UploadWorker>().build()
    ```
 
 2. **Use Unique Work to Avoid Duplicates**
    ```kotlin
-   // ✅ GOOD - Only one sync at a time
+   //  GOOD - Only one sync at a time
    WorkManager.getInstance(context)
        .enqueueUniqueWork("sync", ExistingWorkPolicy.KEEP, request)
 
-   // ❌ BAD - Multiple syncs can run
+   //  BAD - Multiple syncs can run
    WorkManager.getInstance(context).enqueue(request)
    ```
 
 3. **Keep doWork() Short**
    ```kotlin
-   // ✅ GOOD - Complete within 10 minutes
+   //  GOOD - Complete within 10 minutes
    override suspend fun doWork(): Result {
        // Quick operation
        return Result.success()
    }
 
-   // ❌ BAD - Long-running operation
+   //  BAD - Long-running operation
    override suspend fun doWork(): Result {
        while (true) { // Infinite loop!
            delay(1000)
@@ -766,12 +766,12 @@ fun cancelSync() {
 
 4. **Use WorkManager for Deferrable Work**
    ```kotlin
-   // ✅ GOOD - Use WorkManager
+   //  GOOD - Use WorkManager
    // - Sync data when WiFi available
    // - Backup photos overnight
    // - Clean cache when idle
 
-   // ❌ BAD - Use WorkManager for:
+   //  BAD - Use WorkManager for:
    // - Real-time messaging (use FCM)
    // - Time-sensitive operations (use AlarmManager)
    // - Long-running tasks (use Foreground Service)
@@ -780,13 +780,13 @@ fun cancelSync() {
 ### Summary
 
 **WorkManager advanced features:**
-- ✅ **Constraints** - Network, battery, storage, device state
-- ✅ **Periodic work** - Minimum 15 minutes, with flex interval
-- ✅ **Work chaining** - Sequential and parallel execution
-- ✅ **ExistingWorkPolicy** - REPLACE, KEEP, APPEND, APPEND_OR_REPLACE
-- ✅ **Persistence** - Survives app updates and reboots
-- ✅ **Progress tracking** - setProgress() and observe in UI
-- ✅ **Cancellation** - Cancel by ID, tag, or unique name
+-  **Constraints** - Network, battery, storage, device state
+-  **Periodic work** - Minimum 15 minutes, with flex interval
+-  **Work chaining** - Sequential and parallel execution
+-  **ExistingWorkPolicy** - REPLACE, KEEP, APPEND, APPEND_OR_REPLACE
+-  **Persistence** - Survives app updates and reboots
+-  **Progress tracking** - setProgress() and observe in UI
+-  **Cancellation** - Cancel by ID, tag, or unique name
 
 **Use cases:**
 - Photo/video backup (with WiFi constraint)
@@ -813,13 +813,13 @@ fun cancelSync() {
 ### Резюме
 
 **Продвинутые возможности WorkManager:**
-- ✅ **Constraints** — сеть, батарея, хранилище, состояние устройства
-- ✅ **Periodic work** — минимум 15 минут, с flex интервалом
-- ✅ **Work chaining** — последовательное и параллельное выполнение
-- ✅ **ExistingWorkPolicy** — REPLACE, KEEP, APPEND, APPEND_OR_REPLACE
-- ✅ **Persistence** — переживает обновления приложения и перезагрузки
-- ✅ **Progress tracking** — setProgress() и наблюдение в UI
-- ✅ **Cancellation** — отмена по ID, тегу или уникальному имени
+-  **Constraints** — сеть, батарея, хранилище, состояние устройства
+-  **Periodic work** — минимум 15 минут, с flex интервалом
+-  **Work chaining** — последовательное и параллельное выполнение
+-  **ExistingWorkPolicy** — REPLACE, KEEP, APPEND, APPEND_OR_REPLACE
+-  **Persistence** — переживает обновления приложения и перезагрузки
+-  **Progress tracking** — setProgress() и наблюдение в UI
+-  **Cancellation** — отмена по ID, тегу или уникальному имени
 
 **Применение:**
 - Резервное копирование фото/видео (с WiFi constraint)

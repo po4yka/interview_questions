@@ -70,7 +70,7 @@ fun CounterWithRememberSaveable() {
 | **Configuration change** | - Теряется | - Сохраняется |
 | **Process death** | - Теряется | - Сохраняется* |
 | **Поддерживаемые типы** | Любые | Bundle-compatible |
-| **Производительность** | ⚡ Быстрее | 🐢 Медленнее (сериализация) |
+| **Производительность** |  Быстрее |  Медленнее (сериализация) |
 | **Лимит размера** | Нет | 1MB (Bundle limit) |
 | **Use case** | Временное UI состояние | Важное пользовательское состояние |
 
@@ -460,10 +460,10 @@ fun NonSerializableExample() {
 ```kotlin
 @Composable
 fun PerformanceComparison() {
-    // ⚡ remember - быстро, без overhead
+    //  remember - быстро, без overhead
     var tempState by remember { mutableStateOf(0) }
 
-    // 🐢 rememberSaveable - медленнее (serialization overhead)
+    //  rememberSaveable - медленнее (serialization overhead)
     var savedState by rememberSaveable { mutableStateOf(0) }
 
     // Для больших структур данных:

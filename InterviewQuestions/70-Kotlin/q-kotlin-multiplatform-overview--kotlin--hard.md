@@ -136,18 +136,18 @@ actual class DatabaseDriver {
 ```
 Common Code (Kotlin)
         ↓
-┌───────┴───────┐
-│   Compiler    │
-│   Frontend    │
-└───────┬───────┘
+
+   Compiler    
+   Frontend    
+
         ↓
    Kotlin IR (Intermediate Representation)
         ↓
-┌───────┴───────────────────────┐
-│                               │
+
+                               
 Android Backend        iOS/Native Backend
 (JVM bytecode)         (LLVM IR → native)
-        │                       │
+                               
         ↓                       ↓
     .dex/.jar              .framework/.klib
 ```
@@ -163,29 +163,29 @@ Android Backend        iOS/Native Backend
 
 ```
 project/
-├── shared/
-│   ├── commonMain/
-│   │   └── kotlin/
-│   │       ├── data/
-│   │       │   ├── UserRepository.kt
-│   │       │   └── models/
-│   │       ├── domain/
-│   │       │   └── LoginUseCase.kt
-│   │       └── expect/
-│   │           └── Platform.kt
-│   ├── androidMain/
-│   │   └── kotlin/
-│   │       └── actual/
-│   │           └── Platform.kt
-│   ├── iosMain/
-│   │   └── kotlin/
-│   │       └── actual/
-│   │           └── Platform.kt
-│   └── build.gradle.kts
-├── androidApp/
-│   └── build.gradle.kts
-└── iosApp/
-    └── iosApp.xcodeproj
+ shared/
+    commonMain/
+       kotlin/
+           data/
+              UserRepository.kt
+              models/
+           domain/
+              LoginUseCase.kt
+           expect/
+               Platform.kt
+    androidMain/
+       kotlin/
+           actual/
+               Platform.kt
+    iosMain/
+       kotlin/
+           actual/
+               Platform.kt
+    build.gradle.kts
+ androidApp/
+    build.gradle.kts
+ iosApp/
+     iosApp.xcodeproj
 ```
 
 ### Key Technologies
@@ -295,29 +295,29 @@ kotlin {
 **1. Share Everything (except UI)**
 
 ```
-┌─────────────────────────────┐
-│   Platform-Specific UI      │  ← Android: Jetpack Compose
-│   (Android/iOS)             │  ← iOS: SwiftUI
-├─────────────────────────────┤
-│   Shared Presentation       │  ← ViewModels, States
-├─────────────────────────────┤
-│   Shared Business Logic     │  ← Use Cases, Repositories
-├─────────────────────────────┤
-│   Shared Data Layer         │  ← Network, Database, Models
-└─────────────────────────────┘
+
+   Platform-Specific UI        ← Android: Jetpack Compose
+   (Android/iOS)               ← iOS: SwiftUI
+
+   Shared Presentation         ← ViewModels, States
+
+   Shared Business Logic       ← Use Cases, Repositories
+
+   Shared Data Layer           ← Network, Database, Models
+
 ```
 
 **2. Share Only Data/Business Logic**
 
 ```
-┌─────────────────────────────┐
-│   Platform-Specific UI      │
-│   + Presentation            │  ← ViewModels are native
-├─────────────────────────────┤
-│   Shared Business Logic     │  ← Use Cases
-├─────────────────────────────┤
-│   Shared Data Layer         │  ← API, DB
-└─────────────────────────────┘
+
+   Platform-Specific UI      
+   + Presentation              ← ViewModels are native
+
+   Shared Business Logic       ← Use Cases
+
+   Shared Data Layer           ← API, DB
+
 ```
 
 ### iOS Integration
@@ -579,11 +579,11 @@ actual class DatabaseDriver {
         ↓
 Kotlin IR (Промежуточное представление)
         ↓
-┌───────┴───────────────────────┐
-│                               │
+
+                               
 Android Backend        iOS/Native Backend
 (JVM bytecode)         (LLVM IR → native)
-        │                       │
+                               
         ↓                       ↓
     .dex/.jar              .framework/.klib
 ```
@@ -643,16 +643,16 @@ kotlin {
 **Делиться всем (кроме UI):**
 
 ```
-┌─────────────────────────────┐
-│   Платформенный UI          │  ← Android: Jetpack Compose
-│   (Android/iOS)             │  ← iOS: SwiftUI
-├─────────────────────────────┤
-│   Общий Presentation        │  ← ViewModels, States
-├─────────────────────────────┤
-│   Общая бизнес-логика       │  ← Use Cases, Repositories
-├─────────────────────────────┤
-│   Общий Data Layer          │  ← Network, Database, Models
-└─────────────────────────────┘
+
+   Платформенный UI            ← Android: Jetpack Compose
+   (Android/iOS)               ← iOS: SwiftUI
+
+   Общий Presentation          ← ViewModels, States
+
+   Общая бизнес-логика         ← Use Cases, Repositories
+
+   Общий Data Layer            ← Network, Database, Models
+
 ```
 
 ### Интеграция с iOS

@@ -926,3 +926,13 @@ productFlavors {
 - **Direct APK**: Enterprise, полный контроль
 
 Ключевые моменты: build variants, unified interfaces, runtime detection, безопасность, тестирование на реальных устройствах каждой платформы.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-internal-app-distribution--distribution--medium]] - Distribution
+- [[q-app-store-optimization--distribution--medium]] - Distribution
+- [[q-play-store-publishing--distribution--medium]] - Distribution
+- [[q-android-app-bundles--android--easy]] - Distribution

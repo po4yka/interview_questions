@@ -903,3 +903,14 @@ Android Keystore обеспечивает:
 - **Безопасность по умолчанию**: Ключи не покидают защищённую среду
 
 Используйте Keystore для: токенов, паролей, кредитных карт, ключей шифрования и любых чувствительных данных.
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-encrypted-file-storage--security--medium]] - Security
+- [[q-database-encryption-android--android--medium]] - Security
+- [[q-app-security-best-practices--security--medium]] - Security
+- [[q-data-encryption-at-rest--security--medium]] - Security

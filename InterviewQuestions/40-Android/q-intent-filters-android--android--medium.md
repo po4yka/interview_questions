@@ -856,3 +856,22 @@ URI указывается отдельными атрибутами для ка
 - `android:priority` - Для упорядочивания между приложениями
 - `android:order` - Для упорядочивания внутри одного приложения (API 28+)
 - `android:autoVerify` - Для верификации App Links (API 23+)
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+- [[q-what-is-intent--android--easy]] - Fundamentals
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Fundamentals
+
+### Related (Medium)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-anr-application-not-responding--android--medium]] - Fundamentals
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
+- [[q-what-are-intents-for--android--medium]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Fundamentals
+- [[q-kotlin-context-receivers--kotlin--hard]] - Fundamentals

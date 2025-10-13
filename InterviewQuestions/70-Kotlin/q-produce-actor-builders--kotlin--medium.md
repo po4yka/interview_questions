@@ -62,7 +62,7 @@ fun basicProduce() = runBlocking {
 // Comparison: Manual channel vs produce
 class ProduceComparison {
 
-    // ❌ Manual approach (more boilerplate)
+    //  Manual approach (more boilerplate)
     suspend fun manualChannel(): ReceiveChannel<Int> {
         val channel = Channel<Int>()
 
@@ -79,7 +79,7 @@ class ProduceComparison {
         return channel
     }
 
-    // ✅ Using produce (cleaner, safer)
+    //  Using produce (cleaner, safer)
     fun withProduce() = produce {
         for (i in 1..5) {
             send(i)
@@ -266,7 +266,7 @@ fun actorExample() = runBlocking {
 // Comparison: Manual actor vs builder
 class ActorComparison {
 
-    // ❌ Manual approach
+    //  Manual approach
     suspend fun manualActor(): SendChannel<CounterMsg> {
         val channel = Channel<CounterMsg>()
         var counter = 0
@@ -284,7 +284,7 @@ class ActorComparison {
         return channel
     }
 
-    // ✅ Using actor builder
+    //  Using actor builder
     fun withActor() = actor<CounterMsg> {
         var counter = 0
 
@@ -508,17 +508,17 @@ class ActorUseCases {
 /**
  * PRODUCE vs ACTOR
  *
- * ┌──────────────────┬──────────────────────┬──────────────────────┐
- * │ Aspect           │ produce              │ actor                │
- * ├──────────────────┼──────────────────────┼──────────────────────┤
- * │ Purpose          │ Generate values      │ Process messages     │
- * │ Direction        │ Outbound (send)      │ Inbound (receive)    │
- * │ Return Type      │ ReceiveChannel       │ SendChannel          │
- * │ Primary Use      │ Producer pattern     │ Actor pattern        │
- * │ State            │ Usually stateless    │ Usually stateful     │
- * │ Consumer         │ External             │ Internal             │
- * │ Pattern          │ One-to-many          │ Many-to-one          │
- * └──────────────────┴──────────────────────┴──────────────────────┘
+ * 
+ *  Aspect            produce               actor                
+ * 
+ *  Purpose           Generate values       Process messages     
+ *  Direction         Outbound (send)       Inbound (receive)    
+ *  Return Type       ReceiveChannel        SendChannel          
+ *  Primary Use       Producer pattern      Actor pattern        
+ *  State             Usually stateless     Usually stateful     
+ *  Consumer          External              Internal             
+ *  Pattern           One-to-many           Many-to-one          
+ * 
  */
 
 class ProduceVsActorExamples {

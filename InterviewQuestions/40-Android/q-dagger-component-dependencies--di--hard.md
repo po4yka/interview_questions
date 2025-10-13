@@ -237,11 +237,11 @@ class UserProfileActivity : AppCompatActivity() {
 ```
 
 **Benefits of Component Dependencies:**
-- ✅ **Modular** - Each feature is independent
-- ✅ **Explicit contracts** - Clear what each feature can use
-- ✅ **Testable** - Easy to mock AppComponent for testing
-- ✅ **Dynamic features** - Can load/unload features
-- ✅ **Multi-module** - Different Gradle modules can have different components
+-  **Modular** - Each feature is independent
+-  **Explicit contracts** - Clear what each feature can use
+-  **Testable** - Easy to mock AppComponent for testing
+-  **Dynamic features** - Can load/unload features
+-  **Multi-module** - Different Gradle modules can have different components
 
 ### Real-World Example: Subcomponents
 
@@ -363,11 +363,11 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Benefits of Subcomponents:**
-- ✅ **Automatic dependency access** - No need to expose explicitly
-- ✅ **Scope inheritance** - Child can use parent bindings
-- ✅ **Simpler setup** - Less boilerplate
-- ✅ **Binding override** - Can override parent bindings in child
-- ✅ **Hierarchical structure** - Clear parent-child relationship
+-  **Automatic dependency access** - No need to expose explicitly
+-  **Scope inheritance** - Child can use parent bindings
+-  **Simpler setup** - Less boilerplate
+-  **Binding override** - Can override parent bindings in child
+-  **Hierarchical structure** - Clear parent-child relationship
 
 ### Advanced: Mixing Both Approaches
 
@@ -463,15 +463,15 @@ object ActivityModule {
 ```
 
 **Hilt benefits:**
-- ✅ No manual component creation
-- ✅ Predefined hierarchy
-- ✅ Automatic scoping
-- ✅ Standard component lifecycle
+-  No manual component creation
+-  Predefined hierarchy
+-  Automatic scoping
+-  Standard component lifecycle
 
 **Hilt limitations:**
-- ❌ Can't use component dependencies for features
-- ❌ Fixed component hierarchy
-- ❌ Less flexibility for custom architectures
+-  Can't use component dependencies for features
+-  Fixed component hierarchy
+-  Less flexibility for custom architectures
 
 **When to use plain Dagger instead of Hilt:**
 - Need component dependencies for modular features
@@ -643,33 +643,33 @@ fun testActivitySubcomponent() {
 
 | Scenario | Use Component Dependencies | Use Subcomponents |
 |----------|----------------------------|-------------------|
-| **Multi-module project** | ✅ Yes | ❌ No |
-| **Dynamic feature modules** | ✅ Yes | ❌ No |
-| **Isolated testing** | ✅ Yes | ❌ No |
-| **Explicit contracts** | ✅ Yes | ❌ No |
-| **Simple hierarchy** | ❌ No | ✅ Yes |
-| **Automatic dependency access** | ❌ No | ✅ Yes |
-| **Scope inheritance** | ❌ No | ✅ Yes |
-| **Override parent bindings** | ❌ No | ✅ Yes |
-| **Standard Android lifecycle** | ❌ Use Hilt | ❌ Use Hilt |
+| **Multi-module project** |  Yes |  No |
+| **Dynamic feature modules** |  Yes |  No |
+| **Isolated testing** |  Yes |  No |
+| **Explicit contracts** |  Yes |  No |
+| **Simple hierarchy** |  No |  Yes |
+| **Automatic dependency access** |  No |  Yes |
+| **Scope inheritance** |  No |  Yes |
+| **Override parent bindings** |  No |  Yes |
+| **Standard Android lifecycle** |  Use Hilt |  Use Hilt |
 
 ### Best Practices
 
 1. **Use Hilt for Standard Android Apps**
    ```kotlin
-   // ✅ GOOD - Use Hilt for most apps
+   //  GOOD - Use Hilt for most apps
    @HiltAndroidApp
    class MyApplication : Application()
 
    @AndroidEntryPoint
    class MainActivity : AppCompatActivity()
 
-   // ❌ AVOID - Manual Dagger unless you have specific needs
+   //  AVOID - Manual Dagger unless you have specific needs
    ```
 
 2. **Use Component Dependencies for Multi-Module**
    ```kotlin
-   // ✅ GOOD - Feature modules with component dependencies
+   //  GOOD - Feature modules with component dependencies
    // :app
    interface AppComponent {
        fun apiService(): ApiService
@@ -686,7 +686,7 @@ fun testActivitySubcomponent() {
 
 3. **Use Subcomponents for Hierarchical Scopes**
    ```kotlin
-   // ✅ GOOD - Natural parent-child relationship
+   //  GOOD - Natural parent-child relationship
    @Component
    interface AppComponent {
        fun activityComponentFactory(): ActivityComponent.Factory
@@ -703,13 +703,13 @@ fun testActivitySubcomponent() {
 
 4. **Minimize Exposed Dependencies**
    ```kotlin
-   // ✅ GOOD - Only expose what's needed
+   //  GOOD - Only expose what's needed
    interface AppComponent {
        fun apiService(): ApiService
        fun database(): AppDatabase
    }
 
-   // ❌ BAD - Exposing everything
+   //  BAD - Exposing everything
    interface AppComponent {
        fun apiService(): ApiService
        fun database(): AppDatabase
@@ -737,7 +737,7 @@ fun testActivitySubcomponent() {
 
 1. **Forgetting to Expose Dependencies**
    ```kotlin
-   // ❌ BAD - apiService not exposed
+   //  BAD - apiService not exposed
    @Component
    interface AppComponent {
        fun database(): AppDatabase
@@ -748,7 +748,7 @@ fun testActivitySubcomponent() {
    interface FeatureComponent
    // Can't use apiService! Compilation error
 
-   // ✅ GOOD - Expose what's needed
+   //  GOOD - Expose what's needed
    @Component
    interface AppComponent {
        fun database(): AppDatabase
@@ -758,7 +758,7 @@ fun testActivitySubcomponent() {
 
 2. **Scope Conflicts**
    ```kotlin
-   // ❌ BAD - Scope mismatch
+   //  BAD - Scope mismatch
    @Singleton
    @Component
    interface AppComponent {
@@ -769,7 +769,7 @@ fun testActivitySubcomponent() {
    @Component(dependencies = [AppComponent::class])
    interface FeatureComponent
 
-   // ✅ GOOD - Different scope
+   //  GOOD - Different scope
    @FeatureScope
    @Component(dependencies = [AppComponent::class])
    interface FeatureComponent
@@ -777,14 +777,14 @@ fun testActivitySubcomponent() {
 
 3. **Memory Leaks with Subcomponents**
    ```kotlin
-   // ❌ BAD - Holding reference to subcomponent
+   //  BAD - Holding reference to subcomponent
    class MainActivity : AppCompatActivity() {
        companion object {
            var activityComponent: ActivityComponent? = null // Memory leak!
        }
    }
 
-   // ✅ GOOD - Don't hold references
+   //  GOOD - Don't hold references
    class MainActivity : AppCompatActivity() {
        override fun onCreate(savedInstanceState: Bundle?) {
            super.onCreate(savedInstanceState)
@@ -800,19 +800,19 @@ fun testActivitySubcomponent() {
 **Component Dependencies vs Subcomponents:**
 
 **Component Dependencies:**
-- ✅ Use for: Multi-module projects, dynamic features, isolated testing
-- ✅ Characteristics: Explicit contracts, separate lifecycles, modular
-- ❌ More boilerplate: Must expose dependencies explicitly
+-  Use for: Multi-module projects, dynamic features, isolated testing
+-  Characteristics: Explicit contracts, separate lifecycles, modular
+-  More boilerplate: Must expose dependencies explicitly
 
 **Subcomponents:**
-- ✅ Use for: Hierarchical scopes, simple projects, scope inheritance
-- ✅ Characteristics: Automatic access, tighter coupling, less boilerplate
-- ❌ Less modular: Child depends on parent structure
+-  Use for: Hierarchical scopes, simple projects, scope inheritance
+-  Characteristics: Automatic access, tighter coupling, less boilerplate
+-  Less modular: Child depends on parent structure
 
 **Hilt:**
-- ✅ Use for: Standard Android apps, predefined hierarchy
-- ✅ Benefits: No manual component management, standard lifecycle
-- ❌ Limitations: Fixed hierarchy, no component dependencies
+-  Use for: Standard Android apps, predefined hierarchy
+-  Benefits: No manual component management, standard lifecycle
+-  Limitations: Fixed hierarchy, no component dependencies
 
 **Decision guide:**
 1. Standard Android app → Use Hilt
@@ -846,19 +846,19 @@ fun testActivitySubcomponent() {
 **Component Dependencies vs Subcomponents:**
 
 **Component Dependencies:**
-- ✅ Используйте для: Мульти-модульных проектов, dynamic features, изолированного тестирования
-- ✅ Характеристики: Явные контракты, отдельные жизненные циклы, модульность
-- ❌ Больше boilerplate: Нужно явно предоставлять зависимости
+-  Используйте для: Мульти-модульных проектов, dynamic features, изолированного тестирования
+-  Характеристики: Явные контракты, отдельные жизненные циклы, модульность
+-  Больше boilerplate: Нужно явно предоставлять зависимости
 
 **Subcomponents:**
-- ✅ Используйте для: Иерархических scopes, простых проектов, наследования scope
-- ✅ Характеристики: Автоматический доступ, более тесная связь, меньше boilerplate
-- ❌ Менее модульно: Child зависит от структуры parent
+-  Используйте для: Иерархических scopes, простых проектов, наследования scope
+-  Характеристики: Автоматический доступ, более тесная связь, меньше boilerplate
+-  Менее модульно: Child зависит от структуры parent
 
 **Hilt:**
-- ✅ Используйте для: Стандартных Android-приложений, предопределённой иерархии
-- ✅ Преимущества: Нет ручного управления компонентами, стандартный жизненный цикл
-- ❌ Ограничения: Фиксированная иерархия, нет component dependencies
+-  Используйте для: Стандартных Android-приложений, предопределённой иерархии
+-  Преимущества: Нет ручного управления компонентами, стандартный жизненный цикл
+-  Ограничения: Фиксированная иерархия, нет component dependencies
 
 **Руководство по выбору:**
 1. Стандартное Android-приложение → Используйте Hilt

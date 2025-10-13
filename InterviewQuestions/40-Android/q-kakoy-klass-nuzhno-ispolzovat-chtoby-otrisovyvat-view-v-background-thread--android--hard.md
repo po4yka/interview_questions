@@ -444,12 +444,12 @@ class CameraSurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.
 ### Common Mistakes
 
 ```kotlin
-// ❌ BAD: Not unlocking canvas
+//  BAD: Not unlocking canvas
 canvas = holder.lockCanvas()
 draw(canvas)
 // Forgot to unlock!
 
-// ✅ GOOD: Always unlock in finally
+//  GOOD: Always unlock in finally
 var canvas: Canvas? = null
 try {
     canvas = holder.lockCanvas()
@@ -458,12 +458,12 @@ try {
     canvas?.let { holder.unlockCanvasAndPost(it) }
 }
 
-// ❌ BAD: Not stopping thread properly
+//  BAD: Not stopping thread properly
 override fun surfaceDestroyed(holder: SurfaceHolder) {
     thread?.interrupt() // May not work
 }
 
-// ✅ GOOD: Use flag and join
+//  GOOD: Use flag and join
 override fun surfaceDestroyed(holder: SurfaceHolder) {
     thread?.running = false
     thread?.join()

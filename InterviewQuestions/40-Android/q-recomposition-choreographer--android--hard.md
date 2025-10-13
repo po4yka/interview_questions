@@ -40,9 +40,9 @@ Display refresh rate: 60 Hz
 Frame budget: 16.67 ms per frame (1000ms / 60)
 
 VSYNC signals arrive every ~16.67ms
-┌─────┐     ┌─────┐     ┌─────┐
-│VSYNC│ ... │VSYNC│ ... │VSYNC│
-└─────┘     └─────┘     └─────┘
+          
+VSYNC ... VSYNC ... VSYNC
+          
   ↓           ↓           ↓
 Frame 1     Frame 2     Frame 3
 ```
@@ -71,48 +71,48 @@ fun Counter() {
 
 ```
 Time: 0ms
-┌──────────────────────────────────┐
-│ User clicks button               │
-│ count++ (state changes)          │
-│ → Flags UI needs redraw          │
-└──────────────────────────────────┘
+
+ User clicks button               
+ count++ (state changes)          
+ → Flags UI needs redraw          
+
                 ↓
 
 Time: 0-16ms
-┌──────────────────────────────────┐
-│ Choreographer is notified        │
-│ Waits for next VSYNC signal      │
-└──────────────────────────────────┘
+
+ Choreographer is notified        
+ Waits for next VSYNC signal      
+
                 ↓
 
 Time: 16.67ms
-┌──────────────────────────────────┐
-│ VSYNC signal arrives             │
-│ Choreographer triggers frame     │
-│ → Recomposition begins           │
-└──────────────────────────────────┘
+
+ VSYNC signal arrives             
+ Choreographer triggers frame     
+ → Recomposition begins           
+
                 ↓
 
 Time: 16.67-20ms
-┌──────────────────────────────────┐
-│ Compose recomposes changed parts │
-│ → Only Text("Count: $count")     │
-│ → Not the entire Column/Button   │
-└──────────────────────────────────┘
+
+ Compose recomposes changed parts 
+ → Only Text("Count: $count")     
+ → Not the entire Column/Button   
+
                 ↓
 
 Time: 20-32ms
-┌──────────────────────────────────┐
-│ UI rendering (draw phase)        │
-│ Frame submitted to display       │
-└──────────────────────────────────┘
+
+ UI rendering (draw phase)        
+ Frame submitted to display       
+
                 ↓
 
 Time: 33.34ms (next VSYNC)
-┌──────────────────────────────────┐
-│ Frame appears on screen          │
-│ User sees updated count          │
-└──────────────────────────────────┘
+
+ Frame appears on screen          
+ User sees updated count          
+
 ```
 
 **Key points:**
@@ -128,17 +128,17 @@ Time: 33.34ms (next VSYNC)
 
 Without Choreographer (random timing):
 ```
-State changes:  ─┬───┬─┬───┬──────┬─┬───
-Recomposition:   └┬──└┬└┬──└┬─────└┬└┬──
-VSYNC:          ────┴────┴────┴────┴────
+State changes:  
+Recomposition:   
+VSYNC:          
 Result: Janky, inconsistent frame timing BAD
 ```
 
 With Choreographer (VSYNC-aligned):
 ```
-State changes:  ─┬───┬─┬───┬──────┬─┬───
+State changes:  
 Recomposition:   [batched]  [batched]
-VSYNC:          ────┴────┴────┴────┴────
+VSYNC:          
 Result: Smooth, consistent 60fps GOOD
 ```
 
@@ -365,16 +365,16 @@ fun Counter() {
 
 ```
 Frame time bars:
-█     = Input
-██    = Animation
-███   = Measure/Layout
-████  = Draw
-─────  ← 16ms green line (60fps threshold)
+     = Input
+    = Animation
+   = Measure/Layout
+  = Draw
+  ← 16ms green line (60fps threshold)
 
 Example:
-████████████  ← 25ms (dropped frame, jank)
-████          ← 8ms (smooth)
-██████        ← 12ms (smooth)
+  ← 25ms (dropped frame, jank)
+          ← 8ms (smooth)
+        ← 12ms (smooth)
 ```
 
 ---
@@ -454,3 +454,18 @@ fun DeferredExample() {
 - 60Hz: 16.67ms
 - 120Hz: 8.33ms
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recomposition-compose--android--medium]] - Compose
+- [[q-how-does-jetpackcompose-work--android--medium]] - Compose
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose
+
+### Related (Hard)
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose
+- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
+- [[q-compose-performance-optimization--android--hard]] - Compose

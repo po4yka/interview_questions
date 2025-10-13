@@ -193,11 +193,11 @@ suspend fun fetchUser(id: Int): User {
 
 | Библиотека | Простота | Производительность | Функциональность | Use Case |
 |------------|----------|-------------------|------------------|----------|
-| **HttpURLConnection** | ⭐⭐ | ⭐⭐⭐ | ⭐⭐ | Простые запросы |
-| **OkHttp** | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Гибкий HTTP клиент |
-| **Retrofit** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | RESTful API |
-| **Volley** | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | Множество мелких запросов |
-| **Ktor** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Kotlin multiplatform |
+| **HttpURLConnection** |  |  |  | Простые запросы |
+| **OkHttp** |  |  |  | Гибкий HTTP клиент |
+| **Retrofit** |  |  |  | RESTful API |
+| **Volley** |  |  |  | Множество мелких запросов |
+| **Ktor** |  |  |  | Kotlin multiplatform |
 
 ### Важные правила
 
@@ -209,7 +209,7 @@ button.setOnClickListener {
     val data = fetchData()  // NetworkOnMainThreadException!
 }
 
-// ✓ ПРАВИЛЬНО - в фоновом потоке
+//  ПРАВИЛЬНО - в фоновом потоке
 button.setOnClickListener {
     lifecycleScope.launch(Dispatchers.IO) {
         val data = fetchData()
@@ -237,7 +237,7 @@ button.setOnClickListener {
 ```kotlin
 // Android 9+ блокирует cleartext (HTTP) по умолчанию
 // Используйте HTTPS!
-const val BASE_URL = "https://api.example.com/"  // ✓
+const val BASE_URL = "https://api.example.com/"  // 
 const val BASE_URL = "http://api.example.com/"   // BAD
 ```
 
@@ -303,3 +303,21 @@ fun isNetworkAvailable(context: Context): Boolean {
 ```
 
 **English**: Android network operations use: **HttpURLConnection** (basic, built-in), **OkHttp** (powerful HTTP client with connection pooling, HTTP/2), **Retrofit** (most popular, type-safe REST client), **Volley** (Google's library for multiple small requests), **Ktor** (Kotlin-first async client). Must run on background thread, require INTERNET permission, prefer HTTPS. Retrofit + OkHttp recommended for most apps.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-graphql-vs-rest--networking--easy]] - Networking
+
+### Related (Medium)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-network-error-handling-strategies--networking--medium]] - Networking
+- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+- [[q-api-file-upload-server--android--medium]] - Networking
+
+### Advanced (Harder)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-network-request-deduplication--networking--hard]] - Networking

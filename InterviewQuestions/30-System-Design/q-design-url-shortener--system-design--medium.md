@@ -281,20 +281,20 @@ class HashBasedShortener {
 }
 ```
 
-**✅ Base62 Pros:**
+** Base62 Pros:**
 - No collisions (unique sequence)
 - Short codes (7 chars)
 - Predictable length
 
-**❌ Base62 Cons:**
+** Base62 Cons:**
 - Sequential (can guess next URL)
 - Needs centralized sequence
 
-**✅ Hash Pros:**
+** Hash Pros:**
 - Decentralized (any server can generate)
 - Same URL always gets same hash (idempotent)
 
-**❌ Hash Cons:**
+** Hash Cons:**
 - Collisions possible (need handling)
 - Longer codes (7+ chars minimum)
 
@@ -305,36 +305,36 @@ class HashBasedShortener {
 #### 5. System Architecture
 
 ```
-                          ┌──────────────┐
-                          │  CDN/CloudFlare│
-                          │  (Caching)     │
-                          └────────┬───────┘
-                                   │
-                          ┌────────▼───────┐
-                          │ Load Balancer  │
-                          └────┬──────┬────┘
-                               │      │
-                  ┌────────────┴─┐  ┌─┴────────────┐
-                  │              │  │              │
-            ┌─────▼─────┐  ┌─────▼─────┐  ┌─────▼─────┐
-            │  API       │  │  API       │  │  API       │
-            │  Server 1  │  │  Server 2  │  │  Server 3  │
-            └─────┬──────┘  └─────┬──────┘  └─────┬──────┘
-                  │               │               │
-                  └───────┬───────┴───────┬───────┘
-                          │               │
-                  ┌───────▼──────┐  ┌─────▼────────┐
-                  │  Redis Cache │  │  Analytics   │
-                  │  (Read cache)│  │  Queue       │
-                  └───────┬──────┘  │  (Kafka)     │
-                          │         └──────────────┘
-                  ┌───────▼──────┐
-                  │  PostgreSQL  │
-                  │  (Sharded)   │
-                  │  - Shard 1   │
-                  │  - Shard 2   │
-                  │  - Shard 3   │
-                  └──────────────┘
+                          
+                            CDN/CloudFlare
+                            (Caching)     
+                          
+                                   
+                          
+                           Load Balancer  
+                          
+                                     
+                    
+                                                
+                
+              API           API           API       
+              Server 1      Server 2      Server 3  
+                
+                                                
+                  
+                                         
+                    
+                    Redis Cache     Analytics   
+                    (Read cache)    Queue       
+                      (Kafka)     
+                                   
+                  
+                    PostgreSQL  
+                    (Sharded)   
+                    - Shard 1   
+                    - Shard 2   
+                    - Shard 3   
+                  
 ```
 
 ---

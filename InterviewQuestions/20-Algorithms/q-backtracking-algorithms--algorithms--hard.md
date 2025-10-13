@@ -76,11 +76,11 @@ fun backtrack(
 
 **Key characteristics:**
 ```
-✅ Explores all possibilities systematically
-✅ Prunes invalid branches early (optimization)
-✅ Uses recursion naturally
-✅ Often O(2^n) or O(n!) time complexity
-✅ O(n) space for recursion stack
+ Explores all possibilities systematically
+ Prunes invalid branches early (optimization)
+ Uses recursion naturally
+ Often O(2^n) or O(n!) time complexity
+ O(n) space for recursion stack
 ```
 
 ---
@@ -185,11 +185,11 @@ solutions.forEach { solution ->
 4×4 Board:
 
 Row 0: Try col 0
-  Q... ✓
+  Q... 
 
 Row 1: Try col 0 → Invalid (same column)
        Try col 1 → Invalid (diagonal)
-       Try col 2 ✓
+       Try col 2 
   Q...
   ..Q.
 
@@ -199,12 +199,12 @@ Row 2: Try col 0 → Invalid
        Try col 3 → Invalid
        → BACKTRACK to row 1
 
-Row 1: Try col 3 ✓
+Row 1: Try col 3 
   Q...
   ...Q
 
 Row 2: Try col 0 → Invalid
-       Try col 1 ✓
+       Try col 1 
   Q...
   ...Q
   .Q..
@@ -214,7 +214,7 @@ Row 3: Try col 0,1,2,3 → All invalid
        → BACKTRACK to row 1
        → BACKTRACK to row 0
 
-Row 0: Try col 1 ✓
+Row 0: Try col 1 
   .Q..
   (continue searching...)
 ```
@@ -426,7 +426,7 @@ Level 0: Choose 1
     used = [T, T, F]
 
     Level 2: Choose 3
-      current = [1, 2, 3] ✓ Add to result
+      current = [1, 2, 3]  Add to result
       Backtrack to Level 1
 
   Level 1: Choose 3
@@ -434,7 +434,7 @@ Level 0: Choose 1
     used = [T, F, T]
 
     Level 2: Choose 2
-      current = [1, 3, 2] ✓ Add to result
+      current = [1, 3, 2]  Add to result
       Backtrack to Level 0
 
 Level 0: Choose 2
@@ -872,7 +872,7 @@ fun combinationSumOptimized(candidates: IntArray, target: Int): List<List<Int>> 
             val num = candidates[i]
 
             // Early termination: no point checking larger numbers
-            if (num > remaining) break  // ✅ Much faster than continue
+            if (num > remaining) break  //  Much faster than continue
 
             current.add(num)
             backtrack(i, remaining - num)
@@ -954,7 +954,7 @@ fun solveNQueensPruned(n: Int): Int {
 
             // Prune invalid branches immediately
             if (col in cols || diag in diags || antiDiag in antiDiags) {
-                continue  // ✅ Skip entire subtree
+                continue  //  Skip entire subtree
             }
 
             cols.add(col)

@@ -1,4 +1,5 @@
 ---
+topic: programming-languages
 tags:
   - java
   - kotlin
@@ -8,6 +9,10 @@ tags:
   - reference-types
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-programming-languages
+related_questions: []
 ---
 
 # В чем разница примитивного и ссылочного типов
@@ -83,17 +88,17 @@ text.toUpperCase();      // OK
 **Primitive type:**
 ```
 Stack:
-┌───────┐
-│ x: 10 │  (value stored directly)
-└───────┘
+
+ x: 10   (value stored directly)
+
 ```
 
 **Reference type:**
 ```
 Stack:              Heap:
-┌────────┐        ┌─────────────┐
-│ ref: ─────────→ │ "Hello"     │  (actual object)
-└────────┘        └─────────────┘
+        
+ ref: →  "Hello"       (actual object)
+        
 ```
 
 ### Kotlin Context
@@ -234,3 +239,16 @@ In **Kotlin**: everything looks like objects, but primitives are used internally
 
 Примитивные типы хранят значения напрямую, не могут быть null и не имеют методов. Ссылочные типы — это объекты которые хранят ссылки на данные в памяти и могут быть null.
 
+
+---
+
+## Related Questions
+
+### Android Implementation
+- [[q-sharedpreferences-definition--android--easy]] - Memory Management
+- [[q-leakcanary-library--android--easy]] - Memory Management
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Memory Management
+- [[q-optimize-memory-usage-android--android--medium]] - Memory Management
+- [[q-stack-heap-memory-multiple-threads--android--medium]] - Memory Management
+- [[q-tasks-back-stack--android--medium]] - Memory Management
+- [[q-memory-leak-vs-oom-android--android--medium]] - Memory Management

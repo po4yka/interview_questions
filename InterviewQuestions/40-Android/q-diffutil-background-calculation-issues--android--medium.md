@@ -52,7 +52,7 @@ class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
     }
 }
 
-// ✓ ПРАВИЛЬНО - использовать неизменяемую копию
+//  ПРАВИЛЬНО - использовать неизменяемую копию
 class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
     private var users: List<User> = emptyList()
 
@@ -105,7 +105,7 @@ class MessageCallback(
     }
 }
 
-// ✓ ПРАВИЛЬНО - предварительная обработка данных
+//  ПРАВИЛЬНО - предварительная обработка данных
 data class Message(
     val id: Int,
     val text: String,
@@ -153,7 +153,7 @@ fun updateLargeList(newItems: List<Item>) {
     diffResult.dispatchUpdatesTo(adapter)
 }
 
-// ✓ ПРАВИЛЬНО - использовать Paging или частичные обновления
+//  ПРАВИЛЬНО - использовать Paging или частичные обновления
 class ItemAdapter : PagedListAdapter<Item, ItemViewHolder>(
     DIFF_CALLBACK
 ) {
@@ -215,7 +215,7 @@ class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
     }
 }
 
-// ✓ ПРАВИЛЬНО - использовать Job для отмены предыдущих расчетов
+//  ПРАВИЛЬНО - использовать Job для отмены предыдущих расчетов
 class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
     private var diffJob: Job? = null
     private var users: List<User> = emptyList()
@@ -251,7 +251,7 @@ class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
     }
 }
 
-// ✓ ЕЩЕ ЛУЧШЕ - использовать ListAdapter
+//  ЕЩЕ ЛУЧШЕ - использовать ListAdapter
 class UserAdapter : ListAdapter<User, UserViewHolder>(
     object : DiffUtil.ItemCallback<User>() {
         override fun areItemsTheSame(oldItem: User, newItem: User) =
@@ -297,7 +297,7 @@ class ChatAdapter : RecyclerView.Adapter<MessageViewHolder>() {
     }
 }
 
-// ✓ ПРАВИЛЬНО - использовать неизменяемые списки
+//  ПРАВИЛЬНО - использовать неизменяемые списки
 class ChatAdapter : RecyclerView.Adapter<MessageViewHolder>() {
     private var messages: List<Message> = emptyList()
     private val updateLock = Mutex()
@@ -335,7 +335,7 @@ class User(
 // DiffUtil всегда считает объекты разными
 // areContentsTheSame() всегда возвращает false
 
-// ✓ ПРАВИЛЬНО - data class с правильными полями
+//  ПРАВИЛЬНО - data class с правильными полями
 data class User(
     val id: Int,
     val name: String,
@@ -390,7 +390,7 @@ class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
     }
 }
 
-// ✓ ПРАВИЛЬНО - не храним лишние ссылки
+//  ПРАВИЛЬНО - не храним лишние ссылки
 class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
     private var users: List<User> = emptyList()
 

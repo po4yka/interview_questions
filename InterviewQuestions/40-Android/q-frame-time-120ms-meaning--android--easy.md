@@ -37,8 +37,8 @@ User sees: freeze/stutter for 120ms
 **Visual Impact:**
 
 ```
-Normal (16ms):    ████████████████ Smooth
-Your frame (120ms): ████████████████████████████████████████████████████████████████████████ JANKY!
+Normal (16ms):     Smooth
+Your frame (120ms):  JANKY!
 
 Timeline:
 0ms    16ms   32ms   48ms   64ms   80ms   96ms   112ms  120ms
@@ -54,15 +54,15 @@ User sees 7 dropped frames = visible stutter
 Green line = 16ms (60 fps budget)
 
      |
-120ms|                                    ████ ← Your frame (BAD!)
-     |                                    ████
-     |                                    ████
-     |                                    ████
-     |                                    ████
-     |                                    ████
- 16ms|────────────────────────────────────────────
-     |  ████ ████   ████ ████   ████ ████
-     |  ████ ████   ████ ████   ████ ████
+120ms|                                     ← Your frame (BAD!)
+     |                                    
+     |                                    
+     |                                    
+     |                                    
+     |                                    
+ 16ms|
+     |           
+     |           
      |__________________________|___|___|___|____
         Normal frames            ^
                                  Spike!
@@ -73,7 +73,7 @@ Green line = 16ms (60 fps budget)
 **1. Heavy UI work on main thread:**
 
 ```kotlin
-// ❌ BAD - Blocks UI for 120ms
+//  BAD - Blocks UI for 120ms
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     // Complex calculation on main thread
     val processedData = heavyProcessing(data[position])  // 120ms!
@@ -84,7 +84,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 **2. Synchronous network/database:**
 
 ```kotlin
-// ❌ BAD
+//  BAD
 button.setOnClickListener {
     val data = database.query()  // Blocks UI!
     updateUI(data)
@@ -94,7 +94,7 @@ button.setOnClickListener {
 **3. Large list without recycling:**
 
 ```kotlin
-// ❌ BAD
+//  BAD
 for (item in largeList) {
     val view = inflate(R.layout.item)  // Many inflations!
     container.addView(view)
@@ -104,7 +104,7 @@ for (item in largeList) {
 **Solutions:**
 
 ```kotlin
-// ✅ GOOD - Move work off main thread
+//  GOOD - Move work off main thread
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     viewModelScope.launch(Dispatchers.Default) {
         val processed = heavyProcessing(data[position])
@@ -114,7 +114,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     }
 }
 
-// ✅ GOOD - Async operations
+//  GOOD - Async operations
 button.setOnClickListener {
     viewModelScope.launch {
         val data = withContext(Dispatchers.IO) {
@@ -124,7 +124,7 @@ button.setOnClickListener {
     }
 }
 
-// ✅ GOOD - Use RecyclerView
+//  GOOD - Use RecyclerView
 recyclerView.adapter = MyAdapter(largeList)  // Efficient recycling
 ```
 
@@ -152,10 +152,10 @@ Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallba
 
 | Frame Time | FPS | User Experience |
 |------------|-----|-----------------|
-| 16ms | 60 | ✅ Smooth |
-| 33ms | 30 | ⚠️ Noticeable |
-| 120ms | 8 | ❌ Janky, freezes |
-| 1000ms | 1 | 💥 ANR risk |
+| 16ms | 60 |  Smooth |
+| 33ms | 30 |  Noticeable |
+| 120ms | 8 |  Janky, freezes |
+| 1000ms | 1 |  ANR risk |
 
 **Summary:**
 

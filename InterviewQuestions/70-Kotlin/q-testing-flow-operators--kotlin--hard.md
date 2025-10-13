@@ -1107,7 +1107,7 @@ fun `timeoutEach fails on slow emissions`() = runTest {
 ### Best Practices
 
 ```kotlin
-// ✅ DO: Use turbine for flow testing
+//  DO: Use turbine for flow testing
 @Test
 fun goodTest() = runTest {
     flow.test {
@@ -1115,7 +1115,7 @@ fun goodTest() = runTest {
     }
 }
 
-// ❌ DON'T: Manually collect and assert
+//  DON'T: Manually collect and assert
 @Test
 fun badTest() = runTest {
     val results = mutableListOf<Int>()
@@ -1123,7 +1123,7 @@ fun badTest() = runTest {
     assertEquals(expected, results)
 }
 
-// ✅ DO: Test timing with virtual time
+//  DO: Test timing with virtual time
 @Test
 fun goodTest() = runTest {
     val start = currentTime
@@ -1132,7 +1132,7 @@ fun goodTest() = runTest {
     assertEquals(expectedDuration, duration)
 }
 
-// ✅ DO: Test operator combinations
+//  DO: Test operator combinations
 @Test
 fun goodTest() = runTest {
     flow
@@ -1144,7 +1144,7 @@ fun goodTest() = runTest {
         }
 }
 
-// ✅ DO: Test error handling
+//  DO: Test error handling
 @Test
 fun goodTest() = runTest {
     flow
@@ -1155,7 +1155,7 @@ fun goodTest() = runTest {
         }
 }
 
-// ✅ DO: Test cancellation
+//  DO: Test cancellation
 @Test
 fun goodTest() = runTest {
     val job = launch {

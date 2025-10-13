@@ -83,7 +83,7 @@ fun caller() {
     processItemsSafely(items) { item ->
         if (item == "b") {
             return  // - ОШИБКА КОМПИЛЯЦИИ: return не разрешен
-            return@processItemsSafely  // ✓ Labeled return OK
+            return@processItemsSafely  //  Labeled return OK
         }
         println(item)
     }
@@ -104,7 +104,7 @@ inline fun runInBackground(action: () -> Unit) {
     }.start()
 }
 
-// ✓ С crossinline
+//  С crossinline
 inline fun runInBackground(crossinline action: () -> Unit) {
     Thread {
         action()  // OK - non-local return запрещен
@@ -302,7 +302,7 @@ inline fun broken(action: () -> Unit) {
 // "Can't inline 'action' here: it may contain non-local returns.
 // Add 'crossinline' modifier to parameter declaration 'action'"
 
-// ✓ ИСПРАВЛЕНО
+//  ИСПРАВЛЕНО
 inline fun fixed(crossinline action: () -> Unit) {
     Thread {
         action()  // OK

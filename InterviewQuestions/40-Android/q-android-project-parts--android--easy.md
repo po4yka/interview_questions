@@ -49,34 +49,34 @@ An Android project consists of:
 
 ```
 my-android-app/
-├── app/                              ← Main application module
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/                ← Java source code
-│   │   │   │   └── com/example/app/
-│   │   │   │       ├── MainActivity.kt
-│   │   │   │       ├── LoginActivity.kt
-│   │   │   │       └── viewmodel/
-│   │   │   ├── kotlin/              ← Kotlin source code (alternative)
-│   │   │   ├── res/                 ← Resources
-│   │   │   │   ├── layout/          ← XML layouts
-│   │   │   │   ├── values/          ← Strings, colors, dimensions
-│   │   │   │   ├── drawable/        ← Images, icons
-│   │   │   │   └── mipmap/          ← App icons
-│   │   │   ├── assets/              ← Raw files
-│   │   │   └── AndroidManifest.xml  ← App manifest
-│   │   ├── test/                    ← Unit tests
-│   │   └── androidTest/             ← Instrumentation tests
-│   ├── build.gradle.kts             ← Module build script
-│   └── proguard-rules.pro           ← ProGuard configuration
-├── gradle/                           ← Gradle wrapper files
-│   └── wrapper/
-│       ├── gradle-wrapper.jar
-│       └── gradle-wrapper.properties
-├── build.gradle.kts                  ← Project build script
-├── settings.gradle.kts               ← Project settings
-├── gradle.properties                 ← Gradle properties
-└── local.properties                  ← Local SDK path
+ app/                              ← Main application module
+    src/
+       main/
+          java/                ← Java source code
+             com/example/app/
+                 MainActivity.kt
+                 LoginActivity.kt
+                 viewmodel/
+          kotlin/              ← Kotlin source code (alternative)
+          res/                 ← Resources
+             layout/          ← XML layouts
+             values/          ← Strings, colors, dimensions
+             drawable/        ← Images, icons
+             mipmap/          ← App icons
+          assets/              ← Raw files
+          AndroidManifest.xml  ← App manifest
+       test/                    ← Unit tests
+       androidTest/             ← Instrumentation tests
+    build.gradle.kts             ← Module build script
+    proguard-rules.pro           ← ProGuard configuration
+ gradle/                           ← Gradle wrapper files
+    wrapper/
+        gradle-wrapper.jar
+        gradle-wrapper.properties
+ build.gradle.kts                  ← Project build script
+ settings.gradle.kts               ← Project settings
+ gradle.properties                 ← Gradle properties
+ local.properties                  ← Local SDK path
 ```
 
 ---
@@ -89,30 +89,30 @@ my-android-app/
 
 ```
 src/
-├── main/
-│   ├── java/
-│   │   └── com/example/app/
-│   │       ├── MainActivity.kt
-│   │       ├── LoginActivity.kt
-│   │       ├── ui/
-│   │       │   ├── home/
-│   │       │   │   ├── HomeFragment.kt
-│   │       │   │   └── HomeViewModel.kt
-│   │       │   └── profile/
-│   │       ├── data/
-│   │       │   ├── repository/
-│   │       │   └── network/
-│   │       └── domain/
-│   │           └── model/
-│   └── kotlin/  ← Alternative location for Kotlin files
-├── test/        ← Unit tests (JVM)
-│   └── java/
-│       └── com/example/app/
-│           └── ViewModelTest.kt
-└── androidTest/ ← Instrumentation tests (Android device/emulator)
-    └── java/
-        └── com/example/app/
-            └── MainActivityTest.kt
+ main/
+    java/
+       com/example/app/
+           MainActivity.kt
+           LoginActivity.kt
+           ui/
+              home/
+                 HomeFragment.kt
+                 HomeViewModel.kt
+              profile/
+           data/
+              repository/
+              network/
+           domain/
+               model/
+    kotlin/  ← Alternative location for Kotlin files
+ test/        ← Unit tests (JVM)
+    java/
+        com/example/app/
+            ViewModelTest.kt
+ androidTest/ ← Instrumentation tests (Android device/emulator)
+     java/
+         com/example/app/
+             MainActivityTest.kt
 ```
 
 ---
@@ -171,37 +171,37 @@ class HomeViewModel : ViewModel() {
 
 ```
 res/
-├── layout/              ← XML layouts
-│   ├── activity_main.xml
-│   ├── fragment_home.xml
-│   └── item_product.xml
-├── values/              ← Values (strings, colors, dimensions)
-│   ├── strings.xml
-│   ├── colors.xml
-│   ├── dimens.xml
-│   └── styles.xml
-├── values-ru/           ← Russian localization
-│   └── strings.xml
-├── drawable/            ← Vector drawables, XML shapes
-│   ├── ic_home.xml
-│   └── bg_button.xml
-├── drawable-hdpi/       ← High-density bitmaps
-│   └── image.png
-├── drawable-xhdpi/      ← Extra-high-density bitmaps
-│   └── image.png
-├── mipmap-hdpi/         ← App icons (different densities)
-│   └── ic_launcher.png
-├── mipmap-xhdpi/
-├── mipmap-xxhdpi/
-├── mipmap-xxxhdpi/
-├── font/                ← Custom fonts
-│   └── roboto_bold.ttf
-├── raw/                 ← Raw files (audio, video)
-│   └── music.mp3
-├── xml/                 ← XML configurations
-│   └── network_security_config.xml
-└── anim/                ← Animations
-    └── fade_in.xml
+ layout/              ← XML layouts
+    activity_main.xml
+    fragment_home.xml
+    item_product.xml
+ values/              ← Values (strings, colors, dimensions)
+    strings.xml
+    colors.xml
+    dimens.xml
+    styles.xml
+ values-ru/           ← Russian localization
+    strings.xml
+ drawable/            ← Vector drawables, XML shapes
+    ic_home.xml
+    bg_button.xml
+ drawable-hdpi/       ← High-density bitmaps
+    image.png
+ drawable-xhdpi/      ← Extra-high-density bitmaps
+    image.png
+ mipmap-hdpi/         ← App icons (different densities)
+    ic_launcher.png
+ mipmap-xhdpi/
+ mipmap-xxhdpi/
+ mipmap-xxxhdpi/
+ font/                ← Custom fonts
+    roboto_bold.ttf
+ raw/                 ← Raw files (audio, video)
+    music.mp3
+ xml/                 ← XML configurations
+    network_security_config.xml
+ anim/                ← Animations
+     fade_in.xml
 ```
 
 ---
@@ -488,7 +488,7 @@ android {
 
 ```
 libs/
-└── custom-library.jar
+ custom-library.jar
 ```
 
 **Reference in build.gradle.kts:**
@@ -503,7 +503,7 @@ dependencies {
 **Modern approach (recommended):**
 ```kotlin
 dependencies {
-    // ✅ Use Maven repositories instead
+    //  Use Maven repositories instead
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 }
 ```
@@ -518,14 +518,14 @@ dependencies {
 
 ```
 assets/
-├── database/
-│   └── initial_data.db
-├── fonts/
-│   └── custom_font.ttf
-├── config/
-│   └── settings.json
-└── html/
-    └── about.html
+ database/
+    initial_data.db
+ fonts/
+    custom_font.ttf
+ config/
+    settings.json
+ html/
+     about.html
 ```
 
 ---

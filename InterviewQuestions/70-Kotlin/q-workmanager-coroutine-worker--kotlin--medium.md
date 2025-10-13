@@ -130,7 +130,7 @@ class RxBasedWorker(context: Context, params: WorkerParameters)
 **Decision matrix:**
 
 ```kotlin
-// ✅ USE WorkManager + CoroutineWorker when:
+//  USE WorkManager + CoroutineWorker when:
 
 // 1. Work must survive process death
 class DataSyncWorker : CoroutineWorker {
@@ -166,7 +166,7 @@ val periodicWork = PeriodicWorkRequestBuilder<CleanupWorker>(
     repeatIntervalTimeUnit = TimeUnit.DAYS
 ).build()
 
-// ❌ DON'T use WorkManager when:
+//  DON'T use WorkManager when:
 
 // 1. Immediate execution needed (use regular coroutines)
 viewModelScope.launch {
@@ -938,21 +938,21 @@ class DataSyncWorkerTest {
 **Production-ready patterns:**
 
 ```kotlin
-// ✅ GOOD: Use unique work for deduplication
+//  GOOD: Use unique work for deduplication
 WorkManager.getInstance(context).enqueueUniqueWork(
     "user_sync_$userId",
     ExistingWorkPolicy.KEEP, // Don't start if already running
     syncRequest
 )
 
-// ✅ GOOD: Set appropriate constraints
+//  GOOD: Set appropriate constraints
 val constraints = Constraints.Builder()
     .setRequiredNetworkType(NetworkType.CONNECTED)
     .setRequiresBatteryNotLow(true)
     .setRequiresStorageNotLow(true)
     .build()
 
-// ✅ GOOD: Check isStopped for cancellation
+//  GOOD: Check isStopped for cancellation
 override suspend fun doWork(): Result {
     for (item in items) {
         if (isStopped) {
@@ -963,14 +963,14 @@ override suspend fun doWork(): Result {
     return Result.success()
 }
 
-// ✅ GOOD: Use setForeground for long-running work
+//  GOOD: Use setForeground for long-running work
 override suspend fun doWork(): Result {
     setForeground(createForegroundInfo())
     // Long-running work
     return Result.success()
 }
 
-// ✅ GOOD: Exponential backoff for retries
+//  GOOD: Exponential backoff for retries
 OneTimeWorkRequestBuilder<MyWorker>()
     .setBackoffCriteria(
         BackoffPolicy.EXPONENTIAL,
@@ -979,13 +979,13 @@ OneTimeWorkRequestBuilder<MyWorker>()
     )
     .build()
 
-// ❌ BAD: Blocking operations in CoroutineWorker
+//  BAD: Blocking operations in CoroutineWorker
 override suspend fun doWork(): Result {
     Thread.sleep(1000) // Don't block! Use delay()
     return Result.success()
 }
 
-// ❌ BAD: Ignoring cancellation
+//  BAD: Ignoring cancellation
 override suspend fun doWork(): Result {
     // Missing isStopped check
     while (true) {
@@ -993,7 +993,7 @@ override suspend fun doWork(): Result {
     }
 }
 
-// ❌ BAD: Not handling exceptions
+//  BAD: Not handling exceptions
 override suspend fun doWork(): Result {
     performWork() // May throw exception
     return Result.success()

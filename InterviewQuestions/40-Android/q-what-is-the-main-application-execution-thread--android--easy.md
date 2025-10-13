@@ -35,9 +35,9 @@ The main application execution thread in Android is called the **Main Thread** (
 
 ```
 Main Thread
-  ├── Looper (processes messages)
-  ├── MessageQueue (stores messages)
-  └── Handler (sends/handles messages)
+   Looper (processes messages)
+   MessageQueue (stores messages)
+   Handler (sends/handles messages)
 ```
 
 ### Example: Main Thread in Action
@@ -238,3 +238,17 @@ lifecycleScope.launch {
     textView.text = data // Автоматически на главном потоке
 }
 ```
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+- [[q-main-android-components--android--easy]] - Fundamentals
+- [[q-what-unifies-android-components--android--easy]] - Fundamentals
+
+### Advanced (Harder)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+- [[q-anr-application-not-responding--android--medium]] - Fundamentals
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals

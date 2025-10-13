@@ -91,13 +91,13 @@ class MainActivity : AppCompatActivity() {
 
 ### Main Thread Rules
 
-#### ✅ Allowed Operations
+####  Allowed Operations
 - UI updates (setText, setVisibility, etc.)
 - View inflation (should be optimized)
 - Short computations (<16ms for 60fps)
 - Lifecycle callbacks
 
-#### ❌ Prohibited Operations
+####  Prohibited Operations
 - Network requests
 - Database queries (large datasets)
 - File I/O operations
@@ -169,7 +169,7 @@ class DataProcessor {
 
 #### 3. AsyncTask (Deprecated)
 ```kotlin
-// ⚠️ Deprecated - use Coroutines instead
+//  Deprecated - use Coroutines instead
 class DownloadTask : AsyncTask<String, Int, String>() {
     override fun doInBackground(vararg params: String): String {
         // Background thread

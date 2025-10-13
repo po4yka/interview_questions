@@ -1,4 +1,6 @@
 ---
+topic: programming-languages
+subtopics: ["computer-science", "fundamentals"]
 tags:
   - xml
   - markup-language
@@ -6,6 +8,10 @@ tags:
   - programming-languages
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-programming-languages
+related_questions: []
 ---
 
 # Как расшифровывается xml?
@@ -137,3 +143,15 @@ In Android development, XML is heavily used:
 
 XML — это eXtensible Markup Language (Расширяемый язык разметки).
 
+
+---
+
+## Related Questions
+
+### Related (Easy)
+- [[q-data-structures-overview--algorithms--easy]] - Data Structures
+
+### Advanced (Harder)
+- [[q-default-vs-io-dispatcher--programming-languages--medium]] - Computer Science
+- [[q-os-fundamentals-concepts--computer-science--hard]] - Computer Science
+- [[q-clean-code-principles--software-engineering--medium]] - Computer Science

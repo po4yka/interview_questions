@@ -375,3 +375,17 @@ findNavController().navigateUp()
 ## Ответ (RU)
 Навигация между различными Activity в Android-приложении представляет собой важный аспект управления потоком пользовательского интерфейса. Можно рассматривать как отдельный экран с пользовательским интерфейсом. Навигация между ними позволяет пользователям переходить от одного задания к другому. Основные механизмы навигации: Интенты (Intents): Явные интенты используются, когда вы знаете конкретное Activity которое хотите запустить. Они прямо указывают на класс Activity который необходимо открыть. Неявные интенты не указывают прямо на класс Activity вместо этого они объявляют общую операцию которую должно выполнить приложение и позволяют системе определить наиболее подходящий компонент для её выполнения. Жизненный цикл и управление переходами: Каждое имеет свой жизненный цикл который критически важен для правильной реализации навигации между активностями особенно когда нужно обрабатывать сохранение и восстановление данных. Закрытие Activity: Для возврата к предыдущему можно использовать finish(). Использование флагов интента: могут включать различные флаги для управления историей активностей и поведением переходов. Навигационные компоненты: Современные приложения на Android часто используют Navigation Component который упрощает реализацию навигации между фрагментами и активностями.
 
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation, Activity
+- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation
+- [[q-compose-navigation-advanced--android--medium]] - Navigation
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
+
+### Advanced (Harder)
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity

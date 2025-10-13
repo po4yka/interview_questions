@@ -269,7 +269,7 @@ val s1 = String(charArrayOf('H', 'i'))
 val s2 = String(charArrayOf('H', 'i'))
 
 s1 === s2  // false (different objects)
-s1 == s2   // true (same content) ✓
+s1 == s2   // true (same content) 
 ```
 
 ### Summary

@@ -900,3 +900,14 @@ class BackgroundLocationManager {
 - **Уведомления**: Обязательны на Android 13+
 - **Фоновая геолокация**: Более строгие требования
 - **Проверки версий**: Критичны для совместимости
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-encrypted-file-storage--security--medium]] - Security
+- [[q-database-encryption-android--android--medium]] - Security
+- [[q-runtime-permissions-best-practices--permissions--medium]] - Security
+- [[q-app-security-best-practices--security--medium]] - Security

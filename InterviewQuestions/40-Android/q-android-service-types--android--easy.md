@@ -96,3 +96,12 @@ bindService(Intent(this, MusicService::class.java), connection, BIND_AUTO_CREATE
 
 В Android есть три основных вида сервисов: обычные (Started Service), фоновые с уведомлением (Foreground Service) и привязанные (Bound Service).
 
+
+---
+
+## Related Questions
+
+### Advanced (Harder)
+- [[q-service-component--android--medium]] - Service
+- [[q-foreground-service-types--background--medium]] - Service
+- [[q-when-can-the-system-restart-a-service--android--medium]] - Service

@@ -283,13 +283,13 @@ suspend fun getUser(@Path("id") userId: String): UserResponse
   "name": "John Doe",
   "email": "john@example.com",
   "avatar": "https://...",
-  "bio": "Long bio text...",           // ❌ Not needed
-  "location": "San Francisco",         // ❌ Not needed
-  "website": "https://...",            // ❌ Not needed
-  "followers": 1234,                   // ❌ Not needed
-  "following": 567,                    // ❌ Not needed
-  "createdAt": "2020-01-01T00:00:00Z", // ❌ Not needed
-  "settings": { /* ... */ }            // ❌ Not needed
+  "bio": "Long bio text...",           //  Not needed
+  "location": "San Francisco",         //  Not needed
+  "website": "https://...",            //  Not needed
+  "followers": 1234,                   //  Not needed
+  "following": 567,                    //  Not needed
+  "createdAt": "2020-01-01T00:00:00Z", //  Not needed
+  "settings": { /* ... */ }            //  Not needed
 }
 
 // Problems:
@@ -698,59 +698,59 @@ apolloClient.mutation(UpdatePostMutation(id = "456", title = "New Title")).execu
 
 ### When to Use REST
 
-✅ **Simple APIs**
+ **Simple APIs**
 - Basic CRUD operations
 - Few related resources
 - Simple data structures
 
-✅ **Public APIs**
+ **Public APIs**
 - External third-party consumers
 - Well-documented REST standards
 - HTTP caching important
 
-✅ **File Operations**
+ **File Operations**
 - File uploads/downloads
 - Multipart form data
 - Binary data transfer
 
-✅ **Team Familiarity**
+ **Team Familiarity**
 - Team experienced with REST
 - Limited GraphQL knowledge
 - Standard tooling preferred
 
-✅ **HTTP Caching Critical**
+ **HTTP Caching Critical**
 - CDN distribution needed
 - Edge caching requirements
 - Standard HTTP semantics
 
 ### When to Use GraphQL
 
-✅ **Complex Data Requirements**
+ **Complex Data Requirements**
 - Deeply nested data structures
 - Multiple related resources
 - Variable data needs per client
 
-✅ **Mobile Applications**
+ **Mobile Applications**
 - Bandwidth optimization critical
 - Minimize network requests
 - Battery life considerations
 
-✅ **Multiple Client Types**
+ **Multiple Client Types**
 - Web, mobile, desktop clients
 - Different data needs per platform
 - Single flexible API
 
-✅ **Real-Time Features**
+ **Real-Time Features**
 - Live updates needed
 - Subscriptions for push data
 - Collaborative features
 
-✅ **Rapid Iteration**
+ **Rapid Iteration**
 - Frequent schema changes
 - No version management desired
 - Gradual API evolution
 
-✅ **Developer Experience**
+ **Developer Experience**
 - Type safety important
 - Autocomplete/IntelliSense desired
 - Compile-time validation valued
@@ -1152,12 +1152,12 @@ suspend fun getUser(@Path("id") userId: String): UserResponse
   "name": "John Doe",
   "email": "john@example.com",
   "avatar": "https://...",
-  "bio": "Длинный текст био...",      // ❌ Не нужно
-  "location": "San Francisco",         // ❌ Не нужно
-  "website": "https://...",            // ❌ Не нужно
-  "followers": 1234,                   // ❌ Не нужно
-  "following": 567,                    // ❌ Не нужно
-  "createdAt": "2020-01-01",           // ❌ Не нужно
+  "bio": "Длинный текст био...",      //  Не нужно
+  "location": "San Francisco",         //  Не нужно
+  "website": "https://...",            //  Не нужно
+  "followers": 1234,                   //  Не нужно
+  "following": 567,                    //  Не нужно
+  "createdAt": "2020-01-01",           //  Не нужно
 }
 
 // Проблемы:
@@ -1372,46 +1372,46 @@ Cache-Control: max-age=3600
 
 ### Когда использовать REST
 
-✅ **Простые API**
+ **Простые API**
 - Базовые CRUD операции
 - Немного связанных ресурсов
 - Простые структуры данных
 
-✅ **Публичные API**
+ **Публичные API**
 - Внешние потребители третьих сторон
 - Хорошо документированные стандарты REST
 - Важно HTTP кеширование
 
-✅ **Операции с файлами**
+ **Операции с файлами**
 - Загрузка/скачивание файлов
 - Multipart form data
 - Передача бинарных данных
 
-✅ **Знакомство команды**
+ **Знакомство команды**
 - Команда опытна в REST
 - Ограниченные знания GraphQL
 
 ### Когда использовать GraphQL
 
-✅ **Сложные требования к данным**
+ **Сложные требования к данным**
 - Глубоко вложенные структуры данных
 - Множество связанных ресурсов
 - Переменные потребности в данных
 
-✅ **Мобильные приложения**
+ **Мобильные приложения**
 - Критична оптимизация пропускной способности
 - Минимизация сетевых запросов
 - Учёт времени работы батареи
 
-✅ **Множество типов клиентов**
+ **Множество типов клиентов**
 - Веб, мобильные, десктоп клиенты
 - Разные потребности в данных
 
-✅ **Real-time функции**
+ **Real-time функции**
 - Нужны живые обновления
 - Подписки для push данных
 
-✅ **Быстрая итерация**
+ **Быстрая итерация**
 - Частые изменения схемы
 - Не желательно управление версиями
 
@@ -1438,3 +1438,12 @@ Cache-Control: max-age=3600
 - Версионирование REST явное, GraphQL эволюционирует gracefully
 - Выбирайте на основе сценария использования
 - Оба могут сосуществовать в одном приложении
+
+---
+
+## Related Questions
+
+### Advanced (Harder)
+- [[q-http-protocols-comparison--android--medium]] - Networking
+- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking

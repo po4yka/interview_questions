@@ -490,9 +490,9 @@ class AppInitializer @Inject constructor(
                 try {
                     println("Initializing feature module: ${module.id}")
                     module.initialize(context)
-                    println("✓ ${module.id} initialized successfully")
+                    println(" ${module.id} initialized successfully")
                 } catch (e: Exception) {
-                    println("✗ Failed to initialize ${module.id}: ${e.message}")
+                    println(" Failed to initialize ${module.id}: ${e.message}")
                 }
             }
     }
@@ -830,23 +830,23 @@ class LoginActivity : AppCompatActivity() {
 
 1. **Use @JvmSuppressWildcards for Kotlin**
    ```kotlin
-   // ✅ GOOD - Suppresses wildcards for Kotlin
+   //  GOOD - Suppresses wildcards for Kotlin
    @Inject
    constructor(private val plugins: Set<@JvmSuppressWildcards Plugin>)
 
-   // ❌ BAD - May cause issues with Kotlin generics
+   //  BAD - May cause issues with Kotlin generics
    @Inject
    constructor(private val plugins: Set<Plugin>)
    ```
 
 2. **Prefer Abstract Binds over Provides**
    ```kotlin
-   // ✅ GOOD - More efficient
+   //  GOOD - More efficient
    @Binds
    @IntoSet
    abstract fun bindPlugin(plugin: MyPlugin): Plugin
 
-   // ❌ BAD - Less efficient (creates extra method)
+   //  BAD - Less efficient (creates extra method)
    @Provides
    @IntoSet
    fun providePlugin(plugin: MyPlugin): Plugin = plugin
@@ -854,7 +854,7 @@ class LoginActivity : AppCompatActivity() {
 
 3. **Use @Multibinds for Optional Collections**
    ```kotlin
-   // ✅ GOOD - Can inject even if empty
+   //  GOOD - Can inject even if empty
    @Module
    @InstallIn(SingletonComponent::class)
    abstract class PluginModule {
@@ -867,7 +867,7 @@ class LoginActivity : AppCompatActivity() {
 
 4. **Order with Priority When Needed**
    ```kotlin
-   // ✅ GOOD - Sort by priority if order matters
+   //  GOOD - Sort by priority if order matters
    @Singleton
    class PluginManager @Inject constructor(
        private val plugins: Set<@JvmSuppressWildcards Plugin>
@@ -881,7 +881,7 @@ class LoginActivity : AppCompatActivity() {
 
 5. **Error Handling in Multibinding Consumers**
    ```kotlin
-   // ✅ GOOD - Handle individual failures gracefully
+   //  GOOD - Handle individual failures gracefully
    fun initializeAll() {
        plugins.forEach { plugin ->
            try {
@@ -892,7 +892,7 @@ class LoginActivity : AppCompatActivity() {
        }
    }
 
-   // ❌ BAD - One failure breaks all
+   //  BAD - One failure breaks all
    fun initializeAll() {
        plugins.forEach { it.initialize() } // Will stop at first failure
    }
@@ -931,12 +931,12 @@ class PluginManager @Inject constructor(
 - `@Multibinds` - Declares empty collection
 
 **Use cases**:
-- ✅ Plugin architectures
-- ✅ Feature module systems
-- ✅ Event subscriber patterns
-- ✅ Interceptor chains
-- ✅ Dynamic navigation
-- ✅ Multi-type RecyclerView adapters
+-  Plugin architectures
+-  Feature module systems
+-  Event subscriber patterns
+-  Interceptor chains
+-  Dynamic navigation
+-  Multi-type RecyclerView adapters
 
 **Benefits**:
 - Open/Closed Principle (open for extension, closed for modification)
@@ -1358,12 +1358,12 @@ fun BottomNavigation(
 - `@Multibinds` — объявляет пустую коллекцию
 
 **Применения**:
-- ✅ Плагинные архитектуры
-- ✅ Системы feature-модулей
-- ✅ Паттерны подписчиков событий
-- ✅ Цепочки interceptor'ов
-- ✅ Динамическая навигация
-- ✅ Многотипные адаптеры RecyclerView
+-  Плагинные архитектуры
+-  Системы feature-модулей
+-  Паттерны подписчиков событий
+-  Цепочки interceptor'ов
+-  Динамическая навигация
+-  Многотипные адаптеры RecyclerView
 
 **Преимущества**:
 - Принцип Open/Closed (открыт для расширения, закрыт для изменения)

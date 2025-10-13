@@ -1,4 +1,6 @@
 ---
+topic: architecture-patterns
+subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 tags:
   - code-reuse
   - composition
@@ -9,6 +11,10 @@ tags:
   - relationships
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-architecture-patterns
+related_questions: []
 ---
 
 # Что известно о композиции классов?
@@ -530,3 +536,16 @@ class UserActivity : AppCompatActivity() {
 
 5. **Гибкость в дизайне**: Использование композиции предоставляет большую гибкость в проектировании программного обеспечения, так как изменения в одном классе меньше влияют на классы, которые используют его объекты.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-java-all-classes-inherit-from-object--programming-languages--easy]] - Inheritance
+
+### Related (Medium)
+- [[q-inheritance-vs-composition--oop--medium]] - Inheritance
+- [[q-inheritance-composition-aggregation--oop--medium]] - Inheritance
+- [[q-when-inheritance-useful--oop--medium]] - Inheritance
+- [[q-sealed-class-sealed-interface--kotlin--medium]] - Classes

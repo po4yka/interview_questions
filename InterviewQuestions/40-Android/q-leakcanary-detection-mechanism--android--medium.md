@@ -10,6 +10,10 @@ tags:
   - weakreference
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Как LeakCanary понимает что произошла утечка памяти?
@@ -115,16 +119,16 @@ fun checkForLeaks() {
          ↓
 5. Check if WeakReference.get() == null
          ↓
-    ┌─────┴─────┐
-    │           │
+    
+               
    YES         NO
-    │           │
-    │           ↓
-    │      Leak detected!
-    │           ↓
-    │      Create heap dump
-    │           ↓
-    │      Analyze with Shark
+               
+               ↓
+          Leak detected!
+               ↓
+          Create heap dump
+               ↓
+          Analyze with Shark
     ↓
 No leak, continue monitoring
 ```
@@ -223,3 +227,18 @@ LeakCanary понимает, что произошла утечка памяти
 
 Если слабая ссылка не равна null после GC, это указывает на утечку памяти.
 
+
+---
+
+## Related Questions
+
+### Computer Science Fundamentals
+- [[q-primitive-vs-reference-types--programming-languages--easy]] - Memory Management
+- [[q-reference-types-criteria--programming-languages--medium]] - Memory Management
+- [[q-kotlin-reference-equality-operator--programming-languages--easy]] - Memory Management
+- [[q-reference-types-protect-from-deletion--programming-languages--easy]] - Memory Management
+- [[q-find-object-without-references--programming-languages--medium]] - Memory Management
+
+### Kotlin Language Features
+- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Memory Management
+- [[q-kotlin-native--kotlin--hard]] - Memory Management

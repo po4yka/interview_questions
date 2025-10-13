@@ -26,7 +26,7 @@ status: draft
 
 **Without DiffUtil:**
 ```kotlin
-// ❌ BAD - Inefficient
+//  BAD - Inefficient
 fun updateData(newList: List<Item>) {
     items = newList
     notifyDataSetChanged() // Refreshes EVERYTHING, loses scroll position, animations
@@ -35,7 +35,7 @@ fun updateData(newList: List<Item>) {
 
 **With DiffUtil:**
 ```kotlin
-// ✅ GOOD - Efficient, animated updates
+//  GOOD - Efficient, animated updates
 fun updateData(newList: List<Item>) {
     val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(items, newList))
     items = newList
@@ -102,19 +102,19 @@ class ItemDiffCallback(
     override fun getOldListSize(): Int = oldList.size
     override fun getNewListSize(): Int = newList.size
 
-    // ✅ Are items the same entity? (same ID)
+    //  Are items the same entity? (same ID)
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldList[oldItemPosition].id == newList[newItemPosition].id
     }
 
-    // ✅ Are item contents the same? (all properties equal)
+    //  Are item contents the same? (all properties equal)
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
         return oldItem == newItem
     }
 
-    // ✅ Optional: What specifically changed? (for partial updates)
+    //  Optional: What specifically changed? (for partial updates)
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
@@ -302,7 +302,7 @@ data class Item(
     val imageUrl: String,
     val metadata: Map<String, Any> // Expensive to compare
 ) {
-    // ✅ Optimize equals to skip expensive comparisons when possible
+    //  Optimize equals to skip expensive comparisons when possible
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Item) return false
@@ -335,12 +335,12 @@ data class Item(
 ```kotlin
 class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
     override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-        // ✅ Compare by ID only (fast)
+        //  Compare by ID only (fast)
         return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
-        // ✅ Use data class equals (efficient)
+        //  Use data class equals (efficient)
         return oldItem == newItem
     }
 }
@@ -584,9 +584,9 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 
 | Method | Time | Animations | Scroll Position |
 |--------|------|------------|-----------------|
-| `notifyDataSetChanged()` | ~50ms | ❌ No | ❌ Lost |
-| `DiffUtil` (sync) | ~15ms | ✅ Yes | ✅ Kept |
-| `ListAdapter` (async) | ~1ms (UI) | ✅ Yes | ✅ Kept |
+| `notifyDataSetChanged()` | ~50ms |  No |  Lost |
+| `DiffUtil` (sync) | ~15ms |  Yes |  Kept |
+| `ListAdapter` (async) | ~1ms (UI) |  Yes |  Kept |
 
 **DiffUtil is 3x faster and provides better UX!**
 
@@ -596,13 +596,13 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 
 **1. Use ListAdapter when possible**
 ```kotlin
-// ✅ Simplest and most efficient
+//  Simplest and most efficient
 class MyAdapter : ListAdapter<Item, ViewHolder>(DiffCallback())
 ```
 
 **2. Implement efficient equals()**
 ```kotlin
-// ✅ Check cheap properties first
+//  Check cheap properties first
 override fun areContentsTheSame(old: Item, new: Item): Boolean {
     if (old.id != new.id) return false // Fast check first
     return old == new // Full comparison
@@ -611,7 +611,7 @@ override fun areContentsTheSame(old: Item, new: Item): Boolean {
 
 **3. Use payloads for partial updates**
 ```kotlin
-// ✅ Only update changed views
+//  Only update changed views
 override fun getChangePayload(old: Item, new: Item): Any? {
     // Return what changed
 }
@@ -675,7 +675,7 @@ override fun getItemId(position: Int): Long {
 
 **Без DiffUtil:**
 ```kotlin
-// ❌ ПЛОХО - Неэффективно
+//  ПЛОХО - Неэффективно
 fun updateData(newList: List<Item>) {
     items = newList
     notifyDataSetChanged() // Обновляет ВСЁ, теряет позицию прокрутки
@@ -684,7 +684,7 @@ fun updateData(newList: List<Item>) {
 
 **С DiffUtil:**
 ```kotlin
-// ✅ ХОРОШО - Эффективно, анимированные обновления
+//  ХОРОШО - Эффективно, анимированные обновления
 fun updateData(newList: List<Item>) {
     val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(items, newList))
     items = newList
@@ -732,7 +732,7 @@ adapter.submitList(newItems) // DiffUtil вычисляется автомати
 
 **1. Реализуйте эффективный equals()**
 ```kotlin
-// ✅ Проверяйте дешёвые свойства первыми
+//  Проверяйте дешёвые свойства первыми
 override fun areContentsTheSame(old: Item, new: Item): Boolean {
     if (old.id != new.id) return false // Быстрая проверка
     return old == new
@@ -756,3 +756,33 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 - Очень большие списки (> 10,000 элементов) - используйте Paging 3
 - Частые быстрые обновления - используйте debounce
 - Простые списки с полным обновлением - `notifyDataSetChanged()` подойдёт
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
+- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+
+### Related (Medium)
+- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
+- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui

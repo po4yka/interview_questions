@@ -58,19 +58,19 @@ tags: [android, performance, macrobenchmark, startup, optimization, profiling, p
 
 ```
 MyApp/
-├── app/                          # Main app module
-├── macrobenchmark/               # New benchmark module
-│   ├── build.gradle.kts
-│   └── src/
-│       └── main/
-│           └── AndroidManifest.xml
-│       └── androidTest/
-│           └── java/
-│               └── com/example/benchmark/
-│                   ├── StartupBenchmark.kt
-│                   ├── ScrollBenchmark.kt
-│                   └── BaselineProfileGenerator.kt
-└── settings.gradle.kts
+ app/                          # Main app module
+ macrobenchmark/               # New benchmark module
+    build.gradle.kts
+    src/
+        main/
+            AndroidManifest.xml
+        androidTest/
+            java/
+                com/example/benchmark/
+                    StartupBenchmark.kt
+                    ScrollBenchmark.kt
+                    BaselineProfileGenerator.kt
+ settings.gradle.kts
 ```
 
 #### 2. Add Macrobenchmark Module
@@ -553,11 +553,11 @@ fun MainScreen() {
 After running benchmarks, traces are saved:
 ```
 macrobenchmark/build/outputs/connected_android_test_additional_output/
-└── <device-model>/
-    └── StartupBenchmark_startupColdCompilationNone/
-        ├── StartupBenchmark_startupColdCompilationNone-iteration001-perfetto-trace.perfetto-trace
-        ├── StartupBenchmark_startupColdCompilationNone-iteration002-perfetto-trace.perfetto-trace
-        └── ...
+ <device-model>/
+     StartupBenchmark_startupColdCompilationNone/
+         StartupBenchmark_startupColdCompilationNone-iteration001-perfetto-trace.perfetto-trace
+         StartupBenchmark_startupColdCompilationNone-iteration002-perfetto-trace.perfetto-trace
+         ...
 ```
 
 #### 2. Opening Traces in Android Studio
@@ -976,7 +976,7 @@ def parse_benchmark_results(results_dir):
 
 def format_comment(results):
     """Format results as GitHub comment."""
-    comment = "## 📊 Benchmark Results\n\n"
+    comment = "##  Benchmark Results\n\n"
     comment += "| Test | Startup Time (ms) | Status |\n"
     comment += "|------|------------------|--------|\n"
 
@@ -990,21 +990,21 @@ def format_comment(results):
         startup_time = metrics["startup_time_ms"]
 
         # Determine status
-        status = "✅"
+        status = ""
         for startup_type, threshold in thresholds.items():
             if startup_type.lower() in test_name.lower():
                 if startup_time > threshold:
-                    status = "⚠️"
+                    status = ""
                 if startup_time > threshold * 1.5:
-                    status = "❌"
+                    status = ""
                 break
 
         comment += f"| {test_name} | {startup_time:.1f} | {status} |\n"
 
     comment += "\n### Thresholds\n"
-    comment += "- Cold Startup: < 600ms ✅, < 900ms ⚠️\n"
-    comment += "- Warm Startup: < 350ms ✅, < 525ms ⚠️\n"
-    comment += "- Hot Startup: < 150ms ✅, < 225ms ⚠️\n"
+    comment += "- Cold Startup: < 600ms , < 900ms \n"
+    comment += "- Warm Startup: < 350ms , < 525ms \n"
+    comment += "- Hot Startup: < 150ms , < 225ms \n"
 
     return comment
 
@@ -1077,19 +1077,19 @@ if __name__ == "__main__":
 
 ```
 MyApp/
-├── app/                          # Основной модуль приложения
-├── macrobenchmark/               # Новый модуль бенчмарков
-│   ├── build.gradle.kts
-│   └── src/
-│       └── main/
-│           └── AndroidManifest.xml
-│       └── androidTest/
-│           └── java/
-│               └── com/example/benchmark/
-│                   ├── StartupBenchmark.kt
-│                   ├── ScrollBenchmark.kt
-│                   └── BaselineProfileGenerator.kt
-└── settings.gradle.kts
+ app/                          # Основной модуль приложения
+ macrobenchmark/               # Новый модуль бенчмарков
+    build.gradle.kts
+    src/
+        main/
+            AndroidManifest.xml
+        androidTest/
+            java/
+                com/example/benchmark/
+                    StartupBenchmark.kt
+                    ScrollBenchmark.kt
+                    BaselineProfileGenerator.kt
+ settings.gradle.kts
 ```
 
 [Previous sections of Russian translation with all code examples remain the same...]

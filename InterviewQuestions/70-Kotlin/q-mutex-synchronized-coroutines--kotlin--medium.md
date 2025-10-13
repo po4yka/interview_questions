@@ -64,7 +64,7 @@ suspend fun incrementCounter() {
 | **Blocking** | Suspends coroutine (non-blocking) | Blocks thread |
 | **Usage** | `suspend` functions only | Any function |
 | **Thread efficiency** | High (doesn't block threads) | Low (blocks threads) |
-| **Reentrant** | ❌ NO (will deadlock) | ✅ YES |
+| **Reentrant** |  NO (will deadlock) |  YES |
 | **Fairness** | Optional (default: unfair) | JVM-dependent |
 | **Cancellation** | Supports coroutine cancellation | No cancellation support |
 | **Try lock** | `tryLock()` available | `synchronized` doesn't support |
@@ -173,14 +173,14 @@ For simple operations like counter increment, use **atomic types** instead of Mu
 ```kotlin
 import java.util.concurrent.atomic.AtomicInteger
 
-// ✅ GOOD: Use atomic for simple counter
+//  GOOD: Use atomic for simple counter
 val atomicCounter = AtomicInteger(0)
 
 suspend fun increment() {
     atomicCounter.incrementAndGet()
 }
 
-// ❌ BAD: Mutex overkill for simple operations
+//  BAD: Mutex overkill for simple operations
 val mutex = Mutex()
 var counter = 0
 
@@ -668,14 +668,14 @@ class BankAccountTest {
 
 #### Best Practices
 
-1. ✅ Use `withLock` instead of manual `lock()`/`unlock()`
-2. ✅ Keep critical sections small and fast
-3. ✅ Perform expensive operations outside the lock
-4. ✅ Use atomic types for simple operations
-5. ✅ Document lock ordering requirements
-6. ✅ Consider using `Channel` or `Actor` for complex state management
-7. ✅ Test concurrent access thoroughly
-8. ✅ Use Mutex fairness only when needed (usually unfair is fine)
+1.  Use `withLock` instead of manual `lock()`/`unlock()`
+2.  Keep critical sections small and fast
+3.  Perform expensive operations outside the lock
+4.  Use atomic types for simple operations
+5.  Document lock ordering requirements
+6.  Consider using `Channel` or `Actor` for complex state management
+7.  Test concurrent access thoroughly
+8.  Use Mutex fairness only when needed (usually unfair is fine)
 
 ### When to Use What?
 
@@ -748,7 +748,7 @@ suspend fun incrementCounter() {
 | **Блокировка** | Приостанавливает корутину (неблокирующая) | Блокирует поток |
 | **Использование** | Только `suspend` функции | Любая функция |
 | **Эффективность потоков** | Высокая (не блокирует потоки) | Низкая (блокирует потоки) |
-| **Реентерабельность** | ❌ НЕТ (будет deadlock) | ✅ ДА |
+| **Реентерабельность** |  НЕТ (будет deadlock) |  ДА |
 | **Справедливость** | Опционально (по умолчанию: несправедливый) | Зависит от JVM |
 | **Отмена** | Поддерживает отмену корутины | Нет поддержки отмены |
 | **Try lock** | Доступен `tryLock()` | `synchronized` не поддерживает |
@@ -857,14 +857,14 @@ private fun innerWithoutLock() {
 ```kotlin
 import java.util.concurrent.atomic.AtomicInteger
 
-// ✅ ХОРОШО: Используйте atomic для простого счетчика
+//  ХОРОШО: Используйте atomic для простого счетчика
 val atomicCounter = AtomicInteger(0)
 
 suspend fun increment() {
     atomicCounter.incrementAndGet()
 }
 
-// ❌ ПЛОХО: Mutex излишен для простых операций
+//  ПЛОХО: Mutex излишен для простых операций
 val mutex = Mutex()
 var counter = 0
 

@@ -27,11 +27,11 @@ This is needed so you can store objects in files, databases, or transfer them be
 
 **Why Serialization:**
 
-- 💾 **Save state** to files or database
-- 🌐 **Network transfer** between client and server
-- 📦 **Cache** objects for faster access
-- 🔄 **Deep copy** of objects
-- ⏸️ **Pause/Resume** application state
+-  **Save state** to files or database
+-  **Network transfer** between client and server
+-  **Cache** objects for faster access
+-  **Deep copy** of objects
+- ⏸ **Pause/Resume** application state
 
 **Common Formats:**
 

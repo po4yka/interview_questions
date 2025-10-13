@@ -1,4 +1,6 @@
 ---
+topic: architecture-patterns
+subtopics: ["design-principles", "best-practices", "architecture"]
 tags:
   - best-practices
   - configuration
@@ -9,6 +11,10 @@ tags:
   - software-design
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-architecture-patterns
+related_questions: []
 ---
 
 # Что такое софткод?
@@ -600,3 +606,17 @@ class CheckoutFragment : Fragment() {
 - Основная бизнес-логика
 - Внутренние идентификаторы
 
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-solid-principles--software-design--medium]] - Design Principles
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-usecase-pattern-android--android--medium]] - Architecture
+
+### Advanced (Harder)
+- [[q-modularization-patterns--android--hard]] - Architecture
+- [[q-design-instagram-stories--android--hard]] - Media
+- [[q-design-uber-app--android--hard]] - Location

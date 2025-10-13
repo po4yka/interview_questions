@@ -362,18 +362,18 @@ val fragment = supportFragmentManager
 
 ```
 Need to add fragment?
-│
-├─ Need immediate availability?
-│  ├─ Yes → Use commitNow()
-│  └─ No → Continue
-│
-├─ Need back stack?
-│  ├─ Yes → Must use commit() (async)
-│  └─ No → Continue
-│
-├─ Activity state might be saved?
-│  ├─ Yes → Use commitAllowingStateLoss()
-│  └─ No → Use commit()
+
+ Need immediate availability?
+   Yes → Use commitNow()
+   No → Continue
+
+ Need back stack?
+   Yes → Must use commit() (async)
+   No → Continue
+
+ Activity state might be saved?
+   Yes → Use commitAllowingStateLoss()
+   No → Use commit()
 ```
 
 ---
@@ -383,3 +383,21 @@ Need to add fragment?
 Как добавить фрагмент синхронно / асинхронно
 
 Синхронно: Асинхронно (с отложенным исполнением): commitNow() — выполняется немедленно в текущем потоке. Используется редко (например, в setup-методах).
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment
+- [[q-fragment-basics--android--easy]] - Fragment
+
+### Related (Medium)
+- [[q-save-data-outside-fragment--android--medium]] - Fragment
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - Fragment
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment
+- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] - Fragment
+
+### Advanced (Harder)
+- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - Fragment

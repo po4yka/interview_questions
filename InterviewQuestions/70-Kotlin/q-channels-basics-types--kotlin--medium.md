@@ -607,7 +607,7 @@ class ChannelPerformance {
 ```kotlin
 class ChannelPatterns {
 
-    // ✅ GOOD: Close channel after sending
+    //  GOOD: Close channel after sending
     suspend fun goodProducerPattern() {
         val channel = Channel<Int>()
 
@@ -626,7 +626,7 @@ class ChannelPatterns {
         }
     }
 
-    // ❌ BAD: Forgot to close channel
+    //  BAD: Forgot to close channel
     suspend fun badProducerPattern() {
         val channel = Channel<Int>()
 
@@ -642,7 +642,7 @@ class ChannelPatterns {
         }
     }
 
-    // ✅ GOOD: Choose appropriate capacity
+    //  GOOD: Choose appropriate capacity
     suspend fun goodCapacityChoice() {
         // UI updates: conflated (only latest matters)
         val uiUpdates = Channel<State>(Channel.CONFLATED)
@@ -654,7 +654,7 @@ class ChannelPatterns {
         val logs = Channel<LogEntry>(Channel.UNLIMITED)
     }
 
-    // ❌ BAD: Wrong capacity choice
+    //  BAD: Wrong capacity choice
     suspend fun badCapacityChoice() {
         // UI updates with unlimited: memory leak!
         val uiUpdates = Channel<State>(Channel.UNLIMITED)
@@ -665,7 +665,7 @@ class ChannelPatterns {
         // Lost requests if new ones arrive before processing
     }
 
-    // ✅ GOOD: Proper exception handling
+    //  GOOD: Proper exception handling
     suspend fun goodExceptionHandling() {
         val channel = Channel<Int>()
 

@@ -10,6 +10,10 @@ tags:
   - ui
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # What to put in state for initial list?
@@ -92,3 +96,22 @@ class ListViewModel : ViewModel() {
 ## Ответ (RU)
 Для отображения первоначального списка в state можно положить пустой массив, если данные загружаются асинхронно, или заранее подготовленный статический список, если данные известны на момент загрузки приложения.
 
+
+---
+
+## Related Questions
+
+### Computer Science Fundamentals
+- [[q-list-vs-sequence--programming-languages--medium]] - Data Structures
+
+### Kotlin Language Features
+- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
+- [[q-array-vs-list-kotlin--kotlin--easy]] - Data Structures
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+- [[q-list-vs-sequence--kotlin--medium]] - Data Structures
+
+### Related Algorithms
+- [[q-sorting-algorithms-comparison--algorithms--medium]] - Data Structures
+
+### System Design Concepts
+- [[q-message-queues-event-driven--system-design--medium]] - Data Structures

@@ -473,3 +473,21 @@ class MarkdownRepository(
 ## Ответ (RU)
 Сохранение структуры Markdown зависит от целей приложения. Варианты: хранить как обычный текст в базе или файле, парсить Markdown в JSON и сохранять структуру с помощью Room + TypeConverter или конвертировать Markdown в HTML и хранить. Примеры кода на Kotlin/Android с использованием SQLite, Room и файлового хранения.
 
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
+- [[q-sharedpreferences-definition--android--easy]] - Storage
+
+### Related (Medium)
+- [[q-database-optimization-android--android--medium]] - Storage
+- [[q-room-database-migrations--room--medium]] - Storage
+- [[q-database-encryption-android--android--medium]] - Storage
+- [[q-room-code-generation-timing--android--medium]] - Storage
+- [[q-room-transactions-dao--room--medium]] - Storage
+
+### Advanced (Harder)
+- [[q-room-fts-full-text-search--room--hard]] - Storage

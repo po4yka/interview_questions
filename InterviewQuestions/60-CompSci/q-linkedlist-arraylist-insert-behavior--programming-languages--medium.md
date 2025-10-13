@@ -1,4 +1,5 @@
 ---
+topic: programming-languages
 tags:
   - collections
   - data structures
@@ -6,6 +7,10 @@ tags:
   - programming-languages
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-programming-languages
+related_questions: []
 ---
 
 # Как будут вести себя linked list и array list, если вставить в них элемент?
@@ -28,3 +33,18 @@ LinkedList and ArrayList are two different implementations of the List interface
 
 LinkedList и ArrayList представляют собой две разные реализации интерфейса List, и каждая из них имеет свои особенности поведения при вставке элементов. ArrayList основан на динамическом массиве и добавление элемента в конец списка выполняется за время O(1), но может потребовать расширения массива, что занимает O(n). Добавление элемента в середину списка имеет временную сложность O(n - index). LinkedList реализует структуру данных двунаправленного связного списка и добавление элемента в конец или начало списка выполняется за время O(1). Добавление элемента в середину списка имеет временную сложность O(n) из-за необходимости найти узел.
 
+
+---
+
+## Related Questions
+
+### Android Implementation
+- [[q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy]] - Data Structures
+- [[q-kak-izmenit-kolichestvo-kolonok-v-recyclerview-v-zavisimosti-ot-orientatsii--programming-languages--easy]] - Data Structures
+
+### Kotlin Language Features
+- [[q-arraylist-linkedlist-vector-difference--programming-languages--medium]] - Data Structures
+- [[q-collection-implementations--programming-languages--easy]] - Data Structures
+- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
+- [[q-equals-hashcode-contracts--programming-languages--hard]] - Data Structures
+- [[q-kotlin-immutable-collections--programming-languages--easy]] - Data Structures

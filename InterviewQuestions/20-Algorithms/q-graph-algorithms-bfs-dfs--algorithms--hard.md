@@ -120,7 +120,7 @@ Queue: [4]       Done!
 - **Time:** O(V + E) where V = vertices, E = edges
 - **Space:** O(V) for queue and visited array
 
-**✅ Use BFS for:**
+** Use BFS for:**
 - **Shortest path** in unweighted graph
 - **Level-order** traversal
 - **Connected components**
@@ -182,7 +182,7 @@ fun dfsIterative(graph: Graph, start: Int) {
 - **Time:** O(V + E)
 - **Space:** O(V) for recursion stack
 
-**✅ Use DFS for:**
+** Use DFS for:**
 - **Topological sort**
 - **Cycle detection**
 - **Path finding** (not necessarily shortest)
@@ -530,9 +530,9 @@ println(distances.contentToString())  // [0, 3, 1, 4, ∞]
 |---------|-----|-----|
 | **Data Structure** | Queue | Stack/Recursion |
 | **Order** | Level by level | Deep first |
-| **Shortest Path** | ✅ Yes (unweighted) | ❌ No |
+| **Shortest Path** |  Yes (unweighted) |  No |
 | **Space** | O(w) w=width | O(h) h=height |
-| **Complete** | ✅ Yes | ⚠️ May get stuck |
+| **Complete** |  Yes |  May get stuck |
 | **Use Case** | Shortest path, levels | Topological, cycles |
 
 ---
@@ -627,3 +627,20 @@ class SocialNetwork {
 8. How do you find articulation points in a graph?
 9. What is the traveling salesman problem?
 10. How do you implement union-find (disjoint set)?
+
+---
+
+## Related Questions
+
+### Android Implementation
+- [[q-compose-canvas-graphics--jetpack-compose--hard]] - Data Structures
+- [[q-cache-implementation-strategies--android--medium]] - Data Structures
+- [[q-recomposition-choreographer--android--hard]] - Data Structures
+- [[q-android-security-practices-checklist--android--medium]] - Data Structures
+- [[q-rxjava-pagination-recyclerview--android--medium]] - Data Structures
+
+### Kotlin Language Features
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+
+### System Design Concepts
+- [[q-message-queues-event-driven--system-design--medium]] - Data Structures

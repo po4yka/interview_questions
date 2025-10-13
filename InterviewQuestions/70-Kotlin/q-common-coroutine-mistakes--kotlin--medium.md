@@ -45,7 +45,7 @@ Even experienced developers make common mistakes when working with Kotlin corout
 **Problem:** `GlobalScope` coroutines are not tied to any lifecycle and can leak.
 
 ```kotlin
-// ❌ WRONG: GlobalScope coroutine continues after Activity destroyed
+//  WRONG: GlobalScope coroutine continues after Activity destroyed
 class MyActivity : AppCompatActivity() {
     fun loadData() {
         GlobalScope.launch {
@@ -62,10 +62,10 @@ class MyActivity : AppCompatActivity() {
 - Can crash when accessing destroyed views
 - No structured concurrency
 
-**✅ FIX: Use proper scope**
+** FIX: Use proper scope**
 
 ```kotlin
-// ✅ CORRECT: Use lifecycleScope
+//  CORRECT: Use lifecycleScope
 class MyActivity : AppCompatActivity() {
     fun loadData() {
         lifecycleScope.launch {
@@ -75,7 +75,7 @@ class MyActivity : AppCompatActivity() {
     }
 }
 
-// ✅ CORRECT: Use viewModelScope
+//  CORRECT: Use viewModelScope
 class MyViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
@@ -85,7 +85,7 @@ class MyViewModel : ViewModel() {
     }
 }
 
-// ✅ CORRECT: Custom scope with lifecycle
+//  CORRECT: Custom scope with lifecycle
 class MyRepository {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -113,7 +113,7 @@ grep -r "GlobalScope" --include="*.kt"
 **Problem:** Ignoring cancellation can waste resources and cause bugs.
 
 ```kotlin
-// ❌ WRONG: Ignores cancellation
+//  WRONG: Ignores cancellation
 suspend fun processData() {
     while (true) { // Never checks cancellation!
         val data = fetchNextBatch()
@@ -127,10 +127,10 @@ suspend fun processData() {
 - Wastes CPU/memory/network
 - Parent waits forever for child to finish
 
-**✅ FIX: Check cancellation**
+** FIX: Check cancellation**
 
 ```kotlin
-// ✅ CORRECT: Check isActive
+//  CORRECT: Check isActive
 suspend fun processData() = coroutineScope {
     while (isActive) { // Checks cancellation
         val data = fetchNextBatch()
@@ -138,7 +138,7 @@ suspend fun processData() = coroutineScope {
     }
 }
 
-// ✅ CORRECT: Use ensureActive()
+//  CORRECT: Use ensureActive()
 suspend fun processData() = coroutineScope {
     while (true) {
         ensureActive() // Throws CancellationException if cancelled
@@ -147,7 +147,7 @@ suspend fun processData() = coroutineScope {
     }
 }
 
-// ✅ CORRECT: Use cancellable delay
+//  CORRECT: Use cancellable delay
 suspend fun processData() {
     while (true) {
         delay(100) // Automatically checks cancellation
@@ -156,7 +156,7 @@ suspend fun processData() {
     }
 }
 
-// ✅ CORRECT: yield() for CPU-intensive work
+//  CORRECT: yield() for CPU-intensive work
 suspend fun processData() {
     while (true) {
         yield() // Gives other coroutines a chance, checks cancellation
@@ -168,7 +168,7 @@ suspend fun processData() {
 **Example: File processing**
 
 ```kotlin
-// ❌ WRONG
+//  WRONG
 suspend fun processLargeFile(file: File) {
     file.readLines().forEach { line ->
         // No cancellation check - processes entire file even if cancelled
@@ -176,7 +176,7 @@ suspend fun processLargeFile(file: File) {
     }
 }
 
-// ✅ CORRECT
+//  CORRECT
 suspend fun processLargeFile(file: File) {
     file.readLines().forEach { line ->
         ensureActive() // Check cancellation on each line
@@ -190,7 +190,7 @@ suspend fun processLargeFile(file: File) {
 **Problem:** `runBlocking` blocks thread, defeating coroutines' purpose.
 
 ```kotlin
-// ❌ WRONG: Blocks main thread
+//  WRONG: Blocks main thread
 fun loadUser() {
     runBlocking {
         val user = repository.getUser()
@@ -198,7 +198,7 @@ fun loadUser() {
     }
 }
 
-// ❌ WRONG: Blocks in ViewModel
+//  WRONG: Blocks in ViewModel
 class MyViewModel : ViewModel() {
     fun loadData() {
         runBlocking { // Blocks UI thread!
@@ -214,10 +214,10 @@ class MyViewModel : ViewModel() {
 - Wastes thread pool resources
 - Can cause ANRs (Application Not Responding)
 
-**✅ FIX: Use proper coroutine scope**
+** FIX: Use proper coroutine scope**
 
 ```kotlin
-// ✅ CORRECT: Non-blocking
+//  CORRECT: Non-blocking
 class MyViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
@@ -227,7 +227,7 @@ class MyViewModel : ViewModel() {
     }
 }
 
-// ✅ CORRECT: In tests
+//  CORRECT: In tests
 @Test
 fun testLoadData() = runTest { // Use runTest, not runBlocking
     val data = repository.fetchData()
@@ -241,7 +241,7 @@ fun testLoadData() = runTest { // Use runTest, not runBlocking
 - Bridging blocking and suspending code (rare)
 
 ```kotlin
-// ✅ ACCEPTABLE: main() in CLI app
+//  ACCEPTABLE: main() in CLI app
 fun main() = runBlocking {
     val data = fetchData()
     println(data)
@@ -253,13 +253,13 @@ fun main() = runBlocking {
 **Problem:** Calling blocking functions in coroutines wastes dispatcher threads.
 
 ```kotlin
-// ❌ WRONG: Blocking call in coroutine
+//  WRONG: Blocking call in coroutine
 viewModelScope.launch(Dispatchers.Main) {
     val data = repository.getDataBlocking() // Blocks Main thread!
     updateUI(data)
 }
 
-// ❌ WRONG: Thread.sleep in coroutine
+//  WRONG: Thread.sleep in coroutine
 launch {
     Thread.sleep(1000) // Blocks thread!
     println("After sleep")
@@ -272,10 +272,10 @@ launch {
 - Can cause deadlocks
 - Defeats coroutine advantages
 
-**✅ FIX: Use withContext for blocking code**
+** FIX: Use withContext for blocking code**
 
 ```kotlin
-// ✅ CORRECT: Move blocking work to IO dispatcher
+//  CORRECT: Move blocking work to IO dispatcher
 viewModelScope.launch {
     val data = withContext(Dispatchers.IO) {
         repository.getDataBlocking() // Blocking call on IO thread
@@ -283,13 +283,13 @@ viewModelScope.launch {
     updateUI(data) // Back on Main thread
 }
 
-// ✅ CORRECT: Use delay, not Thread.sleep
+//  CORRECT: Use delay, not Thread.sleep
 launch {
     delay(1000) // Non-blocking delay
     println("After delay")
 }
 
-// ✅ CORRECT: Wrap blocking APIs
+//  CORRECT: Wrap blocking APIs
 suspend fun readFile(path: String): String = withContext(Dispatchers.IO) {
     File(path).readText() // Blocking file I/O
 }
@@ -298,7 +298,7 @@ suspend fun readFile(path: String): String = withContext(Dispatchers.IO) {
 **Example: Database query**
 
 ```kotlin
-// ❌ WRONG
+//  WRONG
 class UserRepository {
     suspend fun getUser(id: String): User {
         return database.query("SELECT * FROM users WHERE id = ?", id)
@@ -306,7 +306,7 @@ class UserRepository {
     }
 }
 
-// ✅ CORRECT
+//  CORRECT
 class UserRepository {
     suspend fun getUser(id: String): User = withContext(Dispatchers.IO) {
         database.query("SELECT * FROM users WHERE id = ?", id)
@@ -319,7 +319,7 @@ class UserRepository {
 **Problem:** One child failure cancels all siblings.
 
 ```kotlin
-// ❌ WRONG: One failure cancels all
+//  WRONG: One failure cancels all
 viewModelScope.launch {
     coroutineScope {
         launch { loadUsers() } // If this fails...
@@ -334,10 +334,10 @@ viewModelScope.launch {
 - Parent cancellation cancels all children
 - Independent tasks should fail independently
 
-**✅ FIX: Use supervisorScope**
+** FIX: Use supervisorScope**
 
 ```kotlin
-// ✅ CORRECT: Independent failure handling
+//  CORRECT: Independent failure handling
 viewModelScope.launch {
     supervisorScope {
         launch {
@@ -366,7 +366,7 @@ viewModelScope.launch {
     }
 }
 
-// ✅ CORRECT: Use SupervisorJob for scope
+//  CORRECT: Use SupervisorJob for scope
 class MyRepository {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -383,15 +383,15 @@ class MyRepository {
 ```
 coroutineScope:
 Parent
-├── Child 1 (fails) ──> Cancels Parent ──> Cancels Child 2, 3
-├── Child 2 (cancelled)
-└── Child 3 (cancelled)
+ Child 1 (fails) > Cancels Parent > Cancels Child 2, 3
+ Child 2 (cancelled)
+ Child 3 (cancelled)
 
 supervisorScope:
 Parent
-├── Child 1 (fails) ──> No effect on others
-├── Child 2 (continues)
-└── Child 3 (continues)
+ Child 1 (fails) > No effect on others
+ Child 2 (continues)
+ Child 3 (continues)
 ```
 
 #### Mistake 6: Forgetting to Call await() on async
@@ -399,7 +399,7 @@ Parent
 **Problem:** `async` result never collected, exception silently lost.
 
 ```kotlin
-// ❌ WRONG: Never awaits result
+//  WRONG: Never awaits result
 viewModelScope.launch {
     async {
         repository.fetchData() // Exception silently lost!
@@ -407,7 +407,7 @@ viewModelScope.launch {
     // Result never used!
 }
 
-// ❌ WRONG: Starting async without awaiting
+//  WRONG: Starting async without awaiting
 fun loadData() {
     viewModelScope.launch {
         val deferred1 = async { fetchUsers() }
@@ -425,10 +425,10 @@ fun loadData() {
 - Wasted work
 - Misleading code (looks like it does something)
 
-**✅ FIX: Always await() async results**
+** FIX: Always await() async results**
 
 ```kotlin
-// ✅ CORRECT: await() results
+//  CORRECT: await() results
 viewModelScope.launch {
     try {
         val result = async {
@@ -441,7 +441,7 @@ viewModelScope.launch {
     }
 }
 
-// ✅ CORRECT: Parallel execution with await
+//  CORRECT: Parallel execution with await
 suspend fun loadData() = coroutineScope {
     val users = async { fetchUsers() }
     val posts = async { fetchPosts() }
@@ -452,7 +452,7 @@ suspend fun loadData() = coroutineScope {
     combine(usersResult, postsResult)
 }
 
-// ✅ BETTER: Use launch if you don't need result
+//  BETTER: Use launch if you don't need result
 viewModelScope.launch {
     try {
         repository.fetchData()
@@ -470,7 +470,7 @@ viewModelScope.launch {
 **Problem:** Creating coroutines for every small operation.
 
 ```kotlin
-// ❌ WRONG: Unnecessary coroutine overhead
+//  WRONG: Unnecessary coroutine overhead
 suspend fun processItems(items: List<Item>) {
     items.forEach { item ->
         coroutineScope {
@@ -481,7 +481,7 @@ suspend fun processItems(items: List<Item>) {
     }
 }
 
-// ❌ WRONG: Coroutine for simple operation
+//  WRONG: Coroutine for simple operation
 viewModelScope.launch {
     val result = async { // Unnecessary!
         computeValue(x, y)
@@ -495,24 +495,24 @@ viewModelScope.launch {
 - No concurrency benefit
 - Harder to debug
 
-**✅ FIX: Only create coroutines when needed**
+** FIX: Only create coroutines when needed**
 
 ```kotlin
-// ✅ CORRECT: Sequential processing (no coroutines needed)
+//  CORRECT: Sequential processing (no coroutines needed)
 suspend fun processItems(items: List<Item>) {
     items.forEach { item ->
         processItem(item) // Already suspend, no launch needed
     }
 }
 
-// ✅ CORRECT: Parallel processing (coroutines make sense)
+//  CORRECT: Parallel processing (coroutines make sense)
 suspend fun processItemsParallel(items: List<Item>) = coroutineScope {
     items.map { item ->
         async { processItem(item) } // Parallel processing
     }.awaitAll()
 }
 
-// ✅ CORRECT: Simple computation (no coroutine needed)
+//  CORRECT: Simple computation (no coroutine needed)
 viewModelScope.launch {
     val result = computeValue(x, y) // Direct call
 }
@@ -534,7 +534,7 @@ viewModelScope.launch {
 **Problem:** Manually managing Job lifecycle.
 
 ```kotlin
-// ❌ WRONG: Manual job management
+//  WRONG: Manual job management
 class MyViewModel : ViewModel() {
     private val jobs = mutableListOf<Job>()
 
@@ -558,10 +558,10 @@ class MyViewModel : ViewModel() {
 - No automatic cleanup
 - Defeats structured concurrency
 
-**✅ FIX: Use proper scope**
+** FIX: Use proper scope**
 
 ```kotlin
-// ✅ CORRECT: viewModelScope handles lifecycle
+//  CORRECT: viewModelScope handles lifecycle
 class MyViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
@@ -571,7 +571,7 @@ class MyViewModel : ViewModel() {
     // No manual cleanup needed!
 }
 
-// ✅ CORRECT: Custom scope with cleanup
+//  CORRECT: Custom scope with cleanup
 class MyRepository {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -598,7 +598,7 @@ class MyRepository {
 **Problem:** Coroutine captures reference to Activity/Fragment.
 
 ```kotlin
-// ❌ WRONG: Captures Activity reference
+//  WRONG: Captures Activity reference
 class MyActivity : AppCompatActivity() {
     fun loadData() {
         GlobalScope.launch {
@@ -616,10 +616,10 @@ class MyActivity : AppCompatActivity() {
 - Memory leak (Activity can't be garbage collected)
 - Potential crash if Activity destroyed
 
-**✅ FIX: Use proper scope and weak references**
+** FIX: Use proper scope and weak references**
 
 ```kotlin
-// ✅ CORRECT: Use lifecycleScope
+//  CORRECT: Use lifecycleScope
 class MyActivity : AppCompatActivity() {
     fun loadData() {
         lifecycleScope.launch {
@@ -629,7 +629,7 @@ class MyActivity : AppCompatActivity() {
     }
 }
 
-// ✅ CORRECT: Pass data to ViewModel
+//  CORRECT: Pass data to ViewModel
 class MyActivity : AppCompatActivity() {
     private val viewModel: MyViewModel by viewModels()
 
@@ -644,7 +644,7 @@ class MyActivity : AppCompatActivity() {
     }
 }
 
-// ✅ CORRECT: Use weak reference (rare cases)
+//  CORRECT: Use weak reference (rare cases)
 class MyActivity : AppCompatActivity() {
     fun loadData() {
         val activityRef = WeakReference(this)
@@ -664,7 +664,7 @@ class MyActivity : AppCompatActivity() {
 **Problem:** Not understanding exception handling differences.
 
 ```kotlin
-// ❌ WRONG: try-catch doesn't catch exception in launch
+//  WRONG: try-catch doesn't catch exception in launch
 viewModelScope.launch {
     try {
         launch {
@@ -675,7 +675,7 @@ viewModelScope.launch {
     }
 }
 
-// ❌ WRONG: Not awaiting async
+//  WRONG: Not awaiting async
 viewModelScope.launch {
     try {
         async {
@@ -693,10 +693,10 @@ viewModelScope.launch {
 - Exceptions in `async` stored in `Deferred`, thrown on `await()`
 - Try-catch placement matters
 
-**✅ FIX: Proper exception handling**
+** FIX: Proper exception handling**
 
 ```kotlin
-// ✅ CORRECT: Catch inside launch
+//  CORRECT: Catch inside launch
 viewModelScope.launch {
     launch {
         try {
@@ -707,7 +707,7 @@ viewModelScope.launch {
     }
 }
 
-// ✅ CORRECT: Catch around await()
+//  CORRECT: Catch around await()
 viewModelScope.launch {
     try {
         val result = async {
@@ -718,7 +718,7 @@ viewModelScope.launch {
     }
 }
 
-// ✅ CORRECT: Use CoroutineExceptionHandler
+//  CORRECT: Use CoroutineExceptionHandler
 val handler = CoroutineExceptionHandler { _, exception ->
     handleError(exception)
 }
@@ -729,7 +729,7 @@ viewModelScope.launch(handler) {
     }
 }
 
-// ✅ CORRECT: Use supervisorScope for independent tasks
+//  CORRECT: Use supervisorScope for independent tasks
 viewModelScope.launch {
     supervisorScope {
         launch {
@@ -756,12 +756,12 @@ viewModelScope.launch {
 #### Mistake 11: Using Dispatchers.IO for CPU-Intensive Work
 
 ```kotlin
-// ❌ WRONG: IO dispatcher for CPU work
+//  WRONG: IO dispatcher for CPU work
 viewModelScope.launch(Dispatchers.IO) {
     complexCalculation() // CPU-intensive, not I/O!
 }
 
-// ✅ CORRECT: Use Dispatchers.Default
+//  CORRECT: Use Dispatchers.Default
 viewModelScope.launch(Dispatchers.Default) {
     complexCalculation()
 }
@@ -775,14 +775,14 @@ viewModelScope.launch(Dispatchers.Default) {
 #### Mistake 12: Not Using withContext for Dispatcher Switching
 
 ```kotlin
-// ❌ WRONG: Unnecessary launch
+//  WRONG: Unnecessary launch
 suspend fun fetchData(): Data {
     return GlobalScope.async(Dispatchers.IO) {
         api.fetch()
     }.await()
 }
 
-// ✅ CORRECT: Use withContext
+//  CORRECT: Use withContext
 suspend fun fetchData(): Data {
     return withContext(Dispatchers.IO) {
         api.fetch()

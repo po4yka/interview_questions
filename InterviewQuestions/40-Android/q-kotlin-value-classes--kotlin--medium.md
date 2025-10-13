@@ -55,7 +55,7 @@ value class Amount(val value: Double)
 
 // Usage - type safety without runtime overhead
 fun getUser(userId: UserId): User {
-    // Can't accidentally pass Email here ✅
+    // Can't accidentally pass Email here 
     return userRepository.findById(userId.value)
 }
 
@@ -66,18 +66,18 @@ fun sendEmail(email: Email, subject: String) {
 val userId = UserId("user123")
 val email = Email("user@example.com")
 
-// Compile error ✅
+// Compile error 
 // getUser(email)  // Type mismatch
 ```
 
 **Key features:**
 ```
-✅ Zero runtime overhead (inlined at compile time)
-✅ Type safety at compile time
-✅ Must have single property in primary constructor
-✅ Property must be immutable (val, not var)
-✅ Replaces inline classes (deprecated in Kotlin 1.5)
-✅ @JvmInline annotation required
+ Zero runtime overhead (inlined at compile time)
+ Type safety at compile time
+ Must have single property in primary constructor
+ Property must be immutable (val, not var)
+ Replaces inline classes (deprecated in Kotlin 1.5)
+ @JvmInline annotation required
 ```
 
 ---
@@ -95,10 +95,10 @@ value class UserIdValue(val value: String)
 // Performance comparison
 fun testPerformance() {
     // Data class: allocates object on heap
-    val dataId = UserIdData("123")  // Heap allocation ❌
+    val dataId = UserIdData("123")  // Heap allocation 
 
     // Value class: no allocation, inlined to String
-    val valueId = UserIdValue("123")  // No allocation ✅
+    val valueId = UserIdValue("123")  // No allocation 
 
     // At runtime, valueId is just "123"
 }
@@ -120,7 +120,7 @@ fun createOrder(
     quantity: Int,
     price: Double
 ) {
-    // Easy to mix up parameters ❌
+    // Easy to mix up parameters 
     // createOrder("product123", "customer456", 10, 99.99)
 }
 
@@ -151,7 +151,7 @@ fun createOrder(
     quantity: Quantity,
     price: Price
 ) {
-    // Impossible to mix up parameters ✅
+    // Impossible to mix up parameters 
     // Type-safe and self-documenting
 }
 
@@ -352,10 +352,10 @@ fun processPayment(amount: USD) {
 val priceUSD = USD(99.99)
 val priceEUR = EUR(89.99)
 
-processPayment(priceUSD)  // ✅
-// processPayment(priceEUR)  // ❌ Compile error
+processPayment(priceUSD)  // 
+// processPayment(priceEUR)  //  Compile error
 
-val total = priceUSD + USD(10.0)  // ✅ Type-safe
+val total = priceUSD + USD(10.0)  //  Type-safe
 val discounted = priceUSD - USD(5.0)
 ```
 
@@ -423,8 +423,8 @@ fun logAccess(id: Identifier) {
 val userId = UserId("user123")
 val productId = ProductId("product456")
 
-logAccess(userId)     // Boxing occurs here ⚠️
-logAccess(productId)  // Boxing occurs here ⚠️
+logAccess(userId)     // Boxing occurs here 
+logAccess(productId)  // Boxing occurs here 
 
 // When used as interface type, value class is boxed
 ```
@@ -499,10 +499,10 @@ value class UserId(val value: String)
 
 // 1. When used as Any
 val userId = UserId("123")
-val any: Any = userId  // Boxing occurs ⚠️
+val any: Any = userId  // Boxing occurs 
 
 // 2. When used in collections
-val list: List<UserId> = listOf(UserId("1"), UserId("2"))  // Boxing occurs ⚠️
+val list: List<UserId> = listOf(UserId("1"), UserId("2"))  // Boxing occurs 
 
 // 3. When used as interface type
 interface Identifier {
@@ -510,13 +510,13 @@ interface Identifier {
 }
 @JvmInline
 value class UserId2(override val value: String) : Identifier
-val id: Identifier = UserId2("123")  // Boxing occurs ⚠️
+val id: Identifier = UserId2("123")  // Boxing occurs 
 
 // 4. When used as nullable
-val nullableId: UserId? = UserId("123")  // Boxing occurs ⚠️
+val nullableId: UserId? = UserId("123")  // Boxing occurs 
 
 // 5. Varargs
-fun log(vararg ids: UserId) {  // Boxing occurs ⚠️
+fun log(vararg ids: UserId) {  // Boxing occurs 
     ids.forEach { println(it.value) }
 }
 
@@ -552,7 +552,7 @@ val json = Json.encodeToString(
 )
 
 // Output: {"id":"user123","name":"John Doe","email":"john@example.com"}
-// Value classes are serialized as their underlying values ✅
+// Value classes are serialized as their underlying values 
 ```
 
 ---
@@ -560,15 +560,15 @@ val json = Json.encodeToString(
 ### BEST PRACTICES
 
 ```kotlin
-// ✅ Good: Single primitive property
+//  Good: Single primitive property
 @JvmInline
 value class UserId(val value: String)
 
-// ❌ Bad: Multiple properties not allowed
+//  Bad: Multiple properties not allowed
 // @JvmInline
 // value class User(val id: String, val name: String)  // Won't compile
 
-// ✅ Good: Validation in init
+//  Good: Validation in init
 @JvmInline
 value class PositiveInt(val value: Int) {
     init {
@@ -576,7 +576,7 @@ value class PositiveInt(val value: Int) {
     }
 }
 
-// ✅ Good: Extension functions for operations
+//  Good: Extension functions for operations
 @JvmInline
 value class Percentage(val value: Double) {
     init {
@@ -586,7 +586,7 @@ value class Percentage(val value: Double) {
 
 fun Percentage.toDecimal(): Double = value / 100.0
 
-// ✅ Good: Companion object for factory methods
+//  Good: Companion object for factory methods
 @JvmInline
 value class Email(val value: String) {
     companion object {

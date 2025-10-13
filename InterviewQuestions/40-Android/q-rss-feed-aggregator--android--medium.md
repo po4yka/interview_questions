@@ -20,20 +20,20 @@ RSS-агрегатор собирает и отображает ленты из 
 ### Архитектура
 
 ```
-┌─────────────┐
-│   UI Layer  │  ← Compose/XML + ViewModel
-└──────┬──────┘
-       │
-┌──────▼──────────┐
-│ Repository      │  ← Координация данных
-└──────┬──────────┘
-       │
-    ┌──▼───────────────┬──────────────┐
-    │                  │              │
-┌───▼─────┐   ┌───────▼────┐  ┌─────▼──────┐
-│ Network │   │    Room    │  │WorkManager │
-│  (RSS)  │   │  Database  │  │  (Sync)    │
-└─────────┘   └────────────┘  └────────────┘
+
+   UI Layer    ← Compose/XML + ViewModel
+
+       
+
+ Repository        ← Координация данных
+
+       
+    
+                                    
+     
+ Network        Room      WorkManager 
+  (RSS)       Database      (Sync)    
+     
 ```
 
 ### 1. Data Models

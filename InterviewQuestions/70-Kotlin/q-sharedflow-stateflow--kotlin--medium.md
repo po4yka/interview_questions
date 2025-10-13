@@ -329,7 +329,7 @@ val suspend = MutableSharedFlow<Int>(
 
 ### When to Use StateFlow
 
-#### ✅ Use StateFlow for:
+####  Use StateFlow for:
 
 ```kotlin
 // 1. UI State
@@ -368,7 +368,7 @@ class Repository {
 
 ### When to Use SharedFlow
 
-#### ✅ Use SharedFlow for:
+####  Use SharedFlow for:
 
 ```kotlin
 // 1. One-time Events
@@ -427,11 +427,11 @@ class EventBus {
 
 ```kotlin
 // StateFlow: Must have initial value
-val state = MutableStateFlow<String>("initial")  // ✅
-// val state = MutableStateFlow<String>()        // ❌ Error
+val state = MutableStateFlow<String>("initial")  // 
+// val state = MutableStateFlow<String>()        //  Error
 
 // SharedFlow: No initial value required
-val shared = MutableSharedFlow<String>()         // ✅
+val shared = MutableSharedFlow<String>()         // 
 val shared2 = MutableSharedFlow<String?>(replay = 1).apply {
     tryEmit(null)  // Can set initial value if needed
 }
@@ -447,7 +447,7 @@ state.value = 20      // Direct assignment
 
 // SharedFlow: No value property
 val shared = MutableSharedFlow<Int>()
-// println(shared.value)  // ❌ Error: no value property
+// println(shared.value)  //  Error: no value property
 ```
 
 #### Collecting
@@ -574,21 +574,21 @@ val notifications = MutableSharedFlow<String>(
 ```kotlin
 // Don't expose mutable versions
 class BadViewModel : ViewModel() {
-    val state = MutableStateFlow<UiState>(UiState.Initial)  // ❌ Bad
+    val state = MutableStateFlow<UiState>(UiState.Initial)  //  Bad
 }
 
 // Don't use SharedFlow for state
 class BadViewModel : ViewModel() {
-    private val _isLoading = MutableSharedFlow<Boolean>()  // ❌ Use StateFlow
+    private val _isLoading = MutableSharedFlow<Boolean>()  //  Use StateFlow
 }
 
 // Don't use StateFlow for events
 class BadViewModel : ViewModel() {
-    private val _events = MutableStateFlow<Event?>(null)  // ❌ Use SharedFlow
+    private val _events = MutableStateFlow<Event?>(null)  //  Use SharedFlow
 }
 
 // Don't forget initial value for StateFlow
-// val state = MutableStateFlow<String>()  // ❌ Error
+// val state = MutableStateFlow<String>()  //  Error
 ```
 
 ### Performance Considerations
@@ -713,7 +713,7 @@ class UserViewModel : ViewModel() {
 
 ### Когда использовать StateFlow
 
-#### ✅ Использовать StateFlow для:
+####  Использовать StateFlow для:
 
 ```kotlin
 // 1. Состояние UI
@@ -740,7 +740,7 @@ class SessionManager {
 
 ### Когда использовать SharedFlow
 
-#### ✅ Использовать SharedFlow для:
+####  Использовать SharedFlow для:
 
 ```kotlin
 // 1. Одноразовые события
@@ -807,17 +807,17 @@ class GoodViewModel : ViewModel() {
 ```kotlin
 // Не выставлять изменяемые версии
 class BadViewModel : ViewModel() {
-    val state = MutableStateFlow<UiState>(UiState.Initial)  // ❌ Плохо
+    val state = MutableStateFlow<UiState>(UiState.Initial)  //  Плохо
 }
 
 // Не использовать SharedFlow для состояния
 class BadViewModel : ViewModel() {
-    private val _isLoading = MutableSharedFlow<Boolean>()  // ❌ Использовать StateFlow
+    private val _isLoading = MutableSharedFlow<Boolean>()  //  Использовать StateFlow
 }
 
 // Не использовать StateFlow для событий
 class BadViewModel : ViewModel() {
-    private val _events = MutableStateFlow<Event?>(null)  // ❌ Использовать SharedFlow
+    private val _events = MutableStateFlow<Event?>(null)  //  Использовать SharedFlow
 }
 ```
 

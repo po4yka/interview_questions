@@ -1069,3 +1069,14 @@ suspend fun migrateSharedPreferences(oldPrefsName: String) {
 - EncryptedSharedPreferences: токены, настройки
 - SQLCipher: пользовательские данные, сообщения
 - EncryptedFile: документы, изображения
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-android-security-practices-checklist--android--medium]] - Security
+- [[q-encrypted-file-storage--security--medium]] - Security
+- [[q-database-encryption-android--android--medium]] - Security
+- [[q-app-security-best-practices--security--medium]] - Security
+- [[q-android-keystore-system--security--medium]] - Security

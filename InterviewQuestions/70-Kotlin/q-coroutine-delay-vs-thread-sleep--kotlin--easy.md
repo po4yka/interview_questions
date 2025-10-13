@@ -574,7 +574,7 @@ fun commonMistakes() = runBlocking {
 ### Quick Reference
 
 ```kotlin
-// ✅ Use delay() when:
+//  Use delay() when:
 // - Inside coroutines
 // - Need cancellation support
 // - Want to avoid blocking threads
@@ -585,7 +585,7 @@ suspend fun goodExample1() {
     delay(1000)
 }
 
-// ❌ Don't use Thread.sleep when:
+//  Don't use Thread.sleep when:
 // - Inside coroutines
 // - Need cancellation
 // - Care about performance
@@ -596,7 +596,7 @@ suspend fun badExample1() {
     Thread.sleep(1000) // DON'T DO THIS
 }
 
-// ⚠️ Thread.sleep might be OK when:
+//  Thread.sleep might be OK when:
 // - Not in coroutine context
 // - Simple blocking scripts
 // - Legacy code (consider refactoring)

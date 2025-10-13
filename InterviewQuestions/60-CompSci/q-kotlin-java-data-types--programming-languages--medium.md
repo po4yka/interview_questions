@@ -190,10 +190,10 @@ val doubles: DoubleArray = doubleArrayOf(1.0, 2.0)
 **Java:**
 ```
 Object (reference types)
-  ├─ String
-  ├─ Integer, Double, etc. (wrappers)
-  ├─ Arrays
-  └─ Custom classes
+   String
+   Integer, Double, etc. (wrappers)
+   Arrays
+   Custom classes
 
 (primitives are separate, not part of hierarchy)
 ```
@@ -201,14 +201,14 @@ Object (reference types)
 **Kotlin:**
 ```
 Any (all types)
-  ├─ Any? (nullable)
-  ├─ Number
-  │   ├─ Int, Double, Float, Long, Short, Byte
-  │   └─ All are objects
-  ├─ String
-  ├─ Collections
-  └─ Custom classes
-      └─ Nothing (bottom type)
+   Any? (nullable)
+   Number
+      Int, Double, Float, Long, Short, Byte
+      All are objects
+   String
+   Collections
+   Custom classes
+       Nothing (bottom type)
 ```
 
 ### Summary

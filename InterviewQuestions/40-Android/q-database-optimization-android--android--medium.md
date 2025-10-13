@@ -471,3 +471,17 @@ class UserCache {
 - Профилируйте операции
 - Мониторьте размер БД
 - Планируйте периодический VACUUM
+
+---
+
+## Related Questions
+
+### Related (Medium)
+- [[q-dagger-build-time-optimization--android--medium]] - Performance
+- [[q-performance-optimization-android--android--medium]] - Performance
+- [[q-build-optimization-gradle--gradle--medium]] - Performance
+- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] - Performance

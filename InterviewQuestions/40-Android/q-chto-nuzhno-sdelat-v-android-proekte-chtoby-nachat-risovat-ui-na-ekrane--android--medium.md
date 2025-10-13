@@ -422,3 +422,19 @@ override fun onCreate(savedInstanceState: Bundle?) {
 Что нужно сделать в Android-проекте чтобы начать рисовать UI на экране?
 
 Чтобы начать рисовать пользовательский интерфейс (UI) на экране в Android-проекте, необходимо выполнить несколько шагов. Сначала создайте Android-проект в Android Studio с шаблоном «Empty Activity». Затем настройте макет, используя XML-файл для определения структуры интерфейса. Подключите макет к активности с помощью метода setContentView() в Activity классе. Если требуется кастомное рисование, создайте собственный класс, унаследованный от View и переопределите метод onDraw(). Наконец, запустите приложение на эмуляторе или реальном устройстве.
+
+---
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
+
+### Related (Medium)
+- [[q-dagger-build-time-optimization--android--medium]] - Ui
+- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
+- [[q-build-optimization-gradle--gradle--medium]] - Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
+- [[q-testing-compose-ui--android--medium]] - Ui
