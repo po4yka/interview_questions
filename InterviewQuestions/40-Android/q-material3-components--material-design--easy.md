@@ -1,4 +1,6 @@
 ---
+topic: ui-ux-accessibility
+subtopics: [material-design]
 tags:
   - material-design
   - material3
@@ -6,6 +8,10 @@ tags:
   - design-system
 difficulty: easy
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-ui-ux-accessibility
+related_questions: []
 ---
 
 # Material 3 Components

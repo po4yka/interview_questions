@@ -10,6 +10,10 @@ tags:
   - threading
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Что происходит, когда поток разбирает пустую очередь сообщений с помощью Looper.loop()?

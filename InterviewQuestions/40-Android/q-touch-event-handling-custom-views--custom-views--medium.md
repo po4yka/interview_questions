@@ -793,7 +793,7 @@ override fun onDetachedFromWindow() {
 
 ## Ответ (RU)
 
-Понимание **обработки событий касания** необходимо для создания интерактивных пользовательских view.
+Понимание **обработки событий касания** необходимо для создания интерактивных пользовательских представлений (custom views). Система обработки касаний в Android сложна, но мощна, и позволяет реализовать любой жест или паттерн взаимодействия.
 
 ### Поток диспетчеризации событий касания
 
@@ -803,68 +803,695 @@ Activity.dispatchTouchEvent()
 ViewGroup.dispatchTouchEvent()
     ↓
 ViewGroup.onInterceptTouchEvent() → true? → ViewGroup.onTouchEvent()
-    ↓ false
-Child.dispatchTouchEvent()
+    ↓ false                                        ↓
+Child.dispatchTouchEvent()                    потреблено?
+    ↓                                              ↓
+Child.onTouchEvent()                          Вернуть true/false
     ↓
-Child.onTouchEvent()
+потреблено?
+    ↓
+Вернуть true/false
 ```
 
-### Основные методы
+---
 
-**onTouchEvent()** - обработка событий касания
+### 1. Базовая обработка событий касания
+
+**Действия MotionEvent:**
+- `ACTION_DOWN` - Касание началось
+- `ACTION_MOVE` - Касание перемещается
+- `ACTION_UP` - Касание завершилось
+- `ACTION_CANCEL` - Касание отменено (родителем)
+- `ACTION_POINTER_DOWN/UP` - Мультитач
 
 ```kotlin
-override fun onTouchEvent(event: MotionEvent): Boolean {
-    when (event.action) {
-        MotionEvent.ACTION_DOWN -> {
-            // Касание началось
-            return true // Потреблять событие
-        }
-        MotionEvent.ACTION_MOVE -> {
-            // Касание движется
-            return true
-        }
-        MotionEvent.ACTION_UP -> {
-            // Касание завершено
-            performClick()
-            return true
-        }
+class SimpleTouchView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    private var touchX = 0f
+    private var touchY = 0f
+    private val paint = Paint().apply {
+        color = Color.RED
+        style = Paint.Style.FILL
     }
-    return super.onTouchEvent(event)
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                // Касание началось
+                touchX = event.x
+                touchY = event.y
+                Log.d("Touch", "DOWN в ($touchX, $touchY)")
+                invalidate()
+                return true // Потребить событие
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                // Касание переместилось
+                touchX = event.x
+                touchY = event.y
+                Log.d("Touch", "MOVE в ($touchX, $touchY)")
+                invalidate()
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                // Касание завершилось
+                Log.d("Touch", "UP в (${event.x}, ${event.y})")
+                performClick() // Доступность
+                return true
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                // Касание отменено родителем
+                Log.d("Touch", "CANCEL")
+                return true
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+        // Обработка действия клика
+        return true
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        // Рисование круга в месте касания
+        canvas.drawCircle(touchX, touchY, 50f, paint)
+    }
 }
 ```
 
-**GestureDetector** - стандартные жесты
+**Ключевые моменты:**
+- Возвращайте `true`, чтобы потребить событие (и продолжать получать события)
+- Возвращайте `false`, чтобы передать событие родителю
+- Необходимо обработать `ACTION_DOWN`, чтобы получать последующие события
+- Переопределяйте `performClick()` для доступности
+
+---
+
+### 2. Перетаскиваемое View
+
+Реализуем view, которое можно перетаскивать.
 
 ```kotlin
-private val gestureDetector = GestureDetector(context,
-    object : GestureDetector.SimpleOnGestureListener() {
+class DraggableView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    private var offsetX = 0f
+    private var offsetY = 0f
+    private var isDragging = false
+
+    private val paint = Paint().apply {
+        color = Color.BLUE
+        style = Paint.Style.FILL
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                // Начало перетаскивания
+                offsetX = event.x
+                offsetY = event.y
+                isDragging = true
+                parent.requestDisallowInterceptTouchEvent(true) // Запретить родителю перехватывать
+                return true
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                if (isDragging) {
+                    // Вычисление дельты перемещения
+                    val dx = event.x - offsetX
+                    val dy = event.y - offsetY
+
+                    // Перемещение view
+                    translationX += dx
+                    translationY += dy
+
+                    return true
+                }
+            }
+
+            MotionEvent.ACTION_UP,
+            MotionEvent.ACTION_CANCEL -> {
+                isDragging = false
+                parent.requestDisallowInterceptTouchEvent(false)
+                return true
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        canvas.drawCircle(
+            width / 2f,
+            height / 2f,
+            min(width, height) / 2f,
+            paint
+        )
+    }
+}
+```
+
+---
+
+### 3. Пользовательский жест: определение свайпа
+
+Определяем свайпы влево/вправо вручную.
+
+```kotlin
+class SwipeDetectorView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    private var startX = 0f
+    private var startY = 0f
+    private var startTime = 0L
+
+    private val minSwipeDistance = 100 // dp
+    private val maxSwipeTime = 500 // ms
+    private val maxYDelta = 100 // dp (вертикальный допуск)
+
+    var onSwipeLeft: (() -> Unit)? = null
+    var onSwipeRight: (() -> Unit)? = null
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                startX = event.x
+                startY = event.y
+                startTime = System.currentTimeMillis()
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                val endX = event.x
+                val endY = event.y
+                val endTime = System.currentTimeMillis()
+
+                val deltaX = endX - startX
+                val deltaY = endY - startY
+                val duration = endTime - startTime
+
+                // Проверяем, является ли это свайпом
+                if (duration < maxSwipeTime &&
+                    abs(deltaX) > minSwipeDistance.dpToPx() &&
+                    abs(deltaY) < maxYDelta.dpToPx()
+                ) {
+                    if (deltaX > 0) {
+                        onSwipeRight?.invoke()
+                        Log.d("Gesture", "Свайп ВПРАВО")
+                    } else {
+                        onSwipeLeft?.invoke()
+                        Log.d("Gesture", "Свайп ВЛЕВО")
+                    }
+                    return true
+                }
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+
+    private fun Int.dpToPx(): Float =
+        this * context.resources.displayMetrics.density
+}
+```
+
+---
+
+### 4. GestureDetector для стандартных жестов
+
+Используйте **GestureDetector** для стандартных жестов.
+
+```kotlin
+class GestureDemoView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    private val gestureListener = object : GestureDetector.SimpleOnGestureListener() {
+        override fun onDown(e: MotionEvent): Boolean {
+            // Возвращаем true, чтобы указать, что мы хотим обрабатывать жесты
+            return true
+        }
+
         override fun onSingleTapUp(e: MotionEvent): Boolean {
-            // Обработать tap
+            Log.d("Gesture", "Одиночный тап в (${e.x}, ${e.y})")
+            performClick()
             return true
         }
 
         override fun onDoubleTap(e: MotionEvent): Boolean {
-            // Обработать double tap
+            Log.d("Gesture", "Двойной тап")
+            // Обработка двойного тапа
             return true
         }
 
         override fun onLongPress(e: MotionEvent) {
-            // Обработать long press
+            Log.d("Gesture", "Долгое нажатие")
+            performLongClick()
         }
-    })
 
-override fun onTouchEvent(event: MotionEvent): Boolean {
-    return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+        override fun onFling(
+            e1: MotionEvent?,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
+            Log.d("Gesture", "Fling со скоростью ($velocityX, $velocityY)")
+            return true
+        }
+
+        override fun onScroll(
+            e1: MotionEvent?,
+            e2: MotionEvent,
+            distanceX: Float,
+            distanceY: Float
+        ): Boolean {
+            Log.d("Gesture", "Scroll на ($distanceX, $distanceY)")
+            return true
+        }
+    }
+
+    private val gestureDetector = GestureDetector(context, gestureListener)
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        // Делегируем детектору жестов
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+    }
 }
 ```
 
-### Ключевые правила
+---
 
-- Возвращайте `true` из ACTION_DOWN для получения последующих событий
-- Переопределяйте `performClick()` для доступности
-- Обрабатывайте ACTION_CANCEL
-- Используйте `requestDisallowInterceptTouchEvent()` для предотвращения перехвата родителем
+### 5. ScaleGestureDetector для масштабирования (Pinch-to-Zoom)
+
+```kotlin
+class ZoomableView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    private var scaleFactor = 1f
+    private var focusX = 0f
+    private var focusY = 0f
+
+    private val scaleListener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            scaleFactor *= detector.scaleFactor
+
+            // Ограничение диапазона масштабирования
+            scaleFactor = scaleFactor.coerceIn(0.5f, 3f)
+
+            // Получение точки фокуса
+            focusX = detector.focusX
+            focusY = detector.focusY
+
+            invalidate()
+            return true
+        }
+    }
+
+    private val scaleDetector = ScaleGestureDetector(context, scaleListener)
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        scaleDetector.onTouchEvent(event)
+        return true
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        canvas.save()
+
+        // Масштабирование вокруг точки фокуса
+        canvas.scale(scaleFactor, scaleFactor, focusX, focusY)
+
+        // Рисование содержимого
+        paint.color = Color.BLUE
+        canvas.drawRect(100f, 100f, 300f, 300f, paint)
+
+        canvas.restore()
+    }
+}
+```
+
+---
+
+### 6. Перехват касаний в ViewGroup
+
+**onInterceptTouchEvent()** позволяет родителю "украсть" события у дочерних элементов.
+
+```kotlin
+class SwipeToDeleteLayout @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : FrameLayout(context, attrs) {
+
+    private var startX = 0f
+    private var intercepting = false
+
+    override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                startX = event.x
+                intercepting = false
+                return false // Пока не перехватывать
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                val deltaX = event.x - startX
+
+                // Перехватываем, если обнаружен горизонтальный свайп
+                if (!intercepting && abs(deltaX) > 50) {
+                    intercepting = true
+                    return true // Начать перехват
+                }
+            }
+
+            MotionEvent.ACTION_UP,
+            MotionEvent.ACTION_CANCEL -> {
+                intercepting = false
+            }
+        }
+
+        return false
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        // Обработка свайпа для удаления
+        when (event.action) {
+            MotionEvent.ACTION_MOVE -> {
+                translationX = event.x - startX
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                if (abs(translationX) > width / 2) {
+                    // Порог свайпа достигнут - удаляем
+                    animate()
+                        .translationX(width.toFloat())
+                        .alpha(0f)
+                        .setDuration(200)
+                        .withEndAction {
+                            visibility = GONE
+                        }
+                        .start()
+                } else {
+                    // Возвращаемся в исходное положение
+                    animate()
+                        .translationX(0f)
+                        .setDuration(200)
+                        .start()
+                }
+                return true
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+}
+```
+
+---
+
+### 7. Обработка мультитача
+
+Обработка нескольких одновременных касаний.
+
+```kotlin
+class MultiTouchView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    private val activePointers = mutableMapOf<Int, PointF>()
+    private val paint = Paint().apply {
+        style = Paint.Style.FILL
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                // Первое касание
+                val pointerId = event.getPointerId(0)
+                activePointers[pointerId] = PointF(event.x, event.y)
+                invalidate()
+                return true
+            }
+
+            MotionEvent.ACTION_POINTER_DOWN -> {
+                // Дополнительное касание
+                val pointerIndex = event.actionIndex
+                val pointerId = event.getPointerId(pointerIndex)
+                activePointers[pointerId] = PointF(
+                    event.getX(pointerIndex),
+                    event.getY(pointerIndex)
+                )
+                invalidate()
+                return true
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                // Обновление всех активных касаний
+                for (i in 0 until event.pointerCount) {
+                    val pointerId = event.getPointerId(i)
+                    activePointers[pointerId] = PointF(
+                        event.getX(i),
+                        event.getY(i)
+                    )
+                }
+                invalidate()
+                return true
+            }
+
+            MotionEvent.ACTION_POINTER_UP -> {
+                // Одно касание отпущено
+                val pointerIndex = event.actionIndex
+                val pointerId = event.getPointerId(pointerIndex)
+                activePointers.remove(pointerId)
+                invalidate()
+                return true
+            }
+
+            MotionEvent.ACTION_UP,
+            MotionEvent.ACTION_CANCEL -> {
+                // Все касания отпущены
+                activePointers.clear()
+                invalidate()
+                return true
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        // Рисование круга для каждого активного касания
+        val colors = listOf(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA)
+
+        activePointers.entries.forEachIndexed { index, (_, point) ->
+            paint.color = colors[index % colors.size]
+            canvas.drawCircle(point.x, point.y, 50f, paint)
+        }
+    }
+}
+```
+
+---
+
+### 8. Отслеживание скорости (Velocity Tracking)
+
+Отслеживание скорости касания для жестов броска (fling).
+
+```kotlin
+class FlingView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    private val velocityTracker = VelocityTracker.obtain()
+    private var positionX = 0f
+    private var positionY = 0f
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        // Добавление движения в трекер
+        velocityTracker.addMovement(event)
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                return true
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                positionX = event.x
+                positionY = event.y
+                invalidate()
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                // Вычисление скорости
+                velocityTracker.computeCurrentVelocity(1000) // пикселей в секунду
+
+                val velocityX = velocityTracker.xVelocity
+                val velocityY = velocityTracker.yVelocity
+
+                Log.d("Velocity", "X: $velocityX px/s, Y: $velocityY px/s")
+
+                // Запуск анимации броска на основе скорости
+                if (abs(velocityX) > 1000) {
+                    startFlingAnimation(velocityX, velocityY)
+                }
+
+                velocityTracker.clear()
+                return true
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+
+    private fun startFlingAnimation(velocityX: Float, velocityY: Float) {
+        // Анимация с замедлением
+        animate()
+            .translationXBy(velocityX / 2)
+            .translationYBy(velocityY / 2)
+            .setDuration(500)
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        velocityTracker.recycle()
+    }
+}
+```
+
+---
+
+### 9. Обратная связь на касание
+
+Предоставление визуальной обратной связи на касания.
+
+```kotlin
+class TouchFeedbackView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    private var isPressed = false
+    private val normalPaint = Paint().apply {
+        color = Color.BLUE
+        style = Paint.Style.FILL
+    }
+
+    private val pressedPaint = Paint().apply {
+        color = Color.DARK_GRAY
+        style = Paint.Style.FILL
+    }
+
+    init {
+        // Включение звуковых эффектов и тактильной обратной связи
+        isSoundEffectsEnabled = true
+        isHapticFeedbackEnabled = true
+
+        // Добавление эффекта волны (Material Design)
+        foreground = context.getDrawable(R.drawable.ripple)
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                isPressed = true
+                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                invalidate()
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                isPressed = false
+                playSoundEffect(SoundEffectConstants.CLICK)
+                performClick()
+                invalidate()
+                return true
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                isPressed = false
+                invalidate()
+                return true
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+        // Обработка клика
+        return true
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        val paint = if (isPressed) pressedPaint else normalPaint
+
+        canvas.drawRoundRect(
+            0f, 0f, width.toFloat(), height.toFloat(),
+            20f, 20f,
+            paint
+        )
+    }
+}
+```
+
+---
+
+### 10. Лучшие практики
+
+**1. Возвращайте `true` из `ACTION_DOWN`**, чтобы получать последующие события
+**2. Переопределяйте `performClick()`** для доступности
+**3. Запрашивайте у родителя не перехватывать события** с помощью `parent.requestDisallowInterceptTouchEvent(true)`
+**4. Обрабатывайте `ACTION_CANCEL`**, чтобы сбросить состояние
+**5. Освобождайте `VelocityTracker`** с помощью `recycle()`
+
+---
+
+### Резюме
+
+**Поток событий касания:**
+1. `dispatchTouchEvent()` - точка входа
+2. `onInterceptTouchEvent()` - родитель может "украсть" события
+3. `onTouchEvent()` - обработка событий
+
+**Ключевые API:**
+- `GestureDetector` - стандартные жесты
+- `ScaleGestureDetector` - масштабирование
+- `VelocityTracker` - отслеживание скорости
+- `MotionEvent` - сырые данные о касании
+
+**Лучшие практики:**
+- Возвращайте `true` из `ACTION_DOWN`
+- Переопределяйте `performClick()`
+- Обрабатывайте `ACTION_CANCEL`
+- Используйте `requestDisallowInterceptTouchEvent()`
 - Предоставляйте визуальную/тактильную обратную связь
 
 ---

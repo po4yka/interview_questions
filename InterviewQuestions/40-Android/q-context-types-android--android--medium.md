@@ -4,10 +4,8 @@ title: "Context in Android / Context в Android"
 topic: android
 status: draft
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-10-13
 difficulty: medium
-topics:
-  - android
 subtopics:
   - lifecycle
   - activity

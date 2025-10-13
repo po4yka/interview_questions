@@ -614,26 +614,566 @@ value class Email(val value: String) {
 
 ---
 
-## Russian Version
+### Подробный ответ
 
-### Постановка задачи
+---
 
-Value классы (ранее inline классы) обеспечивают типобезопасные обёртки вокруг примитивных типов без накладных расходов. Они позволяют создавать строго типизированные доменные модели без штрафов производительности во время выполнения, что критично для производительных Android приложений.
+### ОСНОВЫ VALUE КЛАССОВ
 
-**Вопрос:** Что такое value классы? Чем они отличаются от data классов? Когда их использовать? Какие преимущества производительности и ограничения?
+**Определение:**
+```kotlin
+@JvmInline
+value class UserId(val value: String)
 
-### Ключевые выводы
+@JvmInline
+value class Email(val value: String)
 
-1. **Value классы** обеспечивают типобезопасные обёртки без накладных расходов
-2. **@JvmInline** аннотация обязательна для JVM таргетов
-3. **Одно val свойство** только в primary конструкторе
-4. **Нет накладных расходов** при прямом использовании
-5. **Boxing происходит** при использовании как Any, в коллекциях, nullable, интерфейсах
-6. **Идеально для** ID, измерений, денег, timestamp
-7. **Валидация** в init блоке гарантирует инварианты
-8. **Сериализация** обрабатывает value классы как базовый тип
-9. **Типобезопасность** предотвращает смешивание похожих примитивных значений
-10. **Лучше чем typealias** - реальная проверка типов, а не просто алиас
+@JvmInline
+value class Amount(val value: Double)
+
+// Использование - типобезопасность без накладных расходов во время выполнения
+fun getUser(userId: UserId): User {
+    // Нельзя случайно передать сюда Email
+    return userRepository.findById(userId.value)
+}
+
+fun sendEmail(email: Email, subject: String) {
+    // Типобезопасная обработка email
+}
+
+val userId = UserId("user123")
+val email = Email("user@example.com")
+
+// Ошибка компиляции
+// getUser(email)  // Несоответствие типов
+```
+
+**Ключевые особенности:**
+```
+ Нулевые накладные расходы во время выполнения (инлайнятся во время компиляции)
+ Типобезопасность во время компиляции
+ Должен иметь одно свойство в первичном конструкторе
+ Свойство должно быть неизменяемым (val, не var)
+ Заменяет inline классы (устарели в Kotlin 1.5)
+ Требуется аннотация @JvmInline
+```
+
+---
+
+### VALUE КЛАСС VS DATA КЛАСС
+
+```kotlin
+// Data класс - обычное выделение объекта
+data class UserIdData(val value: String)
+
+// Value класс - нет выделения объекта
+@JvmInline
+value class UserIdValue(val value: String)
+
+// Сравнение производительности
+fun testPerformance() {
+    // Data класс: выделяет объект в куче
+    val dataId = UserIdData("123")  // Выделение в куче
+
+    // Value класс: нет выделения, инлайнится в String
+    val valueId = UserIdValue("123")  // Нет выделения
+
+    // Во время выполнения valueId - это просто "123"
+}
+
+// Использование памяти:
+// Data класс: Заголовок объекта + ссылка на String = ~16 байт
+// Value класс: Просто String = 0 дополнительных байт
+```
+
+---
+
+### ТИПОБЕЗОПАСНЫЕ ДОМЕННЫЕ МОДЕЛИ
+
+```kotlin
+// Проблема: одержимость примитивами
+fun createOrder(
+    customerId: String,
+    productId: String,
+    quantity: Int,
+    price: Double
+) {
+    // Легко перепутать параметры
+    // createOrder("product123", "customer456", 10, 99.99)
+}
+
+// Решение: value классы
+@JvmInline
+value class CustomerId(val value: String)
+
+@JvmInline
+value class ProductId(val value: String)
+
+@JvmInline
+value class Quantity(val value: Int) {
+    init {
+        require(value > 0) { "Количество должно быть положительным" }
+    }
+}
+
+@JvmInline
+value class Price(val value: Double) {
+    init {
+        require(value >= 0) { "Цена должна быть неотрицательной" }
+    }
+}
+
+fun createOrder(
+    customerId: CustomerId,
+    productId: ProductId,
+    quantity: Quantity,
+    price: Price
+) {
+    // Невозможно перепутать параметры
+    // Типобезопасно и самодокументируемо
+}
+
+// Использование
+val order = createOrder(
+    customerId = CustomerId("customer456"),
+    productId = ProductId("product123"),
+    quantity = Quantity(10),
+    price = Price(99.99)
+)
+```
+
+---
+
+### ВАЛИДАЦИЯ В VALUE КЛАССАХ
+
+```kotlin
+@JvmInline
+value class Email(val value: String) {
+    init {
+        require(value.contains("@")) { "Неверный формат email" }
+        require(value.length <= 100) { "Email слишком длинный" }
+    }
+
+    fun domain(): String = value.substringAfter("@")
+    fun localPart(): String = value.substringBefore("@")
+}
+
+@JvmInline
+value class PhoneNumber(val value: String) {
+    init {
+        val digits = value.filter { it.isDigit() }
+        require(digits.length in 10..15) { "Неверный номер телефона" }
+    }
+
+    fun formatted(): String {
+        val digits = value.filter { it.isDigit() }
+        return when (digits.length) {
+            10 -> "${digits.substring(0, 3)}-${digits.substring(3, 6)}-${digits.substring(6)}"
+            11 -> "+${digits[0]} ${digits.substring(1, 4)}-${digits.substring(4, 7)}-${digits.substring(7)}"
+            else -> value
+        }
+    }
+}
+
+@JvmInline
+value class Password(val value: String) {
+    init {
+        require(value.length >= 8) { "Пароль должен быть не менее 8 символов" }
+        require(value.any { it.isUpperCase() }) { "Пароль должен содержать заглавную букву" }
+        require(value.any { it.isDigit() }) { "Пароль должен содержать цифру" }
+    }
+
+    fun strength(): PasswordStrength {
+        return when {
+            value.length >= 12 && value.any { !it.isLetterOrDigit() } -> PasswordStrength.STRONG
+            value.length >= 10 -> PasswordStrength.MEDIUM
+            else -> PasswordStrength.WEAK
+        }
+    }
+}
+
+enum class PasswordStrength { WEAK, MEDIUM, STRONG }
+
+// Использование
+try {
+    val email = Email("user@example.com")
+    val phone = PhoneNumber("1234567890")
+    val password = Password("SecurePass123")
+
+    println("Домен email: ${email.domain()}")
+    println("Отформатированный телефон: ${phone.formatted()}")
+    println("Надежность пароля: ${password.strength()}")
+} catch (e: IllegalArgumentException) {
+    println("Ошибка валидации: ${e.message}")
+}
+```
+
+---
+
+### РАСПРОСТРАНЕННЫЕ СЛУЧАИ ИСПОЛЬЗОВАНИЯ
+
+#### 1. ID и идентификаторы
+
+```kotlin
+@JvmInline
+value class UserId(val value: String)
+
+@JvmInline
+value class OrderId(val value: Long)
+
+@JvmInline
+value class SessionToken(val value: String) {
+    fun isExpired(): Boolean {
+        // Проверка истечения срока действия токена
+        return false
+    }
+}
+
+class UserRepository {
+    private val users = mutableMapOf<UserId, User>()
+
+    fun findById(id: UserId): User? = users[id]
+
+    fun save(user: User) {
+        users[user.id] = user
+    }
+}
+
+data class User(
+    val id: UserId,
+    val email: Email,
+    val name: String
+)
+```
+
+---
+
+#### 2. Измерения и единицы
+
+```kotlin
+@JvmInline
+value class Meters(val value: Double) {
+    fun toKilometers(): Kilometers = Kilometers(value / 1000)
+    fun toMiles(): Miles = Miles(value * 0.000621371)
+}
+
+@JvmInline
+value class Kilometers(val value: Double) {
+    fun toMeters(): Meters = Meters(value * 1000)
+}
+
+@JvmInline
+value class Miles(val value: Double) {
+    fun toMeters(): Meters = Meters(value * 1609.344)
+}
+
+@JvmInline
+value class Kilograms(val value: Double) {
+    fun toPounds(): Pounds = Pounds(value * 2.20462)
+}
+
+@JvmInline
+value class Pounds(val value: Double) {
+    fun toKilograms(): Kilograms = Kilograms(value / 2.20462)
+}
+
+// Использование - невозможно перепутать единицы
+fun calculateShippingCost(distance: Kilometers, weight: Kilograms): Price {
+    val distanceInMiles = distance.toMeters().toMiles()
+    val weightInPounds = weight.toPounds()
+
+    val cost = distanceInMiles.value * 0.5 + weightInPounds.value * 0.1
+    return Price(cost)
+}
+
+val distance = Kilometers(100.0)
+val weight = Kilograms(5.0)
+val cost = calculateShippingCost(distance, weight)
+```
+
+---
+
+#### 3. Деньги и валюта
+
+```kotlin
+@JvmInline
+value class USD(val cents: Long) {
+    constructor(dollars: Double) : this((dollars * 100).toLong())
+
+    fun toDollars(): Double = cents / 100.0
+
+    operator fun plus(other: USD): USD = USD(cents + other.cents)
+    operator fun minus(other: USD): USD = USD(cents - other.cents)
+    operator fun times(multiplier: Int): USD = USD(cents * multiplier)
+    operator fun div(divisor: Int): USD = USD(cents / divisor)
+
+    override fun toString(): String = "$${toDollars()}"
+}
+
+@JvmInline
+value class EUR(val cents: Long) {
+    constructor(euros: Double) : this((euros * 100).toLong())
+
+    fun toEuros(): Double = cents / 100.0
+
+    operator fun plus(other: EUR): EUR = EUR(cents + other.cents)
+    operator fun minus(other: EUR): EUR = EUR(cents - other.cents)
+
+    override fun toString(): String = "€${toEuros()}"
+}
+
+// Использование - нельзя случайно смешать валюты
+fun processPayment(amount: USD) {
+    println("Обработка платежа: $amount")
+}
+
+val priceUSD = USD(99.99)
+val priceEUR = EUR(89.99)
+
+processPayment(priceUSD)  // 
+// processPayment(priceEUR)  // Ошибка компиляции
+
+val total = priceUSD + USD(10.0)  // Типобезопасно
+val discounted = priceUSD - USD(5.0)
+```
+
+---
+
+#### 4. Временные метки и длительность
+
+```kotlin
+@JvmInline
+value class Milliseconds(val value: Long) {
+    fun toSeconds(): Seconds = Seconds(value / 1000)
+}
+
+@JvmInline
+value class Seconds(val value: Long) {
+    fun toMilliseconds(): Milliseconds = Milliseconds(value * 1000)
+    fun toMinutes(): Minutes = Minutes(value / 60)
+}
+
+@JvmInline
+value class Minutes(val value: Long) {
+    fun toSeconds(): Seconds = Seconds(value * 60)
+}
+
+@JvmInline
+value class UnixTimestamp(val value: Long) {
+    fun toDate(): Date = Date(value)
+
+    fun isAfter(other: UnixTimestamp): Boolean = value > other.value
+
+    companion object {
+        fun now(): UnixTimestamp = UnixTimestamp(System.currentTimeMillis())
+    }
+}
+
+// Использование
+fun cacheData(key: String, data: String, ttl: Seconds) {
+    val expiresAt = UnixTimestamp.now().value + ttl.toMilliseconds().value
+    // Сохранить с истечением срока
+}
+
+cacheData("user:123", "data", Seconds(3600))  // TTL 1 час
+```
+
+---
+
+### VALUE КЛАССЫ С ИНТЕРФЕЙСАМИ
+
+```kotlin
+interface Identifier {
+    val value: String
+}
+
+@JvmInline
+value class UserId(override val value: String) : Identifier
+
+@JvmInline
+value class ProductId(override val value: String) : Identifier
+
+fun logAccess(id: Identifier) {
+    println("Доступ к ресурсу: ${id.value}")
+}
+
+// Использование
+val userId = UserId("user123")
+val productId = ProductId("product456")
+
+logAccess(userId)     // Происходит боксинг
+logAccess(productId)  // Происходит боксинг
+
+// При использовании в качестве типа интерфейса value класс упаковывается (boxing)
+```
+
+---
+
+### СПЕЦИФИЧНЫЕ ДЛЯ ANDROID СЛУЧАИ ИСПОЛЬЗОВАНИЯ
+
+#### ID ресурсов
+
+```kotlin
+@JvmInline
+value class StringRes(@StringRes val value: Int)
+
+@JvmInline
+value class DrawableRes(@DrawableRes val value: Int)
+
+@JvmInline
+value class ColorRes(@ColorRes val value: Int)
+
+@Composable
+fun getText(stringRes: StringRes): String {
+    return stringResource(id = stringRes.value)
+}
+
+@Composable
+fun DisplayMessage() {
+    val message = getText(StringRes(R.string.app_name))
+    Text(text = message)
+}
+```
+
+---
+
+#### Аргументы навигации
+
+```kotlin
+@JvmInline
+value class UserId(val value: String)
+
+@JvmInline
+value class PostId(val value: String)
+
+sealed class Screen {
+    data object Home : Screen()
+    data class Profile(val userId: UserId) : Screen()
+    data class PostDetail(val postId: PostId) : Screen()
+}
+
+fun NavController.navigate(screen: Screen) {
+    when (screen) {
+        is Screen.Home -> navigate("home")
+        is Screen.Profile -> navigate("profile/${screen.userId.value}")
+        is Screen.PostDetail -> navigate("post/${screen.postId.value}")
+    }
+}
+
+// Использование - типобезопасная навигация
+navController.navigate(Screen.Profile(UserId("user123")))
+navController.navigate(Screen.PostDetail(PostId("post456")))
+```
+
+---
+
+### ОГРАНИЧЕНИЯ И БОКСИНГ
+
+```kotlin
+// Value классы инлайнятся, но в некоторых случаях происходит боксинг:
+
+@JvmInline
+value class UserId(val value: String)
+
+// 1. При использовании как Any
+val userId = UserId("123")
+val any: Any = userId  // Происходит боксинг
+
+// 2. При использовании в коллекциях
+val list: List<UserId> = listOf(UserId("1"), UserId("2"))  // Происходит боксинг
+
+// 3. При использовании как тип интерфейса
+interface Identifier {
+    val value: String
+}
+@JvmInline
+value class UserId2(override val value: String) : Identifier
+val id: Identifier = UserId2("123")  // Происходит боксинг
+
+// 4. При использовании как nullable
+val nullableId: UserId? = UserId("123")  // Происходит боксинг
+
+// 5. Varargs
+fun log(vararg ids: UserId) {  // Происходит боксинг
+    ids.forEach { println(it.value) }
+}
+
+// Чтобы избежать боксинга:
+// - Используйте value классы напрямую (не как Any/интерфейс)
+// - Избегайте nullable value классов, когда это возможно
+// - Рассмотрите использование обычных классов для коллекций
+```
+
+---
+
+### VALUE КЛАССЫ В СЕРИАЛИЗАЦИИ
+
+```kotlin
+@Serializable
+@JvmInline
+value class UserId(val value: String)
+
+@Serializable
+data class User(
+    val id: UserId,
+    val name: String,
+    val email: Email
+)
+
+// Сериализация в JSON
+val json = Json.encodeToString(
+    User(
+        id = UserId("user123"),
+        name = "John Doe",
+        email = Email("john@example.com")
+    )
+)
+
+// Вывод: {"id":"user123","name":"John Doe","email":"john@example.com"}
+// Value классы сериализуются как их базовые значения
+```
+
+---
+
+### ЛУЧШИЕ ПРАКТИКИ
+
+```kotlin
+//  Хорошо: Одно свойство-примитив
+@JvmInline
+value class UserId(val value: String)
+
+//  Плохо: Несколько свойств не допускаются
+// @JvmInline
+// value class User(val id: String, val name: String)  // Не скомпилируется
+
+//  Хорошо: Валидация в init
+@JvmInline
+value class PositiveInt(val value: Int) {
+    init {
+        require(value > 0) { "Значение должно быть положительным" }
+    }
+}
+
+//  Хорошо: Функции-расширения для операций
+@JvmInline
+value class Percentage(val value: Double) {
+    init {
+        require(value in 0.0..100.0) { "Процент должен быть в диапазоне 0-100" }
+    }
+}
+
+fun Percentage.toDecimal(): Double = value / 100.0
+
+//  Хорошо: Companion object для фабричных методов
+@JvmInline
+value class Email(val value: String) {
+    companion object {
+        fun fromStringOrNull(str: String): Email? {
+            return if (str.contains("@")) Email(str) else null
+        }
+    }
+}
+```
 
 ## Follow-ups
 

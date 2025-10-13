@@ -5,12 +5,16 @@ tags:
   - text-scaling
   - font-size
   - dynamic-type
+topic: android
+subtopics: [ui-accessibility]
 difficulty: medium
 status: draft
-related:
+related_questions:
   - q-accessibility-compose--accessibility--medium
   - q-accessibility-testing--accessibility--medium
 created: 2025-10-11
+date_updated: 2025-10-13
+moc: moc-android
 ---
 
 # Question (EN)

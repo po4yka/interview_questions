@@ -754,7 +754,249 @@ class BiometricBestPractices {
 
 ---
 
-### KEY TAKEAWAYS
+## Answer (EN)
+
+### Overview
+
+**Biometric authentication** (fingerprint, face, iris) provides secure and convenient user authentication. The **AndroidX Biometric library** offers a unified API for implementing biometric authentication across different Android versions and devices.
+
+### Key Components
+
+**1. BiometricManager**
+- Checks if biometric authentication is available
+
+**2. BiometricPrompt**
+- Manages the biometric authentication dialog
+
+**3. CryptoObject**
+- Associates biometric authentication with cryptographic operations
+
+### Implementation Steps
+
+**1. Add Dependency**
+```gradle
+dependencies {
+    implementation "androidx.biometric:biometric:1.2.0-alpha05"
+}
+```
+
+**2. Check Availability**
+```kotlin
+val biometricManager = BiometricManager.from(this)
+when (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
+    BiometricManager.BIOMETRIC_SUCCESS ->
+        // App can authenticate with biometrics
+    BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE ->
+        // No biometric features available
+    BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE ->
+        // Biometric features are currently unavailable
+    BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED ->
+        // User hasn't enrolled any biometrics
+}
+```
+
+**3. Create BiometricPrompt**
+```kotlin
+val executor = ContextCompat.getMainExecutor(this)
+val biometricPrompt = BiometricPrompt(this, executor,
+    object : BiometricPrompt.AuthenticationCallback() {
+        override fun onAuthenticationSucceeded(
+            result: BiometricPrompt.AuthenticationResult) {
+            super.onAuthenticationSucceeded(result)
+            // Authentication successful
+        }
+
+        override fun onAuthenticationError(errorCode: Int, 
+            errString: CharSequence) {
+            super.onAuthenticationError(errorCode, errString)
+            // Authentication error
+        }
+
+        override fun onAuthenticationFailed() {
+            super.onAuthenticationFailed()
+            // Authentication failed
+        }
+    })
+```
+
+**4. Create PromptInfo**
+```kotlin
+val promptInfo = BiometricPrompt.PromptInfo.Builder()
+    .setTitle("Biometric login")
+    .setSubtitle("Log in using your biometric credential")
+    .setNegativeButtonText("Use account password")
+    .build()
+```
+
+**5. Authenticate**
+```kotlin
+biometricPrompt.authenticate(promptInfo)
+```
+
+### Crypto-based Authentication
+
+For higher security, use `CryptoObject` to tie authentication to a cryptographic key.
+
+```kotlin
+// 1. Generate key
+val keyGenerator = KeyGenerator.getInstance(
+    KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+
+val keyGenParameterSpec = KeyGenParameterSpec.Builder(
+    "my_key",
+    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+    .setUserAuthenticationRequired(true)
+    .build()
+
+keyGenerator.init(keyGenParameterSpec)
+keyGenerator.generateKey()
+
+// 2. Create cipher
+val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+val secretKey = getSecretKey()
+cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+
+// 3. Authenticate with CryptoObject
+biometricPrompt.authenticate(
+    promptInfo,
+    BiometricPrompt.CryptoObject(cipher)
+)
+
+// 4. Use cipher after successful authentication
+// result.cryptoObject.cipher.doFinal(data)
+```
+
+### Best Practices
+
+- **Provide fallback**: Always offer password/PIN as alternative
+- **Handle errors**: Inform user about authentication errors
+- **Use appropriate strength**: `BIOMETRIC_STRONG` for sensitive data
+- **Check availability**: Don't show biometric option if not available
+- **Respect user choice**: Allow users to disable biometric login
+
+## Ответ (RU)
+
+### Обзор
+
+**Биометрическая аутентификация** (отпечаток пальца, лицо, радужка) обеспечивает безопасную и удобную аутентификацию пользователя. Библиотека **AndroidX Biometric** предлагает унифицированный API для реализации биометрической аутентификации на разных версиях Android и устройствах.
+
+### Ключевые компоненты
+
+**1. BiometricManager**
+- Проверяет доступность биометрической аутентификации
+
+**2. BiometricPrompt**
+- Управляет диалогом биометрической аутентификации
+
+**3. CryptoObject**
+- Связывает биометрическую аутентификацию с криптографическими операциями
+
+### Шаги реализации
+
+**1. Добавить зависимость**
+```gradle
+dependencies {
+    implementation "androidx.biometric:biometric:1.2.0-alpha05"
+}
+```
+
+**2. Проверить доступность**
+```kotlin
+val biometricManager = BiometricManager.from(this)
+when (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
+    BiometricManager.BIOMETRIC_SUCCESS ->
+        // Приложение может аутентифицироваться с помощью биометрии
+    BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE ->
+        // Нет доступных биометрических функций
+    BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE ->
+        // Биометрические функции в данный момент недоступны
+    BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED ->
+        // Пользователь не зарегистрировал биометрические данные
+}
+```
+
+**3. Создать BiometricPrompt**
+```kotlin
+val executor = ContextCompat.getMainExecutor(this)
+val biometricPrompt = BiometricPrompt(this, executor,
+    object : BiometricPrompt.AuthenticationCallback() {
+        override fun onAuthenticationSucceeded(
+            result: BiometricPrompt.AuthenticationResult) {
+            super.onAuthenticationSucceeded(result)
+            // Аутентификация успешна
+        }
+
+        override fun onAuthenticationError(errorCode: Int, 
+            errString: CharSequence) {
+            super.onAuthenticationError(errorCode, errString)
+            // Ошибка аутентификации
+        }
+
+        override fun onAuthenticationFailed() {
+            super.onAuthenticationFailed()
+            // Аутентификация не удалась
+        }
+    })
+```
+
+**4. Создать PromptInfo**
+```kotlin
+val promptInfo = BiometricPrompt.PromptInfo.Builder()
+    .setTitle("Биометрический вход")
+    .setSubtitle("Войдите, используя ваши биометрические данные")
+    .setNegativeButtonText("Использовать пароль")
+    .build()
+```
+
+**5. Аутентифицировать**
+```kotlin
+biometricPrompt.authenticate(promptInfo)
+```
+
+### Аутентификация с использованием криптографии
+
+Для повышения безопасности используйте `CryptoObject`, чтобы связать аутентификацию с криптографическим ключом.
+
+```kotlin
+// 1. Сгенерировать ключ
+val keyGenerator = KeyGenerator.getInstance(
+    KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+
+val keyGenParameterSpec = KeyGenParameterSpec.Builder(
+    "my_key",
+    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+    .setUserAuthenticationRequired(true)
+    .build()
+
+keyGenerator.init(keyGenParameterSpec)
+keyGenerator.generateKey()
+
+// 2. Создать шифр
+val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+val secretKey = getSecretKey()
+cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+
+// 3. Аутентифицировать с CryptoObject
+biometricPrompt.authenticate(
+    promptInfo,
+    BiometricPrompt.CryptoObject(cipher)
+)
+
+// 4. Использовать шифр после успешной аутентификации
+// result.cryptoObject.cipher.doFinal(data)
+```
+
+### Лучшие практики
+
+- **Предоставлять запасной вариант**: Всегда предлагайте пароль/PIN в качестве альтернативы
+- **Обрабатывать ошибки**: Информируйте пользователя об ошибках аутентификации
+- **Использовать соответствующую надежность**: `BIOMETRIC_STRONG` для конфиденциальных данных
+- **Проверять доступность**: Не показывайте опцию биометрии, если она недоступна
+- **Уважать выбор пользователя**: Позволяйте пользователям отключать биометрический вход
 
 1. **BiometricPrompt** unified API for all biometric types
 2. **Check availability** before showing biometric UI

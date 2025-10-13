@@ -10,6 +10,10 @@ tags:
   - difficulty/medium
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-networking
+related_questions: []
 ---
 
 # WebSocket Implementation / Реализация WebSocket

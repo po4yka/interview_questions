@@ -1,4 +1,6 @@
 ---
+topic: ui-ux-accessibility
+subtopics: [material-design, ui-animation]
 tags:
   - material-design
   - material3
@@ -7,6 +9,10 @@ tags:
   - motion
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-ui-ux-accessibility
+related_questions: []
 ---
 
 # Material 3 Motion and Transitions

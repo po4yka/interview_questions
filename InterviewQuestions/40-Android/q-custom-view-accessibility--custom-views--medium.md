@@ -1,4 +1,6 @@
 ---
+topic: android
+subtopics: [ui-views, ui-accessibility]
 tags:
   - custom-views
   - accessibility
@@ -6,6 +8,10 @@ tags:
   - inclusive-design
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Custom View Accessibility

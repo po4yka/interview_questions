@@ -1,5 +1,6 @@
 ---
-topic: dependency-injection
+topic: architecture-patterns
+subtopics: [di-hilt, di-koin]
 tags:
   - dependency-injection
   - koin
@@ -9,6 +10,10 @@ tags:
   - difficulty/medium
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-architecture-patterns
+related_questions: []
 ---
 
 # Koin vs Hilt Comparison / Сравнение Koin и Hilt

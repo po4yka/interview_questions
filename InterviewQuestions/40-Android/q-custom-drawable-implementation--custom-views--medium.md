@@ -1,4 +1,6 @@
 ---
+topic: android
+subtopics: [ui-views, ui-graphics]
 tags:
   - custom-views
   - drawable
@@ -6,6 +8,10 @@ tags:
   - android-framework
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Custom Drawable Implementation

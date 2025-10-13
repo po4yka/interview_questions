@@ -4,12 +4,13 @@
 id: "20251013-600005"
 title: "Data Structures and Algorithms Fundamentals"
 description: "Comprehensive coverage of fundamental data structures (arrays, linked lists, stacks, queues, trees, graphs, hash tables) and core algorithms (sorting, searching, recursion, dynamic programming) with time/space complexity analysis"
-category: "computer-science"
+topic: cs
 subcategory: "algorithms"
 difficulty: "hard"
 tags: ["data-structures", "algorithms", "complexity", "big-o", "sorting", "searching", "trees", "graphs", "dynamic-programming", "recursion", "kotlin"]
 created: "2025-10-13"
 updated: "2025-10-13"
+moc: moc-cs
 related_questions:
   - "20251012-600003"  # Concurrency Fundamentals
   - "20251012-600004"  # OOP Principles

@@ -619,7 +619,259 @@ User downloads only:
 
 ## Ответ (RU)
 
-[Russian translation with all sections...]
+### Обзор
+
+**Почему важен размер приложения:**
+- Конверсия в установки падает на 1% за каждые 6 МБ
+- Пользователи с ограниченным трафиком отказываются от больших загрузок
+- Play Store заметно показывает размер установки
+- Быстрые загрузки = лучший пользовательский опыт
+
+**Целевые размеры:**
+- Маленькое приложение: < 10 МБ
+- Среднее приложение: 10-50 МБ
+- Большое приложение: 50-100 МБ
+- Слишком большое: > 100 МБ (требует WiFi на некоторых устройствах)
+
+### Полная конфигурация R8
+
+**app/build.gradle.kts:**
+```kotlin
+android {
+    buildTypes {
+        release {
+            // Включить сжатие и обфускацию кода
+            isMinifyEnabled = true
+
+            // Включить сжатие ресурсов
+            isShrinkResources = true
+
+            // Правила ProGuard
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
+    // Включить полный режим R8 для максимальной оптимизации
+    buildFeatures {
+        buildConfig = true
+    }
+}
+```
+
+**proguard-rules.pro:**
+```proguard
+# Агрессивная оптимизация
+-optimizationpasses 5
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-verbose
+
+# Удалить логирование в релизе
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+    public static *** w(...);
+    public static *** e(...);
+}
+
+# Удалить отладочный код
+-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+    public static void check*(...);
+    public static void throw*(...);
+}
+
+# Сохранить data-классы для сериализации
+-keep class com.example.model.** { *; }
+-keepclassmembers class com.example.model.** { *; }
+
+# Сохранить реализации Parcelable
+-keep class * implements android.os.Parcelable {
+    public static final android.os.Parcelable$Creator *;
+}
+
+# Сохранить нативные методы
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# Удалить неиспользуемые ресурсы
+-keep class **.R$*
+```
+
+### Сжатие ресурсов
+
+#### 1. Удаление неиспользуемых ресурсов
+
+**app/build.gradle.kts:**
+```kotlin
+android {
+    buildTypes {
+        release {
+            isShrinkResources = true  // Автоматически удаляет неиспользуемые ресурсы
+            isMinifyEnabled = true     // Должно быть включено для сжатия ресурсов
+        }
+    }
+
+    // Сохранить конкретные ресурсы
+    resourceConfigurations += listOf("en", "ru")  // Только английский и русский
+}
+```
+
+**res/raw/keep.xml:**
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@layout/used_by_reflection,@drawable/used_in_code"
+    tools:discard="@layout/unused*,@drawable/unused*" />
+```
+
+#### 2. Фильтрация языков (resConfigs)
+
+**До: Все языки (125 языков)**
+```
+Размер APK со всеми переводами: 8.2 МБ
+```
+
+**После: Только поддерживаемые языки**
+```kotlin
+android {
+    defaultConfig {
+        // Включить только английский, русский, испанский
+        resourceConfigurations += listOf("en", "ru", "es")
+    }
+}
+
+// Размер APK: 8.2 МБ → 5.1 МБ (сокращение на 38%)
+```
+
+#### 3. Фильтрация плотности экрана
+
+```kotlin
+android {
+    defaultConfig {
+        // Поддержка только распространенных плотностей
+        resourceConfigurations += listOf(
+            "mdpi",
+            "hdpi",
+            "xhdpi",
+            "xxhdpi",
+            "xxxhdpi"
+        )
+        // Исключить ldpi (редко), tvdpi (обрабатывается масштабированием)
+    }
+}
+```
+
+### Оптимизация изображений
+
+#### 1. Конвертация PNG в WebP
+
+**До: PNG изображения**
+```
+PNG изображения: 15.2 МБ
+```
+
+**После: WebP изображения**
+```
+WebP изображения: 4.6 МБ (сокращение на 70%)
+```
+
+#### 2. Использование векторных изображений
+
+**До: Несколько PNG для разных плотностей**
+```
+res/
+ drawable-mdpi/icon.png (2KB)
+ ...
+Итого: 62 КБ для одной иконки
+```
+
+**После: Одно векторное изображение**
+```
+res/drawable/icon.xml (< 1KB)
+Итого: 1 КБ (сокращение на 98%)
+```
+
+### Фильтрация нативных библиотек
+
+#### 1. Разделение по ABI
+
+**До: Универсальный APK со всеми ABI**
+```
+APK содержит:
+ lib/armeabi-v7a/libnative.so (4.2MB)
+ ...
+Итого: 23.4 МБ
+```
+
+**После: Разделение по ABI**
+```kotlin
+android {
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+            isUniversalApk = false
+        }
+    }
+}
+```
+
+#### 2. App Bundle с фильтрацией ABI
+
+**Лучший подход: Android App Bundle**
+```kotlin
+android {
+    bundle {
+        language { enableSplit = true }
+        density { enableSplit = true }
+        abi { enableSplit = true }
+    }
+
+    defaultConfig {
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+        }
+    }
+}
+```
+
+**Результат:**
+```
+До (универсальный APK): 35 МБ
+После (App Bundle):
+  - Размер загрузки: 12 МБ (сокращение на 66%)
+```
+
+### Динамические модули
+
+Позволяют загружать фичи по требованию, уменьшая начальный размер установки.
+
+### Оптимизация зависимостей
+
+Исключайте неиспользуемые модули из больших библиотек и используйте легковесные альтернативы.
+
+### APK Analyzer
+
+Используйте инструмент в Android Studio для анализа содержимого APK и выявления "узких мест".
+
+### Лучшие практики
+
+1. **Используйте App Bundles**: сокращение размера на 40-60%
+2. **Включайте R8 Full Mode**: максимальная оптимизация кода
+3. **Сжимайте ресурсы**: автоматическое удаление неиспользуемых
+4. **Конвертируйте в WebP**: на 70-80% меньше PNG
+5. **Используйте векторные изображения**: на 90%+ меньше PNG
+6. **Фильтруйте языки**: только поддерживаемые
+7. **Разделяйте по ABI**: одна ABI на устройство
+8. **Динамические фичи**: загрузка по требованию
+9. **Регулярно анализируйте**: используйте APK Analyzer
+10. **Исключайте неиспользуемое**: удаляйте ненужные модули библиотек
 
 ---
 

@@ -5,12 +5,16 @@ tags:
   - alarmmanager
   - jobscheduler
   - background-processing
+topic: android
+subtopics: [background-execution, workmanager]
 difficulty: medium
 status: draft
-related:
+related_questions:
   - q-workmanager-advanced--background--medium
   - q-foreground-service-types--background--medium
 created: 2025-10-12
+date_updated: 2025-10-13
+moc: moc-android
 ---
 
 # Question (EN)

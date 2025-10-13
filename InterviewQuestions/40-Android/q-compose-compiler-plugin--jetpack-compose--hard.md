@@ -1,4 +1,6 @@
 ---
+topic: android
+subtopics: [jetpack-compose, performance]
 tags:
   - jetpack-compose
   - compiler
@@ -7,6 +9,10 @@ tags:
   - kotlin-compiler
 difficulty: hard
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Compose Compiler Plugin Transformations

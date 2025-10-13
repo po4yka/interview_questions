@@ -772,26 +772,355 @@ end
 Как автоматизировать деплой Android-приложения в Play Store? Объясните процесс подписи, версионирования, треков релизов (internal, alpha, beta, production) и автоматической генерации release notes.
 
 ## Ответ (RU)
-[Перевод с примерами из английской версии...]
+### Обзор
 
-### Резюме
+Автоматизированное развертывание обеспечивает согласованность релизов, уменьшает человеческие ошибки и ускоряет процесс выпуска. Ключевые компоненты:
+1. **Подпись кода** - подписание APK/AAB с помощью keystore
+2. **Версионирование** - автоматическое обновление версий
+3. **Треки релизов** - Internal → Alpha → Beta → Production
+4. **Заметки к релизу** - автоматическая генерация списка изменений
+5. **Развертывание** - загрузка в Play Store
 
-**Автоматизированный pipeline деплоя:**
-1.  **Подпись кода** — управление keystore, CI-секреты
-2.  **Версионирование** — git-теги, semantic versioning, авто-инкремент
-3.  **Треки релизов** — Internal → Alpha → Beta → Production
-4.  **Release notes** — генерация из conventional commits
-5.  **Деплой** — автоматизация Fastlane, постепенный rollout
-6.  **Мониторинг** — отслеживание метрик, остановка при проблемах
+### 1. Настройка подписи кода
 
-**Ключевые инструменты:**
-- **Fastlane** — автоматизация деплоя
-- **GitHub Actions** — оркестрация CI/CD
-- **Conventional Commits** — структурированный changelog
-- **Play Store API** — программные загрузки
+**Управление Keystore**:
 
-**Стратегия rollout:**
-- Начать с internal testing
-- Постепенно расширять до alpha, beta
-- Production rollout на 10% → 25% → 50% → 100%
-- Мониторить метрики, останавливать при проблемах
+```bash
+# Генерация keystore (одноразовая настройка)
+keytool -genkey -v \
+  -keystore release.keystore \
+  -alias my-app-key \
+  -keyalg RSA \
+  -keysize 2048 \
+  -validity 10000
+
+# Экспорт keystore в base64 для секретов CI
+base64 -i release.keystore | pbcopy
+```
+
+**gradle.properties (локально)**:
+
+```properties
+# НЕ добавляйте это в git!
+KEYSTORE_FILE=release.keystore
+KEYSTORE_PASSWORD=your_keystore_password
+KEY_ALIAS=my-app-key
+KEY_PASSWORD=your_key_password
+```
+
+**app/build.gradle.kts**:
+
+```kotlin
+android {
+    signingConfigs {
+        create("release") {
+            // Чтение из переменных окружения (CI) или gradle.properties (локально)
+            storeFile = file(System.getenv("KEYSTORE_FILE")
+                ?: project.findProperty("KEYSTORE_FILE") as String? ?: "release.keystore")
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+                ?: project.findProperty("KEYSTORE_PASSWORD") as String?
+            keyAlias = System.getenv("KEY_ALIAS")
+                ?: project.findProperty("KEY_ALIAS") as String?
+            keyPassword = System.getenv("KEY_PASSWORD")
+                ?: project.findProperty("KEY_PASSWORD") as String?
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+```
+
+### 2. Автоматическое версионирование
+
+**Стратегия семантического версионирования**:
+
+```
+Версия: X.Y.Z
+X = Мажорная (ломающие изменения)
+Y = Минорная (новые фичи)
+Z = Патч (исправления ошибок)
+
+Пример: 1.2.3 → 1.2.4 (патч)
+         1.2.4 → 1.3.0 (минорная фича)
+         1.3.0 → 2.0.0 (мажорное ломающее изменение)
+```
+
+**app/build.gradle.kts с авто-версионированием**:
+
+```kotlin
+import java.io.ByteArrayOutputStream
+
+fun getGitCommitCount(): Int {
+    val output = ByteArrayOutputStream()
+    project.exec {
+        commandLine("git", "rev-list", "--count", "HEAD")
+        standardOutput = output
+    }
+    return output.toString().trim().toInt()
+}
+
+fun getVersionNameFromTag(): String {
+    return try {
+        val output = ByteArrayOutputStream()
+        project.exec {
+            commandLine("git", "describe", "--tags", "--abbrev=0")
+            standardOutput = output
+        }
+        output.toString().trim().removePrefix("v")
+    } catch (e: Exception) {
+        "1.0.0" // Версия по умолчанию
+    }
+}
+
+android {
+    defaultConfig {
+        applicationId = "com.example.app"
+
+        // Авто-инкремент versionCode на основе коммитов git
+        versionCode = getGitCommitCount()
+
+        // Получение versionName из тега git
+        versionName = getVersionNameFromTag()
+
+        // Альтернатива: Чтение из version.properties
+        // versionCode = project.property("VERSION_CODE").toString().toInt()
+        // versionName = project.property("VERSION_NAME").toString()
+    }
+}
+
+// Задача для обновления версии
+tasks.register("bumpVersion") {
+    doLast {
+        val versionFile = file("version.properties")
+        val properties = java.util.Properties()
+
+        if (versionFile.exists()) {
+            versionFile.inputStream().use { properties.load(it) }
+        }
+
+        val currentCode = properties.getProperty("VERSION_CODE", "1").toInt()
+        val currentName = properties.getProperty("VERSION_NAME", "1.0.0")
+
+        // Парсинг семантической версии
+        val (major, minor, patch) = currentName.split(".").map { it.toInt() }
+
+        // Определение типа обновления из сообщения коммита или аргумента
+        val bumpType = project.findProperty("bumpType") as String? ?: "patch"
+
+        val newVersion = when (bumpType) {
+            "major" -> "${major + 1}.0.0"
+            "minor" -> "$major.${minor + 1}.0"
+            "patch" -> "$major.$minor.${patch + 1}"
+            else -> currentName
+        }
+
+        properties.setProperty("VERSION_CODE", (currentCode + 1).toString())
+        properties.setProperty("VERSION_NAME", newVersion)
+
+        versionFile.outputStream().use { properties.store(it, null) }
+
+        println("Версия обновлена: $currentName ($currentCode) → $newVersion (${currentCode + 1})")
+
+        // Создание тега git
+        exec {
+            commandLine("git", "tag", "v$newVersion")
+        }
+    }
+}
+```
+
+### 3. Настройка Fastlane
+
+**Gemfile**:
+
+```ruby
+source "https://rubygems.org"
+
+gem "fastlane", "~> 2.217"
+gem "fastlane-plugin-firebase_app_distribution"
+```
+
+**fastlane/Appfile**:
+
+```ruby
+json_key_file("service_account.json") # Путь к JSON сервисного аккаунта
+package_name("com.example.app")
+```
+
+**fastlane/Fastfile**:
+
+```ruby
+default_platform(:android)
+
+platform :android do
+
+  desc "Отправить новую сборку во внутреннее тестирование"
+  lane :internal do
+    # Инкремент кода версии
+    gradle(
+      task: "clean"
+    )
+
+    # Сборка release bundle
+    gradle(
+      task: "bundle",
+      build_type: "Release",
+      properties: {
+        "android.injected.signing.store.file" => ENV["KEYSTORE_FILE"],
+        "android.injected.signing.store.password" => ENV["KEYSTORE_PASSWORD"],
+        "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
+        "android.injected.signing.key.password" => ENV["KEY_PASSWORD"]
+      }
+    )
+
+    # Загрузка во внутренний трек Play Store
+    upload_to_play_store(
+      track: 'internal',
+      aab: 'app/build/outputs/bundle/release/app-release.aab',
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+
+    # Отправка в Slack
+    slack(
+      message: " Внутренняя сборка успешно загружена!",
+      channel: "#releases",
+      success: true,
+      default_payloads: [:git_branch, :git_author, :last_git_commit_message]
+    )
+  end
+
+  desc "Продвинуть из внутреннего в альфа"
+  lane :promote_to_alpha do
+    # Продвижение из внутреннего в альфа
+    upload_to_play_store(
+      track: 'internal',
+      track_promote_to: 'alpha',
+      skip_upload_aab: true,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+
+    slack(
+      message: " Сборка продвинута в альфа!",
+      channel: "#releases"
+    )
+  end
+
+  # ... (остальные lanes как в английской версии)
+end
+```
+
+### 4. Автоматические заметки к релизу
+
+**Скрипт для генерации заметок к релизу из коммитов git**:
+
+```bash
+#!/bin/bash
+# generate_release_notes.sh
+
+# ... (скрипт как в английской версии)
+```
+
+**Формат Conventional Commits**:
+
+```
+<type>(<scope>): <subject>
+
+Типы:
+- feat: Новая фича
+- fix: Исправление ошибки
+- docs: Изменения в документации
+# ... (остальные типы)
+```
+
+### 5. Полное развертывание с GitHub Actions
+
+**.github/workflows/deploy.yml**:
+
+```yaml
+name: Развертывание в Play Store
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      # ... (шаги как в английской версии, с переведенными именами)
+      - name: Развертывание в Play Store (внутренний)
+        run: bundle exec fastlane internal
+        env:
+          KEYSTORE_FILE: release.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      # ...
+```
+
+### 6. Управление метаданными Play Store
+
+**Структура директорий**:
+
+```
+fastlane/metadata/android/
+ en-US/
+    title.txt
+    # ...
+ ru-RU/
+     title.txt
+     # ...
+```
+
+### 7. Стратегия постепенного развертывания (Gradual Rollout)
+
+```
+День 1:  Внутренний трек (команда)
+День 2:  Альфа-трек (доверенные тестеры, 10-50 пользователей)
+День 4:  Бета-трек (широкая аудитория, 100-1000 пользователей)
+День 7:  Production 10% rollout
+# ... (далее по плану)
+```
+
+### 8. Развертывание с несколькими Flavor
+
+**build.gradle.kts**:
+
+```kotlin
+android {
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("dev") { /* ... */ }
+        create("staging") { /* ... */ }
+        create("production") { /* ... */ }
+    }
+}
+```
+
+### Лучшие практики
+
+1. **Никогда не коммитьте секреты**
+2. **Всегда тестируйте перед Production**
+3. **Автоматизируйте обновление версий**
+4. **Используйте Conventional Commits**
+5. **Мониторьте метрики развертывания**

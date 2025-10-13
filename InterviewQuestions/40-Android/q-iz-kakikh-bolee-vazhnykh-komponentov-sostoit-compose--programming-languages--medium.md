@@ -1,9 +1,15 @@
 ---
+topic: android
+subtopics: [jetpack-compose]
 tags:
   - programming-languages
   - android
 difficulty: medium
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Из каких более важных компонентов состоит Compose?

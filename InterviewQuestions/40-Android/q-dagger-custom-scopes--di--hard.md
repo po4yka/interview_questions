@@ -6,13 +6,17 @@ tags:
   - hilt
   - scopes
   - architecture
+topic: android
+subtopics: [di-hilt, architecture-patterns]
 difficulty: hard
 status: draft
-related:
+related_questions:
   - q-hilt-entry-points--di--medium
   - q-dagger-multibinding--di--hard
   - q-hilt-viewmodel-injection--jetpack--medium
 created: 2025-10-11
+date_updated: 2025-10-13
+moc: moc-android
 ---
 
 # Question (EN)

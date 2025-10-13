@@ -6,13 +6,17 @@ tags:
   - github-actions
   - gitlab-ci
   - automation
+topic: devops-ci-cd
+subtopics: [ci-cd, devops]
 difficulty: medium
 status: draft
-related:
+related_questions:
   - q-cicd-automated-testing--devops--medium
   - q-gradle-build-optimization--build--medium
   - q-app-bundle-optimization--distribution--medium
 created: 2025-10-11
+date_updated: 2025-10-13
+moc: moc-devops-ci-cd
 ---
 
 # Question (EN)

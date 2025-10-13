@@ -8,6 +8,10 @@ tags:
   - lifecycle
 difficulty: hard
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-android
+related_questions: []
 ---
 
 # Side-эффекты в Compose: LaunchedEffect vs DisposableEffect

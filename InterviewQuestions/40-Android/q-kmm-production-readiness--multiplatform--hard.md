@@ -1,4 +1,6 @@
 ---
+topic: kotlin
+subtopics: [kmp]
 tags:
   - Android
   - Kotlin
@@ -7,6 +9,10 @@ tags:
   - BestPractices
 difficulty: hard
 status: draft
+date_created: 2025-10-13
+date_updated: 2025-10-13
+moc: moc-kotlin
+related_questions: []
 ---
 
 # KMM Production Readiness and Best Practices

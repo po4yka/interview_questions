@@ -813,109 +813,278 @@ Key considerations: maximize shared test code, use proper test doubles, test cor
 Объясните стратегии тестирования для KMM проектов. Как писать тесты в commonTest, androidTest и iosTest? Как мокировать platform-specific зависимости? Каковы best practices для unit, integration и UI тестирования на разных платформах?
 
 ## Ответ (RU)
-KMM тестирование использует shared test код в commonTest с возможностью platform-specific тестов, используя kotlin.test для унифицированных assertions и expect/actual для platform-specific реализаций.
+Тестирование в KMM использует общий тестовый код в `commonTest`, позволяя при этом писать платформо-специфичные тесты. Для унифицированных утверждений используется `kotlin.test`, а для платформо-специфичных реализаций тестов — `expect/actual`.
 
-#### Структура тестов
+#### Структура и настройка тестов
 
-**Source Sets**:
-- `commonTest`: Shared тесты (выполняются на всех платформах)
-- `androidUnitTest`: Android-specific тесты
-- `iosTest`: iOS-specific тесты
+**1. Конфигурация исходных наборов тестов**
+```kotlin
+// shared/build.gradle.kts
+kotlin {
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+            }
+        }
 
-**Dependencies**:
-- kotlin.test: Unified assertions
-- kotlinx-coroutines-test: Coroutine testing
-- Turbine: Flow testing
-- MockK: Mocking framework
+        val commonTest by getting {
+            dependencies {
+                // Общая библиотека для тестов
+                implementation(kotlin("test"))
 
-#### Unit Testing
+                // Тестирование корутин
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
-**Repository Tests**:
-- Mock API и database
-- Test happy paths
-- Test error scenarios
-- Verify interactions
+                // Turbine для тестирования Flow
+                implementation("app.cash.turbine:turbine:1.0.0")
 
-**Use Case Tests**:
-- Test business logic
-- Validate inputs
-- Test transformations
-- Mock dependencies
+                // MockK (мультиплатформенный)
+                implementation("io.mockk:mockk:1.13.8")
+            }
+        }
 
-**Flow Testing**:
-- Turbine для reactive streams
-- Test emissions
-- Test transformations
-- Test cancellation
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(kotlin("test-junit"))
+                implementation("junit:junit:4.13.2")
+                implementation("io.mockk:mockk-android:1.13.8")
+                implementation("androidx.test:core:1.5.0")
+                implementation("org.robolectric:robolectric:4.11.1")
+            }
+        }
 
-#### Mocking
+        val iosTest by getting {
+            dependencies {
+                // Зависимости для тестов под iOS
+            }
+        }
+    }
+}
+```
 
-**MockK**:
-- coEvery для suspend functions
-- every для regular functions
-- verify для проверки вызовов
-- clearAllMocks для cleanup
+**2. Структура директорий**
+```
+shared/src/
+ commonMain/kotlin/
+ commonTest/kotlin/          # Общие тесты (запускаются на всех платформах)
+    repository/
+       TaskRepositoryTest.kt
+    usecase/
+       CreateTaskUseCaseTest.kt
+    util/
+        TestHelpers.kt
+ androidUnitTest/kotlin/     # Специфичные для Android тесты
+    database/
+       TaskDatabaseTest.kt
+    util/
+        AndroidTestHelpers.kt
+ iosTest/kotlin/             # Специфичные для iOS тесты
+     database/
+         TaskDatabaseTest.kt
+```
 
-**Fakes**:
-- In-memory implementations
-- Controlled behavior
-- No external dependencies
-- Deterministic results
+#### Модульное тестирование в commonTest
 
-#### Platform-Specific
+**1. Тесты репозитория**
+```kotlin
+// commonTest/repository/TaskRepositoryTest.kt
+class TaskRepositoryTest {
+    private lateinit var repository: TaskRepository
+    private lateinit var mockApi: TaskApi
+    private lateinit var mockDatabase: TaskDatabase
 
-**Expect/Actual**:
-- Test doubles для platform code
-- Platform-specific drivers
-- Consistent interfaces
+    @BeforeTest
+    fun setup() {
+        mockApi = mockk()
+        mockDatabase = mockk()
 
-**Android Tests**:
-- Robolectric для unit tests
-- In-memory SQLite
-- Context-dependent code
+        repository = TaskRepositoryImpl(
+            api = mockApi,
+            database = mockDatabase,
+            logger = TestLogger()
+        )
+    }
 
-**iOS Tests**:
-- Native SQLite driver
-- Platform-specific features
-- XCTest integration
+    @AfterTest
+    fun tearDown() {
+        clearAllMocks()
+    }
 
-#### Best Practices
+    @Test
+    fun `getTasks returns cached data when network fails`() = runTest {
+        // Given
+        val cachedTasks = listOf(
+            Task(id = "1", title = "Cached Task", userId = "user1")
+        )
 
-1. **Coverage**:
-   - 80%+ в shared code
-   - Happy paths + edge cases
-   - Error scenarios
-   - Concurrent operations
+        coEvery { mockApi.fetchTasks() } throws NetworkException()
+        coEvery { mockDatabase.getAllTasks() } returns cachedTasks
 
-2. **Organization**:
-   - Descriptive names
-   - Group related tests
-   - Shared test utilities
-   - Consistent structure
+        // When
+        val result = repository.getTasks()
 
-3. **Performance**:
-   - Fast tests (<100ms)
-   - In-memory databases
-   - No real network
-   - Parallel execution
+        // Then
+        assertTrue(result.isSuccess)
+        assertEquals(cachedTasks, result.getOrNull())
 
-4. **Maintainability**:
-   - Test builders
-   - Custom assertions
-   - Reusable fakes
-   - Clear test data
+        coVerify { mockApi.fetchTasks() }
+        coVerify { mockDatabase.getAllTasks() }
+    }
+    // ...
+}
+```
+
+**2. Тесты Use Case**
+```kotlin
+// commonTest/usecase/CreateTaskUseCaseTest.kt
+class CreateTaskUseCaseTest {
+    // ...
+}
+```
+
+**3. Тестирование Flow с помощью Turbine**
+```kotlin
+// commonTest/repository/TaskFlowTest.kt
+class TaskFlowTest {
+    // ...
+}
+```
+
+#### Мокирование платформо-специфичного кода
+
+**1. Expect/Actual для тестовых двойников**
+```kotlin
+// commonTest - интерфейс для теста
+expect class TestDatabaseDriver {
+    fun createInMemoryDriver(): SqlDriver
+}
+
+// androidUnitTest
+actual class TestDatabaseDriver {
+    actual fun createInMemoryDriver(): SqlDriver {
+        return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).apply {
+            TaskDatabase.Schema.create(this)
+        }
+    }
+}
+
+// iosTest
+actual class TestDatabaseDriver {
+    actual fun createInMemoryDriver(): SqlDriver {
+        return NativeSqliteDriver(
+            schema = TaskDatabase.Schema,
+            name = null // в памяти
+        )
+    }
+}
+
+// Использование в commonTest
+class TaskDatabaseTest {
+    // ...
+}
+```
+
+**2. Тестовые фейки для платформенных API**
+```kotlin
+// commonMain - платформенный интерфейс
+expect class PlatformLogger {
+    fun log(tag: String, message: String)
+}
+
+// commonTest - фейковая реализация
+class FakeLogger : PlatformLogger() {
+    // ...
+}
+```
+
+#### Тестирование корутин
+
+**1. TestDispatchers**
+```kotlin
+// commonTest/util/TestDispatchers.kt
+object TestDispatchers : CoroutineDispatchers {
+    override val main: CoroutineDispatcher = StandardTestDispatcher()
+    override val io: CoroutineDispatcher = StandardTestDispatcher()
+    override val default: CoroutineDispatcher = StandardTestDispatcher()
+}
+```
+
+#### Платформо-специфичные тесты
+
+**1. Специфичные для Android тесты**
+```kotlin
+// androidUnitTest/database/TaskDatabaseAndroidTest.kt
+@RunWith(AndroidJUnit4::class)
+class TaskDatabaseAndroidTest {
+    // ...
+}
+```
+
+**2. Специфичные для iOS тесты**
+```kotlin
+// iosTest/database/TaskDatabaseIOSTest.kt
+class TaskDatabaseIOSTest {
+    // ...
+}
+```
+
+#### Интеграционное тестирование
+
+**1. Сквозные тесты репозитория**
+```kotlin
+// commonTest/integration/TaskRepositoryIntegrationTest.kt
+class TaskRepositoryIntegrationTest {
+    // ...
+}
+```
+
+#### Утилиты для тестов
+
+**1. Строители тестовых данных**
+```kotlin
+// commonTest/util/TestDataBuilders.kt
+object TaskTestData {
+    // ...
+}
+```
+
+**2. Пользовательские утверждения**
+```kotlin
+// commonTest/util/Assertions.kt
+fun assertTaskEquals(expected: Task, actual: Task, message: String = "") {
+    // ...
+}
+```
+
+#### Лучшие практики
+
+1.  **Организация тестов**:
+    *   Общие тесты в `commonTest`.
+    *   Платформо-специфичные тесты в `androidTest`/`iosTest`.
+2.  **Покрытие тестами**:
+    *   Стремитесь к 80%+ покрытию в общем коде.
+    *   Тестируйте позитивные и негативные сценарии.
+3.  **Тестовые данные**:
+    *   Используйте строители для тестовых данных.
+4.  **Мокирование**:
+    *   Мокируйте внешние зависимости.
+    *   Используйте фейки для сложных зависимостей.
+5.  **Производительность**:
+    *   Тесты должны быть быстрыми (<100мс на тест).
+    *   Используйте базы данных в памяти.
 
 ### Резюме
 
-KMM тестирование обеспечивает comprehensive testing:
-- **Shared Tests**: commonTest для всех платформ
-- **Platform-Specific**: androidTest/iosTest для специфичного кода
-- **Mocking**: MockK, fakes, test doubles
-- **Coroutines**: TestDispatchers, runTest
-- **Flows**: Turbine для reactive testing
-- **Integration**: End-to-end тесты
+Тестирование в KMM обеспечивает комплексные возможности:
+- **Общие тесты**: Пишутся один раз, запускаются на всех платформах (`commonTest`).
+- **Платформо-специфичные**: Тестирование реализаций для конкретных платформ.
+- **Мокирование**: MockK для зависимостей, фейки для сложных объектов.
+- **Корутины**: `TestDispatchers` и `runTest` для асинхронного кода.
+- **Flows**: Turbine для тестирования реактивных потоков.
+- **Интеграция**: Сквозные тесты с реальными реализациями.
 
-Ключевые моменты: максимизировать shared tests, proper test doubles, coroutine testing, high coverage в shared логике.
+Ключевые моменты: максимизация общего тестового кода, использование правильных тестовых двойников, корректное тестирование корутин и поддержание высокого покрытия в общей логике.
 
 ---
 
