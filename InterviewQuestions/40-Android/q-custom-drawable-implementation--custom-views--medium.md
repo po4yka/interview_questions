@@ -779,22 +779,35 @@ override fun getIntrinsicHeight(): Int = 48.dpToPx()
 | **Переиспользуемость** | Высокая | Ниже |
 | **Состояние** | Ограниченное (ColorStateList) | Полное управление состоянием |
 
-**Используйте Drawable когда**: неинтерактивная графика, переиспользование в разных view, простые формы/анимации, фоновая/передняя графика.
+**Используйте Drawable когда**:
+- Неинтерактивная графика
+- Переиспользование в разных view
+- Простые формы/анимации
+- Фоновая/передняя графика
 
-**Используйте Custom View когда**: нужно взаимодействие с касаниями, сложный жизненный цикл, требования доступности, координация анимаций.
+**Используйте Custom View когда**:
+- Нужно взаимодействие с касаниями
+- Сложный жизненный цикл
+- Требования доступности
+- Координация анимаций
 
-### Жизненный цикл Drawable
+---
+
+### 1. Жизненный цикл Drawable
 
 Drawable имеет упрощенный жизненный цикл по сравнению с View:
-1. Создание - конструктор вызывается системой или вами
-2. setBounds() - система устанавливает границы для отрисовки
-3. draw() - вызывается для отрисовки на Canvas
-4. onBoundsChange() - вызывается при изменении размера
-5. setState() - обновление состояния (pressed, focused и т.д.)
-6. onStateChange() - реакция на изменения состояния
-7. invalidateSelf() - запрос перерисовки
 
-### Базовый Custom Drawable
+1. **Создание** - конструктор вызывается системой или вами
+2. **setBounds()** - система устанавливает границы для отрисовки
+3. **draw()** - вызывается для отрисовки на Canvas
+4. **onBoundsChange()** - вызывается при изменении размера
+5. **setState()** - обновление состояния (pressed, focused и т.д.)
+6. **onStateChange()** - реакция на изменения состояния
+7. **invalidateSelf()** - запрос перерисовки
+
+---
+
+### 2. Базовый Custom Drawable
 
 ```kotlin
 class CircleDrawable : Drawable() {
@@ -803,6 +816,13 @@ class CircleDrawable : Drawable() {
         style = Paint.Style.FILL
         color = Color.BLUE
     }
+
+    var color: Int
+        get() = paint.color
+        set(value) {
+            paint.color = value
+            invalidateSelf() // Запросить перерисовку
+        }
 
     //  Основной метод отрисовки
     override fun draw(canvas: Canvas) {
@@ -827,87 +847,227 @@ class CircleDrawable : Drawable() {
     }
 
     //  Вернуть прозрачность (обязательно)
+    @Deprecated("Deprecated in Java", ReplaceWith("PixelFormat.TRANSLUCENT"))
+    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
+
+    //  Intrinsic size (опционально)
+    override fun getIntrinsicWidth(): Int = 48.dpToPx()
+    override fun getIntrinsicHeight(): Int = 48.dpToPx()
+
+    private fun Int.dpToPx(): Int =
+        (this * Resources.getSystem().displayMetrics.density).toInt()
+}
+```
+
+**Использование:**
+```kotlin
+// Установить как фон
+view.background = CircleDrawable()
+
+// Установить как источник ImageView
+imageView.setImageDrawable(CircleDrawable())
+
+// Установить программно
+val circle = CircleDrawable().apply {
+    color = Color.RED
+    setBounds(0, 0, 100, 100)
+}
+canvas.draw(circle)
+```
+
+---
+
+### 3. Управление границами (Bounds Management)
+
+Drawable должен уважать границы, установленные контейнером.
+
+```kotlin
+class RectangleDrawable : Drawable() {
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    override fun draw(canvas: Canvas) {
+        //  Всегда использовать bounds, никогда не hardcode координаты
+        val bounds = bounds
+
+        // Рисовать в пределах bounds
+        canvas.drawRect(bounds, paint)
+
+        // Или вычислить относительные координаты
+        val centerX = bounds.centerX().toFloat()
+        val centerY = bounds.centerY().toFloat()
+        val width = bounds.width().toFloat()
+        val height = bounds.height().toFloat()
+
+        // Рисовать что-то центрированное
+        canvas.drawRoundRect(
+            centerX - width / 4,
+            centerY - height / 4,
+            centerX + width / 4,
+            centerY + height / 4,
+            10f, 10f,
+            paint
+        )
+    }
+
+    //  Реагировать на изменения bounds
+    override fun onBoundsChange(bounds: Rect) {
+        super.onBoundsChange(bounds)
+
+        // Пересоздать объекты, зависящие от размера
+        recreateShader(bounds)
+    }
+
+    private fun recreateShader(bounds: Rect) {
+        val shader = LinearGradient(
+            bounds.left.toFloat(),
+            bounds.top.toFloat(),
+            bounds.right.toFloat(),
+            bounds.bottom.toFloat(),
+            Color.BLUE,
+            Color.GREEN,
+            Shader.TileMode.CLAMP
+        )
+        paint.shader = shader
+    }
+
+    override fun setAlpha(alpha: Int) {
+        paint.alpha = alpha
+    }
+
+    override fun setColorFilter(colorFilter: ColorFilter?) {
+        paint.colorFilter = colorFilter
+    }
+
     @Deprecated("Deprecated in Java")
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 }
 ```
 
-### Управление границами
+---
 
-```kotlin
-override fun draw(canvas: Canvas) {
-    //  Всегда использовать bounds, никогда не hardcode координаты
-    val bounds = bounds
-    canvas.drawRect(bounds, paint)
-}
+### 4. Stateful Drawable (с состояниями)
 
-override fun onBoundsChange(bounds: Rect) {
-    super.onBoundsChange(bounds)
-    // Пересоздать объекты, зависящие от размера
-    recreateShader(bounds)
-}
-```
-
-### Ключевые методы
-
-- `draw()` - Отрисовать drawable
-- `onBoundsChange()` - Обработать изменения размера
-- `isStateful()` - Поддержка изменений состояния
-- `onStateChange()` - Обработать изменения состояния
-- `invalidateSelf()` - Запросить перерисовку
-
-### Статичные Drawables
-
-Stateful Drawable может реагировать на состояния view (нажатие, фокус, выбор):
+Реагирует на изменения состояния view (pressed, focused и т.д.).
 
 ```kotlin
 class StatefulButtonDrawable : Drawable() {
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+    }
+
     private val normalColor = Color.BLUE
     private val pressedColor = Color.DARK_GRAY
+    private val disabledColor = Color.LIGHT_GRAY
 
-    override fun isStateful(): Boolean = true
-
-    override fun onStateChange(state: IntArray): Boolean {
-        val newColor = when {
-            state.contains(android.R.attr.state_pressed) -> pressedColor
-            else -> normalColor
-        }
-        if (paint.color != newColor) {
-            paint.color = newColor
-            return true // Запросить перерисовку
-        }
-        return false
+    init {
+        paint.color = normalColor
     }
 
     override fun draw(canvas: Canvas) {
-        canvas.drawRoundRect(bounds.toRectF(), 20f, 20f, paint)
+        val bounds = bounds
+        canvas.drawRoundRect(
+            bounds.left.toFloat(),
+            bounds.top.toFloat(),
+            bounds.right.toFloat(),
+            bounds.bottom.toFloat(),
+            20f, 20f,
+            paint
+        )
     }
+
+    //  Объявить, какие состояния обрабатывает этот drawable
+    override fun isStateful(): Boolean = true
+
+    //  Обработать изменения состояния
+    override fun onStateChange(state: IntArray): Boolean {
+        val oldColor = paint.color
+
+        paint.color = when {
+            state.contains(android.R.attr.state_pressed) -> pressedColor
+            state.contains(android.R.attr.state_enabled).not() -> disabledColor
+            else -> normalColor
+        }
+
+        // Вернуть true, если визуальное представление изменилось (вызывает перерисовку)
+        return oldColor != paint.color
+    }
+
+    override fun setAlpha(alpha: Int) {
+        paint.alpha = alpha
+    }
+
+    override fun setColorFilter(colorFilter: ColorFilter?) {
+        paint.colorFilter = colorFilter
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 }
 ```
 
-### Анимированные Drawables
+**Использование:**
+```kotlin
+button.background = StatefulButtonDrawable()
+// Автоматически меняет цвет при нажатии!
+```
 
-Используйте интерфейс Animatable для создания анимированных drawable:
+---
+
+### 5. Анимированный Drawable
 
 ```kotlin
 class SpinnerDrawable : Drawable(), Animatable {
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeWidth = 8f
+        color = Color.BLUE
+        strokeCap = Paint.Cap.ROUND
+    }
+
     private var rotation = 0f
     private var isRunning = false
 
     private val animator = ValueAnimator.ofFloat(0f, 360f).apply {
         duration = 1000
         repeatCount = ValueAnimator.INFINITE
+        interpolator = LinearInterpolator()
         addUpdateListener { animation ->
             rotation = animation.animatedValue as Float
-            invalidateSelf()
+            invalidateSelf() // Запросить перерисовку
         }
     }
 
+    override fun draw(canvas: Canvas) {
+        val bounds = bounds
+        val centerX = bounds.centerX().toFloat()
+        val centerY = bounds.centerY().toFloat()
+        val radius = min(bounds.width(), bounds.height()) / 2f * 0.8f
+
+        canvas.save()
+        canvas.rotate(rotation, centerX, centerY)
+
+        // Нарисовать дугу (неполный круг для эффекта спиннера)
+        canvas.drawArc(
+            centerX - radius,
+            centerY - radius,
+            centerX + radius,
+            centerY + radius,
+            0f, 270f,
+            false, paint
+        )
+
+        canvas.restore()
+    }
+
+    //  Интерфейс Animatable
     override fun start() {
         if (!isRunning) {
             isRunning = true
             animator.start()
+            callback?.invalidateDrawable(this)
         }
     }
 
@@ -920,27 +1080,408 @@ class SpinnerDrawable : Drawable(), Animatable {
 
     override fun isRunning(): Boolean = isRunning
 
-    override fun draw(canvas: Canvas) {
-        canvas.save()
-        canvas.rotate(rotation, bounds.centerX().toFloat(), bounds.centerY().toFloat())
-        // Рисование спиннера
-        canvas.restore()
+    override fun setAlpha(alpha: Int) {
+        paint.alpha = alpha
     }
+
+    override fun setColorFilter(colorFilter: ColorFilter?) {
+        paint.colorFilter = colorFilter
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 }
 ```
 
-### Лучшие практики
+**Использование:**
+```kotlin
+val spinner = SpinnerDrawable()
+imageView.setImageDrawable(spinner)
+spinner.start() // Запустить анимацию
+```
 
-1. Всегда использовать bounds - никогда не hardcode координаты
-2. Реализовать обязательные методы: setAlpha(), setColorFilter(), getOpacity()
-3. Вызывать invalidateSelf() при изменении состояния
-4. Предварительно выделять объекты (Paint, Path) - не создавать в draw()
-5. Обрабатывать изменения bounds через onBoundsChange()
-6. Предоставлять intrinsic size через getIntrinsicWidth/Height()
-7. Поддерживать tinting для кастомизации цвета
-8. Переопределять isStateful() для stateful drawables
-9. Использовать callback для уведомления об изменениях
-10. Оптимизировать производительность - избегать лишних вычислений в draw()
+---
+
+### 6. LayerDrawable - Комбинирование нескольких Drawables
+
+```kotlin
+class BadgeDrawable(
+    context: Context,
+    count: Int
+) : LayerDrawable(emptyArray()) {
+
+    private val backgroundDrawable = GradientDrawable().apply {
+        shape = GradientDrawable.OVAL
+        setColor(Color.RED)
+    }
+
+    private val textDrawable = TextDrawable(context, count.toString())
+
+    init {
+        addLayer(backgroundDrawable)
+        addLayer(textDrawable)
+
+        // Установить размеры слоев
+        setLayerSize(0, 24.dpToPx(), 24.dpToPx())
+        setLayerSize(1, 24.dpToPx(), 24.dpToPx())
+    }
+
+    private fun Int.dpToPx(): Int =
+        (this * context.resources.displayMetrics.density).toInt()
+}
+
+class TextDrawable(
+    private val context: Context,
+    private val text: String
+) : Drawable() {
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        textAlign = Paint.Align.CENTER
+        textSize = 12.spToPx()
+        color = Color.WHITE
+    }
+
+    override fun draw(canvas: Canvas) {
+        val bounds = bounds
+        val x = bounds.centerX().toFloat()
+        val y = bounds.centerY() - (paint.descent() + paint.ascent()) / 2
+
+        canvas.drawText(text, x, y, paint)
+    }
+
+    override fun setAlpha(alpha: Int) {
+        paint.alpha = alpha
+    }
+
+    override fun setColorFilter(colorFilter: ColorFilter?) {
+        paint.colorFilter = colorFilter
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
+
+    private fun Int.spToPx(): Float =
+        this * context.resources.displayMetrics.scaledDensity
+}
+```
+
+---
+
+### 7. Gradient Drawable (Градиентный Drawable)
+
+```kotlin
+class CustomGradientDrawable : Drawable() {
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var gradientShader: Shader? = null
+
+    var startColor: Int = Color.BLUE
+        set(value) {
+            field = value
+            recreateGradient()
+        }
+
+    var endColor: Int = Color.GREEN
+        set(value) {
+            field = value
+            recreateGradient()
+        }
+
+    var orientation: Orientation = Orientation.TOP_BOTTOM
+        set(value) {
+            field = value
+            recreateGradient()
+        }
+
+    enum class Orientation {
+        TOP_BOTTOM, LEFT_RIGHT, DIAGONAL
+    }
+
+    override fun draw(canvas: Canvas) {
+        val bounds = bounds
+
+        if (gradientShader == null) {
+            recreateGradient()
+        }
+
+        paint.shader = gradientShader
+        canvas.drawRect(bounds, paint)
+    }
+
+    override fun onBoundsChange(bounds: Rect) {
+        super.onBoundsChange(bounds)
+        recreateGradient()
+    }
+
+    private fun recreateGradient() {
+        val bounds = bounds
+        if (bounds.isEmpty) return
+
+        gradientShader = when (orientation) {
+            Orientation.TOP_BOTTOM -> LinearGradient(
+                bounds.centerX().toFloat(),
+                bounds.top.toFloat(),
+                bounds.centerX().toFloat(),
+                bounds.bottom.toFloat(),
+                startColor, endColor,
+                Shader.TileMode.CLAMP
+            )
+
+            Orientation.LEFT_RIGHT -> LinearGradient(
+                bounds.left.toFloat(),
+                bounds.centerY().toFloat(),
+                bounds.right.toFloat(),
+                bounds.centerY().toFloat(),
+                startColor, endColor,
+                Shader.TileMode.CLAMP
+            )
+
+            Orientation.DIAGONAL -> LinearGradient(
+                bounds.left.toFloat(),
+                bounds.top.toFloat(),
+                bounds.right.toFloat(),
+                bounds.bottom.toFloat(),
+                startColor, endColor,
+                Shader.TileMode.CLAMP
+            )
+        }
+
+        invalidateSelf()
+    }
+
+    override fun setAlpha(alpha: Int) {
+        paint.alpha = alpha
+    }
+
+    override fun setColorFilter(colorFilter: ColorFilter?) {
+        paint.colorFilter = colorFilter
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
+}
+```
+
+---
+
+### 8. Shape Drawable с Path
+
+```kotlin
+class StarDrawable : Drawable() {
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = Color.YELLOW
+    }
+
+    private val path = Path()
+    private var pathCreated = false
+
+    override fun draw(canvas: Canvas) {
+        if (!pathCreated) {
+            createStarPath()
+            pathCreated = true
+        }
+
+        canvas.drawPath(path, paint)
+    }
+
+    override fun onBoundsChange(bounds: Rect) {
+        super.onBoundsChange(bounds)
+        pathCreated = false // Пересоздать path при изменении размера
+    }
+
+    private fun createStarPath() {
+        path.reset()
+
+        val bounds = bounds
+        val cx = bounds.centerX().toFloat()
+        val cy = bounds.centerY().toFloat()
+        val outerRadius = min(bounds.width(), bounds.height()) / 2f * 0.9f
+        val innerRadius = outerRadius * 0.4f
+
+        // Создать 5-конечную звезду
+        for (i in 0 until 10) {
+            val angle = Math.PI / 5 * i - Math.PI / 2
+            val radius = if (i % 2 == 0) outerRadius else innerRadius
+            val x = cx + (radius * cos(angle)).toFloat()
+            val y = cy + (radius * sin(angle)).toFloat()
+
+            if (i == 0) {
+                path.moveTo(x, y)
+            } else {
+                path.lineTo(x, y)
+            }
+        }
+
+        path.close()
+    }
+
+    override fun setAlpha(alpha: Int) {
+        paint.alpha = alpha
+    }
+
+    override fun setColorFilter(colorFilter: ColorFilter?) {
+        paint.colorFilter = colorFilter
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
+}
+```
+
+---
+
+### 9. Tinting Drawables (Тонирование)
+
+Поддержка тонирования для кастомизации цвета.
+
+```kotlin
+class TintableDrawable : Drawable() {
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var tintColor: Int? = null
+
+    override fun draw(canvas: Canvas) {
+        paint.color = tintColor ?: Color.BLUE
+        canvas.drawCircle(
+            bounds.centerX().toFloat(),
+            bounds.centerY().toFloat(),
+            min(bounds.width(), bounds.height()) / 2f,
+            paint
+        )
+    }
+
+    override fun setTint(tintColor: Int) {
+        this.tintColor = tintColor
+        invalidateSelf()
+    }
+
+    override fun setTintList(tint: ColorStateList?) {
+        tintColor = tint?.defaultColor
+        invalidateSelf()
+    }
+
+    override fun setAlpha(alpha: Int) {
+        paint.alpha = alpha
+    }
+
+    override fun setColorFilter(colorFilter: ColorFilter?) {
+        paint.colorFilter = colorFilter
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
+}
+```
+
+**Использование:**
+```kotlin
+val drawable = TintableDrawable()
+DrawableCompat.setTint(drawable, Color.RED)
+imageView.setImageDrawable(drawable)
+```
+
+---
+
+### 10. Лучшие практики
+
+**1. Всегда использовать bounds, никогда не hardcode**
+```kotlin
+//  ПРАВИЛЬНО
+override fun draw(canvas: Canvas) {
+    val bounds = bounds
+    canvas.drawRect(bounds, paint)
+}
+
+//  НЕПРАВИЛЬНО
+override fun draw(canvas: Canvas) {
+    canvas.drawRect(0f, 0f, 100f, 100f, paint) // Hardcoded!
+}
+```
+
+**2. Реализовать обязательные методы**
+```kotlin
+//  Должны реализовать эти 3 метода
+override fun setAlpha(alpha: Int)
+override fun setColorFilter(colorFilter: ColorFilter?)
+override fun getOpacity(): Int
+```
+
+**3. Вызывать invalidateSelf() при изменении состояния**
+```kotlin
+var color: Int = Color.BLUE
+    set(value) {
+        field = value
+        paint.color = value
+        invalidateSelf() //  Запросить перерисовку
+    }
+```
+
+**4. Предварительно выделять объекты**
+```kotlin
+//  ПРАВИЛЬНО - Выделить один раз
+private val paint = Paint()
+private val path = Path()
+
+override fun draw(canvas: Canvas) {
+    path.reset() // Переиспользовать
+    // ...
+}
+
+//  НЕПРАВИЛЬНО - Выделение в draw()
+override fun draw(canvas: Canvas) {
+    val paint = Paint() // Выделяется при каждой отрисовке!
+}
+```
+
+**5. Обрабатывать изменения bounds**
+```kotlin
+override fun onBoundsChange(bounds: Rect) {
+    super.onBoundsChange(bounds)
+    // Пересоздать объекты, зависящие от размера
+    recreateShader()
+    recreatePath()
+}
+```
+
+**6. Предоставлять intrinsic size (опционально)**
+```kotlin
+override fun getIntrinsicWidth(): Int = 48.dpToPx()
+override fun getIntrinsicHeight(): Int = 48.dpToPx()
+```
+
+---
+
+### Резюме
+
+**Создание пользовательских Drawables:**
+1. Наследовать класс `Drawable`
+2. Реализовать `draw(canvas: Canvas)`
+3. Реализовать `setAlpha()`, `setColorFilter()`, `getOpacity()`
+4. Использовать `bounds` для координат
+5. Вызывать `invalidateSelf()` при изменении состояния
+
+**Ключевые методы:**
+- `draw()` - Отрисовать drawable
+- `onBoundsChange()` - Обработать изменения размера
+- `isStateful()` - Поддержка изменений состояния
+- `onStateChange()` - Обработать изменения состояния
+- `invalidateSelf()` - Запросить перерисовку
+
+**Drawable vs View:**
+- Drawable: легковесная, переиспользуемая графика
+- View: интерактивные UI элементы с полным жизненным циклом
+
+**Лучшие практики:**
+- Всегда использовать bounds
+- Предварительно выделять объекты
+- Обрабатывать изменения bounds
+- Поддерживать tinting
+- Предоставлять intrinsic size
+- Оптимизировать производительность - избегать лишних вычислений в draw()
+- Использовать callback для уведомления об изменениях
+- Переопределять isStateful() для stateful drawables
 
 ---
 

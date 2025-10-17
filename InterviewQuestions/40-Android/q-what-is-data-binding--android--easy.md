@@ -487,3 +487,286 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
+### Дополнительные возможности
+
+#### Binding Adapters
+
+Пользовательские атрибуты для расширения возможностей Data Binding:
+
+```kotlin
+// Определение Binding Adapter
+@BindingAdapter("imageUrl")
+fun loadImage(imageView: ImageView, url: String?) {
+    url?.let {
+        Glide.with(imageView.context)
+            .load(it)
+            .placeholder(R.drawable.placeholder)
+            .into(imageView)
+    }
+}
+
+// Использование в XML
+<ImageView
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    app:imageUrl="@{user.avatarUrl}" />
+```
+
+#### С несколькими параметрами:
+
+```kotlin
+@BindingAdapter("imageUrl", "placeholder")
+fun loadImage(imageView: ImageView, url: String?, placeholderRes: Int) {
+    Glide.with(imageView.context)
+        .load(url)
+        .placeholder(placeholderRes)
+        .into(imageView)
+}
+
+// XML
+<ImageView
+    app:imageUrl="@{user.avatarUrl}"
+    app:placeholder="@{@drawable/placeholder}" />
+```
+
+#### Observable Collections
+
+Для динамических списков:
+
+```kotlin
+class UserViewModel : ViewModel() {
+    val users = ObservableArrayList<User>()
+
+    fun loadUsers() {
+        users.addAll(fetchUsers())
+    }
+
+    fun addUser(user: User) {
+        users.add(user) // UI обновится автоматически
+    }
+}
+```
+
+#### LiveData с Data Binding
+
+Рекомендуемый подход для современных приложений:
+
+```kotlin
+class ProfileViewModel : ViewModel() {
+    private val _user = MutableLiveData<User>()
+    val user: LiveData<User> = _user
+
+    val isLoading = MutableLiveData<Boolean>()
+    val errorMessage = MutableLiveData<String?>()
+
+    fun loadProfile(userId: String) {
+        isLoading.value = true
+        viewModelScope.launch {
+            try {
+                _user.value = repository.getUser(userId)
+                errorMessage.value = null
+            } catch (e: Exception) {
+                errorMessage.value = e.message
+            } finally {
+                isLoading.value = false
+            }
+        }
+    }
+}
+```
+
+```xml
+<layout>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.ProfileViewModel" />
+    </data>
+
+    <ConstraintLayout>
+        <ProgressBar
+            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}" />
+
+        <TextView
+            android:text="@{viewModel.user.name}"
+            android:visibility="@{!viewModel.isLoading ? View.VISIBLE : View.GONE}" />
+
+        <TextView
+            android:text="@{viewModel.errorMessage}"
+            android:visibility="@{viewModel.errorMessage != null ? View.VISIBLE : View.GONE}" />
+    </ConstraintLayout>
+</layout>
+```
+
+```kotlin
+class ProfileActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityProfileBinding
+    private lateinit var viewModel: ProfileViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_profile)
+        viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
+
+        // ВАЖНО: Установить lifecycleOwner для LiveData
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+
+        viewModel.loadProfile(userId)
+    }
+}
+```
+
+### Практический пример: Форма регистрации
+
+```kotlin
+data class RegistrationForm(
+    var email: String = "",
+    var password: String = "",
+    var confirmPassword: String = "",
+    var agreedToTerms: Boolean = false
+)
+
+class RegistrationViewModel : ViewModel() {
+    val form = RegistrationForm()
+
+    val isFormValid = MutableLiveData<Boolean>()
+    val errorMessage = MutableLiveData<String?>()
+
+    fun validateForm() {
+        when {
+            form.email.isEmpty() -> {
+                errorMessage.value = "Email обязателен"
+                isFormValid.value = false
+            }
+            !Patterns.EMAIL_ADDRESS.matcher(form.email).matches() -> {
+                errorMessage.value = "Неверный формат email"
+                isFormValid.value = false
+            }
+            form.password.length < 6 -> {
+                errorMessage.value = "Пароль должен быть не менее 6 символов"
+                isFormValid.value = false
+            }
+            form.password != form.confirmPassword -> {
+                errorMessage.value = "Пароли не совпадают"
+                isFormValid.value = false
+            }
+            !form.agreedToTerms -> {
+                errorMessage.value = "Необходимо согласиться с условиями"
+                isFormValid.value = false
+            }
+            else -> {
+                errorMessage.value = null
+                isFormValid.value = true
+            }
+        }
+    }
+
+    fun register() {
+        validateForm()
+        if (isFormValid.value == true) {
+            // Выполнить регистрацию
+        }
+    }
+}
+```
+
+```xml
+<layout>
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="viewModel"
+            type="com.example.RegistrationViewModel" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <EditText
+            android:hint="Email"
+            android:text="@={viewModel.form.email}"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:hint="Пароль"
+            android:text="@={viewModel.form.password}"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:hint="Подтвердите пароль"
+            android:text="@={viewModel.form.confirmPassword}"
+            android:inputType="textPassword" />
+
+        <CheckBox
+            android:text="Я согласен с условиями"
+            android:checked="@={viewModel.form.agreedToTerms}" />
+
+        <TextView
+            android:text="@{viewModel.errorMessage}"
+            android:textColor="@android:color/holo_red_dark"
+            android:visibility="@{viewModel.errorMessage != null ? View.VISIBLE : View.GONE}" />
+
+        <Button
+            android:text="Зарегистрироваться"
+            android:onClick="@{() -> viewModel.register()}"
+            android:enabled="@{viewModel.isFormValid}" />
+    </LinearLayout>
+</layout>
+```
+
+### Когда использовать Data Binding
+
+**Используйте Data Binding когда:**
+- Нужна двусторонняя привязка данных
+- Работаете с Observable данными
+- Хотите сократить код UI
+- Используете MVVM архитектуру
+
+**Не используйте Data Binding когда:**
+- Проект простой и не требует сложной привязки
+- Команда предпочитает View Binding за простоту
+- Время сборки критично
+- Нужна максимальная отладочная ясность
+
+### Миграция с findViewById на Data Binding
+
+**Было:**
+```kotlin
+class OldActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val textView = findViewById<TextView>(R.id.textView)
+        val button = findViewById<Button>(R.id.button)
+
+        textView.text = user.name
+        button.setOnClickListener {
+            // Обработка
+        }
+    }
+}
+```
+
+**Стало:**
+```kotlin
+class NewActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.user = user
+        binding.clickHandler = ClickHandler()
+    }
+
+    inner class ClickHandler {
+        fun onButtonClick(view: View) {
+            // Обработка
+        }
+    }
+}
+```
+

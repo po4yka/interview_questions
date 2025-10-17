@@ -434,7 +434,357 @@ fun AdvancedBoxExample() {
 # Как называется лейаут, в котором объекты могут наслаиваться друг на друга?
 
 ## Ответ (RU)
-Такой тип называется FrameLayout в Android или Box в Jetpack Compose.
+
+В Android существует два основных подхода для создания макетов, в которых UI элементы могут накладываться друг на друга: **FrameLayout** (традиционная система View) и **Box** (Jetpack Compose).
+
+### FrameLayout (Традиционная система View)
+
+`FrameLayout` предназначен для отображения одного view, но может содержать несколько дочерних элементов, которые накладываются друг на друга, при этом последний дочерний элемент рисуется поверх.
+
+#### Базовый пример FrameLayout (XML)
+
+```xml
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="300dp">
+
+    <!-- Фоновое изображение (нижний слой) -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"
+        android:scaleType="centerCrop" />
+
+    <!-- Средний слой - полупрозрачное наложение -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000" />
+
+    <!-- Верхний слой - текст -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Наложенный текст"
+        android:textColor="@android:color/white"
+        android:textSize="24sp" />
+</FrameLayout>
+```
+
+#### FrameLayout с позиционированием
+
+```xml
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="200dp">
+
+    <!-- Базовый слой -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blue" />
+
+    <!-- Верхний левый угол -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_margin="16dp"
+        android:text="Верхний левый" />
+
+    <!-- Центр -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Центр" />
+
+    <!-- Нижний правый угол -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:text="Нижний правый" />
+</FrameLayout>
+```
+
+#### Программное создание FrameLayout
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val frameLayout = FrameLayout(this).apply {
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                800
+            )
+        }
+
+        // Добавление фонового изображения
+        val imageView = ImageView(this).apply {
+            setImageResource(R.drawable.background)
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+        }
+
+        // Добавление наложенного текста
+        val textView = TextView(this).apply {
+            text = "Наложенный текст"
+            setTextColor(Color.WHITE)
+            textSize = 24f
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER
+            )
+        }
+
+        frameLayout.addView(imageView)
+        frameLayout.addView(textView)
+
+        setContentView(frameLayout)
+    }
+}
+```
+
+### Типичные случаи использования FrameLayout
+
+#### 1. Изображение с наложенным значком
+
+```xml
+<FrameLayout
+    android:layout_width="100dp"
+    android:layout_height="100dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/user_avatar"
+        android:scaleType="centerCrop" />
+
+    <!-- Наложенный значок -->
+    <TextView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="4dp"
+        android:background="@drawable/circle_red"
+        android:gravity="center"
+        android:text="5"
+        android:textColor="@android:color/white"
+        android:textSize="12sp" />
+</FrameLayout>
+```
+
+#### 2. Наложение загрузки
+
+```xml
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Основное содержимое -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!-- Содержимое здесь -->
+    </LinearLayout>
+
+    <!-- Наложение загрузки -->
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CC000000"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+</FrameLayout>
+```
+
+```kotlin
+// Показать/скрыть наложение загрузки
+fun showLoading(show: Boolean) {
+    findViewById<View>(R.id.loadingOverlay).visibility =
+        if (show) View.VISIBLE else View.GONE
+}
+```
+
+### Box в Jetpack Compose
+
+`Box` - это Compose эквивалент `FrameLayout`, предоставляющий composable, который размещает свои дочерние элементы друг на друге.
+
+#### Базовый пример Box
+
+```kotlin
+@Composable
+fun OverlayExample() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp)
+    ) {
+        // Фоновый слой
+        Image(
+            painter = painterResource(R.drawable.background),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // Полупрозрачное наложение
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+        )
+
+        // Верхний слой - текст
+        Text(
+            text = "Наложенный текст",
+            color = Color.White,
+            fontSize = 24.sp,
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
+```
+
+#### Box с множественным выравниванием
+
+```kotlin
+@Composable
+fun MultiAlignmentBox() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .background(Color.Blue)
+    ) {
+        // Верхний левый
+        Text(
+            text = "Верхний левый",
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(16.dp)
+        )
+
+        // Центр
+        Text(
+            text = "Центр",
+            modifier = Modifier.align(Alignment.Center)
+        )
+
+        // Нижний правый
+        Text(
+            text = "Нижний правый",
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        )
+    }
+}
+```
+
+#### Практические примеры Compose
+
+##### Карточка со значком
+
+```kotlin
+@Composable
+fun BadgedProfileImage(
+    imageUrl: String,
+    badgeCount: Int
+) {
+    Box(
+        modifier = Modifier.size(100.dp)
+    ) {
+        // Изображение профиля
+        AsyncImage(
+            model = imageUrl,
+            contentDescription = "Профиль",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        // Значок
+        if (badgeCount > 0) {
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .align(Alignment.TopEnd)
+                    .offset(x = (-4).dp, y = 4.dp)
+                    .background(Color.Red, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = badgeCount.toString(),
+                    color = Color.White,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+}
+```
+
+##### Наложение загрузки
+
+```kotlin
+@Composable
+fun ScreenWithLoading(
+    isLoading: Boolean,
+    content: @Composable () -> Unit
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Основное содержимое
+        content()
+
+        // Наложение загрузки
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.8f))
+                    .clickable(enabled = false) { }, // Блокировка взаимодействий
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = Color.White)
+            }
+        }
+    }
+}
+```
+
+### Сравнение: FrameLayout vs Box
+
+| Функция | FrameLayout | Box (Compose) |
+|---------|-------------|---------------|
+| Система | Система View | Jetpack Compose |
+| Определение | XML или Kotlin | Kotlin @Composable |
+| Порядок дочерних элементов | Последний дочерний элемент сверху | Последний дочерний элемент сверху |
+| Выравнивание | `layout_gravity` | `Modifier.align()` |
+| Контроль Z-индекса | Порядок добавления | Порядок добавления / `zIndex()` |
+
+### Резюме
+
+- **FrameLayout** (система View): Простой контейнер для наложения views
+- **Box** (Jetpack Compose): Современный декларативный подход для наложения composables
+- Оба размещают дочерние элементы друг на друге в порядке их добавления
+- Используйте `layout_gravity` (FrameLayout) или `Modifier.align()` (Box) для позиционирования
+- Распространенные применения: значки, наложения, плавающие кнопки, индикаторы загрузки
 
 ---
 

@@ -547,6 +547,37 @@ class MyProvider : ContentProvider() {
 4. Доступ к Context
 5. Взаимодействие через Intent/ContentResolver
 
+**Пример Service:**
+```kotlin
+// 1. Объявление в манифесте:
+// <service android:name=".DownloadService" />
+
+// 2. Расширение базового класса
+class DownloadService : Service() {
+
+    // 3. Переопределение методов жизненного цикла
+    override fun onCreate() {
+        super.onCreate()
+        val ctx: Context = this  // 4. Доступ к Context
+        Log.d("Service", "Сервис создан")
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // 5. Intent взаимодействие
+        val url = intent?.getStringExtra("url")
+        // Начать загрузку файла
+        return START_STICKY
+    }
+
+    override fun onBind(intent: Intent?): IBinder? = null
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("Service", "Сервис уничтожен")
+    }
+}
+```
+
 ### Коммуникация между компонентами
 
 ```kotlin
@@ -573,6 +604,245 @@ override fun onReceive(context: Context, intent: Intent) {
 }
 ```
 
+### Практические сценарии использования
+
+**Сценарий 1: Скачивание файла с уведомлением**
+```kotlin
+// Activity запускает Service
+class MainActivity : AppCompatActivity() {
+    fun downloadFile(url: String) {
+        val intent = Intent(this, DownloadService::class.java)
+        intent.putExtra("url", url)
+        startService(intent)
+    }
+}
+
+// Service выполняет загрузку и показывает уведомление
+class DownloadService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val url = intent?.getStringExtra("url") ?: return START_NOT_STICKY
+
+        // Скачивание файла в фоне
+        thread {
+            downloadFileFromUrl(url)
+            showNotification("Загрузка завершена")
+            stopSelf()
+        }
+
+        return START_NOT_STICKY
+    }
+
+    private fun showNotification(message: String) {
+        // При нажатии откроет Activity
+        val intent = Intent(this, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent, PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Загрузка")
+            .setContentText(message)
+            .setContentIntent(pendingIntent)
+            .build()
+
+        val notificationManager = getSystemService<NotificationManager>()
+        notificationManager?.notify(1, notification)
+    }
+
+    override fun onBind(intent: Intent?): IBinder? = null
+}
+```
+
+**Сценарий 2: Получение системных событий**
+```kotlin
+// BroadcastReceiver для системных событий
+class NetworkChangeReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        when (intent.action) {
+            ConnectivityManager.CONNECTIVITY_ACTION -> {
+                val isConnected = isNetworkAvailable(context)
+
+                if (isConnected) {
+                    // Запустить Service для синхронизации
+                    val serviceIntent = Intent(context, SyncService::class.java)
+                    context.startService(serviceIntent)
+                }
+
+                // Отправить результат в Activity через LocalBroadcast
+                val broadcastIntent = Intent("NETWORK_STATUS_CHANGED")
+                broadcastIntent.putExtra("isConnected", isConnected)
+                LocalBroadcastManager.getInstance(context)
+                    .sendBroadcast(broadcastIntent)
+            }
+        }
+    }
+
+    private fun isNetworkAvailable(context: Context): Boolean {
+        val cm = context.getSystemService<ConnectivityManager>()
+        val network = cm?.activeNetwork ?: return false
+        val capabilities = cm.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+}
+
+// Регистрация в манифесте
+// <receiver android:name=".NetworkChangeReceiver" android:exported="false">
+//     <intent-filter>
+//         <action android:name="android.net.conn.CONNECTIVITY_ACTION"/>
+//     </intent-filter>
+// </receiver>
+```
+
+**Сценарий 3: Обмен данными через ContentProvider**
+```kotlin
+// ContentProvider для обмена данными между приложениями
+class ContactsProvider : ContentProvider() {
+    private lateinit var database: SQLiteDatabase
+
+    companion object {
+        const val AUTHORITY = "com.example.app.contacts"
+        val CONTENT_URI: Uri = Uri.parse("content://$AUTHORITY/contacts")
+    }
+
+    override fun onCreate(): Boolean {
+        val dbHelper = DatabaseHelper(context!!)
+        database = dbHelper.writableDatabase
+        return true
+    }
+
+    override fun query(
+        uri: Uri, projection: Array<String>?, selection: String?,
+        selectionArgs: Array<String>?, sortOrder: String?
+    ): Cursor? {
+        return database.query(
+            "contacts", projection, selection,
+            selectionArgs, null, null, sortOrder
+        )
+    }
+
+    override fun insert(uri: Uri, values: ContentValues?): Uri? {
+        val id = database.insert("contacts", null, values)
+        return ContentUris.withAppendedId(CONTENT_URI, id)
+    }
+
+    override fun update(
+        uri: Uri, values: ContentValues?,
+        selection: String?, selectionArgs: Array<String>?
+    ): Int {
+        return database.update("contacts", values, selection, selectionArgs)
+    }
+
+    override fun delete(
+        uri: Uri, selection: String?,
+        selectionArgs: Array<String>?
+    ): Int {
+        return database.delete("contacts", selection, selectionArgs)
+    }
+
+    override fun getType(uri: Uri): String {
+        return "vnd.android.cursor.dir/vnd.example.contacts"
+    }
+}
+
+// Использование из другого приложения
+class AnotherActivity : AppCompatActivity() {
+    fun readContacts() {
+        val uri = Uri.parse("content://com.example.app.contacts/contacts")
+        val cursor = contentResolver.query(uri, null, null, null, null)
+
+        cursor?.use {
+            while (it.moveToNext()) {
+                val name = it.getString(it.getColumnIndexOrThrow("name"))
+                val phone = it.getString(it.getColumnIndexOrThrow("phone"))
+                Log.d("Contact", "Name: $name, Phone: $phone")
+            }
+        }
+    }
+}
+```
+
+**Сценарий 4: Foreground Service для музыкального плеера**
+```kotlin
+class MusicPlayerService : Service() {
+    private lateinit var mediaPlayer: MediaPlayer
+    private val binder = MusicBinder()
+
+    inner class MusicBinder : Binder() {
+        fun getService(): MusicPlayerService = this@MusicPlayerService
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        mediaPlayer = MediaPlayer()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when (intent?.action) {
+            "PLAY" -> playMusic()
+            "PAUSE" -> pauseMusic()
+            "STOP" -> stopMusic()
+        }
+
+        // Foreground service требует уведомление
+        val notification = createNotification()
+        startForeground(1, notification)
+
+        return START_STICKY
+    }
+
+    override fun onBind(intent: Intent?): IBinder = binder
+
+    private fun playMusic() {
+        if (!mediaPlayer.isPlaying) {
+            mediaPlayer.start()
+        }
+    }
+
+    private fun pauseMusic() {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+        }
+    }
+
+    private fun stopMusic() {
+        mediaPlayer.stop()
+        stopForeground(true)
+        stopSelf()
+    }
+
+    private fun createNotification(): Notification {
+        val intent = Intent(this, MusicActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent, PendingIntent.FLAG_IMMUTABLE
+        )
+
+        return NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Музыкальный плеер")
+            .setContentText("Воспроизведение...")
+            .setSmallIcon(R.drawable.ic_music)
+            .setContentIntent(pendingIntent)
+            .addAction(R.drawable.ic_pause, "Пауза",
+                createPendingIntent("PAUSE"))
+            .addAction(R.drawable.ic_stop, "Стоп",
+                createPendingIntent("STOP"))
+            .build()
+    }
+
+    private fun createPendingIntent(action: String): PendingIntent {
+        val intent = Intent(this, MusicPlayerService::class.java)
+        intent.action = action
+        return PendingIntent.getService(
+            this, 0, intent, PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    override fun onDestroy() {
+        mediaPlayer.release()
+        super.onDestroy()
+    }
+}
+```
+
 ### Резюме
 
 Основные компоненты Android объединены:
@@ -583,6 +853,22 @@ override fun onReceive(context: Context, intent: Intent) {
 5. **Определенными жизненными циклами** - предсказуемые переходы состояний
 6. **Выполнением в процессе** - выполняются в процессе приложения
 7. **Системой разрешений** - последовательная модель безопасности
+
+### Ключевые моменты для интервью
+
+**Что спросят:**
+- Какие основные компоненты Android?
+- Что их объединяет?
+- Как они взаимодействуют?
+
+**Правильный ответ должен включать:**
+1. Четыре компонента: Activity, Service, BroadcastReceiver, ContentProvider
+2. Все объявляются в манифесте
+3. Управляются системой, не разработчиком
+4. Взаимодействуют через Intent (кроме ContentProvider - через ContentResolver)
+5. Имеют доступ к Context
+6. Имеют определенные жизненные циклы
+7. Выполняются в процессе приложения (с возможностью указать отдельный процесс)
 
 ## Related Topics
 - AndroidManifest.xml

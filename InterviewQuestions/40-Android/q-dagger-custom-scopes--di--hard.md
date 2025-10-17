@@ -945,7 +945,352 @@ Hilt предоставляет эти стандартные scopes:
 | ViewWithFragmentComponent | @ViewWithFragmentScoped | Создание View во Fragment | Уничтожение View | Зависимости View во Fragment |
 | ServiceComponent | @ServiceScoped | Создание Service | Уничтожение Service | Зависимости Service |
 
-[Продолжение с примерами из английской версии...]
+### Понимание Scopes
+
+```kotlin
+// @Singleton - ОДИН экземпляр для всего жизненного цикла приложения
+@Singleton
+class AppDatabase @Inject constructor() {
+    // Создаётся один раз, используется везде
+}
+
+// @ActivityScoped - ОДИН экземпляр на Activity
+@ActivityScoped
+class ActivityTracker @Inject constructor() {
+    // Новый экземпляр для каждой Activity
+    // Разделяется внутри этой Activity
+}
+
+// Unscoped - НОВЫЙ экземпляр каждый раз
+class RequestHelper @Inject constructor() {
+    // Новый экземпляр при каждом внедрении
+}
+```
+
+### Проблема: Необходимость кастомных жизненных циклов
+
+Иногда встроенные scopes Hilt не соответствуют архитектуре вашего приложения:
+
+```kotlin
+// Проблема: Пользовательская сессия не соответствует ни одному встроенному scope
+// - Не @Singleton (пользователь может выйти из системы)
+// - Не @ActivityScoped (переживает пересоздание Activity)
+// - Не @ActivityRetainedScoped (переживает перезапуск приложения с сохранённым состоянием)
+
+// Нужен scope, который:
+// - Живёт от входа до выхода
+// - Переживает пересоздание Activity/Fragment
+// - Переживает перезапуск приложения (если пользователь остаётся залогиненным)
+// - Уничтожается при выходе пользователя
+```
+
+### Создание кастомных Scopes
+
+Кастомный scope — это просто аннотация:
+
+```kotlin
+// 1. Определяем аннотацию scope
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class UserScope
+
+// 2. Создаём компонент для этого scope
+@UserScope
+@DefineComponent(parent = SingletonComponent::class)
+interface UserComponent {
+    // Определяем, что может быть внедрено в этом scope
+}
+
+// 3. Определяем builder для компонента
+@DefineComponent.Builder
+interface UserComponentBuilder {
+    fun build(): UserComponent
+}
+
+// 4. Помечаем зависимости scope
+@UserScope
+class UserSessionManager @Inject constructor(
+    private val apiService: ApiService
+) {
+    var currentUser: User? = null
+}
+
+@UserScope
+class UserPreferences @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
+    // Пользовательские настройки
+}
+
+// 5. Устанавливаем модули в компонент
+@Module
+@InstallIn(UserComponent::class)
+object UserModule {
+    // Предоставляем user-scoped зависимости
+}
+
+// 6. Управляем жизненным циклом компонента
+@Singleton
+class UserComponentManager @Inject constructor(
+    private val userComponentBuilder: Provider<UserComponentBuilder>
+) {
+    private var userComponent: UserComponent? = null
+
+    fun createUserScope(): UserComponent {
+        if (userComponent == null) {
+            userComponent = userComponentBuilder.get().build()
+        }
+        return userComponent!!
+    }
+
+    fun destroyUserScope() {
+        userComponent = null
+    }
+
+    fun getUserComponent(): UserComponent? = userComponent
+}
+```
+
+### Реальный пример: User Session Scope
+
+Полный пример показан в английской версии с `UserSessionManager`, `UserAnalytics`, и `UserNotificationManager`.
+
+### Кастомный Scope: Feature Scope
+
+Ещё один распространённый случай использования — scopes на уровне feature:
+
+```kotlin
+// Feature scope для многошаговых процессов
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class CheckoutScope
+
+@CheckoutScope
+@DefineComponent(parent = SingletonComponent::class)
+interface CheckoutComponent
+
+// Состояние процесса оформления заказа
+@CheckoutScope
+class CheckoutState @Inject constructor() {
+    var selectedItems: List<CartItem> = emptyList()
+    var shippingAddress: Address? = null
+    var paymentMethod: PaymentMethod? = null
+    var appliedPromoCode: String? = null
+    var calculatedTotal: Double = 0.0
+}
+```
+
+### Сравнение Scopes
+
+```kotlin
+// Singleton - Время жизни приложения
+@Singleton
+class AppDatabase @Inject constructor() {
+    // Живёт весь жизненный цикл приложения
+    // Разделяется всеми пользователями, сессиями, activities
+}
+
+// Кастомный UserScope - Время жизни пользовательской сессии
+@UserScope
+class UserPreferences @Inject constructor() {
+    // Живёт от входа до выхода
+    // Новый экземпляр для каждой пользовательской сессии
+    // Переживает пересоздание Activity
+}
+
+// ActivityScoped - Время жизни Activity
+@ActivityScoped
+class ActivityAnalytics @Inject constructor() {
+    // Живёт для одной Activity
+    // Новый экземпляр для каждой Activity
+    // Уничтожается при уничтожении Activity
+}
+
+// Unscoped - Без разделения
+class RequestHandler @Inject constructor() {
+    // Новый экземпляр каждый раз при внедрении
+    // Не разделяется
+}
+```
+
+### Производительность: Scoped vs Unscoped
+
+```kotlin
+// Сценарий 1: Тяжёлый объект, который должен переиспользоваться
+@Singleton // ХОРОШО - Создан один раз, переиспользуется
+class HeavyImageProcessor @Inject constructor() {
+    private val cache = LruCache<String, Bitmap>(100)
+    // Дорогой для создания, должен быть singleton
+}
+
+// Сценарий 2: Лёгкий, stateless helper
+class UrlFormatter @Inject constructor() { // ХОРОШО - Unscoped, дешёвый для создания
+    fun format(url: String): String = url.trim().lowercase()
+}
+
+// Сценарий 3: Stateful трекер на уровне activity
+@ActivityScoped // ХОРОШО - Один на activity
+class ActivityLifecycleTracker @Inject constructor(
+    private val analytics: Analytics
+) {
+    private var startTime: Long = 0
+}
+
+// ПЛОХО - Singleton для stateful данных на уровне activity
+@Singleton // ПЛОХО - Будет утечка данных Activity между activities!
+class ActivityLifecycleTracker @Inject constructor() {
+    private var startTime: Long = 0 // Разделяется между всеми activities!
+}
+```
+
+### Продвинутое: Scopes с параметрами
+
+Иногда нужны параметризованные scopes:
+
+```kotlin
+// Кастомный scope с данными
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ConversationScope
+
+@ConversationScope
+@DefineComponent(parent = SingletonComponent::class)
+interface ConversationComponent
+
+// Используем holder для параметров
+@ConversationScope
+class ConversationContext @Inject constructor() {
+    lateinit var conversationId: String
+    lateinit var participants: List<User>
+}
+
+@ConversationScope
+class ConversationMessageLoader @Inject constructor(
+    private val context: ConversationContext,
+    private val apiService: ApiService
+) {
+    suspend fun loadMessages(): List<Message> {
+        return apiService.getMessages(context.conversationId)
+    }
+}
+```
+
+### Тестирование кастомных Scopes
+
+```kotlin
+@HiltAndroidTest
+class UserScopeTest {
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
+    @Inject
+    lateinit var userComponentManager: UserComponentManager
+
+    @Test
+    fun testUserScope_instancesAreShared() {
+        val component = userComponentManager.createUserSession()
+        val entryPoint = EntryPointAccessors.fromComponent(
+            component,
+            UserComponentEntryPoint::class.java
+        )
+
+        val manager1 = entryPoint.userSessionManager()
+        val manager2 = entryPoint.userSessionManager()
+
+        // Должны быть одним и тем же экземпляром
+        assertSame(manager1, manager2)
+    }
+}
+```
+
+### Лучшие практики
+
+1. **Используйте встроенные Scopes в первую очередь**
+   ```kotlin
+   // ХОРОШО - Используйте встроенный scope, если он подходит
+   @Singleton
+   class AppConfig @Inject constructor()
+
+   // ПЛОХО - Не создавайте кастомный scope без необходимости
+   @CustomAppScope
+   class AppConfig @Inject constructor()
+   ```
+
+2. **Scope должен соответствовать жизненному циклу**
+   ```kotlin
+   // ХОРОШО - UserScope соответствует жизненному циклу пользовательской сессии
+   @UserScope
+   class UserSettings @Inject constructor()
+
+   // ПЛОХО - Singleton для данных на пользователя приведёт к утечкам
+   @Singleton
+   class UserSettings @Inject constructor()
+   ```
+
+3. **Явно управляйте жизненным циклом Scope**
+   ```kotlin
+   // ХОРОШО - Явное создание/уничтожение
+   fun onLogin() {
+       userComponentManager.createUserSession()
+   }
+
+   fun onLogout() {
+       userComponentManager.destroyUserSession()
+   }
+   ```
+
+4. **Не переиспользуйте Scope избыточно**
+   ```kotlin
+   // ХОРОШО - Unscoped для лёгких, stateless
+   class JsonParser @Inject constructor()
+
+   // ПЛОХО - Ненужный scope
+   @Singleton
+   class JsonParser @Inject constructor()
+   ```
+
+### Распространённые ошибки
+
+1. **Утечки памяти из-за не уничтоженного Scope**
+   ```kotlin
+   // ПЛОХО - Scope никогда не уничтожается
+   fun onCreate() {
+       featureComponentManager.create() // Создан
+       // Никогда не уничтожается - утечка памяти!
+   }
+
+   // ХОРОШО - Scope уничтожается
+   fun onDestroy() {
+       featureComponentManager.destroy() // Очищен
+   }
+   ```
+
+2. **Неправильный Scope для данных**
+   ```kotlin
+   // ПЛОХО - Activity-scoped данные в Singleton
+   @Singleton
+   class CurrentScreenTracker @Inject constructor() {
+       var currentScreen: String = "" // Неправильный scope!
+   }
+
+   // ХОРОШО - Activity-scoped
+   @ActivityScoped
+   class CurrentScreenTracker @Inject constructor() {
+       var currentScreen: String = ""
+   }
+   ```
+
+3. **Забыли аннотацию @Scope**
+   ```kotlin
+   // ПЛОХО - Отсутствует @UserScope
+   class UserSettings @Inject constructor() {
+       // Будет unscoped, даже если вы хотели UserScope!
+   }
+
+   // ХОРОШО
+   @UserScope
+   class UserSettings @Inject constructor()
+   ```
 
 ### Резюме
 

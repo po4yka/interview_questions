@@ -765,33 +765,183 @@ SpringAnimation(view, DynamicAnimation.TRANSLATION_X).apply {
 
 ## Ответ (RU)
 
-**Анимация пользовательских view** оживляет их и улучшает пользовательский опыт.
+**Анимация пользовательских view** оживляет их и улучшает пользовательский опыт. Понимание различных подходов к анимации и их характеристик производительности необходимо для создания плавных, отзывчивых пользовательских интерфейсов.
 
-### Подходы к анимации
+### Сравнение подходов к анимации
 
-| Подход | Случай использования | Производительность |
-|--------|---------------------|-------------------|
-| **ValueAnimator** | Анимировать пользовательские свойства | Отлично |
-| **Property Animation** | Анимировать свойства View | Отлично |
-| **Canvas Animation** | Сложные пользовательские анимации | Хорошо |
+| Подход | Случай использования | Производительность | Сложность |
+|--------|---------------------|-------------------|-----------|
+| **ValueAnimator** | Анимация пользовательских свойств | Отличная | Низкая |
+| **Property Animation** | Анимация свойств View | Отличная | Очень низкая |
+| **Canvas Animation** | Сложные пользовательские анимации | Хорошая | Средняя |
+| **Drawable Animation** | Покадровая анимация | Плохая (высокое потребление памяти) | Низкая |
 
-### Пример: ValueAnimator
+---
+
+### 1. ValueAnimator - Наиболее гибкий
+
+**ValueAnimator** анимирует значения во времени. Вы вручную применяете анимированные значения к вашему view.
 
 ```kotlin
-class AnimatedProgressBar : View {
+class AnimatedProgressBar @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
 
     private var progress: Float = 0f
+        set(value) {
+            field = value.coerceIn(0f, 100f)
+            invalidate() // Перерисовка при изменении значения
+        }
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = Color.BLUE
+    }
+
     private var animator: ValueAnimator? = null
 
-    fun setProgress(target: Float, animated: Boolean = true) {
+    fun setProgress(targetProgress: Float, animated: Boolean = true) {
+        if (!animated) {
+            progress = targetProgress
+            return
+        }
+
+        // Отмена существующей анимации
         animator?.cancel()
 
-        animator = ValueAnimator.ofFloat(progress, target).apply {
+        // Создание новой анимации
+        animator = ValueAnimator.ofFloat(progress, targetProgress).apply {
             duration = 500
             interpolator = DecelerateInterpolator()
 
             addUpdateListener { animation ->
                 progress = animation.animatedValue as Float
+            }
+
+            start()
+        }
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        val progressWidth = width * (progress / 100f)
+        canvas.drawRect(0f, 0f, progressWidth, height.toFloat(), paint)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        animator?.cancel() // Очистка ресурсов
+    }
+}
+```
+
+**Использование:**
+```kotlin
+progressBar.setProgress(75f, animated = true)
+```
+
+---
+
+### 2. Property Animation с ViewPropertyAnimator
+
+**ViewPropertyAnimator** анимирует встроенные свойства View (alpha, translation, scale, rotation).
+
+```kotlin
+class FadeInView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    init {
+        alpha = 0f // Начать невидимым
+    }
+
+    fun show() {
+        animate()
+            .alpha(1f)
+            .setDuration(300)
+            .setInterpolator(AccelerateDecelerateInterpolator())
+            .start()
+    }
+
+    fun hide() {
+        animate()
+            .alpha(0f)
+            .setDuration(300)
+            .withEndAction {
+                visibility = GONE
+            }
+            .start()
+    }
+
+    fun pulse() {
+        // Увеличение и уменьшение масштаба
+        animate()
+            .scaleX(1.2f)
+            .scaleY(1.2f)
+            .setDuration(200)
+            .withEndAction {
+                animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(200)
+                    .start()
+            }
+            .start()
+    }
+}
+```
+
+---
+
+### 3. Canvas Animation с Path
+
+Анимация рисования на canvas.
+
+```kotlin
+class AnimatedPathView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    private val path = Path()
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeWidth = 5f
+        color = Color.BLUE
+    }
+
+    private val pathMeasure = PathMeasure()
+    private var pathLength = 0f
+    private var animatedLength = 0f
+    private var animator: ValueAnimator? = null
+
+    fun setPath(newPath: Path, animate: Boolean = true) {
+        path.reset()
+        path.addPath(newPath)
+
+        pathMeasure.setPath(path, false)
+        pathLength = pathMeasure.length
+
+        if (animate) {
+            animatePath()
+        } else {
+            animatedLength = pathLength
+            invalidate()
+        }
+    }
+
+    private fun animatePath() {
+        animator?.cancel()
+
+        animator = ValueAnimator.ofFloat(0f, pathLength).apply {
+            duration = 1000
+            interpolator = DecelerateInterpolator()
+
+            addUpdateListener { animation ->
+                animatedLength = animation.animatedValue as Float
                 invalidate()
             }
 
@@ -799,38 +949,276 @@ class AnimatedProgressBar : View {
         }
     }
 
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        if (animatedLength == 0f) return
+
+        // Рисовать только анимированную часть пути
+        val dst = Path()
+        pathMeasure.getSegment(0f, animatedLength, dst, true)
+
+        canvas.drawPath(dst, paint)
+    }
+
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        animator?.cancel() // Очистка
+        animator?.cancel()
     }
 }
 ```
 
-### Интерполяторы
+---
 
-- **LinearInterpolator** - Постоянная скорость
-- **AccelerateInterpolator** - Начинает медленно, заканчивает быстро
-- **DecelerateInterpolator** - Начинает быстро, заканчивает медленно
-- **OvershootInterpolator** - Проходит мимо цели, затем возвращается
-- **BounceInterpolator** - Отскакивает в конце
+### 4. Анимация цвета
 
-### Управление жизненным циклом
+Плавная анимация между цветами.
 
 ```kotlin
-override fun onAttachedToWindow() {
-    super.onAttachedToWindow()
-    startAnimation() //  Запуск при присоединении
-}
+class ColorTransitionView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
 
-override fun onDetachedFromWindow() {
-    animator?.cancel() //  Отмена при отсоединении
-    super.onDetachedFromWindow()
+    private var currentColor: Int = Color.BLUE
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var animator: ValueAnimator? = null
+
+    fun animateToColor(targetColor: Int, duration: Long = 500) {
+        animator?.cancel()
+
+        animator = ValueAnimator.ofArgb(currentColor, targetColor).apply {
+            this.duration = duration
+
+            addUpdateListener { animation ->
+                currentColor = animation.animatedValue as Int
+                paint.color = currentColor
+                invalidate()
+            }
+
+            start()
+        }
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        animator?.cancel()
+    }
 }
 ```
 
-### Оптимизация производительности
+---
 
-- Используйте hardware layers во время анимации
+### 5. Сравнение интерполяторов
+
+**Интерполяторы** управляют временем анимации.
+
+```kotlin
+// Linear - Постоянная скорость
+animator.interpolator = LinearInterpolator()
+
+// Accelerate - Начинает медленно, заканчивает быстро
+animator.interpolator = AccelerateInterpolator()
+
+// Decelerate - Начинает быстро, заканчивает медленно
+animator.interpolator = DecelerateInterpolator()
+
+// AccelerateDecelerate - Медленно-быстро-медленно
+animator.interpolator = AccelerateDecelerateInterpolator()
+
+// Overshoot - Проходит за цель, затем возвращается
+animator.interpolator = OvershootInterpolator()
+
+// Anticipate - Сначала отступает назад, затем вперед
+animator.interpolator = AnticipateInterpolator()
+
+// Bounce - Отскакивает в конце
+animator.interpolator = BounceInterpolator()
+
+// Custom - Создайте свой собственный
+animator.interpolator = object : Interpolator {
+    override fun getInterpolation(input: Float): Float {
+        return input * input // Квадратичный
+    }
+}
+```
+
+**Визуальное сравнение:**
+
+| Интерполятор | Движение | Случай использования |
+|--------------|----------|---------------------|
+| Linear | Постоянная скорость | Индикаторы прогресса |
+| Accelerate | Начинает медленно | Элементы, покидающие экран |
+| Decelerate | Заканчивает медленно | Элементы, входящие на экран |
+| AccelerateDecelerate | Плавное | Общие анимации |
+| Overshoot | Отскакивает за цель | Привлечение внимания |
+| Anticipate | Сначала откат | Игривые взаимодействия |
+| Bounce | Отскакивает в конце | Игривый, веселый UI |
+
+---
+
+### 6. Управление жизненным циклом анимации
+
+**Правильная очистка предотвращает утечки памяти:**
+
+```kotlin
+class ProperAnimationView : View {
+
+    private var animator: ValueAnimator? = null
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        // Запуск анимаций при присоединении
+        startAnimation()
+    }
+
+    override fun onDetachedFromWindow() {
+        // Отмена анимаций при отсоединении
+        animator?.cancel()
+        animator = null
+        super.onDetachedFromWindow()
+    }
+
+    override fun onVisibilityChanged(changedView: View, visibility: Int) {
+        super.onVisibilityChanged(changedView, visibility)
+
+        when (visibility) {
+            VISIBLE -> {
+                // Возобновление анимации при видимости
+                startAnimation()
+            }
+            INVISIBLE, GONE -> {
+                // Приостановка анимации при невидимости
+                animator?.pause()
+            }
+        }
+    }
+
+    private fun startAnimation() {
+        animator = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 1000
+            repeatCount = ValueAnimator.INFINITE
+            addUpdateListener {
+                invalidate()
+            }
+            start()
+        }
+    }
+}
+```
+
+---
+
+### 7. Оптимизация производительности
+
+**1. Используйте hardware layers во время анимации:**
+```kotlin
+fun animateWithHardwareLayer() {
+    setLayerType(LAYER_TYPE_HARDWARE, null)
+
+    animate()
+        .alpha(0f)
+        .rotation(360f)
+        .setDuration(500)
+        .withEndAction {
+            setLayerType(LAYER_TYPE_NONE, null)
+        }
+        .start()
+}
+```
+
+**2. Уменьшайте область invalidation:**
+```kotlin
+override fun onDraw(canvas: Canvas) {
+    // Вместо invalidate(), используйте:
+    invalidate(left, top, right, bottom) // Перерисовывайте только измененную область
+}
+```
+
+**3. Используйте RenderEffect (API 31+):**
+```kotlin
+@RequiresApi(31)
+fun applyBlurEffect() {
+    setRenderEffect(
+        RenderEffect.createBlurEffect(10f, 10f, Shader.TileMode.CLAMP)
+    )
+}
+```
+
+---
+
+### Лучшие практики
+
+**1. Всегда отменяйте анимации в onDetachedFromWindow()**
+```kotlin
+override fun onDetachedFromWindow() {
+    super.onDetachedFromWindow()
+    animator?.cancel() // Предотвращение утечек памяти
+}
+```
+
+**2. Используйте подходящие интерполяторы**
+```kotlin
+// ✅ ПРАВИЛЬНО - Естественное движение
+animator.interpolator = DecelerateInterpolator()
+
+// ❌ НЕПРАВИЛЬНО - Linear выглядит механически
+animator.interpolator = LinearInterpolator()
+```
+
+**3. Включайте hardware layers для сложных анимаций**
+```kotlin
+setLayerType(LAYER_TYPE_HARDWARE, null) // Во время анимации
+setLayerType(LAYER_TYPE_NONE, null)      // После анимации
+```
+
+**4. Приостанавливайте анимации при невидимости**
+```kotlin
+override fun onVisibilityChanged(changedView: View, visibility: Int) {
+    if (visibility != VISIBLE) {
+        animator?.pause()
+    }
+}
+```
+
+**5. Используйте spring-анимации для естественного движения**
+```kotlin
+SpringAnimation(view, DynamicAnimation.TRANSLATION_X).apply {
+    spring = SpringForce().apply {
+        dampingRatio = SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY
+        stiffness = SpringForce.STIFFNESS_LOW
+    }
+}.start()
+```
+
+---
+
+### Резюме
+
+**Подходы к анимации:**
+- **ValueAnimator** - Наиболее гибкий, анимирует любое значение
+- **ViewPropertyAnimator** - Простой, для свойств View
+- **Canvas Animation** - Сложные пользовательские анимации
+- **Spring Animation** - Естественные, физические анимации
+
+**Ключевые компоненты:**
+- Animator (ValueAnimator, ObjectAnimator)
+- Interpolator (кривая времени)
+- Update listener (применение значений)
+
+**Управление жизненным циклом:**
+- Запуск в onAttachedToWindow()
+- Отмена в onDetachedFromWindow()
+- Приостановка при невидимости
+- Очистка ресурсов
+
+**Производительность:**
+- Используйте hardware layers
 - Минимизируйте область invalidation
 - Выбирайте подходящие интерполяторы
 - Тестируйте на слабых устройствах

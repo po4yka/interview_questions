@@ -523,3 +523,283 @@ s1 == s2   // true (одинаковое содержимое)
 - Kotlin `==` = Java `.equals()`
 - Kotlin `===` = Java `==`
 
+### Практические примеры использования
+
+**Пример 1: Сравнение data классов**
+```kotlin
+data class User(val id: Int, val name: String, val email: String)
+
+val user1 = User(1, "Иван", "ivan@example.com")
+val user2 = User(1, "Иван", "ivan@example.com")
+val user3 = user1
+
+// Структурное равенство - сравнивает все поля
+println(user1 == user2)  // true - все поля одинаковы
+println(user1 === user2) // false - разные объекты в памяти
+println(user1 === user3) // true - один и тот же объект
+
+// Data класс автоматически генерирует equals()
+// который сравнивает все свойства из primary constructor
+```
+
+**Пример 2: Обычные классы требуют переопределения equals()**
+```kotlin
+// БЕЗ переопределения equals()
+class Person(val name: String, val age: Int)
+
+val person1 = Person("Анна", 25)
+val person2 = Person("Анна", 25)
+
+println(person1 == person2)  // false - использует default equals() (сравнение ссылок)
+println(person1 === person2) // false - разные объекты
+
+// С переопределением equals()
+class PersonWithEquals(val name: String, val age: Int) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is PersonWithEquals) return false
+        return name == other.name && age == other.age
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + age
+        return result
+    }
+}
+
+val p1 = PersonWithEquals("Анна", 25)
+val p2 = PersonWithEquals("Анна", 25)
+
+println(p1 == p2)  // true - custom equals сравнивает name и age
+println(p1 === p2) // false - все еще разные объекты
+```
+
+**Пример 3: Безопасность от null**
+```kotlin
+val s1: String? = null
+val s2: String? = null
+val s3: String? = "Привет"
+val s4: String? = "Привет"
+
+// == безопасен к null
+println(s1 == s2)  // true - оба null
+println(s1 == s3)  // false - один null, другой нет
+println(s3 == s4)  // true - одинаковое содержимое
+
+// В Java это вызвало бы NullPointerException:
+// s1.equals(s2)  // NPE!
+```
+
+**Пример 4: Коллекции и равенство**
+```kotlin
+val list1 = listOf(1, 2, 3)
+val list2 = listOf(1, 2, 3)
+val list3 = mutableListOf(1, 2, 3)
+
+// Структурное равенство - сравнивает содержимое
+println(list1 == list2)  // true - одинаковое содержимое
+println(list1 == list3)  // true - содержимое одинаково
+
+// Референсное равенство - сравнивает объекты
+println(list1 === list2) // false - разные объекты
+println(list1 === list3) // false - разные объекты
+
+// Работает с map, set и т.д.
+val map1 = mapOf("a" to 1, "b" to 2)
+val map2 = mapOf("a" to 1, "b" to 2)
+println(map1 == map2)   // true
+println(map1 === map2)  // false
+```
+
+**Пример 5: Сравнение в when выражении**
+```kotlin
+fun processCommand(command: String) {
+    when (command) {
+        "start" -> println("Запуск")
+        "stop" -> println("Остановка")
+        "pause" -> println("Пауза")
+        else -> println("Неизвестная команда")
+    }
+    // when использует == (структурное равенство)
+}
+
+// Сравнение объектов
+sealed class State
+object Loading : State()
+object Success : State()
+data class Error(val message: String) : State()
+
+fun handleState(state: State) {
+    when (state) {
+        is Loading -> println("Загрузка...")
+        is Success -> println("Успешно")
+        is Error -> println("Ошибка: ${state.message}")
+    }
+}
+```
+
+**Пример 6: Проверка типа с is и сравнение**
+```kotlin
+fun processValue(value: Any) {
+    when {
+        value is String && value == "special" ->
+            println("Специальная строка")
+
+        value is Int && value > 100 ->
+            println("Большое число")
+
+        value is List<*> && value.isEmpty() ->
+            println("Пустой список")
+
+        else -> println("Другое значение")
+    }
+}
+
+// Использование
+processValue("special")     // Специальная строка
+processValue(150)           // Большое число
+processValue(emptyList<Int>()) // Пустой список
+```
+
+**Пример 7: Кастомная реализация equals для сложной логики**
+```kotlin
+data class Product(
+    val id: Int,
+    val name: String,
+    val price: Double,
+    val metadata: Map<String, String>
+) {
+    // Переопределяем equals для игнорирования metadata
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Product) return false
+
+        // Сравниваем только id, name, price (игнорируем metadata)
+        return id == other.id &&
+               name == other.name &&
+               price == other.price
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + name.hashCode()
+        result = 31 * result + price.hashCode()
+        return result
+    }
+}
+
+val product1 = Product(1, "Ноутбук", 1000.0, mapOf("color" to "black"))
+val product2 = Product(1, "Ноутбук", 1000.0, mapOf("color" to "white"))
+
+println(product1 == product2)  // true - metadata игнорируется
+```
+
+**Пример 8: Сравнение в Collections**
+```kotlin
+data class Student(val id: Int, val name: String)
+
+val students = listOf(
+    Student(1, "Иван"),
+    Student(2, "Мария"),
+    Student(3, "Петр")
+)
+
+val searchStudent = Student(2, "Мария")
+
+// contains использует == (equals)
+println(students.contains(searchStudent))  // true
+
+// indexOf также использует ==
+println(students.indexOf(searchStudent))   // 1
+
+// remove в MutableList использует ==
+val mutableStudents = students.toMutableList()
+mutableStudents.remove(searchStudent)      // Удалит студента с id=2
+println(mutableStudents.size)              // 2
+
+// Set использует equals и hashCode
+val studentSet = setOf(
+    Student(1, "Иван"),
+    Student(2, "Мария"),
+    Student(1, "Иван")  // Дубликат - не будет добавлен
+)
+println(studentSet.size)  // 2
+```
+
+**Пример 9: Сравнение с nullable типами**
+```kotlin
+fun compareNullable(a: String?, b: String?) {
+    // Безопасное сравнение
+    when {
+        a == null && b == null -> println("Оба null")
+        a == null -> println("Только a null")
+        b == null -> println("Только b null")
+        a == b -> println("Равны: $a")
+        else -> println("Разные: $a vs $b")
+    }
+}
+
+compareNullable(null, null)         // Оба null
+compareNullable("test", null)       // Только b null
+compareNullable("test", "test")     // Равны: test
+compareNullable("test", "other")    // Разные: test vs other
+```
+
+**Пример 10: Проверка identity в кэше**
+```kotlin
+class Cache<K, V> {
+    private val cache = mutableMapOf<K, V>()
+
+    fun put(key: K, value: V) {
+        cache[key] = value
+    }
+
+    fun get(key: K): V? = cache[key]
+
+    // Проверка что значение то же самое (не копия)
+    fun isSameInstance(key: K, value: V): Boolean {
+        val cached = cache[key]
+        return cached === value  // Референсное сравнение
+    }
+
+    // Проверка что содержимое одинаково
+    fun hasEqualValue(key: K, value: V): Boolean {
+        val cached = cache[key]
+        return cached == value  // Структурное сравнение
+    }
+}
+
+// Использование
+val cache = Cache<String, List<Int>>()
+val list1 = listOf(1, 2, 3)
+val list2 = listOf(1, 2, 3)
+
+cache.put("data", list1)
+
+println(cache.isSameInstance("data", list1))  // true - тот же объект
+println(cache.isSameInstance("data", list2))  // false - другой объект
+println(cache.hasEqualValue("data", list2))   // true - одинаковое содержимое
+```
+
+### Важные замечания
+
+1. **Data классы автоматически генерируют equals()** - сравнивают все свойства из primary constructor
+2. **Обычные классы требуют ручного переопределения** equals() и hashCode()
+3. **== всегда null-safe** - не нужны дополнительные проверки
+4. **=== полезен для оптимизации** - быстрая проверка identity перед дорогим equals()
+5. **Collections используют equals()** - важно правильно реализовать для корректной работы Set, Map
+6. **hashCode() должен соответствовать equals()** - если equals() говорит что объекты равны, hashCode() должен быть одинаковым
+
+### Таблица quick reference
+
+| Сценарий | Оператор | Пример |
+|----------|----------|--------|
+| Сравнение значений | `==` | `"hello" == "hello"` → true |
+| Проверка null | `==` | `null == null` → true |
+| Сравнение ссылок | `===` | `obj1 === obj2` |
+| Неравенство значений | `!=` | `5 != 3` → true |
+| Неравенство ссылок | `!==` | `obj1 !== obj2` |
+| В коллекциях | `contains()` | Использует `==` |
+| В when | `when(x)` | Использует `==` |
+

@@ -563,19 +563,346 @@ placeable.place(
 
 ## Ответ (RU)
 
-Создание кастомных layouts в Jetpack Compose позволяет реализовать сложную логику компоновки.
+Создание кастомных layouts в Jetpack Compose позволяет реализовать сложную логику компоновки, которая выходит за рамки стандартных layouts как Column, Row или Box.
 
 ### Основы Layout
 
-Composable `Layout` - это основа для всех layouts в Compose. Он принимает:
-- `content`: дочерние composables
-- `measurePolicy` или лямбду с логикой измерения/размещения
+Composable `Layout` - это основа для всех layouts в Compose:
+
+```kotlin
+@Composable
+fun CustomLayout(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Layout(
+        modifier = modifier,
+        content = content
+    ) { measurables, constraints ->
+        // 1. Измерить дочерние элементы
+        val placeables = measurables.map { measurable ->
+            measurable.measure(constraints)
+        }
+
+        // 2. Вычислить размер layout
+        val width = placeables.maxOfOrNull { it.width } ?: 0
+        val height = placeables.sumOf { it.height }
+
+        // 3. Разместить дочерние элементы
+        layout(width, height) {
+            var yPosition = 0
+            placeables.forEach { placeable ->
+                placeable.place(x = 0, y = yPosition)
+                yPosition += placeable.height
+            }
+        }
+    }
+}
+```
 
 ### Measure Policy
 
-Определяет как дети измеряются и позиционируются.
+Measure policy определяет как дочерние элементы измеряются и позиционируются:
 
-[Полные примеры реализаций FlowLayout, StaggeredGrid и Carousel приведены в английском разделе]
+```kotlin
+val customMeasurePolicy = MeasurePolicy { measurables, constraints ->
+    // Кастомная логика измерения
+    val placeables = measurables.map { it.measure(constraints) }
+
+    layout(constraints.maxWidth, constraints.maxHeight) {
+        // Кастомная логика размещения
+    }
+}
+
+@Composable
+fun CustomLayoutWithPolicy(modifier: Modifier = Modifier) {
+    Layout(
+        content = { /* дочерние элементы */ },
+        measurePolicy = customMeasurePolicy,
+        modifier = modifier
+    )
+}
+```
+
+### Система ограничений (Constraints)
+
+Constraints определяют min/max ширину и высоту для дочернего элемента:
+
+```kotlin
+data class Constraints(
+    val minWidth: Int,
+    val maxWidth: Int,
+    val minHeight: Int,
+    val maxHeight: Int
+)
+
+// Создание специфичных constraints
+val fixedConstraints = Constraints.fixed(width = 100, height = 100)
+val looseConstraints = Constraints(maxWidth = 500, maxHeight = 500)
+val tightConstraints = Constraints(
+    minWidth = 200,
+    maxWidth = 200,
+    minHeight = 100,
+    maxHeight = 100
+)
+```
+
+### Пример: FlowLayout
+
+FlowLayout размещает дочерние элементы в ряды, переносясь на следующий ряд при необходимости:
+
+```kotlin
+@Composable
+fun FlowLayout(
+    modifier: Modifier = Modifier,
+    horizontalSpacing: Dp = 0.dp,
+    verticalSpacing: Dp = 0.dp,
+    content: @Composable () -> Unit
+) {
+    Layout(
+        modifier = modifier,
+        content = content
+    ) { measurables, constraints ->
+        val horizontalSpacingPx = horizontalSpacing.roundToPx()
+        val verticalSpacingPx = verticalSpacing.roundToPx()
+
+        // Измерить всех детей с loose constraints
+        val placeables = measurables.map { measurable ->
+            measurable.measure(constraints.copy(minWidth = 0, minHeight = 0))
+        }
+
+        // Вычислить ряды
+        val rows = mutableListOf<List<Placeable>>()
+        var currentRow = mutableListOf<Placeable>()
+        var currentRowWidth = 0
+
+        placeables.forEach { placeable ->
+            val placeableWidth = placeable.width + horizontalSpacingPx
+
+            if (currentRowWidth + placeableWidth <= constraints.maxWidth || currentRow.isEmpty()) {
+                currentRow.add(placeable)
+                currentRowWidth += placeableWidth
+            } else {
+                rows.add(currentRow)
+                currentRow = mutableListOf(placeable)
+                currentRowWidth = placeableWidth
+            }
+        }
+        if (currentRow.isNotEmpty()) {
+            rows.add(currentRow)
+        }
+
+        // Вычислить размеры layout
+        val width = constraints.maxWidth
+        val height = rows.sumOf { row ->
+            row.maxOfOrNull { it.height } ?: 0
+        } + (rows.size - 1) * verticalSpacingPx
+
+        // Разместить детей
+        layout(width, height) {
+            var yPosition = 0
+            rows.forEach { row ->
+                var xPosition = 0
+                val rowHeight = row.maxOfOrNull { it.height } ?: 0
+
+                row.forEach { placeable ->
+                    placeable.place(xPosition, yPosition)
+                    xPosition += placeable.width + horizontalSpacingPx
+                }
+
+                yPosition += rowHeight + verticalSpacingPx
+            }
+        }
+    }
+}
+
+// Использование
+@Composable
+fun FlowLayoutExample() {
+    FlowLayout(
+        horizontalSpacing = 8.dp,
+        verticalSpacing = 8.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        repeat(10) { index ->
+            Chip(text = "Элемент $index")
+        }
+    }
+}
+```
+
+### Intrinsic Measurements
+
+Intrinsic measurements позволяют родителям запрашивать предпочтения размера дочерних элементов перед фактическим измерением:
+
+```kotlin
+@Composable
+fun IntrinsicLayout(modifier: Modifier = Modifier) {
+    Layout(
+        modifier = modifier,
+        content = {
+            Text("Короткий")
+            Text("Очень длинный текст здесь")
+        }
+    ) { measurables, constraints ->
+        // Запросить intrinsic ширину всех детей
+        val maxIntrinsicWidth = measurables.maxOfOrNull {
+            it.maxIntrinsicWidth(constraints.maxHeight)
+        } ?: 0
+
+        // Измерить всех детей с одинаковой шириной
+        val placeables = measurables.map { measurable ->
+            measurable.measure(
+                constraints.copy(
+                    minWidth = maxIntrinsicWidth,
+                    maxWidth = maxIntrinsicWidth
+                )
+            )
+        }
+
+        val height = placeables.sumOf { it.height }
+
+        layout(maxIntrinsicWidth, height) {
+            var yPosition = 0
+            placeables.forEach { placeable ->
+                placeable.place(0, yPosition)
+                yPosition += placeable.height
+            }
+        }
+    }
+}
+```
+
+**Методы intrinsic измерений:**
+- `minIntrinsicWidth(height: Int)`: Минимальная ширина при заданной высоте
+- `maxIntrinsicWidth(height: Int)`: Максимальная полезная ширина при заданной высоте
+- `minIntrinsicHeight(width: Int)`: Минимальная высота при заданной ширине
+- `maxIntrinsicHeight(width: Int)`: Максимальная полезная высота при заданной ширине
+
+### ParentDataModifier для конфигурации дочерних элементов
+
+```kotlin
+data class GridScope(val row: Int, val column: Int)
+
+fun Modifier.gridItem(row: Int, column: Int) = this.then(
+    object : ParentDataModifier {
+        override fun Density.modifyParentData(parentData: Any?) =
+            GridScope(row, column)
+    }
+)
+
+@Composable
+fun GridLayout(
+    rows: Int,
+    columns: Int,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Layout(
+        modifier = modifier,
+        content = content
+    ) { measurables, constraints ->
+        val cellWidth = constraints.maxWidth / columns
+        val cellHeight = constraints.maxHeight / rows
+
+        val placeables = measurables.map { measurable ->
+            val gridScope = measurable.parentData as? GridScope
+            measurable.measure(
+                constraints.copy(
+                    minWidth = 0,
+                    maxWidth = cellWidth,
+                    minHeight = 0,
+                    maxHeight = cellHeight
+                )
+            ) to gridScope
+        }
+
+        layout(constraints.maxWidth, constraints.maxHeight) {
+            placeables.forEach { (placeable, scope) ->
+                if (scope != null) {
+                    placeable.place(
+                        x = scope.column * cellWidth,
+                        y = scope.row * cellHeight
+                    )
+                }
+            }
+        }
+    }
+}
+```
+
+### Оптимизация производительности
+
+**1. Правило одного измерения:**
+```kotlin
+// НЕПРАВИЛЬНО: Множественные измерения
+val placeable1 = measurable.measure(constraints1)
+val placeable2 = measurable.measure(constraints2)  // ❌ Второе измерение!
+
+// ПРАВИЛЬНО: Одно измерение
+val placeable = measurable.measure(constraints)
+```
+
+**2. Оптимизация constraints:**
+```kotlin
+// Предпочитать tight constraints когда возможно
+val tightConstraints = Constraints.fixed(width, height)
+
+// Использовать copy для модификации constraints
+val relaxedConstraints = constraints.copy(minWidth = 0, minHeight = 0)
+```
+
+**3. Избегать аллокаций в layout:**
+```kotlin
+// НЕПРАВИЛЬНО: Создание списка в layout
+layout(width, height) {
+    val positions = mutableListOf<Int>()  // ❌ Аллокация
+    // ...
+}
+
+// ПРАВИЛЬНО: Вычислять позиции напрямую
+layout(width, height) {
+    var yPosition = 0
+    placeables.forEach { placeable ->
+        placeable.place(0, yPosition)
+        yPosition += placeable.height
+    }
+}
+```
+
+### Распространенные ошибки
+
+**1. Не обработка пустых measurables:**
+```kotlin
+// НЕПРАВИЛЬНО: Предполагает что measurables существуют
+val width = placeables.maxOf { it.width }  // Crash если пусто!
+
+// ПРАВИЛЬНО: Обработка пустого случая
+val width = placeables.maxOfOrNull { it.width } ?: 0
+```
+
+**2. Игнорирование constraints:**
+```kotlin
+// НЕПРАВИЛЬНО: Фиксированный размер игнорирует constraints
+layout(fixedWidth, fixedHeight) { ... }
+
+// ПРАВИЛЬНО: Уважать constraints
+val width = constraints.constrainWidth(desiredWidth)
+val height = constraints.constrainHeight(desiredHeight)
+layout(width, height) { ... }
+```
+
+**3. Размещение за пределами границ:**
+```kotlin
+// НЕПРАВИЛЬНО: Можно разместить за пределами родителя
+placeable.place(x = -100, y = -100)
+
+// ПРАВИЛЬНО: Ограничить валидными позициями
+placeable.place(
+    x = x.coerceIn(0, width - placeable.width),
+    y = y.coerceIn(0, height - placeable.height)
+)
+```
 
 ### Лучшие практики
 
@@ -585,9 +912,9 @@ Composable `Layout` - это основа для всех layouts в Compose. О
 4. **Используйте intrinsics для multi-pass layouts**
 5. **Избегайте аллокаций в layout лямбде**
 6. **Тестируйте с различными сценариями ограничений**
-7. **Учитывайте поддержку RTL**
-8. **Документируйте поведение**
-9. **Профилируйте производительность**
+7. **Учитывайте поддержку RTL** с `place(x, y)` vs `placeRelative(x, y)`
+8. **Документируйте поведение кастомного layout**
+9. **Профилируйте производительность** с Layout Inspector
 
 
 ---

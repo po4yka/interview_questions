@@ -284,6 +284,41 @@ fun processFile() {
 | **Синтаксис** | `throw new Exception()` | `throws Exception` |
 | **Обязательность** | Когда нужно выбросить | Для checked exceptions (Java) |
 
+### Пример с обоими ключевыми словами (Java)
+
+```java
+// Java - использование обоих throw и throws
+public class FileProcessor {
+    // throws: объявляет исключение
+    public void processFile(String path) throws IOException {
+        if (path == null) {
+            // throw: фактически выбрасывает исключение
+            throw new IllegalArgumentException("Путь не может быть null");
+        }
+
+        FileReader reader = new FileReader(path);  // Может выбросить IOException
+        // ... обработка файла
+    }
+}
+```
+
+### Пример Kotlin (только throw)
+
+```kotlin
+// Kotlin - только throw, нет throws
+class FileProcessor {
+    fun processFile(path: String) {
+        if (path.isEmpty()) {
+            // throw: фактически выбрасывает исключение
+            throw IllegalArgumentException("Путь не может быть пустым")
+        }
+
+        val reader = FileReader(path)  // Может выбросить IOException (unchecked)
+        // ... обработка файла
+    }
+}
+```
+
 ### Аннотация @Throws в Kotlin
 
 Для совместимости с Java, Kotlin имеет аннотацию `@Throws`:
@@ -346,4 +381,138 @@ if (age < 0) {
 - Синтаксис: `throws ExceptionType1, ExceptionType2`
 
 **Ключевое различие**: `throw` - это действие (выбрасывает исключение), `throws` - это декларация (объявляет что метод может выбросить).
+
+### Практические примеры использования
+
+**Пример 1: Валидация данных**
+```kotlin
+// Kotlin
+fun validateAge(age: Int) {
+    if (age < 0) {
+        throw IllegalArgumentException("Возраст не может быть отрицательным")
+    }
+    if (age > 150) {
+        throw IllegalArgumentException("Возраст слишком большой")
+    }
+}
+
+// Использование
+try {
+    validateAge(-5)
+} catch (e: IllegalArgumentException) {
+    println("Ошибка валидации: ${e.message}")
+}
+```
+
+**Пример 2: Работа с файлами (Java)**
+```java
+// Java - должны объявлять IOException
+public String readFileContent(String path) throws IOException {
+    if (path == null || path.isEmpty()) {
+        throw new IllegalArgumentException("Путь не может быть пустым");
+    }
+
+    BufferedReader reader = new BufferedReader(new FileReader(path));
+    return reader.readLine();
+}
+
+// Вызывающий код должен обработать исключение
+public void processFile() {
+    try {
+        String content = readFileContent("data.txt");
+        System.out.println(content);
+    } catch (IOException e) {
+        System.err.println("Ошибка чтения файла: " + e.getMessage());
+    }
+}
+```
+
+**Пример 3: Кастомные исключения**
+```kotlin
+// Kotlin - создание собственного исключения
+class InsufficientBalanceException(
+    val balance: Double,
+    val amount: Double
+) : Exception("Недостаточно средств. Баланс: $balance, требуется: $amount")
+
+class BankAccount(private var balance: Double) {
+    fun withdraw(amount: Double) {
+        if (amount > balance) {
+            throw InsufficientBalanceException(balance, amount)
+        }
+        balance -= amount
+    }
+}
+
+// Использование
+val account = BankAccount(100.0)
+try {
+    account.withdraw(150.0)
+} catch (e: InsufficientBalanceException) {
+    println(e.message)
+    println("Баланс: ${e.balance}, попытка снять: ${e.amount}")
+}
+```
+
+**Пример 4: Цепочка исключений**
+```kotlin
+// Kotlin - обертывание исключений
+class DataProcessingException(message: String, cause: Throwable)
+    : Exception(message, cause)
+
+fun processData(data: String) {
+    try {
+        // Некоторая обработка
+        val result = data.toInt()
+    } catch (e: NumberFormatException) {
+        throw DataProcessingException(
+            "Не удалось обработать данные: $data",
+            e
+        )
+    }
+}
+
+// Использование
+try {
+    processData("abc")
+} catch (e: DataProcessingException) {
+    println("Ошибка: ${e.message}")
+    println("Причина: ${e.cause?.message}")
+}
+```
+
+**Пример 5: Multiple exceptions (Java)**
+```java
+// Java - объявление нескольких исключений
+public void connectToDatabase(String url)
+    throws SQLException, ClassNotFoundException {
+
+    if (url == null) {
+        throw new IllegalArgumentException("URL не может быть null");
+    }
+
+    Class.forName("com.mysql.jdbc.Driver");
+    DriverManager.getConnection(url);
+}
+
+// Обработка нескольких исключений
+public void initDatabase() {
+    try {
+        connectToDatabase("jdbc:mysql://localhost/db");
+    } catch (SQLException e) {
+        System.err.println("Ошибка БД: " + e.getMessage());
+    } catch (ClassNotFoundException e) {
+        System.err.println("Драйвер не найден: " + e.getMessage());
+    }
+}
+```
+
+### Лучшие практики
+
+1. **Используйте специфичные исключения** - не бросайте общий `Exception`
+2. **Добавляйте осмысленные сообщения** - помогите понять причину ошибки
+3. **В Kotlin избегайте @Throws** - используйте только для Java interop
+4. **Не игнорируйте исключения** - всегда обрабатывайте или логируйте
+5. **Создавайте кастомные исключения** - для доменных ошибок
+6. **Документируйте исключения** - укажите когда метод может выбросить исключение
 

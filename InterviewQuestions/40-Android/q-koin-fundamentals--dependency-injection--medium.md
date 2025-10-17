@@ -732,6 +732,376 @@ class UserRepositoryTest : KoinTest {
 6. **Проверка модулей** - использовать `checkModules()` для верификации
 7. **Избегать избыточной инъекции** - не инжектить простые значения
 
+### Определение классов для примера
+
+```kotlin
+// Доменный слой
+data class User(
+    val id: String,
+    val name: String,
+    val email: String
+)
+
+interface UserRepository {
+    suspend fun getUser(id: String): Result<User>
+    suspend fun saveUser(user: User): Result<Unit>
+}
+
+// Слой данных
+class UserRepositoryImpl(
+    private val api: UserApi,
+    private val database: UserDatabase,
+    private val logger: Logger
+) : UserRepository {
+    override suspend fun getUser(id: String): Result<User> {
+        logger.log("Загрузка пользователя: $id")
+        return try {
+            val user = api.getUser(id)
+            database.saveUser(user)
+            Result.success(user)
+        } catch (e: Exception) {
+            database.getUser(id)?.let {
+                Result.success(it)
+            } ?: Result.failure(e)
+        }
+    }
+
+    override suspend fun saveUser(user: User): Result<Unit> {
+        logger.log("Сохранение пользователя: ${user.id}")
+        return try {
+            api.saveUser(user)
+            database.saveUser(user)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+}
+
+// Use cases
+class GetUserUseCase(private val repository: UserRepository) {
+    suspend operator fun invoke(id: String): Result<User> {
+        return repository.getUser(id)
+    }
+}
+
+class SaveUserUseCase(private val repository: UserRepository) {
+    suspend operator fun invoke(user: User): Result<Unit> {
+        return repository.saveUser(user)
+    }
+}
+
+// Слой представления
+class UserViewModel(
+    private val getUserUseCase: GetUserUseCase,
+    private val saveUserUseCase: SaveUserUseCase
+) : ViewModel() {
+    private val _userState = MutableStateFlow<UiState<User>>(UiState.Loading)
+    val userState: StateFlow<UiState<User>> = _userState.asStateFlow()
+
+    fun loadUser(id: String) {
+        viewModelScope.launch {
+            _userState.value = UiState.Loading
+            getUserUseCase(id)
+                .onSuccess { user ->
+                    _userState.value = UiState.Success(user)
+                }
+                .onFailure { error ->
+                    _userState.value = UiState.Error(error.message ?: "Неизвестная ошибка")
+                }
+        }
+    }
+
+    fun saveUser(user: User) {
+        viewModelScope.launch {
+            saveUserUseCase(user)
+                .onSuccess {
+                    _userState.value = UiState.Success(user)
+                }
+                .onFailure { error ->
+                    _userState.value = UiState.Error(error.message ?: "Неизвестная ошибка")
+                }
+        }
+    }
+}
+
+sealed class UiState<out T> {
+    object Loading : UiState<Nothing>()
+    data class Success<T>(val data: T) : UiState<T>()
+    data class Error(val message: String) : UiState<Nothing>()
+}
+```
+
+### Создание модулей Koin
+
+```kotlin
+// networkModule.kt
+val networkModule = module {
+    // Single - создается один раз и переиспользуется
+    single<Retrofit> {
+        Retrofit.Builder()
+            .baseUrl("https://api.example.com")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(get()) // Получает OkHttpClient из другого модуля
+            .build()
+    }
+
+    single<OkHttpClient> {
+        OkHttpClient.Builder()
+            .addInterceptor(get<AuthInterceptor>())
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = if (BuildConfig.DEBUG)
+                    HttpLoggingInterceptor.Level.BODY
+                else
+                    HttpLoggingInterceptor.Level.NONE
+            })
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
+
+    single<UserApi> {
+        get<Retrofit>().create(UserApi::class.java)
+    }
+}
+
+// dataModule.kt
+val dataModule = module {
+    // Single - экземпляр базы данных
+    single<UserDatabase> {
+        Room.databaseBuilder(
+            androidContext(),
+            UserDatabase::class.java,
+            "user-database"
+        )
+        .fallbackToDestructiveMigration()
+        .build()
+    }
+
+    single<UserDao> { get<UserDatabase>().userDao() }
+
+    // Factory - новый экземпляр каждый раз
+    factory<Logger> {
+        LoggerImpl(tag = "UserApp")
+    }
+
+    // Single с привязкой интерфейса
+    single<UserRepository> {
+        UserRepositoryImpl(
+            api = get(),
+            database = get(),
+            logger = get()
+        )
+    }
+}
+
+// domainModule.kt
+val domainModule = module {
+    // Factory - новый экземпляр для каждой инъекции
+    factory { GetUserUseCase(get()) }
+    factory { SaveUserUseCase(get()) }
+}
+
+// presentationModule.kt
+val presentationModule = module {
+    // ViewModel - интеграция с Android Architecture Components
+    viewModel { UserViewModel(get(), get()) }
+
+    // ViewModel с параметрами
+    viewModel { (userId: String) ->
+        UserDetailViewModel(
+            userId = userId,
+            getUserUseCase = get()
+        )
+    }
+}
+
+// utilityModule.kt
+val utilityModule = module {
+    single<AuthInterceptor> {
+        AuthInterceptor(tokenProvider = get())
+    }
+
+    single<TokenProvider> {
+        TokenProviderImpl(
+            sharedPreferences = androidContext()
+                .getSharedPreferences("auth", Context.MODE_PRIVATE)
+        )
+    }
+}
+
+// Все модули приложения
+val appModules = listOf(
+    networkModule,
+    dataModule,
+    domainModule,
+    presentationModule,
+    utilityModule
+)
+```
+
+### Использование в Fragment
+
+```kotlin
+class UserFragment : Fragment() {
+    // ViewModel из Activity scope
+    private val userViewModel: UserViewModel by activityViewModel()
+
+    // Прямая инъекция
+    private val logger: Logger by inject()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            userViewModel.userState.collect { state ->
+                when (state) {
+                    is UiState.Loading -> showLoading()
+                    is UiState.Success -> showUser(state.data)
+                    is UiState.Error -> showError(state.message)
+                }
+            }
+        }
+    }
+
+    private fun showLoading() {
+        // Показать индикатор загрузки
+    }
+
+    private fun showUser(user: User) {
+        // Отобразить данные пользователя
+    }
+
+    private fun showError(message: String) {
+        // Показать ошибку
+    }
+}
+```
+
+### Использование в Jetpack Compose
+
+```kotlin
+@Composable
+fun UserScreen(userId: String) {
+    // Получить ViewModel из Koin
+    val viewModel: UserViewModel = koinViewModel()
+
+    // Получить зависимость из Koin
+    val logger: Logger = get()
+
+    val userState by viewModel.userState.collectAsState()
+
+    LaunchedEffect(userId) {
+        logger.log("Загрузка пользователя: $userId")
+        viewModel.loadUser(userId)
+    }
+
+    when (val state = userState) {
+        is UiState.Loading -> LoadingView()
+        is UiState.Success -> UserDetailView(state.data)
+        is UiState.Error -> ErrorView(state.message)
+    }
+}
+
+@Composable
+fun LoadingView() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+fun UserDetailView(user: User) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text(text = "Имя: ${user.name}", style = MaterialTheme.typography.h5)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "Email: ${user.email}", style = MaterialTheme.typography.body1)
+    }
+}
+
+@Composable
+fun ErrorView(message: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = "Ошибка: $message", color = Color.Red)
+    }
+}
+```
+
+### Свойства Koin
+
+Использование файла конфигурации для внешних параметров:
+
+```kotlin
+// koin.properties файл в assets
+server.url=https://api.example.com
+api.timeout=30000
+cache.enabled=true
+
+// Модуль использующий свойства
+module {
+    single<ApiService> {
+        val url = getProperty<String>("server.url")
+        val timeout = getProperty<Int>("api.timeout")
+        val cacheEnabled = getProperty<Boolean>("cache.enabled")
+        ApiService(url, timeout, cacheEnabled)
+    }
+}
+```
+
+### Общие ошибки
+
+**1. Циклические зависимости** - Koin не обнаружит их во время компиляции:
+```kotlin
+// ПЛОХО: циклическая зависимость
+module {
+    single { ServiceA(get()) } // Требует ServiceB
+    single { ServiceB(get()) } // Требует ServiceA - ошибка во время выполнения!
+}
+```
+
+**2. Отсутствующие зависимости** - ошибки runtime вместо compile-time:
+```kotlin
+// ПЛОХО: забыли добавить зависимость в модуль
+class MyActivity : AppCompatActivity() {
+    private val service: MyService by inject() // Крэш! MyService не определен в модулях
+}
+```
+
+**3. Неправильный scope** - использование factory для дорогих объектов:
+```kotlin
+// ПЛОХО: создание новой базы данных каждый раз
+module {
+    factory { Room.databaseBuilder(...).build() } // Должен быть single!
+}
+```
+
+**4. Утечки памяти** - хранение Activity context в singleton:
+```kotlin
+// ПЛОХО: утечка Activity context
+single { MyService(androidContext()) } // Если MyService хранит context, это утечка!
+
+// ХОРОШО: использовать Application context
+single { MyService(androidContext()) } // Koin предоставляет Application context
+```
+
+**5. Поздняя инициализация** - не запустили Koin перед использованием:
+```kotlin
+// ПЛОХО: использование Koin до инициализации
+class MyActivity : AppCompatActivity() {
+    private val service: MyService by inject() // Крэш если startKoin() не вызван!
+}
+```
+
 ### Резюме
 
 Koin — прагматичный легковесный DI фреймворк для Kotlin с service locator паттерном и runtime разрешением. Предлагает простой DSL, без генерации кода, быстрые сборки, поддержку Factory/Single/ViewModel и KMM. Trade-offs: runtime ошибки vs compile-time безопасность, чуть медленнее performance, но быстрее разработка и сборка.

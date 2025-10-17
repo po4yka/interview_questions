@@ -588,27 +588,565 @@ Need to show notification to user?
 Когда использовать WorkManager vs AlarmManager vs JobScheduler vs Foreground Service? Какие компромиссы и применения для каждого?
 
 ## Ответ (RU)
-[Перевод с примерами из английской версии...]
+
+### Обзор
+
+Android предоставляет несколько API для фоновой работы, каждый с разными возможностями и ограничениями:
+
+| API | Лучше всего для | Гарантии | Переживает | Тайминг | Constraints |
+|-----|----------|------------|----------|---------|-------------|
+| **WorkManager** | Отложенная гарантированная работа | Гарантированная | Перезагрузки, обновления приложения | Гибкий | Сеть, батарея, хранилище |
+| **AlarmManager** | Критичные по времени задачи | Точный тайминг | Перезагрузки | Точный или окно | Нет |
+| **JobScheduler** | Запланированная фоновая работа | Гарантированная | Перезагрузки | Гибкий | Сеть, зарядка, idle |
+| **Foreground Service** | Видимая для пользователя работа | Пользователь может остановить | Пока работает | Немедленный | Нет |
+| **Coroutines** | Короткие асинхронные задачи | Не гарантировано | Только пока приложение живо | Немедленный | Нет |
+
+### WorkManager
+
+**Используйте когда:**
+- Работа должна в итоге завершиться (гарантированно)
+- Работу можно отложить (гибкий тайминг)
+- Нужно уважать ограничения (сеть, батарея)
+- Работа должна пережить перезапуск/обновление приложения
+
+**Не используйте когда:**
+- Нужен точный тайминг (используйте AlarmManager)
+- Пользователь должен видеть что работа выполняется (используйте Foreground Service)
+- Очень чувствительно к времени (используйте AlarmManager)
+
+**Пример: Резервное копирование фотографий**
+
+```kotlin
+fun schedulePhotoBackup() {
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.UNMETERED) // Только WiFi
+        .setRequiresBatteryNotLow(true)
+        .build()
+
+    val backupRequest = PeriodicWorkRequestBuilder<PhotoBackupWorker>(
+        24, TimeUnit.HOURS
+    )
+        .setConstraints(constraints)
+        .build()
+
+    WorkManager.getInstance(context)
+        .enqueueUniquePeriodicWork(
+            "photo_backup",
+            ExistingPeriodicWorkPolicy.KEEP,
+            backupRequest
+        )
+}
+
+@HiltWorker
+class PhotoBackupWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted params: WorkerParameters,
+    private val photoRepository: PhotoRepository
+) : CoroutineWorker(context, params) {
+
+    override suspend fun doWork(): Result {
+        return try {
+            val photos = photoRepository.getUnsyncedPhotos()
+            photos.forEach { photo ->
+                photoRepository.uploadPhoto(photo)
+            }
+            Result.success()
+        } catch (e: Exception) {
+            Result.retry()
+        }
+    }
+}
+```
+
+**Характеристики:**
+- Минимальный периодический интервал: 15 минут
+- Запускается когда ограничения выполнены (гибко)
+- Переживает обновления приложения и перезагрузки
+- Автоматический retry с backoff
+- Хорошо для: синхронизация, резервное копирование, очистка, загрузка
+
+### AlarmManager
+
+**Используйте когда:**
+- Нужен точный тайминг (в пределах секунд)
+- Критичные по времени операции
+- Будильник, напоминания, запланированные задачи
+
+**Не используйте когда:**
+- Можно отложить (используйте WorkManager)
+- Нужны ограничения сети/батареи (используйте WorkManager)
+- Просто нужна периодическая синхронизация (используйте WorkManager)
+
+**Пример: Напоминание о лекарстве**
+
+```kotlin
+fun scheduleMedicationReminder(reminderTime: Long) {
+    val alarmManager = context.getSystemService(AlarmManager::class.java)
+
+    val intent = Intent(context, MedicationReminderReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(
+        context,
+        MEDICATION_REQUEST_CODE,
+        intent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    // Точный alarm (требует разрешения SCHEDULE_EXACT_ALARM на Android 12+)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (alarmManager.canScheduleExactAlarms()) {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                reminderTime,
+                pendingIntent
+            )
+        } else {
+            // Fallback на неточный alarm
+            alarmManager.setAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                reminderTime,
+                pendingIntent
+            )
+        }
+    } else {
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            reminderTime,
+            pendingIntent
+        )
+    }
+}
+
+class MedicationReminderReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        // Показать уведомление
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_medication)
+            .setContentTitle("Напоминание о лекарстве")
+            .setContentText("Время принять лекарство")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .build()
+
+        NotificationManagerCompat.from(context)
+            .notify(MEDICATION_NOTIFICATION_ID, notification)
+
+        // Запланировать следующее напоминание
+        val nextReminder = reminderTime + TimeUnit.DAYS.toMillis(1)
+        scheduleMedicationReminder(nextReminder)
+    }
+}
+```
+
+**Типы Alarm:**
+
+```kotlin
+// RTC - Real Time Clock (время по часам)
+AlarmManager.RTC // Не будит устройство
+AlarmManager.RTC_WAKEUP // Будит устройство
+
+// ELAPSED_REALTIME - Время с момента загрузки
+AlarmManager.ELAPSED_REALTIME // Не будит устройство
+AlarmManager.ELAPSED_REALTIME_WAKEUP // Будит устройство
+
+// Примеры:
+// Точный alarm в определенное время
+alarmManager.setExact(
+    AlarmManager.RTC_WAKEUP,
+    triggerAtMillis,
+    pendingIntent
+)
+
+// Повторяющийся alarm
+alarmManager.setRepeating(
+    AlarmManager.RTC_WAKEUP,
+    firstTriggerMillis,
+    intervalMillis,
+    pendingIntent
+)
+
+// Неточный alarm (более дружелюбен к батарее)
+alarmManager.set(
+    AlarmManager.RTC_WAKEUP,
+    triggerAtMillis,
+    pendingIntent
+)
+
+// Alarm с окном (между двумя временами)
+alarmManager.setWindow(
+    AlarmManager.RTC_WAKEUP,
+    windowStartMillis,
+    windowLengthMillis,
+    pendingIntent
+)
+```
+
+**Ограничения Android 12+:**
+
+```xml
+<!-- Разрешение манифеста для точных alarms -->
+<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
+<!-- Или используйте это для пользовательских alarms (часы, календари) -->
+<uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+```
+
+**Характеристики:**
+- Может срабатывать в точное время (точность в секундах)
+- Будит устройство из сна
+- Ограничено оптимизацией батареи
+- Хорошо для: будильники, напоминания, задачи чувствительные к времени
+
+### JobScheduler
+
+**Используйте когда:**
+- Только API 21+ (не нужна обратная совместимость)
+- Нужны ограничения (сеть, зарядка, idle)
+- Можно отложить
+
+**Не используйте когда:**
+- Нужно поддерживать старые версии Android (используйте WorkManager)
+- WorkManager предоставляет все что вам нужно
+
+**Примечание:** WorkManager использует JobScheduler внутри на API 23+, поэтому предпочтительнее WorkManager для лучшего API и обратной совместимости.
+
+**Пример: Очистка базы данных**
+
+```kotlin
+fun scheduleCleanup(context: Context) {
+    val jobScheduler = context.getSystemService(JobScheduler::class.java)
+
+    val jobInfo = JobInfo.Builder(
+        CLEANUP_JOB_ID,
+        ComponentName(context, CleanupJobService::class.java)
+    )
+        .setRequiresDeviceIdle(true) // Только когда устройство в idle
+        .setRequiresCharging(true) // Только при зарядке
+        .setPersisted(true) // Пережить перезагрузку
+        .setPeriodic(TimeUnit.DAYS.toMillis(1)) // Ежедневно
+        .build()
+
+    jobScheduler.schedule(jobInfo)
+}
+
+class CleanupJobService : JobService() {
+    private var job: Job? = null
+
+    override fun onStartJob(params: JobParameters): Boolean {
+        job = CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // Очистка старых данных
+                database.cleanOldRecords()
+
+                // Задача успешно завершена
+                jobFinished(params, false)
+            } catch (e: Exception) {
+                // Задача провалилась, перепланировать
+                jobFinished(params, true)
+            }
+        }
+
+        return true // Работа продолжается
+    }
+
+    override fun onStopJob(params: JobParameters): Boolean {
+        job?.cancel()
+        return true // Перепланировать
+    }
+}
+```
+
+**Характеристики:**
+- Только API 21+
+- Хорошая поддержка ограничений
+- Переживает перезагрузки
+- WorkManager - лучшая альтернатива
+
+### Foreground Service
+
+**Используйте когда:**
+- Пользователь должен знать что работа выполняется
+- Работу нельзя прерывать
+- Долгосрочные операции (минуты - часы)
+- Воспроизведение музыки, навигация, загрузка файлов
+
+**Не используйте когда:**
+- Работу можно отложить (используйте WorkManager)
+- Быстрая фоновая задача (используйте Coroutines)
+- Не нужно показывать уведомление
+
+**Пример: Музыкальный плеер**
+
+```kotlin
+class MusicPlayerService : Service() {
+
+    private val mediaPlayer = MediaPlayer()
+    private val binder = MusicBinder()
+
+    inner class MusicBinder : Binder() {
+        fun getService(): MusicPlayerService = this@MusicPlayerService
+    }
+
+    override fun onBind(intent: Intent): IBinder = binder
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when (intent?.action) {
+            ACTION_PLAY -> play()
+            ACTION_PAUSE -> pause()
+            ACTION_STOP -> stop()
+        }
+        return START_STICKY
+    }
+
+    private fun play() {
+        val notification = createNotification()
+
+        // Запустить как foreground service (обязательно для Android 8+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(
+                NOTIFICATION_ID,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+            )
+        } else {
+            startForeground(NOTIFICATION_ID, notification)
+        }
+
+        mediaPlayer.start()
+    }
+
+    private fun createNotification(): Notification {
+        return NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_music)
+            .setContentTitle("Сейчас играет")
+            .setContentText(currentSong.title)
+            .addAction(R.drawable.ic_pause, "Пауза", pausePendingIntent)
+            .addAction(R.drawable.ic_stop, "Стоп", stopPendingIntent)
+            .setStyle(
+                MediaStyle()
+                    .setShowActionsInCompactView(0, 1)
+            )
+            .build()
+    }
+
+    private fun pause() {
+        mediaPlayer.pause()
+    }
+
+    private fun stop() {
+        mediaPlayer.stop()
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        stopSelf()
+    }
+}
+
+// Запустить сервис
+fun startMusicPlayback() {
+    val intent = Intent(context, MusicPlayerService::class.java).apply {
+        action = ACTION_PLAY
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        context.startForegroundService(intent)
+    } else {
+        context.startService(intent)
+    }
+}
+```
+
+**Типы Foreground service (Android 10+):**
+
+```xml
+<service
+    android:name=".MusicPlayerService"
+    android:foregroundServiceType="mediaPlayback" />
+
+<!-- Доступные типы: -->
+<!-- camera, connectedDevice, dataSync, location, mediaPlayback,
+     mediaProjection, microphone, phoneCall, remoteMessaging,
+     shortService, specialUse, systemExempted -->
+```
+
+**Характеристики:**
+- Должен показывать уведомление
+- Пользователь знает что работа выполняется
+- Не убивается системой (кроме низкой памяти)
+- Интенсивно использует батарею
+- Хорошо для: воспроизведение медиа, навигация, передача файлов
+
+### Coroutines (Без гарантий)
+
+**Используйте когда:**
+- Быстрые асинхронные операции
+- Приложение на переднем плане
+- OK если работа не завершится
+
+**Не используйте когда:**
+- Работа должна завершиться (используйте WorkManager)
+- Приложение может быть убито (используйте WorkManager)
+
+**Пример: Быстрый API вызов**
+
+```kotlin
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val repository: HomeRepository
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    init {
+        loadData()
+    }
+
+    private fun loadData() {
+        viewModelScope.launch {
+            try {
+                val data = repository.fetchData()
+                _uiState.value = UiState.Success(data)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message ?: "Неизвестная ошибка")
+            }
+        }
+    }
+}
+```
+
+**Характеристики:**
+- Нет гарантии завершения
+- Отменяется при отмене scope
+- Хорошо для: обновления UI, быстрые API вызовы
+- Не хорошо для: фоновая синхронизация, загрузки
+
+### Дерево решений
+
+```
+Нужно показывать уведомление пользователю?
+ ДА → Foreground Service
+ НЕТ
+     Должно произойти в точное время?
+        ДА → AlarmManager
+        НЕТ
+            Должно завершиться даже если приложение убито?
+               ДА → WorkManager
+               НЕТ → Coroutines
+            Нужны ограничения (WiFi, батарея)?
+                ДА → WorkManager
+```
+
+### Таблица сравнения
+
+| Функция | WorkManager | AlarmManager | JobScheduler | Foreground Service | Coroutines |
+|---------|-------------|--------------|--------------|-------------------|------------|
+| **Гарантированное выполнение** | Да | Да | Да | Да | Нет |
+| **Точный тайминг** | Нет | Да | Нет | Да | Да |
+| **Переживает перезагрузку** | Да | Да | Да | Нет | Нет |
+| **Переживает убийство приложения** | Да | Да | Да | Нет | Нет |
+| **Ограничение сети** | Да | Нет | Да | Нет | Нет |
+| **Ограничение батареи** | Да | Нет | Да | Нет | Нет |
+| **Обратная совместимость** | API 14+ | Все | API 21+ | Все | Все |
+| **Видимость пользователя** | Опционально | Нет | Нет | Обязательно | Нет |
+| **Мин. интервал** | 15 мин | Нет | 15 мин | N/A | N/A |
+| **Дружелюбен к батарее** | Да | Нет | Да | Нет | Да |
+
+### Реальные случаи использования
+
+**WorkManager:**
+```
+Синхронизация данных приложения при доступе к WiFi
+Резервное копирование фотографий ночью
+Загрузка логов на сервер
+Очистка старых файлов кеша
+Обработка изображений для загрузки
+Отправка аналитических событий пакетами
+```
+
+**AlarmManager:**
+```
+Приложение будильника
+Напоминания о лекарствах
+Уведомления о событиях календаря
+Напоминания о регулярных счетах
+Запланированная генерация отчетов
+```
+
+**Foreground Service:**
+```
+Воспроизведение музыки/подкастов
+GPS навигация
+Загрузка файлов (инициированная пользователем)
+Видеозвонок
+Отслеживание фитнеса
+Общий доступ к местоположению в реальном времени
+```
+
+**Coroutines:**
+```
+Загрузка данных для UI
+Быстрые API вызовы
+Загрузка изображений
+Валидация форм
+Запросы к базе данных (пока приложение активно)
+```
+
+### Лучшие практики
+
+1. **Предпочитайте WorkManager для фоновой работы**
+   ```kotlin
+   // ХОРОШО - WorkManager для синхронизации
+   WorkManager.getInstance(context)
+       .enqueueUniquePeriodicWork(...)
+
+   // ПЛОХО - AlarmManager для периодической синхронизации
+   alarmManager.setRepeating(...)
+   ```
+
+2. **Используйте AlarmManager только для точного тайминга**
+   ```kotlin
+   // ХОРОШО - Будильник
+   alarmManager.setExact(...)
+
+   // ПЛОХО - Синхронизация данных (используйте WorkManager)
+   alarmManager.setRepeating(...)
+   ```
+
+3. **Foreground Service только когда видимо**
+   ```kotlin
+   // ХОРОШО - Воспроизведение музыки
+   startForeground(notification)
+
+   // ПЛОХО - Тихая синхронизация данных
+   startForeground(notification) // Пользователь видит уведомление!
+   ```
+
+4. **Coroutines для работы связанной с UI**
+   ```kotlin
+   // ХОРОШО - Загрузка данных для экрана
+   viewModelScope.launch { loadData() }
+
+   // ПЛОХО - Загрузка файла (используйте WorkManager)
+   viewModelScope.launch { uploadFile() } // Может быть убито!
+   ```
 
 ### Резюме
 
 **Используйте WorkManager когда:**
-- Работа должна завершиться (гарантирована)
+- Работа должна завершиться (гарантированно)
 - Работу можно отложить
-- Нужны constraints (сеть, батарея, хранилище)
-- Работа переживает обновления/перезагрузки приложения
+- Нужны ограничения (сеть, батарея, хранилище)
+- Работа переживает обновления приложения/перезагрузки
 
 **Используйте AlarmManager когда:**
-- Нужна точная синхронизация (будильник, напоминания)
+- Нужен точный тайминг (будильник, напоминания)
 - Критичные по времени операции
 
 **Используйте Foreground Service когда:**
-- Пользователь должен видеть работу (требуется notification)
-- Долгие операции (музыка, навигация)
+- Пользователь должен видеть что работа выполняется (требуется уведомление)
+- Долгосрочные операции (музыка, навигация)
 
 **Используйте Coroutines когда:**
 - Быстрая асинхронная работа
 - Приложение на переднем плане
-- ОК если работа не завершится
+- OK если работа не завершится
 
 **Общее правило:** Начинайте с WorkManager для фоновой работы. Используйте альтернативы только если WorkManager не подходит для вашего случая.

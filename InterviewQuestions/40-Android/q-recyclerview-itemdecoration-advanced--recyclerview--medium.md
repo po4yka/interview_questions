@@ -690,7 +690,7 @@ recyclerView.invalidate()
 
 ## Ответ (RU)
 
-**ItemDecoration** позволяет добавлять пользовательскую отрисовку и смещения layout к элементам RecyclerView без изменения самих элементов.
+**ItemDecoration** позволяет добавлять пользовательскую отрисовку и смещения layout к элементам RecyclerView без изменения самих элементов. Идеально подходит для разделителей, отступов, sticky headers и визуальных эффектов.
 
 ### Фазы ItemDecoration
 
@@ -699,83 +699,532 @@ RecyclerView отрисовка происходит в 3 фазах:
 ```
 1. onDraw() - Рисовать ПОД элементами (фоновые украшения)
 2. Элементы view отрисовываются
-3. onDrawOver() - Рисовать НАД элементами (sticky headers)
+3. onDrawOver() - Рисовать НАД элементами (фронтальные украшения, sticky headers)
 ```
 
-### Базовый разделитель
+**Методы:**
+- `onDraw()` - Рисовать украшения под элементами
+- `onDrawOver()` - Рисовать украшения над элементами
+- `getItemOffsets()` - Добавлять отступы/padding вокруг элементов
+
+---
+
+### Базовый разделитель ItemDecoration
 
 ```kotlin
-class SimpleDividerDecoration : RecyclerView.ItemDecoration() {
+class SimpleDividerDecoration(
+    context: Context,
+    private val dividerHeight: Int = 1.dpToPx(context)
+) : RecyclerView.ItemDecoration() {
 
     private val paint = Paint().apply {
         color = Color.LTGRAY
+        style = Paint.Style.FILL
     }
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-        outRect.bottom = dividerHeight
+    // Добавить отступ для разделителя
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        // Добавить нижний отступ ко всем элементам кроме последнего
+        val position = parent.getChildAdapterPosition(view)
+        if (position != parent.adapter?.itemCount?.minus(1)) {
+            outRect.bottom = dividerHeight
+        }
+    }
+
+    // Нарисовать разделитель под элементами
+    override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        val left = parent.paddingLeft
+        val right = parent.width - parent.paddingRight
+
+        for (i in 0 until parent.childCount) {
+            val child = parent.getChildAt(i)
+            val params = child.layoutParams as RecyclerView.LayoutParams
+
+            val top = child.bottom + params.bottomMargin
+            val bottom = top + dividerHeight
+
+            canvas.drawRect(
+                left.toFloat(),
+                top.toFloat(),
+                right.toFloat(),
+                bottom.toFloat(),
+                paint
+            )
+        }
+    }
+
+    private fun Int.dpToPx(context: Context): Int {
+        return (this * context.resources.displayMetrics.density).toInt()
+    }
+}
+
+// Использование
+recyclerView.addItemDecoration(SimpleDividerDecoration(context))
+```
+
+---
+
+### Продвинутый разделитель с отступами
+
+```kotlin
+class InsetDividerDecoration(
+    context: Context,
+    private val insetStart: Int = 16.dpToPx(context),
+    private val insetEnd: Int = 0,
+    @ColorInt private val dividerColor: Int = Color.LTGRAY,
+    private val dividerHeight: Int = 1.dpToPx(context)
+) : RecyclerView.ItemDecoration() {
+
+    private val paint = Paint().apply {
+        color = dividerColor
+        style = Paint.Style.FILL
+    }
+
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        val position = parent.getChildAdapterPosition(view)
+        val itemCount = state.itemCount
+
+        // Добавить отступ кроме последнего элемента
+        if (position < itemCount - 1) {
+            outRect.bottom = dividerHeight
+        }
     }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        for (i in 0 until parent.childCount) {
+        val left = parent.paddingLeft + insetStart
+        val right = parent.width - parent.paddingRight - insetEnd
+
+        for (i in 0 until parent.childCount - 1) { // Пропустить последний элемент
             val child = parent.getChildAt(i)
-            val top = child.bottom
+            val params = child.layoutParams as RecyclerView.LayoutParams
+
+            val top = child.bottom + params.bottomMargin
             val bottom = top + dividerHeight
-            canvas.drawRect(left, top, right, bottom, paint)
+
+            canvas.drawRect(
+                left.toFloat(),
+                top.toFloat(),
+                right.toFloat(),
+                bottom.toFloat(),
+                paint
+            )
         }
+    }
+
+    private fun Int.dpToPx(context: Context): Int {
+        return (this * context.resources.displayMetrics.density).toInt()
     }
 }
 ```
 
-### Grid spacing
+---
+
+### Grid Spacing Decoration
 
 ```kotlin
 class GridSpacingDecoration(
     private val spanCount: Int,
-    private val spacing: Int
+    private val spacing: Int,
+    private val includeEdge: Boolean = true
 ) : RecyclerView.ItemDecoration() {
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
         val position = parent.getChildAdapterPosition(view)
-        val column = position % spanCount
+        val column = position % spanCount // Индекс колонки
 
-        outRect.left = spacing - column * spacing / spanCount
-        outRect.right = (column + 1) * spacing / spanCount
-        outRect.bottom = spacing
+        if (includeEdge) {
+            // Отступы со всех сторон
+            outRect.left = spacing - column * spacing / spanCount
+            outRect.right = (column + 1) * spacing / spanCount
+
+            if (position < spanCount) { // Верхний край
+                outRect.top = spacing
+            }
+            outRect.bottom = spacing
+        } else {
+            // Отступы только между элементами
+            outRect.left = column * spacing / spanCount
+            outRect.right = spacing - (column + 1) * spacing / spanCount
+
+            if (position >= spanCount) {
+                outRect.top = spacing
+            }
+        }
     }
 }
+
+// Использование
+val spanCount = 3
+val spacing = 16.dpToPx()
+recyclerView.addItemDecoration(GridSpacingDecoration(spanCount, spacing, true))
 ```
 
-### Sticky Header
+---
+
+### Sticky Header Decoration
 
 ```kotlin
-class StickyHeaderDecoration : RecyclerView.ItemDecoration() {
+interface StickyHeaderAdapter {
+    fun isHeader(position: Int): Boolean
+    fun getHeaderView(position: Int, parent: RecyclerView): View
+}
+
+class StickyHeaderDecoration(
+    private val adapter: StickyHeaderAdapter
+) : RecyclerView.ItemDecoration() {
+
+    private var currentHeader: Pair<Int, View>? = null
 
     override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        // Получить header view
-        val headerView = getHeaderView(parent)
+        super.onDrawOver(canvas, parent, state)
 
-        // Отрисовать в верхней части
+        val topChild = parent.getChildAt(0) ?: return
+        val topChildPosition = parent.getChildAdapterPosition(topChild)
+        if (topChildPosition == RecyclerView.NO_POSITION) return
+
+        // Найти текущую позицию заголовка
+        val headerPosition = findHeaderPosition(topChildPosition)
+        if (headerPosition == RecyclerView.NO_POSITION) return
+
+        // Получить или создать header view
+        val headerView = getHeaderView(parent, headerPosition)
+
+        // Вычислить позицию заголовка
+        val contactPoint = headerView.bottom
+        val childInContact = getChildInContact(parent, contactPoint)
+
+        if (childInContact != null) {
+            val childPosition = parent.getChildAdapterPosition(childInContact)
+            if (adapter.isHeader(childPosition)) {
+                // Сдвинуть текущий заголовок вверх
+                moveHeader(canvas, headerView, childInContact)
+                return
+            }
+        }
+
+        // Нарисовать заголовок вверху
+        drawHeader(canvas, headerView)
+    }
+
+    private fun findHeaderPosition(fromPosition: Int): Int {
+        var position = fromPosition
+        while (position >= 0) {
+            if (adapter.isHeader(position)) {
+                return position
+            }
+            position--
+        }
+        return RecyclerView.NO_POSITION
+    }
+
+    private fun getHeaderView(parent: RecyclerView, position: Int): View {
+        // Проверить кэш
+        if (currentHeader?.first == position) {
+            return currentHeader!!.second
+        }
+
+        // Создать новый header view
+        val headerView = adapter.getHeaderView(position, parent)
+
+        // Измерить header
+        val widthSpec = View.MeasureSpec.makeMeasureSpec(
+            parent.width,
+            View.MeasureSpec.EXACTLY
+        )
+        val heightSpec = View.MeasureSpec.makeMeasureSpec(
+            parent.height,
+            View.MeasureSpec.UNSPECIFIED
+        )
+
+        val childWidth = ViewGroup.getChildMeasureSpec(
+            widthSpec,
+            parent.paddingLeft + parent.paddingRight,
+            headerView.layoutParams.width
+        )
+        val childHeight = ViewGroup.getChildMeasureSpec(
+            heightSpec,
+            parent.paddingTop + parent.paddingBottom,
+            headerView.layoutParams.height
+        )
+
+        headerView.measure(childWidth, childHeight)
+        headerView.layout(0, 0, headerView.measuredWidth, headerView.measuredHeight)
+
+        currentHeader = position to headerView
+        return headerView
+    }
+
+    private fun drawHeader(canvas: Canvas, headerView: View) {
         canvas.save()
         canvas.translate(0f, 0f)
         headerView.draw(canvas)
         canvas.restore()
     }
+
+    private fun moveHeader(canvas: Canvas, currentHeader: View, nextHeader: View) {
+        canvas.save()
+        val offset = nextHeader.top - currentHeader.height
+        canvas.translate(0f, offset.toFloat())
+        currentHeader.draw(canvas)
+        canvas.restore()
+    }
+
+    private fun getChildInContact(parent: RecyclerView, contactPoint: Int): View? {
+        for (i in 0 until parent.childCount) {
+            val child = parent.getChildAt(i)
+            if (child.bottom > contactPoint && child.top <= contactPoint) {
+                return child
+            }
+        }
+        return null
+    }
 }
+
+// Реализация в адаптере
+class MyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(), StickyHeaderAdapter {
+
+    override fun isHeader(position: Int): Boolean {
+        // Ваша логика для определения заголовка
+        return items[position] is HeaderItem
+    }
+
+    override fun getHeaderView(position: Int, parent: RecyclerView): View {
+        val holder = onCreateViewHolder(parent, TYPE_HEADER)
+        onBindViewHolder(holder, position)
+        return holder.itemView
+    }
+}
+
+// Использование
+val decoration = StickyHeaderDecoration(adapter as StickyHeaderAdapter)
+recyclerView.addItemDecoration(decoration)
 ```
+
+---
+
+### Section Divider с меткой
+
+```kotlin
+class SectionDividerDecoration(
+    context: Context,
+    private val getSectionName: (position: Int) -> String?
+) : RecyclerView.ItemDecoration() {
+
+    private val dividerHeight = 40.dpToPx(context)
+    private val dividerPaint = Paint().apply {
+        color = Color.LTGRAY
+        style = Paint.Style.FILL
+    }
+
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.BLACK
+        textSize = 14.spToPx(context)
+    }
+
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        val position = parent.getChildAdapterPosition(view)
+
+        // Добавить отступ если первый элемент или секция изменилась
+        if (position == 0 || isNewSection(position, parent)) {
+            outRect.top = dividerHeight
+        }
+    }
+
+    override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        for (i in 0 until parent.childCount) {
+            val child = parent.getChildAt(i)
+            val position = parent.getChildAdapterPosition(child)
+
+            if (position == 0 || isNewSection(position, parent)) {
+                val sectionName = getSectionName(position) ?: continue
+
+                // Нарисовать фон секции
+                val top = child.top - dividerHeight
+                val bottom = child.top
+
+                canvas.drawRect(
+                    0f,
+                    top.toFloat(),
+                    parent.width.toFloat(),
+                    bottom.toFloat(),
+                    dividerPaint
+                )
+
+                // Нарисовать текст секции
+                val textY = top + dividerHeight / 2f + textPaint.textSize / 2f
+                canvas.drawText(
+                    sectionName,
+                    16f,
+                    textY,
+                    textPaint
+                )
+            }
+        }
+    }
+
+    private fun isNewSection(position: Int, parent: RecyclerView): Boolean {
+        if (position == 0) return true
+
+        val currentSection = getSectionName(position)
+        val previousSection = getSectionName(position - 1)
+
+        return currentSection != previousSection
+    }
+
+    private fun Int.dpToPx(context: Context): Int {
+        return (this * context.resources.displayMetrics.density).toInt()
+    }
+
+    private fun Int.spToPx(context: Context): Float {
+        return this * context.resources.displayMetrics.scaledDensity
+    }
+}
+
+// Использование
+val decoration = SectionDividerDecoration(context) { position ->
+    // Вернуть имя секции для позиции
+    when {
+        position < 5 -> "Секция A"
+        position < 10 -> "Секция B"
+        else -> "Секция C"
+    }
+}
+recyclerView.addItemDecoration(decoration)
+```
+
+---
 
 ### Соображения производительности
 
-1. **Кэшировать Paint объекты**
-2. **Ограничить операции рисования**
-3. **Использовать аппаратное ускорение**
+**1. Кэшировать Paint объекты**
+```kotlin
+//  ДЕЛАТЬ - Создать один раз
+private val paint = Paint()
+
+//  НЕ ДЕЛАТЬ - Создавать в onDraw
+override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+    val paint = Paint() // ПЛОХО - аллокация при каждой отрисовке!
+}
+```
+
+**2. Ограничить операции рисования**
+```kotlin
+//  ДЕЛАТЬ - Рисовать только видимые элементы
+for (i in 0 until parent.childCount) {
+    val child = parent.getChildAt(i)
+    // Рисовать только для этого child
+}
+
+//  НЕ ДЕЛАТЬ - Цикл по всем элементам
+for (position in 0 until adapter.itemCount) {
+    // ПЛОХО - рисует даже невидимые элементы
+}
+```
+
+**3. Использовать аппаратное ускорение**
+```kotlin
+// Установить layer type для сложных украшений
+recyclerView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+```
+
+---
 
 ### Лучшие практики
 
-- Использовать `getItemOffsets()` для spacing
-- `onDraw()` для украшений ПОД элементами
-- `onDrawOver()` для украшений НАД элементами
-- Кэшировать сложные вычисления
+**1. Используйте getItemOffsets для spacing**
+```kotlin
+//  ДЕЛАТЬ - Использовать getItemOffsets для spacing
+override fun getItemOffsets(outRect: Rect, ...) {
+    outRect.bottom = spacing
+}
+
+//  НЕ ДЕЛАТЬ - Добавлять spacing в layout
+```
+
+**2. onDraw vs onDrawOver**
+```kotlin
+// Использовать onDraw для украшений ПОД элементами (разделители, фоны)
+override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+    // Рисовать разделители
+}
+
+// Использовать onDrawOver для украшений НАД элементами (sticky headers, оверлеи)
+override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+    // Рисовать sticky header
+}
+```
+
+**3. Кэшировать сложные вычисления**
+```kotlin
+private var cachedHeaderView: View? = null
+
+override fun onDrawOver(...) {
+    val headerView = cachedHeaderView ?: createHeaderView()
+    // Использовать кэшированный view
+}
+```
+
+**4. Эффективно invalidate**
+```kotlin
+//  ДЕЛАТЬ - Invalidate только украшения
+recyclerView.invalidateItemDecorations()
+
+//  НЕ ДЕЛАТЬ - Invalidate весь RecyclerView
+recyclerView.invalidate()
+```
+
+---
+
+### Резюме
+
+**Фазы ItemDecoration:**
+1. `onDraw()` - Рисовать под элементами
+2. Элементы view отрисовываются
+3. `onDrawOver()` - Рисовать над элементами
+
+**Ключевые методы:**
+- `getItemOffsets()` - Добавить spacing
+- `onDraw()` - Рисовать фоны, разделители
+- `onDrawOver()` - Рисовать оверлеи, sticky headers
+
+**Распространённые случаи использования:**
+- Разделители (простые, с отступами, для сетки)
+- Spacing (linear, grid)
+- Sticky headers
+- Section dividers с метками
+- Подсветка и значки
+
+**Советы по производительности:**
+- Кэшировать Paint объекты
+- Рисовать только видимые элементы
+- Использовать аппаратное ускорение
 - Эффективно invalidate
+
+**Лучшие практики:**
+- Использовать getItemOffsets для spacing
+- Выбрать правильную фазу рисования
+- Кэшировать сложные вычисления
+- Тестировать с разными размерами списков
 
 ---
 

@@ -381,4 +381,292 @@ Key points:
 
 ## Ответ (RU)
 
-Система вызывает: dispatchTouchEvent() — распределяет событие. onTouchEvent() — обрабатывает вью, если не перехвачено. onClick() — вызывается, если был ACTION_UP без движения.
+Когда пользователь нажимает на экран в Android, система вызывает серию методов событий касания. Основные события: **dispatchTouchEvent()**, **onInterceptTouchEvent()** (для ViewGroups), **onTouchEvent()**, и если настроено, **onClick()**.
+
+### Поток событий касания
+
+```kotlin
+// Поток распространения событий:
+// Activity.dispatchTouchEvent()
+//   → ViewGroup.dispatchTouchEvent()
+//     → ViewGroup.onInterceptTouchEvent()
+//       → View.dispatchTouchEvent()
+//         → View.onTouchEvent()
+//           → View.OnClickListener.onClick()
+```
+
+### Действия событий касания
+
+```kotlin
+class TouchEventExample : View {
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                // Пользователь нажал на экран
+                Log.d("Touch", "ACTION_DOWN в (${event.x}, ${event.y})")
+                return true
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                // Пользователь двигает пальцем при нажатии
+                Log.d("Touch", "ACTION_MOVE в (${event.x}, ${event.y})")
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                // Пользователь поднял палец
+                Log.d("Touch", "ACTION_UP в (${event.x}, ${event.y})")
+                return true
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                // Касание отменено (например, родитель перехватывает)
+                Log.d("Touch", "ACTION_CANCEL")
+                return true
+            }
+        }
+        return super.onTouchEvent(event)
+    }
+}
+```
+
+### dispatchTouchEvent()
+
+Первый вызываемый метод - распределяет событие.
+
+```kotlin
+class CustomView : View {
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        Log.d("Touch", "dispatchTouchEvent: ${event.actionToString()}")
+
+        // Можно перехватить перед обычной обработкой
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            // Пользовательская логика
+        }
+
+        return super.dispatchTouchEvent(event)
+    }
+}
+```
+
+### onTouchEvent()
+
+Основной метод обработки касания.
+
+```kotlin
+class InteractiveView : View {
+
+    private var lastX = 0f
+    private var lastY = 0f
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                lastX = event.x
+                lastY = event.y
+                return true // Потребить событие
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                val dx = event.x - lastX
+                val dy = event.y - lastY
+
+                translationX += dx
+                translationY += dy
+
+                lastX = event.x
+                lastY = event.y
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                performClick() // Важно для доступности
+                return true
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+
+    override fun performClick(): Boolean {
+        return super.performClick()
+    }
+}
+```
+
+### onClick()
+
+Вызывается, когда ACTION_UP происходит без значительного движения.
+
+```kotlin
+class ClickableView : View {
+
+    init {
+        // Установить слушатель кликов
+        setOnClickListener {
+            Log.d("Touch", "View кликнут!")
+        }
+    }
+
+    // onClick вызывается только если:
+    // 1. Произошел ACTION_DOWN
+    // 2. ACTION_UP произошел в том же месте
+    // 3. Нет ACTION_CANCEL
+    // 4. View кликабелен
+}
+```
+
+### Перехват касаний ViewGroup
+
+```kotlin
+class CustomViewGroup : ViewGroup {
+
+    override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                // Решить, перехватывать ли
+                return false // Позволить дочерним элементам обработать
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                // Перехватить при прокрутке
+                if (shouldInterceptScroll(event)) {
+                    return true // Перехватить будущие события
+                }
+            }
+        }
+
+        return super.onInterceptTouchEvent(event)
+    }
+
+    private fun shouldInterceptScroll(event: MotionEvent): Boolean {
+        // Пользовательская логика для определения перехвата
+        return false
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        // Обработать перехваченные события
+        return super.onTouchEvent(event)
+    }
+}
+```
+
+### Последовательность событий для одиночного нажатия
+
+```
+1. ACTION_DOWN - dispatchTouchEvent()
+2. ACTION_DOWN - onTouchEvent()
+3. ACTION_UP - dispatchTouchEvent()
+4. ACTION_UP - onTouchEvent()
+5. performClick()
+6. onClick()
+```
+
+### Обнаружение жестов
+
+```kotlin
+class GestureView : View {
+
+    private val gestureDetector = GestureDetector(context,
+        object : GestureDetector.SimpleOnGestureListener() {
+
+            override fun onDown(e: MotionEvent): Boolean {
+                Log.d("Gesture", "onDown")
+                return true
+            }
+
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
+                Log.d("Gesture", "Одиночное нажатие")
+                return true
+            }
+
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                Log.d("Gesture", "Двойное нажатие")
+                return true
+            }
+
+            override fun onLongPress(e: MotionEvent) {
+                Log.d("Gesture", "Длинное нажатие")
+            }
+
+            override fun onFling(
+                e1: MotionEvent,
+                e2: MotionEvent,
+                velocityX: Float,
+                velocityY: Float
+            ): Boolean {
+                Log.d("Gesture", "Fling: скорость ($velocityX, $velocityY)")
+                return true
+            }
+
+            override fun onScroll(
+                e1: MotionEvent,
+                e2: MotionEvent,
+                distanceX: Float,
+                distanceY: Float
+            ): Boolean {
+                Log.d("Gesture", "Прокрутка: расстояние ($distanceX, $distanceY)")
+                return true
+            }
+        })
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+    }
+}
+```
+
+### События касания в Jetpack Compose
+
+```kotlin
+@Composable
+fun ComposeTouchEvents() {
+    var tapInfo by remember { mutableStateOf("Нажмите на box") }
+
+    Box(
+        modifier = Modifier
+            .size(200.dp)
+            .background(Color.Blue)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = {
+                        tapInfo = "Нажато"
+                        tryAwaitRelease()
+                        tapInfo = "Отпущено"
+                    },
+                    onTap = {
+                        tapInfo = "Нажато в (${it.x}, ${it.y})"
+                    },
+                    onDoubleTap = {
+                        tapInfo = "Двойное нажатие"
+                    },
+                    onLongPress = {
+                        tapInfo = "Длинное нажатие"
+                    }
+                )
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        Text(tapInfo, color = Color.White)
+    }
+}
+```
+
+### Резюме
+
+Когда пользователь нажимает на экран, Android вызывает:
+
+1. **ACTION_DOWN** - Пользователь касается экрана
+2. **dispatchTouchEvent()** - Начинается распространение события
+3. **onInterceptTouchEvent()** - Родитель может перехватить (только ViewGroup)
+4. **onTouchEvent()** - View обрабатывает событие
+5. **ACTION_UP** - Пользователь поднимает палец
+6. **onClick()** - Вызывается, если не было движения
+
+Ключевые моменты:
+- Возвращайте `true` из onTouchEvent() для потребления события
+- onClick() срабатывает только на ACTION_UP без движения
+- dispatchTouchEvent() первый, onTouchEvent() обрабатывает фактическое касание
+- ViewGroups могут перехватывать дочерние события с помощью onInterceptTouchEvent()

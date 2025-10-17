@@ -427,6 +427,40 @@ fun LocationScreen() {
         }
     }
 }
+
+// Пример использования с обработкой разрешений
+@Composable
+fun LocationScreen() {
+    var showPermissionRationale by remember { mutableStateOf(false) }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        showPermissionRationale = !isGranted
+    }
+
+    LaunchedEffect(Unit) {
+        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        LocationTracker(
+            updateIntervalMs = 3000L,
+            minDistanceMeters = 5f,
+            onLocationUpdate = { location ->
+                Log.d("Location", "Новое местоположение: ${location.latitude}, ${location.longitude}")
+            }
+        )
+
+        if (showPermissionRationale) {
+            PermissionRationale(
+                onRequestPermission = {
+                    permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                }
+            )
+        }
+    }
+}
 ```
 
 ### Advanced Example: Combining Multiple Side Effects

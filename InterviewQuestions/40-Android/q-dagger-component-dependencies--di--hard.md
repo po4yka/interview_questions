@@ -1099,6 +1099,50 @@ class ActivityModule {
 -  **Переопределение binding** - Может переопределять родительские bindings
 -  **Иерархическая структура** - Четкая связь parent-child
 
+### Продвинутый подход: Смешивание обоих методов
+
+```kotlin
+// Core компонент (используется как зависимость)
+@Singleton
+@Component(modules = [CoreModule::class])
+interface CoreComponent {
+    fun apiService(): ApiService
+    fun database(): AppDatabase
+}
+
+// App компонент (зависит от core, имеет subcomponents)
+@Singleton
+@Component(
+    dependencies = [CoreComponent::class], // Component dependency
+    modules = [AppModule::class, SubcomponentsModule::class]
+)
+interface AppComponent {
+    fun activityComponentFactory(): ActivityComponent.Factory
+
+    @Component.Factory
+    interface Factory {
+        fun create(coreComponent: CoreComponent): AppComponent
+    }
+}
+
+// Activity subcomponent
+@ActivityScope
+@Subcomponent(modules = [ActivityModule::class])
+interface ActivityComponent {
+
+    @Subcomponent.Factory
+    interface Factory {
+        fun create(): ActivityComponent
+    }
+
+    fun inject(activity: MainActivity)
+
+    // Может получить доступ к:
+    // - AppComponent зависимостям (subcomponent)
+    // - CoreComponent предоставленным зависимостям (через AppComponent)
+}
+```
+
 ### Подход Hilt
 
 **Hilt упрощает это используя предопределенную иерархию компонентов:**
@@ -1169,6 +1213,125 @@ object ActivityModule {
 - Нужна кастомная иерархия компонентов
 - Нужен больший контроль над жизненным циклом компонентов
 - Работа с multi-module проектом с dynamic features
+
+### Продакшн пример: Мульти-модульное приложение с Component Dependencies
+
+```kotlin
+// :app модуль - App компонент
+@Singleton
+@Component(modules = [AppModule::class])
+interface AppComponent {
+    // Предоставляем основные зависимости
+    fun retrofit(): Retrofit
+    fun database(): AppDatabase
+    fun context(): Context
+
+    @Component.Factory
+    interface Factory {
+        fun create(@BindsInstance context: Context): AppComponent
+    }
+}
+
+// :feature:user модуль - User feature компонент
+@FeatureScope
+@Component(
+    dependencies = [AppComponent::class],
+    modules = [UserFeatureModule::class]
+)
+interface UserFeatureComponent {
+    fun inject(activity: UserActivity)
+
+    @Component.Factory
+    interface Factory {
+        fun create(appComponent: AppComponent): UserFeatureComponent
+    }
+}
+
+// Точка входа фичи
+object UserFeature {
+    private var component: UserFeatureComponent? = null
+
+    fun init(appComponent: AppComponent) {
+        if (component == null) {
+            component = DaggerUserFeatureComponent.factory()
+                .create(appComponent)
+        }
+    }
+
+    fun getComponent(): UserFeatureComponent {
+        return component ?: throw IllegalStateException("UserFeature not initialized")
+    }
+
+    fun destroy() {
+        component = null
+    }
+}
+
+// :feature:shop модуль - Shop feature компонент
+@FeatureScope
+@Component(
+    dependencies = [AppComponent::class],
+    modules = [ShopFeatureModule::class]
+)
+interface ShopFeatureComponent {
+    fun inject(activity: ShopActivity)
+
+    @Component.Factory
+    interface Factory {
+        fun create(appComponent: AppComponent): ShopFeatureComponent
+    }
+}
+
+// Точка входа фичи
+object ShopFeature {
+    private var component: ShopFeatureComponent? = null
+
+    fun init(appComponent: AppComponent) {
+        if (component == null) {
+            component = DaggerShopFeatureComponent.factory()
+                .create(appComponent)
+        }
+    }
+
+    fun getComponent(): ShopFeatureComponent {
+        return component ?: throw IllegalStateException("ShopFeature not initialized")
+    }
+
+    fun destroy() {
+        component = null
+    }
+}
+
+// В Application
+class MyApplication : Application() {
+
+    lateinit var appComponent: AppComponent
+
+    override fun onCreate() {
+        super.onCreate()
+
+        appComponent = DaggerAppComponent.factory()
+            .create(this)
+
+        // Инициализируем фичи
+        UserFeature.init(appComponent)
+        ShopFeature.init(appComponent)
+    }
+}
+
+// Использование в фиче
+class UserActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var userRepository: UserRepository
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        UserFeature.getComponent().inject(this)
+    }
+}
+```
 
 ### Тестирование: Component Dependencies vs Subcomponents
 
@@ -1289,6 +1452,19 @@ fun testActivitySubcomponent() {
        fun okHttpClient(): OkHttpClient
        // ... еще 20
    }
+   ```
+
+5. **Документируйте отношения компонентов**
+   ```kotlin
+   /**
+    * AppComponent - Зависимости уровня приложения
+    * Жизненный цикл: Application.onCreate() до уничтожения приложения
+    * Предоставляет: ApiService, AppDatabase, Analytics
+    * Используется: Всеми feature компонентами
+    */
+   @Singleton
+   @Component(modules = [AppModule::class])
+   interface AppComponent
    ```
 
 ### Распространенные ошибки

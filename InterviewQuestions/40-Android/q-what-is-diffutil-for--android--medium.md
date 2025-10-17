@@ -659,6 +659,257 @@ class GoodAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
 5. ✅ **Запускайте в фоновом потоке** для тяжелых вычислений
 6. ❌ **Не используйте notifyDataSetChanged()** когда можете использовать DiffUtil
 
+### Базовая реализация DiffUtil
+
+Классический подход с использованием `DiffUtil.Callback`:
+
+```kotlin
+data class User(
+    val id: Int,
+    val name: String,
+    val email: String
+)
+
+class UserDiffCallback(
+    private val oldList: List<User>,
+    private val newList: List<User>
+) : DiffUtil.Callback() {
+
+    override fun getOldListSize(): Int = oldList.size
+    override fun getNewListSize(): Int = newList.size
+
+    // Проверка, являются ли элементы одним и тем же объектом (обычно по ID)
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition].id == newList[newItemPosition].id
+    }
+
+    // Проверка, одинаково ли содержимое элементов
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition] == newList[newItemPosition]
+    }
+
+    // Опционально: предоставить payload для частичных обновлений
+    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
+
+        return when {
+            oldItem.name != newItem.name -> "NAME_CHANGED"
+            oldItem.email != newItem.email -> "EMAIL_CHANGED"
+            else -> null
+        }
+    }
+}
+
+// Использование в адаптере
+class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
+
+    private val users = mutableListOf<User>()
+
+    fun updateUsers(newUsers: List<User>) {
+        val diffCallback = UserDiffCallback(users, newUsers)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+        users.clear()
+        users.addAll(newUsers)
+
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+    // ... ViewHolder и другие методы
+}
+```
+
+### DiffUtil со сложными объектами
+
+Пример работы с вложенными объектами и частичными обновлениями:
+
+```kotlin
+data class Post(
+    val id: Int,
+    val title: String,
+    val content: String,
+    val author: Author,
+    val likes: Int,
+    val isLiked: Boolean
+)
+
+data class Author(val id: Int, val name: String)
+
+class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
+
+    override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+        // Одинаковый пост, если ID совпадают
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+        // Все поля должны совпадать
+        return oldItem == newItem
+    }
+
+    override fun getChangePayload(oldItem: Post, newItem: Post): Any? {
+        return when {
+            oldItem.isLiked != newItem.isLiked || oldItem.likes != newItem.likes -> {
+                PayloadChange.LikeChanged(newItem.likes, newItem.isLiked)
+            }
+            oldItem.title != newItem.title -> {
+                PayloadChange.TitleChanged(newItem.title)
+            }
+            oldItem.content != newItem.content -> {
+                PayloadChange.ContentChanged(newItem.content)
+            }
+            else -> null
+        }
+    }
+
+    sealed class PayloadChange {
+        data class LikeChanged(val likes: Int, val isLiked: Boolean) : PayloadChange()
+        data class TitleChanged(val title: String) : PayloadChange()
+        data class ContentChanged(val content: String) : PayloadChange()
+    }
+}
+
+class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()) {
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            val post = getItem(position)
+            payloads.forEach { payload ->
+                when (payload) {
+                    is PostDiffCallback.PayloadChange.LikeChanged -> {
+                        holder.updateLikes(payload.likes, payload.isLiked)
+                    }
+                    is PostDiffCallback.PayloadChange.TitleChanged -> {
+                        holder.updateTitle(payload.title)
+                    }
+                    is PostDiffCallback.PayloadChange.ContentChanged -> {
+                        holder.updateContent(payload.content)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_post, parent, false)
+        )
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val titleTextView: TextView = itemView.findViewById(R.id.tvTitle)
+        private val contentTextView: TextView = itemView.findViewById(R.id.tvContent)
+        private val likesTextView: TextView = itemView.findViewById(R.id.tvLikes)
+        private val likeButton: ImageButton = itemView.findViewById(R.id.btnLike)
+
+        fun bind(post: Post) {
+            titleTextView.text = post.title
+            contentTextView.text = post.content
+            updateLikes(post.likes, post.isLiked)
+        }
+
+        fun updateTitle(title: String) {
+            titleTextView.text = title
+        }
+
+        fun updateContent(content: String) {
+            contentTextView.text = content
+        }
+
+        fun updateLikes(count: Int, isLiked: Boolean) {
+            likesTextView.text = count.toString()
+            likeButton.setImageResource(
+                if (isLiked) R.drawable.ic_liked else R.drawable.ic_like
+            )
+        }
+    }
+}
+```
+
+### Оптимизация производительности
+
+Для больших списков важно запускать вычисления DiffUtil в фоновом потоке:
+
+```kotlin
+class OptimizedDiffCallback<T>(
+    private val oldList: List<T>,
+    private val newList: List<T>,
+    private val getId: (T) -> Any,
+    private val areContentsEqual: (T, T) -> Boolean = { old, new -> old == new }
+) : DiffUtil.Callback() {
+
+    override fun getOldListSize() = oldList.size
+    override fun getNewListSize() = newList.size
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return getId(oldList[oldItemPosition]) == getId(newList[newItemPosition])
+    }
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return areContentsEqual(oldList[oldItemPosition], newList[newItemPosition])
+    }
+}
+
+// Использование с большими списками
+class LargeListAdapter : RecyclerView.Adapter<LargeListAdapter.ViewHolder>() {
+
+    private var items = listOf<Item>()
+
+    fun updateItems(newItems: List<Item>) {
+        // Запуск вычисления diff в фоновом потоке
+        lifecycleScope.launch(Dispatchers.Default) {
+            val diffCallback = OptimizedDiffCallback(
+                oldList = items,
+                newList = newItems,
+                getId = { it.id }
+            )
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+            withContext(Dispatchers.Main) {
+                items = newItems
+                diffResult.dispatchUpdatesTo(this@LargeListAdapter)
+            }
+        }
+    }
+
+    // ... реализация адаптера
+}
+```
+
+### Использование в Fragment/Activity
+
+Пример интеграции ListAdapter в реальном приложении:
+
+```kotlin
+class UsersFragment : Fragment() {
+
+    private val adapter = UserListAdapter()
+    private val viewModel: UsersViewModel by viewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
+        // Наблюдаем за изменениями - DiffUtil автоматически вычисляет разницу
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.users.collect { users ->
+                adapter.submitList(users)
+            }
+        }
+    }
+}
+```
+
 ### Преимущества DiffUtil
 
 | Функция | Преимущество |

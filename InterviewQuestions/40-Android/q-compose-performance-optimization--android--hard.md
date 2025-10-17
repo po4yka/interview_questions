@@ -220,13 +220,66 @@ fun Parent() {
 ### Причины рекомпозиции
 
 **1. Изменения состояния**
+
+```kotlin
+// ПЛОХО - Рекомпозиция всего экрана при любом изменении
+@Composable
+fun Screen(viewModel: ViewModel) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    // Весь экран перекомпонуется при изменении ЛЮБОГО поля в uiState
+    Column {
+        Header(uiState.title)
+        Content(uiState.content)
+        Footer(uiState.footer)
+    }
+}
+
+// ХОРОШО - Разделить состояние
+@Composable
+fun Screen(viewModel: ViewModel) {
+    val title by viewModel.title.collectAsState()
+    val content by viewModel.content.collectAsState()
+    val footer by viewModel.footer.collectAsState()
+
+    // Только измененная часть перекомпонуется
+    Column {
+        Header(title)
+        Content(content)
+        Footer(footer)
+    }
+}
+```
+
 **2. Нестабильные параметры**
+
+```kotlin
+// ПЛОХО - List нестабильный
+@Composable
+fun ItemList(items: List<Item>) {  // Перекомпонуется даже если список не изменился
+    LazyColumn {
+        items(items) { item -> ItemCard(item) }
+    }
+}
+
+// ХОРОШО - Используйте @Stable или immutable коллекции
+@Stable
+data class ItemListState(val items: List<Item>)
+
+@Composable
+fun ItemList(state: ItemListState) {  // Пропускает рекомпозицию если одинаковый
+    LazyColumn {
+        items(state.items) { item -> ItemCard(item) }
+    }
+}
+```
 
 ### Техники оптимизации
 
 **1. Используйте ключи в списках**
 
 ```kotlin
+// ХОРОШО - Переиспользует композиции
 LazyColumn {
     items(
         items = products,
@@ -237,13 +290,47 @@ LazyColumn {
 }
 ```
 
+**Почему ключи важны:**
+```kotlin
+// Без ключей:
+// Исходно: [A, B, C]
+// После вставки в 0: [D, A, B, C]
+// Compose видит: позиция 0 изменилась A→D, позиция 1 изменилась B→A, и т.д.
+// Результат: ВСЕ элементы перекомпонуются!
+
+// С ключами:
+// Исходно: [A(key:1), B(key:2), C(key:3)]
+// После вставки: [D(key:4), A(key:1), B(key:2), C(key:3)]
+// Compose видит: добавлен элемент D, элементы A,B,C не изменились
+// Результат: Только новый элемент D компонуется!
+```
+
 **2. derivedStateOf для вычисляемых значений**
 
 ```kotlin
+// ПЛОХО - Пересчитывает при каждом скролле
+@Composable
+fun MessageList(messages: List<Message>) {
+    val listState = rememberLazyListState()
+    val showButton = listState.firstVisibleItemIndex > 0  // Пересчитывает постоянно
+
+    LazyColumn(state = listState) {
+        items(messages) { MessageItem(it) }
+    }
+}
+
 // ХОРОШО - Пересчитывает только при пересечении порога
-val showButton by remember {
-    derivedStateOf {
-        listState.firstVisibleItemIndex > 0
+@Composable
+fun MessageList(messages: List<Message>) {
+    val listState = rememberLazyListState()
+    val showButton by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 0
+        }
+    }
+
+    LazyColumn(state = listState) {
+        items(messages) { MessageItem(it) }
     }
 }
 ```
@@ -252,29 +339,179 @@ val showButton by remember {
 
 ```kotlin
 // ПЛОХО - Новая лямбда при каждой рекомпозиции
-Button(onClick = { viewModel.action() })
+@Composable
+fun Screen() {
+    Button(onClick = { viewModel.action() }) {  // Новая лямбда каждый раз
+        Text("Нажать")
+    }
+}
 
 // ХОРОШО - Запомнить лямбду
-val onClick = remember { { viewModel.action() } }
-Button(onClick = onClick)
+@Composable
+fun Screen() {
+    val onClick = remember { { viewModel.action() } }
+    Button(onClick = onClick) {
+        Text("Нажать")
+    }
+}
 
 // ЛУЧШЕ - Ссылка на метод
-Button(onClick = viewModel::action)
+@Composable
+fun Screen() {
+    Button(onClick = viewModel::action) {  // Стабильная ссылка
+        Text("Нажать")
+    }
+}
 ```
 
 **4. Пометить классы как @Stable/@Immutable**
 
 ```kotlin
-@Immutable
-data class Product(val id: String, val name: String)
+@Immutable  // Все свойства val и неизменяемы
+data class Product(
+    val id: String,
+    val name: String,
+    val price: Double
+)
 
-@Stable
-class ViewModel : ViewModel() {
-    var state by mutableStateOf(State())
+@Stable  // Свойства могут быть var, но уведомляют об изменении
+class ProductViewModel : ViewModel() {
+    var selectedProduct by mutableStateOf<Product?>(null)
 }
 ```
 
-**Краткое содержание**: Оптимизация Compose: 1) Разделить состояние для минимизации scope рекомпозиции. 2) Использовать `derivedStateOf` для вычисляемых значений. 3) Пометить data классы как `@Immutable/@Stable`. 4) Использовать `key` в LazyColumn. 5) Запоминать лямбды или использовать ссылки на методы. 6) Избегать нестабильных параметров.
+**5. Избегайте распространения рекомпозиции**
+
+```kotlin
+// ПЛОХО - Родитель передает нестабильное состояние
+@Composable
+fun Parent() {
+    var counter by remember { mutableStateOf(0) }
+
+    Column {
+        Button(onClick = { counter++ }) { Text("$counter") }
+        ExpensiveChild(counter)  // Перекомпонуется без необходимости
+    }
+}
+
+// ХОРОШО - Поднять состояние, передавать только при необходимости
+@Composable
+fun Parent() {
+    var counter by remember { mutableStateOf(0) }
+
+    Column {
+        Button(onClick = { counter++ }) { Text("$counter") }
+        ExpensiveChild()  // Не перекомпонуется
+    }
+}
+```
+
+**6. Используйте remember для дорогих вычислений**
+
+```kotlin
+// ПЛОХО - Вычисляется при каждой рекомпозиции
+@Composable
+fun UserList(users: List<User>) {
+    val sortedUsers = users.sortedBy { it.name }  // Сортируется каждый раз!
+
+    LazyColumn {
+        items(sortedUsers) { user ->
+            UserRow(user)
+        }
+    }
+}
+
+// ХОРОШО - Кэширование с remember
+@Composable
+fun UserList(users: List<User>) {
+    val sortedUsers = remember(users) {
+        users.sortedBy { it.name }  // Сортируется только при изменении users
+    }
+
+    LazyColumn {
+        items(sortedUsers) { user ->
+            UserRow(user)
+        }
+    }
+}
+```
+
+**7. Разделите большие composables**
+
+```kotlin
+// ПЛОХО - Монолитный composable
+@Composable
+fun Screen(viewModel: ViewModel) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    Column {
+        // 100+ строк кода
+        // Всё перекомпонуется при любом изменении
+    }
+}
+
+// ХОРОШО - Разделить на маленькие composables
+@Composable
+fun Screen(viewModel: ViewModel) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    Column {
+        Header(uiState.header)
+        Body(uiState.body)
+        Footer(uiState.footer)
+    }
+}
+```
+
+**8. Используйте contentType в LazyColumn**
+
+```kotlin
+@Composable
+fun MixedList(items: List<ListItem>) {
+    LazyColumn {
+        items(
+            items = items,
+            key = { it.id },
+            contentType = { item ->
+                when (item) {
+                    is TextItem -> "text"
+                    is ImageItem -> "image"
+                    is VideoItem -> "video"
+                }
+            }
+        ) { item ->
+            when (item) {
+                is TextItem -> TextRow(item)
+                is ImageItem -> ImageRow(item)
+                is VideoItem -> VideoRow(item)
+            }
+        }
+    }
+}
+```
+
+### Инструменты профилирования
+
+**Layout Inspector для отслеживания рекомпозиций:**
+```
+Android Studio > View > Tool Windows > Layout Inspector
+Включить "Show Recomposition Counts"
+```
+
+**Recomposition Highlighter:**
+```kotlin
+// Для отладки
+@Composable
+fun RecompositionCounter() {
+    val count = remember { mutableStateOf(0) }
+    LaunchedEffect(Unit) {
+        count.value++
+    }
+    Log.d("Recomposition", "Count: ${count.value}")
+}
+```
+
+**Краткое содержание**: Оптимизация Compose: 1) Разделить состояние для минимизации scope рекомпозиции. 2) Использовать `derivedStateOf` для вычисляемых значений. 3) Пометить data классы как `@Immutable/@Stable`. 4) Использовать `key` в LazyColumn. 5) Запоминать лямбды или использовать ссылки на методы. 6) Избегать нестабильных параметров. 7) Использовать инструменты: Layout Inspector, Recomposition Counter.
 
 ---
 

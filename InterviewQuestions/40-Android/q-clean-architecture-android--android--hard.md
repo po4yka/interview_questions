@@ -207,39 +207,81 @@ object DomainModule {
 **3. Presentation** - UI (ViewModel, Compose)
 
 ```
+
+     Слой Presentation            ← UI, ViewModel
+
+       Слой Data                  ← Repository, API, DB
+
+      Слой Domain                 ← Use Cases, Entities
+
+
 Зависимости: Presentation → Data → Domain
 ```
 
 ### Слой Domain (Основная бизнес-логика)
 
+Слой Domain содержит основную бизнес-логику и не зависит от внешних фреймворков:
+
 ```kotlin
 // domain/model/User.kt
-data class User(val id: String, val name: String, val email: String)
+data class User(
+    val id: String,
+    val name: String,
+    val email: String
+)
 
 // domain/repository/UserRepository.kt (интерфейс)
 interface UserRepository {
     suspend fun getUser(id: String): Result<User>
+    suspend fun updateUser(user: User): Result<Unit>
 }
 
 // domain/usecase/GetUserUseCase.kt
-class GetUserUseCase(private val repository: UserRepository) {
+class GetUserUseCase(
+    private val repository: UserRepository
+) {
     suspend operator fun invoke(userId: String): Result<User> {
         return repository.getUser(userId)
     }
 }
 ```
 
+**Ключевые характеристики Domain слоя:**
+- Чистый Kotlin/Java код (без Android фреймворков)
+- Содержит бизнес-правила
+- Определяет интерфейсы репозиториев
+- Содержит use cases (варианты использования)
+- Независим от UI и источников данных
+
 ### Слой Data (Реализация)
 
+Слой Data предоставляет реализацию интерфейсов, определённых в Domain:
+
 ```kotlin
+// data/remote/dto/UserDto.kt
+@Serializable
+data class UserDto(
+    val id: String,
+    val name: String,
+    val email: String
+)
+
+// data/remote/api/UserApi.kt
+interface UserApi {
+    @GET("users/{id}")
+    suspend fun getUser(@Path("id") id: String): UserDto
+}
+
 // data/repository/UserRepositoryImpl.kt
 class UserRepositoryImpl(
-    private val api: UserApi
+    private val api: UserApi,
+    private val mapper: UserMapper
 ) : UserRepository {
     override suspend fun getUser(id: String): Result<User> {
         return try {
             val dto = api.getUser(id)
-            Result.success(mapper.toDomain(dto))
+            val user = mapper.toDomain(dto)
+            Result.success(user)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -247,14 +289,191 @@ class UserRepositoryImpl(
 }
 ```
 
+**Ключевые характеристики Data слоя:**
+- Реализует интерфейсы из Domain
+- Работает с API, базами данных, файлами
+- Преобразует DTO в domain модели
+- Обрабатывает источники данных
+- Может использовать Room, Retrofit, DataStore
+
+### Слой Presentation
+
+Слой Presentation управляет UI и взаимодействует с Domain через use cases:
+
+```kotlin
+// presentation/UserViewModel.kt
+@HiltViewModel
+class UserViewModel @Inject constructor(
+    private val getUserUseCase: GetUserUseCase
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    fun loadUser(userId: String) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+
+            getUserUseCase(userId)
+                .onSuccess { user ->
+                    _uiState.value = UiState.Success(user)
+                }
+                .onFailure { error ->
+                    _uiState.value = UiState.Error(error.message ?: "Unknown")
+                }
+        }
+    }
+}
+
+sealed class UiState {
+    object Loading : UiState()
+    data class Success(val user: User) : UiState()
+    data class Error(val message: String) : UiState()
+}
+```
+
+**Ключевые характеристики Presentation слоя:**
+- Содержит ViewModel, UI компоненты
+- Зависит от Domain (use cases)
+- Управляет UI состоянием
+- Не содержит бизнес-логику
+- Использует Compose/Views для отображения
+
+### Внедрение зависимостей
+
+Dagger Hilt используется для связывания слоёв:
+
+```kotlin
+// di/DataModule.kt
+@Module
+@InstallIn(SingletonComponent::class)
+object DataModule {
+
+    @Provides
+    @Singleton
+    fun provideUserApi(retrofit: Retrofit): UserApi {
+        return retrofit.create(UserApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(
+        api: UserApi,
+        mapper: UserMapper
+    ): UserRepository {
+        return UserRepositoryImpl(api, mapper)
+    }
+}
+
+// di/DomainModule.kt
+@Module
+@InstallIn(ViewModelComponent::class)
+object DomainModule {
+
+    @Provides
+    fun provideGetUserUseCase(
+        repository: UserRepository
+    ): GetUserUseCase {
+        return GetUserUseCase(repository)
+    }
+}
+```
+
+### Правило зависимостей
+
+**Правило:** Зависимости всегда указывают внутрь (к Domain)
+
+```kotlin
+// ✅ ПРАВИЛЬНО: Presentation → Domain
+class UserViewModel(
+    private val getUserUseCase: GetUserUseCase  // Domain use case
+)
+
+// ✅ ПРАВИЛЬНО: Data → Domain
+class UserRepositoryImpl(
+    private val api: UserApi
+) : UserRepository  // Domain interface
+
+// ❌ НЕПРАВИЛЬНО: Domain → Data
+// Domain НЕ должен зависеть от Data или Presentation!
+```
+
 ### Преимущества
 
-**1. Тестируемость** - Легко мокать зависимости
-**2. Разделение обязанностей** - Четкие ответственности
-**3. Независимость** - Бизнес-логика независима от фреймворков
-**4. Поддерживаемость** - Изменения изолированы в слоях
+**1. Тестируемость**
+```kotlin
+// Легко мокать зависимости в тестах
+@Test
+fun `test getUserUseCase returns user`() = runTest {
+    val mockRepository = mockk<UserRepository>()
+    coEvery { mockRepository.getUser("1") } returns Result.success(testUser)
 
-**Краткое содержание**: Clean Architecture: Domain (entities, use cases), Data (реализация repository, API, DB), Presentation (ViewModel, UI). Правило зависимости: внешние зависят от внутренних. Domain имеет интерфейсы, Data реализует их. Use cases инкапсулируют бизнес-логику.
+    val useCase = GetUserUseCase(mockRepository)
+    val result = useCase("1")
+
+    assertTrue(result.isSuccess)
+    assertEquals(testUser, result.getOrNull())
+}
+```
+
+**2. Разделение обязанностей**
+- Domain: Бизнес-логика
+- Data: Работа с данными
+- Presentation: UI логика
+
+**3. Независимость**
+- Бизнес-логика не зависит от фреймворков
+- Можно заменить UI без изменения бизнес-логики
+- Можно заменить источник данных без изменения Domain
+
+**4. Поддерживаемость**
+- Изменения изолированы в слоях
+- Легко добавлять новые функции
+- Код проще понимать и модифицировать
+
+### Пример структуры проекта
+
+```
+app/
+  ├── domain/
+  │   ├── model/
+  │   │   └── User.kt
+  │   ├── repository/
+  │   │   └── UserRepository.kt
+  │   └── usecase/
+  │       └── GetUserUseCase.kt
+  ├── data/
+  │   ├── remote/
+  │   │   ├── api/
+  │   │   │   └── UserApi.kt
+  │   │   └── dto/
+  │   │       └── UserDto.kt
+  │   ├── mapper/
+  │   │   └── UserMapper.kt
+  │   └── repository/
+  │       └── UserRepositoryImpl.kt
+  └── presentation/
+      ├── viewmodel/
+      │   └── UserViewModel.kt
+      └── ui/
+          └── UserScreen.kt
+```
+
+### Когда использовать Clean Architecture
+
+**Используйте когда:**
+- Большое приложение с множеством features
+- Команда из нескольких разработчиков
+- Долгосрочная поддержка кода
+- Необходима высокая тестируемость
+- Сложная бизнес-логика
+
+**Не обязательно для:**
+- Простых приложений
+- Прототипов
+- MVP (минимально жизнеспособного продукта)
+
+**Краткое содержание**: Clean Architecture: Domain (entities, use cases), Data (реализация repository, API, DB), Presentation (ViewModel, UI). Правило зависимости: внешние зависят от внутренних. Domain имеет интерфейсы, Data реализует их. Use cases инкапсулируют бизнес-логику. Преимущества: тестируемость, разделение обязанностей, независимость, поддерживаемость.
 
 ---
 

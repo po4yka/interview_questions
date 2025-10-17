@@ -440,16 +440,340 @@ fun deleteItemWithUndo(position: Int) {
 | `DiffUtil` | Да | Лучшая | Сложные изменения |
 | `ListAdapter` | Да | Лучшая | Рекомендуется |
 
+### AsyncListDiffer для фоновых вычислений
+
+AsyncListDiffer вычисляет разницу между списками в фоновом потоке:
+
+```kotlin
+class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
+
+    private val diffCallback = object : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item) =
+            oldItem.id == newItem.id
+
+        override fun areContentsTheSame(oldItem: Item, newItem: Item) =
+            oldItem == newItem
+    }
+
+    private val differ = AsyncListDiffer(this, diffCallback)
+
+    val currentList: List<Item>
+        get() = differ.currentList
+
+    fun submitList(list: List<Item>) {
+        differ.submitList(list)
+    }
+
+    fun removeItem(item: Item) {
+        val newList = currentList.toMutableList()
+        newList.remove(item)
+        submitList(newList)
+    }
+
+    override fun getItemCount() = currentList.size
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(currentList[position])
+    }
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(item: Item) {
+            itemView.findViewById<TextView>(R.id.textView).text = item.name
+        }
+    }
+}
+```
+
+### Продвинутые сценарии
+
+**Сценарий 1: Множественное удаление с подтверждением**
+```kotlin
+class MultiSelectAdapter(private val items: MutableList<Item>) :
+    RecyclerView.Adapter<MultiSelectAdapter.ViewHolder>() {
+
+    private val selectedItems = mutableSetOf<Int>()
+    var isSelectionMode = false
+        set(value) {
+            field = value
+            if (!value) selectedItems.clear()
+            notifyDataSetChanged()
+        }
+
+    fun toggleSelection(position: Int) {
+        if (selectedItems.contains(position)) {
+            selectedItems.remove(position)
+        } else {
+            selectedItems.add(position)
+        }
+        notifyItemChanged(position)
+    }
+
+    fun deleteSelectedItems() {
+        // Сортируем в обратном порядке чтобы избежать проблем с индексами
+        val sortedPositions = selectedItems.sortedDescending()
+
+        sortedPositions.forEach { position ->
+            items.removeAt(position)
+            notifyItemRemoved(position)
+        }
+
+        selectedItems.clear()
+        isSelectionMode = false
+    }
+
+    fun getSelectedCount() = selectedItems.size
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_selectable, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position], selectedItems.contains(position), isSelectionMode)
+    }
+
+    override fun getItemCount() = items.size
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val textView: TextView = itemView.findViewById(R.id.textView)
+        private val checkBox: CheckBox = itemView.findViewById(R.id.checkBox)
+
+        fun bind(item: Item, isSelected: Boolean, isSelectionMode: Boolean) {
+            textView.text = item.name
+            checkBox.isVisible = isSelectionMode
+            checkBox.isChecked = isSelected
+
+            itemView.setOnClickListener {
+                if (isSelectionMode) {
+                    toggleSelection(adapterPosition)
+                } else {
+                    // Обычный клик
+                }
+            }
+
+            itemView.setOnLongClickListener {
+                if (!isSelectionMode) {
+                    this@MultiSelectAdapter.isSelectionMode = true
+                    toggleSelection(adapterPosition)
+                }
+                true
+            }
+        }
+    }
+}
+
+// Использование в Activity
+class MainActivity : AppCompatActivity() {
+    private lateinit var adapter: MultiSelectAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        adapter = MultiSelectAdapter(items)
+        recyclerView.adapter = adapter
+
+        deleteButton.setOnClickListener {
+            if (adapter.getSelectedCount() > 0) {
+                AlertDialog.Builder(this)
+                    .setTitle("Удаление")
+                    .setMessage("Удалить ${adapter.getSelectedCount()} элементов?")
+                    .setPositiveButton("Да") { _, _ ->
+                        adapter.deleteSelectedItems()
+                    }
+                    .setNegativeButton("Отмена", null)
+                    .show()
+            }
+        }
+    }
+}
+```
+
+**Сценарий 2: Удаление с анимацией**
+```kotlin
+class AnimatedAdapter(private val items: MutableList<Item>) :
+    RecyclerView.Adapter<AnimatedAdapter.ViewHolder>() {
+
+    fun removeItemWithAnimation(position: Int, recyclerView: RecyclerView) {
+        val viewHolder = recyclerView.findViewHolderForAdapterPosition(position)
+        viewHolder?.itemView?.let { view ->
+            // Анимация исчезновения
+            view.animate()
+                .alpha(0f)
+                .translationX(view.width.toFloat())
+                .setDuration(300)
+                .withEndAction {
+                    items.removeAt(position)
+                    notifyItemRemoved(position)
+                    notifyItemRangeChanged(position, items.size)
+                }
+                .start()
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position])
+
+        // Анимация появления
+        holder.itemView.alpha = 0f
+        holder.itemView.translationX = -holder.itemView.width.toFloat()
+        holder.itemView.animate()
+            .alpha(1f)
+            .translationX(0f)
+            .setDuration(300)
+            .setStartDelay((position * 50).toLong())
+            .start()
+    }
+
+    override fun getItemCount() = items.size
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(item: Item) {
+            itemView.findViewById<TextView>(R.id.textView).text = item.name
+        }
+    }
+}
+```
+
+**Сценарий 3: Оптимизация с payload**
+```kotlin
+class OptimizedAdapter(private val items: MutableList<Item>) :
+    RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
+
+    companion object {
+        const val PAYLOAD_FAVORITE = "favorite"
+        const val PAYLOAD_NAME = "name"
+    }
+
+    fun updateItemFavorite(position: Int, isFavorite: Boolean) {
+        items[position] = items[position].copy(isFavorite = isFavorite)
+        notifyItemChanged(position, PAYLOAD_FAVORITE)
+    }
+
+    fun removeItem(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position])
+    }
+
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            // Частичное обновление только измененных элементов
+            payloads.forEach { payload ->
+                when (payload) {
+                    PAYLOAD_FAVORITE -> holder.updateFavorite(items[position].isFavorite)
+                    PAYLOAD_NAME -> holder.updateName(items[position].name)
+                }
+            }
+        }
+    }
+
+    override fun getItemCount() = items.size
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val textView: TextView = itemView.findViewById(R.id.textView)
+        private val favoriteIcon: ImageView = itemView.findViewById(R.id.favoriteIcon)
+
+        fun bind(item: Item) {
+            textView.text = item.name
+            updateFavorite(item.isFavorite)
+        }
+
+        fun updateFavorite(isFavorite: Boolean) {
+            favoriteIcon.setImageResource(
+                if (isFavorite) R.drawable.ic_favorite_filled
+                else R.drawable.ic_favorite_outline
+            )
+        }
+
+        fun updateName(name: String) {
+            textView.text = name
+        }
+    }
+}
+```
+
 ### Лучшие практики
 
-1. Используйте `notifyItemRemoved()` для удаления одного элемента
-2. Используйте `ListAdapter` с DiffUtil для современных приложений
-3. Избегайте `notifyDataSetChanged()` - нет анимаций
-4. Обновляйте модель данных ПЕРЕД вызовом notify
-5. Используйте `notifyItemRangeChanged()` для обновления позиций
-6. Реализуйте функциональность undo для лучшего UX
-7. Тестируйте с различными размерами списков
-8. Рассмотрите использование AsyncListDiffer для фоновых вычислений
+1. **Используйте `notifyItemRemoved()`** для удаления одного элемента с анимацией
+2. **Используйте `ListAdapter` с DiffUtil** для современных приложений
+3. **Избегайте `notifyDataSetChanged()`** - нет анимаций и плохая производительность
+4. **Обновляйте модель данных ПЕРЕД вызовом notify** - иначе будет exception
+5. **Используйте `notifyItemRangeChanged()`** для обновления позиций после удаления
+6. **Реализуйте функциональность undo** для лучшего UX
+7. **Тестируйте с различными размерами списков** - от пустого до тысяч элементов
+8. **Используйте AsyncListDiffer** для фоновых вычислений больших списков
+9. **Используйте payload** для частичных обновлений ViewHolder
+10. **Сортируйте позиции в обратном порядке** при множественном удалении
+
+### Распространенные ошибки
+
+**Ошибка 1: Вызов notify до обновления данных**
+```kotlin
+// НЕПРАВИЛЬНО
+notifyItemRemoved(position)
+items.removeAt(position)  // Crash! IndexOutOfBoundsException
+
+// ПРАВИЛЬНО
+items.removeAt(position)
+notifyItemRemoved(position)
+```
+
+**Ошибка 2: Не обновлять позиции после удаления**
+```kotlin
+// НЕПРАВИЛЬНО - позиции элементов будут неверными
+fun removeItem(position: Int) {
+    items.removeAt(position)
+    notifyItemRemoved(position)
+}
+
+// ПРАВИЛЬНО - обновить позиции следующих элементов
+fun removeItem(position: Int) {
+    items.removeAt(position)
+    notifyItemRemoved(position)
+    notifyItemRangeChanged(position, items.size)
+}
+```
+
+**Ошибка 3: Модификация currentList напрямую с ListAdapter**
+```kotlin
+// НЕПРАВИЛЬНО - не работает с ListAdapter
+adapter.currentList.remove(item)
+adapter.notifyItemRemoved(position)
+
+// ПРАВИЛЬНО - создать новый список
+val newList = adapter.currentList.toMutableList()
+newList.remove(item)
+adapter.submitList(newList)
+```
 
 ---
 

@@ -557,21 +557,43 @@ getUserIds()
 **Поведение**: Обрабатывает несколько внутренних потоков одновременно с настраиваемым лимитом конкурентности.
 
 ```kotlin
+fun <T, R> Flow<T>.flatMapMerge(
+    concurrency: Int = DEFAULT_CONCURRENCY,
+    transform: suspend (T) -> Flow<R>
+): Flow<R>
+
 // Пример: Параллельные API вызовы
-getUserIds()
-    .flatMapMerge(concurrency = 2) { userId ->
-        fetchUserDetails(userId)
-    }
-    .collect { details ->
-        println("Получено: $details")
-    }
-// Результат: на 40% быстрее благодаря параллелизму!
+fun main() = runBlocking {
+    val startTime = System.currentTimeMillis()
+
+    getUserIds()
+        .flatMapMerge(concurrency = 2) { userId ->
+            fetchUserDetails(userId)
+        }
+        .collect { details ->
+            println("Получено: $details (прошло: ${System.currentTimeMillis() - startTime}ms)")
+        }
+}
+
+/*
+Вывод (конкурентно с concurrency=2):
+Получены данные пользователя 1 в 300ms
+Получены данные пользователя 2 в 300ms  // Запущен параллельно
+Получено: UserDetails(1, ...) (прошло: 300ms)
+Получено: UserDetails(2, ...) (прошло: 300ms)
+Получены данные пользователя 3 в 500ms  // Запущен после освобождения слота
+Получено: UserDetails(3, ...) (прошло: 500ms)
+Всего: ~500ms (на 40% быстрее!)
+*/
 ```
 
 **Практический пример с обработкой ошибок**:
 
 ```kotlin
 // Пакетная обработка с контролем конкурентности
+data class ImageUploadTask(val id: String, val imageData: ByteArray)
+data class UploadResult(val id: String, val url: String, val success: Boolean)
+
 fun uploadImages(tasks: List<ImageUploadTask>): Flow<UploadResult> =
     tasks.asFlow()
         .flatMapMerge(concurrency = 5) { task ->
@@ -584,6 +606,11 @@ fun uploadImages(tasks: List<ImageUploadTask>): Flow<UploadResult> =
                 }
             }
         }
+
+suspend fun uploadImage(data: ByteArray): String {
+    delay(100) // Симуляция загрузки
+    return "https://cdn.example.com/${UUID.randomUUID()}"
+}
 ```
 
 **Когда использовать**:
@@ -598,22 +625,52 @@ fun uploadImages(tasks: List<ImageUploadTask>): Flow<UploadResult> =
 **Поведение**: Отменяет предыдущий внутренний поток при поступлении нового значения, обрабатывает только последнее.
 
 ```kotlin
-// Пример: Поисковый запрос
+fun <T, R> Flow<T>.flatMapLatest(transform: suspend (T) -> Flow<R>): Flow<R> =
+    transformLatest { value ->
+        emitAll(transform(value))
+    }
+
+// Пример: Поисковый запрос с отменой
+data class SearchResult(val query: String, val results: List<String>)
+
 fun searchFlow(query: String): Flow<SearchResult> = flow {
     println("Начало поиска: $query")
     delay(300) // Симуляция API вызова
-    emit(SearchResult(query, listOf("$query результат 1", "$query результат 2")))
+    emit(SearchResult(
+        query,
+        listOf("$query результат 1", "$query результат 2")
+    ))
     println("Поиск завершен: $query")
 }
 
-searchQueries
-    .flatMapLatest { query ->
-        searchFlow(query)
+fun main() = runBlocking {
+    val searchQueries = flow {
+        emit("kot")
+        delay(100)
+        emit("kotl")  // Отменяет поиск "kot"
+        delay(100)
+        emit("kotli") // Отменяет поиск "kotl"
+        delay(500)    // Ждем завершения
     }
-    .collect { result ->
-        println("Отображение результатов для: ${result.query}")
-    }
-// Завершается только последний поиск!
+
+    searchQueries
+        .flatMapLatest { query ->
+            searchFlow(query)
+        }
+        .collect { result ->
+            println("Отображение результатов для: ${result.query}")
+        }
+}
+
+/*
+Вывод:
+Начало поиска: kot
+Начало поиска: kotl      // Отменяет "kot"
+Начало поиска: kotli     // Отменяет "kotl"
+Поиск завершен: kotli
+Отображение результатов для: kotli
+Завершается только последний поиск!
+*/
 ```
 
 **Реальная реализация - Поиск с debounce**:
@@ -737,6 +794,37 @@ fun <T> Flow<T>.rateLimit(
 }
 ```
 
+### Сравнение производительности
+
+```kotlin
+// Бенчмарк различных вариантов flatMap
+suspend fun benchmarkFlatMapVariants() {
+    val itemCount = 100
+    val processingTime = 10L // мс на элемент
+
+    // flatMapConcat
+    var startTime = System.currentTimeMillis()
+    (1..itemCount).asFlow()
+        .flatMapConcat { flowOf(it).onEach { delay(processingTime) } }
+        .collect()
+    println("flatMapConcat: ${System.currentTimeMillis() - startTime}ms") // ~1000ms
+
+    // flatMapMerge с concurrency=10
+    startTime = System.currentTimeMillis()
+    (1..itemCount).asFlow()
+        .flatMapMerge(10) { flowOf(it).onEach { delay(processingTime) } }
+        .collect()
+    println("flatMapMerge(10): ${System.currentTimeMillis() - startTime}ms") // ~100ms
+
+    // flatMapLatest (завершается только последний)
+    startTime = System.currentTimeMillis()
+    (1..itemCount).asFlow()
+        .flatMapLatest { flowOf(it).onEach { delay(processingTime) } }
+        .collect()
+    println("flatMapLatest: ${System.currentTimeMillis() - startTime}ms") // ~10ms
+}
+```
+
 ### Лучшие практики
 
 1. **Выбирайте правильный оператор**:
@@ -751,13 +839,25 @@ fun <T> Flow<T>.rateLimit(
    .flatMapMerge(concurrency = 10) //  Контролируемо
    ```
 
-3. **Обрабатывайте ошибки правильно**:
+3. **Учитывайте ограничения ресурсов**:
+   ```kotlin
+   // Ограничение конкурентных сетевых запросов
+   val maxConcurrentRequests = 5
+   requests.flatMapMerge(maxConcurrentRequests) { makeRequest(it) }
+   ```
+
+4. **Обрабатывайте ошибки правильно**:
    ```kotlin
    .flatMapMerge { item ->
        flow { emit(process(item)) }
            .catch { e -> emit(defaultValue) }
    }
    ```
+
+5. **Учитывайте память**:
+   - `flatMapMerge` держит несколько потоков в памяти
+   - `flatMapLatest` наиболее эффективен по памяти (только один активный)
+   - `flatMapConcat` умеренное использование памяти
 
 ### Распространенные ошибки
 
@@ -770,7 +870,30 @@ fun <T> Flow<T>.rateLimit(
    (1..1000).asFlow().flatMapMerge(10) { fetchData(it) }
    ```
 
-2. **Не настройка конкурентности**:
+2. **Забывание об отмене с flatMapLatest**:
+   ```kotlin
+   //  Утечка ресурсов если не учитывается отмена
+   searchQuery.flatMapLatest { query ->
+       flow {
+           val connection = openConnection() // Не отменяется!
+           // ...
+       }
+   }
+
+   //  Правильная отмена
+   searchQuery.flatMapLatest { query ->
+       flow {
+           val connection = openConnection()
+           try {
+               // ...
+           } finally {
+               connection.close()
+           }
+       }
+   }
+   ```
+
+3. **Не настройка конкурентности**:
    ```kotlin
    //  Конкурентность по умолчанию может быть слишком большой
    .flatMapMerge { ... }

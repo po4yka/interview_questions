@@ -947,23 +947,222 @@ Data encryption at rest on Android:
 ---
 
 ## Ответ (RU)
-**Шифрование данных в покое** защищает конфиденциальные данные на устройстве от несанкционированного доступа. Android предоставляет EncryptedSharedPreferences для простого хранилища и SQLCipher для шифрования баз данных.
 
-### Сравнение подходов
+**Шифрование данных в покое** защищает конфиденциальные данные, хранящиеся на устройстве, от несанкционированного доступа. Android предоставляет несколько вариантов шифрования: EncryptedSharedPreferences для простого хранилища ключ-значение и SQLCipher для шифрования баз данных. Правильная реализация требует понимания компромиссов в производительности и безопасного управления ключами.
 
-| Функция | EncryptedSharedPreferences | SQLCipher |
-|---------|---------------------------|-----------|
-| Назначение | Настройки, токены | База данных |
-| Производительность | Быстро | Умеренные накладные расходы |
-| Сложность | Просто | Умеренно |
-| Управление ключами | Автоматическое | Ручное |
-| Шифрование | AES-256-GCM | AES-256 |
+### Сравнение вариантов шифрования
 
-### Реализация
+| Характеристика | EncryptedSharedPreferences | SQLCipher | Шифрование файлов |
+|---------|---------------------------|-----------|-----------------|
+| Назначение | Настройки, токены | База данных | Большие файлы |
+| Производительность | Быстро | Умеренные накладные расходы | Зависит от размера |
+| Сложность | Простая | Умеренная | Сложная |
+| Управление ключами | Автоматическое (Keystore) | Ручное | Ручное |
+| Библиотека | Jetpack Security | SQLCipher для Android | EncryptedFile |
+| Шифрование | AES-256-GCM | AES-256 | AES-256-GCM |
+
+### Полная реализация
+
+#### 1. Настройка EncryptedSharedPreferences
 
 ```kotlin
-// EncryptedSharedPreferences
-class SecurePreferencesManager(context: Context) {
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
+import android.content.Context
+import android.content.SharedPreferences
+
+/**
+ * Реализация EncryptedSharedPreferences
+ */
+class SecurePreferencesManager(private val context: Context) {
+
+    companion object {
+        private const val PREFS_FILE_NAME = "secure_preferences"
+    }
+
+    // Создание MasterKey для шифрования
+    private val masterKey: MasterKey by lazy {
+        MasterKey.Builder(context)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .setUserAuthenticationRequired(false) // Установите true для защиты биометрией
+            .setRequestStrongBoxBacked(true) // Используйте StrongBox если доступен
+            .build()
+    }
+
+    // Создание EncryptedSharedPreferences
+    private val encryptedPrefs: SharedPreferences by lazy {
+        EncryptedSharedPreferences.create(
+            context,
+            PREFS_FILE_NAME,
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
+
+    /**
+     * Сохранить зашифрованную строку
+     */
+    fun putString(key: String, value: String) {
+        encryptedPrefs.edit()
+            .putString(key, value)
+            .apply()
+    }
+
+    /**
+     * Получить зашифрованную строку
+     */
+    fun getString(key: String, defaultValue: String? = null): String? {
+        return encryptedPrefs.getString(key, defaultValue)
+    }
+
+    /**
+     * Сохранить зашифрованное целое число
+     */
+    fun putInt(key: String, value: Int) {
+        encryptedPrefs.edit()
+            .putInt(key, value)
+            .apply()
+    }
+
+    /**
+     * Получить зашифрованное целое число
+     */
+    fun getInt(key: String, defaultValue: Int = 0): Int {
+        return encryptedPrefs.getInt(key, defaultValue)
+    }
+
+    /**
+     * Сохранить зашифрованное булево значение
+     */
+    fun putBoolean(key: String, value: Boolean) {
+        encryptedPrefs.edit()
+            .putBoolean(key, value)
+            .apply()
+    }
+
+    /**
+     * Получить зашифрованное булево значение
+     */
+    fun getBoolean(key: String, defaultValue: Boolean = false): Boolean {
+        return encryptedPrefs.getBoolean(key, defaultValue)
+    }
+
+    /**
+     * Экспорт в JSON (для миграции)
+     */
+    fun exportToJson(): String {
+        val data = encryptedPrefs.all.mapValues { it.value.toString() }
+        return Json.encodeToString(data)
+    }
+
+    /**
+     * Импорт из JSON
+     */
+    fun importFromJson(json: String) {
+        val data = Json.decodeFromString<Map<String, String>>(json)
+        val editor = encryptedPrefs.edit()
+
+        data.forEach { (key, value) ->
+            editor.putString(key, value)
+        }
+
+        editor.apply()
+    }
+}
+```
+
+#### 2. Интеграция SQLCipher с Room
+
+```kotlin
+import net.sqlcipher.database.SQLiteDatabase
+import net.sqlcipher.database.SupportFactory
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+
+/**
+ * База данных Room с шифрованием SQLCipher
+ */
+@Database(entities = [User::class, Message::class], version = 1)
+abstract class EncryptedDatabase : RoomDatabase() {
+
+    abstract fun userDao(): UserDao
+    abstract fun messageDao(): MessageDao
+
+    companion object {
+        @Volatile
+        private var INSTANCE: EncryptedDatabase? = null
+
+        fun getInstance(context: Context): EncryptedDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = buildDatabase(context)
+                INSTANCE = instance
+                instance
+            }
+        }
+
+        private fun buildDatabase(context: Context): EncryptedDatabase {
+            // Инициализация SQLCipher
+            SQLiteDatabase.loadLibs(context)
+
+            // Получение или создание пароля базы данных
+            val passphrase = getDatabasePassphrase(context)
+
+            // Создание фабрики поддержки SQLCipher
+            val factory = SupportFactory(passphrase)
+
+            return Room.databaseBuilder(
+                context.applicationContext,
+                EncryptedDatabase::class.java,
+                "encrypted_database.db"
+            )
+                .openHelperFactory(factory)
+                .fallbackToDestructiveMigration()
+                .build()
+        }
+
+        /**
+         * Получить пароль базы данных из Android Keystore
+         */
+        private fun getDatabasePassphrase(context: Context): ByteArray {
+            val keyManager = DatabaseKeyManager(context)
+            return keyManager.getDatabaseKey()
+        }
+
+        /**
+         * Изменить пароль базы данных
+         */
+        fun changePassphrase(
+            context: Context,
+            database: EncryptedDatabase,
+            newPassphrase: ByteArray
+        ) {
+            val dbFile = context.getDatabasePath("encrypted_database.db")
+
+            database.close()
+
+            SQLiteDatabase.openOrCreateDatabase(
+                dbFile.absolutePath,
+                getDatabasePassphrase(context),
+                null
+            ).use { db ->
+                db.rawExecSQL("PRAGMA rekey = '${String(newPassphrase)}'")
+            }
+        }
+    }
+}
+
+/**
+ * Управление ключом шифрования базы данных
+ */
+class DatabaseKeyManager(private val context: Context) {
+
+    companion object {
+        private const val KEY_ALIAS = "database_key"
+        private const val PREFS_NAME = "db_key_prefs"
+        private const val KEY_ENCRYPTED_KEY = "encrypted_db_key"
+    }
 
     private val masterKey = MasterKey.Builder(context)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -971,105 +1170,546 @@ class SecurePreferencesManager(context: Context) {
 
     private val encryptedPrefs = EncryptedSharedPreferences.create(
         context,
-        "secure_prefs",
+        PREFS_NAME,
         masterKey,
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
-    fun putString(key: String, value: String) {
-        encryptedPrefs.edit().putString(key, value).apply()
-    }
-}
+    /**
+     * Получить или создать ключ базы данных
+     */
+    fun getDatabaseKey(): ByteArray {
+        val existingKey = encryptedPrefs.getString(KEY_ENCRYPTED_KEY, null)
 
-// SQLCipher с Room
-class EncryptedDatabase : RoomDatabase() {
-
-    companion object {
-        fun getInstance(context: Context): EncryptedDatabase {
-            SQLiteDatabase.loadLibs(context)
-            val passphrase = getDatabasePassphrase(context)
-            val factory = SupportFactory(passphrase)
-
-            return Room.databaseBuilder(
-                context,
-                EncryptedDatabase::class.java,
-                "encrypted.db"
-            )
-                .openHelperFactory(factory)
-                .build()
+        return if (existingKey != null) {
+            Base64.decode(existingKey, Base64.NO_WRAP)
+        } else {
+            generateAndStoreKey()
         }
     }
-}
-```
 
-### Управление ключами
-
-```kotlin
-class DatabaseKeyManager(context: Context) {
-
-    fun getDatabaseKey(): ByteArray {
-        // Генерация или получение ключа из Keystore
+    /**
+     * Сгенерировать новый ключ базы данных
+     */
+    private fun generateAndStoreKey(): ByteArray {
+        // Генерация случайного 256-битного ключа
         val key = ByteArray(32)
         SecureRandom().nextBytes(key)
+
+        // Сохранение зашифрованного ключа
+        val encodedKey = Base64.encodeToString(key, Base64.NO_WRAP)
+        encryptedPrefs.edit()
+            .putString(KEY_ENCRYPTED_KEY, encodedKey)
+            .apply()
+
         return key
     }
 
+    /**
+     * Ротация ключа базы данных
+     */
+    fun rotateKey(): ByteArray {
+        encryptedPrefs.edit().remove(KEY_ENCRYPTED_KEY).apply()
+        return generateAndStoreKey()
+    }
+
+    /**
+     * Вывести ключ из пароля используя PBKDF2
+     */
     fun deriveKeyFromPassphrase(passphrase: String): ByteArray {
+        val salt = getSalt()
+        val iterations = 10000
+        val keyLength = 256
+
         val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
-        val spec = PBEKeySpec(passphrase.toCharArray(), salt, 10000, 256)
+        val spec = PBEKeySpec(
+            passphrase.toCharArray(),
+            salt,
+            iterations,
+            keyLength
+        )
+
         return factory.generateSecret(spec).encoded
     }
-}
-```
 
-### Производительность
+    private fun getSalt(): ByteArray {
+        val existingSalt = encryptedPrefs.getString("salt", null)
 
-**Типичные накладные расходы:**
-- EncryptedSharedPreferences: 5-15%
-- SQLCipher: 10-25%
-- Шифрование файлов: 5-20%
+        return if (existingSalt != null) {
+            Base64.decode(existingSalt, Base64.NO_WRAP)
+        } else {
+            val salt = ByteArray(16)
+            SecureRandom().nextBytes(salt)
 
-### Миграция данных
+            encryptedPrefs.edit()
+                .putString("salt", Base64.encodeToString(salt, Base64.NO_WRAP))
+                .apply()
 
-```kotlin
-suspend fun migrateSharedPreferences(oldPrefsName: String) {
-    val oldPrefs = context.getSharedPreferences(oldPrefsName, MODE_PRIVATE)
-    oldPrefs.all.forEach { (key, value) ->
-        when (value) {
-            is String -> securePrefs.putString(key, value)
-            is Int -> securePrefs.putInt(key, value)
-            // ...
+            salt
         }
     }
-    oldPrefs.edit().clear().apply()
 }
 ```
 
-### Best Practices
+### Сравнение производительности и бенчмарки
 
-1. **EncryptedSharedPreferences для простых данных**
-2. **SQLCipher для баз данных**
-3. **Хранение ключей в Android Keystore**
-4. **Мониторинг влияния на производительность**
-5. **Обработка ротации ключей**
-6. **Планирование миграции**
-7. **Использование сильных паролей**
+```kotlin
+import kotlin.system.measureTimeMillis
+
+/**
+ * Бенчмарк накладных расходов шифрования
+ */
+class EncryptionBenchmark(
+    private val context: Context,
+    private val securePrefs: SecurePreferencesManager,
+    private val encryptedDb: EncryptedDatabase
+) {
+
+    data class BenchmarkResult(
+        val operation: String,
+        val recordCount: Int,
+        val encryptedTimeMs: Long,
+        val unencryptedTimeMs: Long,
+        val overheadPercent: Double
+    ) {
+        override fun toString(): String {
+            return """
+                $operation ($recordCount записей):
+                  Зашифровано: ${encryptedTimeMs}мс
+                  Незашифровано: ${unencryptedTimeMs}мс
+                  Накладные расходы: ${"%.2f".format(overheadPercent)}%
+            """.trimIndent()
+        }
+    }
+
+    /**
+     * Бенчмарк операций SharedPreferences
+     */
+    suspend fun benchmarkSharedPreferences(): List<BenchmarkResult> = withContext(Dispatchers.IO) {
+        val results = mutableListOf<BenchmarkResult>()
+        val operations = listOf(10, 100, 1000)
+
+        // Незашифрованные SharedPreferences
+        val normalPrefs = context.getSharedPreferences("benchmark", Context.MODE_PRIVATE)
+
+        operations.forEach { count ->
+            // Бенчмарк записи
+            val encryptedWriteTime = measureTimeMillis {
+                repeat(count) { i ->
+                    securePrefs.putString("key_$i", "value_$i")
+                }
+            }
+
+            val unencryptedWriteTime = measureTimeMillis {
+                val editor = normalPrefs.edit()
+                repeat(count) { i ->
+                    editor.putString("key_$i", "value_$i")
+                }
+                editor.apply()
+            }
+
+            results.add(
+                BenchmarkResult(
+                    operation = "Запись SharedPreferences",
+                    recordCount = count,
+                    encryptedTimeMs = encryptedWriteTime,
+                    unencryptedTimeMs = unencryptedWriteTime,
+                    overheadPercent = calculateOverhead(encryptedWriteTime, unencryptedWriteTime)
+                )
+            )
+
+            // Бенчмарк чтения
+            val encryptedReadTime = measureTimeMillis {
+                repeat(count) { i ->
+                    securePrefs.getString("key_$i")
+                }
+            }
+
+            val unencryptedReadTime = measureTimeMillis {
+                repeat(count) { i ->
+                    normalPrefs.getString("key_$i", null)
+                }
+            }
+
+            results.add(
+                BenchmarkResult(
+                    operation = "Чтение SharedPreferences",
+                    recordCount = count,
+                    encryptedTimeMs = encryptedReadTime,
+                    unencryptedTimeMs = unencryptedReadTime,
+                    overheadPercent = calculateOverhead(encryptedReadTime, unencryptedReadTime)
+                )
+            )
+        }
+
+        results
+    }
+
+    /**
+     * Бенчмарк операций с базой данных
+     */
+    suspend fun benchmarkDatabase(): List<BenchmarkResult> = withContext(Dispatchers.IO) {
+        val results = mutableListOf<BenchmarkResult>()
+        val operations = listOf(100, 1000, 5000)
+
+        // Незашифрованная база данных Room
+        val unencryptedDb = Room.databaseBuilder(
+            context,
+            UnencryptedDatabase::class.java,
+            "benchmark.db"
+        ).build()
+
+        operations.forEach { count ->
+            // Бенчмарк вставки
+            val users = (1..count).map { i ->
+                User(
+                    username = "user_$i",
+                    email = "user$i@example.com",
+                    phoneNumber = "+123456789$i"
+                )
+            }
+
+            val encryptedInsertTime = measureTimeMillis {
+                users.forEach { encryptedDb.userDao().insertUser(it) }
+            }
+
+            val unencryptedInsertTime = measureTimeMillis {
+                users.forEach { unencryptedDb.userDao().insertUser(it) }
+            }
+
+            results.add(
+                BenchmarkResult(
+                    operation = "Вставка в базу данных",
+                    recordCount = count,
+                    encryptedTimeMs = encryptedInsertTime,
+                    unencryptedTimeMs = unencryptedInsertTime,
+                    overheadPercent = calculateOverhead(encryptedInsertTime, unencryptedInsertTime)
+                )
+            )
+
+            // Бенчмарк запросов
+            val encryptedQueryTime = measureTimeMillis {
+                encryptedDb.userDao().getAllUsers()
+            }
+
+            val unencryptedQueryTime = measureTimeMillis {
+                unencryptedDb.userDao().getAllUsers()
+            }
+
+            results.add(
+                BenchmarkResult(
+                    operation = "Запрос к базе данных",
+                    recordCount = count,
+                    encryptedTimeMs = encryptedQueryTime,
+                    unencryptedTimeMs = unencryptedQueryTime,
+                    overheadPercent = calculateOverhead(encryptedQueryTime, unencryptedQueryTime)
+                )
+            )
+
+            // Очистка
+            encryptedDb.userDao().deleteAllUsers()
+            unencryptedDb.userDao().deleteAllUsers()
+        }
+
+        unencryptedDb.close()
+        results
+    }
+
+    private fun calculateOverhead(encrypted: Long, unencrypted: Long): Double {
+        if (unencrypted == 0L) return 0.0
+        return ((encrypted - unencrypted).toDouble() / unencrypted) * 100
+    }
+}
+```
+
+### Миграция с незашифрованного на зашифрованное хранилище
+
+```kotlin
+/**
+ * Миграция с незашифрованного на зашифрованное хранилище
+ */
+class EncryptionMigration(
+    private val context: Context,
+    private val securePrefs: SecurePreferencesManager
+) {
+
+    /**
+     * Миграция SharedPreferences
+     */
+    suspend fun migrateSharedPreferences(
+        oldPrefsName: String
+    ): MigrationResult = withContext(Dispatchers.IO) {
+        try {
+            val oldPrefs = context.getSharedPreferences(oldPrefsName, Context.MODE_PRIVATE)
+            val allEntries = oldPrefs.all
+
+            var migratedCount = 0
+
+            allEntries.forEach { (key, value) ->
+                when (value) {
+                    is String -> securePrefs.putString(key, value)
+                    is Int -> securePrefs.putInt(key, value)
+                    is Boolean -> securePrefs.putBoolean(key, value)
+                    is Long -> securePrefs.putLong(key, value)
+                    is Float -> securePrefs.putFloat(key, value)
+                    is Set<*> -> {
+                        @Suppress("UNCHECKED_CAST")
+                        securePrefs.putStringSet(key, value as Set<String>)
+                    }
+                }
+                migratedCount++
+            }
+
+            // Удаление старых настроек
+            oldPrefs.edit().clear().apply()
+
+            MigrationResult.Success(migratedCount)
+        } catch (e: Exception) {
+            MigrationResult.Failure(e.message ?: "Неизвестная ошибка")
+        }
+    }
+
+    /**
+     * Миграция базы данных Room
+     */
+    suspend fun migrateDatabase(
+        oldDbName: String,
+        newDbName: String
+    ): MigrationResult = withContext(Dispatchers.IO) {
+        try {
+            // Открытие старой базы данных
+            val oldDb = Room.databaseBuilder(
+                context,
+                UnencryptedDatabase::class.java,
+                oldDbName
+            ).build()
+
+            // Открытие новой зашифрованной базы данных
+            val newDb = EncryptedDatabase.getInstance(context)
+
+            // Миграция пользователей
+            val users = oldDb.userDao().getAllUsers()
+            users.forEach { newDb.userDao().insertUser(it) }
+
+            // Миграция сообщений
+            users.forEach { user ->
+                val messages = oldDb.messageDao().getMessagesForUser(user.id)
+                messages.forEach { newDb.messageDao().insertMessage(it) }
+            }
+
+            // Закрытие и удаление старой базы данных
+            oldDb.close()
+            context.deleteDatabase(oldDbName)
+
+            MigrationResult.Success(users.size)
+        } catch (e: Exception) {
+            MigrationResult.Failure(e.message ?: "Неизвестная ошибка")
+        }
+    }
+
+    sealed class MigrationResult {
+        data class Success(val recordsMigrated: Int) : MigrationResult()
+        data class Failure(val error: String) : MigrationResult()
+    }
+}
+```
+
+### Полный репозиторий с шифрованием
+
+```kotlin
+/**
+ * Репозиторий с зашифрованным хранилищем
+ */
+class UserRepository(
+    private val database: EncryptedDatabase,
+    private val securePrefs: SecurePreferencesManager
+) {
+
+    private val userDao = database.userDao()
+
+    /**
+     * Сохранить пользователя с зашифрованным хранилищем
+     */
+    suspend fun saveUser(user: User): Long {
+        val userId = userDao.insertUser(user)
+
+        // Сохранение настроек пользователя
+        securePrefs.putString("current_user_email", user.email)
+        securePrefs.putLong("current_user_id", userId)
+
+        return userId
+    }
+
+    /**
+     * Получить пользователя по ID
+     */
+    suspend fun getUser(userId: Long): User? {
+        return userDao.getUserById(userId)
+    }
+
+    /**
+     * Получить всех пользователей
+     */
+    suspend fun getAllUsers(): List<User> {
+        return userDao.getAllUsers()
+    }
+
+    /**
+     * Обновить пользователя
+     */
+    suspend fun updateUser(user: User) {
+        userDao.updateUser(user)
+
+        // Обновление настроек если это текущий пользователь
+        val currentUserId = securePrefs.getLong("current_user_id", -1)
+        if (currentUserId == user.id) {
+            securePrefs.putString("current_user_email", user.email)
+        }
+    }
+
+    /**
+     * Удалить пользователя
+     */
+    suspend fun deleteUser(user: User) {
+        userDao.deleteUser(user)
+
+        // Очистка настроек если это текущий пользователь
+        val currentUserId = securePrefs.getLong("current_user_id", -1)
+        if (currentUserId == user.id) {
+            securePrefs.remove("current_user_email")
+            securePrefs.remove("current_user_id")
+        }
+    }
+
+    /**
+     * Получить текущего пользователя
+     */
+    suspend fun getCurrentUser(): User? {
+        val userId = securePrefs.getLong("current_user_id", -1)
+        return if (userId != -1L) {
+            userDao.getUserById(userId)
+        } else {
+            null
+        }
+    }
+
+    /**
+     * Очистить все данные
+     */
+    suspend fun clearAllData() {
+        userDao.deleteAllUsers()
+        securePrefs.clear()
+    }
+}
+```
+
+### Лучшие практики
+
+1. **Использовать EncryptedSharedPreferences для простых данных**
+   ```kotlin
+   val securePrefs = SecurePreferencesManager(context)
+   securePrefs.putString("token", authToken)
+   ```
+
+2. **Использовать SQLCipher для баз данных**
+   ```kotlin
+   val factory = SupportFactory(passphrase)
+   Room.databaseBuilder(...).openHelperFactory(factory).build()
+   ```
+
+3. **Хранить ключи в Android Keystore**
+   ```kotlin
+   val masterKey = MasterKey.Builder(context)
+       .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+       .build()
+   ```
+
+4. **Мониторить влияние на производительность**
+   ```kotlin
+   // Типичные накладные расходы: 5-15% для EncryptedSharedPreferences
+   // Типичные накладные расходы: 10-25% для SQLCipher
+   ```
+
+5. **Обрабатывать ротацию ключей**
+   ```kotlin
+   database.rawExecSQL("PRAGMA rekey = 'newPassphrase'")
+   ```
+
+6. **Планировать стратегию миграции**
+   ```kotlin
+   // Миграция существующих данных на зашифрованное хранилище
+   migrateSharedPreferences("old_prefs")
+   ```
+
+7. **Использовать сильные пароли**
+   ```kotlin
+   val key = deriveKeyFromPassphrase(userPassphrase)
+   ```
+
+8. **Осторожно создавать резервные копии зашифрованных данных**
+   ```kotlin
+   // Зашифрованные резервные копии остаются зашифрованными
+   // Резервная копия ключей требует отдельного защищенного канала
+   ```
+
+### Типичные ошибки
+
+1. **Не использовать Keystore**
+   ```kotlin
+   // ПЛОХО: Жестко закодированный пароль
+   val passphrase = "myPassword123".toByteArray()
+
+   // ХОРОШО: Ключ из Keystore
+   val passphrase = keyManager.getDatabaseKey()
+   ```
+
+2. **Игнорировать производительность**
+   ```kotlin
+   // Измеряйте и оптимизируйте для вашего случая использования
+   // Рассмотрите кеширование часто используемых данных
+   ```
+
+3. **Забывать о миграции**
+   ```kotlin
+   // Всегда предоставляйте путь миграции с незашифрованных данных
+   ```
+
+4. **Не обрабатывать инвалидацию ключей**
+   ```kotlin
+   try {
+       readEncryptedData()
+   } catch (e: KeyPermanentlyInvalidatedException) {
+       // Пользователь изменил экран блокировки - повторно зашифруйте новым ключом
+   }
+   ```
 
 ### Резюме
 
-Шифрование данных в покое:
+Шифрование данных в покое на Android:
 
-- **EncryptedSharedPreferences**: Простое, автоматическое управление ключами
-- **SQLCipher**: Шифрование БД, ручное управление
-- **Keystore**: Безопасное хранение ключей
-- **Производительность**: 5-25% накладных расходов
-- **Миграция**: Планируйте переход от незашифрованных данных
+- **EncryptedSharedPreferences**: Простое, автоматическое управление ключами, накладные расходы 5-15%
+- **SQLCipher**: Шифрование базы данных, накладные расходы 10-25%, ручное управление ключами
+- **EncryptedFile**: Большие файлы, поддержка потоковой передачи
+- **Управление ключами**: Android Keystore для безопасного хранения ключей
+- **Миграция**: Планируйте миграцию существующих данных
 
-**Выбор решения**:
-- EncryptedSharedPreferences: токены, настройки
-- SQLCipher: пользовательские данные, сообщения
-- EncryptedFile: документы, изображения
+**Матрица принятия решений**:
+- Используйте **EncryptedSharedPreferences** для: токенов, настроек, небольших данных
+- Используйте **SQLCipher** для: пользовательских данных, сообщений, конфиденциальных баз данных
+- Используйте **EncryptedFile** для: документов, изображений, больших файлов
+
+**Влияние на производительность**:
+- EncryptedSharedPreferences: ~5-15% медленнее стандартных
+- SQLCipher: ~10-25% медленнее незашифрованного Room
+- Шифрование файлов: ~5-20% накладных расходов в зависимости от размера
+
+**Ключевые выводы**:
+1. Шифрование обязательно для конфиденциальных данных
+2. Накладные расходы на производительность приемлемы для большинства случаев использования
+3. Используйте Android Keystore для управления ключами
+4. Планируйте миграцию с незашифрованного на зашифрованное
+5. Тестируйте на реальных устройствах с реалистичными размерами данных
 
 ---
 

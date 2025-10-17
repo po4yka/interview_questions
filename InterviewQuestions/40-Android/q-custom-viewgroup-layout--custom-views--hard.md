@@ -1155,52 +1155,413 @@ class FlowLayout @JvmOverloads constructor(
 
 ### Продвинутый уровень: Пользовательские LayoutParams
 
+Добавьте пользовательские параметры компоновки для большего контроля:
+
 ```kotlin
-// ... (код как в английской версии)
+class FlowLayoutAdvanced @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ViewGroup(context, attrs, defStyleAttr) {
+
+    // Пользовательские LayoutParams с поддержкой gravity
+    class LayoutParams : MarginLayoutParams {
+        var gravity: Int = Gravity.TOP or Gravity.START
+
+        constructor(c: Context, attrs: AttributeSet?) : super(c, attrs) {
+            val a = c.obtainStyledAttributes(attrs, R.styleable.FlowLayout_Layout)
+            gravity = a.getInt(R.styleable.FlowLayout_Layout_android_layout_gravity, gravity)
+            a.recycle()
+        }
+
+        constructor(width: Int, height: Int) : super(width, height)
+        constructor(source: ViewGroup.LayoutParams) : super(source)
+    }
+
+    override fun generateLayoutParams(attrs: AttributeSet?): ViewGroup.LayoutParams {
+        return LayoutParams(context, attrs)
+    }
+
+    override fun generateDefaultLayoutParams(): ViewGroup.LayoutParams {
+        return LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+    }
+
+    override fun generateLayoutParams(p: ViewGroup.LayoutParams?): ViewGroup.LayoutParams {
+        return LayoutParams(p)
+    }
+
+    override fun checkLayoutParams(p: ViewGroup.LayoutParams?): Boolean {
+        return p is LayoutParams
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        // Реализация измерения
+        setMeasuredDimension(0, 0)
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        // Использовать пользовательские LayoutParams для позиционирования
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            val lp = child.layoutParams as LayoutParams
+
+            // Применить gravity
+            val childLeft = when (lp.gravity and Gravity.HORIZONTAL_GRAVITY_MASK) {
+                Gravity.CENTER_HORIZONTAL -> (width - child.measuredWidth) / 2
+                Gravity.END -> width - child.measuredWidth
+                else -> 0
+            }
+
+            // Расположить дочерний элемент...
+        }
+    }
+}
 ```
 
 ---
 
 ### Реальный пример: StaggeredLayout
 
-Более сложная компоновка, создающая сетку в стиле Pinterest.
+Более сложная компоновка, создающая сетку в стиле Pinterest:
 
 ```kotlin
-// ... (код как в английской версии)
+class StaggeredLayout @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ViewGroup(context, attrs, defStyleAttr) {
+
+    var columnCount: Int = 2
+        set(value) {
+            field = value
+            requestLayout()
+        }
+
+    var spacing: Int = 0
+        set(value) {
+            field = value
+            requestLayout()
+        }
+
+    // Отслеживание высоты каждого столбца
+    private val columnHeights = IntArray(2)
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val width = MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight
+        val columnWidth = (width - spacing * (columnCount - 1)) / columnCount
+
+        // Сбросить высоты столбцов
+        columnHeights.fill(0)
+
+        // Измерить каждый дочерний элемент
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            if (child.visibility == GONE) continue
+
+            // Измерить дочерний элемент с шириной столбца
+            val childWidthSpec = MeasureSpec.makeMeasureSpec(
+                columnWidth,
+                MeasureSpec.EXACTLY
+            )
+            val childHeightSpec = MeasureSpec.makeMeasureSpec(
+                0,
+                MeasureSpec.UNSPECIFIED
+            )
+
+            child.measure(childWidthSpec, childHeightSpec)
+
+            // Найти самый короткий столбец
+            val shortestColumn = columnHeights.indices.minByOrNull { columnHeights[it] } ?: 0
+
+            // Добавить высоту дочернего элемента к столбцу
+            columnHeights[shortestColumn] += child.measuredHeight + spacing
+        }
+
+        // Общая высота - это самый высокий столбец
+        val totalHeight = (columnHeights.maxOrNull() ?: 0) + paddingTop + paddingBottom
+
+        setMeasuredDimension(
+            MeasureSpec.getSize(widthMeasureSpec),
+            resolveSize(totalHeight, heightMeasureSpec)
+        )
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        val width = right - left - paddingLeft - paddingRight
+        val columnWidth = (width - spacing * (columnCount - 1)) / columnCount
+
+        // Сбросить позиции столбцов
+        val columnPositions = IntArray(columnCount) { paddingTop }
+
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            if (child.visibility == GONE) continue
+
+            // Найти самый короткий столбец
+            val shortestColumn = columnPositions.indices.minByOrNull { columnPositions[it] } ?: 0
+
+            // Вычислить позицию дочернего элемента
+            val childLeft = paddingLeft + shortestColumn * (columnWidth + spacing)
+            val childTop = columnPositions[shortestColumn]
+
+            // Расположить дочерний элемент
+            child.layout(
+                childLeft,
+                childTop,
+                childLeft + columnWidth,
+                childTop + child.measuredHeight
+            )
+
+            // Обновить позицию столбца
+            columnPositions[shortestColumn] += child.measuredHeight + spacing
+        }
+    }
+}
+```
+
+**Использование:**
+```xml
+<com.example.ui.StaggeredLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:columnCount="2"
+    app:spacing="8dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image1" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image2" />
+
+    <!-- Больше изображений... -->
+</com.example.ui.StaggeredLayout>
 ```
 
 ---
 
 ### Вспомогательные методы измерения
 
+**Доступные вспомогательные методы:**
+
 ```kotlin
-// ... (код как в английской версии)
+// 1. measureChild - Простое измерение
+measureChild(child, widthMeasureSpec, heightMeasureSpec)
+
+// 2. measureChildWithMargins - Учитывает margins
+measureChildWithMargins(
+    child,
+    widthMeasureSpec, usedWidth,
+    heightMeasureSpec, usedHeight
+)
+
+// 3. Ручное измерение - Полный контроль
+val childWidthSpec = MeasureSpec.makeMeasureSpec(
+    desiredWidth,
+    MeasureSpec.EXACTLY
+)
+val childHeightSpec = MeasureSpec.makeMeasureSpec(
+    desiredHeight,
+    MeasureSpec.AT_MOST
+)
+child.measure(childWidthSpec, childHeightSpec)
 ```
+
+**Сравнение:**
+
+| Метод | Учитывает Padding | Учитывает Margins | Случай использования |
+|--------|-----------------|------------------|----------|
+| `measureChild` | Да | Нет | Простые компоновки |
+| `measureChildWithMargins` | Да | Да | Большинство компоновок |
+| Ручной `measure()` | Нет | Нет | Полный контроль |
 
 ---
 
 ### Лучшие практики
 
 **1. Всегда измеряйте дочерние элементы перед родительским**
+```kotlin
+override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    // Сначала измерить дочерние элементы
+    for (i in 0 until childCount) {
+        measureChild(getChildAt(i), widthMeasureSpec, heightMeasureSpec)
+    }
+
+    // Затем рассчитать собственный размер на основе дочерних элементов
+    val width = calculateWidth()
+    val height = calculateHeight()
+    setMeasuredDimension(width, height)
+}
+```
+
 **2. Пропускайте дочерние элементы с видимостью GONE**
+```kotlin
+for (i in 0 until childCount) {
+    val child = getChildAt(i)
+    if (child.visibility == GONE) continue // Пропустить
+    // Обработать дочерний элемент
+}
+```
+
 **3. Используйте `resolveSize` для `wrap_content`/`match_parent`**
+```kotlin
+// ДЕЛАЙТЕ
+setMeasuredDimension(
+    resolveSize(desiredWidth, widthMeasureSpec),
+    resolveSize(desiredHeight, heightMeasureSpec)
+)
+
+// НЕ ДЕЛАЙТЕ - игнорирование measure spec
+setMeasuredDimension(desiredWidth, desiredHeight)
+```
+
 **4. Поддерживайте RTL-компоновки**
+```kotlin
+override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+    val isRtl = layoutDirection == LAYOUT_DIRECTION_RTL
+
+    for (i in 0 until childCount) {
+        val child = getChildAt(i)
+
+        val childLeft = if (isRtl) {
+            width - currentX - child.measuredWidth
+        } else {
+            currentX
+        }
+
+        child.layout(childLeft, currentY, /* ... */)
+    }
+}
+```
+
 **5. Оптимизируйте производительность**
+```kotlin
+class OptimizedViewGroup : ViewGroup {
+    // Кэш для избежания повторных выделений
+    private val childBounds = mutableListOf<Rect>()
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        // Очистить и переиспользовать список
+        childBounds.clear()
+
+        for (i in 0 until childCount) {
+            // Измерить и закэшировать границы
+            val child = getChildAt(i)
+            measureChild(child, widthMeasureSpec, heightMeasureSpec)
+
+            val bounds = Rect(0, 0, child.measuredWidth, child.measuredHeight)
+            childBounds.add(bounds)
+        }
+
+        setMeasuredDimension(/* ... */)
+    }
+
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        // Использовать закэшированные границы
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            val bounds = childBounds[i]
+            child.layout(bounds.left, bounds.top, bounds.right, bounds.bottom)
+        }
+    }
+}
+```
 
 ---
 
 ### Распространенные ошибки
 
 **Забыли вызвать `setMeasuredDimension()`**
+```kotlin
+override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    // Измерить дочерние элементы...
+    // КРАХ! Необходимо вызвать setMeasuredDimension()
+}
+```
+
 **Не измерили дочерние элементы**
+```kotlin
+override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+    val child = getChildAt(0)
+    // child.measuredWidth равен 0! Необходимо вызвать measure() в onMeasure()
+    child.layout(0, 0, child.measuredWidth, child.measuredHeight)
+}
+```
+
 **Вызов `requestLayout()` в `onLayout()`**
+```kotlin
+override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+    // ...
+    requestLayout() // БЕСКОНЕЧНЫЙ ЦИКЛ!
+}
+```
 
 ---
 
 ### Тестирование пользовательского ViewGroup
 
 ```kotlin
-// ... (код как в английской версии)
+@RunWith(AndroidJUnit4::class)
+class FlowLayoutTest {
+
+    @Test
+    fun testMeasurement() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val flowLayout = FlowLayout(context)
+
+        // Добавить дочерние элементы
+        repeat(5) {
+            val child = View(context).apply {
+                layoutParams = ViewGroup.LayoutParams(100, 100)
+            }
+            flowLayout.addView(child)
+        }
+
+        // Измерить с шириной 300px
+        val widthSpec = MeasureSpec.makeMeasureSpec(300, MeasureSpec.EXACTLY)
+        val heightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+
+        flowLayout.measure(widthSpec, heightSpec)
+
+        // Должен перенестись на 2 ряда (3 + 2 дочерних элемента)
+        // Ряд 1: 300px, Ряд 2: 200px
+        assertEquals(300, flowLayout.measuredWidth)
+        assertTrue(flowLayout.measuredHeight >= 200)
+    }
+
+    @Test
+    fun testLayout() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val flowLayout = FlowLayout(context).apply {
+            horizontalSpacing = 10
+        }
+
+        val child1 = View(context).apply {
+            layoutParams = ViewGroup.LayoutParams(100, 50)
+        }
+        val child2 = View(context).apply {
+            layoutParams = ViewGroup.LayoutParams(100, 50)
+        }
+
+        flowLayout.addView(child1)
+        flowLayout.addView(child2)
+
+        flowLayout.measure(
+            MeasureSpec.makeMeasureSpec(300, MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        )
+        flowLayout.layout(0, 0, 300, flowLayout.measuredHeight)
+
+        // Проверить позиции
+        assertEquals(0, child1.left)
+        assertEquals(110, child2.left) // 100 + 10 spacing
+    }
+}
 ```
 
 ---

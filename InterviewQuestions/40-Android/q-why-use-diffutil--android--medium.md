@@ -266,7 +266,7 @@ class UserAdapter : ListAdapter<User, UserAdapter.ViewHolder>(UserDiffCallback()
 }
 ```
 
-### 5. DiffUtil with Complex Objects
+### 5. DiffUtil со сложными объектами
 
 ```kotlin
 data class Post(
@@ -283,12 +283,12 @@ data class Author(val id: Int, val name: String)
 class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
 
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
-        // Same post if IDs match
+        // Один и тот же пост, если ID совпадают
         return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
-        // All fields must match
+        // Все поля должны совпадать
         return oldItem == newItem
     }
 
@@ -377,7 +377,7 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 }
 ```
 
-### 6. Performance Considerations
+### 6. Вопросы производительности
 
 ```kotlin
 class OptimizedDiffCallback<T>(
@@ -399,13 +399,13 @@ class OptimizedDiffCallback<T>(
     }
 }
 
-// Usage with large lists
+// Использование с большими списками
 class LargeListAdapter : RecyclerView.Adapter<LargeListAdapter.ViewHolder>() {
 
     private var items = listOf<Item>()
 
     fun updateItems(newItems: List<Item>) {
-        // Run diff calculation in background
+        // Запустить вычисление diff в фоне
         lifecycleScope.launch(Dispatchers.Default) {
             val diffCallback = OptimizedDiffCallback(
                 oldList = items,
@@ -421,7 +421,7 @@ class LargeListAdapter : RecyclerView.Adapter<LargeListAdapter.ViewHolder>() {
         }
     }
 
-    // ... adapter implementation
+    // ... реализация адаптера
 }
 ```
 
@@ -726,7 +726,61 @@ class UserAdapter : ListAdapter<User, UserAdapter.ViewHolder>(UserDiffCallback()
 }
 ```
 
-### Сравнение: С DiffUtil и без
+### Реальный пример: Продакшн использование
+
+```kotlin
+// ViewModel с DiffUtil
+class ProductListViewModel : ViewModel() {
+
+    private val _products = MutableStateFlow<List<Product>>(emptyList())
+    val products: StateFlow<List<Product>> = _products.asStateFlow()
+
+    fun loadProducts() {
+        viewModelScope.launch {
+            val newProducts = repository.getProducts()
+            _products.value = newProducts // ListAdapter автоматически применит DiffUtil
+        }
+    }
+
+    fun updateProduct(productId: String, newPrice: Double) {
+        viewModelScope.launch {
+            val updatedList = _products.value.map { product ->
+                if (product.id == productId) {
+                    product.copy(price = newPrice)
+                } else {
+                    product
+                }
+            }
+            _products.value = updatedList
+        }
+    }
+}
+
+// Fragment с адаптером
+class ProductListFragment : Fragment() {
+
+    private val viewModel: ProductListViewModel by viewModels()
+    private val adapter = ProductListAdapter(
+        onProductClick = { product -> navigateToDetails(product) },
+        onAddToCart = { product -> viewModel.addToCart(product) }
+    )
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.adapter = adapter
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.products.collect { products ->
+                adapter.submitList(products) // DiffUtil работает автоматически
+            }
+        }
+    }
+}
+```
+
+### Сравнение производительности: С DiffUtil и без
 
 #### Без DiffUtil (Плохо)
 ```kotlin
@@ -739,6 +793,12 @@ class BadAdapter : RecyclerView.Adapter<ViewHolder>() {
         notifyDataSetChanged() // - Обновляет весь список, нет анимаций
     }
 }
+
+// Проблемы:
+// 1. Все ViewHolder пересоздаются
+// 2. Нет анимаций
+// 3. Плохая производительность
+// 4. Скролл сбрасывается
 ```
 
 #### С DiffUtil (Хорошо)
@@ -746,6 +806,48 @@ class BadAdapter : RecyclerView.Adapter<ViewHolder>() {
 class GoodAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
     fun updateItems(newItems: List<Item>) {
         submitList(newItems) // - Обновляет только измененные элементы, плавные анимации
+    }
+}
+
+// Преимущества:
+// 1. Обновляются только измененные элементы
+// 2. Красивые анимации
+// 3. Отличная производительность
+// 4. Позиция скролла сохраняется
+```
+
+### Пример: Пагинация с DiffUtil
+
+```kotlin
+class PaginatedListAdapter : ListAdapter<Item, PaginatedListAdapter.ViewHolder>(ItemDiffCallback()) {
+
+    private var isLoading = false
+
+    fun appendItems(newItems: List<Item>) {
+        val currentList = currentList.toMutableList()
+        currentList.addAll(newItems)
+        submitList(currentList)
+    }
+
+    fun setLoading(loading: Boolean) {
+        isLoading = loading
+        if (loading) {
+            val currentList = currentList.toMutableList()
+            currentList.add(LoadingItem) // Специальный элемент для индикатора загрузки
+            submitList(currentList)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is LoadingItem -> VIEW_TYPE_LOADING
+            else -> VIEW_TYPE_ITEM
+        }
+    }
+
+    companion object {
+        private const val VIEW_TYPE_ITEM = 0
+        private const val VIEW_TYPE_LOADING = 1
     }
 }
 ```
