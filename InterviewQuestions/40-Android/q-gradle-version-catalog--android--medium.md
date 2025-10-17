@@ -1,20 +1,20 @@
 ---
+id: "20251015082237327"
+title: "Gradle Version Catalog / Каталог версий Gradle"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - gradle
   - version-catalog
   - dependency-management
   - toml
-subtopics:
-  - gradle
+source: Kirchhoff repo
+subtopics:   - gradle
   - dependency-management
   - build-variants
-difficulty: medium
-status: draft
-source: Kirchhoff repo
 ---
-
 # Gradle Version Catalog / Gradle Version Catalog
 
 **English**: What do you know about Gradle Version Catalog?

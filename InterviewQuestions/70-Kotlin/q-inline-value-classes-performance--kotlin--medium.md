@@ -1,16 +1,17 @@
 ---
+id: "20251015082236010"
+title: "Inline Value Classes Performance"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - inline-classes
   - value-classes
   - performance
   - optimization
   - zero-cost-abstractions
-difficulty: medium
-status: draft
 ---
-
 # Inline Value Classes and Performance
 
 # Question (EN)

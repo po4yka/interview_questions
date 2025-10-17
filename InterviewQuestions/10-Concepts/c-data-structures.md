@@ -7,7 +7,30 @@ created: 2025-10-12
 updated: 2025-10-12
 ---
 
-# Data Structures
+# Summary (EN)
+
+Data structures are ways to organize and store data efficiently. Choosing the right data structure is crucial for algorithm performance. Common structures include linear structures (arrays, linked lists, stacks, queues), trees (binary trees, BSTs), hash tables for fast lookups, and graphs for representing relationships.
+
+# Сводка (RU)
+
+Структуры данных - это способы организации и эффективного хранения данных. Выбор правильной структуры данных критически важен для производительности алгоритма. Распространенные структуры включают линейные структуры (массивы, связные списки, стеки, очереди), деревья (бинарные деревья, BST), хеш-таблицы для быстрого поиска и графы для представления отношений.
+
+## Use Cases / Trade-offs
+
+**Use Cases:**
+- Arrays: Random access, fixed collections
+- Linked Lists: Dynamic size, frequent insertions/deletions
+- Stacks: LIFO operations, function calls, undo
+- Queues: FIFO operations, task scheduling, BFS
+- Hash Tables: Fast key-value lookups, caching
+- Trees: Hierarchical data, sorted data (BST)
+- Graphs: Networks, relationships, dependencies
+
+**Trade-offs:**
+- **Arrays vs Linked Lists:** Fast access (O(1)) vs. fast insertion/deletion at known positions
+- **Hash Tables:** O(1) average lookups vs. O(n) worst case and no ordering
+- **Trees:** Balanced (O(log n)) vs. unbalanced (O(n)) operations
+- **Space vs Time:** More memory for faster operations (e.g., hash tables)
 
 ## Overview
 
@@ -256,6 +279,13 @@ class Graph {
 ## Related Concepts
 
 - [[c-algorithms]]
+
+## References
+
+- "Data Structures and Algorithms in Java" by Robert Lafore
+- [VisuAlgo - Data Structure Visualizations](https://visualgo.net/)
+- [Big-O Cheat Sheet](https://www.bigocheatsheet.com/)
+- "Grokking Algorithms" by Aditya Bhargava
 
 ## MOC Links
 

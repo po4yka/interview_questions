@@ -1,14 +1,15 @@
 ---
+id: "20251015082237251"
+title: "Compose Modifier Order Performance / Порядок модификаторов и производительность Compose"
 topic: jetpack-compose
-tags:
-  - jetpack-compose
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - jetpack-compose
   - modifiers
   - performance
   - optimization
-difficulty: medium
-status: draft
 ---
-
 # Modifier Order, Performance, and Layout Phases
 
 **English**: How does modifier order affect performance and behavior? Explain modifier chain optimization and measure/layout/draw phases.

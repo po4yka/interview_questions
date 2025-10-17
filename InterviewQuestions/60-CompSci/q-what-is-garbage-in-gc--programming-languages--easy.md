@@ -1,14 +1,16 @@
 ---
-tags:
-  - garbage-collection
+id: "20251015082237176"
+title: "What Is Garbage In Gc / Что такое мусор в GC"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - garbage-collection
   - jvm
   - kotlin
   - memory-management
   - programming-languages
-difficulty: easy
-status: draft
 ---
-
 # О каком мусоре идет речь в сборщике мусора?
 
 # Question (EN)

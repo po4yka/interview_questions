@@ -1,15 +1,16 @@
 ---
+id: "20251015082237074"
+title: "Kotlin Extension Functions Advanced"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - extensions
   - receivers
   - generics
   - dsl
-difficulty: hard
-status: draft
 ---
-
 # Advanced Extension Functions
 
 **English**: Implement extension functions with receivers, generic extensions, and nullable receivers. Understand resolution and scope.

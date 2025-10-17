@@ -1,17 +1,18 @@
 ---
+id: "20251015082237456"
+title: "Separate Ui Business Logic / Разделение UI и бизнес-логики"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/architecture-clean
   - architecture
   - architecture-clean
   - clean-architecture
   - platform/android
   - separation-of-concerns
-difficulty: easy
-status: draft
 ---
-
 # Зачем нужно разделять отображение и бизнес-логику?
 
 **English**: Why do we need to separate presentation and business logic?

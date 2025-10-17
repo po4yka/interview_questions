@@ -1,22 +1,31 @@
 ---
+id: "20251015082237238"
+title: "Dagger Build Time Optimization"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - dagger
   - hilt
   - dependency-injection
   - build-optimization
   - performance
-difficulty: medium
-status: draft
 ---
 
-# Оптимизация времени сборки с Dagger
+# Question (EN)
 
-**English**: How to minimize Dagger's impact on build time?
+> How to minimize Dagger's impact on build time?
+
+# Вопрос (RU)
+
+> Оптимизация времени сборки с Dagger
+
+---
 
 ## Answer (EN)
-Для минимизации влияния Dagger на время сборки можно воспользоваться несколькими стратегиями и практиками, которые помогут оптимизировать процесс компиляции.
+
+To minimize Dagger's impact on build time, you can use several strategies and practices that help optimize the compilation process.
 
 ### 1. Использование Hilt вместо Dagger
 
@@ -422,6 +431,7 @@ abstract class FeatureModule {
 ### Метрики улучшения
 
 **До оптимизации:**
+
 ```
 Build time: 2m 30s
 kapt tasks: 1m 45s (70%)
@@ -430,6 +440,7 @@ Total @Provides: 200+
 ```
 
 **После оптимизации:**
+
 ```
 Build time: 1m 10s (-53%)
 ksp tasks: 35s (-66%)
@@ -440,31 +451,38 @@ Total @Provides: 80
 
 ### Checklist оптимизации
 
-- [ ] Переход с Dagger на Hilt
-- [ ] Включить incremental kapt
-- [ ] Разделить большие модули
-- [ ] Заменить @Provides на @Binds где возможно
-- [ ] Использовать Provider<T> для ленивой инициализации
-- [ ] Минимизировать singleton scopes
-- [ ] Проверить Build Analyzer
-- [ ] Настроить gradle.properties
-- [ ] Рассмотреть миграцию на KSP
-- [ ] Удалить неиспользуемые зависимости
-- [ ] Использовать AssistedInject для runtime параметров
-- [ ] Оптимизировать Multibindings
+-   [ ] Переход с Dagger на Hilt
+-   [ ] Включить incremental kapt
+-   [ ] Разделить большие модули
+-   [ ] Заменить @Provides на @Binds где возможно
+-   [ ] Использовать Provider<T> для ленивой инициализации
+-   [ ] Минимизировать singleton scopes
+-   [ ] Проверить Build Analyzer
+-   [ ] Настроить gradle.properties
+-   [ ] Рассмотреть миграцию на KSP
+-   [ ] Удалить неиспользуемые зависимости
+-   [ ] Использовать AssistedInject для runtime параметров
+-   [ ] Оптимизировать Multibindings
 
 **English**: Optimize Dagger build time by: 1) **Use Hilt** instead of Dagger, 2) **Enable incremental kapt** (`kapt.incremental.apt=true`), 3) **Split large modules** into smaller ones, 4) **Use @Binds** instead of @Provides (generates less code), 5) **Migrate to KSP** when available (faster than kapt), 6) **Use Provider<T>** for lazy initialization, 7) **Minimize Singleton scopes**, 8) **Remove unused dependencies**, 9) **Configure gradle.properties** (parallel, caching), 10) **Use AssistedInject** for runtime params. Typical improvement: 50-70% faster builds. Check Build Analyzer to identify bottlenecks.
 
 ---
 
+## Follow-ups
+
+-   How does Dagger's annotation processing compare to Koin's runtime DI in terms of build time?
+-   What are the trade-offs between using @Binds vs @Provides for performance?
+-   How can you profile and measure Dagger's impact on your specific build times?
+
+## References
+
+-   `https://dagger.dev/hilt/` — Hilt documentation
+-   `https://developer.android.com/training/dependency-injection/hilt-android` — Hilt guide
+-   `https://github.com/google/dagger` — Dagger GitHub repository
+
 ## Related Questions
 
 ### Related (Medium)
-- [[q-android-build-optimization--android--medium]] - android build optimization   android 
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
-### Related (Medium)
-- [[q-android-build-optimization--android--medium]] - android build optimization   android 
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
-### Related (Medium)
-- [[q-android-build-optimization--android--medium]] - android build optimization   android 
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+
+-   [[q-android-build-optimization--android--medium]] - Android build optimization
+-   [[q-build-optimization-gradle--gradle--medium]] - Gradle optimization

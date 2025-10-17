@@ -1,14 +1,16 @@
 ---
-tags:
-  - collections
+id: "20251015082237140"
+title: "Hashmap How It Works / Как работает HashMap"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - collections
   - data structures
   - hashmap
   - kotlin
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # Как работает HashMap?
 
 # Question (EN)

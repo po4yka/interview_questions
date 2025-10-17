@@ -1,17 +1,17 @@
 ---
+id: "20251015082237159"
 title: Memento Pattern
 topic: design-patterns
-subtopics:
-  - behavioral-patterns
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: []
+related:   - command-pattern
+  - state-pattern
+subtopics:   - behavioral-patterns
   - state-management
   - undo-redo
-difficulty: medium
-related:
-  - command-pattern
-  - state-pattern
-status: draft
 ---
-
 # Memento Pattern / Паттерн Хранитель
 
 # Question (EN)

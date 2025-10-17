@@ -1,21 +1,22 @@
 ---
+id: "20251015082237474"
+title: "Leakcanary Heap Dump Analysis"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - android
   - android/memory-management
   - heap-dump
   - leakcanary
   - memory-analysis
   - memory-management
   - shark
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Как понять что в дампе есть утечка?
 
 **English**: How to find a leak in a heap dump?

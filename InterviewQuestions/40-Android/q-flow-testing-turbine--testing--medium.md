@@ -1,31 +1,28 @@
 ---
 id: 20251012-400007
 title: "Flow Testing with Turbine / Тестирование Flow с Turbine"
-slug: flow-testing-turbine-testing-medium
 topic: android
-subtopics:
-  - testing
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - testing
   - kotlin-flow
   - turbine
   - coroutines
   - unit-testing
-status: draft
-difficulty: medium
-moc: moc-android
 date_created: 2025-10-12
 date_updated: 2025-10-12
-related_questions:
-  - q-kotlin-coroutines-advanced--kotlin--hard
+moc: moc-android
+related_questions:   - q-kotlin-coroutines-advanced--kotlin--hard
   - q-unit-testing-coroutines-flow--android--medium
   - q-compose-testing--android--medium
-tags:
-  - testing
+slug: flow-testing-turbine-testing-medium
+subtopics:   - testing
   - kotlin-flow
   - turbine
   - coroutines
   - unit-testing
 ---
-
 # Flow Testing with Turbine
 
 ## English Version

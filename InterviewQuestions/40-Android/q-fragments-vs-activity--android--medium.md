@@ -1,13 +1,14 @@
 ---
+id: "20251015082238615"
+title: "Fragments Vs Activity / Fragments против Activity"
 topic: android
-tags:
-  - android
-  - fragments
-  - ui-architecture
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
+  - fragments
+  - ui-architecture
 ---
-
 # Для чего нужны фрагменты если есть Activity?
 
 **English**: Why use Fragments if we have Activities?
@@ -190,22 +191,6 @@ findNavController().navigate(R.id.action_to_detail)
 ```
 
 **English**: Fragments provide modularity (break complex UI into manageable parts), reusability (use in multiple activities), adaptive interfaces (support different screen sizes), independent lifecycle management, simplified inter-component communication, and dynamic UI capabilities. Modern Android navigation is built on fragments.
-
----
-
-## Related Questions
-
-### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity, Fragment
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Activity, Fragment
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Activity, Fragment
-- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Activity, Fragment
-
-### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
-- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
-- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] - Activity, Fragment
 
 ---
 

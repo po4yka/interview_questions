@@ -1,16 +1,17 @@
 ---
+id: "20251015082237378"
+title: "Why Was The Lifecycle Library Created / Зачем создали библиотеку Lifecycle"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android/architecture
   - android/lifecycle
   - lifecycle
   - architecture-components
   - memory-leaks
-difficulty: hard
-status: draft
 ---
-
 # Why was the Lifecycle library created?
 
 **Russian**: Почему была создана библиотека Lifecycle?

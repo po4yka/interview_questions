@@ -1,7 +1,11 @@
 ---
+id: "20251015082237320"
+title: "Single Activity Pros Cons / Преимущества и недостатки Single Activity"
 topic: android
-tags:
-  - activity
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - activity
   - android
   - android/activity
   - android/fragment
@@ -12,10 +16,7 @@ tags:
   - performance-startup
   - platform/android
   - single-activity
-difficulty: medium
-status: draft
 ---
-
 # Какие у подхода Single Activity этого подхода + и - ?
 
 **English**: What are the pros and cons of the Single Activity approach?

@@ -1,11 +1,12 @@
 ---
+id: "20251015082237345"
+title: "Does State Made In Compose Help Avoid Race Condition / Помогает ли State в Compose избежать состояния гонки"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # Does state in Compose help avoid race conditions?
 
 ## EN (expanded)

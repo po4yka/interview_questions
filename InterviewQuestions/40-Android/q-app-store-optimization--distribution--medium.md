@@ -1,14 +1,16 @@
 ---
-tags:
-  - Android
+id: "20251015082237449"
+title: "App Store Optimization / App Store Оптимизация"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Android
   - Marketing
   - Distribution
   - ASO
   - PlayStore
-difficulty: medium
-status: draft
 ---
-
 # App Store Optimization (ASO) and Play Store Listing
 
 # Question (EN)

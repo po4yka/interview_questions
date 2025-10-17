@@ -1,19 +1,20 @@
 ---
+id: "20251015082237576"
+title: "Custom Drawable Implementation / Custom Drawable Реализация"
 topic: android
-subtopics: [ui-views, ui-graphics]
-tags:
-  - custom-views
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - custom-views
   - drawable
   - graphics
   - android-framework
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
+subtopics: [ui-views, ui-graphics]
 ---
-
 # Custom Drawable Implementation
 
 # Question (EN)
@@ -774,8 +775,24 @@ override fun getIntrinsicHeight(): Int = 48.dpToPx()
 | **Случай использования** | Простая графика, иконки | Интерактивные UI элементы |
 | **Производительность** | Легковесный | Тяжелее (полный View) |
 | **Взаимодействие** | Нет обработки касаний | Полная поддержка касаний |
-| **Жизненный цикл** | Простой | Сложный |
+| **Жизненный цикл** | Простой | Сложный (attach/detach) |
 | **Переиспользуемость** | Высокая | Ниже |
+| **Состояние** | Ограниченное (ColorStateList) | Полное управление состоянием |
+
+**Используйте Drawable когда**: неинтерактивная графика, переиспользование в разных view, простые формы/анимации, фоновая/передняя графика.
+
+**Используйте Custom View когда**: нужно взаимодействие с касаниями, сложный жизненный цикл, требования доступности, координация анимаций.
+
+### Жизненный цикл Drawable
+
+Drawable имеет упрощенный жизненный цикл по сравнению с View:
+1. Создание - конструктор вызывается системой или вами
+2. setBounds() - система устанавливает границы для отрисовки
+3. draw() - вызывается для отрисовки на Canvas
+4. onBoundsChange() - вызывается при изменении размера
+5. setState() - обновление состояния (pressed, focused и т.д.)
+6. onStateChange() - реакция на изменения состояния
+7. invalidateSelf() - запрос перерисовки
 
 ### Базовый Custom Drawable
 
@@ -839,13 +856,91 @@ override fun onBoundsChange(bounds: Rect) {
 - `onStateChange()` - Обработать изменения состояния
 - `invalidateSelf()` - Запросить перерисовку
 
+### Статичные Drawables
+
+Stateful Drawable может реагировать на состояния view (нажатие, фокус, выбор):
+
+```kotlin
+class StatefulButtonDrawable : Drawable() {
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val normalColor = Color.BLUE
+    private val pressedColor = Color.DARK_GRAY
+
+    override fun isStateful(): Boolean = true
+
+    override fun onStateChange(state: IntArray): Boolean {
+        val newColor = when {
+            state.contains(android.R.attr.state_pressed) -> pressedColor
+            else -> normalColor
+        }
+        if (paint.color != newColor) {
+            paint.color = newColor
+            return true // Запросить перерисовку
+        }
+        return false
+    }
+
+    override fun draw(canvas: Canvas) {
+        canvas.drawRoundRect(bounds.toRectF(), 20f, 20f, paint)
+    }
+}
+```
+
+### Анимированные Drawables
+
+Используйте интерфейс Animatable для создания анимированных drawable:
+
+```kotlin
+class SpinnerDrawable : Drawable(), Animatable {
+    private var rotation = 0f
+    private var isRunning = false
+
+    private val animator = ValueAnimator.ofFloat(0f, 360f).apply {
+        duration = 1000
+        repeatCount = ValueAnimator.INFINITE
+        addUpdateListener { animation ->
+            rotation = animation.animatedValue as Float
+            invalidateSelf()
+        }
+    }
+
+    override fun start() {
+        if (!isRunning) {
+            isRunning = true
+            animator.start()
+        }
+    }
+
+    override fun stop() {
+        if (isRunning) {
+            isRunning = false
+            animator.cancel()
+        }
+    }
+
+    override fun isRunning(): Boolean = isRunning
+
+    override fun draw(canvas: Canvas) {
+        canvas.save()
+        canvas.rotate(rotation, bounds.centerX().toFloat(), bounds.centerY().toFloat())
+        // Рисование спиннера
+        canvas.restore()
+    }
+}
+```
+
 ### Лучшие практики
 
-- Всегда использовать bounds
-- Предварительно выделять объекты
-- Обрабатывать изменения bounds
-- Поддерживать tinting
-- Предоставлять intrinsic size
+1. Всегда использовать bounds - никогда не hardcode координаты
+2. Реализовать обязательные методы: setAlpha(), setColorFilter(), getOpacity()
+3. Вызывать invalidateSelf() при изменении состояния
+4. Предварительно выделять объекты (Paint, Path) - не создавать в draw()
+5. Обрабатывать изменения bounds через onBoundsChange()
+6. Предоставлять intrinsic size через getIntrinsicWidth/Height()
+7. Поддерживать tinting для кастомизации цвета
+8. Переопределять isStateful() для stateful drawables
+9. Использовать callback для уведомления об изменениях
+10. Оптимизировать производительность - избегать лишних вычислений в draw()
 
 ---
 

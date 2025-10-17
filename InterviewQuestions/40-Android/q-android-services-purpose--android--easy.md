@@ -1,19 +1,23 @@
 ---
+id: "20251015082238653"
+title: "Android Services Purpose / Назначение Service в Android"
 topic: android
-tags:
-  - android
-  - services
-  - background-operations
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - android
+  - services
+  - background-operations
 ---
 
 # Для чего нужны сервисы?
 
 # Question (EN)
+
 > What are services used for in Android?
 
 # Вопрос (RU)
+
 > Для чего нужны сервисы?
 
 ---
@@ -206,19 +210,33 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 С Android 8.0+ ограничения на фоновые сервисы стали строже:
 
-- **Foreground Services** - для видимых пользователю операций
-- **WorkManager** - для отложенных фоновых задач
-- **JobScheduler** - для системных задач
-- **AlarmManager** - для точных по времени задач
+-   **Foreground Services** - для видимых пользователю операций
+-   **WorkManager** - для отложенных фоновых задач
+-   **JobScheduler** - для системных задач
+-   **AlarmManager** - для точных по времени задач
 
 ---
+
+## Follow-ups
+
+-   When should a Foreground Service be preferred over WorkManager (uploads, playback)?
+-   How do Android 8.0+ background execution limits change Service usage?
+-   How to guarantee work survives process death (WorkManager vs bound Service)?
+
+## References
+
+-   `https://developer.android.com/guide/background` — Background work overview
+-   `https://developer.android.com/guide/components/services` — Services
+-   `https://developer.android.com/guide/components/foreground-services` — Foreground services
 
 ## Related Questions
 
 ### Related (Easy)
-- [[q-what-are-services-for--android--easy]] - Service
+
+-   [[q-what-are-services-for--android--easy]] - Service
 
 ### Advanced (Harder)
-- [[q-service-component--android--medium]] - Service
-- [[q-what-are-services-used-for--android--medium]] - Service
-- [[q-foreground-service-types--background--medium]] - Service
+
+-   [[q-service-component--android--medium]] - Service
+-   [[q-what-are-services-used-for--android--medium]] - Service
+-   [[q-foreground-service-types--background--medium]] - Service

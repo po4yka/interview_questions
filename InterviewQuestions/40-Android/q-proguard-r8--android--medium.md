@@ -175,34 +175,10 @@ ProGuard (или компилятор R8) обфусцирует ваш код, 
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
 ### Related (Medium)
 - [[q-macrobenchmark-startup--performance--medium]] - Performance
 - [[q-reduce-app-size--android--medium]] - Optimization
 - [[q-build-optimization-gradle--gradle--medium]] - Gradle
 - [[q-app-startup-optimization--performance--medium]] - Performance
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
-### Related (Medium)
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-reduce-app-size--android--medium]] - Optimization
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
-- [[q-app-startup-optimization--performance--medium]] - Performance
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
-### Related (Medium)
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-reduce-app-size--android--medium]] - Optimization
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
-- [[q-app-startup-optimization--performance--medium]] - Performance
-
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

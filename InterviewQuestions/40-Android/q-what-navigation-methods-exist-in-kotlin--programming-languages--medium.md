@@ -1,13 +1,25 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237263"
+title: "What Navigation Methods Exist In Kotlin / Какие методы навигации существуют в Kotlin"
+topic: android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
 
-# Какие есть способы навигации в Kotlin?
+# Question (EN)
+
+> What navigation methods exist in Kotlin for Android applications?
+
+# Вопрос (RU)
+
+> Какие есть способы навигации в Kotlin?
+
+---
 
 ## Answer (EN)
+
 Navigation in Android/Kotlin applications can be implemented using several approaches, each suitable for different use cases and architectures.
 
 ### 1. Jetpack Navigation Component
@@ -259,13 +271,13 @@ fun createDeepLink(itemId: Int): PendingIntent {
 
 ### Comparison of Navigation Methods
 
-| Method | Use Case | Pros | Cons |
-|--------|----------|------|------|
-| Jetpack Navigation | Modern apps with complex navigation | Type-safe, visual graph, easy back stack | Learning curve, XML configuration |
-| FragmentTransaction | Simple fragment operations | Full control, no dependencies | Manual back stack management |
-| Explicit Intent | Activity navigation | Simple, well-known | Creates new activities, memory overhead |
-| Implicit Intent | Cross-app navigation | System integration | Requires external app availability |
-| NavController | Fragment-based apps | Centralized navigation logic | Requires setup |
+| Method              | Use Case                            | Pros                                     | Cons                                    |
+| ------------------- | ----------------------------------- | ---------------------------------------- | --------------------------------------- |
+| Jetpack Navigation  | Modern apps with complex navigation | Type-safe, visual graph, easy back stack | Learning curve, XML configuration       |
+| FragmentTransaction | Simple fragment operations          | Full control, no dependencies            | Manual back stack management            |
+| Explicit Intent     | Activity navigation                 | Simple, well-known                       | Creates new activities, memory overhead |
+| Implicit Intent     | Cross-app navigation                | System integration                       | Requires external app availability      |
+| NavController       | Fragment-based apps                 | Centralized navigation logic             | Requires setup                          |
 
 ### Best Practices
 
@@ -278,7 +290,28 @@ fun createDeepLink(itemId: Int): PendingIntent {
 
 ---
 
-# Какие есть способы навигации в Kotlin
+## Follow-ups
+
+-   How do you handle deep linking with Jetpack Navigation Component?
+-   What are the differences between FragmentTransaction and Navigation Component for fragment management?
+-   How do you implement conditional navigation based on user authentication state?
+
+## References
+
+-   `https://developer.android.com/guide/navigation` — Navigation Component guide
+-   `https://developer.android.com/guide/components/fragments` — Fragment transactions
+-   `https://developer.android.com/guide/components/intents-filters` — Intent-based navigation
+
+## Related Questions
+
+### Related (Medium)
+
+-   [[q-navigation-component--android--medium]] - Navigation Component
+-   [[q-fragment-transactions--android--medium]] - Fragment transactions
+-   [[q-deep-linking-android--android--medium]] - Deep linking
+
+---
 
 ## Ответ (RU)
+
 Способы навигации в Kotlin: Jetpack Navigation Component — современный способ навигации, основанный на графе навигации и безопасных аргументах. Позволяет легко переходить между фрагментами и активностями, а также управлять состоянием навигации. FragmentTransaction — ручной способ добавления, замены и удаления фрагментов. Navigation через Intent — используется для переключения между активностями или фрагментами внутри приложения или между приложениями. Explicit и Implicit Intents — явные и неявные намерения для навигации между компонентами. NavHostFragment и NavController — связаны с использованием графа навигации для управления фрагментами в приложениях Android.

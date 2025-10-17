@@ -1,16 +1,17 @@
 ---
+id: "20251015082237275"
+title: "What Is Data Binding / Что такое Data Binding"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/data-binding
   - android/ui
   - data binding
   - data-binding
   - ui
-difficulty: easy
-status: draft
 ---
-
 # Использовал Data Binding
 
 **English**: Have you used Data Binding
@@ -251,5 +252,238 @@ class MainActivity : AppCompatActivity() {
 ```
 
 ## Ответ (RU)
-Это библиотека в Android, которая позволяет связывать компоненты пользовательского интерфейса (UI) напрямую с источниками данных, снижая количество шаблонного кода
+
+**Data Binding** — это библиотека в Android, которая позволяет связывать компоненты пользовательского интерфейса (UI) напрямую с источниками данных в вашем приложении, сокращая количество шаблонного кода, необходимого для синхронизации UI с данными.
+
+### Ключевые возможности
+
+1. **Устраняет findViewById()**: Прямые ссылки на view
+2. **Двусторонняя привязка**: Автоматическое обновление UI при изменении данных
+3. **Язык выражений**: Логика в XML layout
+4. **Наблюдаемые данные**: Автоматические обновления UI
+5. **Null-безопасность**: Встроенные проверки на null
+
+### Настройка
+
+```gradle
+// build.gradle (Module)
+android {
+    buildFeatures {
+        dataBinding true
+    }
+}
+```
+
+### Базовое использование
+
+```xml
+<!-- activity_main.xml -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="user"
+            type="com.example.User" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{user.name}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{String.valueOf(user.age)}" />
+    </LinearLayout>
+</layout>
+```
+
+```kotlin
+// Data class
+data class User(val name: String, val age: Int)
+
+// Activity
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val binding: ActivityMainBinding = DataBindingUtil.setContentView(
+            this, R.layout.activity_main
+        )
+
+        val user = User("John Doe", 30)
+        binding.user = user
+    }
+}
+```
+
+### Наблюдаемые данные
+
+```kotlin
+class User : BaseObservable() {
+    @get:Bindable
+    var name: String = ""
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.name)
+        }
+
+    @get:Bindable
+    var age: Int = 0
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.age)
+        }
+}
+
+// UI автоматически обновляется при изменении свойств
+user.name = "Jane Doe"  // TextView обновляется автоматически
+```
+
+### Двусторонняя привязка данных
+
+```xml
+<EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@={viewModel.searchQuery}" />
+```
+
+```kotlin
+class SearchViewModel : ViewModel() {
+    val searchQuery = MutableLiveData<String>()
+
+    init {
+        searchQuery.value = ""
+    }
+}
+```
+
+### Выражения привязки
+
+```xml
+<!-- Конкатенация строк -->
+<TextView
+    android:text="@{`Hello, ` + user.name}" />
+
+<!-- Null coalescing -->
+<TextView
+    android:text="@{user.name ?? `Unknown`}" />
+
+<!-- Условные выражения -->
+<TextView
+    android:visibility="@{user.isActive ? View.VISIBLE : View.GONE}" />
+
+<!-- Вызовы методов -->
+<Button
+    android:onClick="@{() -> viewModel.onButtonClick()}" />
+```
+
+### С ViewModel
+
+```kotlin
+class UserViewModel : ViewModel() {
+    val userName = MutableLiveData<String>()
+    val userAge = MutableLiveData<Int>()
+
+    fun loadUser() {
+        userName.value = "John Doe"
+        userAge.value = 30
+    }
+}
+```
+
+```xml
+<layout>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.UserViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="@{viewModel.userName}" />
+
+        <TextView
+            android:text="@{String.valueOf(viewModel.userAge)}" />
+    </LinearLayout>
+</layout>
+```
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: UserViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        viewModel = ViewModelProvider(this)[UserViewModel::class.java]
+
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+
+        viewModel.loadUser()
+    }
+}
+```
+
+### Data Binding vs View Binding
+
+| Функция | Data Binding | View Binding |
+|---------|-------------|--------------|
+| Null-безопасность | - | - |
+| Типобезопасность | - | - |
+| Шаблонный код | Меньше | Минимальный |
+| Двусторонняя привязка | - | - |
+| Язык выражений | - | - |
+| Время сборки | Медленнее | Быстрее |
+| Сложность | Выше | Ниже |
+
+### Преимущества
+
+1. **Меньше шаблонного кода**
+2. **Типобезопасный доступ к view**
+3. **Автоматические обновления UI**
+4. **Лучшее разделение ответственности**
+5. **Улучшенная читаемость**
+
+### Недостатки
+
+1. **Увеличенное время сборки**
+2. **Сложнее отлаживать**
+3. **Логика в XML** (может быть анти-паттерном)
+4. **Кривая обучения**
+5. **Не рекомендуется Google** (предпочитают View Binding)
+
+### Современная альтернатива: View Binding
+
+```kotlin
+// Проще и рекомендуется
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Прямой, типобезопасный доступ к view
+        binding.textView.text = "Hello"
+        binding.button.setOnClickListener {
+            // Обработка клика
+        }
+    }
+}
+```
 

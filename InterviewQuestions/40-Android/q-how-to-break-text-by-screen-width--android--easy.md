@@ -1,22 +1,31 @@
 ---
+id: "20251015082237262"
+title: "How To Break Text By Screen Width / Как разбить текст по ширине экрана"
 topic: android
-tags:
-  - Paint
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - Paint
   - android
   - android/text-rendering
   - android/ui
   - breakText
   - text-rendering
   - ui
-difficulty: easy
-status: draft
 ---
 
-# Как разбить текст, зная, сколько символов помещается на экране?
+# Question (EN)
 
-**English**: How to break text knowing how many characters fit on screen?
+> How to break text knowing how many characters fit on screen?
+
+# Вопрос (RU)
+
+> Как разбить текст, зная, сколько символов помещается на экране?
+
+---
 
 ## Answer (EN)
+
 Use the **Paint** class and **breakText()** method to determine how many characters fit in a line based on available width.
 
 ### Using breakText()
@@ -108,6 +117,29 @@ class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attr
 }
 ```
 
+---
+
 ## Ответ (RU)
+
 Используйте класс Paint и метод breakText, чтобы определить, сколько символов помещается в строку. Это позволит разбивать текст в зависимости от ширины экрана и используемого шрифта.
 
+---
+
+## Follow-ups
+
+-   How do you handle text breaking for different screen densities and font sizes?
+-   What's the difference between breakText() and measureText() for text layout?
+-   How can you implement custom text wrapping with hyphenation?
+
+## References
+
+-   `https://developer.android.com/reference/android/graphics/Paint` — Paint class documentation
+-   `https://developer.android.com/guide/topics/ui/look-and-feel/themes` — Android themes and text
+-   `https://developer.android.com/training/custom-views` — Custom views guide
+
+## Related Questions
+
+### Related (Easy)
+
+-   [[q-text-measurement-android--android--easy]] - Text measurement
+-   [[q-custom-view-text-rendering--android--easy]] - Custom text rendering

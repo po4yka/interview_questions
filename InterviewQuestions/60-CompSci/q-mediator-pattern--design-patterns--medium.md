@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237146"
+title: "Mediator Pattern / Mediator Паттерн"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - behavioral-patterns
   - mediator
   - gof-patterns
   - coupling
-difficulty: medium
-status: draft
 ---
-
 # Mediator Pattern
 
 # Question (EN)

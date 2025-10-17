@@ -1,7 +1,11 @@
 ---
+id: "20251015082237412"
+title: "Deep Link Vs App Link"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/navigation
   - app-linking
   - app-links
@@ -10,10 +14,7 @@ tags:
   - navigation
   - uri
   - verification
-difficulty: medium
-status: draft
 ---
-
 # Какие особенности отличия deep link от app link?
 
 **English**: What are the differences between deep links and app links?
@@ -438,5 +439,269 @@ fun checkAppLinkStatus(packageName: String) {
 **Best practice:** Use **App Links** for production apps with web presence, fall back to Deep Links for older Android versions.
 
 ## Ответ (RU)
-Deep link работает через схему URI например myapp требует настройки intent-filter. App link использует HTTP HTTPS ссылки и требует подтверждения владения доменом через файл assetlinks.json.
+**Deep Link** работает через **пользовательскую URI-схему** (например, `myapp://`) и требует настройки `intent-filter`.
+
+**App Link** использует **HTTP/HTTPS URL** и требует **проверки владения доменом** через файл `assetlinks.json`.
+
+## Ключевые различия
+
+| Особенность | Deep Link | App Link |
+|---------|-----------|----------|
+| **Схема** | Пользовательская (`myapp://`) | Только HTTPS (`https://`) |
+| **Верификация** | Нет | Требуется верификация домена |
+| **Пользовательский опыт** | Показывает диалог выбора приложения | Открывает приложение напрямую |
+| **Версия Android** | Все версии | Android 6.0+ (API 23+) |
+| **Безопасность** | Низкая (любой может заявить схему) | Высокая (подтвержденное владение) |
+| **Сложность настройки** | Простая | Сложная (требуется файл на сервере) |
+| **Случай использования** | Внутренняя навигация | Проверенный веб-контент |
+
+---
+
+## Deep Links
+
+### Характеристики
+
+- Пользовательская URI-схема (например, `myapp://`, `mydomain://`)
+- Работает на всех версиях Android
+- Простая настройка (не требуется конфигурация сервера)
+- Не проверяется - любое приложение может заявить ту же схему
+- Показывает диалог выбора, если несколько приложений обрабатывают URI
+
+### Реализация
+
+**AndroidManifest.xml:**
+
+```xml
+<activity android:name=".DetailActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <!-- Пользовательская схема -->
+        <data
+            android:scheme="myapp"
+            android:host="product"
+            android:pathPrefix="/detail" />
+    </intent-filter>
+</activity>
+```
+
+**Обработка в Activity:**
+
+```kotlin
+class DetailActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val uri: Uri? = intent.data
+
+        uri?.let {
+            val scheme = it.scheme        // "myapp"
+            val host = it.host            // "product"
+            val path = it.path            // "/detail/123"
+            val productId = it.lastPathSegment  // "123"
+
+            loadProduct(productId)
+        }
+    }
+}
+```
+
+**Тестирование:**
+
+```bash
+adb shell am start -W -a android.intent.action.VIEW \
+    -d "myapp://product/detail/123" \
+    com.example.myapp
+```
+
+---
+
+## App Links
+
+### Характеристики
+
+- Использует HTTPS URL (стандартные веб-ссылки)
+- Проверенное владение доменом
+- Открывает приложение напрямую (без диалога выбора)
+- Кликабельно в веб-браузерах и электронной почте
+- Безопасно - только проверенное приложение может обрабатывать домен
+- Только Android 6.0+ (API 23+)
+- Требует конфигурации сервера (assetlinks.json)
+
+### Реализация
+
+**1. Настройка AndroidManifest.xml:**
+
+```xml
+<activity android:name=".DetailActivity">
+    <intent-filter android:autoVerify="true">
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <!-- Только HTTPS URL -->
+        <data
+            android:scheme="https"
+            android:host="www.example.com"
+            android:pathPrefix="/product" />
+    </intent-filter>
+</activity>
+```
+
+**Ключевое отличие:** `android:autoVerify="true"` включает автоматическую верификацию.
+
+**2. Создание файла Digital Asset Links:**
+
+**Расположение:** `https://www.example.com/.well-known/assetlinks.json`
+
+```json
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.example.myapp",
+    "sha256_cert_fingerprints": [
+      "14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5"
+    ]
+  }
+}]
+```
+
+**Получение SHA256 отпечатка:**
+
+```bash
+# Debug keystore
+keytool -list -v -keystore ~/.android/debug.keystore \
+    -alias androiddebugkey -storepass android -keypass android
+
+# Release keystore
+keytool -list -v -keystore my-release-key.jks \
+    -alias my-key-alias
+```
+
+**Тестирование:**
+
+```bash
+# Тест с ADB
+adb shell am start -W -a android.intent.action.VIEW \
+    -d "https://www.example.com/product/123" \
+    com.example.myapp
+
+# Проверка ассоциаций домена
+adb shell pm get-app-links com.example.myapp
+
+# Сброс состояния верификации
+adb shell pm set-app-links --package com.example.myapp 0 all
+
+# Верификация домена
+adb shell pm verify-app-links --re-verify com.example.myapp
+```
+
+---
+
+## Примеры сравнения
+
+### Поток Deep Link
+
+```
+Пользователь кликает: myapp://product/123
+
+Android:
+  1. Находит приложения с intent-filter для "myapp://"
+  2. Если найдено несколько → Показывает диалог выбора
+  3. Пользователь выбирает приложение
+  4. Приложение открывается
+
+Проблемы:
+   Диалог выбора (плохой UX)
+   Любое приложение может заявить схему "myapp://"
+   Не кликабельно в веб-браузерах
+```
+
+### Поток App Link
+
+```
+Пользователь кликает: https://www.example.com/product/123
+
+Android:
+  1. Проверяет, верифицирован ли домен для какого-либо приложения
+  2. Если найдено верифицированное приложение → Открывает напрямую
+  3. Если приложение не установлено → Открывает в браузере
+  4. Без диалога выбора
+
+Преимущества:
+   Прямое открытие приложения (лучший UX)
+   Проверенное владение (безопасно)
+   Работает в браузерах, почте и т.д.
+```
+
+---
+
+## Интеграция с Navigation Component
+
+### Deep Link в nav_graph.xml:
+
+```xml
+<fragment
+    android:id="@+id/productDetailFragment"
+    android:name="com.example.ProductDetailFragment">
+
+    <argument
+        android:name="productId"
+        app:argType="string" />
+
+    <!-- Deep Link -->
+    <deepLink app:uri="myapp://product/{productId}" />
+
+    <!-- App Link -->
+    <deepLink app:uri="https://www.example.com/product/{productId}" />
+</fragment>
+```
+
+**Автоматическая обработка:** Navigation Component обрабатывает ссылку автоматически и извлекает аргументы.
+
+---
+
+## Проверка статуса верификации
+
+```kotlin
+fun checkAppLinkStatus(packageName: String) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val manager = getSystemService(DomainVerificationManager::class.java)
+        val userState = manager.getDomainVerificationUserState(packageName)
+
+        val verifiedDomains = userState?.hostToStateMap
+            ?.filterValues { it == DomainVerificationUserState.DOMAIN_STATE_VERIFIED }
+            ?.keys
+
+        Log.d("AppLink", "Verified domains: $verifiedDomains")
+    }
+}
+```
+
+---
+
+## Резюме
+
+**Deep Links:**
+- Пользовательская URI-схема (`myapp://`)
+- Простая настройка (без серверного файла)
+- Показывает диалог выбора приложения, если несколько
+- Работает на всех версиях Android
+- Не проверяется/небезопасно
+
+**App Links:**
+- HTTPS URL (`https://`)
+- Требует верификации домена (`assetlinks.json`)
+- Открывает приложение напрямую (без выбора)
+- Только Android 6.0+
+- Проверено и безопасно
+
+**Когда использовать:**
+- **Deep Links**: Внутренняя навигация, пользовательские схемы, обратная совместимость
+- **App Links**: Публичные общедоступные URL, проверенный веб-контент, лучший UX
+
+**Лучшая практика:** Используйте **App Links** для продакшн-приложений с веб-присутствием, возвращайтесь к Deep Links для старых версий Android.
 

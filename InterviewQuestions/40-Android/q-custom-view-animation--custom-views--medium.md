@@ -1,13 +1,15 @@
 ---
-tags:
-  - custom-views
+id: "20251015082237357"
+title: "Custom View Animation / Анимация кастомных View"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - custom-views
   - animation
   - valueanimator
   - performance
-difficulty: medium
-status: draft
 ---
-
 # Custom View Animation
 
 # Question (EN)

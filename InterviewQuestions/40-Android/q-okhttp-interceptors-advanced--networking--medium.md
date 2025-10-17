@@ -1,17 +1,18 @@
 ---
+id: "20251015082237316"
+title: "Okhttp Interceptors Advanced / Продвинутые перехватчики OkHttp"
 topic: networking
-tags:
-  - networking
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - networking
   - okhttp
   - interceptors
   - authentication
   - caching
   - retry
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # OkHttp Interceptors Advanced / Продвинутые интерцепторы OkHttp
 
 **English**: Implement custom OkHttp interceptors for authentication refresh, request retry, and response caching. Explain application vs network interceptor chain order.

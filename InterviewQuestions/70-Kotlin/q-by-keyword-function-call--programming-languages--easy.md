@@ -1,11 +1,12 @@
 ---
+id: "20251015082236017"
+title: "By Keyword Function Call / Ключевое слово by и вызов функции"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Can you call a function or constructor after by
 
 # Question (EN)

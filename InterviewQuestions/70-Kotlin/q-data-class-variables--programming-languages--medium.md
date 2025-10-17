@@ -1,11 +1,12 @@
 ---
+id: "20251015082237063"
+title: "Data Class Variables / Переменные data class"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # What variables can be used in data class?
 
 # Question (EN)

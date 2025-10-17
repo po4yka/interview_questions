@@ -1,7 +1,11 @@
 ---
+id: "20251015082237333"
+title: "What Problems Can There Be With List Items / Какие могут быть проблемы с элементами списка"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-13
+tags: - android
   - android/recyclerview
   - android/views
   - diffutil
@@ -12,14 +16,11 @@ tags:
   - recyclerview
   - ui
   - views
-difficulty: easy
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Какие могут быть проблемы с элементами списка?
 
 **English**: What problems can there be with list items?

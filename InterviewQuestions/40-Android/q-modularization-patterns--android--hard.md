@@ -160,27 +160,16 @@ Since Android modules come with overhead, preferably, you'd want to use the Kotl
 - [[q-android-security-practices-checklist--android--medium]] - Security
 - [[q-build-optimization-gradle--gradle--medium]] - Gradle
 - [[q-usecase-pattern-android--android--medium]] - Architecture
-
 ### Related (Hard)
 - [[q-data-sync-unstable-network--android--hard]] - Networking
 - [[q-multi-module-best-practices--android--hard]] - Architecture
 - [[q-clean-architecture-android--android--hard]] - Architecture
 - [[q-design-instagram-stories--android--hard]] - Media
-### Prerequisites (Easier)
-- [[q-android-security-practices-checklist--android--medium]] - Security
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
-- [[q-usecase-pattern-android--android--medium]] - Architecture
-
 ### Related (Hard)
 - [[q-data-sync-unstable-network--android--hard]] - Networking
 - [[q-multi-module-best-practices--android--hard]] - Architecture
 - [[q-clean-architecture-android--android--hard]] - Architecture
 - [[q-design-instagram-stories--android--hard]] - Media
-### Prerequisites (Easier)
-- [[q-android-security-practices-checklist--android--medium]] - Security
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
-- [[q-usecase-pattern-android--android--medium]] - Architecture
-
 ### Related (Hard)
 - [[q-data-sync-unstable-network--android--hard]] - Networking
 - [[q-multi-module-best-practices--android--hard]] - Architecture

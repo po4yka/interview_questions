@@ -1,29 +1,26 @@
 ---
 id: 20251012-300002
 title: "Load Balancing Algorithms and Strategies / Алгоритмы и стратегии балансировки нагрузки"
-slug: load-balancing-strategies-system-design-medium
 topic: system-design
-subtopics:
-  - load-balancing
-  - scalability
-  - high-availability
-  - distributed-systems
-status: draft
 difficulty: medium
-moc: moc-system-design
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-horizontal-vertical-scaling--system-design--medium
-  - q-stateless-stateful-services--system-design--medium
-  - q-health-checks-circuit-breaker--system-design--hard
-tags:
-  - system-design
+status: draft
+created: 2025-10-12
+tags: - system-design
   - load-balancing
   - scalability
   - algorithms
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-system-design
+related_questions:   - q-horizontal-vertical-scaling--system-design--medium
+  - q-stateless-stateful-services--system-design--medium
+  - q-health-checks-circuit-breaker--system-design--hard
+slug: load-balancing-strategies-system-design-medium
+subtopics:   - load-balancing
+  - scalability
+  - high-availability
+  - distributed-systems
 ---
-
 # Load Balancing Algorithms and Strategies
 
 ## English Version

@@ -1,32 +1,29 @@
 ---
 id: 20251012-600003
 title: "Concurrency Fundamentals / Основы параллелизма"
-slug: concurrency-fundamentals-computer-science-hard
 topic: concurrency
-subtopics:
-  - concurrency
-  - multithreading
-  - synchronization
-  - race-conditions
-  - locks
-status: draft
 difficulty: hard
-moc: moc-concurrency
-date_created: 2025-10-12
-date_updated: 2025-10-13
-related_questions:
-  - q-os-fundamentals-concepts--computer-science--hard
-  - q-kotlin-coroutines-advanced--kotlin--hard
-  - q-clean-code-principles--software-engineering--medium
-tags:
-  - concurrency
+status: draft
+created: 2025-10-12
+tags: - concurrency
   - multithreading
   - synchronization
   - race-conditions
   - mutexes
   - semaphores
+date_created: 2025-10-12
+date_updated: 2025-10-13
+moc: moc-concurrency
+related_questions:   - q-os-fundamentals-concepts--computer-science--hard
+  - q-kotlin-coroutines-advanced--kotlin--hard
+  - q-clean-code-principles--software-engineering--medium
+slug: concurrency-fundamentals-computer-science-hard
+subtopics:   - concurrency
+  - multithreading
+  - synchronization
+  - race-conditions
+  - locks
 ---
-
 # Concurrency Fundamentals
 
 ## English Version

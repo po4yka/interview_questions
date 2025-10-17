@@ -1,15 +1,17 @@
 ---
-tags:
-  - garbage-collection
+id: "20251015082237147"
+title: "How Gc Knows Object Can Be Destroyed / Как GC знает что объект можно уничтожить"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - garbage-collection
   - gc-algorithm
   - jvm
   - kotlin
   - programming-languages
   - reachability
-difficulty: easy
-status: draft
 ---
-
 # Как сборщик мусора понимает что объект можно уничтожить?
 
 # Question (EN)

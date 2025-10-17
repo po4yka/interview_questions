@@ -1,24 +1,26 @@
 ---
+id: "20251015082238598"
+title: "Android Jetpack Overview / Обзор Android Jetpack"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-13
+tags: - android
   - jetpack
   - androidx
   - libraries
-difficulty: easy
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
 
-# Что такое Android Jetpack?
-
 # Question (EN)
+
 > What is Android Jetpack?
 
 # Вопрос (RU)
+
 > Что такое Android Jetpack?
 
 ---
@@ -341,13 +343,13 @@ fun UserItem(user: User) {
 
 ### Категории Jetpack библиотек
 
-| Категория | Библиотеки | Назначение |
-|-----------|-----------|------------|
-| **Foundation** | AppCompat, KTX, Multidex | Базовая совместимость и расширения |
-| **Architecture** | ViewModel, LiveData, Room, WorkManager, Navigation | Архитектура приложения |
-| **UI** | Compose, Fragment, RecyclerView, ViewPager2 | Компоненты интерфейса |
-| **Behavior** | Permissions, Notifications, Preferences | Поведение приложения |
-| **Data** | DataStore, Paging, Room | Работа с данными |
+| Категория        | Библиотеки                                         | Назначение                         |
+| ---------------- | -------------------------------------------------- | ---------------------------------- |
+| **Foundation**   | AppCompat, KTX, Multidex                           | Базовая совместимость и расширения |
+| **Architecture** | ViewModel, LiveData, Room, WorkManager, Navigation | Архитектура приложения             |
+| **UI**           | Compose, Fragment, RecyclerView, ViewPager2        | Компоненты интерфейса              |
+| **Behavior**     | Permissions, Notifications, Preferences            | Поведение приложения               |
+| **Data**         | DataStore, Paging, Room                            | Работа с данными                   |
 
 ### Преимущества использования Jetpack
 
@@ -495,9 +497,24 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
+## Follow-ups
+
+-   When to migrate from SharedPreferences to DataStore and how?
+-   View-based UI vs Jetpack Compose — coexistence and migration strategy?
+-   WorkManager vs Foreground Service for periodic/background work?
+
+## References
+
+-   `https://developer.android.com/jetpack` — Jetpack overview
+-   `https://developer.android.com/topic/libraries/architecture` — Architecture Components
+-   `https://developer.android.com/topic/libraries/architecture/workmanager` — WorkManager
+-   `https://developer.android.com/topic/libraries/data-store` — DataStore
+-   `https://developer.android.com/jetpack/compose` — Compose
+
 ## Related Questions
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Jetpack, View
-- [[q-adaptive-layouts-compose--jetpack-compose--hard]] - Jetpack, View
-- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - Jetpack, View
+
+-   [[q-compose-custom-layout--jetpack-compose--hard]] - Jetpack, View
+-   [[q-adaptive-layouts-compose--jetpack-compose--hard]] - Jetpack, View
+-   [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - Jetpack, View

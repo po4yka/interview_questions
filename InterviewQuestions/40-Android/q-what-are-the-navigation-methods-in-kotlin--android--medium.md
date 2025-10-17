@@ -1,7 +1,11 @@
 ---
+id: "20251015082238620"
+title: "What Are The Navigation Methods In Kotlin / Какие методы навигации в Kotlin"
 topic: android
-tags:
-  - Jetpack Navigation Component
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Jetpack Navigation Component
   - FragmentTransaction
   - Intent
   - NavHostFragment
@@ -10,10 +14,7 @@ tags:
   - ui
   - navigation
   - fragments
-difficulty: medium
-status: draft
 ---
-
 # What are the navigation methods in Kotlin?
 
 # Вопрос (RU)

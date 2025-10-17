@@ -1,6 +1,11 @@
 ---
-tags:
-  - collections
+id: "20251015082237151"
+title: "Equals Hashcode Rules / Правила equals и hashCode"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - collections
   - contracts
   - equals
   - hashcode
@@ -8,10 +13,7 @@ tags:
   - kotlin
   - object-methods
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # Какие существуют правила для методов equals и hashcode?
 
 # Question (EN)

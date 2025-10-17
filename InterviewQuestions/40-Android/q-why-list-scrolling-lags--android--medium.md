@@ -1,7 +1,11 @@
 ---
+id: "20251015082238607"
+title: "Why List Scrolling Lags / Почему тормозит скроллинг списка"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - android
   - android/performance
   - android/recyclerview
   - diffutil
@@ -10,14 +14,11 @@ tags:
   - recyclerview
   - scrolling
   - viewholder
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Почему при скролле может тормозить список?
 
 **English**: Why might list scrolling lag?
@@ -555,25 +556,8 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: List<
 
 ## Related Questions
 
-### Computer Science Fundamentals
+### Related (Medium)
 - [[q-list-vs-sequence--programming-languages--medium]] - Data Structures
-
-### Kotlin Language Features
-- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
-- [[q-array-vs-list-kotlin--kotlin--easy]] - Data Structures
-- [[q-kotlin-collections--kotlin--medium]] - Data Structures
-- [[q-list-vs-sequence--kotlin--medium]] - Data Structures
-- [[q-deferred-async-patterns--kotlin--medium]] - Performance
-- [[q-channel-buffering-strategies--kotlin--hard]] - Performance
-
----
-
-## Related Questions
-
-### Computer Science Fundamentals
-- [[q-list-vs-sequence--programming-languages--medium]] - Data Structures
-
-### Kotlin Language Features
 - [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
 - [[q-array-vs-list-kotlin--kotlin--easy]] - Data Structures
 - [[q-kotlin-collections--kotlin--medium]] - Data Structures

@@ -1,18 +1,11 @@
 ---
-topic: kotlin
 id: "20251012-180006"
-title: "Dispatchers.Main.immediate vs Dispatchers.Main / Dispatchers.Main.immediate vs Dispatchers.Main"
-subtopics:
-  - coroutines
-  - dispatchers
-  - main
-  - performance
-  - android
+title: "Dispatchers.Main.immediate vs Dispatchers.Main"
+topic: kotlin
 difficulty: medium
-moc: moc-kotlin
 status: draft
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - dispatchers
   - main
@@ -21,8 +14,13 @@ tags:
   - android
   - ui-thread
   - optimization
+moc: moc-kotlin
+subtopics:   - coroutines
+  - dispatchers
+  - main
+  - performance
+  - android
 ---
-
 # Dispatchers.Main.immediate vs Dispatchers.Main
 
 ## English
@@ -30,7 +28,17 @@ tags:
 ### Question
 What is Dispatchers.Main.immediate and how does it differ from Dispatchers.Main? When does Main.immediate avoid dispatch and what are the performance implications? Provide production examples of UI updates, view state changes, performance measurements, and testing strategies.
 
-### Answer
+# Question (EN)
+> What is Dispatchers.Main.immediate and how does it differ from Dispatchers.Main? When does Main.immediate avoid dispatch and what are the performance implications? Provide production examples of UI updates, view state changes, performance measurements, and testing strategies.
+
+# Вопрос (RU)
+> What is Dispatchers.Main.immediate and how does it differ from Dispatchers.Main? When does Main.immediate avoid dispatch and what are the performance implications? Provide production examples of UI updates, view state changes, performance measurements, and testing strategies.
+
+---
+
+## Answer (EN)
+
+
 
 **Dispatchers.Main.immediate** is an optimization of Dispatchers.Main that avoids unnecessary dispatch when already on the main thread. This can significantly improve performance by eliminating dispatch overhead.
 
@@ -758,12 +766,11 @@ lifecycleScope.launch(Dispatchers.Main) {
 
 ---
 
-## Русский
 
-### Вопрос
+## Ответ (RU)
+
+*(Краткое содержание основных пунктов из английской версии)*
 Что такое Dispatchers.Main.immediate и чем он отличается от Dispatchers.Main? Когда Main.immediate избегает dispatch и каковы последствия для производительности? Приведите production примеры обновлений UI, изменений состояния view, измерений производительности и стратегий тестирования.
-
-### Ответ
 
 **Dispatchers.Main.immediate** — это оптимизация Dispatchers.Main, которая избегает ненужного dispatch когда уже находится на главном потоке. Это может значительно улучшить производительность за счет устранения overhead dispatch.
 

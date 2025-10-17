@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237214"
+title: "Equals Hashcode Purpose / Назначение equals и hashCode"
+topic: computer-science
 difficulty: hard
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Why are equals and hashcode methods needed?
 
 # Question (EN)

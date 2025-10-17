@@ -1,12 +1,13 @@
 ---
+id: "20251015082237062"
+title: "Job Vs Supervisorjob / Job против Supervisorjob"
 topic: kotlin
-tags:
-  - programming-languages
-  - kotlin
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
+  - kotlin
 ---
-
 # В чем отличие между job и supervisor job
 
 **English**: What is the difference between Job and SupervisorJob?

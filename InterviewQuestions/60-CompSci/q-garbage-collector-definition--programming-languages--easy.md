@@ -1,6 +1,11 @@
 ---
-tags:
-  - automatic-memory
+id: "20251015082237087"
+title: "Garbage Collector Definition / Определение Garbage Collector"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - automatic-memory
   - garbage-collection
   - gc
   - java
@@ -8,10 +13,7 @@ tags:
   - kotlin
   - memory-management
   - programming-languages
-difficulty: easy
-status: draft
 ---
-
 # Что такое сборщик мусора?
 
 # Question (EN)

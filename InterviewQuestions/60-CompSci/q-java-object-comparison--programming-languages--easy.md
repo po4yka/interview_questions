@@ -1,21 +1,22 @@
 ---
+id: "20251015082237121"
+title: "Java Object Comparison / Java Object Сравнение"
 topic: programming-languages
-subtopics: ["java", "jvm", "language-features"]
-tags:
-  - equality
+difficulty: easy
+status: draft
+created: 2025-10-13
+tags: - equality
   - equals
   - hashcode
   - java
   - object-comparison
   - programming-languages
-difficulty: easy
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-programming-languages
 related_questions: []
+subtopics: ["java", "jvm", "language-features"]
 ---
-
 # Как сравниваются объекты в Java?
 
 # Question (EN)

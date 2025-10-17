@@ -1,7 +1,11 @@
 ---
+id: "20251015082237581"
+title: "List Elements Problems / Проблемы элементов списка"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - android
   - android/performance
   - android/recyclerview
   - concurrency
@@ -10,14 +14,11 @@ tags:
   - memory
   - performance
   - recyclerview
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Какие могут быть проблемы с элементами списка?
 
 **English**: What problems can occur with list elements?

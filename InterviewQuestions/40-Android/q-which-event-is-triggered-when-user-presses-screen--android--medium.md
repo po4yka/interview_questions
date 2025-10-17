@@ -1,11 +1,12 @@
 ---
+id: "20251015082237582"
+title: "Which Event Is Triggered When User Presses Screen / Какое событие срабатывает когда пользователь нажимает на экран"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # Which event is triggered when user presses the screen?
 
 ## EN (expanded)

@@ -1,15 +1,16 @@
 ---
+id: "20251015082237306"
+title: "Mvi One Time Events / Одноразовые события в MVI"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - mvi
   - architecture
   - state-management
   - events
-difficulty: medium
-status: draft
 ---
-
 # MVI: Обработка одноразовых событий (One-time Events)
 
 **English**: How to handle one-time events in MVI architecture?

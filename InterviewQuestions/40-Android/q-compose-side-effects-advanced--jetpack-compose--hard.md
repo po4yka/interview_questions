@@ -1,14 +1,15 @@
 ---
+id: "20251015082237388"
+title: "Compose Side Effects Advanced / Побочные эффекты Compose продвинутый уровень"
 topic: jetpack-compose
-tags:
-  - jetpack-compose
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - jetpack-compose
   - side-effects
   - lifecycle
   - launched-effect
-difficulty: hard
-status: draft
 ---
-
 # Compare Side Effect APIs and Implement Location Tracking
 
 **English**: Compare LaunchedEffect, DisposableEffect, SideEffect, and produceState. When should you use each? Implement a location tracking composable.
@@ -564,6 +565,181 @@ Jetpack Compose предоставляет несколько API для side-э
 | **SideEffect** | Нет scope | Нет очистки | Синхронизация с не-Compose кодом | Каждая успешная recomposition |
 | **produceState** | CoroutineScope | Автоматическая отмена | Конвертация async в State | Изменение ключа или выход из composition |
 
+### LaunchedEffect - Побочные эффекты с корутинами
+
+**Когда использовать**: Запуск корутин для suspend функций, сбора Flow, отложенных операций.
+
+**Характеристики**:
+- Выполняется в coroutine scope, привязанном к lifecycle composition
+- Автоматически отменяется при выходе из composition или изменении ключей
+- Перезапускается когда любой параметр-ключ изменяется
+- Идеально для API вызовов, операций с БД, сбора Flow
+
+```kotlin
+@Composable
+fun UserDataScreen(userId: String) {
+    var userData by remember { mutableStateOf<UserData?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(userId) {
+        // Отменяет предыдущую корутину если userId изменился
+        isLoading = true
+        error = null
+
+        try {
+            // Вызов suspend функции
+            userData = repository.getUserData(userId)
+        } catch (e: Exception) {
+            error = e.message
+        } finally {
+            isLoading = false
+        }
+    }
+
+    when {
+        isLoading -> LoadingIndicator()
+        error != null -> ErrorView(error!!)
+        userData != null -> UserContent(userData!!)
+    }
+}
+```
+
+**Пример с несколькими ключами**:
+```kotlin
+@Composable
+fun SearchWithFilters(
+    query: String,
+    filters: FilterOptions
+) {
+    var results by remember { mutableStateOf<List<Item>>(emptyList()) }
+
+    // Перезапускается когда query ИЛИ filters изменяются
+    LaunchedEffect(query, filters) {
+        delay(300) // Debounce
+        results = searchRepository.search(query, filters)
+    }
+
+    ResultsList(results)
+}
+```
+
+### DisposableEffect - Управление подписками
+
+**Когда использовать**: Регистрация/отмена слушателей, наблюдателей или любых ресурсов требующих явной очистки.
+
+**Характеристики**:
+- Требует явного блока onDispose (обязательно)
+- onDispose вызывается при выходе из composition или изменении ключей
+- Нет автоматической поддержки корутин
+- Идеально для LocationManager, BroadcastReceiver, lifecycle наблюдателей
+
+```kotlin
+@Composable
+fun SensorMonitor(sensorType: Int) {
+    var sensorData by remember { mutableStateOf<FloatArray?>(null) }
+    val context = LocalContext.current
+
+    DisposableEffect(sensorType) {
+        val sensorManager = context.getSystemService<SensorManager>()!!
+        val sensor = sensorManager.getDefaultSensor(sensorType)
+
+        val listener = object : SensorEventListener {
+            override fun onSensorChanged(event: SensorEvent) {
+                sensorData = event.values.clone()
+            }
+            override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+        }
+
+        sensorManager.registerListener(
+            listener,
+            sensor,
+            SensorManager.SENSOR_DELAY_NORMAL
+        )
+
+        // ОБЯЗАТЕЛЬНО: очистка при dispose
+        onDispose {
+            sensorManager.unregisterListener(listener)
+        }
+    }
+
+    SensorDisplay(sensorData)
+}
+```
+
+### SideEffect - Синхронизация состояния
+
+**Когда использовать**: Публикация Compose состояния в не-Compose код после успешной recomposition.
+
+**Характеристики**:
+- Выполняется после каждой успешной recomposition
+- Нет очистки или отмены
+- Выполняется синхронно
+- Идеально для аналитики, синхронизации с не-Compose состоянием
+
+```kotlin
+@Composable
+fun ScreenWithAnalytics(screenName: String, userId: String) {
+    // Выполняется после КАЖДОЙ recomposition с обновленными значениями
+    SideEffect {
+        analytics.logScreenView(
+            screen = screenName,
+            userId = userId
+        )
+    }
+
+    ScreenContent()
+}
+```
+
+**Важно**: Используйте экономно - выполняется при каждой recomposition!
+
+### produceState - Конвертация Async в State
+
+**Когда использовать**: Конвертация suspend функций или Flows в объекты State.
+
+**Характеристики**:
+- Возвращает State<T>
+- Coroutine scope предоставляется автоматически
+- Отменяется при dispose или изменении ключа
+- Чистый API для трансформации async → State
+
+```kotlin
+@Composable
+fun loadNetworkImage(url: String): State<ImageBitmap?> {
+    return produceState<ImageBitmap?>(initialValue = null, url) {
+        // Выполняется в корутине, отменяется при dispose
+        value = imageLoader.load(url)
+    }
+}
+
+// Использование
+@Composable
+fun NetworkImage(url: String) {
+    val imageState = loadNetworkImage(url)
+
+    imageState.value?.let { bitmap ->
+        Image(bitmap, contentDescription = null)
+    } ?: CircularProgressIndicator()
+}
+```
+
+**С Flow**:
+```kotlin
+@Composable
+fun <T> Flow<T>.collectAsStateWithLifecycle(
+    initialValue: T,
+    lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle,
+    minActiveState: Lifecycle.State = Lifecycle.State.STARTED
+): State<T> {
+    return produceState(initialValue, this, lifecycle, minActiveState) {
+        lifecycle.repeatOnLifecycle(minActiveState) {
+            collect { value = it }
+        }
+    }
+}
+```
+
 ### Дерево решений: Какой Side Effect использовать?
 
 ```
@@ -581,23 +757,302 @@ Jetpack Compose предоставляет несколько API для side-э
        Используйте SideEffect
 ```
 
-[Полная реализация отслеживания местоположения приведена в английском разделе]
+### Полная реализация отслеживания местоположения
+
+```kotlin
+data class LocationState(
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
+    val accuracy: Float = 0f,
+    val timestamp: Long = 0L,
+    val isTracking: Boolean = false,
+    val error: String? = null
+)
+
+@Composable
+fun LocationTracker(
+    updateIntervalMs: Long = 5000L,
+    minDistanceMeters: Float = 10f,
+    onLocationUpdate: (LocationState) -> Unit = {}
+) {
+    var locationState by remember { mutableStateOf(LocationState()) }
+    val context = LocalContext.current
+
+    // Проверка разрешений
+    val hasLocationPermission = remember {
+        ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    DisposableEffect(hasLocationPermission, updateIntervalMs, minDistanceMeters) {
+        if (!hasLocationPermission) {
+            locationState = locationState.copy(
+                error = "Разрешение на местоположение не предоставлено",
+                isTracking = false
+            )
+            onDispose { }
+            return@DisposableEffect
+        }
+
+        val locationManager = context.getSystemService<LocationManager>()
+
+        if (locationManager == null) {
+            locationState = locationState.copy(
+                error = "LocationManager недоступен",
+                isTracking = false
+            )
+            onDispose { }
+            return@DisposableEffect
+        }
+
+        val listener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                val newState = LocationState(
+                    latitude = location.latitude,
+                    longitude = location.longitude,
+                    accuracy = location.accuracy,
+                    timestamp = location.time,
+                    isTracking = true,
+                    error = null
+                )
+                locationState = newState
+                onLocationUpdate(newState)
+            }
+
+            @Deprecated("Deprecated in Java")
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+
+            override fun onProviderEnabled(provider: String) {
+                locationState = locationState.copy(
+                    error = null,
+                    isTracking = true
+                )
+            }
+
+            override fun onProviderDisabled(provider: String) {
+                locationState = locationState.copy(
+                    error = "Провайдер местоположения отключен",
+                    isTracking = false
+                )
+            }
+        }
+
+        try {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                updateIntervalMs,
+                minDistanceMeters,
+                listener
+            )
+
+            // Получить последнее известное местоположение сразу
+            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)?.let { location ->
+                locationState = LocationState(
+                    latitude = location.latitude,
+                    longitude = location.longitude,
+                    accuracy = location.accuracy,
+                    timestamp = location.time,
+                    isTracking = true,
+                    error = null
+                )
+            }
+        } catch (e: SecurityException) {
+            locationState = locationState.copy(
+                error = "Ошибка безопасности: ${e.message}",
+                isTracking = false
+            )
+        }
+
+        // ОЧИСТКА: Отменить регистрацию слушателя когда эффект завершается
+        onDispose {
+            try {
+                locationManager.removeUpdates(listener)
+            } catch (e: Exception) {
+                // Обрабатываем ошибки очистки без вывода
+            }
+        }
+    }
+
+    // Отображение UI
+    LocationDisplay(locationState)
+}
+
+@Composable
+private fun LocationDisplay(state: LocationState) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = "Отслеживание местоположения",
+                style = MaterialTheme.typography.titleLarge
+            )
+
+            Divider()
+
+            if (state.error != null) {
+                Text(
+                    text = "Ошибка: ${state.error}",
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("Статус:")
+                Text(
+                    text = if (state.isTracking) "Отслеживание" else "Не отслеживается",
+                    color = if (state.isTracking) Color.Green else Color.Red
+                )
+            }
+
+            if (state.isTracking) {
+                Text("Широта: ${state.latitude}")
+                Text("Долгота: ${state.longitude}")
+                Text("Точность: ${state.accuracy}м")
+                Text(
+                    "Последнее обновление: ${
+                        SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+                            .format(Date(state.timestamp))
+                    }"
+                )
+            }
+        }
+    }
+}
+```
+
+### Продвинутый пример: Комбинирование нескольких Side Effects
+
+```kotlin
+@Composable
+fun RealtimeChatMessage(messageId: String) {
+    var message by remember { mutableStateOf<Message?>(null) }
+    var isOnline by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+
+    // LaunchedEffect: Загрузка данных сообщения
+    LaunchedEffect(messageId) {
+        message = repository.getMessage(messageId)
+    }
+
+    // DisposableEffect: Подписка на real-time обновления
+    DisposableEffect(messageId) {
+        val listener = object : MessageListener {
+            override fun onMessageUpdated(updatedMessage: Message) {
+                message = updatedMessage
+            }
+        }
+
+        firestore.collection("messages")
+            .document(messageId)
+            .addSnapshotListener(listener)
+
+        onDispose {
+            // Очистка слушателя
+            listener.remove()
+        }
+    }
+
+    // SideEffect: Отслеживание просмотров сообщения
+    SideEffect {
+        message?.let {
+            analytics.logEvent("message_viewed", bundleOf("id" to messageId))
+        }
+    }
+
+    // produceState: Мониторинг подключения
+    val connectivityState = produceConnectivityState()
+
+    MessageView(message, connectivityState.value)
+}
+
+@Composable
+fun produceConnectivityState(): State<Boolean> {
+    val context = LocalContext.current
+    return produceState(initialValue = false) {
+        val connectivityManager = context.getSystemService<ConnectivityManager>()!!
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                value = true
+            }
+            override fun onLost(network: Network) {
+                value = false
+            }
+        }
+
+        connectivityManager.registerDefaultNetworkCallback(callback)
+
+        awaitDispose {
+            connectivityManager.unregisterNetworkCallback(callback)
+        }
+    }
+}
+```
 
 ### Распространенные ошибки
 
-**1. Забытый onDispose в DisposableEffect** - приводит к утечкам памяти
-**2. Неправильные ключи** - вызывают ненужные перезапуски
-**3. Чрезмерное использование SideEffect** - выполняется при каждой recomposition
+**1. Забытый onDispose в DisposableEffect**
+```kotlin
+// НЕПРАВИЛЬНО - Утечка памяти!
+DisposableEffect(Unit) {
+    val listener = createListener()
+    register(listener)
+    // Отсутствует onDispose!
+}
+
+// ПРАВИЛЬНО
+DisposableEffect(Unit) {
+    val listener = createListener()
+    register(listener)
+    onDispose { unregister(listener) }
+}
+```
+
+**2. Неправильные ключи вызывают ненужные перезапуски**
+```kotlin
+// НЕПРАВИЛЬНО - Перезапускается при каждой recomposition
+LaunchedEffect(viewModel) {
+    loadData()
+}
+
+// ПРАВИЛЬНО - Перезапускается только когда нужно
+LaunchedEffect(viewModel.userId) {
+    loadData()
+}
+```
+
+**3. Чрезмерное использование SideEffect**
+```kotlin
+// НЕПРАВИЛЬНО - Выполняется каждую recomposition (дорого!)
+SideEffect {
+    heavyComputation()
+}
+
+// ПРАВИЛЬНО - Используйте LaunchedEffect с правильными ключами
+LaunchedEffect(key) {
+    heavyComputation()
+}
+```
 
 ### Лучшие практики
 
-1. Выбирайте правильный API на основе дерева решений
-2. Всегда указывайте правильные ключи для поведения перезапуска
-3. Очистка в DisposableEffect обязательна - без исключений
-4. Используйте rememberUpdatedState для callback'ов
-5. Предпочитайте produceState для чистой конвертации async → State
-6. SideEffect только для синхронизации, не для async работы
-7. Тестируйте side effects с проверкой корректной очистки
+1. **Выбирайте правильный API** на основе дерева решений
+2. **Всегда указывайте правильные ключи** для поведения перезапуска
+3. **Очистка DisposableEffect обязательна** - без исключений
+4. **Используйте rememberUpdatedState** для callback'ов, которые не должны перезапускать эффекты
+5. **Предпочитайте produceState** для чистой конвертации async → State
+6. **SideEffect для синхронизации**, не для async работы
+7. **Тестируйте side effects** с проверкой корректной очистки
 
 
 ---

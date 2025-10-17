@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237129"
+title: "Synchronized Blocks With Coroutines / Синхронизированные блоки с корутинами"
+topic: computer-science
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Why Not Use Synchronized Blocks with Coroutines?
 
 # Question (EN)

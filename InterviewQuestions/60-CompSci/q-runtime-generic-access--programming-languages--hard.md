@@ -1,14 +1,16 @@
 ---
-tags:
-  - generics
+id: "20251015082237091"
+title: "Runtime Generic Access / Доступ к дженерикам во время выполнения"
+topic: computer-science
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - generics
   - kotlin
   - programming-languages
   - reified
   - type-erasure
-difficulty: hard
-status: draft
 ---
-
 # Можно ли получить в runtime доступ к типу дженерика?
 
 # Question (EN)

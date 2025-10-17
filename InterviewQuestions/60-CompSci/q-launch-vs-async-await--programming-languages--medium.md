@@ -1,15 +1,17 @@
 ---
-tags:
-  - async
+id: "20251015082237160"
+title: "Launch Vs Async Await"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - async
   - await
   - coroutines
   - kotlin
   - launch
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # Чем launch отличается от async/await ?
 
 # Question (EN)

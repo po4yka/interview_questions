@@ -1,24 +1,23 @@
 ---
-tags:
-  - android
+id: "20251015082238610"
+title: "Cicd Pipeline Setup / Настройка CI/CD пайплайна"
+topic: devops-ci-cd
+difficulty: medium
+status: draft
+created: 2025-10-11
+tags: - android
   - ci-cd
   - devops
   - github-actions
   - gitlab-ci
   - automation
-topic: devops-ci-cd
-subtopics: [ci-cd, devops]
-difficulty: medium
-status: draft
-related_questions:
-  - q-cicd-automated-testing--devops--medium
-  - q-gradle-build-optimization--build--medium
-  - q-app-bundle-optimization--distribution--medium
-created: 2025-10-11
 date_updated: 2025-10-13
 moc: moc-devops-ci-cd
+related_questions:   - q-cicd-automated-testing--devops--medium
+  - q-gradle-build-optimization--build--medium
+  - q-app-bundle-optimization--distribution--medium
+subtopics: [ci-cd, devops]
 ---
-
 # Question (EN)
 How do you set up a CI/CD pipeline for an Android project? Compare GitHub Actions, GitLab CI, and Jenkins. What are the essential stages in an Android CI/CD pipeline?
 
@@ -358,7 +357,7 @@ instrumented_tests:
     - echo "Starting emulator..."
     - adb start-server
     - emulator -avd test -no-audio -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim &
-    - adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+    - adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed)]]; do sleep 1; done;'
     - adb devices
     - ./gradlew connectedDebugAndroidTest
   artifacts:

@@ -1,11 +1,12 @@
 ---
+id: "20251015082236031"
+title: "Object Companion Object"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: hard
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # What is object / companion object?
 
 # Question (EN)

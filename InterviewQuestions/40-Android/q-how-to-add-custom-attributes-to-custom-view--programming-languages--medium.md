@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237394"
+title: "How To Add Custom Attributes To Custom View / Как добавить кастомные атрибуты к кастомным View"
+topic: android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Как добавить кастомные атрибуты у кастомного view?
 
 ## Answer (EN)

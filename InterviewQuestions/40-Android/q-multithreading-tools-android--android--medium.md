@@ -1,7 +1,11 @@
 ---
+id: "20251015082237446"
+title: "Multithreading Tools Android / Инструменты многопоточности Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - multithreading
   - concurrency
   - asynctask
@@ -10,10 +14,7 @@ tags:
   - coroutines
   - background-tasks
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Multithreading Tools in Android / Инструменты многопоточности в Android
 
 **English**: What tools for multithreading do you know?

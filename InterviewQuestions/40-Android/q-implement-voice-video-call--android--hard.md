@@ -724,25 +724,16 @@ fun VideoCallScreen(
 ### Prerequisites (Easier)
 - [[q-http-protocols-comparison--android--medium]] - Networking
 - [[q-parallel-network-calls-coroutines--kotlin--medium]] - Coroutines
-
 ### Related (Hard)
 - [[q-design-instagram-stories--android--hard]] - Media
 - [[q-data-sync-unstable-network--android--hard]] - Networking
 - [[q-design-uber-app--android--hard]] - Location
 - [[q-design-whatsapp-app--android--hard]] - Messaging
-### Prerequisites (Easier)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-parallel-network-calls-coroutines--kotlin--medium]] - Coroutines
-
 ### Related (Hard)
 - [[q-design-instagram-stories--android--hard]] - Media
 - [[q-data-sync-unstable-network--android--hard]] - Networking
 - [[q-design-uber-app--android--hard]] - Location
 - [[q-design-whatsapp-app--android--hard]] - Messaging
-### Prerequisites (Easier)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-parallel-network-calls-coroutines--kotlin--medium]] - Coroutines
-
 ### Related (Hard)
 - [[q-design-instagram-stories--android--hard]] - Media
 - [[q-data-sync-unstable-network--android--hard]] - Networking

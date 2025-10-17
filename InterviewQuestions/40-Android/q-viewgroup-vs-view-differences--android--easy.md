@@ -1,15 +1,16 @@
 ---
+id: "20251015082237402"
+title: "Viewgroup Vs View Differences"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - viewgroup
   - view
   - ui
   - view-hierarchy
-difficulty: easy
-status: draft
 ---
-
 # What's ViewGroup? How are they different from Views?
 
 **Russian**: Что такое ViewGroup? Чем они отличаются от View?

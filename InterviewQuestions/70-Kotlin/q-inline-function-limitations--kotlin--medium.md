@@ -1,14 +1,15 @@
 ---
+id: "20251015082236019"
+title: "Inline Function Limitations / Ограничения inline функций"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - inline-functions
   - performance
   - limitations
-difficulty: medium
-status: draft
 ---
-
 # Когда нельзя использовать inline функции?
 
 **English**: When can't you use inline functions?

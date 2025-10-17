@@ -1,15 +1,16 @@
 ---
+id: "20251015082237064"
+title: "Executor Service Java / ExecutorService в Java"
 topic: kotlin
-tags:
-  - java
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - java
   - concurrency
   - multithreading
   - executor
   - thread-pool
-difficulty: medium
-status: draft
 ---
-
 # Как работают Executor и ExecutorService?
 
 # Question (EN)

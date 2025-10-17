@@ -1,6 +1,6 @@
 ---
 id: 20251006-012
-title: "Semantics in Jetpack Compose / Semantics в Jetpack Compose"
+title: "Semantics in Jetpack Compose"
 aliases: []
 
 # Classification

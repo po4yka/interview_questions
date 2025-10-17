@@ -1,16 +1,17 @@
 ---
+id: "20251015082237491"
+title: "Baseline Profiles Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - performance
   - baseline-profiles
   - aot
   - optimization
   - app-startup
-difficulty: medium
-status: draft
 ---
-
 # Baseline Profiles in Android
 
 **Сложность**: Medium

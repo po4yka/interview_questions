@@ -1,16 +1,17 @@
 ---
+id: "20251015082237348"
+title: "What Is Viewmodel / Что такое ViewModel"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - viewmodel
   - architecture
   - lifecycle
   - mvvm
   - state-management
-difficulty: medium
-status: draft
 ---
-
 # What is ViewModel?
 
 **Russian**: Что такое ViewModel?

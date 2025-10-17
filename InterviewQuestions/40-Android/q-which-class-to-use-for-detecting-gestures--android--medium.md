@@ -1,14 +1,15 @@
 ---
+id: "20251015082237347"
+title: "Which Class To Use For Detecting Gestures / Какой класс использовать для обнаружения жестов"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - gestures
   - ui
   - touch-events
-difficulty: medium
-status: draft
 ---
-
 # Which class can be used to catch different gestures?
 
 ## EN (expanded)

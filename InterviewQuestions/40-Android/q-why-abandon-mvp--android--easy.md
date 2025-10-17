@@ -1,7 +1,11 @@
 ---
+id: "20251015082237584"
+title: "Why Abandon Mvp / Почему отказаться от MVP"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/architecture-mvp
   - architecture-mvp
   - architecture-patterns
@@ -9,10 +13,7 @@ tags:
   - mvi
   - mvp
   - mvvm
-difficulty: easy
-status: draft
 ---
-
 # Почему многие отказываются от MVP?
 
 **English**: Why do many developers abandon MVP?

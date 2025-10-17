@@ -1,15 +1,17 @@
 ---
-tags:
-  - android
+id: "20251015082237508"
+title: "Vector Graphics Animations / Анимации векторной графики"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - vector-graphics
   - animated-vector-drawable
   - svg
   - animations
   - graphics
-difficulty: medium
-status: draft
 ---
-
 # Vector Graphics and Animated Vector Drawables
 
 # Question (EN)

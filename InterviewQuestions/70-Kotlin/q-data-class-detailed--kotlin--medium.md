@@ -1,17 +1,17 @@
 ---
-topic: kotlin
 id: "20251012-150011"
 title: "Data classes in Kotlin: features, limitations, and best practices"
-description: "Comprehensive guide to Kotlin data classes covering generated methods, copy(), componentN(), destructuring, limitations, and when to use them"
+topic: kotlin
+difficulty: medium
+status: draft
+created: "2025-10-12"
 tags: ["kotlin", "classes", "data-class", "kotlin-features", "difficulty/medium"]
-topic: "kotlin"
-subtopics: ["classes", "data-class", "kotlin-features"]
-moc: "moc-kotlin"
-status: "draft"
 date_created: "2025-10-12"
 date_updated: "2025-10-12"
+description: "Comprehensive guide to Kotlin data classes covering generated methods, copy(), componentN(), destructuring, limitations, and when to use them"
+moc: "moc-kotlin"
+subtopics: ["classes", "data-class", "kotlin-features"]
 ---
-
 # Data classes in Kotlin: features, limitations, and best practices
 
 ## English

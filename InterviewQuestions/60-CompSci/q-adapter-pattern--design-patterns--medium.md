@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237096"
+title: "Adapter Pattern / Adapter Паттерн"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - structural-patterns
   - adapter
   - gof-patterns
   - wrapper
-difficulty: medium
-status: draft
 ---
-
 # Adapter Pattern
 
 # Question (EN)

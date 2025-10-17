@@ -1,14 +1,16 @@
 ---
-tags:
-  - extension-functions
+id: "20251015082237201"
+title: "Extension Properties / Свойства-расширения"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - extension-functions
   - extensions
   - kotlin
   - programming-languages
   - properties
-difficulty: medium
-status: draft
 ---
-
 # Свойства какого вида можно добавить как расширение
 
 # Question (EN)

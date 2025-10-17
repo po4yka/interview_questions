@@ -1,11 +1,12 @@
 ---
+id: "20251015082237563"
+title: "Why Diffutil Needed / Зачем нужен DiffUtil"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # Why do we need DiffUtil?
 
 ## EN (expanded)

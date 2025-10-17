@@ -1,16 +1,17 @@
 ---
+id: "20251015082237246"
+title: "Large File Upload / Загрузка больших файлов"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - file-upload
   - workmanager
   - retrofit
   - background-processing
   - multipart
-difficulty: medium
-status: draft
 ---
-
 # Загрузка больших файлов на сервер в Android
 
 **English**: How to upload large files to server in Android?

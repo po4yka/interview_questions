@@ -469,50 +469,21 @@ coroutineScope {
 
 ### Prerequisites (Easier)
 - [[q-what-is-coroutine--kotlin--easy]] - Coroutines
-
 ### Related (Medium)
 - [[q-flow-exception-handling--kotlin--medium]] - Flow
 - [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Coroutines
 - [[q-coroutine-timeout-withtimeout--kotlin--medium]] - Coroutines
 - [[q-coroutine-supervisorjob-use-cases--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-structured-concurrency--kotlin--hard]] - Coroutines
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
-### Prerequisites (Easier)
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
-
-### Related (Medium)
-- [[q-flow-exception-handling--kotlin--medium]] - Flow
-- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Coroutines
-- [[q-coroutine-timeout-withtimeout--kotlin--medium]] - Coroutines
-- [[q-coroutine-supervisorjob-use-cases--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-structured-concurrency--kotlin--hard]] - Coroutines
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
-### Prerequisites (Easier)
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
-
-### Related (Medium)
-- [[q-flow-exception-handling--kotlin--medium]] - Flow
-- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Coroutines
-- [[q-coroutine-timeout-withtimeout--kotlin--medium]] - Coroutines
-- [[q-coroutine-supervisorjob-use-cases--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-structured-concurrency--kotlin--hard]] - Coroutines
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
-### Hub
-- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
-
-### Related (Medium)
 - [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
 - [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
 - [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
 - [[q-coroutine-context-explained--kotlin--medium]] - CoroutineContext explained
-
 ### Advanced (Harder)
+- [[q-structured-concurrency--kotlin--hard]] - Coroutines
+- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
 - [[q-coroutine-context-detailed--kotlin--hard]] - Deep dive into CoroutineContext
 - [[q-advanced-coroutine-patterns--kotlin--hard]] - Advanced patterns
 - [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization
+### Hub
+- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
+

@@ -1,15 +1,16 @@
 ---
+id: "20251015082237066"
+title: "Coroutinescope Vs Supervisorscope / Coroutinescope против Supervisorscope"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - scope
   - error-handling
   - structured-concurrency
-difficulty: medium
-status: draft
 ---
-
 # coroutineScope vs supervisorScope: обработка ошибок
 
 # Question (EN)

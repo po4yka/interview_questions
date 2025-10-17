@@ -1,14 +1,15 @@
 ---
+id: "20251015082134"
+title: "Associatewith Vs Associateby / associateWith против associateBy"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - collections
   - map
   - transformation
-difficulty: easy
-status: draft
 ---
-
 # associateWith() vs associateBy(): создание Map из коллекций
 
 **English**: Difference between associateWith() and associateBy()

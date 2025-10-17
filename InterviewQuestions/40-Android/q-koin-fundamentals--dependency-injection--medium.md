@@ -1,15 +1,16 @@
 ---
+id: "20251015082237507"
+title: "Koin Fundamentals / Основы Koin"
 topic: dependency-injection
-tags:
-  - dependency-injection
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - dependency-injection
   - koin
   - architecture
   - service-locator
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Koin Fundamentals / Основы Koin
 
 **English**: How does Koin differ from Dagger/Hilt? Implement a complete Koin module with factory, single, and viewModel definitions.

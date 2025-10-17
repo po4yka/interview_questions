@@ -1,11 +1,12 @@
 ---
+id: "20251015082237059"
+title: "Zip Parallelism Guarantee / Гарантия параллелизма zip"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Will zip guarantee parallel execution of 2 network requests launched for Coroutine
 
 **English**: Will zip guarantee parallel execution of 2 network requests launched for Coroutine?

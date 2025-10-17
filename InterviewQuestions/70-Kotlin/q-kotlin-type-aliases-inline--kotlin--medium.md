@@ -1,15 +1,16 @@
 ---
+id: "20251015082236026"
+title: "Kotlin Type Aliases Inline / Type aliases и inline в Kotlin"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - type-aliases
   - inline-classes
   - type-safety
   - performance
-difficulty: medium
-status: draft
 ---
-
 # Type Aliases vs Inline Classes vs Wrapper Classes
 
 **English**: When should you use type aliases vs inline classes vs wrapper classes? Compare memory overhead and type safety.
@@ -370,39 +371,349 @@ data class Address(
 
 ## Ответ (RU)
 
-Kotlin предоставляет три способа создания типовых абстракций.
+Kotlin предоставляет три способа создания типовых абстракций: псевдонимы типов (type aliases), встроенные классы (inline classes) и классы-обертки (wrapper classes). Каждый имеет различные компромиссы.
 
 ### Type Aliases - Только compile-time
 
-Создает альтернативные имена для существующих типов. Нет runtime overhead, нет type safety.
+**Назначение**: Создание альтернативных имен для существующих типов. Нет runtime overhead, нет type safety.
 
-### Inline Classes - Type Safety без overhead
+```kotlin
+// Псевдоним типа
+typealias UserId = String
+typealias Email = String
+typealias ProductId = Int
 
-Оборачивает одно значение с type safety и нулевой runtime стоимостью.
+fun getUser(id: UserId): User { ... }
+fun sendEmail(email: Email) { ... }
+
+// Проблема: Нет type safety во время выполнения!
+val userId: UserId = "user123"
+val email: Email = "user@example.com"
+
+sendEmail(userId)  // Компилируется! Псевдонимы не обеспечивают безопасность
+getUser(email)     // Компилируется! Они все просто String
+```
+
+**Характеристики**:
+- Нулевой runtime overhead
+- Нет type safety (только псевдонимы)
+- Полезны для сложных generic типов
+- Улучшают читаемость
+
+**Хорошие примеры использования**:
+```kotlin
+// Сложные generic типы
+typealias StringMap = Map<String, String>
+typealias Callback<T> = (T) -> Unit
+typealias Predicate<T> = (T) -> Boolean
+
+// Типы функций
+typealias ClickListener = (View) -> Unit
+typealias Validator = (String) -> Boolean
+```
+
+### Inline Classes (Value Classes) - Type Safety без overhead
+
+**Назначение**: Оборачивает одно значение с type safety и нулевой runtime стоимостью.
+
+```kotlin
+@JvmInline
+value class UserId(val value: String)
+
+@JvmInline
+value class Email(val value: String)
+
+@JvmInline
+value class ProductId(val value: Int)
+
+fun getUser(id: UserId): User { ... }
+fun sendEmail(email: Email) { ... }
+
+// Type safety!
+val userId = UserId("user123")
+val email = Email("user@example.com")
+
+sendEmail(userId)  // Ошибка компиляции! Несоответствие типов
+getUser(email)     // Ошибка компиляции! Несоответствие типов
+```
+
+**Характеристики**:
+- Строгая type safety во время компиляции
+- Нулевой runtime overhead (inlined)
+- Должен оборачивать одно значение
+- Может иметь методы и свойства
+
+**Продвинутое использование**:
+```kotlin
+@JvmInline
+value class Password(private val value: String) {
+    init {
+        require(value.length >= 8) { "Пароль слишком короткий" }
+    }
+
+    fun validate(): Boolean {
+        return value.any { it.isUpperCase() } &&
+               value.any { it.isDigit() }
+    }
+
+    // Нельзя открыть обернутое значение (безопасность)
+    override fun toString() = "***"
+}
+
+@JvmInline
+value class Percentage(val value: Double) {
+    init {
+        require(value in 0.0..100.0) { "Неверный процент" }
+    }
+
+    operator fun plus(other: Percentage) =
+        Percentage((value + other.value).coerceAtMost(100.0))
+
+    fun format() = "$value%"
+}
+```
+
+**Когда происходит inlining**:
+```kotlin
+@JvmInline
+value class UserId(val value: String)
+
+fun process(id: UserId) {
+    println(id.value)
+}
+
+// Компилируется в:
+// fun process(id: String) {  // Встроено!
+//     println(id)
+// }
+```
+
+**Когда происходит boxing**:
+```kotlin
+@JvmInline
+value class UserId(val value: String)
+
+interface UserRepository {
+    fun getUser(id: UserId): User  // Boxing!
+}
+
+val list: List<UserId> = listOf()  // Boxing!
+val any: Any = UserId("123")       // Boxing!
+```
 
 ### Wrapper Classes - Полный OOP с overhead
 
-Создает отдельные типы с полными OOP возможностями но с runtime overhead.
+**Назначение**: Создание отдельных типов с полными OOP возможностями но с runtime overhead.
+
+```kotlin
+// Обычный класс-обертка
+data class UserId(val value: String) {
+    init {
+        require(value.isNotBlank()) { "UserId не может быть пустым" }
+    }
+
+    fun toInt() = value.hashCode()
+}
+
+data class Email(val value: String) {
+    val domain: String get() = value.substringAfter('@')
+
+    init {
+        require('@' in value) { "Неверный email" }
+    }
+
+    fun isGmail() = domain == "gmail.com"
+}
+```
+
+**Характеристики**:
+- Полная type safety
+- Runtime создание объектов (heap allocation)
+- Может иметь несколько свойств
+- Поддержка наследования
+- Memory overhead
+
+**Когда использовать**:
+```kotlin
+// Сложные типы с несколькими свойствами
+data class Money(
+    val amount: BigDecimal,
+    val currency: Currency
+) {
+    operator fun plus(other: Money): Money {
+        require(currency == other.currency)
+        return Money(amount + other.amount, currency)
+    }
+}
+
+// Типы, требующие наследования
+abstract class Identifier(val value: String)
+class UserId(value: String) : Identifier(value)
+class ProductId(value: String) : Identifier(value)
+```
+
+### Сравнение производительности
+
+```kotlin
+// Результаты бенчмарков (приблизительно)
+// Type Alias: 0 нс (только compile-time)
+// Inline Class: 0 нс (inlined)
+// Wrapper Class: 10-50 нс (аллокация + GC)
+
+@Benchmark
+fun typeAlias(): String {
+    val id: UserId = "123"  // typealias UserId = String
+    return id  // Нет overhead
+}
+
+@Benchmark
+fun inlineClass(): String {
+    val id = UserId("123")  // @JvmInline value class UserId(val value: String)
+    return id.value  // Встроено, нет overhead
+}
+
+@Benchmark
+fun wrapperClass(): String {
+    val id = UserIdWrapper("123")  // data class UserIdWrapper(val value: String)
+    return id.value  // Heap allocation + доступ
+}
+```
+
+### Сравнение затрат памяти
+
+```kotlin
+// Type Alias
+typealias UserId = String
+val id: UserId = "123"  // 40 байт (объект String)
+
+// Inline Class
+@JvmInline
+value class UserId(val value: String)
+val id = UserId("123")  // 40 байт (объект String, UserId встроен)
+
+// Wrapper Class
+data class UserId(val value: String)
+val id = UserId("123")  // 40 байт (String) + 16 байт (объект UserId) = 56 байт
+```
 
 ### Матрица сравнения
 
 | Функция | Type Alias | Inline Class | Wrapper Class |
 |---------|------------|--------------|---------------|
-| **Type Safety** | Нет | Сильная | Сильная |
+| **Type Safety** | Нет (только compile-time имя) | Сильная | Сильная |
 | **Runtime Overhead** | Ноль | Ноль (при inlining) | Аллокация объекта |
 | **Память** | Нет overhead | Нет overhead | 16+ байт на экземпляр |
+| **Методы** | Нет | Да | Да |
+| **Наследование** | Нет | Нет | Да |
+| **Несколько свойств** | Нет | Нет | Да |
+| **Nullable** | Зависит от базового типа | Явно | Явно |
+| **Boxing** | Н/Д | Иногда (интерфейсы, коллекции) | Всегда объект |
 
-[Полные примеры и дерево решений приведены в английском разделе]
+### Дерево принятия решений
+
+```
+Нужна типовая абстракция?
+
+ Только для читаемости?
+   Используйте TYPE ALIAS
+     (Сложные generic, типы функций)
+
+ Нужна type safety?
+
+   Обертка одного значения?
+     Используйте INLINE CLASS
+       (ID, обертки примитивов, единицы измерения)
+
+   Несколько свойств ИЛИ наследование?
+      Используйте WRAPPER CLASS
+        (Доменные модели, сложные типы)
+```
+
+### Примеры из реальной жизни
+
+**Type Aliases**:
+```kotlin
+typealias Json = String
+typealias Callback<T> = (Result<T>) -> Unit
+typealias UsersMap = Map<UserId, User>
+
+interface ApiService {
+    suspend fun getData(): Json
+    fun observeUsers(callback: Callback<UsersMap>)
+}
+```
+
+**Inline Classes**:
+```kotlin
+@JvmInline
+value class Meters(val value: Double) {
+    operator fun plus(other: Meters) = Meters(value + other.value)
+}
+
+@JvmInline
+value class Seconds(val value: Long)
+
+@JvmInline
+value class Speed(val metersPerSecond: Double) {
+    constructor(meters: Meters, seconds: Seconds) : this(
+        meters.value / seconds.value
+    )
+}
+
+// Использование
+val distance = Meters(100.0)
+val time = Seconds(10)
+val speed = Speed(distance, time)
+```
+
+**Wrapper Classes**:
+```kotlin
+data class Location(
+    val latitude: Double,
+    val longitude: Double
+) {
+    fun distanceTo(other: Location): Meters {
+        // Вычислить расстояние
+    }
+}
+
+data class Address(
+    val street: String,
+    val city: String,
+    val country: String,
+    val location: Location?
+)
+```
+
+### Ограничения
+
+**Ограничения Type Alias**:
+- Нет type safety
+- Нельзя добавить методы
+- Нельзя наследовать или реализовать интерфейсы
+
+**Ограничения Inline Class**:
+- Только одно свойство (Kotlin 1.x)
+- Boxing в определенных контекстах (интерфейсы, коллекции)
+- Нельзя иметь lateinit или делегированные свойства
+- Нельзя расширять другие классы
+
+**Ограничения Wrapper Class**:
+- Runtime overhead
+- Аллокация памяти
+- Нагрузка на GC для часто создаваемых объектов
 
 ### Лучшие практики
 
-1. **Используйте type aliases** для сложных generic типов
+1. **Используйте type aliases** для сложных generic типов и читаемости
 2. **Используйте inline classes** для type-safe wrappers без overhead
-3. **Используйте wrapper classes** когда нужно несколько свойств
-4. **Предпочитайте inline classes** вместо type aliases для ID
+3. **Используйте wrapper classes** когда нужно несколько свойств или наследование
+4. **Предпочитайте inline classes** вместо type aliases для ID и единиц измерения
 5. **Знайте о boxing** с inline classes
-6. **Профилируйте производительность**
-7. **Используйте data classes** для wrapper classes
+6. **Профилируйте производительность** если создаете много короткоживущих объектов
+7. **Используйте data classes** для wrapper classes чтобы получить equals/hashCode/toString
 8. **Делайте свойства inline class private** для инкапсуляции
 9. **Добавляйте валидацию** в init блоках
-10. **Документируйте boxing поведение**
+10. **Документируйте boxing поведение** для inline classes
+
+**Резюме**: Kotlin предоставляет три способа создания типовых абстракций с различными компромиссами. Type aliases предоставляют нулевой overhead но без type safety. Inline classes обеспечивают strong type safety без runtime overhead. Wrapper classes предоставляют полный OOP функционал с runtime overhead. Выбирайте type aliases для сложных типов, inline classes для безопасных оберток без overhead, и wrapper classes когда нужно несколько свойств или наследование.

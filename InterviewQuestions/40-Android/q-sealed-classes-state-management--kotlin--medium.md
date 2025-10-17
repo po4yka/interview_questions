@@ -1,31 +1,28 @@
 ---
 id: 20251012-400005
 title: "Sealed Classes for State Management / Sealed классы для управления состоянием"
-slug: sealed-classes-state-management-kotlin-medium
 topic: android
-subtopics:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - sealed-classes
   - state-management
   - mvi
   - architecture
-status: draft
-difficulty: medium
-moc: moc-android
 date_created: 2025-10-12
 date_updated: 2025-10-12
-related_questions:
-  - q-mvi-architecture--android--hard
+moc: moc-android
+related_questions:   - q-mvi-architecture--android--hard
   - q-mvvm-architecture--android--medium
   - q-kotlin-coroutines-advanced--kotlin--hard
-tags:
-  - kotlin
+slug: sealed-classes-state-management-kotlin-medium
+subtopics:   - kotlin
   - sealed-classes
   - state-management
   - mvi
   - architecture
 ---
-
 # Sealed Classes for State Management
 
 ## English Version

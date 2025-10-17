@@ -1,21 +1,28 @@
 ---
+id: "20251015082237571"
+title: "Which Layout For Large List / Какой layout для большого списка"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/recyclerview
   - android/ui
   - layout
   - recyclerview
   - ui
-difficulty: easy
-status: draft
 ---
 
-# Какой layout выбрать для списка из большого количества элементов?
+# Question (EN)
 
-**English**: Which layout to choose for a list with a large number of elements?
+> Which layout to choose for a list with a large number of elements?
+
+# Вопрос (RU)
+
+> Какой layout выбрать для списка из большого количества элементов?
 
 ## Answer (EN)
+
 For displaying lists with a large number of elements in Android, you should use **RecyclerView**. It is the most efficient and recommended component for displaying large datasets in list or grid format.
 
 ### Why RecyclerView?
@@ -202,20 +209,21 @@ adapter.submitList(newList)
 
 ### Comparison: RecyclerView vs ListView
 
-| Feature | RecyclerView | ListView |
-|---------|--------------|----------|
-| View Recycling | Enforced | Optional |
-| Performance | Excellent | Poor for large lists |
-| Flexibility | High | Limited |
-| Animations | Built-in | Manual |
-| Layout Options | Multiple | Vertical only |
-| Recommendation | - Preferred | - Deprecated |
+| Feature        | RecyclerView | ListView             |
+| -------------- | ------------ | -------------------- |
+| View Recycling | Enforced     | Optional             |
+| Performance    | Excellent    | Poor for large lists |
+| Flexibility    | High         | Limited              |
+| Animations     | Built-in     | Manual               |
+| Layout Options | Multiple     | Vertical only        |
+| Recommendation | - Preferred  | - Deprecated         |
 
 ### When NOT to Use RecyclerView
 
 For very small, static lists (< 20 items), simpler alternatives might suffice:
-- **LinearLayout** with ScrollView (for ~5-10 items)
-- **Compose LazyColumn** (for new Compose projects)
+
+-   **LinearLayout** with ScrollView (for ~5-10 items)
+-   **Compose LazyColumn** (for new Compose projects)
 
 ### Jetpack Compose Alternative
 
@@ -234,18 +242,33 @@ fun MyList(items: List<String>) {
 ```
 
 ## Ответ (RU)
+
 Для списка из большого количества элементов следует использовать RecyclerView. Это наиболее эффективный и рекомендуемый компонент для отображения больших данных в виде списка или сетки в Android
 
+---
+
+## Follow-ups
+
+-   Когда стоит использовать ListAdapter + DiffUtil вместо обычного Adapter?
+-   Как включить prefetch и настроить RecycledViewPool для больших списков?
+-   Когда Compose LazyColumn лучше, чем RecyclerView, и наоборот?
+
+## References
+
+-   `https://developer.android.com/guide/topics/ui/layout/recyclerview` — RecyclerView
+-   `https://developer.android.com/topic/libraries/architecture/paging/v3-overview` — Paging 3
 
 ---
 
 ## Related Questions
 
 ### Related (Easy)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View
-- [[q-viewmodel-pattern--android--easy]] - View
+
+-   [[q-recyclerview-sethasfixedsize--android--easy]] - View
+-   [[q-viewmodel-pattern--android--easy]] - View
 
 ### Advanced (Harder)
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
-- [[q-testing-viewmodels-turbine--testing--medium]] - View
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+
+-   [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+-   [[q-testing-viewmodels-turbine--testing--medium]] - View
+-   [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View

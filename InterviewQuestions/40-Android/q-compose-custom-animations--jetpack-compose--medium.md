@@ -1,19 +1,19 @@
 ---
+id: "20251015082237546"
+title: "Compose Custom Animations / Кастомные анимации Compose"
 topic: android
-subtopics: [jetpack-compose, animations]
-tags:
-  - jetpack-compose
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - jetpack-compose
   - animations
   - animatable
   - spring-animations
   - animation-specs
-difficulty: medium
-status: draft
-moc: moc-android
 date_created: 2025-10-13
 date_updated: 2025-10-13
-related_questions:
-  - q-jetpack-compose-basics--android--medium
+moc: moc-android
+related_questions:   - q-jetpack-compose-basics--android--medium
   - q-how-does-jetpack-compose-work--android--medium
   - q-what-are-the-most-important-components-of-compose--android--medium
   - q-how-to-create-list-like-recyclerview-in-compose--android--medium
@@ -22,8 +22,8 @@ related_questions:
   - q-compose-stability-skippability--jetpack-compose--hard
   - q-stable-classes-compose--android--hard
   - q-stable-annotation-compose--android--hard
+subtopics: [jetpack-compose, animations]
 ---
-
 # Custom Animations with Animatable and animate*AsState
 
 # Question (EN)

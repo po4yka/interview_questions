@@ -1,11 +1,13 @@
 ---
-tags:
-  - programming-languages
-  - android
+id: "20251015082237389"
+title: "How To Reduce Number Of Recompositions Besides Side Effects / Как уменьшить количество рекомпозиций кроме побочных эффектов"
+topic: android
 difficulty: hard
 status: draft
+created: 2025-10-15
+tags: - programming-languages
+  - android
 ---
-
 # Как можно уменьшить количество рекомпозиций помимо side-эффектов?
 
 ## Answer (EN)

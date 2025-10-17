@@ -1,7 +1,11 @@
 ---
+id: "20251015082237500"
+title: "List To Detail Navigation / Навигация от списка к детализации"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/navigation
   - bundle
   - data-passing
@@ -11,10 +15,7 @@ tags:
   - navigation-component
   - ui-patterns
   - viewmodel
-difficulty: medium
-status: draft
 ---
-
 # С помощью чего делается переход со списков на деталки?
 
 **English**: How do you implement navigation from a list to detail screens?
@@ -431,7 +432,307 @@ class UserDetailFragment : Fragment() {
 - **Use ViewModel** for data management
 
 ## Ответ (RU)
-Для реализации переходов от списка к экрану деталей элемента в Android используются Intent, Bundle, ViewModel и инструменты навигации такие как Navigation Component. Базовый способ - использование Intent и Bundle для передачи данных между активностями. Современный подход предполагает использование Navigation Component с графом навигации и передачей данных через аргументы.
+
+Для реализации переходов от **списка** к экрану **деталей элемента** в Android используются **Intent**, **Bundle**, **ViewModel** и инструменты навигации такие как **Navigation Component**.
+
+Базовый подход использует **Intent и Bundle** для передачи данных между активностями. Современный подход включает использование **Navigation Component** с графом навигации и передачей данных через аргументы.
+
+## Подход 1: Intent + Bundle (Activity to Activity)
+
+### Базовая реализация
+
+```kotlin
+// Activity со списком
+class UserListActivity : AppCompatActivity() {
+    private lateinit var adapter: UserAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        adapter = UserAdapter { user ->
+            // Навигация к деталям
+            openUserDetail(user)
+        }
+
+        recyclerView.adapter = adapter
+    }
+
+    private fun openUserDetail(user: User) {
+        val intent = Intent(this, UserDetailActivity::class.java)
+        intent.putExtra("USER_ID", user.id)
+        intent.putExtra("USER_NAME", user.name)
+        intent.putExtra("USER_EMAIL", user.email)
+        startActivity(intent)
+    }
+}
+
+// Activity с деталями
+class UserDetailActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val userId = intent.getIntExtra("USER_ID", -1)
+        val userName = intent.getStringExtra("USER_NAME")
+        val userEmail = intent.getStringExtra("USER_EMAIL")
+
+        // Отображение деталей пользователя
+        nameTextView.text = userName
+        emailTextView.text = userEmail
+    }
+}
+```
+
+### Передача Parcelable объектов
+
+```kotlin
+// Сделать User Parcelable
+@Parcelize
+data class User(
+    val id: Int,
+    val name: String,
+    val email: String,
+    val avatarUrl: String
+) : Parcelable
+
+// Activity со списком
+private fun openUserDetail(user: User) {
+    val intent = Intent(this, UserDetailActivity::class.java)
+    intent.putExtra("USER", user)  // Передача всего объекта
+    startActivity(intent)
+}
+
+// Activity с деталями
+class UserDetailActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val user = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra("USER", User::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra("USER")
+        }
+
+        user?.let {
+            displayUser(it)
+        }
+    }
+
+    private fun displayUser(user: User) {
+        nameTextView.text = user.name
+        emailTextView.text = user.email
+        Glide.with(this).load(user.avatarUrl).into(avatarImageView)
+    }
+}
+```
+
+## Подход 2: Navigation Component (Fragment to Fragment)
+
+### Настройка графа навигации
+
+**res/navigation/nav_graph.xml:**
+
+```xml
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/userListFragment">
+
+    <fragment
+        android:id="@+id/userListFragment"
+        android:name="com.example.UserListFragment">
+        <action
+            android:id="@+id/action_list_to_detail"
+            app:destination="@id/userDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userDetailFragment"
+        android:name="com.example.UserDetailFragment">
+        <argument
+            android:name="userId"
+            app:argType="integer" />
+        <argument
+            android:name="userName"
+            app:argType="string" />
+    </fragment>
+</navigation>
+```
+
+### Fragment со списком
+
+```kotlin
+class UserListFragment : Fragment() {
+    private lateinit var adapter: UserAdapter
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        adapter = UserAdapter { user ->
+            // Навигация к деталям с аргументами
+            val action = UserListFragmentDirections
+                .actionListToDetail(user.id, user.name)
+            findNavController().navigate(action)
+        }
+
+        recyclerView.adapter = adapter
+    }
+}
+```
+
+### Fragment с деталями
+
+```kotlin
+class UserDetailFragment : Fragment() {
+    private val args: UserDetailFragmentArgs by navArgs()
+    private val viewModel: UserDetailViewModel by viewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Получение аргументов
+        val userId = args.userId
+        val userName = args.userName
+
+        // Загрузка полных данных пользователя
+        viewModel.loadUser(userId)
+
+        // Наблюдение за данными
+        viewModel.user.observe(viewLifecycleOwner) { user ->
+            displayUser(user)
+        }
+    }
+
+    private fun displayUser(user: User) {
+        nameTextView.text = user.name
+        emailTextView.text = user.email
+        bioTextView.text = user.bio
+    }
+}
+```
+
+## Подход 3: Shared ViewModel (Рекомендуется для Fragments)
+
+```kotlin
+// Общая ViewModel (область activity)
+class UserViewModel : ViewModel() {
+    private val _selectedUser = MutableLiveData<User?>()
+    val selectedUser: LiveData<User?> = _selectedUser
+
+    fun selectUser(user: User) {
+        _selectedUser.value = user
+    }
+}
+
+// Fragment со списком
+class UserListFragment : Fragment() {
+    private val viewModel: UserViewModel by activityViewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        adapter = UserAdapter { user ->
+            // Сохранить пользователя в общей ViewModel
+            viewModel.selectUser(user)
+
+            // Навигация
+            findNavController().navigate(R.id.action_list_to_detail)
+        }
+    }
+}
+
+// Fragment с деталями
+class UserDetailFragment : Fragment() {
+    private val viewModel: UserViewModel by activityViewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Наблюдение за выбранным пользователем из общей ViewModel
+        viewModel.selectedUser.observe(viewLifecycleOwner) { user ->
+            user?.let { displayUser(it) }
+        }
+    }
+}
+```
+
+## Сравнительная таблица
+
+| Подход | Преимущества | Недостатки | Сценарий использования |
+|--------|-------------|-----------|----------------------|
+| **Intent + Bundle** | Простой, знакомый | Boilerplate, не type-safe | Приложения на основе Activity |
+| **Intent + Parcelable** | Передача целых объектов | Ограничение размера (1MB) | Небольшие и средние объекты |
+| **Navigation Component** | Type-safe, визуальный граф | Кривая обучения | Современные приложения на основе Fragment |
+| **Shared ViewModel** | Простой, реактивный | Только область activity | Связанные экраны |
+| **Safe Args** | Безопасность во время компиляции | Overhead сборки | Сложная навигация |
+| **Deep Links** | Внешняя навигация | Требуется настройка | Общие URL |
+
+## Лучшие практики
+
+**1. Передавайте только необходимые данные:**
+
+```kotlin
+// ПЛОХО - Передача всего списка
+intent.putParcelableArrayListExtra("USERS", ArrayList(allUsers))
+
+// ХОРОШО - Передача только ID
+intent.putExtra("USER_ID", userId)
+
+// Загрузка полных данных на экране деталей
+viewModel.loadUser(userId)
+```
+
+**2. Используйте ViewModel для загрузки данных:**
+
+```kotlin
+class UserDetailViewModel(
+    private val repository: UserRepository
+) : ViewModel() {
+    private val _user = MutableLiveData<User>()
+    val user: LiveData<User> = _user
+
+    fun loadUser(userId: Int) {
+        viewModelScope.launch {
+            _user.value = repository.getUserById(userId)
+        }
+    }
+}
+```
+
+**3. Обрабатывайте изменения конфигурации:**
+
+```kotlin
+// ViewModel переживает поворот экрана
+class UserDetailFragment : Fragment() {
+    private val viewModel: UserDetailViewModel by viewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Загружать только если еще не загружено
+        if (viewModel.user.value == null) {
+            viewModel.loadUser(args.userId)
+        }
+    }
+}
+```
+
+## Резюме
+
+**Основные подходы для навигации список-детали:**
+
+1. **Intent + Bundle** - Передача данных между активностями
+2. **Navigation Component** - Современная, type-safe навигация Fragment
+3. **Shared ViewModel** - Совместное использование данных между Fragment
+4. **Safe Args** - Безопасность типов во время компиляции
+5. **Deep Links** - Навигация на основе URI
+
+**Рекомендуемый подход:**
+- **Single Activity + Navigation Component + Safe Args** для современных приложений
+- **Передавайте ID, а не объекты** - загружайте полные данные на экране деталей
+- **Используйте ViewModel** для управления данными
+
+Для реализации переходов от списка к экрану деталей в Android используются Intent, Bundle, ViewModel и Navigation Component. Современный подход предполагает использование Navigation Component с Safe Args для type-safe навигации и передачи только ID элементов, загружая полные данные через ViewModel в экране деталей.
 
 
 ---

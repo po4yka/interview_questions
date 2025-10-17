@@ -2,33 +2,29 @@
 id: q-notification-channels-android--android--medium--1728115260000
 title: "Notification Channels / Каналы уведомлений"
 topic: android
-aliases:
-  - Notification Channels
-  - Каналы уведомлений
-date_created: 2025-10-05
-date_modified: 2025-10-05
-status: draft
-original_language: en
-language_tags:
-  - en
-  - ru
-type: question
-category: android
 difficulty: medium
-subtopics:
-  - notifications
-  - ui-widgets
-tags:
-  - android
+status: draft
+created: 2025-10-05
+tags: - android
   - notifications
   - notification-channels
   - android8
   - importance
   - difficulty/medium
+aliases:   - Notification Channels
+  - Каналы уведомлений
+category: android
+date_created: 2025-10-05
+date_modified: 2025-10-05
+language_tags:   - en
+  - ru
 moc: moc-android
+original_language: en
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20notification.md"
+subtopics:   - notifications
+  - ui-widgets
+type: question
 ---
-
 # Notification Channels / Каналы уведомлений
 
 # Question (EN)

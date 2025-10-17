@@ -1,8 +1,11 @@
 ---
+id: "20251015082237149"
+title: "Inheritance Vs Composition / Inheritance против Composition"
 topic: architecture-patterns
-subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
-tags:
-  - composition
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - composition
   - coupling
   - dependency-injection
   - design-patterns
@@ -11,14 +14,12 @@ tags:
   - inheritance
   - is-a
   - oop
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-architecture-patterns
 related_questions: []
+subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
-
 # Какие отличия наследования от композиции?
 
 # Question (EN)
@@ -540,22 +541,334 @@ Composition is considered **more flexible and less coupled** than inheritance, m
 
 ## Ответ (RU)
 
-**Наследование** — это когда один класс расширяет другой, наследуя его поведение (отношение IS-A).
+**Наследование** — это когда один класс **расширяет** другой, наследуя его поведение (отношение IS-A).
 
-**Композиция** — это включение одного объекта в другой, при этом зависимость явно передаётся (отношение HAS-A).
+**Композиция** — это когда один объект **включён в** другой, при этом зависимость явно передаётся (отношение HAS-A).
 
-**Композиция считается более гибкой и менее связанной альтернативой наследованию.**
+**Композиция считается более гибкой и менее связанной** по сравнению с наследованием.
 
-**Основные отличия:**
+## Ключевые отличия
+
+### 1. Тип отношения
+
+**Наследование: IS-A (ЯВЛЯЕТСЯ)**
+```kotlin
+// Dog ЯВЛЯЕТСЯ Animal
+open class Animal {
+    open fun makeSound() {
+        println("Общий звук")
+    }
+}
+
+class Dog : Animal() {
+    override fun makeSound() {
+        println("Гав!")
+    }
+}
+
+val dog: Animal = Dog()  // Dog ЯВЛЯЕТСЯ Animal
+```
+
+**Композиция: HAS-A (ИМЕЕТ)**
+```kotlin
+// Car ИМЕЕТ Engine
+class Engine {
+    fun start() {
+        println("Двигатель запущен")
+    }
+}
+
+class Car(private val engine: Engine) {  // Car ИМЕЕТ Engine
+    fun start() {
+        engine.start()
+    }
+}
+
+val car = Car(Engine())
+```
+
+### 2. Связанность
+
+**Наследование: Сильная связанность**
+
+Дочерний класс **тесно связан** с родительским классом. Изменения в родителе влияют на всех потомков.
+
+```kotlin
+// Сильная связанность
+open class Parent {
+    open fun method1() = println("Родительский метод 1")
+    open fun method2() = println("Родительский метод 2")
+    open fun method3() = println("Родительский метод 3")
+}
+
+class Child : Parent() {
+    override fun method1() = println("Дочерний метод 1")
+    // Наследует method2 и method3
+}
+
+// Проблема: Если Parent изменится, Child сломается!
+// Parent добавляет новое поведение → все потомки затронуты
+// Parent изменяет сигнатуру метода → все потомки должны обновиться
+```
+
+**Композиция: Слабая связанность**
+
+Объекты **слабо связаны**. Изменения в компонуемых объектах имеют минимальное влияние.
+
+```kotlin
+// Слабая связанность
+interface Engine {
+    fun start()
+}
+
+class ElectricEngine : Engine {
+    override fun start() = println("Электрический двигатель запущен")
+}
+
+class GasEngine : Engine {
+    override fun start() = println("Бензиновый двигатель запущен")
+}
+
+class Car(private val engine: Engine) {  // Зависимость внедрена
+    fun start() = engine.start()
+}
+
+// Легко менять реализации
+val electricCar = Car(ElectricEngine())
+val gasCar = Car(GasEngine())
+
+// Изменения Engine не влияют на Car (пока интерфейс стабилен)
+```
+
+### 3. Гибкость
+
+**Наследование: Фиксировано во время компиляции**
+
+Отношение **статично** - определено при написании кода.
+
+```kotlin
+// Фиксированное поведение
+class Warrior : Fighter() {
+    // Всегда использует поведение Fighter
+    // Нельзя изменить во время выполнения
+}
+
+val warrior = Warrior()
+// Warrior всегда будет Fighter
+```
+
+**Композиция: Гибко во время выполнения**
+
+Поведение может быть **изменено динамически** во время выполнения.
+
+```kotlin
+// Динамическое поведение
+interface AttackStrategy {
+    fun attack()
+}
+
+class SwordAttack : AttackStrategy {
+    override fun attack() = println("Замах мечом")
+}
+
+class MagicAttack : AttackStrategy {
+    override fun attack() = println("Произношение заклинания")
+}
+
+class Character(private var attackStrategy: AttackStrategy) {
+    fun attack() = attackStrategy.attack()
+
+    // Можно изменить поведение во время выполнения!
+    fun changeStrategy(newStrategy: AttackStrategy) {
+        attackStrategy = newStrategy
+    }
+}
+
+val character = Character(SwordAttack())
+character.attack()  // "Замах мечом"
+
+character.changeStrategy(MagicAttack())
+character.attack()  // "Произношение заклинания" - Поведение изменилось!
+```
+
+### 4. Тестируемость
+
+**Наследование: Сложнее тестировать**
+
+Нужно тестировать родителя и потомка вместе. Сложно подменять поведение родителя.
+
+```kotlin
+// Сложно тестировать
+open class DatabaseService {
+    open fun save(data: String) {
+        // Реальный вызов базы данных
+        connectToDatabase()
+        executeQuery("INSERT INTO table VALUES ($data)")
+    }
+}
+
+class UserService : DatabaseService() {
+    fun createUser(name: String) {
+        save(name)  // Вызывает реальную базу данных!
+    }
+}
+
+// Тестирование UserService требует реальной базы данных
+// Сложно подменить метод save()
+```
+
+**Композиция: Легко тестировать**
+
+Можно легко внедрять mock/fake объекты.
+
+```kotlin
+// Легко тестировать
+interface DatabaseService {
+    fun save(data: String)
+}
+
+class RealDatabaseService : DatabaseService {
+    override fun save(data: String) {
+        // Реальный вызов базы данных
+    }
+}
+
+class UserService(private val database: DatabaseService) {
+    fun createUser(name: String) {
+        database.save(name)
+    }
+}
+
+// Тестирование - внедрить mock
+class MockDatabaseService : DatabaseService {
+    override fun save(data: String) {
+        println("Mock: сохранено $data")
+    }
+}
+
+val userService = UserService(MockDatabaseService())
+userService.createUser("Alice")  // Использует mock, реальной базы не нужно!
+```
+
+### 5. Множественное поведение
+
+**Наследование: Нельзя наследоваться от нескольких классов**
+
+Большинство языков (Java, Kotlin) не поддерживают множественное наследование.
+
+```kotlin
+// Множественное наследование не разрешено
+class FlyingCar : Car, Airplane {  // Ошибка компиляции!
+    // ...
+}
+```
+
+**Композиция: Можно компоновать несколько объектов**
+
+Можно легко комбинировать поведение из нескольких источников.
+
+```kotlin
+// Множественная композиция
+class FlyingCar(
+    private val carEngine: CarEngine,
+    private val wings: Wings,
+    private val propeller: Propeller
+) {
+    fun drive() = carEngine.start()
+    fun fly() {
+        wings.extend()
+        propeller.spin()
+    }
+}
+```
+
+## Таблица сравнения
 
 | Аспект | Наследование | Композиция |
 |--------|-------------|------------|
-| **Связанность** | Сильная | Слабая |
-| **Гибкость** | Фиксированная | Динамическая |
-| **Тестируемость** | Сложная | Простая |
-| **Зависимости** | Неявные | Явные |
+| **Отношение** | IS-A (ЯВЛЯЕТСЯ) | HAS-A (ИМЕЕТ) |
+| **Связанность** | Сильная (тесная) | Слабая (свободная) |
+| **Гибкость** | Фиксирована при компиляции | Гибкая во время выполнения |
+| **Тестируемость** | Сложно подменять | Легко подменять |
+| **Множественное поведение** | Ограничено (одиночное наследование) | Неограниченно |
+| **Зависимость** | Неявная (встроенная) | Явная (внедрённая) |
+| **Переиспользование** | Родитель → Потомки | Компоненты переиспользуются везде |
+| **Сложность** | Может привести к глубоким иерархиям | Плоский, простой дизайн |
 
-**Правило:** Предпочитайте композицию наследованию для большей гибкости и тестируемости.
+### Когда использовать каждый
+
+**Используйте Наследование:**
+- Чёткое отношение **IS-A (ЯВЛЯЕТСЯ)**
+- Нужен **полиморфизм** (обрабатывать Dog как Animal)
+- **Расширение фреймворка/библиотеки** (Activity, Fragment)
+- **Стабильная иерархия** (не будет часто меняться)
+
+```kotlin
+// Хорошее использование наследования
+class MainActivity : AppCompatActivity() {
+    // MainActivity ЯВЛЯЕТСЯ AppCompatActivity
+}
+```
+
+**Используйте Композицию:**
+- Отношение **HAS-A (ИМЕЕТ)**
+- Нужна **гибкость**
+- Требуется **слабая связанность**
+- Нужна **тестируемость**
+- Комбинирование **множественного поведения**
+
+```kotlin
+// Хорошее использование композиции
+class OrderService(
+    private val paymentProcessor: PaymentProcessor,
+    private val emailService: EmailService,
+    private val logger: Logger
+) {
+    // OrderService ИМЕЕТ PaymentProcessor, EmailService, Logger
+}
+```
+
+## Лучшая практика: Предпочитайте композицию наследованию
+
+```kotlin
+// Избегайте: Наследование для переиспользования кода
+class UserService : Logger() {
+    fun createUser(name: String) {
+        log("Создание пользователя: $name")  // Наследование log()
+    }
+}
+
+// Предпочитайте: Композицию с внедрением зависимостей
+class UserService(private val logger: Logger) {
+    fun createUser(name: String) {
+        logger.log("Создание пользователя: $name")  // Композиция logger
+    }
+}
+```
+
+**Почему композиция лучше:**
+1. **Слабая связанность** - UserService не зависит от реализации Logger
+2. **Гибкость** - Можно легко заменить Logger (ConsoleLogger, FileLogger и т.д.)
+3. **Тестируемость** - Можно внедрить MockLogger для тестирования
+4. **Явная зависимость** - Logger явно передаётся, не скрыт в наследовании
+
+## Резюме
+
+**Наследование:**
+- Один класс **расширяет** другой (IS-A)
+- **Сильная связанность**, фиксировано при компиляции
+- **Сложно тестировать**, ограниченная гибкость
+- Используйте для **расширения фреймворка** и **чётких иерархий**
+
+**Композиция:**
+- Один объект **содержит** другой (HAS-A)
+- **Слабая связанность**, гибко во время выполнения
+- **Легко тестировать**, явные зависимости
+- Используйте для **большинства случаев**, особенно когда нужна гибкость
+
+**Золотое правило:** **"Предпочитайте композицию наследованию"**
+
+Композиция считается **более гибкой и менее связанной** чем наследование, что делает её предпочтительным выбором для большинства сценариев проектирования.
 
 
 ---

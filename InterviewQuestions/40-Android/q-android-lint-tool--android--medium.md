@@ -2,27 +2,24 @@
 id: android-lint-tool-1730793600000
 title: Android Lint Tool / Инструмент Android Lint
 topic: android
-language_tags:
-  - en
-  - ru
-original_language: en
+difficulty: medium
 status: draft
-moc: moc-android
-tags:
-  - android
+created: 2025-10-15
+tags: - android
   - lint
   - static-analysis
   - code-quality
   - gradle
   - difficulty/medium
-subtopics:
-  - static-analysis
+language_tags:   - en
+  - ru
+moc: moc-android
+original_language: en
+source: https://github.com/Kirchhoff-/Android-Interview-Questions
+subtopics:   - static-analysis
   - gradle
   - build-variants
-difficulty: medium
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
 ---
-
 # Android Lint Tool / Инструмент Android Lint
 
 # Question (EN)

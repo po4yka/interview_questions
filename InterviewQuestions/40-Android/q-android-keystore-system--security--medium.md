@@ -1,17 +1,18 @@
 ---
+id: "20251015082237405"
+title: "Android Keystore System / Система Android Keystore"
 topic: security
-tags:
-  - security
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - security
   - keystore
   - encryption
   - biometric
   - attestation
   - authentication
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Android Keystore System / Система Android Keystore
 
 **English**: Implement secure key storage using Android Keystore. Handle biometric authentication and key attestation for sensitive operations.

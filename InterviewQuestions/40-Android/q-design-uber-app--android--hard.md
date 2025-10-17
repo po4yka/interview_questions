@@ -860,27 +860,16 @@ class OfflineRideManager @Inject constructor(
 - [[q-http-protocols-comparison--android--medium]] - Networking
 - [[q-usecase-pattern-android--android--medium]] - Architecture
 - [[q-repository-multiple-sources--android--medium]] - Architecture
-
 ### Related (Hard)
 - [[q-design-whatsapp-app--android--hard]] - Messaging
 - [[q-design-instagram-stories--android--hard]] - Media
 - [[q-multi-module-best-practices--android--hard]] - Architecture
 - [[q-data-sync-unstable-network--android--hard]] - Networking
-### Prerequisites (Easier)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-usecase-pattern-android--android--medium]] - Architecture
-- [[q-repository-multiple-sources--android--medium]] - Architecture
-
 ### Related (Hard)
 - [[q-design-whatsapp-app--android--hard]] - Messaging
 - [[q-design-instagram-stories--android--hard]] - Media
 - [[q-multi-module-best-practices--android--hard]] - Architecture
 - [[q-data-sync-unstable-network--android--hard]] - Networking
-### Prerequisites (Easier)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-usecase-pattern-android--android--medium]] - Architecture
-- [[q-repository-multiple-sources--android--medium]] - Architecture
-
 ### Related (Hard)
 - [[q-design-whatsapp-app--android--hard]] - Messaging
 - [[q-design-instagram-stories--android--hard]] - Media

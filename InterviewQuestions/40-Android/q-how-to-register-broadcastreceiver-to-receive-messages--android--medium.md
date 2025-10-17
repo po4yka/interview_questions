@@ -1,11 +1,12 @@
 ---
+id: "20251015082237310"
+title: "How To Register Broadcastreceiver To Receive Messages / Как зарегистрировать BroadcastReceiver для получения сообщений"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # How to register BroadcastReceiver to receive messages?
 
 ## Answer (EN)
@@ -472,81 +473,463 @@ unregisterReceiver(receiver)
 ## Ответ (RU)
 Существует **два способа** регистрации BroadcastReceiver в Android:
 
+1. **Динамическая регистрация в коде** (Runtime registration) - Рекомендуется для большинства случаев
+2. **Статическая регистрация в AndroidManifest.xml** - Ограниченное использование из-за ограничений фоновой работы
+
 ### 1. Динамическая регистрация (Рекомендуется)
 
-Регистрация в коде программно:
+Регистрация BroadcastReceiver программно в Activity, Fragment или Service.
+
+#### Базовая динамическая регистрация
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
-    private val receiver = object : BroadcastReceiver() {
+    private val networkReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            // Обработка broadcast
+            val action = intent?.action
+            if (action == ConnectivityManager.CONNECTIVITY_ACTION) {
+                val isConnected = isNetworkAvailable(context)
+                Toast.makeText(context, "Network: $isConnected", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     override fun onStart() {
         super.onStart()
 
-        // Регистрация
-        val filter = IntentFilter("com.example.ACTION")
-        registerReceiver(receiver, filter)
+        // Регистрация receiver
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(networkReceiver, filter)
     }
 
     override fun onStop() {
         super.onStop()
 
         // ВАЖНО: Отмена регистрации для предотвращения утечек
-        unregisterReceiver(receiver)
+        unregisterReceiver(networkReceiver)
+    }
+
+    private fun isNetworkAvailable(context: Context?): Boolean {
+        val cm = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+        val network = cm?.activeNetwork
+        val capabilities = cm?.getNetworkCapabilities(network)
+        return capabilities != null
+    }
+}
+```
+
+#### Множественные Broadcast действия
+
+```kotlin
+class BatteryActivity : AppCompatActivity() {
+
+    private val batteryReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                Intent.ACTION_BATTERY_LOW -> {
+                    showNotification("Батарея разряжена!")
+                }
+                Intent.ACTION_BATTERY_OKAY -> {
+                    showNotification("Уровень батареи в норме")
+                }
+                Intent.ACTION_POWER_CONNECTED -> {
+                    showNotification("Подключено питание")
+                }
+                Intent.ACTION_POWER_DISCONNECTED -> {
+                    showNotification("Питание отключено")
+                }
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_battery)
+
+        // Регистрация для нескольких действий
+        val filter = IntentFilter().apply {
+            addAction(Intent.ACTION_BATTERY_LOW)
+            addAction(Intent.ACTION_BATTERY_OKAY)
+            addAction(Intent.ACTION_POWER_CONNECTED)
+            addAction(Intent.ACTION_POWER_DISCONNECTED)
+        }
+
+        registerReceiver(batteryReceiver, filter)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(batteryReceiver)
+    }
+}
+```
+
+#### Пользовательские Broadcasts
+
+```kotlin
+// Отправитель
+class SenderActivity : AppCompatActivity() {
+
+    fun sendCustomBroadcast() {
+        val intent = Intent("com.example.CUSTOM_ACTION").apply {
+            putExtra("message", "Привет от отправителя!")
+            putExtra("timestamp", System.currentTimeMillis())
+        }
+        sendBroadcast(intent)
+    }
+}
+
+// Получатель
+class ReceiverActivity : AppCompatActivity() {
+
+    private val customReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val message = intent?.getStringExtra("message")
+            val timestamp = intent?.getLongExtra("timestamp", 0L)
+
+            Log.d("ReceiverActivity", "Получено: $message в $timestamp")
+            updateUI(message)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val filter = IntentFilter("com.example.CUSTOM_ACTION")
+        registerReceiver(customReceiver, filter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(customReceiver)
+    }
+}
+```
+
+#### Локальные Broadcasts (Устаревшее, но показано для справки)
+
+```kotlin
+// Старый способ - LocalBroadcastManager (Устарел в AndroidX)
+class OldLocalBroadcastExample : AppCompatActivity() {
+
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            // Обработка локального broadcast
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(receiver, IntentFilter("local_action"))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver)
+    }
+}
+
+// Современный способ - Используйте LiveData, Flow или EventBus
+class ModernLocalEventExample : AppCompatActivity() {
+
+    private val eventBus = MutableSharedFlow<String>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            eventBus.collect { message ->
+                // Обработка сообщения
+            }
+        }
+    }
+
+    fun sendEvent() {
+        lifecycleScope.launch {
+            eventBus.emit("Привет")
+        }
     }
 }
 ```
 
 ### 2. Статическая регистрация (Manifest)
 
-Регистрация в AndroidManifest.xml:
+Регистрация в AndroidManifest.xml - receiver существует даже когда приложение не запущено.
+
+**Примечание:** Сильно ограничено с Android 8.0 (API 26) для неявных broadcasts.
 
 ```xml
-<receiver
-    android:name=".MyReceiver"
-    android:enabled="true"
-    android:exported="true">
-    <intent-filter>
-        <action android:name="android.intent.action.BOOT_COMPLETED" />
-    </intent-filter>
-</receiver>
+<!-- AndroidManifest.xml -->
+<manifest>
+    <application>
+
+        <!-- Статический BroadcastReceiver -->
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- SMS Receiver (требует разрешения) -->
+        <receiver
+            android:name=".SmsReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+    <!-- Разрешения -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+</manifest>
 ```
 
+**Реализация BroadcastReceiver:**
+
 ```kotlin
-class MyReceiver : BroadcastReceiver() {
+class BootReceiver : BroadcastReceiver() {
+
     override fun onReceive(context: Context?, intent: Intent?) {
-        // Обработка broadcast
+        if (intent?.action == Intent.ACTION_BOOT_COMPLETED) {
+            Log.d("BootReceiver", "Устройство загружено!")
+
+            // Запуск сервиса или планирование работы
+            val serviceIntent = Intent(context, MyService::class.java)
+            context?.startService(serviceIntent)
+        }
+    }
+}
+
+class SmsReceiver : BroadcastReceiver() {
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        if (intent?.action == "android.provider.Telephony.SMS_RECEIVED") {
+            val bundle = intent.extras
+            val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
+
+            messages.forEach { message ->
+                val sender = message.displayOriginatingAddress
+                val body = message.messageBody
+
+                Log.d("SmsReceiver", "От: $sender, Сообщение: $body")
+                showNotification(context, sender, body)
+            }
+        }
     }
 }
 ```
 
-### Сравнение
+### Динамическая vs Статическая регистрация
 
-| Динамическая | Статическая |
-|-------------|-------------|
-| Активна только когда компонент жив | Всегда активна |
-| Регистрация в коде | Регистрация в Manifest |
-| Требуется отмена регистрации | Автоматическая |
-| Нет ограничений Android 8+ | Много ограничений |
-| Для UI обновлений | Для BOOT_COMPLETED, SMS |
+| Аспект | Динамическая регистрация | Статическая регистрация |
+|--------|-------------------------|------------------------|
+| **Когда активна** | Только когда компонент жив | Всегда (даже если приложение не запущено) |
+| **Регистрация** | В коде (onCreate/onResume) | AndroidManifest.xml |
+| **Отмена регистрации** | Требуется (onDestroy/onPause) | Автоматическая |
+| **Память** | Более эффективно (регистрируется только при необходимости) | Всегда в памяти |
+| **Ограничения Android 8+** | Нет ограничений | Много неявных broadcasts заблокировано |
+| **Случаи использования** | Обновления UI, временные слушатели | BOOT_COMPLETED, SMS, будильники |
+
+### Разрешения для BroadcastReceivers
+
+Некоторые broadcasts требуют разрешений:
+
+```xml
+<!-- AndroidManifest.xml -->
+
+<!-- Для получения boot completed -->
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+<!-- Для получения SMS -->
+<uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+<!-- Для проверки состояния сети -->
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+<!-- Для получения состояния батареи -->
+<!-- Разрешение не требуется - публичный broadcast -->
+```
+
+### Современные альтернативы BroadcastReceiver
+
+#### 1. WorkManager (для фоновой работы)
+
+```kotlin
+// Вместо прослушивания BOOT_COMPLETED или изменений сети
+val workRequest = PeriodicWorkRequestBuilder<MyWorker>(
+    repeatInterval = 15,
+    repeatIntervalTimeUnit = TimeUnit.MINUTES
+).setConstraints(
+    Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .build()
+).build()
+
+WorkManager.getInstance(context).enqueue(workRequest)
+```
+
+#### 2. Flow/LiveData (для событий внутри приложения)
+
+```kotlin
+// Вместо LocalBroadcastManager
+class EventBus {
+    private val _events = MutableSharedFlow<Event>()
+    val events: SharedFlow<Event> = _events.asSharedFlow()
+
+    suspend fun emit(event: Event) {
+        _events.emit(event)
+    }
+}
+
+// ViewModel
+class MyViewModel(private val eventBus: EventBus) : ViewModel() {
+    init {
+        viewModelScope.launch {
+            eventBus.events.collect { event ->
+                // Обработка события
+            }
+        }
+    }
+}
+```
+
+#### 3. NetworkCallback (для изменений сети)
+
+```kotlin
+val networkCallback = object : ConnectivityManager.NetworkCallback() {
+    override fun onAvailable(network: Network) {
+        // Сеть доступна
+    }
+
+    override fun onLost(network: Network) {
+        // Сеть потеряна
+    }
+}
+
+val connectivityManager = getSystemService(ConnectivityManager::class.java)
+val request = NetworkRequest.Builder()
+    .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    .build()
+
+connectivityManager.registerNetworkCallback(request, networkCallback)
+
+// Не забудьте отменить регистрацию
+connectivityManager.unregisterNetworkCallback(networkCallback)
+```
 
 ### Лучшие практики
 
-1. **Всегда отменяйте регистрацию динамических receivers**
-2. **Используйте viewLifecycleOwner во Fragment**
-3. **Для фоновой работы используйте WorkManager вместо BroadcastReceiver**
-4. **Для событий внутри приложения используйте Flow/LiveData**
+**1. Всегда отменяйте регистрацию динамических receivers**
 
-### Современные альтернативы
+```kotlin
+class MyActivity : AppCompatActivity() {
+    private val receiver = MyReceiver()
 
-- **WorkManager** - для фоновой работы
-- **Flow/LiveData** - для событий внутри приложения
-- **NetworkCallback** - для изменений сети
+    override fun onStart() {
+        super.onStart()
+        registerReceiver(receiver, IntentFilter("ACTION"))
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(receiver) // Предотвращает утечки памяти
+    }
+}
+```
+
+**2. Аккуратно используйте Context-зарегистрированные receivers**
+
+```kotlin
+// Используйте viewLifecycleOwner во Fragment
+class MyFragment : Fragment() {
+    private val receiver = MyReceiver()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Регистрация
+        requireContext().registerReceiver(receiver, IntentFilter("ACTION"))
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Отмена регистрации в onDestroyView (не onDestroy)
+        requireContext().unregisterReceiver(receiver)
+    }
+}
+```
+
+**3. Обрабатывайте безопасность с разрешениями**
+
+```kotlin
+// Отправка broadcast с разрешением
+sendBroadcast(
+    Intent("com.example.CUSTOM_ACTION"),
+    "com.example.permission.CUSTOM_PERMISSION"
+)
+
+// Только receivers с этим разрешением получат broadcast
+```
+
+**4. Предпочитайте упорядоченные broadcasts для приоритетной обработки**
+
+```kotlin
+// Отправка упорядоченного broadcast
+sendOrderedBroadcast(
+    Intent("ACTION"),
+    null, // разрешение
+    null, // resultReceiver
+    null, // scheduler
+    Activity.RESULT_OK,
+    null, // initialData
+    null  // initialExtras
+)
+
+// Receiver с приоритетом в manifest
+<receiver android:name=".HighPriorityReceiver">
+    <intent-filter android:priority="1000">
+        <action android:name="ACTION" />
+    </intent-filter>
+</receiver>
+```
+
+### Резюме
+
+**Динамическая регистрация (Рекомендуется):**
+```kotlin
+// Регистрация
+val filter = IntentFilter("ACTION")
+registerReceiver(receiver, filter)
+
+// Отмена регистрации
+unregisterReceiver(receiver)
+```
+
+**Статическая регистрация:**
+```xml
+<receiver android:name=".MyReceiver">
+    <intent-filter>
+        <action android:name="ACTION" />
+    </intent-filter>
+</receiver>
+```
+
+**Ключевые моменты:**
+- Динамическая регистрация: Регистрируйте в onCreate/onStart, отменяйте регистрацию в onDestroy/onStop
+- Статическая регистрация: Ограничена с Android 8.0, используйте для конкретных broadcasts как BOOT_COMPLETED
+- Всегда отменяйте регистрацию динамических receivers для предотвращения утечек памяти
+- Рассмотрите современные альтернативы: WorkManager, Flow, NetworkCallback
+- Используйте соответствующие разрешения для конфиденциальных broadcasts
 
 ---
 

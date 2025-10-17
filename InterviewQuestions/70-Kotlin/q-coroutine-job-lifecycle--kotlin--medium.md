@@ -1,17 +1,17 @@
 ---
-topic: kotlin
 id: "20251012-150001"
 title: "What is a Job and its lifecycle in Kotlin coroutines?"
-description: "A comprehensive guide to understanding Job and its lifecycle states in Kotlin coroutines, including parent-child relationships and cancellation mechanisms"
+topic: kotlin
+difficulty: medium
+status: draft
+created: "2025-10-12"
 tags: ["kotlin", "coroutines", "job", "lifecycle", "cancellation", "difficulty/medium"]
-topic: "kotlin"
-subtopics: ["coroutines", "job", "lifecycle", "cancellation"]
-moc: "moc-kotlin"
-status: "draft"
 date_created: "2025-10-12"
 date_updated: "2025-10-12"
+description: "A comprehensive guide to understanding Job and its lifecycle states in Kotlin coroutines, including parent-child relationships and cancellation mechanisms"
+moc: "moc-kotlin"
+subtopics: ["coroutines", "job", "lifecycle", "cancellation"]
 ---
-
 # What is a Job and its lifecycle in Kotlin coroutines?
 
 ## English

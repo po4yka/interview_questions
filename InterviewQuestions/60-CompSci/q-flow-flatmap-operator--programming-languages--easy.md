@@ -1,16 +1,18 @@
 ---
-tags:
-  - coroutines
+id: "20251015082237209"
+title: "Flow Flatmap Operator / Оператор flatMap для Flow"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - coroutines
   - flatmap
   - flow
   - kotlin
   - operators
   - programming-languages
   - reactive
-difficulty: easy
-status: draft
 ---
-
 # Чем воспользоваться если нужно преобразовать один поток данных в другой поток данных
 
 # Question (EN)

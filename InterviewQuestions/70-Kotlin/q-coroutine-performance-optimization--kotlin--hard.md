@@ -64,25 +64,16 @@ Comprehensive answer for question 140021.
 ### Prerequisites (Easier)
 - [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines
 - [[q-what-is-coroutine--kotlin--easy]] - Coroutines
-
 ### Related (Hard)
 - [[q-coroutine-profiling--kotlin--hard]] - Coroutines
 - [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutines
 - [[q-flow-performance--kotlin--hard]] - Coroutines
 - [[q-dispatcher-performance--kotlin--hard]] - Coroutines
-### Prerequisites (Easier)
-- [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
-
 ### Related (Hard)
 - [[q-coroutine-profiling--kotlin--hard]] - Coroutines
 - [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutines
 - [[q-flow-performance--kotlin--hard]] - Coroutines
 - [[q-dispatcher-performance--kotlin--hard]] - Coroutines
-### Prerequisites (Easier)
-- [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
-
 ### Related (Hard)
 - [[q-coroutine-profiling--kotlin--hard]] - Coroutines
 - [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutines

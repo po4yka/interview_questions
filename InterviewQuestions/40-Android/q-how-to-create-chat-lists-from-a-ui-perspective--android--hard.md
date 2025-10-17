@@ -1,15 +1,16 @@
 ---
+id: "20251015082237380"
+title: "How To Create Chat Lists From A Ui Perspective / Как создать списки чатов с точки зрения UI"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android/recyclerview
   - recyclerview
   - ui
   - ui design
-difficulty: hard
-status: draft
 ---
-
 # Как делать списки чатов с точки зрения UI?
 
 **English**: How to create chat lists from a UI perspective?

@@ -1,17 +1,18 @@
 ---
+id: "20251015082237521"
+title: "Factory Pattern Android / Factory Паттерн Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android-framework
   - android/architecture-clean
   - architecture-clean
   - design-patterns
   - factory-pattern
   - platform/android
-difficulty: medium
-status: draft
 ---
-
 # Можешь привести пример когда android фреймворк использует паттерн Factory
 
 **English**: Can you give an example of when the Android framework uses the Factory pattern

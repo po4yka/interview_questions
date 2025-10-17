@@ -1,11 +1,12 @@
 ---
+id: "20251015082237597"
+title: "How To Tell Adapter To Redraw List If Element Was Deleted / Как сказать адаптеру перерисовать список если элемент был удален"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # How to tell adapter to redraw list if an element was deleted?
 
 ## EN (expanded)

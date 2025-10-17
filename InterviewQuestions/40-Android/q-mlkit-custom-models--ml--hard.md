@@ -1,16 +1,18 @@
 ---
-tags:
-  - android
+id: "20251015082237384"
+title: "Mlkit Custom Models / Кастомные модели ML Kit"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - ml-kit
   - tensorflow-lite
   - custom-models
   - machine-learning
   - automl
   - model-deployment
-difficulty: hard
-status: draft
 ---
-
 # ML Kit Custom Models and TensorFlow Lite Integration
 
 # Question (EN)

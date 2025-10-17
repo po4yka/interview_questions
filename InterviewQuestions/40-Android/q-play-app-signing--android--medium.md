@@ -1,7 +1,11 @@
 ---
+id: "20251015082237470"
+title: "Play App Signing / Подписание приложений Play"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - play-app-signing
   - security
   - signing
@@ -9,10 +13,7 @@ tags:
   - google-play
   - app-bundle
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # What is Play App Signing? / Что такое Play App Signing?
 
 **English**: What's Play App Signing?

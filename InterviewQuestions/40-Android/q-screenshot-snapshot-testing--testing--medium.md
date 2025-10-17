@@ -1,21 +1,26 @@
 ---
-tags:
-  - testing
+id: "20251015082237242"
+title: "Screenshot Snapshot Testing / Screenshot Snapshot Тестирование"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - testing
   - screenshot-testing
   - paparazzi
   - shot
   - ui-testing
   - visual-regression
-difficulty: medium
-status: draft
 ---
 
 # Screenshot and Snapshot Testing
 
 # Question (EN)
+
 > Implement screenshot testing with Paparazzi or Shot. How do you handle different screen sizes and themes?
 
 # Вопрос (RU)
+
 > Реализуйте screenshot тестирование с помощью Paparazzi или Shot. Как обрабатывать разные размеры экранов и темы?
 
 ---
@@ -377,16 +382,16 @@ class ResponsiveShotTest {
 
 ### Paparazzi vs Shot Comparison
 
-| Feature | Paparazzi | Shot |
-|---------|-----------|------|
-| **Speed** |  Fast (JVM) |  Slow (Device) |
-| **Setup** |  Simple |  Requires device |
-| **CI** |  No emulator needed |  Needs emulator |
-| **Accuracy** |  Simulated rendering |  Real device rendering |
-| **Compose** |  Full support |  Full support |
-| **Views** |  Supported |  Supported |
-| **Animations** |  Limited |  Full support |
-| **Hardware** |  No real hardware |  Real hardware |
+| Feature        | Paparazzi           | Shot                  |
+| -------------- | ------------------- | --------------------- |
+| **Speed**      | Fast (JVM)          | Slow (Device)         |
+| **Setup**      | Simple              | Requires device       |
+| **CI**         | No emulator needed  | Needs emulator        |
+| **Accuracy**   | Simulated rendering | Real device rendering |
+| **Compose**    | Full support        | Full support          |
+| **Views**      | Supported           | Supported             |
+| **Animations** | Limited             | Full support          |
+| **Hardware**   | No real hardware    | Real hardware         |
 
 ---
 
@@ -550,26 +555,26 @@ name: Screenshot Tests
 on: [pull_request]
 
 jobs:
-  screenshot-tests:
-    runs-on: ubuntu-latest
+    screenshot-tests:
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
+        steps:
+            - uses: actions/checkout@v3
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
+            - name: Set up JDK
+              uses: actions/setup-java@v3
+              with:
+                  java-version: "17"
 
-      - name: Run Paparazzi Tests
-        run: ./gradlew verifyPaparazziDebug
+            - name: Run Paparazzi Tests
+              run: ./gradlew verifyPaparazziDebug
 
-      - name: Upload test results
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: paparazzi-failures
-          path: app/build/paparazzi/failures
+            - name: Upload test results
+              if: failure()
+              uses: actions/upload-artifact@v3
+              with:
+                  name: paparazzi-failures
+                  path: app/build/paparazzi/failures
 ```
 
 ---
@@ -640,9 +645,9 @@ paparazzi.snapshot("test1") { }
 
 ### Обработка нестабильных screenshots
 
-- Отключайте анимации
-- Используйте фиксированные timestamps
-- Избегайте динамического контента
+-   Отключайте анимации
+-   Используйте фиксированные timestamps
+-   Избегайте динамического контента
 
 ### CI интеграция
 
@@ -659,14 +664,28 @@ Screenshot тестирование предотвращает визуальн�
 
 ---
 
+## Follow-ups
+
+-   How do you handle screenshot test failures when UI changes are intentional vs regressions?
+-   What's the best strategy for maintaining screenshot test baselines across different device configurations?
+-   How can you integrate screenshot testing into your design system validation workflow?
+
+## References
+
+-   `https://github.com/cashapp/paparazzi` — Paparazzi library
+-   `https://developer.android.com/training/testing/instrumented-tests` — Android testing guide
+-   `https://developer.android.com/jetpack/compose/testing` — Compose testing
+
 ## Related Questions
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
-- [[q-testing-compose-ui--android--medium]] - Testing
-- [[q-compose-testing--android--medium]] - Testing
-- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
-- [[q-fakes-vs-mocks-testing--testing--medium]] - Testing
+
+-   [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+-   [[q-testing-compose-ui--android--medium]] - Testing
+-   [[q-compose-testing--android--medium]] - Testing
+-   [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+-   [[q-fakes-vs-mocks-testing--testing--medium]] - Testing
 
 ### Advanced (Harder)
-- [[q-testing-coroutines-flow--testing--hard]] - Testing
+
+-   [[q-testing-coroutines-flow--testing--hard]] - Testing

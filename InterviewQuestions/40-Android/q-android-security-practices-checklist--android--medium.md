@@ -351,25 +351,7 @@ channel[1].postMessage(WebMessage("Мое защищенное сообщени�
 
 ### Prerequisites (Easier)
 - [[q-cleartext-traffic-android--android--easy]] - Security
-
 ### Related (Medium)
 - [[q-android-security-best-practices--android--medium]] - android security best practices 
-
-### Advanced (Harder)
-- [[q-modularization-patterns--android--hard]] - Architecture
-### Prerequisites (Easier)
-- [[q-cleartext-traffic-android--android--easy]] - Security
-
-### Related (Medium)
-- [[q-android-security-best-practices--android--medium]] - android security best practices 
-
-### Advanced (Harder)
-- [[q-modularization-patterns--android--hard]] - Architecture
-### Prerequisites (Easier)
-- [[q-cleartext-traffic-android--android--easy]] - Security
-
-### Related (Medium)
-- [[q-android-security-best-practices--android--medium]] - android security best practices 
-
 ### Advanced (Harder)
 - [[q-modularization-patterns--android--hard]] - Architecture

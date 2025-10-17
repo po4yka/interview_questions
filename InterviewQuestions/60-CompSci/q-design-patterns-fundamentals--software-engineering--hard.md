@@ -1,21 +1,18 @@
-# Design Patterns Fundamentals
-
 ---
 id: "20251013-600006"
 title: "Design Patterns Fundamentals"
-description: "Comprehensive coverage of essential design patterns (Creational, Structural, Behavioral) with real-world Android/Kotlin examples including Singleton, Factory, Observer, Strategy, Decorator, and more"
-topic: "architecture-patterns"
-subcategory: "design-patterns"
-difficulty: "hard"
-tags: ["design-patterns", "gof", "creational", "structural", "behavioral", "singleton", "factory", "observer", "strategy", "decorator", "kotlin", "android"]
+topic: architecture-patterns
+difficulty: hard
+status: draft
 created: "2025-10-13"
-updated: "2025-10-13"
-related_questions:
-  - "20251012-600004"  # OOP Principles
-  - "20251013-600005"  # Data Structures and Algorithms
+tags: ["design-patterns", "gof", "creational", "structural", "behavioral", "singleton", "factory", "observer", "strategy", "decorator", "kotlin", "android"]
+description: "Comprehensive coverage of essential design patterns (Creational, Structural, Behavioral) with real-world Android/Kotlin examples including Singleton, Factory, Observer, Strategy, Decorator, and more"
 language: "en"
+related_questions:   - "20251012-600004"  # OOP Principles
+  - "20251013-600005"  # Data Structures and Algorithms
+subcategory: "design-patterns"
+updated: "2025-10-13"
 ---
-
 ## Question
 
 **English:**

@@ -1,16 +1,17 @@
 ---
+id: "20251015082236016"
+title: "List Set Map Differences / Различия List Set и Map"
 topic: kotlin
-tags:
-  - collections
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - collections
   - kotlin
   - list
   - map
   - programming-languages
   - set
-difficulty: easy
-status: draft
 ---
-
 # рассказать отличия и в каких случаях их использовать list set map
 
 # Question (EN)

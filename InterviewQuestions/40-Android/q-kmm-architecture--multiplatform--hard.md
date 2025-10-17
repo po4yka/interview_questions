@@ -1,14 +1,16 @@
 ---
-tags:
-  - Android
+id: "20251015082237331"
+title: "Kmm Architecture / Архитектура KMM"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - KMM
   - Multiplatform
   - Architecture
-difficulty: hard
-status: draft
 ---
-
 # Kotlin Multiplatform Mobile (KMM) Architecture
 
 # Question (EN)

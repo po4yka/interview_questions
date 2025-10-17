@@ -1,16 +1,17 @@
 ---
+id: "20251015082237484"
+title: "What Does Itemdecoration Do / Что делает ItemDecoration"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/recyclerview
   - android/ui
   - itemdecoration
   - recyclerview
   - ui
-difficulty: medium
-status: draft
 ---
-
 # Что позволяет делать ItemDecoration?
 
 **English**: What does ItemDecoration allow you to do?

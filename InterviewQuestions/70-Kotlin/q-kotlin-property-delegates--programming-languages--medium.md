@@ -1,0 +1,32 @@
+---
+id: "20251015082237143"
+title: "Kotlin Property Delegates / Делегаты свойств Kotlin"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - delegates
+  - kotlin
+  - programming-languages
+  - property-delegates
+---
+# В чем особенность делегатов свойств
+
+# Question (EN)
+> What are the features of property delegates?
+
+# Вопрос (RU)
+> В чем особенность делегатов свойств
+
+---
+
+## Answer (EN)
+
+Property delegates are a powerful feature that allows delegating property get/set operations to another object. The main idea is that instead of each property independently storing data or performing operations, it can redirect these tasks to a delegate. This avoids code duplication and makes property handling mechanisms more modular and reusable. Main features and benefits: logic isolation, code reuse, extensibility, and built-in language support.
+
+---
+
+## Ответ (RU)
+
+Делегаты свойств — это мощная функциональность, позволяющая делегировать выполнение операций получения и установки значения свойства другому объекту. Основная идея заключается в том, что вместо того чтобы каждое свойство самостоятельно хранило данные или выполняло операции, оно может перенаправить эти задачи делегату. Это позволяет избежать дублирования кода и сделать более модульными и переиспользуемыми механизмы обработки свойств. Основные особенности и преимущества: Изоляция логики, Повторное использование кода, Расширяемость и Встроенная поддержка в языке.
+

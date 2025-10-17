@@ -1,7 +1,11 @@
 ---
+id: "20251015082237429"
+title: "Stable Classes Compose / Stable Классы Compose"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android/jetpack-compose
   - android/performance
   - immutability
@@ -10,10 +14,7 @@ tags:
   - recomposition
   - stability
   - stable-annotation
-difficulty: hard
-status: draft
 ---
-
 # Какие классы будут автоматически выводиться как stable?
 
 **English**: Which classes are automatically inferred as stable in Jetpack Compose?

@@ -1,21 +1,22 @@
 ---
+id: "20251015082237352"
+title: "Stack Heap Memory Multiple Threads / Stack и Heap память для нескольких потоков"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - android
   - android/memory-management
   - heap
   - memory-management
   - multithreading
   - stack
   - threading
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Изменится ли объём памяти стека/кучи, если в приложении создано несколько потоков?
 
 **English**: Will stack/heap memory size change if multiple threads are created in the app?

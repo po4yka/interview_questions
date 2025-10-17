@@ -1,32 +1,29 @@
 ---
 id: 20251012-160001
 title: "Mutex vs synchronized in Kotlin coroutines / Mutex vs synchronized в Kotlin корутинах"
-slug: mutex-synchronized-coroutines-kotlin-medium
 topic: kotlin
-subtopics:
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - coroutines
+  - concurrency
+  - thread-safety
   - mutex
   - synchronization
-  - thread-safety
-  - concurrency
-status: draft
-difficulty: medium
-moc: moc-kotlin
 date_created: 2025-10-12
 date_updated: 2025-10-12
-related_questions:
-  - q-race-conditions-coroutines--kotlin--hard
+moc: moc-kotlin
+related_questions:   - q-race-conditions-coroutines--kotlin--hard
   - q-semaphore-rate-limiting--kotlin--medium
   - q-channelflow-callbackflow-flow--kotlin--medium
-tags:
-  - kotlin
-  - coroutines
-  - concurrency
-  - thread-safety
+slug: mutex-synchronized-coroutines-kotlin-medium
+subtopics:   - coroutines
   - mutex
   - synchronization
+  - thread-safety
+  - concurrency
 ---
-
 # Mutex vs synchronized in Kotlin coroutines
 
 ## English Version

@@ -1,20 +1,25 @@
 ---
-tags:
-  - jetpack-compose
+id: "20251015082237277"
+title: "Compositionlocal Advanced / CompositionLocal продвинутый уровень"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - jetpack-compose
   - composition-local
   - dependency-injection
   - best-practices
   - architecture
-difficulty: medium
-status: draft
 ---
 
 # CompositionLocal Advanced Usage
 
 # Question (EN)
+
 > When should you use CompositionLocal vs passing parameters? Explain staticCompositionLocalOf vs compositionLocalOf.
 
 # Вопрос (RU)
+
 > Когда следует использовать CompositionLocal вместо передачи параметров? Объясните разницу между staticCompositionLocalOf и compositionLocalOf.
 
 ---
@@ -26,16 +31,18 @@ status: draft
 ### CompositionLocal vs Parameters
 
 **Use Parameters When:**
-- Data is used by immediate children
-- Explicit dependencies are clearer
-- Data changes frequently per composable
-- You want compile-time safety
+
+-   Data is used by immediate children
+-   Explicit dependencies are clearer
+-   Data changes frequently per composable
+-   You want compile-time safety
 
 **Use CompositionLocal When:**
-- Data is needed deep in the tree (cross-cutting concerns)
-- It's awkward to pass through many layers
-- Data represents environmental context (theme, locale, etc.)
-- Data changes infrequently
+
+-   Data is needed deep in the tree (cross-cutting concerns)
+-   It's awkward to pass through many layers
+-   Data represents environmental context (theme, locale, etc.)
+-   Data changes infrequently
 
 ---
 
@@ -99,10 +106,11 @@ The key difference is **how recomposition is triggered** when the value changes.
 #### compositionLocalOf (Dynamic)
 
 **Characteristics:**
-- Tracks reads at the **specific location** where `.current` is accessed
-- Only recomposes consumers that actually read the value
-- More efficient for frequently changing values
-- Small performance overhead per read
+
+-   Tracks reads at the **specific location** where `.current` is accessed
+-   Only recomposes consumers that actually read the value
+-   More efficient for frequently changing values
+-   Small performance overhead per read
 
 ```kotlin
 val LocalCounter = compositionLocalOf { 0 }
@@ -139,19 +147,21 @@ fun Child2() {
 ```
 
 **When counter changes:**
--  `Parent` recomposes (owns the state)
--  `Child1` recomposes (reads `LocalCounter.current`)
--  `Child2` does NOT recompose (never reads value)
+
+-   `Parent` recomposes (owns the state)
+-   `Child1` recomposes (reads `LocalCounter.current`)
+-   `Child2` does NOT recompose (never reads value)
 
 ---
 
 #### staticCompositionLocalOf (Static)
 
 **Characteristics:**
-- Does NOT track individual reads
-- Recomposes **entire composition** below the provider
-- More efficient for rarely changing values (no tracking overhead)
-- Used for truly static or rarely-changing data
+
+-   Does NOT track individual reads
+-   Recomposes **entire composition** below the provider
+-   More efficient for rarely changing values (no tracking overhead)
+-   Used for truly static or rarely-changing data
 
 ```kotlin
 val LocalConfig = staticCompositionLocalOf { Config.DEFAULT }
@@ -184,23 +194,24 @@ fun Child2() {
 ```
 
 **When config changes:**
--  `Parent` recomposes
--  `Child1` recomposes (entire subtree recomposes)
--  `Child2` recomposes (entire subtree recomposes, even though it doesn't read the value!)
+
+-   `Parent` recomposes
+-   `Child1` recomposes (entire subtree recomposes)
+-   `Child2` recomposes (entire subtree recomposes, even though it doesn't read the value!)
 
 ---
 
 ### Comparison Table
 
-| Feature | compositionLocalOf | staticCompositionLocalOf |
-|---------|-------------------|-------------------------|
-| **Recomposition scope** | Only consumers that read the value | Entire subtree |
-| **Read tracking** | Yes | No |
-| **Performance (stable values)** | Slower (tracking overhead) | Faster (no tracking) |
-| **Performance (changing values)** | Faster (targeted recomposition) | Slower (broad recomposition) |
-| **Best for** | Frequently changing values | Rarely changing values |
-| **Memory overhead** | Higher (per-read tracking) | Lower |
-| **Examples** | Colors, dimensions | Configuration, locale |
+| Feature                           | compositionLocalOf                 | staticCompositionLocalOf     |
+| --------------------------------- | ---------------------------------- | ---------------------------- |
+| **Recomposition scope**           | Only consumers that read the value | Entire subtree               |
+| **Read tracking**                 | Yes                                | No                           |
+| **Performance (stable values)**   | Slower (tracking overhead)         | Faster (no tracking)         |
+| **Performance (changing values)** | Faster (targeted recomposition)    | Slower (broad recomposition) |
+| **Best for**                      | Frequently changing values         | Rarely changing values       |
+| **Memory overhead**               | Higher (per-read tracking)         | Lower                        |
+| **Examples**                      | Colors, dimensions                 | Configuration, locale        |
 
 ---
 
@@ -418,7 +429,7 @@ fun NestedProviders() {
 
 ### Anti-Patterns
 
-####  DON'T: Use CompositionLocal for simple parameter passing
+#### DON'T: Use CompositionLocal for simple parameter passing
 
 ```kotlin
 //  BAD: Unnecessary CompositionLocal
@@ -451,7 +462,7 @@ fun Child(name: String) {
 
 ---
 
-####  DON'T: Use CompositionLocal for business logic
+#### DON'T: Use CompositionLocal for business logic
 
 ```kotlin
 //  BAD: Business logic in CompositionLocal
@@ -476,7 +487,7 @@ fun UserScreen(viewModel: UserViewModel) {
 
 ---
 
-####  DON'T: Overuse staticCompositionLocalOf
+#### DON'T: Overuse staticCompositionLocalOf
 
 ```kotlin
 //  BAD: Using static for frequently changing value
@@ -734,39 +745,43 @@ val LocalAppTheme = compositionLocalOf<AppTheme> {
 ### CompositionLocal vs Параметры
 
 **Используйте параметры когда:**
-- Данные используются непосредственными дочерними элементами
-- Явные зависимости более понятны
-- Данные часто меняются для каждого composable
-- Нужна безопасность на уровне компиляции
+
+-   Данные используются непосредственными дочерними элементами
+-   Явные зависимости более понятны
+-   Данные часто меняются для каждого composable
+-   Нужна безопасность на уровне компиляции
 
 **Используйте CompositionLocal когда:**
-- Данные нужны глубоко в дереве (сквозные задачи)
-- Неудобно передавать через много слоев
-- Данные представляют контекст окружения (тема, локаль и т.д.)
-- Данные редко меняются
+
+-   Данные нужны глубоко в дереве (сквозные задачи)
+-   Неудобно передавать через много слоев
+-   Данные представляют контекст окружения (тема, локаль и т.д.)
+-   Данные редко меняются
 
 ### staticCompositionLocalOf vs compositionLocalOf
 
 **compositionLocalOf (Динамический):**
-- Отслеживает чтения в конкретном месте, где вызывается `.current`
-- Перекомпонует только потребителей, которые действительно читают значение
-- Более эффективен для часто изменяющихся значений
+
+-   Отслеживает чтения в конкретном месте, где вызывается `.current`
+-   Перекомпонует только потребителей, которые действительно читают значение
+-   Более эффективен для часто изменяющихся значений
 
 **staticCompositionLocalOf (Статический):**
-- НЕ отслеживает отдельные чтения
-- Перекомпонует **всю композицию** ниже провайдера
-- Более эффективен для редко меняющихся значений (нет накладных расходов на отслеживание)
+
+-   НЕ отслеживает отдельные чтения
+-   Перекомпонует **всю композицию** ниже провайдера
+-   Более эффективен для редко меняющихся значений (нет накладных расходов на отслеживание)
 
 ### Когда использовать что
 
-| Тип значения | Рекомендуемый вариант |
-|--------------|----------------------|
-| Цвета темы (меняются) | compositionLocalOf |
-| Типографика темы (меняется) | compositionLocalOf |
-| URL API (константа) | staticCompositionLocalOf |
-| Конфигурация приложения | staticCompositionLocalOf |
-| Информация о пользователе | compositionLocalOf |
-| Локаль (редко меняется) | staticCompositionLocalOf |
+| Тип значения                | Рекомендуемый вариант    |
+| --------------------------- | ------------------------ |
+| Цвета темы (меняются)       | compositionLocalOf       |
+| Типографика темы (меняется) | compositionLocalOf       |
+| URL API (константа)         | staticCompositionLocalOf |
+| Конфигурация приложения     | staticCompositionLocalOf |
+| Информация о пользователе   | compositionLocalOf       |
+| Локаль (редко меняется)     | staticCompositionLocalOf |
 
 ### Лучшие практики
 
@@ -778,23 +793,38 @@ val LocalAppTheme = compositionLocalOf<AppTheme> {
 
 CompositionLocal — мощный инструмент для управления глобальным контекстом, но его следует использовать разумно.
 
-
 ---
 
 ## Related Questions
 
 ### Hub
-- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+-   [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
 
 ### Related (Medium)
-- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
-- [[q-mutable-state-compose--android--medium]] - MutableState basics
-- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
+
+-   [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
+-   [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
+-   [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
+-   [[q-mutable-state-compose--android--medium]] - MutableState basics
+-   [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
 
 ### Advanced (Harder)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
-- [[q-stable-classes-compose--android--hard]] - @Stable annotation
-- [[q-stable-annotation-compose--android--hard]] - Stability annotations
 
+-   [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+-   [[q-stable-classes-compose--android--hard]] - @Stable annotation
+-   [[q-stable-annotation-compose--android--hard]] - Stability annotations
+
+---
+
+## Follow-ups
+
+-   When should CompositionLocal be avoided in favor of explicit parameters?
+-   How do staticCompositionLocalOf vs compositionLocalOf impact recomposition scope?
+-   How do you test CompositionLocal usage in complex trees?
+
+## References
+
+-   `https://developer.android.com/jetpack/compose/compositionlocal` — CompositionLocal
+-   `https://developer.android.com/jetpack/compose/performance` — Performance & recomposition
+-   `https://developer.android.com/jetpack/compose/state` — State and effects

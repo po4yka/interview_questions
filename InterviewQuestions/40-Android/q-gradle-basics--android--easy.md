@@ -1,14 +1,15 @@
 ---
+id: "20251015082237401"
+title: "Gradle Basics / Gradle Основы"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - gradle
   - build-system
   - dependencies
-difficulty: easy
-status: draft
 ---
-
 # Gradle Basics
 
 **English**: What is Gradle? Explain project vs module build.gradle files, dependencies, build variants, and common Gradle tasks.

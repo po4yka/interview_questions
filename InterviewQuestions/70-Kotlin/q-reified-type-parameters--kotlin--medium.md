@@ -1,15 +1,16 @@
 ---
+id: "20251015082236021"
+title: "Reified Type Parameters / Reified параметры типов"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - generics
   - reified
   - inline-functions
   - type-system
-difficulty: medium
-status: draft
 ---
-
 # Зачем нужен reified в Kotlin?
 
 **English**: What is `reified` for in Kotlin?

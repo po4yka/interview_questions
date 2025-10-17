@@ -1,7 +1,11 @@
 ---
+id: "20251015082237536"
+title: "Navigation Methods In Android / Методы навигации в Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/navigation
   - android/ui
   - bottomnavigationview
@@ -12,10 +16,7 @@ tags:
   - navigation
   - tablayout
   - ui
-difficulty: medium
-status: draft
 ---
-
 # Какие способы навигации в Android знаешь?
 
 **English**: What navigation methods in Android do you know?

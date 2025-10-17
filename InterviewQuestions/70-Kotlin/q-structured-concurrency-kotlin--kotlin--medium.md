@@ -2,25 +2,23 @@
 id: 20251006-structured-concurrency
 title: Structured Concurrency in Kotlin Coroutines
 topic: kotlin
-subtopics:
-  - coroutines
-  - structured-concurrency
-  - scope-management
 difficulty: medium
-language_tags:
-  - en
-  - ru
-original_language: en
 status: draft
-source: Kotlin Coroutines Interview Questions PDF
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - structured-concurrency
   - scope
   - lifecycle
   - memory-leaks
   - difficulty/medium
+language_tags:   - en
+  - ru
+original_language: en
+source: Kotlin Coroutines Interview Questions PDF
+subtopics:   - coroutines
+  - structured-concurrency
+  - scope-management
 ---
 # Question (EN)
 > What is structured concurrency and why is it important in Android coroutine usage?

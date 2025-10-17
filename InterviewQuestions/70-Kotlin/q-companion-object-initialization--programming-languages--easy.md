@@ -1,11 +1,12 @@
 ---
+id: "20251015082237054"
+title: "Companion Object Initialization / Инициализация Companion Object"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # When is companion object initialized?
 
 # Question (EN)

@@ -1,29 +1,26 @@
 ---
 id: 20251012-300007
 title: "REST API Design Best Practices / Лучшие практики проектирования REST API"
-slug: rest-api-design-best-practices-system-design-medium
 topic: system-design
-subtopics:
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - system-design
   - rest-api
+  - api-design
+  - http
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-system-design
+related_questions:   - q-api-versioning-strategies--system-design--medium
+  - q-graphql-vs-rest--system-design--medium
+  - q-api-rate-limiting--system-design--hard
+slug: rest-api-design-best-practices-system-design-medium
+subtopics:   - rest-api
   - api-design
   - http
   - web-services
-status: draft
-difficulty: medium
-moc: moc-system-design
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-api-versioning-strategies--system-design--medium
-  - q-graphql-vs-rest--system-design--medium
-  - q-api-rate-limiting--system-design--hard
-tags:
-  - system-design
-  - rest-api
-  - api-design
-  - http
 ---
-
 # REST API Design Best Practices
 
 ## English Version

@@ -1,15 +1,16 @@
 ---
+id: "20251015082236015"
+title: "Kotlin Sealed When Exhaustive / sealed и exhaustive when в Kotlin"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - sealed-classes
   - when-expression
   - state-machine
   - result
-difficulty: medium
-status: draft
 ---
-
 # Sealed Classes and Exhaustive When
 
 **English**: Leverage sealed classes for exhaustive when expressions. Implement state machines and result types with sealed hierarchies.

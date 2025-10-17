@@ -1,11 +1,12 @@
 ---
+id: "20251015082238655"
+title: "Until What Point Does Viewmodel Guarantee State Preservation / До какого момента ViewModel гарантирует сохранение состояния"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # Until what point does ViewModel guarantee state preservation
 
 ## Answer (EN)
@@ -153,7 +154,156 @@ class MyViewModel : ViewModel() {
 | ViewModel thread-safe by default | - Must implement thread safety |
 
 ## Ответ (RU)
-ViewModel сохраняет данные до тех пор, пока связанная Activity или Fragment не будут уничтожены навсегда Например данные сохраняются при изменении конфигурации например поворот экрана но удаляются если приложение закрывается или выгружается из памяти
+
+ViewModel гарантирует сохранение состояния до тех пор, пока Activity не завершится полностью или процесс не будет убит. Она переживает изменения конфигурации такие как поворот экрана, но не переживает уничтожение процесса.
+
+### Гарантии времени жизни ViewModel
+
+#### Переживает (Данные сохраняются)
+
+1. **Изменения конфигурации**:
+   ```kotlin
+   class MyActivity : AppCompatActivity() {
+       private val viewModel: MyViewModel by viewModels()
+
+       override fun onCreate(savedInstanceState: Bundle?) {
+           super.onCreate(savedInstanceState)
+           // viewModel переживает:
+           // - Поворот экрана
+           // - Смену языка
+           // - Переключение темной темы
+           // - Изменение размера шрифта
+       }
+   }
+   ```
+
+2. **Транзакции Fragment**:
+   - Замена Fragment в той же Activity
+   - Fragment добавлен в back stack
+   - Пересоздание Fragment при изменении конфигурации родительской Activity
+
+3. **Activity в фоне** (onStop):
+   - Activity перемещена в фон но процесс жив
+   - Другая Activity запущена поверх
+
+#### Не переживает (Данные теряются)
+
+1. **Activity.finish() вызван**:
+   ```kotlin
+   class MyActivity : AppCompatActivity() {
+       private val viewModel: MyViewModel by viewModels()
+
+       fun closeActivity() {
+           finish() // ViewModel.onCleared() будет вызван
+       }
+   }
+   ```
+
+2. **Смерть процесса**:
+   - Система убивает процесс приложения из-за нехватки памяти
+   - Пользователь принудительно останавливает приложение из настроек
+   - Системе не хватает памяти
+   - Приложение падает
+
+3. **Навигация назад**:
+   - Пользователь нажимает кнопку назад на корневой Activity
+   - `finish()` вызывается внутренне
+
+### Визуализация жизненного цикла ViewModel
+
+```
+Activity создан → ViewModel создан
+       ↓
+Изменение конфигурации → ViewModel СОХРАНЕН
+       ↓
+Activity пересоздан → Тот же экземпляр ViewModel
+       ↓
+Activity.finish() → ViewModel.onCleared()
+       ↓
+ViewModel уничтожен
+```
+
+### Обработка смерти процесса
+
+Чтобы пережить смерть процесса, комбинируйте ViewModel с SavedStateHandle:
+
+```kotlin
+class MyViewModel(
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+    // Автоматически сохраняется и восстанавливается при смерти процесса
+    var userName: String
+        get() = savedStateHandle["user_name"] ?: ""
+        set(value) { savedStateHandle["user_name"] = value }
+
+    // Обычное свойство - теряется при смерти процесса
+    var temporaryData: String = ""
+
+    // LiveData с сохраненным состоянием
+    val userNameLiveData: MutableLiveData<String> =
+        savedStateHandle.getLiveData("user_name_live", "")
+}
+```
+
+### Fragment-Scoped ViewModel
+
+Время жизни Fragment ViewModel:
+
+```kotlin
+class MyFragment : Fragment() {
+    // Привязан к жизненному циклу Fragment
+    private val fragmentViewModel: MyViewModel by viewModels()
+
+    // Привязан к родительской Activity - переживает пересоздание Fragment
+    private val activityViewModel: SharedViewModel by activityViewModels()
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // fragmentViewModel все еще жив если Fragment в back stack
+    }
+}
+```
+
+**Fragment ViewModel очищается когда**:
+- Fragment окончательно удален (не в back stack)
+- Родительская Activity завершается
+- `clearFragmentResult()` с `FragmentManager.popBackStack()`
+
+### Лучшие практики
+
+1. **Критичные данные**: Используйте SavedStateHandle для данных, которые должны пережить смерть процесса
+2. **Большие данные**: Храните в Repository/Database, ссылайтесь в ViewModel
+3. **Временное UI состояние**: Используйте обычные свойства ViewModel
+4. **Мониторинг жизненного цикла**: Реализуйте `onCleared()` для очистки
+
+```kotlin
+class MyViewModel : ViewModel() {
+    private val disposables = CompositeDisposable()
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.clear()
+        // Очистить ресурсы
+    }
+}
+```
+
+### Частые заблуждения
+
+| Заблуждение | Реальность |
+|-------------|-----------|
+| ViewModel переживает перезапуск приложения | Теряется при смерти процесса |
+| ViewModel переживает нажатие назад | Очищается когда Activity завершается |
+| ViewModel это singleton | Привязан к Activity/Fragment |
+| ViewModel thread-safe по умолчанию | Должна быть реализована thread safety |
+
+**Резюме**: ViewModel гарантирует сохранение состояния пока связанная Activity или Fragment не будут окончательно уничтожены. Данные сохраняются при изменениях конфигурации (например поворот экрана), но удаляются если:
+1. Activity завершается (finish() или back navigation)
+2. Приложение закрывается или процесс убивается системой
+3. Пользователь принудительно останавливает приложение
+
+Для сохранения данных через смерть процесса используйте **SavedStateHandle** в комбинации с ViewModel. Для больших данных храните их в Repository/Database и только ссылайтесь из ViewModel.
 
 ## Related Topics
 - ViewModel lifecycle

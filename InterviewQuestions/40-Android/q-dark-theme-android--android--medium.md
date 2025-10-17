@@ -1,17 +1,18 @@
 ---
+id: "20251015082237534"
+title: "Dark Theme Android / Темная тема Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - dark-theme
   - ui
   - theming
   - daynight
   - material-design
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # What is Dark Theme in Android? / Что такое темная тема в Android?
 
 **English**: What's dark theme?

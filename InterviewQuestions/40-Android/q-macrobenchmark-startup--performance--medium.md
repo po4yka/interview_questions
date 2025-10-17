@@ -1174,34 +1174,10 @@ MyApp/
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
 ### Related (Medium)
 - [[q-app-startup-optimization--performance--medium]] - Performance
 - [[q-baseline-profiles-optimization--performance--medium]] - Performance
 - [[q-memory-leak-detection--performance--medium]] - Performance
 - [[q-jank-detection-frame-metrics--performance--medium]] - Performance
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
-### Related (Medium)
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
-- [[q-memory-leak-detection--performance--medium]] - Performance
-- [[q-jank-detection-frame-metrics--performance--medium]] - Performance
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
-### Related (Medium)
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
-- [[q-memory-leak-detection--performance--medium]] - Performance
-- [[q-jank-detection-frame-metrics--performance--medium]] - Performance
-
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

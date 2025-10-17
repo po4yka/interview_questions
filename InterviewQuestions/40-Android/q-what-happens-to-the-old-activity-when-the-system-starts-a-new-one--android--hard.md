@@ -1,11 +1,12 @@
 ---
+id: "20251015082238609"
+title: "What Happens To The Old Activity When The System Starts A New One / Что происходит со старой Activity при запуске новой"
 topic: android
-tags:
-  - android
 difficulty: hard
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # What happens to the old Activity when the system starts a new one?
 
 ## Answer (EN)

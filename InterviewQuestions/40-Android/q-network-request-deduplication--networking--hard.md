@@ -1,17 +1,18 @@
 ---
+id: "20251015082237528"
+title: "Network Request Deduplication / Дедупликация сетевых запросов"
 topic: networking
-tags:
-  - networking
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - networking
   - optimization
   - deduplication
   - concurrency
   - performance
   - caching
   - difficulty/hard
-difficulty: hard
-status: draft
 ---
-
 # Network Request Deduplication / Дедупликация сетевых запросов
 
 **English**: Implement request deduplication to prevent multiple identical requests. Handle concurrent API calls efficiently with Flow and coroutines.

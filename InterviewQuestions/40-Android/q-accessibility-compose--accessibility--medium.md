@@ -1,19 +1,19 @@
 ---
-tags:
-  - android
+id: "20251015082237281"
+title: "Accessibility Compose / Доступность в Compose"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-11
+tags: - android
   - accessibility
   - compose
   - talkback
   - inclusive-design
-difficulty: medium
-status: draft
-related:
-  - q-accessibility-talkback--accessibility--medium
+related:   - q-accessibility-talkback--accessibility--medium
   - q-accessibility-testing--accessibility--medium
   - q-custom-view-accessibility--custom-views--medium
-created: 2025-10-11
 ---
-
 # Question (EN)
 How do you make Jetpack Compose UIs accessible? What are the key considerations for TalkBack support, content descriptions, semantic properties, and accessibility actions in Compose?
 

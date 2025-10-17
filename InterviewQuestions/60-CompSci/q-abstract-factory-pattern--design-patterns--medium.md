@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237132"
+title: "Abstract Factory Pattern / Abstract Factory Паттерн"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - creational-patterns
   - abstract-factory
   - factory
   - gof-patterns
-difficulty: medium
-status: draft
 ---
-
 # Abstract Factory Pattern
 
 # Question (EN)

@@ -1,14 +1,16 @@
 ---
-tags:
-  - Android
+id: "20251015082237494"
+title: "Mlkit Face Detection / Распознавание лиц ML Kit"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - MLKit
   - MachineLearning
   - FaceDetection
-difficulty: medium
-status: draft
 ---
-
 # ML Kit Face Detection and Analysis
 
 # Question (EN)

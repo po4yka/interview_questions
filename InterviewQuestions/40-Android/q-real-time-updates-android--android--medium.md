@@ -1,17 +1,18 @@
 ---
+id: "20251015082237509"
+title: "Real Time Updates Android / Обновления в реальном времени Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - networking
   - websockets
   - sse
   - firebase
   - fcm
   - real-time
-difficulty: medium
-status: draft
 ---
-
 # How to Implement Real-Time Updates in Android
 
 **Сложность**: 🟡 Medium

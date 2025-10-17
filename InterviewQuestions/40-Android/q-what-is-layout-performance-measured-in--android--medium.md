@@ -1,15 +1,16 @@
 ---
+id: "20251015082237414"
+title: "What Is Layout Performance Measured In / В чем измеряется производительность layout"
 topic: android
-tags:
-  - layout
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - layout
   - performance
   - android
   - ui
   - layouts
-difficulty: medium
-status: draft
 ---
-
 # What is layout performance measured in?
 
 # Вопрос (RU)

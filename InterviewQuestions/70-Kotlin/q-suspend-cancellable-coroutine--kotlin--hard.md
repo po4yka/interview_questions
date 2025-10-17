@@ -1,32 +1,29 @@
 ---
 id: 20251012-160006
 title: "Converting callbacks with suspendCancellableCoroutine / Преобразование callback с suspendCancellableCoroutine"
-slug: suspend-cancellable-coroutine-kotlin-hard
 topic: kotlin
-subtopics:
+difficulty: hard
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - coroutines
   - suspend
   - callbacks
-  - integration
   - cancellation
-status: draft
-difficulty: hard
-moc: moc-kotlin
+  - integration
 date_created: 2025-10-12
 date_updated: 2025-10-12
-related_questions:
-  - q-continuation-cps-internals--kotlin--hard
+moc: moc-kotlin
+related_questions:   - q-continuation-cps-internals--kotlin--hard
   - q-channelflow-callbackflow-flow--kotlin--medium
   - q-coroutine-exception-handler--kotlin--medium
-tags:
-  - kotlin
-  - coroutines
+slug: suspend-cancellable-coroutine-kotlin-hard
+subtopics:   - coroutines
   - suspend
   - callbacks
-  - cancellation
   - integration
+  - cancellation
 ---
-
 # Converting callbacks with suspendCancellableCoroutine
 
 ## English Version

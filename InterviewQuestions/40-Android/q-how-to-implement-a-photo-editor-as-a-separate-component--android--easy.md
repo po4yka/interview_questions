@@ -1,7 +1,11 @@
 ---
+id: "20251015082237411"
+title: "How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор как отдельный компонент"
 topic: android
-tags:
-  - activity
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - activity
   - android
   - android/fragments
   - android/views
@@ -12,10 +16,7 @@ tags:
   - imageview
   - ui
   - views
-difficulty: easy
-status: draft
 ---
-
 # Как реализовать редактор фотографий в качестве отдельного компонента?
 
 **English**: How to implement a photo editor as a separate component?

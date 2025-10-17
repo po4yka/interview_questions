@@ -1,15 +1,16 @@
 ---
+id: "20251015082237541"
+title: "How To Organize Work With Text And Images In A Delegate / How To Organize Work With Text и Images In A Delegate"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/recyclerview
   - delegates
   - recyclerview
   - ui
-difficulty: easy
-status: draft
 ---
-
 # Как организовать работу с текстом и картинками в делегате?
 
 **English**: How to organize work with text and images in a delegate?

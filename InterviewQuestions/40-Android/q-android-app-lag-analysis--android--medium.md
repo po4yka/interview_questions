@@ -1,21 +1,22 @@
 ---
+id: "20251015082238612"
+title: "Android App Lag Analysis / Анализ тормозов приложения Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - android
   - performance
   - performance-rendering
   - performance-memory
   - ui
   - profiling
   - strictmode
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Why Does Android App Lag? Analysis and Solutions
 
 # Question (EN)

@@ -1,14 +1,15 @@
 ---
+id: "20251015082236022"
+title: "Crossinline Keyword / Ключевое слово crossinline"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - inline-functions
   - lambda
   - non-local-returns
-difficulty: medium
-status: draft
 ---
-
 # Зачем нужен crossinline?
 
 # Question (EN)

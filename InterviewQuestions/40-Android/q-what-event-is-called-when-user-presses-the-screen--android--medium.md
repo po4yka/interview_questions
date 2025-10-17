@@ -1,15 +1,16 @@
 ---
+id: "20251015082237503"
+title: "What Event Is Called When User Presses The Screen / Какое событие вызывается когда пользователь нажимает на экран"
 topic: android
-tags:
-  - touch events
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - touch events
   - event handling
   - android
   - ui
   - touch-events
-difficulty: medium
-status: draft
 ---
-
 # What event is called when user presses the screen?
 
 # Вопрос (RU)

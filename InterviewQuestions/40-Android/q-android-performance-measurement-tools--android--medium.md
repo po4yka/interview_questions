@@ -1,7 +1,11 @@
 ---
+id: "20251015082237562"
+title: "Android Performance Measurement Tools / Инструменты измерения производительности Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - android
   - android-profiler
   - android/performance
   - benchmark
@@ -9,14 +13,11 @@ tags:
   - optimization
   - performance
   - profiling
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Как определить изменение скорости работы программы после наших действий?
 
 # Question (EN)

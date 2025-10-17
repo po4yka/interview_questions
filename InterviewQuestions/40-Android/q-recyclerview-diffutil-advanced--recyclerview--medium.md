@@ -1,13 +1,15 @@
 ---
-tags:
-  - recyclerview
+id: "20251015082237399"
+title: "Recyclerview Diffutil Advanced / Продвинутый DiffUtil для RecyclerView"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - recyclerview
   - diffutil
   - performance
   - lists
-difficulty: medium
-status: draft
 ---
-
 # RecyclerView DiffUtil Advanced
 
 # Question (EN)
@@ -756,21 +758,6 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 - Очень большие списки (> 10,000 элементов) - используйте Paging 3
 - Частые быстрые обновления - используйте debounce
 - Простые списки с полным обновлением - `notifyDataSetChanged()` подойдёт
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
-
-### Related (Medium)
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
-- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
-- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui
 
 ---
 

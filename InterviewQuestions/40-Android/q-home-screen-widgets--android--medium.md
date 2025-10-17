@@ -1,14 +1,15 @@
 ---
+id: "20251015082237343"
+title: "Home Screen Widgets / Виджеты домашнего экрана"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - widgets
   - appwidget
   - home-screen
-difficulty: medium
-status: draft
 ---
-
 # Android Home Screen Widgets / Виджеты главного экрана Android
 
 **English**: What's a Widget?

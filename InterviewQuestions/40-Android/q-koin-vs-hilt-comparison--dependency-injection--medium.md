@@ -1,21 +1,22 @@
 ---
+id: "20251015082237580"
+title: "Koin Vs Hilt Comparison / Koin против Hilt Сравнение"
 topic: architecture-patterns
-subtopics: [di-hilt, di-koin]
-tags:
-  - dependency-injection
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - dependency-injection
   - koin
   - hilt
   - comparison
   - architecture
   - difficulty/medium
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-architecture-patterns
 related_questions: []
+subtopics: [di-hilt, di-koin]
 ---
-
 # Koin vs Hilt Comparison / Сравнение Koin и Hilt
 
 **English**: Compare Koin and Hilt in detail. When would you choose one over the other? Discuss compile-time vs runtime DI.
@@ -557,78 +558,118 @@ Both are excellent choices. The decision depends on your specific constraints: t
 ## Ответ (RU)
 ### Глубокое сравнение: Koin vs Hilt
 
-Koin и Hilt — популярные решения для внедрения зависимостей в Android, но они используют фундаментально разные подходы.
+Koin и Hilt — популярные решения для внедрения зависимостей в Android, но они используют фундаментально разные подходы к решению одной и той же проблемы.
 
 ### Архитектурное сравнение
 
 | Аспект | Koin | Hilt |
 |--------|------|------|
-| **Паттерн** | Service Locator | True Dependency Injection |
-| **Разрешение** | Runtime (рефлексия) | Compile-time (генерация кода) |
-| **Генерация кода** | Нет | Обширная (kapt/ksp) |
+| **Паттерн** | Service Locator | Настоящий Dependency Injection |
+| **Разрешение зависимостей** | Runtime (на основе рефлексии) | Compile-time (генерация кода) |
+| **Генерация кода** | Нет | Обширная (через kapt/ksp) |
 | **Верификация** | Runtime проверки | Compile-time верификация |
-| **Время сборки** | Минимальное (~5-10с) | Значительное (~30-60с) |
-| **Runtime производительность** | ~10-15% медленнее | Оптимальная |
-| **Старт приложения** | 50-100мс для больших приложений | 0мс |
-| **Размер APK** | +200KB | +500KB-1MB |
+| **Влияние на время сборки** | Минимальное (~5-10с для изменений модуля) | Значительное (~30-60с для изменений модуля) |
+| **Runtime производительность** | ~10-15% медленнее | Оптимальная (прямое создание экземпляров) |
+| **Overhead старта приложения** | 50-100мс для больших приложений | 0мс (нет runtime инициализации) |
+| **Размер APK** | +200KB (библиотека Koin) | +500KB-1MB (сгенерированный код) |
 | **Кривая обучения** | Легкая (1-2 дня) | Средняя (1-2 недели) |
-| **Boilerplate** | Минимальный | Умеренный |
+| **Boilerplate код** | Минимальный | Умеренный (аннотации) |
 | **Multiplatform** | Полная поддержка KMM | Только Android |
-| **Сообщения об ошибках** | Runtime исключения | Ясные compile ошибки |
+| **Сообщения об ошибках** | Runtime исключения | Понятные ошибки компиляции |
+| **Сложность тестирования** | Простая (переопределение модулей) | Умеренная (тестовые компоненты) |
+| **Обнаружение циклических зависимостей** | Только во время выполнения | Во время компиляции |
+| **Поддержка IDE** | Базовая | Отличная (навигация, предупреждения) |
+| **Размер сообщества** | Средний (~8K звезд на GitHub) | Большой (~15K звезд на GitHub) |
 
-### Compile-Time vs Runtime DI
+### Compile-Time vs Runtime Dependency Injection
 
 #### Compile-Time DI (Hilt/Dagger)
 
-**Как работает:**
-1. Annotation processor анализирует код при компиляции
-2. Генерирует boilerplate код для DI
-3. Создаёт component графы и factory классы
-4. Всё связывание происходит при компиляции
+**Как это работает:**
+1. Annotation processor анализирует код во время компиляции
+2. Генерирует boilerplate код для внедрения зависимостей
+3. Создаёт графы компонентов и классы-фабрики
+4. Всё связывание происходит на этапе компиляции
 5. Runtime просто выполняет сгенерированный код
 
 **Преимущества:**
-- **Типобезопасность** - ловит ошибки при компиляции
-- **Производительность** - нет рефлексии
-- **Навигация** - IDE может переходить к сгенерированному коду
-- **Верификация** - граф зависимостей валидирован до запуска
-- **Без overhead старта** - всё предвычислено
+- **Типобезопасность** - Ловит ошибки на этапе компиляции
+- **Производительность** - Нет рефлексии, прямое создание экземпляров
+- **Навигация** - IDE может навигироваться к сгенерированному коду
+- **Верификация** - Граф зависимостей проверяется до запуска
+- **Нет Overhead при старте** - Всё предвычислено
 
 **Недостатки:**
-- **Время сборки** - медленные сборки
-- **Сложность** - крутая кривая обучения
-- **Boilerplate** - больше аннотаций и setup
-- **Гибкость** - менее динамично
+- **Время сборки** - Медленные сборки (обработка аннотаций)
+- **Сложность** - Крутая кривая обучения
+- **Boilerplate** - Больше аннотаций и настройки
+- **Гибкость** - Менее динамично, требует пересборки
 
 #### Runtime DI (Koin)
 
-**Как работает:**
+**Как это работает:**
 1. DSL определения загружаются при старте приложения
 2. Зависимости разрешаются при запросе
-3. Использует рефлексию и lazy instantiation
-4. Паттерн service locator
+3. Использует рефлексию и ленивое создание экземпляров
+4. Паттерн Service Locator
 
 **Преимущества:**
-- **Скорость сборки** - нет генерации кода
-- **Простота** - легко изучить и использовать
-- **Гибкость** - можно менять в runtime
-- **Динамичность** - условная загрузка модулей
-- **Отладка** - видите реальный код
+- **Скорость сборки** - Нет генерации кода
+- **Простота** - Легко изучить и использовать
+- **Гибкость** - Можно изменять во время выполнения
+- **Динамичность** - Условная загрузка модулей
+- **Отладка** - Видите реальный код, а не сгенерированный
 
 **Недостатки:**
-- **Runtime ошибки** - отсутствующие зависимости крашат приложение
-- **Производительность** - небольшой overhead от рефлексии
-- **Время старта** - валидация модулей занимает время
-- **Без навигации** - нельзя перейти к инъекциям в IDE
+- **Runtime ошибки** - Отсутствующие зависимости вызывают крах приложения
+- **Производительность** - Небольшой overhead от рефлексии
+- **Время старта** - Валидация модулей занимает время
+- **Нет навигации** - Невозможно перейти к инъекциям в IDE
 
 ### Параллельная реализация
+
+Давайте реализуем одну и ту же функцию с обеими фреймворками:
 
 #### Сценарий: Система аутентификации пользователя
 
 **Реализация на Koin:**
 
 ```kotlin
-// Модули - простой DSL
+// 1. Определение интерфейсов и классов
+interface AuthRepository {
+    suspend fun login(email: String, password: String): Result<User>
+    suspend fun logout(): Result<Unit>
+}
+
+class AuthRepositoryImpl(
+    private val api: AuthApi,
+    private val tokenStorage: TokenStorage,
+    private val userCache: UserCache
+) : AuthRepository {
+    override suspend fun login(email: String, password: String): Result<User> {
+        return try {
+            val response = api.login(LoginRequest(email, password))
+            tokenStorage.saveToken(response.token)
+            userCache.saveUser(response.user)
+            Result.success(response.user)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun logout(): Result<Unit> {
+        return try {
+            api.logout()
+            tokenStorage.clearToken()
+            userCache.clearUser()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+}
+
+// 2. Модули Koin - Простой DSL
 val networkModule = module {
     single<OkHttpClient> {
         OkHttpClient.Builder()
@@ -649,34 +690,67 @@ val networkModule = module {
 
 val dataModule = module {
     single<TokenStorage> { TokenStorageImpl(androidContext()) }
-    single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
+    single<UserCache> { UserCacheImpl() }
+    single<AuthInterceptor> { AuthInterceptor(get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
+}
+
+val domainModule = module {
+    factory { LoginUseCase(get()) }
+    factory { LogoutUseCase(get()) }
 }
 
 val presentationModule = module {
-    viewModel { AuthViewModel(get()) }
+    viewModel { AuthViewModel(get(), get()) }
 }
 
-// Инициализация
+// 3. Инициализация в Application
 class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
             androidContext(this@MyApp)
-            modules(networkModule, dataModule, presentationModule)
+            modules(networkModule, dataModule, domainModule, presentationModule)
         }
     }
 }
 
-// Использование
+// 4. Использование в Activity
 class LoginActivity : AppCompatActivity() {
     private val viewModel: AuthViewModel by viewModel()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // ViewModel автоматически инжектирована
+    }
+}
+
+// 5. Тестирование - Легко переопределить модули
+class AuthRepositoryTest : KoinTest {
+    @get:Rule
+    val koinTestRule = KoinTestRule.create {
+        modules(module {
+            single<AuthApi> { mockk<AuthApi>() }
+            single<TokenStorage> { mockk<TokenStorage>(relaxed = true) }
+            single<UserCache> { mockk<UserCache>(relaxed = true) }
+            single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
+        })
+    }
+
+    @Test
+    fun `login сохраняет токен и пользователя`() = runTest {
+        val repository: AuthRepository by inject()
+        // Реализация теста
+    }
 }
 ```
 
 **Реализация на Hilt:**
 
 ```kotlin
-// Модули - на основе аннотаций
+// 1. Те же интерфейсы и классы
+
+// 2. Модули Hilt - На основе аннотаций
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -693,7 +767,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://api.example.com")
             .client(okHttpClient)
@@ -710,6 +786,33 @@ object NetworkModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
+object DataModule {
+
+    @Provides
+    @Singleton
+    fun provideTokenStorage(
+        @ApplicationContext context: Context
+    ): TokenStorage {
+        return TokenStorageImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserCache(): UserCache {
+        return UserCacheImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(
+        tokenStorage: TokenStorage
+    ): AuthInterceptor {
+        return AuthInterceptor(tokenStorage)
+    }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
 
     @Binds
@@ -719,72 +822,254 @@ abstract class RepositoryModule {
     ): AuthRepository
 }
 
-// Аннотация Application
+@Module
+@InstallIn(ViewModelComponent::class)
+object DomainModule {
+
+    @Provides
+    fun provideLoginUseCase(
+        repository: AuthRepository
+    ): LoginUseCase {
+        return LoginUseCase(repository)
+    }
+
+    @Provides
+    fun provideLogoutUseCase(
+        repository: AuthRepository
+    ): LogoutUseCase {
+        return LogoutUseCase(repository)
+    }
+}
+
+// 3. Аннотирование Application
 @HiltAndroidApp
 class MyApp : Application()
 
-// Аннотация Activity
+// 4. Аннотирование Activity
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private val viewModel: AuthViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // ViewModel автоматически инжектирована
+    }
 }
 
-// Аннотация ViewModel
+// 5. Аннотирование ViewModel
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val logoutUseCase: LogoutUseCase
 ) : ViewModel()
+
+// 6. Аннотирование Repository с @Inject
+@Singleton
+class AuthRepositoryImpl @Inject constructor(
+    private val api: AuthApi,
+    private val tokenStorage: TokenStorage,
+    private val userCache: UserCache
+) : AuthRepository {
+    // Реализация
+}
+
+// 7. Тестирование - Требуется больше настройки
+@HiltAndroidTest
+class AuthRepositoryTest {
+
+    @get:Rule
+    val hiltRule = HiltAndroidRule(this)
+
+    @Inject
+    lateinit var repository: AuthRepository
+
+    @BindValue
+    @JvmField
+    val mockApi: AuthApi = mockk()
+
+    @BindValue
+    @JvmField
+    val mockTokenStorage: TokenStorage = mockk(relaxed = true)
+
+    @BindValue
+    @JvmField
+    val mockUserCache: UserCache = mockk(relaxed = true)
+
+    @Before
+    fun setup() {
+        hiltRule.inject()
+    }
+
+    @Test
+    fun `login сохраняет токен и пользователя`() = runTest {
+        // Реализация теста
+    }
+}
 ```
 
 ### Матрица решений
 
 #### Выбирайте Koin когда:
 
- **Kotlin Multiplatform** - нужен общий код iOS/Android/Web
- **Быстрая итерация** - прототип или MVP
- **Малое/среднее приложение** - < 50 модулей
- **Опыт команды** - junior/mid-level команда
- **Производительность сборки** - время сборки критично
- **Динамичная конфигурация** - нужно переключение модулей в runtime
- **Быстрое обучение** - команда должна быть продуктивна за дни
- **Фокус на тестирование** - частая замена mock/fake
+✅ **Kotlin Multiplatform** - Нужен общий код для iOS/Android/Web
+✅ **Быстрая итерация** - Разработка прототипа или MVP
+✅ **Малое/Среднее приложение** - < 50 модулей, < 500K строк
+✅ **Опыт команды** - Junior/mid-level команда
+✅ **Производительность сборки** - Время сборки - критичное узкое место
+✅ **Динамичная конфигурация** - Нужно переключение модулей в runtime
+✅ **Быстрое обучение** - Команда должна быть продуктивна за дни
+✅ **Фокус на тестирование** - Частая замена mock/fake
+
+**Примеры проектов:**
+- MVP/Прототип приложений
+- Kotlin Multiplatform Mobile (KMM)
+- Небольшие бизнес-приложения
+- Циклы быстрой разработки
+- Обучающие/образовательные проекты
 
 #### Выбирайте Hilt когда:
 
- **Только Android** - нет multiplatform требований
- **Большой масштаб** - > 50 модулей, > 500K строк
- **Типобезопасность** - нужны compile-time гарантии
- **Критична производительность** - каждая миллисекунда важна
- **Опытная команда** - команда знает Dagger/DI паттерны
- **Долгосрочная поддержка** - приложение проживёт 5+ лет
- **Сложные зависимости** - много scope и qualifiers
- **Экосистема Google** - использование других Jetpack библиотек
+✅ **Только Android** - Нет multiplatform требований
+✅ **Большой масштаб** - > 50 модулей, > 500K строк
+✅ **Типобезопасность** - Нужны гарантии на этапе компиляции
+✅ **Критична производительность** - Важна каждая миллисекунда
+✅ **Опытная команда** - Команда знает Dagger/DI паттерны
+✅ **Долгосрочная поддержка** - Приложение будет жить 5+ лет
+✅ **Сложные зависимости** - Много scope и qualifiers
+✅ **Экосистема Google** - Использование других Jetpack библиотек
+
+**Примеры проектов:**
+- Корпоративные приложения
+- Финансовые/банковские приложения
+- Высокопроизводительные игры
+- Долгосрочные продукты
+- Проекты больших команд (10+ разработчиков)
 
 ### Бенчмарки производительности
 
 **Время старта приложения (холодный старт):**
 ```
-Koin:  1200ms (включая 80ms инициализацию DI)
-Hilt:  1150ms (без overhead инициализации DI)
+Koin:  1200мс (включая 80мс инициализацию DI)
+Hilt:  1150мс (без overhead инициализации DI)
 ```
 
 **Разрешение зависимостей (1000 инъекций):**
 ```
-Koin:  25ms (runtime рефлексия)
-Hilt:  18ms (прямое создание экземпляров)
+Koin:  25мс (runtime рефлексия)
+Hilt:  18мс (прямое создание экземпляров)
 ```
 
-**Время сборки (чистая сборка):**
+**Время сборки (Чистая сборка):**
 ```
-Koin:  45s
-Hilt:  78s (+73% медленнее из-за kapt)
+Koin:  45с
+Hilt:  78с (+73% медленнее из-за kapt)
 ```
 
-**Время сборки (инкрементальная):**
+**Время сборки (Инкрементальная):**
 ```
-Koin:  8s
-Hilt:  22s (+175% медленнее)
+Koin:  8с
+Hilt:  22с (+175% медленнее)
 ```
+
+### Стратегия миграции
+
+#### С Koin на Hilt:
+
+```kotlin
+// Шаг 1: Добавить Hilt рядом с Koin
+// Шаг 2: Мигрировать модули один за другим
+// Шаг 3: Заменить аннотации Koin
+
+// До (Koin)
+class UserRepository(private val api: UserApi)
+
+val dataModule = module {
+    single { UserRepository(get()) }
+}
+
+// После (Hilt)
+@Singleton
+class UserRepository @Inject constructor(
+    private val api: UserApi
+)
+
+@Module
+@InstallIn(SingletonComponent::class)
+object DataModule {
+    // Модуль больше не нужен при использовании @Inject
+}
+```
+
+#### С Hilt на Koin:
+
+```kotlin
+// До (Hilt)
+@Singleton
+class UserRepository @Inject constructor(
+    private val api: UserApi
+)
+
+// После (Koin)
+class UserRepository(private val api: UserApi)
+
+val dataModule = module {
+    single { UserRepository(get()) }
+}
+```
+
+### Гибридный подход
+
+Вы можете использовать оба в одном проекте:
+
+```kotlin
+// Используйте Hilt для критичных путей
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val repository: Repository
+) : ViewModel()
+
+// Используйте Koin для функций/экспериментов
+val experimentModule = module {
+    viewModel { ExperimentViewModel(get()) }
+}
+
+// Доступ к Koin из Hilt
+@Inject lateinit var koin: Koin
+```
+
+### Лучшие практики для каждого
+
+**Лучшие практики Koin:**
+1. Используйте `checkModules()` в тестах для проверки графа
+2. Группируйте модули по функциям для ясности
+3. Используйте `single` для дорогих объектов
+4. Предпочитайте `by inject()` вместо `get()` для ленивой инициализации
+5. Используйте именованные зависимости умеренно
+6. Документируйте зависимости модулей
+
+**Лучшие практики Hilt:**
+1. Используйте `@Binds` вместо `@Provides` когда возможно
+2. Держите модули маленькими и сфокусированными
+3. Используйте qualifiers для нескольких реализаций
+4. Предпочитайте constructor injection
+5. Используйте scope соответствующим образом
+6. Рассмотрите KSP вместо kapt для более быстрых сборок
+
+### Распространенные ошибки
+
+**Ошибки Koin:**
+- Не вызов `startKoin()` перед первой инъекцией
+- Использование `get()` вместо `by inject()` везде
+- Циклические зависимости (не обнаруживаются до runtime)
+- Не тестирование с `checkModules()`
+- Чрезмерное использование именованных зависимостей
+
+**Ошибки Hilt:**
+- Аннотирование Application но не сборка
+- Неправильный выбор scope компонента
+- Забывание `@HiltViewModel` на ViewModels
+- Использование field injection когда доступен constructor
+- Не использование `@Binds` для интерфейсов
 
 ### Резюме
 

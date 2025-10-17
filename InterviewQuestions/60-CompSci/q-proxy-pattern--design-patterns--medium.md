@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237168"
+title: "Proxy Pattern / Proxy Паттерн"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - structural-patterns
   - proxy
   - gof-patterns
   - surrogate
-difficulty: medium
-status: draft
 ---
-
 # Proxy Pattern
 
 # Question (EN)

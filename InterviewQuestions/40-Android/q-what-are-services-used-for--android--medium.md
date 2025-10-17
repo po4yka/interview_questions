@@ -1,16 +1,17 @@
 ---
+id: "20251015082237382"
+title: "What Are Services Used For / Для чего используются Service"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/services
   - android/background-processing
   - services
   - background-work
   - foreground-service
-difficulty: medium
-status: draft
 ---
-
 # What are services used for?
 
 **Russian**: Для чего используются сервисы?

@@ -1,11 +1,12 @@
 ---
+id: "20251015082237448"
+title: "How To Connect Broadcastreceiver So It Can Receive Messages / Как подключить BroadcastReceiver для получения сообщений"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # How to connect BroadcastReceiver so it can receive messages?
 
 ## Answer (EN)

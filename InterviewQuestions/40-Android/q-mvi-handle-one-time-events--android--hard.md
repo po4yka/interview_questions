@@ -1,7 +1,11 @@
 ---
+id: "20251015082238651"
+title: "Mvi Handle One Time Events / Обработка одноразовых событий в MVI"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android/architecture-mvi
   - android/lifecycle
   - architecture-mvi
@@ -12,10 +16,7 @@ tags:
   - sharedflow
   - stateflow
   - viewmodel
-difficulty: hard
-status: draft
 ---
-
 # Как с MVI обрабатывать события, которые не нужно хранить?
 
 **English**: How to handle events in MVI that don't need to be stored?

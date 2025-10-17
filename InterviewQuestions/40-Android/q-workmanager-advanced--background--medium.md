@@ -1,19 +1,19 @@
 ---
-tags:
-  - android
+id: "20251015082237278"
+title: "Workmanager Advanced / Продвинутый WorkManager"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - android
   - workmanager
   - background-processing
   - jetpack
   - kotlin-coroutines
-difficulty: medium
-status: draft
-related:
-  - q-workmanager-chaining--background--medium
+related:   - q-workmanager-chaining--background--medium
   - q-foreground-service-types--background--medium
   - q-coroutines-structured-concurrency--coroutines--hard
-created: 2025-10-12
 ---
-
 # Question (EN)
 What are the advanced features of WorkManager? Explain work constraints, periodic work, work chaining, ExistingWorkPolicy, and how WorkManager handles app updates and reboots.
 

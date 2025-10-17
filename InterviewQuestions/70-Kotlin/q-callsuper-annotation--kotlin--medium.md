@@ -1,15 +1,16 @@
 ---
+id: "20251015082236045"
+title: "Callsuper Annotation / Аннотация CallSuper"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - android
   - annotations
   - best-practices
   - lifecycle
-difficulty: medium
-status: draft
 ---
-
 # Аннотация @CallSuper
 
 # Question (EN)

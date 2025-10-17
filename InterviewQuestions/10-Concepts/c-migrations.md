@@ -7,7 +7,28 @@ created: 2025-10-12
 updated: 2025-10-12
 ---
 
-# Database Migrations
+# Summary (EN)
+
+Database migrations are version-controlled schema changes that can be applied and rolled back systematically. They enable safe database evolution in production environments through forward migrations (applying changes) and rollback migrations (reverting changes). Key patterns include additive changes (safe), breaking changes (requires careful planning), and zero-downtime migrations for high-availability systems.
+
+# Сводка (RU)
+
+Миграции баз данных - это версионированные изменения схемы, которые могут быть применены и откачены систематически. Они обеспечивают безопасную эволюцию базы данных в production-среде через прямые миграции (применение изменений) и откат миграций (отмена изменений). Ключевые паттерны включают аддитивные изменения (безопасные), ломающие изменения (требуют тщательного планирования) и миграции без простоя для высокодоступных систем.
+
+## Use Cases / Trade-offs
+
+**Use Cases:**
+- Schema evolution in production
+- Synchronized database changes across environments
+- Rollback capability for failed deployments
+- Team collaboration on database changes
+- Database versioning and history
+
+**Trade-offs:**
+- **Additive vs Breaking Changes:** Safe additions vs. complex multi-step migrations
+- **Automatic vs Manual:** Automated migrations vs. manual control for critical changes
+- **Up/Down Migrations:** Bidirectional changes vs. forward-only migrations
+- **Zero-Downtime:** Application complexity vs. continuous availability
 
 ## Overview
 
@@ -87,6 +108,13 @@ ALTER TABLE users DROP COLUMN old_email;
 
 - [[c-database-design]]
 - [[c-relational-databases]]
+
+## References
+
+- [Flyway Database Migrations](https://flywaydb.org/)
+- [Liquibase Documentation](https://www.liquibase.org/)
+- [Refactoring Databases](https://databaserefactoring.com/)
+- "Refactoring Databases: Evolutionary Database Design" by Scott W. Ambler and Pramod J. Sadalage
 
 ## MOC Links
 

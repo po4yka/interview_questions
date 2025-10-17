@@ -1,16 +1,17 @@
 ---
+id: "20251015082236042"
+title: "Kotlin Dsl Creation / Создание DSL в Kotlin"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - dsl
   - type-safety
   - scope-functions
   - dsl-marker
   - builders
-difficulty: hard
-status: draft
 ---
-
 # Creating Type-Safe DSLs in Kotlin
 
 # Question (EN)

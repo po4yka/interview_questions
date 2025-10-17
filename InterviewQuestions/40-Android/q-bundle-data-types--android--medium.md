@@ -1,17 +1,18 @@
 ---
+id: "20251015082237590"
+title: "Bundle Data Types / Типы данных Bundle"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/data-passing
   - bundle
   - data-passing
   - intent
   - parcelable
   - serializable
-difficulty: medium
-status: draft
 ---
-
 # Что можно положить в Bundle?
 
 # Question (EN)

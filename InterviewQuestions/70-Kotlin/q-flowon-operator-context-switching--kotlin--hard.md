@@ -3,10 +3,10 @@ topic: kotlin
 id: "20251012-170004"
 title: "flowOn operator and context switching in flows / flowOn оператор и переключение контекста"
 description: "Deep dive into flowOn operator, how it changes upstream execution context, buffering behavior, and performance implications"
-topic: "kotlin"
+topic: kotlin
 subtopics: ["coroutines", "flow", "flowon", "dispatchers", "context", "performance"]
-difficulty: "hard"
-status: "draft"
+difficulty: hard
+status: draft
 created: 2025-10-12
 updated: 2025-10-12
 category: "coroutines-advanced"

@@ -1,31 +1,28 @@
 ---
 id: 20251012-400010
-title: "Kotlin DSL Builders / DSL Builder'ы в Kotlin"
-slug: kotlin-dsl-builders-kotlin-hard
+title: "Kotlin DSL Builders"
 topic: android
-subtopics:
-  - kotlin
-  - dsl
-  - builders
-  - api-design
-  - type-safe-builders
-status: draft
 difficulty: hard
-moc: moc-android
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-kotlin-context-receivers--kotlin--hard
-  - q-jetpack-compose-basics--android--medium
-  - q-gradle-kotlin-dsl-vs-groovy--android--medium
-tags:
-  - kotlin
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - dsl
   - builders
   - api-design
   - lambdas
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-android
+related_questions:   - q-kotlin-context-receivers--kotlin--hard
+  - q-jetpack-compose-basics--android--medium
+  - q-gradle-kotlin-dsl-vs-groovy--android--medium
+slug: kotlin-dsl-builders-kotlin-hard
+subtopics:   - kotlin
+  - dsl
+  - builders
+  - api-design
+  - type-safe-builders
 ---
-
 # Kotlin DSL Builders
 
 ## English Version

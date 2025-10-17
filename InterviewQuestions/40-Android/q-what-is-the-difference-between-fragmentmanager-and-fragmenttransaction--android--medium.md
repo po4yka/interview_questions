@@ -1,16 +1,17 @@
 ---
+id: "20251015082237547"
+title: "What Is The Difference Between Fragmentmanager And Fragmenttransaction / What Is The Difference Between Fragmentmanager и Fragmenttransaction"
 topic: android
-tags:
-  - fragment
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - fragment
   - fragmentmanager
   - fragmenttransaction
   - android
   - ui
   - fragments
-difficulty: medium
-status: draft
 ---
-
 # What is the difference between FragmentManager and FragmentTransaction?
 
 # Вопрос (RU)

@@ -1,14 +1,16 @@
 ---
-tags:
-  - Android
+id: "20251015082238646"
+title: "Play Store Publishing / Публикация в Play Store"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - Distribution
   - PlayStore
   - Publishing
-difficulty: medium
-status: draft
 ---
-
 # Google Play Store Publishing and Release Management
 
 # Question (EN)

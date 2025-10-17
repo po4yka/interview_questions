@@ -1,8 +1,11 @@
 ---
+id: "20251015082237153"
+title: "Inheritance Composition Aggregation / Наследование композиция и агрегация"
 topic: architecture-patterns
-subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
-tags:
-  - aggregation
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - aggregation
   - composition
   - design-patterns
   - has-a
@@ -10,14 +13,12 @@ tags:
   - is-a
   - oop
   - relationships
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-architecture-patterns
 related_questions: []
+subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
-
 # В чём различия наследования, композиции, агрегации?
 
 # Question (EN)

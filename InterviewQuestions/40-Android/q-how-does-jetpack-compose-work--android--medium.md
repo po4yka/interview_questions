@@ -1,15 +1,16 @@
 ---
+id: "20251015082237565"
+title: "How Does Jetpack Compose Work / Как работает Jetpack Compose"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - jetpack-compose
   - compose
   - declarative-ui
   - recomposition
-difficulty: medium
-status: draft
 ---
-
 # How does Jetpack Compose work?
 
 ## EN (expanded)

@@ -1,18 +1,11 @@
 ---
-topic: kotlin
 id: "20251012-180003"
 title: "Coroutines and side effects in Jetpack Compose / Корутины и side effects в Jetpack Compose"
-subtopics:
-  - coroutines
-  - android
-  - compose
-  - side-effects
-  - launchedeffect
+topic: kotlin
 difficulty: medium
-moc: moc-kotlin
 status: draft
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - android
   - jetpack-compose
@@ -21,8 +14,13 @@ tags:
   - rememberCoroutineScope
   - lifecycle
   - state-management
+moc: moc-kotlin
+subtopics:   - coroutines
+  - android
+  - compose
+  - side-effects
+  - launchedeffect
 ---
-
 # Coroutines and side effects in Jetpack Compose
 
 ## English
@@ -30,7 +28,17 @@ tags:
 ### Question
 What are side effects in Jetpack Compose and how do coroutines integrate with them? Explain LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, and other side effect handlers. When should you use each? Provide production examples of data loading, animations, event handling, and Flow collection with proper lifecycle management and testing strategies.
 
-### Answer
+# Question (EN)
+> What are side effects in Jetpack Compose and how do coroutines integrate with them? Explain LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, and other side effect handlers. When should you use each? Provide production examples of data loading, animations, event handling, and Flow collection with proper lifecycle management and testing strategies.
+
+# Вопрос (RU)
+> What are side effects in Jetpack Compose and how do coroutines integrate with them? Explain LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, and other side effect handlers. When should you use each? Provide production examples of data loading, animations, event handling, and Flow collection with proper lifecycle management and testing strategies.
+
+---
+
+## Answer (EN)
+
+
 
 **Side effects** in Compose are operations that escape the scope of a composable function and affect the state of the app outside of the composition itself. Coroutines are central to managing async side effects in Compose.
 
@@ -889,12 +897,11 @@ fun testArticleLoading() = runTest {
 
 ---
 
-## Русский
 
-### Вопрос
+## Ответ (RU)
+
+*(Краткое содержание основных пунктов из английской версии)*
 Что такое side effects в Jetpack Compose и как корутины интегрируются с ними? Объясните LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState и другие обработчики side effects. Когда следует использовать каждый из них? Приведите production примеры загрузки данных, анимаций, обработки событий и сбора Flow с правильным управлением жизненным циклом и стратегиями тестирования.
-
-### Ответ
 
 **Side effects** в Compose — это операции, которые выходят за рамки composable функции и влияют на состояние приложения вне самой композиции.
 

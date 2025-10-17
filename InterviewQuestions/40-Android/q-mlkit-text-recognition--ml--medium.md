@@ -1,14 +1,16 @@
 ---
-tags:
-  - Android
+id: "20251015082237496"
+title: "Mlkit Text Recognition / Распознавание текста ML Kit"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - MLKit
   - MachineLearning
   - TextRecognition
-difficulty: medium
-status: draft
 ---
-
 # ML Kit Text Recognition and OCR
 
 # Question (EN)

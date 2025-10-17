@@ -1,15 +1,17 @@
 ---
-tags:
-  - garbage-collection
+id: "20251015082237208"
+title: "Garbage Collector Roots / Корни Garbage Collector"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - garbage-collection
   - gc-roots
   - jvm
   - kotlin
   - memory-management
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # Что такое Garbage Collector Roots?
 
 # Question (EN)
@@ -114,5 +116,91 @@ GC Roots are the **starting points** for garbage collection. Objects reachable f
 
 ## Ответ (RU)
 
-Garbage Collector Roots — это набор объектов, которые используются как отправные точки для определения достижимых объектов. Включают: локальные переменные активных потоков, статические поля классов и JNI ссылки.
+**Garbage Collector (GC) Roots** — это начальные точки, которые сборщик мусора использует для определения того, какие объекты достижимы (живы) и какие могут быть собраны сборщиком мусора.
+
+**Как работает GC:**
+
+1. Начать с GC Roots
+2. Пометить все достижимые объекты
+3. Удалить (sweep) недостижимые объекты
+
+**Объект достижим, если к нему можно получить доступ из любого GC Root через цепочку ссылок.**
+
+**Типы GC Roots:**
+
+**1. Локальные переменные и параметры**
+```kotlin
+fun example() {
+    val user = User("John")  // GC Root (локальная переменная)
+    // user достижим пока выполняется метод
+}
+// После выхода из метода user больше не GC Root
+```
+
+**2. Активные фреймы стека потоков**
+```kotlin
+Thread.start {
+    val data = Data()  // GC Root (в активном потоке)
+    // data достижим пока поток выполняется
+}
+```
+
+**3. Статические поля**
+```kotlin
+object AppConfig {
+    val instance = Config()  // GC Root (статическое поле)
+    // Всегда достижим пока класс загружен
+}
+```
+
+**4. JNI ссылки**
+```kotlin
+// Ссылки из нативного кода
+external fun nativeMethod()  // Может создавать JNI GC Roots
+```
+
+**Пример:**
+
+```kotlin
+class Node(val value: Int, var next: Node? = null)
+
+fun main() {
+    val root = Node(1)  // GC Root (локальная переменная)
+    root.next = Node(2)
+    root.next?.next = Node(3)
+
+    // Достижимые: root, Node(2), Node(3)
+    // Все остаются живыми, так как достижимы из GC Root
+
+    root.next = null  // Node(2) и Node(3) теперь недостижимы
+    // Node(2) и Node(3) могут быть собраны сборщиком мусора
+}
+```
+
+**Пример утечки памяти:**
+
+```kotlin
+object Cache {
+    private val data = mutableListOf<Data>()  // GC Root!
+
+    fun add(item: Data) {
+        data.add(item)
+        // Элементы никогда не удаляются - утечка памяти!
+        // Все элементы всегда достижимы из статического поля
+    }
+}
+```
+
+**Категории:**
+
+| Тип GC Root | Время жизни | Пример |
+|-------------|-------------|--------|
+| Локальные переменные | Выполнение метода | `val x = User()` |
+| Статические поля | Класс загружен | `companion object { val x }` |
+| Активные потоки | Поток выполняется | Переменные в стеке потока |
+| JNI ссылки | Нативный код | Глобальные JNI ссылки |
+
+**Резюме:**
+
+GC Roots — это **начальные точки** для сборки мусора. Объекты, достижимые из GC Roots, **остаются живыми**. Объекты, не достижимые, являются **мусором** и будут собраны. Основные типы GC Roots: локальные переменные активных методов, статические поля загруженных классов, активные потоки и JNI ссылки. Понимание GC Roots важно для предотвращения утечек памяти и оптимизации использования памяти.
 

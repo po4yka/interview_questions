@@ -1,16 +1,17 @@
 ---
+id: "20251015082237323"
+title: "Android Testing Strategies / Android Тестирование Strategies"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - testing
   - junit
   - espresso
   - mockito
   - quality-assurance
-difficulty: medium
-status: draft
 ---
-
 # Методы тестирования Android приложений
 
 # Question (EN)

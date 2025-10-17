@@ -1,15 +1,16 @@
 ---
+id: "20251015082236037"
+title: "Heap Pollution Generics / Загрязнение кучи дженериками"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - java
   - generics
   - type-safety
   - runtime-errors
-difficulty: hard
-status: draft
 ---
-
 # Heap Pollution (Загрязнение кучи)
 
 # Question (EN)
@@ -215,7 +216,8 @@ class BadAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int = items.size
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        TODO()
+        // Implementation not shown for brevity
+        throw NotImplementedError("Implementation depends on specific ViewHolder")
     }
 }
 
@@ -253,7 +255,8 @@ class GoodAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int = items.size
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        TODO()
+        // Implementation not shown for brevity
+        throw NotImplementedError("Implementation depends on specific ViewHolder")
     }
 }
 ```

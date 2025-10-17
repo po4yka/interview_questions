@@ -1,14 +1,16 @@
 ---
-tags:
-  - coroutines
+id: "20251015082237234"
+title: "Coroutine Dispatchers / Диспетчеры корутин"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - coroutines
   - dispatchers
   - kotlin
   - programming-languages
   - threading
-difficulty: medium
-status: draft
 ---
-
 # Что знаешь о диспатчерах?
 
 # Question (EN)

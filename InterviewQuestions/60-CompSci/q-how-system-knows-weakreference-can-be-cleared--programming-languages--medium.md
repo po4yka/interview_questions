@@ -1,16 +1,18 @@
 ---
-tags:
-  - garbage-collection
+id: "20251015082237221"
+title: "How System Knows Weakreference Can Be Cleared / Как система знает что WeakReference можно очистить"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - garbage-collection
   - jvm
   - kotlin
   - memory-management
   - programming-languages
   - weak-reference
   - weak-references
-difficulty: medium
-status: draft
 ---
-
 # Как система понимает, что WeakReference можно очистить?
 
 # Question (EN)

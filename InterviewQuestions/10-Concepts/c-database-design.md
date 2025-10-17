@@ -7,7 +7,28 @@ created: 2025-10-12
 updated: 2025-10-12
 ---
 
-# Database Design Principles
+# Summary (EN)
+
+Database design is the process of organizing data according to a database model. Good database design is essential for data integrity, performance, scalability, maintainability, and query efficiency. Key principles include normalization, entity-relationship modeling, proper constraints, and indexing strategies.
+
+# Сводка (RU)
+
+Проектирование базы данных - это процесс организации данных в соответствии с моделью базы данных. Хорошее проектирование БД необходимо для обеспечения целостности данных, производительности, масштабируемости, поддерживаемости и эффективности запросов. Ключевые принципы включают нормализацию, моделирование сущность-связь, правильные ограничения и стратегии индексации.
+
+## Use Cases / Trade-offs
+
+**Use Cases:**
+- Transactional systems (OLTP)
+- Data warehousing (OLAP)
+- Application databases
+- Content management systems
+- E-commerce platforms
+
+**Trade-offs:**
+- **Normalization:** Better data integrity vs. query performance
+- **Denormalization:** Faster reads vs. data redundancy and update complexity
+- **Constraints:** Data integrity vs. insert/update overhead
+- **Indexes:** Query speed vs. storage and write performance
 
 ## Overview / Обзор
 

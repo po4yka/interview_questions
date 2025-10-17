@@ -1,11 +1,12 @@
 ---
+id: "20251015082237529"
+title: "What Are Activity Lifecycle Methods And How Do They Work / What Are Activity Lifecycle Methods и How Do They Work"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # What are Activity lifecycle methods and how do they work?
 
 ## Answer (EN)
@@ -535,20 +536,6 @@ override fun onSaveInstanceState(outState: Bundle) {
 - Configuration changes
 - Lifecycle-aware components
 - Process death
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-viewmodel-pattern--android--easy]] - Lifecycle
-
-### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
-- [[q-how-does-activity-lifecycle-work--android--medium]] - Lifecycle, Activity
 
 ---
 

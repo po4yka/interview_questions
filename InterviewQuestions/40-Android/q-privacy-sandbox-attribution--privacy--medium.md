@@ -1,15 +1,17 @@
 ---
-tags:
-  - android
+id: "20251015082237335"
+title: "Privacy Sandbox Attribution"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - privacy-sandbox
   - attribution-reporting
   - conversion-tracking
   - privacy
   - advertising
-difficulty: medium
-status: draft
 ---
-
 # Privacy Sandbox: Attribution Reporting API
 
 # Question (EN)

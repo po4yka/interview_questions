@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082238600"
+title: "What To Do In Android Project To Start Drawing Ui On Screen / Что делать в Android проекте чтобы начать рисовать UI на экране"
+topic: android
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Что нужно сделать в Android-проекте чтобы начать рисовать UI на экране?
 
 # Question (EN)

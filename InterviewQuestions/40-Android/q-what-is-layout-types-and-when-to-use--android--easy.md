@@ -1,7 +1,11 @@
 ---
+id: "20251015082237266"
+title: "What Is Layout Types And When To Use / What Is Layout Types и When To Use"
 topic: android
-tags:
-  - ConstraintLayout
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - ConstraintLayout
   - LinearLayout
   - RelativeLayout
   - android
@@ -11,8 +15,6 @@ tags:
   - layouts
   - ui
   - xml
-difficulty: easy
-status: draft
 ---
 
 # Что такое layout, какие их виды бывают и когда их использовать?
@@ -20,6 +22,7 @@ status: draft
 **English**: What is layout, what types exist and when to use them?
 
 ## Answer (EN)
+
 A **layout** is a way to define the user interface (UI) of an Android application. It describes how interface elements (widgets) are arranged and positioned on the screen. Layouts can be defined using XML files (most common) or programmatically in code.
 
 ### Common Layout Types
@@ -48,9 +51,10 @@ Arranges child elements in a single row or column (vertically or horizontally).
 ```
 
 **When to use:**
-- Simple interfaces with elements arranged sequentially
-- Forms with vertical or horizontal arrangement
-- When you need equal weight distribution among children
+
+-   Simple interfaces with elements arranged sequentially
+-   Forms with vertical or horizontal arrangement
+-   When you need equal weight distribution among children
 
 #### 2. RelativeLayout
 
@@ -79,9 +83,10 @@ Positions child elements relative to each other or to the parent container.
 ```
 
 **When to use:**
-- Elements need to be positioned relative to each other
-- You want to avoid deep view hierarchies
-- Creating overlapping views
+
+-   Elements need to be positioned relative to each other
+-   You want to avoid deep view hierarchies
+-   Creating overlapping views
 
 #### 3. ConstraintLayout
 
@@ -113,10 +118,11 @@ Provides a flexible constraint system for positioning elements relative to each 
 ```
 
 **When to use:**
-- Complex interfaces requiring precise positioning
-- Flat view hierarchies for better performance
-- Responsive designs that adapt to different screen sizes
-- Modern Android development (recommended default)
+
+-   Complex interfaces requiring precise positioning
+-   Flat view hierarchies for better performance
+-   Responsive designs that adapt to different screen sizes
+-   Modern Android development (recommended default)
 
 #### 4. FrameLayout
 
@@ -141,9 +147,10 @@ Designed to hold a single child view, though it can contain multiple views stack
 ```
 
 **When to use:**
-- Fragment containers
-- Simple overlays
-- Single view containers
+
+-   Fragment containers
+-   Simple overlays
+-   Single view containers
 
 #### 5. GridLayout
 
@@ -164,19 +171,20 @@ Arranges children in a grid structure.
 ```
 
 **When to use:**
-- Calculator layouts
-- Image galleries
-- Button grids
+
+-   Calculator layouts
+-   Image galleries
+-   Button grids
 
 ### Layout Selection Guidelines
 
-| Layout Type | Performance | Flexibility | Complexity | Best For |
-|-------------|------------|-------------|------------|----------|
-| LinearLayout | Good | Low | Low | Simple lists |
-| RelativeLayout | Moderate | Moderate | Moderate | Legacy apps |
-| ConstraintLayout | Best | High | Moderate | Modern apps |
-| FrameLayout | Best | Low | Low | Overlays |
-| GridLayout | Good | Moderate | Moderate | Grid structures |
+| Layout Type      | Performance | Flexibility | Complexity | Best For        |
+| ---------------- | ----------- | ----------- | ---------- | --------------- |
+| LinearLayout     | Good        | Low         | Low        | Simple lists    |
+| RelativeLayout   | Moderate    | Moderate    | Moderate   | Legacy apps     |
+| ConstraintLayout | Best        | High        | Moderate   | Modern apps     |
+| FrameLayout      | Best        | Low         | Low        | Overlays        |
+| GridLayout       | Good        | Moderate    | Moderate   | Grid structures |
 
 ### Best Practices
 
@@ -187,18 +195,32 @@ Arranges children in a grid structure.
 5. **Consider performance** when choosing layout types
 
 ## Ответ (RU)
+
 Это способ определения пользовательского интерфейса (UI) приложения, который описывает как элементы интерфейса виджеты располагаются на экране. Макеты задаются с помощью XML файлов или программно в коде. Виды: LinearLayout Располагает дочерние элементы в виде одной строки или столбца вертикально или горизонтально. Подходит для простых интерфейсов где элементы должны быть расположены один за другим. RelativeLayout Располагает дочерние элементы относительно друг друга или относительно родительского контейнера. Подходит для более сложных интерфейсов где элементы должны быть выровнены относительно других элементов ConstraintLayout Предоставляет гибкую систему ограничения для размещения элементов относительно друг друга и границ контейнера Это мощный и эффективный макет который заменяет сложные вложенные макеты Подходит для сложных интерфейсов где требуется точное позиционирование и выравнивание элементов
 
-
 ---
+
+## Follow-ups
+
+-   When should you use ConstraintLayout vs LinearLayout for performance?
+-   How do you handle different screen sizes and orientations with different layout types?
+-   What are the performance implications of nested layouts vs flat layouts?
+
+## References
+
+-   `https://developer.android.com/guide/topics/ui/declaring-layout` — Layout guide
+-   `https://developer.android.com/training/constraint-layout` — ConstraintLayout guide
+-   `https://developer.android.com/guide/topics/ui/look-and-feel/responsive-design` — Responsive design
 
 ## Related Questions
 
 ### Related (Easy)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View
-- [[q-viewmodel-pattern--android--easy]] - View
+
+-   [[q-recyclerview-sethasfixedsize--android--easy]] - View
+-   [[q-viewmodel-pattern--android--easy]] - View
 
 ### Advanced (Harder)
-- [[q-testing-viewmodels-turbine--testing--medium]] - View
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+
+-   [[q-testing-viewmodels-turbine--testing--medium]] - View
+-   [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
+-   [[q-rxjava-pagination-recyclerview--android--medium]] - View

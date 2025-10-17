@@ -1,11 +1,12 @@
 ---
+id: "20251015082237568"
+title: "What Does The Lifecycle Library Do / Что делает библиотека Lifecycle"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # What does the Lifecycle library do?
 
 ## Answer (EN)

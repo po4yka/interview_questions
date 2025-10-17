@@ -1,15 +1,16 @@
 ---
+id: "20251015082237426"
+title: "Compose Ui Testing Advanced"
 topic: testing
-tags:
-  - testing
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - testing
   - compose-testing
   - ui-testing
   - semantics
   - accessibility
-difficulty: hard
-status: draft
 ---
-
 # Advanced Compose UI Testing
 
 **English**: Test complex Compose UI scenarios: animations, gestures, semantic matchers, and accessibility. Handle async operations.
@@ -718,35 +719,7 @@ class CompleteScreenTest {
 - [[q-testing-compose-ui--android--medium]] - Compose, Testing
 - [[q-compose-testing--android--medium]] - Compose, Testing
 
-### Related (Hard)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
-- [[q-compose-performance-optimization--android--hard]] - Compose
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose, Ui
-- [[q-testing-compose-ui--android--medium]] - Compose, Testing
-- [[q-compose-testing--android--medium]] - Compose, Testing
-
-### Related (Hard)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
-- [[q-compose-performance-optimization--android--hard]] - Compose
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose, Ui
-- [[q-testing-compose-ui--android--medium]] - Compose, Testing
-- [[q-compose-testing--android--medium]] - Compose, Testing
-
-### Related (Hard)
+### Related (Medium)
 - [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
 - [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
 - [[q-compose-performance-optimization--android--hard]] - Compose

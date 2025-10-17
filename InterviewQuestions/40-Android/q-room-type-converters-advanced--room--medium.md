@@ -1,17 +1,18 @@
 ---
+id: "20251015082237376"
+title: "Room Type Converters Advanced / Продвинутые Type Converters в Room"
 topic: room
-tags:
-  - room
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - room
   - database
   - type-converters
   - serialization
   - json
   - performance
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Room Advanced Type Converters / Продвинутые Type Converters в Room
 
 **English**: Implement complex type converters for custom types, enums, and collections. Handle JSON serialization with performance considerations.

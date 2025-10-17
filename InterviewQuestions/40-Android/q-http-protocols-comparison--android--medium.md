@@ -1,6 +1,6 @@
 ---
 id: 20251006-000004
-title: "HTTP vs Long-Polling vs WebSocket vs SSE / HTTP vs Long-Polling vs WebSocket vs SSE"
+title: "HTTP vs Long-Polling vs WebSocket vs SSE / HTTP против Long-Polling против WebSocket против SSE"
 aliases: []
 
 # Classification

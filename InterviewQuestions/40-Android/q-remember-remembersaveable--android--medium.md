@@ -1,6 +1,6 @@
 ---
 id: 20251006-010
-title: "remember vs rememberSaveable in Compose / remember vs rememberSaveable в Compose"
+title: "remember vs rememberSaveable in Compose"
 aliases: []
 
 # Classification

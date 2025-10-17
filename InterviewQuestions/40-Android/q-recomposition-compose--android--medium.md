@@ -344,8 +344,12 @@ fun GoodExample() {
 ### Advanced: Custom Remember
 
 ```kotlin
-class UserRepository {
-    fun loadUser(id: String): Flow<User> = TODO()
+class UserRepository(private val context: Context) {
+    fun loadUser(id: String): Flow<User> = flow {
+        // Simulate loading user from network/database
+        delay(1000)
+        emit(User(id, "User $id"))
+    }
 }
 
 @Composable
@@ -363,6 +367,16 @@ fun UserScreen(userId: String) {
 
     user?.let {
         UserCard(it)
+    }
+}
+
+// UserCard implementation
+@Composable
+fun UserCard(user: User) {
+    Card(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = user.name, style = MaterialTheme.typography.h6)
+        }
     }
 }
 ```

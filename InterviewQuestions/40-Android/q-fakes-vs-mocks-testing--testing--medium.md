@@ -1,22 +1,27 @@
 ---
-tags:
-  - testing
+id: "20251015082237245"
+title: "Fakes Vs Mocks Testing / Fakes против Mocks Тестирование"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - testing
   - fakes
   - mocks
   - test-doubles
   - architecture
   - stubs
   - testing-strategy
-difficulty: medium
-status: draft
 ---
 
 # Fakes vs Mocks vs Stubs
 
 # Question (EN)
+
 > Explain the difference between fakes, mocks, and stubs. When should you use each? Implement a fake repository.
 
 # Вопрос (RU)
+
 > Объясните разницу между fakes, mocks и stubs. Когда следует использовать каждый? Реализуйте fake repository.
 
 ---
@@ -79,9 +84,10 @@ fun testWithStub() = runTest {
 ```
 
 **When to use:**
-- Need simple predetermined responses
-- Don't care about verification
-- Testing state changes, not behavior
+
+-   Need simple predetermined responses
+-   Don't care about verification
+-   Testing state changes, not behavior
 
 ---
 
@@ -109,9 +115,10 @@ fun testWithMock() = runTest {
 ```
 
 **When to use:**
-- Need to verify specific interactions
-- Testing that collaborations happen correctly
-- Complex interaction patterns
+
+-   Need to verify specific interactions
+-   Testing that collaborations happen correctly
+-   Complex interaction patterns
 
 ---
 
@@ -240,11 +247,12 @@ class UserViewModelTest {
 ```
 
 **When to use:**
-- Testing complex workflows
-- Need realistic behavior
-- Multiple tests use same setup
-- Testing state mutations
-- Integration tests
+
+-   Testing complex workflows
+-   Need realistic behavior
+-   Multiple tests use same setup
+-   Testing state mutations
+-   Integration tests
 
 ---
 
@@ -373,12 +381,12 @@ class UserWithPostsTest {
 
 ### Comparison Table
 
-| Type | Purpose | Verification | Complexity | Use Case |
-|------|---------|--------------|------------|----------|
-| **Stub** | Pre-configured responses | No | Low | Simple predetermined data |
-| **Mock** | Verify interactions | Yes | Low | Behavior verification |
-| **Fake** | Working implementation | No | High | Realistic behavior, integration tests |
-| **Spy** | Real + verification | Yes | Medium | Partial mocking |
+| Type     | Purpose                  | Verification | Complexity | Use Case                              |
+| -------- | ------------------------ | ------------ | ---------- | ------------------------------------- |
+| **Stub** | Pre-configured responses | No           | Low        | Simple predetermined data             |
+| **Mock** | Verify interactions      | Yes          | Low        | Behavior verification                 |
+| **Fake** | Working implementation   | No           | High       | Realistic behavior, integration tests |
+| **Spy**  | Real + verification      | Yes          | Medium     | Partial mocking                       |
 
 ---
 
@@ -609,14 +617,28 @@ Fake содержит in-memory хранилище и полную реализ�
 
 ---
 
+## Follow-ups
+
+-   How do you decide when to create a fake vs using a mock for testing database operations?
+-   What are the performance implications of using fakes vs mocks in large test suites?
+-   How can you ensure that your fakes accurately represent the behavior of real implementations?
+
+## References
+
+-   `https://developer.android.com/training/testing/unit-testing` — Unit testing guide
+-   `https://developer.android.com/training/testing/fundamentals` — Testing fundamentals
+-   `https://developer.android.com/training/testing/instrumented-tests` — Instrumented testing
+
 ## Related Questions
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
-- [[q-testing-compose-ui--android--medium]] - Testing
-- [[q-compose-testing--android--medium]] - Testing
-- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
-- [[q-screenshot-snapshot-testing--testing--medium]] - Testing
+
+-   [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+-   [[q-testing-compose-ui--android--medium]] - Testing
+-   [[q-compose-testing--android--medium]] - Testing
+-   [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+-   [[q-screenshot-snapshot-testing--testing--medium]] - Testing
 
 ### Advanced (Harder)
-- [[q-testing-coroutines-flow--testing--hard]] - Testing
+
+-   [[q-testing-coroutines-flow--testing--hard]] - Testing

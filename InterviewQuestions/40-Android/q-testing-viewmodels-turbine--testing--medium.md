@@ -1,21 +1,26 @@
 ---
-tags:
-  - testing
+id: "20251015082237258"
+title: "Testing Viewmodels Turbine / Тестирование Viewmodels Turbine"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - testing
   - viewmodel
   - flow
   - turbine
   - state-management
   - coroutines
-difficulty: medium
-status: draft
 ---
 
 # Testing ViewModels with Turbine
 
 # Question (EN)
+
 > How do you test StateFlow and SharedFlow emissions in ViewModels using Turbine? Handle multiple emissions and timeouts.
 
 # Вопрос (RU)
+
 > Как тестировать эмиссии StateFlow и SharedFlow в ViewModels используя Turbine? Обработка множественных эмиссий и таймаутов.
 
 ---
@@ -593,23 +598,36 @@ SharedFlow не имеет начального значения, поэтому
 
 Turbine делает тестирование Flow простым и выразительным.
 
-
 ---
+
+## Follow-ups
+
+-   How do you test ViewModels that emit both StateFlow and SharedFlow simultaneously?
+-   What are the best practices for handling timeout scenarios in Flow testing?
+-   How can you mock dependencies in ViewModel tests while using Turbine?
+
+## References
+
+-   `https://github.com/cashapp/turbine` — Turbine library
+-   `https://developer.android.com/topic/libraries/architecture/viewmodel` — ViewModel testing
+-   `https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-test/` — Coroutines testing
 
 ## Related Questions
 
 ### Hub
-- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+
+-   [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
 
 ### Related (Medium)
-- [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
-- [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
-- [[q-what-is-viewmodel--android--medium]] - What is ViewModel
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
-- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation
+
+-   [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
+-   [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
+-   [[q-what-is-viewmodel--android--medium]] - What is ViewModel
+-   [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
+-   [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation
 
 ### Advanced (Harder)
-- [[q-mvi-architecture--android--hard]] - MVI architecture pattern
-- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
-- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
 
+-   [[q-mvi-architecture--android--hard]] - MVI architecture pattern
+-   [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
+-   [[q-offline-first-architecture--android--hard]] - Offline-first architecture

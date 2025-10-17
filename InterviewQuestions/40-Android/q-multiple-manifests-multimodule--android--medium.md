@@ -1,7 +1,11 @@
 ---
+id: "20251015082237431"
+title: "Multiple Manifests Multimodule / Множественные манифесты в мультимодульных проектах"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android-manifest
   - android/multi-module
   - android/project-structure
@@ -10,10 +14,7 @@ tags:
   - modularization
   - multi-module
   - project-structure
-difficulty: medium
-status: draft
 ---
-
 # Для проектов в которых есть несколько модулей, там может быть много Android Manifest'ов, для чего это делается?
 
 **English**: In multi-module projects, there can be many AndroidManifest files. Why is this done?

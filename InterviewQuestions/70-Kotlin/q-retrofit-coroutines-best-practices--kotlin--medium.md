@@ -2,17 +2,10 @@
 id: 20251012-180007
 title: "Retrofit with coroutines: best practices / Retrofit с корутинами: лучшие практики"
 topic: kotlin
-subtopics:
-  - coroutines
-  - android
-  - retrofit
-  - networking
-  - best-practices
 difficulty: medium
-moc: moc-kotlin
 status: draft
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - retrofit
   - android
@@ -20,8 +13,13 @@ tags:
   - okhttp
   - rest-api
   - error-handling
+moc: moc-kotlin
+subtopics:   - coroutines
+  - android
+  - retrofit
+  - networking
+  - best-practices
 ---
-
 # Retrofit with Coroutines: Best Practices
 
 **English** | [Русский](#russian-version)

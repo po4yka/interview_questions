@@ -1,20 +1,21 @@
 ---
+id: "20251015082237381"
+title: "Canvas Optimization / Canvas Оптимизация"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - android
   - canvas
   - custom-drawing
   - graphics
   - performance
   - optimization
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Canvas Optimization and Custom Drawing
 
 # Question (EN)

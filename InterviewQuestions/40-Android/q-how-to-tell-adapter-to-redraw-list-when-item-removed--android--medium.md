@@ -1,13 +1,14 @@
 ---
+id: "20251015082237574"
+title: "How To Tell Adapter To Redraw List When Item Removed / Как сказать адаптеру перерисовать список когда элемент удален"
 topic: android
-tags:
-  - android
-  - recyclerview
-  - adapter
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
+  - recyclerview
+  - adapter
 ---
-
 # How to tell adapter to redraw list when item removed?
 
 ## Answer (EN)
@@ -263,7 +264,192 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 # Как сказать адаптеру перерисовать список, если какой-то элемент удалился
 
 ## Ответ (RU)
-Если удалился элемент из списка, нужно: Удалить его из списка данных. Сообщить Adapter, чтобы он перерисовал только изменённые элементы.
+
+Если элемент был удален из списка, нужно: (1) Удалить его из списка данных, (2) Сообщить Adapter перерисовать только измененные элементы используя специфичные notify методы.
+
+### Правильный подход
+
+```kotlin
+class MyAdapter(private val items: MutableList<Item>) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+
+    // НЕПРАВИЛЬНО: Обновляет весь список, нет анимаций
+    fun removeItemBad(position: Int) {
+        items.removeAt(position)
+        notifyDataSetChanged() // Неэффективно!
+    }
+
+    // ПРАВИЛЬНО: Обновляет только затронутый элемент
+    fun removeItem(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position) // Плавная анимация
+    }
+
+    // ЛУЧШЕ: Также обновляет последующие элементы
+    fun removeItemWithRange(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, items.size) // Обновляет позиции
+    }
+}
+```
+
+### Использование DiffUtil (Рекомендуется)
+
+DiffUtil автоматически вычисляет различия между старым и новым списком:
+
+```kotlin
+class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(ItemDiffCallback()) {
+
+    private class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+    fun removeItem(item: Item) {
+        val newList = currentList.toMutableList()
+        newList.remove(item)
+        submitList(newList) // DiffUtil автоматически вычислит изменения
+    }
+}
+```
+
+### Все notify методы
+
+```kotlin
+// Удалить один элемент
+fun removeItem(position: Int) {
+    items.removeAt(position)
+    notifyItemRemoved(position)
+}
+
+// Удалить диапазон элементов
+fun removeItems(startPosition: Int, count: Int) {
+    repeat(count) {
+        items.removeAt(startPosition)
+    }
+    notifyItemRangeRemoved(startPosition, count)
+}
+
+// Добавить элемент
+fun addItem(position: Int, item: Item) {
+    items.add(position, item)
+    notifyItemInserted(position)
+}
+
+// Обновить элемент
+fun updateItem(position: Int, item: Item) {
+    items[position] = item
+    notifyItemChanged(position)
+}
+
+// Переместить элемент
+fun moveItem(fromPosition: Int, toPosition: Int) {
+    val item = items.removeAt(fromPosition)
+    items.add(toPosition, item)
+    notifyItemMoved(fromPosition, toPosition)
+}
+```
+
+### Свайп для удаления
+
+Реализация swipe-to-delete с ItemTouchHelper:
+
+```kotlin
+class SwipeToDeleteActivity : AppCompatActivity() {
+
+    private lateinit var adapter: MyAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        adapter = MyAdapter(items)
+        recyclerView.adapter = adapter
+
+        // Swipe для удаления
+        val swipeHandler = object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                adapter.removeItem(position)
+            }
+        }
+
+        ItemTouchHelper(swipeHandler).attachToRecyclerView(recyclerView)
+    }
+}
+```
+
+### Функциональность Undo
+
+Добавьте возможность отменить удаление:
+
+```kotlin
+class UndoDeleteAdapter(private val items: MutableList<Item>) : RecyclerView.Adapter<ViewHolder>() {
+
+    private var recentlyDeletedItem: Item? = null
+    private var recentlyDeletedPosition: Int = -1
+
+    fun removeItem(position: Int) {
+        recentlyDeletedItem = items[position]
+        recentlyDeletedPosition = position
+
+        items.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun undoDelete() {
+        recentlyDeletedItem?.let { item ->
+            items.add(recentlyDeletedPosition, item)
+            notifyItemInserted(recentlyDeletedPosition)
+        }
+    }
+}
+
+// Использование в Activity
+fun deleteItemWithUndo(position: Int) {
+    adapter.removeItem(position)
+
+    Snackbar.make(binding.root, "Элемент удален", Snackbar.LENGTH_LONG)
+        .setAction("ОТМЕНИТЬ") {
+            adapter.undoDelete()
+        }
+        .show()
+}
+```
+
+### Сравнение методов
+
+| Метод | Анимация | Производительность | Случай использования |
+|-------|----------|---------------------|----------------------|
+| `notifyDataSetChanged()` | Нет | Плохая | Избегать если возможно |
+| `notifyItemRemoved()` | Да | Хорошая | Удаление одного элемента |
+| `notifyItemRangeRemoved()` | Да | Хорошая | Удаление нескольких элементов |
+| `DiffUtil` | Да | Лучшая | Сложные изменения |
+| `ListAdapter` | Да | Лучшая | Рекомендуется |
+
+### Лучшие практики
+
+1. Используйте `notifyItemRemoved()` для удаления одного элемента
+2. Используйте `ListAdapter` с DiffUtil для современных приложений
+3. Избегайте `notifyDataSetChanged()` - нет анимаций
+4. Обновляйте модель данных ПЕРЕД вызовом notify
+5. Используйте `notifyItemRangeChanged()` для обновления позиций
+6. Реализуйте функциональность undo для лучшего UX
+7. Тестируйте с различными размерами списков
+8. Рассмотрите использование AsyncListDiffer для фоновых вычислений
 
 ---
 

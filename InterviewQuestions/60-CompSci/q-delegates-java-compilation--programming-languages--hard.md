@@ -1,15 +1,17 @@
 ---
-tags:
-  - compilation
+id: "20251015082237099"
+title: "Delegates Java Compilation / Компиляция делегатов в Java"
+topic: computer-science
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - compilation
   - delegates
   - delegation
   - kotlin
   - kotlin-compiler
   - programming-languages
-difficulty: hard
-status: draft
 ---
-
 # Как делегаты работают на уровне компиляции Java ?
 
 # Question (EN)

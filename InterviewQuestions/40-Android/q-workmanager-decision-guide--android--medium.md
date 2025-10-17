@@ -1,15 +1,16 @@
 ---
+id: "20251015082237329"
+title: "Workmanager Decision Guide / Руководство по выбору WorkManager"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - workmanager
   - background-work
   - coroutines
   - service
-difficulty: medium
-status: draft
 ---
-
 # WorkManager vs Coroutines vs Service - Decision Guide
 
 **English**: When should you use WorkManager vs Coroutines vs Service for background work?

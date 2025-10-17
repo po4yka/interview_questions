@@ -1,15 +1,16 @@
 ---
+id: "20251015082236044"
+title: "Suspend Functions Deep Dive"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - suspend-functions
   - concurrency
   - cps
-difficulty: medium
-status: draft
 ---
-
 # Suspend Functions - Deep Dive
 
 **English**: Explain how suspend functions work in Kotlin coroutines. What does the `suspend` keyword do?

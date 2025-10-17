@@ -1,15 +1,16 @@
 ---
+id: "20251015082237499"
+title: "Why Is Viewmodel Needed And What Happens In It / Why Is Viewmodel Needed и What Happens In It"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - viewmodel
   - lifecycle
   - mvvm
   - architecture
-difficulty: medium
-status: draft
 ---
-
 # Why is ViewModel needed and what happens in it?
 
 ## EN (expanded)

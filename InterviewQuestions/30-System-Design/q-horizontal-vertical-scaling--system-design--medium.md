@@ -1,29 +1,26 @@
 ---
 id: 20251012-300001
 title: "Horizontal vs Vertical Scaling / Горизонтальное vs Вертикальное масштабирование"
-slug: horizontal-vertical-scaling-system-design-medium
 topic: system-design
-subtopics:
-  - scalability
-  - scaling
-  - distributed-systems
-  - performance
-status: draft
 difficulty: medium
-moc: moc-system-design
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-load-balancing-strategies--system-design--medium
-  - q-database-sharding--system-design--hard
-  - q-stateless-stateful-services--system-design--medium
-tags:
-  - system-design
+status: draft
+created: 2025-10-12
+tags: - system-design
   - scalability
   - architecture
   - distributed-systems
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-system-design
+related_questions:   - q-load-balancing-strategies--system-design--medium
+  - q-database-sharding--system-design--hard
+  - q-stateless-stateful-services--system-design--medium
+slug: horizontal-vertical-scaling-system-design-medium
+subtopics:   - scalability
+  - scaling
+  - distributed-systems
+  - performance
 ---
-
 # Horizontal vs Vertical Scaling
 
 ## English Version

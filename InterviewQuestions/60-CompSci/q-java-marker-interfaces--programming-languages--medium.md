@@ -1,21 +1,22 @@
 ---
+id: "20251015082237089"
+title: "Java Marker Interfaces / Маркерные интерфейсы Java"
 topic: programming-languages
-subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
-tags:
-  - cloneable
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - cloneable
   - interfaces
   - java
   - marker-interface
   - programming-languages
   - serializable
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-programming-languages
 related_questions: []
+subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
-
 # Перечислите маркерные интерфейсы
 
 # Question (EN)

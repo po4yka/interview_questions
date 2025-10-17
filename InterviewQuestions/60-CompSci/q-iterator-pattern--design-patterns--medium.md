@@ -1,16 +1,16 @@
 ---
+id: "20251015082237123"
 title: Iterator Pattern
 topic: design-patterns
-subtopics:
-  - behavioral-patterns
-  - collection-traversal
 difficulty: medium
-related:
-  - composite-pattern
-  - visitor-pattern
 status: draft
+created: 2025-10-15
+tags: []
+related:   - composite-pattern
+  - visitor-pattern
+subtopics:   - behavioral-patterns
+  - collection-traversal
 ---
-
 # Iterator Pattern / Паттерн Итератор
 
 # Question (EN)

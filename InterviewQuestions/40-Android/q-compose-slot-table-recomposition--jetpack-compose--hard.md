@@ -1,14 +1,16 @@
 ---
-tags:
-  - jetpack-compose
+id: "20251015082237354"
+title: "Compose Slot Table Recomposition / Slot Table и рекомпозиция Compose"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - jetpack-compose
   - internals
   - recomposition
   - slot-table
   - performance
-difficulty: hard
-status: draft
 ---
-
 # Compose Slot Table & Recomposition Tracking
 
 # Question (EN)

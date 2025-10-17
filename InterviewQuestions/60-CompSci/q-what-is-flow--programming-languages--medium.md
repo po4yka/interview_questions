@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237200"
+title: "What Is Flow / Что такое Flow"
+topic: computer-science
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # What is Flow in Kotlin?
 
 # Question (EN)

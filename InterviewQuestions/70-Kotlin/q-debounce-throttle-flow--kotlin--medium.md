@@ -1,6 +1,6 @@
 ---
 id: 20251006-005
-title: "Debounce vs Throttle in Flow / Debounce vs Throttle во Flow"
+title: "Debounce vs Throttle in Flow"
 aliases: []
 
 # Classification
@@ -642,6 +642,138 @@ searchQuery
     .filter { it.length >= 2 }  // Мин. длина
     .distinctUntilChanged()  // Избегать дублирующих поисков
     .flatMapLatest { search(it) }
+```
+
+### Продвинутые реализации
+
+**Пользовательский throttleLast (эмитит последнее значение в окне):**
+
+```kotlin
+fun <T> Flow<T>.throttleLast(windowDuration: Long): Flow<T> = flow {
+    var lastValue: T? = null
+    var lastEmissionTime = 0L
+
+    collect { value ->
+        val currentTime = System.currentTimeMillis()
+        lastValue = value
+
+        if (currentTime - lastEmissionTime >= windowDuration) {
+            emit(value)
+            lastEmissionTime = currentTime
+            lastValue = null
+        }
+    }
+
+    // Эмитировать последнее значение если существует
+    lastValue?.let { emit(it) }
+}
+```
+
+**Debounce с немедленной первой эмиссией:**
+
+```kotlin
+fun <T> Flow<T>.debounceImmediate(timeoutMillis: Long): Flow<T> = flow {
+    var lastEmissionTime = 0L
+
+    collect { value ->
+        val currentTime = System.currentTimeMillis()
+
+        if (currentTime - lastEmissionTime >= timeoutMillis) {
+            // Эмитировать немедленно если прошло достаточно времени
+            emit(value)
+            lastEmissionTime = currentTime
+        } else {
+            // Стандартное поведение debounce
+            delay(timeoutMillis)
+            emit(value)
+        }
+    }
+}
+```
+
+### Комбинирование debounce и throttle
+
+**Пример: Умный поиск с обоими**
+
+```kotlin
+class SmartSearchViewModel : ViewModel() {
+    private val _searchQuery = MutableStateFlow("")
+
+    val searchResults: Flow<List<Product>> = _searchQuery
+        .throttleFirst(100)  // Игнорировать супербыструю печать (< 100мс)
+        .debounce(300)  // Затем ждать 300мс пока пользователь приостановится
+        .distinctUntilChanged()
+        .flatMapLatest { query ->
+            repository.search(query)
+        }
+}
+```
+
+### Соображения производительности
+
+**debounce - Эффективность по памяти:**
+
+```kotlin
+// debounce хранит только последнее значение
+searchQuery
+    .debounce(300)
+    .collect { /* ... */ }
+
+// Память: O(1) - только последнее значение
+```
+
+**throttle - Может отбрасывать много значений:**
+
+```kotlin
+// throttle отбрасывает промежуточные значения
+rapidUpdates
+    .throttleFirst(1000)
+    .collect { /* ... */ }
+
+// Если 100 обновлений за 1с → 99 отброшено
+```
+
+### Тестирование
+
+**Тест debounce:**
+
+```kotlin
+@Test
+fun `debounce should emit last value after quiet period`() = runTest {
+    val flow = flow {
+        emit(1)
+        delay(100)
+        emit(2)
+        delay(100)
+        emit(3)
+        delay(500)  // Период тишины
+    }.debounce(300)
+
+    val result = flow.toList()
+
+    assertEquals(listOf(3), result)  // Только последнее значение
+}
+```
+
+**Тест throttle:**
+
+```kotlin
+@Test
+fun `throttle should emit first value and ignore subsequent`() = runTest {
+    val flow = flow {
+        emit(1)
+        delay(100)
+        emit(2)
+        delay(100)
+        emit(3)
+        delay(600)  // Новое окно
+        emit(4)
+    }.throttleFirst(500)
+
+    val result = flow.toList()
+
+    assertEquals(listOf(1, 4), result)
+}
 ```
 
 **Краткое содержание**: `debounce` ждет период тишины после последней эмиссии (сбрасывает таймер на каждом значении). `throttle` эмитит первое значение, затем игнорирует на фиксированное окно. Используйте `debounce` для: поиска, валидации формы, авто-сохранения (ждать пока пользователь закончит). Используйте `throttle` для: кликов по кнопке, обновлений локации, событий прокрутки (ограничение частоты). Типичные таймауты: поиск 300мс, авто-сохранение 2с, кнопка 1с.

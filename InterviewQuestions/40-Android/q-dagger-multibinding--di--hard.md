@@ -1,19 +1,19 @@
 ---
-tags:
-  - android
+id: "20251015082237488"
+title: "Dagger Multibinding / Multibinding в Dagger"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-11
+tags: - android
   - dependency-injection
   - dagger
   - hilt
   - advanced
-difficulty: hard
-status: draft
-related:
-  - q-hilt-entry-points--di--medium
+related:   - q-hilt-entry-points--di--medium
   - q-hilt-assisted-injection--di--medium
   - q-dagger-custom-scopes--di--hard
-created: 2025-10-11
 ---
-
 # Question (EN)
 Explain Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). How would you use it to implement a plugin architecture or feature module system?
 

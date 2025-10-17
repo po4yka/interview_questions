@@ -1,15 +1,17 @@
 ---
-tags:
-  - comparison
+id: "20251015082237139"
+title: "Sealed Vs Enum Classes / Sealed против Enum Классы"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - comparison
   - enum
   - kotlin
   - oop
   - programming-languages
   - sealed-class
-difficulty: medium
-status: draft
 ---
-
 # Каковы отличия sealed и enum классов в Kotlin?
 
 # Question (EN)
@@ -151,5 +153,128 @@ sealed class TaskResult {
 
 ## Ответ (RU)
 
-sealed class – это ограниченная иерархия классов, где можно создавать разные подклассы с разными свойствами. enum class – это фиксированный набор однотипных объектов, которые не имеют разной структуры. enum class используется для фиксированного набора значений, когда значения не изменятся и у всех одинаковая структура. sealed class используется для сложных состояний с разной структурой, когда у состояний разные параметры и поведение.
+### Ключевые отличия
+
+| Характеристика | Enum Class | Sealed Class |
+|---------------|-----------|--------------|
+| **Структура** | Фиксированный набор однородных объектов | Ограниченная иерархия классов |
+| **Количество экземпляров** | Фиксировано на этапе компиляции | Можно создавать множество экземпляров |
+| **Свойства** | Все экземпляры имеют одинаковую структуру | Подклассы могут иметь разные свойства |
+| **Наследование** | Не может иметь подклассов | Может иметь множество подклассов |
+| **Применение** | Простые фиксированные значения | Сложные состояния с разными данными |
+
+### Enum Class
+
+**Фиксированный набор однородных объектов с идентичной структурой:**
+
+```kotlin
+enum class Color(val rgb: Int) {
+    RED(0xFF0000),
+    GREEN(0x00FF00),
+    BLUE(0x0000FF);
+
+    fun hex() = "#${rgb.toString(16)}"
+}
+
+// Использование
+val color = Color.RED
+println(color.rgb)  // 16711680
+println(color.hex()) // #ff0000
+
+// Все enum-экземпляры имеют одинаковую структуру
+when (color) {
+    Color.RED -> println("Red")
+    Color.GREEN -> println("Green")
+    Color.BLUE -> println("Blue")
+    // Исчерпывающе: компилятор знает все значения
+}
+```
+
+**Характеристики:**
+- Каждое значение — это единственный экземпляр
+- Все значения имеют одинаковые свойства
+- Нельзя создать новые экземпляры в runtime
+- Можно перебрать все значения: `Color.values()`
+
+### Sealed Class
+
+**Ограниченная иерархия, где подклассы могут иметь разную структуру:**
+
+```kotlin
+sealed class Result<out T> {
+    data class Success<T>(val data: T, val timestamp: Long) : Result<T>()
+    data class Error(val exception: Exception, val code: Int) : Result<Nothing>()
+    object Loading : Result<Nothing>()
+}
+
+// Использование - разные свойства для каждого подкласса
+val result: Result<User> = Result.Success(user, System.currentTimeMillis())
+
+when (result) {
+    is Result.Success -> println("Данные: ${result.data}, время: ${result.timestamp}")
+    is Result.Error -> println("Ошибка: ${result.exception.message}, код: ${result.code}")
+    is Result.Loading -> println("Загрузка...")
+    // Исчерпывающе: компилятор знает все подклассы
+}
+
+// Можно создать несколько экземпляров Success с разными данными
+val result1 = Result.Success("data1", 123L)
+val result2 = Result.Success("data2", 456L)
+```
+
+**Характеристики:**
+- Допускается множество экземпляров каждого подкласса
+- Подклассы могут иметь совершенно разные свойства
+- Могут быть data-классы, object'ы, обычные классы в качестве подклассов
+- Нельзя создать экземпляр самого sealed-класса
+
+### Когда использовать каждый
+
+**Используйте `enum class` когда:**
+- Фиксированный набор значений, который не изменится
+- Все значения имеют одинаковую структуру
+- Простые состояния или константы
+- Нужно перебрать все значения
+
+```kotlin
+enum class Direction { NORTH, SOUTH, EAST, WEST }
+enum class HttpStatus(val code: Int) { OK(200), NOT_FOUND(404), ERROR(500) }
+enum class DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY }
+```
+
+**Используйте `sealed class` когда:**
+- Сложные состояния с разной структурой
+- Каждое состояние имеет разные параметры
+- Нужна типобезопасная конечная автоматизация
+- Моделирование дискриминированных объединений
+
+```kotlin
+// Результат сети с разными данными для каждого состояния
+sealed class NetworkResult<out T> {
+    data class Success<T>(val data: T, val cached: Boolean) : NetworkResult<T>()
+    data class Error(val message: String, val retryable: Boolean) : NetworkResult<Nothing>()
+    object Loading : NetworkResult<Nothing>()
+}
+
+// Состояние UI с разными свойствами
+sealed class UiState {
+    object Idle : UiState()
+    object Loading : UiState()
+    data class Success(val items: List<Item>, val hasMore: Boolean) : UiState()
+    data class Error(val error: Throwable, val canRetry: Boolean) : UiState()
+}
+```
+
+### Можно комбинировать оба подхода
+
+```kotlin
+// Enum для простого статуса
+enum class Status { PENDING, COMPLETED, FAILED }
+
+// Sealed class для сложного результата с enum
+sealed class TaskResult {
+    data class Success(val value: String, val status: Status) : TaskResult()
+    data class Failure(val error: String, val status: Status) : TaskResult()
+}
+```
 

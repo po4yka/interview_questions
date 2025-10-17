@@ -1,18 +1,11 @@
 ---
-topic: kotlin
 id: "20251012-180002"
 title: "Using CoroutineWorker with WorkManager / Использование CoroutineWorker с WorkManager"
-subtopics:
-  - coroutines
-  - android
-  - workmanager
-  - background
-  - worker
+topic: kotlin
 difficulty: medium
-moc: moc-kotlin
 status: draft
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - android
   - workmanager
@@ -21,8 +14,13 @@ tags:
   - worker
   - periodic-work
   - constraints
+moc: moc-kotlin
+subtopics:   - coroutines
+  - android
+  - workmanager
+  - background
+  - worker
 ---
-
 # Using CoroutineWorker with WorkManager
 
 ## English

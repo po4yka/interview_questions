@@ -1,14 +1,16 @@
 ---
-tags:
-  - context
+id: "20251015082237155"
+title: "Coroutine Context Essence / Суть Coroutine Context"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - context
   - coroutinecontext
   - coroutines
   - kotlin
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # Что является сущностью корутин контекста?
 
 # Question (EN)

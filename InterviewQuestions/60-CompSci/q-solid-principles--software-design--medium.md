@@ -1,8 +1,11 @@
 ---
+id: "20251015082237205"
+title: "Solid Principles / Принципы SOLID"
 topic: architecture-patterns
-subtopics: ["design-principles", "best-practices", "architecture"]
-tags:
-  - architecture
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - architecture
   - design-principles
   - dip
   - isp
@@ -12,14 +15,12 @@ tags:
   - software-design
   - solid
   - srp
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-architecture-patterns
 related_questions: []
+subtopics: ["design-principles", "best-practices", "architecture"]
 ---
-
 # Что такое принципы SOLID?
 
 # Question (EN)

@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237106"
+title: "Flow Shopping Cart Implementation"
+topic: computer-science
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Implementing Flow for Shopping Cart Management
 
 # Question (EN)

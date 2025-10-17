@@ -1,27 +1,25 @@
 ---
 id: git-merge-vs-rebase
-title: Git Merge vs Rebase / Git Merge vs Rebase
+title: "Git Merge vs Rebase"
 topic: tools
-subtopics:
-  - git
-  - merge
-  - rebase
-  - version-control
-  - workflow
 difficulty: medium
-language_tags:
-  - en
-  - ru
-original_language: ru
 status: draft
-tags:
-  - git
+created: 2025-10-15
+tags: - git
   - merge
   - rebase
   - version-control
   - workflow
   - tools
   - difficulty/medium
+language_tags:   - en
+  - ru
+original_language: ru
+subtopics:   - git
+  - merge
+  - rebase
+  - version-control
+  - workflow
 ---
 # Question (EN)
 > What is the difference between git merge and git rebase?

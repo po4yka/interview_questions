@@ -1,15 +1,16 @@
 ---
+id: "20251015082237370"
+title: "Why Fragment Needs Separate Callback For Ui Creation / Почему Fragment нужен отдельный колбэк для создания UI"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android/fragments
   - android/lifecycle
   - fragments
   - lifecycle
-difficulty: hard
-status: draft
 ---
-
 # Why Fragment needs separate callback for UI creation?
 
 **Russian**: Почему у Fragment отдельный callback для создания UI?
@@ -689,15 +690,6 @@ class MyFragment : Fragment() {
 - Уничтожать views когда не видны (память)
 - Сохранять состояние Fragment (данные, ViewModel)
 - Быстро пересоздавать views когда нужно
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-save-data-outside-fragment--android--medium]] - Fragment
-- [[q-dagger-build-time-optimization--android--medium]] - Ui
-- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
 
 ---
 

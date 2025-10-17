@@ -1,22 +1,31 @@
 ---
+id: "20251015082237286"
+title: "Graphql Vs Rest / Graphql против Rest"
 topic: networking
-tags:
-  - networking
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - networking
   - graphql
   - rest
   - api-design
   - comparison
   - architecture
   - difficulty/easy
-difficulty: easy
-status: draft
 ---
 
-# GraphQL vs REST APIs / GraphQL против REST API
+# Question (EN)
 
-**English**: Compare GraphQL and REST APIs in detail. When would you choose GraphQL? Discuss over-fetching, under-fetching, versioning, caching.
+> Compare GraphQL and REST APIs in detail. When would you choose GraphQL? Discuss over-fetching, under-fetching, versioning, caching.
+
+# Вопрос (RU)
+
+> Сравните GraphQL и REST API. Когда стоит выбрать GraphQL? Обсудите over-fetching, under-fetching, версионирование, кэширование.
+
+---
 
 ## Answer (EN)
+
 **GraphQL** and **REST** are two different approaches to building APIs. While REST has been the standard for decades, GraphQL offers a modern alternative that solves many common REST pain points. Understanding when to use each is crucial for building efficient, maintainable APIs.
 
 ### Fundamental Differences
@@ -34,10 +43,11 @@ DELETE /api/posts/456
 ```
 
 **Characteristics:**
-- Multiple endpoints for different resources
-- HTTP methods define operations (GET, POST, PUT, DELETE)
-- Server defines response structure
-- Each resource has its own URL
+
+-   Multiple endpoints for different resources
+-   HTTP methods define operations (GET, POST, PUT, DELETE)
+-   Server defines response structure
+-   Each resource has its own URL
 
 #### GraphQL
 
@@ -63,10 +73,11 @@ query {
 ```
 
 **Characteristics:**
-- Single endpoint for all operations
-- Client specifies exact data requirements
-- Strongly typed schema
-- Nested data fetching in single request
+
+-   Single endpoint for all operations
+-   Client specifies exact data requirements
+-   Strongly typed schema
+-   Nested data fetching in single request
 
 ### Side-by-Side Comparison
 
@@ -179,61 +190,61 @@ data class Post(
 ```graphql
 # GraphQL Schema
 type User {
-  id: ID!
-  name: String!
-  email: String!
-  avatar: String
-  bio: String
-  location: String
-  website: String
-  followers: Int!
-  following: Int!
-  posts: [Post!]!
-  createdAt: DateTime!
+    id: ID!
+    name: String!
+    email: String!
+    avatar: String
+    bio: String
+    location: String
+    website: String
+    followers: Int!
+    following: Int!
+    posts: [Post!]!
+    createdAt: DateTime!
 }
 
 type Post {
-  id: ID!
-  title: String!
-  content: String!
-  excerpt: String
-  tags: [String!]!
-  likes: Int!
-  views: Int!
-  comments: [Comment!]!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+    id: ID!
+    title: String!
+    content: String!
+    excerpt: String
+    tags: [String!]!
+    likes: Int!
+    views: Int!
+    comments: [Comment!]!
+    createdAt: DateTime!
+    updatedAt: DateTime!
 }
 
 type Comment {
-  id: ID!
-  content: String!
-  author: User!
-  likes: Int!
-  createdAt: DateTime!
+    id: ID!
+    content: String!
+    author: User!
+    likes: Int!
+    createdAt: DateTime!
 }
 
 type Query {
-  user(id: ID!): User
+    user(id: ID!): User
 }
 ```
 
 ```graphql
 # GraphQL Query - Request exactly what we need
 query GetUserProfile($id: ID!) {
-  user(id: $id) {
-    id
-    name
-    avatar
-    posts {
-      id
-      title
-      likes
-      comments {
+    user(id: $id) {
         id
-      }
+        name
+        avatar
+        posts {
+            id
+            title
+            likes
+            comments {
+                id
+            }
+        }
     }
-  }
 }
 ```
 
@@ -370,26 +381,26 @@ suspend fun getPostWithDetails(postId: String): PostDetails {
 ```graphql
 # Single request gets all nested data
 query GetPostDetails($id: ID!) {
-  post(id: $id) {
-    id
-    title
-    content
-    author {
-      id
-      name
-      avatar
-    }
-    comments {
-      id
-      content
-      author {
+    post(id: $id) {
         id
-        name
-        avatar
-      }
-      createdAt
+        title
+        content
+        author {
+            id
+            name
+            avatar
+        }
+        comments {
+            id
+            content
+            author {
+                id
+                name
+                avatar
+            }
+            createdAt
+        }
     }
-  }
 }
 
 # Benefits:
@@ -446,14 +457,14 @@ suspend fun getPostsWithAuthors(): List<PostWithAuthor> {
 ```graphql
 # GraphQL automatically batches and caches
 query GetPosts {
-  posts {
-    id
-    title
-    author {
-      id
-      name
+    posts {
+        id
+        title
+        author {
+            id
+            name
+        }
     }
-  }
 }
 
 # Server-side: DataLoader batches author requests
@@ -541,30 +552,30 @@ data class UserV2Response(
 # Evolution through deprecation
 
 type User {
-  id: ID!
-  name: String! @deprecated(reason: "Use 'fullName' instead")
-  fullName: String!
-  email: String!
-  avatar: String
+    id: ID!
+    name: String! @deprecated(reason: "Use 'fullName' instead")
+    fullName: String!
+    email: String!
+    avatar: String
 }
 
 # Old clients continue to work:
 query OldClient {
-  user(id: "123") {
-    id
-    name    # Still works, shows deprecation warning
-    email
-  }
+    user(id: "123") {
+        id
+        name # Still works, shows deprecation warning
+        email
+    }
 }
 
 # New clients use new fields:
 query NewClient {
-  user(id: "123") {
-    id
-    fullName  # New field
-    email
-    avatar
-  }
+    user(id: "123") {
+        id
+        fullName # New field
+        email
+        avatar
+    }
 }
 
 # Benefits:
@@ -681,79 +692,90 @@ apolloClient.mutation(UpdatePostMutation(id = "456", title = "New Title")).execu
 
 ### Decision Matrix
 
-| Factor | REST | GraphQL | Winner |
-|--------|------|---------|--------|
-| **Simple CRUD** | Straightforward | More setup needed | REST |
-| **Complex nested data** | Multiple requests | Single request | GraphQL |
-| **Mobile/bandwidth** | Over-fetching common | Exact data needed | GraphQL |
-| **Caching** | HTTP cache | Normalized cache | GraphQL |
-| **Real-time** | WebSocket/SSE separate | Built-in subscriptions | GraphQL |
-| **Learning curve** | Lower | Higher | REST |
-| **Type safety** | Manual (OpenAPI) | Built-in schema | GraphQL |
-| **Tooling** | Mature | Growing | REST |
-| **File upload** | Simple multipart | More complex | REST |
-| **Public API** | Well understood | Less common | REST |
-| **Versioning** | Explicit versions | Schema evolution | GraphQL |
-| **Monitoring** | Standard tools | Needs custom tools | REST |
+| Factor                  | REST                   | GraphQL                | Winner  |
+| ----------------------- | ---------------------- | ---------------------- | ------- |
+| **Simple CRUD**         | Straightforward        | More setup needed      | REST    |
+| **Complex nested data** | Multiple requests      | Single request         | GraphQL |
+| **Mobile/bandwidth**    | Over-fetching common   | Exact data needed      | GraphQL |
+| **Caching**             | HTTP cache             | Normalized cache       | GraphQL |
+| **Real-time**           | WebSocket/SSE separate | Built-in subscriptions | GraphQL |
+| **Learning curve**      | Lower                  | Higher                 | REST    |
+| **Type safety**         | Manual (OpenAPI)       | Built-in schema        | GraphQL |
+| **Tooling**             | Mature                 | Growing                | REST    |
+| **File upload**         | Simple multipart       | More complex           | REST    |
+| **Public API**          | Well understood        | Less common            | REST    |
+| **Versioning**          | Explicit versions      | Schema evolution       | GraphQL |
+| **Monitoring**          | Standard tools         | Needs custom tools     | REST    |
 
 ### When to Use REST
 
- **Simple APIs**
-- Basic CRUD operations
-- Few related resources
-- Simple data structures
+**Simple APIs**
 
- **Public APIs**
-- External third-party consumers
-- Well-documented REST standards
-- HTTP caching important
+-   Basic CRUD operations
+-   Few related resources
+-   Simple data structures
 
- **File Operations**
-- File uploads/downloads
-- Multipart form data
-- Binary data transfer
+    **Public APIs**
 
- **Team Familiarity**
-- Team experienced with REST
-- Limited GraphQL knowledge
-- Standard tooling preferred
+-   External third-party consumers
+-   Well-documented REST standards
+-   HTTP caching important
 
- **HTTP Caching Critical**
-- CDN distribution needed
-- Edge caching requirements
-- Standard HTTP semantics
+    **File Operations**
+
+-   File uploads/downloads
+-   Multipart form data
+-   Binary data transfer
+
+    **Team Familiarity**
+
+-   Team experienced with REST
+-   Limited GraphQL knowledge
+-   Standard tooling preferred
+
+    **HTTP Caching Critical**
+
+-   CDN distribution needed
+-   Edge caching requirements
+-   Standard HTTP semantics
 
 ### When to Use GraphQL
 
- **Complex Data Requirements**
-- Deeply nested data structures
-- Multiple related resources
-- Variable data needs per client
+**Complex Data Requirements**
 
- **Mobile Applications**
-- Bandwidth optimization critical
-- Minimize network requests
-- Battery life considerations
+-   Deeply nested data structures
+-   Multiple related resources
+-   Variable data needs per client
 
- **Multiple Client Types**
-- Web, mobile, desktop clients
-- Different data needs per platform
-- Single flexible API
+    **Mobile Applications**
 
- **Real-Time Features**
-- Live updates needed
-- Subscriptions for push data
-- Collaborative features
+-   Bandwidth optimization critical
+-   Minimize network requests
+-   Battery life considerations
 
- **Rapid Iteration**
-- Frequent schema changes
-- No version management desired
-- Gradual API evolution
+    **Multiple Client Types**
 
- **Developer Experience**
-- Type safety important
-- Autocomplete/IntelliSense desired
-- Compile-time validation valued
+-   Web, mobile, desktop clients
+-   Different data needs per platform
+-   Single flexible API
+
+    **Real-Time Features**
+
+-   Live updates needed
+-   Subscriptions for push data
+-   Collaborative features
+
+    **Rapid Iteration**
+
+-   Frequent schema changes
+-   No version management desired
+-   Gradual API evolution
+
+    **Developer Experience**
+
+-   Type safety important
+-   Autocomplete/IntelliSense desired
+-   Compile-time validation valued
 
 ### Performance Comparison
 
@@ -898,114 +920,124 @@ class ApiClient(
 #### REST Pitfalls
 
 1. **Over-fetching Ignored**
-   ```kotlin
-   // BAD: Fetching full objects when only ID needed
-   val posts = api.getPosts() // Returns full Post objects
-   val postIds = posts.map { it.id } // Only need IDs!
 
-   // BETTER: Add lightweight endpoint
-   @GET("posts/ids")
-   suspend fun getPostIds(): List<String>
-   ```
+    ```kotlin
+    // BAD: Fetching full objects when only ID needed
+    val posts = api.getPosts() // Returns full Post objects
+    val postIds = posts.map { it.id } // Only need IDs!
+
+    // BETTER: Add lightweight endpoint
+    @GET("posts/ids")
+    suspend fun getPostIds(): List<String>
+    ```
 
 2. **N+1 Queries Unnoticed**
-   ```kotlin
-   // BAD: N+1 problem
-   val posts = api.getPosts()
-   posts.forEach { post ->
-       val author = api.getUser(post.authorId) // N queries!
-   }
 
-   // BETTER: Include author in response or use batch endpoint
-   @GET("posts?include=author")
-   suspend fun getPostsWithAuthors(): List<PostWithAuthor>
-   ```
+    ```kotlin
+    // BAD: N+1 problem
+    val posts = api.getPosts()
+    posts.forEach { post ->
+        val author = api.getUser(post.authorId) // N queries!
+    }
+
+    // BETTER: Include author in response or use batch endpoint
+    @GET("posts?include=author")
+    suspend fun getPostsWithAuthors(): List<PostWithAuthor>
+    ```
 
 3. **Version Sprawl**
-   ```kotlin
-   // BAD: Too many versions
-   interface ApiV1Service { /* ... */ }
-   interface ApiV2Service { /* ... */ }
-   interface ApiV3Service { /* ... */ }
-   interface ApiV4Service { /* ... */ }
 
-   // BETTER: Graceful deprecation with single version
-   ```
+    ```kotlin
+    // BAD: Too many versions
+    interface ApiV1Service { /* ... */ }
+    interface ApiV2Service { /* ... */ }
+    interface ApiV3Service { /* ... */ }
+    interface ApiV4Service { /* ... */ }
+
+    // BETTER: Graceful deprecation with single version
+    ```
 
 #### GraphQL Pitfalls
 
 1. **Over-fetching at Server Level**
-   ```graphql
-   # BAD: Resolver fetches too much
-   type User {
-     posts: [Post!]! # Resolves ALL posts
-   }
 
-   # BETTER: Add pagination
-   type User {
-     posts(first: Int, after: String): PostConnection!
-   }
-   ```
+    ```graphql
+    # BAD: Resolver fetches too much
+    type User {
+        posts: [Post!]! # Resolves ALL posts
+    }
+
+    # BETTER: Add pagination
+    type User {
+        posts(first: Int, after: String): PostConnection!
+    }
+    ```
 
 2. **No Request Limits**
-   ```graphql
-   # BAD: Clients can request infinite depth
-   query {
-     user {
-       posts {
-         author {
-           posts {
-             author {
-               posts { # Infinite nesting!
-   ```
 
-   ```kotlin
-   // GOOD: Implement query complexity limits
-   apollo {
-       maxDepth = 5
-       maxComplexity = 1000
-   }
-   ```
+    ```graphql
+    # BAD: Clients can request infinite depth
+    query {
+      user {
+        posts {
+          author {
+            posts {
+              author {
+                posts { # Infinite nesting!
+    ```
+
+    ```kotlin
+    // GOOD: Implement query complexity limits
+    apollo {
+        maxDepth = 5
+        maxComplexity = 1000
+    }
+    ```
 
 3. **Ignoring Cache**
-   ```kotlin
-   // BAD: Always fetching from network
-   apolloClient.query(GetUserQuery(id))
-       .fetchPolicy(FetchPolicy.NetworkOnly) // Always network!
 
-   // GOOD: Use cache when appropriate
-   apolloClient.query(GetUserQuery(id))
-       .fetchPolicy(FetchPolicy.CacheFirst)
-   ```
+    ```kotlin
+    // BAD: Always fetching from network
+    apolloClient.query(GetUserQuery(id))
+        .fetchPolicy(FetchPolicy.NetworkOnly) // Always network!
+
+    // GOOD: Use cache when appropriate
+    apolloClient.query(GetUserQuery(id))
+        .fetchPolicy(FetchPolicy.CacheFirst)
+    ```
 
 ### Summary
 
 **REST** is ideal for:
-- Simple CRUD APIs
-- Public APIs
-- File operations
-- Teams with REST expertise
-- Standard HTTP caching needs
+
+-   Simple CRUD APIs
+-   Public APIs
+-   File operations
+-   Teams with REST expertise
+-   Standard HTTP caching needs
 
 **GraphQL** excels at:
-- Complex nested data
-- Mobile applications
-- Multiple client types
-- Real-time requirements
-- Rapid API evolution
-- Developer experience
+
+-   Complex nested data
+-   Mobile applications
+-   Multiple client types
+-   Real-time requirements
+-   Rapid API evolution
+-   Developer experience
 
 **Key Takeaways:**
-- GraphQL solves over-fetching and under-fetching
-- REST has better caching with standard HTTP
-- GraphQL has better caching with normalization
-- REST versioning is explicit, GraphQL evolves gracefully
-- Choose based on use case, not popularity
-- Both can coexist in same application
+
+-   GraphQL solves over-fetching and under-fetching
+-   REST has better caching with standard HTTP
+-   GraphQL has better caching with normalization
+-   REST versioning is explicit, GraphQL evolves gracefully
+-   Choose based on use case, not popularity
+-   Both can coexist in same application
 
 ---
 
 ## Ответ (RU)
+
 **GraphQL** и **REST** - это два разных подхода к построению API. В то время как REST был стандартом в течение десятилетий, GraphQL предлагает современную альтернативу, которая решает многие распространённые проблемы REST. Понимание, когда использовать каждый из них, критически важно для создания эффективных и поддерживаемых API.
 
 ### Фундаментальные различия
@@ -1023,10 +1055,11 @@ DELETE /api/posts/456
 ```
 
 **Характеристики:**
-- Множество эндпоинтов для разных ресурсов
-- HTTP методы определяют операции
-- Сервер определяет структуру ответа
-- Каждый ресурс имеет свой URL
+
+-   Множество эндпоинтов для разных ресурсов
+-   HTTP методы определяют операции
+-   Сервер определяет структуру ответа
+-   Каждый ресурс имеет свой URL
 
 #### GraphQL
 
@@ -1047,10 +1080,11 @@ query {
 ```
 
 **Характеристики:**
-- Единая точка входа для всех операций
-- Клиент указывает точные требования к данным
-- Строго типизированная схема
-- Вложенная выборка данных в одном запросе
+
+-   Единая точка входа для всех операций
+-   Клиент указывает точные требования к данным
+-   Строго типизированная схема
+-   Вложенная выборка данных в одном запросе
 
 ### Сравнение: одна и та же функциональность
 
@@ -1098,19 +1132,19 @@ class RestUserRepository(private val api: RestApiService) {
 ```graphql
 # GraphQL запрос - Запросить точно то, что нужно
 query GetUserProfile($id: ID!) {
-  user(id: $id) {
-    id
-    name
-    avatar
-    posts {
-      id
-      title
-      likes
-      comments {
+    user(id: $id) {
         id
-      }
+        name
+        avatar
+        posts {
+            id
+            title
+            likes
+            comments {
+                id
+            }
+        }
     }
-  }
 }
 ```
 
@@ -1232,24 +1266,24 @@ suspend fun getPostWithDetails(postId: String): PostDetails {
 ```graphql
 # Единый запрос получает все вложенные данные
 query GetPostDetails($id: ID!) {
-  post(id: $id) {
-    id
-    title
-    content
-    author {
-      id
-      name
-      avatar
-    }
-    comments {
-      id
-      content
-      author {
+    post(id: $id) {
         id
-        name
-      }
+        title
+        content
+        author {
+            id
+            name
+            avatar
+        }
+        comments {
+            id
+            content
+            author {
+                id
+                name
+            }
+        }
     }
-  }
 }
 
 # Преимущества:
@@ -1284,28 +1318,28 @@ Header: Accept: application/vnd.myapi.v1+json
 # Эволюция через deprecation
 
 type User {
-  id: ID!
-  name: String! @deprecated(reason: "Используйте 'fullName'")
-  fullName: String!
-  email: String!
+    id: ID!
+    name: String! @deprecated(reason: "Используйте 'fullName'")
+    fullName: String!
+    email: String!
 }
 
 # Старые клиенты продолжают работать:
 query OldClient {
-  user(id: "123") {
-    id
-    name    # Всё ещё работает, показывает предупреждение
-    email
-  }
+    user(id: "123") {
+        id
+        name # Всё ещё работает, показывает предупреждение
+        email
+    }
 }
 
 # Новые клиенты используют новые поля:
 query NewClient {
-  user(id: "123") {
-    id
-    fullName  # Новое поле
-    email
-  }
+    user(id: "123") {
+        id
+        fullName # Новое поле
+        email
+    }
 }
 
 # Преимущества:
@@ -1359,91 +1393,104 @@ Cache-Control: max-age=3600
 
 ### Матрица решений
 
-| Фактор | REST | GraphQL | Победитель |
-|--------|------|---------|------------|
-| **Простой CRUD** | Прямолинейно | Больше настройки | REST |
-| **Сложные вложенные данные** | Множество запросов | Единый запрос | GraphQL |
-| **Мобильные/пропускная способность** | Over-fetching частый | Точные данные | GraphQL |
-| **Кеширование** | HTTP кеш | Нормализованный кеш | GraphQL |
-| **Real-time** | WebSocket/SSE отдельно | Встроенные подписки | GraphQL |
-| **Кривая обучения** | Ниже | Выше | REST |
-| **Типобезопасность** | Ручная | Встроенная схема | GraphQL |
-| **Версионирование** | Явные версии | Эволюция схемы | GraphQL |
+| Фактор                               | REST                   | GraphQL             | Победитель |
+| ------------------------------------ | ---------------------- | ------------------- | ---------- |
+| **Простой CRUD**                     | Прямолинейно           | Больше настройки    | REST       |
+| **Сложные вложенные данные**         | Множество запросов     | Единый запрос       | GraphQL    |
+| **Мобильные/пропускная способность** | Over-fetching частый   | Точные данные       | GraphQL    |
+| **Кеширование**                      | HTTP кеш               | Нормализованный кеш | GraphQL    |
+| **Real-time**                        | WebSocket/SSE отдельно | Встроенные подписки | GraphQL    |
+| **Кривая обучения**                  | Ниже                   | Выше                | REST       |
+| **Типобезопасность**                 | Ручная                 | Встроенная схема    | GraphQL    |
+| **Версионирование**                  | Явные версии           | Эволюция схемы      | GraphQL    |
 
 ### Когда использовать REST
 
- **Простые API**
-- Базовые CRUD операции
-- Немного связанных ресурсов
-- Простые структуры данных
+**Простые API**
 
- **Публичные API**
-- Внешние потребители третьих сторон
-- Хорошо документированные стандарты REST
-- Важно HTTP кеширование
+-   Базовые CRUD операции
+-   Немного связанных ресурсов
+-   Простые структуры данных
 
- **Операции с файлами**
-- Загрузка/скачивание файлов
-- Multipart form data
-- Передача бинарных данных
+    **Публичные API**
 
- **Знакомство команды**
-- Команда опытна в REST
-- Ограниченные знания GraphQL
+-   Внешние потребители третьих сторон
+-   Хорошо документированные стандарты REST
+-   Важно HTTP кеширование
+
+    **Операции с файлами**
+
+-   Загрузка/скачивание файлов
+-   Multipart form data
+-   Передача бинарных данных
+
+    **Знакомство команды**
+
+-   Команда опытна в REST
+-   Ограниченные знания GraphQL
 
 ### Когда использовать GraphQL
 
- **Сложные требования к данным**
-- Глубоко вложенные структуры данных
-- Множество связанных ресурсов
-- Переменные потребности в данных
+**Сложные требования к данным**
 
- **Мобильные приложения**
-- Критична оптимизация пропускной способности
-- Минимизация сетевых запросов
-- Учёт времени работы батареи
+-   Глубоко вложенные структуры данных
+-   Множество связанных ресурсов
+-   Переменные потребности в данных
 
- **Множество типов клиентов**
-- Веб, мобильные, десктоп клиенты
-- Разные потребности в данных
+    **Мобильные приложения**
 
- **Real-time функции**
-- Нужны живые обновления
-- Подписки для push данных
+-   Критична оптимизация пропускной способности
+-   Минимизация сетевых запросов
+-   Учёт времени работы батареи
 
- **Быстрая итерация**
-- Частые изменения схемы
-- Не желательно управление версиями
+    **Множество типов клиентов**
+
+-   Веб, мобильные, десктоп клиенты
+-   Разные потребности в данных
+
+    **Real-time функции**
+
+-   Нужны живые обновления
+-   Подписки для push данных
+
+    **Быстрая итерация**
+
+-   Частые изменения схемы
+-   Не желательно управление версиями
 
 ### Резюме
 
 **REST** идеален для:
-- Простых CRUD API
-- Публичных API
-- Операций с файлами
-- Команд с экспертизой REST
-- Стандартного HTTP кеширования
+
+-   Простых CRUD API
+-   Публичных API
+-   Операций с файлами
+-   Команд с экспертизой REST
+-   Стандартного HTTP кеширования
 
 **GraphQL** превосходен в:
-- Сложных вложенных данных
-- Мобильных приложениях
-- Множестве типов клиентов
-- Real-time требованиях
-- Быстрой эволюции API
+
+-   Сложных вложенных данных
+-   Мобильных приложениях
+-   Множестве типов клиентов
+-   Real-time требованиях
+-   Быстрой эволюции API
 
 **Ключевые выводы:**
-- GraphQL решает проблемы over-fetching и under-fetching
-- REST лучше для стандартного HTTP кеширования
-- GraphQL лучше с нормализованным кешем
-- Версионирование REST явное, GraphQL эволюционирует gracefully
-- Выбирайте на основе сценария использования
-- Оба могут сосуществовать в одном приложении
+
+-   GraphQL решает проблемы over-fetching и under-fetching
+-   REST лучше для стандартного HTTP кеширования
+-   GraphQL лучше с нормализованным кешем
+-   Версионирование REST явное, GraphQL эволюционирует gracefully
+-   Выбирайте на основе сценария использования
+-   Оба могут сосуществовать в одном приложении
 
 ---
 
 ## Related Questions
 
 ### Advanced (Harder)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
-- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+
+-   [[q-http-protocols-comparison--android--medium]] - Networking
+-   [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+-   [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking

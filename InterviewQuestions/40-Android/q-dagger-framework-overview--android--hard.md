@@ -1,7 +1,11 @@
 ---
+id: "20251015082237479"
+title: "Dagger Framework Overview / Обзор фреймворка Dagger"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android/architecture-clean
   - android/di-hilt
   - architecture-clean
@@ -9,10 +13,7 @@ tags:
   - dependency-injection
   - di-hilt
   - platform/android
-difficulty: hard
-status: draft
 ---
-
 # Что известно про фреймворк Dagger ?
 
 **English**: What do you know about the Dagger framework?

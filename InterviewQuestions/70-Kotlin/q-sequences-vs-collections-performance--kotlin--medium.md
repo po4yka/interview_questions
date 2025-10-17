@@ -1,16 +1,17 @@
 ---
+id: "20251015082236036"
+title: "Sequences Vs Collections Performance"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - sequences
   - collections
   - performance
   - lazy-evaluation
   - optimization
-difficulty: medium
-status: draft
 ---
-
 # Sequences vs Collections Performance
 
 # Question (EN)

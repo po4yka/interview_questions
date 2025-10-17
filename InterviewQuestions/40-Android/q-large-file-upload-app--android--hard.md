@@ -1,17 +1,18 @@
 ---
+id: "20251015082237432"
+title: "Large File Upload App / Загрузка больших файлов в приложении"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android/background-processing
   - background-processing
   - file-upload
   - networking
   - retrofit
   - workmanager
-difficulty: hard
-status: draft
 ---
-
 # Как бы реализовал приложение, которое может загружать большие файлы на сервер?
 
 **English**: How would you implement an app that can upload large files to a server?

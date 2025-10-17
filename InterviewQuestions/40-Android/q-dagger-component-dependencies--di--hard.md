@@ -1,20 +1,20 @@
 ---
-tags:
-  - android
+id: "20251015082237392"
+title: "Dagger Component Dependencies / Зависимости компонентов Dagger"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-11
+tags: - android
   - dependency-injection
   - dagger
   - hilt
   - architecture
   - advanced
-difficulty: hard
-status: draft
-related:
-  - q-dagger-custom-scopes--di--hard
+related:   - q-dagger-custom-scopes--di--hard
   - q-dagger-multibinding--di--hard
   - q-hilt-entry-points--di--medium
-created: 2025-10-11
 ---
-
 # Question (EN)
 What's the difference between Component Dependencies and Subcomponents in Dagger? When would you use one over the other? How does Hilt handle this?
 
@@ -450,7 +450,10 @@ class MainActivity : AppCompatActivity() {
 object AppModule {
     @Provides
     @Singleton
-    fun provideDatabase(): AppDatabase = TODO()
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(context, AppDatabase::class.java, "app_db")
+            .build()
+    }
 }
 
 @Module
@@ -458,7 +461,9 @@ object AppModule {
 object ActivityModule {
     @Provides
     @ActivityScoped
-    fun provideActivityTracker(): ActivityTracker = TODO()
+    fun provideActivityTracker(activity: Activity, analytics: Analytics): ActivityTracker {
+        return ActivityTracker(activity, analytics)
+    }
 }
 ```
 
@@ -839,7 +844,514 @@ fun testActivitySubcomponent() {
 | **Конфликты Binding** | Изолированные | Может переопределять parent |
 | **Жизненный цикл** | Независимый | Привязан к parent |
 
-[Продолжение с примерами из английской версии...]
+### Component Dependencies (Зависимости компонентов)
+
+Component dependencies позволяют одному компоненту зависеть от другого:
+
+```kotlin
+// Родительский компонент
+@Singleton
+@Component(modules = [AppModule::class])
+interface AppComponent {
+    // Должен явно предоставлять то, что может использовать дочерний компонент
+    fun appDatabase(): AppDatabase
+    fun apiService(): ApiService
+    fun sharedPreferences(): SharedPreferences
+}
+
+// Дочерний компонент с зависимостью от родителя
+@ActivityScope
+@Component(
+    dependencies = [AppComponent::class], // Зависимость компонента
+    modules = [ActivityModule::class]
+)
+interface ActivityComponent {
+    fun inject(activity: MainActivity)
+
+    // Может использовать appDatabase(), apiService(), sharedPreferences() из AppComponent
+}
+
+// Использование
+class MainActivity : AppCompatActivity() {
+    @Inject lateinit var activityTracker: ActivityTracker
+    @Inject lateinit var appDatabase: AppDatabase // Из AppComponent
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appComponent = (application as MyApplication).appComponent
+        DaggerActivityComponent.builder()
+            .appComponent(appComponent) // Передаем родительский компонент
+            .build()
+            .inject(this)
+    }
+}
+```
+
+**Ключевые характеристики:**
+- Родитель должен **явно предоставлять** зависимости через методы
+- Дочерний компонент **не может получить доступ** к непредоставленным зависимостям
+- **Отдельные жизненные циклы** - родитель и дочерний управляются независимо
+- **Нет общих scope** - каждый имеет свой scope
+- **Нет конфликтов binding** - изолированные bindings
+
+### Subcomponents (Подкомпоненты)
+
+Subcomponents создают иерархическую связь, где дочерний является частью родителя:
+
+```kotlin
+// Родительский компонент
+@Singleton
+@Component(modules = [AppModule::class])
+interface AppComponent {
+    // Factory или builder для создания subcomponent
+    fun activityComponentFactory(): ActivityComponent.Factory
+}
+
+// Дочерний subcomponent
+@ActivityScope
+@Subcomponent(modules = [ActivityModule::class])
+interface ActivityComponent {
+
+    @Subcomponent.Factory
+    interface Factory {
+        fun create(): ActivityComponent
+    }
+
+    fun inject(activity: MainActivity)
+
+    // Может получить доступ ко ВСЕМ зависимостям из AppComponent
+    // Не нужно явное предоставление
+}
+
+// Использование
+class MainActivity : AppCompatActivity() {
+    @Inject lateinit var activityTracker: ActivityTracker
+    @Inject lateinit var appDatabase: AppDatabase // Автоматически доступен из parent
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appComponent = (application as MyApplication).appComponent
+        appComponent.activityComponentFactory()
+            .create()
+            .inject(this)
+    }
+}
+```
+
+**Ключевые характеристики:**
+- Дочерний может получить доступ ко **всем зависимостям parent** автоматически
+- **Общий scope** - дочерний наследует bindings родителя
+- **Связанный жизненный цикл** - дочерний создается через parent
+- **Может переопределять** родительские bindings в дочернем scope
+- **Более тесная связь** - дочерний зависит от структуры parent
+
+### Реальный пример: Component Dependencies
+
+```kotlin
+// Application level компонент
+@Singleton
+@Component(modules = [
+    NetworkModule::class,
+    DatabaseModule::class,
+    AnalyticsModule::class
+])
+interface AppComponent {
+    // Явно предоставляем что может использовать фича
+    fun apiService(): ApiService
+    fun database(): AppDatabase
+    fun analytics(): Analytics
+    fun imageLoader(): ImageLoader
+
+    @Component.Factory
+    interface Factory {
+        fun create(@BindsInstance application: Application): AppComponent
+    }
+}
+
+// Feature компонент с зависимостями
+@FeatureScope
+@Component(
+    dependencies = [AppComponent::class],
+    modules = [UserFeatureModule::class]
+)
+interface UserFeatureComponent {
+    fun inject(activity: UserProfileActivity)
+    fun inject(fragment: UserDetailsFragment)
+
+    @Component.Factory
+    interface Factory {
+        fun create(appComponent: AppComponent): UserFeatureComponent
+    }
+}
+
+@Module
+class UserFeatureModule {
+    @Provides
+    @FeatureScope
+    fun provideUserRepository(
+        apiService: ApiService, // Из AppComponent
+        database: AppDatabase // Из AppComponent
+    ): UserRepository {
+        return UserRepository(apiService, database)
+    }
+
+    @Provides
+    @FeatureScope
+    fun provideUserViewModel(
+        repository: UserRepository,
+        analytics: Analytics // Из AppComponent
+    ): UserViewModel {
+        return UserViewModel(repository, analytics)
+    }
+}
+
+// Использование
+class UserProfileActivity : AppCompatActivity() {
+    private lateinit var userFeatureComponent: UserFeatureComponent
+    @Inject lateinit var userViewModel: UserViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appComponent = (application as MyApplication).appComponent
+        userFeatureComponent = DaggerUserFeatureComponent.factory()
+            .create(appComponent)
+        userFeatureComponent.inject(this)
+    }
+}
+```
+
+**Преимущества Component Dependencies:**
+-  **Модульность** - Каждая фича независима
+-  **Явные контракты** - Понятно что каждая фича может использовать
+-  **Тестируемость** - Легко замокировать AppComponent для тестирования
+-  **Dynamic features** - Можно загружать/выгружать фичи
+-  **Multi-module** - Разные Gradle модули могут иметь разные компоненты
+
+### Реальный пример: Subcomponents
+
+```kotlin
+// Application компонент с subcomponents
+@Singleton
+@Component(modules = [
+    AppModule::class,
+    SubcomponentsModule::class // Объявляет subcomponents
+])
+interface AppComponent {
+    fun activityComponentFactory(): ActivityComponent.Factory
+    fun serviceComponentFactory(): ServiceComponent.Factory
+
+    @Component.Factory
+    interface Factory {
+        fun create(@BindsInstance application: Application): AppComponent
+    }
+}
+
+// Модуль объявляющий subcomponents
+@Module(subcomponents = [
+    ActivityComponent::class,
+    ServiceComponent::class
+])
+object SubcomponentsModule
+
+// Activity subcomponent
+@ActivityScope
+@Subcomponent(modules = [ActivityModule::class])
+interface ActivityComponent {
+
+    @Subcomponent.Factory
+    interface Factory {
+        fun create(@BindsInstance activity: Activity): ActivityComponent
+    }
+
+    fun inject(activity: MainActivity)
+
+    // Может получить доступ ко всему из AppComponent
+}
+
+@Module
+class ActivityModule {
+    @Provides
+    @ActivityScope
+    fun provideActivityTracker(
+        activity: Activity,
+        analytics: Analytics // Из parent AppComponent
+    ): ActivityTracker {
+        return ActivityTracker(activity, analytics)
+    }
+
+    @Provides
+    @ActivityScope
+    fun provideNavigationController(
+        activity: Activity
+    ): NavigationController {
+        return NavigationController(activity)
+    }
+}
+```
+
+**Преимущества Subcomponents:**
+-  **Автоматический доступ к зависимостям** - Не нужно предоставлять явно
+-  **Наследование scope** - Дочерний может использовать родительские bindings
+-  **Упрощенная настройка** - Меньше boilerplate
+-  **Переопределение binding** - Может переопределять родительские bindings
+-  **Иерархическая структура** - Четкая связь parent-child
+
+### Подход Hilt
+
+**Hilt упрощает это используя предопределенную иерархию компонентов:**
+
+```kotlin
+// Hilt использует subcomponents внутренне
+// SingletonComponent (app scope)
+//   ↓
+// ActivityRetainedComponent (переживает изменения конфигурации)
+//   ↓
+// ViewModelComponent (ViewModel scope)
+//   ↓
+// ActivityComponent (Activity scope)
+//   ↓
+// FragmentComponent (Fragment scope)
+//   ↓
+// ViewComponent (View scope)
+
+// Всё обрабатывается автоматически
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var appDatabase: AppDatabase // Из SingletonComponent
+
+    @Inject
+    lateinit var activityTracker: ActivityTracker // Из ActivityComponent
+
+    // Не нужно ручное создание компонентов!
+}
+
+// Модули устанавливаются в определенные компоненты
+@Module
+@InstallIn(SingletonComponent::class) // Зависимости уровня приложения
+object AppModule {
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(context, AppDatabase::class.java, "app_db")
+            .build()
+    }
+}
+
+@Module
+@InstallIn(ActivityComponent::class) // Зависимости уровня Activity
+object ActivityModule {
+    @Provides
+    @ActivityScoped
+    fun provideActivityTracker(activity: Activity, analytics: Analytics): ActivityTracker {
+        return ActivityTracker(activity, analytics)
+    }
+}
+```
+
+**Преимущества Hilt:**
+-  Нет ручного создания компонентов
+-  Предопределенная иерархия
+-  Автоматический scoping
+-  Стандартный жизненный цикл компонентов
+
+**Ограничения Hilt:**
+-  Нельзя использовать component dependencies для фич
+-  Фиксированная иерархия компонентов
+-  Меньше гибкости для кастомной архитектуры
+
+**Когда использовать plain Dagger вместо Hilt:**
+- Нужны component dependencies для модульных фич
+- Нужна кастомная иерархия компонентов
+- Нужен больший контроль над жизненным циклом компонентов
+- Работа с multi-module проектом с dynamic features
+
+### Тестирование: Component Dependencies vs Subcomponents
+
+```kotlin
+// Тестирование с Component Dependencies - легко мокировать
+@Test
+fun testUserFeature() {
+    // Создаем фейковый app компонент
+    val fakeAppComponent = object : AppComponent {
+        override fun apiService() = FakeApiService()
+        override fun database() = FakeDatabase()
+        override fun analytics() = FakeAnalytics()
+        override fun imageLoader() = FakeImageLoader()
+    }
+
+    // Создаем feature компонент с фейковыми зависимостями
+    val userFeatureComponent = DaggerUserFeatureComponent.factory()
+        .create(fakeAppComponent)
+
+    // Тестирование с фейковыми зависимостями
+    val activity = UserProfileActivity()
+    userFeatureComponent.inject(activity)
+
+    // Проверки...
+}
+
+// Тестирование с Subcomponents - нужно мокировать parent
+@Test
+fun testActivitySubcomponent() {
+    // Нужно создать весь app компонент
+    val appComponent = DaggerAppComponent.builder()
+        .appModule(FakeAppModule())
+        .build()
+
+    // Создать subcomponent
+    val activityComponent = appComponent.activityComponentFactory()
+        .create(FakeActivity())
+
+    // Тестирование...
+}
+```
+
+### Матрица решений
+
+| Сценарий | Использовать Component Dependencies | Использовать Subcomponents |
+|----------|----------------------------|-------------------|
+| **Multi-module проект** |  Да |  Нет |
+| **Dynamic feature модули** |  Да |  Нет |
+| **Изолированное тестирование** |  Да |  Нет |
+| **Явные контракты** |  Да |  Нет |
+| **Простая иерархия** |  Нет |  Да |
+| **Автоматический доступ к зависимостям** |  Нет |  Да |
+| **Наследование scope** |  Нет |  Да |
+| **Переопределение parent bindings** |  Нет |  Да |
+| **Стандартный Android жизненный цикл** |  Используйте Hilt |  Используйте Hilt |
+
+### Лучшие практики
+
+1. **Используйте Hilt для стандартных Android приложений**
+   ```kotlin
+   //  ХОРОШО - Используйте Hilt для большинства приложений
+   @HiltAndroidApp
+   class MyApplication : Application()
+
+   @AndroidEntryPoint
+   class MainActivity : AppCompatActivity()
+
+   //  ИЗБЕГАЙТЕ - Ручной Dagger если нет специфических нужд
+   ```
+
+2. **Используйте Component Dependencies для Multi-Module**
+   ```kotlin
+   //  ХОРОШО - Feature модули с component dependencies
+   // :app
+   interface AppComponent {
+       fun apiService(): ApiService
+   }
+
+   // :feature:user
+   @Component(dependencies = [AppComponent::class])
+   interface UserFeatureComponent
+
+   // :feature:shop
+   @Component(dependencies = [AppComponent::class])
+   interface ShopFeatureComponent
+   ```
+
+3. **Используйте Subcomponents для иерархических Scopes**
+   ```kotlin
+   //  ХОРОШО - Естественная связь parent-child
+   @Component
+   interface AppComponent {
+       fun activityComponentFactory(): ActivityComponent.Factory
+   }
+
+   @Subcomponent
+   interface ActivityComponent {
+       fun fragmentComponentFactory(): FragmentComponent.Factory
+   }
+
+   @Subcomponent
+   interface FragmentComponent
+   ```
+
+4. **Минимизируйте предоставленные зависимости**
+   ```kotlin
+   //  ХОРОШО - Предоставляйте только необходимое
+   interface AppComponent {
+       fun apiService(): ApiService
+       fun database(): AppDatabase
+   }
+
+   //  ПЛОХО - Предоставление всего
+   interface AppComponent {
+       fun apiService(): ApiService
+       fun database(): AppDatabase
+       fun retrofit(): Retrofit
+       fun okHttpClient(): OkHttpClient
+       // ... еще 20
+   }
+   ```
+
+### Распространенные ошибки
+
+1. **Забывание предоставлять зависимости**
+   ```kotlin
+   //  ПЛОХО - apiService не предоставлен
+   @Component
+   interface AppComponent {
+       fun database(): AppDatabase
+       // Отсутствует: fun apiService(): ApiService
+   }
+
+   @Component(dependencies = [AppComponent::class])
+   interface FeatureComponent
+   // Нельзя использовать apiService! Ошибка компиляции
+
+   //  ХОРОШО - Предоставить что нужно
+   @Component
+   interface AppComponent {
+       fun database(): AppDatabase
+       fun apiService(): ApiService
+   }
+   ```
+
+2. **Конфликты Scope**
+   ```kotlin
+   //  ПЛОХО - Несоответствие scope
+   @Singleton
+   @Component
+   interface AppComponent {
+       fun database(): AppDatabase
+   }
+
+   @Singleton // ПЛОХО - Такой же scope как у parent!
+   @Component(dependencies = [AppComponent::class])
+   interface FeatureComponent
+
+   //  ХОРОШО - Другой scope
+   @FeatureScope
+   @Component(dependencies = [AppComponent::class])
+   interface FeatureComponent
+   ```
+
+3. **Утечки памяти с Subcomponents**
+   ```kotlin
+   //  ПЛОХО - Держим ссылку на subcomponent
+   class MainActivity : AppCompatActivity() {
+       companion object {
+           var activityComponent: ActivityComponent? = null // Утечка памяти!
+       }
+   }
+
+   //  ХОРОШО - Не держать ссылки
+   class MainActivity : AppCompatActivity() {
+       override fun onCreate(savedInstanceState: Bundle?) {
+           super.onCreate(savedInstanceState)
+           val component = appComponent.activityComponentFactory().create()
+           component.inject(this)
+           // Компонент может быть собран сборщиком мусора
+       }
+   }
+   ```
 
 ### Резюме
 

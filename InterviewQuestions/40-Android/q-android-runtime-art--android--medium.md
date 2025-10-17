@@ -1,14 +1,15 @@
 ---
+id: "20251015082237464"
+title: "Android Runtime Art"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - runtime
   - art
   - dalvik
-difficulty: medium
-status: draft
 ---
-
 # Что такое Runtime в контексте Android?
 
 # Question (EN)

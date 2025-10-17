@@ -1,13 +1,14 @@
 ---
+id: "20251015082237452"
+title: "Network Operations Android / Сетевые операции в Android"
 topic: android
-tags:
-  - android
-  - networking
-  - http
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
+  - networking
+  - http
 ---
-
 # Что используется для работы с сетью в Android?
 
 **English**: What is used for network operations in Android?

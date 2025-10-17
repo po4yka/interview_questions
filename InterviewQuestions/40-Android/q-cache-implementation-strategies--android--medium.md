@@ -1,13 +1,15 @@
 ---
+id: "20251015082237255"
+title: "Cache Implementation Strategies / Cache Реализация Strategies"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - android
   - caching
   - performance
   - data-storage
   - optimization
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
@@ -17,9 +19,11 @@ related_questions: []
 # Как реализовать кэширование в Android?
 
 # Question (EN)
+
 > How to implement caching in Android?
 
 # Вопрос (RU)
+
 > Как реализовать кэширование в Android?
 
 ---
@@ -657,19 +661,35 @@ class CacheMetrics {
 
 ---
 
+## Follow-ups
+
+-   How do you implement cache invalidation strategies for different types of data (user preferences vs API responses)?
+-   What are the trade-offs between using LruCache vs Room database for caching large datasets?
+-   How can you implement cache warming strategies to improve app startup performance?
+
+## References
+
+-   `https://developer.android.com/topic/libraries/architecture/room` — Room database caching
+-   `https://developer.android.com/topic/performance/memory` — Memory management
+-   `https://developer.android.com/topic/libraries/architecture/workmanager` — Background cache updates
+
 ## Related Questions
 
 ### Computer Science Fundamentals
-- [[q-list-vs-sequence--programming-languages--medium]] - Data Structures
+
+-   [[q-list-vs-sequence--programming-languages--medium]] - Data Structures
 
 ### Kotlin Language Features
-- [[q-kotlin-collections--kotlin--medium]] - Data Structures
+
+-   [[q-kotlin-collections--kotlin--medium]] - Data Structures
 
 ### Related Algorithms
-- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Data Structures
-- [[q-advanced-graph-algorithms--algorithms--hard]] - Data Structures
-- [[q-binary-search-trees-bst--algorithms--hard]] - Data Structures
-- [[q-sorting-algorithms-comparison--algorithms--medium]] - Data Structures
+
+-   [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Data Structures
+-   [[q-advanced-graph-algorithms--algorithms--hard]] - Data Structures
+-   [[q-binary-search-trees-bst--algorithms--hard]] - Data Structures
+-   [[q-sorting-algorithms-comparison--algorithms--medium]] - Data Structures
 
 ### System Design Concepts
-- [[q-message-queues-event-driven--system-design--medium]] - Data Structures
+
+-   [[q-message-queues-event-driven--system-design--medium]] - Data Structures

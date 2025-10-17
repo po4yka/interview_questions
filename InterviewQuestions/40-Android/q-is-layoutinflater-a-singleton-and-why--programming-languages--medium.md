@@ -1,11 +1,13 @@
 ---
-tags:
-  - programming-languages
-  - android
+id: "20251015082237317"
+title: "Is Layoutinflater A Singleton And Why / Is Layoutinflater A Singleton и Why"
+topic: android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
+  - android
 ---
-
 # Является ли LayoutInflater синглтоном и почему?
 
 ## Answer (EN)

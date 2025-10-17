@@ -1,11 +1,12 @@
 ---
+id: "20251015082238616"
+title: "Kakaya Raznitsa Mezhdu Dialogom I Fragmentom / Какая разница между Dialog и Fragment"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # What is the difference between dialog and fragment?
 
 ## EN (expanded)

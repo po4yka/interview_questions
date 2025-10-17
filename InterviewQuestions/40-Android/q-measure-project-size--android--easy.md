@@ -1,7 +1,11 @@
 ---
+id: "20251015082237383"
+title: "Measure Project Size / Измерение размера проекта"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/project-structure
   - apk-size
   - codebase-analysis
@@ -10,10 +14,7 @@ tags:
   - modules
   - project-metrics
   - project-structure
-difficulty: easy
-status: draft
 ---
-
 # Как можно измерить размер проекта?
 
 **English**: How can you measure project size?
@@ -37,7 +38,6 @@ Project size can be measured in several ways:
 **How to measure:**
 
 ```bash
-
 # Count all Kotlin files
 find . -name "*.kt" | xargs wc -l
 
@@ -111,7 +111,6 @@ Code:     79,988 lines (78.2%)
 **How to measure:**
 
 ```bash
-
 # Count build.gradle.kts files (each module has one)
 find . -name "build.gradle.kts" | wc -l
 
@@ -193,7 +192,6 @@ project/
 #### Option 1: Build and Check APK
 
 ```bash
-
 # Build release APK
 ./gradlew assembleRelease
 
@@ -201,7 +199,6 @@ project/
 ls -lh app/build/outputs/apk/release/app-release.apk
 
 # Output example:
-
 # -rw-r--r-- 1 user staff 15M Oct 4 app-release.apk
 ```
 
@@ -255,14 +252,11 @@ META-INF/:      0.3 MB (2.0%)
 #### Method Count
 
 ```bash
-
 # Count methods using dexcount plugin
 ./gradlew countDebugDexMethods
 
 # Output:
-
 # Total methods: 45,234
-
 # Total fields:  12,345
 ```
 
@@ -273,7 +267,6 @@ META-INF/:      0.3 MB (2.0%)
 #### File Count
 
 ```bash
-
 # Count all source files
 find ./src -type f | wc -l
 
@@ -287,7 +280,6 @@ find ./src -name "*.xml" | wc -l   # XML layouts
 #### Dependencies Count
 
 ```bash
-
 # List all dependencies
 ./gradlew dependencies
 
@@ -388,7 +380,6 @@ Build time: 3-5 minutes (clean)
 ### 1. SonarQube
 
 ```bash
-
 # Run SonarQube analysis
 ./gradlew sonarqube
 ```
@@ -512,16 +503,484 @@ android {
 ---
 
 ## Ответ (RU)
-Размер проекта можно измерить несколькими способами:
 
+Размер проекта можно измерить несколькими способами:
 1. **Строки кода (LOC)** - общее количество строк исходного кода
 2. **Количество модулей** - уровень модуляризации
 3. **Размер APK** - размер финального приложения
 
 **Типичный крупный проект:** около **100,000 строк кода**, разделённых на **5-10 модулей**.
 
+---
+
+## Метрики измерения
+
+### 1. Строки кода (LOC)
+
+**Определение:** Подсчет строк исходного кода в проекте.
+
 **Как измерить:**
-- LOC: `find . -name "*.kt" | xargs wc -l`
-- Модули: посчитать build.gradle файлы
-- APK: Android Studio → APK Analyzer
+
+```bash
+# Подсчитать все Kotlin файлы
+find . -name "*.kt" | xargs wc -l
+
+# Подсчитать все Java файлы
+find . -name "*.java" | xargs wc -l
+
+# Подсчитать и Kotlin и Java
+find . \( -name "*.kt" -o -name "*.java" \) | xargs wc -l
+```
+
+**Пример вывода:**
+```
+   1234 ./app/src/main/java/com/example/MainActivity.kt
+   567 ./app/src/main/java/com/example/ViewModel.kt
+   890 ./feature/login/src/main/java/Login.kt
+   ...
+   102345 total
+```
+
+---
+
+#### Использование Android Studio
+
+**Плагин Statistic:**
+
+1. Установить плагин "Statistic"
+2. **Analyze → Statistic**
+3. Просмотреть детальную разбивку:
+   - Строки кода по типу файла
+   - Строки по пакету
+   - Соотношение комментариев
+   - Пустые строки
+
+**Пример отчета:**
+```
+Total Files: 423
+Total Lines: 102,345
+
+Kotlin:  85,234 lines (83.3%)
+Java:    12,456 lines (12.2%)
+XML:      4,655 lines (4.5%)
+
+Comments: 15,234 lines (14.9%)
+Blank:    8,123 lines (7.9%)
+Code:     79,988 lines (78.2%)
+```
+
+---
+
+#### Интерпретация размера кода
+
+| Размер проекта | Диапазон LOC | Типичная сложность |
+|----------------|--------------|-------------------|
+| **Маленький** | < 10,000 | Приложение с одной функцией, прототип |
+| **Средний** | 10,000 - 50,000 | Стандартное приложение, 2-5 функций |
+| **Большой** | 50,000 - 200,000 | Корпоративное приложение, 5-10 модулей |
+| **Очень большой** | > 200,000 | Сложная платформа, 10+ модулей |
+
+**Примеры проектов:**
+- **Маленький:** Приложение калькулятор (~2,000 LOC)
+- **Средний:** Новостной ридер (~25,000 LOC)
+- **Большой:** Банковское приложение (~120,000 LOC)
+- **Очень большой:** Платформа социальных медиа (~500,000 LOC)
+
+---
+
+### 2. Количество модулей
+
+**Определение:** Подсчет Gradle модулей в проекте.
+
+**Как измерить:**
+
+```bash
+# Подсчитать файлы build.gradle.kts (у каждого модуля есть один)
+find . -name "build.gradle.kts" | wc -l
+
+# Или подсчитать includes в settings.gradle.kts
+cat settings.gradle.kts | grep "include" | wc -l
+```
+
+**Пример settings.gradle.kts:**
+```kotlin
+include(":app")
+include(":core:network")
+include(":core:database")
+include(":feature:login")
+include(":feature:profile")
+include(":feature:chat")
+include(":feature:settings")
+```
+
+**Количество модулей:** 7 модулей
+
+---
+
+#### Организация модулей
+
+**Типичная структура модулей:**
+
+```
+project/
+ app/                    ← Главный модуль приложения
+ core/
+    network/           ← Библиотека сети
+    database/          ← Слой базы данных
+    ui/                ← Общие UI компоненты
+    utils/             ← Утилиты
+ feature/
+    login/             ← Функция входа
+    profile/           ← Функция профиля
+    chat/              ← Функция чата
+    settings/          ← Функция настроек
+ test/
+     shared/            ← Общие тестовые утилиты
+```
+
+**Всего:** 12 модулей
+
+---
+
+#### Интерпретация количества модулей
+
+| Модуляризация | Количество модулей | Преимущества |
+|---------------|-------------------|-------------|
+| **Монолитная** | 1 | Просто, быстрые сборки (маленькие приложения) |
+| **Базовая** | 2-4 | Некоторое разделение, умеренные сборки |
+| **Модульная** | 5-10 | Хорошее разделение, параллельные сборки |
+| **Высоко модульная** | 10-20 | Отличное разделение, сложная настройка |
+| **Микросервисы** | 20+ | Независимо развертываемые единицы |
+
+**Пример:**
+```kotlin
+// Типичный большой проект: 5-10 модулей
+:app                    // Главный модуль
+:core-network           // HTTP клиент, API вызовы
+:core-database          // Room, хранение данных
+:core-ui                // Общие UI компоненты
+:feature-login          // Экран входа
+:feature-home           // Главный экран
+:feature-profile        // Профиль пользователя
+:feature-settings       // Настройки приложения
+```
+
+---
+
+### 3. Размер APK
+
+**Определение:** Размер скомпилированного пакета Android приложения.
+
+**Как измерить:**
+
+#### Вариант 1: Собрать и проверить APK
+
+```bash
+# Собрать release APK
+./gradlew assembleRelease
+
+# Проверить размер APK
+ls -lh app/build/outputs/apk/release/app-release.apk
+
+# Пример вывода:
+# -rw-r--r-- 1 user staff 15M Oct 4 app-release.apk
+```
+
+---
+
+#### Вариант 2: Android Studio APK Analyzer
+
+1. **Build → Analyze APK**
+2. Выбрать файл APK
+3. Просмотреть детальную разбивку:
+   - Общий размер
+   - Размер ресурсов
+   - Размер DEX файлов
+   - Размер нативных библиотек
+   - Размер ассетов
+
+**Пример разбивки:**
+```
+Total APK Size: 15.2 MB
+
+classes.dex:    5.2 MB (34.2%)
+resources.arsc: 2.1 MB (13.8%)
+res/:           4.8 MB (31.6%)
+lib/:           2.3 MB (15.1%)
+assets/:        0.5 MB (3.3%)
+META-INF/:      0.3 MB (2.0%)
+```
+
+---
+
+#### Интерпретация размера APK
+
+| Категория приложения | Типичный размер | Примечания |
+|---------------------|----------------|-----------|
+| **Легковесное** | < 10 MB | Утилиты, простые игры |
+| **Стандартное** | 10-30 MB | Большинство приложений продуктивности |
+| **С медиа-контентом** | 30-100 MB | Социальные медиа, фото приложения |
+| **Большое** | 100-500 MB | Игры, видео-стриминг |
+| **Очень большое** | > 500 MB | AAA игры, оффлайн видео приложения |
+
+**Примеры:**
+- Калькулятор: ~2 MB
+- Twitter: ~35 MB
+- Instagram: ~60 MB
+- PUBG Mobile: ~900 MB
+
+---
+
+### 4. Другие метрики
+
+#### Количество методов
+
+```bash
+# Подсчитать методы используя плагин dexcount
+./gradlew countDebugDexMethods
+
+# Вывод:
+# Total methods: 45,234
+# Total fields:  12,345
+```
+
+**Лимит Android:** 65,536 методов на DEX файл (требуется MultiDex если превышено)
+
+---
+
+#### Количество файлов
+
+```bash
+# Подсчитать все исходные файлы
+find ./src -type f | wc -l
+
+# Подсчитать по типу
+find ./src -name "*.kt" | wc -l    # Kotlin файлы
+find ./src -name "*.xml" | wc -l   # XML layouts
+```
+
+---
+
+#### Количество зависимостей
+
+```bash
+# Список всех зависимостей
+./gradlew dependencies
+
+# Подсчитать уникальные зависимости
+./gradlew dependencies | grep "---" | wc -l
+```
+
+**Пример:**
+```
++--- androidx.core:core-ktx:1.12.0
++--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2
++--- com.squareup.retrofit2:retrofit:2.9.0
++--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3
+...
+Total: 47 dependencies
+```
+
+---
+
+## Полный пример: Метрики реального проекта
+
+### Пример: E-commerce приложение среднего размера
+
+```
+Метрики проекта:
+================
+Строки кода:       78,234 LOC
+  - Kotlin:        62,187 LOC (79.5%)
+  - Java:           8,456 LOC (10.8%)
+  - XML:            7,591 LOC (9.7%)
+
+Модули:           8 модулей
+  - app
+  - core-network
+  - core-database
+  - core-ui
+  - feature-catalog
+  - feature-cart
+  - feature-checkout
+  - feature-profile
+
+Размер APK:       24.3 MB (release)
+  - Код:           6.8 MB
+  - Ресурсы:       9.2 MB
+  - Нативные lib:  7.1 MB
+  - Другое:        1.2 MB
+
+Методы:           42,156 методов
+Файлы:            523 исходных файла
+Зависимости:      38 библиотек
+Время сборки:     2м 15с (инкрементальная)
+```
+
+---
+
+## Разбивка типичного большого проекта
+
+**~100,000 LOC, 5-10 модулей:**
+
+```
+Структура проекта:
+==================
+
+1. app модуль (~10,000 LOC)
+   - Класс Application
+   - Главная activity
+   - Настройка навигации
+   - Внедрение зависимостей
+
+2. core модули (~30,000 LOC)
+   - core-network:  8,000 LOC
+   - core-database: 7,000 LOC
+   - core-ui:       6,000 LOC
+   - core-domain:   5,000 LOC
+   - core-utils:    4,000 LOC
+
+3. feature модули (~55,000 LOC)
+   - feature-auth:     12,000 LOC
+   - feature-home:     10,000 LOC
+   - feature-profile:   8,000 LOC
+   - feature-messages:  9,000 LOC
+   - feature-settings:  7,000 LOC
+   - feature-search:    9,000 LOC
+
+4. test модули (~5,000 LOC)
+   - Юнит-тесты
+   - Интеграционные тесты
+   - UI тесты
+
+APK: 25-35 MB (типично)
+Время сборки: 3-5 минут (чистая)
+```
+
+---
+
+## Инструменты измерения
+
+### 1. SonarQube
+
+```bash
+# Запустить анализ SonarQube
+./gradlew sonarqube
+```
+
+**Предоставляемые метрики:**
+- Строки кода
+- Сложность кода (цикломатическая)
+- Дублирование кода
+- Code smells
+- Технический долг
+
+---
+
+### 2. Detekt
+
+```gradle
+// build.gradle.kts
+plugins {
+    id("io.gitlab.arturbosch.detekt") version "1.23.0"
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    config = files("$projectDir/config/detekt.yml")
+}
+```
+
+```bash
+./gradlew detekt
+```
+
+---
+
+### 3. Android Lint
+
+```bash
+./gradlew lint
+```
+
+**Вывод:** `app/build/reports/lint-results.html`
+
+---
+
+## Лучшие практики
+
+### 1. Мониторинг роста
+
+```kotlin
+// Отслеживать метрики со временем
+// Commit: 2024-01-01
+LOC: 50,000
+APK: 18 MB
+Модули: 5
+
+// Commit: 2024-06-01
+LOC: 78,000 (+56%)
+APK: 24 MB (+33%)
+Модули: 8 (+3)
+```
+
+### 2. Установка лимитов
+
+```gradle
+// Применить лимит размера APK
+android {
+    buildTypes {
+        release {
+            if (variant.outputs[0].outputFile.size() > 50_000_000) {
+                throw GradleException("APK size exceeds 50MB!")
+            }
+        }
+    }
+}
+```
+
+### 3. Регулярная очистка
+
+- Удалять неиспользуемые зависимости
+- Удалять мертвый код
+- Оптимизировать ресурсы (изображения, строки)
+- Использовать R8/ProGuard shrinking
+
+---
+
+## Резюме
+
+**Как измерить размер проекта:**
+
+1. **Строки кода (LOC)**
+   - Find + wc -l
+   - Плагин Statistics в Android Studio
+   - Типичный большой проект: **~100,000 LOC**
+
+2. **Количество модулей**
+   - Подсчитать build.gradle файлы
+   - Проверить includes в settings.gradle
+   - Типичный большой проект: **5-10 модулей**
+
+3. **Размер APK**
+   - Собрать и проверить размер файла
+   - APK Analyzer в Android Studio
+   - Типичный большой проект: **20-40 MB**
+
+4. **Другие метрики**
+   - Количество методов
+   - Количество файлов
+   - Количество зависимостей
+   - Время сборки
+
+**Инструменты:**
+- Android Studio (APK Analyzer, плагин Statistics)
+- SonarQube (качество кода)
+- Detekt (статический анализ Kotlin)
+- Dexcount (подсчет методов)
+
+**Лучшие практики:**
+- Мониторить метрики со временем
+- Устанавливать лимиты размера
+- Регулярная очистка и оптимизация
 

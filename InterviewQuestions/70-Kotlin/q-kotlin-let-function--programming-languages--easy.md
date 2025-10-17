@@ -1,15 +1,16 @@
 ---
+id: "20251015082237073"
+title: "Kotlin Let Function / Функция let в Kotlin"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - let
   - null-safety
   - programming-languages
   - scope-functions
-difficulty: easy
-status: draft
 ---
-
 # Для чего нужен let?
 
 # Question (EN)

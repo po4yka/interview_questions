@@ -1,7 +1,11 @@
 ---
+id: "20251015082238659"
+title: "Single Activity Approach / Подход Single Activity"
 topic: android
-tags:
-  - activity
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - activity
   - android
   - android/activity
   - android/fragment
@@ -10,10 +14,7 @@ tags:
   - jetpack-navigation-component
   - platform/android
   - ui-navigation
-difficulty: medium
-status: draft
 ---
-
 # Что означает в Android-разработке подход Single Activity?
 
 **English**: What does the Single Activity approach mean in Android development?

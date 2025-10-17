@@ -1,17 +1,18 @@
 ---
+id: "20251015082237433"
+title: "Database Optimization Android / Database Оптимизация Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - database
   - room
   - performance
   - optimization
   - sql
   - indexing
-difficulty: medium
-status: draft
 ---
-
 # Database Optimization Techniques in Android
 
 **Сложность**: 🟡 Medium

@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237299"
+title: "How To Show Svg String As Vector File / Как показать SVG строку как векторный файл"
+topic: android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Как SVG-строку показать в виде векторного файла?
 
 ## Answer (EN)

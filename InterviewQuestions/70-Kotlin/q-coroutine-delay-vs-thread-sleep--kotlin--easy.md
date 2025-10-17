@@ -1,17 +1,17 @@
 ---
-topic: kotlin
 id: "20251012-150005"
 title: "delay() vs Thread.sleep(): what's the difference?"
-description: "Understanding the fundamental differences between suspending delay() and blocking Thread.sleep() in Kotlin coroutines, including thread usage and performance implications"
+topic: kotlin
+difficulty: easy
+status: draft
+created: "2025-10-12"
 tags: ["kotlin", "coroutines", "delay", "threads", "suspending", "difficulty/easy"]
-topic: "kotlin"
-subtopics: ["coroutines", "delay", "threads", "suspending"]
-moc: "moc-kotlin"
-status: "draft"
 date_created: "2025-10-12"
 date_updated: "2025-10-12"
+description: "Understanding the fundamental differences between suspending delay() and blocking Thread.sleep() in Kotlin coroutines, including thread usage and performance implications"
+moc: "moc-kotlin"
+subtopics: ["coroutines", "delay", "threads", "suspending"]
 ---
-
 # delay() vs Thread.sleep(): what's the difference?
 
 ## English
@@ -663,7 +663,6 @@ fun legacyCode() {
 
 ### Prerequisites (Easier)
 - [[q-what-is-coroutine--kotlin--easy]] - Coroutines
-
 ### Related (Same Level)
 - [[q-suspending-vs-blocking--kotlin--medium]] - Coroutines
 - [[q-coroutine-virtual-time--kotlin--medium]] - Coroutines
@@ -674,8 +673,11 @@ fun legacyCode() {
 - [[q-coroutine-profiling--kotlin--hard]] - Coroutines
 - [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
 - [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutines
-### Prerequisites (Easier)
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
+### Related (Same Level)
+- [[q-suspending-vs-blocking--kotlin--medium]] - Coroutines
+- [[q-coroutine-virtual-time--kotlin--medium]] - Coroutines
+- [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
+- [[q-coroutine-cancellation-cooperation--kotlin--medium]] - Coroutines
 
 ### Related (Same Level)
 - [[q-suspending-vs-blocking--kotlin--medium]] - Coroutines
@@ -683,23 +685,6 @@ fun legacyCode() {
 - [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
 - [[q-coroutine-cancellation-cooperation--kotlin--medium]] - Coroutines
 
-### Advanced (Harder)
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
-- [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutines
-### Prerequisites (Easier)
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
-
-### Related (Same Level)
-- [[q-suspending-vs-blocking--kotlin--medium]] - Coroutines
-- [[q-coroutine-virtual-time--kotlin--medium]] - Coroutines
-- [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
-- [[q-coroutine-cancellation-cooperation--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
-- [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutines
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
 

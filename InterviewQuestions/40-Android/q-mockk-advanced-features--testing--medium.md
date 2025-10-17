@@ -1,15 +1,17 @@
 ---
-tags:
-  - testing
+id: "20251015082237314"
+title: "Mockk Advanced Features / Продвинутые возможности MockK"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - testing
   - mockk
   - mocking
   - kotlin
   - unit-testing
   - coroutines
-difficulty: medium
-status: draft
 ---
-
 # MockK Advanced Features
 
 # Question (EN)

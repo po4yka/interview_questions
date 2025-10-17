@@ -1,11 +1,12 @@
 ---
+id: "20251015082237511"
+title: "Can A Service Communicate With The User / Может ли Service общаться с пользователем"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # Can a service communicate with the user
 
 # Question (EN)

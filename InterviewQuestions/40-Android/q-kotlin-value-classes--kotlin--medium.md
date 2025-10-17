@@ -1,31 +1,28 @@
 ---
 id: 20251012-400006
 title: "Kotlin Value Classes (Inline Classes) / Value классы в Kotlin"
-slug: kotlin-value-classes-kotlin-medium
 topic: android
-subtopics:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - value-classes
   - inline-classes
   - performance
   - type-safety
-status: draft
-difficulty: medium
-moc: moc-android
 date_created: 2025-10-12
 date_updated: 2025-10-12
-related_questions:
-  - q-kotlin-coroutines-advanced--kotlin--hard
+moc: moc-android
+related_questions:   - q-kotlin-coroutines-advanced--kotlin--hard
   - q-sealed-classes-state-management--kotlin--medium
   - q-compose-performance-optimization--android--hard
-tags:
-  - kotlin
+slug: kotlin-value-classes-kotlin-medium
+subtopics:   - kotlin
   - value-classes
   - inline-classes
   - performance
   - type-safety
 ---
-
 # Kotlin Value Classes (Inline Classes)
 
 ## English Version

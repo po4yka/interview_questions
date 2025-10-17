@@ -1,30 +1,27 @@
 ---
 id: 20251012-300006
 title: "Microservices vs Monolith Architecture / Микросервисы vs Монолитная архитектура"
-slug: microservices-vs-monolith-system-design-hard
 topic: system-design
-subtopics:
+difficulty: hard
+status: draft
+created: 2025-10-12
+tags: - system-design
   - microservices
+  - architecture
+  - distributed-systems
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-system-design
+related_questions:   - q-api-gateway-pattern--system-design--medium
+  - q-service-mesh--system-design--hard
+  - q-distributed-transactions--system-design--hard
+slug: microservices-vs-monolith-system-design-hard
+subtopics:   - microservices
   - monolith
   - architecture
   - distributed-systems
   - scalability
-status: draft
-difficulty: hard
-moc: moc-system-design
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-api-gateway-pattern--system-design--medium
-  - q-service-mesh--system-design--hard
-  - q-distributed-transactions--system-design--hard
-tags:
-  - system-design
-  - microservices
-  - architecture
-  - distributed-systems
 ---
-
 # Microservices vs Monolith Architecture
 
 ## English Version
@@ -629,20 +626,9 @@ class OrderModuleImpl(
 - [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
 - [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
 - [[q-design-url-shortener--system-design--medium]] - design url shortener   system
-
 ### Related (Hard)
 - [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
-### Prerequisites (Easier)
-- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
-- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
-- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
-
 ### Related (Hard)
 - [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
-### Prerequisites (Easier)
-- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
-- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
-- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
-
 ### Related (Hard)
 - [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system

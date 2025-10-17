@@ -1,16 +1,17 @@
 ---
+id: "20251015082237416"
+title: "Encrypted File Storage / Зашифрованное хранение файлов"
 topic: security
-tags:
-  - security
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - security
   - encryption
   - file-storage
   - streaming
   - encrypted-file
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Encrypted File Storage / Шифрование файлов
 
 **English**: Implement encrypted file storage using EncryptedFile API. Handle large files with streaming encryption/decryption.

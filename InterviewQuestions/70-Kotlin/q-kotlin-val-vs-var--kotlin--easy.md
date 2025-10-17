@@ -1,6 +1,6 @@
 ---
 id: 20251012-003
-title: "Val vs Var in Kotlin / Val vs Var в Kotlin"
+title: "Val vs Var in Kotlin"
 aliases: []
 
 # Classification

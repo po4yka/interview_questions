@@ -1,7 +1,11 @@
 ---
+id: "20251015082237379"
+title: "Save Markdown Structure Database / Сохранение структуры Markdown в базе данных"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/data-storage
   - data-storage
   - database
@@ -9,10 +13,7 @@ tags:
   - room
   - serialization
   - storage
-difficulty: medium
-status: draft
 ---
-
 # Как бы ты сохранил структуру Markdown в базу данных/на диск?
 
 **English**: How would you save Markdown structure to a database/disk?

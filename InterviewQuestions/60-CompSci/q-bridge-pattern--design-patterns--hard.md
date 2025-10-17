@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237107"
+title: "Bridge Pattern / Bridge Паттерн"
+topic: computer-science
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - structural-patterns
   - bridge
   - gof-patterns
   - abstraction
-difficulty: hard
-status: draft
 ---
-
 # Bridge Pattern
 
 # Question (EN)

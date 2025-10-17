@@ -1,14 +1,15 @@
 ---
+id: "20251015082237274"
+title: "Compose Custom Layout / Кастомный Layout в Compose"
 topic: jetpack-compose
-tags:
-  - jetpack-compose
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - jetpack-compose
   - custom-layout
   - measure
   - layout
-difficulty: hard
-status: draft
 ---
-
 # Custom Layout Composables
 
 **English**: Implement a custom Layout composable. Explain measure policy, intrinsic measurements, and multi-pass layout.
@@ -597,15 +598,9 @@ Composable `Layout` - это основа для всех layouts в Compose. О
 - [[q-compose-modifier-order-performance--jetpack-compose--medium]] - compose modifier order performance 
 - [[q-compose-navigation-advanced--jetpack-compose--medium]] - compose navigation advanced   jetpack
 - [[q-compose-remember-derived-state--jetpack-compose--medium]] - compose remember derived state 
-
 ### Related (Hard)
 - [[q-compose-side-effects-advanced--jetpack-compose--hard]] - compose side effects advanced 
 - [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization 
-### Prerequisites (Easier)
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - compose modifier order performance 
-- [[q-compose-navigation-advanced--jetpack-compose--medium]] - compose navigation advanced   jetpack
-- [[q-compose-remember-derived-state--jetpack-compose--medium]] - compose remember derived state 
-
 ### Related (Hard)
 - [[q-compose-side-effects-advanced--jetpack-compose--hard]] - compose side effects advanced 
 - [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization 

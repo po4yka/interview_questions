@@ -1,15 +1,16 @@
 ---
+id: "20251015082237570"
+title: "State Hoisting Compose / Поднятие состояния в Compose"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - jetpack-compose
   - state-management
   - architecture
   - best-practices
-difficulty: medium
-status: draft
 ---
-
 # State Hoisting в Jetpack Compose
 
 **English**: What is state hoisting in Jetpack Compose and why is it considered a best practice for building reusable components?

@@ -1,7 +1,11 @@
 ---
+id: "20251015082237313"
+title: "Recomposition Choreographer / Рекомпозиция и Choreographer"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android/jetpack-compose
   - android/performance
   - choreographer
@@ -10,10 +14,7 @@ tags:
   - performance
   - recomposition
   - vsync
-difficulty: hard
-status: draft
 ---
-
 # Рекомпозиция происходит в рандомное время или по команде хореографера?
 
 **English**: Does recomposition happen at random times or on command from Choreographer?

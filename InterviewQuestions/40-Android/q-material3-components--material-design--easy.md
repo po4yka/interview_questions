@@ -1,19 +1,20 @@
 ---
+id: "20251015082237559"
+title: "Material3 Components / Компоненты Material3"
 topic: ui-ux-accessibility
-subtopics: [material-design]
-tags:
-  - material-design
+difficulty: easy
+status: draft
+created: 2025-10-13
+tags: - material-design
   - material3
   - ui-components
   - design-system
-difficulty: easy
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-ui-ux-accessibility
 related_questions: []
+subtopics: [material-design]
 ---
-
 # Material 3 Components
 
 # Question (EN)
@@ -697,15 +698,105 @@ import androidx.compose.material3.Button
 - `BottomNavigation` → `NavigationBar`
 - `BottomNavigationItem` → `NavigationBarItem`
 
+**5. Использовать подходящие типы кнопок**
+- Filled: Основное действие
+- Filled Tonal: Вторичное действие
+- Outlined: Третичное действие
+- Text: Самый низкий приоритет
+
 ### Динамический цвет (Android 12+)
 
 ```kotlin
+@Composable
+fun AppTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = true, // Включить на Android 12+
+    content: @Composable () -> Unit
+) {
+    val colorScheme = when {
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            val context = LocalContext.current
+            if (darkTheme) dynamicDarkColorScheme(context)
+            else dynamicLightColorScheme(context)
+        }
+
+        darkTheme -> darkColorScheme(
+            primary = Color(0xFFD0BCFF),
+            // ... темные цвета
+        )
+
+        else -> lightColorScheme(
+            primary = Color(0xFF6750A4),
+            // ... светлые цвета
+        )
+    }
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = Typography,
+        content = content
+    )
+}
+```
+
+### Лучшие практики
+
+**1. Использовать семантические цветовые роли**
+```kotlin
+//  ДЕЛАЙТЕ - Используйте семантические роли
+Card(
+    colors = CardDefaults.cardColors(
+        containerColor = MaterialTheme.colorScheme.surfaceVariant
+    )
+)
+
+//  НЕ ДЕЛАЙТЕ - Жестко закодированные цвета
+Card(colors = CardDefaults.cardColors(containerColor = Color(0xFFE8DEF8)))
+```
+
+**2. Уважать динамическую тематизацию**
+```kotlin
+//  Включить динамический цвет когда доступно
 val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
     dynamicLightColorScheme(context)
 } else {
     lightColorScheme()
 }
 ```
+
+**3. Следовать руководству по elevation**
+- Уровень 0: Фон, поверхности
+- Уровень 1: Карточки, листы
+- Уровень 2: App bars
+- Уровень 3: FAB, диалоги
+- Уровень 4: Navigation drawer
+- Уровень 5: Modal bottom sheet
+
+### Резюме Material 3
+
+**Ключевые возможности Material 3:**
+- Динамическая цветовая система
+- Персонализация пользователя
+- 25+ семантических цветовых ролей
+- Тональная elevation
+- Модернизированные компоненты
+- Лучшая доступность
+
+**Основные компоненты:**
+- Кнопки (Filled, Tonal, Outlined, Text)
+- Карточки (Elevated, Filled, Outlined)
+- Навигация (Bar, Rail, Drawer)
+- Top App Bar (Small, Medium, Large)
+- Text Fields (Filled, Outlined)
+- Диалоги и Bottom Sheets
+- Chips (Assist, Filter, Input, Suggestion)
+
+**Шаги миграции:**
+1. Обновить зависимости
+2. Обновить theme (colors → colorScheme)
+3. Обновить imports
+4. Обновить имена компонентов
+5. Обработать breaking changes
 
 ---
 

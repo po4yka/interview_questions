@@ -1,24 +1,23 @@
 ---
-tags:
-  - android
+id: "20251015082237558"
+title: "Dagger Custom Scopes / Кастомные скоупы Dagger"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-11
+tags: - android
   - dependency-injection
   - dagger
   - hilt
   - scopes
   - architecture
-topic: android
-subtopics: [di-hilt, architecture-patterns]
-difficulty: hard
-status: draft
-related_questions:
-  - q-hilt-entry-points--di--medium
-  - q-dagger-multibinding--di--hard
-  - q-hilt-viewmodel-injection--jetpack--medium
-created: 2025-10-11
 date_updated: 2025-10-13
 moc: moc-android
+related_questions:   - q-hilt-entry-points--di--medium
+  - q-dagger-multibinding--di--hard
+  - q-hilt-viewmodel-injection--jetpack--medium
+subtopics: [di-hilt, architecture-patterns]
 ---
-
 # Question (EN)
 How do you create and use custom scopes in Dagger/Hilt? Explain the difference between Singleton, custom scopes, and unscoped dependencies. Provide examples of when and why you'd create a custom scope.
 

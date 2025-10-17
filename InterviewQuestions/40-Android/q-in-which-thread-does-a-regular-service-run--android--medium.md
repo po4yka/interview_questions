@@ -1,11 +1,12 @@
 ---
+id: "20251015082237518"
+title: "In Which Thread Does A Regular Service Run / В каком потоке работает обычный Service"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # In which thread does a regular service run
 
 ## Answer (EN)

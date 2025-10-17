@@ -1,11 +1,12 @@
 ---
+id: "20251015082237060"
+title: "Interface Properties / Свойства интерфейсов"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # How to operate with properties in interface?
 
 # Question (EN)

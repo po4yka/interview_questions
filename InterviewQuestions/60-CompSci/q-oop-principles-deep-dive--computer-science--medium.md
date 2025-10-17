@@ -1,35 +1,30 @@
 ---
 id: 20251012-600004
 title: "OOP Principles Deep Dive / Глубокое погружение в принципы ООП"
-slug: oop-principles-deep-dive-computer-science-medium
 topic: cs
-subtopics: ["computer-science", "fundamentals"]
-
-subtopics:
-  - oop
-  - object-oriented-programming
-  - encapsulation
-  - inheritance
-  - polymorphism
-  - abstraction
-status: draft
 difficulty: medium
-moc: moc-cs
-date_created: 2025-10-12
-date_updated: 2025-10-13
-related_questions:
-  - q-solid-principles--software-design--medium
-  - q-clean-code-principles--software-engineering--medium
-  - q-design-patterns-types--design-patterns--medium
-tags:
-  - oop
+status: draft
+created: 2025-10-12
+tags: - oop
   - encapsulation
   - inheritance
   - polymorphism
   - abstraction
   - composition
+date_created: 2025-10-12
+date_updated: 2025-10-13
+moc: moc-cs
+related_questions:   - q-solid-principles--software-design--medium
+  - q-clean-code-principles--software-engineering--medium
+  - q-design-patterns-types--design-patterns--medium
+slug: oop-principles-deep-dive-computer-science-medium
+subtopics:   - oop
+  - object-oriented-programming
+  - encapsulation
+  - inheritance
+  - polymorphism
+  - abstraction
 ---
-
 # OOP Principles Deep Dive
 
 ## English Version

@@ -2,28 +2,25 @@
 id: tasks-back-stack-1730793900000
 title: Tasks and Back Stack / Задачи и стек возврата
 topic: android
-language_tags:
-  - en
-  - ru
-original_language: en
+difficulty: medium
 status: draft
-moc: moc-android
-tags:
-  - android
+created: 2025-10-15
+tags: - android
   - tasks
   - back-stack
   - navigation
   - activity
   - launch-mode
   - difficulty/medium
-subtopics:
-  - activity
+language_tags:   - en
+  - ru
+moc: moc-android
+original_language: en
+source: https://github.com/Kirchhoff-/Android-Interview-Questions
+subtopics:   - activity
   - ui-navigation
   - lifecycle
-difficulty: medium
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
 ---
-
 # Tasks and Back Stack / Задачи и стек возврата
 
 **English**: What do you know about tasks and the back stack?

@@ -1,14 +1,15 @@
 ---
+id: "20251015082237340"
+title: "Play Feature Delivery"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - play-feature-delivery
   - dynamic-modules
   - app-bundle
-difficulty: medium
-status: draft
 ---
-
 # Play Feature Delivery / Play Feature Delivery
 
 **English**: What do you know about Play Feature Delivery?

@@ -152,7 +152,8 @@ These unchecked casts can be used when type safety is implied by the high-level 
 
 ```kotlin
 fun readDictionary(file: File): Map<String, *> = file.inputStream().use {
-    TODO("Read a mapping of strings to arbitrary elements.")
+    // Read file and deserialize to map (implementation simplified)
+    emptyMap<String, Any>()
 }
 
 // We saved a map with `Int`s into this file
@@ -285,7 +286,8 @@ fun handleStrings(list: MutableList<String>) {
 
 ```kotlin
 fun readDictionary(file: File): Map<String, *> = file.inputStream().use {
-    TODO("Read a mapping of strings to arbitrary elements.")
+    // Читаем файл и десериализуем в map (реализация упрощена)
+    emptyMap<String, Any>()
 }
 
 // Мы сохранили map с `Int` в этот файл

@@ -1,17 +1,17 @@
 ---
+id: "20251015082237128"
 title: Interpreter Pattern
 topic: design-patterns
-subtopics:
-  - behavioral-patterns
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: []
+related:   - composite-pattern
+  - visitor-pattern
+subtopics:   - behavioral-patterns
   - language-processing
   - expression-evaluation
-difficulty: hard
-related:
-  - composite-pattern
-  - visitor-pattern
-status: draft
 ---
-
 # Interpreter Pattern / Паттерн Интерпретатор
 
 # Question (EN)

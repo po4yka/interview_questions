@@ -1,17 +1,18 @@
 ---
+id: "20251015082237315"
+title: "Room Paging3 Integration / Интеграция Room с Paging3"
 topic: room
-tags:
-  - room
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - room
   - paging3
   - database
   - pagination
   - architecture
   - offline-first
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Room Paging 3 Integration / Интеграция Room с Paging 3
 
 **English**: Implement Room database source for Paging 3. Handle remote mediator for network + database paging.

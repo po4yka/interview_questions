@@ -1,6 +1,6 @@
 ---
 id: 20251006-018
-title: "Gradle Kotlin DSL vs Groovy / Gradle Kotlin DSL против Groovy"
+title: "Gradle Kotlin DSL vs Groovy"
 aliases: []
 
 # Classification

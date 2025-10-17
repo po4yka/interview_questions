@@ -1,16 +1,17 @@
 ---
+id: "20251015082236030"
+title: "Stateflow Purpose / Назначение StateFlow"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - stateflow
   - reactive
   - flow
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # Для чего нужен StateFlow?
 
 **English**: What is StateFlow used for?

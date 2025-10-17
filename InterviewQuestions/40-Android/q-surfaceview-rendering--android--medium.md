@@ -1,17 +1,18 @@
 ---
+id: "20251015082237537"
+title: "Surfaceview Rendering / Рендеринг SurfaceView"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - surfaceview
   - rendering
   - views
   - performance
   - threading
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # What is SurfaceView? / Что такое SurfaceView?
 
 **English**: What is SurfaceView?

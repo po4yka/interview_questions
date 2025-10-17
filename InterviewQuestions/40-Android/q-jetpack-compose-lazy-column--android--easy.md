@@ -1,16 +1,17 @@
 ---
+id: "20251015082238664"
+title: "Jetpack Compose Lazy Column"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/ui-compose
   - jetpack-compose
   - lazy-column
   - platform/android
   - ui-compose
-difficulty: easy
-status: draft
 ---
-
 # Как в Jetpack Compose создать список, аналогичный RecyclerView?
 
 **English**: How to create a RecyclerView-like list in Jetpack Compose?

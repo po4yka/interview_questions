@@ -1,11 +1,12 @@
 ---
+id: "20251015082236020"
+title: "Extensions In Java / Расширения в Java"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # How are Extensions applied in Java?
 
 # Question (EN)

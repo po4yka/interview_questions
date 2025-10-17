@@ -1,11 +1,12 @@
 ---
+id: "20251015082237415"
+title: "What Are Intents For / Для чего нужны Intent"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # What are Intents for?
 
 ## Answer (EN)

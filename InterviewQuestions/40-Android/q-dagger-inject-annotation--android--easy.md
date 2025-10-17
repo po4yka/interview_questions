@@ -1,16 +1,17 @@
 ---
+id: "20251015082237554"
+title: "Dagger Inject Annotation / Аннотация Inject Dagger"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/dependency-injection
   - dagger
   - dependency-injection
   - hilt
   - inject
-difficulty: easy
-status: draft
 ---
-
 # Как сообщить Dagger, что мы собираемся что-то инжектить?
 
 **English**: How to tell Dagger we're going to inject something?

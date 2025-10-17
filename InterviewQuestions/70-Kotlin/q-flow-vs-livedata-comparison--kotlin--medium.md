@@ -2,20 +2,10 @@
 id: 20251006-flow-vs-livedata
 title: Flow vs LiveData Comparison / Сравнение Flow и LiveData
 topic: kotlin
-subtopics:
-  - flow
-  - livedata
-  - state-management
-  - lifecycle
 difficulty: medium
-language_tags:
-  - en
-  - ru
-original_language: en
 status: draft
-source: Kotlin Coroutines Interview Questions PDF
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - flow
   - livedata
   - stateflow
@@ -23,6 +13,14 @@ tags:
   - lifecycle
   - comparison
   - difficulty/medium
+language_tags:   - en
+  - ru
+original_language: en
+source: Kotlin Coroutines Interview Questions PDF
+subtopics:   - flow
+  - livedata
+  - state-management
+  - lifecycle
 ---
 # Question (EN)
 > What are the differences between Kotlin Flow and LiveData? When should you use each?

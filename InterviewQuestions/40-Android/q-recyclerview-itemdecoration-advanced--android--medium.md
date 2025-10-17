@@ -2,34 +2,30 @@
 id: q-recyclerview-itemdecoration-advanced--android--medium--1728115320000
 title: "RecyclerView ItemDecoration Advanced / RecyclerView ItemDecoration продвинутый"
 topic: android
-aliases:
-  - RecyclerView ItemDecoration Advanced
-  - RecyclerView ItemDecoration продвинутый
-date_created: 2025-10-05
-date_modified: 2025-10-05
-status: draft
-original_language: en
-language_tags:
-  - en
-  - ru
-type: question
-category: android
 difficulty: medium
-subtopics:
-  - ui-views
-  - ui-widgets
-  - performance-rendering
-tags:
-  - android
+status: draft
+created: 2025-10-05
+tags: - android
   - recyclerview
   - itemdecoration
   - ui
   - custom-views
   - difficulty/medium
+aliases:   - RecyclerView ItemDecoration Advanced
+  - RecyclerView ItemDecoration продвинутый
+category: android
+date_created: 2025-10-05
+date_modified: 2025-10-05
+language_tags:   - en
+  - ru
 moc: moc-android
+original_language: en
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20RecyclerView%20ItemDecoration.md"
+subtopics:   - ui-views
+  - ui-widgets
+  - performance-rendering
+type: question
 ---
-
 # RecyclerView ItemDecoration Advanced / RecyclerView ItemDecoration продвинутый
 
 # Question (EN)
@@ -223,21 +219,6 @@ ItemDecoration обычно используется для:
 - Создания границ визуального группирования
 - Добавления заголовков или разделителей секций
 - Рисования пользовательских декораций или наложений
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
-
-### Related (Medium)
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
-- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui
-- [[q-recyclerview-diffutil-advanced--recyclerview--medium]] - View, Ui
 
 ---
 

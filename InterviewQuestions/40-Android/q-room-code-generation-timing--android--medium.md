@@ -1,7 +1,11 @@
 ---
+id: "20251015082237252"
+title: "Room Code Generation Timing / Время генерации кода Room"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/data-storage
   - annotation-processing
   - code-generation
@@ -9,10 +13,7 @@ tags:
   - kapt
   - ksp
   - room
-difficulty: medium
-status: draft
 ---
-
 # В какой момент генерируется код при использовании SQLite?
 
 **English**: When is code generated when using SQLite/Room?
@@ -378,7 +379,359 @@ app/build/generated/ksp/debug/kotlin/
 **Room over SQLite:** Generates code at compile time via kapt/KSP
 
 ## Ответ (RU)
-Если используешь Room (ORM для SQLite), то код генерируется на этапе компиляции с помощью Annotation Processing (kapt) или KSP. Если используешь kapt (Annotation Processor) или KSP, то код генерируется во время компиляции.
+
+Если используешь **Room** (ORM для SQLite), код генерируется **на этапе компиляции** с помощью **Annotation Processing** (**kapt**) или **KSP** (Kotlin Symbol Processing).
+
+**SQLite** сам по себе не генерирует код - это библиотека для работы с базами данных во время выполнения. Однако при использовании **Room** как слоя абстракции над SQLite, процессор аннотаций Room генерирует код реализации во время компиляции.
+
+## Процесс Генерации Кода
+
+### 1. Написание Кода Room с Аннотациями
+
+```kotlin
+@Entity(tableName = "users")
+data class User(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val name: String,
+    val email: String
+)
+
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users")
+    fun getAllUsers(): Flow<List<User>>
+
+    @Insert
+    suspend fun insert(user: User)
+}
+
+@Database(entities = [User::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
+}
+```
+
+### 2. Процессор Аннотаций Запускается на Этапе Компиляции
+
+**Использование kapt (Kotlin Annotation Processing Tool):**
+
+```kotlin
+// build.gradle
+plugins {
+    id 'kotlin-kapt'
+}
+
+dependencies {
+    implementation "androidx.room:room-runtime:2.6.0"
+    implementation "androidx.room:room-ktx:2.6.0"
+    kapt "androidx.room:room-compiler:2.6.0"  // Процессор аннотаций
+}
+```
+
+**Или использование KSP (Kotlin Symbol Processing - быстрее):**
+
+```kotlin
+// build.gradle
+plugins {
+    id 'com.google.devtools.ksp' version '1.9.0-1.0.13'
+}
+
+dependencies {
+    implementation "androidx.room:room-runtime:2.6.0"
+    implementation "androidx.room:room-ktx:2.6.0"
+    ksp "androidx.room:room-compiler:2.6.0"  // Генератор кода
+}
+```
+
+### 3. Сгенерированный Код (Пример)
+
+Room генерирует классы реализации на основе ваших аннотаций:
+
+**Сгенерированная Реализация DAO:**
+
+```kotlin
+// Автоматически сгенерировано Room (упрощённо)
+public class UserDao_Impl implements UserDao {
+    private final RoomDatabase __db;
+    private final EntityInsertionAdapter<User> __insertionAdapterOfUser;
+
+    public UserDao_Impl(RoomDatabase __db) {
+        this.__db = __db;
+        this.__insertionAdapterOfUser = new EntityInsertionAdapter<User>(__db) {
+            @Override
+            public String createQuery() {
+                return "INSERT OR ABORT INTO `users` (`id`,`name`,`email`) VALUES (?,?,?)";
+            }
+
+            @Override
+            public void bind(SupportSQLiteStatement stmt, User value) {
+                stmt.bindLong(1, value.id);
+                stmt.bindString(2, value.name);
+                stmt.bindString(3, value.email);
+            }
+        };
+    }
+
+    @Override
+    public Object insert(User user, Continuation<? super Unit> continuation) {
+        return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
+            @Override
+            public Unit call() throws Exception {
+                __db.beginTransaction();
+                try {
+                    __insertionAdapterOfUser.insert(user);
+                    __db.setTransactionSuccessful();
+                    return Unit.INSTANCE;
+                } finally {
+                    __db.endTransaction();
+                }
+            }
+        }, continuation);
+    }
+
+    @Override
+    public Flow<List<User>> getAllUsers() {
+        final String _sql = "SELECT * FROM users";
+        final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+        return CoroutinesRoom.createFlow(__db, false, new String[]{"users"},
+            new Callable<List<User>>() {
+                @Override
+                public List<User> call() throws Exception {
+                    Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+                    try {
+                        // Чтение данных из курсора
+                        final List<User> _result = new ArrayList<>();
+                        while(_cursor.moveToNext()) {
+                            final User _item = new User(
+                                _cursor.getInt(0),
+                                _cursor.getString(1),
+                                _cursor.getString(2)
+                            );
+                            _result.add(_item);
+                        }
+                        return _result;
+                    } finally {
+                        _cursor.close();
+                    }
+                }
+            });
+    }
+}
+```
+
+**Расположение сгенерированных файлов:**
+
+```
+app/build/generated/
+   ksp/          # Если используется KSP
+      kotlin/
+          UserDao_Impl.kt
+   source/kapt/  # Если используется kapt
+       debug/
+           UserDao_Impl.java
+```
+
+---
+
+## Валидация на Этапе Компиляции
+
+Room валидирует SQL-запросы **на этапе компиляции**, обнаруживая ошибки заранее:
+
+**Пример - SQL Ошибка Обнаружена на Этапе Компиляции:**
+
+```kotlin
+@Dao
+interface UserDao {
+    // Ошибка компиляции: Таблица "usres" не существует (опечатка!)
+    @Query("SELECT * FROM usres")
+    fun getAllUsers(): Flow<List<User>>
+
+    // Ошибка компиляции: Колонка "age" не существует в сущности User
+    @Query("SELECT * FROM users WHERE age > :minAge")
+    fun getUsersOlderThan(minAge: Int): List<User>
+}
+```
+
+**Вывод компилятора:**
+
+```
+error: There is a problem with the query: [SQLITE_ERROR] SQL error or missing database (no such table: usres)
+SELECT * FROM usres
+             ^
+```
+
+---
+
+## Сравнение kapt vs KSP
+
+### kapt (Kotlin Annotation Processing Tool)
+
+**Характеристики:**
+- Использует Java API для обработки аннотаций
+- Медленнее (требует генерации stubs)
+- Более зрелый, широко поддерживается
+
+**Пример:**
+
+```kotlin
+// build.gradle
+plugins {
+    id 'kotlin-kapt'
+}
+
+dependencies {
+    kapt "androidx.room:room-compiler:2.6.0"
+}
+```
+
+**Время сборки:** ~30-60 секунд (зависит от размера проекта)
+
+---
+
+### KSP (Kotlin Symbol Processing)
+
+**Характеристики:**
+- Нативный Kotlin API
+- До 2x быстрее чем kapt
+- Современный, рекомендуется для новых проектов
+
+**Пример:**
+
+```kotlin
+// build.gradle (project)
+plugins {
+    id 'com.google.devtools.ksp' version '1.9.0-1.0.13' apply false
+}
+
+// build.gradle (app)
+plugins {
+    id 'com.google.devtools.ksp'
+}
+
+dependencies {
+    ksp "androidx.room:room-compiler:2.6.0"
+}
+```
+
+**Время сборки:** ~15-30 секунд (до 2x быстрее)
+
+---
+
+## Стадии Компиляции
+
+```
+1. Написание Kotlin кода с аннотациями Room
+   ↓
+2. Обработка аннотаций на этапе компиляции (kapt/KSP)
+   - Валидация SQL-запросов
+   - Генерация реализаций DAO
+   - Генерация реализаций Database
+   ↓
+3. Сгенерированный код компилируется в байткод
+   ↓
+4. Runtime: Использование сгенерированных реализаций
+```
+
+**Пример временной линии:**
+
+```kotlin
+// Стадия 1: Вы пишете
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users")
+    fun getAll(): List<User>
+}
+
+// Стадия 2: Время компиляции - Room генерирует
+class UserDao_Impl : UserDao {
+    override fun getAll(): List<User> {
+        // Сгенерированная реализация
+    }
+}
+
+// Стадия 3: Компиляция в байткод
+
+// Стадия 4: Использование во время выполнения
+val dao = database.userDao()  // Возвращает экземпляр UserDao_Impl
+val users = dao.getAll()       // Вызывает сгенерированный код
+```
+
+---
+
+## Инкрементальная Компиляция
+
+**KSP поддерживает инкрементальную компиляцию:**
+
+```kotlin
+// Обрабатываются только изменённые файлы
+@Entity
+data class User(...)  // Изменён
+
+@Entity
+data class Product(...)  // Не изменён - не обрабатывается!
+```
+
+**Преимущества:**
+- Более быстрые сборки (только изменённые файлы)
+- Лучшая производительность IDE
+- Сокращённое время компиляции
+
+---
+
+## Отладка Сгенерированного Кода
+
+**Просмотр сгенерированного кода в Android Studio:**
+
+1. Собрать проект: `Build → Rebuild Project`
+2. Перейти к сгенерированным файлам:
+   - **kapt**: `app/build/generated/source/kapt/debug/`
+   - **KSP**: `app/build/generated/ksp/debug/kotlin/`
+
+**Пример пути:**
+
+```
+app/build/generated/ksp/debug/kotlin/
+ com/example/app/database/
+     UserDao_Impl.kt
+     AppDatabase_Impl.kt
+```
+
+---
+
+## Сравнение Производительности
+
+| Аспект | kapt | KSP |
+|--------|------|-----|
+| **Скорость** | Медленнее | В 2 раза быстрее |
+| **API** | Java | Kotlin |
+| **Инкрементальность** | Ограниченная | Полная |
+| **Зрелость** | Зрелый | Современный |
+| **Поддержка Room** | Полная | Полная |
+
+**Рекомендация:** Используйте **KSP** для новых проектов (быстрее, лучшая поддержка Kotlin)
+
+---
+
+## Резюме
+
+**Когда происходит генерация кода?**
+- **Время компиляции** (не во время выполнения!)
+- Используя процессоры аннотаций **kapt** или **KSP**
+- Генерирует реализации DAO, реализации Database
+- Валидирует SQL-запросы на этапе компиляции
+- Ошибки обнаруживаются во время компиляции, а не во время выполнения
+
+**Процесс:**
+1. Написать аннотации Room (`@Entity`, `@Dao`, `@Query`)
+2. Запустить сборку (kapt/KSP обрабатывает аннотации)
+3. Код генерируется в `build/generated/`
+4. Сгенерированный код компилируется с вашим приложением
+5. Runtime: Использование сгенерированных реализаций
+
+**SQLite сам по себе:** Не генерирует код (библиотека времени выполнения)
+
+**Room над SQLite:** Генерирует код на этапе компиляции через kapt/KSP
 
 
 ---

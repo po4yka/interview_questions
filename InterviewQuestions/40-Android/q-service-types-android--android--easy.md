@@ -1,13 +1,14 @@
 ---
+id: "20251015082237525"
+title: "Service Types Android / Типы Service в Android"
 topic: android
-tags:
-  - android
-  - services
-  - background-tasks
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - android
+  - services
+  - background-tasks
 ---
-
 # Какие есть виды сервисов?
 
 **English**: What types of services exist in Android?

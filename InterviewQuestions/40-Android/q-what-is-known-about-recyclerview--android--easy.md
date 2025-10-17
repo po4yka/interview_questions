@@ -1,7 +1,11 @@
 ---
+id: "20251015082237510"
+title: "What Is Known About Recyclerview / Что известно о RecyclerView"
 topic: android
-tags:
-  - adapter
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - adapter
   - android
   - android/layouts
   - android/recyclerview
@@ -12,10 +16,7 @@ tags:
   - ui
   - viewholder
   - views
-difficulty: easy
-status: draft
 ---
-
 # Что известно про RecyclerView?
 
 **English**: What is known about RecyclerView?
@@ -118,20 +119,7 @@ RecyclerView — это мощный компонент пользователь
 
 ## Related Questions
 
-### Related (Easy)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
-
-### Advanced (Harder)
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
-
----
-
-## Related Questions
-
-### Related (Easy)
+### Related (Medium)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
 - [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
 

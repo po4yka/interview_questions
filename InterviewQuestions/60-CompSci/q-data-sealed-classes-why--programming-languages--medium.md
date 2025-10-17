@@ -1,13 +1,15 @@
 ---
-tags:
-  - data-class
+id: "20251015082237126"
+title: "Data Sealed Classes Why"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - data-class
   - kotlin
   - programming-languages
   - sealed-classes
-difficulty: medium
-status: draft
 ---
-
 # Зачем нужны Data Class и Sealed Classes?
 
 # Question (EN)

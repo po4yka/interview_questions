@@ -1,11 +1,13 @@
 ---
-tags:
-  - programming-languages
-  - android
+id: "20251015082237360"
+title: "What Do You Know About Modifiers / Что вы знаете о модификаторах"
+topic: android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
+  - android
 ---
-
 # Что знаешь о модификациях?
 
 # Question (EN)

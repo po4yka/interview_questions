@@ -1,21 +1,25 @@
 ---
-tags:
-  - Android
+id: "20251015082237270"
+title: "Flutter Comparison / Flutter Сравнение"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - Flutter
   - Multiplatform
   - Comparison
-difficulty: medium
-status: draft
 ---
 
 # KMM vs Flutter - Trade-offs and Decision Making
 
 # Question (EN)
-> 
-Compare Kotlin Multiplatform Mobile (KMM) with Flutter for cross-platform development. What are the architectural differences, performance characteristics, and trade-offs? When should you choose KMM over Flutter and vice versa?
+
+> Compare Kotlin Multiplatform Mobile (KMM) with Flutter for cross-platform development. What are the architectural differences, performance characteristics, and trade-offs? When should you choose KMM over Flutter and vice versa?
 
 ## Answer (EN)
+
 KMM and Flutter represent fundamentally different approaches to cross-platform development, each with distinct advantages, trade-offs, and ideal use cases that significantly impact development strategy and long-term maintenance.
 
 #### Architectural Comparison
@@ -23,56 +27,59 @@ KMM and Flutter represent fundamentally different approaches to cross-platform d
 **1. Technology Stack**
 
 **KMM Architecture**
+
 ```
 
-         Platform-Specific UI         
-   Android: Compose/Views             
-   iOS: SwiftUI/UIKit                 
+         Platform-Specific UI
+   Android: Compose/Views
+   iOS: SwiftUI/UIKit
 
                 ↓
 
-      Shared Business Logic           
-   - Domain Layer (Use Cases)         
-   - Data Layer (Repositories)        
-   - Network Layer (Ktor)             
-   - Database (SQLDelight)            
-   Written in Kotlin                  
+      Shared Business Logic
+   - Domain Layer (Use Cases)
+   - Data Layer (Repositories)
+   - Network Layer (Ktor)
+   - Database (SQLDelight)
+   Written in Kotlin
 
                 ↓
 
-      Platform-Specific APIs          
-   Android: Android SDK               
-   iOS: iOS SDK (via Kotlin/Native)  
+      Platform-Specific APIs
+   Android: Android SDK
+   iOS: iOS SDK (via Kotlin/Native)
 
 ```
 
 **Flutter Architecture**
+
 ```
 
-         Flutter Framework            
-   - Widgets (UI Components)          
-   - Business Logic (Dart)            
-   - State Management                 
-   Written in Dart                    
+         Flutter Framework
+   - Widgets (UI Components)
+   - Business Logic (Dart)
+   - State Management
+   Written in Dart
 
                 ↓
 
-         Flutter Engine               
-   - Skia Graphics Engine             
-   - Dart Runtime                     
-   - Platform Channels                
+         Flutter Engine
+   - Skia Graphics Engine
+   - Dart Runtime
+   - Platform Channels
 
                 ↓
 
-      Platform-Specific APIs          
-   Android: Android Embedder          
-   iOS: iOS Embedder                  
+      Platform-Specific APIs
+   Android: Android Embedder
+   iOS: iOS Embedder
 
 ```
 
 **2. Code Sharing Comparison**
 
 **KMM Project Structure**
+
 ```kotlin
 // KMM - Shared business logic, platform-specific UI
 
@@ -123,6 +130,7 @@ struct TaskListView: View {
 ```
 
 **Flutter Project Structure**
+
 ```dart
 // Flutter - Shared UI and business logic (90-95% shared)
 
@@ -168,6 +176,7 @@ class TaskListScreen extends StatelessWidget {
 #### Performance Comparison
 
 **1. Startup Time**
+
 ```kotlin
 // KMM - Native startup
 // Android: 300-500ms (typical)
@@ -185,6 +194,7 @@ class TaskListScreen extends StatelessWidget {
 **2. Runtime Performance**
 
 **KMM Performance Profile**
+
 ```kotlin
 // Direct native performance
 class ImageProcessor {
@@ -205,6 +215,7 @@ class ImageProcessor {
 ```
 
 **Flutter Performance Profile**
+
 ```dart
 // Compiled to native ARM code (AOT)
 class ImageProcessor {
@@ -224,6 +235,7 @@ class ImageProcessor {
 ```
 
 **3. Benchmark Comparison**
+
 ```kotlin
 // Real-world performance comparison
 
@@ -251,6 +263,7 @@ class ImageProcessor {
 **1. Team Structure**
 
 **KMM Team**
+
 ```kotlin
 // Requires mixed skillset
 
@@ -278,6 +291,7 @@ Cons:
 ```
 
 **Flutter Team**
+
 ```dart
 // Single skillset team
 
@@ -305,6 +319,7 @@ Cons:
 **2. Development Velocity**
 
 **KMM Development Cycle**
+
 ```kotlin
 // Feature: User Profile Screen
 
@@ -329,6 +344,7 @@ Code reuse: 60-70%
 ```
 
 **Flutter Development Cycle**
+
 ```dart
 // Feature: User Profile Screen
 
@@ -352,6 +368,7 @@ Code reuse: 90-95%
 **1. Native API Access**
 
 **KMM - Direct Platform Access**
+
 ```kotlin
 // Android - Direct Android SDK access
 class LocationManager(private val context: Context) {
@@ -392,6 +409,7 @@ actual class LocationManager {
 ```
 
 **Flutter - Platform Channels**
+
 ```dart
 // Flutter - Platform channel bridge
 
@@ -448,6 +466,7 @@ class LocationPlugin: NSObject, FlutterPlugin {
 **2. Third-Party Libraries**
 
 **KMM Ecosystem**
+
 ```kotlin
 // Native libraries work directly
 dependencies {
@@ -475,6 +494,7 @@ dependencies {
 ```
 
 **Flutter Ecosystem**
+
 ```dart
 // Flutter pub packages
 dependencies:
@@ -502,6 +522,7 @@ dependencies:
 **Choose KMM When:**
 
 1. **Native Experience is Critical**
+
 ```kotlin
 // Banking app, health apps, productivity tools
 // Example: Banking App
@@ -520,6 +541,7 @@ KMM Advantage:
 ```
 
 2. **Existing Native Apps**
+
 ```kotlin
 // Gradual migration scenario
 // Example: Large existing Android app
@@ -543,6 +565,7 @@ KMM Advantage:
 ```
 
 3. **Performance-Critical Apps**
+
 ```kotlin
 // Games, media processing, AR/VR
 // Example: Photo Editing App
@@ -563,6 +586,7 @@ KMM Advantage:
 **Choose Flutter When:**
 
 1. **Rapid MVP Development**
+
 ```dart
 // Startups, prototypes, MVPs
 // Example: Social Media Startup
@@ -581,6 +605,7 @@ Flutter Advantage:
 ```
 
 2. **Consistent Brand Experience**
+
 ```dart
 // Custom-designed apps
 // Example: Retail/E-commerce App
@@ -599,6 +624,7 @@ Flutter Advantage:
 ```
 
 3. **Multi-Platform Beyond Mobile**
+
 ```dart
 // Web, Desktop, Mobile
 // Example: Productivity Suite
@@ -618,6 +644,7 @@ Flutter Advantage:
 #### Migration Scenarios
 
 **1. Migrating from Native to KMM**
+
 ```kotlin
 // Incremental adoption path
 
@@ -650,6 +677,7 @@ Code Reuse: 60-70%
 ```
 
 **2. Migrating from Native to Flutter**
+
 ```dart
 // Big bang approach (typically)
 
@@ -670,6 +698,7 @@ Code Reuse: 90-95%
 #### Best Practices Comparison
 
 **KMM Best Practices**
+
 ```kotlin
 // 1. Minimize expect/actual declarations
 // 2. Keep shared layer thin
@@ -687,6 +716,7 @@ iosMain/
 ```
 
 **Flutter Best Practices**
+
 ```dart
 // 1. Use platform-adaptive widgets
 // 2. Leverage existing packages
@@ -706,6 +736,7 @@ Widget buildButton() {
 #### Cost Analysis
 
 **Development Cost**
+
 ```
 KMM:
 - Initial: Higher (2 UI implementations)
@@ -721,6 +752,7 @@ Flutter:
 ```
 
 **Long-Term TCO**
+
 ```
 KMM:
 - Platform updates: Immediate
@@ -738,146 +770,188 @@ Flutter:
 ### Summary
 
 **KMM Strengths:**
-- True native UI/UX
-- Direct platform API access
-- Best performance
-- Incremental adoption
-- Familiar to native developers
+
+-   True native UI/UX
+-   Direct platform API access
+-   Best performance
+-   Incremental adoption
+-   Familiar to native developers
 
 **KMM Weaknesses:**
-- Duplicate UI code
-- Requires platform expertise
-- Slower initial development
-- Larger team needed
+
+-   Duplicate UI code
+-   Requires platform expertise
+-   Slower initial development
+-   Larger team needed
 
 **Flutter Strengths:**
-- Maximum code reuse (90-95%)
-- Faster development
-- Consistent UI
-- Smaller team
-- Hot reload
+
+-   Maximum code reuse (90-95%)
+-   Faster development
+-   Consistent UI
+-   Smaller team
+-   Hot reload
 
 **Flutter Weaknesses:**
-- Custom UI (not platform-native)
-- Platform channel overhead
-- Delayed platform features
-- Larger app size
+
+-   Custom UI (not platform-native)
+-   Platform channel overhead
+-   Delayed platform features
+-   Larger app size
 
 **Decision Framework:**
-- Native UX critical? → KMM
-- Rapid MVP? → Flutter
-- Existing native app? → KMM
-- Multi-platform (Web/Desktop)? → Flutter
-- Performance-critical? → KMM
-- Small team? → Flutter
+
+-   Native UX critical? → KMM
+-   Rapid MVP? → Flutter
+-   Existing native app? → KMM
+-   Multi-platform (Web/Desktop)? → Flutter
+-   Performance-critical? → KMM
+-   Small team? → Flutter
 
 ---
 
 # Вопрос (RU)
-> 
-Сравните Kotlin Multiplatform Mobile (KMM) с Flutter для кросс-платформенной разработки. Каковы архитектурные различия, характеристики производительности и trade-offs? Когда выбирать KMM вместо Flutter и наоборот?
+
+> Сравните Kotlin Multiplatform Mobile (KMM) с Flutter для кросс-платформенной разработки. Каковы архитектурные различия, характеристики производительности и trade-offs? Когда выбирать KMM вместо Flutter и наоборот?
 
 ## Ответ (RU)
+
 KMM и Flutter представляют фундаментально разные подходы к кросс-платформенной разработке, каждый с уникальными преимуществами, компромиссами и идеальными use cases.
 
 #### Архитектурное сравнение
 
 **KMM**:
-- Shared: Бизнес-логика (60-80%)
-- Platform-specific: UI (20-40%)
-- Технология: Kotlin для shared, native UI
+
+-   Shared: Бизнес-логика (60-80%)
+-   Platform-specific: UI (20-40%)
+-   Технология: Kotlin для shared, native UI
 
 **Flutter**:
-- Shared: UI + логика (90-95%)
-- Platform-specific: Минимум (5-10%)
-- Технология: Dart для всего, Skia для рендеринга
+
+-   Shared: UI + логика (90-95%)
+-   Platform-specific: Минимум (5-10%)
+-   Технология: Dart для всего, Skia для рендеринга
 
 #### Производительность
 
 **Startup Time**:
-- KMM: Быстрее (native)
-- Flutter: Медленнее (Dart VM init)
+
+-   KMM: Быстрее (native)
+-   Flutter: Медленнее (Dart VM init)
 
 **Runtime Performance**:
-- KMM: 100% native
-- Flutter: 95-98% native (AOT компиляция)
+
+-   KMM: 100% native
+-   Flutter: 95-98% native (AOT компиляция)
 
 **App Size**:
-- KMM: Меньше (использует platform SDKs)
-- Flutter: Больше (включает Flutter engine ~10MB)
+
+-   KMM: Меньше (использует platform SDKs)
+-   Flutter: Больше (включает Flutter engine ~10MB)
 
 **Memory**:
-- KMM: Ниже (native управление)
-- Flutter: Выше (Dart VM + Skia)
+
+-   KMM: Ниже (native управление)
+-   Flutter: Выше (Dart VM + Skia)
 
 #### Development Experience
 
 **Team Size**:
-- KMM: Больше (6-9 разработчиков)
-  - Kotlin devs
-  - Android devs
-  - iOS devs
-- Flutter: Меньше (3-5 разработчиков)
-  - Flutter devs
+
+-   KMM: Больше (6-9 разработчиков)
+    -   Kotlin devs
+    -   Android devs
+    -   iOS devs
+-   Flutter: Меньше (3-5 разработчиков)
+    -   Flutter devs
 
 **Development Speed**:
-- KMM: Медленнее (duplicate UI)
-- Flutter: Быстрее (shared UI)
+
+-   KMM: Медленнее (duplicate UI)
+-   Flutter: Быстрее (shared UI)
 
 **Code Reuse**:
-- KMM: 60-70%
-- Flutter: 90-95%
+
+-   KMM: 60-70%
+-   Flutter: 90-95%
 
 #### Platform Integration
 
 **KMM**:
--  Прямой доступ к native APIs
--  Zero overhead
--  Мгновенный доступ к новым features
--  Нужно реализовывать дважды
+
+-   Прямой доступ к native APIs
+-   Zero overhead
+-   Мгновенный доступ к новым features
+-   Нужно реализовывать дважды
 
 **Flutter**:
--  Единый API из Dart
--  Consistent interface
--  Platform channel overhead
--  Задержка с новыми platform features
+
+-   Единый API из Dart
+-   Consistent interface
+-   Platform channel overhead
+-   Задержка с новыми platform features
 
 #### Use Cases
 
 **Выбирайте KMM когда**:
-- Native UX критичен
-- Существующее native приложение
-- Performance-critical app
-- Доступ к latest platform features
-- Команда с native expertise
+
+-   Native UX критичен
+-   Существующее native приложение
+-   Performance-critical app
+-   Доступ к latest platform features
+-   Команда с native expertise
 
 **Выбирайте Flutter когда**:
-- Быстрый MVP
-- Consistent brand experience
-- Маленькая команда
-- Multi-platform (Web/Desktop)
-- Custom UI design
+
+-   Быстрый MVP
+-   Consistent brand experience
+-   Маленькая команда
+-   Multi-platform (Web/Desktop)
+-   Custom UI design
 
 #### Cost Analysis
 
 **KMM**:
-- Начальная стоимость: Выше
-- Maintenance: Средний
-- Timeline: Дольше
-- Команда: Больше
+
+-   Начальная стоимость: Выше
+-   Maintenance: Средний
+-   Timeline: Дольше
+-   Команда: Больше
 
 **Flutter**:
-- Начальная стоимость: Ниже
-- Maintenance: Ниже
-- Timeline: Быстрее
-- Команда: Меньше
+
+-   Начальная стоимость: Ниже
+-   Maintenance: Ниже
+-   Timeline: Быстрее
+-   Команда: Меньше
 
 ### Резюме
 
 **KMM = Native Experience + Code Sharing**
-- Лучший выбор для native UX, performance, existing apps
+
+-   Лучший выбор для native UX, performance, existing apps
 
 **Flutter = Maximum Code Reuse + Fast Development**
-- Лучший выбор для MVPs, consistent UI, small teams
 
-Выбор зависит от приоритетов: native experience vs development speed, team expertise vs code reuse, platform features vs consistency.
+-   Лучший выбор для MVPs, consistent UI, small teams
+
+---
+
+## Follow-ups
+
+-   How do you migrate an existing native Android app to KMM vs Flutter?
+-   What are the performance implications of using KMM vs Flutter for CPU-intensive applications?
+-   How do you handle platform-specific features and native integrations in both approaches?
+
+## References
+
+-   `https://kotlinlang.org/docs/multiplatform.html` — Kotlin Multiplatform Mobile
+-   `https://flutter.dev/docs` — Flutter documentation
+-   `https://developer.android.com/kotlin/multiplatform` — Android KMM guide
+
+## Related Questions
+
+### Related (Medium)
+
+-   [[q-kmm-networking--multiplatform--medium]] - KMM networking
+-   [[q-flutter-state-management--multiplatform--medium]] - Flutter state management

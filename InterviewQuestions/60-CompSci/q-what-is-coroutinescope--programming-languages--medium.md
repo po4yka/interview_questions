@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237228"
+title: "What Is Coroutinescope / Что такое CoroutineScope"
+topic: computer-science
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # What is CoroutineScope?
 
 # Question (EN)

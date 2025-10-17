@@ -1,14 +1,16 @@
 ---
-tags:
-  - Android
+id: "20251015082237524"
+title: "Kmm Testing / Kmm Тестирование"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - KMM
   - Testing
   - Multiplatform
-difficulty: medium
-status: draft
 ---
-
 # Testing in Kotlin Multiplatform Mobile
 
 # Question (EN)

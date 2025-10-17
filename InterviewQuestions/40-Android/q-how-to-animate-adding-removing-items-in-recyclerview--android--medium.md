@@ -1,14 +1,15 @@
 ---
+id: "20251015082238635"
+title: "How To Animate Adding Removing Items In Recyclerview / Как анимировать добавление и удаление элементов в RecyclerView"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - recyclerview
   - animations
   - itemanimator
-difficulty: medium
-status: draft
 ---
-
 # What needs to be used to animate adding/removing items in RecyclerView?
 
 ## EN (expanded)

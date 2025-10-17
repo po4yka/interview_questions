@@ -1,29 +1,26 @@
 ---
 id: 20251012-300010
 title: "Design URL Shortener (like bit.ly) / Проектирование сокращателя URL"
-slug: design-url-shortener-system-design-medium
 topic: system-design
-subtopics:
-  - system-design-interview
-  - url-shortener
-  - scalability
-  - distributed-systems
-status: draft
 difficulty: medium
-moc: moc-system-design
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-database-sharding-partitioning--system-design--hard
-  - q-caching-strategies--system-design--medium
-  - q-rest-api-design-best-practices--system-design--medium
-tags:
-  - system-design
+status: draft
+created: 2025-10-12
+tags: - system-design
   - url-shortener
   - interview
   - scalability
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-system-design
+related_questions:   - q-database-sharding-partitioning--system-design--hard
+  - q-caching-strategies--system-design--medium
+  - q-rest-api-design-best-practices--system-design--medium
+slug: design-url-shortener-system-design-medium
+subtopics:   - system-design-interview
+  - url-shortener
+  - scalability
+  - distributed-systems
 ---
-
 # Design URL Shortener (like bit.ly)
 
 ## English Version

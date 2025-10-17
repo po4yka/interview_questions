@@ -1,33 +1,30 @@
 ---
 id: 20251012-160005
 title: "Continuation and CPS: how suspend functions work internally / Continuation и CPS: как работают suspend функции внутри"
-slug: continuation-cps-internals-kotlin-hard
 topic: kotlin
-subtopics:
-  - coroutines
-  - continuation
-  - cps
-  - internals
-  - state-machine
-status: draft
 difficulty: hard
-moc: moc-kotlin
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-suspend-cancellable-coroutine--kotlin--hard
-  - q-debugging-coroutines-techniques--kotlin--medium
-  - q-common-coroutine-mistakes--kotlin--medium
-tags:
-  - kotlin
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - coroutines
   - continuation
   - cps
   - internals
   - state-machine
   - advanced
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-kotlin
+related_questions:   - q-suspend-cancellable-coroutine--kotlin--hard
+  - q-debugging-coroutines-techniques--kotlin--medium
+  - q-common-coroutine-mistakes--kotlin--medium
+slug: continuation-cps-internals-kotlin-hard
+subtopics:   - coroutines
+  - continuation
+  - cps
+  - internals
+  - state-machine
 ---
-
 # Continuation and CPS: how suspend functions work internally
 
 ## English Version

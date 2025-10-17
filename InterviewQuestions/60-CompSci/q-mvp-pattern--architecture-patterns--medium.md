@@ -1,18 +1,18 @@
 ---
+id: "20251015082237223"
 title: MVP Pattern (Model-View-Presenter)
 topic: architecture-patterns
-subtopics:
-  - android-architecture
-  - separation-of-concerns
-  - testability
 difficulty: medium
-related:
-  - mvvm-pattern
+status: draft
+created: 2025-10-15
+tags: []
+related:   - mvvm-pattern
   - mvi-pattern
   - clean-architecture
-status: draft
+subtopics:   - android-architecture
+  - separation-of-concerns
+  - testability
 ---
-
 # MVP Pattern / Паттерн MVP (Model-View-Presenter)
 
 # Question (EN)

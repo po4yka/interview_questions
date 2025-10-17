@@ -1,15 +1,16 @@
 ---
+id: "20251015082237364"
+title: "What Is The Main Application Execution Thread / Что такое главный поток выполнения приложения"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - threading
   - main-thread
   - ui-thread
   - looper
-difficulty: easy
-status: draft
 ---
-
 # What is the main application execution thread?
 
 ## Answer (EN)

@@ -1,13 +1,15 @@
 ---
-tags:
-  - collections
+id: "20251015082237187"
+title: "Iterator Order Guarantee / Гарантия порядка Iterator"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - collections
   - iterators
   - kotlin
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # После перебирания данных итератором, гарантируется ли очередность получения этих данных?
 
 # Question (EN)

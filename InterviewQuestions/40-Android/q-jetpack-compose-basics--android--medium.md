@@ -1333,40 +1333,13 @@ fun LoadDataExample(userId: String) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-jetpack-compose-lazy-column--android--easy]] - jetpack compose lazy column 
-
-### Related (Medium)
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
-- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
-- [[q-remember-remembersaveable--android--medium]] - Jetpack Compose
-- [[q-compose-semantics--android--medium]] - Jetpack Compose
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Prerequisites (Easier)
-- [[q-jetpack-compose-lazy-column--android--easy]] - jetpack compose lazy column 
-
-### Related (Medium)
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
-- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
-- [[q-remember-remembersaveable--android--medium]] - Jetpack Compose
-- [[q-compose-semantics--android--medium]] - Jetpack Compose
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Prerequisites (Easier)
-- [[q-jetpack-compose-lazy-column--android--easy]] - jetpack compose lazy column 
-
-### Related (Medium)
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
-- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
-- [[q-remember-remembersaveable--android--medium]] - Jetpack Compose
-- [[q-compose-semantics--android--medium]] - Jetpack Compose
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Prerequisites (Easier)
 - [[q-jetpack-compose-lazy-column--android--easy]] - LazyColumn for lists
+
+### Related (Medium)
+- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
+- [[q-remember-remembersaveable--android--medium]] - Jetpack Compose
+- [[q-compose-semantics--android--medium]] - Jetpack Compose
 
 ### Compose Fundamentals (Medium)
 - [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
@@ -1376,13 +1349,10 @@ fun LoadDataExample(userId: String) {
 - [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
 - [[q-compose-remember-derived-state--jetpack-compose--medium]] - Derived state patterns
 - [[q-state-hoisting-compose--android--medium]] - State hoisting principles
-- [[q-recomposition-compose--android--medium]] - Understanding recomposition
-- [[q-compose-modifier-system--android--medium]] - Modifier system
 - [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Modifier order & performance
 
 ### UI & Components (Medium)
 - [[q-compose-side-effects-launchedeffect-disposableeffect--android--hard]] - LaunchedEffect & DisposableEffect
-- [[q-compose-semantics--android--medium]] - Semantics for accessibility
 - [[q-compose-gesture-detection--jetpack-compose--medium]] - Gesture detection
 - [[q-compose-custom-animations--jetpack-compose--medium]] - Custom animations
 - [[q-animated-visibility-vs-content--jetpack-compose--medium]] - AnimatedVisibility vs Content
@@ -1404,6 +1374,7 @@ fun LoadDataExample(userId: String) {
 - [[q-compositionlocal-compose--android--hard]] - CompositionLocal deep dive
 - [[q-compose-compiler-plugin--jetpack-compose--hard]] - Compiler plugin internals
 - [[q-kak-risuet-compose-na-ekrane--android--hard]] - Compose drawing internals
+
 ## References
 - [Jetpack Compose Documentation](https://developer.android.com/jetpack/compose)
 - [Compose Basics](https://developer.android.com/jetpack/compose/tutorial)

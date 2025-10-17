@@ -1,15 +1,16 @@
 ---
+id: "20251015082237540"
+title: "Rss Feed Aggregator / Агрегатор RSS лент"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - rss
   - xml-parsing
   - workmanager
   - room
-difficulty: medium
-status: draft
 ---
-
 # Реализация RSS-агрегатора на Android
 
 **English**: How to implement RSS feed aggregator on Android?

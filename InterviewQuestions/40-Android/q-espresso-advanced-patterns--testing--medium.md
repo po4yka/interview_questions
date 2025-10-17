@@ -1,14 +1,15 @@
 ---
+id: "20251015082237569"
+title: "Espresso Advanced Patterns / Espresso Advanced Паттерны"
 topic: testing
-tags:
-  - testing
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - testing
   - espresso
   - ui-testing
   - idling-resource
-difficulty: medium
-status: draft
 ---
-
 # Espresso Advanced Patterns
 
 **English**: Implement Espresso tests with IdlingResource, custom matchers, and ViewActions. Test RecyclerView and complex interactions.

@@ -1,17 +1,18 @@
 ---
+id: "20251015082237358"
+title: "App Security Best Practices / Лучшие практики безопасности приложения"
 topic: security
-tags:
-  - security
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - security
   - best-practices
   - audit
   - vulnerabilities
   - owasp
   - hardening
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # App Security Best Practices / Best Practices безопасности приложений
 
 **English**: Implement comprehensive security best practices: secure network communication with certificate pinning, encrypted storage, code obfuscation, root detection, and secure coding patterns.

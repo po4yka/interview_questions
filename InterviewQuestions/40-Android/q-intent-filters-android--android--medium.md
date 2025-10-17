@@ -1,22 +1,22 @@
 ---
+id: "20251015082237325"
+title: "Intent Filters Android / Intent фильтры Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - intent-filter
   - deep-linking
   - manifest
   - implicit-intent
   - intents-deeplinks
   - activity
-subtopics:
-  - intents-deeplinks
+source: Kirchhoff-Android-Interview-Questions
+subtopics:   - intents-deeplinks
   - activity
   - manifest
-difficulty: medium
-status: draft
-source: Kirchhoff-Android-Interview-Questions
 ---
-
 # Intent Filters in Android / Фильтры намерений в Android
 
 **English**: What do you know about Intent Filters in Android?

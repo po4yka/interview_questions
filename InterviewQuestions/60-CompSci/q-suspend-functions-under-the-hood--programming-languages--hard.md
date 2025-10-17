@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237227"
+title: "Suspend Functions Under The Hood"
+topic: computer-science
 difficulty: hard
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Suspend Functions Under the Hood
 
 # Question (EN)
@@ -477,4 +479,252 @@ suspend fun example() {
 
 ## Ответ (RU)
 
-Suspend-функции в Kotlin приостанавливают выполнение без блокировки потока. Под капотом: suspend-функция разбивается на несколько частей (continuations). Приостанавливается если выполняется асинхронный код например delay withContext. Продолжается с места остановки когда результат готов
+Suspend-функции в Kotlin приостанавливают выполнение без блокировки потока. Под капотом компилятор Kotlin преобразует suspend-функции в state machine (машину состояний), которая может приостанавливать и возобновлять выполнение.
+
+### Основные принципы работы
+
+1. **Continuation-Passing Style (CPS)**: Suspend-функция разбивается на несколько частей (continuations)
+2. **State Machine**: Компилятор генерирует state machine с точками приостановки как состояниями
+3. **Suspension**: Происходит когда выполняется асинхронный код (например, delay, withContext)
+4. **Resumption**: Продолжает с точки остановки когда результат готов
+
+### Преобразование компилятором
+
+```kotlin
+// Исходный код:
+suspend fun fetchUserData(userId: Int): User {
+    val profile = fetchProfile(userId)    // Точка приостановки 1
+    val settings = fetchSettings(userId)  // Точка приостановки 2
+    return User(profile, settings)
+}
+
+// Что генерирует компилятор (концептуально):
+fun fetchUserData(
+    userId: Int,
+    continuation: Continuation<User>
+): Any? {
+    val sm = continuation as? FetchUserDataSM
+        ?: FetchUserDataSM(userId, continuation)
+
+    when (sm.label) {
+        0 -> {
+            sm.label = 1
+            if (fetchProfile(userId, sm) == COROUTINE_SUSPENDED)
+                return COROUTINE_SUSPENDED
+            sm.profile = result
+        }
+        1 -> {
+            sm.label = 2
+            if (fetchSettings(userId, sm) == COROUTINE_SUSPENDED)
+                return COROUTINE_SUSPENDED
+            sm.settings = result
+        }
+        2 -> {
+            return User(sm.profile, sm.settings)
+        }
+    }
+}
+```
+
+### Простой пример преобразования
+
+```kotlin
+// Оригинальный код
+suspend fun simple(): String {
+    delay(1000)
+    return "Done"
+}
+
+// После компиляции (упрощенно)
+fun simple(continuation: Continuation<String>): Any? {
+    val sm = continuation as? SimpleSM ?: SimpleSM(continuation)
+
+    when (sm.label) {
+        0 -> {
+            sm.label = 1
+            val delayResult = delay(1000, sm)
+            if (delayResult == COROUTINE_SUSPENDED) {
+                return COROUTINE_SUSPENDED
+            }
+        }
+        1 -> {
+            return "Done"
+        }
+    }
+    throw IllegalStateException()
+}
+```
+
+### State Machine с локальными переменными
+
+```kotlin
+// Оригинал: Функция с локальными переменными
+suspend fun calculate(x: Int, y: Int): Int {
+    val sum = x + y             // Локальная переменная
+    delay(100)                  // Точка приостановки
+    val product = sum * 2       // Другая локальная переменная
+    delay(100)                  // Другая приостановка
+    return product + x
+}
+
+// Скомпилировано: Переменные перемещены в state machine
+fun calculate(
+    x: Int,
+    y: Int,
+    continuation: Continuation<Int>
+): Any? {
+    val sm = continuation as? CalculateSM
+        ?: CalculateSM(x, y, continuation)
+
+    when (sm.label) {
+        0 -> {
+            sm.sum = x + y              // Сохранить в SM
+            sm.label = 1
+            if (delay(100, sm) == COROUTINE_SUSPENDED)
+                return COROUTINE_SUSPENDED
+        }
+        1 -> {
+            sm.product = sm.sum * 2     // Доступ из SM
+            sm.label = 2
+            if (delay(100, sm) == COROUTINE_SUSPENDED)
+                return COROUTINE_SUSPENDED
+        }
+        2 -> {
+            return sm.product + sm.x    // Доступ из SM
+        }
+    }
+}
+```
+
+### Интерфейс Continuation
+
+```kotlin
+// Основной интерфейс для suspend-функций
+public interface Continuation<in T> {
+    // Контекст корутины
+    public val context: CoroutineContext
+
+    // Вызывается для возобновления корутины с результатом или исключением
+    public fun resumeWith(result: Result<T>)
+}
+
+// Расширяющие функции
+public inline fun <T> Continuation<T>.resume(value: T) {
+    resumeWith(Result.success(value))
+}
+
+public inline fun <T> Continuation<T>.resumeWithException(exception: Throwable) {
+    resumeWith(Result.failure(exception))
+}
+```
+
+### Как работает приостановка
+
+```kotlin
+// 1. Вызов функции начинается с label 0
+suspend fun example(): String {
+    println("До приостановки")
+    delay(1000)  // Точка приостановки
+    println("После приостановки")
+    return "Done"
+}
+
+// 2. Достигается delay, который возвращает COROUTINE_SUSPENDED
+//    Функция возвращает COROUTINE_SUSPENDED вызывающему коду
+//    Поток освобождается для другой работы
+
+// 3. После завершения delay, планировщик вызывает:
+continuation.resumeWith(Result.success(Unit))
+
+// 4. Функция возобновляется с label 1
+//    Продолжает с места остановки
+//    Возвращает "Done"
+```
+
+### Вложенные suspend вызовы
+
+```kotlin
+// Оригинал: Вложенные suspend вызовы
+suspend fun outer(): String {
+    val result1 = inner1()  // Вызов другой suspend-функции
+    val result2 = inner2()
+    return "$result1 $result2"
+}
+
+suspend fun inner1(): String {
+    delay(100)
+    return "First"
+}
+
+suspend fun inner2(): String {
+    delay(100)
+    return "Second"
+}
+
+// Каждая функция имеет свой state machine
+// Continuations связаны в цепочку
+```
+
+### Влияние на производительность
+
+```kotlin
+// Каждая точка приостановки создает overhead state machine
+suspend fun manySteps(): Int {
+    delay(1)  // Состояние 0 -> 1
+    delay(1)  // Состояние 1 -> 2
+    delay(1)  // Состояние 2 -> 3
+    delay(1)  // Состояние 3 -> 4
+    delay(1)  // Состояние 4 -> 5
+    return 42
+}
+// Создает state machine с 6 состояниями
+
+// Меньше точек приостановки = меньше overhead
+suspend fun optimized(): Int {
+    delay(5)  // Только одно состояние 0 -> 1
+    return 42
+}
+// Создает state machine с 2 состояниями
+```
+
+### Inline suspend функции
+
+```kotlin
+// inline suspend функции оптимизируются
+suspend inline fun <T> measureTime(
+    block: suspend () -> T
+): Pair<T, Long> {
+    val start = System.currentTimeMillis()
+    val result = block()
+    val time = System.currentTimeMillis() - start
+    return result to time
+}
+
+// После inlining дополнительный state machine не создается
+suspend fun example() {
+    val (data, time) = measureTime {
+        fetchData()  // Существует только state machine fetchData
+    }
+}
+```
+
+### Ключевые концепции
+
+1. **CPS Transformation**: Каждая `suspend fun foo(): T` становится `fun foo(Continuation<T>): Any?`
+
+2. **State Machine**: Тело функции разбивается на состояния в точках приостановки
+
+3. **Continuation**: Объект, который хранит:
+   - Текущее состояние (label)
+   - Локальные переменные
+   - Ссылку на completion continuation
+
+4. **COROUTINE_SUSPENDED**: Объект-маркер, указывающий на приостановку
+
+5. **Без блокировки потока**: При приостановке поток немедленно освобождается
+
+6. **Resumption**: Вызывается `continuation.resumeWith()` для продолжения выполнения
+
+7. **Stack Unwinding**: Приостановка разворачивает стек вызовов; возобновление восстанавливает его
+
+**Резюме**: Suspend-функции в Kotlin преобразуются компилятором в state machine с использованием Continuation-Passing Style. Каждая точка приостановки (suspend вызов) разбивает функцию на состояния. При приостановке функция возвращает COROUTINE_SUSPENDED и освобождает поток. При возобновлении continuation.resumeWith() вызывается для продолжения с места остановки. Локальные переменные сохраняются в state machine классе. Этот механизм позволяет асинхронному коду выглядеть синхронным без блокировки потоков.

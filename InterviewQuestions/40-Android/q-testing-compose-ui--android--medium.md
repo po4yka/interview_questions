@@ -1,15 +1,16 @@
 ---
+id: "20251015082237417"
+title: "Testing Compose Ui / Тестирование Compose Ui"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - jetpack-compose
   - testing
   - ui-testing
   - compose-test
-difficulty: medium
-status: draft
 ---
-
 # Testing Compose UI
 
 **English**: How do you test Jetpack Compose UI? What are the key APIs and best practices?

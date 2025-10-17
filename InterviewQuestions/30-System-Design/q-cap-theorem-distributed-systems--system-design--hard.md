@@ -1,31 +1,28 @@
 ---
 id: 20251012-300004
 title: "CAP Theorem and Distributed Systems / CAP теорема и распределённые системы"
-slug: cap-theorem-distributed-systems-system-design-hard
 topic: system-design
-subtopics:
+difficulty: hard
+status: draft
+created: 2025-10-12
+tags: - system-design
   - distributed-systems
+  - cap-theorem
+  - consistency
+  - availability
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-system-design
+related_questions:   - q-eventual-consistency--system-design--hard
+  - q-database-replication--system-design--medium
+  - q-consensus-algorithms--system-design--hard
+slug: cap-theorem-distributed-systems-system-design-hard
+subtopics:   - distributed-systems
   - consistency
   - availability
   - partition-tolerance
   - cap-theorem
-status: draft
-difficulty: hard
-moc: moc-system-design
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-eventual-consistency--system-design--hard
-  - q-database-replication--system-design--medium
-  - q-consensus-algorithms--system-design--hard
-tags:
-  - system-design
-  - distributed-systems
-  - cap-theorem
-  - consistency
-  - availability
 ---
-
 # CAP Theorem and Distributed Systems
 
 ## English Version

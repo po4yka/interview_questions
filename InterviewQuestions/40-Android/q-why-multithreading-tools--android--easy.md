@@ -1,16 +1,17 @@
 ---
+id: "20251015082238663"
+title: "Why Multithreading Tools / Зачем инструменты многопоточности"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/concurrency
   - concurrency
   - multithreading
   - performance
   - threading
-difficulty: easy
-status: draft
 ---
-
 # Для чего нужна многопоточность, какие инструменты использовать?
 
 **English**: Why is multithreading needed and which tools should be used?

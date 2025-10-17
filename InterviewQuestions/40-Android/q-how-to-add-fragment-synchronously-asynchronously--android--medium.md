@@ -1,13 +1,14 @@
 ---
+id: "20251015082237520"
+title: "How To Add Fragment Synchronously Asynchronously / Как добавить Fragment синхронно и асинхронно"
 topic: android
-tags:
-  - android
-  - fragment
-  - fragment-transaction
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
+  - fragment
+  - fragment-transaction
 ---
-
 # How to add fragment synchronously/asynchronously?
 
 ## EN (expanded)

@@ -1,14 +1,15 @@
 ---
+id: "20251015082237353"
+title: "Compose Navigation Advanced / Продвинутая навигация Compose"
 topic: jetpack-compose
-tags:
-  - jetpack-compose
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - jetpack-compose
   - navigation
   - type-safety
   - deep-links
-difficulty: medium
-status: draft
 ---
-
 # Advanced Navigation Compose with Type Safety
 
 **English**: Implement type-safe navigation with arguments, deep links, and back stack handling. Use Navigation Compose with sealed classes.

@@ -1,16 +1,17 @@
 ---
+id: "20251015082237395"
+title: "Dagger Main Elements / Основные элементы Dagger"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/di-hilt
   - dagger
   - dependency-injection
   - di-hilt
   - platform/android
-difficulty: medium
-status: draft
 ---
-
 # Из каких основных элементов состоит Dagger?
 
 **English**: What are the main elements of Dagger?

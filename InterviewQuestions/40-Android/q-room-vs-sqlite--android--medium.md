@@ -1,17 +1,18 @@
 ---
+id: "20251015082237437"
+title: "Room Vs Sqlite / Room против Sqlite"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/data-storage
   - comparison
   - database
   - orm
   - room
   - sqlite
-difficulty: medium
-status: draft
 ---
-
 # В чем разница между Room & SQLite?
 
 **English**: What is the difference between Room and SQLite?
@@ -429,7 +430,286 @@ class UserRepository(private val userDao: UserDao) {
 **Recommendation:** Use **Room** for modern Android development. It provides better safety, less code, and easier maintenance while maintaining SQLite's performance.
 
 ## Ответ (RU)
-SQLite – низкоуровневая реляционная база данных, требует SQL-запросов вручную. Room – надстройка над SQLite, предоставляет удобный API с аннотациями, поддерживает LiveData, Flow и автоматическую миграцию данных. Room упрощает работу с базой и делает код читаемым, но внутри все равно использует SQLite.
+
+**SQLite** – это **низкоуровневая реляционная база данных**, которая требует **ручного написания SQL-запросов**.
+
+**Room** – это **обертка/ORM (Object-Relational Mapping) над SQLite**, которая предоставляет **удобный API с аннотациями**, поддерживает **LiveData и Flow**, и обеспечивает **автоматическую миграцию данных**.
+
+Room упрощает работу с базой данных и делает код более читаемым, но **внутри все равно использует SQLite**.
+
+### Ключевые различия
+
+#### 1. Уровень абстракции
+
+**SQLite - низкоуровневый:**
+
+```kotlin
+class DatabaseHelper(context: Context) : SQLiteOpenHelper(
+    context, "database.db", null, 1
+) {
+    override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL("""
+            CREATE TABLE users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT,
+                email TEXT
+            )
+        """)
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase, old: Int, new: Int) {
+        db.execSQL("DROP TABLE IF EXISTS users")
+        onCreate(db)
+    }
+}
+```
+
+**Room - высокоуровневый:**
+
+```kotlin
+@Entity(tableName = "users")
+data class User(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val name: String,
+    val email: String
+)
+
+@Database(entities = [User::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
+}
+```
+
+#### 2. Обработка SQL запросов
+
+**SQLite - ручные строки:**
+
+```kotlin
+fun getUser(userId: Int): User? {
+    val db = dbHelper.readableDatabase
+
+    // SQL как сырая строка - ошибки только во время выполнения!
+    val cursor = db.rawQuery(
+        "SELECT * FROM usres WHERE id = ?",  // Опечатка! "usres" вместо "users"
+        arrayOf(userId.toString())
+    )
+
+    // Ручная обработка курсора
+    var user: User? = null
+    if (cursor.moveToFirst()) {
+        user = User(
+            id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+            name = cursor.getString(cursor.getColumnIndexOrThrow("name")),
+            email = cursor.getString(cursor.getColumnIndexOrThrow("email"))
+        )
+    }
+    cursor.close()
+    return user
+}
+```
+
+**Room - типобезопасный, проверяемый:**
+
+```kotlin
+@Dao
+interface UserDao {
+    // Проверка SQL на этапе компиляции
+    @Query("SELECT * FROM users WHERE id = :userId")
+    suspend fun getUser(userId: Int): User?
+
+    // Опечатка в имени таблицы будет обнаружена при компиляции!
+}
+```
+
+#### 3. CRUD операции
+
+**SQLite - многословный:**
+
+```kotlin
+// Insert
+fun insertUser(name: String, email: String) {
+    val db = dbHelper.writableDatabase
+    val values = ContentValues().apply {
+        put("name", name)
+        put("email", email)
+    }
+    db.insert("users", null, values)
+}
+
+// Update
+fun updateUser(user: User) {
+    val db = dbHelper.writableDatabase
+    val values = ContentValues().apply {
+        put("name", user.name)
+        put("email", user.email)
+    }
+    db.update("users", values, "id = ?", arrayOf(user.id.toString()))
+}
+
+// Delete
+fun deleteUser(userId: Int) {
+    val db = dbHelper.writableDatabase
+    db.delete("users", "id = ?", arrayOf(userId.toString()))
+}
+```
+
+**Room - лаконичный:**
+
+```kotlin
+@Dao
+interface UserDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(user: User)
+
+    @Update
+    suspend fun update(user: User)
+
+    @Delete
+    suspend fun delete(user: User)
+
+    @Query("DELETE FROM users WHERE id = :userId")
+    suspend fun deleteById(userId: Int)
+}
+```
+
+#### 4. Реактивные данные
+
+**SQLite - нет встроенной поддержки:**
+
+```kotlin
+// Нужно вручную уведомлять наблюдателей
+fun getUsers(): List<User> {
+    val db = dbHelper.readableDatabase
+    val cursor = db.rawQuery("SELECT * FROM users", null)
+
+    val users = mutableListOf<User>()
+    while (cursor.moveToNext()) {
+        users.add(/* парсинг пользователя */)
+    }
+    cursor.close()
+
+    // Нет автоматических обновлений при изменении данных
+    return users
+}
+```
+
+**Room - встроенные Flow/LiveData:**
+
+```kotlin
+@Dao
+interface UserDao {
+    // Автоматически обновляет UI при изменении данных
+    @Query("SELECT * FROM users")
+    fun getAllUsers(): Flow<List<User>>
+
+    // Или с LiveData
+    @Query("SELECT * FROM users")
+    fun getAllUsersLiveData(): LiveData<List<User>>
+}
+
+// Во Fragment/Activity - автоматические обновления!
+viewLifecycleOwner.lifecycleScope.launch {
+    userDao.getAllUsers().collect { users ->
+        adapter.submitList(users)  // UI обновляется автоматически
+    }
+}
+```
+
+### Таблица сравнения
+
+| Функция | SQLite | Room |
+|---------|--------|------|
+| **Абстракция** | Низкоуровневая | Высокоуровневая ORM |
+| **Шаблонный код** | Много | Мало |
+| **Проверка SQL** | Во время выполнения | На этапе компиляции |
+| **Типобезопасность** | Нет | Да |
+| **CRUD операции** | Ручные ContentValues | Аннотации |
+| **Реактивность (Flow/LiveData)** | Нет | Да |
+| **Поддержка корутин** | Нет | Да |
+| **Миграции** | Ручные | Структурированные |
+| **Тестирование** | Сложно | Легко |
+| **Производительность** | Быстро | Быстро (использует SQLite) |
+| **Зависимости** | Встроено | Jetpack библиотека |
+
+### Полный пример сравнения
+
+**SQLite:**
+
+```kotlin
+class UserRepository(context: Context) {
+    private val dbHelper = DatabaseHelper(context)
+
+    fun insertUser(name: String, email: String): Long {
+        val db = dbHelper.writableDatabase
+        val values = ContentValues().apply {
+            put("name", name)
+            put("email", email)
+        }
+        return db.insert("users", null, values)
+    }
+
+    fun getAllUsers(): List<User> {
+        val db = dbHelper.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM users", null)
+        val users = mutableListOf<User>()
+
+        while (cursor.moveToNext()) {
+            users.add(
+                User(
+                    id = cursor.getInt(0),
+                    name = cursor.getString(1),
+                    email = cursor.getString(2)
+                )
+            )
+        }
+        cursor.close()
+        return users
+    }
+}
+```
+
+**Room:**
+
+```kotlin
+@Dao
+interface UserDao {
+    @Insert
+    suspend fun insert(user: User): Long
+
+    @Query("SELECT * FROM users")
+    fun getAllUsers(): Flow<List<User>>
+}
+
+class UserRepository(private val userDao: UserDao) {
+    suspend fun insertUser(name: String, email: String): Long {
+        return userDao.insert(User(name = name, email = email))
+    }
+
+    fun getAllUsers(): Flow<List<User>> = userDao.getAllUsers()
+}
+```
+
+### Резюме
+
+**SQLite:**
+- Низкоуровневая реляционная база данных
+- Требует ручных SQL запросов в виде строк
+- Нет проверки на этапе компиляции
+- Много шаблонного кода
+- Встроено в Android
+
+**Room:**
+- Высокоуровневая ORM обертка над SQLite
+- Типобезопасный, основанный на аннотациях API
+- Проверка SQL на этапе компиляции
+- Поддержка LiveData/Flow
+- Автоматические миграции
+- Легкое тестирование
+- Меньше шаблонного кода
+- **По-прежнему использует SQLite внутри**
+
+**Рекомендация:** Используйте **Room** для современной разработки Android. Он обеспечивает лучшую безопасность, меньше кода и упрощенное обслуживание при сохранении производительности SQLite.
 
 
 ---

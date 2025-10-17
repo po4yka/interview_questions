@@ -1,11 +1,12 @@
 ---
+id: "20251015082237056"
+title: "Data Sealed Classes Definition"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: hard
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # What are Data Class and Sealed Classes?
 
 # Question (EN)

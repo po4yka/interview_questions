@@ -1,19 +1,20 @@
 ---
+id: "20251015082237141"
+title: "Xml Acronym / Расшифровка аббревиатуры XML"
 topic: programming-languages
-subtopics: ["computer-science", "fundamentals"]
-tags:
-  - xml
+difficulty: easy
+status: draft
+created: 2025-10-13
+tags: - xml
   - markup-language
   - acronym
   - programming-languages
-difficulty: easy
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-programming-languages
 related_questions: []
+subtopics: ["computer-science", "fundamentals"]
 ---
-
 # Как расшифровывается xml?
 
 # Question (EN)
@@ -141,7 +142,116 @@ In Android development, XML is heavily used:
 
 ## Ответ (RU)
 
-XML — это eXtensible Markup Language (Расширяемый язык разметки).
+**XML** расшифровывается как **eXtensible Markup Language** (Расширяемый язык разметки).
+
+### Ключевые характеристики
+
+**1. Расширяемый:**
+- Вы можете определять свои собственные теги
+- Не ограничен предопределенным набором (в отличие от HTML)
+
+```xml
+<!-- Пользовательские теги -->
+<user>
+    <name>John Doe</name>
+    <email>john@example.com</email>
+</user>
+```
+
+**2. Язык разметки:**
+- Использует теги для структурирования данных
+- Самоописывающий формат
+- Читается как человеком, так и машиной
+
+**3. Распространенное использование:**
+- Конфигурационные файлы (макеты Android, Maven pom.xml)
+- Обмен данными между системами
+- Хранение документов
+- Веб-сервисы (SOAP)
+
+### Пример XML
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<library>
+    <book id="1">
+        <title>Clean Code</title>
+        <author>Robert Martin</author>
+        <year>2008</year>
+    </book>
+    <book id="2">
+        <title>Effective Java</title>
+        <author>Joshua Bloch</author>
+        <year>2018</year>
+    </book>
+</library>
+```
+
+### Контекст Android
+
+В Android разработке XML используется повсеместно:
+
+**Файлы макетов:**
+```xml
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Hello World"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+```
+
+**Ресурсы:**
+```xml
+<!-- strings.xml -->
+<resources>
+    <string name="app_name">MyApp</string>
+    <string name="welcome">Welcome!</string>
+</resources>
+```
+
+**Манифест:**
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application
+        android:label="@string/app_name">
+        <activity android:name=".MainActivity" />
+    </application>
+</manifest>
+```
+
+### XML vs JSON
+
+| Характеристика | XML | JSON |
+|---------|-----|------|
+| **Синтаксис** | На основе тегов | Пары ключ-значение |
+| **Многословность** | Более многословный | Более компактный |
+| **Атрибуты** | Поддерживает атрибуты | Нет атрибутов |
+| **Массивы** | Более сложные | Нативная поддержка |
+| **Комментарии** | Поддерживает `<!-- -->` | Нет комментариев |
+| **Случай использования** | Конфигурационные файлы, документы | Web API, передача данных |
+
+**Одни и те же данные в обоих форматах:**
+
+```xml
+<!-- XML -->
+<person>
+    <name>John</name>
+    <age>30</age>
+</person>
+```
+
+```json
+// JSON
+{
+  "name": "John",
+  "age": 30
+}
+```
 
 
 ---

@@ -26,9 +26,13 @@ updated: 2025-10-06
 
 tags: [android, networking, sync, offline-first, workmanager, difficulty/hard]
 ---
+
 # Question (EN)
+
 > How would you handle data synchronization in an Android app with an unstable network connection?
+
 # Вопрос (RU)
+
 > Как бы вы обрабатывали синхронизацию данных в Android приложении при нестабильном сетевом соединении?
 
 ---
@@ -313,42 +317,43 @@ class PaginatedSyncManager {
 
 **Принцип:** Локальная база данных - единственный источник истины.
 
-- Всегда читать из локальной БД
-- Сначала сохранять локально, затем синхронизировать
-- Ставить операции в очередь при отсутствии сети
+-   Всегда читать из локальной БД
+-   Сначала сохранять локально, затем синхронизировать
+-   Ставить операции в очередь при отсутствии сети
 
 ### 2. Очередь синхронизации с WorkManager
 
-- Хранение неотправленных изменений
-- Автоматическая синхронизация при появлении сети
-- Экспоненциальная задержка между попытками
-- Максимум 3 попытки
+-   Хранение неотправленных изменений
+-   Автоматическая синхронизация при появлении сети
+-   Экспоненциальная задержка между попытками
+-   Максимум 3 попытки
 
 ### 3. Мониторинг сети
 
-- ConnectivityManager для отслеживания состояния сети
-- Автоматический запуск синхронизации при появлении соединения
-- StateFlow для реактивного обновления UI
+-   ConnectivityManager для отслеживания состояния сети
+-   Автоматический запуск синхронизации при появлении соединения
+-   StateFlow для реактивного обновления UI
 
 ### 4. Разрешение конфликтов
 
 **Стратегии:**
-- Last Write Wins (побеждает последняя запись)
-- Server Always Wins (всегда побеждает сервер)
-- Custom Merge (пользовательское слияние)
-- Field-level merge (слияние на уровне полей)
+
+-   Last Write Wins (побеждает последняя запись)
+-   Server Always Wins (всегда побеждает сервер)
+-   Custom Merge (пользовательское слияние)
+-   Field-level merge (слияние на уровне полей)
 
 ### 5. Механизм повторных попыток
 
-- Retry Interceptor для OkHttp
-- Экспоненциальная задержка
-- Максимальное количество попыток
+-   Retry Interceptor для OkHttp
+-   Экспоненциальная задержка
+-   Максимальное количество попыток
 
 ### 6. Пагинация для больших данных
 
-- Синхронизация частями
-- Сохранение прогресса
-- Возобновление с последней страницы
+-   Синхронизация частями
+-   Сохранение прогресса
+-   Возобновление с последней страницы
 
 ### Лучшие практики:
 
@@ -375,40 +380,10 @@ class PaginatedSyncManager {
 ---
 
 ## References
-- [Offline-First Architecture](https://developer.android.com/topic/architecture/data-layer/offline-first)
-- [WorkManager Guide](https://developer.android.com/topic/libraries/architecture/workmanager)
-- [Network Connectivity](https://developer.android.com/training/monitoring-device-state/connectivity-status-type)
-- [Room Database](https://developer.android.com/training/data-storage/room)
+
+-   [Offline-First Architecture](https://developer.android.com/topic/architecture/data-layer/offline-first)
+-   [WorkManager Guide](https://developer.android.com/topic/libraries/architecture/workmanager)
+-   [Network Connectivity](https://developer.android.com/training/monitoring-device-state/connectivity-status-type)
+-   [Room Database](https://developer.android.com/training/data-storage/room)
 
 ## Related Questions
-
-### Prerequisites (Easier)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-usecase-pattern-android--android--medium]] - Architecture
-- [[q-repository-multiple-sources--android--medium]] - Architecture
-
-### Related (Hard)
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-- [[q-implement-voice-video-call--android--hard]] - Webrtc
-- [[q-modularization-patterns--android--hard]] - Architecture
-- [[q-clean-architecture-android--android--hard]] - Architecture
-### Prerequisites (Easier)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-usecase-pattern-android--android--medium]] - Architecture
-- [[q-repository-multiple-sources--android--medium]] - Architecture
-
-### Related (Hard)
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-- [[q-implement-voice-video-call--android--hard]] - Webrtc
-- [[q-modularization-patterns--android--hard]] - Architecture
-- [[q-clean-architecture-android--android--hard]] - Architecture
-### Prerequisites (Easier)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-usecase-pattern-android--android--medium]] - Architecture
-- [[q-repository-multiple-sources--android--medium]] - Architecture
-
-### Related (Hard)
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-- [[q-implement-voice-video-call--android--hard]] - Webrtc
-- [[q-modularization-patterns--android--hard]] - Architecture
-- [[q-clean-architecture-android--android--hard]] - Architecture

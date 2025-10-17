@@ -1,16 +1,17 @@
 ---
+id: "20251015082237450"
+title: "How Navigation Is Implemented In Android / Как реализована навигация в Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/navigation
   - android/ui
   - gestures
   - navigation
   - ui
-difficulty: medium
-status: draft
 ---
-
 # Каким образом осуществляется навигация в Android?
 
 **English**: How is navigation implemented in Android?

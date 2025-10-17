@@ -1,7 +1,11 @@
 ---
+id: "20251015082237377"
+title: "Data Encryption At Rest / Шифрование данных в покое"
 topic: security
-tags:
-  - security
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - security
   - encryption
   - database
   - shared-preferences
@@ -9,10 +13,7 @@ tags:
   - performance
   - key-management
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Data Encryption at Rest / Шифрование данных в покое
 
 **English**: Implement data encryption at rest using EncryptedSharedPreferences and SQLCipher for Room. Compare approaches, performance impact, and key management strategies.

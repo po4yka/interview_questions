@@ -1,21 +1,22 @@
 ---
+id: "20251015082237359"
+title: "What To Put In State For Initial List / Что положить в State для начального списка"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-13
+tags: - android
   - android/state-management
   - android/ui
   - data-loading
   - state
   - state-management
   - ui
-difficulty: easy
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # What to put in state for initial list?
 
 **Russian**: Что положить в state для отображения первоначального списка?

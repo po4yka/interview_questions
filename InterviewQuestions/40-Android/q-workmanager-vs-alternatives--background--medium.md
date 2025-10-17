@@ -1,22 +1,21 @@
 ---
-tags:
-  - android
+id: "20251015082238618"
+title: "Workmanager Vs Alternatives / Workmanager против Alternatives"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - android
   - workmanager
   - alarmmanager
   - jobscheduler
   - background-processing
-topic: android
-subtopics: [background-execution, workmanager]
-difficulty: medium
-status: draft
-related_questions:
-  - q-workmanager-advanced--background--medium
-  - q-foreground-service-types--background--medium
-created: 2025-10-12
 date_updated: 2025-10-13
 moc: moc-android
+related_questions:   - q-workmanager-advanced--background--medium
+  - q-foreground-service-types--background--medium
+subtopics: [background-execution, workmanager]
 ---
-
 # Question (EN)
 When should you use WorkManager vs AlarmManager vs JobScheduler vs Foreground Service? What are the trade-offs and use cases for each?
 

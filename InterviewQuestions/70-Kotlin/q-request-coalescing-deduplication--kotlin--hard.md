@@ -2,17 +2,10 @@
 id: 20251012-180009
 title: "Request coalescing and deduplication patterns / Объединение и дедупликация запросов"
 topic: kotlin
-subtopics:
-  - coroutines
-  - optimization
-  - caching
-  - performance
-  - patterns
 difficulty: hard
-moc: moc-kotlin
 status: draft
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - optimization
   - caching
@@ -20,8 +13,13 @@ tags:
   - patterns
   - deduplication
   - coalescing
+moc: moc-kotlin
+subtopics:   - coroutines
+  - optimization
+  - caching
+  - performance
+  - patterns
 ---
-
 # Request Coalescing and Deduplication Patterns
 
 **English** | [Русский](#russian-version)

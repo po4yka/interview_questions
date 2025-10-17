@@ -1,7 +1,11 @@
 ---
+id: "20251015082237373"
+title: "Inject Router To Presenter / Инъекция Router в Presenter"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/architecture-mvi
   - android/di-hilt
   - architecture-mvi
@@ -10,10 +14,7 @@ tags:
   - di-hilt
   - koin
   - platform/android
-difficulty: medium
-status: draft
 ---
-
 # How to inject Router directly into Presenter?
 
 **Russian**: Что использовать для того чтобы роутер инжектился напрямую в презентер?

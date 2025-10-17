@@ -1,31 +1,267 @@
 ---
+id: "20251015082237264"
+title: "Main Thread Android / Главный поток Android"
 topic: android
-tags:
-  - android
-  - threading
-  - ui-thread
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
+  - threading
+  - ui-thread
 ---
 
-# Какой основной поток выполнения приложения?
+# Question (EN)
 
-**English**: What is the main execution thread in an Android application?
+> What is the main execution thread in an Android application?
+
+# Вопрос (RU)
+
+> Какой основной поток выполнения приложения?
+
+---
 
 ## Answer (EN)
-Основной поток выполнения приложения, также известный как **UI-поток (User Interface Thread)** или **Main Thread**, играет ключевую роль в функционировании Android приложения.
 
-### Основные характеристики
+The main execution thread in an Android application, also known as the **UI Thread** or **Main Thread**, plays a crucial role in the functioning of Android applications.
 
-#### 1. Отвечает за обработку пользовательского интерфейса
+### Key Characteristics
 
-Все операции, связанные с UI, должны выполняться в главном потоке:
+#### 1. Responsible for User Interface Processing
+
+All UI-related operations must be executed on the main thread:
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // UI operations on main thread
+        findViewById<TextView>(R.id.textView).text = "Hello World"
+    }
+}
+```
+
+#### 2. Single Thread Execution
+
+-   Only **one thread** can modify UI components at a time
+-   Prevents **race conditions** and UI inconsistencies
+-   Ensures **thread safety** for UI operations
+
+#### 3. Blocking Operations Cause ANR
+
+**ANR (Application Not Responding)** occurs when the main thread is blocked:
+
+```kotlin
+// BAD - Blocks main thread
+fun loadData() {
+    val data = networkCall() // Takes 5 seconds
+    updateUI(data) // UI freezes
+}
+
+// GOOD - Use background thread
+fun loadData() {
+    lifecycleScope.launch(Dispatchers.IO) {
+        val data = networkCall() // Background thread
+        withContext(Dispatchers.Main) {
+            updateUI(data) // Back to main thread
+        }
+    }
+}
+```
+
+### Main Thread Responsibilities
+
+1. **UI Updates**: Drawing, layout, input handling
+2. **Lifecycle Events**: onCreate, onResume, onPause
+3. **User Interactions**: Touch events, button clicks
+4. **System Callbacks**: Configuration changes, memory pressure
+
+### Threading Best Practices
+
+#### Use Background Threads for Heavy Operations
+
+```kotlin
+// Network operations
+lifecycleScope.launch(Dispatchers.IO) {
+    val result = apiService.getData()
+    withContext(Dispatchers.Main) {
+        updateUI(result)
+    }
+}
+
+// Database operations
+lifecycleScope.launch(Dispatchers.IO) {
+    val users = database.userDao().getAllUsers()
+    withContext(Dispatchers.Main) {
+        adapter.submitList(users)
+    }
+}
+```
+
+#### Use Main Thread for UI Updates Only
+
+```kotlin
+// Correct - UI updates on main thread
+fun updateProgress(progress: Int) {
+    progressBar.progress = progress
+    statusText.text = "Progress: $progress%"
+}
+
+// Incorrect - Heavy computation on main thread
+fun calculateComplexData() {
+    val result = (1..1000000).sum() // Blocks UI
+    updateUI(result)
+}
+```
+
+### Thread Safety Considerations
+
+#### Shared Data Access
+
+```kotlin
+class DataManager {
+    private val _data = MutableLiveData<String>()
+    val data: LiveData<String> = _data
+
+    fun updateData(newData: String) {
+        // Safe - LiveData handles thread switching
+        _data.value = newData
+    }
+}
+```
+
+#### Synchronization
+
+```kotlin
+class ThreadSafeCounter {
+    private var count = 0
+    private val lock = Any()
+
+    fun increment() {
+        synchronized(lock) {
+            count++
+        }
+    }
+
+    fun getCount(): Int {
+        synchronized(lock) {
+            return count
+        }
+    }
+}
+```
+
+### Common Threading Patterns
+
+#### 1. Coroutines with LifecycleScope
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            // Runs on main thread
+            val data = withContext(Dispatchers.IO) {
+                // Background work
+                loadDataFromNetwork()
+            }
+            // Back on main thread
+            updateUI(data)
+        }
+    }
+}
+```
+
+#### 2. ViewModel with Coroutines
+
+```kotlin
+class MyViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    fun loadData() {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            try {
+                val data = repository.getData()
+                _uiState.value = UiState.Success(data)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message)
+            }
+        }
+    }
+}
+```
+
+#### 3. WorkManager for Background Tasks
+
+```kotlin
+class DataSyncWorker(
+    context: Context,
+    params: WorkerParameters
+) : Worker(context, params) {
+
+    override fun doWork(): Result {
+        return try {
+            // Background work
+            syncData()
+            Result.success()
+        } catch (e: Exception) {
+            Result.failure()
+        }
+    }
+}
+```
+
+### Threading Dispatchers
+
+```kotlin
+// Main thread - UI operations
+Dispatchers.Main
+
+// Background thread - CPU-intensive work
+Dispatchers.Default
+
+// Background thread - I/O operations
+Dispatchers.IO
+
+// Unconfined - inherits caller's thread
+Dispatchers.Unconfined
+```
+
+### Debugging Thread Issues
+
+#### Check Current Thread
+
+```kotlin
+fun checkThread() {
+    Log.d("Thread", "Current thread: ${Thread.currentThread().name}")
+    Log.d("Thread", "Is main thread: ${Looper.getMainLooper().thread == Thread.currentThread()}")
+}
+```
+
+#### Detect ANR
+
+```kotlin
+// Monitor main thread blocking
+class ANRDetector {
+    fun startMonitoring() {
+        val handler = Handler(Looper.getMainLooper())
+        handler.post(object : Runnable {
+            override fun run() {
+                // Check if main thread is responsive
+                handler.postDelayed(this, 1000)
+            }
+        })
+    }
+}
+```
+
+---
+
+## Ответ (RU)
 
         // Всё это выполняется в main thread
         val textView = findViewById<TextView>(R.id.textView)
@@ -36,8 +272,10 @@ class MainActivity : AppCompatActivity() {
             textView.text = "Button clicked"
         }
     }
+
 }
-```
+
+````
 
 #### 2. Обработка событий
 
@@ -48,15 +286,16 @@ class MainActivity : AppCompatActivity() {
 button.setOnClickListener { }
 editText.addTextChangedListener { }
 recyclerView.setOnScrollListener { }
-```
+````
 
 #### 3. Запрещает длительные операции
 
 **НЕЛЬЗЯ выполнять в main thread**:
-- Сетевые запросы
-- Операции с базой данных
-- Тяжёлые вычисления
-- Чтение/запись больших файлов
+
+-   Сетевые запросы
+-   Операции с базой данных
+-   Тяжёлые вычисления
+-   Чтение/запись больших файлов
 
 ```kotlin
 // - НЕПРАВИЛЬНО - блокирует UI
@@ -90,9 +329,9 @@ while (true) {
 
 **Компоненты event loop**:
 
-- **Looper** - управляет очередью сообщений
-- **MessageQueue** - очередь событий и задач
-- **Handler** - отправляет и обрабатывает сообщения
+-   **Looper** - управляет очередью сообщений
+-   **MessageQueue** - очередь событий и задач
+-   **Handler** - отправляет и обрабатывает сообщения
 
 ```kotlin
 // Отправка задачи в main thread из фонового потока
@@ -175,22 +414,3 @@ WorkManager.getInstance(context).enqueue(workRequest)
 ---
 
 ## Related Questions
-
-### Prerequisites (Easier)
-- [[q-what-is-the-main-application-execution-thread--android--easy]] - what is the main
-
-### Related (Medium)
-- [[q-handler-looper-main-thread--android--medium]] - handler looper main thread 
-- [[q-how-does-the-main-thread-work--android--medium]] - how does the main
-### Prerequisites (Easier)
-- [[q-what-is-the-main-application-execution-thread--android--easy]] - what is the main
-
-### Related (Medium)
-- [[q-handler-looper-main-thread--android--medium]] - handler looper main thread 
-- [[q-how-does-the-main-thread-work--android--medium]] - how does the main
-### Prerequisites (Easier)
-- [[q-what-is-the-main-application-execution-thread--android--easy]] - what is the main
-
-### Related (Medium)
-- [[q-handler-looper-main-thread--android--medium]] - handler looper main thread 
-- [[q-how-does-the-main-thread-work--android--medium]] - how does the main

@@ -1,20 +1,21 @@
 ---
+id: "20251015082237575"
+title: "Material3 Motion Transitions / Движение и переходы Material3"
 topic: ui-ux-accessibility
-subtopics: [material-design, ui-animation]
-tags:
-  - material-design
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - material-design
   - material3
   - animation
   - transitions
   - motion
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-ui-ux-accessibility
 related_questions: []
+subtopics: [material-design, ui-animation]
 ---
-
 # Material 3 Motion and Transitions
 
 # Question (EN)

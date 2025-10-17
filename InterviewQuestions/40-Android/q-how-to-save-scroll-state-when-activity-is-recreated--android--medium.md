@@ -1,11 +1,12 @@
 ---
+id: "20251015082238641"
+title: "How To Save Scroll State When Activity Is Recreated / Как сохранить состояние скролла при пересоздании Activity"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # How to save scroll state when Activity is recreated?
 
 ## Answer (EN)

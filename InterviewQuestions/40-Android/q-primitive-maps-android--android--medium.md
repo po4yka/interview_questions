@@ -1,14 +1,15 @@
 ---
+id: "20251015082237502"
+title: "Primitive Maps Android / Примитивные Map в Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - performance
   - collections
   - memory-optimization
-difficulty: medium
-status: draft
 ---
-
 # Примитивные коллекции Map в Android
 
 **English**: Primitive Map Collections in Android (SparseArray, SparseIntArray, SparseBooleanArray, LongSparseArray)
@@ -210,7 +211,9 @@ class RecyclerViewAdapter(private val items: List<String>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        TODO("Not yet implemented")
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_recyclerview, parent, false)
+        return ViewHolder(view)
     }
 
     override fun getItemCount(): Int = items.size
@@ -504,7 +507,9 @@ class OptimizedRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        TODO("Not yet implemented")
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_optimized, parent, false)
+        return RecyclerView.ViewHolder(view) {}
     }
 
     override fun getItemCount(): Int = 0

@@ -1,26 +1,31 @@
 ---
-tags:
-  - Android
+id: "20251015082237243"
+title: "Kmm Ktor Networking / Ktor для сети в KMM"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - KMM
   - Ktor
   - Networking
-difficulty: medium
-status: draft
 ---
 
 # Ktor Client for Multiplatform Networking
 
 # Question (EN)
-> 
-Explain how to use Ktor client for multiplatform networking in KMM projects. How do you configure platform-specific engines, handle authentication, implement retry logic, and manage network errors across Android and iOS?
+
+> Explain how to use Ktor client for multiplatform networking in KMM projects. How do you configure platform-specific engines, handle authentication, implement retry logic, and manage network errors across Android and iOS?
 
 ## Answer (EN)
+
 Ktor is the recommended HTTP client for Kotlin Multiplatform, providing a unified API with platform-optimized engines (OkHttp for Android, NSURLSession for iOS) and comprehensive plugin support for modern networking requirements.
 
 #### Ktor Setup and Configuration
 
 **1. Dependencies**
+
 ```kotlin
 // shared/build.gradle.kts
 kotlin {
@@ -63,6 +68,7 @@ kotlin {
 ```
 
 **2. Basic Client Configuration**
+
 ```kotlin
 // commonMain/network/HttpClientFactory.kt
 object HttpClientFactory {
@@ -158,6 +164,7 @@ actual fun HttpClientConfig<*>.configurePlatformEngine() {
 #### Authentication
 
 **1. Bearer Token Authentication**
+
 ```kotlin
 // commonMain/network/AuthenticatedHttpClient.kt
 class AuthenticatedHttpClient(
@@ -256,6 +263,7 @@ class UnauthorizedException(message: String) : Exception(message)
 ```
 
 **2. Custom Authentication Header**
+
 ```kotlin
 // API Key authentication
 class ApiKeyAuthClient(private val apiKey: String) {
@@ -320,6 +328,7 @@ class OAuth2Client(
 #### Retry Logic
 
 **1. Automatic Retry Plugin**
+
 ```kotlin
 // commonMain/network/plugins/RetryPlugin.kt
 class RetryPlugin(
@@ -409,6 +418,7 @@ val client = HttpClient {
 ```
 
 **2. Conditional Retry**
+
 ```kotlin
 // Retry only for specific requests
 suspend inline fun <reified T> HttpClient.getWithRetry(
@@ -463,6 +473,7 @@ val users = client.getWithRetry<List<User>>("users") {
 #### Error Handling
 
 **1. Comprehensive Error Handling**
+
 ```kotlin
 // commonMain/network/NetworkError.kt
 sealed class NetworkError : Exception() {
@@ -585,6 +596,7 @@ class UserRepository(private val client: HttpClient) {
 ```
 
 **2. Network Availability Check**
+
 ```kotlin
 // Platform-specific network checking
 expect class NetworkMonitor() {
@@ -677,6 +689,7 @@ class SafeApiClient(
 #### Advanced Features
 
 **1. Request/Response Interceptors**
+
 ```kotlin
 // Request interceptor for analytics
 class AnalyticsInterceptor(
@@ -762,6 +775,7 @@ class CacheInterceptor(
 ```
 
 **2. File Upload/Download**
+
 ```kotlin
 // File upload with progress
 suspend fun HttpClient.uploadFile(
@@ -816,6 +830,7 @@ suspend fun HttpClient.downloadFile(
 ```
 
 **3. GraphQL Support**
+
 ```kotlin
 // GraphQL client
 class GraphQLClient(
@@ -880,6 +895,7 @@ val result = client.query<UserQuery>("""
 #### Testing
 
 **1. Mock Client for Testing**
+
 ```kotlin
 // commonTest
 class MockHttpClient {
@@ -942,120 +958,149 @@ class UserRepositoryTest {
 ### Summary
 
 Ktor provides comprehensive multiplatform networking:
-- **Platform Engines**: OkHttp (Android), NSURLSession (iOS)
-- **Authentication**: Bearer tokens, OAuth, API keys with auto-refresh
-- **Retry Logic**: Exponential backoff, conditional retries
-- **Error Handling**: Type-safe errors, network monitoring
-- **Advanced Features**: Interceptors, caching, file upload/download
-- **Testing**: Mock engine for unit tests
+
+-   **Platform Engines**: OkHttp (Android), NSURLSession (iOS)
+-   **Authentication**: Bearer tokens, OAuth, API keys with auto-refresh
+-   **Retry Logic**: Exponential backoff, conditional retries
+-   **Error Handling**: Type-safe errors, network monitoring
+-   **Advanced Features**: Interceptors, caching, file upload/download
+-   **Testing**: Mock engine for unit tests
 
 Key considerations: proper error handling, retry strategies, authentication management, and platform-specific optimizations.
 
 ---
 
 # Вопрос (RU)
-> 
-Объясните как использовать Ktor client для multiplatform networking в KMM проектах. Как настроить platform-specific engines, обработать аутентификацию, реализовать retry логику и управлять network ошибками на Android и iOS?
+
+> Объясните как использовать Ktor client для multiplatform networking в KMM проектах. Как настроить platform-specific engines, обработать аутентификацию, реализовать retry логику и управлять network ошибками на Android и iOS?
 
 ## Ответ (RU)
+
 Ktor — рекомендуемый HTTP client для Kotlin Multiplatform, предоставляющий единый API с platform-optimized engines (OkHttp для Android, NSURLSession для iOS) и comprehensive plugin support.
 
 #### Ключевые возможности
 
 **Platform Engines**:
-- Android: OkHttp (производительный, feature-rich)
-- iOS: NSURLSession (native, iOS-оптимизирован)
-- Автоматический выбор оптимального engine
+
+-   Android: OkHttp (производительный, feature-rich)
+-   iOS: NSURLSession (native, iOS-оптимизирован)
+-   Автоматический выбор оптимального engine
 
 **Plugins**:
-- ContentNegotiation: JSON serialization/deserialization
-- Auth: Bearer tokens, OAuth, custom auth
-- Logging: Детальное логирование запросов
-- HttpTimeout: Таймауты запросов
-- Retry: Автоматические повторы
+
+-   ContentNegotiation: JSON serialization/deserialization
+-   Auth: Bearer tokens, OAuth, custom auth
+-   Logging: Детальное логирование запросов
+-   HttpTimeout: Таймауты запросов
+-   Retry: Автоматические повторы
 
 #### Аутентификация
 
 **Bearer Token**:
-- Auto-refresh на 401
-- Secure token storage
-- Concurrent request handling
+
+-   Auto-refresh на 401
+-   Secure token storage
+-   Concurrent request handling
 
 **OAuth 2.0**:
-- Authorization code flow
-- Client credentials
-- Refresh token rotation
+
+-   Authorization code flow
+-   Client credentials
+-   Refresh token rotation
 
 #### Retry Logic
 
 **Стратегии**:
-- Exponential backoff (1s, 2s, 4s, 8s)
-- Linear backoff
-- Custom delay functions
+
+-   Exponential backoff (1s, 2s, 4s, 8s)
+-   Linear backoff
+-   Custom delay functions
 
 **Retryable условия**:
-- Timeout errors
-- Network errors
-- 5xx server errors
-- 429 Too Many Requests (с Retry-After)
+
+-   Timeout errors
+-   Network errors
+-   5xx server errors
+-   429 Too Many Requests (с Retry-After)
 
 #### Error Handling
 
 **Type-safe errors**:
-- HttpError (4xx, 5xx)
-- TimeoutError
-- NoInternetError
-- SerializationError
-- UnknownError
+
+-   HttpError (4xx, 5xx)
+-   TimeoutError
+-   NoInternetError
+-   SerializationError
+-   UnknownError
 
 **Network monitoring**:
-- Real-time connectivity status
-- Platform-specific APIs
-- Reactive Flow<Boolean>
+
+-   Real-time connectivity status
+-   Platform-specific APIs
+-   Reactive Flow<Boolean>
 
 #### Advanced Features
 
 **Interceptors**:
-- Request/response logging
-- Analytics tracking
-- Custom headers injection
-- Response caching
+
+-   Request/response logging
+-   Analytics tracking
+-   Custom headers injection
+-   Response caching
 
 **File Operations**:
-- Upload с progress
-- Download с progress
-- Multipart form data
+
+-   Upload с progress
+-   Download с progress
+-   Multipart form data
 
 **GraphQL**:
-- Query/mutation support
-- Error handling
-- Variable substitution
+
+-   Query/mutation support
+-   Error handling
+-   Variable substitution
 
 ### Резюме
 
 Ktor обеспечивает полнофункциональный networking:
-- **Unified API**: Один код для Android и iOS
-- **Platform-optimized**: Нативные engines
-- **Type-safe**: Compile-time проверки
-- **Feature-rich**: Auth, retry, logging, caching
-- **Testable**: Mock engine для unit tests
+
+-   **Unified API**: Один код для Android и iOS
+-   **Platform-optimized**: Нативные engines
+-   **Type-safe**: Compile-time проверки
+-   **Feature-rich**: Auth, retry, logging, caching
+-   **Testable**: Mock engine для unit tests
 
 Ключевые моменты: правильная обработка ошибок, retry стратегии, authentication management, platform-specific оптимизации.
 
 ---
 
+## Follow-ups
+
+-   How do you handle platform-specific networking differences between Android and iOS in KMM?
+-   What are the performance implications of using Ktor vs platform-specific networking libraries?
+-   How can you implement offline-first networking with Ktor in a multiplatform app?
+
+## References
+
+-   `https://ktor.io/` — Ktor documentation
+-   `https://kotlinlang.org/docs/multiplatform.html` — Kotlin Multiplatform
+-   `https://developer.android.com/kotlin/coroutines` — Coroutines guide
+
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-graphql-vs-rest--networking--easy]] - Networking
+
+-   [[q-graphql-vs-rest--networking--easy]] - Networking
 
 ### Related (Medium)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
-- [[q-network-error-handling-strategies--networking--medium]] - Networking
-- [[q-okhttp-interceptors-advanced--networking--medium]] - Networking
-- [[q-graphql-apollo-android--networking--medium]] - Networking
+
+-   [[q-http-protocols-comparison--android--medium]] - Networking
+-   [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+-   [[q-network-error-handling-strategies--networking--medium]] - Networking
+-   [[q-okhttp-interceptors-advanced--networking--medium]] - Networking
+-   [[q-graphql-apollo-android--networking--medium]] - Networking
 
 ### Advanced (Harder)
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-network-request-deduplication--networking--hard]] - Networking
+
+-   [[q-data-sync-unstable-network--android--hard]] - Networking
+-   [[q-network-request-deduplication--networking--hard]] - Networking

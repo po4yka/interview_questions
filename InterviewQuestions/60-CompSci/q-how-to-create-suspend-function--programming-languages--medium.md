@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237183"
+title: "How To Create Suspend Function / Как создать suspend функцию"
+topic: computer-science
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # How to Create a Suspend Function?
 
 # Question (EN)

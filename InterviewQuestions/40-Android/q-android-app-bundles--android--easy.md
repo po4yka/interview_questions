@@ -1,25 +1,23 @@
 ---
 id: 20251005-143000
-title: "Android App Bundles / Android App Bundle (AAB)"
+title: "Android App Bundles"
 topic: android
-original_language: en
-language_tags: [en, ru]
-moc: moc-android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-05
+tags: - android
   - app-bundle
   - play-store
   - distribution
   - difficulty/easy
-subtopics:
-  - app-bundle
-  - play-console
-status: draft
-created: 2025-10-05
+language_tags: [en, ru]
+moc: moc-android
 modified: 2025-10-05
+original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
+subtopics:   - app-bundle
+  - play-console
 ---
-
 # Android App Bundles / Android App Bundle (AAB)
 # Question (EN)
 What do you know about App Bundles?

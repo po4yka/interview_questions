@@ -1,15 +1,17 @@
 ---
-tags:
-  - automatic-memory
+id: "20251015082237156"
+title: "What Happens To Unneeded Objects / Что происходит с ненужными объектами"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - automatic-memory
   - garbage-collection
   - jvm
   - kotlin
   - memory-management
   - programming-languages
-difficulty: easy
-status: draft
 ---
-
 # Что происходит с объектами, которые больше не нужны?
 
 # Question (EN)

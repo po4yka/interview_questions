@@ -1,18 +1,11 @@
 ---
-topic: kotlin
 id: "20251012-180001"
 title: "Fan-in and fan-out patterns with Channels / Fan-in и fan-out паттерны с каналами"
-subtopics:
-  - coroutines
-  - channels
-  - patterns
-  - concurrency
-  - parallelism
+topic: kotlin
 difficulty: hard
-moc: moc-kotlin
 status: draft
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - channels
   - patterns
@@ -22,8 +15,13 @@ tags:
   - parallelism
   - work-distribution
   - aggregation
+moc: moc-kotlin
+subtopics:   - coroutines
+  - channels
+  - patterns
+  - concurrency
+  - parallelism
 ---
-
 # Fan-in and fan-out patterns with Channels
 
 ## English
@@ -31,7 +29,17 @@ tags:
 ### Question
 What are fan-out and fan-in patterns in Kotlin Coroutines with Channels? How do you implement work distribution (fan-out) and result aggregation (fan-in)? Provide production-ready examples of parallel image processing, distributed work queues, and log aggregation.
 
-### Answer
+# Question (EN)
+> What are fan-out and fan-in patterns in Kotlin Coroutines with Channels? How do you implement work distribution (fan-out) and result aggregation (fan-in)? Provide production-ready examples of parallel image processing, distributed work queues, and log aggregation.
+
+# Вопрос (RU)
+> What are fan-out and fan-in patterns in Kotlin Coroutines with Channels? How do you implement work distribution (fan-out) and result aggregation (fan-in)? Provide production-ready examples of parallel image processing, distributed work queues, and log aggregation.
+
+---
+
+## Answer (EN)
+
+
 
 **Fan-out** and **Fan-in** are fundamental concurrency patterns for distributing work across multiple workers and aggregating results.
 
@@ -1308,12 +1316,11 @@ val numWorkers = Runtime.getRuntime().availableProcessors()
 
 ---
 
-## Русский
 
-### Вопрос
+## Ответ (RU)
+
+*(Краткое содержание основных пунктов из английской версии)*
 Что такое паттерны fan-out и fan-in в Kotlin Coroutines с каналами? Как реализовать распределение работы (fan-out) и агрегацию результатов (fan-in)? Приведите production-ready примеры параллельной обработки изображений, распределенных очередей задач и агрегации логов.
-
-### Ответ
 
 **Fan-out** и **Fan-in** — это фундаментальные паттерны конкурентности для распределения работы между несколькими обработчиками и агрегации результатов.
 

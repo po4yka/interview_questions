@@ -1,16 +1,18 @@
 ---
-tags:
-  - garbage-collection
+id: "20251015082237086"
+title: "Detect Unused Object / Обнаружение неиспользуемых объектов"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - garbage-collection
   - kotlin
   - leakcanary
   - memory-management
   - programming-languages
   - weak-reference
   - weak-references
-difficulty: easy
-status: draft
 ---
-
 # Как по объекту понять что он не используется?
 
 # Question (EN)

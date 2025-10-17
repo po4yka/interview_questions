@@ -1,22 +1,31 @@
 ---
+id: "20251015082237282"
+title: "Runtime Permissions Best Practices / Лучшие практики runtime разрешений"
 topic: permissions
-tags:
-  - permissions
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - permissions
   - runtime
   - privacy
   - ux
   - best-practices
   - activity-result
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
 
-# Runtime Permission Best Practices / Best Practices разрешений
+# Question (EN)
 
-**English**: Implement runtime permission handling with proper UX flow. Show rationale before requesting, handle permanent denial gracefully, and use ActivityResultContracts API.
+> Implement runtime permission handling with proper UX flow. Show rationale before requesting, handle permanent denial gracefully, and use ActivityResultContracts API.
+
+# Вопрос (RU)
+
+> Реализуйте обработку runtime-разрешений с правильным UX: показывайте обоснование запроса, корректно обрабатывайте постоянный отказ и используйте API ActivityResultContracts.
+
+---
 
 ## Answer (EN)
+
 **Runtime permissions** were introduced in Android 6.0 (API 23) to give users more control over sensitive data and operations. Proper permission handling requires a well-designed UX flow that respects user decisions while explaining why permissions are needed.
 
 ### Key Concepts
@@ -726,76 +735,85 @@ class PermissionFlowTest {
 ### Best Practices
 
 1. **Request Permissions at Point of Use**
-   ```kotlin
-   // BAD: Request all permissions on app launch
-   // GOOD: Request when user tries to use feature
-   button.setOnClickListener {
-       permissionManager.requestPermission(CAMERA) { granted ->
-           if (granted) openCamera()
-       }
-   }
-   ```
+
+    ```kotlin
+    // BAD: Request all permissions on app launch
+    // GOOD: Request when user tries to use feature
+    button.setOnClickListener {
+        permissionManager.requestPermission(CAMERA) { granted ->
+            if (granted) openCamera()
+        }
+    }
+    ```
 
 2. **Always Show Rationale**
-   ```kotlin
-   permissionManager.requestPermission(
-       permission = CAMERA,
-       rationale = "Camera access is needed to scan QR codes"
-   ) { granted -> }
-   ```
+
+    ```kotlin
+    permissionManager.requestPermission(
+        permission = CAMERA,
+        rationale = "Camera access is needed to scan QR codes"
+    ) { granted -> }
+    ```
 
 3. **Handle Permanent Denial Gracefully**
-   ```kotlin
-   when (state) {
-       PermanentlyDenied -> showSettingsDialog()
-       Denied -> showRationale()
-       Granted -> proceed()
-   }
-   ```
+
+    ```kotlin
+    when (state) {
+        PermanentlyDenied -> showSettingsDialog()
+        Denied -> showRationale()
+        Granted -> proceed()
+    }
+    ```
 
 4. **Use Minimal Permissions**
-   ```kotlin
-   // Request COARSE_LOCATION if fine is not needed
-   if (needsApproximateLocation) {
-       requestPermission(ACCESS_COARSE_LOCATION)
-   }
-   ```
+
+    ```kotlin
+    // Request COARSE_LOCATION if fine is not needed
+    if (needsApproximateLocation) {
+        requestPermission(ACCESS_COARSE_LOCATION)
+    }
+    ```
 
 5. **Request Incrementally**
-   ```kotlin
-   // Request foreground first, then background
-   requestForegroundLocation { granted ->
-       if (granted && needsBackground) {
-           requestBackgroundLocation()
-       }
-   }
-   ```
+
+    ```kotlin
+    // Request foreground first, then background
+    requestForegroundLocation { granted ->
+        if (granted && needsBackground) {
+            requestBackgroundLocation()
+        }
+    }
+    ```
 
 6. **Explain Before Requesting**
-   ```kotlin
-   // Show UI explaining why, then request
-   showExplanationUI {
-       onContinue = { requestPermission() }
-   }
-   ```
+
+    ```kotlin
+    // Show UI explaining why, then request
+    showExplanationUI {
+        onContinue = { requestPermission() }
+    }
+    ```
 
 7. **Don't Block App Usage**
-   ```kotlin
-   // Allow app usage with degraded functionality
-   if (!hasLocationPermission) {
-       showManualLocationInput()
-   }
-   ```
+
+    ```kotlin
+    // Allow app usage with degraded functionality
+    if (!hasLocationPermission) {
+        showManualLocationInput()
+    }
+    ```
 
 8. **Test All Permission States**
-   ```kotlin
-   // Test: not requested, granted, denied, permanently denied
-   ```
+
+    ```kotlin
+    // Test: not requested, granted, denied, permanently denied
+    ```
 
 9. **Use System UI When Possible**
-   ```kotlin
-   // Photo picker instead of READ_MEDIA_IMAGES on Android 13+
-   ```
+
+    ```kotlin
+    // Photo picker instead of READ_MEDIA_IMAGES on Android 13+
+    ```
 
 10. **Track Permission Analytics**
     ```kotlin
@@ -806,72 +824,78 @@ class PermissionFlowTest {
 ### Common Pitfalls
 
 1. **Requesting Too Early**
-   ```kotlin
-   // BAD: On app launch
-   override fun onCreate() {
-       requestAllPermissions()
-   }
 
-   // GOOD: When feature is used
-   fun openCamera() {
-       requestCameraPermission()
-   }
-   ```
+    ```kotlin
+    // BAD: On app launch
+    override fun onCreate() {
+        requestAllPermissions()
+    }
+
+    // GOOD: When feature is used
+    fun openCamera() {
+        requestCameraPermission()
+    }
+    ```
 
 2. **Not Handling Permanent Denial**
-   ```kotlin
-   // BAD: Keep asking
-   // GOOD: Direct to settings
-   if (isPermanentlyDenied) {
-       openAppSettings()
-   }
-   ```
+
+    ```kotlin
+    // BAD: Keep asking
+    // GOOD: Direct to settings
+    if (isPermanentlyDenied) {
+        openAppSettings()
+    }
+    ```
 
 3. **Poor Rationale Messaging**
-   ```kotlin
-   // BAD: "App needs camera"
-   // GOOD: "Camera is needed to scan barcodes for product lookup"
-   ```
+
+    ```kotlin
+    // BAD: "App needs camera"
+    // GOOD: "Camera is needed to scan barcodes for product lookup"
+    ```
 
 4. **Forgetting Android Version Checks**
-   ```kotlin
-   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-       requestRuntimePermission()
-   }
-   ```
+    ```kotlin
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        requestRuntimePermission()
+    }
+    ```
 
 ### Summary
 
 Runtime permission best practices:
 
-- **Request at point of use**: Not on app launch
-- **Show clear rationale**: Explain why permission is needed
-- **Handle denial gracefully**: Provide alternative flows
-- **Permanent denial**: Direct users to settings
-- **Use ActivityResultContracts**: Modern, lifecycle-aware API
-- **Test all states**: Not requested, granted, denied, permanent
-- **Respect user choice**: Don't nag users
-- **Request minimal permissions**: Only what's truly needed
+-   **Request at point of use**: Not on app launch
+-   **Show clear rationale**: Explain why permission is needed
+-   **Handle denial gracefully**: Provide alternative flows
+-   **Permanent denial**: Direct users to settings
+-   **Use ActivityResultContracts**: Modern, lifecycle-aware API
+-   **Test all states**: Not requested, granted, denied, permanent
+-   **Respect user choice**: Don't nag users
+-   **Request minimal permissions**: Only what's truly needed
 
 **UX Guidelines**:
-- Explain before requesting
-- Make denial non-blocking when possible
-- One permission at a time for clarity
-- Use system UI when available (photo picker)
-- Analytics to understand permission conversion rates
+
+-   Explain before requesting
+-   Make denial non-blocking when possible
+-   One permission at a time for clarity
+-   Use system UI when available (photo picker)
+-   Analytics to understand permission conversion rates
 
 ---
 
 ## Ответ (RU)
+
 **Runtime разрешения** были введены в Android 6.0 (API 23) для предоставления пользователям большего контроля над конфиденциальными данными. Правильная обработка разрешений требует продуманного UX-потока.
 
 ### Основные концепции
 
 **Состояния разрешений:**
-- Не запрошено
-- Предоставлено
-- Отклонено (можно запросить снова)
-- Навсегда отклонено (пользователь отметил "Больше не спрашивать")
+
+-   Не запрошено
+-   Предоставлено
+-   Отклонено (можно запросить снова)
+-   Навсегда отклонено (пользователь отметил "Больше не спрашивать")
 
 ### Полная реализация
 
@@ -996,27 +1020,29 @@ fun CameraPermissionScreen() {
 
 Runtime разрешения требуют:
 
-- **Запрос в момент использования**: Не при запуске приложения
-- **Четкое обоснование**: Объяснение необходимости
-- **Graceful обработка отказа**: Альтернативные потоки
-- **ActivityResultContracts**: Современный API
-- **Тестирование всех состояний**
-- **Уважение выбора пользователя**
+-   **Запрос в момент использования**: Не при запуске приложения
+-   **Четкое обоснование**: Объяснение необходимости
+-   **Graceful обработка отказа**: Альтернативные потоки
+-   **ActivityResultContracts**: Современный API
+-   **Тестирование всех состояний**
+-   **Уважение выбора пользователя**
 
 **UX рекомендации**:
-- Объяснение перед запросом
-- Не блокирование при отказе
-- Одно разрешение за раз
-- Использование системного UI
-- Аналитика конверсии разрешений
+
+-   Объяснение перед запросом
+-   Не блокирование при отказе
+-   Одно разрешение за раз
+-   Использование системного UI
+-   Аналитика конверсии разрешений
 
 ---
 
 ## Related Questions
 
 ### Related (Medium)
-- [[q-android-security-practices-checklist--android--medium]] - Security
-- [[q-encrypted-file-storage--security--medium]] - Security
-- [[q-database-encryption-android--android--medium]] - Security
-- [[q-app-security-best-practices--security--medium]] - Security
-- [[q-android14-permissions--permissions--medium]] - Security
+
+-   [[q-android-security-practices-checklist--android--medium]] - Security
+-   [[q-encrypted-file-storage--security--medium]] - Security
+-   [[q-database-encryption-android--android--medium]] - Security
+-   [[q-app-security-best-practices--security--medium]] - Security
+-   [[q-android14-permissions--permissions--medium]] - Security

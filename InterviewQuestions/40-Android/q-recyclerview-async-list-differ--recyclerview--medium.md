@@ -1,14 +1,16 @@
 ---
-tags:
-  - recyclerview
+id: "20251015082237366"
+title: "Recyclerview Async List Differ"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - recyclerview
   - async
   - diffutil
   - performance
   - threading
-difficulty: medium
-status: draft
 ---
-
 # RecyclerView Async List Diffing
 
 # Question (EN)
@@ -757,29 +759,133 @@ searchView.onQueryTextChange { query ->
 
 ```kotlin
 //  ПРОБЛЕМА - Блокирует UI поток
-fun updateData(newItems: List<Item>) {
-    val diffResult = DiffUtil.calculateDiff(
-        ItemDiffCallback(items, newItems)
-    ) // БЛОКИРУЕТ UI поток для больших списков!
+class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
+    private var items = emptyList<Item>()
 
-    items = newItems
-    diffResult.dispatchUpdatesTo(this)
+    fun updateData(newItems: List<Item>) {
+        val diffResult = DiffUtil.calculateDiff(
+            ItemDiffCallback(items, newItems)
+        ) // БЛОКИРУЕТ UI поток для больших списков!
+
+        items = newItems
+        diffResult.dispatchUpdatesTo(this)
+    }
 }
 ```
 
+**Для списка из 10,000 элементов:**
+- Вычисление DiffUtil: ~200мс
+- UI зависает на 200мс
+- Дёрганый, плохой UX
+
+---
+
 ### Решение AsyncListDiffer
 
+**Вычисляет diff в фоновом потоке:**
+
 ```kotlin
-class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
+class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 
     //  AsyncListDiffer обрабатывает потоки автоматически
     private val differ = AsyncListDiffer(this, DiffCallback())
 
+    // Доступ к текущему списку
+    val currentList: List<Item>
+        get() = differ.currentList
+
+    // Отправить новый список (асинхронное вычисление)
     fun submitList(newList: List<Item>) {
         differ.submitList(newList) // Асинхронно, не блокирует!
     }
 
-    override fun getItemCount() = differ.currentList.size
+    override fun getItemCount() = currentList.size
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = currentList[position]
+        holder.bind(item)
+    }
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val textView: TextView = view.findViewById(R.id.text)
+
+        fun bind(item: Item) {
+            textView.text = item.name
+        }
+    }
+
+    class DiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
+        }
+    }
+}
+```
+
+---
+
+### Как AsyncListDiffer работает внутри
+
+**Поток выполнения:**
+
+```
+Главный поток              Фоновый поток
+-----------                -----------------
+submitList(newList)
+    ↓
+Сохранить newList
+    ↓                    →  Вычислить diff
+UI остается отзывчивым      (DiffUtil.calculateDiff)
+    ↓                    ←  Вернуть DiffResult
+Получить результат
+    ↓
+dispatchUpdatesTo(adapter)
+    ↓
+Обновить UI (плавно!)
+```
+
+**Ключевые моменты:**
+- Вычисление diff на фоновом executor
+- UI поток остается отзывчивым
+- Обновления отправляются на главном потоке
+- Потокобезопасный доступ к списку
+
+---
+
+### AsyncListDiffer vs ListAdapter
+
+| Функция | AsyncListDiffer | ListAdapter |
+|---------|----------------|-------------|
+| **Базовый класс** | Любой адаптер | Должен расширять ListAdapter |
+| **Гибкость** | Более гибкий | Проще API |
+| **Шаблонный код** | Немного больше | Меньше |
+| **Случай использования** | Пользовательские адаптеры | Стандартные адаптеры |
+| **Потоки** | Ручная настройка | Автоматически |
+
+**ListAdapter (построен на AsyncListDiffer):**
+
+```kotlin
+//  ListAdapter проще
+class SimpleAdapter : ListAdapter<Item, SimpleAdapter.ViewHolder>(DiffCallback()) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        // ...
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position) // ListAdapter предоставляет это
+        holder.bind(item)
+    }
 
     class DiffCallback : DiffUtil.ItemCallback<Item>() {
         override fun areItemsTheSame(oldItem: Item, newItem: Item) =
@@ -789,40 +895,32 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
             oldItem == newItem
     }
 }
-```
-
-### AsyncListDiffer vs ListAdapter
-
-| Функция | AsyncListDiffer | ListAdapter |
-|---------|----------------|-------------|
-| **Базовый класс** | Любой адаптер | Должен расширять ListAdapter |
-| **Гибкость** | Более гибкий | Проще API |
-| **Boilerplate** | Чуть больше | Меньше |
-| **Использование** | Пользовательские адаптеры | Стандартные адаптеры |
-
-**ListAdapter (построен на AsyncListDiffer):**
-
-```kotlin
-//  ListAdapter проще
-class SimpleAdapter : ListAdapter<Item, ViewHolder>(DiffCallback()) {
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item)
-    }
-}
 
 // Использование
-adapter.submitList(items) // Тот же API!
+val adapter = SimpleAdapter()
+adapter.submitList(items) // Тот же API, что и AsyncListDiffer!
 ```
 
-### Безопасность потоков
+**Когда использовать AsyncListDiffer:**
+- Нужен пользовательский базовый класс адаптера
+- Несколько типов списков в одном адаптере
+- Продвинутая кастомизация
+
+**Когда использовать ListAdapter:**
+- Стандартный случай использования (95% времени)
+- Проще, чище код
+- Рекомендуется Google
+
+---
+
+### Безопасность потоков с submitList()
 
 **submitList() потокобезопасен:**
 
 ```kotlin
 //  Безопасно вызывать из любого потока
 viewModel.items.observe(lifecycleOwner) { items ->
-    adapter.submitList(items)
+    adapter.submitList(items) // Можно вызывать из фонового потока
 }
 ```
 
@@ -832,44 +930,281 @@ viewModel.items.observe(lifecycleOwner) { items ->
 //  ПЛОХО - Изменяемый список
 val items = mutableListOf<Item>()
 adapter.submitList(items)
-items.add(Item()) // ОПАСНО!
+
+// Позже...
+items.add(Item()) // ОПАСНО! Список вычисляется в фоне
+adapter.submitList(items) // Может упасть или дать неправильные результаты
 
 //  ХОРОШО - Неизменяемый список
 val items = listOf<Item>(...)
 adapter.submitList(items)
+
+// Позже...
 val newItems = items + Item() // Создать новый список
 adapter.submitList(newItems) // Безопасно!
 ```
 
-### Лучшие практики
+---
 
-1. Используйте неизменяемые списки
-2. Предпочитайте ListAdapter
-3. Используйте commit callback разумно
-4. Debounce частые обновления
-5. Тестируйте с большими списками
+### Безопасная обработка мутаций списка
 
-### Когда использовать
+**Проблема: Изменение списка во время diff:**
 
-- Списки с 100+ элементами
-- Частые обновления
-- Нужен плавный UX
-- Требуется фоновая обработка
+```kotlin
+//  НЕБЕЗОПАСНО
+class UnsafeViewModel : ViewModel() {
+    private val _items = MutableLiveData<MutableList<Item>>()
+    val items: LiveData<MutableList<Item>> = _items
+
+    fun addItem(item: Item) {
+        _items.value?.add(item) // Мутирует список!
+        _items.value = _items.value // Запускает observer
+    }
+}
+```
+
+**Решение 1: Используйте неизменяемые списки**
+
+```kotlin
+//  БЕЗОПАСНО - Неизменяемый
+class SafeViewModel : ViewModel() {
+    private val _items = MutableLiveData<List<Item>>()
+    val items: LiveData<List<Item>> = _items
+
+    fun addItem(item: Item) {
+        val currentList = _items.value ?: emptyList()
+        _items.value = currentList + item // Создает новый список
+    }
+}
+```
+
+**Решение 2: Делайте защитную копию**
+
+```kotlin
+//  БЕЗОПАСНО - Защитная копия
+adapter.submitList(items.toList()) // Создает копию
+```
+
+**Решение 3: Используйте StateFlow с неизменяемыми списками**
+
+```kotlin
+class FlowViewModel : ViewModel() {
+    private val _items = MutableStateFlow<List<Item>>(emptyList())
+    val items: StateFlow<List<Item>> = _items.asStateFlow()
+
+    fun addItem(item: Item) {
+        _items.value = _items.value + item // Создает новый список
+    }
+}
+
+// Во Fragment/Activity
+lifecycleScope.launch {
+    viewModel.items.collect { items ->
+        adapter.submitList(items)
+    }
+}
+```
 
 ---
 
-## Related Questions
+### Callback завершения
 
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+**Получить уведомление, когда diff завершен:**
 
-### Related (Medium)
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
-- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
-- [[q-recyclerview-diffutil-advanced--recyclerview--medium]] - View, Ui
+```kotlin
+adapter.submitList(newItems) { // Callback выполняется когда diff завершен
+    // Прокрутить наверх после обновления
+    recyclerView.scrollToPosition(0)
+}
+
+// Или с большим контролем
+adapter.submitList(newItems, object : Runnable {
+    override fun run() {
+        // Обновление завершено
+        progressBar.isVisible = false
+        emptyView.isVisible = newItems.isEmpty()
+    }
+})
+```
+
+---
+
+### Пользовательский Executor
+
+**По умолчанию использует Architecture Components executor. Можно настроить:**
+
+```kotlin
+// Пользовательский executor (например, для тестирования)
+val customExecutor = Executors.newSingleThreadExecutor()
+
+val differ = AsyncListDiffer(
+    adapter,
+    AsyncDifferConfig.Builder(DiffCallback())
+        .setBackgroundThreadExecutor(customExecutor)
+        .build()
+)
+
+// Для тестирования с мгновенным выполнением
+val testExecutor = Executor { it.run() } // Выполняется синхронно
+
+val differ = AsyncListDiffer(
+    adapter,
+    AsyncDifferConfig.Builder(DiffCallback())
+        .setBackgroundThreadExecutor(testExecutor)
+        .build()
+)
+```
+
+---
+
+### Оптимизация производительности
+
+**1. Debounce быстрых обновлений:**
+
+```kotlin
+class DebouncedAdapter : RecyclerView.Adapter<ViewHolder>() {
+
+    private val differ = AsyncListDiffer(this, DiffCallback())
+    private val handler = Handler(Looper.getMainLooper())
+    private var pendingUpdate: List<Item>? = null
+
+    private val submitRunnable = Runnable {
+        pendingUpdate?.let {
+            differ.submitList(it)
+            pendingUpdate = null
+        }
+    }
+
+    fun submitListDebounced(items: List<Item>, delayMs: Long = 300) {
+        pendingUpdate = items
+        handler.removeCallbacks(submitRunnable)
+        handler.postDelayed(submitRunnable, delayMs)
+    }
+
+    fun submitListImmediate(items: List<Item>) {
+        handler.removeCallbacks(submitRunnable)
+        pendingUpdate = null
+        differ.submitList(items)
+    }
+
+    // ... остальная часть адаптера
+}
+```
+
+**2. Используйте эффективный equals():**
+
+```kotlin
+data class Item(
+    val id: Long,
+    val name: String,
+    val description: String,
+    val metadata: Map<String, Any> // Дорого сравнивать
+) {
+    // Оптимизировать equals
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Item) return false
+
+        // Сначала проверить дешевые поля
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (description != other.description) return false
+
+        // Проверить дорогое поле только если все остальное совпадает
+        return metadata == other.metadata
+    }
+}
+```
+
+**3. Рассмотрите пагинацию для очень больших списков:**
+
+```kotlin
+// Для списков > 10,000 элементов используйте Paging 3 вместо этого
+// AsyncListDiffer все еще работает, но пагинация более эффективна
+```
+
+---
+
+### Лучшие практики
+
+**1. Используйте неизменяемые списки**
+```kotlin
+//  ДЕЛАЙТЕ
+val newList = currentList + newItem
+adapter.submitList(newList)
+
+//  НЕ ДЕЛАЙТЕ
+val list = mutableListOf<Item>()
+adapter.submitList(list)
+list.add(item) // Опасно!
+```
+
+**2. Предпочитайте ListAdapter**
+```kotlin
+//  ДЕЛАЙТЕ - Проще
+class MyAdapter : ListAdapter<Item, ViewHolder>(DiffCallback())
+
+// Используйте AsyncListDiffer только для специальных нужд
+```
+
+**3. Используйте commit callback разумно**
+```kotlin
+//  ДЕЛАЙТЕ - Прокрутка после обновления
+adapter.submitList(items) {
+    recyclerView.scrollToPosition(0)
+}
+
+//  НЕ ДЕЛАЙТЕ - Тяжелая работа в callback
+adapter.submitList(items) {
+    // Тяжелая операция - блокирует UI!
+}
+```
+
+**4. Debounce частых обновлений**
+```kotlin
+//  ДЕЛАЙТЕ - Debounce пользовательского ввода
+searchView.onQueryTextChange { query ->
+    viewModel.search(query) // Debounced в ViewModel
+}
+```
+
+**5. Тестируйте с большими списками**
+```kotlin
+// Тестируйте с 1000+ элементами, чтобы убедиться в отсутствии дёрганий
+```
+
+---
+
+### Резюме
+
+**Преимущества AsyncListDiffer:**
+- Вычисление diff в фоновом потоке
+- Неблокирующие обновления UI
+- Автоматическая потокобезопасность
+- Плавный UX для больших списков
+
+**Как это работает:**
+- Вычисляет diff на фоновом executor
+- Отправляет обновления на главном потоке
+- Потокобезопасный submitList()
+
+**AsyncListDiffer vs ListAdapter:**
+- ListAdapter построен на AsyncListDiffer
+- ListAdapter проще (рекомендуется)
+- AsyncListDiffer для пользовательских адаптеров
+
+**Лучшие практики:**
+- Используйте неизменяемые списки
+- Предпочитайте ListAdapter когда возможно
+- Debounce частых обновлений
+- Используйте commit callback для действий после обновления
+- Тестируйте с большими наборами данных
+
+**Когда использовать:**
+- Списки с 100+ элементами
+- Частые обновления
+- Нужен плавный UX
+- Желательна фоновая обработка
 
 ---
 

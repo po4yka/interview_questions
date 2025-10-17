@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237145"
+title: "Coroutinescope Vs Supervisorscope / Coroutinescope против Supervisorscope"
+topic: computer-science
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # CoroutineScope vs SupervisorScope
 
 # Question (EN)

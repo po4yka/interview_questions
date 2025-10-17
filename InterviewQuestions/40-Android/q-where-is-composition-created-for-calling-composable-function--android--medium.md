@@ -1,15 +1,16 @@
 ---
+id: "20251015082238624"
+title: "Where Is Composition Created For Calling Composable Function / Где создается Composition для вызова Composable функции"
 topic: android
-tags:
-  - Jetpack Compose
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Jetpack Compose
   - setContent
   - android
   - ui
   - jetpack-compose
-difficulty: medium
-status: draft
 ---
-
 # Where is composition created for calling composable function?
 
 # Вопрос (RU)

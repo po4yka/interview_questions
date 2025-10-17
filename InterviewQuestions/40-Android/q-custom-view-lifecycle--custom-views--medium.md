@@ -1,13 +1,15 @@
 ---
-tags:
-  - custom-views
+id: "20251015082237451"
+title: "Custom View Lifecycle / Жизненный цикл кастомных View"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - custom-views
   - android-framework
   - lifecycle
   - performance
-difficulty: medium
-status: draft
 ---
-
 # Custom View Lifecycle
 
 # Question (EN)
@@ -837,23 +839,6 @@ class CustomProgressBar @JvmOverloads constructor(
 |-------|-------------------|-------------------|-----------|
 | `invalidate()` | Только визуальное изменение | Быстро | onDraw |
 | `requestLayout()` | Изменение размера/позиции | Медленнее | onMeasure → onLayout → onDraw |
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-viewmodel-pattern--android--easy]] - Lifecycle, View
-
-### Related (Medium)
-- [[q-testing-viewmodels-turbine--testing--medium]] - Lifecycle, View
-- [[q-what-is-viewmodel--android--medium]] - Lifecycle, View
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - Lifecycle, View
-- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - Lifecycle, View
-- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - Lifecycle, View
-
-### Advanced (Harder)
-- [[q-compose-custom-layout--jetpack-compose--hard]] - View
 
 ---
 

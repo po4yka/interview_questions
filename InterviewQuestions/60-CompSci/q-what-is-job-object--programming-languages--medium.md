@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237135"
+title: "What Is Job Object / Что такое объект Job"
+topic: computer-science
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # What is the Job Object For?
 
 # Question (EN)

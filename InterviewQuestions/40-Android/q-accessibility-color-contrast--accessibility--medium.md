@@ -1,18 +1,18 @@
 ---
-tags:
-  - android
+id: "20251015082237421"
+title: "Accessibility Color Contrast / Контрастность цветов для доступности"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-11
+tags: - android
   - accessibility
   - color-contrast
   - wcag
   - visual-accessibility
-difficulty: medium
-status: draft
-related:
-  - q-accessibility-compose--accessibility--medium
+related:   - q-accessibility-compose--accessibility--medium
   - q-material3-dynamic-color-theming--material-design--medium
-created: 2025-10-11
 ---
-
 # Question (EN)
 How do you ensure sufficient color contrast for accessibility? What are WCAG contrast requirements, and how do you test and fix contrast issues in Android apps?
 

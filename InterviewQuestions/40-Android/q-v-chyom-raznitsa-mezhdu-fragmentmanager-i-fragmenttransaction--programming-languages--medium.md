@@ -1,11 +1,13 @@
 ---
-tags:
-  - programming-languages
-  - android
+id: "20251015082238613"
+title: "V Chyom Raznitsa Mezhdu Fragmentmanager I Fragmenttransaction / В чем разница между FragmentManager и FragmentTransaction"
+topic: android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
+  - android
 ---
-
 # В чём разница между FragmentManager и FragmentTransaction
 
 ## Answer (EN)

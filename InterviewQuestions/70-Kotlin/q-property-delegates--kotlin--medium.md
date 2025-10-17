@@ -1,13 +1,14 @@
 ---
+id: "20251015082236013"
+title: "Property Delegates / Делегаты свойств"
 topic: kotlin
-tags:
-  - kotlin
-  - delegates
-  - properties
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - kotlin
+  - delegates
+  - properties
 ---
-
 # В чем особенность делегатов свойств
 
 **English**: What is special about property delegates in Kotlin?

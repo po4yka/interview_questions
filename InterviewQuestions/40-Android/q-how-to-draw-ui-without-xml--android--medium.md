@@ -1,11 +1,12 @@
 ---
+id: "20251015082237404"
+title: "How To Draw Ui Without Xml / Как рисовать UI без XML"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # How to draw UI without XML?
 
 ## EN (expanded)

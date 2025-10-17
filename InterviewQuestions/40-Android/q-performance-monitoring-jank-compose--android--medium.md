@@ -1,16 +1,17 @@
 ---
+id: "20251015082237369"
+title: "Performance Monitoring Jank Compose / Мониторинг производительности и джанка в Compose"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - jetpack-compose
   - performance
   - jank
   - profiling
   - optimization
-difficulty: medium
-status: draft
 ---
-
 # Performance Monitoring and Jank Detection in Compose
 
 **English**: How do you detect and fix performance issues (jank) in Jetpack Compose apps?

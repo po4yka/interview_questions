@@ -1,16 +1,17 @@
 ---
+id: "20251015082237436"
+title: "Android Modularization / Модуляризация Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - modularization
   - architecture
   - multi-module
   - gradle
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Android Modularization / Модуляризация Android
 
 # Question (EN)

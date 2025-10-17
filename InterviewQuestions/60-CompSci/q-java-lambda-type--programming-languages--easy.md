@@ -1,20 +1,21 @@
 ---
+id: "20251015082237162"
+title: "Java Lambda Type / Тип лямбд Java"
 topic: programming-languages
-subtopics: ["java", "jvm", "language-features"]
-tags:
-  - functional-interface
+difficulty: easy
+status: draft
+created: 2025-10-13
+tags: - functional-interface
   - functional-programming
   - java
   - lambda
   - programming-languages
-difficulty: easy
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-programming-languages
 related_questions: []
+subtopics: ["java", "jvm", "language-features"]
 ---
-
 # Какой тип у лямбды в Java?
 
 # Question (EN)

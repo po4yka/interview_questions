@@ -1,11 +1,12 @@
 ---
+id: "20251015082237595"
+title: "Viewmodel Vs Onsavedinstancestate / Viewmodel против Onsavedinstancestate"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # ViewModel vs OnSavedInstanceState
 
 ## Answer (EN)

@@ -1,11 +1,13 @@
 ---
-tags:
-  - programming-languages
-  - android
+id: "20251015082237564"
+title: "How Jetpack Compose Works / Как работает Jetpack Compose"
+topic: android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
+  - android
 ---
-
 # Как работает jetpackCompose?
 
 ## Answer (EN)
@@ -471,7 +473,193 @@ The magic is in the **smart recomposition** - Compose only re-executes functions
 # Как работает jetpackCompose?
 
 ## Ответ (RU)
-Jetpack Compose – это декларативный UI-фреймворк от Google для создания интерфейсов в Android. Вместо традиционных XML + View в Compose используется функции-компоненты, которые описывают UI. Главные принципы работы Jetpack Compose: декларативный подход – UI создаётся через функции, без XML. Реактивность – UI автоматически обновляется, если данные изменились. Компонентный подход – UI состоит из маленьких, переиспользуемых функций. Composable-функции (@Composable) – основной строительный блок Compose.
+
+Jetpack Compose – это современный декларативный UI-фреймворк от Google для создания нативных Android интерфейсов. Вместо традиционных XML-макетов и императивных манипуляций View, Compose использует composable-функции для описания UI.
+
+### Основные принципы
+
+1. **Декларативный UI** - Описываешь, как UI должен выглядеть, а не как его строить
+2. **Реактивность** - UI автоматически обновляется при изменении данных
+3. **Компонентный подход** - UI строится из маленьких переиспользуемых функций
+4. **Kotlin-first** - Встроенная поддержка корутин и Flow
+
+### Базовые Composable-функции
+
+```kotlin
+@Composable
+fun Greeting(name: String) {
+    Text(text = "Привет, $name!")
+}
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            Greeting("Мир")
+        }
+    }
+}
+```
+
+### Как работает композиция
+
+Compose строит дерево composable-функций, называемое **Composition**. Внутри Compose создает **slot table**, которая отслеживает активные composables, их позицию в дереве, состояние и параметры.
+
+### Рекомпозиция - сердце Compose
+
+Когда данные изменяются, Compose интеллектуально перекомпонует только затронутые части:
+
+```kotlin
+@Composable
+fun Counter() {
+    var count by remember { mutableStateOf(0) }
+
+    Column {
+        Text("Счет: $count")  // Перекомпонуется при изменении count
+        Button(onClick = { count++ }) {
+            Text("Увеличить")  // Никогда не перекомпонуется (статичный)
+        }
+    }
+}
+```
+
+**Процесс рекомпозиции:**
+1. Изменение состояния (count++)
+2. Compose помечает зависимые composables как невалидные
+3. Только невалидные composables выполняются заново
+4. UI обновляется с новыми значениями
+
+### Управление состоянием
+
+Состояние - это данные, которые могут изменяться со временем. Compose наблюдает за состоянием и перекомпонуется при изменениях.
+
+```kotlin
+@Composable
+fun LoginScreen() {
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    Column {
+        TextField(
+            value = username,
+            onValueChange = { username = it },
+            label = { Text("Имя пользователя") }
+        )
+
+        TextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Пароль") }
+        )
+
+        Button(
+            onClick = { /* login */ },
+            enabled = username.isNotEmpty() && password.isNotEmpty()
+        ) {
+            Text("Войти")
+        }
+    }
+}
+```
+
+### Жизненный цикл Composables
+
+Composables следуют жизненному циклу: **Вход → Рекомпозиция → Выход**
+
+```kotlin
+@Composable
+fun LifecycleExample() {
+    LaunchedEffect(Unit) {
+        println("Вошел в композицию")
+    }
+
+    DisposableEffect(Unit) {
+        println("В композиции")
+        onDispose {
+            println("Вышел из композиции")
+        }
+    }
+
+    SideEffect {
+        println("Перекомпонован")
+    }
+}
+```
+
+### Модификаторы - стилизация и поведение
+
+```kotlin
+@Composable
+fun ModifierExample() {
+    Text(
+        text = "Привет",
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .background(Color.Blue)
+            .clickable { /* обработка клика */ }
+    )
+}
+```
+
+### Оптимизация производительности
+
+Compose оптимизирован по умолчанию, но можно помочь:
+
+```kotlin
+@Composable
+fun OptimizedList(items: List<Item>) {
+    LazyColumn {
+        items(items, key = { it.id }) { item ->
+            ItemRow(item)
+        }
+    }
+}
+
+@Composable
+fun ItemRow(item: Item) {
+    val isExpensive by remember(item) {
+        derivedStateOf { expensiveCalculation(item) }
+    }
+
+    Row {
+        Text(item.name)
+        if (isExpensive) {
+            Icon(Icons.Default.Star, null)
+        }
+    }
+}
+```
+
+### Ключевые отличия от View System
+
+| View System | Jetpack Compose |
+|-------------|-----------------|
+| Императивный (как) | Декларативный (что) |
+| XML + Код | Чистый Kotlin |
+| findViewById | Прямой доступ |
+| Ручные обновления | Автоматическая рекомпозиция |
+| Сложный жизненный цикл | Простой жизненный цикл |
+| Нужен RecyclerView | Встроенный LazyColumn |
+
+### Как Compose работает под капотом
+
+1. **Композиция**: Строит UI дерево из @Composable функций
+2. **Layout**: Измеряет и позиционирует элементы
+3. **Рисование**: Рендерит пиксели на экран
+
+**Slot Table**: Compose использует gap buffer для эффективного отслеживания позиций composables, объектов состояния, запоминаемых значений и групповых ключей для рекомпозиции.
+
+### Резюме
+
+Jetpack Compose работает путем:
+1. **Объявления UI** с @Composable функциями
+2. **Построения дерева композиции** из этих функций
+3. **Автоматического наблюдения** за изменениями состояния
+4. **Рекомпозиции** только затронутых частей при изменении состояния
+5. **Эффективного измерения, позиционирования и рисования**
+
+Магия в **умной рекомпозиции** - Compose повторно выполняет только те функции, которые зависят от измененного состояния, обеспечивая высокую производительность.
 
 ---
 

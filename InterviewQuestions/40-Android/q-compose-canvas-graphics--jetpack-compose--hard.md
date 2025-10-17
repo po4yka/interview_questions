@@ -1,31 +1,28 @@
 ---
 id: 20251012-400001
 title: "Compose Canvas & Graphics / Canvas и графика в Compose"
-slug: compose-canvas-graphics-jetpack-compose-hard
 topic: android
-subtopics:
+difficulty: hard
+status: draft
+created: 2025-10-12
+tags: - android
   - jetpack-compose
+  - canvas
+  - graphics
+  - custom-drawing
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-android
+related_questions:   - q-compose-performance-optimization--android--hard
+  - q-compose-custom-layout--jetpack-compose--hard
+  - q-compose-custom-animations--jetpack-compose--medium
+slug: compose-canvas-graphics-jetpack-compose-hard
+subtopics:   - jetpack-compose
   - canvas
   - graphics
   - custom-drawing
   - animation
-status: draft
-difficulty: hard
-moc: moc-android
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-compose-performance-optimization--android--hard
-  - q-compose-custom-layout--jetpack-compose--hard
-  - q-compose-custom-animations--jetpack-compose--medium
-tags:
-  - android
-  - jetpack-compose
-  - canvas
-  - graphics
-  - custom-drawing
 ---
-
 # Compose Canvas & Graphics
 
 ## English Version

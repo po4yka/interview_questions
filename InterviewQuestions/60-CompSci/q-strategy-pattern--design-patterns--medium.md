@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237104"
+title: "Strategy Pattern / Strategy Паттерн"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - behavioral-patterns
   - strategy
   - gof-patterns
   - policy-pattern
-difficulty: medium
-status: draft
 ---
-
 # Strategy Pattern
 
 # Question (EN)
@@ -340,61 +342,93 @@ processor.process("Hello") // "HELLO"
 
 ### Определение
 
-
-The Strategy Design Pattern is a behavioral design pattern that **allows you to define a family of algorithms or behaviors, put each of them in a separate class, and make them interchangeable at runtime**. This pattern is useful when you want to dynamically change the behavior of a class without modifying its code.
+Паттерн проектирования **Strategy** (Стратегия) — это поведенческий паттерн, который **позволяет определить семейство алгоритмов или поведений, поместить каждый из них в отдельный класс и сделать их взаимозаменяемыми во время выполнения**. Этот паттерн полезен, когда вы хотите динамически изменять поведение класса без модификации его кода.
 
 ### Ключевые характеристики
 
+Паттерн Strategy обладает несколькими ключевыми характеристиками:
 
-This pattern exhibits several key characteristics:
-
-1. **Defines a family of algorithms** - Encapsulates multiple algorithms/behaviors into separate classes (strategies)
-2. **Encapsulates behaviors** - Each strategy encapsulates a specific behavior or algorithm
-3. **Enables dynamic behavior switching** - Clients can switch between different strategies at runtime
-4. **Promotes object collaboration** - Context delegates execution to a strategy object
+1. **Определяет семейство алгоритмов** - Инкапсулирует множественные алгоритмы/поведения в отдельные классы (стратегии)
+2. **Инкапсулирует поведение** - Каждая стратегия инкапсулирует специфичное поведение или алгоритм
+3. **Обеспечивает динамическое переключение поведения** - Клиенты могут переключаться между разными стратегиями во время выполнения
+4. **Способствует взаимодействию объектов** - Контекст делегирует выполнение объекту стратегии
 
 ### Когда использовать?
 
+Паттерн Strategy может быть полезен в различных сценариях:
 
-The Strategy Design Pattern can be useful in various scenarios:
+1. **Алгоритмы сортировки** - Различные алгоритмы сортировки инкапсулированы в стратегии
+2. **Правила валидации** - Различные правила валидации как отдельные стратегии
+3. **Форматирование текста** - Различные стратегии форматирования
+4. **Доступ к базе данных** - Различные стратегии доступа к БД
+5. **Стратегия оплаты** - Различные методы платежа как стратегии
+6. **Навигационные приложения** - Разные маршруты в зависимости от способа передвижения (автомобиль, велосипед, пешком)
+7. **Сжатие изображений** - Пользователи могут выбирать различные алгоритмы сжатия
 
-1. **Sorting algorithms** - Different sorting algorithms encapsulated into strategies
-2. **Validation rules** - Different validation rules as separate strategies
-3. **Text formatting** - Different formatting strategies
-4. **Database access** - Different database access strategies
-5. **Payment strategy** - Different payment methods as strategies
-6. **Navigation apps** - Different routes based on travel mode (driving, biking, walking)
-7. **Image compression** - Users can choose different compression algorithms
+### Структура паттерна
+
+Паттерн Strategy состоит из трех основных компонентов:
+
+1. **Strategy (Стратегия)** - Интерфейс, общий для всех поддерживаемых алгоритмов. Контекст использует этот интерфейс для вызова алгоритма, определенного конкретной стратегией.
+
+2. **ConcreteStrategy (Конкретная стратегия)** - Реализует алгоритм, используя интерфейс Strategy. Каждая конкретная стратегия представляет собой отдельный алгоритм или вариант поведения.
+
+3. **Context (Контекст)** - Хранит ссылку на объект Strategy и взаимодействует с ним исключительно через интерфейс Strategy. Контекст не знает, какую конкретную стратегию использует.
 
 ### Объяснение примера
 
+**Пояснение к примерам**:
 
-**Explanation**:
+- **`RouteStrategy`** определяет контракт, которому должны следовать все стратегии (алгоритмы)
+- **Конкретные стратегии** (`DrivingStrategy`, `WalkingStrategy`) инкапсулируют специфичные алгоритмы
+- **`Navigator`** (класс-контекст) хранит ссылку на объект стратегии и может переключаться между стратегиями
+- Клиент может легко переключаться между различными стратегиями без изменения реализации контекста
+- **В Android**: Обработка платежей, фильтры изображений, валидация данных, стратегии повтора сетевых запросов
 
-- **`RouteStrategy`** defines a contract that all strategies (algorithms) must follow
-- **Concrete strategies** (`DrivingStrategy`, `WalkingStrategy`) encapsulate specific algorithms
-- **`Navigator`** (context class) maintains a reference to a strategy object and can switch between strategies
-- Client can easily switch between different strategies without changing the context implementation
-- **Android**: Payment processing, image filters, data validation, network retry strategies
+### Применение в Android
+
+В Android разработке паттерн Strategy особенно полезен для:
+
+**1. Обработка платежей** - Различные методы оплаты (кредитная карта, PayPal, Google Pay) реализуются как отдельные стратегии.
+
+**2. Сетевые запросы** - Разные стратегии повтора запросов (exponential backoff, linear retry, immediate retry).
+
+**3. Валидация форм** - Различные правила валидации для разных полей ввода.
+
+**4. Сжатие данных** - Выбор между различными алгоритмами сжатия в зависимости от размера и типа данных.
+
+**5. Навигация** - Различные способы навигации между экранами (с анимацией, без анимации, с передачей данных).
+
+### Использование с функциями высшего порядка в Kotlin
+
+В Kotlin паттерн Strategy можно элегантно реализовать с помощью функций высшего порядка и лямбда-выражений, что делает код более кратким и выразительным. Вместо создания отдельных классов для каждой стратегии, можно передавать функции как параметры.
+
+Это особенно удобно для простых алгоритмов, где создание отдельного класса было бы избыточным. Однако для сложных алгоритмов с состоянием рекомендуется использовать классические классы-стратегии.
 
 ### Pros (Преимущества)
 
-
-1. **Eliminates conditional logic** - Reduces complex if-else or when statements
-2. **Enhances flexibility** - Easy to add/modify algorithms without affecting client code
-3. **Promotes reusability** - Each algorithm is standalone and reusable
-4. **Improves maintainability** - Encapsulating algorithms separately makes code easier to maintain
-5. **Open/Closed Principle** - Open for extension, closed for modification
-6. **Runtime flexibility** - Can switch strategies at runtime
+1. **Устраняет условную логику** - Уменьшает сложные конструкции if-else или when
+2. **Повышает гибкость** - Легко добавлять/изменять алгоритмы без влияния на клиентский код
+3. **Способствует повторному использованию** - Каждый алгоритм является самостоятельным и переиспользуемым
+4. **Улучшает поддерживаемость** - Инкапсуляция алгоритмов отдельно делает код легче в поддержке
+5. **Принцип открытости/закрытости** - Открыт для расширения, закрыт для модификации
+6. **Гибкость во время выполнения** - Можно переключать стратегии во время выполнения
 
 ### Cons (Недостатки)
 
+1. **Увеличение количества классов** - Каждый алгоритм требует отдельного класса
+2. **Сложность** - Может привнести сложность при большом количестве стратегий
+3. **Накладные расходы** - Может создать излишние накладные расходы, когда достаточно простого условного оператора
+4. **Осведомленность клиента** - Клиенты должны знать о различных стратегиях
+5. **Логика выбора стратегии** - Необходимо реализовать логику выбора стратегии
 
-1. **Increased number of classes** - Each algorithm requires a separate class
-2. **Complexity** - Can introduce complexity with numerous strategies
-3. **Overhead** - May introduce overhead when simple conditional would suffice
-4. **Client awareness** - Clients must be aware of different strategies
-5. **Strategy selection logic** - Need to implement strategy selection logic
+### Комбинирование с другими паттернами
+
+**С Factory паттерном** - Factory может создавать нужную стратегию на основе входных параметров, скрывая от клиента детали создания.
+
+**С Dependency Injection** - Стратегии могут внедряться через DI фреймворки (Dagger, Hilt), что упрощает тестирование и замену реализаций.
+
+**С State паттерном** - Хотя эти паттерны похожи, Strategy фокусируется на взаимозаменяемых алгоритмах, а State - на изменении поведения объекта в зависимости от его состояния.
 
 
 ---

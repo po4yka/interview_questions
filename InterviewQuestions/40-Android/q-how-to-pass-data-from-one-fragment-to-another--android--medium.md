@@ -1,7 +1,11 @@
 ---
+id: "20251015082237468"
+title: "How To Pass Data From One Fragment To Another / Как передать данные из одного Fragment в другой"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/fragments
   - android/views
   - communication
@@ -9,10 +13,7 @@ tags:
   - ui
   - viewmodel
   - views
-difficulty: medium
-status: draft
 ---
-
 # Как передавать данные из одного фрагмента в другой?
 
 **English**: How to pass data from one fragment to another?

@@ -1,6 +1,11 @@
 ---
-tags:
-  - garbage-collection
+id: "20251015082237158"
+title: "Reference Types Protect From Deletion / Типы ссылок защищают от удаления"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - garbage-collection
   - jvm
   - kotlin
   - memory-management
@@ -10,10 +15,7 @@ tags:
   - soft-reference
   - strong-reference
   - weak-reference
-difficulty: easy
-status: draft
 ---
-
 # Все ли виды ссылок защищают объект от удаления?
 
 # Question (EN)

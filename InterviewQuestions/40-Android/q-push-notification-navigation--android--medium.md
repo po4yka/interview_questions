@@ -1,15 +1,16 @@
 ---
+id: "20251015082237476"
+title: "Push Notification Navigation / Навигация из push уведомлений"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - notifications
   - fcm
   - navigation
   - deeplink
-difficulty: medium
-status: draft
 ---
-
 # Как открыть Activity или Fragment из push уведомления?
 
 **English**: How to open a specific Activity or Fragment from a push notification?

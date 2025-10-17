@@ -1,19 +1,23 @@
 ---
+id: "20251015082238599"
+title: "Android App Components / Компоненты Android приложения"
 topic: android
-tags:
-  - android
-  - app-architecture
-  - components
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - android
+  - app-architecture
+  - components
 ---
 
 # Какие основные компоненты Android-приложения?
 
 # Question (EN)
+
 > What are the main components of an Android application?
 
 # Вопрос (RU)
+
 > Какие основные компоненты Android-приложения?
 
 ---
@@ -87,16 +91,32 @@ class MyContentProvider : ContentProvider() {
 
 ---
 
+## Follow-ups
+
+-   What is the role of Intent Filters with these components?
+-   How do foreground services differ from background services post Android 8.0?
+-   When to expose data via ContentProvider vs in-app repository?
+
+## References
+
+-   `https://developer.android.com/guide/components/fundamentals` — App components
+-   `https://developer.android.com/guide/components/activities/intro-activities` — Activities
+-   `https://developer.android.com/guide/components/services` — Services
+-   `https://developer.android.com/guide/components/broadcasts` — Broadcasts
+-   `https://developer.android.com/guide/topics/providers/content-providers` — Content providers
+
 ## Related Questions
 
 ### Related (Easy)
-- [[q-architecture-components-libraries--android--easy]] - Fundamentals
-- [[q-what-unifies-android-components--android--easy]] - Fundamentals
-- [[q-android-components-besides-activity--android--easy]] - Fundamentals
-- [[q-main-android-components--android--easy]] - Fundamentals
-- [[q-material3-components--material-design--easy]] - Fundamentals
+
+-   [[q-architecture-components-libraries--android--easy]] - Fundamentals
+-   [[q-what-unifies-android-components--android--easy]] - Fundamentals
+-   [[q-android-components-besides-activity--android--easy]] - Fundamentals
+-   [[q-main-android-components--android--easy]] - Fundamentals
+-   [[q-material3-components--material-design--easy]] - Fundamentals
 
 ### Advanced (Harder)
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
-- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
-- [[q-hilt-components-scope--android--medium]] - Fundamentals
+
+-   [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+-   [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
+-   [[q-hilt-components-scope--android--medium]] - Fundamentals

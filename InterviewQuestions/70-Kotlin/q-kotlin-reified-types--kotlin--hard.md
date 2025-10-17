@@ -1,15 +1,16 @@
 ---
+id: "20251015082236046"
+title: "Kotlin Reified Types / Reified типы в Kotlin"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - reified
   - generics
   - type-parameters
   - inline
-difficulty: hard
-status: draft
 ---
-
 # Reified Type Parameters
 
 **English**: Explain reified type parameters. Implement type-safe builders and factories using reified. What are the limitations?

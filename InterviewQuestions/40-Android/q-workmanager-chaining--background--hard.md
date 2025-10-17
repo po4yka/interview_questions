@@ -1,14 +1,16 @@
 ---
-tags:
-  - Android
+id: "20251015082237312"
+title: "Workmanager Chaining / Цепочки WorkManager"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - Background
   - WorkManager
   - Coroutines
-difficulty: hard
-status: draft
 ---
-
 # WorkManager Work Chaining - Advanced Patterns
 
 # Question (EN)

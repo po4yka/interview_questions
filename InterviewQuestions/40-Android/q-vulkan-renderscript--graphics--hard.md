@@ -1,16 +1,18 @@
 ---
-tags:
-  - android
+id: "20251015082237577"
+title: "Vulkan Renderscript / Vulkan и RenderScript"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - vulkan
   - renderscript
   - gpu
   - graphics
   - low-level
   - compute
-difficulty: hard
-status: draft
 ---
-
 # Vulkan and RenderScript Alternatives for GPU Computing
 
 # Question (EN)

@@ -1,31 +1,28 @@
 ---
 id: 20251012-160004
 title: "Debugging Kotlin coroutines: tools and techniques / Отладка Kotlin корутин: инструменты и техники"
-slug: debugging-coroutines-techniques-kotlin-medium
 topic: kotlin
-subtopics:
-  - coroutines
-  - debugging
-  - profiling
-  - troubleshooting
-status: draft
 difficulty: medium
-moc: moc-kotlin
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-coroutine-exception-handler--kotlin--medium
-  - q-common-coroutine-mistakes--kotlin--medium
-  - q-race-conditions-coroutines--kotlin--hard
-tags:
-  - kotlin
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - coroutines
   - debugging
   - profiling
   - troubleshooting
   - tools
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-kotlin
+related_questions:   - q-coroutine-exception-handler--kotlin--medium
+  - q-common-coroutine-mistakes--kotlin--medium
+  - q-race-conditions-coroutines--kotlin--hard
+slug: debugging-coroutines-techniques-kotlin-medium
+subtopics:   - coroutines
+  - debugging
+  - profiling
+  - troubleshooting
 ---
-
 # Debugging Kotlin coroutines: tools and techniques
 
 ## English Version

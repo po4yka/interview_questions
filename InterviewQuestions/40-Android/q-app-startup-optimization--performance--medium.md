@@ -941,34 +941,10 @@ fun MainScreen() {
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
 ### Related (Medium)
 - [[q-macrobenchmark-startup--performance--medium]] - Performance
 - [[q-app-startup-library--android--medium]] - App Startup
 - [[q-baseline-profiles-optimization--performance--medium]] - Performance
 - [[q-app-size-optimization--performance--medium]] - Performance
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
-### Related (Medium)
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-app-startup-library--android--medium]] - App Startup
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
-- [[q-app-size-optimization--performance--medium]] - Performance
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
-### Related (Medium)
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-app-startup-library--android--medium]] - App Startup
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
-- [[q-app-size-optimization--performance--medium]] - Performance
-
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

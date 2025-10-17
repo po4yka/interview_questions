@@ -1,33 +1,30 @@
 ---
 id: 20251012-200007
 title: "Advanced Graph Algorithms (Dijkstra, MST, Floyd-Warshall) / Продвинутые алгоритмы на графах"
-slug: advanced-graph-algorithms-algorithms-hard
 topic: algorithms
-subtopics:
-  - graph
-  - dijkstra
-  - mst
-  - shortest-path
-  - minimum-spanning-tree
-status: draft
 difficulty: hard
-moc: moc-algorithms
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-graph-algorithms-bfs-dfs--algorithms--hard
-  - q-dynamic-programming-fundamentals--algorithms--hard
-  - q-binary-search-trees-bst--algorithms--hard
-tags:
-  - algorithms
+status: draft
+created: 2025-10-12
+tags: - algorithms
   - graph
   - dijkstra
   - mst
   - shortest-path
   - floyd-warshall
   - bellman-ford
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-algorithms
+related_questions:   - q-graph-algorithms-bfs-dfs--algorithms--hard
+  - q-dynamic-programming-fundamentals--algorithms--hard
+  - q-binary-search-trees-bst--algorithms--hard
+slug: advanced-graph-algorithms-algorithms-hard
+subtopics:   - graph
+  - dijkstra
+  - mst
+  - shortest-path
+  - minimum-spanning-tree
 ---
-
 # Advanced Graph Algorithms
 
 ## English Version
@@ -293,6 +290,26 @@ fun bellmanFord(graph: Graph, edges: List<MSTEdge>, source: Int): IntArray? {
 8. **Используйте MST** для проектирования сетей, кластеризации, минимальной стоимости соединений
 9. **Приоритетная очередь** критична для эффективных алгоритмов на графах
 10. **Восстановление пути** требует отслеживания родительских указателей
+
+### Сравнение алгоритмов
+
+**Алгоритм Дейкстры**: находит кратчайший путь от одной исходной вершины во взвешенном графе с неотрицательными весами ребер. Использует жадный подход с приоритетной очередью. Временная сложность O((V+E) log V) с приоритетной очередью. Не работает с отрицательными весами.
+
+**Минимальное остовное дерево**: находит подмножество ребер, соединяющих все вершины с минимальным общим весом. Краскал сортирует все ребра и добавляет их в MST, если они не создают цикл (Union-Find). Прим растит MST от стартовой вершины, добавляя самое дешевое ребро.
+
+**Флойд-Уоршелл**: находит кратчайшие пути между всеми парами вершин. Использует динамическое программирование. Сложность O(V³). Работает с отрицательными весами (но не циклами). Подходит для плотных графов малого размера.
+
+**Беллман-Форд**: находит кратчайший путь от одной исходной вершины, работает с отрицательными весами и обнаруживает отрицательные циклы. Сложность O(V*E). Медленнее Дейкстры, но более универсален.
+
+### Когда использовать
+
+**Дейкстра**: GPS-навигация, сетевая маршрутизация, поиск пути в играх. Требования: неотрицательные веса, нужен путь от одной вершины.
+
+**MST (Краскал/Прим)**: проектирование сетей, кластеризация данных, минимизация стоимости соединений, построение дорог между городами.
+
+**Флойд-Уоршелл**: когда нужны расстояния между всеми парами вершин, транзитивное замыкание, малые плотные графы.
+
+**Беллман-Форд**: графы с отрицательными весами, обнаружение арбитража в валютных курсах, обнаружение отрицательных циклов.
 
 ## Follow-ups
 

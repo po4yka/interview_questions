@@ -1,36 +1,32 @@
 ---
 id: q-task-affinity--android--medium--1728115500000
-title: "Task Affinity in Android / Task Affinity в Android"
+title: "Task Affinity in Android"
 topic: android
-aliases:
-  - Task Affinity in Android
-  - Task Affinity в Android
-date_created: 2025-10-05
-date_modified: 2025-10-05
-status: draft
-original_language: en
-language_tags:
-  - en
-  - ru
-type: question
-category: android
 difficulty: medium
-subtopics:
-  - activity
-  - ui-navigation
-  - lifecycle
-tags:
-  - android
+status: draft
+created: 2025-10-05
+tags: - android
   - task-affinity
   - tasks
   - activity
   - navigation
   - manifest
   - difficulty/medium
+aliases:   - Task Affinity in Android
+  - Task Affinity в Android
+category: android
+date_created: 2025-10-05
+date_modified: 2025-10-05
+language_tags:   - en
+  - ru
 moc: moc-android
+original_language: en
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20taskAffinity.md"
+subtopics:   - activity
+  - ui-navigation
+  - lifecycle
+type: question
 ---
-
 # Task Affinity in Android / Task Affinity в Android
 
 # Question (EN)

@@ -2,25 +2,23 @@
 id: 20251006-coroutine-cancellation
 title: Coroutine Cancellation Mechanisms / Механизмы Отмены Корутин
 topic: kotlin
-subtopics:
-  - coroutines
-  - cancellation
-  - cooperative-cancellation
 difficulty: medium
-language_tags:
-  - en
-  - ru
-original_language: en
 status: draft
-source: Kotlin Coroutines Interview Questions PDF
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - cancellation
   - cooperative
   - isactive
   - cancellationexception
   - difficulty/medium
+language_tags:   - en
+  - ru
+original_language: en
+source: Kotlin Coroutines Interview Questions PDF
+subtopics:   - coroutines
+  - cancellation
+  - cooperative-cancellation
 ---
 # Question (EN)
 > How does coroutine cancellation work, and how is it different from canceling a Thread?

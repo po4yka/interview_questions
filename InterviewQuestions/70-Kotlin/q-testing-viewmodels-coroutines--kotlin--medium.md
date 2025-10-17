@@ -1,15 +1,16 @@
 ---
+id: "20251015082236047"
+title: "Testing Viewmodels Coroutines / Тестирование Viewmodels Coroutines"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - testing
   - coroutines
   - viewmodel
   - unit-testing
-difficulty: medium
-status: draft
 ---
-
 # Testing ViewModels with Coroutines
 
 **English**: How do you properly test ViewModels that use coroutines? What are the common patterns and pitfalls?

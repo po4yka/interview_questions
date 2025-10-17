@@ -1,14 +1,15 @@
 ---
+id: "20251015082237447"
+title: "Retrofit Usage Tutorial / Retrofit Использование Tutorial"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - retrofit
   - networking
   - tutorial
-difficulty: medium
-status: draft
 ---
-
 # Как делать сетевые запросы с помощью Retrofit?
 
 **English**: How to make network requests with Retrofit?

@@ -1,17 +1,18 @@
 ---
+id: "20251015082236027"
+title: "Generics Types Overview / Обзор обобщенных типов"
 topic: kotlin
-tags:
-  - bounds
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - bounds
   - generics
   - java
   - kotlin
   - programming-languages
   - type-parameters
   - variance
-difficulty: medium
-status: draft
 ---
-
 # Какие виды дженериков есть?
 
 # Question (EN)

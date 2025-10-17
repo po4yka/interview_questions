@@ -522,7 +522,459 @@ tasks.withType<KspTask> {
 
 ## Ответ (RU)
 
-[Russian translation follows same structure...]
+### Архитектура KAPT vs KSP
+
+#### KAPT (Kotlin Annotation Processing Tool)
+
+**Как работает:**
+```
+1. Kotlin код → Генерация Java заглушек
+2. Java заглушки → Запуск Java annotation processors
+3. Генерация кода → Компиляция в байт-код
+
+Проблема: Шаг 1 дорогой и медленный
+```
+
+**Диаграмма архитектуры:**
+```
+Kotlin Source (.kt)
+    ↓
+[Генерация Java заглушек] ← 30-40% времени KAPT
+    ↓
+Java Stubs (.java)
+    ↓
+[Java Annotation Processor]
+    ↓
+Сгенерированный код
+    ↓
+[Kotlin/Java Compiler]
+    ↓
+Байт-код
+```
+
+**Ограничения:**
+- Не инкрементальный (перерабатывает все файлы при любом изменении)
+- Генерирует ненужные Java заглушки
+- Медленная компиляция
+- Высокое использование памяти
+
+#### KSP (Kotlin Symbol Processing)
+
+**Как работает:**
+```
+1. Kotlin код → KSP процессор (прямой доступ к Kotlin символам)
+2. Генерация кода → Компиляция в байт-код
+
+Преимущество: Нет генерации Java заглушек, в 2 раза быстрее
+```
+
+**Диаграмма архитектуры:**
+```
+Kotlin Source (.kt)
+    ↓
+[KSP Processor] ← Прямой доступ к Kotlin API
+    ↓
+Сгенерированный код
+    ↓
+[Kotlin Compiler]
+    ↓
+Байт-код
+```
+
+**Преимущества:**
+- В 2 раза быстрее KAPT (без генерации Java заглушек)
+- Инкрементальная обработка (только измененные файлы)
+- Нативный Kotlin API (лучшая типобезопасность)
+- Меньшее использование памяти
+
+### Сравнение производительности
+
+**Тестовый проект:**
+- 50 исходных файлов
+- Room база данных (5 entities, 3 DAOs)
+- Hilt dependency injection (10 модулей)
+- Moshi JSON parsing (15 data классов)
+
+**Результаты KAPT:**
+```
+Время конфигурации: 8.2с
+KAPT обработка: 45.3с
+  - Генерация заглушек: 18.7с
+  - Room processor: 14.2с
+  - Hilt processor: 9.8с
+  - Moshi processor: 2.6с
+Общее время сборки: 89.5с
+```
+
+**Результаты KSP:**
+```
+Время конфигурации: 8.2с
+KSP обработка: 22.1с
+  - Room processor: 7.3с
+  - Hilt processor: 11.2с
+  - Moshi processor: 3.6с
+Общее время сборки: 46.8с
+
+Улучшение: на 47.7% быстрее (89.5с → 46.8с)
+```
+
+### Полное руководство по миграции
+
+#### Шаг 1: Проверка поддержки библиотек
+
+**Библиотеки с полной поддержкой KSP (2024):**
+```kotlin
+//  Полная поддержка KSP
+- Room 2.6.0+
+- Hilt 2.44+
+- Moshi 1.14.0+ (с moshi-kotlin-codegen)
+- Glide 4.14.0+
+- Библиотеки с авто-генерацией кода
+
+//  Частичная или отсутствие поддержки KSP
+- Некоторые модули Dagger (используйте Hilt вместо этого)
+- Устаревшие annotation processors
+```
+
+#### Шаг 2: Обновление файлов сборки
+
+**До: Конфигурация KAPT**
+
+**build.gradle.kts (app модуль):**
+```kotlin
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")  // KAPT плагин
+    id("dagger.hilt.android.plugin")
+}
+
+android {
+    kapt {
+        correctErrorTypes = true
+        useBuildCache = true
+    }
+}
+
+dependencies {
+    // Room с KAPT
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+
+    // Hilt с KAPT
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
+}
+```
+
+**После: Конфигурация KSP**
+
+**build.gradle.kts (уровень проекта):**
+```kotlin
+plugins {
+    id("com.android.application") version "8.2.0" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.21" apply false
+    id("com.google.dagger.hilt.android") version "2.50" apply false
+    id("com.google.devtools.ksp") version "1.9.21-1.0.16" apply false  // Добавить KSP
+}
+```
+
+**build.gradle.kts (app модуль):**
+```kotlin
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")  // Заменить kotlin-kapt на KSP
+    id("dagger.hilt.android.plugin")
+}
+
+android {
+    // Конфигурация KSP
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+        arg("room.incremental", "true")
+        arg("room.expandProjection", "true")
+    }
+
+    // Добавить сгенерированные исходники в source sets
+    applicationVariants.all {
+        kotlin.sourceSets {
+            getByName(name) {
+                kotlin.srcDir("build/generated/ksp/$name/kotlin")
+            }
+        }
+    }
+}
+
+dependencies {
+    // Room с KSP
+    implementation("androidx.room:room-runtime:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")  // Изменено с kapt на ksp
+
+    // Hilt с KSP
+    implementation("com.google.dagger:hilt-android:2.50")
+    ksp("com.google.dagger:hilt-android-compiler:2.50")  // Изменено с kapt на ksp
+}
+```
+
+#### Шаг 3: Обновление путей к исходникам
+
+**До: KAPT сгенерированные исходники**
+```kotlin
+sourceSets {
+    getByName("main") {
+        java.srcDir("build/generated/source/kapt/main")
+        java.srcDir("build/generated/source/kapt/debug")
+    }
+}
+```
+
+**После: KSP сгенерированные исходники**
+```kotlin
+kotlin.sourceSets {
+    getByName("main") {
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+    }
+    getByName("debug") {
+        kotlin.srcDir("build/generated/ksp/debug/kotlin")
+    }
+    getByName("release") {
+        kotlin.srcDir("build/generated/ksp/release/kotlin")
+    }
+}
+```
+
+#### Шаг 4: Очистка и пересборка
+
+```bash
+# Очистка старых KAPT файлов
+./gradlew clean
+
+# Удаление KAPT кеша
+rm -rf .gradle/
+rm -rf build/generated/source/kapt/
+
+# Сборка с KSP
+./gradlew assembleDebug --scan
+
+# Сравнение времени сборки
+```
+
+### Чек-лист миграции
+
+```
+[ ] Обновить project-level build.gradle (добавить KSP плагин)
+[ ] Обновить app-level build.gradle (заменить kotlin-kapt на ksp)
+[ ] Изменить все kapt() зависимости на ksp()
+[ ] Обновить KSP аргументы (room.schemaLocation, и т.д.)
+[ ] Обновить пути source set (kapt → ksp)
+[ ] Очистить директории сборки
+[ ] Протестировать полную сборку
+[ ] Проверить что сгенерированный код идентичен
+[ ] Запустить все тесты
+[ ] Сравнить время сборки (до/после)
+[ ] Обновить конфигурацию CI/CD
+[ ] Обновить документацию
+```
+
+### Тестирование миграции
+
+**Проверка сгенерированного кода:**
+
+**До миграции (KAPT):**
+```bash
+# Сборка с KAPT
+./gradlew assembleDebug
+
+# Местоположение сгенерированных файлов
+ls -la app/build/generated/source/kapt/debug/
+
+# Пример сгенерированных файлов:
+app/build/generated/source/kapt/debug/
+ com/example/
+    AppDatabase_Impl.java
+    UserDao_Impl.java
+    MainActivity_GeneratedInjector.java
+```
+
+**После миграции (KSP):**
+```bash
+# Сборка с KSP
+./gradlew assembleDebug
+
+# Местоположение сгенерированных файлов (другой путь!)
+ls -la app/build/generated/ksp/debug/kotlin/
+
+# Пример сгенерированных файлов:
+app/build/generated/ksp/debug/kotlin/
+ com/example/
+    AppDatabase_Impl.kt
+    UserDao_Impl.kt
+    MainActivity_GeneratedInjector.kt
+```
+
+### Смешанные KAPT/KSP проекты
+
+Некоторые библиотеки могут еще не поддерживать KSP. Можно использовать оба временно:
+
+**build.gradle.kts:**
+```kotlin
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")  // Оставить для неподдерживаемых библиотек
+    id("com.google.devtools.ksp")  // Использовать для поддерживаемых библиотек
+}
+
+dependencies {
+    // Библиотеки с поддержкой KSP
+    implementation("androidx.room:room-runtime:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
+
+    // Библиотеки только с KAPT (устаревшие)
+    implementation("com.some.legacy:library:1.0.0")
+    kapt("com.some.legacy:library-compiler:1.0.0")
+}
+```
+
+### Измерение времени сборки
+
+**Скрипт измерения:**
+
+**measure_build_times.sh:**
+```bash
+#!/bin/bash
+
+echo "=== Сравнение времени сборки: KAPT vs KSP ==="
+
+# Чистая сборка
+echo "Очистка..."
+./gradlew clean > /dev/null 2>&1
+
+# Измерение KAPT сборки
+echo "Измерение KAPT сборки..."
+git checkout kapt-version
+./gradlew clean > /dev/null 2>&1
+
+KAPT_START=$(date +%s)
+./gradlew assembleDebug --no-build-cache
+KAPT_END=$(date +%s)
+KAPT_TIME=$((KAPT_END - KAPT_START))
+
+# Измерение KSP сборки
+echo "Измерение KSP сборки..."
+git checkout ksp-version
+./gradlew clean > /dev/null 2>&1
+
+KSP_START=$(date +%s)
+./gradlew assembleDebug --no-build-cache
+KSP_END=$(date +%s)
+KSP_TIME=$((KSP_END - KSP_START))
+
+# Вычисление улучшения
+IMPROVEMENT=$(awk "BEGIN {print (($KAPT_TIME - $KSP_TIME) / $KAPT_TIME) * 100}")
+
+echo ""
+echo "Результаты:"
+echo "  Время сборки KAPT: ${KAPT_TIME}с"
+echo "  Время сборки KSP: ${KSP_TIME}с"
+echo "  Улучшение: ${IMPROVEMENT}%"
+```
+
+**Реальные результаты:**
+
+```
+Малый проект (< 50 файлов):
+  KAPT: 25с
+  KSP: 15с
+  Улучшение: 40%
+
+Средний проект (50-200 файлов):
+  KAPT: 89с
+  KSP: 47с
+  Улучшение: 47%
+
+Большой проект (200+ файлов):
+  KAPT: 245с
+  KSP: 128с
+  Улучшение: 48%
+
+Среднее улучшение: на 40-50% быстрее сборки
+```
+
+### Решение проблем
+
+**Проблема 1: Сгенерированные файлы не найдены**
+
+```
+Error: Unresolved reference: AppDatabase_Impl
+```
+
+**Решение: Обновить source sets**
+```kotlin
+kotlin.sourceSets {
+    getByName("main") {
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+    }
+}
+```
+
+**Проблема 2: KSP аргументы не распознаются**
+
+**KAPT:**
+```kotlin
+kapt {
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
+}
+```
+
+**KSP:**
+```kotlin
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+```
+
+**Проблема 3: Инкрементальная обработка не работает**
+
+```kotlin
+ksp {
+    arg("room.incremental", "true")  // Включить инкрементальную обработку для Room
+}
+
+tasks.withType<KspTask> {
+    // Принудительная инкрементальная обработка
+    incremental = true
+}
+```
+
+### Лучшие практики
+
+1. **Мигрировать инкрементально**: Начать с одного модуля, проверить, затем расширить
+2. **Тщательно тестировать**: Запускать полный набор тестов после миграции
+3. **Сравнить сгенерированный код**: Убедиться что KSP производит эквивалентный код
+4. **Измерить время сборки**: Задокументировать фактические улучшения
+5. **Обновить CI/CD**: Убедиться что сборочные серверы правильно используют KSP
+6. **Держать зависимости актуальными**: Использовать последние версии для лучшей поддержки KSP
+7. **Смешанный режим временно**: Использовать KAPT+KSP во время переходного периода
+8. **Мониторить использование памяти**: KSP использует меньше памяти
+9. **Включить инкрементальную обработку**: Настроить для максимальной скорости
+10. **Документировать изменения**: Обновить командную документацию и README
+
+### Распространенные ошибки
+
+1. **Не обновление путей к исходникам**: IDE не может найти сгенерированные файлы
+2. **Забывание очистки**: Старые KAPT файлы мешают KSP
+3. **Неправильная версия KSP**: Должна соответствовать версии Kotlin (1.9.21 → 1.9.21-1.0.16)
+4. **Не тестирование всех build вариантов**: Debug работает, release падает
+5. **Отсутствие KSP аргументов**: Местоположение схемы Room и т.д.
+6. **Игнорирование предупреждений**: KSP может предупреждать о неинкрементальной обработке
+7. **Не обновление CI**: Локальные сборки работают, CI все еще использует KAPT
+8. **Несовместимые библиотеки**: Некоторые библиотеки еще не поддерживают KSP
+9. **Проблемы синхронизации Gradle**: Очистить и синхронизировать после изменений
+10. **Ожидания производительности**: Улучшение варьируется в зависимости от размера проекта
 
 ---
 

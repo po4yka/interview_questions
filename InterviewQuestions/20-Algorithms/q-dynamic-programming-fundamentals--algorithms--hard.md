@@ -1,30 +1,27 @@
 ---
 id: 20251012-200003
 title: "Dynamic Programming Fundamentals / Основы динамического программирования"
-slug: dynamic-programming-fundamentals-algorithms-hard
 topic: algorithms
-subtopics:
+difficulty: hard
+status: draft
+created: 2025-10-12
+tags: - algorithms
   - dynamic-programming
+  - dp
+  - optimization
+  - memoization
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-algorithms
+related_questions:   - q-recursion-vs-iteration--algorithms--medium
+  - q-backtracking-algorithms--algorithms--hard
+slug: dynamic-programming-fundamentals-algorithms-hard
+subtopics:   - dynamic-programming
   - dp
   - memoization
   - tabulation
   - optimization
-status: draft
-difficulty: hard
-moc: moc-algorithms
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-recursion-vs-iteration--algorithms--medium
-  - q-backtracking-algorithms--algorithms--hard
-tags:
-  - algorithms
-  - dynamic-programming
-  - dp
-  - optimization
-  - memoization
 ---
-
 # Dynamic Programming Fundamentals
 
 ## English Version

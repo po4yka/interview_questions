@@ -3,10 +3,10 @@ topic: kotlin
 id: "20251012-170005"
 title: "NonCancellable context for critical cleanup operations / NonCancellable контекст для критических операций"
 description: "Complete guide to using NonCancellable context for cleanup, when to use it, risks, and best practices with real examples"
-topic: "kotlin"
+topic: kotlin
 subtopics: ["coroutines", "cancellation", "noncancellable", "cleanup", "finally"]
-difficulty: "medium"
-status: "draft"
+difficulty: medium
+status: draft
 created: 2025-10-12
 updated: 2025-10-12
 category: "coroutines-advanced"

@@ -1,16 +1,17 @@
 ---
+id: "20251015082237050"
+title: "Variance Type Projections / Вариантность и проекции типов"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - generics
   - variance
   - type-system
   - projections
   - covariance
-difficulty: hard
-status: draft
 ---
-
 # Variance and Type Projections in Kotlin
 
 # Question (EN)

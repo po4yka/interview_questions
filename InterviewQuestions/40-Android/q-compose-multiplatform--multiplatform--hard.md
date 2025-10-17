@@ -1,26 +1,33 @@
 ---
-tags:
-  - Android
+id: "20251015082237293"
+title: "Compose Multiplatform"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - Compose
   - Multiplatform
   - UI
-difficulty: hard
-status: draft
 ---
 
-# Compose Multiplatform for Shared UI
-
 # Question (EN)
-> 
-Explain Compose Multiplatform and how it differs from KMM. How do you create shared UI components across Android, iOS, Desktop, and Web? What are the limitations and best practices for cross-platform Compose development?
+
+> Explain Compose Multiplatform and how it differs from KMM. How do you create shared UI components across Android, iOS, Desktop, and Web? What are the limitations and best practices for cross-platform Compose development?
+
+# Вопрос (RU)
+
+> Объясните Compose Multiplatform и чем он отличается от KMM. Как создавать общий UI для Android, iOS, Desktop и Web? Каковы ограничения и лучшие практики кроссплатформенной разработки на Compose?
 
 ## Answer (EN)
+
 Compose Multiplatform extends Kotlin Multiplatform to share UI code across Android, iOS, Desktop, and Web using Jetpack Compose's declarative UI paradigm, enabling unprecedented code reuse while maintaining platform-specific customizations.
 
 #### Compose Multiplatform Setup
 
 **1. Project Configuration**
+
 ```kotlin
 // settings.gradle.kts
 pluginManagement {
@@ -137,6 +144,7 @@ compose.experimental {
 ```
 
 **2. Directory Structure**
+
 ```
 project/
  composeApp/
@@ -170,6 +178,7 @@ project/
 #### Shared UI Components
 
 **1. Common Composables**
+
 ```kotlin
 // commonMain/ui/components/TaskCard.kt
 @Composable
@@ -253,6 +262,7 @@ expect fun formatDate(timestamp: Long): String
 ```
 
 **2. Shared Screens**
+
 ```kotlin
 // commonMain/ui/screens/TaskListScreen.kt
 @Composable
@@ -430,6 +440,7 @@ fun ErrorView(
 ```
 
 **3. Create Task Dialog**
+
 ```kotlin
 // commonMain/ui/components/CreateTaskDialog.kt
 @Composable
@@ -501,6 +512,7 @@ fun CreateTaskDialog(
 #### Platform-Specific Adaptations
 
 **1. Platform Detection**
+
 ```kotlin
 // commonMain/Platform.kt
 enum class Platform {
@@ -529,6 +541,7 @@ actual fun isDebug(): Boolean = js("process.env.NODE_ENV === 'development'") as 
 ```
 
 **2. Platform-Specific UI Adaptations**
+
 ```kotlin
 // commonMain/ui/components/PlatformAdaptiveButton.kt
 @Composable
@@ -643,6 +656,7 @@ fun PlatformBackButton(onClick: () -> Unit) {
 ```
 
 **3. Responsive Layouts**
+
 ```kotlin
 // commonMain/ui/utils/WindowSize.kt
 enum class WindowSize {
@@ -734,6 +748,7 @@ actual fun rememberWindowSize(): WindowSize {
 #### Theme and Styling
 
 **1. Shared Material Theme**
+
 ```kotlin
 // commonMain/ui/theme/Theme.kt
 @Composable
@@ -813,6 +828,7 @@ expect fun isSystemInDarkTheme(): Boolean
 ```
 
 **2. Resource Management**
+
 ```kotlin
 // commonMain/ui/theme/Resources.kt
 @Composable
@@ -857,6 +873,7 @@ expect fun stringResource(key: String): String
 #### Navigation
 
 **1. Shared Navigation Graph**
+
 ```kotlin
 // commonMain/navigation/Navigation.kt
 sealed class Screen(val route: String) {
@@ -920,6 +937,7 @@ fun AppNavigation() {
 #### Platform Entry Points
 
 **1. Android**
+
 ```kotlin
 // androidApp/MainActivity.kt
 class MainActivity : ComponentActivity() {
@@ -942,6 +960,7 @@ fun App() {
 ```
 
 **2. iOS**
+
 ```swift
 // iosApp/ComposeView.swift
 import SwiftUI
@@ -973,6 +992,7 @@ fun MainViewController() = ComposeUIViewController {
 ```
 
 **3. Desktop**
+
 ```kotlin
 // desktopApp/main.kt
 fun main() = application {
@@ -993,6 +1013,7 @@ fun main() = application {
 ```
 
 **4. Web**
+
 ```kotlin
 // jsMain/main.kt
 fun main() {
@@ -1020,59 +1041,66 @@ fun main() {
 #### Best Practices
 
 1. **Code Sharing Strategy**:
-   - Share UI components, screens, navigation
-   - Keep platform-specific code minimal
-   - Use expect/actual for platform differences
-   - Design responsive layouts from start
+
+    - Share UI components, screens, navigation
+    - Keep platform-specific code minimal
+    - Use expect/actual for platform differences
+    - Design responsive layouts from start
 
 2. **Performance**:
-   - Use LazyColumn/LazyRow for lists
-   - Avoid unnecessary recompositions
-   - Use remember for expensive calculations
-   - Profile on all target platforms
+
+    - Use LazyColumn/LazyRow for lists
+    - Avoid unnecessary recompositions
+    - Use remember for expensive calculations
+    - Profile on all target platforms
 
 3. **Platform Adaptation**:
-   - Respect platform conventions
-   - Use platform-appropriate spacing
-   - Adapt navigation patterns
-   - Handle platform-specific gestures
+
+    - Respect platform conventions
+    - Use platform-appropriate spacing
+    - Adapt navigation patterns
+    - Handle platform-specific gestures
 
 4. **Resources**:
-   - Use Compose Resources for images
-   - Centralize string constants
-   - Support dark/light themes
-   - Plan for localization
+
+    - Use Compose Resources for images
+    - Centralize string constants
+    - Support dark/light themes
+    - Plan for localization
 
 5. **Testing**:
-   - Write UI tests in commonTest
-   - Test on all target platforms
-   - Use screenshot testing
-   - Verify responsive layouts
+    - Write UI tests in commonTest
+    - Test on all target platforms
+    - Use screenshot testing
+    - Verify responsive layouts
 
 #### Limitations
 
 1. **iOS Limitations**:
-   - No direct SwiftUI interop (yet)
-   - UIViewController wrapper required
-   - Some animations may differ
-   - Platform feel requires customization
+
+    - No direct SwiftUI interop (yet)
+    - UIViewController wrapper required
+    - Some animations may differ
+    - Platform feel requires customization
 
 2. **Web Limitations**:
-   - Canvas-based (not DOM)
-   - Larger bundle size
-   - Limited SEO
-   - Accessibility challenges
+
+    - Canvas-based (not DOM)
+    - Larger bundle size
+    - Limited SEO
+    - Accessibility challenges
 
 3. **Desktop Limitations**:
-   - Window management differences
-   - Different input methods (mouse vs touch)
-   - Platform-specific shortcuts
+
+    - Window management differences
+    - Different input methods (mouse vs touch)
+    - Platform-specific shortcuts
 
 4. **General**:
-   - Learning curve for all platforms
-   - Build times can be long
-   - Debugging across platforms
-   - Third-party library support
+    - Learning curve for all platforms
+    - Build times can be long
+    - Debugging across platforms
+    - Third-party library support
 
 #### Common Pitfalls
 
@@ -1086,136 +1114,155 @@ fun main() {
 ### Summary
 
 Compose Multiplatform enables UI code sharing across platforms:
-- **Targets**: Android, iOS, Desktop, Web
-- **Shared Code**: UI components, screens, navigation, themes
-- **Platform-Specific**: Entry points, resources, platform conventions
-- **Responsive**: Adaptive layouts for different screen sizes
-- **Limitations**: Platform-specific behaviors, performance considerations
+
+-   **Targets**: Android, iOS, Desktop, Web
+-   **Shared Code**: UI components, screens, navigation, themes
+-   **Platform-Specific**: Entry points, resources, platform conventions
+-   **Responsive**: Adaptive layouts for different screen sizes
+-   **Limitations**: Platform-specific behaviors, performance considerations
 
 Key considerations: appropriate abstraction levels, platform conventions, responsive design, performance optimization, and comprehensive testing across all targets.
 
 ---
 
 # Вопрос (RU)
-> 
-Объясните Compose Multiplatform и чем он отличается от KMM. Как создавать shared UI компоненты для Android, iOS, Desktop и Web? Каковы ограничения и best practices для кросс-платформенной Compose разработки?
+
+> Объясните Compose Multiplatform и чем он отличается от KMM. Как создавать shared UI компоненты для Android, iOS, Desktop и Web? Каковы ограничения и best practices для кросс-платформенной Compose разработки?
 
 ## Ответ (RU)
+
 Compose Multiplatform расширяет Kotlin Multiplatform для sharing UI кода между Android, iOS, Desktop и Web, используя декларативную UI парадигму Jetpack Compose, обеспечивая беспрецедентное переиспользование кода с сохранением platform-specific кастомизаций.
 
 #### Отличия от KMM
 
 **KMM**:
-- Только бизнес-логика, данные, сеть
-- UI остается platform-specific
-- Android: Compose, iOS: SwiftUI
+
+-   Только бизнес-логика, данные, сеть
+-   UI остается platform-specific
+-   Android: Compose, iOS: SwiftUI
 
 **Compose Multiplatform**:
-- Shared UI + бизнес-логика
-- Один UI фреймворк для всех платформ
-- Compose везде (Android, iOS, Desktop, Web)
+
+-   Shared UI + бизнес-логика
+-   Один UI фреймворк для всех платформ
+-   Compose везде (Android, iOS, Desktop, Web)
 
 #### Shared UI
 
 **Что можно делить**:
--  UI компоненты
--  Screens
--  Navigation
--  Themes
--  Layouts
+
+-   UI компоненты
+-   Screens
+-   Navigation
+-   Themes
+-   Layouts
 
 **Platform-specific**:
-- Entry points (Activity, UIViewController, Window)
-- Platform conventions
-- Specific gestures
-- Resources handling
+
+-   Entry points (Activity, UIViewController, Window)
+-   Platform conventions
+-   Specific gestures
+-   Resources handling
 
 #### Responsive Design
 
 **WindowSize**:
-- COMPACT: телефон portrait
-- MEDIUM: телефон landscape, планшет portrait
-- EXPANDED: планшет landscape, desktop
+
+-   COMPACT: телефон portrait
+-   MEDIUM: телефон landscape, планшет portrait
+-   EXPANDED: планшет landscape, desktop
 
 **Adaptive layouts**:
-- Single column для COMPACT
-- Two column для MEDIUM
-- Three column + NavigationRail для EXPANDED
+
+-   Single column для COMPACT
+-   Two column для MEDIUM
+-   Three column + NavigationRail для EXPANDED
 
 #### Платформы
 
 **Android**:
-- Activity с setContent
-- Standard Compose
-- Material 3
+
+-   Activity с setContent
+-   Standard Compose
+-   Material 3
 
 **iOS**:
-- UIViewController wrapper
-- ComposeUIViewController
-- Platform adaptations
+
+-   UIViewController wrapper
+-   ComposeUIViewController
+-   Platform adaptations
 
 **Desktop**:
-- Window application
-- Mouse hover effects
-- Keyboard shortcuts
+
+-   Window application
+-   Mouse hover effects
+-   Keyboard shortcuts
 
 **Web**:
-- Canvas-based rendering
-- Browser compatibility
-- Bundle size considerations
+
+-   Canvas-based rendering
+-   Browser compatibility
+-   Bundle size considerations
 
 #### Best Practices
 
 1. **Code Sharing**:
-   - Максимизировать shared UI
-   - Minimize platform-specific код
-   - Responsive from start
-   - Platform conventions
+
+    - Максимизировать shared UI
+    - Minimize platform-specific код
+    - Responsive from start
+    - Platform conventions
 
 2. **Performance**:
-   - LazyColumn/LazyRow
-   - Избегать recompositions
-   - remember для дорогих вычислений
-   - Profile на всех платформах
+
+    - LazyColumn/LazyRow
+    - Избегать recompositions
+    - remember для дорогих вычислений
+    - Profile на всех платформах
 
 3. **Platform Adaptation**:
-   - Уважать platform conventions
-   - Platform-specific spacing
-   - Adaptive navigation
-   - Platform gestures
+
+    - Уважать platform conventions
+    - Platform-specific spacing
+    - Adaptive navigation
+    - Platform gestures
 
 4. **Resources**:
-   - Compose Resources
-   - Centralized strings
-   - Dark/light themes
-   - Localization ready
+    - Compose Resources
+    - Centralized strings
+    - Dark/light themes
+    - Localization ready
 
 #### Ограничения
 
 **iOS**:
-- No direct SwiftUI interop
-- UIViewController wrapper
-- Анимации могут отличаться
+
+-   No direct SwiftUI interop
+-   UIViewController wrapper
+-   Анимации могут отличаться
 
 **Web**:
-- Canvas-based (не DOM)
-- Большой bundle size
-- Limited SEO
-- Accessibility сложности
+
+-   Canvas-based (не DOM)
+-   Большой bundle size
+-   Limited SEO
+-   Accessibility сложности
 
 **Desktop**:
-- Window management
-- Input methods (mouse vs touch)
-- Platform shortcuts
+
+-   Window management
+-   Input methods (mouse vs touch)
+-   Platform shortcuts
 
 ### Резюме
 
 Compose Multiplatform обеспечивает UI code sharing:
-- **Targets**: Android, iOS, Desktop, Web
-- **Shared**: UI components, screens, navigation, themes
-- **Platform-Specific**: Entry points, resources, conventions
-- **Responsive**: Adaptive layouts
-- **Limitations**: Platform behaviors, performance
+
+-   **Targets**: Android, iOS, Desktop, Web
+-   **Shared**: UI components, screens, navigation, themes
+-   **Platform-Specific**: Entry points, resources, conventions
+-   **Responsive**: Adaptive layouts
+-   **Limitations**: Platform behaviors, performance
 
 Ключевые моменты: правильная абстракция, platform conventions, responsive design, оптимизация производительности, тестирование на всех платформах.
 
@@ -1224,12 +1271,14 @@ Compose Multiplatform обеспечивает UI code sharing:
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose
-- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose
+
+-   [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose
+-   [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose
+-   [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose
 
 ### Related (Hard)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
-- [[q-compose-performance-optimization--android--hard]] - Compose
-- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose
+
+-   [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
+-   [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
+-   [[q-compose-performance-optimization--android--hard]] - Compose
+-   [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose

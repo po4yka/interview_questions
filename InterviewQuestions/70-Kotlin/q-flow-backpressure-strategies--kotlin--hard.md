@@ -738,25 +738,14 @@ suspend fun processLargeFile(file: File) {
 - [[q-backpressure-in-kotlin-flow--programming-languages--medium]] - Flow
 - [[q-instant-search-flow-operators--kotlin--medium]] - Flow
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-
 ### Related (Hard)
 - [[q-flow-backpressure--kotlin--hard]] - Flow
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 - [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
-### Prerequisites (Easier)
-- [[q-backpressure-in-kotlin-flow--programming-languages--medium]] - Flow
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-
 ### Related (Hard)
 - [[q-flow-backpressure--kotlin--hard]] - Flow
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 - [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
-### Prerequisites (Easier)
-- [[q-backpressure-in-kotlin-flow--programming-languages--medium]] - Flow
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-
 ### Related (Hard)
 - [[q-flow-backpressure--kotlin--hard]] - Flow
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines

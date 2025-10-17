@@ -1,14 +1,16 @@
 ---
-tags:
-  - Android
+id: "20251015082237328"
+title: "React Native Comparison / React Native Сравнение"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - ReactNative
   - Multiplatform
   - JavaScript
-difficulty: medium
-status: draft
 ---
-
 # KMM vs React Native - Technical Comparison
 
 # Question (EN)

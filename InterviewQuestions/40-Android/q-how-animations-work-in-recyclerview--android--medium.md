@@ -1,17 +1,18 @@
 ---
+id: "20251015082237356"
+title: "How Animations Work In Recyclerview / Как работают анимации в RecyclerView"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/animations
   - android/recyclerview
   - android/ui
   - animations
   - recyclerview
   - ui
-difficulty: medium
-status: draft
 ---
-
 # How are animations done in RecyclerView?
 
 **Russian**: Как в RecyclerView делаются анимации?
@@ -335,21 +336,6 @@ if (!isReduceMotionEnabled) {
 ## Ответ (RU)
 Для добавления анимаций в RecyclerView можно использовать DefaultItemAnimator для стандартных анимаций, установив его через recyclerView.setItemAnimator(new DefaultItemAnimator()). Для пользовательских анимаций создается наследник DefaultItemAnimator, например CustomItemAnimator, где переопределяются методы анимаций. Также анимации можно реализовывать непосредственно в Adapter, устанавливая начальные параметры элемента и запуская анимацию внутри onBindViewHolder.
 
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
-
-### Related (Medium)
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
-- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui
-- [[q-recyclerview-diffutil-advanced--recyclerview--medium]] - View, Ui
 
 ---
 

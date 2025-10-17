@@ -1,30 +1,27 @@
 ---
 id: 20251012-160003
 title: "CoroutineExceptionHandler: installation and usage / CoroutineExceptionHandler: установка и использование"
-slug: coroutine-exception-handler-kotlin-medium
 topic: kotlin
-subtopics:
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - coroutines
   - exception-handling
-  - ceh
   - error-handling
-status: draft
-difficulty: medium
-moc: moc-kotlin
+  - ceh
 date_created: 2025-10-12
 date_updated: 2025-10-12
-related_questions:
-  - q-common-coroutine-mistakes--kotlin--medium
+moc: moc-kotlin
+related_questions:   - q-common-coroutine-mistakes--kotlin--medium
   - q-debugging-coroutines-techniques--kotlin--medium
   - q-suspend-cancellable-coroutine--kotlin--hard
-tags:
-  - kotlin
-  - coroutines
+slug: coroutine-exception-handler-kotlin-medium
+subtopics:   - coroutines
   - exception-handling
-  - error-handling
   - ceh
+  - error-handling
 ---
-
 # CoroutineExceptionHandler: installation and usage
 
 ## English Version

@@ -1,17 +1,17 @@
 ---
-topic: kotlin
 id: "20251012-1500010"
 title: "What makes Flow a cold stream?"
-description: "Comprehensive guide to What makes Flow a cold stream? in Kotlin coroutines"
+topic: kotlin
+difficulty: easy
+status: draft
+created: "2025-10-12"
 tags: ["kotlin", "coroutines", "difficulty/medium"]
-topic: "kotlin"
-subtopics: ["coroutines", "flow", "cold-streams", "basics"]
-moc: "moc-kotlin"
-status: "draft"
 date_created: "2025-10-12"
 date_updated: "2025-10-12"
+description: "Comprehensive guide to What makes Flow a cold stream? in Kotlin coroutines"
+moc: "moc-kotlin"
+subtopics: ["coroutines", "flow", "cold-streams", "basics"]
 ---
-
 # What makes Flow a cold stream?
 
 ## English
@@ -62,7 +62,6 @@ date_updated: "2025-10-12"
 
 ### Prerequisites (Easier)
 - [[q-flow-basics--kotlin--easy]] - Flow
-
 ### Related (Same Level)
 - [[q-catch-operator-flow--kotlin--medium]] - Flow
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
@@ -73,8 +72,11 @@ date_updated: "2025-10-12"
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 - [[q-flow-backpressure--kotlin--hard]] - Flow
 - [[q-flow-testing-advanced--kotlin--hard]] - Flow
-### Prerequisites (Easier)
-- [[q-flow-basics--kotlin--easy]] - Flow
+### Related (Same Level)
+- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+- [[q-hot-cold-flows--kotlin--medium]] - Coroutines
+- [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
 
 ### Related (Same Level)
 - [[q-catch-operator-flow--kotlin--medium]] - Flow
@@ -82,23 +84,6 @@ date_updated: "2025-10-12"
 - [[q-hot-cold-flows--kotlin--medium]] - Coroutines
 - [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
 
-### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-backpressure--kotlin--hard]] - Flow
-- [[q-flow-testing-advanced--kotlin--hard]] - Flow
-### Prerequisites (Easier)
-- [[q-flow-basics--kotlin--easy]] - Flow
-
-### Related (Same Level)
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-hot-cold-flows--kotlin--medium]] - Coroutines
-- [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-backpressure--kotlin--hard]] - Flow
-- [[q-flow-testing-advanced--kotlin--hard]] - Flow
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 

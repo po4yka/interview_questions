@@ -1,21 +1,22 @@
 ---
+id: "20251015082237594"
+title: "Websocket Implementation / Websocket Реализация"
 topic: networking
-tags:
-  - networking
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - networking
   - websocket
   - okhttp
   - real-time
   - resilience
   - reconnection
   - difficulty/medium
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-networking
 related_questions: []
 ---
-
 # WebSocket Implementation / Реализация WebSocket
 
 **English**: Implement WebSocket connection with OkHttp. Handle reconnection with exponential backoff, heartbeat/ping-pong, and message queue for offline messages.

@@ -798,6 +798,6 @@ launch { flow.collect { println("F2: $it") } }
 
 - [[q-channels-basics-types--kotlin--medium]] - Channel types and characteristics
 - [[q-kotlin-flow-basics--kotlin--medium]] - Flow fundamentals
-- [[q-sharedflow-stateflow--kotlin--medium]] - Hot flows
+- [[q-stateflow-sharedflow-differences--kotlin--medium]] - Hot flows
 - [[q-flow-backpressure--kotlin--hard]] - Flow backpressure handling
 - [[q-channel-buffering-strategies--kotlin--hard]] - Channel buffering

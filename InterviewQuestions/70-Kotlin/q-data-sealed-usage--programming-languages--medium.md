@@ -1,11 +1,12 @@
 ---
+id: "20251015082236034"
+title: "Data Sealed Usage / Data Sealed Использование"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # What are data classes and sealed classes used for?
 
 # Question (EN)

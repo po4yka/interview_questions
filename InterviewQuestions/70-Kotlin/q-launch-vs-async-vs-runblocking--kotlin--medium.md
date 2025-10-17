@@ -1,16 +1,17 @@
 ---
+id: "20251015082236024"
+title: "Launch Vs Async Vs Runblocking / Launch против Async против Runblocking"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - launch
   - async
   - runblocking
   - coroutine-builders
-difficulty: medium
-status: draft
 ---
-
 # Launch vs Async vs RunBlocking
 
 # Question (EN)

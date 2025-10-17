@@ -1,15 +1,16 @@
 ---
+id: "20251015082236032"
+title: "Delegates Compilation / Компиляция делегатов"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - delegates
   - compilation
   - bytecode
   - advanced
-difficulty: hard
-status: draft
 ---
-
 # Как делегаты работают на уровне компиляции?
 
 # Question (EN)

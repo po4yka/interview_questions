@@ -1,11 +1,12 @@
 ---
+id: "20251015082236014"
+title: "Prohibit Object Creation / Запрет создания объектов"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # How to programmatically prohibit creating a class object?
 
 **English**: How to programmatically prohibit creating a class object in Kotlin?
@@ -402,8 +403,202 @@ fun main() {
 ---
 
 ## Ответ (RU)
-# Вопрос (RU)
-Как программно запретить создание объекта класса
 
-## Ответ (RU)
-Сделать приватный конструктор, чтобы запретить внешнее создание объекта. Используется в паттерне Singleton или Utility-классах например Math
+Чтобы программно запретить создание объекта класса, необходимо сделать конструктор приватным. Это используется в паттерне Singleton или utility-классах (например, Math).
+
+**Основные подходы:**
+1. **Приватный primary constructor** - наиболее распространенный подход
+2. **Приватный secondary constructor** - если primary не подходит
+3. **`object` declaration** - для синглтонов (без конструктора вообще)
+4. **Abstract class** - нельзя создать экземпляр напрямую
+
+### Примеры кода
+
+**Приватный primary constructor:**
+
+```kotlin
+class Singleton private constructor() {
+    companion object {
+        private var instance: Singleton? = null
+
+        fun getInstance(): Singleton {
+            return instance ?: synchronized(this) {
+                instance ?: Singleton().also { instance = it }
+            }
+        }
+    }
+
+    fun doSomething() {
+        println("Doing something")
+    }
+}
+
+fun main() {
+    // val singleton = Singleton()  // ОШИБКА: Конструктор приватный
+
+    // Нужно использовать фабричный метод
+    val singleton = Singleton.getInstance()
+    singleton.doSomething()
+
+    val singleton2 = Singleton.getInstance()
+    println(singleton === singleton2)  // true - тот же экземпляр
+}
+```
+
+**Utility-класс с приватным конструктором:**
+
+```kotlin
+class MathUtils private constructor() {
+    companion object {
+        fun add(a: Int, b: Int) = a + b
+
+        fun multiply(a: Int, b: Int) = a * b
+
+        fun factorial(n: Int): Long {
+            return if (n <= 1) 1 else n * factorial(n - 1)
+        }
+    }
+}
+
+fun main() {
+    // val utils = MathUtils()  // ОШИБКА: Нельзя создать экземпляр
+
+    // Используем статические методы
+    println(MathUtils.add(5, 3))        // 8
+    println(MathUtils.multiply(4, 7))   // 28
+    println(MathUtils.factorial(5))     // 120
+}
+```
+
+**Object declaration (лучше для синглтонов):**
+
+```kotlin
+object DatabaseConnection {
+    private var isConnected = false
+
+    fun connect() {
+        if (!isConnected) {
+            println("Подключение к БД...")
+            isConnected = true
+        }
+    }
+
+    fun disconnect() {
+        if (isConnected) {
+            println("Отключение от БД...")
+            isConnected = false
+        }
+    }
+
+    fun isConnected() = isConnected
+}
+
+fun main() {
+    // Нет конструктора для вызова - объект создается автоматически
+
+    DatabaseConnection.connect()
+    println("Подключен: ${DatabaseConnection.isConnected()}")
+
+    DatabaseConnection.disconnect()
+    println("Подключен: ${DatabaseConnection.isConnected()}")
+}
+```
+
+**Factory pattern с приватным конструктором:**
+
+```kotlin
+class User private constructor(
+    val id: Int,
+    val name: String,
+    val email: String
+) {
+    companion object {
+        private var nextId = 1
+        private val users = mutableMapOf<Int, User>()
+
+        fun create(name: String, email: String): User {
+            val user = User(nextId++, name, email)
+            users[user.id] = user
+            return user
+        }
+
+        fun getById(id: Int): User? = users[id]
+
+        fun getAll(): List<User> = users.values.toList()
+    }
+
+    override fun toString() = "User(id=$id, name='$name', email='$email')"
+}
+
+fun main() {
+    // val user = User(1, "Alice", "alice@example.com")  // ОШИБКА
+
+    // Нужно использовать фабричный метод
+    val user1 = User.create("Alice", "alice@example.com")
+    val user2 = User.create("Bob", "bob@example.com")
+
+    println(user1)
+    println(user2)
+
+    println("\nВсе пользователи:")
+    User.getAll().forEach { println(it) }
+
+    println("\nНайти пользователя 1: ${User.getById(1)}")
+}
+```
+
+**Builder pattern с приватным конструктором:**
+
+```kotlin
+class Car private constructor(
+    val brand: String,
+    val model: String,
+    val year: Int,
+    val color: String?,
+    val sunroof: Boolean
+) {
+    class Builder {
+        private var brand: String = ""
+        private var model: String = ""
+        private var year: Int = 0
+        private var color: String? = null
+        private var sunroof: Boolean = false
+
+        fun brand(brand: String) = apply { this.brand = brand }
+        fun model(model: String) = apply { this.model = model }
+        fun year(year: Int) = apply { this.year = year }
+        fun color(color: String) = apply { this.color = color }
+        fun sunroof(sunroof: Boolean) = apply { this.sunroof = sunroof }
+
+        fun build(): Car {
+            require(brand.isNotBlank()) { "Бренд обязателен" }
+            require(model.isNotBlank()) { "Модель обязательна" }
+            require(year > 1900) { "Неверный год" }
+
+            return Car(brand, model, year, color, sunroof)
+        }
+    }
+
+    companion object {
+        fun builder() = Builder()
+    }
+
+    override fun toString() =
+        "Car(brand='$brand', model='$model', year=$year, color=$color, sunroof=$sunroof)"
+}
+
+fun main() {
+    // val car = Car("Toyota", "Camry", 2023, "Red", false)  // ОШИБКА
+
+    // Нужно использовать builder
+    val car = Car.builder()
+        .brand("Toyota")
+        .model("Camry")
+        .year(2023)
+        .color("Red")
+        .sunroof(true)
+        .build()
+
+    println(car)
+}
+```

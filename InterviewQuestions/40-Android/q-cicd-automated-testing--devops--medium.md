@@ -1,20 +1,20 @@
 ---
-tags:
-  - android
+id: "20251015082237276"
+title: "Cicd Automated Testing / Cicd Automated Тестирование"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-11
+tags: - android
   - ci-cd
   - testing
   - automation
   - github-actions
   - emulator
-difficulty: medium
-status: draft
-related:
-  - q-cicd-pipeline-setup--devops--medium
+related:   - q-cicd-pipeline-setup--devops--medium
   - q-compose-ui-testing--testing--medium
   - q-testing-coroutines-flow--testing--hard
-created: 2025-10-11
 ---
-
 # Question (EN)
 How do you run automated tests (unit, instrumented, UI) in CI/CD? What are the challenges with running instrumented tests in CI and how do you solve them?
 

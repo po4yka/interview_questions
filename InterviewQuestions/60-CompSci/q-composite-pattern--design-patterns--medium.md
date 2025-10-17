@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237108"
+title: "Composite Pattern / Composite Паттерн"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - structural-patterns
   - composite
   - gof-patterns
   - tree-structure
-difficulty: medium
-status: draft
 ---
-
 # Composite Pattern
 
 # Question (EN)

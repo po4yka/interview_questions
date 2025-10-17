@@ -7,7 +7,28 @@ created: 2025-10-12
 updated: 2025-10-12
 ---
 
-# Algorithms
+# Summary (EN)
+
+An algorithm is a step-by-step procedure for solving a problem. Understanding algorithms is crucial for writing efficient code and solving computational problems. Key concepts include time/space complexity (Big O notation), sorting algorithms, searching algorithms, and algorithm design patterns like divide-and-conquer, dynamic programming, and greedy approaches.
+
+# Сводка (RU)
+
+Алгоритм - это пошаговая процедура решения задачи. Понимание алгоритмов критически важно для написания эффективного кода и решения вычислительных проблем. Ключевые концепции включают временную/пространственную сложность (нотация Big O), алгоритмы сортировки, алгоритмы поиска и паттерны проектирования алгоритмов, такие как разделяй и властвуй, динамическое программирование и жадные подходы.
+
+## Use Cases / Trade-offs
+
+**Use Cases:**
+- Data processing and transformation
+- Search and retrieval operations
+- Optimization problems
+- Graph traversal and analysis
+- Computational problem solving
+
+**Trade-offs:**
+- **Time vs Space:** Faster execution vs. memory usage
+- **Sorting:** Merge Sort (stable, O(n log n)) vs. Quick Sort (faster average, unstable)
+- **Searching:** Linear (simple, O(n)) vs. Binary (requires sorted data, O(log n))
+- **Algorithm Patterns:** Optimal solution (dynamic programming) vs. fast approximation (greedy)
 
 ## Overview
 
@@ -171,6 +192,13 @@ fun binarySearch(list: List<Int>, target: Int): Int {
 ## Related Concepts
 
 - [[c-data-structures]]
+
+## References
+
+- "Introduction to Algorithms" by Cormen, Leiserson, Rivest, and Stein (CLRS)
+- [Big-O Cheat Sheet](https://www.bigocheatsheet.com/)
+- [Visualgo - Algorithm Visualizations](https://visualgo.net/)
+- [GeeksforGeeks Algorithms](https://www.geeksforgeeks.org/fundamentals-of-algorithms/)
 
 ## MOC Links
 

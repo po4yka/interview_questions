@@ -1,16 +1,17 @@
 ---
+id: "20251015082238622"
+title: "How To Fix A Bad Element Layout / Как исправить плохой layout элемента"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/layouts
   - layout
   - layouts
   - performance
   - ui
-difficulty: easy
-status: draft
 ---
-
 # Как можно исправить плохой layout элемента?
 
 **English**: How to fix a bad element layout?

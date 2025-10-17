@@ -1,11 +1,13 @@
 ---
-tags:
-  - programming-languages
-  - android
+id: "20251015082237578"
+title: "What Is Pendingintent / Что такое PendingIntent"
+topic: android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
+  - android
 ---
-
 # Что такое PendingIntent?
 
 # Question (EN)

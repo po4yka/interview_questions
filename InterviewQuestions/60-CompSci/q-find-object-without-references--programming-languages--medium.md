@@ -1,16 +1,18 @@
 ---
-tags:
-  - debugging
+id: "20251015082237191"
+title: "Find Object Without References / Поиск объектов без ссылок"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - debugging
   - heap-dump
   - kotlin
   - mat
   - memory-management
   - memory-profiler
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # Как найти объект, если на него нет ссылок?
 
 # Question (EN)

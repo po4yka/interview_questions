@@ -36,10 +36,10 @@ q-<slug>--<topic>--<difficulty>.md
 
 **Required heading format**:
 ```markdown
-## Question (EN)
+# Question (EN)
 > Your question here
 
-## Вопрос (RU)
+# Вопрос (RU)
 > Ваш вопрос здесь
 
 ---
@@ -51,7 +51,7 @@ Your answer here
 Ваш ответ здесь
 ```
 
-**Important**: All question and answer headings must use `##` (h2 level).
+**Important**: Question headings must use `#` (h1 level) and answer headings must use `##` (h2 level).
 
 ---
 
@@ -221,8 +221,8 @@ For Android questions, choose 1-3 subtopics from TAXONOMY.md:
 - **Add references** to official documentation
 
 ### 3. Heading Levels
-- **Questions**: Use `## Question (EN)` and `## Вопрос (RU)`
-- **Answers**: Use `## Answer (EN)` and `## Ответ (RU)`
+- **Questions**: Use `# Question (EN)` and `# Вопрос (RU)` (h1 level)
+- **Answers**: Use `## Answer (EN)` and `## Ответ (RU)` (h2 level)
 - **Subsections**: Use `###` for subsections within answers
 
 ### 4. Tags
@@ -268,10 +268,10 @@ tags:
 
 **Content**:
 ```markdown
-## Question (EN)
+# Question (EN)
 > What are Kotlin scope functions and when should you use each one?
 
-## Вопрос (RU)
+# Вопрос (RU)
 > Что такое функции области видимости в Kotlin и когда следует использовать каждую?
 
 ---
@@ -328,7 +328,7 @@ Before committing a new file, verify:
 1. **File naming** follows convention
 2. **YAML frontmatter** is complete and valid
 3. **Both languages** (EN and RU) are present
-4. **Heading levels** use `##` for questions and answers
+4. **Heading levels** use `#` (h1) for questions and `##` (h2) for answers
 5. **Code examples** are properly formatted
 6. **Tags** include topic and `difficulty/X`
 7. **No emoji** in content (unless explicitly requested)
@@ -347,9 +347,9 @@ Before committing a new file, verify:
 
 ### Issue 2: Wrong Heading Levels
 
-**Problem**: Questions use `#` instead of `##`
+**Problem**: Inconsistent heading levels for questions and answers
 
-**Solution**: Always use `##` for all question and answer headings
+**Solution**: Always use `#` (h1) for question headings and `##` (h2) for answer headings
 
 ### Issue 3: Missing Language Sections
 

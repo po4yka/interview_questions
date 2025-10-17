@@ -1,11 +1,12 @@
 ---
+id: "20251015082237458"
+title: "What Events Are Activity Methods Tied To / С какими событиями связаны методы Activity"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # What events are Activity methods tied to?
 
 # Вопрос (RU)

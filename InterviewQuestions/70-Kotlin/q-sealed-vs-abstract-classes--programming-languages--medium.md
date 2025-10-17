@@ -1,15 +1,16 @@
 ---
+id: "20251015082237068"
+title: "Sealed Vs Abstract Classes / Sealed против Abstract Классы"
 topic: kotlin
-tags:
-  - abstract
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - abstract
   - abstract-classes
   - kotlin
   - programming-languages
   - sealed-classes
-difficulty: medium
-status: draft
 ---
-
 # В чем отличие sealed классов от абстрактных
 
 **English**: What is the difference between sealed and abstract classes?

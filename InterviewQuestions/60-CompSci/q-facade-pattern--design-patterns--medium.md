@@ -1,13 +1,15 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237193"
+title: "Facade Pattern / Facade Паттерн"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - structural-patterns
   - facade
   - gof-patterns
-difficulty: medium
-status: draft
 ---
-
 # Facade Pattern
 
 # Question (EN)

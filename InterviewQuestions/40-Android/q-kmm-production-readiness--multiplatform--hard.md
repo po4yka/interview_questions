@@ -1,20 +1,21 @@
 ---
+id: "20251015082238611"
+title: "Kmm Production Readiness / Готовность KMM к production"
 topic: kotlin
-subtopics: [kmp]
-tags:
-  - Android
+difficulty: hard
+status: draft
+created: 2025-10-13
+tags: - Android
   - Kotlin
   - KMM
   - Production
   - BestPractices
-difficulty: hard
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-kotlin
 related_questions: []
+subtopics: [kmp]
 ---
-
 # KMM Production Readiness and Best Practices
 
 # Question (EN)

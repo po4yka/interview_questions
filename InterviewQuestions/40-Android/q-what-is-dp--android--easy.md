@@ -1,17 +1,19 @@
 ---
+id: "20251015082237425"
+title: "What Is Dp / Что такое dp"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
 
-# What is dp?
-
 # Question (EN)
+
 > What is dp (density-independent pixel)?
 
 # Вопрос (RU)
+
 > Что такое dp?
 
 ---
@@ -46,22 +48,23 @@ pixels = dp × (device dpi / 160)
 ```
 
 **Example**: 100dp on different devices
-- mdpi (160dpi): 100dp = 100px
-- hdpi (240dpi): 100dp = 150px
-- xhdpi (320dpi): 100dp = 200px
-- xxhdpi (480dpi): 100dp = 300px
+
+-   mdpi (160dpi): 100dp = 100px
+-   hdpi (240dpi): 100dp = 150px
+-   xhdpi (320dpi): 100dp = 200px
+-   xxhdpi (480dpi): 100dp = 300px
 
 ### Visual Comparison
 
 ```
 
-     Same Physical Size          
+     Same Physical Size
 
- ldpi:   75px  (100dp)          
- mdpi:   100px (100dp)          
- hdpi:   150px (100dp)          
- xhdpi:  200px (100dp)          
- xxhdpi: 300px (100dp)          
+ ldpi:   75px  (100dp)
+ mdpi:   100px (100dp)
+ hdpi:   150px (100dp)
+ xhdpi:  200px (100dp)
+ xxhdpi: 300px (100dp)
 
 ```
 
@@ -69,14 +72,14 @@ pixels = dp × (device dpi / 160)
 
 Android defines standard density buckets:
 
-| Density | DPI | Scale Factor | Folder |
-|---------|-----|--------------|--------|
-| ldpi | ~120dpi | 0.75 | drawable-ldpi |
-| mdpi | ~160dpi | 1.0 (baseline) | drawable-mdpi |
-| hdpi | ~240dpi | 1.5 | drawable-hdpi |
-| xhdpi | ~320dpi | 2.0 | drawable-xhdpi |
-| xxhdpi | ~480dpi | 3.0 | drawable-xxhdpi |
-| xxxhdpi | ~640dpi | 4.0 | drawable-xxxhdpi |
+| Density | DPI     | Scale Factor   | Folder           |
+| ------- | ------- | -------------- | ---------------- |
+| ldpi    | ~120dpi | 0.75           | drawable-ldpi    |
+| mdpi    | ~160dpi | 1.0 (baseline) | drawable-mdpi    |
+| hdpi    | ~240dpi | 1.5            | drawable-hdpi    |
+| xhdpi   | ~320dpi | 2.0            | drawable-xhdpi   |
+| xxhdpi  | ~480dpi | 3.0            | drawable-xxhdpi  |
+| xxxhdpi | ~640dpi | 4.0            | drawable-xxxhdpi |
 
 ### XML Usage
 
@@ -306,14 +309,14 @@ fun ResponsiveLayout() {
 
 ### dp vs px vs sp
 
-| Use Case | Unit | Example |
-|----------|------|---------|
-| Layout dimensions | dp | `width = 100.dp` |
-| Margins/Padding | dp | `padding(16.dp)` |
-| Border thickness | dp | `border(1.dp)` |
-| Icon sizes | dp | `size(24.dp)` |
-| **Text size** | **sp** | `fontSize = 16.sp` |
-| Drawing (rare) | px | Canvas operations |
+| Use Case          | Unit   | Example            |
+| ----------------- | ------ | ------------------ |
+| Layout dimensions | dp     | `width = 100.dp`   |
+| Margins/Padding   | dp     | `padding(16.dp)`   |
+| Border thickness  | dp     | `border(1.dp)`     |
+| Icon sizes        | dp     | `size(24.dp)`      |
+| **Text size**     | **sp** | `fontSize = 16.sp` |
+| Drawing (rare)    | px     | Canvas operations  |
 
 ### Best Practices
 
@@ -369,6 +372,17 @@ Log.d("Screen", "Density: ${density}x ($densityDpi dpi)")
 
 ## Ответ (RU)
 
-Что такое dp
+dp (density-independent pixels, "плотность-независимые пиксели") — единица измерения в Android для создания адаптивных интерфейсов, одинаково выглядящих на экранах с разной плотностью пикселей. Пересчет выполняется по формуле: `px = dp × (dpi / 160)`. Используйте dp для размеров элементов, отступов и толщины линий, а sp — только для размера текста.
 
-dp (Density-independent Pixels) это единица измерения в Android используемая для создания адаптивных интерфейсов Она масштабируется в зависимости от плотности экрана устройства обеспечивая одинаковый визуальный размер элементов на разных экранах
+---
+
+## Follow-ups
+
+-   Когда использовать sp вместо dp (и в Compose, и во View-системе)?
+-   Как связаны density buckets и папки ресурсов `drawable-*`/`mipmap-*`?
+-   Какие проблемы возникают при смешении px и dp и как мигрировать?
+
+## References
+
+-   `https://developer.android.com/training/multiscreen/screendensities` — Support different pixel densities
+-   `https://developer.android.com/guide/topics/resources/multiscreen-density` — Density resources

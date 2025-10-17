@@ -1,7 +1,11 @@
 ---
+id: "20251015082237557"
+title: "Pass Large Data Between Activities / Передача больших данных между Activity"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android/data-passing
   - content-provider
   - data-passing
@@ -9,10 +13,7 @@ tags:
   - intent
   - large-data
   - uri
-difficulty: hard
-status: draft
 ---
-
 # Как правильно передать большой объем данных, например картинку, на Activity?
 
 **English**: How to properly pass large data (e.g., an image) between Activities?

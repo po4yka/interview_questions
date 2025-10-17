@@ -1,14 +1,15 @@
 ---
+id: "20251015082236039"
+title: "Arraylist Linkedlist Vector Difference / Разница ArrayList LinkedList и Vector"
 topic: kotlin
-tags:
-  - collections
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - collections
   - data structures
   - kotlin
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # В чем разница ArrayList, LinkedList, Vector
 
 **English**: What is the difference between ArrayList, LinkedList, Vector?

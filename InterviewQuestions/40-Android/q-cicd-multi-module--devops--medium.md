@@ -1,29 +1,33 @@
 ---
-tags:
-  - android
+id: "20251015082237259"
+title: "Cicd Multi Module / CI/CD для мультимодульных проектов"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-11
+tags: - android
   - ci-cd
   - multi-module
   - gradle
   - build-optimization
-difficulty: medium
-status: draft
-related:
-  - q-cicd-pipeline-setup--devops--medium
+related:   - q-cicd-pipeline-setup--devops--medium
   - q-gradle-build-optimization--build--medium
   - q-gradle-dependency-management--build--medium
-created: 2025-10-11
 ---
 
 # Question (EN)
+
 How do you optimize CI/CD for multi-module Android projects? How do you detect affected modules and run tests only for changed code?
 
 ## Answer (EN)
+
 ### Overview
 
 Multi-module projects present unique CI/CD challenges:
--  Building all modules takes too long
--  Running all tests is expensive
--  Deploying unchanged modules wastes resources
+
+-   Building all modules takes too long
+-   Running all tests is expensive
+-   Deploying unchanged modules wastes resources
 
 **Solution**: Detect affected modules and build/test only what changed.
 
@@ -172,116 +176,116 @@ tasks.register("testAffected") {
 name: Multi-Module CI
 
 on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
+    push:
+        branches: [main, develop]
+    pull_request:
+        branches: [main]
 
 jobs:
-  detect-changes:
-    runs-on: ubuntu-latest
-    outputs:
-      affected-modules: ${{ steps.detect.outputs.modules }}
-      should-build: ${{ steps.detect.outputs.should-build }}
+    detect-changes:
+        runs-on: ubuntu-latest
+        outputs:
+            affected-modules: ${{ steps.detect.outputs.modules }}
+            should-build: ${{ steps.detect.outputs.should-build }}
 
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Need full history for git diff
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0 # Need full history for git diff
 
-      - name: Detect affected modules
-        id: detect
-        run: |
-          # Get changed files
-          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+            - name: Detect affected modules
+              id: detect
+              run: |
+                  # Get changed files
+                  CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
 
-          echo "Changed files:"
-          echo "$CHANGED_FILES"
+                  echo "Changed files:"
+                  echo "$CHANGED_FILES"
 
-          # Detect affected modules (simple approach)
-          MODULES=""
+                  # Detect affected modules (simple approach)
+                  MODULES=""
 
-          if echo "$CHANGED_FILES" | grep -q "^app/"; then
-            MODULES="$MODULES app"
-          fi
+                  if echo "$CHANGED_FILES" | grep -q "^app/"; then
+                    MODULES="$MODULES app"
+                  fi
 
-          if echo "$CHANGED_FILES" | grep -q "^feature/home/"; then
-            MODULES="$MODULES feature:home"
-          fi
+                  if echo "$CHANGED_FILES" | grep -q "^feature/home/"; then
+                    MODULES="$MODULES feature:home"
+                  fi
 
-          if echo "$CHANGED_FILES" | grep -q "^feature/profile/"; then
-            MODULES="$MODULES feature:profile"
-          fi
+                  if echo "$CHANGED_FILES" | grep -q "^feature/profile/"; then
+                    MODULES="$MODULES feature:profile"
+                  fi
 
-          if echo "$CHANGED_FILES" | grep -q "^core/data/"; then
-            # core:data affects feature:home and feature:profile
-            MODULES="$MODULES core:data feature:home feature:profile"
-          fi
+                  if echo "$CHANGED_FILES" | grep -q "^core/data/"; then
+                    # core:data affects feature:home and feature:profile
+                    MODULES="$MODULES core:data feature:home feature:profile"
+                  fi
 
-          if echo "$CHANGED_FILES" | grep -q "^core/ui/"; then
-            # core:ui affects all features
-            MODULES="$MODULES core:ui feature:home feature:profile feature:settings"
-          fi
+                  if echo "$CHANGED_FILES" | grep -q "^core/ui/"; then
+                    # core:ui affects all features
+                    MODULES="$MODULES core:ui feature:home feature:profile feature:settings"
+                  fi
 
-          # Remove duplicates
-          MODULES=$(echo "$MODULES" | tr ' ' '\n' | sort -u | tr '\n' ' ')
+                  # Remove duplicates
+                  MODULES=$(echo "$MODULES" | tr ' ' '\n' | sort -u | tr '\n' ' ')
 
-          echo "Affected modules: $MODULES"
+                  echo "Affected modules: $MODULES"
 
-          # Output as JSON array for matrix
-          MODULES_JSON=$(echo $MODULES | jq -R -s -c 'split(" ") | map(select(length > 0))')
-          echo "modules=$MODULES_JSON" >> $GITHUB_OUTPUT
+                  # Output as JSON array for matrix
+                  MODULES_JSON=$(echo $MODULES | jq -R -s -c 'split(" ") | map(select(length > 0))')
+                  echo "modules=$MODULES_JSON" >> $GITHUB_OUTPUT
 
-          # Set flag if there are modules to build
-          if [ -n "$MODULES" ]; then
-            echo "should-build=true" >> $GITHUB_OUTPUT
-          else
-            echo "should-build=false" >> $GITHUB_OUTPUT
-          fi
+                  # Set flag if there are modules to build
+                  if [ -n "$MODULES" ]; then
+                    echo "should-build=true" >> $GITHUB_OUTPUT
+                  else
+                    echo "should-build=false" >> $GITHUB_OUTPUT
+                  fi
 
-  build-affected:
-    needs: detect-changes
-    if: needs.detect-changes.outputs.should-build == 'true'
-    runs-on: ubuntu-latest
+    build-affected:
+        needs: detect-changes
+        if: needs.detect-changes.outputs.should-build == 'true'
+        runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        module: ${{ fromJson(needs.detect-changes.outputs.affected-modules) }}
+        strategy:
+            matrix:
+                module: ${{ fromJson(needs.detect-changes.outputs.affected-modules) }}
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
+            - name: Set up JDK 17
+              uses: actions/setup-java@v4
+              with:
+                  java-version: "17"
+                  distribution: "temurin"
+                  cache: gradle
 
-      - name: Grant execute permission
-        run: chmod +x gradlew
+            - name: Grant execute permission
+              run: chmod +x gradlew
 
-      - name: Build ${{ matrix.module }}
-        run: ./gradlew :${{ matrix.module }}:assemble
+            - name: Build ${{ matrix.module }}
+              run: ./gradlew :${{ matrix.module }}:assemble
 
-      - name: Test ${{ matrix.module }}
-        run: ./gradlew :${{ matrix.module }}:test
+            - name: Test ${{ matrix.module }}
+              run: ./gradlew :${{ matrix.module }}:test
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: test-results-${{ matrix.module }}
-          path: ${{ matrix.module }}/build/reports/tests/
+            - name: Upload test results
+              uses: actions/upload-artifact@v3
+              if: always()
+              with:
+                  name: test-results-${{ matrix.module }}
+                  path: ${{ matrix.module }}/build/reports/tests/
 
-  build-all:
-    needs: detect-changes
-    if: needs.detect-changes.outputs.should-build == 'false'
-    runs-on: ubuntu-latest
+    build-all:
+        needs: detect-changes
+        if: needs.detect-changes.outputs.should-build == 'false'
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: No changes detected
-        run: echo "No modules affected by this change"
+        steps:
+            - name: No changes detected
+              run: echo "No modules affected by this change"
 ```
 
 ### Strategy 3: Using Gradle Enterprise Build Scan
@@ -320,55 +324,55 @@ gradleEnterprise {
 name: Multi-Module with Caching
 
 on:
-  push:
-    branches: [ main ]
+    push:
+        branches: [main]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+            - name: Set up JDK 17
+              uses: actions/setup-java@v4
+              with:
+                  java-version: "17"
+                  distribution: "temurin"
 
-      # Cache Gradle wrapper
-      - name: Cache Gradle wrapper
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+            # Cache Gradle wrapper
+            - name: Cache Gradle wrapper
+              uses: actions/cache@v3
+              with:
+                  path: ~/.gradle/wrapper
+                  key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
 
-      # Cache Gradle dependencies
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-caches-
+            # Cache Gradle dependencies
+            - name: Cache Gradle dependencies
+              uses: actions/cache@v3
+              with:
+                  path: ~/.gradle/caches
+                  key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
+                  restore-keys: |
+                      ${{ runner.os }}-gradle-caches-
 
-      # Cache module build outputs
-      - name: Cache module outputs
-        uses: actions/cache@v3
-        with:
-          path: |
-            */build/
-            !*/build/reports/
-            !*/build/test-results/
-          key: ${{ runner.os }}-module-outputs-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-module-outputs-
+            # Cache module build outputs
+            - name: Cache module outputs
+              uses: actions/cache@v3
+              with:
+                  path: |
+                      */build/
+                      !*/build/reports/
+                      !*/build/test-results/
+                  key: ${{ runner.os }}-module-outputs-${{ github.sha }}
+                  restore-keys: |
+                      ${{ runner.os }}-module-outputs-
 
-      - name: Grant execute permission
-        run: chmod +x gradlew
+            - name: Grant execute permission
+              run: chmod +x gradlew
 
-      - name: Build all modules
-        run: ./gradlew assemble --parallel --build-cache
+            - name: Build all modules
+              run: ./gradlew assemble --parallel --build-cache
 ```
 
 ### Strategy 5: Nx-style Computation Caching
@@ -401,77 +405,78 @@ org.gradle.experimental.gradlemodule.metadata=true
 name: Smart CI with Build Cache
 
 on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
+    push:
+        branches: [main, develop]
+    pull_request:
+        branches: [main]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+            - name: Set up JDK 17
+              uses: actions/setup-java@v4
+              with:
+                  java-version: "17"
+                  distribution: "temurin"
 
-      # Restore Gradle build cache
-      - name: Restore build cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches/build-cache-*
-          key: ${{ runner.os }}-gradle-build-cache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-build-cache-
+            # Restore Gradle build cache
+            - name: Restore build cache
+              uses: actions/cache@v3
+              with:
+                  path: ~/.gradle/caches/build-cache-*
+                  key: ${{ runner.os }}-gradle-build-cache-${{ github.sha }}
+                  restore-keys: |
+                      ${{ runner.os }}-gradle-build-cache-
 
-      # Restore configuration cache
-      - name: Restore configuration cache
-        uses: actions/cache@v3
-        with:
-          path: .gradle/configuration-cache
-          key: ${{ runner.os }}-gradle-config-cache-${{ hashFiles('**/*.gradle*') }}
+            # Restore configuration cache
+            - name: Restore configuration cache
+              uses: actions/cache@v3
+              with:
+                  path: .gradle/configuration-cache
+                  key: ${{ runner.os }}-gradle-config-cache-${{ hashFiles('**/*.gradle*') }}
 
-      - name: Grant execute permission
-        run: chmod +x gradlew
+            - name: Grant execute permission
+              run: chmod +x gradlew
 
-      # Build with caching - Gradle automatically skips unchanged modules
-      - name: Build all modules (with cache)
-        run: |
-          ./gradlew assemble \
-            --parallel \
-            --build-cache \
-            --configuration-cache \
-            -Dorg.gradle.caching=true
+            # Build with caching - Gradle automatically skips unchanged modules
+            - name: Build all modules (with cache)
+              run: |
+                  ./gradlew assemble \
+                    --parallel \
+                    --build-cache \
+                    --configuration-cache \
+                    -Dorg.gradle.caching=true
 
-      # Test with caching
-      - name: Test all modules (with cache)
-        run: |
-          ./gradlew test \
-            --parallel \
-            --build-cache \
-            --configuration-cache \
-            -Dorg.gradle.caching=true
+            # Test with caching
+            - name: Test all modules (with cache)
+              run: |
+                  ./gradlew test \
+                    --parallel \
+                    --build-cache \
+                    --configuration-cache \
+                    -Dorg.gradle.caching=true
 
-      # Upload test results
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: test-results
-          path: |
-            */build/reports/tests/
-            */build/test-results/
+            # Upload test results
+            - name: Upload test results
+              uses: actions/upload-artifact@v3
+              if: always()
+              with:
+                  name: test-results
+                  path: |
+                      */build/reports/tests/
+                      */build/test-results/
 ```
 
 ### Production Example: Complete Multi-Module Setup
 
 **Project structure**:
+
 ```
 root/
  app/
@@ -628,129 +633,132 @@ tasks.register<AffectedModulesTask>("affectedModules") {
 name: Smart Multi-Module CI
 
 on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
+    push:
+        branches: [main, develop]
+    pull_request:
+        branches: [main]
 
 jobs:
-  affected-modules:
-    runs-on: ubuntu-latest
-    outputs:
-      modules: ${{ steps.affected.outputs.modules }}
-      matrix: ${{ steps.affected.outputs.matrix }}
+    affected-modules:
+        runs-on: ubuntu-latest
+        outputs:
+            modules: ${{ steps.affected.outputs.modules }}
+            matrix: ${{ steps.affected.outputs.matrix }}
 
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+            - name: Set up JDK 17
+              uses: actions/setup-java@v4
+              with:
+                  java-version: "17"
+                  distribution: "temurin"
 
-      - name: Detect affected modules
-        id: affected
-        run: |
-          chmod +x gradlew
-          ./gradlew affectedModules
+            - name: Detect affected modules
+              id: affected
+              run: |
+                  chmod +x gradlew
+                  ./gradlew affectedModules
 
-          # Read affected modules
-          MODULES=$(cat build/affected-modules.txt | tr '\n' ' ')
-          echo "modules=$MODULES" >> $GITHUB_OUTPUT
+                  # Read affected modules
+                  MODULES=$(cat build/affected-modules.txt | tr '\n' ' ')
+                  echo "modules=$MODULES" >> $GITHUB_OUTPUT
 
-          # Convert to JSON matrix
-          MATRIX=$(echo $MODULES | jq -R -s -c 'split(" ") | map(select(length > 0))')
-          echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+                  # Convert to JSON matrix
+                  MATRIX=$(echo $MODULES | jq -R -s -c 'split(" ") | map(select(length > 0))')
+                  echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
 
-  build-and-test:
-    needs: affected-modules
-    if: needs.affected-modules.outputs.matrix != '[]'
-    runs-on: ubuntu-latest
+    build-and-test:
+        needs: affected-modules
+        if: needs.affected-modules.outputs.matrix != '[]'
+        runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        module: ${{ fromJson(needs.affected-modules.outputs.matrix) }}
+        strategy:
+            fail-fast: false
+            matrix:
+                module: ${{ fromJson(needs.affected-modules.outputs.matrix) }}
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
+            - name: Set up JDK 17
+              uses: actions/setup-java@v4
+              with:
+                  java-version: "17"
+                  distribution: "temurin"
+                  cache: gradle
 
-      - name: Build and test ${{ matrix.module }}
-        run: |
-          chmod +x gradlew
-          ./gradlew :${{ matrix.module }}:assemble :${{ matrix.module }}:test --parallel
+            - name: Build and test ${{ matrix.module }}
+              run: |
+                  chmod +x gradlew
+                  ./gradlew :${{ matrix.module }}:assemble :${{ matrix.module }}:test --parallel
 
-      - name: Upload results for ${{ matrix.module }}
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: results-${{ matrix.module }}
-          path: |
-            ${{ matrix.module }}/build/reports/
-            ${{ matrix.module }}/build/test-results/
+            - name: Upload results for ${{ matrix.module }}
+              uses: actions/upload-artifact@v3
+              if: always()
+              with:
+                  name: results-${{ matrix.module }}
+                  path: |
+                      ${{ matrix.module }}/build/reports/
+                      ${{ matrix.module }}/build/test-results/
 ```
 
 ### Best Practices
 
 1. **Always Build Root/App Module**
-   ```yaml
-   #  GOOD - Always verify app assembles
-   - name: Build app module
-     run: ./gradlew :app:assemble
 
-   # Even if only library modules changed
-   ```
+    ```yaml
+    #  GOOD - Always verify app assembles
+    - name: Build app module
+      run: ./gradlew :app:assemble
+    # Even if only library modules changed
+    ```
 
 2. **Cache Aggressively**
-   ```yaml
-   #  GOOD - Multi-layer caching
-   - uses: actions/cache@v3
-     with:
-       path: |
-         ~/.gradle/caches
-         ~/.gradle/wrapper
-         .gradle/configuration-cache
-       key: gradle-${{ hashFiles('**/*.gradle*') }}
-   ```
+
+    ```yaml
+    #  GOOD - Multi-layer caching
+    - uses: actions/cache@v3
+      with:
+          path: |
+              ~/.gradle/caches
+              ~/.gradle/wrapper
+              .gradle/configuration-cache
+          key: gradle-${{ hashFiles('**/*.gradle*') }}
+    ```
 
 3. **Parallelize When Possible**
-   ```bash
-   #  GOOD - Build modules in parallel
-   ./gradlew assemble --parallel --max-workers=4
 
-   #  BAD - Sequential builds
-   ./gradlew :module1:assemble
-   ./gradlew :module2:assemble
-   ```
+    ```bash
+    #  GOOD - Build modules in parallel
+    ./gradlew assemble --parallel --max-workers=4
+
+    #  BAD - Sequential builds
+    ./gradlew :module1:assemble
+    ./gradlew :module2:assemble
+    ```
 
 4. **Use Remote Build Cache for Teams**
-   ```kotlin
-   // build.gradle.kts
-   buildCache {
-       remote<HttpBuildCache> {
-           url = uri("https://build-cache.company.com")
-           credentials {
-               username = System.getenv("BUILD_CACHE_USERNAME")
-               password = System.getenv("BUILD_CACHE_PASSWORD")
-           }
-           isPush = System.getenv("CI") == "true"
-       }
-   }
-   ```
+    ```kotlin
+    // build.gradle.kts
+    buildCache {
+        remote<HttpBuildCache> {
+            url = uri("https://build-cache.company.com")
+            credentials {
+                username = System.getenv("BUILD_CACHE_USERNAME")
+                password = System.getenv("BUILD_CACHE_PASSWORD")
+            }
+            isPush = System.getenv("CI") == "true"
+        }
+    }
+    ```
 
 ### Summary
 
 **Strategies for multi-module CI/CD:**
+
 1.  **Affected module detection** - Build only what changed
 2.  **Module-level caching** - Reuse unchanged builds
 3.  **Parallel execution** - Build modules in parallel
@@ -758,27 +766,32 @@ jobs:
 5.  **Remote build cache** - Share cache across team
 
 **Key optimizations:**
-- Detect changed files with git diff
-- Build module dependency graph
-- Calculate transitive dependencies
-- Run tests only for affected modules
-- Cache everything (dependencies, build outputs, config)
+
+-   Detect changed files with git diff
+-   Build module dependency graph
+-   Calculate transitive dependencies
+-   Run tests only for affected modules
+-   Cache everything (dependencies, build outputs, config)
 
 **Expected improvements:**
-- **From**: 30 min full build
-- **To**: 5-10 min incremental build (80% faster)
+
+-   **From**: 30 min full build
+-   **To**: 5-10 min incremental build (80% faster)
 
 ---
 
 # Вопрос (RU)
+
 Как оптимизировать CI/CD для мульти-модульных Android-проектов? Как определять затронутые модули и запускать тесты только для изменённого кода?
 
 ## Ответ (RU)
+
 [Перевод с примерами из английской версии...]
 
 ### Резюме
 
 **Стратегии для мульти-модульного CI/CD:**
+
 1.  **Обнаружение затронутых модулей** — собирать только то, что изменилось
 2.  **Кеширование на уровне модулей** — переиспользовать неизменённые сборки
 3.  **Параллельное выполнение** — собирать модули параллельно
@@ -786,12 +799,31 @@ jobs:
 5.  **Удалённый build cache** — делиться кешем между командой
 
 **Ключевые оптимизации:**
-- Обнаруживать изменённые файлы с git diff
-- Строить граф зависимостей модулей
-- Вычислять транзитивные зависимости
-- Запускать тесты только для затронутых модулей
-- Кешировать всё (зависимости, выходы сборки, конфигурацию)
 
-**Ожидаемые улучшения:**
-- **От**: 30 мин полная сборка
-- **К**: 5-10 мин инкрементальная сборка (на 80% быстрее)
+-   Обнаруживать изменённые файлы с git diff
+-   Строить граф зависимостей модулей
+-   Вычислять транзитивные зависимости
+-   Запускать тесты только для затронутых модулей
+-   Кешировать всё (зависимости, выходы сборки, конфигурацию)
+
+---
+
+## Follow-ups
+
+-   How do you handle circular dependencies between modules in CI/CD pipelines?
+-   What strategies can you use to optimize build times for large multi-module projects?
+-   How do you implement incremental testing for modules with shared dependencies?
+
+## References
+
+-   `https://docs.gradle.org/current/userguide/build_cache.html` — Gradle build cache
+-   `https://docs.gradle.org/current/userguide/configuration_cache.html` — Configuration cache
+-   `https://developer.android.com/studio/build/optimize-your-build` — Build optimization
+
+## Related Questions
+
+### Related (Medium)
+
+-   [[q-cicd-pipeline-setup--devops--medium]] - CI/CD pipeline setup
+-   [[q-gradle-build-optimization--build--medium]] - Gradle build optimization
+-   [[q-gradle-dependency-management--build--medium]] - Dependency management

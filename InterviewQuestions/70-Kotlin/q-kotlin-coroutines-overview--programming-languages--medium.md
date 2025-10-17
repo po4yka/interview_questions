@@ -1,16 +1,17 @@
 ---
+id: "20251015082236012"
+title: "Kotlin Coroutines Overview / Обзор корутин Kotlin"
 topic: kotlin
-tags:
-  - async
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - async
   - concurrency
   - coroutines
   - kotlin
   - lightweight-threads
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # Что известно про корутины?
 
 # Question (EN)

@@ -1,28 +1,25 @@
 ---
 id: splash-screen-api-android12-1730793800000
-title: Splash Screen API (Android 12+) / API Splash Screen (Android 12+)
+title: "Splash Screen API (Android 12+)"
 topic: android
-language_tags:
-  - en
-  - ru
-original_language: en
+difficulty: medium
 status: draft
-moc: moc-android
-tags:
-  - android
+created: 2025-10-15
+tags: - android
   - splash-screen
   - android12
   - app-startup
   - ui
   - difficulty/medium
-subtopics:
-  - ui-views
+language_tags:   - en
+  - ru
+moc: moc-android
+original_language: en
+source: https://github.com/Kirchhoff-/Android-Interview-Questions
+subtopics:   - ui-views
   - app-startup
   - ui-animation
-difficulty: medium
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
 ---
-
 # Splash Screen API (Android 12+) / API Splash Screen (Android 12+)
 
 **English**: What do you know about Splash Screen API?

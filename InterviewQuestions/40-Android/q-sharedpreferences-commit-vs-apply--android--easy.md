@@ -1,6 +1,6 @@
 ---
 id: 20251006-100007
-title: "commit() vs apply() in SharedPreferences? / commit() vs apply() в SharedPreferences?"
+title: "commit() vs apply() in SharedPreferences?"
 aliases: []
 
 # Classification

@@ -1,7 +1,11 @@
 ---
+id: "20251015082237260"
+title: "Why Separate Ui And Business Logic / Why Separate Ui и Business Logic"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/architecture-patterns
   - architecture-patterns
   - clean-architecture
@@ -9,15 +13,20 @@ tags:
   - mvp
   - mvvm
   - separation-of-concerns
-difficulty: easy
-status: draft
 ---
 
-# Зачем нужно разделять отображение и бизнес-логику?
+# Question (EN)
 
-**English**: Why is it necessary to separate UI and business logic?
+> Why is it necessary to separate UI and business logic?
+
+# Вопрос (RU)
+
+> Зачем нужно разделять отображение и бизнес-логику?
+
+---
 
 ## Answer (EN)
+
 Separating UI and business logic is a fundamental principle of good software architecture.
 
 **Key Reasons:**
@@ -58,9 +67,9 @@ fun `test get active users`() {
 
 **2. Maintainability**
 
-- Logic changes don't affect UI
-- UI changes don't affect logic
-- Easier to understand and modify
+-   Logic changes don't affect UI
+-   UI changes don't affect logic
+-   Easier to understand and modify
 
 **3. Reusability**
 
@@ -82,9 +91,9 @@ class UserWidget : AppWidgetProvider()
 
 **4. Scalability**
 
-- Large codebases remain organized
-- Multiple developers can work independently
-- Easier to add new features
+-   Large codebases remain organized
+-   Multiple developers can work independently
+-   Easier to add new features
 
 **5. Platform Independence**
 
@@ -144,12 +153,12 @@ class GetUsersUseCase(private val repository: UserRepository) {
 
 **Benefits Summary:**
 
-- **Testable**: Can test business logic without UI
-- **Maintainable**: Changes are isolated
-- **Reusable**: Logic works across different UIs
-- **Scalable**: Easier to grow codebase
-- **Readable**: Code is organized and clear
-- **Flexible**: Easy to change UI or logic independently
+-   **Testable**: Can test business logic without UI
+-   **Maintainable**: Changes are isolated
+-   **Reusable**: Logic works across different UIs
+-   **Scalable**: Easier to grow codebase
+-   **Readable**: Code is organized and clear
+-   **Flexible**: Easy to change UI or logic independently
 
 **Anti-Pattern (Avoid):**
 
@@ -178,16 +187,25 @@ class MainActivity : AppCompatActivity() {
 Separation of concerns is a key principle of Clean Architecture, MVP, MVVM, and MVI patterns. It makes code more testable, maintainable, and professional.
 
 ## Ответ (RU)
+
 Разделение UI и бизнес-логики делает код понятнее, тестируемее и проще в поддержке. Это ключевой принцип Clean Architecture и паттернов MVP, MVVM, MVI.
 
-
 ---
+
+## Follow-ups
+
+-   What are the main architectural patterns that enforce separation of concerns in Android?
+-   How does separating UI and business logic improve code testability?
+-   What are the consequences of tightly coupling UI and business logic?
+
+## References
+
+-   `https://developer.android.com/jetpack/guide` — Architecture components
+-   `https://developer.android.com/topic/libraries/architecture/viewmodel` — ViewModel guide
+-   `https://developer.android.com/topic/libraries/architecture/livedata` — LiveData guide
 
 ## Related Questions
 
 ### Related (Easy)
-- [[q-separate-ui-business-logic--android--easy]] - separate ui business logic 
-### Related (Easy)
-- [[q-separate-ui-business-logic--android--easy]] - separate ui business logic 
-### Related (Easy)
-- [[q-separate-ui-business-logic--android--easy]] - separate ui business logic 
+
+-   [[q-separate-ui-business-logic--android--easy]] - Separation of concerns

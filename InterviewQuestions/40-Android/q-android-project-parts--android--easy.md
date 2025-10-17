@@ -1,17 +1,18 @@
 ---
+id: "20251015082237375"
+title: "Android Project Parts / Части Android проекта"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/project-structure
   - assets
   - gradle
   - manifest
   - project-structure
   - resources
-difficulty: easy
-status: draft
 ---
-
 # Из каких частей состоит проект и какая часть за что отвечает?
 
 # Question (EN)

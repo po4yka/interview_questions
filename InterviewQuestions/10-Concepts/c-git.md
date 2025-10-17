@@ -7,7 +7,26 @@ created: 2025-10-12
 updated: 2025-10-12
 ---
 
-# Git Fundamentals
+# Summary (EN)
+
+Git is a distributed version control system for tracking changes in source code during software development. It provides powerful branching and merging capabilities, supports distributed workflows, and maintains complete history of all changes.
+
+# Сводка (RU)
+
+Git - это распределенная система контроля версий для отслеживания изменений в исходном коде во время разработки программного обеспечения. Она предоставляет мощные возможности ветвления и слияния, поддерживает распределенные рабочие процессы и сохраняет полную историю всех изменений.
+
+## Use Cases / Trade-offs
+
+**Use Cases:**
+- Source code version control
+- Collaborative development
+- Feature branch workflows
+- Code review processes
+- Release management
+
+**Trade-offs:**
+- **Pros:** Distributed architecture, powerful branching, offline work, fast operations
+- **Cons:** Steep learning curve, complex conflict resolution, large binary files handling
 
 ## Overview
 
@@ -98,6 +117,12 @@ git rebase -i HEAD~3
 ## Related Concepts
 
 - [[c-version-control]]
+
+## References
+
+- [Pro Git Book](https://git-scm.com/book/en/v2)
+- [Git Documentation](https://git-scm.com/doc)
+- [Atlassian Git Tutorials](https://www.atlassian.com/git/tutorials)
 
 ## MOC Links
 

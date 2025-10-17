@@ -1,31 +1,28 @@
 ---
 id: 20251012-400002
 title: "LazyGrid & LazyStaggeredGrid / LazyGrid и LazyStaggeredGrid"
-slug: lazy-grid-staggered-grid-jetpack-compose-medium
 topic: android
-subtopics:
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - android
   - jetpack-compose
+  - lazy-layout
+  - grid
+  - performance
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-android
+related_questions:   - q-jetpack-compose-lazy-column--android--easy
+  - q-compose-lazy-layout-optimization--jetpack-compose--hard
+  - q-paging-library-3--android--medium
+slug: lazy-grid-staggered-grid-jetpack-compose-medium
+subtopics:   - jetpack-compose
   - lazy-layout
   - grid
   - performance
   - ui
-status: draft
-difficulty: medium
-moc: moc-android
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-jetpack-compose-lazy-column--android--easy
-  - q-compose-lazy-layout-optimization--jetpack-compose--hard
-  - q-paging-library-3--android--medium
-tags:
-  - android
-  - jetpack-compose
-  - lazy-layout
-  - grid
-  - performance
 ---
-
 # LazyGrid & LazyStaggeredGrid
 
 ## English Version

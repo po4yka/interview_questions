@@ -1,14 +1,16 @@
 ---
-tags:
-  - jetpack-compose
+id: "20251015082237478"
+title: "Compose Gesture Detection / Обнаружение жестов Compose"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - jetpack-compose
   - gestures
   - pointer-input
   - drag-swipe
   - touch-events
-difficulty: medium
-status: draft
 ---
-
 # Gesture Detection and PointerInput
 
 # Question (EN)

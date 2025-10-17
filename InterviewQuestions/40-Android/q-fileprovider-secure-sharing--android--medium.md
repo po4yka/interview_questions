@@ -2,34 +2,30 @@
 id: q-fileprovider-secure-sharing--android--medium--1728115200000
 title: "FileProvider for Secure File Sharing / FileProvider для безопасного обмена файлами"
 topic: android
-aliases:
-  - FileProvider for Secure File Sharing
-  - FileProvider для безопасного обмена файлами
-date_created: 2025-10-05
-date_modified: 2025-10-05
-status: draft
-original_language: en
-language_tags:
-  - en
-  - ru
-type: question
-category: android
 difficulty: medium
-subtopics:
-  - content-provider
-  - permissions
-  - files-media
-tags:
-  - android
+status: draft
+created: 2025-10-05
+tags: - android
   - fileprovider
   - content-provider
   - file-sharing
   - security
   - difficulty/medium
+aliases:   - FileProvider for Secure File Sharing
+  - FileProvider для безопасного обмена файлами
+category: android
+date_created: 2025-10-05
+date_modified: 2025-10-05
+language_tags:   - en
+  - ru
 moc: moc-android
+original_language: en
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20FileProvider.md"
+subtopics:   - content-provider
+  - permissions
+  - files-media
+type: question
 ---
-
 # FileProvider for Secure File Sharing / FileProvider для безопасного обмена файлами
 
 # Question (EN)

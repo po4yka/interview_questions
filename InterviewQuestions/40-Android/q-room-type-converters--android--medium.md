@@ -1,16 +1,17 @@
 ---
+id: "20251015082237545"
+title: "Room Type Converters"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - room
   - typeconverter
   - database
   - custom-types
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Room TypeConverters / TypeConverters в Room
 
 **English**: What do you know about Converters in Room?

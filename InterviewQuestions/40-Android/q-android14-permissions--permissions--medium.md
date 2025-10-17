@@ -1,7 +1,11 @@
 ---
+id: "20251015082237516"
+title: "Android14 Permissions / Разрешения Android 14"
 topic: permissions
-tags:
-  - permissions
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - permissions
   - android14
   - android13
   - privacy
@@ -9,10 +13,7 @@ tags:
   - notifications
   - compatibility
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Android 14 Permission Changes / Изменения разрешений в Android 14
 
 **English**: Implement Android 14 permission changes: photo picker for partial media access, notification permissions, and background location restrictions.

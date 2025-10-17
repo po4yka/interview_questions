@@ -1,20 +1,21 @@
 ---
+id: "20251015082238643"
+title: "Compose Compiler Plugin / Плагин компилятора Compose"
 topic: android
-subtopics: [jetpack-compose, performance]
-tags:
-  - jetpack-compose
+difficulty: hard
+status: draft
+created: 2025-10-13
+tags: - jetpack-compose
   - compiler
   - internals
   - plugin
   - kotlin-compiler
-difficulty: hard
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
+subtopics: [jetpack-compose, performance]
 ---
-
 # Compose Compiler Plugin Transformations
 
 # Question (EN)

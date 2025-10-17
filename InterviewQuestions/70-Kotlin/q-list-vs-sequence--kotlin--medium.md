@@ -1,15 +1,16 @@
 ---
+id: "20251015082237057"
+title: "List Vs Sequence / List против Sequence"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - collections
   - sequence
   - performance
   - lazy-evaluation
-difficulty: medium
-status: draft
 ---
-
 # List vs Sequence: жадные и ленивые коллекции
 
 # Question (EN)

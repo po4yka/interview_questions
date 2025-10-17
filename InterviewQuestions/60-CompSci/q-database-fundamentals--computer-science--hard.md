@@ -1,22 +1,19 @@
-# Database Fundamentals
-
 ---
 id: "20251013-600007"
 title: "Database Fundamentals"
-description: "Comprehensive coverage of database concepts including SQL/NoSQL, ACID properties, transactions, indexing, normalization, and Android Room database with real-world Kotlin examples"
-topic: "databases"
-subcategory: "databases"
-difficulty: "hard"
-tags: ["database", "sql", "nosql", "acid", "transactions", "indexing", "normalization", "room", "sqlite", "android", "kotlin"]
+topic: databases
+difficulty: hard
+status: draft
 created: "2025-10-13"
-updated: "2025-10-13"
-moc: moc-databases
-related_questions:
-  - "20251013-600005"  # Data Structures and Algorithms
-  - "20251012-600004"  # OOP Principles
+tags: ["database", "sql", "nosql", "acid", "transactions", "indexing", "normalization", "room", "sqlite", "android", "kotlin"]
+description: "Comprehensive coverage of database concepts including SQL/NoSQL, ACID properties, transactions, indexing, normalization, and Android Room database with real-world Kotlin examples"
 language: "en"
+moc: moc-databases
+related_questions:   - "20251013-600005"  # Data Structures and Algorithms
+  - "20251012-600004"  # OOP Principles
+subcategory: "databases"
+updated: "2025-10-13"
 ---
-
 ## Question
 
 **English:**

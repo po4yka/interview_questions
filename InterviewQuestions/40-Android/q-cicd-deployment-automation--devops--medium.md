@@ -1,20 +1,20 @@
 ---
-tags:
-  - android
+id: "20251015082237475"
+title: "Cicd Deployment Automation / Автоматизация деплоя CI/CD"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-11
+tags: - android
   - ci-cd
   - deployment
   - play-store
   - fastlane
   - automation
-difficulty: medium
-status: draft
-related:
-  - q-cicd-pipeline-setup--devops--medium
+related:   - q-cicd-pipeline-setup--devops--medium
   - q-app-bundle-optimization--distribution--medium
   - q-app-versioning-release--distribution--medium
-created: 2025-10-11
 ---
-
 # Question (EN)
 How do you automate Android app deployment to the Play Store? Explain the process of signing, versioning, release tracks (internal, alpha, beta, production), and automated release notes generation.
 

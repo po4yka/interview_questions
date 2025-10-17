@@ -1,11 +1,12 @@
 ---
+id: "20251015082236048"
+title: "Nothing Instances / Экземпляры Nothing"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # How many instance types does Nothing have?
 
 # Question (EN)

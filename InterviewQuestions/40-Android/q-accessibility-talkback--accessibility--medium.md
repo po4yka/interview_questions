@@ -1,19 +1,19 @@
 ---
-tags:
-  - android
+id: "20251015082237490"
+title: "Accessibility Talkback / Доступность и TalkBack"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-11
+tags: - android
   - accessibility
   - talkback
   - screen-reader
   - assistive-technology
-difficulty: medium
-status: draft
-related:
-  - q-accessibility-compose--accessibility--medium
+related:   - q-accessibility-compose--accessibility--medium
   - q-accessibility-testing--accessibility--medium
   - q-custom-view-accessibility--custom-views--medium
-created: 2025-10-11
 ---
-
 # Question (EN)
 How does TalkBack work in Android? How do you optimize Views and Compose UIs for TalkBack navigation? What are focus order, traversal order, and accessibility focus?
 

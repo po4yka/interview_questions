@@ -1,17 +1,18 @@
 ---
+id: "20251015082236029"
+title: "Kotlin Scope Functions Advanced"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - scope-functions
   - let
   - run
   - apply
   - with
   - also
-difficulty: medium
-status: draft
 ---
-
 # Advanced Scope Functions Usage
 
 **English**: Compare let, run, with, apply, also. When should you use each? Explain return values and context objects.
@@ -275,28 +276,255 @@ user?.email?.let { email ->
 
 ## Ответ (RU)
 
-Scope functions Kotlin выполняют блоки кода в контексте объекта.
+Scope-функции Kotlin (let, run, with, apply, also) выполняют блоки кода в контексте объекта. Выбор правильной функции зависит от способа доступа к контексту и требуемого возвращаемого значения.
 
 ### Быстрая справка
 
 | Функция | Контекст | Возвращает | Случай использования |
 |----------|---------|---------|----------|
-| **let** | it | Результат лямбды | Трансформация, null safety |
-| **run** | this | Результат лямбды | Конфигурация + вычисление |
-| **with** | this | Результат лямбды | Группировка вызовов |
-| **apply** | this | Объект контекста | Конфигурация объекта |
-| **also** | it | Объект контекста | Дополнительные эффекты |
+| **let** | it (аргумент) | Результат лямбды | Трансформация объекта, null safety |
+| **run** | this (receiver) | Результат лямбды | Конфигурация объекта + вычисление результата |
+| **with** | this (receiver) | Результат лямбды | Группировка вызовов на объекте |
+| **apply** | this (receiver) | Объект контекста | Конфигурация объекта |
+| **also** | it (аргумент) | Объект контекста | Дополнительные эффекты, логирование |
 
-[Полные примеры и дерево решений приведены в английском разделе]
+### let - Трансформация и Null Safety
 
-### Лучшие практики
+```kotlin
+// Null safety
+val name: String? = getNullableName()
+name?.let {
+    println("Name: $it")
+    sendEmail(it)
+}
+
+// Трансформация результата
+val result = getUserId()
+    .let { loadUser(it) }
+    .let { formatUser(it) }
+
+// Введение локальной переменной
+val data = complexCalculation().let { result ->
+    println("Result: $result")
+    validateResult(result)
+    result.transform()
+}
+
+// Избежание конфликтов имён
+fun process() {
+    val value = "outer"
+    getValue()?.let { value ->  // Другая переменная
+        println(value)  // Внутренняя value
+    }
+}
+```
+
+### run - Инициализация и Вычисление
+
+```kotlin
+// Инициализация объекта + вычисление
+val result = service.run {
+    connect()
+    authenticate()
+    fetchData()
+}
+
+// Блок выражения
+val regex = run {
+    val digits = "0-9"
+    val letters = "a-zA-Z"
+    Regex("[$digits$letters]+")
+}
+
+// Ограничение области видимости
+run {
+    val temp = expensiveCalculation()
+    processResult(temp)
+    // temp недоступна снаружи
+}
+
+// Extension vs non-extension
+"text".run {
+    println(this)  // Extension: "text" как receiver
+}
+
+run {
+    println("block")  // Non-extension: нет receiver
+}
+```
+
+### with - Группировка Операций
+
+```kotlin
+// Группировка вызовов без extension
+val result = with(stringBuilder) {
+    append("Hello")
+    append(" ")
+    append("World")
+    toString()
+}
+
+// Конфигурация и возврат результата
+val formatted = with(user) {
+    "Name: $name, Email: $email, Age: $age"
+}
+
+// Вычисления с вспомогательным объектом
+with(canvas) {
+    drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
+    drawCircle(centerX, centerY, radius, paint)
+}
+```
+
+### apply - Конфигурация Объекта
+
+```kotlin
+// Паттерн Builder
+val intent = Intent(context, Activity::class.java).apply {
+    putExtra("key", "value")
+    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    action = Intent.ACTION_VIEW
+}
+
+// Цепочка конфигурации
+val user = User().apply {
+    name = "John"
+    email = "john@example.com"
+    age = 30
+}.also {
+    save(it)
+}
+
+// Множественные apply в цепочке
+textView.apply {
+    text = "Hello"
+    textSize = 16f
+}.apply {
+    setTextColor(Color.BLACK)
+    gravity = Gravity.CENTER
+}
+```
+
+### also - Побочные Эффекты
+
+```kotlin
+// Логирование
+val numbers = mutableListOf(1, 2, 3)
+    .also { println("Initial list: $it") }
+    .apply { add(4) }
+    .also { println("After adding: $it") }
+
+// Валидация
+fun createUser(name: String) = User(name)
+    .also { validateUser(it) }
+    .also { logCreation(it) }
+
+// Ссылка на объект, а не на свойства
+class Builder {
+    private val items = mutableListOf<String>()
+
+    fun add(item: String) = also {
+        items.add(item)  // Ссылается на Builder, а не на items
+    }
+}
+```
+
+### Дерево Решений
+
+```
+Нужно работать с объектом?
+
+ Хотите вернуть сам объект?
+   Нужен объект как receiver (this)?
+     Используйте APPLY (конфигурация)
+   Нужен объект как аргумент (it)?
+      Используйте ALSO (побочные эффекты, логирование)
+
+ Хотите вернуть другой результат?
+    Есть объект для работы?
+      Как receiver (this)?
+        Используйте RUN (инициализация + вычисление)
+      Как аргумент (it)?
+         Используйте LET (трансформация, null safety)
+
+    Объект из внешней области видимости?
+       Используйте WITH (группировка вызовов)
+```
+
+### Распространённые Паттерны
+
+**Безопасные вызовы с let**:
+```kotlin
+user?.let {
+    updateUI(it.name)
+    saveToDatabase(it)
+}
+```
+
+**Конфигурация с apply**:
+```kotlin
+val dialog = AlertDialog.Builder(context).apply {
+    setTitle("Title")
+    setMessage("Message")
+    setPositiveButton("OK") { _, _ -> }
+}.create()
+```
+
+**Логирование с also**:
+```kotlin
+repository.getUser(id)
+    .also { Log.d("TAG", "User loaded: $it") }
+    .let { user -> updateUI(user) }
+```
+
+**Сложная инициализация с run**:
+```kotlin
+val config = Config().run {
+    loadSettings()
+    applyDefaults()
+    validate()
+    this
+}
+```
+
+### Распространённые Ошибки
+
+**1. Использование неправильного типа контекста**:
+```kotlin
+// НЕПРАВИЛЬНО
+"text".apply {
+    toUpperCase()  // Результат игнорируется
+}
+
+// ПРАВИЛЬНО
+"text".let {
+    it.toUpperCase()  // Результат используется
+}
+```
+
+**2. Ненужная вложенность**:
+```kotlin
+// НЕПРАВИЛЬНО
+user?.let {
+    it.email?.let { email ->
+        sendEmail(email)
+    }
+}
+
+// ПРАВИЛЬНО
+user?.email?.let { email ->
+    sendEmail(email)
+}
+```
+
+### Лучшие Практики
 
 1. **let** для null safety и трансформаций
 2. **run** когда нужна инициализация + результат
 3. **with** для группировки вызовов на внешнем объекте
 4. **apply** для конфигурации объекта
-5. **also** для side effects и логирования
+5. **also** для побочных эффектов и логирования
 6. Избегайте глубокой вложенности
-7. Используйте осмысленные имена вместо `it`
+7. Используйте осмысленные имена вместо `it` когда нужна ясность
 8. Предпочитайте `let` вместо `run` для nullable receivers
-9. Не переиспользуйте - иногда простой код лучше
+9. Не злоупотребляйте - иногда простой код лучше

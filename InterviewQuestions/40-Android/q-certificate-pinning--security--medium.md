@@ -1,16 +1,17 @@
 ---
+id: "20251015082237531"
+title: "Certificate Pinning / Закрепление сертификатов"
 topic: security
-tags:
-  - security
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - security
   - certificate-pinning
   - networking
   - okhttp
   - ssl-tls
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Certificate Pinning / Закрепление сертификатов
 
 **English**: Implement certificate pinning with OkHttp. Handle certificate rotation, pin multiple certificates including backup pins, and test implementation.

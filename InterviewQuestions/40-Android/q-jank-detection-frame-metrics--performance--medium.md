@@ -985,34 +985,10 @@ class FrameMetricsMonitor {
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
 ### Related (Medium)
 - [[q-memory-leak-detection--performance--medium]] - Performance
 - [[q-macrobenchmark-startup--performance--medium]] - Performance
 - [[q-app-startup-optimization--performance--medium]] - Performance
 - [[q-baseline-profiles-optimization--performance--medium]] - Performance
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
-### Related (Medium)
-- [[q-memory-leak-detection--performance--medium]] - Performance
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
-### Related (Medium)
-- [[q-memory-leak-detection--performance--medium]] - Performance
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
-
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

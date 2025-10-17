@@ -1,17 +1,18 @@
 ---
+id: "20251015082237588"
+title: "Api Rate Limiting Throttling"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - networking
   - api
   - rate-limiting
   - throttling
   - retrofit
   - okhttp
-difficulty: medium
-status: draft
 ---
-
 # API Rate Limiting and Throttling in Android
 
 **Сложность**: Medium

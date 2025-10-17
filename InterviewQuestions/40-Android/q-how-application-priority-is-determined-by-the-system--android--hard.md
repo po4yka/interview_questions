@@ -1,17 +1,28 @@
 ---
+id: "20251015082237254"
+title: "How Application Priority Is Determined By The System / Как система определяет приоритет приложения"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - process-management
   - memory-management
   - lifecycle
-difficulty: hard
-status: draft
 ---
 
-# How application priority is determined by the system?
+# Question (EN)
+
+> How application priority is determined by the system?
+
+# Вопрос (RU)
+
+> Как система определяет приоритет приложения?
+
+---
 
 ## Answer (EN)
+
 Android determines application priority based on the **importance hierarchy** of processes, which affects **Low Memory Killer (LMK)** decisions and CPU/resource allocation. The system classifies processes into five main priority levels.
 
 ### Process Priority Hierarchy
@@ -29,11 +40,12 @@ From highest to lowest priority:
 **Definition:** Process the user is currently interacting with.
 
 **Conditions:**
-- Has an Activity in **resumed state** (onResume called, user seeing it)
-- Has a Service bound to foreground Activity
-- Has a Service running in foreground (via startForeground with notification)
-- Has a BroadcastReceiver executing onReceive()
-- Has a ContentProvider executing onCreate()
+
+-   Has an Activity in **resumed state** (onResume called, user seeing it)
+-   Has a Service bound to foreground Activity
+-   Has a Service running in foreground (via startForeground with notification)
+-   Has a BroadcastReceiver executing onReceive()
+-   Has a ContentProvider executing onCreate()
 
 **Example:**
 
@@ -66,9 +78,10 @@ class MusicPlayerService : Service() {
 **Definition:** Process doing something user is aware of, but not in foreground.
 
 **Conditions:**
-- Has an Activity in **paused state** (onPause called, partially visible)
-- Activity covered by non-fullscreen Activity (dialog, transparent Activity)
-- Has a Service bound to visible Activity
+
+-   Has an Activity in **paused state** (onPause called, partially visible)
+-   Activity covered by non-fullscreen Activity (dialog, transparent Activity)
+-   Has a Service bound to visible Activity
 
 **Example:**
 
@@ -100,8 +113,9 @@ fun showDialog() {
 **Definition:** Process running a Service started with startService().
 
 **Conditions:**
-- Has a Service running (not foreground service)
-- Service performing long-running operation
+
+-   Has a Service running (not foreground service)
+-   Service performing long-running operation
 
 **Example:**
 
@@ -138,9 +152,10 @@ startService(Intent(this, DownloadService::class.java))
 **Definition:** Process not currently needed, kept in cache for faster restart.
 
 **Conditions:**
-- Has an Activity in **stopped state** (onStop called, not visible)
-- No active components (Service, BroadcastReceiver, etc.)
-- User navigated away from app
+
+-   Has an Activity in **stopped state** (onStop called, not visible)
+-   No active components (Service, BroadcastReceiver, etc.)
+-   User navigated away from app
 
 **Example:**
 
@@ -171,8 +186,9 @@ class MainActivity : AppCompatActivity() {
 **Definition:** Process with no active components, kept only for caching.
 
 **Conditions:**
-- No Activity, Service, or any component
-- Process kept alive for faster cold start
+
+-   No Activity, Service, or any component
+-   Process kept alive for faster cold start
 
 **Priority:** **Lowest** - Killed immediately when memory needed
 
@@ -221,6 +237,7 @@ Empty            1000        Immediately
 ```
 
 **Process:**
+
 1. System detects **low memory**
 2. LMK kills processes starting from **highest oom_adj**
 3. Continues until **enough memory freed**
@@ -421,6 +438,7 @@ class ProcessManagement {
 ### Summary
 
 **Priority hierarchy:**
+
 ```
 FOREGROUND (0)       → User interacting, foreground service
     ↓
@@ -434,15 +452,17 @@ EMPTY (1000)         → No components, killed first
 ```
 
 **Key factors:**
-- Activity state (resumed > paused > stopped)
-- Service type (foreground > background)
-- Bound services (inherit bound component's priority)
-- Component execution (BroadcastReceiver, ContentProvider)
+
+-   Activity state (resumed > paused > stopped)
+-   Service type (foreground > background)
+-   Bound services (inherit bound component's priority)
+-   Component execution (BroadcastReceiver, ContentProvider)
 
 **System behavior:**
-- Low Memory Killer (LMK) kills lowest priority first
-- LRU order within same priority level
-- Foreground processes rarely killed
+
+-   Low Memory Killer (LMK) kills lowest priority first
+-   LRU order within same priority level
+-   Foreground processes rarely killed
 
 ## Ответ (RU)
 
@@ -470,20 +490,39 @@ Empty          1000       Немедленно
 
 ### Ключевые факторы
 
-- Состояние Activity (resumed > paused > stopped)
-- Тип сервиса (foreground > background)
-- Выполнение компонентов (BroadcastReceiver, ContentProvider)
-- Bound services наследуют приоритет связанного компонента
-
+-   Состояние Activity (resumed > paused > stopped)
+-   Тип сервиса (foreground > background)
+-   Выполнение компонентов (BroadcastReceiver, ContentProvider)
+-   Bound services наследуют приоритет связанного компонента
 
 ---
 
+## Follow-ups
+
+-   How does Android's Low Memory Killer (LMK) decide which processes to terminate first?
+-   What's the difference between oom_adj and oom_score_adj in Android process management?
+-   How can you optimize your app to avoid being killed by the system during low memory conditions?
+
+## References
+
+-   `https://developer.android.com/guide/components/activities/process-lifecycle` — Process lifecycle
+-   `https://developer.android.com/guide/components/services` — Services and process priority
+-   `https://developer.android.com/topic/performance/memory` — Memory management
+
 ## Related Questions
 
+### Related (Hard)
+
+-   [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Process management
+-   [[q-android-memory-management--android--hard]] - Memory management
+-   [[q-background-execution-limits--android--hard]] - Background execution
+
 ### Prerequisites (Easier)
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
-- [[q-anr-application-not-responding--android--medium]] - Fundamentals
-- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
+
+-   [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+-   [[q-anr-application-not-responding--android--medium]] - Fundamentals
+-   [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
 
 ### Related (Hard)
-- [[q-kotlin-context-receivers--kotlin--hard]] - Fundamentals
+
+-   [[q-kotlin-context-receivers--kotlin--hard]] - Fundamentals

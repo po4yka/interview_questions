@@ -1,16 +1,18 @@
 ---
-tags:
-  - collections
+id: "20251015082237190"
+title: "Priorityqueue Vs Deque / Priorityqueue против Deque"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - collections
   - data-structures
   - deque
   - kotlin
   - priority-queue
   - programming-languages
   - queue
-difficulty: easy
-status: draft
 ---
-
 # Какова разница между PriorityQueue и Deque?
 
 # Question (EN)

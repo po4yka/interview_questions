@@ -1,7 +1,11 @@
 ---
+id: "20251015082237444"
+title: "Cancel Presenter Requests / Отмена запросов Presenter"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/architecture-mvi
   - android/lifecycle
   - architecture-mvi
@@ -9,10 +13,7 @@ tags:
   - mvp
   - platform/android
   - presenter-view-communication
-difficulty: medium
-status: draft
 ---
-
 # Какие есть механизмы для отмены запросов presenter у view?
 
 # Question (EN)

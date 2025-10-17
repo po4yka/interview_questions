@@ -1,17 +1,18 @@
 ---
+id: "20251015082236005"
+title: "Coroutines Vs Threads / Корутины против потоков"
 topic: kotlin
-tags:
-  - comparison
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - comparison
   - concurrency
   - coroutines
   - java
   - kotlin
   - programming-languages
   - threads
-difficulty: medium
-status: draft
 ---
-
 # В чем концептуальное отличие корутинов от потоков в Java
 
 # Question (EN)

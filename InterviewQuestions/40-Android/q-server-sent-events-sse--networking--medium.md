@@ -1,17 +1,18 @@
 ---
+id: "20251015082237482"
+title: "Server Sent Events Sse"
 topic: networking
-tags:
-  - networking
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - networking
   - sse
   - server-sent-events
   - real-time
   - streaming
   - comparison
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Server-Sent Events (SSE) / Server-Sent Events (SSE)
 
 **English**: Implement Server-Sent Events (SSE) for real-time updates. Compare with WebSockets for different use cases with decision matrix.
@@ -1145,6 +1146,104 @@ class SseClient(
 }
 ```
 
+### Типизированный обработчик событий
+
+```kotlin
+import com.google.gson.Gson
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.mapNotNull
+
+/**
+ * Типизированный SSE-клиент с автоматической десериализацией JSON
+ */
+class TypedSseClient(
+    private val sseClient: SseClient,
+    private val gson: Gson = Gson()
+) {
+    inline fun <reified T : Any> subscribeToEvent(
+        url: String,
+        eventType: String,
+        headers: Map<String, String> = emptyMap()
+    ): Flow<TypedSseEvent<T>> {
+        return sseClient.connect(url, headers)
+            .mapNotNull { event ->
+                when (event) {
+                    is SseEvent.Connected -> TypedSseEvent.Connected()
+                    is SseEvent.Message -> {
+                        if (event.event == eventType) {
+                            try {
+                                val data = gson.fromJson(event.data, T::class.java)
+                                TypedSseEvent.Data(data, event.id)
+                            } catch (e: Exception) {
+                                TypedSseEvent.Error(e)
+                            }
+                        } else null
+                    }
+                    is SseEvent.Error -> TypedSseEvent.Error(event.exception)
+                    else -> null
+                }
+            }
+    }
+}
+```
+
+### Примеры из реального мира
+
+```kotlin
+// Пример 1: Live-счета спортивных матчей
+data class ScoreUpdate(
+    val matchId: String,
+    val homeScore: Int,
+    val awayScore: Int
+)
+
+class LiveScoreTracker(private val typedSseClient: TypedSseClient) {
+    fun trackMatch(matchId: String): Flow<TypedSseEvent<ScoreUpdate>> {
+        return typedSseClient.subscribeToEvent(
+            url = "https://api.sports.com/matches/$matchId/events",
+            eventType = "score-update"
+        )
+    }
+}
+
+// Пример 2: Обновления цен акций
+data class StockPrice(
+    val symbol: String,
+    val price: Double,
+    val change: Double
+)
+
+// Пример 3: Лента уведомлений
+data class Notification(
+    val id: String,
+    val type: String,
+    val message: String
+)
+```
+
+### Интеграция с Repository
+
+```kotlin
+class LiveDataRepository(
+    private val sseClient: SseClient,
+    private val localCache: LiveDataCache
+) {
+    fun observeLiveUpdates(userId: String): Flow<SseEvent> {
+        val lastEventId = localCache.getLastEventId(userId)
+
+        return sseClient.connect(
+            url = "https://api.example.com/users/$userId/live",
+            headers = mapOf("Authorization" to "Bearer ${getToken()}"),
+            lastEventId = lastEventId
+        ).onEach { event ->
+            if (event is SseEvent.Message && event.id != null) {
+                localCache.saveLastEventId(userId, event.id)
+            }
+        }
+    }
+}
+```
+
 ### Сравнение SSE, WebSocket и Polling
 
 | Характеристика | SSE | WebSocket | Long Polling | Short Polling |
@@ -1168,82 +1267,228 @@ class SseClient(
 
 #### Используйте SSE, когда:
 
- **Нужна односторонняя связь**
-- Сервер отправляет обновления клиентам.
-- Клиенту не нужно отправлять сообщения в ответ.
-- Примеры: уведомления, live-счета, котировки акций.
+**Нужна односторонняя связь**
+- Сервер отправляет обновления клиентам
+- Клиенту не нужно отправлять сообщения в ответ
+- Примеры: уведомления, live-счета, котировки акций
 
- **Требуется простая реализация**
-- Построен на стандартном HTTP.
-- Нативная поддержка в браузерах.
-- Легко отлаживать стандартными инструментами.
+**Требуется простая реализация**
+- Построен на стандартном HTTP
+- Нативная поддержка в браузерах
+- Легко отлаживать стандартными инструментами
 
- **Важно автоматическое переподключение**
-- Встроенное переподключение с экспоненциальной задержкой.
-- Поддержка возобновления по ID события.
-- Не нужна ручная логика повторов.
+**Важно автоматическое переподключение**
+- Встроенное переподключение с экспоненциальной задержкой
+- Поддержка возобновления по ID события
+- Не нужна ручная логика повторов
+
+**Совместимость с прокси/файрволами**
+- Работает через стандартную HTTP-инфраструктуру
+- Нет требований к специальным портам
+- Совместимо с корпоративными файрволами
 
 #### Используйте WebSocket, когда:
 
- **Требуется двунаправленная связь**
-- И клиент, и сервер отправляют сообщения.
-- Взаимодействие в реальном времени.
-- Примеры: чаты, игры, совместное редактирование.
+**Требуется двунаправленная связь**
+- И клиент, и сервер отправляют сообщения
+- Взаимодействие в реальном времени
+- Примеры: чаты, игры, совместное редактирование
 
- **Критична низкая задержка**
-- Требования к задержке на уровне микросекунд.
-- Высокочастотные обновления.
-- Примеры: торговые платформы, многопользовательские игры.
+**Критична низкая задержка**
+- Требования к задержке на уровне микросекунд
+- Высокочастотные обновления
+- Примеры: торговые платформы, многопользовательские игры
 
- **Передача бинарных данных**
-- Эффективный бинарный протокол.
-- Стриминг изображений/видео.
-- Передача больших объемов данных.
+**Передача бинарных данных**
+- Эффективный бинарный протокол
+- Стриминг изображений/видео
+- Передача больших объемов данных
+
+**Нужен кастомный протокол**
+- Полный контроль над форматом сообщений
+- Требования к кастомному хэндшейку
+- Оптимизации на уровне протокола
 
 #### Используйте Polling, когда:
 
- **Достаточно простых обновлений**
-- Нечастые обновления (> 30 секунд).
-- Не чувствительно к задержкам.
-- Примеры: проверка почты, обновления погоды.
+**Достаточно простых обновлений**
+- Нечастые обновления (> 30 секунд)
+- Не чувствительно к задержкам
+- Примеры: проверка почты, обновления погоды
 
- **Нет поддержки постоянного соединения**
-- Ограничения сервера.
-- Ограничения балансировщика нагрузки.
-- Устаревшая инфраструктура.
+**Нет поддержки постоянного соединения**
+- Ограничения сервера
+- Ограничения балансировщика нагрузки
+- Устаревшая инфраструктура
+
+**Предпочтителен stateless подход**
+- Каждый запрос независим
+- Простое горизонтальное масштабирование
+- Простая балансировка нагрузки
 
 ### Лучшие практики
 
 1. **Всегда обрабатывайте переподключение**
+   ```kotlin
+   sseClient.connect(url)
+       .retry(3) // Повторять при ошибках
+       .collect { event -> /* обработка */ }
+   ```
+
 2. **Сохраняйте последний ID события**
+   ```kotlin
+   var lastEventId: String? = null
+   sseClient.connect(url, lastEventId = lastEventId)
+       .collect { event ->
+           if (event is SseEvent.Message) {
+               lastEventId = event.id
+           }
+       }
+   ```
+
 3. **Уважайте задержки повторных попыток**
+   ```kotlin
+   event.retry?.let { delay ->
+       // Сервер указал кастомную задержку повтора
+       useCustomRetryDelay(delay)
+   }
+   ```
+
 4. **Мониторьте состояние соединения**
+   ```kotlin
+   fun monitorConnection(): Flow<ConnectionHealth> {
+       return sseClient.connect(url)
+           .map { event ->
+               when (event) {
+                   is SseEvent.Connected -> ConnectionHealth.Healthy
+                   is SseEvent.Error -> ConnectionHealth.Unhealthy
+                   else -> ConnectionHealth.Unknown
+               }
+           }
+   }
+   ```
+
 5. **Обрабатывайте переходы между фоновым и активным режимами**
+   ```kotlin
+   class SseManager(private val lifecycleOwner: LifecycleOwner) {
+       init {
+           lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+               override fun onStop(owner: LifecycleOwner) {
+                   disconnect() // Приложение уходит в фон
+               }
+
+               override fun onStart(owner: LifecycleOwner) {
+                   connect() // Приложение возвращается
+               }
+           })
+       }
+   }
+   ```
 
 ### Распространенные ошибки
 
 1. **Не обрабатывать разрывы соединения**
+   ```kotlin
+   // ПЛОХО: Нет обработки переподключения
+   sseClient.connect(url).collect { /* ... */ }
+
+   // ХОРОШО: Автоматическое переподключение
+   sseClient.connect(url)
+       .retry { cause ->
+           delay(calculateBackoff())
+           true
+       }
+       .collect { /* ... */ }
+   ```
+
 2. **Забывать закрывать соединения**
+   ```kotlin
+   // ПЛОХО: Утечка соединения
+   fun startListening() {
+       viewModelScope.launch {
+           sseClient.connect(url).collect { /* ... */ }
+       }
+   }
+
+   // ХОРОШО: Правильное управление жизненным циклом
+   fun startListening() {
+       viewModelScope.launch {
+           sseClient.connect(url)
+               .flowOn(Dispatchers.IO)
+               .collect { /* ... */ }
+       } // Job отменяется при очистке ViewModel
+   }
+   ```
+
 3. **Не парсить типы событий**
+   ```kotlin
+   // ПЛОХО: Игнорирование типов событий
+   when (event) {
+       is SseEvent.Message -> handleMessage(event.data)
+   }
+
+   // ХОРОШО: Обработка разных типов событий
+   when (event) {
+       is SseEvent.Message -> {
+           when (event.event) {
+               "score-update" -> handleScoreUpdate(event.data)
+               "game-end" -> handleGameEnd(event.data)
+               else -> handleGenericMessage(event.data)
+           }
+       }
+   }
+   ```
+
 4. **Чрезмерное использование памяти**
+   ```kotlin
+   // ПЛОХО: Хранение всех сообщений в памяти
+   val allMessages = mutableListOf<String>()
+   sseClient.connect(url).collect { event ->
+       if (event is SseEvent.Message) {
+           allMessages.add(event.data) // Утечка памяти!
+       }
+   }
+
+   // ХОРОШО: Обработка и удаление
+   sseClient.connect(url).collect { event ->
+       if (event is SseEvent.Message) {
+           processMessage(event.data)
+           // Сообщение удаляется сборщиком мусора после обработки
+       }
+   }
+   ```
+
 5. **Не учитывать расход батареи**
+   ```kotlin
+   // ХОРОШО: Отключаться когда не нужно
+   class EfficientSseManager {
+       fun startWhenVisible() {
+           lifecycleOwner.lifecycleScope.launch {
+               lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                   sseClient.connect(url).collect { /* ... */ }
+               } // Автоматически отключается при остановке
+           }
+       }
+   }
+   ```
 
 ### Резюме
 
 Server-Sent Events предоставляют:
 
-- **Простоту**: Построены на стандартном HTTP, легко реализуются.
-- **Эффективность**: Односторонняя связь без сложности WebSocket.
-- **Надежность**: Автоматическое переподключение с возобновлением по ID события.
-- **Совместимость**: Работают с существующей HTTP-инфраструктурой.
-- **Обновления в реальном времени**: Push-уведомления с низкой задержкой.
-- **Эффективность ресурсов**: Меньше накладных расходов, чем у polling.
+- **Простоту**: Построены на стандартном HTTP, легко реализуются
+- **Эффективность**: Односторонняя связь без сложности WebSocket
+- **Надежность**: Автоматическое переподключение с возобновлением по ID события
+- **Совместимость**: Работают с существующей HTTP-инфраструктурой
+- **Обновления в реальном времени**: Push-уведомления с низкой задержкой
+- **Эффективность ресурсов**: Меньше накладных расходов, чем у polling
+- **Нативная поддержка**: Browser EventSource API, поддержка OkHttp
 
-**Выбирайте SSE для**: уведомлений, live-счетов, котировок акций, дашбордов мониторинга, лент активности.
+**Выбирайте SSE для**: уведомлений, live-счетов, котировок акций, дашбордов мониторинга, лент активности
 
-**Выбирайте WebSocket для**: чат-приложений, игр, совместного редактирования, двунаправленной связи в реальном времени.
+**Выбирайте WebSocket для**: чат-приложений, игр, совместного редактирования, двунаправленной связи в реальном времени
 
-**Выбирайте Polling для**: нечастых обновлений, устаревших систем, простых реализаций.
+**Выбирайте Polling для**: нечастых обновлений, устаревших систем, простых реализаций
 
 ---
 

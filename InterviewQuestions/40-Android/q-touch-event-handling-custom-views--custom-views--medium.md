@@ -1,13 +1,15 @@
 ---
-tags:
-  - custom-views
+id: "20251015082237542"
+title: "Touch Event Handling Custom Views"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - custom-views
   - touch-events
   - gestures
   - android-framework
-difficulty: medium
-status: draft
 ---
-
 # Touch Event Handling in Custom Views
 
 # Question (EN)
@@ -1464,13 +1466,88 @@ class TouchFeedbackView @JvmOverloads constructor(
 
 ---
 
+### Комбинирование GestureDetector и ScaleGestureDetector
+
+Можно комбинировать разные детекторы жестов для сложных взаимодействий:
+
+```kotlin
+class ZoomableScrollView : View {
+    private val gestureDetector = GestureDetector(context, gestureListener)
+    private val scaleDetector = ScaleGestureDetector(context, scaleListener)
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        var handled = scaleDetector.onTouchEvent(event)
+        handled = gestureDetector.onTouchEvent(event) || handled
+        return handled || super.onTouchEvent(event)
+    }
+}
+```
+
+### ViewGroup и перехват событий
+
+ViewGroup может перехватывать события у дочерних элементов через onInterceptTouchEvent():
+
+**Как это работает**:
+1. ACTION_DOWN приходит в ViewGroup
+2. onInterceptTouchEvent() возвращает false - событие идет к child
+3. При ACTION_MOVE если нужно перехватить - onInterceptTouchEvent() возвращает true
+4. Child получает ACTION_CANCEL
+5. Дальнейшие события обрабатывает ViewGroup
+
+**Пример**: ScrollView перехватывает скроллинг, когда пользователь делает вертикальное движение, но пропускает горизонтальное к дочернему HorizontalScrollView.
+
+### Координация с родителем
+
+Используйте requestDisallowInterceptTouchEvent() чтобы запретить родителю перехватывать события:
+
+```kotlin
+override fun onTouchEvent(event: MotionEvent): Boolean {
+    when (event.action) {
+        MotionEvent.ACTION_DOWN -> {
+            // Запрещаем родителю перехватывать
+            parent.requestDisallowInterceptTouchEvent(true)
+            return true
+        }
+        MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+            // Разрешаем снова
+            parent.requestDisallowInterceptTouchEvent(false)
+        }
+    }
+    return true
+}
+```
+
+### Производительность и оптимизация
+
+**Избегайте аллокаций в onTouchEvent**: предварительно создавайте объекты, переиспользуйте массивы и коллекции.
+
+**Batch обновления**: накапливайте изменения и применяйте за один раз вместо множественных invalidate().
+
+**Оптимизация invalidate**: используйте invalidate(rect) для перерисовки только измененной области.
+
+**Дебаунсинг**: для частых событий (MOVE) используйте throttling или debouncing.
+
 ### 10. Лучшие практики
 
-**1. Возвращайте `true` из `ACTION_DOWN`**, чтобы получать последующие события
-**2. Переопределяйте `performClick()`** для доступности
-**3. Запрашивайте у родителя не перехватывать события** с помощью `parent.requestDisallowInterceptTouchEvent(true)`
-**4. Обрабатывайте `ACTION_CANCEL`**, чтобы сбросить состояние
-**5. Освобождайте `VelocityTracker`** с помощью `recycle()`
+**1. Возвращайте `true` из `ACTION_DOWN`** чтобы получать последующие события - это критично!
+
+**2. Переопределяйте `performClick()`** для доступности - обязательно для screen readers.
+
+**3. Запрашивайте у родителя не перехватывать** события с помощью `parent.requestDisallowInterceptTouchEvent(true)` когда нужен контроль.
+
+**4. Обрабатывайте `ACTION_CANCEL`** чтобы корректно сбросить состояние - родитель может отменить жест.
+
+**5. Освобождайте `VelocityTracker`** с помощью `recycle()` в onDetachedFromWindow().
+
+**6. Предоставляйте тактильную и визуальную обратную связь** - используйте performHapticFeedback() и изменение состояния.
+
+**7. Тестируйте на разных устройствах** - размеры экранов и плотность пикселей влияют на touch точность.
+
+**8. Обрабатывайте мультитач корректно** - используйте actionMasked и getPointerId().
+
+**9. Документируйте поведение жестов** - объясните пользователям что делают различные жесты.
+
+**10. Соблюдайте Android Design Guidelines** - следуйте стандартным паттернам взаимодействия.
 
 ---
 

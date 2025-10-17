@@ -1,6 +1,6 @@
 ---
 id: 20251005-235008
-title: "lazy vs lateinit / lazy vs lateinit"
+title: "lazy vs lateinit / lazy против lateinit"
 aliases: []
 
 # Classification

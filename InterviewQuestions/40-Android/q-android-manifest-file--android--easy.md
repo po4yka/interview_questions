@@ -1,28 +1,25 @@
 ---
 id: android-manifest-file-1730794000000
-title: AndroidManifest.xml / AndroidManifest.xml
+title: AndroidManifest.xml / Файл манифеста Android
 topic: android
-language_tags:
-  - en
-  - ru
-original_language: en
+difficulty: easy
 status: draft
-moc: moc-android
-tags:
-  - android
+created: 2025-10-15
+tags: - android
   - manifest
   - androidmanifest
   - configuration
   - app-structure
   - difficulty/easy
-subtopics:
-  - app-startup
+language_tags:   - en
+  - ru
+moc: moc-android
+original_language: en
+source: https://github.com/Kirchhoff-/Android-Interview-Questions
+subtopics:   - app-startup
   - permissions
   - activity
-difficulty: easy
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
 ---
-
 # AndroidManifest.xml / AndroidManifest.xml
 
 # Question (EN)

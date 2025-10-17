@@ -1,16 +1,17 @@
 ---
+id: "20251015082237443"
+title: "Dagger Problems / Проблемы Dagger"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/di-hilt
   - dagger
   - dependency-injection
   - di-hilt
   - platform/android
-difficulty: medium
-status: draft
 ---
-
 # Какие проблемы есть у Dagger?
 
 **English**: What problems does Dagger have?

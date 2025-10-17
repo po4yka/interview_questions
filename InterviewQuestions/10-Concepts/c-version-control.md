@@ -7,7 +7,29 @@ created: 2025-10-12
 updated: 2025-10-12
 ---
 
-# Version Control Systems
+# Summary (EN)
+
+Version Control Systems (VCS) track changes to files over time, enabling collaboration, history tracking, and rollback capabilities. There are two main types: Centralized (CVCS) with a single repository like SVN, and Distributed (DVCS) where every developer has a full copy like Git. VCS provides essential features for team collaboration, code review, and change management.
+
+# Сводка (RU)
+
+Системы контроля версий (VCS) отслеживают изменения в файлах с течением времени, обеспечивая совместную работу, отслеживание истории и возможность отката. Существуют два основных типа: Централизованные (CVCS) с единым репозиторием, такие как SVN, и Распределенные (DVCS), где каждый разработчик имеет полную копию, такие как Git. VCS предоставляют необходимые функции для командной работы, проверки кода и управления изменениями.
+
+## Use Cases / Trade-offs
+
+**Use Cases:**
+- Source code management
+- Team collaboration
+- Change tracking and history
+- Code review workflows
+- Release management
+- Backup and disaster recovery
+
+**Trade-offs:**
+- **CVCS vs DVCS:** Simple central control vs. offline work and distributed workflows
+- **Branching:** Flexibility vs. merge complexity
+- **History:** Complete audit trail vs. repository size growth
+- **Learning Curve:** Simple workflows vs. advanced features complexity
 
 ## Overview
 
@@ -68,6 +90,13 @@ Named reference to specific commit (releases).
 ## Related Concepts
 
 - [[c-git]]
+
+## References
+
+- [Git Documentation](https://git-scm.com/doc)
+- [Version Control with Git](https://www.atlassian.com/git/tutorials/what-is-version-control)
+- "Version Control with Git" by Jon Loeliger and Matthew McCullough
+- [Pro Git Book](https://git-scm.com/book/en/v2)
 
 ## MOC Links
 

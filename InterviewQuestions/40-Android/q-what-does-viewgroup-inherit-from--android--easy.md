@@ -1,15 +1,16 @@
 ---
+id: "20251015082237418"
+title: "What Does Viewgroup Inherit From / От чего наследуется ViewGroup"
 topic: android
-tags:
-  - viewgroup
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - viewgroup
   - inheritance
   - android
   - ui
   - views
-difficulty: medium
-status: draft
 ---
-
 # What does ViewGroup inherit from?
 
 # Вопрос (RU)

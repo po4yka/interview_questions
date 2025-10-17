@@ -1,16 +1,16 @@
 ---
+id: "20251015082237553"
 title: "Why might user data disappear during screen rotation?"
 topic: android
-tags:
-  - android
 difficulty: hard
 status: draft
+created: 2025-10-13
+tags: - android
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Why might user data disappear during screen rotation?
 
 ## Answer (EN)

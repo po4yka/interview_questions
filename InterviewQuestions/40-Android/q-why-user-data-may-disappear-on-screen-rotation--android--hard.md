@@ -1,11 +1,12 @@
 ---
+id: "20251015082238632"
+title: "Why User Data May Disappear On Screen Rotation / Почему данные пользователя могут пропасть при повороте экрана"
 topic: android
-tags:
-  - android
 difficulty: hard
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # Why user data may disappear on screen rotation?
 
 **Russian**: Почему пользовательские данные могут исчезнуть при повороте экрана?

@@ -1,13 +1,15 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237182"
+title: "Singleton Pattern / Singleton Паттерн"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - creational-patterns
   - singleton
   - gof-patterns
-difficulty: easy
-status: draft
 ---
-
 # Singleton Pattern
 
 # Question (EN)

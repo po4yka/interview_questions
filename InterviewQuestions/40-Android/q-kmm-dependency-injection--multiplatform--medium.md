@@ -1,14 +1,16 @@
 ---
-tags:
-  - Android
+id: "20251015082237319"
+title: "Kmm Dependency Injection"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - KMM
   - DI
   - Koin
-difficulty: medium
-status: draft
 ---
-
 # Dependency Injection in Kotlin Multiplatform Mobile
 
 # Question (EN)

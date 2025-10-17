@@ -1,13 +1,15 @@
 ---
-tags:
-  - class-hierarchy
+id: "20251015082237092"
+title: "Sealed Classes Limitations / Sealed Классы Limitations"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - class-hierarchy
   - kotlin
   - programming-languages
   - sealed-classes
-difficulty: medium
-status: draft
 ---
-
 # Какие есть ограничения у sealed классов?
 
 # Question (EN)

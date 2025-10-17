@@ -1,16 +1,17 @@
 ---
+id: "20251015082237407"
+title: "How To Implement View Behavior When It Is Added To The Tree / Как реализовать поведение View при добавлении в дерево"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/views
   - custom view
   - ui
   - view lifecycle
   - views
-difficulty: easy
-status: draft
 ---
-
 # Как можно реализовать поведение view при ее добавлении в дерево?
 
 **English**: How to implement view behavior when it is added to the tree?

@@ -1,14 +1,15 @@
 ---
+id: "20251015082237538"
+title: "How To Add Custom Attributes To Custom View / Как добавить кастомные атрибуты к кастомным View"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-13
+tags: - android
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
-related_questions:
-  - q-recyclerview-sethasfixedsize--android--easy
+related_questions:   - q-recyclerview-sethasfixedsize--android--easy
   - q-viewmodel-pattern--android--easy
   - q-what-is-known-about-methods-that-redraw-view--android--medium
   - q-testing-viewmodels-turbine--testing--medium
@@ -17,7 +18,6 @@ related_questions:
   - q-how-to-create-list-like-recyclerview-in-compose--android--medium
   - q-compose-custom-layout--jetpack-compose--hard
 ---
-
 # How to add custom attributes to custom view?
 
 ## EN (expanded)

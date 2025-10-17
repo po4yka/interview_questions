@@ -1,15 +1,17 @@
 ---
-tags:
-  - android
+id: "20251015082237483"
+title: "Opengl Advanced Rendering / Продвинутый рендеринг OpenGL"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - opengl-es
   - 3d-graphics
   - shaders
   - rendering
   - textures
-difficulty: medium
-status: draft
 ---
-
 # Advanced OpenGL ES Rendering Techniques
 
 # Question (EN)

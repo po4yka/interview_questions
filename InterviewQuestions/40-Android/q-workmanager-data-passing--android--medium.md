@@ -1,15 +1,16 @@
 ---
+id: "20251015082237368"
+title: "Workmanager Data Passing / Передача данных WorkManager"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/background-processing
   - background-processing
   - data-passing
   - workmanager
-difficulty: medium
-status: draft
 ---
-
 # How to pass and receive data from WorkManager?
 
 **Russian**: Как передать и как получить данные из WorkManager?

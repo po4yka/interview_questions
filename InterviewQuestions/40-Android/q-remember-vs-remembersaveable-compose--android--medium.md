@@ -1,14 +1,15 @@
 ---
+id: "20251015082237462"
+title: "Remember Vs Remembersaveable Compose"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - jetpack-compose
   - state-management
   - configuration-changes
-difficulty: medium
-status: draft
 ---
-
 # Remember vs RememberSaveable в Compose
 
 **English**: What's the difference between remember and rememberSaveable in Compose for preserving state across configuration changes?

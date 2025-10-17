@@ -1,17 +1,17 @@
 ---
-topic: kotlin
 id: "20251012-150009"
 title: "What is Dispatchers.Unconfined and when to use it?"
-description: "Comprehensive guide to What is Dispatchers.Unconfined and when to use it? in Kotlin coroutines"
+topic: kotlin
+difficulty: medium
+status: draft
+created: "2025-10-12"
 tags: ["kotlin", "coroutines", "difficulty/medium"]
-topic: "kotlin"
-subtopics: ["coroutines", "dispatchers", "unconfined"]
-moc: "moc-kotlin"
-status: "draft"
 date_created: "2025-10-12"
 date_updated: "2025-10-12"
+description: "Comprehensive guide to What is Dispatchers.Unconfined and when to use it? in Kotlin coroutines"
+moc: "moc-kotlin"
+subtopics: ["coroutines", "dispatchers", "unconfined"]
 ---
-
 # What is Dispatchers.Unconfined and when to use it?
 
 ## English

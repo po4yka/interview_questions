@@ -1,7 +1,11 @@
 ---
+id: "20251015082237253"
+title: "What Are The Most Important Components Of Compose / Какие самые важные компоненты Compose"
 topic: android
-tags:
-  - Compose
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Compose
   - Composable functions
   - State management
   - Modifiers
@@ -9,17 +13,20 @@ tags:
   - android
   - ui
   - jetpack-compose
-difficulty: medium
-status: draft
 ---
 
-# What are the most important components of Compose?
+# Question (EN)
+
+> What are the most important components of Compose?
 
 # Вопрос (RU)
 
-Из каких более важных компонентов состоит Compose
+> Из каких более важных компонентов состоит Compose?
+
+---
 
 ## Answer (EN)
+
 Jetpack Compose consists of several core components that work together to create a declarative UI framework. Understanding these components is essential for effective Compose development.
 
 ### 1. Composable Functions
@@ -595,23 +602,36 @@ The most important Compose components:
 
 Compose состоит из следующих более важных компонентов: Composable функции, которые описывают UI; State управляет состоянием компонентов; Modifiers применяются для настройки внешнего вида и поведения; Layouts определяют структуру расположения элементов на экране и Recomposition механизм обновления интерфейса при изменении состояния
 
-
 ---
+
+## Follow-ups
+
+-   How do you choose between different Compose layout components (Column, Row, Box, LazyColumn)?
+-   What's the difference between `remember` and `rememberSaveable` and when should you use each?
+-   How does Compose's state management differ from traditional Android View state handling?
+
+## References
+
+-   `https://developer.android.com/jetpack/compose` — Jetpack Compose overview
+-   `https://developer.android.com/jetpack/compose/state` — State management in Compose
+-   `https://developer.android.com/jetpack/compose/layouts` — Layouts in Compose
 
 ## Related Questions
 
 ### Hub
-- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+-   [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
 
 ### Related (Medium)
-- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
-- [[q-mutable-state-compose--android--medium]] - MutableState basics
-- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
-- [[q-compose-remember-derived-state--jetpack-compose--medium]] - Derived state patterns
+
+-   [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
+-   [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
+-   [[q-mutable-state-compose--android--medium]] - MutableState basics
+-   [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
+-   [[q-compose-remember-derived-state--jetpack-compose--medium]] - Derived state patterns
 
 ### Advanced (Harder)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
-- [[q-stable-classes-compose--android--hard]] - @Stable annotation
-- [[q-stable-annotation-compose--android--hard]] - Stability annotations
 
+-   [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+-   [[q-stable-classes-compose--android--hard]] - @Stable annotation
+-   [[q-stable-annotation-compose--android--hard]] - Stability annotations

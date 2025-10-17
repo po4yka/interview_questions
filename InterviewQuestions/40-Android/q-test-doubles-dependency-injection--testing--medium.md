@@ -1,14 +1,15 @@
 ---
+id: "20251015082237489"
+title: "Test Doubles Dependency Injection"
 topic: testing
-tags:
-  - testing
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - testing
   - hilt
   - dependency-injection
   - test-doubles
-difficulty: medium
-status: draft
 ---
-
 # Test Doubles with Hilt
 
 **English**: Implement test doubles with Hilt. Use @TestInstallIn to replace production modules. Test with different configurations.

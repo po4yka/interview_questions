@@ -1,16 +1,18 @@
 ---
-tags:
-  - copy
+id: "20251015082237167"
+title: "Data Class Special Features / Специальные возможности data class"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - copy
   - data-class
   - equals
   - hashcode
   - kotlin
   - programming-languages
   - tostring
-difficulty: easy
-status: draft
 ---
-
 # Какая особенность у Data Class относительно других Kotlin Classes?
 
 # Question (EN)

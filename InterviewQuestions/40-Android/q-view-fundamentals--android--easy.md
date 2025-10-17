@@ -1,17 +1,18 @@
 ---
+id: "20251015082237386"
+title: "View Fundamentals / Основы View"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - view
   - ui
   - basics
   - widget
   - view-hierarchy
   - difficulty/easy
-difficulty: easy
-status: draft
 ---
-
 # What is a View in Android? / Что такое View в Android?
 
 **English**: What's View?

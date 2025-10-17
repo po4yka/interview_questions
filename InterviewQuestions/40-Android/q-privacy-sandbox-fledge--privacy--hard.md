@@ -1,16 +1,18 @@
 ---
-tags:
-  - android
+id: "20251015082237592"
+title: "Privacy Sandbox Fledge"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - privacy-sandbox
   - fledge
   - protected-audience
   - remarketing
   - privacy
   - advertising
-difficulty: hard
-status: draft
 ---
-
 # Privacy Sandbox: FLEDGE (Protected Audience API) and On-Device Auctions
 
 # Question (EN)

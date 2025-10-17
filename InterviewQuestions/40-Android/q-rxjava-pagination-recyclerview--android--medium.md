@@ -520,10 +520,6 @@ class PaginationScrollListener(
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
 ## References
 - [RxJava Documentation](https://github.com/ReactiveX/RxJava)
 - [Paging 3 Library](https://developer.android.com/topic/libraries/architecture/paging/v3-overview)

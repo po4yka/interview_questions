@@ -1,6 +1,6 @@
 ---
 id: 20251012-140020
-title: "Flow Combining: zip, combine, merge / Объединение Flow: zip, combine, merge"
+title: "Flow Combining: zip, combine, merge"
 aliases: []
 
 # Classification
@@ -65,29 +65,13 @@ Comprehensive answer for question 140020.
 - [[q-what-is-coroutine--kotlin--easy]] - Coroutines
 - [[q-suspend-functions-basics--kotlin--easy]] - Coroutines
 - [[q-coroutine-builders-basics--kotlin--easy]] - Coroutines
-
 ### Advanced (Harder)
 - [[q-flow-performance--kotlin--hard]] - Coroutines
 - [[q-select-expression-channels--kotlin--hard]] - Coroutines
 - [[q-coroutine-profiling--kotlin--hard]] - Coroutines
-### Prerequisites (Easier)
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
-- [[q-suspend-functions-basics--kotlin--easy]] - Coroutines
-- [[q-coroutine-builders-basics--kotlin--easy]] - Coroutines
-
-### Advanced (Harder)
-- [[q-flow-performance--kotlin--hard]] - Coroutines
-- [[q-select-expression-channels--kotlin--hard]] - Coroutines
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
-### Prerequisites (Easier)
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
-- [[q-suspend-functions-basics--kotlin--easy]] - Coroutines
-- [[q-coroutine-builders-basics--kotlin--easy]] - Coroutines
-
-### Advanced (Harder)
-- [[q-flow-performance--kotlin--hard]] - Coroutines
-- [[q-select-expression-channels--kotlin--hard]] - Coroutines
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
+- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
+- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
+- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
@@ -98,7 +82,3 @@ Comprehensive answer for question 140020.
 - [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
 - [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
 
-### Advanced (Harder)
-- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies

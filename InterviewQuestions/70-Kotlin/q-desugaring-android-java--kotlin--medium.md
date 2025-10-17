@@ -1,15 +1,16 @@
 ---
+id: "20251015082236033"
+title: "Desugaring Android Java"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - java
   - android
   - compilation
   - backward-compatibility
-difficulty: medium
-status: draft
 ---
-
 # Desugaring в Android
 
 # Question (EN)

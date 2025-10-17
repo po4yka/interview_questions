@@ -1,17 +1,17 @@
 ---
-topic: kotlin
 id: "20251012-150017"
 title: "Value classes (inline classes) in Kotlin"
-description: "Comprehensive guide to Value classes (inline classes) in Kotlin covering concepts, patterns, best practices, and real-world examples"
+topic: kotlin
+difficulty: medium
+status: draft
+created: "2025-10-12"
 tags: ["kotlin", "classes", "difficulty/medium"]
-topic: "kotlin"
-subtopics: ["classes", "kotlin-features", "oop"]
-moc: "moc-kotlin"
-status: "draft"
 date_created: "2025-10-12"
 date_updated: "2025-10-12"
+description: "Comprehensive guide to Value classes (inline classes) in Kotlin covering concepts, patterns, best practices, and real-world examples"
+moc: "moc-kotlin"
+subtopics: ["classes", "kotlin-features", "oop"]
 ---
-
 # Value classes (inline classes) in Kotlin
 
 ## English

@@ -1,16 +1,17 @@
 ---
+id: "20251015082237550"
+title: "Room Database Migrations / Миграции базы данных Room"
 topic: room
-tags:
-  - room
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - room
   - database
   - migrations
   - persistence
   - testing
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Room Database Migrations / Миграции базы данных Room
 
 **English**: Implement complex Room database migrations from version 1 to 3. Handle destructive and non-destructive migrations with testing.

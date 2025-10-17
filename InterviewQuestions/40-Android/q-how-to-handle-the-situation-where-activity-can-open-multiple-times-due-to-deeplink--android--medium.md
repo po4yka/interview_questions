@@ -1,11 +1,12 @@
 ---
+id: "20251015082237445"
+title: "How To Handle The Situation Where Activity Can Open Multiple Times Due To Deeplink / Как обработать ситуацию когда Activity может открыться несколько раз из-за deeplink"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # How to handle the situation where Activity can open multiple times due to deeplink?
 
 ## Answer (EN)

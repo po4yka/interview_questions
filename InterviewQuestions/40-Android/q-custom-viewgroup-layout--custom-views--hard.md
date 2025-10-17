@@ -1,13 +1,15 @@
 ---
-tags:
-  - custom-views
+id: "20251015082237495"
+title: "Custom Viewgroup Layout / Layout кастомных ViewGroup"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - custom-views
   - viewgroup
   - layout
   - android-framework
-difficulty: hard
-status: draft
 ---
-
 # Custom ViewGroup and Layout
 
 # Question (EN)
@@ -935,7 +937,180 @@ class FlowLayout @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
 
-    // ... (код как в английской версии)
+    // Отступы между дочерними элементами
+    var horizontalSpacing: Int = 0
+        set(value) {
+            field = value
+            requestLayout()
+        }
+
+    var verticalSpacing: Int = 0
+        set(value) {
+            field = value
+            requestLayout()
+        }
+
+    init {
+        // Чтение пользовательских атрибутов
+        context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.FlowLayout,
+            defStyleAttr,
+            0
+        ).apply {
+            try {
+                horizontalSpacing = getDimensionPixelSize(
+                    R.styleable.FlowLayout_horizontalSpacing,
+                    0
+                )
+                verticalSpacing = getDimensionPixelSize(
+                    R.styleable.FlowLayout_verticalSpacing,
+                    0
+                )
+            } finally {
+                recycle()
+            }
+        }
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+
+        // Рассчитать доступную ширину для дочерних элементов
+        val availableWidth = if (widthMode == MeasureSpec.UNSPECIFIED) {
+            Int.MAX_VALUE
+        } else {
+            widthSize - paddingLeft - paddingRight
+        }
+
+        var currentRowWidth = 0
+        var currentRowHeight = 0
+        var totalWidth = 0
+        var totalHeight = 0
+
+        // Измерить каждый дочерний элемент и рассчитать общие размеры
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            if (child.visibility == GONE) continue
+
+            // Измерить дочерний элемент с доступным пространством
+            measureChildWithMargins(
+                child,
+                widthMeasureSpec,
+                0,
+                heightMeasureSpec,
+                totalHeight
+            )
+
+            val childWidth = child.measuredWidth + child.marginLeft + child.marginRight
+            val childHeight = child.measuredHeight + child.marginTop + child.marginBottom
+
+            // Проверить нужно ли переносить на следующий ряд
+            if (currentRowWidth + childWidth > availableWidth && currentRowWidth > 0) {
+                // Начать новый ряд
+                totalWidth = max(totalWidth, currentRowWidth - horizontalSpacing)
+                totalHeight += currentRowHeight + verticalSpacing
+
+                currentRowWidth = childWidth + horizontalSpacing
+                currentRowHeight = childHeight
+            } else {
+                // Добавить в текущий ряд
+                currentRowWidth += childWidth + horizontalSpacing
+                currentRowHeight = max(currentRowHeight, childHeight)
+            }
+        }
+
+        // Добавить последний ряд
+        totalWidth = max(totalWidth, currentRowWidth - horizontalSpacing)
+        totalHeight += currentRowHeight
+
+        // Добавить отступы (padding)
+        totalWidth += paddingLeft + paddingRight
+        totalHeight += paddingTop + paddingBottom
+
+        // Разрешить финальные размеры
+        val finalWidth = when (widthMode) {
+            MeasureSpec.EXACTLY -> widthSize
+            MeasureSpec.AT_MOST -> min(totalWidth, widthSize)
+            else -> totalWidth
+        }
+
+        val finalHeight = when (heightMode) {
+            MeasureSpec.EXACTLY -> heightSize
+            MeasureSpec.AT_MOST -> min(totalHeight, heightSize)
+            else -> totalHeight
+        }
+
+        setMeasuredDimension(finalWidth, finalHeight)
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        val availableWidth = right - left - paddingLeft - paddingRight
+
+        var currentX = paddingLeft
+        var currentY = paddingTop
+        var currentRowHeight = 0
+
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            if (child.visibility == GONE) continue
+
+            val childWidth = child.measuredWidth
+            val childHeight = child.measuredHeight
+            val lp = child.layoutParams as MarginLayoutParams
+
+            val totalChildWidth = childWidth + lp.leftMargin + lp.rightMargin
+
+            // Проверить нужен ли перенос
+            if (currentX + totalChildWidth > paddingLeft + availableWidth && currentX > paddingLeft) {
+                // Переместиться на следующий ряд
+                currentX = paddingLeft
+                currentY += currentRowHeight + verticalSpacing
+                currentRowHeight = 0
+            }
+
+            // Расположить дочерний элемент
+            val childLeft = currentX + lp.leftMargin
+            val childTop = currentY + lp.topMargin
+
+            child.layout(
+                childLeft,
+                childTop,
+                childLeft + childWidth,
+                childTop + childHeight
+            )
+
+            // Обновить позицию для следующего дочернего элемента
+            currentX += totalChildWidth + horizontalSpacing
+            currentRowHeight = max(
+                currentRowHeight,
+                childHeight + lp.topMargin + lp.bottomMargin
+            )
+        }
+    }
+
+    // Поддержка margins
+    override fun generateLayoutParams(attrs: AttributeSet?): LayoutParams {
+        return MarginLayoutParams(context, attrs)
+    }
+
+    override fun generateDefaultLayoutParams(): LayoutParams {
+        return MarginLayoutParams(
+            LayoutParams.WRAP_CONTENT,
+            LayoutParams.WRAP_CONTENT
+        )
+    }
+
+    override fun generateLayoutParams(p: LayoutParams?): LayoutParams {
+        return MarginLayoutParams(p)
+    }
+
+    override fun checkLayoutParams(p: LayoutParams?): Boolean {
+        return p is MarginLayoutParams
+    }
 }
 ```
 

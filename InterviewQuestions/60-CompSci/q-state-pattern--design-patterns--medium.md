@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237202"
+title: "State Pattern / State Паттерн"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - behavioral-patterns
   - state
   - gof-patterns
   - state-machine
-difficulty: medium
-status: draft
 ---
-
 # State Pattern
 
 # Question (EN)

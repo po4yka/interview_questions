@@ -1,28 +1,25 @@
 ---
 id: 20251012-200002
 title: "Binary Search and Variants / Бинарный поиск и варианты"
-slug: binary-search-variants-algorithms-medium
 topic: algorithms
-subtopics:
-  - binary-search
-  - searching
-  - divide-and-conquer
-  - logarithmic
-status: draft
 difficulty: medium
-moc: moc-algorithms
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-sorting-algorithms-comparison--algorithms--medium
-  - q-two-pointers-technique--algorithms--medium
-tags:
-  - algorithms
+status: draft
+created: 2025-10-12
+tags: - algorithms
   - binary-search
   - searching
   - log-n
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-algorithms
+related_questions:   - q-sorting-algorithms-comparison--algorithms--medium
+  - q-two-pointers-technique--algorithms--medium
+slug: binary-search-variants-algorithms-medium
+subtopics:   - binary-search
+  - searching
+  - divide-and-conquer
+  - logarithmic
 ---
-
 # Binary Search and Variants
 
 ## English Version

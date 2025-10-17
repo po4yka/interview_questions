@@ -1,7 +1,11 @@
 ---
+id: "20251015082237334"
+title: "Android Storage Types / Типы хранилища Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/data-storage
   - content-providers
   - data-storage
@@ -12,10 +16,7 @@ tags:
   - sharedpreferences
   - sqlite
   - storage
-difficulty: medium
-status: draft
 ---
-
 # Какие типы хранилищ существуют в Android-приложениях?
 
 # Question (EN)
@@ -393,7 +394,302 @@ val syncWorkRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
 
 ## Ответ (RU)
 
-В Android-приложениях существует несколько типов хранилищ данных, каждый из которых подходит для различных сценариев и требований к данным. Основные типы хранилищ данных в Android включают: 1. SharedPreferences - используется для хранения пар ключ-значение и идеально подходит для хранения небольших данных таких как настройки пользователя предпочтения и конфигурации. 2. Internal Storage - хранение данных внутри внутренней памяти устройства подходит для хранения приватных данных которые должны быть доступны только внутри приложения. 3. External Storage - хранение данных на внешней памяти устройства (SD-карта или внешняя память устройства) используется для хранения данных которые должны быть доступны за пределами приложения например мультимедийные файлы фотографии видео. 4. SQLite Database - полноценная реляционная база данных встроенная в Android идеально подходит для хранения структурированных данных с отношениями запросами и транзакциями. 5. Content Providers - механизм для обмена данными между приложениями используется для предоставления доступа к данным одного приложения другим приложениям часто используется для доступа к системным данным таким как контакты изображения и видео.
+В Android-приложениях существует **несколько типов хранилищ данных**, каждый из которых подходит для различных сценариев и требований к данным.
+
+### Основные типы хранилищ
+
+### 1. SharedPreferences
+
+**Назначение:** Хранение небольших пар ключ-значение
+
+**Лучше всего для:**
+- Настройки и предпочтения пользователя
+- Конфигурация приложения
+- Простые флаги и состояния
+- Токены и ID сессий
+
+**Пример:**
+
+```kotlin
+val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+
+// Запись
+prefs.edit()
+    .putString("username", "ivan_petrov")
+    .putBoolean("dark_mode", true)
+    .putInt("launch_count", 5)
+    .apply()
+
+// Чтение
+val username = prefs.getString("username", "")
+val isDarkMode = prefs.getBoolean("dark_mode", false)
+```
+
+**Характеристики:**
+- Простой API
+- Сохраняется между сессиями приложения
+- Не подходит для больших данных
+- Не подходит для сложных объектов
+
+---
+
+### 2. Internal Storage (Внутреннее хранилище)
+
+**Назначение:** Хранение приватных файлов во внутренней памяти приложения
+
+**Лучше всего для:**
+- Приватные данные приложения
+- Кеш файлы
+- Скачанный контент
+- Пользовательские файлы, которые должны быть приватными
+
+**Характеристики:**
+- **Приватное**: Доступно только вашему приложению
+- **Авто-удаление**: Удаляется при удалении приложения
+- **Расположение**: `/data/data/<package_name>/files/`
+
+**Пример:**
+
+```kotlin
+// Записать файл во внутреннее хранилище
+val filename = "user_data.txt"
+val content = "Информация профиля пользователя"
+
+context.openFileOutput(filename, Context.MODE_PRIVATE).use { output ->
+    output.write(content.toByteArray())
+}
+
+// Прочитать файл из внутреннего хранилища
+val inputStream = context.openFileInput(filename)
+val text = inputStream.bufferedReader().use { it.readText() }
+
+// Получить объект файла
+val file = File(context.filesDir, filename)
+
+// Директория кеша (автоматически управляется)
+val cacheFile = File(context.cacheDir, "temp.dat")
+```
+
+---
+
+### 3. External Storage (Внешнее хранилище)
+
+**Назначение:** Хранение файлов на внешнем хранилище (SD карта или внешний раздел устройства)
+
+**Лучше всего для:**
+- Медиа файлы (фото, видео, музыка)
+- Большие файлы
+- Файлы, которые должны остаться после удаления приложения
+- Файлы, общие для других приложений
+
+**Характеристики:**
+- **Доступность**: Может быть доступно другим приложениям (если публичное)
+- **Постоянство**: Переживает удаление приложения (публичные директории)
+- **Требует разрешений** (на старых версиях Android)
+
+**Scoped Storage (Android 10+):**
+
+```kotlin
+// Директория, специфичная для приложения (не требует разрешений)
+val appDir = context.getExternalFilesDir(null)
+val mediaDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+// Запись в директорию приложения
+val file = File(appDir, "photo.jpg")
+FileOutputStream(file).use { output ->
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output)
+}
+```
+
+**MediaStore API (для общих медиа):**
+
+```kotlin
+// Сохранить изображение в общую директорию Pictures
+fun saveImageToGallery(context: Context, bitmap: Bitmap, displayName: String) {
+    val contentValues = ContentValues().apply {
+        put(MediaStore.Images.Media.DISPLAY_NAME, displayName)
+        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+        put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+    }
+
+    val uri = context.contentResolver.insert(
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        contentValues
+    )
+
+    uri?.let {
+        context.contentResolver.openOutputStream(it)?.use { output ->
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output)
+        }
+    }
+}
+```
+
+---
+
+### 4. SQLite Database
+
+**Назначение:** Полнофункциональная реляционная база данных для структурированных данных
+
+**Лучше всего для:**
+- Структурированные данные с отношениями
+- Сложные запросы и транзакции
+- Большие наборы данных с индексированием
+- Данные, требующие ACID гарантий
+
+**Пример:**
+
+```kotlin
+// Использование Room (рекомендуется)
+@Entity(tableName = "users")
+data class User(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val name: String,
+    val email: String
+)
+
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users WHERE name LIKE :search")
+    suspend fun searchUsers(search: String): List<User>
+
+    @Insert
+    suspend fun insert(user: User)
+
+    @Delete
+    suspend fun delete(user: User)
+}
+
+@Database(entities = [User::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
+}
+
+// Использование
+val db = Room.databaseBuilder(context, AppDatabase::class.java, "app-db").build()
+val users = db.userDao().searchUsers("%иван%")
+```
+
+**Характеристики:**
+- ACID транзакции
+- Сложные запросы с SQL
+- Отношения и соединения (joins)
+- Индексирование для производительности
+- **Расположение**: `/data/data/<package_name>/databases/`
+
+---
+
+### 5. Content Providers
+
+**Назначение:** Обмен данными между приложениями
+
+**Лучше всего для:**
+- Доступ к системным данным (контакты, календарь, медиа)
+- Обмен данными приложения с другими приложениями
+- Предоставление структурированного доступа к вашим данным
+- Безопасный обмен данными с разрешениями
+
+**Пример - Чтение контактов:**
+
+```kotlin
+// Запрос контактов
+val cursor = contentResolver.query(
+    ContactsContract.Contacts.CONTENT_URI,
+    null,
+    null,
+    null,
+    null
+)
+
+cursor?.use {
+    while (it.moveToNext()) {
+        val id = it.getLong(it.getColumnIndexOrThrow(ContactsContract.Contacts._ID))
+        val name = it.getString(it.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME))
+        // Использовать данные контакта
+    }
+}
+```
+
+**Общие Content Providers:**
+- `ContactsContract` - Контакты
+- `MediaStore` - Изображения, видео, аудио
+- `CalendarContract` - События календаря
+- `Settings` - Системные настройки
+
+---
+
+### Таблица сравнения хранилищ
+
+| Тип хранилища | Ограничение размера | Доступность | Постоянство | Случай использования |
+|--------------|---------------------|-------------|-------------|---------------------|
+| **SharedPreferences** | Маленький (KB) | Приватный | Переживает перезапуск | Настройки, предпочтения |
+| **Internal Storage** | Квота приложения | Приватный | Удаляется при удалении | Приватные файлы, кеш |
+| **External Storage** | Лимит устройства | Публичный/Приватный | Настраиваемое | Медиа, большие файлы |
+| **SQLite** | Лимит устройства | Приватный | Удаляется при удалении | Структурированные данные |
+| **Content Providers** | Варьируется | Контролируемый | Варьируется | Обмен данными между приложениями |
+
+### Дерево решений
+
+```kotlin
+// Выбор хранилища на основе требований:
+
+if (данные это небольшие пары ключ-значение) {
+    использовать SharedPreferences
+} else if (данные это приватные файлы) {
+    использовать Internal Storage
+} else if (данные это медиа/большие файлы для обмена) {
+    использовать External Storage (MediaStore)
+} else if (данные структурированные/реляционные) {
+    использовать SQLite (Room)
+} else if (обмен данными с другими приложениями) {
+    использовать Content Provider
+}
+```
+
+### Современные лучшие практики
+
+**1. DataStore (замена SharedPreferences):**
+
+```kotlin
+// Preferences DataStore
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
+// Запись
+context.dataStore.edit { settings ->
+    settings[stringPreferencesKey("username")] = "иван"
+}
+
+// Чтение как Flow
+val usernameFlow: Flow<String> = context.dataStore.data
+    .map { preferences ->
+        preferences[stringPreferencesKey("username")] ?: ""
+    }
+```
+
+**2. Room (замена сырого SQLite):**
+
+```kotlin
+// Типобезопасные, проверяемые во время компиляции запросы
+@Query("SELECT * FROM users WHERE age > :minAge")
+suspend fun getUsersOlderThan(minAge: Int): List<User>
+```
+
+### Резюме
+
+**5 основных типов хранилищ в Android:**
+
+1. **SharedPreferences** - Небольшие данные ключ-значение (настройки, флаги)
+2. **Internal Storage** - Приватные файлы приложения
+3. **External Storage** - Медиа и общие файлы
+4. **SQLite Database** - Структурированные реляционные данные
+5. **Content Providers** - Обмен данными между приложениями
+
+**Выбирайте на основе:**
+- Размера и структуры данных
+- Требований к приватности
+- Потребностей в обмене
+- Сложности запросов
 
 
 ---

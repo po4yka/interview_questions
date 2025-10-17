@@ -3,10 +3,10 @@ topic: kotlin
 id: "20251012-170002"
 title: "Creating custom CoroutineDispatchers with limitedParallelism / Создание кастомных диспетчеров"
 description: "Deep dive into creating custom dispatchers, limitedParallelism API, thread pool sizing, and resource-specific dispatchers"
-topic: "kotlin"
+topic: kotlin
 subtopics: ["coroutines", "dispatchers", "custom", "threading", "performance"]
-difficulty: "hard"
-status: "draft"
+difficulty: hard
+status: draft
 created: 2025-10-12
 updated: 2025-10-12
 category: "coroutines-advanced"
@@ -17,12 +17,17 @@ contributors: []
 
 # Creating custom CoroutineDispatchers with limitedParallelism / Создание кастомных диспетчеров
 
-## English Version
+# Question (EN)
 
-### Question
-When and how should you create custom CoroutineDispatchers in Kotlin? Explain the `limitedParallelism()` API, ExecutorService integration, thread pool sizing strategies, and real-world scenarios for resource-specific dispatchers.
+> When and how should you create custom CoroutineDispatchers in Kotlin? Explain the `limitedParallelism()` API, ExecutorService integration, thread pool sizing strategies, and real-world scenarios for resource-specific dispatchers.
 
-### Answer
+# Вопрос (RU)
+
+> Когда и как следует создавать кастомные CoroutineDispatchers в Kotlin? Объясните API `limitedParallelism()`, интеграцию с ExecutorService, стратегии размера пула потоков и реальные сценарии для диспетчеров специфических ресурсов.
+
+---
+
+## Answer (EN)
 
 #### When to Create Custom Dispatchers
 
@@ -940,12 +945,9 @@ Choose the right dispatcher for your workload to maximize performance and resour
 
 ---
 
-## Russian Version / Русская версия
+## Ответ (RU)
 
-### Вопрос
-Когда и как следует создавать кастомные CoroutineDispatchers в Kotlin? Объясните API `limitedParallelism()`, интеграцию с ExecutorService, стратегии размера пула потоков и реальные сценарии для диспетчеров специфических ресурсов.
-
-### Ответ
+*(Краткое содержание основных пунктов из английской версии)*
 
 #### Когда создавать кастомные диспетчеры
 

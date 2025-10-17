@@ -1,17 +1,17 @@
 ---
-topic: kotlin
 id: "20251012-150012"
 title: "Sealed classes vs sealed interfaces in Kotlin"
-description: "Comprehensive guide to sealed classes and sealed interfaces covering exhaustive when expressions, hierarchy, comparison with enums, and Kotlin 1.5+ features"
+topic: kotlin
+difficulty: medium
+status: draft
+created: "2025-10-12"
 tags: ["kotlin", "classes", "sealed", "polymorphism", "when-expression", "difficulty/medium"]
-topic: "kotlin"
-subtopics: ["classes", "sealed", "polymorphism", "when-expression"]
-moc: "moc-kotlin"
-status: "draft"
 date_created: "2025-10-12"
 date_updated: "2025-10-12"
+description: "Comprehensive guide to sealed classes and sealed interfaces covering exhaustive when expressions, hierarchy, comparison with enums, and Kotlin 1.5+ features"
+moc: "moc-kotlin"
+subtopics: ["classes", "sealed", "polymorphism", "when-expression"]
 ---
-
 # Sealed classes vs sealed interfaces in Kotlin
 
 ## English

@@ -1,15 +1,16 @@
 ---
+id: "20251015082238633"
+title: "In What Cases Might You Need To Call Commitallowingstateloss / В каких случаях может понадобиться commitAllowingStateLoss"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android/fragments
   - fragments
   - lifecycle
   - ui
-difficulty: hard
-status: draft
 ---
-
 # В каких случаях может понадобиться вызывать commitAllowingStateLoss
 
 **English**: In what cases might you need to call commitAllowingStateLoss

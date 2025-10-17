@@ -1,15 +1,16 @@
 ---
+id: "20251015082237438"
+title: "Koin Scope Management / Koin Scope Управление"
 topic: dependency-injection
-tags:
-  - dependency-injection
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - dependency-injection
   - koin
   - scopes
   - lifecycle
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Koin Scope Management / Управление Scope в Koin
 
 **English**: How do you manage scopes in Koin? Implement Activity and Fragment scoped dependencies with proper lifecycle handling.

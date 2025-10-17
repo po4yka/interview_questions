@@ -1,11 +1,12 @@
 ---
+id: "20251015082237523"
+title: "How Does Fragment Lifecycle Differ From Activity V2 / Чем жизненный цикл Fragment отличается от Activity v2"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # How does Fragment lifecycle differ from Activity?
 
 ## Answer (EN)
@@ -513,38 +514,6 @@ class SafeFragment : Fragment() {
 - ViewLifecycleOwner
 - Memory leak prevention
 - Fragment communication
-
----
-
-## Related Questions
-
-### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
-- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
-
-### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
-- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
-- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
-
----
-
-## Related Questions
-
-### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
-- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
-
-### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
-- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
-- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
 
 ---
 

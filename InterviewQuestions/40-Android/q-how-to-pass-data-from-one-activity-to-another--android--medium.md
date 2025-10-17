@@ -1,11 +1,12 @@
 ---
+id: "20251015082237560"
+title: "How To Pass Data From One Activity To Another / Как передать данные из одной Activity в другую"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # How to pass data from one Activity to another?
 
 ## Answer (EN)

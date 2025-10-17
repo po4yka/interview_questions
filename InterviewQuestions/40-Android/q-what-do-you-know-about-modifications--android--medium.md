@@ -1,17 +1,18 @@
 ---
+id: "20251015082237465"
+title: "What Do You Know About Modifications / Что вы знаете о модификациях"
 topic: android
-tags:
-  - modifications
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - modifications
   - UI elements
   - Jetpack Compose
   - android
   - ui
   - jetpack-compose
   - modifiers
-difficulty: medium
-status: draft
 ---
-
 # What do you know about modifications?
 
 # Вопрос (RU)

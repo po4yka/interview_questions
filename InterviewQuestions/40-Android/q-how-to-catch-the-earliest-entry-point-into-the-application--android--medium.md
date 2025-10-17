@@ -1,11 +1,12 @@
 ---
+id: "20251015082237543"
+title: "How To Catch The Earliest Entry Point Into The Application / Как поймать самую раннюю точку входа в приложение"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # How to catch the earliest entry point into the application?
 
 ## Answer (EN)

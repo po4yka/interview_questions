@@ -1,14 +1,15 @@
 ---
+id: "20251015082237409"
+title: "How To Display Two Identical Fragments On The Screen At The Same Time / Как отобразить два одинаковых Fragment на экране одновременно"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/fragments
   - fragments
   - ui
-difficulty: easy
-status: draft
 ---
-
 # Как на экране одновременно отобразить два одинаковых фрагмента?
 
 **English**: How to display two identical fragments on the screen at the same time?

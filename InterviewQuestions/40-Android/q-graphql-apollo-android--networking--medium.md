@@ -1,17 +1,18 @@
 ---
+id: "20251015082237461"
+title: "Graphql Apollo Android"
 topic: networking
-tags:
-  - networking
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - networking
   - graphql
   - apollo
   - api
   - caching
   - subscriptions
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # GraphQL with Apollo Android / GraphQL с Apollo Android
 
 **English**: Implement a GraphQL client with Apollo Android. Explain queries, mutations, fragments, and subscriptions. Handle normalized caching.

@@ -1,17 +1,18 @@
 ---
+id: "20251015082236007"
+title: "Kotlin Java Abstract Differences / Различия abstract в Kotlin и Java"
 topic: kotlin
-tags:
-  - abstract
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - abstract
   - inheritance
   - java
   - kotlin
   - oop
   - open
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # Какое главное отличие между Java и Kotlin касательно абстрактных классов и методов?
 
 **English**: What is the main difference between Java and Kotlin regarding abstract classes and methods?

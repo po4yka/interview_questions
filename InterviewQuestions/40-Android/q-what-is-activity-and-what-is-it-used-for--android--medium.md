@@ -1,14 +1,15 @@
 ---
+id: "20251015082237338"
+title: "What Is Activity And What Is It Used For / What Is Activity и What Is It Used For"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - activity
   - lifecycle
   - ui
-difficulty: medium
-status: draft
 ---
-
 # What is Activity and what is it used for?
 
 ## Answer (EN)

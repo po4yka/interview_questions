@@ -1,33 +1,30 @@
 ---
 id: 20251012-160007
 title: "Race conditions and data races in Kotlin coroutines / Состояния гонки и data race в Kotlin корутинах"
-slug: race-conditions-coroutines-kotlin-hard
 topic: kotlin
-subtopics:
-  - coroutines
-  - race-conditions
-  - thread-safety
-  - concurrency
-  - bugs
-status: draft
 difficulty: hard
-moc: moc-kotlin
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-mutex-synchronized-coroutines--kotlin--medium
-  - q-semaphore-rate-limiting--kotlin--medium
-  - q-debugging-coroutines-techniques--kotlin--medium
-tags:
-  - kotlin
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - coroutines
   - race-conditions
   - thread-safety
   - concurrency
   - data-races
   - bugs
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-kotlin
+related_questions:   - q-mutex-synchronized-coroutines--kotlin--medium
+  - q-semaphore-rate-limiting--kotlin--medium
+  - q-debugging-coroutines-techniques--kotlin--medium
+slug: race-conditions-coroutines-kotlin-hard
+subtopics:   - coroutines
+  - race-conditions
+  - thread-safety
+  - concurrency
+  - bugs
 ---
-
 # Race conditions and data races in Kotlin coroutines
 
 ## English Version

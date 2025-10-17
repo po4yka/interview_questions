@@ -1,7 +1,11 @@
 ---
+id: "20251015082237457"
+title: "Retrofit Path Parameter / Path параметр Retrofit"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/networking
   - get-request
   - networking
@@ -9,10 +13,7 @@ tags:
   - path-parameters
   - rest-api
   - retrofit
-difficulty: medium
-status: draft
 ---
-
 # Как в Ретрофите в гет методе поставить атрибут в путь в конкретном месте?
 
 **English**: How to put a parameter in a specific place in the path for a GET method in Retrofit?

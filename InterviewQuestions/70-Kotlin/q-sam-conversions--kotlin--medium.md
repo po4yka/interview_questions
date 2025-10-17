@@ -1,15 +1,16 @@
 ---
+id: "20251015082236038"
+title: "Sam Conversions / SAM конверсии"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - sam
   - lambda
   - functional-interface
   - java-interop
-difficulty: medium
-status: draft
 ---
-
 # SAM (Single Abstract Method) конверсии
 
 **English**: SAM (Single Abstract Method) conversions in Kotlin

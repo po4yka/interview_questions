@@ -1,7 +1,11 @@
 ---
+id: "20251015082237311"
+title: "Room Transactions Dao / Транзакции DAO в Room"
 topic: room
-tags:
-  - room
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - room
   - database
   - transactions
   - dao
@@ -9,10 +13,7 @@ tags:
   - consistency
   - acid
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Room Transactions and DAO / Транзакции и DAO в Room
 
 **English**: Implement Room transactions with @Transaction annotation. Handle complex multi-table operations atomically.

@@ -1,17 +1,18 @@
 ---
+id: "20251015082237469"
+title: "Overdraw Gpu Rendering / Overdraw и GPU рендеринг"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - performance
   - gpu
   - rendering
   - overdraw
   - optimization
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # What is Overdraw? / Что такое Overdraw?
 
 **English**: What is Overdraw?

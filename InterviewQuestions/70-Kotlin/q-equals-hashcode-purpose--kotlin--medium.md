@@ -1,13 +1,14 @@
 ---
+id: "20251015082236043"
+title: "Equals Hashcode Purpose / Назначение equals и hashCode"
 topic: kotlin
-tags:
-  - kotlin
-  - object-comparison
-  - hashmap
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - kotlin
+  - object-comparison
+  - hashmap
 ---
-
 # Зачем нужны методы equals и hashcode?
 
 # Question (EN)

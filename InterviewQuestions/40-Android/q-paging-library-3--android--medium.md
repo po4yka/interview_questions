@@ -2,26 +2,23 @@
 id: paging-library-3-1730793700000
 title: Paging Library 3 / Библиотека Paging 3
 topic: android
-language_tags:
-  - en
-  - ru
-original_language: en
+difficulty: medium
 status: draft
-moc: moc-android
-tags:
-  - android
+created: 2025-10-15
+tags: - android
   - paging
   - paging3
   - pagination
   - recyclerview
   - difficulty/medium
-subtopics:
-  - performance-rendering
-  - architecture-clean
-difficulty: medium
+language_tags:   - en
+  - ru
+moc: moc-android
+original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
+subtopics:   - performance-rendering
+  - architecture-clean
 ---
-
 # Paging Library 3 / Библиотека Paging 3
 
 **English**: What do you know about paging library?

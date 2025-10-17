@@ -1,17 +1,18 @@
 ---
+id: "20251015082238614"
+title: "Hilt Components Scope / Компоненты и скоупы Hilt"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/dependency-injection
   - components
   - dagger
   - dependency-injection
   - hilt
   - scope
-difficulty: medium
-status: draft
 ---
-
 # Какие готовые компоненты с готовым скоупом есть в Dagger Hilt и как модуль добавить к этой компоненте?
 
 **English**: What ready-made components with scopes are in Dagger Hilt, and how to add a module to a component?

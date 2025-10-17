@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237527"
+title: "V Chyom Izmeryaetsya Proizvoditelnost Layout / В чем измеряется производительность layout"
+topic: android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # В чём измеряется производительность layout
 
 ## Answer (EN)

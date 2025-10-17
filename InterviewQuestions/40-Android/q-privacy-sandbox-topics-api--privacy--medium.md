@@ -1,15 +1,17 @@
 ---
-tags:
-  - android
+id: "20251015082237532"
+title: "Privacy Sandbox Topics Api"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - privacy-sandbox
   - topics-api
   - privacy
   - advertising
   - user-privacy
-difficulty: medium
-status: draft
 ---
-
 # Privacy Sandbox: Topics API and Privacy-Preserving Advertising
 
 # Question (EN)

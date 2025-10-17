@@ -1,13 +1,14 @@
 ---
+id: "20251015082237408"
+title: "Fragment Vs Activity Lifecycle"
 topic: android
-tags:
-  - android
-  - fragments
-  - lifecycle
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
+  - fragments
+  - lifecycle
 ---
-
 # Чем жизненный цикл фрагмента отличается от Activity
 
 **English**: How does Fragment lifecycle differ from Activity lifecycle?
@@ -195,38 +196,6 @@ supportFragmentManager.beginTransaction()
 | **Вложенность** | Нет | Может содержать child fragments |
 
 **English**: Fragment lifecycle is more granular than Activity, with additional states like onAttach/onDetach for Activity binding and onCreateView/onDestroyView for view management. Fragments can be reused across activities, support programmatic back stack, and have separate view lifecycle allowing view destruction without fragment destruction.
-
----
-
-## Related Questions
-
-### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
-- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
-
-### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
-- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
-- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
-
----
-
-## Related Questions
-
-### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
-- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
-
-### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
-- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
-- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 id: 20251012-017
-title: "Kotlin/Native / Kotlin/Native"
+title: "Kotlin"
 aliases: []
 
 # Classification

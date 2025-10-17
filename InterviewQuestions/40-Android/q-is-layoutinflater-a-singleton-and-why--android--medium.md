@@ -1,16 +1,17 @@
 ---
+id: "20251015082237247"
+title: "Is Layoutinflater A Singleton And Why / Is Layoutinflater A Singleton и Why"
 topic: android
-tags:
-  - LayoutInflater
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - LayoutInflater
   - Context
   - Singleton
   - android
   - ui
   - layoutinflater
-difficulty: medium
-status: draft
 ---
-
 # Is LayoutInflater a singleton and why
 
 # Вопрос (RU)

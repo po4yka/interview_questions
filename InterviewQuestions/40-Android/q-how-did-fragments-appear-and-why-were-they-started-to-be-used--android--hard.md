@@ -1,15 +1,16 @@
 ---
+id: "20251015082238605"
+title: "How Did Fragments Appear And Why Were They Started To Be Used / How Did Fragments Appear и Why Were They Started To Be Used"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android-ui
   - android/fragments
   - fragments
   - ui
-difficulty: hard
-status: draft
 ---
-
 # Как появились фрагменты и для чего их начали использовать?
 
 **English**: How did fragments appear and why were they started to be used?

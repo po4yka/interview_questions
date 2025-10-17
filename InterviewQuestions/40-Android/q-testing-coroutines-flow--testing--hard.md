@@ -1,21 +1,26 @@
 ---
-tags:
-  - testing
+id: "20251015082237240"
+title: "Testing Coroutines Flow / Тестирование Coroutines Flow"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - testing
   - coroutines
   - flow
   - async
   - turbine
   - test-dispatcher
-difficulty: hard
-status: draft
 ---
 
 # Testing Coroutines and Flow
 
 # Question (EN)
+
 > How do you test suspend functions, StateFlow, and SharedFlow? Explain TestDispatcher, runTest, and turbine library.
 
 # Вопрос (RU)
+
 > Как тестировать suspend функции, StateFlow и SharedFlow? Объясните TestDispatcher, runTest и библиотеку turbine.
 
 ---
@@ -49,9 +54,10 @@ fun testSuspendFunction() = runTest {
 ```
 
 **runTest automatically:**
-- Advances virtual time
-- Waits for all coroutines to complete
-- Runs instantly (no actual delays)
+
+-   Advances virtual time
+-   Waits for all coroutines to complete
+-   Runs instantly (no actual delays)
 
 ---
 
@@ -697,8 +703,8 @@ viewModel.events.test { /* ... */ }
 
 ### TestDispatcher типы
 
-- **StandardTestDispatcher** - корутины не выполняются до `advanceUntilIdle()`
-- **UnconfinedTestDispatcher** - корутины выполняются немедленно
+-   **StandardTestDispatcher** - корутины не выполняются до `advanceUntilIdle()`
+-   **UnconfinedTestDispatcher** - корутины выполняются немедленно
 
 ### Контроль времени
 
@@ -710,8 +716,8 @@ viewModel.events.test { /* ... */ }
 
 ### Тестирование StateFlow vs SharedFlow
 
-- **StateFlow** - эмитирует текущее значение немедленно
-- **SharedFlow** - не имеет начального значения
+-   **StateFlow** - эмитирует текущее значение немедленно
+-   **SharedFlow** - не имеет начального значения
 
 ### Лучшие практики
 
@@ -724,9 +730,22 @@ viewModel.events.test { /* ... */ }
 
 ---
 
+## Follow-ups
+
+-   How do you test coroutines with delays and timeouts in unit tests?
+-   What's the difference between testing StateFlow vs SharedFlow behavior?
+-   How can you mock suspend functions that return Flow in your tests?
+
+## References
+
+-   `https://developer.android.com/kotlin/coroutines/test` — Testing coroutines
+-   `https://github.com/cashapp/turbine` — Turbine library
+-   `https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-test/` — Coroutines test utilities
+
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
-- [[q-testing-compose-ui--android--medium]] - Testing
-- [[q-compose-testing--android--medium]] - Testing
+
+-   [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+-   [[q-testing-compose-ui--android--medium]] - Testing
+-   [[q-compose-testing--android--medium]] - Testing

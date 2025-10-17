@@ -1,7 +1,11 @@
 ---
+id: "20251015082237492"
+title: "Presenter Notify View / Presenter уведомляет View"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/architecture-mvi
   - android/lifecycle
   - architecture-mvi
@@ -11,10 +15,7 @@ tags:
   - platform/android
   - presenter
   - view
-difficulty: medium
-status: draft
 ---
-
 # После получения результата внутри Presenter как сообщить об этом View
 
 **English**: After getting a result inside Presenter, how to notify the View

@@ -1,40 +1,49 @@
 ---
+id: "20251015082237265"
+title: "Sharedpreferences Definition / Определение SharedPreferences"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/data-storage
   - data-storage
   - key-value
   - persistence
   - sharedpreferences
-difficulty: easy
-status: draft
 ---
 
-# Что такое SharedPreferences?
+# Question (EN)
 
-**English**: What is SharedPreferences?
+> What is SharedPreferences?
+
+# Вопрос (RU)
+
+> Что такое SharedPreferences?
+
+---
 
 ## Answer (EN)
+
 **SharedPreferences** is a mechanism for **storing and retrieving simple data** in the form of **key-value pairs**.
 
 It's one of the **simplest ways** to save small amounts of data, such as user settings or application state between sessions.
 
 **Key Characteristics:**
 
-- - **Simple to use** - minimal API
--  **Private by default** - data accessible only within the app
--  **Persistent** - survives app restarts
--  **Small data only** - not for large datasets
--  **Perfect for**: User preferences, settings, flags, tokens
+-   -   **Simple to use** - minimal API
+-   **Private by default** - data accessible only within the app
+-   **Persistent** - survives app restarts
+-   **Small data only** - not for large datasets
+-   **Perfect for**: User preferences, settings, flags, tokens
 
 **Suitable For:**
 
-- User preferences (theme, language, notifications on/off)
-- Application state (first launch flag, tutorial completed)
-- Simple configuration values
-- Login tokens or session IDs
-- UI state (checkbox states, selected tabs)
+-   User preferences (theme, language, notifications on/off)
+-   Application state (first launch flag, tutorial completed)
+-   Simple configuration values
+-   Login tokens or session IDs
+-   UI state (checkbox states, selected tabs)
 
 **Basic Usage:**
 
@@ -222,10 +231,10 @@ fun SharedPreferences.observeKey(key: String, default: String): Flow<String> = c
 
 **Limitations:**
 
-- - Not suitable for large data (use Room/SQLite)
-- - Not suitable for complex objects (use JSON or Serialization)
-- - Not encrypted by default (use EncryptedSharedPreferences for sensitive data)
-- - Not suitable for structured/relational data
+-   -   Not suitable for large data (use Room/SQLite)
+-   -   Not suitable for complex objects (use JSON or Serialization)
+-   -   Not encrypted by default (use EncryptedSharedPreferences for sensitive data)
+-   -   Not suitable for structured/relational data
 
 **Security - EncryptedSharedPreferences:**
 
@@ -251,27 +260,32 @@ encryptedPrefs.edit {
 
 **Summary:**
 
-- **SharedPreferences**: Simple key-value storage
-- **Use for**: Settings, preferences, flags, small data
-- **apply()**: Async (recommended)
-- **commit()**: Sync (returns boolean)
-- **Private by default**: Data accessible only within app
-- **Limitations**: Not for large/complex/sensitive data
-- **Security**: Use EncryptedSharedPreferences for sensitive data
-
-## Ответ (RU)
-SharedPreferences представляет собой механизм для хранения и извлечения простых данных в форме пар ключ-значение. Это один из самых простых способов сохранения небольших объемов данных, таких как пользовательские настройки или состояние приложения между сессиями использования приложения. Подходят для сохранения приватных данных доступных только внутри приложения. Основные особенности: Простота использования, частная доступность данных и применение для хранения настроек пользователя или флагов состояния. Для работы с SharedPreferences необходимо получить экземпляр через getSharedPreferences(String name, int mode) или getPreferences(int mode). Данные записываются через SharedPreferences.Editor и сохраняются с помощью apply() или commit().
-
+-   **SharedPreferences**: Simple key-value storage
+-   **Use for**: Settings, preferences, flags, small data
+-   **apply()**: Async (recommended)
+-   **commit()**: Sync (returns boolean)
+-   **Private by default**: Data accessible only within app
+-   **Limitations**: Not for large/complex/sensitive data
+-   **Security**: Use EncryptedSharedPreferences for sensitive data
 
 ---
 
+## Ответ (RU)
+
+SharedPreferences представляет собой механизм для хранения и извлечения простых данных в форме пар ключ-значение. Это один из самых простых способов сохранения небольших объемов данных, таких как пользовательские настройки или состояние приложения между сессиями использования приложения. Подходят для сохранения приватных данных доступных только внутри приложения. Основные особенности: Простота использования, частная доступность данных и применение для хранения настроек пользователя или флагов состояния. Для работы с SharedPreferences необходимо получить экземпляр через getSharedPreferences(String name, int mode) или getPreferences(int mode). Данные записываются через SharedPreferences.Editor и сохраняются с помощью apply() или commit().
+
+---
+
+## Follow-ups
+
+-   When should you use SharedPreferences vs Room database for data storage?
+-   What are the differences between apply() and commit() methods in SharedPreferences?
+-   How do you migrate from SharedPreferences to DataStore for modern Android apps?
+
+## References
+
+-   `https://developer.android.com/training/data-storage/shared-preferences` — SharedPreferences guide
+-   `https://developer.android.com/topic/libraries/architecture/datastore` — DataStore migration
+-   `https://developer.android.com/topic/security/data` — EncryptedSharedPreferences
+
 ## Related Questions
-
-### Related (Easy)
-- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
-- [[q-room-library-definition--android--easy]] - Storage
-
-### Advanced (Harder)
-- [[q-room-code-generation-timing--android--medium]] - Storage
-- [[q-room-transactions-dao--room--medium]] - Storage
-- [[q-room-paging3-integration--room--medium]] - Storage

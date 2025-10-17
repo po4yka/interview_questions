@@ -1,16 +1,17 @@
 ---
+id: "20251015082237481"
+title: "What Is The Layout Called Where Objects Can Overlay Each Other / Как называется layout где объекты могут перекрывать друг друга"
 topic: android
-tags:
-  - FrameLayout
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - FrameLayout
   - Jetpack Compose
   - android
   - ui
   - layouts
   - framelayout
-difficulty: medium
-status: draft
 ---
-
 # What is the layout called where objects can overlay each other?
 
 # Вопрос (RU)
@@ -436,7 +437,421 @@ fun AdvancedBoxExample() {
 
 ## Ответ (RU)
 
-Такой тип называется FrameLayout в Android или Box в Jetpack Compose.
+В Android существует два основных подхода для создания макетов, где элементы интерфейса могут накладываться друг на друга: **FrameLayout** (традиционная система View) и **Box** (Jetpack Compose).
+
+### FrameLayout (Традиционная система View)
+
+`FrameLayout` предназначен для отображения одного view, но может содержать несколько дочерних элементов, которые накладываются друг на друга, при этом последний дочерний элемент рисуется сверху.
+
+#### Основной пример FrameLayout (XML)
+
+```xml
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="300dp">
+
+    <!-- Фоновое изображение (нижний слой) -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"
+        android:scaleType="centerCrop" />
+
+    <!-- Средний слой - полупрозрачное наложение -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000" />
+
+    <!-- Верхний слой - текст -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Overlay Text"
+        android:textColor="@android:color/white"
+        android:textSize="24sp" />
+</FrameLayout>
+```
+
+#### FrameLayout с позиционированием
+
+```xml
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="200dp">
+
+    <!-- Базовый слой -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blue" />
+
+    <!-- Верхний левый угол -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_margin="16dp"
+        android:text="Top Left" />
+
+    <!-- Центр -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Center" />
+
+    <!-- Правый нижний угол -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:text="Bottom Right" />
+</FrameLayout>
+```
+
+#### Программное создание FrameLayout
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val frameLayout = FrameLayout(this).apply {
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                800
+            )
+        }
+
+        // Добавление фонового изображения
+        val imageView = ImageView(this).apply {
+            setImageResource(R.drawable.background)
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+        }
+
+        // Добавление текста поверх
+        val textView = TextView(this).apply {
+            text = "Overlay Text"
+            setTextColor(Color.WHITE)
+            textSize = 24f
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER
+            )
+        }
+
+        frameLayout.addView(imageView)
+        frameLayout.addView(textView)
+
+        setContentView(frameLayout)
+    }
+}
+```
+
+### Типичные случаи использования FrameLayout
+
+#### 1. Изображение со значком
+
+```xml
+<FrameLayout
+    android:layout_width="100dp"
+    android:layout_height="100dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/user_avatar"
+        android:scaleType="centerCrop" />
+
+    <!-- Значок поверх изображения -->
+    <TextView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="4dp"
+        android:background="@drawable/circle_red"
+        android:gravity="center"
+        android:text="5"
+        android:textColor="@android:color/white"
+        android:textSize="12sp" />
+</FrameLayout>
+```
+
+#### 2. Оверлей загрузки
+
+```xml
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Основной контент -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!-- Контент здесь -->
+    </LinearLayout>
+
+    <!-- Оверлей загрузки -->
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CC000000"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+</FrameLayout>
+```
+
+```kotlin
+// Показать/скрыть оверлей загрузки
+fun showLoading(show: Boolean) {
+    findViewById<View>(R.id.loadingOverlay).visibility =
+        if (show) View.VISIBLE else View.GONE
+}
+```
+
+### Box в Jetpack Compose
+
+`Box` — это эквивалент `FrameLayout` в Compose, предоставляющий composable-элемент, который размещает своих потомков друг поверх друга.
+
+#### Основной пример Box
+
+```kotlin
+@Composable
+fun OverlayExample() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp)
+    ) {
+        // Фоновый слой
+        Image(
+            painter = painterResource(R.drawable.background),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // Полупрозрачное наложение
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+        )
+
+        // Верхний слой - текст
+        Text(
+            text = "Overlay Text",
+            color = Color.White,
+            fontSize = 24.sp,
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
+```
+
+#### Box с несколькими выравниваниями
+
+```kotlin
+@Composable
+fun MultiAlignmentBox() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .background(Color.Blue)
+    ) {
+        // Верхний левый
+        Text(
+            text = "Top Left",
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(16.dp)
+        )
+
+        // Центр
+        Text(
+            text = "Center",
+            modifier = Modifier.align(Alignment.Center)
+        )
+
+        // Правый нижний
+        Text(
+            text = "Bottom Right",
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        )
+    }
+}
+```
+
+#### Практические примеры в Compose
+
+##### Карточка со значком
+
+```kotlin
+@Composable
+fun BadgedProfileImage(
+    imageUrl: String,
+    badgeCount: Int
+) {
+    Box(
+        modifier = Modifier.size(100.dp)
+    ) {
+        // Изображение профиля
+        AsyncImage(
+            model = imageUrl,
+            contentDescription = "Profile",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        // Значок
+        if (badgeCount > 0) {
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .align(Alignment.TopEnd)
+                    .offset(x = (-4).dp, y = 4.dp)
+                    .background(Color.Red, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = badgeCount.toString(),
+                    color = Color.White,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+}
+```
+
+##### Оверлей загрузки
+
+```kotlin
+@Composable
+fun ScreenWithLoading(
+    isLoading: Boolean,
+    content: @Composable () -> Unit
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Основной контент
+        content()
+
+        // Оверлей загрузки
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.8f))
+                    .clickable(enabled = false) { }, // Блокировать взаимодействия
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = Color.White)
+            }
+        }
+    }
+}
+```
+
+##### Плавающая кнопка действия
+
+```kotlin
+@Composable
+fun ContentWithFAB() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Прокручиваемый контент
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            items(50) { index ->
+                Text(
+                    text = "Item $index",
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+        }
+
+        // Плавающая кнопка действия поверх контента
+        FloatingActionButton(
+            onClick = { /* Действие */ },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add"
+            )
+        }
+    }
+}
+```
+
+### Сравнение: FrameLayout vs Box
+
+| Характеристика | FrameLayout | Box (Compose) |
+|---------|-------------|---------------|
+| Система | View System | Jetpack Compose |
+| Определение | XML или Kotlin | Kotlin @Composable |
+| Порядок потомков | Последний сверху | Последний сверху |
+| Выравнивание | `layout_gravity` | `Modifier.align()` |
+| Управление Z-index | Порядок добавления | Порядок добавления / `zIndex()` |
+
+### Расширенные возможности Box
+
+```kotlin
+@Composable
+fun AdvancedBoxExample() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Слой 1 (снизу)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Blue)
+        )
+
+        // Слой 2 (средний) - с пользовательским z-index
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .align(Alignment.Center)
+                .zIndex(1f) // Явное упорядочивание по z
+                .background(Color.Green)
+        )
+
+        // Слой 3 (сверху по умолчанию)
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .align(Alignment.Center)
+                .background(Color.Red)
+        )
+    }
+}
+```
+
+### Резюме
+
+- **FrameLayout** (View System): простой контейнер для наложения view
+- **Box** (Jetpack Compose): современный декларативный подход для наложения composable-элементов
+- Оба размещают потомков друг поверх друга в порядке их добавления
+- Используйте `layout_gravity` (FrameLayout) или `Modifier.align()` (Box) для позиционирования
+- Типичные применения: значки, оверлеи, плавающие кнопки, индикаторы загрузки
 
 ---
 

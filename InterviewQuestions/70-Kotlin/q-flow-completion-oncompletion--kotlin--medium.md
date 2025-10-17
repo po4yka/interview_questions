@@ -1,18 +1,11 @@
 ---
-topic: kotlin
 id: "20251012-180005"
 title: "Flow completion with onCompletion operator / Завершение Flow с onCompletion оператором"
-subtopics:
-  - coroutines
-  - flow
-  - completion
-  - cleanup
-  - operators
+topic: kotlin
 difficulty: medium
-moc: moc-kotlin
 status: draft
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - flow
   - oncompletion
@@ -20,8 +13,13 @@ tags:
   - lifecycle
   - operators
   - error-handling
+moc: moc-kotlin
+subtopics:   - coroutines
+  - flow
+  - completion
+  - cleanup
+  - operators
 ---
-
 # Flow completion with onCompletion operator
 
 ## English

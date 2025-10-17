@@ -1,14 +1,16 @@
 ---
-tags:
-  - Android
+id: "20251015082237374"
+title: "Service Lifecycle Binding / Жизненный цикл и привязка Service"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - Background
   - Service
   - IPC
-difficulty: hard
-status: draft
 ---
-
 # Service Lifecycle and Binding - Advanced Patterns
 
 # Question (EN)
@@ -929,15 +931,6 @@ Services — фундаментальные Android-компоненты для 
 - **Foreground Services**: обязательны для видимой пользователю работы на Android 12+
 
 Ключевые моменты: правильное управление жизненным циклом, соответствие требованиям foreground service, надежная обработка ошибок, эффективный дизайн IPC.
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-service-component--android--medium]] - Service
-- [[q-testing-viewmodels-turbine--testing--medium]] - Lifecycle
-- [[q-what-is-viewmodel--android--medium]] - Lifecycle
 
 ---
 

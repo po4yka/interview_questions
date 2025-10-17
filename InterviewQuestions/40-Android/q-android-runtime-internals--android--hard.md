@@ -1,7 +1,11 @@
 ---
+id: "20251015082238631"
+title: "Android Runtime Internals / Внутреннее устройство Android Runtime"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-13
+tags: - android
   - art
   - runtime
   - jit
@@ -9,14 +13,11 @@ tags:
   - dex
   - compilation
   - performance
-difficulty: hard
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Android Runtime Internals
 
 **Сложность**: Hard

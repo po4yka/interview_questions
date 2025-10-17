@@ -1,19 +1,20 @@
 ---
+id: "20251015082238654"
+title: "Compose Side Effects Launchedeffect Disposableeffect / Побочные эффекты LaunchedEffect и DisposableEffect"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-13
+tags: - android
   - jetpack-compose
   - side-effects
   - coroutines
   - lifecycle
-difficulty: hard
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Side-эффекты в Compose: LaunchedEffect vs DisposableEffect
 
 **English**: What are side-effect APIs in Compose, and when would you use LaunchedEffect vs DisposableEffect?

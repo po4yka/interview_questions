@@ -1,30 +1,27 @@
 ---
 id: 20251012-200004
 title: "Graph Algorithms: BFS and DFS / Алгоритмы графов: BFS и DFS"
-slug: graph-algorithms-bfs-dfs-algorithms-hard
 topic: algorithms
-subtopics:
+difficulty: hard
+status: draft
+created: 2025-10-12
+tags: - algorithms
   - graphs
+  - bfs
+  - dfs
+  - traversal
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-algorithms
+related_questions:   - q-binary-search-variants--algorithms--medium
+  - q-dynamic-programming-fundamentals--algorithms--hard
+slug: graph-algorithms-bfs-dfs-algorithms-hard
+subtopics:   - graphs
   - bfs
   - dfs
   - traversal
   - shortest-path
-status: draft
-difficulty: hard
-moc: moc-algorithms
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-binary-search-variants--algorithms--medium
-  - q-dynamic-programming-fundamentals--algorithms--hard
-tags:
-  - algorithms
-  - graphs
-  - bfs
-  - dfs
-  - traversal
 ---
-
 # Graph Algorithms: BFS and DFS
 
 ## English Version

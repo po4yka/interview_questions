@@ -1,11 +1,12 @@
 ---
+id: "20251015082236049"
+title: "Equals Hashcode Contracts / Контракты equals и hashCode"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: hard
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Tell about equals and hashCode contracts
 
 # Question (EN)

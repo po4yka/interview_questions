@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237235"
+title: "Flyweight Pattern / Flyweight Паттерн"
+topic: computer-science
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - structural-patterns
   - flyweight
   - gof-patterns
   - memory-optimization
-difficulty: hard
-status: draft
 ---
-
 # Flyweight Pattern
 
 # Question (EN)

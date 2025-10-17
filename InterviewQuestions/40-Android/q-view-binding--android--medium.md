@@ -1,20 +1,20 @@
 ---
+id: "20251015082237332"
+title: "View Binding / Привязка View"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - view-binding
   - ui
   - type-safety
   - difficulty/medium
-subtopics:
-  - ui-views
+source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20View%20Binding.md
+subtopics:   - ui-views
   - gradle
   - build-variants
-difficulty: medium
-status: draft
-source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20View%20Binding.md
 ---
-
 # View Binding in Android / View Binding в Android
 
 **English**: What do you know about View Binding?

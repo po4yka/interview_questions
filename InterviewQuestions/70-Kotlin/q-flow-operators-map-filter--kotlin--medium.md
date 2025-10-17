@@ -1,6 +1,6 @@
 ---
 id: 20251012-140018
-title: "Flow Operators: map, filter, transform / Операторы Flow: map, filter, transform"
+title: "Flow Operators: map, filter, transform"
 aliases: []
 
 # Classification

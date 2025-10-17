@@ -1,13 +1,14 @@
 ---
+id: "20251015082237330"
+title: "Activity Lifecycle Methods / Методы жизненного цикла Activity"
 topic: android
-tags:
-  - android
-  - activity
-  - lifecycle
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
+  - activity
+  - lifecycle
 ---
-
 # Какие есть методы жизненного цикла Activity и как они отрабатывают?
 
 # Question (EN)
@@ -361,20 +362,6 @@ class MyLifecycleObserver : DefaultLifecycleObserver {
 ```
 
 **English**: Activity lifecycle methods are callbacks invoked by Android system during state changes: `onCreate()` (initialization, called once), `onStart()` (becomes visible), `onResume()` (foreground, interactive), `onPause()` (loses focus, save data quickly), `onStop()` (no longer visible, release resources), `onRestart()` (resuming after stop), `onDestroy()` (final cleanup). Proper management prevents resource leaks and ensures smooth UX. **Important:** `onDestroy()` may not be called if system kills process - use `onSaveInstanceState()` for critical data. Modern approach: use `DefaultLifecycleObserver` (not deprecated `@OnLifecycleEvent`).
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-viewmodel-pattern--android--easy]] - Lifecycle
-
-### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
-- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
-- [[q-how-does-activity-lifecycle-work--android--medium]] - Lifecycle, Activity
 
 ---
 

@@ -1,7 +1,11 @@
 ---
+id: "20251015082237272"
+title: "Save Data Outside Fragment / Сохранение данных вне Fragment"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/data-storage
   - architecture
   - data-persistence
@@ -10,15 +14,20 @@ tags:
   - room
   - sharedpreferences
   - viewmodel
-difficulty: medium
-status: draft
 ---
 
-# Каким образом можно сохранить данные за пределами фрагмента?
+# Question (EN)
 
-**English**: How can you save data outside a fragment?
+> How can you save data outside a fragment?
+
+# Вопрос (RU)
+
+> Каким образом можно сохранить данные за пределами фрагмента?
+
+---
 
 ## Answer (EN)
+
 To save data **outside a fragment** (so it persists beyond the fragment's lifecycle), you can use several methods depending on your requirements.
 
 ## Main Approaches
@@ -294,13 +303,13 @@ class UserListFragment : Fragment() {
 
 ## Comparison Table
 
-| Method | Persistence | Survives Rotation | Survives Process Death | Use Case |
-|--------|-------------|-------------------|------------------------|----------|
-| **SharedPreferences** | - Permanent | - Yes | - Yes | Settings, flags |
-| **Room Database** | - Permanent | - Yes | - Yes | Structured data |
-| **ViewModel** | - Temporary | - Yes | - No | UI state |
-| **SavedStateHandle** | - Limited | - Yes | - Yes | UI state (small) |
-| **Files** | - Permanent | - Yes | - Yes | Documents, media |
+| Method                | Persistence | Survives Rotation | Survives Process Death | Use Case         |
+| --------------------- | ----------- | ----------------- | ---------------------- | ---------------- |
+| **SharedPreferences** | - Permanent | - Yes             | - Yes                  | Settings, flags  |
+| **Room Database**     | - Permanent | - Yes             | - Yes                  | Structured data  |
+| **ViewModel**         | - Temporary | - Yes             | - No                   | UI state         |
+| **SavedStateHandle**  | - Limited   | - Yes             | - Yes                  | UI state (small) |
+| **Files**             | - Permanent | - Yes             | - Yes                  | Documents, media |
 
 ## Best Practices
 
@@ -368,19 +377,27 @@ class UserRepository(
 Fragment → ViewModel → Repository → (Room + SharedPreferences + Files)
 
 ## Ответ (RU)
-Для сохранения данных за пределами фрагмента в Android можно использовать несколько методов. Основные способы включают SharedPreferences, базы данных SQLite, Room, файлы и ViewModel с ViewModelFactory. SharedPreference используется для хранения небольших порций данных в виде пар ключ значение. Это удобно для хранения настроек пользователя или состояния приложения. SQLite это встроенная реляционная база данных которая позволяет хранить структурированные данные для работы с ней используются sql запросы. Room это библиотека которая упрощает работу с sqlite предоставляя абстракцию в виде аннотаций и dao data access objects.
 
+Для сохранения данных за пределами фрагмента в Android можно использовать несколько методов. Основные способы включают SharedPreferences, базы данных SQLite, Room, файлы и ViewModel с ViewModelFactory. SharedPreference используется для хранения небольших порций данных в виде пар ключ значение. Это удобно для хранения настроек пользователя или состояния приложения. SQLite это встроенная реляционная база данных которая позволяет хранить структурированные данные для работы с ней используются sql запросы. Room это библиотека которая упрощает работу с sqlite предоставляя абстракцию в виде аннотаций и dao data access objects.
 
 ---
 
 ## Related Questions
 
+## Follow-ups
+
+-   When should you use DataStore instead of SharedPreferences?
+-   How do you share data between fragments using activity-scoped ViewModel?
+-   What are best practices for repository and caching layers?
+
+## References
+
+-   `https://developer.android.com/topic/libraries/architecture/viewmodel` — ViewModel
+-   `https://developer.android.com/training/data-storage/shared-preferences` — SharedPreferences
+-   `https://developer.android.com/topic/libraries/architecture/datastore` — DataStore
+-   `https://developer.android.com/training/data-storage/room` — Room
+
 ### Related (Medium)
-- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] - how to pass data
-- [[q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium]] - how can data be
-### Related (Medium)
-- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] - how to pass data
-- [[q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium]] - how can data be
-### Related (Medium)
-- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] - how to pass data
-- [[q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium]] - how can data be
+
+-   [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]]
+-   [[q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium]]

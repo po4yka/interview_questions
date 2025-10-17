@@ -1,7 +1,11 @@
 ---
+id: "20251015082237261"
+title: "Parsing Optimization Android / Parsing Оптимизация Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/performance
   - gson
   - json
@@ -10,15 +14,20 @@ tags:
   - parsing
   - performance
   - xml
-difficulty: medium
-status: draft
 ---
 
-# Где можно оптимизировать парсинг?
+# Question (EN)
 
-**English**: Where can parsing be optimized?
+> Where can parsing be optimized in Android applications?
+
+# Вопрос (RU)
+
+> Где можно оптимизировать парсинг?
+
+---
 
 ## Answer (EN)
+
 **1. Use Streaming Processing**
 
 Use XmlPullParser instead of DOM for XML.
@@ -202,14 +211,14 @@ parserparseStream(stream).collect { item ->
 
 **Optimization Summary:**
 
-| Optimization | Benefit | Use Case |
-|--------------|---------|----------|
-| **Streaming** | Lower memory | Large documents |
-| **Reduce conversions** | Faster parsing | String heavy |
-| **Caching** | Avoid re-parsing | Frequently accessed |
-| **Moshi/kotlinx** | Speed | JSON parsing |
-| **Lazy parsing** | Memory efficient | Large lists |
-| **Background** | UI responsive | Heavy parsing |
+| Optimization           | Benefit          | Use Case            |
+| ---------------------- | ---------------- | ------------------- |
+| **Streaming**          | Lower memory     | Large documents     |
+| **Reduce conversions** | Faster parsing   | String heavy        |
+| **Caching**            | Avoid re-parsing | Frequently accessed |
+| **Moshi/kotlinx**      | Speed            | JSON parsing        |
+| **Lazy parsing**       | Memory efficient | Large lists         |
+| **Background**         | UI responsive    | Heavy parsing       |
 
 **Summary:**
 
@@ -221,23 +230,37 @@ parserparseStream(stream).collect { item ->
 6. Parse on background thread
 
 ## Ответ (RU)
+
 1. Использовать потоковую обработку (например, XmlPullParser вместо DOM)
 2. Уменьшить количество преобразований строк
 3. Кешировать результаты парсинга для повторного использования
 4. Использовать специализированные библиотеки (Moshi, Gson)
 
-
 ---
+
+## Follow-ups
+
+-   How do you choose between Gson, Moshi, and Jackson for JSON parsing performance?
+-   What are the memory implications of using streaming vs DOM parsing for large XML files?
+-   How can you implement caching strategies for parsed data to avoid repeated parsing?
+
+## References
+
+-   `https://github.com/square/moshi` — Moshi JSON library
+-   `https://github.com/google/gson` — Gson library
+-   `https://developer.android.com/topic/performance` — Android performance guide
 
 ## Related Questions
 
 ### Backend Concepts
-- [[q-virtual-tables-disadvantages--backend--medium]] - Performance
-- [[q-sql-join-algorithms-complexity--backend--hard]] - Performance
+
+-   [[q-virtual-tables-disadvantages--backend--medium]] - Performance
+-   [[q-sql-join-algorithms-complexity--backend--hard]] - Performance
 
 ### Kotlin Language Features
-- [[q-deferred-async-patterns--kotlin--medium]] - Performance
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance
-- [[q-channel-buffering-strategies--kotlin--hard]] - Performance
-- [[q-custom-dispatchers-limited-parallelism--kotlin--hard]] - Performance
-- [[q-kotlin-inline-functions--kotlin--medium]] - Performance
+
+-   [[q-deferred-async-patterns--kotlin--medium]] - Performance
+-   [[q-coroutine-performance-optimization--kotlin--hard]] - Performance
+-   [[q-channel-buffering-strategies--kotlin--hard]] - Performance
+-   [[q-custom-dispatchers-limited-parallelism--kotlin--hard]] - Performance
+-   [[q-kotlin-inline-functions--kotlin--medium]] - Performance

@@ -26,9 +26,13 @@ updated: 2025-10-06
 
 tags: [android, apk-size, optimization, build, resources, difficulty/medium]
 ---
+
 # Question (EN)
+
 > What techniques can be used to reduce Android APK size?
+
 # Вопрос (RU)
+
 > Какие техники можно использовать для уменьшения размера Android APK?
 
 ---
@@ -53,10 +57,11 @@ android {
 ```
 
 **What it does:**
-- Removes unused code (dead code elimination)
-- Removes unused resources
-- Obfuscates code (shorter class/method names)
-- Optimizes bytecode
+
+-   Removes unused code (dead code elimination)
+-   Removes unused resources
+-   Obfuscates code (shorter class/method names)
+-   Optimizes bytecode
 
 **Impact:** 20-40% size reduction
 
@@ -79,21 +84,24 @@ android {
 ```
 
 **What it does:**
-- Google Play generates optimized APKs for each device configuration
-- Users only download resources for their device
-- Dynamic feature modules (on-demand delivery)
+
+-   Google Play generates optimized APKs for each device configuration
+-   Users only download resources for their device
+-   Dynamic feature modules (on-demand delivery)
 
 **Impact:** 15-35% size reduction compared to universal APK
 
 ### 3. Optimize Images and Resources
 
 **Use WebP format:**
+
 ```kotlin
 // WebP provides better compression than PNG/JPEG
 // drawable/image.webp (instead of .png or .jpg)
 ```
 
 **Vector Drawables:**
+
 ```xml
 <!-- Use VectorDrawable instead of multiple PNG densities -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
@@ -108,6 +116,7 @@ android {
 ```
 
 **Remove unused alternative resources:**
+
 ```gradle
 android {
     defaultConfig {
@@ -158,6 +167,7 @@ implementation 'com.google.android.gms:play-services-maps:18.0.0'
 ```
 
 **Check dependency size:**
+
 ```bash
 ./gradlew :app:analyzeReleaseBundle
 ```
@@ -235,10 +245,12 @@ android {
 ### 11. Analyze APK Size
 
 **Using Android Studio:**
-- Build → Analyze APK
-- Shows breakdown of APK contents
+
+-   Build → Analyze APK
+-   Shows breakdown of APK contents
 
 **Using command line:**
+
 ```bash
 # Generate size report
 ./gradlew :app:analyzeReleaseBundle
@@ -247,10 +259,11 @@ android {
 ```
 
 **APK Analyzer breakdown:**
-- **DEX files**: Java/Kotlin code
-- **Resources**: Images, layouts, strings
-- **Native libs**: .so files
-- **Assets**: Raw files
+
+-   **DEX files**: Java/Kotlin code
+-   **Resources**: Images, layouts, strings
+-   **Native libs**: .so files
+-   **Assets**: Raw files
 
 ### Size Reduction Checklist
 
@@ -292,15 +305,15 @@ class APKSizeOptimization {
 
 ### Expected Results
 
-| Technique | Size Reduction |
-|-----------|----------------|
-| R8/ProGuard + Resource Shrinking | 20-40% |
-| Android App Bundle | 15-35% |
-| WebP Images | 25-35% (from PNG) |
-| Vector Drawables | 50-80% (vs multiple PNGs) |
-| ABI Filters | 30-50% |
-| Remove Unused Dependencies | 5-20% |
-| **Combined** | **40-70%** |
+| Technique                        | Size Reduction            |
+| -------------------------------- | ------------------------- |
+| R8/ProGuard + Resource Shrinking | 20-40%                    |
+| Android App Bundle               | 15-35%                    |
+| WebP Images                      | 25-35% (from PNG)         |
+| Vector Drawables                 | 50-80% (vs multiple PNGs) |
+| ABI Filters                      | 30-50%                    |
+| Remove Unused Dependencies       | 5-20%                     |
+| **Combined**                     | **40-70%**                |
 
 ### Best Practices
 
@@ -337,9 +350,9 @@ class APKSizeOptimization {
 
 ### 3. Оптимизация изображений
 
-- **WebP формат**: Лучшее сжатие чем PNG/JPEG
-- **Vector Drawables**: Вместо множества PNG разных разрешений
-- **Удаление неиспользуемых ресурсов**: Через `resConfigs`
+-   **WebP формат**: Лучшее сжатие чем PNG/JPEG
+-   **Vector Drawables**: Вместо множества PNG разных разрешений
+-   **Удаление неиспользуемых ресурсов**: Через `resConfigs`
 
 **Уменьшение:** 10-30%
 
@@ -366,14 +379,14 @@ class APKSizeOptimization {
 
 ### Ожидаемые результаты:
 
-| Техника | Уменьшение размера |
-|---------|---------------------|
-| R8/ProGuard | 20-40% |
-| App Bundle | 15-35% |
-| WebP | 25-35% |
-| Vector Drawables | 50-80% |
-| ABI фильтры | 30-50% |
-| **Комбинированно** | **40-70%** |
+| Техника            | Уменьшение размера |
+| ------------------ | ------------------ |
+| R8/ProGuard        | 20-40%             |
+| App Bundle         | 15-35%             |
+| WebP               | 25-35%             |
+| Vector Drawables   | 50-80%             |
+| ABI фильтры        | 30-50%             |
+| **Комбинированно** | **40-70%**         |
 
 ### Лучшие практики:
 
@@ -394,34 +407,35 @@ class APKSizeOptimization {
 ---
 
 ## References
-- [Reduce APK Size - Android Developers](https://developer.android.com/topic/performance/reduce-apk-size)
-- [Android App Bundle](https://developer.android.com/guide/app-bundle)
-- [R8 Shrinking](https://developer.android.com/studio/build/shrink-code)
-- [WebP Images](https://developer.android.com/studio/write/convert-webp)
+
+-   [Reduce APK Size - Android Developers](https://developer.android.com/topic/performance/reduce-apk-size)
+-   [Android App Bundle](https://developer.android.com/guide/app-bundle)
+-   [R8 Shrinking](https://developer.android.com/studio/build/shrink-code)
+-   [WebP Images](https://developer.android.com/studio/write/convert-webp)
+
+---
+
+## Follow-ups
+
+-   How do you measure and track APK size changes across different app versions?
+-   What are the trade-offs between using dynamic feature modules vs keeping everything in the base APK?
+-   How can you implement APK size budgets in your CI/CD pipeline to prevent size regressions?
+
+## References
+
+-   `https://developer.android.com/topic/performance/reduce-apk-size` — APK size reduction guide
+-   `https://developer.android.com/studio/build/shrink-code` — Code shrinking
+-   `https://developer.android.com/guide/app-bundle` — Android App Bundle
 
 ## Related Questions
 
 ### Related (Medium)
-- [[q-reduce-app-size--android--medium]] - Optimization
-- [[q-app-size-optimization--performance--medium]] - Performance
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
+
+-   [[q-reduce-app-size--android--medium]] - Optimization
+-   [[q-app-size-optimization--performance--medium]] - Performance
+-   [[q-macrobenchmark-startup--performance--medium]] - Performance
+-   [[q-recomposition-compose--android--medium]] - Jetpack Compose
 
 ### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Related (Medium)
-- [[q-reduce-app-size--android--medium]] - Optimization
-- [[q-app-size-optimization--performance--medium]] - Performance
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
 
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Related (Medium)
-- [[q-reduce-app-size--android--medium]] - Optimization
-- [[q-app-size-optimization--performance--medium]] - Performance
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
+-   [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

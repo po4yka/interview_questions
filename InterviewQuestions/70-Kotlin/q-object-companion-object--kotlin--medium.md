@@ -1,13 +1,14 @@
 ---
+id: "20251015082236003"
+title: "Object Companion Object"
 topic: kotlin
-tags:
-  - kotlin
-  - object-oriented
-  - singleton
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - kotlin
+  - object-oriented
+  - singleton
 ---
-
 # Что такое object / companion object?
 
 # Question (EN)

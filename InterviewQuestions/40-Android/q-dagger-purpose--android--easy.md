@@ -1,14 +1,15 @@
 ---
+id: "20251015082237385"
+title: "Dagger Purpose / Назначение Dagger"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - dependency-injection
   - dagger
   - di-hilt
-difficulty: easy
-status: draft
 ---
-
 # Для чего нужен Dagger ?
 
 **English**: What is Dagger used for?

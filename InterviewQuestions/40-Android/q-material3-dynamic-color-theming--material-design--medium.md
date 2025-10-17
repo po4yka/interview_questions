@@ -1,13 +1,15 @@
 ---
-tags:
-  - material-design
+id: "20251015082237403"
+title: "Material3 Dynamic Color Theming / Динамические цвета Material3"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - material-design
   - material3
   - theming
   - dynamic-color
-difficulty: medium
-status: draft
 ---
-
 # Material 3 Dynamic Color and Theming
 
 # Question (EN)

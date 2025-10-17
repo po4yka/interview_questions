@@ -2,20 +2,10 @@
 id: 20251006-debounce-search-coroutines
 title: Debouncing Search with Coroutines / Отложенный Поиск с Корутинами
 topic: kotlin
-subtopics:
-  - coroutines
-  - debouncing
-  - search
-  - job-cancellation
 difficulty: medium
-language_tags:
-  - en
-  - ru
-original_language: en
 status: draft
-source: Kotlin Coroutines Interview Questions PDF
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - debouncing
   - search
@@ -23,6 +13,14 @@ tags:
   - cancellation
   - android
   - difficulty/medium
+language_tags:   - en
+  - ru
+original_language: en
+source: Kotlin Coroutines Interview Questions PDF
+subtopics:   - coroutines
+  - debouncing
+  - search
+  - job-cancellation
 ---
 # Question (EN)
 > How would you implement a search-as-you-type feature with debouncing using Kotlin coroutines?

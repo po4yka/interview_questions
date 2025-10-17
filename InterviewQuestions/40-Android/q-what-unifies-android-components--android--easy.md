@@ -1,7 +1,11 @@
 ---
+id: "20251015082237367"
+title: "What Unifies Android Components / Что объединяет компоненты Android"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android-components
   - android/android-components
   - android/context
@@ -10,10 +14,7 @@ tags:
   - context
   - intent
   - manifest
-difficulty: easy
-status: draft
 ---
-
 # What unifies Android components?
 
 **Russian**: Что объединяет основные компоненты Android-приложения?

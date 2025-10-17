@@ -1,14 +1,15 @@
 ---
+id: "20251015082237053"
+title: "Partition Function / Функция partition"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - collections
   - filtering
   - pair
-difficulty: easy
-status: draft
 ---
-
 # partition(): разделение коллекции на две части
 
 **English**: partition() function in Kotlin collections

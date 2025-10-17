@@ -1,22 +1,23 @@
 ---
+id: "20251015082237199"
+title: "Class Composition / Композиция классов"
 topic: architecture-patterns
-subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
-tags:
-  - code-reuse
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - code-reuse
   - composition
   - design-patterns
   - encapsulation
   - has-a
   - oop
   - relationships
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-architecture-patterns
 related_questions: []
+subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
-
 # Что известно о композиции классов?
 
 # Question (EN)

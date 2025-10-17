@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237170"
+title: "Error Handling In Coroutines"
+topic: computer-science
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Error Handling Methods in Coroutines
 
 # Question (EN)

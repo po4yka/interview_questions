@@ -1,16 +1,17 @@
 ---
+id: "20251015082237305"
+title: "Android Build Optimization / Android Build Оптимизация"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - build-optimization
   - gradle
   - kotlin
   - ksp
   - performance
-difficulty: medium
-status: draft
 ---
-
 # Android Build Optimization
 
 # Question (EN)

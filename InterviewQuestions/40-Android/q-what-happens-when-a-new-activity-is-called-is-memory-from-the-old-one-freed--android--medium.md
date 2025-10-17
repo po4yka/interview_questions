@@ -1,14 +1,25 @@
 ---
+id: "20251015082237294"
+title: "What Happens When A New Activity Is Called Is Memory From The Old One Freed / Что происходит когда вызывается новая Activity освобождается ли память от старой"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
 
-# What happens when a new Activity is called? Is memory from the old one freed?
+# Question (EN)
+
+> What happens when a new Activity is called? Is memory from the old one freed?
+
+# Вопрос (RU)
+
+> Что происходит, когда запускается новая Activity? Освобождается ли память предыдущей?
+
+---
 
 ## Answer (EN)
+
 When a new Activity is called, the old Activity does **not** immediately have its memory freed. Instead, it goes through lifecycle transitions and stays in the back stack. The system may free its memory later under memory pressure.
 
 ### What Happens When New Activity Starts
@@ -336,13 +347,13 @@ class MyActivity : AppCompatActivity() {
 
 ### Memory States Summary
 
-| State | Activity Lifecycle | Memory Status | Can Be Killed |
-|-------|-------------------|---------------|---------------|
-| Created | onCreate() → onStart() | Allocated | No |
-| Resumed | onResume() | In use, foreground | No |
-| Paused | onPause() | In use, visible | No (rare) |
-| Stopped | onStop() | In memory, background | Yes |
-| Destroyed | onDestroy() | Freed/being freed | N/A |
+| State     | Activity Lifecycle     | Memory Status         | Can Be Killed |
+| --------- | ---------------------- | --------------------- | ------------- |
+| Created   | onCreate() → onStart() | Allocated             | No            |
+| Resumed   | onResume()             | In use, foreground    | No            |
+| Paused    | onPause()              | In use, visible       | No (rare)     |
+| Stopped   | onStop()               | In memory, background | Yes           |
+| Destroyed | onDestroy()            | Freed/being freed     | N/A           |
 
 ### Best Practices
 
@@ -389,6 +400,7 @@ class BestPracticeActivity : AppCompatActivity() {
 ### Summary
 
 When a new Activity is called:
+
 1. **Old Activity is paused** (onPause)
 2. **New Activity starts** (onCreate → onStart → onResume)
 3. **Old Activity is stopped** (onStop)
@@ -396,9 +408,10 @@ When a new Activity is called:
 5. **Memory is NOT immediately freed**
 
 Memory is freed when:
-- User presses **back** (onDestroy called)
-- **finish()** is called
-- **System needs memory** (may kill stopped Activities)
+
+-   User presses **back** (onDestroy called)
+-   **finish()** is called
+-   **System needs memory** (may kill stopped Activities)
 
 The old Activity **remains in memory in the back stack** until explicitly finished or killed by the system for memory.
 
@@ -431,11 +444,12 @@ Activity A: onStop()      ← A больше не видима
 ### Состояние памяти
 
 Когда Activity переходит в состояние STOPPED:
-- Экземпляр Activity остаётся в памяти
-- Все переменные-члены существуют
-- Все выделенные данные остаются
-- ViewModel продолжает существовать
-- Значения сохранены
+
+-   Экземпляр Activity остаётся в памяти
+-   Все переменные-члены существуют
+-   Все выделенные данные остаются
+-   ViewModel продолжает существовать
+-   Значения сохранены
 
 **onDestroy() НЕ вызывается автоматически** - память НЕ освобождается.
 
@@ -574,13 +588,13 @@ class MyViewModel : ViewModel() {
 
 ### Таблица состояний памяти
 
-| Состояние | Жизненный цикл | Статус памяти | Может быть убита |
-|-----------|----------------|---------------|------------------|
-| Created | onCreate() → onStart() | Выделена | Нет |
-| Resumed | onResume() | Используется, передний план | Нет |
-| Paused | onPause() | Используется, видима | Нет (редко) |
-| Stopped | onStop() | В памяти, фон | Да |
-| Destroyed | onDestroy() | Освобождена | Н/Д |
+| Состояние | Жизненный цикл         | Статус памяти               | Может быть убита |
+| --------- | ---------------------- | --------------------------- | ---------------- |
+| Created   | onCreate() → onStart() | Выделена                    | Нет              |
+| Resumed   | onResume()             | Используется, передний план | Нет              |
+| Paused    | onPause()              | Используется, видима        | Нет (редко)      |
+| Stopped   | onStop()               | В памяти, фон               | Да               |
+| Destroyed | onDestroy()            | Освобождена                 | Н/Д              |
 
 ### Лучшие практики
 
@@ -610,6 +624,7 @@ class BestPracticeActivity : AppCompatActivity() {
 ### Резюме
 
 Когда вызывается новая Activity:
+
 1. Старая Activity приостанавливается (onPause)
 2. Новая Activity запускается (onCreate → onStart → onResume)
 3. Старая Activity останавливается (onStop)
@@ -617,30 +632,34 @@ class BestPracticeActivity : AppCompatActivity() {
 5. Память НЕ освобождается сразу
 
 Память освобождается когда:
-- Пользователь нажимает назад (вызывается onDestroy)
-- Вызывается finish()
-- Системе нужна память (может убить остановленные Activity)
+
+-   Пользователь нажимает назад (вызывается onDestroy)
+-   Вызывается finish()
+-   Системе нужна память (может убить остановленные Activity)
 
 Старая Activity **остаётся в памяти в back stack** пока явно не завершена или не убита системой для памяти.
 
 ## Related Topics
-- Activity lifecycle
-- Back stack
-- onSaveInstanceState
-- ViewModel lifecycle
-- Memory management
-- Process death
+
+-   Activity lifecycle
+-   Back stack
+-   onSaveInstanceState
+-   ViewModel lifecycle
+-   Memory management
+-   Process death
 
 ---
 
 ## Related Questions
 
 ### Related (Medium)
-- [[q-memory-leak-detection--performance--medium]] - Performance
-- [[q-dagger-build-time-optimization--android--medium]] - Performance
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Performance
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-performance-optimization-android--android--medium]] - Performance
+
+-   [[q-memory-leak-detection--performance--medium]] - Performance
+-   [[q-dagger-build-time-optimization--android--medium]] - Performance
+-   [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Performance
+-   [[q-macrobenchmark-startup--performance--medium]] - Performance
+-   [[q-performance-optimization-android--android--medium]] - Performance
 
 ### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Performance
+
+-   [[q-compose-performance-optimization--android--hard]] - Performance

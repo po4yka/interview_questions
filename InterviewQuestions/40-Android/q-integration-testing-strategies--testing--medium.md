@@ -1,14 +1,15 @@
 ---
+id: "20251015082237498"
+title: "Integration Testing Strategies / Integration Тестирование Strategies"
 topic: testing
-tags:
-  - testing
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - testing
   - integration-testing
   - architecture
   - strategy
-difficulty: medium
-status: draft
 ---
-
 # Integration Testing Strategies
 
 **English**: Design integration testing strategy. Test ViewModel + Repository + Database layers. Mock external dependencies.

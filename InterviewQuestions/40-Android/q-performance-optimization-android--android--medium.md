@@ -1,34 +1,30 @@
 ---
+id: "20251015082237268"
+title: "Performance Optimization Android / Performance Оптимизация Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - performance
   - optimization
   - performance-rendering
   - performance-memory
   - checklist
-difficulty: medium
-status: draft
 ---
 
-# App Performance Optimization Checklist for Android
-
-**Сложность**: 🟡 Medium
-**Источник**: Amit Shekhar Android Interview Questions
-
 # Question (EN)
-> 
+
+> What is a comprehensive checklist for optimizing Android app performance? What are the key areas to focus on?
 
 # Вопрос (RU)
-> 
+
+> Какой комплексный чек-лист для оптимизации производительности Android приложения? На какие ключевые области обратить внимание?
 
 ---
 
 ## Answer (EN)
-# Question (EN)
-What is a comprehensive checklist for optimizing Android app performance? What are the key areas to focus on?
 
-## Answer (EN)
 Performance optimization requires a systematic approach across multiple areas. Here's a comprehensive checklist covering startup, runtime, memory, network, and rendering performance.
 
 #### 1. **App Startup Optimization**
@@ -76,14 +72,15 @@ class LazyComponents {
 ```
 
 **Checklist:**
-- [ ] Profile Application.onCreate() time
-- [ ] Defer non-critical initialization
-- [ ] Use App Startup library
-- [ ] Implement baseline profiles
-- [ ] Measure with `adb shell am start -W`
-- [ ] Target: Cold start < 1000ms
-- [ ] Use lazy initialization
-- [ ] Splash screen via theme (not Activity)
+
+-   [ ] Profile Application.onCreate() time
+-   [ ] Defer non-critical initialization
+-   [ ] Use App Startup library
+-   [ ] Implement baseline profiles
+-   [ ] Measure with `adb shell am start -W`
+-   [ ] Target: Cold start < 1000ms
+-   [ ] Use lazy initialization
+-   [ ] Splash screen via theme (not Activity)
 
 #### 2. **UI Rendering Optimization**
 
@@ -148,14 +145,15 @@ binding.stubRarelyUsed.inflate()
 ```
 
 **Checklist:**
-- [ ] Enable "Profile GPU Rendering"
-- [ ] Enable "Debug GPU Overdraw"
-- [ ] Keep view hierarchy depth < 10
-- [ ] Use ConstraintLayout or Compose
-- [ ] Avoid overdraw (< 2x ideal)
-- [ ] Target 60 FPS (16ms per frame)
-- [ ] Use ViewStub for conditional views
-- [ ] Merge layouts where possible
+
+-   [ ] Enable "Profile GPU Rendering"
+-   [ ] Enable "Debug GPU Overdraw"
+-   [ ] Keep view hierarchy depth < 10
+-   [ ] Use ConstraintLayout or Compose
+-   [ ] Avoid overdraw (< 2x ideal)
+-   [ ] Target 60 FPS (16ms per frame)
+-   [ ] Use ViewStub for conditional views
+-   [ ] Merge layouts where possible
 
 #### 3. **RecyclerView Optimization**
 
@@ -230,14 +228,15 @@ val pager = Pager(
 ```
 
 **Checklist:**
-- [ ] Use ListAdapter with DiffUtil
-- [ ] Enable stable IDs
-- [ ] Use ViewBinding
-- [ ] Keep onBindViewHolder lightweight
-- [ ] Enable item prefetch
-- [ ] Set appropriate cache size
-- [ ] Use Paging 3 for large datasets
-- [ ] Avoid nested RecyclerViews (use ConcatAdapter)
+
+-   [ ] Use ListAdapter with DiffUtil
+-   [ ] Enable stable IDs
+-   [ ] Use ViewBinding
+-   [ ] Keep onBindViewHolder lightweight
+-   [ ] Enable item prefetch
+-   [ ] Set appropriate cache size
+-   [ ] Use Paging 3 for large datasets
+-   [ ] Avoid nested RecyclerViews (use ConcatAdapter)
 
 #### 4. **Memory Optimization**
 
@@ -308,14 +307,15 @@ class CollectionOptimization {
 ```
 
 **Checklist:**
-- [ ] Use image loading libraries (Glide/Coil)
-- [ ] Sample large bitmaps
-- [ ] Fix memory leaks (LeakCanary)
-- [ ] Use ViewModel for data retention
-- [ ] Use SparseArray for primitive keys
-- [ ] Implement proper cleanup
-- [ ] Monitor memory usage
-- [ ] Target: < 50MB RAM usage
+
+-   [ ] Use image loading libraries (Glide/Coil)
+-   [ ] Sample large bitmaps
+-   [ ] Fix memory leaks (LeakCanary)
+-   [ ] Use ViewModel for data retention
+-   [ ] Use SparseArray for primitive keys
+-   [ ] Implement proper cleanup
+-   [ ] Monitor memory usage
+-   [ ] Target: < 50MB RAM usage
 
 #### 5. **Database Optimization**
 
@@ -361,14 +361,15 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "db")
 ```
 
 **Checklist:**
-- [ ] Add appropriate indices
-- [ ] Use projections (select specific columns)
-- [ ] Implement pagination
-- [ ] Batch operations
-- [ ] Use transactions
-- [ ] Enable WAL mode
-- [ ] Avoid main thread operations
-- [ ] Profile queries (enable logging)
+
+-   [ ] Add appropriate indices
+-   [ ] Use projections (select specific columns)
+-   [ ] Implement pagination
+-   [ ] Batch operations
+-   [ ] Use transactions
+-   [ ] Enable WAL mode
+-   [ ] Avoid main thread operations
+-   [ ] Profile queries (enable logging)
 
 #### 6. **Network Optimization**
 
@@ -435,14 +436,15 @@ class OfflineFirstRepository(
 ```
 
 **Checklist:**
-- [ ] Implement response caching
-- [ ] Use pagination for lists
-- [ ] Compress requests/responses
-- [ ] Field filtering (request only needed data)
-- [ ] Implement offline-first
-- [ ] Batch network requests
-- [ ] Use WorkManager for background sync
-- [ ] Monitor network usage
+
+-   [ ] Implement response caching
+-   [ ] Use pagination for lists
+-   [ ] Compress requests/responses
+-   [ ] Field filtering (request only needed data)
+-   [ ] Implement offline-first
+-   [ ] Batch network requests
+-   [ ] Use WorkManager for background sync
+-   [ ] Monitor network usage
 
 #### 7. **Battery Optimization**
 
@@ -491,13 +493,14 @@ fusedLocationClient.requestLocationUpdates(
 ```
 
 **Checklist:**
-- [ ] Use WorkManager for background tasks
-- [ ] Set appropriate constraints
-- [ ] Batch network requests
-- [ ] Optimize location updates
-- [ ] Minimize wakelock usage
-- [ ] Use Doze-aware APIs
-- [ ] Profile with Battery Historian
+
+-   [ ] Use WorkManager for background tasks
+-   [ ] Set appropriate constraints
+-   [ ] Batch network requests
+-   [ ] Optimize location updates
+-   [ ] Minimize wakelock usage
+-   [ ] Use Doze-aware APIs
+-   [ ] Profile with Battery Historian
 
 #### 8. **Build Optimization**
 
@@ -549,14 +552,15 @@ dependencies {
 ```
 
 **Checklist:**
-- [ ] Enable R8/ProGuard
-- [ ] Shrink resources
-- [ ] Use Android App Bundle
-- [ ] Remove unused dependencies
-- [ ] Split APKs by ABI
-- [ ] Optimize images (WebP)
-- [ ] Enable build cache
-- [ ] Target: APK < 20MB
+
+-   [ ] Enable R8/ProGuard
+-   [ ] Shrink resources
+-   [ ] Use Android App Bundle
+-   [ ] Remove unused dependencies
+-   [ ] Split APKs by ABI
+-   [ ] Optimize images (WebP)
+-   [ ] Enable build cache
+-   [ ] Target: APK < 20MB
 
 ### Monitoring and Profiling
 
@@ -580,114 +584,103 @@ class PerformanceMonitor {
 ```
 
 **Tools:**
-- [ ] Android Profiler (CPU, Memory, Network, Energy)
-- [ ] Layout Inspector
-- [ ] LeakCanary
-- [ ] StrictMode (debug builds)
-- [ ] Firebase Performance Monitoring
-- [ ] Perfetto/Systrace
-- [ ] Baseline Profiles
+
+-   [ ] Android Profiler (CPU, Memory, Network, Energy)
+-   [ ] Layout Inspector
+-   [ ] LeakCanary
+-   [ ] StrictMode (debug builds)
+-   [ ] Firebase Performance Monitoring
+-   [ ] Perfetto/Systrace
+-   [ ] Baseline Profiles
 
 ### Performance Targets
 
-| Metric | Target | Good | Acceptable |
-|--------|--------|------|------------|
-| Cold Start | < 500ms | < 1000ms | < 1500ms |
-| Frame Rate | 60 FPS | 50-60 FPS | > 45 FPS |
-| Memory | < 50MB | < 100MB | < 150MB |
-| APK Size | < 10MB | < 20MB | < 50MB |
-| Battery/Hour | < 3% | < 5% | < 10% |
+| Metric       | Target  | Good      | Acceptable |
+| ------------ | ------- | --------- | ---------- |
+| Cold Start   | < 500ms | < 1000ms  | < 1500ms   |
+| Frame Rate   | 60 FPS  | 50-60 FPS | > 45 FPS   |
+| Memory       | < 50MB  | < 100MB   | < 150MB    |
+| APK Size     | < 10MB  | < 20MB    | < 50MB     |
+| Battery/Hour | < 3%    | < 5%      | < 10%      |
 
 ---
 
-
-
 ## Ответ (RU)
+
 # Вопрос (RU)
+
 Каков комплексный чек-лист оптимизации производительности Android-приложения? На какие ключевые области сосредоточиться?
 
 ## Ответ (RU)
+
 Оптимизация производительности требует системного подхода.
 
 #### Основные области:
 
 **1. Запуск приложения:**
-- Отложенная инициализация
-- App Startup library
-- Baseline Profiles
-- Цель: < 1000ms
+
+-   Отложенная инициализация
+-   App Startup library
+-   Baseline Profiles
+-   Цель: < 1000ms
 
 **2. UI рендеринг:**
-- Плоская иерархия view
-- ConstraintLayout/Compose
-- Избегать overdraw
-- Цель: 60 FPS
+
+-   Плоская иерархия view
+-   ConstraintLayout/Compose
+-   Избегать overdraw
+-   Цель: 60 FPS
 
 **3. RecyclerView:**
-- ListAdapter + DiffUtil
-- ViewBinding
-- Item prefetch
-- Paging 3
+
+-   ListAdapter + DiffUtil
+-   ViewBinding
+-   Item prefetch
+-   Paging 3
 
 **4. Память:**
-- Image libraries (Glide/Coil)
-- LeakCanary
-- ViewModel
-- Цель: < 50MB RAM
+
+-   Image libraries (Glide/Coil)
+-   LeakCanary
+-   ViewModel
+-   Цель: < 50MB RAM
 
 **5. База данных:**
-- Индексы
-- Пагинация
-- Batch операции
-- WAL mode
+
+-   Индексы
+-   Пагинация
+-   Batch операции
+-   WAL mode
 
 **6. Сеть:**
-- Кэширование
-- Offline-first
-- Пагинация
-- Сжатие
+
+-   Кэширование
+-   Offline-first
+-   Пагинация
+-   Сжатие
 
 **7. Батарея:**
-- WorkManager
-- Оптимизация location
-- Batch requests
+
+-   WorkManager
+-   Оптимизация location
+-   Batch requests
 
 **8. Сборка:**
-- R8/ProGuard
-- App Bundle
-- Resource shrinking
-- Цель: < 20MB APK
+
+-   R8/ProGuard
+-   App Bundle
+-   Resource shrinking
+-   Цель: < 20MB APK
 
 #### Инструменты:
-- Android Profiler
-- LeakCanary
-- Firebase Performance
-- Perfetto
+
+-   Android Profiler
+-   LeakCanary
+-   Firebase Performance
+-   Perfetto
 
 Системная оптимизация всех областей даёт наилучший результат.
 
 ---
 
 ## Related Questions
-
-### Related (Medium)
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
-- [[q-app-size-optimization--performance--medium]] - Performance
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Related (Medium)
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
-- [[q-app-size-optimization--performance--medium]] - Performance
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Related (Medium)
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
-- [[q-app-size-optimization--performance--medium]] - Performance
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

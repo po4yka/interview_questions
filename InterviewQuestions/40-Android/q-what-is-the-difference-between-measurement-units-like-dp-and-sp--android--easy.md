@@ -1,15 +1,16 @@
 ---
+id: "20251015082237430"
+title: "What Is The Difference Between Measurement Units Like Dp And Sp / What Is The Difference Between Measurement Units Like Dp и Sp"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android ui
   - dp
   - sp
   - ui
-difficulty: easy
-status: draft
 ---
-
 # Чем отличаются единицы измерения например dp от sp
 
 **English**: What is the difference between measurement units like dp and sp?

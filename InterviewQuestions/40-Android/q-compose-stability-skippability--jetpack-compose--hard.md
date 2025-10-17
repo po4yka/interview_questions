@@ -1,20 +1,25 @@
 ---
-tags:
-  - jetpack-compose
+id: "20251015082237239"
+title: "Compose Stability Skippability / Стабильность и пропускаемость Compose"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - jetpack-compose
   - performance
   - compiler
   - stability
   - optimization
-difficulty: hard
-status: draft
 ---
 
 # Compose Stability & Skippability
 
 # Question (EN)
+
 > Explain how Compose determines if a composable is skippable. What makes a class stable? How does the @Stable annotation work?
 
 # Вопрос (RU)
+
 > Объясните, как Compose определяет, можно ли пропустить перекомпозицию composable-функции. Что делает класс стабильным? Как работает аннотация @Stable?
 
 ---
@@ -69,20 +74,23 @@ A type is **stable** if the Compose compiler can guarantee that:
 3. **All public properties are also stable types**
 
 **Automatically stable types:**
-- All primitive types (`Int`, `Long`, `Float`, `Boolean`, etc.)
-- `String`
-- All function types (lambdas)
-- Immutable collections from `kotlinx.collections.immutable`
+
+-   All primitive types (`Int`, `Long`, `Float`, `Boolean`, etc.)
+-   `String`
+-   All function types (lambdas)
+-   Immutable collections from `kotlinx.collections.immutable`
 
 **Conditionally stable:**
-- Data classes where all properties are `val` and of stable types
-- Sealed classes with stable subtypes
+
+-   Data classes where all properties are `val` and of stable types
+-   Sealed classes with stable subtypes
 
 **Unstable:**
-- Classes with `var` properties
-- Mutable collections (`MutableList`, `MutableMap`, etc.)
-- Interfaces (Compose can't prove stability)
-- Abstract classes
+
+-   Classes with `var` properties
+-   Mutable collections (`MutableList`, `MutableMap`, etc.)
+-   Interfaces (Compose can't prove stability)
+-   Abstract classes
 
 ```kotlin
 //  STABLE - all properties are val and stable types
@@ -128,9 +136,10 @@ fun UserDisplay(user: UserData) { // Will recompose every time
 The **@Stable** annotation is a **promise** to the Compose compiler that a type follows the stability contract, even if the compiler can't prove it automatically.
 
 **Use @Stable when:**
-- You have an interface or abstract class that you know is stable
-- You have a class with private mutable state that's never exposed
-- You're using observable patterns (StateFlow, LiveData) that notify Compose
+
+-   You have an interface or abstract class that you know is stable
+-   You have a class with private mutable state that's never exposed
+-   You're using observable patterns (StateFlow, LiveData) that notify Compose
 
 ```kotlin
 // Tell Compose this interface is stable
@@ -214,9 +223,10 @@ android {
 ```
 
 This generates reports showing:
-- Which composables are skippable
-- Which parameters are unstable
-- Stability inference for your classes
+
+-   Which composables are skippable
+-   Which parameters are unstable
+-   Stability inference for your classes
 
 **Example report:**
 
@@ -341,9 +351,10 @@ android {
 ```
 
 **What it does:**
-- Treats lambdas as stable even if they capture unstable values
-- Makes more composables skippable by default
-- Experimental feature, use with caution
+
+-   Treats lambdas as stable even if they capture unstable values
+-   Makes more composables skippable by default
+-   Experimental feature, use with caution
 
 ```kotlin
 // Without strong skipping: NOT skippable (lambda captures unstable user)
@@ -400,16 +411,18 @@ interface Repository {
 ### Performance Impact
 
 **Without skipping:**
-- 10,000 composables on screen
-- State change affects 1 composable
-- Result: All 10,000 recompose
-- Time: ~100ms
+
+-   10,000 composables on screen
+-   State change affects 1 composable
+-   Result: All 10,000 recompose
+-   Time: ~100ms
 
 **With proper skipping:**
-- 10,000 composables on screen
-- State change affects 1 composable
-- Result: Only 1 recomposes
-- Time: ~0.1ms
+
+-   10,000 composables on screen
+-   State change affects 1 composable
+-   Result: Only 1 recomposes
+-   Time: ~0.1ms
 
 **1000x performance improvement!**
 
@@ -455,29 +468,33 @@ fun UserProfile(user: User) { // Будет всегда перекомпоно�
 3. **Все публичные свойства также являются стабильными типами**
 
 **Автоматически стабильные типы:**
-- Все примитивные типы (`Int`, `Long`, `Float`, `Boolean` и т.д.)
-- `String`
-- Все функциональные типы (лямбды)
-- Неизменяемые коллекции из `kotlinx.collections.immutable`
+
+-   Все примитивные типы (`Int`, `Long`, `Float`, `Boolean` и т.д.)
+-   `String`
+-   Все функциональные типы (лямбды)
+-   Неизменяемые коллекции из `kotlinx.collections.immutable`
 
 **Условно стабильные:**
-- Data классы, где все свойства `val` и стабильных типов
-- Sealed классы со стабильными подтипами
+
+-   Data классы, где все свойства `val` и стабильных типов
+-   Sealed классы со стабильными подтипами
 
 **Нестабильные:**
-- Классы со свойствами `var`
-- Изменяемые коллекции (`MutableList`, `MutableMap` и т.д.)
-- Интерфейсы (Compose не может доказать стабильность)
-- Абстрактные классы
+
+-   Классы со свойствами `var`
+-   Изменяемые коллекции (`MutableList`, `MutableMap` и т.д.)
+-   Интерфейсы (Compose не может доказать стабильность)
+-   Абстрактные классы
 
 ### Аннотация @Stable
 
 Аннотация **@Stable** — это **обещание** компилятору Compose, что тип следует контракту стабильности, даже если компилятор не может это доказать автоматически.
 
 **Используйте @Stable когда:**
-- У вас есть интерфейс или абстрактный класс, о котором вы знаете, что он стабилен
-- У вас есть класс с приватным изменяемым состоянием, которое никогда не раскрывается
-- Вы используете observable паттерны (StateFlow, LiveData), которые уведомляют Compose
+
+-   У вас есть интерфейс или абстрактный класс, о котором вы знаете, что он стабилен
+-   У вас есть класс с приватным изменяемым состоянием, которое никогда не раскрывается
+-   Вы используете observable паттерны (StateFlow, LiveData), которые уведомляют Compose
 
 ```kotlin
 @Stable
@@ -502,18 +519,30 @@ fun UserDisplay(user: StableUserData) { // Теперь пропускается
 
 **Улучшение производительности в 1000 раз!**
 
-
 ---
+
+## Follow-ups
+
+-   How does Compose's stability analysis compare to React's memo optimization?
+-   What are the performance implications of using @Immutable vs @Stable annotations?
+-   How can you debug and profile Compose recomposition to identify stability issues?
+
+## References
+
+-   `https://developer.android.com/jetpack/compose/mental-model` — Compose mental model
+-   `https://developer.android.com/jetpack/compose/performance` — Compose performance
+-   `https://developer.android.com/jetpack/compose/state` — State management in Compose
 
 ## Related Questions
 
 ### Hub
-- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+
+-   [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
 
 ### Related (Hard)
-- [[q-stable-classes-compose--android--hard]] - @Stable annotation
-- [[q-stable-annotation-compose--android--hard]] - Stability annotations
-- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
-- [[q-compose-performance-optimization--android--hard]] - Performance optimization
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts
 
+-   [[q-stable-classes-compose--android--hard]] - @Stable annotation
+-   [[q-stable-annotation-compose--android--hard]] - Stability annotations
+-   [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
+-   [[q-compose-performance-optimization--android--hard]] - Performance optimization
+-   [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts

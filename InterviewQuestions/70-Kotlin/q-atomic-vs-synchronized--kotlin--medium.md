@@ -1,16 +1,17 @@
 ---
+id: "20251015082236011"
+title: "Atomic Vs Synchronized / Atomic против Synchronized"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - java
   - concurrency
   - thread-safety
   - atomic
   - synchronized
-difficulty: medium
-status: draft
 ---
-
 # Atomic vs Synchronized: когда использовать
 
 **English**: When to use atomic variables vs synchronized?

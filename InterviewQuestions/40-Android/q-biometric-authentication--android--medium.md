@@ -1,31 +1,28 @@
 ---
 id: 20251012-400003
 title: "Biometric Authentication / Биометрическая аутентификация"
-slug: biometric-authentication-android-medium
 topic: android
-subtopics:
-  - security
-  - biometric
-  - authentication
-  - fingerprint
-  - face-recognition
-status: draft
 difficulty: medium
-moc: moc-android
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-encrypted-shared-preferences--security--medium
-  - q-keystore-api--security--hard
-  - q-certificate-pinning--security--hard
-tags:
-  - android
+status: draft
+created: 2025-10-12
+tags: - android
   - security
   - biometric
   - authentication
   - androidx-biometric
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-android
+related_questions:   - q-encrypted-shared-preferences--security--medium
+  - q-keystore-api--security--hard
+  - q-certificate-pinning--security--hard
+slug: biometric-authentication-android-medium
+subtopics:   - security
+  - biometric
+  - authentication
+  - fingerprint
+  - face-recognition
 ---
-
 # Biometric Authentication
 
 ## English Version
@@ -997,6 +994,38 @@ biometricPrompt.authenticate(
 - **Использовать соответствующую надежность**: `BIOMETRIC_STRONG` для конфиденциальных данных
 - **Проверять доступность**: Не показывайте опцию биометрии, если она недоступна
 - **Уважать выбор пользователя**: Позволяйте пользователям отключать биометрический вход
+
+### Типы аутентификаторов
+
+**BIOMETRIC_STRONG** - это биометрия класса 3 с наивысшим уровнем безопасности (отпечаток пальца, лицо, радужка). Используется для критически важных операций, таких как финансовые транзакции и доступ к зашифрованным данным. Поддерживает работу с CryptoObject для криптографических операций.
+
+**BIOMETRIC_WEAK** - биометрия класса 2 с более низким уровнем безопасности, но быстрой работой. Подходит для быстрой разблокировки приложения и некритичных операций.
+
+**DEVICE_CREDENTIAL** - аутентификация через PIN, графический ключ или пароль устройства. Не требует биометрии и обеспечивает широкую поддержку устройств.
+
+Комбинация **BIOMETRIC_STRONG | DEVICE_CREDENTIAL** обеспечивает лучший пользовательский опыт с автоматическим переключением на резервный метод аутентификации.
+
+### Обработка ошибок
+
+Важно корректно обрабатывать все типы ошибок биометрической аутентификации:
+- `ERROR_HW_UNAVAILABLE` - биометрическое оборудование недоступно
+- `ERROR_LOCKOUT` - слишком много попыток, временная блокировка
+- `ERROR_LOCKOUT_PERMANENT` - постоянная блокировка, требуется использование пароля
+- `ERROR_NO_BIOMETRICS` - биометрические данные не зарегистрированы
+- `ERROR_USER_CANCELED` - пользователь отменил аутентификацию
+
+### Интеграция с Android Keystore
+
+При использовании CryptoObject аутентификация привязывается к криптографическим ключам в Android Keystore. Это обеспечивает, что доступ к зашифрованным данным возможен только после успешной биометрической аутентификации. Параметр `setUserAuthenticationRequired(true)` гарантирует, что ключ можно использовать только после аутентификации пользователя.
+
+Параметр `setInvalidatedByBiometricEnrollment(true)` автоматически инвалидирует ключ при регистрации новых биометрических данных, что повышает безопасность.
+
+### Повторная аутентификация
+
+Для обеспечения безопасности рекомендуется требовать повторную аутентификацию после:
+- Возврата приложения из фонового режима (если прошло больше установленного таймаута)
+- Выполнения критичных операций (платежи, изменение настроек безопасности)
+- Истечения времени сессии (обычно 30 секунд - 5 минут в зависимости от уровня безопасности)
 
 1. **BiometricPrompt** unified API for all biometric types
 2. **Check availability** before showing biometric UI

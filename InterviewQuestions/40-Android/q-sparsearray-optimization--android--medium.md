@@ -2,34 +2,30 @@
 id: q-sparsearray-optimization--android--medium--1728115440000
 title: "SparseArray and Optimization / SparseArray и оптимизация"
 topic: android
-aliases:
-  - SparseArray and Optimization
-  - SparseArray и оптимизация
-date_created: 2025-10-05
-date_modified: 2025-10-13
-status: draft
-original_language: en
-language_tags:
-  - en
-  - ru
-type: question
-category: android
 difficulty: medium
-subtopics:
-  - performance-memory
-  - performance-rendering
-tags:
-  - android
+status: draft
+created: 2025-10-05
+tags: - android
   - sparsearray
   - data-structures
   - performance
   - memory-optimization
   - difficulty/medium
+aliases:   - SparseArray and Optimization
+  - SparseArray и оптимизация
+category: android
+date_created: 2025-10-05
+date_modified: 2025-10-13
+language_tags:   - en
+  - ru
 moc: moc-android
+original_language: en
 related_questions: []
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20SparseArray.md"
+subtopics:   - performance-memory
+  - performance-rendering
+type: question
 ---
-
 # SparseArray and Optimization / SparseArray и оптимизация
 
 # Question (EN)

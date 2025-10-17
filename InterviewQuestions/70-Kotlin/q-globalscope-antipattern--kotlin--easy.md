@@ -2,26 +2,24 @@
 id: 20251006-globalscope-antipattern
 title: GlobalScope Anti-Pattern / Анти-Паттерн GlobalScope
 topic: kotlin
-subtopics:
-  - coroutines
-  - globalscope
-  - lifecycle
-  - memory-leaks
 difficulty: easy
-language_tags:
-  - en
-  - ru
-original_language: en
 status: draft
-source: Kotlin Coroutines Interview Questions PDF
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - globalscope
   - anti-pattern
   - lifecycle
   - memory-leaks
   - difficulty/easy
+language_tags:   - en
+  - ru
+original_language: en
+source: Kotlin Coroutines Interview Questions PDF
+subtopics:   - coroutines
+  - globalscope
+  - lifecycle
+  - memory-leaks
 ---
 # Question (EN)
 > Why should you avoid using GlobalScope in Android applications?

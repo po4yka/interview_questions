@@ -1,11 +1,12 @@
 ---
+id: "20251015082236004"
+title: "Serialization Basics / Основы сериализации"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # What is serialization?
 
 **English**: What is serialization in Kotlin and programming in general?

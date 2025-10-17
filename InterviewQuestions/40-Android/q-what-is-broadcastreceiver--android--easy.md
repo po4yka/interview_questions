@@ -1,18 +1,29 @@
 ---
+id: "20251015082238602"
+title: "What Is Broadcastreceiver / Что такое BroadcastReceiver"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android-components
   - broadcast-receiver
   - system-events
   - intent
-difficulty: easy
-status: draft
 ---
 
-# What is BroadcastReceiver?
+# Question (EN)
+
+> What is BroadcastReceiver?
+
+# Вопрос (RU)
+
+> Что такое BroadcastReceiver?
+
+---
 
 ## Answer (EN)
+
 **BroadcastReceiver** is one of the fundamental Android components that allows applications to **receive and respond to system-wide or app-specific broadcast messages**. It acts as a listener for Intent broadcasts sent by the Android system or other applications.
 
 ### Core Concept
@@ -69,13 +80,14 @@ class SystemBroadcastReceiver : BroadcastReceiver() {
 ```
 
 **Common system broadcasts:**
-- `ACTION_BATTERY_LOW` / `ACTION_BATTERY_OKAY` - Battery status
-- `ACTION_POWER_CONNECTED` / `ACTION_POWER_DISCONNECTED` - Charging status
-- `ACTION_BOOT_COMPLETED` - Device finished booting
-- `ACTION_SCREEN_ON` / `ACTION_SCREEN_OFF` - Screen state
-- `ACTION_AIRPLANE_MODE_CHANGED` - Airplane mode toggled
-- `ACTION_TIMEZONE_CHANGED` - Time zone changed
-- `ACTION_DATE_CHANGED` - Date changed
+
+-   `ACTION_BATTERY_LOW` / `ACTION_BATTERY_OKAY` - Battery status
+-   `ACTION_POWER_CONNECTED` / `ACTION_POWER_DISCONNECTED` - Charging status
+-   `ACTION_BOOT_COMPLETED` - Device finished booting
+-   `ACTION_SCREEN_ON` / `ACTION_SCREEN_OFF` - Screen state
+-   `ACTION_AIRPLANE_MODE_CHANGED` - Airplane mode toggled
+-   `ACTION_TIMEZONE_CHANGED` - Time zone changed
+-   `ACTION_DATE_CHANGED` - Date changed
 
 #### 2. Custom Broadcasts
 
@@ -172,8 +184,9 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Key difference:**
-- Static: Works even when app is closed (limited on Android 8.0+)
-- Dynamic: Only works when component is active, must unregister
+
+-   Static: Works even when app is closed (limited on Android 8.0+)
+-   Dynamic: Only works when component is active, must unregister
 
 ### Broadcast Types
 
@@ -276,14 +289,17 @@ class MainActivity : AppCompatActivity() {
 Starting from Android 8.0 (API 26), there are restrictions on implicit broadcasts registered in manifest.
 
 **Affected broadcasts:**
+
 Most implicit system broadcasts cannot be received by manifest-declared receivers.
 
 **Exceptions (still work):**
-- `ACTION_BOOT_COMPLETED`
-- `ACTION_LOCALE_CHANGED`
-- `ACTION_TIME_SET`
+
+-   `ACTION_BOOT_COMPLETED`
+-   `ACTION_LOCALE_CHANGED`
+-   `ACTION_TIME_SET`
 
 **Solutions:**
+
 1. Register receiver dynamically instead
 2. Use JobScheduler or WorkManager for background tasks
 3. Use foreground services
@@ -414,25 +430,29 @@ class AppUpdateReceiver : BroadcastReceiver() {
 ### Summary
 
 **BroadcastReceiver is an Android component that:**
-- Listens for system-wide or app-specific broadcast messages
-- Can be registered statically (manifest) or dynamically (runtime)
-- Receives Intent broadcasts from system or other apps
-- Executes in main thread (keep onReceive() fast)
-- Has restrictions on Android 8.0+ for background execution
+
+-   Listens for system-wide or app-specific broadcast messages
+-   Can be registered statically (manifest) or dynamically (runtime)
+-   Receives Intent broadcasts from system or other apps
+-   Executes in main thread (keep onReceive() fast)
+-   Has restrictions on Android 8.0+ for background execution
 
 **Use cases:**
-- Monitoring system events (battery, network, screen)
-- App-to-app communication
-- Responding to device state changes
-- Scheduling tasks based on system conditions
+
+-   Monitoring system events (battery, network, screen)
+-   App-to-app communication
+-   Responding to device state changes
+-   Scheduling tasks based on system conditions
 
 **Best practices:**
-- Keep onReceive() short (< 10 seconds)
-- Always unregister dynamic receivers
-- Use LocalBroadcastManager for internal broadcasts
-- Consider WorkManager for background tasks on Android 8.0+
+
+-   Keep onReceive() short (< 10 seconds)
+-   Always unregister dynamic receivers
+-   Use LocalBroadcastManager for internal broadcasts
+-   Consider WorkManager for background tasks on Android 8.0+
 
 ## Ответ (RU)
+
 **BroadcastReceiver** - это один из фундаментальных компонентов Android, который позволяет приложениям **получать и реагировать на широковещательные сообщения** от системы или других приложений.
 
 ### Основная концепция
@@ -442,23 +462,27 @@ BroadcastReceiver работает по принципу publish-subscribe (из
 ### Типы широковещательных сообщений
 
 **1. Системные broadcasts:**
-- `ACTION_BATTERY_LOW` - низкий заряд батареи
-- `ACTION_BOOT_COMPLETED` - устройство загрузилось
-- `ACTION_AIRPLANE_MODE_CHANGED` - изменен режим полета
-- `ACTION_SCREEN_ON` / `ACTION_SCREEN_OFF` - экран включен/выключен
+
+-   `ACTION_BATTERY_LOW` - низкий заряд батареи
+-   `ACTION_BOOT_COMPLETED` - устройство загрузилось
+-   `ACTION_AIRPLANE_MODE_CHANGED` - изменен режим полета
+-   `ACTION_SCREEN_ON` / `ACTION_SCREEN_OFF` - экран включен/выключен
 
 **2. Пользовательские broadcasts:**
+
 Приложения могут отправлять собственные broadcasts для коммуникации между компонентами.
 
 ### Методы регистрации
 
 **Статическая (в манифесте):**
-- Работает даже когда приложение закрыто
-- Ограничения на Android 8.0+
+
+-   Работает даже когда приложение закрыто
+-   Ограничения на Android 8.0+
 
 **Динамическая (в коде):**
-- Работает только пока компонент активен
-- Необходимо отменять регистрацию
+
+-   Работает только пока компонент активен
+-   Необходимо отменять регистрацию
 
 ### Лучшие практики
 
@@ -467,15 +491,27 @@ BroadcastReceiver работает по принципу publish-subscribe (из
 3. Используйте LocalBroadcastManager для внутренней коммуникации
 4. На Android 8.0+ используйте WorkManager вместо manifest-registered receivers
 
-
 ---
+
+## Follow-ups
+
+-   How do Android 8.0+ background execution limits affect BroadcastReceiver usage?
+-   When should you use LocalBroadcastManager vs global broadcasts?
+-   What's the difference between ordered and normal broadcasts?
+
+## References
+
+-   `https://developer.android.com/guide/components/broadcasts` — Broadcasts overview
+-   `https://developer.android.com/guide/components/broadcast-exceptions` — Background execution limits
 
 ## Related Questions
 
 ### Related (Easy)
-- [[q-broadcastreceiver-contentprovider--android--easy]] - Broadcast
+
+-   [[q-broadcastreceiver-contentprovider--android--easy]] - Broadcast
 
 ### Advanced (Harder)
-- [[q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]] - Broadcast
-- [[q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium]] - Broadcast
-- [[q-kotlin-context-receivers--kotlin--hard]] - Broadcast
+
+-   [[q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]] - Broadcast
+-   [[q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium]] - Broadcast
+-   [[q-kotlin-context-receivers--kotlin--hard]] - Broadcast

@@ -1,7 +1,11 @@
 ---
+id: "20251015082237440"
+title: "Android Components Besides Activity / Компоненты Android кроме Activity"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android-components
   - android/android-components
   - broadcast-receiver
@@ -11,10 +15,7 @@ tags:
   - service
   - view
   - viewmodel
-difficulty: easy
-status: draft
 ---
-
 # Какие компоненты используются помимо activity?
 
 # Question (EN)
@@ -146,19 +147,7 @@ class ProfileViewModel : ViewModel() {
 
 ## Related Questions
 
-### Related (Easy)
-- [[q-architecture-components-libraries--android--easy]] - Fundamentals
-
-### Advanced (Harder)
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
-
----
-
-## Related Questions
-
-### Related (Easy)
+### Related (Medium)
 - [[q-architecture-components-libraries--android--easy]] - Fundamentals
 
 ### Advanced (Harder)

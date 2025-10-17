@@ -7,7 +7,29 @@ created: 2025-10-12
 updated: 2025-10-12
 ---
 
-# Database Performance Optimization
+# Summary (EN)
+
+Database performance optimization involves improving query execution speed, reducing resource consumption, and ensuring scalability. Key techniques include proper indexing strategies (B-Tree, partial, covering indexes), query optimization (avoiding N+1 problems, rewriting inefficient queries), batch operations, denormalization for read-heavy workloads, connection pooling, and monitoring with slow query logs.
+
+# Сводка (RU)
+
+Оптимизация производительности БД включает улучшение скорости выполнения запросов, снижение потребления ресурсов и обеспечение масштабируемости. Ключевые техники включают правильные стратегии индексации (B-Tree, частичные, покрывающие индексы), оптимизацию запросов (избегание проблем N+1, переписывание неэффективных запросов), пакетные операции, денормализацию для read-heavy нагрузок, пулы соединений и мониторинг с журналами медленных запросов.
+
+## Use Cases / Trade-offs
+
+**Use Cases:**
+- High-traffic applications
+- Large dataset queries
+- Real-time analytics
+- OLTP systems optimization
+- Report generation performance
+
+**Trade-offs:**
+- **Indexes:** Query speed vs. write performance and storage
+- **Denormalization:** Read speed vs. data redundancy and update complexity
+- **Caching:** Performance vs. stale data
+- **Connection Pools:** Resource efficiency vs. connection limits
+- **Batch Operations:** Throughput vs. latency
 
 ## Overview / Обзор
 

@@ -1,23 +1,28 @@
 ---
+id: "20251015082237435"
+title: "What Are Px Dp Sp / Что такое px dp и sp"
 topic: android
-tags:
-  - px
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - px
   - dp
   - sp
   - android
   - ui
   - measurement-units
-difficulty: medium
-status: draft
 ---
 
-# What are px dp sp?
+# Question (EN)
+
+> What are px, dp, and sp?
 
 # Вопрос (RU)
 
-Что такое px dp sp
+> Что такое px, dp и sp?
 
 ## Answer (EN)
+
 Android uses three main measurement units for defining UI dimensions: **px** (pixels), **dp** (density-independent pixels), and **sp** (scale-independent pixels). Understanding these units is crucial for creating layouts that work across different screen sizes and densities.
 
 ### 1. px (Pixels)
@@ -40,9 +45,10 @@ val textView = TextView(context).apply {
 ```
 
 **Problems with px:**
-- Looks different on different screen densities
-- A 100px view appears much smaller on high-density screens
-- Not recommended for UI dimensions
+
+-   Looks different on different screen densities
+-   A 100px view appears much smaller on high-density screens
+-   Not recommended for UI dimensions
 
 ```kotlin
 // Example showing px inconsistency
@@ -85,9 +91,10 @@ val textView = TextView(context).apply {
 ```
 
 **Why use dp:**
-- Consistent visual size across all devices
-- 1dp = 1px on mdpi (160dpi) screens
-- Automatically scales with screen density
+
+-   Consistent visual size across all devices
+-   1dp = 1px on mdpi (160dpi) screens
+-   Automatically scales with screen density
 
 ```kotlin
 // DP conversion utilities
@@ -128,9 +135,10 @@ val textView = TextView(context).apply {
 ```
 
 **Why use sp for text:**
-- Respects user's font size preferences
-- Accessibility-friendly
-- Scales with system font settings
+
+-   Respects user's font size preferences
+-   Accessibility-friendly
+-   Scales with system font settings
 
 ```kotlin
 // SP conversion utilities
@@ -163,14 +171,14 @@ class FontSizeDemo : AppCompatActivity() {
 
 ### Density Conversion Table
 
-| Density | Scale | Example |
-|---------|-------|---------|
-| ldpi | 0.75x | 1dp = 0.75px |
-| mdpi (baseline) | 1.0x | 1dp = 1px |
-| hdpi | 1.5x | 1dp = 1.5px |
-| xhdpi | 2.0x | 1dp = 2px |
-| xxhdpi | 3.0x | 1dp = 3px |
-| xxxhdpi | 4.0x | 1dp = 4px |
+| Density         | Scale | Example      |
+| --------------- | ----- | ------------ |
+| ldpi            | 0.75x | 1dp = 0.75px |
+| mdpi (baseline) | 1.0x  | 1dp = 1px    |
+| hdpi            | 1.5x  | 1dp = 1.5px  |
+| xhdpi           | 2.0x  | 1dp = 2px    |
+| xxhdpi          | 3.0x  | 1dp = 3px    |
+| xxxhdpi         | 4.0x  | 1dp = 4px    |
 
 ### Practical Examples
 
@@ -355,11 +363,11 @@ fun DimensionsInCompose() {
 
 ### Best Practices
 
-| Unit | Use For | Don't Use For |
-|------|---------|---------------|
-| **dp** | View dimensions, margins, padding, icon sizes | Text size |
-| **sp** | Text size only | View dimensions |
-| **px** | Rare cases (drawing, canvas) | Any UI elements |
+| Unit   | Use For                                       | Don't Use For   |
+| ------ | --------------------------------------------- | --------------- |
+| **dp** | View dimensions, margins, padding, icon sizes | Text size       |
+| **sp** | Text size only                                | View dimensions |
+| **px** | Rare cases (drawing, canvas)                  | Any UI elements |
 
 ### Common Mistakes to Avoid
 
@@ -389,11 +397,24 @@ textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
 
 ### Summary
 
-- **px** - Physical pixels, avoid for UI (looks different on different screens)
-- **dp** - Density-independent pixels, use for all UI dimensions (consistent across devices)
-- **sp** - Scale-independent pixels, use ONLY for text size (respects user font settings)
-- Always use **dp** for layouts and **sp** for text to ensure proper scaling and accessibility
+-   **px** - Physical pixels, avoid for UI (looks different on different screens)
+-   **dp** - Density-independent pixels, use for all UI dimensions (consistent across devices)
+-   **sp** - Scale-independent pixels, use ONLY for text size (respects user font settings)
+-   Always use **dp** for layouts and **sp** for text to ensure proper scaling and accessibility
 
 ## Ответ (RU)
 
 px (пиксели) – физические точки экрана. dp (density-independent pixels) – абстрактная единица измерения, которая адаптируется под плотность экрана. sp (scale-independent pixels) – масштабируемые пиксели для текста. px не зависит от плотности экрана, dp адаптируется под плотность экрана для UI размеров, sp учитывает настройки шрифта пользователя и используется только для текста. Примеры использования в XML и Kotlin приведены.
+
+---
+
+## Follow-ups
+
+-   Почему нельзя использовать dp для текста и sp для размеров View?
+-   Как правильно мигрировать проект с px на dp/sp?
+-   Как адаптировать размеры в Jetpack Compose при изменении плотности?
+
+## References
+
+-   `https://developer.android.com/training/multiscreen/screendensities` — Screen densities
+-   `https://developer.android.com/guide/practices/screens_support` — Support different screens

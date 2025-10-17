@@ -1,13 +1,14 @@
 ---
+id: "20251015082236041"
+title: "Job Vs Supervisorjob / Job против Supervisorjob"
 topic: kotlin
-tags:
-  - kotlin
-  - coroutines
-  - error-handling
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - kotlin
+  - coroutines
+  - error-handling
 ---
-
 # В чем отличие между Job и SupervisorJob
 
 # Question (EN)

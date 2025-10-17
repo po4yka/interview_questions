@@ -1,21 +1,22 @@
 ---
+id: "20251015082238630"
+title: "Looper Empty Queue Behavior / Поведение Looper при пустой очереди"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - android
   - android/concurrency
   - blocking
   - concurrency
   - looper
   - message-queue
   - threading
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Что происходит, когда поток разбирает пустую очередь сообщений с помощью Looper.loop()?
 
 **English**: What happens when a thread processes an empty message queue with Looper.loop()?

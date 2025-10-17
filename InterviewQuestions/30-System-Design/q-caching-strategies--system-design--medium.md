@@ -1,30 +1,27 @@
 ---
 id: 20251012-300003
 title: "Caching Strategies and Patterns / Стратегии и паттерны кеширования"
-slug: caching-strategies-system-design-medium
 topic: system-design
-subtopics:
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - system-design
   - caching
+  - performance
+  - scalability
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-system-design
+related_questions:   - q-cache-invalidation--system-design--hard
+  - q-cdn-architecture--system-design--medium
+  - q-database-sharding--system-design--hard
+slug: caching-strategies-system-design-medium
+subtopics:   - caching
   - performance
   - redis
   - memcached
   - cdn
-status: draft
-difficulty: medium
-moc: moc-system-design
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-cache-invalidation--system-design--hard
-  - q-cdn-architecture--system-design--medium
-  - q-database-sharding--system-design--hard
-tags:
-  - system-design
-  - caching
-  - performance
-  - scalability
 ---
-
 # Caching Strategies and Patterns
 
 ## English Version

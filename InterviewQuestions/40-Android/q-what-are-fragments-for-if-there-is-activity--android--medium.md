@@ -1,14 +1,15 @@
 ---
+id: "20251015082237459"
+title: "What Are Fragments For If There Is Activity / Зачем нужны Fragment если есть Activity"
 topic: android
-tags:
-  - fragments
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - fragments
   - activity
   - android
   - ui
-difficulty: medium
-status: draft
 ---
-
 # What are fragments for if there is Activity?
 
 # Вопрос (RU)
@@ -303,22 +304,6 @@ class MainActivity : AppCompatActivity() {
 ## Ответ (RU)
 
 Фрагменты используются для создания многоразовых компонентов пользовательского интерфейса, которые могут быть встроены в различные Activity. Они позволяют более гибко управлять интерфейсом и разделять его на отдельные части, что улучшает модульность приложения. Фрагменты могут быть динамически добавлены или удалены во время выполнения, что упрощает адаптацию интерфейса под разные устройства. В отличие от Activity, фрагменты могут совместно использовать ресурсы внутри одного экрана.
-
----
-
-## Related Questions
-
-### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity, Fragment
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Activity, Fragment
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Activity, Fragment
-- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Activity, Fragment
-- [[q-fragments-vs-activity--android--medium]] - Activity, Fragment
-
-### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
-- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
-- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] - Activity, Fragment
 
 ---
 

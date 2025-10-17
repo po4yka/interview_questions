@@ -1,14 +1,15 @@
 ---
+id: "20251015082237324"
+title: "If Activity Starts After A Service Can You Connect To This Service / Можно ли подключиться к Service если Activity запустилась после него"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - service
   - binding
   - ipc
-difficulty: medium
-status: draft
 ---
-
 # If Activity starts after a service, can you connect to this service
 
 ## Answer (EN)
@@ -105,23 +106,6 @@ class MyActivity : AppCompatActivity() {
 - ServiceConnection
 - Started vs Bound services
 - AIDL for inter-process communication
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-android-components-besides-activity--android--easy]] - Activity
-
-### Related (Medium)
-- [[q-service-component--android--medium]] - Service
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
-- [[q-single-activity-pros-cons--android--medium]] - Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Activity
-
-### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity
 
 ---
 

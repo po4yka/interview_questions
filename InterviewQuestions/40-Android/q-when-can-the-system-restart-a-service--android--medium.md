@@ -1,14 +1,25 @@
 ---
+id: "20251015082237283"
+title: "When Can The System Restart A Service / Когда система может перезапустить Service"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
 
-# When can the system restart a service?
+# Question (EN)
+
+> When can the system restart a service?
+
+# Вопрос (RU)
+
+> Когда система может перезапустить сервис?
+
+---
 
 ## Answer (EN)
+
 The Android system can restart a service after it has been killed, depending on the return value from `onStartCommand()` and the service type. Understanding when and how services restart is crucial for building robust Android applications.
 
 ### Service Restart Behavior by Return Value
@@ -36,15 +47,17 @@ class MusicPlayerService : Service() {
 ```
 
 **Behavior:**
-- Service is killed due to memory pressure
-- System recreates the service when resources become available
-- `onStartCommand()` is called with **null Intent**
-- Service continues running in its default state
+
+-   Service is killed due to memory pressure
+-   System recreates the service when resources become available
+-   `onStartCommand()` is called with **null Intent**
+-   Service continues running in its default state
 
 **Use cases:**
-- Music players (don't need original Intent data)
-- Background monitoring services
-- Services that maintain state independently
+
+-   Music players (don't need original Intent data)
+-   Background monitoring services
+-   Services that maintain state independently
 
 #### 2. START_REDELIVER_INTENT
 
@@ -72,16 +85,18 @@ class DownloadService : Service() {
 ```
 
 **Behavior:**
-- Service is killed while processing
-- System recreates the service
-- `onStartCommand()` is called with the **same Intent** that was being processed
-- Service can continue the interrupted task
+
+-   Service is killed while processing
+-   System recreates the service
+-   `onStartCommand()` is called with the **same Intent** that was being processed
+-   Service can continue the interrupted task
 
 **Use cases:**
-- File downloads/uploads
-- Data synchronization
-- Critical task processing
-- Any operation that must complete
+
+-   File downloads/uploads
+-   Data synchronization
+-   Critical task processing
+-   Any operation that must complete
 
 #### 3. START_NOT_STICKY
 
@@ -105,14 +120,16 @@ class OneTimeTaskService : Service() {
 ```
 
 **Behavior:**
-- Service is killed
-- System does NOT restart it
-- Exception: If there are pending Intents waiting to be delivered
+
+-   Service is killed
+-   System does NOT restart it
+-   Exception: If there are pending Intents waiting to be delivered
 
 **Use cases:**
-- Short-lived tasks
-- Tasks that can be safely abandoned
-- Tasks that are not critical
+
+-   Short-lived tasks
+-   Tasks that can be safely abandoned
+-   Tasks that are not critical
 
 #### 4. START_STICKY_COMPATIBILITY
 
@@ -152,11 +169,12 @@ class MusicService : Service() {
 ```
 
 **Special properties:**
-- Highest priority among services
-- Must display persistent notification
-- Rarely killed by system
-- If killed, system prioritizes restarting them
-- Requires special permissions on Android 9+
+
+-   Highest priority among services
+-   Must display persistent notification
+-   Rarely killed by system
+-   If killed, system prioritizes restarting them
+-   Requires special permissions on Android 9+
 
 ### Conditions When System Restarts Services
 
@@ -170,9 +188,10 @@ class MusicService : Service() {
 ```
 
 **Service importance:**
-- Foreground services: Highest priority
-- Started services with START_STICKY: Medium priority
-- Bound services: Priority depends on bound components
+
+-   Foreground services: Highest priority
+-   Started services with START_STICKY: Medium priority
+-   Bound services: Priority depends on bound components
 
 ### Practical Example: Combining Patterns
 
@@ -216,13 +235,13 @@ class DownloadService : Service() {
 
 ### Comparison Table
 
-| Return Value | Restarts? | Intent Redelivered? | Use Case |
-|--------------|-----------|---------------------|----------|
-| START_STICKY | Yes | No (null Intent) | Long-running, stateless services |
-| START_REDELIVER_INTENT | Yes | Yes (same Intent) | Critical task completion |
-| START_NOT_STICKY | No | Only pending Intents | Short-lived tasks |
-| Foreground + STICKY | Yes (priority) | No | User-visible services |
-| Foreground + REDELIVER | Yes (priority) | Yes | Critical user-visible tasks |
+| Return Value           | Restarts?      | Intent Redelivered?  | Use Case                         |
+| ---------------------- | -------------- | -------------------- | -------------------------------- |
+| START_STICKY           | Yes            | No (null Intent)     | Long-running, stateless services |
+| START_REDELIVER_INTENT | Yes            | Yes (same Intent)    | Critical task completion         |
+| START_NOT_STICKY       | No             | Only pending Intents | Short-lived tasks                |
+| Foreground + STICKY    | Yes (priority) | No                   | User-visible services            |
+| Foreground + REDELIVER | Yes (priority) | Yes                  | Critical user-visible tasks      |
 
 ### How to Prevent Unwanted Restarts
 
@@ -315,43 +334,63 @@ WorkManager.getInstance(context).enqueue(workRequest)
 The system can restart a service based on:
 
 **1. onStartCommand() return value:**
-- START_STICKY: Restarts with null Intent
-- START_REDELIVER_INTENT: Restarts with same Intent
-- START_NOT_STICKY: Does not restart
+
+-   START_STICKY: Restarts with null Intent
+-   START_REDELIVER_INTENT: Restarts with same Intent
+-   START_NOT_STICKY: Does not restart
 
 **2. Service type:**
-- Foreground services: Highest restart priority
-- Started services: Medium priority
-- Bound services: Depends on bound components
+
+-   Foreground services: Highest restart priority
+-   Started services: Medium priority
+-   Bound services: Depends on bound components
 
 **3. System resources:**
-- Restarted when memory pressure decreases
-- Priority based on service importance
+
+-   Restarted when memory pressure decreases
+-   Priority based on service importance
 
 **Modern recommendation:** For guaranteed background work, use WorkManager instead of services.
 
 ## Ответ (RU)
+
 Система Android может перезапустить сервис в нескольких случаях, особенно если это касается долгосрочных или критически важных задач, которые должны продолжаться даже если приложение было закрыто или убито системой. Использование START_STICKY позволяет системе перезапустить сервис если он был убит. Использование START_REDELIVER_INTENT также позволяет системе перезапустить сервис если он был убит но с повторной доставкой последнего Intent. Foreground сервисы имеют более высокий приоритет и менее вероятно будут убиты системой но если это произойдет система постарается их перезапустить
 
 ## Related Topics
-- Service lifecycle
-- onStartCommand() return values
-- Foreground services
-- Memory management
+
+-   Service lifecycle
+-   onStartCommand() return values
+-   Foreground services
+-   Memory management
 
 ---
 
 ## Related Questions
 
+## Follow-ups
+
+-   When should you prefer WorkManager over a background Service?
+-   How do foreground service restrictions (Android 12+) affect restart behavior?
+-   What are best practices for idempotent work when using START_REDELIVER_INTENT?
+
+## References
+
+-   `https://developer.android.com/guide/components/services` — Services guide
+-   `https://developer.android.com/guide/background` — Background work
+-   `https://developer.android.com/topic/libraries/architecture/workmanager` — WorkManager
+
 ### Prerequisites (Easier)
-- [[q-android-service-types--android--easy]] - Service
+
+-   [[q-android-service-types--android--easy]] - Service
 
 ### Related (Medium)
-- [[q-service-component--android--medium]] - Service
-- [[q-foreground-service-types--background--medium]] - Service
-- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Service
-- [[q-keep-service-running-background--android--medium]] - Service
-- [[q-background-vs-foreground-service--android--medium]] - Service
+
+-   [[q-service-component--android--medium]] - Service
+-   [[q-foreground-service-types--background--medium]] - Service
+-   [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Service
+-   [[q-keep-service-running-background--android--medium]] - Service
+-   [[q-background-vs-foreground-service--android--medium]] - Service
 
 ### Advanced (Harder)
-- [[q-service-lifecycle-binding--background--hard]] - Service
+
+-   [[q-service-lifecycle-binding--background--hard]] - Service

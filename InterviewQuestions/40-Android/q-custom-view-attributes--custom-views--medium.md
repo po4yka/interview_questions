@@ -1,13 +1,15 @@
 ---
-tags:
-  - custom-views
+id: "20251015082237326"
+title: "Custom View Attributes / Атрибуты кастомных View"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - custom-views
   - xml-attributes
   - android-framework
   - theming
-difficulty: medium
-status: draft
 ---
-
 # Custom View Attributes
 
 # Question (EN)
@@ -840,13 +842,307 @@ class CustomProgressBar @JvmOverloads constructor(
 4. **defStyleRes** (стиль по умолчанию)
 5. **Жестко заданное значение** (низший)
 
+### Поддержка стилей и тем
+
+**Шаг 1: Определить атрибут стиля по умолчанию в attrs.xml**
+
+```xml
+<resources>
+    <!-- Определить custom атрибут стиля -->
+    <attr name="customProgressBarStyle" format="reference" />
+
+    <declare-styleable name="ProgressBar">
+        <attr name="progress" format="float" />
+        <attr name="progressColor" format="color" />
+        <!-- ... другие атрибуты ... -->
+    </declare-styleable>
+</resources>
+```
+
+**Шаг 2: Создать стиль в styles.xml**
+
+```xml
+<resources>
+    <!-- Стиль по умолчанию для CustomProgressBar -->
+    <style name="Widget.App.ProgressBar" parent="">
+        <item name="progress">0</item>
+        <item name="progressColor">@color/primary</item>
+        <item name="backgroundColor">@color/surface</item>
+        <item name="showPercentage">true</item>
+        <item name="barHeight">50dp</item>
+    </style>
+
+    <!-- Вариант Success -->
+    <style name="Widget.App.ProgressBar.Success">
+        <item name="progressColor">@color/green</item>
+        <item name="backgroundColor">@color/light_green</item>
+    </style>
+</resources>
+```
+
+**Шаг 3: Установить стиль по умолчанию в теме**
+
+```xml
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+        <!-- Установить стиль по умолчанию для CustomProgressBar -->
+        <item name="customProgressBarStyle">@style/Widget.App.ProgressBar</item>
+    </style>
+</resources>
+```
+
+**Шаг 4: Использовать стиль по умолчанию в конструкторе**
+
+```kotlin
+class CustomProgressBar @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = R.attr.customProgressBarStyle, // Использовать атрибут темы
+    defStyleRes: Int = R.style.Widget_App_ProgressBar  // Fallback
+) : View(context, attrs, defStyleAttr, defStyleRes) {
+    // ... реализация конструктора ...
+}
+```
+
+**Использование в XML:**
+
+```xml
+<!-- Использует стиль по умолчанию из темы -->
+<com.example.ui.CustomProgressBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:progress="50" />
+
+<!-- Применяет custom стиль -->
+<com.example.ui.CustomProgressBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/Widget.App.ProgressBar.Success"
+    app:progress="100" />
+
+<!-- XML атрибуты переопределяют стиль -->
+<com.example.ui.CustomProgressBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/Widget.App.ProgressBar.Success"
+    app:progress="75"
+    app:progressColor="@color/blue" /> <!-- Переопределяет цвет стиля -->
+```
+
+### Приоритет атрибутов
+
+**Приоритет (от высшего к низшему):**
+
+1. **XML атрибут** - прямой атрибут в layout
+2. **XML style** - `style="@style/..."` в layout
+3. **defStyleAttr** - атрибут темы
+4. **defStyleRes** - ресурс стиля по умолчанию
+5. **Жестко заданное значение** - fallback в коде
+
+**Пример:**
+```kotlin
+context.theme.obtainStyledAttributes(
+    attrs,
+    R.styleable.ProgressBar,
+    defStyleAttr,      // Приоритет 3: атрибут темы
+    defStyleRes        // Приоритет 4: стиль по умолчанию
+).apply {
+    progress = getFloat(
+        R.styleable.ProgressBar_progress,
+        0f  // Приоритет 5: жестко заданное значение
+    )
+    // Приоритет 1-2 из XML применяется автоматически
+}
+```
+
+### Интеграция с темами
+
+**Создать theme-aware атрибуты:**
+
+**attrs.xml:**
+```xml
+<resources>
+    <!-- Определить themeable цвета -->
+    <attr name="progressBarColor" format="color" />
+    <attr name="progressBarBackground" format="color" />
+
+    <declare-styleable name="ProgressBar">
+        <attr name="progressColor" format="color" />
+        <attr name="backgroundColor" format="color" />
+    </declare-styleable>
+</resources>
+```
+
+**themes.xml:**
+```xml
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+        <!-- Цвета светлой темы -->
+        <item name="progressBarColor">@color/blue_500</item>
+        <item name="progressBarBackground">@color/gray_200</item>
+    </style>
+
+    <style name="AppTheme.Dark" parent="AppTheme">
+        <!-- Цвета темной темы -->
+        <item name="progressBarColor">@color/blue_300</item>
+        <item name="progressBarBackground">@color/gray_800</item>
+    </style>
+</resources>
+```
+
+**Читать из темы:**
+```kotlin
+init {
+    context.theme.obtainStyledAttributes(
+        attrs,
+        R.styleable.ProgressBar,
+        defStyleAttr,
+        defStyleRes
+    ).apply {
+        try {
+            // Попытка прочитать из XML/style
+            progressColor = getColor(R.styleable.ProgressBar_progressColor, -1)
+
+            // Если не установлено, читаем из темы
+            if (progressColor == -1) {
+                progressColor = getThemeColor(R.attr.progressBarColor, Color.BLUE)
+            }
+
+        } finally {
+            recycle()
+        }
+    }
+}
+
+private fun getThemeColor(attr: Int, defaultColor: Int): Int {
+    val typedValue = TypedValue()
+    return if (context.theme.resolveAttribute(attr, typedValue, true)) {
+        typedValue.data
+    } else {
+        defaultColor
+    }
+}
+```
+
+### Валидация и обработка ошибок
+
+```kotlin
+init {
+    context.theme.obtainStyledAttributes(
+        attrs,
+        R.styleable.ProgressBar,
+        defStyleAttr,
+        defStyleRes
+    ).apply {
+        try {
+            progress = getFloat(R.styleable.ProgressBar_progress, 0f)
+
+            // Валидация диапазона progress
+            if (progress < 0f || progress > 100f) {
+                throw IllegalArgumentException(
+                    "Progress должен быть между 0 и 100, получено $progress"
+                )
+            }
+
+            barHeight = getDimension(R.styleable.ProgressBar_barHeight, 50f.dpToPx())
+
+            // Валидация bar height
+            if (barHeight <= 0f) {
+                throw IllegalArgumentException(
+                    "Bar height должна быть положительной, получено $barHeight"
+                )
+            }
+
+            // Проверка обязательных атрибутов
+            if (!hasValue(R.styleable.ProgressBar_progressColor)) {
+                Log.w("ProgressBar", "progressColor не установлен, используется значение по умолчанию")
+            }
+
+        } finally {
+            recycle()
+        }
+    }
+}
+```
+
 ### Ключевые правила
 
-- Всегда вызывайте `recycle()` на TypedArray
-- Предоставляйте значения по умолчанию
-- Валидируйте значения атрибутов
-- Поддерживайте темы
-- Документируйте атрибуты
+**1. Всегда освобождайте TypedArray**
+```kotlin
+// ПРАВИЛЬНО
+context.theme.obtainStyledAttributes(attrs, R.styleable.CustomView).apply {
+    try {
+        // Чтение атрибутов
+    } finally {
+        recycle() // ВАЖНО!
+    }
+}
+
+// НЕПРАВИЛЬНО - забыли recycle
+val a = context.theme.obtainStyledAttributes(attrs, R.styleable.CustomView)
+// Чтение атрибутов
+// Отсутствует recycle() - утечка памяти!
+```
+
+**2. Предоставляйте значения по умолчанию**
+```kotlin
+progress = getFloat(R.styleable.ProgressBar_progress, 0f) // Имеет значение по умолчанию
+```
+
+**3. Используйте значимые имена**
+```kotlin
+// ПРАВИЛЬНО
+<attr name="progressColor" format="color" />
+
+// НЕПРАВИЛЬНО
+<attr name="color1" format="color" />
+```
+
+**4. Документируйте атрибуты**
+```xml
+<resources>
+    <declare-styleable name="ProgressBar">
+        <!-- Текущее значение progress (0-100) -->
+        <attr name="progress" format="float" />
+
+        <!-- Цвет прогресс бара -->
+        <attr name="progressColor" format="color" />
+    </declare-styleable>
+</resources>
+```
+
+**5. Поддерживайте RTL (Right-to-Left)**
+```kotlin
+if (layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+    // Зеркалирование отрисовки для RTL языков
+}
+```
+
+**6. Валидируйте значения атрибутов**
+- Проверяйте диапазоны (progress 0-100)
+- Валидируйте размеры (положительные значения)
+- Проверяйте обязательные атрибуты
+
+**7. Используйте правильные форматы**
+- dimension для размеров (dp, sp, px)
+- color для цветов
+- reference для ресурсов
+- enum для ограниченного набора значений
+
+**8. Поддерживайте темы**
+- Читайте цвета из темы
+- Поддерживайте светлую/темную темы
+- Используйте тематические атрибуты
+
+**9. Тестируйте атрибуты**
+- Тестируйте значения по умолчанию
+- Проверяйте валидацию
+- Тестируйте с разными темами
+
+**10. Оптимизируйте производительность**
+- Предварительно вычисляйте значения в init
+- Кешируйте преобразования (dp to px)
+- Избегайте лишних вычислений в onDraw()
 
 ---
 

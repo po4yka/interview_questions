@@ -1,18 +1,18 @@
 ---
+id: "20251015082237233"
 title: MVI Pattern (Model-View-Intent)
 topic: architecture-patterns
-subtopics:
-  - android-architecture
-  - unidirectional-data-flow
-  - state-management
 difficulty: hard
-related:
-  - mvvm-pattern
+status: draft
+created: 2025-10-15
+tags: []
+related:   - mvvm-pattern
   - mvp-pattern
   - redux-architecture
-status: draft
+subtopics:   - android-architecture
+  - unidirectional-data-flow
+  - state-management
 ---
-
 # MVI Pattern / Паттерн MVI (Model-View-Intent)
 
 # Question (EN)

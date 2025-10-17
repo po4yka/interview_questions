@@ -1,16 +1,18 @@
 ---
-tags:
-  - double
+id: "20251015082237231"
+title: "Switch Float Double / Switch с float и double"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - double
   - float
   - floating-point
   - java
   - kotlin
   - programming-languages
   - switch
-difficulty: easy
-status: draft
 ---
-
 # Работает ли switch() с double/float?
 
 # Question (EN)

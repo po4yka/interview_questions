@@ -1,14 +1,15 @@
 ---
+id: "20251015082237398"
+title: "Workmanager Execution Guarantee / Гарантия выполнения WorkManager"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - workmanager
   - background-tasks
   - reliability
-difficulty: medium
-status: draft
 ---
-
 # How does WorkManager guarantee task execution?
 
 **Russian**: Как WorkManager гарантирует выполнение задач?

@@ -1,33 +1,30 @@
 ---
 id: 20251012-160010
 title: "Top 10 common Kotlin coroutines mistakes and anti-patterns / 10 частых ошибок с Kotlin корутинами"
-slug: common-coroutine-mistakes-kotlin-medium
 topic: kotlin
-subtopics:
-  - coroutines
-  - mistakes
-  - anti-patterns
-  - best-practices
-  - gotchas
-status: draft
 difficulty: medium
-moc: moc-kotlin
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-coroutine-exception-handler--kotlin--medium
-  - q-debugging-coroutines-techniques--kotlin--medium
-  - q-mutex-synchronized-coroutines--kotlin--medium
-tags:
-  - kotlin
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - coroutines
   - mistakes
   - anti-patterns
   - best-practices
   - gotchas
   - code-review
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-kotlin
+related_questions:   - q-coroutine-exception-handler--kotlin--medium
+  - q-debugging-coroutines-techniques--kotlin--medium
+  - q-mutex-synchronized-coroutines--kotlin--medium
+slug: common-coroutine-mistakes-kotlin-medium
+subtopics:   - coroutines
+  - mistakes
+  - anti-patterns
+  - best-practices
+  - gotchas
 ---
-
 # Top 10 common Kotlin coroutines mistakes and anti-patterns
 
 ## English Version

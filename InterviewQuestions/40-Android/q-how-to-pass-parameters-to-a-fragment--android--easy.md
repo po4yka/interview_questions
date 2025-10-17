@@ -1,15 +1,16 @@
 ---
+id: "20251015082237514"
+title: "How To Pass Parameters To A Fragment / Как передать параметры во Fragment"
 topic: android
-tags:
-  - fragments
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - fragments
   - bundle
   - android
   - ui
   - data-passing
-difficulty: medium
-status: draft
 ---
-
 # How to pass parameters to a fragment?
 
 # Вопрос (RU)

@@ -1,21 +1,21 @@
 ---
+id: "20251015082237512"
+title: "Strictmode Debugging / Отладка StrictMode"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - strictmode
   - performance
   - debugging
   - main-thread
   - difficulty/medium
-subtopics:
-  - profiling
+source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20StrictMode.md
+subtopics:   - profiling
   - performance-rendering
   - debugging
-difficulty: medium
-status: draft
-source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20StrictMode.md
 ---
-
 # StrictMode in Android / StrictMode в Android
 
 **English**: What is StrictMode?

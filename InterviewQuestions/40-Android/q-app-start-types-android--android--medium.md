@@ -1,17 +1,18 @@
 ---
+id: "20251015082237519"
+title: "App Start Types Android / Типы запуска приложения Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - performance
   - app-startup
   - cold-start
   - warm-start
   - hot-start
   - optimization
-difficulty: medium
-status: draft
 ---
-
 # Hot, Warm, and Cold App Start in Android
 
 **Сложность**: Medium

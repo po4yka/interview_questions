@@ -1,21 +1,30 @@
 ---
+id: "20251015082237302"
+title: "Network Error Handling Strategies"
 topic: networking
-tags:
-  - networking
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - networking
   - error-handling
   - strategy
   - architecture
   - ux
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
 
-# Network Error Handling Strategies / Стратегии обработки сетевых ошибок
+# Question (EN)
 
-**English**: Design a comprehensive error handling strategy for network requests. Handle timeouts, no internet, 4xx/5xx errors differently with user-friendly messages.
+> Design a comprehensive error handling strategy for network requests. Handle timeouts, no internet, 4xx/5xx errors differently with user-friendly messages.
+
+# Вопрос (RU)
+
+> Спроектируйте стратегию обработки сетевых ошибок. Обрабатывайте таймауты, отсутствие интернета, 4xx/5xx ошибки по-разному с понятными сообщениями пользователю.
+
+---
 
 ## Answer (EN)
+
 **Comprehensive error handling** is crucial for providing excellent user experience in Android apps. Users should understand what went wrong and what they can do about it. A well-designed error handling strategy differentiates between error types and provides appropriate responses for each.
 
 ### Error Classification
@@ -923,18 +932,19 @@ fun NetworkError.toUserFriendlyMessage(): String {
 
 Comprehensive error handling provides:
 
-- **Better UX**: Clear, actionable error messages
-- **Resilience**: Automatic retry for transient failures
-- **Offline Support**: Graceful degradation when offline
-- **Intelligence**: Different strategies for different errors
-- **Debugging**: Proper error logging and tracking
-- **Maintainability**: Centralized error handling logic
+-   **Better UX**: Clear, actionable error messages
+-   **Resilience**: Automatic retry for transient failures
+-   **Offline Support**: Graceful degradation when offline
+-   **Intelligence**: Different strategies for different errors
+-   **Debugging**: Proper error logging and tracking
+-   **Maintainability**: Centralized error handling logic
 
 Master error handling to build robust, user-friendly Android applications.
 
 ---
 
 ## Ответ (RU)
+
 **Комплексная обработка ошибок** критична для отличного пользовательского опыта в Android приложениях. Пользователи должны понимать, что пошло не так и что они могут с этим сделать. Хорошо спроектированная стратегия обработки ошибок различает типы ошибок и предоставляет соответствующие ответы для каждого.
 
 ### Классификация ошибок
@@ -1256,27 +1266,30 @@ class UserViewModel(
 
 Комплексная обработка ошибок обеспечивает:
 
-- **Лучший UX**: Понятные, действенные сообщения
-- **Устойчивость**: Автоматические повторы
-- **Оффлайн поддержку**: Деградация без интернета
-- **Интеллект**: Разные стратегии для разных ошибок
-- **Отладку**: Правильное логирование
-- **Поддерживаемость**: Централизованная логика
+-   **Лучший UX**: Понятные, действенные сообщения
+-   **Устойчивость**: Автоматические повторы
+-   **Оффлайн поддержку**: Деградация без интернета
+-   **Интеллект**: Разные стратегии для разных ошибок
+-   **Отладку**: Правильное логирование
+-   **Поддерживаемость**: Централизованная логика
 
 ---
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-graphql-vs-rest--networking--easy]] - Networking
+
+-   [[q-graphql-vs-rest--networking--easy]] - Networking
 
 ### Related (Medium)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
-- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
-- [[q-okhttp-interceptors-advanced--networking--medium]] - Networking
-- [[q-network-operations-android--android--medium]] - Networking
+
+-   [[q-http-protocols-comparison--android--medium]] - Networking
+-   [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+-   [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
+-   [[q-okhttp-interceptors-advanced--networking--medium]] - Networking
+-   [[q-network-operations-android--android--medium]] - Networking
 
 ### Advanced (Harder)
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-network-request-deduplication--networking--hard]] - Networking
+
+-   [[q-data-sync-unstable-network--android--hard]] - Networking
+-   [[q-network-request-deduplication--networking--hard]] - Networking

@@ -1,20 +1,21 @@
 ---
+id: "20251015082238636"
+title: "Spannable Text Styling / Стилизация текста Spannable"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - android
   - spannable
   - text-styling
   - ui
   - textview
   - difficulty/medium
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Spannable Text in Android / Spannable текст в Android
 
 **English**: What is Spannable?

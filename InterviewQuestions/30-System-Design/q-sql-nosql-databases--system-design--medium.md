@@ -1,31 +1,28 @@
 ---
 id: 20251012-300005
 title: "SQL vs NoSQL Databases / SQL vs NoSQL базы данных"
-slug: sql-nosql-databases-system-design-medium
 topic: system-design
-subtopics:
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - system-design
   - databases
+  - sql
+  - nosql
+  - scalability
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-system-design
+related_questions:   - q-database-sharding--system-design--hard
+  - q-cap-theorem-distributed-systems--system-design--hard
+  - q-database-indexing--system-design--medium
+slug: sql-nosql-databases-system-design-medium
+subtopics:   - databases
   - sql
   - nosql
   - data-modeling
   - scalability
-status: draft
-difficulty: medium
-moc: moc-system-design
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-database-sharding--system-design--hard
-  - q-cap-theorem-distributed-systems--system-design--hard
-  - q-database-indexing--system-design--medium
-tags:
-  - system-design
-  - databases
-  - sql
-  - nosql
-  - scalability
 ---
-
 # SQL vs NoSQL Databases
 
 ## English Version

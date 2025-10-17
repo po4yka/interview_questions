@@ -1,17 +1,18 @@
 ---
+id: "20251015082134"
+title: "16kb Dex Page Size / Размер страницы DEX 16KB"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - dex
   - build-optimization
   - apk-size
   - performance
   - r8
   - proguard
-difficulty: medium
-status: draft
 ---
-
 # 16 KB DEX Page Size Issue in Android
 
 # Question (EN)

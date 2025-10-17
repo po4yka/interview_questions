@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237079"
+title: "Hot Vs Cold Flows"
+topic: computer-science
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Hot vs Cold Flows
 
 # Question (EN)

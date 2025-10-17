@@ -1,11 +1,12 @@
 ---
+id: "20251015082236006"
+title: "Data Class Requirements / Требования Data Class"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # What are the requirements when creating a data class?
 
 # Question (EN)

@@ -1,13 +1,14 @@
 ---
+id: "20251015082237069"
+title: "Kotlin Advantages For Android / Преимущества Kotlin для Android"
 topic: kotlin
-tags:
-  - kotlin
-  - android
-  - language-features
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - kotlin
+  - android
+  - language-features
 ---
-
 # В чем преимущество Kotlin для разработки под Android
 
 # Question (EN)

@@ -1,15 +1,16 @@
 ---
+id: "20251015082238603"
+title: "What Are Fragments And Why Are They More Convenient To Use Instead Of Multiple Activities / What Are Fragments и Why Are They More Convenient To Use Instead Of Multiple Activities"
 topic: android
-tags:
-  - activity
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - activity
   - android
   - android/fragments
   - fragments
   - ui
-difficulty: hard
-status: draft
 ---
-
 # Что такое фрагменты и почему их удобнее использовать вместо множества activity?
 
 **English**: What are fragments and why are they more convenient to use instead of multiple activities?
@@ -322,21 +323,7 @@ Using fragments allows creating **flexible, modular, and efficient applications*
 - [[q-why-use-fragments-when-we-have-activities--android--medium]] - Activity, Fragment
 - [[q-fragments-vs-activity--android--medium]] - Activity, Fragment
 
-### Related (Hard)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
-- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
-- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
-- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Activity, Fragment
-- [[q-fragments-vs-activity--android--medium]] - Activity, Fragment
-
-### Related (Hard)
+### Related (Medium)
 - [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
 - [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
 - [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment

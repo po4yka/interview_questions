@@ -1,11 +1,12 @@
 ---
+id: "20251015082236023"
+title: "Object Keyword Kotlin / Ключевое слово object в Kotlin"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Tell about the Object keyword in Kotlin
 
 # Question (EN)

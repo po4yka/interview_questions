@@ -1,15 +1,17 @@
 ---
-tags:
-  - best-practices
+id: "20251015082237148"
+title: "Reference Types Criteria / Критерии типов ссылок"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - best-practices
   - design
   - immutability
   - kotlin
   - programming-languages
   - reference-types
-difficulty: medium
-status: draft
 ---
-
 # Каким критериям должны соответствовать ссылочные типы?
 
 # Question (EN)

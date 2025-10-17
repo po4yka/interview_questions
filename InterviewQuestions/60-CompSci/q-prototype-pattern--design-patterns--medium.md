@@ -1,16 +1,16 @@
 ---
+id: "20251015082237210"
 title: Prototype Pattern
 topic: design-patterns
-subtopics:
-  - creational-patterns
-  - object-cloning
 difficulty: medium
-related:
-  - factory-method-pattern
-  - builder-pattern
 status: draft
+created: 2025-10-15
+tags: []
+related:   - factory-method-pattern
+  - builder-pattern
+subtopics:   - creational-patterns
+  - object-cloning
 ---
-
 # Prototype Pattern / Паттерн Прототип
 
 # Question (EN)

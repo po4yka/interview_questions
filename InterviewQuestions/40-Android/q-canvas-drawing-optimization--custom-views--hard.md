@@ -1,13 +1,15 @@
 ---
-tags:
-  - custom-views
+id: "20251015082237350"
+title: "Canvas Drawing Optimization / Canvas Drawing Оптимизация"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - custom-views
   - canvas
   - performance
   - graphics
-difficulty: hard
-status: draft
 ---
-
 # Canvas Drawing Optimization
 
 # Question (EN)

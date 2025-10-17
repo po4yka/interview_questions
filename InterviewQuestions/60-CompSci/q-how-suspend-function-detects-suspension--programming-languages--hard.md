@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237169"
+title: "How Suspend Function Detects Suspension / Как suspend функция определяет приостановку"
+topic: computer-science
 difficulty: hard
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # How Suspend Function Detects Suspension?
 
 # Question (EN)

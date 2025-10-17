@@ -1,17 +1,18 @@
 ---
+id: "20251015082238621"
+title: "Database Encryption Android / Шифрование базы данных Android"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - database
   - encryption
   - security
   - sqlcipher
   - room
   - keystore
-difficulty: medium
-status: draft
 ---
-
 # Database Encryption in Android
 
 **Difficulty**: Medium

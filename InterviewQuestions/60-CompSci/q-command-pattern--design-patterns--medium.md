@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237180"
+title: "Command Pattern / Command Паттерн"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - behavioral-patterns
   - command
   - gof-patterns
   - action-pattern
-difficulty: medium
-status: draft
 ---
-
 # Command Pattern
 
 # Question (EN)

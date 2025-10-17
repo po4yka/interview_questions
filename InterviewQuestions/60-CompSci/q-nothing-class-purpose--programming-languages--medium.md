@@ -1,6 +1,11 @@
 ---
-tags:
-  - control-flow
+id: "20251015082237098"
+title: "Nothing Class Purpose / Назначение класса Nothing"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - control-flow
   - exceptions
   - kotlin
   - nothing
@@ -8,10 +13,7 @@ tags:
   - programming-languages
   - type-system
   - unreachable-code
-difficulty: medium
-status: draft
 ---
-
 # Зачем нужен класс Nothing?
 
 # Question (EN)

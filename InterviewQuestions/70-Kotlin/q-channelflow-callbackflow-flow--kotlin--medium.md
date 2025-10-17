@@ -1,32 +1,29 @@
 ---
 id: 20251012-160008
 title: "channelFlow vs callbackFlow vs flow: when to use each / channelFlow vs callbackFlow vs flow: когда использовать"
-slug: channelflow-callbackflow-flow-kotlin-medium
 topic: kotlin
-subtopics:
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - coroutines
   - flow
   - channelflow
   - callbackflow
   - builders
-status: draft
-difficulty: medium
-moc: moc-kotlin
 date_created: 2025-10-12
 date_updated: 2025-10-12
-related_questions:
-  - q-suspend-cancellable-coroutine--kotlin--hard
+moc: moc-kotlin
+related_questions:   - q-suspend-cancellable-coroutine--kotlin--hard
   - q-mutex-synchronized-coroutines--kotlin--medium
   - q-common-coroutine-mistakes--kotlin--medium
-tags:
-  - kotlin
-  - coroutines
+slug: channelflow-callbackflow-flow-kotlin-medium
+subtopics:   - coroutines
   - flow
   - channelflow
   - callbackflow
   - builders
 ---
-
 # channelFlow vs callbackFlow vs flow: when to use each
 
 ## English Version

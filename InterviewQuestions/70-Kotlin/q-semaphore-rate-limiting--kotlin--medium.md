@@ -1,32 +1,29 @@
 ---
 id: 20251012-160002
 title: "Semaphore for rate limiting and resource pooling / Semaphore для ограничения скорости и пулов ресурсов"
-slug: semaphore-rate-limiting-kotlin-medium
 topic: kotlin
-subtopics:
-  - coroutines
-  - semaphore
-  - rate-limiting
-  - concurrency
-  - resource-pool
-status: draft
 difficulty: medium
-moc: moc-kotlin
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-mutex-synchronized-coroutines--kotlin--medium
-  - q-channelflow-callbackflow-flow--kotlin--medium
-  - q-race-conditions-coroutines--kotlin--hard
-tags:
-  - kotlin
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - coroutines
   - semaphore
   - rate-limiting
   - concurrency
   - resource-management
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-kotlin
+related_questions:   - q-mutex-synchronized-coroutines--kotlin--medium
+  - q-channelflow-callbackflow-flow--kotlin--medium
+  - q-race-conditions-coroutines--kotlin--hard
+slug: semaphore-rate-limiting-kotlin-medium
+subtopics:   - coroutines
+  - semaphore
+  - rate-limiting
+  - concurrency
+  - resource-pool
 ---
-
 # Semaphore for rate limiting and resource pooling
 
 ## English Version

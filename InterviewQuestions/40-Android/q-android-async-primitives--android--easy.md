@@ -1,7 +1,11 @@
 ---
+id: "20251015082237280"
+title: "Android Async Primitives / Примитивы асинхронности Android"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - async
   - asynctask
   - coroutines
@@ -9,10 +13,7 @@ tags:
   - handler
   - rxjava
   - threading
-difficulty: easy
-status: draft
 ---
-
 # Какие асинхронные примитивы используют для обработки данных?
 
 # Question (EN)

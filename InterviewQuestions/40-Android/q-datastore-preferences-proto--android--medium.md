@@ -1,21 +1,21 @@
 ---
+id: "20251015082237472"
+title: "Datastore Preferences Proto"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - datastore
   - preferences
   - proto-datastore
   - storage
   - difficulty/medium
-subtopics:
-  - datastore
+source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20you%20know%20about%20DataStore.md
+subtopics:   - datastore
   - storage
   - serialization
-difficulty: medium
-status: draft
-source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20you%20know%20about%20DataStore.md
 ---
-
 # DataStore in Android / DataStore в Android
 
 **English**: What do you know about DataStore?

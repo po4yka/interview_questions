@@ -2,23 +2,21 @@
 id: 20251012-180010
 title: "Migrating from RxJava to Kotlin Coroutines / Миграция с RxJava на Kotlin корутины"
 topic: kotlin
-subtopics:
-  - coroutines
-  - rxjava
-  - migration
-  - refactoring
 difficulty: medium
-moc: moc-kotlin
 status: draft
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - rxjava
   - migration
   - refactoring
   - reactive-programming
+moc: moc-kotlin
+subtopics:   - coroutines
+  - rxjava
+  - migration
+  - refactoring
 ---
-
 # Migrating from RxJava to Kotlin Coroutines
 
 **English** | [Русский](#russian-version)

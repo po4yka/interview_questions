@@ -1,14 +1,15 @@
 ---
+id: "20251015082237441"
+title: "Compose Lazy Layout Optimization"
 topic: jetpack-compose
-tags:
-  - jetpack-compose
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - jetpack-compose
   - lazy-lists
   - performance
   - optimization
-difficulty: hard
-status: draft
 ---
-
 # LazyColumn/LazyRow Performance Optimization
 
 **English**: Optimize LazyColumn/LazyRow performance. Implement custom keys, item reuse, prefetching, and avoid common pitfalls.
@@ -584,23 +585,7 @@ LazyColumn и LazyRow - высоко оптимизированные composable
 - [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
 - [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
 
-### Related (Hard)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
-- [[q-compose-performance-optimization--android--hard]] - Performance, Compose
-- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose, Jetpack
-- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - Compose, Jetpack
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Performance, Compose
-- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
-- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
-
-### Related (Hard)
+### Related (Medium)
 - [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
 - [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
 - [[q-compose-performance-optimization--android--hard]] - Performance, Compose

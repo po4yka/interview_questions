@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237142"
+title: "Factory Method Pattern / Factory Method Паттерн"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - creational-patterns
   - factory-method
   - factory
   - gof-patterns
-difficulty: medium
-status: draft
 ---
-
 # Factory Method Pattern
 
 # Question (EN)

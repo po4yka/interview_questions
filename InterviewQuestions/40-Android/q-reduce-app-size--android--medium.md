@@ -364,34 +364,10 @@ android {
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
 ### Related (Medium)
 - [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
 - [[q-app-size-optimization--performance--medium]] - Performance
 - [[q-app-startup-optimization--performance--medium]] - Performance
 - [[q-macrobenchmark-startup--performance--medium]] - Performance
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
-### Related (Medium)
-- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
-- [[q-app-size-optimization--performance--medium]] - Performance
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
-
-### Related (Medium)
-- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
-- [[q-app-size-optimization--performance--medium]] - Performance
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

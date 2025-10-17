@@ -1,16 +1,18 @@
 ---
-tags:
-  - garbage-collector
+id: "20251015082237078"
+title: "Garbage Collector Basics / Garbage Collector Основы"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - garbage-collector
   - gc
   - java
   - kotlin
   - memory-management
   - performance
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # Что такое сборщик мусора?
 
 # Question (EN)

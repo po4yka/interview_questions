@@ -1,15 +1,16 @@
 ---
+id: "20251015082237339"
+title: "How To Change The Number Of Columns In Recyclerview Depending On Orientation / Как изменить количество колонок в RecyclerView в зависимости от ориентации"
 topic: android
-tags:
-  - recyclerview
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - recyclerview
   - gridlayoutmanager
   - android
   - ui
   - layouts
-difficulty: easy
-status: draft
 ---
-
 # How to change the number of columns in RecyclerView depending on orientation?
 
 # Вопрос (RU)
@@ -143,19 +144,7 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 
 ## Related Questions
 
-### Related (Easy)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-
-### Advanced (Harder)
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
-
----
-
-## Related Questions
-
-### Related (Easy)
+### Related (Medium)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
 
 ### Advanced (Harder)

@@ -1,7 +1,11 @@
 ---
+id: "20251015082238650"
+title: "Stable Annotation Compose / Аннотация Stable в Compose"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android/jetpack-compose
   - android/performance
   - annotations
@@ -11,10 +15,7 @@ tags:
   - recomposition
   - stability
   - stable-annotation
-difficulty: hard
-status: draft
 ---
-
 # Что известно про stable?
 
 **English**: What is known about @Stable?

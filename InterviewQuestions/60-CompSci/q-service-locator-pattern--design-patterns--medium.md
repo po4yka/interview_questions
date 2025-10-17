@@ -1,18 +1,18 @@
 ---
+id: "20251015082237110"
 title: Service Locator Pattern
 topic: design-patterns
-subtopics:
-  - structural-patterns
-  - dependency-management
-  - service-discovery
 difficulty: medium
-related:
-  - dependency-injection
+status: draft
+created: 2025-10-15
+tags: []
+related:   - dependency-injection
   - singleton-pattern
   - factory-pattern
-status: draft
+subtopics:   - structural-patterns
+  - dependency-management
+  - service-discovery
 ---
-
 # Service Locator Pattern / Паттерн Локатор Служб
 
 # Question (EN)

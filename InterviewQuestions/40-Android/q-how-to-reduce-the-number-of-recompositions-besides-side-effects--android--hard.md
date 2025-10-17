@@ -1,16 +1,17 @@
 ---
+id: "20251015082238617"
+title: "How To Reduce The Number Of Recompositions Besides Side Effects / Как уменьшить количество рекомпозиций кроме побочных эффектов"
 topic: android
-tags:
-  - Jetpack Compose
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Jetpack Compose
   - UI Optimization
   - android
   - ui
   - jetpack-compose
   - performance
-difficulty: medium
-status: draft
 ---
-
 # How to reduce the number of recompositions besides side-effects?
 
 # Вопрос (RU)

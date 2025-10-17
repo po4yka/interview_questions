@@ -1,30 +1,27 @@
 ---
 id: 20251012-160009
-title: "StandardTestDispatcher vs UnconfinedTestDispatcher / StandardTestDispatcher vs UnconfinedTestDispatcher"
-slug: test-dispatcher-types-kotlin-medium
+title: "StandardTestDispatcher vs UnconfinedTestDispatcher / StandardTestDispatcher против UnconfinedTestDispatcher"
 topic: kotlin
-subtopics:
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - coroutines
   - testing
   - test-dispatcher
   - runtest
-status: draft
-difficulty: medium
-moc: moc-kotlin
 date_created: 2025-10-12
 date_updated: 2025-10-12
-related_questions:
-  - q-debugging-coroutines-techniques--kotlin--medium
+moc: moc-kotlin
+related_questions:   - q-debugging-coroutines-techniques--kotlin--medium
   - q-common-coroutine-mistakes--kotlin--medium
   - q-channelflow-callbackflow-flow--kotlin--medium
-tags:
-  - kotlin
-  - coroutines
+slug: test-dispatcher-types-kotlin-medium
+subtopics:   - coroutines
   - testing
   - test-dispatcher
   - runtest
 ---
-
 # StandardTestDispatcher vs UnconfinedTestDispatcher
 
 ## English Version

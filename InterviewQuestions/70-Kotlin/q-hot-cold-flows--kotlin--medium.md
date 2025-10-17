@@ -116,7 +116,7 @@ val hotFlow = MutableSharedFlow<Int>()
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
 - [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
 - [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
-- [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
+- [[q-stateflow-sharedflow-differences--kotlin--medium]] - SharedFlow vs StateFlow
 - [[q-stateflow-sharedflow-differences--kotlin--medium]] - StateFlow & SharedFlow differences
 
 ### Advanced (Harder)

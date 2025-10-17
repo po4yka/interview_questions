@@ -1,30 +1,27 @@
 ---
 id: 20251012-200001
 title: "Sorting Algorithms Comparison / Сравнение алгоритмов сортировки"
-slug: sorting-algorithms-comparison-algorithms-medium
 topic: algorithms
-subtopics:
-  - sorting
-  - quicksort
-  - mergesort
-  - heapsort
-  - time-complexity
-status: draft
 difficulty: medium
-moc: moc-algorithms
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-binary-search--algorithms--easy
-  - q-time-space-complexity--algorithms--easy
-tags:
-  - algorithms
+status: draft
+created: 2025-10-12
+tags: - algorithms
   - sorting
   - quicksort
   - mergesort
   - complexity
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-algorithms
+related_questions:   - q-binary-search--algorithms--easy
+  - q-time-space-complexity--algorithms--easy
+slug: sorting-algorithms-comparison-algorithms-medium
+subtopics:   - sorting
+  - quicksort
+  - mergesort
+  - heapsort
+  - time-complexity
 ---
-
 # Sorting Algorithms Comparison
 
 ## English Version

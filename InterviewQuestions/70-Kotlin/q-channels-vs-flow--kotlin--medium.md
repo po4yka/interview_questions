@@ -144,7 +144,7 @@ fun main() = runBlocking {
 
     launch {
         for (i in 1..5) {
-            println("Sending $i (buffer size: ${channel.})")
+            println("Sending $i")
             channel.send(i)
             println("Sent $i (no suspend for first 3)")
         }
@@ -823,23 +823,17 @@ eventBus.publish(AppEvent.UserLoggedIn(123))
 
 ## Related Questions
 
+### Hub
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+
 ### Prerequisites (Easier)
 - [[q-flow-basics--kotlin--easy]] - Flow
+- [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Coroutines
 
 ### Related (Medium)
 - [[q-catch-operator-flow--kotlin--medium]] - Flow
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
 - [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
-- [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Coroutines
-
-### Advanced (Harder)
-- [[q-select-expression-channels--kotlin--hard]] - Coroutines
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
-### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
-
-### Related (Medium)
 - [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
 - [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
@@ -847,6 +841,9 @@ eventBus.publish(AppEvent.UserLoggedIn(123))
 - [[q-stateflow-sharedflow-differences--kotlin--medium]] - StateFlow & SharedFlow differences
 
 ### Advanced (Harder)
+- [[q-select-expression-channels--kotlin--hard]] - Coroutines
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
 - [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
 - [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
 - [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies

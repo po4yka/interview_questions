@@ -1,7 +1,11 @@
 ---
+id: "20251015082238601"
+title: "How To Create Animations In Android / Как создавать анимации в Android"
 topic: android
-tags:
-  - Drawable Animations
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Drawable Animations
   - MotionLayout
   - Property Animations
   - View Animations
@@ -10,10 +14,7 @@ tags:
   - android/ui
   - animations
   - ui
-difficulty: medium
-status: draft
 ---
-
 # Как в Android можно сделать анимацию?
 
 **English**: How to create animations in Android?

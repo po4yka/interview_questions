@@ -1,17 +1,18 @@
 ---
+id: "20251015082237471"
+title: "View Methods And Their Purpose"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/ui
   - android/view
   - ui
   - ui components
   - view
   - view lifecycle
-difficulty: medium
-status: draft
 ---
-
 # Какие методы есть у view и что каждый из них делает?
 
 **English**: What methods does View have and what does each do?
@@ -431,7 +432,419 @@ override fun onDetachedFromWindow() {
 | requestFocus() | Request keyboard focus |
 
 ## Ответ (RU)
-onMeasure - определяет размер View. onLayout - отвечает за позиционирование View внутри родительского контейнера. onDraw - отвечает за рисование View. invalidate - используется для перерисовывания View. setOnClickListener - устанавливает слушатель нажатия. setVisibility - управляет видимостью View. getWidth и getHeight - возвращают размеры View. setBackgroundColor - устанавливает цвет фона.
+
+Класс **View** в Android предоставляет множество методов для управления внешним видом, поведением и жизненным циклом. Понимание этих методов критически важно для разработки пользовательских представлений и оптимизации UI.
+
+### Методы измерения и макетирования
+
+#### onMeasure()
+
+Определяет требования к размеру для View и его дочерних элементов.
+
+```kotlin
+override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    // Вычислить желаемые размеры
+    val desiredWidth = suggestedMinimumWidth + paddingLeft + paddingRight
+    val desiredHeight = suggestedMinimumHeight + paddingTop + paddingBottom
+
+    // Разрешить размер на основе ограничений
+    val width = resolveSize(desiredWidth, widthMeasureSpec)
+    val height = resolveSize(desiredHeight, heightMeasureSpec)
+
+    // Установить измеренные размеры
+    setMeasuredDimension(width, height)
+}
+```
+
+#### onLayout()
+
+Позиционирует View и его дочерние элементы внутри родительского контейнера.
+
+```kotlin
+override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+    // Позиционировать дочерние представления
+    for (i in 0 until childCount) {
+        val child = getChildAt(i)
+        child.layout(0, 0, child.measuredWidth, child.measuredHeight)
+    }
+}
+```
+
+### Методы рисования
+
+#### onDraw()
+
+Отрисовывает визуальное содержимое View на холсте.
+
+```kotlin
+override fun onDraw(canvas: Canvas) {
+    super.onDraw(canvas)
+
+    // Нарисовать пользовательское содержимое
+    val paint = Paint().apply {
+        color = Color.BLUE
+        style = Paint.Style.FILL
+    }
+
+    canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
+}
+```
+
+#### invalidate()
+
+Запрашивает перерисовку View в UI потоке.
+
+```kotlin
+class CustomView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    var progress: Int = 0
+        set(value) {
+            field = value
+            invalidate() // Вызывает onDraw()
+        }
+}
+```
+
+#### postInvalidate()
+
+Запрашивает перерисовку из фонового потока.
+
+```kotlin
+Thread {
+    // Фоновая работа
+    progress = 50
+
+    // Запросить перерисовку из фонового потока
+    postInvalidate()
+}.start()
+```
+
+### Методы размера и позиции
+
+#### getWidth() и getHeight()
+
+Возвращает текущие размеры View.
+
+```kotlin
+val width = view.width
+val height = view.height
+
+// Примечание: возвращает 0 до завершения layout
+// Используйте post{} чтобы убедиться, что размеры доступны
+view.post {
+    val actualWidth = view.width
+    val actualHeight = view.height
+}
+```
+
+#### getMeasuredWidth() и getMeasuredHeight()
+
+Возвращает размер, определенный в `onMeasure()`.
+
+```kotlin
+override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+    val measuredW = measuredWidth
+    val measuredH = measuredHeight
+}
+```
+
+### Методы видимости
+
+#### setVisibility()
+
+Управляет состоянием видимости View.
+
+```kotlin
+// Сделать представление невидимым, но сохранить его пространство
+view.visibility = View.INVISIBLE
+
+// Скрыть представление и удалить из макета
+view.visibility = View.GONE
+
+// Показать представление
+view.visibility = View.VISIBLE
+
+// Переключить видимость
+view.visibility = if (view.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+```
+
+#### isShown()
+
+Проверяет, видимы ли View и все его предки.
+
+```kotlin
+if (view.isShown) {
+    // View фактически видим на экране
+}
+```
+
+### Фон и внешний вид
+
+#### setBackgroundColor()
+
+Устанавливает цвет фона View.
+
+```kotlin
+view.setBackgroundColor(Color.RED)
+view.setBackgroundColor(ContextCompat.getColor(context, R.color.primary))
+
+// С альфа-каналом
+view.setBackgroundColor(Color.argb(128, 255, 0, 0))
+```
+
+#### setBackground()
+
+Устанавливает drawable в качестве фона.
+
+```kotlin
+view.background = ContextCompat.getDrawable(context, R.drawable.background)
+
+// Удалить фон
+view.background = null
+```
+
+#### setAlpha()
+
+Устанавливает прозрачность View (0.0f = прозрачный, 1.0f = непрозрачный).
+
+```kotlin
+view.alpha = 0.5f // 50% прозрачность
+```
+
+### Методы взаимодействия
+
+#### setOnClickListener()
+
+Устанавливает обработчик события клика.
+
+```kotlin
+view.setOnClickListener {
+    // Обработать клик
+    Toast.makeText(context, "Clicked!", Toast.LENGTH_SHORT).show()
+}
+
+// Удалить обработчик
+view.setOnClickListener(null)
+```
+
+#### setOnLongClickListener()
+
+Устанавливает обработчик длительного нажатия.
+
+```kotlin
+view.setOnLongClickListener {
+    // Обработать длительное нажатие
+    true // Вернуть true если обработано
+}
+```
+
+#### setOnTouchListener()
+
+Устанавливает обработчик события касания.
+
+```kotlin
+view.setOnTouchListener { v, event ->
+    when (event.action) {
+        MotionEvent.ACTION_DOWN -> {
+            // Касание началось
+            true
+        }
+        MotionEvent.ACTION_MOVE -> {
+            // Касание переместилось
+            true
+        }
+        MotionEvent.ACTION_UP -> {
+            // Касание завершилось
+            true
+        }
+        else -> false
+    }
+}
+```
+
+### Методы фокуса
+
+#### requestFocus()
+
+Запрашивает фокус клавиатуры для View.
+
+```kotlin
+editText.requestFocus()
+
+// Показать клавиатуру
+val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+```
+
+#### clearFocus()
+
+Удаляет фокус с View.
+
+```kotlin
+editText.clearFocus()
+```
+
+### Методы анимации
+
+#### animate()
+
+Возвращает ViewPropertyAnimator для анимации свойств.
+
+```kotlin
+view.animate()
+    .alpha(0f)
+    .translationY(100f)
+    .scaleX(1.5f)
+    .setDuration(500)
+    .start()
+```
+
+#### setTranslationX/Y/Z()
+
+Устанавливает смещение View в 3D пространстве.
+
+```kotlin
+view.translationX = 100f
+view.translationY = 200f
+view.translationZ = 10f
+```
+
+#### setRotation/RotationX/RotationY()
+
+Устанавливает поворот View.
+
+```kotlin
+view.rotation = 45f // Повернуть на 45 градусов
+view.rotationX = 30f // Повернуть вокруг оси X
+view.rotationY = 30f // Повернуть вокруг оси Y
+```
+
+#### setScaleX/ScaleY()
+
+Устанавливает масштаб View.
+
+```kotlin
+view.scaleX = 1.5f // Масштаб до 150% по горизонтали
+view.scaleY = 1.5f // Масштаб до 150% по вертикали
+```
+
+### Управление состоянием
+
+#### setEnabled()
+
+Включает или отключает View.
+
+```kotlin
+button.isEnabled = false // Отключить
+button.isEnabled = true  // Включить
+```
+
+#### setClickable()
+
+Управляет реагированием View на клики.
+
+```kotlin
+view.isClickable = true
+view.isLongClickable = true
+```
+
+#### setSelected()
+
+Устанавливает состояние выбора View.
+
+```kotlin
+view.isSelected = true
+```
+
+#### setPressed()
+
+Устанавливает состояние нажатия View.
+
+```kotlin
+view.isPressed = true
+```
+
+### Отступы и поля
+
+#### setPadding()
+
+Устанавливает внутренние отступы.
+
+```kotlin
+view.setPadding(16, 16, 16, 16) // left, top, right, bottom
+
+// Отдельные стороны
+view.setPaddingRelative(16, 16, 16, 16) // start, top, end, bottom
+```
+
+#### setLayoutParams()
+
+Устанавливает параметры макета, включая поля.
+
+```kotlin
+val params = view.layoutParams as ViewGroup.MarginLayoutParams
+params.setMargins(16, 16, 16, 16)
+view.layoutParams = params
+```
+
+### Методы тегов
+
+#### setTag() / getTag()
+
+Сохраняет произвольные данные с View.
+
+```kotlin
+view.tag = userData
+val userData = view.tag as? UserData
+
+// С ключом
+view.setTag(R.id.user_data, userData)
+val data = view.getTag(R.id.user_data) as? UserData
+```
+
+### Методы жизненного цикла
+
+#### onAttachedToWindow()
+
+Вызывается когда View присоединен к окну.
+
+```kotlin
+override fun onAttachedToWindow() {
+    super.onAttachedToWindow()
+    // Запустить анимации или зарегистрировать слушателей
+}
+```
+
+#### onDetachedFromWindow()
+
+Вызывается когда View отсоединен от окна.
+
+```kotlin
+override fun onDetachedFromWindow() {
+    super.onDetachedFromWindow()
+    // Остановить анимации, отменить регистрацию слушателей
+}
+```
+
+### Резюме ключевых методов
+
+| Метод | Назначение |
+|--------|---------|
+| onMeasure() | Определить требования к размеру |
+| onLayout() | Позиционировать дочерние представления |
+| onDraw() | Нарисовать визуальное содержимое |
+| invalidate() | Запросить перерисовку |
+| getWidth/Height() | Получить текущие размеры |
+| setVisibility() | Управлять видимостью |
+| setOnClickListener() | Обрабатывать клики |
+| setBackgroundColor() | Установить цвет фона |
+| animate() | Создать анимации |
+| requestFocus() | Запросить фокус клавиатуры |
 
 
 ---

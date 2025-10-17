@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237103"
+title: "Where To Call Suspend Functions"
+topic: computer-science
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Where to Call Suspend Functions?
 
 # Question (EN)

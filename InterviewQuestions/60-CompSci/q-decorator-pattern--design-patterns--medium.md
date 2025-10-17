@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237111"
+title: "Decorator Pattern / Decorator Паттерн"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - structural-patterns
   - decorator
   - gof-patterns
   - wrapper
-difficulty: medium
-status: draft
 ---
-
 # Decorator Pattern
 
 # Question (EN)

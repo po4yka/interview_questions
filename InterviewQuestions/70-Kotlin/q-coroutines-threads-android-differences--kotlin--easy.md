@@ -2,26 +2,24 @@
 id: 20251006-coroutines-threads-android
 title: Coroutines vs Threads on Android / Корутины vs Потоки на Android
 topic: kotlin
-subtopics:
-  - coroutines
-  - threads
-  - performance
-  - android
 difficulty: easy
-language_tags:
-  - en
-  - ru
-original_language: en
 status: draft
-source: Kotlin Coroutines Interview Questions PDF
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - threads
   - performance
   - android
   - comparison
   - difficulty/easy
+language_tags:   - en
+  - ru
+original_language: en
+source: Kotlin Coroutines Interview Questions PDF
+subtopics:   - coroutines
+  - threads
+  - performance
+  - android
 ---
 # Question (EN)
 > What are the key differences between coroutines and threads in Android development?
@@ -490,6 +488,107 @@ fun loadData() {
 - Поток: ~1-2 МБ каждый → 1000 потоков = ~1-2 ГБ
 - Корутина: ~байты каждая → 1,000,000 корутин = ~несколько МБ
 
+### Android-специфические преимущества
+
+**1. Безопасность Main потока**:
+```kotlin
+// Корутины делают легким сохранение main-safe
+lifecycleScope.launch {
+    val data = withContext(Dispatchers.IO) { loadData() }
+    updateUI(data) // Безопасно - обратно на main потоке
+}
+```
+
+**2. Интеграция с жизненным циклом**:
+```kotlin
+// Автоматическая отмена с жизненным циклом
+viewModelScope.launch { ... } // Отменяется в onCleared()
+lifecycleScope.launch { ... } // Отменяется когда жизненный цикл уничтожен
+```
+
+**3. Структурированная конкурентность**:
+```kotlin
+// Отношение родитель-потомок предотвращает утечки
+lifecycleScope.launch {
+    val job1 = launch { work1() }
+    val job2 = launch { work2() }
+    // Оба отменяются если родитель отменен
+}
+```
+
+### Сравнение кода: Реальный пример
+
+**Версия с потоками**:
+```kotlin
+// - СЛОЖНО: Сетевой вызов на потоках
+class UserRepository {
+    fun getUser(callback: (User?) -> Unit) {
+        Thread {
+            try {
+                val response = api.getUser()
+                val user = parseUser(response)
+
+                Handler(Looper.getMainLooper()).post {
+                    callback(user)
+                }
+            } catch (e: Exception) {
+                Handler(Looper.getMainLooper()).post {
+                    callback(null)
+                }
+            }
+        }.start()
+    }
+}
+
+// Использование
+repository.getUser { user ->
+    if (user != null) {
+        updateUI(user)
+    }
+}
+```
+
+**Версия с корутинами**:
+```kotlin
+// - ПРОСТО: Сетевой вызов на корутинах
+class UserRepository {
+    suspend fun getUser(): User? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = api.getUser()
+                parseUser(response)
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+}
+
+// Использование
+lifecycleScope.launch {
+    val user = repository.getUser()
+    if (user != null) {
+        updateUI(user)
+    }
+}
+```
+
+### Когда использовать каждый
+
+**Используйте Потоки Когда**:
+- WARNING: Работа с Java библиотеками, которые требуют потоки
+- WARNING: Долгие блокирующие операции (редко - используйте WorkManager вместо этого)
+- WARNING: Низкоуровневое системное программирование
+
+**Используйте Корутины Когда** (Почти Всегда на Android):
+- - Сетевые вызовы
+- - Операции с базой данных
+- - Файловый I/O
+- - Обработка изображений
+- - Любая async работа в Android приложении
+- - Обновления UI с фоновой работой
+- - Сложные конкурентные операции
+
 ### Резюме
 
 **Потоки**:
@@ -509,6 +608,330 @@ fun loadData() {
 - - Автоматическое управление жизненным циклом
 - - Чистое переключение диспетчеров
 - - Низкое использование памяти
+
+### Переключение контекста: Стоимость
+
+**Потоки - Дорогое переключение**:
+```kotlin
+// Переключение контекста включает:
+// 1. Сохранение состояния потока (регистры, указатель стека)
+// 2. Переключение в режим ядра
+// 3. Планирование следующего потока
+// 4. Восстановление состояния потока
+// Время: ~1-10 микросекунд на переключение
+
+Thread {
+    // Работа в фоновом потоке
+    val data = loadData()
+
+    runOnUiThread {
+        // Дорогое переключение контекста на main поток
+        updateUI(data)
+    }
+}.start()
+```
+
+**Корутины - Дешевое переключение**:
+```kotlin
+// Переключение контекста это просто вызов функции
+// Нет вовлечения ядра
+// Время: ~наносекунды
+
+lifecycleScope.launch {
+    // Работа на background диспетчере
+    val data = withContext(Dispatchers.IO) {
+        loadData()
+    }
+
+    // Дешевое переключение на main диспетчер
+    updateUI(data) // runOnUiThread не нужен!
+}
+```
+
+### Безопасность Main потока
+
+**Потоки - Ручное переключение**:
+```kotlin
+// - МНОГОСЛОВНО: Ручное управление потоками
+class UserViewModel {
+    fun loadUser() {
+        Thread {
+            // Фоновый поток
+            val user = repository.getUser()
+
+            // Нужно вручную переключиться на main поток
+            Handler(Looper.getMainLooper()).post {
+                _userData.value = user
+            }
+
+            // Или
+            runOnUiThread {
+                _userData.value = user
+            }
+        }.start()
+    }
+}
+```
+
+**Корутины - Автоматическое переключение**:
+```kotlin
+// - ЧИСТО: Автоматическая обработка диспетчером
+class UserViewModel : ViewModel() {
+    fun loadUser() {
+        viewModelScope.launch {
+            // IO работа на background диспетчере
+            val user = withContext(Dispatchers.IO) {
+                repository.getUser()
+            }
+
+            // Автоматически переключается обратно на main диспетчер
+            _userData.value = user // Безопасно на main потоке!
+        }
+    }
+}
+```
+
+### Отмена
+
+**Потоки - Сложно отменить**:
+```kotlin
+// - ОПАСНО: Прерывание потока рискованно
+class DataLoader {
+    private var thread: Thread? = null
+
+    fun loadData() {
+        thread = Thread {
+            try {
+                while (!Thread.currentThread().isInterrupted) {
+                    // Работа
+                    val data = fetchData()
+
+                    // Проверить прерывание вручную
+                    if (Thread.interrupted()) break
+                }
+            } catch (e: InterruptedException) {
+                // Обработать прерывание
+            }
+        }
+        thread?.start()
+    }
+
+    fun cancel() {
+        thread?.interrupt() // Небезопасно - может повредить состояние!
+    }
+}
+```
+
+**Корутины - Легко отменить**:
+```kotlin
+// - БЕЗОПАСНО: Кооперативная отмена
+class DataLoader {
+    private var job: Job? = null
+
+    fun loadData() {
+        job = lifecycleScope.launch {
+            while (isActive) { // Встроенная проверка отмены
+                val data = fetchData()
+                updateUI(data)
+            }
+        }
+    }
+
+    fun cancel() {
+        job?.cancel() // Безопасная, предсказуемая отмена
+    }
+}
+```
+
+### Управление жизненным циклом
+
+**Потоки - Ручное управление**:
+```kotlin
+// - РИСК УТЕЧКИ: Нужно вручную отслеживать и отменять потоки
+class MyActivity : AppCompatActivity() {
+    private val activeThreads = mutableListOf<Thread>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val thread = Thread {
+            // Долгая работа
+            repeat(1000) {
+                Thread.sleep(1000)
+                // Если Activity уничтожена, это продолжает работать!
+            }
+        }
+        activeThreads.add(thread)
+        thread.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Нужно вручную отменить все потоки
+        activeThreads.forEach { it.interrupt() }
+        activeThreads.clear()
+    }
+}
+```
+
+**Корутины - Автоматическое управление**:
+```kotlin
+// - БЕЗ УТЕЧЕК: Автоматическое управление жизненным циклом
+class MyActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            // Долгая работа
+            repeat(1000) {
+                delay(1000)
+                // Автоматически отменяется когда Activity уничтожена!
+            }
+        }
+    }
+
+    // onDestroy не нужен - автоматическая очистка!
+}
+```
+
+### Сравнение производительности
+
+**Бенчмарк: 10,000 конкурентных задач**
+
+```kotlin
+// Потоки - Крэш или серьезное замедление
+fun threadBenchmark() {
+    val startTime = System.currentTimeMillis()
+
+    repeat(10000) {
+        Thread {
+            Thread.sleep(1000)
+            println("Done")
+        }.start()
+    }
+    // Результат: OutOfMemoryError или экстремальное замедление
+}
+
+// Корутины - Без проблем
+suspend fun coroutineBenchmark() {
+    val startTime = System.currentTimeMillis()
+
+    coroutineScope {
+        repeat(10000) {
+            launch {
+                delay(1000)
+                println("Done")
+            }
+        }
+    }
+    // Результат: ~1 секунда, минимальное использование памяти
+}
+```
+
+**Результаты**:
+- Потоки: Крэш с OutOfMemoryError (слишком много потоков)
+- Корутины: Завершаются успешно за ~1 секунду
+
+### Преимущества специфичные для Android
+
+**1. Безопасность Main потока**:
+```kotlin
+// Корутины делают легким сохранение main-safe
+lifecycleScope.launch {
+    val data = withContext(Dispatchers.IO) { loadData() }
+    updateUI(data) // Безопасно - обратно на main потоке
+}
+```
+
+**2. Интеграция с жизненным циклом**:
+```kotlin
+// Автоматическая отмена с жизненным циклом
+viewModelScope.launch { ... } // Отменяется в onCleared()
+lifecycleScope.launch { ... } // Отменяется когда жизненный цикл уничтожен
+```
+
+**3. Структурированная конкурентность**:
+```kotlin
+// Отношение родитель-потомок предотвращает утечки
+lifecycleScope.launch {
+    val job1 = launch { work1() }
+    val job2 = launch { work2() }
+    // Оба отменяются если родитель отменен
+}
+```
+
+### Сравнение кода: Реальный пример
+
+**Версия с потоками**:
+```kotlin
+// - СЛОЖНО: Сетевой вызов на потоках
+class UserRepository {
+    fun getUser(callback: (User?) -> Unit) {
+        Thread {
+            try {
+                val response = api.getUser()
+                val user = parseUser(response)
+
+                Handler(Looper.getMainLooper()).post {
+                    callback(user)
+                }
+            } catch (e: Exception) {
+                Handler(Looper.getMainLooper()).post {
+                    callback(null)
+                }
+            }
+        }.start()
+    }
+}
+
+// Использование
+repository.getUser { user ->
+    if (user != null) {
+        updateUI(user)
+    }
+}
+```
+
+**Версия с корутинами**:
+```kotlin
+// - ПРОСТО: Сетевой вызов на корутинах
+class UserRepository {
+    suspend fun getUser(): User? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = api.getUser()
+                parseUser(response)
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+}
+
+// Использование
+lifecycleScope.launch {
+    val user = repository.getUser()
+    if (user != null) {
+        updateUI(user)
+    }
+}
+```
+
+### Когда использовать каждый
+
+**Используйте Потоки Когда**:
+- WARNING: Работа с Java библиотеками, которые требуют потоки
+- WARNING: Долгие блокирующие операции (редко - используйте WorkManager вместо этого)
+- WARNING: Низкоуровневое системное программирование
+
+**Используйте Корутины Когда** (Почти Всегда на Android):
+- - Сетевые вызовы
+- - Операции с базой данных
+- - Файловый I/O
+- - Обработка изображений
+- - Любая async работа в Android приложении
+- - Обновления UI с фоновой работой
+- - Сложные конкурентные операции
 
 **Ключевой Вывод**: На Android **всегда предпочитайте корутины потокам** для асинхронных операций. Корутины легче, безопаснее и бесшовно интегрируются с компонентами жизненного цикла Android.
 

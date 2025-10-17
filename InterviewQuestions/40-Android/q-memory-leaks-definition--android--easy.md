@@ -1,20 +1,21 @@
 ---
+id: "20251015082237442"
+title: "Memory Leaks Definition / Определение утечек памяти"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-13
+tags: - android
   - android/memory-management
   - garbage-collection
   - memory-leaks
   - memory-management
   - performance
-difficulty: easy
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Что такое утечки памяти?
 
 **English**: What are memory leaks?

@@ -1,7 +1,11 @@
 ---
+id: "20251015082238652"
+title: "Fast Chat Rendering / Быстрый рендеринг чата"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android/performance
   - android/recyclerview
   - chat
@@ -12,10 +16,7 @@ tags:
   - performance
   - recyclerview
   - room
-difficulty: hard
-status: draft
 ---
-
 # Как можно гарантировать быструю отрисовку чатов?
 
 **English**: How can you guarantee fast chat rendering?

@@ -1,34 +1,40 @@
 ---
 id: 20251012-400009
-title: "Kotlin Context Receivers / Context Receivers в Kotlin"
-slug: kotlin-context-receivers-kotlin-hard
+title: "Kotlin Context Receivers"
 topic: android
-subtopics:
-  - kotlin
-  - context-receivers
-  - advanced-features
-  - dsl
-  - api-design
-status: draft
 difficulty: hard
-moc: moc-android
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-kotlin-dsl-builders--kotlin--hard
-  - q-sealed-classes-state-management--kotlin--medium
-  - q-kotlin-coroutines-advanced--kotlin--hard
-tags:
-  - kotlin
+status: draft
+created: 2025-10-12
+tags: - kotlin
   - context-receivers
   - experimental
   - dsl
   - api-design
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-android
+related_questions:   - q-kotlin-dsl-builders--kotlin--hard
+  - q-sealed-classes-state-management--kotlin--medium
+  - q-kotlin-coroutines-advanced--kotlin--hard
+slug: kotlin-context-receivers-kotlin-hard
+subtopics:   - kotlin
+  - context-receivers
+  - advanced-features
+  - dsl
+  - api-design
 ---
 
-# Kotlin Context Receivers
+# Question (EN)
 
-## English Version
+> What are Kotlin context receivers? How do they differ from extension functions, and when should you use them in Android?
+
+# Вопрос (RU)
+
+> Что такое context receivers в Kotlin? Чем они отличаются от extension-функций и когда их стоит применять в Android?
+
+---
+
+## Answer (EN)
 
 ### Problem Statement
 
@@ -43,6 +49,7 @@ Context receivers are an experimental Kotlin feature that allows declaring conte
 ### CONTEXT RECEIVERS BASICS
 
 **Enable in build.gradle:**
+
 ```kotlin
 compilerOptions {
     freeCompilerArgs.add("-Xcontext-receivers")
@@ -50,6 +57,7 @@ compilerOptions {
 ```
 
 **Basic syntax:**
+
 ```kotlin
 // Traditional extension function
 fun Context.showToast(message: String) {
@@ -69,6 +77,7 @@ fun Activity.someMethod() {
 ```
 
 **Key differences:**
+
 ```
 Extension function:
  Single receiver
@@ -827,9 +836,11 @@ Context receivers - экспериментальная возможность Ko
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
-- [[q-context-types-android--android--medium]] - Fundamentals
-- [[q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]] - Broadcast
+
+-   [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
+-   [[q-context-types-android--android--medium]] - Fundamentals
+-   [[q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]] - Broadcast
 
 ### Related (Hard)
-- [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Fundamentals
+
+-   [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Fundamentals

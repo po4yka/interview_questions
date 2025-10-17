@@ -2,26 +2,24 @@
 id: 20251006-coroutine-resource-cleanup
 title: Resource Cleanup in Coroutines / Очистка Ресурсов в Корутинах
 topic: kotlin
-subtopics:
-  - coroutines
-  - resource-management
-  - cancellation
-  - cleanup
 difficulty: medium
-language_tags:
-  - en
-  - ru
-original_language: en
 status: draft
-source: Kotlin Coroutines Interview Questions PDF
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - resource-cleanup
   - try-finally
   - noncancellable
   - cancellation
   - difficulty/medium
+language_tags:   - en
+  - ru
+original_language: en
+source: Kotlin Coroutines Interview Questions PDF
+subtopics:   - coroutines
+  - resource-management
+  - cancellation
+  - cleanup
 ---
 # Question (EN)
 > How do you ensure proper resource cleanup when a coroutine is cancelled?

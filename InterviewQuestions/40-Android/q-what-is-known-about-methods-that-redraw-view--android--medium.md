@@ -1,15 +1,17 @@
 ---
+id: "20251015082237267"
+title: "What Is Known About Methods That Redraw View / Что известно о методах перерисовывающих View"
 topic: android
-tags:
-  - invalidate
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - invalidate
   - requestLayout
   - postInvalidate
   - android
   - ui
   - views
   - rendering
-difficulty: medium
-status: draft
 ---
 
 # What is known about methods that redraw View?
@@ -19,6 +21,7 @@ status: draft
 Что известно про методы, которые перерисовывают View?
 
 ## Answer (EN)
+
 Android provides several methods to trigger View redrawing and layout recalculation. Understanding when and how to use each method is crucial for efficient UI updates.
 
 ### 1. invalidate()
@@ -47,11 +50,12 @@ class CustomView @JvmOverloads constructor(
 ```
 
 #### When to use invalidate():
-- Color changes
-- Text updates
-- Drawing state changes
-- Visibility changes in custom drawing
-- Animation frames
+
+-   Color changes
+-   Text updates
+-   Drawing state changes
+-   Visibility changes in custom drawing
+-   Animation frames
 
 ```kotlin
 class AnimatedView : View {
@@ -110,11 +114,12 @@ class ExpandableView @JvmOverloads constructor(
 ```
 
 #### When to use requestLayout():
-- Size changes
-- Margin/padding changes
-- LayoutParams changes
-- Adding/removing children
-- Orientation changes
+
+-   Size changes
+-   Margin/padding changes
+-   LayoutParams changes
+-   Adding/removing children
+-   Orientation changes
 
 ```kotlin
 class DynamicSizeView : View {
@@ -203,6 +208,7 @@ class ComparisonExample : View {
 ### 4. Additional Redraw Methods
 
 #### forceLayout()
+
 Forces layout pass without immediate redraw:
 
 ```kotlin
@@ -214,6 +220,7 @@ fun forceLayoutExample() {
 ```
 
 #### invalidateDrawable()
+
 Invalidates a specific Drawable:
 
 ```kotlin
@@ -334,36 +341,120 @@ fun safeInvalidate() {
 
 ### Summary Table
 
-| Method | Thread | Calls | Use Case |
-|--------|--------|-------|----------|
-| `invalidate()` | UI thread | `onDraw()` | Visual changes only |
-| `requestLayout()` | UI thread | `onMeasure()`, `onLayout()` | Size/position changes |
-| `postInvalidate()` | Any thread | `onDraw()` (on UI thread) | Visual changes from background |
-| `forceLayout()` | UI thread | Marks for layout | Force layout recalculation |
+| Method             | Thread     | Calls                       | Use Case                       |
+| ------------------ | ---------- | --------------------------- | ------------------------------ |
+| `invalidate()`     | UI thread  | `onDraw()`                  | Visual changes only            |
+| `requestLayout()`  | UI thread  | `onMeasure()`, `onLayout()` | Size/position changes          |
+| `postInvalidate()` | Any thread | `onDraw()` (on UI thread)   | Visual changes from background |
+| `forceLayout()`    | UI thread  | Marks for layout            | Force layout recalculation     |
 
 ## Ответ (RU)
 
-invalidate() — помечает View на перерисовку (вызов onDraw). requestLayout() — вызывает перерасчёт размеров и размещения (onMeasure, onLayout). postInvalidate() — отложенная перерисовка из не-UI потока.
+Android предоставляет несколько методов для запуска перерисовки View и пересчёта layout. Понимание когда и как использовать каждый метод критично для эффективных обновлений UI.
+
+**Основные методы перерисовки:**
+
+### 1. invalidate()
+
+Помечает View для перерисовки вызовом `onDraw()`. Используйте когда визуальный вид меняется, но размер остаётся прежним.
+
+**Когда использовать**:
+- Изменения цвета, текста
+- Изменения состояния рисования
+- Кадры анимации
+
+**Характеристики**:
+- Вызывается только из UI потока
+- Вызывает `onDraw()`
+- Не вызывает `onMeasure()` или `onLayout()`
+
+### 2. requestLayout()
+
+Запускает пересчёт размеров и позиционирования вызовом `onMeasure()` и `onLayout()`. Используйте когда размеры View меняются.
+
+**Когда использовать**:
+- Изменения размера
+- Изменения margin/padding
+- Изменения LayoutParams
+- Добавление/удаление детей
+
+**Характеристики**:
+- Вызывается только из UI потока
+- Вызывает `onMeasure()` и `onLayout()`
+- Может также вызвать `onDraw()`
+
+### 3. postInvalidate()
+
+Отложенная перерисовка из не-UI потока. Потокобезопасная версия `invalidate()`.
+
+**Когда использовать**:
+- Обновления из фоновых потоков
+- Когда не можете гарантировать выполнение на UI потоке
+
+**Характеристики**:
+- Можно вызывать из любого потока
+- Отправляет вызов `invalidate()` в UI поток
+- Асинхронный
+
+### 4. forceLayout()
+
+Принудительно помечает View для пересчёта layout без немедленной перерисовки.
+
+**Когда использовать**:
+- Когда нужно пометить для layout, но не запускать его сразу
+- Обычно используется вместе с `requestLayout()`
+
+### Таблица Сравнения
+
+| Метод | Поток | Вызывает | Случай Использования |
+|--------|--------|-------|----------|
+| `invalidate()` | UI поток | `onDraw()` | Только визуальные изменения |
+| `requestLayout()` | UI поток | `onMeasure()`, `onLayout()` | Изменения размера/позиции |
+| `postInvalidate()` | Любой поток | `onDraw()` (на UI потоке) | Визуальные изменения из фона |
+| `forceLayout()` | UI поток | Помечает для layout | Принудительный пересчёт layout |
+
+### Лучшие Практики
+
+1. **Используйте invalidate()** для только визуальных изменений
+2. **Используйте requestLayout()** когда размер/позиция меняются
+3. **Используйте postInvalidate()** из фоновых потоков
+4. **Группируйте обновления** чтобы избежать множественных перерисовок
+5. **Избегайте вызовов в циклах** - эти методы дорогие
+6. **Проверяйте прикрепление** перед вызовом
+
+### Пример: Правильное Использование
+
+```kotlin
+class CustomView : View {
+    private var color = Color.RED
+    private var size = 100
+
+    // Только визуальное изменение - invalidate()
+    fun changeColor(newColor: Int) {
+        color = newColor
+        invalidate()
+    }
+
+    // Изменение размера - requestLayout() + invalidate()
+    fun changeSize(newSize: Int) {
+        size = newSize
+        requestLayout()
+        invalidate()
+    }
+
+    // Обновление из фонового потока - postInvalidate()
+    fun updateFromBackground() {
+        Thread {
+            // Фоновая работа
+            processData()
+
+            // Безопасно вызывать из любого потока
+            postInvalidate()
+        }.start()
+    }
+}
+```
 
 ---
 
 ## Related Questions
-
-### Prerequisites (Easier)
-- [[q-what-is-known-about-recyclerview--android--easy]] - what is known about
-
-### Related (Medium)
-- [[q-what-methods-redraw-views--android--medium]] - what methods redraw views 
-- [[q-what-is-known-about-view-lifecycles--android--medium]] - what is known about
-### Prerequisites (Easier)
-- [[q-what-is-known-about-recyclerview--android--easy]] - what is known about
-
-### Related (Medium)
-- [[q-what-methods-redraw-views--android--medium]] - what methods redraw views 
-- [[q-what-is-known-about-view-lifecycles--android--medium]] - what is known about
-### Prerequisites (Easier)
-- [[q-what-is-known-about-recyclerview--android--easy]] - what is known about
-
-### Related (Medium)
-- [[q-what-methods-redraw-views--android--medium]] - what methods redraw views 
-- [[q-what-is-known-about-view-lifecycles--android--medium]] - what is known about

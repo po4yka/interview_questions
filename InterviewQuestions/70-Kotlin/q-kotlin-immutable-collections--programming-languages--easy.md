@@ -1,14 +1,15 @@
 ---
+id: "20251015082237071"
+title: "Kotlin Immutable Collections / Неизменяемые коллекции Kotlin"
 topic: kotlin
-tags:
-  - collections
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - collections
   - immutability
   - kotlin
   - programming-languages
-difficulty: easy
-status: draft
 ---
-
 # Какой механизм позволяет создавать иммутабельные коллекции в Kotlin?
 
 **English**: What mechanism allows creating immutable collections in Kotlin?

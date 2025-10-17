@@ -1,23 +1,30 @@
 ---
-tags:
-  - android
+id: "20251015082237298"
+title: "Hilt Assisted Injection"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-11
+tags: - android
   - dependency-injection
   - hilt
   - dagger
   - assisted-inject
-difficulty: medium
-status: draft
-related:
-  - q-hilt-entry-points--di--medium
+related:   - q-hilt-entry-points--di--medium
   - q-dagger-multibinding--di--hard
   - q-hilt-viewmodel-injection--jetpack--medium
-created: 2025-10-11
 ---
 
 # Question (EN)
-What is Assisted Injection in Hilt/Dagger? When and why would you use `@AssistedInject` and `@AssistedFactory`? Provide real-world examples.
+
+> What is Assisted Injection in Hilt/Dagger? When and why would you use `@AssistedInject` and `@AssistedFactory`? Provide real-world examples.
+
+# Вопрос (RU)
+
+> Что такое Assisted Injection в Hilt/Dagger? Когда и зачем использовать `@AssistedInject` и `@AssistedFactory`? Приведите примеры из практики.
 
 ## Answer (EN)
+
 ### Overview
 
 **Assisted Injection** is a Dagger/Hilt feature that allows you to mix dependencies provided by Dagger with runtime parameters that you provide when creating an instance. This is useful when you need to create objects that require both injected dependencies and user-provided data.
@@ -102,6 +109,7 @@ class UserViewModel @Inject constructor(
 ```
 
 **How it works:**
+
 1. Mark the class constructor with `@AssistedInject`
 2. Mark runtime parameters with `@Assisted`
 3. Create a factory interface with `@AssistedFactory`
@@ -673,167 +681,180 @@ fun FileUploadScreen(
 
 ### Assisted Injection vs Alternatives
 
-| Approach | When to Use | Pros | Cons |
-|----------|-------------|------|------|
-| **@AssistedInject** | Mix DI + runtime params | Clean, type-safe, DI benefits | Extra factory interface |
-| **Manual Factory** | Simple cases | No annotation processor | Boilerplate, lose DI benefits |
-| **Provider<T>** | Create multiple instances | Simple | All params must be injectable |
-| **Lazy<T>** | Defer creation | Simple | All params must be injectable |
-| **@Binds with qualifier** | Multiple implementations | Simple | Params must be known at compile-time |
+| Approach                  | When to Use               | Pros                          | Cons                                 |
+| ------------------------- | ------------------------- | ----------------------------- | ------------------------------------ |
+| **@AssistedInject**       | Mix DI + runtime params   | Clean, type-safe, DI benefits | Extra factory interface              |
+| **Manual Factory**        | Simple cases              | No annotation processor       | Boilerplate, lose DI benefits        |
+| **Provider<T>**           | Create multiple instances | Simple                        | All params must be injectable        |
+| **Lazy<T>**               | Defer creation            | Simple                        | All params must be injectable        |
+| **@Binds with qualifier** | Multiple implementations  | Simple                        | Params must be known at compile-time |
 
 ### Best Practices
 
 1. **Use @AssistedInject for Runtime Parameters**
-   ```kotlin
-   //  GOOD - Runtime data via @Assisted
-   class UserRepository @AssistedInject constructor(
-       private val api: ApiService,
-       @Assisted private val userId: String
-   )
 
-   //  BAD - Trying to inject runtime data
-   class UserRepository @Inject constructor(
-       private val api: ApiService,
-       private val userId: String // Won't compile!
-   )
-   ```
+    ```kotlin
+    //  GOOD - Runtime data via @Assisted
+    class UserRepository @AssistedInject constructor(
+        private val api: ApiService,
+        @Assisted private val userId: String
+    )
+
+    //  BAD - Trying to inject runtime data
+    class UserRepository @Inject constructor(
+        private val api: ApiService,
+        private val userId: String // Won't compile!
+    )
+    ```
 
 2. **Name Same-Type Parameters**
-   ```kotlin
-   //  GOOD - Named for clarity
-   @AssistedInject constructor(
-       @Assisted("startDate") private val startDate: Long,
-       @Assisted("endDate") private val endDate: Long
-   )
 
-   //  BAD - Ambiguous
-   @AssistedInject constructor(
-       @Assisted private val startDate: Long,
-       @Assisted private val endDate: Long // Which is which?
-   )
-   ```
+    ```kotlin
+    //  GOOD - Named for clarity
+    @AssistedInject constructor(
+        @Assisted("startDate") private val startDate: Long,
+        @Assisted("endDate") private val endDate: Long
+    )
+
+    //  BAD - Ambiguous
+    @AssistedInject constructor(
+        @Assisted private val startDate: Long,
+        @Assisted private val endDate: Long // Which is which?
+    )
+    ```
 
 3. **Keep Assisted Parameters Minimal**
-   ```kotlin
-   //  GOOD - Minimal runtime params
-   class OrderProcessor @AssistedInject constructor(
-       private val api: ApiService,
-       @Assisted private val orderId: String
-   )
 
-   //  BAD - Too many runtime params suggests wrong abstraction
-   class OrderProcessor @AssistedInject constructor(
-       private val api: ApiService,
-       @Assisted private val orderId: String,
-       @Assisted private val userId: String,
-       @Assisted private val items: List<Item>,
-       @Assisted private val address: Address,
-       @Assisted private val payment: PaymentInfo // Too many!
-   )
-   ```
+    ```kotlin
+    //  GOOD - Minimal runtime params
+    class OrderProcessor @AssistedInject constructor(
+        private val api: ApiService,
+        @Assisted private val orderId: String
+    )
+
+    //  BAD - Too many runtime params suggests wrong abstraction
+    class OrderProcessor @AssistedInject constructor(
+        private val api: ApiService,
+        @Assisted private val orderId: String,
+        @Assisted private val userId: String,
+        @Assisted private val items: List<Item>,
+        @Assisted private val address: Address,
+        @Assisted private val payment: PaymentInfo // Too many!
+    )
+    ```
 
 4. **Don't Confuse with @AssistedFactory vs Factory Pattern**
-   ```kotlin
-   //  GOOD - @AssistedFactory for DI + runtime params
-   @AssistedFactory
-   interface UserRepoFactory {
-       fun create(userId: String): UserRepository
-   }
 
-   //  BAD - Manual factory loses DI benefits
-   interface UserRepoFactory {
-       fun create(userId: String): UserRepository
-   }
-   class UserRepoFactoryImpl(
-       private val api: ApiService // Have to inject factory instead
-   ) : UserRepoFactory {
-       override fun create(userId: String) = UserRepository(api, userId)
-   }
-   ```
+    ```kotlin
+    //  GOOD - @AssistedFactory for DI + runtime params
+    @AssistedFactory
+    interface UserRepoFactory {
+        fun create(userId: String): UserRepository
+    }
+
+    //  BAD - Manual factory loses DI benefits
+    interface UserRepoFactory {
+        fun create(userId: String): UserRepository
+    }
+    class UserRepoFactoryImpl(
+        private val api: ApiService // Have to inject factory instead
+    ) : UserRepoFactory {
+        override fun create(userId: String) = UserRepository(api, userId)
+    }
+    ```
 
 5. **Testing with Assisted Injection**
-   ```kotlin
-   //  GOOD - Test with fake factory
-   @Test
-   fun testUserRepository() {
-       val fakeApi = FakeApiService()
-       val fakeFactory = object : UserRepositoryFactory {
-           override fun create(userId: String) = UserRepository(fakeApi, userId)
-       }
 
-       val repo = fakeFactory.create("user123")
-       // Test repo...
-   }
-   ```
+    ```kotlin
+    //  GOOD - Test with fake factory
+    @Test
+    fun testUserRepository() {
+        val fakeApi = FakeApiService()
+        val fakeFactory = object : UserRepositoryFactory {
+            override fun create(userId: String) = UserRepository(fakeApi, userId)
+        }
+
+        val repo = fakeFactory.create("user123")
+        // Test repo...
+    }
+    ```
 
 ### Common Use Cases
 
 1. **Repository per entity ID**
-   ```kotlin
-   class EntityRepository @AssistedInject constructor(
-       private val api: ApiService,
-       @Assisted private val entityId: String
-   )
-   ```
+
+    ```kotlin
+    class EntityRepository @AssistedInject constructor(
+        private val api: ApiService,
+        @Assisted private val entityId: String
+    )
+    ```
 
 2. **ViewHolder with dependencies**
-   ```kotlin
-   class CustomViewHolder @AssistedInject constructor(
-       private val imageLoader: ImageLoader,
-       @Assisted private val view: View
-   )
-   ```
+
+    ```kotlin
+    class CustomViewHolder @AssistedInject constructor(
+        private val imageLoader: ImageLoader,
+        @Assisted private val view: View
+    )
+    ```
 
 3. **Worker with dependencies**
-   ```kotlin
-   @HiltWorker
-   class SyncWorker @AssistedInject constructor(
-       @Assisted context: Context,
-       @Assisted params: WorkerParameters,
-       private val api: ApiService
-   )
-   ```
+
+    ```kotlin
+    @HiltWorker
+    class SyncWorker @AssistedInject constructor(
+        @Assisted context: Context,
+        @Assisted params: WorkerParameters,
+        private val api: ApiService
+    )
+    ```
 
 4. **UseCase with runtime params**
-   ```kotlin
-   class SubmitFormUseCase @AssistedInject constructor(
-       private val api: ApiService,
-       @Assisted private val formData: FormData
-   )
-   ```
+
+    ```kotlin
+    class SubmitFormUseCase @AssistedInject constructor(
+        private val api: ApiService,
+        @Assisted private val formData: FormData
+    )
+    ```
 
 5. **Callback-based processors**
-   ```kotlin
-   class DataProcessor @AssistedInject constructor(
-       private val api: ApiService,
-       @Assisted private val onProgress: (Int) -> Unit
-   )
-   ```
+    ```kotlin
+    class DataProcessor @AssistedInject constructor(
+        private val api: ApiService,
+        @Assisted private val onProgress: (Int) -> Unit
+    )
+    ```
 
 ### Summary
 
 **Assisted Injection** allows mixing dependency injection with runtime parameters:
 
 **When to use:**
--  Need both injected dependencies AND runtime data
--  Creating objects with user input
--  ViewHolders with dependencies
--  Workers with dependencies (Hilt 2.31+)
--  Objects with callbacks
+
+-   Need both injected dependencies AND runtime data
+-   Creating objects with user input
+-   ViewHolders with dependencies
+-   Workers with dependencies (Hilt 2.31+)
+-   Objects with callbacks
 
 **Key annotations:**
-- `@AssistedInject` - Constructor annotation
-- `@Assisted` - Parameter annotation for runtime data
-- `@AssistedFactory` - Factory interface
-- `@Assisted("name")` - Named parameters for disambiguation
+
+-   `@AssistedInject` - Constructor annotation
+-   `@Assisted` - Parameter annotation for runtime data
+-   `@AssistedFactory` - Factory interface
+-   `@Assisted("name")` - Named parameters for disambiguation
 
 **Benefits:**
-- Clean separation of injected vs runtime params
-- Type-safe factory generation
-- Keeps DI benefits while accepting runtime data
-- No boilerplate factory implementation
+
+-   Clean separation of injected vs runtime params
+-   Type-safe factory generation
+-   Keeps DI benefits while accepting runtime data
+-   No boilerplate factory implementation
 
 **Best practices:**
+
 1. Use named @Assisted for same-type params
 2. Keep assisted parameters minimal
 3. Inject factory, not the class directly
@@ -842,9 +863,11 @@ fun FileUploadScreen(
 ---
 
 # Вопрос (RU)
+
 Что такое Assisted Injection в Hilt/Dagger? Когда и зачем использовать `@AssistedInject` и `@AssistedFactory`? Приведите примеры из реальной практики.
 
 ## Ответ (RU)
+
 ### Обзор
 
 **Assisted Injection** — это функция Dagger/Hilt, которая позволяет смешивать зависимости, предоставляемые Dagger, с runtime-параметрами, которые вы предоставляете при создании экземпляра. Это полезно, когда вам нужно создать объекты, которые требуют как внедрённых зависимостей, так и данных, предоставленных пользователем.
@@ -929,6 +952,7 @@ class UserViewModel @Inject constructor(
 ```
 
 **Как это работает:**
+
 1. Помечаем конструктор класса `@AssistedInject`
 2. Помечаем runtime-параметры `@Assisted`
 3. Создаём интерфейс factory с `@AssistedFactory`
@@ -942,25 +966,29 @@ class UserViewModel @Inject constructor(
 **Assisted Injection** позволяет смешивать dependency injection с runtime-параметрами:
 
 **Когда использовать:**
--  Нужны как внедрённые зависимости, ТАК И runtime-данные
--  Создание объектов с пользовательским вводом
--  ViewHolder'ы с зависимостями
--  Worker'ы с зависимостями (Hilt 2.31+)
--  Объекты с callback'ами
+
+-   Нужны как внедрённые зависимости, ТАК И runtime-данные
+-   Создание объектов с пользовательским вводом
+-   ViewHolder'ы с зависимостями
+-   Worker'ы с зависимостями (Hilt 2.31+)
+-   Объекты с callback'ами
 
 **Ключевые аннотации:**
-- `@AssistedInject` — аннотация конструктора
-- `@Assisted` — аннотация параметра для runtime-данных
-- `@AssistedFactory` — интерфейс factory
-- `@Assisted("name")` — именованные параметры для различения
+
+-   `@AssistedInject` — аннотация конструктора
+-   `@Assisted` — аннотация параметра для runtime-данных
+-   `@AssistedFactory` — интерфейс factory
+-   `@Assisted("name")` — именованные параметры для различения
 
 **Преимущества:**
-- Чёткое разделение внедрённых и runtime-параметров
-- Типобезопасная генерация factory
-- Сохранение преимуществ DI при принятии runtime-данных
-- Нет boilerplate-реализации factory
+
+-   Чёткое разделение внедрённых и runtime-параметров
+-   Типобезопасная генерация factory
+-   Сохранение преимуществ DI при принятии runtime-данных
+-   Нет boilerplate-реализации factory
 
 **Лучшие практики:**
+
 1. Используйте именованные @Assisted для параметров одного типа
 2. Держите assisted-параметры минимальными
 3. Внедряйте factory, а не класс напрямую

@@ -1,7 +1,11 @@
 ---
+id: "20251015082237587"
+title: "Viewmodel Pattern / Viewmodel Паттерн"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/architecture-mvvm
   - android/lifecycle
   - architecture-mvvm
@@ -9,10 +13,7 @@ tags:
   - mvvm
   - platform/android
   - viewmodel
-difficulty: easy
-status: draft
 ---
-
 # Какой архитектурный паттерн реализуется благодаря ViewModel?
 
 **English**: What architectural pattern is implemented using ViewModel?

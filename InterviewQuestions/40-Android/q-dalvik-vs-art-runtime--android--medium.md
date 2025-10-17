@@ -1,7 +1,11 @@
 ---
+id: "20251015082237279"
+title: "Dalvik Vs Art Runtime"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - dalvik
   - art
   - runtime
@@ -9,28 +13,20 @@ tags:
   - aot
   - compilation
   - performance
-difficulty: medium
-status: draft
 ---
 
-# Dalvik vs ART Runtime
-
-**Difficulty**: Medium
-**Source**: Amit Shekhar Android Interview Questions
-
 # Question (EN)
-> 
+
+> What are the differences between Dalvik and ART runtimes in Android? Why did Android migrate from Dalvik to ART?
 
 # Вопрос (RU)
-> 
+
+> В чем различия между рантаймами Dalvik и ART в Android? Почему Android перешел с Dalvik на ART?
 
 ---
 
 ## Answer (EN)
-# Question (EN)
-What are the differences between Dalvik and ART runtimes in Android? Why did Android migrate from Dalvik to ART?
 
-## Answer (EN)
 Dalvik and ART (Android Runtime) are execution environments for running Android applications. ART replaced Dalvik starting from Android 5.0 (Lollipop) to improve performance, battery life, and developer experience.
 
 #### 1. **Dalvik Virtual Machine (Legacy)**
@@ -67,15 +63,17 @@ Repeat for each app launch
 ```
 
 **Advantages:**
-- Fast installation (no compilation needed)
-- Small storage footprint
-- Immediate app updates
+
+-   Fast installation (no compilation needed)
+-   Small storage footprint
+-   Immediate app updates
 
 **Disadvantages:**
-- Slower app startup (JIT compilation overhead)
-- Runtime performance overhead (interpretation + JIT)
-- Higher battery consumption (repeated JIT compilation)
-- More GC pressure (frequent object allocation)
+
+-   Slower app startup (JIT compilation overhead)
+-   Runtime performance overhead (interpretation + JIT)
+-   Higher battery consumption (repeated JIT compilation)
+-   More GC pressure (frequent object allocation)
 
 #### 2. **ART (Android Runtime)**
 
@@ -448,97 +446,107 @@ adb shell dumpsys package com.example.app | grep -A 1 "Dexopt state"
 
 ### Comparison Summary
 
-| Feature | Dalvik | ART (5.0-6.0) | ART (7.0+) |
-|---------|--------|---------------|------------|
-| Compilation | JIT | Full AOT | Hybrid JIT+AOT |
-| Install Time | Fast | Slow | Fast |
-| First Run | Slow | Fast | Medium |
-| Optimized Run | Medium | Fast | Very Fast |
-| Storage | Small | Large | Medium |
-| Battery | Higher | Lower | Lowest |
-| GC Pauses | Long (50-200ms) | Short (2-10ms) | Very Short (<5ms) |
-| Updates | Instant | Slow | Fast |
+| Feature       | Dalvik          | ART (5.0-6.0)  | ART (7.0+)        |
+| ------------- | --------------- | -------------- | ----------------- |
+| Compilation   | JIT             | Full AOT       | Hybrid JIT+AOT    |
+| Install Time  | Fast            | Slow           | Fast              |
+| First Run     | Slow            | Fast           | Medium            |
+| Optimized Run | Medium          | Fast           | Very Fast         |
+| Storage       | Small           | Large          | Medium            |
+| Battery       | Higher          | Lower          | Lowest            |
+| GC Pauses     | Long (50-200ms) | Short (2-10ms) | Very Short (<5ms) |
+| Updates       | Instant         | Slow           | Fast              |
 
 ### Why ART?
 
 **Performance:**
-- 2x faster execution
-- 70% less CPU usage
-- Better battery life
+
+-   2x faster execution
+-   70% less CPU usage
+-   Better battery life
 
 **User Experience:**
-- Faster app launches
-- Smoother scrolling
-- Fewer jank/stutters
+
+-   Faster app launches
+-   Smoother scrolling
+-   Fewer jank/stutters
 
 **Developer Benefits:**
-- Better debugging tools
-- Improved profiling
-- Native crash reporting
+
+-   Better debugging tools
+-   Improved profiling
+-   Native crash reporting
 
 ---
 
-
-
 ## Ответ (RU)
+
 # Вопрос (RU)
+
 В чём различия между Dalvik и ART runtime в Android? Почему Android мигрировал с Dalvik на ART?
 
 ## Ответ (RU)
+
 Dalvik и ART (Android Runtime) - это среды выполнения для запуска Android-приложений. ART заменил Dalvik начиная с Android 5.0 (Lollipop).
 
 #### Dalvik (Legacy):
 
 **Компиляция:** JIT (Just-In-Time)
-- Байткод интерпретируется при запуске
-- Горячий код JIT-компилируется
-- Компиляция повторяется при каждом запуске
+
+-   Байткод интерпретируется при запуске
+-   Горячий код JIT-компилируется
+-   Компиляция повторяется при каждом запуске
 
 **Преимущества:**
-- Быстрая установка
-- Малый размер
-- Мгновенные обновления
+
+-   Быстрая установка
+-   Малый размер
+-   Мгновенные обновления
 
 **Недостатки:**
-- Медленный запуск
-- Overhead интерпретации
-- Высокий расход батареи
-- Длинные паузы GC (50-200ms)
+
+-   Медленный запуск
+-   Overhead интерпретации
+-   Высокий расход батареи
+-   Длинные паузы GC (50-200ms)
 
 #### ART:
 
 **Android 5.0-6.0: Полная AOT**
-- Компиляция всего кода при установке
-- Быстрое выполнение
-- Медленная установка
-- Большой размер
+
+-   Компиляция всего кода при установке
+-   Быстрое выполнение
+-   Медленная установка
+-   Большой размер
 
 **Android 7.0+: Гибридная JIT+AOT**
-- Быстрая установка
-- JIT при первом запуске
-- Profile-guided AOT в фоне
-- Оптимальная производительность
+
+-   Быстрая установка
+-   JIT при первом запуске
+-   Profile-guided AOT в фоне
+-   Оптимальная производительность
 
 **Преимущества:**
-- 2x быстрее выполнение
-- 70% меньше использование CPU
-- Лучше батарея
-- Короткие паузы GC (2-10ms)
-- Улучшенная отладка
+
+-   2x быстрее выполнение
+-   70% меньше использование CPU
+-   Лучше батарея
+-   Короткие паузы GC (2-10ms)
+-   Улучшенная отладка
 
 ### Сравнение производительности:
 
-| Метрика | Dalvik | ART |
-|---------|--------|-----|
-| Холодный запуск | 1200ms | 800ms (-33%) |
-| Тёплый запуск | 800ms | 500ms (-38%) |
-| CPU | 100% | 65% (-35%) |
-| Батарея | 100% | 70% (-30%) |
-| GC паузы | 50-200ms | <5ms |
+| Метрика         | Dalvik   | ART          |
+| --------------- | -------- | ------------ |
+| Холодный запуск | 1200ms   | 800ms (-33%) |
+| Тёплый запуск   | 800ms    | 500ms (-38%) |
+| CPU             | 100%     | 65% (-35%)   |
+| Батарея         | 100%     | 70% (-30%)   |
+| GC паузы        | 50-200ms | <5ms         |
 
 #### Почему ART?
 
-- Значительное улучшение производительности
-- Лучший UX (плавность, отзывчивость)
-- Экономия батареи
-- Улучшенные инструменты для разработчиков
+-   Значительное улучшение производительности
+-   Лучший UX (плавность, отзывчивость)
+-   Экономия батареи
+-   Улучшенные инструменты для разработчиков

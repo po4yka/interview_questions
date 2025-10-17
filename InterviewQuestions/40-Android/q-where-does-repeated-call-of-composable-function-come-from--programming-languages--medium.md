@@ -1,11 +1,13 @@
 ---
-tags:
-  - programming-languages
-  - android
+id: "20251015082238662"
+title: "Where Does Repeated Call Of Composable Function Come From / Откуда берется повторный вызов Composable функции"
+topic: android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
+  - android
 ---
-
 # Откуда происходит повторный вызов composable функции
 
 ## Answer (EN)

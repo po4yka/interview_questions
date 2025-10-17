@@ -1,14 +1,16 @@
 ---
-tags:
-  - extension-functions
+id: "20251015082237127"
+title: "Regular Vs Extension Method"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - extension-functions
   - functions
   - kotlin
   - programming-languages
   - static-methods
-difficulty: easy
-status: draft
 ---
-
 # В чём отличие обычного метода от extension метода в Kotlin
 
 # Question (EN)

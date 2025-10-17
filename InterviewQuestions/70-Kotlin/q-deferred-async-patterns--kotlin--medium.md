@@ -3,10 +3,10 @@ topic: kotlin
 id: "20251012-170001"
 title: "Deferred and async patterns deep dive / Deferred и async паттерны подробно"
 description: "Complete guide to Deferred<T>, async patterns, parallel execution, and advanced async/await usage in Kotlin coroutines"
-topic: "kotlin"
+topic: kotlin
 subtopics: ["coroutines", "deferred", "async", "concurrency", "parallelism"]
-difficulty: "medium"
-status: "draft"
+difficulty: medium
+status: draft
 created: 2025-10-12
 updated: 2025-10-12
 category: "coroutines-advanced"
@@ -17,12 +17,17 @@ contributors: []
 
 # Deferred and async patterns deep dive / Deferred и async паттерны подробно
 
-## English Version
+# Question (EN)
 
-### Question
-What is `Deferred<T>` in Kotlin coroutines? How does it differ from `Job`? Explain the `async` builder, `await()` function, and various patterns for parallel execution with real-world examples.
+> What is `Deferred<T>` in Kotlin coroutines? How does it differ from `Job`? Explain the `async` builder, `await()` function, and various patterns for parallel execution with real-world examples.
 
-### Answer
+# Вопрос (RU)
+
+> Что такое `Deferred<T>` в корутинах Kotlin? Чем он отличается от `Job`? Объясните билдер `async`, функцию `await()` и различные паттерны параллельного выполнения с реальными примерами.
+
+---
+
+## Answer (EN)
 
 #### What is Deferred<T>?
 
@@ -978,12 +983,9 @@ suspend fun loadDataGood() = coroutineScope {
 
 ---
 
-## Russian Version / Русская версия
+## Ответ (RU)
 
-### Вопрос
-Что такое `Deferred<T>` в корутинах Kotlin? Чем он отличается от `Job`? Объясните билдер `async`, функцию `await()` и различные паттерны параллельного выполнения с реальными примерами.
-
-### Ответ
+*(Краткое содержание основных пунктов из английской версии)*
 
 #### Что такое Deferred<T>?
 

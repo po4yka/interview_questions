@@ -1,15 +1,16 @@
 ---
+id: "20251015082237552"
+title: "What Design Systems In Android Have You Worked With / С какими дизайн-системами Android вы работали"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - fluent design system
   - human interface guidelines
   - material design
   - ui
-difficulty: medium
-status: draft
 ---
-
 # С какими вариантами систем проектирования в Android работал
 
 **English**: What design systems in Android have you worked with?

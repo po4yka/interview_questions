@@ -1,6 +1,6 @@
 ---
 id: 20251006-backpressure-flow
-title: "Back Pressure in Kotlin Flow / Back Pressure в Kotlin Flow"
+title: "Back Pressure in Kotlin Flow"
 aliases: []
 
 # Classification

@@ -1,30 +1,27 @@
 ---
 id: 20251012-200006
 title: "Two Pointers and Sliding Window Patterns / Паттерны двух указателей и скользящего окна"
-slug: two-pointers-sliding-window-algorithms-medium
 topic: algorithms
-subtopics:
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - algorithms
   - two-pointers
+  - sliding-window
+  - array
+  - optimization
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-algorithms
+related_questions:   - q-binary-search-variants--algorithms--medium
+  - q-sorting-algorithms-comparison--algorithms--medium
+slug: two-pointers-sliding-window-algorithms-medium
+subtopics:   - two-pointers
   - sliding-window
   - array
   - string
   - optimization
-status: draft
-difficulty: medium
-moc: moc-algorithms
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-binary-search-variants--algorithms--medium
-  - q-sorting-algorithms-comparison--algorithms--medium
-tags:
-  - algorithms
-  - two-pointers
-  - sliding-window
-  - array
-  - optimization
 ---
-
 # Two Pointers and Sliding Window Patterns
 
 ## English Version

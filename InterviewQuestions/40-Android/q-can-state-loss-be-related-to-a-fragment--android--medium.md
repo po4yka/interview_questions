@@ -1,11 +1,12 @@
 ---
+id: "20251015082237322"
+title: "Can State Loss Be Related To A Fragment / Может ли потеря состояния быть связана с Fragment"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # Can state loss be related to a fragment
 
 # Question (EN)

@@ -1,32 +1,29 @@
 ---
 id: 20251012-200008
 title: "Backtracking Algorithms (N-Queens, Sudoku, Subsets) / Алгоритмы с откатом"
-slug: backtracking-algorithms-algorithms-hard
 topic: algorithms
-subtopics:
-  - backtracking
-  - recursion
-  - combinatorics
-  - constraint-satisfaction
-status: draft
 difficulty: hard
-moc: moc-algorithms
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-dynamic-programming-fundamentals--algorithms--hard
-  - q-graph-algorithms-bfs-dfs--algorithms--hard
-  - q-binary-search-trees-bst--algorithms--hard
-tags:
-  - algorithms
+status: draft
+created: 2025-10-12
+tags: - algorithms
   - backtracking
   - recursion
   - n-queens
   - sudoku
   - permutations
   - combinations
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-algorithms
+related_questions:   - q-dynamic-programming-fundamentals--algorithms--hard
+  - q-graph-algorithms-bfs-dfs--algorithms--hard
+  - q-binary-search-trees-bst--algorithms--hard
+slug: backtracking-algorithms-algorithms-hard
+subtopics:   - backtracking
+  - recursion
+  - combinatorics
+  - constraint-satisfaction
 ---
-
 # Backtracking Algorithms
 
 ## English Version
@@ -576,7 +573,7 @@ fun combinationSum(candidates: IntArray, target: Int): List<List<Int>> {
 val candidates = intArrayOf(2, 3, 6, 7)
 val target = 7
 val combos = combinationSum(candidates, target)
-println(combos)  // [[2,2,3], [7]]
+println(combos)  // `[[2,2,3], [7]]`
 
 // Time: O(n^(t/m)) where t=target, m=min candidate
 // Space: O(t/m) - recursion depth

@@ -1,15 +1,16 @@
 ---
+id: "20251015082237434"
+title: "How To Write Recyclerview So That It Caches Ahead / Как написать RecyclerView чтобы он кешировал вперед"
 topic: android
-tags:
-  - recyclerview
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - recyclerview
   - caching
   - android
   - ui
   - performance
-difficulty: medium
-status: draft
 ---
-
 # How to write RecyclerView so that it caches ahead?
 
 # Вопрос (RU)
@@ -424,21 +425,6 @@ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 ## Ответ (RU)
 
 1. Использовать setItemViewCacheSize для кэширования определённого количества элементов. 2. Включить предзагрузку данных с помощью RecyclerView.OnScrollListener. 3. Реализовать Prefetching через LinearLayoutManager или RecyclerView.LayoutManager.
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
-
-### Related (Medium)
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
-- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
-- [[q-recyclerview-async-list-differ--recyclerview--medium]] - View, Ui
 
 ---
 

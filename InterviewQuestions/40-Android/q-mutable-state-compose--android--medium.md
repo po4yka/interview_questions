@@ -1,7 +1,11 @@
 ---
+id: "20251015082237361"
+title: "Mutable State Compose / Изменяемое состояние Compose"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/jetpack-compose
   - jetpack-compose
   - mutablestate
@@ -9,10 +13,7 @@ tags:
   - recomposition
   - state
   - state-management
-difficulty: medium
-status: draft
 ---
-
 # What is MutableState in Compose?
 
 **Russian**: Что такое mutable state в Compose?

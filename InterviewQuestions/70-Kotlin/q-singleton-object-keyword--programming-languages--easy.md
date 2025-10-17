@@ -1,11 +1,12 @@
 ---
+id: "20251015082237061"
+title: "Singleton Object Keyword / Синглтон с ключевым словом object"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # What keyword is used to create singleton objects in Kotlin?
 
 **English**: What keyword is used to create singleton objects (singleton) in Kotlin?

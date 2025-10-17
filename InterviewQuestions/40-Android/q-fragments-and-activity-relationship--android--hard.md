@@ -1,16 +1,17 @@
 ---
+id: "20251015082237589"
+title: "Fragments And Activity Relationship"
 topic: android
-tags:
-  - activity
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - activity
   - android
   - android/fragments
   - android/ui
   - fragments
   - ui
-difficulty: hard
-status: draft
 ---
-
 # Как существуют и к чему привязаны фрагменты в Activity?
 
 **English**: How do fragments exist and what are they attached to in Activity?
@@ -263,21 +264,7 @@ class MyFragment : Fragment() {
 - [[q-fragment-vs-activity-lifecycle--android--medium]] - Activity, Fragment
 - [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
 
-### Related (Hard)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
-- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] - Activity, Fragment
-- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity, Fragment
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Activity, Fragment
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
-
-### Related (Hard)
+### Related (Medium)
 - [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
 - [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] - Activity, Fragment
 - [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment

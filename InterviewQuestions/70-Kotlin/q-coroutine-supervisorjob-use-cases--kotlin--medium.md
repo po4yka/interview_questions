@@ -1,17 +1,17 @@
 ---
-topic: kotlin
 id: "20251012-150003"
 title: "SupervisorJob: when and why to use it?"
-description: "Comprehensive guide to SupervisorJob in Kotlin coroutines, covering independent failure handling, comparison with regular Job, and real-world use cases in Android development"
+topic: kotlin
+difficulty: medium
+status: draft
+created: "2025-10-12"
 tags: ["kotlin", "coroutines", "supervisorjob", "error-handling", "job", "difficulty/medium"]
-topic: "kotlin"
-subtopics: ["coroutines", "supervisorjob", "error-handling", "job"]
-moc: "moc-kotlin"
-status: "draft"
 date_created: "2025-10-12"
 date_updated: "2025-10-12"
+description: "Comprehensive guide to SupervisorJob in Kotlin coroutines, covering independent failure handling, comparison with regular Job, and real-world use cases in Android development"
+moc: "moc-kotlin"
+subtopics: ["coroutines", "supervisorjob", "error-handling", "job"]
 ---
-
 # SupervisorJob: when and why to use it?
 
 ## English

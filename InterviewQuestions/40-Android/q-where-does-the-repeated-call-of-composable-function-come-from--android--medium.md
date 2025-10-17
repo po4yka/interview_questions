@@ -1,15 +1,16 @@
 ---
+id: "20251015082238640"
+title: "Where Does The Repeated Call Of Composable Function Come From / Откуда берется повторный вызов Composable функции"
 topic: android
-tags:
-  - Jetpack Compose
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Jetpack Compose
   - recomposition
   - android
   - ui
   - jetpack-compose
-difficulty: medium
-status: draft
 ---
-
 # Where does the repeated call of composable function come from?
 
 # Вопрос (RU)

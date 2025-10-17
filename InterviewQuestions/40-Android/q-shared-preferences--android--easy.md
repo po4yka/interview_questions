@@ -1,13 +1,14 @@
 ---
+id: "20251015082237455"
+title: "Shared Preferences"
 topic: android
-tags:
-  - android
-  - data-storage
-  - shared-preferences
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - android
+  - data-storage
+  - shared-preferences
 ---
-
 # Что такое SharedPreferences?
 
 **English**: What is SharedPreferences?

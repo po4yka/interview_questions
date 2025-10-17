@@ -1,19 +1,20 @@
 ---
+id: "20251015082237081"
+title: "List Vs Sequence / List против Sequence"
 topic: programming-languages
-tags:
-  - collections
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - collections
   - kotlin
   - list
   - programming-languages
   - sequence
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-programming-languages
 related_questions: []
 ---
-
 # В чем разница между работой с list и работой с sequence
 
 # Question (EN)

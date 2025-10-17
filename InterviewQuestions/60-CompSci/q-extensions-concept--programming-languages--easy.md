@@ -1,13 +1,15 @@
 ---
-tags:
-  - extension-functions
+id: "20251015082237188"
+title: "Extensions Concept / Концепция расширений"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - extension-functions
   - extensions
   - kotlin
   - programming-languages
-difficulty: easy
-status: draft
 ---
-
 # Что такое Extensions?
 
 # Question (EN)

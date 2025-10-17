@@ -1,17 +1,17 @@
 ---
-topic: kotlin
 id: "20251012-150008"
 title: "Parent-child relationships in structured concurrency"
-description: "Comprehensive guide to Parent-child relationships in structured concurrency in Kotlin coroutines"
+topic: kotlin
+difficulty: medium
+status: draft
+created: "2025-10-12"
 tags: ["kotlin", "coroutines", "difficulty/medium"]
-topic: "kotlin"
-subtopics: ["coroutines", "structured-concurrency", "job", "hierarchy"]
-moc: "moc-kotlin"
-status: "draft"
 date_created: "2025-10-12"
 date_updated: "2025-10-12"
+description: "Comprehensive guide to Parent-child relationships in structured concurrency in Kotlin coroutines"
+moc: "moc-kotlin"
+subtopics: ["coroutines", "structured-concurrency", "job", "hierarchy"]
 ---
-
 # Parent-child relationships in structured concurrency
 
 ## English

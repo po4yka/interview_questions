@@ -1,19 +1,28 @@
 ---
+id: "20251015082237290"
+title: "Which Class To Catch Gestures / Какой класс для ловли жестов"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - gesture-detector
   - gestures
   - ui
-difficulty: easy
-status: draft
 ---
 
-# Какой класс можно использовать что бы ловить разные жесты?
+# Question (EN)
 
-**English**: Which class can be used to catch different gestures?
+> Which class can be used to catch different gestures?
+
+# Вопрос (RU)
+
+> Какой класс можно использовать, чтобы ловить разные жесты?
+
+---
 
 ## Answer (EN)
+
 Use **GestureDetector** to handle standard gestures like taps, swipes, long presses, double taps, and flings.
 
 ### Basic Usage
@@ -101,5 +110,23 @@ class GestureView(context: Context) : View(context) {
 ```
 
 ## Ответ (RU)
-Чтобы обрабатывать жесты в Android, используйте класс GestureDetector. Он помогает отслеживать стандартные жесты: одиночные нажатия, свайпы, долгие нажатия, двойные касания и т.д.
 
+---
+
+## Follow-ups
+
+-   How do you detect pinch-to-zoom and rotation gestures (ScaleGestureDetector)?
+-   When should you use GestureDetector vs OnGestureListener vs Compose gestures?
+-   How do you avoid gesture conflicts inside nested scrolling containers?
+
+## References
+
+-   `https://developer.android.com/reference/android/view/GestureDetector` — GestureDetector
+-   `https://developer.android.com/reference/android/view/ScaleGestureDetector` — ScaleGestureDetector
+-   `https://developer.android.com/jetpack/compose/gestures` — Compose gestures
+
+## Related Questions
+
+-   [[q-what-is-known-about-methods-that-redraw-view--android--medium]]
+-   [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]]
+    Чтобы обрабатывать жесты в Android, используйте класс GestureDetector. Он помогает отслеживать стандартные жесты: одиночные нажатия, свайпы, долгие нажатия, двойные касания и т.д.

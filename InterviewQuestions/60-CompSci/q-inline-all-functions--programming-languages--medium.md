@@ -1,15 +1,17 @@
 ---
-tags:
-  - compiler
+id: "20251015082237189"
+title: "Inline All Functions / Inline All Функции"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - compiler
   - compiler-optimization
   - inline
   - inline-functions
   - kotlin
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # Можно ли на уровне компилятора сделать все функции inline?
 
 # Question (EN)

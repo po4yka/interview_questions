@@ -1,31 +1,28 @@
 ---
 id: 20251012-300008
 title: "Message Queues and Event-Driven Architecture / Очереди сообщений и событийная архитектура"
-slug: message-queues-event-driven-system-design-medium
 topic: system-design
-subtopics:
-  - message-queues
-  - event-driven
-  - kafka
-  - rabbitmq
-  - async-processing
-status: draft
 difficulty: medium
-moc: moc-system-design
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-microservices-vs-monolith--system-design--hard
-  - q-distributed-transactions--system-design--hard
-  - q-event-sourcing-cqrs--system-design--hard
-tags:
-  - system-design
+status: draft
+created: 2025-10-12
+tags: - system-design
   - message-queues
   - kafka
   - event-driven
   - async
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-system-design
+related_questions:   - q-microservices-vs-monolith--system-design--hard
+  - q-distributed-transactions--system-design--hard
+  - q-event-sourcing-cqrs--system-design--hard
+slug: message-queues-event-driven-system-design-medium
+subtopics:   - message-queues
+  - event-driven
+  - kafka
+  - rabbitmq
+  - async-processing
 ---
-
 # Message Queues and Event-Driven Architecture
 
 ## English Version

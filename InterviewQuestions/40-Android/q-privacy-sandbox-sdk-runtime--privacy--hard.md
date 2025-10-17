@@ -1,15 +1,17 @@
 ---
-tags:
-  - android
+id: "20251015082237572"
+title: "Privacy Sandbox Sdk Runtime"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - privacy-sandbox
   - sdk-runtime
   - privacy
   - sandboxing
   - security
-difficulty: hard
-status: draft
 ---
-
 # Privacy Sandbox: SDK Runtime and App Sandboxing
 
 # Question (EN)

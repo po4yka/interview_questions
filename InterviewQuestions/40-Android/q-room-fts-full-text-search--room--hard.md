@@ -1,17 +1,18 @@
 ---
+id: "20251015082237371"
+title: "Room Fts Full Text Search / Полнотекстовый поиск FTS в Room"
 topic: room
-tags:
-  - room
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - room
   - database
   - fts
   - search
   - performance
   - optimization
   - difficulty/hard
-difficulty: hard
-status: draft
 ---
-
 # Room Full-Text Search (FTS) / Полнотекстовый поиск в Room
 
 **English**: Implement full-text search in Room using FTS4/FTS5. Optimize search performance for large datasets.
@@ -800,6 +801,7 @@ Always use FTS5 for production apps with significant text search requirements, a
 ---
 
 ## Ответ (RU)
+
 **Полнотекстовый поиск (FTS)** в Room обеспечивает эффективные возможности текстового поиска через расширения FTS SQLite (FTS3, FTS4 и FTS5). FTS необходим для поиска по большим текстовым наборам данных со сложными запросами, поддерживая функции префиксного поиска, ранжирования и подсветки.
 
 ### Зачем использовать FTS?
@@ -947,6 +949,8 @@ interface ArticleSearchDao {
 
 ### Подсветка результатов поиска
 
+FTS5 предоставляет функции для подсветки совпадающих терминов в результатах поиска.
+
 ```kotlin
 data class ArticleWithHighlight(
     @Embedded
@@ -958,6 +962,7 @@ data class ArticleWithHighlight(
 
 @Dao
 interface ArticleHighlightDao {
+    // Подсветка совпадающих терминов с кастомными тегами
     @Query("""
         SELECT
             articles.*,
@@ -974,45 +979,140 @@ interface ArticleHighlightDao {
         query: String,
         limit: Int = 20
     ): List<ArticleWithHighlight>
+
+    // highlight() синтаксис:
+    // highlight(fts_table, column_index, start_tag, end_tag)
+    // column_index: 0=title, 1=content, 2=author
+
+    // snippet() синтаксис:
+    // snippet(fts_table, column_index, start_tag, end_tag, ellipsis, max_tokens)
 }
+```
+
+### Кастомные токенизаторы
+
+FTS поддерживает различные токенизаторы для языково-специфичной обработки текста.
+
+```kotlin
+// Unicode61 токенизатор (по умолчанию, поддерживает большинство языков)
+@Fts4(tokenizer = FtsOptions.TOKENIZER_UNICODE61)
+@Entity(tableName = "articles_fts")
+data class ArticleFtsUnicode(
+    val title: String,
+    val content: String
+)
+
+// Porter токенизатор (английский stemming)
+// "running" соответствует "run", "runner", "runs"
+@Fts4(tokenizer = FtsOptions.TOKENIZER_PORTER)
+@Entity(tableName = "articles_fts_porter")
+data class ArticleFtsPorter(
+    val title: String,
+    val content: String
+)
+
+// Simple токенизатор (только ASCII, быстрее)
+@Fts4(tokenizer = FtsOptions.TOKENIZER_SIMPLE)
+@Entity(tableName = "articles_fts_simple")
+data class ArticleFtsSimple(
+    val title: String,
+    val content: String
+)
 ```
 
 ### Оптимизация производительности
 
-#### Использование триггеров для автоматической синхронизации FTS
+#### 1. Использование триггеров для автоматической синхронизации FTS
+
+Вместо ручной синхронизации FTS таблиц, используйте SQLite триггеры:
 
 ```kotlin
-override fun onCreate(db: SupportSQLiteDatabase) {
-    super.onCreate(db)
+@Database(
+    entities = [Article::class, ArticleFts::class],
+    version = 1
+)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun articleDao(): ArticleDao
 
-    // Триггер для синхронизации INSERT
-    db.execSQL("""
-        CREATE TRIGGER articles_fts_insert AFTER INSERT ON articles
-        BEGIN
-            INSERT INTO articles_fts (rowid, title, content, author)
-            VALUES (new.id, new.title, new.content, new.author);
-        END
-    """)
+    override fun onCreate(db: SupportSQLiteDatabase) {
+        super.onCreate(db)
 
-    // Триггер для синхронизации UPDATE
-    db.execSQL("""
-        CREATE TRIGGER articles_fts_update AFTER UPDATE ON articles
-        BEGIN
-            UPDATE articles_fts
-            SET title = new.title,
-                content = new.content,
-                author = new.author
-            WHERE rowid = new.id;
-        END
-    """)
+        // Триггер для синхронизации INSERT
+        db.execSQL("""
+            CREATE TRIGGER articles_fts_insert AFTER INSERT ON articles
+            BEGIN
+                INSERT INTO articles_fts (rowid, title, content, author)
+                VALUES (new.id, new.title, new.content, new.author);
+            END
+        """)
 
-    // Триггер для синхронизации DELETE
-    db.execSQL("""
-        CREATE TRIGGER articles_fts_delete AFTER DELETE ON articles
-        BEGIN
-            DELETE FROM articles_fts WHERE rowid = old.id;
-        END
+        // Триггер для синхронизации UPDATE
+        db.execSQL("""
+            CREATE TRIGGER articles_fts_update AFTER UPDATE ON articles
+            BEGIN
+                UPDATE articles_fts
+                SET title = new.title,
+                    content = new.content,
+                    author = new.author
+                WHERE rowid = new.id;
+            END
+        """)
+
+        // Триггер для синхронизации DELETE
+        db.execSQL("""
+            CREATE TRIGGER articles_fts_delete AFTER DELETE ON articles
+            BEGIN
+                DELETE FROM articles_fts WHERE rowid = old.id;
+            END
+        """)
+    }
+}
+```
+
+#### 2. Оптимизация размера FTS таблицы
+
+```kotlin
+// Индексировать только поисковые поля, исключить метаданные
+@Fts4(contentEntity = Article::class)
+@Entity(tableName = "articles_fts")
+data class ArticleFtsOptimized(
+    @PrimaryKey
+    @ColumnInfo(name = "rowid")
+    val rowid: Long,
+    val title: String,      // Индекс
+    val content: String,    // Индекс
+    // Исключить: publishedAt, categoryId, viewCount, isFavorite
+)
+```
+
+#### 3. Пагинация для больших наборов результатов
+
+```kotlin
+@Dao
+interface ArticleDao {
+    // Использовать LIMIT и OFFSET для пагинации
+    @Query("""
+        SELECT articles.*, bm25(articles_fts) as rank
+        FROM articles
+        INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+        WHERE articles_fts MATCH :query
+        ORDER BY rank
+        LIMIT :limit OFFSET :offset
     """)
+    suspend fun searchArticlesPaged(
+        query: String,
+        limit: Int,
+        offset: Int
+    ): List<ArticleSearchResult>
+
+    // Или использовать Paging 3
+    @Query("""
+        SELECT articles.* FROM articles
+        INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+        WHERE articles_fts MATCH :query
+        ORDER BY bm25(articles_fts)
+    """)
+    fun searchArticlesPaging(query: String): PagingSource<Int, Article>
 }
 ```
 
@@ -1020,24 +1120,114 @@ override fun onCreate(db: SupportSQLiteDatabase) {
 
 Сравнение FTS5 и запросов LIKE на разных размерах наборов данных:
 
+```kotlin
+class SearchBenchmark {
+    suspend fun benchmarkSearch(query: String, dataset: List<Article>) {
+        val dao = database.articleDao()
+
+        // Заполнить тестовые данные
+        dataset.forEach { dao.insertArticleWithFts(it) }
+
+        // Бенчмарк LIKE запроса
+        val likeStart = System.currentTimeMillis()
+        val likeResults = dao.searchWithLike("%$query%")
+        val likeTime = System.currentTimeMillis() - likeStart
+
+        // Бенчмарк FTS5 запроса
+        val ftsStart = System.currentTimeMillis()
+        val ftsResults = dao.searchArticles(query).first()
+        val ftsTime = System.currentTimeMillis() - ftsStart
+
+        println("""
+            Размер набора данных: ${dataset.size}
+            Запрос: "$query"
+
+            LIKE запрос:
+              Время: ${likeTime}мс
+              Результаты: ${likeResults.size}
+
+            FTS5 запрос:
+              Время: ${ftsTime}мс
+              Результаты: ${ftsResults.size}
+              Ускорение: ${likeTime.toFloat() / ftsTime}x
+        """.trimIndent())
+    }
+}
+
+// Ожидаемые результаты:
+// 1,000 статей:    FTS5 ~2-5x быстрее
+// 10,000 статей:   FTS5 ~10-20x быстрее
+// 100,000 статей:  FTS5 ~50-100x быстрее
 ```
-1,000 статей:    FTS5 ~2-5x быстрее
-10,000 статей:   FTS5 ~10-20x быстрее
-100,000 статей:  FTS5 ~50-100x быстрее
+
+### Полная реализация Repository
+
+```kotlin
+class ArticleRepository(private val dao: ArticleDao) {
+
+    // Поиск с debounce для лучшего UX
+    fun searchArticles(queryFlow: Flow<String>): Flow<List<ArticleSearchResult>> {
+        return queryFlow
+            .debounce(300)  // Ждать 300мс после того как пользователь прекратит печатать
+            .filter { it.isNotBlank() && it.length >= 2 }  // Минимум 2 символа
+            .distinctUntilChanged()
+            .flatMapLatest { query ->
+                dao.searchWithRanking(sanitizeQuery(query))
+            }
+    }
+
+    // Санитизация пользовательского ввода для предотвращения синтаксических ошибок FTS
+    private fun sanitizeQuery(query: String): String {
+        // Удалить специальные операторы FTS если нужно
+        return query
+            .trim()
+            .replace("\"", "")  // Удалить кавычки
+            .replace("*", "")   // Удалить wildcards
+            .split("\\s+".toRegex())  // Разделить по пробелам
+            .filter { it.isNotEmpty() }
+            .joinToString(" AND ")  // Объединить с оператором AND
+    }
+
+    // Подсказки автодополнения
+    suspend fun getAutocompleteSuggestions(prefix: String): List<String> {
+        if (prefix.length < 2) return emptyList()
+
+        val results = dao.autocompleteSearch(prefix)
+        return results
+            .map { it.title }
+            .distinct()
+            .take(10)
+    }
+}
 ```
 
 ### Best Practices
 
-1. **Использовать FTS5**: Всегда предпочитать FTS5 вместо FTS4
+1. **Использовать FTS5**: Всегда предпочитать FTS5 вместо FTS4 для лучшей производительности
 2. **Внешние таблицы содержимого**: Избегать дублирования данных с параметром contentEntity
-3. **Автоматическая синхронизация**: Использовать триггеры для синхронизации FTS таблицы
-4. **Индексировать только поисковые поля**: Не индексировать метаданные
-5. **Санитизация пользовательского ввода**: Предотвращать синтаксические ошибки FTS
-6. **Debounce поиска**: Ждать, пока пользователь прекратит печатать
-7. **Использовать ранжирование BM25**: Сортировать результаты по релевантности
+3. **Автоматическая синхронизация**: Использовать триггеры для синхронизации FTS таблицы с основной
+4. **Индексировать только поисковые поля**: Не индексировать поля метаданных
+5. **Санитизация пользовательского ввода**: Предотвращать синтаксические ошибки FTS из пользовательских запросов
+6. **Debounce поиска**: Ждать пока пользователь прекратит печатать перед поиском
+7. **Использовать ранжирование BM25**: Сортировать результаты по релевантности для лучшего UX
 8. **Пагинация**: Использовать LIMIT/OFFSET или Paging 3 для больших наборов результатов
 9. **Подсвечивать совпадения**: Использовать функции highlight() и snippet()
 10. **Выбрать правильный токенизатор**: Porter для английского, Unicode61 для общего использования
+11. **Перестроение индекса**: Предоставить функцию maintenance для перестроения FTS индекса
+12. **Тестировать производительность**: Бенчмаркить с наборами данных размера production
+
+### Частые ошибки
+
+1. **Забывание @Transaction**: Операции синхронизации FTS должны быть атомарными
+2. **Неиндексирование внешних ключей**: Замедляет операции JOIN
+3. **Специальные символы**: Операторы FTS в пользовательском вводе вызывают ошибки
+4. **Дублирование данных**: Неиспользование внешней таблицы содержимого тратит место
+5. **Без debouncing**: Поиск на каждом нажатии клавиши влияет на производительность
+6. **Неправильный токенизатор**: Использование simple токенизатора для не-ASCII текста
+7. **Без ранжирования**: Результаты не отсортированы по релевантности
+8. **Загрузка всех результатов**: Непагинирование больших наборов результатов
+9. **Забывание триггеров**: Ручная синхронизация FTS подвержена ошибкам
+10. **Нетестирование граничных случаев**: Пустые запросы, специальные символы, длинный текст
 
 ### Резюме
 
@@ -1052,6 +1242,8 @@ override fun onCreate(db: SupportSQLiteDatabase) {
 - **Булевы операторы**: Поддержка сложных запросов (AND, OR, NOT)
 - **Префиксное сопоставление**: Функциональность автодополнения
 - **Триггеры**: Автоматическая синхронизация FTS
+
+Всегда используйте FTS5 для production приложений со значительными требованиями к текстовому поиску, и оптимизируйте с правильной индексацией, пагинацией и санитизацией запросов. FTS обеспечивает в 10-100 раз лучшую производительность чем LIKE запросы на больших наборах данных и поддерживает продвинутые функции поиска такие как ранжирование BM25, подсветку совпадений и булевы операторы.
 
 ---
 

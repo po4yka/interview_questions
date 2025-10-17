@@ -1,7 +1,11 @@
 ---
+id: "20251015082237548"
+title: "Main Android Components / Основные компоненты Android"
 topic: android
-tags:
-  - activity
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - activity
   - android
   - android/activity
   - android/broadcast-receiver
@@ -11,10 +15,7 @@ tags:
   - components
   - content-provider
   - service
-difficulty: easy
-status: draft
 ---
-
 # Какие основные компоненты Android-приложения?
 
 **English**: What are the main Android application components?
@@ -88,7 +89,73 @@ class MyContentProvider : ContentProvider() {
 All components declared in **AndroidManifest.xml**.
 
 ## Ответ (RU)
-Основные компоненты: Activity (экран UI), Services (фоновые операции), Broadcast Receivers (события), Content Providers (обмен данными).
+
+**Четыре основных компонента Android:**
+
+**1. Activity** - Экран UI
+- Представляет один экран с пользовательским интерфейсом
+- Пользователь взаимодействует с приложением через Activity
+- Пример: HomeActivity, ProfileActivity
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+}
+```
+
+**2. Service** - Фоновые операции
+- Выполняет длительные операции без UI
+- Работает в фоне
+- Пример: Воспроизведение музыки, синхронизация данных
+
+```kotlin
+class MusicService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Воспроизведение музыки в фоне
+        return START_STICKY
+    }
+}
+```
+
+**3. BroadcastReceiver** - Системные события
+- Прослушивает системные или приложением рассылаемые события
+- Реагирует на события
+- Пример: Низкий заряд батареи, изменение сети
+
+```kotlin
+class NetworkReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        // Обработать изменение сети
+    }
+}
+```
+
+**4. ContentProvider** - Обмен данными
+- Управляет и делится данными приложения
+- Позволяет доступ к данным из других приложений
+- Пример: Контакты, MediaStore
+
+```kotlin
+class MyContentProvider : ContentProvider() {
+    override fun query(...): Cursor? {
+        // Предоставить данные другим приложениям
+    }
+}
+```
+
+**Резюме:**
+
+| Компонент | Назначение | Есть UI | Пример применения |
+|-----------|------------|---------|-------------------|
+| Activity | Экран UI | Да | Экран входа |
+| Service | Фоновая работа | Нет | Музыкальный плеер |
+| BroadcastReceiver | Слушатель событий | Нет | Оповещения о батарее |
+| ContentProvider | Обмен данными | Нет | Список контактов |
+
+Все компоненты объявляются в **AndroidManifest.xml**.
 
 
 ---

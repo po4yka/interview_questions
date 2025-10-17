@@ -1,11 +1,13 @@
 ---
-tags:
-  - programming-languages
-  - android
+id: "20251015082237420"
+title: "How To Draw Ui Without Xml / Как рисовать UI без XML"
+topic: android
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - programming-languages
+  - android
 ---
-
 # Как рисовать UI без xml?
 
 ## Answer (EN)

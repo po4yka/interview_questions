@@ -2,17 +2,10 @@
 id: 20251012-180008
 title: "Circuit breaker pattern with coroutines / Circuit breaker паттерн с корутинами"
 topic: kotlin
-subtopics:
-  - coroutines
-  - resilience
-  - patterns
-  - error-handling
-  - production
 difficulty: hard
-moc: moc-kotlin
 status: draft
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - circuit-breaker
   - resilience
@@ -20,8 +13,13 @@ tags:
   - error-handling
   - production
   - microservices
+moc: moc-kotlin
+subtopics:   - coroutines
+  - resilience
+  - patterns
+  - error-handling
+  - production
 ---
-
 # Circuit Breaker Pattern with Coroutines
 
 **English** | [Русский](#russian-version)

@@ -1,17 +1,18 @@
 ---
+id: "20251015082237391"
+title: "Looper Thread Connection / Связь Looper и потока"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/concurrency
   - concurrency
   - handler
   - looper
   - message-queue
   - threading
-difficulty: medium
-status: draft
 ---
-
 # Как Looper связывается с потоком?
 
 **English**: How does Looper connect to a thread?

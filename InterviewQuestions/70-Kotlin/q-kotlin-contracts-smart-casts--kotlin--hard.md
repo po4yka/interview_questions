@@ -1,16 +1,17 @@
 ---
+id: "20251015082237070"
+title: "Kotlin Contracts Smart Casts / Контракты и smart casts в Kotlin"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - contracts
   - smart-casts
   - type-system
   - advanced
   - compiler
-difficulty: hard
-status: draft
 ---
-
 # Kotlin Contracts and Smart Casts
 
 # Question (EN)

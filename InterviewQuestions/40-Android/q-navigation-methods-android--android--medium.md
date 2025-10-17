@@ -1,7 +1,11 @@
 ---
+id: "20251015082238665"
+title: "Navigation Methods Android / Методы навигации Android"
 topic: android
-tags:
-  - activity
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - activity
   - android
   - android/navigation
   - architecture
@@ -11,14 +15,11 @@ tags:
   - navigation
   - navigation-component
   - ui-patterns
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Какие способы навигации знаешь?
 
 **English**: What navigation methods do you know?

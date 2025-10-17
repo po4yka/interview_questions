@@ -1,15 +1,16 @@
 ---
+id: "20251015082238604"
+title: "Compose Remember Derived State / Remember и Derived State в Compose"
 topic: jetpack-compose
-tags:
-  - jetpack-compose
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - jetpack-compose
   - state
   - remember
   - optimization
   - process-death
-difficulty: medium
-status: draft
 ---
-
 # Remember, RememberSaveable, and DerivedStateOf
 
 **English**: Explain remember, rememberSaveable, and derivedStateOf. How do they optimize recomposition? Handle process death.

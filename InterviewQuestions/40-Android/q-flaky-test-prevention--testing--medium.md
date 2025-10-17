@@ -1,19 +1,25 @@
 ---
+id: "20251015082237285"
+title: "Flaky Test Prevention / Предотвращение нестабильных тестов"
 topic: testing
-tags:
-  - testing
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - testing
   - flaky-tests
   - stability
   - best-practices
-difficulty: medium
-status: draft
 ---
 
-# Flaky Test Prevention and Resolution
+# Question (EN)
 
-**English**: Identify and fix flaky tests. Handle timing issues, test isolation, resource cleanup. Implement retry strategies.
+> Identify and fix flaky tests. Handle timing issues, test isolation, resource cleanup. Implement retry strategies.
 
-**Russian**: Выявляйте и исправляйте flaky тесты. Обрабатывайте проблемы с таймингом, изоляцию тестов, очистку ресурсов. Реализуйте стратегии повторных попыток.
+# Вопрос (RU)
+
+> Выявляйте и исправляйте flaky тесты. Обрабатывайте проблемы с таймингом, изоляцию тестов, очистку ресурсов. Реализуйте стратегии повторных попыток.
+
+---
 
 ## Answer (EN)
 
@@ -22,6 +28,7 @@ Flaky tests are tests that sometimes pass and sometimes fail without code change
 ### Common Causes of Flaky Tests
 
 **1. Timing Issues**
+
 ```kotlin
 // FLAKY: Race condition
 @Test
@@ -41,6 +48,7 @@ fun stableTest_properAsync() = runTest {
 ```
 
 **2. Shared State Between Tests**
+
 ```kotlin
 // FLAKY: Shared mutable state
 class FlakyTest {
@@ -80,6 +88,7 @@ class StableTest {
 ```
 
 **3. Non-Deterministic Data**
+
 ```kotlin
 // FLAKY: Random data
 @Test
@@ -105,6 +114,7 @@ fun stableTest_seededRandom() {
 ```
 
 **4. External Dependencies**
+
 ```kotlin
 // FLAKY: Real network call
 @Test
@@ -125,6 +135,7 @@ fun stableTest_mockedNetwork() = runTest {
 ```
 
 **5. Test Order Dependencies**
+
 ```kotlin
 // FLAKY: Depends on test order
 class OrderDependentTests {
@@ -168,6 +179,7 @@ class IndependentTests {
 ### Fixing Timing Issues
 
 **Problem: UI Not Updated**
+
 ```kotlin
 // FLAKY
 @Test
@@ -195,6 +207,7 @@ fun stableTest_waitForUpdate() {
 ```
 
 **Problem: Coroutine Not Complete**
+
 ```kotlin
 // FLAKY
 @Test
@@ -213,6 +226,7 @@ fun stableTest_coroutineComplete() = runTest {
 ```
 
 **Problem: Animation Not Finished**
+
 ```kotlin
 // FLAKY
 @Test
@@ -277,6 +291,7 @@ class ModernCleanupTest {
 ### Test Isolation Strategies
 
 **1. Fresh State Per Test**
+
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class IsolatedTests {
@@ -303,6 +318,7 @@ class IsolatedTests {
 ```
 
 **2. Separate Test Instances**
+
 ```kotlin
 // Use @TestInstance for JUnit 5
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)  // Default
@@ -325,6 +341,7 @@ class PerClassTests {
 ### Retry Strategies
 
 **Gradle Test Retry Plugin**
+
 ```gradle
 plugins {
     id 'org.gradle.test-retry' version '1.5.4'
@@ -340,6 +357,7 @@ tasks.withType(Test) {
 ```
 
 **Custom Retry Rule (JUnit 4)**
+
 ```kotlin
 class RetryRule(private val retryCount: Int = 3) : TestRule {
     override fun apply(base: Statement, description: Description): Statement {
@@ -375,6 +393,7 @@ class FlakyTest {
 ```
 
 **Conditional Retry**
+
 ```kotlin
 class ConditionalRetryRule : TestRule {
     override fun apply(base: Statement, description: Description): Statement {
@@ -401,6 +420,7 @@ class ConditionalRetryRule : TestRule {
 ### Detecting Flaky Tests
 
 **1. Run Tests Multiple Times**
+
 ```bash
 # Run same test 100 times
 ./gradlew test --tests "*.FlakyTest" --rerun-tasks
@@ -412,16 +432,18 @@ done
 ```
 
 **2. CI/CD Detection**
+
 ```yaml
 # GitHub Actions
 - name: Run tests multiple times
   run: |
-    for i in {1..10}; do
-      ./gradlew test || exit 1
-    done
+      for i in {1..10}; do
+        ./gradlew test || exit 1
+      done
 ```
 
 **3. Flakiness Score**
+
 ```kotlin
 data class TestResult(
     val name: String,
@@ -468,16 +490,16 @@ class FlakinessAnalyzer {
 
 When you encounter a flaky test, check:
 
-- [ ] Does it use Thread.sleep()? Replace with proper waiting
-- [ ] Does it share state with other tests? Isolate
-- [ ] Does it depend on test order? Make independent
-- [ ] Does it use real network/database? Mock it
-- [ ] Does it use Random? Use seeded Random
-- [ ] Does it wait for async operations? Add proper waiting
-- [ ] Does it clean up resources? Add @After cleanup
-- [ ] Does it have hardcoded timeouts? Make configurable
-- [ ] Does it test animations? Control test clock
-- [ ] Does it run reliably 100 times? Test it
+-   [ ] Does it use Thread.sleep()? Replace with proper waiting
+-   [ ] Does it share state with other tests? Isolate
+-   [ ] Does it depend on test order? Make independent
+-   [ ] Does it use real network/database? Mock it
+-   [ ] Does it use Random? Use seeded Random
+-   [ ] Does it wait for async operations? Add proper waiting
+-   [ ] Does it clean up resources? Add @After cleanup
+-   [ ] Does it have hardcoded timeouts? Make configurable
+-   [ ] Does it test animations? Control test clock
+-   [ ] Does it run reliably 100 times? Test it
 
 ## Ответ (RU)
 
@@ -516,11 +538,13 @@ Flaky тесты - это тесты которые иногда проходя�
 ## Related Questions
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
-- [[q-testing-compose-ui--android--medium]] - Testing
-- [[q-compose-testing--android--medium]] - Testing
-- [[q-robolectric-vs-instrumented--testing--medium]] - Testing
-- [[q-screenshot-snapshot-testing--testing--medium]] - Testing
+
+-   [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+-   [[q-testing-compose-ui--android--medium]] - Testing
+-   [[q-compose-testing--android--medium]] - Testing
+-   [[q-robolectric-vs-instrumented--testing--medium]] - Testing
+-   [[q-screenshot-snapshot-testing--testing--medium]] - Testing
 
 ### Advanced (Harder)
-- [[q-testing-coroutines-flow--testing--hard]] - Testing
+
+-   [[q-testing-coroutines-flow--testing--hard]] - Testing

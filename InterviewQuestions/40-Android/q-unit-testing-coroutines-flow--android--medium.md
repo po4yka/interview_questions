@@ -1,17 +1,18 @@
 ---
+id: "20251015082238644"
+title: "Unit Testing Coroutines Flow"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - testing
   - coroutines
   - flow
   - unit-testing
   - turbine
   - mockk
-difficulty: medium
-status: draft
 ---
-
 # Unit Testing with Coroutines and Flow
 
 **Сложность**: 🟡 Medium

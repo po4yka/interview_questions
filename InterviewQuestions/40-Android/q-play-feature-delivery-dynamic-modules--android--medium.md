@@ -2,34 +2,30 @@
 id: q-play-feature-delivery-dynamic-modules--android--medium--1728115380000
 title: "Play Feature Delivery and Dynamic Modules / Play Feature Delivery и динамические модули"
 topic: android
-aliases:
-  - Play Feature Delivery and Dynamic Modules
-  - Play Feature Delivery и динамические модули
-date_created: 2025-10-05
-date_modified: 2025-10-05
-status: draft
-original_language: en
-language_tags:
-  - en
-  - ru
-type: question
-category: android
 difficulty: medium
-subtopics:
-  - app-bundle
-  - play-console
-  - architecture-modularization
-tags:
-  - android
+status: draft
+created: 2025-10-05
+tags: - android
   - play-feature-delivery
   - dynamic-modules
   - app-bundle
   - modularization
   - difficulty/medium
+aliases:   - Play Feature Delivery and Dynamic Modules
+  - Play Feature Delivery и динамические модули
+category: android
+date_created: 2025-10-05
+date_modified: 2025-10-05
+language_tags:   - en
+  - ru
 moc: moc-android
+original_language: en
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20Play%20Feature%20Delivery.md"
+subtopics:   - app-bundle
+  - play-console
+  - architecture-modularization
+type: question
 ---
-
 # Play Feature Delivery and Dynamic Modules / Play Feature Delivery и динамические модули
 
 # Question (EN)

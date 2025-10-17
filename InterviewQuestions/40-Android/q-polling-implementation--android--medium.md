@@ -1,15 +1,16 @@
 ---
+id: "20251015082237555"
+title: "Polling Implementation / Polling Реализация"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - polling
   - background-tasks
   - coroutines
   - workmanager
-difficulty: medium
-status: draft
 ---
-
 # Как реализовать polling в Android?
 
 **English**: How to implement polling in Android?

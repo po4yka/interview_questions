@@ -1,31 +1,28 @@
 ---
 id: 20251012-300009
 title: "Database Sharding and Partitioning / Шардирование и партиционирование баз данных"
-slug: database-sharding-partitioning-system-design-hard
 topic: system-design
-subtopics:
+difficulty: hard
+status: draft
+created: 2025-10-12
+tags: - system-design
   - database
+  - sharding
+  - partitioning
+  - scalability
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-system-design
+related_questions:   - q-sql-nosql-databases--system-design--medium
+  - q-horizontal-vertical-scaling--system-design--medium
+  - q-cap-theorem-distributed-systems--system-design--hard
+slug: database-sharding-partitioning-system-design-hard
+subtopics:   - database
   - sharding
   - partitioning
   - scalability
   - distributed-databases
-status: draft
-difficulty: hard
-moc: moc-system-design
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-sql-nosql-databases--system-design--medium
-  - q-horizontal-vertical-scaling--system-design--medium
-  - q-cap-theorem-distributed-systems--system-design--hard
-tags:
-  - system-design
-  - database
-  - sharding
-  - partitioning
-  - scalability
 ---
-
 # Database Sharding and Partitioning
 
 ## English Version
@@ -758,20 +755,9 @@ class InstagramShardRouter(
 - [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
 - [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
 - [[q-design-url-shortener--system-design--medium]] - design url shortener   system
-
 ### Related (Hard)
 - [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
-### Prerequisites (Easier)
-- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
-- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
-- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
-
 ### Related (Hard)
 - [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
-### Prerequisites (Easier)
-- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
-- [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
-- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
-
 ### Related (Hard)
 - [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system

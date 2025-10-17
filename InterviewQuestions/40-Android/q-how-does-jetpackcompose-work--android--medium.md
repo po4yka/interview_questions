@@ -1,15 +1,16 @@
 ---
+id: "20251015082237248"
+title: "How Does Jetpackcompose Work / Как работает Jetpack Compose"
 topic: android
-tags:
-  - jetpack compose
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - jetpack compose
   - ui framework
   - android
   - ui
   - jetpack-compose
-difficulty: medium
-status: draft
 ---
-
 # How does jetpackCompose work?
 
 # Вопрос (RU)

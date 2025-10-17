@@ -1,6 +1,6 @@
 ---
 id: 20251006-015
-title: "Clean Architecture in Android / Clean Architecture в Android"
+title: "Clean Architecture in Android"
 aliases: []
 
 # Classification
@@ -267,36 +267,23 @@ class UserRepositoryImpl(
 - [[q-usecase-pattern-android--android--medium]] - Architecture
 - [[q-repository-pattern--android--medium]] - Architecture
 - [[q-repository-multiple-sources--android--medium]] - Architecture
-
-### Related (Hard)
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-- [[q-modularization-patterns--android--hard]] - Architecture
-- [[q-design-instagram-stories--android--hard]] - Media
-### Prerequisites (Easier)
-- [[q-usecase-pattern-android--android--medium]] - Architecture
-- [[q-repository-pattern--android--medium]] - Architecture
-- [[q-repository-multiple-sources--android--medium]] - Architecture
-
-### Related (Hard)
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-- [[q-modularization-patterns--android--hard]] - Architecture
-- [[q-design-instagram-stories--android--hard]] - Media
-### Prerequisites (Easier)
-- [[q-usecase-pattern-android--android--medium]] - Architecture
-- [[q-repository-pattern--android--medium]] - Architecture
-- [[q-repository-multiple-sources--android--medium]] - Architecture
-
-### Related (Hard)
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-- [[q-modularization-patterns--android--hard]] - Architecture
-- [[q-design-instagram-stories--android--hard]] - Media
-### Prerequisites (Easier)
 - [[q-architecture-components-libraries--android--easy]] - Architecture Components overview
 - [[q-viewmodel-pattern--android--easy]] - ViewModel pattern basics
-
+### Related (Hard)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-modularization-patterns--android--hard]] - Architecture
+- [[q-design-instagram-stories--android--hard]] - Media
+### Related (Hard)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-modularization-patterns--android--hard]] - Architecture
+- [[q-design-instagram-stories--android--hard]] - Media
+### Related (Hard)
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-modularization-patterns--android--hard]] - Architecture
+- [[q-design-instagram-stories--android--hard]] - Media
 ### MVVM & ViewModel (Medium)
 - [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
 - [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison

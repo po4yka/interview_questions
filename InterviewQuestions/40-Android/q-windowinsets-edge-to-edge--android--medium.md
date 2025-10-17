@@ -1,31 +1,28 @@
 ---
 id: 20251012-400004
-title: "WindowInsets & Edge-to-Edge / WindowInsets и Edge-to-Edge"
-slug: windowinsets-edge-to-edge-android-medium
+title: "WindowInsets & Edge-to-Edge"
 topic: android
-subtopics:
-  - ui
-  - system-ui
+difficulty: medium
+status: draft
+created: 2025-10-12
+tags: - android
   - windowinsets
   - edge-to-edge
+  - system-ui
   - immersive
-status: draft
-difficulty: medium
-moc: moc-android
 date_created: 2025-10-12
 date_updated: 2025-10-12
-related_questions:
-  - q-jetpack-compose-basics--android--medium
+moc: moc-android
+related_questions:   - q-jetpack-compose-basics--android--medium
   - q-material3-components--material-design--easy
   - q-adaptive-layouts--android--hard
-tags:
-  - android
+slug: windowinsets-edge-to-edge-android-medium
+subtopics:   - ui
+  - system-ui
   - windowinsets
   - edge-to-edge
-  - system-ui
   - immersive
 ---
-
 # WindowInsets & Edge-to-Edge
 
 ## English Version

@@ -1,6 +1,6 @@
 ---
 id: 20251005-235003
-title: "CoroutineScope vs CoroutineContext / CoroutineScope vs CoroutineContext"
+title: "CoroutineScope vs CoroutineContext / CoroutineScope против CoroutineContext"
 aliases: []
 
 # Classification

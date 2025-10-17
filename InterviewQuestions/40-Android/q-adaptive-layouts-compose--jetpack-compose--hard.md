@@ -1,31 +1,28 @@
 ---
 id: 20251012-400008
 title: "Adaptive Layouts in Compose / Адаптивные layouts в Compose"
-slug: adaptive-layouts-compose-jetpack-compose-hard
 topic: android
-subtopics:
+difficulty: hard
+status: draft
+created: 2025-10-12
+tags: - android
   - jetpack-compose
+  - adaptive-layouts
+  - responsive-design
+  - window-size-classes
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-android
+related_questions:   - q-windowinsets-edge-to-edge--android--medium
+  - q-jetpack-compose-basics--android--medium
+  - q-material3-components--material-design--easy
+slug: adaptive-layouts-compose-jetpack-compose-hard
+subtopics:   - jetpack-compose
   - adaptive-layouts
   - responsive-design
   - window-size-classes
   - foldables
-status: draft
-difficulty: hard
-moc: moc-android
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-windowinsets-edge-to-edge--android--medium
-  - q-jetpack-compose-basics--android--medium
-  - q-material3-components--material-design--easy
-tags:
-  - android
-  - jetpack-compose
-  - adaptive-layouts
-  - responsive-design
-  - window-size-classes
 ---
-
 # Adaptive Layouts in Compose
 
 ## English Version
@@ -803,22 +800,7 @@ fun AdaptivePreview() {
 - [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
 - [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
 
-### Related (Hard)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
-- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose, Jetpack
-- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - Compose, Jetpack
-
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose, Jetpack
-- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
-- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
-
-### Related (Hard)
+### Related (Medium)
 - [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
 - [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
 - [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose, Jetpack

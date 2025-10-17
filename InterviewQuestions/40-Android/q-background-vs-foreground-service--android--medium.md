@@ -1,17 +1,18 @@
 ---
+id: "20251015082237346"
+title: "Background Vs Foreground Service"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/foreground-service
   - android/services
   - background-service
   - foreground-service
   - process-priority
   - services
-difficulty: medium
-status: draft
 ---
-
 # Background service vs Foreground service
 
 # Question (EN)
@@ -657,18 +658,626 @@ Is the task user-visible and time-sensitive?
 
 **Foreground service** требует **постоянное уведомление** и имеет **высокий приоритет** - система не убьет его просто так.
 
-**Ключевые отличия:**
+---
+
+## Детальное сравнение
 
 | Аспект | Background Service | Foreground Service |
 |--------|-------------------|-------------------|
-| **Уведомление** | Не требуется | **Обязательно** |
-| **Приоритет** | Низкий | Высокий |
-| **Видимость** | Скрыт от пользователя | Видим через уведомление |
+| **Уведомление** | Не требуется | Обязательное постоянное уведомление |
+| **Приоритет** | Низкий (может быть убит) | Высокий (защищен от завершения) |
+| **Осведомленность пользователя** | Скрыт от пользователя | Пользователь видит уведомление |
 | **Поведение системы** | Убивает при нехватке памяти | Сохраняет как можно дольше |
+| **Случаи использования** | Простые задачи, синхронизация | Музыка, навигация, загрузки |
+| **Ограничения Android 8.0+** | Серьезные ограничения | Может работать дольше |
 
-**Когда использовать:**
-- **Foreground Service**: музыка, навигация, загрузки (пользователь должен знать)
-- **Background Service**: почти никогда на Android 8.0+ (используйте WorkManager)
+---
+
+## Background Service
+
+### Определение
+
+**Background service** работает **без осведомленности пользователя** и имеет **низкий приоритет**.
+
+```kotlin
+class BackgroundSyncService : Service() {
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Background service - может быть убит в любой момент
+        Thread {
+            syncData()  // Может быть прерван!
+            stopSelf()
+        }.start()
+
+        return START_NOT_STICKY
+    }
+
+    private fun syncData() {
+        // Логика синхронизации
+        Thread.sleep(5000)
+        Log.d("Service", "Sync complete")
+    }
+
+    override fun onBind(intent: Intent?): IBinder? = null
+}
+```
+
+**Характеристики:**
+- Уведомление не требуется
+- Низкий приоритет (уровень Service Process)
+- Может быть убит системой при нехватке памяти
+- **Android 8.0+ серьезно ограничивает выполнение background service**
+
+---
+
+### Ограничения Android 8.0+ для Background
+
+На Android 8.0 (API 26) и выше **background services ограничены**:
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+
+    private fun startBackgroundService() {
+        val intent = Intent(this, BackgroundSyncService::class.java)
+
+        // На Android 8.0+ это может выбросить IllegalStateException
+        // если приложение в фоне!
+        startService(intent)
+    }
+}
+```
+
+**Выбрасываемое исключение:**
+```
+java.lang.IllegalStateException: Not allowed to start service Intent
+{cmp=com.example/.BackgroundSyncService}: app is in background
+```
+
+**Решение:** Используйте foreground service или WorkManager вместо этого.
+
+---
+
+## Foreground Service
+
+### Определение
+
+**Foreground service** работает с **осведомленностью пользователя** через **постоянное уведомление** и имеет **высокий приоритет**.
+
+```kotlin
+class ForegroundDownloadService : Service() {
+
+    private val NOTIFICATION_ID = 1
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Foreground service - защищен от завершения
+        startForeground(NOTIFICATION_ID, createNotification())
+
+        Thread {
+            downloadFile()  // Гарантированно завершится!
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            stopSelf()
+        }.start()
+
+        return START_NOT_STICKY
+    }
+
+    private fun createNotification(): Notification {
+        val channelId = "download_channel"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "Downloads",
+                NotificationManager.IMPORTANCE_LOW
+            )
+            getSystemService(NotificationManager::class.java)
+                .createNotificationChannel(channel)
+        }
+
+        return NotificationCompat.Builder(this, channelId)
+            .setContentTitle("Downloading file")
+            .setContentText("Download in progress...")
+            .setSmallIcon(android.R.drawable.stat_sys_download)
+            .setOngoing(true)  // Не может быть отклонено пользователем
+            .build()
+    }
+
+    private fun downloadFile() {
+        // Логика загрузки
+        Thread.sleep(10000)
+        Log.d("Service", "Download complete")
+    }
+
+    override fun onBind(intent: Intent?): IBinder? = null
+}
+```
+
+**Характеристики:**
+- **Уведомление обязательно** (показывается пользователю)
+- **Высокий приоритет** (уровень Foreground Process)
+- **Защищен** от завершения
+- Может работать на Android 8.0+ (с ограничениями)
+
+---
+
+### Запуск Foreground Service
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+
+    private fun startForegroundService() {
+        val intent = Intent(this, ForegroundDownloadService::class.java)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //  Необходимо использовать startForegroundService() на Android 8.0+
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
+    }
+}
+```
+
+**Важно:** На Android 8.0+ вы **должны** вызвать `startForeground()` в течение **5 секунд** после запуска сервиса, иначе система его убьет.
+
+---
+
+## Уровни приоритета процессов
+
+### Приоритет Background Service
+
+```
+Иерархия приоритетов процессов (от низкого к высокому):
+
+ 5. Empty Process
+
+ 4. Cached Process
+
+ 3. Service Process (Background)      Может быть убит при нехватке памяти
+
+ 2. Visible Process
+
+ 1. Foreground Process
+
+```
+
+**Background service:**
+- Приоритет: **Service Process (Уровень 3)**
+- Система убивает при нехватке памяти
+- Нет гарантии завершения
+
+---
+
+### Приоритет Foreground Service
+
+```
+Иерархия приоритетов процессов (от низкого к высокому):
+
+ 5. Empty Process
+
+ 4. Cached Process
+
+ 3. Service Process
+
+ 2. Visible Process
+
+ 1. Foreground Process (Foreground)   Высший приоритет, защищен
+
+```
+
+**Foreground service:**
+- Приоритет: **Foreground Process (Уровень 1)**
+- Система сохраняет как можно дольше
+- Высокая гарантия завершения
+
+---
+
+## Примеры из реальной практики
+
+### Пример 1: Музыкальный плеер (Foreground Service)
+
+```kotlin
+class MusicPlayerService : Service() {
+
+    private val NOTIFICATION_ID = 100
+    private var mediaPlayer: MediaPlayer? = null
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when (intent?.action) {
+            ACTION_PLAY -> {
+                // Foreground service с уведомлением
+                startForeground(NOTIFICATION_ID, createNotification("Playing"))
+                playMusic()
+            }
+            ACTION_PAUSE -> {
+                pauseMusic()
+                updateNotification("Paused")
+            }
+            ACTION_STOP -> {
+                stopMusic()
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                stopSelf()
+            }
+        }
+
+        return START_STICKY  // Перезапустить если убит
+    }
+
+    private fun createNotification(status: String): Notification {
+        val channelId = "music_channel"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "Music Player",
+                NotificationManager.IMPORTANCE_LOW
+            )
+            getSystemService(NotificationManager::class.java)
+                .createNotificationChannel(channel)
+        }
+
+        return NotificationCompat.Builder(this, channelId)
+            .setContentTitle("Music Player")
+            .setContentText(status)
+            .setSmallIcon(android.R.drawable.ic_media_play)
+            .setOngoing(true)
+            .build()
+    }
+
+    private fun updateNotification(status: String) {
+        val notification = createNotification(status)
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.notify(NOTIFICATION_ID, notification)
+    }
+
+    private fun playMusic() {
+        mediaPlayer = MediaPlayer.create(this, R.raw.music_file)
+        mediaPlayer?.start()
+    }
+
+    private fun pauseMusic() {
+        mediaPlayer?.pause()
+    }
+
+    private fun stopMusic() {
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
+    override fun onBind(intent: Intent?): IBinder? = null
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopMusic()
+    }
+
+    companion object {
+        const val ACTION_PLAY = "ACTION_PLAY"
+        const val ACTION_PAUSE = "ACTION_PAUSE"
+        const val ACTION_STOP = "ACTION_STOP"
+    }
+}
+```
+
+**Почему foreground?**
+- Пользователь ожидает продолжения воспроизведения музыки
+- Высокий приоритет предотвращает прерывание
+- Уведомление показывает статус воспроизведения
+
+---
+
+### Пример 2: Синхронизация данных (Background Service → WorkManager)
+
+```kotlin
+// НЕ ДЕЛАЙТЕ ТАК: Background service (ограничен на Android 8.0+)
+class SyncService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Thread {
+            syncDataToServer()  // Может быть убит!
+            stopSelf()
+        }.start()
+        return START_NOT_STICKY
+    }
+
+    override fun onBind(intent: Intent?): IBinder? = null
+}
+
+// ДЕЛАЙТЕ ТАК: Используйте WorkManager
+class SyncWorker(
+    context: Context,
+    params: WorkerParameters
+) : CoroutineWorker(context, params) {
+
+    override suspend fun doWork(): Result {
+        return try {
+            syncDataToServer()
+            Result.success()
+        } catch (e: Exception) {
+            Result.retry()
+        }
+    }
+
+    private suspend fun syncDataToServer() {
+        // Логика синхронизации
+        withContext(Dispatchers.IO) {
+            // Сетевой вызов
+        }
+    }
+}
+
+// Запланировать синхронизацию
+val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
+
+WorkManager.getInstance(context).enqueue(syncRequest)
+```
+
+**Почему WorkManager?**
+- Синхронизация может быть отложена
+- Пользователю не нужно видеть уведомление
+- Система управляет выполнением интеллектуально
+
+---
+
+## Когда использовать каждый
+
+### Используйте Background Service когда:
+
+** Примечание:** Background services **сильно ограничены** на Android 8.0+. Рассмотрите использование **WorkManager** или **JobScheduler** вместо этого.
+
+**Редкие случаи:**
+- Приложение на переднем плане
+- Очень короткая задача (< 1 секунды)
+- Устаревшее приложение (target API < 26)
+
+---
+
+### Используйте Foreground Service когда:
+
+**Используйте foreground service когда:**
+
+1. **Задача видимая пользователю**
+   ```kotlin
+   // Воспроизведение музыки
+   // Пользователь ожидает продолжения музыки
+   class MusicPlayerService : Service() {
+       override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+           startForeground(NOTIFICATION_ID, notification)
+           playMusic()
+           return START_STICKY
+       }
+   }
+   ```
+
+2. **Задача, чувствительная ко времени**
+   ```kotlin
+   // Навигация
+   // Пользователю нужны обновления местоположения в реальном времени
+   class NavigationService : Service() {
+       override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+           startForeground(NOTIFICATION_ID, notification)
+           startLocationUpdates()
+           return START_STICKY
+       }
+   }
+   ```
+
+3. **Загрузка/выгрузка по инициативе пользователя**
+   ```kotlin
+   // Загрузка файла
+   // Пользователь нажал кнопку "Загрузить"
+   class DownloadService : Service() {
+       override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+           startForeground(NOTIFICATION_ID, notification)
+           downloadFile()
+           return START_NOT_STICKY
+       }
+   }
+   ```
+
+---
+
+## Требования к манифесту
+
+### Background Service
+
+```xml
+<manifest>
+    <application>
+        <service
+            android:name=".BackgroundSyncService"
+            android:exported="false" />
+    </application>
+</manifest>
+```
+
+### Foreground Service
+
+```xml
+<manifest>
+    <!-- Требуется для foreground service -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <!-- Требуется для отправки уведомлений (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application>
+        <service
+            android:name=".ForegroundDownloadService"
+            android:foregroundServiceType="dataSync"
+            android:exported="false" />
+    </application>
+</manifest>
+```
+
+**Типы foreground service (Android 10+):**
+- `camera` - Доступ к камере
+- `connectedDevice` - Устройства Bluetooth/USB
+- `dataSync` - Передача/синхронизация данных
+- `location` - Отслеживание местоположения
+- `mediaPlayback` - Воспроизведение аудио/видео
+- `mediaProjection` - Запись экрана
+- `microphone` - Запись аудио
+- `phoneCall` - Обработка телефонных звонков
+
+---
+
+## Различия между версиями Android
+
+### Android 7.1 и ниже
+
+```kotlin
+// Background и foreground работают похоже
+startService(Intent(this, MyService::class.java))
+```
+
+### Android 8.0 (API 26)
+
+**Ограничения background service:**
+- Нельзя запускать background services когда приложение в фоне
+- Нужно использовать `startForegroundService()` для foreground services
+
+```kotlin
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    startForegroundService(intent)  // Нужно вызвать startForeground() в течение 5с
+} else {
+    startService(intent)
+}
+```
+
+### Android 12 (API 31)
+
+**Ограничения запуска foreground service:**
+- Нельзя запускать foreground services из фона (с исключениями)
+- Нужно использовать WorkManager или точные alarm'ы для запуска из фона
+
+```kotlin
+//  Может выбросить ForegroundServiceStartNotAllowedException на Android 12+
+// если приложение в фоне
+startForegroundService(intent)
+
+//  Используйте WorkManager вместо этого
+val workRequest = OneTimeWorkRequestBuilder<MyWorker>()
+    .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+    .build()
+WorkManager.getInstance(context).enqueue(workRequest)
+```
+
+---
+
+## Распространенные ошибки
+
+### Ошибка 1: Использование Background Service на Android 8.0+
+
+```kotlin
+// ПЛОХО: Не работает на Android 8.0+
+class MainActivity : AppCompatActivity() {
+    private fun syncData() {
+        startService(Intent(this, SyncService::class.java))
+        // Выбрасывает IllegalStateException если приложение в фоне!
+    }
+}
+
+// ХОРОШО: Используйте WorkManager
+class MainActivity : AppCompatActivity() {
+    private fun syncData() {
+        val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>().build()
+        WorkManager.getInstance(this).enqueue(syncRequest)
+    }
+}
+```
+
+### Ошибка 2: Не вызываете startForeground() достаточно быстро
+
+```kotlin
+// ПЛОХО: Задержка перед startForeground()
+class MyService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Thread {
+            Thread.sleep(10000)  // 10 секунд задержки
+            startForeground(NOTIFICATION_ID, notification)  // Слишком поздно! Service убит
+        }.start()
+        return START_NOT_STICKY
+    }
+}
+
+// ХОРОШО: Вызовите startForeground() немедленно
+class MyService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startForeground(NOTIFICATION_ID, notification)  // В течение 5 секунд
+        Thread {
+            doLongRunningTask()
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            stopSelf()
+        }.start()
+        return START_NOT_STICKY
+    }
+}
+```
+
+### Ошибка 3: Использование Foreground Service для откладываемых задач
+
+```kotlin
+// ПЛОХО: Foreground service для периодической синхронизации
+class PeriodicSyncService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startForeground(NOTIFICATION_ID, notification)  // Пользователь видит ненужное уведомление
+        syncData()
+        return START_STICKY
+    }
+}
+
+// ХОРОШО: Используйте WorkManager для периодических задач
+val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
+
+WorkManager.getInstance(context).enqueue(syncRequest)
+```
+
+---
+
+## Резюме
+
+### Background Service
+- **Работает:** В фоне, скрыт от пользователя
+- **Приоритет:** Низкий (может быть убит при нехватке памяти)
+- **Уведомление:** Не требуется
+- **Android 8.0+:** **Сильно ограничен** (используйте WorkManager вместо этого)
+- **Случай использования:** Почти никогда (используйте WorkManager для фоновых задач)
+
+### Foreground Service
+- **Работает:** С осведомленностью пользователя через уведомление
+- **Приоритет:** Высокий (защищен от завершения)
+- **Уведомление:** **Обязательное** постоянное уведомление
+- **Android 8.0+:** Разрешен, но требует `startForegroundService()`
+- **Случай использования:** Музыка, навигация, загрузки по инициативе пользователя
+
+### Руководство по принятию решения
+
+```
+Задача видима пользователю и чувствительна ко времени?
+|-- ДА → Foreground Service
+-- НЕТ → Задача может быть отложена?
+    |-- ДА → WorkManager
+    -- НЕТ → Рассмотрите действительно ли это необходимо
+        -- Если да, вероятно нужен Foreground Service
+```
+
+**Лучшая практика:** Избегайте background services на Android 8.0+. Используйте:
+- **Foreground service** для задач видимых пользователю
+- **WorkManager** для откладываемых фоновых задач
+- **JobScheduler** для оптимизированных системой периодических задач
 
 
 ---

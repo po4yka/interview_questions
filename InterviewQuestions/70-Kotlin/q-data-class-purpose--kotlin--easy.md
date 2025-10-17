@@ -1,13 +1,14 @@
 ---
+id: "20251015082237072"
+title: "Data Class Purpose / Назначение data class"
 topic: kotlin
-tags:
-  - kotlin
-  - data-classes
-  - code-generation
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - kotlin
+  - data-classes
+  - code-generation
 ---
-
 # Для чего нужен data class?
 
 # Question (EN)

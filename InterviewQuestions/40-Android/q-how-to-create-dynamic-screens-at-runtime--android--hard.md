@@ -1,7 +1,11 @@
 ---
+id: "20251015082237336"
+title: "How To Create Dynamic Screens At Runtime / Как создавать динамические экраны во время выполнения"
 topic: android
-tags:
-  - Jetpack Compose
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Jetpack Compose
   - Fragment
   - RecyclerView
   - dynamic UI
@@ -9,10 +13,7 @@ tags:
   - ui
   - dynamic-ui
   - jetpack-compose
-difficulty: medium
-status: draft
 ---
-
 # How to create dynamic screens at runtime?
 
 # Вопрос (RU)

@@ -1,21 +1,22 @@
 ---
+id: "20251015082237561"
+title: "Offline First Architecture / Архитектура Offline First"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-13
+tags: - android
   - architecture
   - offline-first
   - networking
   - sync
   - room
   - workmanager
-difficulty: hard
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # How to Implement Offline-First Architecture in Android
 
 **Сложность**:  Hard

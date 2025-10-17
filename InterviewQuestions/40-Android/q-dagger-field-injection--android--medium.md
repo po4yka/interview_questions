@@ -1,16 +1,17 @@
 ---
+id: "20251015082238608"
+title: "Dagger Field Injection / Инъекция полей Dagger"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/di-hilt
   - dagger
   - dependency-injection
   - di-hilt
   - platform/android
-difficulty: medium
-status: draft
 ---
-
 # Какие особенности инжекта в поле при помощи Dagger?
 
 **English**: What are the features of field injection using Dagger?

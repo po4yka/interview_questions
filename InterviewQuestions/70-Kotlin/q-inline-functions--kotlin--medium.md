@@ -1,13 +1,14 @@
 ---
+id: "20251015082237052"
+title: "Inline Functions"
 topic: kotlin
-tags:
-  - kotlin
-  - inline-functions
-  - performance
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - kotlin
+  - inline-functions
+  - performance
 ---
-
 # Что такое inline функции?
 
 # Question (EN)

@@ -1,21 +1,22 @@
 ---
+id: "20251015082237118"
+title: "Java Equals Default Behavior / Поведение equals по умолчанию в Java"
 topic: programming-languages
-subtopics: ["java", "jvm", "language-features"]
-tags:
-  - equality
+difficulty: easy
+status: draft
+created: 2025-10-13
+tags: - equality
   - equals
   - java
   - object-class
   - programming-languages
   - reference-equality
-difficulty: easy
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-programming-languages
 related_questions: []
+subtopics: ["java", "jvm", "language-features"]
 ---
-
 # Как в оригинальном Java equals работает, что он сравнивает?
 
 # Question (EN)

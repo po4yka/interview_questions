@@ -1,17 +1,18 @@
 ---
+id: "20251015082238661"
+title: "Proguard R8 Rules / Правила ProGuard и R8"
 topic: security
-tags:
-  - security
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - security
   - proguard
   - r8
   - obfuscation
   - optimization
   - library
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # ProGuard/R8 Rules / Правила ProGuard/R8
 
 **English**: Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection, serialization, native methods, and APIs. Optimize for production while maintaining functionality.
@@ -1041,17 +1042,6 @@ ProGuard/R8 обеспечивает:
 - **Отладку**: Mapping файлы для деобфускации
 
 Всегда тестируйте обфусцированные сборки и сохраняйте mapping файлы для каждого релиза.
-
----
-
-## Related Questions
-
-### Related (Medium)
-- [[q-android-security-practices-checklist--android--medium]] - Security
-- [[q-encrypted-file-storage--security--medium]] - Security
-- [[q-proguard-r8--android--medium]] - Build
-- [[q-database-encryption-android--android--medium]] - Security
-- [[q-dagger-build-time-optimization--android--medium]] - Build
 
 ---
 

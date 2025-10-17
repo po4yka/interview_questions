@@ -1,16 +1,17 @@
 ---
+id: "20251015082236028"
+title: "Lifecycle Scopes Viewmodelscope Lifecyclescope / Скоупы жизненного цикла ViewModelScope и LifecycleScope"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - lifecycle
   - viewmodelscope
   - lifecyclescope
   - android
-difficulty: medium
-status: draft
 ---
-
 # viewModelScope vs lifecycleScope
 
 # Question (EN)

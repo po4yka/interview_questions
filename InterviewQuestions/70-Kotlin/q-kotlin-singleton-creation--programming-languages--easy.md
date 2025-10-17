@@ -1,11 +1,12 @@
 ---
+id: "20251015082236025"
+title: "Kotlin Singleton Creation / Создание синглтона в Kotlin"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # How to create a singleton in Kotlin?
 
 # Question (EN)

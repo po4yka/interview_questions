@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237117"
+title: "Launch Vs Async Error Handling / Launch против Async Error Обработка"
+topic: computer-science
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # Error Handling Differences: Launch vs Async
 
 # Question (EN)

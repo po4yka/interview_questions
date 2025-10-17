@@ -1,11 +1,12 @@
 ---
+id: "20251015082238645"
+title: "How To Display Snackbar Or Toast Based On Results / Как отобразить Snackbar или Toast в зависимости от результатов"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
-
 # How to display Snackbar or Toast based on results?
 
 ## EN (expanded)

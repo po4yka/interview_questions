@@ -1,10 +1,12 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237084"
+title: "Sharedflow Vs Stateflow / Sharedflow против Stateflow"
+topic: computer-science
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # SharedFlow vs StateFlow Differences
 
 # Question (EN)

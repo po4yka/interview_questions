@@ -1,17 +1,18 @@
 ---
+id: "20251015082236002"
+title: "Collection Implementations / Реализации коллекций"
 topic: kotlin
-tags:
-  - collections
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - collections
   - implementations
   - kotlin
   - list
   - map
   - programming-languages
   - set
-difficulty: easy
-status: draft
 ---
-
 # Какие есть реализации коллекций?
 
 # Question (EN)

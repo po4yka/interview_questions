@@ -1,15 +1,17 @@
 ---
+id: "20251015082237289"
+title: "Retrofit Call Adapter Advanced / Продвинутый CallAdapter для Retrofit"
 topic: networking
-tags:
-  - networking
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - networking
   - retrofit
   - call-adapter
   - result
   - error-handling
   - sealed-classes
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
 
 # Retrofit CallAdapter Advanced / Продвинутый CallAdapter для Retrofit
@@ -17,6 +19,7 @@ status: draft
 **English**: Implement custom Retrofit CallAdapter for Result<T> type. Handle different response types and errors uniformly with sealed classes.
 
 ## Answer (EN)
+
 **Retrofit CallAdapter** is a powerful abstraction that allows you to transform API responses into custom types. By creating a custom CallAdapter, you can standardize error handling, wrap responses in Result types, and integrate seamlessly with Kotlin Coroutines and Flow.
 
 ### Why Custom CallAdapter?
@@ -865,23 +868,24 @@ class ResultCallAdapterTest {
 ### Common Pitfalls
 
 1. **Not Handling All Error Types**:
-   ```kotlin
-   // BAD: Only handles HTTP errors
-   when (result) {
-       is Result.Success -> handleSuccess()
-       is Result.Error.HttpError -> handleError()
-       // Missing other error types!
-   }
 
-   // GOOD: Exhaustive handling
-   when (result) {
-       is Result.Success -> handleSuccess()
-       is Result.Error.HttpError -> handleHttpError()
-       is Result.Error.NetworkError -> handleNetworkError()
-       is Result.Error.SerializationError -> handleSerializationError()
-       is Result.Error.UnknownError -> handleUnknownError()
-   }
-   ```
+    ```kotlin
+    // BAD: Only handles HTTP errors
+    when (result) {
+        is Result.Success -> handleSuccess()
+        is Result.Error.HttpError -> handleError()
+        // Missing other error types!
+    }
+
+    // GOOD: Exhaustive handling
+    when (result) {
+        is Result.Success -> handleSuccess()
+        is Result.Error.HttpError -> handleHttpError()
+        is Result.Error.NetworkError -> handleNetworkError()
+        is Result.Error.SerializationError -> handleSerializationError()
+        is Result.Error.UnknownError -> handleUnknownError()
+    }
+    ```
 
 2. **Losing Type Information**: Erasing type with Result<Any>
 
@@ -909,19 +913,20 @@ class ResultCallAdapterTest {
 
 Custom Retrofit CallAdapter provides:
 
-- **Unified Error Handling**: Single place for all error conversion
-- **Type Safety**: Sealed classes for exhaustive error handling
-- **Clean Code**: Repositories don't need try-catch everywhere
-- **Testability**: Easy to test with MockWebServer
-- **Flexibility**: Support for Call, suspend, and Flow
-- **User Experience**: Convert technical errors to user-friendly messages
-- **Maintainability**: Centralized error logic
+-   **Unified Error Handling**: Single place for all error conversion
+-   **Type Safety**: Sealed classes for exhaustive error handling
+-   **Clean Code**: Repositories don't need try-catch everywhere
+-   **Testability**: Easy to test with MockWebServer
+-   **Flexibility**: Support for Call, suspend, and Flow
+-   **User Experience**: Convert technical errors to user-friendly messages
+-   **Maintainability**: Centralized error logic
 
 Master CallAdapter to build robust, maintainable Android network layers.
 
 ---
 
 ## Ответ (RU)
+
 **Retrofit CallAdapter** - мощная абстракция, позволяющая трансформировать API-ответы в пользовательские типы. Создав кастомный CallAdapter, можно стандартизировать обработку ошибок, обернуть ответы в Result типы и бесшовно интегрироваться с Kotlin Coroutines и Flow.
 
 ### Зачем нужен кастомный CallAdapter?
@@ -1244,48 +1249,32 @@ class UserViewModel(
 
 Кастомный Retrofit CallAdapter обеспечивает:
 
-- **Единообразную обработку ошибок**: Одно место для конвертации
-- **Типобезопасность**: Sealed classes для полной обработки
-- **Чистый код**: Репозитории без try-catch
-- **Тестируемость**: Лёгкое тестирование
-- **Гибкость**: Поддержка Call, suspend, Flow
-- **UX**: Понятные сообщения об ошибках
-- **Поддерживаемость**: Централизованная логика ошибок
+-   **Единообразную обработку ошибок**: Одно место для конвертации
+-   **Типобезопасность**: Sealed classes для полной обработки
+-   **Чистый код**: Репозитории без try-catch
+-   **Тестируемость**: Лёгкое тестирование
+-   **Гибкость**: Поддержка Call, suspend, Flow
+-   **UX**: Понятные сообщения об ошибках
+-   **Поддерживаемость**: Централизованная логика ошибок
 
 ---
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
-- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
+
+-   [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
+-   [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
+-   [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
 
 ### Related (Medium)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-dagger-build-time-optimization--android--medium]] - Ui
-- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
-- [[q-build-optimization-gradle--gradle--medium]] - Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
+
+-   [[q-http-protocols-comparison--android--medium]] - Networking
+-   [[q-dagger-build-time-optimization--android--medium]] - Ui
+-   [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
+-   [[q-build-optimization-gradle--gradle--medium]] - Ui
+-   [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
 
 ### Advanced (Harder)
-- [[q-data-sync-unstable-network--android--hard]] - Networking
 
----
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
-- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
-
-### Related (Medium)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-dagger-build-time-optimization--android--medium]] - Ui
-- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
-- [[q-build-optimization-gradle--gradle--medium]] - Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
-
-### Advanced (Harder)
-- [[q-data-sync-unstable-network--android--hard]] - Networking
+-   [[q-data-sync-unstable-network--android--hard]] - Networking

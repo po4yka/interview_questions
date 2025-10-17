@@ -1,16 +1,17 @@
 ---
+id: "20251015082237355"
+title: "Mvp Pattern / Mvp Паттерн"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - architecture-patterns
   - mvp
   - model-view-presenter
   - presenter
   - contract
-difficulty: medium
-status: draft
 ---
-
 # MVP Pattern
 
 **English**: What is the MVP (Model-View-Presenter) architectural pattern? Explain its components and how it differs from other patterns.

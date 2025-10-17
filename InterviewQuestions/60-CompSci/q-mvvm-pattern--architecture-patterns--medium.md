@@ -1,19 +1,19 @@
 ---
+id: "20251015082237218"
 title: MVVM Pattern (Model-View-ViewModel)
 topic: architecture-patterns
-subtopics:
-  - android-architecture
-  - data-binding
-  - reactive-programming
 difficulty: medium
-related:
-  - mvp-pattern
+status: draft
+created: 2025-10-15
+tags: []
+related:   - mvp-pattern
   - mvi-pattern
   - clean-architecture
   - livedata
-status: draft
+subtopics:   - android-architecture
+  - data-binding
+  - reactive-programming
 ---
-
 # MVVM Pattern / Паттерн MVVM (Model-View-ViewModel)
 
 # Question (EN)

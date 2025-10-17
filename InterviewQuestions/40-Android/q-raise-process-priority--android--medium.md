@@ -1,22 +1,31 @@
 ---
+id: "20251015082237287"
+title: "Raise Process Priority / Повышение приоритета процесса"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/foreground-service
   - android/services
   - foreground-service
   - lifecycle
   - process-priority
   - services
-difficulty: medium
-status: draft
 ---
 
-# Можно ли поднять приоритет процесса?
+# Question (EN)
 
-**English**: Can you raise the priority of a process?
+> Can you raise the priority of a process?
+
+# Вопрос (RU)
+
+> Можно ли поднять приоритет процесса?
+
+---
 
 ## Answer (EN)
+
 **Yes**, you can raise the priority of a process in Android using **`startForeground()`** in Services. This makes the service run as a **foreground service**, ensuring it has **high priority** and is protected from being killed by the system.
 
 ---
@@ -42,9 +51,10 @@ Android uses a **hierarchy of process importance** to decide which processes to 
 ```
 
 **System behavior:**
-- When memory is low, Android kills processes **starting from the bottom**
-- Foreground processes are **last to be killed**
-- Background services can be killed **anytime** to free memory
+
+-   When memory is low, Android kills processes **starting from the bottom**
+-   Foreground processes are **last to be killed**
+-   Background services can be killed **anytime** to free memory
 
 ---
 
@@ -140,9 +150,10 @@ class DownloadService : Service() {
 ```
 
 **Benefits:**
-- **High priority** - System won't kill the service easily
-- **User visibility** - Notification shows ongoing work
-- **Guaranteed completion** - Download won't be interrupted
+
+-   **High priority** - System won't kill the service easily
+-   **User visibility** - Notification shows ongoing work
+-   **Guaranteed completion** - Download won't be interrupted
 
 ---
 
@@ -293,9 +304,9 @@ class MusicPlayerService : Service() {
 ```
 Process Priority: Service Process (Level 3)
 
- App Process                         
-  DownloadService                 
-      Background work             
+ App Process
+  DownloadService
+      Background work
 
 
 System: "Low memory! Kill this service."
@@ -307,10 +318,10 @@ Result: - Service killed, work interrupted
 ```
 Process Priority: Foreground Process (Level 1)
 
- App Process                         
-  DownloadService (Foreground)    
-      Notification visible        
-      Protected work              
+ App Process
+  DownloadService (Foreground)
+      Notification visible
+      Protected work
 
 
 System: "Low memory! But this is foreground, keep it."
@@ -396,125 +407,138 @@ jobScheduler.schedule(job)
 ### Limitations
 
 1. **Notification Required**
-   ```kotlin
-   // - Can't do this on Android 8.0+
-   startForeground(NOTIFICATION_ID, null)  // Crashes!
 
-   // - Must provide notification
-   startForeground(NOTIFICATION_ID, createNotification())
-   ```
+    ```kotlin
+    // - Can't do this on Android 8.0+
+    startForeground(NOTIFICATION_ID, null)  // Crashes!
+
+    // - Must provide notification
+    startForeground(NOTIFICATION_ID, createNotification())
+    ```
 
 2. **User Visibility**
-   - Foreground service **must** show a **persistent notification**
-   - User sees the service is running
-   - Can't hide it
+
+    - Foreground service **must** show a **persistent notification**
+    - User sees the service is running
+    - Can't hide it
 
 3. **Android 12+ Restrictions**
-   ```kotlin
-   // Android 12+ restricts starting foreground services from background
-   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-       // Need to use WorkManager or exact alarm for background starts
-   }
-   ```
+    ```kotlin
+    // Android 12+ restricts starting foreground services from background
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        // Need to use WorkManager or exact alarm for background starts
+    }
+    ```
 
 ### Best Practices
 
 1. **Only Use When Necessary**
-   ```kotlin
-   // - DON'T: Foreground service for simple background task
-   class SimpleTaskService : Service() {
-       override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-           startForeground(1, notification)  // Overkill!
-           doSimpleTask()  // Could use WorkManager instead
-           return START_NOT_STICKY
-       }
-   }
 
-   // - DO: Foreground service for user-visible long-running task
-   class NavigationService : Service() {
-       override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-           startForeground(1, notification)
-           startNavigation()  // User expects this to continue
-           return START_STICKY
-       }
-   }
-   ```
+    ```kotlin
+    // - DON'T: Foreground service for simple background task
+    class SimpleTaskService : Service() {
+        override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+            startForeground(1, notification)  // Overkill!
+            doSimpleTask()  // Could use WorkManager instead
+            return START_NOT_STICKY
+        }
+    }
+
+    // - DO: Foreground service for user-visible long-running task
+    class NavigationService : Service() {
+        override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+            startForeground(1, notification)
+            startNavigation()  // User expects this to continue
+            return START_STICKY
+        }
+    }
+    ```
 
 2. **Stop Foreground When Done**
-   ```kotlin
-   // - Always stop foreground when task completes
-   fun completeTask() {
-       stopForeground(STOP_FOREGROUND_REMOVE)  // Remove notification
-       stopSelf()  // Stop service
-   }
-   ```
+
+    ```kotlin
+    // - Always stop foreground when task completes
+    fun completeTask() {
+        stopForeground(STOP_FOREGROUND_REMOVE)  // Remove notification
+        stopSelf()  // Stop service
+    }
+    ```
 
 3. **Use Appropriate Service Type (Android 10+)**
-   ```kotlin
-   // Manifest
-   <service
-       android:name=".LocationService"
-       android:foregroundServiceType="location" />
 
-   // Code
-   startForeground(
-       NOTIFICATION_ID,
-       notification,
-       ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
-   )
-   ```
+    ```kotlin
+    // Manifest
+    <service
+        android:name=".LocationService"
+        android:foregroundServiceType="location" />
+
+    // Code
+    startForeground(
+        NOTIFICATION_ID,
+        notification,
+        ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
+    )
+    ```
 
 ---
 
 ## Summary
 
 **Can you raise process priority?**
-- **Yes**, using `startForeground()` in services
-- Makes service a **foreground service** with high priority
-- Requires a **visible notification**
-- **Protects** from being killed by the system
+
+-   **Yes**, using `startForeground()` in services
+-   Makes service a **foreground service** with high priority
+-   Requires a **visible notification**
+-   **Protects** from being killed by the system
 
 **How it works:**
+
 1. Call `startForeground(id, notification)` in service
 2. Service moves from **Service Process** → **Foreground Process**
 3. System gives **high priority**, won't kill easily
 4. User sees **persistent notification**
 
 **When to use:**
-- - Music playback
-- - Navigation/location tracking
-- - File download/upload (user-initiated)
-- - Active fitness tracking
-- - Simple background tasks (use WorkManager)
-- - Periodic sync (use JobScheduler)
+
+-   -   Music playback
+-   -   Navigation/location tracking
+-   -   File download/upload (user-initiated)
+-   -   Active fitness tracking
+-   -   Simple background tasks (use WorkManager)
+-   -   Periodic sync (use JobScheduler)
 
 **Other priority influences:**
-- Bound service with foreground activity (inherits priority)
-- JobScheduler priority hints
-- Process importance (read-only, managed by system)
+
+-   Bound service with foreground activity (inherits priority)
+-   JobScheduler priority hints
+-   Process importance (read-only, managed by system)
 
 **Best practices:**
-- Only use when **truly necessary**
-- Stop foreground when task completes
-- Use appropriate service type (Android 10+)
-- Consider WorkManager for deferrable tasks
+
+-   Only use when **truly necessary**
+-   Stop foreground when task completes
+-   Use appropriate service type (Android 10+)
+-   Consider WorkManager for deferrable tasks
 
 ---
 
 ## Ответ (RU)
+
 **Да**, можно поднять приоритет процесса используя **`startForeground()`** в сервисах. Это позволяет сервису работать как **foreground service**, обеспечивая его **высокий приоритет** и защиту от уничтожения системой.
 
 **Как это работает:**
+
 1. Вызовите `startForeground(id, notification)` в сервисе
 2. Сервис переходит из **Service Process** → **Foreground Process**
 3. Система дает **высокий приоритет**, не убивает просто так
 4. Пользователь видит **постоянное уведомление**
 
 **Когда использовать:**
-- Воспроизведение музыки
-- Навигация/отслеживание местоположения
-- Скачивание/загрузка файлов
-- НЕ для простых фоновых задач (используйте WorkManager)
+
+-   Воспроизведение музыки
+-   Навигация/отслеживание местоположения
+-   Скачивание/загрузка файлов
+-   НЕ для простых фоновых задач (используйте WorkManager)
 
 **Пример:**
 
@@ -555,8 +579,8 @@ class DownloadService : Service() {
 ```
 
 **Важно:**
-- На Android 8.0+ необходимо вызвать `startForeground()` в течение 5 секунд после запуска сервиса
-- Обязательно требуется видимое уведомление
-- Всегда вызывайте `stopForeground()` и `stopSelf()` когда задача завершена
-- Используйте только когда действительно необходимо - для задач, которые пользователь ожидает увидеть работающими
 
+-   На Android 8.0+ необходимо вызвать `startForeground()` в течение 5 секунд после запуска сервиса
+-   Обязательно требуется видимое уведомление
+-   Всегда вызывайте `stopForeground()` и `stopSelf()` когда задача завершена
+-   Используйте только когда действительно необходимо - для задач, которые пользователь ожидает увидеть работающими

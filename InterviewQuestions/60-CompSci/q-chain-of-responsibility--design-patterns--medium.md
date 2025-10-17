@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237215"
+title: "Chain Of Responsibility / Цепочка обязанностей"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - behavioral-patterns
   - chain-of-responsibility
   - gof-patterns
   - chain-pattern
-difficulty: medium
-status: draft
 ---
-
 # Chain of Responsibility Pattern
 
 # Question (EN)

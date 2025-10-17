@@ -1,16 +1,17 @@
 ---
+id: "20251015082238629"
+title: "Workmanager Return Result / Возврат результата WorkManager"
 topic: android
-tags:
-  - android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - android
   - android/background-processing
   - background-processing
   - coroutines
   - livedata
   - workmanager
-difficulty: medium
-status: draft
 ---
-
 # Как вернуть результат работы WorkManager в приложение?
 
 **English**: How to return a result from WorkManager to the app?

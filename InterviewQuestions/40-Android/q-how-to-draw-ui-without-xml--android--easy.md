@@ -1,16 +1,17 @@
 ---
+id: "20251015082237526"
+title: "How To Draw Ui Without Xml / Как рисовать UI без XML"
 topic: android
-tags:
-  - Jetpack Compose
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Jetpack Compose
   - View
   - android
   - ui
   - jetpack-compose
   - views
-difficulty: medium
-status: draft
 ---
-
 # How to draw UI without xml?
 
 # Вопрос (RU)

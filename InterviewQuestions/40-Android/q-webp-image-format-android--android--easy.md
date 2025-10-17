@@ -1,15 +1,16 @@
 ---
+id: "20251015082237466"
+title: "Webp Image Format Android / Формат изображений WebP в Android"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - webp
   - optimization
   - images
   - performance
-difficulty: easy
-status: draft
 ---
-
 # WebP - самый экономичный формат изображений
 
 **English**: WebP - most efficient image format for Android

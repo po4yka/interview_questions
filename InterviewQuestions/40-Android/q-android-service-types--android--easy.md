@@ -1,7 +1,11 @@
 ---
+id: "20251015082237454"
+title: "Android Service Types / Типы Service в Android"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/background-execution
   - android/service
   - background-execution
@@ -9,10 +13,7 @@ tags:
   - foreground-service
   - service
   - started-service
-difficulty: easy
-status: draft
 ---
-
 # Какие виды сервисов есть в Android?
 
 # Question (EN)

@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237178"
+title: "Observer Pattern / Observer Паттерн"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - behavioral-patterns
   - observer
   - gof-patterns
   - publish-subscribe
-difficulty: medium
-status: draft
 ---
-
 # Observer Pattern
 
 # Question (EN)

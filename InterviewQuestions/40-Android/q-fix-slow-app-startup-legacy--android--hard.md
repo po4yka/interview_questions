@@ -1,17 +1,18 @@
 ---
+id: "20251015082237439"
+title: "Fix Slow App Startup Legacy / Исправление медленного запуска приложения"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - android/performance
   - app-startup
   - lazy-init
   - legacy-code
   - optimization
   - performance
-difficulty: hard
-status: draft
 ---
-
 # Что делать если надо исправить долгий запуск приложения в legacy проекте?
 
 **English**: What to do if you need to fix slow app startup in a legacy project?

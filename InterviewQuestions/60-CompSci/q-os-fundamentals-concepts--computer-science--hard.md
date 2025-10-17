@@ -1,34 +1,29 @@
 ---
 id: 20251012-600001
 title: "Operating System Fundamentals / Основы операционных систем"
-slug: os-fundamentals-concepts-computer-science-hard
 topic: operating-systems
-subtopics: ["computer-science", "fundamentals"]
-
-subtopics:
-  - operating-systems
-  - processes
-  - threads
-  - memory-management
-  - cpu-scheduling
-status: draft
 difficulty: hard
-moc: moc-operating-systems
-date_created: 2025-10-12
-date_updated: 2025-10-13
-related_questions:
-  - q-concurrency-fundamentals--computer-science--hard
-  - q-solid-principles--software-design--medium
-  - q-data-structures-overview--algorithms--easy
-tags:
-  - os
+status: draft
+created: 2025-10-12
+tags: - os
   - processes
   - threads
   - memory
   - cpu-scheduling
   - virtual-memory
+date_created: 2025-10-12
+date_updated: 2025-10-13
+moc: moc-operating-systems
+related_questions:   - q-concurrency-fundamentals--computer-science--hard
+  - q-solid-principles--software-design--medium
+  - q-data-structures-overview--algorithms--easy
+slug: os-fundamentals-concepts-computer-science-hard
+subtopics:   - operating-systems
+  - processes
+  - threads
+  - memory-management
+  - cpu-scheduling
 ---
-
 # Operating System Fundamentals
 
 ## English Version

@@ -1,15 +1,17 @@
 ---
-tags:
-  - abstract-class
+id: "20251015082237102"
+title: "Abstract Class Purpose / Назначение абстрактных классов"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - abstract-class
   - inheritance
   - kotlin
   - oop
   - programming-languages
   - template-method
-difficulty: medium
-status: draft
 ---
-
 # Что такое абстрактный класс и для чего он используется?
 
 # Question (EN)

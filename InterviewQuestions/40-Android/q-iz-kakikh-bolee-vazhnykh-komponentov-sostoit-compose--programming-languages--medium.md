@@ -1,17 +1,18 @@
 ---
+id: "20251015082238606"
+title: "Iz Kakikh Bolee Vazhnykh Komponentov Sostoit Compose / Из каких более важных компонентов состоит Compose"
 topic: android
-subtopics: [jetpack-compose]
-tags:
-  - programming-languages
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-13
+tags: - programming-languages
+  - android
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
+subtopics: [jetpack-compose]
 ---
-
 # Из каких более важных компонентов состоит Compose?
 
 ## Answer (EN)

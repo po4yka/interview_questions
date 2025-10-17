@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237075"
+title: "Template Method Pattern / Template Method Паттерн"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - behavioral-patterns
   - template-method
   - gof-patterns
   - hook-method
-difficulty: medium
-status: draft
 ---
-
 # Template Method Pattern
 
 # Question (EN)

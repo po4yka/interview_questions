@@ -1,22 +1,21 @@
 ---
-tags:
-  - android
+id: "20251015082238647"
+title: "Accessibility Text Scaling / Масштабирование текста для доступности"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-11
+tags: - android
   - accessibility
   - text-scaling
   - font-size
   - dynamic-type
-topic: android
-subtopics: [ui-accessibility]
-difficulty: medium
-status: draft
-related_questions:
-  - q-accessibility-compose--accessibility--medium
-  - q-accessibility-testing--accessibility--medium
-created: 2025-10-11
 date_updated: 2025-10-13
 moc: moc-android
+related_questions:   - q-accessibility-compose--accessibility--medium
+  - q-accessibility-testing--accessibility--medium
+subtopics: [ui-accessibility]
 ---
-
 # Question (EN)
 How do you support dynamic text sizing and display scaling for accessibility? What are sp units, text scaling factors, and how do you test your UI with different text sizes?
 

@@ -1,14 +1,25 @@
 ---
+id: "20251015082237304"
+title: "Is Fragment Lifecycle Connected To Activity Or Independent / Связан ли жизненный цикл Fragment с Activity или независим"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
 
-# Is Fragment lifecycle connected to Activity or independent
+# Question (EN)
+
+> Is the Fragment lifecycle connected to the Activity or independent?
+
+# Вопрос (RU)
+
+> Связан ли жизненный цикл Fragment с Activity или независим?
+
+---
 
 ## Answer (EN)
+
 The Fragment lifecycle is **connected to and dependent on** its host Activity's lifecycle, but Fragments also have their own additional lifecycle states and callbacks.
 
 ### Relationship: Connected, Not Independent
@@ -390,18 +401,21 @@ class DependentFragment : Fragment() {
 ### Summary
 
 **Is Fragment lifecycle connected to Activity?**
-- **Yes, tightly connected**
-- Fragment cannot be more active than Activity
-- Activity lifecycle changes trigger Fragment lifecycle changes
-- Fragment is destroyed when Activity is destroyed
+
+-   **Yes, tightly connected**
+-   Fragment cannot be more active than Activity
+-   Activity lifecycle changes trigger Fragment lifecycle changes
+-   Fragment is destroyed when Activity is destroyed
 
 **Is Fragment lifecycle independent?**
-- **No, not independent**
-- Fragments have additional lifecycle states (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach)
-- But these are still subordinate to Activity lifecycle
-- Fragment can have its view destroyed and recreated while Fragment instance survives
+
+-   **No, not independent**
+-   Fragments have additional lifecycle states (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach)
+-   But these are still subordinate to Activity lifecycle
+-   Fragment can have its view destroyed and recreated while Fragment instance survives
 
 **Key Points:**
+
 1. Fragment lifecycle is **dependent** on Activity lifecycle
 2. Fragment has **additional** lifecycle callbacks beyond Activity
 3. Fragment can never be in a **more active state** than its Activity
@@ -409,6 +423,7 @@ class DependentFragment : Fragment() {
 5. Use **viewLifecycleOwner** for view-related observations
 
 ## Ответ (RU)
+
 Жизненный цикл Fragment **связан и зависит от** жизненного цикла Activity-хоста, но Fragment также имеет свои дополнительные состояния и коллбэки.
 
 ### Связь: Зависимый, не независимый
@@ -432,6 +447,7 @@ Activity.onCreate()
 ### Как Activity влияет на Fragment
 
 **Когда Activity приостанавливается:**
+
 ```
 Activity.onPause()
     ↓
@@ -439,6 +455,7 @@ Fragment.onPause()  // Fragment ДОЛЖЕН приостановиться
 ```
 
 **Когда Activity останавливается:**
+
 ```
 Activity.onStop()
     ↓
@@ -446,6 +463,7 @@ Fragment.onStop()  // Fragment ДОЛЖЕН остановиться
 ```
 
 **Когда Activity уничтожается:**
+
 ```
 Activity.onDestroy()
     ↓
@@ -492,16 +510,19 @@ class ModernFragment : Fragment() {
 ### Резюме
 
 **Fragment lifecycle связан с Activity?**
-- Да, тесно связан
-- Fragment не может быть активнее Activity
-- Изменения Activity lifecycle вызывают изменения Fragment lifecycle
+
+-   Да, тесно связан
+-   Fragment не может быть активнее Activity
+-   Изменения Activity lifecycle вызывают изменения Fragment lifecycle
 
 **Fragment lifecycle независим?**
-- Нет, не независим
-- Fragment имеет дополнительные состояния
-- Но они подчинены Activity lifecycle
+
+-   Нет, не независим
+-   Fragment имеет дополнительные состояния
+-   Но они подчинены Activity lifecycle
 
 **Ключевые моменты:**
+
 1. Fragment lifecycle **зависит** от Activity lifecycle
 2. Fragment имеет **дополнительные** коллбэки
 3. Fragment никогда не может быть **активнее** Activity
@@ -511,47 +532,3 @@ class ModernFragment : Fragment() {
 ---
 
 ## Related Questions
-
-### Related (Medium)
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
-- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
-
-### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
-- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
-- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
-
----
-
-## Related Questions
-
-### Related (Medium)
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
-- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
-
-### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
-- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
-- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
-
----
-
-## Related Questions
-
-### Related (Medium)
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
-- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
-
-### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
-- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
-- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment

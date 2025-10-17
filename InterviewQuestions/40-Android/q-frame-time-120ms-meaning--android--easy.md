@@ -1,21 +1,22 @@
 ---
+id: "20251015082237533"
+title: "Frame Time 120ms Meaning / Значение времени кадра 120мс"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-13
+tags: - android
   - android/performance
   - fps
   - frame-rate
   - performance
   - rendering
   - ui-performance
-difficulty: easy
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
 related_questions: []
 ---
-
 # Если профайлер показывает тебе что какой-нибудь фрейм занял 120 миллисекунд, что это значит?
 
 **English**: If profiler shows that a frame took 120 milliseconds, what does it mean?

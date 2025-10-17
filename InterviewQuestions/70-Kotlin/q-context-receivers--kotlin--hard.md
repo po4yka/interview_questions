@@ -1,16 +1,17 @@
 ---
+id: "20251015082236001"
+title: "Context Receivers"
 topic: kotlin
-tags:
-  - kotlin
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - kotlin
   - context-receivers
   - dsl
   - advanced
   - receivers
   - scope-functions
-difficulty: hard
-status: draft
 ---
-
 # Context Receivers in Kotlin
 
 # Question (EN)

@@ -1,16 +1,18 @@
 ---
-tags:
-  - collections
+id: "20251015082237192"
+title: "Equals Hashcode Contracts / Контракты equals и hashCode"
+topic: computer-science
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - collections
   - contract
   - equals
   - hashcode
   - kotlin
   - object-methods
   - programming-languages
-difficulty: medium
-status: draft
 ---
-
 # Расскажи о контрактах equals и hashCode
 
 # Question (EN)

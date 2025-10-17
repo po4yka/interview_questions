@@ -1,22 +1,23 @@
 ---
+id: "20251015082237077"
+title: "Softcode Vs Hardcode / Softcode против Hardcode"
 topic: architecture-patterns
-subtopics: ["design-principles", "best-practices", "architecture"]
-tags:
-  - best-practices
+difficulty: medium
+status: draft
+created: 2025-10-13
+tags: - best-practices
   - configuration
   - flexibility
   - hardcoding
   - maintainability
   - softcoding
   - software-design
-difficulty: medium
-status: draft
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-architecture-patterns
 related_questions: []
+subtopics: ["design-principles", "best-practices", "architecture"]
 ---
-
 # Что такое софткод?
 
 # Question (EN)

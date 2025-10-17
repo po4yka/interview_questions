@@ -1,7 +1,11 @@
 ---
+id: "20251015082237365"
+title: "Architecture Components Libraries / Библиотеки Architecture Components"
 topic: android
-tags:
-  - android
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - android
   - android/architecture-clean
   - android/lifecycle
   - architecture-clean
@@ -14,10 +18,7 @@ tags:
   - room
   - viewmodel
   - workmanager
-difficulty: easy
-status: draft
 ---
-
 # What libraries are in Architecture Components?
 
 # Question (EN)

@@ -1,11 +1,12 @@
 ---
+id: "20251015082237058"
+title: "Data Sealed Difference / Разница data и sealed"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # What is the difference between data classes and sealed classes?
 
 # Question (EN)

@@ -1,33 +1,28 @@
 ---
 id: 20251012-600002
 title: "Clean Code Principles / Принципы чистого кода"
-slug: clean-code-principles-software-engineering-medium
 topic: cs
-subtopics: ["computer-science", "fundamentals"]
-
-subtopics:
-  - clean-code
-  - software-engineering
-  - best-practices
-  - code-quality
-  - refactoring
-status: draft
 difficulty: medium
-moc: moc-cs
-date_created: 2025-10-12
-date_updated: 2025-10-13
-related_questions:
-  - q-solid-principles--software-design--medium
-  - q-design-patterns-types--design-patterns--medium
-  - q-refactoring-techniques--software-engineering--medium
-tags:
-  - clean-code
+status: draft
+created: 2025-10-12
+tags: - clean-code
   - best-practices
   - refactoring
   - code-quality
   - readable-code
+date_created: 2025-10-12
+date_updated: 2025-10-13
+moc: moc-cs
+related_questions:   - q-solid-principles--software-design--medium
+  - q-design-patterns-types--design-patterns--medium
+  - q-refactoring-techniques--software-engineering--medium
+slug: clean-code-principles-software-engineering-medium
+subtopics:   - clean-code
+  - software-engineering
+  - best-practices
+  - code-quality
+  - refactoring
 ---
-
 # Clean Code Principles
 
 ## English Version

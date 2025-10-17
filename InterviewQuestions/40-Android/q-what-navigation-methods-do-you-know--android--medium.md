@@ -1,13 +1,25 @@
 ---
-tags:
-  - programming-languages
+id: "20251015082237291"
+title: "What Navigation Methods Do You Know / Какие методы навигации вы знаете"
+topic: android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
 
-# Какие способы навигации знаешь?
+# Question (EN)
+
+> What navigation methods do you know?
+
+# Вопрос (RU)
+
+> Какие способы навигации вы знаете?
+
+---
 
 ## Answer (EN)
+
 Android offers multiple navigation methods for moving between screens and managing app flow. Each method serves specific use cases and architectural patterns.
 
 ### 1. Activity Navigation via Intent
@@ -457,16 +469,16 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector)
 
 ### Comparison Table
 
-| Method | Use Case | Pros | Cons |
-|--------|----------|------|------|
-| Activity Intent | Simple app flows | Easy, well-known | Memory overhead |
-| FragmentManager | Complex single-activity | Flexible, reusable | Manual management |
-| Navigation Component | Modern apps | Type-safe, visual graph | Learning curve |
-| Bottom Navigation | 3-5 main sections | Familiar UX | Limited items |
-| Tab Navigation | Related content | Swipeable | Limited to linear flow |
-| Drawer Navigation | Many sections | Organized | Hidden initially |
-| Deep Links | External navigation | Sharable URLs | Configuration needed |
-| Compose Navigation | Compose apps | Declarative, type-safe | Compose-only |
+| Method               | Use Case                | Pros                    | Cons                   |
+| -------------------- | ----------------------- | ----------------------- | ---------------------- |
+| Activity Intent      | Simple app flows        | Easy, well-known        | Memory overhead        |
+| FragmentManager      | Complex single-activity | Flexible, reusable      | Manual management      |
+| Navigation Component | Modern apps             | Type-safe, visual graph | Learning curve         |
+| Bottom Navigation    | 3-5 main sections       | Familiar UX             | Limited items          |
+| Tab Navigation       | Related content         | Swipeable               | Limited to linear flow |
+| Drawer Navigation    | Many sections           | Organized               | Hidden initially       |
+| Deep Links           | External navigation     | Sharable URLs           | Configuration needed   |
+| Compose Navigation   | Compose apps            | Declarative, type-safe  | Compose-only           |
 
 ### Best Practices
 
@@ -482,15 +494,158 @@ sealed class Screen(val route: String, val label: String, val icon: ImageVector)
 # Какие способы навигации знаешь
 
 ## Ответ (RU)
-В Android есть несколько способов навигации между экранами. Основные способы включают Activity-навигацию через Intent, Fragment-based навигацию с FragmentManager, Navigation Component из Jetpack, Bottom Navigation и Tab Navigation для переключения между экранами через меню навигации, Drawer Navigation с боковым меню DrawerLayout, Deep Links и App Links для навигации через ссылки а также Navigation в Jetpack Compose с использованием NavHost и NavController.
+
+Android предлагает множество способов навигации для перемещения между экранами и управления потоком приложения. Каждый метод подходит для определённых случаев использования и архитектурных паттернов.
+
+### 1. Навигация между Activity через Intent
+
+Традиционный подход для навигации между активностями.
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    // Базовая навигация
+    private fun navigateToDetails() {
+        val intent = Intent(this, DetailsActivity::class.java)
+        intent.putExtra("ITEM_ID", 42)
+        startActivity(intent)
+    }
+
+    // Навигация с результатом
+    private val detailsLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val data = result.data?.getStringExtra("RESULT")
+        }
+    }
+}
+```
+
+### 2. Navigation Component (Jetpack)
+
+Современная навигация на основе графа с типобезопасными аргументами.
+
+```kotlin
+// В Activity
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val navController = findNavController(R.id.nav_host_fragment)
+        NavigationUI.setupActionBarWithNavController(this, navController)
+    }
+}
+
+// Во Fragment
+class HomeFragment : Fragment() {
+    private fun navigateToDetails(itemId: Int) {
+        val action = HomeFragmentDirections.actionHomeToDetails(itemId)
+        findNavController().navigate(action)
+    }
+}
+```
+
+### 3. Bottom Navigation
+
+Навигация через вкладки внизу экрана.
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val navController = findNavController(R.id.nav_host_fragment)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        NavigationUI.setupWithNavController(bottomNav, navController)
+    }
+}
+```
+
+### 4. Drawer Navigation
+
+Боковое меню навигации.
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    private lateinit var drawerLayout: DrawerLayout
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        drawerLayout = findViewById(R.id.drawer_layout)
+        val navController = findNavController(R.id.nav_host_fragment)
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        NavigationUI.setupWithNavController(navigationView, navController)
+    }
+}
+```
+
+### 5. Deep Links и App Links
+
+Навигация на основе URL из внешних источников.
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.handleDeepLink(intent)
+    }
+}
+```
+
+### 6. Navigation в Jetpack Compose
+
+Декларативная навигация с использованием NavHost и NavController.
+
+```kotlin
+@Composable
+fun AppNavigation() {
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = "home") {
+        composable("home") {
+            HomeScreen(
+                onNavigateToDetails = { itemId ->
+                    navController.navigate("details/$itemId")
+                }
+            )
+        }
+
+        composable("details/{itemId}") { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getInt("itemId") ?: 0
+            DetailsScreen(itemId = itemId)
+        }
+    }
+}
+```
+
+### Таблица сравнения
+
+| Метод | Случай использования | Плюсы | Минусы |
+|-------|---------------------|-------|--------|
+| Activity Intent | Простые потоки | Просто, хорошо известно | Overhead памяти |
+| FragmentManager | Сложные single-activity | Гибкий, переиспользуемый | Ручное управление |
+| Navigation Component | Современные приложения | Типобезопасный, визуальный граф | Кривая обучения |
+| Bottom Navigation | 3-5 основных разделов | Знакомый UX | Ограничено элементами |
+| Drawer Navigation | Много разделов | Организован | Скрыт изначально |
+| Deep Links | Внешняя навигация | Делимые URL | Требуется конфигурация |
+| Compose Navigation | Compose приложения | Декларативный, типобезопасный | Только для Compose |
+
+### Лучшие практики
+
+1. **Используйте Navigation Component** для новых проектов
+2. **Single-Activity архитектура** с фрагментами или Compose
+3. **Типобезопасные аргументы** с плагином Safe Args
+4. **Обрабатывайте deep links** для лучшего UX
+5. **Правильное управление back stack**
+6. **Используйте подходящий паттерн навигации** для вашего случая
 
 ---
 
 ## Related Questions
 
 ### Related (Medium)
-- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation
-- [[q-compose-navigation-advanced--android--medium]] - Navigation
-- [[q-activity-navigation-how-it-works--android--medium]] - Navigation
-- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation
-- [[q-how-navigation-is-implemented-in-android--android--medium]] - Navigation
+
+-   [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation
+-   [[q-compose-navigation-advanced--android--medium]] - Navigation
+-   [[q-activity-navigation-how-it-works--android--medium]] - Navigation
+-   [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation
+-   [[q-how-navigation-is-implemented-in-android--android--medium]] - Navigation

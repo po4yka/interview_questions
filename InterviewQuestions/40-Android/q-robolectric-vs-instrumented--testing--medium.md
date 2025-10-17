@@ -1,21 +1,26 @@
 ---
-tags:
-  - testing
+id: "20251015082237241"
+title: "Robolectric Vs Instrumented / Robolectric против Instrumented"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - testing
   - robolectric
   - instrumented-tests
   - strategy
   - comparison
   - unit-testing
-difficulty: medium
-status: draft
 ---
 
 # Robolectric vs Instrumented Tests
 
 # Question (EN)
+
 > When should you use Robolectric vs instrumented tests? What are the tradeoffs in speed, reliability, and coverage?
 
 # Вопрос (RU)
+
 > Когда следует использовать Robolectric вместо инструментальных тестов? Какие компромиссы в скорости, надежности и покрытии?
 
 ---
@@ -51,11 +56,12 @@ class MainActivityTest {
 ```
 
 **Key characteristics:**
--  Runs on JVM (fast)
--  No device needed
--  Works in CI without emulator
--  Simulated Android (not real)
--  May have subtle differences from real device
+
+-   Runs on JVM (fast)
+-   No device needed
+-   Works in CI without emulator
+-   Simulated Android (not real)
+-   May have subtle differences from real device
 
 ---
 
@@ -81,22 +87,23 @@ class MainActivityInstrumentedTest {
 ```
 
 **Key characteristics:**
--  Real Android environment
--  Tests actual device behavior
--  Hardware sensors, GPS, camera
--  Slow (requires device/emulator)
--  Requires emulator/device for CI
--  Flaky (environment-dependent)
+
+-   Real Android environment
+-   Tests actual device behavior
+-   Hardware sensors, GPS, camera
+-   Slow (requires device/emulator)
+-   Requires emulator/device for CI
+-   Flaky (environment-dependent)
 
 ---
 
 ### Speed Comparison
 
-| Type | Execution Time | Feedback Loop |
-|------|---------------|---------------|
-| **Unit tests (pure JVM)** | 0.1 - 1s | Instant |
-| **Robolectric** | 1 - 10s | Fast |
-| **Instrumented** | 10 - 60s+ | Slow |
+| Type                      | Execution Time | Feedback Loop |
+| ------------------------- | -------------- | ------------- |
+| **Unit tests (pure JVM)** | 0.1 - 1s       | Instant       |
+| **Robolectric**           | 1 - 10s        | Fast          |
+| **Instrumented**          | 10 - 60s+      | Slow          |
 
 **Example benchmark:**
 
@@ -294,17 +301,17 @@ class FirebaseTest {
 
 ### Comparison Table
 
-| Aspect | Robolectric | Instrumented |
-|--------|-------------|--------------|
-| **Speed** |  Fast (1-10s) |  Slow (10-60s+) |
-| **Setup** |  Simple |  Requires device |
-| **CI Integration** |  Easy |  Needs emulator |
-| **Reliability** |  Consistent |  Can be flaky |
-| **Real device** |  Simulated |  Real |
-| **Hardware** |  Mocked |  Real sensors |
-| **Debugging** |  IDE breakpoints |  ADB/Logcat |
-| **Coverage** |  Framework only |  Full stack |
-| **Android versions** |  Limited |  All versions |
+| Aspect               | Robolectric     | Instrumented    |
+| -------------------- | --------------- | --------------- |
+| **Speed**            | Fast (1-10s)    | Slow (10-60s+)  |
+| **Setup**            | Simple          | Requires device |
+| **CI Integration**   | Easy            | Needs emulator  |
+| **Reliability**      | Consistent      | Can be flaky    |
+| **Real device**      | Simulated       | Real            |
+| **Hardware**         | Mocked          | Real sensors    |
+| **Debugging**        | IDE breakpoints | ADB/Logcat      |
+| **Coverage**         | Framework only  | Full stack      |
+| **Android versions** | Limited         | All versions    |
 
 ---
 
@@ -368,21 +375,23 @@ class LoginFlowTest {
 ### Decision Matrix
 
 **Use Robolectric when:**
-- Testing ViewModels with Android dependencies
-- Testing Fragment/Activity lifecycle
-- Testing Resources, Context, SharedPreferences
-- Testing Intent creation
-- Need fast feedback in CI
-- Don't need real device behavior
+
+-   Testing ViewModels with Android dependencies
+-   Testing Fragment/Activity lifecycle
+-   Testing Resources, Context, SharedPreferences
+-   Testing Intent creation
+-   Need fast feedback in CI
+-   Don't need real device behavior
 
 **Use Instrumented when:**
-- Testing complex UI interactions (swipe, drag, animations)
-- Testing hardware (camera, GPS, sensors)
-- Testing performance
-- Testing third-party SDKs (Firebase, Google Maps)
-- Testing WebView behavior
-- Testing on multiple device configurations
-- Need pixel-perfect screenshot testing
+
+-   Testing complex UI interactions (swipe, drag, animations)
+-   Testing hardware (camera, GPS, sensors)
+-   Testing performance
+-   Testing third-party SDKs (Firebase, Google Maps)
+-   Testing WebView behavior
+-   Testing on multiple device configurations
+-   Need pixel-perfect screenshot testing
 
 ---
 
@@ -494,29 +503,29 @@ Robolectric симулирует Android framework на JVM. Быстрые, р�
 
 ### Сравнение скорости
 
-- Unit тесты: 0.1-1с
-- Robolectric: 1-10с
-- Инструментальные: 10-60с+
+-   Unit тесты: 0.1-1с
+-   Robolectric: 1-10с
+-   Инструментальные: 10-60с+
 
 ### Когда использовать Robolectric
 
-- Тестирование ViewModel с Android зависимостями
-- Тестирование жизненного цикла Activity/Fragment
-- Тестирование Resources, Context
-- Нужна быстрая обратная связь в CI
+-   Тестирование ViewModel с Android зависимостями
+-   Тестирование жизненного цикла Activity/Fragment
+-   Тестирование Resources, Context
+-   Нужна быстрая обратная связь в CI
 
 ### Когда использовать Инструментальные тесты
 
-- Сложные UI взаимодействия
-- Взаимодействие с hardware
-- Тестирование производительности
-- Интеграция с третьими SDK
+-   Сложные UI взаимодействия
+-   Взаимодействие с hardware
+-   Тестирование производительности
+-   Интеграция с третьими SDK
 
 ### Пирамида тестирования
 
-- 70% - Unit тесты (чистый JVM)
-- 20% - Интеграционные (Robolectric)
-- 10% - E2E Инструментальные
+-   70% - Unit тесты (чистый JVM)
+-   20% - Интеграционные (Robolectric)
+-   10% - E2E Инструментальные
 
 ### Лучшие практики
 
@@ -529,14 +538,28 @@ Robolectric симулирует Android framework на JVM. Быстрые, р�
 
 ---
 
+## Follow-ups
+
+-   How do you set up CI/CD pipelines to run both Robolectric and instrumented tests efficiently?
+-   What are the performance implications of running Robolectric tests vs instrumented tests in parallel?
+-   How can you mock external dependencies in instrumented tests without affecting real device behavior?
+
+## References
+
+-   `https://robolectric.org/` — Robolectric documentation
+-   `https://developer.android.com/training/testing/instrumented-tests` — Instrumented testing guide
+-   `https://developer.android.com/training/testing/junit-runner` — JUnit testing on Android
+
 ## Related Questions
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--testing--medium]] - Testing
-- [[q-testing-compose-ui--android--medium]] - Testing
-- [[q-compose-testing--android--medium]] - Testing
-- [[q-screenshot-snapshot-testing--testing--medium]] - Testing
-- [[q-fakes-vs-mocks-testing--testing--medium]] - Testing
+
+-   [[q-testing-viewmodels-turbine--testing--medium]] - Testing
+-   [[q-testing-compose-ui--android--medium]] - Testing
+-   [[q-compose-testing--android--medium]] - Testing
+-   [[q-screenshot-snapshot-testing--testing--medium]] - Testing
+-   [[q-fakes-vs-mocks-testing--testing--medium]] - Testing
 
 ### Advanced (Harder)
-- [[q-testing-coroutines-flow--testing--hard]] - Testing
+
+-   [[q-testing-coroutines-flow--testing--hard]] - Testing

@@ -1,17 +1,18 @@
 ---
+id: "20251015082237583"
+title: "Activity Navigation How It Works / Как работает навигация Activity"
 topic: android
-tags:
-  - activity
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - activity
   - android
   - android/navigation
   - back-stack
   - intent
   - lifecycle
   - navigation
-difficulty: medium
-status: draft
 ---
-
 # Как работает навигация по Activity?
 
 # Question (EN)

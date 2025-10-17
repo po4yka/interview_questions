@@ -1,19 +1,19 @@
 ---
-tags:
-  - android
+id: "20251015082237307"
+title: "Accessibility Testing / Accessibility Тестирование"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-11
+tags: - android
   - accessibility
   - testing
   - automated-testing
   - talkback
-difficulty: medium
-status: draft
-related:
-  - q-accessibility-compose--accessibility--medium
+related:   - q-accessibility-compose--accessibility--medium
   - q-accessibility-talkback--accessibility--medium
   - q-cicd-automated-testing--devops--medium
-created: 2025-10-11
 ---
-
 # Question (EN)
 How do you test accessibility in Android apps? What tools and techniques are available for automated accessibility testing? How do you write accessibility tests with Espresso and Compose Test?
 

@@ -1,14 +1,16 @@
 ---
-tags:
-  - Android
+id: "20251015082237342"
+title: "Kmm Sqldelight / SQLDelight в KMM"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - KMM
   - SQLDelight
   - Database
-difficulty: medium
-status: draft
 ---
-
 # SQLDelight for Multiplatform Database
 
 # Question (EN)

@@ -1,11 +1,12 @@
 ---
+id: "20251015082237051"
+title: "Lazy Initialization / Ленивая инициализация"
 topic: kotlin
-tags:
-  - programming-languages
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - programming-languages
 ---
-
 # What function in Kotlin is used for lazy property initialization?
 
 # Question (EN)

@@ -1,18 +1,11 @@
 ---
-topic: kotlin
 id: "20251012-180004"
 title: "Retry and exponential backoff patterns in Flow / Retry и exponential backoff паттерны в Flow"
-subtopics:
-  - coroutines
-  - flow
-  - retry
-  - error-handling
-  - resilience
+topic: kotlin
 difficulty: medium
-moc: moc-kotlin
 status: draft
-tags:
-  - kotlin
+created: 2025-10-15
+tags: - kotlin
   - coroutines
   - flow
   - retry
@@ -21,8 +14,13 @@ tags:
   - resilience
   - circuit-breaker
   - production
+moc: moc-kotlin
+subtopics:   - coroutines
+  - flow
+  - retry
+  - error-handling
+  - resilience
 ---
-
 # Retry and exponential backoff patterns in Flow
 
 ## English

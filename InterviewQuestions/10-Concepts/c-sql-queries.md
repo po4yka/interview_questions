@@ -7,7 +7,28 @@ created: 2025-10-12
 updated: 2025-10-12
 ---
 
-# SQL Queries
+# Summary (EN)
+
+SQL (Structured Query Language) is the standard language for relational database management. It provides powerful query capabilities including SELECT statements, various JOIN types, subqueries, Common Table Expressions (CTEs), and window functions for data analysis and manipulation.
+
+# Сводка (RU)
+
+SQL (Structured Query Language) - это стандартный язык для управления реляционными базами данных. Он предоставляет мощные возможности запросов, включая операторы SELECT, различные типы JOIN, подзапросы, общие табличные выражения (CTE) и оконные функции для анализа и манипуляции данными.
+
+## Use Cases / Trade-offs
+
+**Use Cases:**
+- Data retrieval and filtering
+- Complex data aggregations
+- Joining data from multiple tables
+- Hierarchical data queries (recursive CTEs)
+- Analytical queries (window functions)
+
+**Trade-offs:**
+- **JOINs:** Flexibility vs. performance with large datasets
+- **Subqueries:** Readability vs. potential performance issues
+- **CTEs:** Code clarity vs. materialization overhead
+- **Window Functions:** Powerful analytics vs. complexity
 
 ## Overview
 
@@ -170,6 +191,13 @@ FROM daily_sales;
 - [[c-database-design]]
 - [[c-database-performance]]
 - [[c-relational-databases]]
+
+## References
+
+- [PostgreSQL SQL Documentation](https://www.postgresql.org/docs/current/sql.html)
+- [MySQL Reference Manual](https://dev.mysql.com/doc/refman/8.0/en/)
+- [SQL Tutorial - W3Schools](https://www.w3schools.com/sql/)
+- [Modern SQL](https://modern-sql.com/)
 
 ## MOC Links
 

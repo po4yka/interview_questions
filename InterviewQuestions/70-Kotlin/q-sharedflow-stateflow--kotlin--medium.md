@@ -1,6 +1,6 @@
 ---
 id: 20251012-004
-title: "SharedFlow vs StateFlow / SharedFlow vs StateFlow"
+title: "SharedFlow vs StateFlow / SharedFlow против StateFlow"
 aliases: []
 
 # Classification

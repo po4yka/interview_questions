@@ -1,17 +1,18 @@
 ---
+id: "20251015082237593"
+title: "Room Relations Embedded / Relations и Embedded в Room"
 topic: room
-tags:
-  - room
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - room
   - database
   - relations
   - embedded
   - modeling
   - junction-table
   - difficulty/medium
-difficulty: medium
-status: draft
 ---
-
 # Room Relations and Embedded / Отношения и Embedded в Room
 
 **English**: Implement @Relation for one-to-many and many-to-many relationships. Use @Embedded for flattening data classes.

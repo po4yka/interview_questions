@@ -1,14 +1,15 @@
 ---
+id: "20251015082237497"
+title: "How To Tell Adapter To Redraw List If An Item Was Deleted / Как сказать адаптеру перерисовать список если элемент был удален"
 topic: android
-tags:
-  - adapter
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - adapter
   - recyclerview
   - android
   - ui
-difficulty: medium
-status: draft
 ---
-
 # How to tell adapter to redraw list if an item was deleted?
 
 # Вопрос (RU)

@@ -1,15 +1,17 @@
 ---
-tags:
-  - jetpack-compose
+id: "20251015082237467"
+title: "Derived State Snapshot System / Derived State и система Snapshot"
+topic: android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - jetpack-compose
   - state
   - snapshot
   - optimization
   - derived-state
   - performance
-difficulty: hard
-status: draft
 ---
-
 # Compose Snapshot System & derivedStateOf
 
 # Question (EN)

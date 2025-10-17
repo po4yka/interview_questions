@@ -1,7 +1,11 @@
 ---
+id: "20251015082237585"
+title: "What Each Android Component Represents / Что представляет каждый компонент Android"
 topic: android
-tags:
-  - activity
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - activity
   - android
   - android-components
   - android/android-components
@@ -12,10 +16,7 @@ tags:
   - intent
   - service
   - view
-difficulty: easy
-status: draft
 ---
-
 # Что из себя представляет каждый компонент Android-приложения?
 
 **English**: What does each Android application component represent?

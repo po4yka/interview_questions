@@ -1,11 +1,13 @@
 ---
-tags:
-  - programming-languages
-  - android
+id: "20251015082237487"
+title: "Which Class Can Be Used To Detect Different Gestures / Какой класс можно использовать для обнаружения разных жестов"
+topic: android
 difficulty: easy
 status: draft
+created: 2025-10-15
+tags: - programming-languages
+  - android
 ---
-
 # Какой класс можно использовать что бы ловить разные жесты?
 
 ## Answer (EN)

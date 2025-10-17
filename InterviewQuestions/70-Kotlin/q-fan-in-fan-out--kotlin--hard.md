@@ -1,6 +1,6 @@
 ---
 id: 20251012-014
-title: "Fan-in Fan-out Pattern / Паттерн Fan-in Fan-out"
+title: "Fan-in Fan-out Pattern"
 aliases: []
 
 # Classification

@@ -1,30 +1,27 @@
 ---
 id: 20251012-200005
 title: "Binary Search Trees and AVL Trees / Бинарные деревья поиска и AVL деревья"
-slug: binary-search-trees-bst-algorithms-hard
 topic: algorithms
-subtopics:
-  - trees
-  - bst
-  - avl
-  - balanced-trees
-  - tree-traversal
-status: draft
 difficulty: hard
-moc: moc-algorithms
-date_created: 2025-10-12
-date_updated: 2025-10-12
-related_questions:
-  - q-binary-search-variants--algorithms--medium
-  - q-graph-algorithms-bfs-dfs--algorithms--hard
-tags:
-  - algorithms
+status: draft
+created: 2025-10-12
+tags: - algorithms
   - trees
   - bst
   - avl
   - data-structures
+date_created: 2025-10-12
+date_updated: 2025-10-12
+moc: moc-algorithms
+related_questions:   - q-binary-search-variants--algorithms--medium
+  - q-graph-algorithms-bfs-dfs--algorithms--hard
+slug: binary-search-trees-bst-algorithms-hard
+subtopics:   - trees
+  - bst
+  - avl
+  - balanced-trees
+  - tree-traversal
 ---
-
 # Binary Search Trees and AVL Trees
 
 ## English Version
@@ -671,9 +668,5 @@ class FileSystem {
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-binary-search-variants--algorithms--medium]] - binary search variants   algorithms 
-### Prerequisites (Easier)
-- [[q-binary-search-variants--algorithms--medium]] - binary search variants   algorithms 
 ### Prerequisites (Easier)
 - [[q-binary-search-variants--algorithms--medium]] - binary search variants   algorithms 

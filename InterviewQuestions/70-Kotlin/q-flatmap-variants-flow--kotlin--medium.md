@@ -1,6 +1,6 @@
 ---
 id: 20251006-003
-title: "flatMapConcat vs flatMapMerge vs flatMapLatest / flatMapConcat vs flatMapMerge vs flatMapLatest"
+title: "flatMapConcat vs flatMapMerge vs flatMapLatest / flatMapConcat против flatMapMerge против flatMapLatest"
 aliases: []
 
 # Classification
@@ -572,6 +572,125 @@ items.flatMapLatest { processItem(it) }  // 100мс (если элементы �
 | **flatMapConcat** | Важен порядок, последовательная обработка | Загрузка упорядоченного списка, последовательные API вызовы |
 | **flatMapMerge** | Важна скорость, порядок не важен | Параллельные загрузки, конкурентные запросы |
 | **flatMapLatest** | Важен только последний | Поиск, автозаполнение, обновление |
+
+### Продвинутое использование
+
+**Пример 4: Авто-обновление с flatMapLatest**
+
+```kotlin
+class DashboardViewModel : ViewModel() {
+    private val refreshTrigger = MutableSharedFlow<Unit>()
+
+    val dashboardData: Flow<DashboardData> = merge(
+        flowOf(Unit),  // Начальная загрузка
+        refreshTrigger  // Ручное обновление
+    )
+    .flatMapLatest {  // Отменить предыдущую загрузку если триггерится новое обновление
+        repository.getDashboardData()
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            refreshTrigger.emit(Unit)
+        }
+    }
+}
+```
+
+**Пример 5: Загрузка деталей для элементов списка с flatMapMerge**
+
+```kotlin
+class ProductListViewModel : ViewModel() {
+    val productsWithDetails: Flow<List<ProductDetails>> = repository
+        .getProductIds()
+        .flatMapConcat { productIds ->  // Получить все ID сначала
+            productIds.asFlow()
+                .flatMapMerge(concurrency = 10) { productId ->  // Загрузить детали конкурентно
+                    repository.getProductDetails(productId)
+                }
+                .toList()
+                .asFlow()
+        }
+}
+```
+
+**Пример 6: Поиск с debounce и конкурентными запросами**
+
+```kotlin
+class SearchViewModel : ViewModel() {
+    private val searchQuery = MutableStateFlow("")
+
+    val searchResults: Flow<SearchResults> = searchQuery
+        .debounce(300)
+        .flatMapLatest { query ->  // Отменить предыдущий поиск
+            combine(
+                repository.searchProducts(query),
+                repository.searchCategories(query),
+                repository.searchBrands(query)
+            ) { products, categories, brands ->
+                SearchResults(products, categories, brands)
+            }
+        }
+}
+```
+
+### Граничные случаи
+
+**flatMapLatest с медленным источником:**
+
+```kotlin
+// Если источник эмитит медленно, все элементы завершаются
+flow {
+    emit(1)
+    delay(1000)  // Достаточно времени для завершения внутреннего flow
+    emit(2)
+    delay(1000)
+    emit(3)
+}
+.flatMapLatest { value ->
+    flow {
+        delay(100)
+        emit("$value-complete")
+    }
+}
+// Вывод: 1-complete, 2-complete, 3-complete
+```
+
+**flatMapMerge с ограничением конкурентности:**
+
+```kotlin
+// Только 2 конкурентных flow
+(1..10).asFlow()
+    .flatMapMerge(concurrency = 2) { value ->
+        flow {
+            delay(1000)
+            emit(value)
+        }
+    }
+// Обрабатывает пакетами по 2: [1,2], [3,4], [5,6], и т.д.
+```
+
+### Комбинация с другими операторами
+
+**flatMapLatest + retry:**
+
+```kotlin
+searchQuery
+    .flatMapLatest { query ->
+        repository.search(query)
+            .retry(3) { e -> e is IOException }
+    }
+```
+
+**flatMapMerge + catch:**
+
+```kotlin
+urls.asFlow()
+    .flatMapMerge(5) { url ->
+        repository.download(url)
+            .catch { emit(DownloadResult.Error(it)) }
+    }
+```
 
 **Краткое содержание**: `flatMapConcat` выполняет внутренние flows последовательно (сохраняет порядок, медленнее). `flatMapMerge` выполняет конкурентно (быстрее, порядок не сохраняется, настраиваемая конкурентность). `flatMapLatest` отменяет предыдущий внутренний flow когда приходит новое значение (завершается только последний). Используйте `flatMapConcat` для: упорядоченной обработки, последовательных операций. Используйте `flatMapMerge` для: параллельных загрузок, конкурентных запросов. Используйте `flatMapLatest` для: поиска, автозаполнения, обновления.
 

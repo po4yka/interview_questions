@@ -1,14 +1,24 @@
 ---
+id: "20251015082237273"
+title: "What Can Be Done Through Composer / Что можно сделать через Composer"
 topic: android
-tags:
-  - android
 difficulty: medium
 status: draft
+created: 2025-10-15
+tags: - android
 ---
 
-# What can be done through Composer in Jetpack Compose?
+# Question (EN)
 
-## EN (expanded)
+> What can be done through the Composer in Jetpack Compose? What does it manage and how should you use it?
+
+# Вопрос (RU)
+
+> Что можно делать через Composer в Jetpack Compose? За что он отвечает и как правильно им пользоваться?
+
+---
+
+## Answer (EN)
 
 ### What is Composer?
 
@@ -433,24 +443,38 @@ fun CorrectStateManagement() {
 
 ---
 
-## RU (original)
+---
 
-Что можно делать через Composer
+## Ответ (RU)
 
-Это внутренний компонент Compose, отвечающий за управление состоянием и рендерингом. Через него Compose отслеживает изменения в UI и обновляет только те элементы, которые изменились. Он также управляет процессом recomposition
+**Composer** — это внутренний компонент Jetpack Compose, отвечающий за управление деревом композиции, отслеживание зависимостей состояния и процессом перекомпозиции. Он обновляет только те части UI, которые действительно изменились, обеспечивая высокую производительность и предсказуемость поведения.
 
 ---
 
 ## Related Questions
 
+## Follow-ups
+
+-   How does the Composer decide what to recompose and what to skip?
+-   How do stability and `@Stable/@Immutable` annotations affect recomposition?
+-   What are practical strategies to minimize recomposition scope?
+
+## References
+
+-   `https://developer.android.com/jetpack/compose/mental-model` — Compose mental model
+-   `https://developer.android.com/jetpack/compose/performance` — Performance & recomposition
+-   `https://developer.android.com/jetpack/compose/state` — State and recomposition
+
 ### Related (Medium)
-- [[q-how-does-jetpackcompose-work--android--medium]] - Compose
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose
-- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose
-- [[q-accessibility-compose--accessibility--medium]] - Compose
+
+-   [[q-how-does-jetpackcompose-work--android--medium]] - Compose
+-   [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose
+-   [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose
+-   [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose
+-   [[q-accessibility-compose--accessibility--medium]] - Compose
 
 ### Advanced (Harder)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
-- [[q-compose-performance-optimization--android--hard]] - Compose
+
+-   [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
+-   [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
+-   [[q-compose-performance-optimization--android--hard]] - Compose

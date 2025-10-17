@@ -1,13 +1,15 @@
 ---
-tags:
-  - component-functions
+id: "20251015082237213"
+title: "Data Class Component Functions"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - component-functions
   - data-class
   - kotlin
   - programming-languages
-difficulty: easy
-status: draft
 ---
-
 # Для чего служит component в data class?
 
 # Question (EN)

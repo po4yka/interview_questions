@@ -7,7 +7,28 @@ created: 2025-10-12
 updated: 2025-10-12
 ---
 
-# Database Views
+# Summary (EN)
+
+Views are virtual tables based on SQL queries that simplify complex queries and provide security through data abstraction. Regular views are computed on each query, while materialized views store results physically for faster access but require manual refreshing.
+
+# Сводка (RU)
+
+Представления - это виртуальные таблицы, основанные на SQL-запросах, которые упрощают сложные запросы и обеспечивают безопасность через абстракцию данных. Обычные представления вычисляются при каждом запросе, в то время как материализованные представления физически хранят результаты для более быстрого доступа, но требуют ручного обновления.
+
+## Use Cases / Trade-offs
+
+**Use Cases:**
+- Simplifying complex queries
+- Abstracting schema changes
+- Security and access control
+- Creating consistent data interfaces
+- Pre-aggregated reporting data (materialized views)
+
+**Trade-offs:**
+- **Regular Views:** No storage overhead vs. recomputation on each query
+- **Materialized Views:** Fast reads vs. stale data and refresh overhead
+- **Abstraction:** Simplified queries vs. debugging complexity
+- **Updates:** Limited UPDATE/INSERT support through views
 
 ## Overview
 
@@ -75,6 +96,12 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY user_order_summary;
 
 - [[c-database-performance]]
 - [[c-sql-queries]]
+
+## References
+
+- [PostgreSQL Views Documentation](https://www.postgresql.org/docs/current/sql-createview.html)
+- [PostgreSQL Materialized Views](https://www.postgresql.org/docs/current/sql-creatematerializedview.html)
+- [MySQL Views](https://dev.mysql.com/doc/refman/8.0/en/views.html)
 
 ## MOC Links
 

@@ -1,23 +1,30 @@
 ---
-tags:
-  - android
+id: "20251015082237297"
+title: "Hilt Entry Points"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-11
+tags: - android
   - dependency-injection
   - hilt
   - dagger
   - architecture
-difficulty: medium
-status: draft
-related:
-  - q-dagger-multibinding--di--hard
+related:   - q-dagger-multibinding--di--hard
   - q-hilt-assisted-injection--di--medium
   - q-hilt-viewmodel-injection--jetpack--medium
-created: 2025-10-11
 ---
 
 # Question (EN)
-What are Hilt Entry Points and when would you use them? How do they differ from standard dependency injection?
+
+> What are Hilt Entry Points and when would you use them? How do they differ from standard dependency injection?
+
+# Вопрос (RU)
+
+> Что такое Hilt Entry Points и когда вы бы их использовали? Чем они отличаются от стандартного внедрения зависимостей?
 
 ## Answer (EN)
+
 ### Overview
 
 **Hilt Entry Points** are interfaces annotated with `@EntryPoint` that allow you to get dependencies from Hilt in places where Hilt cannot automatically inject dependencies. They serve as a bridge between the Hilt dependency graph and code that isn't managed by Hilt.
@@ -25,14 +32,16 @@ What are Hilt Entry Points and when would you use them? How do they differ from 
 ### When Standard Injection Doesn't Work
 
 Hilt can automatically inject dependencies into:
-- Activities (annotated with `@AndroidEntryPoint`)
-- Fragments
-- Views
-- Services
-- BroadcastReceivers
-- ViewModels
+
+-   Activities (annotated with `@AndroidEntryPoint`)
+-   Fragments
+-   Views
+-   Services
+-   BroadcastReceivers
+-   ViewModels
 
 But there are cases where Hilt **cannot** inject:
+
 1. **Content Providers** - Created before Application.onCreate()
 2. **WorkManager Workers** - Instantiated by WorkManager, not Hilt
 3. **Third-party libraries** - You don't control their constructors
@@ -521,225 +530,233 @@ class NotificationManager @Inject constructor(
 
 ### Entry Points vs Standard Injection
 
-| Aspect | Standard Injection | Entry Points |
-|--------|-------------------|--------------|
-| **Syntax** | `@Inject` annotation | `@EntryPoint` interface + `EntryPointAccessors` |
-| **Automatic** | Yes, Hilt manages lifecycle | No, manual retrieval required |
-| **Type Safety** | Compile-time | Compile-time (interface) + Runtime (accessor) |
-| **Performance** | Faster (direct field injection) | Slightly slower (lookup + call) |
-| **Use Case** | Hilt-managed classes | Non-Hilt classes, external libraries |
-| **Boilerplate** | Minimal | More (interface definition) |
-| **Lifecycle** | Tied to component scope | Retrieved on-demand |
+| Aspect          | Standard Injection              | Entry Points                                    |
+| --------------- | ------------------------------- | ----------------------------------------------- |
+| **Syntax**      | `@Inject` annotation            | `@EntryPoint` interface + `EntryPointAccessors` |
+| **Automatic**   | Yes, Hilt manages lifecycle     | No, manual retrieval required                   |
+| **Type Safety** | Compile-time                    | Compile-time (interface) + Runtime (accessor)   |
+| **Performance** | Faster (direct field injection) | Slightly slower (lookup + call)                 |
+| **Use Case**    | Hilt-managed classes            | Non-Hilt classes, external libraries            |
+| **Boilerplate** | Minimal                         | More (interface definition)                     |
+| **Lifecycle**   | Tied to component scope         | Retrieved on-demand                             |
 
 ### Best Practices
 
 1. **Prefer Standard Injection**
-   ```kotlin
-   //  GOOD - Use standard injection when possible
-   @AndroidEntryPoint
-   class MyActivity : AppCompatActivity() {
-       @Inject lateinit var repository: Repository
-   }
 
-   //  AVOID - Don't use Entry Points unnecessarily
-   class MyActivity : AppCompatActivity() {
-       private lateinit var repository: Repository
+    ```kotlin
+    //  GOOD - Use standard injection when possible
+    @AndroidEntryPoint
+    class MyActivity : AppCompatActivity() {
+        @Inject lateinit var repository: Repository
+    }
 
-       override fun onCreate(savedInstanceState: Bundle?) {
-           super.onCreate(savedInstanceState)
-           val entryPoint = EntryPointAccessors.fromActivity(this, MyEntryPoint::class.java)
-           repository = entryPoint.repository() // Unnecessary!
-       }
-   }
-   ```
+    //  AVOID - Don't use Entry Points unnecessarily
+    class MyActivity : AppCompatActivity() {
+        private lateinit var repository: Repository
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            val entryPoint = EntryPointAccessors.fromActivity(this, MyEntryPoint::class.java)
+            repository = entryPoint.repository() // Unnecessary!
+        }
+    }
+    ```
 
 2. **Minimize Entry Point Surface**
-   ```kotlin
-   //  GOOD - Specific, minimal interface
-   @EntryPoint
-   @InstallIn(SingletonComponent::class)
-   interface WorkerEntryPoint {
-       fun apiService(): ApiService
-       fun database(): AppDatabase
-   }
 
-   //  BAD - Exposing too many dependencies
-   @EntryPoint
-   @InstallIn(SingletonComponent::class)
-   interface GodEntryPoint {
-       fun apiService(): ApiService
-       fun database(): AppDatabase
-       fun sharedPreferences(): SharedPreferences
-       fun analytics(): Analytics
-       fun logger(): Logger
-       fun cache(): Cache
-       // ... 20 more dependencies
-   }
-   ```
+    ```kotlin
+    //  GOOD - Specific, minimal interface
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface WorkerEntryPoint {
+        fun apiService(): ApiService
+        fun database(): AppDatabase
+    }
+
+    //  BAD - Exposing too many dependencies
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface GodEntryPoint {
+        fun apiService(): ApiService
+        fun database(): AppDatabase
+        fun sharedPreferences(): SharedPreferences
+        fun analytics(): Analytics
+        fun logger(): Logger
+        fun cache(): Cache
+        // ... 20 more dependencies
+    }
+    ```
 
 3. **Cache Entry Point Access**
-   ```kotlin
-   //  GOOD - Cache the dependency, not the accessor
-   class MyContentProvider : ContentProvider() {
-       private val repository: Repository by lazy {
-           val entryPoint = EntryPointAccessors.fromApplication(
-               context!!.applicationContext,
-               MyEntryPoint::class.java
-           )
-           entryPoint.repository()
-       }
 
-       override fun query(...): Cursor? {
-           repository.getData() // Fast, already cached
-           return null
-       }
-   }
+    ```kotlin
+    //  GOOD - Cache the dependency, not the accessor
+    class MyContentProvider : ContentProvider() {
+        private val repository: Repository by lazy {
+            val entryPoint = EntryPointAccessors.fromApplication(
+                context!!.applicationContext,
+                MyEntryPoint::class.java
+            )
+            entryPoint.repository()
+        }
 
-   //  BAD - Repeated accessor calls
-   class MyContentProvider : ContentProvider() {
-       override fun query(...): Cursor? {
-           val entryPoint = EntryPointAccessors.fromApplication(
-               context!!.applicationContext,
-               MyEntryPoint::class.java
-           )
-           entryPoint.repository().getData() // Repeated work!
-           return null
-       }
-   }
-   ```
+        override fun query(...): Cursor? {
+            repository.getData() // Fast, already cached
+            return null
+        }
+    }
+
+    //  BAD - Repeated accessor calls
+    class MyContentProvider : ContentProvider() {
+        override fun query(...): Cursor? {
+            val entryPoint = EntryPointAccessors.fromApplication(
+                context!!.applicationContext,
+                MyEntryPoint::class.java
+            )
+            entryPoint.repository().getData() // Repeated work!
+            return null
+        }
+    }
+    ```
 
 4. **Use Appropriate Component Scope**
-   ```kotlin
-   //  GOOD - SingletonComponent for app-wide dependencies
-   @EntryPoint
-   @InstallIn(SingletonComponent::class)
-   interface AppEntryPoint {
-       fun database(): AppDatabase
-   }
 
-   //  GOOD - ActivityComponent for activity-scoped dependencies
-   @EntryPoint
-   @InstallIn(ActivityComponent::class)
-   interface ActivityEntryPoint {
-       fun activityTracker(): ActivityTracker
-   }
+    ```kotlin
+    //  GOOD - SingletonComponent for app-wide dependencies
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface AppEntryPoint {
+        fun database(): AppDatabase
+    }
 
-   //  BAD - Wrong scope
-   @EntryPoint
-   @InstallIn(ActivityComponent::class) // Activity scope!
-   interface BadEntryPoint {
-       fun database(): AppDatabase // Singleton dependency!
-   }
-   ```
+    //  GOOD - ActivityComponent for activity-scoped dependencies
+    @EntryPoint
+    @InstallIn(ActivityComponent::class)
+    interface ActivityEntryPoint {
+        fun activityTracker(): ActivityTracker
+    }
+
+    //  BAD - Wrong scope
+    @EntryPoint
+    @InstallIn(ActivityComponent::class) // Activity scope!
+    interface BadEntryPoint {
+        fun database(): AppDatabase // Singleton dependency!
+    }
+    ```
 
 5. **Error Handling**
-   ```kotlin
-   //  GOOD - Handle potential errors
-   class MyContentProvider : ContentProvider() {
-       private val repository: Repository? by lazy {
-           try {
-               val entryPoint = EntryPointAccessors.fromApplication(
-                   context?.applicationContext ?: return@lazy null,
-                   MyEntryPoint::class.java
-               )
-               entryPoint.repository()
-           } catch (e: IllegalStateException) {
-               Log.e("MyContentProvider", "Hilt not initialized", e)
-               null
-           }
-       }
 
-       override fun onCreate(): Boolean {
-           if (repository == null) {
-               Log.e("MyContentProvider", "Failed to initialize dependencies")
-               return false
-           }
-           return true
-       }
-   }
-   ```
+    ```kotlin
+    //  GOOD - Handle potential errors
+    class MyContentProvider : ContentProvider() {
+        private val repository: Repository? by lazy {
+            try {
+                val entryPoint = EntryPointAccessors.fromApplication(
+                    context?.applicationContext ?: return@lazy null,
+                    MyEntryPoint::class.java
+                )
+                entryPoint.repository()
+            } catch (e: IllegalStateException) {
+                Log.e("MyContentProvider", "Hilt not initialized", e)
+                null
+            }
+        }
+
+        override fun onCreate(): Boolean {
+            if (repository == null) {
+                Log.e("MyContentProvider", "Failed to initialize dependencies")
+                return false
+            }
+            return true
+        }
+    }
+    ```
 
 ### Common Pitfalls
 
 1. **Using Entry Points in Hilt-Managed Classes**
-   ```kotlin
-   //  BAD - Activity already supports @Inject
-   @AndroidEntryPoint
-   class MyActivity : AppCompatActivity() {
-       private lateinit var repository: Repository
 
-       override fun onCreate(savedInstanceState: Bundle?) {
-           super.onCreate(savedInstanceState)
-           val entryPoint = EntryPointAccessors.fromActivity(this, MyEntryPoint::class.java)
-           repository = entryPoint.repository() // Why?!
-       }
-   }
+    ```kotlin
+    //  BAD - Activity already supports @Inject
+    @AndroidEntryPoint
+    class MyActivity : AppCompatActivity() {
+        private lateinit var repository: Repository
 
-   //  GOOD - Use standard injection
-   @AndroidEntryPoint
-   class MyActivity : AppCompatActivity() {
-       @Inject lateinit var repository: Repository
-   }
-   ```
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            val entryPoint = EntryPointAccessors.fromActivity(this, MyEntryPoint::class.java)
+            repository = entryPoint.repository() // Why?!
+        }
+    }
+
+    //  GOOD - Use standard injection
+    @AndroidEntryPoint
+    class MyActivity : AppCompatActivity() {
+        @Inject lateinit var repository: Repository
+    }
+    ```
 
 2. **Incorrect Component Scope**
-   ```kotlin
-   //  BAD - ContentProvider needs SingletonComponent
-   @EntryPoint
-   @InstallIn(ActivityComponent::class) // Wrong!
-   interface MyEntryPoint {
-       fun repository(): Repository
-   }
 
-   class MyContentProvider : ContentProvider() {
-       override fun onCreate(): Boolean {
-           // This will crash - no Activity context!
-           val entryPoint = EntryPointAccessors.fromApplication(
-               context!!.applicationContext,
-               MyEntryPoint::class.java // Expects ActivityComponent!
-           )
-           return true
-       }
-   }
+    ```kotlin
+    //  BAD - ContentProvider needs SingletonComponent
+    @EntryPoint
+    @InstallIn(ActivityComponent::class) // Wrong!
+    interface MyEntryPoint {
+        fun repository(): Repository
+    }
 
-   //  GOOD
-   @EntryPoint
-   @InstallIn(SingletonComponent::class)
-   interface MyEntryPoint {
-       fun repository(): Repository
-   }
-   ```
+    class MyContentProvider : ContentProvider() {
+        override fun onCreate(): Boolean {
+            // This will crash - no Activity context!
+            val entryPoint = EntryPointAccessors.fromApplication(
+                context!!.applicationContext,
+                MyEntryPoint::class.java // Expects ActivityComponent!
+            )
+            return true
+        }
+    }
+
+    //  GOOD
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface MyEntryPoint {
+        fun repository(): Repository
+    }
+    ```
 
 3. **Memory Leaks with Wrong Scope**
-   ```kotlin
-   //  BAD - Leaking Activity reference
-   @EntryPoint
-   @InstallIn(ActivityComponent::class)
-   interface ActivityEntryPoint {
-       fun activityTracker(): ActivityTracker
-   }
 
-   @Singleton // Singleton holding Activity-scoped dependency!
-   class BackgroundService @Inject constructor(
-       private val context: Context
-   ) {
-       private val activityTracker: ActivityTracker by lazy {
-           // This will leak the Activity!
-           val entryPoint = EntryPointAccessors.fromActivity(
-               context as Activity, // Context might be Activity
-               ActivityEntryPoint::class.java
-           )
-           entryPoint.activityTracker()
-       }
-   }
+    ```kotlin
+    //  BAD - Leaking Activity reference
+    @EntryPoint
+    @InstallIn(ActivityComponent::class)
+    interface ActivityEntryPoint {
+        fun activityTracker(): ActivityTracker
+    }
 
-   //  GOOD - Use appropriate scope
-   @EntryPoint
-   @InstallIn(SingletonComponent::class)
-   interface ServiceEntryPoint {
-       fun serviceTracker(): ServiceTracker // Singleton-scoped
-   }
-   ```
+    @Singleton // Singleton holding Activity-scoped dependency!
+    class BackgroundService @Inject constructor(
+        private val context: Context
+    ) {
+        private val activityTracker: ActivityTracker by lazy {
+            // This will leak the Activity!
+            val entryPoint = EntryPointAccessors.fromActivity(
+                context as Activity, // Context might be Activity
+                ActivityEntryPoint::class.java
+            )
+            entryPoint.activityTracker()
+        }
+    }
+
+    //  GOOD - Use appropriate scope
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface ServiceEntryPoint {
+        fun serviceTracker(): ServiceTracker // Singleton-scoped
+    }
+    ```
 
 ### Testing Entry Points
 
@@ -794,25 +811,29 @@ class ContentProviderTest {
 **Hilt Entry Points** are interfaces that provide access to Hilt dependencies in classes where automatic injection isn't possible:
 
 **When to use**:
--  Content Providers
--  WorkManager Workers (before Hilt 2.31)
--  Firebase Services
--  Third-party library initialization
--  Custom views with complex inflation
--  Multi-process components
+
+-   Content Providers
+-   WorkManager Workers (before Hilt 2.31)
+-   Firebase Services
+-   Third-party library initialization
+-   Custom views with complex inflation
+-   Multi-process components
 
 **When NOT to use**:
--  Activities, Fragments, Services (use `@AndroidEntryPoint`)
--  ViewModels (use `@HiltViewModel`)
--  Any Hilt-managed class
+
+-   Activities, Fragments, Services (use `@AndroidEntryPoint`)
+-   ViewModels (use `@HiltViewModel`)
+-   Any Hilt-managed class
 
 **Key differences from standard injection**:
-- Manual retrieval vs automatic injection
-- Requires explicit interface definition
-- Slightly more boilerplate
-- Used as escape hatch for non-Hilt code
+
+-   Manual retrieval vs automatic injection
+-   Requires explicit interface definition
+-   Slightly more boilerplate
+-   Used as escape hatch for non-Hilt code
 
 **Best practices**:
+
 1. Prefer standard injection when possible
 2. Keep Entry Point interfaces small and focused
 3. Use appropriate component scope
@@ -822,9 +843,11 @@ class ContentProviderTest {
 ---
 
 # Вопрос (RU)
+
 Что такое Hilt Entry Points и когда их использовать? Чем они отличаются от стандартной инъекции зависимостей?
 
 ## Ответ (RU)
+
 ### Обзор
 
 **Hilt Entry Points** — это интерфейсы, помеченные аннотацией `@EntryPoint`, которые позволяют получать зависимости из Hilt в местах, где Hilt не может автоматически внедрить зависимости. Они служат мостом между графом зависимостей Hilt и кодом, который не управляется Hilt.
@@ -832,14 +855,16 @@ class ContentProviderTest {
 ### Когда стандартная инъекция не работает
 
 Hilt может автоматически внедрять зависимости в:
-- Activity (с аннотацией `@AndroidEntryPoint`)
-- Fragment
-- View
-- Service
-- BroadcastReceiver
-- ViewModel
+
+-   Activity (с аннотацией `@AndroidEntryPoint`)
+-   Fragment
+-   View
+-   Service
+-   BroadcastReceiver
+-   ViewModel
 
 Но есть случаи, когда Hilt **не может** выполнить инъекцию:
+
 1. **Content Provider** — создаются до Application.onCreate()
 2. **WorkManager Worker** — создаются WorkManager, а не Hilt
 3. **Сторонние библиотеки** — вы не контролируете их конструкторы
@@ -1318,225 +1343,233 @@ class NotificationManager @Inject constructor(
 
 ### Entry Points vs стандартная инъекция
 
-| Аспект | Стандартная инъекция | Entry Points |
-|--------|---------------------|--------------|
-| **Синтаксис** | Аннотация `@Inject` | Интерфейс `@EntryPoint` + `EntryPointAccessors` |
-| **Автоматичность** | Да, Hilt управляет жизненным циклом | Нет, требуется ручное получение |
-| **Типобезопасность** | Compile-time | Compile-time (интерфейс) + Runtime (accessor) |
-| **Производительность** | Быстрее (прямая инъекция полей) | Чуть медленнее (lookup + вызов) |
-| **Применение** | Hilt-управляемые классы | Не-Hilt классы, внешние библиотеки |
-| **Boilerplate** | Минимальный | Больше (определение интерфейса) |
-| **Жизненный цикл** | Привязан к scope компонента | Получается по требованию |
+| Аспект                 | Стандартная инъекция                | Entry Points                                    |
+| ---------------------- | ----------------------------------- | ----------------------------------------------- |
+| **Синтаксис**          | Аннотация `@Inject`                 | Интерфейс `@EntryPoint` + `EntryPointAccessors` |
+| **Автоматичность**     | Да, Hilt управляет жизненным циклом | Нет, требуется ручное получение                 |
+| **Типобезопасность**   | Compile-time                        | Compile-time (интерфейс) + Runtime (accessor)   |
+| **Производительность** | Быстрее (прямая инъекция полей)     | Чуть медленнее (lookup + вызов)                 |
+| **Применение**         | Hilt-управляемые классы             | Не-Hilt классы, внешние библиотеки              |
+| **Boilerplate**        | Минимальный                         | Больше (определение интерфейса)                 |
+| **Жизненный цикл**     | Привязан к scope компонента         | Получается по требованию                        |
 
 ### Лучшие практики
 
 1. **Предпочитайте стандартную инъекцию**
-   ```kotlin
-   //  ХОРОШО — используйте стандартную инъекцию, когда возможно
-   @AndroidEntryPoint
-   class MyActivity : AppCompatActivity() {
-       @Inject lateinit var repository: Repository
-   }
 
-   //  ИЗБЕГАЙТЕ — не используйте Entry Points без необходимости
-   class MyActivity : AppCompatActivity() {
-       private lateinit var repository: Repository
+    ```kotlin
+    //  ХОРОШО — используйте стандартную инъекцию, когда возможно
+    @AndroidEntryPoint
+    class MyActivity : AppCompatActivity() {
+        @Inject lateinit var repository: Repository
+    }
 
-       override fun onCreate(savedInstanceState: Bundle?) {
-           super.onCreate(savedInstanceState)
-           val entryPoint = EntryPointAccessors.fromActivity(this, MyEntryPoint::class.java)
-           repository = entryPoint.repository() // Ненужно!
-       }
-   }
-   ```
+    //  ИЗБЕГАЙТЕ — не используйте Entry Points без необходимости
+    class MyActivity : AppCompatActivity() {
+        private lateinit var repository: Repository
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            val entryPoint = EntryPointAccessors.fromActivity(this, MyEntryPoint::class.java)
+            repository = entryPoint.repository() // Ненужно!
+        }
+    }
+    ```
 
 2. **Минимизируйте поверхность Entry Point**
-   ```kotlin
-   //  ХОРОШО — конкретный, минимальный интерфейс
-   @EntryPoint
-   @InstallIn(SingletonComponent::class)
-   interface WorkerEntryPoint {
-       fun apiService(): ApiService
-       fun database(): AppDatabase
-   }
 
-   //  ПЛОХО — слишком много зависимостей
-   @EntryPoint
-   @InstallIn(SingletonComponent::class)
-   interface GodEntryPoint {
-       fun apiService(): ApiService
-       fun database(): AppDatabase
-       fun sharedPreferences(): SharedPreferences
-       fun analytics(): Analytics
-       fun logger(): Logger
-       fun cache(): Cache
-       // ... ещё 20 зависимостей
-   }
-   ```
+    ```kotlin
+    //  ХОРОШО — конкретный, минимальный интерфейс
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface WorkerEntryPoint {
+        fun apiService(): ApiService
+        fun database(): AppDatabase
+    }
+
+    //  ПЛОХО — слишком много зависимостей
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface GodEntryPoint {
+        fun apiService(): ApiService
+        fun database(): AppDatabase
+        fun sharedPreferences(): SharedPreferences
+        fun analytics(): Analytics
+        fun logger(): Logger
+        fun cache(): Cache
+        // ... ещё 20 зависимостей
+    }
+    ```
 
 3. **Кешируйте доступ к Entry Point**
-   ```kotlin
-   //  ХОРОШО — кешируйте зависимость, а не accessor
-   class MyContentProvider : ContentProvider() {
-       private val repository: Repository by lazy {
-           val entryPoint = EntryPointAccessors.fromApplication(
-               context!!.applicationContext,
-               MyEntryPoint::class.java
-           )
-           entryPoint.repository()
-       }
 
-       override fun query(...): Cursor? {
-           repository.getData() // Быстро, уже в кеше
-           return null
-       }
-   }
+    ```kotlin
+    //  ХОРОШО — кешируйте зависимость, а не accessor
+    class MyContentProvider : ContentProvider() {
+        private val repository: Repository by lazy {
+            val entryPoint = EntryPointAccessors.fromApplication(
+                context!!.applicationContext,
+                MyEntryPoint::class.java
+            )
+            entryPoint.repository()
+        }
 
-   //  ПЛОХО — повторные вызовы accessor
-   class MyContentProvider : ContentProvider() {
-       override fun query(...): Cursor? {
-           val entryPoint = EntryPointAccessors.fromApplication(
-               context!!.applicationContext,
-               MyEntryPoint::class.java
-           )
-           entryPoint.repository().getData() // Повторная работа!
-           return null
-       }
-   }
-   ```
+        override fun query(...): Cursor? {
+            repository.getData() // Быстро, уже в кеше
+            return null
+        }
+    }
+
+    //  ПЛОХО — повторные вызовы accessor
+    class MyContentProvider : ContentProvider() {
+        override fun query(...): Cursor? {
+            val entryPoint = EntryPointAccessors.fromApplication(
+                context!!.applicationContext,
+                MyEntryPoint::class.java
+            )
+            entryPoint.repository().getData() // Повторная работа!
+            return null
+        }
+    }
+    ```
 
 4. **Используйте подходящий scope компонента**
-   ```kotlin
-   //  ХОРОШО — SingletonComponent для app-wide зависимостей
-   @EntryPoint
-   @InstallIn(SingletonComponent::class)
-   interface AppEntryPoint {
-       fun database(): AppDatabase
-   }
 
-   //  ХОРОШО — ActivityComponent для activity-scoped зависимостей
-   @EntryPoint
-   @InstallIn(ActivityComponent::class)
-   interface ActivityEntryPoint {
-       fun activityTracker(): ActivityTracker
-   }
+    ```kotlin
+    //  ХОРОШО — SingletonComponent для app-wide зависимостей
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface AppEntryPoint {
+        fun database(): AppDatabase
+    }
 
-   //  ПЛОХО — неправильный scope
-   @EntryPoint
-   @InstallIn(ActivityComponent::class) // Activity scope!
-   interface BadEntryPoint {
-       fun database(): AppDatabase // Singleton зависимость!
-   }
-   ```
+    //  ХОРОШО — ActivityComponent для activity-scoped зависимостей
+    @EntryPoint
+    @InstallIn(ActivityComponent::class)
+    interface ActivityEntryPoint {
+        fun activityTracker(): ActivityTracker
+    }
+
+    //  ПЛОХО — неправильный scope
+    @EntryPoint
+    @InstallIn(ActivityComponent::class) // Activity scope!
+    interface BadEntryPoint {
+        fun database(): AppDatabase // Singleton зависимость!
+    }
+    ```
 
 5. **Обработка ошибок**
-   ```kotlin
-   //  ХОРОШО — обрабатывайте потенциальные ошибки
-   class MyContentProvider : ContentProvider() {
-       private val repository: Repository? by lazy {
-           try {
-               val entryPoint = EntryPointAccessors.fromApplication(
-                   context?.applicationContext ?: return@lazy null,
-                   MyEntryPoint::class.java
-               )
-               entryPoint.repository()
-           } catch (e: IllegalStateException) {
-               Log.e("MyContentProvider", "Hilt not initialized", e)
-               null
-           }
-       }
 
-       override fun onCreate(): Boolean {
-           if (repository == null) {
-               Log.e("MyContentProvider", "Failed to initialize dependencies")
-               return false
-           }
-           return true
-       }
-   }
-   ```
+    ```kotlin
+    //  ХОРОШО — обрабатывайте потенциальные ошибки
+    class MyContentProvider : ContentProvider() {
+        private val repository: Repository? by lazy {
+            try {
+                val entryPoint = EntryPointAccessors.fromApplication(
+                    context?.applicationContext ?: return@lazy null,
+                    MyEntryPoint::class.java
+                )
+                entryPoint.repository()
+            } catch (e: IllegalStateException) {
+                Log.e("MyContentProvider", "Hilt not initialized", e)
+                null
+            }
+        }
+
+        override fun onCreate(): Boolean {
+            if (repository == null) {
+                Log.e("MyContentProvider", "Failed to initialize dependencies")
+                return false
+            }
+            return true
+        }
+    }
+    ```
 
 ### Распространённые ошибки
 
 1. **Использование Entry Points в Hilt-управляемых классах**
-   ```kotlin
-   //  ПЛОХО — Activity уже поддерживает @Inject
-   @AndroidEntryPoint
-   class MyActivity : AppCompatActivity() {
-       private lateinit var repository: Repository
 
-       override fun onCreate(savedInstanceState: Bundle?) {
-           super.onCreate(savedInstanceState)
-           val entryPoint = EntryPointAccessors.fromActivity(this, MyEntryPoint::class.java)
-           repository = entryPoint.repository() // Зачем?!
-       }
-   }
+    ```kotlin
+    //  ПЛОХО — Activity уже поддерживает @Inject
+    @AndroidEntryPoint
+    class MyActivity : AppCompatActivity() {
+        private lateinit var repository: Repository
 
-   //  ХОРОШО — используйте стандартную инъекцию
-   @AndroidEntryPoint
-   class MyActivity : AppCompatActivity() {
-       @Inject lateinit var repository: Repository
-   }
-   ```
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            val entryPoint = EntryPointAccessors.fromActivity(this, MyEntryPoint::class.java)
+            repository = entryPoint.repository() // Зачем?!
+        }
+    }
+
+    //  ХОРОШО — используйте стандартную инъекцию
+    @AndroidEntryPoint
+    class MyActivity : AppCompatActivity() {
+        @Inject lateinit var repository: Repository
+    }
+    ```
 
 2. **Неправильный scope компонента**
-   ```kotlin
-   //  ПЛОХО — ContentProvider нужен SingletonComponent
-   @EntryPoint
-   @InstallIn(ActivityComponent::class) // Неправильно!
-   interface MyEntryPoint {
-       fun repository(): Repository
-   }
 
-   class MyContentProvider : ContentProvider() {
-       override fun onCreate(): Boolean {
-           // Это упадёт — нет Activity контекста!
-           val entryPoint = EntryPointAccessors.fromApplication(
-               context!!.applicationContext,
-               MyEntryPoint::class.java // Ожидает ActivityComponent!
-           )
-           return true
-       }
-   }
+    ```kotlin
+    //  ПЛОХО — ContentProvider нужен SingletonComponent
+    @EntryPoint
+    @InstallIn(ActivityComponent::class) // Неправильно!
+    interface MyEntryPoint {
+        fun repository(): Repository
+    }
 
-   //  ХОРОШО
-   @EntryPoint
-   @InstallIn(SingletonComponent::class)
-   interface MyEntryPoint {
-       fun repository(): Repository
-   }
-   ```
+    class MyContentProvider : ContentProvider() {
+        override fun onCreate(): Boolean {
+            // Это упадёт — нет Activity контекста!
+            val entryPoint = EntryPointAccessors.fromApplication(
+                context!!.applicationContext,
+                MyEntryPoint::class.java // Ожидает ActivityComponent!
+            )
+            return true
+        }
+    }
+
+    //  ХОРОШО
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface MyEntryPoint {
+        fun repository(): Repository
+    }
+    ```
 
 3. **Утечки памяти с неправильным scope**
-   ```kotlin
-   //  ПЛОХО — утечка ссылки на Activity
-   @EntryPoint
-   @InstallIn(ActivityComponent::class)
-   interface ActivityEntryPoint {
-       fun activityTracker(): ActivityTracker
-   }
 
-   @Singleton // Singleton держит Activity-scoped зависимость!
-   class BackgroundService @Inject constructor(
-       private val context: Context
-   ) {
-       private val activityTracker: ActivityTracker by lazy {
-           // Это приведёт к утечке Activity!
-           val entryPoint = EntryPointAccessors.fromActivity(
-               context as Activity, // Context может быть Activity
-               ActivityEntryPoint::class.java
-           )
-           entryPoint.activityTracker()
-       }
-   }
+    ```kotlin
+    //  ПЛОХО — утечка ссылки на Activity
+    @EntryPoint
+    @InstallIn(ActivityComponent::class)
+    interface ActivityEntryPoint {
+        fun activityTracker(): ActivityTracker
+    }
 
-   //  ХОРОШО — используйте подходящий scope
-   @EntryPoint
-   @InstallIn(SingletonComponent::class)
-   interface ServiceEntryPoint {
-       fun serviceTracker(): ServiceTracker // Singleton-scoped
-   }
-   ```
+    @Singleton // Singleton держит Activity-scoped зависимость!
+    class BackgroundService @Inject constructor(
+        private val context: Context
+    ) {
+        private val activityTracker: ActivityTracker by lazy {
+            // Это приведёт к утечке Activity!
+            val entryPoint = EntryPointAccessors.fromActivity(
+                context as Activity, // Context может быть Activity
+                ActivityEntryPoint::class.java
+            )
+            entryPoint.activityTracker()
+        }
+    }
+
+    //  ХОРОШО — используйте подходящий scope
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface ServiceEntryPoint {
+        fun serviceTracker(): ServiceTracker // Singleton-scoped
+    }
+    ```
 
 ### Тестирование Entry Points
 
@@ -1591,25 +1624,29 @@ class ContentProviderTest {
 **Hilt Entry Points** — это интерфейсы, предоставляющие доступ к Hilt-зависимостям в классах, где автоматическая инъекция невозможна:
 
 **Когда использовать**:
--  Content Provider
--  WorkManager Worker (до Hilt 2.31)
--  Firebase Services
--  Инициализация сторонних библиотек
--  Кастомные view со сложным надувом
--  Многопроцессные компоненты
+
+-   Content Provider
+-   WorkManager Worker (до Hilt 2.31)
+-   Firebase Services
+-   Инициализация сторонних библиотек
+-   Кастомные view со сложным надувом
+-   Многопроцессные компоненты
 
 **Когда НЕ использовать**:
--  Activity, Fragment, Service (используйте `@AndroidEntryPoint`)
--  ViewModel (используйте `@HiltViewModel`)
--  Любой Hilt-управляемый класс
+
+-   Activity, Fragment, Service (используйте `@AndroidEntryPoint`)
+-   ViewModel (используйте `@HiltViewModel`)
+-   Любой Hilt-управляемый класс
 
 **Ключевые отличия от стандартной инъекции**:
-- Ручное получение vs автоматическая инъекция
-- Требуется явное определение интерфейса
-- Немного больше boilerplate
-- Используется как escape hatch для не-Hilt кода
+
+-   Ручное получение vs автоматическая инъекция
+-   Требуется явное определение интерфейса
+-   Немного больше boilerplate
+-   Используется как escape hatch для не-Hilt кода
 
 **Лучшие практики**:
+
 1. Предпочитайте стандартную инъекцию, когда возможно
 2. Держите интерфейсы Entry Point небольшими и сфокусированными
 3. Используйте подходящий scope компонента

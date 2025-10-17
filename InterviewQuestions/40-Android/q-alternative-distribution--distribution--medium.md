@@ -1,14 +1,16 @@
 ---
-tags:
-  - Android
+id: "20251015082237535"
+title: "Alternative Distribution / Альтернативное распространение"
+topic: android
+difficulty: medium
+status: draft
+created: 2025-10-15
+tags: - Android
   - Kotlin
   - Distribution
   - APK
   - Samsung
-difficulty: medium
-status: draft
 ---
-
 # Alternative App Distribution Channels
 
 # Question (EN)

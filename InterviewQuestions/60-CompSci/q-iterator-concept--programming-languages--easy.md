@@ -1,15 +1,17 @@
 ---
-tags:
-  - collections
+id: "20251015082237114"
+title: "Iterator Concept / Концепция Iterator"
+topic: computer-science
+difficulty: easy
+status: draft
+created: 2025-10-15
+tags: - collections
   - design-patterns
   - iterator
   - kotlin
   - programming-languages
   - traversal
-difficulty: easy
-status: draft
 ---
-
 # Что такое итератор?
 
 # Question (EN)

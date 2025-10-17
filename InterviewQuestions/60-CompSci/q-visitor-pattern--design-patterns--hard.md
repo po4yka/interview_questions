@@ -1,14 +1,16 @@
 ---
-tags:
-  - design-patterns
+id: "20251015082237220"
+title: "Visitor Pattern / Visitor Паттерн"
+topic: computer-science
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - design-patterns
   - behavioral-patterns
   - visitor
   - gof-patterns
   - double-dispatch
-difficulty: hard
-status: draft
 ---
-
 # Visitor Pattern
 
 # Question (EN)

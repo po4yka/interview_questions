@@ -399,7 +399,7 @@ launch(Dispatchers.Unconfined) {
 
 Диспетчеры корутин определяют, какой поток или пул потоков выполняет корутину. Kotlin предоставляет четыре основных диспетчера, каждый оптимизирован для конкретных задач.
 
-### Обзор диспетчеров
+### Обзор Диспетчеров
 
 | Диспетчер | Пул потоков | Случай использования | Примеры |
 |------------|-------------|----------|----------|
@@ -495,6 +495,10 @@ class DataProcessor {
         }
     }
 
+    suspend fun sortLargeList(list: List<Int>): List<Int> = withContext(Dispatchers.Default) {
+        list.sorted()
+    }
+
     suspend fun parseJson(json: String): Data = withContext(Dispatchers.Default) {
         Json.decodeFromString<Data>(json)
     }
@@ -514,7 +518,185 @@ class DataProcessor {
 - Сортировки/фильтрации больших коллекций
 - Криптографических операций
 
-### Лучшие практики
+### Dispatchers.Unconfined
+
+Начинает в контексте вызывающей стороны, возобновляется в произвольном потоке:
+
+```kotlin
+fun main() = runBlocking {
+    launch(Dispatchers.Unconfined) {
+        println("Unconfined 1: ${Thread.currentThread().name}")
+        delay(100)
+        println("Unconfined 2: ${Thread.currentThread().name}") // Другой поток!
+    }
+
+    launch {
+        println("Main: ${Thread.currentThread().name}")
+        delay(100)
+        println("Main: ${Thread.currentThread().name}") // Тот же поток
+    }
+}
+
+// Вывод:
+// Unconfined 1: main
+// Main: main
+// Unconfined 2: kotlinx.coroutines.DefaultExecutor
+// Main: main
+```
+
+**Характеристики**:
+- Нет привязки к потоку
+- Возобновляется в том потоке, в котором возобновилась suspend-функция
+- Непредсказуемое поведение потока
+- Очень низкие накладные расходы
+
+**Использовать для**:
+- Тестирования
+- Производительно-критичного кода (продвинутый)
+- Когда поток не имеет значения
+- Обычно **не рекомендуется** для production
+
+### Переключение Диспетчеров с withContext
+
+```kotlin
+class UserViewModel : ViewModel() {
+    fun loadUser(id: Int) {
+        viewModelScope.launch(Dispatchers.Main) {
+            // Начать на Main потоке
+            showLoading()
+
+            val user = withContext(Dispatchers.IO) {
+                // Переключиться на IO для сети
+                api.getUser(id)
+            }
+            // Автоматически обратно на Main
+
+            val processed = withContext(Dispatchers.Default) {
+                // Переключиться на Default для CPU работы
+                processUserData(user)
+            }
+            // Автоматически обратно на Main
+
+            updateUI(processed)
+        }
+    }
+}
+```
+
+### Реальный Пример: Полный Поток
+
+```kotlin
+class MovieRepository(
+    private val api: MovieApiService,
+    private val database: MovieDatabase,
+    private val imageProcessor: ImageProcessor
+) {
+    suspend fun getMovieDetails(id: Int): Movie = withContext(Dispatchers.IO) {
+        // 1. Сетевой вызов на IO диспетчере
+        val movieDto = api.fetchMovie(id)
+
+        // 2. CPU-интенсивный парсинг на Default диспетчере
+        val movie = withContext(Dispatchers.Default) {
+            parseMovieDto(movieDto)
+        }
+
+        // 3. Скачать и обработать постер (обратно на IO)
+        val posterUrl = movie.posterUrl
+        val posterBytes = api.downloadPoster(posterUrl)
+
+        // 4. Обработать изображение на Default диспетчере
+        val processedPoster = withContext(Dispatchers.Default) {
+            imageProcessor.optimize(posterBytes)
+        }
+
+        // 5. Сохранить в базу данных (обратно на IO)
+        database.movieDao().insert(movie.copy(poster = processedPoster))
+
+        movie
+    }
+}
+
+class MovieViewModel : ViewModel() {
+    private val _movie = MutableStateFlow<UiState<Movie>>(UiState.Loading)
+    val movie: StateFlow<UiState<Movie>> = _movie
+
+    fun loadMovie(id: Int) {
+        // Запустить на Main диспетчере
+        viewModelScope.launch(Dispatchers.Main) {
+            _movie.value = UiState.Loading
+
+            try {
+                // Repository обрабатывает переключение диспетчеров внутренне
+                val movie = repository.getMovieDetails(id)
+
+                // Обновить UI на Main диспетчере (автоматически)
+                _movie.value = UiState.Success(movie)
+            } catch (e: Exception) {
+                _movie.value = UiState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+}
+```
+
+### Пользовательские Диспетчеры
+
+```kotlin
+// Диспетчер с ограниченным параллелизмом
+val customDispatcher = Dispatchers.IO.limitedParallelism(5)
+
+suspend fun processItems(items: List<Item>) {
+    items.map { item ->
+        async(customDispatcher) {
+            processItem(item)
+        }
+    }.awaitAll()
+    // Максимум 5 одновременных операций
+}
+
+// Однопоточный диспетчер
+val singleThreadDispatcher = newSingleThreadContext("MyThread")
+
+suspend fun sequentialOperations() = withContext(singleThreadDispatcher) {
+    // Все операции на одном потоке
+    operation1()
+    operation2()
+    operation3()
+}
+
+// Пул потоков фиксированного размера
+val fixedThreadPool = newFixedThreadPoolContext(4, "MyPool")
+```
+
+### Производительность Диспетчеров
+
+```kotlin
+// ПЛОХО: Использование неправильного диспетчера
+suspend fun loadData() = withContext(Dispatchers.Default) {
+    // Блокирующий I/O на CPU-bound диспетчере
+    api.fetchData() // Тратит впустую CPU поток!
+}
+
+// ХОРОШО: Использование правильного диспетчера
+suspend fun loadData() = withContext(Dispatchers.IO) {
+    api.fetchData()
+}
+
+// ПЛОХО: Ненужное переключение
+suspend fun simpleCalculation() = withContext(Dispatchers.Main) {
+    val result = withContext(Dispatchers.Default) {
+        2 + 2 // Слишком просто чтобы оправдать переключение
+    }
+    result
+}
+
+// ХОРОШО: Прямое вычисление
+suspend fun simpleCalculation(): Int {
+    return 2 + 2
+}
+```
+
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 ```kotlin
@@ -532,6 +714,20 @@ suspend fun sortData(data: List<Int>) = withContext(Dispatchers.Default) {
 lifecycleScope.launch(Dispatchers.Main) {
     textView.text = "Обновлено"
 }
+
+// Позволить viewModelScope по умолчанию использовать Main
+viewModelScope.launch {
+    // Уже на Main
+    updateUI()
+}
+
+// Переключать контексты соответственно
+viewModelScope.launch {
+    val data = withContext(Dispatchers.IO) {
+        fetchData()
+    }
+    updateUI(data)
+}
 ```
 
 #### НЕ ДЕЛАТЬ:
@@ -541,10 +737,41 @@ withContext(Dispatchers.Default) {
     api.fetchData() // Неправильный диспетчер!
 }
 
+// Не использовать IO для CPU работы
+withContext(Dispatchers.IO) {
+    heavyCalculation() // Тратит впустую I/O потоки
+}
+
 // Не обновлять UI не на Main потоке
 withContext(Dispatchers.IO) {
     textView.text = "Ошибка" // Crash!
 }
+
+// Не использовать Unconfined в production
+launch(Dispatchers.Unconfined) {
+    // Непредсказуемое поведение
+}
+```
+
+### Дерево Решений
+
+```
+Какую операцию нужно выполнить?
+
+ Обновление UI?
+   → Dispatchers.Main
+
+ Сетевой запрос / База данных / Файловый I/O?
+   → Dispatchers.IO
+
+ Тяжёлые вычисления / Парсинг / Обработка данных?
+   → Dispatchers.Default
+
+ Тестирование / Специальный случай?
+   → Dispatchers.Unconfined (с осторожностью)
+
+ Нужен специфический пул потоков?
+   → Пользовательский диспетчер
 ```
 
 ---

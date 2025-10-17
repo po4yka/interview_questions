@@ -1,15 +1,16 @@
 ---
+id: "20251015082237506"
+title: "Mvi Architecture / Архитектура MVI"
 topic: android
-tags:
-  - android
+difficulty: hard
+status: draft
+created: 2025-10-15
+tags: - android
   - architecture
   - mvi
   - state-management
   - unidirectional-data-flow
-difficulty: hard
-status: draft
 ---
-
 # MVI Architecture
 
 **English**: Explain the MVI (Model-View-Intent) architecture pattern. How does it differ from MVVM?
