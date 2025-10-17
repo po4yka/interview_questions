@@ -1,15 +1,13 @@
 ---
-id: "20251015082238607"
+id: 20251012-122711196
 title: "Why List Scrolling Lags / Почему тормозит скроллинг списка"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [android/performance, android/recyclerview, diffutil, optimization, performance, recyclerview, scrolling, viewholder, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Почему при скролле может тормозить список?
 

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237240"
+id: 20251012-122711118
 title: "Testing Coroutines Flow / Тестирование Coroutines Flow"
 topic: android
 difficulty: hard

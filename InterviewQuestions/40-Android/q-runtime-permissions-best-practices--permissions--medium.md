@@ -1,5 +1,5 @@
 ---
-id: "20251015082237282"
+id: 20251012-12271194
 title: "Runtime Permissions Best Practices / Лучшие практики runtime разрешений"
 topic: permissions
 difficulty: medium

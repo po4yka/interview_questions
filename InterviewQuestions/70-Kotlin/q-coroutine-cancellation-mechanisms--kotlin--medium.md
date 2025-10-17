@@ -1,5 +1,5 @@
 ---
-id: 20251006-coroutine-cancellation
+id: 20251012-1227111199
 title: Coroutine Cancellation Mechanisms / Механизмы Отмены Корутин
 topic: kotlin
 difficulty: medium

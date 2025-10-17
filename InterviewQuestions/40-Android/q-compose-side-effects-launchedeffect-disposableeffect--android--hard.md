@@ -1,15 +1,13 @@
 ---
-id: "20251015082238654"
+id: 20251017-145045
 title: "Compose Side Effects Launchedeffect Disposableeffect / Побочные эффекты LaunchedEffect и DisposableEffect"
 topic: android
 difficulty: hard
 status: draft
 created: 2025-10-13
 tags: [jetpack-compose, side-effects, coroutines, lifecycle, difficulty/hard]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Side-эффекты в Compose: LaunchedEffect vs DisposableEffect
 

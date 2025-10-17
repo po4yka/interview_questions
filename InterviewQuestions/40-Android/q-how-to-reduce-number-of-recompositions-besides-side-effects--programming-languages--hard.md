@@ -1,5 +1,5 @@
 ---
-id: "20251015082237389"
+id: 20251012-1227193
 title: "How To Reduce Number Of Recompositions Besides Side Effects / Как уменьшить количество рекомпозиций кроме побочных эффектов"
 topic: android
 difficulty: hard

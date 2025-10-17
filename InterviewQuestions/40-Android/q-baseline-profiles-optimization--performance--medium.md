@@ -5,7 +5,12 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [performance, baseline-profiles, optimization, startup, jank, aot, macrobenchmark]
+subtopics:
+  - performance
+  - baseline-profiles
+  - optimization
+  - startup
+  - jank
 question_kind: practical
 difficulty: medium
 

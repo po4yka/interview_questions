@@ -1,5 +1,5 @@
 ---
-id: "20251015082236006"
+id: 20251012-154350
 title: "Data Class Requirements / Требования Data Class"
 topic: kotlin
 difficulty: medium

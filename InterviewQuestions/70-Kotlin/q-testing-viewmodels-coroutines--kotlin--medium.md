@@ -1,5 +1,5 @@
 ---
-id: "20251015082236047"
+id: 20251017-150748
 title: "Testing Viewmodels Coroutines / Тестирование Viewmodels Coroutines"
 topic: kotlin
 difficulty: medium
@@ -657,4 +657,46 @@ testImplementation "app.cash.turbine:turbine:1.0.0" // Для тестирова
 **Common pitfalls**: Forgetting runTest (test completes before coroutine). Not setting up Main dispatcher (crashes). Not advancing time with StandardTestDispatcher (test fails). Testing implementation instead of state.
 
 **Best practices**: Always use runTest for coroutine tests. Use MainDispatcherRule for ViewModels. Use Fake repositories, not mocks. Test final state, not intermediate steps. Use turbine for Flow testing. Verify state sequences for loading states.
+
+## Ответ (RU)
+
+Тестирование **ViewModels с корутинами** требует специальной настройки для контроля выполнения корутин и времени в тестовом окружении.
+
+### Ключевые инструменты
+
+1. **runTest** - предоставляет TestScope, автоматически ждет завершения корутин, пропускает delay() мгновенно
+2. **MainDispatcherRule** - заменяет Dispatchers.Main на TestDispatcher для viewModelScope
+3. **TestDispatcher** - StandardTestDispatcher (требует advanceUntilIdle) vs UnconfinedTestDispatcher (выполняется сразу)
+
+### Контроль виртуального времени
+
+- `advanceTimeBy(millis)` - продвигает время на N миллисекунд
+- `advanceUntilIdle()` - выполняет все ожидающие корутины
+- `runCurrent()` - выполняет только текущие запланированные задачи
+- `currentTime` - получает виртуальное время
+
+### Паттерны тестирования
+
+- Используйте Fake repositories с контролируемыми результатами
+- Тестируйте Flow через `test {}` (turbine) или `take().toList()`
+- Тестируйте последовательности состояний, а не реализацию
+- Тестируйте обработку ошибок через Result.failure()
+- Тестируйте отмену через множественные быстрые вызовы
+- Тестируйте debouncing через advanceTimeBy()
+
+### Частые ошибки
+
+- Забыли runTest (тест завершается до корутины)
+- Не настроили Main dispatcher (краш)
+- Не продвинули время с StandardTestDispatcher (тест падает)
+- Тестируют реализацию вместо состояния
+
+### Best Practices
+
+- Всегда используйте runTest для тестов корутин
+- Используйте MainDispatcherRule для ViewModels
+- Используйте Fake repositories, а не mocks
+- Тестируйте финальное состояние, а не промежуточные шаги
+- Используйте turbine для тестирования Flow
+- Проверяйте последовательности состояний для loading states
 

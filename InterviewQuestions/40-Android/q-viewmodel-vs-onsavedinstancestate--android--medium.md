@@ -1,5 +1,5 @@
 ---
-id: "20251015082237595"
+id: 20251012-122711130
 title: "Viewmodel Vs Onsavedinstancestate / Viewmodel против Onsavedinstancestate"
 topic: android
 difficulty: medium

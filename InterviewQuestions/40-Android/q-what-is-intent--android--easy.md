@@ -1,5 +1,5 @@
 ---
-id: "20251015082238619"
+id: 20251012-122711160
 title: "What Is Intent / Что такое Intent"
 topic: android
 difficulty: easy

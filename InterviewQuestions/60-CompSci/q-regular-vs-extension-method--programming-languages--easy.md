@@ -1,5 +1,5 @@
 ---
-id: "20251015082237127"
+id: 20251017-105231
 title: "Regular Vs Extension Method"
 topic: computer-science
 difficulty: easy

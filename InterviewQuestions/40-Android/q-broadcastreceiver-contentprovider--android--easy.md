@@ -1,5 +1,5 @@
 ---
-id: "20251015082237501"
+id: 20251016-162753
 title: "Broadcastreceiver Contentprovider / BroadcastReceiver и ContentProvider"
 topic: android
 difficulty: easy

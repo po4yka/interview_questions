@@ -1,5 +1,5 @@
 ---
-id: "20251015082237158"
+id: 20251012-1227111174
 title: "Reference Types Protect From Deletion / Типы ссылок защищают от удаления"
 topic: computer-science
 difficulty: easy

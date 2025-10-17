@@ -1,5 +1,5 @@
 ---
-id: "20251015082237410"
+id: 20251012-12271132
 title: "Main Causes Ui Lag / Основные причины тормозов UI"
 topic: android
 difficulty: medium

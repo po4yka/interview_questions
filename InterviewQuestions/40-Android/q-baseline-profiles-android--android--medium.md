@@ -1,5 +1,5 @@
 ---
-id: "20251015082237491"
+id: 20251012-122787
 title: "Baseline Profiles Android"
 topic: android
 difficulty: medium

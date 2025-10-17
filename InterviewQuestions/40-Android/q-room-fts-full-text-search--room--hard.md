@@ -1,5 +1,5 @@
 ---
-id: "20251015082237371"
+id: 20251016-164554
 title: "Room Fts Full Text Search / Полнотекстовый поиск FTS в Room"
 topic: room
 difficulty: hard

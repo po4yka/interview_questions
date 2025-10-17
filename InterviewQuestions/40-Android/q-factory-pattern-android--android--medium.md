@@ -1,5 +1,5 @@
 ---
-id: "20251015082237521"
+id: 20251012-1227134
 title: "Factory Pattern Android / Factory Паттерн Android"
 topic: android
 difficulty: medium

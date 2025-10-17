@@ -171,7 +171,3 @@ The activity can only be running as the root activity of the task, the first act
 
 ### Related (Medium)
 - [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose
-### Related (Medium)
-- [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose
-### Related (Medium)
-- [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose

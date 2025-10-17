@@ -1,5 +1,5 @@
 ---
-id: "20251015082236036"
+id: 20251012-154388
 title: "Sequences Vs Collections Performance"
 topic: kotlin
 difficulty: medium

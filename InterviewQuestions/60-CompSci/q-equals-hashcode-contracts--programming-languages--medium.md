@@ -1,5 +1,5 @@
 ---
-id: "20251015082237192"
+id: 20251012-1227111128
 title: "Equals Hashcode Contracts / Контракты equals и hashCode"
 topic: computer-science
 difficulty: medium

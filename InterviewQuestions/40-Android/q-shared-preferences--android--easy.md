@@ -1,5 +1,5 @@
 ---
-id: "20251015082237455"
+id: 20251017-150433
 title: "Shared Preferences"
 topic: android
 difficulty: easy

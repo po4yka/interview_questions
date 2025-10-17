@@ -1,5 +1,5 @@
 ---
-id: "20251015082237577"
+id: 20251012-122711131
 title: "Vulkan Renderscript / Vulkan и RenderScript"
 topic: android
 difficulty: hard

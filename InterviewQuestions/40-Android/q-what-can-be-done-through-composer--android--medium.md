@@ -1,5 +1,5 @@
 ---
-id: "20251015082237273"
+id: 20251012-122711143
 title: "What Can Be Done Through Composer / Что можно сделать через Composer"
 topic: android
 difficulty: medium

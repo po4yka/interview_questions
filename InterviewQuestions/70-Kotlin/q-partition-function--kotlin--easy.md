@@ -1,5 +1,5 @@
 ---
-id: "20251015082237053"
+id: 20251017-150747
 title: "Partition Function / Функция partition"
 topic: kotlin
 difficulty: easy
@@ -352,4 +352,32 @@ val byPriority = items.groupBy {
 ```
 
 **English**: `partition()` splits collection into **two lists** based on predicate: first contains matching elements (`true`), second contains non-matching (`false`). Returns `Pair<List, List>`. Use destructuring: `val (matching, nonMatching) = list.partition { condition }`. Traverses collection **once** (2x faster than two `filter` calls). Use for: validation (valid/invalid), results (success/error), categorization (urgent/normal). Don't use if need only one group (use `filter`) or >2 groups (use `groupBy`). Works with List, Set, Sequence (materializes to List).
+
+## Ответ (RU)
+
+`partition()` разделяет коллекцию на **два списка** на основе предиката: первый содержит подходящие элементы (`true`), второй - неподходящие (`false`). Возвращает `Pair<List, List>`.
+
+### Основное использование
+
+```kotlin
+val (matching, nonMatching) = list.partition { condition }
+```
+
+### Преимущества
+
+- Проходит по коллекции **один раз** (в 2 раза быстрее чем два вызова `filter`)
+- Сохраняет обе группы элементов
+- Работает с List, Set, Sequence (материализуется в List)
+
+### Когда использовать
+
+- Валидация (валидные/невалидные данные)
+- Результаты (успех/ошибка)
+- Категоризация (срочно/обычно)
+- A/B тестирование (группа A / группа B)
+
+### Когда НЕ использовать
+
+- Если нужна только одна группа → используйте `filter`
+- Если нужно >2 групп → используйте `groupBy`
 

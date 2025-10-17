@@ -1,5 +1,5 @@
 ---
-id: "20251015082238602"
+id: 20251012-122711157
 title: "What Is Broadcastreceiver / Что такое BroadcastReceiver"
 topic: android
 difficulty: easy

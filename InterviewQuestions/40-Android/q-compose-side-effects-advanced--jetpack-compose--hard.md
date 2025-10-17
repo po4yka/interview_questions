@@ -1,5 +1,5 @@
 ---
-id: "20251015082237388"
+id: 20251017-104815
 title: "Compose Side Effects Advanced / Побочные эффекты Compose продвинутый уровень"
 topic: jetpack-compose
 difficulty: hard

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237465"
+id: 20251012-122711145
 title: "What Do You Know About Modifications / Что вы знаете о модификациях"
 topic: android
 difficulty: medium

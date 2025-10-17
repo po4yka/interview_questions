@@ -1,5 +1,5 @@
 ---
-id: "20251015082237251"
+id: 20251012-1227103
 title: "Compose Modifier Order Performance / Порядок модификаторов и производительность Compose"
 topic: jetpack-compose
 difficulty: medium
@@ -534,40 +534,13 @@ fun DebugExample() {
 
 ### Related (Medium)
 - [[q-compose-navigation-advanced--jetpack-compose--medium]] - compose navigation advanced   jetpack
-- [[q-compose-remember-derived-state--jetpack-compose--medium]] - compose remember derived state 
+- [[q-compose-remember-derived-state--jetpack-compose--medium]] - compose remember derived state
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--jetpack-compose--hard]] - compose custom layout   jetpack
 - [[q-compose-side-effects-advanced--jetpack-compose--hard]] - compose side effects advanced 
-- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization 
-### Related (Medium)
-- [[q-compose-navigation-advanced--jetpack-compose--medium]] - compose navigation advanced   jetpack
-- [[q-compose-remember-derived-state--jetpack-compose--medium]] - compose remember derived state 
+- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization
 
-### Advanced (Harder)
-- [[q-compose-custom-layout--jetpack-compose--hard]] - compose custom layout   jetpack
-- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - compose side effects advanced 
-- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization 
-### Related (Medium)
-- [[q-compose-navigation-advanced--jetpack-compose--medium]] - compose navigation advanced   jetpack
-- [[q-compose-remember-derived-state--jetpack-compose--medium]] - compose remember derived state 
-
-### Advanced (Harder)
-- [[q-compose-custom-layout--jetpack-compose--hard]] - compose custom layout   jetpack
-- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - compose side effects advanced 
-- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization 
 ### Hub
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
-
-### Related (Medium)
-- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
-- [[q-mutable-state-compose--android--medium]] - MutableState basics
-- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
-
-### Advanced (Harder)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
-- [[q-stable-classes-compose--android--hard]] - @Stable annotation
-- [[q-stable-annotation-compose--android--hard]] - Stability annotations
 

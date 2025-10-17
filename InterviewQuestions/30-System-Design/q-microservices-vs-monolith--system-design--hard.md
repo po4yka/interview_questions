@@ -524,66 +524,414 @@ class OrderModuleImpl(
 
 ## Ответ (RU)
 
-Выбор между монолитной и микросервисной архитектурой - фундаментальное архитектурное решение, которое влияет на скорость разработки, масштабируемость, организацию команды и операционную сложность.
+Выбор между монолитной и микросервисной архитектурой - фундаментальное архитектурное решение, которое влияет на скорость разработки, масштабируемость, организацию команды и операционную сложность. Каждый подход имеет свои преимущества и недостатки.
 
 ### Монолитная архитектура
 
 **Что это?**
 Единое унифицированное приложение, где все компоненты тесно связаны и развёртываются как одна единица.
 
-** Плюсы:**
-- **Простая разработка** - Единая кодовая база
-- **Легкая отладка** - Единый процесс
-- **ACID транзакции** - Транзакции БД across модулей
-- **Производительность** - Нет сетевых накладных расходов
-- **Простое развёртывание** - Один артефакт
+```
 
-** Минусы:**
-- **Масштабируемость** - Нужно масштабировать всё приложение
-- **Технологическая привязка** - Один язык/фреймворк
+      Монолитное приложение
+
+
+     UI          API
+
+
+
+      Бизнес-логика
+    - Управление пользователями
+    - Обработка заказов
+    - Платежи
+    - Инвентарь
+    - Уведомления
+
+
+
+      Единая база данных
+
+
+
+       Единица развёртывания
+```
+
+**Пример структуры кода:**
+```kotlin
+// Монолитное E-commerce приложение
+@SpringBootApplication
+class EcommerceApplication
+
+// Все сервисы в одном приложении
+@Service
+class UserService(private val userRepo: UserRepository) {
+    fun createUser(user: User): User = userRepo.save(user)
+}
+
+@Service
+class OrderService(
+    private val orderRepo: OrderRepository,
+    private val userService: UserService,        // Прямая зависимость
+    private val inventoryService: InventoryService,
+    private val paymentService: PaymentService
+) {
+    @Transactional  // Единая транзакция БД
+    fun placeOrder(order: Order): Order {
+        // Всё в одном приложении, одна транзакция
+        val user = userService.getUser(order.userId)
+        inventoryService.reserveItems(order.items)
+        paymentService.processPayment(order.payment)
+        return orderRepo.save(order)
+    }
+}
+```
+
+**Плюсы:**
+- **Простая разработка** - Единая кодовая база, легко понять
+- **Легкая отладка** - Единый процесс, stack traces работают
+- **ACID транзакции** - Транзакции БД между всеми модулями
+- **Производительность** - Нет сетевых накладных расходов между компонентами
+- **Простое развёртывание** - Один артефакт для развёртывания
+- **Нет сложности распределённых систем**
+
+**Минусы:**
+- **Масштабируемость** - Нужно масштабировать всё приложение (нельзя масштабировать части)
+- **Технологическая привязка** - Один язык/фреймворк для всего
 - **Риск развёртывания** - Малое изменение требует полного передеплоя
-- **Узкое место разработки** - Команда мешает друг другу
+- **Узкое место разработки** - Команды мешают друг другу
 - **Долгая сборка** - Большая кодовая база
+- **Сложно понять** - Со временем становится "большим клубком грязи"
+
+---
 
 ### Микросервисная архитектура
 
 **Что это?**
 Приложение, состоящее из небольших независимых сервисов, которые общаются по сети.
 
-** Плюсы:**
-- **Независимое масштабирование**
-- **Технологическая гибкость**
-- **Изоляция сбоев**
-- **Быстрое развёртывание**
-- **Автономия команд**
-- **Легче понять** - Каждый сервис небольшой
+```
 
-** Минусы:**
-- **Сложность** - Задачи распределённых систем
-- **Нет ACID транзакций**
-- **Сетевые накладные расходы**
-- **Консистентность данных** - Eventual consistency
-- **Операционные затраты** - Много сервисов для деплоя
+              API Gateway/Load Balancer
+
+
+
+ User        Order    Inventory  Payment
+ Service     Service   Service   Service
+
+
+
+ User DB    Order DB  Inv. DB   Payment DB
+
+
+Каждый сервис: Независимое развёртывание, масштабирование, БД
+```
+
+**Пример структуры кода:**
+```kotlin
+// User Microservice (отдельное приложение)
+@SpringBootApplication
+class UserServiceApplication
+
+@RestController
+@RequestMapping("/api/users")
+class UserController(private val userService: UserService) {
+    @PostMapping
+    fun createUser(@RequestBody user: User): User {
+        return userService.createUser(user)
+    }
+}
+
+// Order Microservice (отдельное приложение)
+@SpringBootApplication
+class OrderServiceApplication
+
+@Service
+class OrderService(
+    private val orderRepo: OrderRepository,
+    private val userClient: UserServiceClient,      // HTTP вызов к User Service
+    private val inventoryClient: InventoryServiceClient,
+    private val paymentClient: PaymentServiceClient
+) {
+    suspend fun placeOrder(order: Order): Order {
+        // Сетевые вызовы к другим сервисам
+        val user = userClient.getUser(order.userId)  // HTTP GET
+
+        // Нет ACID транзакций между сервисами
+        // Нужны паттерны распределённых транзакций (Saga)
+        try {
+            inventoryClient.reserveItems(order.items)
+            paymentClient.processPayment(order.payment)
+            return orderRepo.save(order)
+        } catch (e: Exception) {
+            // Компенсирующие транзакции
+            inventoryClient.releaseItems(order.items)
+            throw e
+        }
+    }
+}
+```
+
+**Плюсы:**
+- **Независимое масштабирование** - Масштабируйте только то, что нужно
+- **Технологическая гибкость** - Разные языки/фреймворки для каждого сервиса
+- **Изоляция сбоев** - Сбой одного сервиса не роняет всё
+- **Быстрое развёртывание** - Развёртывайте один сервис независимо
+- **Автономия команд** - Команды владеют целыми сервисами
+- **Легче понять** - Каждый сервис небольшой и сфокусированный
+
+**Минусы:**
+- **Сложность** - Проблемы распределённых систем (сеть, задержки, сбои)
+- **Нет ACID транзакций** - Распределённые транзакции сложны
+- **Сетевые накладные расходы** - Коммуникация между сервисами добавляет задержку
+- **Консистентность данных** - Eventual consistency, сложнее поддерживать
+- **Операционные затраты** - Много сервисов для развёртывания, мониторинга, отладки
+- **Сложность тестирования** - Интеграционное тестирование сложнее
+
+---
+
+### Подробное сравнение
+
+| Аспект | Монолит | Микросервисы |
+|--------|----------|---------------|
+| **Кодовая база** | Единый репозиторий | Множество репозиториев |
+| **Развёртывание** | Всё или ничего | Независимое по сервисам |
+| **Масштабирование** | Масштабировать всё | Масштабировать отдельные сервисы |
+| **Технологии** | Единый стек | Polyglot (множество стеков) |
+| **Транзакции** | ACID (легко) | Распределённые (сложно) |
+| **Данные** | Общая БД | БД на сервис |
+| **Коммуникация** | Вызовы методов | Сеть (HTTP/gRPC/messaging) |
+| **Разработка** | Легко начать | Сложно с первого дня |
+| **Команда** | Одна команда | Множество команд |
+| **Отладка** | Простая | Нужен distributed tracing |
+| **Производительность** | Быстро (без сети) | Сетевая задержка |
+| **Сбои** | Каскадные сбои | Изолированные сбои |
+
+---
 
 ### Когда использовать монолит
 
- **Монолит лучше когда:**
+**Монолит лучше когда:**
+
 1. **Малая команда** (< 10 разработчиков)
 2. **Простое приложение**
 3. **Быстрый выход на рынок** критичен
-4. **Ограниченные ресурсы**
+4. **Ограниченные ресурсы** (не можете управлять множеством сервисов)
 5. **Startup/MVP** фаза
-6. **Строгие ACID требования**
+6. **Хорошо определённый ограниченный контекст**
+7. **Строгие ACID требования**
+
+**Примеры сценариев:**
+```
+- Небольшой e-commerce магазин
+- Внутренние административные инструменты
+- MVP и прототипы
+- Приложения с низкой сложностью
+- Команды новые в распределённых системах
+```
+
+---
 
 ### Когда использовать микросервисы
 
- **Микросервисы лучше когда:**
+**Микросервисы лучше когда:**
+
 1. **Большая команда** (множество команд)
-2. **Сложный домен**
-3. **Разные потребности масштабирования**
+2. **Сложный домен** (множество ограниченных контекстов)
+3. **Разные потребности масштабирования** для компонентов
 4. **Нужна технологическая гибкость**
 5. **Частые развёртывания**
 6. **Есть DevOps зрелость**
+7. **Можете справиться со сложностью распределённых систем**
+
+**Примеры сценариев:**
+```
+- Netflix: Разные сервисы для стриминга, рекомендаций, биллинга
+- Amazon: Миллионы сервисов для разных функций
+- Uber: Отдельные сервисы для поездок, платежей, карт, сопоставления
+- Крупные предприятия с множеством продуктов
+```
+
+---
+
+### Путь миграции: Монолит → Микросервисы
+
+**НЕ НАЧИНАЙТЕ с микросервисов если у вас нет:**
+- Большой команды
+- Чётких границ сервисов
+- DevOps инфраструктуры
+- Экспертизы в распределённых системах
+
+**Начните с модульного монолита:**
+```kotlin
+// Модульный монолит: Организованный, но всё ещё одно развёртывание
+@SpringBootApplication
+class EcommerceApplication
+
+// Модуль 1: Users (может стать микросервисом позже)
+package com.ecommerce.users
+@Service
+class UserService { /* ... */ }
+
+// Модуль 2: Orders (может стать микросервисом позже)
+package com.ecommerce.orders
+@Service
+class OrderService { /* ... */ }
+
+// Чёткие границы, но всё ещё развёртывается вместе
+// Легко разделить на микросервисы когда нужно
+```
+
+**Паттерн Strangler Fig:**
+```
+Шаг 1: Начните с монолита
+
+   Монолит
+  - Users
+  - Orders
+  - Payments
+
+
+Шаг 2: Извлеките один сервис
+
+   Монолит       Payment
+  - Users         Service
+  - Orders        (НОВЫЙ)
+
+
+Шаг 3: Извлеките ещё один
+
+   Монолит       Payment
+  - Users         Service
+
+
+                    Order
+                    Service
+                    (НОВЫЙ)
+
+
+Шаг 4: Завершите миграцию
+
+ User          Payment
+ Service       Service
+
+
+ Order
+ Service
+
+```
+
+---
+
+### Проблемы микросервисов и решения
+
+#### 1. Распределённые транзакции
+
+**Проблема:** Нет ACID между сервисами
+
+**Решение: Saga Pattern**
+```kotlin
+// Saga Pattern: На основе хореографии
+class OrderSaga(
+    private val orderService: OrderService,
+    private val inventoryService: InventoryService,
+    private val paymentService: PaymentService,
+    private val eventBus: EventBus
+) {
+    suspend fun createOrder(order: Order) {
+        try {
+            // Шаг 1: Создать заказ
+            orderService.createPendingOrder(order)
+            eventBus.publish(OrderCreatedEvent(order.id))
+
+            // Шаг 2: Зарезервировать товары
+            inventoryService.reserveItems(order.items)
+            eventBus.publish(InventoryReservedEvent(order.id))
+
+            // Шаг 3: Обработать платёж
+            paymentService.processPayment(order.payment)
+            eventBus.publish(PaymentProcessedEvent(order.id))
+
+            // Шаг 4: Подтвердить заказ
+            orderService.confirmOrder(order.id)
+
+        } catch (e: Exception) {
+            // Компенсирующие транзакции (откат)
+            eventBus.publish(OrderFailedEvent(order.id))
+            paymentService.refund(order.payment)
+            inventoryService.releaseItems(order.items)
+            orderService.cancelOrder(order.id)
+        }
+    }
+}
+```
+
+#### 2. Service Discovery
+
+**Проблема:** Сервисам нужно находить друг друга
+
+**Решение: Service Registry (Consul, Eureka)**
+
+#### 3. API Gateway
+
+**Проблема:** Клиенты не хотят вызывать множество сервисов
+
+**Решение: Паттерн API Gateway**
+```
+Client
+
+
+
+ API Gateway   Единая точка входа
+
+
+
+ User Order Payment  (Внутренние сервисы)
+```
+
+#### 4. Distributed Tracing
+
+**Проблема:** Сложно отлаживать между сервисами
+
+**Решение: Distributed Tracing (Jaeger, Zipkin)**
+
+---
+
+### Гибрид: Модульный монолит
+
+**Лучшее из обоих миров для многих приложений:**
+
+```kotlin
+// Модульный монолит с чёткими границами
+@SpringBootApplication
+class EcommerceApplication
+
+// Интерфейсы модулей (могут быть извлечены в микросервисы)
+interface UserModule {
+    fun getUser(id: Long): User
+    fun createUser(user: User): User
+}
+
+interface OrderModule {
+    fun placeOrder(order: Order): Order
+}
+
+// Реализации в том же развёртывании
+@Component
+class UserModuleImpl : UserModule { /* ... */ }
+
+@Component
+class OrderModuleImpl(
+    private val userModule: UserModule  // Dependency injection
+) : OrderModule { /* ... */ }
+
+// Преимущества:
+// - Чёткие границы (легко извлечь позже)
+// - Единое развёртывание (проще операции)
+// - ACID транзакции (когда нужно)
+// - Можно извлечь в микросервисы когда команда растёт
+```
+
+---
 
 ### Ключевые выводы
 
@@ -593,8 +941,10 @@ class OrderModuleImpl(
 4. **Модульный монолит** = Хороший компромисс
 5. **Микросервисам нужны:** DevOps, мониторинг, distributed tracing
 6. **Распределённые транзакции** сложны - используйте Saga pattern
-7. **Не делайте микросервисы** просто потому что это модно
-8. **Микросервисы ≠ лучше** - выбирайте исходя из размера команды, сложности
+7. **Service mesh** помогает управлять коммуникацией между сервисами
+8. **Не делайте микросервисы** просто потому что это модно
+9. **Strangler fig pattern** для постепенной миграции
+10. **Микросервисы ≠ лучше** - выбирайте исходя из размера команды, сложности
 
 ## Follow-ups
 
@@ -613,13 +963,11 @@ class OrderModuleImpl(
 
 ## Related Questions
 
+### Related (Hard)
+- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
+
 ### Prerequisites (Easier)
 - [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
 - [[q-caching-strategies--system-design--medium]] - caching strategies   system design 
 - [[q-design-url-shortener--system-design--medium]] - design url shortener   system
-### Related (Hard)
-- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
-### Related (Hard)
-- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
-### Related (Hard)
-- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
+

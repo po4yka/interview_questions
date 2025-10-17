@@ -1,5 +1,5 @@
 ---
-id: "20251015082237325"
+id: 20251012-12271108
 title: "Intent Filters Android / Intent фильтры Android"
 topic: android
 difficulty: medium

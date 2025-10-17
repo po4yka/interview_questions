@@ -1,11 +1,16 @@
 ---
-id: 20251012-017
+id: 20251012-152104
 title: "Kotlin"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [kotlin-native, multiplatform, interop, cinterop, memory-model, native-compilation]
+subtopics:
+  - kotlin-native
+  - multiplatform
+  - interop
+  - cinterop
+  - memory-model
 question_kind: theory
 difficulty: hard
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, kotlin-native, multiplatform, interop, cinterop, ios, native, difficulty/hard]
 ---
-
 # Question (EN)
 > What is Kotlin/Native? Explain native compilation, interop with C libraries and Objective-C/Swift, memory model differences, and use cases for iOS development.
 

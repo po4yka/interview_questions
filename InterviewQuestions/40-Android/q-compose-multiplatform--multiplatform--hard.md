@@ -1,5 +1,5 @@
 ---
-id: "20251015082237293"
+id: 20251015-100154
 title: "Compose Multiplatform"
 topic: android
 difficulty: hard

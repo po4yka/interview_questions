@@ -1,5 +1,5 @@
 ---
-id: "20251015082237140"
+id: 20251012-1227111142
 title: "Hashmap How It Works / Как работает HashMap"
 topic: computer-science
 difficulty: medium

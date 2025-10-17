@@ -1,5 +1,5 @@
 ---
-id: "20251015082237187"
+id: 20251012-1227111152
 title: "Iterator Order Guarantee / Гарантия порядка Iterator"
 topic: computer-science
 difficulty: medium

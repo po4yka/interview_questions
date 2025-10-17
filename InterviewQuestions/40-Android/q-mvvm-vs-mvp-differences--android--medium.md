@@ -1,5 +1,5 @@
 ---
-id: "20251015082237463"
+id: 20251016-161930
 title: "Mvvm Vs Mvp Differences"
 topic: android
 difficulty: medium

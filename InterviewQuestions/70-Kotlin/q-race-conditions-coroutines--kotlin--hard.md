@@ -12,13 +12,10 @@ tags: - kotlin
   - concurrency
   - data-races
   - bugs
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-kotlin
-related_questions:   - q-mutex-synchronized-coroutines--kotlin--medium
+related:   - q-mutex-synchronized-coroutines--kotlin--medium
   - q-semaphore-rate-limiting--kotlin--medium
   - q-debugging-coroutines-techniques--kotlin--medium
-slug: race-conditions-coroutines-kotlin-hard
 subtopics:   - coroutines
   - race-conditions
   - thread-safety

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237080"
+id: 20251016-123551
 title: "Kotlin Run Operator / Оператор run в Kotlin"
 topic: computer-science
 difficulty: easy

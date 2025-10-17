@@ -1,5 +1,5 @@
 ---
-id: "20251015082237319"
+id: 20251012-12271119
 title: "Kmm Dependency Injection"
 topic: android
 difficulty: medium

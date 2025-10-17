@@ -1,5 +1,5 @@
 ---
-id: "20251015082237135"
+id: 20251012-1227111192
 title: "What Is Job Object / Что такое объект Job"
 topic: computer-science
 difficulty: medium

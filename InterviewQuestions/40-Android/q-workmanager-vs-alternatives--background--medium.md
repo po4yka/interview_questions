@@ -1,14 +1,13 @@
 ---
-id: "20251015082238618"
+id: 20251017-114414
 title: "Workmanager Vs Alternatives / Workmanager против Alternatives"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-12
 tags: [workmanager, alarmmanager, jobscheduler, background-processing, android/background-execution, android/workmanager, difficulty/medium]
-date_updated: 2025-10-13
 moc: moc-android
-related_questions:   - q-workmanager-advanced--background--medium
+related:   - q-workmanager-advanced--background--medium
   - q-foreground-service-types--background--medium
 subtopics: [background-execution, workmanager]
 ---

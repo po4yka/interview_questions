@@ -1,15 +1,13 @@
 ---
-id: "20251015082237559"
+id: 20251016-162207
 title: "Material3 Components / Компоненты Material3"
 topic: ui-ux-accessibility
 difficulty: easy
 status: draft
 created: 2025-10-13
 tags: [design, material3, ui-components, design-system, difficulty/easy]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-ui-ux-accessibility
-related_questions: []
+related: []
 subtopics: [material-design]
 ---
 # Material 3 Components

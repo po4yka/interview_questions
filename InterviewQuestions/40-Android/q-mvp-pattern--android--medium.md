@@ -1,5 +1,5 @@
 ---
-id: "20251015082237355"
+id: 20251017-144928
 title: "Mvp Pattern / Mvp Паттерн"
 topic: android
 difficulty: medium

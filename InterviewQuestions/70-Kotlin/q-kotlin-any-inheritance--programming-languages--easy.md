@@ -1,5 +1,5 @@
 ---
-id: "20251015082237115"
+id: 20251012-12271111111
 title: "Kotlin Any Inheritance / Наследование от Any в Kotlin"
 topic: computer-science
 difficulty: easy

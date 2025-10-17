@@ -1,5 +1,5 @@
 ---
-id: "20251015082237307"
+id: 20251012-122754
 title: "Accessibility Testing / Accessibility Тестирование"
 topic: android
 difficulty: medium

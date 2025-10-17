@@ -9,12 +9,9 @@ tags: - algorithms
   - binary-search
   - searching
   - log-n
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-algorithms
-related_questions:   - q-sorting-algorithms-comparison--algorithms--medium
+related:   - q-sorting-algorithms-comparison--algorithms--medium
   - q-two-pointers-technique--algorithms--medium
-slug: binary-search-variants-algorithms-medium
 subtopics:   - binary-search
   - searching
   - divide-and-conquer
@@ -543,8 +540,5 @@ val found = findUserById(users, 5)  // User(5, "Charlie")
 ## Related Questions
 
 ### Advanced (Harder)
-- [[q-binary-search-trees-bst--algorithms--hard]] - binary search trees bst 
-### Advanced (Harder)
-- [[q-binary-search-trees-bst--algorithms--hard]] - binary search trees bst 
-### Advanced (Harder)
-- [[q-binary-search-trees-bst--algorithms--hard]] - binary search trees bst 
+- [[q-binary-search-trees-bst--algorithms--hard]] - binary search trees bst
+

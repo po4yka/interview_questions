@@ -1,5 +1,5 @@
 ---
-id: "20251015082237479"
+id: 20251012-1227118
 title: "Dagger Framework Overview / Обзор фреймворка Dagger"
 topic: android
 difficulty: hard

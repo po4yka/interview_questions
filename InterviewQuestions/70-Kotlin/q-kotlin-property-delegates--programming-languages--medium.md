@@ -1,5 +1,5 @@
 ---
-id: "20251015082237143"
+id: 20251012-12271111147
 title: "Kotlin Property Delegates / Делегаты свойств Kotlin"
 topic: computer-science
 difficulty: medium

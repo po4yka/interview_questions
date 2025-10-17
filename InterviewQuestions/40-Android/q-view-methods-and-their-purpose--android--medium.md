@@ -1,5 +1,5 @@
 ---
-id: "20251015082237471"
+id: 20251016-162730
 title: "View Methods And Their Purpose"
 topic: android
 difficulty: medium

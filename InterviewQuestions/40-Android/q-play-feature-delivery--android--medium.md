@@ -1,5 +1,5 @@
 ---
-id: "20251015082237340"
+id: 20251012-12271165
 title: "Play Feature Delivery"
 topic: android
 difficulty: medium

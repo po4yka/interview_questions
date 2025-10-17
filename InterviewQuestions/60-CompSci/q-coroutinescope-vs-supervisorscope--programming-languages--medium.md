@@ -1,5 +1,5 @@
 ---
-id: "20251015082237145"
+id: 20251012-1227111121
 title: "Coroutinescope Vs Supervisorscope / Coroutinescope против Supervisorscope"
 topic: computer-science
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237462"
+id: 20251012-12271181
 title: "Remember Vs Remembersaveable Compose"
 topic: android
 difficulty: medium

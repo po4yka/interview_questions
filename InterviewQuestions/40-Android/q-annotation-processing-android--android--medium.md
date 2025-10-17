@@ -746,14 +746,7 @@ data class User(val id: String, val name: String)
 - [[q-annotation-processing--android--medium]] - Annotation Processing
 - [[q-kapt-vs-ksp--android--medium]] - Annotation Processing
 - [[q-kapt-ksp-migration--gradle--medium]] - Kapt
-### Related (Medium)
-- [[q-annotation-processing--android--medium]] - Annotation Processing
-- [[q-kapt-vs-ksp--android--medium]] - Annotation Processing
-- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
-### Related (Medium)
-- [[q-annotation-processing--android--medium]] - Annotation Processing
-- [[q-kapt-vs-ksp--android--medium]] - Annotation Processing
-- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
+
 ## References
 - [KSP Documentation](https://kotlinlang.org/docs/ksp-overview.html)
 - [KAPT Documentation](https://kotlinlang.org/docs/kapt.html)

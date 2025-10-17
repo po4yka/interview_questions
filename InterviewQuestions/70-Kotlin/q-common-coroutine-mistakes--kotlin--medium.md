@@ -12,13 +12,10 @@ tags: - kotlin
   - best-practices
   - gotchas
   - code-review
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-kotlin
-related_questions:   - q-coroutine-exception-handler--kotlin--medium
+related:   - q-coroutine-exception-handler--kotlin--medium
   - q-debugging-coroutines-techniques--kotlin--medium
   - q-mutex-synchronized-coroutines--kotlin--medium
-slug: common-coroutine-mistakes-kotlin-medium
 subtopics:   - coroutines
   - mistakes
   - anti-patterns

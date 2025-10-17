@@ -1,5 +1,5 @@
 ---
-id: "20251015082237324"
+id: 20251012-12271103
 title: "If Activity Starts After A Service Can You Connect To This Service / Можно ли подключиться к Service если Activity запустилась после него"
 topic: android
 difficulty: medium

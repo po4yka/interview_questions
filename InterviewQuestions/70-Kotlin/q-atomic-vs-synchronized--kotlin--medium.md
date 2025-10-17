@@ -1,5 +1,5 @@
 ---
-id: "20251015082236011"
+id: 20251017-150235
 title: "Atomic Vs Synchronized / Atomic против Synchronized"
 topic: kotlin
 difficulty: medium
@@ -452,3 +452,26 @@ class DataRepository {
 | **Use case** | Counters, flags | Caches, collections |
 
 **English**: Use **Atomic** variables (`AtomicInteger`, `AtomicReference`) for single operations on single variable (counters, flags) - lock-free, ~2x faster. Use **synchronized** for complex operations or multiple variables (caches, collections, multiple steps) - ensures mutual exclusion. Atomic uses CAS (Compare-And-Swap) loop. For Android, prefer coroutines with `Mutex` or `actor` pattern. Don't mix approaches. Atomic: simple & fast. Synchronized: complex & safe.
+
+## Ответ (RU)
+
+Используйте **Atomic** переменные (`AtomicInteger`, `AtomicReference`) для одиночных операций с одной переменной (счетчики, флаги) - lock-free, примерно в 2 раза быстрее. Используйте **synchronized** для сложных операций или работы с несколькими переменными (кеши, коллекции, множественные шаги) - обеспечивает взаимное исключение.
+
+### Когда использовать Atomic
+
+- Простой счетчик
+- Флаг (boolean)
+- Одна ссылка
+- Read-modify-write операция для ОДНОЙ переменной
+- Compare-and-swap логика
+
+### Когда использовать Synchronized
+
+- Работа с несколькими переменными
+- Сложная логика (if-else, циклы)
+- Вызовы методов внутри критической секции
+- Нужна взаимная эксклюзивность
+- Работа с коллекциями
+
+Atomic использует CAS (Compare-And-Swap) цикл. Для Android предпочитайте корутины с `Mutex` или паттерн `actor`. Не смешивайте подходы. Atomic: просто и быстро. Synchronized: сложно и безопасно.
+

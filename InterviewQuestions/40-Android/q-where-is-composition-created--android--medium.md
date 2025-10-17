@@ -1,5 +1,5 @@
 ---
-id: "20251015082237453"
+id: 20251012-122711182
 title: "Where Is Composition Created / Где создается Composition"
 topic: android
 difficulty: medium

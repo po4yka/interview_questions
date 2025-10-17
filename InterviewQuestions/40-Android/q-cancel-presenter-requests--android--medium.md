@@ -1,5 +1,5 @@
 ---
-id: "20251015082237444"
+id: 20251012-122792
 title: "Cancel Presenter Requests / Отмена запросов Presenter"
 topic: android
 difficulty: medium

@@ -11,13 +11,10 @@ tags: - concurrency
   - race-conditions
   - mutexes
   - semaphores
-date_created: 2025-10-12
-date_updated: 2025-10-13
 moc: moc-concurrency
-related_questions:   - q-os-fundamentals-concepts--computer-science--hard
+related:   - q-os-fundamentals-concepts--computer-science--hard
   - q-kotlin-coroutines-advanced--kotlin--hard
   - q-clean-code-principles--software-engineering--medium
-slug: concurrency-fundamentals-computer-science-hard
 subtopics:   - concurrency
   - multithreading
   - synchronization

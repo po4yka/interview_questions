@@ -1,5 +1,5 @@
 ---
-id: "20251015082237100"
+id: 20251016-162841
 title: "Kotlin Constructor Keyword / Ключевое слово constructor в Kotlin"
 topic: computer-science
 difficulty: easy

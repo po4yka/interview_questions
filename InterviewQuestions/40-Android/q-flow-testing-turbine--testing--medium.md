@@ -6,13 +6,10 @@ difficulty: medium
 status: draft
 created: 2025-10-12
 tags: [kotlin-flow, turbine, coroutines, unit-testing, android/kotlin-flow, android/turbine, android/coroutines, android/unit-testing, difficulty/medium]
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-android
-related_questions:   - q-kotlin-coroutines-advanced--kotlin--hard
+related:   - q-kotlin-coroutines-advanced--kotlin--hard
   - q-unit-testing-coroutines-flow--android--medium
   - q-compose-testing--android--medium
-slug: flow-testing-turbine-testing-medium
 subtopics:   - testing
   - kotlin-flow
   - turbine

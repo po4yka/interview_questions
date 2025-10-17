@@ -1,5 +1,5 @@
 ---
-id: "20251015082237397"
+id: 20251012-122711162
 title: "What Is Known About View Lifecycles / Что известно о жизненных циклах View"
 topic: android
 difficulty: medium

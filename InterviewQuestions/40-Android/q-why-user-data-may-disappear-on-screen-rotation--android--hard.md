@@ -1,5 +1,5 @@
 ---
-id: "20251015082238632"
+id: 20251012-1227111101
 title: "Why User Data May Disappear On Screen Rotation / Почему данные пользователя могут пропасть при повороте экрана"
 topic: android
 difficulty: hard

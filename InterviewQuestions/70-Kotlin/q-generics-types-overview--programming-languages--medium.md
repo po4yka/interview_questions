@@ -1,5 +1,5 @@
 ---
-id: "20251015082236027"
+id: 20251012-154363
 title: "Generics Types Overview / Обзор обобщенных типов"
 topic: kotlin
 difficulty: medium

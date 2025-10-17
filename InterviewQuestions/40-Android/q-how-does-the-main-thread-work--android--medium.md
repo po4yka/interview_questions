@@ -1,5 +1,5 @@
 ---
-id: "20251015082237517"
+id: 20251012-1227161
 title: "How Does The Main Thread Work / Как работает главный поток"
 topic: android
 difficulty: medium

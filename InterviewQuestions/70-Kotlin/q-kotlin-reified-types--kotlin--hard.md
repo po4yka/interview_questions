@@ -1,5 +1,5 @@
 ---
-id: "20251015082236046"
+id: 20251012-12271111150
 title: "Kotlin Reified Types / Reified типы в Kotlin"
 topic: kotlin
 difficulty: hard

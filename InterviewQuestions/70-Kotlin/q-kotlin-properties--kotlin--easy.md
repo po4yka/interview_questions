@@ -1,11 +1,16 @@
 ---
-id: 20251012-002
+id: 20251012-144442
 title: "Kotlin Properties / Свойства в Kotlin"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [properties, getters, setters, backing-field, lateinit, delegated-properties]
+subtopics:
+  - properties
+  - getters
+  - setters
+  - backing-field
+  - lateinit
 question_kind: theory
 difficulty: easy
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, properties, getters, setters, backing-field, lateinit, lazy, delegated-properties, difficulty/easy]
 ---
-
 # Question (EN)
 > What are properties in Kotlin? Explain val vs var, custom getters and setters, backing fields, lateinit, and property delegation basics.
 

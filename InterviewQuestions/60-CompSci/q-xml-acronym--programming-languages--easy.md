@@ -1,5 +1,5 @@
 ---
-id: "20251015082237141"
+id: 20251016-161959
 title: "Xml Acronym / Расшифровка аббревиатуры XML"
 topic: programming-languages
 difficulty: easy
@@ -9,10 +9,8 @@ tags: - xml
   - markup-language
   - acronym
   - programming-languages
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-programming-languages
-related_questions: []
+related: []
 subtopics: ["computer-science", "fundamentals"]
 ---
 # Как расшифровывается xml?

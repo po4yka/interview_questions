@@ -1,5 +1,5 @@
 ---
-id: "20251015082237398"
+id: 20251012-1227111106
 title: "Workmanager Execution Guarantee / Гарантия выполнения WorkManager"
 topic: android
 difficulty: medium

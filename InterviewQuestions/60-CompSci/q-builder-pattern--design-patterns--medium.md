@@ -1,5 +1,5 @@
 ---
-id: "20251015082237175"
+id: 20251016-173030
 title: "Builder Pattern / Builder Паттерн"
 topic: computer-science
 difficulty: medium

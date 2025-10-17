@@ -1,5 +1,5 @@
 ---
-id: "20251015082237556"
+id: 20251012-122711175
 title: "What To Do In Android Project To Start Drawing Ui On Screen / Что делать в Android проекте чтобы начать рисовать UI на экране"
 topic: android
 difficulty: medium

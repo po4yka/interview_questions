@@ -649,22 +649,13 @@ Firebase Cloud Messaging (FCM) доставляет уведомления:
 
 ## Related Questions
 
+### Related (Hard)
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-instagram-stories--android--hard]] - Media
+- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+
 ### Prerequisites (Easier)
 - [[q-http-protocols-comparison--android--medium]] - Networking
 - [[q-usecase-pattern-android--android--medium]] - Architecture
 - [[q-repository-multiple-sources--android--medium]] - Architecture
-### Related (Hard)
-- [[q-design-uber-app--android--hard]] - Location
-- [[q-design-instagram-stories--android--hard]] - Media
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-### Related (Hard)
-- [[q-design-uber-app--android--hard]] - Location
-- [[q-design-instagram-stories--android--hard]] - Media
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-### Related (Hard)
-- [[q-design-uber-app--android--hard]] - Location
-- [[q-design-instagram-stories--android--hard]] - Media
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-- [[q-data-sync-unstable-network--android--hard]] - Networking

@@ -1,5 +1,5 @@
 ---
-id: 202510051234002
+id: 20251012-122786
 title: "Background Tasks Decision Guide / Руководство по фоновым задачам"
 topic: android
 status: draft

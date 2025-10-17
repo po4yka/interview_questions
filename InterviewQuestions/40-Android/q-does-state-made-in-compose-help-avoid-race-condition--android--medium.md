@@ -1,5 +1,5 @@
 ---
-id: "20251015082237345"
+id: 20251012-1227131
 title: "Does State Made In Compose Help Avoid Race Condition / Помогает ли State в Compose избежать состояния гонки"
 topic: android
 difficulty: medium

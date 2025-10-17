@@ -1,5 +1,5 @@
 ---
-id: "20251015082237555"
+id: 20251017-144836
 title: "Polling Implementation / Polling Реализация"
 topic: android
 difficulty: medium

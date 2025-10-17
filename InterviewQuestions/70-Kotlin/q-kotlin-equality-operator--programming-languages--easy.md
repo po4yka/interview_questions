@@ -1,5 +1,5 @@
 ---
-id: "20251015082237179"
+id: 20251017-105156
 title: "Kotlin Equality Operator / Оператор равенства в Kotlin"
 topic: computer-science
 difficulty: easy

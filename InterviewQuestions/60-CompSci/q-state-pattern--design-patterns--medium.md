@@ -1,5 +1,5 @@
 ---
-id: "20251015082237202"
+id: 20251012-1227111182
 title: "State Pattern / State Паттерн"
 topic: computer-science
 difficulty: medium

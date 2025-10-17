@@ -1,5 +1,5 @@
 ---
-id: "20251015082237074"
+id: 20251012-12271111126
 title: "Kotlin Extension Functions Advanced"
 topic: kotlin
 difficulty: hard

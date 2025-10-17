@@ -1,5 +1,5 @@
 ---
-id: "20251015082237543"
+id: 20251012-1227170
 title: "How To Catch The Earliest Entry Point Into The Application / Как поймать самую раннюю точку входа в приложение"
 topic: android
 difficulty: medium

@@ -1,15 +1,13 @@
 ---
-id: "20251015082238660"
+id: 20251012-122777
 title: "Animated Visibility Vs Content"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [compose, animations, transitions, animated-visibility, ui, android/ui-animation, android/jetpack-compose, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 subtopics: [ui-animation, jetpack-compose]
 ---
 # AnimatedVisibility vs AnimatedContent vs Crossfade

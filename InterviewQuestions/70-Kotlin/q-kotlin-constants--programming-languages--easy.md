@@ -1,5 +1,5 @@
 ---
-id: "20251015082237094"
+id: 20251012-12271111115
 title: "Kotlin Constants / Константы в Kotlin"
 topic: computer-science
 difficulty: easy

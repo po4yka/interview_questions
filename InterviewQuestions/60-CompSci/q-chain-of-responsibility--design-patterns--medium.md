@@ -1,5 +1,5 @@
 ---
-id: "20251015082237215"
+id: 20251012-1227111115
 title: "Chain Of Responsibility / Цепочка обязанностей"
 topic: computer-science
 difficulty: medium

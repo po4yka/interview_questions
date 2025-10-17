@@ -1,5 +1,5 @@
 ---
-id: "20251015082237429"
+id: 20251012-122711110
 title: "Stable Classes Compose / Stable Классы Compose"
 topic: android
 difficulty: hard

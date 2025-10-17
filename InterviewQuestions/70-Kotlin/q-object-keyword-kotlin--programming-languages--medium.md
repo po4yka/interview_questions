@@ -1,5 +1,5 @@
 ---
-id: "20251015082236023"
+id: 20251012-154385
 title: "Object Keyword Kotlin / Ключевое слово object в Kotlin"
 topic: kotlin
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237534"
+id: 20251012-1227126
 title: "Dark Theme Android / Темная тема Android"
 topic: android
 difficulty: medium

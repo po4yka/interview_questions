@@ -1,15 +1,13 @@
 ---
-id: "20251015082237442"
+id: 20251012-12271137
 title: "Memory Leaks Definition / Определение утечек памяти"
 topic: android
 difficulty: easy
 status: draft
 created: 2025-10-13
 tags: [android/memory-management, garbage-collection, memory-leaks, memory-management, performance, difficulty/easy]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Что такое утечки памяти?
 

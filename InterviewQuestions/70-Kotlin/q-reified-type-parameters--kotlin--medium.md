@@ -1,5 +1,5 @@
 ---
-id: "20251015082236021"
+id: 20251017-150501
 title: "Reified Type Parameters / Reified параметры типов"
 topic: kotlin
 difficulty: medium
@@ -414,3 +414,34 @@ val product = create<Product>()  // Product::class.java.newInstance()
    ```
 
 **English**: `reified` modifier for type parameters in inline functions preserves type information at runtime, bypassing JVM type erasure. Enables: `T::class`, `is T` checks, `Array<T>()` creation without passing `Class<T>`. Must be `inline` function. Use cases: JSON parsing (`gson.fromJson<User>()`), Intent extras (`intent.getParcelableExtra<User>()`), Activity launch (`startActivity<MainActivity>()`), ViewModel creation, collection filtering (`filterIsInstance<String>()`). Compiler inlines function code with concrete type. Cannot use with non-inline, virtual, or interface methods.
+
+## Ответ (RU)
+
+Модификатор `reified` для параметров типов в inline функциях сохраняет информацию о типе во время выполнения, обходя стирание типов (type erasure) в JVM.
+
+### Что дает reified
+
+- Доступ к `T::class` (получение класса типа)
+- Проверки `is T` (runtime type checks)
+- Создание `Array<T>()` без передачи `Class<T>`
+- Работа с reflection для типа T
+
+### Обязательные требования
+
+Функция **должна быть inline**. Нельзя использовать с:
+- Не-inline функциями
+- Virtual/override методами
+- Методами интерфейсов
+
+### Практические примеры использования
+
+1. **JSON парсинг**: `gson.fromJson<User>(json)` вместо `gson.fromJson(json, User::class.java)`
+2. **Intent extras в Android**: `intent.getParcelableExtra<User>("user")` вместо передачи класса
+3. **Запуск Activity**: `startActivity<MainActivity>()` - короткий DSL синтаксис
+4. **ViewModel creation**: `viewModel<UserViewModel>()` - автоматическое определение класса
+5. **Фильтрация коллекций**: `list.filterIsInstance<String>()` - фильтрация по типу
+
+### Как работает
+
+Компилятор встраивает (inlines) код функции в место вызова, подставляя конкретный тип вместо `T`. Поэтому `T::class` работает - компилятор знает конкретный тип.
+

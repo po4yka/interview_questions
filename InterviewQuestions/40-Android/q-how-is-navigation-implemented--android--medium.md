@@ -1,5 +1,5 @@
 ---
-id: "20251015082238637"
+id: 20251012-1227162
 title: "How Is Navigation Implemented / Как реализована навигация"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082236025"
+id: 20251012-154376
 title: "Kotlin Singleton Creation / Создание синглтона в Kotlin"
 topic: kotlin
 difficulty: easy

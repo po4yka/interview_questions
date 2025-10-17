@@ -11,13 +11,10 @@ tags: - oop
   - polymorphism
   - abstraction
   - composition
-date_created: 2025-10-12
-date_updated: 2025-10-13
 moc: moc-cs
-related_questions:   - q-solid-principles--software-design--medium
+related:   - q-solid-principles--software-design--medium
   - q-clean-code-principles--software-engineering--medium
   - q-design-patterns-types--design-patterns--medium
-slug: oop-principles-deep-dive-computer-science-medium
 subtopics:   - oop
   - object-oriented-programming
   - encapsulation

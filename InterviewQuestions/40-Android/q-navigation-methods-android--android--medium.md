@@ -1,15 +1,13 @@
 ---
-id: "20251015082238665"
+id: 20251012-12271149
 title: "Navigation Methods Android / Методы навигации Android"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [android, android/navigation, architecture, compose, fragment, jetpack, navigation, navigation-component, ui-patterns, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Какие способы навигации знаешь?
 

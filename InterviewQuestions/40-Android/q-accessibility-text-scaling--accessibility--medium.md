@@ -1,14 +1,13 @@
 ---
-id: "20251015082238647"
+id: 20251012-122755
 title: "Accessibility Text Scaling / Масштабирование текста для доступности"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-11
 tags: [accessibility, text-scaling, font-size, dynamic-type, android/ui-accessibility, difficulty/medium]
-date_updated: 2025-10-13
 moc: moc-android
-related_questions:   - q-accessibility-compose--accessibility--medium
+related:   - q-accessibility-compose--accessibility--medium
   - q-accessibility-testing--accessibility--medium
 subtopics: [ui-accessibility]
 ---

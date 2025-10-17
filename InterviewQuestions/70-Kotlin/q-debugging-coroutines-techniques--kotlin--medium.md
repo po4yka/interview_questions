@@ -11,13 +11,10 @@ tags: - kotlin
   - profiling
   - troubleshooting
   - tools
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-kotlin
-related_questions:   - q-coroutine-exception-handler--kotlin--medium
+related:   - q-coroutine-exception-handler--kotlin--medium
   - q-common-coroutine-mistakes--kotlin--medium
   - q-race-conditions-coroutines--kotlin--hard
-slug: debugging-coroutines-techniques-kotlin-medium
 subtopics:   - coroutines
   - debugging
   - profiling

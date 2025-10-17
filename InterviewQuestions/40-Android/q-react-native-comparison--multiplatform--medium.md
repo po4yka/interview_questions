@@ -1,5 +1,5 @@
 ---
-id: "20251015082237328"
+id: 20251012-12271176
 title: "React Native Comparison / React Native Сравнение"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: 20251006-009
+id: 20251012-1227105
 title: "Compose Navigation Deep Dive / Навигация в Compose - детально"
 aliases: []
 
@@ -438,22 +438,6 @@ fun ListScreen(
 
 ## Related Questions
 
-### Related (Medium)
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
-- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
-- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
-- [[q-compose-semantics--android--medium]] - Jetpack Compose
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Related (Medium)
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
-- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
-- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
-- [[q-compose-semantics--android--medium]] - Jetpack Compose
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
 ### Related (Medium)
 - [[q-recomposition-compose--android--medium]] - Jetpack Compose
 - [[q-compose-modifier-system--android--medium]] - Jetpack Compose

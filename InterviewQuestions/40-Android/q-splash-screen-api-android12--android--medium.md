@@ -1,5 +1,5 @@
 ---
-id: splash-screen-api-android12-1730793800000
+id: 20251017-144925
 title: "Splash Screen API (Android 12+)"
 topic: android
 difficulty: medium

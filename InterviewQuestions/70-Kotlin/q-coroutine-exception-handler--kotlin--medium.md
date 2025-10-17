@@ -10,13 +10,10 @@ tags: - kotlin
   - exception-handling
   - error-handling
   - ceh
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-kotlin
-related_questions:   - q-common-coroutine-mistakes--kotlin--medium
+related:   - q-common-coroutine-mistakes--kotlin--medium
   - q-debugging-coroutines-techniques--kotlin--medium
   - q-suspend-cancellable-coroutine--kotlin--hard
-slug: coroutine-exception-handler-kotlin-medium
 subtopics:   - coroutines
   - exception-handling
   - ceh

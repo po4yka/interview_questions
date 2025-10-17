@@ -1,5 +1,5 @@
 ---
-id: "20251015082238652"
+id: 20251012-1227136
 title: "Fast Chat Rendering / Быстрый рендеринг чата"
 topic: android
 difficulty: hard

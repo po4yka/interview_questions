@@ -1,5 +1,5 @@
 ---
-id: "20251015082237354"
+id: 20251012-1227109
 title: "Compose Slot Table Recomposition / Slot Table и рекомпозиция Compose"
 topic: android
 difficulty: hard

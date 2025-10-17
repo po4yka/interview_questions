@@ -1,5 +1,5 @@
 ---
-id: "20251015082237276"
+id: 20251012-122796
 title: "Cicd Automated Testing / Cicd Automated Тестирование"
 topic: android
 difficulty: medium

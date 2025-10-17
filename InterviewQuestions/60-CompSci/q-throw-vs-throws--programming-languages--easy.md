@@ -1,5 +1,5 @@
 ---
-id: "20251015082237125"
+id: 20251017-104905
 title: "Throw Vs Throws / Throw против Throws"
 topic: computer-science
 difficulty: easy

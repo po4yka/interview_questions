@@ -1,5 +1,5 @@
 ---
-id: "20251015082237511"
+id: 20251012-122790
 title: "Can A Service Communicate With The User / Может ли Service общаться с пользователем"
 topic: android
 difficulty: medium

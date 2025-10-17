@@ -1,5 +1,5 @@
 ---
-id: "20251015082237120"
+id: 20251012-12271111133
 title: "Kotlin Init Block Features / Возможности блока init в Kotlin"
 topic: computer-science
 difficulty: easy

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237095"
+id: 20251012-12271111122
 title: "Kotlin Delegation / Делегирование в Kotlin"
 topic: programming-languages
 difficulty: easy
@@ -10,10 +10,8 @@ tags: - by-keyword
   - delegation
   - kotlin
   - programming-languages
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-programming-languages
-related_questions: []
+related: []
 ---
 # Что известно о делегировании?
 

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237101"
+id: 20251012-1227111161
 title: "Linkedlist Arraylist Insert Behavior / Поведение вставки LinkedList и ArrayList"
 topic: programming-languages
 difficulty: medium
@@ -9,10 +9,8 @@ tags: - collections
   - data structures
   - kotlin
   - programming-languages
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-programming-languages
-related_questions: []
+related: []
 ---
 # Как будут вести себя linked list и array list, если вставить в них элемент?
 

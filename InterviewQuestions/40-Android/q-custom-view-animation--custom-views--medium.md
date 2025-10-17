@@ -1,5 +1,5 @@
 ---
-id: "20251015082237357"
+id: 20251017-104848
 title: "Custom View Animation / Анимация кастомных View"
 topic: android
 difficulty: medium

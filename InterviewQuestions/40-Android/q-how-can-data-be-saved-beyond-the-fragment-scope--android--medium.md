@@ -1,5 +1,5 @@
 ---
-id: "20251015082237544"
+id: 20251016-162905
 title: "How Can Data Be Saved Beyond The Fragment Scope / Как можно сохранить данные за пределами скоупа Fragment"
 topic: android
 difficulty: medium

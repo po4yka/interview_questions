@@ -1,5 +1,5 @@
 ---
-id: "20251015082237231"
+id: 20251012-1227111184
 title: "Switch Float Double / Switch с float и double"
 topic: computer-science
 difficulty: easy

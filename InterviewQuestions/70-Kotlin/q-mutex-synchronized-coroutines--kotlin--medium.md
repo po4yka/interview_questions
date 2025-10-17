@@ -11,13 +11,10 @@ tags: - kotlin
   - thread-safety
   - mutex
   - synchronization
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-kotlin
-related_questions:   - q-race-conditions-coroutines--kotlin--hard
+related:   - q-race-conditions-coroutines--kotlin--hard
   - q-semaphore-rate-limiting--kotlin--medium
   - q-channelflow-callbackflow-flow--kotlin--medium
-slug: mutex-synchronized-coroutines-kotlin-medium
 subtopics:   - coroutines
   - mutex
   - synchronization

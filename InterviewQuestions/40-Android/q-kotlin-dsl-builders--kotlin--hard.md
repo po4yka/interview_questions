@@ -6,13 +6,10 @@ difficulty: hard
 status: draft
 created: 2025-10-12
 tags: [dsl, builders, api-design, lambdas, android/dsl, android/builders, android/api-design, android/type-safe-builders, difficulty/hard]
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-android
-related_questions:   - q-kotlin-context-receivers--kotlin--hard
+related:   - q-kotlin-context-receivers--kotlin--hard
   - q-jetpack-compose-basics--android--medium
   - q-gradle-kotlin-dsl-vs-groovy--android--medium
-slug: kotlin-dsl-builders-kotlin-hard
 subtopics:   - kotlin
   - dsl
   - builders

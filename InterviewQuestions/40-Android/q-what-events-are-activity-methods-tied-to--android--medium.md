@@ -1,5 +1,5 @@
 ---
-id: "20251015082237458"
+id: 20251012-122711152
 title: "What Events Are Activity Methods Tied To / С какими событиями связаны методы Activity"
 topic: android
 difficulty: medium

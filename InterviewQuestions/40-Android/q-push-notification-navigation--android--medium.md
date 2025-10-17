@@ -1,5 +1,5 @@
 ---
-id: "20251015082237476"
+id: 20251012-12271174
 title: "Push Notification Navigation / Навигация из push уведомлений"
 topic: android
 difficulty: medium

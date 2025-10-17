@@ -1,5 +1,5 @@
 ---
-id: "20251015082237376"
+id: 20251012-12271193
 title: "Room Type Converters Advanced / Продвинутые Type Converters в Room"
 topic: room
 difficulty: medium

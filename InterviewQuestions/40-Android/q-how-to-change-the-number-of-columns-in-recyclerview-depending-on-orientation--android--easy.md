@@ -1,5 +1,5 @@
 ---
-id: "20251015082237339"
+id: 20251012-1227172
 title: "How To Change The Number Of Columns In Recyclerview Depending On Orientation / Как изменить количество колонок в RecyclerView в зависимости от ориентации"
 topic: android
 difficulty: easy

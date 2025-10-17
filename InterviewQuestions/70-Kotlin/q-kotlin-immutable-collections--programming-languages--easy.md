@@ -1,5 +1,5 @@
 ---
-id: "20251015082237071"
+id: 20251012-154373
 title: "Kotlin Immutable Collections / Неизменяемые коллекции Kotlin"
 topic: kotlin
 difficulty: easy

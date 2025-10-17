@@ -536,34 +536,7 @@ viewModelScope.launch {
 ### Advanced (Harder)
 - [[q-lifecycle-aware-coroutines--kotlin--hard]] - Coroutines
 - [[q-channel-pipelines--kotlin--hard]] - Channels
-### Related (Medium)
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
-- [[q-testing-viewmodel-coroutines--kotlin--medium]] - Testing
-- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
-- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Coroutines
 
-### Advanced (Harder)
-- [[q-lifecycle-aware-coroutines--kotlin--hard]] - Coroutines
-- [[q-channel-pipelines--kotlin--hard]] - Channels
-### Related (Medium)
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
-- [[q-testing-viewmodel-coroutines--kotlin--medium]] - Testing
-- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
-- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-lifecycle-aware-coroutines--kotlin--hard]] - Coroutines
-- [[q-channel-pipelines--kotlin--hard]] - Channels
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
 
-### Related (Medium)
-- [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
-- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
-- [[q-coroutine-context-explained--kotlin--medium]] - CoroutineContext explained
-
-### Advanced (Harder)
-- [[q-coroutine-context-detailed--kotlin--hard]] - Deep dive into CoroutineContext
-- [[q-advanced-coroutine-patterns--kotlin--hard]] - Advanced patterns
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization

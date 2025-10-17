@@ -1,5 +1,5 @@
 ---
-id: "20251015082237482"
+id: 20251016-172959
 title: "Server Sent Events Sse"
 topic: networking
 difficulty: medium

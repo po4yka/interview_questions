@@ -1,5 +1,5 @@
 ---
-id: "20251015082236040"
+id: 20251012-154340
 title: "Array Vs List Kotlin"
 topic: kotlin
 difficulty: easy
@@ -8,10 +8,8 @@ created: 2025-10-13
 tags: - kotlin
   - collections
   - data-structures
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-kotlin
-related_questions:   - q-list-vs-sequence--kotlin--medium.md
+related:   - q-list-vs-sequence--kotlin--medium.md
 subtopics: [collections, data-structures, array, list]
 ---
 # What is the difference between array and list in Kotlin?

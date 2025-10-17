@@ -1,5 +1,5 @@
 ---
-id: "20251015082237411"
+id: 20251012-1227185
 title: "How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор как отдельный компонент"
 topic: android
 difficulty: easy

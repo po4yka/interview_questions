@@ -1,11 +1,16 @@
 ---
-id: 20251012-007
+id: 20251016-163125
 title: "Coroutine Dispatchers / Диспетчеры корутин"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, dispatchers, threading, concurrency, main, io, default]
+subtopics:
+  - coroutines
+  - dispatchers
+  - threading
+  - concurrency
+  - main
 question_kind: theory
 difficulty: medium
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, coroutines, dispatchers, threading, main, io, default, unconfined, difficulty/medium]
 ---
-
 # Question (EN)
 > What are coroutine dispatchers in Kotlin? Explain Main, IO, Default, and Unconfined dispatchers and when to use each.
 
@@ -794,39 +798,9 @@ launch(Dispatchers.Unconfined) {
 - [[q-coroutine-context-detailed--kotlin--hard]] - Coroutines
 - [[q-actor-pattern--kotlin--hard]] - Coroutines
 - [[q-fan-in-fan-out--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
-- [[q-custom-dispatchers-limited-parallelism--kotlin--hard]] - Coroutines
-- [[q-dispatchers-unconfined--kotlin--medium]] - Coroutines
-- [[q-deferred-async-patterns--kotlin--medium]] - Coroutines
 
-### Advanced (Harder)
-- [[q-coroutine-context-detailed--kotlin--hard]] - Coroutines
-- [[q-actor-pattern--kotlin--hard]] - Coroutines
-- [[q-fan-in-fan-out--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
-- [[q-custom-dispatchers-limited-parallelism--kotlin--hard]] - Coroutines
-- [[q-dispatchers-unconfined--kotlin--medium]] - Coroutines
-- [[q-deferred-async-patterns--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-coroutine-context-detailed--kotlin--hard]] - Coroutines
-- [[q-actor-pattern--kotlin--hard]] - Coroutines
-- [[q-fan-in-fan-out--kotlin--hard]] - Coroutines
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
-
-### Related (Medium)
-- [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
-- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
-- [[q-coroutine-context-explained--kotlin--medium]] - CoroutineContext explained
-- [[q-coroutine-cancellation--kotlin--medium]] - Cancellation basics
-
-### Advanced (Harder)
-- [[q-coroutine-context-detailed--kotlin--hard]] - Deep dive into CoroutineContext
-- [[q-advanced-coroutine-patterns--kotlin--hard]] - Advanced patterns
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization
 
 ## MOC Links
 

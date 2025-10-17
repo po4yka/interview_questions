@@ -1,5 +1,5 @@
 ---
-id: "20251015082237060"
+id: 20251012-154366
 title: "Interface Properties / Свойства интерфейсов"
 topic: kotlin
 difficulty: medium

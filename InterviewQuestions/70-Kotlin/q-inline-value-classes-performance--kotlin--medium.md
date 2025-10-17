@@ -1,5 +1,5 @@
 ---
-id: "20251015082236010"
+id: 20251012-154365
 title: "Inline Value Classes Performance"
 topic: kotlin
 difficulty: medium

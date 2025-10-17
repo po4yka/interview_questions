@@ -1,15 +1,13 @@
 ---
-id: "20251015082238630"
+id: 20251012-12271130
 title: "Looper Empty Queue Behavior / Поведение Looper при пустой очереди"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [android/concurrency, blocking, concurrency, looper, message-queue, threading, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Что происходит, когда поток разбирает пустую очередь сообщений с помощью Looper.loop()?
 

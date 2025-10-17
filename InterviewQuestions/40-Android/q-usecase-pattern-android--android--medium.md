@@ -1,5 +1,5 @@
 ---
-id: 20251006-016
+id: 20251012-122711122
 title: "UseCase Pattern in Android / Паттерн UseCase в Android"
 aliases: []
 
@@ -231,33 +231,7 @@ class UserViewModel(
 - [[q-clean-architecture-android--android--hard]] - Architecture
 - [[q-data-sync-unstable-network--android--hard]] - Networking
 - [[q-multi-module-best-practices--android--hard]] - Architecture
-### Related (Medium)
-- [[q-repository-pattern--android--medium]] - Architecture
-- [[q-repository-multiple-sources--android--medium]] - Architecture
 
-### Advanced (Harder)
-- [[q-clean-architecture-android--android--hard]] - Architecture
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-### Related (Medium)
-- [[q-repository-pattern--android--medium]] - Architecture
-- [[q-repository-multiple-sources--android--medium]] - Architecture
-
-### Advanced (Harder)
-- [[q-clean-architecture-android--android--hard]] - Architecture
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-multi-module-best-practices--android--hard]] - Architecture
 ### Hub
 - [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
 
-### Related (Medium)
-- [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
-- [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
-- [[q-what-is-viewmodel--android--medium]] - What is ViewModel
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
-- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation
-
-### Advanced (Harder)
-- [[q-mvi-architecture--android--hard]] - MVI architecture pattern
-- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
-- [[q-offline-first-architecture--android--hard]] - Offline-first architecture

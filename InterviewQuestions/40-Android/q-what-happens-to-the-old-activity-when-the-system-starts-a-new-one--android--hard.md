@@ -1,5 +1,5 @@
 ---
-id: "20251015082238609"
+id: 20251012-122711153
 title: "What Happens To The Old Activity When The System Starts A New One / Что происходит со старой Activity при запуске новой"
 topic: android
 difficulty: hard

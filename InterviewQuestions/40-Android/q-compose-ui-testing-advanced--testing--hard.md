@@ -1,5 +1,5 @@
 ---
-id: "20251015082237426"
+id: 20251017-115621
 title: "Compose Ui Testing Advanced"
 topic: testing
 difficulty: hard

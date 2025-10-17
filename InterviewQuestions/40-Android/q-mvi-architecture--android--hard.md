@@ -1,5 +1,5 @@
 ---
-id: "20251015082237506"
+id: 20251012-12271146
 title: "Mvi Architecture / Архитектура MVI"
 topic: android
 difficulty: hard

@@ -1,5 +1,5 @@
 ---
-id: "20251015082236028"
+id: 20251012-154379
 title: "Lifecycle Scopes Viewmodelscope Lifecyclescope / Скоупы жизненного цикла ViewModelScope и LifecycleScope"
 topic: kotlin
 difficulty: medium

@@ -1,11 +1,16 @@
 ---
-id: 20251012-018
+id: 20251012-152219
 title: "Structured Concurrency / Структурированная параллельность"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, structured-concurrency, cancellation, exception-handling, scope, supervisorscope]
+subtopics:
+  - coroutines
+  - structured-concurrency
+  - cancellation
+  - exception-handling
+  - scope
 question_kind: theory
 difficulty: hard
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, coroutines, structured-concurrency, cancellation, exception-handling, scope, difficulty/hard]
 ---
-
 # Question (EN)
 > What is structured concurrency in Kotlin? Explain parent-child coroutine hierarchy, cancellation propagation, exception propagation, and differences between coroutineScope, supervisorScope, and withContext.
 

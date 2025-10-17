@@ -1,5 +1,5 @@
 ---
-id: q-task-affinity--android--medium--1728115500000
+id: 20251012-122711115
 title: "Task Affinity in Android"
 topic: android
 difficulty: medium
@@ -9,7 +9,6 @@ tags: [task-affinity, tasks, activity, navigation, manifest, difficulty/medium, 
 aliases:   - Task Affinity in Android
   - Task Affinity в Android
 category: android
-date_created: 2025-10-05
 date_modified: 2025-10-05
 language_tags: [task-affinity, tasks, activity, navigation, manifest, difficulty/medium, android/ui-navigation, android/lifecycle]
 moc: moc-android

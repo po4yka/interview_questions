@@ -1,5 +1,5 @@
 ---
-id: paging-library-3-1730793700000
+id: 20251017-145100
 title: Paging Library 3 / Библиотека Paging 3
 topic: android
 difficulty: medium

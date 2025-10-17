@@ -1,5 +1,5 @@
 ---
-id: "20251015082237459"
+id: 20251012-122711136
 title: "What Are Fragments For If There Is Activity / Зачем нужны Fragment если есть Activity"
 topic: android
 difficulty: medium

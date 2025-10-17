@@ -1,5 +1,5 @@
 ---
-id: "20251015082237129"
+id: 20251012-1227111185
 title: "Synchronized Blocks With Coroutines / Синхронизированные блоки с корутинами"
 topic: computer-science
 difficulty: medium

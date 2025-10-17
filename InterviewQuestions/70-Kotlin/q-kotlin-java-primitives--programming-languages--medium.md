@@ -1,5 +1,5 @@
 ---
-id: "20251015082237236"
+id: 20251017-105059
 title: "Kotlin Java Primitives / Примитивы Kotlin и Java"
 topic: computer-science
 difficulty: medium

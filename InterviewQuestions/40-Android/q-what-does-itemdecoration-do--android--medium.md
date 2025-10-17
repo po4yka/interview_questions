@@ -1,5 +1,5 @@
 ---
-id: "20251015082237484"
+id: 20251012-122711147
 title: "What Does Itemdecoration Do / Что делает ItemDecoration"
 topic: android
 difficulty: medium

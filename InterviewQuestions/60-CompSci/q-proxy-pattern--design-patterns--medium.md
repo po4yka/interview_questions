@@ -1,5 +1,5 @@
 ---
-id: "20251015082237168"
+id: 20251012-1227111172
 title: "Proxy Pattern / Proxy Паттерн"
 topic: computer-science
 difficulty: medium

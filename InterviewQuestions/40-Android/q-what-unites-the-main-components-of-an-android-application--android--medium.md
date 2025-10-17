@@ -1,5 +1,5 @@
 ---
-id: "20251015082237363"
+id: 20251017-105005
 title: "What Unites The Main Components Of An Android Application / Что объединяет основные компоненты Android приложения"
 topic: android
 difficulty: medium

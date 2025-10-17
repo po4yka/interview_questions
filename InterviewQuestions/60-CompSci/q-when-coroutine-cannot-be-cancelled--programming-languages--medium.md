@@ -1,5 +1,5 @@
 ---
-id: "20251015082237216"
+id: 20251012-1227111193
 title: "When Coroutine Cannot Be Cancelled / Когда корутина не может быть отменена"
 topic: computer-science
 difficulty: medium

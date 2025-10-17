@@ -1,5 +1,5 @@
 ---
-id: "20251015082237302"
+id: 20251012-12271152
 title: "Network Error Handling Strategies"
 topic: networking
 difficulty: medium

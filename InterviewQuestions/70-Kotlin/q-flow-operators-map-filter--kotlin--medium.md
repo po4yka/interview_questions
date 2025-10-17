@@ -70,35 +70,7 @@ Comprehensive answer for question 140018.
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 - [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
-### Related (Medium)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
-- [[q-flow-operators--kotlin--medium]] - Flow
-- [[q-retry-operators-flow--kotlin--medium]] - Flow
-- [[q-flow-time-operators--kotlin--medium]] - Flow
 
-### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
-### Related (Medium)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
-- [[q-flow-operators--kotlin--medium]] - Flow
-- [[q-retry-operators-flow--kotlin--medium]] - Flow
-- [[q-flow-time-operators--kotlin--medium]] - Flow
-
-### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
-### Related (Medium)
-- [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
-- [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
-
-### Advanced (Harder)
-- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies

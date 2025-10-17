@@ -8,7 +8,6 @@ subtopics:
   - buffer
   - capacity
   - backpressure
-  - performance
 difficulty: hard
 moc: moc-kotlin
 status: draft
@@ -24,7 +23,6 @@ tags:
   - capacity
   - producer-consumer
 ---
-
 # Channel buffer strategies: RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED / Стратегии буферизации каналов
 
 ## English

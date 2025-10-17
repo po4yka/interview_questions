@@ -427,14 +427,7 @@ adapter.removeItem()  // Still works fine
 - [[q-macrobenchmark-startup--performance--medium]] - Performance
 - [[q-app-startup-optimization--performance--medium]] - Performance
 - [[q-baseline-profiles-optimization--performance--medium]] - Performance
-### Advanced (Harder)
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
-### Advanced (Harder)
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+
 ## References
 - [RecyclerView Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView#setHasFixedSize(boolean))
 - [RecyclerView Performance](https://developer.android.com/topic/performance/rendering/recyclerview)

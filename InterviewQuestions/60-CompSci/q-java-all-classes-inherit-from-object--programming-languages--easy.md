@@ -1,5 +1,5 @@
 ---
-id: "20251015082237116"
+id: 20251016-162644
 title: "Java All Classes Inherit From Object / Java All Классы Inherit From Object"
 topic: programming-languages
 difficulty: easy
@@ -10,10 +10,8 @@ tags: - inheritance
   - object-class
   - oop
   - programming-languages
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-programming-languages
-related_questions: []
+related: []
 subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
 # От какого объекта наследуются все классы в Java?

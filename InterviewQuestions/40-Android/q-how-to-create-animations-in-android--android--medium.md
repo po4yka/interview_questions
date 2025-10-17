@@ -1,5 +1,5 @@
 ---
-id: "20251015082238601"
+id: 20251012-1227174
 title: "How To Create Animations In Android / Как создавать анимации в Android"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237518"
+id: 20251012-12271105
 title: "In Which Thread Does A Regular Service Run / В каком потоке работает обычный Service"
 topic: android
 difficulty: medium

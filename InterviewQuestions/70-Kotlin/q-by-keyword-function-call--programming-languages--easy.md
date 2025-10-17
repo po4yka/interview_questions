@@ -1,5 +1,5 @@
 ---
-id: "20251015082236017"
+id: 20251012-154342
 title: "By Keyword Function Call / Ключевое слово by и вызов функции"
 topic: kotlin
 difficulty: easy

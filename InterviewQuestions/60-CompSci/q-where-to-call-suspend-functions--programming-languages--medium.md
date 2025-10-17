@@ -1,5 +1,5 @@
 ---
-id: "20251015082237103"
+id: 20251012-1227111194
 title: "Where To Call Suspend Functions"
 topic: computer-science
 difficulty: medium

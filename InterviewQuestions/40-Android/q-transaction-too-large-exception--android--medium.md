@@ -1,5 +1,5 @@
 ---
-id: "20251015082237318"
+id: 20251012-122711120
 title: "Transaction Too Large Exception"
 topic: android
 difficulty: medium

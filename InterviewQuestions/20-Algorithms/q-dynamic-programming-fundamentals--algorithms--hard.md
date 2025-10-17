@@ -10,12 +10,9 @@ tags: - algorithms
   - dp
   - optimization
   - memoization
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-algorithms
-related_questions:   - q-recursion-vs-iteration--algorithms--medium
+related:   - q-recursion-vs-iteration--algorithms--medium
   - q-backtracking-algorithms--algorithms--hard
-slug: dynamic-programming-fundamentals-algorithms-hard
 subtopics:   - dynamic-programming
   - dp
   - memoization

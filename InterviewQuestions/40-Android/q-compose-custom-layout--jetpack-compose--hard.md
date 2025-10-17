@@ -1,5 +1,5 @@
 ---
-id: "20251015082237274"
+id: 20251017-114443
 title: "Compose Custom Layout / Кастомный Layout в Compose"
 topic: jetpack-compose
 difficulty: hard
@@ -918,23 +918,15 @@ placeable.place(
 
 ## Related Questions
 
+### Related (Hard)
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - compose side effects advanced 
+- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization
+
 ### Prerequisites (Easier)
 - [[q-compose-modifier-order-performance--jetpack-compose--medium]] - compose modifier order performance 
 - [[q-compose-navigation-advanced--jetpack-compose--medium]] - compose navigation advanced   jetpack
-- [[q-compose-remember-derived-state--jetpack-compose--medium]] - compose remember derived state 
-### Related (Hard)
-- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - compose side effects advanced 
-- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization 
-### Related (Hard)
-- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - compose side effects advanced 
-- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - compose lazy layout optimization 
+- [[q-compose-remember-derived-state--jetpack-compose--medium]] - compose remember derived state
+
 ### Hub
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
-
-### Related (Hard)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
-- [[q-stable-classes-compose--android--hard]] - @Stable annotation
-- [[q-stable-annotation-compose--android--hard]] - Stability annotations
-- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
-- [[q-compose-performance-optimization--android--hard]] - Performance optimization
 

@@ -1,5 +1,5 @@
 ---
-id: 20251006-globalscope-antipattern
+id: 20251012-12271111107
 title: GlobalScope Anti-Pattern / Анти-Паттерн GlobalScope
 topic: kotlin
 difficulty: easy

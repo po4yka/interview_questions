@@ -12,13 +12,10 @@ tags: - algorithms
   - shortest-path
   - floyd-warshall
   - bellman-ford
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-algorithms
-related_questions:   - q-graph-algorithms-bfs-dfs--algorithms--hard
+related:   - q-graph-algorithms-bfs-dfs--algorithms--hard
   - q-dynamic-programming-fundamentals--algorithms--hard
   - q-binary-search-trees-bst--algorithms--hard
-slug: advanced-graph-algorithms-algorithms-hard
 subtopics:   - graph
   - dijkstra
   - mst

@@ -1,14 +1,13 @@
 ---
-id: "20251015082237558"
+id: 20251017-114336
 title: "Dagger Custom Scopes / Кастомные скоупы Dagger"
 topic: android
 difficulty: hard
 status: draft
 created: 2025-10-11
 tags: [dependency-injection, dagger, hilt, scopes, architecture, android/di-hilt, android/architecture-patterns, difficulty/hard]
-date_updated: 2025-10-13
 moc: moc-android
-related_questions:   - q-hilt-entry-points--di--medium
+related:   - q-hilt-entry-points--di--medium
   - q-dagger-multibinding--di--hard
   - q-hilt-viewmodel-injection--jetpack--medium
 subtopics: [di-hilt, architecture-patterns]

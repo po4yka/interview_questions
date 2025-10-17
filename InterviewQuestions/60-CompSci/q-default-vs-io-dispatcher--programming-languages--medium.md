@@ -1,15 +1,13 @@
 ---
-id: "20251015082237122"
+id: 20251016-175035
 title: "Default Vs Io Dispatcher"
 topic: programming-languages
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: - programming-languages
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-programming-languages
-related_questions: []
+related: []
 subtopics: ["computer-science", "fundamentals"]
 ---
 # Default Dispatcher vs IO Dispatcher

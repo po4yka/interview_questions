@@ -1,5 +1,5 @@
 ---
-id: "20251015082237242"
+id: 20251012-12271197
 title: "Screenshot Snapshot Testing / Screenshot Snapshot Тестирование"
 topic: android
 difficulty: medium

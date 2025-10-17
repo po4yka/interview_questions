@@ -1,5 +1,5 @@
 ---
-id: "20251015082237159"
+id: 20251012-1227111164
 title: Memento Pattern
 topic: design-patterns
 difficulty: medium

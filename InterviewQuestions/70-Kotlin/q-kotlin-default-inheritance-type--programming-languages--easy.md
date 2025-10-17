@@ -1,5 +1,5 @@
 ---
-id: "20251015082237130"
+id: 20251012-12271111121
 title: "Kotlin Default Inheritance Type / Тип наследования по умолчанию в Kotlin"
 topic: computer-science
 difficulty: easy

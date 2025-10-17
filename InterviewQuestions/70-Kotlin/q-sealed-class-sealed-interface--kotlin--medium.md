@@ -6,8 +6,6 @@ difficulty: medium
 status: draft
 created: "2025-10-12"
 tags: ["kotlin", "classes", "sealed", "polymorphism", "when-expression", "difficulty/medium"]
-date_created: "2025-10-12"
-date_updated: "2025-10-12"
 description: "Comprehensive guide to sealed classes and sealed interfaces covering exhaustive when expressions, hierarchy, comparison with enums, and Kotlin 1.5+ features"
 moc: "moc-kotlin"
 subtopics: ["classes", "sealed", "polymorphism", "when-expression"]

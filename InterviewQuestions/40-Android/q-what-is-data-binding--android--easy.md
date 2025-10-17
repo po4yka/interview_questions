@@ -1,5 +1,5 @@
 ---
-id: "20251015082237275"
+id: 20251017-104847
 title: "What Is Data Binding / Что такое Data Binding"
 topic: android
 difficulty: easy

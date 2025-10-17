@@ -7,8 +7,13 @@
 ##  Quick Health Check
 
 ```dataviewjs
-const files = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci" or "20-Algorithms" or "50-Backend" or "80-Tools"')
-    .where(p => p.file.path.endsWith('.md'));
+const TOPIC_FOLDERS = ["20-Algorithms", "30-System-Design", "40-Android", "50-Backend", "60-CompSci", "70-Kotlin", "80-Tools"];
+const AUXILIARY_FOLDERS = ["10-Concepts", "90-MOCs"];
+const SCAN_FOLDERS = [...TOPIC_FOLDERS, ...AUXILIARY_FOLDERS];
+const folderQuery = SCAN_FOLDERS.map(folder => `"${folder}"`).join(" or ");
+
+const files = dv.pages(folderQuery)
+    .where(p => p.file.ext === "md");
 
 let totalLinks = 0, brokenLinks = 0;
 
@@ -46,8 +51,11 @@ if (brokenLinks > 0) {
 ##  Today's Top Issues
 
 ```dataviewjs
-const files = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci"')
-    .where(p => p.file.path.endsWith('.md'));
+const TOPIC_FOLDERS = ["20-Algorithms", "30-System-Design", "40-Android", "50-Backend", "60-CompSci", "70-Kotlin", "80-Tools"];
+const folderQuery = TOPIC_FOLDERS.map(folder => `"${folder}"`).join(" or ");
+
+const files = dv.pages(folderQuery)
+    .where(p => p.file.ext === "md");
 
 let brokenByTarget = {};
 

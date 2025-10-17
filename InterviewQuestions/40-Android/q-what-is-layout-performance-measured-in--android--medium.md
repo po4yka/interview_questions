@@ -1,5 +1,5 @@
 ---
-id: "20251015082237414"
+id: 20251017-112427
 title: "What Is Layout Performance Measured In / В чем измеряется производительность layout"
 topic: android
 difficulty: medium

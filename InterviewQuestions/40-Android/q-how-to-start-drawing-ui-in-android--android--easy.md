@@ -1,5 +1,5 @@
 ---
-id: "20251015082237269"
+id: 20251012-1227198
 title: "How To Start Drawing Ui In Android / Как начать рисовать UI в Android"
 topic: android
 difficulty: easy

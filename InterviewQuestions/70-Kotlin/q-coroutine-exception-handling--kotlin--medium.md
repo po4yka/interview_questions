@@ -1,5 +1,5 @@
 ---
-id: 20251006-007
+id: 20251012-135616
 title: "Coroutine Exception Handling / Обработка исключений в корутинах"
 aliases: []
 

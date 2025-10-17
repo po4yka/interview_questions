@@ -1,5 +1,5 @@
 ---
-id: "20251015082237530"
+id: 20251012-12271151
 title: "Navigation Methods In Kotlin / Методы навигации в Kotlin"
 topic: android
 difficulty: medium

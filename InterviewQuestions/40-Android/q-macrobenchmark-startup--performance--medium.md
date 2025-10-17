@@ -5,7 +5,12 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [performance, macrobenchmark, startup, optimization, profiling, perfetto]
+subtopics:
+  - performance
+  - macrobenchmark
+  - startup
+  - optimization
+  - profiling
 question_kind: practical
 difficulty: medium
 

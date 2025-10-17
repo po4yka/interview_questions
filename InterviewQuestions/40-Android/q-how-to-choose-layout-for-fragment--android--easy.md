@@ -1,5 +1,5 @@
 ---
-id: "20251015082237271"
+id: 20251016-164356
 title: "How To Choose Layout For Fragment / Как выбрать layout для Fragment"
 topic: android
 difficulty: easy

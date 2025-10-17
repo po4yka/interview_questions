@@ -1,5 +1,5 @@
 ---
-id: "20251015082237252"
+id: 20251016-162640
 title: "Room Code Generation Timing / Время генерации кода Room"
 topic: android
 difficulty: medium

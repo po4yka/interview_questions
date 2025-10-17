@@ -1,5 +1,5 @@
 ---
-id: "20251015082237076"
+id: 20251016-164232
 title: "When Inheritance Useful / Когда полезно наследование"
 topic: architecture-patterns
 difficulty: medium
@@ -12,10 +12,8 @@ tags: - oop
   - design-patterns
   - best-practices
   - polymorphism
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-architecture-patterns
-related_questions: []
+related: []
 subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
 # В каких случаях наследование полезно, а в каких нет?

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237259"
+id: 20251012-122798
 title: "Cicd Multi Module / CI/CD для мультимодульных проектов"
 topic: android
 difficulty: medium

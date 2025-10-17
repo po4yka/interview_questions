@@ -1,5 +1,5 @@
 ---
-id: "20251015082237212"
+id: 20251012-12271111158
 title: "Kotlin Vs Java Class Creation"
 topic: computer-science
 difficulty: medium

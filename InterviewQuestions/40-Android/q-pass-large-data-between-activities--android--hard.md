@@ -1,5 +1,5 @@
 ---
-id: "20251015082237557"
+id: 20251012-12271162
 title: "Pass Large Data Between Activities / Передача больших данных между Activity"
 topic: android
 difficulty: hard

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237313"
+id: 20251017-105224
 title: "Recomposition Choreographer / Рекомпозиция и Choreographer"
 topic: android
 difficulty: hard

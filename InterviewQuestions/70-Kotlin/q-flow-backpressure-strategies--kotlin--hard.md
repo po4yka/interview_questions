@@ -1,5 +1,5 @@
 ---
-id: 20251011-007
+id: 20251012-12271111104
 title: "Flow Backpressure Strategies / Стратегии противодавления Flow"
 aliases: []
 
@@ -734,28 +734,16 @@ suspend fun processLargeFile(file: File) {
 
 ## Related Questions
 
+### Related (Hard)
+- [[q-flow-backpressure--kotlin--hard]] - Flow
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
+
 ### Prerequisites (Easier)
 - [[q-backpressure-in-kotlin-flow--programming-languages--medium]] - Flow
 - [[q-instant-search-flow-operators--kotlin--medium]] - Flow
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-### Related (Hard)
-- [[q-flow-backpressure--kotlin--hard]] - Flow
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
-### Related (Hard)
-- [[q-flow-backpressure--kotlin--hard]] - Flow
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
-### Related (Hard)
-- [[q-flow-backpressure--kotlin--hard]] - Flow
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
+
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
-### Related (Hard)
-- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Deep dive into operators
-- [[q-flow-performance--kotlin--hard]] - Performance optimization
-- [[q-flow-testing-advanced--kotlin--hard]] - Advanced Flow testing

@@ -1,15 +1,13 @@
 ---
-id: "20251015082237255"
+id: 20251012-122789
 title: "Cache Implementation Strategies / Cache Реализация Strategies"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [caching, performance, data-storage, optimization, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 
 # Как реализовать кэширование в Android?

@@ -1,5 +1,5 @@
 ---
-id: "20251015082236038"
+id: 20251017-150544
 title: "Sam Conversions / SAM конверсии"
 topic: kotlin
 difficulty: medium
@@ -430,4 +430,46 @@ processItems(list) { it.uppercase() }
 ```
 
 **English**: **SAM (Single Abstract Method)** conversions allow using **lambda functions** instead of anonymous class objects for interfaces with **one abstract method**. Works automatically with **Java** interfaces (Runnable, Comparator, OnClickListener). For **Kotlin** interfaces, requires `fun interface` modifier. Example: `button.setOnClickListener { }` instead of `object : OnClickListener { override fun onClick(...) }`. Use SAM for Java interop and type safety. Use function types `(T) -> R` for pure Kotlin code. SAM constructor explicitly creates instance: `Runnable { code }`. Only works with single abstract method - default methods don't count.
+
+## Ответ (RU)
+
+**SAM (Single Abstract Method)** конверсии позволяют использовать **лямбда-функции** вместо объектов анонимных классов для интерфейсов с **одним абстрактным методом**.
+
+### Как работает
+
+Вместо создания анонимного класса можно передать лямбду:
+
+```kotlin
+// Без SAM - многословно
+button.setOnClickListener(object : View.OnClickListener {
+    override fun onClick(v: View) { }
+})
+
+// С SAM - кратко
+button.setOnClickListener { v -> }
+```
+
+### Для Java интерфейсов
+
+Работает автоматически для Java интерфейсов (Runnable, Comparator, OnClickListener)
+
+### Для Kotlin интерфейсов
+
+Требует модификатор `fun interface`:
+
+```kotlin
+fun interface StringTransformer {
+    fun transform(input: String): String
+}
+
+// Использование
+val result = processString("hello") { it.uppercase() }
+```
+
+### Когда использовать
+
+- **SAM**: для Java interop и типобезопасности
+- **Function types** `(T) -> R`: для чистого Kotlin кода
+
+SAM конструктор явно создает экземпляр: `Runnable { code }`. Работает только с одним абстрактным методом - default методы не считаются.
 

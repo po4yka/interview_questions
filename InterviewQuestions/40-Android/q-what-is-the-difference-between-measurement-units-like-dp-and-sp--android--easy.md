@@ -1,5 +1,5 @@
 ---
-id: "20251015082237430"
+id: 20251012-122711166
 title: "What Is The Difference Between Measurement Units Like Dp And Sp / What Is The Difference Between Measurement Units Like Dp и Sp"
 topic: android
 difficulty: easy

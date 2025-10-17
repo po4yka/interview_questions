@@ -1,5 +1,5 @@
 ---
-id: "20251015082237537"
+id: 20251012-122711114
 title: "Surfaceview Rendering / Рендеринг SurfaceView"
 topic: android
 difficulty: medium

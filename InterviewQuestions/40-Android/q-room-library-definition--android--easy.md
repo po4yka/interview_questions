@@ -1,15 +1,13 @@
 ---
-id: "20251015082237423"
+id: 20251012-12271188
 title: "Room Library Definition / Определение библиотеки Room"
 topic: android
 difficulty: easy
 status: draft
 created: 2025-10-13
 tags: [android/data-storage, architecture-components, data-storage, database, orm, room, sqlite, difficulty/easy]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions:   - q-sharedpreferences-commit-vs-apply--android--easy
+related:   - q-sharedpreferences-commit-vs-apply--android--easy
   - q-sharedpreferences-definition--android--easy
   - q-room-code-generation-timing--android--medium
   - q-room-transactions-dao--room--medium

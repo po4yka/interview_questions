@@ -1,5 +1,5 @@
 ---
-id: "20251015082237277"
+id: 20251012-1227111
 title: "Compositionlocal Advanced / CompositionLocal продвинутый уровень"
 topic: android
 difficulty: medium

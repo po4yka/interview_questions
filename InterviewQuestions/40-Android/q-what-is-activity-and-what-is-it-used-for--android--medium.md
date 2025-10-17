@@ -1,5 +1,5 @@
 ---
-id: "20251015082237338"
+id: 20251012-122711156
 title: "What Is Activity And What Is It Used For / What Is Activity и What Is It Used For"
 topic: android
 difficulty: medium

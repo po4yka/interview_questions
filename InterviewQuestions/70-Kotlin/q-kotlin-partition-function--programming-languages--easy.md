@@ -1,5 +1,5 @@
 ---
-id: "20251015082237164"
+id: 20251012-12271111146
 title: "Kotlin Partition Function / Функция partition в Kotlin"
 topic: computer-science
 difficulty: easy

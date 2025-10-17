@@ -1,5 +1,5 @@
 ---
-id: "20251015082237312"
+id: 20251012-1227111104
 title: "Workmanager Chaining / Цепочки WorkManager"
 topic: android
 difficulty: hard

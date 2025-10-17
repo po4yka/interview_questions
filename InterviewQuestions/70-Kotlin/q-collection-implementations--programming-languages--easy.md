@@ -1,5 +1,5 @@
 ---
-id: "20251015082236002"
+id: 20251012-154344
 title: "Collection Implementations / Реализации коллекций"
 topic: kotlin
 difficulty: easy

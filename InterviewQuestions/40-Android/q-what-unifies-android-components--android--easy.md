@@ -1,5 +1,5 @@
 ---
-id: "20251015082237367"
+id: 20251012-122711178
 title: "What Unifies Android Components / Что объединяет компоненты Android"
 topic: android
 difficulty: easy

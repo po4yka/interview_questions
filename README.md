@@ -182,16 +182,17 @@ Explain approach, complexity, trade-offs, pitfalls. Include code when relevant.
 ## Easy Starters (Dataview)
 ```dataview
 TABLE difficulty, file.link, subtopics
-FROM "Algorithms"
-WHERE difficulty = "easy"
+FROM ""
+WHERE topic = "algorithms" AND startswith(file.name, "q-") AND difficulty = "easy"
 SORT file.name ASC
 ````
 
 ## By Technique
 
 ```dataview
-LIST FROM "Algorithms"
-WHERE contains(tags, "two-pointers")
+LIST file.link
+FROM ""
+WHERE topic = "algorithms" AND startswith(file.name, "q-") AND contains(tags, "two-pointers")
 ```
 
 ````
@@ -202,8 +203,8 @@ WHERE contains(tags, "two-pointers")
 - **All LeetCode by difficulty**
 ```dataview
 TABLE difficulty, subtopics, status
-FROM "Algorithms"
-WHERE contains(tags, "leetcode")
+FROM ""
+WHERE topic = "algorithms" AND startswith(file.name, "q-") AND contains(tags, "leetcode")
 SORT difficulty ASC, file.name ASC
 ````
 
@@ -211,8 +212,8 @@ SORT difficulty ASC, file.name ASC
 
 ```dataview
 LIST file.link
-FROM "Android"
-WHERE contains(tags, "android/compose")
+FROM ""
+WHERE topic = "android" AND startswith(file.name, "q-") AND contains(tags, "android/compose")
 ```
 
 * **Recently Updated**

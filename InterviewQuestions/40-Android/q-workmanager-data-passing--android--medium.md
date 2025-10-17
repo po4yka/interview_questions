@@ -1,5 +1,5 @@
 ---
-id: "20251015082237368"
+id: 20251012-1227111105
 title: "Workmanager Data Passing / Передача данных WorkManager"
 topic: android
 difficulty: medium

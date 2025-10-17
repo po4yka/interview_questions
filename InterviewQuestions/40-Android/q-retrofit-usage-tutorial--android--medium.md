@@ -1,5 +1,5 @@
 ---
-id: "20251015082237447"
+id: 20251017-150432
 title: "Retrofit Usage Tutorial / Retrofit Использование Tutorial"
 topic: android
 difficulty: medium

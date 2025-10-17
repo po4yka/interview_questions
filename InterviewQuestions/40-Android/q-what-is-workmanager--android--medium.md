@@ -1,5 +1,5 @@
 ---
-id: "20251015082237387"
+id: 20251012-122711170
 title: "What Is Workmanager / Что такое WorkManager"
 topic: android
 difficulty: medium

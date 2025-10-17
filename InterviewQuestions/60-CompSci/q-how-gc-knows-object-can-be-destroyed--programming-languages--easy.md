@@ -1,5 +1,5 @@
 ---
-id: "20251015082237147"
+id: 20251012-1227111144
 title: "How Gc Knows Object Can Be Destroyed / Как GC знает что объект можно уничтожить"
 topic: computer-science
 difficulty: easy

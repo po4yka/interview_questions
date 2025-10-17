@@ -1,5 +1,5 @@
 ---
-id: 20251012-010
+id: 20251012-150059
 title: "Kotlin Multiplatform expect/actual / Механизм expect/actual в Kotlin"
 aliases: []
 

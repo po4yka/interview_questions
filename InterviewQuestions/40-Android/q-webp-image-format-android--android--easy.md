@@ -1,5 +1,5 @@
 ---
-id: "20251015082237466"
+id: 20251012-122711132
 title: "Webp Image Format Android / Формат изображений WebP в Android"
 topic: android
 difficulty: easy

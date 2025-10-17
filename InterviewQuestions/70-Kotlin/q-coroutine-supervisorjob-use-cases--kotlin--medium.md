@@ -6,8 +6,6 @@ difficulty: medium
 status: draft
 created: "2025-10-12"
 tags: ["kotlin", "coroutines", "supervisorjob", "error-handling", "job", "difficulty/medium"]
-date_created: "2025-10-12"
-date_updated: "2025-10-12"
 description: "Comprehensive guide to SupervisorJob in Kotlin coroutines, covering independent failure handling, comparison with regular Job, and real-world use cases in Android development"
 moc: "moc-kotlin"
 subtopics: ["coroutines", "supervisorjob", "error-handling", "job"]

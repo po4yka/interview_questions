@@ -1,5 +1,5 @@
 ---
-id: "20251015082237108"
+id: 20251012-1227111118
 title: "Composite Pattern / Composite Паттерн"
 topic: computer-science
 difficulty: medium

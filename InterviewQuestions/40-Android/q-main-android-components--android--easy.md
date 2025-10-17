@@ -1,5 +1,5 @@
 ---
-id: "20251015082237548"
+id: 20251016-162827
 title: "Main Android Components / Основные компоненты Android"
 topic: android
 difficulty: easy

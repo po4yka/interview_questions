@@ -1,5 +1,5 @@
 ---
-id: "20251015082237413"
+id: 20251012-1227177
 title: "How To Create List Like Recyclerview In Compose / Как создать список как RecyclerView в Compose"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237176"
+id: 20251012-1227111191
 title: "What Is Garbage In Gc / Что такое мусор в GC"
 topic: computer-science
 difficulty: easy

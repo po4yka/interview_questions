@@ -1,5 +1,5 @@
 ---
-id: "20251015082237478"
+id: 20251012-1227102
 title: "Compose Gesture Detection / Обнаружение жестов Compose"
 topic: android
 difficulty: medium

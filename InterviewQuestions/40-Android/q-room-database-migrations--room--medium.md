@@ -1,5 +1,5 @@
 ---
-id: "20251015082237550"
+id: 20251012-12271187
 title: "Room Database Migrations / Миграции базы данных Room"
 topic: room
 difficulty: medium

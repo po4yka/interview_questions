@@ -1,15 +1,13 @@
 ---
-id: "20251015082238658"
+id: 20251012-122711173
 title: "What Needs To Be Done In Android Project To Start Drawing Ui On Screen / Что нужно сделать в Android проекте чтобы начать рисовать UI на экране"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [XML layout, AndroidManifest.xml, android, ui, activity, lifecycle, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # What needs to be done in Android project to start drawing UI on screen?
 

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237314"
+id: 20251012-12271142
 title: "Mockk Advanced Features / Продвинутые возможности MockK"
 topic: android
 difficulty: medium

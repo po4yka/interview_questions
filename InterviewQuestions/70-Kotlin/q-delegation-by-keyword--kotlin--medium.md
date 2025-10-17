@@ -6,8 +6,6 @@ difficulty: medium
 status: draft
 created: "2025-10-12"
 tags: ["kotlin", "classes", "difficulty/medium"]
-date_created: "2025-10-12"
-date_updated: "2025-10-12"
 description: "Comprehensive guide to Class delegation with 'by' keyword covering concepts, patterns, best practices, and real-world examples"
 moc: "moc-kotlin"
 subtopics: ["classes", "kotlin-features", "oop"]

@@ -1,5 +1,5 @@
 ---
-id: "20251015082238640"
+id: 20251012-122711181
 title: "Where Does The Repeated Call Of Composable Function Come From / Откуда берется повторный вызов Composable функции"
 topic: android
 difficulty: medium

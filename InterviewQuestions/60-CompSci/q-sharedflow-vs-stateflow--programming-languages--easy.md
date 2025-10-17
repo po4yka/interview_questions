@@ -1,5 +1,5 @@
 ---
-id: "20251015082237084"
+id: 20251012-1227111178
 title: "Sharedflow Vs Stateflow / Sharedflow против Stateflow"
 topic: computer-science
 difficulty: easy

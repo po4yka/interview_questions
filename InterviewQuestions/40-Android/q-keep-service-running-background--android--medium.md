@@ -1,5 +1,5 @@
 ---
-id: "20251015082237344"
+id: 20251016-174927
 title: "Keep Service Running Background / Удержание Service в фоне"
 topic: android
 difficulty: medium

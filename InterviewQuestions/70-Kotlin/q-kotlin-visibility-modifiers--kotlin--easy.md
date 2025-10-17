@@ -86,9 +86,3 @@ Kotlin позволяет контролировать видимость сим
 ### Advanced (Harder)
 - [[q-access-modifiers--programming-languages--medium]] - Access Modifiers
 - [[q-visibility-modifiers-kotlin--kotlin--medium]] - Classes
-### Advanced (Harder)
-- [[q-access-modifiers--programming-languages--medium]] - Access Modifiers
-- [[q-visibility-modifiers-kotlin--kotlin--medium]] - Classes
-### Advanced (Harder)
-- [[q-access-modifiers--programming-languages--medium]] - Access Modifiers
-- [[q-visibility-modifiers-kotlin--kotlin--medium]] - Classes

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237262"
+id: 20251012-1227169
 title: "How To Break Text By Screen Width / Как разбить текст по ширине экрана"
 topic: android
 difficulty: easy

@@ -1,15 +1,13 @@
 ---
-id: "20251015082238638"
+id: 20251012-12271102
 title: "How are VSYNC and recomposition events related?"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: - android
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # How are VSYNC and recomposition events related?
 

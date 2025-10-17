@@ -1,5 +1,5 @@
 ---
-id: "20251015082237587"
+id: 20251012-122711129
 title: "Viewmodel Pattern / Viewmodel Паттерн"
 topic: android
 difficulty: easy

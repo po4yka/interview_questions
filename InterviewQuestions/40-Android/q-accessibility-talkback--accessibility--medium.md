@@ -1,5 +1,5 @@
 ---
-id: "20251015082237490"
+id: 20251012-122753
 title: "Accessibility Talkback / Доступность и TalkBack"
 topic: android
 difficulty: medium

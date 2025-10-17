@@ -1,5 +1,5 @@
 ---
-id: "20251015082237173"
+id: 20251012-12271111132
 title: "Kotlin Generic Function Syntax / Синтаксис обобщенных функций Kotlin"
 topic: computer-science
 difficulty: easy

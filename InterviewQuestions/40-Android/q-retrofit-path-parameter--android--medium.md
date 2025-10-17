@@ -1,5 +1,5 @@
 ---
-id: "20251015082237457"
+id: 20251012-12271185
 title: "Retrofit Path Parameter / Path параметр Retrofit"
 topic: android
 difficulty: medium

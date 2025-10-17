@@ -1,5 +1,5 @@
 ---
-id: "20251015082237590"
+id: 20251012-122788
 title: "Bundle Data Types / Типы данных Bundle"
 topic: android
 difficulty: medium

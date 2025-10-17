@@ -1,5 +1,5 @@
 ---
-id: "20251015082237525"
+id: 20251012-122711101
 title: "Service Types Android / Типы Service в Android"
 topic: android
 difficulty: easy

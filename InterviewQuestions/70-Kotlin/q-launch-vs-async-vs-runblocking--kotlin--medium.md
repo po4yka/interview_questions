@@ -1,5 +1,5 @@
 ---
-id: "20251015082236024"
+id: 20251012-154377
 title: "Launch Vs Async Vs Runblocking / Launch против Async против Runblocking"
 topic: kotlin
 difficulty: medium

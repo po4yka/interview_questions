@@ -1,5 +1,5 @@
 ---
-id: "20251015082237257"
+id: 20251012-1227155
 title: "How Dialog Differs From Other Navigation / Чем Dialog отличается от другой навигации"
 topic: android
 difficulty: medium

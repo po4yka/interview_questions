@@ -1,15 +1,13 @@
 ---
-id: "20251015082238606"
+id: 20251012-12271113
 title: "Iz Kakikh Bolee Vazhnykh Komponentov Sostoit Compose / Из каких более важных компонентов состоит Compose"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [languages, android, android/jetpack-compose, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 subtopics: [jetpack-compose]
 ---
 # Из каких более важных компонентов состоит Compose?

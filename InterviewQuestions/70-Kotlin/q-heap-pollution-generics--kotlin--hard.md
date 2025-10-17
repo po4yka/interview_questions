@@ -1,5 +1,5 @@
 ---
-id: "20251015082236037"
+id: 20251016-123535
 title: "Heap Pollution Generics / Загрязнение кучи дженериками"
 topic: kotlin
 difficulty: hard

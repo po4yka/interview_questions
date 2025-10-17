@@ -1,5 +1,5 @@
 ---
-id: "20251015082237335"
+id: 20251012-12271169
 title: "Privacy Sandbox Attribution"
 topic: android
 difficulty: medium

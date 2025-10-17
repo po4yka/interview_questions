@@ -1,5 +1,5 @@
 ---
-id: "20251015082236019"
+id: 20251017-150407
 title: "Inline Function Limitations / Ограничения inline функций"
 topic: kotlin
 difficulty: medium
@@ -357,3 +357,33 @@ inline fun transaction(
 ```
 
 **English**: Cannot use inline when: 1) **Storing lambda** in variable (use `noinline`), 2) **Passing lambda** to non-inline function (`noinline`), 3) **Recursive functions** (infinite inlining), 4) **Large functions** (code bloat), 5) **Frequently called** simple functions (bloat), 6) **Public library API** (update issues), 7) **Accessing private members** from public inline. Use inline only for: small functions with lambdas, `reified` type parameters, DSL builders. Use `noinline` to exclude specific parameters from inlining.
+
+## Ответ (RU)
+
+Нельзя использовать inline когда:
+
+### Основные ограничения
+
+1. **Нельзя сохранить лямбду в переменную** - inline функция встраивает код лямбды в место вызова, поэтому нельзя сохранить для отложенного выполнения (используйте `noinline`)
+
+2. **Нельзя передать лямбду в не-inline функцию** - inline лямбду нельзя передать в обычную функцию (используйте `noinline`)
+
+3. **Рекурсивные функции нельзя inline** - приведет к бесконечному росту кода
+
+4. **Большие функции** - inline копирует код в каждое место вызова, раздувая размер APK
+
+5. **Часто вызываемые функции** - если вызывается 10,000 раз, код будет продублирован 10,000 раз
+
+6. **Public library API** - inline функции встраиваются в код клиента, усложняя обновление библиотеки
+
+7. **Доступ к private членам** - public inline функция не может обращаться к private полям
+
+### Когда ИСПОЛЬЗОВАТЬ inline
+
+- Маленькие функции с лямбдами (1-3 строки)
+- Функции с `reified` параметрами типов (inline обязателен)
+- DSL builders
+- Higher-order функции где важна производительность
+
+Используйте `noinline` чтобы исключить конкретные параметры из inlining, и `crossinline` когда нельзя делать non-local return.
+

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237508"
+id: 20251012-122711125
 title: "Vector Graphics Animations / Анимации векторной графики"
 topic: android
 difficulty: medium

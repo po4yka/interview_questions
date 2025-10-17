@@ -1,5 +1,5 @@
 ---
-id: "20251015082237230"
+id: 20251012-12271111142
 title: "Kotlin Non Inheritable Class / Не наследуемый класс в Kotlin"
 topic: computer-science
 difficulty: easy

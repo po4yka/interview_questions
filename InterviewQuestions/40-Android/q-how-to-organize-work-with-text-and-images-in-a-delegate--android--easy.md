@@ -1,5 +1,5 @@
 ---
-id: "20251015082237541"
+id: 20251012-1227187
 title: "How To Organize Work With Text And Images In A Delegate / How To Organize Work With Text и Images In A Delegate"
 topic: android
 difficulty: easy

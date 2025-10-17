@@ -1,5 +1,5 @@
 ---
-id: "20251015082237059"
+id: 20251012-154395
 title: "Zip Parallelism Guarantee / Гарантия параллелизма zip"
 topic: kotlin
 difficulty: medium

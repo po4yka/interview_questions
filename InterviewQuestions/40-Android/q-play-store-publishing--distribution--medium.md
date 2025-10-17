@@ -1,5 +1,5 @@
 ---
-id: "20251015082238646"
+id: 20251012-12271167
 title: "Play Store Publishing / Публикация в Play Store"
 topic: android
 difficulty: medium

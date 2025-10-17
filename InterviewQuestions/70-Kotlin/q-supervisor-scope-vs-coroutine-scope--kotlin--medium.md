@@ -1,5 +1,5 @@
 ---
-id: 20251011-010
+id: 20251016-162810
 title: "supervisorScope vs coroutineScope / supervisorScope против coroutineScope"
 aliases: []
 

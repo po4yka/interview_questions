@@ -1,5 +1,5 @@
 ---
-id: "20251015082237146"
+id: 20251012-1227111163
 title: "Mediator Pattern / Mediator Паттерн"
 topic: computer-science
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: 20251006-structured-concurrency
+id: 20251012-12271111161
 title: Structured Concurrency in Kotlin Coroutines
 topic: kotlin
 difficulty: medium

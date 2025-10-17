@@ -1,5 +1,5 @@
 ---
-id: "20251015082237535"
+id: 20251012-122758
 title: "Alternative Distribution / Альтернативное распространение"
 topic: android
 difficulty: medium

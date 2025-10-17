@@ -1,5 +1,5 @@
 ---
-id: "20251015082237507"
+id: 20251017-112118
 title: "Koin Fundamentals / Основы Koin"
 topic: dependency-injection
 difficulty: medium

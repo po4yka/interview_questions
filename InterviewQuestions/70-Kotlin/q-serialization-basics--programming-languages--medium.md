@@ -1,5 +1,5 @@
 ---
-id: "20251015082236004"
+id: 20251012-154389
 title: "Serialization Basics / Основы сериализации"
 topic: kotlin
 difficulty: medium

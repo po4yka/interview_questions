@@ -1,5 +1,5 @@
 ---
-id: "20251015082237542"
+id: 20251016-174833
 title: "Touch Event Handling Custom Views"
 topic: android
 difficulty: medium

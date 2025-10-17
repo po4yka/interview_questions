@@ -1,5 +1,5 @@
 ---
-id: "20251015082237563"
+id: 20251012-122711192
 title: "Why Diffutil Needed / Зачем нужен DiffUtil"
 topic: android
 difficulty: medium

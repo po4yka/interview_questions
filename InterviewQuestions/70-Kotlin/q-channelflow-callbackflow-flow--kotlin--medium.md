@@ -11,13 +11,10 @@ tags: - kotlin
   - channelflow
   - callbackflow
   - builders
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-kotlin
-related_questions:   - q-suspend-cancellable-coroutine--kotlin--hard
+related:   - q-suspend-cancellable-coroutine--kotlin--hard
   - q-mutex-synchronized-coroutines--kotlin--medium
   - q-common-coroutine-mistakes--kotlin--medium
-slug: channelflow-callbackflow-flow-kotlin-medium
 subtopics:   - coroutines
   - flow
   - channelflow

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237204"
+id: 20251012-12271111157
 title: "Kotlin Type System Features / Возможности системы типов Kotlin"
 topic: computer-science
 difficulty: medium

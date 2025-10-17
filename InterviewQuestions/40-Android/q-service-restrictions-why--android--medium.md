@@ -1,5 +1,5 @@
 ---
-id: "20251015082237362"
+id: 20251012-122711100
 title: "Service Restrictions Why / Почему ограничения для Service"
 topic: android
 difficulty: medium

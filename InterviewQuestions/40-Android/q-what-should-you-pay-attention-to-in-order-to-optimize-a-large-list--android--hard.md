@@ -1,15 +1,13 @@
 ---
-id: "20251015082237504"
+id: 20251016-162026
 title: "What Should You Pay Attention To In Order To Optimize A Large List / На что обратить внимание для оптимизации большого списка"
 topic: android
 difficulty: hard
 status: draft
 created: 2025-10-13
 tags: [android/recyclerview, android/views, recyclerview, ui, viewholder, views, difficulty/hard]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # На что следует обращать внимание, чтобы оптимизировать большой список?
 

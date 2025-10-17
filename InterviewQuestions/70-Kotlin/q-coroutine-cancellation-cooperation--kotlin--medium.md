@@ -1,5 +1,5 @@
 ---
-id: 20251011-009
+id: 20251012-1227111198
 title: "Coroutine Cancellation Cooperation / Кооперативная отмена корутин"
 aliases: []
 

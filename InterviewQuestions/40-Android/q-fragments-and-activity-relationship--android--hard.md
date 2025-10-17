@@ -1,5 +1,5 @@
 ---
-id: "20251015082237589"
+id: 20251017-114653
 title: "Fragments And Activity Relationship"
 topic: android
 difficulty: hard

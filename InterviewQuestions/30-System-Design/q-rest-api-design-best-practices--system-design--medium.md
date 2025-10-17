@@ -9,13 +9,10 @@ tags: - system-design
   - rest-api
   - api-design
   - http
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-system-design
-related_questions:   - q-api-versioning-strategies--system-design--medium
+related:   - q-api-versioning-strategies--system-design--medium
   - q-graphql-vs-rest--system-design--medium
   - q-api-rate-limiting--system-design--hard
-slug: rest-api-design-best-practices-system-design-medium
 subtopics:   - rest-api
   - api-design
   - http

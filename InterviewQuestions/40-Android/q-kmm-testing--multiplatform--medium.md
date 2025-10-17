@@ -1,5 +1,5 @@
 ---
-id: "20251015082237524"
+id: 20251012-12271123
 title: "Kmm Testing / Kmm Тестирование"
 topic: android
 difficulty: medium

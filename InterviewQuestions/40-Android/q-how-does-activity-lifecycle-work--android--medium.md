@@ -1,15 +1,13 @@
 ---
-id: "20251015082237591"
+id: 20251012-1227157
 title: "How is Fragment lifecycle connected with Activity?"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: - android
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # How is Fragment lifecycle connected with Activity?
 

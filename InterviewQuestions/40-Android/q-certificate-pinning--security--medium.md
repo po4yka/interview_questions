@@ -1,5 +1,5 @@
 ---
-id: "20251015082237531"
+id: 20251012-122795
 title: "Certificate Pinning / Закрепление сертификатов"
 topic: security
 difficulty: medium

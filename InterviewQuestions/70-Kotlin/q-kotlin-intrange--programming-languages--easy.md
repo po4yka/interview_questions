@@ -1,5 +1,5 @@
 ---
-id: "20251015082237174"
+id: 20251012-12271111136
 title: "Kotlin Intrange / IntRange в Kotlin"
 topic: computer-science
 difficulty: easy

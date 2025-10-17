@@ -1,5 +1,5 @@
 ---
-id: "20251015082237222"
+id: 20251012-12271111125
 title: "Kotlin Equals Hashcode Purpose / Назначение equals и hashCode в Kotlin"
 topic: computer-science
 difficulty: medium

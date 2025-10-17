@@ -1,5 +1,5 @@
 ---
-id: "20251015082237229"
+id: 20251012-12271111160
 title: "Lambdas Java Kotlin Syntax / Синтаксис лямбд Java и Kotlin"
 topic: computer-science
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237123"
+id: 20251012-1227111153
 title: Iterator Pattern
 topic: design-patterns
 difficulty: medium

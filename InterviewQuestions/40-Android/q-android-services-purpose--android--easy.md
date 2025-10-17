@@ -1,5 +1,5 @@
 ---
-id: "20251015082238653"
+id: 20251012-122774
 title: "Android Services Purpose / Назначение Service в Android"
 topic: android
 difficulty: easy

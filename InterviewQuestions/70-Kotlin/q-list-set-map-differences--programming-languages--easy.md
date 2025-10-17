@@ -1,5 +1,5 @@
 ---
-id: "20251015082236016"
+id: 20251012-154380
 title: "List Set Map Differences / Различия List Set и Map"
 topic: kotlin
 difficulty: easy

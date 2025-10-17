@@ -1,5 +1,5 @@
 ---
-id: "20251015082236034"
+id: 20251012-154355
 title: "Data Sealed Usage / Data Sealed Использование"
 topic: kotlin
 difficulty: medium

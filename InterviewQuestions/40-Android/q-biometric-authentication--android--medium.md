@@ -6,13 +6,10 @@ difficulty: medium
 status: draft
 created: 2025-10-12
 tags: [security, biometric, authentication, androidx-biometric, android/biometric, android/authentication, android/fingerprint, android/face-recognition, difficulty/medium]
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-android
-related_questions:   - q-encrypted-shared-preferences--security--medium
+related:   - q-encrypted-shared-preferences--security--medium
   - q-keystore-api--security--hard
   - q-certificate-pinning--security--hard
-slug: biometric-authentication-android-medium
 subtopics:   - security
   - biometric
   - authentication

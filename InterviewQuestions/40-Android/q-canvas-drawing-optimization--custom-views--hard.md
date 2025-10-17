@@ -1,5 +1,5 @@
 ---
-id: "20251015082237350"
+id: 20251012-122793
 title: "Canvas Drawing Optimization / Canvas Drawing Оптимизация"
 topic: android
 difficulty: hard

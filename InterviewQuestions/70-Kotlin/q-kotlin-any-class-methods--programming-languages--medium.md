@@ -1,5 +1,5 @@
 ---
-id: "20251015082237172"
+id: 20251012-12271111110
 title: "Kotlin Any Class Methods / Методы класса Any в Kotlin"
 topic: computer-science
 difficulty: medium

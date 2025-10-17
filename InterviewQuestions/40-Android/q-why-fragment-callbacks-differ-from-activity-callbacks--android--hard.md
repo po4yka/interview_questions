@@ -1,5 +1,5 @@
 ---
-id: "20251015082238649"
+id: 20251012-122711193
 title: "Why Fragment Callbacks Differ From Activity Callbacks / Почему колбэки Fragment отличаются от колбэков Activity"
 topic: android
 difficulty: hard

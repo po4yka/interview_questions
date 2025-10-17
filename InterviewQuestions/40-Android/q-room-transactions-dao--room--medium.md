@@ -1,5 +1,5 @@
 ---
-id: "20251015082237311"
+id: 20251012-12271191
 title: "Room Transactions Dao / Транзакции DAO в Room"
 topic: room
 difficulty: medium

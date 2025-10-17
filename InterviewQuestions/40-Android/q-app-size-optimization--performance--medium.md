@@ -5,7 +5,12 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [performance, app-size, optimization, proguard, r8, app-bundle, splits]
+subtopics:
+  - performance
+  - app-size
+  - optimization
+  - proguard
+  - r8
 question_kind: practical
 difficulty: medium
 

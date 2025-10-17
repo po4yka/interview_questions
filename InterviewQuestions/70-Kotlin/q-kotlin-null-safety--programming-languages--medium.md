@@ -1,5 +1,5 @@
 ---
-id: "20251015082237203"
+id: 20251012-12271111143
 title: "Kotlin Null Safety"
 topic: computer-science
 difficulty: medium

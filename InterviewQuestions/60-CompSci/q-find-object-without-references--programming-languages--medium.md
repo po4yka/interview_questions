@@ -1,5 +1,5 @@
 ---
-id: "20251015082237191"
+id: 20251012-1227111136
 title: "Find Object Without References / Поиск объектов без ссылок"
 topic: computer-science
 difficulty: medium

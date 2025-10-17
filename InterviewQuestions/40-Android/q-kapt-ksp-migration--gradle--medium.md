@@ -5,7 +5,12 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [kapt, ksp, annotation-processing, build, performance, migration]
+subtopics:
+  - kapt
+  - ksp
+  - annotation-processing
+  - build
+  - performance
 question_kind: practical
 difficulty: medium
 
@@ -986,22 +991,6 @@ tasks.withType<KspTask> {
 
 ## Related Questions
 
-### Related (Medium)
-- [[q-kapt-vs-ksp--android--medium]] - Annotation Processing
-- [[q-annotation-processing-android--android--medium]] - Annotations
-- [[q-annotation-processing--android--medium]] - Annotation Processing
-- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Related (Medium)
-- [[q-kapt-vs-ksp--android--medium]] - Annotation Processing
-- [[q-annotation-processing-android--android--medium]] - Annotations
-- [[q-annotation-processing--android--medium]] - Annotation Processing
-- [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
 ### Related (Medium)
 - [[q-kapt-vs-ksp--android--medium]] - Annotation Processing
 - [[q-annotation-processing-android--android--medium]] - Annotations

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237468"
+id: 20251012-1227189
 title: "How To Pass Data From One Fragment To Another / Как передать данные из одного Fragment в другой"
 topic: android
 difficulty: medium

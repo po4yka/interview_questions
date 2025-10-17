@@ -1,5 +1,5 @@
 ---
-id: "20251015082237392"
+id: 20251017-112117
 title: "Dagger Component Dependencies / Зависимости компонентов Dagger"
 topic: android
 difficulty: hard

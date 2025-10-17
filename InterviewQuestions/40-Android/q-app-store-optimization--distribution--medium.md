@@ -1,5 +1,5 @@
 ---
-id: "20251015082237449"
+id: 20251012-122783
 title: "App Store Optimization / App Store Оптимизация"
 topic: android
 difficulty: medium

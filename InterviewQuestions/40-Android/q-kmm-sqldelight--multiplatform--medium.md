@@ -1,5 +1,5 @@
 ---
-id: "20251015082237342"
+id: 20251012-12271122
 title: "Kmm Sqldelight / SQLDelight в KMM"
 topic: android
 difficulty: medium

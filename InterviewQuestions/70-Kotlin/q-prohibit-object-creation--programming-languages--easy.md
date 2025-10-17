@@ -1,5 +1,5 @@
 ---
-id: "20251015082236014"
+id: 20251016-172047
 title: "Prohibit Object Creation / Запрет создания объектов"
 topic: kotlin
 difficulty: easy

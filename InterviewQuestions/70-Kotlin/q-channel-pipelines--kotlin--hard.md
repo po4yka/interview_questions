@@ -5,7 +5,12 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [channels, coroutines, pipelines, fan-out, fan-in, backpressure]
+subtopics:
+  - channels
+  - coroutines
+  - pipelines
+  - fan-out
+  - fan-in
 question_kind: theory
 difficulty: hard
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, channels, coroutines, pipelines, fan-out, fan-in, backpressure, difficulty/hard]
 ---
-
 # Question (EN)
 > Explain channel pipelines in Kotlin coroutines. How do you implement producer-consumer patterns, fan-out, fan-in, and buffering strategies? Provide examples of real-world pipeline architectures.
 

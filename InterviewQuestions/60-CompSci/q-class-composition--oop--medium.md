@@ -1,5 +1,5 @@
 ---
-id: "20251015082237199"
+id: 20251012-1227111116
 title: "Class Composition / Композиция классов"
 topic: architecture-patterns
 difficulty: medium
@@ -12,10 +12,8 @@ tags: - code-reuse
   - has-a
   - oop
   - relationships
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-architecture-patterns
-related_questions: []
+related: []
 subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
 # Что известно о композиции классов?

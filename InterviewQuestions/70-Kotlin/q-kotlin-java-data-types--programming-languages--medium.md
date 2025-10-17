@@ -1,5 +1,5 @@
 ---
-id: "20251015082237082"
+id: 20251012-12271111137
 title: "Kotlin Java Data Types / Типы данных Kotlin и Java"
 topic: computer-science
 difficulty: medium

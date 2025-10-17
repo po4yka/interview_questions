@@ -1,5 +1,5 @@
 ---
-id: 20251003140601
+id: 20251012-1227111108
 title: Database migration purpose / Цель миграции баз данных
 aliases: []
 
@@ -56,7 +56,21 @@ Migrations ensure smooth transitions while preserving data integrity and applica
 
 ## Ответ (RU)
 
-Миграция в контексте ПО и баз данных относится к процессу переноса данных, приложений или других элементов из одной среды в другую или к изменениям в структуре баз данных, кода или технологии без потери данных или функциональности. Она необходима по множеству причин, включая улучшение производительности, масштабирование, обновление систем и интеграцию новых функций. Цели включают: обновление инфраструктуры, консолидацию данных, соответствие стандартам и снижение затрат.
+Миграция в контексте программного обеспечения и баз данных относится к процессу переноса данных, приложений или других элементов из одной среды в другую, или к изменениям в структуре баз данных, кода или технологии без потери данных или функциональности.
+
+**Зачем нужны миграции:**
+- Улучшение производительности
+- Масштабирование системы
+- Обновление систем
+- Интеграция новых функций
+
+**Цели миграций включают:**
+- **Обновление инфраструктуры**: Переход на новые системы баз данных или облачные платформы
+- **Консолидация данных**: Объединение данных из нескольких источников
+- **Соответствие стандартам**: Адаптация к новым нормативным или техническим требованиям
+- **Снижение затрат**: Оптимизация инфраструктуры и операционных расходов
+
+Миграции обеспечивают плавный переход при сохранении целостности данных и функциональности приложений.
 
 ---
 
@@ -72,22 +86,6 @@ Migrations ensure smooth transitions while preserving data integrity and applica
 
 ## Related Questions
 
-### Related (Medium)
-- [[q-virtual-tables-disadvantages--backend--medium]] - Databases
-- [[q-relational-table-unique-data--backend--medium]] - Databases
-- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
-- [[q-callback-to-coroutine-conversion--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-sql-join-algorithms-complexity--backend--hard]] - Databases
-### Related (Medium)
-- [[q-virtual-tables-disadvantages--backend--medium]] - Databases
-- [[q-relational-table-unique-data--backend--medium]] - Databases
-- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
-- [[q-callback-to-coroutine-conversion--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-sql-join-algorithms-complexity--backend--hard]] - Databases
 ### Related (Medium)
 - [[q-virtual-tables-disadvantages--backend--medium]] - Databases
 - [[q-relational-table-unique-data--backend--medium]] - Databases

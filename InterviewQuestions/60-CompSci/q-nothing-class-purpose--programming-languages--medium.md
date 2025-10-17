@@ -1,5 +1,5 @@
 ---
-id: "20251015082237098"
+id: 20251012-1227111168
 title: "Nothing Class Purpose / Назначение класса Nothing"
 topic: computer-science
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237149"
+id: 20251016-161819
 title: "Inheritance Vs Composition / Inheritance против Composition"
 topic: architecture-patterns
 difficulty: medium
@@ -14,10 +14,8 @@ tags: - composition
   - inheritance
   - is-a
   - oop
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-architecture-patterns
-related_questions: []
+related: []
 subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
 # Какие отличия наследования от композиции?

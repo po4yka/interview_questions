@@ -5,7 +5,12 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [performance, startup, app-startup, optimization, lazy-init, profiling]
+subtopics:
+  - performance
+  - startup
+  - app-startup
+  - optimization
+  - lazy-init
 question_kind: practical
 difficulty: medium
 

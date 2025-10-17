@@ -1,5 +1,5 @@
 ---
-id: "20251015082237369"
+id: 20251017-144929
 title: "Performance Monitoring Jank Compose / Мониторинг производительности и джанка в Compose"
 topic: android
 difficulty: medium

@@ -1,11 +1,16 @@
 ---
-id: 20251012-003
+id: 20251012-144607
 title: "Val vs Var in Kotlin"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [val, var, immutability, mutability, read-only, constants]
+subtopics:
+  - val
+  - var
+  - immutability
+  - mutability
+  - read-only
 question_kind: comparison
 difficulty: easy
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, val, var, immutability, mutability, read-only, constants, difficulty/easy]
 ---
-
 # Question (EN)
 > What's the difference between val and var in Kotlin? When should you use each?
 

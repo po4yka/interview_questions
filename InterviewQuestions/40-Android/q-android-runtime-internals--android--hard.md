@@ -1,15 +1,13 @@
 ---
-id: "20251015082238631"
+id: 20251012-122771
 title: "Android Runtime Internals / Внутреннее устройство Android Runtime"
 topic: android
 difficulty: hard
 status: draft
 created: 2025-10-13
 tags: [art, runtime, jit, aot, dex, compilation, performance, difficulty/hard]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Android Runtime Internals
 

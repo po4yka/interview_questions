@@ -1,5 +1,5 @@
 ---
-id: "20251015082237386"
+id: 20251012-122711127
 title: "View Fundamentals / Основы View"
 topic: android
 difficulty: easy

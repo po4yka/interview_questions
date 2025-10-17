@@ -1,5 +1,5 @@
 ---
-id: "20251015082237394"
+id: 20251012-1227166
 title: "How To Add Custom Attributes To Custom View / Как добавить кастомные атрибуты к кастомным View"
 topic: android
 difficulty: medium

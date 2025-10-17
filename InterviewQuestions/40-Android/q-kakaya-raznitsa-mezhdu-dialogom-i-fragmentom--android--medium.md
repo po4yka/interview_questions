@@ -1,5 +1,5 @@
 ---
-id: "20251015082238616"
+id: 20251012-12271116
 title: "Kakaya Raznitsa Mezhdu Dialogom I Fragmentom / Какая разница между Dialog и Fragment"
 topic: android
 difficulty: medium

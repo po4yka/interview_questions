@@ -1,5 +1,5 @@
 ---
-id: "20251015082237383"
+id: 20251016-162851
 title: "Measure Project Size / Измерение размера проекта"
 topic: android
 difficulty: easy

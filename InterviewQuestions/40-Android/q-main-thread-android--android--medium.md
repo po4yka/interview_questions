@@ -1,5 +1,5 @@
 ---
-id: "20251015082237264"
+id: 20251012-12271133
 title: "Main Thread Android / Главный поток Android"
 topic: android
 difficulty: medium

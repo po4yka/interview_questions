@@ -1,5 +1,5 @@
 ---
-id: "20251015082237183"
+id: 20251012-1227111147
 title: "How To Create Suspend Function / Как создать suspend функцию"
 topic: computer-science
 difficulty: medium

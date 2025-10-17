@@ -1,5 +1,5 @@
 ---
-id: "20251015082237105"
+id: 20251012-12271111144
 title: "Kotlin Nullable String Declaration / Объявление nullable String в Kotlin"
 topic: computer-science
 difficulty: easy

@@ -1,5 +1,5 @@
 ---
-id: "20251015082238642"
+id: 20251012-122772
 title: "Android Security Best Practices / Лучшие практики безопасности Android"
 topic: android
 difficulty: medium

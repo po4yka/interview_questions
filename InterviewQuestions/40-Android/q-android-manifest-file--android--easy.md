@@ -1,5 +1,5 @@
 ---
-id: android-manifest-file-1730794000000
+id: 20251015-094722
 title: AndroidManifest.xml / Файл манифеста Android
 topic: android
 difficulty: easy

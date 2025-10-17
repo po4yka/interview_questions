@@ -1,5 +1,5 @@
 ---
-id: "20251015082237233"
+id: 20251012-1227111165
 title: MVI Pattern (Model-View-Intent)
 topic: architecture-patterns
 difficulty: hard

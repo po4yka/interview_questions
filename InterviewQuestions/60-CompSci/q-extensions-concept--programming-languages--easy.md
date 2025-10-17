@@ -1,5 +1,5 @@
 ---
-id: "20251015082237188"
+id: 20251012-1227111133
 title: "Extensions Concept / Концепция расширений"
 topic: computer-science
 difficulty: easy

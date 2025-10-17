@@ -1,5 +1,5 @@
 ---
-id: "20251015082238613"
+id: 20251012-122711124
 title: "V Chyom Raznitsa Mezhdu Fragmentmanager I Fragmenttransaction / В чем разница между FragmentManager и FragmentTransaction"
 topic: android
 difficulty: medium

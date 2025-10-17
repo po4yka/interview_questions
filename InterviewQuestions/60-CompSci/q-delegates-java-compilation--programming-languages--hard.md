@@ -1,5 +1,5 @@
 ---
-id: "20251015082237099"
+id: 20251012-1227111126
 title: "Delegates Java Compilation / Компиляция делегатов в Java"
 topic: computer-science
 difficulty: hard

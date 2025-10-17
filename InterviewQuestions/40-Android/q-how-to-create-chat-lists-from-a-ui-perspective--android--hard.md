@@ -1,5 +1,5 @@
 ---
-id: "20251015082237380"
+id: 20251012-1227175
 title: "How To Create Chat Lists From A Ui Perspective / Как создать списки чатов с точки зрения UI"
 topic: android
 difficulty: hard

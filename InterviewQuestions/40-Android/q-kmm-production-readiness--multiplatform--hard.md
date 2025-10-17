@@ -1,15 +1,13 @@
 ---
-id: "20251015082238611"
+id: 20251012-12271121
 title: "Kmm Production Readiness / Готовность KMM к production"
 topic: kotlin
 difficulty: hard
 status: draft
 created: 2025-10-13
 tags: [Kotlin, KMM, Production, BestPractices, difficulty/hard]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-kotlin
-related_questions: []
+related: []
 subtopics: [kmp]
 ---
 # KMM Production Readiness and Best Practices

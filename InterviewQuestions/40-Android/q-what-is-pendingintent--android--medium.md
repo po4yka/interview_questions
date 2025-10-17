@@ -1,5 +1,5 @@
 ---
-id: "20251015082238625"
+id: 20251016-162719
 title: "What Is Pendingintent / Что такое PendingIntent"
 topic: android
 difficulty: medium

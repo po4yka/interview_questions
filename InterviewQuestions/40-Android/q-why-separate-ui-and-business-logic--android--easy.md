@@ -1,5 +1,5 @@
 ---
-id: "20251015082237260"
+id: 20251012-122711199
 title: "Why Separate Ui And Business Logic / Why Separate Ui и Business Logic"
 topic: android
 difficulty: easy

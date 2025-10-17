@@ -1,5 +1,5 @@
 ---
-id: "20251015082237206"
+id: 20251012-12271111129
 title: "Kotlin Favorite Features / Любимые возможности Kotlin"
 topic: computer-science
 difficulty: easy

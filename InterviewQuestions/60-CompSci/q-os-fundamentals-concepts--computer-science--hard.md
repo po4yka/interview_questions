@@ -11,13 +11,10 @@ tags: - os
   - memory
   - cpu-scheduling
   - virtual-memory
-date_created: 2025-10-12
-date_updated: 2025-10-13
 moc: moc-operating-systems
-related_questions:   - q-concurrency-fundamentals--computer-science--hard
+related:   - q-concurrency-fundamentals--computer-science--hard
   - q-solid-principles--software-design--medium
   - q-data-structures-overview--algorithms--easy
-slug: os-fundamentals-concepts-computer-science-hard
 subtopics:   - operating-systems
   - processes
   - threads

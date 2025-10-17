@@ -1,5 +1,5 @@
 ---
-id: "20251015082237156"
+id: 20251012-1227111188
 title: "What Happens To Unneeded Objects / Что происходит с ненужными объектами"
 topic: computer-science
 difficulty: easy

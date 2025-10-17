@@ -1,5 +1,5 @@
 ---
-id: "20251015082237409"
+id: 20251012-1227179
 title: "How To Display Two Identical Fragments On The Screen At The Same Time / Как отобразить два одинаковых Fragment на экране одновременно"
 topic: android
 difficulty: easy

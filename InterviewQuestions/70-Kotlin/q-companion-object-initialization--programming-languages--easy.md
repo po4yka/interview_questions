@@ -1,5 +1,5 @@
 ---
-id: "20251015082237054"
+id: 20251012-154345
 title: "Companion Object Initialization / Инициализация Companion Object"
 topic: kotlin
 difficulty: easy

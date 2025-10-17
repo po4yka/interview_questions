@@ -1,5 +1,5 @@
 ---
-id: "20251015082237057"
+id: 20251012-154381
 title: "List Vs Sequence / List против Sequence"
 topic: kotlin
 difficulty: medium

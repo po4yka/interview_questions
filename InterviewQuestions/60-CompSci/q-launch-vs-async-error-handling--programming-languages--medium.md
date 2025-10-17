@@ -1,5 +1,5 @@
 ---
-id: "20251015082237117"
+id: 20251012-1227111160
 title: "Launch Vs Async Error Handling / Launch против Async Error Обработка"
 topic: computer-science
 difficulty: medium

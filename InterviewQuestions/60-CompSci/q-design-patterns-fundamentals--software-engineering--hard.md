@@ -8,7 +8,7 @@ created: "2025-10-13"
 tags: ["design-patterns", "gof", "creational", "structural", "behavioral", "singleton", "factory", "observer", "strategy", "decorator", "kotlin", "android"]
 description: "Comprehensive coverage of essential design patterns (Creational, Structural, Behavioral) with real-world Android/Kotlin examples including Singleton, Factory, Observer, Strategy, Decorator, and more"
 language: "en"
-related_questions:   - "20251012-600004"  # OOP Principles
+related:   - "20251012-600004"  # OOP Principles
   - "20251013-600005"  # Data Structures and Algorithms
 subcategory: "design-patterns"
 updated: "2025-10-13"

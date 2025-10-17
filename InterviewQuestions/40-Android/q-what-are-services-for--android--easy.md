@@ -1,5 +1,5 @@
 ---
-id: "20251015082237573"
+id: 20251012-122711139
 title: "What Are Services For / Для чего нужны Service"
 topic: android
 difficulty: easy

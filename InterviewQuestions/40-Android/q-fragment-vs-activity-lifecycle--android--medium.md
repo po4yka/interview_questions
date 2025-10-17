@@ -1,5 +1,5 @@
 ---
-id: "20251015082237408"
+id: 20251017-144927
 title: "Fragment Vs Activity Lifecycle"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237570"
+id: 20251017-144953
 title: "State Hoisting Compose / Поднятие состояния в Compose"
 topic: android
 difficulty: medium

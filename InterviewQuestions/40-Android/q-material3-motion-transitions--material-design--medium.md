@@ -1,15 +1,13 @@
 ---
-id: "20251015082237575"
+id: 20251012-12271135
 title: "Material3 Motion Transitions / Движение и переходы Material3"
 topic: ui-ux-accessibility
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [design, material3, animation, transitions, motion, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-ui-ux-accessibility
-related_questions: []
+related: []
 subtopics: [material-design, ui-animation]
 ---
 # Material 3 Motion and Transitions

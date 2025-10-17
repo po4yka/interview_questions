@@ -5,7 +5,12 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, flow, hot-flows, cold-flows, sharedflow, stateflow]
+subtopics:
+  - coroutines
+  - flow
+  - hot-flows
+  - cold-flows
+  - sharedflow
 question_kind: theory
 difficulty: medium
 
@@ -93,33 +98,7 @@ val hotFlow = MutableSharedFlow<Int>()
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Flow
-- [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Coroutines
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
-- [[q-testing-viewmodel-coroutines--kotlin--medium]] - Testing
 
-### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Flow
-- [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Coroutines
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
-- [[q-testing-viewmodel-coroutines--kotlin--medium]] - Testing
-
-### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
-### Related (Medium)
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
-- [[q-stateflow-sharedflow-differences--kotlin--medium]] - SharedFlow vs StateFlow
-- [[q-stateflow-sharedflow-differences--kotlin--medium]] - StateFlow & SharedFlow differences
-
-### Advanced (Harder)
-- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies

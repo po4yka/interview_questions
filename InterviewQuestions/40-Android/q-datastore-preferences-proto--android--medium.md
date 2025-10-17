@@ -1,5 +1,5 @@
 ---
-id: "20251015082237472"
+id: 20251012-1227129
 title: "Datastore Preferences Proto"
 topic: android
 difficulty: medium

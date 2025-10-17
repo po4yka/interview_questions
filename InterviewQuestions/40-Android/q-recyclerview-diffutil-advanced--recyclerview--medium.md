@@ -1,5 +1,5 @@
 ---
-id: "20251015082237399"
+id: 20251017-114326
 title: "Recyclerview Diffutil Advanced / Продвинутый DiffUtil для RecyclerView"
 topic: android
 difficulty: medium

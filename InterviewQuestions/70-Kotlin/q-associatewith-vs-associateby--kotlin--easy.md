@@ -1,5 +1,5 @@
 ---
-id: "20251015082134"
+id: 20251017-150134
 title: "Associatewith Vs Associateby / associateWith против associateBy"
 topic: kotlin
 difficulty: easy
@@ -280,4 +280,18 @@ val itemsById = items.associateBy { it.id }
 ```
 
 **English**: `associateBy()` creates `Map` where **keys** are computed from elements, **values** are elements themselves: `List<T>.associateBy { key } → Map<Key, T>`. `associateWith()` does opposite - elements become **keys**, **values** are computed: `List<T>.associateWith { value } → Map<T, Value>`. `associateBy` useful for indexing objects by ID (fast O(1) lookup). `associateWith` useful for mapping elements to their properties. On key collision, last value wins. Use `groupBy` to keep all values. `associate` for full flexibility with Pair creation.
+
+## Ответ (RU)
+
+`associateBy()` создает `Map`, где **ключи** вычисляются из элементов, а **значениями** становятся сами элементы: `List<T>.associateBy { key } → Map<Key, T>`. `associateWith()` делает наоборот — элементы становятся **ключами**, а **значения** вычисляются: `List<T>.associateWith { value } → Map<T, Value>`.
+
+### Основные различия
+
+- **associateBy**: элемент → значение, вычисляем ключ (для индексации объектов по ID)
+- **associateWith**: элемент → ключ, вычисляем значение (для маппинга элементов к их свойствам)
+- **associate**: полная гибкость, создаем оба через `Pair`
+
+### Использование
+
+`associateBy` полезен для индексации объектов по ID (быстрый поиск O(1)). `associateWith` полезен для маппинга элементов к их свойствам. При коллизии ключей выигрывает последнее значение. Используйте `groupBy` чтобы сохранить все значения.
 

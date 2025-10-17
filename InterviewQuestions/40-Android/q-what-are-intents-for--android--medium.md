@@ -1,5 +1,5 @@
 ---
-id: "20251015082237415"
+id: 20251012-122711137
 title: "What Are Intents For / Для чего нужны Intent"
 topic: android
 difficulty: medium

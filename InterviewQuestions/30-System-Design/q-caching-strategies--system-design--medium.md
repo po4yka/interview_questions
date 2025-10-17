@@ -9,13 +9,10 @@ tags: - system-design
   - caching
   - performance
   - scalability
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-system-design
-related_questions:   - q-cache-invalidation--system-design--hard
+related:   - q-cache-invalidation--system-design--hard
   - q-cdn-architecture--system-design--medium
   - q-database-sharding--system-design--hard
-slug: caching-strategies-system-design-medium
 subtopics:   - caching
   - performance
   - redis
@@ -737,21 +734,4 @@ class ProductService(
 ### Advanced (Harder)
 - [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
 - [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
-### Related (Medium)
-- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
-- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
-- [[q-load-balancing-strategies--system-design--medium]] - load balancing strategies   system
-- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
 
-### Advanced (Harder)
-- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
-- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system
-### Related (Medium)
-- [[q-sql-nosql-databases--system-design--medium]] - sql nosql databases   system
-- [[q-design-url-shortener--system-design--medium]] - design url shortener   system
-- [[q-load-balancing-strategies--system-design--medium]] - load balancing strategies   system
-- [[q-horizontal-vertical-scaling--system-design--medium]] - horizontal vertical scaling   system
-
-### Advanced (Harder)
-- [[q-microservices-vs-monolith--system-design--hard]] - microservices vs monolith   system
-- [[q-database-sharding-partitioning--system-design--hard]] - database sharding partitioning   system

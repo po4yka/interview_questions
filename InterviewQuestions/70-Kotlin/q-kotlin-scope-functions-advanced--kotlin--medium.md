@@ -1,5 +1,5 @@
 ---
-id: "20251015082236029"
+id: 20251016-162536
 title: "Kotlin Scope Functions Advanced"
 topic: kotlin
 difficulty: medium

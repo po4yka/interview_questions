@@ -1,5 +1,5 @@
 ---
-id: "20251015082237109"
+id: 20251016-161612
 title: "Kotlin Combine Collections / Объединение коллекций Kotlin"
 topic: programming-languages
 difficulty: easy
@@ -8,10 +8,8 @@ created: 2025-10-13
 tags: - collections
   - kotlin
   - programming-languages
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-programming-languages
-related_questions: []
+related: []
 ---
 # Какая функция Kotlin используется для объединения двух коллекций?
 

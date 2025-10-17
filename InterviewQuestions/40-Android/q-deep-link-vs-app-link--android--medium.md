@@ -1,5 +1,5 @@
 ---
-id: "20251015082237412"
+id: 20251016-161730
 title: "Deep Link Vs App Link"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: 20251006-debounce-search-coroutines
+id: 20251012-12271111103
 title: Debouncing Search with Coroutines / Отложенный Поиск с Корутинами
 topic: kotlin
 difficulty: medium

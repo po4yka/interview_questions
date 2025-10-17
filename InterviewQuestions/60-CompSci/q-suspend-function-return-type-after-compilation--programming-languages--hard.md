@@ -1,5 +1,5 @@
 ---
-id: "20251015082237090"
+id: 20251016-162953
 title: "Suspend Function Return Type After Compilation / Тип возвращаемого значения suspend функции после компиляции"
 topic: computer-science
 difficulty: hard

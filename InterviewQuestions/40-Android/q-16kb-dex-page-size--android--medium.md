@@ -1,5 +1,5 @@
 ---
-id: "20251015082134"
+id: 20251012-122750
 title: "16kb Dex Page Size / Размер страницы DEX 16KB"
 topic: android
 difficulty: medium

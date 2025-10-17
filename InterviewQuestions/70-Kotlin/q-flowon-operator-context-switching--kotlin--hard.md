@@ -4,7 +4,12 @@ id: "20251012-170004"
 title: "flowOn operator and context switching in flows / flowOn оператор и переключение контекста"
 description: "Deep dive into flowOn operator, how it changes upstream execution context, buffering behavior, and performance implications"
 topic: kotlin
-subtopics: ["coroutines", "flow", "flowon", "dispatchers", "context", "performance"]
+subtopics:
+  - coroutines
+  - flow
+  - flowon
+  - dispatchers
+  - context
 difficulty: hard
 status: draft
 created: 2025-10-12
@@ -14,7 +19,6 @@ tags: ["flowon", "context-switching", "dispatchers", "buffer", "performance", "f
 moc: "moc-kotlin"
 contributors: []
 ---
-
 # flowOn operator and context switching in flows / flowOn оператор и переключение контекста
 
 ## English Version
@@ -1020,26 +1024,6 @@ flow {
 ### Advanced (Harder)
 - [[q-coroutine-context-detailed--kotlin--hard]] - Coroutines
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related ("hard")
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
-- [[q-coroutine-context-elements--kotlin--hard]] - Coroutines
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-hot-cold-flows--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-coroutine-context-detailed--kotlin--hard]] - Coroutines
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related ("hard")
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
-- [[q-coroutine-context-elements--kotlin--hard]] - Coroutines
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-hot-cold-flows--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-coroutine-context-detailed--kotlin--hard]] - Coroutines
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
 ### Related (Hard)
 - [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
@@ -1047,6 +1031,9 @@ flow {
 - [[q-flow-operators-deep-dive--kotlin--hard]] - Deep dive into operators
 - [[q-flow-performance--kotlin--hard]] - Performance optimization
 - [[q-flow-testing-advanced--kotlin--hard]] - Advanced Flow testing
+
+### Hub
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
 ## Tags
 #kotlin #coroutines #flowon #context-switching #dispatchers #flow #performance #buffer

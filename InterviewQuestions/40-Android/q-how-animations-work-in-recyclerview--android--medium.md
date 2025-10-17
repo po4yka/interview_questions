@@ -1,5 +1,5 @@
 ---
-id: "20251015082237356"
+id: 20251017-114255
 title: "How Animations Work In Recyclerview / Как работают анимации в RecyclerView"
 topic: android
 difficulty: medium

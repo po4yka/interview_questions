@@ -1,5 +1,5 @@
 ---
-id: "20251015082237227"
+id: 20251016-164118
 title: "Suspend Functions Under The Hood"
 topic: computer-science
 difficulty: hard

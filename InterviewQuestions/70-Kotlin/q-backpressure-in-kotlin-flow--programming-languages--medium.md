@@ -1,5 +1,5 @@
 ---
-id: 20251006-backpressure-flow
+id: 20251012-122746
 title: "Back Pressure in Kotlin Flow"
 aliases: []
 
@@ -954,23 +954,4 @@ class BackPressureBestPractices {
 - [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
 - [[q-flow-backpressure--kotlin--hard]] - Flow
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
-- [[q-flow-operators--kotlin--medium]] - Flow
 
-### Advanced (Harder)
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
-- [[q-flow-backpressure--kotlin--hard]] - Flow
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
-- [[q-flow-operators--kotlin--medium]] - Flow
-
-### Advanced (Harder)
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
-- [[q-flow-backpressure--kotlin--hard]] - Flow
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines

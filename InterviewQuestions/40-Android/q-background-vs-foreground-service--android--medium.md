@@ -1,5 +1,5 @@
 ---
-id: "20251015082237346"
+id: 20251016-161808
 title: "Background Vs Foreground Service"
 topic: android
 difficulty: medium

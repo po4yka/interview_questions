@@ -1,5 +1,5 @@
 ---
-id: "20251015082237560"
+id: 20251012-1227188
 title: "How To Pass Data From One Activity To Another / Как передать данные из одной Activity в другую"
 topic: android
 difficulty: medium

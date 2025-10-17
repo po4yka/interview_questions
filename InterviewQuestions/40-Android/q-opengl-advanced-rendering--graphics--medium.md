@@ -1,5 +1,5 @@
 ---
-id: "20251015082237483"
+id: 20251012-12271157
 title: "Opengl Advanced Rendering / Продвинутый рендеринг OpenGL"
 topic: android
 difficulty: medium

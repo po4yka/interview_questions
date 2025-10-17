@@ -1,5 +1,5 @@
 ---
-id: "20251015082237596"
+id: 20251012-1227111100
 title: "Why Use Fragments When We Have Activities / Зачем использовать Fragment когда есть Activity"
 topic: android
 difficulty: medium

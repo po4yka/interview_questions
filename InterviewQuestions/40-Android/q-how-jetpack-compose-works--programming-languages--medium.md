@@ -1,5 +1,5 @@
 ---
-id: "20251015082237564"
+id: 20251016-163745
 title: "How Jetpack Compose Works / Как работает Jetpack Compose"
 topic: android
 difficulty: medium

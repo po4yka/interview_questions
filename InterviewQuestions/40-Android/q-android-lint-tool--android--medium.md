@@ -1,5 +1,5 @@
 ---
-id: android-lint-tool-1730793600000
+id: 20251012-122748
 title: Android Lint Tool / Инструмент Android Lint
 topic: android
 difficulty: medium

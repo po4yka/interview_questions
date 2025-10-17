@@ -1,5 +1,5 @@
 ---
-id: "20251015082237505"
+id: 20251012-122711106
 title: "Singleton Scope Binding / Привязка Singleton скоупа"
 topic: android
 difficulty: medium

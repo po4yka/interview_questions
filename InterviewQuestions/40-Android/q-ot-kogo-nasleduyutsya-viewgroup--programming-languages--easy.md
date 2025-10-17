@@ -1,5 +1,5 @@
 ---
-id: "20251015082237539"
+id: 20251016-163816
 title: "Ot Kogo Nasleduyutsya Viewgroup / От кого наследуется ViewGroup"
 topic: android
 difficulty: easy

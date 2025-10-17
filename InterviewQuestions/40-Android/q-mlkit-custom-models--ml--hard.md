@@ -1,5 +1,5 @@
 ---
-id: "20251015082237384"
+id: 20251012-12271138
 title: "Mlkit Custom Models / Кастомные модели ML Kit"
 topic: android
 difficulty: hard

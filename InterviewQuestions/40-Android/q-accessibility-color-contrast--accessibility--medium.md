@@ -1,5 +1,5 @@
 ---
-id: "20251015082237421"
+id: 20251012-122751
 title: "Accessibility Color Contrast / Контрастность цветов для доступности"
 topic: android
 difficulty: medium

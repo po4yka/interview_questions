@@ -1,5 +1,5 @@
 ---
-id: "20251015082237477"
+id: 20251012-1227112
 title: "Compositionlocal Compose / CompositionLocal в Compose"
 topic: android
 difficulty: hard

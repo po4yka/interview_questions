@@ -1,5 +1,5 @@
 ---
-id: "20251015082237315"
+id: 20251012-12271189
 title: "Room Paging3 Integration / Интеграция Room с Paging3"
 topic: room
 difficulty: medium

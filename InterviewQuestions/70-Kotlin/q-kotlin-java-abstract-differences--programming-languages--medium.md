@@ -1,5 +1,5 @@
 ---
-id: "20251015082236007"
+id: 20251012-154374
 title: "Kotlin Java Abstract Differences / Различия abstract в Kotlin и Java"
 topic: kotlin
 difficulty: medium

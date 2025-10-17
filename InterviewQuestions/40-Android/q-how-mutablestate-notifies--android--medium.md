@@ -1,15 +1,13 @@
 ---
-id: "20251015082238634"
+id: 20251012-1227163
 title: "How Mutablestate Notifies / Как MutableState уведомляет"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [android/jetpack-compose, jetpack-compose, mutablestate, observer-pattern, recomposition, snapshot-system, state, state-management, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Как mutableState сообщает о том, что он изменился?
 

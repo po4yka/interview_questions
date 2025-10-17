@@ -1,15 +1,13 @@
 ---
-id: "20251015082237580"
+id: 20251016-174842
 title: "Koin Vs Hilt Comparison / Koin против Hilt Сравнение"
 topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [injection, koin, hilt, comparison, architecture, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-architecture-patterns
-related_questions: []
+related: []
 subtopics: [di-hilt, di-koin]
 ---
 # Koin vs Hilt Comparison / Сравнение Koin и Hilt

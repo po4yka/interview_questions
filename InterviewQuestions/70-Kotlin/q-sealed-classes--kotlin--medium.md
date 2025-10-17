@@ -1,5 +1,5 @@
 ---
-id: "20251015082236009"
+id: 20251012-154386
 title: "Sealed Classes"
 topic: kotlin
 difficulty: medium
@@ -8,10 +8,8 @@ created: 2025-10-13
 tags: - kotlin
   - sealed-classes
   - type-safety
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-kotlin
-related_questions:   - q-sealed-class-sealed-interface--kotlin--medium.md
+related:   - q-sealed-class-sealed-interface--kotlin--medium.md
 subtopics: [sealed-classes, enums, when-expression]
 ---
 # What is special about sealed classes in Kotlin?

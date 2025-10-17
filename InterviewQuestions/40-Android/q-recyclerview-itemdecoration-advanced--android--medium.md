@@ -1,5 +1,5 @@
 ---
-id: q-recyclerview-itemdecoration-advanced--android--medium--1728115320000
+id: 20251012-12271178
 title: "RecyclerView ItemDecoration Advanced / RecyclerView ItemDecoration продвинутый"
 topic: android
 difficulty: medium
@@ -9,7 +9,6 @@ tags: [recyclerview, itemdecoration, ui, custom-views, difficulty/medium, androi
 aliases:   - RecyclerView ItemDecoration Advanced
   - RecyclerView ItemDecoration продвинутый
 category: android
-date_created: 2025-10-05
 date_modified: 2025-10-05
 language_tags: [recyclerview, itemdecoration, ui, custom-views, difficulty/medium, android/views, android/ui-widgets, android/performance-rendering]
 moc: moc-android

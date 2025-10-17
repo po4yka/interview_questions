@@ -1,5 +1,5 @@
 ---
-id: "20251015082237254"
+id: 20251012-1227153
 title: "How Application Priority Is Determined By The System / Как система определяет приоритет приложения"
 topic: android
 difficulty: hard
@@ -509,17 +509,12 @@ Empty          1000       Немедленно
 ## Related Questions
 
 ### Related (Hard)
-
 -   [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Process management
 -   [[q-android-memory-management--android--hard]] - Memory management
 -   [[q-background-execution-limits--android--hard]] - Background execution
 
 ### Prerequisites (Easier)
-
 -   [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
 -   [[q-anr-application-not-responding--android--medium]] - Fundamentals
 -   [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
 
-### Related (Hard)
-
--   [[q-kotlin-context-receivers--kotlin--hard]] - Fundamentals

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237488"
+id: 20251012-1227121
 title: "Dagger Multibinding / Multibinding в Dagger"
 topic: android
 difficulty: hard

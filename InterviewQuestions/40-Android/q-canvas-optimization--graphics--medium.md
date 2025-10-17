@@ -1,15 +1,13 @@
 ---
-id: "20251015082237381"
+id: 20251012-122794
 title: "Canvas Optimization / Canvas Оптимизация"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [canvas, custom-drawing, graphics, performance, optimization, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Canvas Optimization and Custom Drawing
 

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237528"
+id: 20251012-12271153
 title: "Network Request Deduplication / Дедупликация сетевых запросов"
 topic: networking
 difficulty: hard

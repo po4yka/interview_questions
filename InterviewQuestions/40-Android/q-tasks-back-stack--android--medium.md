@@ -1,5 +1,5 @@
 ---
-id: tasks-back-stack-1730793900000
+id: 20251017-144930
 title: Tasks and Back Stack / Задачи и стек возврата
 topic: android
 difficulty: medium

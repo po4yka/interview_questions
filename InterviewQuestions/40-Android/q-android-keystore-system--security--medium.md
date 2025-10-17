@@ -1,5 +1,5 @@
 ---
-id: "20251015082237405"
+id: 20251012-122766
 title: "Android Keystore System / Система Android Keystore"
 topic: security
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237194"
+id: 20251016-163742
 title: "Design Patterns Types / Design Паттерны Types"
 topic: computer-science
 difficulty: medium

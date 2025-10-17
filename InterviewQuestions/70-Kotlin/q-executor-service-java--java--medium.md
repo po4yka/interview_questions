@@ -1,5 +1,5 @@
 ---
-id: "20251015082237064"
+id: 20251012-154361
 title: "Executor Service Java / ExecutorService в Java"
 topic: kotlin
 difficulty: medium

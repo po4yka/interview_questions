@@ -1,5 +1,5 @@
 ---
-id: "20251015082237085"
+id: 20251012-12271111114
 title: "Kotlin Collections Overview / Обзор коллекций Kotlin"
 topic: programming-languages
 difficulty: easy
@@ -13,10 +13,8 @@ tags: - collections
   - mutable
   - programming-languages
   - set
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-programming-languages
-related_questions: []
+related: []
 ---
 # Какие коллекции знаешь?
 

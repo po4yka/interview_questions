@@ -1,5 +1,5 @@
 ---
-id: "20251015082238650"
+id: 20251012-122711109
 title: "Stable Annotation Compose / Аннотация Stable в Compose"
 topic: android
 difficulty: hard

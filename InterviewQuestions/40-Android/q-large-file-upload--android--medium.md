@@ -1,5 +1,5 @@
 ---
-id: "20251015082237246"
+id: 20251017-144923
 title: "Large File Upload / Загрузка больших файлов"
 topic: android
 difficulty: medium
@@ -540,17 +540,8 @@ val constraints = Constraints.Builder()
 ## Related Questions
 
 ### Related (Medium)
-- [[q-api-file-upload-server--android--medium]] - api file upload server 
+- [[q-api-file-upload-server--android--medium]] - api file upload server
 
 ### Advanced (Harder)
-- [[q-large-file-upload-app--android--hard]] - large file upload app 
-### Related (Medium)
-- [[q-api-file-upload-server--android--medium]] - api file upload server 
+- [[q-large-file-upload-app--android--hard]] - large file upload app
 
-### Advanced (Harder)
-- [[q-large-file-upload-app--android--hard]] - large file upload app 
-### Related (Medium)
-- [[q-api-file-upload-server--android--medium]] - api file upload server 
-
-### Advanced (Harder)
-- [[q-large-file-upload-app--android--hard]] - large file upload app 

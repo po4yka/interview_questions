@@ -1,5 +1,5 @@
 ---
-id: "20251015082236026"
+id: 20251016-163852
 title: "Kotlin Type Aliases Inline / Type aliases и inline в Kotlin"
 topic: kotlin
 difficulty: medium

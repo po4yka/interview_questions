@@ -1,5 +1,5 @@
 ---
-id: "20251015082237418"
+id: 20251012-122711149
 title: "What Does Viewgroup Inherit From / От чего наследуется ViewGroup"
 topic: android
 difficulty: medium

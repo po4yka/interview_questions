@@ -1,5 +1,5 @@
 ---
-id: "20251015082237104"
+id: 20251016-172829
 title: "Strategy Pattern / Strategy Паттерн"
 topic: computer-science
 difficulty: medium

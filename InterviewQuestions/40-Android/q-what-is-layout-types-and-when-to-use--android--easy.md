@@ -1,5 +1,5 @@
 ---
-id: "20251015082237266"
+id: 20251012-122711163
 title: "What Is Layout Types And When To Use / What Is Layout Types и When To Use"
 topic: android
 difficulty: easy

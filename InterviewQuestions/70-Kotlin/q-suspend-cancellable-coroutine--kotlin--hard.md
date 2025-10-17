@@ -11,13 +11,10 @@ tags: - kotlin
   - callbacks
   - cancellation
   - integration
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-kotlin
-related_questions:   - q-continuation-cps-internals--kotlin--hard
+related:   - q-continuation-cps-internals--kotlin--hard
   - q-channelflow-callbackflow-flow--kotlin--medium
   - q-coroutine-exception-handler--kotlin--medium
-slug: suspend-cancellable-coroutine-kotlin-hard
 subtopics:   - coroutines
   - suspend
   - callbacks

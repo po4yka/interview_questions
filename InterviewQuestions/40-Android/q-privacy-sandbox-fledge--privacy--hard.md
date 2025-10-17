@@ -1,5 +1,5 @@
 ---
-id: "20251015082237592"
+id: 20251012-12271170
 title: "Privacy Sandbox Fledge"
 topic: android
 difficulty: hard

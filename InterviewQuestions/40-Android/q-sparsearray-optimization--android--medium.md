@@ -1,5 +1,5 @@
 ---
-id: q-sparsearray-optimization--android--medium--1728115440000
+id: 20251012-122711108
 title: "SparseArray and Optimization / SparseArray и оптимизация"
 topic: android
 difficulty: medium
@@ -9,12 +9,11 @@ tags: [sparsearray, data-structures, performance, memory-optimization, difficult
 aliases:   - SparseArray and Optimization
   - SparseArray и оптимизация
 category: android
-date_created: 2025-10-05
 date_modified: 2025-10-13
 language_tags: [sparsearray, data-structures, performance, memory-optimization, difficulty/medium, android/memory, android/performance-rendering]
 moc: moc-android
 original_language: en
-related_questions: []
+related: []
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20SparseArray.md"
 subtopics:   - performance-memory
   - performance-rendering

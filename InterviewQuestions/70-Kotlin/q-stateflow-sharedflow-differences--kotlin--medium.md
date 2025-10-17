@@ -333,33 +333,7 @@ private val _tickFlow = MutableSharedFlow<Unit>(
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
-- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
-- [[q-sharedflow-stateflow--kotlin--medium]] - Flow
-- [[q-sharedflow-replay-buffer-config--kotlin--medium]] - Coroutines
 
-### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
-- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
-- [[q-sharedflow-stateflow--kotlin--medium]] - Flow
-- [[q-sharedflow-replay-buffer-config--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
-### Related (Medium)
-- [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
-- [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
-
-### Advanced (Harder)
-- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies

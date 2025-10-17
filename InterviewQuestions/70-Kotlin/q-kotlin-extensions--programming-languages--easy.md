@@ -1,5 +1,5 @@
 ---
-id: "20251015082237136"
+id: 20251012-12271111127
 title: "Kotlin Extensions / Расширения Kotlin"
 topic: computer-science
 difficulty: easy

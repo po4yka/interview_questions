@@ -1,5 +1,5 @@
 ---
-id: "20251015082237234"
+id: 20251012-1227111120
 title: "Coroutine Dispatchers / Диспетчеры корутин"
 topic: computer-science
 difficulty: medium

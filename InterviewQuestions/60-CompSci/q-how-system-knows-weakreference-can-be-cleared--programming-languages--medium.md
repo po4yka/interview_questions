@@ -1,5 +1,5 @@
 ---
-id: "20251015082237221"
+id: 20251012-1227111146
 title: "How System Knows Weakreference Can Be Cleared / Как система знает что WeakReference можно очистить"
 topic: computer-science
 difficulty: medium

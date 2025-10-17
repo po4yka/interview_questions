@@ -1,5 +1,5 @@
 ---
-id: "20251015082237298"
+id: 20251012-1227149
 title: "Hilt Assisted Injection"
 topic: android
 difficulty: medium
@@ -955,7 +955,716 @@ class UserViewModel @Inject constructor(
 4. Dagger генерирует реализацию factory
 5. Внедряем factory и вызываем `create()` с runtime-параметрами
 
-[Продолжение с остальными примерами из английской версии...]
+### Базовый пример: обработчик сообщений чата
+
+```kotlin
+// Обработчик сообщений, которому нужны как внедрённые зависимости, так и runtime-сообщение
+class MessageProcessor @AssistedInject constructor(
+    // Внедрено через Dagger
+    private val apiService: ApiService,
+    private val database: Database,
+    private val analytics: Analytics,
+    // Предоставлено во время выполнения
+    @Assisted private val message: Message,
+    @Assisted private val senderId: String
+) {
+
+    suspend fun process() {
+        analytics.track("message_processing_started", mapOf(
+            "sender_id" to senderId,
+            "message_type" to message.type
+        ))
+
+        // Валидация сообщения
+        if (message.content.isEmpty()) {
+            throw IllegalArgumentException("Message content cannot be empty")
+        }
+
+        // Отправка в API
+        val result = apiService.sendMessage(senderId, message)
+
+        // Сохранение в локальную базу данных
+        database.messageDao().insert(MessageEntity.from(message, result.id))
+
+        analytics.track("message_processing_completed")
+    }
+}
+
+@AssistedFactory
+interface MessageProcessorFactory {
+    fun create(message: Message, senderId: String): MessageProcessor
+}
+
+// Использование в ViewModel
+@HiltViewModel
+class ChatViewModel @Inject constructor(
+    private val messageProcessorFactory: MessageProcessorFactory,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+    private val currentUserId: String = savedStateHandle["userId"]!!
+
+    fun sendMessage(message: Message) {
+        viewModelScope.launch {
+            val processor = messageProcessorFactory.create(message, currentUserId)
+            processor.process()
+        }
+    }
+}
+```
+
+### Несколько @Assisted параметров
+
+Вы можете иметь несколько runtime-параметров:
+
+```kotlin
+class OrderProcessor @AssistedInject constructor(
+    // Внедрённые зависимости
+    private val apiService: ApiService,
+    private val paymentService: PaymentService,
+    private val analytics: Analytics,
+    // Runtime-параметры
+    @Assisted private val orderId: String,
+    @Assisted private val userId: String,
+    @Assisted private val items: List<OrderItem>
+) {
+
+    suspend fun processOrder(): OrderResult {
+        analytics.track("order_processing", mapOf("order_id" to orderId))
+
+        // Расчёт итоговой суммы
+        val total = items.sumOf { it.price * it.quantity }
+
+        // Обработка платежа
+        val paymentResult = paymentService.charge(userId, total)
+
+        // Создание заказа
+        val order = apiService.createOrder(orderId, userId, items)
+
+        return OrderResult(order, paymentResult)
+    }
+}
+
+@AssistedFactory
+interface OrderProcessorFactory {
+    fun create(orderId: String, userId: String, items: List<OrderItem>): OrderProcessor
+}
+```
+
+### Устранение неоднозначности параметров одного типа
+
+Когда у вас несколько параметров одного типа, используйте именованные `@Assisted`:
+
+```kotlin
+class TransferProcessor @AssistedInject constructor(
+    private val apiService: ApiService,
+    // Используем именованные @Assisted для различения параметров одного типа
+    @Assisted("fromUserId") private val fromUserId: String,
+    @Assisted("toUserId") private val toUserId: String,
+    @Assisted("amount") private val amount: Double
+) {
+
+    suspend fun transfer() {
+        apiService.transfer(fromUserId, toUserId, amount)
+    }
+}
+
+@AssistedFactory
+interface TransferProcessorFactory {
+    // Имена параметров в factory должны совпадать с именами @Assisted
+    fun create(
+        @Assisted("fromUserId") fromUserId: String,
+        @Assisted("toUserId") toUserId: String,
+        @Assisted("amount") amount: Double
+    ): TransferProcessor
+}
+```
+
+### Реальный пример: RecyclerView ViewHolder с зависимостями
+
+```kotlin
+// ViewHolder, которому нужны как внедрённые зависимости, так и view/данные
+class ProductViewHolder @AssistedInject constructor(
+    // Внедрённые зависимости
+    private val imageLoader: ImageLoader,
+    private val analytics: Analytics,
+    private val cartManager: CartManager,
+    // Runtime-параметры
+    @Assisted private val view: View,
+    @Assisted private val onClickListener: (Product) -> Unit
+) : RecyclerView.ViewHolder(view) {
+
+    private val imageView: ImageView = view.findViewById(R.id.productImage)
+    private val titleView: TextView = view.findViewById(R.id.productTitle)
+    private val priceView: TextView = view.findViewById(R.id.productPrice)
+    private val addToCartButton: Button = view.findViewById(R.id.addToCart)
+
+    private var currentProduct: Product? = null
+
+    init {
+        addToCartButton.setOnClickListener {
+            currentProduct?.let { product ->
+                cartManager.addToCart(product)
+                analytics.track("add_to_cart", mapOf("product_id" to product.id))
+            }
+        }
+
+        view.setOnClickListener {
+            currentProduct?.let { product ->
+                analytics.track("product_clicked", mapOf("product_id" to product.id))
+                onClickListener(product)
+            }
+        }
+    }
+
+    fun bind(product: Product) {
+        currentProduct = product
+        titleView.text = product.title
+        priceView.text = "$${product.price}"
+        imageLoader.load(product.imageUrl, imageView)
+    }
+}
+
+@AssistedFactory
+interface ProductViewHolderFactory {
+    fun create(view: View, onClickListener: (Product) -> Unit): ProductViewHolder
+}
+
+// Adapter
+class ProductAdapter @Inject constructor(
+    private val productViewHolderFactory: ProductViewHolderFactory
+) : RecyclerView.Adapter<ProductViewHolder>() {
+
+    private val products = mutableListOf<Product>()
+    private var onProductClick: (Product) -> Unit = {}
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_product, parent, false)
+
+        // Используем factory для создания ViewHolder с внедрёнными зависимостями
+        return productViewHolderFactory.create(view, onProductClick)
+    }
+
+    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+        holder.bind(products[position])
+    }
+
+    override fun getItemCount() = products.size
+
+    fun submitList(newProducts: List<Product>) {
+        products.clear()
+        products.addAll(newProducts)
+        notifyDataSetChanged()
+    }
+
+    fun setOnProductClickListener(listener: (Product) -> Unit) {
+        onProductClick = listener
+    }
+}
+
+// Использование во Fragment
+@AndroidEntryPoint
+class ProductListFragment : Fragment() {
+
+    @Inject
+    lateinit var adapter: ProductAdapter
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
+        recyclerView.adapter = adapter
+
+        adapter.setOnProductClickListener { product ->
+            // Переход к деталям продукта
+            navigateToProductDetails(product.id)
+        }
+    }
+}
+```
+
+### Assisted Injection с WorkManager
+
+```kotlin
+// Worker с assisted injection (Hilt 2.31+)
+@HiltWorker
+class DataSyncWorker @AssistedInject constructor(
+    // Assisted-параметры от WorkManager
+    @Assisted context: Context,
+    @Assisted params: WorkerParameters,
+    // Внедрённые зависимости
+    private val apiService: ApiService,
+    private val database: AppDatabase,
+    private val notificationManager: NotificationManager
+) : CoroutineWorker(context, params) {
+
+    override suspend fun doWork(): Result {
+        return try {
+            // Получаем runtime-данные из inputData
+            val syncType = inputData.getString("sync_type") ?: "full"
+
+            notificationManager.showProgress("Синхронизация данных...")
+
+            when (syncType) {
+                "full" -> syncAll()
+                "incremental" -> syncIncremental()
+                else -> Result.failure()
+            }
+
+            notificationManager.showSuccess("Синхронизация завершена")
+            Result.success()
+        } catch (e: Exception) {
+            notificationManager.showError("Ошибка синхронизации: ${e.message}")
+            Result.retry()
+        }
+    }
+
+    private suspend fun syncAll() {
+        val data = apiService.fetchAllData()
+        database.dataDao().deleteAll()
+        database.dataDao().insertAll(data)
+    }
+
+    private suspend fun syncIncremental() {
+        val lastSyncTime = database.syncDao().getLastSyncTime()
+        val data = apiService.fetchDataSince(lastSyncTime)
+        database.dataDao().insertAll(data)
+        database.syncDao().updateSyncTime(System.currentTimeMillis())
+    }
+}
+
+// Использование
+class SyncManager @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
+
+    fun scheduleSyncWork(syncType: String) {
+        val inputData = workDataOf("sync_type" to syncType)
+
+        val syncWorkRequest = OneTimeWorkRequestBuilder<DataSyncWorker>()
+            .setInputData(inputData)
+            .setConstraints(Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build())
+            .build()
+
+        WorkManager.getInstance(context).enqueue(syncWorkRequest)
+    }
+}
+```
+
+### Assisted Injection с Compose
+
+```kotlin
+// UseCase с assisted injection
+class LoadUserDetailsUseCase @AssistedInject constructor(
+    private val userRepository: UserRepository,
+    private val analytics: Analytics,
+    @Assisted private val userId: String
+) {
+
+    suspend operator fun invoke(): Result<UserDetails> {
+        analytics.track("load_user_details", mapOf("user_id" to userId))
+
+        return try {
+            val user = userRepository.getUser(userId)
+            val posts = userRepository.getUserPosts(userId)
+            val followers = userRepository.getFollowers(userId)
+
+            Result.success(UserDetails(user, posts, followers))
+        } catch (e: Exception) {
+            analytics.track("load_user_details_error", mapOf(
+                "user_id" to userId,
+                "error" to e.message
+            ))
+            Result.failure(e)
+        }
+    }
+}
+
+@AssistedFactory
+interface LoadUserDetailsUseCaseFactory {
+    fun create(userId: String): LoadUserDetailsUseCase
+}
+
+// ViewModel
+@HiltViewModel
+class UserDetailsViewModel @Inject constructor(
+    private val loadUserDetailsUseCaseFactory: LoadUserDetailsUseCaseFactory,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+    private val userId: String = savedStateHandle["userId"]!!
+
+    val userDetails = flow {
+        val useCase = loadUserDetailsUseCaseFactory.create(userId)
+        val result = useCase()
+        emit(result)
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        Result.success(UserDetails.Empty)
+    )
+}
+
+// Composable
+@Composable
+fun UserDetailsScreen(
+    viewModel: UserDetailsViewModel = hiltViewModel()
+) {
+    val userDetails by viewModel.userDetails.collectAsState()
+
+    when {
+        userDetails.isSuccess -> {
+            val details = userDetails.getOrNull()!!
+            UserDetailsContent(details)
+        }
+        userDetails.isFailure -> {
+            ErrorScreen(userDetails.exceptionOrNull()?.message ?: "Unknown error")
+        }
+    }
+}
+```
+
+### Продвинутый пример: Assisted Injection с дженериками
+
+```kotlin
+// Обобщённый процессор с assisted injection
+class DataProcessor<T : Any> @AssistedInject constructor(
+    private val apiService: ApiService,
+    private val database: Database,
+    @Assisted private val data: T,
+    @Assisted private val validator: (T) -> Boolean
+) {
+
+    suspend fun process(): Result<T> {
+        if (!validator(data)) {
+            return Result.failure(IllegalArgumentException("Invalid data"))
+        }
+
+        // Обработка данных
+        val result = apiService.upload(data)
+        database.save(data)
+
+        return Result.success(result)
+    }
+}
+
+// Нужна отдельная factory для каждого типа
+@AssistedFactory
+interface UserDataProcessorFactory {
+    fun create(data: User, validator: (User) -> Boolean): DataProcessor<User>
+}
+
+@AssistedFactory
+interface ProductDataProcessorFactory {
+    fun create(data: Product, validator: (Product) -> Boolean): DataProcessor<Product>
+}
+
+// Использование
+class DataUploadManager @Inject constructor(
+    private val userDataProcessorFactory: UserDataProcessorFactory,
+    private val productDataProcessorFactory: ProductDataProcessorFactory
+) {
+
+    suspend fun uploadUser(user: User): Result<User> {
+        val validator: (User) -> Boolean = { it.email.isNotEmpty() && it.name.isNotEmpty() }
+        val processor = userDataProcessorFactory.create(user, validator)
+        return processor.process()
+    }
+
+    suspend fun uploadProduct(product: Product): Result<Product> {
+        val validator: (Product) -> Boolean = { it.price > 0 && it.title.isNotEmpty() }
+        val processor = productDataProcessorFactory.create(product, validator)
+        return processor.process()
+    }
+}
+```
+
+### Production-пример: загрузка файлов с прогрессом
+
+```kotlin
+// Загрузчик файлов с callback прогресса
+class FileUploader @AssistedInject constructor(
+    private val apiService: ApiService,
+    private val analytics: Analytics,
+    @Assisted private val file: File,
+    @Assisted private val onProgress: (Int) -> Unit
+) {
+
+    suspend fun upload(): Result<FileUploadResponse> {
+        analytics.track("file_upload_started", mapOf(
+            "file_name" to file.name,
+            "file_size" to file.length()
+        ))
+
+        return try {
+            val fileSize = file.length()
+            var uploadedBytes = 0L
+
+            val requestBody = object : RequestBody() {
+                override fun contentType() = "application/octet-stream".toMediaTypeOrNull()
+
+                override fun contentLength() = fileSize
+
+                override fun writeTo(sink: BufferedSink) {
+                    file.source().use { source ->
+                        var bytesRead: Long
+                        val buffer = Buffer()
+
+                        while (source.read(buffer, 8192).also { bytesRead = it } != -1L) {
+                            sink.write(buffer, bytesRead)
+                            uploadedBytes += bytesRead
+
+                            // Отчёт о прогрессе
+                            val progress = ((uploadedBytes.toFloat() / fileSize) * 100).toInt()
+                            onProgress(progress)
+                        }
+                    }
+                }
+            }
+
+            val response = apiService.uploadFile(requestBody)
+
+            analytics.track("file_upload_completed", mapOf(
+                "file_name" to file.name,
+                "upload_id" to response.id
+            ))
+
+            Result.success(response)
+        } catch (e: Exception) {
+            analytics.track("file_upload_failed", mapOf(
+                "file_name" to file.name,
+                "error" to e.message
+            ))
+            Result.failure(e)
+        }
+    }
+}
+
+@AssistedFactory
+interface FileUploaderFactory {
+    fun create(file: File, onProgress: (Int) -> Unit): FileUploader
+}
+
+// ViewModel
+@HiltViewModel
+class FileUploadViewModel @Inject constructor(
+    private val fileUploaderFactory: FileUploaderFactory
+) : ViewModel() {
+
+    private val _uploadProgress = MutableStateFlow(0)
+    val uploadProgress: StateFlow<Int> = _uploadProgress.asStateFlow()
+
+    private val _uploadState = MutableStateFlow<UploadState>(UploadState.Idle)
+    val uploadState: StateFlow<UploadState> = _uploadState.asStateFlow()
+
+    fun uploadFile(file: File) {
+        viewModelScope.launch {
+            _uploadState.value = UploadState.Uploading
+
+            val uploader = fileUploaderFactory.create(file) { progress ->
+                _uploadProgress.value = progress
+            }
+
+            val result = uploader.upload()
+
+            _uploadState.value = when {
+                result.isSuccess -> UploadState.Success(result.getOrNull()!!)
+                else -> UploadState.Error(result.exceptionOrNull()?.message ?: "Upload failed")
+            }
+        }
+    }
+}
+
+sealed class UploadState {
+    object Idle : UploadState()
+    object Uploading : UploadState()
+    data class Success(val response: FileUploadResponse) : UploadState()
+    data class Error(val message: String) : UploadState()
+}
+
+// Composable
+@Composable
+fun FileUploadScreen(
+    viewModel: FileUploadViewModel = hiltViewModel()
+) {
+    val uploadProgress by viewModel.uploadProgress.collectAsState()
+    val uploadState by viewModel.uploadState.collectAsState()
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        when (uploadState) {
+            is UploadState.Idle -> {
+                Button(onClick = { /* Выбор файла */ }) {
+                    Text("Выбрать файл")
+                }
+            }
+            is UploadState.Uploading -> {
+                LinearProgressIndicator(
+                    progress = uploadProgress / 100f,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Text("Загрузка: $uploadProgress%")
+            }
+            is UploadState.Success -> {
+                Text("Загрузка завершена!")
+            }
+            is UploadState.Error -> {
+                Text("Ошибка: ${(uploadState as UploadState.Error).message}")
+            }
+        }
+    }
+}
+```
+
+### Assisted Injection vs альтернативы
+
+| Подход                    | Когда использовать                  | Плюсы                               | Минусы                                           |
+| ------------------------- | ----------------------------------- | ----------------------------------- | ------------------------------------------------ |
+| **@AssistedInject**       | Смешивание DI + runtime-параметров  | Чисто, типобезопасно, преимущества DI | Дополнительный интерфейс factory                 |
+| **Manual Factory**        | Простые случаи                      | Нет annotation processor            | Boilerplate, потеря преимуществ DI               |
+| **Provider<T>**           | Создание нескольких экземпляров     | Просто                              | Все параметры должны быть injectable             |
+| **Lazy<T>**               | Отложенное создание                 | Просто                              | Все параметры должны быть injectable             |
+| **@Binds с qualifier**    | Множественные реализации            | Просто                              | Параметры должны быть известны на compile-time   |
+
+### Лучшие практики
+
+1. **Используйте @AssistedInject для runtime-параметров**
+
+    ```kotlin
+    //  ХОРОШО — runtime-данные через @Assisted
+    class UserRepository @AssistedInject constructor(
+        private val api: ApiService,
+        @Assisted private val userId: String
+    )
+
+    //  ПЛОХО — попытка внедрить runtime-данные
+    class UserRepository @Inject constructor(
+        private val api: ApiService,
+        private val userId: String // Не скомпилируется!
+    )
+    ```
+
+2. **Именуйте параметры одного типа**
+
+    ```kotlin
+    //  ХОРОШО — именованные для ясности
+    @AssistedInject constructor(
+        @Assisted("startDate") private val startDate: Long,
+        @Assisted("endDate") private val endDate: Long
+    )
+
+    //  ПЛОХО — неоднозначность
+    @AssistedInject constructor(
+        @Assisted private val startDate: Long,
+        @Assisted private val endDate: Long // Какой есть какой?
+    )
+    ```
+
+3. **Держите Assisted-параметры минимальными**
+
+    ```kotlin
+    //  ХОРОШО — минимум runtime-параметров
+    class OrderProcessor @AssistedInject constructor(
+        private val api: ApiService,
+        @Assisted private val orderId: String
+    )
+
+    //  ПЛОХО — слишком много runtime-параметров предполагает неправильную абстракцию
+    class OrderProcessor @AssistedInject constructor(
+        private val api: ApiService,
+        @Assisted private val orderId: String,
+        @Assisted private val userId: String,
+        @Assisted private val items: List<Item>,
+        @Assisted private val address: Address,
+        @Assisted private val payment: PaymentInfo // Слишком много!
+    )
+    ```
+
+4. **Не путайте @AssistedFactory с Factory Pattern**
+
+    ```kotlin
+    //  ХОРОШО — @AssistedFactory для DI + runtime-параметров
+    @AssistedFactory
+    interface UserRepoFactory {
+        fun create(userId: String): UserRepository
+    }
+
+    //  ПЛОХО — ручная factory теряет преимущества DI
+    interface UserRepoFactory {
+        fun create(userId: String): UserRepository
+    }
+    class UserRepoFactoryImpl(
+        private val api: ApiService // Нужно внедрять factory вместо этого
+    ) : UserRepoFactory {
+        override fun create(userId: String) = UserRepository(api, userId)
+    }
+    ```
+
+5. **Тестирование с Assisted Injection**
+
+    ```kotlin
+    //  ХОРОШО — тестируем с fake factory
+    @Test
+    fun testUserRepository() {
+        val fakeApi = FakeApiService()
+        val fakeFactory = object : UserRepositoryFactory {
+            override fun create(userId: String) = UserRepository(fakeApi, userId)
+        }
+
+        val repo = fakeFactory.create("user123")
+        // Тестируем repo...
+    }
+    ```
+
+### Типичные случаи использования
+
+1. **Repository для entity ID**
+
+    ```kotlin
+    class EntityRepository @AssistedInject constructor(
+        private val api: ApiService,
+        @Assisted private val entityId: String
+    )
+    ```
+
+2. **ViewHolder с зависимостями**
+
+    ```kotlin
+    class CustomViewHolder @AssistedInject constructor(
+        private val imageLoader: ImageLoader,
+        @Assisted private val view: View
+    )
+    ```
+
+3. **Worker с зависимостями**
+
+    ```kotlin
+    @HiltWorker
+    class SyncWorker @AssistedInject constructor(
+        @Assisted context: Context,
+        @Assisted params: WorkerParameters,
+        private val api: ApiService
+    )
+    ```
+
+4. **UseCase с runtime-параметрами**
+
+    ```kotlin
+    class SubmitFormUseCase @AssistedInject constructor(
+        private val api: ApiService,
+        @Assisted private val formData: FormData
+    )
+    ```
+
+5. **Процессоры на основе callback**
+    ```kotlin
+    class DataProcessor @AssistedInject constructor(
+        private val api: ApiService,
+        @Assisted private val onProgress: (Int) -> Unit
+    )
+    ```
 
 ### Резюме
 

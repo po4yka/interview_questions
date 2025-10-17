@@ -1,5 +1,5 @@
 ---
-id: "20251015082237139"
+id: 20251016-171706
 title: "Sealed Vs Enum Classes / Sealed против Enum Классы"
 topic: computer-science
 difficulty: medium

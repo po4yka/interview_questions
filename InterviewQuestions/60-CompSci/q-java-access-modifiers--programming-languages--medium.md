@@ -1,5 +1,5 @@
 ---
-id: "20251015082237163"
+id: 20251012-1227111154
 title: "Java Access Modifiers / Модификаторы доступа Java"
 topic: programming-languages
 difficulty: medium
@@ -14,10 +14,8 @@ tags: - access-modifiers
   - programming-languages
   - protected
   - public
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-programming-languages
-related_questions: []
+related: []
 subtopics: ["java", "jvm", "language-features"]
 ---
 # Как лучше всего использовать модификаторы доступа в Java?

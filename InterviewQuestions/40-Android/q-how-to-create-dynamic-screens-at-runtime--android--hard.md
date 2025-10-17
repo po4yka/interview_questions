@@ -1,5 +1,5 @@
 ---
-id: "20251015082237336"
+id: 20251012-1227176
 title: "How To Create Dynamic Screens At Runtime / Как создавать динамические экраны во время выполнения"
 topic: android
 difficulty: medium

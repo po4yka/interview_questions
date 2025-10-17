@@ -1,5 +1,5 @@
 ---
-id: "20251015082237289"
+id: 20251012-12271183
 title: "Retrofit Call Adapter Advanced / Продвинутый CallAdapter для Retrofit"
 topic: networking
 difficulty: medium

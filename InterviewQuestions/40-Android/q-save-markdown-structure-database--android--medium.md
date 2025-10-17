@@ -1,5 +1,5 @@
 ---
-id: "20251015082237379"
+id: 20251012-12271196
 title: "Save Markdown Structure Database / Сохранение структуры Markdown в базе данных"
 topic: android
 difficulty: medium

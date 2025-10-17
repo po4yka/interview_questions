@@ -1,5 +1,5 @@
 ---
-id: "20251015082237128"
+id: 20251012-1227111150
 title: Interpreter Pattern
 topic: design-patterns
 difficulty: hard

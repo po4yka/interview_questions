@@ -10,13 +10,10 @@ tags: - system-design
   - kafka
   - event-driven
   - async
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-system-design
-related_questions:   - q-microservices-vs-monolith--system-design--hard
+related:   - q-microservices-vs-monolith--system-design--hard
   - q-distributed-transactions--system-design--hard
   - q-event-sourcing-cqrs--system-design--hard
-slug: message-queues-event-driven-system-design-medium
 subtopics:   - message-queues
   - event-driven
   - kafka

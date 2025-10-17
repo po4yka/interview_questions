@@ -1,5 +1,5 @@
 ---
-id: "20251015082237081"
+id: 20251012-1227111162
 title: "List Vs Sequence / List против Sequence"
 topic: programming-languages
 difficulty: medium
@@ -10,10 +10,8 @@ tags: - collections
   - list
   - programming-languages
   - sequence
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-programming-languages
-related_questions: []
+related: []
 ---
 # В чем разница между работой с list и работой с sequence
 

@@ -1,15 +1,13 @@
 ---
-id: "20251015082237538"
+id: 20251012-1227165
 title: "How To Add Custom Attributes To Custom View / Как добавить кастомные атрибуты к кастомным View"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: - android
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions:   - q-recyclerview-sethasfixedsize--android--easy
+related:   - q-recyclerview-sethasfixedsize--android--easy
   - q-viewmodel-pattern--android--easy
   - q-what-is-known-about-methods-that-redraw-view--android--medium
   - q-testing-viewmodels-turbine--testing--medium

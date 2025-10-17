@@ -1,5 +1,5 @@
 ---
-id: 20251006-006
+id: 20251012-135617
 title: "Kotlin Delegation Pattern Deep Dive / Паттерн делегирования в Kotlin - детально"
 aliases: []
 

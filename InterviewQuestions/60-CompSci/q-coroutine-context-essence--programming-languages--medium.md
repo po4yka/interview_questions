@@ -1,5 +1,5 @@
 ---
-id: "20251015082237155"
+id: 20251012-1227111119
 title: "Coroutine Context Essence / Суть Coroutine Context"
 topic: computer-science
 difficulty: medium

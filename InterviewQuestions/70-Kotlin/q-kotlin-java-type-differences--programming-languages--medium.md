@@ -1,5 +1,5 @@
 ---
-id: "20251015082237157"
+id: 20251017-104927
 title: "Kotlin Java Type Differences / Различия типов Kotlin и Java"
 topic: computer-science
 difficulty: medium

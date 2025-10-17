@@ -1,14 +1,13 @@
 ---
-id: "20251015082238610"
+id: 20251014-205721
 title: "Cicd Pipeline Setup / Настройка CI/CD пайплайна"
 topic: devops-ci-cd
 difficulty: medium
 status: draft
 created: 2025-10-11
 tags: [ci-cd, devops, github-actions, gitlab-ci, automation, difficulty/medium]
-date_updated: 2025-10-13
 moc: moc-devops-ci-cd
-related_questions:   - q-cicd-automated-testing--devops--medium
+related:   - q-cicd-automated-testing--devops--medium
   - q-gradle-build-optimization--build--medium
   - q-app-bundle-optimization--distribution--medium
 subtopics: [ci-cd, devops]

@@ -575,35 +575,9 @@ class ThrottledApiClient(maxConcurrent: Int = 5) {
 
 ### Advanced (Harder)
 - [[q-flow-testing-advanced--kotlin--hard]] - Flow
-### Related (Medium)
-- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Coroutines
-- [[q-deferred-async-patterns--kotlin--medium]] - Coroutines
-- [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
-- [[q-coroutine-builders-comparison--kotlin--medium]] - Coroutines
 
-### Advanced (Harder)
-- [[q-flow-testing-advanced--kotlin--hard]] - Flow
-### Related (Medium)
-- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Coroutines
-- [[q-deferred-async-patterns--kotlin--medium]] - Coroutines
-- [[q-coroutine-context-explained--kotlin--medium]] - Coroutines
-- [[q-coroutine-builders-comparison--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-flow-testing-advanced--kotlin--hard]] - Flow
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
-
-### Related (Medium)
-- [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
-- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
-- [[q-coroutine-context-explained--kotlin--medium]] - CoroutineContext explained
-
-### Advanced (Harder)
-- [[q-coroutine-context-detailed--kotlin--hard]] - Deep dive into CoroutineContext
-- [[q-advanced-coroutine-patterns--kotlin--hard]] - Advanced patterns
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization
 
 ## References
 - [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)

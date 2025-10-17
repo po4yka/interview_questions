@@ -1,5 +1,5 @@
 ---
-id: q-view-composition-strategy-compose--android--medium--1728115560000
+id: 20251012-122711126
 title: "ViewCompositionStrategy in Compose / ViewCompositionStrategy в Compose"
 topic: android
 difficulty: medium
@@ -9,7 +9,6 @@ tags: [compose, viewcompositionstrategy, lifecycle, interop, difficulty/medium, 
 aliases:   - ViewCompositionStrategy in Compose
   - ViewCompositionStrategy в Compose
 category: android
-date_created: 2025-10-05
 date_modified: 2025-10-05
 language_tags: [compose, viewcompositionstrategy, lifecycle, interop, difficulty/medium, android/compose, android/lifecycle, android/performance-memory]
 moc: moc-android

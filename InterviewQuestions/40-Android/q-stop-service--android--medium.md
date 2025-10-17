@@ -1,5 +1,5 @@
 ---
-id: "20251015082237427"
+id: 20251012-122711112
 title: "Stop Service / Остановка Service"
 topic: android
 difficulty: medium

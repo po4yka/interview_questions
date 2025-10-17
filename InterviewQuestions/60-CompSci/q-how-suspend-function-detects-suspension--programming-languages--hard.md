@@ -1,5 +1,5 @@
 ---
-id: "20251015082237169"
+id: 20251012-1227111145
 title: "How Suspend Function Detects Suspension / Как suspend функция определяет приостановку"
 topic: computer-science
 difficulty: hard

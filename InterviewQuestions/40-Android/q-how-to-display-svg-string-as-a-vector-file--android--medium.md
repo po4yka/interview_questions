@@ -1,5 +1,5 @@
 ---
-id: "20251015082237321"
+id: 20251016-162623
 title: "How To Display Svg String As A Vector File / Как отобразить SVG строку как векторный файл"
 topic: android
 difficulty: medium

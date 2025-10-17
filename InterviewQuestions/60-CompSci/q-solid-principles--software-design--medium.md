@@ -1,5 +1,5 @@
 ---
-id: "20251015082237205"
+id: 20251012-1227111181
 title: "Solid Principles / Принципы SOLID"
 topic: architecture-patterns
 difficulty: medium
@@ -15,10 +15,8 @@ tags: - architecture
   - software-design
   - solid
   - srp
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-architecture-patterns
-related_questions: []
+related: []
 subtopics: ["design-principles", "best-practices", "architecture"]
 ---
 # Что такое принципы SOLID?

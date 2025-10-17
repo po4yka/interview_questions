@@ -1,15 +1,13 @@
 ---
-id: "20251015082238612"
+id: 20251012-122760
 title: "Android App Lag Analysis / Анализ тормозов приложения Android"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [performance, performance-rendering, performance-memory, ui, profiling, strictmode, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Why Does Android App Lag? Analysis and Solutions
 

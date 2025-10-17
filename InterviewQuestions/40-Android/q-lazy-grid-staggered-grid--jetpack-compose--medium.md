@@ -6,13 +6,10 @@ difficulty: medium
 status: draft
 created: 2025-10-12
 tags: [jetpack-compose, lazy-layout, grid, performance, android/compose, android/lazy-layout, android/grid, android/performance, android/ui, difficulty/medium]
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-android
-related_questions:   - q-jetpack-compose-lazy-column--android--easy
+related:   - q-jetpack-compose-lazy-column--android--easy
   - q-compose-lazy-layout-optimization--jetpack-compose--hard
   - q-paging-library-3--android--medium
-slug: lazy-grid-staggered-grid-jetpack-compose-medium
 subtopics:   - jetpack-compose
   - lazy-layout
   - grid

@@ -1,5 +1,5 @@
 ---
-id: 20251006-flow-vs-livedata
+id: 20251017-112205
 title: Flow vs LiveData Comparison / Сравнение Flow и LiveData
 topic: kotlin
 difficulty: medium

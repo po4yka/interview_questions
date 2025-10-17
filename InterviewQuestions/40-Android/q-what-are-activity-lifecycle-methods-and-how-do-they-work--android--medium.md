@@ -1,5 +1,5 @@
 ---
-id: "20251015082237529"
+id: 20251012-122711134
 title: "What Are Activity Lifecycle Methods And How Do They Work / What Are Activity Lifecycle Methods и How Do They Work"
 topic: android
 difficulty: medium

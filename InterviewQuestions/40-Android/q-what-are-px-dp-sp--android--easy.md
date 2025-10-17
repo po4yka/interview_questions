@@ -1,5 +1,5 @@
 ---
-id: "20251015082237435"
+id: 20251012-122711138
 title: "What Are Px Dp Sp / Что такое px dp и sp"
 topic: android
 difficulty: medium

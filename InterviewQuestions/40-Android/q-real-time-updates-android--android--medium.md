@@ -1,5 +1,5 @@
 ---
-id: "20251015082237509"
+id: 20251012-12271177
 title: "Real Time Updates Android / Обновления в реальном времени Android"
 topic: android
 difficulty: medium

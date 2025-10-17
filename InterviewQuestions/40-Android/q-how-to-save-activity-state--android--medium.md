@@ -1,5 +1,5 @@
 ---
-id: "20251015082238628"
+id: 20251012-1227195
 title: "How To Save Activity State / Как сохранить состояние Activity"
 topic: android
 difficulty: medium

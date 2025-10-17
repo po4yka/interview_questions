@@ -1,5 +1,5 @@
 ---
-id: "20251015082237532"
+id: 20251012-12271172
 title: "Privacy Sandbox Topics Api"
 topic: android
 difficulty: medium

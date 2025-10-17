@@ -1,5 +1,5 @@
 ---
-id: "20251015082237407"
+id: 20251012-1227186
 title: "How To Implement View Behavior When It Is Added To The Tree / Как реализовать поведение View при добавлении в дерево"
 topic: android
 difficulty: easy

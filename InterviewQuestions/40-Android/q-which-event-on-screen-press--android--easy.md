@@ -1,5 +1,5 @@
 ---
-id: "20251015082237419"
+id: 20251016-163920
 title: "Which Event On Screen Press / Какое событие при нажатии на экран"
 topic: android
 difficulty: easy

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237377"
+id: 20251017-112139
 title: "Data Encryption At Rest / Шифрование данных в покое"
 topic: security
 difficulty: medium

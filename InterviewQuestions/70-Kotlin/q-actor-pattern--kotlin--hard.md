@@ -1,11 +1,16 @@
 ---
-id: 20251012-012
+id: 20251012-150452
 title: "Actor Pattern with Coroutines / Паттерн Actor с корутинами"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, actor, concurrency, channels, state-management, message-passing]
+subtopics:
+  - coroutines
+  - actor
+  - concurrency
+  - channels
+  - state-management
 question_kind: theory
 difficulty: hard
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, coroutines, actor, concurrency, channels, message-passing, state-encapsulation, difficulty/hard]
 ---
-
 # Question (EN)
 > What is the Actor pattern in Kotlin coroutines? Explain message passing with channels, state encapsulation, and provide real-world examples of actors.
 

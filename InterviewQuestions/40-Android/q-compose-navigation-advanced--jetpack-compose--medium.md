@@ -1,5 +1,5 @@
 ---
-id: "20251015082237353"
+id: 20251012-1227106
 title: "Compose Navigation Advanced / Продвинутая навигация Compose"
 topic: jetpack-compose
 difficulty: medium

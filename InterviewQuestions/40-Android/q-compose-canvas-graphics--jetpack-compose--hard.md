@@ -6,13 +6,10 @@ difficulty: hard
 status: draft
 created: 2025-10-12
 tags: [jetpack-compose, canvas, graphics, custom-drawing, android/compose, android/canvas, android/graphics, android/custom-drawing, android/animation, difficulty/hard]
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-android
-related_questions:   - q-compose-performance-optimization--android--hard
+related:   - q-compose-performance-optimization--android--hard
   - q-compose-custom-layout--jetpack-compose--hard
   - q-compose-custom-animations--jetpack-compose--medium
-slug: compose-canvas-graphics-jetpack-compose-hard
 subtopics:   - jetpack-compose
   - canvas
   - graphics
@@ -908,6 +905,114 @@ fun OptimizedComplexDrawing(data: List<Float>) {
 Jetpack Compose предоставляет мощные Canvas API для кастомного рисования и графики. Понимание работы Canvas, DrawScope и graphicsLayer критично для создания кастомных UI компонентов, графиков, игр и сложных анимаций.
 
 **Вопрос:** Как работает Canvas в Jetpack Compose? Что такое DrawScope? Как рисовать фигуры, пути, текст и изображения? Какие есть соображения производительности?
+
+### Подробный ответ (RU)
+
+Canvas в Jetpack Compose предоставляет мощные возможности для кастомного рисования и графики. Понимание работы Canvas, DrawScope и graphicsLayer критично для создания пользовательских UI компонентов, графиков, игр и сложных анимаций.
+
+#### Основы Canvas
+
+**Canvas** - это composable-функция, предоставляющая DrawScope для кастомного рисования. DrawScope содержит функции рисования, а координаты начинаются с (0,0) в верхнем левом углу. Все размеры указываются в пикселях, поэтому значения в dp необходимо конвертировать через `.toPx()`.
+
+**DrawScope** предоставляет функции для:
+- **Фигур**: `drawCircle()`, `drawRect()`, `drawRoundRect()`, `drawOval()`, `drawArc()`
+- **Линий**: `drawLine()` с параметрами strokeWidth
+- **Путей**: `drawPath()` для сложных форм
+- **Текста**: `drawText()` с TextMeasurer
+- **Изображений**: `drawImage()` с ImageBitmap
+
+#### Рисование путей (Paths)
+
+**Path** позволяет создавать сложные фигуры:
+- `moveTo()` - переместить в точку без рисования
+- `lineTo()` - нарисовать линию к точке
+- `quadraticBezierTo()` - квадратичная кривая Безье
+- `cubicBezierTo()` - кубическая кривая Безье
+- `addOval()`, `addRoundRect()` - добавить готовые фигуры
+- `close()` - замкнуть путь
+
+Пути можно рисовать с заливкой (`Fill`) или обводкой (`Stroke`).
+
+#### Градиенты и Brushes
+
+Compose поддерживает три типа градиентов:
+- **linearGradient** - линейный градиент между двумя точками
+- **radialGradient** - радиальный градиент из центральной точки
+- **sweepGradient** - угловой градиент (как цветовое колесо)
+
+Brush можно использовать вместо сплошного цвета в любой функции рисования.
+
+#### Blend Modes
+
+BlendModes контролируют, как слои композируются друг с другом. Доступны режимы:
+- `Multiply` - умножение цветов
+- `Screen` - осветление
+- `Overlay` - комбинация multiply и screen
+- `Xor` - исключающее ИЛИ
+- `Plus` - сложение цветов
+- И многие другие...
+
+#### Трансформации
+
+`withTransform()` позволяет применять трансформации к области рисования:
+- `translate()` - сдвиг координат
+- `rotate()` - поворот вокруг pivot point
+- `scale()` - масштабирование по осям X и Y
+
+Трансформации можно комбинировать для создания сложных эффектов.
+
+#### Clipping (Обрезка)
+
+Clipping ограничивает область рисования:
+- `clipRect()` - обрезать до прямоугольника
+- `clipPath()` - обрезать по пути
+- Всё, что нарисовано вне области, не отображается
+
+#### GraphicsLayer для производительности
+
+`graphicsLayer` modifier обеспечивает аппаратное ускорение для трансформаций:
+- Не вызывает recomposition при изменении параметров
+- Поддерживает rotationX, rotationY, rotationZ
+- Поддерживает scaleX, scaleY
+- Поддерживает translationX, translationY
+- Поддерживает alpha (прозрачность)
+- Поддерживает shadow elevation
+
+**graphicsLayer vs drawWithContent:**
+- **graphicsLayer**: Аппаратное ускорение, лучше для трансформаций
+- **drawWithContent**: Доступ к Canvas, лучше для кастомного рисования
+
+#### Реальные примеры
+
+**Circular Progress Bar**: Использует `drawArc()` для фона и прогресса с разными sweepAngle.
+
+**Line Chart**: Создаёт Path через точки данных, рисует линию и заливку под ней с gradientом.
+
+**Custom Shapes**: Комбинирует Path операции для создания сложных фигур с границами.
+
+#### Оптимизация производительности
+
+1. **Кэшировать статические пути** с `remember`:
+   ```kotlin
+   val path = remember { Path().apply { /* build path */ } }
+   ```
+
+2. **Использовать drawBehind вместо Canvas** для простых случаев:
+   - `drawBehind` - модификатор, более эффективен
+   - `Canvas` - отдельный composable, для сложной логики
+
+3. **Кэшировать сложные вычисления**:
+   ```kotlin
+   val data = remember(input) { expensiveCalculation(input) }
+   ```
+
+4. **Отложить чтение state до draw phase**:
+   ```kotlin
+   Modifier.drawWithContent {
+       val offset = animatedOffset.value  // Read here, not in composition
+       translate(offset) { drawContent() }
+   }
+   ```
 
 ### Ключевые выводы
 

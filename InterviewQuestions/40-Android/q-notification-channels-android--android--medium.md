@@ -1,5 +1,5 @@
 ---
-id: q-notification-channels-android--android--medium--1728115260000
+id: 20251012-12271154
 title: "Notification Channels / Каналы уведомлений"
 topic: android
 difficulty: medium
@@ -9,7 +9,6 @@ tags: [notifications, notification-channels, android8, importance, difficulty/me
 aliases:   - Notification Channels
   - Каналы уведомлений
 category: android
-date_created: 2025-10-05
 date_modified: 2025-10-05
 language_tags: [notifications, notification-channels, android8, importance, difficulty/medium, android/ui-widgets]
 moc: moc-android

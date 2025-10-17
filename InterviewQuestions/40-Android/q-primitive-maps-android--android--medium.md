@@ -1,5 +1,5 @@
 ---
-id: "20251015082237502"
+id: 20251016-123513
 title: "Primitive Maps Android / Примитивные Map в Android"
 topic: android
 difficulty: medium

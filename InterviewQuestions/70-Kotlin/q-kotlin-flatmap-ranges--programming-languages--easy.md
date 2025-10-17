@@ -1,5 +1,5 @@
 ---
-id: "20251015082237133"
+id: 20251012-12271111131
 title: "Kotlin Flatmap Ranges / flatMap и диапазоны в Kotlin"
 topic: computer-science
 difficulty: easy

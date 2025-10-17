@@ -1,5 +1,5 @@
 ---
-id: "20251015082237228"
+id: 20251012-1227111189
 title: "What Is Coroutinescope / Что такое CoroutineScope"
 topic: computer-science
 difficulty: medium

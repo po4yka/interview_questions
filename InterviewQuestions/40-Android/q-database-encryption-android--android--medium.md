@@ -1,5 +1,5 @@
 ---
-id: "20251015082238621"
+id: 20251012-1227127
 title: "Database Encryption Android / Шифрование базы данных Android"
 topic: android
 difficulty: medium

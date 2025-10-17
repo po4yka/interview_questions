@@ -1,5 +1,5 @@
 ---
-id: "20251015082237253"
+id: 20251012-122711141
 title: "What Are The Most Important Components Of Compose / Какие самые важные компоненты Compose"
 topic: android
 difficulty: medium

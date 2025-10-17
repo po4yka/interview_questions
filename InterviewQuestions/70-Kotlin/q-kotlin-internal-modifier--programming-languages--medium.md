@@ -1,5 +1,5 @@
 ---
-id: "20251015082237119"
+id: 20251012-12271111135
 title: "Kotlin Internal Modifier / Модификатор internal в Kotlin"
 topic: computer-science
 difficulty: medium

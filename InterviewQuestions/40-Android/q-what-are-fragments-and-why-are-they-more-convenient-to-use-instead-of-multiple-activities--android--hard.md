@@ -1,5 +1,5 @@
 ---
-id: "20251015082238603"
+id: 20251012-122711135
 title: "What Are Fragments And Why Are They More Convenient To Use Instead Of Multiple Activities / What Are Fragments и Why Are They More Convenient To Use Instead Of Multiple Activities"
 topic: android
 difficulty: hard

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237461"
+id: 20251012-1227146
 title: "Graphql Apollo Android"
 topic: networking
 difficulty: medium

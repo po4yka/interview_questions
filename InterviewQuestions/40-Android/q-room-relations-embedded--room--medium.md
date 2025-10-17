@@ -1,5 +1,5 @@
 ---
-id: "20251015082237593"
+id: 20251012-12271190
 title: "Room Relations Embedded / Relations и Embedded в Room"
 topic: room
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237391"
+id: 20251012-12271131
 title: "Looper Thread Connection / Связь Looper и потока"
 topic: android
 difficulty: medium

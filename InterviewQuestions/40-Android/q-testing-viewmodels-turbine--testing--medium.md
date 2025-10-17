@@ -1,5 +1,5 @@
 ---
-id: "20251015082237258"
+id: 20251012-122711119
 title: "Testing Viewmodels Turbine / Тестирование Viewmodels Turbine"
 topic: android
 difficulty: medium

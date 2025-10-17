@@ -1,5 +1,5 @@
 ---
-id: "20251015082237571"
+id: 20251012-122711189
 title: "Which Layout For Large List / Какой layout для большого списка"
 topic: android
 difficulty: easy

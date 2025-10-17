@@ -10,8 +10,13 @@
 
 ```dataviewjs
 // Comprehensive link health analysis
-const folders = ['"40-Android"', '"70-Kotlin"', '"60-CompSci"', '"20-Algorithms"', '"50-Backend"', '"80-Tools"', '"90-MOCs"'];
-const files = dv.pages(folders.join(' or ')).where(p => p.file.path.endsWith('.md'));
+const TOPIC_FOLDERS = ["20-Algorithms", "30-System-Design", "40-Android", "50-Backend", "60-CompSci", "70-Kotlin", "80-Tools"];
+const AUXILIARY_FOLDERS = ["10-Concepts", "90-MOCs"];
+const SCAN_FOLDERS = [...TOPIC_FOLDERS, ...AUXILIARY_FOLDERS];
+const folderQuery = SCAN_FOLDERS.map(folder => `"${folder}"`).join(" or ");
+
+const files = dv.pages(folderQuery)
+    .where(p => p.file.ext === "md");
 
 let stats = {
     totalFiles: 0,
@@ -26,7 +31,10 @@ let brokenLinkDetails = [];
 const filesWithLinks = new Set();
 
 for (let file of files) {
-    stats.totalFiles++;
+    const isQuestion = file.file.name.startsWith('q-');
+    if (isQuestion) {
+        stats.totalFiles++;
+    }
     const content = await dv.io.load(file.file.path);
     if (!content) continue;
 
@@ -62,13 +70,14 @@ for (let file of files) {
     }
 
     // Check for Related Questions section
-    if (!content.includes('## Related Questions') && file.file.path.includes('q-')) {
+    if (isQuestion && !content.includes('## Related Questions')) {
         stats.filesWithoutRelated++;
     }
 }
 
 // Calculate orphans
 for (let file of files) {
+    if (!file.file.name.startsWith('q-')) continue;
     if (!filesWithLinks.has(file.file.name) && !filesWithLinks.has(file.file.name.replace('.md', ''))) {
         stats.orphanFiles++;
     }
@@ -111,8 +120,13 @@ dv.table(
 ##  Broken Links Detail
 
 ```dataviewjs
-const folders = ['"40-Android"', '"70-Kotlin"', '"60-CompSci"', '"20-Algorithms"', '"50-Backend"', '"80-Tools"', '"90-MOCs"'];
-const files = dv.pages(folders.join(' or ')).where(p => p.file.path.endsWith('.md'));
+const TOPIC_FOLDERS = ["20-Algorithms", "30-System-Design", "40-Android", "50-Backend", "60-CompSci", "70-Kotlin", "80-Tools"];
+const AUXILIARY_FOLDERS = ["10-Concepts", "90-MOCs"];
+const SCAN_FOLDERS = [...TOPIC_FOLDERS, ...AUXILIARY_FOLDERS];
+const folderQuery = SCAN_FOLDERS.map(folder => `"${folder}"`).join(" or ");
+
+const files = dv.pages(folderQuery)
+    .where(p => p.file.ext === "md");
 
 let brokenLinks = [];
 
@@ -198,13 +212,19 @@ if (brokenLinks.length > 0) {
 
 ```dataviewjs
 // Find files with no incoming links
-const allFiles = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci" or "20-Algorithms" or "50-Backend" or "80-Tools"')
-    .where(p => p.file.path.endsWith('.md'));
+const TOPIC_FOLDERS = ["20-Algorithms", "30-System-Design", "40-Android", "50-Backend", "60-CompSci", "70-Kotlin", "80-Tools"];
+const AUXILIARY_FOLDERS = ["10-Concepts", "90-MOCs"];
+const SCAN_FOLDERS = [...TOPIC_FOLDERS, ...AUXILIARY_FOLDERS];
+const folderQuery = SCAN_FOLDERS.map(folder => `"${folder}"`).join(" or ");
+
+const scopedFiles = dv.pages(folderQuery)
+    .where(p => p.file.ext === "md");
+const questionFiles = scopedFiles.where(p => p.file.name.startsWith('q-'));
 
 const filesWithLinks = new Set();
 
 // Scan all files for outgoing links
-for (let file of allFiles) {
+for (let file of scopedFiles) {
     const content = await dv.io.load(file.file.path);
     if (!content) continue;
 
@@ -219,7 +239,7 @@ for (let file of allFiles) {
 }
 
 // Find orphans
-const orphans = allFiles
+const orphans = questionFiles
     .where(f => !filesWithLinks.has(f.file.name) && !filesWithLinks.has(f.file.name.replace('.md', '')))
     .sort(f => f.file.name, 'asc');
 
@@ -271,8 +291,10 @@ These files exist but aren't discoverable through navigation.
 
 ```dataviewjs
 // Find questions that should link to each other based on shared subtopics
-const qFiles = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci"')
-    .where(p => p.file.path.includes('q-') && p.subtopics);
+const TOPIC_FOLDERS = ["20-Algorithms", "30-System-Design", "40-Android", "50-Backend", "60-CompSci", "70-Kotlin", "80-Tools"];
+const folderQuery = TOPIC_FOLDERS.map(folder => `"${folder}"`).join(" or ");
+const qFiles = dv.pages(folderQuery)
+    .where(p => p.file.name.startsWith('q-') && p.subtopics);
 
 let suggestions = [];
 
@@ -336,8 +358,10 @@ if (suggestions.length > 0) {
 
 ```dataviewjs
 // Check for common structural issues
-const files = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci"')
-    .where(p => p.file.path.includes('q-'));
+const TOPIC_FOLDERS = ["20-Algorithms", "30-System-Design", "40-Android", "50-Backend", "60-CompSci", "70-Kotlin", "80-Tools"];
+const folderQuery = TOPIC_FOLDERS.map(folder => `"${folder}"`).join(" or ");
+const files = dv.pages(folderQuery)
+    .where(p => p.file.name.startsWith('q-'));
 
 let issues = {
     missingRelated: [],

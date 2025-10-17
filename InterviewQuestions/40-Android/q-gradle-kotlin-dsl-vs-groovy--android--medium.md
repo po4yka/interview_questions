@@ -1,5 +1,5 @@
 ---
-id: 20251006-018
+id: 20251012-1227145
 title: "Gradle Kotlin DSL vs Groovy"
 aliases: []
 
@@ -234,20 +234,6 @@ android {
 
 ## Related Questions
 
-### Related (Medium)
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
-- [[q-proguard-r8--android--medium]] - Build Tools
-- [[q-annotation-processing--android--medium]] - Annotation Processing
-
-### Advanced (Harder)
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-### Related (Medium)
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
-- [[q-proguard-r8--android--medium]] - Build Tools
-- [[q-annotation-processing--android--medium]] - Annotation Processing
-
-### Advanced (Harder)
-- [[q-multi-module-best-practices--android--hard]] - Architecture
 ### Related (Medium)
 - [[q-build-optimization-gradle--gradle--medium]] - Gradle
 - [[q-proguard-r8--android--medium]] - Build Tools

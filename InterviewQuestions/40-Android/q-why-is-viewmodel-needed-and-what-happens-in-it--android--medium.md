@@ -1,5 +1,5 @@
 ---
-id: "20251015082237499"
+id: 20251012-122711195
 title: "Why Is Viewmodel Needed And What Happens In It / Why Is Viewmodel Needed и What Happens In It"
 topic: android
 difficulty: medium

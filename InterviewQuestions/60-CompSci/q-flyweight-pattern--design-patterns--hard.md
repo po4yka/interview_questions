@@ -1,5 +1,5 @@
 ---
-id: "20251015082237235"
+id: 20251012-1227111139
 title: "Flyweight Pattern / Flyweight Паттерн"
 topic: computer-science
 difficulty: hard

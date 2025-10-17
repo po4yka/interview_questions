@@ -1,5 +1,5 @@
 ---
-id: "20251015082237464"
+id: 20251012-122770
 title: "Android Runtime Art"
 topic: android
 difficulty: medium

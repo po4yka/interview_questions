@@ -1,5 +1,5 @@
 ---
-id: "20251015082237332"
+id: 20251015-094712
 title: "View Binding / Привязка View"
 topic: android
 difficulty: medium

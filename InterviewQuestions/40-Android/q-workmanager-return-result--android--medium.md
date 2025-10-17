@@ -1,5 +1,5 @@
 ---
-id: "20251015082238629"
+id: 20251012-1227111107
 title: "Workmanager Return Result / Возврат результата WorkManager"
 topic: android
 difficulty: medium

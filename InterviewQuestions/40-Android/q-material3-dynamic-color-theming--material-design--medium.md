@@ -1,5 +1,5 @@
 ---
-id: "20251015082237403"
+id: 20251012-12271134
 title: "Material3 Dynamic Color Theming / Динамические цвета Material3"
 topic: android
 difficulty: medium

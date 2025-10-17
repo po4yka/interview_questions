@@ -1,5 +1,5 @@
 ---
-id: q-fileprovider-secure-sharing--android--medium--1728115200000
+id: 20251012-1227137
 title: "FileProvider for Secure File Sharing / FileProvider для безопасного обмена файлами"
 topic: android
 difficulty: medium
@@ -9,7 +9,6 @@ tags: [fileprovider, content-provider, file-sharing, security, difficulty/medium
 aliases:   - FileProvider for Secure File Sharing
   - FileProvider для безопасного обмена файлами
 category: android
-date_created: 2025-10-05
 date_modified: 2025-10-05
 language_tags: [fileprovider, content-provider, file-sharing, security, difficulty/medium, android/provider, android/permissions, android/files-media]
 moc: moc-android

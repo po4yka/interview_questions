@@ -1,5 +1,5 @@
 ---
-id: "20251015082238604"
+id: 20251012-1227107
 title: "Compose Remember Derived State / Remember и Derived State в Compose"
 topic: jetpack-compose
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082236012"
+id: 20251012-154371
 title: "Kotlin Coroutines Overview / Обзор корутин Kotlin"
 topic: kotlin
 difficulty: medium

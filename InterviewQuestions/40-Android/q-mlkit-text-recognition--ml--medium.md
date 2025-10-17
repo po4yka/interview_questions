@@ -1,5 +1,5 @@
 ---
-id: "20251015082237496"
+id: 20251012-12271141
 title: "Mlkit Text Recognition / Распознавание текста ML Kit"
 topic: android
 difficulty: medium

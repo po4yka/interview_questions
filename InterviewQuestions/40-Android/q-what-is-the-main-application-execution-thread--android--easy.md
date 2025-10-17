@@ -1,5 +1,5 @@
 ---
-id: "20251015082237364"
+id: 20251012-122711167
 title: "What Is The Main Application Execution Thread / Что такое главный поток выполнения приложения"
 topic: android
 difficulty: easy

@@ -1,5 +1,5 @@
 ---
-id: 20251006-010
+id: 20251012-12271180
 title: "remember vs rememberSaveable in Compose"
 aliases: []
 
@@ -200,22 +200,6 @@ fun Counter() {
 
 ## Related Questions
 
-### Related (Medium)
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
-- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
-- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
-- [[q-compose-semantics--android--medium]] - Jetpack Compose
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Related (Medium)
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
-- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
-- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
-- [[q-compose-semantics--android--medium]] - Jetpack Compose
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
 ### Related (Medium)
 - [[q-recomposition-compose--android--medium]] - Jetpack Compose
 - [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose

@@ -1,5 +1,5 @@
 ---
-id: 20251006-005
+id: 20251016-162035
 title: "Debounce vs Throttle in Flow"
 aliases: []
 
@@ -796,17 +796,7 @@ fun `throttle should emit first value and ignore subsequent`() = runTest {
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 - [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
 - [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
+
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
-### Related (Medium)
-- [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
-- [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
-
-### Advanced (Harder)
-- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies

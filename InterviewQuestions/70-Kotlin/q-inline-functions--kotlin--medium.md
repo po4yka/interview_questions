@@ -1,5 +1,5 @@
 ---
-id: "20251015082237052"
+id: 20251012-154364
 title: "Inline Functions"
 topic: kotlin
 difficulty: medium

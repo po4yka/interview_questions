@@ -1,5 +1,5 @@
 ---
-id: "20251015082237347"
+id: 20251012-122711186
 title: "Which Class To Use For Detecting Gestures / Какой класс использовать для обнаружения жестов"
 topic: android
 difficulty: medium

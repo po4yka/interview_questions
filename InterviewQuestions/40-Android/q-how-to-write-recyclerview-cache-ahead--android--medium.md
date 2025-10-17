@@ -1,5 +1,5 @@
 ---
-id: "20251015082237493"
+id: 20251012-12271100
 title: "How To Write Recyclerview Cache Ahead / Как написать RecyclerView с кешированием вперед"
 topic: android
 difficulty: medium

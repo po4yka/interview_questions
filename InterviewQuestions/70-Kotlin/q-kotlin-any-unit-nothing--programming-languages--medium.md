@@ -1,5 +1,5 @@
 ---
-id: "20251015082237137"
+id: 20251012-12271111112
 title: "Kotlin Any Unit Nothing / Any Unit и Nothing в Kotlin"
 topic: computer-science
 difficulty: medium

@@ -1,15 +1,13 @@
 ---
-id: "20251015082237594"
+id: 20251012-122711133
 title: "Websocket Implementation / Websocket Реализация"
 topic: networking
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [websocket, okhttp, real-time, resilience, reconnection, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-networking
-related_questions: []
+related: []
 ---
 # WebSocket Implementation / Реализация WebSocket
 

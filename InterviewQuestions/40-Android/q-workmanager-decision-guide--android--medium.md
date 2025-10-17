@@ -1,5 +1,5 @@
 ---
-id: "20251015082237329"
+id: 20251017-144931
 title: "Workmanager Decision Guide / Руководство по выбору WorkManager"
 topic: android
 difficulty: medium

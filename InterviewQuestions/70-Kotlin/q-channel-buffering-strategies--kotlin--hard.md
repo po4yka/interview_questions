@@ -1,11 +1,16 @@
 ---
-id: 20251012-016
+id: 20251012-151628
 title: "Channel Buffering Strategies / Стратегии буферизации каналов"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, channels, buffering, rendezvous, conflated, unlimited]
+subtopics:
+  - coroutines
+  - channels
+  - buffering
+  - rendezvous
+  - conflated
 question_kind: theory
 difficulty: hard
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, coroutines, channels, buffering, rendezvous, conflated, unlimited, performance, difficulty/hard]
 ---
-
 # Question (EN)
 > What are channel buffering strategies in Kotlin? Explain RENDEZVOUS, BUFFERED, UNLIMITED, and CONFLATED channels and when to use each.
 

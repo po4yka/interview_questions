@@ -1,5 +1,5 @@
 ---
-id: "20251015082237431"
+id: 20251012-12271144
 title: "Multiple Manifests Multimodule / Множественные манифесты в мультимодульных проектах"
 topic: android
 difficulty: medium

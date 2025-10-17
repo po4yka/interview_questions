@@ -1,15 +1,13 @@
 ---
-id: "20251015082238623"
+id: 20251012-122711116
 title: "Test Coverage Quality Metrics / Метрики покрытия и качества тестов"
 topic: testing
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [coverage, jacoco, metrics, quality, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-testing
-related_questions: []
+related: []
 ---
 # Test Coverage and Quality Metrics
 

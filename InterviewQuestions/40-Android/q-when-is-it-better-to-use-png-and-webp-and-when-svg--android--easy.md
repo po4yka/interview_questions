@@ -1,5 +1,5 @@
 ---
-id: "20251015082237406"
+id: 20251016-161632
 title: "When Is It Better To Use Png And Webp And When Svg / When Is It Better To Use Png и Webp и When Svg"
 topic: android
 difficulty: easy

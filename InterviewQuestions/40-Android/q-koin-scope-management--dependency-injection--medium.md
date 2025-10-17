@@ -1,5 +1,5 @@
 ---
-id: "20251015082237438"
+id: 20251012-12271124
 title: "Koin Scope Management / Koin Scope Управление"
 topic: dependency-injection
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237440"
+id: 20251012-122764
 title: "Android Components Besides Activity / Компоненты Android кроме Activity"
 topic: android
 difficulty: easy

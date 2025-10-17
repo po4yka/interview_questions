@@ -1,5 +1,5 @@
 ---
-id: 202510051234005
+id: 20251012-1227144
 title: "Gradle Build System / Система сборки Gradle"
 topic: android
 status: draft

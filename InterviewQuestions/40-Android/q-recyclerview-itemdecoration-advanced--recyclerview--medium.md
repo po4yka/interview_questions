@@ -1,15 +1,13 @@
 ---
-id: "20251015082237515"
+id: 20251017-114440
 title: "Recyclerview Itemdecoration Advanced / Продвинутый ItemDecoration для RecyclerView"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [itemdecoration, custom-drawing, ui, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions:   - q-recyclerview-sethasfixedsize--android--easy
+related:   - q-recyclerview-sethasfixedsize--android--easy
   - q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
   - q-rxjava-pagination-recyclerview--android--medium
   - q-how-to-create-list-like-recyclerview-in-compose--android--medium

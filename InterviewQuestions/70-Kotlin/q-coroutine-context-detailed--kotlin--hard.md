@@ -1,5 +1,5 @@
 ---
-id: 20251006-008
+id: 20251012-142409
 title: "CoroutineContext explained in detail / CoroutineContext детально"
 aliases: []
 

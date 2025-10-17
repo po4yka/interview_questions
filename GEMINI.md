@@ -211,8 +211,8 @@ When working with existing content, use these query patterns:
 ```dataview
 # Find all questions by topic and difficulty
 TABLE difficulty, status, updated
-FROM "Algorithms"
-WHERE topic = "algorithms"
+FROM ""
+WHERE topic = "algorithms" AND startswith(file.name, "q-")
 SORT difficulty ASC, updated DESC
 
 # Find questions needing review

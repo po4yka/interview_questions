@@ -1,5 +1,5 @@
 ---
-id: "20251015082237492"
+id: 20251012-12271168
 title: "Presenter Notify View / Presenter уведомляет View"
 topic: android
 difficulty: medium

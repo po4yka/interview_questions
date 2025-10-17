@@ -1,5 +1,5 @@
 ---
-id: "20251015082237428"
+id: 20251017-150243
 title: "Migration To Compose / Миграция на Compose"
 topic: android
 difficulty: medium

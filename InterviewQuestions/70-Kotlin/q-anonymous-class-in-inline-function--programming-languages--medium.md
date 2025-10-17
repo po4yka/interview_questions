@@ -1,5 +1,5 @@
 ---
-id: anonymous-class-inline-function
+id: 20251012-1227111196
 title: Anonymous Class in Inline Function / Анонимный класс в inline функции
 aliases: []
 

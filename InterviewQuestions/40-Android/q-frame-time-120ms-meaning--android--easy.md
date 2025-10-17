@@ -1,15 +1,13 @@
 ---
-id: "20251015082237533"
+id: 20251012-1227143
 title: "Frame Time 120ms Meaning / Значение времени кадра 120мс"
 topic: android
 difficulty: easy
 status: draft
 created: 2025-10-13
 tags: [android/performance, fps, frame-rate, performance, rendering, ui-performance, difficulty/easy]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Если профайлер показывает тебе что какой-нибудь фрейм занял 120 миллисекунд, что это значит?
 

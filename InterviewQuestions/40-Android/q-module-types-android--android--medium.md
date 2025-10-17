@@ -1,15 +1,13 @@
 ---
-id: "20251015082238657"
+id: 20251012-12271143
 title: "Module Types Android / Типы модулей Android"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [modules, app-module, library-module, feature-module, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Types of Android Modules / Типы модулей Android
 

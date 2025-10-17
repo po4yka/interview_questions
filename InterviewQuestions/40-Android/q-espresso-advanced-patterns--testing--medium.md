@@ -1,5 +1,5 @@
 ---
-id: "20251015082237569"
+id: 20251012-1227133
 title: "Espresso Advanced Patterns / Espresso Advanced Паттерны"
 topic: testing
 difficulty: medium

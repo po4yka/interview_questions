@@ -1,5 +1,5 @@
 ---
-id: "20251015082236045"
+id: 20251012-154343
 title: "Callsuper Annotation / Аннотация CallSuper"
 topic: kotlin
 difficulty: medium

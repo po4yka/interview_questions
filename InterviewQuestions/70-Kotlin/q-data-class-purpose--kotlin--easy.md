@@ -1,5 +1,5 @@
 ---
-id: "20251015082237072"
+id: 20251012-154349
 title: "Data Class Purpose / Назначение data class"
 topic: kotlin
 difficulty: easy

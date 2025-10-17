@@ -1,5 +1,5 @@
 ---
-id: "20251015082237439"
+id: 20251012-1227138
 title: "Fix Slow App Startup Legacy / Исправление медленного запуска приложения"
 topic: android
 difficulty: hard

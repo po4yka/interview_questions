@@ -1,5 +1,5 @@
 ---
-id: 20251006-014
+id: 20251017-114546
 title: "Multi-module Architecture Best Practices / Лучшие практики мульти-модульной архитектуры"
 aliases: []
 
@@ -441,22 +441,13 @@ feature:   feature:   feature:
 
 ## Related Questions
 
+### Related (Hard)
+- [[q-design-uber-app--android--hard]] - Location
+- [[q-design-whatsapp-app--android--hard]] - Messaging
+- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-modularization-patterns--android--hard]] - Architecture
+
 ### Prerequisites (Easier)
 - [[q-build-optimization-gradle--gradle--medium]] - Gradle
 - [[q-usecase-pattern-android--android--medium]] - Architecture
 - [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Gradle
-### Related (Hard)
-- [[q-design-uber-app--android--hard]] - Location
-- [[q-design-whatsapp-app--android--hard]] - Messaging
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-modularization-patterns--android--hard]] - Architecture
-### Related (Hard)
-- [[q-design-uber-app--android--hard]] - Location
-- [[q-design-whatsapp-app--android--hard]] - Messaging
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-modularization-patterns--android--hard]] - Architecture
-### Related (Hard)
-- [[q-design-uber-app--android--hard]] - Location
-- [[q-design-whatsapp-app--android--hard]] - Messaging
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-modularization-patterns--android--hard]] - Architecture

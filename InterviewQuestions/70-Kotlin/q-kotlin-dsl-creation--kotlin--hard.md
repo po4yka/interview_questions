@@ -1,5 +1,5 @@
 ---
-id: "20251015082236042"
+id: 20251012-154372
 title: "Kotlin Dsl Creation / Создание DSL в Kotlin"
 topic: kotlin
 difficulty: hard

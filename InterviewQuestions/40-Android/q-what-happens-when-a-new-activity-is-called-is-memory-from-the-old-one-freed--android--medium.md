@@ -1,5 +1,5 @@
 ---
-id: "20251015082237294"
+id: 20251012-122711154
 title: "What Happens When A New Activity Is Called Is Memory From The Old One Freed / Что происходит когда вызывается новая Activity освобождается ли память от старой"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082238624"
+id: 20251012-122711183
 title: "Where Is Composition Created For Calling Composable Function / Где создается Composition для вызова Composable функции"
 topic: android
 difficulty: medium

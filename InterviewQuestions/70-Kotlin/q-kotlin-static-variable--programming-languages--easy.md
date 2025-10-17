@@ -1,5 +1,5 @@
 ---
-id: "20251015082237232"
+id: 20251016-163945
 title: "Kotlin Static Variable / Статические переменные в Kotlin"
 topic: computer-science
 difficulty: easy

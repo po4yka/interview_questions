@@ -1,5 +1,5 @@
 ---
-id: "20251015082237304"
+id: 20251012-12271110
 title: "Is Fragment Lifecycle Connected To Activity Or Independent / Связан ли жизненный цикл Fragment с Activity или независим"
 topic: android
 difficulty: medium

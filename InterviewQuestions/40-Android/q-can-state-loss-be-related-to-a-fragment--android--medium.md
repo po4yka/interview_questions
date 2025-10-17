@@ -1,5 +1,5 @@
 ---
-id: "20251015082237322"
+id: 20251012-122791
 title: "Can State Loss Be Related To A Fragment / Может ли потеря состояния быть связана с Fragment"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237066"
+id: 20251012-154347
 title: "Coroutinescope Vs Supervisorscope / Coroutinescope против Supervisorscope"
 topic: kotlin
 difficulty: medium

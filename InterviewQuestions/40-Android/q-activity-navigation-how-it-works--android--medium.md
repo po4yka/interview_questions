@@ -1,5 +1,5 @@
 ---
-id: "20251015082237583"
+id: 20251012-122757
 title: "Activity Navigation How It Works / Как работает навигация Activity"
 topic: android
 difficulty: medium

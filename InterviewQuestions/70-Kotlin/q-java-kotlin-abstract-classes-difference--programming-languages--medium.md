@@ -1,5 +1,5 @@
 ---
-id: "20251015082237083"
+id: 20251012-12271111108
 title: "Java Kotlin Abstract Classes Difference"
 topic: computer-science
 difficulty: medium

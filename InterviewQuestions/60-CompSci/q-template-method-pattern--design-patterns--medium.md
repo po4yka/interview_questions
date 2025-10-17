@@ -1,5 +1,5 @@
 ---
-id: "20251015082237075"
+id: 20251012-1227111186
 title: "Template Method Pattern / Template Method Паттерн"
 topic: computer-science
 difficulty: medium

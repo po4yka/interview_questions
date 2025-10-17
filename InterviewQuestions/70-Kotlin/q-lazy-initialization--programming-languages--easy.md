@@ -1,5 +1,5 @@
 ---
-id: "20251015082237051"
+id: 20251012-154378
 title: "Lazy Initialization / Ленивая инициализация"
 topic: kotlin
 difficulty: easy

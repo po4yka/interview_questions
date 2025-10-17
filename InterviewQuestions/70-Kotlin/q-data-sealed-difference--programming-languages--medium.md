@@ -1,5 +1,5 @@
 ---
-id: "20251015082237058"
+id: 20251012-154354
 title: "Data Sealed Difference / Разница data и sealed"
 topic: kotlin
 difficulty: medium

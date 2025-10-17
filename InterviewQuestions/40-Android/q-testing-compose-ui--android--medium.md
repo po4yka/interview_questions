@@ -1,5 +1,5 @@
 ---
-id: "20251015082237417"
+id: 20251017-150241
 title: "Testing Compose Ui / Тестирование Compose Ui"
 topic: android
 difficulty: medium

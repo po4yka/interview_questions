@@ -1,5 +1,5 @@
 ---
-id: "20251015082237582"
+id: 20251012-122711188
 title: "Which Event Is Triggered When User Presses Screen / Какое событие срабатывает когда пользователь нажимает на экран"
 topic: android
 difficulty: medium

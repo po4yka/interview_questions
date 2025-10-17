@@ -1,5 +1,5 @@
 ---
-id: "20251015082237486"
+id: 20251012-122799
 title: "Cicd Pipeline Android"
 topic: android
 difficulty: medium

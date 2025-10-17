@@ -1,5 +1,5 @@
 ---
-id: "20251015082238661"
+id: 20251012-12271173
 title: "Proguard R8 Rules / Правила ProGuard и R8"
 topic: security
 difficulty: medium

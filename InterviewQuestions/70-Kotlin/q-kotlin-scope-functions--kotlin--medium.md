@@ -5,7 +5,12 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [scope-functions, let, run, with, apply, also]
+subtopics:
+  - scope-functions
+  - let
+  - run
+  - with
+  - apply
 question_kind: theory
 difficulty: medium
 

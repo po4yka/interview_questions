@@ -1,5 +1,5 @@
 ---
-id: "20251015082237126"
+id: 20251012-1227111124
 title: "Data Sealed Classes Why"
 topic: computer-science
 difficulty: medium

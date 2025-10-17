@@ -1,5 +1,5 @@
 ---
-id: "20251015082237291"
+id: 20251016-172837
 title: "What Navigation Methods Do You Know / Какие методы навигации вы знаете"
 topic: android
 difficulty: medium

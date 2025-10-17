@@ -1,15 +1,13 @@
 ---
-id: "20251015082238648"
+id: 20251017-144954
 title: "Diffutil Background Calculation Issues / Проблемы фонового вычисления DiffUtil"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [recyclerview, diffutil, performance, multithreading, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Проблемы расчета DiffUtil в фоновом потоке
 

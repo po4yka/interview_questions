@@ -1,5 +1,5 @@
 ---
-id: "20251015082237056"
+id: 20251012-154352
 title: "Data Sealed Classes Definition"
 topic: kotlin
 difficulty: hard

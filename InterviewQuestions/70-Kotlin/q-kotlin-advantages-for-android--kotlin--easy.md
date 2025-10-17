@@ -1,5 +1,5 @@
 ---
-id: "20251015082237069"
+id: 20251012-154369
 title: "Kotlin Advantages For Android / Преимущества Kotlin для Android"
 topic: kotlin
 difficulty: easy

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237436"
+id: 20251012-122767
 title: "Android Modularization / Модуляризация Android"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237178"
+id: 20251012-1227111169
 title: "Observer Pattern / Observer Паттерн"
 topic: computer-science
 difficulty: medium

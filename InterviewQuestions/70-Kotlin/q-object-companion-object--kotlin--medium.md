@@ -1,5 +1,5 @@
 ---
-id: "20251015082236003"
+id: 20251012-154383
 title: "Object Companion Object"
 topic: kotlin
 difficulty: medium

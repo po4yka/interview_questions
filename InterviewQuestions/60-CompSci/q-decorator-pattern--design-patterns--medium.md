@@ -1,5 +1,5 @@
 ---
-id: "20251015082237111"
+id: 20251012-1227111125
 title: "Decorator Pattern / Decorator Паттерн"
 topic: computer-science
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237374"
+id: 20251012-12271199
 title: "Service Lifecycle Binding / Жизненный цикл и привязка Service"
 topic: android
 difficulty: hard

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237348"
+id: 20251012-122711168
 title: "What Is Viewmodel / Что такое ViewModel"
 topic: android
 difficulty: medium

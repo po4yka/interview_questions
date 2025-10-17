@@ -1,5 +1,5 @@
 ---
-id: "20251015082237096"
+id: 20251012-1227111113
 title: "Adapter Pattern / Adapter Паттерн"
 topic: computer-science
 difficulty: medium

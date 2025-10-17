@@ -1,5 +1,5 @@
 ---
-id: 20251011-004
+id: 20251012-12271111102
 title: "CoroutineContext Composition / Композиция CoroutineContext"
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237495"
+id: 20251017-104944
 title: "Custom Viewgroup Layout / Layout кастомных ViewGroup"
 topic: android
 difficulty: hard

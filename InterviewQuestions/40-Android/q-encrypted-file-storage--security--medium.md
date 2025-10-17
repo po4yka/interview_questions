@@ -1,5 +1,5 @@
 ---
-id: "20251015082237416"
+id: 20251012-1227132
 title: "Encrypted File Storage / Зашифрованное хранение файлов"
 topic: security
 difficulty: medium

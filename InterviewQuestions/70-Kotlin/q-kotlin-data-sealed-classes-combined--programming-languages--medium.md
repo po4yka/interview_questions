@@ -1,5 +1,5 @@
 ---
-id: "20251015082237217"
+id: 20251012-12271111119
 title: "Kotlin Data Sealed Classes Combined"
 topic: computer-science
 difficulty: medium

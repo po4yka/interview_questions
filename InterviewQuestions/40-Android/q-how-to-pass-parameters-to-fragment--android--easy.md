@@ -1,5 +1,5 @@
 ---
-id: "20251015082237579"
+id: 20251012-1227191
 title: "How To Pass Parameters To Fragment / Как передать параметры во Fragment"
 topic: android
 difficulty: easy

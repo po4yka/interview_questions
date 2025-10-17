@@ -1,5 +1,5 @@
 ---
-id: "20251015082238615"
+id: 20251017-144911
 title: "Fragments Vs Activity / Fragments против Activity"
 topic: android
 difficulty: medium

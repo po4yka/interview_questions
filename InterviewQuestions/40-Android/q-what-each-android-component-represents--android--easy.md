@@ -1,5 +1,5 @@
 ---
-id: "20251015082237585"
+id: 20251012-122711150
 title: "What Each Android Component Represents / Что представляет каждый компонент Android"
 topic: android
 difficulty: easy

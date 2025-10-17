@@ -1,11 +1,16 @@
 ---
-id: 20251012-009
+id: 20251012-145453
 title: "Testing ViewModels with Coroutines / Тестирование ViewModel с корутинами"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [testing, viewmodel, coroutines, unit-testing, stateflow, sharedflow]
+subtopics:
+  - testing
+  - viewmodel
+  - coroutines
+  - unit-testing
+  - stateflow
 question_kind: implementation
 difficulty: medium
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, testing, viewmodel, coroutines, unit-testing, stateflow, turbine, difficulty/medium]
 ---
-
 # Question (EN)
 > How do you test ViewModels that use coroutines? Explain TestCoroutineDispatcher, StandardTestDispatcher, testing StateFlow/SharedFlow, and mocking suspend functions.
 

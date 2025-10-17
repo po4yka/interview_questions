@@ -1,5 +1,5 @@
 ---
-id: "20251015082237067"
+id: 20251012-154394
 title: "Why Data Sealed Classes Needed"
 topic: kotlin
 difficulty: medium

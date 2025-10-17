@@ -1,5 +1,5 @@
 ---
-id: "20251015082237196"
+id: 20251012-12271111139
 title: "Kotlin Lateinit / lateinit в Kotlin"
 topic: computer-science
 difficulty: medium

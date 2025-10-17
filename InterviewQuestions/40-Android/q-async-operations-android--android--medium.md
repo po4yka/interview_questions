@@ -1,5 +1,5 @@
 ---
-id: "20251015082237341"
+id: 20251012-122785
 title: "Async Operations Android / Асинхронные операции Android"
 topic: android
 difficulty: medium

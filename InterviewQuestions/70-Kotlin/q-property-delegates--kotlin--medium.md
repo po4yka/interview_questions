@@ -1,5 +1,5 @@
 ---
-id: "20251015082236013"
+id: 20251017-150318
 title: "Property Delegates / Делегаты свойств"
 topic: kotlin
 difficulty: medium
@@ -257,3 +257,25 @@ Easy to create new delegates for specific needs.
 Kotlin provides `by` syntax for working with delegates.
 
 **English**: Property delegates allow delegating getter/setter operations to another object, avoiding code duplication and making code modular. Built-in delegates include `lazy` (lazy initialization), `observable` (change observation), `vetoable` (validation), and `notNull`. Custom delegates implement `ReadWriteProperty` interface, enabling reusable logic for SharedPreferences, validation, logging, etc.
+
+## Ответ (RU)
+
+Делегаты свойств (Property Delegates) позволяют делегировать операции получения и установки значения свойства другому объекту, избегая дублирования кода и делая код модульным.
+
+### Встроенные делегаты
+
+- **lazy** - ленивая инициализация (значение вычисляется только при первом обращении)
+- **observable** - наблюдение за изменениями (вызывается callback при каждом изменении)
+- **vetoable** - валидация перед изменением (можно отклонить новое значение)
+- **notNull** - поздняя инициализация с проверкой (IllegalStateException если не инициализировано)
+
+### Пользовательские делегаты
+
+Реализуют интерфейс `ReadWriteProperty`, что позволяет создавать переиспользуемую логику для:
+- SharedPreferences (автоматическое сохранение/чтение)
+- Валидация (проверка значений перед установкой)
+- Логирование (запись всех изменений)
+- Кеширование и другие задачи
+
+Пользовательские делегаты позволяют вынести сложную логику getter/setter в отдельный класс и переиспользовать её для нескольких свойств.
+

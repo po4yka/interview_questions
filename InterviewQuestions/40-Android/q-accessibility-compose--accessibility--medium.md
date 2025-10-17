@@ -1,5 +1,5 @@
 ---
-id: "20251015082237281"
+id: 20251012-122749
 title: "Accessibility Compose / Доступность в Compose"
 topic: android
 difficulty: medium

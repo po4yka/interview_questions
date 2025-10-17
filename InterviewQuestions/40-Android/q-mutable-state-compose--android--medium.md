@@ -1,5 +1,5 @@
 ---
-id: "20251015082237361"
+id: 20251017-105120
 title: "Mutable State Compose / Изменяемое состояние Compose"
 topic: android
 difficulty: medium

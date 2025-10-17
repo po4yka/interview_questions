@@ -1,5 +1,5 @@
 ---
-id: "20251015082237223"
+id: 20251012-1227111166
 title: MVP Pattern (Model-View-Presenter)
 topic: architecture-patterns
 difficulty: medium

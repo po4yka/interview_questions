@@ -35,7 +35,7 @@ Welcome to your comprehensive interview questions knowledge base! This vault con
 ```dataview
 TABLE
     length(rows) as "Count"
-FROM "20-Algorithms" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
+FROM "10-Concepts" OR "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
 WHERE startswith(file.name, "q-") OR startswith(file.name, "c-")
 GROUP BY difficulty
 SORT difficulty ASC
@@ -49,7 +49,7 @@ TABLE
     round((length(filter(rows, (r) => r.difficulty = "easy")) / length(rows)) * 100, 1) + "%" as "Easy",
     round((length(filter(rows, (r) => r.difficulty = "medium")) / length(rows)) * 100, 1) + "%" as "Medium",
     round((length(filter(rows, (r) => r.difficulty = "hard")) / length(rows)) * 100, 1) + "%" as "Hard"
-FROM "20-Algorithms" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
+FROM "10-Concepts" OR "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
 WHERE topic AND (startswith(file.name, "q-") OR startswith(file.name, "c-"))
 GROUP BY topic
 SORT length(rows) DESC
@@ -67,7 +67,7 @@ TABLE WITHOUT ID
     topic as "Topic",
     difficulty as "Difficulty",
     created as "Added"
-FROM "10-Git" OR "20-Algorithms" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
+FROM "10-Concepts" OR "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
 WHERE startswith(file.name, "q-")
 SORT created DESC
 LIMIT 10
@@ -79,7 +79,7 @@ LIMIT 10
 TABLE WITHOUT ID
     file.link as "Question",
     topic as "Topic"
-FROM "10-Git" OR "20-Algorithms" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
+FROM "10-Concepts" OR "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
 WHERE difficulty = "hard" AND startswith(file.name, "q-")
 SORT file.name ASC
 ```
@@ -91,7 +91,7 @@ TABLE WITHOUT ID
     file.link as "Question",
     topic as "Topic",
     difficulty as "Difficulty"
-FROM "10-Git" OR "20-Algorithms" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
+FROM "10-Concepts" OR "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
 WHERE status = "draft" AND startswith(file.name, "q-")
 SORT topic ASC, difficulty ASC
 LIMIT 20
@@ -146,7 +146,7 @@ TABLE WITHOUT ID
     file.link as "Question",
     topic as "Topic",
     difficulty as "Difficulty"
-FROM "10-Git" OR "20-Algorithms" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
+FROM "10-Concepts" OR "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
 WHERE contains(language_tags, "en") AND contains(language_tags, "ru") AND startswith(file.name, "q-")
 SORT topic ASC, difficulty ASC
 LIMIT 20
@@ -160,7 +160,7 @@ TABLE WITHOUT ID
     file.link as "Question",
     topic as "Topic",
     difficulty as "Difficulty"
-FROM "10-Git" OR "20-Algorithms" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
+FROM "10-Concepts" OR "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
 WHERE question_kind = "coding" AND startswith(file.name, "q-")
 SORT difficulty ASC
 LIMIT 15
@@ -172,7 +172,7 @@ TABLE WITHOUT ID
     file.link as "Question",
     topic as "Topic",
     difficulty as "Difficulty"
-FROM "10-Git" OR "20-Algorithms" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
+FROM "10-Concepts" OR "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
 WHERE question_kind = "system-design" AND startswith(file.name, "q-")
 SORT difficulty ASC
 ```
@@ -207,7 +207,7 @@ Create new content using these templates:
 TABLE WITHOUT ID
     length(rows.file.tags) as "Count",
     rows.file.tags as "Tag"
-FROM "10-Git" OR "20-Algorithms" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
+FROM "10-Concepts" OR "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
 WHERE startswith(file.name, "q-")
 FLATTEN file.tags as tag
 GROUP BY tag

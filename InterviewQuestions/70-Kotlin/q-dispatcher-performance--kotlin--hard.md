@@ -61,21 +61,12 @@ Comprehensive answer for question 140022.
 
 ## Related Questions
 
+### Related (Hard)
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
+- [[q-flow-performance--kotlin--hard]] - Coroutines
+- [[q-select-expression-channels--kotlin--hard]] - Coroutines
+- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
+
 ### Prerequisites (Easier)
 - [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines
 - [[q-what-is-coroutine--kotlin--easy]] - Coroutines
-### Related (Hard)
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
-- [[q-flow-performance--kotlin--hard]] - Coroutines
-- [[q-select-expression-channels--kotlin--hard]] - Coroutines
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
-### Related (Hard)
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
-- [[q-flow-performance--kotlin--hard]] - Coroutines
-- [[q-select-expression-channels--kotlin--hard]] - Coroutines
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines
-### Related (Hard)
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
-- [[q-flow-performance--kotlin--hard]] - Coroutines
-- [[q-select-expression-channels--kotlin--hard]] - Coroutines
-- [[q-coroutine-profiling--kotlin--hard]] - Coroutines

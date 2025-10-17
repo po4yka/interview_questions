@@ -1,5 +1,5 @@
 ---
-id: "20251015082237184"
+id: 20251016-162915
 title: "Interface Vs Abstract Class"
 topic: computer-science
 difficulty: medium

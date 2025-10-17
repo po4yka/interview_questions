@@ -10,13 +10,10 @@ tags: - clean-code
   - refactoring
   - code-quality
   - readable-code
-date_created: 2025-10-12
-date_updated: 2025-10-13
 moc: moc-cs
-related_questions:   - q-solid-principles--software-design--medium
+related:   - q-solid-principles--software-design--medium
   - q-design-patterns-types--design-patterns--medium
   - q-refactoring-techniques--software-engineering--medium
-slug: clean-code-principles-software-engineering-medium
 subtopics:   - clean-code
   - software-engineering
   - best-practices

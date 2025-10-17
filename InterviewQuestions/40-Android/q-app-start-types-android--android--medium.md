@@ -1,5 +1,5 @@
 ---
-id: "20251015082237519"
+id: 20251012-122782
 title: "App Start Types Android / Типы запуска приложения Android"
 topic: android
 difficulty: medium

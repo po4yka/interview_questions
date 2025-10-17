@@ -1,5 +1,5 @@
 ---
-id: "20251015082237584"
+id: 20251012-122711190
 title: "Why Abandon Mvp / Почему отказаться от MVP"
 topic: android
 difficulty: easy

@@ -6,13 +6,10 @@ difficulty: medium
 status: draft
 created: 2025-10-12
 tags: [value-classes, inline-classes, performance, type-safety, android/value-classes, android/inline-classes, android/performance, android/type-safety, difficulty/medium]
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-android
-related_questions:   - q-kotlin-coroutines-advanced--kotlin--hard
+related:   - q-kotlin-coroutines-advanced--kotlin--hard
   - q-sealed-classes-state-management--kotlin--medium
   - q-compose-performance-optimization--android--hard
-slug: kotlin-value-classes-kotlin-medium
 subtopics:   - kotlin
   - value-classes
   - inline-classes

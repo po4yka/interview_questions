@@ -1,5 +1,5 @@
 ---
-id: "20251015082237209"
+id: 20251012-1227111137
 title: "Flow Flatmap Operator / Оператор flatMap для Flow"
 topic: computer-science
 difficulty: easy

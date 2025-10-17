@@ -1,5 +1,5 @@
 ---
-id: "20251015082237171"
+id: 20251016-164233
 title: "Kotlin Null Checks Methods / Методы проверки на null в Kotlin"
 topic: computer-science
 difficulty: easy

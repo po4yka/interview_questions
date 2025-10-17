@@ -1,5 +1,5 @@
 ---
-id: "20251015082237256"
+id: 20251012-12271148
 title: "Mvvm Pattern / Паттерн MVVM"
 topic: android
 difficulty: medium

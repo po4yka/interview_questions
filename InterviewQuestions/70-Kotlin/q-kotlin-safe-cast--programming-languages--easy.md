@@ -1,5 +1,5 @@
 ---
-id: "20251015082237198"
+id: 20251012-12271111151
 title: "Kotlin Safe Cast / Безопасное приведение типов в Kotlin"
 topic: computer-science
 difficulty: easy

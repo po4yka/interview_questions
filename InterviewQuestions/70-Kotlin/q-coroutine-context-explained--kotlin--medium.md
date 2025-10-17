@@ -1,5 +1,5 @@
 ---
-id: coroutine-context-explained
+id: 20251012-12271111100
 title: Coroutine Context Explained / CoroutineContext объяснение
 aliases: []
 
@@ -579,35 +579,7 @@ class MyViewModel : ViewModel() {
 ### Advanced (Harder)
 - [[q-actor-pattern--kotlin--hard]] - Coroutines
 - [[q-fan-in-fan-out--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutines
-- [[q-coroutine-builders-comparison--kotlin--medium]] - Coroutines
-- [[q-callback-to-coroutine-conversion--kotlin--medium]] - Coroutines
-- [[q-parallel-network-calls-coroutines--kotlin--medium]] - Coroutines
 
-### Advanced (Harder)
-- [[q-actor-pattern--kotlin--hard]] - Coroutines
-- [[q-fan-in-fan-out--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutines
-- [[q-coroutine-builders-comparison--kotlin--medium]] - Coroutines
-- [[q-callback-to-coroutine-conversion--kotlin--medium]] - Coroutines
-- [[q-parallel-network-calls-coroutines--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-actor-pattern--kotlin--hard]] - Coroutines
-- [[q-fan-in-fan-out--kotlin--hard]] - Coroutines
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
-
-### Related (Medium)
-- [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
-- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
-- [[q-coroutine-cancellation--kotlin--medium]] - Cancellation basics
-
-### Advanced (Harder)
-- [[q-coroutine-context-detailed--kotlin--hard]] - Deep dive into CoroutineContext
-- [[q-advanced-coroutine-patterns--kotlin--hard]] - Advanced patterns
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization
 

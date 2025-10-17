@@ -1,5 +1,5 @@
 ---
-id: "20251015082237445"
+id: 20251012-1227184
 title: "How To Handle The Situation Where Activity Can Open Multiple Times Due To Deeplink / Как обработать ситуацию когда Activity может открыться несколько раз из-за deeplink"
 topic: android
 difficulty: medium

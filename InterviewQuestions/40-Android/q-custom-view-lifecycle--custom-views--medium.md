@@ -1,5 +1,5 @@
 ---
-id: "20251015082237451"
+id: 20251012-1227115
 title: "Custom View Lifecycle / Жизненный цикл кастомных View"
 topic: android
 difficulty: medium

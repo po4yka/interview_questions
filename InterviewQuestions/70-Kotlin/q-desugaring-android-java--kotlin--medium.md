@@ -1,5 +1,5 @@
 ---
-id: "20251015082236033"
+id: 20251012-154358
 title: "Desugaring Android Java"
 topic: kotlin
 difficulty: medium

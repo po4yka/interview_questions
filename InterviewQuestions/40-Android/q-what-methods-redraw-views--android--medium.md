@@ -1,5 +1,5 @@
 ---
-id: "20251015082237372"
+id: 20251016-163003
 title: "What Methods Redraw Views / Какие методы перерисовывают View"
 topic: android
 difficulty: medium

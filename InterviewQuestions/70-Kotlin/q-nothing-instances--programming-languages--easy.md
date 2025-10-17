@@ -1,5 +1,5 @@
 ---
-id: "20251015082236048"
+id: 20251012-154382
 title: "Nothing Instances / Экземпляры Nothing"
 topic: kotlin
 difficulty: easy

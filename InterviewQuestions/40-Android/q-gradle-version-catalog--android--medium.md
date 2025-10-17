@@ -1,5 +1,5 @@
 ---
-id: "20251015082237327"
+id: 20251015-094711
 title: "Gradle Version Catalog / Каталог версий Gradle"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237320"
+id: 20251012-122711105
 title: "Single Activity Pros Cons / Преимущества и недостатки Single Activity"
 topic: android
 difficulty: medium

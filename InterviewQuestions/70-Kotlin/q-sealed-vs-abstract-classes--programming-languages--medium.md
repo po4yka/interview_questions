@@ -1,5 +1,5 @@
 ---
-id: "20251015082237068"
+id: 20251012-154387
 title: "Sealed Vs Abstract Classes / Sealed против Abstract Классы"
 topic: kotlin
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082238614"
+id: 20251012-1227150
 title: "Hilt Components Scope / Компоненты и скоупы Hilt"
 topic: android
 difficulty: medium

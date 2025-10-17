@@ -1,5 +1,5 @@
 ---
-id: "20251015082237091"
+id: 20251012-1227111175
 title: "Runtime Generic Access / Доступ к дженерикам во время выполнения"
 topic: computer-science
 difficulty: hard

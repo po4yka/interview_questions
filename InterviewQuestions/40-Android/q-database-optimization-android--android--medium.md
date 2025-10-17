@@ -1,5 +1,5 @@
 ---
-id: "20251015082237433"
+id: 20251012-1227128
 title: "Database Optimization Android / Database Оптимизация Android"
 topic: android
 difficulty: medium

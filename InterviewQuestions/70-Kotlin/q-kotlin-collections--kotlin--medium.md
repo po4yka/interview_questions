@@ -1,11 +1,16 @@
 ---
-id: 20251012-011
+id: 20251012-150256
 title: "Kotlin Collections / Коллекции в Kotlin"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [collections, list, set, map, sequences, operators, functional-programming]
+subtopics:
+  - collections
+  - list
+  - set
+  - map
+  - sequences
 question_kind: theory
 difficulty: medium
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, collections, list, set, map, sequences, operators, filter, map, flatmap, difficulty/medium]
 ---
-
 # Question (EN)
 > What are Kotlin collections? Explain List, Set, Map, their mutable variants, collection operators, and the difference between Collections and Sequences.
 

@@ -270,16 +270,7 @@ scope.launch { } // - Работает
 - [[q-structured-concurrency-patterns--kotlin--hard]] - Coroutines
 - [[q-coroutine-context-detailed--kotlin--hard]] - Coroutines
 - [[q-structured-concurrency--kotlin--hard]] - Coroutines
+
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
 
-### Related (Medium)
-- [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
-- [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
-- [[q-coroutine-context-explained--kotlin--medium]] - CoroutineContext explained
-- [[q-coroutine-cancellation--kotlin--medium]] - Cancellation basics
-
-### Advanced (Harder)
-- [[q-coroutine-context-detailed--kotlin--hard]] - Deep dive into CoroutineContext
-- [[q-advanced-coroutine-patterns--kotlin--hard]] - Advanced patterns
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization

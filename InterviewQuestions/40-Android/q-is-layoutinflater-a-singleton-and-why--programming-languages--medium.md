@@ -1,5 +1,5 @@
 ---
-id: "20251015082237317"
+id: 20251012-12271112
 title: "Is Layoutinflater A Singleton And Why / Is Layoutinflater A Singleton и Why"
 topic: android
 difficulty: medium

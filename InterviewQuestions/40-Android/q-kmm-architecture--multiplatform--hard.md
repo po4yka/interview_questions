@@ -1,5 +1,5 @@
 ---
-id: "20251015082237331"
+id: 20251012-12271118
 title: "Kmm Architecture / Архитектура KMM"
 topic: android
 difficulty: hard

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237452"
+id: 20251017-150431
 title: "Network Operations Android / Сетевые операции в Android"
 topic: android
 difficulty: medium

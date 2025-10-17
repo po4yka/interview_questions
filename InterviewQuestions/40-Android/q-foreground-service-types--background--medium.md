@@ -1,5 +1,5 @@
 ---
-id: "20251015082237250"
+id: 20251016-172637
 title: "Foreground Service Types / Типы Foreground Service"
 topic: android
 difficulty: medium

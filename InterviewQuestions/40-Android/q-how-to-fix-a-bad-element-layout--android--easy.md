@@ -1,5 +1,5 @@
 ---
-id: "20251015082238622"
+id: 20251012-1227183
 title: "How To Fix A Bad Element Layout / Как исправить плохой layout элемента"
 topic: android
 difficulty: easy

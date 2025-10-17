@@ -1,5 +1,5 @@
 ---
-id: "20251015082237272"
+id: 20251012-12271195
 title: "Save Data Outside Fragment / Сохранение данных вне Fragment"
 topic: android
 difficulty: medium

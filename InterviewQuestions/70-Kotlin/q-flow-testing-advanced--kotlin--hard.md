@@ -1,5 +1,5 @@
 ---
-id: 20251011-008
+id: 20251012-12271111106
 title: "Advanced Flow Testing / Продвинутое тестирование Flow"
 aliases: []
 
@@ -710,20 +710,15 @@ fun `test search debouncing`() = runTest {
 
 ## Related Questions
 
+### Related (Hard)
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
+
 ### Prerequisites (Easier)
 - [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
 - [[q-testing-viewmodel-coroutines--kotlin--medium]] - Testing
 - [[q-catch-operator-flow--kotlin--medium]] - Flow
 
-### Related (Hard)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
-### Related (Hard)
-- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Deep dive into operators
-- [[q-flow-performance--kotlin--hard]] - Performance optimization

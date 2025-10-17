@@ -1,5 +1,5 @@
 ---
-id: "20251015082237225"
+id: 20251016-162812
 title: "Zip Operator Parallel Requests / Оператор zip для параллельных запросов"
 topic: computer-science
 difficulty: medium

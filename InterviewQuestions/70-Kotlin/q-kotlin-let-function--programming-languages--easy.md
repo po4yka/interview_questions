@@ -1,5 +1,5 @@
 ---
-id: "20251015082237073"
+id: 20251012-154375
 title: "Kotlin Let Function / Функция let в Kotlin"
 topic: kotlin
 difficulty: easy

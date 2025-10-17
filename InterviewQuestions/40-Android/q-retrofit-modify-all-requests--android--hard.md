@@ -1,15 +1,13 @@
 ---
-id: "20251015082237480"
+id: 20251012-12271184
 title: "Retrofit Modify All Requests / Изменение всех запросов Retrofit"
 topic: android
 difficulty: hard
 status: draft
 created: 2025-10-13
 tags: [android/networking, authentication, interceptor, logging, networking, okhttp, retrofit, difficulty/hard]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions:   - q-http-protocols-comparison--android--medium
+related:   - q-http-protocols-comparison--android--medium
   - q-retrofit-call-adapter-advanced--networking--medium
   - q-retrofit-usage-tutorial--android--medium
   - q-data-sync-unstable-network--android--hard

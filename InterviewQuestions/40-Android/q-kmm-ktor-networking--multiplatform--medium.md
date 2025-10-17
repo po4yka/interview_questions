@@ -1,5 +1,5 @@
 ---
-id: "20251015082237243"
+id: 20251012-12271120
 title: "Kmm Ktor Networking / Ktor для сети в KMM"
 topic: android
 difficulty: medium

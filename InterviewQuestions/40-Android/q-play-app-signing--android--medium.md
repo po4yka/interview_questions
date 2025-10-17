@@ -1,5 +1,5 @@
 ---
-id: "20251015082237470"
+id: 20251012-12271164
 title: "Play App Signing / Подписание приложений Play"
 topic: android
 difficulty: medium

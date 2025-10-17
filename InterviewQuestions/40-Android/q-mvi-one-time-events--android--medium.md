@@ -1,5 +1,5 @@
 ---
-id: "20251015082237306"
+id: 20251017-144924
 title: "Mvi One Time Events / Одноразовые события в MVI"
 topic: android
 difficulty: medium

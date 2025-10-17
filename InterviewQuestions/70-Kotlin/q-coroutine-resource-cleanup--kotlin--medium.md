@@ -1,5 +1,5 @@
 ---
-id: 20251006-coroutine-resource-cleanup
+id: 20251012-12271111101
 title: Resource Cleanup in Coroutines / Очистка Ресурсов в Корутинах
 topic: kotlin
 difficulty: medium

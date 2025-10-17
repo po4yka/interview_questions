@@ -1,5 +1,5 @@
 ---
-id: 202510051234003
+id: 20251012-1227113
 title: "Context in Android / Context в Android"
 topic: android
 status: draft

@@ -10,13 +10,10 @@ tags: - system-design
   - cap-theorem
   - consistency
   - availability
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-system-design
-related_questions:   - q-eventual-consistency--system-design--hard
+related:   - q-eventual-consistency--system-design--hard
   - q-database-replication--system-design--medium
   - q-consensus-algorithms--system-design--hard
-slug: cap-theorem-distributed-systems-system-design-hard
 subtopics:   - distributed-systems
   - consistency
   - availability

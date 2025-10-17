@@ -1,5 +1,5 @@
 ---
-id: "20251015082237193"
+id: 20251012-1227111134
 title: "Facade Pattern / Facade Паттерн"
 topic: computer-science
 difficulty: medium

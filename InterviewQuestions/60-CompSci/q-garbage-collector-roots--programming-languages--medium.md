@@ -1,5 +1,5 @@
 ---
-id: "20251015082237208"
+id: 20251016-164117
 title: "Garbage Collector Roots / Корни Garbage Collector"
 topic: computer-science
 difficulty: medium

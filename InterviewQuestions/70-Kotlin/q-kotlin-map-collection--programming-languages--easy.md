@@ -1,5 +1,5 @@
 ---
-id: "20251015082237112"
+id: 20251012-12271111140
 title: "Kotlin Map Collection / Map коллекция в Kotlin"
 topic: programming-languages
 difficulty: easy
@@ -9,10 +9,8 @@ tags: - collections
   - kotlin
   - map
   - programming-languages
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-programming-languages
-related_questions: []
+related: []
 ---
 # Расскажи про коллекцию Map
 

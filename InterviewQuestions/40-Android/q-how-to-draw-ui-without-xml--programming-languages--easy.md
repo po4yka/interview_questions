@@ -1,5 +1,5 @@
 ---
-id: "20251015082237420"
+id: 20251012-1227182
 title: "How To Draw Ui Without Xml / Как рисовать UI без XML"
 topic: android
 difficulty: easy

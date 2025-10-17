@@ -1,5 +1,5 @@
 ---
-id: "20251015082237170"
+id: 20251012-1227111131
 title: "Error Handling In Coroutines"
 topic: computer-science
 difficulty: medium

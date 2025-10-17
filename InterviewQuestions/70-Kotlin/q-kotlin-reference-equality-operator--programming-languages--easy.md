@@ -1,5 +1,5 @@
 ---
-id: "20251015082237150"
+id: 20251012-12271111148
 title: "Kotlin Reference Equality Operator / Оператор ссылочного равенства в Kotlin"
 topic: computer-science
 difficulty: easy

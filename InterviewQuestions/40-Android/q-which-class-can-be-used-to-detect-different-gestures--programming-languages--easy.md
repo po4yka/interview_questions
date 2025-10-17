@@ -1,5 +1,5 @@
 ---
-id: "20251015082237487"
+id: 20251012-122711184
 title: "Which Class Can Be Used To Detect Different Gestures / Какой класс можно использовать для обнаружения разных жестов"
 topic: android
 difficulty: easy

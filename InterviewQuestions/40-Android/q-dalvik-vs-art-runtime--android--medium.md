@@ -1,5 +1,5 @@
 ---
-id: "20251015082237279"
+id: 20251012-1227125
 title: "Dalvik Vs Art Runtime"
 topic: android
 difficulty: medium

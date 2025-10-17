@@ -1,5 +1,5 @@
 ---
-id: "20251015082237334"
+id: 20251016-163010
 title: "Android Storage Types / Типы хранилища Android"
 topic: android
 difficulty: medium

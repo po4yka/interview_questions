@@ -1,5 +1,5 @@
 ---
-id: "20251015082237326"
+id: 20251016-175330
 title: "Custom View Attributes / Атрибуты кастомных View"
 topic: android
 difficulty: medium

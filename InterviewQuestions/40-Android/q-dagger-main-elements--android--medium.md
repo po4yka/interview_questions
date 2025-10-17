@@ -1,5 +1,5 @@
 ---
-id: "20251015082237395"
+id: 20251012-1227120
 title: "Dagger Main Elements / Основные элементы Dagger"
 topic: android
 difficulty: medium

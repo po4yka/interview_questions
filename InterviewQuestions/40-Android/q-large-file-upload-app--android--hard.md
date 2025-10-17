@@ -1,5 +1,5 @@
 ---
-id: "20251015082237432"
+id: 20251012-12271125
 title: "Large File Upload App / Загрузка больших файлов в приложении"
 topic: android
 difficulty: hard

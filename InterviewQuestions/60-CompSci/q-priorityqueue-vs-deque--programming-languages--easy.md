@@ -1,5 +1,5 @@
 ---
-id: "20251015082237190"
+id: 20251012-1227111170
 title: "Priorityqueue Vs Deque / Priorityqueue против Deque"
 topic: computer-science
 difficulty: easy

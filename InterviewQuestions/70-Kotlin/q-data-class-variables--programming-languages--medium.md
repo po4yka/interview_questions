@@ -1,5 +1,5 @@
 ---
-id: "20251015082237063"
+id: 20251012-154351
 title: "Data Class Variables / Переменные data class"
 topic: kotlin
 difficulty: medium

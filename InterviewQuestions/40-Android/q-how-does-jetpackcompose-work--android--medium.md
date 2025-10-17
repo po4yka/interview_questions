@@ -1,5 +1,5 @@
 ---
-id: "20251015082237248"
+id: 20251012-1227160
 title: "How Does Jetpackcompose Work / Как работает Jetpack Compose"
 topic: android
 difficulty: medium
@@ -950,11 +950,4 @@ Jetpack Compose работает через:
 - [[q-how-does-the-main-thread-work--android--medium]] - how does the main
 - [[q-how-does-jetpack-compose-work--android--medium]] - how does jetpack compose
 - [[q-how-does-activity-lifecycle-work--android--medium]] - how does activity lifecycle
-### Related (Medium)
-- [[q-how-does-the-main-thread-work--android--medium]] - how does the main
-- [[q-how-does-jetpack-compose-work--android--medium]] - how does jetpack compose
-- [[q-how-does-activity-lifecycle-work--android--medium]] - how does activity lifecycle
-### Related (Medium)
-- [[q-how-does-the-main-thread-work--android--medium]] - how does the main
-- [[q-how-does-jetpack-compose-work--android--medium]] - how does jetpack compose
-- [[q-how-does-activity-lifecycle-work--android--medium]] - how does activity lifecycle
+

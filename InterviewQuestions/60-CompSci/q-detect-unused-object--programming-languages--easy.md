@@ -1,5 +1,5 @@
 ---
-id: "20251015082237086"
+id: 20251012-1227111127
 title: "Detect Unused Object / Обнаружение неиспользуемых объектов"
 topic: computer-science
 difficulty: easy

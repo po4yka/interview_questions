@@ -1,5 +1,5 @@
 ---
-id: "20251015082237165"
+id: 20251012-12271111113
 title: "Kotlin Class Initializers / Инициализаторы классов Kotlin"
 topic: computer-science
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237498"
+id: 20251012-12271107
 title: "Integration Testing Strategies / Integration Тестирование Strategies"
 topic: testing
 difficulty: medium

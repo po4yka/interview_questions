@@ -1,5 +1,5 @@
 ---
-id: "20251015082237568"
+id: 20251012-122711148
 title: "What Does The Lifecycle Library Do / Что делает библиотека Lifecycle"
 topic: android
 difficulty: medium

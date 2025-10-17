@@ -5,7 +5,12 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [performance, jank, frames, rendering, profiling, optimization]
+subtopics:
+  - performance
+  - jank
+  - frames
+  - rendering
+  - profiling
 question_kind: practical
 difficulty: medium
 

@@ -1,5 +1,5 @@
 ---
-id: 20251006-coroutines-threads-android
+id: 20251016-174636
 title: Coroutines vs Threads on Android / Корутины vs Потоки на Android
 topic: kotlin
 difficulty: easy

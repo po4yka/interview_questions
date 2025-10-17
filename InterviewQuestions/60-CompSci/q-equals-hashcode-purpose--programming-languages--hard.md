@@ -1,5 +1,5 @@
 ---
-id: "20251015082237214"
+id: 20251012-1227111129
 title: "Equals Hashcode Purpose / Назначение equals и hashCode"
 topic: computer-science
 difficulty: hard

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237310"
+id: 20251016-161705
 title: "How To Register Broadcastreceiver To Receive Messages / Как зарегистрировать BroadcastReceiver для получения сообщений"
 topic: android
 difficulty: medium

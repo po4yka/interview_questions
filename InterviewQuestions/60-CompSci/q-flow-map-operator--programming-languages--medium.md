@@ -1,5 +1,5 @@
 ---
-id: "20251015082237185"
+id: 20251016-162242
 title: "Flow Map Operator / Оператор map для Flow"
 topic: computer-science
 difficulty: medium

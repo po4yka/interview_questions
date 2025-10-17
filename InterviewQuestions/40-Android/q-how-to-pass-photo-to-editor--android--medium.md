@@ -1,5 +1,5 @@
 ---
-id: "20251015082237422"
+id: 20251012-1227192
 title: "How To Pass Photo To Editor / Как передать фото в редактор"
 topic: android
 difficulty: medium

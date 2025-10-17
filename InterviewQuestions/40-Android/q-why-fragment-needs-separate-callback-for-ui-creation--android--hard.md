@@ -1,5 +1,5 @@
 ---
-id: "20251015082237370"
+id: 20251012-122711194
 title: "Why Fragment Needs Separate Callback For Ui Creation / Почему Fragment нужен отдельный колбэк для создания UI"
 topic: android
 difficulty: hard

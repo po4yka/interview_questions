@@ -1,5 +1,5 @@
 ---
-id: "20251015082237378"
+id: 20251012-1227111102
 title: "Why Was The Lifecycle Library Created / Зачем создали библиотеку Lifecycle"
 topic: android
 difficulty: hard

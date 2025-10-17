@@ -1,5 +1,5 @@
 ---
-id: "20251015082237494"
+id: 20251012-12271139
 title: "Mlkit Face Detection / Распознавание лиц ML Kit"
 topic: android
 difficulty: medium

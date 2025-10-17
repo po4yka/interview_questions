@@ -1,5 +1,5 @@
 ---
-id: "20251015082237351"
+id: 20251012-122711159
 title: "What Is Hilt / Что такое Hilt"
 topic: android
 difficulty: medium

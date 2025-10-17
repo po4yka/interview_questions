@@ -1,5 +1,5 @@
 ---
-id: 20251006-012
+id: 20251012-1227108
 title: "Semantics in Jetpack Compose"
 aliases: []
 
@@ -228,33 +228,7 @@ fun testButton() {
 
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Related (Medium)
-- [[q-compose-testing--android--medium]] - Jetpack Compose
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
-- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
-- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
 
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-### Related (Medium)
-- [[q-compose-testing--android--medium]] - Jetpack Compose
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
-- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
-- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
 ### Hub
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
 
-### Related (Medium)
-- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
-- [[q-mutable-state-compose--android--medium]] - MutableState basics
-- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
-
-### Advanced (Harder)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
-- [[q-stable-classes-compose--android--hard]] - @Stable annotation
-- [[q-stable-annotation-compose--android--hard]] - Stability annotations

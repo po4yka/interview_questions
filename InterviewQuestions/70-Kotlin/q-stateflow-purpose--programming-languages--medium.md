@@ -1,5 +1,5 @@
 ---
-id: "20251015082236030"
+id: 20251012-154391
 title: "Stateflow Purpose / Назначение StateFlow"
 topic: kotlin
 difficulty: medium

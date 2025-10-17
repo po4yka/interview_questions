@@ -1,5 +1,5 @@
 ---
-id: "20251015082237527"
+id: 20251012-122711123
 title: "V Chyom Izmeryaetsya Proizvoditelnost Layout / В чем измеряется производительность layout"
 topic: android
 difficulty: medium

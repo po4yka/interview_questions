@@ -1,11 +1,16 @@
 ---
-id: 20251012-015
+id: 20251012-151451
 title: "Flow Backpressure / Противодавление в Flow"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, backpressure, buffer, conflate, collectlatest, coroutines]
+subtopics:
+  - flow
+  - backpressure
+  - buffer
+  - conflate
+  - collectlatest
 question_kind: theory
 difficulty: hard
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, flow, backpressure, buffer, conflate, collectlatest, performance, difficulty/hard]
 ---
-
 # Question (EN)
 > What is backpressure in Kotlin Flow? Explain buffer(), conflate(), and collectLatest() operators and when to use each strategy.
 
@@ -633,31 +637,18 @@ searchQuery.collectLatest { query ->
 
 ## Related Questions
 
+### Related (Hard)
+- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+- [[q-flow-testing-advanced--kotlin--hard]] - Flow
+
 ### Prerequisites (Easier)
 - [[q-backpressure-in-kotlin-flow--programming-languages--medium]] - Flow
 - [[q-catch-operator-flow--kotlin--medium]] - Flow
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-### Related (Hard)
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-testing-advanced--kotlin--hard]] - Flow
-### Related (Hard)
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-testing-advanced--kotlin--hard]] - Flow
-### Related (Hard)
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-testing-advanced--kotlin--hard]] - Flow
+
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
-
-### Related (Hard)
-- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Deep dive into operators
-- [[q-flow-performance--kotlin--hard]] - Performance optimization
-- [[q-flow-testing-advanced--kotlin--hard]] - Advanced Flow testing
 
 ## MOC Links
 

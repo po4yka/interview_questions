@@ -1,5 +1,5 @@
 ---
-id: "20251015082237061"
+id: 20251012-154390
 title: "Singleton Object Keyword / Синглтон с ключевым словом object"
 topic: kotlin
 difficulty: easy

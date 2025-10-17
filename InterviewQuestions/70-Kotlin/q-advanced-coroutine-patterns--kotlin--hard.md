@@ -1,11 +1,16 @@
 ---
-id: 20251012-013
+id: 20251012-150629
 title: "Advanced Coroutine Patterns / Продвинутые паттерны корутин"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, patterns, pipeline, producer-consumer, resource-pooling, rate-limiting]
+subtopics:
+  - coroutines
+  - patterns
+  - pipeline
+  - producer-consumer
+  - resource-pooling
 question_kind: theory
 difficulty: hard
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, coroutines, patterns, pipeline, producer-consumer, semaphore, mutex, difficulty/hard]
 ---
-
 # Question (EN)
 > What are advanced coroutine patterns in Kotlin? Explain pipeline pattern, producer-consumer with multiple stages, resource pooling with Mutex/Semaphore, custom scope builders, and rate limiting patterns.
 
@@ -947,24 +951,19 @@ GlobalScope.launch {
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
-- [[q-coroutine-builders-basics--kotlin--easy]] - Coroutines
-
 ### Related (Hard)
 - [[q-coroutine-profiling--kotlin--hard]] - Coroutines
 - [[q-coroutine-performance-optimization--kotlin--hard]] - Coroutines
 - [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutines
 - [[q-flow-performance--kotlin--hard]] - Coroutines
+
+### Prerequisites (Easier)
+- [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines
+- [[q-what-is-coroutine--kotlin--easy]] - Coroutines
+- [[q-coroutine-builders-basics--kotlin--easy]] - Coroutines
+
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
-
-### Related (Hard)
-- [[q-coroutine-context-detailed--kotlin--hard]] - Deep dive into CoroutineContext
-- [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization
-- [[q-lifecycle-aware-coroutines--kotlin--hard]] - Lifecycle-aware patterns
-- [[q-coroutine-profiling--kotlin--hard]] - Profiling and debugging
 
 ## MOC Links
 

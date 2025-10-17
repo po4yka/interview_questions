@@ -1,5 +1,5 @@
 ---
-id: 20251006-019
+id: 20251012-12271117
 title: "kapt vs KSP comparison / Сравнение kapt и KSP"
 aliases: []
 
@@ -207,16 +207,6 @@ dependencies {
 
 ## Related Questions
 
-### Related (Medium)
-- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
-- [[q-annotation-processing-android--android--medium]] - Annotations
-- [[q-annotation-processing--android--medium]] - Annotation Processing
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
-### Related (Medium)
-- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
-- [[q-annotation-processing-android--android--medium]] - Annotations
-- [[q-annotation-processing--android--medium]] - Annotation Processing
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
 ### Related (Medium)
 - [[q-kapt-ksp-migration--gradle--medium]] - Kapt
 - [[q-annotation-processing-android--android--medium]] - Annotations

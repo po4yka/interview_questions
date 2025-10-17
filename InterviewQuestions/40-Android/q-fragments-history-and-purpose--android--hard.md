@@ -1,5 +1,5 @@
 ---
-id: "20251015082237244"
+id: 20251012-1227142
 title: "Fragments History And Purpose"
 topic: android
 difficulty: hard

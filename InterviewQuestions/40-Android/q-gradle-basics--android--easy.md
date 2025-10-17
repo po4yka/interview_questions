@@ -1,5 +1,5 @@
 ---
-id: "20251015082237401"
+id: 20251012-152245
 title: "Gradle Basics / Gradle Основы"
 topic: android
 difficulty: easy

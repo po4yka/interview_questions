@@ -1,15 +1,13 @@
 ---
-id: "20251015082237581"
+id: 20251012-12271129
 title: "List Elements Problems / Проблемы элементов списка"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [android/performance, android/recyclerview, concurrency, diffutil, livedata, memory, performance, recyclerview, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Какие могут быть проблемы с элементами списка?
 

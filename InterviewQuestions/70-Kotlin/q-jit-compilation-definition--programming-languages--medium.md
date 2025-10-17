@@ -1,5 +1,5 @@
 ---
-id: "20251015082236008"
+id: 20251016-174805
 title: "Jit Compilation Definition / Определение JIT компиляции"
 topic: kotlin
 difficulty: medium

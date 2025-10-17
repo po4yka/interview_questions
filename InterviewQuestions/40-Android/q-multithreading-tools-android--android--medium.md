@@ -1,5 +1,5 @@
 ---
-id: "20251015082237446"
+id: 20251012-12271145
 title: "Multithreading Tools Android / Инструменты многопоточности Android"
 topic: android
 difficulty: medium

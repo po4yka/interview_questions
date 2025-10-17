@@ -486,9 +486,6 @@ java.net.UnknownServiceException: CLEARTEXT communication to example.com not per
 
 ### Advanced (Harder)
 - [[q-android-security-practices-checklist--android--medium]] - Security
-### Advanced (Harder)
-- [[q-android-security-practices-checklist--android--medium]] - Security
-### Advanced (Harder)
-- [[q-android-security-practices-checklist--android--medium]] - Security
+
 ## References
 - [Android Documentation](https://developer.android.com)

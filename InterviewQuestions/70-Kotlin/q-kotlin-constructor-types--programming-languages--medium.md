@@ -1,5 +1,5 @@
 ---
-id: "20251015082237154"
+id: 20251012-12271111116
 title: "Kotlin Constructor Types / Типы конструкторов Kotlin"
 topic: computer-science
 difficulty: medium

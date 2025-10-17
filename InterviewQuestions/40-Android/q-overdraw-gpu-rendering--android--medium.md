@@ -1,5 +1,5 @@
 ---
-id: "20251015082237469"
+id: 20251012-12271159
 title: "Overdraw Gpu Rendering / Overdraw и GPU рендеринг"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237093"
+id: 20251016-163408
 title: "Primitive Vs Reference Types"
 topic: programming-languages
 difficulty: easy
@@ -11,10 +11,8 @@ tags: - java
   - primitive-types
   - programming-languages
   - reference-types
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-programming-languages
-related_questions: []
+related: []
 ---
 # В чем разница примитивного и ссылочного типов
 

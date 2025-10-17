@@ -1,13 +1,11 @@
 ---
-id: "20251012-1500010"
+id: 20251016-123804
 title: "What makes Flow a cold stream?"
 topic: kotlin
 difficulty: easy
 status: draft
 created: "2025-10-12"
 tags: ["kotlin", "coroutines", "difficulty/medium"]
-date_created: "2025-10-12"
-date_updated: "2025-10-12"
 description: "Comprehensive guide to What makes Flow a cold stream? in Kotlin coroutines"
 moc: "moc-kotlin"
 subtopics: ["coroutines", "flow", "cold-streams", "basics"]
@@ -60,23 +58,22 @@ subtopics: ["coroutines", "flow", "cold-streams", "basics"]
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-flow-basics--kotlin--easy]] - Flow
-### Related (Same Level)
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-hot-cold-flows--kotlin--medium]] - Coroutines
-- [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
+### Same Level (Easy)
+- [[q-flow-basics--kotlin--easy]] - Flow basics and creation
+
+### Next Steps (Medium)
+- [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
+- [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
+- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
+- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 - [[q-flow-backpressure--kotlin--hard]] - Flow
 - [[q-flow-testing-advanced--kotlin--hard]] - Flow
-### Related (Same Level)
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-hot-cold-flows--kotlin--medium]] - Coroutines
-- [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
+
+### Prerequisites (Easier)
+- [[q-flow-basics--kotlin--easy]] - Flow
 
 ### Related (Same Level)
 - [[q-catch-operator-flow--kotlin--medium]] - Flow
@@ -87,11 +84,3 @@ subtopics: ["coroutines", "flow", "cold-streams", "basics"]
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
-### Same Level (Easy)
-- [[q-flow-basics--kotlin--easy]] - Flow basics and creation
-
-### Next Steps (Medium)
-- [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237241"
+id: 20251012-12271186
 title: "Robolectric Vs Instrumented / Robolectric против Instrumented"
 topic: android
 difficulty: medium

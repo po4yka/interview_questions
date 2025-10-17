@@ -1,15 +1,13 @@
 ---
-id: "20251015082237561"
+id: 20251012-12271155
 title: "Offline First Architecture / Архитектура Offline First"
 topic: android
 difficulty: hard
 status: draft
 created: 2025-10-13
 tags: [architecture, offline-first, networking, sync, room, workmanager, difficulty/hard]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # How to Implement Offline-First Architecture in Android
 

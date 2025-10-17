@@ -1,5 +1,5 @@
 ---
-id: "20251015082237134"
+id: 20251012-12271111152
 title: "Kotlin Sam Conversions / SAM конверсии в Kotlin"
 topic: computer-science
 difficulty: medium

@@ -4,7 +4,12 @@ id: "20251012-170003"
 title: "SharedFlow replay cache and buffer configuration / SharedFlow replay cache и конфигурация буфера"
 description: "Complete guide to SharedFlow configuration: replay cache, buffer capacity, overflow strategies, and performance implications"
 topic: kotlin
-subtopics: ["coroutines", "flow", "sharedflow", "replay", "buffer", "backpressure"]
+subtopics:
+  - coroutines
+  - flow
+  - sharedflow
+  - replay
+  - buffer
 difficulty: medium
 status: draft
 created: 2025-10-12
@@ -14,7 +19,6 @@ tags: ["sharedflow", "replay", "buffer", "backpressure", "hot-flow", "configurat
 moc: "moc-kotlin"
 contributors: []
 ---
-
 # SharedFlow replay cache and buffer configuration / SharedFlow replay cache и конфигурация буфера
 
 ## English Version
@@ -1278,30 +1282,6 @@ val lowMemory = MutableSharedFlow<LargeObject>(
 - [[q-stateflow-sharedflow-differences--kotlin--medium]] - Stateflow
 - [[q-sharedflow-stateflow--kotlin--medium]] - Flow
 
-### Advanced (Harder)
-- [[q-channel-pipelines--kotlin--hard]] - Channels
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related ("medium")
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
-- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
-- [[q-stateflow-sharedflow-differences--kotlin--medium]] - Stateflow
-- [[q-sharedflow-stateflow--kotlin--medium]] - Flow
-
-### Advanced (Harder)
-- [[q-channel-pipelines--kotlin--hard]] - Channels
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related ("medium")
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
-- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
-- [[q-stateflow-sharedflow-differences--kotlin--medium]] - Stateflow
-- [[q-sharedflow-stateflow--kotlin--medium]] - Flow
-
-### Advanced (Harder)
-- [[q-channel-pipelines--kotlin--hard]] - Channels
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
-
 ### Related (Medium)
 - [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
@@ -1310,9 +1290,11 @@ val lowMemory = MutableSharedFlow<LargeObject>(
 - [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
 
 ### Advanced (Harder)
-- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
+- [[q-channel-pipelines--kotlin--hard]] - Channels
+- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+
+### Hub
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
 ## Tags
 #kotlin #coroutines #sharedflow #replay #buffer #backpressure #hot-flow #stateflow

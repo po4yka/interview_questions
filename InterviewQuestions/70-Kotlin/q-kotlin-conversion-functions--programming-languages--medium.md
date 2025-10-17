@@ -1,5 +1,5 @@
 ---
-id: "20251015082237131"
+id: 20251012-12271111117
 title: "Kotlin Conversion Functions / Kotlin Conversion Функции"
 topic: computer-science
 difficulty: medium

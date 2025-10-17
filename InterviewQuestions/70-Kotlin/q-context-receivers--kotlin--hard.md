@@ -1,5 +1,5 @@
 ---
-id: "20251015082236001"
+id: 20251015-095858
 title: "Context Receivers"
 topic: kotlin
 difficulty: hard

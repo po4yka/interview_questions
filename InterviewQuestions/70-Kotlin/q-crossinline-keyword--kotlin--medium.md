@@ -1,5 +1,5 @@
 ---
-id: "20251015082236022"
+id: 20251012-154348
 title: "Crossinline Keyword / Ключевое слово crossinline"
 topic: kotlin
 difficulty: medium

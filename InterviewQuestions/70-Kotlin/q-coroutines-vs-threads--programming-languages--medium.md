@@ -1,5 +1,5 @@
 ---
-id: "20251015082236005"
+id: 20251012-154346
 title: "Coroutines Vs Threads / Корутины против потоков"
 topic: kotlin
 difficulty: medium

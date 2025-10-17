@@ -1,5 +1,5 @@
 ---
-id: "20251015082237102"
+id: 20251012-122747
 title: "Abstract Class Purpose / Назначение абстрактных классов"
 topic: computer-science
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237443"
+id: 20251012-1227122
 title: "Dagger Problems / Проблемы Dagger"
 topic: android
 difficulty: medium

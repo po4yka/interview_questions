@@ -1,5 +1,5 @@
 ---
-id: "20251015082237284"
+id: 20251012-122711155
 title: "What Is A View And What Is Responsible For Its Visual Part / What Is A View и What Is Responsible For Its Visual Part"
 topic: android
 difficulty: medium

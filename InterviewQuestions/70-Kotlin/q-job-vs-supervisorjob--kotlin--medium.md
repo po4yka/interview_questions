@@ -1,5 +1,5 @@
 ---
-id: "20251015082236041"
+id: 20251012-154367
 title: "Job Vs Supervisorjob / Job против Supervisorjob"
 topic: kotlin
 difficulty: medium

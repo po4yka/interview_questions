@@ -1,5 +1,5 @@
 ---
-id: "20251015082237540"
+id: 20251017-144838
 title: "Rss Feed Aggregator / Агрегатор RSS лент"
 topic: android
 difficulty: medium

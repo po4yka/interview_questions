@@ -10,12 +10,9 @@ tags: - algorithms
   - quicksort
   - mergesort
   - complexity
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-algorithms
-related_questions:   - q-binary-search--algorithms--easy
+related:   - q-binary-search--algorithms--easy
   - q-time-space-complexity--algorithms--easy
-slug: sorting-algorithms-comparison-algorithms-medium
 subtopics:   - sorting
   - quicksort
   - mergesort

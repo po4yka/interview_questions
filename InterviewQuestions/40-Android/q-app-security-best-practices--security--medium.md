@@ -1,5 +1,5 @@
 ---
-id: "20251015082237358"
+id: 20251012-122781
 title: "App Security Best Practices / Лучшие практики безопасности приложения"
 topic: security
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082238655"
+id: 20251016-164357
 title: "Until What Point Does Viewmodel Guarantee State Preservation / До какого момента ViewModel гарантирует сохранение состояния"
 topic: android
 difficulty: medium

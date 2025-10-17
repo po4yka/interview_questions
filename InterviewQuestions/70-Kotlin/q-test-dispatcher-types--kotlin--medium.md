@@ -10,13 +10,10 @@ tags: - kotlin
   - testing
   - test-dispatcher
   - runtest
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-kotlin
-related_questions:   - q-debugging-coroutines-techniques--kotlin--medium
+related:   - q-debugging-coroutines-techniques--kotlin--medium
   - q-common-coroutine-mistakes--kotlin--medium
   - q-channelflow-callbackflow-flow--kotlin--medium
-slug: test-dispatcher-types-kotlin-medium
 subtopics:   - coroutines
   - testing
   - test-dispatcher

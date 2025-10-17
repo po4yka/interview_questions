@@ -1,5 +1,5 @@
 ---
-id: "20251015082237283"
+id: 20251012-122711179
 title: "When Can The System Restart A Service / Когда система может перезапустить Service"
 topic: android
 difficulty: medium

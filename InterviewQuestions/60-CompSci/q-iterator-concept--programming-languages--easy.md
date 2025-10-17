@@ -1,5 +1,5 @@
 ---
-id: "20251015082237114"
+id: 20251012-1227111151
 title: "Iterator Concept / Концепция Iterator"
 topic: computer-science
 difficulty: easy

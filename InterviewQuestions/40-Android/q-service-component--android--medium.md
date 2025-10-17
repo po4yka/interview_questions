@@ -184,19 +184,3 @@ These two paths aren't entirely separate. You can bind to a service that is alre
 
 ### Advanced (Harder)
 - [[q-lifecycle-aware-coroutines--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-memory-leak-detection--performance--medium]] - Performance
-- [[q-lifecyclescope-viewmodelscope--kotlin--medium]] - Coroutines
-- [[q-repeatonlifecycle-android--kotlin--medium]] - Coroutines
-- [[q-viewmodel-coroutines-lifecycle--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-lifecycle-aware-coroutines--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-memory-leak-detection--performance--medium]] - Performance
-- [[q-lifecyclescope-viewmodelscope--kotlin--medium]] - Coroutines
-- [[q-repeatonlifecycle-android--kotlin--medium]] - Coroutines
-- [[q-viewmodel-coroutines-lifecycle--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-lifecycle-aware-coroutines--kotlin--hard]] - Coroutines

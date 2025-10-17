@@ -1,5 +1,5 @@
 ---
-id: "20251015082237213"
+id: 20251012-1227111122
 title: "Data Class Component Functions"
 topic: computer-science
 difficulty: easy

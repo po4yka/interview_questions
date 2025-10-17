@@ -1,5 +1,5 @@
 ---
-id: "20251015082237121"
+id: 20251012-1227111158
 title: "Java Object Comparison / Java Object Сравнение"
 topic: programming-languages
 difficulty: easy
@@ -11,10 +11,8 @@ tags: - equality
   - java
   - object-comparison
   - programming-languages
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-programming-languages
-related_questions: []
+related: []
 subtopics: ["java", "jvm", "language-features"]
 ---
 # Как сравниваются объекты в Java?

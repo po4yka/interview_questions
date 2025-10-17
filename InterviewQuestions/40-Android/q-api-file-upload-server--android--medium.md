@@ -1,5 +1,5 @@
 ---
-id: "20251015082237308"
+id: 20251012-122779
 title: "Api File Upload Server / Загрузка файлов на сервер через API"
 topic: android
 difficulty: medium

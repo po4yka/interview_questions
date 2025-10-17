@@ -6,8 +6,6 @@ difficulty: medium
 status: draft
 created: "2025-10-12"
 tags: ["kotlin", "coroutines", "withcontext", "dispatchers", "context-switching", "difficulty/medium"]
-date_created: "2025-10-12"
-date_updated: "2025-10-12"
 description: "A comprehensive guide to withContext in Kotlin coroutines, covering dispatcher switching, performance implications, and comparison with other coroutine builders"
 moc: "moc-kotlin"
 subtopics: ["coroutines", "withcontext", "dispatchers", "context-switching"]

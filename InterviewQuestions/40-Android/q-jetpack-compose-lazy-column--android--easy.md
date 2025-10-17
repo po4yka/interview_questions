@@ -1,5 +1,5 @@
 ---
-id: "20251015082238664"
+id: 20251012-12271114
 title: "Jetpack Compose Lazy Column"
 topic: android
 difficulty: easy

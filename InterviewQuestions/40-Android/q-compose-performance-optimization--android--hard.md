@@ -1,5 +1,5 @@
 ---
-id: 20251006-011
+id: 20251017-114333
 title: "Compose Performance Optimization / Оптимизация производительности Compose"
 aliases: []
 

@@ -6,13 +6,10 @@ difficulty: hard
 status: draft
 created: 2025-10-12
 tags: [context-receivers, experimental, dsl, api-design, android/context-receivers, android/advanced-features, android/dsl, android/api-design, difficulty/hard]
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-android
-related_questions:   - q-kotlin-dsl-builders--kotlin--hard
+related:   - q-kotlin-dsl-builders--kotlin--hard
   - q-sealed-classes-state-management--kotlin--medium
   - q-kotlin-coroutines-advanced--kotlin--hard
-slug: kotlin-context-receivers-kotlin-hard
 subtopics:   - kotlin
   - context-receivers
   - advanced-features

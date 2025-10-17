@@ -6,13 +6,10 @@ difficulty: medium
 status: draft
 created: 2025-10-12
 tags: [windowinsets, edge-to-edge, system-ui, immersive, android/system-ui, android/windowinsets, android/edge-to-edge, android/immersive, difficulty/medium]
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-android
-related_questions:   - q-jetpack-compose-basics--android--medium
+related:   - q-jetpack-compose-basics--android--medium
   - q-material3-components--material-design--easy
   - q-adaptive-layouts--android--hard
-slug: windowinsets-edge-to-edge-android-medium
 subtopics:   - ui
   - system-ui
   - windowinsets

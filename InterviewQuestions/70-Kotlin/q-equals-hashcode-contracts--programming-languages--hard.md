@@ -1,5 +1,5 @@
 ---
-id: "20251015082236049"
+id: 20251012-154359
 title: "Equals Hashcode Contracts / Контракты equals и hashCode"
 topic: kotlin
 difficulty: hard

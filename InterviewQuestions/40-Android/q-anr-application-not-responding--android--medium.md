@@ -1,5 +1,5 @@
 ---
-id: 202510051234001
+id: 20251012-122778
 title: "ANR (Application Not Responding) / ANR (Приложение не отвечает)"
 topic: android
 status: draft

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237239"
+id: 20251012-1227110
 title: "Compose Stability Skippability / Стабильность и пропускаемость Compose"
 topic: android
 difficulty: hard

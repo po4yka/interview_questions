@@ -1,5 +1,5 @@
 ---
-id: "20251015082237516"
+id: 20251012-122776
 title: "Android14 Permissions / Разрешения Android 14"
 topic: permissions
 difficulty: medium

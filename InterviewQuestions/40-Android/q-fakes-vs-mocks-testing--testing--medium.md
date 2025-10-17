@@ -1,5 +1,5 @@
 ---
-id: "20251015082237245"
+id: 20251012-1227135
 title: "Fakes Vs Mocks Testing / Fakes против Mocks Тестирование"
 topic: android
 difficulty: medium

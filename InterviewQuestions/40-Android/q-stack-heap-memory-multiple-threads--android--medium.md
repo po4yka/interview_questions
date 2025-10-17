@@ -1,15 +1,13 @@
 ---
-id: "20251015082237352"
+id: 20251012-122711111
 title: "Stack Heap Memory Multiple Threads / Stack и Heap память для нескольких потоков"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
 tags: [android/memory-management, heap, memory-management, multithreading, stack, threading, difficulty/medium]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Изменится ли объём памяти стека/кучи, если в приложении создано несколько потоков?
 

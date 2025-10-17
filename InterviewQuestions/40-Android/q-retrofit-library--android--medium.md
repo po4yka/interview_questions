@@ -1,5 +1,5 @@
 ---
-id: "20251015082237566"
+id: 20251017-144837
 title: "Retrofit Library / Библиотека Retrofit"
 topic: android
 difficulty: medium

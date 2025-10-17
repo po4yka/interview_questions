@@ -11,7 +11,7 @@
 ```dataview
 TABLE WITHOUT ID
     length(rows) as "Total Questions"
-FROM "40-Android" OR "70-Kotlin" OR "60-CompSci" OR "20-Algorithms" OR "50-Backend" OR "80-Tools"
+FROM "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
 WHERE topic
 GROUP BY true
 ```
@@ -25,7 +25,7 @@ TABLE WITHOUT ID
     round((length(filter(rows, (r) => r.difficulty = "easy")) / length(rows)) * 100) + "%" as "Easy",
     round((length(filter(rows, (r) => r.difficulty = "medium")) / length(rows)) * 100) + "%" as "Medium",
     round((length(filter(rows, (r) => r.difficulty = "hard")) / length(rows)) * 100) + "%" as "Hard"
-FROM "40-Android" OR "70-Kotlin" OR "60-CompSci" OR "20-Algorithms" OR "50-Backend" OR "80-Tools"
+FROM "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
 WHERE topic
 GROUP BY topic
 SORT length(rows) DESC
@@ -33,28 +33,82 @@ SORT length(rows) DESC
 
 ### By Difficulty
 
-```dataview
-TABLE WITHOUT ID
-    difficulty as "Difficulty",
-    length(rows) as "Count",
-    round((length(rows) / 580) * 100) + "%" as "Percentage"
-FROM "40-Android" OR "70-Kotlin" OR "60-CompSci" OR "20-Algorithms" OR "50-Backend" OR "80-Tools"
-WHERE difficulty
-GROUP BY difficulty
-SORT difficulty ASC
+```dataviewjs
+const sources = '"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"';
+const difficultyPages = dv.pages(sources)
+    .where(p => p.difficulty);
+
+const totalDifficulty = difficultyPages.length;
+const preferredOrder = ["easy", "medium", "hard"];
+const difficultyCounts = {};
+
+for (const page of difficultyPages) {
+    const key = String(page.difficulty).toLowerCase();
+    difficultyCounts[key] = (difficultyCounts[key] ?? 0) + 1;
+}
+
+const formatLabel = value => value ? value.charAt(0).toUpperCase() + value.slice(1) : "Unknown";
+
+const orderedRows = preferredOrder
+    .map(diff => ({ diff, count: difficultyCounts[diff] ?? 0 }))
+    .filter(entry => entry.count > 0);
+
+const otherRows = Object.keys(difficultyCounts)
+    .filter(diff => !preferredOrder.includes(diff))
+    .sort()
+    .map(diff => ({ diff, count: difficultyCounts[diff] }));
+
+const tableRows = orderedRows.concat(otherRows).map(({ diff, count }) => [
+    formatLabel(diff),
+    count,
+    totalDifficulty ? `${Math.round((count / totalDifficulty) * 100)}%` : "0%"
+]);
+
+if (tableRows.length) {
+    dv.table(["Difficulty", "Count", "Percentage"], tableRows);
+} else {
+    dv.paragraph("No questions with difficulty metadata.");
+}
 ```
 
 ### By Status
 
-```dataview
-TABLE WITHOUT ID
-    status as "Status",
-    length(rows) as "Count",
-    round((length(rows) / 580) * 100) + "%" as "Percentage"
-FROM "40-Android" OR "70-Kotlin" OR "60-CompSci" OR "20-Algorithms" OR "50-Backend" OR "80-Tools"
-WHERE status
-GROUP BY status
-SORT length(rows) DESC
+```dataviewjs
+const statusSources = '"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"';
+const statusPages = dv.pages(statusSources)
+    .where(p => p.status);
+
+const totalStatuses = statusPages.length;
+const statusOrder = ["draft", "reviewed", "ready"];
+const statusCounts = {};
+
+for (const page of statusPages) {
+    const key = String(page.status).toLowerCase();
+    statusCounts[key] = (statusCounts[key] ?? 0) + 1;
+}
+
+const formatLabel = value => value ? value.charAt(0).toUpperCase() + value.slice(1) : "Unknown";
+
+const preferredStatuses = statusOrder
+    .map(status => ({ status, count: statusCounts[status] ?? 0 }))
+    .filter(entry => entry.count > 0);
+
+const additionalStatuses = Object.keys(statusCounts)
+    .filter(status => !statusOrder.includes(status))
+    .sort()
+    .map(status => ({ status, count: statusCounts[status] }));
+
+const statusRows = preferredStatuses.concat(additionalStatuses).map(({ status, count }) => [
+    formatLabel(status),
+    count,
+    totalStatuses ? `${Math.round((count / totalStatuses) * 100)}%` : "0%"
+]);
+
+if (statusRows.length) {
+    dv.table(["Status", "Count", "Percentage"], statusRows);
+} else {
+    dv.paragraph("No questions with status metadata.");
+}
 ```
 ## Quick Links
 
@@ -85,7 +139,7 @@ TABLE WITHOUT ID
     "Bilingual Coverage" as "Metric",
     length(filter(rows, (r) => contains(r.language_tags, "en") AND contains(r.language_tags, "ru"))) as "Questions with EN+RU",
     round((length(filter(rows, (r) => contains(r.language_tags, "en") AND contains(r.language_tags, "ru"))) / length(rows)) * 100) + "%" as "Coverage"
-FROM "40-Android" OR "70-Kotlin" OR "60-CompSci" OR "20-Algorithms" OR "50-Backend" OR "80-Tools"
+FROM "20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"
 WHERE language_tags
 GROUP BY true
 ```
@@ -98,8 +152,13 @@ GROUP BY true
 
 ```dataviewjs
 // Find all files with broken wikilinks
-const files = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci" or "20-Algorithms" or "50-Backend" or "80-Tools" or "90-MOCs"')
-    .where(p => p.file.path.endsWith('.md'));
+const TOPIC_FOLDERS = ["20-Algorithms", "30-System-Design", "40-Android", "50-Backend", "60-CompSci", "70-Kotlin", "80-Tools"];
+const AUXILIARY_FOLDERS = ["10-Concepts", "90-MOCs"];
+const SCAN_FOLDERS = [...TOPIC_FOLDERS, ...AUXILIARY_FOLDERS];
+const folderQuery = SCAN_FOLDERS.map(folder => `"${folder}"`).join(" or ");
+
+const files = dv.pages(folderQuery)
+    .where(p => p.file.ext === "md");
 
 let brokenLinks = [];
 let totalLinks = 0;
@@ -135,7 +194,8 @@ for (let file of files) {
 
 // Display results
 dv.header(3, ` Summary`);
-dv.paragraph(`**Total Links**: ${totalLinks} | **Broken**: ${brokenCount} | **Health**: ${Math.round((totalLinks - brokenCount) / totalLinks * 100)}%`);
+const linkHealth = totalLinks > 0 ? Math.round(((totalLinks - brokenCount) / totalLinks) * 100) : 100;
+dv.paragraph(`**Total Links**: ${totalLinks} | **Broken**: ${brokenCount} | **Health**: ${linkHealth}%`);
 
 if (brokenCount > 0) {
     dv.header(3, ` Broken Links (${brokenCount})`);
@@ -173,16 +233,16 @@ if (brokenCount > 0) {
 
 ```dataviewjs
 // Find related questions that should link to each other but don't
-const files = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci"')
-    .where(p => p.file.path.startsWith('q-'));
+const questionFiles = dv.pages('"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"')
+    .where(p => p.file.name.startsWith('q-'));
 
 let suggestions = [];
 
-for (let file of files) {
+for (let file of questionFiles) {
     if (!file.subtopics) continue;
 
     // Find files with overlapping subtopics
-    const related = files.where(f =>
+    const related = questionFiles.where(f =>
         f.file.path !== file.file.path &&
         f.subtopics &&
         f.subtopics.some(st => file.subtopics.includes(st))
@@ -278,8 +338,8 @@ if (orphans.length > 0) {
 
 ```dataviewjs
 // Find files that don't have a "Related Questions" section
-const files = dv.pages('"40-Android" or "70-Kotlin" or "60-CompSci"')
-    .where(p => p.file.path.startsWith('q-'));
+const files = dv.pages('"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"')
+    .where(p => p.file.name.startsWith('q-'));
 
 let filesWithoutRelated = [];
 

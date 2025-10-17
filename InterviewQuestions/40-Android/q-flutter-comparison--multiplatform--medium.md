@@ -1,5 +1,5 @@
 ---
-id: "20251015082237270"
+id: 20251012-1227140
 title: "Flutter Comparison / Flutter Сравнение"
 topic: android
 difficulty: medium

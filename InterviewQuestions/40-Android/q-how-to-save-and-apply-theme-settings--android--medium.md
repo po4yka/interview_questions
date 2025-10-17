@@ -1,5 +1,5 @@
 ---
-id: "20251015082237393"
+id: 20251012-1227196
 title: "How To Save And Apply Theme Settings / How To Save и Apply Theme Settings"
 topic: android
 difficulty: medium

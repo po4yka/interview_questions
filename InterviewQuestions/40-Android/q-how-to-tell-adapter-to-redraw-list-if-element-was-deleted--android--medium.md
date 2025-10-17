@@ -1,5 +1,5 @@
 ---
-id: "20251015082237597"
+id: 20251017-114527
 title: "How To Tell Adapter To Redraw List If Element Was Deleted / Как сказать адаптеру перерисовать список если элемент был удален"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: q-play-feature-delivery-dynamic-modules--android--medium--1728115380000
+id: 20251012-12271166
 title: "Play Feature Delivery and Dynamic Modules / Play Feature Delivery и динамические модули"
 topic: android
 difficulty: medium
@@ -9,7 +9,6 @@ tags: [play-feature-delivery, dynamic-modules, app-bundle, modularization, diffi
 aliases:   - Play Feature Delivery and Dynamic Modules
   - Play Feature Delivery и динамические модули
 category: android
-date_created: 2025-10-05
 date_modified: 2025-10-05
 language_tags: [play-feature-delivery, dynamic-modules, app-bundle, modularization, difficulty/medium, android/bundle, android/play-console, android/architecture-modularization]
 moc: moc-android

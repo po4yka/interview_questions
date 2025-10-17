@@ -1,5 +1,5 @@
 ---
-id: "20251015082237226"
+id: 20251012-12271111145
 title: "Kotlin Object Companion Object / Object и Companion Object в Kotlin"
 topic: computer-science
 difficulty: easy

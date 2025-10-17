@@ -1,5 +1,5 @@
 ---
-id: "20251015082236039"
+id: 20251012-154341
 title: "Arraylist Linkedlist Vector Difference / Разница ArrayList LinkedList и Vector"
 topic: kotlin
 difficulty: medium

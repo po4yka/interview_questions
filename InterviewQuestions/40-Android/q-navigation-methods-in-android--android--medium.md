@@ -1,5 +1,5 @@
 ---
-id: "20251015082237536"
+id: 20251012-12271150
 title: "Navigation Methods In Android / Методы навигации в Android"
 topic: android
 difficulty: medium

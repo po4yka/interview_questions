@@ -1,5 +1,5 @@
 ---
-id: 20251006-004
+id: 20251012-142410
 title: "Retry and RetryWhen operators in Flow / Операторы Retry и RetryWhen во Flow"
 aliases: []
 
@@ -686,37 +686,7 @@ class ProductViewModel : ViewModel() {
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 - [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
 - [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
-### Related (Medium)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-flow-operators--kotlin--medium]] - Flow
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
 
-### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
-### Related (Medium)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-flow-operators--kotlin--medium]] - Flow
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
-
-### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Flow
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
-### Related (Medium)
-- [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
-- [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
-
-### Advanced (Harder)
-- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237300"
+id: 20251012-122761
 title: "Android Architectural Patterns / Android Architectural Паттерны"
 topic: android
 difficulty: medium

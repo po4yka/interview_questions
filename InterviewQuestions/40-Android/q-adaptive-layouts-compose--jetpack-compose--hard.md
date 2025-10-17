@@ -6,13 +6,10 @@ difficulty: hard
 status: draft
 created: 2025-10-12
 tags: [jetpack-compose, adaptive-layouts, responsive-design, window-size-classes, android/compose, android/adaptive-layouts, android/responsive-design, android/window-size-classes, android/foldables, difficulty/hard]
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-android
-related_questions:   - q-windowinsets-edge-to-edge--android--medium
+related:   - q-windowinsets-edge-to-edge--android--medium
   - q-jetpack-compose-basics--android--medium
   - q-material3-components--material-design--easy
-slug: adaptive-layouts-compose-jetpack-compose-hard
 subtopics:   - jetpack-compose
   - adaptive-layouts
   - responsive-design

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237547"
+id: 20251012-122711165
 title: "What Is The Difference Between Fragmentmanager And Fragmenttransaction / What Is The Difference Between Fragmentmanager и Fragmenttransaction"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237323"
+id: 20251012-122775
 title: "Android Testing Strategies / Android Тестирование Strategies"
 topic: android
 difficulty: medium

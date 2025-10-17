@@ -1,5 +1,5 @@
 ---
-id: "20251015082238641"
+id: 20251012-1227197
 title: "How To Save Scroll State When Activity Is Recreated / Как сохранить состояние скролла при пересоздании Activity"
 topic: android
 difficulty: medium

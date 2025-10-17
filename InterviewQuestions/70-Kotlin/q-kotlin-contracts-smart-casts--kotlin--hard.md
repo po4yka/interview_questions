@@ -1,5 +1,5 @@
 ---
-id: "20251015082237070"
+id: 20251012-154370
 title: "Kotlin Contracts Smart Casts / Контракты и smart casts в Kotlin"
 topic: kotlin
 difficulty: hard

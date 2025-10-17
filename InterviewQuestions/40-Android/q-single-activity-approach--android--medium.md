@@ -1,5 +1,5 @@
 ---
-id: "20251015082238659"
+id: 20251012-122711104
 title: "Single Activity Approach / Подход Single Activity"
 topic: android
 difficulty: medium

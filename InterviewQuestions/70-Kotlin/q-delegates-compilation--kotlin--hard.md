@@ -1,5 +1,5 @@
 ---
-id: "20251015082236032"
+id: 20251012-154356
 title: "Delegates Compilation / Компиляция делегатов"
 topic: kotlin
 difficulty: hard

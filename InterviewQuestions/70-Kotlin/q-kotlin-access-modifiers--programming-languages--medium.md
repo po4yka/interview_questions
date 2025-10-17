@@ -1,5 +1,5 @@
 ---
-id: "20251015082237207"
+id: 20251012-12271111109
 title: "Kotlin Access Modifiers / Модификаторы доступа Kotlin"
 topic: computer-science
 difficulty: medium

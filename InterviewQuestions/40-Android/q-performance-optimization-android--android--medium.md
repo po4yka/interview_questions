@@ -1,5 +1,5 @@
 ---
-id: "20251015082237268"
+id: 20251012-12271163
 title: "Performance Optimization Android / Performance Оптимизация Android"
 topic: android
 difficulty: medium

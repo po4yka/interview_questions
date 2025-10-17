@@ -1,5 +1,5 @@
 ---
-id: "20251015082237167"
+id: 20251012-1227111123
 title: "Data Class Special Features / Специальные возможности data class"
 topic: computer-science
 difficulty: easy

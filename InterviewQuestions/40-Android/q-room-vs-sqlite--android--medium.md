@@ -1,5 +1,5 @@
 ---
-id: "20251015082237437"
+id: 20251016-163856
 title: "Room Vs Sqlite / Room против Sqlite"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082238633"
+id: 20251012-12271104
 title: "In What Cases Might You Need To Call Commitallowingstateloss / В каких случаях может понадобиться commitAllowingStateLoss"
 topic: android
 difficulty: hard

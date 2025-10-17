@@ -1,5 +1,5 @@
 ---
-id: "20251015082238626"
+id: 20251012-12271115
 title: "Jit Vs Aot Compilation"
 topic: android
 difficulty: medium

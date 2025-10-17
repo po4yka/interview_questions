@@ -1,5 +1,5 @@
 ---
-id: "20251015082237523"
+id: 20251012-1227158
 title: "How Does Fragment Lifecycle Differ From Activity V2 / Чем жизненный цикл Fragment отличается от Activity v2"
 topic: android
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237210"
+id: 20251012-1227111171
 title: Prototype Pattern
 topic: design-patterns
 difficulty: medium

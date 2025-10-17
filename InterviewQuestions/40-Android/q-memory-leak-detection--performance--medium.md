@@ -5,7 +5,12 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [performance, memory-leaks, profiling, leakcanary, optimization, lifecycle]
+subtopics:
+  - performance
+  - memory-leaks
+  - profiling
+  - leakcanary
+  - optimization
 question_kind: practical
 difficulty: medium
 

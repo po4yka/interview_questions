@@ -6,8 +6,6 @@ difficulty: medium
 status: draft
 created: "2025-10-12"
 tags: ["kotlin", "coroutines", "difficulty/medium"]
-date_created: "2025-10-12"
-date_updated: "2025-10-12"
 description: "Comprehensive guide to What is Dispatchers.Unconfined and when to use it? in Kotlin coroutines"
 moc: "moc-kotlin"
 subtopics: ["coroutines", "dispatchers", "unconfined"]

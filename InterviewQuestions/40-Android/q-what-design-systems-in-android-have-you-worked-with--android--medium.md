@@ -1,5 +1,5 @@
 ---
-id: "20251015082237552"
+id: 20251012-122711144
 title: "What Design Systems In Android Have You Worked With / С какими дизайн-системами Android вы работали"
 topic: android
 difficulty: medium

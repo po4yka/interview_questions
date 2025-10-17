@@ -1,5 +1,5 @@
 ---
-id: "20251015082237152"
+id: 20251012-12271111120
 title: "Kotlin Default Access Modifier / Модификатор доступа по умолчанию в Kotlin"
 topic: computer-science
 difficulty: easy

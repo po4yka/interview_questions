@@ -1,5 +1,5 @@
 ---
-id: "20251015082237500"
+id: 20251016-164009
 title: "List To Detail Navigation / Навигация от списка к детализации"
 topic: android
 difficulty: medium

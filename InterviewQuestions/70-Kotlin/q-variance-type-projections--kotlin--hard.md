@@ -1,5 +1,5 @@
 ---
-id: "20251015082237050"
+id: 20251012-154392
 title: "Variance Type Projections / Вариантность и проекции типов"
 topic: kotlin
 difficulty: hard

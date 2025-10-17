@@ -1,5 +1,5 @@
 ---
-id: "20251015082238663"
+id: 20251012-122711198
 title: "Why Multithreading Tools / Зачем инструменты многопоточности"
 topic: android
 difficulty: easy

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237295"
+id: 20251012-12271109
 title: "Internal App Distribution / Внутреннее распространение приложения"
 topic: android
 difficulty: medium

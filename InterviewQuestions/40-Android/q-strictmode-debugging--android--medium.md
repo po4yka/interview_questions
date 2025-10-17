@@ -1,5 +1,5 @@
 ---
-id: "20251015082237512"
+id: 20251012-122711113
 title: "Strictmode Debugging / Отладка StrictMode"
 topic: android
 difficulty: medium

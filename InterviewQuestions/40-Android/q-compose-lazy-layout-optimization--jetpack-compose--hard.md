@@ -1,5 +1,5 @@
 ---
-id: "20251015082237441"
+id: 20251017-115547
 title: "Compose Lazy Layout Optimization"
 topic: jetpack-compose
 difficulty: hard

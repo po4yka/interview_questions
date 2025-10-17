@@ -1,5 +1,5 @@
 ---
-id: "20251015082238605"
+id: 20251012-1227156
 title: "How Did Fragments Appear And Why Were They Started To Be Used / How Did Fragments Appear и Why Were They Started To Be Used"
 topic: android
 difficulty: hard

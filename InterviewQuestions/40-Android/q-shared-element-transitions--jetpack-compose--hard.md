@@ -1,5 +1,5 @@
 ---
-id: "20251015082237288"
+id: 20251012-122711102
 title: "Shared Element Transitions / Переходы с общими элементами"
 topic: android
 difficulty: hard
@@ -23,6 +23,78 @@ tags: [compose, animations, navigation, transitions, shared-elements, hero-anima
 ## Answer (EN)
 
 **Shared Element Transitions** (also known as hero animations) create visual continuity when an element transitions between two screens. Compose 1.6+ provides the **SharedTransitionLayout** API for implementing these transitions declaratively.
+
+**Key concepts:**
+
+```kotlin
+// SharedTransitionLayout provides scope for shared elements
+SharedTransitionLayout {
+    AnimatedContent(targetState = isDetailScreen) { isDetail ->
+        if (isDetail) {
+            DetailScreen()
+        } else {
+            ListScreen()
+        }
+    }
+}
+
+// Mark shared elements with matching keys
+@Composable
+fun SharedTransitionScope.ListItem(item: Item) {
+    Image(
+        painter = painterResource(item.imageRes),
+        modifier = Modifier.sharedElement(
+            rememberSharedContentState(key = "image-${item.id}"),
+            animatedVisibilityScope = this@AnimatedContent
+        )
+    )
+}
+```
+
+**Features:**
+- Smooth morphing between screens
+- Automatic bounds and position interpolation
+- Works with Navigation Compose
+- Declarative API with modifiers
+
+---
+
+## Ответ (RU)
+
+**Переходы с общими элементами** (также известные как hero animations) создают визуальную непрерывность при переходе элемента между двумя экранами. Compose 1.6+ предоставляет API **SharedTransitionLayout** для декларативной реализации таких переходов.
+
+**Ключевые концепции:**
+
+```kotlin
+// SharedTransitionLayout обеспечивает scope для общих элементов
+SharedTransitionLayout {
+    AnimatedContent(targetState = isDetailScreen) { isDetail ->
+        if (isDetail) {
+            DetailScreen()
+        } else {
+            ListScreen()
+        }
+    }
+}
+
+// Отметьте общие элементы совпадающими ключами
+@Composable
+fun SharedTransitionScope.ListItem(item: Item) {
+    Image(
+        painter = painterResource(item.imageRes),
+        modifier = Modifier.sharedElement(
+            rememberSharedContentState(key = "image-${item.id}"),
+            animatedVisibilityScope = this@AnimatedContent
+        )
+    )
+}
+```
+
+**Возможности:**
+- Плавная трансформация между экранами
+- Автоматическая интерполяция границ и позиции
+- Работает с Navigation Compose
+- Декларативный API с модификаторами
 
 ---
 

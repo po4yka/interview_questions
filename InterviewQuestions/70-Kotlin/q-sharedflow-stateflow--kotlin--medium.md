@@ -1,11 +1,16 @@
 ---
-id: 20251012-004
+id: 20251012-144758
 title: "SharedFlow vs StateFlow / SharedFlow против StateFlow"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, sharedflow, stateflow, hot-flow, state-management, coroutines]
+subtopics:
+  - flow
+  - sharedflow
+  - stateflow
+  - hot-flow
+  - state-management
 question_kind: comparison
 difficulty: medium
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, flow, sharedflow, stateflow, hot-flow, coroutines, state-management, difficulty/medium]
 ---
-
 # Question (EN)
 > What's the difference between SharedFlow and StateFlow? When should you use each?
 
@@ -840,38 +844,9 @@ class BadViewModel : ViewModel() {
 ### Advanced (Harder)
 - [[q-actor-pattern--kotlin--hard]] - Coroutines
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
-- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
-- [[q-stateflow-sharedflow-differences--kotlin--medium]] - Stateflow
-- [[q-sharedflow-replay-buffer-config--kotlin--medium]] - Coroutines
 
-### Advanced (Harder)
-- [[q-actor-pattern--kotlin--hard]] - Coroutines
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Coroutines
-- [[q-stateflow-sharedflow-android--kotlin--medium]] - Coroutines
-- [[q-stateflow-sharedflow-differences--kotlin--medium]] - Stateflow
-- [[q-sharedflow-replay-buffer-config--kotlin--medium]] - Coroutines
-
-### Advanced (Harder)
-- [[q-actor-pattern--kotlin--hard]] - Coroutines
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
-
-### Related (Medium)
-- [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
-- [[q-stateflow-sharedflow-differences--kotlin--medium]] - StateFlow & SharedFlow differences
-
-### Advanced (Harder)
-- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
 
 ## MOC Links
 

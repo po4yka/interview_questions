@@ -1,5 +1,5 @@
 ---
-id: "20251015082238635"
+id: 20251012-1227168
 title: "How To Animate Adding Removing Items In Recyclerview / Как анимировать добавление и удаление элементов в RecyclerView"
 topic: android
 difficulty: medium

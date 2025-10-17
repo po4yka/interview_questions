@@ -1,5 +1,5 @@
 ---
-id: "20251015082237278"
+id: 20251012-1227111103
 title: "Workmanager Advanced / Продвинутый WorkManager"
 topic: android
 difficulty: medium

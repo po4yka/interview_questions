@@ -1,5 +1,5 @@
 ---
-id: "20251015082237373"
+id: 20251012-12271106
 title: "Inject Router To Presenter / Инъекция Router в Presenter"
 topic: android
 difficulty: medium

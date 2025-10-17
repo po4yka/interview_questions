@@ -1,5 +1,5 @@
 ---
-id: "20251015082238645"
+id: 20251012-1227178
 title: "How To Display Snackbar Or Toast Based On Results / Как отобразить Snackbar или Toast в зависимости от результатов"
 topic: android
 difficulty: medium

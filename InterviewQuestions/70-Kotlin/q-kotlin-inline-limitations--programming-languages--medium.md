@@ -1,5 +1,5 @@
 ---
-id: "20251015082237161"
+id: 20251016-163311
 title: "Kotlin Inline Limitations / Ограничения inline в Kotlin"
 topic: computer-science
 difficulty: medium

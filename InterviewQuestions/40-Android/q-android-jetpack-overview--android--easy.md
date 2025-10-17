@@ -1,15 +1,13 @@
 ---
-id: "20251015082238598"
+id: 20251012-122765
 title: "Android Jetpack Overview / Обзор Android Jetpack"
 topic: android
 difficulty: easy
 status: draft
 created: 2025-10-13
 tags: [jetpack, androidx, libraries, difficulty/easy]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 
 # Question (EN)

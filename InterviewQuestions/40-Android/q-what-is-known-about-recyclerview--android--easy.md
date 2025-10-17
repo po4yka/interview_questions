@@ -1,5 +1,5 @@
 ---
-id: "20251015082237510"
+id: 20251012-122711161
 title: "What Is Known About Recyclerview / Что известно о RecyclerView"
 topic: android
 difficulty: easy

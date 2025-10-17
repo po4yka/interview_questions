@@ -1,5 +1,5 @@
 ---
-id: "20251015082236044"
+id: 20251017-150640
 title: "Suspend Functions Deep Dive"
 topic: kotlin
 difficulty: medium
@@ -744,3 +744,40 @@ suspend fun fetchData() {
 **Performance**: Minimal overhead if no actual suspension occurs. State machine optimized by compiler. Use `inline suspend` for zero-overhead abstractions.
 
 **Common uses**: Network requests (Retrofit), database operations (Room), sequential async operations, parallel operations with `async`/`await`, timeout/retry logic, Flow emissions.
+
+## Ответ (RU)
+
+**Suspend функции** - это функции, которые могут приостанавливать выполнение без блокировки потоков. Ключевое слово `suspend` преобразует функцию в машину состояний, позволяя ей приостановиться в определенных точках и возобновиться позже на любом потоке.
+
+### Как это работает
+
+Компилятор Kotlin использует Continuation Passing Style (CPS) для преобразования suspend функций в машины состояний. Каждая точка приостановки получает метку, и добавляется параметр `Continuation<T>` для возобновления. Когда suspend функция приостанавливается, она возвращает `COROUTINE_SUSPENDED`; когда готова возобновиться, вызывает `continuation.resumeWith(result)`.
+
+### Основные правила
+
+Suspend функции можно вызывать только из:
+1. Других suspend функций
+2. Coroutine builders (`launch`, `async`)
+3. `runBlocking` (только для тестов/main)
+
+### Переключение потоков
+
+После точки приостановки корутина может возобновиться на другом потоке. Suspend функции не блокируют потоки - они освобождают их для других задач.
+
+### Best Practices
+
+- Используйте `delay()`, а не `Thread.sleep()`
+- Используйте `suspendCancellableCoroutine` для интеграции callback API (не `suspendCoroutine`)
+- Всегда регистрируйте обработчики отмены через `invokeOnCancellation`
+- Не используйте `runBlocking` в production коде
+- Всегда пробрасывайте `CancellationException`
+- Проверяйте отмену в длительных циклах через `ensureActive()`
+
+### Производительность
+
+Минимальный overhead если нет реального приостановления. State machine оптимизирован компилятором. Используйте `inline suspend` для zero-overhead абстракций.
+
+### Типичные случаи использования
+
+Сетевые запросы (Retrofit), операции с БД (Room), последовательные async операции, параллельные операции с `async`/`await`, timeout/retry логика, эмиссии Flow.
+

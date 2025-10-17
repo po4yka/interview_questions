@@ -166,14 +166,14 @@ Common query patterns for AI agents:
 ```dataview
 # All LeetCode by difficulty
 TABLE difficulty, subtopics, status
-FROM "Algorithms"
-WHERE contains(tags, "leetcode")
+FROM ""
+WHERE topic = "algorithms" AND startswith(file.name, "q-") AND contains(tags, "leetcode")
 SORT difficulty ASC, file.name ASC
 
 # Android questions touching Compose
 LIST file.link
-FROM "Android"
-WHERE contains(tags, "android/compose")
+FROM ""
+WHERE topic = "android" AND startswith(file.name, "q-") AND contains(tags, "android/compose")
 
 # Recently Updated
 TABLE updated, topic, difficulty

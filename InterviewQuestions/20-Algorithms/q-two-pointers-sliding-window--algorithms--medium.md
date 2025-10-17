@@ -10,12 +10,9 @@ tags: - algorithms
   - sliding-window
   - array
   - optimization
-date_created: 2025-10-12
-date_updated: 2025-10-12
 moc: moc-algorithms
-related_questions:   - q-binary-search-variants--algorithms--medium
+related:   - q-binary-search-variants--algorithms--medium
   - q-sorting-algorithms-comparison--algorithms--medium
-slug: two-pointers-sliding-window-algorithms-medium
 subtopics:   - two-pointers
   - sliding-window
   - array

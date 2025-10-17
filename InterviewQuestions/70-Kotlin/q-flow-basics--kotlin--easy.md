@@ -1,5 +1,5 @@
 ---
-id: 20251012-008
+id: 20251012-145350
 title: "Flow Basics in Kotlin / Основы Flow в Kotlin"
 aliases: []
 
@@ -526,21 +526,6 @@ fun calculate(x: Int): Int  // Лучше чем Flow<Int>
 
 ## Related Questions
 
-### Advanced (Harder)
-- [[q-kotlin-flow-basics--kotlin--medium]] - Flow
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-### Advanced (Harder)
-- [[q-kotlin-flow-basics--kotlin--medium]] - Flow
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-### Advanced (Harder)
-- [[q-kotlin-flow-basics--kotlin--medium]] - Flow
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
-- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
-
 ### Same Level (Easy)
 - [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Cold flow fundamentals
 
@@ -549,6 +534,14 @@ fun calculate(x: Int): Int  // Лучше чем Flow<Int>
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
 - [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
 - [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
+
+### Advanced (Harder)
+- [[q-kotlin-flow-basics--kotlin--medium]] - Flow
+- [[q-catch-operator-flow--kotlin--medium]] - Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
+
+### Hub
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
 ## MOC Links
 

@@ -1,5 +1,5 @@
 ---
-id: 20251011-003
+id: 20251012-12271111105
 title: "Flow Exception Handling / Обработка исключений в Flow"
 aliases: []
 
@@ -978,33 +978,7 @@ fun <T> Flow<T>.withRobustErrorHandling(
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-coroutine-exception-handling--kotlin--medium]] - Coroutines
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
-- [[q-retry-operators-flow--kotlin--medium]] - Flow
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
 
-### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-### Related (Medium)
-- [[q-coroutine-exception-handling--kotlin--medium]] - Coroutines
-- [[q-catch-operator-flow--kotlin--medium]] - Flow
-- [[q-retry-operators-flow--kotlin--medium]] - Flow
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
-
-### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
-### Related (Medium)
-- [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
-- [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
-
-### Advanced (Harder)
-- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies

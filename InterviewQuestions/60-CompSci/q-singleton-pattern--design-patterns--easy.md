@@ -1,5 +1,5 @@
 ---
-id: "20251015082237182"
+id: 20251012-1227111179
 title: "Singleton Pattern / Singleton Паттерн"
 topic: computer-science
 difficulty: easy
@@ -206,60 +206,168 @@ class MyRepository(private val api: ApiService) // Injected, not singleton
 
 ### Определение
 
-
-Singleton pattern is a software design pattern that **restricts the instantiation of a class to one "single" instance**. This is useful when exactly one object is needed to coordinate actions across the system. The term comes from the mathematical concept of a singleton.
+Паттерн Singleton — это паттерн проектирования, который **ограничивает создание экземпляров класса одним единственным экземпляром**. Это полезно, когда требуется ровно один объект для координации действий в системе. Термин происходит от математической концепции одноэлементного множества.
 
 ### Проблемы, которые решает
 
+Паттерн проектирования Singleton решает такие проблемы как:
 
-The singleton design pattern solves problems like:
-
-1. **How can it be ensured that a class has only one instance?**
-2. **How can the sole instance of a class be accessed easily?**
-3. **How can a class control its instantiation?**
-4. **How can the number of instances of a class be restricted?**
+1. **Как гарантировать, что класс имеет только один экземпляр?**
+2. **Как обеспечить легкий доступ к единственному экземпляру класса?**
+3. **Как класс может контролировать своё создание?**
+4. **Как ограничить количество экземпляров класса?**
 
 ### Решение
 
+Для создания singleton класса необходимо иметь:
 
-To create the singleton class, we need to have:
+- **Статический член**: Получает память только один раз из-за static, содержит экземпляр Singleton класса
+- **Приватный конструктор**: Предотвращает создание экземпляров Singleton класса извне
+- **Статический фабричный метод**: Предоставляет глобальную точку доступа к объекту Singleton и возвращает экземпляр вызывающему коду
 
-- **Static member**: It gets memory only once because of static, it contains the instance of the Singleton class
-- **Private constructor**: It will prevent to instantiate the Singleton class from outside the class
-- **Static factory method**: This provides the global point of access to the Singleton object and returns the instance to the caller
+### Пример: Классический Singleton
+
+```java
+public final class ClassSingleton {
+
+    private static ClassSingleton INSTANCE;
+    private String info = "Initial info class";
+
+    private ClassSingleton() {
+    }
+
+    public static ClassSingleton getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new ClassSingleton();
+        }
+
+        return INSTANCE;
+    }
+
+    // getters and setters
+}
+```
+
+### Пример Android/Kotlin: Потокобезопасный Singleton
+
+```kotlin
+// Object declaration - потокобезопасный singleton в Kotlin
+object DatabaseHelper {
+    private var database: SQLiteDatabase? = null
+
+    fun getDatabase(context: Context): SQLiteDatabase {
+        return database ?: synchronized(this) {
+            database ?: SQLiteDatabase.openOrCreateDatabase(
+                context.getDatabasePath("mydb.db"),
+                null
+            ).also { database = it }
+        }
+    }
+}
+
+// Использование
+val db = DatabaseHelper.getDatabase(context)
+```
+
+### Пример Kotlin: Ленивая инициализация
+
+```kotlin
+class NetworkManager private constructor() {
+
+    companion object {
+        @Volatile
+        private var instance: NetworkManager? = null
+
+        fun getInstance(): NetworkManager {
+            return instance ?: synchronized(this) {
+                instance ?: NetworkManager().also { instance = it }
+            }
+        }
+    }
+
+    fun makeRequest(url: String) {
+        println("Making request to: $url")
+    }
+}
+
+// Или используя lazy делегат
+class CacheManager private constructor() {
+    companion object {
+        val instance: CacheManager by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+            CacheManager()
+        }
+    }
+}
+```
 
 ### Объяснение примера
 
+**Пояснение**:
 
-**Explanation**:
+- **Object declaration** в Kotlin автоматически создает потокобезопасный singleton
+- **Companion object** с ленивой инициализацией обеспечивает потокобезопасный singleton с двойной проверкой блокировки
+- **`@Volatile`** обеспечивает видимость изменений переменной экземпляра между потоками
+- **`synchronized`** блок гарантирует, что только один поток может создать экземпляр
+- **`by lazy`** делегат предоставляет встроенную потокобезопасную ленивую инициализацию
 
-- **Object declaration** in Kotlin automatically creates a thread-safe singleton
-- **Companion object** with lazy initialization provides thread-safe singleton with double-checked locking
-- **`@Volatile`** ensures visibility of changes to the instance variable across threads
-- **`synchronized`** block ensures only one thread can create the instance
-- **`by lazy`** delegate provides built-in thread-safe lazy initialization
+### Типичное применение
 
-### Pros (Преимущества)
+Распространенное использование:
 
+- Паттерны **abstract factory, factory method, builder и prototype** могут использовать singleton в своей реализации
+- **Facade объекты** часто являются singleton, так как требуется только один facade объект
+- **State объекты** часто являются singleton
+- **Подключения к базам данных, network менеджеры, configuration менеджеры** в Android
+- **Репозитории уровня приложения, analytics trackers, утилиты логирования**
 
-1. **Controlled access** - Provides controlled access to the sole instance
-2. **Memory efficiency** - Saves memory as only one instance exists
-3. **Global access point** - Easy access from anywhere in the application
-4. **Lazy initialization** - Instance can be created when first needed
-5. **Thread safety** - Can be implemented to be thread-safe
+### Преимущества
 
-### Cons (Недостатки)
+1. **Контролируемый доступ** - Обеспечивает контролируемый доступ к единственному экземпляру
+2. **Эффективность памяти** - Экономит память, так как существует только один экземпляр
+3. **Глобальная точка доступа** - Легкий доступ из любого места приложения
+4. **Ленивая инициализация** - Экземпляр может быть создан при первой необходимости
+5. **Потокобезопасность** - Может быть реализован потокобезопасным способом
 
+### Недостатки
 
-1. **Global state** - Creates global state which can make testing difficult
-2. **Hidden dependencies** - Classes using singleton have hidden dependencies
-3. **Violates Single Responsibility** - Controls both its own creation and business logic
-4. **Difficult to test** - Hard to mock in unit tests
-5. **Concurrency issues** - Requires careful synchronization in multithreaded environments
-6. **Violates Dependency Inversion** - Tight coupling to concrete implementation
+1. **Глобальное состояние** - Создает глобальное состояние, что может усложнить тестирование
+2. **Скрытые зависимости** - Классы, использующие singleton, имеют скрытые зависимости
+3. **Нарушает Single Responsibility** - Контролирует как своё создание, так и бизнес-логику
+4. **Сложность тестирования** - Трудно мокировать в unit тестах
+5. **Проблемы с конкурентностью** - Требует тщательной синхронизации в многопоточных средах
+6. **Нарушает Dependency Inversion** - Жесткая связь с конкретной реализацией
 
+### Лучшие практики
 
-Singleton - это порождающий паттерн проектирования, который гарантирует, что класс имеет только один экземпляр, и предоставляет глобальную точку доступа к этому экземпляру.
+```kotlin
+// DO: Используйте object declaration для простых singleton
+object AppConfig {
+    var apiKey: String = ""
+    var baseUrl: String = ""
+}
+
+// DO: Используйте ленивую инициализацию для дорогих объектов
+class ImageCache private constructor(context: Context) {
+    companion object {
+        @Volatile private var instance: ImageCache? = null
+
+        fun getInstance(context: Context): ImageCache {
+            return instance ?: synchronized(this) {
+                instance ?: ImageCache(context.applicationContext)
+                    .also { instance = it }
+            }
+        }
+    }
+}
+
+// DO: Используйте Dependency Injection вместо singleton когда возможно
+class MyRepository(private val api: ApiService) // Внедрён, не singleton
+
+// DON'T: Не используйте singleton для объектов с разными жизненными циклами
+// DON'T: Не храните ссылки на Activity/Context в singleton (утечки памяти!)
+```
+
+Singleton — это порождающий паттерн проектирования, который гарантирует, что класс имеет только один экземпляр, и предоставляет глобальную точку доступа к этому экземпляру. **Проблема**: Необходимо гарантировать существование только одного экземпляра и обеспечить легкий доступ. **Решение**: Приватный конструктор, статический экземпляр и статический фабричный метод. **Использовать когда**: (1) Нужен ровно один экземпляр, (2) Экземпляр должен быть глобально доступен, (3) Желательна ленивая инициализация. **Kotlin**: Используйте `object` declaration или companion object с ленивой инициализацией. **Плюсы**: контролируемый доступ, эффективность памяти, глобальный доступ. **Минусы**: глобальное состояние, скрытые зависимости, сложность тестирования. **Примеры**: Database helper, network manager, конфигурация, analytics tracker.
 
 ---
 

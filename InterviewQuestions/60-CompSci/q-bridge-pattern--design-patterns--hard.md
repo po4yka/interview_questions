@@ -1,5 +1,5 @@
 ---
-id: "20251015082237107"
+id: 20251012-1227111114
 title: "Bridge Pattern / Bridge Паттерн"
 topic: computer-science
 difficulty: hard

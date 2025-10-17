@@ -1,5 +1,5 @@
 ---
-id: "20251015082237467"
+id: 20251012-1227130
 title: "Derived State Snapshot System / Derived State и система Snapshot"
 topic: android
 difficulty: hard

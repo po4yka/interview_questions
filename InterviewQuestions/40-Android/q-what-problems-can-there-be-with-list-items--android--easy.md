@@ -1,15 +1,13 @@
 ---
-id: "20251015082237333"
+id: 20251012-122711174
 title: "What Problems Can There Be With List Items / Какие могут быть проблемы с элементами списка"
 topic: android
 difficulty: easy
 status: draft
 created: 2025-10-13
 tags: [android/recyclerview, android/views, diffutil, listview, memory-management, multithreading, performance-optimization, recyclerview, ui, views, difficulty/easy]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # Какие могут быть проблемы с элементами списка?
 

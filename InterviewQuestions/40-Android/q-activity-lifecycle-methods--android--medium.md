@@ -1,5 +1,5 @@
 ---
-id: "20251015082237330"
+id: 20251012-122756
 title: "Activity Lifecycle Methods / Методы жизненного цикла Activity"
 topic: android
 difficulty: medium

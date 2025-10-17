@@ -1,5 +1,5 @@
 ---
-id: "20251015082237265"
+id: 20251012-122711103
 title: "Sharedpreferences Definition / Определение SharedPreferences"
 topic: android
 difficulty: easy

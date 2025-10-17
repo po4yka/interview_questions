@@ -1,15 +1,13 @@
 ---
-id: "20251015082237359"
+id: 20251012-122711177
 title: "What To Put In State For Initial List / Что положить в State для начального списка"
 topic: android
 difficulty: easy
 status: draft
 created: 2025-10-13
 tags: [android/state-management, android/ui, data-loading, state, state-management, ui, difficulty/easy]
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-android
-related_questions: []
+related: []
 ---
 # What to put in state for initial list?
 

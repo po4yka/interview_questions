@@ -1,5 +1,5 @@
 ---
-id: "20251015082238608"
+id: 20251012-1227117
 title: "Dagger Field Injection / Инъекция полей Dagger"
 topic: android
 difficulty: medium

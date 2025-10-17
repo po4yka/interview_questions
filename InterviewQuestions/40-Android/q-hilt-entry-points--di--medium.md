@@ -1,5 +1,5 @@
 ---
-id: "20251015082237297"
+id: 20251012-1227151
 title: "Hilt Entry Points"
 topic: android
 difficulty: medium

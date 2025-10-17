@@ -1,5 +1,5 @@
 ---
-id: "20251015082237195"
+id: 20251016-172614
 title: "Kotlin Unit Singleton / Unit как синглтон в Kotlin"
 topic: computer-science
 difficulty: easy

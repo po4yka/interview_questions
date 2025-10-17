@@ -1,5 +1,5 @@
 ---
-id: "20251015082236015"
+id: 20251012-12271111155
 title: "Kotlin Sealed When Exhaustive / sealed и exhaustive when в Kotlin"
 topic: kotlin
 difficulty: medium

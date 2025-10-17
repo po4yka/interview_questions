@@ -1,5 +1,5 @@
 ---
-id: "20251015082237349"
+id: 20251017-144926
 title: "Handler Looper Comprehensive / Handler и Looper подробно"
 topic: android
 difficulty: medium

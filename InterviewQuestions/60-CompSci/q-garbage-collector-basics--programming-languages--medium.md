@@ -1,5 +1,5 @@
 ---
-id: "20251015082237078"
+id: 20251012-1227111140
 title: "Garbage Collector Basics / Garbage Collector Основы"
 topic: computer-science
 difficulty: medium

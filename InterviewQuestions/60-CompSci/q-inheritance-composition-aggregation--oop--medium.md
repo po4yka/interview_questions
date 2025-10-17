@@ -1,5 +1,5 @@
 ---
-id: "20251015082237153"
+id: 20251012-1227111148
 title: "Inheritance Composition Aggregation / Наследование композиция и агрегация"
 topic: architecture-patterns
 difficulty: medium
@@ -13,10 +13,8 @@ tags: - aggregation
   - is-a
   - oop
   - relationships
-date_created: 2025-10-13
-date_updated: 2025-10-13
 moc: moc-architecture-patterns
-related_questions: []
+related: []
 subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
 # В чём различия наследования, композиции, агрегации?

@@ -1,5 +1,5 @@
 ---
-id: "20251015082237390"
+id: 20251012-122711169
 title: "What Is Viewstub / Что такое ViewStub"
 topic: android
 difficulty: medium

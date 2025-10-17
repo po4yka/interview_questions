@@ -1,11 +1,16 @@
 ---
-id: 20251012-014
+id: 20251012-151316
 title: "Fan-in Fan-out Pattern"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, channels, concurrency, fan-in, fan-out, parallelism]
+subtopics:
+  - coroutines
+  - channels
+  - concurrency
+  - fan-in
+  - fan-out
 question_kind: theory
 difficulty: hard
 
@@ -26,7 +31,6 @@ updated: 2025-10-12
 
 tags: [kotlin, coroutines, fan-in, fan-out, channels, parallel-processing, load-balancing, difficulty/hard]
 ---
-
 # Question (EN)
 > What are Fan-in and Fan-out patterns in Kotlin coroutines? Explain how to distribute work to multiple workers and aggregate results from multiple sources.
 

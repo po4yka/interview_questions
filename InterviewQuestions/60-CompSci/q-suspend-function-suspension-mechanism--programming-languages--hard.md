@@ -1,5 +1,5 @@
 ---
-id: "20251015082237181"
+id: 20251012-1227111183
 title: "Suspend Function Suspension Mechanism / Механизм приостановки suspend функции"
 topic: computer-science
 difficulty: hard

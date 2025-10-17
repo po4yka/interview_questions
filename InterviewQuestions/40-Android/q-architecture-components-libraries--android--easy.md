@@ -1,5 +1,5 @@
 ---
-id: "20251015082237365"
+id: 20251012-122784
 title: "Architecture Components Libraries / Библиотеки Architecture Components"
 topic: android
 difficulty: easy
