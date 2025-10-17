@@ -10,11 +10,7 @@
 
 ```dataviewjs
 // Comprehensive link health analysis
-const TOPIC_FOLDERS = ["20-Algorithms", "30-System-Design", "40-Android", "50-Backend", "60-CompSci", "70-Kotlin", "80-Tools"];
-const AUXILIARY_FOLDERS = ["10-Concepts", "90-MOCs"];
-const SCAN_FOLDERS = [...TOPIC_FOLDERS, ...AUXILIARY_FOLDERS];
-const folderQuery = SCAN_FOLDERS.map(folder => `"${folder}"`).join(" or ");
-
+<%* tR += await tp.user.folderConstants({ include_auxiliary: true }); %>
 const files = dv.pages(folderQuery)
     .where(p => p.file.ext === "md");
 
@@ -120,11 +116,7 @@ dv.table(
 ##  Broken Links Detail
 
 ```dataviewjs
-const TOPIC_FOLDERS = ["20-Algorithms", "30-System-Design", "40-Android", "50-Backend", "60-CompSci", "70-Kotlin", "80-Tools"];
-const AUXILIARY_FOLDERS = ["10-Concepts", "90-MOCs"];
-const SCAN_FOLDERS = [...TOPIC_FOLDERS, ...AUXILIARY_FOLDERS];
-const folderQuery = SCAN_FOLDERS.map(folder => `"${folder}"`).join(" or ");
-
+<%* tR += await tp.user.folderConstants({ include_auxiliary: true }); %>
 const files = dv.pages(folderQuery)
     .where(p => p.file.ext === "md");
 
@@ -212,11 +204,7 @@ if (brokenLinks.length > 0) {
 
 ```dataviewjs
 // Find files with no incoming links
-const TOPIC_FOLDERS = ["20-Algorithms", "30-System-Design", "40-Android", "50-Backend", "60-CompSci", "70-Kotlin", "80-Tools"];
-const AUXILIARY_FOLDERS = ["10-Concepts", "90-MOCs"];
-const SCAN_FOLDERS = [...TOPIC_FOLDERS, ...AUXILIARY_FOLDERS];
-const folderQuery = SCAN_FOLDERS.map(folder => `"${folder}"`).join(" or ");
-
+<%* tR += await tp.user.folderConstants({ include_auxiliary: true }); %>
 const scopedFiles = dv.pages(folderQuery)
     .where(p => p.file.ext === "md");
 const questionFiles = scopedFiles.where(p => p.file.name.startsWith('q-'));
@@ -291,8 +279,7 @@ These files exist but aren't discoverable through navigation.
 
 ```dataviewjs
 // Find questions that should link to each other based on shared subtopics
-const TOPIC_FOLDERS = ["20-Algorithms", "30-System-Design", "40-Android", "50-Backend", "60-CompSci", "70-Kotlin", "80-Tools"];
-const folderQuery = TOPIC_FOLDERS.map(folder => `"${folder}"`).join(" or ");
+<%* tR += await tp.user.folderConstants(); %>
 const qFiles = dv.pages(folderQuery)
     .where(p => p.file.name.startsWith('q-') && p.subtopics);
 
@@ -358,8 +345,7 @@ if (suggestions.length > 0) {
 
 ```dataviewjs
 // Check for common structural issues
-const TOPIC_FOLDERS = ["20-Algorithms", "30-System-Design", "40-Android", "50-Backend", "60-CompSci", "70-Kotlin", "80-Tools"];
-const folderQuery = TOPIC_FOLDERS.map(folder => `"${folder}"`).join(" or ");
+<%* tR += await tp.user.folderConstants(); %>
 const files = dv.pages(folderQuery)
     .where(p => p.file.name.startsWith('q-'));
 
