@@ -5,15 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Jetpack Navigation Component
-  - FragmentTransaction
-  - Intent
-  - NavHostFragment
-  - NavController
-  - android
-  - ui
-  - navigation
-  - fragments
+tags: [FragmentTransaction, Intent, NavHostFragment, NavController, android, ui, navigation, fragments, difficulty/medium]
 ---
 # What are the navigation methods in Kotlin?
 

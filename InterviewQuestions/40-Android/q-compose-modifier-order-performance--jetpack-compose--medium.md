@@ -5,10 +5,7 @@ topic: jetpack-compose
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - jetpack-compose
-  - modifiers
-  - performance
-  - optimization
+tags: [compose, modifiers, performance, optimization, difficulty/medium]
 ---
 # Modifier Order, Performance, and Layout Phases
 

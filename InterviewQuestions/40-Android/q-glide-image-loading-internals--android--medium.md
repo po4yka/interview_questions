@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/glide, android/image-loading, android/caching, android/memory-management, difficulty/medium]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: [bitmap-handling, caching, memory-optimization, glide]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, glide, image-loading, caching, bitmap, performance, difficulty/medium]
+tags: [en, ru, android/glide, android/image-loading, android/caching, android/memory-management, difficulty/medium]
 ---
 # Question (EN)
 > How do image loading libraries like Glide/Fresco work internally?

@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - kotlin
-  - context-receivers
-  - experimental
-  - dsl
-  - api-design
+tags: [context-receivers, experimental, dsl, api-design, android/context-receivers, android/advanced-features, android/dsl, android/api-design, difficulty/hard]
 date_created: 2025-10-12
 date_updated: 2025-10-12
 moc: moc-android

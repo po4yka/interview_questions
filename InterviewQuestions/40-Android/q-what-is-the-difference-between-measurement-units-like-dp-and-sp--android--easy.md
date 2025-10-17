@@ -5,11 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android ui
-  - dp
-  - sp
-  - ui
+tags: [android ui, dp, sp, ui, difficulty/easy]
 ---
 # Чем отличаются единицы измерения например dp от sp
 

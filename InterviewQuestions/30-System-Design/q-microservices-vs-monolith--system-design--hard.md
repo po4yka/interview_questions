@@ -1,40 +1,39 @@
 ---
-id: 20251012-300006
+id: 20251012-203116
 title: "Microservices vs Monolith Architecture / Микросервисы vs Монолитная архитектура"
 topic: system-design
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - system-design
-  - microservices
-  - architecture
-  - distributed-systems
-date_created: 2025-10-12
-date_updated: 2025-10-12
+updated: 2025-10-12
+tags: [design, microservices, architecture, distributed-systems, difficulty/hard]
+aliases: []
+original_language: en
+language_tags: [en, ru]
+question_kind: system-design
 moc: moc-system-design
-related_questions:   - q-api-gateway-pattern--system-design--medium
-  - q-service-mesh--system-design--hard
-  - q-distributed-transactions--system-design--hard
-slug: microservices-vs-monolith-system-design-hard
 subtopics:   - microservices
   - monolith
   - architecture
   - distributed-systems
   - scalability
+related:   - q-api-gateway-pattern--system-design--medium
+  - q-service-mesh--system-design--hard
+  - q-distributed-transactions--system-design--hard
 ---
-# Microservices vs Monolith Architecture
+# Question (EN)
+> What are the key differences between microservices and monolithic architecture? When should you use each, and what are the trade-offs?
 
-## English Version
+# Вопрос (RU)
+> Каковы ключевые различия между микросервисами и монолитной архитектурой? Когда следует использовать каждый подход, и каковы компромиссы?
 
-### Problem Statement
+---
+
+## Answer (EN)
 
 Choosing between monolithic and microservices architecture is a fundamental architectural decision that impacts development speed, scalability, team organization, and operational complexity. Each approach has distinct advantages and challenges.
 
-**The Question:** What are the key differences between microservices and monolithic architecture? When should you use each, and what are the trade-offs?
-
-### Detailed Answer
-
-#### Monolithic Architecture
+### Monolithic Architecture
 
 **What is it?**
 Single, unified application where all components are tightly coupled and deployed as one unit.
@@ -123,7 +122,7 @@ class PaymentService(private val paymentRepo: PaymentRepository) {
 
 ---
 
-#### Microservices Architecture
+### Microservices Architecture
 
 **What is it?**
 Application composed of small, independent services that communicate over the network.
@@ -523,19 +522,11 @@ class OrderModuleImpl(
 9. **Strangler fig pattern** for gradual migration
 10. **Microservices ≠ better** - choose based on team size, complexity
 
----
-
-## Russian Version
-
-### Постановка задачи
+## Ответ (RU)
 
 Выбор между монолитной и микросервисной архитектурой - фундаментальное архитектурное решение, которое влияет на скорость разработки, масштабируемость, организацию команды и операционную сложность.
 
-**Вопрос:** Каковы ключевые различия между микросервисами и монолитной архитектурой? Когда следует использовать каждый подход, и каковы компромиссы?
-
-### Детальный ответ
-
-#### Монолитная архитектура
+### Монолитная архитектура
 
 **Что это?**
 Единое унифицированное приложение, где все компоненты тесно связаны и развёртываются как одна единица.
@@ -554,7 +545,7 @@ class OrderModuleImpl(
 - **Узкое место разработки** - Команда мешает друг другу
 - **Долгая сборка** - Большая кодовая база
 
-#### Микросервисная архитектура
+### Микросервисная архитектура
 
 **Что это?**
 Приложение, состоящее из небольших независимых сервисов, которые общаются по сети.

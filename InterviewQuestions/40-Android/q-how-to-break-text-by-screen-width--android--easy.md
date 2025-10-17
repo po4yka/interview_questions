@@ -5,13 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - Paint
-  - android
-  - android/text-rendering
-  - android/ui
-  - breakText
-  - text-rendering
-  - ui
+tags: [android, android/text-rendering, android/ui, breakText, text-rendering, ui, difficulty/easy]
 ---
 
 # Question (EN)

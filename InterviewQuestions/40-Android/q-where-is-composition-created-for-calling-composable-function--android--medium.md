@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Jetpack Compose
-  - setContent
-  - android
-  - ui
-  - jetpack-compose
+tags: [setContent, android, ui, jetpack-compose, difficulty/medium]
 ---
 # Where is composition created for calling composable function?
 

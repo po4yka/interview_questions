@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - play-feature-delivery
-  - dynamic-modules
-  - app-bundle
+tags: [play-feature-delivery, dynamic-modules, app-bundle, difficulty/medium]
 ---
 # Play Feature Delivery / Play Feature Delivery
 

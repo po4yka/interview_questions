@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - testing
-  - robolectric
-  - instrumented-tests
-  - strategy
-  - comparison
-  - unit-testing
+tags: [robolectric, instrumented-tests, strategy, comparison, unit-testing, difficulty/medium]
 ---
 
 # Robolectric vs Instrumented Tests

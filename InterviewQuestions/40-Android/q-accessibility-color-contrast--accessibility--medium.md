@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-11
-tags: - android
-  - accessibility
-  - color-contrast
-  - wcag
-  - visual-accessibility
+tags: [accessibility, color-contrast, wcag, visual-accessibility, difficulty/medium]
 related:   - q-accessibility-compose--accessibility--medium
   - q-material3-dynamic-color-theming--material-design--medium
 ---

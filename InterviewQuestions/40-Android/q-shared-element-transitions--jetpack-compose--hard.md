@@ -5,12 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - jetpack-compose
-  - animations
-  - navigation
-  - transitions
-  - shared-elements
-  - hero-animations
+tags: [compose, animations, navigation, transitions, shared-elements, hero-animations, difficulty/hard]
 ---
 
 # Shared Element Transitions in Compose

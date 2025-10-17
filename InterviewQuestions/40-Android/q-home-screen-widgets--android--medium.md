@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - widgets
-  - appwidget
-  - home-screen
+tags: [widgets, appwidget, home-screen, difficulty/medium]
 ---
 # Android Home Screen Widgets / Виджеты главного экрана Android
 

@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - performance
-  - gpu
-  - rendering
-  - overdraw
-  - optimization
-  - difficulty/medium
+tags: [performance, gpu, rendering, overdraw, optimization, difficulty/medium]
 ---
 # What is Overdraw? / Что такое Overdraw?
 

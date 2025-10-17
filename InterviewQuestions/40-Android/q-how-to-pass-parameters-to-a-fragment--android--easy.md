@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - fragments
-  - bundle
-  - android
-  - ui
-  - data-passing
+tags: [bundle, android, ui, data-passing, difficulty/medium]
 ---
 # How to pass parameters to a fragment?
 

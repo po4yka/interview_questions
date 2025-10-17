@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - custom-views
-  - state-management
-  - lifecycle
-  - android-framework
+tags: [views, state-management, lifecycle, android-framework, android/ui-views, android/lifecycle, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

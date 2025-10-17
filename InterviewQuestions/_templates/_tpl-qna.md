@@ -5,20 +5,20 @@ aliases: []
 
 # Classification
 topic: <%* /* choose one from TAXONOMY.md */ %>
-subtopics: []                  # 0–3; для Android — из списка Android subtopics
+subtopics: []                  # 0-3; for Android use Android subtopics list
 question_kind: coding          # coding | theory | system-design | android
 difficulty: easy               # easy | medium | hard
 
 # Language & provenance
 original_language: en          # en | ru
-language_tags: [en]            # какие языки уже есть в заметке
-source:                        # URL источника
-source_note:                   # Описание источника
+language_tags: [en]            # which languages are present
+source:                        # URL of source
+source_note:                   # Description of source
 
 # Workflow & relations
 status: draft                  # draft | reviewed | ready | retired
-moc:                           # moc-<topic> (без скобок)
-related: []                    # список: c-concept-name (без скобок [[]])
+moc:                           # moc-<topic> (without brackets)
+related: []                    # list: c-concept-name (without brackets [[]])
 
 # Timestamps
 created: <% tp.date.now("YYYY-MM-DD") %>

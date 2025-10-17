@@ -5,10 +5,7 @@ topic: jetpack-compose
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - jetpack-compose
-  - navigation
-  - type-safety
-  - deep-links
+tags: [compose, navigation, type-safety, deep-links, difficulty/medium]
 ---
 # Advanced Navigation Compose with Type Safety
 

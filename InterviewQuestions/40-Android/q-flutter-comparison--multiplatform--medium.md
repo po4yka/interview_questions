@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - Flutter
-  - Multiplatform
-  - Comparison
+tags: [Kotlin, Flutter, Multiplatform, Comparison, difficulty/medium]
 ---
 
 # KMM vs Flutter - Trade-offs and Decision Making

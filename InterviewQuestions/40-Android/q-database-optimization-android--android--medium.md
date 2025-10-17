@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - database
-  - room
-  - performance
-  - optimization
-  - sql
-  - indexing
+tags: [database, room, performance, optimization, sql, indexing, difficulty/medium]
 ---
 # Database Optimization Techniques in Android
 

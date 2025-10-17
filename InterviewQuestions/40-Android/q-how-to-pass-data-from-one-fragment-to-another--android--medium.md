@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/fragments
-  - android/views
-  - communication
-  - fragments
-  - ui
-  - viewmodel
-  - views
+tags: [android/fragments, android/views, communication, fragments, ui, viewmodel, views, difficulty/medium]
 ---
 # Как передавать данные из одного фрагмента в другой?
 

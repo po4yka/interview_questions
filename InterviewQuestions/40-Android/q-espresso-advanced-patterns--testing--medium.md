@@ -5,10 +5,7 @@ topic: testing
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - testing
-  - espresso
-  - ui-testing
-  - idling-resource
+tags: [espresso, ui-testing, idling-resource, difficulty/medium]
 ---
 # Espresso Advanced Patterns
 

@@ -5,10 +5,7 @@ topic: testing
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - testing
-  - flaky-tests
-  - stability
-  - best-practices
+tags: [flaky-tests, stability, best-practices, difficulty/medium]
 ---
 
 # Question (EN)

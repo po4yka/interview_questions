@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/app-startup, android/initialization, android/performance, android/jetpack, difficulty/medium]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: [application-class, initialization, performance-optimization]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, app-startup, jetpack, initialization, performance, difficulty/medium]
+tags: [en, ru, android/app-startup, android/initialization, android/performance, android/jetpack, difficulty/medium]
 ---
 # Question (EN)
 > What is the Android App Startup library and how does it optimize app initialization?

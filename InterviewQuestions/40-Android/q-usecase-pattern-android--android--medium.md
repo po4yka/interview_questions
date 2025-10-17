@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/architecture, android/usecase, android/clean-architecture, android/domain-layer, difficulty/medium]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, architecture, usecase, clean-architecture, domain-layer, difficulty/medium]
+tags: [en, ru, android/architecture, android/usecase, android/clean-architecture, android/domain-layer, difficulty/medium]
 ---
 # Question (EN)
 > What is the UseCase pattern in Android? When and how to implement it?

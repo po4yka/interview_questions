@@ -5,13 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/architecture-clean
-  - architecture
-  - architecture-clean
-  - clean-architecture
-  - platform/android
-  - separation-of-concerns
+tags: [android/architecture-clean, architecture, architecture-clean, clean-architecture, platform/android, separation-of-concerns, difficulty/easy]
 ---
 # Зачем нужно разделять отображение и бизнес-логику?
 

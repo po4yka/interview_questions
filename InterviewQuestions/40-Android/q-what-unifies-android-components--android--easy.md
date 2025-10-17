@@ -5,15 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android-components
-  - android/android-components
-  - android/context
-  - android/manifest
-  - components
-  - context
-  - intent
-  - manifest
+tags: [android-components, android/android-components, android/context, android/manifest, components, context, intent, manifest, difficulty/easy]
 ---
 # What unifies Android components?
 

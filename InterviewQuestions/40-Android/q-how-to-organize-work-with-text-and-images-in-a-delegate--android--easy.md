@@ -5,11 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/recyclerview
-  - delegates
-  - recyclerview
-  - ui
+tags: [android/recyclerview, delegates, recyclerview, ui, difficulty/easy]
 ---
 # Как организовать работу с текстом и картинками в делегате?
 

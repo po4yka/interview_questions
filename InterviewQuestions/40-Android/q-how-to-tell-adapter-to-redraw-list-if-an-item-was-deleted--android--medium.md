@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - adapter
-  - recyclerview
-  - android
-  - ui
+tags: [recyclerview, android, ui, difficulty/medium]
 ---
 # How to tell adapter to redraw list if an item was deleted?
 

@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Jetpack Compose
-  - UI Optimization
-  - android
-  - ui
-  - jetpack-compose
-  - performance
+tags: [UI Optimization, android, ui, jetpack-compose, performance, difficulty/medium]
 ---
 # How to reduce the number of recompositions besides side-effects?
 

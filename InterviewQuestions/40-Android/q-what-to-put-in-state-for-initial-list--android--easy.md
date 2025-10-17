@@ -5,13 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - android
-  - android/state-management
-  - android/ui
-  - data-loading
-  - state
-  - state-management
-  - ui
+tags: [android/state-management, android/ui, data-loading, state, state-management, ui, difficulty/easy]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Jetpack Compose
-  - View
-  - android
-  - ui
-  - jetpack-compose
-  - views
+tags: [View, android, ui, jetpack-compose, views, difficulty/medium]
 ---
 # How to draw UI without xml?
 

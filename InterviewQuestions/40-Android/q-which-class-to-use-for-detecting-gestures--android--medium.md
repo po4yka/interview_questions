@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - gestures
-  - ui
-  - touch-events
+tags: [gestures, ui, touch-events, difficulty/medium]
 ---
 # Which class can be used to catch different gestures?
 

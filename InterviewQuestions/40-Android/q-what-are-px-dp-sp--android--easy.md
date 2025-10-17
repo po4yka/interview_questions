@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - px
-  - dp
-  - sp
-  - android
-  - ui
-  - measurement-units
+tags: [dp, sp, android, ui, measurement-units, difficulty/medium]
 ---
 
 # Question (EN)

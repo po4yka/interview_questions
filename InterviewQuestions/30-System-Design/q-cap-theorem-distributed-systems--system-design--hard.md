@@ -23,19 +23,21 @@ subtopics:   - distributed-systems
   - partition-tolerance
   - cap-theorem
 ---
-# CAP Theorem and Distributed Systems
+# Question (EN)
+> What is the CAP theorem? What trade-offs do different systems make, and how do you choose between CP and AP systems?
 
-## English Version
+# Вопрос (RU)
+> Что такое CAP теорема? Какие компромиссы делают разные системы, и как выбрать между CP и AP системами?
 
-### Problem Statement
+---
+
+## Answer (EN)
 
 When designing distributed systems, you cannot have all three guarantees simultaneously: **Consistency**, **Availability**, and **Partition Tolerance**. Understanding the CAP theorem helps you make informed trade-offs when designing distributed databases and systems.
 
-**The Question:** What is the CAP theorem? What trade-offs do different systems make, and how do you choose between CP and AP systems?
 
-### Detailed Answer
 
-#### What is the CAP Theorem?
+### What is the CAP Theorem?
 
 **CAP Theorem** (Brewer's Theorem) states that a distributed system can provide at most **TWO** of the following three guarantees:
 
@@ -54,7 +56,7 @@ When designing distributed systems, you cannot have all three guarantees simulta
                 Tolerance)
 ```
 
-#### The Three Guarantees
+### The Three Guarantees
 
 **1. Consistency (C)**
 - Every read receives the most recent write
@@ -92,7 +94,7 @@ Can't communicate, but both sides still work
 
 ### CAP Trade-offs
 
-#### In Reality: You Must Choose P
+### In Reality: You Must Choose P
 
 **Network partitions WILL happen:**
 - Network failures
@@ -262,7 +264,7 @@ session.execute(
 
 When partition heals, how to resolve conflicts?
 
-#### 1. Last-Write-Wins (LWW)
+### 1. Last-Write-Wins (LWW)
 ```
 Partition occurs:
 Side A: Write x=10 at timestamp T1
@@ -275,7 +277,7 @@ x = 20 (timestamp T2 wins)
 **Pros:** Simple
 **Cons:** Data loss possible
 
-#### 2. Version Vectors
+### 2. Version Vectors
 ```
 Initial: x=5 [v1]
 
@@ -288,7 +290,7 @@ Conflict detected! [v2a] vs [v2b]
 → Application-level resolution required
 ```
 
-#### 3. CRDTs (Conflict-free Replicated Data Types)
+### 3. CRDTs (Conflict-free Replicated Data Types)
 ```kotlin
 // Counter CRDT - always converges correctly
 class GCounter {
@@ -328,7 +330,7 @@ merged.value() // = 8 (correct!)
 
 ### Consistency Models
 
-#### Strong Consistency (CP)
+### Strong Consistency (CP)
 - Reads always return latest write
 - Linearizability
 - Like single-machine behavior
@@ -338,7 +340,7 @@ Write(x=5) completed at T1
 Read(x) at T2 (T2 > T1) → Always returns 5
 ```
 
-#### Eventual Consistency (AP)
+### Eventual Consistency (AP)
 - All replicas converge to same value eventually
 - Reads may return stale data temporarily
 - Given enough time without writes, all reads return same value
@@ -349,7 +351,7 @@ Read(x) at T2 (T2 > T1) → May return old value temporarily
 Read(x) at T3 (T3 >> T1) → Eventually returns 5
 ```
 
-#### Causal Consistency
+### Causal Consistency
 - Preserves cause-effect relationships
 - Weaker than strong, stronger than eventual
 
@@ -362,7 +364,7 @@ All nodes see x=5 before y=10 (causal order preserved)
 
 ### Real-World Examples
 
-#### CP System: MongoDB
+### CP System: MongoDB
 
 ```javascript
 // MongoDB with strong consistency
@@ -393,7 +395,7 @@ try {
 }
 ```
 
-#### AP System: Cassandra
+### AP System: Cassandra
 
 ```kotlin
 // Cassandra with tunable consistency
@@ -429,7 +431,7 @@ class CassandraRepository(private val session: CqlSession) {
 
 ### Hybrid Approaches
 
-#### Tunable Consistency
+### Tunable Consistency
 
 **Cassandra/DynamoDB allow tuning:**
 ```
@@ -457,7 +459,7 @@ fun casualRead(id: UUID): Data {
 }
 ```
 
-#### PACELC Extension
+### PACELC Extension
 
 **PACELC**: If **P**artition, choose **A** or **C**, **E**lse (no partition), choose **L**atency or **C**onsistency
 
@@ -502,17 +504,13 @@ Examples:
 
 ---
 
-## Russian Version
-
-### Постановка задачи
+## Ответ (RU)
 
 При проектировании распределённых систем невозможно одновременно иметь все три гарантии: **Консистентность**, **Доступность** и **Устойчивость к разделению**. Понимание CAP теоремы помогает принимать обоснованные компромиссы при проектировании распределённых баз данных и систем.
 
-**Вопрос:** Что такое CAP теорема? Какие компромиссы делают разные системы, и как выбрать между CP и AP системами?
 
-### Детальный ответ
 
-#### Что такое CAP теорема?
+### Что такое CAP теорема?
 
 **CAP теорема** (теорема Брюера) гласит, что распределённая система может обеспечить максимум **ДВЕ** из следующих трёх гарантий:
 
@@ -534,7 +532,7 @@ Examples:
               к разделению)
 ```
 
-#### Три гарантии
+### Три гарантии
 
 **1. Consistency (Консистентность)**
 - Каждое чтение получает самую последнюю запись

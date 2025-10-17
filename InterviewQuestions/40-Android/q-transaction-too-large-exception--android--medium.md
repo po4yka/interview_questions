@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/memory-management
-  - binder
-  - exceptions
-  - intent
-  - ipc
-  - savedinstancestate
+tags: [android/memory-management, binder, exceptions, intent, ipc, savedinstancestate, difficulty/medium]
 ---
 # Что такое TransactionTooLargeException?
 

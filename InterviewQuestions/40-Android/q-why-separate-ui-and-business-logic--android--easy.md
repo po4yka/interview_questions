@@ -5,14 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/architecture-patterns
-  - architecture-patterns
-  - clean-architecture
-  - mvi
-  - mvp
-  - mvvm
-  - separation-of-concerns
+tags: [android/architecture-patterns, architecture-patterns, clean-architecture, mvi, mvp, mvvm, separation-of-concerns, difficulty/easy]
 ---
 
 # Question (EN)

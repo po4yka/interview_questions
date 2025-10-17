@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/services
-  - bound-service
-  - service-lifecycle
-  - services
-  - started-service
+tags: [android/services, bound-service, service-lifecycle, services, started-service, difficulty/medium]
 ---
 # Как остановить сервис?
 

@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/background-processing
-  - background-processing
-  - battery-optimization
-  - doze-mode
-  - services
-  - workmanager
+tags: [android/background-processing, background-processing, battery-optimization, doze-mode, services, workmanager, difficulty/medium]
 ---
 # Why are there restrictions on starting services?
 

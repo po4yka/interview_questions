@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/background-processing
-  - background-processing
-  - data-passing
-  - workmanager
+tags: [android/background-processing, background-processing, data-passing, workmanager, difficulty/medium]
 ---
 # How to pass and receive data from WorkManager?
 

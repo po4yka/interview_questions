@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/services
-  - android/background-processing
-  - services
-  - background-work
-  - foreground-service
+tags: [android/services, android/background-processing, services, background-work, foreground-service, difficulty/medium]
 ---
 # What are services used for?
 

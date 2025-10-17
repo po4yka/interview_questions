@@ -10,15 +10,8 @@ subtopics:
   - lifecycle
   - activity
   - app-startup
-tags:
-  - android
-  - context
-  - application-context
-  - activity-context
-  - difficulty/medium
-language_tags:
-  - en
-  - ru
+tags: [context, application-context, activity-context, difficulty/medium, android/activity, android/app-startup]
+language_tags: [context, application-context, activity-context, difficulty/medium, android/activity, android/app-startup]
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Context.md
 author: null

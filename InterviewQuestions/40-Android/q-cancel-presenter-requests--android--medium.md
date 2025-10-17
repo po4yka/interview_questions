@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/architecture-mvi
-  - android/lifecycle
-  - architecture-mvi
-  - lifecycle
-  - mvp
-  - platform/android
-  - presenter-view-communication
+tags: [android/architecture-mvi, android/lifecycle, architecture-mvi, lifecycle, mvp, platform/android, presenter-view-communication, difficulty/medium]
 ---
 # Какие есть механизмы для отмены запросов presenter у view?
 

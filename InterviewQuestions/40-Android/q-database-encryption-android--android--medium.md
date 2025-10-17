@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - database
-  - encryption
-  - security
-  - sqlcipher
-  - room
-  - keystore
+tags: [database, encryption, security, sqlcipher, room, keystore, difficulty/medium]
 ---
 # Database Encryption in Android
 

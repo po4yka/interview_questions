@@ -5,11 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - recyclerview
-  - gridlayoutmanager
-  - android
-  - ui
-  - layouts
+tags: [gridlayoutmanager, android, ui, layouts, difficulty/easy]
 ---
 # How to change the number of columns in RecyclerView depending on orientation?
 

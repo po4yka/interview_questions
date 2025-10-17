@@ -23,19 +23,21 @@ subtopics:   - message-queues
   - rabbitmq
   - async-processing
 ---
-# Message Queues and Event-Driven Architecture
+# Question (EN)
+> What are message queues? When should you use them? What are the differences between Kafka, RabbitMQ, and other messaging systems?
 
-## English Version
+# Вопрос (RU)
+> Что такое очереди сообщений? Когда их следует использовать? В чём разница между Kafka, RabbitMQ и другими системами обмена сообщениями?
 
-### Problem Statement
+---
+
+## Answer (EN)
 
 Synchronous communication between services creates tight coupling and can lead to cascading failures. Message queues and event-driven architecture enable asynchronous, scalable, and resilient systems.
 
-**The Question:** What are message queues? When should you use them? What are the differences between Kafka, RabbitMQ, and other messaging systems?
 
-### Detailed Answer
 
-#### What are Message Queues?
+### What are Message Queues?
 
 **Message Queue** = Asynchronous communication pattern where producers send messages to a queue, and consumers process them independently.
 
@@ -59,7 +61,7 @@ Producer → [Queue] → Consumer
 
 ### Message Queue Patterns
 
-#### 1. Point-to-Point (Queue)
+### 1. Point-to-Point (Queue)
 
 One message → One consumer
 
@@ -101,7 +103,7 @@ class EmailConsumer {
 }
 ```
 
-#### 2. Publish-Subscribe (Topic)
+### 2. Publish-Subscribe (Topic)
 
 One message → Multiple consumers (all receive copy)
 
@@ -170,7 +172,7 @@ class CRMConsumer {
 
 ### Popular Message Queue Systems
 
-#### 1. RabbitMQ (AMQP)
+### 1. RabbitMQ (AMQP)
 
 **Best for:** Complex routing, traditional message queuing
 
@@ -242,7 +244,7 @@ class OrderProcessor {
 
 ---
 
-#### 2. Apache Kafka
+### 2. Apache Kafka
 
 **Best for:** High throughput, event streaming, real-time data pipelines
 
@@ -354,7 +356,7 @@ Consumer Group:
 
 ---
 
-#### 3. AWS SQS/SNS
+### 3. AWS SQS/SNS
 
 **SQS** = Simple Queue Service (queue)
 **SNS** = Simple Notification Service (pub/sub)
@@ -442,7 +444,7 @@ class SNSService(private val snsClient: SnsClient) {
 
 ### Event-Driven Architecture Patterns
 
-#### 1. Event Notification
+### 1. Event Notification
 
 ```kotlin
 // Service publishes event when something happens
@@ -468,7 +470,7 @@ class InventoryService {
 }
 ```
 
-#### 2. Event-Carried State Transfer
+### 2. Event-Carried State Transfer
 
 ```kotlin
 // Event contains all necessary data (no need to query source)
@@ -495,7 +497,7 @@ class ShippingService {
 }
 ```
 
-#### 3. Event Sourcing
+### 3. Event Sourcing
 
 ```kotlin
 // Store events, not current state
@@ -673,17 +675,13 @@ class NotificationEventConsumer {
 
 ---
 
-## Russian Version
-
-### Постановка задачи
+## Ответ (RU)
 
 Синхронная коммуникация между сервисами создаёт тесную связанность и может привести к каскадным сбоям. Очереди сообщений и событийная архитектура обеспечивают асинхронные, масштабируемые и устойчивые системы.
 
-**Вопрос:** Что такое очереди сообщений? Когда их следует использовать? В чём разница между Kafka, RabbitMQ и другими системами обмена сообщениями?
 
-### Детальный ответ
 
-#### Что такое очереди сообщений?
+### Что такое очереди сообщений?
 
 **Message Queue** = Паттерн асинхронной коммуникации, где производители отправляют сообщения в очередь, а потребители обрабатывают их независимо.
 
@@ -696,13 +694,13 @@ class NotificationEventConsumer {
 
 ### Популярные системы очередей сообщений
 
-#### 1. RabbitMQ (AMQP)
+### 1. RabbitMQ (AMQP)
 **Лучше для:** Сложная маршрутизация, традиционные очереди сообщений
 
-#### 2. Apache Kafka
+### 2. Apache Kafka
 **Лучше для:** Высокая пропускная способность, потоковая передача событий
 
-#### 3. AWS SQS/SNS
+### 3. AWS SQS/SNS
 **Лучше для:** AWS-native приложения, управляемый сервис
 
 ### Ключевые выводы

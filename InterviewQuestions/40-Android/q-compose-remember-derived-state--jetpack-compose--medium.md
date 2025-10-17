@@ -5,11 +5,7 @@ topic: jetpack-compose
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - jetpack-compose
-  - state
-  - remember
-  - optimization
-  - process-death
+tags: [compose, state, remember, optimization, process-death, difficulty/medium]
 ---
 # Remember, RememberSaveable, and DerivedStateOf
 

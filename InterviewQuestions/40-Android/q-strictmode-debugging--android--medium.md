@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - strictmode
-  - performance
-  - debugging
-  - main-thread
-  - difficulty/medium
+tags: [strictmode, performance, debugging, main-thread, difficulty/medium, android/performance-rendering, android/debugging]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20StrictMode.md
 subtopics:   - profiling
   - performance-rendering

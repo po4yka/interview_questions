@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/dependency-injection
-  - dagger
-  - dependency-injection
-  - hilt
-  - scope
-  - singleton
+tags: [android/dependency-injection, dagger, dependency-injection, hilt, scope, singleton, difficulty/medium]
 ---
 # К какому scope привязан Singleton?
 

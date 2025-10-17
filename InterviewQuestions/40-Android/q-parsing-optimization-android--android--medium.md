@@ -5,15 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/performance
-  - gson
-  - json
-  - moshi
-  - optimization
-  - parsing
-  - performance
-  - xml
+tags: [android/performance, gson, json, moshi, optimization, parsing, performance, xml, difficulty/medium]
 ---
 
 # Question (EN)

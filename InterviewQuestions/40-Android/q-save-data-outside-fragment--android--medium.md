@@ -5,15 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/data-storage
-  - architecture
-  - data-persistence
-  - data-storage
-  - fragments
-  - room
-  - sharedpreferences
-  - viewmodel
+tags: [android/data-storage, architecture, data-persistence, data-storage, fragments, room, sharedpreferences, viewmodel, difficulty/medium]
 ---
 
 # Question (EN)

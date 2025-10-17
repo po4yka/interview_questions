@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Jetpack Compose
-  - recomposition
-  - android
-  - ui
-  - jetpack-compose
+tags: [recomposition, android, ui, jetpack-compose, difficulty/medium]
 ---
 # Where does the repeated call of composable function come from?
 

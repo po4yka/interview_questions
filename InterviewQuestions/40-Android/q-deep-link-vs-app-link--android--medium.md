@@ -5,15 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/navigation
-  - app-linking
-  - app-links
-  - deep-linking
-  - https
-  - navigation
-  - uri
-  - verification
+tags: [android/navigation, app-linking, app-links, deep-linking, https, navigation, uri, verification, difficulty/medium]
 ---
 # Какие особенности отличия deep link от app link?
 

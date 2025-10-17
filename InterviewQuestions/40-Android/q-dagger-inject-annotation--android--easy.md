@@ -5,12 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/dependency-injection
-  - dagger
-  - dependency-injection
-  - hilt
-  - inject
+tags: [android/dependency-injection, dagger, dependency-injection, hilt, inject, difficulty/easy]
 ---
 # Как сообщить Dagger, что мы собираемся что-то инжектить?
 

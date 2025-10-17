@@ -11,7 +11,7 @@ difficulty: hard
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/architecture, android/multi-module, android/gradle, android/scalability, difficulty/hard]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, architecture, multi-module, gradle, scalability, difficulty/hard]
+tags: [en, ru, android/architecture, android/multi-module, android/gradle, android/scalability, difficulty/hard]
 ---
 # Question (EN)
 > What are best practices for multi-module architecture in Android? When and why to use it?

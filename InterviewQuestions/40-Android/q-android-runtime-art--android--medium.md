@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - runtime
-  - art
-  - dalvik
+tags: [runtime, art, dalvik, difficulty/medium]
 ---
 # Что такое Runtime в контексте Android?
 

@@ -15,7 +15,7 @@
 
 ## YAML Frontmatter (Q&A)
 
-- [ ] `id`: YYYYMMDD-HHmmss format
+- [ ] `id`: YYYYMMDD-HHmmss format (e.g., 20251003-143500)
 - [ ] `title`: "EN Title / RU Заголовок"
 - [ ] `aliases`: Include both languages
 - [ ] `topic`: ONE value from TAXONOMY.md
@@ -24,7 +24,8 @@
 - [ ] `difficulty`: easy | medium | hard
 - [ ] `original_language`: en | ru
 - [ ] `language_tags`: [en] or [en, ru]
-- [ ] `sources`: [{url, note}] if applicable
+- [ ] `source`: URL if applicable
+- [ ] `source_note`: Description of source if applicable
 - [ ] `status`: **draft** (always for agent-created)
 - [ ] `moc`: Link to ≥1 MOC
 - [ ] `related`: Link to 2–5 concepts/questions
@@ -111,8 +112,7 @@ ui-ux-accessibility, behavioral, cs
 - Kotlin → `70-Kotlin/`
 - CompSci → `60-CompSci/`
 - Backend → `50-Backend/`
-- Tools → `80-Tools/`
-- Git → `10-Git/`
+- Tools (includes Git) → `80-Tools/`
 - Concepts → `10-Concepts/`
 - MOCs → `90-MOCs/`
 

@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - jetpack-compose
-  - gestures
-  - pointer-input
-  - drag-swipe
-  - touch-events
+tags: [compose, gestures, pointer-input, drag-swipe, touch-events, difficulty/medium]
 ---
 # Gesture Detection and PointerInput
 

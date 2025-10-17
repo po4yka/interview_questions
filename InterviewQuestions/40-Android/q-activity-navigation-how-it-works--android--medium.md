@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - activity
-  - android
-  - android/navigation
-  - back-stack
-  - intent
-  - lifecycle
-  - navigation
+tags: [android, android/navigation, back-stack, intent, lifecycle, navigation, difficulty/medium]
 ---
 # Как работает навигация по Activity?
 

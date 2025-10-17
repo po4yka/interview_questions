@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/jetpack-compose, android/state, android/remember, android/remembersaveable, difficulty/medium]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, jetpack-compose, state, remember, remembersaveable, difficulty/medium]
+tags: [en, ru, android/jetpack-compose, android/state, android/remember, android/remembersaveable, difficulty/medium]
 ---
 # Question (EN)
 > What is the difference between remember and rememberSaveable in Jetpack Compose?

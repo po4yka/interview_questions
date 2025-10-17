@@ -5,11 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android-components
-  - broadcast-receiver
-  - system-events
-  - intent
+tags: [android-components, broadcast-receiver, system-events, intent, difficulty/easy]
 ---
 
 # Question (EN)

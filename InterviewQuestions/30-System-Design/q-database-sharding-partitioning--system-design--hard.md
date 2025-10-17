@@ -23,19 +23,21 @@ subtopics:   - database
   - scalability
   - distributed-databases
 ---
-# Database Sharding and Partitioning
+# Question (EN)
+> What is database sharding? How is it different from partitioning? What are the sharding strategies, and what are the trade-offs?
 
-## English Version
+# Вопрос (RU)
+> Что такое шардирование базы данных? Чем оно отличается от партиционирования? Каковы стратегии шардирования и какие компромиссы?
 
-### Problem Statement
+---
+
+## Answer (EN)
 
 As your database grows, a single server can't handle all the load. Sharding and partitioning are techniques to horizontally scale databases by distributing data across multiple servers.
 
-**The Question:** What is database sharding? How is it different from partitioning? What are the sharding strategies, and what are the trade-offs?
 
-### Detailed Answer
 
-#### Partitioning vs Sharding
+### Partitioning vs Sharding
 
 **Partitioning** = Splitting large table into smaller pieces on **same server**
 **Sharding** = Splitting data across **multiple servers**
@@ -63,7 +65,7 @@ Sharding (Horizontal Scaling):
 
 ### Partitioning Strategies
 
-#### 1. Range Partitioning
+### 1. Range Partitioning
 
 **Split by value range** (e.g., by date, ID range)
 
@@ -106,7 +108,7 @@ WHERE created_at BETWEEN '2024-01-01' AND '2024-12-31';
 
 ---
 
-#### 2. Hash Partitioning
+### 2. Hash Partitioning
 
 **Use hash function** to distribute data evenly
 
@@ -153,7 +155,7 @@ user_id=103 → hash % 4 = 3 → users_3
 
 ---
 
-#### 3. List Partitioning
+### 3. List Partitioning
 
 **Partition by discrete values** (e.g., country, category)
 
@@ -187,7 +189,7 @@ CREATE TABLE products_food PARTITION OF products
 
 ### Sharding Strategies
 
-#### 1. Range-Based Sharding
+### 1. Range-Based Sharding
 
 **Distribute by ID range**
 
@@ -233,7 +235,7 @@ class UserService(private val shardRouter: RangeShardRouter) {
 
 ---
 
-#### 2. Hash-Based Sharding
+### 2. Hash-Based Sharding
 
 **Use hash function to determine shard**
 
@@ -279,7 +281,7 @@ class OrderService(private val shardRouter: HashShardRouter) {
 
 ---
 
-#### 3. Consistent Hashing
+### 3. Consistent Hashing
 
 **Better for dynamic shard addition/removal**
 
@@ -354,7 +356,7 @@ Ring visualization:
 
 ---
 
-#### 4. Geographic Sharding
+### 4. Geographic Sharding
 
 **Shard by location** (for latency, compliance)
 
@@ -397,7 +399,7 @@ class UserService(private val geoRouter: GeoShardRouter) {
 
 ### Sharding Challenges & Solutions
 
-#### Challenge 1: Joins Across Shards
+### Challenge 1: Joins Across Shards
 
 **Problem:** Can't JOIN across different databases
 
@@ -445,7 +447,7 @@ suspend fun getOrderWithUser(orderId: Long): Order {
 
 ---
 
-#### Challenge 2: Distributed Transactions
+### Challenge 2: Distributed Transactions
 
 **Problem:** ACID transactions don't work across shards
 
@@ -487,7 +489,7 @@ class TransferSaga(
 
 ---
 
-#### Challenge 3: Auto-Increment IDs
+### Challenge 3: Auto-Increment IDs
 
 **Problem:** Each shard has its own sequence
 
@@ -566,7 +568,7 @@ CREATE SEQUENCE user_id_seq_3 START 3 INCREMENT BY 1000;
 
 ---
 
-#### Challenge 4: Resharding (Adding/Removing Shards)
+### Challenge 4: Resharding (Adding/Removing Shards)
 
 **Problem:** Changing number of shards requires data migration
 
@@ -681,24 +683,20 @@ class InstagramShardRouter(
 
 ---
 
-## Russian Version
-
-### Постановка задачи
+## Ответ (RU)
 
 По мере роста вашей базы данных один сервер не может обработать всю нагрузку. Шардирование и партиционирование - техники горизонтального масштабирования баз данных путём распределения данных по нескольким серверам.
 
-**Вопрос:** Что такое шардирование базы данных? Чем оно отличается от партиционирования? Каковы стратегии шардирования и какие компромиссы?
 
-### Детальный ответ
 
-#### Партиционирование vs Шардирование
+### Партиционирование vs Шардирование
 
 **Партиционирование** = Разделение большой таблицы на меньшие части на **том же сервере**
 **Шардирование** = Разделение данных по **нескольким серверам**
 
 ### Стратегии шардирования
 
-#### 1. Range-Based Sharding (По диапазону)
+### 1. Range-Based Sharding (По диапазону)
 **Распределение по диапазону ID**
 
 ** Плюсы:**
@@ -709,7 +707,7 @@ class InstagramShardRouter(
 - Hotspots на новых данных
 - Несбалансированная нагрузка
 
-#### 2. Hash-Based Sharding (По хешу)
+### 2. Hash-Based Sharding (По хешу)
 **Использование хеш-функции**
 
 ** Плюсы:**
@@ -720,7 +718,7 @@ class InstagramShardRouter(
 - Сложно добавлять/удалять шарды
 - Нет поддержки range queries
 
-#### 3. Consistent Hashing (Консистентное хеширование)
+### 3. Consistent Hashing (Консистентное хеширование)
 **Лучше для динамического добавления/удаления шардов**
 
 ### Ключевые выводы

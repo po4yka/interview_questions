@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - ReactNative
-  - Multiplatform
-  - JavaScript
+tags: [Kotlin, ReactNative, Multiplatform, JavaScript, difficulty/medium]
 ---
 # KMM vs React Native - Technical Comparison
 

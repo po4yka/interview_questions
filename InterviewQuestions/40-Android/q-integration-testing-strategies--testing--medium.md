@@ -5,10 +5,7 @@ topic: testing
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - testing
-  - integration-testing
-  - architecture
-  - strategy
+tags: [integration-testing, architecture, strategy, difficulty/medium]
 ---
 # Integration Testing Strategies
 

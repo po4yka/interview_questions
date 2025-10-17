@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - viewmodel
-  - lifecycle
-  - mvvm
-  - architecture
+tags: [viewmodel, lifecycle, mvvm, architecture, difficulty/medium]
 ---
 # Why is ViewModel needed and what happens in it?
 

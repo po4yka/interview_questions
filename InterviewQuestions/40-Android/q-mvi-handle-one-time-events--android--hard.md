@@ -5,17 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/architecture-mvi
-  - android/lifecycle
-  - architecture-mvi
-  - lifecycle
-  - livedata
-  - mvi
-  - platform/android
-  - sharedflow
-  - stateflow
-  - viewmodel
+tags: [android/architecture-mvi, android/lifecycle, architecture-mvi, lifecycle, livedata, mvi, platform/android, sharedflow, stateflow, viewmodel, difficulty/hard]
 ---
 # Как с MVI обрабатывать события, которые не нужно хранить?
 

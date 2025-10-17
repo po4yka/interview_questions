@@ -11,7 +11,7 @@ difficulty: easy
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/security, android/network, android/https, android/cleartext, difficulty/easy]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, 20251006-100011, difficulty/easy]
+tags: [en, ru, android/security, android/network, android/https, android/cleartext, difficulty/easy]
 ---
 # Question (EN)
 > What is cleartext traffic in Android?

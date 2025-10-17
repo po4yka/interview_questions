@@ -5,11 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-05
-tags: - android
-  - app-bundle
-  - play-store
-  - distribution
-  - difficulty/easy
+tags: [app-bundle, play-store, distribution, difficulty/easy, android/bundle, android/play-console]
 language_tags: [en, ru]
 moc: moc-android
 modified: 2025-10-05

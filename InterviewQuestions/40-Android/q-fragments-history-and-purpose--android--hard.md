@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/fragments
-  - android/ui
-  - fragments
-  - ui
+tags: [android/fragments, android/ui, fragments, ui, difficulty/hard]
 ---
 
 # Question (EN)

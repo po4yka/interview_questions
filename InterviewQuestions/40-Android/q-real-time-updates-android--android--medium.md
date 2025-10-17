@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - networking
-  - websockets
-  - sse
-  - firebase
-  - fcm
-  - real-time
+tags: [networking, websockets, sse, firebase, fcm, real-time, difficulty/medium]
 ---
 # How to Implement Real-Time Updates in Android
 

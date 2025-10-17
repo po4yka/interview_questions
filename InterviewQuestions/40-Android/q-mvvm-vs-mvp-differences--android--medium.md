@@ -5,18 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/architecture-mvp
-  - android/architecture-mvvm
-  - architecture-mvp
-  - architecture-mvvm
-  - architecture-patterns
-  - data-binding
-  - lifecycle
-  - mvp
-  - mvvm
-  - presenter
-  - viewmodel
+tags: [android/architecture-mvp, android/architecture-mvvm, architecture-mvp, architecture-mvvm, architecture-patterns, data-binding, lifecycle, mvp, mvvm, presenter, viewmodel, difficulty/medium]
 ---
 # Чем MVVM отличается от MVP?
 

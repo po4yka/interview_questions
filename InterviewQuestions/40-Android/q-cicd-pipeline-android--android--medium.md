@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - cicd
-  - github-actions
-  - automation
-  - testing
-  - deployment
-  - gradle
+tags: [cicd, github-actions, automation, testing, deployment, gradle, difficulty/medium]
 ---
 # CI/CD Pipeline for Android
 

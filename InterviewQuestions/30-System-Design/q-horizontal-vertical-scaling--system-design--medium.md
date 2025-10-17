@@ -21,19 +21,21 @@ subtopics:   - scalability
   - distributed-systems
   - performance
 ---
-# Horizontal vs Vertical Scaling
+# Question (EN)
+> What is the difference between horizontal and vertical scaling? When should you use each approach, and what are their trade-offs?
 
-## English Version
+# Вопрос (RU)
+> В чём разница между горизонтальным и вертикальным масштабированием? Когда следует использовать каждый подход, и каковы их компромиссы?
 
-### Problem Statement
+---
+
+## Answer (EN)
 
 As your application grows and needs to handle more traffic, you need strategies to scale your system. The two fundamental approaches are **horizontal scaling** (scaling out) and **vertical scaling** (scaling up). Understanding when to use each approach is crucial for building scalable systems.
 
-**The Question:** What is the difference between horizontal and vertical scaling? When should you use each approach, and what are their trade-offs?
 
-### Detailed Answer
 
-#### What is Vertical Scaling?
+### What is Vertical Scaling?
 
 **Vertical Scaling** (Scaling Up) means adding more resources (CPU, RAM, disk) to an existing server/machine.
 
@@ -53,7 +55,7 @@ Before:     After:
 Single Server
 ```
 
-#### What is Horizontal Scaling?
+### What is Horizontal Scaling?
 
 **Horizontal Scaling** (Scaling Out) means adding more servers/machines to your pool of resources.
 
@@ -70,7 +72,7 @@ Server 1  →   Server 1 Server 2 Server 3
               Load Balancer distributes traffic
 ```
 
-#### Comparison Matrix
+### Comparison Matrix
 
 | Aspect | Vertical Scaling | Horizontal Scaling |
 |--------|-----------------|-------------------|
@@ -84,7 +86,7 @@ Server 1  →   Server 1 Server 2 Server 3
 | **Latency** | Low (same machine) | Network latency exists |
 | **Examples** | Database upgrades | Web server fleet |
 
-#### When to Use Vertical Scaling
+### When to Use Vertical Scaling
 
  **Good for:**
 - **Databases** - especially RDBMS (PostgreSQL, MySQL) where distributed writes are complex
@@ -115,7 +117,7 @@ Stack Overflow primarily uses vertical scaling for their SQL Server:
 - Eventually hit practical limits
 ```
 
-#### When to Use Horizontal Scaling
+### When to Use Horizontal Scaling
 
  **Good for:**
 - **Web servers** - stateless HTTP servers scale perfectly
@@ -164,7 +166,7 @@ def create_order(order_data):
     return {"order_id": order_id}
 ```
 
-#### Hybrid Approach (Most Common)
+### Hybrid Approach (Most Common)
 
 Most production systems use **both**:
 
@@ -206,7 +208,7 @@ Replica 1          Replica 2
 - **Database reads** → Horizontal (read replicas)
 - **Background jobs** → Horizontal (worker queues)
 
-#### Cost Analysis
+### Cost Analysis
 
 **Vertical Scaling Costs:**
 ```
@@ -230,7 +232,7 @@ Notice: Exponential cost growth
    Can scale gradually
 ```
 
-#### Limitations & Challenges
+### Limitations & Challenges
 
 **Vertical Scaling Limits:**
 ```
@@ -252,7 +254,7 @@ Notice: Exponential cost growth
  More operational complexity
 ```
 
-#### Real-World System Design
+### Real-World System Design
 
 **E-commerce Platform Architecture:**
 ```kotlin
@@ -334,7 +336,7 @@ spec:
         periodSeconds: 120
 ```
 
-#### Decision Tree
+### Decision Tree
 
 ```
 Start: Need to scale?
@@ -379,17 +381,13 @@ Start: Need to scale?
 
 ---
 
-## Russian Version
-
-### Постановка задачи
+## Ответ (RU)
 
 По мере роста вашего приложения и необходимости обработки большего трафика, нужны стратегии масштабирования системы. Два фундаментальных подхода - это **горизонтальное масштабирование** (scaling out) и **вертикальное масштабирование** (scaling up). Понимание, когда использовать каждый подход, критически важно для построения масштабируемых систем.
 
-**Вопрос:** В чём разница между горизонтальным и вертикальным масштабированием? Когда следует использовать каждый подход, и каковы их компромиссы?
 
-### Детальный ответ
 
-#### Что такое вертикальное масштабирование?
+### Что такое вертикальное масштабирование?
 
 **Вертикальное масштабирование** (Scaling Up) означает добавление большего количества ресурсов (CPU, RAM, диск) к существующему серверу/машине.
 
@@ -409,7 +407,7 @@ Start: Need to scale?
 Один сервер
 ```
 
-#### Что такое горизонтальное масштабирование?
+### Что такое горизонтальное масштабирование?
 
 **Горизонтальное масштабирование** (Scaling Out) означает добавление большего количества серверов/машин в пул ресурсов.
 
@@ -426,7 +424,7 @@ Start: Need to scale?
            Балансировщик распределяет трафик
 ```
 
-#### Матрица сравнения
+### Матрица сравнения
 
 | Аспект | Вертикальное | Горизонтальное |
 |--------|--------------|----------------|
@@ -440,7 +438,7 @@ Start: Need to scale?
 | **Задержка** | Низкая (та же машина) | Сетевая задержка |
 | **Примеры** | Обновление БД | Флот веб-серверов |
 
-#### Когда использовать вертикальное масштабирование
+### Когда использовать вертикальное масштабирование
 
  **Подходит для:**
 - **Баз данных** - особенно RDBMS (PostgreSQL, MySQL), где распределённые записи сложны
@@ -462,7 +460,7 @@ Start: Need to scale?
   - Нет проблем синхронизации данных
 ```
 
-#### Когда использовать горизонтальное масштабирование
+### Когда использовать горизонтальное масштабирование
 
  **Подходит для:**
 - **Веб-серверов** - stateless HTTP серверы отлично масштабируются
@@ -490,7 +488,7 @@ def get_user(user_id):
     return jsonify(user)
 ```
 
-#### Гибридный подход (наиболее распространённый)
+### Гибридный подход (наиболее распространённый)
 
 Большинство production систем используют **оба подхода**:
 

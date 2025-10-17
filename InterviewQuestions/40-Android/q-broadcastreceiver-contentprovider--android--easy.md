@@ -5,14 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/broadcast-receiver
-  - android/content-provider
-  - broadcast-receiver
-  - content-provider
-  - data-sharing
-  - intent
-  - system-events
+tags: [android/broadcast-receiver, android/content-provider, broadcast-receiver, content-provider, data-sharing, intent, system-events, difficulty/easy]
 ---
 # Что известно про ресиверы и контент-провайдеры?
 

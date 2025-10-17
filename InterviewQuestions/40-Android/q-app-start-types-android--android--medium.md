@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - performance
-  - app-startup
-  - cold-start
-  - warm-start
-  - hot-start
-  - optimization
+tags: [performance, app-startup, cold-start, warm-start, hot-start, optimization, difficulty/medium]
 ---
 # Hot, Warm, and Cold App Start in Android
 

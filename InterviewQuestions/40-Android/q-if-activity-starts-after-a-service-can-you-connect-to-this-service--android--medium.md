@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - service
-  - binding
-  - ipc
+tags: [service, binding, ipc, difficulty/medium]
 ---
 # If Activity starts after a service, can you connect to this service
 

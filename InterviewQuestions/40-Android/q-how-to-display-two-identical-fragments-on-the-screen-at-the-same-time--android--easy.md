@@ -5,10 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/fragments
-  - fragments
-  - ui
+tags: [android/fragments, fragments, ui, difficulty/easy]
 ---
 # Как на экране одновременно отобразить два одинаковых фрагмента?
 

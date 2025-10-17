@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/foreground-service
-  - android/services
-  - foreground-service
-  - lifecycle
-  - process-priority
-  - services
+tags: [android/foreground-service, android/services, foreground-service, lifecycle, process-priority, services, difficulty/medium]
 ---
 
 # Question (EN)

@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/data-storage
-  - comparison
-  - database
-  - orm
-  - room
-  - sqlite
+tags: [android/data-storage, comparison, database, orm, room, sqlite, difficulty/medium]
 ---
 # В чем разница между Room & SQLite?
 

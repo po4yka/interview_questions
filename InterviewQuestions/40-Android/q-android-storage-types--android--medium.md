@@ -5,17 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/data-storage
-  - content-providers
-  - data-storage
-  - external-storage
-  - file-system
-  - internal-storage
-  - persistence
-  - sharedpreferences
-  - sqlite
-  - storage
+tags: [android/data-storage, content-providers, data-storage, external-storage, file-system, internal-storage, persistence, sharedpreferences, sqlite, storage, difficulty/medium]
 ---
 # Какие типы хранилищ существуют в Android-приложениях?
 

@@ -5,15 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/jetpack-compose
-  - android/performance
-  - choreographer
-  - frame-scheduling
-  - jetpack-compose
-  - performance
-  - recomposition
-  - vsync
+tags: [android/jetpack-compose, android/performance, choreographer, frame-scheduling, jetpack-compose, performance, recomposition, vsync, difficulty/hard]
 ---
 # Рекомпозиция происходит в рандомное время или по команде хореографера?
 

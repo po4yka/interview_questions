@@ -5,10 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - dependency-injection
-  - dagger
-  - di-hilt
+tags: [dependency-injection, dagger, di-hilt, difficulty/easy]
 ---
 # Для чего нужен Dagger ?
 

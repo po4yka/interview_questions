@@ -5,12 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/layouts
-  - layout
-  - layouts
-  - performance
-  - ui
+tags: [android/layouts, layout, layouts, performance, ui, difficulty/easy]
 ---
 # Как можно исправить плохой layout элемента?
 

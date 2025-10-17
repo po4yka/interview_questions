@@ -5,13 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/intents-deeplinks
-  - component-communication
-  - explicit-intent
-  - implicit-intent
-  - intent
-  - intents-deeplinks
+tags: [android/intents-deeplinks, component-communication, explicit-intent, implicit-intent, intent, intents-deeplinks, difficulty/easy]
 ---
 
 # Question (EN)

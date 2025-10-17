@@ -5,17 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - activity
-  - android
-  - android/activity
-  - android/fragment
-  - android/performance-startup
-  - fragment
-  - fragments
-  - performance
-  - performance-startup
-  - platform/android
-  - single-activity
+tags: [android, android/activity, android/fragment, android/performance-startup, fragment, fragments, performance, performance-startup, platform/android, single-activity, difficulty/medium]
 ---
 # Какие у подхода Single Activity этого подхода + и - ?
 

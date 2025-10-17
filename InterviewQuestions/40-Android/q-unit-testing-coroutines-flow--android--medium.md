@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - testing
-  - coroutines
-  - flow
-  - unit-testing
-  - turbine
-  - mockk
+tags: [testing, coroutines, flow, unit-testing, turbine, mockk, difficulty/medium]
 ---
 # Unit Testing with Coroutines and Flow
 

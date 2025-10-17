@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - notifications
-  - fcm
-  - navigation
-  - deeplink
+tags: [notifications, fcm, navigation, deeplink, difficulty/medium]
 ---
 # Как открыть Activity или Fragment из push уведомления?
 

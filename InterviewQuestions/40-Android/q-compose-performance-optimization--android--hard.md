@@ -11,7 +11,7 @@ difficulty: hard
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/jetpack-compose, android/performance, android/optimization, android/recomposition, difficulty/hard]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, jetpack-compose, performance, optimization, recomposition, difficulty/hard]
+tags: [en, ru, android/jetpack-compose, android/performance, android/optimization, android/recomposition, difficulty/hard]
 ---
 # Question (EN)
 > How to optimize performance in Jetpack Compose? What causes unnecessary recomposition and how to avoid it?

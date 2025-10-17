@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/rxjava, android/recyclerview, android/pagination, android/infinite-scroll, difficulty/medium]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: [recyclerview, rxjava, pagination, paging-library]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, rxjava, recyclerview, pagination, infinite-scroll, difficulty/medium]
+tags: [en, ru, android/rxjava, android/recyclerview, android/pagination, android/infinite-scroll, difficulty/medium]
 ---
 # Question (EN)
 > How do you implement pagination/infinite scrolling in RecyclerView using RxJava?

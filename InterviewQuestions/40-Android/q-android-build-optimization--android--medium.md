@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - build-optimization
-  - gradle
-  - kotlin
-  - ksp
-  - performance
+tags: [build-optimization, gradle, kotlin, ksp, performance, difficulty/medium]
 ---
 # Android Build Optimization
 

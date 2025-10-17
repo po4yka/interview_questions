@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/networking
-  - file-upload
-  - http
-  - multipart
-  - networking
-  - okhttp
-  - retrofit
+tags: [android/networking, file-upload, http, multipart, networking, okhttp, retrofit, difficulty/medium]
 ---
 # Какое API или другие инструменты будешь использовать для отправления файлов на сервер?
 

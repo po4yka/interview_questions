@@ -5,9 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - image-formats
-  - ui
+tags: [image-formats, ui, difficulty/easy]
 ---
 # Когда лучше использовать png и webp, а когда svg?
 

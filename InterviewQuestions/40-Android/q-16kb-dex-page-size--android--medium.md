@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - dex
-  - build-optimization
-  - apk-size
-  - performance
-  - r8
-  - proguard
+tags: [dex, build-optimization, apk-size, performance, r8, proguard, difficulty/medium]
 ---
 # 16 KB DEX Page Size Issue in Android
 

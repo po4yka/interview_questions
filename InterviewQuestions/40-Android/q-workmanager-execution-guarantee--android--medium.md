@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - workmanager
-  - background-tasks
-  - reliability
+tags: [workmanager, background-tasks, reliability, difficulty/medium]
 ---
 # How does WorkManager guarantee task execution?
 

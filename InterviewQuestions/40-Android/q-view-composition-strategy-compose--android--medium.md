@@ -5,19 +5,13 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-05
-tags: - android
-  - compose
-  - viewcompositionstrategy
-  - lifecycle
-  - interop
-  - difficulty/medium
+tags: [compose, viewcompositionstrategy, lifecycle, interop, difficulty/medium, android/compose, android/lifecycle, android/performance-memory]
 aliases:   - ViewCompositionStrategy in Compose
   - ViewCompositionStrategy в Compose
 category: android
 date_created: 2025-10-05
 date_modified: 2025-10-05
-language_tags:   - en
-  - ru
+language_tags: [compose, viewcompositionstrategy, lifecycle, interop, difficulty/medium, android/compose, android/lifecycle, android/performance-memory]
 moc: moc-android
 original_language: en
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20ViewCompositionStrategy.md"

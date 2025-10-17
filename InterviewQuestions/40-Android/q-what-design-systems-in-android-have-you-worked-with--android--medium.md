@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - fluent design system
-  - human interface guidelines
-  - material design
-  - ui
+tags: [fluent design system, human interface guidelines, material design, ui, difficulty/medium]
 ---
 # С какими вариантами систем проектирования в Android работал
 

@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/activity, android/task-management, android/navigation, difficulty/medium]
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [android, activity, launch-mode, task-management, navigation, difficulty/medium]
+tags: [en, ru, android/activity, android/task-management, android/navigation, difficulty/medium]
 ---
 # Question (EN)
 > What launch modes do you know?

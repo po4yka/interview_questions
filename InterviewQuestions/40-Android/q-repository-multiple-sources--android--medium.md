@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/architecture, android/repository, android/data-layer, android/caching, difficulty/medium]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, architecture, repository, data-layer, caching, difficulty/medium]
+tags: [en, ru, android/architecture, android/repository, android/data-layer, android/caching, difficulty/medium]
 ---
 # Question (EN)
 > How to implement Repository pattern with multiple data sources (network, database, cache)?

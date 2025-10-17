@@ -22,19 +22,21 @@ subtopics:   - caching
   - memcached
   - cdn
 ---
-# Caching Strategies and Patterns
+# Question (EN)
+> What are the main caching strategies? When should you use each strategy, and what are common caching patterns?
 
-## English Version
+# Вопрос (RU)
+> Каковы основные стратегии кеширования? Когда следует использовать каждую стратегию, и каковы распространённые паттерны кеширования?
 
-### Problem Statement
+---
+
+## Answer (EN)
 
 Caching is one of the most effective ways to improve system performance. However, implementing caching incorrectly can lead to stale data, cache misses, and even worse performance. Understanding different caching strategies is essential for building high-performance systems.
 
-**The Question:** What are the main caching strategies? When should you use each strategy, and what are common caching patterns?
 
-### Detailed Answer
 
-#### Why Caching?
+### Why Caching?
 
 **Performance gains:**
 - Database query: ~10-100ms
@@ -59,7 +61,7 @@ Client → DB (100ms)     Client → DB (100ms) → Cache
 
 ### Caching Strategies
 
-#### 1. Cache-Aside (Lazy Loading)
+### 1. Cache-Aside (Lazy Loading)
 
 **How it works:**
 1. Application checks cache first
@@ -130,7 +132,7 @@ class UserService(
 
 ---
 
-#### 2. Read-Through Cache
+### 2. Read-Through Cache
 
 **How it works:**
 - Cache sits between app and database
@@ -191,7 +193,7 @@ val user = cache.get("user:$userId") {
 
 ---
 
-#### 3. Write-Through Cache
+### 3. Write-Through Cache
 
 **How it works:**
 - Write to cache AND database simultaneously
@@ -267,7 +269,7 @@ class UserService(
 
 ---
 
-#### 4. Write-Behind (Write-Back) Cache
+### 4. Write-Behind (Write-Back) Cache
 
 **How it works:**
 - Write to cache immediately
@@ -355,24 +357,24 @@ class WriteBackCache(
 
 When cache is full, what to remove?
 
-#### LRU (Least Recently Used)
+### LRU (Least Recently Used)
 Most popular choice. Removes oldest accessed item.
 ```
 Cache: [A:10s, B:5s, C:1s] (C accessed most recently)
 Cache full → Evict A (accessed 10 seconds ago)
 ```
 
-#### LFU (Least Frequently Used)
+### LFU (Least Frequently Used)
 Removes least frequently accessed item.
 ```
 Cache: [A:10hits, B:5hits, C:50hits]
 Cache full → Evict B (only 5 hits)
 ```
 
-#### FIFO (First In First Out)
+### FIFO (First In First Out)
 Removes oldest item regardless of access.
 
-#### TTL (Time To Live)
+### TTL (Time To Live)
 Expires items after fixed time.
 ```kotlin
 cache.set("user:123", user, ttl = 1.hours)
@@ -390,9 +392,9 @@ maxmemory-policy allkeys-lru  # or allkeys-lfu, volatile-lru, volatile-ttl
 
 ### Caching Patterns
 
-#### 1. Cache-Aside Pattern (Already covered)
+### 1. Cache-Aside Pattern (Already covered)
 
-#### 2. Refresh-Ahead
+### 2. Refresh-Ahead
 
 **Proactively refresh cache before expiration:**
 ```kotlin
@@ -438,7 +440,7 @@ class RefreshAheadCache(
 }
 ```
 
-#### 3. Cache Warming
+### 3. Cache Warming
 
 **Preload cache with expected data:**
 ```kotlin
@@ -469,7 +471,7 @@ class CacheWarmer(
 }
 ```
 
-#### 4. Multi-Level Caching
+### 4. Multi-Level Caching
 
 ```
 
@@ -532,13 +534,13 @@ class MultiLevelCache(
 
 **"There are only two hard things in Computer Science: cache invalidation and naming things" - Phil Karlton**
 
-#### 1. TTL-Based
+### 1. TTL-Based
 ```kotlin
 cache.set("user:123", user, ttl = 5.minutes)
 // Automatically expires
 ```
 
-#### 2. Event-Based Invalidation
+### 2. Event-Based Invalidation
 ```kotlin
 @EventListener
 fun onUserUpdated(event: UserUpdatedEvent) {
@@ -548,7 +550,7 @@ fun onUserUpdated(event: UserUpdatedEvent) {
 }
 ```
 
-#### 3. Tag-Based Invalidation
+### 3. Tag-Based Invalidation
 ```kotlin
 // Set cache with tags
 cache.setWithTags(
@@ -626,17 +628,13 @@ class ProductService(
 
 ---
 
-## Russian Version
-
-### Постановка задачи
+## Ответ (RU)
 
 Кеширование - один из самых эффективных способов улучшить производительность системы. Однако, неправильная реализация кеширования может привести к устаревшим данным, промахам кеша и даже худшей производительности.
 
-**Вопрос:** Каковы основные стратегии кеширования? Когда следует использовать каждую стратегию, и каковы распространённые паттерны кеширования?
 
-### Детальный ответ
 
-#### Зачем кеширование?
+### Зачем кеширование?
 
 **Выигрыш в производительности:**
 - Запрос к БД: ~10-100ms
@@ -645,7 +643,7 @@ class ProductService(
 
 ### Стратегии кеширования
 
-#### 1. Cache-Aside (Ленивая загрузка)
+### 1. Cache-Aside (Ленивая загрузка)
 
 **Как работает:**
 1. Приложение сначала проверяет кеш
@@ -665,7 +663,7 @@ class ProductService(
 
 **Подходит для:** Workloads с частым чтением, редко меняющиеся данные
 
-#### 2. Write-Through (Сквозная запись)
+### 2. Write-Through (Сквозная запись)
 
 **Как работает:**
 - Запись в кеш И БД одновременно
@@ -683,7 +681,7 @@ class ProductService(
 
 **Подходит для:** Приложений, требующих строгой консистентности
 
-#### 3. Write-Behind (Отложенная запись)
+### 3. Write-Behind (Отложенная запись)
 
 **Как работает:**
 - Запись в кеш немедленно

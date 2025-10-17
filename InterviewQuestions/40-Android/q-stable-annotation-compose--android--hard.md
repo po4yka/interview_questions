@@ -5,16 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/jetpack-compose
-  - android/performance
-  - annotations
-  - jetpack-compose
-  - optimization
-  - performance
-  - recomposition
-  - stability
-  - stable-annotation
+tags: [android/jetpack-compose, android/performance, annotations, jetpack-compose, optimization, performance, recomposition, stability, stable-annotation, difficulty/hard]
 ---
 # Что известно про stable?
 

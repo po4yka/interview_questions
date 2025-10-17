@@ -5,17 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - activity
-  - android
-  - android/fragments
-  - android/views
-  - bitmap
-  - canvas
-  - fragment
-  - fragments
-  - imageview
-  - ui
-  - views
+tags: [android, android/fragments, android/views, bitmap, canvas, fragment, fragments, imageview, ui, views, difficulty/easy]
 ---
 # Как реализовать редактор фотографий в качестве отдельного компонента?
 

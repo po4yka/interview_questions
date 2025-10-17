@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android-framework
-  - android/architecture-clean
-  - architecture-clean
-  - design-patterns
-  - factory-pattern
-  - platform/android
+tags: [android-framework, android/architecture-clean, architecture-clean, design-patterns, factory-pattern, platform/android, difficulty/medium]
 ---
 # Можешь привести пример когда android фреймворк использует паттерн Factory
 

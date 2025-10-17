@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - intent
-  - fileprovider
-  - bitmap
-  - image-processing
+tags: [intent, fileprovider, bitmap, image-processing, difficulty/medium]
 ---
 # How to pass a photo to an editor?
 

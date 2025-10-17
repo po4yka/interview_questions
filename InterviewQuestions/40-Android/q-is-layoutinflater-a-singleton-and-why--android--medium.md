@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - LayoutInflater
-  - Context
-  - Singleton
-  - android
-  - ui
-  - layoutinflater
+tags: [Context, Singleton, android, ui, layoutinflater, difficulty/medium]
 ---
 # Is LayoutInflater a singleton and why
 

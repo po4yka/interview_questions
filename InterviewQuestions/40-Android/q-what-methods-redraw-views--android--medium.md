@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/views
-  - custom-views
-  - view-rendering
-  - invalidate
-  - requestLayout
+tags: [android/views, custom-views, view-rendering, invalidate, requestLayout, difficulty/medium]
 ---
 # What methods are used to redraw Views?
 

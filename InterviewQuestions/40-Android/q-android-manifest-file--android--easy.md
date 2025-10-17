@@ -5,14 +5,8 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - manifest
-  - androidmanifest
-  - configuration
-  - app-structure
-  - difficulty/easy
-language_tags:   - en
-  - ru
+tags: [manifest, androidmanifest, configuration, app-structure, difficulty/easy, android/startup, android/permissions, android/activity]
+language_tags: [manifest, androidmanifest, configuration, app-structure, difficulty/easy, android/startup, android/permissions, android/activity]
 moc: moc-android
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions

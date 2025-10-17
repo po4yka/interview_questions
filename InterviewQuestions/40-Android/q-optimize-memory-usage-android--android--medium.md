@@ -5,16 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - android
-  - android/memory-management
-  - android/performance
-  - glide
-  - lrucache
-  - memory-management
-  - memory-optimization
-  - optimization
-  - performance
-  - weakreference
+tags: [android/memory-management, android/performance, glide, lrucache, memory-management, memory-optimization, optimization, performance, weakreference, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

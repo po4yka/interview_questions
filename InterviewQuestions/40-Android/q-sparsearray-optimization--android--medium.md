@@ -5,19 +5,13 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-05
-tags: - android
-  - sparsearray
-  - data-structures
-  - performance
-  - memory-optimization
-  - difficulty/medium
+tags: [sparsearray, data-structures, performance, memory-optimization, difficulty/medium, android/memory, android/performance-rendering]
 aliases:   - SparseArray and Optimization
   - SparseArray и оптимизация
 category: android
 date_created: 2025-10-05
 date_modified: 2025-10-13
-language_tags:   - en
-  - ru
+language_tags: [sparsearray, data-structures, performance, memory-optimization, difficulty/medium, android/memory, android/performance-rendering]
 moc: moc-android
 original_language: en
 related_questions: []

@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/annotation-processing, android/kapt, android/ksp, android/build-performance, difficulty/medium]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, annotation-processing, kapt, ksp, build-performance, difficulty/medium]
+tags: [en, ru, android/annotation-processing, android/kapt, android/ksp, android/build-performance, difficulty/medium]
 ---
 # Question (EN)
 > What is the difference between kapt and KSP? Which one to use?

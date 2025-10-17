@@ -5,16 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - activity
-  - android
-  - android/navigation
-  - architecture
-  - compose
-  - fragment
-  - jetpack
-  - navigation
-  - navigation-component
-  - ui-patterns
+tags: [android, android/navigation, architecture, compose, fragment, jetpack, navigation, navigation-component, ui-patterns, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

@@ -5,16 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - activity
-  - android
-  - android/activity
-  - android/broadcast-receiver
-  - android/content-provider
-  - android/service
-  - broadcast-receiver
-  - components
-  - content-provider
-  - service
+tags: [android, android/activity, android/broadcast-receiver, android/content-provider, android/service, broadcast-receiver, components, content-provider, service, difficulty/easy]
 ---
 # Какие основные компоненты Android-приложения?
 

@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - dalvik
-  - art
-  - runtime
-  - jit
-  - aot
-  - compilation
-  - performance
+tags: [dalvik, art, runtime, jit, aot, compilation, performance, difficulty/medium]
 ---
 
 # Question (EN)

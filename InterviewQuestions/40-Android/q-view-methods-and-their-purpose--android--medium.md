@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/ui
-  - android/view
-  - ui
-  - ui components
-  - view
-  - view lifecycle
+tags: [android/ui, android/view, ui, ui components, view, view lifecycle, difficulty/medium]
 ---
 # Какие методы есть у view и что каждый из них делает?
 

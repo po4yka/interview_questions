@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - dark-theme
-  - ui
-  - theming
-  - daynight
-  - material-design
-  - difficulty/medium
+tags: [dark-theme, ui, theming, daynight, material-design, difficulty/medium]
 ---
 # What is Dark Theme in Android? / Что такое темная тема в Android?
 

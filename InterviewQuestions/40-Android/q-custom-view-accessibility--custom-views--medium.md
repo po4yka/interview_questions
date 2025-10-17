@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - custom-views
-  - accessibility
-  - a11y
-  - inclusive-design
+tags: [views, accessibility, a11y, inclusive-design, android/ui-views, android/ui-accessibility, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

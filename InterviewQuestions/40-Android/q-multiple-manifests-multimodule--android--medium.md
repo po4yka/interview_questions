@@ -5,15 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android-manifest
-  - android/multi-module
-  - android/project-structure
-  - build-system
-  - manifest-merging
-  - modularization
-  - multi-module
-  - project-structure
+tags: [android-manifest, android/multi-module, android/project-structure, build-system, manifest-merging, modularization, multi-module, project-structure, difficulty/medium]
 ---
 # Для проектов в которых есть несколько модулей, там может быть много Android Manifest'ов, для чего это делается?
 

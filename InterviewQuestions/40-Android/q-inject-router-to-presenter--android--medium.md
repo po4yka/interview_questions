@@ -5,15 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/architecture-mvi
-  - android/di-hilt
-  - architecture-mvi
-  - dagger/hilt
-  - dependency-injection
-  - di-hilt
-  - koin
-  - platform/android
+tags: [android/architecture-mvi, android/di-hilt, architecture-mvi, dagger/hilt, dependency-injection, di-hilt, koin, platform/android, difficulty/medium]
 ---
 # How to inject Router directly into Presenter?
 

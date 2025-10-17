@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/fragments
-  - fragments
-  - lifecycle
-  - ui
+tags: [android/fragments, fragments, lifecycle, ui, difficulty/hard]
 ---
 # В каких случаях может понадобиться вызывать commitAllowingStateLoss
 

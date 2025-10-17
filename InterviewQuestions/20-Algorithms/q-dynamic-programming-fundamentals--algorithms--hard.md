@@ -22,19 +22,21 @@ subtopics:   - dynamic-programming
   - tabulation
   - optimization
 ---
-# Dynamic Programming Fundamentals
+# Question (EN)
+> What is Dynamic Programming? How does it differ from recursion? What are the main DP patterns and classic problems?
 
-## English Version
+# Вопрос (RU)
+> Что такое динамическое программирование? Чем оно отличается от рекурсии? Каковы основные паттерны DP и классические задачи?
 
-### Problem Statement
+---
+
+## Answer (EN)
 
 Dynamic Programming (DP) is a powerful technique for solving optimization problems by breaking them into overlapping subproblems. Understanding DP is crucial for technical interviews and real-world optimization challenges.
 
-**The Question:** What is Dynamic Programming? How does it differ from recursion? What are the main DP patterns and classic problems?
 
-### Detailed Answer
 
-#### What is Dynamic Programming?
+### What is Dynamic Programming?
 
 **Dynamic Programming** = Optimization technique that solves problems by:
 1. Breaking into **overlapping subproblems**
@@ -57,7 +59,7 @@ F(1) = 1
 F(n) = F(n-1) + F(n-2)
 ```
 
-#### Naive Recursion (Exponential - O(2^n))
+### Naive Recursion (Exponential - O(2^n))
 
 ```kotlin
 fun fibRecursive(n: Int): Long {
@@ -95,7 +97,7 @@ fib(2) calculated 3 times!
 fib(3) calculated 2 times!
 ```
 
-#### Top-Down DP: Memoization (O(n))
+### Top-Down DP: Memoization (O(n))
 
 ```kotlin
 fun fibMemo(n: Int, memo: MutableMap<Int, Long> = mutableMapOf()): Long {
@@ -119,7 +121,7 @@ println(fibMemo(40))  // Instant!
 println(fibMemo(100)) // Still fast!
 ```
 
-#### Bottom-Up DP: Tabulation (O(n))
+### Bottom-Up DP: Tabulation (O(n))
 
 ```kotlin
 fun fibTabulation(n: Int): Long {
@@ -143,7 +145,7 @@ fun fibTabulation(n: Int): Long {
 println(fibTabulation(100))
 ```
 
-#### Space-Optimized (O(1))
+### Space-Optimized (O(1))
 
 ```kotlin
 fun fibOptimized(n: Int): Long {
@@ -514,19 +516,19 @@ println(canPartition(intArrayOf(1, 2, 3, 5)))   // false
 
 ### DP Patterns Summary
 
-#### 1. Linear DP
+### 1. Linear DP
 - Fibonacci, Climbing Stairs, House Robber
 - **Pattern:** `dp[i] depends on dp[i-1], dp[i-2], ...`
 
-#### 2. Grid/2D DP
+### 2. Grid/2D DP
 - Knapsack, LCS, Edit Distance
 - **Pattern:** `dp[i][j] depends on dp[i-1][j], dp[i][j-1], dp[i-1][j-1]`
 
-#### 3. Interval DP
+### 3. Interval DP
 - Longest Palindromic Substring
 - **Pattern:** `dp[i][j] depends on dp[i+1][j-1]`
 
-#### 4. DP on Subsets
+### 4. DP on Subsets
 - Traveling Salesman, Bitmask DP
 - **Pattern:** Use bitmask to represent state
 
@@ -629,17 +631,13 @@ class SpellChecker {
 
 ---
 
-## Russian Version
-
-### Постановка задачи
+## Ответ (RU)
 
 Динамическое программирование (DP) - мощная техника для решения задач оптимизации путём разбиения на перекрывающиеся подзадачи.
 
-**Вопрос:** Что такое динамическое программирование? Чем оно отличается от рекурсии? Каковы основные паттерны DP и классические задачи?
 
-### Детальный ответ
 
-#### Что такое динамическое программирование?
+### Что такое динамическое программирование?
 
 **Динамическое программирование** = Техника оптимизации, которая решает задачи путём:
 1. Разбиения на **перекрывающиеся подзадачи**

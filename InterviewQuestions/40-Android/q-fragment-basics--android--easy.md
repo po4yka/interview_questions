@@ -12,15 +12,8 @@ subtopics:
   - fragment
   - lifecycle
   - ui-navigation
-tags:
-  - android
-  - fragment
-  - ui-component
-  - lifecycle
-  - difficulty/easy
-language_tags:
-  - en
-  - ru
+tags: [fragment, ui-component, lifecycle, difficulty/easy, android/lifecycle, android/ui-navigation]
+language_tags: [fragment, ui-component, lifecycle, difficulty/easy, android/lifecycle, android/ui-navigation]
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Fragment.md
 author: null

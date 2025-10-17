@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - recyclerview
-  - animations
-  - itemanimator
+tags: [recyclerview, animations, itemanimator, difficulty/medium]
 ---
 # What needs to be used to animate adding/removing items in RecyclerView?
 

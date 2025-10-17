@@ -5,17 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - activity
-  - android
-  - android-components
-  - android/android-components
-  - broadcast-receiver
-  - components
-  - content-provider
-  - fragment
-  - intent
-  - service
-  - view
+tags: [android, android-components, android/android-components, broadcast-receiver, components, content-provider, fragment, intent, service, view, difficulty/easy]
 ---
 # Что из себя представляет каждый компонент Android-приложения?
 

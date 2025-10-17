@@ -5,8 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - programming-languages
-  - android
+tags: [languages, android, difficulty/easy]
 ---
 # От кого наследуются ViewGroup
 

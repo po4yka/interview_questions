@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - activity
-  - android
-  - android/fragments
-  - fragments
-  - ui
+tags: [android, android/fragments, fragments, ui, difficulty/hard]
 ---
 # Для чего нужны фрагменты если есть Activity?
 

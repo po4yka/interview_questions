@@ -5,12 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/ui-compose
-  - jetpack-compose
-  - lazy-column
-  - platform/android
-  - ui-compose
+tags: [android/ui-compose, jetpack-compose, lazy-column, platform/android, ui-compose, difficulty/easy]
 ---
 # Как в Jetpack Compose создать список, аналогичный RecyclerView?
 

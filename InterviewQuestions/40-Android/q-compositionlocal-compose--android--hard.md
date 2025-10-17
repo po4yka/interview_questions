@@ -5,12 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - compose
-  - compositionlocal
-  - state-management
-  - implicit-data
-  - difficulty/hard
+tags: [compose, compositionlocal, state-management, implicit-data, difficulty/hard, android/compose, android/ui-state]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20CompositionLocal.md
 subtopics:   - ui-compose
   - ui-state

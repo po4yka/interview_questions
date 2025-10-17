@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - testing
-  - mockk
-  - mocking
-  - kotlin
-  - unit-testing
-  - coroutines
+tags: [mockk, mocking, kotlin, unit-testing, coroutines, difficulty/medium]
 ---
 # MockK Advanced Features
 

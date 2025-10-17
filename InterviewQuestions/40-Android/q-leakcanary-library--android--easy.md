@@ -5,14 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - android
-  - android/memory-management
-  - debugging-tools
-  - leakcanary
-  - memory-leaks
-  - memory-management
-  - square
-  - tools
+tags: [android/memory-management, debugging-tools, leakcanary, memory-leaks, memory-management, square, tools, difficulty/easy]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - datastore
-  - preferences
-  - proto-datastore
-  - storage
-  - difficulty/medium
+tags: [datastore, preferences, proto-datastore, storage, difficulty/medium, android/storage, android/serialization]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20you%20know%20about%20DataStore.md
 subtopics:   - datastore
   - storage

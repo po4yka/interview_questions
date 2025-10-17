@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - android
-  - caching
-  - performance
-  - data-storage
-  - optimization
+tags: [caching, performance, data-storage, optimization, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

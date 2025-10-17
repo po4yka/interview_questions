@@ -5,15 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/jetpack-compose
-  - android/performance
-  - immutability
-  - jetpack-compose
-  - performance
-  - recomposition
-  - stability
-  - stable-annotation
+tags: [android/jetpack-compose, android/performance, immutability, jetpack-compose, performance, recomposition, stability, stable-annotation, difficulty/hard]
 ---
 # Какие классы будут автоматически выводиться как stable?
 

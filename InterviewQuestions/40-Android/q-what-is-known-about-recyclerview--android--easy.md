@@ -5,17 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - adapter
-  - android
-  - android/layouts
-  - android/recyclerview
-  - android/views
-  - layoutmanager
-  - layouts
-  - recyclerview
-  - ui
-  - viewholder
-  - views
+tags: [android, android/layouts, android/recyclerview, android/views, layoutmanager, layouts, recyclerview, ui, viewholder, views, difficulty/easy]
 ---
 # Что известно про RecyclerView?
 

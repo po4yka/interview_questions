@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - testing
-  - viewmodel
-  - flow
-  - turbine
-  - state-management
-  - coroutines
+tags: [viewmodel, flow, turbine, state-management, coroutines, difficulty/medium]
 ---
 
 # Testing ViewModels with Turbine

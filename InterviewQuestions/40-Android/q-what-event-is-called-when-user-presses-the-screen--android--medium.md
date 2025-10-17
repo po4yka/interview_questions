@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - touch events
-  - event handling
-  - android
-  - ui
-  - touch-events
+tags: [event handling, android, ui, touch-events, difficulty/medium]
 ---
 # What event is called when user presses the screen?
 

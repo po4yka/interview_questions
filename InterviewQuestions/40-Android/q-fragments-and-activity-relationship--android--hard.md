@@ -5,12 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - activity
-  - android
-  - android/fragments
-  - android/ui
-  - fragments
-  - ui
+tags: [android, android/fragments, android/ui, fragments, ui, difficulty/hard]
 ---
 # Как существуют и к чему привязаны фрагменты в Activity?
 

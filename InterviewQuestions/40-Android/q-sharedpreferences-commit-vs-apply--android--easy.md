@@ -11,7 +11,7 @@ difficulty: easy
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/sharedpreferences, android/data-storage, android/performance, difficulty/easy]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: [datastore, shared-preferences, data-storage]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, sharedpreferences, commit, apply, performance, difficulty/easy]
+tags: [en, ru, android/sharedpreferences, android/data-storage, android/performance, difficulty/easy]
 ---
 # Question (EN)
 > What is the difference between commit() and apply() in SharedPreferences?

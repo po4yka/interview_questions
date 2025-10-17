@@ -5,12 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - android
-  - android/memory-management
-  - garbage-collection
-  - memory-leaks
-  - memory-management
-  - performance
+tags: [android/memory-management, garbage-collection, memory-leaks, memory-management, performance, difficulty/easy]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

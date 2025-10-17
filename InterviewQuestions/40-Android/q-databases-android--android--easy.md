@@ -5,13 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - android
-  - android/data-storage
-  - data-storage
-  - database
-  - realm
-  - room
-  - sqlite
+tags: [android/data-storage, data-storage, database, realm, room, sqlite, difficulty/easy]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

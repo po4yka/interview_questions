@@ -5,16 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/architecture-mvi
-  - android/lifecycle
-  - architecture-mvi
-  - callback
-  - lifecycle
-  - livedata
-  - platform/android
-  - presenter
-  - view
+tags: [android/architecture-mvi, android/lifecycle, architecture-mvi, callback, lifecycle, livedata, platform/android, presenter, view, difficulty/medium]
 ---
 # После получения результата внутри Presenter как сообщить об этом View
 

@@ -5,14 +5,8 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - lint
-  - static-analysis
-  - code-quality
-  - gradle
-  - difficulty/medium
-language_tags:   - en
-  - ru
+tags: [lint, static-analysis, code-quality, gradle, difficulty/medium, android/analysis, android/gradle, android/build-variants]
+language_tags: [lint, static-analysis, code-quality, gradle, difficulty/medium, android/analysis, android/gradle, android/build-variants]
 moc: moc-android
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions

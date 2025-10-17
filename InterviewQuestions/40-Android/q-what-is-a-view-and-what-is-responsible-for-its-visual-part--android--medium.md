@@ -5,15 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/layouts
-  - android/views
-  - event handling
-  - layouts
-  - ui
-  - view
-  - views
-  - xml layout
+tags: [android/layouts, android/views, event handling, layouts, ui, view, views, xml layout, difficulty/medium]
 ---
 
 # Question (EN)

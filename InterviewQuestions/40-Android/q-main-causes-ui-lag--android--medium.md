@@ -5,17 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/performance
-  - android/ui
-  - animations
-  - images
-  - layouts
-  - main-thread
-  - optimization
-  - performance
-  - threading
-  - ui
+tags: [android/performance, android/ui, animations, images, layouts, main-thread, optimization, performance, threading, ui, difficulty/medium]
 ---
 # Какие основные причины торможения UI?
 

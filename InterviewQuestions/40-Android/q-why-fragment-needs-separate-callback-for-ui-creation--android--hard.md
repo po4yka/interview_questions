@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/fragments
-  - android/lifecycle
-  - fragments
-  - lifecycle
+tags: [android/fragments, android/lifecycle, fragments, lifecycle, difficulty/hard]
 ---
 # Why Fragment needs separate callback for UI creation?
 

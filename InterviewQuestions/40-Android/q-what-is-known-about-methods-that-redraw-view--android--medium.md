@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - invalidate
-  - requestLayout
-  - postInvalidate
-  - android
-  - ui
-  - views
-  - rendering
+tags: [requestLayout, postInvalidate, android, ui, views, rendering, difficulty/medium]
 ---
 
 # What is known about methods that redraw View?

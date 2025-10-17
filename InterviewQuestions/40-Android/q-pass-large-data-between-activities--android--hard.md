@@ -5,14 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/data-passing
-  - content-provider
-  - data-passing
-  - file-provider
-  - intent
-  - large-data
-  - uri
+tags: [android/data-passing, content-provider, data-passing, file-provider, intent, large-data, uri, difficulty/hard]
 ---
 # Как правильно передать большой объем данных, например картинку, на Activity?
 

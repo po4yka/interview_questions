@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - testing
-  - screenshot-testing
-  - paparazzi
-  - shot
-  - ui-testing
-  - visual-regression
+tags: [screenshot-testing, paparazzi, shot, ui-testing, visual-regression, difficulty/medium]
 ---
 
 # Screenshot and Snapshot Testing

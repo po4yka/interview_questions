@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/data-storage
-  - data-storage
-  - database
-  - markdown
-  - room
-  - serialization
-  - storage
+tags: [android/data-storage, data-storage, database, markdown, room, serialization, storage, difficulty/medium]
 ---
 # Как бы ты сохранил структуру Markdown в базу данных/на диск?
 

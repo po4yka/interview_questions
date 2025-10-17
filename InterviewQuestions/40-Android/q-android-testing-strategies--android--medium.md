@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - testing
-  - junit
-  - espresso
-  - mockito
-  - quality-assurance
+tags: [testing, junit, espresso, mockito, quality-assurance, difficulty/medium]
 ---
 # Методы тестирования Android приложений
 

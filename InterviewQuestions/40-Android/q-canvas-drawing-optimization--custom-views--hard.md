@@ -5,10 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - custom-views
-  - canvas
-  - performance
-  - graphics
+tags: [views, canvas, performance, graphics, difficulty/hard]
 ---
 # Canvas Drawing Optimization
 

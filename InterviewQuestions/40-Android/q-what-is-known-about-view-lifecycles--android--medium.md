@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - view
-  - lifecycle
-  - ui
+tags: [view, lifecycle, ui, difficulty/medium]
 ---
 # What is known about View lifecycles?
 

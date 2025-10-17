@@ -11,7 +11,7 @@ difficulty: easy
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/recyclerview, android/performance, android/optimization, difficulty/easy]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, 20251006-100008, difficulty/easy, recyclerview, performance]
+tags: [en, ru, android/recyclerview, android/performance, android/optimization, difficulty/easy]
 ---
 
 # Question (EN)

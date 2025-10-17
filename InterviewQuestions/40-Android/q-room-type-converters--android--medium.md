@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - room
-  - typeconverter
-  - database
-  - custom-types
-  - difficulty/medium
+tags: [room, typeconverter, database, custom-types, difficulty/medium]
 ---
 # Room TypeConverters / TypeConverters в Room
 

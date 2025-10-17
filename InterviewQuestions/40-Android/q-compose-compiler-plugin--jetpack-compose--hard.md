@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-13
-tags: - jetpack-compose
-  - compiler
-  - internals
-  - plugin
-  - kotlin-compiler
+tags: [compose, compiler, internals, plugin, kotlin-compiler, android/jetpack-compose, android/performance, difficulty/hard]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

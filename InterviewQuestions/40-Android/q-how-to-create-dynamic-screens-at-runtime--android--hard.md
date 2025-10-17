@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Jetpack Compose
-  - Fragment
-  - RecyclerView
-  - dynamic UI
-  - android
-  - ui
-  - dynamic-ui
-  - jetpack-compose
+tags: [Fragment, RecyclerView, dynamic UI, android, ui, dynamic-ui, jetpack-compose, difficulty/medium]
 ---
 # How to create dynamic screens at runtime?
 

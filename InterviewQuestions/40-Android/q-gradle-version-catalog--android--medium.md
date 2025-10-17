@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - gradle
-  - version-catalog
-  - dependency-management
-  - toml
+tags: [gradle, version-catalog, dependency-management, toml, android/dependency-management, android/build-variants, difficulty/medium]
 source: Kirchhoff repo
 subtopics:   - gradle
   - dependency-management

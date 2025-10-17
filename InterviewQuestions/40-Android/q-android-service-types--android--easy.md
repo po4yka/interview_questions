@@ -5,14 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/background-execution
-  - android/service
-  - background-execution
-  - bound-service
-  - foreground-service
-  - service
-  - started-service
+tags: [android/background-execution, android/service, background-execution, bound-service, foreground-service, service, started-service, difficulty/easy]
 ---
 # Какие виды сервисов есть в Android?
 

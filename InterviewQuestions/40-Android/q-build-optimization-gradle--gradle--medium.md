@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/gradle, android/build-performance, android/optimization, android/configuration-cache, android/modularization, difficulty/medium]
 source: Original
 source_note: Gradle build performance best practices
 
@@ -24,7 +24,7 @@ related: [kapt-vs-ksp, app-startup-optimization, modularization-patterns]
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [android, gradle, build-performance, optimization, configuration-cache, modularization, difficulty/medium]
+tags: [en, ru, android/gradle, android/build-performance, android/optimization, android/configuration-cache, android/modularization, difficulty/medium]
 ---
 # Question (EN)
 > Optimize Gradle build time comprehensively. Use configuration cache, build cache, parallel execution, modularization, and incremental annotation processing.

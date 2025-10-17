@@ -5,12 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/concurrency
-  - concurrency
-  - multithreading
-  - performance
-  - threading
+tags: [android/concurrency, concurrency, multithreading, performance, threading, difficulty/easy]
 ---
 # Для чего нужна многопоточность, какие инструменты использовать?
 

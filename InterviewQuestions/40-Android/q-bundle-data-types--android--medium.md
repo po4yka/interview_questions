@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/data-passing
-  - bundle
-  - data-passing
-  - intent
-  - parcelable
-  - serializable
+tags: [android/data-passing, bundle, data-passing, intent, parcelable, serializable, difficulty/medium]
 ---
 # Что можно положить в Bundle?
 

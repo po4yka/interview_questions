@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/recyclerview
-  - android/ui
-  - itemdecoration
-  - recyclerview
-  - ui
+tags: [android/recyclerview, android/ui, itemdecoration, recyclerview, ui, difficulty/medium]
 ---
 # Что позволяет делать ItemDecoration?
 

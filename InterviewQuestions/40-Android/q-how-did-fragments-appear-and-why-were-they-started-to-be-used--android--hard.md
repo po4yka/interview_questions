@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android-ui
-  - android/fragments
-  - fragments
-  - ui
+tags: [android-ui, android/fragments, fragments, ui, difficulty/hard]
 ---
 # Как появились фрагменты и для чего их начали использовать?
 

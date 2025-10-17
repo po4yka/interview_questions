@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/dependency-injection
-  - components
-  - dagger
-  - dependency-injection
-  - hilt
-  - scope
+tags: [android/dependency-injection, components, dagger, dependency-injection, hilt, scope, difficulty/medium]
 ---
 # Какие готовые компоненты с готовым скоупом есть в Dagger Hilt и как модуль добавить к этой компоненте?
 

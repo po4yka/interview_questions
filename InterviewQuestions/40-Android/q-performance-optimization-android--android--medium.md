@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - performance
-  - optimization
-  - performance-rendering
-  - performance-memory
-  - checklist
+tags: [performance, optimization, performance-rendering, performance-memory, checklist, difficulty/medium]
 ---
 
 # Question (EN)

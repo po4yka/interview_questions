@@ -5,12 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/recyclerview
-  - android/ui
-  - layout
-  - recyclerview
-  - ui
+tags: [android/recyclerview, android/ui, layout, recyclerview, ui, difficulty/easy]
 ---
 
 # Question (EN)

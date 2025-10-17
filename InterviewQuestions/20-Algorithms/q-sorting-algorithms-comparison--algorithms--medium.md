@@ -22,19 +22,21 @@ subtopics:   - sorting
   - heapsort
   - time-complexity
 ---
-# Sorting Algorithms Comparison
+# Question (EN)
+> What are the main sorting algorithms? Compare their time/space complexity and when should you use each algorithm?
 
-## English Version
+# Вопрос (RU)
+> Каковы основные алгоритмы сортировки? Сравните их временную/пространственную сложность и когда следует использовать каждый алгоритм?
 
-### Problem Statement
+---
+
+## Answer (EN)
 
 Sorting is one of the most fundamental operations in computer science. Understanding different sorting algorithms, their time/space complexity, and when to use each is essential for technical interviews and real-world applications.
 
-**The Question:** What are the main sorting algorithms? Compare their time/space complexity and when should you use each algorithm?
 
-### Detailed Answer
 
-#### Comparison Table
+### Comparison Table
 
 | Algorithm | Best | Average | Worst | Space | Stable | In-Place |
 |-----------|------|---------|-------|-------|--------|----------|
@@ -569,17 +571,13 @@ val custom = products.sortedWith { a, b ->
 
 ---
 
-## Russian Version
-
-### Постановка задачи
+## Ответ (RU)
 
 Сортировка - одна из самых фундаментальных операций в информатике. Понимание различных алгоритмов сортировки, их временной/пространственной сложности и когда использовать каждый - необходимо для технических интервью.
 
-**Вопрос:** Каковы основные алгоритмы сортировки? Сравните их временную/пространственную сложность и когда следует использовать каждый алгоритм?
 
-### Детальный ответ
 
-#### Таблица сравнения
+### Таблица сравнения
 
 | Алгоритм | Лучший | Средний | Худший | Память | Стабильный |
 |----------|--------|---------|--------|--------|------------|

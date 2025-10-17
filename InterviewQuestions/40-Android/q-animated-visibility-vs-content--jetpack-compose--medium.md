@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - jetpack-compose
-  - animations
-  - transitions
-  - animated-visibility
-  - ui
+tags: [compose, animations, transitions, animated-visibility, ui, android/ui-animation, android/jetpack-compose, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

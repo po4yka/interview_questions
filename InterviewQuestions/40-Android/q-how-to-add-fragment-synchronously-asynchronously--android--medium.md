@@ -5,9 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - fragment
-  - fragment-transaction
+tags: [fragment, fragment-transaction, difficulty/medium]
 ---
 # How to add fragment synchronously/asynchronously?
 

@@ -11,7 +11,7 @@ difficulty: hard
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/networking, android/offline-first, android/sync, android/architecture, difficulty/hard]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: [offline-first, workmanager, networking, data-persistence]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, networking, sync, offline-first, workmanager, difficulty/hard]
+tags: [en, ru, android/networking, android/offline-first, android/sync, android/architecture, difficulty/hard]
 ---
 
 # Question (EN)

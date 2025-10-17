@@ -5,14 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/architecture-mvvm
-  - android/lifecycle
-  - architecture-mvvm
-  - lifecycle
-  - mvvm
-  - platform/android
-  - viewmodel
+tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, lifecycle, mvvm, platform/android, viewmodel, difficulty/easy]
 ---
 # Какой архитектурный паттерн реализуется благодаря ViewModel?
 

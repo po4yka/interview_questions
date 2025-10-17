@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - viewstub
-  - ui
-  - performance
-  - lazy-loading
-  - optimization
+tags: [viewstub, ui, performance, lazy-loading, optimization, difficulty/medium]
 ---
 # What is ViewStub?
 

@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Compose
-  - Composable functions
-  - State management
-  - Modifiers
-  - Layouts
-  - android
-  - ui
-  - jetpack-compose
+tags: [Composable functions, State management, Modifiers, Layouts, android, ui, jetpack-compose, difficulty/medium]
 ---
 
 # Question (EN)

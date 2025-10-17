@@ -5,15 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Drawable Animations
-  - MotionLayout
-  - Property Animations
-  - View Animations
-  - android
-  - android/animations
-  - android/ui
-  - animations
-  - ui
+tags: [MotionLayout, Property Animations, View Animations, android, android/animations, android/ui, animations, ui, difficulty/medium]
 ---
 # Как в Android можно сделать анимацию?
 

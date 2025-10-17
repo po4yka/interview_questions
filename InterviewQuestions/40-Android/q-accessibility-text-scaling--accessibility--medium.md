@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-11
-tags: - android
-  - accessibility
-  - text-scaling
-  - font-size
-  - dynamic-type
+tags: [accessibility, text-scaling, font-size, dynamic-type, android/ui-accessibility, difficulty/medium]
 date_updated: 2025-10-13
 moc: moc-android
 related_questions:   - q-accessibility-compose--accessibility--medium

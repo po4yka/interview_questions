@@ -5,11 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - webp
-  - optimization
-  - images
-  - performance
+tags: [webp, optimization, images, performance, difficulty/easy]
 ---
 # WebP - самый экономичный формат изображений
 

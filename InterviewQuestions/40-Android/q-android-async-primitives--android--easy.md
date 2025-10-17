@@ -5,14 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - async
-  - asynctask
-  - coroutines
-  - executorservice
-  - handler
-  - rxjava
-  - threading
+tags: [async, asynctask, coroutines, executorservice, handler, rxjava, threading, difficulty/easy]
 ---
 # Какие асинхронные примитивы используют для обработки данных?
 

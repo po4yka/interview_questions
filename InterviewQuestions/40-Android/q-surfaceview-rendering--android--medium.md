@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - surfaceview
-  - rendering
-  - views
-  - performance
-  - threading
-  - difficulty/medium
+tags: [surfaceview, rendering, views, performance, threading, difficulty/medium]
 ---
 # What is SurfaceView? / Что такое SurfaceView?
 

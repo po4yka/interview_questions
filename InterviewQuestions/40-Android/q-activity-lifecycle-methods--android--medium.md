@@ -5,9 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - activity
-  - lifecycle
+tags: [activity, lifecycle, difficulty/medium]
 ---
 # Какие есть методы жизненного цикла Activity и как они отрабатывают?
 

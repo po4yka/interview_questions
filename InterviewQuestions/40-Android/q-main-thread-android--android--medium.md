@@ -5,9 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - threading
-  - ui-thread
+tags: [threading, ui-thread, difficulty/medium]
 ---
 
 # Question (EN)

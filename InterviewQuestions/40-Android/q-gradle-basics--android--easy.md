@@ -5,10 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - gradle
-  - build-system
-  - dependencies
+tags: [gradle, build-system, dependencies, difficulty/easy]
 ---
 # Gradle Basics
 

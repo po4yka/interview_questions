@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - viewgroup
-  - inheritance
-  - android
-  - ui
-  - views
+tags: [inheritance, android, ui, views, difficulty/medium]
 ---
 # What does ViewGroup inherit from?
 

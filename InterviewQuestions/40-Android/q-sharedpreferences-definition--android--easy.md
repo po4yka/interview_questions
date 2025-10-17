@@ -5,12 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/data-storage
-  - data-storage
-  - key-value
-  - persistence
-  - sharedpreferences
+tags: [android/data-storage, data-storage, key-value, persistence, sharedpreferences, difficulty/easy]
 ---
 
 # Question (EN)

@@ -5,14 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/architecture-clean
-  - android/di-hilt
-  - architecture-clean
-  - dagger
-  - dependency-injection
-  - di-hilt
-  - platform/android
+tags: [android/architecture-clean, android/di-hilt, architecture-clean, dagger, dependency-injection, di-hilt, platform/android, difficulty/hard]
 ---
 # Что известно про фреймворк Dagger ?
 

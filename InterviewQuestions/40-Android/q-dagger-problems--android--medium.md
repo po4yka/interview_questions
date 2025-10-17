@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/di-hilt
-  - dagger
-  - dependency-injection
-  - di-hilt
-  - platform/android
+tags: [android/di-hilt, dagger, dependency-injection, di-hilt, platform/android, difficulty/medium]
 ---
 # Какие проблемы есть у Dagger?
 

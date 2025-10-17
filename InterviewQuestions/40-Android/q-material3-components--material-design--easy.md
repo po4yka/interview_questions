@@ -5,10 +5,7 @@ topic: ui-ux-accessibility
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - material-design
-  - material3
-  - ui-components
-  - design-system
+tags: [design, material3, ui-components, design-system, difficulty/easy]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-ui-ux-accessibility

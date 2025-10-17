@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - viewmodel
-  - architecture
-  - lifecycle
-  - mvvm
-  - state-management
+tags: [viewmodel, architecture, lifecycle, mvvm, state-management, difficulty/medium]
 ---
 # What is ViewModel?
 

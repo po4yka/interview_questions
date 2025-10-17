@@ -5,14 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/architecture-mvp
-  - architecture-mvp
-  - architecture-patterns
-  - lifecycle
-  - mvi
-  - mvp
-  - mvvm
+tags: [android/architecture-mvp, architecture-mvp, architecture-patterns, lifecycle, mvi, mvp, mvvm, difficulty/easy]
 ---
 # Почему многие отказываются от MVP?
 

@@ -5,12 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/data-binding
-  - android/ui
-  - data binding
-  - data-binding
-  - ui
+tags: [android/data-binding, android/ui, data binding, data-binding, ui, difficulty/easy]
 ---
 # Использовал Data Binding
 

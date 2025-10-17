@@ -5,13 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/performance
-  - app-startup
-  - lazy-init
-  - legacy-code
-  - optimization
-  - performance
+tags: [android/performance, app-startup, lazy-init, legacy-code, optimization, performance, difficulty/hard]
 ---
 # Что делать если надо исправить долгий запуск приложения в legacy проекте?
 

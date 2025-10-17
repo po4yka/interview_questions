@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/concurrency
-  - concurrency
-  - handler
-  - looper
-  - message-queue
-  - threading
+tags: [android/concurrency, concurrency, handler, looper, message-queue, threading, difficulty/medium]
 ---
 # Как Looper связывается с потоком?
 

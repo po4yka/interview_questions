@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - networking
-  - api
-  - rate-limiting
-  - throttling
-  - retrofit
-  - okhttp
+tags: [networking, api, rate-limiting, throttling, retrofit, okhttp, difficulty/medium]
 ---
 # API Rate Limiting and Throttling in Android
 

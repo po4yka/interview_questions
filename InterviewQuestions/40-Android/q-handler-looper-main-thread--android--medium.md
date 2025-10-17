@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/concurrency
-  - concurrency
-  - handler
-  - looper
-  - main-thread
-  - message-queue
-  - threading
+tags: [android/concurrency, concurrency, handler, looper, main-thread, message-queue, threading, difficulty/medium]
 ---
 # Как можно получить сообщения на главном потоке с помощью Handler и Looper?
 

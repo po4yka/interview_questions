@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - testing
-  - fakes
-  - mocks
-  - test-doubles
-  - architecture
-  - stubs
-  - testing-strategy
+tags: [fakes, mocks, test-doubles, architecture, stubs, testing-strategy, difficulty/medium]
 ---
 
 # Fakes vs Mocks vs Stubs

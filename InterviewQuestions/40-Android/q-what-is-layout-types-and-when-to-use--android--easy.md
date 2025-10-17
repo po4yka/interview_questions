@@ -5,16 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - ConstraintLayout
-  - LinearLayout
-  - RelativeLayout
-  - android
-  - android/layouts
-  - android/ui
-  - layout
-  - layouts
-  - ui
-  - xml
+tags: [LinearLayout, RelativeLayout, android, android/layouts, android/ui, layout, layouts, ui, xml, difficulty/easy]
 ---
 
 # Что такое layout, какие их виды бывают и когда их использовать?

@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/navigation
-  - navigation
-  - ui
+tags: [android/navigation, navigation, ui, difficulty/medium]
 ---
 # Каким образом осуществляется навигация?
 

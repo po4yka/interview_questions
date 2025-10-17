@@ -5,10 +5,7 @@ topic: testing
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - testing
-  - hilt
-  - dependency-injection
-  - test-doubles
+tags: [hilt, dependency-injection, test-doubles, difficulty/medium]
 ---
 # Test Doubles with Hilt
 

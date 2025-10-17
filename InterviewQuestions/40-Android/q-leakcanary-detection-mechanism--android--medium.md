@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - android
-  - android/memory-management
-  - debugging
-  - leakcanary
-  - memory-leaks
-  - memory-management
-  - weakreference
+tags: [android/memory-management, debugging, leakcanary, memory-leaks, memory-management, weakreference, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

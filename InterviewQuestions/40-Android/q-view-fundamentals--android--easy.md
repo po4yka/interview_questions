@@ -5,13 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - view
-  - ui
-  - basics
-  - widget
-  - view-hierarchy
-  - difficulty/easy
+tags: [view, ui, basics, widget, view-hierarchy, difficulty/easy]
 ---
 # What is a View in Android? / Что такое View в Android?
 

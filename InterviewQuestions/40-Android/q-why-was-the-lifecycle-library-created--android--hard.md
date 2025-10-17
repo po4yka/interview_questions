@@ -5,12 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/architecture
-  - android/lifecycle
-  - lifecycle
-  - architecture-components
-  - memory-leaks
+tags: [android/architecture, android/lifecycle, lifecycle, architecture-components, memory-leaks, difficulty/hard]
 ---
 # Why was the Lifecycle library created?
 

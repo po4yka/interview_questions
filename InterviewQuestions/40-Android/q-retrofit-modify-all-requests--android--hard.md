@@ -5,14 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-13
-tags: - android
-  - android/networking
-  - authentication
-  - interceptor
-  - logging
-  - networking
-  - okhttp
-  - retrofit
+tags: [android/networking, authentication, interceptor, logging, networking, okhttp, retrofit, difficulty/hard]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

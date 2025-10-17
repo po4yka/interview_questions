@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - activity
-  - android
-  - android/fragments
-  - fragments
-  - ui
+tags: [android, android/fragments, fragments, ui, difficulty/hard]
 ---
 # Что такое фрагменты и почему их удобнее использовать вместо множества activity?
 

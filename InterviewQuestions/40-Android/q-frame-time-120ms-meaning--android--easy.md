@@ -5,13 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - android
-  - android/performance
-  - fps
-  - frame-rate
-  - performance
-  - rendering
-  - ui-performance
+tags: [android/performance, fps, frame-rate, performance, rendering, ui-performance, difficulty/easy]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

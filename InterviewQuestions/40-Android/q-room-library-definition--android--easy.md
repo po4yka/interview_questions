@@ -5,14 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - android
-  - android/data-storage
-  - architecture-components
-  - data-storage
-  - database
-  - orm
-  - room
-  - sqlite
+tags: [android/data-storage, architecture-components, data-storage, database, orm, room, sqlite, difficulty/easy]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

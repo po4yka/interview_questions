@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/architecture-clean
-  - android/di-hilt
-  - architecture-clean
-  - dependency-injection
-  - di-hilt
-  - hilt
-  - platform/android
+tags: [android/architecture-clean, android/di-hilt, architecture-clean, dependency-injection, di-hilt, hilt, platform/android, difficulty/medium]
 ---
 # What is Hilt?
 

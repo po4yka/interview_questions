@@ -5,13 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/project-structure
-  - assets
-  - gradle
-  - manifest
-  - project-structure
-  - resources
+tags: [android/project-structure, assets, gradle, manifest, project-structure, resources, difficulty/easy]
 ---
 # Из каких частей состоит проект и какая часть за что отвечает?
 

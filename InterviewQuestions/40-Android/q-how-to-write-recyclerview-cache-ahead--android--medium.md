@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - recyclerview
-  - caching
-  - prefetching
-  - performance
-  - optimization
+tags: [recyclerview, caching, prefetching, performance, optimization, difficulty/medium]
 ---
 # How to write RecyclerView to cache ahead?
 

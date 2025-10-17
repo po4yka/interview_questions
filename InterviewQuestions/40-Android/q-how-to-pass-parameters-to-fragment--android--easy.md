@@ -5,10 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - fragment
-  - bundle
-  - arguments
+tags: [fragment, bundle, arguments, difficulty/easy]
 ---
 # Как передать параметры во фрагмент?
 

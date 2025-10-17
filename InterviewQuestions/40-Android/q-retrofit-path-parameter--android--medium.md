@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/networking
-  - get-request
-  - networking
-  - path-parameter
-  - path-parameters
-  - rest-api
-  - retrofit
+tags: [android/networking, get-request, networking, path-parameter, path-parameters, rest-api, retrofit, difficulty/medium]
 ---
 # Как в Ретрофите в гет методе поставить атрибут в путь в конкретном месте?
 

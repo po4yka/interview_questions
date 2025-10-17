@@ -5,9 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - services
-  - background-operations
+tags: [services, background-operations, difficulty/easy]
 ---
 
 # Для чего нужны сервисы?

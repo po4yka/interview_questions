@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - jetpack-compose
-  - lazycolumn
-  - lazyrow
-  - recyclerview
+tags: [jetpack-compose, lazycolumn, lazyrow, recyclerview, difficulty/medium]
 ---
 # How to create a list like RecyclerView in Jetpack Compose?
 

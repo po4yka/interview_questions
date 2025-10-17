@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - jetpack-compose
-  - internals
-  - recomposition
-  - slot-table
-  - performance
+tags: [compose, internals, recomposition, slot-table, performance, difficulty/hard]
 ---
 # Compose Slot Table & Recomposition Tracking
 

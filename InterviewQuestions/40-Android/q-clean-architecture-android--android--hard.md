@@ -11,7 +11,7 @@ difficulty: hard
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/architecture, android/clean-architecture, android/layers, android/separation-of-concerns, difficulty/hard]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, architecture, clean-architecture, layers, separation-of-concerns, difficulty/hard]
+tags: [en, ru, android/architecture, android/clean-architecture, android/layers, android/separation-of-concerns, difficulty/hard]
 ---
 # Question (EN)
 > What is Clean Architecture in Android? How to implement it with layers?

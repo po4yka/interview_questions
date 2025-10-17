@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - material-design
-  - material3
-  - theming
-  - dynamic-color
+tags: [design, material3, theming, dynamic-color, difficulty/medium]
 ---
 # Material 3 Dynamic Color and Theming
 

@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/recyclerview
-  - recyclerview
-  - ui
-  - ui design
+tags: [android/recyclerview, recyclerview, ui, ui design, difficulty/hard]
 ---
 # Как делать списки чатов с точки зрения UI?
 

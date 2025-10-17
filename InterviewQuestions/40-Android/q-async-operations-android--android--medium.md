@@ -5,15 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/concurrency
-  - async
-  - concurrency
-  - coroutines
-  - executor
-  - handler
-  - threading
-  - workmanager
+tags: [android/concurrency, async, concurrency, coroutines, executor, handler, threading, workmanager, difficulty/medium]
 ---
 # How to run asynchronous operations in Android?
 

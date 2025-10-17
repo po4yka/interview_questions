@@ -5,15 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - multithreading
-  - concurrency
-  - asynctask
-  - workmanager
-  - rxjava
-  - coroutines
-  - background-tasks
-  - difficulty/medium
+tags: [multithreading, concurrency, asynctask, workmanager, rxjava, coroutines, background-tasks, difficulty/medium]
 ---
 # Multithreading Tools in Android / Инструменты многопоточности в Android
 

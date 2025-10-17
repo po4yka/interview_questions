@@ -5,15 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - android
-  - android/jetpack-compose
-  - jetpack-compose
-  - mutablestate
-  - observer-pattern
-  - recomposition
-  - snapshot-system
-  - state
-  - state-management
+tags: [android/jetpack-compose, jetpack-compose, mutablestate, observer-pattern, recomposition, snapshot-system, state, state-management, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

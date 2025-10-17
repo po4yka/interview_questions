@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - play-app-signing
-  - security
-  - signing
-  - keystore
-  - google-play
-  - app-bundle
-  - difficulty/medium
+tags: [play-app-signing, security, signing, keystore, google-play, app-bundle, difficulty/medium]
 ---
 # What is Play App Signing? / Что такое Play App Signing?
 

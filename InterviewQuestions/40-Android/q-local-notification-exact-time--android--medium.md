@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/notifications, android/alarmmanager, android/scheduling, difficulty/medium]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, 20251006-100013, difficulty/medium]
+tags: [en, ru, android/notifications, android/alarmmanager, android/scheduling, difficulty/medium]
 ---
 # Question (EN)
 > How to schedule local notifications at exact time?

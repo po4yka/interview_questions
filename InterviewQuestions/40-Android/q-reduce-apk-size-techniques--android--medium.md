@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/build-optimization, android/apk-size, android/performance, android/resources, difficulty/medium]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: [proguard-r8, build-optimization, app-bundles]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, apk-size, optimization, build, resources, difficulty/medium]
+tags: [en, ru, android/build-optimization, android/apk-size, android/performance, android/resources, difficulty/medium]
 ---
 
 # Question (EN)

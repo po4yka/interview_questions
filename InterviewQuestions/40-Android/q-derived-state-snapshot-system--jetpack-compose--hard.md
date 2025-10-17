@@ -5,12 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - jetpack-compose
-  - state
-  - snapshot
-  - optimization
-  - derived-state
-  - performance
+tags: [compose, state, snapshot, optimization, derived-state, performance, difficulty/hard]
 ---
 # Compose Snapshot System & derivedStateOf
 

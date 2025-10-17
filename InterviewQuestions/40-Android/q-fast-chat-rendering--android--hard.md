@@ -5,17 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/performance
-  - android/recyclerview
-  - chat
-  - diffutil
-  - flow
-  - optimization
-  - paging
-  - performance
-  - recyclerview
-  - room
+tags: [android/performance, android/recyclerview, chat, diffutil, flow, optimization, paging, performance, recyclerview, room, difficulty/hard]
 ---
 # Как можно гарантировать быструю отрисовку чатов?
 

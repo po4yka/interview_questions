@@ -5,14 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-13
-tags: - android
-  - art
-  - runtime
-  - jit
-  - aot
-  - dex
-  - compilation
-  - performance
+tags: [art, runtime, jit, aot, dex, compilation, performance, difficulty/hard]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

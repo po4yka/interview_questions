@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - fragments
-  - activity
-  - android
-  - ui
+tags: [activity, android, ui, difficulty/medium]
 ---
 # What are fragments for if there is Activity?
 

@@ -5,10 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - process-management
-  - memory-management
-  - lifecycle
+tags: [process-management, memory-management, lifecycle, difficulty/hard]
 ---
 
 # Question (EN)

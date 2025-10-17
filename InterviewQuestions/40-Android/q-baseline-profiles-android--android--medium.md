@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - performance
-  - baseline-profiles
-  - aot
-  - optimization
-  - app-startup
+tags: [performance, baseline-profiles, aot, optimization, app-startup, difficulty/medium]
 ---
 # Baseline Profiles in Android
 

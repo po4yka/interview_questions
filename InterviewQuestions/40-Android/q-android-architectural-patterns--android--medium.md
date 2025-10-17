@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - architecture-patterns
-  - clean-architecture
-  - component-based
-  - mvc
-  - mvp
-  - mvvm
+tags: [architecture-patterns, clean-architecture, component-based, mvc, mvp, mvvm, difficulty/medium]
 ---
 # Какие архитектурные паттерны используются в Android-фреймворке?
 

@@ -5,13 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/touch-events
-  - android/ui
-  - event handling
-  - touch events
-  - touch-events
-  - ui
+tags: [android/touch-events, android/ui, event handling, touch events, touch-events, ui, difficulty/easy]
 ---
 # Какое событие вызывается при нажатии юзера по экрану?
 

@@ -5,9 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - touch-events
-  - ui
+tags: [touch-events, ui, difficulty/medium]
 ---
 
 # Question (EN)

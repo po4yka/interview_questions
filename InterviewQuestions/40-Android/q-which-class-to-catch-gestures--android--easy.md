@@ -5,10 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - gesture-detector
-  - gestures
-  - ui
+tags: [gesture-detector, gestures, ui, difficulty/easy]
 ---
 
 # Question (EN)

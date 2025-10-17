@@ -5,13 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/background-processing
-  - background-processing
-  - file-upload
-  - networking
-  - retrofit
-  - workmanager
+tags: [android/background-processing, background-processing, file-upload, networking, retrofit, workmanager, difficulty/hard]
 ---
 # Как бы реализовал приложение, которое может загружать большие файлы на сервер?
 

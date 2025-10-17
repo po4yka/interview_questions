@@ -12,16 +12,8 @@ subtopics:
   - background-execution
   - coroutines
   - service
-tags:
-  - android
-  - background-tasks
-  - workmanager
-  - coroutines
-  - service
-  - difficulty/medium
-language_tags:
-  - en
-  - ru
+tags: [background-tasks, workmanager, coroutines, service, difficulty/medium, android/execution, android/coroutines, android/service]
+language_tags: [background-tasks, workmanager, coroutines, service, difficulty/medium, android/execution, android/coroutines, android/service]
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20background%20task%20and%20how%20it%20should%20be%20performed.md
 author: null

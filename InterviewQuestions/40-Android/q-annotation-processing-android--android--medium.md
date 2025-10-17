@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/annotations, android/kapt, android/ksp, android/code-generation, difficulty/medium]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, 20251006-100012, difficulty/medium]
+tags: [en, ru, android/annotations, android/kapt, android/ksp, android/code-generation, difficulty/medium]
 ---
 # Question (EN)
 > What is annotation processing in Android?

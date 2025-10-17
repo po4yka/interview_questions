@@ -5,12 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/views
-  - custom view
-  - ui
-  - view lifecycle
-  - views
+tags: [android/views, custom view, ui, view lifecycle, views, difficulty/easy]
 ---
 # Как можно реализовать поведение view при ее добавлении в дерево?
 

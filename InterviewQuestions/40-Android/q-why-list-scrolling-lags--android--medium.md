@@ -5,15 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - android
-  - android/performance
-  - android/recyclerview
-  - diffutil
-  - optimization
-  - performance
-  - recyclerview
-  - scrolling
-  - viewholder
+tags: [android/performance, android/recyclerview, diffutil, optimization, performance, recyclerview, scrolling, viewholder, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

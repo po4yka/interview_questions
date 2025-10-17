@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - android
-  - memory
-  - memory-leak
-  - oom
-  - performance-memory
-  - leakcanary
-  - debugging
+tags: [memory, memory-leak, oom, performance-memory, leakcanary, debugging, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

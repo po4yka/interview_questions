@@ -5,17 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/navigation
-  - android/ui
-  - bottomnavigationview
-  - fragmentmanager
-  - intent
-  - jetpack navigation
-  - navhost
-  - navigation
-  - tablayout
-  - ui
+tags: [android/navigation, android/ui, bottomnavigationview, fragmentmanager, intent, jetpack navigation, navhost, navigation, tablayout, ui, difficulty/medium]
 ---
 # Какие способы навигации в Android знаешь?
 

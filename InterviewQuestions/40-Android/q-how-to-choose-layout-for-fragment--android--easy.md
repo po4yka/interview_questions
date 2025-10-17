@@ -5,15 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/fragments
-  - android/layouts
-  - android/ui
-  - fragment
-  - fragments
-  - layoutinflater
-  - layouts
-  - ui
+tags: [android/fragments, android/layouts, android/ui, fragment, fragments, layoutinflater, layouts, ui, difficulty/easy]
 ---
 
 # Каким образом ты выбираешь layout?

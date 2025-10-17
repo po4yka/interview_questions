@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - activity
-  - lifecycle
-  - ui
+tags: [activity, lifecycle, ui, difficulty/medium]
 ---
 # What is Activity and what is it used for?
 

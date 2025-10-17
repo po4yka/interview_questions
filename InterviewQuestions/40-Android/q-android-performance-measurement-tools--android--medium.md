@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - android
-  - android-profiler
-  - android/performance
-  - benchmark
-  - gpu-rendering
-  - optimization
-  - performance
-  - profiling
+tags: [android-profiler, android/performance, benchmark, gpu-rendering, optimization, performance, profiling, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

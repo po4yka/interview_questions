@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - fragment
-  - fragmentmanager
-  - fragmenttransaction
-  - android
-  - ui
-  - fragments
+tags: [fragmentmanager, fragmenttransaction, android, ui, fragments, difficulty/medium]
 ---
 # What is the difference between FragmentManager and FragmentTransaction?
 

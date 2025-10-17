@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - modifications
-  - UI elements
-  - Jetpack Compose
-  - android
-  - ui
-  - jetpack-compose
-  - modifiers
+tags: [UI elements, Jetpack Compose, android, ui, jetpack-compose, modifiers, difficulty/medium]
 ---
 # What do you know about modifications?
 

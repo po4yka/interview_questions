@@ -5,16 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android-components
-  - android/android-components
-  - broadcast-receiver
-  - components
-  - content-provider
-  - fragment
-  - service
-  - view
-  - viewmodel
+tags: [android-components, android/android-components, broadcast-receiver, components, content-provider, fragment, service, view, viewmodel, difficulty/easy]
 ---
 # Какие компоненты используются помимо activity?
 

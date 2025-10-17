@@ -20,19 +20,21 @@ subtopics:   - binary-search
   - divide-and-conquer
   - logarithmic
 ---
-# Binary Search and Variants
+# Question (EN)
+> How does binary search work? What are common variants and edge cases?
 
-## English Version
+# Вопрос (RU)
+> Как работает бинарный поиск? Каковы распространённые варианты и граничные случаи?
 
-### Problem Statement
+---
+
+## Answer (EN)
 
 Binary search is one of the most important algorithms with O(log n) time complexity. Understanding binary search and its variants is crucial for solving many interview problems efficiently.
 
-**The Question:** How does binary search work? What are common variants and edge cases?
 
-### Detailed Answer
 
-#### 1. Classic Binary Search
+### 1. Classic Binary Search
 
 **Find target in sorted array.**
 
@@ -85,7 +87,7 @@ Step 4: left=3, right=2
 
 ---
 
-#### 2. Find First Occurrence
+### 2. Find First Occurrence
 
 **Find leftmost occurrence of target.**
 
@@ -118,7 +120,7 @@ println(findFirst(arr, 2))  // 1 (first occurrence)
 
 ---
 
-#### 3. Find Last Occurrence
+### 3. Find Last Occurrence
 
 **Find rightmost occurrence of target.**
 
@@ -151,7 +153,7 @@ println(findLast(arr, 2))  // 3 (last occurrence)
 
 ---
 
-#### 4. Find Insertion Position
+### 4. Find Insertion Position
 
 **Find where to insert target to maintain sorted order.**
 
@@ -182,7 +184,7 @@ println(searchInsert(arr, 7))  // 4
 
 ---
 
-#### 5. Search in Rotated Sorted Array
+### 5. Search in Rotated Sorted Array
 
 **Array rotated at pivot: [4,5,6,7,0,1,2]**
 
@@ -225,7 +227,7 @@ println(searchRotated(arr, 3))  // -1
 
 ---
 
-#### 6. Find Peak Element
+### 6. Find Peak Element
 
 **Find any peak (element greater than neighbors).**
 
@@ -256,7 +258,7 @@ println(findPeakElement(arr))  // 2 (value 3 is peak)
 
 ---
 
-#### 7. Square Root (Integer)
+### 7. Square Root (Integer)
 
 **Find floor(sqrt(x)) using binary search.**
 
@@ -288,7 +290,7 @@ println(mySqrt(16))  // 4
 
 ---
 
-#### 8. Search in 2D Matrix
+### 8. Search in 2D Matrix
 
 **Matrix: rows and columns sorted.**
 
@@ -329,7 +331,7 @@ println(searchMatrix(matrix, 13))  // false
 
 ---
 
-#### 9. Find Minimum in Rotated Sorted Array
+### 9. Find Minimum in Rotated Sorted Array
 
 ```kotlin
 fun findMin(nums: IntArray): Int {
@@ -358,7 +360,7 @@ println(findMin(arr))  // 0
 
 ---
 
-#### 10. Koko Eating Bananas (Binary Search on Answer)
+### 10. Koko Eating Bananas (Binary Search on Answer)
 
 **Find minimum eating speed to finish all bananas in h hours.**
 
@@ -391,7 +393,7 @@ println(minEatingSpeed(piles, h))  // 4
 
 ### Common Binary Search Patterns
 
-#### Pattern 1: Exact Match
+### Pattern 1: Exact Match
 ```kotlin
 while (left <= right) {
     // ... find exact target
@@ -399,7 +401,7 @@ while (left <= right) {
 return -1  // Not found
 ```
 
-#### Pattern 2: Find Boundary (First/Last occurrence)
+### Pattern 2: Find Boundary (First/Last occurrence)
 ```kotlin
 while (left <= right) {
     if (condition) {
@@ -410,7 +412,7 @@ while (left <= right) {
 return result
 ```
 
-#### Pattern 3: Minimize/Maximize
+### Pattern 3: Minimize/Maximize
 ```kotlin
 while (left < right) {
     if (canAchieve(mid)) {
@@ -497,17 +499,13 @@ val found = findUserById(users, 5)  // User(5, "Charlie")
 
 ---
 
-## Russian Version
-
-### Постановка задачи
+## Ответ (RU)
 
 Бинарный поиск - один из важнейших алгоритмов со сложностью O(log n). Понимание бинарного поиска и его вариантов критично для эффективного решения многих задач на интервью.
 
-**Вопрос:** Как работает бинарный поиск? Каковы распространённые варианты и граничные случаи?
 
-### Детальный ответ
 
-#### Классический бинарный поиск
+### Классический бинарный поиск
 
 **Найти target в отсортированном массиве.**
 

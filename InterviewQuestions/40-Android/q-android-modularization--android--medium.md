@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - modularization
-  - architecture
-  - multi-module
-  - gradle
-  - difficulty/medium
+tags: [modularization, architecture, multi-module, gradle, difficulty/medium]
 ---
 # Android Modularization / Модуляризация Android
 

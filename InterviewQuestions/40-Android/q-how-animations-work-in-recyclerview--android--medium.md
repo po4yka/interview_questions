@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/animations
-  - android/recyclerview
-  - android/ui
-  - animations
-  - recyclerview
-  - ui
+tags: [android/animations, android/recyclerview, android/ui, animations, recyclerview, ui, difficulty/medium]
 ---
 # How are animations done in RecyclerView?
 

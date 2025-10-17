@@ -5,12 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - testing
-  - coroutines
-  - flow
-  - async
-  - turbine
-  - test-dispatcher
+tags: [coroutines, flow, async, turbine, test-dispatcher, difficulty/hard]
 ---
 
 # Testing Coroutines and Flow

@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - jit
-  - aot
-  - compilation
-  - art
-  - performance
-  - baseline-profiles
+tags: [jit, aot, compilation, art, performance, baseline-profiles, difficulty/medium]
 ---
 # JIT vs AOT Compilation in Android
 
