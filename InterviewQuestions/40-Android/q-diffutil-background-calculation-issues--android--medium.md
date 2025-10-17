@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - android
-  - recyclerview
-  - diffutil
-  - performance
-  - multithreading
+tags: [recyclerview, diffutil, performance, multithreading, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
@@ -22,9 +18,9 @@ related_questions: []
 ## Answer (EN)
 Расчет DiffUtil в фоновом потоке может работать плохо при следующих условиях, которые приводят к некорректным результатам, проблемам производительности или race conditions.
 
-### 1. Модификация данных во время расчета
+### 1. Data Modification During Calculation
 
-**Проблема**: DiffUtil может дать некорректные результаты из-за изменений в списке во время вычисления diff.
+**Problem**: DiffUtil may produce incorrect results due to list changes during diff calculation.
 
 ```kotlin
 // НЕПРАВИЛЬНО - данные могут измениться во время расчета
@@ -87,9 +83,9 @@ class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
 }
 ```
 
-### 2. Сложные и долгие вычисления в Callback
+### 2. Complex and Long Computations in Callback
 
-**Проблема**: Тяжелые операции в `areContentsTheSame()` замедляют расчет даже в фоне.
+**Problem**: Heavy operations in `areContentsTheSame()` slow down calculation even in background.
 
 ```kotlin
 // НЕПРАВИЛЬНО - тяжелые вычисления в callback
@@ -144,9 +140,9 @@ class MessageCallback(
 }
 ```
 
-### 3. Работа с очень большими наборами данных
+### 3. Working with Very Large Datasets
 
-**Проблема**: DiffUtil имеет сложность O(N*M), что становится медленным для больших списков.
+**Problem**: DiffUtil has O(N*M) complexity, which becomes slow for large lists.
 
 ```kotlin
 // НЕПРАВИЛЬНО - DiffUtil для 10,000+ элементов
@@ -201,9 +197,9 @@ class ItemAdapter : RecyclerView.Adapter<ItemViewHolder>() {
 }
 ```
 
-### 4. Race Conditions при множественных обновлениях
+### 4. Race Conditions with Multiple Updates
 
-**Проблема**: Множественные вызовы `calculateDiff()` могут перекрываться и давать неверный результат.
+**Problem**: Multiple `calculateDiff()` calls can overlap and produce incorrect results.
 
 ```kotlin
 // НЕПРАВИЛЬНО - несколько одновременных обновлений
@@ -271,9 +267,9 @@ class UserAdapter : ListAdapter<User, UserViewHolder>(
 }
 ```
 
-### 5. Изменение данных во время обновления UI
+### 5. Data Changes During UI Update
 
-**Проблема**: Данные меняются между `calculateDiff()` и `dispatchUpdatesTo()`.
+**Problem**: Data changes between `calculateDiff()` and `dispatchUpdatesTo()`.
 
 ```kotlin
 // НЕПРАВИЛЬНО - данные могут измениться
@@ -324,9 +320,9 @@ class ChatAdapter : RecyclerView.Adapter<MessageViewHolder>() {
 }
 ```
 
-### 6. Неправильная реализация equals/hashCode
+### 6. Incorrect equals/hashCode Implementation
 
-**Проблема**: Некорректное сравнение объектов приводит к лишним обновлениям.
+**Problem**: Incorrect object comparison leads to unnecessary updates.
 
 ```kotlin
 // НЕПРАВИЛЬНО - нет equals/hashCode
@@ -379,7 +375,7 @@ class User(
 }
 ```
 
-### 7. Проблемы с памятью при больших списках
+### 7. Memory Issues with Large Lists
 
 ```kotlin
 // НЕПРАВИЛЬНО - держим ссылки на старые списки
@@ -414,9 +410,9 @@ class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
 }
 ```
 
-### Решения и Best Practices
+### Solutions and Best Practices
 
-**1. Использовать ListAdapter**
+**1. Use ListAdapter**
 
 ```kotlin
 // Автоматически обрабатывает все edge cases
@@ -448,7 +444,7 @@ class UserDiffCallback : DiffUtil.ItemCallback<User>() {
 }
 ```
 
-**2. Оптимизация для больших списков**
+**2. Optimization for Large Lists**
 
 ```kotlin
 // Использовать Paging 3
@@ -472,7 +468,7 @@ fun submitListSafely(newList: List<User>) {
 }
 ```
 
-**3. Debouncing для частых обновлений**
+**3. Debouncing for Frequent Updates**
 
 ```kotlin
 class UserViewModel : ViewModel() {

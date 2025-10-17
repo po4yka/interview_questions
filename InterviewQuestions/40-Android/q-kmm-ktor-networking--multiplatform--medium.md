@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - KMM
-  - Ktor
-  - Networking
+tags: [Kotlin, KMM, Ktor, Networking, difficulty/medium]
 ---
 
 # Ktor Client for Multiplatform Networking

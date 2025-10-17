@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - handler
-  - looper
-  - threading
-  - message-queue
-  - concurrency
+tags: [handler, looper, threading, message-queue, concurrency, difficulty/medium]
 ---
 # Handler and Looper: Complete guide
 
@@ -21,7 +16,7 @@ tags: - android
 ## Answer (EN)
 Handler и Looper — это фундаментальные компоненты Android для организации межпоточного взаимодействия и обработки сообщений в очереди.
 
-### 1. Архитектура Handler-Looper-MessageQueue
+### 1. Handler-Looper-MessageQueue Architecture
 
 ```
 Thread
@@ -49,7 +44,7 @@ class Handler {
 }
 ```
 
-### 2. Как Looper связывается с потоком
+### 2. How Looper Binds to a Thread
 
 Looper создается и привязывается к потоку через `Looper.prepare()` и `Looper.loop()`.
 
@@ -114,7 +109,7 @@ handlerThread.handler.sendMessage(
 - `Looper.loop()` — бесконечный цикл, блокирует поток
 - Один поток → один Looper → один MessageQueue
 
-### 3. Проверка наличия Looper в потоке
+### 3. Checking for Looper in a Thread
 
 ```kotlin
 // Проверка есть ли Looper в текущем потоке
@@ -166,9 +161,9 @@ fun isMainThread(): Boolean {
 }
 ```
 
-### 4. Получение сообщений на главном потоке
+### 4. Receiving Messages on the Main Thread
 
-#### Способ 1: Handler с Main Looper
+#### Method 1: Handler with Main Looper
 
 ```kotlin
 class BackgroundTask {
@@ -200,7 +195,7 @@ class BackgroundTask {
 }
 ```
 
-#### Способ 2: sendMessage
+#### Method 2: sendMessage
 
 ```kotlin
 class DataProcessor : Handler(Looper.getMainLooper()) {
@@ -258,7 +253,7 @@ val processor = DataProcessor()
 processor.processDataInBackground("hello world")
 ```
 
-#### Способ 3: postDelayed
+#### Method 3: postDelayed
 
 ```kotlin
 class NotificationManager {
@@ -296,7 +291,7 @@ class NotificationManager {
 }
 ```
 
-### 5. HandlerThread - готовое решение
+### 5. HandlerThread - Ready-Made Solution
 
 Android предоставляет `HandlerThread` — поток с встроенным Looper.
 
@@ -340,7 +335,7 @@ processor.processImage("https://example.com/image.jpg") { bitmap ->
 }
 ```
 
-### 6. Message и Runnable
+### 6. Message and Runnable
 
 ```kotlin
 // Runnable - простые задачи
@@ -367,7 +362,7 @@ val msg3 = Message.obtain(handler, MSG_DATA, data)  // С данными
 // val correct = Message.obtain()  //  ПРАВИЛЬНО
 ```
 
-### 7. Управление очередью сообщений
+### 7. Managing the Message Queue
 
 ```kotlin
 class TaskQueue {
@@ -418,7 +413,7 @@ class TaskQueue {
 }
 ```
 
-### 8. IdleHandler - выполнение когда очередь пуста
+### 8. IdleHandler - Execution When Queue is Idle
 
 ```kotlin
 class IdleMonitor {
@@ -467,7 +462,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 9. Утечки памяти и очистка
+### 9. Memory Leaks and Cleanup
 
 ```kotlin
 // УТЕЧКА ПАМЯТИ
@@ -546,7 +541,7 @@ class ModernActivity : AppCompatActivity() {
 }
 ```
 
-### 10. Продвинутые техники
+### 10. Advanced Techniques
 
 ```kotlin
 // Barrier Messages - блокируют выполнение async сообщений
@@ -575,7 +570,7 @@ Looper.getMainLooper().setMessageLogging { log ->
 }
 ```
 
-### Сравнительная таблица
+### Comparison Table
 
 | Компонент | Назначение | Количество на поток |
 |-----------|------------|---------------------|

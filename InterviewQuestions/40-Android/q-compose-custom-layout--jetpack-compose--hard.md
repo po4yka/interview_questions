@@ -5,10 +5,7 @@ topic: jetpack-compose
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - jetpack-compose
-  - custom-layout
-  - measure
-  - layout
+tags: [compose, custom-layout, measure, layout, difficulty/hard]
 ---
 # Custom Layout Composables
 

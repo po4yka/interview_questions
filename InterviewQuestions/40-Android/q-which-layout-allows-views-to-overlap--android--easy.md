@@ -5,10 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - layouts
-  - framelayout
-  - ui
+tags: [layouts, framelayout, ui, difficulty/easy]
 ---
 # Which layout allows views to overlap?
 

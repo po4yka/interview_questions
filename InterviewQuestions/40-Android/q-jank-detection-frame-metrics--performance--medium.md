@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/performance, android/jank, android/frames, android/rendering, android/profiling, android/optimization, difficulty/medium]
 source: Original
 source_note: Frame rendering performance best practices
 
@@ -24,7 +24,7 @@ related: [macrobenchmark-startup, app-startup-optimization, baseline-profiles-op
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [android, performance, jank, frames, rendering, profiling, optimization, difficulty/medium]
+tags: [en, ru, android/performance, android/jank, android/frames, android/rendering, android/profiling, android/optimization, difficulty/medium]
 ---
 # Question (EN)
 > Implement frame metrics monitoring to detect and fix jank. Use FrameMetricsAggregator, OnFrameMetricsAvailableListener, and systrace to identify rendering issues.

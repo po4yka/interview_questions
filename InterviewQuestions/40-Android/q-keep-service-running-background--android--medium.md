@@ -5,15 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/background-processing
-  - android/services
-  - android/workmanager
-  - background-processing
-  - foreground-service
-  - jobscheduler
-  - services
-  - workmanager
+tags: [android/background-processing, android/services, android/workmanager, background-processing, foreground-service, jobscheduler, services, workmanager, difficulty/medium]
 ---
 # How to keep service running in background?
 

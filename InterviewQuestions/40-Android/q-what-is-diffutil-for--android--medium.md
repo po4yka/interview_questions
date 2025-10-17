@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - recyclerview
-  - diffutil
-  - android
-  - ui
+tags: [diffutil, android, ui, difficulty/medium]
 ---
 # What is DiffUtil for?
 

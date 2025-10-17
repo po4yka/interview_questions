@@ -5,10 +5,7 @@ topic: jetpack-compose
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - jetpack-compose
-  - side-effects
-  - lifecycle
-  - launched-effect
+tags: [compose, side-effects, lifecycle, launched-effect, difficulty/hard]
 ---
 # Compare Side Effect APIs and Implement Location Tracking
 

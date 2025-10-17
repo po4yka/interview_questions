@@ -5,13 +5,7 @@ topic: networking
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - networking
-  - graphql
-  - rest
-  - api-design
-  - comparison
-  - architecture
-  - difficulty/easy
+tags: [graphql, rest, api-design, comparison, architecture, difficulty/easy]
 ---
 
 # Question (EN)

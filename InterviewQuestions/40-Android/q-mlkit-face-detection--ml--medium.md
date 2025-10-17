@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - MLKit
-  - MachineLearning
-  - FaceDetection
+tags: [Kotlin, MLKit, MachineLearning, FaceDetection, difficulty/medium]
 ---
 # ML Kit Face Detection and Analysis
 

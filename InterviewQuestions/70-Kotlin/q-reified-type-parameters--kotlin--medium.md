@@ -16,12 +16,12 @@ tags: - kotlin
 **English**: What is `reified` for in Kotlin?
 
 ## Answer (EN)
-`reified` — это модификатор для параметров типа в inline функциях, который позволяет сохранить информацию о типе во время выполнения (runtime). Обычно в JVM generic типы стираются (type erasure), но `reified` позволяет обращаться к типу как к обычному классу внутри функции.
+`reified` is a modifier for type parameters in inline functions that preserves type information at runtime. Normally in JVM, generic types are erased (type erasure), but `reified` allows accessing the type as a regular class inside the function.
 
-### Проблема: Type Erasure в Java/Kotlin
+### Problem: Type Erasure in Java/Kotlin
 
 ```kotlin
-// - НЕ РАБОТАЕТ - тип T стирается во время компиляции
+// - DOESN'T WORK - type T is erased at compile time
 fun <T> isInstanceOf(value: Any): Boolean {
     return value is T  // ERROR: Cannot check for instance of erased type
 }
@@ -31,19 +31,19 @@ fun <T> createInstance(): T {
     return T::class.java.newInstance()  // ERROR: Cannot use T::class
 }
 
-// Старый способ - передавать Class явно
+// Old way - pass Class explicitly
 fun <T> createInstance(clazz: Class<T>): T {
     return clazz.newInstance()
 }
 
-// Использование - неудобно
+// Usage - inconvenient
 val user = createInstance(User::class.java)
 ```
 
-### Решение: reified + inline
+### Solution: reified + inline
 
 ```kotlin
-//  С reified - тип доступен в runtime
+//  With reified - type available at runtime
 inline fun <reified T> isInstanceOf(value: Any): Boolean {
     return value is T  // OK!
 }
@@ -52,27 +52,27 @@ inline fun <reified T> createInstance(): T {
     return T::class.java.newInstance()  // OK!
 }
 
-// Использование - красиво и просто
+// Usage - clean and simple
 val user = createInstance<User>()
 val isUser = isInstanceOf<User>(someObject)
 ```
 
-### Практические примеры
+### Practical examples
 
-#### 1. Фильтрация коллекций по типу
+#### 1. Collection filtering by type
 
 ```kotlin
-// Без reified - нужно передавать Class
+// Without reified - need to pass Class
 fun <T> List<*>.filterByType(clazz: Class<T>): List<T> {
     return this.filter { clazz.isInstance(it) }
         .map { it as T }
 }
 
-// Использование
+// Usage
 val numbers = listOf<Any>(1, "two", 3, "four", 5)
-val ints = numbers.filterByType(Int::class.java)  // Громоздко
+val ints = numbers.filterByType(Int::class.java)  // Clumsy
 
-//  С reified - встроено в Kotlin
+//  With reified - built into Kotlin
 inline fun <reified T> List<*>.filterIsInstance(): List<T> {
     return this.filterIsInstance(T::class.java)
 }
@@ -82,7 +82,7 @@ val ints = numbers.filterIsInstance<Int>()
 val strings = numbers.filterIsInstance<String>()
 ```
 
-#### 2. JSON десериализация (Gson, Moshi, kotlinx.serialization)
+#### 2. JSON deserialization (Gson, Moshi, kotlinx.serialization)
 
 ```kotlin
 // Без reified - нужно передавать Type/Class
@@ -109,7 +109,7 @@ inline fun <reified T> Gson.fromJson(json: String): T {
 val map = gson.fromJson<Map<String, User>>(jsonString)
 ```
 
-#### 3. Intent extras в Android
+#### 3. Intent extras in Android
 
 ```kotlin
 // Без reified - многословно
@@ -144,7 +144,7 @@ val user = intent.getParcelableExtraCompat<User>("user")
 val location = intent.getParcelableExtraCompat<Location>("location")
 ```
 
-#### 4. Запуск Activity с типобезопасностью
+#### 4. Type-safe Activity launch
 
 ```kotlin
 // Старый способ
@@ -215,7 +215,7 @@ inline fun <reified T : Any> Kodein.instance(): T {
 val db: AppDatabase = kodein.instance()
 ```
 
-#### 7. Проверка типов в runtime
+#### 7. Runtime type checking
 
 ```kotlin
 inline fun <reified T> checkType(value: Any): String {
@@ -254,10 +254,10 @@ val userDao = database.getDao<UserDao>()
 val productDao = database.getDao<ProductDao>()
 ```
 
-### Как работает reified под капотом
+### How reified works under the hood
 
 ```kotlin
-// Kotlin код
+// Kotlin code
 inline fun <reified T> createList(): List<T> {
     println("Creating list of ${T::class.simpleName}")
     return emptyList()
@@ -268,9 +268,9 @@ fun test() {
     val products = createList<Product>()
 }
 
-// Компилируется в (примерно):
+// Compiles to (approximately):
 fun test() {
-    // Код функции встраивается с конкретным типом
+    // Function code is inlined with concrete type
     println("Creating list of User")
     val users = emptyList<User>()
 
@@ -279,50 +279,50 @@ fun test() {
 }
 ```
 
-**Ключевой момент**: Компилятор встраивает (inline) код функции в место вызова, подставляя конкретный тип вместо `T`. Поэтому `T::class` работает - компилятор знает конкретный тип.
+**Key point**: The compiler inlines the function code at the call site, substituting the concrete type for `T`. That's why `T::class` works - the compiler knows the concrete type.
 
-### Ограничения reified
+### Reified limitations
 
 ```kotlin
-//  МОЖНО
+//  ALLOWED
 inline fun <reified T> getClassName() = T::class.simpleName
 inline fun <reified T> isInstance(obj: Any) = obj is T
 inline fun <reified T> createArray(size: Int) = Array<T?>(size) { null }
 
-// - НЕЛЬЗЯ - функция ДОЛЖНА быть inline
+// - NOT ALLOWED - function MUST be inline
 fun <reified T> nonInlineFunction() {}  // ERROR: reified requires inline
 
-// - НЕЛЬЗЯ - virtual/override функции не могут быть inline
+// - NOT ALLOWED - virtual/override functions cannot be inline
 interface Repository<T> {
-    fun <reified T> find(): T  // ERROR: reified не работает с interface methods
+    fun <reified T> find(): T  // ERROR: reified doesn't work with interface methods
 }
 
-// - НЕЛЬЗЯ - параметры функции не могут быть reified
-inline fun test(reified param: Any) {}  // ERROR: только type parameters
+// - NOT ALLOWED - function parameters cannot be reified
+inline fun test(reified param: Any) {}  // ERROR: only type parameters
 ```
 
-### Сравнение подходов
+### Comparison of approaches
 
 ```kotlin
-// 1. Без generics - дублирование кода
+// 1. Without generics - code duplication
 fun parseUser(json: String): User = gson.fromJson(json, User::class.java)
 fun parseProduct(json: String): Product = gson.fromJson(json, Product::class.java)
-// ... еще 50 функций
+// ... 50 more functions
 
-// 2. Generic без reified - неудобно
+// 2. Generic without reified - inconvenient
 fun <T> parse(json: String, clazz: Class<T>): T = gson.fromJson(json, clazz)
 
-val user = parse(jsonString, User::class.java)  // Повторение типа
+val user = parse(jsonString, User::class.java)  // Type repetition
 
-// 3. Generic с reified - идеально
+// 3. Generic with reified - ideal
 inline fun <reified T> parse(json: String): T = gson.fromJson(json, T::class.java)
 
-val user = parse<User>(jsonString)  // Тип указан один раз
+val user = parse<User>(jsonString)  // Type specified once
 ```
 
-### Продвинутые паттерны
+### Advanced patterns
 
-#### Множественные reified параметры
+#### Multiple reified parameters
 
 ```kotlin
 inline fun <reified K, reified V> createMap(): MutableMap<K, V> {
@@ -333,7 +333,7 @@ inline fun <reified K, reified V> createMap(): MutableMap<K, V> {
 val userMap = createMap<Int, User>()  // Map<Int, User>
 ```
 
-#### Reified с bounds
+#### Reified with bounds
 
 ```kotlin
 inline fun <reified T : Number> sumOf(vararg values: T): Double {

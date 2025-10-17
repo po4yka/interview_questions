@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - Distribution
-  - Testing
-  - Firebase
+tags: [Kotlin, Distribution, Testing, Firebase, difficulty/medium]
 ---
 
 # Question (EN)

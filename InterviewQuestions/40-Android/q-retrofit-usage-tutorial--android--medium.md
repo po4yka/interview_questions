@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - retrofit
-  - networking
-  - tutorial
+tags: [retrofit, networking, tutorial, difficulty/medium]
 ---
 # Как делать сетевые запросы с помощью Retrofit?
 
@@ -17,7 +14,7 @@ tags: - android
 ## Answer (EN)
 Retrofit — это type-safe HTTP клиент для Android и Java. Вот пошаговое руководство по его использованию.
 
-### Шаг 1: Добавление зависимостей
+### Step 1: Adding dependencies
 
 ```gradle
 // app/build.gradle
@@ -38,7 +35,7 @@ dependencies {
 }
 ```
 
-### Шаг 2: Создание модели данных
+### Step 2: Creating data model
 
 ```kotlin
 // User.kt
@@ -57,56 +54,56 @@ data class Post(
     val body: String
 )
 
-// Для POST запросов
+// For POST requests
 data class CreateUserRequest(
     val name: String,
     val email: String
 )
 ```
 
-### Шаг 3: Определение API интерфейса
+### Step 3: Defining API interface
 
 ```kotlin
 // ApiService.kt
 interface ApiService {
-    // GET запрос
+    // GET request
     @GET("users")
     suspend fun getUsers(): List<User>
 
-    // GET с параметром в пути
+    // GET with path parameter
     @GET("users/{id}")
     suspend fun getUser(@Path("id") userId: Int): User
 
-    // GET с query параметрами
+    // GET with query parameters
     @GET("posts")
     suspend fun getPosts(
         @Query("userId") userId: Int,
         @Query("_limit") limit: Int = 10
     ): List<Post>
 
-    // POST запрос
+    // POST request
     @POST("users")
     suspend fun createUser(@Body user: CreateUserRequest): User
 
-    // PUT запрос
+    // PUT request
     @PUT("users/{id}")
     suspend fun updateUser(
         @Path("id") userId: Int,
         @Body user: User
     ): User
 
-    // DELETE запрос
+    // DELETE request
     @DELETE("users/{id}")
     suspend fun deleteUser(@Path("id") userId: Int): Response<Unit>
 
-    // Заголовки
+    // Headers
     @GET("users/{id}")
     suspend fun getUserWithAuth(
         @Path("id") userId: Int,
         @Header("Authorization") token: String
     ): User
 
-    // Несколько query параметров
+    // Multiple query parameters
     @GET("search")
     suspend fun search(
         @QueryMap parameters: Map<String, String>
@@ -114,14 +111,14 @@ interface ApiService {
 }
 ```
 
-### Шаг 4: Создание Retrofit instance
+### Step 4: Creating Retrofit instance
 
 ```kotlin
 // RetrofitClient.kt
 object RetrofitClient {
     private const val BASE_URL = "https://jsonplaceholder.typicode.com/"
 
-    // OkHttp клиент с логированием
+    // OkHttp client with logging
     private val okHttpClient = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
@@ -134,7 +131,7 @@ object RetrofitClient {
             }
         })
         .addInterceptor { chain ->
-            // Добавление headers ко всем запросам
+            // Add headers to all requests
             val request = chain.request().newBuilder()
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
@@ -157,7 +154,7 @@ object RetrofitClient {
 }
 ```
 
-### Шаг 5: Использование в ViewModel
+### Step 5: Using in ViewModel
 
 ```kotlin
 // UserViewModel.kt
@@ -180,13 +177,13 @@ class UserViewModel : ViewModel() {
                 val result = apiService.getUsers()
                 _users.value = result
             } catch (e: HttpException) {
-                // HTTP ошибка (4xx, 5xx)
+                // HTTP error (4xx, 5xx)
                 _error.value = "HTTP Error: ${e.code()}"
             } catch (e: IOException) {
-                // Сетевая ошибка
+                // Network error
                 _error.value = "Network Error: ${e.message}"
             } catch (e: Exception) {
-                // Другие ошибки
+                // Other errors
                 _error.value = "Error: ${e.message}"
             } finally {
                 _loading.value = false
@@ -199,7 +196,7 @@ class UserViewModel : ViewModel() {
             try {
                 val request = CreateUserRequest(name, email)
                 val newUser = apiService.createUser(request)
-                // Обновить список пользователей
+                // Update user list
                 _users.value = _users.value?.plus(newUser)
             } catch (e: Exception) {
                 _error.value = e.message
@@ -209,7 +206,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-### Шаг 6: Использование в Activity/Fragment
+### Step 6: Using in Activity/Fragment
 
 ```kotlin
 // MainActivity.kt
@@ -224,7 +221,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         observeViewModel()
 
-        // Загрузить данные
+        // Load data
         viewModel.loadUsers()
     }
 
@@ -237,17 +234,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        // Наблюдение за пользователями
+        // Observe users
         viewModel.users.observe(this) { users ->
             adapter.submitList(users)
         }
 
-        // Наблюдение за загрузкой
+        // Observe loading
         viewModel.loading.observe(this) { isLoading ->
             progressBar.isVisible = isLoading
         }
 
-        // Наблюдение за ошибками
+        // Observe errors
         viewModel.error.observe(this) { errorMessage ->
             Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
         }
@@ -255,7 +252,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Обработка различных типов запросов
+### Handling different request types
 
 #### Form URL Encoded
 
@@ -325,7 +322,7 @@ interface ApiService {
 }
 ```
 
-### Обработка ошибок с sealed class
+### Error handling with sealed class
 
 ```kotlin
 sealed class Result<out T> {

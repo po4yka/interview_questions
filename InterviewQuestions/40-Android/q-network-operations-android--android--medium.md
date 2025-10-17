@@ -5,9 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - networking
-  - http
+tags: [networking, http, difficulty/medium]
 ---
 # Что используется для работы с сетью в Android?
 
@@ -16,11 +14,11 @@ tags: - android
 ## Answer (EN)
 Для работы с сетью в Android используются различные библиотеки и инструменты, обеспечивающие выполнение сетевых запросов, обработку ответов и управление асинхронными операциями.
 
-### Основные инструменты
+### Main tools
 
-#### 1. HttpURLConnection (встроенный)
+#### 1. HttpURLConnection (built-in)
 
-Базовый инструмент для простых HTTP запросов.
+Basic tool for simple HTTP requests.
 
 ```kotlin
 fun fetchData(): String {
@@ -45,14 +43,14 @@ fun fetchData(): String {
 }
 ```
 
-**Минусы:**
-- Много boilerplate кода
-- Нет автоматической конвертации JSON
-- Сложно управлять async операциями
+**Cons:**
+- Lots of boilerplate code
+- No automatic JSON conversion
+- Difficult to manage async operations
 
-#### 2. OkHttp (рекомендуется)
+#### 2. OkHttp (recommended)
 
-Мощный HTTP клиент от Square.
+Powerful HTTP client from Square.
 
 ```kotlin
 // Зависимость
@@ -74,14 +72,14 @@ fun fetchData() {
 
     client.newCall(request).enqueue(object : Callback {
         override fun onFailure(call: Call, e: IOException) {
-            // Ошибка сети
+            // Network error
         }
 
         override fun onResponse(call: Call, response: Response) {
             response.use {
                 if (it.isSuccessful) {
                     val body = it.body?.string()
-                    // Обработка ответа
+                    // Process response
                 }
             }
         }
@@ -89,23 +87,23 @@ fun fetchData() {
 }
 ```
 
-**Преимущества:**
-- Эффективное управление соединениями
+**Advantages:**
+- Efficient connection management
 - Connection pooling
-- Автоматические retry
-- Поддержка HTTP/2
+- Automatic retry
+- HTTP/2 support
 - WebSocket support
 
-#### 3. Retrofit (самый популярный)
+#### 3. Retrofit (most popular)
 
-Type-safe HTTP клиент, использует OkHttp внутри.
+Type-safe HTTP client, uses OkHttp internally.
 
 ```kotlin
-// Зависимости
+// Dependencies
 // implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 // implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
-// API интерфейс
+// API interface
 interface ApiService {
     @GET("users/{id}")
     suspend fun getUser(@Path("id") userId: Int): User
@@ -120,7 +118,7 @@ interface ApiService {
     ): List<User>
 }
 
-// Создание Retrofit
+// Create Retrofit
 val retrofit = Retrofit.Builder()
     .baseUrl("https://api.example.com/")
     .addConverterFactory(GsonConverterFactory.create())
@@ -129,7 +127,7 @@ val retrofit = Retrofit.Builder()
 
 val apiService = retrofit.create(ApiService::class.java)
 
-// Использование с корутинами
+// Using with coroutines
 lifecycleScope.launch {
     try {
         val user = apiService.getUser(123)
@@ -140,9 +138,9 @@ lifecycleScope.launch {
 }
 ```
 
-#### 4. Volley (от Google)
+#### 4. Volley (from Google)
 
-Библиотека для быстрых небольших запросов.
+Library for fast small requests.
 
 ```kotlin
 // implementation 'com.android.volley:volley:1.2.1'
@@ -153,11 +151,11 @@ val request = StringRequest(
     Request.Method.GET,
     "https://api.example.com/data",
     { response ->
-        // Успешный ответ
+        // Successful response
         Log.d("Response", response)
     },
     { error ->
-        // Ошибка
+        // Error
         Log.e("Error", error.toString())
     }
 )
@@ -165,15 +163,15 @@ val request = StringRequest(
 queue.add(request)
 ```
 
-**Особенности:**
-- Автоматическое кэширование
-- Приоритизация запросов
-- Отмена запросов
-- Хорошо для множества мелких запросов
+**Features:**
+- Automatic caching
+- Request prioritization
+- Request cancellation
+- Good for multiple small requests
 
 #### 5. Ktor Client (Kotlin-first)
 
-Асинхронный HTTP клиент для Kotlin.
+Asynchronous HTTP client for Kotlin.
 
 ```kotlin
 // implementation("io.ktor:ktor-client-android:2.3.0")
@@ -190,7 +188,7 @@ suspend fun fetchUser(id: Int): User {
 }
 ```
 
-### Сравнительная таблица
+### Comparison table
 
 | Библиотека | Простота | Производительность | Функциональность | Use Case |
 |------------|----------|-------------------|------------------|----------|
@@ -200,7 +198,7 @@ suspend fun fetchUser(id: Int): User {
 | **Volley** |  |  |  | Множество мелких запросов |
 | **Ktor** |  |  |  | Kotlin multiplatform |
 
-### Важные правила
+### Important rules
 
 **1. Сетевые операции в фоновом потоке**
 
@@ -262,7 +260,7 @@ suspend fun safeApiCall(): Result<User> {
 }
 ```
 
-### Проверка интернет-соединения
+### Checking internet connection
 
 ```kotlin
 fun isNetworkAvailable(context: Context): Boolean {

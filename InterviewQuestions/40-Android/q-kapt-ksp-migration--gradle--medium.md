@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/kapt, android/ksp, android/annotation-processing, android/build, android/performance, android/migration, difficulty/medium]
 source: Original
 source_note: Annotation processing migration best practices
 
@@ -24,7 +24,7 @@ related: [build-optimization-gradle, app-startup-optimization]
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [android, kapt, ksp, annotation-processing, build, performance, migration, difficulty/medium]
+tags: [en, ru, android/kapt, android/ksp, android/annotation-processing, android/build, android/performance, android/migration, difficulty/medium]
 ---
 # Question (EN)
 > Compare KAPT and KSP for annotation processing in depth. Migrate library dependencies from KAPT to KSP. Measure and document build time improvements.

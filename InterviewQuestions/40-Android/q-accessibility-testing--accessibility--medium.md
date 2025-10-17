@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-11
-tags: - android
-  - accessibility
-  - testing
-  - automated-testing
-  - talkback
+tags: [accessibility, testing, automated-testing, talkback, difficulty/medium]
 related:   - q-accessibility-compose--accessibility--medium
   - q-accessibility-talkback--accessibility--medium
   - q-cicd-automated-testing--devops--medium

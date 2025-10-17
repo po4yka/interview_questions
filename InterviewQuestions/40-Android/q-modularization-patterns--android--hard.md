@@ -11,7 +11,7 @@ difficulty: hard
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/architecture, android/modularization, android/best-practices, difficulty/hard]
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [android, architecture, modularization, design-patterns, coupling, cohesion, dependency-injection, difficulty/hard]
+tags: [en, ru, android/architecture, android/modularization, android/best-practices, difficulty/hard]
 ---
 # Question (EN)
 > What modularization patterns do you know?

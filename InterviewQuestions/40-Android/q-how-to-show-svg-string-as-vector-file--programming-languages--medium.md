@@ -5,7 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - programming-languages
+tags: [languages, difficulty/medium]
 ---
 # Как SVG-строку показать в виде векторного файла?
 

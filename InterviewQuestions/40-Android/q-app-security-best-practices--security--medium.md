@@ -5,13 +5,7 @@ topic: security
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - security
-  - best-practices
-  - audit
-  - vulnerabilities
-  - owasp
-  - hardening
-  - difficulty/medium
+tags: [best-practices, audit, vulnerabilities, owasp, hardening, difficulty/medium]
 ---
 # App Security Best Practices / Best Practices безопасности приложений
 

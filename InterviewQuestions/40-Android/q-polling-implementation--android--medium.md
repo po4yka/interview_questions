@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - polling
-  - background-tasks
-  - coroutines
-  - workmanager
+tags: [polling, background-tasks, coroutines, workmanager, difficulty/medium]
 ---
 # Как реализовать polling в Android?
 
@@ -18,7 +14,7 @@ tags: - android
 ## Answer (EN)
 Polling — это техника периодического получения обновленных данных с сервера. В Android можно использовать различные подходы в зависимости от требований к частоте опроса, надежности и энергоэффективности.
 
-### 1. Coroutines + Flow (рекомендуется для UI)
+### 1. Coroutines + Flow (Recommended for UI)
 
 Современный подход с использованием корутин для периодического опроса.
 
@@ -136,7 +132,7 @@ class OrderFragment : Fragment() {
 }
 ```
 
-### 2. WorkManager (для фоновых задач)
+### 2. WorkManager (For Background Tasks)
 
 Гарантированное выполнение периодических задач даже при перезагрузке устройства.
 
@@ -258,7 +254,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 3. Handler + Runnable (простой способ)
+### 3. Handler + Runnable (Simple Approach)
 
 Для простых задач, которые выполняются пока Activity/Fragment активны.
 
@@ -320,7 +316,7 @@ class StatusFragment : Fragment() {
 }
 ```
 
-### 4. AlarmManager (для точных интервалов)
+### 4. AlarmManager (For Precise Intervals)
 
 Для задач, которые требуют выполнения в точное время.
 
@@ -392,7 +388,7 @@ class PollingBroadcastReceiver : BroadcastReceiver() {
 }
 ```
 
-### 5. RxJava Observable.interval (альтернатива)
+### 5. RxJava Observable.interval (Alternative)
 
 ```kotlin
 class RxPollingManager {
@@ -430,7 +426,7 @@ class RxPollingManager {
 }
 ```
 
-### 6. Smart Polling с адаптивными интервалами
+### 6. Smart Polling with Adaptive Intervals
 
 ```kotlin
 class SmartPollingManager(
@@ -466,7 +462,7 @@ class SmartPollingManager(
 }
 ```
 
-### 7. Polling с WebSocket fallback
+### 7. Polling with WebSocket Fallback
 
 ```kotlin
 class DataSyncManager(
@@ -565,7 +561,7 @@ fun pollWhenOnline(context: Context): Flow<Data> = flow {
 }
 ```
 
-### Сравнительная таблица
+### Comparison Table
 
 | Метод | Use Case | Преимущества | Недостатки |
 |-------|----------|--------------|------------|

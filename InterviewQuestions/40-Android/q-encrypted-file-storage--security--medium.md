@@ -5,12 +5,7 @@ topic: security
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - security
-  - encryption
-  - file-storage
-  - streaming
-  - encrypted-file
-  - difficulty/medium
+tags: [encryption, file-storage, streaming, encrypted-file, difficulty/medium]
 ---
 # Encrypted File Storage / Шифрование файлов
 

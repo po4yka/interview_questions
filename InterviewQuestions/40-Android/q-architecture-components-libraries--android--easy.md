@@ -5,19 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/architecture-clean
-  - android/lifecycle
-  - architecture-clean
-  - databinding
-  - lifecycle
-  - livedata
-  - navigation
-  - paging
-  - platform/android
-  - room
-  - viewmodel
-  - workmanager
+tags: [android/architecture-clean, android/lifecycle, architecture-clean, databinding, lifecycle, livedata, navigation, paging, platform/android, room, viewmodel, workmanager, difficulty/easy]
 ---
 # What libraries are in Architecture Components?
 

@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/networking, android/real-time, android/protocols, android/performance, difficulty/medium]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: [websocket, real-time-updates, networking]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, networking, http, websocket, sse, long-polling, real-time, difficulty/medium]
+tags: [en, ru, android/networking, android/real-time, android/protocols, android/performance, difficulty/medium]
 ---
 # Question (EN)
 > What are the differences between HTTP, Long-Polling, WebSocket, and Server-Sent Events (SSE)? When should each be used?

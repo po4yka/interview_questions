@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/data-storage
-  - annotation-processing
-  - code-generation
-  - compile-time
-  - kapt
-  - ksp
-  - room
+tags: [android/data-storage, annotation-processing, code-generation, compile-time, kapt, ksp, room, difficulty/medium]
 ---
 # В какой момент генерируется код при использовании SQLite?
 

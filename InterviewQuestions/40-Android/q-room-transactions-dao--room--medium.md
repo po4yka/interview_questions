@@ -5,14 +5,7 @@ topic: room
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - room
-  - database
-  - transactions
-  - dao
-  - atomicity
-  - consistency
-  - acid
-  - difficulty/medium
+tags: [database, transactions, dao, atomicity, consistency, acid, difficulty/medium]
 ---
 # Room Transactions and DAO / Транзакции и DAO в Room
 

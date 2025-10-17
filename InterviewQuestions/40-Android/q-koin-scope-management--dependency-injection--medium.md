@@ -5,11 +5,7 @@ topic: dependency-injection
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - dependency-injection
-  - koin
-  - scopes
-  - lifecycle
-  - difficulty/medium
+tags: [injection, koin, scopes, lifecycle, difficulty/medium]
 ---
 # Koin Scope Management / Управление Scope в Koin
 

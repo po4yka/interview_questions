@@ -5,12 +5,7 @@ topic: networking
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - networking
-  - error-handling
-  - strategy
-  - architecture
-  - ux
-  - difficulty/medium
+tags: [error-handling, strategy, architecture, ux, difficulty/medium]
 ---
 
 # Question (EN)

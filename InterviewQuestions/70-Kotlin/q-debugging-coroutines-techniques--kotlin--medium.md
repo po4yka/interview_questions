@@ -23,19 +23,22 @@ subtopics:   - coroutines
   - profiling
   - troubleshooting
 ---
-# Debugging Kotlin coroutines: tools and techniques
 
-## English Version
+# Question (EN)
+> What tools and techniques are available for debugging Kotlin coroutines? How do you identify deadlocks, leaks, and performance issues?
 
-### Problem Statement
+# Вопрос (RU)
+> Какие инструменты и техники доступны для отладки Kotlin корутин? Как идентифицировать deadlock, утечки и проблемы производительности?
+
+---
+
+## Answer (EN)
 
 Debugging coroutines is challenging because traditional debugging tools are designed for threads, not suspending functions. Coroutines can suspend, resume on different threads, and have complex hierarchies. Understanding how to debug coroutines effectively is crucial for production readiness.
 
-**The Question:** What tools and techniques are available for debugging Kotlin coroutines? How do you identify deadlocks, leaks, and performance issues?
 
-### Detailed Answer
 
-#### 1. Enable Debug Mode
+### 1. Enable Debug Mode
 
 **First step:** Enable kotlinx.coroutines debug mode to add coroutine info to thread names.
 
@@ -76,7 +79,7 @@ fun main() {
 // Running on: main @coroutine#2
 ```
 
-#### 2. CoroutineName for Debugging
+### 2. CoroutineName for Debugging
 
 **Use CoroutineName** to identify coroutines in logs and debugger:
 
@@ -118,7 +121,7 @@ class UserRepository {
 // Loading user 123 on: DefaultDispatcher-worker-2 @LoadUser-123#5
 ```
 
-#### 3. Reading Coroutine Stack Traces
+### 3. Reading Coroutine Stack Traces
 
 **Problem:** Coroutine stack traces can be confusing because they show suspension points, not call stacks.
 
@@ -165,7 +168,7 @@ fun main() = runBlocking(CoroutineName("MainCoroutine")) {
 //     ...
 ```
 
-#### 4. IntelliJ IDEA Coroutine Debugger
+### 4. IntelliJ IDEA Coroutine Debugger
 
 **IntelliJ IDEA** has built-in coroutine debugging support (2021.2+).
 
@@ -198,7 +201,7 @@ suspend fun loadUser(userId: String): User {
 // - Coroutine #4 (ImageDownloader): CANCELLED
 ```
 
-#### 5. Coroutine Dump Analysis
+### 5. Coroutine Dump Analysis
 
 **Dump all coroutines** to see what's running:
 
@@ -245,7 +248,7 @@ fun main() {
 }
 ```
 
-#### 6. Finding Suspended Coroutines
+### 6. Finding Suspended Coroutines
 
 **Problem:** Coroutine appears "stuck" - is it suspended or deadlocked?
 
@@ -292,7 +295,7 @@ repeat(10) {
 }
 ```
 
-#### 7. Detecting Deadlocks
+### 7. Detecting Deadlocks
 
 **Scenario: Two coroutines waiting for each other**
 
@@ -344,7 +347,7 @@ launch(CoroutineName("Coroutine-1")) {
 }
 ```
 
-#### 8. Identifying Leaked Coroutines
+### 8. Identifying Leaked Coroutines
 
 **Coroutine leaks** occur when coroutines keep running after they should have been cancelled.
 
@@ -400,7 +403,7 @@ class TrackedViewModel : ViewModel() {
 CoroutineTracker.printActiveCoroutines()
 ```
 
-#### 9. LeakCanary for Coroutine Leaks
+### 9. LeakCanary for Coroutine Leaks
 
 **LeakCanary** can detect coroutine leaks:
 
@@ -422,7 +425,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-#### 10. Logging Best Practices
+### 10. Logging Best Practices
 
 **Pattern: Structured logging with coroutine context**
 
@@ -475,7 +478,7 @@ suspend fun loadUser(userId: String) {
 }
 ```
 
-#### 11. Android Studio Debugging Features
+### 11. Android Studio Debugging Features
 
 **Android Studio** provides specific coroutine debugging tools:
 
@@ -491,7 +494,7 @@ suspend fun loadUser(userId: String) {
 - View Room database queries triggered by coroutines
 - See active queries and their coroutine context
 
-#### 12. Thread Dumps Interpretation
+### 12. Thread Dumps Interpretation
 
 **Get thread dump:**
 
@@ -519,7 +522,7 @@ jstack <PID> > threaddump.txt
 - `TIMED_WAITING`: Coroutine is suspended (delay)
 - `MyClass.kt:25`: Suspension point
 
-#### 13. Common Debugging Scenarios
+### 13. Common Debugging Scenarios
 
 **Scenario 1: Coroutine never completes**
 
@@ -604,7 +607,7 @@ repeat(10) {
 // [worker-2 @coroutine#3] After: 1   ← Lost update!
 ```
 
-#### 14. Profiling Coroutine Performance
+### 14. Profiling Coroutine Performance
 
 **Android Studio Profiler:**
 
@@ -656,7 +659,7 @@ profiler.printStats()
 // LoadData: avg=245ms, min=180ms, max=450ms, count=127
 ```
 
-#### 15. Testing Tools
+### 15. Testing Tools
 
 **kotlinx-coroutines-test** provides debugging utilities:
 
@@ -711,17 +714,13 @@ fun debugTest() = runTest {
 
 ---
 
-## Русская версия
-
-### Формулировка проблемы
+## Ответ (RU)
 
 Отладка корутин сложна, потому что традиционные инструменты отладки разработаны для потоков, а не для suspend функций. Корутины могут приостанавливаться, возобновляться на разных потоках и имеют сложные иерархии. Понимание эффективной отладки корутин критично для production готовности.
 
-**Вопрос:** Какие инструменты и техники доступны для отладки Kotlin корутин? Как идентифицировать deadlock, утечки и проблемы производительности?
 
-### Подробный ответ
 
-#### 1. Включение режима отладки
+### 1. Включение режима отладки
 
 **Первый шаг:** Включите режим отладки kotlinx.coroutines для добавления информации о корутинах в имена потоков.
 
@@ -743,7 +742,7 @@ Thread: DefaultDispatcher-worker-1
 Thread: DefaultDispatcher-worker-1 @coroutine#2
 ```
 
-#### 2. CoroutineName для отладки
+### 2. CoroutineName для отладки
 
 **Используйте CoroutineName** для идентификации корутин в логах и отладчике:
 

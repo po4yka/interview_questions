@@ -5,13 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - privacy-sandbox
-  - fledge
-  - protected-audience
-  - remarketing
-  - privacy
-  - advertising
+tags: [privacy-sandbox, fledge, protected-audience, remarketing, privacy, advertising, difficulty/hard]
 ---
 # Privacy Sandbox: FLEDGE (Protected Audience API) and On-Device Auctions
 

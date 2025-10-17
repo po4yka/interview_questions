@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - kotlin
-  - sealed-classes
-  - state-management
-  - mvi
-  - architecture
+tags: [sealed-classes, state-management, mvi, architecture, android/sealed-classes, android/state-management, android/mvi, android/architecture, difficulty/medium]
 date_created: 2025-10-12
 date_updated: 2025-10-12
 moc: moc-android

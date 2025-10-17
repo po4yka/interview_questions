@@ -5,13 +5,7 @@ topic: permissions
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - permissions
-  - runtime
-  - privacy
-  - ux
-  - best-practices
-  - activity-result
-  - difficulty/medium
+tags: [runtime, privacy, ux, best-practices, activity-result, difficulty/medium]
 ---
 
 # Question (EN)

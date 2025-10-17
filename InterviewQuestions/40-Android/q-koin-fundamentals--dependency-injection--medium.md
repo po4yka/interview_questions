@@ -5,11 +5,7 @@ topic: dependency-injection
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - dependency-injection
-  - koin
-  - architecture
-  - service-locator
-  - difficulty/medium
+tags: [injection, koin, architecture, service-locator, difficulty/medium]
 ---
 # Koin Fundamentals / Основы Koin
 

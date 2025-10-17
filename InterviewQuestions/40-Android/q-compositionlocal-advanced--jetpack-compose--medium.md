@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - jetpack-compose
-  - composition-local
-  - dependency-injection
-  - best-practices
-  - architecture
+tags: [compose, composition-local, dependency-injection, best-practices, architecture, difficulty/medium]
 ---
 
 # CompositionLocal Advanced Usage

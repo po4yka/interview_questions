@@ -21,19 +21,21 @@ subtopics:   - rest-api
   - http
   - web-services
 ---
-# REST API Design Best Practices
+# Question (EN)
+> What are the best practices for designing RESTful APIs? How do you structure endpoints, handle errors, and ensure API quality?
 
-## English Version
+# Вопрос (RU)
+> Каковы лучшие практики проектирования RESTful API? Как структурировать endpoints, обрабатывать ошибки и обеспечивать качество API?
 
-### Problem Statement
+---
+
+## Answer (EN)
 
 Designing a good REST API is crucial for building maintainable, scalable, and developer-friendly services. Poor API design leads to confusion, increased support burden, and difficult-to-evolve systems.
 
-**The Question:** What are the best practices for designing RESTful APIs? How do you structure endpoints, handle errors, and ensure API quality?
 
-### Detailed Answer
 
-#### REST Principles
+### REST Principles
 
 **REST (Representational State Transfer)** is an architectural style based on:
 
@@ -48,7 +50,7 @@ Designing a good REST API is crucial for building maintainable, scalable, and de
 
 ### 1. Resource Naming Conventions
 
-#### Use Nouns, Not Verbs
+### Use Nouns, Not Verbs
 
  **Bad:**
 ```
@@ -67,7 +69,7 @@ PUT    /users/123      # Update user
 DELETE /users/123      # Delete user
 ```
 
-#### Use Plural Nouns
+### Use Plural Nouns
 
  **Bad:**
 ```
@@ -81,7 +83,7 @@ DELETE /users/123      # Delete user
 /orders/456
 ```
 
-#### Nested Resources for Relationships
+### Nested Resources for Relationships
 
 ```
 GET /users/123/orders           # Get orders for user 123
@@ -202,7 +204,7 @@ Response: 204 No Content
 
 Use appropriate HTTP status codes:
 
-#### Success (2xx)
+### Success (2xx)
 
 ```kotlin
 @RestController
@@ -244,7 +246,7 @@ class OrderController(private val orderService: OrderService) {
 }
 ```
 
-#### Client Errors (4xx)
+### Client Errors (4xx)
 
 ```kotlin
 @RestControllerAdvice
@@ -330,7 +332,7 @@ data class FieldError(
 )
 ```
 
-#### Server Errors (5xx)
+### Server Errors (5xx)
 
 ```kotlin
 @ExceptionHandler(Exception::class)
@@ -691,17 +693,13 @@ sealed class BatchResult<T> {
 
 ---
 
-## Russian Version
-
-### Постановка задачи
+## Ответ (RU)
 
 Проектирование хорошего REST API критически важно для построения поддерживаемых, масштабируемых и удобных для разработчиков сервисов.
 
-**Вопрос:** Каковы лучшие практики проектирования RESTful API? Как структурировать endpoints, обрабатывать ошибки и обеспечивать качество API?
 
-### Детальный ответ
 
-#### Принципы REST
+### Принципы REST
 
 **REST (Representational State Transfer)** - архитектурный стиль, основанный на:
 
@@ -714,7 +712,7 @@ sealed class BatchResult<T> {
 
 ### 1. Соглашения об именовании ресурсов
 
-#### Используйте существительные, не глаголы
+### Используйте существительные, не глаголы
 
  **Плохо:**
 ```

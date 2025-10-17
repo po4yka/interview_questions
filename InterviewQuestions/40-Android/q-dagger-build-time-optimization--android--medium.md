@@ -1,16 +1,22 @@
 ---
-id: "20251015082237238"
+id: 20251012-122748
 title: "Dagger Build Time Optimization"
 topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - dagger
+updated: 2025-10-15
+tags: [dagger, hilt, dependency-injection, build-optimization, performance, android/hilt, android/dependency-injection, android/build-optimization, difficulty/medium]
+aliases: []
+original_language: en
+language_tags: [en, ru]
+question_kind: android
+moc: moc-android
+subtopics:   - dagger
   - hilt
   - dependency-injection
   - build-optimization
-  - performance
+related: []
 ---
 
 # Question (EN)
@@ -27,9 +33,9 @@ tags: - android
 
 To minimize Dagger's impact on build time, you can use several strategies and practices that help optimize the compilation process.
 
-### 1. Использование Hilt вместо Dagger
+### 1. Use Hilt instead of Dagger
 
-Hilt упрощает настройку и сокращает boilerplate код, что ускоряет компиляцию.
+Hilt simplifies setup and reduces boilerplate code, which speeds up compilation.
 
 ```kotlin
 //  Dagger - много кода, медленная компиляция
@@ -66,9 +72,9 @@ object NetworkModule {
 }
 ```
 
-### 2. Разделение модулей (Modularization)
+### 2. Module Separation (Modularization)
 
-Разбейте большие модули на несколько меньших, логически связанных компонентов.
+Split large modules into several smaller, logically connected components.
 
 ```kotlin
 //  НЕПРАВИЛЬНО - один огромный модуль
@@ -116,9 +122,9 @@ object ImageModule {
 }
 ```
 
-### 3. Использование компонентов с Subcomponents
+### 3. Use Components with Subcomponents
 
-Изолируйте изменения в разных частях приложения.
+Isolate changes in different parts of the application.
 
 ```kotlin
 // Feature-specific components
@@ -144,7 +150,7 @@ object ProfileFeatureModule {
 // Изменения в ProfileFeatureModule не триггерят перекомпиляцию UserFeatureModule
 ```
 
-### 4. Избегание избыточных зависимостей
+### 4. Avoid Excessive Dependencies
 
 ```kotlin
 //  НЕПРАВИЛЬНО - слишком много зависимостей в конструкторе
@@ -181,9 +187,9 @@ class MainUseCases @Inject constructor(
 }
 ```
 
-### 5. Использование @Binds вместо @Provides
+### 5. Use @Binds instead of @Provides
 
-`@Binds` генерирует меньше кода чем `@Provides`.
+`@Binds` generates less code than `@Provides`.
 
 ```kotlin
 //  МЕДЛЕННЕЕ - @Provides
@@ -207,9 +213,9 @@ abstract class RepositoryModule {
 }
 ```
 
-### 6. Ограничение Scopes
+### 6. Limit Scopes
 
-Используйте минимально необходимые scope'ы.
+Use the minimum necessary scopes.
 
 ```kotlin
 //  НЕПРАВИЛЬНО - слишком много singleton'ов
@@ -238,7 +244,7 @@ object ActivityModule {
 }
 ```
 
-### 7. Gradle оптимизации
+### 7. Gradle Optimizations
 
 ```kotlin
 // gradle.properties
@@ -277,9 +283,9 @@ android {
 }
 ```
 
-### 8. Использование KSP (вместо kapt)
+### 8. Use KSP (instead of kapt)
 
-KSP (Kotlin Symbol Processing) значительно быстрее kapt.
+KSP (Kotlin Symbol Processing) is significantly faster than kapt.
 
 ```gradle
 // build.gradle (project level)
@@ -295,7 +301,7 @@ plugins {
 // ВАЖНО: Убедитесь что Hilt поддерживает KSP в вашей версии
 ```
 
-### 9. Проверка зависимостей с помощью Build Analyzer
+### 9. Check Dependencies with Build Analyzer
 
 ```kotlin
 // Android Studio: Build -> Analyze Build...
@@ -319,7 +325,7 @@ implementation("some.library:name:1.0") {
 }
 ```
 
-### 10. Ленивая инициализация
+### 10. Lazy Initialization
 
 ```kotlin
 //  НЕПРАВИЛЬНО - все создается сразу
@@ -352,9 +358,9 @@ class HeavyService @Inject constructor(
 }
 ```
 
-### 11. AssistedInject для runtime параметров
+### 11. AssistedInject for Runtime Parameters
 
-Избегайте фабрик которые требуют много generated кода.
+Avoid factories that require a lot of generated code.
 
 ```kotlin
 //  МЕДЛЕННЕЕ - ручная фабрика
@@ -394,7 +400,7 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-### 12. Минимизация Multibindings
+### 12. Minimize Multibindings
 
 ```kotlin
 //  МЕДЛЕННО - слишком много bindings
@@ -428,9 +434,9 @@ abstract class FeatureModule {
 }
 ```
 
-### Метрики улучшения
+### Improvement Metrics
 
-**До оптимизации:**
+**Before optimization:**
 
 ```
 Build time: 2m 30s
@@ -439,7 +445,7 @@ Dagger components: 15
 Total @Provides: 200+
 ```
 
-**После оптимизации:**
+**After optimization:**
 
 ```
 Build time: 1m 10s (-53%)
@@ -449,20 +455,20 @@ Total @Provides: 80
 @Binds: 40 (вместо @Provides)
 ```
 
-### Checklist оптимизации
+### Optimization Checklist
 
--   [ ] Переход с Dagger на Hilt
--   [ ] Включить incremental kapt
--   [ ] Разделить большие модули
--   [ ] Заменить @Provides на @Binds где возможно
--   [ ] Использовать Provider<T> для ленивой инициализации
--   [ ] Минимизировать singleton scopes
--   [ ] Проверить Build Analyzer
--   [ ] Настроить gradle.properties
--   [ ] Рассмотреть миграцию на KSP
--   [ ] Удалить неиспользуемые зависимости
--   [ ] Использовать AssistedInject для runtime параметров
--   [ ] Оптимизировать Multibindings
+-   [ ] Migrate from Dagger to Hilt
+-   [ ] Enable incremental kapt
+-   [ ] Split large modules
+-   [ ] Replace @Provides with @Binds where possible
+-   [ ] Use Provider<T> for lazy initialization
+-   [ ] Minimize singleton scopes
+-   [ ] Check Build Analyzer
+-   [ ] Configure gradle.properties
+-   [ ] Consider migration to KSP
+-   [ ] Remove unused dependencies
+-   [ ] Use AssistedInject for runtime parameters
+-   [ ] Optimize Multibindings
 
 **English**: Optimize Dagger build time by: 1) **Use Hilt** instead of Dagger, 2) **Enable incremental kapt** (`kapt.incremental.apt=true`), 3) **Split large modules** into smaller ones, 4) **Use @Binds** instead of @Provides (generates less code), 5) **Migrate to KSP** when available (faster than kapt), 6) **Use Provider<T>** for lazy initialization, 7) **Minimize Singleton scopes**, 8) **Remove unused dependencies**, 9) **Configure gradle.properties** (parallel, caching), 10) **Use AssistedInject** for runtime params. Typical improvement: 50-70% faster builds. Check Build Analyzer to identify bottlenecks.
 

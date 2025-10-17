@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - svg
-  - image loading
-  - file handling
-  - android
-  - ui
-  - image-loading
+tags: [image loading, file handling, android, ui, image-loading, difficulty/medium]
 ---
 # How to display SVG string as a vector file?
 

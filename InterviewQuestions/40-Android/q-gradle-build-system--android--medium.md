@@ -12,17 +12,8 @@ subtopics:
   - gradle
   - build-variants
   - dependency-management
-tags:
-  - android
-  - gradle
-  - build-system
-  - dependency-management
-  - groovy
-  - kotlin-dsl
-  - difficulty/medium
-language_tags:
-  - en
-  - ru
+tags: [gradle, build-system, dependency-management, groovy, kotlin-dsl, difficulty/medium, android/build-variants, android/dependency-management]
+language_tags: [gradle, build-system, dependency-management, groovy, kotlin-dsl, difficulty/medium, android/build-variants, android/dependency-management]
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Gradle.md
 author: null

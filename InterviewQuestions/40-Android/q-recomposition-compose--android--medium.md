@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/jetpack-compose, android/recomposition, android/state, android/performance, android/remember, difficulty/medium]
 source: internal
 source_note: Created for vault completeness
 
@@ -24,7 +24,7 @@ related: [q-compose-performance-optimization--android--hard, q-jetpack-compose-b
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [android, jetpack-compose, recomposition, state, performance, difficulty/medium]
+tags: [en, ru, android/jetpack-compose, android/recomposition, android/state, android/performance, android/remember, difficulty/medium]
 ---
 
 # Question (EN)

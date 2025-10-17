@@ -11,7 +11,7 @@ difficulty: hard
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, difficulty/hard]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,17 +24,7 @@ related: [video-streaming, image-processing, caching, offline-first]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags:
-    [
-        system-design,
-        instagram,
-        stories,
-        media,
-        video,
-        architecture,
-        android,
-        difficulty/hard,
-    ]
+tags: [en, ru, difficulty/hard]
 ---
 
 # Question (EN)

@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - jetpack-compose
-  - state-management
-  - architecture
-  - best-practices
+tags: [jetpack-compose, state-management, architecture, best-practices, difficulty/medium]
 ---
 # State Hoisting в Jetpack Compose
 
@@ -18,7 +14,7 @@ tags: - android
 ## Answer (EN)
 **State hoisting** (подъем состояния) — это паттерн в Compose, где состояние перемещается из компонента наверх к его caller. Компонент становится **stateless** (без состояния), получая значение и callback для изменения. Это делает компоненты переиспользуемыми, тестируемыми и предсказуемыми.
 
-### Проблема: Stateful компонент
+### Problem: Stateful Component
 
 ```kotlin
 // - НЕПРАВИЛЬНО - stateful компонент (сложно переиспользовать)
@@ -40,7 +36,7 @@ fun SearchBar() {
 // 4. Состояние привязано к компоненту
 ```
 
-### Решение: State Hoisting
+### Solution: State Hoisting
 
 ```kotlin
 // - ПРАВИЛЬНО - stateless компонент (переиспользуемый)
@@ -70,16 +66,16 @@ fun SearchScreen() {
 }
 ```
 
-**Преимущества**:
+**Benefits**:
 - - **Single source of truth** - состояние в одном месте
 - - **Reusability** - компонент можно переиспользовать
 - - **Testability** - легко тестировать
 - - **Predictability** - явный контроль состояния
 - - **Composability** - легко комбинировать
 
-### Принципы State Hoisting
+### State Hoisting Principles
 
-**Правило**: Состояние должно быть hoisted до **lowest common ancestor** (наименьшего общего родителя) всех компонентов, которым нужно это состояние.
+**Rule**: State should be hoisted to the **lowest common ancestor** of all components that need it.
 
 ```kotlin
 @Composable
@@ -133,9 +129,9 @@ fun CartSummary(
 }
 ```
 
-### Паттерны State Hoisting
+### State Hoisting Patterns
 
-#### 1. Value + Callback паттерн
+#### 1. Value + Callback Pattern
 
 ```kotlin
 // Stateless компонент
@@ -169,7 +165,7 @@ fun CounterScreen() {
 }
 ```
 
-#### 2. State Object паттерн
+#### 2. State Object Pattern
 
 ```kotlin
 // State object для сложного состояния
@@ -212,9 +208,9 @@ fun FilterPanel(
 }
 ```
 
-#### 3. State Holder класс
+#### 3. State Holder Class
 
-Для сложной логики состояния используйте `@Stable` класс:
+For complex state logic, use `@Stable` class:
 
 ```kotlin
 @Stable
@@ -282,9 +278,9 @@ fun SearchScreen() {
 }
 ```
 
-### Уровни State Hoisting
+### State Hoisting Levels
 
-#### Уровень 1: Локальный UI state
+#### Level 1: Local UI State
 
 ```kotlin
 @Composable
@@ -307,7 +303,7 @@ fun ExpandableCard(title: String, content: String) {
 }
 ```
 
-#### Уровень 2: Screen-level state
+#### Level 2: Screen-Level State
 
 ```kotlin
 @Composable
@@ -331,7 +327,7 @@ fun ProductListScreen() {
 }
 ```
 
-#### Уровень 3: ViewModel state
+#### Level 3: ViewModel State
 
 ```kotlin
 @HiltViewModel
@@ -368,7 +364,7 @@ fun ProductScreen(viewModel: ProductViewModel = hiltViewModel()) {
 
 ### Stateful vs Stateless Composables
 
-#### Stateful - внутреннее состояние
+#### Stateful - Internal State
 
 ```kotlin
 // Stateful - управляет своим состоянием
@@ -396,7 +392,7 @@ fun Screen() {
 - - Не нужно сохранять состояние
 - - Примеры: animation state, scroll state, expanded/collapsed
 
-#### Stateless - hoisted состояние
+#### Stateless - Hoisted State
 
 ```kotlin
 // Stateless - получает состояние извне
@@ -420,16 +416,16 @@ fun Screen() {
 }
 ```
 
-**Когда использовать**:
-- - Нужен контроль состояния извне
-- - Множественное использование
-- - Тестирование
-- - Состояние в ViewModel
-- - Примеры: форма ввода, фильтры, выбранные элементы
+**When to use**:
+- - Need external control of state
+- - Multiple usage scenarios
+- - Testing
+- - State in ViewModel
+- - Examples: input forms, filters, selected items
 
-### Практические примеры
+### Practical Examples
 
-#### Пример 1: Форма регистрации
+#### Example 1: Registration Form
 
 ```kotlin
 data class RegistrationFormState(
@@ -500,7 +496,7 @@ fun RegistrationScreen(viewModel: RegistrationViewModel = hiltViewModel()) {
 }
 ```
 
-#### Пример 2: Tabs с контентом
+#### Example 2: Tabs with Content
 
 ```kotlin
 @Composable
@@ -544,7 +540,7 @@ fun ProfileScreen() {
 }
 ```
 
-#### Пример 3: Multi-selection список
+#### Example 3: Multi-Selection List
 
 ```kotlin
 @Composable
@@ -606,7 +602,7 @@ fun ProductSelectionScreen() {
 }
 ```
 
-### Hoisting с derivedStateOf
+### Hoisting with derivedStateOf
 
 ```kotlin
 @Composable

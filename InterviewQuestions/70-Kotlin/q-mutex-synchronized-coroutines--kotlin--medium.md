@@ -24,19 +24,22 @@ subtopics:   - coroutines
   - thread-safety
   - concurrency
 ---
-# Mutex vs synchronized in Kotlin coroutines
 
-## English Version
+# Question (EN)
+> What is the difference between `Mutex` and `synchronized` in Kotlin coroutines, and when should you use each?
 
-### Problem Statement
+# Вопрос (RU)
+> В чем разница между `Mutex` и `synchronized` в Kotlin корутинах, и когда следует использовать каждый из них?
+
+---
+
+## Answer (EN)
 
 When working with shared mutable state in Kotlin coroutines, you need thread-safe synchronization mechanisms. Traditional Java's `synchronized` blocks and Kotlin's `@Synchronized` annotation block threads, which is inefficient in the coroutine world. **Mutex** provides a suspension-based alternative that doesn't block threads.
 
-**The Question:** What is the difference between `Mutex` and `synchronized` in Kotlin coroutines, and when should you use each?
 
-### Detailed Answer
 
-#### What is Mutex?
+### What is Mutex?
 
 **Mutex** (Mutual Exclusion) is a synchronization primitive from `kotlinx.coroutines.sync` that provides mutual exclusion without blocking threads. Instead of blocking, it **suspends** the coroutine until the lock is available.
 
@@ -54,7 +57,7 @@ suspend fun incrementCounter() {
 }
 ```
 
-#### Mutex vs synchronized: Key Differences
+### Mutex vs synchronized: Key Differences
 
 | Feature | Mutex | synchronized |
 |---------|-------|--------------|
@@ -67,7 +70,7 @@ suspend fun incrementCounter() {
 | **Try lock** | `tryLock()` available | `synchronized` doesn't support |
 | **Performance** | Better for high contention | Better for very low contention |
 
-#### Basic Mutex Usage
+### Basic Mutex Usage
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -120,7 +123,7 @@ suspend fun main() = coroutineScope {
 }
 ```
 
-#### Why Mutex is NOT Reentrant (Critical!)
+### Why Mutex is NOT Reentrant (Critical!)
 
 **Reentrant** means the same thread can acquire the lock multiple times. Mutex is **NOT reentrant** and will deadlock:
 
@@ -163,7 +166,7 @@ private fun innerWithoutLock() {
 }
 ```
 
-#### Mutex vs AtomicInteger/AtomicReference
+### Mutex vs AtomicInteger/AtomicReference
 
 For simple operations like counter increment, use **atomic types** instead of Mutex:
 
@@ -217,7 +220,7 @@ class UserSession {
 }
 ```
 
-#### Performance Implications
+### Performance Implications
 
 **Mutex Performance:**
 - Low contention: ~10-20ns overhead per lock (very fast)
@@ -278,7 +281,7 @@ fun main() = runBlocking {
 }
 ```
 
-#### Common Patterns
+### Common Patterns
 
 **Pattern 1: Shared Counter**
 
@@ -378,7 +381,7 @@ class Connection {
 }
 ```
 
-#### Real Android ViewModel Example
+### Real Android ViewModel Example
 
 ```kotlin
 class UserProfileViewModel : ViewModel() {
@@ -443,7 +446,7 @@ val Int.minutes: kotlin.time.Duration
     get() = kotlin.time.Duration.parse("${this}m")
 ```
 
-#### Mutex Fairness
+### Mutex Fairness
 
 By default, Mutex is **unfair** - coroutines may acquire the lock out of order. For fair ordering:
 
@@ -469,7 +472,7 @@ class FairMutex {
 }
 ```
 
-#### Deadlock Scenarios and Prevention
+### Deadlock Scenarios and Prevention
 
 **Scenario 1: Lock Ordering Deadlock**
 
@@ -549,7 +552,7 @@ private fun innerWithoutLock() {
 }
 ```
 
-#### tryLock and Timeouts
+### tryLock and Timeouts
 
 ```kotlin
 val mutex = Mutex()
@@ -575,7 +578,7 @@ suspend fun acquireWithTimeout(): Boolean {
 }
 ```
 
-#### Production Code Example: Rate-Limited API Client
+### Production Code Example: Rate-Limited API Client
 
 ```kotlin
 class ApiClient {
@@ -611,7 +614,7 @@ class ApiClient {
 }
 ```
 
-#### Testing Mutex-Based Code
+### Testing Mutex-Based Code
 
 ```kotlin
 import kotlinx.coroutines.test.*
@@ -653,7 +656,7 @@ class BankAccountTest {
 
 ### Common Pitfalls and Best Practices
 
-#### Pitfalls
+### Pitfalls
 
 1. **Using Mutex reentrantly** - Will deadlock
 2. **Holding lock during long operations** - Blocks other coroutines unnecessarily
@@ -663,7 +666,7 @@ class BankAccountTest {
 6. **Lock ordering violations** - Causes deadlocks
 7. **Using Mutex for simple counters** - Use AtomicInteger instead
 
-#### Best Practices
+### Best Practices
 
 1.  Use `withLock` instead of manual `lock()`/`unlock()`
 2.  Keep critical sections small and fast
@@ -710,17 +713,13 @@ class BankAccountTest {
 
 ---
 
-## Русская версия
-
-### Формулировка проблемы
+## Ответ (RU)
 
 При работе с общим изменяемым состоянием в Kotlin корутинах необходимы потокобезопасные механизмы синхронизации. Традиционные Java блоки `synchronized` и Kotlin аннотация `@Synchronized` блокируют потоки, что неэффективно в мире корутин. **Mutex** предоставляет альтернативу на основе приостановки, которая не блокирует потоки.
 
-**Вопрос:** В чем разница между `Mutex` и `synchronized` в Kotlin корутинах, и когда следует использовать каждый из них?
 
-### Подробный ответ
 
-#### Что такое Mutex?
+### Что такое Mutex?
 
 **Mutex** (Взаимное исключение) - это примитив синхронизации из `kotlinx.coroutines.sync`, который обеспечивает взаимное исключение без блокировки потоков. Вместо блокировки он **приостанавливает** корутину, пока блокировка не станет доступной.
 
@@ -738,7 +737,7 @@ suspend fun incrementCounter() {
 }
 ```
 
-#### Mutex vs synchronized: Ключевые различия
+### Mutex vs synchronized: Ключевые различия
 
 | Характеристика | Mutex | synchronized |
 |----------------|-------|--------------|
@@ -751,7 +750,7 @@ suspend fun incrementCounter() {
 | **Try lock** | Доступен `tryLock()` | `synchronized` не поддерживает |
 | **Производительность** | Лучше при высокой конкуренции | Лучше при очень низкой конкуренции |
 
-#### Базовое использование Mutex
+### Базовое использование Mutex
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -804,7 +803,7 @@ suspend fun main() = coroutineScope {
 }
 ```
 
-#### Почему Mutex НЕ реентерабельный (Критично!)
+### Почему Mutex НЕ реентерабельный (Критично!)
 
 **Реентерабельность** означает, что один и тот же поток может захватить блокировку несколько раз. Mutex **НЕ реентерабельный** и приведет к deadlock:
 
@@ -847,7 +846,7 @@ private fun innerWithoutLock() {
 }
 ```
 
-#### Mutex vs AtomicInteger/AtomicReference
+### Mutex vs AtomicInteger/AtomicReference
 
 Для простых операций типа увеличения счетчика используйте **атомарные типы** вместо Mutex:
 
@@ -901,7 +900,7 @@ class UserSession {
 }
 ```
 
-#### Производительность
+### Производительность
 
 **Производительность Mutex:**
 - Низкая конкуренция: ~10-20нс накладные расходы на блокировку (очень быстро)
@@ -913,7 +912,7 @@ class UserSession {
 - Высокая конкуренция: Потоки блокируются, тратя ресурсы ОС
 - Масштабируемость: Плохая (100и потоков конкурируют за блокировку)
 
-#### Общие паттерны
+### Общие паттерны
 
 **Паттерн 1: Общий счетчик**
 
@@ -970,7 +969,7 @@ class CacheWithMutex<K, V> {
 }
 ```
 
-#### Реальный пример Android ViewModel
+### Реальный пример Android ViewModel
 
 ```kotlin
 class UserProfileViewModel : ViewModel() {

@@ -5,12 +5,7 @@ topic: devops-ci-cd
 difficulty: medium
 status: draft
 created: 2025-10-11
-tags: - android
-  - ci-cd
-  - devops
-  - github-actions
-  - gitlab-ci
-  - automation
+tags: [ci-cd, devops, github-actions, gitlab-ci, automation, difficulty/medium]
 date_updated: 2025-10-13
 moc: moc-devops-ci-cd
 related_questions:   - q-cicd-automated-testing--devops--medium

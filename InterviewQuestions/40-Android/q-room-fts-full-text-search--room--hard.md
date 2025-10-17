@@ -5,13 +5,7 @@ topic: room
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - room
-  - database
-  - fts
-  - search
-  - performance
-  - optimization
-  - difficulty/hard
+tags: [database, fts, search, performance, optimization, difficulty/hard]
 ---
 # Room Full-Text Search (FTS) / Полнотекстовый поиск в Room
 

@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/performance, android/app-size, android/optimization, android/proguard, android/r8, android/app-bundle, android/splits, difficulty/medium]
 source: Original
 source_note: App size reduction best practices
 
@@ -24,7 +24,7 @@ related: [build-optimization-gradle, proguard-r8, play-feature-delivery]
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [android, performance, app-size, optimization, proguard, r8, app-bundle, splits, difficulty/medium]
+tags: [en, ru, android/performance, android/app-size, android/optimization, android/proguard, android/r8, android/app-bundle, android/splits, difficulty/medium]
 ---
 # Question (EN)
 > Comprehensively reduce APK/AAB size. Use resource shrinking, code minification with R8, native library filtering, split APKs, and Android App Bundle configuration.

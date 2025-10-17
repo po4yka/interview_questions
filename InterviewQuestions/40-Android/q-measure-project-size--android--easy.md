@@ -5,15 +5,7 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/project-structure
-  - apk-size
-  - codebase-analysis
-  - codebase-size
-  - metrics
-  - modules
-  - project-metrics
-  - project-structure
+tags: [android/project-structure, apk-size, codebase-analysis, codebase-size, metrics, modules, project-metrics, project-structure, difficulty/easy]
 ---
 # Как можно измерить размер проекта?
 

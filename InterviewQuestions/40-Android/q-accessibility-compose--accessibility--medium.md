@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-11
-tags: - android
-  - accessibility
-  - compose
-  - talkback
-  - inclusive-design
+tags: [accessibility, compose, talkback, inclusive-design, difficulty/medium]
 related:   - q-accessibility-talkback--accessibility--medium
   - q-accessibility-testing--accessibility--medium
   - q-custom-view-accessibility--custom-views--medium

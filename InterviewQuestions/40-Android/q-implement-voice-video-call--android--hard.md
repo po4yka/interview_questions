@@ -11,7 +11,7 @@ difficulty: hard
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/webrtc, android/real-time, android/media, android/networking, android/peer-to-peer, difficulty/hard]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: [webrtc, real-time-communication, websocket, media-streaming]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android, webrtc, voice-call, video-call, real-time, peer-to-peer, difficulty/hard]
+tags: [en, ru, android/webrtc, android/real-time, android/media, android/networking, android/peer-to-peer, difficulty/hard]
 ---
 # Question (EN)
 > How would you implement voice and video calling features in an Android application?

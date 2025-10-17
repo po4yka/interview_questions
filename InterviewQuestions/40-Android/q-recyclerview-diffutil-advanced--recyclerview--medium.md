@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - recyclerview
-  - diffutil
-  - performance
-  - lists
+tags: [diffutil, performance, lists, difficulty/medium]
 ---
 # RecyclerView DiffUtil Advanced
 

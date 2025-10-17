@@ -5,13 +5,7 @@ topic: networking
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - networking
-  - optimization
-  - deduplication
-  - concurrency
-  - performance
-  - caching
-  - difficulty/hard
+tags: [optimization, deduplication, concurrency, performance, caching, difficulty/hard]
 ---
 # Network Request Deduplication / Дедупликация сетевых запросов
 

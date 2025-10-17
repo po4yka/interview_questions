@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/annotation-processing, android/kapt, android/ksp, android/codegen, android/build-tools, difficulty/medium]
 source: internal
 source_note: Created for vault completeness
 
@@ -24,7 +24,7 @@ related: [q-kapt-vs-ksp--android--medium]
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [android, annotation-processing, kapt, ksp, codegen, difficulty/medium]
+tags: [en, ru, android/annotation-processing, android/kapt, android/ksp, android/codegen, android/build-tools, difficulty/medium]
 ---
 
 # Question (EN)

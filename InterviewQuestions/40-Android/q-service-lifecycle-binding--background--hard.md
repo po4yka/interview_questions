@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - Background
-  - Service
-  - IPC
+tags: [Kotlin, Background, Service, IPC, difficulty/hard]
 ---
 # Service Lifecycle and Binding - Advanced Patterns
 

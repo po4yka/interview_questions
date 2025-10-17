@@ -5,13 +5,7 @@ topic: room
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - room
-  - database
-  - type-converters
-  - serialization
-  - json
-  - performance
-  - difficulty/medium
+tags: [database, type-converters, serialization, json, performance, difficulty/medium]
 ---
 # Room Advanced Type Converters / Продвинутые Type Converters в Room
 

@@ -22,19 +22,22 @@ subtopics:   - coroutines
   - ceh
   - error-handling
 ---
-# CoroutineExceptionHandler: installation and usage
 
-## English Version
+# Question (EN)
+> What is CoroutineExceptionHandler, where can it be installed, and how does it work with different coroutine builders (launch vs async)?
 
-### Problem Statement
+# Вопрос (RU)
+> Что такое CoroutineExceptionHandler, где его можно установить, и как он работает с разными билдерами корутин (launch vs async)?
+
+---
+
+## Answer (EN)
 
 Unhandled exceptions in coroutines can crash your application or silently fail, making debugging difficult. **CoroutineExceptionHandler (CEH)** provides a last-resort mechanism to catch uncaught exceptions in coroutines. However, it doesn't work everywhere and has specific installation rules.
 
-**The Question:** What is CoroutineExceptionHandler, where can it be installed, and how does it work with different coroutine builders (launch vs async)?
 
-### Detailed Answer
 
-#### What is CoroutineExceptionHandler?
+### What is CoroutineExceptionHandler?
 
 **CoroutineExceptionHandler** is a `CoroutineContext.Element` that handles uncaught exceptions in coroutines. It acts as a **last-resort handler** - similar to `Thread.UncaughtExceptionHandler` for threads.
 
@@ -54,7 +57,7 @@ fun main() = runBlocking {
 // Output: Caught exception: java.lang.RuntimeException: Test exception
 ```
 
-#### Key Principles
+### Key Principles
 
 **CEH works ONLY on:**
 1.  **Root coroutines** (direct children of CoroutineScope)
@@ -67,7 +70,7 @@ fun main() = runBlocking {
 3.  **runBlocking** (exceptions thrown directly)
 4.  **supervisorScope children** (need own CEH)
 
-#### CEH with launch (Works)
+### CEH with launch (Works)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -91,7 +94,7 @@ fun main() = runBlocking {
 // Program continues
 ```
 
-#### CEH with async (Does NOT Work)
+### CEH with async (Does NOT Work)
 
 ```kotlin
 fun main() = runBlocking {
@@ -118,7 +121,7 @@ fun main() = runBlocking {
 
 **Why?** `async` exposes exceptions through its `Deferred` result. You must call `await()` and handle the exception there. CEH is bypassed.
 
-#### Exception Propagation Hierarchy
+### Exception Propagation Hierarchy
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -151,7 +154,7 @@ fun main() = runBlocking {
 
 **Rule:** Exceptions in child coroutines propagate UP to the nearest CEH in a parent coroutine.
 
-#### Installing CEH in CoroutineScope
+### Installing CEH in CoroutineScope
 
 **Pattern 1: Scope-level CEH**
 
@@ -194,7 +197,7 @@ fun fetchDataWithCustomHandler() = viewModelScope.launch {
 }
 ```
 
-#### Default Exception Handler
+### Default Exception Handler
 
 If no CEH is installed, the **default handler** is used:
 
@@ -218,7 +221,7 @@ fun main() = runBlocking {
 // (Stack trace printed to stderr)
 ```
 
-#### CEH in Android Application
+### CEH in Android Application
 
 **Global crash handler in Application class:**
 
@@ -287,7 +290,7 @@ fun Exception.toUserFriendlyMessage(): String {
 }
 ```
 
-#### Why CEH Doesn't Catch Exceptions in async
+### Why CEH Doesn't Catch Exceptions in async
 
 ```kotlin
 fun main() = runBlocking {
@@ -324,7 +327,7 @@ fun main() = runBlocking {
 
 **Solution:** Always await() async results or use launch instead.
 
-#### supervisorScope and CEH Interaction
+### supervisorScope and CEH Interaction
 
 ```kotlin
 fun main() = runBlocking {
@@ -386,7 +389,7 @@ fun main() = runBlocking {
 // Child 2 still running
 ```
 
-#### Real-World Example: Logging and Analytics
+### Real-World Example: Logging and Analytics
 
 ```kotlin
 class ProductionCoroutineExceptionHandler(
@@ -449,7 +452,7 @@ class MyViewModel(
 }
 ```
 
-#### CEH Limitations and Alternatives
+### CEH Limitations and Alternatives
 
 **Limitations:**
 
@@ -499,7 +502,7 @@ repository.dataFlow
     }
 ```
 
-#### Best Practices
+### Best Practices
 
 **1. Use CEH for unexpected exceptions:**
 
@@ -565,7 +568,7 @@ launch(handler) {
 }
 ```
 
-#### Testing CEH
+### Testing CEH
 
 ```kotlin
 import kotlinx.coroutines.test.*
@@ -638,7 +641,7 @@ class CEHTest {
 }
 ```
 
-#### Common Mistakes
+### Common Mistakes
 
 **Mistake 1: Installing CEH on child coroutines**
 
@@ -701,21 +704,17 @@ launch(handler) {
 
 ---
 
-## Русская версия
-
-### Формулировка проблемы
+## Ответ (RU)
 
 Необработанные исключения в корутинах могут приводить к краху приложения или незаметному сбою, затрудняя отладку. **CoroutineExceptionHandler (CEH)** предоставляет механизм последней инстанции для перехвата необработанных исключений в корутинах. Однако он работает не везде и имеет специфические правила установки.
 
-**Вопрос:** Что такое CoroutineExceptionHandler, где его можно установить, и как он работает с разными билдерами корутин (launch vs async)?
 
-### Подробный ответ
 
-#### Что такое CoroutineExceptionHandler?
+### Что такое CoroutineExceptionHandler?
 
 **CoroutineExceptionHandler** - это `CoroutineContext.Element`, который обрабатывает необработанные исключения в корутинах. Он действует как **обработчик последней инстанции** - аналогично `Thread.UncaughtExceptionHandler` для потоков.
 
-#### Ключевые принципы
+### Ключевые принципы
 
 **CEH работает ТОЛЬКО на:**
 1.  **Корневых корутинах** (прямых потомках CoroutineScope)
@@ -728,7 +727,7 @@ launch(handler) {
 3.  **runBlocking** (исключения выбрасываются напрямую)
 4.  **Потомках supervisorScope** (нужен собственный CEH)
 
-#### CEH с launch (Работает)
+### CEH с launch (Работает)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -752,7 +751,7 @@ fun main() = runBlocking {
 // Программа продолжается
 ```
 
-#### CEH с async (НЕ работает)
+### CEH с async (НЕ работает)
 
 ```kotlin
 fun main() = runBlocking {
@@ -779,7 +778,7 @@ fun main() = runBlocking {
 
 **Почему?** `async` предоставляет исключения через свой результат `Deferred`. Вы должны вызвать `await()` и обработать исключение там. CEH обходится.
 
-#### Реальный пример Android ViewModel
+### Реальный пример Android ViewModel
 
 ```kotlin
 class UserViewModel : ViewModel() {

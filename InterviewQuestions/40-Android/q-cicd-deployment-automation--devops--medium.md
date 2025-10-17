@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-11
-tags: - android
-  - ci-cd
-  - deployment
-  - play-store
-  - fastlane
-  - automation
+tags: [ci-cd, deployment, play-store, fastlane, automation, difficulty/medium]
 related:   - q-cicd-pipeline-setup--devops--medium
   - q-app-bundle-optimization--distribution--medium
   - q-app-versioning-release--distribution--medium

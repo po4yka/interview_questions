@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/performance, android/startup, android/app-startup, android/optimization, android/lazy-init, android/profiling, difficulty/medium]
 source: Original
 source_note: App startup optimization best practices
 
@@ -24,7 +24,7 @@ related: [macrobenchmark-startup, baseline-profiles-optimization, memory-leak-de
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [android, performance, startup, app-startup, optimization, lazy-init, profiling, difficulty/medium]
+tags: [en, ru, android/performance, android/startup, android/app-startup, android/optimization, android/lazy-init, android/profiling, difficulty/medium]
 ---
 # Question (EN)
 > Optimize app startup time using App Startup library, lazy initialization, content provider consolidation, and deferred task execution.

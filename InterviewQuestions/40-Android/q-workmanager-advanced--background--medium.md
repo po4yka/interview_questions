@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - android
-  - workmanager
-  - background-processing
-  - jetpack
-  - kotlin-coroutines
+tags: [workmanager, background-processing, jetpack, kotlin-coroutines, difficulty/medium]
 related:   - q-workmanager-chaining--background--medium
   - q-foreground-service-types--background--medium
   - q-coroutines-structured-concurrency--coroutines--hard

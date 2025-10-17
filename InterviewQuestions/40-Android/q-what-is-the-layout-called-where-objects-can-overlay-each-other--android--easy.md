@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - FrameLayout
-  - Jetpack Compose
-  - android
-  - ui
-  - layouts
-  - framelayout
+tags: [Jetpack Compose, android, ui, layouts, framelayout, difficulty/medium]
 ---
 # What is the layout called where objects can overlay each other?
 

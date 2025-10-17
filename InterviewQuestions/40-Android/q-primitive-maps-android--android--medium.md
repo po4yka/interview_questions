@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - performance
-  - collections
-  - memory-optimization
+tags: [performance, collections, memory-optimization, difficulty/medium]
 ---
 # Примитивные коллекции Map в Android
 

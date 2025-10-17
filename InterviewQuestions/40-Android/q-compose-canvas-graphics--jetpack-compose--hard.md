@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - android
-  - jetpack-compose
-  - canvas
-  - graphics
-  - custom-drawing
+tags: [jetpack-compose, canvas, graphics, custom-drawing, android/compose, android/canvas, android/graphics, android/custom-drawing, android/animation, difficulty/hard]
 date_created: 2025-10-12
 date_updated: 2025-10-12
 moc: moc-android

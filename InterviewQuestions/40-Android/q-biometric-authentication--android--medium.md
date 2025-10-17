@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - android
-  - security
-  - biometric
-  - authentication
-  - androidx-biometric
+tags: [security, biometric, authentication, androidx-biometric, android/biometric, android/authentication, android/fingerprint, android/face-recognition, difficulty/medium]
 date_created: 2025-10-12
 date_updated: 2025-10-12
 moc: moc-android

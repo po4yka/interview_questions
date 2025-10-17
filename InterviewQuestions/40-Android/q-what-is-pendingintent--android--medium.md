@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - PendingIntent
-  - Android Components
-  - android
-  - ui
-  - intents
-  - pending-intent
+tags: [Android Components, android, ui, intents, pending-intent, difficulty/medium]
 ---
 
 # Question (EN)

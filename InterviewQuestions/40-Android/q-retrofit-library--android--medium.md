@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - retrofit
-  - networking
-  - rest-api
+tags: [retrofit, networking, rest-api, difficulty/medium]
 ---
 # Что из себя представляет Retrofit?
 
@@ -17,7 +14,7 @@ tags: - android
 ## Answer (EN)
 Retrofit — это типобезопасный HTTP-клиент, разработанный компанией Square для Android и Java. Этот инструмент предназначен для упрощения процесса отправки сетевых запросов к RESTful API и обработки ответов сервера.
 
-### Основные характеристики
+### Key Features
 
 #### 1. Простота в использовании
 
@@ -36,7 +33,7 @@ interface ApiService {
 }
 ```
 
-#### 2. Преобразование данных
+#### 2. Data Conversion
 
 Автоматически обрабатывает данные запросов и ответов с помощью конвертеров (Gson, Moshi, Jackson и др.).
 
@@ -57,7 +54,7 @@ data class User(
 )
 ```
 
-#### 3. Асинхронные и синхронные вызовы
+#### 3. Asynchronous and Synchronous Calls
 
 Поддерживаются как синхронные, так и асинхронные вызовы API.
 
@@ -92,7 +89,7 @@ apiService.getUser(123).enqueue(object : Callback<User> {
 })
 ```
 
-#### 4. Настраиваемость
+#### 4. Customizability
 
 Благодаря использованию OkHttp в качестве сетевого клиента, Retrofit предлагает расширенные возможности по настройке HTTP-клиентов.
 
@@ -119,7 +116,7 @@ val retrofit = Retrofit.Builder()
     .build()
 ```
 
-### Полный пример использования
+### Complete Usage Example
 
 ```kotlin
 // 1. Определение API интерфейса

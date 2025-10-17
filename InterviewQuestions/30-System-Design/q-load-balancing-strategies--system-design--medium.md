@@ -21,19 +21,21 @@ subtopics:   - load-balancing
   - high-availability
   - distributed-systems
 ---
-# Load Balancing Algorithms and Strategies
+# Question (EN)
+> What are the main load balancing algorithms? When should you use each algorithm, and what are their trade-offs?
 
-## English Version
+# Вопрос (RU)
+> Каковы основные алгоритмы балансировки нагрузки? Когда следует использовать каждый алгоритм и каковы их компромиссы?
 
-### Problem Statement
+---
+
+## Answer (EN)
 
 When you have multiple servers handling requests, you need a **load balancer** to distribute traffic efficiently across them. The algorithm you choose significantly impacts performance, fairness, and user experience.
 
-**The Question:** What are the main load balancing algorithms? When should you use each algorithm, and what are their trade-offs?
 
-### Detailed Answer
 
-#### What is Load Balancing?
+### What is Load Balancing?
 
 **Load Balancing** distributes incoming network traffic across multiple servers to ensure:
 -  No single server is overwhelmed
@@ -53,7 +55,7 @@ Clients    Load Balancer
                        
 ```
 
-#### Load Balancing Algorithms
+### Load Balancing Algorithms
 
 ### 1. Round Robin (Simple, Fair)
 
@@ -488,7 +490,7 @@ resource "aws_lb_target_group" "app" {
 
 ### Advanced Patterns
 
-#### Layer 4 vs Layer 7 Load Balancing
+### Layer 4 vs Layer 7 Load Balancing
 
 **Layer 4 (Transport Layer):**
 - Routes based on IP + Port
@@ -512,7 +514,7 @@ Layer 7 Load Balancer (ALB):
 
 ```
 
-#### Health Checks
+### Health Checks
 
 ```kotlin
 class HealthCheckLoadBalancer(
@@ -565,17 +567,13 @@ class HealthCheckLoadBalancer(
 
 ---
 
-## Russian Version
-
-### Постановка задачи
+## Ответ (RU)
 
 Когда у вас есть несколько серверов, обрабатывающих запросы, вам нужен **балансировщик нагрузки** для эффективного распределения трафика между ними. Выбранный алгоритм значительно влияет на производительность, справедливость и пользовательский опыт.
 
-**Вопрос:** Каковы основные алгоритмы балансировки нагрузки? Когда следует использовать каждый алгоритм и каковы их компромиссы?
 
-### Детальный ответ
 
-#### Что такое балансировка нагрузки?
+### Что такое балансировка нагрузки?
 
 **Балансировка нагрузки** распределяет входящий сетевой трафик между несколькими серверами для обеспечения:
 -  Ни один сервер не перегружен
@@ -583,7 +581,7 @@ class HealthCheckLoadBalancer(
 -  Лучшая производительность и время отклика
 -  Эффективное использование ресурсов
 
-#### Алгоритмы балансировки нагрузки
+### Алгоритмы балансировки нагрузки
 
 ### 1. Round Robin (Круговой, по очереди)
 

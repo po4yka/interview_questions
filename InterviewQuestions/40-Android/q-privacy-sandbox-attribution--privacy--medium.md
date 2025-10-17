@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - privacy-sandbox
-  - attribution-reporting
-  - conversion-tracking
-  - privacy
-  - advertising
+tags: [privacy-sandbox, attribution-reporting, conversion-tracking, privacy, advertising, difficulty/medium]
 ---
 # Privacy Sandbox: Attribution Reporting API
 

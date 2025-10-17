@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - android
-  - workmanager
-  - alarmmanager
-  - jobscheduler
-  - background-processing
+tags: [workmanager, alarmmanager, jobscheduler, background-processing, android/background-execution, android/workmanager, difficulty/medium]
 date_updated: 2025-10-13
 moc: moc-android
 related_questions:   - q-workmanager-advanced--background--medium

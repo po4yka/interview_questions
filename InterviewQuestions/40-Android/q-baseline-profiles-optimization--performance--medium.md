@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/performance, android/baseline-profiles, android/optimization, android/startup, android/jank, android/aot, android/macrobenchmark, difficulty/medium]
 source: Original
 source_note: Baseline profiles performance optimization
 
@@ -24,7 +24,7 @@ related: [macrobenchmark-startup, app-startup-optimization, jank-detection-frame
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [android, performance, baseline-profiles, optimization, startup, jank, aot, macrobenchmark, difficulty/medium]
+tags: [en, ru, android/performance, android/baseline-profiles, android/optimization, android/startup, android/jank, android/aot, android/macrobenchmark, difficulty/medium]
 ---
 # Question (EN)
 > Generate and use Baseline Profiles for app startup and jank optimization. Set up Macrobenchmark for profile generation. Measure performance improvements in production.

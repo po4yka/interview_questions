@@ -5,13 +5,7 @@ topic: room
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - room
-  - database
-  - relations
-  - embedded
-  - modeling
-  - junction-table
-  - difficulty/medium
+tags: [database, relations, embedded, modeling, junction-table, difficulty/medium]
 ---
 # Room Relations and Embedded / Отношения и Embedded в Room
 

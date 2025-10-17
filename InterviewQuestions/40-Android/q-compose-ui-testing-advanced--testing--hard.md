@@ -5,11 +5,7 @@ topic: testing
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - testing
-  - compose-testing
-  - ui-testing
-  - semantics
-  - accessibility
+tags: [compose-testing, ui-testing, semantics, accessibility, difficulty/hard]
 ---
 # Advanced Compose UI Testing
 

@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - jetpack-compose
-  - testing
-  - ui-testing
-  - compose-test
+tags: [jetpack-compose, testing, ui-testing, compose-test, difficulty/medium]
 ---
 # Testing Compose UI
 
@@ -18,7 +14,7 @@ tags: - android
 ## Answer (EN)
 **Compose UI testing** использует декларативный API для поиска, взаимодействия и верификации composable функций.
 
-### Основной setup
+### Basic setup
 
 ```kotlin
 class LoginScreenTest {
@@ -49,44 +45,44 @@ class LoginScreenTest {
 - - Синхронизируется с recomposition
 - - Предоставляет finders, assertions, actions
 
-### Finders - поиск элементов
+### Finders - finding elements
 
 ```kotlin
-// По тексту
+// By text
 composeTestRule.onNodeWithText("Submit")
 composeTestRule.onNodeWithText("Submit", ignoreCase = true)
 composeTestRule.onNodeWithText("Submit", substring = true)
 
-// По content description (для accessibility)
+// By content description (for accessibility)
 composeTestRule.onNodeWithContentDescription("Profile picture")
 
-// По test tag
+// By test tag
 composeTestRule.onNodeWithTag("login_button")
 
-// По semantic property
+// By semantic property
 composeTestRule.onNode(hasText("Submit"))
 composeTestRule.onNode(isEnabled())
 composeTestRule.onNode(hasClickAction())
 
-// Комбинирование условий
+// Combining conditions
 composeTestRule.onNode(
     hasText("Submit") and isEnabled() and hasClickAction()
 )
 
-// Поиск нескольких элементов
+// Finding multiple elements
 composeTestRule.onAllNodesWithText("Item")
 composeTestRule.onAllNodesWithTag("list_item")
 
-// Фильтрация
+// Filtering
 composeTestRule.onAllNodesWithText("Item")
     .filter(isEnabled())
     .onFirst()
 ```
 
-### Test Tags - лучший способ для тестирования
+### Test Tags - best way for testing
 
 ```kotlin
-// Composable с test tags
+// Composable with test tags
 @Composable
 fun LoginScreen() {
     Column {
@@ -111,7 +107,7 @@ fun LoginScreen() {
     }
 }
 
-// Тест с test tags
+// Test with test tags
 @Test
 fun loginButton_enabled_when_fields_valid() {
     composeTestRule.setContent {
@@ -129,13 +125,13 @@ fun loginButton_enabled_when_fields_valid() {
 }
 ```
 
-**Почему test tags лучше**:
+**Why test tags are better**:
 - - Не зависят от текста (локализация)
 - - Более стабильны при рефакторинге
 - - Явно показывают testable элементы
 - - Работают быстрее чем text search
 
-### Actions - взаимодействие с элементами
+### Actions - interacting with elements
 
 ```kotlin
 // Click
@@ -170,7 +166,7 @@ composeTestRule.onNodeWithTag("item").performTouchInput {
 }
 ```
 
-### Assertions - проверка состояния
+### Assertions - verifying state
 
 ```kotlin
 // Existence
@@ -205,7 +201,7 @@ composeTestRule.onNodeWithTag("progress")
     .assert(hasProgressBarRangeInfo(ProgressBarRangeInfo(0.5f, 0f..1f)))
 ```
 
-### Тестирование State изменений
+### Testing State changes
 
 ```kotlin
 @Composable
@@ -252,7 +248,7 @@ fun counter_increments_on_button_click() {
 }
 ```
 
-### Тестирование LazyColumn/LazyRow
+### Testing LazyColumn/LazyRow
 
 ```kotlin
 @Composable
@@ -314,7 +310,7 @@ fun userList_scrolls_to_bottom() {
 }
 ```
 
-### Тестирование с ViewModel
+### Testing with ViewModel
 
 ```kotlin
 class ProductsScreenTest {
@@ -378,29 +374,29 @@ class ProductsScreenTest {
 }
 ```
 
-### waitUntil - ожидание состояния
+### waitUntil - waiting for state
 
 ```kotlin
-// Ждем пока элемент появится
+// Wait until element appears
 composeTestRule.waitUntil(timeoutMillis = 5000) {
     composeTestRule.onAllNodesWithText("Data loaded")
         .fetchSemanticsNodes().isNotEmpty()
 }
 
-// Ждем пока элемент исчезнет
+// Wait until element disappears
 composeTestRule.waitUntil(timeoutMillis = 5000) {
     composeTestRule.onAllNodesWithTag("loading")
         .fetchSemanticsNodes().isEmpty()
 }
 
-// Ждем определенное количество элементов
+// Wait for specific number of elements
 composeTestRule.waitUntil(timeoutMillis = 5000) {
     composeTestRule.onAllNodesWithTag("list_item")
         .fetchSemanticsNodes().size == 10
 }
 ```
 
-### Тестирование Navigation
+### Testing Navigation
 
 ```kotlin
 @Test
@@ -423,7 +419,7 @@ fun clicking_product_navigates_to_details() {
 }
 ```
 
-### Тестирование Dialogs и Bottom Sheets
+### Testing Dialogs and Bottom Sheets
 
 ```kotlin
 @Composable
@@ -496,10 +492,10 @@ fun dialog_cancels_deletion() {
 }
 ```
 
-### unmergedTree - для вложенных элементов
+### unmergedTree - for nested elements
 
 ```kotlin
-// По умолчанию Compose мержит semantics дочерних элементов
+// By default Compose merges child semantics
 @Composable
 fun ListItem(title: String, subtitle: String) {
     Column {
@@ -508,13 +504,13 @@ fun ListItem(title: String, subtitle: String) {
     }
 }
 
-// - Не найдет - semantics смержены
+// Won't find - semantics are merged
 composeTestRule.onNodeWithText("Subtitle").assertExists() // FAIL
 
-// - useUnmergedTree = true
+// useUnmergedTree = true
 composeTestRule.onNodeWithText("Subtitle", useUnmergedTree = true).assertExists()
 
-// Или отключить merging в Composable
+// Or disable merging in Composable
 @Composable
 fun ListItem(title: String, subtitle: String) {
     Column(modifier = Modifier.semantics { testTagsAsResourceId = true }) {
@@ -526,7 +522,7 @@ fun ListItem(title: String, subtitle: String) {
 composeTestRule.onNodeWithTag("subtitle").assertExists() // OK
 ```
 
-### Тестирование Animations
+### Testing Animations
 
 ```kotlin
 @Composable
@@ -579,7 +575,7 @@ fun animatedVisibility_shows_and_hides_content() {
 }
 ```
 
-### mainClock - контроль времени
+### mainClock - time control
 
 ```kotlin
 @Test
@@ -622,39 +618,39 @@ fun loginScreen_screenshot() {
 ### Best Practices
 
 ```kotlin
-// - 1. Используйте test tags вместо text
+// 1. Use test tags instead of text
 modifier = Modifier.testTag("submit_button")
 
-// - 2. Тестируйте поведение, не реализацию
+// 2. Test behavior, not implementation
 @Test
 fun `clicking submit sends data`() {
-    // НЕ тестируем что вызвался viewModel.submit()
-    // Тестируем что UI показал success state
+    // DON'T test that viewModel.submit() was called
+    // Test that UI showed success state
     composeTestRule.onNodeWithText("Success").assertExists()
 }
 
-// - 3. Используйте meaningful test tags
+// 3. Use meaningful test tags
 modifier = Modifier.testTag("email_input") // GOOD
 modifier = Modifier.testTag("input1")      // BAD
 
-// - 4. waitUntil для async operations
+// 4. waitUntil for async operations
 composeTestRule.waitUntil {
     composeTestRule.onAllNodesWithTag("item")
         .fetchSemanticsNodes().size == expectedSize
 }
 
-// - 5. Тестируйте accessibility
+// 5. Test accessibility
 composeTestRule.onNodeWithTag("icon")
     .assertContentDescriptionEquals("Profile picture")
 
-// - 6. Группируйте related tests
+// 6. Group related tests
 class LoginScreenTest {
     @Test fun `empty fields show error`() { }
     @Test fun `valid fields enable button`() { }
     @Test fun `clicking login shows loading`() { }
 }
 
-// - 7. Setup в @Before
+// 7. Setup in @Before
 @Before
 fun setup() {
     composeTestRule.setContent {
@@ -666,33 +662,33 @@ fun setup() {
 ### Common Pitfalls
 
 ```kotlin
-// - 1. Забыли useUnmergedTree
-composeTestRule.onNodeWithText("Subtitle").assertExists() // Fail если merged
+// 1. Forgot useUnmergedTree
+composeTestRule.onNodeWithText("Subtitle").assertExists() // Fail if merged
 
-// - Fix
+// Fix
 composeTestRule.onNodeWithText("Subtitle", useUnmergedTree = true).assertExists()
 
-// - 2. Не ждем async операций
+// 2. Not waiting for async operations
 viewModel.loadData()
-composeTestRule.onNodeWithText("Data").assertExists() // Fail - еще не загружено
+composeTestRule.onNodeWithText("Data").assertExists() // Fail - not loaded yet
 
-// - Fix
+// Fix
 viewModel.loadData()
 composeTestRule.waitUntil {
     composeTestRule.onAllNodesWithText("Data").fetchSemanticsNodes().isNotEmpty()
 }
 
-// - 3. Тестируем text вместо semantics
+// 3. Testing text instead of semantics
 composeTestRule.onNodeWithText("Submit").performClick()
-// Проблема: сломается при локализации
+// Problem: breaks with localization
 
-// - Fix
+// Fix
 composeTestRule.onNodeWithTag("submit_button").performClick()
 
-// - 4. Забыли mainClock для анимаций
-composeTestRule.onNodeWithTag("animated").assertExists() // Fail - анимация еще идет
+// 4. Forgot mainClock for animations
+composeTestRule.onNodeWithTag("animated").assertExists() // Fail - animation still running
 
-// - Fix
+// Fix
 composeTestRule.mainClock.advanceTimeBy(1000)
 composeTestRule.onNodeWithTag("animated").assertExists()
 ```

@@ -24,19 +24,22 @@ subtopics:   - coroutines
   - integration
   - cancellation
 ---
-# Converting callbacks with suspendCancellableCoroutine
 
-## English Version
+# Question (EN)
+> How do you convert callback-based APIs to suspend functions using `suspendCancellableCoroutine`? How do you handle cancellation, errors, and race conditions?
 
-### Problem Statement
+# Вопрос (RU)
+> Как преобразовать API на основе callback в suspend функции используя `suspendCancellableCoroutine`? Как обрабатывать отмену, ошибки и состояния гонки?
+
+---
+
+## Answer (EN)
 
 Many Android and Java libraries use callback-based APIs (Retrofit callbacks, Firebase listeners, Location updates, OkHttp calls). To use them idiomatically with coroutines, you need to convert callbacks to suspend functions using `suspendCancellableCoroutine`. This is a critical skill for integrating legacy code with coroutines while handling cancellation properly.
 
-**The Question:** How do you convert callback-based APIs to suspend functions using `suspendCancellableCoroutine`? How do you handle cancellation, errors, and race conditions?
 
-### Detailed Answer
 
-#### suspendCoroutine vs suspendCancellableCoroutine
+### suspendCoroutine vs suspendCancellableCoroutine
 
 **suspendCoroutine:** Basic suspension, no cancellation support
 
@@ -75,7 +78,7 @@ suspend fun cancellableSuspend() = suspendCancellableCoroutine<String> { cont ->
 
 **Rule:** Always use `suspendCancellableCoroutine` unless you have a specific reason not to.
 
-#### Basic Pattern: Single Callback
+### Basic Pattern: Single Callback
 
 ```kotlin
 // Callback-based API
@@ -117,7 +120,7 @@ launch {
 }
 ```
 
-#### invokeOnCancellation for Resource Cleanup
+### invokeOnCancellation for Resource Cleanup
 
 **Critical:** Always clean up resources when coroutine is cancelled.
 
@@ -142,7 +145,7 @@ suspend fun fetchWithCancellation(): String = suspendCancellableCoroutine { cont
 }
 ```
 
-#### Real Example: OkHttp Call Conversion
+### Real Example: OkHttp Call Conversion
 
 ```kotlin
 import okhttp3.*
@@ -200,7 +203,7 @@ delay(100)
 job.cancel() // Cancels OkHttp call automatically
 ```
 
-#### Handling Race Conditions: Resume Exactly Once
+### Handling Race Conditions: Resume Exactly Once
 
 **Critical rule:** Continuation must be resumed **exactly once** - not zero, not twice.
 
@@ -256,7 +259,7 @@ suspend fun safeOperation2(): String = suspendCancellableCoroutine { cont ->
 }
 ```
 
-#### Real Example: Firebase Realtime Database
+### Real Example: Firebase Realtime Database
 
 ```kotlin
 import com.google.firebase.database.*
@@ -304,7 +307,7 @@ suspend fun getUserProfileWithTimeout(userId: String): UserProfile {
 }
 ```
 
-#### Real Example: Android Location Updates
+### Real Example: Android Location Updates
 
 ```kotlin
 import android.location.Location
@@ -365,7 +368,7 @@ class LocationViewModel : ViewModel() {
 }
 ```
 
-#### Error Handling Patterns
+### Error Handling Patterns
 
 **Pattern 1: Resume with exception**
 
@@ -411,7 +414,7 @@ when (val result = fetchDataSafe()) {
 }
 ```
 
-#### Thread-Safety Considerations
+### Thread-Safety Considerations
 
 **Problem:** Callback may be called on different thread
 
@@ -430,7 +433,7 @@ suspend fun threadSafeOperation(): String = suspendCancellableCoroutine { cont -
 
 **CancellableContinuation is thread-safe:** You can safely call `resume()` and `resumeWithException()` from any thread.
 
-#### Real Example: Retrofit Call Conversion (Manual)
+### Real Example: Retrofit Call Conversion (Manual)
 
 ```kotlin
 import retrofit2.Call
@@ -482,7 +485,7 @@ suspend fun fetchUser(id: String): User {
 }
 ```
 
-#### Testing Cancellable Suspend Functions
+### Testing Cancellable Suspend Functions
 
 ```kotlin
 import kotlinx.coroutines.test.*
@@ -551,7 +554,7 @@ class SuspendTest {
 }
 ```
 
-#### Common Mistakes and Pitfalls
+### Common Mistakes and Pitfalls
 
 **Mistake 1: Not checking isActive before resume**
 
@@ -715,15 +718,11 @@ suspend fun correct5() = suspendCancellableCoroutine<String> { cont ->
 
 ---
 
-## Русская версия
-
-### Формулировка проблемы
+## Ответ (RU)
 
 Многие Android и Java библиотеки используют API на основе callback (Retrofit callbacks, Firebase listeners, Location updates, OkHttp calls). Для их идиоматичного использования с корутинами нужно преобразовать callback в suspend функции используя `suspendCancellableCoroutine`. Это критический навык для интеграции legacy кода с корутинами с правильной обработкой отмены.
 
-**Вопрос:** Как преобразовать API на основе callback в suspend функции используя `suspendCancellableCoroutine`? Как обрабатывать отмену, ошибки и состояния гонки?
 
-### Подробный ответ
 
 [Полный русский перевод опущен для краткости, но следует той же структуре что и английская версия]
 

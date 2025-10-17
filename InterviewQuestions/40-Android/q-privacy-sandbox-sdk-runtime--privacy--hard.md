@@ -5,12 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - privacy-sandbox
-  - sdk-runtime
-  - privacy
-  - sandboxing
-  - security
+tags: [privacy-sandbox, sdk-runtime, privacy, sandboxing, security, difficulty/hard]
 ---
 # Privacy Sandbox: SDK Runtime and App Sandboxing
 

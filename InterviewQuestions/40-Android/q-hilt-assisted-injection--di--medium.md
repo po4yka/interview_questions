@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-11
-tags: - android
-  - dependency-injection
-  - hilt
-  - dagger
-  - assisted-inject
+tags: [dependency-injection, hilt, dagger, assisted-inject, difficulty/medium]
 related:   - q-hilt-entry-points--di--medium
   - q-dagger-multibinding--di--hard
   - q-hilt-viewmodel-injection--jetpack--medium

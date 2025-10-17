@@ -5,13 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
-  - ml-kit
-  - tensorflow-lite
-  - custom-models
-  - machine-learning
-  - automl
-  - model-deployment
+tags: [ml-kit, tensorflow-lite, custom-models, machine-learning, automl, model-deployment, difficulty/hard]
 ---
 # ML Kit Custom Models and TensorFlow Lite Integration
 

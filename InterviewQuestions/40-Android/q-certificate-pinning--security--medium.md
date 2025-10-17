@@ -5,12 +5,7 @@ topic: security
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - security
-  - certificate-pinning
-  - networking
-  - okhttp
-  - ssl-tls
-  - difficulty/medium
+tags: [certificate-pinning, networking, okhttp, ssl-tls, difficulty/medium]
 ---
 # Certificate Pinning / Закрепление сертификатов
 

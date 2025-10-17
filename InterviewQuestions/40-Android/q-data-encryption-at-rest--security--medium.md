@@ -5,14 +5,7 @@ topic: security
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - security
-  - encryption
-  - database
-  - shared-preferences
-  - sqlcipher
-  - performance
-  - key-management
-  - difficulty/medium
+tags: [encryption, database, shared-preferences, sqlcipher, performance, key-management, difficulty/medium]
 ---
 # Data Encryption at Rest / Шифрование данных в покое
 

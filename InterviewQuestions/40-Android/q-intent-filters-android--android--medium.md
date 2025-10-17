@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - intent-filter
-  - deep-linking
-  - manifest
-  - implicit-intent
-  - intents-deeplinks
-  - activity
+tags: [intent-filter, deep-linking, manifest, implicit-intent, intents-deeplinks, activity, android/deeplinks, android/activity, android/manifest, difficulty/medium]
 source: Kirchhoff-Android-Interview-Questions
 subtopics:   - intents-deeplinks
   - activity

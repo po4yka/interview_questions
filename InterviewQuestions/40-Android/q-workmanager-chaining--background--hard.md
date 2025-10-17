@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - Background
-  - WorkManager
-  - Coroutines
+tags: [Kotlin, Background, WorkManager, Coroutines, difficulty/hard]
 ---
 # WorkManager Work Chaining - Advanced Patterns
 

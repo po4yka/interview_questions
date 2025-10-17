@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/architecture, android/repository, android/data-layer, android/clean-architecture, android/mvvm, difficulty/medium]
 source: internal
 source_note: Created for vault completeness
 
@@ -24,7 +24,7 @@ related: [q-repository-multiple-sources--android--medium, q-clean-architecture-a
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [android, architecture, repository, data-layer, clean-architecture, difficulty/medium]
+tags: [en, ru, android/architecture, android/repository, android/data-layer, android/clean-architecture, android/mvvm, difficulty/medium]
 ---
 
 # Question (EN)

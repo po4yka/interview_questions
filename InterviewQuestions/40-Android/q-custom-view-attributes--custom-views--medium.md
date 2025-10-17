@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - custom-views
-  - xml-attributes
-  - android-framework
-  - theming
+tags: [views, xml-attributes, android-framework, theming, difficulty/medium]
 ---
 # Custom View Attributes
 

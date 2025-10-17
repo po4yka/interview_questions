@@ -5,9 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - recyclerview
-  - ui-components
+tags: [recyclerview, ui-components, difficulty/medium]
 ---
 # Что известно про RecyclerView?
 
@@ -16,11 +14,11 @@ tags: - android
 ## Answer (EN)
 RecyclerView — это мощный компонент пользовательского интерфейса, предоставляемый библиотекой AndroidX, предназначенный для отображения динамических списков элементов. Он был представлен как улучшенная и более гибкая замена ListView.
 
-### Основные особенности
+### Key features
 
-#### 1. Эффективное повторное использование View
+#### 1. Efficient View recycling
 
-Использует концепцию ViewHolder для эффективного повторного использования элементов списка при прокрутке.
+Uses ViewHolder pattern for efficient reuse of list items during scrolling.
 
 ```kotlin
 class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -29,24 +27,24 @@ class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 }
 ```
 
-Это повышает производительность для больших списков, поскольку количество создаваемых объектов View ограничивается только теми, которые видны пользователю.
+This improves performance for large lists since the number of created View objects is limited to only those visible to the user.
 
-#### 2. Гибкое отображение элементов
+#### 2. Flexible item display
 
-Поддерживает различные компоновки через LayoutManager API:
+Supports various layouts through LayoutManager API:
 
 ```kotlin
-// Вертикальный список
+// Vertical list
 recyclerView.layoutManager = LinearLayoutManager(context)
 
-// Горизонтальный список
+// Horizontal list
 recyclerView.layoutManager = LinearLayoutManager(
     context,
     LinearLayoutManager.HORIZONTAL,
     false
 )
 
-// Сетка
+// Grid
 recyclerView.layoutManager = GridLayoutManager(context, 2)
 
 // Staggered Grid
@@ -56,9 +54,9 @@ recyclerView.layoutManager = StaggeredGridLayoutManager(
 )
 ```
 
-#### 3. Анимация изменений
+#### 3. Change animations
 
-Встроенная поддержка анимаций для операций добавления, удаления и перемещения элементов.
+Built-in animation support for add, remove, and move operations.
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
@@ -66,33 +64,33 @@ class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
 
     fun addItem(item: String, position: Int) {
         items.add(position, item)
-        notifyItemInserted(position)  // Автоматическая анимация
+        notifyItemInserted(position)  // Automatic animation
     }
 
     fun removeItem(position: Int) {
         items.removeAt(position)
-        notifyItemRemoved(position)  // Автоматическая анимация
+        notifyItemRemoved(position)  // Automatic animation
     }
 }
 ```
 
-#### 4. Декорации и разделители
+#### 4. Decorations and dividers
 
-С помощью класса ItemDecoration можно легко добавлять разделители между элементами.
+ItemDecoration class makes it easy to add dividers between items.
 
 ```kotlin
 class DividerItemDecoration : RecyclerView.ItemDecoration() {
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        // Рисование разделителей
+        // Draw dividers
     }
 }
 
 recyclerView.addItemDecoration(DividerItemDecoration())
 ```
 
-#### 5. Обработка событий нажатий
+#### 5. Click event handling
 
-В отличие от ListView, RecyclerView не имеет встроенного метода для обработки нажатий на элементы, что предоставляет больше гибкости.
+Unlike ListView, RecyclerView doesn't have built-in method for handling item clicks, providing more flexibility.
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
@@ -105,15 +103,15 @@ class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
     }
 }
 
-// Использование
+// Usage
 adapter.onItemClick = { position ->
     Toast.makeText(context, "Clicked: $position", Toast.LENGTH_SHORT).show()
 }
 ```
 
-### Ключевые компоненты
+### Key components
 
-**Adapter** - отвечает за связь данных с ViewHolder и создание ViewHolder.
+**Adapter** - responsible for binding data to ViewHolder and creating ViewHolder.
 
 ```kotlin
 class MyAdapter(private val items: List<String>) :
@@ -137,11 +135,11 @@ class MyAdapter(private val items: List<String>) :
 }
 ```
 
-**LayoutManager** - управляет расположением элементов внутри RecyclerView.
+**LayoutManager** - manages item positioning inside RecyclerView.
 
-**ViewHolder** - содержит ссылки на все View, которые необходимо заполнить данными.
+**ViewHolder** - holds references to all Views that need to be filled with data.
 
-### Полный пример
+### Complete example
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -151,15 +149,15 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
 
-        // Настройка LayoutManager
+        // Setup LayoutManager
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Создание и установка адаптера
+        // Create and set adapter
         val items = listOf("Item 1", "Item 2", "Item 3")
         val adapter = MyAdapter(items)
         recyclerView.adapter = adapter
 
-        // Добавление разделителей
+        // Add dividers
         recyclerView.addItemDecoration(
             DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         )
@@ -167,15 +165,15 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Преимущества перед ListView
+### Advantages over ListView
 
-| Аспект | ListView | RecyclerView |
+| Aspect | ListView | RecyclerView |
 |--------|----------|--------------|
-| **ViewHolder** | Опционально | Обязательно (лучше производительность) |
-| **Layouts** | Только вертикальный | Вертикальный, горизонтальный, сетка |
-| **Анимации** | Нет встроенных | Встроенные анимации |
-| **Декорации** | Сложно | ItemDecoration API |
-| **Производительность** | Хорошая | Отличная |
+| **ViewHolder** | Optional | Mandatory (better performance) |
+| **Layouts** | Vertical only | Vertical, horizontal, grid |
+| **Animations** | No built-in | Built-in animations |
+| **Decorations** | Difficult | ItemDecoration API |
+| **Performance** | Good | Excellent |
 
 ## Ответ (RU)
 

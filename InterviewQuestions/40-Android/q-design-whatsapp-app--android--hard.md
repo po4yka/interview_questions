@@ -11,7 +11,7 @@ difficulty: hard
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, difficulty/hard]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: [real-time-updates, websocket, database-design, offline-first]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [system-design, whatsapp, messaging, real-time, architecture, scalability, android, difficulty/hard]
+tags: [en, ru, difficulty/hard]
 ---
 # Question (EN)
 > How would you design a WhatsApp-like messaging application for Android?

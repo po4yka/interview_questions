@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-11
-tags: - android
-  - ci-cd
-  - multi-module
-  - gradle
-  - build-optimization
+tags: [ci-cd, multi-module, gradle, build-optimization, difficulty/medium]
 related:   - q-cicd-pipeline-setup--devops--medium
   - q-gradle-build-optimization--build--medium
   - q-gradle-dependency-management--build--medium

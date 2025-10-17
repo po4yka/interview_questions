@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - android
-  - jetpack-compose
-  - lazy-layout
-  - grid
-  - performance
+tags: [jetpack-compose, lazy-layout, grid, performance, android/compose, android/lazy-layout, android/grid, android/performance, android/ui, difficulty/medium]
 date_created: 2025-10-12
 date_updated: 2025-10-12
 moc: moc-android

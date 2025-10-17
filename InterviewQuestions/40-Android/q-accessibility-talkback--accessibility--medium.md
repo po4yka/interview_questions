@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-11
-tags: - android
-  - accessibility
-  - talkback
-  - screen-reader
-  - assistive-technology
+tags: [accessibility, talkback, screen-reader, assistive-technology, difficulty/medium]
 related:   - q-accessibility-compose--accessibility--medium
   - q-accessibility-testing--accessibility--medium
   - q-custom-view-accessibility--custom-views--medium

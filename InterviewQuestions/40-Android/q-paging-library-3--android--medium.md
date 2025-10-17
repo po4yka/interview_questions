@@ -5,14 +5,8 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - paging
-  - paging3
-  - pagination
-  - recyclerview
-  - difficulty/medium
-language_tags:   - en
-  - ru
+tags: [paging, paging3, pagination, recyclerview, difficulty/medium, android/rendering, android/architecture-clean]
+language_tags: [paging, paging3, pagination, recyclerview, difficulty/medium, android/rendering, android/architecture-clean]
 moc: moc-android
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
@@ -54,7 +48,7 @@ class ConcertViewModel(concertDao: ConcertDao) : ViewModel() {
 }
 ```
 
-#### Data
+#### Data Source
 
 Each instance of `PagedList` loads an up-to-date snapshot of your app's data from its corresponding `DataSource` object. Data flows from your app's backend or database into the `PagedList` object.
 
@@ -69,7 +63,7 @@ interface ConcertDao {
 }
 ```
 
-#### UI
+#### UI Layer
 
 The `PagedList` class works with a `PagedListAdapter` to load items into a `RecyclerView`. These classes work together to fetch and display content as it's loaded, prefetching out-of-view content and animating content changes.
 

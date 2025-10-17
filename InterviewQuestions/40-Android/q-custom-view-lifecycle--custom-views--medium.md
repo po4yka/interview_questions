@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - custom-views
-  - android-framework
-  - lifecycle
-  - performance
+tags: [views, android-framework, lifecycle, performance, difficulty/medium]
 ---
 # Custom View Lifecycle
 

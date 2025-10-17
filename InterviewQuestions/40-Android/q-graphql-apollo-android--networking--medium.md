@@ -5,13 +5,7 @@ topic: networking
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - networking
-  - graphql
-  - apollo
-  - api
-  - caching
-  - subscriptions
-  - difficulty/medium
+tags: [graphql, apollo, api, caching, subscriptions, difficulty/medium]
 ---
 # GraphQL with Apollo Android / GraphQL с Apollo Android
 

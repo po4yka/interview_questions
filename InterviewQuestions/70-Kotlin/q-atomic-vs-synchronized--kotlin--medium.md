@@ -19,7 +19,7 @@ tags: - kotlin
 ## Answer (EN)
 **Atomic** переменные (`AtomicInteger`, `AtomicReference`) и **synchronized** блоки — два способа обеспечить потокобезопасность. Используются в разных ситуациях в зависимости от сложности операций.
 
-### Atomic Variables — для простых операций
+### Atomic Variables - for simple operations
 
 Используйте для **одиночных** операций с **одной** переменной. Lock-free, высокая производительность.
 
@@ -61,14 +61,14 @@ repeat(1000) {
 // Гарантированно: counter.get() == 1000
 ```
 
-**Когда использовать Atomic:**
-- - Простой счетчик
-- - Флаг (boolean)
-- - Одиночная ссылка
-- - Операция читай-изменяй-запиши для ОДНОЙ переменной
-- - Compare-and-swap логика
+**When to use Atomic:**
+- - Simple counter
+- - Flag (boolean)
+- - Single reference
+- - Read-modify-write operation for ONE variable
+- - Compare-and-swap logic
 
-### Synchronized — для сложных операций
+### Synchronized - for complex operations
 
 Используйте для **множественных** операций или работы с **несколькими** переменными.
 
@@ -105,16 +105,16 @@ class BankAccount {
 }
 ```
 
-**Когда использовать Synchronized:**
-- - Работа с несколькими переменными
-- - Сложная логика (if-else, циклы)
-- - Вызов методов внутри критической секции
-- - Нужна взаимная исключительность (mutual exclusion)
-- - Работа с коллекциями
+**When to use Synchronized:**
+- - Working with multiple variables
+- - Complex logic (if-else, loops)
+- - Method calls inside critical section
+- - Need mutual exclusion
+- - Working with collections
 
-### Примеры использования
+### Usage examples
 
-#### Пример 1: Счетчик (Atomic лучше)
+#### Example 1: Counter (Atomic is better)
 
 ```kotlin
 // - Atomic - идеально для счетчика
@@ -141,7 +141,7 @@ class RequestCounter {
 }
 ```
 
-#### Пример 2: Cache с TTL (Synchronized лучше)
+#### Example 2: Cache with TTL (Synchronized is better)
 
 ```kotlin
 // - Synchronized - нужен для сложной логики
@@ -177,7 +177,7 @@ class Cache<K, V>(private val ttlMs: Long) {
 }
 ```
 
-#### Пример 3: Флаг состояния (Atomic проще)
+#### Example 3: State flag (Atomic is simpler)
 
 ```kotlin
 // - Atomic - для простого флага
@@ -202,7 +202,7 @@ class ConnectionManager {
 }
 ```
 
-#### Пример 4: Transfer между аккаунтами (Synchronized обязателен)
+#### Example 4: Transfer between accounts (Synchronized required)
 
 ```kotlin
 // - Synchronized - работа с несколькими объектами
@@ -229,7 +229,7 @@ class Bank {
 // - Atomic НЕ ПОМОЖЕТ - нужна координация между аккаунтами
 ```
 
-### Performance сравнение
+### Performance comparison
 
 ```kotlin
 // Benchmark (примерные результаты)
@@ -259,9 +259,9 @@ class BenchmarkCounter {
 }
 ```
 
-**Результат**: Atomic в ~2 раза быстрее synchronized для простых операций.
+**Result**: Atomic ~2x faster than synchronized for simple operations.
 
-### Типы Atomic переменных
+### Atomic variable types
 
 ```kotlin
 // Примитивы
@@ -294,28 +294,28 @@ class Counter {
 }
 ```
 
-### Compare-and-Swap (CAS) паттерн
+### Compare-and-Swap (CAS) pattern
 
-Основа atomic операций — CAS loop.
+The foundation of atomic operations - CAS loop.
 
 ```kotlin
 class CASExample {
     private val atomicValue = AtomicInteger(0)
 
-    // CAS loop для сложной логики
+    // CAS loop for complex logic
     fun updateWithFunction(updateFn: (Int) -> Int) {
         while (true) {
             val current = atomicValue.get()
             val updated = updateFn(current)
 
             if (atomicValue.compareAndSet(current, updated)) {
-                break  // Успешно обновили
+                break  // Successfully updated
             }
-            // Retry если другой поток изменил значение
+            // Retry if another thread changed the value
         }
     }
 
-    // Использование
+    // Usage
     fun incrementIfEven() {
         updateWithFunction { current ->
             if (current % 2 == 0) current + 1 else current
@@ -324,12 +324,12 @@ class CASExample {
 }
 ```
 
-### Когда НЕ использовать ни то, ни другое
+### When NOT to use either
 
-Для Android — используйте высокоуровневые абстракции:
+For Android - use high-level abstractions:
 
 ```kotlin
-// - Корутины с Mutex
+// - Coroutines with Mutex
 class SafeCache {
     private val cache = mutableMapOf<String, String>()
     private val mutex = Mutex()
@@ -347,7 +347,7 @@ class SafeCache {
     }
 }
 
-// - Actor для sequential processing
+// - Actor for sequential processing
 @OptIn(ObsoleteCoroutinesApi::class)
 fun cacheActor() = actor<CacheCommand> {
     val cache = mutableMapOf<String, String>()
@@ -368,7 +368,7 @@ sealed class CacheCommand {
 
 ### Best Practices
 
-**1. Предпочитайте Atomic для простых случаев**
+**1. Prefer Atomic for simple cases**
 
 ```kotlin
 // - ПРАВИЛЬНО
@@ -386,10 +386,10 @@ class Statistics {
 }
 ```
 
-**2. Используйте Synchronized для сложной логики**
+**2. Use Synchronized for complex logic**
 
 ```kotlin
-// - ПРАВИЛЬНО
+// - CORRECT
 class ResourcePool<T>(private val factory: () -> T) {
     private val available = mutableListOf<T>()
     private val lock = Any()
@@ -408,10 +408,10 @@ class ResourcePool<T>(private val factory: () -> T) {
 }
 ```
 
-**3. Избегайте смешивания**
+**3. Avoid mixing**
 
 ```kotlin
-// - НЕПРАВИЛЬНО - смешивание подходов
+// - INCORRECT - mixing approaches
 class BadExample {
     private val atomicCount = AtomicInteger(0)
     private var syncCount = 0
@@ -420,16 +420,16 @@ class BadExample {
     fun update() {
         atomicCount.incrementAndGet()
         synchronized(lock) {
-            syncCount++  // Разные механизмы синхронизации!
+            syncCount++  // Different synchronization mechanisms!
         }
     }
 }
 ```
 
-**4. В Android используйте корутины**
+**4. In Android use coroutines**
 
 ```kotlin
-// - ЛУЧШИЙ ПОДХОД для Android
+// - BEST APPROACH for Android
 class DataRepository {
     private val cache = mutableMapOf<String, Data>()
 
@@ -439,16 +439,16 @@ class DataRepository {
 }
 ```
 
-### Сравнительная таблица
+### Comparison table
 
-| Аспект | Atomic | Synchronized |
+| Aspect | Atomic | Synchronized |
 |--------|--------|--------------|
-| **Операции** | Одиночные | Множественные |
-| **Переменные** | Одна | Несколько |
-| **Performance** |  Быстрее |  Медленнее |
-| **Сложность логики** | - Простая только | - Любая |
-| **Lock-free** | - Да | - Нет |
-| **Deadlock риск** | - Нет | WARNING: Возможен |
-| **Use case** | Счетчики, флаги | Кэши, коллекции |
+| **Operations** | Single | Multiple |
+| **Variables** | One | Multiple |
+| **Performance** |  Faster |  Slower |
+| **Logic complexity** | - Simple only | - Any |
+| **Lock-free** | - Yes | - No |
+| **Deadlock risk** | - No | WARNING: Possible |
+| **Use case** | Counters, flags | Caches, collections |
 
 **English**: Use **Atomic** variables (`AtomicInteger`, `AtomicReference`) for single operations on single variable (counters, flags) - lock-free, ~2x faster. Use **synchronized** for complex operations or multiple variables (caches, collections, multiple steps) - ensures mutual exclusion. Atomic uses CAS (Compare-And-Swap) loop. For Android, prefer coroutines with `Mutex` or `actor` pattern. Don't mix approaches. Atomic: simple & fast. Synchronized: complex & safe.

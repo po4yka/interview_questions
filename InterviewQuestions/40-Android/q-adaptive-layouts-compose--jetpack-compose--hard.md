@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - android
-  - jetpack-compose
-  - adaptive-layouts
-  - responsive-design
-  - window-size-classes
+tags: [jetpack-compose, adaptive-layouts, responsive-design, window-size-classes, android/compose, android/adaptive-layouts, android/responsive-design, android/window-size-classes, android/foldables, difficulty/hard]
 date_created: 2025-10-12
 date_updated: 2025-10-12
 moc: moc-android

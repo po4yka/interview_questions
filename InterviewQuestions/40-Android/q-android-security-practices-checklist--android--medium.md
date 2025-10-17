@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/security, android/best-practices, android/data-protection, difficulty/medium]
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [android, security, best-practices, ssl, encryption, webview, permissions, difficulty/medium]
+tags: [en, ru, android/security, android/best-practices, android/data-protection, difficulty/medium]
 ---
 # Question (EN)
 > What security best practices do you know?

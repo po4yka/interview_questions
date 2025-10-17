@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Marketing
-  - Distribution
-  - ASO
-  - PlayStore
+tags: [Marketing, Distribution, ASO, PlayStore, difficulty/medium]
 ---
 # App Store Optimization (ASO) and Play Store Listing
 

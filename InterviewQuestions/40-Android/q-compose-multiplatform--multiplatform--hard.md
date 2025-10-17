@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - Compose
-  - Multiplatform
-  - UI
+tags: [Kotlin, Compose, Multiplatform, UI, difficulty/hard]
 ---
 
 # Question (EN)

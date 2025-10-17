@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - Distribution
-  - APK
-  - Samsung
+tags: [Kotlin, Distribution, APK, Samsung, difficulty/medium]
 ---
 # Alternative App Distribution Channels
 

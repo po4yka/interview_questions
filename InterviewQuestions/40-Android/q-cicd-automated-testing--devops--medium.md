@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-11
-tags: - android
-  - ci-cd
-  - testing
-  - automation
-  - github-actions
-  - emulator
+tags: [ci-cd, testing, automation, github-actions, emulator, difficulty/medium]
 related:   - q-cicd-pipeline-setup--devops--medium
   - q-compose-ui-testing--testing--medium
   - q-testing-coroutines-flow--testing--hard

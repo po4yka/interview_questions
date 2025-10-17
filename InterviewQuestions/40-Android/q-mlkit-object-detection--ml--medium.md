@@ -5,13 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - ml-kit
-  - object-detection
-  - image-labeling
-  - barcode-scanning
-  - machine-learning
-  - camera
+tags: [ml-kit, object-detection, image-labeling, barcode-scanning, machine-learning, camera, difficulty/medium]
 ---
 # ML Kit Object Detection, Image Labeling, and Barcode Scanning
 

@@ -5,13 +5,7 @@ topic: networking
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - networking
-  - sse
-  - server-sent-events
-  - real-time
-  - streaming
-  - comparison
-  - difficulty/medium
+tags: [sse, server-sent-events, real-time, streaming, comparison, difficulty/medium]
 ---
 # Server-Sent Events (SSE) / Server-Sent Events (SSE)
 

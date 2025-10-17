@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - privacy-sandbox
-  - topics-api
-  - privacy
-  - advertising
-  - user-privacy
+tags: [privacy-sandbox, topics-api, privacy, advertising, user-privacy, difficulty/medium]
 ---
 # Privacy Sandbox: Topics API and Privacy-Preserving Advertising
 

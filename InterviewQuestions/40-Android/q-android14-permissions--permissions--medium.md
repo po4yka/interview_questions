@@ -5,14 +5,7 @@ topic: permissions
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - permissions
-  - android14
-  - android13
-  - privacy
-  - photos
-  - notifications
-  - compatibility
-  - difficulty/medium
+tags: [android14, android13, privacy, photos, notifications, compatibility, difficulty/medium]
 ---
 # Android 14 Permission Changes / Изменения разрешений в Android 14
 

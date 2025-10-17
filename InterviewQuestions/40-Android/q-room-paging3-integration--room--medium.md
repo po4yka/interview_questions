@@ -5,13 +5,7 @@ topic: room
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - room
-  - paging3
-  - database
-  - pagination
-  - architecture
-  - offline-first
-  - difficulty/medium
+tags: [paging3, database, pagination, architecture, offline-first, difficulty/medium]
 ---
 # Room Paging 3 Integration / Интеграция Room с Paging 3
 

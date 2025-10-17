@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - android
-  - windowinsets
-  - edge-to-edge
-  - system-ui
-  - immersive
+tags: [windowinsets, edge-to-edge, system-ui, immersive, android/system-ui, android/windowinsets, android/edge-to-edge, android/immersive, difficulty/medium]
 date_created: 2025-10-12
 date_updated: 2025-10-12
 moc: moc-android

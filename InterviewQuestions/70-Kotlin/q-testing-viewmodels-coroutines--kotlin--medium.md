@@ -16,9 +16,9 @@ tags: - kotlin
 **English**: How do you properly test ViewModels that use coroutines? What are the common patterns and pitfalls?
 
 ## Answer (EN)
-Тестирование **ViewModel** с корутинами требует специальной настройки для контроля выполнения корутин и времени в тестовой среде.
+Testing **ViewModels** with coroutines requires special setup to control coroutine execution and time in test environment.
 
-### Основная проблема
+### Main problem
 
 ```kotlin
 // ViewModel
@@ -36,24 +36,24 @@ class UserViewModel(
     }
 }
 
-// - НЕПРАВИЛЬНЫЙ тест - не ждет завершения корутины
+// - INCORRECT test - doesn't wait for coroutine completion
 @Test
 fun `load user updates state`() {
     val viewModel = UserViewModel(fakeRepository)
 
     viewModel.loadUser(1)
 
-    // FAIL: корутина еще не завершилась!
+    // FAIL: coroutine hasn't completed yet!
     assertEquals(expectedUser, viewModel.user.value)
 }
 ```
 
-**Проблема**: корутина запускается асинхронно, тест завершается до получения результата.
+**Problem**: coroutine starts asynchronously, test completes before getting result.
 
-### Решение: runTest и TestDispatcher
+### Solution: runTest and TestDispatcher
 
 ```kotlin
-// - ПРАВИЛЬНЫЙ тест
+// - CORRECT test
 class UserViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -66,19 +66,19 @@ class UserViewModelTest {
         // When
         viewModel.loadUser(1)
 
-        // Then - runTest автоматически ждет завершения корутин
+        // Then - runTest automatically waits for coroutines completion
         assertEquals(expectedUser, viewModel.user.value)
     }
 }
 ```
 
 **runTest**:
-- - Автоматически ждет завершения всех корутин
-- - Предоставляет `TestScope` и `TestDispatcher`
-- - Пропускает `delay()` мгновенно
-- - Контролирует виртуальное время
+- - Automatically waits for all coroutines completion
+- - Provides `TestScope` and `TestDispatcher`
+- - Skips `delay()` instantly
+- - Controls virtual time
 
-### MainDispatcherRule - для viewModelScope
+### MainDispatcherRule - for viewModelScope
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -105,7 +105,7 @@ class UserViewModelTest {
         val viewModel = UserViewModel(fakeRepository)
 
         viewModel.loadUser(1)
-        // viewModelScope теперь использует TestDispatcher
+        // viewModelScope now uses TestDispatcher
 
         assertEquals(expectedUser, viewModel.user.value)
     }
@@ -113,14 +113,14 @@ class UserViewModelTest {
 ```
 
 **MainDispatcherRule**:
-- - Заменяет `Dispatchers.Main` на `TestDispatcher`
-- - Работает с `viewModelScope` (который использует Main)
-- - Автоматический cleanup в `@After`
+- - Replaces `Dispatchers.Main` with `TestDispatcher`
+- - Works with `viewModelScope` (which uses Main)
+- - Automatic cleanup in `@After`
 
 ### StandardTestDispatcher vs UnconfinedTestDispatcher
 
 ```kotlin
-// StandardTestDispatcher - требует явного продвижения времени
+// StandardTestDispatcher - requires explicit time advancement
 @Test
 fun `test with StandardTestDispatcher`() = runTest {
     val dispatcher = StandardTestDispatcher(testScheduler)
@@ -129,15 +129,15 @@ fun `test with StandardTestDispatcher`() = runTest {
     val viewModel = UserViewModel(fakeRepository)
     viewModel.loadUser(1)
 
-    // Нужно явно продвинуть время
-    advanceUntilIdle() // Или advanceTimeBy()
+    // Need to explicitly advance time
+    advanceUntilIdle() // Or advanceTimeBy()
 
     assertEquals(expectedUser, viewModel.user.value)
 
     Dispatchers.resetMain()
 }
 
-// UnconfinedTestDispatcher - выполняется немедленно
+// UnconfinedTestDispatcher - executes immediately
 @Test
 fun `test with UnconfinedTestDispatcher`() = runTest {
     val dispatcher = UnconfinedTestDispatcher(testScheduler)
@@ -146,18 +146,18 @@ fun `test with UnconfinedTestDispatcher`() = runTest {
     val viewModel = UserViewModel(fakeRepository)
     viewModel.loadUser(1)
 
-    // НЕ нужно advanceUntilIdle() - выполнилось сразу
+    // NO need for advanceUntilIdle() - executed immediately
     assertEquals(expectedUser, viewModel.user.value)
 
     Dispatchers.resetMain()
 }
 ```
 
-**Различия**:
-- **StandardTestDispatcher**: корутины в очереди, нужно `advanceUntilIdle()`
-- **UnconfinedTestDispatcher**: корутины выполняются немедленно
+**Differences**:
+- **StandardTestDispatcher**: coroutines in queue, need `advanceUntilIdle()`
+- **UnconfinedTestDispatcher**: coroutines execute immediately
 
-### Тестирование Flow
+### Testing Flow
 
 ```kotlin
 class UserViewModel(

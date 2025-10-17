@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - recyclerview
-  - diffutil
-  - performance
+tags: [recyclerview, diffutil, performance, difficulty/medium]
 ---
 # Why use DiffUtil?
 
@@ -266,7 +263,7 @@ class UserAdapter : ListAdapter<User, UserAdapter.ViewHolder>(UserDiffCallback()
 }
 ```
 
-### 5. DiffUtil со сложными объектами
+### 5. DiffUtil with Complex Objects
 
 ```kotlin
 data class Post(
@@ -377,7 +374,7 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 }
 ```
 
-### 6. Вопросы производительности
+### 6. Performance Considerations
 
 ```kotlin
 class OptimizedDiffCallback<T>(

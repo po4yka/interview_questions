@@ -15,28 +15,28 @@ tags: - kotlin
 **English**: partition() function in Kotlin collections
 
 ## Answer (EN)
-`partition()` делит коллекцию на **два списка**: первый содержит элементы, соответствующие условию (`true`), второй — не соответствующие (`false`). Возвращает `Pair<List, List>`. Удобно для фильтрации без потери "невалидных" элементов.
+`partition()` splits collection into **two lists**: first contains elements matching condition (`true`), second - non-matching (`false`). Returns `Pair<List, List>`. Convenient for filtering without losing "invalid" elements.
 
-### Базовое использование
+### Basic usage
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
-// Разделить на четные и нечетные
+// Split into even and odd
 val (even, odd) = numbers.partition { it % 2 == 0 }
 
 println("Even: $even")  // Even: [2, 4, 6, 8, 10]
 println("Odd: $odd")    // Odd: [1, 3, 5, 7, 9]
 ```
 
-**Эквивалентно:**
+**Equivalent to:**
 ```kotlin
 val even = numbers.filter { it % 2 == 0 }
 val odd = numbers.filter { it % 2 != 0 }
-// Но partition проходит по коллекции только один раз!
+// But partition traverses collection only once!
 ```
 
-### Возвращаемый тип
+### Return type
 
 ```kotlin
 val result: Pair<List<Int>, List<Int>> = numbers.partition { it > 5 }
@@ -44,28 +44,28 @@ val result: Pair<List<Int>, List<Int>> = numbers.partition { it > 5 }
 val matching = result.first   // [6, 7, 8, 9, 10]
 val nonMatching = result.second  // [1, 2, 3, 4, 5]
 
-// Или с деструктуризацией
+// Or with destructuring
 val (matching, nonMatching) = numbers.partition { it > 5 }
 ```
 
-### Сравнение с filter
+### Comparison with filter
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5, 6)
 
-// С filter - два прохода по коллекции
+// With filter - two passes through collection
 val positive = numbers.filter { it > 3 }       // [4, 5, 6]
 val negative = numbers.filter { it <= 3 }      // [1, 2, 3]
 
-// С partition - один проход
+// With partition - one pass
 val (positive, negative) = numbers.partition { it > 3 }
 // positive = [4, 5, 6]
 // negative = [1, 2, 3]
 ```
 
-### Практические примеры
+### Practical examples
 
-#### Пример 1: Валидация данных
+#### Example 1: Data validation
 
 ```kotlin
 data class User(val name: String, val email: String, val age: Int) {
@@ -84,7 +84,7 @@ val users = listOf(
     User("Eve", "eve@example.com", 28)
 )
 
-// Разделить на валидных и невалидных
+// Split into valid and invalid
 val (valid, invalid) = users.partition { it.isValid() }
 
 println("Valid users: ${valid.map { it.name }}")
@@ -93,12 +93,12 @@ println("Valid users: ${valid.map { it.name }}")
 println("Invalid users: ${invalid.map { it.name }}")
 // Invalid users: [, Charlie, David]
 
-// Можно обработать обе группы
+// Can process both groups
 valid.forEach { saveToDatabase(it) }
 invalid.forEach { logValidationError(it) }
 ```
 
-#### Пример 2: Обработка результатов API
+#### Example 2: Processing API results
 
 ```kotlin
 sealed class ApiResult<out T> {
@@ -295,13 +295,13 @@ enum class Category { URGENT, NORMAL }
 val (urgent, normal) = items.partition { it.category == Category.URGENT }
 ```
 
-**2. Обработка ошибок**
+**2. Error handling**
 
 ```kotlin
 val (successes, failures) = results.partition { it.isSuccess }
 ```
 
-**3. Фильтрация с логированием**
+**3. Filtering with logging**
 
 ```kotlin
 val (valid, invalid) = data.partition { it.isValid() }
@@ -310,7 +310,7 @@ invalid.forEach { logger.warn("Invalid data: $it") }
 processData(valid)
 ```
 
-**4. A/B тестирование**
+**4. A/B testing**
 
 ```kotlin
 val (groupA, groupB) = users.partition { it.id % 2 == 0 }

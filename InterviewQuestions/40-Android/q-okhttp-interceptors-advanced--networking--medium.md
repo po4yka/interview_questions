@@ -5,13 +5,7 @@ topic: networking
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - networking
-  - okhttp
-  - interceptors
-  - authentication
-  - caching
-  - retry
-  - difficulty/medium
+tags: [okhttp, interceptors, authentication, caching, retry, difficulty/medium]
 ---
 # OkHttp Interceptors Advanced / Продвинутые интерцепторы OkHttp
 

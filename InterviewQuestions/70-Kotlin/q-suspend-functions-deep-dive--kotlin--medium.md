@@ -16,69 +16,69 @@ tags: - kotlin
 **English**: Explain how suspend functions work in Kotlin coroutines. What does the `suspend` keyword do?
 
 ## Answer (EN)
-**Suspend функции** - это функции, которые могут **приостанавливать** (suspend) выполнение без блокировки потока. Ключевое слово `suspend` превращает функцию в state machine, позволяя ей останавливаться в определенных точках и возобновляться позже на любом потоке.
+**Suspend functions** are functions that can **suspend** execution without blocking threads. The `suspend` keyword transforms a function into a state machine, allowing it to pause at certain points and resume later on any thread.
 
-### Что делает suspend keyword
+### What the suspend keyword does
 
 ```kotlin
-// Обычная функция - блокирует поток
+// Regular function - blocks thread
 fun loadUser(id: Int): User {
-    Thread.sleep(1000) // - Блокирует поток!
+    Thread.sleep(1000) // - Blocks thread!
     return database.getUser(id)
 }
 
-// Suspend функция - НЕ блокирует поток
+// Suspend function - does NOT block thread
 suspend fun loadUser(id: Int): User {
-    delay(1000) // - Приостанавливает корутину, освобождает поток
+    delay(1000) // - Suspends coroutine, releases thread
     return database.getUser(id)
 }
 ```
 
-**Ключевые отличия**:
-- - **Обычная функция**: блокирует поток → другие задачи ждут
-- - **Suspend функция**: освобождает поток → другие задачи выполняются
+**Key differences**:
+- - **Regular function**: blocks thread → other tasks wait
+- - **Suspend function**: releases thread → other tasks execute
 
-### Правила использования suspend функций
+### Rules for using suspend functions
 
 ```kotlin
 class UserRepository {
-    // - Suspend функцию можно вызвать из другой suspend функции
+    // - Suspend function can be called from another suspend function
     suspend fun getUser(id: Int): User {
-        return apiService.fetchUser(id) // fetchUser - тоже suspend
+        return apiService.fetchUser(id) // fetchUser is also suspend
     }
 
-    // - Или из coroutine scope
+    // - Or from coroutine scope
     fun loadUserInBackground(id: Int) {
         viewModelScope.launch {
-            val user = getUser(id) // OK внутри корутины
+            val user = getUser(id) // OK inside coroutine
         }
     }
 
-    // - НЕЛЬЗЯ вызвать из обычной функции
+    // - CANNOT call from regular function
     fun getUserSync(id: Int): User {
         return getUser(id) // - Compilation error!
     }
 }
 ```
 
-**3 способа вызвать suspend функцию**:
-1. Из другой suspend функции
-2. Из coroutine builder (`launch`, `async`)
-3. Из `runBlocking` (только для тестов/main)
+**3 ways to call suspend function**:
+1. From another suspend function
+2. From coroutine builder (`launch`, `async`)
+3. From `runBlocking` (only for tests/main)
 
-### Как работает suspend под капотом
+### How suspend works under the hood
 
-Компилятор Kotlin трансформирует suspend функции используя **Continuation Passing Style (CPS)**:
+Kotlin compiler transforms suspend functions using **Continuation Passing Style (CPS)**:
 
 ```kotlin
-// Код который вы пишете:
+// Code you write:
 suspend fun loginUser(email: String, password: String): User {
     val token = authenticate(email, password)  // suspension point 1
     val user = fetchUserData(token)            // suspension point 2
     return user
 }
 
-// Что генерирует компилятор (упрощенно):
+// What compiler generates (simplified):
 fun loginUser(
     email: String,
     password: String,
@@ -105,47 +105,47 @@ fun loginUser(
 }
 ```
 
-**Что происходит**:
-1. Suspend функция превращается в **state machine** с метками (labels)
-2. Добавляется параметр `Continuation<T>` - callback для возобновления
-3. При каждом suspension point функция может вернуть `COROUTINE_SUSPENDED`
-4. Когда готова возобновиться - вызывает `continuation.resumeWith(result)`
+**What happens**:
+1. Suspend function is transformed into a **state machine** with labels
+2. A `Continuation<T>` parameter is added - callback for resumption
+3. At each suspension point, function may return `COROUTINE_SUSPENDED`
+4. When ready to resume - calls `continuation.resumeWith(result)`
 
-### Continuation - что это?
+### Continuation - what is it?
 
 ```kotlin
-// Continuation - это callback для возобновления корутины
+// Continuation - is a callback for coroutine resumption
 public interface Continuation<in T> {
     public val context: CoroutineContext
     public fun resumeWith(result: Result<T>)
 }
 
-// Extension функции для удобства
+// Extension functions for convenience
 fun <T> Continuation<T>.resume(value: T)
 fun <T> Continuation<T>.resumeWithException(exception: Throwable)
 ```
 
-**Пример использования Continuation API**:
+**Example using Continuation API**:
 
 ```kotlin
-// Превращаем callback API в suspend функцию
+// Transform callback API into suspend function
 suspend fun fetchUserFromCallback(id: Int): User = suspendCoroutine { continuation ->
-    // Старый callback API
+    // Old callback API
     userApi.getUser(id, object : Callback<User> {
         override fun onSuccess(user: User) {
-            continuation.resume(user) // Возобновляем с результатом
+            continuation.resume(user) // Resume with result
         }
 
         override fun onError(error: Exception) {
-            continuation.resumeWithException(error) // Возобновляем с ошибкой
+            continuation.resumeWithException(error) // Resume with error
         }
     })
 }
 
-// Теперь можно использовать как обычную suspend функцию
+// Now can use as regular suspend function
 suspend fun loadUser(id: Int) {
     try {
-        val user = fetchUserFromCallback(id) // Выглядит синхронно!
+        val user = fetchUserFromCallback(id) // Looks synchronous!
         println("Loaded: ${user.name}")
     } catch (e: Exception) {
         println("Error: ${e.message}")
@@ -156,17 +156,17 @@ suspend fun loadUser(id: Int) {
 ### suspendCoroutine vs suspendCancellableCoroutine
 
 ```kotlin
-// - НЕ отменяемая - может привести к утечкам
+// - NOT cancellable - can lead to leaks
 suspend fun downloadFile(url: String): File = suspendCoroutine { continuation ->
     networkClient.download(url, object : DownloadCallback {
         override fun onComplete(file: File) {
             continuation.resume(file)
         }
     })
-    // Проблема: если корутина отменена, callback все равно выполнится!
+    // Problem: if coroutine is cancelled, callback still executes!
 }
 
-// - Отменяемая - правильный подход
+// - Cancellable - correct approach
 suspend fun downloadFile(url: String): File = suspendCancellableCoroutine { continuation ->
     val call = networkClient.download(url, object : DownloadCallback {
         override fun onComplete(file: File) {
@@ -178,16 +178,16 @@ suspend fun downloadFile(url: String): File = suspendCancellableCoroutine { cont
         }
     })
 
-    // Регистрируем cancellation handler
+    // Register cancellation handler
     continuation.invokeOnCancellation {
-        call.cancel() // Отменяем network запрос
+        call.cancel() // Cancel network request
     }
 }
 ```
 
-**Всегда используйте `suspendCancellableCoroutine`** для интеграции с callback API!
+**Always use `suspendCancellableCoroutine`** for callback API integration!
 
-### Suspend функции и потоки
+### Suspend functions and threads
 
 ```kotlin
 suspend fun processData() {
@@ -204,16 +204,16 @@ suspend fun processData() {
     println("End: ${Thread.currentThread().name}")
 }
 
-// Вывод:
+// Output:
 // Start: main
-// After delay: main (может быть другой поток из того же диспетчера!)
+// After delay: main (may be different thread from same dispatcher!)
 // In IO: DefaultDispatcher-worker-1
 // End: main
 ```
 
-**Важно**: После suspension point корутина может возобновиться на **другом потоке**!
+**Important**: After suspension point, coroutine may resume on **different thread**!
 
-### Реальные примеры suspend функций
+### Real examples of suspend functions
 
 #### 1. Network запросы (Retrofit)
 

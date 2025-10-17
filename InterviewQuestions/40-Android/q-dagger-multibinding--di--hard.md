@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-11
-tags: - android
-  - dependency-injection
-  - dagger
-  - hilt
-  - advanced
+tags: [dependency-injection, dagger, hilt, advanced, difficulty/hard]
 related:   - q-hilt-entry-points--di--medium
   - q-hilt-assisted-injection--di--medium
   - q-dagger-custom-scopes--di--hard

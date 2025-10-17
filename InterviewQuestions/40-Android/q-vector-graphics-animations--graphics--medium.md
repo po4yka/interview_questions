@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - vector-graphics
-  - animated-vector-drawable
-  - svg
-  - animations
-  - graphics
+tags: [vector-graphics, animated-vector-drawable, svg, animations, graphics, difficulty/medium]
 ---
 # Vector Graphics and Animated Vector Drawables
 

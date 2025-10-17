@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - layout
-  - performance
-  - android
-  - ui
-  - layouts
+tags: [performance, android, ui, layouts, difficulty/medium]
 ---
 # What is layout performance measured in?
 

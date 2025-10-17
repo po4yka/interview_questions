@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - KMM
-  - SQLDelight
-  - Database
+tags: [Kotlin, KMM, SQLDelight, Database, difficulty/medium]
 ---
 # SQLDelight for Multiplatform Database
 

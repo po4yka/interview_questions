@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - recyclerview
-  - async
-  - diffutil
-  - performance
-  - threading
+tags: [async, diffutil, performance, threading, difficulty/medium]
 ---
 # RecyclerView Async List Diffing
 

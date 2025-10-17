@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/jetpack-compose, android/testing, android/ui-testing, android/semantics, android/test-rules, difficulty/medium]
 source: internal
 source_note: Created for vault completeness
 
@@ -24,7 +24,7 @@ related: [q-compose-ui-testing-advanced--testing--hard, q-jetpack-compose-basics
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [android, jetpack-compose, testing, ui-testing, semantics, difficulty/medium]
+tags: [en, ru, android/jetpack-compose, android/testing, android/ui-testing, android/semantics, android/test-rules, difficulty/medium]
 ---
 
 # Question (EN)

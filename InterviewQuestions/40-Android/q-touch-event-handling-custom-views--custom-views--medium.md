@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - custom-views
-  - touch-events
-  - gestures
-  - android-framework
+tags: [views, touch-events, gestures, android-framework, difficulty/medium]
 ---
 # Touch Event Handling in Custom Views
 

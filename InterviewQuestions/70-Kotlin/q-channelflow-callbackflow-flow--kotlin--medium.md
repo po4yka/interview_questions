@@ -24,19 +24,22 @@ subtopics:   - coroutines
   - callbackflow
   - builders
 ---
-# channelFlow vs callbackFlow vs flow: when to use each
 
-## English Version
+# Question (EN)
+> What's the difference between `flow{}`, `channelFlow{}`, and `callbackFlow{}`? When should you use each builder?
 
-### Problem Statement
+# Вопрос (RU)
+> В чем разница между `flow{}`, `channelFlow{}`, и `callbackFlow{}`? Когда следует использовать каждый билдер?
+
+---
+
+## Answer (EN)
 
 Kotlin Flow provides multiple builders (`flow{}`, `channelFlow{}`, `callbackFlow{}`) each with different characteristics. Choosing the wrong builder can lead to performance issues, crashes, or incorrect behavior. Understanding when to use each is essential for production-ready Flow code.
 
-**The Question:** What's the difference between `flow{}`, `channelFlow{}`, and `callbackFlow{}`? When should you use each builder?
 
-### Detailed Answer
 
-#### Overview of Flow Builders
+### Overview of Flow Builders
 
 | Builder | Type | Concurrency | Buffering | Use Case |
 |---------|------|-------------|-----------|----------|
@@ -44,7 +47,7 @@ Kotlin Flow provides multiple builders (`flow{}`, `channelFlow{}`, `callbackFlow
 | **channelFlow{}** | Hot | Concurrent sends | Buffered channel | Concurrent data sources |
 | **callbackFlow{}** | Hot | Concurrent sends | Buffered + awaitClose | Callback-based APIs |
 
-#### flow{} - Cold, Sequential Flow
+### flow{} - Cold, Sequential Flow
 
 **Characteristics:**
 - **Cold**: Starts on collection
@@ -113,7 +116,7 @@ fun concurrentFlow(): Flow<Int> = flow {
 // but emission happened in [coroutine#2].
 ```
 
-#### channelFlow{} - Concurrent Flow
+### channelFlow{} - Concurrent Flow
 
 **Characteristics:**
 - **Hot**: Producer runs independently
@@ -184,7 +187,7 @@ fun bufferedFlow(): Flow<Int> = channelFlow {
 }.buffer(capacity = Channel.UNLIMITED) // Or CONFLATED, RENDEZVOUS, etc.
 ```
 
-#### callbackFlow{} - Callback-Based APIs
+### callbackFlow{} - Callback-Based APIs
 
 **Characteristics:**
 - **Hot**: Producer runs independently
@@ -261,7 +264,7 @@ fun goodCallbackFlow() = callbackFlow {
 }
 ```
 
-#### Real Example: Firebase Realtime Database
+### Real Example: Firebase Realtime Database
 
 ```kotlin
 fun DatabaseReference.asFlow(): Flow<DataSnapshot> = callbackFlow {
@@ -290,7 +293,7 @@ database.child("users").asFlow()
     }
 ```
 
-#### Real Example: Room Database Query
+### Real Example: Room Database Query
 
 ```kotlin
 // Room can return Flow directly
@@ -322,7 +325,7 @@ interface UserDao {
 }
 ```
 
-#### Real Example: WebSocket Connection
+### Real Example: WebSocket Connection
 
 ```kotlin
 fun webSocketFlow(url: String): Flow<String> = callbackFlow {
@@ -358,7 +361,7 @@ webSocketFlow("wss://example.com/ws")
     }
 ```
 
-#### send() vs trySend() vs emit()
+### send() vs trySend() vs emit()
 
 **emit():** Suspending, waits for collector
 - Use in: `flow{}`, `channelFlow{}`
@@ -398,7 +401,7 @@ callbackFlow {
 }
 ```
 
-#### Error Handling
+### Error Handling
 
 **flow{}:**
 
@@ -460,7 +463,7 @@ callbackFlowWithError()
     .collect { data -> println(data) }
 ```
 
-#### Cancellation Handling
+### Cancellation Handling
 
 **flow{}:** Automatically cancelled when collector cancels
 
@@ -493,7 +496,7 @@ callbackFlow {
 }
 ```
 
-#### Performance Implications
+### Performance Implications
 
 **flow{}:**
 - **Lowest overhead**: Direct emit, no channel
@@ -526,7 +529,7 @@ channelFlow {
 // callbackFlow{}: ~500ns + callback overhead
 ```
 
-#### Testing Strategies
+### Testing Strategies
 
 **Testing flow{}:**
 
@@ -592,7 +595,7 @@ class FakeListener {
 }
 ```
 
-#### Common Pitfalls
+### Common Pitfalls
 
 **Pitfall 1: Using flow{} for concurrent emissions**
 
@@ -675,7 +678,7 @@ callbackFlow {
 }.buffer(Channel.CONFLATED) // Drop oldest on buffer full
 ```
 
-#### Choosing the Right Builder: Decision Tree
+### Choosing the Right Builder: Decision Tree
 
 ```
 Need to emit values?
@@ -737,15 +740,11 @@ fun sensorData(sensor: Sensor) = callbackFlow {
 
 ---
 
-## Русская версия
-
-### Формулировка проблемы
+## Ответ (RU)
 
 Kotlin Flow предоставляет несколько билдеров (`flow{}`, `channelFlow{}`, `callbackFlow{}`), каждый с разными характеристиками. Выбор неправильного билдера может привести к проблемам производительности, крашам или некорректному поведению. Понимание когда использовать каждый критично для production-ready Flow кода.
 
-**Вопрос:** В чем разница между `flow{}`, `channelFlow{}`, и `callbackFlow{}`? Когда следует использовать каждый билдер?
 
-### Подробный ответ
 
 [Полный русский перевод следует той же структуре]
 

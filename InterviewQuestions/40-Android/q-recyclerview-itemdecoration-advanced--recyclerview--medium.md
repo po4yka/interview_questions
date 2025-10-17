@@ -5,10 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - recyclerview
-  - itemdecoration
-  - custom-drawing
-  - ui
+tags: [itemdecoration, custom-drawing, ui, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

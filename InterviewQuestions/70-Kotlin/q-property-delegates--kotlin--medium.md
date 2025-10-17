@@ -16,47 +16,47 @@ tags: - kotlin
 ## Answer (EN)
 Делегаты свойств (Property Delegates) — это мощная функциональность Kotlin, позволяющая делегировать выполнение операций получения и установки значения свойства другому объекту.
 
-### Основная идея
+### Main idea
 
-Вместо того чтобы каждое свойство самостоятельно хранило данные или выполняло операции, оно может перенаправить эти задачи делегату.
+Instead of each property storing data or performing operations independently, it can delegate these tasks to another object.
 
 ```kotlin
 class Example {
-    // Обычное свойство
+    // Normal property
     var normalProperty: String = ""
 
-    // Делегированное свойство
+    // Delegated property
     var delegatedProperty: String by Delegate()
 }
 ```
 
-### Стандартные делегаты
+### Standard delegates
 
-#### 1. lazy - ленивая инициализация
+#### 1. lazy - lazy initialization
 
-Значение вычисляется только при первом обращении.
+Value is computed only on first access.
 
 ```kotlin
 class DatabaseConnection {
-    // Инициализируется только при первом использовании
+    // Initialized only on first use
     val database: Database by lazy {
         println("Initializing database...")
         Database.connect("jdbc:mysql://localhost/mydb")
     }
 
     fun query() {
-        database.execute("SELECT * FROM users")  // Здесь происходит инициализация
+        database.execute("SELECT * FROM users")  // Initialization happens here
     }
 }
 
-// Пример использования
+// Usage example
 val connection = DatabaseConnection()
-// "Initializing database..." ещё не выведено
-connection.query()  // Теперь выведется "Initializing database..."
-connection.query()  // База уже инициализирована, повторно не создаётся
+// "Initializing database..." not printed yet
+connection.query()  // Now prints "Initializing database..."
+connection.query()  // Database already initialized, not created again
 ```
 
-#### 2. observable - наблюдение за изменениями
+#### 2. observable - change observation
 
 ```kotlin
 class User {
@@ -65,48 +65,48 @@ class User {
     }
 }
 
-// Использование
+// Usage
 val user = User()
-user.name = "Alice"  // Выведет: name changed from Initial Name to Alice
-user.name = "Bob"    // Выведет: name changed from Alice to Bob
+user.name = "Alice"  // Prints: name changed from Initial Name to Alice
+user.name = "Bob"    // Prints: name changed from Alice to Bob
 ```
 
-#### 3. vetoable - валидация перед изменением
+#### 3. vetoable - validation before change
 
 ```kotlin
 class Product {
     var price: Int by Delegates.vetoable(0) { _, oldValue, newValue ->
-        newValue >= 0  // Разрешить изменение только если новая цена >= 0
+        newValue >= 0  // Allow change only if new price >= 0
     }
 }
 
-// Использование
+// Usage
 val product = Product()
-product.price = 100   // OK, цена установлена
-product.price = -50   // Отклонено, цена остаётся 100
+product.price = 100   // OK, price set
+product.price = -50   // Rejected, price remains 100
 println(product.price)  // 100
 ```
 
-#### 4. notNull - поздняя инициализация с проверкой
+#### 4. notNull - late initialization with check
 
 ```kotlin
 class Configuration {
     var apiKey: String by Delegates.notNull()
 
     fun initialize() {
-        apiKey = "your_api_key"  // Должно быть установлено до первого чтения
+        apiKey = "your_api_key"  // Must be set before first read
     }
 
     fun makeRequest() {
-        println("Using API key: $apiKey")  // IllegalStateException если не инициализировано
+        println("Using API key: $apiKey")  // IllegalStateException if not initialized
     }
 }
 ```
 
-### Кастомные делегаты
+### Custom delegates
 
 ```kotlin
-// Делегат для логирования доступа к свойству
+// Delegate for logging property access
 class LoggingDelegate<T>(private var value: T) : ReadWriteProperty<Any?, T> {
     override fun getValue(thisRef: Any?, property: KProperty<*>): T {
         println("Getting ${property.name} = $value")
@@ -119,7 +119,7 @@ class LoggingDelegate<T>(private var value: T) : ReadWriteProperty<Any?, T> {
     }
 }
 
-// Использование
+// Usage
 class Example {
     var data: String by LoggingDelegate("initial")
 }
@@ -129,7 +129,7 @@ example.data  // Getting data = initial
 example.data = "new value"  // Setting data from initial to new value
 ```
 
-### Делегат для SharedPreferences
+### Delegate for SharedPreferences
 
 ```kotlin
 class SharedPreferencesDelegate<T>(
@@ -163,11 +163,11 @@ class SharedPreferencesDelegate<T>(
     }
 }
 
-// Extension функция для удобства
+// Extension function for convenience
 fun <T> SharedPreferences.delegate(key: String, defaultValue: T) =
     SharedPreferencesDelegate(this, key, defaultValue)
 
-// Использование
+// Usage
 class Settings(context: Context) {
     private val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
@@ -177,11 +177,11 @@ class Settings(context: Context) {
 }
 
 val settings = Settings(context)
-settings.username = "Alice"  // Автоматически сохраняется в SharedPreferences
-println(settings.username)   // Автоматически читается из SharedPreferences
+settings.username = "Alice"  // Automatically saved to SharedPreferences
+println(settings.username)   // Automatically read from SharedPreferences
 ```
 
-### Map делегаты
+### Map delegates
 
 ```kotlin
 class User(map: Map<String, Any?>) {
@@ -190,7 +190,7 @@ class User(map: Map<String, Any?>) {
     val email: String by map
 }
 
-// Использование
+// Usage
 val userMap = mapOf(
     "name" to "Alice",
     "age" to 30,
@@ -202,11 +202,11 @@ println(user.name)   // Alice
 println(user.age)    // 30
 ```
 
-### Основные особенности и преимущества
+### Key features and benefits
 
-#### 1. Изоляция логики
+#### 1. Logic isolation
 
-Логика получения/установки значения вынесена в отдельный класс.
+Getter/setter logic is extracted into a separate class.
 
 ```kotlin
 class ValidationDelegate(private var value: String) : ReadWriteProperty<Any?, String> {
@@ -225,9 +225,9 @@ class Form {
 }
 ```
 
-#### 2. Повторное использование кода
+#### 2. Code reusability
 
-Один делегат можно использовать для множества свойств.
+One delegate can be used for multiple properties.
 
 ```kotlin
 class RangeDelegate(private var value: Int, private val range: IntRange) :
@@ -248,12 +248,12 @@ class GameCharacter {
 }
 ```
 
-#### 3. Расширяемость
+#### 3. Extensibility
 
-Легко создавать новые делегаты для специфичных нужд.
+Easy to create new delegates for specific needs.
 
-#### 4. Встроенная поддержка в языке
+#### 4. Built-in language support
 
-Kotlin предоставляет синтаксис `by` для работы с делегатами.
+Kotlin provides `by` syntax for working with delegates.
 
 **English**: Property delegates allow delegating getter/setter operations to another object, avoiding code duplication and making code modular. Built-in delegates include `lazy` (lazy initialization), `observable` (change observation), `vetoable` (validation), and `notNull`. Custom delegates implement `ReadWriteProperty` interface, enabling reusable logic for SharedPreferences, validation, logging, etc.

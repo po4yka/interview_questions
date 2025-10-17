@@ -12,16 +12,8 @@ subtopics:
   - strictmode-anr
   - performance-rendering
   - profiling
-tags:
-  - android
-  - anr
-  - performance
-  - main-thread
-  - debugging
-  - difficulty/medium
-language_tags:
-  - en
-  - ru
+tags: [anr, performance, main-thread, debugging, difficulty/medium, android/anr, android/performance-rendering, android/profiling]
+language_tags: [anr, performance, main-thread, debugging, difficulty/medium, android/anr, android/performance-rendering, android/profiling]
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20ANR.md
 author: null

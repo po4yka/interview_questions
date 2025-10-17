@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - jetpack-compose
-  - performance
-  - jank
-  - profiling
-  - optimization
+tags: [jetpack-compose, performance, jank, profiling, optimization, difficulty/medium]
 ---
 # Performance Monitoring and Jank Detection in Compose
 
@@ -19,7 +14,7 @@ tags: - android
 ## Answer (EN)
 **Jank** - это "замирания" UI когда frame rate падает ниже 60fps (16.67ms per frame). В Compose главные причины: избыточные recompositions, медленные вычисления, неоптимизированные списки.
 
-### Что такое Jank?
+### What is Jank?
 
 ```
 Perfect:  60fps (16.67ms per frame)
@@ -35,7 +30,7 @@ Jank:             Пропущенные frames
 4. Blocking UI thread (IO/CPU работа)
 5. Large memory allocations
 
-### Layout Inspector - визуализация recompositions
+### Layout Inspector - Visualizing Recompositions
 
 ```kotlin
 // Android Studio → Tools → Layout Inspector → Live Updates
@@ -85,7 +80,7 @@ fun ProductsList(products: List<Product>) {
 // - Skipped recompositions (оптимизация сработала)
 ```
 
-### remember - избегаем лишних вычислений
+### remember - Avoiding Unnecessary Computations
 
 ```kotlin
 // - НЕПРАВИЛЬНО - вычисляется каждый recompose
@@ -115,7 +110,7 @@ fun ExpensiveComponent(items: List<Item>) {
 }
 ```
 
-### derivedStateOf - вычисляемый state
+### derivedStateOf - Computed State
 
 ```kotlin
 // - НЕПРАВИЛЬНО - каждое изменение listState → recompose
@@ -165,7 +160,7 @@ fun ScrollableList() {
 }
 ```
 
-### Stability - ключ к оптимизации
+### Stability - Key to Optimization
 
 ```kotlin
 // - НЕСТАБИЛЬНЫЙ класс - всегда recompose
@@ -230,7 +225,7 @@ class SearchQuery {
 }
 ```
 
-### LazyColumn/LazyRow оптимизация
+### LazyColumn/LazyRow Optimization
 
 ```kotlin
 // - НЕПРАВИЛЬНО - нестабильный key
@@ -281,7 +276,7 @@ fun MixedList(items: List<ListItem>) {
 }
 ```
 
-### Modifier reuse
+### Modifier Reuse
 
 ```kotlin
 // - НЕПРАВИЛЬНО - новый Modifier каждый recompose

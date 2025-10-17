@@ -5,13 +5,7 @@ topic: networking
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - networking
-  - retrofit
-  - call-adapter
-  - result
-  - error-handling
-  - sealed-classes
-  - difficulty/medium
+tags: [retrofit, call-adapter, result, error-handling, sealed-classes, difficulty/medium]
 ---
 
 # Retrofit CallAdapter Advanced / Продвинутый CallAdapter для Retrofit

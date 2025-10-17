@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - android
-  - foreground-service
-  - background-processing
-  - notifications
-  - android-14
+tags: [foreground-service, background-processing, notifications, android-14, difficulty/medium]
 related:   - q-workmanager-advanced--background--medium
   - q-workmanager-vs-alternatives--background--medium
 ---

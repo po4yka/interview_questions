@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/components, android/background-processing, android/lifecycle, difficulty/medium]
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 
@@ -24,7 +24,7 @@ related: []
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [android, service, components, background, lifecycle, foreground-service, bound-service, difficulty/medium]
+tags: [en, ru, android/components, android/background-processing, android/lifecycle, difficulty/medium]
 ---
 # Question (EN)
 > What's Service?

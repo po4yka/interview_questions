@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - opengl-es
-  - 3d-graphics
-  - shaders
-  - rendering
-  - textures
+tags: [opengl-es, 3d-graphics, shaders, rendering, textures, difficulty/medium]
 ---
 # Advanced OpenGL ES Rendering Techniques
 

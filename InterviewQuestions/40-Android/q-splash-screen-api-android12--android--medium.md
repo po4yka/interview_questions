@@ -5,14 +5,8 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - splash-screen
-  - android12
-  - app-startup
-  - ui
-  - difficulty/medium
-language_tags:   - en
-  - ru
+tags: [splash-screen, android12, app-startup, ui, difficulty/medium, android/views, android/app-startup, android/ui-animation]
+language_tags: [splash-screen, android12, app-startup, ui, difficulty/medium, android/views, android/app-startup, android/ui-animation]
 moc: moc-android
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
@@ -192,7 +186,7 @@ Generally, we recommend removing your previous custom splash screen `Activity` a
 
 **Splash Screen** (экран заставки) - это первый экран, видимый пользователю при запуске приложения. Это важный экран, на котором пользователь получает первое впечатление о приложении.
 
-### Когда показывается Splash Screen
+### When Splash Screen Shows
 
 Когда пользователь запускает приложение, когда процесс приложения не запущен (холодный старт) или `Activity` не создана (теплый старт), происходят следующие события:
 - Система показывает splash screen, используя темы и анимации, которые вы определили
@@ -200,11 +194,11 @@ Generally, we recommend removing your previous custom splash screen `Activity` a
 
 **Примечание**: Splash screen никогда не показывается при горячем старте.
 
-### Изменения в Android 12
+### Android 12 Changes
 
 Начиная с Android 12, система применяет [системный splash screen по умолчанию](https://developer.android.com/about/versions/12/features/splash-screen) при холодном и теплом запуске для всех приложений. По умолчанию этот системный splash screen создается с использованием иконки запуска вашего приложения и `windowBackground` вашей темы, если это один цвет.
 
-### Библиотека совместимости SplashScreen
+### SplashScreen Compat Library
 
 Вы можете использовать `SplashScreen` API напрямую, но мы настоятельно рекомендуем использовать **библиотеку совместимости Androidx SplashScreen**. Библиотека совместимости использует `SplashScreen` API, обеспечивает обратную совместимость и создает согласованный внешний вид splash screen на всех версиях Android.
 
@@ -215,9 +209,9 @@ Generally, we recommend removing your previous custom splash screen `Activity` a
 **С библиотекой совместимости**:
 - Система отображает одинаковый splash screen на всех версиях Android
 
-### Как добавить Splash Screen
+### How to Add a Splash Screen
 
-#### 1. Добавить зависимости
+#### 1. Add Dependencies
 
 Добавьте следующую зависимость в файл `build.gradle` модуля приложения:
 
@@ -227,7 +221,7 @@ dependencies {
 }
 ```
 
-#### 2. Добавить тему
+#### 2. Add a Theme
 
 Создайте тему splash screen в `res/values/styles.xml`. Родительский элемент зависит от формы иконки:
 - Если иконка круглая, используйте `Theme.SplashScreen`
@@ -258,7 +252,7 @@ dependencies {
 </style>
 ```
 
-#### 3. Создать Drawable для темы
+#### 3. Create a Drawable for the Theme
 
 Создайте новый файл `res/drawable/splash_screen.xml`:
 
@@ -283,7 +277,7 @@ dependencies {
 <dimen name="splash_screen_icon_size">36dp</dimen>
 ```
 
-#### 4. Указать тему
+#### 4. Specify the Theme
 
 В файле манифеста вашего приложения (`AndroidManifest.xml`) замените тему стартовой activity:
 
@@ -296,7 +290,7 @@ dependencies {
 </manifest>
 ```
 
-#### 5. Обновить вашу стартовую Activity
+#### 5. Update Your Starting Activity
 
 Установите splash screen в стартовой activity перед вызовом `super.onCreate()`:
 
@@ -314,11 +308,11 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-### Адаптация пользовательских Activity Splash Screen
+### Adapting Custom Splash Screen Activities
 
 После миграции на splash screen для Android 12 и выше решите, что делать с вашей предыдущей пользовательской `Activity` splash screen. У вас есть следующие варианты:
 
-#### Предотвратить отображение пользовательской Activity
+#### Prevent the Custom Activity from Being Displayed
 
 Если ваша предыдущая `Activity` splash screen в основном использовалась для маршрутизации, вы можете использовать `SplashScreen.setKeepOnScreenCondition`, чтобы сохранить activity маршрутизации, но остановить ее отрисовку:
 
@@ -336,11 +330,11 @@ class RoutingActivity : Activity() {
 }
 ```
 
-#### Сохранить пользовательскую Activity для брендинга
+#### Keep the Custom Activity for Branding
 
 Если вы хотите использовать предыдущую `Activity` splash screen для брендинга, вы можете перейти от системного splash screen к вашей пользовательской `Activity` splash screen, настроив анимацию закрытия splash screen.
 
-#### Удалить пользовательскую Activity Splash Screen
+#### Remove the Custom Splash Screen Activity
 
 В целом, мы рекомендуем полностью удалить вашу предыдущую пользовательскую `Activity` splash screen, чтобы избежать дублирования, повысить эффективность и сократить время загрузки. Техники для избежания показа избыточных splash screens:
 

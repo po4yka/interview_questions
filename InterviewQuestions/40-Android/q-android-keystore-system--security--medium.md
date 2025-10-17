@@ -5,13 +5,7 @@ topic: security
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - security
-  - keystore
-  - encryption
-  - biometric
-  - attestation
-  - authentication
-  - difficulty/medium
+tags: [keystore, encryption, biometric, attestation, authentication, difficulty/medium]
 ---
 # Android Keystore System / Система Android Keystore
 

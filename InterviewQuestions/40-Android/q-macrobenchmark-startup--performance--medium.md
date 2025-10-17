@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags: [en, ru, android/performance, android/macrobenchmark, android/startup, android/optimization, android/profiling, android/perfetto, difficulty/medium]
 source: Original
 source_note: Performance optimization best practices
 
@@ -24,7 +24,7 @@ related: [app-startup-optimization, baseline-profiles-optimization, jank-detecti
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [android, performance, macrobenchmark, startup, optimization, profiling, perfetto, difficulty/medium]
+tags: [en, ru, android/performance, android/macrobenchmark, android/startup, android/optimization, android/profiling, android/perfetto, difficulty/medium]
 ---
 # Question (EN)
 > Implement macrobenchmark for app startup. Measure cold, warm, and hot startup times. Use Perfetto traces to identify bottlenecks and optimize based on results.

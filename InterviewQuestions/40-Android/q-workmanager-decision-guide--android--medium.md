@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - workmanager
-  - background-work
-  - coroutines
-  - service
+tags: [workmanager, background-work, coroutines, service, difficulty/medium]
 ---
 # WorkManager vs Coroutines vs Service - Decision Guide
 
@@ -27,7 +23,7 @@ tags: - android
 | **Периодические задачи** | - Да (min 15 min) | - Нет | WARNING: Вручную |
 | **Use case** | Deferrable гарантированная работа | Async операции в UI | Long-running foreground |
 
-### Когда использовать WorkManager
+### When to Use WorkManager
 
 ```kotlin
 // - Загрузка файлов - должна завершиться
@@ -87,7 +83,7 @@ fun scheduleUpload(fileUri: String) {
 - - Автоматические retry при сбое
 - - Батарейно-эффективно (соблюдает Doze Mode)
 
-### Когда использовать Coroutines
+### When to Use Coroutines
 
 ```kotlin
 class ProductsViewModel(
@@ -146,7 +142,7 @@ class ProductsViewModel(
 - - Нет retry/backoff из коробки
 - - Нет constraints (WiFi, charging)
 
-### Когда использовать Foreground Service
+### When to Use Foreground Service
 
 ```kotlin
 class MusicPlayerService : Service() {
@@ -203,9 +199,9 @@ fun startMusicPlayer() {
 - - Может работать пока приложение закрыто
 - WARNING: Система может убить при низкой памяти
 
-### Сравнение на примерах
+### Comparison with Examples
 
-#### Пример 1: Загрузка файла
+#### Example 1: File Upload
 
 ```kotlin
 // - НЕПРАВИЛЬНО - Coroutines
@@ -232,7 +228,7 @@ fun uploadFile(file: File) {
 }
 ```
 
-#### Пример 2: Периодическая синхронизация
+#### Example 2: Periodic Synchronization
 
 ```kotlin
 // - НЕПРАВИЛЬНО - Coroutines с while loop
@@ -268,7 +264,7 @@ fun schedulePeriodicSync() {
 }
 ```
 
-#### Пример 3: Music Player
+#### Example 3: Music Player
 
 ```kotlin
 // - НЕПРАВИЛЬНО - WorkManager
@@ -293,7 +289,7 @@ class MusicPlayerService : Service() {
 }
 ```
 
-#### Пример 4: Загрузка данных для UI
+#### Example 4: Loading Data for UI
 
 ```kotlin
 // - НЕПРАВИЛЬНО - WorkManager
@@ -315,7 +311,7 @@ fun loadProducts() {
 }
 ```
 
-### Комбинирование подходов
+### Combining Approaches
 
 ```kotlin
 class DataSyncManager(
@@ -531,7 +527,7 @@ class TrackingService : Service() {
          ДА (≥ 15 min): WorkManager Periodic
 ```
 
-### Migration примеры
+### Migration Examples
 
 ```kotlin
 // Было: AsyncTask (deprecated)

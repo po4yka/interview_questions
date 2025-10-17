@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - architecture-patterns
-  - mvp
-  - model-view-presenter
-  - presenter
-  - contract
+tags: [architecture-patterns, mvp, model-view-presenter, presenter, contract, difficulty/medium]
 ---
 # MVP Pattern
 
@@ -19,7 +14,7 @@ tags: - android
 ## Answer (EN)
 **MVP (Model-View-Presenter)** - архитектурный паттерн, разработанный для облегчения автоматизированного модульного тестирования и улучшения разделения ответственности в презентационной логике.
 
-### Компоненты MVP
+### MVP Components
 
 MVP is an architectural pattern engineered to facilitate automated unit testing and improve the separation of concerns in presentation logic.
 
@@ -73,7 +68,7 @@ Since the View and the Presenter work closely together, they need to have a refe
 
 The relationship between the Presenter and its corresponding View is defined in a **Contract** interface class, making the code more readable and the connection between the two easier to understand.
 
-### Пример MVP с Contract
+### MVP Example with Contract
 
 ```kotlin
 // Contract - определяет связь между View и Presenter
@@ -185,7 +180,7 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 }
 ```
 
-### Зачем использовать MVP?
+### Why Use MVP?
 
 ## Why Use MVP?
 

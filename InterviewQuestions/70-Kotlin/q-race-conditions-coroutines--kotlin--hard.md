@@ -25,19 +25,22 @@ subtopics:   - coroutines
   - concurrency
   - bugs
 ---
-# Race conditions and data races in Kotlin coroutines
 
-## English Version
+# Question (EN)
+> What are race conditions and data races in Kotlin coroutines? How do you detect and prevent them?
 
-### Problem Statement
+# Вопрос (RU)
+> Что такое состояния гонки и data race в Kotlin корутинах? Как их обнаруживать и предотвращать?
+
+---
+
+## Answer (EN)
 
 Coroutines make concurrent programming easier, but they don't eliminate race conditions. When multiple coroutines access shared mutable state, subtle bugs can appear. Understanding race conditions vs data races, detection techniques, and prevention strategies is critical for production-ready coroutine code.
 
-**The Question:** What are race conditions and data races in Kotlin coroutines? How do you detect and prevent them?
 
-### Detailed Answer
 
-#### Race Condition vs Data Race
+### Race Condition vs Data Race
 
 **Race Condition:** Bug where program behavior depends on timing/ordering of concurrent operations.
 
@@ -78,7 +81,7 @@ launch {
 // Even with synchronized reads/writes, logic is still racy
 ```
 
-#### Common Race Condition Pattern: Check-Then-Act
+### Common Race Condition Pattern: Check-Then-Act
 
 **Problem:** State changes between check and action.
 
@@ -142,7 +145,7 @@ class BankAccount {
 }
 ```
 
-#### Common Race Condition Pattern: Read-Modify-Write
+### Common Race Condition Pattern: Read-Modify-Write
 
 **Problem:** Counter increment without synchronization.
 
@@ -211,7 +214,7 @@ repeat(1000) {
 }
 ```
 
-#### Shared Mutable State Problems
+### Shared Mutable State Problems
 
 **Problem:** Multiple coroutines modifying shared state.
 
@@ -303,7 +306,7 @@ class UserCache {
 }
 ```
 
-#### Detection Techniques
+### Detection Techniques
 
 **Technique 1: Stress testing**
 
@@ -387,7 +390,7 @@ kotlin {
 - [ ] Are there check-then-act patterns?
 - [ ] Are there read-modify-write operations?
 
-#### Prevention Strategy 1: Mutex
+### Prevention Strategy 1: Mutex
 
 **When to use:** Multiple operations need atomicity.
 
@@ -420,7 +423,7 @@ class SessionManager {
 }
 ```
 
-#### Prevention Strategy 2: Atomic Types
+### Prevention Strategy 2: Atomic Types
 
 **When to use:** Simple counters, flags, references.
 
@@ -453,7 +456,7 @@ class ConfigManager {
 }
 ```
 
-#### Prevention Strategy 3: Confined Dispatcher
+### Prevention Strategy 3: Confined Dispatcher
 
 **When to use:** State confined to single thread.
 
@@ -478,7 +481,7 @@ class DatabaseManager {
 }
 ```
 
-#### Prevention Strategy 4: StateFlow (Immutable Updates)
+### Prevention Strategy 4: StateFlow (Immutable Updates)
 
 **When to use:** Observable state with atomic updates.
 
@@ -510,7 +513,7 @@ sealed class UserState {
 
 **Why safe?** StateFlow updates are atomic - no partial updates visible.
 
-#### Happens-Before Relationships
+### Happens-Before Relationships
 
 **Happens-before:** Guarantees that effects of one operation are visible to another.
 
@@ -538,7 +541,7 @@ launch {
 }
 ```
 
-#### Volatile and @Volatile in Kotlin
+### Volatile and @Volatile in Kotlin
 
 **@Volatile:** Ensures visibility across threads, but NOT atomicity.
 
@@ -574,7 +577,7 @@ isRunning = false // Visible immediately
 - `@Volatile`: Visibility only
 - `Atomic*`: Visibility + atomicity
 
-#### Coroutine Context Confinement
+### Coroutine Context Confinement
 
 **Pattern:** Confine mutable state to specific context.
 
@@ -597,7 +600,7 @@ class Repository {
 }
 ```
 
-#### Testing for Race Conditions
+### Testing for Race Conditions
 
 **Test pattern: Concurrent access**
 
@@ -633,7 +636,7 @@ fun `stress test 100 times`() {
 }
 ```
 
-#### Real-World Example: Session Management
+### Real-World Example: Session Management
 
 **Problem: Concurrent login/logout**
 
@@ -698,7 +701,7 @@ data class Session(
 )
 ```
 
-#### Real-World Example: Cache Updates
+### Real-World Example: Cache Updates
 
 **Problem: Lost cache updates**
 
@@ -761,7 +764,7 @@ class ImageCache {
 // Now concurrent requests share single download
 ```
 
-#### kotlinx.coroutines.sync Primitives
+### kotlinx.coroutines.sync Primitives
 
 **Available primitives:**
 
@@ -815,15 +818,11 @@ launch { val value = channel.receive() }
 
 ---
 
-## Русская версия
-
-### Формулировка проблемы
+## Ответ (RU)
 
 Корутины упрощают конкурентное программирование, но не устраняют состояния гонки. Когда несколько корутин обращаются к общему изменяемому состоянию, могут появиться тонкие баги. Понимание состояний гонки vs data race, техник обнаружения и стратегий предотвращения критично для production-ready корутинного кода.
 
-**Вопрос:** Что такое состояния гонки и data race в Kotlin корутинах? Как их обнаруживать и предотвращать?
 
-### Подробный ответ
 
 [Полный русский перевод следует той же структуре]
 

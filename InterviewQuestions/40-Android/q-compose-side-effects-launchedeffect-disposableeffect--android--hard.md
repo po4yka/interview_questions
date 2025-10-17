@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-13
-tags: - android
-  - jetpack-compose
-  - side-effects
-  - coroutines
-  - lifecycle
+tags: [jetpack-compose, side-effects, coroutines, lifecycle, difficulty/hard]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android
@@ -22,7 +18,7 @@ related_questions: []
 ## Answer (EN)
 **Side-effects** в Jetpack Compose — это операции, которые выполняются вне обычного цикла recomposition и могут взаимодействовать с внешним миром (API calls, database, sensors, etc.). Compose предоставляет специальные API для безопасного управления side-effects с учетом жизненного цикла.
 
-### Проблема без Side-Effect API
+### Problem Without Side-Effect API
 
 ```kotlin
 // НЕПРАВИЛЬНО - выполнится при каждой recomposition
@@ -33,13 +29,13 @@ fun BadExample(userId: Int) {
 }
 ```
 
-**Проблемы**:
+**Problems**:
 - Выполняется при каждой recomposition
 - Нет контроля жизненного цикла
 - Утечки памяти
 - Неконтролируемые async операции
 
-### Основные Side-Effect API
+### Main Side-Effect APIs
 
 | API | Когда использовать | Отмена при | Повторный запуск |
 |-----|-------------------|-----------|------------------|
@@ -51,9 +47,9 @@ fun BadExample(userId: Int) {
 | **derivedStateOf** | Вычисляемое состояние | Никогда | При изменении зависимостей |
 | **produceState** | State из suspend функции | Composable покидает composition | При изменении key |
 
-### LaunchedEffect - Запуск корутин
+### LaunchedEffect - Launching Coroutines
 
-**Используйте** для запуска coroutine работы при входе в composition или изменении ключа.
+**Use** for launching coroutine work when entering composition or when key changes.
 
 ```kotlin
 @Composable
@@ -85,12 +81,12 @@ fun UserProfile(userId: Int) {
 }
 ```
 
-**Поведение**:
+**Behavior**:
 1. При первом composition - запускается coroutine
 2. При изменении `userId` - **отменяет** предыдущую coroutine, запускает новую
 3. При покидании composition - **отменяет** coroutine
 
-#### LaunchedEffect с несколькими ключами
+#### LaunchedEffect with Multiple Keys
 
 ```kotlin
 @Composable
@@ -115,7 +111,7 @@ fun SearchScreen(
 }
 ```
 
-#### LaunchedEffect(Unit) - один раз
+#### LaunchedEffect(Unit) - Once Only
 
 ```kotlin
 @Composable
@@ -129,7 +125,7 @@ fun AnalyticsScreen(screenName: String) {
 }
 ```
 
-#### LaunchedEffect с Flow
+#### LaunchedEffect with Flow
 
 ```kotlin
 @Composable
@@ -150,9 +146,9 @@ fun OrderTracking(orderId: Int) {
 }
 ```
 
-### DisposableEffect - Подписки и очистка
+### DisposableEffect - Subscriptions and Cleanup
 
-**Используйте** для регистрации/отмены подписок, listeners, observers.
+**Use** for registering/unregistering subscriptions, listeners, observers.
 
 ```kotlin
 @Composable
@@ -189,12 +185,12 @@ fun LocationTracker() {
 }
 ```
 
-**Ключевые особенности**:
+**Key Features**:
 - **onDispose** блок **обязателен**
 - Вызывается при покидании composition или изменении key
 - Используется для cleanup resources
 
-#### DisposableEffect с изменяющимся ключом
+#### DisposableEffect with Changing Key
 
 ```kotlin
 @Composable
@@ -229,7 +225,7 @@ fun VideoPlayer(videoUrl: String) {
 }
 ```
 
-#### DisposableEffect для Lifecycle observers
+#### DisposableEffect for Lifecycle Observers
 
 ```kotlin
 @Composable
@@ -258,7 +254,7 @@ fun LifecycleAwareComponent() {
 }
 ```
 
-### Сравнение LaunchedEffect vs DisposableEffect
+### Comparison: LaunchedEffect vs DisposableEffect
 
 ```kotlin
 @Composable
@@ -281,17 +277,17 @@ fun ComparisonExample(userId: Int) {
 }
 ```
 
-| Аспект | LaunchedEffect | DisposableEffect |
+| Aspect | LaunchedEffect | DisposableEffect |
 |--------|----------------|------------------|
 | **Use case** | Coroutine работа | Подписки, listeners |
 | **Cleanup** | Автоматическая отмена | Явный onDispose блок |
-| **Возвращает** | Unit | DisposableEffectResult |
-| **Когда cleanup** | При dispose или key change | При dispose или key change |
-| **Примеры** | API calls, Flow collect | LocationManager, BroadcastReceiver |
+| **Returns** | Unit | DisposableEffectResult |
+| **When cleanup** | On dispose or key change | On dispose or key change |
+| **Examples** | API calls, Flow collect | LocationManager, BroadcastReceiver |
 
-### SideEffect - Публикация Compose state
+### SideEffect - Publishing Compose State
 
-**Используйте** для синхронизации Compose state с non-Compose кодом.
+**Use** for synchronizing Compose state with non-Compose code.
 
 ```kotlin
 @Composable
@@ -303,15 +299,15 @@ fun AnalyticsExample(currentScreen: Screen) {
 }
 ```
 
-**Особенности**:
+**Features**:
 - Выполняется **после** каждой успешной recomposition
 - Нет cleanup
 - Нет cancellation
 - Для синхронизации, не для async работы
 
-### rememberCoroutineScope - Event-driven работа
+### rememberCoroutineScope - Event-Driven Work
 
-**Используйте** для запуска coroutines из event handlers (onClick, swipe, etc.).
+**Use** for launching coroutines from event handlers (onClick, swipe, etc.).
 
 ```kotlin
 @Composable
@@ -344,11 +340,11 @@ fun RefreshableList() {
 }
 ```
 
-**Важно**: Scope привязан к Composable lifecycle - coroutines отменятся при dispose.
+**Important**: Scope is tied to Composable lifecycle - coroutines cancel on dispose.
 
-### produceState - Конвертация async в State
+### produceState - Converting Async to State
 
-**Используйте** для создания State из suspend функций или Flow.
+**Use** for creating State from suspend functions or Flow.
 
 ```kotlin
 @Composable
@@ -370,12 +366,12 @@ fun UserScreen(userId: Int) {
 }
 ```
 
-**Преимущества**:
+**Benefits**:
 - Чистый API для async → State
 - Автоматическая отмена при dispose
 - Перезапуск при изменении key
 
-#### produceState с Flow
+#### produceState with Flow
 
 ```kotlin
 @Composable
@@ -404,9 +400,9 @@ fun OrdersScreen(viewModel: OrdersViewModel) {
 }
 ```
 
-### derivedStateOf - Вычисляемое состояние
+### derivedStateOf - Computed State
 
-**Используйте** для оптимизации - вычисляет state только при изменении зависимостей.
+**Use** for optimization - computes state only when dependencies change.
 
 ```kotlin
 @Composable
@@ -425,9 +421,9 @@ fun TodoList(todos: List<Todo>) {
 }
 ```
 
-### rememberUpdatedState - Всегда актуальное значение
+### rememberUpdatedState - Always Current Value
 
-**Используйте** для callbacks, которые должны видеть последнее значение без перезапуска effect.
+**Use** for callbacks that should see the latest value without restarting effect.
 
 ```kotlin
 @Composable
@@ -442,7 +438,7 @@ fun Timer(onTimeout: () -> Unit) {
 }
 ```
 
-**Без rememberUpdatedState**:
+**Without rememberUpdatedState**:
 ```kotlin
 // НЕПРАВИЛЬНО - будет вызвана СТАРАЯ версия callback
 LaunchedEffect(Unit) {
@@ -457,9 +453,9 @@ LaunchedEffect(onTimeout) {
 }
 ```
 
-### Практические примеры
+### Practical Examples
 
-#### Пример 1: Подписка на Firebase реал-тайм обновления
+#### Example 1: Firebase Real-Time Updates Subscription
 
 ```kotlin
 @Composable
@@ -495,7 +491,7 @@ fun ChatMessages(chatId: String) {
 }
 ```
 
-#### Пример 2: Sensor tracking с cleanup
+#### Example 2: Sensor Tracking with Cleanup
 
 ```kotlin
 @Composable
@@ -536,7 +532,7 @@ fun AccelerometerTracker() {
 }
 ```
 
-#### Пример 3: Pagination с LaunchedEffect
+#### Example 3: Pagination with LaunchedEffect
 
 ```kotlin
 @Composable
@@ -563,7 +559,7 @@ fun PaginatedList(viewModel: ListViewModel) {
 }
 ```
 
-#### Пример 4: Back press handling
+#### Example 4: Back Press Handling
 
 ```kotlin
 @Composable
@@ -613,9 +609,9 @@ fun UnsavedChangesScreen() {
 }
 ```
 
-### Распространенные ошибки
+### Common Mistakes
 
-#### Ошибка 1: Бесконечная recomposition
+#### Mistake 1: Infinite Recomposition
 
 ```kotlin
 // НЕПРАВИЛЬНО
@@ -639,7 +635,7 @@ fun GoodExample() {
 }
 ```
 
-#### Ошибка 2: Забытый onDispose
+#### Mistake 2: Forgotten onDispose
 
 ```kotlin
 // НЕПРАВИЛЬНО - утечка памяти
@@ -666,7 +662,7 @@ fun GoodDisposableEffect() {
 }
 ```
 
-#### Ошибка 3: Неправильный ключ
+#### Mistake 3: Wrong Key
 
 ```kotlin
 // НЕПРАВИЛЬНО - не перезапустится при изменении userId

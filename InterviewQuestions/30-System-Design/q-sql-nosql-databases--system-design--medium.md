@@ -23,19 +23,21 @@ subtopics:   - databases
   - data-modeling
   - scalability
 ---
-# SQL vs NoSQL Databases
+# Question (EN)
+> What are the key differences between SQL and NoSQL databases? When should you use each type, and what are the trade-offs?
 
-## English Version
+# Вопрос (RU)
+> Каковы ключевые различия между SQL и NoSQL базами данных? Когда следует использовать каждый тип, и каковы компромиссы?
 
-### Problem Statement
+---
+
+## Answer (EN)
 
 Choosing between SQL and NoSQL databases is one of the most important decisions in system design. Each has distinct strengths, weaknesses, and ideal use cases. Understanding these trade-offs helps you select the right database for your application's requirements.
 
-**The Question:** What are the key differences between SQL and NoSQL databases? When should you use each type, and what are the trade-offs?
 
-### Detailed Answer
 
-#### SQL (Relational) Databases
+### SQL (Relational) Databases
 
 **Examples:** PostgreSQL, MySQL, Oracle, SQL Server, MariaDB
 
@@ -88,7 +90,7 @@ ORDER BY o.total_amount DESC;
 
 ---
 
-#### NoSQL Databases
+### NoSQL Databases
 
 **Types:**
 
@@ -131,7 +133,7 @@ ORDER BY o.total_amount DESC;
 
 ### SQL Deep Dive
 
-#### ACID Properties
+### ACID Properties
 
 ```kotlin
 // SQL Transaction Example
@@ -176,7 +178,7 @@ class BankService(private val dataSource: DataSource) {
 }
 ```
 
-#### When to Use SQL
+### When to Use SQL
 
  **Strong Consistency Required:**
 - Financial transactions
@@ -212,7 +214,7 @@ class BankService(private val dataSource: DataSource) {
 
 ### NoSQL Deep Dive
 
-#### 1. Document Databases (MongoDB)
+### 1. Document Databases (MongoDB)
 
 **Best for:** Flexible schemas, nested data, rapid development
 
@@ -337,7 +339,7 @@ class UserRepository(private val database: MongoDatabase) {
 
 ---
 
-#### 2. Key-Value Stores (Redis, DynamoDB)
+### 2. Key-Value Stores (Redis, DynamoDB)
 
 **Best for:** Caching, sessions, real-time data
 
@@ -427,7 +429,7 @@ class ProductRepository(private val dynamoDb: DynamoDbClient) {
 
 ---
 
-#### 3. Column-Family (Cassandra)
+### 3. Column-Family (Cassandra)
 
 **Best for:** Time-series, write-heavy workloads, big data
 
@@ -590,7 +592,7 @@ class EcommerceService(
 
 ### Migration Strategies
 
-#### SQL → NoSQL Migration
+### SQL → NoSQL Migration
 
 **Step 1: Add NoSQL alongside SQL**
 ```kotlin
@@ -643,17 +645,13 @@ suspend fun updateUser(user: User) {
 
 ---
 
-## Russian Version
-
-### Постановка задачи
+## Ответ (RU)
 
 Выбор между SQL и NoSQL базами данных - одно из самых важных решений в проектировании систем. У каждого типа есть свои сильные и слабые стороны и идеальные сценарии использования.
 
-**Вопрос:** Каковы ключевые различия между SQL и NoSQL базами данных? Когда следует использовать каждый тип, и каковы компромиссы?
 
-### Детальный ответ
 
-#### SQL (Реляционные) базы данных
+### SQL (Реляционные) базы данных
 
 **Примеры:** PostgreSQL, MySQL, Oracle, SQL Server, MariaDB
 
@@ -665,7 +663,7 @@ suspend fun updateUser(user: User) {
 -  **JOIN** между таблицами
 -  **Строгая консистентность**
 
-#### NoSQL базы данных
+### NoSQL базы данных
 
 **Типы:**
 

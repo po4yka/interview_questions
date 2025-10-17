@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - components
-  - activity
-  - service
-  - broadcastreceiver
-  - contentprovider
+tags: [components, activity, service, broadcastreceiver, contentprovider, difficulty/medium]
 ---
 # What unites the main components of an Android application?
 

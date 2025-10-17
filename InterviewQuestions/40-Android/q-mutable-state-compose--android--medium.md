@@ -5,14 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/jetpack-compose
-  - jetpack-compose
-  - mutablestate
-  - observable
-  - recomposition
-  - state
-  - state-management
+tags: [android/jetpack-compose, jetpack-compose, mutablestate, observable, recomposition, state, state-management, difficulty/medium]
 ---
 # What is MutableState in Compose?
 

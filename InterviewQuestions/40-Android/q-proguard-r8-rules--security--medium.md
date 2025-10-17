@@ -5,13 +5,7 @@ topic: security
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - security
-  - proguard
-  - r8
-  - obfuscation
-  - optimization
-  - library
-  - difficulty/medium
+tags: [proguard, r8, obfuscation, optimization, library, difficulty/medium]
 ---
 # ProGuard/R8 Rules / Правила ProGuard/R8
 

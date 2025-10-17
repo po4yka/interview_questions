@@ -5,13 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-13
-tags: - android
-  - architecture
-  - offline-first
-  - networking
-  - sync
-  - room
-  - workmanager
+tags: [architecture, offline-first, networking, sync, room, workmanager, difficulty/hard]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-android

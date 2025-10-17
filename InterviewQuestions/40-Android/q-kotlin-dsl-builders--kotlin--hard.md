@@ -5,11 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - kotlin
-  - dsl
-  - builders
-  - api-design
-  - lambdas
+tags: [dsl, builders, api-design, lambdas, android/dsl, android/builders, android/api-design, android/type-safe-builders, difficulty/hard]
 date_created: 2025-10-12
 date_updated: 2025-10-12
 moc: moc-android

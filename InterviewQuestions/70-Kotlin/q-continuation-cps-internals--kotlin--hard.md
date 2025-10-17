@@ -25,19 +25,22 @@ subtopics:   - coroutines
   - internals
   - state-machine
 ---
-# Continuation and CPS: how suspend functions work internally
 
-## English Version
+# Question (EN)
+> How does Kotlin transform suspend functions internally? What is Continuation, CPS transformation, and how do state machines work?
 
-### Problem Statement
+# Вопрос (RU)
+> Как Kotlin трансформирует suspend функции внутри? Что такое Continuation, CPS трансформация, и как работают конечные автоматы?
+
+---
+
+## Answer (EN)
 
 Understanding how `suspend` functions work internally is crucial for advanced coroutine usage, performance optimization, and debugging. Kotlin compiles suspend functions using **Continuation Passing Style (CPS)** and **state machines** under the hood. This transformation is transparent to developers but understanding it unlocks deeper insights.
 
-**The Question:** How does Kotlin transform suspend functions internally? What is Continuation, CPS transformation, and how do state machines work?
 
-### Detailed Answer
 
-#### What is Continuation?
+### What is Continuation?
 
 **Continuation** represents "the rest of the computation" - what should happen after a suspension point resumes.
 
@@ -54,7 +57,7 @@ fun <T> Continuation<T>.resumeWithException(exception: Throwable)
 
 **Key concept:** When a suspend function suspends, it passes a Continuation to the suspending operation. That operation later calls `resumeWith()` to continue execution.
 
-#### Continuation Passing Style (CPS)
+### Continuation Passing Style (CPS)
 
 **CPS transformation:** The compiler transforms every suspend function to accept an additional `Continuation` parameter.
 
@@ -83,7 +86,7 @@ fun getUserName(userId: String, continuation: Continuation<String>): Any? {
 - Continuation parameter added
 - Function is no longer `suspend` (it's a regular function)
 
-#### State Machine Transformation
+### State Machine Transformation
 
 **The compiler transforms suspend functions into state machines** where each suspension point becomes a state.
 
@@ -149,7 +152,7 @@ class ExampleStateMachine(
 - **State machine class**: Stores state between suspensions
 - **resumeWith**: Advances to next state when resumed
 
-#### Real Decompiled Example
+### Real Decompiled Example
 
 Let's look at actual decompiled code:
 
@@ -256,7 +259,7 @@ static final class FetchUserDataContinuation extends ContinuationImpl {
 5. Local variables stored in continuation class fields
 6. Each suspension point increments label
 
-#### suspendCoroutine and suspendCancellableCoroutine
+### suspendCoroutine and suspendCancellableCoroutine
 
 **suspendCoroutine:** Low-level API to create custom suspending operations.
 
@@ -304,7 +307,7 @@ suspend fun cancellableDelay(timeMillis: Long) = suspendCancellableCoroutine<Uni
 }
 ```
 
-#### Continuation.resume and resumeWith
+### Continuation.resume and resumeWith
 
 ```kotlin
 // Resume with success
@@ -352,7 +355,7 @@ suspender.provideValue("Hello!") // Resumes coroutine
 // Received: Hello!
 ```
 
-#### ContinuationInterceptor
+### ContinuationInterceptor
 
 **ContinuationInterceptor** is how dispatchers work - they intercept continuations to switch threads.
 
@@ -397,7 +400,7 @@ runBlocking(LoggingInterceptor()) {
 // After delay
 ```
 
-#### How Dispatchers Intercept Continuations
+### How Dispatchers Intercept Continuations
 
 **Dispatchers.Default implementation (simplified):**
 
@@ -440,7 +443,7 @@ class DispatchedContinuation<T>(
 5. Dispatcher schedules resume on appropriate thread
 6. State machine continues from next label
 
-#### Why suspend Functions Can't Be Called from Regular Functions
+### Why suspend Functions Can't Be Called from Regular Functions
 
 **The problem:**
 
@@ -490,7 +493,7 @@ fun regularFunction() {
 }
 ```
 
-#### Performance Implications
+### Performance Implications
 
 **State machine benefits:**
 
@@ -535,7 +538,7 @@ inline suspend fun inlinedSum(a: Int, b: Int): Int {
 // Performance: ~5ns (no state machine needed)
 ```
 
-#### Advanced: Implementing Custom Suspending Operations
+### Advanced: Implementing Custom Suspending Operations
 
 **Example: Converting callback to suspend function**
 
@@ -577,7 +580,7 @@ launch {
 }
 ```
 
-#### State Machine with Multiple Variables
+### State Machine with Multiple Variables
 
 **Example:**
 
@@ -605,7 +608,7 @@ class ComplexFunctionContinuation(completion: Continuation<Int>) : Continuation<
 
 **Key insight:** All local variables that survive suspension points become fields in the continuation class.
 
-#### Exception Handling in State Machines
+### Exception Handling in State Machines
 
 **Source:**
 
@@ -649,7 +652,7 @@ fun withExceptionHandling(cont: Continuation<Unit>): Any? {
 }
 ```
 
-#### Visualizing State Machine Execution
+### Visualizing State Machine Execution
 
 ```
 Initial call: label = 0
@@ -690,17 +693,13 @@ Complete
 
 ---
 
-## Русская версия
-
-### Формулировка проблемы
+## Ответ (RU)
 
 Понимание того, как `suspend` функции работают внутри, критично для продвинутого использования корутин, оптимизации производительности и отладки. Kotlin компилирует suspend функции используя **Continuation Passing Style (CPS)** и **конечные автоматы (state machines)** под капотом. Эта трансформация прозрачна для разработчиков, но её понимание открывает глубокие знания.
 
-**Вопрос:** Как Kotlin трансформирует suspend функции внутри? Что такое Continuation, CPS трансформация, и как работают конечные автоматы?
 
-### Подробный ответ
 
-#### Что такое Continuation?
+### Что такое Continuation?
 
 **Continuation** представляет "остаток вычисления" - что должно произойти после возобновления точки приостановки.
 
@@ -713,7 +712,7 @@ public interface Continuation<in T> {
 
 **Ключевая концепция:** Когда suspend функция приостанавливается, она передает Continuation приостанавливающей операции. Эта операция позже вызывает `resumeWith()` для продолжения выполнения.
 
-#### Continuation Passing Style (CPS)
+### Continuation Passing Style (CPS)
 
 **CPS трансформация:** Компилятор преобразует каждую suspend функцию, добавляя дополнительный параметр `Continuation`.
 

@@ -15,38 +15,38 @@ tags: - kotlin
 **English**: When can't you use inline functions?
 
 ## Answer (EN)
-Хотя `inline` функции повышают производительность за счет встраивания кода, существуют случаи, когда их использование невозможно, нежелательно или даже вредно.
+Although `inline` functions improve performance through code inlining, there are cases when their use is impossible, undesirable, or even harmful.
 
-### 1. Нельзя сохранить лямбду в переменную
+### 1. Cannot store lambda in variable
 
-Inline функция встраивает код лямбды в место вызова, поэтому нельзя сохранить лямбду для отложенного выполнения.
+Inline function embeds lambda code at call site, so you cannot store lambda for deferred execution.
 
 ```kotlin
-// - ОШИБКА КОМПИЛЯЦИИ
+// - COMPILATION ERROR
 inline fun processData(callback: () -> Unit) {
     val storedCallback = callback  // ERROR: Illegal usage of inline-parameter
-    // Нельзя сохранить callback для использования позже
+    // Cannot store callback for later use
 }
 
-// - ОШИБКА
+// - ERROR
 inline fun deferExecution(action: () -> Unit) {
     val deferredAction = action
     Handler(Looper.getMainLooper()).post(deferredAction)  // ERROR
 }
 
-//  ПРАВИЛЬНО - использовать noinline
+//  CORRECT - use noinline
 inline fun processData(noinline callback: () -> Unit) {
     val storedCallback = callback  // OK
     Handler(Looper.getMainLooper()).post(storedCallback)
 }
 
-//  ПРАВИЛЬНО - выполнить inline лямбду сразу
+//  CORRECT - execute inline lambda immediately
 inline fun processDataNow(callback: () -> Unit) {
-    callback()  // OK - прямой вызов
+    callback()  // OK - direct call
 }
 ```
 
-### 2. Нельзя передать лямбду в обычную (не-inline) функцию
+### 2. Cannot pass lambda to regular (non-inline) function
 
 ```kotlin
 // - ОШИБКА КОМПИЛЯЦИИ
@@ -75,9 +75,9 @@ fun withLogging(action: () -> Unit) {
 }
 ```
 
-### 3. Рекурсивные функции не могут быть inline
+### 3. Recursive functions cannot be inline
 
-Встраивание рекурсивной функции привело бы к бесконечному росту кода.
+Inlining a recursive function would lead to infinite code growth.
 
 ```kotlin
 // - ОШИБКА КОМПИЛЯЦИИ
@@ -90,20 +90,20 @@ fun factorial(n: Int): Int {
     return if (n <= 1) 1 else n * factorial(n - 1)
 }
 
-//  АЛЬТЕРНАТИВА - tailrec вместо inline
+//  ALTERNATIVE - tailrec instead of inline
 tailrec fun factorial(n: Int, acc: Int = 1): Int {
     return if (n <= 1) acc else factorial(n - 1, n * acc)
 }
 ```
 
-### 4. Большие функции - увеличение размера кода
+### 4. Large functions - code size increase
 
-Inline функции копируют свой код в каждое место вызова, что может значительно увеличить размер APK.
+Inline functions copy their code to every call site, which can significantly increase APK size.
 
 ```kotlin
-// - ПЛОХАЯ ПРАКТИКА - большая inline функция
+// - BAD PRACTICE - large inline function
 inline fun processUserData(user: User, callback: (Result) -> Unit) {
-    // 100+ строк кода
+    // 100+ lines of code
     val validatedUser = validateUser(user)
     val enrichedUser = enrichUserData(validatedUser)
     val processedUser = applyBusinessLogic(enrichedUser)
@@ -115,21 +115,21 @@ inline fun processUserData(user: User, callback: (Result) -> Unit) {
     callback(Result.Success(savedUser))
 }
 
-// Каждый вызов добавит ~100 строк кода!
-processUserData(user1) { }  // +100 строк в bytecode
-processUserData(user2) { }  // +100 строк в bytecode
-processUserData(user3) { }  // +100 строк в bytecode
+// Each call adds ~100 lines of code!
+processUserData(user1) { }  // +100 lines in bytecode
+processUserData(user2) { }  // +100 lines in bytecode
+processUserData(user3) { }  // +100 lines in bytecode
 
-//  ПРАВИЛЬНО - большие функции НЕ делать inline
+//  CORRECT - large functions should NOT be inline
 fun processUserData(user: User, callback: (Result) -> Unit) {
-    // Код выполняется только в одном месте
-    // Все вызовы ссылаются на одну функцию
+    // Code executes in only one place
+    // All calls reference one function
 }
 ```
 
-**Рекомендация**: Inline использовать только для маленьких функций (1-3 строки).
+**Recommendation**: Use inline only for small functions (1-3 lines).
 
-### 5. Функции с высоким порядком вызовов
+### 5. Functions with high call frequency
 
 ```kotlin
 // - ПЛОХАЯ ПРАКТИКА - inline функция вызывается очень часто
@@ -148,7 +148,7 @@ fun log(message: String) {
 }
 ```
 
-### 6. Функции с reified типами без необходимости
+### 6. Functions with reified types without necessity
 
 ```kotlin
 // - ИЗБЫТОЧНО - reified без реальной необходимости
@@ -173,9 +173,9 @@ inline fun <reified T : Activity> Context.startActivity() {
 context.startActivity<MainActivity>()  // Без явного .java
 ```
 
-### 7. Public API библиотек
+### 7. Public library API
 
-Inline функции встраиваются в клиентский код, что усложняет обновление библиотеки.
+Inline functions are embedded into client code, complicating library updates.
 
 ```kotlin
 // - ПЛОХАЯ ПРАКТИКА - inline в public API библиотеки
@@ -205,7 +205,7 @@ fun processRequest(url: String, callback: (Response) -> Unit) {
 // Теперь обновление библиотеки сразу применит новую реализацию
 ```
 
-### 8. Функции с внутренними/private зависимостями
+### 8. Functions with internal/private dependencies
 
 ```kotlin
 // - ОШИБКА - inline функция обращается к private полю
@@ -237,7 +237,7 @@ class UserManager {
 }
 ```
 
-### 9. Функции с non-local returns в сложных конструкциях
+### 9. Functions with non-local returns in complex constructs
 
 ```kotlin
 // - СЛОЖНО ДЛЯ ПОНИМАНИЯ
@@ -266,7 +266,7 @@ fun processItems(items: List<String>) {
 }
 ```
 
-### 10. Когда производительность не критична
+### 10. When performance is not critical
 
 ```kotlin
 // - ИЗБЫТОЧНО - inline без выигрыша в производительности
@@ -288,7 +288,7 @@ fun formatUserName(firstName: String, lastName: String): String {
 // 3. Очень маленькая (1-3 строки)
 ```
 
-### Когда СТОИТ использовать inline
+### When you SHOULD use inline
 
 ```kotlin
 //  ПРАВИЛЬНО - inline для higher-order функций
@@ -324,25 +324,25 @@ inline fun buildUser(init: UserBuilder.() -> Unit): User {
 }
 ```
 
-### Ключевые правила
+### Key rules
 
-| Ситуация | Можно inline? | Причина |
+| Situation | Can inline? | Reason |
 |----------|---------------|---------|
-| Маленькая функция с лямбдой | - Да | Оптимизация |
-| Большая функция (50+ строк) | - Нет | Раздувание кода |
-| Рекурсивная функция | - Нет | Бесконечное встраивание |
-| Функция с reified типом | - Да | Необходимо inline |
-| Public API библиотеки | WARNING: Осторожно | Проблемы с обновлениями |
-| Сохранение лямбды | - Нет | Используйте noinline |
-| Часто вызываемая функция | WARNING: Зависит | Баланс размера/скорости |
+| Small function with lambda | - Yes | Optimization |
+| Large function (50+ lines) | - No | Code bloat |
+| Recursive function | - No | Infinite inlining |
+| Function with reified type | - Yes | Inline required |
+| Public library API | WARNING: Careful | Update issues |
+| Storing lambda | - No | Use noinline |
+| Frequently called function | WARNING: Depends | Size/speed balance |
 
-### Использование noinline и crossinline
+### Using noinline and crossinline
 
 ```kotlin
-// noinline - отключить inline для конкретного параметра
+// noinline - disable inline for specific parameter
 inline fun transaction(
-    noinline onError: (Exception) -> Unit,  // Можно сохранить
-    crossinline onSuccess: () -> Unit       // Нельзя non-local return
+    noinline onError: (Exception) -> Unit,  // Can be stored
+    crossinline onSuccess: () -> Unit       // Cannot non-local return
 ) {
     try {
         db.beginTransaction()

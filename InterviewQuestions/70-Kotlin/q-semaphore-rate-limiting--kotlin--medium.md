@@ -24,19 +24,22 @@ subtopics:   - coroutines
   - concurrency
   - resource-pool
 ---
-# Semaphore for rate limiting and resource pooling
 
-## English Version
+# Question (EN)
+> How do you use Semaphore in Kotlin coroutines for rate limiting and resource pooling? What's the difference between Semaphore and Mutex?
 
-### Problem Statement
+# Вопрос (RU)
+> Как использовать Semaphore в Kotlin корутинах для ограничения скорости и пулов ресурсов? В чем разница между Semaphore и Mutex?
+
+---
+
+## Answer (EN)
 
 In production systems, you often need to limit concurrent access to resources: restrict the number of simultaneous API calls, manage connection pools, or control parallel downloads. **Semaphore** from `kotlinx.coroutines.sync` provides a suspension-based mechanism to limit concurrent access without blocking threads.
 
-**The Question:** How do you use Semaphore in Kotlin coroutines for rate limiting and resource pooling? What's the difference between Semaphore and Mutex?
 
-### Detailed Answer
 
-#### What is Semaphore?
+### What is Semaphore?
 
 **Semaphore** is a synchronization primitive that maintains a set of **permits**. Coroutines acquire permits to proceed and release them when done. Unlike Mutex (which is essentially a Semaphore with 1 permit), Semaphore can have multiple permits, allowing controlled concurrent access.
 
@@ -55,7 +58,7 @@ suspend fun limitedOperation() {
 }
 ```
 
-#### Key Concepts
+### Key Concepts
 
 **Permits:**
 - Number of coroutines that can enter critical section simultaneously
@@ -69,7 +72,7 @@ suspend fun limitedOperation() {
 - `tryAcquire()` - Try to acquire without suspending
 - `availablePermits` - Number of available permits
 
-#### Semaphore vs Mutex
+### Semaphore vs Mutex
 
 | Feature | Semaphore(N) | Mutex |
 |---------|--------------|-------|
@@ -88,7 +91,7 @@ val semaphoreAsMutex = Semaphore(1)
 // Use Semaphore(N) when N > 1
 ```
 
-#### Basic Semaphore Usage
+### Basic Semaphore Usage
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -125,7 +128,7 @@ suspend fun main() = coroutineScope {
 // ... (3-7 wait until first batch completes)
 ```
 
-#### Pattern 1: Rate Limiting API Calls
+### Pattern 1: Rate Limiting API Calls
 
 **Problem:** Limit concurrent API calls to avoid overwhelming the server or hitting rate limits.
 
@@ -168,7 +171,7 @@ suspend fun main() = coroutineScope {
 }
 ```
 
-#### Pattern 2: Real Android Retrofit Example
+### Pattern 2: Real Android Retrofit Example
 
 ```kotlin
 class ImageDownloadRepository(
@@ -228,7 +231,7 @@ class GalleryViewModel(
 }
 ```
 
-#### Pattern 3: Database Connection Pool
+### Pattern 3: Database Connection Pool
 
 ```kotlin
 class DatabaseConnectionPool(
@@ -311,7 +314,7 @@ suspend fun main() = coroutineScope {
 }
 ```
 
-#### Pattern 4: Controlling Parallel Downloads
+### Pattern 4: Controlling Parallel Downloads
 
 ```kotlin
 class ParallelDownloadManager(
@@ -383,7 +386,7 @@ class DownloadViewModel : ViewModel() {
 }
 ```
 
-#### Fair vs Unfair Semaphores
+### Fair vs Unfair Semaphores
 
 By default, Semaphore in kotlinx.coroutines is **unfair** - permits may be granted out of order.
 
@@ -420,7 +423,7 @@ class FairSemaphore(permits: Int) {
 }
 ```
 
-#### Timeout on Acquire
+### Timeout on Acquire
 
 ```kotlin
 import kotlinx.coroutines.withTimeoutOrNull
@@ -451,7 +454,7 @@ fun tryAcquireNonBlocking(): Boolean {
 }
 ```
 
-#### Real-World: Rate-Limited API Client with Backoff
+### Real-World: Rate-Limited API Client with Backoff
 
 ```kotlin
 class ProductionApiClient(
@@ -528,7 +531,7 @@ class HttpException(private val statusCode: Int, message: String) : Exception(me
 }
 ```
 
-#### Error Handling and Permit Cleanup
+### Error Handling and Permit Cleanup
 
 **Critical:** Always use `withPermit` to ensure permits are released even on exceptions:
 
@@ -571,7 +574,7 @@ suspend fun manualAcquireCorrect() {
 }
 ```
 
-#### Advanced: Dynamic Semaphore Sizing
+### Advanced: Dynamic Semaphore Sizing
 
 ```kotlin
 class AdaptiveSemaphore(
@@ -656,7 +659,7 @@ class AdaptiveApiClient {
 }
 ```
 
-#### Testing Semaphore-Based Code
+### Testing Semaphore-Based Code
 
 ```kotlin
 import kotlinx.coroutines.test.*
@@ -734,7 +737,7 @@ class SemaphoreTest {
 
 ### Common Pitfalls and Best Practices
 
-#### Pitfalls
+### Pitfalls
 
 1. **Manual acquire/release without finally** - Leaks permits on exception
 2. **Using too few permits** - Bottleneck, underutilizes resources
@@ -744,7 +747,7 @@ class SemaphoreTest {
 6. **Creating new Semaphore per operation** - Should be shared singleton
 7. **Not considering permit starvation** - Some coroutines may wait indefinitely
 
-#### Best Practices
+### Best Practices
 
 1.  Always use `withPermit` instead of manual acquire/release
 2.  Size permits based on resource limits (connections, API limits)
@@ -782,17 +785,13 @@ class SemaphoreTest {
 
 ---
 
-## Русская версия
-
-### Формулировка проблемы
+## Ответ (RU)
 
 В продакшн-системах часто нужно ограничивать конкурентный доступ к ресурсам: ограничить количество одновременных API вызовов, управлять пулами подключений или контролировать параллельные загрузки. **Semaphore** из `kotlinx.coroutines.sync` предоставляет механизм на основе приостановки для ограничения конкурентного доступа без блокировки потоков.
 
-**Вопрос:** Как использовать Semaphore в Kotlin корутинах для ограничения скорости и пулов ресурсов? В чем разница между Semaphore и Mutex?
 
-### Подробный ответ
 
-#### Что такое Semaphore?
+### Что такое Semaphore?
 
 **Semaphore** - это примитив синхронизации, который поддерживает набор **разрешений (permits)**. Корутины получают разрешения для продолжения и освобождают их после завершения. В отличие от Mutex (который по сути является Semaphore с 1 разрешением), Semaphore может иметь несколько разрешений, позволяя контролируемый конкурентный доступ.
 
@@ -811,7 +810,7 @@ suspend fun limitedOperation() {
 }
 ```
 
-#### Ключевые концепции
+### Ключевые концепции
 
 **Разрешения (Permits):**
 - Количество корутин, которые могут войти в критическую секцию одновременно
@@ -825,7 +824,7 @@ suspend fun limitedOperation() {
 - `tryAcquire()` - Попытаться получить без приостановки
 - `availablePermits` - Количество доступных разрешений
 
-#### Паттерн 1: Ограничение скорости API вызовов
+### Паттерн 1: Ограничение скорости API вызовов
 
 ```kotlin
 class RateLimitedApiClient(maxConcurrent: Int = 5) {
@@ -849,7 +848,7 @@ class RateLimitedApiClient(maxConcurrent: Int = 5) {
 }
 ```
 
-#### Паттерн 2: Реальный пример Android Retrofit
+### Паттерн 2: Реальный пример Android Retrofit
 
 ```kotlin
 class ImageDownloadRepository(
@@ -887,7 +886,7 @@ class ImageDownloadRepository(
 }
 ```
 
-#### Паттерн 3: Пул подключений к базе данных
+### Паттерн 3: Пул подключений к базе данных
 
 ```kotlin
 class DatabaseConnectionPool(

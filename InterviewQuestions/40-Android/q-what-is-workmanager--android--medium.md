@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - workmanager
-  - background-work
-  - jetpack
-  - architecture
-  - scheduled-tasks
+tags: [workmanager, background-work, jetpack, architecture, scheduled-tasks, difficulty/medium]
 ---
 # What is WorkManager?
 

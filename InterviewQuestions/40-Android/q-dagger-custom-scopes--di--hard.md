@@ -5,12 +5,7 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-11
-tags: - android
-  - dependency-injection
-  - dagger
-  - hilt
-  - scopes
-  - architecture
+tags: [dependency-injection, dagger, hilt, scopes, architecture, android/di-hilt, android/architecture-patterns, difficulty/hard]
 date_updated: 2025-10-13
 moc: moc-android
 related_questions:   - q-hilt-entry-points--di--medium

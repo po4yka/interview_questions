@@ -5,12 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - file-upload
-  - workmanager
-  - retrofit
-  - background-processing
-  - multipart
+tags: [file-upload, workmanager, retrofit, background-processing, multipart, difficulty/medium]
 ---
 # Загрузка больших файлов на сервер в Android
 
@@ -19,9 +14,9 @@ tags: - android
 ## Answer (EN)
 Для реализации загрузки больших файлов необходимо учитывать: асинхронную обработку, устойчивость к изменениям конфигурации (rotation), восстановление после неудач, отображение прогресса и работу в фоновом режиме.
 
-### 1. WorkManager + Retrofit (рекомендуемый подход)
+### 1. WorkManager + Retrofit (Recommended Approach)
 
-#### Зависимости
+#### Dependencies
 
 ```gradle
 dependencies {
@@ -38,7 +33,7 @@ dependencies {
 }
 ```
 
-#### API интерфейс
+#### API Interface
 
 ```kotlin
 interface FileUploadApi {
@@ -71,7 +66,7 @@ data class ChunkResponse(
 )
 ```
 
-#### Retrofit setup с большими таймаутами
+#### Retrofit Setup with Large Timeouts
 
 ```kotlin
 object RetrofitClient {
@@ -194,7 +189,7 @@ class FileUploadWorker(
 }
 ```
 
-#### Запуск загрузки
+#### Starting the Upload
 
 ```kotlin
 class FileUploadManager(private val context: Context) {
@@ -285,7 +280,7 @@ class UploadActivity : AppCompatActivity() {
 }
 ```
 
-### 2. Chunked Upload (для очень больших файлов)
+### 2. Chunked Upload (For Very Large Files)
 
 Разбиение файла на части (chunks) для загрузки.
 
@@ -387,7 +382,7 @@ class ChunkedFileUploadWorker(
 }
 ```
 
-### 3. Progress tracking с OkHttp Interceptor
+### 3. Progress Tracking with OkHttp Interceptor
 
 ```kotlin
 class UploadProgressInterceptor(
@@ -445,7 +440,7 @@ val client = OkHttpClient.Builder()
     .build()
 ```
 
-### 4. Resumable upload (с возобновлением)
+### 4. Resumable Upload (With Resume Capability)
 
 ```kotlin
 class ResumableUploadManager(

@@ -5,12 +5,7 @@ topic: room
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - room
-  - database
-  - migrations
-  - persistence
-  - testing
-  - difficulty/medium
+tags: [database, migrations, persistence, testing, difficulty/medium]
 ---
 # Room Database Migrations / Миграции базы данных Room
 

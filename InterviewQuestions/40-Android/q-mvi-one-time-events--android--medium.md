@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - mvi
-  - architecture
-  - state-management
-  - events
+tags: [mvi, architecture, state-management, events, difficulty/medium]
 ---
 # MVI: Обработка одноразовых событий (One-time Events)
 
@@ -18,7 +14,7 @@ tags: - android
 ## Answer (EN)
 В MVI (Model-View-Intent) State должен быть immutable и содержать только UI состояние. Но некоторые события (navigation, toasts, snackbars) не должны сохраняться в State и повторяться при пересоздании экрана. Существует несколько паттернов для их обработки.
 
-### Проблема
+### The Problem
 
 ```kotlin
 // - НЕПРАВИЛЬНО - событие в State
@@ -31,7 +27,7 @@ data class UiState(
 // При пересоздании Activity toast покажется снова
 ```
 
-### Решение 1: SharedFlow с replay = 0
+### Solution 1: SharedFlow with replay = 0
 
 Рекомендуемый подход для Kotlin Coroutines.
 
@@ -164,7 +160,7 @@ class UserFragment : Fragment() {
 }
 ```
 
-### Решение 2: Channel
+### Solution 2: Channel
 
 Альтернатива SharedFlow - более простой API.
 
@@ -193,7 +189,7 @@ LaunchedEffect(Unit) {
 }
 ```
 
-### Решение 3: SingleLiveEvent (LiveData)
+### Solution 3: SingleLiveEvent (LiveData)
 
 Для проектов на LiveData.
 
@@ -238,7 +234,7 @@ viewModel.toastEvent.observe(viewLifecycleOwner) { message ->
 }
 ```
 
-### Решение 4: Consumed Event Wrapper
+### Solution 4: Consumed Event Wrapper
 
 Для StateFlow - обертка с флагом "consumed".
 
@@ -299,7 +295,7 @@ LaunchedEffect(uiState.toastEvent) {
 }
 ```
 
-### Сравнение подходов
+### Comparison of Approaches
 
 | Подход | Pros | Cons | Use Case |
 |--------|------|------|----------|

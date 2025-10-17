@@ -25,19 +25,22 @@ subtopics:   - coroutines
   - best-practices
   - gotchas
 ---
-# Top 10 common Kotlin coroutines mistakes and anti-patterns
 
-## English Version
+# Question (EN)
+> What are the most common mistakes when using Kotlin coroutines, and how do you fix them?
 
-### Problem Statement
+# Вопрос (RU)
+> Какие самые распространенные ошибки при использовании Kotlin корутин, и как их исправить?
+
+---
+
+## Answer (EN)
 
 Even experienced developers make common mistakes when working with Kotlin coroutines. These mistakes can lead to memory leaks, crashes, race conditions, or poor performance. Understanding and avoiding these anti-patterns is critical for production-ready code.
 
-**The Question:** What are the most common mistakes when using Kotlin coroutines, and how do you fix them?
 
-### Detailed Answer
 
-#### Mistake 1: Using GlobalScope
+### Mistake 1: Using GlobalScope
 
 **Problem:** `GlobalScope` coroutines are not tied to any lifecycle and can leak.
 
@@ -105,7 +108,7 @@ class MyRepository {
 grep -r "GlobalScope" --include="*.kt"
 ```
 
-#### Mistake 2: Not Handling Cancellation
+### Mistake 2: Not Handling Cancellation
 
 **Problem:** Ignoring cancellation can waste resources and cause bugs.
 
@@ -182,7 +185,7 @@ suspend fun processLargeFile(file: File) {
 }
 ```
 
-#### Mistake 3: Using runBlocking in Production
+### Mistake 3: Using runBlocking in Production
 
 **Problem:** `runBlocking` blocks thread, defeating coroutines' purpose.
 
@@ -245,7 +248,7 @@ fun main() = runBlocking {
 }
 ```
 
-#### Mistake 4: Mixing Blocking and Suspending Code
+### Mistake 4: Mixing Blocking and Suspending Code
 
 **Problem:** Calling blocking functions in coroutines wastes dispatcher threads.
 
@@ -311,7 +314,7 @@ class UserRepository {
 }
 ```
 
-#### Mistake 5: Not Using supervisorScope for Independent Tasks
+### Mistake 5: Not Using supervisorScope for Independent Tasks
 
 **Problem:** One child failure cancels all siblings.
 
@@ -391,7 +394,7 @@ Parent
  Child 3 (continues)
 ```
 
-#### Mistake 6: Forgetting to Call await() on async
+### Mistake 6: Forgetting to Call await() on async
 
 **Problem:** `async` result never collected, exception silently lost.
 
@@ -462,7 +465,7 @@ viewModelScope.launch {
 
 **Rule of thumb:** If you don't need return value, use `launch`, not `async`.
 
-#### Mistake 7: Creating Many Unnecessary Coroutines
+### Mistake 7: Creating Many Unnecessary Coroutines
 
 **Problem:** Creating coroutines for every small operation.
 
@@ -526,7 +529,7 @@ viewModelScope.launch {
 - Simple computations
 - Already in coroutine context
 
-#### Mistake 8: Not Using Structured Concurrency
+### Mistake 8: Not Using Structured Concurrency
 
 **Problem:** Manually managing Job lifecycle.
 
@@ -590,7 +593,7 @@ class MyRepository {
 - No manual job tracking
 - Lifecycle-aware
 
-#### Mistake 9: Memory Leaks from Captured Contexts
+### Mistake 9: Memory Leaks from Captured Contexts
 
 **Problem:** Coroutine captures reference to Activity/Fragment.
 
@@ -656,7 +659,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-#### Mistake 10: Improper Exception Handling in launch vs async
+### Mistake 10: Improper Exception Handling in launch vs async
 
 **Problem:** Not understanding exception handling differences.
 
@@ -750,7 +753,7 @@ viewModelScope.launch {
 
 ### Additional Common Mistakes
 
-#### Mistake 11: Using Dispatchers.IO for CPU-Intensive Work
+### Mistake 11: Using Dispatchers.IO for CPU-Intensive Work
 
 ```kotlin
 //  WRONG: IO dispatcher for CPU work
@@ -769,7 +772,7 @@ viewModelScope.launch(Dispatchers.Default) {
 - `Dispatchers.Default`: CPU-intensive work (parsing, calculations)
 - `Dispatchers.Main`: UI operations
 
-#### Mistake 12: Not Using withContext for Dispatcher Switching
+### Mistake 12: Not Using withContext for Dispatcher Switching
 
 ```kotlin
 //  WRONG: Unnecessary launch
@@ -891,15 +894,11 @@ dependencies {
 
 ---
 
-## Русская версия
-
-### Формулировка проблемы
+## Ответ (RU)
 
 Даже опытные разработчики совершают типичные ошибки при работе с Kotlin корутинами. Эти ошибки могут привести к утечкам памяти, крашам, состояниям гонки или плохой производительности. Понимание и избегание этих анти-паттернов критично для production-ready кода.
 
-**Вопрос:** Какие самые распространенные ошибки при использовании Kotlin корутин, и как их исправить?
 
-### Подробный ответ
 
 [Полный русский перевод следует той же структуре]
 

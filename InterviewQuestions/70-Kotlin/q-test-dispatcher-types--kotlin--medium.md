@@ -22,19 +22,22 @@ subtopics:   - coroutines
   - test-dispatcher
   - runtest
 ---
-# StandardTestDispatcher vs UnconfinedTestDispatcher
 
-## English Version
+# Question (EN)
+> What's the difference between StandardTestDispatcher and UnconfinedTestDispatcher? When should you use each?
 
-### Problem Statement
+# Вопрос (RU)
+> В чем разница между StandardTestDispatcher и UnconfinedTestDispatcher? Когда следует использовать каждый?
+
+---
+
+## Answer (EN)
 
 Testing coroutines requires special test dispatchers that control time and execution order. Kotlin provides `StandardTestDispatcher` and `UnconfinedTestDispatcher`, each with different behavior. Choosing the wrong one can lead to flaky tests, timing issues, or incorrect test results.
 
-**The Question:** What's the difference between StandardTestDispatcher and UnconfinedTestDispatcher? When should you use each?
 
-### Detailed Answer
 
-#### Overview of Test Dispatchers
+### Overview of Test Dispatchers
 
 | Feature | StandardTestDispatcher | UnconfinedTestDispatcher |
 |---------|------------------------|--------------------------|
@@ -44,7 +47,7 @@ Testing coroutines requires special test dispatchers that control time and execu
 | **Default in runTest** |  Yes (since 1.6) |  No |
 | **Use case** | Most tests | Tests needing immediate execution |
 
-#### StandardTestDispatcher Behavior
+### StandardTestDispatcher Behavior
 
 **Key characteristics:**
 - **Queues coroutines**: Doesn't execute until explicitly advanced
@@ -79,7 +82,7 @@ fun testStandardDispatcher() = runTest {
 // After advanceUntilIdle: value = 1
 ```
 
-#### UnconfinedTestDispatcher Behavior
+### UnconfinedTestDispatcher Behavior
 
 **Key characteristics:**
 - **Executes immediately**: Coroutines run until first suspension
@@ -107,7 +110,7 @@ fun testUnconfinedDispatcher() = runTest(UnconfinedTestDispatcher()) {
 // After launch: value = 1
 ```
 
-#### runTest Default Behavior
+### runTest Default Behavior
 
 **runTest uses StandardTestDispatcher by default (since kotlinx.coroutines 1.6):**
 
@@ -125,7 +128,7 @@ fun explicitStandardDispatcher() = runTest(StandardTestDispatcher()) {
 }
 ```
 
-#### advanceUntilIdle with StandardTestDispatcher
+### advanceUntilIdle with StandardTestDispatcher
 
 **advanceUntilIdle():** Executes all pending coroutines and advances time until nothing left to run.
 
@@ -151,7 +154,7 @@ fun testAdvanceUntilIdle() = runTest {
 }
 ```
 
-#### advanceTimeBy - Precise Time Control
+### advanceTimeBy - Precise Time Control
 
 **advanceTimeBy(millis):** Advances virtual time by specific amount.
 
@@ -177,7 +180,7 @@ fun testAdvanceTimeBy() = runTest {
 }
 ```
 
-#### TestScope and Virtual Time
+### TestScope and Virtual Time
 
 **TestScope:** Provides `currentTime` property to check virtual time.
 
@@ -196,7 +199,7 @@ fun testVirtualTime() = runTest {
 }
 ```
 
-#### Testing Delays and Timeouts
+### Testing Delays and Timeouts
 
 **Test long delays instantly:**
 
@@ -233,7 +236,7 @@ fun testTimeout() = runTest {
 }
 ```
 
-#### Testing Immediate Execution with UnconfinedTestDispatcher
+### Testing Immediate Execution with UnconfinedTestDispatcher
 
 **Use case: Test code that must execute before suspension**
 
@@ -281,7 +284,7 @@ fun testWithStandardDispatcher() = runTest {
 }
 ```
 
-#### Common Testing Patterns
+### Common Testing Patterns
 
 **Pattern 1: Test StateFlow updates**
 
@@ -357,7 +360,7 @@ fun testCancellation() = runTest {
 }
 ```
 
-#### Mixing Dispatchers in Tests
+### Mixing Dispatchers in Tests
 
 **Background work with StandardTestDispatcher:**
 
@@ -401,7 +404,7 @@ fun testMixedDispatchers() = runTest {
 }
 ```
 
-#### Real ViewModel Testing Examples
+### Real ViewModel Testing Examples
 
 **Example 1: Testing loading states**
 
@@ -508,7 +511,7 @@ fun `test search debounce`() = runTest {
 }
 ```
 
-#### Migration from Old Test API
+### Migration from Old Test API
 
 **Old API (deprecated):**
 
@@ -536,7 +539,7 @@ fun newTest() = runTest {
 - Auto-advancement → Manual with `advanceUntilIdle()`
 - More explicit control over execution
 
-#### Best Practices
+### Best Practices
 
 **1. Use StandardTestDispatcher by default:**
 
@@ -606,7 +609,7 @@ fun goodTest() = runTest {
 }
 ```
 
-#### Common Mistakes
+### Common Mistakes
 
 **Mistake 1: Forgetting advanceUntilIdle()**
 
@@ -695,7 +698,7 @@ fun goodTest() = runTest {
 }
 ```
 
-#### When to Use Each Dispatcher
+### When to Use Each Dispatcher
 
 **Use StandardTestDispatcher when:**
 - Default choice for most tests
@@ -725,15 +728,11 @@ fun goodTest() = runTest {
 
 ---
 
-## Русская версия
-
-### Формулировка проблемы
+## Ответ (RU)
 
 Тестирование корутин требует специальных тестовых диспетчеров, которые контролируют время и порядок выполнения. Kotlin предоставляет `StandardTestDispatcher` и `UnconfinedTestDispatcher`, каждый с разным поведением. Выбор неправильного может привести к нестабильным тестам, проблемам с временем или неверным результатам тестов.
 
-**Вопрос:** В чем разница между StandardTestDispatcher и UnconfinedTestDispatcher? Когда следует использовать каждый?
 
-### Подробный ответ
 
 [Полный русский перевод следует той же структуре]
 

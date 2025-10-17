@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - KMM
-  - DI
-  - Koin
+tags: [Kotlin, KMM, DI, Koin, difficulty/medium]
 ---
 # Dependency Injection in Kotlin Multiplatform Mobile
 

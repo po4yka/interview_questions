@@ -5,16 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - android/navigation
-  - bundle
-  - data-passing
-  - intent
-  - master-detail
-  - navigation
-  - navigation-component
-  - ui-patterns
-  - viewmodel
+tags: [android/navigation, bundle, data-passing, intent, master-detail, navigation, navigation-component, ui-patterns, viewmodel, difficulty/medium]
 ---
 # С помощью чего делается переход со списков на деталки?
 

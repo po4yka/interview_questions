@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - android
-  - jetpack-compose
-  - migration
-  - xml-to-compose
-  - architecture
+tags: [jetpack-compose, migration, xml-to-compose, architecture, difficulty/medium]
 ---
 # Стратегия миграции большого проекта на Jetpack Compose
 
@@ -18,13 +14,13 @@ tags: - android
 ## Answer (EN)
 Миграция большого проекта на Compose требует поэтапного подхода, минимизирующего риски и позволяющего продолжать разработку новых фич во время миграции.
 
-### Рекомендуемая стратегия: Гибридный подход
+### Recommended strategy: Hybrid approach
 
-**Принцип**: Постепенная миграция снизу вверх, начиная с листовых компонентов UI.
+**Principle**: Gradual bottom-up migration, starting with leaf UI components.
 
-### Этап 1: Подготовка проекта
+### Phase 1: Project preparation
 
-#### Обновление зависимостей
+#### Updating dependencies
 
 ```gradle
 // app/build.gradle
@@ -65,30 +61,30 @@ dependencies {
 }
 ```
 
-### Этап 2: ComposeView внутри существующих XML
+### Phase 2: ComposeView inside existing XML
 
-Начните с малого: добавляйте Compose компоненты внутри существующих экранов.
+Start small: add Compose components inside existing screens.
 
 ```kotlin
-// Существующий XML layout (activity_main.xml)
+// Existing XML layout (activity_main.xml)
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- Существующий XML UI -->
+    <!-- Existing XML UI -->
     <TextView
         android:id="@+id/titleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <!-- НОВЫЙ: Compose внутри XML -->
+    <!-- NEW: Compose inside XML -->
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/composeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <!-- Существующая RecyclerView -->
+    <!-- Existing RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -103,17 +99,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Интеграция Compose
+        // Compose integration
         findViewById<ComposeView>(R.id.composeView).setContent {
             MaterialTheme {
-                // Новый UI на Compose
+                // New UI in Compose
                 UserProfileCard(
                     user = viewModel.currentUser.collectAsState().value
                 )
             }
         }
 
-        // Существующий код для XML views
+        // Existing code for XML views
         findViewById<TextView>(R.id.titleText).text = "My App"
     }
 }
@@ -141,16 +137,16 @@ fun UserProfileCard(user: User?) {
 }
 ```
 
-### Этап 3: AndroidView для встраивания XML в Compose
+### Phase 3: AndroidView for embedding XML in Compose
 
-Обратный подход: используйте XML views внутри Compose.
+Reverse approach: use XML views inside Compose.
 
 ```kotlin
 @Composable
 fun LegacyMapView(location: Location) {
     AndroidView(
         factory = { context ->
-            // Создать существующий XML View
+            // Create existing XML View
             MapView(context).apply {
                 onCreate(null)
                 getMapAsync { googleMap ->
@@ -174,34 +170,34 @@ fun LegacyRecyclerView(items: List<Item>) {
             }
         },
         update = { recyclerView ->
-            // Обновить adapter при изменении items
+            // Update adapter when items change
             (recyclerView.adapter as? ItemAdapter)?.updateItems(items)
         }
     )
 }
 ```
 
-### Этап 4: Модульная миграция
+### Phase 4: Modular migration
 
-Разделите приложение на фича-модули и мигрируйте каждый модуль отдельно.
+Split app into feature modules and migrate each separately.
 
 ```
 app/
- feature-auth/          ← Мигрировать первым (небольшой модуль)
-    xml/              (старый код)
-    compose/          (новый код)
- feature-profile/       ← Мигрировать вторым
- feature-feed/          ← Мигрировать третьим
- feature-messaging/     ← Оставить на потом (сложный)
+ feature-auth/          ← Migrate first (small module)
+    xml/              (old code)
+    compose/          (new code)
+ feature-profile/       ← Migrate second
+ feature-feed/          ← Migrate third
+ feature-messaging/     ← Leave for later (complex)
  core/
-     ui-xml/           (общие XML компоненты)
-     ui-compose/       (общие Compose компоненты)
+     ui-xml/           (shared XML components)
+     ui-compose/       (shared Compose components)
 ```
 
-#### Пример модуля после миграции
+#### Module example after migration
 
 ```kotlin
-// feature-auth/LoginScreen.kt (новый Compose)
+// feature-auth/LoginScreen.kt (new Compose)
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
@@ -264,19 +260,19 @@ fun LoginScreen(
 }
 ```
 
-### Этап 5: Навигация - гибридный подход
+### Phase 5: Navigation - hybrid approach
 
-#### Вариант А: Navigation Component с Compose destinations
+#### Option A: Navigation Component with Compose destinations
 
 ```kotlin
 // nav_graph.xml
 <navigation>
-    <!-- XML экраны -->
+    <!-- XML screens -->
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.app.HomeFragment"/>
 
-    <!-- Compose экраны как dialog/fragment -->
+    <!-- Compose screens as dialog/fragment -->
     <fragment
         android:id="@+id/profileScreen"
         android:name="com.app.ComposeFragment">
@@ -286,7 +282,7 @@ fun LoginScreen(
     </fragment>
 </navigation>
 
-// ComposeFragment - универсальный контейнер
+// ComposeFragment - universal container
 class ComposeFragment : Fragment() {
     override fun onCreateView(...): View {
         return ComposeView(requireContext()).apply {
@@ -304,7 +300,7 @@ class ComposeFragment : Fragment() {
 }
 ```
 
-#### Вариант Б: Compose Navigation для новых экранов
+#### Option B: Compose Navigation for new screens
 
 ```kotlin
 @Composable
@@ -312,7 +308,7 @@ fun AppNavigation() {
     val navController = rememberNavController()
 
     NavHost(navController, startDestination = "home") {
-        // Новые Compose экраны
+        // New Compose screens
         composable("home") {
             HomeScreen(navController)
         }
@@ -322,22 +318,22 @@ fun AppNavigation() {
             ProfileScreen(userId, navController)
         }
 
-        // Старые XML экраны через AndroidViewBinding
+        // Old XML screens via AndroidViewBinding
         composable("legacy_settings") {
             AndroidViewBinding(SettingsFragmentBinding::inflate) {
-                // Настроить XML View
+                // Configure XML View
             }
         }
     }
 }
 ```
 
-### Этап 6: Общие компоненты (Design System)
+### Phase 6: Shared components (Design System)
 
-Создайте Compose версии общих UI компонентов параллельно с XML.
+Create Compose versions of shared UI components in parallel with XML.
 
 ```kotlin
-// До миграции: XML custom view
+// Before migration: XML custom view
 class CustomButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
@@ -345,7 +341,7 @@ class CustomButton @JvmOverloads constructor(
     // Custom button logic
 }
 
-// После: Compose компонент
+// After: Compose component
 @Composable
 fun CustomButton(
     text: String,
@@ -365,15 +361,15 @@ fun CustomButton(
     }
 }
 
-// Переходный период: оба варианта доступны
-// Новый код использует Compose версию
-// Старый код продолжает использовать XML версию
+// Transition period: both versions available
+// New code uses Compose version
+// Old code continues using XML version
 ```
 
-### Этап 7: Тестирование на каждом шаге
+### Phase 7: Testing at each step
 
 ```kotlin
-// Compose UI тесты
+// Compose UI tests
 @get:Rule
 val composeTestRule = createComposeRule()
 
@@ -402,34 +398,34 @@ fun loginButton_showsLoadingState() {
 }
 ```
 
-### План миграции (пример для проекта на 50+ экранов)
+### Migration plan (example for 50+ screen project)
 
-**Фаза 1 (1-2 месяца):** Инфраструктура
-- - Добавить Compose зависимости
-- - Создать Design System на Compose
-- - Настроить тестирование
-- - Обучить команду
+**Phase 1 (1-2 months):** Infrastructure
+- Add Compose dependencies
+- Create Compose Design System
+- Setup testing
+- Train team
 
-**Фаза 2 (2-3 месяца):** Новые фичи только на Compose
-- - Все новые экраны только Compose
-- - Рефакторинг простых экранов (Login, Settings)
-- ⏳ Сложные экраны остаются на XML
+**Phase 2 (2-3 months):** New features Compose-only
+- All new screens Compose only
+- Refactor simple screens (Login, Settings)
+- Complex screens remain XML
 
-**Фаза 3 (3-6 месяцев):** Постепенная миграция
-- ⏳ Миграция экранов по приоритету
-- ⏳ Переписать RecyclerView → LazyColumn
-- ⏳ Сложные кастомные views → Canvas/Compose
+**Phase 3 (3-6 months):** Gradual migration
+- Migrate screens by priority
+- Rewrite RecyclerView → LazyColumn
+- Complex custom views → Canvas/Compose
 
-**Фаза 4 (1-2 месяца):** Финализация
-- ⏳ Удалить XML layouts
-- ⏳ Удалить зависимости на Views
-- - 100% Compose
+**Phase 4 (1-2 months):** Finalization
+- Remove XML layouts
+- Remove Views dependencies
+- 100% Compose
 
-**Итого**: ~9-13 месяцев для полной миграции
+**Total**: ~9-13 months for full migration
 
-### Общие паттерны миграции
+### Common migration patterns
 
-| XML Компонент | Compose Альтернатива |
+| XML Component | Compose Alternative |
 |---------------|----------------------|
 | `RecyclerView` | `LazyColumn` / `LazyRow` |
 | `ViewPager2` | `HorizontalPager` |
@@ -439,17 +435,17 @@ fun loginButton_showsLoadingState() {
 | `findViewById()` | State hoisting |
 | `include` layout | Composable function call |
 
-### Риски и решения
+### Risks and solutions
 
-**Риск 1: Performance degradation**
+**Risk 1: Performance degradation**
 ```kotlin
-// Решение: Profiling и оптимизация
+// Solution: Profiling and optimization
 @Composable
 fun HeavyList(items: List<Item>) {
-    // - Плохо - пересоздается каждый раз
+    // Bad - recreated every time
     val sorted = items.sortedBy { it.name }
 
-    //  Хорошо - кэшируется
+    // Good - cached
     val sorted = remember(items) {
         items.sortedBy { it.name }
     }
@@ -462,9 +458,9 @@ fun HeavyList(items: List<Item>) {
 }
 ```
 
-**Риск 2: Размер APK увеличивается**
+**Risk 2: APK size increases**
 ```gradle
-// Решение: R8 и ProGuard оптимизации
+// Solution: R8 and ProGuard optimizations
 android {
     buildTypes {
         release {
@@ -475,13 +471,13 @@ android {
 }
 ```
 
-**Риск 3: Сложные кастомные views**
+**Risk 3: Complex custom views**
 ```kotlin
-// Решение: Canvas API в Compose
+// Solution: Canvas API in Compose
 @Composable
 fun CustomChart(data: List<DataPoint>) {
     Canvas(modifier = Modifier.fillMaxSize()) {
-        // Рисование с помощью Compose Canvas
+        // Drawing with Compose Canvas
         data.forEachIndexed { index, point ->
             drawCircle(
                 color = Color.Blue,

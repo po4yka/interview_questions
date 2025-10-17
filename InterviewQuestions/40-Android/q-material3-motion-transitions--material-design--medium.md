@@ -5,11 +5,7 @@ topic: ui-ux-accessibility
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - material-design
-  - material3
-  - animation
-  - transitions
-  - motion
+tags: [design, material3, animation, transitions, motion, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-ui-ux-accessibility

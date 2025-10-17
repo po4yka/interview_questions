@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - KMM
-  - Testing
-  - Multiplatform
+tags: [Kotlin, KMM, Testing, Multiplatform, difficulty/medium]
 ---
 # Testing in Kotlin Multiplatform Mobile
 

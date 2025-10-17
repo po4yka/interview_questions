@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - jetpack compose
-  - ui framework
-  - android
-  - ui
-  - jetpack-compose
+tags: [ui framework, android, ui, jetpack-compose, difficulty/medium]
 ---
 # How does jetpackCompose work?
 

@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - MLKit
-  - MachineLearning
-  - TextRecognition
+tags: [Kotlin, MLKit, MachineLearning, TextRecognition, difficulty/medium]
 ---
 # ML Kit Text Recognition and OCR
 

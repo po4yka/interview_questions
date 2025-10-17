@@ -5,12 +5,7 @@ topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - dependency-injection
-  - koin
-  - hilt
-  - comparison
-  - architecture
-  - difficulty/medium
+tags: [injection, koin, hilt, comparison, architecture, difficulty/medium]
 date_created: 2025-10-13
 date_updated: 2025-10-13
 moc: moc-architecture-patterns

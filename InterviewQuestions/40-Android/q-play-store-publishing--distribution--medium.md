@@ -5,11 +5,7 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - Android
-  - Kotlin
-  - Distribution
-  - PlayStore
-  - Publishing
+tags: [Kotlin, Distribution, PlayStore, Publishing, difficulty/medium]
 ---
 # Google Play Store Publishing and Release Management
 
