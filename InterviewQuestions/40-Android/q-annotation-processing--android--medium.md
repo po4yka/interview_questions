@@ -18,11 +18,11 @@ source_note: Created for vault completeness
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-kapt-vs-ksp--android--medium]
+related: [q-kapt-vs-ksp--android--medium, q-gradle-build-system--android--medium, q-android-build-optimization--android--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-10-18
 
 tags: [en, ru, android/annotation-processing, android/kapt, android/ksp, android/codegen, android/build-tools, difficulty/medium]
 ---

@@ -7,7 +7,7 @@ status: draft
 created: "2025-10-12"
 tags: ["kotlin", "coroutines", "delay", "threads", "suspending", "difficulty/easy"]
 description: "Understanding the fundamental differences between suspending delay() and blocking Thread.sleep() in Kotlin coroutines, including thread usage and performance implications"
-moc: "moc-kotlin"
+moc: moc-kotlin
 related: [q-array-vs-list-kotlin--kotlin--easy, q-kotlin-java-type-differences--programming-languages--medium, q-kotlin-inline-functions--programming-languages--medium]
 subtopics: ["coroutines", "delay", "threads", "suspending"]
 ---
@@ -634,9 +634,608 @@ fun legacyCode() {
 
 ### Решение
 
-**`delay()`** - это **приостанавливающая функция**, которая останавливает корутину без блокировки базового потока, позволяя работать другим корутинам. **`Thread.sleep()`** - это **блокирующая функция**, которая блокирует весь поток, предотвращая любую другую работу на этом потоке.
+**`delay()`** - это **приостанавливающая функция (suspending function)**, которая останавливает корутину без блокировки базового потока, позволяя работать другим корутинам. **`Thread.sleep()`** - это **блокирующая функция**, которая блокирует весь поток, предотвращая любую другую работу на этом потоке.
 
-[Полный перевод разделов...]
+#### Базовое различие
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun basicDifference() = runBlocking {
+    println("=== Thread.sleep() ===")
+    println("Thread: ${Thread.currentThread().name}")
+
+    // Thread.sleep блокирует поток
+    Thread.sleep(1000)
+    println("После Thread.sleep (поток был заблокирован)")
+
+    println("\n=== delay() ===")
+    println("Thread: ${Thread.currentThread().name}")
+
+    // delay приостанавливает корутину
+    delay(1000)
+    println("После delay (поток НЕ был заблокирован)")
+}
+```
+
+#### Блокировка потока vs приостановка
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateThreadBlocking() = runBlocking {
+    println("=== Thread.sleep блокирует поток ===")
+
+    val time1 = measureTimeMillis {
+        launch {
+            println("Корутина 1 запущена на ${Thread.currentThread().name}")
+            Thread.sleep(1000) // Блокирует поток!
+            println("Корутина 1 завершена")
+        }
+
+        launch {
+            println("Корутина 2 запущена на ${Thread.currentThread().name}")
+            Thread.sleep(1000) // Должна ждать поток
+            println("Корутина 2 завершена")
+        }
+    }
+    println("Время с Thread.sleep: $time1 ms") // ~2000ms (последовательно)
+
+    println("\n=== delay приостанавливает корутину ===")
+
+    val time2 = measureTimeMillis {
+        launch {
+            println("Корутина 3 запущена на ${Thread.currentThread().name}")
+            delay(1000) // Приостанавливает, не блокирует поток
+            println("Корутина 3 завершена")
+        }
+
+        launch {
+            println("Корутина 4 запущена на ${Thread.currentThread().name}")
+            delay(1000) // Может работать одновременно
+            println("Корутина 4 завершена")
+        }
+    }
+    println("Время с delay: $time2 ms") // ~1000ms (параллельно)
+}
+```
+
+#### Визуализация различий
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun visualizeTheorem() = runBlocking {
+    println("=== Визуальная демонстрация ===")
+
+    // С Thread.sleep: Поток заблокирован
+    println("\nС Thread.sleep:")
+    launch(Dispatchers.Default) {
+        repeat(5) { i ->
+            println("[$i] До sleep на ${Thread.currentThread().name}")
+            Thread.sleep(500)
+            println("[$i] После sleep")
+        }
+    }
+
+    delay(3000) // Ждём завершения
+
+    // С delay: Поток свободен для другой работы
+    println("\n\nС delay:")
+    repeat(5) {
+        launch(Dispatchers.Default) {
+            println("[$it] До delay на ${Thread.currentThread().name}")
+            delay(500)
+            println("[$it] После delay на ${Thread.currentThread().name}")
+        }
+    }
+
+    delay(1500) // Всё завершится за ~500ms вместо 2500ms
+}
+```
+
+#### Влияние на производительность
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun performanceComparison() = runBlocking {
+    println("=== Сравнение производительности ===")
+
+    val coroutineCount = 100
+
+    // Используя Thread.sleep: Создаёт перегрузку потоков
+    val time1 = measureTimeMillis {
+        val jobs = List(coroutineCount) {
+            launch(Dispatchers.Default) {
+                Thread.sleep(1000)
+            }
+        }
+        jobs.forEach { it.join() }
+    }
+    println("$coroutineCount корутин с Thread.sleep: $time1 ms")
+
+    // Используя delay: Эффективное использование ресурсов
+    val time2 = measureTimeMillis {
+        val jobs = List(coroutineCount) {
+            launch(Dispatchers.Default) {
+                delay(1000)
+            }
+        }
+        jobs.forEach { it.join() }
+    }
+    println("$coroutineCount корутин с delay: $time2 ms")
+
+    // Thread.sleep намного медленнее, так как блокирует потоки
+}
+```
+
+#### Истощение пула потоков
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun threadPoolExhaustion() {
+    println("=== Истощение пула потоков ===")
+
+    // Плохо: Использование Thread.sleep истощает пул потоков
+    runBlocking(Dispatchers.Default) {
+        println("Доступно процессоров: ${Runtime.getRuntime().availableProcessors()}")
+
+        val jobs = List(1000) { index ->
+            launch {
+                println("[$index] Запущена на ${Thread.currentThread().name}")
+                Thread.sleep(5000) // Блокирует поток на 5 секунд
+                println("[$index] Завершена")
+            }
+        }
+
+        jobs.forEach { it.join() }
+    }
+
+    // Хорошо: Использование delay не истощает пул потоков
+    runBlocking(Dispatchers.Default) {
+        val jobs = List(1000) { index ->
+            launch {
+                println("[$index] Запущена на ${Thread.currentThread().name}")
+                delay(5000) // Приостанавливает, поток может делать другую работу
+                println("[$index] Завершена")
+            }
+        }
+
+        jobs.forEach { it.join() }
+    }
+}
+```
+
+#### Поддержка отмены
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun cancellationSupport() = runBlocking {
+    println("=== Поддержка отмены ===")
+
+    // Thread.sleep нельзя отменить
+    val job1 = launch {
+        try {
+            println("Запуск Thread.sleep")
+            Thread.sleep(10000)
+            println("Thread.sleep завершён (это не напечатается)")
+        } catch (e: Exception) {
+            println("Поймано: ${e::class.simpleName}")
+        }
+    }
+
+    delay(1000)
+    job1.cancel()
+    println("Job1 отменён: ${job1.isCancelled}")
+    job1.join()
+
+    // delay можно отменить
+    val job2 = launch {
+        try {
+            println("Запуск delay")
+            delay(10000)
+            println("delay завершён (это не напечатается)")
+        } catch (e: CancellationException) {
+            println("delay был отменён корректно")
+        }
+    }
+
+    delay(1000)
+    job2.cancel()
+    println("Job2 отменён: ${job2.isCancelled}")
+    job2.join()
+}
+```
+
+#### Примеры использования
+
+```kotlin
+import kotlinx.coroutines.*
+
+// Пример использования 1: Операции в корутинах - используйте delay
+suspend fun periodicTask() {
+    while (true) {
+        performTask()
+        delay(1000) // Приостанавливает, не блокирует
+    }
+}
+
+// Пример использования 2: Тестирование с задержками
+suspend fun testWithDelay() {
+    val result = loadData()
+    delay(100) // Даём время для асинхронных операций
+    verify(result)
+}
+
+// Пример использования 3: Механизм повторных попыток
+suspend fun retryWithDelay(times: Int, delayTime: Long, block: suspend () -> Unit) {
+    repeat(times) { attempt ->
+        try {
+            block()
+            return
+        } catch (e: Exception) {
+            if (attempt < times - 1) {
+                delay(delayTime) // Ждём перед повторной попыткой
+            }
+        }
+    }
+}
+
+// Пример использования 4: Throttling (ограничение частоты)
+suspend fun throttledOperation(intervalMs: Long) {
+    var lastExecutionTime = 0L
+
+    fun canExecute(): Boolean {
+        val currentTime = System.currentTimeMillis()
+        return currentTime - lastExecutionTime >= intervalMs
+    }
+
+    if (!canExecute()) {
+        val waitTime = intervalMs - (System.currentTimeMillis() - lastExecutionTime)
+        delay(waitTime) // Используйте delay, не Thread.sleep
+    }
+
+    lastExecutionTime = System.currentTimeMillis()
+    // Выполняем операцию
+}
+
+// ИЗБЕГАЙТЕ: Thread.sleep в корутинах
+suspend fun badExample() {
+    Thread.sleep(1000) // НЕ ДЕЛАЙТЕ ТАК в корутинах!
+}
+
+// Хорошо: Используйте delay вместо этого
+suspend fun goodExample() {
+    delay(1000) // Правильный способ
+}
+
+suspend fun performTask() {
+    delay(100)
+}
+
+suspend fun loadData(): String {
+    delay(100)
+    return "data"
+}
+
+fun verify(result: String) {
+    println("Проверено: $result")
+}
+```
+
+#### Когда Thread.sleep может быть допустим
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun whenThreadSleepIsOk() {
+    // 1. Код вне корутин (редко в современном Kotlin)
+    fun blockingFunction() {
+        Thread.sleep(1000) // OK если не в контексте корутины
+    }
+
+    // 2. Блокирующие утилиты для тестов (не рекомендуется)
+    fun simpleBlockingTest() {
+        Thread.sleep(100)
+        // Лучше использовать runBlocking + delay
+    }
+
+    // 3. Главный поток в простых скриптах (до корутин)
+    fun oldStyleMain() {
+        println("Start")
+        Thread.sleep(1000)
+        println("End")
+    }
+
+    // Лучшие альтернативы
+    suspend fun modernMain() {
+        println("Start")
+        delay(1000)
+        println("End")
+    }
+}
+```
+
+#### Реальные примеры
+
+```kotlin
+import kotlinx.coroutines.*
+
+// Пример 1: Ограничение частоты API запросов
+class ApiClient {
+    private var lastRequestTime = 0L
+    private val minRequestInterval = 1000L // 1 секунда
+
+    suspend fun makeRequest(url: String): String {
+        val now = System.currentTimeMillis()
+        val timeSinceLastRequest = now - lastRequestTime
+
+        if (timeSinceLastRequest < minRequestInterval) {
+            // Используйте delay, не Thread.sleep
+            delay(minRequestInterval - timeSinceLastRequest)
+        }
+
+        lastRequestTime = System.currentTimeMillis()
+        return performRequest(url)
+    }
+
+    private suspend fun performRequest(url: String): String {
+        delay(500) // Имитация сетевого запроса
+        return "Response from $url"
+    }
+}
+
+// Пример 2: Механизм опроса (polling)
+class DataPoller {
+    suspend fun pollForData(intervalMs: Long = 5000) {
+        while (true) {
+            try {
+                val data = fetchData()
+                processData(data)
+                delay(intervalMs) // Используйте delay для опроса
+            } catch (e: CancellationException) {
+                println("Опрос отменён")
+                throw e
+            } catch (e: Exception) {
+                println("Ошибка: ${e.message}, повторная попытка...")
+                delay(intervalMs)
+            }
+        }
+    }
+
+    private suspend fun fetchData(): String {
+        delay(200)
+        return "data"
+    }
+
+    private fun processData(data: String) {
+        println("Обработано: $data")
+    }
+}
+
+// Пример 3: Реализация timeout
+suspend fun <T> withCustomTimeout(timeMs: Long, block: suspend () -> T): T {
+    return withTimeout(timeMs) {
+        block()
+    }
+}
+
+// Пример 4: Отложенное выполнение
+class TaskScheduler {
+    private val scope = CoroutineScope(Dispatchers.Default)
+
+    fun scheduleTask(delayMs: Long, task: suspend () -> Unit): Job {
+        return scope.launch {
+            delay(delayMs) // Используйте delay для планирования
+            task()
+        }
+    }
+
+    fun cancel() {
+        scope.cancel()
+    }
+}
+
+fun demonstrateRealWorld() = runBlocking {
+    // Ограничение частоты API
+    val client = ApiClient()
+    repeat(5) { index ->
+        launch {
+            val response = client.makeRequest("https://api.example.com/$index")
+            println(response)
+        }
+    }
+
+    delay(6000)
+
+    // Опрос
+    val poller = DataPoller()
+    val pollingJob = launch {
+        poller.pollForData(1000)
+    }
+
+    delay(5000)
+    pollingJob.cancel()
+
+    // Запланированные задачи
+    val scheduler = TaskScheduler()
+    scheduler.scheduleTask(2000) {
+        println("Запланированная задача выполнена")
+    }
+
+    delay(3000)
+    scheduler.cancel()
+}
+```
+
+#### Соображения по тестированию
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.*
+import org.junit.Test
+import kotlin.test.assertEquals
+
+class DelayVsSleepTest {
+    // delay можно контролировать в тестах
+    @Test
+    fun testWithDelay() = runTest {
+        var executed = false
+
+        launch {
+            delay(5000) // Виртуальное время
+            executed = true
+        }
+
+        advanceTimeBy(5000) // Перемотка времени вперёд
+        assertEquals(true, executed)
+    }
+
+    // Thread.sleep нельзя контролировать
+    @Test
+    fun testWithSleep() = runTest {
+        var executed = false
+
+        launch {
+            Thread.sleep(5000) // Реальное время! Тест занимает 5 секунд
+            executed = true
+        }
+
+        // Нельзя перемотать Thread.sleep
+        // Нужно реально ждать 5 секунд
+        delay(5000)
+        assertEquals(true, executed)
+    }
+
+    // delay намного лучше для тестирования
+    @Test
+    fun testDelayAdvantage() = runTest {
+        val startTime = currentTime
+
+        delay(10000) // 10 секунд в виртуальном времени
+        advanceUntilIdle()
+
+        val elapsedTime = currentTime - startTime
+        // Тест выполняется мгновенно, реального ожидания нет
+        println("Прошло виртуального времени: $elapsedTime ms")
+    }
+}
+```
+
+#### Распространённые ошибки
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun commonMistakes() = runBlocking {
+    // Ошибка 1: Использование Thread.sleep в корутине
+    launch {
+        // ПЛОХО: Блокирует поток
+        Thread.sleep(1000)
+    }
+
+    // Правильно
+    launch {
+        // ХОРОШО: Приостанавливает корутину
+        delay(1000)
+    }
+
+    // Ошибка 2: Использование Thread.sleep с withContext
+    withContext(Dispatchers.IO) {
+        // ПЛОХО: Блокирует IO поток
+        Thread.sleep(1000)
+    }
+
+    // Правильно
+    withContext(Dispatchers.IO) {
+        // ХОРОШО: Приостанавливает, освобождает IO поток
+        delay(1000)
+    }
+
+    // Ошибка 3: Смешивание блокирующего и приостанавливающего подходов
+    suspend fun mixedApproach() {
+        delay(1000)
+        Thread.sleep(1000) // ПЛОХО: Зачем блокировать после приостановки?
+        delay(1000)
+    }
+
+    // Правильно
+    suspend fun consistentApproach() {
+        delay(1000)
+        delay(1000)
+        delay(1000)
+    }
+
+    // Ошибка 4: Использование Thread.sleep для timeout
+    launch {
+        // ПЛОХО
+        Thread.sleep(5000)
+        cancel() // Ручной timeout
+    }
+
+    // ХОРОШО: Используйте withTimeout
+    withTimeout(5000) {
+        // Автоматическая отмена
+    }
+}
+```
+
+### Краткая справка
+
+```kotlin
+//  Используйте delay() когда:
+// - Внутри корутин
+// - Нужна поддержка отмены
+// - Хотите избежать блокировки потоков
+// - Пишете тесты (можно перематывать время)
+// - Нужно эффективное использование ресурсов
+
+suspend fun goodExample1() {
+    delay(1000)
+}
+
+//  НЕ используйте Thread.sleep когда:
+// - Внутри корутин
+// - Нужна отмена
+// - Важна производительность
+// - Пишете тестируемый код
+// - Ограниченный пул потоков
+
+suspend fun badExample1() {
+    Thread.sleep(1000) // НЕ ДЕЛАЙТЕ ТАК
+}
+
+//  Thread.sleep может быть OK когда:
+// - Не в контексте корутины
+// - Простые блокирующие скрипты
+// - Легаси код (рассмотрите рефакторинг)
+
+fun legacyCode() {
+    Thread.sleep(1000) // OK если не в корутине
+}
+```
+
+### Лучшие практики
+
+1. **Всегда используйте `delay()` в корутинах, никогда `Thread.sleep()`**
+2. **Используйте `delay()` для любого временного ожидания в приостанавливающих функциях**
+3. **`Thread.sleep()` следует использовать только в блокирующем коде вне корутин**
+4. **Тестируйте код корутин с `delay()` для быстрого тестирования**
+5. **Проверяйте `isActive` в долгоработающих циклах с `delay()`**
+
+### Сводка по производительности
+
+| Аспект | delay() | Thread.sleep() |
+|--------|---------|----------------|
+| Использование потока | Приостанавливает, освобождает поток | Блокирует поток |
+| Возможность отмены | Да | Нет |
+| Поддержка тестирования | Возможна перемотка | Реальное ожидание |
+| Эффективность ресурсов | Да | Нет |
+| Совместимость с корутинами | Да | Нет |
+| Производительность | Высокая | Низкая (в корутинах) |
 
 ---
 

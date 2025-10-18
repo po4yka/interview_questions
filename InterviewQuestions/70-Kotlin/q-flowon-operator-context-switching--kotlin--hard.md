@@ -16,7 +16,7 @@ created: 2025-10-12
 updated: 2025-10-12
 category: "coroutines-advanced"
 tags: ["flowon", "context-switching", "dispatchers", "buffer", "performance", "flow-operators"]
-moc: "moc-kotlin"
+moc: moc-kotlin
 related: [q-associatewith-vs-associateby--kotlin--easy, q-retrofit-coroutines-best-practices--kotlin--medium, q-kotlin-constructor-keyword--programming-languages--easy]
 contributors: []
 ---

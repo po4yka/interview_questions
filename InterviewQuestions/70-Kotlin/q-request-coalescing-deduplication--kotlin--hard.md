@@ -1789,7 +1789,780 @@ suspend fun execute(key: K, operation: suspend () -> V): V = coroutineScope {
 
 ---
 
-[Russian content follows same structure...]
+## Обзор
+
+Объединение запросов (также называемое дедупликацией запросов или схлопыванием запросов) — это техника оптимизации, которая объединяет несколько одновременных запросов к одному ресурсу в единственный вызов бэкенда.
+
+**Ключевые преимущества:**
+- Значительно снижает нагрузку на бэкенд (снижение в 10-100 раз)
+- Улучшает время отклика (все запрашивающие получают один результат)
+- Предотвращает проблему лавинообразной нагрузки
+- Уменьшает использование сетевой пропускной способности
+- Улучшает коэффициент попадания в кэш
+
+**Когда использовать:**
+- Несколько компонентов запрашивают одни и те же данные одновременно
+- Высоконагруженные эндпоинты с идентичными запросами
+- Дорогие операции (запросы к базе данных, вызовы API)
+- Подписки на данные реального времени
+
+---
+
+## Определение паттерна
+
+### Что такое объединение запросов?
+
+```
+БЕЗ объединения:
+     Запрос 1
+  Клиент
+    A
+
+     Запрос 2
+  Клиент   Бэкенд
+    B
+
+     Запрос 3
+  Клиент
+    C
+
+Результат: 3 идентичных вызова бэкенда
+
+
+С объединением:
+
+  Клиент
+    A
+
+     Единственный
+  Клиент  Запрос   Бэкенд
+    B
+
+  Клиент
+    C
+
+Результат: 1 вызов бэкенда, 3 клиента получают результат
+```
+
+### Основные концепции
+
+1. **Отслеживание выполняющихся запросов**: Отслеживание текущих запросов
+2. **Совместное использование Deferred**: Совместное использование `Deferred<T>` между одновременными запрашивающими
+3. **Дедупликация на основе ключей**: Использование уникальных ключей для идентификации идентичных запросов
+4. **Широковещательная рассылка результатов**: Все ожидающие получают один результат
+5. **Очистка**: Удаление завершенных запросов из карты отслеживания
+
+---
+
+## Проблемный сценарий
+
+### Сценарий: Загрузка профиля пользователя
+
+```kotlin
+//  ПРОБЛЕМА: Несколько компонентов загружают один профиль пользователя
+class UserProfileScreen : Fragment() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Компонент 1: Заголовок загружает пользователя
+        userRepository.getUser(userId) // API вызов 1
+
+        // Компонент 2: Аватар загружает пользователя
+        userRepository.getUser(userId) // API вызов 2
+
+        // Компонент 3: Статистика загружает пользователя
+        userRepository.getUser(userId) // API вызов 3
+
+        // Компонент 4: Действия загружают пользователя
+        userRepository.getUser(userId) // API вызов 4
+    }
+}
+
+// Результат: 4 идентичных API вызова подряд!
+// Бэкенд получает нагрузку в 4 раза больше
+// Пользователь ждет 4 отдельных сетевых вызова
+```
+
+### Реальное влияние
+
+```kotlin
+// Реальные метрики из production приложения:
+
+// БЕЗ объединения:
+// - 10,000 запросов профилей пользователей/минуту
+// - Среднее 3 дублирующих запроса на пользователя
+// - Всего вызовов бэкенда: 30,000/минуту
+// - CPU бэкенда: 85%
+// - P95 задержка: 450мс
+
+// С объединением:
+// - 10,000 запросов профилей пользователей/минуту
+// - Дедуплицировано до: 3,500/минуту (снижение на 90%!)
+// - CPU бэкенда: 30%
+// - P95 задержка: 120мс
+```
+
+---
+
+## Архитектура решения
+
+### Базовая архитектура
+
+```kotlin
+class RequestCoalescer<K, V> {
+    // Отслеживание выполняющихся запросов
+    private val inFlightRequests = ConcurrentHashMap<K, Deferred<V>>()
+
+    suspend fun execute(
+        key: K,
+        operation: suspend () -> V
+    ): V {
+        // Проверка, выполняется ли уже запрос
+        val existingRequest = inFlightRequests[key]
+        if (existingRequest != null) {
+            // Ожидание существующего запроса
+            return existingRequest.await()
+        }
+
+        // Запуск нового запроса
+        return coroutineScope {
+            val deferred = async {
+                try {
+                    operation()
+                } finally {
+                    // Очистка после завершения
+                    inFlightRequests.remove(key)
+                }
+            }
+
+            // Сохранение для других запрашивающих
+            inFlightRequests[key] = deferred
+
+            deferred.await()
+        }
+    }
+}
+```
+
+---
+
+## Потокобезопасная реализация с ConcurrentHashMap
+
+### Базовая реализация
+
+```kotlin
+class RequestCoalescer<K, V> {
+    private val inFlightRequests = ConcurrentHashMap<K, Deferred<V>>()
+
+    suspend fun execute(
+        key: K,
+        operation: suspend () -> V
+    ): V = coroutineScope {
+        // Атомарная проверка и установка
+        val existingDeferred = inFlightRequests[key]
+        if (existingDeferred != null && existingDeferred.isActive) {
+            return@coroutineScope existingDeferred.await()
+        }
+
+        val deferred = async {
+            try {
+                operation()
+            } finally {
+                inFlightRequests.remove(key)
+            }
+        }
+
+        // Возможно состояние гонки здесь!
+        // Другой поток может вставить между проверкой и размещением
+        val previous = inFlightRequests.putIfAbsent(key, deferred)
+
+        if (previous != null && previous.isActive) {
+            // Другой поток выиграл гонку
+            deferred.cancel()
+            previous.await()
+        } else {
+            deferred.await()
+        }
+    }
+}
+```
+
+### Исправление состояния гонки
+
+```kotlin
+class SafeRequestCoalescer<K, V> {
+    private val inFlightRequests = ConcurrentHashMap<K, Deferred<V>>()
+
+    suspend fun execute(
+        key: K,
+        operation: suspend () -> V
+    ): V = coroutineScope {
+        // Атомарная операция вычисления
+        val deferred = inFlightRequests.compute(key) { _, existing ->
+            if (existing != null && existing.isActive) {
+                existing
+            } else {
+                async {
+                    try {
+                        operation()
+                    } finally {
+                        inFlightRequests.remove(key)
+                    }
+                }
+            }
+        }!!
+
+        deferred.await()
+    }
+}
+```
+
+### Обработка ошибок
+
+```kotlin
+class ResilientRequestCoalescer<K, V> {
+    private val inFlightRequests = ConcurrentHashMap<K, Deferred<Result<V>>>()
+
+    suspend fun execute(
+        key: K,
+        operation: suspend () -> V
+    ): Result<V> = coroutineScope {
+        val deferred = inFlightRequests.compute(key) { _, existing ->
+            if (existing != null && existing.isActive) {
+                existing
+            } else {
+                async {
+                    try {
+                        val result = operation()
+                        Result.success(result)
+                    } catch (e: Exception) {
+                        Result.failure(e)
+                    } finally {
+                        inFlightRequests.remove(key)
+                    }
+                }
+            }
+        }!!
+
+        deferred.await()
+    }
+}
+
+// Использование
+val result = coalescer.execute("user:123") {
+    api.getUser("123")
+}
+
+when {
+    result.isSuccess -> {
+        val user = result.getOrNull()!!
+        // Обработка успеха
+    }
+    result.isFailure -> {
+        val error = result.exceptionOrNull()
+        // Обработка ошибки
+        // Примечание: Все ожидающие получают ту же ошибку!
+    }
+}
+```
+
+---
+
+## Альтернативная реализация с Mutex
+
+### Реализация на основе Mutex
+
+```kotlin
+class MutexRequestCoalescer<K, V> {
+    private val inFlightRequests = mutableMapOf<K, Deferred<V>>()
+    private val mutex = Mutex()
+
+    suspend fun execute(
+        key: K,
+        operation: suspend () -> V
+    ): V = coroutineScope {
+        // Проверка с блокировкой
+        mutex.withLock {
+            val existing = inFlightRequests[key]
+            if (existing != null && existing.isActive) {
+                return@coroutineScope existing.await()
+            }
+        }
+
+        // Создание нового deferred
+        val deferred = async {
+            try {
+                operation()
+            } finally {
+                mutex.withLock {
+                    inFlightRequests.remove(key)
+                }
+            }
+        }
+
+        // Сохранение с блокировкой
+        mutex.withLock {
+            // Двойная проверка (другая корутина могла создать его)
+            val existing = inFlightRequests[key]
+            if (existing != null && existing.isActive) {
+                deferred.cancel()
+                return@coroutineScope existing.await()
+            }
+
+            inFlightRequests[key] = deferred
+        }
+
+        deferred.await()
+    }
+}
+```
+
+**Рекомендации:**
+- **ConcurrentHashMap**: Лучшая производительность при высокой параллельности
+- **Mutex**: Более простой код, легче понять, достаточно для большинства случаев
+
+---
+
+## Реальные примеры
+
+### Пример 1: Кэш профиля пользователя с объединением
+
+```kotlin
+class UserRepository(
+    private val api: UserApi,
+    private val cache: UserCache,
+    private val coalescer: RequestCoalescer<String, User>
+) {
+    suspend fun getUser(userId: String): User {
+        // Сначала проверка кэша
+        cache.get(userId)?.let { return it }
+
+        // Объединение API вызовов
+        return coalescer.execute(userId) {
+            val user = api.getUser(userId)
+            cache.put(userId, user)
+            user
+        }
+    }
+}
+
+// Сценарий: Экран профиля пользователя с несколькими компонентами
+class ProfileScreen : Fragment() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            // Все эти вызовы объединяются в ОДИН API вызов
+            val user1 = userRepository.getUser(userId) // Компонент заголовка
+            val user2 = userRepository.getUser(userId) // Компонент аватара
+            val user3 = userRepository.getUser(userId) // Компонент статистики
+            val user4 = userRepository.getUser(userId) // Компонент биографии
+
+            // Только 1 API вызов выполнен!
+            // Все 4 получают результат мгновенно
+        }
+    }
+}
+```
+
+### Пример 2: Дедупликация загрузки изображений
+
+```kotlin
+class ImageLoader(
+    private val httpClient: HttpClient,
+    private val coalescer: RequestCoalescer<String, Bitmap>
+) {
+    suspend fun loadImage(url: String): Bitmap {
+        return coalescer.execute(url) {
+            httpClient.get(url).use { response ->
+                BitmapFactory.decodeStream(response.bodyStream())
+            }
+        }
+    }
+}
+
+// Сценарий: RecyclerView с повторяющимися изображениями
+class ImageAdapter : RecyclerView.Adapter<ImageViewHolder>() {
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        val imageUrl = items[position].imageUrl
+
+        holder.lifecycleScope.launch {
+            // Даже если одно изображение появляется 100 раз в списке,
+            // происходит только 1 загрузка!
+            val bitmap = imageLoader.loadImage(imageUrl)
+            holder.imageView.setImageBitmap(bitmap)
+        }
+    }
+}
+```
+
+---
+
+## Преимущества производительности
+
+### Результаты бенчмарков
+
+```kotlin
+@Test
+fun benchmarkCoalescing() = runBlocking {
+    val api = MockApi(latency = 100) // 100мс на вызов
+    val coalescedRepository = UserRepository(api, coalescer = RequestCoalescer())
+    val regularRepository = UserRepository(api, coalescer = null)
+
+    val concurrentRequests = 100
+    val userId = "test-user"
+
+    // БЕЗ объединения
+    val withoutTime = measureTimeMillis {
+        val jobs = List(concurrentRequests) {
+            launch {
+                regularRepository.getUser(userId)
+            }
+        }
+        jobs.joinAll()
+    }
+    println("Без объединения: ${withoutTime}мс")
+    println("API вызовов сделано: ${api.callCount}") // 100 вызовов
+
+    api.reset()
+
+    // С объединением
+    val withTime = measureTimeMillis {
+        val jobs = List(concurrentRequests) {
+            launch {
+                coalescedRepository.getUser(userId)
+            }
+        }
+        jobs.joinAll()
+    }
+    println("С объединением: ${withTime}мс")
+    println("API вызовов сделано: ${api.callCount}") // 1 вызов!
+
+    // Результаты:
+    // Без: ~10,000мс (100 запросов × 100мс)
+    // С: ~100мс (1 запрос × 100мс)
+    // Ускорение: в 100 раз!
+}
+```
+
+### Реальные метрики production
+
+```kotlin
+/**
+ * Production метрики из реального Android приложения
+ */
+data class ProductionMetrics(
+    // До объединения
+    val beforeApiCalls: Long = 45_000,           // в минуту
+    val beforeBackendCpu: Double = 78.0,         // процентов
+    val beforeP95Latency: Long = 320,            // миллисекунды
+    val beforeErrorRate: Double = 2.3,           // процентов
+
+    // После объединения
+    val afterApiCalls: Long = 8_500,             // в минуту (снижение на 81%!)
+    val afterBackendCpu: Double = 28.0,          // процентов
+    val afterP95Latency: Long = 95,              // миллисекунды
+    val afterErrorRate: Double = 0.4,            // процентов
+
+    // Улучшения
+    val apiCallReduction: Double = 81.1,         // процентов
+    val cpuReduction: Double = 64.1,             // процентов
+    val latencyImprovement: Double = 70.3,       // процентов
+    val errorRateImprovement: Double = 82.6      // процентов
+)
+```
+
+---
+
+## Комбинирование с кэшем в памяти
+
+### Двухуровневая стратегия: Объединение + Кэширование
+
+```kotlin
+class OptimizedRepository<K, V>(
+    private val api: Api<K, V>,
+    private val memoryCache: LruCache<K, CacheEntry<V>>,
+    private val coalescer: RequestCoalescer<K, V>,
+    private val cacheTtl: Long = 5 * 60 * 1000 // 5 минут
+) {
+    suspend fun get(key: K): V {
+        // Уровень 1: Проверка кэша в памяти
+        val cached = memoryCache.get(key)
+        if (cached != null && !cached.isExpired(cacheTtl)) {
+            return cached.value
+        }
+
+        // Уровень 2: Объединение API вызовов
+        return coalescer.execute(key) {
+            val value = api.fetch(key)
+
+            // Сохранение в кэше
+            memoryCache.put(key, CacheEntry(value, System.currentTimeMillis()))
+
+            value
+        }
+    }
+
+    fun invalidate(key: K) {
+        memoryCache.remove(key)
+    }
+
+    fun invalidateAll() {
+        memoryCache.evictAll()
+    }
+}
+
+data class CacheEntry<V>(
+    val value: V,
+    val timestamp: Long
+) {
+    fun isExpired(ttl: Long): Boolean {
+        return System.currentTimeMillis() - timestamp > ttl
+    }
+}
+
+// Преимущества:
+// 1. Кэш в памяти: Мгновенный ответ для кэшированных данных
+// 2. Coalescer: Предотвращает дублирующие API вызовы
+// 3. TTL: Обеспечивает свежесть данных
+```
+
+---
+
+## Лучшие практики
+
+### Что делать
+
+1. **Использовать для дорогих, идемпотентных операций**
+   ```kotlin
+   //  Хорошо
+   coalescer.execute("user:$userId") {
+       api.getUser(userId) // Дорого, идемпотентно
+   }
+   ```
+
+2. **Выбирать подходящие ключи**
+   ```kotlin
+   //  Хорошо - Уникальные, детерминированные ключи
+   coalescer.execute("user:$userId:$includeDetails") {
+       api.getUser(userId, includeDetails)
+   }
+   ```
+
+3. **Обрабатывать ошибки корректно**
+   ```kotlin
+   //  Хорошо
+   try {
+       coalescer.execute(key) { operation() }
+   } catch (e: Exception) {
+       // Все ожидающие получают ту же ошибку
+       fallbackStrategy()
+   }
+   ```
+
+4. **Мониторить метрики**
+   ```kotlin
+   //  Хорошо
+   val metrics = coalescer.getMetrics()
+   Log.d("Metrics", "Уровень объединения: ${metrics.getCoalescingRate()}%")
+   ```
+
+5. **Реализовать таймауты**
+   ```kotlin
+   //  Хорошо
+   withTimeout(5000) {
+       coalescer.execute(key) { operation() }
+   }
+   ```
+
+### Чего не делать
+
+1. **Не объединять не-идемпотентные операции**
+   ```kotlin
+   //  Плохо - Побочные эффекты!
+   coalescer.execute("payment") {
+       api.processPayment() // Создает дублирующие платежи!
+   }
+   ```
+
+2. **Не использовать для мутаций**
+   ```kotlin
+   //  Плохо
+   coalescer.execute("update-user") {
+       api.updateUser(user) // Не должно быть объединено
+   }
+   ```
+
+3. **Не игнорировать очистку**
+   ```kotlin
+   //  Плохо - Утечка памяти
+   val coalescer = RequestCoalescer<String, Data>()
+   // Никогда не очищается!
+
+   //  Хорошо
+   class MyRepository : Closeable {
+       private val coalescer = RequestCoalescer<String, Data>()
+
+       override fun close() {
+           coalescer.clear()
+       }
+   }
+   ```
+
+4. **Не использовать слишком широкие ключи**
+   ```kotlin
+   //  Плохо - Слишком широко
+   coalescer.execute("all-users") { api.getAllUsers() }
+
+   //  Хорошо - Конкретно
+   coalescer.execute("user:$userId") { api.getUser(userId) }
+   ```
+
+---
+
+## Распространенные ошибки
+
+### 1. Объединение не-идемпотентных операций
+
+```kotlin
+//  НЕПРАВИЛЬНО: Обработка платежей НЕ должна быть объединена
+class PaymentService(private val coalescer: RequestCoalescer<String, Payment>) {
+    suspend fun processPayment(orderId: String, amount: Double): Payment {
+        return coalescer.execute("payment:$orderId") {
+            api.processPayment(orderId, amount) // Создает дублирующие списания!
+        }
+    }
+}
+
+//  ПРАВИЛЬНО: Не объединять мутации
+class PaymentService(private val api: PaymentApi) {
+    suspend fun processPayment(orderId: String, amount: Double): Payment {
+        return api.processPayment(orderId, amount) // Каждый вызов независим
+    }
+}
+```
+
+### 2. Утечки памяти из неограниченных карт
+
+```kotlin
+//  НЕПРАВИЛЬНО: Нет очистки
+class LeakyCoalescer<K, V> {
+    private val requests = ConcurrentHashMap<K, Deferred<V>>()
+
+    suspend fun execute(key: K, operation: suspend () -> V): V {
+        val deferred = requests.getOrPut(key) {
+            CompletableDeferred<V>().apply {
+                CoroutineScope(Dispatchers.Default).launch {
+                    complete(operation())
+                }
+            }
+        }
+        return deferred.await()
+        // Никогда не удаляется из карты!
+    }
+}
+
+//  ПРАВИЛЬНО: Очистка после завершения
+class ProperCoalescer<K, V> {
+    private val requests = ConcurrentHashMap<K, Deferred<V>>()
+
+    suspend fun execute(key: K, operation: suspend () -> V): V = coroutineScope {
+        val deferred = async {
+            try {
+                operation()
+            } finally {
+                requests.remove(key) // Очистка!
+            }
+        }
+
+        requests.compute(key) { _, existing ->
+            existing?.takeIf { it.isActive } ?: deferred
+        }!!.await()
+    }
+}
+```
+
+### 3. Игнорирование отмены
+
+```kotlin
+//  НЕПРАВИЛЬНО: Не обрабатывает отмену
+suspend fun execute(key: K, operation: suspend () -> V): V {
+    val deferred = async {
+        operation()
+    }
+    requests[key] = deferred
+    return deferred.await() // Если отменено, запись остается в карте
+}
+
+//  ПРАВИЛЬНО: Очистка при отмене
+suspend fun execute(key: K, operation: suspend () -> V): V = coroutineScope {
+    val deferred = async {
+        try {
+            operation()
+        } catch (e: CancellationException) {
+            requests.remove(key)
+            throw e
+        } finally {
+            requests.remove(key)
+        }
+    }
+
+    requests.compute(key) { _, existing ->
+        existing?.takeIf { it.isActive } ?: deferred
+    }!!.await()
+}
+```
+
+---
+
+## Дополнительные вопросы
+
+1. **В чем разница между объединением запросов и кэшированием?**
+   - Объединение: Дедуплицирует одновременные запросы (одно время)
+   - Кэширование: Сохраняет результаты для повторного использования (во времени)
+   - Лучше всего использовать вместе для оптимальной производительности
+
+2. **Как обрабатывать частичные сбои в объединенных запросах?**
+   - Все ожидающие получают ту же ошибку
+   - Реализовать стратегии отката (кэшированные данные, значения по умолчанию)
+   - Рассмотреть логику повтора с экспоненциальной задержкой
+
+3. **Какой идеальный TTL для отслеживания объединенных запросов?**
+   - Зависит от длительности операции и паттернов запросов
+   - Обычно 30-60 секунд достаточно
+   - Мониторить метрики для настройки
+
+4. **Следует ли объединять POST/PUT/DELETE запросы?**
+   - Нет! Только GET запросы (идемпотентные, без побочных эффектов)
+   - Мутации не должны дедуплицироваться
+
+5. **Как реализовать объединение запросов между несколькими процессами?**
+   - Использовать общее состояние (Redis, Memcached)
+   - Реализовать распределенную блокировку
+   - Более сложно, рассмотреть, действительно ли нужно
+
+6. **В чем разница между объединением и батчингом?**
+   - Объединение: Одинаковый запрос → Одинаковый результат
+   - Батчинг: Разные запросы → Индивидуальные результаты в одном вызове
+   - Оба снижают нагрузку на бэкенд
+
+7. **Как тестировать эффективность объединения в production?**
+   - Мониторить количество API вызовов до/после
+   - Отслеживать метрики уровня объединения
+   - Измерять улучшения CPU бэкенда и задержки
+
+---
+
+## Ссылки
+
+- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
+- [Request Coalescing in Distributed Systems](https://martinfowler.com/articles/patterns-of-distributed-systems/request-pipeline.html)
+- [Facebook's TAO: Request Coalescing](https://www.usenix.org/conference/atc13/technical-sessions/presentation/bronson)
+- [Netflix: Request Collapsing with Hystrix](https://github.com/Netflix/Hystrix/wiki/How-it-Works#RequestCollapsing)
+
+---
+
+## Связанные вопросы
+
+- [Стратегии кэширования](q-caching-strategies--kotlin--medium.md)
+- [Паттерн Circuit breaker](q-circuit-breaker-coroutines--kotlin--hard.md)
+- [Оптимизация производительности](q-performance-optimization--kotlin--hard.md)
 
 ---
 

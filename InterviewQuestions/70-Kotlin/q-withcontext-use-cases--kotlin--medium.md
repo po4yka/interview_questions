@@ -7,7 +7,7 @@ status: draft
 created: "2025-10-12"
 tags: ["kotlin", "coroutines", "withcontext", "dispatchers", "context-switching", "difficulty/medium"]
 description: "A comprehensive guide to withContext in Kotlin coroutines, covering dispatcher switching, performance implications, and comparison with other coroutine builders"
-moc: "moc-kotlin"
+moc: moc-kotlin
 related: [q-race-conditions-coroutines--kotlin--hard, q-launch-vs-async-vs-runblocking--kotlin--medium, q-kotlin-non-inheritable-class--programming-languages--easy]
 subtopics: ["coroutines", "withcontext", "dispatchers", "context-switching"]
 ---

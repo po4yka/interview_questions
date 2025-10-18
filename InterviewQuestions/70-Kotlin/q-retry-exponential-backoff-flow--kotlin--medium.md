@@ -923,7 +923,850 @@ RetryConfig(multiplier = 10.0) // Can lead to hours of waiting
 
 **Retry** паттерны критически важны для создания устойчивых приложений, которые могут восстанавливаться после временных сбоев. **Exponential backoff** — это стратегия, при которой задержки повторных попыток увеличиваются экспоненциально, чтобы избежать перегрузки падающих сервисов.
 
-*(Продолжение следует той же структуре с подробными примерами retry(), retryWhen(), exponential backoff, jitter, circuit breaker интеграции, production примерами для сетевых запросов и БД, тестированием и best practices на русском языке)*
+#### 1. Базовый Retry с оператором retry()
+
+**Оператор retry():**
+- Повторяет Flow при возникновении исключения
+- Опционально ограничивает количество попыток
+- НЕ добавляет задержку между повторами (немедленный retry)
+
+**Простой retry:**
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+fun getData(): Flow<String> = flow {
+    var attempt = 0
+    println("Попытка ${++attempt}")
+    if (attempt < 3) {
+        throw IOException("Ошибка сети")
+    }
+    emit("Успех")
+}
+
+suspend fun basicRetryExample() {
+    getData()
+        .retry(retries = 3) // Повторить до 3 раз
+        .collect { data ->
+            println("Получено: $data")
+        }
+}
+
+// Вывод:
+// Попытка 1
+// Попытка 2
+// Попытка 3
+// Получено: Успех
+```
+
+**Retry с предикатом:**
+
+```kotlin
+suspend fun retryWithPredicateExample() {
+    getData()
+        .retry(3) { cause ->
+            // Повторяем только для IOException, не для IllegalStateException
+            cause is IOException
+        }
+        .collect { data ->
+            println("Получено: $data")
+        }
+}
+```
+
+#### 2. Продвинутый Retry с retryWhen()
+
+**Оператор retryWhen():**
+- Больше контроля над retry логикой
+- Может добавлять задержки между повторами
+- Доступ к счетчику попыток и исключению
+
+**Базовый retryWhen:**
+
+```kotlin
+suspend fun retryWhenExample() {
+    flow {
+        println("Попытка загрузить данные...")
+        throw IOException("Ошибка сети")
+    }
+        .retryWhen { cause, attempt ->
+            // Повторяем только IOException, максимум 3 попытки
+            if (cause is IOException && attempt < 3) {
+                delay(1000 * (attempt + 1)) // Линейный backoff
+                true // Повторить
+            } else {
+                false // Не повторять
+            }
+        }
+        .catch { e ->
+            println("Не удалось после повторов: ${e.message}")
+        }
+        .collect()
+}
+```
+
+**retryWhen vs retry:**
+
+| Функция | retry() | retryWhen() |
+|---------|---------|-------------|
+| Задержка | Нет (немедленно) | Да (ручная delay) |
+| Счетчик попыток | Недоступен | Доступен |
+| Условная логика | Базовый предикат | Полный контроль |
+| Лучше для | Простой retry | Кастомные backoff стратегии |
+
+#### 3. Реализация Exponential Backoff
+
+**Алгоритм exponential backoff:**
+- Задержка увеличивается экспоненциально: 1s, 2s, 4s, 8s, 16s...
+- Формула: `delay = initialDelay * (multiplier ^ attempt)`
+- Предотвращает перегрузку падающих сервисов
+
+**Базовый exponential backoff:**
+
+```kotlin
+suspend fun exponentialBackoffExample() {
+    val initialDelayMs = 1000L
+    val multiplier = 2.0
+    val maxAttempts = 5
+
+    flow {
+        println("Загрузка данных...")
+        throw IOException("Ошибка сети")
+    }
+        .retryWhen { cause, attempt ->
+            if (cause is IOException && attempt < maxAttempts) {
+                val delayMs = (initialDelayMs * multiplier.pow(attempt.toDouble())).toLong()
+                println("Повтор ${attempt + 1}/$maxAttempts через ${delayMs}мс")
+                delay(delayMs)
+                true
+            } else {
+                false
+            }
+        }
+        .catch { e ->
+            println("Не удалось после $maxAttempts попыток: ${e.message}")
+        }
+        .collect()
+}
+
+// Вывод:
+// Загрузка данных...
+// Повтор 1/5 через 1000мс
+// Загрузка данных...
+// Повтор 2/5 через 2000мс
+// Загрузка данных...
+// Повтор 3/5 через 4000мс
+// ...
+```
+
+**Production-ready exponential backoff:**
+
+```kotlin
+data class RetryConfig(
+    val maxAttempts: Int = 5,
+    val initialDelayMs: Long = 1000,
+    val maxDelayMs: Long = 32000,
+    val multiplier: Double = 2.0,
+    val jitterFactor: Double = 0.1
+)
+
+fun <T> Flow<T>.retryWithExponentialBackoff(
+    config: RetryConfig = RetryConfig(),
+    predicate: (Throwable) -> Boolean = { true }
+): Flow<T> = retryWhen { cause, attempt ->
+    if (predicate(cause) && attempt < config.maxAttempts) {
+        val baseDelay = (config.initialDelayMs * config.multiplier.pow(attempt.toDouble()))
+            .toLong()
+            .coerceAtMost(config.maxDelayMs)
+
+        // Добавляем jitter (случайность) для предотвращения thundering herd
+        val jitter = (baseDelay * config.jitterFactor * Random.nextDouble(-1.0, 1.0)).toLong()
+        val delayMs = (baseDelay + jitter).coerceAtLeast(0)
+
+        println("Повтор ${attempt + 1}/${config.maxAttempts} через ${delayMs}мс (причина: ${cause.message})")
+        delay(delayMs)
+        true
+    } else {
+        false
+    }
+}
+
+// Использование
+suspend fun retryWithConfigExample() {
+    getDataFromApi()
+        .retryWithExponentialBackoff(
+            config = RetryConfig(
+                maxAttempts = 5,
+                initialDelayMs = 1000,
+                maxDelayMs = 30000,
+                multiplier = 2.0,
+                jitterFactor = 0.1
+            ),
+            predicate = { it is IOException || it is HttpException }
+        )
+        .collect { data ->
+            println("Успех: $data")
+        }
+}
+```
+
+#### 4. Jitter для времени Retry
+
+**Зачем jitter?**
+- Предотвращает проблему **thundering herd**
+- Множественные клиенты не повторяют в одно и то же время
+- Распределяет нагрузку более равномерно
+
+**Стратегии jitter:**
+
+```kotlin
+// 1. Full jitter: случайная задержка от 0 до вычисленной задержки
+fun calculateFullJitter(baseDelay: Long): Long {
+    return (baseDelay * Random.nextDouble()).toLong()
+}
+
+// 2. Equal jitter: половина базовой задержки + случайная половина
+fun calculateEqualJitter(baseDelay: Long): Long {
+    return (baseDelay / 2) + (baseDelay / 2 * Random.nextDouble()).toLong()
+}
+
+// 3. Decorrelated jitter: на основе предыдущей задержки
+fun calculateDecorrelatedJitter(previousDelay: Long, baseDelay: Long): Long {
+    return (baseDelay + (previousDelay * 3 * Random.nextDouble())).toLong()
+}
+
+// Пример с equal jitter
+fun <T> Flow<T>.retryWithJitter(
+    maxAttempts: Int = 5,
+    initialDelayMs: Long = 1000,
+    maxDelayMs: Long = 32000
+): Flow<T> = retryWhen { cause, attempt ->
+    if (attempt < maxAttempts) {
+        val baseDelay = (initialDelayMs * (2.0.pow(attempt.toDouble())))
+            .toLong()
+            .coerceAtMost(maxDelayMs)
+
+        // Equal jitter
+        val delayMs = (baseDelay / 2) + (baseDelay / 2 * Random.nextDouble()).toLong()
+
+        delay(delayMs)
+        true
+    } else {
+        false
+    }
+}
+```
+
+#### 5. Production пример: Сетевые запросы
+
+**Устойчивый API клиент:**
+
+```kotlin
+import retrofit2.HttpException
+import java.io.IOException
+
+class ApiClient(private val api: ApiService) {
+
+    // Retry конфигурация для разных типов запросов
+    private val standardRetry = RetryConfig(
+        maxAttempts = 3,
+        initialDelayMs = 1000,
+        maxDelayMs = 10000
+    )
+
+    private val longRetry = RetryConfig(
+        maxAttempts = 5,
+        initialDelayMs = 2000,
+        maxDelayMs = 60000
+    )
+
+    fun getUser(userId: String): Flow<User> = flow {
+        emit(api.getUser(userId))
+    }
+        .retryWithExponentialBackoff(
+            config = standardRetry,
+            predicate = ::isRetriableError
+        )
+        .catch { e ->
+            // Обрабатываем неповторяемые ошибки
+            throw ApiException("Не удалось получить пользователя", e)
+        }
+
+    fun syncData(): Flow<SyncResult> = flow {
+        emit(api.syncData())
+    }
+        .retryWithExponentialBackoff(
+            config = longRetry,
+            predicate = ::isRetriableError
+        )
+        .onEach { result ->
+            println("Синхронизация завершена: $result")
+        }
+
+    fun searchUsers(query: String): Flow<List<User>> = flow {
+        emit(api.searchUsers(query))
+    }
+        .timeout(5000) // Timeout через 5 секунд
+        .retryWithExponentialBackoff(
+            config = standardRetry,
+            predicate = { it is IOException || it is TimeoutCancellationException }
+        )
+
+    private fun isRetriableError(error: Throwable): Boolean {
+        return when (error) {
+            // Сетевые ошибки - повторяем
+            is IOException -> true
+
+            // Timeout - повторяем
+            is TimeoutCancellationException -> true
+
+            // HTTP ошибки - проверяем статус код
+            is HttpException -> when (error.code()) {
+                // 5xx ошибки сервера - повторяем
+                in 500..599 -> true
+
+                // 408 Request Timeout - повторяем
+                408 -> true
+
+                // 429 Too Many Requests - повторяем
+                429 -> true
+
+                // Другие 4xx клиентские ошибки - не повторяем
+                else -> false
+            }
+
+            // Другие ошибки - не повторяем
+            else -> false
+        }
+    }
+}
+
+// Использование
+suspend fun fetchUserWithRetry() {
+    val apiClient = ApiClient(apiService)
+
+    apiClient.getUser("user123")
+        .onStart { println("Загрузка пользователя...") }
+        .onEach { user -> println("Пользователь: ${user.name}") }
+        .catch { e -> println("Ошибка: ${e.message}") }
+        .collect()
+}
+```
+
+#### 6. Production пример: Операции с БД
+
+**Устойчивые операции с базой данных с retry:**
+
+```kotlin
+class DatabaseRepository(private val database: AppDatabase) {
+
+    fun insertWithRetry(item: Item): Flow<Long> = flow {
+        emit(database.itemDao().insert(item))
+    }
+        .retryWhen { cause, attempt ->
+            // Повторяем при блокировке БД
+            if (cause is SQLiteException && attempt < 3) {
+                val delayMs = 100L * (attempt + 1)
+                println("БД заблокирована, повтор ${attempt + 1} через ${delayMs}мс")
+                delay(delayMs)
+                true
+            } else {
+                false
+            }
+        }
+
+    fun batchInsertWithRetry(items: List<Item>): Flow<Unit> = flow {
+        database.withTransaction {
+            items.forEach { item ->
+                database.itemDao().insert(item)
+            }
+        }
+        emit(Unit)
+    }
+        .retryWithExponentialBackoff(
+            config = RetryConfig(
+                maxAttempts = 3,
+                initialDelayMs = 100,
+                maxDelayMs = 1000
+            ),
+            predicate = { it is SQLiteException }
+        )
+
+    fun observeItemsWithRetry(userId: String): Flow<List<Item>> {
+        return database.itemDao().observeItems(userId)
+            .catch { e ->
+                if (e is SQLiteException) {
+                    // Выдаем пустой список при ошибке и повторяем
+                    emit(emptyList())
+                    delay(1000)
+                    throw e
+                }
+            }
+            .retryWhen { cause, attempt ->
+                cause is SQLiteException && attempt < 5
+            }
+    }
+}
+```
+
+#### 7. Комбинирование Retry с Timeout
+
+**Паттерн Timeout + retry:**
+
+```kotlin
+suspend fun fetchDataWithTimeoutAndRetry() {
+    flow {
+        emit(fetchDataFromSlowApi())
+    }
+        .timeout(5000) // Timeout каждой попытки через 5 секунд
+        .retryWithExponentialBackoff(
+            config = RetryConfig(maxAttempts = 3)
+        )
+        .catch { e ->
+            when (e) {
+                is TimeoutCancellationException -> {
+                    println("Все попытки превысили timeout")
+                }
+                else -> println("Не удалось: ${e.message}")
+            }
+        }
+        .collect { data ->
+            println("Успех: $data")
+        }
+}
+
+// Timeout на запрос vs общий timeout
+suspend fun fetchWithTotalTimeout() {
+    withTimeout(15000) { // Общий timeout: 15 секунд
+        flow {
+            emit(fetchDataFromApi())
+        }
+            .timeout(5000) // Timeout на попытку: 5 секунд
+            .retryWhen { cause, attempt ->
+                if (cause is TimeoutCancellationException && attempt < 2) {
+                    println("Попытка превысила timeout, повторяем...")
+                    delay(1000)
+                    true
+                } else {
+                    false
+                }
+            }
+            .collect { data ->
+                println("Успех: $data")
+            }
+    }
+}
+```
+
+#### 8. Интеграция Circuit Breaker
+
+**Circuit breaker с retry:**
+
+```kotlin
+enum class CircuitState {
+    CLOSED,  // Нормальная работа
+    OPEN,    // Падает, отклоняем запросы
+    HALF_OPEN // Тестируем восстановление
+}
+
+class CircuitBreaker(
+    private val failureThreshold: Int = 5,
+    private val resetTimeoutMs: Long = 60000
+) {
+    private var state = CircuitState.CLOSED
+    private var failureCount = 0
+    private var lastFailureTime = 0L
+
+    fun <T> protect(block: suspend () -> T): Flow<T> = flow {
+        when (state) {
+            CircuitState.OPEN -> {
+                if (System.currentTimeMillis() - lastFailureTime >= resetTimeoutMs) {
+                    state = CircuitState.HALF_OPEN
+                    println("Circuit breaker: HALF_OPEN (тестирование)")
+                } else {
+                    throw CircuitBreakerOpenException("Circuit breaker OPEN")
+                }
+            }
+            else -> {}
+        }
+
+        try {
+            val result = block()
+            onSuccess()
+            emit(result)
+        } catch (e: Exception) {
+            onFailure()
+            throw e
+        }
+    }
+
+    private fun onSuccess() {
+        failureCount = 0
+        if (state == CircuitState.HALF_OPEN) {
+            state = CircuitState.CLOSED
+            println("Circuit breaker: CLOSED (восстановлен)")
+        }
+    }
+
+    private fun onFailure() {
+        failureCount++
+        lastFailureTime = System.currentTimeMillis()
+
+        if (failureCount >= failureThreshold) {
+            state = CircuitState.OPEN
+            println("Circuit breaker: OPEN (слишком много сбоев)")
+        }
+    }
+}
+
+class CircuitBreakerOpenException(message: String) : Exception(message)
+
+// Использование с retry
+suspend fun fetchWithCircuitBreaker() {
+    val circuitBreaker = CircuitBreaker(
+        failureThreshold = 3,
+        resetTimeoutMs = 30000
+    )
+
+    circuitBreaker.protect {
+        fetchDataFromApi()
+    }
+        .retryWithExponentialBackoff(
+            config = RetryConfig(maxAttempts = 3),
+            predicate = { it !is CircuitBreakerOpenException }
+        )
+        .catch { e ->
+            when (e) {
+                is CircuitBreakerOpenException -> {
+                    println("Circuit breaker открыт, не повторяем")
+                }
+                else -> println("Не удалось: ${e.message}")
+            }
+        }
+        .collect { data ->
+            println("Успех: $data")
+        }
+}
+```
+
+#### 9. Retry для разных типов исключений
+
+**Разные стратегии для разных ошибок:**
+
+```kotlin
+data class RetryStrategy(
+    val maxAttempts: Int,
+    val initialDelayMs: Long,
+    val multiplier: Double = 2.0
+)
+
+fun <T> Flow<T>.retryByExceptionType(
+    strategies: Map<KClass<out Throwable>, RetryStrategy>,
+    defaultStrategy: RetryStrategy? = null
+): Flow<T> = retryWhen { cause, attempt ->
+    // Находим подходящую стратегию
+    val strategy = strategies.entries
+        .firstOrNull { (exceptionType, _) ->
+            exceptionType.isInstance(cause)
+        }?.value ?: defaultStrategy
+
+    if (strategy != null && attempt < strategy.maxAttempts) {
+        val delayMs = (strategy.initialDelayMs * strategy.multiplier.pow(attempt.toDouble()))
+            .toLong()
+
+        println("Повтор ${cause::class.simpleName} (${attempt + 1}/${strategy.maxAttempts}) через ${delayMs}мс")
+        delay(delayMs)
+        true
+    } else {
+        false
+    }
+}
+
+// Использование
+suspend fun fetchWithCustomStrategies() {
+    getDataFromApi()
+        .retryByExceptionType(
+            strategies = mapOf(
+                IOException::class to RetryStrategy(
+                    maxAttempts = 5,
+                    initialDelayMs = 1000,
+                    multiplier = 2.0
+                ),
+                HttpException::class to RetryStrategy(
+                    maxAttempts = 3,
+                    initialDelayMs = 2000,
+                    multiplier = 1.5
+                ),
+                TimeoutCancellationException::class to RetryStrategy(
+                    maxAttempts = 2,
+                    initialDelayMs = 5000,
+                    multiplier = 1.0
+                )
+            ),
+            defaultStrategy = RetryStrategy(
+                maxAttempts = 1,
+                initialDelayMs = 1000
+            )
+        )
+        .collect { data ->
+            println("Успех: $data")
+        }
+}
+```
+
+#### 10. Мониторинг и логирование попыток Retry
+
+**Production мониторинг:**
+
+```kotlin
+interface RetryLogger {
+    fun onRetryAttempt(attempt: Int, maxAttempts: Int, cause: Throwable, delayMs: Long)
+    fun onRetryExhausted(attempts: Int, lastCause: Throwable)
+    fun onRetrySuccess(totalAttempts: Int)
+}
+
+class ProductionRetryLogger(private val analyticsService: AnalyticsService) : RetryLogger {
+    override fun onRetryAttempt(attempt: Int, maxAttempts: Int, cause: Throwable, delayMs: Long) {
+        val event = mapOf(
+            "event" to "retry_attempt",
+            "attempt" to attempt,
+            "max_attempts" to maxAttempts,
+            "cause" to cause::class.simpleName,
+            "delay_ms" to delayMs
+        )
+        analyticsService.logEvent(event)
+        println("[RETRY] Попытка $attempt/$maxAttempts через ${delayMs}мс - ${cause.message}")
+    }
+
+    override fun onRetryExhausted(attempts: Int, lastCause: Throwable) {
+        val event = mapOf(
+            "event" to "retry_exhausted",
+            "attempts" to attempts,
+            "cause" to lastCause::class.simpleName
+        )
+        analyticsService.logEvent(event)
+        println("[RETRY] Исчерпано после $attempts попыток - ${lastCause.message}")
+    }
+
+    override fun onRetrySuccess(totalAttempts: Int) {
+        if (totalAttempts > 0) {
+            val event = mapOf(
+                "event" to "retry_success",
+                "attempts" to totalAttempts
+            )
+            analyticsService.logEvent(event)
+            println("[RETRY] Успех после $totalAttempts повторов")
+        }
+    }
+}
+
+fun <T> Flow<T>.retryWithLogging(
+    config: RetryConfig,
+    logger: RetryLogger,
+    predicate: (Throwable) -> Boolean = { true }
+): Flow<T> {
+    var attemptCount = 0
+
+    return this
+        .retryWhen { cause, attempt ->
+            attemptCount = attempt.toInt()
+
+            if (predicate(cause) && attempt < config.maxAttempts) {
+                val delayMs = calculateBackoff(config, attempt)
+                logger.onRetryAttempt(
+                    attempt = (attempt + 1).toInt(),
+                    maxAttempts = config.maxAttempts,
+                    cause = cause,
+                    delayMs = delayMs
+                )
+                delay(delayMs)
+                true
+            } else {
+                logger.onRetryExhausted(attemptCount + 1, cause)
+                false
+            }
+        }
+        .onEach {
+            if (attemptCount > 0) {
+                logger.onRetrySuccess(attemptCount)
+            }
+        }
+}
+
+private fun calculateBackoff(config: RetryConfig, attempt: Long): Long {
+    val baseDelay = (config.initialDelayMs * config.multiplier.pow(attempt.toDouble()))
+        .toLong()
+        .coerceAtMost(config.maxDelayMs)
+
+    val jitter = (baseDelay * config.jitterFactor * Random.nextDouble(-1.0, 1.0)).toLong()
+    return (baseDelay + jitter).coerceAtLeast(0)
+}
+```
+
+#### 11. Тестирование логики Retry
+
+**Unit тесты с виртуальным временем:**
+
+```kotlin
+import kotlinx.coroutines.test.*
+import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+
+class RetryTest {
+
+    @Test
+    fun `retry успешен после 2 попыток`() = runTest {
+        var attempts = 0
+
+        val flow = flow {
+            attempts++
+            if (attempts < 2) {
+                throw IOException("Ошибка сети")
+            }
+            emit("Успех")
+        }
+
+        val result = flow
+            .retry(retries = 3)
+            .first()
+
+        assertEquals("Успех", result)
+        assertEquals(2, attempts)
+    }
+
+    @Test
+    fun `exponential backoff имеет увеличивающиеся задержки`() = runTest {
+        val delays = mutableListOf<Long>()
+        var attempts = 0
+
+        val flow = flow {
+            attempts++
+            throw IOException("Ошибка")
+        }
+
+        flow
+            .retryWhen { _, attempt ->
+                if (attempt < 3) {
+                    val delay = 1000L * (2.0.pow(attempt.toDouble())).toLong()
+                    delays.add(delay)
+                    delay(delay)
+                    true
+                } else {
+                    false
+                }
+            }
+            .catch { }
+            .collect()
+
+        // Проверяем экспоненциальные задержки: 1000, 2000, 4000
+        assertEquals(listOf(1000L, 2000L, 4000L), delays)
+        assertEquals(4, attempts)
+    }
+
+    @Test
+    fun `retry только для конкретного типа исключения`() = runTest {
+        var ioAttempts = 0
+        var otherAttempts = 0
+
+        val flow = flow {
+            if (ioAttempts < 2) {
+                ioAttempts++
+                throw IOException("Ошибка сети")
+            } else {
+                otherAttempts++
+                throw IllegalStateException("Некорректное состояние")
+            }
+        }
+
+        try {
+            flow
+                .retry(5) { it is IOException }
+                .collect()
+        } catch (e: IllegalStateException) {
+            // Ожидается
+        }
+
+        assertEquals(2, ioAttempts) // Повторили IOException дважды
+        assertEquals(1, otherAttempts) // IllegalStateException не повторяли
+    }
+
+    @Test
+    fun `retry с timeout`() = runTest {
+        val flow = flow {
+            delay(10000) // Имитация медленной операции
+            emit("Данные")
+        }
+
+        var timeoutCount = 0
+
+        flow
+            .timeout(1000)
+            .retryWhen { cause, attempt ->
+                if (cause is TimeoutCancellationException && attempt < 2) {
+                    timeoutCount++
+                    delay(100)
+                    true
+                } else {
+                    false
+                }
+            }
+            .catch { }
+            .collect()
+
+        assertEquals(3, timeoutCount) // Начальная + 2 повтора
+    }
+}
+```
+
+#### 12. Резюме лучших практик
+
+**Что делать:**
+
+```kotlin
+// ✓ Используйте exponential backoff для сетевых запросов
+flow { fetchFromApi() }
+    .retryWithExponentialBackoff()
+
+// ✓ Добавляйте jitter для предотвращения thundering herd
+.retryWithExponentialBackoff(
+    config = RetryConfig(jitterFactor = 0.1)
+)
+
+// ✓ Устанавливайте максимальную задержку чтобы избежать очень долгих ожиданий
+RetryConfig(maxDelayMs = 60000)
+
+// ✓ Повторяйте только повторяемые ошибки
+.retry { it is IOException }
+
+// ✓ Комбинируйте с timeout
+.timeout(5000)
+.retryWithExponentialBackoff()
+
+// ✓ Логируйте попытки retry для мониторинга
+.retryWithLogging(config, logger)
+```
+
+**Чего не делать:**
+
+```kotlin
+// ✗ Не повторяйте немедленно без задержки
+.retry(10) // Молотит сервер
+
+// ✗ Не повторяйте бесконечно
+.retry(Long.MAX_VALUE) // Никогда не сдается
+
+// ✗ Не повторяйте неповторяемые ошибки
+.retry { true } // Повторяет всё
+
+// ✗ Не забывайте максимальную задержку
+RetryConfig(multiplier = 10.0) // Может привести к ожиданию часами
+
+// ✗ Не игнорируйте исключения после retry
+.retry(3)
+// Отсутствует .catch { }
+```
 
 ### Связанные вопросы
 - [[q-flow-operators--kotlin--medium]] - Операторы Flow

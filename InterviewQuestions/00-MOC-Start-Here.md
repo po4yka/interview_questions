@@ -19,12 +19,12 @@ Welcome to your comprehensive interview questions knowledge base! This vault con
 
 | Topic | Questions | Focus Area |
 |-------|-----------|------------|
-| [[moc-android\|Android]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "40-Android")))` | Android development, Jetpack, Compose |
-| [[moc-kotlin\|Kotlin]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "70-Kotlin")))` | Kotlin language, coroutines, Flow |
-| [[moc-algorithms\|Algorithms]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "20-Algorithms")))` | Data structures, algorithms, coding |
-| [[moc-architecture-patterns\|Architecture]] | `= length(filter(file.lists.file, (f) => contains(f.path, "60-CompSci")))` | MVVM, MVI, design patterns |
-| [[moc-backend\|Backend]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "50-Backend")))` | Databases, SQL, APIs |
-| [[moc-tools\|Tools]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "80-Tools")))` | Git, build tools, CI/CD, IDEs |
+| [[moc-android|Android]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "40-Android")))` | Android development, Jetpack, Compose |
+| [[moc-kotlin|Kotlin]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "70-Kotlin")))` | Kotlin language, coroutines, Flow |
+| [[moc-algorithms|Algorithms]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "20-Algorithms")))` | Data structures, algorithms, coding |
+| [[moc-architecture-patterns|Architecture]] | `= length(filter(file.lists.file, (f) => contains(f.path, "60-CompSci")))` | MVVM, MVI, design patterns |
+| [[moc-backend|Backend]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "50-Backend")))` | Databases, SQL, APIs |
+| [[moc-tools|Tools]] | `= length(filter(file.lists.file, (f) => startswith(f.path, "80-Tools")))` | Git, build tools, CI/CD, IDEs |
 
 ---
 

@@ -1672,8 +1672,477 @@ class UserRepository { /* ... */ }
 
 ---
 
-[Russian content follows same structure as English version...]
+## Обзор
+
+Это руководство охватывает миграцию с RxJava на Kotlin корутины, включая сопоставление типов, эквиваленты операторов и лучшие практики для плавного перехода.
+
+**Цели миграции:**
+- Сохранить существующую функциональность
+- Улучшить читаемость кода
+- Сократить зависимости от библиотек
+- Использовать возможности Kotlin
+- Улучшить производительность
+
+## Почему мигрировать
+
+### Преимущества Kotlin корутин
+
+| Аспект | RxJava | Kotlin корутины |
+|--------|--------|-----------------|
+| **Кривая обучения** | Крутая (много операторов) | Плавная (знакомый синтаксис) |
+| **Читаемость кода** | Функциональная, может быть сложной | Последовательная, императивная |
+| **Обработка ошибок** | onError, onErrorReturn и т.д. | try-catch (знакомо) |
+| **Потоки** | Schedulers | Dispatchers (проще) |
+| **Backpressure** | Сложные стратегии | buffer, conflate (проще) |
+| **Интеграция** | Библиотека | Встроенный Kotlin |
+| **Производительность** | Хорошая | Лучше (легковеснее) |
+| **Размер APK** | ~3 МБ (RxJava + RxAndroid) | ~100 КБ (корутины) |
+| **Поддержка Android** | Сторонняя | Официальная (Jetpack) |
+
+## Observable в Flow
+
+### Холодный Observable → Flow
+
+```kotlin
+// RxJava: Холодный Observable
+fun getUsers(): Observable<User> {
+    return Observable.create { emitter ->
+        val users = database.getUsers()
+        users.forEach { user ->
+            emitter.onNext(user)
+        }
+        emitter.onComplete()
+    }
+}
+
+// Корутины: Flow
+fun getUsers(): Flow<User> = flow {
+    val users = database.getUsers()
+    users.forEach { user ->
+        emit(user)
+    }
+}.flowOn(Dispatchers.IO)
+
+// Использование
+lifecycleScope.launch {
+    getUsers()
+        .catch { error -> Log.e("Error", error.message) }
+        .collect { user ->
+            println(user)
+        }
+    println("Завершено")
+}
+```
+
+## Single в suspend функцию
+
+### Базовая конвертация
+
+```kotlin
+// RxJava: Single
+fun getUser(userId: String): Single<User> {
+    return api.getUser(userId)
+}
+
+// Корутины: suspend функция
+suspend fun getUser(userId: String): User {
+    return withContext(Dispatchers.IO) {
+        api.getUser(userId)
+    }
+}
+
+// Использование
+lifecycleScope.launch {
+    try {
+        val user = getUser("123")
+        updateUI(user)
+    } catch (e: Exception) {
+        showError(e)
+    }
+}
+```
+
+## Таблица сопоставления операторов
+
+### Операторы трансформации
+
+| RxJava | Корутины Flow | Описание |
+|--------|---------------|----------|
+| `map` | `map` | Преобразовать каждый элемент |
+| `flatMap` | `flatMapConcat` | Отобразить и сгладить последовательно |
+| `flatMap` (конкурентно) | `flatMapMerge` | Отобразить и сгладить конкурентно |
+| `switchMap` | `flatMapLatest` | Отменить предыдущее при новом |
+| `scan` | `scan` | Накопление элементов |
+| `buffer` | `chunked` | Буферизация элементов в списки |
+
+### Операторы фильтрации
+
+| RxJava | Корутины Flow | Описание |
+|--------|---------------|----------|
+| `filter` | `filter` | Фильтровать по предикату |
+| `take` | `take` | Взять первые N элементов |
+| `skip` | `drop` | Пропустить первые N элементов |
+| `distinct` | `distinctUntilChanged` | Удалить последовательные дубликаты |
+| `debounce` | `debounce` | Дросселирование эмиссий |
+
+### Комбинирование
+
+| RxJava | Корутины Flow | Описание |
+|--------|---------------|----------|
+| `zip` | `zip` | Объединить соответствующие элементы |
+| `combineLatest` | `combine` | Объединить последние из каждого |
+| `merge` | `merge` | Слить несколько потоков |
+| `concat` | `+ оператор` | Конкатенировать потоки |
+
+### Обработка ошибок
+
+| RxJava | Корутины Flow | Описание |
+|--------|---------------|----------|
+| `onErrorReturn` | `catch { emit(default) }` | Вернуть значение по умолчанию при ошибке |
+| `onErrorResumeNext` | `catch { emitAll(fallback) }` | Переключиться на резервный поток |
+| `retry` | `retry` | Повторить при ошибке |
+
+### Потоки
+
+| RxJava | Корутины Flow | Описание |
+|--------|---------------|----------|
+| `subscribeOn` | `flowOn` | Изменить dispatcher для upstream |
+| `observeOn` | N/A (collect в scope) | Изменить dispatcher для downstream |
+
+## Subjects в Flow
+
+### PublishSubject в SharedFlow
+
+```kotlin
+// RxJava: PublishSubject (горячий)
+class EventBus {
+    private val subject = PublishSubject.create<Event>()
+
+    fun publish(event: Event) {
+        subject.onNext(event)
+    }
+
+    fun observe(): Observable<Event> = subject
+}
+
+// Корутины: SharedFlow
+class EventBus {
+    private val _events = MutableSharedFlow<Event>()
+    val events: SharedFlow<Event> = _events.asSharedFlow()
+
+    suspend fun publish(event: Event) {
+        _events.emit(event)
+    }
+}
+
+// Использование
+lifecycleScope.launch {
+    eventBus.events.collect { event ->
+        handleEvent(event)
+    }
+}
+```
+
+### BehaviorSubject в StateFlow
+
+```kotlin
+// RxJava: BehaviorSubject (горячий с начальным значением)
+class UserStore {
+    private val subject = BehaviorSubject.createDefault(User.EMPTY)
+
+    fun updateUser(user: User) {
+        subject.onNext(user)
+    }
+
+    fun observeUser(): Observable<User> = subject
+}
+
+// Корутины: StateFlow
+class UserStore {
+    private val _user = MutableStateFlow(User.EMPTY)
+    val user: StateFlow<User> = _user.asStateFlow()
+
+    fun updateUser(user: User) {
+        _user.value = user
+    }
+}
+
+// Использование
+lifecycleScope.launch {
+    userStore.user.collect { user ->
+        updateUI(user)
+    }
+}
+```
+
+## Миграция потоков
+
+### Schedulers в Dispatchers
+
+```kotlin
+// RxJava: Schedulers
+fun loadUser(userId: String): Single<User> {
+    return api.getUser(userId)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+}
+
+// Корутины: Dispatchers
+suspend fun loadUser(userId: String): User {
+    return withContext(Dispatchers.IO) {
+        api.getUser(userId)
+    }
+    // Возвращается на вызывающий dispatcher (обычно Main)
+}
+```
+
+### Сопоставление Scheduler
+
+| RxJava Scheduler | Корутины Dispatcher | Случай использования |
+|-----------------|---------------------|----------------------|
+| `Schedulers.io()` | `Dispatchers.IO` | Сеть, БД, файловый I/O |
+| `Schedulers.computation()` | `Dispatchers.Default` | CPU-интенсивная работа |
+| `AndroidSchedulers.mainThread()` | `Dispatchers.Main` | Обновления UI |
+
+## Стратегии Backpressure
+
+```kotlin
+// RxJava: Различные стратегии backpressure
+fun produceData(): Flowable<Data> {
+    return Flowable.interval(10, TimeUnit.MILLISECONDS)
+        .onBackpressureBuffer(100)
+}
+
+// Корутины: Flow со стратегиями буферизации
+fun produceData(): Flow<Data> = flow {
+    while (currentCoroutineContext().isActive) {
+        delay(10)
+        emit(Data())
+    }
+}.buffer(100) // Буферизация до 100 элементов
+
+// Или с conflate (сохраняет только последнее)
+fun produceData2(): Flow<Data> = flow {
+    while (currentCoroutineContext().isActive) {
+        delay(10)
+        emit(Data())
+    }
+}.conflate()
+```
+
+## Взаимодействие
+
+### Использование RxJava и корутин вместе
+
+```kotlin
+// Добавить зависимость
+// implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx3:1.7.3"
+
+// RxJava → Корутины
+import kotlinx.coroutines.rx3.await
+import kotlinx.coroutines.rx3.asFlow
+
+// Single в suspend
+suspend fun loadUserFromRx(): User {
+    val rxSingle: Single<User> = legacyApi.getUser("123")
+    return rxSingle.await()
+}
+
+// Observable в Flow
+fun observeUsersFromRx(): Flow<User> {
+    val rxObservable: Observable<User> = legacyApi.observeUsers()
+    return rxObservable.asFlow()
+}
+```
+
+### Корутины → RxJava
+
+```kotlin
+import kotlinx.coroutines.rx3.rxSingle
+import kotlinx.coroutines.rx3.rxObservable
+
+// Suspend в Single
+fun loadUserAsRx(userId: String): Single<User> = rxSingle {
+    repository.loadUser(userId)
+}
+
+// Flow в Observable
+fun observeUsersAsRx(): Observable<User> = rxObservable {
+    repository.observeUsers().collect { user ->
+        send(user)
+    }
+}
+```
+
+## Стратегия постепенной миграции
+
+### Фаза 1: Только новые функции
+
+```kotlin
+// Новые функции используют корутины
+class NewFeatureRepository(private val api: NewApi) {
+    suspend fun loadNewData(): Data {
+        return withContext(Dispatchers.IO) {
+            api.getData()
+        }
+    }
+}
+
+// Существующие функции остаются RxJava
+class LegacyRepository(private val api: LegacyApi) {
+    fun loadOldData(): Single<Data> {
+        return api.getData()
+            .subscribeOn(Schedulers.io())
+    }
+}
+```
+
+### Фаза 2: Обёртка RxJava корутинами
+
+```kotlin
+// Обернуть существующий RxJava код suspend функциями
+class MigrationRepository(private val legacyApi: LegacyApi) {
+    suspend fun loadData(): Data {
+        return legacyApi.getData()
+            .subscribeOn(Schedulers.io())
+            .await()
+    }
+}
+
+// Использовать в новом коде на корутинах
+lifecycleScope.launch {
+    val data = repository.loadData()
+}
+```
+
+## Распространённые ошибки
+
+### 1. Забывание flowOn для Flow
+
+```kotlin
+// ❌ Неправильно: Flow выполняется на dispatcher коллектора
+fun observeData(): Flow<Data> = flow {
+    emit(database.getData()) // Выполнится на Main если собирается из Main!
+}
+
+// ✓ Правильно: Используйте flowOn
+fun observeData(): Flow<Data> = flow {
+    emit(database.getData())
+}.flowOn(Dispatchers.IO)
+```
+
+### 2. Использование runBlocking в продакшене
+
+```kotlin
+// ❌ Неправильно: Блокирует поток
+fun loadUser(userId: String): User {
+    return runBlocking {
+        api.getUser(userId)
+    }
+}
+
+// ✓ Правильно: Используйте suspend
+suspend fun loadUser(userId: String): User {
+    return api.getUser(userId)
+}
+```
+
+### 3. Необработка отмены
+
+```kotlin
+// ❌ Неправильно: Не обрабатывает отмену должным образом
+try {
+    val user = api.getUser(userId)
+} catch (e: Exception) {
+    // CancellationException пойман здесь!
+}
+
+// ✓ Правильно: Перевыбросить CancellationException
+try {
+    val user = api.getUser(userId)
+} catch (e: CancellationException) {
+    throw e
+} catch (e: Exception) {
+    // Обработать другие исключения
+}
+```
+
+## Лучшие практики
+
+### 1. Начните с новых функций
+
+```kotlin
+// ✓ Хорошо: Новые функции используют корутины
+class NewRepository(private val api: NewApi) {
+    suspend fun fetchNewData(): Data = withContext(Dispatchers.IO) {
+        api.getData()
+    }
+}
+```
+
+### 2. Используйте взаимодействие для постепенной миграции
+
+```kotlin
+// ✓ Хорошо: Оберните RxJava корутинами
+import kotlinx.coroutines.rx3.await
+
+suspend fun migrateGradually() {
+    val rxSingle: Single<User> = legacyApi.getUser()
+    val user = rxSingle.await()
+    // Теперь используйте с корутинами
+}
+```
+
+### 3. Мигрируйте тесты вместе с кодом
+
+```kotlin
+// Мигрируйте тесты одновременно с реализацией
+@Test
+fun `test with coroutines`() = runTest {
+    val result = repository.loadData()
+    assertEquals(expected, result)
+}
+```
+
+### 4. Используйте StateFlow для управления состоянием
+
+```kotlin
+// ✓ Хорошо: StateFlow для состояния UI
+class ViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+}
+```
+
+## Чеклист миграции
+
+### До миграции
+
+- [ ] Идентифицировать использование RxJava в кодовой базе
+- [ ] Приоритизировать цели миграции (высокое влияние, часто используемое)
+- [ ] Добавить зависимости корутин
+- [ ] Добавить зависимости взаимодействия (kotlinx-coroutines-rx3)
+- [ ] Настроить инфраструктуру тестирования корутин
+
+### Во время миграции
+
+- [ ] Мигрировать API интерфейсы в suspend функции
+- [ ] Конвертировать Singles в suspend функции
+- [ ] Конвертировать Observables в Flow
+- [ ] Конвертировать Completables в suspend Unit
+- [ ] Мигрировать Subjects в StateFlow/SharedFlow
+- [ ] Заменить Schedulers на Dispatchers
+- [ ] Обновить обработку ошибок (onError → catch/try-catch)
+- [ ] Мигрировать тесты для использования runTest
+
+### После миграции
+
+- [ ] Удалить зависимости RxJava
+- [ ] Удалить адаптеры взаимодействия
+- [ ] Обновить документацию
+- [ ] Проверить уменьшение размера APK
+- [ ] Мониторить улучшения производительности
 
 ---
 
-**End of document**
+**Конец документа**

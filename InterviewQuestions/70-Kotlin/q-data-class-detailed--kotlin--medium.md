@@ -7,7 +7,7 @@ status: draft
 created: "2025-10-12"
 tags: ["kotlin", "classes", "data-class", "kotlin-features", "difficulty/medium"]
 description: "Comprehensive guide to Kotlin data classes covering generated methods, copy(), componentN(), destructuring, limitations, and when to use them"
-moc: "moc-kotlin"
+moc: moc-kotlin
 related: [q-expect-actual-kotlin--kotlin--medium, q-kotlin-collections-overview--programming-languages--easy, q-serialization-basics--programming-languages--medium]
 subtopics: ["classes", "data-class", "kotlin-features"]
 ---

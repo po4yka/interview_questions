@@ -7,7 +7,7 @@ status: draft
 created: "2025-10-12"
 tags: ["kotlin", "classes", "difficulty/medium"]
 description: "Comprehensive guide to Inheritance in Kotlin: open, final, abstract, override covering concepts, patterns, best practices, and real-world examples"
-moc: "moc-kotlin"
+moc: moc-kotlin
 related: [q-flow-backpressure-strategies--kotlin--hard, q-kotlin-delegation-by-restriction--programming-languages--medium, q-kotlin-reflection--programming-languages--medium]
 subtopics: ["classes", "kotlin-features", "oop"]
 ---

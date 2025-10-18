@@ -18,11 +18,11 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-generics--kotlin--hard]
+related: [q-kotlin-generics--kotlin--hard, q-kotlin-type-system--kotlin--medium, q-reified-type-parameters--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-10-18
 
 tags: [kotlin, generics, star-projection, variance, type-safety, difficulty/hard]
 ---

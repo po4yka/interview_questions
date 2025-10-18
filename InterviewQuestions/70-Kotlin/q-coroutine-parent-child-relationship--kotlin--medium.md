@@ -7,7 +7,7 @@ status: draft
 created: "2025-10-12"
 tags: ["kotlin", "coroutines", "difficulty/medium"]
 description: "Comprehensive guide to Parent-child relationships in structured concurrency in Kotlin coroutines"
-moc: "moc-kotlin"
+moc: moc-kotlin
 related: [q-retry-operators-flow--kotlin--medium, q-coroutine-performance-optimization--kotlin--hard, q-kotlin-collections--kotlin--easy]
 subtopics: ["coroutines", "structured-concurrency", "job", "hierarchy"]
 ---

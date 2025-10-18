@@ -7,7 +7,7 @@ status: draft
 created: "2025-10-12"
 tags: ["kotlin", "coroutines", "timeout", "cancellation", "error-handling", "difficulty/medium"]
 description: "Comprehensive guide to timeout handling in Kotlin coroutines, covering withTimeout, withTimeoutOrNull, TimeoutCancellationException, and practical patterns"
-moc: "moc-kotlin"
+moc: moc-kotlin
 related: [q-nested-vs-inner-class--kotlin--medium, q-class-initialization-order--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium]
 subtopics: ["coroutines", "timeout", "cancellation", "error-handling"]
 ---
@@ -255,7 +255,233 @@ suspend fun fetchStocks(): String {
 
 При работе с корутинами операции могут занимать больше времени, чем ожидается, что приводит к плохому пользовательскому опыту или потере ресурсов. Как эффективно реализовать таймауты, используя `withTimeout` и `withTimeoutOrNull`, и в чём различия между ними?
 
-[Full translation sections...]
+### Решение
+
+**`withTimeout`** выбрасывает `TimeoutCancellationException`, если операция превышает указанное время. **`withTimeoutOrNull`** возвращает `null` вместо выбрасывания исключения, обеспечивая более мягкое резервное поведение.
+
+#### Базовое использование
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun basicTimeouts() = runBlocking {
+    println("=== withTimeout ===")
+
+    // withTimeout выбрасывает исключение при таймауте
+    try {
+        withTimeout(1000) {
+            delay(2000) // Занимает больше времени чем таймаут
+            "Result"
+        }
+    } catch (e: TimeoutCancellationException) {
+        println("Операция превысила таймаут!")
+    }
+
+    println("\n=== withTimeoutOrNull ===")
+
+    // withTimeoutOrNull возвращает null при таймауте
+    val result = withTimeoutOrNull(1000) {
+        delay(2000)
+        "Result"
+    }
+    println("Результат: $result") // null
+
+    // Успешная операция
+    val success = withTimeoutOrNull(2000) {
+        delay(1000)
+        "Success"
+    }
+    println("Результат: $success") // "Success"
+}
+```
+
+#### Обработка исключений
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun exceptionHandling() = runBlocking {
+    // withTimeout распространяет TimeoutCancellationException
+    try {
+        val result = withTimeout(1000) {
+            performLongOperation()
+        }
+        println("Результат: $result")
+    } catch (e: TimeoutCancellationException) {
+        println("Таймаут: ${e.message}")
+        // Очистка или резервное поведение
+    }
+
+    // withTimeoutOrNull не выбрасывает, возвращает null
+    val result2 = withTimeoutOrNull(1000) {
+        performLongOperation()
+    } ?: "Значение по умолчанию"
+    println("Результат с резервным значением: $result2")
+}
+
+suspend fun performLongOperation(): String {
+    delay(5000)
+    return "Результат длительной операции"
+}
+```
+
+#### Паттерны для сетевых запросов
+
+```kotlin
+import kotlinx.coroutines.*
+
+class ApiClient {
+    // Паттерн 1: withTimeout для критических операций
+    suspend fun fetchCriticalData(id: String): Data {
+        return withTimeout(5000) {
+            performNetworkRequest(id)
+        }
+    }
+
+    // Паттерн 2: withTimeoutOrNull с резервным вариантом
+    suspend fun fetchDataWithFallback(id: String): Data {
+        return withTimeoutOrNull(5000) {
+            performNetworkRequest(id)
+        } ?: loadFromCache(id)
+    }
+
+    // Паттерн 3: Несколько попыток с таймаутом
+    suspend fun fetchWithRetry(id: String, attempts: Int = 3): Data? {
+        repeat(attempts) { attempt ->
+            val result = withTimeoutOrNull(3000) {
+                performNetworkRequest(id)
+            }
+            if (result != null) return result
+            println("Попытка ${attempt + 1} превысила таймаут")
+            delay(1000)
+        }
+        return null
+    }
+
+    private suspend fun performNetworkRequest(id: String): Data {
+        delay(4000) // Имитация сетевого запроса
+        return Data(id, "Данные из сети")
+    }
+
+    private suspend fun loadFromCache(id: String): Data {
+        delay(100)
+        return Data(id, "Кэшированные данные")
+    }
+}
+
+data class Data(val id: String, val content: String)
+```
+
+#### Таблица сравнения
+
+| Аспект | withTimeout | withTimeoutOrNull |
+|--------|-------------|-------------------|
+| Возврат при таймауте | Выбрасывает TimeoutCancellationException | Возвращает null |
+| Случай использования | Критические операции которые должны завершиться | Опциональные операции с резервным вариантом |
+| Обработка ошибок | Требуется try-catch | Оператор Elvis (?:) |
+| Ясность кода | Явная ошибка | Неявная с проверкой null |
+
+#### Практические примеры
+
+```kotlin
+import kotlinx.coroutines.*
+
+// Пример 1: Аутентификация пользователя с таймаутом
+suspend fun authenticateUser(credentials: Credentials): AuthResult {
+    return try {
+        withTimeout(10000) {
+            val token = callAuthService(credentials)
+            AuthResult.Success(token)
+        }
+    } catch (e: TimeoutCancellationException) {
+        AuthResult.Timeout
+    } catch (e: Exception) {
+        AuthResult.Error(e.message ?: "Неизвестная ошибка")
+    }
+}
+
+// Пример 2: Загрузка опциональной функциональности
+suspend fun loadOptionalFeature(): Feature? {
+    return withTimeoutOrNull(2000) {
+        fetchFeatureConfig()
+    }
+}
+
+// Пример 3: Запрос к базе данных с таймаутом
+suspend fun queryDatabase(query: String): List<Result> {
+    return withTimeoutOrNull(5000) {
+        executeQuery(query)
+    } ?: emptyList()
+}
+
+// Пример 4: Несколько параллельных операций с индивидуальными таймаутами
+suspend fun loadDashboard(): Dashboard = coroutineScope {
+    val weather = async {
+        withTimeoutOrNull(2000) { fetchWeather() }
+    }
+    val news = async {
+        withTimeoutOrNull(3000) { fetchNews() }
+    }
+    val stocks = async {
+        withTimeoutOrNull(1000) { fetchStocks() }
+    }
+
+    Dashboard(
+        weather = weather.await() ?: "Погода недоступна",
+        news = news.await() ?: "Новости недоступны",
+        stocks = stocks.await() ?: "Котировки недоступны"
+    )
+}
+
+data class Credentials(val username: String, val password: String)
+sealed class AuthResult {
+    data class Success(val token: String) : AuthResult()
+    object Timeout : AuthResult()
+    data class Error(val message: String) : AuthResult()
+}
+
+data class Feature(val name: String, val enabled: Boolean)
+data class Result(val id: String, val data: String)
+data class Dashboard(val weather: String, val news: String, val stocks: String)
+
+suspend fun callAuthService(credentials: Credentials): String {
+    delay(5000)
+    return "token123"
+}
+
+suspend fun fetchFeatureConfig(): Feature {
+    delay(3000)
+    return Feature("premium", true)
+}
+
+suspend fun executeQuery(query: String): List<Result> {
+    delay(6000)
+    return listOf(Result("1", "data"))
+}
+
+suspend fun fetchWeather(): String {
+    delay(1500)
+    return "Солнечно, 22°C"
+}
+
+suspend fun fetchNews(): String {
+    delay(2500)
+    return "Последние новости"
+}
+
+suspend fun fetchStocks(): String {
+    delay(800)
+    return "AAPL: $150"
+}
+```
+
+### Лучшие практики
+
+1. **Используйте withTimeout для критических операций** - когда операция обязательно должна завершиться или провалиться
+2. **Используйте withTimeoutOrNull для опциональных операций** - когда можно работать без результата
+3. **Устанавливайте разумные значения таймаута на основе типа операции** - учитывайте сетевые условия и пользовательский опыт
+4. **Всегда предоставляйте резервный вариант для withTimeoutOrNull** - используйте оператор Elvis (?:)
+5. **Учитывайте пользовательский опыт при выборе длительности таймаута** - баланс между надёжностью и скоростью
 
 ---
 

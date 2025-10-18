@@ -7,7 +7,7 @@ status: draft
 created: "2025-10-12"
 tags: ["kotlin", "coroutines", "job", "lifecycle", "cancellation", "difficulty/medium"]
 description: "A comprehensive guide to understanding Job and its lifecycle states in Kotlin coroutines, including parent-child relationships and cancellation mechanisms"
-moc: "moc-kotlin"
+moc: moc-kotlin
 related: [q-kotlin-properties--kotlin--easy, q-property-delegates--kotlin--medium, q-coroutine-context-explained--kotlin--medium]
 subtopics: ["coroutines", "job", "lifecycle", "cancellation"]
 ---

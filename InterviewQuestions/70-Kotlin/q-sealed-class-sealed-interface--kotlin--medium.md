@@ -7,7 +7,7 @@ status: draft
 created: "2025-10-12"
 tags: ["kotlin", "classes", "sealed", "polymorphism", "when-expression", "difficulty/medium"]
 description: "Comprehensive guide to sealed classes and sealed interfaces covering exhaustive when expressions, hierarchy, comparison with enums, and Kotlin 1.5+ features"
-moc: "moc-kotlin"
+moc: moc-kotlin
 related: [q-advanced-coroutine-patterns--kotlin--hard, q-kotlin-enum-classes--kotlin--easy, q-star-projection-vs-any-generics--kotlin--hard]
 subtopics: ["classes", "sealed", "polymorphism", "when-expression"]
 ---

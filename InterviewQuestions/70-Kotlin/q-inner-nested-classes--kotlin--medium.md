@@ -7,7 +7,7 @@ status: draft
 created: "2025-10-12"
 tags: ["kotlin", "classes", "difficulty/medium"]
 description: "Comprehensive guide to Inner vs nested classes in Kotlin covering concepts, patterns, best practices, and real-world examples"
-moc: "moc-kotlin"
+moc: moc-kotlin
 related: [q-dispatchers-main-immediate--kotlin--medium, q-cold-vs-hot-flows--kotlin--medium, q-kotlin-intrange--programming-languages--easy]
 subtopics: ["classes", "kotlin-features", "oop"]
 ---

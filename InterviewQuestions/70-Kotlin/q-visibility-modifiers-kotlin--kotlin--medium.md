@@ -7,7 +7,7 @@ status: draft
 created: "2025-10-12"
 tags: ["kotlin", "classes", "difficulty/medium"]
 description: "Comprehensive guide to Visibility modifiers in Kotlin: private, protected, internal, public covering concepts, patterns, best practices, and real-world examples"
-moc: "moc-kotlin"
+moc: moc-kotlin
 related: [q-kotlin-serialization--programming-languages--easy, q-parallel-network-calls-coroutines--kotlin--medium, q-coroutine-parent-child-relationship--kotlin--medium]
 subtopics: ["classes", "kotlin-features", "oop"]
 ---

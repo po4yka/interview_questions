@@ -7,7 +7,7 @@ status: draft
 created: "2025-10-12"
 tags: ["kotlin", "coroutines", "difficulty/medium"]
 description: "Comprehensive guide to What is Dispatchers.Unconfined and when to use it? in Kotlin coroutines"
-moc: "moc-kotlin"
+moc: moc-kotlin
 related: [q-partition-function--kotlin--easy, q-kotlin-override-keyword--programming-languages--easy, q-parallel-network-calls-coroutines--kotlin--medium]
 subtopics: ["coroutines", "dispatchers", "unconfined"]
 ---

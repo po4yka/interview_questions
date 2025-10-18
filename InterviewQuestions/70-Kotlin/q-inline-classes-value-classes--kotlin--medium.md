@@ -18,11 +18,11 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-type-aliases--kotlin--medium]
+related: [q-type-aliases--kotlin--medium, q-kotlin-inline-functions--kotlin--medium, q-inline-value-classes-performance--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-10-18
 
 tags: [kotlin, inline-class, value-class, performance, optimization, difficulty/medium]
 ---

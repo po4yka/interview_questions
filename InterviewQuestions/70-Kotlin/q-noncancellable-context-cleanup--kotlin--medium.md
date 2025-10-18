@@ -11,7 +11,7 @@ created: 2025-10-12
 updated: 2025-10-12
 category: "coroutines-advanced"
 tags: ["noncancellable", "cancellation", "cleanup", "finally", "resource-management"]
-moc: "moc-kotlin"
+moc: moc-kotlin
 related: [q-sealed-class-sealed-interface--kotlin--medium, q-kotlin-final-modifier--programming-languages--easy, q-java-kotlin-abstract-classes-difference--programming-languages--medium]
 contributors: []
 ---
@@ -716,6 +716,15 @@ try {
 
 `NonCancellable` - это специальный `CoroutineContext`, который делает корутину **не отменяемой**. Он позволяет suspend функциям выполняться даже когда корутина была отменена.
 
+```kotlin
+import kotlinx.coroutines.*
+
+public object NonCancellable : AbstractCoroutineContextElement(Job), Job {
+    // Job который не может быть отменён
+    // Все операции Job ничего не делают
+}
+```
+
 **Ключевые характеристики:**
 - **Job который игнорирует отмену**: `cancel()` ничего не делает
 - **Позволяет suspend функции в finally**: Можно вызывать suspend функции после отмены
@@ -766,6 +775,11 @@ suspend fun demonstrateNonCancellable() = coroutineScope {
     job.cancel()
     job.join()
 }
+
+// Вывод:
+// Работаем...
+// Начало очистки...
+// Очистка завершена
 ```
 
 **Почему нужно**: После отмены корутина находится в отменённом состоянии. Обычно вызов suspend функций выбрасывает `CancellationException`. NonCancellable подавляет это.
@@ -784,7 +798,7 @@ suspend fun processFile(path: String) {
         // Обработка файла
         reader.lineSequence().forEach { line ->
             println("Обработка: $line")
-            delay(100)
+            delay(100) // Имитация обработки
         }
     } finally {
         // КРИТИЧНО: Должны закрыть файл даже если отменено
@@ -796,6 +810,22 @@ suspend fun processFile(path: String) {
         }
     }
 }
+
+suspend fun demonstrateFileCleanup() {
+    val job = CoroutineScope(Dispatchers.IO).launch {
+        processFile("data.txt")
+    }
+
+    delay(250) // Дать время на обработку
+    job.cancel() // Отменить во время обработки
+    job.join()
+}
+
+// Вывод:
+// Обработка: строка1
+// Обработка: строка2
+// Закрытие файла...
+// Файл закрыт
 ```
 
 #### Реальный пример: Сохранение состояния
@@ -830,6 +860,161 @@ class StateManager {
         }
     }
 }
+
+suspend fun demonstrateStateSave() {
+    val manager = StateManager()
+    val job = CoroutineScope(Dispatchers.Default).launch {
+        manager.doWork()
+    }
+
+    delay(350) // Дать время на работу
+    println("Отмена...")
+    job.cancelAndJoin()
+    println("Job отменён и очистка завершена")
+}
+
+// Вывод:
+// Сделано изменение 0
+// Сделано изменение 1
+// Сделано изменение 2
+// Отмена...
+// Сохранение несохранённых изменений при отмене...
+// Состояние сохранено: 3 изменений
+// Сохранение завершено
+// Job отменён и очистка завершена
+```
+
+#### Реальный пример: Коммит транзакции базы данных
+
+```kotlin
+import kotlinx.coroutines.*
+
+class DatabaseTransaction {
+    private val uncommittedChanges = mutableListOf<String>()
+
+    suspend fun executeQuery(query: String) {
+        delay(50) // Имитация запроса
+        uncommittedChanges.add(query)
+        println("Выполнено: $query")
+    }
+
+    suspend fun commit() {
+        delay(100) // Имитация коммита
+        println("Закоммичено ${uncommittedChanges.size} изменений")
+        uncommittedChanges.clear()
+    }
+
+    suspend fun rollback() {
+        delay(50)
+        println("Откачено ${uncommittedChanges.size} изменений")
+        uncommittedChanges.clear()
+    }
+}
+
+suspend fun performTransaction() {
+    val transaction = DatabaseTransaction()
+
+    try {
+        transaction.executeQuery("INSERT INTO users ...")
+        delay(100)
+        transaction.executeQuery("UPDATE users ...")
+        delay(100)
+        transaction.executeQuery("DELETE FROM sessions ...")
+
+        // Обычный коммит
+        transaction.commit()
+    } catch (e: CancellationException) {
+        // Отменено - должны откатить
+        withContext(NonCancellable) {
+            println("Транзакция отменена, откат...")
+            transaction.rollback()
+        }
+        throw e // Перебросить для распространения отмены
+    } finally {
+        // Дополнительная очистка если нужна
+        withContext(NonCancellable) {
+            println("Закрытие транзакции...")
+            delay(50)
+            println("Транзакция закрыта")
+        }
+    }
+}
+
+suspend fun demonstrateTransaction() {
+    val job = CoroutineScope(Dispatchers.IO).launch {
+        performTransaction()
+    }
+
+    delay(150) // Отменить в середине транзакции
+    println("Отмена транзакции...")
+    job.cancelAndJoin()
+}
+
+// Вывод:
+// Выполнено: INSERT INTO users ...
+// Выполнено: UPDATE users ...
+// Отмена транзакции...
+// Транзакция отменена, откат...
+// Откачено 2 изменений
+// Закрытие транзакции...
+// Транзакция закрыта
+```
+
+#### Реальный пример: Событие аналитики при отмене
+
+```kotlin
+import kotlinx.coroutines.*
+
+object Analytics {
+    suspend fun logEvent(event: String, properties: Map<String, Any>) {
+        delay(100) // Имитация сетевого вызова
+        println("Аналитика: $event - $properties")
+    }
+}
+
+suspend fun longRunningTask(taskId: String) {
+    val startTime = System.currentTimeMillis()
+
+    try {
+        println("Запуск задачи $taskId")
+        delay(5000) // Длительная операция
+        println("Задача $taskId завершена")
+
+        // Логировать успех
+        Analytics.logEvent("task_completed", mapOf("taskId" to taskId))
+    } finally {
+        val duration = System.currentTimeMillis() - startTime
+
+        // ДОЛЖНЫ залогировать событие отмены даже если отменено
+        withContext(NonCancellable) {
+            println("Логирование события отмены...")
+            Analytics.logEvent(
+                "task_cancelled",
+                mapOf(
+                    "taskId" to taskId,
+                    "duration_ms" to duration,
+                    "reason" to "user_cancellation"
+                )
+            )
+            println("Аналитика отправлена")
+        }
+    }
+}
+
+suspend fun demonstrateAnalytics() {
+    val job = CoroutineScope(Dispatchers.Default).launch {
+        longRunningTask("task-123")
+    }
+
+    delay(1000) // Отменить через 1 секунду
+    job.cancelAndJoin()
+}
+
+// Вывод:
+// Запуск задачи task-123
+// Логирование события отмены...
+// Аналитика: task_cancelled - {taskId=task-123, duration_ms=1001, reason=user_cancellation}
+// Аналитика отправлена
 ```
 
 #### Риски использования NonCancellable
@@ -845,7 +1030,7 @@ suspend fun badCleanup() {
         withContext(NonCancellable) {
             // Это ПЛОХО - занимает слишком долго
             repeat(1000) {
-                processItem(it)
+                processItem(it) // Каждый занимает 100мс
                 delay(100)
             }
             // Очистка занимает 100 секунд!
@@ -866,7 +1051,163 @@ suspend fun goodCleanup() {
 }
 ```
 
+**2. Сокрытие багов**
+
+```kotlin
+// ПЛОХО: Использование NonCancellable для избежания исправления проблем отмены
+suspend fun badUsage() {
+    withContext(NonCancellable) {
+        // Это должно быть отменяемым, но мы скрываем проблему
+        performBusinessLogic()
+    }
+}
+
+// ХОРОШО: Сделать код правильно отменяемым
+suspend fun goodUsage() {
+    // Бизнес-логика уважает отмену
+    performCancellableBusinessLogic()
+
+    // Только очистка не отменяемая
+    try {
+        // ...
+    } finally {
+        withContext(NonCancellable) {
+            cleanup()
+        }
+    }
+}
+```
+
+**3. Исчерпание ресурсов**
+
+```kotlin
+// ПЛОХО: NonCancellable без временного лимита
+suspend fun riskyCleanup() {
+    try {
+        // работа
+    } finally {
+        withContext(NonCancellable) {
+            // Если это зависнет, корутина никогда не завершится!
+            saveToUnreliableServer()
+        }
+    }
+}
+
+// ХОРОШО: Добавить таймаут даже с NonCancellable
+suspend fun safeCleanup() {
+    try {
+        // работа
+    } finally {
+        withContext(NonCancellable) {
+            withTimeout(5000) {
+                // Максимум 5 секунд для очистки
+                saveToUnreliableServer()
+            }
+        }
+    }
+}
+```
+
+#### NonCancellable не предотвращает отмену
+
+NonCancellable не **предотвращает** отмену; он позволяет suspend функциям **завершиться несмотря на** отмену:
+
+```kotlin
+suspend fun demonstrateCancellationStillHappens() {
+    val job = launch {
+        try {
+            println("Работаем...")
+            delay(1000)
+        } finally {
+            println("Отменено: ${!isActive}")  // true - всё ещё отменено
+
+            withContext(NonCancellable) {
+                println("В NonCancellable")
+                println("Всё ещё отменено: ${!isActive}")  // false - временно не отменено
+                delay(500)
+                println("Очистка завершена")
+            }
+
+            println("После NonCancellable, отменено: ${!isActive}")  // true - снова отменено
+        }
+    }
+
+    delay(100)
+    job.cancelAndJoin()
+}
+
+// Вывод:
+// Работаем...
+// Отменено: true
+// В NonCancellable
+// Всё ещё отменено: false
+// Очистка завершена
+// После NonCancellable, отменено: true
+```
+
+**Ключевая идея**: NonCancellable - это **временное переопределение контекста**, а не постоянное предотвращение отмены.
+
+#### Временные лимиты даже с NonCancellable
+
+Даже NonCancellable уважает **таймауты**:
+
+```kotlin
+suspend fun demonstrateTimeout() {
+    try {
+        withTimeout(500) {
+            try {
+                delay(1000) // Истечёт таймаут
+            } finally {
+                withContext(NonCancellable) {
+                    println("Начало очистки...")
+                    delay(200) // Разрешено несмотря на таймаут
+                    println("Очистка завершена")
+                }
+            }
+        }
+    } catch (e: TimeoutCancellationException) {
+        println("Истёк таймаут: ${e.message}")
+    }
+}
+
+// Вывод:
+// Начало очистки...
+// Очистка завершена
+// Истёк таймаут: Timed out waiting for 500 ms
+```
+
+**Важно**: NonCancellable позволяет завершиться очистке, но не предотвращает срабатывание родительского таймаута.
+
 #### Лучшая практика: Держите коротким
+
+```kotlin
+// ХОРОШО: Короткая, целенаправленная очистка
+suspend fun shortCleanup() {
+    try {
+        // работа
+    } finally {
+        withContext(NonCancellable) {
+            resource.close()  // < 100мс
+            saveState()       // < 200мс
+        }
+        // Всего: ~300мс - приемлемо
+    }
+}
+
+// ПЛОХО: Длительная, сложная очистка
+suspend fun longCleanup() {
+    try {
+        // работа
+    } finally {
+        withContext(NonCancellable) {
+            syncAllDataToServer()   // 10 секунд
+            regenerateCaches()      // 5 секунд
+            sendEmailNotifications() // 3 секунды
+        }
+        // Всего: 18 секунд - неприемлемо!
+    }
+}
+```
 
 **Руководство**: Операции NonCancellable должны завершаться за **< 1 секунду** идеально, **< 5 секунд** максимум.
 
@@ -879,11 +1220,150 @@ suspend fun cleanupWithoutSuspend() {
     val file = File("data.txt")
 
     try {
+        // Suspend работа
         delay(1000)
     } finally {
         // Простая блокирующая очистка - NonCancellable не нужен
         file.delete()  // Обычный блокирующий вызов
         println("Файл удалён")
+    }
+}
+
+// Когда использовать каждый:
+// - Блокирующая очистка: Простые, синхронные операции (file.close(), map.clear())
+// - NonCancellable: Когда очистка требует suspend функций (сеть, delay)
+```
+
+#### Тестирование очистки с отменой
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.*
+import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+
+class NonCancellableTests {
+    @Test
+    fun testCleanupExecutesOnCancellation() = runTest {
+        var cleanupExecuted = false
+
+        val job = launch {
+            try {
+                delay(1000)
+            } finally {
+                withContext(NonCancellable) {
+                    delay(100)
+                    cleanupExecuted = true
+                }
+            }
+        }
+
+        advanceTimeBy(100)
+        job.cancel()
+        job.join()
+
+        assertTrue(cleanupExecuted)
+    }
+
+    @Test
+    fun testCleanupCompletesWithTimeout() = runTest {
+        var cleanupDone = false
+
+        try {
+            withTimeout(500) {
+                try {
+                    delay(1000)
+                } finally {
+                    withContext(NonCancellable) {
+                        delay(200)
+                        cleanupDone = true
+                    }
+                }
+            }
+        } catch (e: TimeoutCancellationException) {
+            // Ожидается
+        }
+
+        assertTrue(cleanupDone)
+    }
+
+    @Test
+    fun testNonCancellableDoesNotPreventCancellation() = runTest {
+        val job = launch {
+            try {
+                delay(1000)
+            } finally {
+                withContext(NonCancellable) {
+                    delay(100)
+                }
+            }
+        }
+
+        job.cancel()
+        job.join()
+
+        assertTrue(job.isCancelled)
+    }
+}
+```
+
+### Распространенные ошибки
+
+**1. Забыли перебросить CancellationException**
+
+```kotlin
+// ПЛОХО: Поглощение отмены
+try {
+    work()
+} catch (e: CancellationException) {
+    withContext(NonCancellable) {
+        cleanup()
+    }
+    // Пропущено: throw e
+}
+
+// ХОРОШО: Переброс отмены
+try {
+    work()
+} catch (e: CancellationException) {
+    withContext(NonCancellable) {
+        cleanup()
+    }
+    throw e // Распространить отмену
+}
+```
+
+**2. Использование NonCancellable для не-очистительного кода**
+
+```kotlin
+// ПЛОХО: Бизнес-логика в NonCancellable
+withContext(NonCancellable) {
+    processUserRequest() // Должно быть отменяемым!
+}
+
+// ХОРОШО: Только очистка в NonCancellable
+try {
+    processUserRequest() // Отменяемо
+} finally {
+    withContext(NonCancellable) {
+        releaseResources() // Не отменяемо
+    }
+}
+```
+
+**3. Нет таймаута на операциях NonCancellable**
+
+```kotlin
+// ПЛОХО: Нет таймаута
+withContext(NonCancellable) {
+    sendToUnreliableServer() // Может зависнуть навсегда
+}
+
+// ХОРОШО: Таймаут даже с NonCancellable
+withContext(NonCancellable) {
+    withTimeout(5000) {
+        sendToUnreliableServer()
     }
 }
 ```
@@ -892,11 +1372,23 @@ suspend fun cleanupWithoutSuspend() {
 
 **NonCancellable** позволяет suspend функциям выполняться во время очистки после отмены:
 
-- **Используйте для**: Критическая очистка (закрытие ресурсов, сохранение состояния)
-- **Не используйте для**: Бизнес-логика, длительные операции
+- **Используйте для**: Критическая очистка (закрытие ресурсов, сохранение состояния, коммит транзакций)
+- **Не используйте для**: Бизнес-логика, длительные операции, сценарии "на всякий случай"
 - **Держите коротким**: < 1 секунды идеально, < 5 секунд максимум
 - **Добавляйте таймауты**: Даже NonCancellable должен иметь временные лимиты
+- **Альтернатива**: Используйте обычный блокирующий код для простой очистки
 - **Помните**: NonCancellable не предотвращает отмену, он позволяет очистку несмотря на отмену
+
+**Паттерн:**
+```kotlin
+try {
+    // Обычная отменяемая работа
+} finally {
+    withContext(NonCancellable) {
+        // Только короткая, критическая очистка
+    }
+}
+```
 
 ---
 

@@ -18,11 +18,11 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-data-class-purpose--kotlin--easy]
+related: [q-data-class-purpose--kotlin--easy, q-data-class-detailed--kotlin--medium, q-kotlin-operator-overloading--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-10-18
 
 tags: [kotlin, destructuring, data-classes, componentN, difficulty/medium]
 ---
