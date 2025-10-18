@@ -36,14 +36,132 @@ tags: [kotlin, coroutines, difficulty/medium]
 
 ## Answer (EN)
 
-Comprehensive answer for question 140029.
 
+Coroutine builders are functions that create and start coroutines. The main builders are `launch`, `async`, and `runBlocking`.
+
+### launch
+Starts a new coroutine and returns a Job:
+```kotlin
+val job = GlobalScope.launch {
+    delay(1000)
+    println("World!")
+}
+println("Hello,")
+// Hello,
+// (1 second delay)
+// World!
+```
+
+### async
+Starts a coroutine that returns a result via Deferred:
+```kotlin
+val deferred = GlobalScope.async {
+    delay(1000)
+    "Result"
+}
+println(deferred.await())  // Wait for result
+```
+
+### runBlocking
+Blocks the current thread until completion:
+```kotlin
+runBlocking {
+    delay(1000)
+    println("Done")
+}
+// Blocks for 1 second, then prints Done
+```
+
+### Key Differences
+| Builder | Returns | Blocks Thread | Use Case |
+|---------|---------|---------------|----------|
+| launch | Job | No | Fire and forget |
+| async | Deferred<T> | No | Needs result |
+| runBlocking | T | Yes | main(), tests |
+
+### Practical Examples
+```kotlin
+// Launch multiple operations
+launch { operation1() }
+launch { operation2() }
+
+// Get results from async
+val result1 = async { fetchData1() }
+val result2 = async { fetchData2() }
+process(result1.await(), result2.await())
+
+// Bridge to coroutines in main
+fun main() = runBlocking {
+    launch { /* coroutine */ }
+}
+```
+
+---
 ---
 
 ## Ответ (RU)
 
-Полный ответ на вопрос 140029.
 
+Coroutine builders - это функции создающие и запускающие корутины. Основные builders: `launch`, `async` и `runBlocking`.
+
+### launch
+Запускает новую корутину и возвращает Job:
+```kotlin
+val job = GlobalScope.launch {
+    delay(1000)
+    println("World!")
+}
+println("Hello,")
+// Hello,
+// (задержка 1 секунда)
+// World!
+```
+
+### async
+Запускает корутину возвращающую результат через Deferred:
+```kotlin
+val deferred = GlobalScope.async {
+    delay(1000)
+    "Result"
+}
+println(deferred.await())  // Ждем результат
+```
+
+### runBlocking
+Блокирует текущий поток до завершения:
+```kotlin
+runBlocking {
+    delay(1000)
+    println("Done")
+}
+// Блокируется на 1 секунду, затем выводит Done
+```
+
+### Ключевые отличия
+| Builder | Возвращает | Блокирует поток | Применение |
+|---------|------------|-----------------|------------|
+| launch | Job | Нет | Запустить и забыть |
+| async | Deferred<T> | Нет | Нужен результат |
+| runBlocking | T | Да | main(), тесты |
+
+### Практические примеры
+```kotlin
+// Запустить несколько операций
+launch { operation1() }
+launch { operation2() }
+
+// Получить результаты из async
+val result1 = async { fetchData1() }
+val result2 = async { fetchData2() }
+process(result1.await(), result2.await())
+
+// Мост к корутинам в main
+fun main() = runBlocking {
+    launch { /* корутина */ }
+}
+```
+
+---
 ---
 
 ## Follow-ups

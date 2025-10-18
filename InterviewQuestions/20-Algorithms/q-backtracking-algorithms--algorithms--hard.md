@@ -5,7 +5,8 @@ topic: algorithms
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - algorithms
+tags:
+  - algorithms
   - backtracking
   - recursion
   - n-queens
@@ -13,10 +14,12 @@ tags: - algorithms
   - permutations
   - combinations
 moc: moc-algorithms
-related:   - q-dynamic-programming-fundamentals--algorithms--hard
+related:
+  - q-dynamic-programming-fundamentals--algorithms--hard
   - q-graph-algorithms-bfs-dfs--algorithms--hard
   - q-binary-search-trees-bst--algorithms--hard
-subtopics:   - backtracking
+subtopics:
+  - backtracking
   - recursion
   - combinatorics
   - constraint-satisfaction

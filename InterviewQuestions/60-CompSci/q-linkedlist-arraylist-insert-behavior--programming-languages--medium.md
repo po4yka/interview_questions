@@ -5,7 +5,8 @@ topic: programming-languages
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - collections
+tags:
+  - collections
   - data structures
   - kotlin
   - programming-languages

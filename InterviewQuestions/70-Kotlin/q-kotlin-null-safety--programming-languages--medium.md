@@ -5,7 +5,8 @@ topic: computer-science
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - elvis
+tags:
+  - elvis
   - kotlin
   - null-safety
   - nullable

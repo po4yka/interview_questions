@@ -5,7 +5,8 @@ topic: computer-science
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - extension-functions
+tags:
+  - extension-functions
   - extension-properties
   - extensions
   - kotlin

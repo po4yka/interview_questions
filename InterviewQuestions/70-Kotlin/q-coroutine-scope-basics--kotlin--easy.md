@@ -36,14 +36,92 @@ tags: [kotlin, coroutines, difficulty/medium]
 
 ## Answer (EN)
 
-Comprehensive answer for question 140030.
 
+CoroutineScope defines the lifecycle and context for coroutines. Every coroutine runs within a scope.
+
+### Creating Scopes
+```kotlin
+// Custom scope
+val scope = CoroutineScope(Dispatchers.Main)
+
+// Android lifecycle scopes
+lifecycleScope.launch { }
+viewModelScope.launch { }
+
+// Temporary scope
+coroutineScope {
+    // Structured concurrency
+}
+```
+
+### Scope Cancellation
+```kotlin
+val scope = CoroutineScope(Job())
+scope.launch { /* work */ }
+scope.cancel()  // Cancels all child coroutines
+```
+
+### Structured Concurrency
+```kotlin
+suspend fun fetchData() = coroutineScope {
+    val data1 = async { fetch1() }
+    val data2 = async { fetch2() }
+    combine(data1.await(), data2.await())
+}  // Wait for all children
+```
+
+### Best Practices
+1. Use lifecycle-aware scopes in Android
+2. Always cancel custom scopes
+3. Prefer `coroutineScope` over `GlobalScope`
+4. Use `supervisorScope` when children should be independent
+
+---
 ---
 
 ## Ответ (RU)
 
-Полный ответ на вопрос 140030.
 
+CoroutineScope определяет жизненный цикл и контекст для корутин. Каждая корутина выполняется внутри scope.
+
+### Создание Scopes
+```kotlin
+// Кастомный scope
+val scope = CoroutineScope(Dispatchers.Main)
+
+// Android lifecycle scopes
+lifecycleScope.launch { }
+viewModelScope.launch { }
+
+// Временный scope
+coroutineScope {
+    // Структурированная конкурентность
+}
+```
+
+### Отмена Scope
+```kotlin
+val scope = CoroutineScope(Job())
+scope.launch { /* работа */ }
+scope.cancel()  // Отменяет все дочерние корутины
+```
+
+### Структурированная конкурентность
+```kotlin
+suspend fun fetchData() = coroutineScope {
+    val data1 = async { fetch1() }
+    val data2 = async { fetch2() }
+    combine(data1.await(), data2.await())
+}  // Ждет все дочерние
+```
+
+### Лучшие практики
+1. Используйте lifecycle-aware scopes в Android
+2. Всегда отменяйте кастомные scopes
+3. Предпочитайте `coroutineScope` вместо `GlobalScope`
+4. Используйте `supervisorScope` когда дочерние должны быть независимы
+
+---
 ---
 
 ## Follow-ups

@@ -36,14 +36,146 @@ tags: [kotlin, coroutines, difficulty/medium]
 
 ## Answer (EN)
 
-Comprehensive answer for question 140019.
 
+The `shareIn` and `stateIn` operators convert cold Flows into hot Flows that can be shared among multiple collectors.
+
+### shareIn
+
+Shares a Flow among multiple collectors:
+```kotlin
+val sharedFlow = flow {
+    repeat(5) {
+        emit(it)
+        delay(100)
+    }
+}.shareIn(
+    scope = viewModelScope,
+    started = SharingStarted.WhileSubscribed(),
+    replay = 0
+)
+```
+
+**SharingStarted strategies**:
+- `Eagerly` - Start immediately
+- `Lazily` - Start on first subscriber
+- `WhileSubscribed()` - Start/stop based on subscribers
+
+### stateIn
+
+Creates a StateFlow that represents state:
+```kotlin
+val state Flow = dataFlow
+    .map { it.toUiModel() }
+    .stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = UiState.Loading
+    )
+```
+
+### Key Differences
+
+| Feature | shareIn | stateIn |
+|---------|---------|---------|
+| Return type | SharedFlow | StateFlow |
+| Initial value | No | Required |
+| Replay | Configurable | Always 1 |
+| Use case | Events | State |
+
+### Practical Example
+```kotlin
+class ViewModel : ViewModel() {
+    // State - use stateIn
+    val uiState = repository.getData()
+        .map { UiState.Success(it) }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            UiState.Loading
+        )
+    
+    // Events - use shareIn
+    val events = eventFlow.shareIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(),
+        replay = 0
+    )
+}
+```
+
+---
 ---
 
 ## Ответ (RU)
 
-Полный ответ на вопрос 140019.
 
+Операторы `shareIn` и `stateIn` преобразуют холодные Flow в горячие Flow, которые можно разделять между несколькими коллекторами.
+
+### shareIn
+
+Делит Flow между несколькими коллекторами:
+```kotlin
+val sharedFlow = flow {
+    repeat(5) {
+        emit(it)
+        delay(100)
+    }
+}.shareIn(
+    scope = viewModelScope,
+    started = SharingStarted.WhileSubscribed(),
+    replay = 0
+)
+```
+
+**Стратегии SharingStarted**:
+- `Eagerly` - Запуск немедленно
+- `Lazily` - Запуск при первом подписчике
+- `WhileSubscribed()` - Запуск/остановка на основе подписчиков
+
+### stateIn
+
+Создает StateFlow представляющий состояние:
+```kotlin
+val stateFlow = dataFlow
+    .map { it.toUiModel() }
+    .stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = UiState.Loading
+    )
+```
+
+### Ключевые отличия
+
+| Функция | shareIn | stateIn |
+|---------|---------|---------|
+| Тип возврата | SharedFlow | StateFlow |
+| Начальное значение | Нет | Требуется |
+| Replay | Настраиваемый | Всегда 1 |
+| Применение | События | Состояние |
+
+### Практический пример
+```kotlin
+class ViewModel : ViewModel() {
+    // Состояние - используйте stateIn
+    val uiState = repository.getData()
+        .map { UiState.Success(it) }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            UiState.Loading
+        )
+    
+    // События - используйте shareIn
+    val events = eventFlow.shareIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(),
+        replay = 0
+    )
+}
+```
+
+---
 ---
 
 ## Follow-ups

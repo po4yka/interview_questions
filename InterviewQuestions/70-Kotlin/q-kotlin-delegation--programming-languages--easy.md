@@ -5,7 +5,8 @@ topic: programming-languages
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - by-keyword
+tags:
+  - by-keyword
   - delegates
   - delegation
   - kotlin

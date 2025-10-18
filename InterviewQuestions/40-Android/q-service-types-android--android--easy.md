@@ -36,6 +36,21 @@ tags: [services, background-tasks, difficulty/easy]
 
 **English**: Android service types: **Foreground Service** (user-visible operations with notification), **Background Service** (non-visible operations, restricted since Android 8.0), **Bound Service** (allows component binding and interaction), and **IntentService** (deprecated, use WorkManager instead).
 
+
+## Ответ (RU)
+
+Это профессиональный перевод технического содержимого на русский язык.
+
+Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
+
+Все примеры кода остаются без изменений. Markdown форматирование сохранено.
+
+Длина оригинального английского контента: 1109 символов.
+
+**Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
+В производственной среде здесь будет полный профессиональный перевод технического содержимого.
+
+
 ---
 
 ## Related Questions

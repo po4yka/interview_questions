@@ -152,7 +152,7 @@ GROUP BY true
 
 ```dataviewjs
 // Find all files with broken wikilinks
-<%* tR += await tp.user.folderConstants({ include_auxiliary: true }); %>
+const folderQuery = '"20-Algorithms" or "30-System-Design" or "40-Android" or "50-Backend" or "60-CompSci" or "70-Kotlin" or "80-Tools"';
 const files = dv.pages(folderQuery)
     .where(p => p.file.ext === "md");
 

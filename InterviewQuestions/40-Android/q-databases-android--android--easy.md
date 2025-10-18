@@ -339,7 +339,9 @@ val config = RealmConfiguration.Builder()
 
 ## Ответ (RU)
 
-В Android приложениях можно использовать **три основные базы данных**: **SQLite**, **Room** и **Realm**.
+
+Android-приложения могут использовать **три основных варианта баз данных**: **SQLite**, **Room** и **Realm**.
+
 
 ## 1. SQLite
 

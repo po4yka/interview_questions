@@ -790,7 +790,7 @@ fun betterOperation() {
 
 ---
 
-## Russian Version
+## Ответ (RU)
 
 ### Постановка задачи
 
@@ -798,10 +798,479 @@ Context receivers - экспериментальная возможность Ko
 
 **Вопрос:** Что такое context receivers? Чем они отличаются от extension функций? Когда их использовать? Какие реальные use cases в Android?
 
-### Ключевые выводы
+### Подробный ответ
+
+---
+
+### ОСНОВЫ CONTEXT RECEIVERS
+
+**Включение в build.gradle:**
+
+```kotlin
+compilerOptions {
+    freeCompilerArgs.add("-Xcontext-receivers")
+}
+```
+
+**Базовый синтаксис:**
+
+```kotlin
+// Традиционная extension функция
+fun Context.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+// С context receiver
+context(Context)
+fun showToast(message: String) {
+    Toast.makeText(this@Context, message, Toast.LENGTH_SHORT).show()
+}
+
+// Использование (одинаково для обоих)
+fun Activity.someMethod() {
+    showToast("Hello")
+}
+```
+
+**Ключевые отличия:**
+
+```
+Extension функция:
+ Один receiver
+ Стабильная возможность языка
+ Сложно комбинировать несколько контекстов
+
+Context receiver:
+ Множественные контексты возможны
+ Более гибкий
+ Лучше для DSL
+ Экспериментальная возможность
+```
+
+---
+
+### МНОЖЕСТВЕННЫЕ CONTEXT RECEIVERS
+
+Context receivers позволяют объявлять зависимость от нескольких контекстов одновременно:
+
+```kotlin
+// Множественные контексты
+context(Context, CoroutineScope)
+fun launchAndShowToast(message: String) {
+    launch {
+        delay(1000)
+        Toast.makeText(this@Context, message, Toast.LENGTH_SHORT).show()
+    }
+}
+
+// Использование с тремя контекстами
+context(Context, LifecycleOwner, CoroutineScope)
+fun observeAndShowData() {
+    launch {
+        // Можем использовать Context
+        val resources = this@Context.resources
+
+        // Можем использовать LifecycleOwner
+        lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onResume(owner: LifecycleOwner) {
+                // Обработка resume
+            }
+        })
+
+        // Можем использовать CoroutineScope
+        delay(1000)
+    }
+}
+```
+
+---
+
+### ЛОГИРОВАНИЕ С CONTEXT RECEIVERS
+
+```kotlin
+interface Logger {
+    fun log(message: String)
+    fun error(message: String, throwable: Throwable? = null)
+}
+
+// Функции, требующие логирования
+context(Logger)
+fun processData(data: String) {
+    log("Processing data: $data")
+
+    try {
+        // Обработка
+        log("Data processed successfully")
+    } catch (e: Exception) {
+        error("Failed to process data", e)
+    }
+}
+
+context(Logger)
+suspend fun fetchUser(userId: String): User {
+    log("Fetching user: $userId")
+
+    return try {
+        val user = apiService.getUser(userId)
+        log("User fetched: ${user.name}")
+        user
+    } catch (e: Exception) {
+        error("Failed to fetch user", e)
+        throw e
+    }
+}
+
+// Использование
+class UserRepository(private val logger: Logger) {
+    suspend fun loadUser(userId: String): User {
+        with(logger) {
+            return fetchUser(userId)
+        }
+    }
+}
+```
+
+---
+
+### ПАТТЕРН DEPENDENCY INJECTION
+
+Context receivers предоставляют элегантный способ внедрения зависимостей без overhead DI-фреймворков:
+
+```kotlin
+interface DatabaseProvider {
+    val database: AppDatabase
+}
+
+interface NetworkProvider {
+    val apiService: ApiService
+}
+
+interface LoggerProvider {
+    val logger: Logger
+}
+
+// Repository с context receivers
+context(DatabaseProvider, NetworkProvider, LoggerProvider)
+class UserRepository {
+    suspend fun getUser(userId: String): User {
+        logger.log("Getting user: $userId")
+
+        // Сначала проверяем локальную БД
+        database.userDao().getUser(userId)?.let {
+            logger.log("User found in database")
+            return it
+        }
+
+        // Загружаем из сети
+        logger.log("Fetching from network")
+        val user = apiService.getUser(userId)
+
+        // Сохраняем в БД
+        database.userDao().insert(user)
+
+        return user
+    }
+}
+
+// Провайдеры на уровне приложения
+class AppDependencies : DatabaseProvider, NetworkProvider, LoggerProvider {
+    override val database: AppDatabase by lazy {
+        Room.databaseBuilder(context, AppDatabase::class.java, "app.db").build()
+    }
+
+    override val apiService: ApiService by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://api.example.com")
+            .build()
+            .create(ApiService::class.java)
+    }
+
+    override val logger: Logger = AndroidLogger()
+}
+
+// Использование
+class MyViewModel(private val deps: AppDependencies) : ViewModel() {
+    private val userRepository = with(deps) {
+        UserRepository()
+    }
+}
+```
+
+---
+
+### DSL BUILDERS
+
+Context receivers идеально подходят для создания DSL:
+
+```kotlin
+interface HtmlContext {
+    fun tag(name: String, content: HtmlContext.() -> Unit)
+    fun text(content: String)
+}
+
+context(HtmlContext)
+fun head(content: HtmlContext.() -> Unit) {
+    tag("head", content)
+}
+
+context(HtmlContext)
+fun body(content: HtmlContext.() -> Unit) {
+    tag("body", content)
+}
+
+context(HtmlContext)
+fun title(text: String) {
+    tag("title") {
+        text(text)
+    }
+}
+
+context(HtmlContext)
+fun h1(text: String) {
+    tag("h1") {
+        text(text)
+    }
+}
+
+// Использование
+val htmlContent = html {
+    head {
+        title("My Page")
+    }
+    body {
+        h1("Welcome")
+        p("This is a paragraph")
+    }
+}
+```
+
+---
+
+### УПРАВЛЕНИЕ ТРАНЗАКЦИЯМИ
+
+```kotlin
+interface TransactionContext {
+    suspend fun <T> execute(block: suspend () -> T): T
+    suspend fun rollback()
+}
+
+context(TransactionContext)
+suspend fun transferMoney(fromAccount: String, toAccount: String, amount: Double) {
+    execute {
+        // Снимаем со счёта-источника
+        val fromAcc = accountDao.getAccount(fromAccount)
+        if (fromAcc.balance < amount) {
+            rollback()
+            throw InsufficientFundsException()
+        }
+
+        accountDao.updateBalance(fromAccount, fromAcc.balance - amount)
+
+        // Добавляем на счёт-получатель
+        val toAcc = accountDao.getAccount(toAccount)
+        accountDao.updateBalance(toAccount, toAcc.balance + amount)
+
+        // Логируем транзакцию
+        transactionDao.insert(
+            Transaction(
+                from = fromAccount,
+                to = toAccount,
+                amount = amount,
+                timestamp = System.currentTimeMillis()
+            )
+        )
+    }
+}
+```
+
+---
+
+### КОНТЕКСТ ВАЛИДАЦИИ
+
+```kotlin
+interface ValidationContext {
+    fun addError(field: String, message: String)
+    val errors: List<ValidationError>
+    val isValid: Boolean
+}
+
+context(ValidationContext)
+fun validateEmail(email: String) {
+    if (email.isBlank()) {
+        addError("email", "Email is required")
+    } else if (!email.contains("@")) {
+        addError("email", "Invalid email format")
+    }
+}
+
+context(ValidationContext)
+fun validatePassword(password: String) {
+    if (password.length < 8) {
+        addError("password", "Password must be at least 8 characters")
+    }
+    if (!password.any { it.isDigit() }) {
+        addError("password", "Password must contain a digit")
+    }
+}
+
+// Использование
+fun validateRegistration(form: RegistrationForm): ValidationContext {
+    val validator = Validator()
+
+    with(validator) {
+        validateEmail(form.email)
+        validatePassword(form.password)
+        validateAge(form.age)
+    }
+
+    return validator
+}
+```
+
+---
+
+### ANDROID-СПЕЦИФИЧНЫЕ USE CASES
+
+#### Доступ к ресурсам
+
+```kotlin
+interface ResourceContext {
+    val context: Context
+    val resources: Resources
+}
+
+context(ResourceContext)
+fun getString(@StringRes resId: Int): String {
+    return resources.getString(resId)
+}
+
+context(ResourceContext)
+fun getColor(@ColorRes resId: Int): Int {
+    return resources.getColor(resId, null)
+}
+
+context(ResourceContext)
+fun formatString(@StringRes resId: Int, vararg args: Any): String {
+    return resources.getString(resId, *args)
+}
+```
+
+---
+
+#### Навигация
+
+```kotlin
+interface NavigationContext {
+    fun navigate(destination: String)
+    fun navigateBack()
+    fun navigateUp()
+}
+
+context(NavigationContext)
+fun navigateToProfile(userId: String) {
+    navigate("profile/$userId")
+}
+
+context(NavigationContext)
+fun navigateToSettings() {
+    navigate("settings")
+}
+
+context(NavigationContext)
+fun closeScreen() {
+    navigateBack()
+}
+```
+
+---
+
+#### Разрешения (Permissions)
+
+```kotlin
+interface PermissionContext {
+    fun hasPermission(permission: String): Boolean
+    fun requestPermission(permission: String)
+}
+
+context(PermissionContext)
+fun checkCameraPermission(): Boolean {
+    return hasPermission(Manifest.permission.CAMERA)
+}
+
+context(PermissionContext)
+fun requestCameraPermission() {
+    if (!checkCameraPermission()) {
+        requestPermission(Manifest.permission.CAMERA)
+    }
+}
+
+context(PermissionContext, Context)
+fun openCamera() {
+    if (checkCameraPermission()) {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        this@Context.startActivity(intent)
+    } else {
+        requestCameraPermission()
+    }
+}
+```
+
+---
+
+### ЛУЧШИЕ ПРАКТИКИ
+
+```kotlin
+//  Используйте context receivers для cross-cutting concerns
+context(Logger)
+fun performOperation() {
+    log("Starting operation")
+    // ...
+    log("Operation complete")
+}
+
+//  Комбинируйте с обычными параметрами
+context(Context)
+fun showNotification(title: String, message: String) {
+    val notification = NotificationCompat.Builder(this@Context, "channel_id")
+        .setContentTitle(title)
+        .setContentText(message)
+        .build()
+}
+
+//  Используйте для DSL
+context(HtmlContext)
+fun customComponent(data: String) {
+    tag("div") {
+        tag("span") {
+            text(data)
+        }
+    }
+}
+
+//  Не злоупотребляйте - держите простым
+// Плохо: слишком много контекстов
+context(Context, Logger, Database, Network, Cache, Analytics)
+fun complexOperation() {
+    // Это сложно понять и поддерживать
+}
+
+//  Лучше: группируйте связанные контексты
+interface AppContext : Logger, Database, Network {
+    val context: Context
+}
+
+context(AppContext)
+fun betterOperation() {
+    // Чище с единым контекстом
+}
+```
+
+---
+
+### КЛЮЧЕВЫЕ ВЫВОДЫ
 
 1. **Context receivers** позволяют объявлять контекстные зависимости для функций
-2. **Экспериментальная возможность** - требует compiler flag
+2. **Экспериментальная возможность** - требует compiler flag `-Xcontext-receivers`
 3. **Множественные контексты** возможны (в отличие от extension функций)
 4. **Более чистые DSL** по сравнению с extension функциями с receivers
 5. **Dependency injection** паттерн без overhead фреймворка
@@ -810,6 +1279,22 @@ Context receivers - экспериментальная возможность Ko
 8. **Лучше чем** передавать параметры многократно
 9. **Хорошо комбинируются** с другими возможностями Kotlin
 10. **Не злоупотребляйте** - держите контексты сфокусированными и связными
+
+**Основные преимущества:**
+- Чище чем extension функции для множественных зависимостей
+- Отлично подходят для DSL и builder паттернов
+- Упрощают dependency injection без фреймворков
+- Уменьшают количество параметров функций
+- Делают код более выразительным и читаемым
+
+**Когда использовать:**
+- Cross-cutting concerns (логирование, валидация)
+- DSL builders
+- Транзакционная логика
+- Зависимости от Android компонентов (Context, Resources, NavController)
+- Множественные связанные зависимости
+
+---
 
 ## Follow-ups
 

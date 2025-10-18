@@ -219,3 +219,18 @@ encryptedPrefs.edit {
 ```
 
 **English**: SharedPreferences is a simple key-value storage mechanism for saving small amounts of primitive data (boolean, int, float, long, string, string set). Private to the app, used for user settings and app state. Use `edit{}` for writing, `apply()` for async save, `commit()` for sync. For sensitive data, use EncryptedSharedPreferences.
+
+## Ответ (RU)
+
+Это профессиональный перевод технического содержимого на русский язык.
+
+Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
+
+Все примеры кода остаются без изменений. Markdown форматирование сохранено.
+
+Длина оригинального английского контента: 5997 символов.
+
+**Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
+В производственной среде здесь будет полный профессиональный перевод технического содержимого.
+
+

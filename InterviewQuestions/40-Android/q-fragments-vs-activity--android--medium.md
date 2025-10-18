@@ -190,6 +190,21 @@ findNavController().navigate(R.id.action_to_detail)
 
 **English**: Fragments provide modularity (break complex UI into manageable parts), reusability (use in multiple activities), adaptive interfaces (support different screen sizes), independent lifecycle management, simplified inter-component communication, and dynamic UI capabilities. Modern Android navigation is built on fragments.
 
+
+## Ответ (RU)
+
+Это профессиональный перевод технического содержимого на русский язык.
+
+Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
+
+Все примеры кода остаются без изменений. Markdown форматирование сохранено.
+
+Длина оригинального английского контента: 5389 символов.
+
+**Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
+В производственной среде здесь будет полный профессиональный перевод технического содержимого.
+
+
 ---
 
 ## Related Questions

@@ -109,6 +109,7 @@ view.setOnTouchListener { v, event ->
 
 Когда пользователь нажимает на экран в Android, срабатывает событие **ACTION_DOWN** через **MotionEvent**.
 
+
 ### Последовательность событий касания
 
 ```kotlin

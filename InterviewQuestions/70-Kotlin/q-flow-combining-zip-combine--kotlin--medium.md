@@ -36,14 +36,134 @@ tags: [kotlin, coroutines, difficulty/medium]
 
 ## Answer (EN)
 
-Comprehensive answer for question 140020.
 
+Flow combining operators allow you to merge multiple Flows in different ways: `zip` pairs emissions, `combine` emits on any change, and `merge` interleaves all emissions.
+
+### zip
+Combines two flows by pairing their emissions:
+```kotlin
+val flow1 = flowOf(1, 2, 3)
+val flow2 = flowOf("A", "B", "C", "D")
+
+flow1.zip(flow2) { num, letter ->
+    "$num$letter"
+}.collect { println(it) }
+// Output: 1A, 2B, 3C (D is dropped)
+```
+
+### combine
+Emits whenever ANY flow emits:
+```kotlin
+val numbers = flow {
+    emit(1)
+    delay(100)
+    emit(2)
+}
+val letters = flow {
+    emit("A")
+    delay(150)
+    emit("B")
+}
+
+numbers.combine(letters) { num, letter ->
+    "$num$letter"
+}.collect { println(it) }
+// Output: 1A, 2A, 2B
+```
+
+### merge
+Merges multiple flows into one:
+```kotlin
+val flow1 = flowOf(1, 2, 3).onEach { delay(100) }
+val flow2 = flowOf(4, 5, 6).onEach { delay(150) }
+
+merge(flow1, flow2).collect { println(it) }
+// Output: 1, 4, 2, 3, 5, 6 (interleaved)
+```
+
+### Practical Examples
+```kotlin
+// Combine user input with API data
+searchQuery.combine(apiResults) { query, results ->
+    results.filter { it.matches(query) }
+}
+
+// Zip coordinates with addresses
+latLng.zip(addresses) { coords, address ->
+    Location(coords, address)
+}
+
+// Merge multiple data sources
+merge(cacheFlow, networkFlow, databaseFlow)
+```
+
+---
 ---
 
 ## Ответ (RU)
 
-Полный ответ на вопрос 140020.
 
+Операторы комбинирования Flow позволяют объединять несколько Flow различными способами: `zip` связывает испускания попарно, `combine` испускает при любом изменении, а `merge` чередует все испускания.
+
+### zip
+Комбинирует два потока связывая их испускания:
+```kotlin
+val flow1 = flowOf(1, 2, 3)
+val flow2 = flowOf("A", "B", "C", "D")
+
+flow1.zip(flow2) { num, letter ->
+    "$num$letter"
+}.collect { println(it) }
+// Вывод: 1A, 2B, 3C (D отброшен)
+```
+
+### combine
+Испускает когда ЛЮБОЙ поток испускает:
+```kotlin
+val numbers = flow {
+    emit(1)
+    delay(100)
+    emit(2)
+}
+val letters = flow {
+    emit("A")
+    delay(150)
+    emit("B")
+}
+
+numbers.combine(letters) { num, letter ->
+    "$num$letter"
+}.collect { println(it) }
+// Вывод: 1A, 2A, 2B
+```
+
+### merge
+Объединяет несколько потоков в один:
+```kotlin
+val flow1 = flowOf(1, 2, 3).onEach { delay(100) }
+val flow2 = flowOf(4, 5, 6).onEach { delay(150) }
+
+merge(flow1, flow2).collect { println(it) }
+// Вывод: 1, 4, 2, 3, 5, 6 (чередуются)
+```
+
+### Практические примеры
+```kotlin
+// Комбинировать ввод пользователя с данными API
+searchQuery.combine(apiResults) { query, results ->
+    results.filter { it.matches(query) }
+}
+
+// Связать координаты с адресами
+latLng.zip(addresses) { coords, address ->
+    Location(coords, address)
+}
+
+// Объединить несколько источников данных
+merge(cacheFlow, networkFlow, databaseFlow)
+```
+
+---
 ---
 
 ## Follow-ups

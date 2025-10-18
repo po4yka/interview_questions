@@ -5,7 +5,8 @@ topic: computer-science
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - class-hierarchy
+tags:
+  - class-hierarchy
   - kotlin
   - programming-languages
   - sealed-classes

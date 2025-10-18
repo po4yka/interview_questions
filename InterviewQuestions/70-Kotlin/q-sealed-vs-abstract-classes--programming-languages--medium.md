@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - abstract
+tags:
+  - abstract
   - abstract-classes
   - kotlin
   - programming-languages

@@ -150,7 +150,139 @@ productFlavors {
 
 ## Ответ (RU)
 
-**Gradle** - инструмент автоматизации сборки для Android.
+**Gradle** — это инструмент автоматизации сборки для Android, который компилирует код, управляет зависимостями и создает APK/AAB файлы.
+
+### Структура проекта
+
+```
+MyApp/
+ build.gradle.kts          (Уровень проекта)
+ settings.gradle.kts
+ app/
+    build.gradle.kts      (Уровень модуля)
+```
+
+### Project-level build.gradle
+
+```kotlin
+plugins {
+    id("com.android.application") version "8.2.0" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.20" apply false
+}
+```
+
+### Module-level build.gradle
+
+```kotlin
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
+
+android {
+    namespace = "com.example.app"
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId = "com.example.app"
+        minSdk = 24
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.compose.ui:ui:1.5.4")
+    testImplementation("junit:junit:4.13.2")
+}
+```
+
+### Зависимости
+
+```kotlin
+// Compile + Runtime
+implementation("androidx.core:core-ktx:1.12.0")
+
+// Compile-only (не включается в APK)
+compileOnly("com.google.android.wearable:wearable:2.9.0")
+
+// API (доступно потребителям)
+api("com.squareup.retrofit2:retrofit:2.9.0")
+
+// Тестовые зависимости
+testImplementation("junit:junit:4.13.2")
+androidTestImplementation("androidx.test:core:1.5.0")
+```
+
+### Варианты сборки
+
+```kotlin
+buildTypes {
+    debug {
+        applicationIdSuffix = ".debug"
+        buildConfigField("String", "API_URL", "\"https://dev.api.com\"")
+    }
+
+    release {
+        isMinifyEnabled = true
+        buildConfigField("String", "API_URL", "\"https://api.com\"")
+    }
+}
+```
+
+### Product Flavors
+
+```kotlin
+flavorDimensions += "version"
+
+productFlavors {
+    create("free") {
+        dimension = "version"
+        applicationIdSuffix = ".free"
+    }
+
+    create("paid") {
+        dimension = "version"
+        applicationIdSuffix = ".paid"
+    }
+}
+
+// Генерирует: freeDebug, freeRelease, paidDebug, paidRelease
+```
+
+### Основные задачи Gradle
+
+```bash
+# Собрать APK
+./gradlew assembleDebug
+./gradlew assembleRelease
+
+# Установить приложение
+./gradlew installDebug
+
+# Запустить тесты
+./gradlew test
+./gradlew connectedAndroidTest
+
+# Очистить сборку
+./gradlew clean
+
+# Показать зависимости
+./gradlew app:dependencies
+```
+
 
 ### Зависимости
 

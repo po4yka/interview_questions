@@ -290,7 +290,8 @@ class MockTest {
 
 ## Ответ (RU)
 
-Hilt предоставляет мощные возможности для тестирования с dependency injection.
+Hilt предоставляет мощные возможности для тестирования с dependency injection, позволяя легко заменять production зависимости на test doubles (mock'и, fake'и, stub'ы).
+
 
 ### @TestInstallIn для замены модулей
 

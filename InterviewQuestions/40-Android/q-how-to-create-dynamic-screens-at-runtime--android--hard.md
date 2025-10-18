@@ -363,7 +363,8 @@ class DynamicScreenActivity : AppCompatActivity() {
 
 ## Ответ (RU)
 
-Для создания динамических экранов в runtime в Android существует несколько подходов:
+Для создания динамических экранов в runtime в Android: загружать конфигурацию с сервера (JSON/XML), использовать фабрики Fragment/View, генерировать UI из описания, или использовать Jetpack Compose/RecyclerView с разными ViewType.
+
 
 ### 1. Server-Driven UI с JSON конфигурацией
 

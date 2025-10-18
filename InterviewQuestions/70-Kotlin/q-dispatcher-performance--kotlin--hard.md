@@ -36,14 +36,128 @@ tags: [kotlin, coroutines, difficulty/medium]
 
 ## Answer (EN)
 
-Comprehensive answer for question 140022.
 
+Dispatcher performance involves choosing the right dispatcher for the task and configuring thread pools appropriately.
+
+### Dispatcher Types
+
+**Dispatchers.Default**
+- CPU-intensive work
+- Thread pool size = CPU cores
+```kotlin
+withContext(Dispatchers.Default) {
+    computeIntensiveOperation()
+}
+```
+
+**Dispatchers.IO**
+- I/O operations (network, files)
+- Thread pool: 64 threads (configurable)
+```kotlin
+withContext(Dispatchers.IO) {
+    downloadFile()
+}
+```
+
+**Dispatchers.Main**
+- UI updates
+- Single thread
+```kotlin
+withContext(Dispatchers.Main) {
+    updateUI()
+}
+```
+
+### Performance Patterns
+
+**1. Limited Parallelism**
+```kotlin
+val limited = Dispatchers.IO.limitedParallelism(4)
+```
+
+**2. Custom Dispatchers**
+```kotlin
+val custom = Executors.newFixedThreadPool(8)
+    .asCoroutineDispatcher()
+```
+
+**3. Avoid Excessive Switching**
+```kotlin
+// Bad
+withContext(Dispatchers.IO) { op1() }
+withContext(Dispatchers.IO) { op2() }
+
+// Good
+withContext(Dispatchers.IO) {
+    op1()
+    op2()
+}
+```
+
+---
 ---
 
 ## Ответ (RU)
 
-Полный ответ на вопрос 140022.
 
+Производительность Dispatcher включает выбор правильного dispatcher для задачи и соответствующую настройку пулов потоков.
+
+### Типы Dispatcher
+
+**Dispatchers.Default**
+- CPU-интенсивная работа
+- Размер пула потоков = ядра CPU
+```kotlin
+withContext(Dispatchers.Default) {
+    computeIntensiveOperation()
+}
+```
+
+**Dispatchers.IO**
+- I/O операции (сеть, файлы)
+- Пул потоков: 64 потока (настраиваемо)
+```kotlin
+withContext(Dispatchers.IO) {
+    downloadFile()
+}
+```
+
+**Dispatchers.Main**
+- Обновления UI
+- Один поток
+```kotlin
+withContext(Dispatchers.Main) {
+    updateUI()
+}
+```
+
+### Паттерны производительности
+
+**1. Ограниченный параллелизм**
+```kotlin
+val limited = Dispatchers.IO.limitedParallelism(4)
+```
+
+**2. Кастомные Dispatchers**
+```kotlin
+val custom = Executors.newFixedThreadPool(8)
+    .asCoroutineDispatcher()
+```
+
+**3. Избегать чрезмерного переключения**
+```kotlin
+// Плохо
+withContext(Dispatchers.IO) { op1() }
+withContext(Dispatchers.IO) { op2() }
+
+// Хорошо
+withContext(Dispatchers.IO) {
+    op1()
+    op2()
+}
+```
+
+---
 ---
 
 ## Follow-ups

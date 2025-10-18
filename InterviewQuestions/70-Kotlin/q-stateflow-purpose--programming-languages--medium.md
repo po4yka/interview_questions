@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - stateflow
   - reactive

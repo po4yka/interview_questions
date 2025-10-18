@@ -5,7 +5,8 @@ topic: computer-science
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - class-design
+tags:
+  - class-design
   - classes
   - final
   - inheritance

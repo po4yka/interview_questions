@@ -452,7 +452,8 @@ class ComprehensiveActivity : AppCompatActivity() {
 - Avoid relying solely on `onSaveInstanceState()` (limited data size)
 
 ## Ответ (RU)
-Android предоставляет несколько механизмов для сохранения и восстановления состояния Activity.
+Android предоставляет несколько механизмов для сохранения и восстановления состояния Activity при изменениях конфигурации (например, поворот экрана) и завершении процесса. Выбор зависит от типа данных, их размера и требований к постоянству.
+
 
 ### 1. onSaveInstanceState() / onRestoreInstanceState()
 

@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
   - kotlin
 ---
 # В чем отличие между job и supervisor job

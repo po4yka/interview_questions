@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - collections
+tags:
+  - collections
   - immutability
   - kotlin
   - programming-languages

@@ -545,11 +545,15 @@ class ManualObserver : AppCompatActivity() {
 
 
 ## Ответ (RU)
+
 # Вопрос (RU)
 В чём разница между утечкой памяти и OutOfMemoryError в Android? Как их обнаружить и исправить?
 
+
 ## Ответ (RU)
-Утечки памяти и OutOfMemoryError - связанные, но различные проблемы.
+# Вопрос (RU)
+В чём разница между утечкой памяти и OutOfMemoryError в Android? Как их обнаружить и исправить?
+
 
 #### Утечка памяти:
 

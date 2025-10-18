@@ -5,7 +5,8 @@ topic: computer-science
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - data-classes
+tags:
+  - data-classes
   - kotlin
   - null-safety
   - programming-languages

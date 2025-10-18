@@ -376,6 +376,102 @@ fun `when load fails should emit error event`() = runTest {
 
 **English**: In MVI, handle one-time events (toasts, navigation) separately from State. Use **SharedFlow** with `replay = 0` (recommended for Compose), **Channel** for simpler cases, **SingleLiveEvent** for LiveData legacy projects, or **Event wrapper** with consumed flag. State should only contain persistent UI data. Events are ephemeral and consumed once. Collect events in `LaunchedEffect` (Compose) or `repeatOnLifecycle` (Views). Test events with `turbine` or manual collection.
 
+---
+
+## Ответ (RU)
+
+### Проблема
+
+В MVI (Model-View-Intent) State должен быть immutable и содержать только UI состояние, которое может быть восстановлено. Однако некоторые события (navigation, toasts, snackbars, dialogs) не должны сохраняться в State и повторяться при пересоздании экрана (например, при повороте).
+
+**Неправильный подход** - хранение событий в State:
+```kotlin
+data class UiState(
+    val isLoading: Boolean = false,
+    val data: List<Item> = emptyList(),
+    val showSuccessToast: Boolean = false  // Проблема!
+)
+// При пересоздании Activity toast покажется снова
+```
+
+### Решение 1: SharedFlow с replay = 0 (Рекомендуется)
+
+Наиболее идиоматичный подход для Kotlin Coroutines и Jetpack Compose.
+
+**Преимущества:**
+- Поддержка нескольких подписчиков
+- Контроль над replay (кэшированием)
+- Интеграция с Flow экосистемой
+
+**Реализация:**
+- Создайте sealed class для событий
+- Используйте MutableSharedFlow<UiEvent> с replay = 0
+- Подписывайтесь через LaunchedEffect в Compose или repeatOnLifecycle в Views
+
+### Решение 2: Channel
+
+Более простой API для случаев с одним подписчиком.
+
+**Преимущества:**
+- Простота использования
+- FIFO гарантия доставки
+- Меньше boilerplate
+
+**Недостатки:**
+- Только один подписчик (suspend функция receive())
+- Меньше гибкости чем SharedFlow
+
+### Решение 3: SingleLiveEvent
+
+Для legacy проектов на LiveData.
+
+**Предупреждение:** Устаревший подход, не рекомендуется для новых проектов. Имеет проблемы с thread-safety и может терять события при множественных обсерверах.
+
+### Решение 4: Event Wrapper с consumed flag
+
+Оборачивание событий в State с флагом "consumed".
+
+**Недостатки:**
+- Больше boilerplate кода
+- Мутабельное состояние (hasBeenHandled)
+- Сложнее тестировать
+
+### Сравнение подходов
+
+| Подход | Когда использовать | Плюсы | Минусы |
+|--------|-------------------|-------|--------|
+| **SharedFlow** | Compose, современные проекты | Множественные подписчики, контроль replay | Чуть сложнее API |
+| **Channel** | Простые случаи, один подписчик | Простой API, FIFO | Только один подписчик |
+| **SingleLiveEvent** | Legacy LiveData проекты | Lifecycle-aware | Устаревший, thread-safety issues |
+| **Event Wrapper** | Простые приложения | Всё в одном State | Boilerplate, мутабельность |
+
+### Лучшие практики
+
+**1. Чёткое разделение State и Events:**
+- **State** - данные, которые нужно восстановить (данные списка, флаги загрузки)
+- **Events** - одноразовые действия (навигация, toasts, dialogs)
+
+**2. Правильный scope для подписки:**
+- В Compose: `LaunchedEffect(Unit)` для collect событий
+- В Views: `repeatOnLifecycle(Lifecycle.State.STARTED)` для избежания утечек
+
+**3. Тестирование событий:**
+- Собирайте события в список во время теста
+- Проверяйте наличие ожидаемых событий
+- Используйте `advanceUntilIdle()` для завершения корутин
+
+**4. Избегайте:**
+- Хранения одноразовых событий в State
+- Использования lifecycleScope напрямую (может терять события)
+- Множественных обсерверов для Channel
+
+### Типичные use cases
+
+- **Navigation**: Переходы между экранами
+- **Toasts/Snackbars**: Кратковременные уведомления
+- **Dialogs**: Показ модальных окон
+- **Permissions**: Запрос разрешений
+- **Analytics**: Логирование событий
 
 ---
 

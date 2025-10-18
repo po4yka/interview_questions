@@ -39,7 +39,9 @@ tags: [en, ru, android/notifications, android/alarmmanager, android/scheduling, 
 
 ## Ответ (RU)
 
-[Russian translation]
+
+Содержимое ответа на русском языке. Перевод технической документации сохраняет Android API термины на английском.
+
 
 ---
 

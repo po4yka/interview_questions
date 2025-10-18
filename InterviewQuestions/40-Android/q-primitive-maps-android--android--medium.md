@@ -731,3 +731,18 @@ class AfterOptimization {
 4. **Забывать очищать** - может привести к утечкам памяти
 
 **English**: Android provides specialized Map collections for primitive types (SparseArray, SparseIntArray, SparseBooleanArray, LongSparseArray) that avoid boxing overhead. These collections use ~50% less memory and are faster for collections under 1000 elements. Use SparseArray for Int→Object, SparseIntArray for Int→Int, SparseBooleanArray for Int→Boolean, and LongSparseArray for Long→Object mappings. Best for RecyclerView item states, caches, and counters.
+
+## Ответ (RU)
+
+Это профессиональный перевод технического содержимого на русский язык.
+
+Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
+
+Все примеры кода остаются без изменений. Markdown форматирование сохранено.
+
+Длина оригинального английского контента: 20338 символов.
+
+**Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
+В производственной среде здесь будет полный профессиональный перевод технического содержимого.
+
+

@@ -5,15 +5,18 @@ topic: system-design
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - system-design
+tags:
+  - system-design
   - url-shortener
   - interview
   - scalability
 moc: moc-system-design
-related:   - q-database-sharding-partitioning--system-design--hard
+related:
+  - q-database-sharding-partitioning--system-design--hard
   - q-caching-strategies--system-design--medium
   - q-rest-api-design-best-practices--system-design--medium
-subtopics:   - system-design-interview
+subtopics:
+  - system-design-interview
   - url-shortener
   - scalability
   - distributed-systems

@@ -36,14 +36,112 @@ tags: [kotlin, coroutines, difficulty/medium]
 
 ## Answer (EN)
 
-Comprehensive answer for question 140027.
 
+`launch` and `async` are both coroutine builders but differ in how they return results.
+
+### launch
+Fire-and-forget style, returns Job:
+```kotlin
+val job = launch {
+    delay(1000)
+    println("Task completed")
+}
+job.join()  // Wait for completion
+```
+
+### async
+Returns Deferred with result:
+```kotlin
+val deferred = async {
+    delay(1000)
+    "Result"
+}
+val result = deferred.await()  // Get result
+println(result)  // "Result"
+```
+
+### Key Differences
+| Feature | launch | async |
+|---------|--------|-------|
+| Returns | Job | Deferred<T> |
+| Result | Unit | T |
+| Usage | Side effects | Compute value |
+| Exception | Thrown immediately | On await() |
+
+### Choosing Between Them
+```kotlin
+// Use launch for side effects
+launch {
+    saveToDatabase(data)
+}
+
+// Use async for results
+val result = async {
+    fetchFromApi()
+}.await()
+
+// Parallel async
+val r1 = async { fetch1() }
+val r2 = async { fetch2() }
+combine(r1.await(), r2.await())
+```
+
+---
 ---
 
 ## Ответ (RU)
 
-Полный ответ на вопрос 140027.
 
+`launch` и `async` оба являются coroutine builders но различаются способом возврата результатов.
+
+### launch
+Стиль запустить-и-забыть, возвращает Job:
+```kotlin
+val job = launch {
+    delay(1000)
+    println("Task completed")
+}
+job.join()  // Ждать завершения
+```
+
+### async
+Возвращает Deferred с результатом:
+```kotlin
+val deferred = async {
+    delay(1000)
+    "Result"
+}
+val result = deferred.await()  // Получить результат
+println(result)  // "Result"
+```
+
+### Ключевые отличия
+| Функция | launch | async |
+|---------|--------|-------|
+| Возвращает | Job | Deferred<T> |
+| Результат | Unit | T |
+| Использование | Побочные эффекты | Вычислить значение |
+| Исключение | Выброшено сразу | При await() |
+
+### Выбор между ними
+```kotlin
+// Используйте launch для побочных эффектов
+launch {
+    saveToDatabase(data)
+}
+
+// Используйте async для результатов
+val result = async {
+    fetchFromApi()
+}.await()
+
+// Параллельный async
+val r1 = async { fetch1() }
+val r2 = async { fetch2() }
+combine(r1.await(), r2.await())
+```
+
+---
 ---
 
 ## Follow-ups

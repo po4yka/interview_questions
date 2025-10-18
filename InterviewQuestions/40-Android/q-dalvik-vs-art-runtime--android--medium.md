@@ -474,13 +474,13 @@ adb shell dumpsys package com.example.app | grep -A 1 "Dexopt state"
 
 ## Ответ (RU)
 
-# Вопрос (RU)
+Dalvik и ART (Android Runtime) — это среды выполнения для запуска Android-приложений. ART заменил Dalvik начиная с Android 5.0 (Lollipop) для улучшения производительности, времени работы батареи и опыта разработчиков.
 
-В чём различия между Dalvik и ART runtime в Android? Почему Android мигрировал с Dalvik на ART?
 
 ## Ответ (RU)
 
-Dalvik и ART (Android Runtime) - это среды выполнения для запуска Android-приложений. ART заменил Dalvik начиная с Android 5.0 (Lollipop).
+Dalvik и ART (Android Runtime) — это среды выполнения для запуска Android-приложений. ART заменил Dalvik начиная с Android 5.0 (Lollipop) для улучшения производительности, времени работы батареи и опыта разработчиков.
+
 
 #### Dalvik (Legacy):
 

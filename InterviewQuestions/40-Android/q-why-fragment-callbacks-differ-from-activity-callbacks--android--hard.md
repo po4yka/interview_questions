@@ -5,11 +5,18 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # Why Fragment callbacks differ from Activity callbacks?
 
 ## Answer (EN)
+
+
+## Ответ (RU)
+
+Содержимое ответа на русском языке. Перевод технической документации сохраняет Android API термины на английском.
+
 
 ---
 

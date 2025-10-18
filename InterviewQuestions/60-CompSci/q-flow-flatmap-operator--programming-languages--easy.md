@@ -5,7 +5,8 @@ topic: computer-science
 difficulty: easy
 status: draft
 created: 2025-10-15
-tags: - coroutines
+tags:
+  - coroutines
   - flatmap
   - flow
   - kotlin

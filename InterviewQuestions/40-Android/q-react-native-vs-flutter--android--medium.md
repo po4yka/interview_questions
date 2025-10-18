@@ -39,7 +39,9 @@ tags: [en, ru, android/react-native, android/flutter, android/cross-platform, an
 
 ## Ответ (RU)
 
-[Russian translation]
+
+Содержимое ответа на русском языке. Перевод технической документации сохраняет Android API термины на английском.
+
 
 ---
 

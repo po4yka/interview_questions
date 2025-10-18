@@ -5,7 +5,8 @@ topic: computer-science
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - compilation
+tags:
+  - compilation
   - delegates
   - delegation
   - kotlin

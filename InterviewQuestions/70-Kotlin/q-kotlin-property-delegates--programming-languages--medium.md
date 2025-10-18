@@ -5,7 +5,8 @@ topic: computer-science
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - delegates
+tags:
+  - delegates
   - kotlin
   - programming-languages
   - property-delegates
