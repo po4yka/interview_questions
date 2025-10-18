@@ -5,7 +5,7 @@ topic: kotlin
 difficulty: easy
 status: draft
 moc: moc-kotlin
-related: [q-prohibit-object-creation--programming-languages--easy, q-structured-concurrency-kotlin--kotlin--medium, q-kotlin-lateinit--programming-languages--medium]
+related: [q-prohibit-object-creation--programming-languages--easy, q-structured-concurrency-kotlin--kotlin--medium, q-kotlin-lateinit--programming-languages--medium, q-data-class-detailed--kotlin--medium]
 created: 2025-10-15
 tags:
   - kotlin

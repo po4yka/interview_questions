@@ -18,11 +18,11 @@ source_note: Comprehensive Kotlin Android StateFlow SharedFlow Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-viewmodel-coroutines-lifecycle--kotlin--medium, q-lifecyclescope-viewmodelscope--kotlin--medium, q-flow-basics--kotlin--medium]
+related: [q-viewmodel-coroutines-lifecycle--kotlin--medium, q-lifecyclescope-viewmodelscope--kotlin--medium, q-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-10-18
 
 tags: [kotlin, coroutines, android, stateflow, sharedflow, flow, difficulty/medium]
 ---

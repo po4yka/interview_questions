@@ -18,11 +18,11 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-flow-basics--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
+related: [q-kotlin-flow-basics--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-10-18
 
 tags: [kotlin, stateflow, sharedflow, flow, hot-flows, coroutines, difficulty/medium]
 ---

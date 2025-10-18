@@ -18,11 +18,11 @@ source_note: Phase 1 Coroutines & Flow Advanced Questions
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-flow-basics--kotlin--medium, q-coroutine-exception-handling--kotlin--medium]
+related: [q-kotlin-flow-basics--kotlin--medium, q-coroutine-exception-handling--kotlin--medium, q-catch-operator-flow--kotlin--medium]
 
 # Timestamps
 created: 2025-10-11
-updated: 2025-10-11
+updated: 2025-10-18
 
 tags: [kotlin, flow, exceptions, error-handling, retry, catch, difficulty/medium]
 ---

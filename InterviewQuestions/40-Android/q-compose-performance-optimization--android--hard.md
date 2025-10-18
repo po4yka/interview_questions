@@ -18,11 +18,11 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-what-do-you-know-about-modifications--android--medium, q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy, q-how-to-pass-data-from-one-activity-to-another--android--medium]
+related: [q-what-do-you-know-about-modifications--android--medium, q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy, q-how-to-pass-data-from-one-activity-to-another--android--medium, q-recomposition-compose--android--medium]
 
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-10-18
 
 tags: [en, ru, android/jetpack-compose, android/performance, android/optimization, android/recomposition, difficulty/hard]
 ---

@@ -18,11 +18,11 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-flowon-operator-context-switching--kotlin--hard, q-repeatonlifecycle-android--kotlin--medium, q-statein-sharein-flow--kotlin--medium]
+related: [q-flowon-operator-context-switching--kotlin--hard, q-repeatonlifecycle-android--kotlin--medium, q-statein-sharein-flow--kotlin--medium, q-kotlin-constructors--kotlin--easy]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-10-18
 
 tags: [kotlin, init-block, constructors, initialization, difficulty/easy]
 ---
