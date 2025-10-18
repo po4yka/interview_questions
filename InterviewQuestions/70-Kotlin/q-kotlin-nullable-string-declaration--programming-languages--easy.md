@@ -51,5 +51,26 @@ nonNullable = null  // Compilation error!
 
 ## Ответ (RU)
 
-В Kotlin для объявления переменной типа nullable String используется оператор ?. после типа данных. Например: var name: String? = null
+В Kotlin для объявления переменной типа nullable String используется **оператор `?`** после типа данных.
+
+**Синтаксис:**
+```kotlin
+var name: String? = null
+```
+
+**Ключевые моменты:**
+- `String` - ненулевой тип (не может быть null)
+- `String?` - nullable тип (может быть null)
+- Без `?` компилятор не позволит присвоить null
+
+**Примеры:**
+```kotlin
+// Nullable переменные
+var nullable: String? = "Hello"
+nullable = null  // OK
+
+// Ненулевые переменные
+var nonNullable: String = "Hello"
+nonNullable = null  // Ошибка компиляции!
+```
 

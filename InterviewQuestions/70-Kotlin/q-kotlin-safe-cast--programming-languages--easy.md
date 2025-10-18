@@ -62,5 +62,36 @@ val result = any as? String ?: "default"
 
 ## Ответ (RU)
 
-Используйте оператор приведения типов `as?`, который возвращает null вместо выброса исключения, если приведение невозможно. Например: val stringValue = anyVariable as? String
+Используйте **оператор безопасного приведения `as?`**, который возвращает null вместо выброса исключения, если приведение типа невозможно.
+
+**Синтаксис:**
+```kotlin
+val stringValue = anyVariable as? String
+```
+
+**Сравнение:**
+
+| Оператор | Успех | Неудача |
+|----------|---------|---------|
+| `as` | Возвращает приведённое значение | Выбрасывает `ClassCastException` |
+| `as?` | Возвращает приведённое значение | Возвращает `null` |
+
+**Примеры:**
+```kotlin
+val any: Any = "Hello"
+val str1 = any as? String      // "Hello" (успех)
+val str2 = any as String        // "Hello" (успех)
+
+val number: Any = 42
+val str3 = number as? String    // null (безопасно)
+val str4 = number as String     // ClassCastException!
+
+// С оператором Elvis
+val result = any as? String ?: "default"
+```
+
+**Когда использовать:**
+- Когда вы не уверены, что приведение будет успешным
+- Когда вы хотите обработать неудачу изящно
+- Чтобы избежать блоков try-catch для приведения типов
 

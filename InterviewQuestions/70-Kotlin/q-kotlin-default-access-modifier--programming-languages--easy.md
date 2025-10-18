@@ -70,5 +70,45 @@ val counter = 0  // public property
 
 ## Ответ (RU)
 
-Модификатор доступа по умолчанию в Kotlin — это `public`. Если не указан модификатор видимости, объявление является публичным.
+Модификатор доступа по умолчанию в Kotlin — это **`public`**. Если не указан модификатор видимости, объявление является публичным.
+
+**Модификаторы доступа в Kotlin:**
+
+```kotlin
+// Public (по умолчанию) - виден везде
+class PublicClass  // То же что: public class PublicClass
+
+// Private - виден только в том же файле (для top-level) или классе
+private class PrivateClass
+
+// Internal - виден в том же модуле
+internal class InternalClass
+
+// Protected - виден в классе и подклассах (только для членов класса)
+open class Base {
+    protected val protectedProperty = 42
+}
+```
+
+**Сравнение с Java:**
+
+| Модификатор | Kotlin по умолчанию | Java по умолчанию |
+|----------|----------------|---------------|
+| Top-level классы | `public` | package-private |
+| Члены класса | `public` | package-private |
+
+**Пример:**
+```kotlin
+// Всё public по умолчанию:
+class User(val name: String)  // public класс, public свойство
+
+fun greet() = "Hello"  // public функция
+
+val counter = 0  // public свойство
+```
+
+**Ключевые отличия от Java:**
+- Kotlin: `public` по умолчанию
+- Java: package-private (без модификатора) по умолчанию
+- В Kotlin есть `internal` (видимость в модуле) вместо package-private
 

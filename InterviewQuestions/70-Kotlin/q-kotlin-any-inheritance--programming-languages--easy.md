@@ -67,5 +67,41 @@ Any (root)
 
 ## Ответ (RU)
 
-В Kotlin все классы по умолчанию наследуются от класса Any. Этот класс является корневым (базовым) классом для всех других классов в Kotlin. Он аналогичен классу Object в Java.
+В Kotlin **все классы по умолчанию наследуются от класса `Any`**. Этот класс является корневым (базовым) классом для всех других классов в Kotlin. Он аналогичен классу `Object` в Java.
+
+**Ключевые моменты:**
+
+- **Any** является супертипом всех ненулевых типов
+- Аналогичен классу `Object` в Java
+- Каждый класс неявно расширяет `Any` (даже без явного объявления)
+
+**Any предоставляет три метода:**
+```kotlin
+open class Any {
+    public open operator fun equals(other: Any?): Boolean
+    public open fun hashCode(): Int
+    public open fun toString(): String
+}
+```
+
+**Пример:**
+```kotlin
+class MyClass  // Неявно расширяет Any
+
+val obj: Any = MyClass()  // Можно присвоить Any
+obj.toString()            // Методы из Any доступны
+obj.equals(obj)
+obj.hashCode()
+```
+
+**Иерархия типов:**
+```
+Any (корень)
+ String
+ Int
+ List<T>
+ YourCustomClass
+```
+
+**Примечание**: Для nullable типов корнем является `Any?`
 
