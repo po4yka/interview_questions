@@ -4,7 +4,7 @@ title: "Strategy Pattern / Strategy Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-mvp-pattern--architecture-patterns--medium, q-launch-vs-async-await--programming-languages--medium, q-mvi-pattern--architecture-patterns--hard]
 created: 2025-10-15
 tags:

@@ -4,7 +4,7 @@ title: "Runtime Generic Access / Доступ к дженерикам во вр�
 topic: computer-science
 difficulty: hard
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-what-is-garbage-in-gc--programming-languages--easy, q-os-fundamentals-concepts--computer-science--hard, q-coroutine-dispatchers--programming-languages--medium]
 created: 2025-10-15
 tags:

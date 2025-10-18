@@ -4,7 +4,7 @@ title: MVI Pattern (Model-View-Intent)
 topic: architecture-patterns
 difficulty: hard
 status: draft
-moc: moc-compSci
+moc: moc-cs
 created: 2025-10-15
 tags: []
 related: [q-reference-types-protect-from-deletion--programming-languages--easy, q-priorityqueue-vs-deque--programming-languages--easy, q-xml-acronym--programming-languages--easy]

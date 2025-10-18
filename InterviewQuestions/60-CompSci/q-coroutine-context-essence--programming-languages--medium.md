@@ -4,7 +4,7 @@ title: "Coroutine Context Essence / Суть Coroutine Context"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-extension-properties--programming-languages--medium, q-abstract-factory-pattern--design-patterns--medium, q-proxy-pattern--design-patterns--medium]
 created: 2025-10-15
 tags:

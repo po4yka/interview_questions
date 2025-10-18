@@ -4,7 +4,7 @@ title: "Find Object Without References / Поиск объектов без сс
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-mvi-pattern--architecture-patterns--hard, q-interpreter-pattern--design-patterns--hard, q-xml-acronym--programming-languages--easy]
 created: 2025-10-15
 tags:

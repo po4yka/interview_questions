@@ -4,7 +4,7 @@ title: "State Pattern / State Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-bridge-pattern--design-patterns--hard, q-hot-vs-cold-flows--programming-languages--medium, q-sharedflow-vs-stateflow--programming-languages--easy]
 created: 2025-10-15
 tags:
@@ -447,59 +447,52 @@ interface State {
 
 ### Определение
 
-
-The state pattern is a behavioral software design pattern that **allows an object to alter its behavior when its internal state changes**. This pattern encapsulates varying behavior for the same object based on its internal state, providing a cleaner way for an object to change its behavior at runtime without resorting to conditional statements.
+Паттерн State (Состояние) - это поведенческий паттерн проектирования, который **позволяет объекту изменять свое поведение при изменении внутреннего состояния**. Этот паттерн инкапсулирует различное поведение одного и того же объекта на основе его внутреннего состояния, предоставляя более чистый способ изменения поведения объекта во время выполнения без использования условных операторов.
 
 ### Проблемы, которые решает
 
+Паттерн State решает две основные проблемы:
 
-The state pattern is set to solve two main problems:
-
-1. **An object should change its behavior when its internal state changes**
-2. **State-specific behavior should be defined independently** - Adding new states should not affect the behavior of existing states
+1. **Объект должен изменять свое поведение при изменении внутреннего состояния**
+2. **Поведение, специфичное для состояния, должно быть определено независимо** - Добавление новых состояний не должно влиять на поведение существующих состояний
 
 ### Почему это проблема?
 
-
-Implementing state-specific behavior directly within a class is inflexible because it commits the class to a particular behavior and makes it impossible to add a new state or change the behavior of an existing state later without changing the class.
+Реализация поведения, специфичного для состояния, непосредственно в классе негибка, поскольку привязывает класс к конкретному поведению и делает невозможным добавление нового состояния или изменение поведения существующего состояния позже без изменения класса.
 
 ### Решение
 
+Паттерн описывает два решения:
 
-The pattern describes two solutions:
+1. **Определить отдельные объекты состояний**, которые инкапсулируют поведение, специфичное для каждого состояния
+2. **Класс делегирует поведение, специфичное для состояния**, своему текущему объекту состояния вместо прямой реализации
 
-1. **Define separate (state) objects** that encapsulate state-specific behavior for each state
-2. **A class delegates state-specific behavior** to its current state object instead of implementing it directly
-
-This makes a class independent of how state-specific behavior is implemented. New states can be added by defining new state classes. A class can change its behavior at run-time by changing its current state object.
+Это делает класс независимым от того, как реализовано поведение, специфичное для состояния. Новые состояния могут быть добавлены путем определения новых классов состояний. Класс может изменять свое поведение во время выполнения, изменяя свой текущий объект состояния.
 
 ### Объяснение
 
+**Пояснение**:
 
-**Explanation**:
-
-- **State interface** defines methods for handling state-specific behavior
-- **Concrete states** implement specific behavior for each state
-- **Context** maintains reference to current state and delegates behavior
-- **State transitions** happen within state classes themselves
-- **Android**: UI states with sealed classes, media player states, order processing
+- **Интерфейс State** определяет методы для обработки поведения, специфичного для состояния
+- **Конкретные состояния** реализуют специфичное поведение для каждого состояния
+- **Context (Контекст)** поддерживает ссылку на текущее состояние и делегирует поведение
+- **Переходы между состояниями** происходят внутри самих классов состояний
+- **Android**: UI состояния с sealed классами, состояния медиа-плеера, обработка заказов
 
 ### Pros (Преимущества)
 
-
-1. **Single Responsibility** - Each state is in separate class
-2. **Open/Closed Principle** - Easy to add new states
-3. **Eliminates conditionals** - No complex if-else chains
-4. **Cleaner code** - State-specific behavior is localized
-5. **Easy to understand** - Clear state transitions
+1. **Единственная ответственность** - Каждое состояние в отдельном классе
+2. **Принцип открытости/закрытости** - Легко добавлять новые состояния
+3. **Устраняет условные операторы** - Нет сложных цепочек if-else
+4. **Чище код** - Поведение, специфичное для состояния, локализовано
+5. **Легко понять** - Четкие переходы между состояниями
 
 ### Cons (Недостатки)
 
-
-1. **Overkill for simple states** - Too complex for few states
-2. **Many classes** - Each state needs a class
-3. **State coupling** - States need to know about each other
-4. **Complexity** - Can be hard to track state transitions
+1. **Избыточность для простых состояний** - Слишком сложно для нескольких состояний
+2. **Много классов** - Каждое состояние требует класс
+3. **Связанность состояний** - Состояния должны знать друг о друге
+4. **Сложность** - Может быть трудно отслеживать переходы между состояниями
 
 
 ---

@@ -4,7 +4,7 @@ title: "Flow Flatmap Operator / Оператор flatMap для Flow"
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-what-is-flow--programming-languages--medium, q-singleton-pattern--design-patterns--easy, q-priorityqueue-vs-deque--programming-languages--easy]
 created: 2025-10-15
 tags:

@@ -4,7 +4,7 @@ title: "What Is Job Object / Что такое объект Job"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-concurrency-fundamentals--computer-science--hard, q-data-structures-algorithms--computer-science--hard, q-decorator-pattern--design-patterns--medium]
 created: 2025-10-15
 tags:

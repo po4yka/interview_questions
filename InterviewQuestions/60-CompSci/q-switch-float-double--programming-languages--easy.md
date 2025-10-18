@@ -4,7 +4,7 @@ title: "Switch Float Double / Switch с float и double"
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-solid-principles--software-design--medium, q-delegates-java-compilation--programming-languages--hard, q-hashmap-how-it-works--programming-languages--medium]
 created: 2025-10-15
 tags:

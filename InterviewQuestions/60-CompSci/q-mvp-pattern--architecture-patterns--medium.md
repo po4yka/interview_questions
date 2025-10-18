@@ -4,7 +4,7 @@ title: MVP Pattern (Model-View-Presenter)
 topic: architecture-patterns
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 created: 2025-10-15
 tags: []
 related: [q-observer-pattern--design-patterns--medium, q-inheritance-vs-composition--oop--medium, q-java-access-modifiers--programming-languages--medium]

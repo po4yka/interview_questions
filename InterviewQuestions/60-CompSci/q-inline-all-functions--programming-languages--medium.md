@@ -4,7 +4,7 @@ title: "Inline All Functions / Inline All Функции"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-bridge-pattern--design-patterns--hard, q-runtime-generic-access--programming-languages--hard, q-java-access-modifiers--programming-languages--medium]
 created: 2025-10-15
 tags:

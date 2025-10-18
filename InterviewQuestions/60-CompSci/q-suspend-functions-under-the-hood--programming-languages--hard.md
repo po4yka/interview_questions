@@ -4,7 +4,7 @@ title: "Suspend Functions Under The Hood"
 topic: computer-science
 difficulty: hard
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-suspend-function-return-type-after-compilation--programming-languages--hard, q-where-to-call-suspend-functions--programming-languages--medium, q-synchronized-blocks-with-coroutines--programming-languages--medium]
 created: 2025-10-15
 tags:

@@ -4,7 +4,7 @@ title: Prototype Pattern
 topic: design-patterns
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 created: 2025-10-15
 tags: []
 related: [q-java-access-modifiers--programming-languages--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium, q-extension-properties--programming-languages--medium]

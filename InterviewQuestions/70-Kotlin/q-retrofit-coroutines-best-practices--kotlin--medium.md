@@ -2379,7 +2379,7 @@ fun onCreate() {
 <a name="обзор-ru"></a>
 ## Обзор
 
-Retrofit с Kotlin корутинами предоставляет современный, эффективный способ обработки сетевых операций в Android приложениях.
+Retrofit с Kotlin корутинами предоставляет современный, эффективный способ обработки сетевых операций в Android приложениях. Это руководство охватывает лучшие практики интеграции Retrofit с корутинами.
 
 **Ключевые преимущества:**
 - Естественный синтаксис async/await с suspend функциями
@@ -2407,10 +2407,656 @@ interface ApiService {
     //  Старый подход: Call<T> (не нужен с корутинами)
     @GET("users/{id}")
     fun getUserOld(@Path("id") userId: String): Call<User>
+
+    //  Множественные suspend операции
+    @POST("users")
+    suspend fun createUser(@Body user: UserRequest): User
+
+    @PUT("users/{id}")
+    suspend fun updateUser(@Path("id") id: String, @Body user: UserRequest): User
+
+    @DELETE("users/{id}")
+    suspend fun deleteUser(@Path("id") id: String): Unit
+
+    //  Query параметры
+    @GET("users")
+    suspend fun getUsers(
+        @Query("page") page: Int,
+        @Query("limit") limit: Int
+    ): List<User>
+
+    //  Заголовки
+    @GET("profile")
+    suspend fun getProfile(@Header("Authorization") token: String): Profile
 }
 ```
 
-[Остальное содержимое на русском языке следует той же структуре...]
+### Настройка Retrofit для корутин
+
+```kotlin
+object RetrofitClient {
+    private const val BASE_URL = "https://api.example.com/"
+
+    private val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        })
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .build()
+
+    val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        // Не нужен CallAdapter с suspend функциями
+        .build()
+
+    val apiService: ApiService = retrofit.create(ApiService::class.java)
+}
+```
+
+---
+
+<a name="типы-ответов-responset-vs-t"></a>
+## Типы ответов: Response&lt;T&gt; vs T
+
+### Когда использовать прямой тип T
+
+Используйте прямой тип `T`, когда вас интересует только случай успеха:
+
+```kotlin
+interface ApiService {
+    @GET("users/{id}")
+    suspend fun getUser(@Path("id") userId: String): User
+}
+
+// Использование
+suspend fun loadUser(userId: String): Result<User> {
+    return try {
+        val user = apiService.getUser(userId)
+        Result.success(user)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+}
+```
+
+**Плюсы:**
+- Более чистый API
+- Меньше шаблонного кода
+- Автоматическая ошибка при статусе не 2xx
+
+**Минусы:**
+- Нет доступа к заголовкам
+- Нет доступа к коду статуса
+- Выбрасывает исключение при ошибке
+
+### Когда использовать Response&lt;T&gt;
+
+Используйте `Response<T>`, когда нужны заголовки, коды статуса или пользовательская обработка ошибок:
+
+```kotlin
+interface ApiService {
+    @GET("users/{id}")
+    suspend fun getUserWithResponse(@Path("id") userId: String): Response<User>
+}
+
+// Использование
+suspend fun loadUserWithDetails(userId: String): UserResult {
+    val response = apiService.getUserWithResponse(userId)
+
+    return when {
+        response.isSuccessful -> {
+            val user = response.body()!!
+            val etag = response.headers()["ETag"]
+            UserResult.Success(user, etag)
+        }
+        response.code() == 404 -> {
+            UserResult.NotFound
+        }
+        response.code() == 429 -> {
+            val retryAfter = response.headers()["Retry-After"]?.toIntOrNull()
+            UserResult.RateLimited(retryAfter)
+        }
+        else -> {
+            val errorBody = response.errorBody()?.string()
+            UserResult.Error(response.code(), errorBody)
+        }
+    }
+}
+
+sealed class UserResult {
+    data class Success(val user: User, val etag: String?) : UserResult()
+    object NotFound : UserResult()
+    data class RateLimited(val retryAfterSeconds: Int?) : UserResult()
+    data class Error(val code: Int, val message: String?) : UserResult()
+}
+```
+
+---
+
+<a name="стратегии-обработки-ошибок-ru"></a>
+## Стратегии обработки ошибок
+
+### Стратегия 1: Try-Catch (Простая)
+
+```kotlin
+class UserRepository(private val api: ApiService) {
+    suspend fun getUser(userId: String): User? {
+        return try {
+            api.getUser(userId)
+        } catch (e: IOException) {
+            // Ошибка сети
+            Log.e("UserRepository", "Ошибка сети", e)
+            null
+        } catch (e: HttpException) {
+            // HTTP ошибка (4xx, 5xx)
+            Log.e("UserRepository", "HTTP ошибка: ${e.code()}", e)
+            null
+        } catch (e: Exception) {
+            // Другие ошибки
+            Log.e("UserRepository", "Неизвестная ошибка", e)
+            null
+        }
+    }
+}
+```
+
+### Стратегия 2: Result&lt;T&gt; Sealed Class
+
+```kotlin
+sealed class Result<out T> {
+    data class Success<T>(val data: T) : Result<T>()
+    data class Error(val exception: Throwable) : Result<Nothing>()
+    object Loading : Result<Nothing>()
+}
+
+class UserRepository(private val api: ApiService) {
+    suspend fun getUser(userId: String): Result<User> {
+        return try {
+            val user = api.getUser(userId)
+            Result.Success(user)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+}
+
+// Использование в ViewModel
+class UserViewModel(private val repository: UserRepository) : ViewModel() {
+    private val _userState = MutableStateFlow<Result<User>>(Result.Loading)
+    val userState: StateFlow<Result<User>> = _userState.asStateFlow()
+
+    fun loadUser(userId: String) {
+        viewModelScope.launch {
+            _userState.value = Result.Loading
+            _userState.value = repository.getUser(userId)
+        }
+    }
+}
+```
+
+### Стратегия 3: NetworkResponse&lt;T, E&gt; (Продвинутая)
+
+```kotlin
+sealed class NetworkResponse<out T, out E> {
+    data class Success<T>(val data: T) : NetworkResponse<T, Nothing>()
+    data class ApiError<E>(val body: E, val code: Int) : NetworkResponse<Nothing, E>()
+    data class NetworkError(val error: IOException) : NetworkResponse<Nothing, Nothing>()
+    data class UnknownError(val error: Throwable) : NetworkResponse<Nothing, Nothing>()
+}
+
+// Модели ответов с ошибками
+data class ApiErrorResponse(
+    val message: String,
+    val code: String?,
+    val details: Map<String, String>?
+)
+
+// Функция-расширение для оборачивания API вызовов
+suspend fun <T, E> safeApiCall(
+    errorClass: Class<E>,
+    apiCall: suspend () -> Response<T>
+): NetworkResponse<T, E> {
+    return try {
+        val response = apiCall()
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body != null) {
+                NetworkResponse.Success(body)
+            } else {
+                NetworkResponse.UnknownError(NullPointerException("Тело ответа null"))
+            }
+        } else {
+            val errorBody = response.errorBody()?.string()
+            val errorResponse = try {
+                Gson().fromJson(errorBody, errorClass)
+            } catch (e: Exception) {
+                null
+            }
+            if (errorResponse != null) {
+                NetworkResponse.ApiError(errorResponse, response.code())
+            } else {
+                NetworkResponse.UnknownError(Exception("Неизвестная API ошибка"))
+            }
+        }
+    } catch (e: IOException) {
+        NetworkResponse.NetworkError(e)
+    } catch (e: Exception) {
+        NetworkResponse.UnknownError(e)
+    }
+}
+
+// Использование
+class UserRepository(private val api: ApiService) {
+    suspend fun getUser(userId: String): NetworkResponse<User, ApiErrorResponse> {
+        return safeApiCall(ApiErrorResponse::class.java) {
+            api.getUserWithResponse(userId)
+        }
+    }
+}
+```
+
+---
+
+<a name="конкурентные-запросы-ru"></a>
+## Конкурентные запросы
+
+### Параллельные запросы с async/await
+
+```kotlin
+class UserRepository(private val api: ApiService) {
+    // Выполнение запросов параллельно
+    suspend fun getUserWithPosts(userId: String): Pair<User, List<Post>> = coroutineScope {
+        val userDeferred = async { api.getUser(userId) }
+        val postsDeferred = async { api.getUserPosts(userId) }
+
+        // Ожидание обоих результатов
+        val user = userDeferred.await()
+        val posts = postsDeferred.await()
+
+        user to posts
+    }
+
+    // Множественные параллельные запросы
+    suspend fun getDashboardData(): DashboardData = coroutineScope {
+        val userDeferred = async { api.getUser("me") }
+        val notificationsDeferred = async { api.getNotifications() }
+        val postsDeferred = async { api.getFeedPosts() }
+        val suggestionsDeferred = async { api.getSuggestions() }
+
+        DashboardData(
+            user = userDeferred.await(),
+            notifications = notificationsDeferred.await(),
+            posts = postsDeferred.await(),
+            suggestions = suggestionsDeferred.await()
+        )
+    }
+}
+```
+
+---
+
+<a name="тестирование-ru"></a>
+## Тестирование
+
+### Настройка MockWebServer
+
+```kotlin
+class UserRepositoryTest {
+    private lateinit var mockWebServer: MockWebServer
+    private lateinit var apiService: ApiService
+    private lateinit var repository: UserRepository
+
+    @Before
+    fun setup() {
+        mockWebServer = MockWebServer()
+        mockWebServer.start()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(mockWebServer.url("/"))
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        apiService = retrofit.create(ApiService::class.java)
+        repository = UserRepository(apiService)
+    }
+
+    @After
+    fun teardown() {
+        mockWebServer.shutdown()
+    }
+
+    @Test
+    fun `getUser возвращает пользователя при успехе`() = runTest {
+        // Подготовка
+        val mockResponse = """
+            {
+                "id": "123",
+                "name": "Иван Иванов",
+                "email": "ivan@example.com"
+            }
+        """.trimIndent()
+
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(mockResponse)
+        )
+
+        // Действие
+        val result = repository.getUser("123")
+
+        // Проверка
+        assertTrue(result is Result.Success)
+        val user = (result as Result.Success).data
+        assertEquals("123", user.id)
+        assertEquals("Иван Иванов", user.name)
+    }
+
+    @Test
+    fun `getUser возвращает ошибку при 404`() = runTest {
+        // Подготовка
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(404)
+                .setBody("{\"error\": \"Пользователь не найден\"}")
+        )
+
+        // Действие
+        val result = repository.getUser("999")
+
+        // Проверка
+        assertTrue(result is Result.Error)
+    }
+}
+```
+
+---
+
+<a name="распространенные-ошибки-ru"></a>
+## Распространенные ошибки
+
+### 1. Не повторное выбрасывание CancellationException
+
+```kotlin
+//  Неправильно
+try {
+    val user = api.getUser(id)
+} catch (e: Exception) {
+    // CancellationException поймано здесь!
+    Log.e("Error", "Ошибка", e)
+}
+
+//  Правильно
+try {
+    val user = api.getUser(id)
+} catch (e: CancellationException) {
+    throw e // Повторно выбросить отмену
+} catch (e: Exception) {
+    Log.e("Error", "Ошибка", e)
+}
+```
+
+### 2. Использование withContext(Dispatchers.IO) для Retrofit
+
+```kotlin
+//  Неправильно - Ненужное переключение диспетчера
+suspend fun getUser(id: String): User {
+    return withContext(Dispatchers.IO) {
+        api.getUser(id) // Retrofit уже использует фоновый поток
+    }
+}
+
+//  Правильно
+suspend fun getUser(id: String): User {
+    return api.getUser(id)
+}
+```
+
+### 3. Не обработка null тела ответа
+
+```kotlin
+//  Неправильно
+val response = api.getUserWithResponse(id)
+val user = response.body()!! // Может выбросить NPE!
+
+//  Правильно
+val response = api.getUserWithResponse(id)
+val user = response.body() ?: throw Exception("Пустое тело ответа")
+```
+
+### 4. Забывание закрыть тело ошибки
+
+```kotlin
+//  Неправильно - Утечка памяти
+val response = api.getUserWithResponse(id)
+if (!response.isSuccessful) {
+    val error = response.errorBody()?.string()
+    // errorBody не закрыто!
+}
+
+//  Правильно
+val response = api.getUserWithResponse(id)
+if (!response.isSuccessful) {
+    response.errorBody()?.use { errorBody ->
+        val error = errorBody.string()
+    }
+}
+```
+
+### 5. Создание множественных экземпляров Retrofit
+
+```kotlin
+//  Неправильно
+class UserRepository {
+    private fun getApi(): ApiService {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .build()
+            .create(ApiService::class.java)
+    }
+}
+
+//  Правильно - Singleton
+object RetrofitClient {
+    val api: ApiService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .build()
+            .create(ApiService::class.java)
+    }
+}
+```
+
+### 6. Не реализация правильного таймаута
+
+```kotlin
+//  Неправильно - Использование таймаутов по умолчанию (10 секунд)
+val okHttpClient = OkHttpClient.Builder().build()
+
+//  Правильно
+val okHttpClient = OkHttpClient.Builder()
+    .connectTimeout(30, TimeUnit.SECONDS)
+    .readTimeout(30, TimeUnit.SECONDS)
+    .writeTimeout(30, TimeUnit.SECONDS)
+    .build()
+```
+
+### 7. Блокирование главного потока с runBlocking
+
+```kotlin
+//  Неправильно
+fun onCreate() {
+    val user = runBlocking {
+        api.getUser("123")
+    } // Блокирует UI поток!
+}
+
+//  Правильно
+fun onCreate() {
+    lifecycleScope.launch {
+        val user = api.getUser("123")
+    }
+}
+```
+
+---
+
+## Чек-лист лучших практик
+
+### Делать:
+
+1. **Используйте suspend функции вместо Call&lt;T&gt;**
+   ```kotlin
+   //  Хорошо
+   @GET("users/{id}")
+   suspend fun getUser(@Path("id") id: String): User
+
+   //  Избегайте
+   @GET("users/{id}")
+   fun getUser(@Path("id") id: String): Call<User>
+   ```
+
+2. **Правильно обрабатывайте отмену**
+   ```kotlin
+   //  Хорошо
+   try {
+       val user = api.getUser(id)
+   } catch (e: CancellationException) {
+       throw e // Повторно выбросить отмену
+   } catch (e: Exception) {
+       // Обработать другие ошибки
+   }
+   ```
+
+3. **Используйте подходящий диспетчер**
+   ```kotlin
+   //  Хорошо - Retrofit уже использует фоновый поток
+   suspend fun getUser(id: String): User {
+       return api.getUser(id) // Не нужен withContext
+   }
+
+   //  Хорошо - Только для операций с базой данных
+   suspend fun getUserFromDb(id: String): User {
+       return withContext(Dispatchers.IO) {
+           userDao.getUser(id)
+       }
+   }
+   ```
+
+4. **Реализуйте правильную конфигурацию таймаута**
+   ```kotlin
+   //  Хорошо
+   val okHttpClient = OkHttpClient.Builder()
+       .connectTimeout(30, TimeUnit.SECONDS)
+       .readTimeout(30, TimeUnit.SECONDS)
+       .writeTimeout(30, TimeUnit.SECONDS)
+       .build()
+   ```
+
+5. **Используйте структурированный параллелизм для параллельных запросов**
+   ```kotlin
+   //  Хорошо
+   suspend fun loadData() = coroutineScope {
+       val user = async { api.getUser() }
+       val posts = async { api.getPosts() }
+       Data(user.await(), posts.await())
+   }
+   ```
+
+6. **Реализуйте правильную обработку ошибок**
+   ```kotlin
+   //  Хорошо
+   sealed class Result<out T> {
+       data class Success<T>(val data: T) : Result<T>()
+       data class Error(val exception: Throwable) : Result<Nothing>()
+   }
+   ```
+
+7. **Кешируйте с Room для оффлайн поддержки**
+   ```kotlin
+   //  Хорошо
+   suspend fun getUser(id: String) = flow {
+       emit(userDao.getUser(id)) // Отправить закешированное
+       val fresh = api.getUser(id)
+       userDao.insert(fresh) // Обновить кеш
+   }
+   ```
+
+8. **Используйте Flow для реактивных потоков**
+   ```kotlin
+   //  Хорошо
+   fun observeUser(id: String): Flow<User> =
+       userDao.observeUser(id)
+   ```
+
+### Не делать:
+
+1. **Не используйте Call&lt;T&gt; с корутинами**
+   ```kotlin
+   //  Плохо
+   val call = api.getUser(id)
+   call.enqueue(object : Callback<User> { ... })
+   ```
+
+2. **Не игнорируйте отмену**
+   ```kotlin
+   //  Плохо
+   try {
+       val user = api.getUser(id)
+   } catch (e: Exception) {
+       // CancellationException тоже поймано здесь!
+   }
+   ```
+
+3. **Не используйте GlobalScope**
+   ```kotlin
+   //  Плохо
+   GlobalScope.launch {
+       val user = api.getUser(id)
+   }
+
+   //  Хорошо
+   viewModelScope.launch {
+       val user = api.getUser(id)
+   }
+   ```
+
+4. **Не используйте runBlocking в production коде**
+   ```kotlin
+   //  Плохо
+   fun getUser(id: String): User {
+       return runBlocking {
+           api.getUser(id)
+       }
+   }
+   ```
+
+5. **Не забывайте обрабатывать ошибки**
+   ```kotlin
+   //  Плохо
+   suspend fun getUser(id: String): User {
+       return api.getUser(id) // Что если ошибка?
+   }
+
+   //  Хорошо
+   suspend fun getUser(id: String): Result<User> {
+       return try {
+           Result.Success(api.getUser(id))
+       } catch (e: Exception) {
+           Result.Error(e)
+       }
+   }
+   ```
+
+---
+
+**Краткое резюме:**
+
+Retrofit с Kotlin корутинами предоставляет мощный, современный способ обработки сетевых операций. Используйте suspend функции вместо Call&lt;T&gt;, правильно обрабатывайте ошибки с sealed классами, реализуйте кеширование с Room для оффлайн поддержки, и всегда помните о правильной обработке отмены корутин. Структурированный параллелизм с async/await позволяет эффективно выполнять параллельные запросы. Для лучших результатов используйте OkHttp interceptors для логирования, аутентификации и обновления токенов.
 
 ---
 

@@ -4,7 +4,7 @@ title: "Template Method Pattern / Template Method Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-nothing-class-purpose--programming-languages--medium, q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-inheritance-vs-composition--oop--medium]
 created: 2025-10-15
 tags:

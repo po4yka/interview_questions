@@ -4,7 +4,7 @@ title: "Hot Vs Cold Flows"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-how-suspend-function-detects-suspension--programming-languages--hard, q-inheritance-vs-composition--oop--medium, q-iterator-concept--programming-languages--easy]
 created: 2025-10-15
 tags:

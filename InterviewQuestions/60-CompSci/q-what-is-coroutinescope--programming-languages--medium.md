@@ -4,7 +4,7 @@ title: "What Is Coroutinescope / Что такое CoroutineScope"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-template-method-pattern--design-patterns--medium, q-memento-pattern--design-patterns--medium, q-hot-vs-cold-flows--programming-languages--medium]
 created: 2025-10-15
 tags:

@@ -4,7 +4,7 @@ title: "How To Create Suspend Function / Как создать suspend функ�
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-java-access-modifiers--programming-languages--medium, q-mvp-pattern--architecture-patterns--medium, q-iterator-order-guarantee--programming-languages--medium]
 created: 2025-10-15
 tags:

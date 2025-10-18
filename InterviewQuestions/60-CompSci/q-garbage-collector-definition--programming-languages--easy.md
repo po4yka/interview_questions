@@ -4,7 +4,7 @@ title: "Garbage Collector Definition / Определение Garbage Collector"
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-iterator-order-guarantee--programming-languages--medium, q-service-locator-pattern--design-patterns--medium, q-abstract-class-purpose--programming-languages--medium]
 created: 2025-10-15
 tags:

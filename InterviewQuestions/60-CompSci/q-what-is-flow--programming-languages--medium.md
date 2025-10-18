@@ -4,7 +4,7 @@ title: "What Is Flow / Что такое Flow"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-priorityqueue-vs-deque--programming-languages--easy, q-flow-flatmap-operator--programming-languages--easy, q-where-to-call-suspend-functions--programming-languages--medium]
 created: 2025-10-15
 tags:

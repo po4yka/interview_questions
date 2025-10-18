@@ -4,7 +4,7 @@ title: Service Locator Pattern
 topic: design-patterns
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 created: 2025-10-15
 tags: []
 related: [q-flow-flatmap-operator--programming-languages--easy, q-builder-pattern--design-patterns--medium, q-what-happens-to-unneeded-objects--programming-languages--easy]

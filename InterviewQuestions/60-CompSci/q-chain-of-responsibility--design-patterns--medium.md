@@ -4,7 +4,7 @@ title: "Chain Of Responsibility / Цепочка обязанностей"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-equals-hashcode-purpose--programming-languages--hard, q-java-object-comparison--programming-languages--easy, q-java-all-classes-inherit-from-object--programming-languages--easy]
 created: 2025-10-15
 tags:
@@ -474,54 +474,48 @@ fun validate(data: UserData) = validationChain.all { it(data) }
 
 ### Определение
 
+Chain of Responsibility (Цепочка обязанностей) - это паттерн проектирования, в котором **запрос последовательно передается через цепочку потенциальных обработчиков, пока один из них не обработает запрос**. Каждый обработчик в цепочке имеет возможность либо обработать запрос, либо передать его следующему обработчику. Клиенту не нужно знать, какой обработчик фактически обработает запрос — он просто отправляет его в цепочку.
 
-Chain of Responsibility is a design pattern in which **a request is passed sequentially through a chain of potential handlers until one of them handles the request**. Each handler in the chain has a chance to either process the request or pass it to the next handler. The client doesn't need to know which handler will actually deal with the request — it simply sends it into the chain.
-
-This pattern decouples the client from the specific receiver that performs the action, following the Open/Closed Principle by allowing new handlers to be added without modifying existing code.
+Этот паттерн отделяет клиента от конкретного получателя, выполняющего действие, следуя принципу открытости/закрытости, позволяя добавлять новые обработчики без изменения существующего кода.
 
 ### Проблемы, которые решает
 
+Какие проблемы решает паттерн Chain of Responsibility?
 
-What problems can the Chain of Responsibility design pattern solve?
-
-1. **Coupling the sender of a request to its receiver should be avoided**
-2. **It should be possible that more than one receiver can handle a request**
-3. **Implementing a request directly within the class is inflexible** - Couples the class to a particular receiver
+1. **Следует избегать связывания отправителя запроса с его получателем**
+2. **Должна быть возможность, чтобы более одного получателя могли обработать запрос**
+3. **Реализация запроса непосредственно в классе негибка** - Связывает класс с конкретным получателем
 
 ### Решение
 
+Определить **цепочку объектов-получателей**, которые имеют ответственность, в зависимости от условий во время выполнения, либо **обработать запрос, либо передать его следующему получателю** в цепочке (если он есть).
 
-Define a **chain of receiver objects** having the responsibility, depending on run-time conditions, to either **handle a request or forward it to the next receiver** on the chain (if any).
-
-This enables us to send a request to a chain of receivers without having to know which one handles the request. The request gets passed along the chain until a receiver handles the request. The sender of a request is no longer coupled to a particular receiver.
+Это позволяет нам отправлять запрос в цепочку получателей, не зная, какой из них обработает запрос. Запрос передается по цепочке, пока получатель не обработает запрос. Отправитель запроса больше не связан с конкретным получателем.
 
 ### Объяснение
 
+**Пояснение**:
 
-**Explanation**:
-
-- **Handler interface** declares methods for handling and chaining
-- **Concrete handlers** check if they can handle request, otherwise pass to next
-- **Chain** is built by linking handlers together
-- **Android**: View event handling, OkHttp interceptors, validation chains
-- Each handler can **modify** the request or **stop** the chain
+- **Интерфейс Handler** объявляет методы для обработки и построения цепочки
+- **Конкретные обработчики** проверяют, могут ли они обработать запрос, иначе передают следующему
+- **Цепочка** строится путем связывания обработчиков вместе
+- **Android**: Обработка событий View, OkHttp interceptors, цепочки валидации
+- Каждый обработчик может **изменить** запрос или **остановить** цепочку
 
 ### Pros (Преимущества)
 
-
-1. **Decoupling** - Sender doesn't need to know which handler processes request
-2. **Flexibility** - Can add/remove/reorder handlers easily
-3. **Single Responsibility** - Each handler handles one type of request
-4. **Dynamic configuration** - Chain can be modified at runtime
-5. **Open/Closed Principle** - New handlers without modifying existing code
+1. **Разделение** - Отправителю не нужно знать, какой обработчик обрабатывает запрос
+2. **Гибкость** - Легко добавлять/удалять/переупорядочивать обработчики
+3. **Единственная ответственность** - Каждый обработчик обрабатывает один тип запроса
+4. **Динамическая конфигурация** - Цепочка может быть изменена во время выполнения
+5. **Принцип открытости/закрытости** - Новые обработчики без изменения существующего кода
 
 ### Cons (Недостатки)
 
-
-1. **No guarantee of handling** - Request might not be handled at all
-2. **Performance overhead** - Request passes through multiple handlers
-3. **Debugging difficulty** - Hard to track request flow
-4. **Runtime complexity** - Dynamic chains can be hard to manage
+1. **Нет гарантии обработки** - Запрос может быть вообще не обработан
+2. **Накладные расходы производительности** - Запрос проходит через несколько обработчиков
+3. **Сложность отладки** - Трудно отследить поток запроса
+4. **Сложность во время выполнения** - Динамические цепочки могут быть трудны в управлении
 
 
 ---

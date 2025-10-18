@@ -4,7 +4,7 @@ title: "Hashmap How It Works / Как работает HashMap"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-switch-float-double--programming-languages--easy, q-how-suspend-function-detects-suspension--programming-languages--hard, q-data-sealed-classes-why--programming-languages--medium]
 created: 2025-10-15
 tags:

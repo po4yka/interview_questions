@@ -4,7 +4,7 @@ title: "What Is Garbage In Gc / Что такое мусор в GC"
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-prototype-pattern--design-patterns--medium, q-interpreter-pattern--design-patterns--hard, q-mvvm-pattern--architecture-patterns--medium]
 created: 2025-10-15
 tags:

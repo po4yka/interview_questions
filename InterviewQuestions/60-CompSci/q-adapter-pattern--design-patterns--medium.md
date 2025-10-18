@@ -4,7 +4,7 @@ title: "Adapter Pattern / Adapter Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-clean-code-principles--software-engineering--medium, q-visitor-pattern--design-patterns--hard, q-launch-vs-async-error-handling--programming-languages--medium]
 created: 2025-10-15
 tags:

@@ -4,7 +4,7 @@ title: "Abstract Class Purpose / Назначение абстрактных к�
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-hot-vs-cold-flows--programming-languages--medium, q-launch-vs-async-error-handling--programming-languages--medium, q-priorityqueue-vs-deque--programming-languages--easy]
 created: 2025-10-15
 tags:

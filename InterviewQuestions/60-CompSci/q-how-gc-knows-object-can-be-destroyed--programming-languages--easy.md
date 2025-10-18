@@ -4,7 +4,7 @@ title: "How Gc Knows Object Can Be Destroyed / Как GC знает что об�
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-what-is-job-object--programming-languages--medium, q-mediator-pattern--design-patterns--medium, q-zip-operator-parallel-requests--programming-languages--medium]
 created: 2025-10-15
 tags:

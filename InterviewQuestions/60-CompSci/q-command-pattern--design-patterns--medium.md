@@ -4,7 +4,7 @@ title: "Command Pattern / Command Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-primitive-vs-reference-types--programming-languages--easy, q-iterator-pattern--design-patterns--medium, q-reference-types-protect-from-deletion--programming-languages--easy]
 created: 2025-10-15
 tags:
@@ -393,67 +393,60 @@ class MacroCommand(private val commands: List<Command>) : Command {
 
 ### Определение
 
-
-The Command Pattern is a behavioral design pattern that **turns a request into a stand-alone object that contains all the information about the request**. This transformation allows you to parameterize methods with different requests, queue requests, log their execution, and support undo operations. It decouples the object that invokes an action from the object that performs the action.
+Паттерн Command — это поведенческий паттерн проектирования, который **превращает запрос в самостоятельный объект, содержащий всю информацию о запросе**. Эта трансформация позволяет параметризовать методы различными запросами, ставить запросы в очередь, логировать их выполнение и поддерживать операции отмены. Паттерн отделяет объект, который вызывает действие, от объекта, который его выполняет.
 
 ### Проблемы, которые решает
 
+Использование паттерна проектирования Command может решить следующие проблемы:
 
-Using the command design pattern can solve these problems:
-
-1. **Coupling the invoker of a request to a particular request should be avoided** - Hard-wired requests should be avoided
-2. **It should be possible to configure an object (that invokes a request) with a request**
-3. **Implementing a request directly into a class is inflexible** - Couples the class to a particular request at compile-time
+1. **Следует избегать связывания инициатора запроса с конкретным запросом** - жестко закодированные запросы должны быть избегнуты
+2. **Должна быть возможность конфигурировать объект (который инициирует запрос) с помощью запроса**
+3. **Реализация запроса напрямую в классе негибка** - связывает класс с конкретным запросом на этапе компиляции
 
 ### Решение
 
+Использование паттерна проектирования Command описывает следующее решение:
 
-Using the command design pattern describes the following solution:
+- Определить отдельные **объекты-команды, которые инкапсулируют запрос**
+- Класс **делегирует запрос объекту-команде** вместо прямой реализации конкретного запроса
 
-- Define separate **(command) objects that encapsulate a request**
-- A class **delegates a request to a command object** instead of implementing a particular request directly
+Это позволяет конфигурировать класс объектом-командой, который используется для выполнения запроса. Класс больше не связан с конкретным запросом и не знает, как запрос выполняется.
 
-This enables one to configure a class with a command object that is used to perform a request. The class is no longer coupled to a particular request and has no knowledge of how the request is carried out.
+### Когда особенно полезен?
 
-### When is it especially useful?
+Паттерн Command особенно полезен для:
 
-
-The Command Pattern is especially useful for:
-
-1. **Decoupling** - Decouples the object that requests an operation (invoker) from the one that performs it (receiver)
-2. **Reusability** - Commands can be reused and combined in complex scenarios
-3. **History and Undo** - Allows for history and undo features (crucial in text editors, drawing apps)
-4. **Logging** - Commands can be logged for debugging and auditing purposes
-5. **Queueing** - Commands can be queued and executed later
+1. **Разделение ответственности (Decoupling)** - отделяет объект, который запрашивает операцию (invoker), от объекта, который её выполняет (receiver)
+2. **Переиспользуемость** - команды могут быть переиспользованы и скомбинированы в сложных сценариях
+3. **История и отмена** - позволяет реализовать функции истории и отмены (критично для текстовых редакторов, графических приложений)
+4. **Логирование** - команды могут быть залогированы для отладки и аудита
+5. **Очереди** - команды могут быть поставлены в очередь и выполнены позже
 
 ### Объяснение
 
+**Пояснение**:
 
-**Explanation**:
+- **Интерфейс Command** объявляет метод `execute()`
+- **Конкретные команды** инкапсулируют действие и получателя
+- **Инициатор (Invoker)** (RemoteControl, CommandManager) выполняет команды
+- **Получатель (Receiver)** (Light, TextEditor) выполняет фактическую работу
+- **Android**: Полезен для undo/redo, очередей действий, управления транзакциями
 
-- **Command interface** declares `execute()` method
-- **Concrete commands** encapsulate action and receiver
-- **Invoker** (RemoteControl, CommandManager) executes commands
-- **Receiver** (Light, TextEditor) performs the actual work
-- **Android**: Useful for undo/redo, action queuing, transaction management
+### Преимущества
 
-### Pros (Преимущества)
+1. **Разделение ответственности** - отделяет инициатора от получателя
+2. **Переиспользуемость** - команды могут быть переиспользованы и скомбинированы
+3. **Отмена/Повтор** - легко реализовать undo/redo
+4. **Логирование** - команды могут быть залогированы для аудита
+5. **Очереди** - команды могут быть поставлены в очередь и выполнены позже
+6. **Макрокоманды** - объединение нескольких команд
 
+### Недостатки
 
-1. **Decoupling** - Separates invoker from receiver
-2. **Reusability** - Commands can be reused and combined
-3. **Undo/Redo** - Easy to implement undo/redo
-4. **Logging** - Commands can be logged for auditing
-5. **Queueing** - Commands can be queued and executed later
-6. **Macro commands** - Combine multiple commands
-
-### Cons (Недостатки)
-
-
-1. **Increased classes** - Each command needs a class
-2. **Complexity** - More complex for simple operations
-3. **Memory overhead** - Storing command history uses memory
-4. **Indirection** - Extra layer of indirection
+1. **Увеличение количества классов** - каждая команда требует отдельного класса
+2. **Сложность** - более сложно для простых операций
+3. **Накладные расходы памяти** - хранение истории команд использует память
+4. **Косвенность** - дополнительный уровень косвенности
 
 
 ---

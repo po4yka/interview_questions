@@ -4,7 +4,7 @@ title: "Where To Call Suspend Functions"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-java-access-modifiers--programming-languages--medium, q-equals-hashcode-purpose--programming-languages--hard, q-prototype-pattern--design-patterns--medium]
 created: 2025-10-15
 tags:

@@ -4,7 +4,7 @@ title: "How System Knows Weakreference Can Be Cleared / Как система з
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-data-class-special-features--programming-languages--easy, q-java-access-modifiers--programming-languages--medium, q-mvp-pattern--architecture-patterns--medium]
 created: 2025-10-15
 tags:

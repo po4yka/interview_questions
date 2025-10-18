@@ -4,7 +4,7 @@ title: "Launch Vs Async Await"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-visitor-pattern--design-patterns--hard, q-iterator-concept--programming-languages--easy, q-hot-vs-cold-flows--programming-languages--medium]
 created: 2025-10-15
 tags:

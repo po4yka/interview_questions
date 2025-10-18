@@ -854,6 +854,535 @@ interface DataStore {
 
 **Вопрос:** Каковы четыре столпа ООП? Как работают инкапсуляция, наследование, полиморфизм и абстракция? Когда использовать композицию вместо наследования? Какие распространённые ошибки ООП?
 
+### Подробный ответ
+
+---
+
+### ЧЕТЫРЕ СТОЛПА ООП
+
+```
+1. ИНКАПСУЛЯЦИЯ
+   - Связывание данных и методов
+   - Скрытие внутренних деталей
+   - Контроль доступа (private/public)
+
+2. НАСЛЕДОВАНИЕ
+   - Создание новых классов из существующих
+   - Отношение "IS-A" (ЯВЛЯЕТСЯ)
+   - Переиспользование кода
+
+3. ПОЛИМОРФИЗМ
+   - Множество форм
+   - Одинаковый интерфейс, разные реализации
+   - Переопределение/перегрузка методов
+
+4. АБСТРАКЦИЯ
+   - Скрытие сложности
+   - Показ только существенных характеристик
+   - Интерфейсы и абстрактные классы
+```
+
+---
+
+### 1. ИНКАПСУЛЯЦИЯ
+
+**Определение: Связывание данных и методов, которые работают с этими данными**
+
+```kotlin
+// ❌ Плохо: Нет инкапсуляции
+class BankAccountBad {
+    var balance: Double = 0.0  // Прямой доступ
+
+    fun deposit(amount: Double) {
+        balance += amount
+    }
+}
+
+// Проблема:
+val account = BankAccountBad()
+account.balance = -1000.0  // ❌ Можно установить некорректное состояние!
+
+// ✅ Хорошо: Инкапсуляция с валидацией
+class BankAccount(initialBalance: Double) {
+    private var _balance: Double = initialBalance  // Приватное
+        set(value) {
+            require(value >= 0) { "Баланс не может быть отрицательным" }
+            field = value
+        }
+
+    val balance: Double  // Публичный доступ только для чтения
+        get() = _balance
+
+    fun deposit(amount: Double) {
+        require(amount > 0) { "Сумма депозита должна быть положительной" }
+        _balance += amount
+    }
+
+    fun withdraw(amount: Double): Boolean {
+        if (amount <= 0) return false
+        if (amount > _balance) return false
+
+        _balance -= amount
+        return true
+    }
+}
+
+// Использование:
+val account = BankAccount(1000.0)
+// account._balance = -100.0  // ❌ Ошибка компиляции
+account.deposit(500.0)  // ✅ Контролируемый доступ
+println(account.balance)  // ✅ Только чтение
+```
+
+**Преимущества инкапсуляции:**
+```
+✓ Контроль доступа к данным
+✓ Валидация изменений состояния
+✓ Скрытие деталей реализации
+✓ Легко изменять внутреннюю реализацию без влияния на пользователей
+✓ Поддержка инвариантов
+```
+
+**Пример для Android:**
+```kotlin
+// ViewModel с инкапсуляцией
+class UserViewModel : ViewModel() {
+    // Приватное изменяемое состояние
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+
+    // Публичное неизменяемое состояние
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    // Приватный изменяемый список
+    private val _users = MutableLiveData<List<User>>()
+
+    // Публичный неизменяемый список
+    val users: LiveData<List<User>> = _users
+
+    // Контролируемая модификация
+    fun loadUsers() {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            try {
+                val users = repository.getUsers()
+                _users.value = users
+                _uiState.value = UiState.Success
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message)
+            }
+        }
+    }
+}
+```
+
+---
+
+### 2. НАСЛЕДОВАНИЕ
+
+**Определение: Создание нового класса из существующего класса**
+
+```kotlin
+// Базовый класс
+open class Animal(val name: String) {
+    open fun makeSound() {
+        println("$name издает звук")
+    }
+
+    fun sleep() {
+        println("$name спит")
+    }
+}
+
+// Производные классы
+class Dog(name: String) : Animal(name) {
+    override fun makeSound() {
+        println("$name лает: Гав!")
+    }
+
+    fun fetch() {
+        println("$name приносит мяч")
+    }
+}
+
+class Cat(name: String) : Animal(name) {
+    override fun makeSound() {
+        println("$name мяукает: Мяу!")
+    }
+
+    fun climb() {
+        println("$name залезает на дерево")
+    }
+}
+
+// Использование:
+val dog = Dog("Рекс")
+dog.makeSound()  // Рекс лает: Гав!
+dog.sleep()      // Рекс спит (унаследовано)
+dog.fetch()      // Рекс приносит мяч (специфично для Dog)
+
+val cat = Cat("Вискас")
+cat.makeSound()  // Вискас мяукает: Мяу!
+cat.sleep()      // Вискас спит (унаследовано)
+cat.climb()      // Вискас залезает на дерево (специфично для Cat)
+```
+
+**Типы наследования:**
+
+**1. Одиночное наследование:**
+```kotlin
+open class Vehicle
+class Car : Vehicle()  // Car наследует от Vehicle
+```
+
+**2. Многоуровневое наследование:**
+```kotlin
+open class Vehicle
+open class Car : Vehicle()
+class SportsCar : Car()  // SportsCar → Car → Vehicle
+```
+
+**3. Иерархическое наследование:**
+```kotlin
+open class Vehicle
+class Car : Vehicle()
+class Bike : Vehicle()
+class Truck : Vehicle()  // Множество классов наследуют от Vehicle
+```
+
+---
+
+### 3. ПОЛИМОРФИЗМ
+
+**Определение: Одинаковый интерфейс, разные реализации**
+
+**A. Переопределение методов (Полиморфизм времени выполнения)**
+
+```kotlin
+open class Shape {
+    open fun area(): Double {
+        return 0.0
+    }
+
+    open fun draw() {
+        println("Рисование фигуры")
+    }
+}
+
+class Circle(val radius: Double) : Shape() {
+    override fun area(): Double {
+        return Math.PI * radius * radius
+    }
+
+    override fun draw() {
+        println("Рисование круга с радиусом $radius")
+    }
+}
+
+class Rectangle(val width: Double, val height: Double) : Shape() {
+    override fun area(): Double {
+        return width * height
+    }
+
+    override fun draw() {
+        println("Рисование прямоугольника ${width}x${height}")
+    }
+}
+
+// Полиморфизм в действии:
+fun printShapeInfo(shape: Shape) {  // Принимает любую Shape
+    shape.draw()
+    println("Площадь: ${shape.area()}")
+}
+
+// Использование:
+val shapes: List<Shape> = listOf(
+    Circle(5.0),
+    Rectangle(4.0, 6.0),
+    Circle(3.0)
+)
+
+shapes.forEach { shape ->
+    printShapeInfo(shape)  // Разное поведение для каждого типа
+}
+```
+
+**B. Перегрузка методов (Полиморфизм времени компиляции)**
+
+```kotlin
+class Calculator {
+    // Одинаковое имя, разные параметры
+    fun add(a: Int, b: Int): Int {
+        return a + b
+    }
+
+    fun add(a: Double, b: Double): Double {
+        return a + b
+    }
+
+    fun add(a: Int, b: Int, c: Int): Int {
+        return a + b + c
+    }
+
+    fun add(numbers: List<Int>): Int {
+        return numbers.sum()
+    }
+}
+
+// Использование:
+val calc = Calculator()
+println(calc.add(1, 2))              // Вызывает Int версию → 3
+println(calc.add(1.5, 2.5))          // Вызывает Double версию → 4.0
+println(calc.add(1, 2, 3))           // Вызывает версию с 3 параметрами → 6
+println(calc.add(listOf(1, 2, 3, 4))) // Вызывает List версию → 10
+```
+
+---
+
+### 4. АБСТРАКЦИЯ
+
+**Определение: Скрытие сложности, показ только существенных характеристик**
+
+**A. Абстрактные классы**
+
+```kotlin
+abstract class Employee(val name: String, val id: String) {
+    // Абстрактный метод (должен быть реализован)
+    abstract fun calculateSalary(): Double
+
+    // Абстрактное свойство
+    abstract val department: String
+
+    // Конкретный метод (можно переопределить)
+    open fun clockIn() {
+        println("$name отметился в ${System.currentTimeMillis()}")
+    }
+
+    // Конкретный метод (нельзя переопределить - не open)
+    fun getId(): String = id
+}
+
+class FullTimeEmployee(
+    name: String,
+    id: String,
+    private val annualSalary: Double
+) : Employee(name, id) {
+    override val department: String = "Инженерный"
+
+    override fun calculateSalary(): Double {
+        return annualSalary / 12  // Месячная зарплата
+    }
+}
+
+class Contractor(
+    name: String,
+    id: String,
+    private val hourlyRate: Double,
+    private val hoursWorked: Double
+) : Employee(name, id) {
+    override val department: String = "Контракт"
+
+    override fun calculateSalary(): Double {
+        return hourlyRate * hoursWorked
+    }
+
+    override fun clockIn() {
+        super.clockIn()
+        println("$name - подрядчик")
+    }
+}
+```
+
+**B. Интерфейсы**
+
+```kotlin
+interface Drawable {
+    fun draw()
+    fun erase() {  // Реализация по умолчанию
+        println("Стирание...")
+    }
+}
+
+interface Clickable {
+    fun onClick()
+    fun onDoubleClick() {
+        println("Двойной клик")  // Реализация по умолчанию
+    }
+}
+
+// Класс может реализовывать несколько интерфейсов
+class Button : Drawable, Clickable {
+    override fun draw() {
+        println("Рисование кнопки")
+    }
+
+    override fun onClick() {
+        println("Кнопка нажата")
+    }
+
+    // Использует реализацию по умолчанию для erase() и onDoubleClick()
+}
+```
+
+**Интерфейс vs Абстрактный класс:**
+```
+Интерфейс:
+✓ Множественное наследование
+✓ Нет состояния (свойства должны быть абстрактными)
+✓ Все методы абстрактные (если нет реализации по умолчанию)
+✓ Используется для отношений "CAN-DO" (МОЖЕТ ДЕЛАТЬ)
+
+Абстрактный класс:
+✓ Только одиночное наследование
+✓ Может иметь состояние (свойства со значениями)
+✓ Может содержать абстрактные и конкретные методы
+✓ Используется для отношений "IS-A" (ЯВЛЯЕТСЯ) с общим кодом
+```
+
+---
+
+### КОМПОЗИЦИЯ ВМЕСТО НАСЛЕДОВАНИЯ
+
+**Предпочитайте композицию наследованию для большей гибкости**
+
+```kotlin
+// ❌ Подход с наследованием (жесткий)
+open class Vehicle {
+    open fun start() { println("Запуск транспорта") }
+}
+
+class Car : Vehicle() {
+    override fun start() {
+        println("Запуск автомобильного двигателя")
+    }
+
+    fun drive() { println("Езда на автомобиле") }
+}
+
+class ElectricCar : Car() {  // Проблема: ElectricCar вынужден наследовать Car
+    override fun start() {
+        println("Запуск электромотора")  // Отличается от car
+    }
+
+    // Что если ElectricCar нужно другое поведение?
+    // Иерархия наследования становится сложной
+}
+
+// ✅ Подход с композицией (гибкий)
+interface Engine {
+    fun start()
+}
+
+class GasEngine : Engine {
+    override fun start() {
+        println("Запуск бензинового двигателя")
+    }
+}
+
+class ElectricMotor : Engine {
+    override fun start() {
+        println("Запуск электромотора")
+    }
+}
+
+class FlexibleCar(private val engine: Engine) {  // Композиция
+    fun start() {
+        engine.start()
+    }
+
+    fun drive() {
+        println("Езда на автомобиле")
+    }
+}
+
+// Использование:
+val gasCar = FlexibleCar(GasEngine())
+gasCar.start()  // Запуск бензинового двигателя
+
+val electricCar = FlexibleCar(ElectricMotor())
+electricCar.start()  // Запуск электромотора
+
+// Легко добавить новые типы двигателей без изменения Car
+class HybridEngine : Engine {
+    override fun start() {
+        println("Запуск гибридного двигателя")
+    }
+}
+
+val hybridCar = FlexibleCar(HybridEngine())
+```
+
+---
+
+### РАСПРОСТРАНЕННЫЕ ОШИБКИ ООП
+
+**1. Божественные объекты (God Objects)**
+```kotlin
+// ❌ Плохо: Класс делает все
+class UserManager {
+    fun createUser() { }
+    fun deleteUser() { }
+    fun validateUser() { }
+    fun authenticateUser() { }
+    fun sendEmail() { }
+    fun logActivity() { }
+    fun generateReport() { }
+    fun processPayment() { }
+    // ... еще 50 методов
+}
+
+// ✅ Хорошо: Единственная ответственность
+class UserService {
+    fun createUser() { }
+    fun deleteUser() { }
+}
+
+class UserValidator {
+    fun validate(user: User): Boolean { }
+}
+
+class AuthenticationService {
+    fun authenticate(credentials: Credentials): Boolean { }
+}
+
+class EmailService {
+    fun sendEmail(to: String, subject: String, body: String) { }
+}
+```
+
+**2. Глубокие иерархии наследования**
+```kotlin
+// ❌ Плохо: Слишком глубоко
+open class A
+open class B : A()
+open class C : B()
+open class D : C()
+open class E : D()  // Слишком глубоко, сложно понимать
+
+// ✅ Хорошо: Мелко, используйте композицию
+interface Behavior1
+interface Behavior2
+interface Behavior3
+
+class MyClass : Behavior1, Behavior2, Behavior3
+```
+
+**3. Протекающие абстракции**
+```kotlin
+// ❌ Плохо: Абстракция раскрывает детали реализации
+interface DataStore {
+    fun save(data: String)
+    fun getSQLConnection(): Connection  // ❌ Раскрывает SQL реализацию!
+}
+
+// ✅ Хорошо: Чистая абстракция
+interface DataStore {
+    fun save(data: String)
+    fun load(): String
+}
+```
+
+---
+
 ### Ключевые выводы
 
 1. **Инкапсуляция** - связывание данных + методов, контроль доступа
@@ -864,7 +1393,7 @@ interface DataStore {
 6. **Интерфейсы** для множественного наследования, отношения CAN-DO
 7. **Абстрактные классы** для IS-A с общим кодом
 8. **Избегайте глубокого наследования** - предпочитайте плоские иерархии
-9. **Single Responsibility** - каждый класс делает одно
+9. **Единственная ответственность** - каждый класс делает одно
 10. **Программируйте к интерфейсам** - зависьте от абстракций
 
 ## Follow-ups

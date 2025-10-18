@@ -4,7 +4,7 @@ title: "Data Class Special Features / Специальные возможнос�
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-zip-operator-parallel-requests--programming-languages--medium, q-coroutine-context-essence--programming-languages--medium, q-garbage-collector-definition--programming-languages--easy]
 created: 2025-10-15
 tags:

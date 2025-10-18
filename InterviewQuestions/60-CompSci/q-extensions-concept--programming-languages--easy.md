@@ -4,7 +4,7 @@ title: "Extensions Concept / Концепция расширений"
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-inheritance-composition-aggregation--oop--medium, q-sealed-classes-limitations--programming-languages--medium, q-reference-types-criteria--programming-languages--medium]
 created: 2025-10-15
 tags:

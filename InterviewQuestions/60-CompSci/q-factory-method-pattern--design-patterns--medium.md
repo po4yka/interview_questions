@@ -4,7 +4,7 @@ title: "Factory Method Pattern / Factory Method Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-reference-types-criteria--programming-languages--medium, q-how-suspend-function-detects-suspension--programming-languages--hard, q-strategy-pattern--design-patterns--medium]
 created: 2025-10-15
 tags:

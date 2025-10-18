@@ -4,7 +4,7 @@ title: "Launch Vs Async Error Handling / Launch против Async Error Обр�
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-concurrency-fundamentals--computer-science--hard, q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-job-object--programming-languages--medium]
 created: 2025-10-15
 tags:

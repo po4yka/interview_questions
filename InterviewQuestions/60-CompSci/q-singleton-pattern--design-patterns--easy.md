@@ -4,7 +4,7 @@ title: "Singleton Pattern / Singleton Паттерн"
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-garbage-collector-definition--programming-languages--easy, q-error-handling-in-coroutines--programming-languages--medium, q-how-gc-knows-object-can-be-destroyed--programming-languages--easy]
 created: 2025-10-15
 tags:

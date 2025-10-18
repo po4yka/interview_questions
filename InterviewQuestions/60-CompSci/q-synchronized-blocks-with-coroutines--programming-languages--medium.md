@@ -4,7 +4,7 @@ title: "Synchronized Blocks With Coroutines / Синхронизированны
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-java-lambda-type--programming-languages--easy, q-sealed-vs-enum-classes--programming-languages--medium, q-proxy-pattern--design-patterns--medium]
 created: 2025-10-15
 tags:

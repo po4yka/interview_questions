@@ -4,7 +4,7 @@ title: "Composite Pattern / Composite Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-coroutine-dispatchers--programming-languages--medium, q-data-class-special-features--programming-languages--easy, q-design-patterns-fundamentals--software-engineering--hard]
 created: 2025-10-15
 tags:

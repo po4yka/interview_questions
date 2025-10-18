@@ -1074,7 +1074,685 @@ class MyCoroutineWorker(
 }
 ```
 
-*(Продолжение следует той же структуре с полными примерами синхронизации данных, загрузки файлов, периодической очистки, тестирования и best practices на русском языке)*
+#### 2. Сравнение типов Worker
+
+**CoroutineWorker vs Worker vs RxWorker:**
+
+```kotlin
+// 1. Worker (традиционный блокирующий)
+class BlockingWorker(context: Context, params: WorkerParameters)
+    : Worker(context, params) {
+
+    // Выполняется в фоновом потоке, но блокирует
+    override fun doWork(): Result {
+        Thread.sleep(1000) // Блокирующий вызов
+        return Result.success()
+    }
+}
+
+// 2. CoroutineWorker (на основе корутин)
+class CoroutineBasedWorker(context: Context, params: WorkerParameters)
+    : CoroutineWorker(context, params) {
+
+    // Suspend функция - неблокирующая
+    override suspend fun doWork(): Result {
+        delay(1000) // Неблокирующая приостановка
+        return Result.success()
+    }
+}
+
+// 3. RxWorker (на основе RxJava)
+class RxBasedWorker(context: Context, params: WorkerParameters)
+    : RxWorker(context, params) {
+
+    // Возвращает Single<Result>
+    override fun createWork(): Single<Result> {
+        return Single.just(Result.success())
+            .delay(1, TimeUnit.SECONDS)
+    }
+}
+```
+
+**Таблица сравнения:**
+
+| Функция | Worker | CoroutineWorker | RxWorker |
+|---------|--------|-----------------|----------|
+| Выполнение | Блокирующий поток | Suspend (неблокирующий) | Реактивный поток |
+| Отмена | Ручная | Автоматическая (Job) | Disposable |
+| API | Синхронный | Корутины | RxJava |
+| Тестирование | Простое | TestDispatcher | TestScheduler |
+| Современность | Нет | Да | Устаревший |
+| Лучше для | Простой блокирующий I/O | Современные Kotlin приложения | Существующий RxJava код |
+
+#### 3. Когда использовать WorkManager vs прямые корутины
+
+**Матрица решений:**
+
+```kotlin
+//  ИСПОЛЬЗУЙТЕ WorkManager + CoroutineWorker когда:
+
+// 1. Работа должна пережить смерть процесса
+class DataSyncWorker : CoroutineWorker {
+    override suspend fun doWork(): Result {
+        // Синхронизация продолжится даже если приложение убито
+        syncDataWithServer()
+        return Result.success()
+    }
+}
+
+// 2. Нужно гарантированное выполнение (даже после перезагрузки)
+val workRequest = OneTimeWorkRequestBuilder<DataSyncWorker>()
+    .setBackoffCriteria(
+        BackoffPolicy.EXPONENTIAL,
+        WorkRequest.MIN_BACKOFF_MILLIS,
+        TimeUnit.MILLISECONDS
+    )
+    .build()
+
+// 3. Нужны ограничения (сеть, батарея и т.д.)
+val constrainedWork = OneTimeWorkRequestBuilder<UploadWorker>()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED) // Только WiFi
+            .setRequiresCharging(true)
+            .build()
+    )
+    .build()
+
+// 4. Периодическая работа
+val periodicWork = PeriodicWorkRequestBuilder<CleanupWorker>(
+    repeatInterval = 1,
+    repeatIntervalTimeUnit = TimeUnit.DAYS
+).build()
+
+//  НЕ используйте WorkManager когда:
+
+// 1. Нужно немедленное выполнение (используйте обычные корутины)
+viewModelScope.launch {
+    loadUserProfile() // Немедленно, привязано к жизненному циклу UI
+}
+
+// 2. Работа привязана к жизненному циклу UI
+lifecycleScope.launch {
+    updateUI() // Должно быть отменено когда UI уничтожено
+}
+
+// 3. Нужны обновления в реальном времени
+fun observeMessages() = channelFlow {
+    // Обмен сообщениями в реальном времени - не подходит для WorkManager
+    websocket.collect { message ->
+        send(message)
+    }
+}
+```
+
+**Когда использовать каждый:**
+
+| Сценарий | Решение | Причина |
+|----------|----------|--------|
+| Загрузка файла в фоне | WorkManager | Переживает смерть процесса |
+| Загрузка данных для экрана | ViewModel + корутина | Привязано к жизненному циклу |
+| Периодическая очистка | WorkManager | Запланированное выполнение |
+| Чат в реальном времени | Корутина + Flow | Нужны немедленные обновления |
+| Миграция базы данных | WorkManager | Длительная, гарантированная |
+| API вызов по клику кнопки | ViewModel + корутина | Немедленно, отменяемо |
+
+#### 4. Production пример: Data Sync Worker
+
+**Полная реализация синхронизации данных:**
+
+```kotlin
+import android.content.Context
+import androidx.work.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
+
+class DataSyncWorker(
+    private val context: Context,
+    private val params: WorkerParameters
+) : CoroutineWorker(context, params) {
+
+    companion object {
+        const val KEY_SYNC_TYPE = "sync_type"
+        const val KEY_USER_ID = "user_id"
+        const val KEY_PROGRESS = "progress"
+        const val TAG_SYNC = "data_sync"
+
+        fun scheduleSyncWork(
+            context: Context,
+            syncType: String,
+            userId: String
+        ): UUID {
+            val inputData = workDataOf(
+                KEY_SYNC_TYPE to syncType,
+                KEY_USER_ID to userId
+            )
+
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresBatteryNotLow(true)
+                .build()
+
+            val syncRequest = OneTimeWorkRequestBuilder<DataSyncWorker>()
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .setBackoffCriteria(
+                    BackoffPolicy.EXPONENTIAL,
+                    WorkRequest.MIN_BACKOFF_MILLIS,
+                    TimeUnit.MILLISECONDS
+                )
+                .addTag(TAG_SYNC)
+                .build()
+
+            WorkManager.getInstance(context).enqueueUniqueWork(
+                "sync_$userId",
+                ExistingWorkPolicy.REPLACE,
+                syncRequest
+            )
+
+            return syncRequest.id
+        }
+    }
+
+    override suspend fun doWork(): Result {
+        val syncType = inputData.getString(KEY_SYNC_TYPE) ?: return Result.failure()
+        val userId = inputData.getString(KEY_USER_ID) ?: return Result.failure()
+
+        return try {
+            // Показать foreground уведомление для длительной работы
+            setForeground(createForegroundInfo())
+
+            // Выполнить синхронизацию с обновлениями прогресса
+            performSync(syncType, userId)
+
+            Result.success()
+        } catch (e: Exception) {
+            if (runAttemptCount < 3) {
+                // Повторить с экспоненциальной задержкой
+                Result.retry()
+            } else {
+                // Превышено максимальное количество попыток
+                Result.failure(
+                    workDataOf("error" to e.message)
+                )
+            }
+        }
+    }
+
+    private suspend fun performSync(syncType: String, userId: String) {
+        val repository = DataRepository() // Получить из DI в реальном приложении
+
+        when (syncType) {
+            "full" -> syncFullData(repository, userId)
+            "incremental" -> syncIncrementalData(repository, userId)
+            else -> throw IllegalArgumentException("Неизвестный тип синхронизации: $syncType")
+        }
+    }
+
+    private suspend fun syncFullData(repository: DataRepository, userId: String) {
+        val steps = listOf("users", "posts", "comments", "media")
+
+        steps.forEachIndexed { index, step ->
+            // Проверить отменена ли работа
+            if (isStopped) {
+                throw CancellationException("Работа отменена")
+            }
+
+            // Обновить прогресс
+            setProgress(
+                workDataOf(
+                    KEY_PROGRESS to ((index + 1) * 100 / steps.size)
+                )
+            )
+
+            // Синхронизировать конкретный тип данных
+            when (step) {
+                "users" -> repository.syncUsers(userId)
+                "posts" -> repository.syncPosts(userId)
+                "comments" -> repository.syncComments(userId)
+                "media" -> repository.syncMedia(userId)
+            }
+        }
+    }
+
+    private suspend fun syncIncrementalData(repository: DataRepository, userId: String) {
+        val lastSyncTime = repository.getLastSyncTime(userId)
+        repository.syncChangesSince(userId, lastSyncTime)
+
+        // Обновить время последней синхронизации
+        repository.updateLastSyncTime(userId, System.currentTimeMillis())
+    }
+
+    private fun createForegroundInfo(): ForegroundInfo {
+        val notification = NotificationCompat.Builder(context, "sync_channel")
+            .setContentTitle("Синхронизация данных")
+            .setContentText("Синхронизация ваших данных в фоне")
+            .setSmallIcon(R.drawable.ic_sync)
+            .setOngoing(true)
+            .build()
+
+        return ForegroundInfo(NOTIFICATION_ID, notification)
+    }
+
+    private companion object {
+        const val NOTIFICATION_ID = 1001
+    }
+}
+```
+
+#### 5. Worker загрузки файлов с прогрессом
+
+**Полная реализация загрузки файлов:**
+
+```kotlin
+import android.content.Context
+import android.net.Uri
+import androidx.work.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.*
+import java.io.File
+import java.io.IOException
+
+class FileUploadWorker(
+    context: Context,
+    params: WorkerParameters
+) : CoroutineWorker(context, params) {
+
+    companion object {
+        const val KEY_FILE_URI = "file_uri"
+        const val KEY_UPLOAD_URL = "upload_url"
+        const val KEY_PROGRESS = "progress"
+
+        fun uploadFile(
+            context: Context,
+            fileUri: Uri,
+            uploadUrl: String
+        ): UUID {
+            val inputData = workDataOf(
+                KEY_FILE_URI to fileUri.toString(),
+                KEY_UPLOAD_URL to uploadUrl
+            )
+
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.UNMETERED) // Только WiFi
+                .build()
+
+            val uploadRequest = OneTimeWorkRequestBuilder<FileUploadWorker>()
+                .setInputData(inputData)
+                .setConstraints(constraints)
+                .build()
+
+            WorkManager.getInstance(context).enqueue(uploadRequest)
+
+            return uploadRequest.id
+        }
+    }
+
+    override suspend fun doWork(): Result {
+        val fileUriString = inputData.getString(KEY_FILE_URI)
+            ?: return Result.failure()
+        val uploadUrl = inputData.getString(KEY_UPLOAD_URL)
+            ?: return Result.failure()
+
+        return try {
+            val fileUri = Uri.parse(fileUriString)
+            val file = getFileFromUri(fileUri)
+
+            // Установить как foreground для длительных загрузок
+            setForeground(createForegroundInfo())
+
+            // Загрузить файл с прогрессом
+            uploadFileWithProgress(file, uploadUrl)
+
+            Result.success(
+                workDataOf("uploaded_file" to file.name)
+            )
+        } catch (e: IOException) {
+            if (runAttemptCount < 3) {
+                Result.retry()
+            } else {
+                Result.failure(
+                    workDataOf("error" to e.message)
+                )
+            }
+        }
+    }
+
+    private suspend fun uploadFileWithProgress(
+        file: File,
+        uploadUrl: String
+    ) = withContext(Dispatchers.IO) {
+        // Логика загрузки с отслеживанием прогресса
+        val fileSize = file.length()
+        var uploadedBytes = 0L
+
+        // Симуляция загрузки
+        while (uploadedBytes < fileSize) {
+            if (isStopped) {
+                throw IOException("Загрузка отменена")
+            }
+
+            uploadedBytes += 8192
+            val progress = (uploadedBytes * 100 / fileSize).toInt()
+
+            setProgressAsync(
+                workDataOf(
+                    KEY_PROGRESS to progress
+                )
+            )
+
+            delay(100) // Симуляция загрузки
+        }
+    }
+
+    private fun getFileFromUri(uri: Uri): File {
+        // В реальном приложении скопировать content:// URI в кеш файл
+        return File(uri.path!!)
+    }
+
+    private fun createForegroundInfo(): ForegroundInfo {
+        val notification = NotificationCompat.Builder(applicationContext, "upload_channel")
+            .setContentTitle("Загрузка файла")
+            .setContentText("Загрузка в процессе")
+            .setSmallIcon(R.drawable.ic_upload)
+            .setProgress(100, 0, false)
+            .setOngoing(true)
+            .build()
+
+        return ForegroundInfo(NOTIFICATION_ID, notification)
+    }
+
+    private companion object {
+        const val NOTIFICATION_ID = 1002
+    }
+}
+```
+
+#### 6. Периодический Worker очистки
+
+**Периодическая работа с задачами обслуживания:**
+
+```kotlin
+import android.content.Context
+import androidx.work.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.util.concurrent.TimeUnit
+
+class CleanupWorker(
+    context: Context,
+    params: WorkerParameters
+) : CoroutineWorker(context, params) {
+
+    companion object {
+        fun schedulePeriodicCleanup(context: Context) {
+            val cleanupRequest = PeriodicWorkRequestBuilder<CleanupWorker>(
+                repeatInterval = 1,
+                repeatIntervalTimeUnit = TimeUnit.DAYS
+            )
+                .setConstraints(
+                    Constraints.Builder()
+                        .setRequiresCharging(true)
+                        .setRequiresBatteryNotLow(true)
+                        .build()
+                )
+                .setInitialDelay(1, TimeUnit.HOURS)
+                .build()
+
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+                "periodic_cleanup",
+                ExistingPeriodicWorkPolicy.KEEP,
+                cleanupRequest
+            )
+        }
+    }
+
+    override suspend fun doWork(): Result {
+        return try {
+            performCleanup()
+            Result.success()
+        } catch (e: Exception) {
+            // Не повторять периодическую работу
+            Result.failure()
+        }
+    }
+
+    private suspend fun performCleanup() = withContext(Dispatchers.IO) {
+        // 1. Очистить директорию кеша
+        cleanCacheDirectory()
+
+        // 2. Удалить старые временные файлы
+        deleteOldTempFiles()
+
+        // 3. Вакуум база данных
+        vacuumDatabase()
+
+        // 4. Очистить старые логи
+        clearOldLogs()
+    }
+
+    private fun cleanCacheDirectory() {
+        val cacheDir = applicationContext.cacheDir
+        val maxCacheSize = 50 * 1024 * 1024 // 50 МБ
+
+        val cacheSize = cacheDir.walkTopDown()
+            .filter { it.isFile }
+            .map { it.length() }
+            .sum()
+
+        if (cacheSize > maxCacheSize) {
+            cacheDir.walkTopDown()
+                .filter { it.isFile }
+                .sortedBy { it.lastModified() }
+                .forEach { file ->
+                    file.delete()
+                }
+        }
+    }
+
+    private fun deleteOldTempFiles() {
+        val tempDir = File(applicationContext.cacheDir, "temp")
+        val maxAge = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7)
+
+        tempDir.walkTopDown()
+            .filter { it.isFile && it.lastModified() < maxAge }
+            .forEach { it.delete() }
+    }
+
+    private suspend fun vacuumDatabase() {
+        // Вакуум SQLite базы данных для освобождения места
+        delay(1000) // Симуляция операции вакуума
+    }
+
+    private fun clearOldLogs() {
+        val logDir = File(applicationContext.filesDir, "logs")
+        val maxAge = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(30)
+
+        logDir.walkTopDown()
+            .filter { it.isFile && it.lastModified() < maxAge }
+            .forEach { it.delete() }
+    }
+}
+```
+
+#### 7. Наблюдение за прогрессом работы
+
+**Мониторинг статуса работы и прогресса:**
+
+```kotlin
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.work.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import java.util.UUID
+
+data class WorkProgress(
+    val state: WorkInfo.State,
+    val progress: Int = 0,
+    val error: String? = null
+)
+
+class WorkViewModel(private val workManager: WorkManager) : ViewModel() {
+
+    private val _workProgress = MutableStateFlow<WorkProgress?>(null)
+    val workProgress: StateFlow<WorkProgress?> = _workProgress
+
+    fun startDataSync(userId: String) {
+        val workId = DataSyncWorker.scheduleSyncWork(
+            context = getApplication(),
+            syncType = "full",
+            userId = userId
+        )
+
+        observeWork(workId)
+    }
+
+    private fun observeWork(workId: UUID) {
+        viewModelScope.launch {
+            workManager.getWorkInfoByIdFlow(workId).collect { workInfo ->
+                _workProgress.value = when (workInfo.state) {
+                    WorkInfo.State.ENQUEUED -> WorkProgress(WorkInfo.State.ENQUEUED)
+                    WorkInfo.State.RUNNING -> {
+                        val progress = workInfo.progress.getInt(
+                            DataSyncWorker.KEY_PROGRESS,
+                            0
+                        )
+                        WorkProgress(WorkInfo.State.RUNNING, progress)
+                    }
+                    WorkInfo.State.SUCCEEDED -> WorkProgress(WorkInfo.State.SUCCEEDED, 100)
+                    WorkInfo.State.FAILED -> {
+                        val error = workInfo.outputData.getString("error")
+                        WorkProgress(WorkInfo.State.FAILED, error = error)
+                    }
+                    WorkInfo.State.CANCELLED -> WorkProgress(WorkInfo.State.CANCELLED)
+                    WorkInfo.State.BLOCKED -> WorkProgress(WorkInfo.State.BLOCKED)
+                }
+            }
+        }
+    }
+
+    fun cancelWork(workId: UUID) {
+        workManager.cancelWorkById(workId)
+    }
+}
+```
+
+#### 8. Тестирование CoroutineWorker
+
+**Модульное тестирование с TestWorkerBuilder:**
+
+```kotlin
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
+import androidx.work.ListenableWorker
+import androidx.work.testing.TestListenableWorkerBuilder
+import androidx.work.workDataOf
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.*
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+
+@RunWith(RobolectricTestRunner::class)
+class DataSyncWorkerTest {
+
+    private lateinit var context: Context
+
+    @Before
+    fun setUp() {
+        context = ApplicationProvider.getApplicationContext()
+    }
+
+    @Test
+    fun testDataSyncWorker_success() = runBlocking {
+        // Создать тестовый worker
+        val worker = TestListenableWorkerBuilder<DataSyncWorker>(context)
+            .setInputData(
+                workDataOf(
+                    DataSyncWorker.KEY_SYNC_TYPE to "full",
+                    DataSyncWorker.KEY_USER_ID to "test_user"
+                )
+            )
+            .build()
+
+        // Запустить worker
+        val result = worker.doWork()
+
+        // Проверить успех
+        assertTrue(result is ListenableWorker.Result.Success)
+    }
+
+    @Test
+    fun testDataSyncWorker_missingInput() = runBlocking {
+        // Создать worker без требуемого ввода
+        val worker = TestListenableWorkerBuilder<DataSyncWorker>(context)
+            .build()
+
+        val result = worker.doWork()
+
+        // Должен провалиться без требуемого ввода
+        assertTrue(result is ListenableWorker.Result.Failure)
+    }
+}
+```
+
+#### 9. Лучшие практики
+
+**Production-ready паттерны:**
+
+```kotlin
+//  ХОРОШО: Использовать уникальную работу для дедупликации
+WorkManager.getInstance(context).enqueueUniqueWork(
+    "user_sync_$userId",
+    ExistingWorkPolicy.KEEP, // Не запускать если уже выполняется
+    syncRequest
+)
+
+//  ХОРОШО: Устанавливать соответствующие ограничения
+val constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.CONNECTED)
+    .setRequiresBatteryNotLow(true)
+    .setRequiresStorageNotLow(true)
+    .build()
+
+//  ХОРОШО: Проверять isStopped для отмены
+override suspend fun doWork(): Result {
+    for (item in items) {
+        if (isStopped) {
+            return Result.failure()
+        }
+        processItem(item)
+    }
+    return Result.success()
+}
+
+//  ХОРОШО: Использовать setForeground для длительной работы
+override suspend fun doWork(): Result {
+    setForeground(createForegroundInfo())
+    // Длительная работа
+    return Result.success()
+}
+
+//  ПЛОХО: Блокирующие операции в CoroutineWorker
+override suspend fun doWork(): Result {
+    Thread.sleep(1000) // Не блокировать! Используйте delay()
+    return Result.success()
+}
+
+//  ПЛОХО: Игнорирование отмены
+override suspend fun doWork(): Result {
+    // Отсутствует проверка isStopped
+    while (true) {
+        processItem()
+    }
+}
+```
 
 ### Связанные вопросы
 - [[q-what-is-coroutine--kotlin--easy]] - Основы корутин

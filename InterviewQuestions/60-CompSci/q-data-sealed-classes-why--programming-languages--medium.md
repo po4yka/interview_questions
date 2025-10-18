@@ -4,7 +4,7 @@ title: "Data Sealed Classes Why"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-abstract-class-purpose--programming-languages--medium, q-interface-vs-abstract-class--programming-languages--medium, q-java-object-comparison--programming-languages--easy]
 created: 2025-10-15
 tags:

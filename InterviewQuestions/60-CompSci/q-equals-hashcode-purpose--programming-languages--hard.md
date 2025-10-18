@@ -4,7 +4,7 @@ title: "Equals Hashcode Purpose / Назначение equals и hashCode"
 topic: computer-science
 difficulty: hard
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-detect-unused-object--programming-languages--easy, q-java-object-comparison--programming-languages--easy, q-memento-pattern--design-patterns--medium]
 created: 2025-10-15
 tags:

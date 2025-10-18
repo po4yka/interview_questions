@@ -376,5 +376,5 @@ SORT difficulty ASC
 
 ## Related MOCs
 - [[moc-kotlin]]
-- [[moc-compSci]]
+- [[moc-cs]]
 - [[moc-tools]]

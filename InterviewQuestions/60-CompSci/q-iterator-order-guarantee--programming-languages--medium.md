@@ -4,7 +4,7 @@ title: "Iterator Order Guarantee / Гарантия порядка Iterator"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-java-object-comparison--programming-languages--easy, q-inheritance-composition-aggregation--oop--medium, q-abstract-factory-pattern--design-patterns--medium]
 created: 2025-10-15
 tags:

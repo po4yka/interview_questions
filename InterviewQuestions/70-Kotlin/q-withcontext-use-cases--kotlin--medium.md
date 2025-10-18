@@ -723,22 +723,510 @@ class WithContextTest {
 
 `withContext` - это **приостанавливающая функция**, которая переключает контекст корутины, выполняет блок кода и возвращает результат. Она в основном используется для переключения диспетчеров для выполнения определённых операций на соответствующих потоках.
 
-[Полный перевод разделов...]
+#### Базовое использование withContext
+
+```kotlin
+import kotlinx.coroutines.*
+
+suspend fun loadData(): String = withContext(Dispatchers.IO) {
+    // Выполнение I/O операции на IO диспетчере
+    println("Загрузка на потоке: ${Thread.currentThread().name}")
+    delay(1000)
+    "Данные загружены"
+}
+
+fun basicWithContextExample() = runBlocking {
+    println("Главный поток: ${Thread.currentThread().name}")
+
+    val data = loadData() // Приостанавливается и переключается на IO диспетчер
+
+    println("Обратно на потоке: ${Thread.currentThread().name}")
+    println("Данные: $data")
+}
+```
+
+#### withContext vs launch
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun compareWithLaunch() = runBlocking {
+    println("=== withContext vs launch ===")
+
+    // withContext: приостанавливается и возвращает результат
+    val result1 = withContext(Dispatchers.IO) {
+        delay(1000)
+        "Результат из withContext"
+    }
+    println("Результат получен немедленно: $result1")
+
+    // launch: не возвращает результат, не приостанавливает родителя
+    val job = launch(Dispatchers.IO) {
+        delay(1000)
+        println("Результат из launch")
+    }
+    println("launch вернулся немедленно, всё ещё ожидание...")
+    job.join() // Нужно явно ждать
+
+    // withContext лучше для последовательных операций
+    val data1 = withContext(Dispatchers.IO) { loadFromDatabase() }
+    val data2 = withContext(Dispatchers.Default) { processData(data1) }
+    val data3 = withContext(Dispatchers.IO) { saveToDatabase(data2) }
+
+    // launch лучше для fire-and-forget операций
+    launch { updateUI() }
+    launch { logAnalytics() }
+    launch { syncToServer() }
+}
+```
+
+#### withContext vs async
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun compareWithAsync() = runBlocking {
+    println("=== withContext vs async ===")
+
+    // withContext: последовательное выполнение
+    val time1 = measureTimeMillis {
+        val result1 = withContext(Dispatchers.IO) {
+            delay(1000)
+            "First"
+        }
+        val result2 = withContext(Dispatchers.IO) {
+            delay(1000)
+            "Second"
+        }
+        println("Результаты: $result1, $result2")
+    }
+    println("withContext заняло: $time1 мс") // ~2000мс
+
+    // async: параллельное выполнение
+    val time2 = measureTimeMillis {
+        val deferred1 = async(Dispatchers.IO) {
+            delay(1000)
+            "First"
+        }
+        val deferred2 = async(Dispatchers.IO) {
+            delay(1000)
+            "Second"
+        }
+        println("Результаты: ${deferred1.await()}, ${deferred2.await()}")
+    }
+    println("async заняло: $time2 мс") // ~1000мс
+
+    // Используйте withContext для последовательных операций
+    // Используйте async для параллельных операций
+}
+```
+
+#### Случаи использования переключения диспетчера
+
+```kotlin
+import kotlinx.coroutines.*
+
+class UserRepository {
+    // Случай 1: I/O операции (сеть, база данных)
+    suspend fun fetchUser(id: String): User = withContext(Dispatchers.IO) {
+        // Сетевой вызов или запрос к базе данных
+        delay(1000) // Имитация I/O
+        User(id, "Иван Иванов")
+    }
+
+    // Случай 2: CPU-интенсивные операции
+    suspend fun processUserData(users: List<User>): List<ProcessedUser> =
+        withContext(Dispatchers.Default) {
+            users.map { user ->
+                // Сложные вычисления
+                ProcessedUser(user.id, user.name.uppercase())
+            }
+        }
+
+    // Случай 3: Обновления UI (Android/Desktop)
+    suspend fun updateUserUI(user: User) = withContext(Dispatchers.Main) {
+        // Обновление UI компонентов
+        println("Обновление UI пользователя: ${user.name}")
+    }
+
+    // Случай 4: Комбинирование нескольких диспетчеров
+    suspend fun loadAndDisplayUser(id: String) {
+        // Начало на Main (если вызвано из UI)
+        val user = withContext(Dispatchers.IO) {
+            // Переключение на IO для сети
+            fetchUserFromNetwork(id)
+        }
+
+        val processed = withContext(Dispatchers.Default) {
+            // Переключение на Default для обработки
+            processUserData(listOf(user))
+        }
+
+        withContext(Dispatchers.Main) {
+            // Обратно на Main для обновления UI
+            displayUser(processed.first())
+        }
+    }
+}
+```
+
+#### Соображения производительности
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
+
+fun performanceComparisons() = runBlocking {
+    println("=== Соображения производительности ===")
+
+    // 1. withContext переиспользует Job родителя
+    // Нет накладных расходов на выделение Job
+    val time1 = measureTimeMillis {
+        repeat(10000) {
+            withContext(Dispatchers.Default) {
+                // Минимальные накладные расходы
+            }
+        }
+    }
+    println("withContext накладные расходы: $time1 мс")
+
+    // 2. async + await имеет накладные расходы на выделение Job
+    val time2 = measureTimeMillis {
+        repeat(10000) {
+            async(Dispatchers.Default) {
+                // Создаёт Deferred job
+            }.await()
+        }
+    }
+    println("async + await накладные расходы: $time2 мс")
+
+    // 3. Ненужные переключения диспетчера
+    val time3 = measureTimeMillis {
+        repeat(1000) {
+            withContext(Dispatchers.Default) {
+                withContext(Dispatchers.Default) {
+                    // Ненужное переключение!
+                    val result = 1 + 1
+                }
+            }
+        }
+    }
+    println("Вложенный withContext: $time3 мс")
+
+    // 4. Правильное использование - переключать только при необходимости
+    val time4 = measureTimeMillis {
+        repeat(1000) {
+            withContext(Dispatchers.Default) {
+                val result = 1 + 1
+                // Остаться на том же диспетчере
+                val result2 = 2 + 2
+            }
+        }
+    }
+    println("Одиночный withContext: $time4 мс")
+}
+```
+
+#### Практические паттерны
+
+```kotlin
+import kotlinx.coroutines.*
+
+// Паттерн 1: Паттерн репозитория с переключением диспетчера
+class ArticleRepository {
+    private val apiService = ApiService()
+    private val database = Database()
+
+    suspend fun getArticle(id: String): Article {
+        // Сначала попробовать кеш
+        val cached = withContext(Dispatchers.IO) {
+            database.getArticle(id)
+        }
+
+        if (cached != null) return cached
+
+        // Получить из сети
+        val article = withContext(Dispatchers.IO) {
+            apiService.fetchArticle(id)
+        }
+
+        // Сохранить в кеш
+        withContext(Dispatchers.IO) {
+            database.saveArticle(article)
+        }
+
+        return article
+    }
+}
+
+// Паттерн 2: Конвейер обработки
+suspend fun processingPipeline(input: String): String {
+    val downloaded = withContext(Dispatchers.IO) {
+        downloadData(input)
+    }
+
+    val processed = withContext(Dispatchers.Default) {
+        processData(downloaded)
+    }
+
+    val validated = withContext(Dispatchers.Default) {
+        validateData(processed)
+    }
+
+    withContext(Dispatchers.IO) {
+        saveData(validated)
+    }
+
+    return validated
+}
+
+// Паттерн 3: Безопасное переключение диспетчера
+suspend fun <T> runOnIO(block: suspend () -> T): T {
+    return withContext(Dispatchers.IO) {
+        block()
+    }
+}
+
+suspend fun <T> runOnComputation(block: suspend () -> T): T {
+    return withContext(Dispatchers.Default) {
+        block()
+    }
+}
+
+// Использование
+suspend fun loadUser(id: String): User = runOnIO {
+    // Автоматически выполняется на IO диспетчере
+    fetchUserFromDatabase(id)
+}
+
+// Паттерн 4: Отменяемые операции
+suspend fun cancellableOperation() = withContext(Dispatchers.IO) {
+    repeat(10) { index ->
+        ensureActive() // Проверка на отмену
+        println("Обработка элемента $index")
+        delay(500)
+    }
+}
+
+// Паттерн 5: Управление ресурсами
+suspend fun <T> useResource(
+    resource: Resource,
+    block: suspend (Resource) -> T
+): T = withContext(Dispatchers.IO) {
+    try {
+        resource.open()
+        block(resource)
+    } finally {
+        resource.close()
+    }
+}
+```
+
+#### Распространённые ошибки
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun commonMistakes() = runBlocking {
+    // Ошибка 1: Использование withContext для параллельных операций
+    // Плохо - последовательное
+    val time1 = measureTimeMillis {
+        val result1 = withContext(Dispatchers.IO) { delay(1000); "A" }
+        val result2 = withContext(Dispatchers.IO) { delay(1000); "B" }
+    }
+    println("Последовательное: $time1 мс") // 2000мс
+
+    // Хорошо - параллельное с async
+    val time2 = measureTimeMillis {
+        val deferred1 = async(Dispatchers.IO) { delay(1000); "A" }
+        val deferred2 = async(Dispatchers.IO) { delay(1000); "B" }
+        val results = awaitAll(deferred1, deferred2)
+    }
+    println("Параллельное: $time2 мс") // 1000мс
+
+    // Ошибка 2: Ненужные переключения диспетчера
+    // Плохо
+    suspend fun badExample() = withContext(Dispatchers.Default) {
+        withContext(Dispatchers.Default) { // Избыточно!
+            compute()
+        }
+    }
+
+    // Хорошо
+    suspend fun goodExample() = withContext(Dispatchers.Default) {
+        compute()
+    }
+
+    // Ошибка 3: Блокирование внутри withContext(Dispatchers.IO)
+    // Плохо - блокирует IO поток
+    suspend fun badIO() = withContext(Dispatchers.IO) {
+        Thread.sleep(1000) // Блокирующий вызов!
+    }
+
+    // Хорошо - использует приостанавливающую функцию
+    suspend fun goodIO() = withContext(Dispatchers.IO) {
+        delay(1000) // Приостанавливающий вызов
+    }
+
+    // Ошибка 4: Использование withContext в ViewModel для fire-and-forget
+    // Плохо
+    fun badViewModel() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                // Это всё ещё приостанавливает родителя
+                logEvent()
+            }
+        }
+    }
+
+    // Хорошо
+    fun goodViewModel() {
+        viewModelScope.launch(Dispatchers.IO) {
+            // Напрямую запускаем на IO диспетчере
+            logEvent()
+        }
+    }
+}
+```
+
+#### Продвинутые паттерны withContext
+
+```kotlin
+import kotlinx.coroutines.*
+
+// Паттерн 1: Таймаут с withContext
+suspend fun <T> withContextAndTimeout(
+    context: CoroutineContext,
+    timeoutMillis: Long,
+    block: suspend () -> T
+): T = withTimeout(timeoutMillis) {
+    withContext(context) {
+        block()
+    }
+}
+
+// Паттерн 2: Повторные попытки с переключением диспетчера
+suspend fun <T> retryOnIO(
+    times: Int = 3,
+    block: suspend () -> T
+): T {
+    repeat(times - 1) { attempt ->
+        try {
+            return withContext(Dispatchers.IO) {
+                block()
+            }
+        } catch (e: Exception) {
+            println("Попытка ${attempt + 1} не удалась: ${e.message}")
+            delay(1000L * (attempt + 1))
+        }
+    }
+    // Последняя попытка
+    return withContext(Dispatchers.IO) {
+        block()
+    }
+}
+
+// Паттерн 3: withContext с пользовательскими элементами контекста
+suspend fun withLogging(block: suspend () -> Unit) {
+    val requestId = java.util.UUID.randomUUID().toString()
+    withContext(CoroutineName("Request-$requestId")) {
+        println("[${coroutineContext[CoroutineName]}] Начало операции")
+        block()
+        println("[${coroutineContext[CoroutineName]}] Операция завершена")
+    }
+}
+
+// Паттерн 4: Комбинирование нескольких элементов контекста
+suspend fun withCustomContext(
+    dispatcher: CoroutineDispatcher,
+    name: String,
+    block: suspend () -> Unit
+) {
+    withContext(dispatcher + CoroutineName(name)) {
+        println("Выполняется на ${Thread.currentThread().name} как $name")
+        block()
+    }
+}
+
+// Паттерн 5: Условное переключение диспетчера
+suspend fun <T> withOptimalDispatcher(
+    data: List<T>,
+    threshold: Int = 100,
+    block: suspend (List<T>) -> Unit
+) {
+    val dispatcher = if (data.size > threshold) {
+        Dispatchers.Default // CPU-интенсивно для больших данных
+    } else {
+        Dispatchers.IO // IO для малых данных
+    }
+
+    withContext(dispatcher) {
+        block(data)
+    }
+}
+```
 
 ### Лучшие практики
 
 1. **Используйте withContext для последовательных операций, требующих переключения диспетчера**
+   ```kotlin
+   suspend fun loadUser(id: String) = withContext(Dispatchers.IO) {
+       database.getUser(id)
+   }
+   ```
+
 2. **Используйте async для параллельных операций**
+   ```kotlin
+   suspend fun loadMultipleUsers(ids: List<String>) = coroutineScope {
+       ids.map { id ->
+           async(Dispatchers.IO) { database.getUser(id) }
+       }.awaitAll()
+   }
+   ```
+
 3. **Избегайте ненужных переключений диспетчера**
+   ```kotlin
+   // Плохо - множественные переключения
+   withContext(Dispatchers.IO) {
+       val a = withContext(Dispatchers.Default) { compute() }
+       val b = withContext(Dispatchers.Default) { compute() }
+   }
+
+   // Хорошо - одно переключение
+   withContext(Dispatchers.Default) {
+       val a = compute()
+       val b = compute()
+   }
+   ```
+
 4. **Используйте withContext вместо async + await для одиночных операций**
+   ```kotlin
+   // Менее эффективно
+   val result = async(Dispatchers.IO) { loadData() }.await()
+
+   // Более эффективно
+   val result = withContext(Dispatchers.IO) { loadData() }
+   ```
+
 5. **Не смешивайте блокирующие и приостанавливающие вызовы**
+   ```kotlin
+   // Плохо
+   withContext(Dispatchers.IO) {
+       Thread.sleep(1000) // Блокирование!
+   }
+
+   // Хорошо
+   withContext(Dispatchers.IO) {
+       delay(1000) // Приостановка
+   }
+   ```
 
 ### Распространённые ошибки
 
-1. Использование withContext для операций "запустил и забыл"
-2. Ненужная вложенность вызовов withContext
-3. Блокировка потока диспетчера
-4. Непонимание того, что withContext приостанавливает вызывающую сторону
+1. **Использование withContext для операций "запустил и забыл"** - используйте launch вместо этого
+2. **Ненужная вложенность вызовов withContext** - объедините переключения диспетчера
+3. **Блокировка потока диспетчера** - используйте приостанавливающие функции вместо блокирующих
+4. **Непонимание того, что withContext приостанавливает вызывающую сторону** - для параллелизма используйте async
 
 ---
 

@@ -4,7 +4,7 @@ title: "Extension Properties / Свойства-расширения"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-what-is-coroutinescope--programming-languages--medium, q-how-suspend-function-detects-suspension--programming-languages--hard, q-error-handling-in-coroutines--programming-languages--medium]
 created: 2025-10-15
 tags:

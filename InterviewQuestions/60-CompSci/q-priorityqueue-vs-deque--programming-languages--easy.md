@@ -4,7 +4,7 @@ title: "Priorityqueue Vs Deque / Priorityqueue против Deque"
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-data-class-component-functions--programming-languages--easy, q-class-composition--oop--medium, q-what-is-coroutinescope--programming-languages--medium]
 created: 2025-10-15
 tags:

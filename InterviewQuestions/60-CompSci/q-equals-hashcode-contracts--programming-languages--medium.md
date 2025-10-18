@@ -4,7 +4,7 @@ title: "Equals Hashcode Contracts / Контракты equals и hashCode"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-what-is-garbage-in-gc--programming-languages--easy, q-composite-pattern--design-patterns--medium, q-flyweight-pattern--design-patterns--hard]
 created: 2025-10-15
 tags:

@@ -4,7 +4,7 @@ title: "Reference Types Protect From Deletion / Типы ссылок защищ
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-detect-unused-object--programming-languages--easy, q-java-marker-interfaces--programming-languages--medium, q-xml-acronym--programming-languages--easy]
 created: 2025-10-15
 tags:

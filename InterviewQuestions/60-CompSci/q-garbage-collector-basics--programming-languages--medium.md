@@ -4,7 +4,7 @@ title: "Garbage Collector Basics / Garbage Collector Основы"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium, q-reference-types-criteria--programming-languages--medium]
 created: 2025-10-15
 tags:

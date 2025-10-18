@@ -4,7 +4,7 @@ title: "Abstract Factory Pattern / Abstract Factory Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-throw-vs-throws--programming-languages--easy, q-clean-code-principles--software-engineering--medium, q-coroutine-dispatchers--programming-languages--medium]
 created: 2025-10-15
 tags:

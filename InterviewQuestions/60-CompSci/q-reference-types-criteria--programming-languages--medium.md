@@ -4,7 +4,7 @@ title: "Reference Types Criteria / Критерии типов ссылок"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-xml-acronym--programming-languages--easy, q-interface-vs-abstract-class--programming-languages--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium]
 created: 2025-10-15
 tags:

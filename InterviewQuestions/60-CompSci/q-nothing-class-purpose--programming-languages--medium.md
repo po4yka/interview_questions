@@ -4,7 +4,7 @@ title: "Nothing Class Purpose / Назначение класса Nothing"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-observer-pattern--design-patterns--medium, q-launch-vs-async-await--programming-languages--medium, q-what-happens-to-unneeded-objects--programming-languages--easy]
 created: 2025-10-15
 tags:

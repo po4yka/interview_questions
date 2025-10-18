@@ -4,7 +4,7 @@ title: "Bridge Pattern / Bridge Паттерн"
 topic: computer-science
 difficulty: hard
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-throw-vs-throws--programming-languages--easy, q-extensions-concept--programming-languages--easy, q-priorityqueue-vs-deque--programming-languages--easy]
 created: 2025-10-15
 tags:

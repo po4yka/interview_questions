@@ -4,7 +4,7 @@ title: "How Suspend Function Detects Suspension / Как suspend функция 
 topic: computer-science
 difficulty: hard
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-visitor-pattern--design-patterns--hard, q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-chain-of-responsibility--design-patterns--medium]
 created: 2025-10-15
 tags:

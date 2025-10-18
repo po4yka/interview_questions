@@ -4,7 +4,7 @@ title: Computer Science — MOC
 kind: moc
 created: 2025-10-12
 updated: 2025-10-12
-tags: [moc, topic/compSci]
+tags: [moc, topic/cs]
 ---
 
 # Computer Science — Map of Content

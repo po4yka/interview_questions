@@ -4,7 +4,7 @@ title: "Coroutine Dispatchers / Диспетчеры корутин"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-priorityqueue-vs-deque--programming-languages--easy, q-data-structures-algorithms--computer-science--hard, q-runtime-generic-access--programming-languages--hard]
 created: 2025-10-15
 tags:

@@ -4,7 +4,7 @@ title: Iterator Pattern
 topic: design-patterns
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 created: 2025-10-15
 tags: []
 related: [q-java-all-classes-inherit-from-object--programming-languages--easy, q-how-to-create-suspend-function--programming-languages--medium, q-facade-pattern--design-patterns--medium]

@@ -4,7 +4,7 @@ title: "Sharedflow Vs Stateflow / Sharedflow против Stateflow"
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-launch-vs-async-error-handling--programming-languages--medium, q-class-composition--oop--medium, q-data-class-special-features--programming-languages--easy]
 created: 2025-10-15
 tags:

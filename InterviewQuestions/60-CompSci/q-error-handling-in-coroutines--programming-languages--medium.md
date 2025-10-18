@@ -4,7 +4,7 @@ title: "Error Handling In Coroutines"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-data-sealed-classes-why--programming-languages--medium, q-hashmap-how-it-works--programming-languages--medium, q-where-to-call-suspend-functions--programming-languages--medium]
 created: 2025-10-15
 tags:

@@ -4,7 +4,7 @@ title: "What Happens To Unneeded Objects / Что происходит с нен
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-xml-acronym--programming-languages--easy, q-suspend-function-return-type-after-compilation--programming-languages--hard, q-java-lambda-type--programming-languages--easy]
 created: 2025-10-15
 tags:

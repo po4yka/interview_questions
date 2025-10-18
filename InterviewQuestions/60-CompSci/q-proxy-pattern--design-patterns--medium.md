@@ -4,7 +4,7 @@ title: "Proxy Pattern / Proxy Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-builder-pattern--design-patterns--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium, q-observer-pattern--design-patterns--medium]
 created: 2025-10-15
 tags:
@@ -374,57 +374,80 @@ class AsyncCacheProxy(
 
 ### Определение
 
-
-The Proxy Design Pattern is a structural design pattern that uses a **placeholder object to control access to another object**. Instead of interacting directly with the main object, the client talks to the proxy, which then manages the interaction. This is useful for controlling access, lazy initialization, logging, or adding security checks.
+Паттерн проектирования Proxy (Заместитель) - это структурный паттерн, который использует **объект-заместитель для контроля доступа к другому объекту**. Вместо прямого взаимодействия с основным объектом, клиент обращается к прокси, который затем управляет взаимодействием. Это полезно для контроля доступа, ленивой инициализации, логирования или добавления проверок безопасности.
 
 ### Проблемы, которые решает
 
+Какие проблемы решает паттерн Proxy:
 
-What problems can the Proxy design pattern solve?
-
-1. **The access to an object should be controlled**
-2. **Additional functionality should be provided when accessing an object**
+1. **Доступ к объекту должен быть контролируемым**
+2. **При обращении к объекту должна предоставляться дополнительная функциональность**
 
 ### Решение
 
+Определить отдельный объект **`Proxy`**, который:
 
-Define a separate **`Proxy`** object that:
+- Может использоваться как заместитель другого объекта (**`Subject`**)
+- Реализует дополнительную функциональность для контроля доступа к этому объекту
 
-- Can be used as a substitute for another object (**`Subject`**)
-- Implements additional functionality to control the access to this subject
+Это позволяет работать через объект Proxy для выполнения дополнительной функциональности при обращении к объекту, такой как проверка прав доступа, кэширование или логирование.
 
-This makes it possible to work through a Proxy object to perform additional functionality when accessing a subject, like checking access rights, caching, or logging.
+Чтобы действовать как заместитель объекта, прокси должен реализовывать интерфейс **`Subject`**. Клиенты не могут определить, работают ли они с объектом или его прокси.
 
-To act as a substitute for a subject, a proxy must implement the **`Subject`** interface. Clients can't tell whether they work with a subject or its proxy.
+### Типы прокси
+
+Основные варианты использования:
+
+1. **Ленивая инициализация (Virtual Proxy)** - Откладывает создание дорогих объектов до момента необходимости
+2. **Контроль доступа (Protection Proxy)** - Управляет доступом к объекту, разрешая/запрещая операции на основе прав
+3. **Доступ к удаленным объектам (Remote Proxy)** - Представляет объект в другом расположении, обрабатывает коммуникацию
+4. **Логирование запросов (Logging Proxy)** - Записывает операции над объектом
+5. **Кэширование (Cache Proxy)** - Сохраняет результаты операций, возвращает закэшированные данные для повторных запросов
 
 ### Объяснение
 
+**Объяснение**:
 
-**Explanation**:
+- **`Database`** - общий интерфейс для RealDatabase и ProxyDatabase
+- **RealDatabase** выполняет реальные операции
+- **ProxyDatabase** контролирует доступ, добавляет логирование, ограничивает определенные запросы
+- **Android**: Ленивая загрузка изображений, кэширование сетевых ответов, контроль доступа
+- **OkHttp Interceptors** - отличный пример паттерна Proxy
 
-- **`Database`** is the common interface for RealDatabase and ProxyDatabase
-- **RealDatabase** performs the real operations
-- **ProxyDatabase** controls access, adds logging, restricts certain queries
-- **Android**: Lazy loading images, caching network responses, access control
-- **OkHttp Interceptors** are a perfect example of Proxy pattern
+### Преимущества
 
-### Pros (Преимущества)
+1. **Разделение ответственности** - Отделяет бизнес-логику от вспомогательных обязанностей
+2. **Оптимизация производительности** - Ленивая инициализация и кэширование улучшают производительность
+3. **Контроль доступа** - Может контролировать и валидировать доступ к объектам
+4. **Прозрачность для клиента** - Клиенту не нужно знать о прокси
+5. **Принцип открытости/закрытости** - Можно добавлять новые прокси без изменения существующего кода
 
+### Недостатки
 
-1. **Separation of Concerns** - Separates business logic from auxiliary responsibilities
-2. **Performance optimization** - Lazy initialization and caching improve performance
-3. **Access control** - Can control and validate access to objects
-4. **Transparent to client** - Client doesn't need to know about the proxy
-5. **Open/Closed Principle** - Can add new proxies without changing existing code
+1. **Дополнительная сложность** - Дополнительный уровень косвенности
+2. **Накладные расходы на производительность** - Небольшая стоимость производительности от косвенности
+3. **Сложность проектирования** - Требует хорошего понимания варианта использования
+4. **Накладные расходы на тестирование** - Больше компонентов для тестирования
+5. **Проблемы с памятью** - Кэширующие прокси могут вызывать проблемы с памятью при неправильном управлении
 
-### Cons (Недостатки)
+### Примеры в Android
 
+В Android паттерн Proxy активно используется:
 
-1. **Additional complexity** - Extra layer of indirection
-2. **Performance overhead** - Slight performance cost from indirection
-3. **Design complexity** - Requires good understanding of use case
-4. **Testing overhead** - More components to test
-5. **Memory concerns** - Caching proxies can cause memory issues if not managed properly
+- **Ленивая загрузка изображений** - ProxyImage откладывает загрузку до момента отображения
+- **OkHttp Interceptors** - Перехватывают HTTP-запросы для логирования, аутентификации, кэширования
+- **Кэширование сетевых ответов** - CachingProxy сохраняет ответы для повторного использования
+- **Контроль доступа к базе данных** - ProxyDatabase ограничивает определенные операции
+
+### Когда использовать
+
+Используйте паттерн Proxy когда:
+
+1. **Ленивая инициализация** - Нужно отложить создание дорогих объектов
+2. **Контроль доступа** - Требуется управление правами доступа к объекту
+3. **Логирование и мониторинг** - Необходимо отслеживать обращения к объекту
+4. **Кэширование** - Нужно сохранять результаты для повторного использования
+5. **Удаленный доступ** - Объект находится в другом процессе или на другом сервере
 
 
 ---

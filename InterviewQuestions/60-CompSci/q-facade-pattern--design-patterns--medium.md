@@ -4,7 +4,7 @@ title: "Facade Pattern / Facade Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-prototype-pattern--design-patterns--medium, q-builder-pattern--design-patterns--medium, q-observer-pattern--design-patterns--medium]
 created: 2025-10-15
 tags:
@@ -369,53 +369,47 @@ class SystemFacade {
 
 ### Определение
 
-
-Facade pattern is a structural design pattern whose purpose is to **hide internal complexity behind a single interface that appears simple from the outside**. It provides a simplified interface to a complex subsystem.
+Паттерн Facade — это структурный паттерн проектирования, целью которого является **сокрытие внутренней сложности за единым интерфейсом, который выглядит простым снаружи**. Он предоставляет упрощенный интерфейс к сложной подсистеме.
 
 ### Проблемы, которые решает
 
+Какие проблемы может решить паттерн проектирования Facade?
 
-What problems can the Facade design pattern solve?
+1. **Чтобы сделать сложную подсистему проще в использовании, должен быть предоставлен простой интерфейс для набора интерфейсов в подсистеме**
+2. **Зависимости от подсистемы должны быть минимизированы**
 
-1. **To make a complex subsystem easier to use, a simple interface should be provided for a set of interfaces in the subsystem**
-2. **The dependencies on a subsystem should be minimized**
+### Ключевые моменты
 
-### Key Points
+Ключевые моменты паттерна Facade:
 
-
-Key Points of the Facade Pattern:
-
-1. **Simplification** - Provides a simplified interface to a complex system of classes
-2. **Decoupling** - Decouples the client code from the internal workings of the system
-3. **Easier Maintenance** - Allows for easier maintenance, as changes in underlying subsystems don't directly affect client code
+1. **Упрощение** - предоставляет упрощенный интерфейс к сложной системе классов
+2. **Разделение ответственности** - отделяет клиентский код от внутренней работы системы
+3. **Облегчение поддержки** - позволяет проще поддерживать код, так как изменения в базовых подсистемах не влияют напрямую на клиентский код
 
 ### Объяснение
 
+**Пояснение**:
 
-**Explanation**:
+- **Подсистемы (Subsystems)** (Lights, Blinds, Projector, MoviePlayer) — это сложные отдельные компоненты
+- **Фасад (Facade)** (HomeTheaterFacade) предоставляет простые методы (`watchMovie()`, `endMovie()`), которые оркеструют множество подсистем
+- **Клиент (Client)** взаимодействует только с фасадом, а не со сложными подсистемами
+- В Android фасады упрощают сложные операции, такие как сеть + кэш + обработка ошибок
 
-- **Subsystems** (Lights, Blinds, Projector, MoviePlayer) are complex individual components
-- **Facade** (HomeTheaterFacade) provides simple methods (`watchMovie()`, `endMovie()`) that orchestrate multiple subsystems
-- **Client** only interacts with the facade, not the complex subsystems
-- In Android, facades simplify complex operations like network + cache + error handling
+### Преимущества
 
-### Pros (Преимущества)
+1. **Упрощенный интерфейс** - делает сложные системы простыми в использовании
+2. **Уменьшение связанности** - клиенты зависят от фасада, а не от подсистем
+3. **Инкапсуляция** - скрывает детали реализации
+4. **Улучшенная поддерживаемость** - изменения в подсистемах не влияют на клиентов
+5. **Облегчение тестирования** - можно мокировать фасад вместо всех подсистем
 
+### Недостатки
 
-1. **Simplified Interface** - Makes complex systems easy to use
-2. **Reduced Coupling** - Clients depend on facade, not subsystems
-3. **Encapsulation** - Hides implementation details
-4. **Improved Maintainability** - Changes to subsystems don't affect clients
-5. **Easier Testing** - Can mock the facade instead of all subsystems
-
-### Cons (Недостатки)
-
-
-1. **Increased Complexity** - Additional abstraction layer
-2. **Reduced Flexibility** - May limit access to advanced features
-3. **Overengineering** - Unnecessary for simple systems
-4. **Potential Performance Overhead** - Extra indirection layer
-5. **God Object Risk** - Facade can become too large
+1. **Увеличение сложности** - дополнительный уровень абстракции
+2. **Уменьшение гибкости** - может ограничить доступ к продвинутым возможностям
+3. **Избыточная инженерия** - не нужен для простых систем
+4. **Потенциальные накладные расходы производительности** - дополнительный уровень косвенности
+5. **Риск God Object** - фасад может стать слишком большим
 
 
 ---

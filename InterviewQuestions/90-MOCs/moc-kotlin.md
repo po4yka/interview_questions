@@ -385,5 +385,5 @@ SORT difficulty ASC
 
 ## Related MOCs
 - [[moc-android]]
-- [[moc-compSci]]
+- [[moc-cs]]
 - [[moc-backend]]

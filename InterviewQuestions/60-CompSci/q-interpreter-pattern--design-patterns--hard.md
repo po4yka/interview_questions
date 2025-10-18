@@ -4,7 +4,7 @@ title: Interpreter Pattern
 topic: design-patterns
 difficulty: hard
 status: draft
-moc: moc-compSci
+moc: moc-cs
 created: 2025-10-15
 tags: []
 related: [q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-what-is-coroutinescope--programming-languages--medium, q-data-sealed-classes-why--programming-languages--medium]

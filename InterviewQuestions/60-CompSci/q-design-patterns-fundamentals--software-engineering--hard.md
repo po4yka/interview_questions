@@ -4,7 +4,7 @@ title: "Design Patterns Fundamentals"
 topic: architecture-patterns
 difficulty: hard
 status: draft
-moc: moc-compSci
+moc: moc-cs
 created: "2025-10-13"
 tags: ["design-patterns", "gof", "creational", "structural", "behavioral", "singleton", "factory", "observer", "strategy", "decorator", "kotlin", "android"]
 description: "Comprehensive coverage of essential design patterns (Creational, Structural, Behavioral) with real-world Android/Kotlin examples including Singleton, Factory, Observer, Strategy, Decorator, and more"

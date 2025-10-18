@@ -4,7 +4,7 @@ title: "Decorator Pattern / Decorator Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-how-to-create-suspend-function--programming-languages--medium, q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-iterator-order-guarantee--programming-languages--medium]
 created: 2025-10-15
 tags:

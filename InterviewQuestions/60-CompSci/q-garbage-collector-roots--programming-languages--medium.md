@@ -4,7 +4,7 @@ title: "Garbage Collector Roots / Корни Garbage Collector"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-extension-properties--programming-languages--medium, q-java-lambda-type--programming-languages--easy, q-inheritance-vs-composition--oop--medium]
 created: 2025-10-15
 tags:

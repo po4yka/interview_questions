@@ -4,7 +4,7 @@ title: "Iterator Concept / Концепция Iterator"
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-what-happens-to-unneeded-objects--programming-languages--easy, q-interface-vs-abstract-class--programming-languages--medium, q-data-class-component-functions--programming-languages--easy]
 created: 2025-10-15
 tags:

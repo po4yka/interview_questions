@@ -4,7 +4,7 @@ title: "Suspend Function Suspension Mechanism / Механизм приоста�
 topic: computer-science
 difficulty: hard
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-list-vs-sequence--programming-languages--medium, q-equals-hashcode-purpose--programming-languages--hard, q-extensions-concept--programming-languages--easy]
 created: 2025-10-15
 tags:

@@ -4,7 +4,7 @@ title: "Mediator Pattern / Mediator Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-state-pattern--design-patterns--medium, q-composite-pattern--design-patterns--medium, q-coroutinescope-vs-supervisorscope--programming-languages--medium]
 created: 2025-10-15
 tags:
@@ -401,58 +401,75 @@ class EventBus : Mediator {
 
 ### Определение
 
-
-Mediator is a behavioral design pattern that **reduces coupling between components of a program by making them communicate indirectly, through a special mediator object**. The Mediator makes it easy to modify, extend and reuse individual components because they're no longer dependent on dozens of other classes.
+Паттерн проектирования Mediator (Посредник) - это поведенческий паттерн, который **уменьшает связанность между компонентами программы, заставляя их взаимодействовать косвенно, через специальный объект-посредник**. Mediator облегчает модификацию, расширение и повторное использование отдельных компонентов, так как они больше не зависят от десятков других классов.
 
 ### Проблемы, которые решает
 
+Проблемы, которые решает паттерн Mediator:
 
-Problems that the mediator design pattern can solve:
+1. **Следует избегать тесной связанности между набором взаимодействующих объектов**
+2. **Должна быть возможность независимо изменять взаимодействие между набором объектов**
 
-1. **Tight coupling between a set of interacting objects should be avoided**
-2. **It should be possible to change the interaction between a set of objects independently**
-
-Defining a set of interacting objects by accessing and updating each other directly is inflexible because it tightly couples the objects to each other. Tightly coupled objects are hard to implement, change, test, and reuse.
+Определение набора взаимодействующих объектов путем прямого обращения и обновления друг друга негибко, потому что это тесно связывает объекты между собой. Тесно связанные объекты сложно реализовать, изменить, тестировать и повторно использовать.
 
 ### Решение
 
+Решения, описываемые паттерном Mediator:
 
-Solutions described by the mediator design pattern:
+- Определить отдельный **объект-посредник (mediator), который инкапсулирует взаимодействие** между набором объектов
+- Объекты **делегируют своё взаимодействие объекту-посреднику** вместо прямого взаимодействия друг с другом
 
-- Define a separate **(mediator) object that encapsulates the interaction** between a set of objects
-- Objects **delegate their interaction to a mediator object** instead of interacting with each other directly
-
-The objects interact with each other indirectly through a mediator object. This makes the objects loosely coupled. They only refer to and know about their mediator object and have no explicit knowledge of each other.
+Объекты взаимодействуют друг с другом косвенно через объект-посредник. Это делает объекты слабо связанными. Они ссылаются только на свой объект-посредник и знают о нем, не имея явного знания друг о друге.
 
 ### Объяснение
 
+**Объяснение**:
 
-**Explanation**:
+- **Mediator** интерфейс определяет контракт для коммуникации
+- **Конкретный посредник** реализует логику координации
+- **Коллеги (Colleagues)** общаются только через посредника, а не напрямую
+- **Уменьшает зависимости** - Каждый коллега знает только о посреднике
+- **Android**: Чат-приложения, валидация форм, ViewModel, координирующая репозитории
 
-- **Mediator** interface defines contract for communication
-- **Concrete mediator** implements coordination logic
-- **Colleagues** communicate only through mediator, not directly
-- **Reduces dependencies** - Each colleague only knows about mediator
-- **Android**: Chat applications, form validation, ViewModel coordinating repositories
+### Преимущества
 
-### Pros (Преимущества)
+1. **Уменьшенная связанность** - Компоненты не зависят друг от друга
+2. **Централизованный контроль** - Все взаимодействия в одном месте
+3. **Переиспользуемость** - Компоненты могут быть повторно использованы независимо
+4. **Упрощенное обслуживание** - Изменения во взаимодействиях не влияют на компоненты
+5. **Принцип единственной ответственности** - Логика коммуникации отделена от компонентов
 
+### Недостатки
 
-1. **Reduced coupling** - Components don't depend on each other
-2. **Centralized control** - All interactions in one place
-3. **Reusability** - Components can be reused independently
-4. **Easier maintenance** - Changes to interactions don't affect components
-5. **Single Responsibility** - Communication logic separated from components
+1. **God object** - Посредник может стать слишком сложным
+2. **Единая точка отказа** - Сбой посредника влияет на всю коммуникацию
+3. **Сложность обслуживания** - Добавление функций может требовать изменений посредника
 
-### Cons (Недостатки)
+### Реальные примеры
 
+Примеры паттерна Mediator в реальном мире:
 
-1. **God object** - Mediator can become too complex
-2. **Single point of failure** - Mediator failure affects all communication
-3. **Maintenance complexity** - Adding features may require mediator changes
+1. **Диспетчерская вышка в аэропорту** - Самолеты общаются с вышкой, а не друг с другом
+2. **Чат-приложение** - Сообщения проходят через центральный узел, а не peer-to-peer
+3. **UI фреймворки** - Диспетчеры событий координируют взаимодействия компонентов
 
+### Когда использовать
 
-**Mediator (Посредник)** - это поведенческий паттерн проектирования, который уменьшает связанность множества классов между собой, благодаря перемещению этих связей в один класс-посредник. **Проблема**: Тесная связанность между взаимодействующими объектами. **Решение**: Создать объект-посредник, который инкапсулирует взаимодействия, объекты общаются через него. **Использовать когда**: (1) Сложная коммуникация между компонентами, (2) Нужна слабая связанность, (3) Необходим централизованный контроль. **Android**: Чат-приложения, валидация форм, ViewModel координирующий репозитории. **Плюсы**: уменьшенная связанность, централизованный контроль, переиспользуемость. **Минусы**: риск god object, единая точка отказа. **Примеры**: Чат-комната, валидация UI-форм, управление воздушным движением, event bus.
+Используйте паттерн Mediator когда:
+
+1. **Сложная коммуникация между компонентами** - Множество компонентов должны взаимодействовать сложным образом
+2. **Нужна слабая связанность** - Компоненты не должны знать друг о друге
+3. **Централизованный контроль** - Все взаимодействия должны проходить через одну точку
+4. **Переиспользуемость компонентов** - Компоненты должны быть независимыми и переиспользуемыми
+
+### Примеры в Android
+
+В Android паттерн Mediator используется в:
+
+- **ViewModel** - Координирует взаимодействие между UI и слоями данных
+- **Event Bus** - Центральный посредник для событий приложения
+- **Чат-приложения** - Центральная комната координирует сообщения между пользователями
+- **Валидация форм** - FormMediator координирует валидацию между полями формы
 
 ## Links
 

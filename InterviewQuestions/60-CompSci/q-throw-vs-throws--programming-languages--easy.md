@@ -4,7 +4,7 @@ title: "Throw Vs Throws / Throw против Throws"
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-observer-pattern--design-patterns--medium, q-sealed-vs-enum-classes--programming-languages--medium, q-data-structures-algorithms--computer-science--hard]
 created: 2025-10-15
 tags:

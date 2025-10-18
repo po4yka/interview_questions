@@ -4,7 +4,7 @@ title: "When Coroutine Cannot Be Cancelled / Когда корутина не м
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-how-suspend-function-detects-suspension--programming-languages--hard, q-priorityqueue-vs-deque--programming-languages--easy, q-equals-hashcode-rules--programming-languages--medium]
 created: 2025-10-15
 tags:

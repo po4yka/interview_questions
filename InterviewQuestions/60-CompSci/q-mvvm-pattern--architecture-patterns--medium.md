@@ -4,7 +4,7 @@ title: MVVM Pattern (Model-View-ViewModel)
 topic: architecture-patterns
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 created: 2025-10-15
 tags: []
 related: [q-flow-flatmap-operator--programming-languages--easy, q-os-fundamentals-concepts--computer-science--hard, q-when-inheritance-useful--oop--medium]

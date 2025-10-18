@@ -4,7 +4,7 @@ title: "Zip Operator Parallel Requests / Оператор zip для парал�
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-regular-vs-extension-method--programming-languages--easy, q-iterator-pattern--design-patterns--medium, q-interface-vs-abstract-class--programming-languages--medium]
 created: 2025-10-15
 tags:

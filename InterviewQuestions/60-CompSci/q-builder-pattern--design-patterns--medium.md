@@ -4,7 +4,7 @@ title: "Builder Pattern / Builder Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-proxy-pattern--design-patterns--medium, q-garbage-collector-definition--programming-languages--easy, q-extensions-concept--programming-languages--easy]
 created: 2025-10-15
 tags:

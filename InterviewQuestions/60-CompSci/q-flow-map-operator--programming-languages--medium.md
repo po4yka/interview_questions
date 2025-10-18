@@ -4,7 +4,7 @@ title: "Flow Map Operator / Оператор map для Flow"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-how-gc-knows-object-can-be-destroyed--programming-languages--easy, q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-suspend-functions-under-the-hood--programming-languages--hard]
 created: 2025-10-15
 tags:

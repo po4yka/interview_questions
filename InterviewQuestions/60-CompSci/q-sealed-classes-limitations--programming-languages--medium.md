@@ -4,7 +4,7 @@ title: "Sealed Classes Limitations / Sealed Классы Limitations"
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-what-is-flow--programming-languages--medium, q-what-is-job-object--programming-languages--medium, q-clean-code-principles--software-engineering--medium]
 created: 2025-10-15
 tags:

@@ -4,7 +4,7 @@ title: "Regular Vs Extension Method"
 topic: computer-science
 difficulty: easy
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-reference-types-protect-from-deletion--programming-languages--easy, q-solid-principles--software-design--medium, q-hot-vs-cold-flows--programming-languages--medium]
 created: 2025-10-15
 tags:

@@ -4,7 +4,7 @@ title: "Coroutinescope Vs Supervisorscope / Coroutinescope против Supervis
 topic: computer-science
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-java-marker-interfaces--programming-languages--medium, q-what-is-coroutinescope--programming-languages--medium, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-15
 tags:

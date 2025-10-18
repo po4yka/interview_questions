@@ -4,7 +4,7 @@ title: "Suspend Function Return Type After Compilation / Тип возвраща
 topic: computer-science
 difficulty: hard
 status: draft
-moc: moc-compSci
+moc: moc-cs
 related: [q-how-to-create-suspend-function--programming-languages--medium, q-java-all-classes-inherit-from-object--programming-languages--easy, q-what-is-garbage-in-gc--programming-languages--easy]
 created: 2025-10-15
 tags:

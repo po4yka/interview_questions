@@ -4,7 +4,7 @@ title: Memento Pattern
 topic: design-patterns
 difficulty: medium
 status: draft
-moc: moc-compSci
+moc: moc-cs
 created: 2025-10-15
 tags: []
 related: [q-extension-properties--programming-languages--medium, q-os-fundamentals-concepts--computer-science--hard, q-how-gc-knows-object-can-be-destroyed--programming-languages--easy]
