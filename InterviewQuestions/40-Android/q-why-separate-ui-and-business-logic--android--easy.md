@@ -181,7 +181,93 @@ Separation of concerns is a key principle of Clean Architecture, MVP, MVVM, and 
 
 ## Ответ (RU)
 
-Разделение UI и бизнес-логики делает код понятнее, тестируемее и проще в поддержке. Это ключевой принцип Clean Architecture и паттернов MVP, MVVM, MVI.
+Разделение UI и бизнес-логики - это фундаментальный принцип хорошей архитектуры программного обеспечения.
+
+**Ключевые причины:**
+
+**1. Тестируемость**
+
+Когда бизнес-логика находится отдельно от UI, ее можно легко тестировать без Android-зависимостей. Unit тесты становятся простыми и быстрыми.
+
+**2. Поддерживаемость**
+
+- Изменения в логике не влияют на UI
+- Изменения в UI не влияют на логику
+- Код легче понимать и модифицировать
+
+**3. Переиспользуемость**
+
+Бизнес-логика может использоваться в разных UI-компонентах: Activity, Fragment, Widget, Compose, даже в разных платформах (KMM).
+
+**4. Масштабируемость**
+
+- Большие кодовые базы остаются организованными
+- Несколько разработчиков могут работать независимо
+- Проще добавлять новые функции
+
+**5. Платформенная независимость**
+
+Бизнес-логика не зависит от Android framework и может работать на любой платформе (Android, iOS через KMM, Desktop, Web).
+
+**6. Лучшая архитектура**
+
+Следует установленным паттернам: **MVP, MVVM, MVI, Clean Architecture**
+
+**Пример с MVVM:**
+
+```kotlin
+// UI слой (Activity/Fragment) - только отображение
+class UserListFragment : Fragment() {
+    private val viewModel: UserViewModel by viewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.users.observe(viewLifecycleOwner) { users ->
+            adapter.submitList(users)  // Только обновление UI
+        }
+    }
+}
+
+// Презентационный слой (ViewModel) - оркестрация
+class UserViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewModel() {
+    private val _users = MutableStateFlow<List<User>>(emptyList())
+    val users = _users.asStateFlow()
+
+    init {
+        loadUsers()
+    }
+
+    private fun loadUsers() {
+        viewModelScope.launch {
+            _users.value = getUsersUseCase()
+        }
+    }
+}
+
+// Доменный слой (Use Case) - чистая бизнес-логика
+class GetUsersUseCase(private val repository: UserRepository) {
+    suspend operator fun invoke(): List<User> {
+        return repository.getActiveUsers()
+            .sortedBy { it.name }
+    }
+}
+```
+
+**Резюме преимуществ:**
+
+- **Тестируемость**: Можно тестировать бизнес-логику без UI
+- **Поддерживаемость**: Изменения изолированы
+- **Переиспользуемость**: Логика работает в разных UI
+- **Масштабируемость**: Проще растить кодовую базу
+- **Читаемость**: Код организован и понятен
+- **Гибкость**: Легко менять UI или логику независимо
+
+**Анти-паттерн (избегать):**
+
+Не смешивайте все в Activity - это делает код непроверяемым, сложным в поддержке и невозможным для переиспользования.
+
+**Итого:**
+
+Separation of concerns (разделение ответственностей) - это ключевой принцип Clean Architecture и паттернов MVP, MVVM, MVI. Это делает код более тестируемым, поддерживаемым и профессиональным.
 
 ---
 
