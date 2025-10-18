@@ -4,6 +4,8 @@ title: "Kotlin Sealed Classes Features"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-retrofit-coroutines-best-practices--kotlin--medium, q-testing-stateflow-sharedflow--kotlin--medium, q-kotlin-lambda-expressions--kotlin--medium]
 created: 2025-10-15
 tags:
   - kotlin
@@ -30,3 +32,8 @@ The feature of sealed classes is restricting the inheritance hierarchy: all thei
 
 Особенность запечатанных классов заключается в ограничении иерархии наследования: все их подклассы должны быть объявлены в том же файле что и сам запечатанный класс Это делает его идеальным инструментом для создания ограниченных иерархий классов где требуется строго контролировать набор возможных подтипов особенно при моделировании состояний или результатов операций в виде дерева наследования
 
+## Related Questions
+
+- [[q-retrofit-coroutines-best-practices--kotlin--medium]]
+- [[q-testing-stateflow-sharedflow--kotlin--medium]]
+- [[q-kotlin-lambda-expressions--kotlin--medium]]

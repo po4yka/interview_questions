@@ -4,8 +4,11 @@ title: "Kotlin Default Inheritance Type / Тип наследования по �
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-coroutine-context-explained--kotlin--medium, q-repeatonlifecycle-android--kotlin--medium, q-java-kotlin-abstract-classes-difference--programming-languages--medium]
 created: 2025-10-15
-tags: - class-design
+tags:
+  - class-design
   - classes
   - final
   - inheritance
@@ -164,3 +167,8 @@ class Error : Result()
 - Рассмотрите `sealed` для контролируемых иерархий
 - Используйте `abstract` когда подклассы должны реализовать поведение
 
+## Related Questions
+
+- [[q-coroutine-context-explained--kotlin--medium]]
+- [[q-repeatonlifecycle-android--kotlin--medium]]
+- [[q-java-kotlin-abstract-classes-difference--programming-languages--medium]]

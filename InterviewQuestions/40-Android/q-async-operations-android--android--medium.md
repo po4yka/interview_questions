@@ -4,6 +4,8 @@ title: "Async Operations Android / Асинхронные операции Andro
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-test-doubles-dependency-injection--testing--medium, q-flutter-comparison--multiplatform--medium, q-proguard-r8--android--medium]
 created: 2025-10-15
 tags: [android/concurrency, async, concurrency, coroutines, executor, handler, threading, workmanager, difficulty/medium]
 ---
@@ -617,3 +619,8 @@ executor.execute {
 - AsyncTask (deprecated в API 30)
 - Сырые Thread (сложно управлять)
 
+## Related Questions
+
+- [[q-test-doubles-dependency-injection--testing--medium]]
+- [[q-flutter-comparison--multiplatform--medium]]
+- [[q-proguard-r8--android--medium]]

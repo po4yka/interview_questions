@@ -4,8 +4,11 @@ title: "How Compose Draws On Screen / Как Compose рисует на экра�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-annotation-processing--android--medium, q-dalvik-vs-art-runtime--android--medium, q-sealed-classes-state-management--kotlin--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How does Compose render on screen?
 

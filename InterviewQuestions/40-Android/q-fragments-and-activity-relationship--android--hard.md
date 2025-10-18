@@ -4,6 +4,8 @@ title: "Fragments And Activity Relationship"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-can-a-service-communicate-with-the-user--android--medium, q-sharedpreferences-commit-vs-apply--android--easy, q-how-did-fragments-appear-and-why-were-they-started-to-be-used--android--hard]
 created: 2025-10-15
 tags: [android, android/fragments, android/ui, fragments, ui, difficulty/hard]
 ---

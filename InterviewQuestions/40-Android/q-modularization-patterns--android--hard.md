@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard, q-ot-kogo-nasleduyutsya-viewgroup--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05

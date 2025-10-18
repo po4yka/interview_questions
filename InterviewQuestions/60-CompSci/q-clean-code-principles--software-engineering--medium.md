@@ -5,16 +5,19 @@ topic: cs
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - clean-code
+tags:
+  - clean-code
   - best-practices
   - refactoring
   - code-quality
   - readable-code
 moc: moc-cs
-related:   - q-solid-principles--software-design--medium
+related: [q-regular-vs-extension-method--programming-languages--easy, q-flow-map-operator--programming-languages--medium, q-java-object-comparison--programming-languages--easy]
+  - q-solid-principles--software-design--medium
   - q-design-patterns-types--design-patterns--medium
   - q-refactoring-techniques--software-engineering--medium
-subtopics:   - clean-code
+subtopics:
+  - clean-code
   - software-engineering
   - best-practices
   - code-quality
@@ -197,3 +200,9 @@ fun save()
 **4. Зависть к функциям (Feature Envy)**
 
 Метод, который больше интересуется другим классом, чем своим собственным.
+
+## Related Questions
+
+- [[q-regular-vs-extension-method--programming-languages--easy]]
+- [[q-flow-map-operator--programming-languages--medium]]
+- [[q-java-object-comparison--programming-languages--easy]]

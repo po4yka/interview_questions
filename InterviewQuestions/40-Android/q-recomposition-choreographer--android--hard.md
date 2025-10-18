@@ -4,6 +4,8 @@ title: "Recomposition Choreographer / Рекомпозиция и Choreographer"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-list-to-detail-navigation--android--medium, q-memory-leak-detection--performance--medium, q-cancel-presenter-requests--android--medium]
 created: 2025-10-15
 tags: [android/jetpack-compose, android/performance, choreographer, frame-scheduling, jetpack-compose, performance, recomposition, vsync, difficulty/hard]
 ---

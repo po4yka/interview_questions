@@ -4,6 +4,8 @@ title: "Dagger Inject Annotation / Аннотация Inject Dagger"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-cancel-presenter-requests--android--medium, q-viewgroup-vs-view-differences--android--easy, q-testing-coroutines-flow--testing--hard]
 created: 2025-10-15
 tags: [android/dependency-injection, dagger, dependency-injection, hilt, inject, difficulty/easy]
 ---
@@ -364,3 +366,8 @@ object AppModule {
 
 **Лучшая практика:** Используйте constructor injection для тестируемости.
 
+## Related Questions
+
+- [[q-cancel-presenter-requests--android--medium]]
+- [[q-viewgroup-vs-view-differences--android--easy]]
+- [[q-testing-coroutines-flow--testing--hard]]

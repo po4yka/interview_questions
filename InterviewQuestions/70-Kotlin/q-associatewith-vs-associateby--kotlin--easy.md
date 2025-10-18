@@ -4,8 +4,11 @@ title: "Associatewith Vs Associateby / associateWith против associateBy"
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-inline-function-limitations--kotlin--medium, q-kotlin-reflection--programming-languages--medium, q-kotlin-constructor-types--programming-languages--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - collections
   - map
   - transformation
@@ -295,3 +298,8 @@ val itemsById = items.associateBy { it.id }
 
 `associateBy` полезен для индексации объектов по ID (быстрый поиск O(1)). `associateWith` полезен для маппинга элементов к их свойствам. При коллизии ключей выигрывает последнее значение. Используйте `groupBy` чтобы сохранить все значения.
 
+## Related Questions
+
+- [[q-inline-function-limitations--kotlin--medium]]
+- [[q-kotlin-reflection--programming-languages--medium]]
+- [[q-kotlin-constructor-types--programming-languages--medium]]

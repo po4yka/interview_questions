@@ -144,3 +144,9 @@ fun main() = runBlocking { // Создает CoroutineScope
 ## References
 
 - [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
+
+## Related Questions
+
+- [[q-coroutines-vs-threads--programming-languages--medium]]
+- [[q-suspend-functions-basics--kotlin--easy]]
+- [[q-coroutine-scope-basics--kotlin--easy]]

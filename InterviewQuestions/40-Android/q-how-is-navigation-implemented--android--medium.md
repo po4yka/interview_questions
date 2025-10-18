@@ -4,6 +4,8 @@ title: "How Is Navigation Implemented / Как реализована навиг
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-service-lifecycle-binding--background--hard, q-navigation-methods-in-kotlin--android--medium, q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy]
 created: 2025-10-15
 tags: [android/navigation, navigation, ui, difficulty/medium]
 ---

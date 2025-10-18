@@ -4,9 +4,11 @@ title: "Accessibility Testing / Accessibility Тестирование"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
 created: 2025-10-11
 tags: [accessibility, testing, automated-testing, talkback, difficulty/medium]
-related:   - q-accessibility-compose--accessibility--medium
+related: [q-tasks-back-stack--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard, q-kmm-dependency-injection--multiplatform--medium]
+  - q-accessibility-compose--accessibility--medium
   - q-accessibility-talkback--accessibility--medium
   - q-cicd-automated-testing--devops--medium
 ---

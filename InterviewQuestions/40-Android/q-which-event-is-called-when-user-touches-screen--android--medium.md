@@ -4,6 +4,8 @@ title: "Which Event Is Called When User Touches Screen / Какое событи
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-espresso-advanced-patterns--testing--medium, q-how-to-create-dynamic-screens-at-runtime--android--hard, q-how-to-create-chat-lists-from-a-ui-perspective--android--hard]
 created: 2025-10-15
 tags: [touch-events, ui, difficulty/medium]
 ---
@@ -668,3 +670,9 @@ fun ComposeTouchEvents() {
 - onClick() срабатывает только на ACTION_UP без движения
 - dispatchTouchEvent() первый, onTouchEvent() обрабатывает фактическое касание
 - ViewGroups могут перехватывать дочерние события с помощью onInterceptTouchEvent()
+
+## Related Questions
+
+- [[q-espresso-advanced-patterns--testing--medium]]
+- [[q-how-to-create-dynamic-screens-at-runtime--android--hard]]
+- [[q-how-to-create-chat-lists-from-a-ui-perspective--android--hard]]

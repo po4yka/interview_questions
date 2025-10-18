@@ -4,10 +4,13 @@ title: "Intent Filters Android / Intent фильтры Android"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-which-event-is-called-when-user-touches-screen--android--medium, q-in-which-thread-does-a-regular-service-run--android--medium, q-what-is-known-about-view-lifecycles--android--medium]
 created: 2025-10-15
 tags: [intent-filter, deep-linking, manifest, implicit-intent, intents-deeplinks, activity, android/deeplinks, android/activity, android/manifest, difficulty/medium]
 source: Kirchhoff-Android-Interview-Questions
-subtopics:   - intents-deeplinks
+subtopics:
+  - intents-deeplinks
   - activity
   - manifest
 ---

@@ -4,8 +4,11 @@ title: "How Gc Knows Object Can Be Destroyed / Как GC знает что об�
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-what-is-job-object--programming-languages--medium, q-mediator-pattern--design-patterns--medium, q-zip-operator-parallel-requests--programming-languages--medium]
 created: 2025-10-15
-tags: - garbage-collection
+tags:
+  - garbage-collection
   - gc-algorithm
   - jvm
   - kotlin
@@ -136,3 +139,8 @@ GC uses **reachability analysis from GC Roots**. If an object cannot be reached 
 
 Сборщик мусора использует анализ ссылок. Объект считается 'мёртвым', если на него нет доступных ссылок из корневых объектов. GC обходит все достижимые объекты, начиная с корневых. Недостижимые объекты считаются мусором и удаляются.
 
+## Related Questions
+
+- [[q-what-is-job-object--programming-languages--medium]]
+- [[q-mediator-pattern--design-patterns--medium]]
+- [[q-zip-operator-parallel-requests--programming-languages--medium]]

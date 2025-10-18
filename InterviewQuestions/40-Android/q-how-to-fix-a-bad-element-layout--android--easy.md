@@ -4,6 +4,8 @@ title: "How To Fix A Bad Element Layout / Как исправить плохой
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-performance-optimization-android--android--medium, q-flow-testing-turbine--testing--medium, q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]
 created: 2025-10-15
 tags: [android/layouts, layout, layouts, performance, ui, difficulty/easy]
 ---

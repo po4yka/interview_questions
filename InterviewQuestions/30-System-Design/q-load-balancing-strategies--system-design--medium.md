@@ -5,15 +5,18 @@ topic: system-design
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - system-design
+tags:
+  - system-design
   - load-balancing
   - scalability
   - algorithms
 moc: moc-system-design
-related:   - q-horizontal-vertical-scaling--system-design--medium
+related: [q-caching-strategies--system-design--medium, q-cap-theorem-distributed-systems--system-design--hard, q-rest-api-design-best-practices--system-design--medium]
+  - q-horizontal-vertical-scaling--system-design--medium
   - q-stateless-stateful-services--system-design--medium
   - q-health-checks-circuit-breaker--system-design--hard
-subtopics:   - load-balancing
+subtopics:
+  - load-balancing
   - scalability
   - high-availability
   - distributed-systems

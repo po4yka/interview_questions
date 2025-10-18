@@ -4,6 +4,8 @@ title: "Singleton Scope Binding / Привязка Singleton скоупа"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-jetpack-compose-works--programming-languages--medium, q-what-navigation-methods-exist-in-kotlin--programming-languages--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
 created: 2025-10-15
 tags: [android/dependency-injection, dagger, dependency-injection, hilt, scope, singleton, difficulty/medium]
 ---
@@ -357,3 +359,8 @@ class UserRepository @Inject constructor(
 - - Живет столько, сколько живет компонент
 - - Может вызвать утечки памяти при неправильном использовании
 
+## Related Questions
+
+- [[q-how-jetpack-compose-works--programming-languages--medium]]
+- [[q-what-navigation-methods-exist-in-kotlin--programming-languages--medium]]
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]]

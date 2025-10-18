@@ -4,6 +4,8 @@ title: "Android Testing Strategies / Android Тестирование Strategies
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-pass-parameters-to-fragment--android--easy, q-how-does-jetpack-compose-work--android--medium, q-how-animations-work-in-recyclerview--android--medium]
 created: 2025-10-15
 tags: [testing, junit, espresso, mockito, quality-assurance, difficulty/medium]
 ---

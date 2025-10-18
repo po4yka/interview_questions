@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [views, drawable, graphics, android-framework, android/ui-views, android/ui-graphics, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-how-to-pass-parameters-to-a-fragment--android--easy, q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium, q-what-problems-can-there-be-with-list-items--android--easy]
 subtopics: [ui-views, ui-graphics]
 ---
 # Custom Drawable Implementation

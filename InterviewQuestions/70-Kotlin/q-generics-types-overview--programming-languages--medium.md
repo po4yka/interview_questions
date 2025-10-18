@@ -4,8 +4,11 @@ title: "Generics Types Overview / Обзор обобщенных типов"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-produce-actor-builders--kotlin--medium, q-job-vs-supervisorjob--programming-languages--medium, q-coroutine-parent-child-relationship--kotlin--medium]
 created: 2025-10-15
-tags: - bounds
+tags:
+  - bounds
   - generics
   - java
   - kotlin
@@ -187,3 +190,8 @@ List     // Java - сырой тип (deprecated)
 | Контравариантность | Потребитель | `in T` |
 | Звездочная проекция | Неизвестный тип | `List<*>` |
 
+## Related Questions
+
+- [[q-produce-actor-builders--kotlin--medium]]
+- [[q-job-vs-supervisorjob--programming-languages--medium]]
+- [[q-coroutine-parent-child-relationship--kotlin--medium]]

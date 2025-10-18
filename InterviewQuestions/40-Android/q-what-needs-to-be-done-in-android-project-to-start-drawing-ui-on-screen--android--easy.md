@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [XML layout, AndroidManifest.xml, android, ui, activity, lifecycle, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-android-security-practices-checklist--android--medium, q-app-startup-library--android--medium, q-view-composition-strategy-compose--android--medium]
 ---
 # What needs to be done in Android project to start drawing UI on screen?
 

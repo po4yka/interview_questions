@@ -4,8 +4,11 @@ title: "What To Do In Android Project To Start Drawing Ui On Screen / Что д�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-in-what-cases-might-you-need-to-call-commitallowingstateloss--android--hard, q-mvp-pattern--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # What needs to be done in Android project to start drawing UI on screen?
 

@@ -12,11 +12,12 @@ original_language: en
 language_tags: [en, ru]
 question_kind: android
 moc: moc-android
-subtopics:   - dagger
+subtopics:
+  - dagger
   - hilt
   - dependency-injection
   - build-optimization
-related: []
+related: [q-internal-app-distribution--distribution--medium, q-which-class-can-be-used-to-detect-different-gestures--programming-languages--easy, q-rxjava-pagination-recyclerview--android--medium]
 ---
 
 # Question (EN)

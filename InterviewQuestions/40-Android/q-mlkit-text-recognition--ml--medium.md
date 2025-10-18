@@ -4,6 +4,8 @@ title: "Mlkit Text Recognition / Распознавание текста ML Kit"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-mutablestate-notifies--android--medium, q-api-rate-limiting-throttling--android--medium, q-handler-looper-comprehensive--android--medium]
 created: 2025-10-15
 tags: [Kotlin, MLKit, MachineLearning, TextRecognition, difficulty/medium]
 ---
@@ -871,3 +873,9 @@ ML Kit Text Recognition обеспечивает мощный OCR:
 - **Structured Data**: Auto-extraction
 
 Ключевые моменты: image quality, preprocessing, script selection, performance optimization, UX.
+
+## Related Questions
+
+- [[q-how-mutablestate-notifies--android--medium]]
+- [[q-api-rate-limiting-throttling--android--medium]]
+- [[q-handler-looper-comprehensive--android--medium]]

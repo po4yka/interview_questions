@@ -5,17 +5,20 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - flow
   - channelflow
   - callbackflow
   - builders
 moc: moc-kotlin
-related:   - q-suspend-cancellable-coroutine--kotlin--hard
+related: [q-channel-pipelines--kotlin--hard, q-kotlin-flow-basics--kotlin--medium, q-compose-side-effects-coroutines--kotlin--medium]
+  - q-suspend-cancellable-coroutine--kotlin--hard
   - q-mutex-synchronized-coroutines--kotlin--medium
   - q-common-coroutine-mistakes--kotlin--medium
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - flow
   - channelflow
   - callbackflow

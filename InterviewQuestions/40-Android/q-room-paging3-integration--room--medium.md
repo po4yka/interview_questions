@@ -4,6 +4,8 @@ title: "Room Paging3 Integration / Интеграция Room с Paging3"
 topic: room
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-view-binding--android--medium, q-dagger-scope-explained--android--medium, q-android-lint-tool--android--medium]
 created: 2025-10-15
 tags: [paging3, database, pagination, architecture, offline-first, difficulty/medium]
 ---

@@ -4,6 +4,8 @@ title: "Kotlin Lateinit / lateinit в Kotlin"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-map-flatmap--kotlin--medium, q-job-vs-supervisorjob--programming-languages--medium, q-kotlin-advantages-for-android--kotlin--easy]
 created: 2025-10-15
 tags:
   - dependency-injection
@@ -99,3 +101,8 @@ if (::name.isInitialized) {
 
 1. lateinit используется для откладывания инициализации переменных (только для var и только ссылочных типов). 2. Поле помечается как lateinit и должно быть инициализировано до первого использования, иначе выбрасывается UninitializedPropertyAccessException. 3. Это полезно в случаях, когда инициализация зависит от внешних условий (например, DI или тестирование).
 
+## Related Questions
+
+- [[q-kotlin-map-flatmap--kotlin--medium]]
+- [[q-job-vs-supervisorjob--programming-languages--medium]]
+- [[q-kotlin-advantages-for-android--kotlin--easy]]

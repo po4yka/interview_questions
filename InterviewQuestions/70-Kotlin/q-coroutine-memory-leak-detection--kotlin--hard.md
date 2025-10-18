@@ -10,6 +10,7 @@ subtopics:
   - debugging
 difficulty: hard
 moc: moc-kotlin
+related: [q-object-keyword-kotlin--programming-languages--medium, q-kotlin-object-companion-object--programming-languages--easy, q-nothing-instances--programming-languages--easy]
 status: draft
 created: 2025-10-12
 updated: 2025-10-12

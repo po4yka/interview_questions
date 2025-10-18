@@ -4,6 +4,8 @@ title: "Workmanager Execution Guarantee / Гарантия выполнения 
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-gradle-build-system--android--medium, q-what-does-viewgroup-inherit-from--android--easy, q-compose-modifier-order-performance--jetpack-compose--medium]
 created: 2025-10-15
 tags: [workmanager, background-tasks, reliability, difficulty/medium]
 ---
@@ -616,3 +618,9 @@ WorkManager.getInstance(context)
 ```
 
 **Резюме:** WorkManager гарантирует выполнение через персистентное хранилище в SQLite, мониторинг системных ограничений, автоматический повтор с backoff, интеграцию с JobScheduler/AlarmManager, и обработку перезагрузок устройства.
+
+## Related Questions
+
+- [[q-gradle-build-system--android--medium]]
+- [[q-what-does-viewgroup-inherit-from--android--easy]]
+- [[q-compose-modifier-order-performance--jetpack-compose--medium]]

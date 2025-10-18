@@ -4,6 +4,8 @@ title: "Graphql Vs Rest / Graphql против Rest"
 topic: networking
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-repository-multiple-sources--android--medium, q-what-are-services-used-for--android--medium, q-large-file-upload-app--android--hard]
 created: 2025-10-15
 tags: [graphql, rest, api-design, comparison, architecture, difficulty/easy]
 ---

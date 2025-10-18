@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/data-storage, data-storage, database, realm, room, sqlite, difficulty/easy]
 moc: moc-android
-related: []
+related: [q-how-to-add-custom-attributes-to-custom-view--programming-languages--medium, q-play-app-signing--android--medium, q-recomposition-choreographer--android--hard]
 ---
 # Какие базы данных можно использовать в Android?
 

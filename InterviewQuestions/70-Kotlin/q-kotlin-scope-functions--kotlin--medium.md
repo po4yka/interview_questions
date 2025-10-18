@@ -23,7 +23,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-testing-coroutines-runtest--kotlin--medium, q-data-sealed-classes-definition--programming-languages--hard, q-kotlin-crossinline--programming-languages--hard]
 
 # Timestamps
 created: 2025-10-05

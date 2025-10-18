@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [views, accessibility, a11y, inclusive-design, android/ui-views, android/ui-accessibility, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-room-transactions-dao--room--medium, q-remember-vs-remembersaveable-compose--android--medium, q-app-security-best-practices--security--medium]
 subtopics: [ui-views, ui-accessibility]
 ---
 # Custom View Accessibility

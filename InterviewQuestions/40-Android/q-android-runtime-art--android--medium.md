@@ -4,6 +4,8 @@ title: "Android Runtime Art"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-view-binding--android--medium, q-android-app-lag-analysis--android--medium, q-webp-image-format-android--android--easy]
 created: 2025-10-15
 tags: [runtime, art, dalvik, difficulty/medium]
 ---
@@ -252,3 +254,9 @@ fun checkRuntime() {
 ```
 
 **English**: Android Runtime (ART) is the execution environment responsible for running apps, managing memory, and interacting with OS. Uses AOT (Ahead-Of-Time) compilation for better performance vs old Dalvik's JIT. Features improved garbage collection, faster app launch, lower battery consumption, and hybrid compilation (AOT + JIT profiling). Loads classes from DEX files and provides sandboxed execution environment.
+
+## Related Questions
+
+- [[q-view-binding--android--medium]]
+- [[q-android-app-lag-analysis--android--medium]]
+- [[q-webp-image-format-android--android--easy]]

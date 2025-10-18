@@ -12,6 +12,7 @@ updated: 2025-10-12
 category: "coroutines-advanced"
 tags: ["dispatchers", "threading", "limitedparallelism", "performance", "resource-management", "concurrency"]
 moc: "moc-kotlin"
+related: [q-kotlin-map-collection--programming-languages--easy, q-visibility-modifiers-kotlin--kotlin--medium, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
 contributors: []
 ---
 

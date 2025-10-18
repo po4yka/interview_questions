@@ -4,8 +4,11 @@ title: "Kotlin Default Access Modifier / Модификатор доступа �
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-dispatcher-performance--kotlin--hard, q-kotlin-generics--kotlin--hard, q-debounce-search-coroutines--kotlin--medium]
 created: 2025-10-15
-tags: - access-modifiers
+tags:
+  - access-modifiers
   - kotlin
   - programming-languages
   - public
@@ -112,3 +115,8 @@ val counter = 0  // public свойство
 - Java: package-private (без модификатора) по умолчанию
 - В Kotlin есть `internal` (видимость в модуле) вместо package-private
 
+## Related Questions
+
+- [[q-dispatcher-performance--kotlin--hard]]
+- [[q-kotlin-generics--kotlin--hard]]
+- [[q-debounce-search-coroutines--kotlin--medium]]

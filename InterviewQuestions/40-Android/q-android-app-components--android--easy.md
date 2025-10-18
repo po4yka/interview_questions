@@ -4,6 +4,8 @@ title: "Android App Components / Компоненты Android приложени
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-baseline-profiles-optimization--performance--medium, q-compose-testing--android--medium, q-architecture-components-libraries--android--easy]
 created: 2025-10-15
 tags: [app-architecture, components, difficulty/easy]
 ---

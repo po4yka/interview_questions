@@ -7,10 +7,12 @@ status: draft
 created: 2025-10-12
 tags: [security, biometric, authentication, androidx-biometric, android/biometric, android/authentication, android/fingerprint, android/face-recognition, difficulty/medium]
 moc: moc-android
-related:   - q-encrypted-shared-preferences--security--medium
+related: [q-how-to-break-text-by-screen-width--android--easy, q-kmm-architecture--multiplatform--hard, q-compose-ui-testing-advanced--testing--hard]
+  - q-encrypted-shared-preferences--security--medium
   - q-keystore-api--security--hard
   - q-certificate-pinning--security--hard
-subtopics:   - security
+subtopics:
+  - security
   - biometric
   - authentication
   - fingerprint
@@ -1066,3 +1068,9 @@ biometricPrompt.authenticate(
 8. What is the relationship between BiometricPrompt and KeyStore?
 9. How do you handle biometric authentication in multi-user scenarios?
 10. What are the privacy considerations for biometric data?
+
+## Related Questions
+
+- [[q-how-to-break-text-by-screen-width--android--easy]]
+- [[q-kmm-architecture--multiplatform--hard]]
+- [[q-compose-ui-testing-advanced--testing--hard]]

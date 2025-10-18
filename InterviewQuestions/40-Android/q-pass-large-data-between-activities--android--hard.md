@@ -4,6 +4,8 @@ title: "Pass Large Data Between Activities / Передача больших д�
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-accessibility-text-scaling--accessibility--medium, q-workmanager-execution-guarantee--android--medium, q-reduce-app-size--android--medium]
 created: 2025-10-15
 tags: [android/data-passing, content-provider, data-passing, file-provider, intent, large-data, uri, difficulty/hard]
 ---

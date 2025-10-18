@@ -4,6 +4,8 @@ title: "Why Multithreading Tools / Зачем инструменты много�
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-repository-multiple-sources--android--medium, q-how-to-reduce-the-number-of-recompositions-besides-side-effects--android--hard, q-how-to-display-snackbar-or-toast-based-on-results--android--medium]
 created: 2025-10-15
 tags: [android/concurrency, concurrency, multithreading, performance, threading, difficulty/easy]
 ---
@@ -614,3 +616,8 @@ WorkManager.getInstance(context).enqueue(work)
 **Правило:**
 > Если операция занимает > **16ms** (один кадр), выполняйте её в фоновом потоке.
 
+## Related Questions
+
+- [[q-repository-multiple-sources--android--medium]]
+- [[q-how-to-reduce-the-number-of-recompositions-besides-side-effects--android--hard]]
+- [[q-how-to-display-snackbar-or-toast-based-on-results--android--medium]]

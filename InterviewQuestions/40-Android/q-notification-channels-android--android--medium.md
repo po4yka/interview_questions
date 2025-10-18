@@ -12,9 +12,11 @@ category: android
 date_modified: 2025-10-05
 language_tags: [notifications, notification-channels, android8, importance, difficulty/medium, android/ui-widgets]
 moc: moc-android
+related: [q-which-class-to-catch-gestures--android--easy, q-what-is-intent--android--easy, q-websocket-implementation--networking--medium]
 original_language: en
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20notification.md"
-subtopics:   - notifications
+subtopics:
+  - notifications
   - ui-widgets
 type: question
 ---
@@ -299,3 +301,9 @@ var builder = NotificationCompat.Builder(this, CHANNEL_ID)
 - Запросы на оценку приложения
 - Операции, которые не требуют участия пользователя, такие как синхронизация информации
 - Состояния ошибок, от которых приложение может восстановиться без взаимодействия с пользователем
+
+## Related Questions
+
+- [[q-which-class-to-catch-gestures--android--easy]]
+- [[q-what-is-intent--android--easy]]
+- [[q-websocket-implementation--networking--medium]]

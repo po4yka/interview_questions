@@ -4,8 +4,11 @@ title: "What Happens To Unneeded Objects / Что происходит с нен
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-xml-acronym--programming-languages--easy, q-suspend-function-return-type-after-compilation--programming-languages--hard, q-java-lambda-type--programming-languages--easy]
 created: 2025-10-15
-tags: - automatic-memory
+tags:
+  - automatic-memory
   - garbage-collection
   - jvm
   - kotlin
@@ -173,3 +176,8 @@ This is automatic memory management in Kotlin/Java!
 
 Объекты, которые больше не имеют активных ссылок, считаются мусором. Такие объекты автоматически удаляются сборщиком мусора, освобождая память для новых объектов. Это происходит в фоновом режиме и не требует прямого вмешательства разработчика.
 
+## Related Questions
+
+- [[q-xml-acronym--programming-languages--easy]]
+- [[q-suspend-function-return-type-after-compilation--programming-languages--hard]]
+- [[q-java-lambda-type--programming-languages--easy]]

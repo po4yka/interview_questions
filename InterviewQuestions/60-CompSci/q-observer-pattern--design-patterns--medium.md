@@ -4,8 +4,11 @@ title: "Observer Pattern / Observer Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-throw-vs-throws--programming-languages--easy, q-abstract-class-purpose--programming-languages--medium, q-oop-principles-deep-dive--computer-science--medium]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - behavioral-patterns
   - observer
   - gof-patterns

@@ -4,6 +4,8 @@ title: "Detect Unused Object / Обнаружение неиспользуемы
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-proxy-pattern--design-patterns--medium, q-abstract-factory-pattern--design-patterns--medium, q-command-pattern--design-patterns--medium]
 created: 2025-10-15
 tags:
   - garbage-collection
@@ -113,3 +115,8 @@ fun testGarbageCollection() {
 
 Используйте WeakReference для определения был ли объект освобожден сборщиком мусора. Также проверьте отсутствие сильных ссылок и используйте ObjectWatcher из LeakCanary для отслеживания.
 
+## Related Questions
+
+- [[q-proxy-pattern--design-patterns--medium]]
+- [[q-abstract-factory-pattern--design-patterns--medium]]
+- [[q-command-pattern--design-patterns--medium]]

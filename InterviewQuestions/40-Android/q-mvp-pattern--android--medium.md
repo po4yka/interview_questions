@@ -4,6 +4,8 @@ title: "Mvp Pattern / Mvp Паттерн"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-save-markdown-structure-database--android--medium, q-android-architectural-patterns--android--medium, q-workmanager-chaining--background--hard]
 created: 2025-10-15
 tags: [architecture-patterns, mvp, model-view-presenter, presenter, contract, difficulty/medium]
 ---
@@ -12,6 +14,15 @@ tags: [architecture-patterns, mvp, model-view-presenter, presenter, contract, di
 **English**: What is the MVP (Model-View-Presenter) architectural pattern? Explain its components and how it differs from other patterns.
 
 ## Answer (EN)
+
+**MVP (Model-View-Presenter)** - архитектурный паттерн для улучшения тестируемости и разделения ответственности.
+
+**Компоненты:** (1) Model - бизнес-логика и данные, (2) View - пассивный UI, реализует интерфейс, уведомляет Presenter о действиях пользователя, (3) Presenter - медиатор между Model и View, содержит презентационную логику, нет Android зависимостей.
+
+**Ключевая особенность:** Contract интерфейс определяет связь View-Presenter. **Преимущества:** тестируемость (mock View), разделение ответственности, Presenter без Android зависимостей. **Недостатки:** может привести к God Presenter, ручное управление lifecycle, риск утечек памяти если View не detach, изменения конфигурации теряют состояние.
+
+## Ответ (RU)
+
 **MVP (Model-View-Presenter)** - архитектурный паттерн, разработанный для облегчения автоматизированного модульного тестирования и улучшения разделения ответственности в презентационной логике.
 
 ### MVP Components
@@ -320,3 +331,9 @@ override fun detachView() {
 
 ---
 *Source: Kirchhoff Android Interview Questions*
+
+## Related Questions
+
+- [[q-save-markdown-structure-database--android--medium]]
+- [[q-android-architectural-patterns--android--medium]]
+- [[q-workmanager-chaining--background--hard]]

@@ -4,6 +4,8 @@ title: "Workmanager Decision Guide / Руководство по выбору Wo
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-api-rate-limiting-throttling--android--medium, q-compose-modifier-system--android--medium, q-databases-android--android--easy]
 created: 2025-10-15
 tags: [workmanager, background-work, coroutines, service, difficulty/medium]
 ---
@@ -12,7 +14,20 @@ tags: [workmanager, background-work, coroutines, service, difficulty/medium]
 **English**: When should you use WorkManager vs Coroutines vs Service for background work?
 
 ## Answer (EN)
-**WorkManager**, **Coroutines**, и **Service** решают разные задачи фоновой работы:
+
+**WorkManager**, **Coroutines** и **Service** решают разные задачи фоновой работы в Android.
+
+**WorkManager:** для отложенной гарантированной работы (загрузка файлов, синхронизация данных, аналитика, периодические задачи >= 15 мин). Гарантии: переживёт закрытие приложения, device reboot, автоматический retry, battery-эффективность. Поддержка: constraints (WiFi, charging), backoff policies, chaining, progress tracking.
+
+**Coroutines:** для async операций во время работы приложения (загрузка данных для UI, network запросы, database операции, Flow-based real-time данных). Ограничения: отменяются при закрытии приложения, не переживут process death, нет retry/backoff, нет constraints.
+
+**Foreground Service:** для long-running user-visible работы (music player, location tracking, fitness tracking, VoIP, active downloads). Требования: обязательно показывать notification, пользователь видит что работает, может работать при закрытом приложении.
+
+**Правила выбора:** нужна гарантия после закрытия → WorkManager. Нужен немедленный результат для UI → Coroutines. Нужна user-visible long-running работа → Foreground Service. Периодические задачи: <15min → Coroutines, >=15min → WorkManager.
+
+## Ответ (RU)
+
+**WorkManager**, **Coroutines** и **Service** решают разные задачи фоновой работы:
 
 | Критерий | WorkManager | Coroutines | Service (Foreground) |
 |----------|-------------|------------|---------------------|

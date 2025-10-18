@@ -4,6 +4,8 @@ title: "What Is Known About View Lifecycles / Что известно о жиз�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-spannable-text-styling--android--medium, q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium, q-api-rate-limiting-throttling--android--medium]
 created: 2025-10-15
 tags: [view, lifecycle, ui, difficulty/medium]
 ---

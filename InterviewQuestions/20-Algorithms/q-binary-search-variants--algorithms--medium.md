@@ -5,14 +5,17 @@ topic: algorithms
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - algorithms
+tags:
+  - algorithms
   - binary-search
   - searching
   - log-n
 moc: moc-algorithms
-related:   - q-sorting-algorithms-comparison--algorithms--medium
+related: [q-binary-search-trees-bst--algorithms--hard, q-two-pointers-sliding-window--algorithms--medium, q-backtracking-algorithms--algorithms--hard]
+  - q-sorting-algorithms-comparison--algorithms--medium
   - q-two-pointers-technique--algorithms--medium
-subtopics:   - binary-search
+subtopics:
+  - binary-search
   - searching
   - divide-and-conquer
   - logarithmic

@@ -4,8 +4,11 @@ title: "How Dialog Differs From Other Navigation / Чем Dialog отличае�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-is-layout-performance-measured-in--android--medium, q-main-thread-android--android--medium, q-kmm-dependency-injection--multiplatform--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 
 # How does dialog differ from other navigation?

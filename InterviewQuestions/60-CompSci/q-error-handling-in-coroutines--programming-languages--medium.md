@@ -4,8 +4,11 @@ title: "Error Handling In Coroutines"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-data-sealed-classes-why--programming-languages--medium, q-hashmap-how-it-works--programming-languages--medium, q-where-to-call-suspend-functions--programming-languages--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Error Handling Methods in Coroutines
 
@@ -192,3 +195,9 @@ class ErrorHandlingBestPractices {
 ## Ответ (RU)
 
 1. Try-catch внутри launch {} или async {} – локальная обработка ошибок.\",
+
+## Related Questions
+
+- [[q-data-sealed-classes-why--programming-languages--medium]]
+- [[q-hashmap-how-it-works--programming-languages--medium]]
+- [[q-where-to-call-suspend-functions--programming-languages--medium]]

@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-viewmodel-vs-onsavedinstancestate--android--medium, q-which-event-is-triggered-when-user-presses-screen--android--medium, q-kapt-vs-ksp--android--medium]
 
 # Timestamps
 created: 2025-10-05

@@ -4,6 +4,8 @@ title: "Android14 Permissions / Разрешения Android 14"
 topic: permissions
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-home-screen-widgets--android--medium, q-why-diffutil-needed--android--medium, q-module-types-android--android--medium]
 created: 2025-10-15
 tags: [android14, android13, privacy, photos, notifications, compatibility, difficulty/medium]
 ---

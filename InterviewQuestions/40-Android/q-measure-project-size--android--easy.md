@@ -4,6 +4,8 @@ title: "Measure Project Size / Измерение размера проекта"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-how-to-write-recyclerview-cache-ahead--android--medium, q-flow-testing-turbine--testing--medium, q-how-navigation-is-implemented-in-android--android--medium]
 created: 2025-10-15
 tags: [android/project-structure, apk-size, codebase-analysis, codebase-size, metrics, modules, project-metrics, project-structure, difficulty/easy]
 ---
@@ -976,3 +978,8 @@ android {
 - Устанавливать лимиты размера
 - Регулярная очистка и оптимизация
 
+## Related Questions
+
+- [[q-how-to-write-recyclerview-cache-ahead--android--medium]]
+- [[q-flow-testing-turbine--testing--medium]]
+- [[q-how-navigation-is-implemented-in-android--android--medium]]

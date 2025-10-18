@@ -5,16 +5,19 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - testing
   - test-dispatcher
   - runtest
 moc: moc-kotlin
-related:   - q-debugging-coroutines-techniques--kotlin--medium
+related: [q-inline-function-limitations--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium, q-flow-backpressure--kotlin--hard]
+  - q-debugging-coroutines-techniques--kotlin--medium
   - q-common-coroutine-mistakes--kotlin--medium
   - q-channelflow-callbackflow-flow--kotlin--medium
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - testing
   - test-dispatcher
   - runtest

@@ -12,6 +12,7 @@ updated: 2025-10-12
 category: "coroutines-advanced"
 tags: ["deferred", "async", "await", "parallel-execution", "concurrency", "performance"]
 moc: "moc-kotlin"
+related: [q-lifecyclescope-viewmodelscope--kotlin--medium, q-kotlin-sealed-classes-purpose--programming-languages--medium, q-singleton-object-keyword--programming-languages--easy]
 contributors: []
 ---
 

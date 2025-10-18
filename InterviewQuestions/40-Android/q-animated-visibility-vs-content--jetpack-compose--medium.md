@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [compose, animations, transitions, animated-visibility, ui, android/ui-animation, android/jetpack-compose, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard, q-android-components-besides-activity--android--easy, q-recomposition-compose--android--medium]
 subtopics: [ui-animation, jetpack-compose]
 ---
 # AnimatedVisibility vs AnimatedContent vs Crossfade

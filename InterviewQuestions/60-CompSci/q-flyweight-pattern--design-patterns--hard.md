@@ -4,8 +4,11 @@ title: "Flyweight Pattern / Flyweight Паттерн"
 topic: computer-science
 difficulty: hard
 status: draft
+moc: moc-compSci
+related: [q-when-coroutine-cannot-be-cancelled--programming-languages--medium, q-decorator-pattern--design-patterns--medium, q-how-to-create-suspend-function--programming-languages--medium]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - structural-patterns
   - flyweight
   - gof-patterns

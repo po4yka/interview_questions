@@ -4,8 +4,11 @@ title: "Sharedflow Vs Stateflow / Sharedflow против Stateflow"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-launch-vs-async-error-handling--programming-languages--medium, q-class-composition--oop--medium, q-data-class-special-features--programming-languages--easy]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # SharedFlow vs StateFlow Differences
 
@@ -356,3 +359,9 @@ val converted: StateFlow<Int> = sharedFlow.stateIn(
 ## Ответ (RU)
 
 SharedFlow — это горячий поток, который передаёт данные нескольким подписчикам в реальном времени и может буферизировать значения. StateFlow — поток, который всегда хранит одно последнее значение и отправляет его подписчикам только при изменении состояния.
+
+## Related Questions
+
+- [[q-launch-vs-async-error-handling--programming-languages--medium]]
+- [[q-class-composition--oop--medium]]
+- [[q-data-class-special-features--programming-languages--easy]]

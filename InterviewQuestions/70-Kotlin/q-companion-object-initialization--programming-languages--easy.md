@@ -4,8 +4,11 @@ title: "Companion Object Initialization / Инициализация Companion O
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-data-sealed-classes-overview--programming-languages--medium, q-kotlin-serialization--programming-languages--easy, q-kotlin-crossinline--programming-languages--hard]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # When is companion object initialized?
 
@@ -417,3 +420,9 @@ fun main() {
 2. **Ленивая загрузка** - если companion object содержит дорогостоящие операции, они не выполнятся, пока не понадобятся
 
 3. **Потокобезопасность** - инициализация гарантированно произойдет только один раз, даже при многопоточном доступе
+
+## Related Questions
+
+- [[q-data-sealed-classes-overview--programming-languages--medium]]
+- [[q-kotlin-serialization--programming-languages--easy]]
+- [[q-kotlin-crossinline--programming-languages--hard]]

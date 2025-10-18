@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-immutable-collections--programming-languages--easy, q-kotlin-internal-modifier--programming-languages--medium, q-destructuring-declarations--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05

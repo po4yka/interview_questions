@@ -4,12 +4,15 @@ title: Service Locator Pattern
 topic: design-patterns
 difficulty: medium
 status: draft
+moc: moc-compSci
 created: 2025-10-15
 tags: []
-related:   - dependency-injection
+related: [q-flow-flatmap-operator--programming-languages--easy, q-builder-pattern--design-patterns--medium, q-what-happens-to-unneeded-objects--programming-languages--easy]
+  - dependency-injection
   - singleton-pattern
   - factory-pattern
-subtopics:   - structural-patterns
+subtopics:
+  - structural-patterns
   - dependency-management
   - service-discovery
 ---

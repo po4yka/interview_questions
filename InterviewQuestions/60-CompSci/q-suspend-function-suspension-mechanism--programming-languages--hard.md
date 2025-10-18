@@ -4,8 +4,11 @@ title: "Suspend Function Suspension Mechanism / Механизм приоста�
 topic: computer-science
 difficulty: hard
 status: draft
+moc: moc-compSci
+related: [q-list-vs-sequence--programming-languages--medium, q-equals-hashcode-purpose--programming-languages--hard, q-extensions-concept--programming-languages--easy]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Suspend Function Suspension Mechanism
 
@@ -214,3 +217,9 @@ class DelayedContinuation(
 ## Ответ (RU)
 
 Когда выполнение suspend-функции приостанавливается состояние функции сохраняется в continuation-объекте а текущий поток освобождается Позже выполнение возобновляется с этого же места как будто ничего не происходило Это реализовано через стейт-машину и трансформацию кода компилятором Kotlin
+
+## Related Questions
+
+- [[q-list-vs-sequence--programming-languages--medium]]
+- [[q-equals-hashcode-purpose--programming-languages--hard]]
+- [[q-extensions-concept--programming-languages--easy]]

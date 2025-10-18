@@ -10,6 +10,7 @@ subtopics:
   - backpressure
 difficulty: hard
 moc: moc-kotlin
+related: [q-cold-vs-hot-flows--kotlin--medium, q-coroutine-delay-vs-thread-sleep--kotlin--easy, q-kotlin-constants--programming-languages--easy]
 status: draft
 created: 2025-10-12
 updated: 2025-10-12

@@ -4,9 +4,11 @@ title: "Cicd Deployment Automation / Автоматизация деплоя CI/
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
 created: 2025-10-11
 tags: [ci-cd, deployment, play-store, fastlane, automation, difficulty/medium]
-related:   - q-cicd-pipeline-setup--devops--medium
+related: [q-how-to-write-recyclerview-so-that-it-caches-ahead--android--medium, q-which-class-to-use-for-detecting-gestures--android--medium, q-dagger-inject-annotation--android--easy]
+  - q-cicd-pipeline-setup--devops--medium
   - q-app-bundle-optimization--distribution--medium
   - q-app-versioning-release--distribution--medium
 ---
@@ -1476,3 +1478,9 @@ android {
 3. **Автоматизируйте обновление версий**
 4. **Используйте Conventional Commits**
 5. **Мониторьте метрики развертывания**
+
+## Related Questions
+
+- [[q-how-to-write-recyclerview-so-that-it-caches-ahead--android--medium]]
+- [[q-which-class-to-use-for-detecting-gestures--android--medium]]
+- [[q-dagger-inject-annotation--android--easy]]

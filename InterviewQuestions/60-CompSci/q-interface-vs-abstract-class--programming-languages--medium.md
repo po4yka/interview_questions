@@ -4,8 +4,11 @@ title: "Interface Vs Abstract Class"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-mvi-pattern--architecture-patterns--hard, q-garbage-collector-basics--programming-languages--medium, q-error-handling-in-coroutines--programming-languages--medium]
 created: 2025-10-15
-tags: - abstract-class
+tags:
+  - abstract-class
   - inheritance
   - interface
   - kotlin
@@ -273,3 +276,8 @@ class Duck : Animal(), Flyable, Swimmable {
 }
 ```
 
+## Related Questions
+
+- [[q-mvi-pattern--architecture-patterns--hard]]
+- [[q-garbage-collector-basics--programming-languages--medium]]
+- [[q-error-handling-in-coroutines--programming-languages--medium]]

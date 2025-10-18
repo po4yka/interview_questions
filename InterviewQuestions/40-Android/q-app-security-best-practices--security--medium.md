@@ -4,6 +4,8 @@ title: "App Security Best Practices / Лучшие практики безопа
 topic: security
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-room-type-converters-advanced--room--medium, q-v-chyom-izmeryaetsya-proizvoditelnost-layout--programming-languages--medium, q-play-feature-delivery-dynamic-modules--android--medium]
 created: 2025-10-15
 tags: [best-practices, audit, vulnerabilities, owasp, hardening, difficulty/medium]
 ---

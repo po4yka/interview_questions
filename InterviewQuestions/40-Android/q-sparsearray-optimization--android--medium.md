@@ -13,9 +13,10 @@ date_modified: 2025-10-13
 language_tags: [sparsearray, data-structures, performance, memory-optimization, difficulty/medium, android/memory, android/performance-rendering]
 moc: moc-android
 original_language: en
-related: []
+related: [q-android-lint-tool--android--medium, q-can-state-loss-be-related-to-a-fragment--android--medium, q-compose-stability-skippability--jetpack-compose--hard]
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20SparseArray.md"
-subtopics:   - performance-memory
+subtopics:
+  - performance-memory
   - performance-rendering
 type: question
 ---

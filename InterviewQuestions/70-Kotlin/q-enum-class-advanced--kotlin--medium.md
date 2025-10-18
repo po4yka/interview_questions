@@ -8,6 +8,7 @@ created: "2025-10-12"
 tags: ["kotlin", "classes", "difficulty/medium"]
 description: "Comprehensive guide to Advanced enum class features in Kotlin covering concepts, patterns, best practices, and real-world examples"
 moc: "moc-kotlin"
+related: [q-flow-operators-deep-dive--kotlin--hard, q-kotlin-java-type-differences--programming-languages--medium, q-kotlin-reified-types--kotlin--hard]
 subtopics: ["classes", "kotlin-features", "oop"]
 ---
 # Advanced enum class features in Kotlin
@@ -149,4 +150,4 @@ subtopics: ["classes", "kotlin-features", "oop"]
 - [[q-sealed-class-sealed-interface--kotlin--medium]]
 - [[q-inheritance-open-final--kotlin--medium]]
 - [[q-visibility-modifiers-kotlin--kotlin--medium]]
-- [[q-kotlin-classes-basics--kotlin--easy]]
+- [[q-kotlin-enum-classes--kotlin--easy]]

@@ -4,8 +4,11 @@ title: "Job Vs Supervisorjob / Job против Supervisorjob"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-native--kotlin--hard, q-data-sealed-classes-definition--programming-languages--hard, q-executor-service-java--java--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - error-handling
 ---
@@ -145,3 +148,9 @@ class BackgroundSyncManager {
     }
 }
 ```
+
+## Related Questions
+
+- [[q-kotlin-native--kotlin--hard]]
+- [[q-data-sealed-classes-definition--programming-languages--hard]]
+- [[q-executor-service-java--java--medium]]

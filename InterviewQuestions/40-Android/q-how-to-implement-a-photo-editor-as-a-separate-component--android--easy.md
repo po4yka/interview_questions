@@ -4,6 +4,8 @@ title: "How To Implement A Photo Editor As A Separate Component / Как реа�
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-workmanager-vs-alternatives--background--medium, q-compose-custom-layout--jetpack-compose--hard, q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium]
 created: 2025-10-15
 tags: [android, android/fragments, android/views, bitmap, canvas, fragment, fragments, imageview, ui, views, difficulty/easy]
 ---
@@ -433,3 +435,8 @@ To implement a photo editor as a separate component:
 ## Ответ (RU)
 Реализация редактора фотографий в Android как отдельного компонента требует нескольких шагов, включающих создание пользовательского интерфейса для редактирования, обработку изображений, а также возможность интеграции этого компонента в другие части вашего приложения. 1. Создание пользовательского интерфейса: Пример XML-разметки с ImageView и кнопками для редактирования. 2. Обработка изображений: Использование Bitmap и Canvas или сторонних библиотек для операций с изображениями. Пример кода на Kotlin показывает функции поворота и применения фильтров к изображению. 3. Интеграция компонента: Создание Activity или Fragment для использования редактора. 4. Обработка разных функций редактирования: Интеграция библиотек, таких как GPUImage для фильтров и Ucrop для обрезки.
 
+## Related Questions
+
+- [[q-workmanager-vs-alternatives--background--medium]]
+- [[q-compose-custom-layout--jetpack-compose--hard]]
+- [[q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium]]

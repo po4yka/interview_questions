@@ -4,6 +4,8 @@ title: "Privacy Sandbox Fledge"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-design-whatsapp-app--android--hard, q-retrofit-modify-all-requests--android--hard, q-http-protocols-comparison--android--medium]
 created: 2025-10-15
 tags: [privacy-sandbox, fledge, protected-audience, remarketing, privacy, advertising, difficulty/hard]
 ---
@@ -869,10 +871,7 @@ FLEDGE/Protected Audience API enables remarketing without third-party cookies th
 
 
 ## Ответ (RU)
-# Вопрос (RU)
-Что такое FLEDGE (Protected Audience API) в Privacy Sandbox? Как он обеспечивает remarketing без third-party cookies? Как реализовать on-device ad auctions и какие технические вызовы?
 
-## Ответ (RU)
 FLEDGE (First Locally-Executed Decision over Groups Experiment), теперь называемый Protected Audience API, обеспечивает remarketing и таргетинг на пользовательские аудитории без cross-site отслеживания. Рекламные аукционы выполняются на устройстве, сохраняя данные пользователя приватными, но позволяя персонализированную рекламу.
 
 #### Архитектура FLEDGE
@@ -928,3 +927,9 @@ FLEDGE (First Locally-Executed Decision over Groups Experiment), теперь н
 ### Резюме
 
 FLEDGE/Protected Audience API обеспечивает remarketing без third-party cookies через on-device аукционы. Рекламодатели добавляют пользователей в custom audiences, затем конкурируют в real-time аукционах, выполняющихся локально на устройстве. Bidding и decision логика выполняются в изолированных JavaScript окружениях, гарантируя что пользовательские данные никогда не покидают устройство.
+
+## Related Questions
+
+- [[q-design-whatsapp-app--android--hard]]
+- [[q-retrofit-modify-all-requests--android--hard]]
+- [[q-http-protocols-comparison--android--medium]]

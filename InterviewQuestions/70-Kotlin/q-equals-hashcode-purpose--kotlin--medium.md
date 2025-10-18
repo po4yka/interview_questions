@@ -4,8 +4,11 @@ title: "Equals Hashcode Purpose / Назначение equals и hashCode"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-sealed-classes-purpose--programming-languages--medium, q-kotlin-when-expression--programming-languages--easy, q-kotlin-map-flatmap--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - object-comparison
   - hashmap
 ---
@@ -170,3 +173,9 @@ val userRoles = hashMapOf<User, String>()
 userRoles[User("Alice", 30)] = "Engineer"
 println(userRoles[User("Alice", 30)])  // "Engineer"
 ```
+
+## Related Questions
+
+- [[q-kotlin-sealed-classes-purpose--programming-languages--medium]]
+- [[q-kotlin-when-expression--programming-languages--easy]]
+- [[q-kotlin-map-flatmap--kotlin--medium]]

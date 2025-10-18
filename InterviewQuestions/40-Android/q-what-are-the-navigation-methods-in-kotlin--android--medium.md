@@ -4,6 +4,8 @@ title: "What Are The Navigation Methods In Kotlin / Какие методы на
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-inject-router-to-presenter--android--medium, q-android-modularization--android--medium, q-dagger-purpose--android--easy]
 created: 2025-10-15
 tags: [FragmentTransaction, Intent, NavHostFragment, NavController, android, ui, navigation, fragments, difficulty/medium]
 ---

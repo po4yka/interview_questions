@@ -4,6 +4,8 @@ title: "Where Is Composition Created For Calling Composable Function / Где с
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-is-layout-types-and-when-to-use--android--easy, q-background-tasks-decision-guide--android--medium, q-okhttp-interceptors-advanced--networking--medium]
 created: 2025-10-15
 tags: [setContent, android, ui, jetpack-compose, difficulty/medium]
 ---
@@ -112,7 +114,105 @@ fun CompositionLifecycle() {
 
 ## Ответ (RU)
 
-Композиция создаётся внутри функции setContent, которая задает точку входа для composable функций в Activity или Fragment. Она инициирует рендеринг интерфейса и управление состоянием.
+Композиция создается внутри функции **setContent**, которая задает точку входа для composable функций в Activity или Fragment. Она инициирует рендеринг интерфейса и управление состоянием.
+
+### Где создается композиция
+
+**1. В Activity через setContent:**
+
+```kotlin
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Композиция создается здесь
+        setContent {
+            MyApp() // Точка входа в Compose UI
+        }
+    }
+}
+```
+
+**2. Во Fragment через ComposeView:**
+
+```kotlin
+class MyFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Композиция создается в ComposeView
+        return ComposeView(requireContext()).apply {
+            setContent {
+                MyComposable()
+            }
+        }
+    }
+}
+```
+
+**3. В обычной View через ComposeView:**
+
+```kotlin
+class MyCustomView(context: Context) : LinearLayout(context) {
+    init {
+        addView(ComposeView(context).apply {
+            setContent {
+                Text("Compose inside custom View")
+            }
+        })
+    }
+}
+```
+
+### Жизненный цикл композиции
+
+```kotlin
+@Composable
+fun CompositionLifecycle() {
+    // Входит в композицию при вызове setContent
+    DisposableEffect(Unit) {
+        println("Entered composition")
+
+        onDispose {
+            println("Left composition")
+        }
+    }
+
+    Text("Hello")
+}
+```
+
+### Множественные композиции
+
+Каждый вызов `setContent` создает отдельную независимую композицию:
+
+```kotlin
+class MultiCompositionActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val layout = LinearLayout(this)
+
+        // Первая композиция
+        layout.addView(ComposeView(this).apply {
+            setContent { Text("First") }
+        })
+
+        // Вторая композиция (независимая)
+        layout.addView(ComposeView(this).apply {
+            setContent { Text("Second") }
+        })
+
+        setContentView(layout)
+    }
+}
+```
+
+### Резюме
+
+Композиция создается в точке вызова `setContent` внутри Activity (`ComponentActivity.setContent()`) или при создании `ComposeView` во Fragment/View. Это корневая точка входа, которая запускает механизм Compose для построения UI дерева, отслеживания состояния и управления рекомпозициями. Каждый `setContent` создает отдельную изолированную композицию
 
 ---
 

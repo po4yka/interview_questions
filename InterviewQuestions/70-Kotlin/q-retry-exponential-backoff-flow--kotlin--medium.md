@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - flow
   - retry
@@ -15,7 +16,9 @@ tags: - kotlin
   - circuit-breaker
   - production
 moc: moc-kotlin
-subtopics:   - coroutines
+related: [q-fan-in-fan-out-channels--kotlin--hard, q-actor-pattern--kotlin--hard, q-coroutine-dispatchers--kotlin--medium]
+subtopics:
+  - coroutines
   - flow
   - retry
   - error-handling

@@ -4,6 +4,8 @@ title: "Test Doubles Dependency Injection"
 topic: testing
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-room-type-converters-advanced--room--medium, q-what-is-known-about-recyclerview--android--easy, q-cicd-automated-testing--devops--medium]
 created: 2025-10-15
 tags: [hilt, dependency-injection, test-doubles, difficulty/medium]
 ---

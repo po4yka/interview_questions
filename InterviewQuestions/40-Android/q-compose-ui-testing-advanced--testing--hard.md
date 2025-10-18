@@ -4,6 +4,8 @@ title: "Compose Ui Testing Advanced"
 topic: testing
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-v-chyom-izmeryaetsya-proizvoditelnost-layout--programming-languages--medium, q-what-is-intent--android--easy, q-android-project-parts--android--easy]
 created: 2025-10-15
 tags: [compose-testing, ui-testing, semantics, accessibility, difficulty/hard]
 ---

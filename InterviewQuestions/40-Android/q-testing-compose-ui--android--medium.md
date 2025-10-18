@@ -4,6 +4,8 @@ title: "Testing Compose Ui / Тестирование Compose Ui"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-android-modularization--android--medium, q-compose-compiler-plugin--jetpack-compose--hard, q-where-does-the-repeated-call-of-composable-function-come-from--android--medium]
 created: 2025-10-15
 tags: [jetpack-compose, testing, ui-testing, compose-test, difficulty/medium]
 ---
@@ -713,6 +715,22 @@ debugImplementation "androidx.compose.ui:ui-test-manifest:1.5.4"
 **Time control**: mainClock.autoAdvance = false for manual time. mainClock.advanceTimeBy(millis) for animations. waitUntil with timeout for async loading.
 
 **Best practices**: Use test tags not text. Test behavior not implementation. Use meaningful tag names. Test accessibility (content descriptions). Group related tests. Setup in @Before. Use waitUntil for async operations.
+
+## Ответ (RU)
+
+**Тестирование Compose UI** использует декларативный API для поиска, взаимодействия и проверки composable функций.
+
+**Ключевые API**: (1) **createComposeRule()** - создает тестовую среду, управляет жизненным циклом композиции, синхронизируется с рекомпозицией. (2) **Finders (Поисковики)** - onNodeWithText, onNodeWithTag, onNodeWithContentDescription, onNode(matcher). (3) **Actions (Действия)** - performClick, performTextInput, performScrollTo, performTouchInput. (4) **Assertions (Утверждения)** - assertExists, assertIsDisplayed, assertIsEnabled, assertTextEquals.
+
+**Test tags (Тестовые теги)**: Лучшая практика для поиска элементов. Используйте `Modifier.testTag("element_id")`. Более стабильны чем текст (локализация). Явно указывают тестируемые элементы. Работают быстрее чем поиск по тексту.
+
+**Паттерны тестирования**: Тестируйте изменения состояния (клик → проверка нового состояния). Тестируйте списки с прокруткой. Тестируйте ViewModel с setContent. Используйте waitUntil для асинхронных операций. Тестируйте навигацию с TestNavHostController. Тестируйте видимость диалогов и нижних листов.
+
+**unmergedTree**: Compose по умолчанию объединяет дочернюю семантику. Используйте `useUnmergedTree = true` для поиска вложенных элементов. Или отключите объединение с помощью модификатора semantics.
+
+**Контроль времени**: mainClock.autoAdvance = false для ручного управления временем. mainClock.advanceTimeBy(millis) для анимаций. waitUntil с таймаутом для асинхронной загрузки.
+
+**Лучшие практики**: Используйте тестовые теги, а не текст. Тестируйте поведение, а не реализацию. Используйте осмысленные имена тегов. Тестируйте доступность (описания контента). Группируйте связанные тесты. Настройка в @Before. Используйте waitUntil для асинхронных операций.
 
 
 

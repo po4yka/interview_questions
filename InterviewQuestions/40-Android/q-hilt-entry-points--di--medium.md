@@ -4,9 +4,11 @@ title: "Hilt Entry Points"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
 created: 2025-10-11
 tags: [dependency-injection, hilt, dagger, architecture, difficulty/medium]
-related:   - q-dagger-multibinding--di--hard
+related: [q-viewgroup-vs-view-differences--android--easy, q-cancel-presenter-requests--android--medium, q-how-to-create-list-like-recyclerview-in-compose--android--medium]
+  - q-dagger-multibinding--di--hard
   - q-hilt-assisted-injection--di--medium
   - q-hilt-viewmodel-injection--jetpack--medium
 ---
@@ -1648,3 +1650,9 @@ class ContentProviderTest {
 3. Используйте подходящий scope компонента
 4. Кешируйте зависимости, а не accessor'ы
 5. Обрабатывайте ошибки инициализации корректно
+
+## Related Questions
+
+- [[q-viewgroup-vs-view-differences--android--easy]]
+- [[q-cancel-presenter-requests--android--medium]]
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]]

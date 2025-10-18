@@ -4,8 +4,11 @@ title: "Chain Of Responsibility / Цепочка обязанностей"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-equals-hashcode-purpose--programming-languages--hard, q-java-object-comparison--programming-languages--easy, q-java-all-classes-inherit-from-object--programming-languages--easy]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - behavioral-patterns
   - chain-of-responsibility
   - gof-patterns

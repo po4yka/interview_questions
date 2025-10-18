@@ -4,6 +4,8 @@ title: "Network Operations Android / Сетевые операции в Android"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-does-the-lifecycle-library-do--android--medium, q-android-app-components--android--easy, q-koin-vs-hilt-comparison--dependency-injection--medium]
 created: 2025-10-15
 tags: [networking, http, difficulty/medium]
 ---

@@ -4,8 +4,11 @@ title: "Singleton Object Keyword / Синглтон с ключевым слов
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-lateinit--programming-languages--medium, q-coroutine-cancellation-cooperation--kotlin--medium, q-associatewith-vs-associateby--kotlin--easy]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # What keyword is used to create singleton objects in Kotlin?
 
@@ -359,3 +362,9 @@ fun main() {
     println("Response: $createResponse")
 }
 ```
+
+## Related Questions
+
+- [[q-kotlin-lateinit--programming-languages--medium]]
+- [[q-coroutine-cancellation-cooperation--kotlin--medium]]
+- [[q-associatewith-vs-associateby--kotlin--easy]]

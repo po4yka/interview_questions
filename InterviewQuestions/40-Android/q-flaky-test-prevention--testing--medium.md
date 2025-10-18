@@ -4,6 +4,8 @@ title: "Flaky Test Prevention / Предотвращение нестабиль�
 topic: testing
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-create-animations-in-android--android--medium, q-16kb-dex-page-size--android--medium, q-compose-navigation-advanced--jetpack-compose--medium]
 created: 2025-10-15
 tags: [flaky-tests, stability, best-practices, difficulty/medium]
 ---

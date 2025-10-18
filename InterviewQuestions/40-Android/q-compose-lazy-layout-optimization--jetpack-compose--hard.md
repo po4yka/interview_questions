@@ -4,6 +4,8 @@ title: "Compose Lazy Layout Optimization"
 topic: jetpack-compose
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-mvi-architecture--android--hard, q-how-mutablestate-notifies--android--medium, q-fix-slow-app-startup-legacy--android--hard]
 created: 2025-10-15
 tags: [compose, lazy-lists, performance, optimization, difficulty/hard]
 ---

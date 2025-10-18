@@ -4,8 +4,11 @@ title: "What Is Dp / Что такое dp"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-pass-large-data-between-activities--android--hard, q-play-feature-delivery--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 
 # Question (EN)
@@ -386,3 +389,9 @@ dp (density-independent pixels, "плотность-независимые пи�
 
 -   `https://developer.android.com/training/multiscreen/screendensities` — Support different pixel densities
 -   `https://developer.android.com/guide/topics/resources/multiscreen-density` — Density resources
+
+## Related Questions
+
+- [[q-pass-large-data-between-activities--android--hard]]
+- [[q-play-feature-delivery--android--medium]]
+- [[q-what-are-the-most-important-components-of-compose--android--medium]]

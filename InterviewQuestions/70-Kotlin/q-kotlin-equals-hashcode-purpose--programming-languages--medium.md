@@ -4,8 +4,11 @@ title: "Kotlin Equals Hashcode Purpose / Назначение equals и hashCode
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-semaphore-rate-limiting--kotlin--medium, q-launch-vs-async--kotlin--easy, q-backpressure-in-kotlin-flow--programming-languages--medium]
 created: 2025-10-15
-tags: - collections
+tags:
+  - collections
   - equals
   - hashcode
   - kotlin
@@ -144,3 +147,8 @@ class Book(val isbn: String, val title: String) {
 
 Соблюдение контракта между `equals()` и `hashCode()` критически важно для правильной работы коллекций, основанных на хеш-таблицах.
 
+## Related Questions
+
+- [[q-semaphore-rate-limiting--kotlin--medium]]
+- [[q-launch-vs-async--kotlin--easy]]
+- [[q-backpressure-in-kotlin-flow--programming-languages--medium]]

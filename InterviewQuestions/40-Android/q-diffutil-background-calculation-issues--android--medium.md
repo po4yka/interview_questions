@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [recyclerview, diffutil, performance, multithreading, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-dalvik-vs-art-runtime--android--medium, q-main-causes-ui-lag--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium]
 ---
 # Проблемы расчета DiffUtil в фоновом потоке
 
@@ -498,4 +498,8 @@ class UserViewModel : ViewModel() {
 **Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
 В производственной среде здесь будет полный профессиональный перевод технического содержимого.
 
+## Related Questions
 
+- [[q-dalvik-vs-art-runtime--android--medium]]
+- [[q-main-causes-ui-lag--android--medium]]
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]]

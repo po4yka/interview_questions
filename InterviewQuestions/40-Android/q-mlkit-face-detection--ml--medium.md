@@ -4,6 +4,8 @@ title: "Mlkit Face Detection / Распознавание лиц ML Kit"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-what-is-pendingintent--programming-languages--medium, q-dagger-framework-overview--android--hard]
 created: 2025-10-15
 tags: [Kotlin, MLKit, MachineLearning, FaceDetection, difficulty/medium]
 ---
@@ -990,3 +992,9 @@ ML Kit Face Detection обеспечивает comprehensive face analysis:
 - **Privacy**: On-device only
 
 Ключевые моменты: performance optimization, privacy compliance, user consent, smooth UX.
+
+## Related Questions
+
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]]
+- [[q-what-is-pendingintent--programming-languages--medium]]
+- [[q-dagger-framework-overview--android--hard]]

@@ -4,6 +4,8 @@ title: "Background Vs Foreground Service"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-sharedpreferences-commit-vs-apply--android--easy, q-android-runtime-internals--android--hard, q-testing-viewmodels-turbine--testing--medium]
 created: 2025-10-15
 tags: [android/foreground-service, android/services, background-service, foreground-service, process-priority, services, difficulty/medium]
 ---

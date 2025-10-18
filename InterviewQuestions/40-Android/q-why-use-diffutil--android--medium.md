@@ -4,6 +4,8 @@ title: "Why Use Diffutil / Почему использовать DiffUtil"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard, q-cicd-pipeline-android--android--medium, q-websocket-implementation--networking--medium]
 created: 2025-10-15
 tags: [recyclerview, diffutil, performance, difficulty/medium]
 ---
@@ -868,3 +870,9 @@ class PaginatedListAdapter : ListAdapter<Item, PaginatedListAdapter.ViewHolder>(
 | ListAdapter | Встроенная поддержка DiffUtil |
 | AsyncListDiffer | Вычисление в фоновом потоке |
 | Payloads | Частичные обновления для лучшей производительности |
+
+## Related Questions
+
+- [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]
+- [[q-cicd-pipeline-android--android--medium]]
+- [[q-websocket-implementation--networking--medium]]

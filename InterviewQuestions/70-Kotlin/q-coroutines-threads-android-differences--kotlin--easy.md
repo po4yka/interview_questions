@@ -4,19 +4,24 @@ title: Coroutines vs Threads on Android / Корутины vs Потоки на 
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-rxjava-to-coroutines-migration--kotlin--medium, q-callsuper-annotation--kotlin--medium, q-kotlin-sam-interfaces--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - threads
   - performance
   - android
   - comparison
   - difficulty/easy
-language_tags:   - en
+language_tags:
+  - en
   - ru
 original_language: en
 source: Kotlin Coroutines Interview Questions PDF
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - threads
   - performance
   - android

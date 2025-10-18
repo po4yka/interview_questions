@@ -18,7 +18,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140028
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-coroutine-exception-handling--kotlin--medium, q-delegates-compilation--kotlin--hard, q-launch-vs-async-vs-runblocking--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12

@@ -4,6 +4,8 @@ title: "Push Notification Navigation / Навигация из push уведом
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-mvi-architecture--android--hard, q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy, q-mutable-state-compose--android--medium]
 created: 2025-10-15
 tags: [notifications, fcm, navigation, deeplink, difficulty/medium]
 ---

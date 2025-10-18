@@ -4,8 +4,11 @@ title: "List Vs Sequence / List против Sequence"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-lambdas-java-kotlin-syntax--programming-languages--medium, q-stateflow-purpose--programming-languages--medium, q-sealed-class-sealed-interface--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - collections
   - sequence
   - performance
@@ -549,3 +552,9 @@ val result = largeDataset.asSequence()
 // - ПРАВИЛЬНО - простой map без цепочки
 val names = users.map { it.name }
 ```
+
+## Related Questions
+
+- [[q-lambdas-java-kotlin-syntax--programming-languages--medium]]
+- [[q-stateflow-purpose--programming-languages--medium]]
+- [[q-sealed-class-sealed-interface--kotlin--medium]]

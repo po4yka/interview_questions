@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [parcelable, serialization, intent, bundle, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-kakaya-raznitsa-mezhdu-dialogom-i-fragmentom--android--medium, q-what-is-workmanager--android--medium, q-android-architectural-patterns--android--medium]
 ---
 # Parcelable in Android / Parcelable в Android
 
@@ -336,3 +336,9 @@ class DetailActivity : AppCompatActivity() {
 **Резюме:**
 
 Parcelable — это интерфейс Android для эффективной сериализации объектов с целью передачи между компонентами. Используйте аннотацию @Parcelize в Kotlin для автоматической генерации кода. Значительно быстрее чем Serializable благодаря отсутствию рефлексии и оптимизации для Android.
+
+## Related Questions
+
+- [[q-kakaya-raznitsa-mezhdu-dialogom-i-fragmentom--android--medium]]
+- [[q-what-is-workmanager--android--medium]]
+- [[q-android-architectural-patterns--android--medium]]

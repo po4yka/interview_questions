@@ -4,6 +4,8 @@ title: "Network Request Deduplication / Дедупликация сетевых 
 topic: networking
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-fragments-vs-activity--android--medium, q-launch-modes-android--android--medium, q-canvas-drawing-optimization--custom-views--hard]
 created: 2025-10-15
 tags: [optimization, deduplication, concurrency, performance, caching, difficulty/hard]
 ---

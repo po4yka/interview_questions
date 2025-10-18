@@ -4,8 +4,11 @@ title: "Kotlin When Vs Switch"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-cold-vs-hot-flows--kotlin--medium, q-channel-buffering-strategies--kotlin--hard, q-flow-operators--kotlin--medium]
 created: 2025-10-15
-tags: - control-flow
+tags:
+  - control-flow
   - expressions
   - kotlin
   - programming-languages
@@ -238,3 +241,8 @@ when (x) {
 
 `when` - это замена Kotlin для `switch`, предлагающая большую гибкость, безопасность и выразительность.
 
+## Related Questions
+
+- [[q-cold-vs-hot-flows--kotlin--medium]]
+- [[q-channel-buffering-strategies--kotlin--hard]]
+- [[q-flow-operators--kotlin--medium]]

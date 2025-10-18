@@ -4,6 +4,8 @@ title: "Save Markdown Structure Database / Сохранение структур
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-database-encryption-android--android--medium, q-mvi-handle-one-time-events--android--hard, q-fragments-vs-activity--android--medium]
 created: 2025-10-15
 tags: [android/data-storage, data-storage, database, markdown, room, serialization, storage, difficulty/medium]
 ---

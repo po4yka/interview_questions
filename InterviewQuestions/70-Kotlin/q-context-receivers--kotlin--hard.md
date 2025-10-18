@@ -4,8 +4,11 @@ title: "Context Receivers"
 topic: kotlin
 difficulty: hard
 status: draft
+moc: moc-kotlin
+related: [q-infix-functions--kotlin--medium, q-kotlin-conversion-functions--programming-languages--medium, q-coroutine-exception-handling--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - context-receivers
   - dsl
   - advanced
@@ -493,3 +496,9 @@ HTML builder, SQL query builder, dependency injection - все становят�
 3. Не злоупотребляйте - слишком много контекстов усложняет код
 
 Context receivers - мощный инструмент для создания выразительных DSL в Kotlin.
+
+## Related Questions
+
+- [[q-infix-functions--kotlin--medium]]
+- [[q-kotlin-conversion-functions--programming-languages--medium]]
+- [[q-coroutine-exception-handling--kotlin--medium]]

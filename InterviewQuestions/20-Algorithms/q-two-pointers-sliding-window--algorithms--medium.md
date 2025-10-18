@@ -5,15 +5,18 @@ topic: algorithms
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - algorithms
+tags:
+  - algorithms
   - two-pointers
   - sliding-window
   - array
   - optimization
 moc: moc-algorithms
-related:   - q-binary-search-variants--algorithms--medium
+related: [q-graph-algorithms-bfs-dfs--algorithms--hard, q-binary-search-trees-bst--algorithms--hard, q-data-structures-overview--algorithms--easy]
+  - q-binary-search-variants--algorithms--medium
   - q-sorting-algorithms-comparison--algorithms--medium
-subtopics:   - two-pointers
+subtopics:
+  - two-pointers
   - sliding-window
   - array
   - string
@@ -600,3 +603,9 @@ fun makeRequest() {
 8. What is the trapping rain water problem solution?
 9. How do you find all anagrams in a string?
 10. What is the maximum consecutive ones with at most k flips?
+
+## Related Questions
+
+- [[q-graph-algorithms-bfs-dfs--algorithms--hard]]
+- [[q-binary-search-trees-bst--algorithms--hard]]
+- [[q-data-structures-overview--algorithms--easy]]

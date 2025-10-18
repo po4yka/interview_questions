@@ -4,6 +4,8 @@ title: "Delegates Java Compilation / Компиляция делегатов в 
 topic: computer-science
 difficulty: hard
 status: draft
+moc: moc-compSci
+related: [q-mvp-pattern--architecture-patterns--medium, q-garbage-collector-basics--programming-languages--medium, q-java-access-modifiers--programming-languages--medium]
 created: 2025-10-15
 tags:
   - compilation
@@ -33,3 +35,8 @@ Delegates allow overriding property behavior by delegating it to other objects u
 
 Позволяют переопределять поведение свойств, делегируя его другим объектам с помощью ключевого слова by. На уровне компиляции Java компилятор Kotlin генерирует вспомогательные классы и методы доступа, которые используют делегаты. 1. Вспомогательные классы: Компилятор создает классы для управления состоянием делегированных свойств. 2. Методы доступа: Создаются геттеры и сеттеры, использующие вспомогательные классы. 3. Вызов делегата: Внутри методов доступа добавляются вызовы делегата для управления значениями.
 
+## Related Questions
+
+- [[q-mvp-pattern--architecture-patterns--medium]]
+- [[q-garbage-collector-basics--programming-languages--medium]]
+- [[q-java-access-modifiers--programming-languages--medium]]

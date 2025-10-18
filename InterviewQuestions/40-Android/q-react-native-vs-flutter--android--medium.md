@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-leakcanary-heap-dump-analysis--android--medium, q-room-type-converters--android--medium, q-splash-screen-api-android12--android--medium]
 
 # Timestamps
 created: 2025-10-06
@@ -39,8 +39,7 @@ tags: [en, ru, android/react-native, android/flutter, android/cross-platform, an
 
 ## Ответ (RU)
 
-
-Содержимое ответа на русском языке. Перевод технической документации сохраняет Android API термины на английском.
+Сравнение React Native и Flutter - два популярных фреймворка для кроссплатформенной разработки мобильных приложений.
 
 
 ---

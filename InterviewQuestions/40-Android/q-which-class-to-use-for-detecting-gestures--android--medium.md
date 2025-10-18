@@ -4,6 +4,8 @@ title: "Which Class To Use For Detecting Gestures / Какой класс исп
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-write-recyclerview-cache-ahead--android--medium, q-dagger-field-injection--android--medium, q-what-are-services-for--android--easy]
 created: 2025-10-15
 tags: [gestures, ui, touch-events, difficulty/medium]
 ---
@@ -477,3 +479,9 @@ fun TransformableBox() {
 Какой класс можно использовать что бы ловить разные жесты
 
 Чтобы обрабатывать жесты в Android, используйте класс GestureDetector. Он помогает отслеживать стандартные жесты: одиночные нажатия, свайпы, долгие нажатия, двойные касания и т.д.
+
+## Related Questions
+
+- [[q-how-to-write-recyclerview-cache-ahead--android--medium]]
+- [[q-dagger-field-injection--android--medium]]
+- [[q-what-are-services-for--android--easy]]

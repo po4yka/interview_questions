@@ -4,8 +4,11 @@ title: "Decorator Pattern / Decorator Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-how-to-create-suspend-function--programming-languages--medium, q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-iterator-order-guarantee--programming-languages--medium]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - structural-patterns
   - decorator
   - gof-patterns
@@ -320,64 +323,58 @@ class MetricsDecorator(service: Service) : ServiceDecorator(service) {
 
 ### Определение
 
-
-The Decorator Design Pattern is a structural design pattern that **allows behavior to be added to individual objects dynamically**, without affecting the behavior of other objects from the same class. It involves creating a set of decorator classes that are used to wrap concrete components.
+Паттерн проектирования Decorator — это структурный паттерн проектирования, который **позволяет динамически добавлять поведение отдельным объектам**, не влияя на поведение других объектов того же класса. Он включает создание набора классов-декораторов, которые используются для обёртывания конкретных компонентов.
 
 ### Проблемы, которые решает
 
+Паттерн декоратор предоставляет гибкую альтернативу подклассам для расширения функциональности. При использовании подклассов разные подклассы расширяют класс разными способами, но расширение привязано к классу во время компиляции и не может быть изменено во время выполнения.
 
-The decorator pattern provides a flexible alternative to subclassing for extending functionality. When using subclassing, different subclasses extend a class in different ways, but an extension is bound to the class at compile-time and can't be changed at run-time.
+Паттерн декоратор позволяет динамически добавлять (и удалять) обязанности объекту во время выполнения следующим образом:
 
-The decorator pattern allows responsibilities to be added (and removed from) an object dynamically at run-time by:
-
-1. Implementing the interface of the extended (decorated) object (**`Component`**) transparently by forwarding all requests to it
-2. Performing additional functionality before or after forwarding a request
+1. Прозрачная реализация интерфейса расширяемого (декорируемого) объекта (**`Component`**) путём перенаправления всех запросов к нему
+2. Выполнение дополнительной функциональности до или после перенаправления запроса
 
 ### Когда использовать?
 
+Паттерн Decorator работает лучше всего, когда нужно добавить возможности объектам без изменения их основной структуры. Используйте его для:
 
-The Decorator Pattern works best when you need to add features to objects without changing their core structure. Use it for:
+1. **Добавления или удаления поведений во время выполнения**
+2. **Улучшения устаревших систем без изменения их кода**
+3. **Избежания взрыва подклассов**
 
-1. **Adding or removing behaviors at runtime**
-2. **Enhancing legacy systems without touching their code**
-3. **Avoiding an explosion of subclasses**
+Не используйте его, если:
 
-Don't use it if:
-
-1. **Objects' core functionality changes often**
-2. **You need to modify object internals**
-3. **You already have many small, similar classes**
+1. **Основная функциональность объектов часто меняется**
+2. **Необходимо изменять внутреннее устройство объекта**
+3. **У вас уже есть много мелких, похожих классов**
 
 ### Объяснение примера
 
+**Объяснение**:
 
-**Explanation**:
-
-- **`Coffee`** is the main object interface, defining methods to get cost and description
-- **`BasicCoffee`** is a concrete component that implements the Coffee interface
-- **`CoffeeDecorator`** is an abstract decorator that implements Coffee and wraps another Coffee object
-- **Concrete decorators** (`MilkDecorator`, `SugarDecorator`) add their respective features
-- **Kotlin delegation** (`by` keyword) simplifies decorator implementation
-- **Android**: Text formatting, input streams, caching layers use decorators
+- **`Coffee`** — это основной интерфейс объекта, определяющий методы для получения стоимости и описания
+- **`BasicCoffee`** — это конкретный компонент, который реализует интерфейс Coffee
+- **`CoffeeDecorator`** — это абстрактный декоратор, который реализует Coffee и оборачивает другой объект Coffee
+- **Конкретные декораторы** (`MilkDecorator`, `SugarDecorator`) добавляют свои соответствующие возможности
+- **Делегирование Kotlin** (ключевое слово `by`) упрощает реализацию декоратора
+- **Android**: форматирование текста, потоки ввода, кэширующие слои используют декораторы
 
 ### Pros (Преимущества)
 
-
-1. **Open-Closed Principle** - Can add functionality without modifying existing code
-2. **Flexibility** - Add/remove responsibilities at runtime
-3. **Reusable code** - Decorators are reusable components
-4. **Composition over inheritance** - Avoids deep class hierarchies
-5. **Single Responsibility** - Each decorator handles one specific feature
-6. **Dynamic behavior** - Can apply or remove decorators at runtime
+1. **Принцип открытости/закрытости** — можно добавлять функциональность без изменения существующего кода
+2. **Гибкость** — добавлять/удалять обязанности во время выполнения
+3. **Переиспользуемый код** — декораторы являются переиспользуемыми компонентами
+4. **Композиция вместо наследования** — избегает глубоких иерархий классов
+5. **Единственная ответственность** — каждый декоратор обрабатывает одну конкретную возможность
+6. **Динамическое поведение** — можно применять или удалять декораторы во время выполнения
 
 ### Cons (Недостатки)
 
-
-1. **Complexity** - Nesting decorators can make code hard to understand
-2. **Many small classes** - Can lead to proliferation of classes
-3. **Order matters** - Decorator order affects final behavior
-4. **Debugging difficulty** - Stack traces become deeper
-5. **Instantiation complexity** - Creating heavily decorated objects is verbose
+1. **Сложность** — вложенность декораторов может затруднить понимание кода
+2. **Много маленьких классов** — может привести к разрастанию классов
+3. **Порядок важен** — порядок декораторов влияет на конечное поведение
+4. **Сложность отладки** — трассировки стека становятся глубже
+5. **Сложность создания экземпляров** — создание сильно декорированных объектов многословно
 
 
 ---

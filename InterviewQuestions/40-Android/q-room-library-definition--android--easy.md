@@ -7,7 +7,8 @@ status: draft
 created: 2025-10-13
 tags: [android/data-storage, architecture-components, data-storage, database, orm, room, sqlite, difficulty/easy]
 moc: moc-android
-related:   - q-sharedpreferences-commit-vs-apply--android--easy
+related: [q-multiple-manifests-multimodule--android--medium, q-baseline-profiles-optimization--performance--medium, q-stable-annotation-compose--android--hard]
+  - q-sharedpreferences-commit-vs-apply--android--easy
   - q-sharedpreferences-definition--android--easy
   - q-room-code-generation-timing--android--medium
   - q-room-transactions-dao--room--medium

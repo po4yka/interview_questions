@@ -18,7 +18,7 @@ source_note: easy_kotlin Telegram channel
 # Workflow & relations
 status: draft
 moc: moc-algorithms
-related:
+related: [q-graph-algorithms-bfs-dfs--algorithms--hard, q-binary-search-variants--algorithms--medium, q-sorting-algorithms-comparison--algorithms--medium]
   - c-data-structures
   - c-algorithms
 

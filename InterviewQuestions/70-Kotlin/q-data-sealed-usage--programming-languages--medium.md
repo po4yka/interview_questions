@@ -4,8 +4,11 @@ title: "Data Sealed Usage / Data Sealed Использование"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-extension-functions-advanced--kotlin--hard, q-kotlin-higher-order-functions--kotlin--medium, q-kotlin-equals-hashcode-purpose--programming-languages--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # What are data classes and sealed classes used for?
 
@@ -721,3 +724,9 @@ fun handleValidation(result: ValidationResult) {
 - Используется для UI состояний, Result типов, навигации, error handling
 
 **Лучшая практика**: Комбинировать data классы для данных и sealed классы для результатов/состояний.
+
+## Related Questions
+
+- [[q-kotlin-extension-functions-advanced--kotlin--hard]]
+- [[q-kotlin-higher-order-functions--kotlin--medium]]
+- [[q-kotlin-equals-hashcode-purpose--programming-languages--medium]]

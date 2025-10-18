@@ -5,9 +5,11 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - android
+tags:
+  - android
 moc: moc-android
-related:   - q-recyclerview-sethasfixedsize--android--easy
+related: [q-service-restrictions-why--android--medium, q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium, q-presenter-notify-view--android--medium]
+  - q-recyclerview-sethasfixedsize--android--easy
   - q-viewmodel-pattern--android--easy
   - q-what-is-known-about-methods-that-redraw-view--android--medium
   - q-testing-viewmodels-turbine--testing--medium
@@ -434,13 +436,128 @@ fun setCustomTextColor(color: Int) {
 ---
 
 ## RU (original)
+Добавление кастомных атрибутов к custom view позволяет конфигурировать view через XML layout файлы.
 
-Как добавить кастомные атрибуты у кастомного view
+**Шаг 1: Объявить атрибуты в attrs.xml:**
 
-Чтобы добавить кастомные атрибуты в Custom View нужно создать attrs.xml и описать атрибуты добавить их в styleable и получить в Custom View использовать атрибуты в XML или Kotlin
+```xml
+<!-- res/values/attrs.xml -->
+<resources>
+    <declare-styleable name="CustomButton">
+        <attr name="buttonColor" format="color" />
+        <attr name="buttonText" format="string" />
+        <attr name="buttonSize" format="dimension" />
+        <attr name="buttonStyle" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="rounded" value="1" />
+            <enum name="circular" value="2" />
+        </attr>
+        <attr name="isEnabled" format="boolean" />
+    </declare-styleable>
+</resources>
+```
 
----
+**Шаг 2: Использовать в Custom View:**
 
+```kotlin
+class CustomButton @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
+    private var buttonColor: Int = Color.BLUE
+    private var buttonText: String = ""
+    private var buttonSize: Float = 50f
+    private var buttonStyle: Int = 0
+    private var isButtonEnabled: Boolean = true
+
+    init {
+        // Получить атрибуты
+        context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.CustomButton,
+            0, 0
+        ).apply {
+            try {
+                buttonColor = getColor(
+                    R.styleable.CustomButton_buttonColor,
+                    Color.BLUE
+                )
+                buttonText = getString(
+                    R.styleable.CustomButton_buttonText
+                ) ?: ""
+                buttonSize = getDimension(
+                    R.styleable.CustomButton_buttonSize,
+                    50f
+                )
+                buttonStyle = getInt(
+                    R.styleable.CustomButton_buttonStyle,
+                    0
+                )
+                isButtonEnabled = getBoolean(
+                    R.styleable.CustomButton_isEnabled,
+                    true
+                )
+            } finally {
+                recycle() // ВАЖНО: освободить ресурсы
+            }
+        }
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        // Использовать атрибуты для рисования
+        paint.color = buttonColor
+        // ...
+    }
+}
+```
+
+**Шаг 3: Использовать в XML:**
+
+```xml
+<com.example.CustomButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:buttonColor="@color/red"
+    app:buttonText="Click Me"
+    app:buttonSize="24sp"
+    app:buttonStyle="rounded"
+    app:isEnabled="true" />
+```
+
+**Форматы атрибутов:**
+
+- `color` - цвет
+- `string` - текст
+- `dimension` - размер (dp, sp, px)
+- `integer` - целое число
+- `float` - дробное число
+- `boolean` - true/false
+- `reference` - ссылка на ресурс (@drawable, @string и т.д.)
+- `enum` - перечисление
+- `flag` - флаги (можно комбинировать)
+
+**Пример с flags:**
+
+```xml
+<attr name="textStyle" format="flag">
+    <flag name="normal" value="0" />
+    <flag name="bold" value="1" />
+    <flag name="italic" value="2" />
+</attr>
+
+<!-- Использование -->
+app:textStyle="bold|italic"
+```
+
+**Best Practices:**
+
+1. ✅ Всегда вызывайте `recycle()` на TypedArray
+2. ✅ Предоставляйте значения по умолчанию
+3. ✅ Используйте `@JvmOverloads` для всех конструкторов
+4. ✅ Группируйте связанные атрибуты в одном `declare-styleable`
 ## Related Questions
 
 ### Prerequisites (Easier)

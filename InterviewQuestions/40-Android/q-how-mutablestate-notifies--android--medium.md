@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/jetpack-compose, jetpack-compose, mutablestate, observer-pattern, recomposition, snapshot-system, state, state-management, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-mlkit-face-detection--ml--medium, q-recomposition-choreographer--android--hard, q-baseline-profiles-optimization--performance--medium]
 ---
 # Как mutableState сообщает о том, что он изменился?
 
@@ -434,3 +434,8 @@ Recomposition (Action)
 
 **Гранулярная рекомпозиция:** Только те Composable, которые **читают** изменённое состояние, перерисовываются.
 
+## Related Questions
+
+- [[q-mlkit-face-detection--ml--medium]]
+- [[q-recomposition-choreographer--android--hard]]
+- [[q-baseline-profiles-optimization--performance--medium]]

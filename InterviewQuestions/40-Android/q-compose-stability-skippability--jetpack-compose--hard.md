@@ -4,6 +4,8 @@ title: "Compose Stability Skippability / Стабильность и пропу�
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy, q-rxjava-pagination-recyclerview--android--medium, q-kakaya-raznitsa-mezhdu-dialogom-i-fragmentom--android--medium]
 created: 2025-10-15
 tags: [compose, performance, compiler, stability, optimization, difficulty/hard]
 ---

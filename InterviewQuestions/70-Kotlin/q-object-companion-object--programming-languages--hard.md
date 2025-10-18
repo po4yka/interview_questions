@@ -4,8 +4,11 @@ title: "Object Companion Object"
 topic: kotlin
 difficulty: hard
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-object-companion-object--programming-languages--easy, q-equals-hashcode-purpose--kotlin--medium, q-kotlin-crossinline--programming-languages--hard]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # What is object / companion object?
 
@@ -497,3 +500,9 @@ val page = HtmlBuilder.html {
 **object**: Создаёт потокобезопасный singleton с ленивой инициализацией. Используется для одиночных экземпляров, утилит, глобальных менеджеров. Может наследоваться и реализовывать интерфейсы.
 
 **companion object**: Объявляет статико-подобные члены внутри класса, доступные через имя класса. Используется для фабричных методов, констант, "статических" функций. Может реализовывать интерфейсы и иметь extension-функции. Один на класс, может быть именованным.
+
+## Related Questions
+
+- [[q-kotlin-object-companion-object--programming-languages--easy]]
+- [[q-equals-hashcode-purpose--kotlin--medium]]
+- [[q-kotlin-crossinline--programming-languages--hard]]

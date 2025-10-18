@@ -4,8 +4,11 @@ title: "Find Object Without References / Поиск объектов без сс
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-mvi-pattern--architecture-patterns--hard, q-interpreter-pattern--design-patterns--hard, q-xml-acronym--programming-languages--easy]
 created: 2025-10-15
-tags: - debugging
+tags:
+  - debugging
   - heap-dump
   - kotlin
   - mat
@@ -152,3 +155,8 @@ class LeakDetector {
 
 Создайте дамп памяти в Android Studio ("Dump Java heap"). Используйте Memory Analyzer Tool (MAT) для анализа. Ищите "Unreachable objects" и "Dominators". LeakCanary автоматически обнаруживает утечки.
 
+## Related Questions
+
+- [[q-mvi-pattern--architecture-patterns--hard]]
+- [[q-interpreter-pattern--design-patterns--hard]]
+- [[q-xml-acronym--programming-languages--easy]]

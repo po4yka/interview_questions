@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/performance, android/recyclerview, concurrency, diffutil, livedata, memory, performance, recyclerview, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-view-methods-and-their-purpose--android--medium, q-multithreading-tools-android--android--medium, q-test-doubles-dependency-injection--testing--medium]
 ---
 # Какие могут быть проблемы с элементами списка?
 

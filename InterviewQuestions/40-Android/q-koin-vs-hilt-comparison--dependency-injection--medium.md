@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [injection, koin, hilt, comparison, architecture, difficulty/medium]
 moc: moc-architecture-patterns
-related: []
+related: [q-mlkit-object-detection--ml--medium, q-network-request-deduplication--networking--hard, q-app-start-types-android--android--medium]
 subtopics: [di-hilt, di-koin]
 ---
 # Koin vs Hilt Comparison / Сравнение Koin и Hilt
@@ -1079,3 +1079,9 @@ val experimentModule = module {
 - Команд с опытом в DI
 
 Оба — отличный выбор. Решение зависит от ваших конкретных ограничений: опыт команды, размер проекта, требования ко времени сборки и целевые платформы.
+
+## Related Questions
+
+- [[q-mlkit-object-detection--ml--medium]]
+- [[q-network-request-deduplication--networking--hard]]
+- [[q-app-start-types-android--android--medium]]

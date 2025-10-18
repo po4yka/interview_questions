@@ -4,6 +4,8 @@ title: "Custom View Attributes / Атрибуты кастомных View"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-keep-service-running-background--android--medium, q-which-class-to-use-for-rendering-view-in-background-thread--android--hard, q-what-is-known-about-methods-that-redraw-view--android--medium]
 created: 2025-10-15
 tags: [views, xml-attributes, android-framework, theming, difficulty/medium]
 ---

@@ -4,6 +4,8 @@ title: "Compose Navigation Advanced / Продвинутая навигация 
 topic: jetpack-compose
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-app-store-optimization--distribution--medium, q-factory-pattern-android--android--medium, q-what-are-services-used-for--android--medium]
 created: 2025-10-15
 tags: [compose, navigation, type-safety, deep-links, difficulty/medium]
 ---

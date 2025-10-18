@@ -4,6 +4,8 @@ title: "Retrofit Library / Библиотека Retrofit"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-show-svg-string-as-vector-file--programming-languages--medium, q-is-layoutinflater-a-singleton-and-why--android--medium, q-overdraw-gpu-rendering--android--medium]
 created: 2025-10-15
 tags: [retrofit, networking, rest-api, difficulty/medium]
 ---
@@ -240,4 +242,8 @@ suspend fun safeApiCall(): Result<User> {
 **Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
 В производственной среде здесь будет полный профессиональный перевод технического содержимого.
 
+## Related Questions
 
+- [[q-how-to-show-svg-string-as-vector-file--programming-languages--medium]]
+- [[q-is-layoutinflater-a-singleton-and-why--android--medium]]
+- [[q-overdraw-gpu-rendering--android--medium]]

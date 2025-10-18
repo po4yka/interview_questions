@@ -4,8 +4,11 @@ title: "Kotlin Java Primitives / Примитивы Kotlin и Java"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-init-block-features--programming-languages--easy, q-kotlin-reflection--programming-languages--medium]
 created: 2025-10-15
-tags: - java
+tags:
+  - java
   - kotlin
   - primitives
   - programming-languages
@@ -614,3 +617,8 @@ val unnecessary: Int? = 42  // Лучше Int
 val inefficient = Array(1_000_000) { 0 }  // Используйте IntArray
 ```
 
+## Related Questions
+
+- [[q-flowon-operator-context-switching--kotlin--hard]]
+- [[q-kotlin-init-block-features--programming-languages--easy]]
+- [[q-kotlin-reflection--programming-languages--medium]]

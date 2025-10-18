@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - android
   - workmanager
@@ -15,7 +16,9 @@ tags: - kotlin
   - periodic-work
   - constraints
 moc: moc-kotlin
-subtopics:   - coroutines
+related: [q-kotlin-when-vs-switch--programming-languages--easy, q-lazy-initialization--programming-languages--easy, q-equality-operators-kotlin--kotlin--easy]
+subtopics:
+  - coroutines
   - android
   - workmanager
   - background
@@ -999,10 +1002,10 @@ override suspend fun doWork(): Result {
 ```
 
 ### Related Questions
-- [[q-coroutine-basics--kotlin--easy]] - Coroutine fundamentals
+- [[q-what-is-coroutine--kotlin--easy]] - Coroutine fundamentals
 - [[q-android-lifecycle-coroutines--kotlin--medium]] - Android lifecycle integration
 - [[q-structured-concurrency--kotlin--hard]] - Structured concurrency principles
-- [[q-flow-basics--kotlin--medium]] - Flow for reactive updates
+- [[q-flow-basics--kotlin--easy]] - Flow for reactive updates
 
 ## Follow-ups
 1. How does WorkManager ensure work execution survives app process death?
@@ -1074,10 +1077,10 @@ class MyCoroutineWorker(
 *(Продолжение следует той же структуре с полными примерами синхронизации данных, загрузки файлов, периодической очистки, тестирования и best practices на русском языке)*
 
 ### Связанные вопросы
-- [[q-coroutine-basics--kotlin--easy]] - Основы корутин
+- [[q-what-is-coroutine--kotlin--easy]] - Основы корутин
 - [[q-android-lifecycle-coroutines--kotlin--medium]] - Интеграция с Android lifecycle
 - [[q-structured-concurrency--kotlin--hard]] - Принципы структурированной конкурентности
-- [[q-flow-basics--kotlin--medium]] - Flow для реактивных обновлений
+- [[q-flow-basics--kotlin--easy]] - Flow для реактивных обновлений
 
 ### Дополнительные вопросы
 1. Как WorkManager гарантирует выполнение работы даже после смерти процесса приложения?

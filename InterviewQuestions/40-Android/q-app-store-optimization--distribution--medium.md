@@ -4,6 +4,8 @@ title: "App Store Optimization / App Store Оптимизация"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-compose-draws-on-screen--android--hard, q-stable-classes-compose--android--hard, q-fragments-and-activity-relationship--android--hard]
 created: 2025-10-15
 tags: [Marketing, Distribution, ASO, PlayStore, difficulty/medium]
 ---

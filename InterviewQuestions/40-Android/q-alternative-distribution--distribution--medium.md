@@ -4,6 +4,8 @@ title: "Alternative Distribution / Альтернативное распрост
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-which-event-is-triggered-when-user-presses-screen--android--medium, q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium, q-how-to-save-activity-state--android--medium]
 created: 2025-10-15
 tags: [Kotlin, Distribution, APK, Samsung, difficulty/medium]
 ---

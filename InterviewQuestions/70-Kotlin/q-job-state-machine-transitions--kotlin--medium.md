@@ -10,6 +10,7 @@ subtopics:
   - cancellation
 difficulty: medium
 moc: moc-kotlin
+related: [q-list-set-map-differences--programming-languages--easy, q-fan-in-fan-out--kotlin--hard, q-inline-function-limitations--kotlin--medium]
 status: draft
 created: 2025-10-12
 updated: 2025-10-12

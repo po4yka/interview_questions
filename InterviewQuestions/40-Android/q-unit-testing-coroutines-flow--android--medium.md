@@ -4,6 +4,8 @@ title: "Unit Testing Coroutines Flow"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-service-types-android--android--easy, q-what-do-you-know-about-modifiers--programming-languages--medium, q-how-to-create-animations-in-android--android--medium]
 created: 2025-10-15
 tags: [testing, coroutines, flow, unit-testing, turbine, mockk, difficulty/medium]
 ---
@@ -707,14 +709,8 @@ fun test() = runTest {
 
 
 ## Ответ (RU)
-# Вопрос (RU)
-Как писать unit-тесты для Kotlin Coroutines и Flow? Каковы лучшие практики и распространенные ошибки?
 
-
-## Ответ (RU)
-# Вопрос (RU)
-Как писать unit-тесты для Kotlin Coroutines и Flow? Каковы лучшие практики и распространенные ошибки?
-
+Тестирование Coroutines и Flow требует специального подхода для асинхронных операций, тестовых диспетчеров и управления временем. Правильное тестирование обеспечивает надежность и поддерживаемость кода.
 
 #### Ключевые концепции:
 

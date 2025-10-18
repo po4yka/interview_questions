@@ -4,6 +4,8 @@ title: "Sealed Classes Limitations / Sealed Классы Limitations"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-what-is-flow--programming-languages--medium, q-what-is-job-object--programming-languages--medium, q-clean-code-principles--software-engineering--medium]
 created: 2025-10-15
 tags:
   - class-hierarchy
@@ -31,3 +33,8 @@ Sealed class limitations: all subtypes must be defined in the same file, sealed 
 
 Ограничения sealed классов: все подтипы должны быть определены в том же файле, sealed класс не может быть интерфейсом или абстрактным классом напрямую, sealed классы и их подтипы не могут быть private, sealed классы не поддерживают наследование от других классов кроме Any и могут использоваться только для классов и объектов но не интерфейсов. Также sealed классы обеспечивают исчерпывающие выражения when, полный контроль над иерархией классов и поддержку сопоставления с образцом.
 
+## Related Questions
+
+- [[q-what-is-flow--programming-languages--medium]]
+- [[q-what-is-job-object--programming-languages--medium]]
+- [[q-clean-code-principles--software-engineering--medium]]

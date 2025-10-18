@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-testing-coroutines-flow--testing--hard, q-test-coverage-quality-metrics--testing--medium, q-shared-preferences--android--easy]
 
 # Timestamps
 created: 2025-10-06

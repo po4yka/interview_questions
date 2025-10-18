@@ -18,7 +18,7 @@ source_note: easy_kotlin Telegram channel
 # Workflow & relations
 status: draft
 moc: moc-backend
-related:
+related: [q-virtual-tables-disadvantages--backend--medium, q-database-migration-purpose--backend--medium, q-relational-table-unique-data--backend--medium]
   - c-sql-queries
   - c-database-performance
   - c-algorithms

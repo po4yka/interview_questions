@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [jetpack, androidx, libraries, difficulty/easy]
 moc: moc-android
-related: []
+related: [q-why-list-scrolling-lags--android--medium, q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium, q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]
 ---
 
 # Question (EN)

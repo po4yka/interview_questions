@@ -4,8 +4,11 @@ title: "Data Class Variables / Переменные data class"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-stateflow-sharedflow-differences--kotlin--medium, q-suspend-functions-basics--kotlin--easy, q-lazy-initialization--programming-languages--easy]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # What variables can be used in data class?
 
@@ -447,3 +450,9 @@ data class CachedData(
     var lastAccessed: Long = 0  // Не часть данных
 }
 ```
+
+## Related Questions
+
+- [[q-stateflow-sharedflow-differences--kotlin--medium]]
+- [[q-suspend-functions-basics--kotlin--easy]]
+- [[q-lazy-initialization--programming-languages--easy]]

@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-testing-compose-ui--android--medium, q-cicd-multi-module--devops--medium]
 
 # Timestamps
 created: 2025-10-06

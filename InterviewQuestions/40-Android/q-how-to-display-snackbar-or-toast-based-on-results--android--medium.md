@@ -4,8 +4,11 @@ title: "How To Display Snackbar Or Toast Based On Results / Как отобра�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-navigation-methods-in-kotlin--android--medium, q-how-animations-work-in-recyclerview--android--medium, q-android-architectural-patterns--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How to display Snackbar or Toast based on results?
 
@@ -101,7 +104,154 @@ Button(onClick = {
 ---
 
 ## RU (original)
+Отображение Snackbar или Toast на основе результатов операций - распространенный паттерн в Android.
 
-По результатам нужно отобразить Snackbar или Toast, как это сделаешь?
+**Toast - простое сообщение:**
 
-Для отображения Toast можно использовать Toast.makeText(context, "Message", LENGTH).show(), а для Snackbar – Snackbar.make(view, "Message", LENGTH).show(). Toast чаще используется для кратких уведомлений, а Snackbar – для сообщений с действиями, например, кнопкой "Отменить". Snackbar также требует привязки к определённому view.
+```kotlin
+class MyActivity : AppCompatActivity() {
+
+    fun showResult(result: Result<Data>) {
+        when (result) {
+            is Result.Success -> {
+                Toast.makeText(
+                    this,
+                    "Success: \${result.data}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            is Result.Error -> {
+                Toast.makeText(
+                    this,
+                    "Error: \${result.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+}
+```
+
+**Snackbar - с действием:**
+
+```kotlin
+fun showSnackbar(result: Result<Data>) {
+    when (result) {
+        is Result.Success -> {
+            Snackbar.make(
+                binding.root,
+                "Success!",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
+        is Result.Error -> {
+            Snackbar.make(
+                binding.root,
+                "Error occurred",
+                Snackbar.LENGTH_LONG
+            ).setAction("Retry") {
+                retryOperation()
+            }.show()
+        }
+    }
+}
+```
+
+**В ViewModel с Flow:**
+
+```kotlin
+class MyViewModel : ViewModel() {
+    private val _messages = MutableSharedFlow<UiMessage>()
+    val messages: SharedFlow<UiMessage> = _messages.asSharedFlow()
+
+    suspend fun performAction() {
+        try {
+            val result = repository.doWork()
+            _messages.emit(UiMessage.Success("Done!"))
+        } catch (e: Exception) {
+            _messages.emit(UiMessage.Error(e.message))
+        }
+    }
+}
+
+// В Activity
+lifecycleScope.launch {
+    viewModel.messages.collect { message ->
+        when (message) {
+            is UiMessage.Success -> showToast(message.text)
+            is UiMessage.Error -> showSnackbar(message.text)
+        }
+    }
+}
+```
+
+**В Compose:**
+
+```kotlin
+@Composable
+fun MyScreen(viewModel: MyViewModel) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.messages.collect { message ->
+            snackbarHostState.showSnackbar(
+                message = message.text,
+                duration = SnackbarDuration.Short
+            )
+        }
+    }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) {
+        Content()
+    }
+}
+```
+
+**Одноразовые события с Event wrapper:**
+
+```kotlin
+data class Event<out T>(private val content: T) {
+    private var hasBeenHandled = false
+
+    fun getContentIfNotHandled(): T? {
+        return if (hasBeenHandled) {
+            null
+        } else {
+            hasBeenHandled = true
+            content
+        }
+    }
+}
+
+class MyViewModel : ViewModel() {
+    private val _toastMessage = MutableLiveData<Event<String>>()
+    val toastMessage: LiveData<Event<String>> = _toastMessage
+
+    fun doWork() {
+        _toastMessage.value = Event("Work completed")
+    }
+}
+
+// Наблюдение
+viewModel.toastMessage.observe(this) { event ->
+    event.getContentIfNotHandled()?.let { message ->
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+}
+```
+
+**Best Practices:**
+
+1. ✅ Snackbar для действий требующих взаимодействия
+2. ✅ Toast для простых информационных сообщений
+3. ✅ Используйте SharedFlow для one-time events
+4. ✅ В Compose используйте SnackbarHost
+5. ❌ Не показывайте Toast из фоновых потоков
+
+## Related Questions
+
+- [[q-navigation-methods-in-kotlin--android--medium]]
+- [[q-how-animations-work-in-recyclerview--android--medium]]
+- [[q-android-architectural-patterns--android--medium]]

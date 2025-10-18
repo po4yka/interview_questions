@@ -4,6 +4,8 @@ title: "Sharedpreferences Definition / Определение SharedPreferences"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-workmanager-return-result--android--medium, q-how-to-break-text-by-screen-width--android--easy, q-android-components-besides-activity--android--easy]
 created: 2025-10-15
 tags: [android/data-storage, data-storage, key-value, persistence, sharedpreferences, difficulty/easy]
 ---

@@ -4,6 +4,8 @@ title: "What Are The Most Important Components Of Compose / Какие самы�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-play-app-signing--android--medium, q-retrofit-modify-all-requests--android--hard, q-mlkit-custom-models--ml--hard]
 created: 2025-10-15
 tags: [Composable functions, State management, Modifiers, Layouts, android, ui, jetpack-compose, difficulty/medium]
 ---

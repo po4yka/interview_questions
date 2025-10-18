@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [design, material3, ui-components, design-system, difficulty/easy]
 moc: moc-ui-ux-accessibility
-related: []
+related: [q-play-feature-delivery--android--medium, q-kmm-production-readiness--multiplatform--hard, q-unit-testing-coroutines-flow--android--medium]
 subtopics: [material-design]
 ---
 # Material 3 Components

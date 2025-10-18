@@ -4,6 +4,8 @@ title: "What Navigation Methods Exist In Kotlin / Какие методы нав
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-app-startup-library--android--medium, q-how-application-priority-is-determined-by-the-system--android--hard, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--programming-languages--easy]
 created: 2025-10-15
 tags: [languages, difficulty/medium]
 ---

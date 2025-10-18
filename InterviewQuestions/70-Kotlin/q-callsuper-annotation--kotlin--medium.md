@@ -4,8 +4,11 @@ title: "Callsuper Annotation / Аннотация CallSuper"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-reified-type-parameters--kotlin--medium, q-testing-flow-operators--kotlin--hard, q-access-modifiers--programming-languages--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - android
   - annotations
   - best-practices
@@ -836,3 +839,9 @@ class MyActivity : AppCompatActivity() {
     }
 }
 ```
+
+## Related Questions
+
+- [[q-reified-type-parameters--kotlin--medium]]
+- [[q-testing-flow-operators--kotlin--hard]]
+- [[q-access-modifiers--programming-languages--medium]]

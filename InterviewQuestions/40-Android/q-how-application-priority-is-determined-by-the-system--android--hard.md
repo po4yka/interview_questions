@@ -4,6 +4,8 @@ title: "How Application Priority Is Determined By The System / Как систе
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-what-navigation-methods-do-you-know--android--medium, q-network-operations-android--android--medium, q-mvp-pattern--android--medium]
 created: 2025-10-15
 tags: [process-management, memory-management, lifecycle, difficulty/hard]
 ---

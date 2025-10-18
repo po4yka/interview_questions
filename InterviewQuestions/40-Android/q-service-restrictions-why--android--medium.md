@@ -4,6 +4,8 @@ title: "Service Restrictions Why / Почему ограничения для Se
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-canvas-drawing-optimization--custom-views--hard, q-what-is-data-binding--android--easy, q-workmanager-chaining--background--hard]
 created: 2025-10-15
 tags: [android/background-processing, background-processing, battery-optimization, doze-mode, services, workmanager, difficulty/medium]
 ---

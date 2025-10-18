@@ -4,6 +4,8 @@ title: "What Is Hilt / Что такое Hilt"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-android-app-components--android--easy, q-what-can-be-done-through-composer--android--medium, q-data-sync-unstable-network--android--hard]
 created: 2025-10-15
 tags: [android/architecture-clean, android/di-hilt, architecture-clean, dependency-injection, di-hilt, hilt, platform/android, difficulty/medium]
 ---
@@ -598,3 +600,8 @@ object DatabaseModule {
 - Интеграция с Jetpack библиотеками
 - Необходима тестируемая архитектура
 
+## Related Questions
+
+- [[q-android-app-components--android--easy]]
+- [[q-what-can-be-done-through-composer--android--medium]]
+- [[q-data-sync-unstable-network--android--hard]]

@@ -4,8 +4,11 @@ title: "Describe Data Sealed Classes"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-immutable-collections--programming-languages--easy, q-serialization-basics--programming-languages--medium, q-kotlin-sam-interfaces--kotlin--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Describe data classes and sealed classes
 
@@ -792,3 +795,9 @@ fun handleValidation(result: ValidationResult) {
 **Data классы**: Предназначены для хранения данных. Автоматически генерируют `equals()`, `hashCode()`, `toString()`, `copy()` и компонентные функции. Идеальны для POJO/POCO объектов, DTOs, моделей данных и value objects. Поддерживают деструктуризацию и простое копирование с изменениями.
 
 **Sealed классы**: Представляют ограниченный набор типов. Ограничивают наследование одним файлом/модулем. Обеспечивают compile-time exhaustiveness checking в `when` выражениях. Идеальны для управления состоянием, Result типов, навигационных событий и представления конечных множеств состояний. Комбинируются с data классами для создания мощных type-safe API.
+
+## Related Questions
+
+- [[q-kotlin-immutable-collections--programming-languages--easy]]
+- [[q-serialization-basics--programming-languages--medium]]
+- [[q-kotlin-sam-interfaces--kotlin--medium]]

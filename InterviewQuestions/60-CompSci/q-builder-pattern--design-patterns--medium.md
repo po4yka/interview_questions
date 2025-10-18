@@ -4,8 +4,11 @@ title: "Builder Pattern / Builder Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-proxy-pattern--design-patterns--medium, q-garbage-collector-definition--programming-languages--easy, q-extensions-concept--programming-languages--easy]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - creational-patterns
   - builder
   - gof-patterns

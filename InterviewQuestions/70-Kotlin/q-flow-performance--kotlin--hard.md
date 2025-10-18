@@ -18,7 +18,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140023
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-flow-backpressure--kotlin--hard, q-kotlin-enum-classes--kotlin--easy, q-kotlin-property-delegates--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-12

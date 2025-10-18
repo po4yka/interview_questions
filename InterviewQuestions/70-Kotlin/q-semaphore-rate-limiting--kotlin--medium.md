@@ -5,17 +5,20 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - semaphore
   - rate-limiting
   - concurrency
   - resource-management
 moc: moc-kotlin
-related:   - q-mutex-synchronized-coroutines--kotlin--medium
+related: [q-kotlin-favorite-features--programming-languages--easy, q-stateflow-purpose--programming-languages--medium, q-kotlin-type-system-features--programming-languages--medium]
+  - q-mutex-synchronized-coroutines--kotlin--medium
   - q-channelflow-callbackflow-flow--kotlin--medium
   - q-race-conditions-coroutines--kotlin--hard
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - semaphore
   - rate-limiting
   - concurrency

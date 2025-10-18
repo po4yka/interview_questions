@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - circuit-breaker
   - resilience
@@ -14,7 +15,9 @@ tags: - kotlin
   - production
   - microservices
 moc: moc-kotlin
-subtopics:   - coroutines
+related: [q-flatmap-variants-flow--kotlin--medium, q-flow-vs-livedata-comparison--kotlin--medium, q-request-coalescing-deduplication--kotlin--hard]
+subtopics:
+  - coroutines
   - resilience
   - patterns
   - error-handling

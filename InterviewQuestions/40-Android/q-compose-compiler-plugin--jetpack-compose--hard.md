@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [compose, compiler, internals, plugin, kotlin-compiler, android/jetpack-compose, android/performance, difficulty/hard]
 moc: moc-android
-related: []
+related: [q-network-request-deduplication--networking--hard, q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy, q-module-types-android--android--medium]
 subtopics: [jetpack-compose, performance]
 ---
 # Compose Compiler Plugin Transformations

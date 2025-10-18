@@ -4,6 +4,8 @@ title: "Which Event On Screen Press / Какое событие при нажа�
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-list-elements-problems--android--medium, q-what-is-workmanager--android--medium, q-cicd-multi-module--devops--medium]
 created: 2025-10-15
 tags: [android/touch-events, android/ui, event handling, touch events, touch-events, ui, difficulty/easy]
 ---
@@ -203,3 +205,8 @@ view.setOnTouchListener { v, event ->
 
 **Резюме**: В Android при нажатии пользователя на экран вызывается событие **ACTION_DOWN** через **MotionEvent**. Полная последовательность событий: ACTION_DOWN (нажатие) → ACTION_MOVE (перемещение) → ACTION_UP (отпускание). Обработка осуществляется через метод `onTouchEvent()` или `setOnTouchListener()`.
 
+## Related Questions
+
+- [[q-list-elements-problems--android--medium]]
+- [[q-what-is-workmanager--android--medium]]
+- [[q-cicd-multi-module--devops--medium]]

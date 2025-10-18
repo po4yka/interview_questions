@@ -4,6 +4,8 @@ title: "Separate Ui Business Logic / Разделение UI и бизнес-л�
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-proguard-r8--android--medium, q-how-to-draw-ui-without-xml--android--easy, q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]
 created: 2025-10-15
 tags: [android/architecture-clean, architecture, architecture-clean, clean-architecture, platform/android, separation-of-concerns, difficulty/easy]
 ---

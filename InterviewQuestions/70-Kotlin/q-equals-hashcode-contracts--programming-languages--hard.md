@@ -4,8 +4,11 @@ title: "Equals Hashcode Contracts / Контракты equals и hashCode"
 topic: kotlin
 difficulty: hard
 status: draft
+moc: moc-kotlin
+related: [q-destructuring-declarations--kotlin--medium, q-kotlin-inline-functions--kotlin--medium, q-coroutine-exception-handler--kotlin--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Tell about equals and hashCode contracts
 
@@ -642,3 +645,9 @@ fun demonstrateMistakes() {
     println("Одинаковый хеш: ${m3a.hashCode() == m3b.hashCode()}")  // true (нарушение!)
 }
 ```
+
+## Related Questions
+
+- [[q-destructuring-declarations--kotlin--medium]]
+- [[q-kotlin-inline-functions--kotlin--medium]]
+- [[q-coroutine-exception-handler--kotlin--medium]]

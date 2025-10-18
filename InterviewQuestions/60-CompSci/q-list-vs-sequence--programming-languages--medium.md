@@ -12,7 +12,7 @@ tags:
   - programming-languages
   - sequence
 moc: moc-programming-languages
-related: []
+related: [q-iterator-pattern--design-patterns--medium, q-data-class-component-functions--programming-languages--easy, q-iterator-order-guarantee--programming-languages--medium]
 ---
 # В чем разница между работой с list и работой с sequence
 

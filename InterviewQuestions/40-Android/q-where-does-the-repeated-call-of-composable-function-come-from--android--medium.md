@@ -4,6 +4,8 @@ title: "Where Does The Repeated Call Of Composable Function Come From / Отку
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium, q-android-performance-measurement-tools--android--medium]
 created: 2025-10-15
 tags: [recomposition, android, ui, jetpack-compose, difficulty/medium]
 ---

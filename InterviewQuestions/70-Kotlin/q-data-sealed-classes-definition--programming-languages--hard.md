@@ -4,8 +4,11 @@ title: "Data Sealed Classes Definition"
 topic: kotlin
 difficulty: hard
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-sam-conversions--programming-languages--medium, q-sequences-vs-collections-performance--kotlin--medium, q-kotlin-channels--kotlin--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # What are Data Class and Sealed Classes?
 
@@ -766,3 +769,9 @@ fun handleFormState(state: FormState) {
 **Sealed Class**: Ограничивает наследование одним файлом/модулем. Создаёт типобезопасные иерархии с exhaustive when-проверками. Все подклассы известны на этапе компиляции. Используется для UI состояний (Loading/Success/Error), Result типов, навигационных событий, command паттернов.
 
 **Комбинирование**: Очень распространён паттерн sealed класса с data подклассами для управления состояниями с данными (например, `sealed class UiState` с `data class Success(val data: T)`).
+
+## Related Questions
+
+- [[q-kotlin-sam-conversions--programming-languages--medium]]
+- [[q-sequences-vs-collections-performance--kotlin--medium]]
+- [[q-kotlin-channels--kotlin--medium]]

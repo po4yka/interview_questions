@@ -4,6 +4,8 @@ title: "Database Optimization Android / Database Оптимизация Android"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-foreground-service-types--background--medium, q-home-screen-widgets--android--medium, q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]
 created: 2025-10-15
 tags: [database, room, performance, optimization, sql, indexing, difficulty/medium]
 ---

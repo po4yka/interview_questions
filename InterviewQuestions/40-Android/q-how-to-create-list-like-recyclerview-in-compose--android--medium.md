@@ -4,6 +4,8 @@ title: "How To Create List Like Recyclerview In Compose / Как создать 
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-animated-visibility-vs-content--jetpack-compose--medium, q-compose-testing--android--medium, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]
 created: 2025-10-15
 tags: [jetpack-compose, lazycolumn, lazyrow, recyclerview, difficulty/medium]
 ---
@@ -475,14 +477,152 @@ fun ItemRow(item: Item) {
 ---
 
 ## RU (original)
+В Jetpack Compose аналогом RecyclerView является LazyColumn и LazyRow.
 
-Как в Jetpack Compose создать список, аналогичный RecyclerView
+**Базовое использование LazyColumn:**
 
-Используется LazyColumn или LazyRow. Они создают и отображают элементы по мере необходимости, экономя ресурсы и обеспечивая плавную прокрутку
+```kotlin
+@Composable
+fun UserList(users: List<User>) {
+    LazyColumn {
+        items(users) { user ->
+            UserItem(user)
+        }
+    }
+}
 
+@Composable
+fun UserItem(user: User) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(text = user.name)
+    }
+}
+```
 
----
+**С индексами:**
 
+```kotlin
+LazyColumn {
+    itemsIndexed(users) { index, user ->
+        UserItem(user, index)
+    }
+}
+```
+
+**Разные типы элементов:**
+
+```kotlin
+LazyColumn {
+    item {
+        HeaderItem()
+    }
+
+    items(users) { user ->
+        UserItem(user)
+    }
+
+    item {
+        FooterItem()
+    }
+}
+```
+
+**С ключами для производительности:**
+
+```kotlin
+LazyColumn {
+    items(
+        items = users,
+        key = { user -> user.id } // Уникальный ключ
+    ) { user ->
+        UserItem(user)
+    }
+}
+```
+
+**Sticky Headers:**
+
+```kotlin
+LazyColumn {
+    groupedUsers.forEach { (category, users) ->
+        stickyHeader {
+            CategoryHeader(category)
+        }
+        items(users) { user ->
+            UserItem(user)
+        }
+    }
+}
+```
+
+**LazyGrid для сетки:**
+
+```kotlin
+LazyVerticalGrid(
+    columns = GridCells.Fixed(2),
+    contentPadding = PaddingValues(16.dp)
+) {
+    items(products) { product ->
+        ProductCard(product)
+    }
+}
+```
+
+**Адаптивная сетка:**
+
+```kotlin
+LazyVerticalGrid(
+    columns = GridCells.Adaptive(minSize = 128.dp)
+) {
+    items(photos) { photo ->
+        PhotoItem(photo)
+    }
+}
+```
+
+**Горизонтальный список:**
+
+```kotlin
+LazyRow(
+    horizontalArrangement = Arrangement.spacedBy(8.dp)
+) {
+    items(items) { item ->
+        ItemCard(item)
+    }
+}
+```
+
+**Управление состоянием прокрутки:**
+
+```kotlin
+@Composable
+fun RememberScrollState() {
+    val listState = rememberLazyListState()
+
+    LazyColumn(state = listState) {
+        items(items) { item ->
+            ItemView(item)
+        }
+    }
+
+    // Прокрутить к позиции
+    LaunchedEffect(Unit) {
+        listState.scrollToItem(10)
+    }
+}
+```
+
+**Best Practices:**
+
+1. ✅ Всегда используйте ключи для элементов списка
+2. ✅ LazyColumn для вертикальных списков
+3. ✅ LazyRow для горизонтальных списков
+4. ✅ LazyVerticalGrid для сеток
+5. ✅ Избегайте вложенных Lazy компонентов
 ## Related Questions
 
 ### Hub

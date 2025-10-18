@@ -4,6 +4,8 @@ title: "Zip Parallelism Guarantee / Гарантия параллелизма zi
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-double-bang-operator--programming-languages--medium, q-coroutine-memory-leak-detection--kotlin--hard, q-partition-function--kotlin--easy]
 created: 2025-10-15
 tags:
   - programming-languages
@@ -136,3 +138,10 @@ coroutineScope {
 ```
 
 ---
+
+## Related Questions
+
+- [[q-kotlin-double-bang-operator--programming-languages--medium]]
+- [[q-coroutine-memory-leak-detection--kotlin--hard]]
+- [[q-partition-function--kotlin--easy]]
+

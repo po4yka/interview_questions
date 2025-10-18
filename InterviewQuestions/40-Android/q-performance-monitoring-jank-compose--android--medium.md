@@ -4,6 +4,8 @@ title: "Performance Monitoring Jank Compose / Мониторинг произв�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy, q-what-are-px-dp-sp--android--easy, q-what-are-the-navigation-methods-in-kotlin--android--medium]
 created: 2025-10-15
 tags: [jetpack-compose, performance, jank, profiling, optimization, difficulty/medium]
 ---
@@ -12,6 +14,17 @@ tags: [jetpack-compose, performance, jank, profiling, optimization, difficulty/m
 **English**: How do you detect and fix performance issues (jank) in Jetpack Compose apps?
 
 ## Answer (EN)
+
+**Jank** - "замирания" UI когда frame rate падает ниже 60fps (16.67ms per frame). Главные причины в Compose: избыточные recompositions, медленные вычисления, неоптимизированные списки, блокировка UI thread.
+
+**Инструменты обнаружения:** (1) Layout Inspector - визуализация recompositions, count, timing, (2) Composition Tracing - профилирование частоты recomposition, (3) Macrobenchmark - измерение frame timing, jank count, P50/P90/P95/P99 метрики, (4) FrameMetrics API - runtime мониторинг jank в production.
+
+**Техники оптимизации:** (1) **remember** - кэширование дорогих вычислений, (2) **derivedStateOf** - recompose только когда derived значение изменилось, (3) **@Stable/@Immutable** - стабильные классы для smart recomposition, (4) **LazyColumn keys** - стабильные unique keys предотвращают recomposition, (5) **Modifier reuse** - избегать создания новых Modifiers каждый recompose.
+
+**Правила Stability:** Primitives stable, `val` stable, `var` unstable, immutable collections stable, mutable unstable, классы требуют `@Stable`/`@Immutable`.
+
+## Ответ (RU)
+
 **Jank** - это "замирания" UI когда frame rate падает ниже 60fps (16.67ms per frame). В Compose главные причины: избыточные recompositions, медленные вычисления, неоптимизированные списки.
 
 ### What is Jank?

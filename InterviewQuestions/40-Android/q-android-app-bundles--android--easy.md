@@ -8,10 +8,12 @@ created: 2025-10-05
 tags: [app-bundle, play-store, distribution, difficulty/easy, android/bundle, android/play-console]
 language_tags: [en, ru]
 moc: moc-android
+related: [q-api-file-upload-server--android--medium, q-gradle-basics--android--easy, q-what-methods-redraw-views--android--medium]
 modified: 2025-10-05
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
-subtopics:   - app-bundle
+subtopics:
+  - app-bundle
   - play-console
 ---
 # Android App Bundles / Android App Bundle (AAB)

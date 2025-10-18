@@ -8,9 +8,11 @@ created: 2025-10-15
 tags: [tasks, back-stack, navigation, activity, launch-mode, difficulty/medium, android/ui-navigation, android/lifecycle]
 language_tags: [tasks, back-stack, navigation, activity, launch-mode, difficulty/medium, android/ui-navigation, android/lifecycle]
 moc: moc-android
+related: [q-recyclerview-itemdecoration-advanced--android--medium, q-database-encryption-android--android--medium, q-what-to-put-in-state-for-initial-list--android--easy]
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
-subtopics:   - activity
+subtopics:
+  - activity
   - ui-navigation
   - lifecycle
 ---
@@ -118,3 +120,9 @@ Android управляет задачами и стеком возврата, п
 ## References
 
 - [Tasks and the back stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
+
+## Related Questions
+
+- [[q-recyclerview-itemdecoration-advanced--android--medium]]
+- [[q-database-encryption-android--android--medium]]
+- [[q-what-to-put-in-state-for-initial-list--android--easy]]

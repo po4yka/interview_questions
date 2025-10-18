@@ -8,9 +8,11 @@ created: 2025-10-15
 tags: [lint, static-analysis, code-quality, gradle, difficulty/medium, android/analysis, android/gradle, android/build-variants]
 language_tags: [lint, static-analysis, code-quality, gradle, difficulty/medium, android/analysis, android/gradle, android/build-variants]
 moc: moc-android
+related: [q-parcelable-implementation--android--medium, q-room-vs-sqlite--android--medium, q-gradle-build-system--android--medium]
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
-subtopics:   - static-analysis
+subtopics:
+  - static-analysis
   - gradle
   - build-variants
 ---
@@ -182,3 +184,9 @@ android {
 
 - [Improve your code with lint checks](https://developer.android.com/studio/write/lint)
 - [Configure lint options with Gradle](https://developer.android.com/studio/write/lint#gradle)
+
+## Related Questions
+
+- [[q-parcelable-implementation--android--medium]]
+- [[q-room-vs-sqlite--android--medium]]
+- [[q-gradle-build-system--android--medium]]

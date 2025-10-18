@@ -18,7 +18,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140019
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-java-type-differences--programming-languages--medium, q-what-is-coroutine--kotlin--easy, q-desugaring-android-java--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12

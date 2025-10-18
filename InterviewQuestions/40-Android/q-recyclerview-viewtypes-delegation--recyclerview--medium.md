@@ -7,7 +7,8 @@ status: draft
 created: 2025-10-13
 tags: [adapter, view-types, design-patterns, difficulty/medium]
 moc: moc-android
-related:   - q-recyclerview-sethasfixedsize--android--easy
+related: [q-dagger-component-dependencies--di--hard, q-compose-slot-table-recomposition--jetpack-compose--hard, q-custom-view-attributes--custom-views--medium]
+  - q-recyclerview-sethasfixedsize--android--easy
   - q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
   - q-rxjava-pagination-recyclerview--android--medium
   - q-how-to-create-list-like-recyclerview-in-compose--android--medium

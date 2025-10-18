@@ -12,9 +12,11 @@ category: android
 date_modified: 2025-10-05
 language_tags: [recyclerview, itemdecoration, ui, custom-views, difficulty/medium, android/views, android/ui-widgets, android/performance-rendering]
 moc: moc-android
+related: [q-kotlin-context-receivers--kotlin--hard, q-dagger-multibinding--di--hard, q-kmm-architecture--multiplatform--hard]
 original_language: en
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20RecyclerView%20ItemDecoration.md"
-subtopics:   - ui-views
+subtopics:
+  - ui-views
   - ui-widgets
   - performance-rendering
 type: question

@@ -4,6 +4,8 @@ title: "Kmm Testing / Kmm Тестирование"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium, q-what-is-layout-performance-measured-in--android--medium, q-gradle-version-catalog--android--medium]
 created: 2025-10-15
 tags: [Kotlin, KMM, Testing, Multiplatform, difficulty/medium]
 ---

@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android-profiler, android/performance, benchmark, gpu-rendering, optimization, performance, profiling, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-jetpack-compose-basics--android--medium, q-what-can-be-done-through-composer--android--medium, q-parsing-optimization-android--android--medium]
 ---
 # Как определить изменение скорости работы программы после наших действий?
 
@@ -181,14 +181,161 @@ class PerformanceTest {
 All these methods allow comparing data before and after optimization to assess program performance changes.
 
 ## Ответ (RU)
-Для определения изменения скорости работы программы можно использовать следующие инструменты:
 
-- **Profile GPU Rendering** - показывает время отрисовки кадров и позволяет выявить тяжелые кадры
-- **Android Profiler** - предоставляет набор инструментов для анализа производительности приложения через вкладки CPU, Memory и другие
-- **Benchmarking** с использованием Jetpack Benchmark - позволяет количественно оценить улучшения
-- **Logcat** - используется для измерения времени выполнения операций через логирование
-- **StrictMode** - помогает обнаружить операции, замедляющие работу приложения в главном потоке
-- **Systrace** - позволяет собирать трассировки производительности системы
+Android предоставляет несколько инструментов для измерения производительности: **Profile GPU Rendering** (визуализация времени кадров), **Android Profiler** (CPU, память, сеть, энергопотребление), **Библиотека Benchmarking** (Jetpack Macrobenchmark и Microbenchmark), **Systrace/Perfetto** (трассировка на уровне системы) и **StrictMode** (обнаружение медленных операций в главном потоке).
+
+**Рекомендуемый подход**: Используйте комбинацию Android Profiler для анализа в реальном времени, Macrobenchmark для метрик запуска приложения и задержек, и Perfetto для глубокого исследования на системном уровне.
+
+Для измерения изменения производительности программы можно использовать следующие инструменты:
+
+**1. Profile GPU Rendering**
+
+Показывает время отрисовки кадров и помогает выявить тяжелые кадры.
+
+```kotlin
+// Включить в параметрах разработчика:
+// Настройки → Параметры разработчика → Профилирование GPU-рендеринга → На экране в виде полос
+
+// Зеленая линия = 16ms (цель 60 fps)
+// Полосы выше зеленой = пропущенные кадры
+```
+
+**2. Android Profiler**
+
+Предоставляет инструменты для анализа производительности приложения через вкладки CPU, Memory и другие.
+
+```kotlin
+// В Android Studio: View → Tool Windows → Profiler
+
+// CPU Profiler - трассировка методов
+// Memory Profiler - отслеживание выделения памяти
+// Network Profiler - мониторинг запросов
+// Energy Profiler - использование батареи
+```
+
+**3. Benchmarking с Jetpack Benchmark**
+
+Позволяет количественно оценить улучшения.
+
+```kotlin
+// build.gradle.kts
+androidTestImplementation("androidx.benchmark:benchmark-junit4:1.3.2")
+
+// Для тестирования запуска и задержек (Macrobenchmark)
+androidTestImplementation("androidx.benchmark:benchmark-macro-junit4:1.3.2")
+
+// Тест производительности
+@RunWith(AndroidJUnit4::class)
+class MyBenchmark {
+    @get:Rule
+    val benchmarkRule = BenchmarkRule()
+
+    @Test
+    fun benchmarkSomeWork() {
+        benchmarkRule.measureRepeated {
+            // Код для тестирования
+            doSomeWork()
+        }
+    }
+}
+```
+
+**4. Logcat - измерение времени операций**
+
+Используется для измерения времени выполнения через логирование.
+
+```kotlin
+val startTime = System.currentTimeMillis()
+performOperation()
+val endTime = System.currentTimeMillis()
+Log.d("Performance", "Операция заняла ${endTime - startTime}ms")
+
+// Или использовать SystemClock
+val startNanos = SystemClock.elapsedRealtimeNanos()
+performOperation()
+val durationNanos = SystemClock.elapsedRealtimeNanos() - startNanos
+Log.d("Performance", "Длительность: ${durationNanos / 1_000_000}ms")
+```
+
+**5. StrictMode**
+
+Помогает обнаружить операции, замедляющие работу приложения в главном потоке.
+
+```kotlin
+if (BuildConfig.DEBUG) {
+    StrictMode.setThreadPolicy(
+        StrictMode.ThreadPolicy.Builder()
+            .detectDiskReads()
+            .detectDiskWrites()
+            .detectNetwork()
+            .penaltyLog()
+            .build()
+    )
+}
+```
+
+**6. Perfetto (заменяет Systrace)**
+
+Современный инструмент трассировки производительности системы. Systrace устарел в пользу Perfetto.
+
+```bash
+# Запись трассировки с Perfetto (Android 10+)
+adb shell perfetto \
+  -c - --txt \
+  -o /data/misc/perfetto-traces/trace \
+  < config.pbtxt
+
+# Или использовать System Tracing в Android Studio:
+# Run → Profile → CPU → System Trace
+
+# В коде - пользовательские секции трассировки
+Trace.beginSection("MyOperation")
+performOperation()
+Trace.endSection()
+```
+
+**Рабочий процесс сравнения:**
+
+```kotlin
+class PerformanceTest {
+    @Test
+    fun comparePerformance() {
+        // До оптимизации
+        val before = measurePerformance { oldImplementation() }
+
+        // После оптимизации
+        val after = measurePerformance { newImplementation() }
+
+        // Вычисление улучшения
+        val improvement = ((before - after) / before.toFloat() * 100).toInt()
+        println("Производительность улучшена на $improvement%")
+
+        // Проверка улучшения
+        assertTrue(after < before)
+    }
+
+    private fun measurePerformance(block: () -> Unit): Long {
+        val iterations = 1000
+        val start = System.nanoTime()
+        repeat(iterations) { block() }
+        return (System.nanoTime() - start) / iterations
+    }
+}
+```
+
+**Сводная таблица инструментов:**
+
+| Инструмент | Назначение | Лучше всего для |
+|------|---------|----------|
+| **GPU Rendering** | Визуализация времени кадров | Производительность UI |
+| **Android Profiler** | Детальный анализ | CPU, Memory, Network |
+| **Benchmark** | Количественное тестирование | Сравнение реализаций |
+| **Macrobenchmark** | Тестирование запуска/задержек | Производительность на уровне приложения |
+| **Logcat** | Быстрые измерения | Конкретные операции |
+| **StrictMode** | Нарушения главного потока | Отладка в разработке |
+| **Perfetto** | Трассировка на уровне системы | Глубокий анализ производительности |
+
+Все эти методы позволяют сравнивать данные до и после оптимизации для оценки изменений производительности программы.
 
 
 ---

@@ -4,6 +4,8 @@ title: "Compose Custom Layout / Кастомный Layout в Compose"
 topic: jetpack-compose
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-how-vsync-and-recomposition-events-are-related--android--hard, q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-what-are-the-navigation-methods-in-kotlin--android--medium]
 created: 2025-10-15
 tags: [compose, custom-layout, measure, layout, difficulty/hard]
 ---

@@ -18,7 +18,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140024
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-default-inheritance-type--programming-languages--easy, q-visibility-modifiers-kotlin--kotlin--medium, q-kotlin-sam-interfaces--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12

@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-lateinit--kotlin--medium, q-coroutine-dispatchers--kotlin--medium, q-retrofit-coroutines-best-practices--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05

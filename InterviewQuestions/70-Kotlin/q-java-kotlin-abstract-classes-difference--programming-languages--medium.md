@@ -4,8 +4,11 @@ title: "Java Kotlin Abstract Classes Difference"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-when-vs-switch--programming-languages--easy, q-inline-function-limitations--kotlin--medium, q-zip-parallelism-guarantee--programming-languages--medium]
 created: 2025-10-15
-tags: - abstract-classes
+tags:
+  - abstract-classes
   - comparison
   - inheritance
   - interfaces
@@ -545,3 +548,8 @@ class Circle(color: String, val radius: Double) : Shape(color) {
 
 Java и Kotlin оба поддерживают концепции абстрактных классов и методов, но существуют определенные различия в подходах и возможностях, связанных с этими концепциями в каждом из языков. Рассмотрим ключевые отличия: 1. Синтаксис и использование - Java использует ключевое слово abstract для объявления абстрактных классов и методов. Абстрактные методы не могут иметь реализации в абстрактном классе. - Kotlin также использует ключевое слово abstract для объявления абстрактных классов и методов. Основное отличие в том, что Kotlin поддерживает свойства которые могут быть абстрактными. 2. Наследование и реализация - Java не поддерживает множественное наследование классов поэтому классы могут наследовать только один абстрактный класс. - Kotlin вводит понятие интерфейсов которые могут содержать реализацию по умолчанию и класс может реализовывать несколько интерфейсов. Это предоставляет большую гибкость по сравнению с Java. 3. Модификаторы доступа по умолчанию - В Java, если он не указан по умолчанию он имеет уровень доступа package-private. - В Kotlin, если он не указан по умолчанию он является public.
 
+## Related Questions
+
+- [[q-kotlin-when-vs-switch--programming-languages--easy]]
+- [[q-inline-function-limitations--kotlin--medium]]
+- [[q-zip-parallelism-guarantee--programming-languages--medium]]

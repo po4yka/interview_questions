@@ -4,6 +4,8 @@ title: "Android Storage Types / Типы хранилища Android"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-do-you-know-about-modifications--android--medium, q-android-manifest-file--android--easy, q-compose-custom-layout--jetpack-compose--hard]
 created: 2025-10-15
 tags: [android/data-storage, content-providers, data-storage, external-storage, file-system, internal-storage, persistence, sharedpreferences, sqlite, storage, difficulty/medium]
 ---

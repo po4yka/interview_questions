@@ -18,7 +18,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140022
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-singleton-creation--programming-languages--easy, q-serialization-basics--programming-languages--medium, q-crossinline-keyword--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12

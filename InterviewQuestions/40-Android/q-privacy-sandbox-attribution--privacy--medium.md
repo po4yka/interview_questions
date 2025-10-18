@@ -4,6 +4,8 @@ title: "Privacy Sandbox Attribution"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-fix-a-bad-element-layout--android--easy, q-how-to-start-drawing-ui-in-android--android--easy, q-how-to-pass-parameters-to-a-fragment--android--easy]
 created: 2025-10-15
 tags: [privacy-sandbox, attribution-reporting, conversion-tracking, privacy, advertising, difficulty/medium]
 ---
@@ -967,3 +969,9 @@ Attribution Reporting API обеспечивает измерение конве
 ### Резюме
 
 Attribution Reporting API обеспечивает измерение конверсий без отслеживания пользователей через два комплементарных подхода: event-level отчёты предоставляют детальную информацию об источнике с ограниченными данными о конверсии (3 бита), в то время как aggregate отчёты предлагают детальные метрики конверсий с differential privacy. Этот двойной подход балансирует гранулярную оптимизацию кампаний с комплексным измерением revenue, сохраняя приватность пользователей.
+
+## Related Questions
+
+- [[q-how-to-fix-a-bad-element-layout--android--easy]]
+- [[q-how-to-start-drawing-ui-in-android--android--easy]]
+- [[q-how-to-pass-parameters-to-a-fragment--android--easy]]

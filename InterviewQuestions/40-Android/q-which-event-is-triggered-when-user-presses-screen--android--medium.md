@@ -4,8 +4,11 @@ title: "Which Event Is Triggered When User Presses Screen / Какое собы�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-16kb-dex-page-size--android--medium, q-primitive-maps-android--android--medium, q-how-to-create-chat-lists-from-a-ui-perspective--android--hard]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # Which event is triggered when user presses the screen?
 
@@ -425,4 +428,416 @@ override fun onTouchEvent(event: MotionEvent): Boolean {
 
 Какое событие вызывается при нажатии юзера по экрану
 
-В Android при нажатии пользователя на экран вызывается событие ACTION_DOWN.
+В Android при нажатии пользователя на экран вызывается событие **ACTION_DOWN**. Это часть системы сенсорных событий, управляемой через `MotionEvent`.
+
+### Действия MotionEvent
+
+Сенсорные события Android имеют несколько типов действий:
+
+| Действие | Константа | Описание |
+|--------|----------|-------------|
+| **ACTION_DOWN** | 0 | Первое касание экрана |
+| **ACTION_UP** | 1 | Последнее касание покидает экран |
+| **ACTION_MOVE** | 2 | Перемещение указателя по экрану |
+| **ACTION_CANCEL** | 3 | Текущий жест отменен |
+| **ACTION_POINTER_DOWN** | 5 | Дополнительный указатель касается экрана |
+| **ACTION_POINTER_UP** | 6 | Не основной указатель покидает экран |
+
+### Базовая обработка касаний
+
+```kotlin
+class CustomView(context: Context, attrs: AttributeSet? = null) :
+    View(context, attrs) {
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                // Пользователь нажал на экран
+                Log.d("Touch", "Экран нажат в точке (${event.x}, ${event.y})")
+                return true // Обработать событие
+            }
+            MotionEvent.ACTION_MOVE -> {
+                // Пользователь перемещает палец
+                Log.d("Touch", "Перемещение в точке (${event.x}, ${event.y})")
+                return true
+            }
+            MotionEvent.ACTION_UP -> {
+                // Пользователь отпустил экран
+                Log.d("Touch", "Экран отпущен")
+                return true
+            }
+            MotionEvent.ACTION_CANCEL -> {
+                // Событие касания отменено
+                Log.d("Touch", "Касание отменено")
+                return true
+            }
+        }
+        return super.onTouchEvent(event)
+    }
+}
+```
+
+### Полный пример обработки касаний
+
+```kotlin
+class DrawingView(context: Context, attrs: AttributeSet? = null) :
+    View(context, attrs) {
+
+    private val paint = Paint().apply {
+        color = Color.BLUE
+        strokeWidth = 10f
+        style = Paint.Style.STROKE
+        isAntiAlias = true
+    }
+
+    private val path = Path()
+    private var startX = 0f
+    private var startY = 0f
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val x = event.x
+        val y = event.y
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                // Пользователь нажал экран - начать рисование
+                startX = x
+                startY = y
+                path.moveTo(x, y)
+                return true
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                // Пользователь перетаскивает - продолжить рисование
+                path.lineTo(x, y)
+                invalidate() // Запросить перерисовку
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                // Пользователь отпустил - завершить рисование
+                path.lineTo(x, y)
+                invalidate()
+                return true
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                // Касание отменено - сбросить
+                path.reset()
+                invalidate()
+                return true
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        canvas.drawPath(path, paint)
+    }
+}
+```
+
+### Обработка касаний в Activity/Fragment
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                Log.d("Activity", "Экран касается")
+                // Обработать касание
+                return true
+            }
+        }
+        return super.onTouchEvent(event)
+    }
+}
+```
+
+### View OnClickListener (упрощенное касание)
+
+Для простых кликов используйте `OnClickListener`:
+
+```kotlin
+button.setOnClickListener {
+    // Автоматически обрабатывает ACTION_DOWN + ACTION_UP
+    Toast.makeText(context, "Кнопка нажата", Toast.LENGTH_SHORT).show()
+}
+
+// Или с обратной связью по касанию
+button.setOnTouchListener { view, event ->
+    when (event.action) {
+        MotionEvent.ACTION_DOWN -> {
+            view.alpha = 0.5f
+            true
+        }
+        MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+            view.alpha = 1f
+            view.performClick() // Вызвать клик
+            true
+        }
+        else -> false
+    }
+}
+```
+
+### Обработка мультикасаний
+
+```kotlin
+class MultiTouchView(context: Context, attrs: AttributeSet? = null) :
+    View(context, attrs) {
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val action = event.actionMasked
+        val pointerIndex = event.actionIndex
+        val pointerId = event.getPointerId(pointerIndex)
+
+        when (action) {
+            MotionEvent.ACTION_DOWN -> {
+                // Первый палец опущен
+                Log.d("Touch", "Первый указатель опущен: $pointerId")
+                return true
+            }
+
+            MotionEvent.ACTION_POINTER_DOWN -> {
+                // Дополнительный палец опущен
+                Log.d("Touch", "Указатель $pointerId опущен")
+                Log.d("Touch", "Всего указателей: ${event.pointerCount}")
+                return true
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                // Любой указатель перемещается
+                for (i in 0 until event.pointerCount) {
+                    val id = event.getPointerId(i)
+                    val x = event.getX(i)
+                    val y = event.getY(i)
+                    Log.d("Touch", "Указатель $id в позиции ($x, $y)")
+                }
+                return true
+            }
+
+            MotionEvent.ACTION_POINTER_UP -> {
+                // Не основной палец поднят
+                Log.d("Touch", "Указатель $pointerId поднят")
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                // Последний палец поднят
+                Log.d("Touch", "Последний указатель поднят")
+                return true
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+}
+```
+
+### Свойства событий касания
+
+```kotlin
+override fun onTouchEvent(event: MotionEvent): Boolean {
+    // Позиция
+    val x = event.x // Относительно view
+    val y = event.y
+    val rawX = event.rawX // Относительно экрана
+    val rawY = event.rawY
+
+    // Время
+    val eventTime = event.eventTime
+    val downTime = event.downTime
+
+    // Давление и размер
+    val pressure = event.pressure
+    val size = event.size
+
+    // Действие
+    val action = event.action
+    val actionMasked = event.actionMasked
+
+    // Информация об указателе
+    val pointerCount = event.pointerCount
+    val pointerId = event.getPointerId(0)
+
+    Log.d("Touch", "Позиция: ($x, $y)")
+    Log.d("Touch", "Давление: $pressure")
+    Log.d("Touch", "Указателей: $pointerCount")
+
+    return true
+}
+```
+
+### Обработка касаний в Jetpack Compose
+
+```kotlin
+@Composable
+fun TouchableBox() {
+    var touchPosition by remember { mutableStateOf<Offset?>(null) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = { offset ->
+                        // ACTION_DOWN
+                        Log.d("Compose", "Нажатие в $offset")
+                        touchPosition = offset
+                    },
+                    onTap = { offset ->
+                        // ACTION_DOWN + ACTION_UP
+                        Log.d("Compose", "Тап в $offset")
+                    }
+                )
+            }
+    ) {
+        touchPosition?.let { pos ->
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                drawCircle(
+                    color = Color.Blue,
+                    radius = 50f,
+                    center = pos
+                )
+            }
+        }
+    }
+}
+
+// Необработанные события касания
+@Composable
+fun RawTouchEvents() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                awaitPointerEventScope {
+                    while (true) {
+                        val event = awaitPointerEvent()
+
+                        event.changes.forEach { change ->
+                            when {
+                                change.pressed -> {
+                                    // ACTION_DOWN
+                                    Log.d("Compose", "Опущен: ${change.position}")
+                                }
+                                change.previousPressed && !change.pressed -> {
+                                    // ACTION_UP
+                                    Log.d("Compose", "Поднят: ${change.position}")
+                                }
+                                else -> {
+                                    // ACTION_MOVE
+                                    Log.d("Compose", "Перемещение: ${change.position}")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+    )
+}
+```
+
+### Распространение событий касания
+
+```kotlin
+// Родительская view
+class ParentView(context: Context) : ViewGroup(context) {
+
+    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+        // Решить, перехватывать ли события касания от дочерних элементов
+        return when (ev.action) {
+            MotionEvent.ACTION_DOWN -> {
+                false // Не перехватывать, позволить дочерним элементам обработать
+            }
+            MotionEvent.ACTION_MOVE -> {
+                // Перехватить при необходимости (например, для прокрутки)
+                true
+            }
+            else -> super.onInterceptTouchEvent(ev)
+        }
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        // Обработать касание, если перехвачено или ни один дочерний элемент не обработал
+        return when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                Log.d("Parent", "Обработка касания")
+                true
+            }
+            else -> super.onTouchEvent(event)
+        }
+    }
+}
+```
+
+### Лучшие практики
+
+1. **Возвращайте true** для обработки событий
+2. **Используйте ACTION_DOWN** для обнаружения начального нажатия
+3. **Отслеживайте ID указателей** для мультикасаний
+4. **Используйте GestureDetector** для сложных жестов
+5. **Учитывайте доступность** - предоставляйте альтернативы касанию
+
+### Распространенные жесты
+
+```kotlin
+val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+    override fun onDown(e: MotionEvent): Boolean {
+        // ACTION_DOWN
+        return true
+    }
+
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+        // Одиночный тап
+        return true
+    }
+
+    override fun onDoubleTap(e: MotionEvent): Boolean {
+        // Двойной тап
+        return true
+    }
+
+    override fun onLongPress(e: MotionEvent) {
+        // Длительное нажатие
+    }
+
+    override fun onScroll(
+        e1: MotionEvent?,
+        e2: MotionEvent,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
+        // Прокрутка
+        return true
+    }
+
+    override fun onFling(
+        e1: MotionEvent?,
+        e2: MotionEvent,
+        velocityX: Float,
+        velocityY: Float
+    ): Boolean {
+        // Жест свайпа
+        return true
+    }
+})
+
+override fun onTouchEvent(event: MotionEvent): Boolean {
+    return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+}
+```
+
+## Related Questions
+
+- [[q-16kb-dex-page-size--android--medium]]
+- [[q-primitive-maps-android--android--medium]]
+- [[q-how-to-create-chat-lists-from-a-ui-perspective--android--hard]]

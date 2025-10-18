@@ -4,6 +4,8 @@ title: "Coroutine Context Essence / Суть Coroutine Context"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-extension-properties--programming-languages--medium, q-abstract-factory-pattern--design-patterns--medium, q-proxy-pattern--design-patterns--medium]
 created: 2025-10-15
 tags:
   - context
@@ -42,3 +44,8 @@ These elements can be combined using the `+` operator to create a complete conte
 
 Сущностью контекста корутины является CoroutineContext. Это ключевая часть механизма корутин, которая определяет различные аспекты поведения корутины, включая её политику планирования, правила обработки исключений и другие настройки. Представляет собой набор различных элементов, каждый из которых отвечает за определённую функциональность в жизненном цикле корутины. Основные элементы: Job, Dispatcher, CoroutineExceptionHandler и CoroutineName.
 
+## Related Questions
+
+- [[q-extension-properties--programming-languages--medium]]
+- [[q-abstract-factory-pattern--design-patterns--medium]]
+- [[q-proxy-pattern--design-patterns--medium]]

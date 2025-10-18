@@ -4,8 +4,11 @@ title: "What Is Job Object / Что такое объект Job"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-concurrency-fundamentals--computer-science--hard, q-data-structures-algorithms--computer-science--hard, q-decorator-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # What is the Job Object For?
 
@@ -413,3 +416,9 @@ class JobBestPractices {
 ## Ответ (RU)
 
 Job — это элемент управления жизненным циклом корутины. С его помощью можно: отменять корутину; отслеживать завершение; объединять с другими задачами; управлять родительскими и дочерними корутинами.
+
+## Related Questions
+
+- [[q-concurrency-fundamentals--computer-science--hard]]
+- [[q-data-structures-algorithms--computer-science--hard]]
+- [[q-decorator-pattern--design-patterns--medium]]

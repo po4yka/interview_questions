@@ -7,7 +7,8 @@ status: draft
 created: 2025-10-11
 tags: [ci-cd, devops, github-actions, gitlab-ci, automation, difficulty/medium]
 moc: moc-devops-ci-cd
-related:   - q-cicd-automated-testing--devops--medium
+related: [q-derived-state-snapshot-system--jetpack-compose--hard, q-stack-heap-memory-multiple-threads--android--medium, q-kmm-architecture--multiplatform--hard]
+  - q-cicd-automated-testing--devops--medium
   - q-gradle-build-optimization--build--medium
   - q-app-bundle-optimization--distribution--medium
 subtopics: [ci-cd, devops]
@@ -866,21 +867,140 @@ jobs:
 
 **CI/CD (Continuous Integration/Continuous Deployment) pipeline** автоматизирует процесс сборки, тестирования и развёртывания Android-приложений. Это обеспечивает качество кода, раннее обнаружение багов и упрощает процесс релиза.
 
-[Продолжение с примерами из английской версии...]
+### Основные этапы CI/CD Pipeline
+
+```
+
+   Commit
+
+
+
+  1. Build         ← Компиляция кода, разрешение зависимостей
+
+
+
+  2. Unit Tests    ← Быстрые изолированные тесты
+
+
+
+  3. Lint/Static   ← Проверки качества кода
+     Analysis
+
+
+
+  4. UI Tests      ← Инструментальные тесты (опционально в CI)
+
+
+
+  5. Build APK/    ← Релизные сборки
+     Bundle
+
+
+
+  6. Sign          ← Подпись релизных артефактов
+
+
+
+  7. Deploy        ← Загрузка в Play Store, Firebase и т.д.
+
+```
+
+### Настройка GitHub Actions
+
+**Преимущества:**
+- Бесплатно для публичных репозиториев, щедрый бесплатный тариф для приватных
+- Нативная интеграция с GitHub
+- Большой marketplace действий
+- Хорошая производительность
+- Простой YAML синтаксис
+
+**.github/workflows/android-ci.yml**:
+
+Конфигурация включает этапы checkout кода, настройку JDK 17, кеширование Gradle зависимостей, запуск lint проверок, unit тестов, генерацию покрытия кода и загрузку артефактов. Для инструментальных тестов используется macOS runner с аппаратным ускорением эмулятора. Релизная сборка включает декодирование keystore из secrets и загрузку в Play Store.
+
+### Настройка GitLab CI
+
+**Преимущества:**
+- Интеграция с GitLab
+- Встроенный Docker registry
+- Отличный UI для визуализации pipeline
+- Опции для self-hosted
+
+**.gitlab-ci.yml**:
+
+Pipeline определяет стадии: build, test, analyze, release, deploy. Используется Docker образ для Android сборки, кеширование Gradle, запуск lint, detekt, unit тестов и инструментальных тестов на эмуляторе. Деплой в Play Store выполняется через Fastlane, в Firebase App Distribution - через firebase-tools.
+
+### Настройка Jenkins
+
+**Преимущества:**
+- Высокая кастомизируемость
+- Контроль через self-hosted
+- Обширная экосистема плагинов
+- Более сложная настройка
+
+**Jenkinsfile**:
+
+Declarative pipeline с stages для checkout, build, unit tests, lint, code coverage, release build и деплоя. Использует credentials management для безопасного хранения keystore и Play Store credentials. Включает post-секции для уведомлений в Slack и очистки workspace.
+
+### Сравнение платформ
+
+| Функция | GitHub Actions | GitLab CI | Jenkins |
+|---------|---------------|-----------|---------|
+| **Сложность настройки** | Легкая | Легкая | Сложная |
+| **Стоимость (Private)** | $$ (щедрый free tier) | $$ (щедрый free tier) | Бесплатно (self-hosted) |
+| **Производительность** | Быстрая | Быстрая | Зависит от железа |
+| **UI/UX** | Хороший | Отличный | Базовый |
+| **Marketplace** | Большой | Хороший | Обширные плагины |
+| **Self-hosted** | GitHub Enterprise | Да | Да |
+| **Поддержка Docker** | Да | Отличная | Да |
+| **Кеширование** | Хорошее | Отличное | Хорошее |
+| **Matrix Builds** | Да | Да | Да |
+| **Управление Secrets** | Хорошее | Хорошее | Хорошее |
+
+### Production пример: Полный CI/CD с Fastlane
+
+**fastlane/Fastfile**:
+
+Определяет lanes для различных задач: запуск тестов, lint, сборка debug APK, сборка release bundle, деплой на internal/beta/production треки Play Store, дистрибуция через Firebase. Включает обработку ошибок с уведомлениями в Slack.
+
+**GitHub Actions с Fastlane**:
+
+Интеграция Fastlane в GitHub Actions для унифицированного CI/CD процесса. Настройка Ruby, JDK, установка Fastlane через bundler и запуск lanes для CI и деплоя.
+
+### Лучшие практики
+
+1. **Кешируйте зависимости**
+   - ХОРОШО: Кеширование Gradle зависимостей для ускорения сборок
+   - ПЛОХО: Отсутствие кеширования приводит к медленным сборкам
+
+2. **Fail Fast**
+   - ХОРОШО: Запуск быстрых проверок сначала (lint перед тестами, тесты перед сборкой)
+   - ПЛОХО: Сборка сначала, затем обнаружение lint ошибок
+
+3. **Безопасное хранение Secrets**
+   - ХОРОШО: Использование secrets management для паролей keystore
+   - ПЛОХО: Хардкод секретов в коде
+
+4. **Параллельные задачи**
+   - ХОРОШО: Запуск независимых задач параллельно (lint и test одновременно)
+   - ПЛОХО: Последовательное выполнение без необходимости
+
+5. **Build Matrix для тестирования на разных API**
+   - ХОРОШО: Тестирование на нескольких конфигурациях (разные API levels и targets)
 
 ### Резюме
 
 **Основные этапы CI/CD для Android:**
-1.  Сборка (компиляция, разрешение зависимостей)
-2.  Unit-тесты (быстрая обратная связь)
-3.  Lint/статический анализ (качество кода)
-4.  UI-тесты (уверенность в UI)
-5.  Сборка артефактов (APK/AAB)
-6.  Подпись (релизные артефакты)
-7.  Развёртывание (Play Store, Firebase)
+1. Сборка (компиляция, разрешение зависимостей)
+2. Unit-тесты (быстрая обратная связь)
+3. Lint/статический анализ (качество кода)
+4. UI-тесты (уверенность в UI)
+5. Сборка артефактов (APK/AAB)
+6. Подпись (релизные артефакты)
+7. Развёртывание (Play Store, Firebase)
 
 **Выбор платформы:**
-- **GitHub Actions**: Лучше для GitHub-проектов, простая настройка, хороший бесплатный тарий
+- **GitHub Actions**: Лучше для GitHub-проектов, простая настройка, хороший бесплатный тариф
 - **GitLab CI**: Лучше для GitLab-проектов, отличный UI, встроенный Docker registry
 - **Jenkins**: Лучше для enterprise, self-hosted, высоко кастомизируемый
 
@@ -890,3 +1010,9 @@ jobs:
 - Правильно защищайте секреты
 - Запускайте независимые задачи параллельно
 - Используйте Fastlane для автоматизации развёртывания
+
+## Related Questions
+
+- [[q-derived-state-snapshot-system--jetpack-compose--hard]]
+- [[q-stack-heap-memory-multiple-threads--android--medium]]
+- [[q-kmm-architecture--multiplatform--hard]]

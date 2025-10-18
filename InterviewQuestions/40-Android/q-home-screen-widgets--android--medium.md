@@ -4,6 +4,8 @@ title: "Home Screen Widgets / Виджеты домашнего экрана"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-recyclerview-viewtypes-delegation--recyclerview--medium, q-what-is-broadcastreceiver--android--easy, q-what-is-known-about-recyclerview--android--easy]
 created: 2025-10-15
 tags: [widgets, appwidget, home-screen, difficulty/medium]
 ---
@@ -589,3 +591,9 @@ RemoteViews поддерживает только определённые layou
 **Резюме:**
 
 Виджеты — это интерактивные компоненты на главном экране Android. Существует четыре категории: информационные, коллекций, управления и гибридные. Для создания виджета необходимы: layout, XML метаданных, AppWidgetProvider и запись в manifest. Жизненный цикл включает onEnabled, onUpdate, onDeleted, onDisabled. RemoteViews используется для построения UI с ограниченной поддержкой view. Основные ограничения: поддержка жестов, типы view, лимит выполнения 5 секунд.
+
+## Related Questions
+
+- [[q-recyclerview-viewtypes-delegation--recyclerview--medium]]
+- [[q-what-is-broadcastreceiver--android--easy]]
+- [[q-what-is-known-about-recyclerview--android--easy]]

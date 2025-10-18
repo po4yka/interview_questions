@@ -9,7 +9,8 @@ tags: ["data-structures", "algorithms", "complexity", "big-o", "sorting", "searc
 description: "Comprehensive coverage of fundamental data structures (arrays, linked lists, stacks, queues, trees, graphs, hash tables) and core algorithms (sorting, searching, recursion, dynamic programming) with time/space complexity analysis"
 language: "en"
 moc: moc-cs
-related:   - "20251012-600003"  # Concurrency Fundamentals
+related: [q-what-is-flow--programming-languages--medium, q-xml-acronym--programming-languages--easy, q-java-object-comparison--programming-languages--easy]
+  - "20251012-600003"  # Concurrency Fundamentals
   - "20251012-600004"  # OOP Principles
 subcategory: "algorithms"
 updated: "2025-10-13"
@@ -712,3 +713,9 @@ Key takeaways for Data Structures and Algorithms:
 
 10. **Explain memoization vs tabulation in Dynamic Programming. Which is better?**
     **Объясните мемоизацию против табуляции в ДП. Что лучше?**
+
+## Related Questions
+
+- [[q-what-is-flow--programming-languages--medium]]
+- [[q-xml-acronym--programming-languages--easy]]
+- [[q-java-object-comparison--programming-languages--easy]]

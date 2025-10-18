@@ -5,15 +5,18 @@ topic: system-design
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - system-design
+tags:
+  - system-design
   - rest-api
   - api-design
   - http
 moc: moc-system-design
-related:   - q-api-versioning-strategies--system-design--medium
+related: [q-horizontal-vertical-scaling--system-design--medium, q-sql-nosql-databases--system-design--medium, q-caching-strategies--system-design--medium]
+  - q-api-versioning-strategies--system-design--medium
   - q-graphql-vs-rest--system-design--medium
   - q-api-rate-limiting--system-design--hard
-subtopics:   - rest-api
+subtopics:
+  - rest-api
   - api-design
   - http
   - web-services

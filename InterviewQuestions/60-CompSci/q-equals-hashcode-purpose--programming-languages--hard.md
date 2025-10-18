@@ -4,8 +4,11 @@ title: "Equals Hashcode Purpose / Назначение equals и hashCode"
 topic: computer-science
 difficulty: hard
 status: draft
+moc: moc-compSci
+related: [q-detect-unused-object--programming-languages--easy, q-java-object-comparison--programming-languages--easy, q-memento-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Why are equals and hashcode methods needed?
 
@@ -126,3 +129,9 @@ fun main() {
 
 ## Ответ (RU)
 Методы equals() и hashCode() играют центральную роль в сравнении объектов и управлении ими в коллекциях. Метод equals(Object obj) определяет равенство объектов по содержимому вместо сравнения ссылок. Метод hashCode() возвращает хеш-код объекта для использования в хеш-таблицах. Соблюдение контракта между equals() и hashCode() критически важно для правильной работы коллекций, основанных на хеш-таблицах.
+
+## Related Questions
+
+- [[q-detect-unused-object--programming-languages--easy]]
+- [[q-java-object-comparison--programming-languages--easy]]
+- [[q-memento-pattern--design-patterns--medium]]

@@ -4,6 +4,8 @@ title: "Mutable State Compose / Изменяемое состояние Compose"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-compose-ui-testing-advanced--testing--hard, q-what-is-data-binding--android--easy, q-accessibility-color-contrast--accessibility--medium]
 created: 2025-10-15
 tags: [android/jetpack-compose, jetpack-compose, mutablestate, observable, recomposition, state, state-management, difficulty/medium]
 ---

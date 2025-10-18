@@ -18,7 +18,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140025
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-sam-conversions--kotlin--medium, q-kotlin-higher-order-functions--kotlin--medium, q-associatewith-vs-associateby--kotlin--easy]
 
 # Timestamps
 created: 2025-10-12

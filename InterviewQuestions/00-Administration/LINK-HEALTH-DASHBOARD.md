@@ -1,4 +1,4 @@
-#  Link Health Dashboard
+# Link Health Dashboard
 
 **Purpose**: Comprehensive automated monitoring of link health, cross-references, and vault connectivity.
 
@@ -6,11 +6,11 @@
 
 ---
 
-##  Overall Link Health
+## Overall Link Health
 
 ```dataviewjs
 // Comprehensive link health analysis
-<%* tR += await tp.user.folderConstants({ include_auxiliary: true }); %>
+const folderQuery = '"20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"';
 const files = dv.pages(folderQuery)
     .where(p => p.file.ext === "md");
 
@@ -86,25 +86,25 @@ const connectivityHealth = stats.totalFiles > 0 ? Math.round(((stats.totalFiles 
 const overallHealth = Math.round((linkHealth * 0.5) + (structureHealth * 0.25) + (connectivityHealth * 0.25));
 
 // Display summary
-dv.header(3, " Vault Health Score");
+dv.header(3, "Vault Health Score");
 dv.paragraph(`
-**Overall Health**: ${overallHealth}% ${overallHealth >= 90 ? '🟢' : overallHealth >= 70 ? '🟡' : ''}
+**Overall Health**: ${overallHealth}% ${overallHealth >= 90 ? 'Excellent' : overallHealth >= 70 ? 'Good' : 'Needs Work'}
 
 | Metric | Score | Status |
 |--------|-------|--------|
-| **Link Integrity** | ${linkHealth}% | ${linkHealth >= 90 ? '🟢 Excellent' : linkHealth >= 70 ? '🟡 Good' : ' Needs Work'} |
-| **Structure Quality** | ${structureHealth}% | ${structureHealth >= 90 ? '🟢 Excellent' : structureHealth >= 70 ? '🟡 Good' : ' Needs Work'} |
-| **Connectivity** | ${connectivityHealth}% | ${connectivityHealth >= 90 ? '🟢 Excellent' : connectivityHealth >= 70 ? '🟡 Good' : ' Needs Work'} |
+| **Link Integrity** | ${linkHealth}% | ${linkHealth >= 90 ? 'Excellent' : linkHealth >= 70 ? 'Good' : 'Needs Work'} |
+| **Structure Quality** | ${structureHealth}% | ${structureHealth >= 90 ? 'Excellent' : structureHealth >= 70 ? 'Good' : 'Needs Work'} |
+| **Connectivity** | ${connectivityHealth}% | ${connectivityHealth >= 90 ? 'Excellent' : connectivityHealth >= 70 ? 'Good' : 'Needs Work'} |
 `);
 
-dv.header(3, " Key Metrics");
+dv.header(3, "Key Metrics");
 dv.table(
     ["Metric", "Count", "Details"],
     [
         ["Total Files", stats.totalFiles, "Q&A files across all topics"],
         ["Total Links", stats.totalLinks, "Wikilinks found in all files"],
         ["Valid Links", stats.validLinks, `${linkHealth}% of all links`],
-        ["Broken Links", stats.brokenLinks, `${stats.brokenLinks > 0 ? ' Needs attention' : ' All good'}`],
+        ["Broken Links", stats.brokenLinks, `${stats.brokenLinks > 0 ? 'Needs attention' : 'All good'}`],
         ["Orphan Files", stats.orphanFiles, "Files with no incoming links"],
         ["Missing Structure", stats.filesWithoutRelated, "Files without Related Questions"]
     ]
@@ -113,10 +113,10 @@ dv.table(
 
 ---
 
-##  Broken Links Detail
+## Broken Links Detail
 
 ```dataviewjs
-<%* tR += await tp.user.folderConstants({ include_auxiliary: true }); %>
+const folderQuery = '"20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"';
 const files = dv.pages(folderQuery)
     .where(p => p.file.ext === "md");
 
@@ -157,13 +157,13 @@ if (brokenLinks.length > 0) {
         .sort((a, b) => b[1] - a[1])
         .slice(0, 20);
 
-    dv.header(3, " Most Referenced Missing Files");
+    dv.header(3, "Most Referenced Missing Files");
     dv.table(
         ["Missing File", "References", "Priority"],
         topMissing.map(([file, count]) => [
             `\`${file}\``,
             count,
-            count >= 3 ? " High" : count >= 2 ? "🟡 Medium" : "Low"
+            count >= 3 ? "High" : count >= 2 ? "Medium" : "Low"
         ])
     );
 
@@ -180,7 +180,7 @@ if (brokenLinks.length > 0) {
         .sort((a, b) => b[1].length - a[1].length)
         .slice(0, 15);
 
-    dv.header(3, " Files with Most Broken Links");
+    dv.header(3, "Files with Most Broken Links");
     dv.table(
         ["Source File", "Topic", "Broken Links", "Count"],
         topSources.map(([source, targets]) => {
@@ -194,17 +194,17 @@ if (brokenLinks.length > 0) {
         })
     );
 } else {
-    dv.paragraph(" **No broken links found! Your vault is in perfect health.**");
+    dv.paragraph("**No broken links found! Your vault is in perfect health.**");
 }
 ```
 
 ---
 
-##  Orphan Files Analysis
+## Orphan Files Analysis
 
 ```dataviewjs
 // Find files with no incoming links
-<%* tR += await tp.user.folderConstants({ include_auxiliary: true }); %>
+const folderQuery = '"20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"';
 const scopedFiles = dv.pages(folderQuery)
     .where(p => p.file.ext === "md");
 const questionFiles = scopedFiles.where(p => p.file.name.startsWith('q-'));
@@ -275,11 +275,11 @@ These files exist but aren't discoverable through navigation.
 
 ---
 
-##  Missing Cross-References
+## Missing Cross-References
 
 ```dataviewjs
 // Find questions that should link to each other based on shared subtopics
-<%* tR += await tp.user.folderConstants(); %>
+const folderQuery = '"20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"';
 const qFiles = dv.pages(folderQuery)
     .where(p => p.file.name.startsWith('q-') && p.subtopics);
 
@@ -323,7 +323,7 @@ if (suggestions.length > 0) {
             `[[${s.from}]]`,
             `[[${s.to}]]`,
             s.commonTopics.slice(0, 3).map(t => `\`${t}\``).join(", "),
-            s.relevance >= 3 ? " High" : s.relevance >= 2 ? "🟡 Medium" : "Low"
+            s.relevance >= 3 ? "High" : s.relevance >= 2 ? "Medium" : "Low"
         ])
     );
 
@@ -341,11 +341,11 @@ if (suggestions.length > 0) {
 
 ---
 
-##  Structure Quality Check
+## Structure Quality Check
 
 ```dataviewjs
 // Check for common structural issues
-<%* tR += await tp.user.folderConstants(); %>
+const folderQuery = '"20-Algorithms" OR "30-System-Design" OR "40-Android" OR "50-Backend" OR "60-CompSci" OR "70-Kotlin" OR "80-Tools"';
 const files = dv.pages(folderQuery)
     .where(p => p.file.name.startsWith('q-'));
 
@@ -385,16 +385,16 @@ dv.header(3, "Structure Issues Summary");
 dv.table(
     ["Issue Type", "Count", "Severity"],
     [
-        ["Missing Related Questions", issues.missingRelated.length, issues.missingRelated.length > 50 ? " High" : "🟡 Medium"],
-        ["Missing References", issues.missingReferences.length, issues.missingReferences.length > 100 ? "🟡 Medium" : "🟢 Low"],
-        ["Missing Tags", issues.missingTags.length, issues.missingTags.length > 20 ? " High" : "🟢 Low"],
-        ["Missing Subtopics", issues.missingSubtopics.length, issues.missingSubtopics.length > 20 ? " High" : "🟢 Low"]
+        ["Missing Related Questions", issues.missingRelated.length, issues.missingRelated.length > 50 ? "High" : "Medium"],
+        ["Missing References", issues.missingReferences.length, issues.missingReferences.length > 100 ? "Medium" : "Low"],
+        ["Missing Tags", issues.missingTags.length, issues.missingTags.length > 20 ? "High" : "Low"],
+        ["Missing Subtopics", issues.missingSubtopics.length, issues.missingSubtopics.length > 20 ? "High" : "Low"]
     ]
 );
 
 // Show sample of files missing Related Questions (highest priority)
 if (issues.missingRelated.length > 0) {
-    dv.header(4, " Files Missing Related Questions (Sample)");
+    dv.header(4, "Files Missing Related Questions (Sample)");
     const sample = issues.missingRelated.slice(0, 15);
     dv.table(
         ["File", "Topic", "Difficulty"],
@@ -409,29 +409,29 @@ if (issues.missingRelated.length > 0) {
 
 ---
 
-##  Action Items
+## Action Items
 
 ```dataviewjs
 // Generate prioritized action items based on the analysis
 dv.header(3, "Recommended Actions");
 
 dv.paragraph(`
-### Priority 1: Fix Broken Links 
+### Priority 1: Fix Broken Links (High)
 1. Review the "Most Referenced Missing Files" section above
 2. Create the top 5 most-referenced missing files
 3. Fix naming inconsistencies in remaining broken links
 
-### Priority 2: Add Cross-References 🟡
+### Priority 2: Add Cross-References (Medium)
 1. Review the "Missing Cross-References" section
 2. Add relevant links between related questions
 3. Focus on high-relevance suggestions first
 
-### Priority 3: Connect Orphan Files 🟢
+### Priority 3: Connect Orphan Files (Low)
 1. Review orphan files by topic
 2. Add links from related questions or MOC files
 3. Improve discoverability of these files
 
-### Priority 4: Structure Improvements 🟢
+### Priority 4: Structure Improvements (Low)
 1. Add "Related Questions" sections to files that lack them
 2. Add relevant tags and subtopics
 3. Include references to documentation
@@ -445,7 +445,7 @@ dv.paragraph(`
 
 ---
 
-##  Historical Tracking
+## Historical Tracking
 
 **Tip**: Take a screenshot of the health metrics above each time you make improvements to track your progress over time.
 

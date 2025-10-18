@@ -4,6 +4,8 @@ title: "Fix Slow App Startup Legacy / Исправление медленног�
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-what-are-services-used-for--android--medium, q-what-to-put-in-state-for-initial-list--android--easy, q-fakes-vs-mocks-testing--testing--medium]
 created: 2025-10-15
 tags: [android/performance, app-startup, lazy-init, legacy-code, optimization, performance, difficulty/hard]
 ---
@@ -237,3 +239,8 @@ class MyApp : Application() {
 
 **Кэширование данных:** Используйте кэширование данных которые не нужно запрашивать каждый раз при запуске.
 
+## Related Questions
+
+- [[q-what-are-services-used-for--android--medium]]
+- [[q-what-to-put-in-state-for-initial-list--android--easy]]
+- [[q-fakes-vs-mocks-testing--testing--medium]]

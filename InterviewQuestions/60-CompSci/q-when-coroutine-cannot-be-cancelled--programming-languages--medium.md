@@ -4,8 +4,11 @@ title: "When Coroutine Cannot Be Cancelled / Когда корутина не м
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-how-suspend-function-detects-suspension--programming-languages--hard, q-priorityqueue-vs-deque--programming-languages--easy, q-equals-hashcode-rules--programming-languages--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # When Coroutine Cannot Be Cancelled?
 
@@ -537,3 +540,9 @@ class CancellationBestPractices {
 ## Ответ (RU)
 
 Да, есть три основных случая: 1. Блокирующий код – если внутри корутины используется блокирующая операция (Thread.sleep(), while(true) {}), она не реагирует на отмену. 2. Отмена родительской корутины не отменяет launch(NonCancellable) – если корутина запущена с NonCancellable, она игнорирует отмену. 3. Отмена не срабатывает, если корутина не проверяет isActive или yield() – долгие вычисления без точек приостановки не дадут корутине завершиться.
+
+## Related Questions
+
+- [[q-how-suspend-function-detects-suspension--programming-languages--hard]]
+- [[q-priorityqueue-vs-deque--programming-languages--easy]]
+- [[q-equals-hashcode-rules--programming-languages--medium]]

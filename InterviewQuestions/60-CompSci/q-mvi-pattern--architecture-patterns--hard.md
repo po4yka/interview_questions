@@ -4,12 +4,15 @@ title: MVI Pattern (Model-View-Intent)
 topic: architecture-patterns
 difficulty: hard
 status: draft
+moc: moc-compSci
 created: 2025-10-15
 tags: []
-related:   - mvvm-pattern
+related: [q-reference-types-protect-from-deletion--programming-languages--easy, q-priorityqueue-vs-deque--programming-languages--easy, q-xml-acronym--programming-languages--easy]
+  - mvvm-pattern
   - mvp-pattern
   - redux-architecture
-subtopics:   - android-architecture
+subtopics:
+  - android-architecture
   - unidirectional-data-flow
   - state-management
 ---

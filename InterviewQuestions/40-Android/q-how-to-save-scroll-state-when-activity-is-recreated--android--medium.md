@@ -4,8 +4,11 @@ title: "How To Save Scroll State When Activity Is Recreated / Как сохра�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-touch-event-handling-custom-views--custom-views--medium, q-diffutil-background-calculation-issues--android--medium, q-spannable-text-styling--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How to save scroll state when Activity is recreated?
 

@@ -5,7 +5,8 @@ topic: programming-languages
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - access-modifiers
+tags:
+  - access-modifiers
   - best-practices
   - encapsulation
   - java
@@ -15,7 +16,7 @@ tags: - access-modifiers
   - protected
   - public
 moc: moc-programming-languages
-related: []
+related: [q-factory-method-pattern--design-patterns--medium, q-mvi-pattern--architecture-patterns--hard, q-equals-hashcode-rules--programming-languages--medium]
 subtopics: ["java", "jvm", "language-features"]
 ---
 # Как лучше всего использовать модификаторы доступа в Java?

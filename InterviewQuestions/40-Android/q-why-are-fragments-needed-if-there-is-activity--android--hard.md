@@ -4,6 +4,8 @@ title: "Why Are Fragments Needed If There Is Activity / Зачем нужны Fr
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-where-is-composition-created--android--medium, q-build-optimization-gradle--gradle--medium, q-hilt-assisted-injection--di--medium]
 created: 2025-10-15
 tags: [android, android/fragments, fragments, ui, difficulty/hard]
 ---

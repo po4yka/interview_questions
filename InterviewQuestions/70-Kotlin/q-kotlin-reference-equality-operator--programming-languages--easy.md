@@ -4,8 +4,11 @@ title: "Kotlin Reference Equality Operator / Оператор ссылочног
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-data-class-detailed--kotlin--medium, q-destructuring-declarations--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium]
 created: 2025-10-15
-tags: - equality
+tags:
+  - equality
   - kotlin
   - operators
   - programming-languages
@@ -124,3 +127,8 @@ user1 === user3  // true (одна и та же ссылка)
 - Kotlin `===` ≈ Java `==`
 - `==` в Kotlin является null-safe, `==` в Java проверяет ссылки
 
+## Related Questions
+
+- [[q-data-class-detailed--kotlin--medium]]
+- [[q-destructuring-declarations--kotlin--medium]]
+- [[q-mutex-synchronized-coroutines--kotlin--medium]]

@@ -5,15 +5,18 @@ topic: system-design
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - system-design
+tags:
+  - system-design
   - caching
   - performance
   - scalability
 moc: moc-system-design
-related:   - q-cache-invalidation--system-design--hard
+related: [q-load-balancing-strategies--system-design--medium, q-cap-theorem-distributed-systems--system-design--hard, q-horizontal-vertical-scaling--system-design--medium]
+  - q-cache-invalidation--system-design--hard
   - q-cdn-architecture--system-design--medium
   - q-database-sharding--system-design--hard
-subtopics:   - caching
+subtopics:
+  - caching
   - performance
   - redis
   - memcached

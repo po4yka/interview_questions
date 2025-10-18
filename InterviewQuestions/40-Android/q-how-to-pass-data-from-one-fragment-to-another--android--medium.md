@@ -4,6 +4,8 @@ title: "How To Pass Data From One Fragment To Another / Как передать 
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-layout-allows-overlapping-objects--android--easy, q-opengl-advanced-rendering--graphics--medium, q-primitive-maps-android--android--medium]
 created: 2025-10-15
 tags: [android/fragments, android/views, communication, fragments, ui, viewmodel, views, difficulty/medium]
 ---

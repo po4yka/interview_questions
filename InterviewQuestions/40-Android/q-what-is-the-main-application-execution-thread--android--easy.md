@@ -4,6 +4,8 @@ title: "What Is The Main Application Execution Thread / Что такое гла
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-what-navigation-methods-do-you-know--android--medium, q-how-to-add-fragment-synchronously-asynchronously--android--medium, q-what-is-pendingintent--programming-languages--medium]
 created: 2025-10-15
 tags: [threading, main-thread, ui-thread, looper, difficulty/easy]
 ---

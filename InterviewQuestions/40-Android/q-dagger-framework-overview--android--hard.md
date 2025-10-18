@@ -4,6 +4,8 @@ title: "Dagger Framework Overview / Обзор фреймворка Dagger"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-async-operations-android--android--medium, q-singleton-scope-binding--android--medium, q-why-abandon-mvp--android--easy]
 created: 2025-10-15
 tags: [android/architecture-clean, android/di-hilt, architecture-clean, dagger, dependency-injection, di-hilt, platform/android, difficulty/hard]
 ---

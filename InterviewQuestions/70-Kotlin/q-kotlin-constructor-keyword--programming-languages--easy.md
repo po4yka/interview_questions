@@ -4,8 +4,11 @@ title: "Kotlin Constructor Keyword / Ключевое слово constructor в 
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-equals-hashcode-contracts--programming-languages--hard, q-lifecyclescope-viewmodelscope--kotlin--medium, q-abstract-class-vs-interface--kotlin--medium]
 created: 2025-10-15
-tags: - classes
+tags:
+  - classes
   - constructor
   - constructors
   - initialization
@@ -185,3 +188,8 @@ class Internal private constructor(val id: Int)
 - Вторичный конструктор: Всегда используйте ключевое слово `constructor`
 - Используйте `constructor` для первичного только при добавлении аннотаций/модификаторов
 
+## Related Questions
+
+- [[q-equals-hashcode-contracts--programming-languages--hard]]
+- [[q-lifecyclescope-viewmodelscope--kotlin--medium]]
+- [[q-abstract-class-vs-interface--kotlin--medium]]

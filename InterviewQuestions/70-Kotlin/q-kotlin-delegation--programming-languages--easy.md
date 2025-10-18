@@ -12,7 +12,7 @@ tags:
   - kotlin
   - programming-languages
 moc: moc-programming-languages
-related: []
+related: [q-testing-coroutines-runtest--kotlin--medium, q-circuit-breaker-coroutines--kotlin--hard, q-coroutine-timeout-withtimeout--kotlin--medium]
 ---
 # Что известно о делегировании?
 

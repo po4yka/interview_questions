@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [modules, app-module, library-module, feature-module, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-workmanager-execution-guarantee--android--medium, q-task-affinity--android--medium]
 ---
 # Types of Android Modules / Типы модулей Android
 
@@ -211,3 +211,9 @@ Test модули — это Android модули, используемые то
 - **App модули** — точки входа, навигация, настройка внедрения зависимостей
 - **Common модули** — общий код (UI, сеть, аналитика, утилиты)
 - **Test модули** — общий тестовый код, фейки, тестовые утилиты
+
+## Related Questions
+
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]]
+- [[q-workmanager-execution-guarantee--android--medium]]
+- [[q-task-affinity--android--medium]]

@@ -4,6 +4,8 @@ title: "How To Draw Ui Without Xml / Как рисовать UI без XML"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-what-each-android-component-represents--android--easy, q-how-to-draw-ui-without-xml--android--easy, q-flaky-test-prevention--testing--medium]
 created: 2025-10-15
 tags: [languages, android, difficulty/easy]
 ---

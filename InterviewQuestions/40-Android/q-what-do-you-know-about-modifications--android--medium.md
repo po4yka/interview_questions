@@ -4,6 +4,8 @@ title: "What Do You Know About Modifications / Что вы знаете о мо�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-where-is-composition-created-for-calling-composable-function--android--medium, q-api-file-upload-server--android--medium, q-reduce-app-size--android--medium]
 created: 2025-10-15
 tags: [UI elements, Jetpack Compose, android, ui, jetpack-compose, modifiers, difficulty/medium]
 ---
@@ -567,3 +569,9 @@ Modifiers in Jetpack Compose are essential for:
 ## Ответ (RU)
 
 Модификации могут означать разные вещи в зависимости от контекста. В Android-разработке чаще всего речь идёт о следующих типах модификаций: 1. Модификация данных (изменение состояния) Это изменение переменных, объектов и структур данных во время работы приложения. 2. Модификация UI (Compose Modifiers) В Jetpack Compose модификации используются для изменения внешнего вида и поведения UI-элементов. 3. Модификация кода (рефакторинг, оптимизация) В программировании модификация кода означает его улучшение без изменения основной логики. 4. Модификация системы (кастомные прошивки, рут-изменения) Это изменения в самой операционной системе Android.
+
+## Related Questions
+
+- [[q-where-is-composition-created-for-calling-composable-function--android--medium]]
+- [[q-api-file-upload-server--android--medium]]
+- [[q-reduce-app-size--android--medium]]

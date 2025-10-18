@@ -4,6 +4,8 @@ title: "Room Vs Sqlite / Room против Sqlite"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-room-transactions-dao--room--medium, q-android-runtime-art--android--medium, q-compose-navigation-advanced--jetpack-compose--medium]
 created: 2025-10-15
 tags: [android/data-storage, comparison, database, orm, room, sqlite, difficulty/medium]
 ---

@@ -11,7 +11,7 @@ tags:
   - kotlin
   - programming-languages
 moc: moc-programming-languages
-related: []
+related: [q-what-is-flow--programming-languages--medium, q-flow-map-operator--programming-languages--medium, q-iterator-pattern--design-patterns--medium]
 ---
 # Как будут вести себя linked list и array list, если вставить в них элемент?
 

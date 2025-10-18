@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-flowon-operator-context-switching--kotlin--hard, q-repeatonlifecycle-android--kotlin--medium, q-statein-sharein-flow--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05

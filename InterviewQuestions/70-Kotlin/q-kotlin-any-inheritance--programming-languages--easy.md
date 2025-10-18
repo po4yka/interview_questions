@@ -4,6 +4,8 @@ title: "Kotlin Any Inheritance / Наследование от Any в Kotlin"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-default-access-modifier--programming-languages--easy, q-channel-buffering-strategies--kotlin--hard, q-partition-function--kotlin--easy]
 created: 2025-10-15
 tags:
   - any
@@ -106,3 +108,8 @@ Any (корень)
 
 **Примечание**: Для nullable типов корнем является `Any?`
 
+## Related Questions
+
+- [[q-kotlin-default-access-modifier--programming-languages--easy]]
+- [[q-channel-buffering-strategies--kotlin--hard]]
+- [[q-partition-function--kotlin--easy]]

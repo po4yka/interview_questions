@@ -5,7 +5,8 @@ topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - best-practices
+tags:
+  - best-practices
   - configuration
   - flexibility
   - hardcoding
@@ -13,7 +14,7 @@ tags: - best-practices
   - softcoding
   - software-design
 moc: moc-architecture-patterns
-related: []
+related: [q-extensions-concept--programming-languages--easy, q-proxy-pattern--design-patterns--medium, q-flyweight-pattern--design-patterns--hard]
 subtopics: ["design-principles", "best-practices", "architecture"]
 ---
 # Что такое софткод?

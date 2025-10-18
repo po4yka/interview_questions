@@ -5,14 +5,15 @@ topic: programming-languages
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - equality
+tags:
+  - equality
   - equals
   - java
   - object-class
   - programming-languages
   - reference-equality
 moc: moc-programming-languages
-related: []
+related: [q-solid-principles--software-design--medium, q-reference-types-criteria--programming-languages--medium, q-data-sealed-classes-why--programming-languages--medium]
 subtopics: ["java", "jvm", "language-features"]
 ---
 # Как в оригинальном Java equals работает, что он сравнивает?

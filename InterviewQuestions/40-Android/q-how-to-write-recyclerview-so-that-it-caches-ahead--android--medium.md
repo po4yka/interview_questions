@@ -4,6 +4,8 @@ title: "How To Write Recyclerview So That It Caches Ahead / Как написа�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-animations-work-in-recyclerview--android--medium, q-server-sent-events-sse--networking--medium, q-cicd-deployment-automation--devops--medium]
 created: 2025-10-15
 tags: [caching, android, ui, performance, difficulty/medium]
 ---

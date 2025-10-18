@@ -4,6 +4,8 @@ title: "Factory Pattern Android / Factory Паттерн Android"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-room-database-migrations--room--medium, q-runtime-permissions-best-practices--permissions--medium, q-kmm-architecture--multiplatform--hard]
 created: 2025-10-15
 tags: [android-framework, android/architecture-clean, architecture-clean, design-patterns, factory-pattern, platform/android, difficulty/medium]
 ---
@@ -497,3 +499,9 @@ val view = inflater.inflate(R.layout.custom_layout, parent, false)
 - Builder Pattern
 - Abstract Factory Pattern
 - Object Creation Patterns
+
+## Related Questions
+
+- [[q-room-database-migrations--room--medium]]
+- [[q-runtime-permissions-best-practices--permissions--medium]]
+- [[q-kmm-architecture--multiplatform--hard]]

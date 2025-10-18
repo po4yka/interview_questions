@@ -12,9 +12,11 @@ category: android
 date_modified: 2025-10-05
 language_tags: [play-feature-delivery, dynamic-modules, app-bundle, modularization, difficulty/medium, android/bundle, android/play-console, android/architecture-modularization]
 moc: moc-android
+related: [q-cicd-automated-testing--devops--medium, q-material3-components--material-design--easy, q-how-to-display-svg-string-as-a-vector-file--android--medium]
 original_language: en
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20Play%20Feature%20Delivery.md"
-subtopics:   - app-bundle
+subtopics:
+  - app-bundle
   - play-console
   - architecture-modularization
 type: question
@@ -204,3 +206,9 @@ dependencies {
 - Модули функций не должны указывать активности в своем манифесте с `android:exported`, установленным в `true`. Это потому, что нет гарантии, что устройство загрузило модуль функций, когда другое приложение пытается запустить активность. Кроме того, ваше приложение должно подтвердить, что функция загружена, прежде чем пытаться получить доступ к ее коду и ресурсам
 
 - Поскольку Play Feature Delivery требует публикации вашего приложения с использованием app bundle, убедитесь, что вы знаете об известных проблемах app bundle
+
+## Related Questions
+
+- [[q-cicd-automated-testing--devops--medium]]
+- [[q-material3-components--material-design--easy]]
+- [[q-how-to-display-svg-string-as-a-vector-file--android--medium]]

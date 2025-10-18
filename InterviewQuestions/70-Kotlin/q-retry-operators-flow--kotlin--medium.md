@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-race-conditions-coroutines--kotlin--hard, q-kotlin-any-class-methods--programming-languages--medium, q-suspend-functions-basics--kotlin--easy]
 
 # Timestamps
 created: 2025-10-06

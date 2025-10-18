@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [art, runtime, jit, aot, dex, compilation, performance, difficulty/hard]
 moc: moc-android
-related: []
+related: [q-migration-to-compose--android--medium, q-testing-coroutines-flow--testing--hard, q-windowinsets-edge-to-edge--android--medium]
 ---
 # Android Runtime Internals
 
@@ -679,3 +679,9 @@ Hardware
 - Profile-guided compilation
 
 Понимание ART помогает оптимизировать производительность и решать проблемы.
+
+## Related Questions
+
+- [[q-migration-to-compose--android--medium]]
+- [[q-testing-coroutines-flow--testing--hard]]
+- [[q-windowinsets-edge-to-edge--android--medium]]

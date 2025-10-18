@@ -4,6 +4,8 @@ title: "What Is Activity And What Is It Used For / What Is Activity и What Is I
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-looper-thread-connection--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium, q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]
 created: 2025-10-15
 tags: [activity, lifecycle, ui, difficulty/medium]
 ---

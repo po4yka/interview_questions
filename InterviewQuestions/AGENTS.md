@@ -27,15 +27,19 @@ This is a **bilingual (EN/RU)** Obsidian vault for interview prep covering:
 
 ### 2. Folder Structure
 ```
-00-Administration/  # vault docs (README, TAXONOMY, this file)
+00-Administration/  # vault docs (README, TAXONOMY, AGENTS.md, AI-TOOLS.md, AGENT-CHECKLIST.md)
 10-Concepts/        # reusable theory notes (c-<slug>.md)
 20-Algorithms/      # coding problems (q-<slug>--algorithms--<difficulty>.md)
 30-System-Design/   # design questions (q-<slug>--system-design--<difficulty>.md)
 40-Android/         # Android Q&As (q-<slug>--android--<difficulty>.md)
-50-Behavioral/      # behavioral Q&As
+50-Backend/         # Backend/database questions (q-<slug>--backend--<difficulty>.md)
 60-CompSci/         # CS fundamentals (OS, networking, etc.)
+70-Kotlin/          # Kotlin language questions (q-<slug>--kotlin--<difficulty>.md)
+80-Tools/           # Development tools - Git, etc. (q-<slug>--tools--<difficulty>.md)
 90-MOCs/            # Maps of Content (moc-<topic>.md)
 _templates/         # Templater templates
+.cursor/            # Cursor AI rules (modern .mdc format in rules/ subdirectory)
+.claude/            # Claude Code settings
 ```
 
 **Rule**: File goes into folder matching its `topic` field.
@@ -72,8 +76,8 @@ Use **English**, **kebab-case**, short, stable. Add Russian/English titles to `a
    - `original_language`: `en` | `ru`
    - `language_tags`: `[en, ru]` if both present
    - `status`: `draft`
-   - `moc`: Link to relevant MOC (e.g., `[[moc-algorithms]]`)
-   - `related`: Link 2–5 related concepts/questions
+   - `moc`: Link to relevant MOC (e.g., `moc-algorithms` - WITHOUT brackets)
+   - `related`: Array of links to 2–5 related concepts/questions (e.g., `[c-hash-map, c-array]` - WITHOUT brackets)
    - `tags`: Include `difficulty/<level>`, topic tags, and `android/<subtopic>` if applicable
 4. **Write content**:
    - Question in EN and RU
@@ -156,10 +160,10 @@ Use **English**, **kebab-case**, short, stable. Add Russian/English titles to `a
 
 ### Topics (Pick ONE)
 ```
-algorithms | data-structures | system-design | android | programming-languages |
+algorithms | data-structures | system-design | android | kotlin | programming-languages |
 architecture-patterns | concurrency | distributed-systems | databases | networking |
 operating-systems | security | performance | testing | devops-ci-cd | cloud |
-debugging | ui-ux-accessibility | behavioral | cs
+debugging | ui-ux-accessibility | behavioral | tools | cs
 ```
 
 ### Difficulty
@@ -306,10 +310,7 @@ SORT updated DESC
    source_note: LeetCode original problem
    status: draft
    moc: moc-algorithms
-   related:
-     - c-hash-map
-     - c-array
-     - q-three-sum--algorithms--medium
+   related: [c-hash-map, c-array, q-three-sum--algorithms--medium]
    created: 2025-10-03
    updated: 2025-10-03
    tags: [leetcode, arrays, hash-map, difficulty/easy]
@@ -326,12 +327,22 @@ SORT updated DESC
 
 - **Full schema & rules**: `00-Administration/README.md`
 - **Controlled vocabularies**: `00-Administration/TAXONOMY.md`
+- **AI tools comparison**: `00-Administration/AI-TOOLS.md`
+- **Quick checklist**: `00-Administration/AGENT-CHECKLIST.md`
 - **Templates**:
   - `_templates/_tpl-qna.md` (Q&A notes)
   - `_templates/_tpl-concept.md` (Concept notes)
   - `_templates/_tpl-moc.md` (MOC notes)
 - **Agent instructions**: `00-Administration/AGENTS.md` (this file)
+- **Cursor AI rules**: `.cursor/rules/` (modern MDC format) and `.cursorrules` (legacy)
+- **Claude Code configuration**:
+  - `.claude/README.md` - Setup guide and quick reference
+  - `.claude/custom_instructions.md` - Auto-loaded context
+  - `.claude/commands/` - Slash commands (/create-qna, /translate, /validate, etc.)
+  - `.claude/settings.local.json` - Permissions
 
 ---
+
+**Emoji Rule**: Do not use emoji in vault notes or agent-created content. Use text equivalents: "CORRECT", "WRONG", "NOTE", "WARNING". Exception: Emoji may appear in Russian content sections where culturally appropriate.
 
 **Summary**: Always use controlled vocabularies, validate YAML, keep both languages in one note, set `status: draft`, and link to concepts + MOCs. When in doubt, ask the user or check TAXONOMY.md.

@@ -4,6 +4,8 @@ title: "What Does Viewgroup Inherit From / От чего наследуется 
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-application-priority-is-determined-by-the-system--android--hard, q-what-is-activity-and-what-is-it-used-for--android--medium, q-compose-custom-animations--jetpack-compose--medium]
 created: 2025-10-15
 tags: [inheritance, android, ui, views, difficulty/medium]
 ---

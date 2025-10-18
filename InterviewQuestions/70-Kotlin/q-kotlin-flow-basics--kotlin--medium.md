@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-flatmap-ranges--programming-languages--easy, q-channels-vs-flow--kotlin--medium, q-kotlin-nullable-string-declaration--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05

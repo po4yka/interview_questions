@@ -4,8 +4,11 @@ title: "Equals Hashcode Contracts / Контракты equals и hashCode"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-what-is-garbage-in-gc--programming-languages--easy, q-composite-pattern--design-patterns--medium, q-flyweight-pattern--design-patterns--hard]
 created: 2025-10-15
-tags: - collections
+tags:
+  - collections
   - contract
   - equals
   - hashcode
@@ -254,3 +257,8 @@ override fun hashCode() = Objects.hash(property1, property2, property3)
 
 Методы equals() и hashCode() используются для сравнения объектов и их корректной работы в коллекциях (Set, Map). Контракт `equals()` должен: Рефлексивность: a.equals(a) → true (объект равен самому себе). Симметричность: a.equals(b) == b.equals(a). Транзитивность: если a == b и b == c, то a == c. Согласованность: если a == b, то a.equals(b) всегда возвращает одно и же, пока объект не изменится. Сравнение с null всегда даёт false: a.equals(null) == false. Контракт hashCode(): если a.equals(b) то a.hashCode() == b.hashCode().
 
+## Related Questions
+
+- [[q-what-is-garbage-in-gc--programming-languages--easy]]
+- [[q-composite-pattern--design-patterns--medium]]
+- [[q-flyweight-pattern--design-patterns--hard]]

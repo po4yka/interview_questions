@@ -4,9 +4,11 @@ title: "Foreground Service Types / Типы Foreground Service"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
 created: 2025-10-12
 tags: [foreground-service, background-processing, notifications, android-14, difficulty/medium]
-related:   - q-workmanager-advanced--background--medium
+related: [q-material3-dynamic-color-theming--material-design--medium, q-mlkit-custom-models--ml--hard, q-compose-gesture-detection--jetpack-compose--medium]
+  - q-workmanager-advanced--background--medium
   - q-workmanager-vs-alternatives--background--medium
 ---
 # Question (EN)

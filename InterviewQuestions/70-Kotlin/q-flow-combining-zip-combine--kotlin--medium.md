@@ -18,7 +18,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140020
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-collections--kotlin--easy, q-testing-coroutine-timing-control--kotlin--medium, q-kotlin-operator-overloading--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12

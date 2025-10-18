@@ -4,8 +4,11 @@ title: "Desugaring Android Java"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-double-bang-operator--programming-languages--medium, q-coroutine-cancellation-mechanisms--kotlin--medium, q-kotlin-any-unit-nothing--programming-languages--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - java
   - android
   - compilation
@@ -415,3 +418,9 @@ Desugaring — это мощный инструмент, который позв
 - Если minSdkVersion уже 26+ (тогда desugaring не нужен)
 - Если критичен размер APK
 - Если используете альтернативные библиотеки (ThreeTenABP)
+
+## Related Questions
+
+- [[q-kotlin-double-bang-operator--programming-languages--medium]]
+- [[q-coroutine-cancellation-mechanisms--kotlin--medium]]
+- [[q-kotlin-any-unit-nothing--programming-languages--medium]]

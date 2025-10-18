@@ -4,6 +4,8 @@ title: "Mvvm Vs Mvp Differences"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-do-you-know-about-modifications--android--medium, q-dagger-framework-overview--android--hard, q-how-to-choose-layout-for-fragment--android--easy]
 created: 2025-10-15
 tags: [android/architecture-mvp, android/architecture-mvvm, architecture-mvp, architecture-mvvm, architecture-patterns, data-binding, lifecycle, mvp, mvvm, presenter, viewmodel, difficulty/medium]
 ---

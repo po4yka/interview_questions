@@ -4,9 +4,11 @@ title: "Hilt Assisted Injection"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
 created: 2025-10-11
 tags: [dependency-injection, hilt, dagger, assisted-inject, difficulty/medium]
-related:   - q-hilt-entry-points--di--medium
+related: [q-list-to-detail-navigation--android--medium, q-webp-image-format-android--android--easy, q-how-to-start-drawing-ui-in-android--android--easy]
+  - q-hilt-entry-points--di--medium
   - q-dagger-multibinding--di--hard
   - q-hilt-viewmodel-injection--jetpack--medium
 ---
@@ -1698,3 +1700,9 @@ fun FileUploadScreen(
 2. Держите assisted-параметры минимальными
 3. Внедряйте factory, а не класс напрямую
 4. Тестируйте с fake-реализациями factory
+
+## Related Questions
+
+- [[q-list-to-detail-navigation--android--medium]]
+- [[q-webp-image-format-android--android--easy]]
+- [[q-how-to-start-drawing-ui-in-android--android--easy]]

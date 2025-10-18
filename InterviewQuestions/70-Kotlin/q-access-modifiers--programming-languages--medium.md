@@ -18,7 +18,7 @@ source_note: ""
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-channel-closing-completion--kotlin--medium, q-kotlin-java-data-types--programming-languages--medium, q-ranges--kotlin--easy]
 
 # Timestamps
 created: 2025-10-06

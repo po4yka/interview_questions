@@ -4,8 +4,11 @@ title: "Kotlin Java Abstract Differences / Различия abstract в Kotlin �
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-structured-concurrency-patterns--kotlin--hard, q-prohibit-object-creation--programming-languages--easy, q-by-keyword-function-call--programming-languages--easy]
 created: 2025-10-15
-tags: - abstract
+tags:
+  - abstract
   - inheritance
   - java
   - kotlin
@@ -110,3 +113,8 @@ abstract class Animal {
 
 Это делает модель наследования в Kotlin **более явной и намеренной**.
 
+## Related Questions
+
+- [[q-structured-concurrency-patterns--kotlin--hard]]
+- [[q-prohibit-object-creation--programming-languages--easy]]
+- [[q-by-keyword-function-call--programming-languages--easy]]

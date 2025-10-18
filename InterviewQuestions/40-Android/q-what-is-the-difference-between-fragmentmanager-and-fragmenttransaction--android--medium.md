@@ -4,6 +4,8 @@ title: "What Is The Difference Between Fragmentmanager And Fragmenttransaction /
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-workmanager-vs-alternatives--background--medium, q-how-to-display-snackbar-or-toast-based-on-results--android--medium, q-network-request-deduplication--networking--hard]
 created: 2025-10-15
 tags: [fragmentmanager, fragmenttransaction, android, ui, fragments, difficulty/medium]
 ---

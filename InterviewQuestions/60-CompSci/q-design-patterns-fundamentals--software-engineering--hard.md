@@ -4,11 +4,13 @@ title: "Design Patterns Fundamentals"
 topic: architecture-patterns
 difficulty: hard
 status: draft
+moc: moc-compSci
 created: "2025-10-13"
 tags: ["design-patterns", "gof", "creational", "structural", "behavioral", "singleton", "factory", "observer", "strategy", "decorator", "kotlin", "android"]
 description: "Comprehensive coverage of essential design patterns (Creational, Structural, Behavioral) with real-world Android/Kotlin examples including Singleton, Factory, Observer, Strategy, Decorator, and more"
 language: "en"
-related:   - "20251012-600004"  # OOP Principles
+related: [q-singleton-pattern--design-patterns--easy, q-default-vs-io-dispatcher--programming-languages--medium, q-sharedflow-vs-stateflow--programming-languages--easy]
+  - "20251012-600004"  # OOP Principles
   - "20251013-600005"  # Data Structures and Algorithms
 subcategory: "design-patterns"
 updated: "2025-10-13"
@@ -2064,3 +2066,9 @@ processor.addHandler { event ->
 
 10. **Why is Composition preferred over Inheritance? Relate to Decorator pattern.**
     **Почему композиция предпочтительнее наследования? Свяжите с паттерном Decorator.**
+
+## Related Questions
+
+- [[q-singleton-pattern--design-patterns--easy]]
+- [[q-default-vs-io-dispatcher--programming-languages--medium]]
+- [[q-sharedflow-vs-stateflow--programming-languages--easy]]

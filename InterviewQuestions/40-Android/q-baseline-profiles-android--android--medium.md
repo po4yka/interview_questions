@@ -4,6 +4,8 @@ title: "Baseline Profiles Android"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-deep-link-vs-app-link--android--medium, q-app-size-optimization--performance--medium, q-koin-fundamentals--dependency-injection--medium]
 created: 2025-10-15
 tags: [performance, baseline-profiles, aot, optimization, app-startup, difficulty/medium]
 ---
@@ -542,3 +544,9 @@ L - Ссылка на класс/метод
 - Тестируйте на реальных устройствах
 - Верифицируйте в production
 - Комбинируйте с другими оптимизациями
+
+## Related Questions
+
+- [[q-deep-link-vs-app-link--android--medium]]
+- [[q-app-size-optimization--performance--medium]]
+- [[q-koin-fundamentals--dependency-injection--medium]]

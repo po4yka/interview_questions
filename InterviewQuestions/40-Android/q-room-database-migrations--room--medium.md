@@ -4,6 +4,8 @@ title: "Room Database Migrations / Миграции базы данных Room"
 topic: room
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-is-layoutinflater-a-singleton-and-why--programming-languages--medium, q-where-is-composition-created-for-calling-composable-function--android--medium, q-recyclerview-diffutil-advanced--recyclerview--medium]
 created: 2025-10-15
 tags: [database, migrations, persistence, testing, difficulty/medium]
 ---

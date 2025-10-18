@@ -4,6 +4,8 @@ title: "Server Sent Events Sse"
 topic: networking
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-recyclerview-explained--android--medium, q-recyclerview-viewtypes-delegation--recyclerview--medium, q-compose-testing--android--medium]
 created: 2025-10-15
 tags: [sse, server-sent-events, real-time, streaming, comparison, difficulty/medium]
 ---

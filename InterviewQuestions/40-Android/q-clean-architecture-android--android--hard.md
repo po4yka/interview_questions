@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-android-services-purpose--android--easy, q-main-thread-android--android--medium, q-reduce-app-size--android--medium]
 
 # Timestamps
 created: 2025-10-06

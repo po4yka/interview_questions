@@ -4,8 +4,11 @@ title: "Iterator Concept / Концепция Iterator"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-what-happens-to-unneeded-objects--programming-languages--easy, q-interface-vs-abstract-class--programming-languages--medium, q-data-class-component-functions--programming-languages--easy]
 created: 2025-10-15
-tags: - collections
+tags:
+  - collections
   - design-patterns
   - iterator
   - kotlin
@@ -197,3 +200,8 @@ val filtered = list.filter { it % 2 != 0 }
 
 Итератор — это объект, позволяющий поэлементно перебирать коллекцию (список, массив и т.п.). Он обычно предоставляет методы hasNext() и next() и позволяет абстрагироваться от конкретной структуры.
 
+## Related Questions
+
+- [[q-what-happens-to-unneeded-objects--programming-languages--easy]]
+- [[q-interface-vs-abstract-class--programming-languages--medium]]
+- [[q-data-class-component-functions--programming-languages--easy]]

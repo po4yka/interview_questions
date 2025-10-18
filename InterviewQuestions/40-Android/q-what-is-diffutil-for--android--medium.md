@@ -4,6 +4,8 @@ title: "What Is Diffutil For / Для чего нужен DiffUtil"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-animations-work-in-recyclerview--android--medium, q-is-layoutinflater-a-singleton-and-why--programming-languages--medium, q-single-activity-pros-cons--android--medium]
 created: 2025-10-15
 tags: [diffutil, android, ui, difficulty/medium]
 ---
@@ -917,3 +919,9 @@ class UsersFragment : Fragment() {
 | **ListAdapter** | Встроенная поддержка DiffUtil |
 | **AsyncListDiffer** | Вычисление в фоновом потоке |
 | **Payloads** | Частичные обновления элементов |
+
+## Related Questions
+
+- [[q-how-animations-work-in-recyclerview--android--medium]]
+- [[q-is-layoutinflater-a-singleton-and-why--programming-languages--medium]]
+- [[q-single-activity-pros-cons--android--medium]]

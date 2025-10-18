@@ -4,8 +4,11 @@ title: "Kotlin Inline Limitations / Ограничения inline в Kotlin"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-access-modifiers--programming-languages--medium, q-object-companion-object--programming-languages--hard, q-context-receivers--kotlin--hard]
 created: 2025-10-15
-tags: - inline
+tags:
+  - inline
   - kotlin
   - lambdas
   - optimization
@@ -759,3 +762,8 @@ inline fun List<Int>.sumByCustom(selector: (Int) -> Int): Int {
 
 **Влияние на память:** Захваченные переменные в не-inlined лямбдах вызывают boxing и увеличение использования памяти.
 
+## Related Questions
+
+- [[q-kotlin-access-modifiers--programming-languages--medium]]
+- [[q-object-companion-object--programming-languages--hard]]
+- [[q-context-receivers--kotlin--hard]]

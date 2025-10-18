@@ -4,8 +4,11 @@ title: "Abstract Class Purpose / Назначение абстрактных к�
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-hot-vs-cold-flows--programming-languages--medium, q-launch-vs-async-error-handling--programming-languages--medium, q-priorityqueue-vs-deque--programming-languages--easy]
 created: 2025-10-15
-tags: - abstract-class
+tags:
+  - abstract-class
   - inheritance
   - kotlin
   - oop
@@ -90,3 +93,8 @@ class Circle(val radius: Double) : Shape() {
 }
 ```
 
+## Related Questions
+
+- [[q-hot-vs-cold-flows--programming-languages--medium]]
+- [[q-launch-vs-async-error-handling--programming-languages--medium]]
+- [[q-priorityqueue-vs-deque--programming-languages--easy]]

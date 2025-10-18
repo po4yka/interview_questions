@@ -5,11 +5,13 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - kotlin
+tags:
+  - kotlin
   - sealed-classes
   - type-safety
 moc: moc-kotlin
-related:   - q-sealed-class-sealed-interface--kotlin--medium.md
+related: [q-heap-pollution-generics--kotlin--hard, q-kotlin-safe-cast--programming-languages--easy, q-channelflow-callbackflow-flow--kotlin--medium]
+  - q-sealed-class-sealed-interface--kotlin--medium.md
 subtopics: [sealed-classes, enums, when-expression]
 ---
 # What is special about sealed classes in Kotlin?
@@ -317,3 +319,9 @@ class MyAction : Action, AnotherInterface {
     // ...
 }
 ```
+
+## Related Questions
+
+- [[q-heap-pollution-generics--kotlin--hard]]
+- [[q-kotlin-safe-cast--programming-languages--easy]]
+- [[q-channelflow-callbackflow-flow--kotlin--medium]]

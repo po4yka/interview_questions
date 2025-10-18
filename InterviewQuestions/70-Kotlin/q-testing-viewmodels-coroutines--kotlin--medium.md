@@ -4,8 +4,11 @@ title: "Testing Viewmodels Coroutines / Тестирование Viewmodels Coro
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-coroutines-overview--programming-languages--medium, q-flowon-operator-context-switching--kotlin--hard, q-kotlin-reflection--programming-languages--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - testing
   - coroutines
   - viewmodel
@@ -700,3 +703,8 @@ testImplementation "app.cash.turbine:turbine:1.0.0" // Для тестирова
 - Используйте turbine для тестирования Flow
 - Проверяйте последовательности состояний для loading states
 
+## Related Questions
+
+- [[q-kotlin-coroutines-overview--programming-languages--medium]]
+- [[q-flowon-operator-context-switching--kotlin--hard]]
+- [[q-kotlin-reflection--programming-languages--medium]]

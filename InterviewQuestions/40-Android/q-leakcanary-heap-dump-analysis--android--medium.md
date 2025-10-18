@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/memory-management, heap-dump, leakcanary, memory-analysis, memory-management, shark, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-privacy-sandbox-fledge--privacy--hard, q-main-thread-android--android--medium, q-canvas-optimization--graphics--medium]
 ---
 # Как понять что в дампе есть утечка?
 

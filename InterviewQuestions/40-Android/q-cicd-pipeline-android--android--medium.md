@@ -4,6 +4,8 @@ title: "Cicd Pipeline Android"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-performance-monitoring-jank-compose--android--medium, q-android-build-optimization--android--medium, q-context-types-android--android--medium]
 created: 2025-10-15
 tags: [cicd, github-actions, automation, testing, deployment, gradle, difficulty/medium]
 ---
@@ -647,3 +649,9 @@ RUN ./gradlew assembleDebug
 - Автоматизация релизов
 
 Хорошо настроенный CI/CD pipeline экономит время, улучшает качество и ускоряет релизы.
+
+## Related Questions
+
+- [[q-performance-monitoring-jank-compose--android--medium]]
+- [[q-android-build-optimization--android--medium]]
+- [[q-context-types-android--android--medium]]

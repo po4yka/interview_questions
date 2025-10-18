@@ -4,8 +4,11 @@ title: "By Keyword Function Call / Ключевое слово by и вызов 
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-lambda-expressions--kotlin--medium, q-kotlin-when-vs-switch--programming-languages--easy, q-kotlin-reified-types--kotlin--hard]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Can you call a function or constructor after by
 
@@ -366,3 +369,9 @@ val value2: String by getDelegate()
 //  НЕ РАБОТАЕТ: Выражение, не возвращающее делегат
 // val value4: String by "string".uppercase()  // ОШИБКА - String не является делегатом
 ```
+
+## Related Questions
+
+- [[q-kotlin-lambda-expressions--kotlin--medium]]
+- [[q-kotlin-when-vs-switch--programming-languages--easy]]
+- [[q-kotlin-reified-types--kotlin--hard]]

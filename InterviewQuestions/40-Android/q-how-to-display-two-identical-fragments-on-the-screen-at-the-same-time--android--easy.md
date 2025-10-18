@@ -4,6 +4,8 @@ title: "How To Display Two Identical Fragments On The Screen At The Same Time / 
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-which-class-to-catch-gestures--android--easy, q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy, q-graphql-vs-rest--networking--easy]
 created: 2025-10-15
 tags: [android/fragments, fragments, ui, difficulty/easy]
 ---

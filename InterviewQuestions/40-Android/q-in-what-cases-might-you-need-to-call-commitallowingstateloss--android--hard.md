@@ -4,6 +4,8 @@ title: "In What Cases Might You Need To Call Commitallowingstateloss / В как
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-why-diffutil-needed--android--medium, q-fragments-and-activity-relationship--android--hard, q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium]
 created: 2025-10-15
 tags: [android/fragments, fragments, lifecycle, ui, difficulty/hard]
 ---
@@ -368,3 +370,8 @@ Use `commitAllowingStateLoss()` when:
 ## Ответ (RU)
 Метод commitAllowingStateLoss() в Android используется для выполнения транзакций фрагментов даже когда состояние активности уже сохранено. Он может быть полезен но следует использовать с осторожностью так как может привести к потере состояния. Рассмотрены ситуации: пользовательская навигация с малой вероятностью возврата операции которые должны быть выполнены немедленно автоматические процессы или системные изменения устранение багов при смене конфигурации. Примеры использования включают переход между фрагментами удаление диалогового фрагмента. Метод позволяет избежать ошибки IllegalStateException при пересоздании активности но с риском потери состояния.
 
+## Related Questions
+
+- [[q-why-diffutil-needed--android--medium]]
+- [[q-fragments-and-activity-relationship--android--hard]]
+- [[q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium]]

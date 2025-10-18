@@ -4,8 +4,11 @@ title: "Kotlin Conversion Functions / Kotlin Conversion Функции"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-coroutine-cancellation-mechanisms--kotlin--medium, q-kotlin-property-delegates--programming-languages--medium, q-coroutine-dispatchers--kotlin--medium]
 created: 2025-10-15
-tags: - conversion
+tags:
+  - conversion
   - extension-functions
   - functions
   - kotlin
@@ -357,3 +360,8 @@ val dtos = users.toDtos()
 
 Функция, которая вызывается на объекте для преобразования его в другой тип в Kotlin называется функцией расширения. Однако, если вы имеете в виду преобразование одного типа данных в другой тип, то это может быть реализовано через функцию-конвертер или метод, который возвращает новый объект нужного типа.
 
+## Related Questions
+
+- [[q-coroutine-cancellation-mechanisms--kotlin--medium]]
+- [[q-kotlin-property-delegates--programming-languages--medium]]
+- [[q-coroutine-dispatchers--kotlin--medium]]

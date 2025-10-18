@@ -4,6 +4,8 @@ title: "Large File Upload / Загрузка больших файлов"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-viewmodel-vs-onsavedinstancestate--android--medium, q-raise-process-priority--android--medium, q-integration-testing-strategies--testing--medium]
 created: 2025-10-15
 tags: [file-upload, workmanager, retrofit, background-processing, multipart, difficulty/medium]
 ---

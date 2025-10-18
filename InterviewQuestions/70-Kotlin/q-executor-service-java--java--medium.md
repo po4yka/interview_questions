@@ -4,8 +4,11 @@ title: "Executor Service Java / ExecutorService в Java"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-data-sealed-classes-combined--programming-languages--medium, q-kotlin-inline-functions--kotlin--medium, q-kotlin-partition-function--programming-languages--easy]
 created: 2025-10-15
-tags: - java
+tags:
+  - java
   - concurrency
   - multithreading
   - executor
@@ -477,3 +480,9 @@ CompletableFuture<String> future = CompletableFuture.supplyAsync(
     executor
 ).thenApply(s -> s + " World");
 ```
+
+## Related Questions
+
+- [[q-kotlin-data-sealed-classes-combined--programming-languages--medium]]
+- [[q-kotlin-inline-functions--kotlin--medium]]
+- [[q-kotlin-partition-function--programming-languages--easy]]

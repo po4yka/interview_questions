@@ -4,6 +4,8 @@ title: "Room Type Converters Advanced / Продвинутые Type Converters �
 topic: room
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-animate-adding-removing-items-in-recyclerview--android--medium, q-tasks-back-stack--android--medium, q-what-is-broadcastreceiver--android--easy]
 created: 2025-10-15
 tags: [database, type-converters, serialization, json, performance, difficulty/medium]
 ---

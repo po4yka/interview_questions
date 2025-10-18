@@ -5,7 +5,8 @@ topic: programming-languages
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - collections
+tags:
+  - collections
   - immutable
   - kotlin
   - list
@@ -14,7 +15,7 @@ tags: - collections
   - programming-languages
   - set
 moc: moc-programming-languages
-related: []
+related: [q-supervisor-scope-vs-coroutine-scope--kotlin--medium, q-nothing-instances--programming-languages--easy, q-lambdas-java-kotlin-syntax--programming-languages--medium]
 ---
 # Какие коллекции знаешь?
 

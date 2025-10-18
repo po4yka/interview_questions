@@ -4,6 +4,8 @@ title: "How To Display Svg String As A Vector File / Как отобразить
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-in-what-cases-might-you-need-to-call-commitallowingstateloss--android--hard, q-repository-multiple-sources--android--medium, q-what-does-the-lifecycle-library-do--android--medium]
 created: 2025-10-15
 tags: [image loading, file handling, android, ui, image-loading, difficulty/medium]
 ---
@@ -772,3 +774,9 @@ class NetworkSvgLoader(private val context: Context) {
 4. **Обрабатывайте ошибки корректно** - парсинг SVG может завершиться неудачей
 5. **Учитывайте использование памяти** при преобразовании в bitmap
 6. **Используйте соответствующий размер изображения** чтобы избежать проблем масштабирования
+
+## Related Questions
+
+- [[q-in-what-cases-might-you-need-to-call-commitallowingstateloss--android--hard]]
+- [[q-repository-multiple-sources--android--medium]]
+- [[q-what-does-the-lifecycle-library-do--android--medium]]

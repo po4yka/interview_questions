@@ -5,11 +5,13 @@ topic: kotlin
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - kotlin
+tags:
+  - kotlin
   - collections
   - data-structures
 moc: moc-kotlin
-related:   - q-list-vs-sequence--kotlin--medium.md
+related: [q-equals-hashcode-purpose--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium, q-catch-operator-flow--kotlin--medium]
+  - q-list-vs-sequence--kotlin--medium.md
 subtopics: [collections, data-structures, array, list]
 ---
 # What is the difference between array and list in Kotlin?
@@ -217,3 +219,9 @@ shoppingList.remove("Молоко")
 - Более читаемый и идиоматичный Kotlin код
 
 **Краткое содержание**: Массивы имеют фиксированный размер и лучшую производительность для прямого доступа. Списки динамичны, предоставляют богатые функциональные операции (map, filter и т.д.) и более гибки для управления коллекциями. Массивы быстрее, но менее удобны, чем списки.
+
+## Related Questions
+
+- [[q-equals-hashcode-purpose--kotlin--medium]]
+- [[q-visibility-modifiers-kotlin--kotlin--medium]]
+- [[q-catch-operator-flow--kotlin--medium]]

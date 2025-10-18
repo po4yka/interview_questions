@@ -4,6 +4,8 @@ title: "16kb Dex Page Size / Размер страницы DEX 16KB"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-background-tasks-decision-guide--android--medium, q-why-fragment-needs-separate-callback-for-ui-creation--android--hard, q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]
 created: 2025-10-15
 tags: [dex, build-optimization, apk-size, performance, r8, proguard, difficulty/medium]
 ---

@@ -4,10 +4,13 @@ title: "Compositionlocal Compose / CompositionLocal в Compose"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-retrofit-modify-all-requests--android--hard, q-kmm-sqldelight--multiplatform--medium, q-dagger-build-time-optimization--android--medium]
 created: 2025-10-15
 tags: [compose, compositionlocal, state-management, implicit-data, difficulty/hard, android/compose, android/ui-state]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20CompositionLocal.md
-subtopics:   - ui-compose
+subtopics:
+  - ui-compose
   - ui-state
 ---
 # CompositionLocal in Jetpack Compose / CompositionLocal в Jetpack Compose

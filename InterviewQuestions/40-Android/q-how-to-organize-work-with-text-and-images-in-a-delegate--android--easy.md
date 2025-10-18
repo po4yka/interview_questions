@@ -4,6 +4,8 @@ title: "How To Organize Work With Text And Images In A Delegate / How To Organiz
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-which-layout-for-large-list--android--easy, q-room-code-generation-timing--android--medium, q-fakes-vs-mocks-testing--testing--medium]
 created: 2025-10-15
 tags: [android/recyclerview, delegates, recyclerview, ui, difficulty/easy]
 ---
@@ -279,3 +281,8 @@ class TextImageViewHolder(
 ## Ответ (RU)
 Для управления текстом и картинками в RecyclerView используйте делегаты, которые разделяют логику отображения разных типов данных. Это упрощает код и улучшает его поддержку.
 
+## Related Questions
+
+- [[q-which-layout-for-large-list--android--easy]]
+- [[q-room-code-generation-timing--android--medium]]
+- [[q-fakes-vs-mocks-testing--testing--medium]]

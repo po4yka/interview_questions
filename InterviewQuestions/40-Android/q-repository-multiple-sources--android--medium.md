@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-kmm-ktor-networking--multiplatform--medium, q-dagger-field-injection--android--medium]
 
 # Timestamps
 created: 2025-10-06

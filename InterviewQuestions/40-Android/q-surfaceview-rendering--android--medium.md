@@ -4,6 +4,8 @@ title: "Surfaceview Rendering / Рендеринг SurfaceView"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-remember-vs-remembersaveable-compose--android--medium, q-how-to-add-fragment-synchronously-asynchronously--android--medium, q-activity-navigation-how-it-works--android--medium]
 created: 2025-10-15
 tags: [surfaceview, rendering, views, performance, threading, difficulty/medium]
 ---

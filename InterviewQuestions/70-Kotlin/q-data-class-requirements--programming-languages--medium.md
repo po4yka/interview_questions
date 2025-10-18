@@ -4,8 +4,11 @@ title: "Data Class Requirements / Требования Data Class"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-actor-pattern--kotlin--hard, q-abstract-class-vs-interface--kotlin--medium, q-ranges--kotlin--easy]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # What are the requirements when creating a data class?
 
@@ -394,3 +397,9 @@ p2.discount = 50.0
 
 println(p1 == p2)  // true! (discount не сравнивается)
 ```
+
+## Related Questions
+
+- [[q-actor-pattern--kotlin--hard]]
+- [[q-abstract-class-vs-interface--kotlin--medium]]
+- [[q-ranges--kotlin--easy]]

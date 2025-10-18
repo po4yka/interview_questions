@@ -4,6 +4,8 @@ title: "Proguard R8 Rules / Правила ProGuard и R8"
 topic: security
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-kotlin-context-receivers--kotlin--hard, q-lazy-grid-staggered-grid--jetpack-compose--medium, q-is-layoutinflater-a-singleton-and-why--programming-languages--medium]
 created: 2025-10-15
 tags: [proguard, r8, obfuscation, optimization, library, difficulty/medium]
 ---

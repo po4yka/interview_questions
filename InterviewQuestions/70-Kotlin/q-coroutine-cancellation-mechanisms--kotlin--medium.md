@@ -4,19 +4,24 @@ title: Coroutine Cancellation Mechanisms / Механизмы Отмены Ко�
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-structured-concurrency-kotlin--kotlin--medium, q-data-sealed-usage--programming-languages--medium, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - cancellation
   - cooperative
   - isactive
   - cancellationexception
   - difficulty/medium
-language_tags:   - en
+language_tags:
+  - en
   - ru
 original_language: en
 source: Kotlin Coroutines Interview Questions PDF
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - cancellation
   - cooperative-cancellation
 ---
@@ -535,3 +540,9 @@ parent.join()
 ---
 
 **Source**: Kotlin Coroutines Interview Questions for Android Developers PDF
+
+## Related Questions
+
+- [[q-structured-concurrency-kotlin--kotlin--medium]]
+- [[q-data-sealed-usage--programming-languages--medium]]
+- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]]

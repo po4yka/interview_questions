@@ -4,10 +4,13 @@ title: "Datastore Preferences Proto"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-multithreading-tools-android--android--medium, q-list-to-detail-navigation--android--medium, q-how-to-reduce-number-of-recompositions-besides-side-effects--programming-languages--hard]
 created: 2025-10-15
 tags: [datastore, preferences, proto-datastore, storage, difficulty/medium, android/storage, android/serialization]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20you%20know%20about%20DataStore.md
-subtopics:   - datastore
+subtopics:
+  - datastore
   - storage
   - serialization
 ---

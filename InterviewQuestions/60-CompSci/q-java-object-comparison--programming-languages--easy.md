@@ -5,14 +5,15 @@ topic: programming-languages
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - equality
+tags:
+  - equality
   - equals
   - hashcode
   - java
   - object-comparison
   - programming-languages
 moc: moc-programming-languages
-related: []
+related: [q-flow-map-operator--programming-languages--medium, q-observer-pattern--design-patterns--medium, q-coroutinescope-vs-supervisorscope--programming-languages--medium]
 subtopics: ["java", "jvm", "language-features"]
 ---
 # Как сравниваются объекты в Java?

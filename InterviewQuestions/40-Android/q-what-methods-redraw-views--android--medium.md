@@ -4,6 +4,8 @@ title: "What Methods Redraw Views / Какие методы перерисовы
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-compose-ui-testing-advanced--testing--hard, q-compose-canvas-graphics--jetpack-compose--hard, q-what-navigation-methods-do-you-know--android--medium]
 created: 2025-10-15
 tags: [android/views, custom-views, view-rendering, invalidate, requestLayout, difficulty/medium]
 ---

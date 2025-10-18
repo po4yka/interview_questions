@@ -4,6 +4,8 @@ title: "Touch Event Handling Custom Views"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-material3-motion-transitions--material-design--medium, q-what-does-itemdecoration-do--android--medium, q-modularization-patterns--android--hard]
 created: 2025-10-15
 tags: [views, touch-events, gestures, android-framework, difficulty/medium]
 ---

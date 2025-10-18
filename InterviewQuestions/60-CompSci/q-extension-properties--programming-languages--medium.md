@@ -4,6 +4,8 @@ title: "Extension Properties / Свойства-расширения"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-what-is-coroutinescope--programming-languages--medium, q-how-suspend-function-detects-suspension--programming-languages--hard, q-error-handling-in-coroutines--programming-languages--medium]
 created: 2025-10-15
 tags:
   - extension-functions
@@ -32,3 +34,8 @@ In Kotlin, you can add extension properties, but only with a custom get (getter)
 
 В Kotlin можно добавлять свойства-расширения (extension properties), но только с кастомным get (геттером). Можно добавлять val с get(). Расширяемые свойства могут быть только вычисляемыми (val), потому что нельзя создать field внутри расширения. var работает только с get() и set(), но всё равно нельзя использовать field.
 
+## Related Questions
+
+- [[q-what-is-coroutinescope--programming-languages--medium]]
+- [[q-how-suspend-function-detects-suspension--programming-languages--hard]]
+- [[q-error-handling-in-coroutines--programming-languages--medium]]

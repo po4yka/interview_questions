@@ -4,8 +4,11 @@ title: "How To Catch The Earliest Entry Point Into The Application / Как по
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-retrofit-modify-all-requests--android--hard, q-jetpack-compose-lazy-column--android--easy, q-privacy-sandbox-sdk-runtime--privacy--hard]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How to catch the earliest entry point into the application?
 

@@ -4,6 +4,8 @@ title: "Dalvik Vs Art Runtime"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-is-navigation-implemented--android--medium, q-mvi-one-time-events--android--medium, q-singleton-scope-binding--android--medium]
 created: 2025-10-15
 tags: [dalvik, art, runtime, jit, aot, compilation, performance, difficulty/medium]
 ---
@@ -543,3 +545,9 @@ Dalvik и ART (Android Runtime) — это среды выполнения дл�
 -   Лучший UX (плавность, отзывчивость)
 -   Экономия батареи
 -   Улучшенные инструменты для разработчиков
+
+## Related Questions
+
+- [[q-how-is-navigation-implemented--android--medium]]
+- [[q-mvi-one-time-events--android--medium]]
+- [[q-singleton-scope-binding--android--medium]]

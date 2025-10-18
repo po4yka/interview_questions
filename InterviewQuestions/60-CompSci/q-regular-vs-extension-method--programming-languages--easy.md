@@ -4,8 +4,11 @@ title: "Regular Vs Extension Method"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-reference-types-protect-from-deletion--programming-languages--easy, q-solid-principles--software-design--medium, q-hot-vs-cold-flows--programming-languages--medium]
 created: 2025-10-15
-tags: - extension-functions
+tags:
+  - extension-functions
   - functions
   - kotlin
   - programming-languages
@@ -842,3 +845,8 @@ fun User.toJson(): String {
 }
 ```
 
+## Related Questions
+
+- [[q-reference-types-protect-from-deletion--programming-languages--easy]]
+- [[q-solid-principles--software-design--medium]]
+- [[q-hot-vs-cold-flows--programming-languages--medium]]

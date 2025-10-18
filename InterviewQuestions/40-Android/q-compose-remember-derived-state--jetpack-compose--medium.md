@@ -4,6 +4,8 @@ title: "Compose Remember Derived State / Remember и Derived State в Compose"
 topic: jetpack-compose
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-remember-vs-remembersaveable-compose--android--medium, q-webp-image-format-android--android--easy, q-react-native-comparison--multiplatform--medium]
 created: 2025-10-15
 tags: [compose, state, remember, optimization, process-death, difficulty/medium]
 ---

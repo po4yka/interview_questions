@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - channels
   - patterns
@@ -16,7 +17,9 @@ tags: - kotlin
   - work-distribution
   - aggregation
 moc: moc-kotlin
-subtopics:   - coroutines
+related: [q-kotlin-nullable-string-declaration--programming-languages--easy, q-data-sealed-classes-definition--programming-languages--hard, q-delegation-by-keyword--kotlin--medium]
+subtopics:
+  - coroutines
   - channels
   - patterns
   - concurrency

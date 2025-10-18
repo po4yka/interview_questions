@@ -4,8 +4,11 @@ title: "What Can Be Done Through Composer / Что можно сделать ч�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-do-you-know-about-modifications--android--medium, q-fragment-vs-activity-lifecycle--android--medium, q-strictmode-debugging--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 
 # Question (EN)

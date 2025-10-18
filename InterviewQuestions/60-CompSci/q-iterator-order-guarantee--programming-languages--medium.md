@@ -4,6 +4,8 @@ title: "Iterator Order Guarantee / Гарантия порядка Iterator"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-java-object-comparison--programming-languages--easy, q-inheritance-composition-aggregation--oop--medium, q-abstract-factory-pattern--design-patterns--medium]
 created: 2025-10-15
 tags:
   - collections
@@ -31,3 +33,8 @@ It is guaranteed only if the data structure supports order (e.g., List, LinkedLi
 
 Гарантируется только в том случае, если структура данных поддерживает порядок (например, List, LinkedList). Если коллекция неупорядоченная (например, HashSet, HashMap.keySet()), порядок может быть произвольным и не повторяться.
 
+## Related Questions
+
+- [[q-java-object-comparison--programming-languages--easy]]
+- [[q-inheritance-composition-aggregation--oop--medium]]
+- [[q-abstract-factory-pattern--design-patterns--medium]]

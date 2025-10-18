@@ -4,8 +4,11 @@ title: "List Set Map Differences / Различия List Set и Map"
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-object-companion-object--programming-languages--easy, q-dispatchers-unconfined--kotlin--medium, q-coroutines-vs-threads--programming-languages--medium]
 created: 2025-10-15
-tags: - collections
+tags:
+  - collections
   - kotlin
   - list
   - map
@@ -212,3 +215,9 @@ val data = cache[userId] ?: fetchData(userId).also { cache[userId] = it }
 - Часто ищете данные по ключу
 - Строите справочники, словари, кэши
 - Подсчитываете частоту элементов
+
+## Related Questions
+
+- [[q-kotlin-object-companion-object--programming-languages--easy]]
+- [[q-dispatchers-unconfined--kotlin--medium]]
+- [[q-coroutines-vs-threads--programming-languages--medium]]

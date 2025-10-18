@@ -4,8 +4,11 @@ title: "Where To Call Suspend Functions"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-java-access-modifiers--programming-languages--medium, q-equals-hashcode-purpose--programming-languages--hard, q-prototype-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Where to Call Suspend Functions?
 
@@ -468,3 +471,9 @@ suspend fun structuredApproach() = coroutineScope {
 ## Ответ (RU)
 
 suspend-функции можно запускать только из корутин. Можно вызывать их из: launch {} или async {} в CoroutineScope, другое suspend-функции и runBlocking {} для тестирования в main-потоке
+
+## Related Questions
+
+- [[q-java-access-modifiers--programming-languages--medium]]
+- [[q-equals-hashcode-purpose--programming-languages--hard]]
+- [[q-prototype-pattern--design-patterns--medium]]

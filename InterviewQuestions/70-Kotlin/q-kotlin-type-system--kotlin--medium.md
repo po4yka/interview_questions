@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-const--kotlin--easy, q-data-class-detailed--kotlin--medium, q-kotlin-enum-classes--kotlin--easy]
 
 # Timestamps
 created: 2025-10-05

@@ -4,8 +4,11 @@ title: "Extensions Concept / Концепция расширений"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-inheritance-composition-aggregation--oop--medium, q-sealed-classes-limitations--programming-languages--medium, q-reference-types-criteria--programming-languages--medium]
 created: 2025-10-15
-tags: - extension-functions
+tags:
+  - extension-functions
   - extensions
   - kotlin
   - programming-languages
@@ -239,3 +242,8 @@ fun MyClass.tryAccess() {
 
 Термин 'Extensions' используется для обозначения функциональности, которая позволяет добавлять новые возможности к существующим классам без изменения их исходного кода.
 
+## Related Questions
+
+- [[q-inheritance-composition-aggregation--oop--medium]]
+- [[q-sealed-classes-limitations--programming-languages--medium]]
+- [[q-reference-types-criteria--programming-languages--medium]]

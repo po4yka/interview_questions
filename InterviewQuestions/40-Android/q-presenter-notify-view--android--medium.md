@@ -4,6 +4,8 @@ title: "Presenter Notify View / Presenter уведомляет View"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-are-fragments-for-if-there-is-activity--android--medium, q-kapt-vs-ksp--android--medium, q-app-store-optimization--distribution--medium]
 created: 2025-10-15
 tags: [android/architecture-mvi, android/lifecycle, architecture-mvi, callback, lifecycle, livedata, platform/android, presenter, view, difficulty/medium]
 ---

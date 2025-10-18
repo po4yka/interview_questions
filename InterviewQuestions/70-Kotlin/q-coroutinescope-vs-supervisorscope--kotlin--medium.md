@@ -4,8 +4,11 @@ title: "Coroutinescope Vs Supervisorscope / Coroutinescope против Supervis
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-channel-pipelines--kotlin--hard, q-inline-value-classes-performance--kotlin--medium, q-kotlin-inline-functions--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - scope
   - error-handling
@@ -438,3 +441,9 @@ suspend fun mixed() = supervisorScope {
     }
 }
 ```
+
+## Related Questions
+
+- [[q-channel-pipelines--kotlin--hard]]
+- [[q-inline-value-classes-performance--kotlin--medium]]
+- [[q-kotlin-inline-functions--kotlin--medium]]

@@ -4,6 +4,8 @@ title: "Navigation Methods In Android / Методы навигации в Andro
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-in-what-cases-might-you-need-to-call-commitallowingstateloss--android--hard, q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium, q-presenter-notify-view--android--medium]
 created: 2025-10-15
 tags: [android/navigation, android/ui, bottomnavigationview, fragmentmanager, intent, jetpack navigation, navhost, navigation, tablayout, ui, difficulty/medium]
 ---
@@ -54,7 +56,47 @@ val deepLink = NavDeepLinkBuilder(context)
 ```
 
 ## Ответ (RU)
-В Android есть несколько способов навигации между экранами. Основные методы включают: 1) Activity-навигация через Intent; 2) Fragment-based навигация с использованием FragmentManager; 3) Navigation Component из Jetpack; 4) Bottom/Tab Navigation с BottomNavigationView или TabLayout; 5) Drawer Navigation через Navigation Drawer; 6) Deep Links и App Links для перехода по ссылкам; и 7) Navigation в Jetpack Compose с NavHost и NavController.
+
+Android предоставляет несколько методов навигации:
+
+1. **Навигация между Activity через Intent**
+2. **Навигация на основе Fragment с использованием FragmentManager**
+3. **Navigation Component из Jetpack**
+4. **Bottom/Tab навигация с BottomNavigationView или TabLayout**
+5. **Drawer Navigation через Navigation Drawer**
+6. **Deep Links и App Links**
+7. **Навигация в Jetpack Compose с NavHost и NavController**
+
+### Примеры
+
+```kotlin
+// 1. Навигация через Intent
+startActivity(Intent(this, DetailActivity::class.java))
+
+// 2. Навигация между Fragment
+supportFragmentManager.beginTransaction()
+    .replace(R.id.container, DetailFragment())
+    .addToBackStack(null)
+    .commit()
+
+// 3. Navigation Component
+findNavController().navigate(R.id.action_home_to_detail)
+
+// 4. Bottom Navigation
+bottomNav.setOnItemSelectedListener { item ->
+    when (item.itemId) {
+        R.id.nav_home -> navigateToHome()
+        R.id.nav_profile -> navigateToProfile()
+        else -> false
+    }
+}
+
+// 5. Deep Links
+val deepLink = NavDeepLinkBuilder(context)
+    .setGraph(R.navigation.nav_graph)
+    .setDestination(R.id.detailFragment)
+    .createPendingIntent()
+```
 
 
 ---

@@ -4,6 +4,8 @@ title: "Workmanager Return Result / Возврат результата WorkMana
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-layout-allows-overlapping-objects--android--easy, q-how-to-reduce-number-of-recompositions-besides-side-effects--programming-languages--hard, q-how-to-draw-ui-without-xml--android--medium]
 created: 2025-10-15
 tags: [android/background-processing, background-processing, coroutines, livedata, workmanager, difficulty/medium]
 ---
@@ -613,3 +615,8 @@ workManager.getWorkInfoByIdLiveData(workRequest.id)
 - Сериализуйте сложные объекты в JSON
 - Обрабатывайте все состояния работы
 
+## Related Questions
+
+- [[q-what-layout-allows-overlapping-objects--android--easy]]
+- [[q-how-to-reduce-number-of-recompositions-besides-side-effects--programming-languages--hard]]
+- [[q-how-to-draw-ui-without-xml--android--medium]]

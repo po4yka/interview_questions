@@ -4,6 +4,8 @@ title: "How To Start Drawing Ui In Android / Как начать рисоват�
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-mlkit-face-detection--ml--medium, q-retrofit-library--android--medium, q-fragment-vs-activity-lifecycle--android--medium]
 created: 2025-10-15
 tags: [UI, XML, android, android/basics, android/ui, basics, ui, difficulty/easy]
 ---
@@ -63,7 +65,52 @@ class CustomView(context: Context) : View(context) {
 
 ## Ответ (RU)
 
-Чтобы начать рисовать пользовательский интерфейс (UI) на экране в Android-проекте, необходимо выполнить несколько шагов. Сначала создайте Android-проект в Android Studio с шаблоном «Empty Activity». Затем настройте макет, используя XML-файл в каталоге res/layout. Пример простого макета с TextView и Button. Подключите макет к активности через метод setContentView() в Activity классе. Если нужно нарисовать что-то вручную, создайте свой View и переопределите метод onDraw(). Для запуска приложения используйте Run в Android Studio.
+Чтобы начать рисовать UI в Android, необходимо: (1) Создать Activity, (2) Определить XML-файл разметки, (3) Подключить разметку к Activity с помощью `setContentView()`.
+
+### Основные шаги
+
+```kotlin
+// 1. Создать Activity
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // 2. Установить разметку
+        setContentView(R.layout.activity_main)
+    }
+}
+```
+
+```xml
+<!-- 3. Определить разметку (res/layout/activity_main.xml) -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click Me" />
+</LinearLayout>
+```
+
+### Пользовательская отрисовка
+
+```kotlin
+class CustomView(context: Context) : View(context) {
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        val paint = Paint().apply { color = Color.BLUE }
+        canvas.drawCircle(100f, 100f, 50f, paint)
+    }
+}
+```
 
 ---
 

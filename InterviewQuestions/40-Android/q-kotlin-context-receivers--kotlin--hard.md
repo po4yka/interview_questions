@@ -7,10 +7,12 @@ status: draft
 created: 2025-10-12
 tags: [context-receivers, experimental, dsl, api-design, android/context-receivers, android/advanced-features, android/dsl, android/api-design, difficulty/hard]
 moc: moc-android
-related:   - q-kotlin-dsl-builders--kotlin--hard
+related: [q-android-components-besides-activity--android--easy, q-mvvm-vs-mvp-differences--android--medium, q-koin-vs-hilt-comparison--dependency-injection--medium]
+  - q-kotlin-dsl-builders--kotlin--hard
   - q-sealed-classes-state-management--kotlin--medium
   - q-kotlin-coroutines-advanced--kotlin--hard
-subtopics:   - kotlin
+subtopics:
+  - kotlin
   - context-receivers
   - advanced-features
   - dsl

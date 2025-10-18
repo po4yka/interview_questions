@@ -15,11 +15,11 @@ language_tags: [context, application-context, activity-context, difficulty/mediu
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Context.md
 author: null
-related:
+related: [q-usecase-pattern-android--android--medium, q-large-file-upload-app--android--hard, q-broadcastreceiver-contentprovider--android--easy]
   - "[[moc-android]]"
   - "[[q-activity-lifecycle--android--easy]]"
   - "[[q-memory-leaks-android--android--medium]]"
-moc:
+moc: moc-android
   - "[[moc-android]]"
 connections: []
 ---

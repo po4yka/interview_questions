@@ -4,8 +4,11 @@ title: "Coroutines Vs Threads / Корутины против потоков"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-lambda-expressions--kotlin--medium, q-fan-in-fan-out-channels--kotlin--hard, q-abstract-class-vs-interface--kotlin--medium]
 created: 2025-10-15
-tags: - comparison
+tags:
+  - comparison
   - concurrency
   - coroutines
   - java
@@ -98,3 +101,9 @@ thread {
 ```
 
 **Основное преимущество:** корутины позволяют писать асинхронный код так, как будто он синхронный, без callback hell и с меньшими затратами ресурсов.
+
+## Related Questions
+
+- [[q-kotlin-lambda-expressions--kotlin--medium]]
+- [[q-fan-in-fan-out-channels--kotlin--hard]]
+- [[q-abstract-class-vs-interface--kotlin--medium]]

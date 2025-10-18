@@ -4,6 +4,8 @@ title: "Android Build Optimization / Android Build Оптимизация"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy, q-where-is-composition-created--android--medium, q-custom-view-animation--custom-views--medium]
 created: 2025-10-15
 tags: [build-optimization, gradle, kotlin, ksp, performance, difficulty/medium]
 ---

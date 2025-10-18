@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/memory-management, garbage-collection, memory-leaks, memory-management, performance, difficulty/easy]
 moc: moc-android
-related: []
+related: [q-canvas-optimization--graphics--medium, q-recyclerview-viewtypes-delegation--recyclerview--medium, q-custom-view-accessibility--custom-views--medium]
 ---
 # Что такое утечки памяти?
 

@@ -4,6 +4,8 @@ title: "Play Store Publishing / Публикация в Play Store"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-privacy-sandbox-attribution--privacy--medium, q-why-diffutil-needed--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
 created: 2025-10-15
 tags: [Kotlin, Distribution, PlayStore, Publishing, difficulty/medium]
 ---

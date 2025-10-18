@@ -4,6 +4,8 @@ title: "What Design Systems In Android Have You Worked With / С какими д
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium, q-how-to-pass-parameters-to-a-fragment--android--easy, q-clean-architecture-android--android--hard]
 created: 2025-10-15
 tags: [fluent design system, human interface guidelines, material design, ui, difficulty/medium]
 ---
@@ -206,3 +208,8 @@ object BrandDesignSystem {
 ## Ответ (RU)
 В Android-разработке часто используются следующие системы проектирования: Material Design от Google, Fluent Design System от Microsoft и Human Interface Guidelines от Apple. Material Design является стандартным выбором благодаря интеграции с экосистемой Google и Android. Fluent Design System ориентирован на создание интуитивных интерфейсов и может быть адаптирован для Android через стилизацию. Принципы HIG, хотя ориентированы на iOS и macOS, могут быть полезны для кросс-платформенных приложений.
 
+## Related Questions
+
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]]
+- [[q-how-to-pass-parameters-to-a-fragment--android--easy]]
+- [[q-clean-architecture-android--android--hard]]

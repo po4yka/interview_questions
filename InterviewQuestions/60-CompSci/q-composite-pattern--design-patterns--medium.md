@@ -4,8 +4,11 @@ title: "Composite Pattern / Composite Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-coroutine-dispatchers--programming-languages--medium, q-data-class-special-features--programming-languages--easy, q-design-patterns-fundamentals--software-engineering--hard]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - structural-patterns
   - composite
   - gof-patterns
@@ -344,56 +347,50 @@ sealed class MenuItem {
 
 ### Определение
 
-
-The Composite Design Pattern is a structural design pattern that **lets you compose objects into tree-like structures to represent part-whole hierarchies**. It allows clients to treat individual objects and compositions of objects uniformly.
+Паттерн проектирования Composite — это структурный паттерн проектирования, который **позволяет компоновать объекты в древовидные структуры для представления иерархий часть-целое**. Он позволяет клиентам обращаться с отдельными объектами и композициями объектов единообразно.
 
 ### Проблемы, которые решает
 
+Паттерн проектирования Composite решает такие проблемы как:
 
-The composite design pattern solves problems like:
-
-1. **Represent a part-whole hierarchy so that clients can treat part and whole objects uniformly**
-2. **Represent a part-whole hierarchy as tree structure**
-3. **Avoid having to treat `Part` and `Whole` objects separately** - This complicates client code
+1. **Представить иерархию часть-целое так, чтобы клиенты могли обращаться с частями и целыми объектами единообразно**
+2. **Представить иерархию часть-целое в виде древовидной структуры**
+3. **Избежать необходимости обрабатывать объекты `Part` и `Whole` отдельно** — это усложняет клиентский код
 
 ### Решение
 
+Решения, которые описывает паттерн проектирования Composite:
 
-Solutions the Composite design pattern describes:
+- Определить унифицированный интерфейс **`Component`** для объектов-частей (`Leaf`) и объектов-целых (`Composite`)
+- Отдельные объекты **`Leaf`** реализуют интерфейс Component напрямую
+- Объекты **`Composite`** перенаправляют запросы своим дочерним компонентам
 
-- Define a unified **`Component`** interface for part (`Leaf`) objects and whole (`Composite`) objects
-- Individual **`Leaf`** objects implement the Component interface directly
-- **`Composite`** objects forward requests to their child components
-
-This enables clients to work through the Component interface to treat Leaf and Composite objects uniformly. Composite objects forward requests recursively downwards the tree structure.
+Это позволяет клиентам работать через интерфейс Component для единообразной обработки объектов Leaf и Composite. Объекты Composite рекурсивно перенаправляют запросы вниз по древовидной структуре.
 
 ### Объяснение
 
+**Объяснение**:
 
-**Explanation**:
-
-- **`Employee`/`ViewComponent`** is the component interface providing uniform methods
-- **`Developer`/`TextView`** is a leaf that implements the interface directly
-- **`Manager`/`LinearLayout`** is a composite containing list of components
-- Composite forwards operations to children, aggregating results
-- **Android**: View hierarchy (ViewGroup/View), menu structures, drawable layers
+- **`Employee`/`ViewComponent`** — это интерфейс компонента, предоставляющий единообразные методы
+- **`Developer`/`TextView`** — это лист, который реализует интерфейс напрямую
+- **`Manager`/`LinearLayout`** — это композит, содержащий список компонентов
+- Композит перенаправляет операции дочерним элементам, агрегируя результаты
+- **Android**: иерархия View (ViewGroup/View), структуры меню, слои drawable
 
 ### Pros (Преимущества)
 
-
-1. **Flexibility** - Easy to add new component types
-2. **Simplified client code** - Treat individual and composite objects the same
-3. **Improved scalability** - Build complex hierarchies easily
-4. **Reduced coupling** - Clients don't know if working with leaf or composite
-5. **Open/Closed Principle** - Add new components without changing existing code
+1. **Гибкость** — легко добавлять новые типы компонентов
+2. **Упрощенный клиентский код** — обращаться с отдельными и композитными объектами одинаково
+3. **Улучшенная масштабируемость** — легко строить сложные иерархии
+4. **Сниженная связанность** — клиенты не знают, работают ли они с листом или композитом
+5. **Принцип открытости/закрытости** — добавлять новые компоненты без изменения существующего кода
 
 ### Cons (Недостатки)
 
-
-1. **Increased complexity** - More complex for simple cases
-2. **Performance overhead** - Extra layers of abstraction
-3. **Limited functionality** - Best for similar objects in hierarchy
-4. **Overly general** - Component interface may be too general
+1. **Увеличенная сложность** — более сложно для простых случаев
+2. **Накладные расходы производительности** — дополнительные уровни абстракции
+3. **Ограниченная функциональность** — лучше всего для похожих объектов в иерархии
+4. **Слишком общий** — интерфейс компонента может быть слишком общим
 
 
 ---

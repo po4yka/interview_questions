@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/memory-management, android/performance, glide, lrucache, memory-management, memory-optimization, optimization, performance, weakreference, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-dagger-component-dependencies--di--hard, q-list-to-detail-navigation--android--medium, q-how-to-fix-a-bad-element-layout--android--easy]
 ---
 
 # Question (EN)

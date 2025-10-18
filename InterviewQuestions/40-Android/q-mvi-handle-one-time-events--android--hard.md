@@ -4,6 +4,8 @@ title: "Mvi Handle One Time Events / Обработка одноразовых �
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-view-methods-and-their-purpose--android--medium, q-annotation-processing--android--medium, q-what-each-android-component-represents--android--easy]
 created: 2025-10-15
 tags: [android/architecture-mvi, android/lifecycle, architecture-mvi, lifecycle, livedata, mvi, platform/android, sharedflow, stateflow, viewmodel, difficulty/hard]
 ---

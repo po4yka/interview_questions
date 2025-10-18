@@ -4,8 +4,11 @@ title: "How To Pass Data From One Activity To Another / Как передать 
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-cicd-deployment-automation--devops--medium, q-how-is-navigation-implemented--android--medium, q-mlkit-text-recognition--ml--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How to pass data from one Activity to another?
 

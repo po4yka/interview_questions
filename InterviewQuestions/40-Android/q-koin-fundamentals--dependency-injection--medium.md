@@ -4,6 +4,8 @@ title: "Koin Fundamentals / Основы Koin"
 topic: dependency-injection
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-register-broadcastreceiver-to-receive-messages--android--medium, q-compositionlocal-compose--android--hard, q-recomposition-choreographer--android--hard]
 created: 2025-10-15
 tags: [injection, koin, architecture, service-locator, difficulty/medium]
 ---
@@ -1101,3 +1103,9 @@ class MyActivity : AppCompatActivity() {
 ### Резюме
 
 Koin — прагматичный легковесный DI фреймворк для Kotlin с service locator паттерном и runtime разрешением. Предлагает простой DSL, без генерации кода, быстрые сборки, поддержку Factory/Single/ViewModel и KMM. Trade-offs: runtime ошибки vs compile-time безопасность, чуть медленнее performance, но быстрее разработка и сборка.
+
+## Related Questions
+
+- [[q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]]
+- [[q-compositionlocal-compose--android--hard]]
+- [[q-recomposition-choreographer--android--hard]]

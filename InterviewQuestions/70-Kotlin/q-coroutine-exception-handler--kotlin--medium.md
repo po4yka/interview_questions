@@ -5,16 +5,19 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - exception-handling
   - error-handling
   - ceh
 moc: moc-kotlin
-related:   - q-common-coroutine-mistakes--kotlin--medium
+related: [q-channels-basics-types--kotlin--medium, q-callback-to-coroutine-conversion--kotlin--medium, q-custom-dispatchers-limited-parallelism--kotlin--hard]
+  - q-common-coroutine-mistakes--kotlin--medium
   - q-debugging-coroutines-techniques--kotlin--medium
   - q-suspend-cancellable-coroutine--kotlin--hard
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - exception-handling
   - ceh
   - error-handling

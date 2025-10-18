@@ -4,6 +4,8 @@ title: "V Chyom Raznitsa Mezhdu Fragmentmanager I Fragmenttransaction / В че�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-is-intent--android--easy, q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium, q-why-use-fragments-when-we-have-activities--android--medium]
 created: 2025-10-15
 tags: [languages, android, difficulty/medium]
 ---

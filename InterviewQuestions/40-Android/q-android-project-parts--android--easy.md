@@ -4,6 +4,8 @@ title: "Android Project Parts / Части Android проекта"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-what-is-workmanager--android--medium, q-how-to-save-and-apply-theme-settings--android--medium, q-implement-voice-video-call--android--hard]
 created: 2025-10-15
 tags: [android/project-structure, assets, gradle, manifest, project-structure, resources, difficulty/easy]
 ---
@@ -672,3 +674,8 @@ sdk.dir=/Users/username/Library/Android/sdk
 - **res/** - компилируемые ресурсы, доступ через R.id
 - **assets/** - сырые файлы, доступ через AssetManager
 
+## Related Questions
+
+- [[q-what-is-workmanager--android--medium]]
+- [[q-how-to-save-and-apply-theme-settings--android--medium]]
+- [[q-implement-voice-video-call--android--hard]]

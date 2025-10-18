@@ -4,6 +4,8 @@ title: "Custom View Animation / Анимация кастомных View"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-each-android-component-represents--android--easy, q-room-type-converters-advanced--room--medium, q-looper-empty-queue-behavior--android--medium]
 created: 2025-10-15
 tags: [views, animation, valueanimator, performance, difficulty/medium]
 ---

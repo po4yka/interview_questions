@@ -4,6 +4,8 @@ title: "What Event Is Called When User Presses The Screen / Какое собы�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-cicd-pipeline-android--android--medium, q-kotlin-context-receivers--kotlin--hard, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
 tags: [event handling, android, ui, touch-events, difficulty/medium]
 ---
@@ -369,3 +371,9 @@ Key points:
 ## Ответ (RU)
 
 Система вызывает: dispatchTouchEvent() — распределяет событие. onTouchEvent() — обрабатывает вью, если не перехвачено. onClick() — вызывается, если был ACTION_UP без движения.
+
+## Related Questions
+
+- [[q-cicd-pipeline-android--android--medium]]
+- [[q-kotlin-context-receivers--kotlin--hard]]
+- [[q-what-is-activity-and-what-is-it-used-for--android--medium]]

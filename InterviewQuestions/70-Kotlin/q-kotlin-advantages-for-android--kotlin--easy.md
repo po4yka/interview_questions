@@ -4,8 +4,11 @@ title: "Kotlin Advantages For Android / Преимущества Kotlin для A
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-interface-properties--programming-languages--medium, q-kotlin-inline-functions--kotlin--medium, q-delegates-compilation--kotlin--hard]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - android
   - language-features
 ---
@@ -114,3 +117,9 @@ lifecycleScope.launch {
 **8. Официальная поддержка Google**
 
 С 2017 года Kotlin является официально поддерживаемым языком для разработки Android.
+
+## Related Questions
+
+- [[q-interface-properties--programming-languages--medium]]
+- [[q-kotlin-inline-functions--kotlin--medium]]
+- [[q-delegates-compilation--kotlin--hard]]

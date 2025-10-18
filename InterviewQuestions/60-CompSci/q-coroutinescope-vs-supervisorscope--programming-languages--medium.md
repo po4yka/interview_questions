@@ -4,8 +4,11 @@ title: "Coroutinescope Vs Supervisorscope / Coroutinescope против Supervis
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-java-marker-interfaces--programming-languages--medium, q-what-is-coroutinescope--programming-languages--medium, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # CoroutineScope vs SupervisorScope
 
@@ -305,3 +308,9 @@ class ScopeBestPractices {
 ## Ответ (RU)
 
 Оба создают новый scope, но различие в обработке ошибок: coroutineScope {} – если одна дочерняя корутина упадет, отменяются все остальные. supervisorScope {} – если одна корутина упадет, остальные продолжают работу.
+
+## Related Questions
+
+- [[q-java-marker-interfaces--programming-languages--medium]]
+- [[q-what-is-coroutinescope--programming-languages--medium]]
+- [[q-flow-map-operator--programming-languages--medium]]

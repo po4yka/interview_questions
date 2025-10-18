@@ -4,6 +4,8 @@ title: "Fragment Vs Activity Lifecycle"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-is-layoutinflater-a-singleton-and-why--programming-languages--medium, q-how-to-write-recyclerview-cache-ahead--android--medium, q-privacy-sandbox-fledge--privacy--hard]
 created: 2025-10-15
 tags: [fragments, lifecycle, difficulty/medium]
 ---

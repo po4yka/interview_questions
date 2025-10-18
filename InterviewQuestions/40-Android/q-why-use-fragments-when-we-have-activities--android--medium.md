@@ -4,6 +4,8 @@ title: "Why Use Fragments When We Have Activities / Зачем использо�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-accessibility-text-scaling--accessibility--medium, q-react-native-comparison--multiplatform--medium, q-stop-service--android--medium]
 created: 2025-10-15
 tags: [android/fragments, android/architecture, fragments, activity, difficulty/medium]
 ---

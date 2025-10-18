@@ -4,6 +4,8 @@ title: "Single Activity Pros Cons / Преимущества и недостат
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-hilt-assisted-injection--di--medium, q-cicd-pipeline-android--android--medium, q-flaky-test-prevention--testing--medium]
 created: 2025-10-15
 tags: [android, android/activity, android/fragment, android/performance-startup, fragment, fragments, performance, performance-startup, platform/android, single-activity, difficulty/medium]
 ---

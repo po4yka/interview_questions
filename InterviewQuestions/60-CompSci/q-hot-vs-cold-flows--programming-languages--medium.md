@@ -4,8 +4,11 @@ title: "Hot Vs Cold Flows"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-how-suspend-function-detects-suspension--programming-languages--hard, q-inheritance-vs-composition--oop--medium, q-iterator-concept--programming-languages--easy]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Hot vs Cold Flows
 
@@ -303,3 +306,9 @@ class ViewModel {
 ## Ответ (RU)
 
 Холодные (cold) — начинают генерировать данные только после подписки Например Flow Observable Горячие (hot) — генерируют данные независимо от подписчиков Например SharedFlow LiveData Broadcast
+
+## Related Questions
+
+- [[q-how-suspend-function-detects-suspension--programming-languages--hard]]
+- [[q-inheritance-vs-composition--oop--medium]]
+- [[q-iterator-concept--programming-languages--easy]]

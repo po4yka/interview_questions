@@ -11,7 +11,7 @@ tags:
   - interview
   - scalability
 moc: moc-system-design
-related:
+related: [q-cap-theorem-distributed-systems--system-design--hard, q-caching-strategies--system-design--medium, q-message-queues-event-driven--system-design--medium]
   - q-database-sharding-partitioning--system-design--hard
   - q-caching-strategies--system-design--medium
   - q-rest-api-design-best-practices--system-design--medium

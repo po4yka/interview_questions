@@ -4,6 +4,8 @@ title: "Fast Chat Rendering / Быстрый рендеринг чата"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-baseline-profiles-optimization--performance--medium, q-16kb-dex-page-size--android--medium, q-how-compose-draws-on-screen--android--hard]
 created: 2025-10-15
 tags: [android/performance, android/recyclerview, chat, diffutil, flow, optimization, paging, performance, recyclerview, room, difficulty/hard]
 ---
@@ -617,3 +619,8 @@ binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(
 3. **Оптимизировать загрузку изображений** - Glide или Coil с кэшированием
 4. **Использовать офлайн-кэш** - Room + Flow/LiveData для offline-first подхода
 
+## Related Questions
+
+- [[q-baseline-profiles-optimization--performance--medium]]
+- [[q-16kb-dex-page-size--android--medium]]
+- [[q-how-compose-draws-on-screen--android--hard]]

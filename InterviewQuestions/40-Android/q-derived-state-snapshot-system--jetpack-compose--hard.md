@@ -4,6 +4,8 @@ title: "Derived State Snapshot System / Derived State и система Snapshot
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-optimize-memory-usage-android--android--medium, q-robolectric-vs-instrumented--testing--medium, q-compose-testing--android--medium]
 created: 2025-10-15
 tags: [compose, state, snapshot, optimization, derived-state, performance, difficulty/hard]
 ---

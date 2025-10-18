@@ -4,6 +4,8 @@ title: "Kotlin Final Modifier / Модификатор final в Kotlin"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-infix-functions--kotlin--medium, q-list-set-map-differences--programming-languages--easy, q-flowon-operator-context-switching--kotlin--hard]
 created: 2025-10-15
 tags:
   - class-modifiers
@@ -85,3 +87,8 @@ class Derived : OpenClass()
 - Этот дизайн поощряет композицию над наследованием
 - Sealed классы — это другой способ контроля иерархии наследования
 
+## Related Questions
+
+- [[q-infix-functions--kotlin--medium]]
+- [[q-list-set-map-differences--programming-languages--easy]]
+- [[q-flowon-operator-context-switching--kotlin--hard]]

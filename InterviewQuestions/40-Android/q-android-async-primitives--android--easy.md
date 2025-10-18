@@ -4,6 +4,8 @@ title: "Android Async Primitives / Примитивы асинхронности
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-why-was-the-lifecycle-library-created--android--hard, q-room-paging3-integration--room--medium, q-why-separate-ui-and-business-logic--android--easy]
 created: 2025-10-15
 tags: [async, asynctask, coroutines, executorservice, handler, rxjava, threading, difficulty/easy]
 ---
@@ -531,3 +533,8 @@ For new Android development, prefer Coroutines + Flow + WorkManager combination.
 
 Для нового Android приложения рекомендуется комбинация Coroutines + Flow + WorkManager.
 
+## Related Questions
+
+- [[q-why-was-the-lifecycle-library-created--android--hard]]
+- [[q-room-paging3-integration--room--medium]]
+- [[q-why-separate-ui-and-business-logic--android--easy]]

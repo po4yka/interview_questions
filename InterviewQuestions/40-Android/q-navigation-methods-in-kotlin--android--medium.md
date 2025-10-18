@@ -4,6 +4,8 @@ title: "Navigation Methods In Kotlin / Методы навигации в Kotlin
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-cache-implementation-strategies--android--medium, q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy, q-how-does-activity-lifecycle-work--android--medium]
 created: 2025-10-15
 tags: [Intent, Jetpack Navigation Component, NavController, NavHostFragment, android, android/navigation, android/ui, navigation, ui, difficulty/medium]
 ---

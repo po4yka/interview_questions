@@ -5,13 +5,14 @@ topic: programming-languages
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - inheritance
+tags:
+  - inheritance
   - java
   - object-class
   - oop
   - programming-languages
 moc: moc-programming-languages
-related: []
+related: [q-abstract-factory-pattern--design-patterns--medium, q-flow-flatmap-operator--programming-languages--easy, q-mvi-pattern--architecture-patterns--hard]
 subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
 # От какого объекта наследуются все классы в Java?

@@ -5,15 +5,18 @@ topic: algorithms
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - algorithms
+tags:
+  - algorithms
   - sorting
   - quicksort
   - mergesort
   - complexity
 moc: moc-algorithms
-related:   - q-binary-search--algorithms--easy
+related: [q-binary-search-variants--algorithms--medium, q-advanced-graph-algorithms--algorithms--hard, q-graph-algorithms-bfs-dfs--algorithms--hard]
+  - q-binary-search--algorithms--easy
   - q-time-space-complexity--algorithms--easy
-subtopics:   - sorting
+subtopics:
+  - sorting
   - quicksort
   - mergesort
   - heapsort

@@ -4,6 +4,8 @@ title: "Launch Vs Async Await"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-visitor-pattern--design-patterns--hard, q-iterator-concept--programming-languages--easy, q-hot-vs-cold-flows--programming-languages--medium]
 created: 2025-10-15
 tags:
   - async
@@ -54,3 +56,8 @@ val result = async {
 
 Launch используется для запуска корутин без блокировки текущего потока и без получения результата выполнения. Он возвращает объект Job для управления корутиной. Async/await запускает корутину и возвращает результат через Deferred с помощью await. Основные отличия: launch не возвращает результат и используется для асинхронных задач без необходимости результата, async/await нужен когда требуется результат. Выбор зависит от необходимости получения результата асинхронной операции.
 
+## Related Questions
+
+- [[q-visitor-pattern--design-patterns--hard]]
+- [[q-iterator-concept--programming-languages--easy]]
+- [[q-hot-vs-cold-flows--programming-languages--medium]]

@@ -5,9 +5,10 @@ topic: android
 difficulty: hard
 status: draft
 created: 2025-10-13
-tags: - android
+tags:
+  - android
 moc: moc-android
-related: []
+related: [q-how-to-display-svg-string-as-a-vector-file--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard, q-compose-gesture-detection--jetpack-compose--medium]
 ---
 # Why might user data disappear during screen rotation?
 
@@ -478,3 +479,9 @@ Data disappears on rotation because:
 - SavedStateHandle
 - Configuration changes
 - retainInstance (deprecated)
+
+## Related Questions
+
+- [[q-how-to-display-svg-string-as-a-vector-file--android--medium]]
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]]
+- [[q-compose-gesture-detection--jetpack-compose--medium]]

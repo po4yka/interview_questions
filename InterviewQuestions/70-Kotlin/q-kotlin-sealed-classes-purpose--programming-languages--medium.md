@@ -4,8 +4,11 @@ title: "Kotlin Sealed Classes Purpose"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-null-checks-methods--programming-languages--easy, q-expect-actual-kotlin--kotlin--medium, q-kotlin-reified-types--kotlin--hard]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - oop
   - programming-languages
   - sealed-classes
@@ -94,3 +97,8 @@ when (result) {
 - Лучше, чем использовать несколько nullable полей
 - Идеально для конечных автоматов, ответов API, навигации
 
+## Related Questions
+
+- [[q-kotlin-null-checks-methods--programming-languages--easy]]
+- [[q-expect-actual-kotlin--kotlin--medium]]
+- [[q-kotlin-reified-types--kotlin--hard]]

@@ -4,6 +4,8 @@ title: "What Are Px Dp Sp / Что такое px dp и sp"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-transaction-too-large-exception--android--medium, q-fragment-basics--android--easy, q-how-to-add-custom-attributes-to-custom-view--programming-languages--medium]
 created: 2025-10-15
 tags: [dp, sp, android, ui, measurement-units, difficulty/medium]
 ---
@@ -413,3 +415,9 @@ px (пиксели) – физические точки экрана. dp (densit
 
 -   `https://developer.android.com/training/multiscreen/screendensities` — Screen densities
 -   `https://developer.android.com/guide/practices/screens_support` — Support different screens
+
+## Related Questions
+
+- [[q-transaction-too-large-exception--android--medium]]
+- [[q-fragment-basics--android--easy]]
+- [[q-how-to-add-custom-attributes-to-custom-view--programming-languages--medium]]

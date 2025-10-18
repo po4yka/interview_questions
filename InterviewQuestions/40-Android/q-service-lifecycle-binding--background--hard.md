@@ -4,6 +4,8 @@ title: "Service Lifecycle Binding / Жизненный цикл и привяз�
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-how-to-add-custom-attributes-to-custom-view--android--medium, q-migration-to-compose--android--medium, q-viewmodel-pattern--android--easy]
 created: 2025-10-15
 tags: [Kotlin, Background, Service, IPC, difficulty/hard]
 ---

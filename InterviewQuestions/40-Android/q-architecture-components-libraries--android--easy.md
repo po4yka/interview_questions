@@ -4,6 +4,8 @@ title: "Architecture Components Libraries / Библиотеки Architecture Co
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-mvp-pattern--android--medium, q-what-can-be-done-through-composer--android--medium, q-custom-viewgroup-layout--custom-views--hard]
 created: 2025-10-15
 tags: [android/architecture-clean, android/lifecycle, architecture-clean, databinding, lifecycle, livedata, navigation, paging, platform/android, room, viewmodel, workmanager, difficulty/easy]
 ---

@@ -4,6 +4,8 @@ title: "Which Layout For Large List / Какой layout для большого 
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-cicd-automated-testing--devops--medium, q-what-do-you-know-about-modifications--android--medium, q-what-events-are-activity-methods-tied-to--android--medium]
 created: 2025-10-15
 tags: [android/recyclerview, android/ui, layout, recyclerview, ui, difficulty/easy]
 ---

@@ -4,8 +4,11 @@ title: "Kotlin Override Keyword / Ключевое слово override в Kotlin
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-contracts-smart-casts--kotlin--hard, q-equality-operators-kotlin--kotlin--easy, q-coroutine-job-lifecycle--kotlin--medium]
 created: 2025-10-15
-tags: - abstract
+tags:
+  - abstract
   - inheritance
   - keywords
   - kotlin
@@ -134,3 +137,8 @@ class Derived : Base() {
 - Kotlin: `override` обязателен (ключевое слово)
 - Kotlin требует, чтобы родительские методы были `open` или `abstract`
 
+## Related Questions
+
+- [[q-kotlin-contracts-smart-casts--kotlin--hard]]
+- [[q-equality-operators-kotlin--kotlin--easy]]
+- [[q-coroutine-job-lifecycle--kotlin--medium]]

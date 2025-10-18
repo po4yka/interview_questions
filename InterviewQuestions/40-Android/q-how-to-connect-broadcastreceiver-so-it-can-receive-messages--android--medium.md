@@ -4,8 +4,11 @@ title: "How To Connect Broadcastreceiver So It Can Receive Messages / Как п�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-state-hoisting-compose--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium, q-memory-leak-vs-oom-android--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How to connect BroadcastReceiver so it can receive messages?
 

@@ -4,6 +4,8 @@ title: "Mockk Advanced Features / Продвинутые возможности 
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-mvp-pattern--android--medium, q-why-use-diffutil--android--medium, q-compositionlocal-compose--android--hard]
 created: 2025-10-15
 tags: [mockk, mocking, kotlin, unit-testing, coroutines, difficulty/medium]
 ---

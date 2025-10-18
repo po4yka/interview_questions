@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-nothing-instances--programming-languages--easy, q-semaphore-rate-limiting--kotlin--medium, q-data-sealed-usage--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-05

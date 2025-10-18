@@ -18,7 +18,7 @@ source_note: easy_kotlin Telegram channel
 # Workflow & relations
 status: draft
 moc: moc-tools
-related:
+related: [q-git-merge-vs-rebase--tools--medium, q-git-pull-vs-fetch--tools--easy]
   - c-git
   - c-version-control
 

@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-contracts-smart-casts--kotlin--hard, q-kotlin-init-block--kotlin--easy, q-kotlin-generic-function-syntax--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05

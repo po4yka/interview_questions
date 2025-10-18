@@ -4,6 +4,8 @@ title: "Polling Implementation / Polling Реализация"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-dagger-build-time-optimization--android--medium, q-baseline-profiles-optimization--performance--medium, q-save-data-outside-fragment--android--medium]
 created: 2025-10-15
 tags: [polling, background-tasks, coroutines, workmanager, difficulty/medium]
 ---
@@ -586,4 +588,8 @@ fun pollWhenOnline(context: Context): Flow<Data> = flow {
 **Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
 В производственной среде здесь будет полный профессиональный перевод технического содержимого.
 
+## Related Questions
 
+- [[q-dagger-build-time-optimization--android--medium]]
+- [[q-baseline-profiles-optimization--performance--medium]]
+- [[q-save-data-outside-fragment--android--medium]]

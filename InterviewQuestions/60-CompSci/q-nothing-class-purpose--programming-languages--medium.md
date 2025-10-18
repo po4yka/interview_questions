@@ -4,8 +4,11 @@ title: "Nothing Class Purpose / Назначение класса Nothing"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-observer-pattern--design-patterns--medium, q-launch-vs-async-await--programming-languages--medium, q-what-happens-to-unneeded-objects--programming-languages--easy]
 created: 2025-10-15
-tags: - control-flow
+tags:
+  - control-flow
   - exceptions
   - kotlin
   - nothing
@@ -373,3 +376,8 @@ fun findUser(id: Int): User {
 
 Класс Nothing имеет уникальное и очень специфическое назначение. Он представляет тип, который не имеет значений и используется для обозначения операций, которые никогда не завершаются нормально. Вот несколько ключевых причин его полезности: 1) Обозначение недостижимого кода. В случаях когда логика приложения предусматривает что определённая функция или участок кода никогда не вернёт управление (например всегда выбрасывает исключение или выполняет бесконечный цикл) указание возвращаемого типа Nothing ясно демонстрирует этот намеренный аспект поведения функции. 2) Помощь в статическом анализе кода - Компилятор и инструменты статического анализа могут использовать информацию о том что определённый участок кода имеет тип Nothing для вывода о том что последующий код недостижим. Это может помочь в оптимизации кода и предотвращении ошибок. 3) Улучшение читабельности и понимания кода - Его использование для указания что функция не возвращает ничего и не должна завершиться делает код более понятным для других разработчиков облегчая понимание логики приложения.
 
+## Related Questions
+
+- [[q-observer-pattern--design-patterns--medium]]
+- [[q-launch-vs-async-await--programming-languages--medium]]
+- [[q-what-happens-to-unneeded-objects--programming-languages--easy]]

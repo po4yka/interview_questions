@@ -4,9 +4,11 @@ title: "Accessibility Talkback / Доступность и TalkBack"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
 created: 2025-10-11
 tags: [accessibility, talkback, screen-reader, assistive-technology, difficulty/medium]
-related:   - q-accessibility-compose--accessibility--medium
+related: [q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--medium, q-touch-event-handling-custom-views--custom-views--medium, q-compose-stability-skippability--jetpack-compose--hard]
+  - q-accessibility-compose--accessibility--medium
   - q-accessibility-testing--accessibility--medium
   - q-custom-view-accessibility--custom-views--medium
 ---

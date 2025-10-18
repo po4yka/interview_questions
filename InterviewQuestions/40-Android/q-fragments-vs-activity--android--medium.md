@@ -4,6 +4,8 @@ title: "Fragments Vs Activity / Fragments против Activity"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-koin-scope-management--dependency-injection--medium, q-why-separate-ui-and-business-logic--android--easy, q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy]
 created: 2025-10-15
 tags: [fragments, ui-architecture, difficulty/medium]
 ---

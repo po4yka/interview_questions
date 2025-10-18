@@ -4,6 +4,8 @@ title: "Room Type Converters"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-migration-to-compose--android--medium, q-how-does-activity-lifecycle-work--android--medium, q-context-types-android--android--medium]
 created: 2025-10-15
 tags: [room, typeconverter, database, custom-types, difficulty/medium]
 ---

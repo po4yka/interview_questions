@@ -4,6 +4,8 @@ title: "Main Causes Ui Lag / Основные причины тормозов UI
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-reduce-apk-size-techniques--android--medium, q-mvvm-pattern--android--medium, q-graphql-vs-rest--networking--easy]
 created: 2025-10-15
 tags: [android/performance, android/ui, animations, images, layouts, main-thread, optimization, performance, threading, ui, difficulty/medium]
 ---

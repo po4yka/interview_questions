@@ -4,6 +4,8 @@ title: "Why Fragment Needs Separate Callback For Ui Creation / Почему Frag
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-how-to-write-recyclerview-so-that-it-caches-ahead--android--medium, q-shared-preferences--android--easy, q-annotation-processing-android--android--medium]
 created: 2025-10-15
 tags: [android/fragments, android/lifecycle, fragments, lifecycle, difficulty/hard]
 ---

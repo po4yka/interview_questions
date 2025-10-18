@@ -4,6 +4,8 @@ title: "What To Do In Android Project To Start Drawing Ui On Screen / Что д�
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-sparsearray-optimization--android--medium, q-compose-performance-optimization--android--hard, q-how-to-pass-parameters-to-fragment--android--easy]
 created: 2025-10-15
 tags: [languages, difficulty/easy]
 ---
@@ -197,7 +199,163 @@ class MainActivity : AppCompatActivity() {
 
 ## Ответ (RU)
 
-Минимальные шаги: создать Activity как точку входа для UI установить content view в виде XML или программно созданного View убедиться что в манифесте указана MainActivity как LAUNCHER при запуске устройства система вызывает onCreate() и в этот момент UI привязывается к экрану
+Чтобы отобразить UI на экране в Android, необходимо: (1) Создать Activity как точку входа, (2) Установить content view с помощью XML layout или программно созданного View, (3) Объявить Activity в AndroidManifest.xml как LAUNCHER. При запуске приложения система вызывает `onCreate()` и UI прикрепляется к экрану.
+
+### Минимальные шаги
+
+1. **Создать Activity**
+2. **Установить content view** (XML или программно)
+3. **Зарегистрировать в AndroidManifest.xml**
+4. **Запустить приложение**
+
+### 1. Создание Activity
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Установить UI здесь
+        setContentView(R.layout.activity_main)
+    }
+}
+```
+
+### 2. Создание XML Layout
+
+```xml
+<!-- res/layout/activity_main.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello, Android!"
+        android:textSize="24sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click Me" />
+</LinearLayout>
+```
+
+### 3. Регистрация в AndroidManifest.xml
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.myapp">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.MyApp">
+
+        <!-- Main Activity - Точка входа -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <!-- LAUNCHER intent filter делает её точкой входа приложения -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
+```
+
+### Альтернатива: Программный UI (Без XML)
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Создание UI программно
+        val textView = TextView(this).apply {
+            text = "Hello, Android!"
+            textSize = 24f
+            gravity = Gravity.CENTER
+        }
+
+        setContentView(textView)
+    }
+}
+```
+
+### Подход с Jetpack Compose
+
+```kotlin
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            MaterialTheme {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Hello, Compose!",
+                        fontSize = 24.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(onClick = { /* action */ }) {
+                        Text("Click Me")
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+### Жизненный цикл UI
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // 1. Activity создана
+        setContentView(R.layout.activity_main)
+        // 2. UI прикреплён к окну
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // 3. Activity видна пользователю
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 4. Activity на переднем плане, пользователь может взаимодействовать
+    }
+}
+```
+
+### Ключевые моменты
+
+- **Activity** — это точка входа для UI
+- **setContentView()** прикрепляет UI к экрану
+- **onCreate()** — место, где инициализируется UI
+- **AndroidManifest.xml** объявляет структуру приложения
+- **LAUNCHER** intent filter отмечает стартовую activity
+
+### Резюме
+
+Для отображения UI в Android необходимо создать Activity, установить content view через `setContentView()` в методе `onCreate()`, и зарегистрировать Activity в AndroidManifest.xml с intent-filter LAUNCHER. При запуске приложения Android система автоматически создаёт Activity и отображает указанный UI на экране.
 
 ---
 

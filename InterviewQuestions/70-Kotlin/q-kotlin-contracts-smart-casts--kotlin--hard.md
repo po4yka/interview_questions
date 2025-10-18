@@ -4,8 +4,11 @@ title: "Kotlin Contracts Smart Casts / Контракты и smart casts в Kotl
 topic: kotlin
 difficulty: hard
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-delegation-by-restriction--programming-languages--medium, q-coroutine-cancellation-cooperation--kotlin--medium, q-flow-operators-deep-dive--kotlin--hard]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - contracts
   - smart-casts
   - type-system
@@ -615,3 +618,9 @@ fun isPositive(value: Int?): Boolean {
 3. Используйте для функций валидации
 
 Контракты — мощный инструмент для улучшения безопасности типов и умных приведений в Kotlin.
+
+## Related Questions
+
+- [[q-kotlin-delegation-by-restriction--programming-languages--medium]]
+- [[q-coroutine-cancellation-cooperation--kotlin--medium]]
+- [[q-flow-operators-deep-dive--kotlin--hard]]

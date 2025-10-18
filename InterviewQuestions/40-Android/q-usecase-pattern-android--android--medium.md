@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-baseline-profiles-optimization--performance--medium, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--medium, q-android-runtime-internals--android--hard]
 
 # Timestamps
 created: 2025-10-06

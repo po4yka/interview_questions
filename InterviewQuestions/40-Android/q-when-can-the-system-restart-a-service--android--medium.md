@@ -4,8 +4,11 @@ title: "When Can The System Restart A Service / Когда система мож
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-koin-scope-management--dependency-injection--medium, q-biometric-authentication--android--medium, q-android-jetpack-overview--android--easy]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 
 # Question (EN)

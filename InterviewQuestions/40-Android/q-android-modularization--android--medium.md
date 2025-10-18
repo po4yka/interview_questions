@@ -4,6 +4,8 @@ title: "Android Modularization / Модуляризация Android"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-custom-view-accessibility--custom-views--medium, q-room-relations-embedded--room--medium, q-compose-side-effects-launchedeffect-disposableeffect--android--hard]
 created: 2025-10-15
 tags: [modularization, architecture, multi-module, gradle, difficulty/medium]
 ---
@@ -115,3 +117,9 @@ app/
 **Резюме:**
 
 Модуляризация — это организация кодовой базы на слабо связанные модули для улучшения переиспользуемости, масштабируемости, тестируемости и времени сборки. Ключевые преимущества включают строгий контроль видимости, настраиваемую доставку функций и лучшее разделение ответственности. Важно найти правильный баланс детализации модулей.
+
+## Related Questions
+
+- [[q-custom-view-accessibility--custom-views--medium]]
+- [[q-room-relations-embedded--room--medium]]
+- [[q-compose-side-effects-launchedeffect-disposableeffect--android--hard]]

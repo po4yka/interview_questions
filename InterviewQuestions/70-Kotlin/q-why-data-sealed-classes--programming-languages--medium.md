@@ -4,6 +4,8 @@ title: "Why Data Sealed Classes"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-visibility-modifiers--kotlin--easy, q-fan-in-fan-out--kotlin--hard, q-kotlin-crossinline--programming-languages--hard]
 created: 2025-10-15
 tags:
   - programming-languages
@@ -104,3 +106,10 @@ fun handle(result: Result) = when (result) {
 - ADTs (Алгебраические типы данных)
 
 ---
+
+## Related Questions
+
+- [[q-kotlin-visibility-modifiers--kotlin--easy]]
+- [[q-fan-in-fan-out--kotlin--hard]]
+- [[q-kotlin-crossinline--programming-languages--hard]]
+

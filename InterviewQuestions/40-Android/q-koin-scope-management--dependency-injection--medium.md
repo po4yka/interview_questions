@@ -4,6 +4,8 @@ title: "Koin Scope Management / Koin Scope Управление"
 topic: dependency-injection
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-display-snackbar-or-toast-based-on-results--android--medium, q-stable-classes-compose--android--hard, q-what-methods-redraw-views--android--medium]
 created: 2025-10-15
 tags: [injection, koin, scopes, lifecycle, difficulty/medium]
 ---
@@ -774,3 +776,9 @@ Koin scopes предоставляют lifecycle-aware управление за
 - **Безопасность памяти** - предотвращает утечки через правильную утилизацию
 
 Используйте scopes для соответствия времени жизни зависимостей жизненному циклу компонентов, предотвращения утечек памяти и организации связанных зависимостей.
+
+## Related Questions
+
+- [[q-how-to-display-snackbar-or-toast-based-on-results--android--medium]]
+- [[q-stable-classes-compose--android--hard]]
+- [[q-what-methods-redraw-views--android--medium]]

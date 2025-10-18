@@ -4,6 +4,8 @@ title: "What Is Workmanager / Что такое WorkManager"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-which-event-is-called-when-user-touches-screen--android--medium, q-mvvm-pattern--android--medium, q-room-fts-full-text-search--room--hard]
 created: 2025-10-15
 tags: [workmanager, background-work, jetpack, architecture, scheduled-tasks, difficulty/medium]
 ---
@@ -650,3 +652,9 @@ WorkManager — это Jetpack библиотека для откладывае�
 - [WorkManager Basics - Medium](https://medium.com/androiddevelopers/workmanager-basics-beba51e94048)
 - [Introducing WorkManager - Medium](https://medium.com/androiddevelopers/introducing-workmanager-2083bcfc4712)
 - [Android WorkManager Tutorial - AndroidWave](https://androidwave.com/android-workmanager-tutorial/)
+
+## Related Questions
+
+- [[q-which-event-is-called-when-user-touches-screen--android--medium]]
+- [[q-mvvm-pattern--android--medium]]
+- [[q-room-fts-full-text-search--room--hard]]

@@ -4,6 +4,8 @@ title: "Shared Element Transitions / Переходы с общими элеме
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium, q-workmanager-advanced--background--medium]
 created: 2025-10-15
 tags: [compose, animations, navigation, transitions, shared-elements, hero-animations, difficulty/hard]
 ---

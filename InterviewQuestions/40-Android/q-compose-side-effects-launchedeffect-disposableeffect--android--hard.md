@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [jetpack-compose, side-effects, coroutines, lifecycle, difficulty/hard]
 moc: moc-android
-related: []
+related: [q-how-to-create-chat-lists-from-a-ui-perspective--android--hard, q-why-diffutil-needed--android--medium, q-what-does-itemdecoration-do--android--medium]
 ---
 # Side-эффекты в Compose: LaunchedEffect vs DisposableEffect
 

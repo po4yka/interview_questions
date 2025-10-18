@@ -4,19 +4,24 @@ title: Resource Cleanup in Coroutines / Очистка Ресурсов в Ко�
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-data-class-requirements--programming-languages--medium, q-channel-buffer-strategies-comparison--kotlin--hard, q-statein-sharein-flow--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - resource-cleanup
   - try-finally
   - noncancellable
   - cancellation
   - difficulty/medium
-language_tags:   - en
+language_tags:
+  - en
   - ru
 original_language: en
 source: Kotlin Coroutines Interview Questions PDF
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - resource-management
   - cancellation
   - cleanup
@@ -652,3 +657,9 @@ try {
 ---
 
 **Source**: Kotlin Coroutines Interview Questions for Android Developers PDF
+
+## Related Questions
+
+- [[q-data-class-requirements--programming-languages--medium]]
+- [[q-channel-buffer-strategies-comparison--kotlin--hard]]
+- [[q-statein-sharein-flow--kotlin--medium]]

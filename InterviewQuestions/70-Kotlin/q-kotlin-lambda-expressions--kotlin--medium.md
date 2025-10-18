@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository - adapted from fun
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-dispatchers-unconfined--kotlin--medium, q-withcontext-use-cases--kotlin--medium, q-coroutine-timeout-withtimeout--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05

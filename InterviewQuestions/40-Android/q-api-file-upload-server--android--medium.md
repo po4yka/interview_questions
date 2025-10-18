@@ -4,6 +4,8 @@ title: "Api File Upload Server / Загрузка файлов на сервер
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-why-multithreading-tools--android--easy, q-notification-channels-android--android--medium, q-how-jetpack-compose-works--programming-languages--medium]
 created: 2025-10-15
 tags: [android/networking, file-upload, http, multipart, networking, okhttp, retrofit, difficulty/medium]
 ---

@@ -4,8 +4,11 @@ title: "How Does The Main Thread Work / Как работает главный �
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-which-layout-allows-views-to-overlap--android--easy, q-how-does-jetpack-compose-work--android--medium, q-what-is-known-about-view-lifecycles--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How does the main thread work?
 
@@ -248,3 +251,9 @@ The main thread operates on a message queue pattern (Looper), processing events 
 - Coroutines and Dispatchers
 - Thread safety
 - Performance optimization
+
+## Related Questions
+
+- [[q-which-layout-allows-views-to-overlap--android--easy]]
+- [[q-how-does-jetpack-compose-work--android--medium]]
+- [[q-what-is-known-about-view-lifecycles--android--medium]]

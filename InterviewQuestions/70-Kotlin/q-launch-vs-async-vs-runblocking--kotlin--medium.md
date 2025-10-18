@@ -4,8 +4,11 @@ title: "Launch Vs Async Vs Runblocking / Launch против Async против 
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-executor-service-java--java--medium, q-coroutine-memory-leak-detection--kotlin--hard, q-list-vs-sequence--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - launch
   - async
@@ -726,3 +729,9 @@ class DataLoaderTest {
     }
 }
 ```
+
+## Related Questions
+
+- [[q-executor-service-java--java--medium]]
+- [[q-coroutine-memory-leak-detection--kotlin--hard]]
+- [[q-list-vs-sequence--kotlin--medium]]

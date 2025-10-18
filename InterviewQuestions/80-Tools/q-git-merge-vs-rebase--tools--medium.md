@@ -4,18 +4,23 @@ title: "Git Merge vs Rebase"
 topic: tools
 difficulty: medium
 status: draft
+moc: moc-tools
+related: [q-git-squash-commits--tools--medium, q-git-pull-vs-fetch--tools--easy]
 created: 2025-10-15
-tags: - git
+tags:
+  - git
   - merge
   - rebase
   - version-control
   - workflow
   - tools
   - difficulty/medium
-language_tags:   - en
+language_tags:
+  - en
   - ru
 original_language: ru
-subtopics:   - git
+subtopics:
+  - git
   - merge
   - rebase
   - version-control
@@ -684,3 +689,8 @@ git revert -m 1 <merge-commit-hash>
 ---
 
 **Source**: Original content
+
+## Related Questions
+
+- [[q-git-squash-commits--tools--medium]]
+- [[q-git-pull-vs-fetch--tools--easy]]

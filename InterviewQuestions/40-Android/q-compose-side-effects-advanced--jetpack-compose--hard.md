@@ -4,6 +4,8 @@ title: "Compose Side Effects Advanced / Побочные эффекты Compose 
 topic: jetpack-compose
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-why-user-data-may-disappear-on-screen-rotation--android--hard, q-how-to-fix-a-bad-element-layout--android--easy, q-how-to-draw-ui-without-xml--programming-languages--easy]
 created: 2025-10-15
 tags: [compose, side-effects, lifecycle, launched-effect, difficulty/hard]
 ---

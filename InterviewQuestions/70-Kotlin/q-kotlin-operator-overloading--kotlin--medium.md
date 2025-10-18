@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-internal-modifier--programming-languages--medium, q-custom-dispatchers-limited-parallelism--kotlin--hard, q-kotlin-sealed-classes-features--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-05

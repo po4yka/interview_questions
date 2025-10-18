@@ -4,8 +4,11 @@ title: "Garbage Collector Roots / Корни Garbage Collector"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-extension-properties--programming-languages--medium, q-java-lambda-type--programming-languages--easy, q-inheritance-vs-composition--oop--medium]
 created: 2025-10-15
-tags: - garbage-collection
+tags:
+  - garbage-collection
   - gc-roots
   - jvm
   - kotlin
@@ -204,3 +207,8 @@ object Cache {
 
 GC Roots — это **начальные точки** для сборки мусора. Объекты, достижимые из GC Roots, **остаются живыми**. Объекты, не достижимые, являются **мусором** и будут собраны. Основные типы GC Roots: локальные переменные активных методов, статические поля загруженных классов, активные потоки и JNI ссылки. Понимание GC Roots важно для предотвращения утечек памяти и оптимизации использования памяти.
 
+## Related Questions
+
+- [[q-extension-properties--programming-languages--medium]]
+- [[q-java-lambda-type--programming-languages--easy]]
+- [[q-inheritance-vs-composition--oop--medium]]

@@ -18,7 +18,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140029
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-data-sealed-usage--programming-languages--medium, q-kotlin-null-safety--programming-languages--medium, q-data-class-detailed--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12

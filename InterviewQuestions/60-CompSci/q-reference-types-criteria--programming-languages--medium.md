@@ -4,8 +4,11 @@ title: "Reference Types Criteria / Критерии типов ссылок"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-xml-acronym--programming-languages--easy, q-interface-vs-abstract-class--programming-languages--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium]
 created: 2025-10-15
-tags: - best-practices
+tags:
+  - best-practices
   - design
   - immutability
   - kotlin
@@ -152,3 +155,8 @@ open class BaseEntity {
 
 Ссылочные типы в Kotlin: неизменяемые, если это требуется по архитектуре; nullable или not-null — в зависимости от требований; должны реализовывать equals, hashCode и toString особенно если используются в коллекциях; быть легковесными если часто копируются; желательно final или sealed если поведение фиксировано
 
+## Related Questions
+
+- [[q-xml-acronym--programming-languages--easy]]
+- [[q-interface-vs-abstract-class--programming-languages--medium]]
+- [[q-linkedlist-arraylist-insert-behavior--programming-languages--medium]]

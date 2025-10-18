@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-array-vs-list-kotlin--kotlin--easy, q-java-kotlin-abstract-classes-difference--programming-languages--medium, q-coroutine-memory-leaks--kotlin--hard]
 
 # Timestamps
 created: 2025-10-05

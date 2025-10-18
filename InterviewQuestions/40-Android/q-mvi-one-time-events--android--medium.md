@@ -4,6 +4,8 @@ title: "Mvi One Time Events / Одноразовые события в MVI"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-graphql-vs-rest--networking--easy, q-test-coverage-quality-metrics--testing--medium, q-how-to-display-svg-string-as-a-vector-file--android--medium]
 created: 2025-10-15
 tags: [mvi, architecture, state-management, events, difficulty/medium]
 ---
@@ -379,6 +381,16 @@ fun `when load fails should emit error event`() = runTest {
 ---
 
 ## Ответ (RU)
+
+В MVI (Model-View-Intent) одноразовые события (navigation, toasts, snackbars) обрабатываются отдельно от State. **Рекомендуемое решение:** использовать **SharedFlow** с `replay = 0` для Compose или **Channel** для простых случаев. State содержит только постоянные UI данные, события - эфемерные и обрабатываются один раз.
+
+**Основные подходы:**
+1. **SharedFlow (replay = 0)** - рекомендуется для Compose, поддержка множественных подписчиков
+2. **Channel** - простой API, FIFO гарантия, только один подписчик
+3. **SingleLiveEvent** - для legacy LiveData проектов (устарел)
+4. **Event Wrapper** - обёртка с consumed флагом (больше boilerplate)
+
+**Лучшие практики:** разделяйте State и Events, собирайте события в `LaunchedEffect` (Compose) или `repeatOnLifecycle` (Views), тестируйте события независимо.
 
 ### Проблема
 

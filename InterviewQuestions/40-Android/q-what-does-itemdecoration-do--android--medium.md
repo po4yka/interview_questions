@@ -4,6 +4,8 @@ title: "What Does Itemdecoration Do / Что делает ItemDecoration"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-opengl-advanced-rendering--graphics--medium, q-retrofit-path-parameter--android--medium, q-what-can-be-done-through-composer--android--medium]
 created: 2025-10-15
 tags: [android/recyclerview, android/ui, itemdecoration, recyclerview, ui, difficulty/medium]
 ---
@@ -317,5 +319,237 @@ val count = recyclerView.itemDecorationCount
 - **Item shadows or overlays**
 
 ## Ответ (RU)
-ItemDecoration в RecyclerView позволяет добавлять украшения к элементам списка такие как отступы разделительные линии рамки и любые другие визуальные элементы которые не являются частью содержимого элементов списка
 
+**ItemDecoration** в RecyclerView позволяет добавлять визуальные декорации к элементам списка, такие как отступы, разделительные линии, рамки и любые другие визуальные элементы, которые не являются частью содержимого самих элементов.
+
+### Основные возможности ItemDecoration
+
+1. **Разделители (Dividers)**: Добавление разделительных линий между элементами
+2. **Отступы (Spacing)**: Управление отступами и padding вокруг элементов
+3. **Рамки (Borders)**: Рисование рамок вокруг элементов или групп
+4. **Заголовки/подвалы (Headers/Footers)**: Рисование кастомных заголовков или подвалов
+5. **Наложения (Overlays)**: Добавление наложений или фонов
+6. **Grid spacing**: Управление отступами в grid layout
+
+### Основные методы ItemDecoration
+
+```kotlin
+abstract class RecyclerView.ItemDecoration {
+    // Рисование декораций ПОД элементами
+    open fun onDraw(c: Canvas, parent: RecyclerView, state: State)
+
+    // Рисование декораций НАД элементами
+    open fun onDrawOver(c: Canvas, parent: RecyclerView, state: State)
+
+    // Определение отступов вокруг элементов
+    open fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: State
+    )
+}
+```
+
+### Примеры использования
+
+**1. Простой разделитель:**
+```kotlin
+class SimpleDividerDecoration(context: Context) : RecyclerView.ItemDecoration() {
+    private val divider: Drawable = context.getDrawable(R.drawable.divider)!!
+
+    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        val left = parent.paddingLeft
+        val right = parent.width - parent.paddingRight
+
+        for (i in 0 until parent.childCount) {
+            val child = parent.getChildAt(i)
+            val params = child.layoutParams as RecyclerView.LayoutParams
+
+            val top = child.bottom + params.bottomMargin
+            val bottom = top + divider.intrinsicHeight
+
+            divider.setBounds(left, top, right, bottom)
+            divider.draw(c)
+        }
+    }
+}
+
+// Использование
+recyclerView.addItemDecoration(SimpleDividerDecoration(this))
+```
+
+**2. Встроенный DividerItemDecoration:**
+```kotlin
+// Вертикальный разделитель
+val dividerDecoration = DividerItemDecoration(
+    this,
+    DividerItemDecoration.VERTICAL
+)
+recyclerView.addItemDecoration(dividerDecoration)
+
+// Кастомный drawable для разделителя
+dividerDecoration.setDrawable(
+    ContextCompat.getDrawable(this, R.drawable.custom_divider)!!
+)
+```
+
+**3. Отступы между элементами:**
+```kotlin
+class SpacingDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        outRect.left = spacing
+        outRect.right = spacing
+        outRect.bottom = spacing
+
+        // Добавить отступ сверху только для первого элемента
+        if (parent.getChildAdapterPosition(view) == 0) {
+            outRect.top = spacing
+        }
+    }
+}
+
+// Использование
+val spacing = resources.getDimensionPixelSize(R.dimen.item_spacing)
+recyclerView.addItemDecoration(SpacingDecoration(spacing))
+```
+
+**4. Grid spacing decoration:**
+```kotlin
+class GridSpacingDecoration(
+    private val spanCount: Int,
+    private val spacing: Int,
+    private val includeEdge: Boolean
+) : RecyclerView.ItemDecoration() {
+
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        val position = parent.getChildAdapterPosition(view)
+        val column = position % spanCount
+
+        if (includeEdge) {
+            outRect.left = spacing - column * spacing / spanCount
+            outRect.right = (column + 1) * spacing / spanCount
+
+            if (position < spanCount) {
+                outRect.top = spacing
+            }
+            outRect.bottom = spacing
+        } else {
+            outRect.left = column * spacing / spanCount
+            outRect.right = spacing - (column + 1) * spacing / spanCount
+
+            if (position >= spanCount) {
+                outRect.top = spacing
+            }
+        }
+    }
+}
+
+// Использование для 2-колоночной сетки
+recyclerView.addItemDecoration(
+    GridSpacingDecoration(
+        spanCount = 2,
+        spacing = 16.dpToPx(),
+        includeEdge = true
+    )
+)
+```
+
+**5. Кастомная рамка:**
+```kotlin
+class BorderDecoration(
+    private val borderWidth: Int,
+    private val borderColor: Int
+) : RecyclerView.ItemDecoration() {
+
+    private val paint = Paint().apply {
+        style = Paint.Style.STROKE
+        strokeWidth = borderWidth.toFloat()
+        color = borderColor
+    }
+
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        for (i in 0 until parent.childCount) {
+            val child = parent.getChildAt(i)
+            c.drawRect(
+                child.left.toFloat(),
+                child.top.toFloat(),
+                child.right.toFloat(),
+                child.bottom.toFloat(),
+                paint
+            )
+        }
+    }
+
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        outRect.set(borderWidth, borderWidth, borderWidth, borderWidth)
+    }
+}
+```
+
+### Множественные декорации
+
+Можно добавлять несколько декораций к одному RecyclerView:
+
+```kotlin
+recyclerView.apply {
+    addItemDecoration(SpacingDecoration(16.dpToPx()))
+    addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+    addItemDecoration(BorderDecoration(2.dpToPx(), Color.GRAY))
+}
+```
+
+### Управление декорациями
+
+```kotlin
+// Удалить конкретную декорацию
+recyclerView.removeItemDecoration(decoration)
+
+// Удалить по индексу
+recyclerView.removeItemDecorationAt(0)
+
+// Получить количество декораций
+val count = recyclerView.itemDecorationCount
+```
+
+### Лучшие практики
+
+1. **Переиспользование декораций** вместо создания новых экземпляров
+2. **Кеширование Paint объектов** для лучшей производительности
+3. **Учет позиции элемента** при расчете отступов
+4. **Использование getItemOffsets для spacing**, **onDraw для визуальных элементов**
+5. **Тестирование с разными layouts** (linear, grid и т.д.)
+
+### Распространенные случаи использования
+
+- Разделители между элементами списка
+- Отступы в grid элементах
+- Заголовки секций в списках
+- Кастомные рамки или фоны
+- Sticky headers
+- Тени или наложения на элементах
+
+### Резюме
+
+ItemDecoration предоставляет мощный механизм для добавления визуальных декораций к RecyclerView без изменения самих элементов списка. Это обеспечивает чистое разделение между содержимым элемента и его визуальным оформлением, делая код более поддерживаемым и переиспользуемым.
+
+## Related Questions
+
+- [[q-opengl-advanced-rendering--graphics--medium]]
+- [[q-retrofit-path-parameter--android--medium]]
+- [[q-what-can-be-done-through-composer--android--medium]]

@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - continuation
   - cps
@@ -13,10 +14,12 @@ tags: - kotlin
   - state-machine
   - advanced
 moc: moc-kotlin
-related:   - q-suspend-cancellable-coroutine--kotlin--hard
+related: [q-kotlin-scope-functions-advanced--kotlin--medium, q-kotlin-data-sealed-classes-combined--programming-languages--medium, q-kotlin-enum-classes--kotlin--easy]
+  - q-suspend-cancellable-coroutine--kotlin--hard
   - q-debugging-coroutines-techniques--kotlin--medium
   - q-common-coroutine-mistakes--kotlin--medium
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - continuation
   - cps
   - internals

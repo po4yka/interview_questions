@@ -4,8 +4,11 @@ title: "Atomic Vs Synchronized / Atomic против Synchronized"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-unit-singleton--programming-languages--easy, q-continuation-cps-internals--kotlin--hard, q-kotlin-flow-basics--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - java
   - concurrency
   - thread-safety
@@ -475,3 +478,8 @@ class DataRepository {
 
 Atomic использует CAS (Compare-And-Swap) цикл. Для Android предпочитайте корутины с `Mutex` или паттерн `actor`. Не смешивайте подходы. Atomic: просто и быстро. Synchronized: сложно и безопасно.
 
+## Related Questions
+
+- [[q-kotlin-unit-singleton--programming-languages--easy]]
+- [[q-continuation-cps-internals--kotlin--hard]]
+- [[q-kotlin-flow-basics--kotlin--medium]]

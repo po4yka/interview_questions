@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [coverage, jacoco, metrics, quality, difficulty/medium]
 moc: moc-testing
-related: []
+related: [q-jetpack-compose-lazy-column--android--easy, q-cicd-pipeline-setup--devops--medium, q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy]
 ---
 # Test Coverage and Quality Metrics
 

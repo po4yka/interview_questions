@@ -4,6 +4,8 @@ title: "Android Keystore System / Система Android Keystore"
 topic: security
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-privacy-sandbox-topics-api--privacy--medium, q-why-use-diffutil--android--medium, q-integration-testing-strategies--testing--medium]
 created: 2025-10-15
 tags: [keystore, encryption, biometric, attestation, authentication, difficulty/medium]
 ---

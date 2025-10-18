@@ -4,8 +4,11 @@ title: "Interface Properties / Свойства интерфейсов"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-statein-sharein-flow--kotlin--medium, q-inline-functions--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # How to operate with properties in interface?
 
@@ -433,3 +436,9 @@ fun main() {
 - Свойства `var` могут объявлять сеттеры, но нуждаются в реализации в классе
 - Свойства могут быть абстрактными (без реализации) или иметь реализацию по умолчанию
 - Можно переопределять свойства в реализующих классах
+
+## Related Questions
+
+- [[q-statein-sharein-flow--kotlin--medium]]
+- [[q-inline-functions--kotlin--medium]]
+- [[q-kotlin-delegation-detailed--kotlin--medium]]

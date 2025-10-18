@@ -4,8 +4,11 @@ title: "Sequences Vs Collections Performance"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-callsuper-annotation--kotlin--medium, q-kotlin-native--kotlin--hard, q-kotlin-constructor-types--programming-languages--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - sequences
   - collections
   - performance
@@ -170,3 +173,9 @@ val count = seq.count() // Evaluates again!
 - Множество терминальных операций
 
 Sequences оптимизируют производительность для больших данных с ленивым вычислением.
+
+## Related Questions
+
+- [[q-callsuper-annotation--kotlin--medium]]
+- [[q-kotlin-native--kotlin--hard]]
+- [[q-kotlin-constructor-types--programming-languages--medium]]

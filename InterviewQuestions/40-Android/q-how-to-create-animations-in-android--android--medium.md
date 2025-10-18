@@ -4,6 +4,8 @@ title: "How To Create Animations In Android / Как создавать аним
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-stable-classes-compose--android--hard, q-app-start-types-android--android--medium, q-data-sync-unstable-network--android--hard]
 created: 2025-10-15
 tags: [MotionLayout, Property Animations, View Animations, android, android/animations, android/ui, animations, ui, difficulty/medium]
 ---
@@ -326,3 +328,8 @@ override fun onDestroyView() {
 ## Ответ (RU)
 В Android анимации можно создавать с помощью Property Animations, View Animations, Drawable Animations и MotionLayout. Для Property Animations используйте ObjectAnimator для анимации свойств объектов. Для View Animations создайте XML-анимацию и примените её через AnimationUtils.loadAnimation. Для Drawable Animations используйте анимацию кадров в XML и запустите её через AnimationDrawable. Для MotionLayout определите анимацию в MotionScene и примените её к элементам интерфейса.
 
+## Related Questions
+
+- [[q-stable-classes-compose--android--hard]]
+- [[q-app-start-types-android--android--medium]]
+- [[q-data-sync-unstable-network--android--hard]]

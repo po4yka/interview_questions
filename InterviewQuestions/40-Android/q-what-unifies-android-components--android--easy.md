@@ -4,6 +4,8 @@ title: "What Unifies Android Components / Что объединяет компо
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-how-navigation-is-implemented-in-android--android--medium, q-architecture-components-libraries--android--easy, q-recyclerview-async-list-differ--recyclerview--medium]
 created: 2025-10-15
 tags: [android-components, android/android-components, android/context, android/manifest, components, context, intent, manifest, difficulty/easy]
 ---

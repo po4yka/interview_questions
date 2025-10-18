@@ -4,6 +4,8 @@ title: "Material3 Dynamic Color Theming / Динамические цвета Ma
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-single-activity-approach--android--medium, q-compose-semantics--android--medium, q-why-was-the-lifecycle-library-created--android--hard]
 created: 2025-10-15
 tags: [design, material3, theming, dynamic-color, difficulty/medium]
 ---
@@ -790,3 +792,9 @@ Switch(
 3. Тестируйте со статическими и динамическими темами
 4. Предоставляйте пользовательский контроль
 5. Следуйте руководству по elevation
+
+## Related Questions
+
+- [[q-single-activity-approach--android--medium]]
+- [[q-compose-semantics--android--medium]]
+- [[q-why-was-the-lifecycle-library-created--android--hard]]

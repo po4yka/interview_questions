@@ -4,6 +4,8 @@ title: "Bundle Data Types / Типы данных Bundle"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-handler-looper-main-thread--android--medium, q-dagger-problems--android--medium, q-recyclerview-viewtypes-delegation--recyclerview--medium]
 created: 2025-10-15
 tags: [android/data-passing, bundle, data-passing, intent, parcelable, serializable, difficulty/medium]
 ---
@@ -497,3 +499,8 @@ bundle.putInt("imageId", imageId)
 - Для обмена данными между Fragment используйте ViewModel
 - Не передавайте Context, ViewModel, соединения с БД
 
+## Related Questions
+
+- [[q-handler-looper-main-thread--android--medium]]
+- [[q-dagger-problems--android--medium]]
+- [[q-recyclerview-viewtypes-delegation--recyclerview--medium]]

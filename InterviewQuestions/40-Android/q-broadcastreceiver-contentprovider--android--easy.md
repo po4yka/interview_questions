@@ -4,6 +4,8 @@ title: "Broadcastreceiver Contentprovider / BroadcastReceiver и ContentProvider
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-keep-service-running-background--android--medium, q-accessibility-text-scaling--accessibility--medium, q-mlkit-face-detection--ml--medium]
 created: 2025-10-15
 tags: [android/broadcast-receiver, android/content-provider, broadcast-receiver, content-provider, data-sharing, intent, system-events, difficulty/easy]
 ---

@@ -4,6 +4,8 @@ title: "Flutter Comparison / Flutter Сравнение"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-custom-view-lifecycle--custom-views--medium, q-lazy-grid-staggered-grid--jetpack-compose--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
 created: 2025-10-15
 tags: [Kotlin, Flutter, Multiplatform, Comparison, difficulty/medium]
 ---

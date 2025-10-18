@@ -4,6 +4,8 @@ title: "Stop Service / Остановка Service"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-async-operations-android--android--medium, q-derived-state-snapshot-system--jetpack-compose--hard, q-how-to-fix-a-bad-element-layout--android--easy]
 created: 2025-10-15
 tags: [android/services, bound-service, service-lifecycle, services, started-service, difficulty/medium]
 ---

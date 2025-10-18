@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - race-conditions
   - thread-safety
@@ -13,10 +14,12 @@ tags: - kotlin
   - data-races
   - bugs
 moc: moc-kotlin
-related:   - q-mutex-synchronized-coroutines--kotlin--medium
+related: [q-job-vs-supervisorjob--kotlin--medium, q-flow-time-operators--kotlin--medium, q-kotlin-partition-function--programming-languages--easy]
+  - q-mutex-synchronized-coroutines--kotlin--medium
   - q-semaphore-rate-limiting--kotlin--medium
   - q-debugging-coroutines-techniques--kotlin--medium
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - race-conditions
   - thread-safety
   - concurrency

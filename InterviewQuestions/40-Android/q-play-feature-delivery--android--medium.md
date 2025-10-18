@@ -4,6 +4,8 @@ title: "Play Feature Delivery"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-anr-application-not-responding--android--medium, q-which-class-to-use-for-detecting-gestures--android--medium, q-handler-looper-comprehensive--android--medium]
 created: 2025-10-15
 tags: [play-feature-delivery, dynamic-modules, app-bundle, difficulty/medium]
 ---
@@ -489,3 +491,9 @@ class MyApplication : Application() {
 **Резюме:**
 
 Play Feature Delivery предоставляет расширенные опции доставки функций приложения через App Bundles. Поддерживает три типа доставки: при установке, по требованию и условную. Требует Android 5.0+, SplitCompat и feature модули. Основные преимущества: уменьшенный размер загрузки, модульная архитектура, целевая доставка.
+
+## Related Questions
+
+- [[q-anr-application-not-responding--android--medium]]
+- [[q-which-class-to-use-for-detecting-gestures--android--medium]]
+- [[q-handler-looper-comprehensive--android--medium]]

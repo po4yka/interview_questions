@@ -4,8 +4,11 @@ title: "Data Class Special Features / Специальные возможнос�
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-zip-operator-parallel-requests--programming-languages--medium, q-coroutine-context-essence--programming-languages--medium, q-garbage-collector-definition--programming-languages--easy]
 created: 2025-10-15
-tags: - copy
+tags:
+  - copy
   - data-class
   - equals
   - hashcode
@@ -255,3 +258,8 @@ println(copy.address)  // "" (empty, not "NYC")
 
 Data Class автоматически генерирует equals, hashCode, toString, copy и componentN функции. Они удобны для хранения данных и значительно упрощают работу с неизменяемыми структурами.
 
+## Related Questions
+
+- [[q-zip-operator-parallel-requests--programming-languages--medium]]
+- [[q-coroutine-context-essence--programming-languages--medium]]
+- [[q-garbage-collector-definition--programming-languages--easy]]

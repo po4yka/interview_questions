@@ -4,6 +4,8 @@ title: "Jetpack Compose Lazy Column"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-privacy-sandbox-fledge--privacy--hard, q-sharedpreferences-commit-vs-apply--android--easy, q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium]
 created: 2025-10-15
 tags: [android/ui-compose, jetpack-compose, lazy-column, platform/android, ui-compose, difficulty/easy]
 ---

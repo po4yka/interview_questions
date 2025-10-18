@@ -4,9 +4,11 @@ title: "Cicd Automated Testing / Cicd Automated Тестирование"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
 created: 2025-10-11
 tags: [ci-cd, testing, automation, github-actions, emulator, difficulty/medium]
-related:   - q-cicd-pipeline-setup--devops--medium
+related: [q-screenshot-snapshot-testing--testing--medium, q-large-file-upload--android--medium, q-android14-permissions--permissions--medium]
+  - q-cicd-pipeline-setup--devops--medium
   - q-compose-ui-testing--testing--medium
   - q-testing-coroutines-flow--testing--hard
 ---

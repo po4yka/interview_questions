@@ -4,6 +4,8 @@ title: "Retrofit Call Adapter Advanced / Продвинутый CallAdapter дл
 topic: networking
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-robolectric-vs-instrumented--testing--medium, q-how-to-display-svg-string-as-a-vector-file--android--medium, q-viewmodel-pattern--android--easy]
 created: 2025-10-15
 tags: [retrofit, call-adapter, result, error-handling, sealed-classes, difficulty/medium]
 ---

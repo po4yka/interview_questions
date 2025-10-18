@@ -4,6 +4,8 @@ title: "How To Break Text By Screen Width / Как разбить текст п�
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-task-affinity--android--medium, q-fix-slow-app-startup-legacy--android--hard, q-android-runtime-art--android--medium]
 created: 2025-10-15
 tags: [android, android/text-rendering, android/ui, breakText, text-rendering, ui, difficulty/easy]
 ---

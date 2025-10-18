@@ -5,15 +5,18 @@ topic: algorithms
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - algorithms
+tags:
+  - algorithms
   - trees
   - bst
   - avl
   - data-structures
 moc: moc-algorithms
-related:   - q-binary-search-variants--algorithms--medium
+related: [q-advanced-graph-algorithms--algorithms--hard, q-data-structures-overview--algorithms--easy, q-sorting-algorithms-comparison--algorithms--medium]
+  - q-binary-search-variants--algorithms--medium
   - q-graph-algorithms-bfs-dfs--algorithms--hard
-subtopics:   - trees
+subtopics:
+  - trees
   - bst
   - avl
   - balanced-trees

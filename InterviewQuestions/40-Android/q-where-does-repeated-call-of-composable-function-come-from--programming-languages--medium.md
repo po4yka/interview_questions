@@ -4,6 +4,8 @@ title: "Where Does Repeated Call Of Composable Function Come From / Откуда
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-main-android-components--android--easy, q-server-sent-events-sse--networking--medium, q-mvvm-vs-mvp-differences--android--medium]
 created: 2025-10-15
 tags: [languages, android, difficulty/medium]
 ---

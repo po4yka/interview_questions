@@ -7,10 +7,12 @@ status: draft
 created: 2025-10-12
 tags: [sealed-classes, state-management, mvi, architecture, android/sealed-classes, android/state-management, android/mvi, android/architecture, difficulty/medium]
 moc: moc-android
-related:   - q-mvi-architecture--android--hard
+related: [q-which-layout-allows-views-to-overlap--android--easy, q-android14-permissions--permissions--medium, q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]
+  - q-mvi-architecture--android--hard
   - q-mvvm-architecture--android--medium
   - q-kotlin-coroutines-advanced--kotlin--hard
-subtopics:   - kotlin
+subtopics:
+  - kotlin
   - sealed-classes
   - state-management
   - mvi
@@ -1044,3 +1046,9 @@ sealed class Status {
 8. What are the best practices for naming sealed class hierarchies?
 9. How do you use sealed classes with Room database?
 10. What is the relationship between sealed classes and exhaustive when?
+
+## Related Questions
+
+- [[q-which-layout-allows-views-to-overlap--android--easy]]
+- [[q-android14-permissions--permissions--medium]]
+- [[q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]]

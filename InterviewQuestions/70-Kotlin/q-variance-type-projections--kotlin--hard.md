@@ -4,8 +4,11 @@ title: "Variance Type Projections / Вариантность и проекции
 topic: kotlin
 difficulty: hard
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-constructor-keyword--programming-languages--easy, q-equals-hashcode-purpose--kotlin--medium, q-launch-vs-async--kotlin--easy]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - generics
   - variance
   - type-system
@@ -167,3 +170,9 @@ fun printList(list: List<*>) {
 Неизвестный тип: `List<*>` означает список неизвестного типа.
 
 Variance обеспечивает type-safety при работе с generic типами в Kotlin.
+
+## Related Questions
+
+- [[q-kotlin-constructor-keyword--programming-languages--easy]]
+- [[q-equals-hashcode-purpose--kotlin--medium]]
+- [[q-launch-vs-async--kotlin--easy]]

@@ -4,6 +4,8 @@ title: "View Fundamentals / Основы View"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-what-is-the-main-application-execution-thread--android--easy, q-fragments-and-activity-relationship--android--hard, q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy]
 created: 2025-10-15
 tags: [view, ui, basics, widget, view-hierarchy, difficulty/easy]
 ---

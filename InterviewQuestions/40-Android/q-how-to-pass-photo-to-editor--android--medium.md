@@ -4,6 +4,8 @@ title: "How To Pass Photo To Editor / Как передать фото в ред
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-multi-module-best-practices--android--hard, q-android-storage-types--android--medium, q-which-event-is-triggered-when-user-presses-screen--android--medium]
 created: 2025-10-15
 tags: [intent, fileprovider, bitmap, image-processing, difficulty/medium]
 ---
@@ -450,8 +452,170 @@ intent.putExtra("uri", uri.toString())
 
 ---
 
-## RU (original)
+## Ответ (RU)
 
-Как бы передавал фотографию в редактор
+Передача фото в редактор зависит от того, является ли он внешним приложением или встроенным редактором.
 
-Передача фото в редактор зависит от типа редактора: 1. Внешний редактор (например, Google Photos, Snapseed). 2. Встроенный редактор внутри приложения. [Contains extensive code examples for both approaches]
+### 1. Внешний редактор (Другое приложение)
+
+Используйте Intent с `ACTION_EDIT`:
+
+```kotlin
+fun openPhotoInExternalEditor(context: Context, photoUri: Uri) {
+    val intent = Intent(Intent.ACTION_EDIT).apply {
+        setDataAndType(photoUri, "image/*")
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+    }
+
+    try {
+        context.startActivity(Intent.createChooser(intent, "Выберите редактор"))
+    } catch (e: ActivityNotFoundException) {
+        Toast.makeText(context, "Редактор изображений не найден", Toast.LENGTH_SHORT).show()
+    }
+}
+```
+
+### 2. Внутренний редактор (Ваше приложение)
+
+**Метод A: Передача URI через Intent**
+
+Используйте FileProvider для безопасной передачи URI файла между компонентами приложения. Создайте PhotoEditorActivity и передайте URI через Intent extras.
+
+**Метод B: Передача Bitmap через Intent (Только для маленьких изображений)**
+
+Сжимайте bitmap в ByteArray и передавайте через Intent. Внимание: размер ограничен ~1MB.
+
+**Метод C: Сохранение во временный файл и передача пути**
+
+Сохраните bitmap во временный файл в cache директории, затем передайте URI файла через Intent.
+
+### 3. Полный пример с FileProvider
+
+Для безопасной передачи файлов между компонентами используйте FileProvider:
+
+**AndroidManifest.xml:**
+```xml
+<provider
+    android:name="androidx.core.content.FileProvider"
+    android:authorities="${applicationId}.fileprovider"
+    android:exported="false"
+    android:grantUriPermissions="true">
+    <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/file_paths" />
+</provider>
+```
+
+**res/xml/file_paths.xml:**
+```xml
+<paths>
+    <cache-path name="shared_images" path="images/" />
+    <files-path name="app_images" path="images/" />
+    <external-files-path name="external_images" path="images/" />
+</paths>
+```
+
+### 4. PhotoManager класс
+
+Создайте централизованный класс для управления фотографиями:
+
+```kotlin
+class PhotoManager(private val context: Context) {
+
+    fun openPhotoEditor(photoFile: File) {
+        val uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.fileprovider",
+            photoFile
+        )
+
+        val intent = Intent(context, PhotoEditorActivity::class.java).apply {
+            putExtra("PHOTO_URI", uri.toString())
+            putExtra("PHOTO_PATH", photoFile.absolutePath)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        context.startActivity(intent)
+    }
+
+    fun savePhotoToCache(bitmap: Bitmap): File {
+        val imagesDir = File(context.cacheDir, "images")
+        imagesDir.mkdirs()
+
+        val imageFile = File(imagesDir, "photo_${System.currentTimeMillis()}.jpg")
+        FileOutputStream(imageFile).use { out ->
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+        }
+
+        return imageFile
+    }
+}
+```
+
+### 5. PhotoEditorActivity
+
+Редактор получает фото и обрабатывает его:
+
+```kotlin
+class PhotoEditorActivity : AppCompatActivity() {
+
+    private lateinit var originalBitmap: Bitmap
+    private var currentBitmap: Bitmap? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val uriString = intent.getStringExtra("PHOTO_URI")
+        val uri = uriString?.let { Uri.parse(it) }
+
+        uri?.let { loadImage(it) }
+    }
+
+    private fun loadImage(uri: Uri) {
+        try {
+            originalBitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                ImageDecoder.decodeBitmap(
+                    ImageDecoder.createSource(contentResolver, uri)
+                )
+            } else {
+                MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            }
+
+            currentBitmap = originalBitmap.copy(originalBitmap.config, true)
+            imageView.setImageBitmap(currentBitmap)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Ошибка загрузки изображения", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+    }
+}
+```
+
+### Лучшие практики
+
+1. **Используйте FileProvider** для Android 7.0+ (API 24+)
+2. **Предоставляйте разрешения URI** при обмене с внешними приложениями
+3. **Осторожно обрабатывайте большие изображения** - не передавайте через Intent extras
+4. **Используйте подходящие форматы изображений** - JPEG для фотографий, PNG для графики
+5. **Управляйте памятью** - освобождайте bitmap когда закончили
+6. **Обрабатывайте ошибки корректно** - проверяйте существование редактора
+7. **Сохраняйте в подходящее место** - cache для временных, files для постоянных
+
+### Распространенные ошибки
+
+```kotlin
+// ✗ ПЛОХО: Большой bitmap через Intent
+val bitmap = BitmapFactory.decodeFile(largeFile)
+intent.putExtra("bitmap", bitmap) // TransactionTooLargeException!
+
+// ✓ ХОРОШО: Используйте URI
+val uri = FileProvider.getUriForFile(context, authority, file)
+intent.putExtra("uri", uri.toString())
+```
+
+## Related Questions
+
+- [[q-multi-module-best-practices--android--hard]]
+- [[q-android-storage-types--android--medium]]
+- [[q-which-event-is-triggered-when-user-presses-screen--android--medium]]

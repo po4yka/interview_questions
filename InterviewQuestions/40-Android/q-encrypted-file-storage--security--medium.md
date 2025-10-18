@@ -4,6 +4,8 @@ title: "Encrypted File Storage / Зашифрованное хранение ф�
 topic: security
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-play-feature-delivery-dynamic-modules--android--medium, q-what-is-broadcastreceiver--android--easy, q-room-type-converters--android--medium]
 created: 2025-10-15
 tags: [encryption, file-storage, streaming, encrypted-file, difficulty/medium]
 ---

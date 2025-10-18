@@ -4,6 +4,8 @@ title: "Custom Viewgroup Layout / Layout кастомных ViewGroup"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-push-notification-navigation--android--medium, q-kmm-sqldelight--multiplatform--medium]
 created: 2025-10-15
 tags: [views, viewgroup, layout, android-framework, difficulty/hard]
 ---

@@ -4,8 +4,11 @@ title: "Kotlin Dsl Creation / Создание DSL в Kotlin"
 topic: kotlin
 difficulty: hard
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-equality-operator--programming-languages--easy, q-kotlin-conversion-functions--programming-languages--medium, q-array-vs-list-kotlin--kotlin--easy]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - dsl
   - type-safety
   - scope-functions
@@ -320,3 +323,9 @@ fun Container.add(component: Any)
 3. Типобезопасные builders
 
 DSL в Kotlin обеспечивают выразительные, типобезопасные API для специфических доменов.
+
+## Related Questions
+
+- [[q-kotlin-equality-operator--programming-languages--easy]]
+- [[q-kotlin-conversion-functions--programming-languages--medium]]
+- [[q-array-vs-list-kotlin--kotlin--easy]]

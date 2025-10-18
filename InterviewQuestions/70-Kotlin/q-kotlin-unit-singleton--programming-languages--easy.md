@@ -4,8 +4,11 @@ title: "Kotlin Unit Singleton / Unit как синглтон в Kotlin"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-channel-buffer-strategies-comparison--kotlin--hard, q-suspend-functions-basics--kotlin--easy, q-kotlin-generic-function-syntax--programming-languages--easy]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - programming-languages
   - singleton
   - type-system
@@ -110,3 +113,8 @@ fun method2() { }         // То же самое (Unit выводится ав�
 
 **Эффективность памяти**: Поскольку это синглтон, нет потерь памяти от множества объектов Unit.
 
+## Related Questions
+
+- [[q-channel-buffer-strategies-comparison--kotlin--hard]]
+- [[q-suspend-functions-basics--kotlin--easy]]
+- [[q-kotlin-generic-function-syntax--programming-languages--easy]]

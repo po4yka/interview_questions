@@ -4,8 +4,11 @@ title: "Kotlin Null Checks Methods / Методы проверки на null в 
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-default-inheritance-type--programming-languages--easy, q-catch-operator-flow--kotlin--medium, q-coroutine-scope-basics--kotlin--easy]
 created: 2025-10-15
-tags: - elvis
+tags:
+  - elvis
   - kotlin
   - null-checks
   - null-safety
@@ -215,3 +218,8 @@ val validEmail = email.takeIf { it.contains("@") }
 
 **Резюме**: Kotlin предоставляет богатый набор операторов для null-безопасности: безопасный вызов `?.`, оператор Элвиса `?:`, явная проверка `if (x != null)`, `requireNotNull()` для выброса исключений, `!!` для принудительного разворачивания (используйте осторожно), `let` для выполнения блоков на non-null значениях, и `takeIf`/`takeUnless` для условной логики. Предпочитайте безопасные операторы `?.` и `?:` для идиоматичного Kotlin кода.
 
+## Related Questions
+
+- [[q-kotlin-default-inheritance-type--programming-languages--easy]]
+- [[q-catch-operator-flow--kotlin--medium]]
+- [[q-coroutine-scope-basics--kotlin--easy]]

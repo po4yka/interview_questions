@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-suspend-functions-deep-dive--kotlin--medium, q-object-singleton-companion--kotlin--medium, q-request-coalescing-deduplication--kotlin--hard]
 
 # Timestamps
 created: 2025-10-06

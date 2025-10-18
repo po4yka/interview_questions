@@ -4,6 +4,8 @@ title: "Dark Theme Android / Темная тема Android"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-polling-implementation--android--medium, q-android-runtime-internals--android--hard, q-mvvm-pattern--android--medium]
 created: 2025-10-15
 tags: [dark-theme, ui, theming, daynight, material-design, difficulty/medium]
 ---
@@ -406,3 +408,9 @@ To properly support Dark theme:
 5. Правильно обрабатывайте уведомления и виджеты
 6. Позвольте пользователям выбирать предпочтение темы
 7. Следуйте руководствам Material Design для темной темы
+
+## Related Questions
+
+- [[q-polling-implementation--android--medium]]
+- [[q-android-runtime-internals--android--hard]]
+- [[q-mvvm-pattern--android--medium]]

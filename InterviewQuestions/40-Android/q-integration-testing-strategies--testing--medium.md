@@ -4,6 +4,8 @@ title: "Integration Testing Strategies / Integration Тестирование St
 topic: testing
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-android-manifest-file--android--easy, q-react-native-comparison--multiplatform--medium, q-koin-vs-hilt-comparison--dependency-injection--medium]
 created: 2025-10-15
 tags: [integration-testing, architecture, strategy, difficulty/medium]
 ---

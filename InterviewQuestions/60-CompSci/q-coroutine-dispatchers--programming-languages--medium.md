@@ -4,6 +4,8 @@ title: "Coroutine Dispatchers / Диспетчеры корутин"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-priorityqueue-vs-deque--programming-languages--easy, q-data-structures-algorithms--computer-science--hard, q-runtime-generic-access--programming-languages--hard]
 created: 2025-10-15
 tags:
   - coroutines
@@ -44,3 +46,8 @@ Dispatchers determine which threads coroutines execute on, helping efficiently d
 
 Термин "диспатчер" обычно связан с механизмами управления потоками и задачами, такими как CoroutineDispatcher. Основные типы диспатчеров: Dispatchers.Main используется для выполнения корутин на главном потоке пользовательского интерфейса. Dispatchers.IO оптимизирован для работы с вводом-выводом, например чтения и записи файлов, работы с сетью и т.д. Dispatchers.Default оптимизирован для выполнения вычислительных задач, которые требуют значительных ресурсов CPU. Dispatchers.Unconfined - корутина запущенная с этим диспатчером начинает выполнение в текущем потоке но только до первой точки приостановки после возобновления она может продолжить выполнение в другом потоке. Диспатчеры определяют на каких потоках выполняются корутины помогая эффективно распределять задачи в зависимости от их характера и требований к ресурсам. Использование правильного диспатчера может значительно повысить производительность и отзывчивость приложений.
 
+## Related Questions
+
+- [[q-priorityqueue-vs-deque--programming-languages--easy]]
+- [[q-data-structures-algorithms--computer-science--hard]]
+- [[q-runtime-generic-access--programming-languages--hard]]

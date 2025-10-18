@@ -4,8 +4,11 @@ title: "How Can Data Be Saved Beyond The Fragment Scope / Как можно со
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-dagger-custom-scopes--di--hard, q-memory-leak-detection--performance--medium, q-alternative-distribution--distribution--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How can data be saved beyond the fragment scope?
 

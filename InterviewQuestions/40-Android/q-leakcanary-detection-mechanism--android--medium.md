@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/memory-management, debugging, leakcanary, memory-leaks, memory-management, weakreference, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-recyclerview-itemdecoration-advanced--android--medium, q-kmm-ktor-networking--multiplatform--medium, q-koin-scope-management--dependency-injection--medium]
 ---
 # Как LeakCanary понимает что произошла утечка памяти?
 

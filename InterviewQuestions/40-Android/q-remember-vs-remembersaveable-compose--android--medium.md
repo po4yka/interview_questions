@@ -4,6 +4,8 @@ title: "Remember Vs Remembersaveable Compose"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-handler-looper-main-thread--android--medium, q-iz-kakikh-bolee-vazhnykh-komponentov-sostoit-compose--programming-languages--medium, q-accessibility-testing--accessibility--medium]
 created: 2025-10-15
 tags: [jetpack-compose, state-management, configuration-changes, difficulty/medium]
 ---

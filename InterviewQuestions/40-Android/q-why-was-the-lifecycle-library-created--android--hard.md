@@ -4,6 +4,8 @@ title: "Why Was The Lifecycle Library Created / Зачем создали биб
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-mlkit-face-detection--ml--medium, q-memory-leak-detection--performance--medium]
 created: 2025-10-15
 tags: [android/architecture, android/lifecycle, lifecycle, architecture-components, memory-leaks, difficulty/hard]
 ---

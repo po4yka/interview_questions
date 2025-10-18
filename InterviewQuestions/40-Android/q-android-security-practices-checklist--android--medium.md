@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-fragments-vs-activity--android--medium, q-graphql-apollo-android--networking--medium, q-what-unites-the-main-components-of-an-android-application--android--medium]
 
 # Timestamps
 created: 2025-10-05

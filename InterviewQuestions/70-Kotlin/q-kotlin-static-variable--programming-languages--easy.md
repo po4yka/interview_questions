@@ -4,8 +4,11 @@ title: "Kotlin Static Variable / Статические переменные в 
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-structured-concurrency-patterns--kotlin--hard, q-enum-class-advanced--kotlin--medium, q-kotlin-java-data-types--programming-languages--medium]
 created: 2025-10-15
-tags: - companion-object
+tags:
+  - companion-object
   - const
   - jvmstatic
   - kotlin
@@ -458,3 +461,8 @@ val admin = User.createAdmin("Алиса")
 - **const val** - константы времени компиляции
 - **object** - паттерн синглтон
 
+## Related Questions
+
+- [[q-structured-concurrency-patterns--kotlin--hard]]
+- [[q-enum-class-advanced--kotlin--medium]]
+- [[q-kotlin-java-data-types--programming-languages--medium]]

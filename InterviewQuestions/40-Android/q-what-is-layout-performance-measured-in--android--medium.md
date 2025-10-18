@@ -4,6 +4,8 @@ title: "What Is Layout Performance Measured In / В чем измеряется 
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-separate-ui-business-logic--android--easy, q-koin-fundamentals--dependency-injection--medium, q-fragments-history-and-purpose--android--hard]
 created: 2025-10-15
 tags: [performance, android, ui, layouts, difficulty/medium]
 ---

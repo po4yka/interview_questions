@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/dependency-injection, dagger, dependency-injection, hilt, lifecycle, scope, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-fileprovider-secure-sharing--android--medium, q-design-whatsapp-app--android--hard, q-which-event-on-screen-press--android--easy]
 ---
 # Что такое scope в Dagger и как они работают?
 
@@ -403,3 +403,8 @@ class Presenter @Inject constructor(
 - Соответствие scope жизненному циклу
 - Не утекайте долгоживущие ссылки
 
+## Related Questions
+
+- [[q-fileprovider-secure-sharing--android--medium]]
+- [[q-design-whatsapp-app--android--hard]]
+- [[q-which-event-on-screen-press--android--easy]]

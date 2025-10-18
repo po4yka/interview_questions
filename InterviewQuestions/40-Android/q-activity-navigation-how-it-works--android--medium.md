@@ -4,6 +4,8 @@ title: "Activity Navigation How It Works / Как работает навига�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-did-fragments-appear-and-why-were-they-started-to-be-used--android--hard, q-fast-chat-rendering--android--hard, q-how-to-create-animations-in-android--android--medium]
 created: 2025-10-15
 tags: [android, android/navigation, back-stack, intent, lifecycle, navigation, difficulty/medium]
 ---
@@ -368,7 +370,336 @@ findNavController().navigateUp()
 - Handle `onNewIntent()` when using SINGLE_TOP
 
 ## Ответ (RU)
-Навигация между различными Activity в Android-приложении представляет собой важный аспект управления потоком пользовательского интерфейса. Можно рассматривать как отдельный экран с пользовательским интерфейсом. Навигация между ними позволяет пользователям переходить от одного задания к другому. Основные механизмы навигации: Интенты (Intents): Явные интенты используются, когда вы знаете конкретное Activity которое хотите запустить. Они прямо указывают на класс Activity который необходимо открыть. Неявные интенты не указывают прямо на класс Activity вместо этого они объявляют общую операцию которую должно выполнить приложение и позволяют системе определить наиболее подходящий компонент для её выполнения. Жизненный цикл и управление переходами: Каждое имеет свой жизненный цикл который критически важен для правильной реализации навигации между активностями особенно когда нужно обрабатывать сохранение и восстановление данных. Закрытие Activity: Для возврата к предыдущему можно использовать finish(). Использование флагов интента: могут включать различные флаги для управления историей активностей и поведением переходов. Навигационные компоненты: Современные приложения на Android часто используют Navigation Component который упрощает реализацию навигации между фрагментами и активностями.
+
+Навигация между Activity в Android управляется через Intent, стек возврата (back stack) и управление задачами (task management).
+
+**Основные механизмы:**
+- **Явные Intent**: Запускают конкретную Activity по имени класса
+- **Неявные Intent**: Объявляют общую операцию, система выбирает подходящий компонент
+- **Back Stack**: Управляет историей Activity (LIFO - последним пришел, первым вышел)
+- **Task Management**: Группирует связанные Activity вместе
+- **Launch Modes**: Контролируют создание экземпляров Activity (standard, singleTop, singleTask, singleInstance)
+
+### Основные механизмы навигации
+
+#### 1. Intent (Явные и Неявные)
+
+**Явные Intent** - используются когда вы знаете конкретную Activity, которую хотите запустить. Они напрямую указывают на класс Activity для открытия.
+
+**Неявные Intent** - не указывают напрямую класс Activity. Вместо этого они объявляют общую операцию, которую должно выполнить приложение, и позволяют системе определить наиболее подходящий компонент для её обработки (например, открытие веб-страницы или отправка данных между приложениями).
+
+**Пример явного Intent:**
+
+```kotlin
+// Переход к конкретной Activity
+val intent = Intent(this, SecondActivity::class.java)
+startActivity(intent)
+
+// С данными
+val intent = Intent(this, DetailActivity::class.java)
+intent.putExtra("USER_ID", userId)
+intent.putExtra("USER_NAME", userName)
+startActivity(intent)
+
+// Получение данных в SecondActivity
+class SecondActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val userId = intent.getIntExtra("USER_ID", -1)
+        val userName = intent.getStringExtra("USER_NAME")
+    }
+}
+```
+
+**Пример неявного Intent:**
+
+```kotlin
+// Открыть веб-страницу
+val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"))
+startActivity(intent)
+
+// Отправить email
+val intent = Intent(Intent.ACTION_SEND).apply {
+    type = "text/plain"
+    putExtra(Intent.EXTRA_EMAIL, arrayOf("user@example.com"))
+    putExtra(Intent.EXTRA_SUBJECT, "Тема")
+    putExtra(Intent.EXTRA_TEXT, "Текст письма")
+}
+startActivity(Intent.createChooser(intent, "Отправить Email"))
+
+// Совершить звонок
+val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:+1234567890"))
+startActivity(intent)
+
+// Поделиться контентом
+val shareIntent = Intent(Intent.ACTION_SEND).apply {
+    type = "text/plain"
+    putExtra(Intent.EXTRA_TEXT, "Посмотрите на этот контент!")
+}
+startActivity(Intent.createChooser(shareIntent, "Поделиться через"))
+```
+
+#### 2. Жизненный цикл Activity и управление переходами
+
+Каждая Activity имеет свой **жизненный цикл**, который критически важен для правильной реализации навигации между Activity, особенно при обработке сохранения и восстановления данных.
+
+**Жизненный цикл при навигации:**
+
+```kotlin
+// Activity A → Activity B
+
+// Activity A:
+onPause()     // A частично видима
+onStop()      // A больше не видна (B теперь видна)
+
+// Activity B:
+onCreate()
+onStart()
+onResume()    // B теперь активна
+
+// Пользователь нажимает Назад:
+
+// Activity B:
+onPause()
+onStop()
+onDestroy()   // B уничтожена
+
+// Activity A:
+onRestart()
+onStart()
+onResume()    // A снова активна
+```
+
+**Сохранение и восстановление состояния:**
+
+```kotlin
+class MyActivity : AppCompatActivity() {
+    private var counter = 0
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("COUNTER", counter)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            counter = savedInstanceState.getInt("COUNTER", 0)
+        }
+    }
+}
+```
+
+#### 3. Закрытие Activity
+
+Для возврата к предыдущей Activity используйте `finish()`:
+
+```kotlin
+// Закрыть текущую Activity
+finish()
+
+// Закрыть и вернуть результат
+val resultIntent = Intent()
+resultIntent.putExtra("RESULT_DATA", resultValue)
+setResult(RESULT_OK, resultIntent)
+finish()
+```
+
+**Activity для результата (современный подход):**
+
+```kotlin
+class FirstActivity : AppCompatActivity() {
+    private val launcher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val data = result.data?.getStringExtra("RESULT_DATA")
+            // Обработать результат
+        }
+    }
+
+    fun launchSecondActivity() {
+        val intent = Intent(this, SecondActivity::class.java)
+        launcher.launch(intent)
+    }
+}
+
+class SecondActivity : AppCompatActivity() {
+    private fun returnResult() {
+        val resultIntent = Intent()
+        resultIntent.putExtra("RESULT_DATA", "Какой-то результат")
+        setResult(RESULT_OK, resultIntent)
+        finish()
+    }
+}
+```
+
+#### 4. Флаги Intent для управления стеком Activity
+
+Intent могут включать различные **флаги** для управления историей активностей и поведением переходов:
+
+**FLAG_ACTIVITY_CLEAR_TOP:**
+
+```kotlin
+// Если Activity уже запущена, поднять её наверх и уничтожить все над ней
+val intent = Intent(this, MainActivity::class.java)
+intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+startActivity(intent)
+```
+
+**FLAG_ACTIVITY_SINGLE_TOP:**
+
+```kotlin
+// Если Activity уже наверху, не создавать новый экземпляр
+val intent = Intent(this, MainActivity::class.java)
+intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+startActivity(intent)
+
+// Обработать новый intent в существующей Activity
+override fun onNewIntent(intent: Intent?) {
+    super.onNewIntent(intent)
+    // Обработать данные нового intent
+}
+```
+
+**FLAG_ACTIVITY_NEW_TASK:**
+
+```kotlin
+// Запустить Activity в новой задаче
+val intent = Intent(this, MainActivity::class.java)
+intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+startActivity(intent)
+```
+
+**FLAG_ACTIVITY_CLEAR_TASK:**
+
+```kotlin
+// Очистить всю задачу и начать заново
+val intent = Intent(this, MainActivity::class.java)
+intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+startActivity(intent)
+```
+
+**Распространенные комбинации:**
+
+```kotlin
+// Выход - очистить всё и перейти к логину
+val intent = Intent(this, LoginActivity::class.java)
+intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+startActivity(intent)
+finish()
+
+// Deep link - очистить верх и использовать single top
+val intent = Intent(this, MainActivity::class.java)
+intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+startActivity(intent)
+```
+
+#### 5. Управление стеком возврата
+
+Android поддерживает **back stack** из Activity:
+
+```
+Поток пользователя:
+A → B → C → D
+
+Back Stack:
+[A, B, C, D]  ← D наверху (видна)
+
+Пользователь нажимает Назад:
+[A, B, C]     ← C теперь видна, D уничтожена
+
+Пользователь нажимает Назад:
+[A, B]        ← B теперь видна, C уничтожена
+```
+
+**Контроль поведения back stack:**
+
+```kotlin
+// Добавить в back stack (по умолчанию)
+startActivity(intent)
+
+// Очистить back stack
+val intent = Intent(this, MainActivity::class.java)
+intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+startActivity(intent)
+
+// Не добавлять в историю
+val intent = Intent(this, SplashActivity::class.java)
+intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+startActivity(intent)
+```
+
+#### 6. Navigation Component (Современный подход)
+
+Современные Android приложения часто используют **Navigation Component**, который упрощает навигацию между Fragment и Activity, обеспечивает корректное управление back stack и улучшает визуализацию потока UI.
+
+**Настройка:**
+
+```kotlin
+// build.gradle
+dependencies {
+    implementation "androidx.navigation:navigation-fragment-ktx:2.7.0"
+    implementation "androidx.navigation:navigation-ui-ktx:2.7.0"
+}
+```
+
+**Navigation Graph (res/navigation/nav_graph.xml):**
+
+```xml
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.HomeFragment">
+        <action
+            android:id="@+id/action_home_to_detail"
+            app:destination="@id/detailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.DetailFragment" />
+</navigation>
+```
+
+**Использование:**
+
+```kotlin
+// Навигация
+findNavController().navigate(R.id.action_home_to_detail)
+
+// С аргументами
+val bundle = bundleOf("userId" to userId)
+findNavController().navigate(R.id.action_home_to_detail, bundle)
+
+// Навигация назад
+findNavController().navigateUp()
+```
+
+### Резюме
+
+**Навигация Activity в Android включает:**
+
+1. **Intent** - Явные (конкретная Activity) и Неявные (система выбирает)
+2. **Управление жизненным циклом** - Сохранение/восстановление состояния при переходах
+3. **finish()** - Закрытие Activity и возврат к предыдущей
+4. **Флаги Intent** - Контроль поведения back stack (CLEAR_TOP, SINGLE_TOP и т.д.)
+5. **Back stack** - Управляется Android, отслеживает историю Activity
+6. **Navigation Component** - Современный подход для навигации Fragment/Activity
+
+**Лучшие практики:**
+- Используйте Navigation Component для сложных потоков навигации
+- Всегда сохраняйте состояние в `onSaveInstanceState()`
+- Используйте соответствующие флаги для контроля back stack
+- Предпочитайте Fragment вместо Activity для внутриприложенческой навигации
+- Обрабатывайте `onNewIntent()` при использовании SINGLE_TOP
 
 
 ---

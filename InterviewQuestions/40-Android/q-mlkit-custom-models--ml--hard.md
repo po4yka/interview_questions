@@ -4,6 +4,8 @@ title: "Mlkit Custom Models / Кастомные модели ML Kit"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy, q-compose-canvas-graphics--jetpack-compose--hard, q-material3-motion-transitions--material-design--medium]
 created: 2025-10-15
 tags: [ml-kit, tensorflow-lite, custom-models, machine-learning, automl, model-deployment, difficulty/hard]
 ---
@@ -1065,3 +1067,9 @@ ML Kit поддерживает пользовательские модели ч
 ### Резюме
 
 Интеграция пользовательских моделей TensorFlow Lite с ML Kit обеспечивает гибкость для специализированных случаев использования при сохранении простоты развёртывания. Firebase ML обеспечивает бесшовные обновления моделей, A/B тестирование и мониторинг. Правильная оптимизация моделей (квантизация, аппаратное ускорение) и стратегия развёртывания (fallback, условная загрузка) критически важны для production-качества ML функций в Android приложениях.
+
+## Related Questions
+
+- [[q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy]]
+- [[q-compose-canvas-graphics--jetpack-compose--hard]]
+- [[q-material3-motion-transitions--material-design--medium]]

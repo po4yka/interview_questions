@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-jit-compilation-definition--programming-languages--medium, q-kotlin-constructor-keyword--programming-languages--easy, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06

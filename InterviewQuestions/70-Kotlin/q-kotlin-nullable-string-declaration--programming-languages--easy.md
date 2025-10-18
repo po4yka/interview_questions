@@ -4,6 +4,8 @@ title: "Kotlin Nullable String Declaration / Объявление nullable Strin
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-operator-overloading--kotlin--medium, q-launch-vs-async--kotlin--easy, q-coroutine-job-lifecycle--kotlin--medium]
 created: 2025-10-15
 tags:
   - kotlin
@@ -75,3 +77,8 @@ var nonNullable: String = "Hello"
 nonNullable = null  // Ошибка компиляции!
 ```
 
+## Related Questions
+
+- [[q-kotlin-operator-overloading--kotlin--medium]]
+- [[q-launch-vs-async--kotlin--easy]]
+- [[q-coroutine-job-lifecycle--kotlin--medium]]

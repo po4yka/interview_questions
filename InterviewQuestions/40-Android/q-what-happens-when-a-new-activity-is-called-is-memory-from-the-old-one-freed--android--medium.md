@@ -4,8 +4,11 @@ title: "What Happens When A New Activity Is Called Is Memory From The Old One Fr
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium, q-retrofit-library--android--medium, q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 
 # Question (EN)

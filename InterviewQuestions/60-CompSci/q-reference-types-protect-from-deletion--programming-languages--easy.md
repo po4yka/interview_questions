@@ -4,8 +4,11 @@ title: "Reference Types Protect From Deletion / Типы ссылок защищ
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-detect-unused-object--programming-languages--easy, q-java-marker-interfaces--programming-languages--medium, q-xml-acronym--programming-languages--easy]
 created: 2025-10-15
-tags: - garbage-collection
+tags:
+  - garbage-collection
   - jvm
   - kotlin
   - memory-management
@@ -154,3 +157,8 @@ fun example() {
 
 Нет, не все ссылки защищают объект от удаления. Strong Reference защищает объект, Weak Reference не защищает и позволяет удалить объект. Soft Reference удаляет объект только при нехватке памяти, а Phantom Reference используется для действий после удаления.
 
+## Related Questions
+
+- [[q-detect-unused-object--programming-languages--easy]]
+- [[q-java-marker-interfaces--programming-languages--medium]]
+- [[q-xml-acronym--programming-languages--easy]]

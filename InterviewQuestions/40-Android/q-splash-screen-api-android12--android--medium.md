@@ -8,9 +8,11 @@ created: 2025-10-15
 tags: [splash-screen, android12, app-startup, ui, difficulty/medium, android/views, android/app-startup, android/ui-animation]
 language_tags: [splash-screen, android12, app-startup, ui, difficulty/medium, android/views, android/app-startup, android/ui-animation]
 moc: moc-android
+related: [q-parsing-optimization-android--android--medium, q-paging-library-3--android--medium, q-multiple-manifests-multimodule--android--medium]
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
-subtopics:   - ui-views
+subtopics:
+  - ui-views
   - app-startup
   - ui-animation
 ---
@@ -182,7 +184,13 @@ Generally, we recommend removing your previous custom splash screen `Activity` a
 - **Show placeholders** for network-based loads with indeterminate durations
 - **Use caching** - show cached content while loading more recent content
 
-**Русский**:
+## Ответ (RU)
+
+**Splash Screen** - первый экран при запуске приложения. С Android 12 система автоматически показывает системный splash screen (launcher icon + `windowBackground`).
+
+**Рекомендация:** использовать **Androidx SplashScreen compat library** для единообразного вида на всех версиях Android.
+
+**Основные шаги:** 1) добавить зависимость `androidx.core:core-splashscreen`, 2) создать тему `Theme.SplashScreen`, 3) вызвать `installSplashScreen()` в `onCreate()` перед `super.onCreate()`, 4) опционально удалить старую custom Activity для эффективности.
 
 **Splash Screen** (экран заставки) - это первый экран, видимый пользователю при запуске приложения. Это важный экран, на котором пользователь получает первое впечатление о приложении.
 

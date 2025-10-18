@@ -10,6 +10,7 @@ subtopics:
   - anti-patterns
 difficulty: hard
 moc: moc-kotlin
+related: [q-lifecycle-aware-coroutines--kotlin--hard, q-kotlin-advantages-for-android--kotlin--easy, q-kotlin-object-companion-object--programming-languages--easy]
 status: draft
 created: 2025-10-12
 updated: 2025-10-12

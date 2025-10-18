@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/recyclerview, android/views, recyclerview, ui, viewholder, views, difficulty/hard]
 moc: moc-android
-related: []
+related: [q-where-does-the-repeated-call-of-composable-function-come-from--android--medium, q-how-to-choose-layout-for-fragment--android--easy, q-anr-application-not-responding--android--medium]
 ---
 # На что следует обращать внимание, чтобы оптимизировать большой список?
 

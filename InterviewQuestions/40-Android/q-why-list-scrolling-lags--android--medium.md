@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/performance, android/recyclerview, diffutil, optimization, performance, recyclerview, scrolling, viewholder, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-dagger-purpose--android--easy, q-retrofit-modify-all-requests--android--hard, q-baseline-profiles-optimization--performance--medium]
 ---
 # Почему при скролле может тормозить список?
 

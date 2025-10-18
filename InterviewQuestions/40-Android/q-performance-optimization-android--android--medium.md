@@ -4,6 +4,8 @@ title: "Performance Optimization Android / Performance Оптимизация An
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-recyclerview-diffutil-advanced--recyclerview--medium, q-kotlin-context-receivers--kotlin--hard, q-notification-channels-android--android--medium]
 created: 2025-10-15
 tags: [performance, optimization, performance-rendering, performance-memory, checklist, difficulty/medium]
 ---

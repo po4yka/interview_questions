@@ -4,6 +4,8 @@ title: "Room Fts Full Text Search / Полнотекстовый поиск FTS 
 topic: room
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-what-navigation-methods-exist-in-kotlin--programming-languages--medium, q-how-jetpack-compose-works--programming-languages--medium, q-espresso-advanced-patterns--testing--medium]
 created: 2025-10-15
 tags: [database, fts, search, performance, optimization, difficulty/hard]
 ---

@@ -5,16 +5,19 @@ topic: system-design
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - system-design
+tags:
+  - system-design
   - database
   - sharding
   - partitioning
   - scalability
 moc: moc-system-design
-related:   - q-sql-nosql-databases--system-design--medium
+related: [q-message-queues-event-driven--system-design--medium, q-load-balancing-strategies--system-design--medium, q-rest-api-design-best-practices--system-design--medium]
+  - q-sql-nosql-databases--system-design--medium
   - q-horizontal-vertical-scaling--system-design--medium
   - q-cap-theorem-distributed-systems--system-design--hard
-subtopics:   - database
+subtopics:
+  - database
   - sharding
   - partitioning
   - scalability

@@ -4,6 +4,8 @@ title: "Dagger Field Injection / Инъекция полей Dagger"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-test-coverage-quality-metrics--testing--medium, q-transaction-too-large-exception--android--medium, q-dark-theme-android--android--medium]
 created: 2025-10-15
 tags: [android/di-hilt, dagger, dependency-injection, di-hilt, platform/android, difficulty/medium]
 ---
@@ -586,3 +588,8 @@ class MainActivity : AppCompatActivity() {
 3. **Всегда используйте lateinit** с @Inject
 4. **Используйте Hilt** для упрощения setup
 
+## Related Questions
+
+- [[q-test-coverage-quality-metrics--testing--medium]]
+- [[q-transaction-too-large-exception--android--medium]]
+- [[q-dark-theme-android--android--medium]]

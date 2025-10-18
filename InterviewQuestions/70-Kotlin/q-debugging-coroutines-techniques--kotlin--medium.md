@@ -5,17 +5,20 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - debugging
   - profiling
   - troubleshooting
   - tools
 moc: moc-kotlin
-related:   - q-coroutine-exception-handler--kotlin--medium
+related: [q-produce-actor-builders--kotlin--medium, q-kotlin-null-safety--kotlin--medium, q-kotlin-any-unit-nothing--programming-languages--medium]
+  - q-coroutine-exception-handler--kotlin--medium
   - q-common-coroutine-mistakes--kotlin--medium
   - q-race-conditions-coroutines--kotlin--hard
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - debugging
   - profiling
   - troubleshooting

@@ -4,8 +4,11 @@ title: "Why User Data May Disappear On Screen Rotation / Почему данны
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-compose-side-effects-advanced--jetpack-compose--hard, q-16kb-dex-page-size--android--medium, q-keep-service-running-background--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # Why user data may disappear on screen rotation?
 
@@ -704,3 +707,8 @@ override fun onSaveInstanceState(outState: Bundle) {
 5. - Тестируйте с поворотом экрана
 6. - Не полагайтесь на переменные экземпляра Activity/Fragment
 
+## Related Questions
+
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]]
+- [[q-16kb-dex-page-size--android--medium]]
+- [[q-keep-service-running-background--android--medium]]

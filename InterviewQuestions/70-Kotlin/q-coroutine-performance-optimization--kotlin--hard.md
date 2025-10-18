@@ -18,7 +18,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140021
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-lifecyclescope-viewmodelscope--kotlin--medium, q-delegates-compilation--kotlin--hard, q-stateflow-purpose--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-12

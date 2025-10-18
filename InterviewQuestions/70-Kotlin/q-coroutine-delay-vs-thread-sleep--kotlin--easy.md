@@ -8,6 +8,7 @@ created: "2025-10-12"
 tags: ["kotlin", "coroutines", "delay", "threads", "suspending", "difficulty/easy"]
 description: "Understanding the fundamental differences between suspending delay() and blocking Thread.sleep() in Kotlin coroutines, including thread usage and performance implications"
 moc: "moc-kotlin"
+related: [q-array-vs-list-kotlin--kotlin--easy, q-kotlin-java-type-differences--programming-languages--medium, q-kotlin-inline-functions--programming-languages--medium]
 subtopics: ["coroutines", "delay", "threads", "suspending"]
 ---
 # delay() vs Thread.sleep(): what's the difference?

@@ -4,6 +4,8 @@ title: "Kotlin Generic Function Syntax / Синтаксис обобщенных
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-sealed-vs-abstract-classes--programming-languages--medium, q-kotlin-sealed-classes-features--programming-languages--medium, q-retrofit-coroutines-best-practices--kotlin--medium]
 created: 2025-10-15
 tags:
   - functions
@@ -99,3 +101,8 @@ val name = identity("Hello")     // T выводится как String
 - Перед именем функции: `fun <T> name()`
 - Перед extension receiver: `fun <T> T.extension()`
 
+## Related Questions
+
+- [[q-sealed-vs-abstract-classes--programming-languages--medium]]
+- [[q-kotlin-sealed-classes-features--programming-languages--medium]]
+- [[q-retrofit-coroutines-best-practices--kotlin--medium]]

@@ -5,16 +5,19 @@ topic: system-design
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - system-design
+tags:
+  - system-design
   - message-queues
   - kafka
   - event-driven
   - async
 moc: moc-system-design
-related:   - q-microservices-vs-monolith--system-design--hard
+related: [q-database-sharding-partitioning--system-design--hard, q-caching-strategies--system-design--medium, q-rest-api-design-best-practices--system-design--medium]
+  - q-microservices-vs-monolith--system-design--hard
   - q-distributed-transactions--system-design--hard
   - q-event-sourcing-cqrs--system-design--hard
-subtopics:   - message-queues
+subtopics:
+  - message-queues
   - event-driven
   - kafka
   - rabbitmq

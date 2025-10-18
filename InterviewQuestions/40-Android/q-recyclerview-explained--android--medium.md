@@ -4,6 +4,8 @@ title: "Recyclerview Explained / Объяснение RecyclerView"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-kmm-dependency-injection--multiplatform--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard, q-what-does-itemdecoration-do--android--medium]
 created: 2025-10-15
 tags: [recyclerview, ui-components, difficulty/medium]
 ---

@@ -4,6 +4,8 @@ title: "How To Pass Parameters To Fragment / Как передать парам�
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-retrofit-library--android--medium, q-cicd-deployment-automation--devops--medium]
 created: 2025-10-15
 tags: [fragment, bundle, arguments, difficulty/easy]
 ---

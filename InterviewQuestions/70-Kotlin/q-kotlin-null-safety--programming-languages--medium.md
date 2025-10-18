@@ -4,6 +4,8 @@ title: "Kotlin Null Safety"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-coroutines-introduction--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium, q-kotlin-static-variable--programming-languages--easy]
 created: 2025-10-15
 tags:
   - elvis
@@ -94,3 +96,8 @@ val result = value as? String // Возвращает null, если приве�
 
 Null safety в Kotlin предотвращает большинство ошибок, связанных с null, во время компиляции.
 
+## Related Questions
+
+- [[q-kotlin-coroutines-introduction--kotlin--medium]]
+- [[q-testing-viewmodels-coroutines--kotlin--medium]]
+- [[q-kotlin-static-variable--programming-languages--easy]]

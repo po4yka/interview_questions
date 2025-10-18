@@ -4,8 +4,11 @@ title: "How To Register Broadcastreceiver To Receive Messages / Как заре�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-does-the-lifecycle-library-do--android--medium, q-how-animations-work-in-recyclerview--android--medium, q-why-was-the-lifecycle-library-created--android--hard]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How to register BroadcastReceiver to receive messages?
 

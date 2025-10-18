@@ -4,6 +4,8 @@ title: "Data Class Purpose / Назначение data class"
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-prohibit-object-creation--programming-languages--easy, q-structured-concurrency-kotlin--kotlin--medium, q-kotlin-lateinit--programming-languages--medium]
 created: 2025-10-15
 tags:
   - kotlin
@@ -73,3 +75,9 @@ println("$name is $age years old")
 - Упрощает создание моделей данных
 - Повышает читабельность кода
 - Обеспечивает корректную работу с коллекциями (благодаря equals/hashCode)
+
+## Related Questions
+
+- [[q-prohibit-object-creation--programming-languages--easy]]
+- [[q-structured-concurrency-kotlin--kotlin--medium]]
+- [[q-kotlin-lateinit--programming-languages--medium]]

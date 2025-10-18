@@ -4,6 +4,8 @@ title: "Why Abandon Mvp / Почему отказаться от MVP"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-what-is-viewstub--android--medium, q-jank-detection-frame-metrics--performance--medium, q-module-types-android--android--medium]
 created: 2025-10-15
 tags: [android/architecture-mvp, architecture-mvp, architecture-patterns, lifecycle, mvi, mvp, mvvm, difficulty/easy]
 ---
@@ -101,5 +103,99 @@ MVP is being abandoned because:
 Modern Android development favors **MVVM** with LiveData/Flow and Coroutines.
 
 ## Ответ (RU)
-Требует много шаблонного кода. Сложно масштабировать. Не очень гибко при асинхронных данных. Современные альтернативы (MVVM, MVI) лучше сочетаются с LiveData, Flow, State и coroutines.
 
+Многие Android разработчики отказываются от MVP по нескольким причинам:
+
+### Основные проблемы MVP
+
+**1. Слишком много шаблонного кода**
+
+MVP требует обширных интерфейсов для коммуникации между View и Presenter:
+
+```kotlin
+// MVP - многословные интерфейсы
+interface UserView {
+    fun showLoading()
+    fun hideLoading()
+    fun showUsers(users: List<User>)
+    fun showError(message: String)
+    fun showEmpty()
+}
+
+interface UserPresenter {
+    fun loadUsers()
+    fun onUserClicked(user: User)
+    fun onRetryClicked()
+}
+```
+
+**2. Сложно масштабировать**
+
+- Каждый экран требует интерфейс View + Presenter
+- Сложные экраны требуют много методов в интерфейсе
+- Сложно управлять несколькими Presenter
+
+**3. Плохая обработка асинхронных данных**
+
+MVP не был разработан для реактивных потоков:
+
+```kotlin
+// MVP плохо работает с Flow/LiveData
+class Presenter(private val view: View) {
+    fun loadData() {
+        // Ручное управление подписками
+        // Сложная обработка жизненного цикла
+    }
+}
+```
+
+**4. Ручное управление жизненным циклом**
+
+MVP требует ручной очистки:
+
+```kotlin
+override fun onDestroy() {
+    super.onDestroy()
+    presenter.detachView()  // Ручная очистка!
+}
+```
+
+### Современные альтернативы
+
+**MVVM:**
+- Lifecycle-aware (ViewModel автоматически учитывает жизненный цикл)
+- Автоматическая привязка данных (LiveData/StateFlow)
+- Меньше шаблонного кода
+- Официальная поддержка Jetpack
+
+**MVI:**
+- Однонаправленный поток данных
+- Лучшее управление состоянием
+- Хорошо работает с Coroutines/Flow
+
+### Сравнение
+
+| Проблема | MVP | MVVM | MVI |
+|----------|-----|------|-----|
+| Шаблонный код | Много | Мало | Средне |
+| Жизненный цикл | Ручной | Автоматический | Автоматический |
+| Реактивность | Плохая | Хорошая | Отличная |
+| Состояние | Разрозненное | ViewModel | Единое состояние |
+| Поддержка Jetpack | Нет | Да | Частично |
+
+### Резюме
+
+MVP отходит на второй план потому что:
+- Слишком много шаблонного кода
+- Сложно масштабировать
+- Плохая поддержка асинхронных/реактивных операций
+- Ручное управление жизненным циклом
+- Существуют лучшие альтернативы (MVVM, MVI)
+
+Современная Android разработка отдает предпочтение **MVVM** с LiveData/Flow и Coroutines
+
+## Related Questions
+
+- [[q-what-is-viewstub--android--medium]]
+- [[q-jank-detection-frame-metrics--performance--medium]]
+- [[q-module-types-android--android--medium]]

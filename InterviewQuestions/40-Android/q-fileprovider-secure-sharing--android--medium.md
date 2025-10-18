@@ -12,9 +12,11 @@ category: android
 date_modified: 2025-10-05
 language_tags: [fileprovider, content-provider, file-sharing, security, difficulty/medium, android/provider, android/permissions, android/files-media]
 moc: moc-android
+related: [q-lazy-grid-staggered-grid--jetpack-compose--medium, q-integration-testing-strategies--testing--medium, q-custom-view-state-saving--custom-views--medium]
 original_language: en
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20FileProvider.md"
-subtopics:   - content-provider
+subtopics:
+  - content-provider
   - permissions
   - files-media
 type: question
@@ -208,3 +210,9 @@ Uri contentUri = getUriForFile(getContext(), "com.mydomain.fileprovider", newFil
 - Отправьте `Intent` другому приложению. Чаще всего это делается путем вызова `setResult()`
 
 Разрешения, предоставленные в `Intent`, остаются в силе, пока активен стек принимающей `Activity`. Когда стек завершается, разрешения автоматически удаляются. Разрешения, предоставленные одной `Activity` в клиентском приложении, автоматически распространяются на другие компоненты этого приложения.
+
+## Related Questions
+
+- [[q-lazy-grid-staggered-grid--jetpack-compose--medium]]
+- [[q-integration-testing-strategies--testing--medium]]
+- [[q-custom-view-state-saving--custom-views--medium]]

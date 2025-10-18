@@ -4,6 +4,8 @@ title: "What Is Broadcastreceiver / Что такое BroadcastReceiver"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-rxjava-pagination-recyclerview--android--medium, q-strictmode-debugging--android--medium, q-custom-view-lifecycle--custom-views--medium]
 created: 2025-10-15
 tags: [android-components, broadcast-receiver, system-events, intent, difficulty/easy]
 ---

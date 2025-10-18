@@ -4,8 +4,11 @@ title: "Garbage Collector Definition / Определение Garbage Collector"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-iterator-order-guarantee--programming-languages--medium, q-service-locator-pattern--design-patterns--medium, q-abstract-class-purpose--programming-languages--medium]
 created: 2025-10-15
-tags: - automatic-memory
+tags:
+  - automatic-memory
   - garbage-collection
   - gc
   - java
@@ -689,3 +692,8 @@ GC нужна дополнительная память для отслежив�
 - Использовать пулы объектов для частых выделений
 - Мониторить поведение GC в продакшене
 
+## Related Questions
+
+- [[q-iterator-order-guarantee--programming-languages--medium]]
+- [[q-service-locator-pattern--design-patterns--medium]]
+- [[q-abstract-class-purpose--programming-languages--medium]]

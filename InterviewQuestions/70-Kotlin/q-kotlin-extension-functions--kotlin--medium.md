@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-flow-backpressure--kotlin--hard, q-viewmodel-coroutines-lifecycle--kotlin--medium, q-coroutine-job-lifecycle--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05

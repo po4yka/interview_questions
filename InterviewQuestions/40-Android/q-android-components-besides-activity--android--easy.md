@@ -4,6 +4,8 @@ title: "Android Components Besides Activity / Компоненты Android кр�
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-room-library-definition--android--easy, q-kotlin-dsl-builders--kotlin--hard, q-glide-image-loading-internals--android--medium]
 created: 2025-10-15
 tags: [android-components, android/android-components, broadcast-receiver, components, content-provider, fragment, service, view, viewmodel, difficulty/easy]
 ---

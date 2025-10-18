@@ -4,8 +4,11 @@ title: "Extensions In Java / Расширения в Java"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-property-delegates--programming-languages--medium, q-kotlin-delegation-detailed--kotlin--medium, q-flow-testing-advanced--kotlin--hard]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # How are Extensions applied in Java?
 
@@ -632,3 +635,9 @@ public class Main {
     }
 }
 ```
+
+## Related Questions
+
+- [[q-kotlin-property-delegates--programming-languages--medium]]
+- [[q-kotlin-delegation-detailed--kotlin--medium]]
+- [[q-flow-testing-advanced--kotlin--hard]]

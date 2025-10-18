@@ -4,6 +4,8 @@ title: "Gradle Basics / Gradle Основы"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-room-transactions-dao--room--medium, q-android-runtime-art--android--medium, q-large-file-upload--android--medium]
 created: 2025-10-15
 tags: [gradle, build-system, dependencies, difficulty/easy]
 ---

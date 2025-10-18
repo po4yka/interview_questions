@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - flow
   - oncompletion
@@ -14,7 +15,9 @@ tags: - kotlin
   - operators
   - error-handling
 moc: moc-kotlin
-subtopics:   - coroutines
+related: [q-kotlin-extension-functions--kotlin--medium, q-access-modifiers--programming-languages--medium, q-kotlin-type-system--kotlin--medium]
+subtopics:
+  - coroutines
   - flow
   - completion
   - cleanup
@@ -895,7 +898,7 @@ class StateMachine {
 ### Связанные вопросы
 - [[q-flow-operators--kotlin--medium]] - Операторы Flow
 - [[q-flow-exception-handling--kotlin--medium]] - Обработка исключений в Flow
-- [[q-flow-basics--kotlin--medium]] - Основы Flow
+- [[q-flow-basics--kotlin--easy]] - Основы Flow
 - [[q-structured-concurrency--kotlin--hard]] - Структурированная конкурентность
 
 ### Дополнительные вопросы

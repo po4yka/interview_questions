@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-hot-cold-flows--kotlin--medium, q-kotlin-any-inheritance--programming-languages--easy, q-kotlin-native--kotlin--hard]
 
 # Timestamps
 created: 2025-10-05

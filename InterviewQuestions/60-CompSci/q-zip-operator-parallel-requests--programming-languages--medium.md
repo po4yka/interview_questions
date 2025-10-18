@@ -4,8 +4,11 @@ title: "Zip Operator Parallel Requests / Оператор zip для парал�
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-regular-vs-extension-method--programming-languages--easy, q-iterator-pattern--design-patterns--medium, q-interface-vs-abstract-class--programming-languages--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Zip Operator for Parallel Request Mapping
 
@@ -535,3 +538,9 @@ suspend fun fetchWithErrorHandling(): Result<CombinedData> = coroutineScope {
 | **combine** | Использует последние из каждого, испускает при любом изменении | Синхронизация данных в реальном времени |
 | **merge** | Сглаживает все источники в один | Объединение похожих потоков |
 | **async/await** | Ручное управление параллельным выполнением | Лучше всего для Kotlin корутин |
+
+## Related Questions
+
+- [[q-regular-vs-extension-method--programming-languages--easy]]
+- [[q-iterator-pattern--design-patterns--medium]]
+- [[q-interface-vs-abstract-class--programming-languages--medium]]

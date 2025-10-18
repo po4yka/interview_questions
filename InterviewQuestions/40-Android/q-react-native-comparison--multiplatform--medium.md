@@ -4,6 +4,8 @@ title: "React Native Comparison / React Native Сравнение"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-does-jetpackcompose-work--android--medium, q-play-app-signing--android--medium, q-privacy-sandbox-attribution--privacy--medium]
 created: 2025-10-15
 tags: [Kotlin, ReactNative, Multiplatform, JavaScript, difficulty/medium]
 ---
@@ -843,3 +845,9 @@ KMM и React Native представляют контрастные филосо
 - Maturing solution
 
 Выбор: React Native для скорости разработки, KMM для native experience и производительности.
+
+## Related Questions
+
+- [[q-how-does-jetpackcompose-work--android--medium]]
+- [[q-play-app-signing--android--medium]]
+- [[q-privacy-sandbox-attribution--privacy--medium]]

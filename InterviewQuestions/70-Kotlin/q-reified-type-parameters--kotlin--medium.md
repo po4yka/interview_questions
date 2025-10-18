@@ -4,8 +4,11 @@ title: "Reified Type Parameters / Reified параметры типов"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-compose-side-effects-coroutines--kotlin--medium, q-inline-functions--kotlin--medium, q-suspending-vs-blocking--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - generics
   - reified
   - inline-functions
@@ -445,3 +448,8 @@ val product = create<Product>()  // Product::class.java.newInstance()
 
 Компилятор встраивает (inlines) код функции в место вызова, подставляя конкретный тип вместо `T`. Поэтому `T::class` работает - компилятор знает конкретный тип.
 
+## Related Questions
+
+- [[q-compose-side-effects-coroutines--kotlin--medium]]
+- [[q-inline-functions--kotlin--medium]]
+- [[q-suspending-vs-blocking--kotlin--medium]]

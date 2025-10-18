@@ -4,6 +4,8 @@ title: "What Is Pendingintent / Что такое PendingIntent"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-room-database-migrations--room--medium, q-how-is-navigation-implemented--android--medium, q-what-event-is-called-when-user-presses-the-screen--android--medium]
 created: 2025-10-15
 tags: [Android Components, android, ui, intents, pending-intent, difficulty/medium]
 ---

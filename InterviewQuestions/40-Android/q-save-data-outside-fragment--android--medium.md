@@ -4,6 +4,8 @@ title: "Save Data Outside Fragment / Сохранение данных вне Fr
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-baseline-profiles-android--android--medium, q-what-is-layout-types-and-when-to-use--android--easy, q-privacy-sandbox-sdk-runtime--privacy--hard]
 created: 2025-10-15
 tags: [android/data-storage, architecture, data-persistence, data-storage, fragments, room, sharedpreferences, viewmodel, difficulty/medium]
 ---

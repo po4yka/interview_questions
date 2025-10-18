@@ -4,8 +4,11 @@ title: "Kotlin When Expression / Выражение when в Kotlin"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-lazy-initialization--programming-languages--easy, q-reified-type-parameters--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium]
 created: 2025-10-15
-tags: - control-flow
+tags:
+  - control-flow
   - kotlin
   - pattern-matching
   - programming-languages
@@ -180,3 +183,8 @@ val result = when (val x = getValue()) {
 - Поддерживает диапазоны и проверки типов
 - Исчерпывающая проверка с sealed классами
 
+## Related Questions
+
+- [[q-lazy-initialization--programming-languages--easy]]
+- [[q-reified-type-parameters--kotlin--medium]]
+- [[q-coroutine-cancellation-mechanisms--kotlin--medium]]

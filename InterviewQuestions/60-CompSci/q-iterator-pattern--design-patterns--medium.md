@@ -4,11 +4,14 @@ title: Iterator Pattern
 topic: design-patterns
 difficulty: medium
 status: draft
+moc: moc-compSci
 created: 2025-10-15
 tags: []
-related:   - composite-pattern
+related: [q-java-all-classes-inherit-from-object--programming-languages--easy, q-how-to-create-suspend-function--programming-languages--medium, q-facade-pattern--design-patterns--medium]
+  - composite-pattern
   - visitor-pattern
-subtopics:   - behavioral-patterns
+subtopics:
+  - behavioral-patterns
   - collection-traversal
 ---
 # Iterator Pattern / Паттерн Итератор

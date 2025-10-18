@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: hard
 status: draft
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - optimization
   - caching
@@ -14,7 +15,9 @@ tags: - kotlin
   - deduplication
   - coalescing
 moc: moc-kotlin
-subtopics:   - coroutines
+related: [q-job-vs-supervisorjob--kotlin--medium, q-kotlin-combine-collections--programming-languages--easy, q-kotlin-vs-java-class-creation--programming-languages--medium]
+subtopics:
+  - coroutines
   - optimization
   - caching
   - performance

@@ -4,6 +4,8 @@ title: "View Methods And Their Purpose"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-implement-voice-video-call--android--hard, q-what-is-viewmodel--android--medium, q-compose-modifier-order-performance--jetpack-compose--medium]
 created: 2025-10-15
 tags: [android/ui, android/view, ui, ui components, view, view lifecycle, difficulty/medium]
 ---

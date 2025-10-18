@@ -4,6 +4,8 @@ title: "V Chyom Izmeryaetsya Proizvoditelnost Layout / В чем измеряе�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-kmm-production-readiness--multiplatform--hard, q-testing-viewmodels-turbine--testing--medium, q-main-causes-ui-lag--android--medium]
 created: 2025-10-15
 tags: [languages, difficulty/medium]
 ---

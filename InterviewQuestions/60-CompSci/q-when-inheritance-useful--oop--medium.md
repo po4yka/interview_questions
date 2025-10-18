@@ -5,7 +5,8 @@ topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - oop
+tags:
+  - oop
   - inheritance
   - is-a
   - composition
@@ -13,7 +14,7 @@ tags: - oop
   - best-practices
   - polymorphism
 moc: moc-architecture-patterns
-related: []
+related: [q-interface-vs-abstract-class--programming-languages--medium, q-factory-method-pattern--design-patterns--medium, q-iterator-pattern--design-patterns--medium]
 subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
 # В каких случаях наследование полезно, а в каких нет?

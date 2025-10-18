@@ -12,9 +12,11 @@ category: android
 date_modified: 2025-10-05
 language_tags: [compose, viewcompositionstrategy, lifecycle, interop, difficulty/medium, android/compose, android/lifecycle, android/performance-memory]
 moc: moc-android
+related: [q-accessibility-color-contrast--accessibility--medium, q-what-event-is-called-when-user-presses-the-screen--android--medium, q-custom-view-accessibility--custom-views--medium]
 original_language: en
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20ViewCompositionStrategy.md"
-subtopics:   - ui-compose
+subtopics:
+  - ui-compose
   - lifecycle
   - performance-memory
 type: question

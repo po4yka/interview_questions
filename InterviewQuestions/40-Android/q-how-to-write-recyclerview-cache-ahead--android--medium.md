@@ -4,6 +4,8 @@ title: "How To Write Recyclerview Cache Ahead / Как написать Recycler
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-looper-thread-connection--android--medium, q-compose-navigation-advanced--android--medium, q-home-screen-widgets--android--medium]
 created: 2025-10-15
 tags: [recyclerview, caching, prefetching, performance, optimization, difficulty/medium]
 ---

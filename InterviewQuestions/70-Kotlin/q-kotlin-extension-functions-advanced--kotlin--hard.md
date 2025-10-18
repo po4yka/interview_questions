@@ -4,8 +4,11 @@ title: "Kotlin Extension Functions Advanced"
 topic: kotlin
 difficulty: hard
 status: draft
+moc: moc-kotlin
+related: [q-crossinline-keyword--kotlin--medium, q-object-singleton-companion--kotlin--medium, q-kotlin-java-primitives--programming-languages--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - extensions
   - receivers
   - generics
@@ -233,3 +236,9 @@ Extension functions добавляют функциональность суще
 6. **Предпочитайте member functions** для основной функциональности
 7. **Используйте extension properties осторожно**
 8. **Группируйте связанные extensions** в одном файле
+
+## Related Questions
+
+- [[q-crossinline-keyword--kotlin--medium]]
+- [[q-object-singleton-companion--kotlin--medium]]
+- [[q-kotlin-java-primitives--programming-languages--medium]]

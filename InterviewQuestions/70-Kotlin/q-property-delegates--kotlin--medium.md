@@ -4,8 +4,11 @@ title: "Property Delegates / Делегаты свойств"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-coroutine-memory-leak-detection--kotlin--hard, q-dispatchers-unconfined--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - delegates
   - properties
 ---
@@ -279,3 +282,8 @@ Kotlin provides `by` syntax for working with delegates.
 
 Пользовательские делегаты позволяют вынести сложную логику getter/setter в отдельный класс и переиспользовать её для нескольких свойств.
 
+## Related Questions
+
+- [[q-coroutine-memory-leak-detection--kotlin--hard]]
+- [[q-dispatchers-unconfined--kotlin--medium]]
+- [[q-stateflow-sharedflow-differences--kotlin--medium]]

@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-test-dispatcher-types--kotlin--medium, q-kotlin-object-companion-object--programming-languages--easy, q-kotlin-favorite-features--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05

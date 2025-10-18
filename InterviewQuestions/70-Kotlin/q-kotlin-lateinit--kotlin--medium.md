@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-partition-function--kotlin--easy, q-kotlin-sam-conversions--programming-languages--medium, q-channel-flow-comparison--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05

@@ -4,8 +4,11 @@ title: "How To Handle The Situation Where Activity Can Open Multiple Times Due T
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-dagger-component-dependencies--di--hard, q-biometric-authentication--android--medium, q-how-mutablestate-notifies--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How to handle the situation where Activity can open multiple times due to deeplink?
 

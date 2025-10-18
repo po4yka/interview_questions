@@ -8,9 +8,11 @@ created: 2025-10-15
 tags: [paging, paging3, pagination, recyclerview, difficulty/medium, android/rendering, android/architecture-clean]
 language_tags: [paging, paging3, pagination, recyclerview, difficulty/medium, android/rendering, android/architecture-clean]
 moc: moc-android
+related: [q-gradle-kotlin-dsl-vs-groovy--android--medium, q-how-to-add-fragment-synchronously-asynchronously--android--medium, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--programming-languages--easy]
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
-subtopics:   - performance-rendering
+subtopics:
+  - performance-rendering
   - architecture-clean
 ---
 # Paging Library 3 / Библиотека Paging 3
@@ -158,3 +160,9 @@ interface ConcertDao {
 - [Paging Library Overview](https://developer.android.com/topic/libraries/architecture/paging)
 - [Paging 3 Overview](https://developer.android.com/topic/libraries/architecture/paging/v3-overview)
 - [Custom DataSource](https://developer.android.com/topic/libraries/architecture/paging/data#custom-data-source)
+
+## Related Questions
+
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]]
+- [[q-how-to-add-fragment-synchronously-asynchronously--android--medium]]
+- [[q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--programming-languages--easy]]

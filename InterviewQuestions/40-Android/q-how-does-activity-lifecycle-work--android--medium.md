@@ -5,9 +5,10 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - android
+tags:
+  - android
 moc: moc-android
-related: []
+related: [q-view-composition-strategy-compose--android--medium, q-compose-side-effects-advanced--jetpack-compose--hard, q-android-runtime-art--android--medium]
 ---
 # How is Fragment lifecycle connected with Activity?
 

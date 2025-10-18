@@ -4,6 +4,8 @@ title: "Mvi Architecture / Архитектура MVI"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-app-startup-optimization--performance--medium, q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium, q-how-to-pass-photo-to-editor--android--medium]
 created: 2025-10-15
 tags: [architecture, mvi, state-management, unidirectional-data-flow, difficulty/hard]
 ---

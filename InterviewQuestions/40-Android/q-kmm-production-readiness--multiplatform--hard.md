@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [Kotlin, KMM, Production, BestPractices, difficulty/hard]
 moc: moc-kotlin
-related: []
+related: [q-intent-filters-android--android--medium, q-handler-looper-comprehensive--android--medium, q-what-is-layout-types-and-when-to-use--android--easy]
 subtopics: [kmp]
 ---
 # KMM Production Readiness and Best Practices
@@ -901,3 +901,9 @@ Production KMM требует:
 Избегайте: shared mutable state, swallowed exceptions, memory leaks, excessive platform calls.
 
 Ключевые моменты: stability, observability, proper error handling, memory management, continuous monitoring.
+
+## Related Questions
+
+- [[q-intent-filters-android--android--medium]]
+- [[q-handler-looper-comprehensive--android--medium]]
+- [[q-what-is-layout-types-and-when-to-use--android--easy]]

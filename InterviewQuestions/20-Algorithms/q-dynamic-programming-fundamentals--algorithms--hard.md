@@ -5,15 +5,18 @@ topic: algorithms
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - algorithms
+tags:
+  - algorithms
   - dynamic-programming
   - dp
   - optimization
   - memoization
 moc: moc-algorithms
-related:   - q-recursion-vs-iteration--algorithms--medium
+related: [q-two-pointers-sliding-window--algorithms--medium, q-backtracking-algorithms--algorithms--hard, q-sorting-algorithms-comparison--algorithms--medium]
+  - q-recursion-vs-iteration--algorithms--medium
   - q-backtracking-algorithms--algorithms--hard
-subtopics:   - dynamic-programming
+subtopics:
+  - dynamic-programming
   - dp
   - memoization
   - tabulation
@@ -665,3 +668,9 @@ class SpellChecker {
 8. How does DP differ from divide-and-conquer?
 9. What is the longest palindromic subsequence problem?
 10. How do you solve the coin change problem with unlimited coins?
+
+## Related Questions
+
+- [[q-two-pointers-sliding-window--algorithms--medium]]
+- [[q-backtracking-algorithms--algorithms--hard]]
+- [[q-sorting-algorithms-comparison--algorithms--medium]]

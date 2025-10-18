@@ -4,6 +4,8 @@ title: "App Start Types Android / Типы запуска приложения A
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-unit-testing-coroutines-flow--android--medium, q-performance-optimization-android--android--medium, q-graphql-apollo-android--networking--medium]
 created: 2025-10-15
 tags: [performance, app-startup, cold-start, warm-start, hot-start, optimization, difficulty/medium]
 ---
@@ -668,3 +670,9 @@ adb shell am start -W com.example.app/.MainActivity
 ```
 
 Используйте `reportFullyDrawn()` для точных метрик.
+
+## Related Questions
+
+- [[q-unit-testing-coroutines-flow--android--medium]]
+- [[q-performance-optimization-android--android--medium]]
+- [[q-graphql-apollo-android--networking--medium]]

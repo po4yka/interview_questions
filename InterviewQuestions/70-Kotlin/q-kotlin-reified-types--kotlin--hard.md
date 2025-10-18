@@ -4,8 +4,11 @@ title: "Kotlin Reified Types / Reified типы в Kotlin"
 topic: kotlin
 difficulty: hard
 status: draft
+moc: moc-kotlin
+related: [q-jit-compilation-definition--programming-languages--medium, q-extensions-in-java--programming-languages--medium, q-coroutinescope-vs-supervisorscope--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - reified
   - generics
   - type-parameters
@@ -135,3 +138,9 @@ inline fun <reified T> process() {
     nonInlineFunction<T>()  // Нельзя передать в не-inline функцию
 }
 ```
+
+## Related Questions
+
+- [[q-jit-compilation-definition--programming-languages--medium]]
+- [[q-extensions-in-java--programming-languages--medium]]
+- [[q-coroutinescope-vs-supervisorscope--kotlin--medium]]

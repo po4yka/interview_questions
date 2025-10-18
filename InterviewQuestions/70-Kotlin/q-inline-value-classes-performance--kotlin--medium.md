@@ -4,8 +4,11 @@ title: "Inline Value Classes Performance"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-expect-actual-kotlin--kotlin--medium, q-kotlin-static-variable--programming-languages--easy, q-kotlin-default-access-modifier--programming-languages--easy]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - inline-classes
   - value-classes
   - performance
@@ -177,3 +180,9 @@ val any: Any = UserId(1) // Boxed
 3. Boxing в некоторых сценариях (generics, nullable, Any)
 
 Value классы обеспечивают type-safety без performance overhead.
+
+## Related Questions
+
+- [[q-expect-actual-kotlin--kotlin--medium]]
+- [[q-kotlin-static-variable--programming-languages--easy]]
+- [[q-kotlin-default-access-modifier--programming-languages--easy]]

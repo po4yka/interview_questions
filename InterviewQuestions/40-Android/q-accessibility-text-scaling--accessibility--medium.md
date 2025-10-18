@@ -7,7 +7,8 @@ status: draft
 created: 2025-10-11
 tags: [accessibility, text-scaling, font-size, dynamic-type, android/ui-accessibility, difficulty/medium]
 moc: moc-android
-related:   - q-accessibility-compose--accessibility--medium
+related: [q-mvi-architecture--android--hard, q-why-abandon-mvp--android--easy, q-how-to-reduce-the-number-of-recompositions-besides-side-effects--android--hard]
+  - q-accessibility-compose--accessibility--medium
   - q-accessibility-testing--accessibility--medium
 subtopics: [ui-accessibility]
 ---

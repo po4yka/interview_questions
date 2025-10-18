@@ -4,6 +4,8 @@ title: "Room Relations Embedded / Relations и Embedded в Room"
 topic: room
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-reduce-app-size--android--medium, q-dagger-purpose--android--easy, q-is-layoutinflater-a-singleton-and-why--android--medium]
 created: 2025-10-15
 tags: [database, relations, embedded, modeling, junction-table, difficulty/medium]
 ---

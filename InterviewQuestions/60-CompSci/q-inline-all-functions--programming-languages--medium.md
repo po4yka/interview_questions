@@ -4,6 +4,8 @@ title: "Inline All Functions / Inline All Функции"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-bridge-pattern--design-patterns--hard, q-runtime-generic-access--programming-languages--hard, q-java-access-modifiers--programming-languages--medium]
 created: 2025-10-15
 tags:
   - compiler
@@ -33,3 +35,8 @@ No, not all functions can be made inline at compiler level: 1. Compiler makes de
 
 Нет, не все функции можно сделать на уровне компилятора: 1. Компилятор принимает решение на основе размера функции и оптимизации производительности. 2. Рекурсивные функции или сложные конструкции не могут быть встроены, так как это может вызвать ошибки или увеличенный размер кода. 3. Принудительное использование inline директив возможно, но это не всегда эффективно.
 
+## Related Questions
+
+- [[q-bridge-pattern--design-patterns--hard]]
+- [[q-runtime-generic-access--programming-languages--hard]]
+- [[q-java-access-modifiers--programming-languages--medium]]

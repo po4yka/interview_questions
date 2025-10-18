@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-how-does-jetpackcompose-work--android--medium, q-derived-state-snapshot-system--jetpack-compose--hard, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]
 
 # Timestamps
 created: 2025-10-06

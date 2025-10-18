@@ -4,8 +4,11 @@ title: "Kotlin Scope Functions Advanced"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-flow-performance--kotlin--hard, q-kotlin-null-safety--programming-languages--medium, q-kotlin-sam-conversions--programming-languages--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - scope-functions
   - let
   - run
@@ -528,3 +531,9 @@ user?.email?.let { email ->
 7. Используйте осмысленные имена вместо `it` когда нужна ясность
 8. Предпочитайте `let` вместо `run` для nullable receivers
 9. Не злоупотребляйте - иногда простой код лучше
+
+## Related Questions
+
+- [[q-flow-performance--kotlin--hard]]
+- [[q-kotlin-null-safety--programming-languages--medium]]
+- [[q-kotlin-sam-conversions--programming-languages--medium]]

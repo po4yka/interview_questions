@@ -12,12 +12,14 @@ original_language: en
 language_tags: [en, ru]
 question_kind: system-design
 moc: moc-system-design
-subtopics:   - microservices
+subtopics:
+  - microservices
   - monolith
   - architecture
   - distributed-systems
   - scalability
-related:   - q-api-gateway-pattern--system-design--medium
+related: [q-message-queues-event-driven--system-design--medium, q-rest-api-design-best-practices--system-design--medium, q-horizontal-vertical-scaling--system-design--medium]
+  - q-api-gateway-pattern--system-design--medium
   - q-service-mesh--system-design--hard
   - q-distributed-transactions--system-design--hard
 ---

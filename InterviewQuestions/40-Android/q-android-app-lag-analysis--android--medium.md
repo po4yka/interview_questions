@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [performance, performance-rendering, performance-memory, ui, profiling, strictmode, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-how-to-start-drawing-ui-in-android--android--easy, q-mvi-handle-one-time-events--android--hard, q-android-testing-strategies--android--medium]
 ---
 # Why Does Android App Lag? Analysis and Solutions
 

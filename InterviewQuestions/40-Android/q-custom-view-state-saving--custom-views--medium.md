@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [views, state-management, lifecycle, android-framework, android/ui-views, android/lifecycle, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-workmanager-return-result--android--medium, q-play-app-signing--android--medium, q-fileprovider-secure-sharing--android--medium]
 subtopics: [ui-views, lifecycle]
 ---
 # Custom View State Saving
@@ -768,3 +768,9 @@ class CounterView : View {
 -  Корректно реализовать Parcelable
 -  Использовать `@Parcelize` для упрощения
 -  Держать размер состояния малым (< 50KB)
+
+## Related Questions
+
+- [[q-workmanager-return-result--android--medium]]
+- [[q-play-app-signing--android--medium]]
+- [[q-fileprovider-secure-sharing--android--medium]]

@@ -4,6 +4,8 @@ title: "How To Change Number Of Columns In Recyclerview Based On Orientation / Ð
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-looper-empty-queue-behavior--android--medium, q-where-does-the-repeated-call-of-composable-function-come-from--android--medium, q-cicd-automated-testing--devops--medium]
 created: 2025-10-15
 tags: [languages, android, difficulty/easy]
 ---

@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-android-jetpack-overview--android--easy, q-shared-element-transitions--jetpack-compose--hard, q-how-compose-draws-on-screen--android--hard]
 
 # Timestamps
 created: 2025-10-06

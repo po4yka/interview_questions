@@ -4,6 +4,8 @@ title: "Kmm Ktor Networking / Ktor для сети в KMM"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-which-layout-for-large-list--android--easy, q-why-are-fragments-needed-if-there-is-activity--android--hard, q-is-layoutinflater-a-singleton-and-why--android--medium]
 created: 2025-10-15
 tags: [Kotlin, KMM, Ktor, Networking, difficulty/medium]
 ---

@@ -4,6 +4,8 @@ title: "Kotlin Constants / Константы в Kotlin"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-inline-function-limitations--kotlin--medium, q-kotlin-native--kotlin--hard, q-kotlin-extensions-overview--programming-languages--medium]
 created: 2025-10-15
 tags:
   - const
@@ -72,3 +74,8 @@ const val MAX_SIZE = 100 // Известна во время компиляци�
 
 Константы **неизменяемы** — их значение не может быть изменено после определения.
 
+## Related Questions
+
+- [[q-inline-function-limitations--kotlin--medium]]
+- [[q-kotlin-native--kotlin--hard]]
+- [[q-kotlin-extensions-overview--programming-languages--medium]]

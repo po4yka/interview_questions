@@ -4,8 +4,11 @@ title: "Kotlin Reflection / Рефлексия в Kotlin"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-object-companion-object--kotlin--medium, q-data-sealed-difference--programming-languages--medium, q-kotlin-serialization--programming-languages--easy]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - kotlin-reflect
   - metaprogramming
   - programming-languages
@@ -550,3 +553,8 @@ val name = nameProp?.get(person)
 - **Применения**: Сериализация, DI, тестирование, ORM
 - **Зависимость**: Требуется библиотека `kotlin-reflect`
 
+## Related Questions
+
+- [[q-object-companion-object--kotlin--medium]]
+- [[q-data-sealed-difference--programming-languages--medium]]
+- [[q-kotlin-serialization--programming-languages--easy]]

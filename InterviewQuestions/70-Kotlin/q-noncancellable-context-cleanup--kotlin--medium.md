@@ -12,6 +12,7 @@ updated: 2025-10-12
 category: "coroutines-advanced"
 tags: ["noncancellable", "cancellation", "cleanup", "finally", "resource-management"]
 moc: "moc-kotlin"
+related: [q-sealed-class-sealed-interface--kotlin--medium, q-kotlin-final-modifier--programming-languages--easy, q-java-kotlin-abstract-classes-difference--programming-languages--medium]
 contributors: []
 ---
 

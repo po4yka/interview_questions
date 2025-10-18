@@ -4,6 +4,8 @@ title: "Compose Multiplatform"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-room-library-definition--android--easy, q-annotation-processing-android--android--medium, q-gradle-basics--android--easy]
 created: 2025-10-15
 tags: [Kotlin, Compose, Multiplatform, UI, difficulty/hard]
 ---

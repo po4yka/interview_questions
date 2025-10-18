@@ -4,8 +4,11 @@ title: "How System Knows Weakreference Can Be Cleared / Как система з
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-data-class-special-features--programming-languages--easy, q-java-access-modifiers--programming-languages--medium, q-mvp-pattern--architecture-patterns--medium]
 created: 2025-10-15
-tags: - garbage-collection
+tags:
+  - garbage-collection
   - jvm
   - kotlin
   - memory-management
@@ -186,3 +189,8 @@ The GC determines WeakReference can be cleared when:
 
 Система определяет, что WeakReference можно очистить, используя механизм сборщика мусора. Если объект достижим только через слабые ссылки (нет сильных ссылок), GC очищает WeakReference.
 
+## Related Questions
+
+- [[q-data-class-special-features--programming-languages--easy]]
+- [[q-java-access-modifiers--programming-languages--medium]]
+- [[q-mvp-pattern--architecture-patterns--medium]]

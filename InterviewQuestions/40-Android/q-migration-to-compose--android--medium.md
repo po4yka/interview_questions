@@ -4,6 +4,8 @@ title: "Migration To Compose / Миграция на Compose"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-does-viewgroup-inherit-from--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium, q-recyclerview-explained--android--medium]
 created: 2025-10-15
 tags: [jetpack-compose, migration, xml-to-compose, architecture, difficulty/medium]
 ---
@@ -490,6 +492,52 @@ fun CustomChart(data: List<DataPoint>) {
 ```
 
 **English**: Migrate large project to Compose using **hybrid approach**: 1) Add **ComposeView** inside existing XML layouts, 2) Use **AndroidView** for XML views inside Compose, 3) **Modular migration** - migrate feature modules one by one, 4) Create Compose **Design System** in parallel with XML, 5) New features Compose-only, 6) Gradual screen migration (simple → complex), 7) Test after each phase. Timeline: 9-13 months for 50+ screen app. Start with leaf components, progress bottom-up. Keep both XML and Compose during transition.
+
+## Ответ (RU)
+
+Мигрируйте большой проект на Compose используя **гибридный подход**: 1) Добавьте **ComposeView** внутри существующих XML layouts, 2) Используйте **AndroidView** для XML views внутри Compose, 3) **Модульная миграция** - мигрируйте feature модули один за другим, 4) Создайте Compose **Design System** параллельно с XML, 5) Новые фичи только на Compose, 6) Постепенная миграция экранов (простые → сложные), 7) Тестируйте после каждой фазы. Временная шкала: 9-13 месяцев для приложения с 50+ экранами. Начинайте с leaf компонентов, продвигайтесь снизу вверх. Сохраняйте и XML, и Compose во время перехода.
+
+### Рекомендуемая стратегия: Гибридный подход
+
+**Принцип**: Постепенная миграция снизу вверх, начиная с конечных UI компонентов.
+
+### Фаза 1: Подготовка проекта
+
+Обновите зависимости, добавьте Compose BOM, настройте buildFeatures.
+
+### Фаза 2: ComposeView внутри существующего XML
+
+Начните с малого: добавьте Compose компоненты внутри существующих экранов через ComposeView в XML layout.
+
+### Фаза 3: AndroidView для встраивания XML в Compose
+
+Обратный подход: используйте XML views внутри Compose через AndroidView для legacy компонентов.
+
+### Фаза 4: Модульная миграция
+
+Разделите приложение на feature модули и мигрируйте каждый отдельно. Начните с малых модулей (feature-auth), затем более крупные.
+
+### Фаза 5: Навигация - гибридный подход
+
+**Вариант A**: Navigation Component с Compose destinations
+**Вариант B**: Compose Navigation для новых экранов
+
+### Фаза 6: Общие компоненты (Design System)
+
+Создайте Compose версии общих UI компонентов параллельно с XML. В переходный период оба варианта доступны.
+
+### Фаза 7: Тестирование на каждом шаге
+
+Используйте Compose UI тесты с createComposeRule для проверки новых компонентов.
+
+### План миграции (пример для проекта с 50+ экранами)
+
+**Фаза 1 (1-2 месяца):** Инфраструктура
+**Фаза 2 (2-3 месяца):** Новые фичи только Compose
+**Фаза 3 (3-6 месяцев):** Постепенная миграция
+**Фаза 4 (1-2 месяца):** Финализация
+
+**Итого**: ~9-13 месяцев для полной миграции
 
 
 ---

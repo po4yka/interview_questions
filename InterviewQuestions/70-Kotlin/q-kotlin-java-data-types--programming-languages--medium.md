@@ -4,8 +4,11 @@ title: "Kotlin Java Data Types / Типы данных Kotlin и Java"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-job-state-machine-transitions--kotlin--medium, q-delegates-compilation--kotlin--hard, q-testing-coroutines-runtest--kotlin--medium]
 created: 2025-10-15
-tags: - data-types
+tags:
+  - data-types
   - java
   - kotlin
   - primitives
@@ -237,3 +240,8 @@ Any (all types)
 
 В Java и Kotlin типы данных делятся на примитивные и ссылочные. В Java: int, double и тд как примитивы и String, классы объекты массивы интерфейсы как ссылочные типы. В Kotlin: Int Double и тд как обёртки примитивов JVM, String коллекции классы с nullable и nonnullable типами. Kotlin добавляет Unit эквивалент void но объект, и Nothing для функций которые всегда бросают исключение. Также в Kotlin все данные являются объектами
 
+## Related Questions
+
+- [[q-job-state-machine-transitions--kotlin--medium]]
+- [[q-delegates-compilation--kotlin--hard]]
+- [[q-testing-coroutines-runtest--kotlin--medium]]

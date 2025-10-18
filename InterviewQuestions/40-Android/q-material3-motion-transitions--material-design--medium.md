@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [design, material3, animation, transitions, motion, difficulty/medium]
 moc: moc-ui-ux-accessibility
-related: []
+related: [q-jetpack-compose-basics--android--medium, q-navigation-methods-in-android--android--medium, q-robolectric-vs-instrumented--testing--medium]
 subtopics: [material-design, ui-animation]
 ---
 # Material 3 Motion and Transitions
@@ -824,3 +824,9 @@ fun SharedElementExample() {
 - `SharedTransitionLayout` - Shared elements
 - `animateContentSize()` - Изменения размера
 - `animateItemPlacement()` - Переупорядочивание списков
+
+## Related Questions
+
+- [[q-jetpack-compose-basics--android--medium]]
+- [[q-navigation-methods-in-android--android--medium]]
+- [[q-robolectric-vs-instrumented--testing--medium]]

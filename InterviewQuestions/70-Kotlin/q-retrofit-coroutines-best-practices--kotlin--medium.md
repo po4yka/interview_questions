@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - retrofit
   - android
@@ -14,7 +15,9 @@ tags: - kotlin
   - rest-api
   - error-handling
 moc: moc-kotlin
-subtopics:   - coroutines
+related: [q-why-data-sealed-classes--programming-languages--medium, q-by-keyword-function-call--programming-languages--easy, q-flow-basics--kotlin--easy]
+subtopics:
+  - coroutines
   - android
   - retrofit
   - networking

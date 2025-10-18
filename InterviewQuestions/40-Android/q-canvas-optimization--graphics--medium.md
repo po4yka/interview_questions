@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [canvas, custom-drawing, graphics, performance, optimization, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-dagger-purpose--android--easy, q-save-data-outside-fragment--android--medium, q-network-operations-android--android--medium]
 ---
 # Canvas Optimization and Custom Drawing
 

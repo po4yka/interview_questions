@@ -4,6 +4,8 @@ title: "Lambdas Java Kotlin Syntax / Синтаксис лямбд Java и Kotli
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-immutable-collections--programming-languages--easy, q-advanced-coroutine-patterns--kotlin--hard, q-kotlin-safe-cast--programming-languages--easy]
 created: 2025-10-15
 tags:
   - functional-programming
@@ -86,3 +88,8 @@ list.filter { it > 0 }
 
 В Java лямбды — это упрощённый синтаксис для анонимных классов, реализующих функциональный интерфейс. Синтаксис: (параметры) -> { тело }. В Kotlin лямбды представляют собой выражения, передаваемые как функции, с синтаксисом { параметры -> тело }. Kotlin более лаконичен, позволяя опускать параметры, если их можно вывести из контекста.
 
+## Related Questions
+
+- [[q-kotlin-immutable-collections--programming-languages--easy]]
+- [[q-advanced-coroutine-patterns--kotlin--hard]]
+- [[q-kotlin-safe-cast--programming-languages--easy]]

@@ -4,8 +4,11 @@ title: "Delegates Compilation / Компиляция делегатов"
 topic: kotlin
 difficulty: hard
 status: draft
+moc: moc-kotlin
+related: [q-flow-backpressure--kotlin--hard, q-rxjava-to-coroutines-migration--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - delegates
   - compilation
   - bytecode
@@ -541,3 +544,9 @@ class Delegated {
 // Normal.value (get):     ~1 ns
 // Delegated.value (get):  ~10 ns (из-за вызова метода + metadata)
 ```
+
+## Related Questions
+
+- [[q-flow-backpressure--kotlin--hard]]
+- [[q-rxjava-to-coroutines-migration--kotlin--medium]]
+- [[q-kotlin-delegation-detailed--kotlin--medium]]

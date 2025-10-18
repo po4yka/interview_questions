@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/memory-management, debugging-tools, leakcanary, memory-leaks, memory-management, square, tools, difficulty/easy]
 moc: moc-android
-related: []
+related: [q-test-doubles-dependency-injection--testing--medium, q-how-vsync-and-recomposition-events-are-related--android--hard, q-custom-view-lifecycle--custom-views--medium]
 ---
 
 # Question (EN)

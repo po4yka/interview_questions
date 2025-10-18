@@ -4,8 +4,11 @@ title: "Kotlin Serialization / Сериализация в Kotlin"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-singleton-creation--programming-languages--easy, q-functional-interfaces-vs-type-aliases--kotlin--medium]
 created: 2025-10-15
-tags: - data-persistence
+tags:
+  - data-persistence
   - json
   - kotlin
   - programming-languages
@@ -373,3 +376,8 @@ dependencies {
 - **Распространённые форматы**: JSON, Binary, Parcelable
 - **Kotlin**: Используйте аннотацию `@Serializable`
 
+## Related Questions
+
+- [[q-kotlin-non-inheritable-class--programming-languages--easy]]
+- [[q-kotlin-singleton-creation--programming-languages--easy]]
+- [[q-functional-interfaces-vs-type-aliases--kotlin--medium]]

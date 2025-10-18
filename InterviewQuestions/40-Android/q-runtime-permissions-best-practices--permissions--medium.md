@@ -4,6 +4,8 @@ title: "Runtime Permissions Best Practices / Лучшие практики runti
 topic: permissions
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-database-encryption-android--android--medium, q-clean-architecture-android--android--hard, q-privacy-sandbox-fledge--privacy--hard]
 created: 2025-10-15
 tags: [runtime, privacy, ux, best-practices, activity-result, difficulty/medium]
 ---

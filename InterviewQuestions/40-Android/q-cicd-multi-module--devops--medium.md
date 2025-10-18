@@ -4,9 +4,11 @@ title: "Cicd Multi Module / CI/CD для мультимодульных прое
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
 created: 2025-10-11
 tags: [ci-cd, multi-module, gradle, build-optimization, difficulty/medium]
-related:   - q-cicd-pipeline-setup--devops--medium
+related: [q-glide-image-loading-internals--android--medium, q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium, q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]
+  - q-cicd-pipeline-setup--devops--medium
   - q-gradle-build-optimization--build--medium
   - q-gradle-dependency-management--build--medium
 ---

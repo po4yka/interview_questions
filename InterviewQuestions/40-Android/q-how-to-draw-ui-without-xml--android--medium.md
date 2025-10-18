@@ -4,8 +4,11 @@ title: "How To Draw Ui Without Xml / Как рисовать UI без XML"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-accessibility-color-contrast--accessibility--medium, q-which-event-is-triggered-when-user-presses-screen--android--medium, q-database-encryption-android--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How to draw UI without XML?
 
@@ -403,13 +406,160 @@ class MyAdapter(private val items: List<String>) :
 ---
 
 ## RU (original)
+Рисование UI без XML можно сделать программно или используя Jetpack Compose.
 
-Как рисовать UI без xml
+**Программный подход (View system):**
 
-В Android можно создавать интерфейс без XML с помощью Jetpack Compose или программного кода (View в Kotlin/Java).
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
----
+        // Создать layout программно
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(16, 16, 16, 16)
+        }
 
+        // Добавить TextView
+        val textView = TextView(this).apply {
+            text = "Hello, World!"
+            textSize = 24f
+            setTextColor(Color.BLACK)
+        }
+
+        // Добавить Button
+        val button = Button(this).apply {
+            text = "Click Me"
+            setOnClickListener {
+                textView.text = "Button clicked!"
+            }
+        }
+
+        // Добавить views в layout
+        layout.addView(textView)
+        layout.addView(button)
+
+        // Установить как content view
+        setContentView(layout)
+    }
+}
+```
+
+**С LayoutParams:**
+
+```kotlin
+val textView = TextView(this).apply {
+    text = "Hello"
+    layoutParams = LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams.MATCH_PARENT,
+        LinearLayout.LayoutParams.WRAP_CONTENT
+    ).apply {
+        setMargins(0, 16, 0, 16)
+    }
+}
+```
+
+**Jetpack Compose (современный подход):**
+
+```kotlin
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MyApp()
+        }
+    }
+}
+
+@Composable
+fun MyApp() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+        var count by remember { mutableStateOf(0) }
+
+        Text(
+            text = "Count: $count",
+            fontSize = 24.sp,
+            color = Color.Black
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = { count++ }) {
+            Text("Increment")
+        }
+    }
+}
+```
+
+**Custom View без XML:**
+
+```kotlin
+class CustomCircleView(context: Context) : View(context) {
+    private val paint = Paint().apply {
+        color = Color.BLUE
+        style = Paint.Style.FILL
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        val centerX = width / 2f
+        val centerY = height / 2f
+        val radius = min(width, height) / 2f * 0.8f
+
+        canvas.drawCircle(centerX, centerY, radius, paint)
+    }
+}
+
+// Использование
+val customView = CustomCircleView(this)
+layout.addView(customView)
+```
+
+**ConstraintLayout программно:**
+
+```kotlin
+val constraintLayout = ConstraintLayout(this)
+
+val button = Button(this).apply {
+    id = View.generateViewId()
+    text = "Click"
+}
+
+constraintLayout.addView(button)
+
+val constraintSet = ConstraintSet()
+constraintSet.clone(constraintLayout)
+constraintSet.connect(
+    button.id,
+    ConstraintSet.START,
+    ConstraintSet.PARENT_ID,
+    ConstraintSet.START,
+    16
+)
+constraintSet.connect(
+    button.id,
+    ConstraintSet.END,
+    ConstraintSet.PARENT_ID,
+    ConstraintSet.END,
+    16
+)
+constraintSet.applyTo(constraintLayout)
+
+setContentView(constraintLayout)
+```
+
+**Рекомендации:**
+
+1. ✅ Jetpack Compose - предпочтительный подход для нового кода
+2. ✅ Программный View - для динамического UI
+3. ❌ XML - для статических layouts (легче поддерживать)
+4. ✅ Комбинируйте подходы по необходимости
 ## Related Questions
 
 ### Prerequisites (Easier)

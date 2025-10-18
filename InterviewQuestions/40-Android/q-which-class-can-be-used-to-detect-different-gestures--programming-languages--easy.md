@@ -4,6 +4,8 @@ title: "Which Class Can Be Used To Detect Different Gestures / Какой кла
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-which-class-to-catch-gestures--android--easy, q-fragments-vs-activity--android--medium, q-material3-components--material-design--easy]
 created: 2025-10-15
 tags: [languages, android, difficulty/easy]
 ---
@@ -356,4 +358,199 @@ fun SwipeExample() {
 # Какой класс можно использовать что бы ловить разные жесты?
 
 ## Ответ (RU)
-Чтобы обрабатывать жесты в Android, используйте класс GestureDetector. Он помогает отслеживать стандартные жесты: одиночные нажатия, свайпы, долгие нажатия, двойные касания и т.д.
+
+Для обработки жестов в Android используйте класс **GestureDetector**. Он помогает отслеживать стандартные жесты: одиночные нажатия, свайпы, долгие нажатия, двойные касания, fling и прокрутку.
+
+### Базовое использование GestureDetector
+
+```kotlin
+class GestureActivity : AppCompatActivity() {
+
+    private lateinit var gestureDetector: GestureDetector
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Создание GestureDetector
+        gestureDetector = GestureDetector(this, MyGestureListener())
+
+        // Применение к view
+        findViewById<View>(R.id.touchArea).setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
+        }
+    }
+
+    private inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
+
+        override fun onSingleTapUp(e: MotionEvent): Boolean {
+            Toast.makeText(this@GestureActivity, "Single Tap", Toast.LENGTH_SHORT).show()
+            return true
+        }
+
+        override fun onDoubleTap(e: MotionEvent): Boolean {
+            Toast.makeText(this@GestureActivity, "Double Tap", Toast.LENGTH_SHORT).show()
+            return true
+        }
+
+        override fun onLongPress(e: MotionEvent) {
+            Toast.makeText(this@GestureActivity, "Long Press", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onFling(
+            e1: MotionEvent,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
+            Toast.makeText(this@GestureActivity, "Fling", Toast.LENGTH_SHORT).show()
+            return true
+        }
+
+        override fun onScroll(
+            e1: MotionEvent,
+            e2: MotionEvent,
+            distanceX: Float,
+            distanceY: Float
+        ): Boolean {
+            Toast.makeText(this@GestureActivity, "Scrolling", Toast.LENGTH_SHORT).show()
+            return true
+        }
+    }
+}
+```
+
+### Все методы GestureDetector
+
+- **onDown** - вызывается когда пользователь касается экрана
+- **onSingleTapUp** - одиночное касание с поднятием пальца
+- **onSingleTapConfirmed** - подтвержденное одиночное касание (не часть двойного)
+- **onDoubleTap** - двойное касание
+- **onLongPress** - долгое нажатие
+- **onScroll** - прокрутка/перетаскивание
+- **onFling** - быстрое движение с отпусканием
+- **onShowPress** - нажатие без движения
+- **onContextClick** - контекстный клик
+
+### Custom View с жестами
+
+```kotlin
+class GestureView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+
+        override fun onDown(e: MotionEvent): Boolean = true
+
+        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+            // Обработка одиночного касания
+            performClick()
+            return true
+        }
+
+        override fun onDoubleTap(e: MotionEvent): Boolean {
+            // Обработка двойного касания (например, увеличение)
+            scaleX *= 1.5f
+            scaleY *= 1.5f
+            return true
+        }
+
+        override fun onLongPress(e: MotionEvent) {
+            // Показать контекстное меню или выделение
+            performLongClick()
+        }
+
+        override fun onFling(
+            e1: MotionEvent,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
+            // Определить направление fling
+            if (abs(velocityX) > abs(velocityY)) {
+                if (velocityX > 0) {
+                    // Fling вправо
+                } else {
+                    // Fling влево
+                }
+            }
+            return true
+        }
+    })
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+    }
+}
+```
+
+### ScaleGestureDetector для pinch zoom
+
+```kotlin
+class ZoomableView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    private var scaleFactor = 1f
+
+    private val scaleGestureDetector = ScaleGestureDetector(context,
+        object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+
+            override fun onScale(detector: ScaleGestureDetector): Boolean {
+                scaleFactor *= detector.scaleFactor
+                scaleFactor = scaleFactor.coerceIn(0.1f, 5.0f) // Ограничение масштаба
+
+                scaleX = scaleFactor
+                scaleY = scaleFactor
+
+                return true
+            }
+        })
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        scaleGestureDetector.onTouchEvent(event)
+        return true
+    }
+}
+```
+
+### Jetpack Compose жесты
+
+```kotlin
+@Composable
+fun GestureExample() {
+    var tapCount by remember { mutableStateOf(0) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = { tapCount++ },
+                    onDoubleTap = { tapCount += 2 },
+                    onLongPress = { tapCount = 0 }
+                )
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        Text("Tap count: $tapCount")
+    }
+}
+```
+
+### Резюме
+
+- **GestureDetector** - распознавание стандартных жестов
+- **ScaleGestureDetector** - жесты pinch zoom
+- **SimpleOnGestureListener** - простая реализация
+- Поддерживает: tap, double tap, long press, fling, scroll
+- Можно комбинировать несколько детекторов жестов
+
+## Related Questions
+
+- [[q-which-class-to-catch-gestures--android--easy]]
+- [[q-fragments-vs-activity--android--medium]]
+- [[q-material3-components--material-design--easy]]

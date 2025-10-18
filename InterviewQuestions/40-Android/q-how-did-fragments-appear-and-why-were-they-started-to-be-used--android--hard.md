@@ -4,6 +4,8 @@ title: "How Did Fragments Appear And Why Were They Started To Be Used / How Did 
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-certificate-pinning--security--medium, q-server-sent-events-sse--networking--medium, q-android-manifest-file--android--easy]
 created: 2025-10-15
 tags: [android-ui, android/fragments, fragments, ui, difficulty/hard]
 ---

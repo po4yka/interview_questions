@@ -4,6 +4,8 @@ title: "Retrofit Path Parameter / Path параметр Retrofit"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-android-runtime-internals--android--hard, q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium, q-overdraw-gpu-rendering--android--medium]
 created: 2025-10-15
 tags: [android/networking, get-request, networking, path-parameter, path-parameters, rest-api, retrofit, difficulty/medium]
 ---

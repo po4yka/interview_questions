@@ -4,10 +4,13 @@ title: "Gradle Version Catalog / Каталог версий Gradle"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-mlkit-face-detection--ml--medium, q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-retrofit-modify-all-requests--android--hard]
 created: 2025-10-15
 tags: [gradle, version-catalog, dependency-management, toml, android/dependency-management, android/build-variants, difficulty/medium]
 source: Kirchhoff repo
-subtopics:   - gradle
+subtopics:
+  - gradle
   - dependency-management
   - build-variants
 ---

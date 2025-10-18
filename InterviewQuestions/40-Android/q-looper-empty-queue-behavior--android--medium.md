@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/concurrency, blocking, concurrency, looper, message-queue, threading, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-main-thread-android--android--medium, q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]
 ---
 # Что происходит, когда поток разбирает пустую очередь сообщений с помощью Looper.loop()?
 
@@ -484,3 +484,8 @@ looper.quit()        // Немедленный выход, отбросить pe
 looper.quitSafely()  // Обработать pending, затем выйти
 ```
 
+## Related Questions
+
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]]
+- [[q-main-thread-android--android--medium]]
+- [[q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]]

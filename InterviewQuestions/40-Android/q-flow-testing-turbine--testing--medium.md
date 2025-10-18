@@ -7,10 +7,12 @@ status: draft
 created: 2025-10-12
 tags: [kotlin-flow, turbine, coroutines, unit-testing, android/kotlin-flow, android/turbine, android/coroutines, android/unit-testing, difficulty/medium]
 moc: moc-android
-related:   - q-kotlin-coroutines-advanced--kotlin--hard
+related: [q-why-diffutil-needed--android--medium, q-which-class-can-be-used-to-detect-different-gestures--programming-languages--easy, q-robolectric-vs-instrumented--testing--medium]
+  - q-kotlin-coroutines-advanced--kotlin--hard
   - q-unit-testing-coroutines-flow--android--medium
   - q-compose-testing--android--medium
-subtopics:   - testing
+subtopics:
+  - testing
   - kotlin-flow
   - turbine
   - coroutines

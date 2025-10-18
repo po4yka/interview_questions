@@ -4,6 +4,8 @@ title: "Kmm Architecture / Архитектура KMM"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-which-class-to-use-for-rendering-view-in-background-thread--android--hard, q-app-size-optimization--performance--medium, q-how-mutablestate-notifies--android--medium]
 created: 2025-10-15
 tags: [Kotlin, KMM, Multiplatform, Architecture, difficulty/hard]
 ---

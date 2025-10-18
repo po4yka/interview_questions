@@ -4,6 +4,8 @@ title: "Multithreading Tools Android / Инструменты многопото
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-background-vs-foreground-service--android--medium, q-push-notification-navigation--android--medium, q-room-vs-sqlite--android--medium]
 created: 2025-10-15
 tags: [multithreading, concurrency, asynctask, workmanager, rxjava, coroutines, background-tasks, difficulty/medium]
 ---
@@ -386,3 +388,9 @@ RxJava — это реализация Reactive Extensions для Java VM: би�
 2. **WorkManager** - для отложенных фоновых задач, требующих гарантированного выполнения
 3. **RxJava** - только если у вас есть существующая кодовая база RxJava или специфические реактивные требования
 4. **Никогда не используйте AsyncTask** - он устарел и имеет много проблем
+
+## Related Questions
+
+- [[q-background-vs-foreground-service--android--medium]]
+- [[q-push-notification-navigation--android--medium]]
+- [[q-room-vs-sqlite--android--medium]]

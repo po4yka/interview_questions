@@ -4,8 +4,11 @@ title: "How Does Fragment Lifecycle Differ From Activity V2 / Чем жизне�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-android-project-parts--android--easy, q-how-to-add-custom-attributes-to-custom-view--android--medium, q-workmanager-return-result--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How does Fragment lifecycle differ from Activity?
 

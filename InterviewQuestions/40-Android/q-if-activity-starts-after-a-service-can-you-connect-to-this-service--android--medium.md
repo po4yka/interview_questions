@@ -4,6 +4,8 @@ title: "If Activity Starts After A Service Can You Connect To This Service / –ú–
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-android-components-besides-activity--android--easy, q-design-whatsapp-app--android--hard, q-workmanager-advanced--background--medium]
 created: 2025-10-15
 tags: [service, binding, ipc, difficulty/medium]
 ---

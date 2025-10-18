@@ -4,6 +4,8 @@ title: "Vulkan Renderscript / Vulkan и RenderScript"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-dagger-field-injection--android--medium, q-accessibility-compose--accessibility--medium, q-compose-compiler-plugin--jetpack-compose--hard]
 created: 2025-10-15
 tags: [vulkan, renderscript, gpu, graphics, low-level, compute, difficulty/hard]
 ---
@@ -1087,3 +1089,9 @@ With RenderScript deprecated, Vulkan and OpenGL ES compute shaders are modern al
 ### Резюме
 
 С устареванием RenderScript, Vulkan и OpenGL ES compute шейдеры являются современными альтернативами для GPU вычислений на Android. Vulkan обеспечивает максимальный контроль но со сложностью, в то время как OpenGL ES 3.1+ предлагает вычислительные возможности с более простой интеграцией. Всегда реализуйте CPU fallback для совместимости и выбирайте подходящий API на основе возможностей устройства и требований производительности.
+
+## Related Questions
+
+- [[q-dagger-field-injection--android--medium]]
+- [[q-accessibility-compose--accessibility--medium]]
+- [[q-compose-compiler-plugin--jetpack-compose--hard]]

@@ -4,8 +4,11 @@ title: "Kotlin Class Initializers / Инициализаторы классов 
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-actor-pattern--kotlin--hard, q-zip-parallelism-guarantee--programming-languages--medium, q-channelflow-callbackflow-flow--kotlin--medium]
 created: 2025-10-15
-tags: - constructors
+tags:
+  - constructors
   - init
   - initialization
   - kotlin
@@ -200,3 +203,8 @@ class Example(val param: String) {
 - Блоки init выполняются до тела вторичного конструктора
 - Свойства могут быть инициализированы в блоках init
 
+## Related Questions
+
+- [[q-actor-pattern--kotlin--hard]]
+- [[q-zip-parallelism-guarantee--programming-languages--medium]]
+- [[q-channelflow-callbackflow-flow--kotlin--medium]]

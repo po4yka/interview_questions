@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/performance, fps, frame-rate, performance, rendering, ui-performance, difficulty/easy]
 moc: moc-android
-related: []
+related: [q-what-is-pendingintent--android--medium, q-why-use-fragments-when-we-have-activities--android--medium, q-how-to-pass-parameters-to-a-fragment--android--easy]
 ---
 # Если профайлер показывает тебе что какой-нибудь фрейм занял 120 миллисекунд, что это значит?
 
@@ -163,8 +163,108 @@ Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallba
 - **Target**: Keep frames under 16ms for smooth 60 fps
 
 ## Ответ (RU)
-Если профайлер показывает что рендеринг какого-либо фрейма занял 120 миллисекунд это означает что этот фрейм выполнялся слишком долго что приводит к фризам и лагам в пользовательском интерфейсе.
 
-Цель: 60 fps = 16.67ms на фрейм
-120ms = пропущено ~7 кадров = заметные лаги
+Если профайлер показывает что отрисовка кадра заняла **120 миллисекунд**, это означает что кадр **выполнялся слишком долго**, что приводит к **зависаниям и лагам** в пользовательском интерфейсе.
 
+**Бюджет кадра:**
+
+- **Цель 60 fps**: 16.67мс на кадр
+- **Кадр 120мс**: превышение в 7 раз!
+- **Результат**: Пропущено ~7 кадров
+
+**Расчёт:**
+
+```
+60 fps = 1000мс / 60 = 16.67мс на кадр
+Кадр 120мс = 120 / 16.67 = ~7 пропущенных кадров
+
+Пользователь видит: зависание на 120мс
+```
+
+**Визуальное воздействие:**
+
+```
+Норма (16мс):       Плавно
+Ваш кадр (120мс):   РЫВОК!
+
+Временная шкала:
+0мс    16мс   32мс   48мс   64мс   80мс   96мс   112мс  120мс
+|------|------|------|------|------|------|------|------|
+ 1      2      3      4      5      6      7      8      Ваш кадр завершён
+
+Пользователь видит 7 пропущенных кадров = видимое заикание
+```
+
+**Основные причины:**
+
+**1. Тяжёлая работа UI в главном потоке:**
+
+```kotlin
+//  ПЛОХО - Блокирует UI на 120мс
+override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    // Сложные вычисления в главном потоке
+    val processedData = heavyProcessing(data[position])  // 120мс!
+    holder.bind(processedData)
+}
+```
+
+**2. Синхронные сетевые/БД операции:**
+
+```kotlin
+//  ПЛОХО
+button.setOnClickListener {
+    val data = database.query()  // Блокирует UI!
+    updateUI(data)
+}
+```
+
+**3. Большой список без переработки:**
+
+```kotlin
+//  ПЛОХО
+for (item in largeList) {
+    val view = inflate(R.layout.item)  // Множество инфляций!
+    container.addView(view)
+}
+```
+
+**Решения:**
+
+```kotlin
+//  ХОРОШО - Перенести работу из главного потока
+override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    viewModelScope.launch(Dispatchers.Default) {
+        val processed = heavyProcessing(data[position])
+        withContext(Dispatchers.Main) {
+            holder.bind(processed)
+        }
+    }
+}
+
+//  ХОРОШО - Асинхронные операции
+button.setOnClickListener {
+    viewModelScope.launch {
+        val data = withContext(Dispatchers.IO) {
+            database.query()
+        }
+        updateUI(data)
+    }
+}
+
+//  ХОРОШО - Использовать RecyclerView
+recyclerView.adapter = MyAdapter(largeList)  // Эффективная переработка
+```
+
+**Итог:**
+
+- **Кадр 120мс** = **7 пропущенных кадров** при 60 fps
+- **Причины**: Тяжёлая работа в главном потоке, синхронный I/O, неэффективная отрисовка
+- **Эффект**: Видимые заикания и лаги
+- **Решение**: Перенести работу из главного потока, оптимизировать отрисовку, использовать асинхронные операции
+- **Цель**: Держать кадры под 16мс для плавных 60 fps
+
+## Related Questions
+
+- [[q-what-is-pendingintent--android--medium]]
+- [[q-why-use-fragments-when-we-have-activities--android--medium]]
+- [[q-how-to-pass-parameters-to-a-fragment--android--easy]]

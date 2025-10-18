@@ -4,6 +4,8 @@ title: "Equals Hashcode Rules / Правила equals и hashCode"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-interpreter-pattern--design-patterns--hard, q-coroutine-context-essence--programming-languages--medium, q-oop-principles-deep-dive--computer-science--medium]
 created: 2025-10-15
 tags:
   - collections
@@ -63,3 +65,8 @@ Methods `equals()` and `hashCode()` are important for correct operation of colle
 
 **Золотое правило**: Когда вы переопределяете `equals()`, вы ДОЛЖНЫ переопределить `hashCode()`!
 
+## Related Questions
+
+- [[q-interpreter-pattern--design-patterns--hard]]
+- [[q-coroutine-context-essence--programming-languages--medium]]
+- [[q-oop-principles-deep-dive--computer-science--medium]]

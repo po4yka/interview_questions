@@ -4,6 +4,8 @@ title: "Dagger Main Elements / Основные элементы Dagger"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-vsync-and-recomposition-events-are-related--android--hard, q-android-manifest-file--android--easy, q-material3-motion-transitions--material-design--medium]
 created: 2025-10-15
 tags: [android/di-hilt, dagger, dependency-injection, di-hilt, platform/android, difficulty/medium]
 ---
@@ -460,3 +462,8 @@ fun provideAuthInterceptor(): Interceptor
 
 **Резюме:** Component соединяет модули и цели инъекции, Module предоставляет зависимости, Scope контролирует время жизни, @Inject отмечает точки инъекции, Qualifier различает одинаковые типы.
 
+## Related Questions
+
+- [[q-how-vsync-and-recomposition-events-are-related--android--hard]]
+- [[q-android-manifest-file--android--easy]]
+- [[q-material3-motion-transitions--material-design--medium]]

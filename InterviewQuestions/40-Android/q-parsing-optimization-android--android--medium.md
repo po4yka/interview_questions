@@ -4,6 +4,8 @@ title: "Parsing Optimization Android / Parsing Оптимизация Android"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium, q-cicd-pipeline-setup--devops--medium, q-server-sent-events-sse--networking--medium]
 created: 2025-10-15
 tags: [android/performance, gson, json, moshi, optimization, parsing, performance, xml, difficulty/medium]
 ---

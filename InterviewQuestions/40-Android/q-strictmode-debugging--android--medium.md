@@ -4,10 +4,13 @@ title: "Strictmode Debugging / Отладка StrictMode"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-real-time-updates-android--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium, q-migration-to-compose--android--medium]
 created: 2025-10-15
 tags: [strictmode, performance, debugging, main-thread, difficulty/medium, android/performance-rendering, android/debugging]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20StrictMode.md
-subtopics:   - profiling
+subtopics:
+  - profiling
   - performance-rendering
   - debugging
 ---
@@ -454,3 +457,9 @@ fun getUsers(): List<User> {
 - [Smooth Operator: Using StrictMode to make your Android App ANR free](https://riggaroo.dev/smooth-operator-using-strictmode-to-make-your-android-app-anr-free/)
 - [Android Best Practices: StrictMode](https://code.tutsplus.com/android-best-practices-strictmode--mobile-7581t)
 - [Raising the Bar with Android StrictMode](https://medium.com/wizeline-mobile/raising-the-bar-with-android-strictmode-7042d8a9e67b)
+
+## Related Questions
+
+- [[q-real-time-updates-android--android--medium]]
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]]
+- [[q-migration-to-compose--android--medium]]

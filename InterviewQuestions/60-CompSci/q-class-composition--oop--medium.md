@@ -5,7 +5,8 @@ topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - code-reuse
+tags:
+  - code-reuse
   - composition
   - design-patterns
   - encapsulation
@@ -13,7 +14,7 @@ tags: - code-reuse
   - oop
   - relationships
 moc: moc-architecture-patterns
-related: []
+related: [q-adapter-pattern--design-patterns--medium, q-reference-types-criteria--programming-languages--medium, q-what-is-job-object--programming-languages--medium]
 subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
 # Что известно о композиции классов?

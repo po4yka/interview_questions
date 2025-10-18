@@ -18,7 +18,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140030
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-sealed-classes-features--programming-languages--medium, q-data-class-variables--programming-languages--medium, q-coroutinescope-vs-supervisorscope--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12

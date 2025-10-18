@@ -4,6 +4,8 @@ title: "State Hoisting Compose / Поднятие состояния в Compose"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-separate-ui-business-logic--android--easy, q-what-is-hilt--android--medium]
 created: 2025-10-15
 tags: [jetpack-compose, state-management, architecture, best-practices, difficulty/medium]
 ---

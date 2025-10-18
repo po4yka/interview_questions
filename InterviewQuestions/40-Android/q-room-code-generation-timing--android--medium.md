@@ -4,6 +4,8 @@ title: "Room Code Generation Timing / Время генерации кода Roo
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-dagger-framework-overview--android--hard, q-koin-fundamentals--dependency-injection--medium, q-baseline-profiles-optimization--performance--medium]
 created: 2025-10-15
 tags: [android/data-storage, annotation-processing, code-generation, compile-time, kapt, ksp, room, difficulty/medium]
 ---

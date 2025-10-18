@@ -4,8 +4,11 @@ title: "Is Fragment Lifecycle Connected To Activity Or Independent / Связа�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-koin-scope-management--dependency-injection--medium, q-how-to-add-fragment-synchronously-asynchronously--android--medium, q-reduce-apk-size-techniques--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 
 # Question (EN)

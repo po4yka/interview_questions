@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - dispatchers
   - main
@@ -15,7 +16,9 @@ tags: - kotlin
   - ui-thread
   - optimization
 moc: moc-kotlin
-subtopics:   - coroutines
+related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-visibility-modifiers--kotlin--easy, q-kotlin-non-inheritable-class--programming-languages--easy]
+subtopics:
+  - coroutines
   - dispatchers
   - main
   - performance
@@ -747,7 +750,7 @@ lifecycleScope.launch(Dispatchers.Main) {
 - [[q-dispatchers-basics--kotlin--medium]] - Dispatcher fundamentals
 - [[q-coroutine-context--kotlin--medium]] - Coroutine context
 - [[q-android-lifecycle-coroutines--kotlin--medium]] - Android lifecycle integration
-- [[q-flow-basics--kotlin--medium]] - Flow fundamentals
+- [[q-flow-basics--kotlin--easy]] - Flow fundamentals
 
 ## Follow-ups
 1. What is the actual mechanism that allows Main.immediate to check if it's already on the main thread?
@@ -780,7 +783,7 @@ lifecycleScope.launch(Dispatchers.Main) {
 - [[q-dispatchers-basics--kotlin--medium]] - Основы диспетчеров
 - [[q-coroutine-context--kotlin--medium]] - Контекст корутины
 - [[q-android-lifecycle-coroutines--kotlin--medium]] - Интеграция с Android lifecycle
-- [[q-flow-basics--kotlin--medium]] - Основы Flow
+- [[q-flow-basics--kotlin--easy]] - Основы Flow
 
 ### Дополнительные вопросы
 1. Какой реальный механизм позволяет Main.immediate проверить, находится ли он уже на главном потоке?

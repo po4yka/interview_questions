@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android, android/navigation, architecture, compose, fragment, jetpack, navigation, navigation-component, ui-patterns, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium, q-how-to-draw-ui-without-xml--android--easy, q-app-startup-optimization--performance--medium]
 ---
 # Какие способы навигации знаешь?
 

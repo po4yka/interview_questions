@@ -4,8 +4,11 @@ title: "What Are Intents For / Для чего нужны Intent"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-annotation-processing--android--medium, q-android-components-besides-activity--android--easy, q-what-is-layout-types-and-when-to-use--android--easy]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # What are Intents for?
 

@@ -4,8 +4,11 @@ title: "Kotlin Delegation By Restriction / Ограничения делегир
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-sequences-detailed--kotlin--medium, q-kotlin-init-block--kotlin--easy, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]
 created: 2025-10-15
-tags: - by-keyword
+tags:
+  - by-keyword
   - delegates
   - delegation
   - kotlin
@@ -342,3 +345,8 @@ class Document : Printer by object : Printer {
 - **Причина**: `by` ожидает **экземпляр** делегата, а не выражение создания
 - **Исключение**: Функции типа `lazy {}` возвращают делегаты, поэтому `by lazy {}` работает
 
+## Related Questions
+
+- [[q-sequences-detailed--kotlin--medium]]
+- [[q-kotlin-init-block--kotlin--easy]]
+- [[q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]]

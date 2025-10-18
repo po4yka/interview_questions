@@ -4,8 +4,11 @@ title: "Kotlin Extensions / Расширения Kotlin"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-extensions-overview--programming-languages--medium, q-kotlin-class-initializers--programming-languages--medium, q-flow-basics--kotlin--easy]
 created: 2025-10-15
-tags: - extension-functions
+tags:
+  - extension-functions
   - extensions
   - kotlin
   - programming-languages
@@ -122,3 +125,8 @@ val numbers = listOf(1, 2, 3, 4, 5)
 println(numbers.average())  // 3.0
 ```
 
+## Related Questions
+
+- [[q-kotlin-extensions-overview--programming-languages--medium]]
+- [[q-kotlin-class-initializers--programming-languages--medium]]
+- [[q-flow-basics--kotlin--easy]]

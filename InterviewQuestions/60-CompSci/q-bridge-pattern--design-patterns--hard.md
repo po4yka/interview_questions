@@ -4,8 +4,11 @@ title: "Bridge Pattern / Bridge Паттерн"
 topic: computer-science
 difficulty: hard
 status: draft
+moc: moc-compSci
+related: [q-throw-vs-throws--programming-languages--easy, q-extensions-concept--programming-languages--easy, q-priorityqueue-vs-deque--programming-languages--easy]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - structural-patterns
   - bridge
   - gof-patterns
@@ -394,55 +397,49 @@ class IOSPlatform : Platform {
 
 ### Определение
 
+Bridge — это структурный паттерн проектирования, который **позволяет разделить большой класс или набор тесно связанных классов на две отдельные иерархии — абстракцию и реализацию, которые могут разрабатываться независимо** друг от друга.
 
-Bridge is a structural design pattern that **lets you split a large class or a set of closely related classes into two separate hierarchies—abstraction and implementation—which can be developed independently** of each other.
-
-This pattern involves an interface which acts as a bridge which makes the functionality of concrete classes independent from interface implementer classes. Both types of classes can be altered structurally without affecting each other.
+Этот паттерн включает интерфейс, который действует как мост, делая функциональность конкретных классов независимой от классов-реализаторов интерфейса. Оба типа классов могут изменяться структурно, не влияя друг на друга.
 
 ### Проблемы, которые решает
 
+Паттерн проектирования Bridge решает следующие проблемы:
 
-The Bridge design pattern solves problems like:
-
-1. **An abstraction and its implementation should be defined and extended independently from each other**
-2. **A compile-time binding between an abstraction and its implementation should be avoided** so that an implementation can be selected at run-time
+1. **Абстракция и её реализация должны определяться и расширяться независимо друг от друга**
+2. **Следует избегать привязки во время компиляции между абстракцией и её реализацией**, чтобы реализация могла выбираться во время выполнения
 
 ### Когда использовать?
 
+Когда использовать паттерн Bridge:
 
-When to Use Bridge Pattern:
-
-1. **Avoid permanent binding** between abstraction and implementation
-2. **Both abstraction and implementation should be extensible** through subclassing
-3. **Changes in implementation shouldn't impact clients**
-4. **Share implementation among multiple objects** and hide implementation details
+1. **Избежать постоянной привязки** между абстракцией и реализацией
+2. **Абстракция и реализация должны быть расширяемыми** через подклассы
+3. **Изменения в реализации не должны влиять на клиентов**
+4. **Разделять реализацию между несколькими объектами** и скрывать детали реализации
 
 ### Объяснение
 
+**Объяснение**:
 
-**Explanation**:
-
-- **Implementor** (Device, Renderer, MessageSender) defines implementation interface
-- **Abstraction** (RemoteControl, Shape, Message) contains reference to implementor
-- **Concrete implementors** provide actual implementations
-- **Refined abstractions** extend base abstraction with more features
-- **Decoupling** allows changing implementations without affecting abstractions
+- **Implementor** (Device, Renderer, MessageSender) определяет интерфейс реализации
+- **Abstraction** (RemoteControl, Shape, Message) содержит ссылку на реализатора
+- **Concrete implementors** предоставляют фактические реализации
+- **Refined abstractions** расширяют базовую абстракцию дополнительными возможностями
+- **Разделение** позволяет изменять реализации без влияния на абстракции
 
 ### Pros (Преимущества)
 
-
-1. **Decoupling** - Abstraction and implementation are independent
-2. **Improved Extensibility** - Extend hierarchies independently
-3. **Enhanced Flexibility** - Change implementation without modifying abstraction
-4. **Runtime binding** - Can switch implementations at runtime
-5. **Open/Closed Principle** - Open for extension, closed for modification
+1. **Разделение** — абстракция и реализация независимы
+2. **Улучшенная расширяемость** — иерархии расширяются независимо
+3. **Повышенная гибкость** — изменение реализации без модификации абстракции
+4. **Привязка во время выполнения** — можно переключать реализации во время выполнения
+5. **Принцип открытости/закрытости** — открыт для расширения, закрыт для модификации
 
 ### Cons (Недостатки)
 
-
-1. **Increased complexity** - More classes and interfaces
-2. **Indirection** - Extra layer of abstraction
-3. **Design overhead** - Requires careful design upfront
+1. **Увеличенная сложность** — больше классов и интерфейсов
+2. **Косвенность** — дополнительный уровень абстракции
+3. **Накладные расходы на проектирование** — требует тщательного проектирования заранее
 
 
 ---

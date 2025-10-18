@@ -4,6 +4,8 @@ title: "Internal App Distribution / Внутреннее распростран�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-memory-leaks-definition--android--easy, q-recyclerview-viewtypes-delegation--recyclerview--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
 created: 2025-10-15
 tags: [Kotlin, Distribution, Testing, Firebase, difficulty/medium]
 ---

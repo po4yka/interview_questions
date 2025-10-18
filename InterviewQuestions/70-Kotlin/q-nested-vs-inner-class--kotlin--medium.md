@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-prohibit-object-creation--programming-languages--easy, q-coroutine-memory-leaks--kotlin--hard, q-retry-operators-flow--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05

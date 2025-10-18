@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [caching, performance, data-storage, optimization, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-how-to-reduce-number-of-recompositions-besides-side-effects--programming-languages--hard, q-why-separate-ui-and-business-logic--android--easy, q-16kb-dex-page-size--android--medium]
 ---
 
 # Как реализовать кэширование в Android?

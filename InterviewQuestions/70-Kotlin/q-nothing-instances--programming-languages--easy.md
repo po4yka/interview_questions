@@ -4,8 +4,11 @@ title: "Nothing Instances / Экземпляры Nothing"
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-circuit-breaker-coroutines--kotlin--hard, q-stateflow-sharedflow-android--kotlin--medium, q-request-coalescing-deduplication--kotlin--hard]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # How many instance types does Nothing have?
 
@@ -429,3 +432,9 @@ Nothing имеет **ноль экземпляров**. Это необитае�
 - Используется для пустых коллекций (`emptyList()` возвращает `List<Nothing>`)
 
 Nothing? может иметь только одно значение: `null`.
+
+## Related Questions
+
+- [[q-circuit-breaker-coroutines--kotlin--hard]]
+- [[q-stateflow-sharedflow-android--kotlin--medium]]
+- [[q-request-coalescing-deduplication--kotlin--hard]]

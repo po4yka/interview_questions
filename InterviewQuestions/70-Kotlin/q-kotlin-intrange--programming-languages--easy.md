@@ -4,8 +4,11 @@ title: "Kotlin Intrange / IntRange в Kotlin"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-constructors--kotlin--easy, q-coroutine-context-elements--kotlin--hard, q-kotlin-class-initializers--programming-languages--medium]
 created: 2025-10-15
-tags: - intrange
+tags:
+  - intrange
   - iteration
   - kotlin
   - programming-languages
@@ -169,3 +172,8 @@ val evens = range.filter { it % 2 == 0 }  // [2, 4, 6, 8, 10]
 
 **IntRange** является частью типов прогрессий Kotlin вместе с `LongRange`, `CharRange` и т.д.
 
+## Related Questions
+
+- [[q-kotlin-constructors--kotlin--easy]]
+- [[q-coroutine-context-elements--kotlin--hard]]
+- [[q-kotlin-class-initializers--programming-languages--medium]]

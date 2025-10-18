@@ -4,8 +4,11 @@ title: "Data Sealed Classes Overview"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-job-state-machine-transitions--kotlin--medium, q-coroutinescope-vs-supervisorscope--kotlin--medium, q-kotlin-vs-java-class-creation--programming-languages--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # What is known about data classes and sealed classes?
 
@@ -487,3 +490,9 @@ when (val state = viewModel.getState()) {
 **Sealed классы**: Ограничивают подклассы одним файлом/модулем. Создают типобезопасные иерархии с exhaustive when-проверками. Используются для UI состояний (Loading/Success/Error), Result типов, навигационных событий.
 
 **В Android**: Data классы - для моделей данных, sealed классы - для управления состояниями в ViewModel. Часто комбинируются: sealed класс с data подклассами.
+
+## Related Questions
+
+- [[q-job-state-machine-transitions--kotlin--medium]]
+- [[q-coroutinescope-vs-supervisorscope--kotlin--medium]]
+- [[q-kotlin-vs-java-class-creation--programming-languages--medium]]

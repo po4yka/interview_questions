@@ -4,6 +4,8 @@ title: "Large File Upload App / Загрузка больших файлов в 
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-launch-modes-android--android--medium, q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy, q-runtime-permissions-best-practices--permissions--medium]
 created: 2025-10-15
 tags: [android/background-processing, background-processing, file-upload, networking, retrofit, workmanager, difficulty/hard]
 ---
@@ -649,3 +651,8 @@ WorkManager.getInstance(context).enqueue(uploadRequest)
 - Обрабатывайте ошибки с повторами
 - Используйте chunked upload для файлов >100MB
 
+## Related Questions
+
+- [[q-launch-modes-android--android--medium]]
+- [[q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy]]
+- [[q-runtime-permissions-best-practices--permissions--medium]]

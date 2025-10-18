@@ -4,6 +4,8 @@ title: "Compose Gesture Detection / Обнаружение жестов Compose"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-unites-the-main-components-of-an-android-application--android--medium, q-main-causes-ui-lag--android--medium, q-which-class-to-use-for-detecting-gestures--android--medium]
 created: 2025-10-15
 tags: [compose, gestures, pointer-input, drag-swipe, touch-events, difficulty/medium]
 ---

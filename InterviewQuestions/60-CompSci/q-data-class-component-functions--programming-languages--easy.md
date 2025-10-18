@@ -4,6 +4,8 @@ title: "Data Class Component Functions"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-suspend-function-suspension-mechanism--programming-languages--hard, q-data-structures-algorithms--computer-science--hard, q-how-suspend-function-detects-suspension--programming-languages--hard]
 created: 2025-10-15
 tags:
   - component-functions
@@ -31,3 +33,8 @@ componentN functions facilitate access to data class properties, especially when
 
 Функции componentN служат для облегчения доступа к свойствам data class особенно при использовании синтаксиса деструктуризации
 
+## Related Questions
+
+- [[q-suspend-function-suspension-mechanism--programming-languages--hard]]
+- [[q-data-structures-algorithms--computer-science--hard]]
+- [[q-how-suspend-function-detects-suspension--programming-languages--hard]]

@@ -4,8 +4,11 @@ title: "Kotlin Any Class Methods / Методы класса Any в Kotlin"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-debugging-coroutines-techniques--kotlin--medium, q-retry-operators-flow--kotlin--medium, q-noncancellable-context-cleanup--kotlin--medium]
 created: 2025-10-15
-tags: - any
+tags:
+  - any
   - equals
   - hashcode
   - kotlin
@@ -190,3 +193,8 @@ println(user.toString())    // User(name=John)
 
 **Важно**: При переопределении `equals()` вы ДОЛЖНЫ переопределить `hashCode()`!
 
+## Related Questions
+
+- [[q-debugging-coroutines-techniques--kotlin--medium]]
+- [[q-retry-operators-flow--kotlin--medium]]
+- [[q-noncancellable-context-cleanup--kotlin--medium]]

@@ -4,6 +4,8 @@ title: "Screenshot Snapshot Testing / Screenshot Snapshot Тестировани
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-kmm-production-readiness--multiplatform--hard, q-hilt-entry-points--di--medium, q-privacy-sandbox-topics-api--privacy--medium]
 created: 2025-10-15
 tags: [screenshot-testing, paparazzi, shot, ui-testing, visual-regression, difficulty/medium]
 ---

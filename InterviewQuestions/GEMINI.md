@@ -32,6 +32,10 @@ Folders:
 - 20-Algorithms/ - coding problems
 - 30-System-Design/ - design questions
 - 40-Android/ - Android Q&As
+- 50-Backend/ - backend/database questions
+- 60-CompSci/ - CS fundamentals
+- 70-Kotlin/ - Kotlin language questions
+- 80-Tools/ - development tools (Git, etc.)
 - 10-Concepts/ - theory notes
 - 90-MOCs/ - hub pages
 ```
@@ -176,9 +180,16 @@ gemini "List all notes in 40-Android/ with status=draft."
 
 ## Critical Rules (Always Follow)
 
+### 0. No Emoji in Content
+```yaml
+# FORBIDDEN: Do not use emoji in vault notes
+# Use text equivalents: "CORRECT", "WRONG", "NOTE", "WARNING"
+# Exception: Emoji may appear in Russian content sections where culturally appropriate
+```
+
 ### 1. Bilingual = Same File
 ```yaml
-#  CORRECT
+# CORRECT
 # File: q-two-sum--algorithms--easy.md
 # Question (EN)
 Given an array...
@@ -186,58 +197,65 @@ Given an array...
 # Вопрос (RU)
 Дан массив...
 
-#  WRONG - Don't create separate files
+# WRONG - Don't create separate files
 # q-two-sum-en.md and q-two-sum-ru.md
 ```
 
 ### 2. Tags = English Only
 ```yaml
-#  CORRECT
+# CORRECT
 tags: [leetcode, arrays, hash-map, difficulty/easy]
 
-#  WRONG
+# WRONG
 tags: [leetcode, массивы, хеш-таблица]
 ```
 
 ### 3. Topic = Exactly One from TAXONOMY.md
 ```yaml
-#  CORRECT
+# CORRECT
 topic: algorithms
 
-#  WRONG
+# WRONG
 topic: [algorithms, data-structures]  # Only ONE
 topic: coding  # Invalid - not in TAXONOMY.md
 ```
 
 ### 4. Android Subtopics → Tags
 ```yaml
-#  CORRECT (for Android notes)
+# CORRECT (for Android notes)
 topic: android
 subtopics: [ui-compose, lifecycle]
 tags: [android/ui-compose, android/lifecycle, difficulty/medium]
 
-#  WRONG
+# WRONG
 # Missing android/* tags
 ```
 
 ### 5. Status = draft (for agent-created)
 ```yaml
-#  CORRECT
+# CORRECT
 status: draft  # Always for Gemini-created/modified notes
 
-#  WRONG
+# WRONG
 status: ready  # Only humans set this
 ```
 
 ### 6. Links Required
 ```yaml
-#  CORRECT
-moc: [[moc-algorithms]]
-related: [[c-hash-map], [c-array], [q-three-sum--algorithms--medium]]
+# CORRECT
+moc: moc-algorithms  # WITHOUT brackets
+related: [c-hash-map, c-array, q-three-sum--algorithms--medium]  # Array WITHOUT brackets
 
-#  WRONG
+# WRONG
 moc: []  # Must link to MOC
 related: []  # Should link to concepts
+moc: [[moc-algorithms]]  # Don't use brackets in YAML
+```
+
+### 7. No Emoji
+```yaml
+# FORBIDDEN: Do not use emoji in notes
+# Use text: "CORRECT", "WRONG", "NOTE", "WARNING"
 ```
 
 ---
@@ -249,8 +267,10 @@ related: []  # Should link to concepts
 | `20-Algorithms/` | `algorithms` | `coding` |
 | `30-System-Design/` | `system-design` | `system-design` |
 | `40-Android/` | `android` | `android` or `theory` |
-| `50-Behavioral/` | `behavioral` | `theory` |
+| `50-Backend/` | `databases` or related | `theory` |
 | `60-CompSci/` | Match specific (see TAXONOMY.md) | `theory` |
+| `70-Kotlin/` | `kotlin` | `coding` or `theory` |
+| `80-Tools/` | `tools` | `theory` |
 | `10-Concepts/` | N/A (concepts) | N/A |
 | `90-MOCs/` | N/A (MOCs) | N/A |
 
@@ -290,11 +310,11 @@ moc-system-design.md
 
 ### Topics (choose ONE)
 ```
-algorithms, data-structures, system-design, android,
+algorithms, data-structures, system-design, android, kotlin,
 programming-languages, architecture-patterns, concurrency,
 distributed-systems, databases, networking, operating-systems,
 security, performance, testing, devops-ci-cd, cloud, debugging,
-ui-ux-accessibility, behavioral, cs
+ui-ux-accessibility, behavioral, tools, cs
 ```
 
 ### Difficulty
@@ -351,8 +371,8 @@ sources:
 
 # Workflow & relations
 status: draft                           # ALWAYS draft for Gemini
-moc: [[moc-algorithms]]                # Link to ≥1 MOC
-related: [[c-hash-map], [c-array]]     # Link to concepts/questions
+moc: moc-algorithms                     # Link to ≥1 MOC (WITHOUT brackets)
+related: [c-hash-map, c-array]          # Array of links (WITHOUT brackets)
 
 # Timestamps
 created: 2025-10-03                     # YYYY-MM-DD
@@ -506,8 +526,11 @@ gemini "Find notes with Russian in tags (should be English only)"
 - **Full vault rules**: `00-Administration/README.md`
 - **Agent tasks**: `00-Administration/AGENTS.md`
 - **Quick checklist**: `00-Administration/AGENT-CHECKLIST.md`
+- **AI tools comparison**: `00-Administration/AI-TOOLS.md`
 - **Valid topics/subtopics**: `00-Administration/TAXONOMY.md`
 - **Templates**: `_templates/_tpl-qna.md`, `_tpl-concept.md`, `_tpl-moc.md`
+- **Cursor AI rules**: `.cursor/rules/` (modern MDC format) and `.cursorrules` (legacy)
+- **Claude Code settings**: `.claude/settings.local.json`
 
 ---
 
@@ -539,4 +562,4 @@ All should have EN/RU, proper YAML, status=draft."
 
 ---
 
-**Remember**: When uncertain, check TAXONOMY.md, set `status: draft`, and ask the user.
+**Remember**: When uncertain, check TAXONOMY.md, set `status: draft`, and ask the user. Do not use emoji in vault notes.

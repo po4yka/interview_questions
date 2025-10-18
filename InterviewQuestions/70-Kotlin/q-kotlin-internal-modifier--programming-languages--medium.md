@@ -4,8 +4,11 @@ title: "Kotlin Internal Modifier / Модификатор internal в Kotlin"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-inheritance-open-final--kotlin--medium, q-flow-completion-oncompletion--kotlin--medium, q-flow-exception-handling--kotlin--medium]
 created: 2025-10-15
-tags: - access-modifiers
+tags:
+  - access-modifiers
   - internal
   - kotlin
   - module
@@ -237,3 +240,8 @@ MyClass.processData$module_name();  // Mangled name
 
 Код с `internal` не будет виден в других модулях, даже если класс или функция — public. Полезно для сокрытия реализации между слоями или при использовании многомодульной архитектуры.
 
+## Related Questions
+
+- [[q-inheritance-open-final--kotlin--medium]]
+- [[q-flow-completion-oncompletion--kotlin--medium]]
+- [[q-flow-exception-handling--kotlin--medium]]

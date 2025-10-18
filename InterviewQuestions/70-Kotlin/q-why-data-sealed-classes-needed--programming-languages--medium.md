@@ -4,6 +4,8 @@ title: "Why Data Sealed Classes Needed"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-flow-exception-handling--kotlin--medium, q-channel-buffering-strategies--kotlin--hard, q-channel-closing-completion--kotlin--medium]
 created: 2025-10-15
 tags:
   - programming-languages
@@ -130,3 +132,10 @@ sealed class Status {
 ```
 
 ---
+
+## Related Questions
+
+- [[q-flow-exception-handling--kotlin--medium]]
+- [[q-channel-buffering-strategies--kotlin--hard]]
+- [[q-channel-closing-completion--kotlin--medium]]
+

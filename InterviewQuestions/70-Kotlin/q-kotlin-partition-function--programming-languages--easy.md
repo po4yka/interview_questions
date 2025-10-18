@@ -4,6 +4,8 @@ title: "Kotlin Partition Function / Функция partition в Kotlin"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-any-inheritance--programming-languages--easy, q-fan-in-fan-out-channels--kotlin--hard, q-continuation-cps-internals--kotlin--hard]
 created: 2025-10-15
 tags:
   - collections
@@ -137,3 +139,10 @@ fun <T> Iterable<T>.partition(
 - Вычисляет предикат один раз на элемент
 
 ---
+
+## Related Questions
+
+- [[q-kotlin-any-inheritance--programming-languages--easy]]
+- [[q-fan-in-fan-out-channels--kotlin--hard]]
+- [[q-continuation-cps-internals--kotlin--hard]]
+

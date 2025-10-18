@@ -4,6 +4,8 @@ title: "Testing Coroutines Flow / Тестирование Coroutines Flow"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-singleton-scope-binding--android--medium, q-what-design-systems-in-android-have-you-worked-with--android--medium, q-test-coverage-quality-metrics--testing--medium]
 created: 2025-10-15
 tags: [coroutines, flow, async, turbine, test-dispatcher, difficulty/hard]
 ---

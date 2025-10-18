@@ -4,6 +4,8 @@ title: "How To Draw Ui Without Xml / Как рисовать UI без XML"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-screenshot-snapshot-testing--testing--medium, q-app-start-types-android--android--medium, q-jit-vs-aot-compilation--android--medium]
 created: 2025-10-15
 tags: [View, android, ui, jetpack-compose, views, difficulty/medium]
 ---

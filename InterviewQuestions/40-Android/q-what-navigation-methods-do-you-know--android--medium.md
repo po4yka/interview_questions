@@ -4,6 +4,8 @@ title: "What Navigation Methods Do You Know / Какие методы навиг
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium, q-what-are-services-for--android--easy, q-api-file-upload-server--android--medium]
 created: 2025-10-15
 tags: [languages, difficulty/medium]
 ---

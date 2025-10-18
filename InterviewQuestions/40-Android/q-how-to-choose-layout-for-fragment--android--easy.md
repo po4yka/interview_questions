@@ -4,6 +4,8 @@ title: "How To Choose Layout For Fragment / Как выбрать layout для 
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-flow-testing-turbine--testing--medium, q-fragment-basics--android--easy, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
 created: 2025-10-15
 tags: [android/fragments, android/layouts, android/ui, fragment, fragments, layoutinflater, layouts, ui, difficulty/easy]
 ---

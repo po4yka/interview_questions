@@ -4,6 +4,8 @@ title: "Stable Annotation Compose / Аннотация Stable в Compose"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-multithreading-tools-android--android--medium, q-push-notification-navigation--android--medium, q-save-data-outside-fragment--android--medium]
 created: 2025-10-15
 tags: [android/jetpack-compose, android/performance, annotations, jetpack-compose, optimization, performance, recomposition, stability, stable-annotation, difficulty/hard]
 ---

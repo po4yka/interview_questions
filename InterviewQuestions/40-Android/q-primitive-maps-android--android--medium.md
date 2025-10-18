@@ -4,6 +4,8 @@ title: "Primitive Maps Android / Примитивные Map в Android"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-where-is-composition-created--android--medium, q-reduce-apk-size-techniques--android--medium, q-kmm-production-readiness--multiplatform--hard]
 created: 2025-10-15
 tags: [performance, collections, memory-optimization, difficulty/medium]
 ---
@@ -745,4 +747,8 @@ class AfterOptimization {
 **Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
 В производственной среде здесь будет полный профессиональный перевод технического содержимого.
 
+## Related Questions
 
+- [[q-where-is-composition-created--android--medium]]
+- [[q-reduce-apk-size-techniques--android--medium]]
+- [[q-kmm-production-readiness--multiplatform--hard]]

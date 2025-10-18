@@ -4,6 +4,8 @@ title: "Ot Kogo Nasleduyutsya Viewgroup / От кого наследуется V
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-canvas-optimization--graphics--medium, q-what-does-itemdecoration-do--android--medium]
 created: 2025-10-15
 tags: [languages, android, difficulty/easy]
 ---

@@ -5,7 +5,8 @@ topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - aggregation
+tags:
+  - aggregation
   - composition
   - design-patterns
   - has-a
@@ -14,7 +15,7 @@ tags: - aggregation
   - oop
   - relationships
 moc: moc-architecture-patterns
-related: []
+related: [q-hot-vs-cold-flows--programming-languages--medium, q-state-pattern--design-patterns--medium, q-adapter-pattern--design-patterns--medium]
 subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
 # В чём различия наследования, композиции, агрегации?

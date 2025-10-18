@@ -4,6 +4,8 @@ title: "Dagger Problems / Проблемы Dagger"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-databases-android--android--easy, q-what-are-the-navigation-methods-in-kotlin--android--medium, q-mvvm-pattern--android--medium]
 created: 2025-10-15
 tags: [android/di-hilt, dagger, dependency-injection, di-hilt, platform/android, difficulty/medium]
 ---
@@ -391,3 +393,8 @@ Dagger имеет ряд проблем: **Крутая кривая обуче�
 
 **Рекомендация:** Для новых Android-проектов лучше использовать **Hilt** вместо Dagger напрямую.
 
+## Related Questions
+
+- [[q-databases-android--android--easy]]
+- [[q-what-are-the-navigation-methods-in-kotlin--android--medium]]
+- [[q-mvvm-pattern--android--medium]]

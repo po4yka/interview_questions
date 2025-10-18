@@ -4,6 +4,8 @@ title: "How Navigation Is Implemented In Android / Как реализована
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-workmanager-data-passing--android--medium, q-graphql-vs-rest--networking--easy, q-strictmode-debugging--android--medium]
 created: 2025-10-15
 tags: [android/navigation, android/ui, gestures, navigation, ui, difficulty/medium]
 ---

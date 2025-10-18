@@ -5,9 +5,10 @@ topic: programming-languages
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - programming-languages
+tags:
+  - programming-languages
 moc: moc-programming-languages
-related: []
+related: [q-primitive-vs-reference-types--programming-languages--easy, q-launch-vs-async-await--programming-languages--medium, q-iterator-pattern--design-patterns--medium]
 subtopics: ["computer-science", "fundamentals"]
 ---
 # Default Dispatcher vs IO Dispatcher

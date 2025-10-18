@@ -4,8 +4,11 @@ title: "Dispatchers Io Vs Default"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-infix-functions--kotlin--medium, q-coroutine-scope-basics--kotlin--easy, q-request-coalescing-deduplication--kotlin--hard]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - dispatchers
   - threading
@@ -612,3 +615,8 @@ class RepositoryTest {
 }
 ```
 
+## Related Questions
+
+- [[q-infix-functions--kotlin--medium]]
+- [[q-coroutine-scope-basics--kotlin--easy]]
+- [[q-request-coalescing-deduplication--kotlin--hard]]

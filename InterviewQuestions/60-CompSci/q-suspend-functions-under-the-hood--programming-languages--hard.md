@@ -4,8 +4,11 @@ title: "Suspend Functions Under The Hood"
 topic: computer-science
 difficulty: hard
 status: draft
+moc: moc-compSci
+related: [q-suspend-function-return-type-after-compilation--programming-languages--hard, q-where-to-call-suspend-functions--programming-languages--medium, q-synchronized-blocks-with-coroutines--programming-languages--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Suspend Functions Under the Hood
 
@@ -728,3 +731,9 @@ suspend fun example() {
 7. **Stack Unwinding**: Приостановка разворачивает стек вызовов; возобновление восстанавливает его
 
 **Резюме**: Suspend-функции в Kotlin преобразуются компилятором в state machine с использованием Continuation-Passing Style. Каждая точка приостановки (suspend вызов) разбивает функцию на состояния. При приостановке функция возвращает COROUTINE_SUSPENDED и освобождает поток. При возобновлении continuation.resumeWith() вызывается для продолжения с места остановки. Локальные переменные сохраняются в state machine классе. Этот механизм позволяет асинхронному коду выглядеть синхронным без блокировки потоков.
+
+## Related Questions
+
+- [[q-suspend-function-return-type-after-compilation--programming-languages--hard]]
+- [[q-where-to-call-suspend-functions--programming-languages--medium]]
+- [[q-synchronized-blocks-with-coroutines--programming-languages--medium]]

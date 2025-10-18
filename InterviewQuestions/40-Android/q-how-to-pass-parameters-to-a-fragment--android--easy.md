@@ -4,6 +4,8 @@ title: "How To Pass Parameters To A Fragment / Как передать пара�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-is-broadcastreceiver--android--easy, q-internal-app-distribution--distribution--medium, q-proguard-r8--android--medium]
 created: 2025-10-15
 tags: [bundle, android, ui, data-passing, difficulty/medium]
 ---

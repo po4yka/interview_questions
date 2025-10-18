@@ -4,8 +4,11 @@ title: "Synchronized Blocks With Coroutines / Синхронизированны
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-java-lambda-type--programming-languages--easy, q-sealed-vs-enum-classes--programming-languages--medium, q-proxy-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Why Not Use Synchronized Blocks with Coroutines?
 
@@ -454,3 +457,9 @@ fun demonstrateThreadBlocking() = runBlocking {
 ## Ответ (RU)
 
 1. synchronized блоки в Java/Kotlin работают на уровне потоков, а не корутин – это разные механизмы синхронизации.\", \"2. Блокировка потоков замедляет работу – Mutex работает в асинхронном стиле, не блокируя потоки.\", \"3. Глобальные synchronized блоки не учитывают отмену корутин – если корутина отменена, synchronized не освобощает ресурс
+
+## Related Questions
+
+- [[q-java-lambda-type--programming-languages--easy]]
+- [[q-sealed-vs-enum-classes--programming-languages--medium]]
+- [[q-proxy-pattern--design-patterns--medium]]

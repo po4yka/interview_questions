@@ -4,8 +4,11 @@ title: "Kotlin Data Sealed Classes Combined"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-stateflow-sharedflow-differences--kotlin--medium, q-channels-basics-types--kotlin--medium, q-kotlin-native--kotlin--hard]
 created: 2025-10-15
-tags: - data-class
+tags:
+  - data-class
   - kotlin
   - oop
   - programming-languages
@@ -119,3 +122,8 @@ fun handleResult(result: Result<String>) = when (result) {
 - Чистый, поддерживаемый код
 - Идеально для управления состоянием
 
+## Related Questions
+
+- [[q-stateflow-sharedflow-differences--kotlin--medium]]
+- [[q-channels-basics-types--kotlin--medium]]
+- [[q-kotlin-native--kotlin--hard]]

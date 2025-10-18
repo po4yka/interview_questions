@@ -4,6 +4,8 @@ title: "Jit Vs Aot Compilation"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-espresso-advanced-patterns--testing--medium, q-fakes-vs-mocks-testing--testing--medium, q-kapt-vs-ksp--android--medium]
 created: 2025-10-15
 tags: [jit, aot, compilation, art, performance, baseline-profiles, difficulty/medium]
 ---
@@ -580,3 +582,9 @@ object CompilationStrategy {
 | Обновления | Быстро | Медленно | Быстро |
 
 **Лучший выбор:** Hybrid с baseline profiles для большинства приложений.
+
+## Related Questions
+
+- [[q-espresso-advanced-patterns--testing--medium]]
+- [[q-fakes-vs-mocks-testing--testing--medium]]
+- [[q-kapt-vs-ksp--android--medium]]

@@ -18,7 +18,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140027
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-coroutine-context-elements--kotlin--hard, q-lazy-initialization--programming-languages--easy, q-kotlin-multiplatform-overview--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12

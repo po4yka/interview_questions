@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-what-is-workmanager--android--medium, q-how-does-jetpackcompose-work--android--medium, q-compose-custom-animations--jetpack-compose--medium]
 
 # Timestamps
 created: 2025-10-06

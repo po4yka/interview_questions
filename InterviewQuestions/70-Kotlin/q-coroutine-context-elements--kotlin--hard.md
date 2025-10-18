@@ -8,6 +8,7 @@ created: "2025-10-12"
 tags: ["kotlin", "coroutines", "difficulty/medium"]
 description: "Comprehensive guide to What are CoroutineContext elements and how do they combine? in Kotlin coroutines"
 moc: "moc-kotlin"
+related: [q-room-coroutines-flow--kotlin--medium, q-kotlin-when-expression--programming-languages--easy, q-coroutine-context-explained--kotlin--medium]
 subtopics: ["coroutines", "context", "job", "dispatcher", "name"]
 ---
 # What are CoroutineContext elements and how do they combine?

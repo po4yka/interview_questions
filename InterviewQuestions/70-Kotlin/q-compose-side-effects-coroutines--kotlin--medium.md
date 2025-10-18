@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - android
   - jetpack-compose
@@ -15,7 +16,9 @@ tags: - kotlin
   - lifecycle
   - state-management
 moc: moc-kotlin
-subtopics:   - coroutines
+related: [q-kotlin-sealed-when-exhaustive--kotlin--medium, q-select-expression-channels--kotlin--hard, q-sealed-class-sealed-interface--kotlin--medium]
+subtopics:
+  - coroutines
   - android
   - compose
   - side-effects
@@ -875,8 +878,8 @@ fun testArticleLoading() = runTest {
 ```
 
 ### Related Questions
-- [[q-coroutine-basics--kotlin--easy]] - Coroutine fundamentals
-- [[q-flow-basics--kotlin--medium]] - Flow fundamentals
+- [[q-what-is-coroutine--kotlin--easy]] - Coroutine fundamentals
+- [[q-flow-basics--kotlin--easy]] - Flow fundamentals
 - [[q-android-lifecycle-coroutines--kotlin--medium]] - Android lifecycle integration
 - [[q-stateflow-sharedflow--kotlin--medium]] - StateFlow and SharedFlow
 
@@ -940,8 +943,8 @@ fun GoodExample() {
 *(Продолжение следует той же структуре с подробными примерами всех side effects на русском языке, включая LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, SideEffect, derivedStateOf, snapshotFlow, production примеры, тестирование и best practices)*
 
 ### Связанные вопросы
-- [[q-coroutine-basics--kotlin--easy]] - Основы корутин
-- [[q-flow-basics--kotlin--medium]] - Основы Flow
+- [[q-what-is-coroutine--kotlin--easy]] - Основы корутин
+- [[q-flow-basics--kotlin--easy]] - Основы Flow
 - [[q-android-lifecycle-coroutines--kotlin--medium]] - Интеграция с Android lifecycle
 - [[q-stateflow-sharedflow--kotlin--medium]] - StateFlow и SharedFlow
 

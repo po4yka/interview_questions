@@ -4,8 +4,11 @@ title: "Viewmodel Vs Onsavedinstancestate / Viewmodel против Onsavedinstan
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-notification-channels-android--android--medium, q-how-vsync-and-recomposition-events-are-related--android--hard, q-play-app-signing--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # ViewModel vs OnSavedInstanceState
 

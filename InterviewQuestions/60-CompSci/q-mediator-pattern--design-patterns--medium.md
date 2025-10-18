@@ -4,8 +4,11 @@ title: "Mediator Pattern / Mediator Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-state-pattern--design-patterns--medium, q-composite-pattern--design-patterns--medium, q-coroutinescope-vs-supervisorscope--programming-languages--medium]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - behavioral-patterns
   - mediator
   - gof-patterns

@@ -4,8 +4,11 @@ title: "Lazy Initialization / Ленивая инициализация"
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-coroutinescope-vs-coroutinecontext--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # What function in Kotlin is used for lazy property initialization?
 
@@ -340,3 +343,9 @@ println(user.profile)  // Профиль пользователя (без выч
 **lazy vs lateinit:**
 - `lazy`: используется с `val`, инициализация при первом доступе, с инициализатором
 - `lateinit`: используется с `var`, должна быть инициализирована до использования, без инициализатора
+
+## Related Questions
+
+- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]]
+- [[q-kotlin-coroutines-introduction--kotlin--medium]]
+- [[q-coroutine-cancellation-mechanisms--kotlin--medium]]

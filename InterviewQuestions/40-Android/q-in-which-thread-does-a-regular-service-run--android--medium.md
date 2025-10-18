@@ -4,8 +4,11 @@ title: "In Which Thread Does A Regular Service Run / В каком потоке 
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-multi-module-best-practices--android--hard, q-retrofit-library--android--medium, q-react-native-comparison--multiplatform--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # In which thread does a regular service run
 

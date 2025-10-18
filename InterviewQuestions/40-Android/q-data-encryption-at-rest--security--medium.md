@@ -4,6 +4,8 @@ title: "Data Encryption At Rest / Шифрование данных в поко�
 topic: security
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-dagger-build-time-optimization--android--medium, q-what-is-pendingintent--programming-languages--medium, q-android-modularization--android--medium]
 created: 2025-10-15
 tags: [encryption, database, shared-preferences, sqlcipher, performance, key-management, difficulty/medium]
 ---

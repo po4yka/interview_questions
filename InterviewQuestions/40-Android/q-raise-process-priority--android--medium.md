@@ -4,6 +4,8 @@ title: "Raise Process Priority / Повышение приоритета про�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-network-operations-android--android--medium, q-what-events-are-activity-methods-tied-to--android--medium, q-kotlin-dsl-builders--kotlin--hard]
 created: 2025-10-15
 tags: [android/foreground-service, android/services, foreground-service, lifecycle, process-priority, services, difficulty/medium]
 ---
@@ -578,3 +580,9 @@ class DownloadService : Service() {
 -   Обязательно требуется видимое уведомление
 -   Всегда вызывайте `stopForeground()` и `stopSelf()` когда задача завершена
 -   Используйте только когда действительно необходимо - для задач, которые пользователь ожидает увидеть работающими
+
+## Related Questions
+
+- [[q-network-operations-android--android--medium]]
+- [[q-what-events-are-activity-methods-tied-to--android--medium]]
+- [[q-kotlin-dsl-builders--kotlin--hard]]

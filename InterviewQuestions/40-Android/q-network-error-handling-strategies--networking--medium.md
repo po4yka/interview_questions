@@ -4,6 +4,8 @@ title: "Network Error Handling Strategies"
 topic: networking
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-presenter-notify-view--android--medium, q-leakcanary-detection-mechanism--android--medium, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--programming-languages--easy]
 created: 2025-10-15
 tags: [error-handling, strategy, architecture, ux, difficulty/medium]
 ---

@@ -17,11 +17,11 @@ language_tags: [anr, performance, main-thread, debugging, difficulty/medium, and
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20ANR.md
 author: null
-related:
+related: [q-why-was-the-lifecycle-library-created--android--hard, q-how-to-save-activity-state--android--medium, q-why-use-diffutil--android--medium]
   - "[[moc-android]]"
   - "[[q-main-thread-vs-background-thread--android--easy]]"
   - "[[q-strictmode-detection--android--medium]]"
-moc:
+moc: moc-android
   - "[[moc-android]]"
 connections: []
 ---

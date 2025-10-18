@@ -4,6 +4,8 @@ title: "Testing Viewmodels Turbine / Тестирование Viewmodels Turbine
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-graphql-vs-rest--networking--easy, q-bundle-data-types--android--medium, q-how-does-jetpackcompose-work--android--medium]
 created: 2025-10-15
 tags: [viewmodel, flow, turbine, state-management, coroutines, difficulty/medium]
 ---

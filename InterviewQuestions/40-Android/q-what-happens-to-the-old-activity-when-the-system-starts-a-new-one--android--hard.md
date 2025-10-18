@@ -4,8 +4,11 @@ title: "What Happens To The Old Activity When The System Starts A New One / Чт
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-surfaceview-rendering--android--medium, q-what-is-diffutil-for--android--medium, q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # What happens to the old Activity when the system starts a new one?
 

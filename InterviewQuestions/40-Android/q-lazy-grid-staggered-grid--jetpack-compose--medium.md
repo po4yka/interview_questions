@@ -7,10 +7,12 @@ status: draft
 created: 2025-10-12
 tags: [jetpack-compose, lazy-layout, grid, performance, android/compose, android/lazy-layout, android/grid, android/performance, android/ui, difficulty/medium]
 moc: moc-android
-related:   - q-jetpack-compose-lazy-column--android--easy
+related: [q-handler-looper-comprehensive--android--medium, q-compose-navigation-advanced--jetpack-compose--medium, q-koin-vs-hilt-comparison--dependency-injection--medium]
+  - q-jetpack-compose-lazy-column--android--easy
   - q-compose-lazy-layout-optimization--jetpack-compose--hard
   - q-paging-library-3--android--medium
-subtopics:   - jetpack-compose
+subtopics:
+  - jetpack-compose
   - lazy-layout
   - grid
   - performance

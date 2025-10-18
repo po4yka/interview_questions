@@ -8,6 +8,7 @@ created: "2025-10-12"
 tags: ["kotlin", "classes", "difficulty/medium"]
 description: "Comprehensive guide to Inheritance in Kotlin: open, final, abstract, override covering concepts, patterns, best practices, and real-world examples"
 moc: "moc-kotlin"
+related: [q-flow-backpressure-strategies--kotlin--hard, q-kotlin-delegation-by-restriction--programming-languages--medium, q-kotlin-reflection--programming-languages--medium]
 subtopics: ["classes", "kotlin-features", "oop"]
 ---
 # Inheritance in Kotlin: open, final, abstract, override
@@ -149,4 +150,4 @@ subtopics: ["classes", "kotlin-features", "oop"]
 - [[q-sealed-class-sealed-interface--kotlin--medium]]
 - [[q-inheritance-open-final--kotlin--medium]]
 - [[q-visibility-modifiers-kotlin--kotlin--medium]]
-- [[q-kotlin-classes-basics--kotlin--easy]]
+- [[q-kotlin-enum-classes--kotlin--easy]]

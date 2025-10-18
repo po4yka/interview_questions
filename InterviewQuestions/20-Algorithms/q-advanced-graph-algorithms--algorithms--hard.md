@@ -5,7 +5,8 @@ topic: algorithms
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - algorithms
+tags:
+  - algorithms
   - graph
   - dijkstra
   - mst
@@ -13,10 +14,12 @@ tags: - algorithms
   - floyd-warshall
   - bellman-ford
 moc: moc-algorithms
-related:   - q-graph-algorithms-bfs-dfs--algorithms--hard
+related: [q-graph-algorithms-bfs-dfs--algorithms--hard, q-binary-search-variants--algorithms--medium, q-binary-search-trees-bst--algorithms--hard]
+  - q-graph-algorithms-bfs-dfs--algorithms--hard
   - q-dynamic-programming-fundamentals--algorithms--hard
   - q-binary-search-trees-bst--algorithms--hard
-subtopics:   - graph
+subtopics:
+  - graph
   - dijkstra
   - mst
   - shortest-path

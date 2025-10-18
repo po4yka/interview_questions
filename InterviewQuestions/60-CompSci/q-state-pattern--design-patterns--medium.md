@@ -4,8 +4,11 @@ title: "State Pattern / State Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-bridge-pattern--design-patterns--hard, q-hot-vs-cold-flows--programming-languages--medium, q-sharedflow-vs-stateflow--programming-languages--easy]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - behavioral-patterns
   - state
   - gof-patterns

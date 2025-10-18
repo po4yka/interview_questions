@@ -4,6 +4,8 @@ title: "What Is Layout Types And When To Use / What Is Layout Types и When To U
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-play-feature-delivery--android--medium, q-annotation-processing--android--medium, q-compose-compiler-plugin--jetpack-compose--hard]
 created: 2025-10-15
 tags: [LinearLayout, RelativeLayout, android, android/layouts, android/ui, layout, layouts, ui, xml, difficulty/easy]
 ---

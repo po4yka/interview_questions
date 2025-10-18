@@ -5,14 +5,17 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - rxjava
   - migration
   - refactoring
   - reactive-programming
 moc: moc-kotlin
-subtopics:   - coroutines
+related: [q-testing-flow-operators--kotlin--hard, q-delegation-by-keyword--kotlin--medium, q-channel-flow-comparison--kotlin--medium]
+subtopics:
+  - coroutines
   - rxjava
   - migration
   - refactoring

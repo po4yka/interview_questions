@@ -4,6 +4,8 @@ title: "How To Create Chat Lists From A Ui Perspective / Как создать �
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-what-are-px-dp-sp--android--easy, q-what-is-known-about-recyclerview--android--easy, q-network-error-handling-strategies--networking--medium]
 created: 2025-10-15
 tags: [android/recyclerview, recyclerview, ui, ui design, difficulty/hard]
 ---

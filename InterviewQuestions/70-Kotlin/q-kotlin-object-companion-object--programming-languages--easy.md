@@ -4,8 +4,11 @@ title: "Kotlin Object Companion Object / Object и Companion Object в Kotlin"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-fold-reduce--kotlin--medium, q-data-class-detailed--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
 created: 2025-10-15
-tags: - companion-object
+tags:
+  - companion-object
   - kotlin
   - object
   - programming-languages
@@ -202,3 +205,8 @@ Database.connect()  // Access via class name
 
 **companion object** используется внутри класса и служит для объявления членов класса, доступных без создания экземпляра этого класса (аналогично статическим членам).
 
+## Related Questions
+
+- [[q-kotlin-fold-reduce--kotlin--medium]]
+- [[q-data-class-detailed--kotlin--medium]]
+- [[q-kotlin-flow-basics--kotlin--medium]]

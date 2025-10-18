@@ -4,8 +4,11 @@ title: "What Layout Allows Overlapping Objects / Какой layout позвол�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-room-database-migrations--room--medium, q-server-sent-events-sse--networking--medium, q-retrofit-call-adapter-advanced--networking--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # What is the layout called where objects can overlap each other?
 
@@ -246,3 +249,9 @@ fun LayeringExample() {
 Как называется лейаут в котором объекты могут наслаиваться друг на друга
 
 В Android для наложения элементов используется FrameLayout или Box в Jetpack Compose. FrameLayout — контейнер, где элементы располагаются в левом верхнем углу и могут накладываться друг на друга. Box в Jetpack Compose аналогичен FrameLayout и также позволяет наложение элементов.
+
+## Related Questions
+
+- [[q-room-database-migrations--room--medium]]
+- [[q-server-sent-events-sse--networking--medium]]
+- [[q-retrofit-call-adapter-advanced--networking--medium]]

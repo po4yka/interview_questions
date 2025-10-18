@@ -4,8 +4,11 @@ title: "Kotlin Constructor Types / Типы конструкторов Kotlin"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-abstract-class-vs-interface--kotlin--medium, q-access-modifiers--programming-languages--medium, q-channel-closing-completion--kotlin--medium]
 created: 2025-10-15
-tags: - classes
+tags:
+  - classes
   - constructors
   - init-block
   - initialization
@@ -154,3 +157,8 @@ val user = User("Alice", 30)
 
 В Kotlin есть первичные и вторичные конструкторы. Первичный конструктор объявляется вместе с классом и может принимать параметры для инициализации свойств класса. Вторичные конструкторы объявляются внутри класса с ключевым словом constructor и предоставляют дополнительные способы инициализации класса.
 
+## Related Questions
+
+- [[q-abstract-class-vs-interface--kotlin--medium]]
+- [[q-access-modifiers--programming-languages--medium]]
+- [[q-channel-closing-completion--kotlin--medium]]

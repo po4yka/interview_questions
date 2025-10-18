@@ -5,17 +5,20 @@ topic: cs
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - oop
+tags:
+  - oop
   - encapsulation
   - inheritance
   - polymorphism
   - abstraction
   - composition
 moc: moc-cs
-related:   - q-solid-principles--software-design--medium
+related: [q-garbage-collector-roots--programming-languages--medium, q-concurrency-fundamentals--computer-science--hard, q-template-method-pattern--design-patterns--medium]
+  - q-solid-principles--software-design--medium
   - q-clean-code-principles--software-engineering--medium
   - q-design-patterns-types--design-patterns--medium
-subtopics:   - oop
+subtopics:
+  - oop
   - object-oriented-programming
   - encapsulation
   - inheritance

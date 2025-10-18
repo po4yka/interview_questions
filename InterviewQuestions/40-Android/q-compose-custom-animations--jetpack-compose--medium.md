@@ -7,7 +7,8 @@ status: draft
 created: 2025-10-13
 tags: [compose, animations, animatable, spring-animations, animation-specs, android/jetpack-compose, android/animations, difficulty/medium]
 moc: moc-android
-related:   - q-jetpack-compose-basics--android--medium
+related: [q-transaction-too-large-exception--android--medium, q-compositionlocal-compose--android--hard, q-save-markdown-structure-database--android--medium]
+  - q-jetpack-compose-basics--android--medium
   - q-how-does-jetpack-compose-work--android--medium
   - q-what-are-the-most-important-components-of-compose--android--medium
   - q-how-to-create-list-like-recyclerview-in-compose--android--medium

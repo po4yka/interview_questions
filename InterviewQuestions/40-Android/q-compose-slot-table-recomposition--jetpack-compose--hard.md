@@ -4,6 +4,8 @@ title: "Compose Slot Table Recomposition / Slot Table и рекомпозици�
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-recomposition-choreographer--android--hard, q-gradle-build-system--android--medium, q-looper-thread-connection--android--medium]
 created: 2025-10-15
 tags: [compose, internals, recomposition, slot-table, performance, difficulty/hard]
 ---

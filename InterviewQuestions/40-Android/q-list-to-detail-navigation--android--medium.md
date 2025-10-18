@@ -4,6 +4,8 @@ title: "List To Detail Navigation / Навигация от списка к де
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-memory-leak-detection--performance--medium, q-measure-project-size--android--easy, q-view-fundamentals--android--easy]
 created: 2025-10-15
 tags: [android/navigation, bundle, data-passing, intent, master-detail, navigation, navigation-component, ui-patterns, viewmodel, difficulty/medium]
 ---

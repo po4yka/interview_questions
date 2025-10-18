@@ -4,8 +4,11 @@ title: "Kotlin Vs Java Class Creation"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-inline-function-limitations--kotlin--medium, q-kotlin-lambda-expressions--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium]
 created: 2025-10-15
-tags: - classes
+tags:
+  - classes
   - companion-object
   - comparison
   - data-classes
@@ -210,3 +213,8 @@ Kotlin's design emphasizes **conciseness**, **safety**, and **expressiveness**, 
 
 При создании классов по сравнению с Java произошли несколько значительных изменений и упрощений. Kotlin предлагает более лаконичный и выразительный синтаксис, что делает код более читаемым и удобным. Объявление классов и конструкторов в Kotlin упрощено, например: class Person(val name: String, val age: Int). Для статических членов используется companion object вместо static. Kotlin предоставляет data классы, которые автоматически генерируют методы equals(), hashCode(), toString(), copy(), и componentN(). Свойства объявляются напрямую, и методы доступа генерируются автоматически.
 
+## Related Questions
+
+- [[q-inline-function-limitations--kotlin--medium]]
+- [[q-kotlin-lambda-expressions--kotlin--medium]]
+- [[q-mutex-synchronized-coroutines--kotlin--medium]]

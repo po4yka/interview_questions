@@ -4,6 +4,8 @@ title: "Workmanager Chaining / Цепочки WorkManager"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-save-markdown-structure-database--android--medium, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-module-types-android--android--medium]
 created: 2025-10-15
 tags: [Kotlin, Background, WorkManager, Coroutines, difficulty/hard]
 ---
@@ -1118,3 +1120,9 @@ WorkManager.getInstance(context)
 - **Условной логикой**: Динамическое построение цепей на основе результатов
 
 Ключевые моменты: держите цепи поддерживаемыми, обрабатывайте ошибки gracefully, минимизируйте передачу данных, используйте теги для организации, проектируйте для наблюдаемости.
+
+## Related Questions
+
+- [[q-save-markdown-structure-database--android--medium]]
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]]
+- [[q-module-types-android--android--medium]]

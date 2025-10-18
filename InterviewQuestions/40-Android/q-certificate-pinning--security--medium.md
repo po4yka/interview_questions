@@ -4,6 +4,8 @@ title: "Certificate Pinning / Закрепление сертификатов"
 topic: security
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-does-jetpackcompose-work--android--medium, q-espresso-advanced-patterns--testing--medium, q-notification-channels-android--android--medium]
 created: 2025-10-15
 tags: [certificate-pinning, networking, okhttp, ssl-tls, difficulty/medium]
 ---

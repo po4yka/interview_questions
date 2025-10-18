@@ -8,10 +8,10 @@ Quick guide to using different AI tools with this vault.
 
 | Tool | File | Description |
 |------|------|-------------|
-| **Cursor AI** | `../.cursorrules` | Auto-loaded rules for Cursor editor |
-| **Claude Code** | `AGENTS.md` | Detailed task workflows and instructions |
-| **ChatGPT / General** | `AGENTS.md` | General LLM agent instructions |
+| **Cursor AI** | `../.cursor/rules/` + `../.cursorrules` | Auto-loaded rules for Cursor editor |
+| **Claude Code** | `../.claude/` | Setup guide, commands, auto-loaded context |
 | **Gemini CLI** | `GEMINI.md` | Command-line workflow examples |
+| **ChatGPT / General** | `AGENTS.md` | General LLM agent instructions |
 | **Any Agent** | `AGENT-CHECKLIST.md` | Quick validation checklist |
 
 ---
@@ -40,7 +40,13 @@ Quick guide to using different AI tools with this vault.
 
 ## Claude Code (CLI)
 
-**Setup**: Read this file (AI-TOOLS.md) or AGENTS.md for context.
+**Setup**: Automatic via `.claude/` configuration.
+
+**Configuration files**:
+- `.claude/README.md` - Complete setup guide and quick reference
+- `.claude/custom_instructions.md` - Auto-loaded vault context
+- `.claude/commands/` - Slash commands for common tasks
+- `.claude/settings.local.json` - Approved permissions
 
 **Usage**:
 ```bash
@@ -48,13 +54,24 @@ Quick guide to using different AI tools with this vault.
 claude-code
 ```
 
+**Available slash commands**:
+- `/create-qna` - Create new Q&A note
+- `/create-concept` - Create concept note
+- `/translate` - Add missing language to note
+- `/validate` - Comprehensive note validation
+- `/link-concepts` - Suggest and add concept links
+
 **Strengths**:
 - Multi-file operations
 - Complex reasoning
 - Detailed analysis
 - File system operations
+- Custom slash commands
 
-**See**: `AGENTS.md` for full task list
+**See**:
+- `.claude/README.md` for setup and quick start
+- `.claude/commands/README.md` for slash command documentation
+- `AGENTS.md` for full task list
 
 ---
 
@@ -118,7 +135,9 @@ Files:
 ### Claude Code
 1. `cd /path/to/vault`
 2. `claude-code`
-3. "Read 00-Administration/AGENTS.md for context"
+3. Context auto-loads from `.claude/custom_instructions.md`
+4. Use `/create-qna`, `/validate`, etc. for common tasks
+5. See `.claude/README.md` for full guide
 
 ### Gemini CLI
 1. `cd /path/to/vault`
@@ -196,13 +215,14 @@ Regardless of which AI tool you use:
 
 | Feature | Cursor | Claude Code | Gemini CLI | ChatGPT |
 |---------|--------|-------------|------------|---------|
-| Auto-loads rules |  |  |  |  |
-| File operations |  |  |  |  |
-| Batch tasks |  |  |  |  |
-| Inline editing |  |  |  |  |
-| Speed |  |  |  |  |
+| Auto-loads rules | ✅ | ✅ | ❌ | ❌ |
+| Slash commands | ❌ | ✅ | ❌ | ❌ |
+| File operations | ✅ | ✅ | ⚠️ | ❌ |
+| Batch tasks | ⚠️ | ✅ | ✅ | ❌ |
+| Inline editing | ✅ | ⚠️ | ❌ | ❌ |
+| Speed | ⚠️ | ⚠️ | ✅ | ⚠️ |
 | Context window | Large | Large | Medium | Medium |
-| Scripting |  |  |  |  |
+| Scripting | ❌ | ⚠️ | ✅ | ❌ |
 | Cost | Paid | Paid | Paid | Free/Paid |
 
 ---
@@ -231,10 +251,11 @@ Regardless of which AI tool you use:
 - Great for "fix this note" type tasks
 
 ### Claude Code
-- Load AGENTS.md at start for context
+- Context auto-loads from `.claude/custom_instructions.md`
+- Use slash commands: `/create-qna`, `/translate`, `/validate`
 - Good for multi-step reasoning
 - Can handle complex file operations
-- Ask to validate before applying changes
+- See `.claude/README.md` for complete guide
 
 ### Gemini CLI
 - Use command patterns from GEMINI.md
@@ -257,7 +278,8 @@ Regardless of which AI tool you use:
 - **Agent tasks**: `AGENTS.md` (this folder)
 - **Quick checklist**: `AGENT-CHECKLIST.md` (this folder)
 - **Gemini guide**: `GEMINI.md` (this folder)
-- **Cursor rules**: `../.cursorrules` (vault root)
+- **Cursor rules**: `../.cursor/rules/` (modern) and `../.cursorrules` (legacy)
+- **Claude Code config**: `../.claude/` (README, commands, settings)
 - **Templates**: `../_templates/` (vault root)
 
 ---
@@ -271,6 +293,11 @@ Include EN and RU. Link to moc-algorithms and c-hash-map."
 ```
 
 ### Using Claude Code
+```
+/create-qna Two Sum problem from LeetCode, algorithms, easy difficulty
+```
+
+Or more detailed:
 ```
 "Create a Q&A note for Two Sum problem.
 Topic: algorithms, Difficulty: easy

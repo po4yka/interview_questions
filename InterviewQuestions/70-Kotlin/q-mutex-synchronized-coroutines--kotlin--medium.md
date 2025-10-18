@@ -5,17 +5,20 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - concurrency
   - thread-safety
   - mutex
   - synchronization
 moc: moc-kotlin
-related:   - q-race-conditions-coroutines--kotlin--hard
+related: [q-debounce-throttle-flow--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium, q-data-sealed-difference--programming-languages--medium]
+  - q-race-conditions-coroutines--kotlin--hard
   - q-semaphore-rate-limiting--kotlin--medium
   - q-channelflow-callbackflow-flow--kotlin--medium
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - mutex
   - synchronization
   - thread-safety

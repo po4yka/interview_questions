@@ -4,9 +4,11 @@ title: "Workmanager Advanced / Продвинутый WorkManager"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
 created: 2025-10-12
 tags: [workmanager, background-processing, jetpack, kotlin-coroutines, difficulty/medium]
-related:   - q-workmanager-chaining--background--medium
+related: [q-mlkit-face-detection--ml--medium, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-parsing-optimization-android--android--medium]
+  - q-workmanager-chaining--background--medium
   - q-foreground-service-types--background--medium
   - q-coroutines-structured-concurrency--coroutines--hard
 ---
@@ -830,3 +832,9 @@ fun cancelSync() {
 - Держите doWork() коротким (< 10 минут)
 - Корректно обрабатывайте отмену
 - Используйте только для откладываемой, гарантированной работы
+
+## Related Questions
+
+- [[q-mlkit-face-detection--ml--medium]]
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]]
+- [[q-parsing-optimization-android--android--medium]]

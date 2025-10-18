@@ -4,6 +4,8 @@ title: "Recyclerview Async List Differ"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-compose-side-effects-advanced--jetpack-compose--hard, q-what-are-services-used-for--android--medium, q-vector-graphics-animations--graphics--medium]
 created: 2025-10-15
 tags: [async, diffutil, performance, threading, difficulty/medium]
 ---

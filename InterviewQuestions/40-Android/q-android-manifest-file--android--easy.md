@@ -8,9 +8,11 @@ created: 2025-10-15
 tags: [manifest, androidmanifest, configuration, app-structure, difficulty/easy, android/startup, android/permissions, android/activity]
 language_tags: [manifest, androidmanifest, configuration, app-structure, difficulty/easy, android/startup, android/permissions, android/activity]
 moc: moc-android
+related: [q-kmm-sqldelight--multiplatform--medium, q-in-which-thread-does-a-regular-service-run--android--medium, q-repository-multiple-sources--android--medium]
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
-subtopics:   - app-startup
+subtopics:
+  - app-startup
   - permissions
   - activity
 ---

@@ -4,6 +4,8 @@ title: "Inject Router To Presenter / Инъекция Router в Presenter"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-play-feature-delivery--android--medium, q-how-to-reduce-number-of-recompositions-besides-side-effects--programming-languages--hard, q-state-hoisting-compose--android--medium]
 created: 2025-10-15
 tags: [android/architecture-mvi, android/di-hilt, architecture-mvi, dagger/hilt, dependency-injection, di-hilt, koin, platform/android, difficulty/medium]
 ---
@@ -784,3 +786,8 @@ class ProductPresenterTest {
 
 **Рекомендация**: Используйте **Hilt** для новых проектов (официальный, меньше boilerplate, лучшая интеграция с Android)
 
+## Related Questions
+
+- [[q-play-feature-delivery--android--medium]]
+- [[q-how-to-reduce-number-of-recompositions-besides-side-effects--programming-languages--hard]]
+- [[q-state-hoisting-compose--android--medium]]

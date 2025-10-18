@@ -4,6 +4,8 @@ title: "Keep Service Running Background / Удержание Service в фоне
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-compose-side-effects-launchedeffect-disposableeffect--android--hard, q-cicd-automated-testing--devops--medium, q-how-to-display-snackbar-or-toast-based-on-results--android--medium]
 created: 2025-10-15
 tags: [android/background-processing, android/services, android/workmanager, background-processing, foreground-service, jobscheduler, services, workmanager, difficulty/medium]
 ---

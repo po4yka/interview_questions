@@ -5,16 +5,19 @@ topic: system-design
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - system-design
+tags:
+  - system-design
   - distributed-systems
   - cap-theorem
   - consistency
   - availability
 moc: moc-system-design
-related:   - q-eventual-consistency--system-design--hard
+related: [q-rest-api-design-best-practices--system-design--medium, q-horizontal-vertical-scaling--system-design--medium, q-message-queues-event-driven--system-design--medium]
+  - q-eventual-consistency--system-design--hard
   - q-database-replication--system-design--medium
   - q-consensus-algorithms--system-design--hard
-subtopics:   - distributed-systems
+subtopics:
+  - distributed-systems
   - consistency
   - availability
   - partition-tolerance

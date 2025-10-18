@@ -4,6 +4,8 @@ title: "Kotlin Favorite Features / Любимые возможности Kotlin"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-flow-operators-map-filter--kotlin--medium, q-class-initialization-order--kotlin--medium, q-fan-in-fan-out-channels--kotlin--hard]
 created: 2025-10-15
 tags:
   - coroutines
@@ -94,3 +96,8 @@ suspend fun fetchData() {
 - **Null Safety**: Предотвращает большинство runtime ошибок
 - **Корутины**: Значительно упрощает асинхронное программирование
 
+## Related Questions
+
+- [[q-flow-operators-map-filter--kotlin--medium]]
+- [[q-class-initialization-order--kotlin--medium]]
+- [[q-fan-in-fan-out-channels--kotlin--hard]]

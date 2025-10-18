@@ -18,7 +18,7 @@ source_note: ""
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-structured-concurrency-kotlin--kotlin--medium, q-delegates-compilation--kotlin--hard, q-coroutine-timeout-withtimeout--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06

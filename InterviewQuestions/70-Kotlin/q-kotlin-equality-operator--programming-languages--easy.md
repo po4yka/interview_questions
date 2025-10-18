@@ -4,8 +4,11 @@ title: "Kotlin Equality Operator / Оператор равенства в Kotlin
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-any-unit-nothing--programming-languages--medium, q-callback-to-coroutine-conversion--kotlin--medium, q-inheritance-open-final--kotlin--medium]
 created: 2025-10-15
-tags: - equality
+tags:
+  - equality
   - equals
   - kotlin
   - operators
@@ -803,3 +806,8 @@ println(cache.hasEqualValue("data", list2))   // true - одинаковое с�
 | В коллекциях | `contains()` | Использует `==` |
 | В when | `when(x)` | Использует `==` |
 
+## Related Questions
+
+- [[q-kotlin-any-unit-nothing--programming-languages--medium]]
+- [[q-callback-to-coroutine-conversion--kotlin--medium]]
+- [[q-inheritance-open-final--kotlin--medium]]

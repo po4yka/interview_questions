@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-lateinit--kotlin--medium, q-kotlin-default-inheritance-type--programming-languages--easy, q-request-coalescing-deduplication--kotlin--hard]
 
 # Timestamps
 created: 2025-10-05

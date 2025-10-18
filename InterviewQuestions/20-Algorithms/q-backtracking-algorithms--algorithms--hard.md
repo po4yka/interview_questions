@@ -14,7 +14,7 @@ tags:
   - permutations
   - combinations
 moc: moc-algorithms
-related:
+related: [q-two-pointers-sliding-window--algorithms--medium, q-binary-search-trees-bst--algorithms--hard, q-data-structures-overview--algorithms--easy]
   - q-dynamic-programming-fundamentals--algorithms--hard
   - q-graph-algorithms-bfs-dfs--algorithms--hard
   - q-binary-search-trees-bst--algorithms--hard
@@ -1436,3 +1436,9 @@ Backtracking - это систематический метод перебора
 8. What is the Dancing Links algorithm for exact cover problems?
 9. How do you parallelize backtracking algorithms?
 10. What are the differences between backtracking, brute force, and exhaustive search?
+
+## Related Questions
+
+- [[q-two-pointers-sliding-window--algorithms--medium]]
+- [[q-binary-search-trees-bst--algorithms--hard]]
+- [[q-data-structures-overview--algorithms--easy]]

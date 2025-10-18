@@ -4,6 +4,8 @@ title: "Compose Modifier Order Performance / Порядок модификато
 topic: jetpack-compose
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-is-workmanager--android--medium, q-play-store-publishing--distribution--medium, q-canvas-drawing-optimization--custom-views--hard]
 created: 2025-10-15
 tags: [compose, modifiers, performance, optimization, difficulty/medium]
 ---

@@ -4,8 +4,11 @@ title: "How Suspend Function Detects Suspension / Как suspend функция 
 topic: computer-science
 difficulty: hard
 status: draft
+moc: moc-compSci
+related: [q-visitor-pattern--design-patterns--hard, q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-chain-of-responsibility--design-patterns--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # How Suspend Function Detects Suspension?
 
@@ -454,3 +457,9 @@ if (condition) { }                    // Regular control flow
 ## Ответ (RU)
 
 Функция "узнает" о приостановке через: - Фрейм Continuation если вызвана другая suspend-функция текущая приостанавливает свое выполнение - Корутинный диспетчер приостановка возможна если выполнение ушло в другой поток withContext - Возвращение специального маркера COROUTINE_SUSPENDED сигнализирует Kotlin Runtime что выполнение отложено
+
+## Related Questions
+
+- [[q-visitor-pattern--design-patterns--hard]]
+- [[q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium]]
+- [[q-chain-of-responsibility--design-patterns--medium]]

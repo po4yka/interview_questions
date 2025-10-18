@@ -4,6 +4,8 @@ title: "Deep Link Vs App Link"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-websocket-implementation--networking--medium, q-task-affinity--android--medium, q-handler-looper-main-thread--android--medium]
 created: 2025-10-15
 tags: [android/navigation, app-linking, app-links, deep-linking, https, navigation, uri, verification, difficulty/medium]
 ---
@@ -697,3 +699,8 @@ fun checkAppLinkStatus(packageName: String) {
 
 **Лучшая практика:** Используйте **App Links** для продакшн-приложений с веб-присутствием, возвращайтесь к Deep Links для старых версий Android.
 
+## Related Questions
+
+- [[q-websocket-implementation--networking--medium]]
+- [[q-task-affinity--android--medium]]
+- [[q-handler-looper-main-thread--android--medium]]

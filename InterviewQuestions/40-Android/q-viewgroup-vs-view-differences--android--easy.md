@@ -4,6 +4,8 @@ title: "Viewgroup Vs View Differences"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-derived-state-snapshot-system--jetpack-compose--hard, q-rxjava-pagination-recyclerview--android--medium]
 created: 2025-10-15
 tags: [viewgroup, view, ui, view-hierarchy, difficulty/easy]
 ---

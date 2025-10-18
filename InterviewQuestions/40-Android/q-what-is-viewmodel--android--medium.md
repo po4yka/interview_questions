@@ -4,6 +4,8 @@ title: "What Is Viewmodel / Что такое ViewModel"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-factory-pattern-android--android--medium, q-view-methods-and-their-purpose--android--medium, q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium]
 created: 2025-10-15
 tags: [viewmodel, architecture, lifecycle, mvvm, state-management, difficulty/medium]
 ---

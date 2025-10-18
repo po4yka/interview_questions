@@ -4,6 +4,8 @@ title: "What Is Intent / Что такое Intent"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-android-service-types--android--easy, q-room-vs-sqlite--android--medium, q-react-native-vs-flutter--android--medium]
 created: 2025-10-15
 tags: [android/intents-deeplinks, component-communication, explicit-intent, implicit-intent, intent, intents-deeplinks, difficulty/easy]
 ---
@@ -88,7 +90,73 @@ Intent is the **glue** that connects Android components, allowing them to commun
 
 ## Ответ (RU)
 
-Intent — это механизм для связи между компонентами приложения или между приложениями. Позволяет запускать Activity, Service, отправлять broadcast и передавать данные.
+**Intent** — это объект-сообщение, используемый для **связи между компонентами Android** (Activity, Service, BroadcastReceiver) и между приложениями.
+
+**Типы:**
+
+**1. Explicit Intent** - Конкретный компонент
+
+```kotlin
+// Запуск конкретной Activity
+val intent = Intent(this, ProfileActivity::class.java)
+intent.putExtra("user_id", 123)
+startActivity(intent)
+
+// Запуск конкретного Service
+startService(Intent(this, MusicService::class.java))
+```
+
+**2. Implicit Intent** - На основе действия
+
+```kotlin
+// Открыть браузер
+val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com"))
+startActivity(intent)
+
+// Поделиться текстом
+val intent = Intent(Intent.ACTION_SEND).apply {
+    type = "text/plain"
+    putExtra(Intent.EXTRA_TEXT, "Hello!")
+}
+startActivity(Intent.createChooser(intent, "Поделиться через"))
+```
+
+**Основные применения:**
+
+**Запуск Activity:**
+
+```kotlin
+startActivity(Intent(this, MainActivity::class.java))
+```
+
+**Запуск Service:**
+
+```kotlin
+startService(Intent(this, DownloadService::class.java))
+```
+
+**Отправка Broadcast:**
+
+```kotlin
+sendBroadcast(Intent("com.example.CUSTOM_ACTION"))
+```
+
+**Передача данных:**
+
+```kotlin
+val intent = Intent(this, DetailActivity::class.java)
+intent.putExtra("name", "John")
+intent.putExtra("age", 30)
+startActivity(intent)
+
+// Получение данных
+val name = intent.getStringExtra("name")
+val age = intent.getIntExtra("age", 0)
+```
+
+**Итог:**
+
+Intent — это **связующее звено**, которое соединяет компоненты Android, позволяя им общаться и передавать данные.
 
 ---
 

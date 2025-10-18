@@ -4,8 +4,11 @@ title: Flow vs LiveData Comparison / Сравнение Flow и LiveData
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-testing-flow-operators--kotlin--hard, q-retry-operators-flow--kotlin--medium, q-executor-service-java--java--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - flow
   - livedata
   - stateflow
@@ -13,11 +16,13 @@ tags: - kotlin
   - lifecycle
   - comparison
   - difficulty/medium
-language_tags:   - en
+language_tags:
+  - en
   - ru
 original_language: en
 source: Kotlin Coroutines Interview Questions PDF
-subtopics:   - flow
+subtopics:
+  - flow
   - livedata
   - state-management
   - lifecycle

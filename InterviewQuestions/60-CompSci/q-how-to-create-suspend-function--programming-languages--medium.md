@@ -4,8 +4,11 @@ title: "How To Create Suspend Function / Как создать suspend функ�
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-java-access-modifiers--programming-languages--medium, q-mvp-pattern--architecture-patterns--medium, q-iterator-order-guarantee--programming-languages--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # How to Create a Suspend Function?
 
@@ -419,3 +422,9 @@ suspend fun longRunningTask() {
 ## Ответ (RU)
 
 Создать suspend-функцию можно, добавив suspend перед fun. Suspend функции нельзя вызывать напрямую из обычных функций, только из корутин.
+
+## Related Questions
+
+- [[q-java-access-modifiers--programming-languages--medium]]
+- [[q-mvp-pattern--architecture-patterns--medium]]
+- [[q-iterator-order-guarantee--programming-languages--medium]]

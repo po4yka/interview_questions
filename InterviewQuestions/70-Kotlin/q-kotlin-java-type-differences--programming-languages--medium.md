@@ -4,8 +4,11 @@ title: "Kotlin Java Type Differences / Различия типов Kotlin и Jav
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-static-variable--programming-languages--easy, q-executor-service-java--java--medium, q-kotlin-constructor-types--programming-languages--medium]
 created: 2025-10-15
-tags: - collections
+tags:
+  - collections
   - comparison
   - java
   - kotlin
@@ -599,3 +602,8 @@ if (adult != null) {  // Обязательная проверка
 5. **Smart Casts**: Автоматическое приведение после проверок
 6. **Унифицированная система**: Нет различия примитивы/объекты для разработчика
 
+## Related Questions
+
+- [[q-kotlin-static-variable--programming-languages--easy]]
+- [[q-executor-service-java--java--medium]]
+- [[q-kotlin-constructor-types--programming-languages--medium]]

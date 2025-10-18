@@ -9,7 +9,8 @@ tags: ["database", "sql", "nosql", "acid", "transactions", "indexing", "normaliz
 description: "Comprehensive coverage of database concepts including SQL/NoSQL, ACID properties, transactions, indexing, normalization, and Android Room database with real-world Kotlin examples"
 language: "en"
 moc: moc-databases
-related:   - "20251013-600005"  # Data Structures and Algorithms
+related: [q-garbage-collector-definition--programming-languages--easy, q-design-patterns-fundamentals--software-engineering--hard, q-bridge-pattern--design-patterns--hard]
+  - "20251013-600005"  # Data Structures and Algorithms
   - "20251012-600004"  # OOP Principles
 subcategory: "databases"
 updated: "2025-10-13"
@@ -1580,3 +1581,9 @@ class OfflineFirstRepository(
 
 10. **What is the difference between @Insert, @Update, and @Upsert in Room?**
     **В чем разница между @Insert, @Update и @Upsert в Room?**
+
+## Related Questions
+
+- [[q-garbage-collector-definition--programming-languages--easy]]
+- [[q-design-patterns-fundamentals--software-engineering--hard]]
+- [[q-bridge-pattern--design-patterns--hard]]

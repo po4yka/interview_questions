@@ -5,12 +5,13 @@ topic: programming-languages
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - xml
+tags:
+  - xml
   - markup-language
   - acronym
   - programming-languages
 moc: moc-programming-languages
-related: []
+related: [q-data-class-component-functions--programming-languages--easy, q-decorator-pattern--design-patterns--medium, q-suspend-functions-under-the-hood--programming-languages--hard]
 subtopics: ["computer-science", "fundamentals"]
 ---
 # Как расшифровывается xml?

@@ -4,6 +4,8 @@ title: "Why Fragment Callbacks Differ From Activity Callbacks / Почему к�
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-why-use-diffutil--android--medium, q-where-does-the-repeated-call-of-composable-function-come-from--android--medium, q-glide-image-loading-internals--android--medium]
 created: 2025-10-15
 tags:
   - android
@@ -15,7 +17,7 @@ tags:
 
 ## Ответ (RU)
 
-Содержимое ответа на русском языке. Перевод технической документации сохраняет Android API термины на английском.
+Колбэки Fragment отличаются от колбэков Activity потому что Fragment имеет более сложный жизненный цикл, который зависит от жизненного цикла хост-Activity. Fragment имеет дополнительные колбэки для управления присоединением к Activity (`onAttach`, `onDetach`) и создания/уничтожения View (`onCreateView`, `onDestroyView`), в то время как Activity имеет более простой жизненный цикл с основными методами (`onCreate`, `onStart`, `onResume`, `onPause`, `onStop`, `onDestroy`).
 
 
 ---

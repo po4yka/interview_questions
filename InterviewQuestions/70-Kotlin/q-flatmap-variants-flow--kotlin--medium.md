@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-inline-functions--kotlin--medium, q-stateflow-purpose--programming-languages--medium, q-test-dispatcher-types--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06

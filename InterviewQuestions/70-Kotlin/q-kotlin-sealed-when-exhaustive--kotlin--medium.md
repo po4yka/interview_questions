@@ -4,8 +4,11 @@ title: "Kotlin Sealed When Exhaustive / sealed и exhaustive when в Kotlin"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-java-kotlin-abstract-classes-difference--programming-languages--medium, q-sequences-detailed--kotlin--medium, q-flow-combining-zip-combine--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - sealed-classes
   - when-expression
   - state-machine
@@ -226,3 +229,9 @@ Sealed классы ограничивают наследование фикси
 4. **Exhaustive when** - избегайте else
 5. **Extension functions** для общих операций
 6. **Generic sealed classes** для переиспользуемых паттернов
+
+## Related Questions
+
+- [[q-java-kotlin-abstract-classes-difference--programming-languages--medium]]
+- [[q-sequences-detailed--kotlin--medium]]
+- [[q-flow-combining-zip-combine--kotlin--medium]]

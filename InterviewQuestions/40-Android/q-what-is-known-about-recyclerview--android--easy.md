@@ -4,6 +4,8 @@ title: "What Is Known About Recyclerview / Что известно о RecyclerVi
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-v-chyom-izmeryaetsya-proizvoditelnost-layout--programming-languages--medium, q-compose-performance-optimization--android--hard, q-workmanager-data-passing--android--medium]
 created: 2025-10-15
 tags: [android, android/layouts, android/recyclerview, android/views, layoutmanager, layouts, recyclerview, ui, viewholder, views, difficulty/easy]
 ---

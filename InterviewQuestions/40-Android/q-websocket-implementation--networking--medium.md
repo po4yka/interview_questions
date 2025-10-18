@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [websocket, okhttp, real-time, resilience, reconnection, difficulty/medium]
 moc: moc-networking
-related: []
+related: [q-parcelable-implementation--android--medium, q-what-problems-can-there-be-with-list-items--android--easy, q-leakcanary-heap-dump-analysis--android--medium]
 ---
 # WebSocket Implementation / Реализация WebSocket
 
@@ -1271,3 +1271,9 @@ fun ChatScreen(chatClient: ChatClient) {
 - **Мониторинг здоровья**: Heartbeat механизм
 - **UX**: Чёткие состояния и обработка ошибок
 - **Эффективность**: Одно постоянное соединение
+
+## Related Questions
+
+- [[q-parcelable-implementation--android--medium]]
+- [[q-what-problems-can-there-be-with-list-items--android--easy]]
+- [[q-leakcanary-heap-dump-analysis--android--medium]]

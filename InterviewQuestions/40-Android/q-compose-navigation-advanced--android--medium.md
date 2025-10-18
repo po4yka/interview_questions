@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-frame-time-120ms-meaning--android--easy, q-why-was-the-lifecycle-library-created--android--hard, q-touch-event-handling-custom-views--custom-views--medium]
 
 # Timestamps
 created: 2025-10-06

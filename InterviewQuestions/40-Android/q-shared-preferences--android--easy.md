@@ -4,6 +4,8 @@ title: "Shared Preferences"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-room-relations-embedded--room--medium, q-how-is-navigation-implemented--android--medium, q-service-lifecycle-binding--background--hard]
 created: 2025-10-15
 tags: [data-storage, shared-preferences, difficulty/easy]
 ---
@@ -233,4 +235,8 @@ encryptedPrefs.edit {
 **Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
 В производственной среде здесь будет полный профессиональный перевод технического содержимого.
 
+## Related Questions
 
+- [[q-room-relations-embedded--room--medium]]
+- [[q-how-is-navigation-implemented--android--medium]]
+- [[q-service-lifecycle-binding--background--hard]]

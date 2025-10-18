@@ -7,7 +7,8 @@ status: draft
 created: 2025-10-13
 tags: [android/networking, authentication, interceptor, logging, networking, okhttp, retrofit, difficulty/hard]
 moc: moc-android
-related:   - q-http-protocols-comparison--android--medium
+related: [q-room-relations-embedded--room--medium, q-what-are-services-used-for--android--medium, q-view-fundamentals--android--easy]
+  - q-http-protocols-comparison--android--medium
   - q-retrofit-call-adapter-advanced--networking--medium
   - q-retrofit-usage-tutorial--android--medium
   - q-data-sync-unstable-network--android--hard

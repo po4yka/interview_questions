@@ -5,9 +5,10 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - android
+tags:
+  - android
 moc: moc-android
-related: []
+related: [q-network-error-handling-strategies--networking--medium, q-privacy-sandbox-fledge--privacy--hard, q-how-to-create-list-like-recyclerview-in-compose--android--medium]
 ---
 # How are VSYNC and recomposition events related?
 
@@ -345,8 +346,340 @@ fun HighRefreshRateAnimation() {
 
 ---
 
-## RU (original)
+## Ответ (RU)
 
-Как связаны VSYNC и события рекомпозиции?
+### Что такое VSYNC?
 
-Это механизм, который синхронизирует отрисовку UI с частотой обновления экрана. В Android VSYNC происходит 60 раз в секунду или больше на устройствах с высокой герцовкой. Compose привязывает рекомпозицию к VSYNC чтобы отрисовка происходила плавно и эффективно. Изменения состояния приводят к запросу рекомпозиции но реальная перерисовка выполняется только при следующем VSYNC-событии.
+**VSYNC (Vertical Synchronization)** — это механизм, который синхронизирует отрисовку UI с частотой обновления экрана.
+
+**Ключевые характеристики:**
+- Происходит 60 раз в секунду (60Hz) на стандартных устройствах
+- Может быть 90Hz, 120Hz или выше на современных устройствах с высокой частотой обновления
+- Сигнализирует, когда дисплей готов принять новый кадр
+- Предотвращает разрывы изображения (screen tearing)
+
+### Как Compose использует VSYNC
+
+Jetpack Compose привязывает рекомпозицию к VSYNC для обеспечения плавной и эффективной отрисовки:
+
+1. **Изменения состояния** вызывают запрос на рекомпозицию
+2. **Рекомпозиция** планируется, но не выполняется немедленно
+3. Приходит **следующий сигнал VSYNC**
+4. **Рекомпозиция и отрисовка** происходят синхронно с обновлением дисплея
+
+```kotlin
+@Composable
+fun VSyncExample() {
+    var count by remember { mutableStateOf(0) }
+
+    Column {
+        Text("Count: $count")
+        Button(onClick = {
+            count++ // Изменение состояния вызывает запрос рекомпозиции
+            // Фактическая рекомпозиция происходит при следующем VSYNC
+        }) {
+            Text("Increment")
+        }
+    }
+}
+```
+
+### Конвейер кадров
+
+```
+Действие пользователя
+    ↓
+Изменение состояния
+    ↓
+Запрос рекомпозиции (запланирован)
+    ↓
+Ожидание сигнала VSYNC
+    ↓
+VSYNC прибывает (16.6ms @ 60Hz)
+    ↓
+Выполняется рекомпозиция
+    ↓
+Layout и Drawing
+    ↓
+Отрисовка GPU
+    ↓
+Кадр отображается на экране
+```
+
+### Пример временной шкалы (дисплей 60Hz)
+
+```
+Время (мс):  0    16.6   33.2   49.8   66.4
+            |     |      |      |      |
+VSYNC:
+            |     |      |      |      |
+Кадр 1:    [Отрисовка--------------]
+Кадр 2:          [Отрисовка--------------]
+Кадр 3:                 [Отрисовка--------------]
+```
+
+### Почему это важно
+
+**Без синхронизации с VSYNC:**
+```kotlin
+// ПЛОХО: Немедленная рекомпозиция без VSYNC
+@Composable
+fun WithoutVSyncSync() {
+    var offset by remember { mutableStateOf(0f) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            // Быстрые обновления без координации с VSYNC
+            offset += 1f // Может вызвать пропущенные кадры, рывки
+            delay(1) // Слишком часто
+        }
+    }
+
+    Box(modifier = Modifier.offset(x = offset.dp))
+}
+```
+
+**С синхронизацией VSYNC:**
+```kotlin
+// ХОРОШО: Анимации привязаны к обновлениям кадров
+@Composable
+fun WithVSyncSync() {
+    val offset by animateFloatAsState(
+        targetValue = 100f,
+        animationSpec = tween(durationMillis = 1000)
+        // Compose автоматически синхронизируется с VSYNC
+    )
+
+    Box(modifier = Modifier.offset(x = offset.dp))
+}
+```
+
+### Планирование рекомпозиции
+
+Compose группирует изменения состояния и планирует рекомпозицию эффективно:
+
+```kotlin
+@Composable
+fun BatchedUpdates() {
+    var count1 by remember { mutableStateOf(0) }
+    var count2 by remember { mutableStateOf(0) }
+
+    Column {
+        Text("Count 1: $count1")
+        Text("Count 2: $count2")
+
+        Button(onClick = {
+            // Множественные изменения состояния
+            count1++ // Изменение 1
+            count2++ // Изменение 2
+            // Оба изменения группируются в одну рекомпозицию
+            // Выполняется при следующем VSYNC
+        }) {
+            Text("Update Both")
+        }
+    }
+}
+```
+
+### Бюджет кадра
+
+При 60Hz каждый кадр имеет бюджет 16.6мс:
+
+```kotlin
+Бюджет кадра (60Hz): 16.6мс
+ Composition: ~2-3мс
+ Layout: ~2-3мс
+ Drawing: ~2-3мс
+ GPU Rendering: ~8-10мс
+ Время буфера: ~2мс
+```
+
+**Пример соблюдения бюджета:**
+```kotlin
+@Composable
+fun EfficientList() {
+    val items = remember { (1..1000).toList() }
+
+    LazyColumn {
+        items(
+            items = items,
+            key = { it } // Стабильные ключи = эффективная рекомпозиция
+        ) { item ->
+            Text("Item $item")
+        }
+    }
+    // LazyColumn компонует только видимые элементы
+    // Остается в пределах бюджета кадра
+}
+```
+
+### Когда происходит рекомпозиция
+
+```kotlin
+@Composable
+fun RecompositionTiming() {
+    var immediate by remember { mutableStateOf(0) }
+    var deferred by remember { mutableStateOf(0) }
+
+    Column {
+        // Рекомпозируется при следующем VSYNC
+        Text("Immediate: $immediate")
+
+        LaunchedEffect(immediate) {
+            // Выполняется немедленно
+            println("State changed: $immediate")
+            // Но обновление UI ждет VSYNC
+        }
+
+        Button(onClick = {
+            immediate++ // Вызывает запрос рекомпозиции
+            // Рекомпозиция происходит при следующем VSYNC (~16мс позже)
+        }) {
+            Text("Update")
+        }
+    }
+}
+```
+
+### Множественные изменения состояния
+
+```kotlin
+@Composable
+fun MultipleChanges() {
+    var counter by remember { mutableStateOf(0) }
+
+    LaunchedEffect(Unit) {
+        // Быстрые изменения состояния
+        repeat(10) {
+            counter++ // 10 изменений состояния
+            delay(1) // 1мс между изменениями
+        }
+        // Отрисовываются только кадры, которые можно скомпоновать
+        // Промежуточные состояния могут быть пропущены
+    }
+
+    Text("Counter: $counter")
+    // Может показать: 0 → 3 → 7 → 10
+    // Пропускает значения между VSYNC
+}
+```
+
+### Мониторинг производительности кадров
+
+```kotlin
+@Composable
+fun FrameMonitoring() {
+    val choreographer = remember {
+        Choreographer.getInstance()
+    }
+
+    DisposableEffect(Unit) {
+        val callback = object : Choreographer.FrameCallback {
+            override fun doFrame(frameTimeNanos: Long) {
+                // Вызывается каждый VSYNC
+                println("Frame at: $frameTimeNanos")
+                choreographer.postFrameCallback(this)
+            }
+        }
+
+        choreographer.postFrameCallback(callback)
+
+        onDispose {
+            choreographer.removeFrameCallback(callback)
+        }
+    }
+}
+```
+
+### Оптимизация для VSYNC
+
+**1. Избегайте дорогих операций в композиции:**
+```kotlin
+@Composable
+fun Optimized() {
+    val expensiveValue = remember {
+        // Вычисляется один раз, не при каждой рекомпозиции
+        computeExpensiveValue()
+    }
+
+    Text("Value: $expensiveValue")
+}
+```
+
+**2. Используйте derivedStateOf для вычисляемых значений:**
+```kotlin
+@Composable
+fun DerivedState(items: List<Item>) {
+    val filteredCount by remember {
+        derivedStateOf {
+            // Пересчитывается только когда items изменяются
+            items.count { it.isActive }
+        }
+    }
+
+    Text("Active: $filteredCount")
+}
+```
+
+**3. Отложите чтения до фазы рисования:**
+```kotlin
+@Composable
+fun DeferredRead() {
+    var offset by remember { mutableStateOf(0f) }
+
+    Box(
+        modifier = Modifier.drawWithContent {
+            // Чтение состояния в фазе рисования
+            // Не вызывает рекомпозицию
+            translate(left = offset) {
+                this@drawWithContent.drawContent()
+            }
+        }
+    )
+}
+```
+
+### Поддержка высокой частоты обновления
+
+```kotlin
+@Composable
+fun HighRefreshRateAnimation() {
+    val infiniteTransition = rememberInfiniteTransition()
+
+    // Автоматически адаптируется к частоте обновления устройства
+    val rotation by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        )
+    )
+
+    Box(
+        modifier = Modifier
+            .size(100.dp)
+            .graphicsLayer {
+                rotationZ = rotation
+                // Синхронизировано с VSYNC автоматически
+                // 60fps на 60Hz, 120fps на 120Hz
+            }
+            .background(Color.Blue)
+    )
+}
+```
+
+### Ключевые выводы
+
+1. **VSYNC** — это сердцебиение отрисовки UI
+2. **Рекомпозиция** планируется, но ожидает VSYNC
+3. **Множественные изменения состояния** между VSYNC группируются
+4. **Compose автоматически** управляет синхронизацией
+5. **Бюджет кадра** должен соблюдаться для избежания рывков
+6. **Высокие частоты обновления** автоматически выигрывают от этой системы
+
+## Related Questions
+
+- [[q-network-error-handling-strategies--networking--medium]]
+- [[q-privacy-sandbox-fledge--privacy--hard]]
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]]

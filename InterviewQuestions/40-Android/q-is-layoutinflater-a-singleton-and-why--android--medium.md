@@ -4,6 +4,8 @@ title: "Is Layoutinflater A Singleton And Why / Is Layoutinflater A Singleton и
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-android-architectural-patterns--android--medium, q-what-does-the-lifecycle-library-do--android--medium, q-main-causes-ui-lag--android--medium]
 created: 2025-10-15
 tags: [Context, Singleton, android, ui, layoutinflater, difficulty/medium]
 ---

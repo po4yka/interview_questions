@@ -4,8 +4,11 @@ title: "Visitor Pattern / Visitor Паттерн"
 topic: computer-science
 difficulty: hard
 status: draft
+moc: moc-compSci
+related: [q-primitive-vs-reference-types--programming-languages--easy, q-decorator-pattern--design-patterns--medium, q-suspend-function-suspension-mechanism--programming-languages--hard]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - behavioral-patterns
   - visitor
   - gof-patterns

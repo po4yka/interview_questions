@@ -4,8 +4,11 @@ title: "What Is Coroutinescope / Что такое CoroutineScope"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-template-method-pattern--design-patterns--medium, q-memento-pattern--design-patterns--medium, q-hot-vs-cold-flows--programming-languages--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # What is CoroutineScope?
 
@@ -376,3 +379,9 @@ class MyRepositoryTest {
 ## Ответ (RU)
 
 Это область, в которой выполняются корутины в Kotlin. Определяет жизненный цикл корутин и позволяет отменять их при завершении scope. GlobalScope – живет все время работы приложения, но редко используется. viewModelScope – в ViewModel, отменяется при уничтожении ViewModel. lifecycleScope – в Activity/Fragment, отменяется при уничтожении UI.
+
+## Related Questions
+
+- [[q-template-method-pattern--design-patterns--medium]]
+- [[q-memento-pattern--design-patterns--medium]]
+- [[q-hot-vs-cold-flows--programming-languages--medium]]

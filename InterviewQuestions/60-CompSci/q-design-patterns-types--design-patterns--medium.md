@@ -4,8 +4,11 @@ title: "Design Patterns Types / Design Паттерны Types"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-flow-map-operator--programming-languages--medium, q-builder-pattern--design-patterns--medium, q-inheritance-vs-composition--oop--medium]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - software-design
   - gof-patterns
   - creational-patterns

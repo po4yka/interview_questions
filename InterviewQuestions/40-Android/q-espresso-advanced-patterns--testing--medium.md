@@ -4,6 +4,8 @@ title: "Espresso Advanced Patterns / Espresso Advanced Паттерны"
 topic: testing
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy, q-flutter-comparison--multiplatform--medium, q-16kb-dex-page-size--android--medium]
 created: 2025-10-15
 tags: [espresso, ui-testing, idling-resource, difficulty/medium]
 ---

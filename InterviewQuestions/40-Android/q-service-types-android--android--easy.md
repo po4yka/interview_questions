@@ -4,6 +4,8 @@ title: "Service Types Android / Типы Service в Android"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-compose-stability-skippability--jetpack-compose--hard, q-alternative-distribution--distribution--medium, q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium]
 created: 2025-10-15
 tags: [services, background-tasks, difficulty/easy]
 ---

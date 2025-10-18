@@ -4,6 +4,8 @@ title: "Main Thread Android / Главный поток Android"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-vulkan-renderscript--graphics--hard, q-room-code-generation-timing--android--medium, q-baseline-profiles-optimization--performance--medium]
 created: 2025-10-15
 tags: [threading, ui-thread, difficulty/medium]
 ---

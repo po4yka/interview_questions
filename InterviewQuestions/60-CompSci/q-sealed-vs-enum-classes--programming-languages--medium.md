@@ -4,8 +4,11 @@ title: "Sealed Vs Enum Classes / Sealed против Enum Классы"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-what-is-garbage-in-gc--programming-languages--easy, q-suspend-function-suspension-mechanism--programming-languages--hard, q-primitive-vs-reference-types--programming-languages--easy]
 created: 2025-10-15
-tags: - comparison
+tags:
+  - comparison
   - enum
   - kotlin
   - oop
@@ -278,3 +281,8 @@ sealed class TaskResult {
 }
 ```
 
+## Related Questions
+
+- [[q-what-is-garbage-in-gc--programming-languages--easy]]
+- [[q-suspend-function-suspension-mechanism--programming-languages--hard]]
+- [[q-primitive-vs-reference-types--programming-languages--easy]]

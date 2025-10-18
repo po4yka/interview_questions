@@ -4,11 +4,14 @@ title: Interpreter Pattern
 topic: design-patterns
 difficulty: hard
 status: draft
+moc: moc-compSci
 created: 2025-10-15
 tags: []
-related:   - composite-pattern
+related: [q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-what-is-coroutinescope--programming-languages--medium, q-data-sealed-classes-why--programming-languages--medium]
+  - composite-pattern
   - visitor-pattern
-subtopics:   - behavioral-patterns
+subtopics:
+  - behavioral-patterns
   - language-processing
   - expression-evaluation
 ---

@@ -4,8 +4,11 @@ title: "Heap Pollution Generics / Загрязнение кучи дженери
 topic: kotlin
 difficulty: hard
 status: draft
+moc: moc-kotlin
+related: [q-data-class-requirements--programming-languages--medium, q-suspend-functions-basics--kotlin--easy, q-kotlin-class-initializers--programming-languages--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - java
   - generics
   - type-safety
@@ -446,3 +449,9 @@ fun test() {
 5. Не подавляйте предупреждения компилятора без понимания
 6. Используйте неизменяемые коллекции
 7. Передавайте `KClass<T>` для создания типизированных массивов
+
+## Related Questions
+
+- [[q-data-class-requirements--programming-languages--medium]]
+- [[q-suspend-functions-basics--kotlin--easy]]
+- [[q-kotlin-class-initializers--programming-languages--medium]]

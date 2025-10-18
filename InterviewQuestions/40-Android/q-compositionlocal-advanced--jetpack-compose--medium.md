@@ -4,6 +4,8 @@ title: "Compositionlocal Advanced / CompositionLocal продвинутый ур
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-test-doubles-dependency-injection--testing--medium, q-activity-lifecycle-methods--android--medium, q-how-to-add-custom-attributes-to-custom-view--programming-languages--medium]
 created: 2025-10-15
 tags: [compose, composition-local, dependency-injection, best-practices, architecture, difficulty/medium]
 ---

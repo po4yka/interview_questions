@@ -4,6 +4,8 @@ title: "How To Add Fragment Synchronously Asynchronously / Как добавит
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-does-jetpackcompose-work--android--medium, q-play-app-signing--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium]
 created: 2025-10-15
 tags: [fragment, fragment-transaction, difficulty/medium]
 ---
@@ -378,13 +380,66 @@ Need to add fragment?
 ---
 
 ## RU (original)
+Fragments можно добавлять синхронно (немедленно) или асинхронно (с отложенным выполнением).
 
-Как добавить фрагмент синхронно / асинхронно
+**Синхронное добавление (commit()):**
 
-Синхронно: Асинхронно (с отложенным исполнением): commitNow() — выполняется немедленно в текущем потоке. Используется редко (например, в setup-методах).
+```kotlin
+// Выполняется немедленно на главном потоке
+supportFragmentManager.beginTransaction()
+    .add(R.id.container, MyFragment())
+    .commit()
+```
 
----
+**Проблема:** Вызывает `IllegalStateException` если вызывается после `onSaveInstanceState()`.
 
+**Асинхронное добавление (commitAllowingStateLoss()):**
+
+```kotlin
+// Позволяет потерю состояния
+supportFragmentManager.beginTransaction()
+    .add(R.id.container, MyFragment())
+    .commitAllowingStateLoss()
+```
+
+**Безопасное выполнение (commitNow()):**
+
+```kotlin
+// Выполняется немедленно, синхронно
+// Нельзя использовать с addToBackStack()
+supportFragmentManager.beginTransaction()
+    .add(R.id.container, MyFragment())
+    .commitNow()
+```
+
+**Отложенное выполнение (commitNowAllowingStateLoss()):**
+
+```kotlin
+supportFragmentManager.beginTransaction()
+    .add(R.id.container, MyFragment())
+    .commitNowAllowingStateLoss()
+```
+
+**Рекомендации:**
+
+- Используйте `commit()` для обычных случаев
+- Используйте `commitAllowingStateLoss()` для UI-событий где потеря состояния допустима
+- Используйте `commitNow()` когда нужно немедленное выполнение
+- Избегайте `commitNow()` с `addToBackStack()`
+
+**Пример с проверкой состояния:**
+
+```kotlin
+if (!isStateSaved) {
+    supportFragmentManager.beginTransaction()
+        .add(R.id.container, MyFragment())
+        .commit()
+} else {
+    supportFragmentManager.beginTransaction()
+        .add(R.id.container, MyFragment())
+        .commitAllowingStateLoss()
+}
+```
 ## Related Questions
 
 ### Prerequisites (Easier)

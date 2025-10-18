@@ -5,14 +5,15 @@ topic: programming-languages
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - java
+tags:
+  - java
   - kotlin
   - memory
   - primitive-types
   - programming-languages
   - reference-types
 moc: moc-programming-languages
-related: []
+related: [q-adapter-pattern--design-patterns--medium, q-what-is-job-object--programming-languages--medium, q-os-fundamentals-concepts--computer-science--hard]
 ---
 # В чем разница примитивного и ссылочного типов
 

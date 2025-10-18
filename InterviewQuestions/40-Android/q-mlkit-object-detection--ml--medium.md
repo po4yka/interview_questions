@@ -4,6 +4,8 @@ title: "Mlkit Object Detection / Распознавание объектов ML 
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-compose-performance-optimization--android--hard, q-test-coverage-quality-metrics--testing--medium, q-when-can-the-system-restart-a-service--android--medium]
 created: 2025-10-15
 tags: [ml-kit, object-detection, image-labeling, barcode-scanning, machine-learning, camera, difficulty/medium]
 ---
@@ -1303,3 +1305,9 @@ ML Kit предоставляет несколько предобученных 
 ### Резюме
 
 ML Kit предоставляет мощные предобученные модели для маркировки изображений, обнаружения объектов и сканирования штрих-кодов с минимальными усилиями по реализации. Обработка на устройстве обеспечивает приватность и офлайн-возможности, в то время как облачные модели предлагают более высокую точность. Интеграция камеры в реальном времени позволяет создавать сценарии живого обнаружения для различных случаев использования от управления инвентарём до дополненной реальности.
+
+## Related Questions
+
+- [[q-compose-performance-optimization--android--hard]]
+- [[q-test-coverage-quality-metrics--testing--medium]]
+- [[q-when-can-the-system-restart-a-service--android--medium]]

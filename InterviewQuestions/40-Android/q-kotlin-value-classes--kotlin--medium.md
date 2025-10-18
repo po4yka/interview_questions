@@ -7,10 +7,12 @@ status: draft
 created: 2025-10-12
 tags: [value-classes, inline-classes, performance, type-safety, android/value-classes, android/inline-classes, android/performance, android/type-safety, difficulty/medium]
 moc: moc-android
-related:   - q-kotlin-coroutines-advanced--kotlin--hard
+related: [q-api-file-upload-server--android--medium, q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-kmm-ktor-networking--multiplatform--medium]
+  - q-kotlin-coroutines-advanced--kotlin--hard
   - q-sealed-classes-state-management--kotlin--medium
   - q-compose-performance-optimization--android--hard
-subtopics:   - kotlin
+subtopics:
+  - kotlin
   - value-classes
   - inline-classes
   - performance
@@ -1165,6 +1167,21 @@ value class Email(val value: String) {
 }
 ```
 
+---
+
+### КЛЮЧЕВЫЕ ВЫВОДЫ
+
+1. **Value классы** обеспечивают типобезопасные обёртки без накладных расходов
+2. **@JvmInline** аннотация обязательна для JVM платформ
+3. **Только одно val свойство** в первичном конструкторе
+4. **Нет накладных расходов во время выполнения** при прямом использовании
+5. **Боксинг происходит** при использовании как Any, в коллекциях, nullable, интерфейсах
+6. **Идеально для** ID, измерений, денег, временных меток
+7. **Валидация** в init блоке обеспечивает инварианты
+8. **Сериализация** обрабатывает value классы как базовый тип
+9. **Типобезопасность** предотвращает смешивание похожих примитивных значений
+10. **Лучше чем typealias** - реальная проверка типов, а не просто псевдоним
+
 ## Follow-ups
 
 1. What's the difference between value classes and inline classes?
@@ -1177,3 +1194,9 @@ value class Email(val value: String) {
 8. How do you test code with value classes?
 9. What happens when value class is used as generic parameter?
 10. How do value classes interact with Compose remember and derivedStateOf?
+
+## Related Questions
+
+- [[q-api-file-upload-server--android--medium]]
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]]
+- [[q-kmm-ktor-networking--multiplatform--medium]]

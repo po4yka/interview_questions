@@ -4,8 +4,11 @@ title: "Collection Implementations / Реализации коллекций"
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-globalscope-antipattern--kotlin--easy, q-fan-in-fan-out-channels--kotlin--hard, q-kotlin-generics--kotlin--hard]
 created: 2025-10-15
-tags: - collections
+tags:
+  - collections
   - implementations
   - kotlin
   - list
@@ -237,3 +240,8 @@ Kotlin использует реализации коллекций Java. Осн
 | Ключ-значение + порядок | LinkedHashMap |
 | Ключ-значение + сортировка | TreeMap |
 
+## Related Questions
+
+- [[q-globalscope-antipattern--kotlin--easy]]
+- [[q-fan-in-fan-out-channels--kotlin--hard]]
+- [[q-kotlin-generics--kotlin--hard]]

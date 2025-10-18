@@ -4,8 +4,11 @@ title: "Data Sealed Difference / Разница data и sealed"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-value-classes-inline-classes--kotlin--medium, q-coroutine-parent-child-relationship--kotlin--medium, q-testing-viewmodel-coroutines--kotlin--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # What is the difference between data classes and sealed classes?
 
@@ -377,3 +380,9 @@ fun process(method: PaymentMethod) = when (method) {
 **Ключевое отличие:**
 - data class = "Какие данные здесь хранятся?"
 - sealed class = "Какие возможны варианты/типы?"
+
+## Related Questions
+
+- [[q-value-classes-inline-classes--kotlin--medium]]
+- [[q-coroutine-parent-child-relationship--kotlin--medium]]
+- [[q-testing-viewmodel-coroutines--kotlin--medium]]

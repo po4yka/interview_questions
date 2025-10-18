@@ -4,6 +4,8 @@ title: "Hashmap How It Works / Как работает HashMap"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-switch-float-double--programming-languages--easy, q-how-suspend-function-detects-suspension--programming-languages--hard, q-data-sealed-classes-why--programming-languages--medium]
 created: 2025-10-15
 tags:
   - collections
@@ -32,3 +34,8 @@ HashMap in Kotlin stores key-value pairs and uses hashing for fast element looku
 
 HashMap в Kotlin хранит пары ключ-значение и использует хеширование для быстрого поиска и вставки элементов. Каждый ключ хешируется, и результат хеш-функции определяет где в таблице будет храниться соответствующее значение. В случае коллизий HashMap использует цепочки или другие методы для хранения нескольких значений в одной корзине. Это обеспечивает доступ к элементам за среднее время O(1).
 
+## Related Questions
+
+- [[q-switch-float-double--programming-languages--easy]]
+- [[q-how-suspend-function-detects-suspension--programming-languages--hard]]
+- [[q-data-sealed-classes-why--programming-languages--medium]]

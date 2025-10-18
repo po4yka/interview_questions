@@ -4,8 +4,11 @@ title: "Flow Map Operator / Оператор map для Flow"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-how-gc-knows-object-can-be-destroyed--programming-languages--easy, q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-suspend-functions-under-the-hood--programming-languages--hard]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Flow Map Operator for Type Transformation
 
@@ -296,3 +299,9 @@ flowOf(1, 2, 3, 4)
 - Каждый элемент обрабатывается **независимо**
 - Нет буферизации или батчинга
 - Используйте `mapLatest` если важен только последний результат
+
+## Related Questions
+
+- [[q-how-gc-knows-object-can-be-destroyed--programming-languages--easy]]
+- [[q-coroutinescope-vs-supervisorscope--programming-languages--medium]]
+- [[q-suspend-functions-under-the-hood--programming-languages--hard]]

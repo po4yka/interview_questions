@@ -4,6 +4,8 @@ title: "What Are Services For / Для чего нужны Service"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-raise-process-priority--android--medium, q-background-tasks-decision-guide--android--medium, q-how-to-display-svg-string-as-a-vector-file--android--medium]
 created: 2025-10-15
 tags: [android/background-execution, android/service, background-execution, background-processing, long-running-tasks, service, difficulty/easy]
 ---
@@ -87,7 +89,68 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 ## Ответ (RU)
 
-Сервисы предназначены для выполнения длительных фоновых операций без взаимодействия с пользователем. Используются для: воспроизведения музыки, обработки сетевых запросов, выполнения периодических задач.
+**Service** используются для **длительных фоновых операций**, которые не требуют взаимодействия с пользователем.
+
+**Основные сценарии использования:**
+
+### 1. Фоновые задачи
+
+```kotlin
+class DataSyncService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Синхронизация данных в фоне
+        syncDataWithServer()
+        return START_STICKY
+    }
+}
+```
+
+### 2. Воспроизведение музыки
+
+```kotlin
+class MusicService : Service() {
+    // Воспроизводит музыку даже когда приложение закрыто
+}
+```
+
+### 3. Сетевые запросы
+
+```kotlin
+class DownloadService : Service() {
+    // Загрузка файлов в фоне
+}
+```
+
+### 4. Периодические задачи
+
+```kotlin
+class LocationService : Service() {
+    // Отслеживание местоположения периодически
+}
+```
+
+### Характеристики
+
+-   Работает **в фоне**
+-   **Без UI**
+-   Работает когда **приложение закрыто**
+-   **Длительные** операции
+
+### Важные замечания
+
+ВНИМАНИЕ: Service **ресурсоёмкие**
+ВНИМАНИЕ: Влияют на **время работы батареи**
+ВНИМАНИЕ: Используйте осторожно и минимизируйте использование
+
+-   Рассмотрите **WorkManager** для современных приложений
+
+### Современная альтернатива
+
+```kotlin
+// Предпочитайте WorkManager для фоновых задач
+val workRequest = OneTimeWorkRequestBuilder<MyWorker>().build()
+WorkManager.getInstance(context).enqueue(workRequest)
+```
 
 ---
 

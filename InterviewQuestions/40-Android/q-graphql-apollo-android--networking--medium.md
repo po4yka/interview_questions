@@ -4,6 +4,8 @@ title: "Graphql Apollo Android"
 topic: networking
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-play-app-signing--android--medium, q-sharedpreferences-definition--android--easy]
 created: 2025-10-15
 tags: [graphql, apollo, api, caching, subscriptions, difficulty/medium]
 ---

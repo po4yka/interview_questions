@@ -18,7 +18,7 @@ source_note: ""
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-zip-parallelism-guarantee--programming-languages--medium, q-kotlin-channels--kotlin--medium, q-inline-value-classes-performance--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06

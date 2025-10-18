@@ -4,6 +4,8 @@ title: "How Does Jetpackcompose Work / Как работает Jetpack Compose"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-cache-implementation-strategies--android--medium, q-custom-view-lifecycle--custom-views--medium, q-custom-view-state-saving--custom-views--medium]
 created: 2025-10-15
 tags: [ui framework, android, ui, jetpack-compose, difficulty/medium]
 ---

@@ -4,8 +4,11 @@ title: "Garbage Collector Basics / Garbage Collector Основы"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium, q-reference-types-criteria--programming-languages--medium]
 created: 2025-10-15
-tags: - garbage-collector
+tags:
+  - garbage-collector
   - gc
   - java
   - kotlin
@@ -97,3 +100,8 @@ fun createObject() {
 }  // obj становится недостижимым здесь, подходит для GC
 ```
 
+## Related Questions
+
+- [[q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium]]
+- [[q-linkedlist-arraylist-insert-behavior--programming-languages--medium]]
+- [[q-reference-types-criteria--programming-languages--medium]]

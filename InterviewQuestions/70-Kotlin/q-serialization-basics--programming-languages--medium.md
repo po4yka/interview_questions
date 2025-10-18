@@ -4,6 +4,8 @@ title: "Serialization Basics / Основы сериализации"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-delegation--programming-languages--easy, q-suspend-cancellable-coroutine--kotlin--hard, q-kotlin-extension-functions--kotlin--medium]
 created: 2025-10-15
 tags:
   - programming-languages
@@ -148,3 +150,10 @@ val json = Json {
 ```
 
 ---
+
+## Related Questions
+
+- [[q-kotlin-delegation--programming-languages--easy]]
+- [[q-suspend-cancellable-coroutine--kotlin--hard]]
+- [[q-kotlin-extension-functions--kotlin--medium]]
+

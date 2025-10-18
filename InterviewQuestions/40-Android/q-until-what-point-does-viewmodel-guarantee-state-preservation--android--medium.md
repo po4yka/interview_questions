@@ -4,8 +4,11 @@ title: "Until What Point Does Viewmodel Guarantee State Preservation / До ка
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-flow-testing-turbine--testing--medium, q-sparsearray-optimization--android--medium, q-hilt-components-scope--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # Until what point does ViewModel guarantee state preservation
 

@@ -4,6 +4,8 @@ title: "Single Activity Approach / Подход Single Activity"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-service-restrictions-why--android--medium, q-fakes-vs-mocks-testing--testing--medium, q-android-architectural-patterns--android--medium]
 created: 2025-10-15
 tags: [android, android/activity, android/fragment, android/ui-navigation, fragment, jetpack-navigation-component, platform/android, ui-navigation, difficulty/medium]
 ---

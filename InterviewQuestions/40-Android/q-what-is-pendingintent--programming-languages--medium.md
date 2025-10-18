@@ -4,6 +4,8 @@ title: "What Is Pendingintent / Что такое PendingIntent"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-mvvm-pattern--android--medium, q-api-file-upload-server--android--medium, q-is-layoutinflater-a-singleton-and-why--programming-languages--medium]
 created: 2025-10-15
 tags: [languages, android, difficulty/medium]
 ---

@@ -4,6 +4,8 @@ title: "How To Tell Adapter To Redraw List When Item Removed / Как сказа
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-parsing-optimization-android--android--medium, q-kotlin-context-receivers--kotlin--hard, q-what-navigation-methods-exist-in-kotlin--programming-languages--medium]
 created: 2025-10-15
 tags: [recyclerview, adapter, difficulty/medium]
 ---

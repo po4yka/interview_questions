@@ -4,6 +4,8 @@ title: "Fakes Vs Mocks Testing / Fakes против Mocks Тестировани
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-retrofit-usage-tutorial--android--medium, q-intent-filters-android--android--medium, q-mvvm-pattern--android--medium]
 created: 2025-10-15
 tags: [fakes, mocks, test-doubles, architecture, stubs, testing-strategy, difficulty/medium]
 ---

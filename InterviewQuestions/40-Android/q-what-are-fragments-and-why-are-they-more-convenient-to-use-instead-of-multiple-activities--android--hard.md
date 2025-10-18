@@ -4,6 +4,8 @@ title: "What Are Fragments And Why Are They More Convenient To Use Instead Of Mu
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-background-vs-foreground-service--android--medium, q-fragments-and-activity-relationship--android--hard, q-mvp-pattern--android--medium]
 created: 2025-10-15
 tags: [android, android/fragments, fragments, ui, difficulty/hard]
 ---

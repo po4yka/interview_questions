@@ -4,6 +4,8 @@ title: "Which Layout Allows Views To Overlap / Какой layout позволя�
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-compositionlocal-advanced--jetpack-compose--medium, q-android-build-optimization--android--medium, q-what-is-intent--android--easy]
 created: 2025-10-15
 tags: [layouts, framelayout, ui, difficulty/easy]
 ---

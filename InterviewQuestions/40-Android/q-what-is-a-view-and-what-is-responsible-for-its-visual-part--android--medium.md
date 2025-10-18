@@ -4,6 +4,8 @@ title: "What Is A View And What Is Responsible For Its Visual Part / What Is A V
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-vulkan-renderscript--graphics--hard, q-kotlin-dsl-builders--kotlin--hard, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--medium]
 created: 2025-10-15
 tags: [android/layouts, android/views, event handling, layouts, ui, view, views, xml layout, difficulty/medium]
 ---

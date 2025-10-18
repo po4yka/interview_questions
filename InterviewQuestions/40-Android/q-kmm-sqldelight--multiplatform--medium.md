@@ -4,6 +4,8 @@ title: "Kmm Sqldelight / SQLDelight в KMM"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-annotation-processing-android--android--medium, q-play-feature-delivery--android--medium, q-gradle-kotlin-dsl-vs-groovy--android--medium]
 created: 2025-10-15
 tags: [Kotlin, KMM, SQLDelight, Database, difficulty/medium]
 ---
@@ -1009,3 +1011,9 @@ SQLDelight обеспечивает type-safe multiplatform database:
 - **Performance**: Indexes, batching, WAL mode
 
 Ключевые моменты: schema design, migration strategy, transaction management, query optimization, testing.
+
+## Related Questions
+
+- [[q-annotation-processing-android--android--medium]]
+- [[q-play-feature-delivery--android--medium]]
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]]

@@ -4,6 +4,8 @@ title: "Robolectric Vs Instrumented / Robolectric против Instrumented"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-splash-screen-api-android12--android--medium, q-encrypted-file-storage--security--medium, q-compose-side-effects-advanced--jetpack-compose--hard]
 created: 2025-10-15
 tags: [robolectric, instrumented-tests, strategy, comparison, unit-testing, difficulty/medium]
 ---

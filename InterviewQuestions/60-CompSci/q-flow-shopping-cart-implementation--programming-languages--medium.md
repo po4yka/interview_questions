@@ -4,8 +4,11 @@ title: "Flow Shopping Cart Implementation"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-nothing-class-purpose--programming-languages--medium, q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-observer-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Implementing Flow for Shopping Cart Management
 
@@ -448,3 +451,9 @@ class ShoppingCartManagerTest {
 ## Ответ (RU)
 
 Используйте Flow для управления состоянием корзины обновляйте данные через методы emit или stateFlow чтобы динамически отслеживать изменения Реализуйте обработку добавления удаления обновления товаров через действия которые изменяют состояние корзины
+
+## Related Questions
+
+- [[q-nothing-class-purpose--programming-languages--medium]]
+- [[q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium]]
+- [[q-observer-pattern--design-patterns--medium]]

@@ -4,6 +4,8 @@ title: "Kmm Dependency Injection"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-choose-layout-for-fragment--android--easy, q-android-security-practices-checklist--android--medium, q-custom-view-attributes--custom-views--medium]
 created: 2025-10-15
 tags: [Kotlin, KMM, DI, Koin, difficulty/medium]
 ---
@@ -958,3 +960,9 @@ KMM DI стратегии:
 - **Manual DI**: Полный контроль, больше кода
 
 Ключевые моменты: expect/actual для platform code, правильное scope management, модульная организация, тестирование.
+
+## Related Questions
+
+- [[q-how-to-choose-layout-for-fragment--android--easy]]
+- [[q-android-security-practices-checklist--android--medium]]
+- [[q-custom-view-attributes--custom-views--medium]]

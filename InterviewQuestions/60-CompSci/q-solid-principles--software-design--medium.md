@@ -5,7 +5,8 @@ topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - architecture
+tags:
+  - architecture
   - design-principles
   - dip
   - isp
@@ -16,7 +17,7 @@ tags: - architecture
   - solid
   - srp
 moc: moc-architecture-patterns
-related: []
+related: [q-oop-principles-deep-dive--computer-science--medium, q-where-to-call-suspend-functions--programming-languages--medium, q-database-fundamentals--computer-science--hard]
 subtopics: ["design-principles", "best-practices", "architecture"]
 ---
 # Что такое принципы SOLID?

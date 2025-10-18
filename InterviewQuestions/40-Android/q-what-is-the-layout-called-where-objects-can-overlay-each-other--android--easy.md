@@ -4,6 +4,8 @@ title: "What Is The Layout Called Where Objects Can Overlay Each Other / Как 
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-compose-gesture-detection--jetpack-compose--medium, q-16kb-dex-page-size--android--medium, q-api-rate-limiting-throttling--android--medium]
 created: 2025-10-15
 tags: [Jetpack Compose, android, ui, layouts, framelayout, difficulty/medium]
 ---

@@ -4,9 +4,11 @@ title: "Accessibility Color Contrast / Контрастность цветов �
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
 created: 2025-10-11
 tags: [accessibility, color-contrast, wcag, visual-accessibility, difficulty/medium]
-related:   - q-accessibility-compose--accessibility--medium
+related: [q-recyclerview-viewtypes-delegation--recyclerview--medium, q-kmm-sqldelight--multiplatform--medium, q-android-app-lag-analysis--android--medium]
+  - q-accessibility-compose--accessibility--medium
   - q-material3-dynamic-color-theming--material-design--medium
 ---
 # Question (EN)

@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-kotlin-java-abstract-differences--programming-languages--medium, q-flow-operators--kotlin--medium, q-kotlin-map-collection--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05

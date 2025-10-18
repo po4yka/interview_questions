@@ -4,6 +4,8 @@ title: "Hilt Components Scope / Компоненты и скоупы Hilt"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-android-security-best-practices--android--medium, q-cicd-pipeline-setup--devops--medium, q-room-library-definition--android--easy]
 created: 2025-10-15
 tags: [android/dependency-injection, components, dagger, dependency-injection, hilt, scope, difficulty/medium]
 ---

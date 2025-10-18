@@ -4,8 +4,11 @@ title: "Object Companion Object"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-java-type-differences--programming-languages--medium, q-coroutinecontext-composition--kotlin--hard, q-flow-backpressure--kotlin--hard]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - object-oriented
   - singleton
 ---
@@ -226,3 +229,9 @@ fun MyClass.Companion.bar() = "bar"
 MyClass.foo()  // "foo" - обычный метод
 MyClass.bar()  // "bar" - расширение
 ```
+
+## Related Questions
+
+- [[q-kotlin-java-type-differences--programming-languages--medium]]
+- [[q-coroutinecontext-composition--kotlin--hard]]
+- [[q-flow-backpressure--kotlin--hard]]

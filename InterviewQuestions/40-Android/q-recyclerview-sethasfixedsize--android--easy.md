@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-what-events-are-activity-methods-tied-to--android--medium, q-handler-looper-main-thread--android--medium, q-workmanager-advanced--background--medium]
 
 # Timestamps
 created: 2025-10-06

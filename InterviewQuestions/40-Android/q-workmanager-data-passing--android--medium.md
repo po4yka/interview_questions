@@ -4,6 +4,8 @@ title: "Workmanager Data Passing / Передача данных WorkManager"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-are-px-dp-sp--android--easy, q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium, q-proguard-r8--android--medium]
 created: 2025-10-15
 tags: [android/background-processing, background-processing, data-passing, workmanager, difficulty/medium]
 ---
@@ -664,3 +666,8 @@ workManager.getWorkInfoByIdLiveData(workRequest.id)
 - Для сложных объектов используйте JSON
 - Для больших данных передавайте ID или путь к файлу
 
+## Related Questions
+
+- [[q-what-are-px-dp-sp--android--easy]]
+- [[q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium]]
+- [[q-proguard-r8--android--medium]]

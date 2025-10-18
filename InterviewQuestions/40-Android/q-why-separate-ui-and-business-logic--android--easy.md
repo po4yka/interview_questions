@@ -4,6 +4,8 @@ title: "Why Separate Ui And Business Logic / Why Separate Ui и Business Logic"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-compose-testing--android--medium, q-api-file-upload-server--android--medium, q-mvvm-vs-mvp-differences--android--medium]
 created: 2025-10-15
 tags: [android/architecture-patterns, architecture-patterns, clean-architecture, mvi, mvp, mvvm, separation-of-concerns, difficulty/easy]
 ---

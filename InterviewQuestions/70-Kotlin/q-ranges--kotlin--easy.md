@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-retry-exponential-backoff-flow--kotlin--medium, q-kotlin-let-function--programming-languages--easy, q-kotlin-flatmap-ranges--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05

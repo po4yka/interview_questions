@@ -4,8 +4,11 @@ title: "Kotlin Type Aliases Inline / Type aliases и inline в Kotlin"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-data-class-requirements--programming-languages--medium, q-actor-pattern--kotlin--hard, q-coroutine-resource-cleanup--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - type-aliases
   - inline-classes
   - type-safety
@@ -717,3 +720,9 @@ data class Address(
 10. **Документируйте boxing поведение** для inline classes
 
 **Резюме**: Kotlin предоставляет три способа создания типовых абстракций с различными компромиссами. Type aliases предоставляют нулевой overhead но без type safety. Inline classes обеспечивают strong type safety без runtime overhead. Wrapper classes предоставляют полный OOP функционал с runtime overhead. Выбирайте type aliases для сложных типов, inline classes для безопасных оберток без overhead, и wrapper classes когда нужно несколько свойств или наследование.
+
+## Related Questions
+
+- [[q-data-class-requirements--programming-languages--medium]]
+- [[q-actor-pattern--kotlin--hard]]
+- [[q-coroutine-resource-cleanup--kotlin--medium]]

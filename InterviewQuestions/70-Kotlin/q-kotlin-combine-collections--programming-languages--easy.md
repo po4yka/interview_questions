@@ -5,11 +5,12 @@ topic: programming-languages
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: - collections
+tags:
+  - collections
   - kotlin
   - programming-languages
 moc: moc-programming-languages
-related: []
+related: [q-custom-dispatchers-limited-parallelism--kotlin--hard, q-kotlin-vs-java-class-creation--programming-languages--medium, q-channels-vs-flow--kotlin--medium]
 ---
 # Какая функция Kotlin используется для объединения двух коллекций?
 

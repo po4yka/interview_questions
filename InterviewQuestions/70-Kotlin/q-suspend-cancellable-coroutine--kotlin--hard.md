@@ -5,17 +5,20 @@ topic: kotlin
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - suspend
   - callbacks
   - cancellation
   - integration
 moc: moc-kotlin
-related:   - q-continuation-cps-internals--kotlin--hard
+related: [q-job-state-machine-transitions--kotlin--medium, q-anonymous-class-in-inline-function--programming-languages--medium, q-debounce-throttle-flow--kotlin--medium]
+  - q-continuation-cps-internals--kotlin--hard
   - q-channelflow-callbackflow-flow--kotlin--medium
   - q-coroutine-exception-handler--kotlin--medium
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - suspend
   - callbacks
   - integration

@@ -4,8 +4,11 @@ title: "Command Pattern / Command Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-primitive-vs-reference-types--programming-languages--easy, q-iterator-pattern--design-patterns--medium, q-reference-types-protect-from-deletion--programming-languages--easy]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - behavioral-patterns
   - command
   - gof-patterns

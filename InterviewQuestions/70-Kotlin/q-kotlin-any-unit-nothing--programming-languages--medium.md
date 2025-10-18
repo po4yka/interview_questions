@@ -4,6 +4,8 @@ title: "Kotlin Any Unit Nothing / Any Unit и Nothing в Kotlin"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-java-primitives--programming-languages--medium, q-coroutine-supervisorjob-use-cases--kotlin--medium, q-sharedflow-stateflow--kotlin--medium]
 created: 2025-10-15
 tags:
   - any
@@ -84,3 +86,8 @@ fun fail(message: String): Nothing {
 }
 ```
 
+## Related Questions
+
+- [[q-kotlin-java-primitives--programming-languages--medium]]
+- [[q-coroutine-supervisorjob-use-cases--kotlin--medium]]
+- [[q-sharedflow-stateflow--kotlin--medium]]

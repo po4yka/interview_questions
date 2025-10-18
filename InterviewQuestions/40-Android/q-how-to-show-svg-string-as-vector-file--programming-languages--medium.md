@@ -4,6 +4,8 @@ title: "How To Show Svg String As Vector File / Как показать SVG ст
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-is-known-about-view-lifecycles--android--medium, q-vector-graphics-animations--graphics--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
 created: 2025-10-15
 tags: [languages, difficulty/medium]
 ---
@@ -977,3 +979,9 @@ implementation "io.coil-kt:coil-svg:2.5.0"
 // Glide (если используется)
 implementation 'com.github.bumptech.glide:glide:4.16.0'
 ```
+
+## Related Questions
+
+- [[q-what-is-known-about-view-lifecycles--android--medium]]
+- [[q-vector-graphics-animations--graphics--medium]]
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]]

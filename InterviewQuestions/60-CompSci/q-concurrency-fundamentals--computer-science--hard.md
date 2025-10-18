@@ -5,17 +5,20 @@ topic: concurrency
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - concurrency
+tags:
+  - concurrency
   - multithreading
   - synchronization
   - race-conditions
   - mutexes
   - semaphores
 moc: moc-concurrency
-related:   - q-os-fundamentals-concepts--computer-science--hard
+related: [q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-decorator-pattern--design-patterns--medium, q-synchronized-blocks-with-coroutines--programming-languages--medium]
+  - q-os-fundamentals-concepts--computer-science--hard
   - q-kotlin-coroutines-advanced--kotlin--hard
   - q-clean-code-principles--software-engineering--medium
-subtopics:   - concurrency
+subtopics:
+  - concurrency
   - multithreading
   - synchronization
   - race-conditions
@@ -943,17 +946,430 @@ lifecycleScope.launch {
 
 ### Постановка задачи
 
-Параллелизм - способность выполнять несколько задач одновременно. Понимание параллелизма критично для создания отзывчивых, высокопроизводительных приложений. Ключевые концепции включают race conditions, примитивы синхронизации, deadlocks и потокобезопасные структуры данных.
+Параллелизм - это способность выполнять несколько задач одновременно. Понимание параллелизма критично для создания отзывчивых, высокопроизводительных приложений. Ключевые концепции включают состояния гонки (race conditions), примитивы синхронизации, взаимные блокировки (deadlocks) и потокобезопасные структуры данных.
 
 **Вопрос:** Что такое concurrency vs parallelism? Что такое race conditions и как их предотвратить? Что такое mutexes, semaphores и monitors? Как избежать deadlocks?
 
-### Ключевые выводы
+### Детальный ответ
+
+---
+
+### CONCURRENCY VS PARALLELISM
+
+```
+Concurrency (Параллелизм):
+- Несколько задач делают прогресс (не обязательно одновременно)
+- О работе с несколькими вещами одновременно
+- Может быть достигнуто с одним ядром CPU (разделение времени)
+
+Пример: Один повар готовит несколько блюд
+- Ставит воду для пасты
+- Пока ждет, режет овощи
+- Пока паста варится, готовит соус
+- Один человек, несколько задач в процессе
+
+Parallelism (Истинный параллелизм):
+- Несколько задач выполняются одновременно
+- О выполнении нескольких вещей одновременно
+- Требует нескольких ядер CPU
+
+Пример: Несколько поваров готовят
+- Повар 1 готовит пасту
+- Повар 2 готовит салат
+- Повар 3 делает десерт
+- Несколько людей работают одновременно
+```
+
+**Визуализация:**
+```
+Concurrency (Одно ядро):
+Время →
+Задача A: ████░░░░████░░░░████
+Задача B: ░░░░████░░░░████░░░░
+       Переключение контекста между задачами
+
+Parallelism (Множество ядер):
+Время →
+Ядро 1 Задача A: ████████████████
+Ядро 2 Задача B: ████████████████
+       Истинное одновременное выполнение
+```
+
+---
+
+### СОСТОЯНИЯ ГОНКИ (RACE CONDITIONS)
+
+**Race Condition = Несколько потоков обращаются к разделяемым данным, как минимум один изменяет их, результат зависит от времени**
+
+**Почему это происходит:**
+```
+Время:    Поток 1              Поток 2
+t1:       Читает count (0)
+t2:                            Читает count (0)
+t3:       Добавляет 1 → 1
+t4:                            Добавляет 1 → 1
+t5:       Записывает 1
+t6:                            Записывает 1
+Результат: count = 1 (должно быть 2!)
+Два инкремента, но count увеличился только на 1
+```
+
+---
+
+### ПРИМИТИВЫ СИНХРОНИЗАЦИИ
+
+**1. Mutex (Блокировка взаимного исключения)**
+
+```kotlin
+// ✓ Исправлено с synchronized
+class SafeCounter {
+    private var count = 0
+    private val lock = Any()
+
+    fun increment() {
+        synchronized(lock) {
+            count++  // Только один поток за раз
+        }
+    }
+
+    fun getCount() = synchronized(lock) { count }
+}
+
+// Или используем ReentrantLock
+class SafeCounterWithLock {
+    private var count = 0
+    private val lock = ReentrantLock()
+
+    fun increment() {
+        lock.lock()
+        try {
+            count++
+        } finally {
+            lock.unlock()  // Всегда разблокируем в finally
+        }
+    }
+}
+
+// Современный Kotlin: Атомарные переменные
+class AtomicCounter {
+    private val count = AtomicInteger(0)
+
+    fun increment() {
+        count.incrementAndGet()  // Атомарная операция
+    }
+
+    fun getCount() = count.get()
+}
+```
+
+**Свойства Mutex:**
+```
+✓ Только один поток может удерживать блокировку одновременно
+✓ Поток, который блокирует, должен разблокировать (владение)
+✓ Реентерабельный: Тот же поток может блокировать несколько раз
+✗ Может вызвать deadlock
+✗ Накладные расходы на производительность
+```
+
+---
+
+**2. Semaphore (Семафор)**
+
+```kotlin
+// Semaphore: Позволяет N потокам обращаться к ресурсу
+
+// Бинарный семафор (как mutex)
+class BinarySemaphoreExample {
+    private val semaphore = Semaphore(1)  // Только 1 разрешение
+
+    fun criticalSection() {
+        semaphore.acquire()  // Получаем разрешение
+        try {
+            // Только один поток здесь
+            println("${Thread.currentThread().name} в критической секции")
+            Thread.sleep(1000)
+        } finally {
+            semaphore.release()  // Возвращаем разрешение
+        }
+    }
+}
+
+// Считающий семафор (пул соединений)
+class ConnectionPool {
+    private val connections = mutableListOf<Connection>()
+    private val semaphore = Semaphore(5)  // Максимум 5 соединений
+
+    fun executeQuery(query: String): String {
+        semaphore.acquire()  // Ждем доступного соединения
+        val connection = synchronized(connections) {
+            connections.removeAt(0)
+        }
+
+        try {
+            return connection.execute(query)
+        } finally {
+            synchronized(connections) {
+                connections.add(connection)
+            }
+            semaphore.release()  // Освобождаем разрешение
+        }
+    }
+}
+```
+
+**Свойства Semaphore:**
+```
+✓ Контролирует доступ к N ресурсам
+✓ Любой поток может освободить (нет владения)
+✓ Полезен для пулов ресурсов
+✓ Может реализовать producer-consumer
+✗ Более сложный чем mutex
+```
+
+---
+
+**3. Monitor (synchronized в Java/Kotlin)**
+
+```kotlin
+// Monitor: Mutex + Условные переменные
+
+class BoundedBuffer<T>(private val capacity: Int) {
+    private val buffer = LinkedList<T>()
+    private val lock = ReentrantLock()
+    private val notFull = lock.newCondition()
+    private val notEmpty = lock.newCondition()
+
+    fun put(item: T) {
+        lock.lock()
+        try {
+            // Ждем пока буфер не заполнен
+            while (buffer.size == capacity) {
+                notFull.await()
+            }
+
+            buffer.add(item)
+            println("Произведено: $item, размер: ${buffer.size}")
+
+            // Сигнализируем что буфер не пуст
+            notEmpty.signal()
+        } finally {
+            lock.unlock()
+        }
+    }
+
+    fun take(): T {
+        lock.lock()
+        try {
+            // Ждем пока буфер не пустой
+            while (buffer.isEmpty()) {
+                notEmpty.await()
+            }
+
+            val item = buffer.removeFirst()
+            println("Потреблено: $item, размер: ${buffer.size}")
+
+            // Сигнализируем что буфер не заполнен
+            notFull.signal()
+
+            return item
+        } finally {
+            lock.unlock()
+        }
+    }
+}
+```
+
+---
+
+### ПОТОКОБЕЗОПАСНЫЕ СТРУКТУРЫ ДАННЫХ
+
+**1. ConcurrentHashMap**
+
+```kotlin
+// ✗ Не потокобезопасно
+val map = HashMap<String, Int>()
+
+// Несколько потоков
+thread { map["key1"] = 1 }
+thread { map["key2"] = 2 }  // Может повредить map
+
+// ✓ Потокобезопасно
+val concurrentMap = ConcurrentHashMap<String, Int>()
+
+thread { concurrentMap["key1"] = 1 }
+thread { concurrentMap["key2"] = 2 }  // Безопасно
+
+// ✓ Атомарные операции
+concurrentMap.compute("counter") { _, oldValue ->
+    (oldValue ?: 0) + 1
+}
+```
+
+**2. CopyOnWriteArrayList**
+
+```kotlin
+// ✓ Потокобезопасный список для чтения-интенсивных нагрузок
+val listeners = CopyOnWriteArrayList<Listener>()
+
+// Безопасная итерация пока другие потоки модифицируют
+thread {
+    for (listener in listeners) {  // Безопасная итерация
+        listener.onEvent()
+    }
+}
+
+thread {
+    listeners.add(newListener)  // Безопасная модификация
+}
+
+// Компромисс:
+// ✓ Быстрые чтения (без блокировок)
+// ✗ Медленные записи (создает копию)
+// Использовать когда чтений >> записей
+```
+
+**3. BlockingQueue**
+
+```kotlin
+// ✓ Потокобезопасная очередь producer-consumer
+val queue = LinkedBlockingQueue<Task>(capacity = 10)
+
+// Поток-производитель
+thread {
+    repeat(20) {
+        val task = Task(it)
+        queue.put(task)  // Блокируется если очередь заполнена
+        println("Произведено: $task")
+    }
+}
+
+// Потоки-потребители
+repeat(3) { workerId ->
+    thread {
+        while (true) {
+            val task = queue.take()  // Блокируется если очередь пуста
+            println("Работник $workerId потребил: $task")
+            task.execute()
+        }
+    }
+}
+```
+
+---
+
+### VOLATILE КЛЮЧЕВОЕ СЛОВО
+
+```kotlin
+// Проблема: Кэширование CPU
+class TaskRunner {
+    private var flag = false  // ✗ Может быть закэширован для каждого потока
+
+    fun runTask() {
+        thread {
+            while (!flag) {  // Может никогда не увидеть изменение flag!
+                // Ждем
+            }
+            println("Задача завершена")
+        }
+
+        Thread.sleep(1000)
+        flag = true  // Может быть не видно другому потоку
+    }
+}
+
+// Решение: @Volatile
+class SafeTaskRunner {
+    @Volatile
+    private var flag = false  // ✓ Всегда читает из основной памяти
+
+    fun runTask() {
+        thread {
+            while (!flag) {  // Видит изменение flag немедленно
+                // Ждем
+            }
+            println("Задача завершена")
+        }
+
+        Thread.sleep(1000)
+        flag = true  // Запись немедленно видна
+    }
+}
+```
+
+**@Volatile гарантирует:**
+```
+✓ Чтения всегда получают последнее значение из основной памяти
+✓ Записи немедленно видны всем потокам
+✓ Нет переупорядочивания инструкций вокруг volatile доступа
+✗ НЕ гарантирует атомарность составных операций
+
+// ✗ Не атомарно (все еще race condition)
+@Volatile var counter = 0
+counter++  // Чтение + инкремент + запись (не атомарно!)
+
+// ✓ Используйте AtomicInteger вместо этого
+val counter = AtomicInteger(0)
+counter.incrementAndGet()  // Атомарно
+```
+
+---
+
+### HAPPENS-BEFORE ОТНОШЕНИЕ
+
+```kotlin
+// Happens-before: Гарантирует видимость и порядок
+
+// 1. Правило порядка программы
+var x = 0
+var y = 0
+
+fun thread1() {
+    x = 1  // Happens-before
+    y = 2  // Эта строка
+}
+// y = 2 видит x = 1
+
+// 2. Правило блокировки монитора
+val lock = Any()
+var shared = 0
+
+fun thread1() {
+    synchronized(lock) {
+        shared = 1  // Happens-before разблокировка
+    }
+}
+
+fun thread2() {
+    synchronized(lock) {  // Блокировка happens-after разблокировка в thread1
+        println(shared)    // Видит shared = 1
+    }
+}
+
+// 3. Правило volatile переменной
+@Volatile var flag = false
+var data = 0
+
+fun writer() {
+    data = 42   // Happens-before
+    flag = true // Volatile запись
+}
+
+fun reader() {
+    if (flag) {      // Volatile чтение
+        println(data) // Видит data = 42 (happens-after)
+    }
+}
+```
+
+---
+
+### КЛЮЧЕВЫЕ ВЫВОДЫ
 
 1. **Concurrency** ≠ **Parallelism** (множество задач vs множество ядер)
 2. **Race condition** = несинхронизированное разделяемое изменяемое состояние
 3. **Mutex** = блокировка взаимного исключения (один поток за раз)
-4. **Semaphore** = счётная блокировка (N потоков за раз)
-5. **Monitor** = mutex + condition variables
+4. **Semaphore** = счетная блокировка (N потоков за раз)
+5. **Monitor** = mutex + условные переменные
 6. **Deadlock** = циклическое ожидание, предотвращается упорядочением блокировок
 7. **@Volatile** = гарантия видимости, не атомарности
 8. **Atomic классы** для lock-free потокобезопасности

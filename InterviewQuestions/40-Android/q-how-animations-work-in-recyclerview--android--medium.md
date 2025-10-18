@@ -4,6 +4,8 @@ title: "How Animations Work In Recyclerview / Как работают анима
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-spannable-text-styling--android--medium, q-broadcastreceiver-contentprovider--android--easy, q-save-data-outside-fragment--android--medium]
 created: 2025-10-15
 tags: [android/animations, android/recyclerview, android/ui, animations, recyclerview, ui, difficulty/medium]
 ---

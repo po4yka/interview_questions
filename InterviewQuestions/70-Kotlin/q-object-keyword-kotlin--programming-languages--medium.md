@@ -4,8 +4,11 @@ title: "Object Keyword Kotlin / Ключевое слово object в Kotlin"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-flow-backpressure--kotlin--hard, q-kotlin-intrange--programming-languages--easy, q-collection-implementations--programming-languages--easy]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Tell about the Object keyword in Kotlin
 
@@ -703,3 +706,9 @@ logger.log("Приложение запущено")
 - **Utility classes**: Группировка утилитных функций и констант
 
 Все варианты потокобезопасны, могут реализовывать интерфейсы и наследоваться от классов, имеют свойства, методы и init блоки.
+
+## Related Questions
+
+- [[q-flow-backpressure--kotlin--hard]]
+- [[q-kotlin-intrange--programming-languages--easy]]
+- [[q-collection-implementations--programming-languages--easy]]

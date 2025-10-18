@@ -4,6 +4,8 @@ title: "How Jetpack Compose Works / Как работает Jetpack Compose"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-custom-viewgroup-layout--custom-views--hard, q-android-manifest-file--android--easy, q-cicd-multi-module--devops--medium]
 created: 2025-10-15
 tags: [languages, android, difficulty/medium]
 ---

@@ -4,8 +4,11 @@ title: "Kotlin Inline Functions / Kotlin Inline Функции"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-when-vs-switch--programming-languages--easy, q-data-sealed-classes-definition--programming-languages--hard, q-kotlin-dsl-creation--kotlin--hard]
 created: 2025-10-15
-tags: - higher-order-functions
+tags:
+  - higher-order-functions
   - inline
   - inline-functions
   - kotlin
@@ -33,3 +36,8 @@ Inline functions are a special type of function where the function code is embed
 
 Inline функции — это специальный тип функций, при компиляции которых код функции встраивается в место её вызова. Это значит, что при вызове inline функции не происходит создание нового стека вызовов; вместо этого компилятор копирует код функции непосредственно в место вызова. Этот механизм особенно полезен при использовании функций высшего порядка, которые принимают функции в качестве параметров или возвращают их в результате. Для чего они нужны: Уменьшение накладных расходов на вызов функций. Поскольку не происходит дополнительных вызовов функций и не создаётся новый стек, использование inline функций может значительно умен. Улучшение производительности при использовании лямбда-выражений. Kotlin использует объекты для представления лямбда-выражений и анонимных функций, что может привести к дополнительной нагрузке на сборщик мусора и память. Inline функции позволяют избежать этого, поскольку лямбды, переданные в inline функции, также инлайнятся. Возможность использования некоторых специфичных возможностей языка. Например, только inline функции могут использовать реифицированные типовые параметры что позволяет избежать ограничений связанных с типовой стиранием во время выполнения и работать с типами как с обычными классами.
 
+## Related Questions
+
+- [[q-kotlin-when-vs-switch--programming-languages--easy]]
+- [[q-data-sealed-classes-definition--programming-languages--hard]]
+- [[q-kotlin-dsl-creation--kotlin--hard]]

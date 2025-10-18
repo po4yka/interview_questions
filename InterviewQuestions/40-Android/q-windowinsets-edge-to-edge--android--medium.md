@@ -7,10 +7,12 @@ status: draft
 created: 2025-10-12
 tags: [windowinsets, edge-to-edge, system-ui, immersive, android/system-ui, android/windowinsets, android/edge-to-edge, android/immersive, difficulty/medium]
 moc: moc-android
-related:   - q-jetpack-compose-basics--android--medium
+related: [q-sharedpreferences-definition--android--easy, q-diffutil-background-calculation-issues--android--medium, q-build-optimization-gradle--gradle--medium]
+  - q-jetpack-compose-basics--android--medium
   - q-material3-components--material-design--easy
   - q-adaptive-layouts--android--hard
-subtopics:   - ui
+subtopics:
+  - ui
   - system-ui
   - windowinsets
   - edge-to-edge
@@ -898,3 +900,9 @@ Edge-to-edge дизайн позволяет приложениям рисова
 8. What are the accessibility considerations for edge-to-edge?
 9. How do you animate WindowInsets changes?
 10. What is WindowInsetsAnimationCompat?
+
+## Related Questions
+
+- [[q-sharedpreferences-definition--android--easy]]
+- [[q-diffutil-background-calculation-issues--android--medium]]
+- [[q-build-optimization-gradle--gradle--medium]]

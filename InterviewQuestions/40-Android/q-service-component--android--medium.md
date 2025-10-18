@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-kmm-dependency-injection--multiplatform--medium, q-anr-application-not-responding--android--medium, q-how-to-start-drawing-ui-in-android--android--easy]
 
 # Timestamps
 created: 2025-10-05

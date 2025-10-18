@@ -4,6 +4,8 @@ title: "Privacy Sandbox Topics Api"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium, q-touch-event-handling-custom-views--custom-views--medium, q-hilt-entry-points--di--medium]
 created: 2025-10-15
 tags: [privacy-sandbox, topics-api, privacy, advertising, user-privacy, difficulty/medium]
 ---

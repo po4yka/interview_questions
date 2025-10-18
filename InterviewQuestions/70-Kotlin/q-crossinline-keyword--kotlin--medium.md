@@ -4,8 +4,11 @@ title: "Crossinline Keyword / Ключевое слово crossinline"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-sealed-vs-abstract-classes--programming-languages--medium, q-star-projection-vs-any-generics--kotlin--hard, q-data-sealed-classes-definition--programming-languages--hard]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - inline-functions
   - lambda
   - non-local-returns
@@ -344,3 +347,9 @@ fun test() {
 | (обычная лямбда) | - Да | - Нет | - Нет | - Нет |
 | `crossinline` | - Нет | - Нет | - Нет | - Да |
 | `noinline` | - Нет | - Да | - Да | - Да |
+
+## Related Questions
+
+- [[q-sealed-vs-abstract-classes--programming-languages--medium]]
+- [[q-star-projection-vs-any-generics--kotlin--hard]]
+- [[q-data-sealed-classes-definition--programming-languages--hard]]

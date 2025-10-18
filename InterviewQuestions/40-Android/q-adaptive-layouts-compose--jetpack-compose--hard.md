@@ -7,10 +7,12 @@ status: draft
 created: 2025-10-12
 tags: [jetpack-compose, adaptive-layouts, responsive-design, window-size-classes, android/compose, android/adaptive-layouts, android/responsive-design, android/window-size-classes, android/foldables, difficulty/hard]
 moc: moc-android
-related:   - q-windowinsets-edge-to-edge--android--medium
+related: [q-which-class-to-use-for-rendering-view-in-background-thread--android--hard, q-where-is-composition-created-for-calling-composable-function--android--medium, q-test-coverage-quality-metrics--testing--medium]
+  - q-windowinsets-edge-to-edge--android--medium
   - q-jetpack-compose-basics--android--medium
   - q-material3-components--material-design--easy
-subtopics:   - jetpack-compose
+subtopics:
+  - jetpack-compose
   - adaptive-layouts
   - responsive-design
   - window-size-classes

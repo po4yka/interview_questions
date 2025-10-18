@@ -10,6 +10,7 @@ subtopics:
   - runtest
 difficulty: medium
 moc: moc-kotlin
+related: [q-enum-class-advanced--kotlin--medium, q-lambdas-java-kotlin-syntax--programming-languages--medium, q-kotlin-constructor-types--programming-languages--medium]
 status: draft
 created: 2025-10-12
 updated: 2025-10-12

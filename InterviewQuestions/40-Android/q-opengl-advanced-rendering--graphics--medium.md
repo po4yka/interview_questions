@@ -4,6 +4,8 @@ title: "Opengl Advanced Rendering / Продвинутый рендеринг Op
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-room-vs-sqlite--android--medium, q-why-fragment-needs-separate-callback-for-ui-creation--android--hard, q-jank-detection-frame-metrics--performance--medium]
 created: 2025-10-15
 tags: [opengl-es, 3d-graphics, shaders, rendering, textures, difficulty/medium]
 ---
@@ -908,3 +910,9 @@ OpenGL ES — это основной API Android для 3D графики и п
 ### Резюме
 
 Продвинутые техники OpenGL ES обеспечивают высокопроизводительный 3D рендеринг и пост-обработку на Android. Ключевые концепции включают пользовательские шейдеры для освещения и эффектов, VAO/VBO для эффективного управления геометрией, управление текстурами с mipmaps и FBO для операций render-to-texture. Правильное управление ресурсами и стратегии оптимизации необходимы для плавного рендеринга.
+
+## Related Questions
+
+- [[q-room-vs-sqlite--android--medium]]
+- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]]
+- [[q-jank-detection-frame-metrics--performance--medium]]

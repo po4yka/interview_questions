@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-infix-functions--kotlin--medium, q-destructuring-declarations--kotlin--medium, q-sequences-vs-collections-performance--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06

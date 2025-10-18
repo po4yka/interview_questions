@@ -17,6 +17,7 @@ updated: 2025-10-12
 category: "coroutines-advanced"
 tags: ["sharedflow", "replay", "buffer", "backpressure", "hot-flow", "configuration"]
 moc: "moc-kotlin"
+related: [q-channels-vs-flow--kotlin--medium, q-data-class-purpose--kotlin--easy, q-kotlin-any-class-methods--programming-languages--medium]
 contributors: []
 ---
 # SharedFlow replay cache and buffer configuration / SharedFlow replay cache и конфигурация буфера

@@ -4,6 +4,8 @@ title: "Fragments History And Purpose"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-compose-navigation-advanced--android--medium, q-app-security-best-practices--security--medium, q-derived-state-snapshot-system--jetpack-compose--hard]
 created: 2025-10-15
 tags: [android/fragments, android/ui, fragments, ui, difficulty/hard]
 ---

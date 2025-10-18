@@ -4,6 +4,8 @@ title: "Overdraw Gpu Rendering / Overdraw и GPU рендеринг"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-pass-parameters-to-a-fragment--android--easy, q-room-vs-sqlite--android--medium, q-how-to-add-fragment-synchronously-asynchronously--android--medium]
 created: 2025-10-15
 tags: [performance, gpu, rendering, overdraw, optimization, difficulty/medium]
 ---
@@ -157,3 +159,9 @@ Android предоставляет инструмент **Debug GPU Overdraw** �
 - Регулярно тестируйте приложение с инструментом GPU Overdraw
 - Профилируйте производительность рендеринга, используя инструменты GPU Profiling
 - Учитывайте компромисс между сложностью иерархии вью и overdraw
+
+## Related Questions
+
+- [[q-how-to-pass-parameters-to-a-fragment--android--easy]]
+- [[q-room-vs-sqlite--android--medium]]
+- [[q-how-to-add-fragment-synchronously-asynchronously--android--medium]]

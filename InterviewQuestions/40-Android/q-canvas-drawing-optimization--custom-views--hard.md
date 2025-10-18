@@ -4,6 +4,8 @@ title: "Canvas Drawing Optimization / Canvas Drawing Оптимизация"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-annotation-processing--android--medium, q-robolectric-vs-instrumented--testing--medium, q-single-activity-approach--android--medium]
 created: 2025-10-15
 tags: [views, canvas, performance, graphics, difficulty/hard]
 ---

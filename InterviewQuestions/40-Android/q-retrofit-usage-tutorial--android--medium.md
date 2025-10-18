@@ -4,6 +4,8 @@ title: "Retrofit Usage Tutorial / Retrofit Использование Tutorial"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-is-data-binding--android--easy, q-flow-testing-turbine--testing--medium, q-compose-navigation-advanced--jetpack-compose--medium]
 created: 2025-10-15
 tags: [retrofit, networking, tutorial, difficulty/medium]
 ---

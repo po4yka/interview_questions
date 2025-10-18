@@ -4,6 +4,8 @@ title: "When Is It Better To Use Png And Webp And When Svg / When Is It Better T
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-dagger-purpose--android--easy, q-compose-ui-testing-advanced--testing--hard, q-dagger-build-time-optimization--android--medium]
 created: 2025-10-15
 tags: [image-formats, ui, difficulty/easy]
 ---
@@ -417,3 +419,8 @@ Glide.with(context)
 2. **WebP** для всего фотографического контента и сложных изображений
 3. **PNG** только когда WebP не поддерживается или для совместимости с устаревшими версиями
 
+## Related Questions
+
+- [[q-dagger-purpose--android--easy]]
+- [[q-compose-ui-testing-advanced--testing--hard]]
+- [[q-dagger-build-time-optimization--android--medium]]

@@ -5,9 +5,10 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - android
+tags:
+  - android
 moc: moc-android
-related: []
+related: [q-what-is-the-main-application-execution-thread--android--easy, q-room-relations-embedded--room--medium, q-alternative-distribution--distribution--medium]
 ---
 # Which class should be used to render View in background thread?
 
@@ -495,3 +496,9 @@ override fun surfaceDestroyed(holder: SurfaceHolder) {
 Какой класс нужно использовать чтобы отрисовывать View в background thread
 
 Нужно использовать SurfaceView который предоставляет отдельный буфер для обновления вне основного потока а также использовать Canvas через SurfaceHolder.lockCanvas
+
+## Related Questions
+
+- [[q-what-is-the-main-application-execution-thread--android--easy]]
+- [[q-room-relations-embedded--room--medium]]
+- [[q-alternative-distribution--distribution--medium]]

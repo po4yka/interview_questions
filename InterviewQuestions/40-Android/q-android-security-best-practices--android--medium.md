@@ -4,10 +4,13 @@ title: "Android Security Best Practices / Лучшие практики безо
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-which-layout-allows-views-to-overlap--android--easy, q-graphql-vs-rest--networking--easy, q-how-to-create-chat-lists-from-a-ui-perspective--android--hard]
 created: 2025-10-15
 tags: [security, best-practices, encryption, ssl, webview, difficulty/medium, android/keystore-crypto, android/network-security-config]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20security%20best%20practices%20you%20know.md
-subtopics:   - permissions
+subtopics:
+  - permissions
   - keystore-crypto
   - network-security-config
 ---

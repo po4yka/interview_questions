@@ -4,8 +4,11 @@ title: "How To Tell Adapter To Redraw List If Element Was Deleted / Как ск�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-compose-modifier-system--android--medium, q-splash-screen-api-android12--android--medium, q-recyclerview-itemdecoration-advanced--recyclerview--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How to tell adapter to redraw list if an element was deleted?
 

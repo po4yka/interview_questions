@@ -4,8 +4,11 @@ title: "Throw Vs Throws / Throw против Throws"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-observer-pattern--design-patterns--medium, q-sealed-vs-enum-classes--programming-languages--medium, q-data-structures-algorithms--computer-science--hard]
 created: 2025-10-15
-tags: - exceptions
+tags:
+  - exceptions
   - java
   - kotlin
   - programming-languages
@@ -516,3 +519,8 @@ public void initDatabase() {
 5. **Создавайте кастомные исключения** - для доменных ошибок
 6. **Документируйте исключения** - укажите когда метод может выбросить исключение
 
+## Related Questions
+
+- [[q-observer-pattern--design-patterns--medium]]
+- [[q-sealed-vs-enum-classes--programming-languages--medium]]
+- [[q-data-structures-algorithms--computer-science--hard]]

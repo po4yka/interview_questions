@@ -4,6 +4,8 @@ title: "Android Architectural Patterns / Android Architectural Паттерны"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-privacy-sandbox-fledge--privacy--hard, q-material3-dynamic-color-theming--material-design--medium, q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium]
 created: 2025-10-15
 tags: [architecture-patterns, clean-architecture, component-based, mvc, mvp, mvvm, difficulty/medium]
 ---
@@ -590,5 +592,23 @@ app/
 **Current Best Practice:** MVVM + Clean Architecture (when needed) + Jetpack Compose
 
 ## Ответ (RU)
-В разработке Android-приложений применяются следующие архитектурные паттерны: MVC, MVP, MVVM, Clean Architecture, Component-Based Architecture.
 
+В разработке Android используются архитектурные паттерны: **MVC** (ранний, редко используется), **MVP** (Model-View-Presenter), **MVVM** (Model-View-ViewModel с data binding), **MVI** (Model-View-Intent для однонаправленного потока данных), **Clean Architecture** (слоистая архитектура с инверсией зависимостей).
+
+**Современная рекомендация:** MVVM + Clean Architecture + Android Architecture Components (ViewModel, LiveData/StateFlow, Repository pattern).
+
+**Основные паттерны:**
+
+**1. MVC** - устаревший, Activity является и View, и Controller.
+**2. MVP** - чёткое разделение через Contract интерфейсы, Presenter тестируется независимо.
+**3. MVVM** - текущий стандарт с Jetpack, ViewModel переживает configuration changes, реактивный подход.
+**4. MVI** - unidirectional data flow, предсказуемое управление состоянием.
+**5. Clean Architecture** - многоуровневая архитектура для сложных приложений.
+
+**Сравнение:** MVC (слишком связанный) → MVP (больше boilerplate) → MVVM (официальная рекомендация Google) → MVI (лучшее управление состоянием) → Clean Architecture (enterprise-уровень).
+
+## Related Questions
+
+- [[q-privacy-sandbox-fledge--privacy--hard]]
+- [[q-material3-dynamic-color-theming--material-design--medium]]
+- [[q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium]]

@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [android/recyclerview, android/views, diffutil, listview, memory-management, multithreading, performance-optimization, recyclerview, ui, views, difficulty/easy]
 moc: moc-android
-related: []
+related: [q-cicd-pipeline-android--android--medium, q-usecase-pattern-android--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
 ---
 # Какие могут быть проблемы с элементами списка?
 

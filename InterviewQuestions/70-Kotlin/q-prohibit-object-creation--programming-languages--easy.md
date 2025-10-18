@@ -4,8 +4,11 @@ title: "Prohibit Object Creation / Запрет создания объекто�
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-structured-concurrency-violations--kotlin--hard, q-sequences-vs-collections-performance--kotlin--medium, q-zip-parallelism-guarantee--programming-languages--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # How to programmatically prohibit creating a class object?
 
@@ -602,3 +605,9 @@ fun main() {
     println(car)
 }
 ```
+
+## Related Questions
+
+- [[q-structured-concurrency-violations--kotlin--hard]]
+- [[q-sequences-vs-collections-performance--kotlin--medium]]
+- [[q-zip-parallelism-guarantee--programming-languages--medium]]

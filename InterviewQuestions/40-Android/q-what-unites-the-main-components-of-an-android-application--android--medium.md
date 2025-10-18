@@ -4,6 +4,8 @@ title: "What Unites The Main Components Of An Android Application / Что об�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-android-lint-tool--android--medium, q-app-security-best-practices--security--medium, q-local-notification-exact-time--android--medium]
 created: 2025-10-15
 tags: [components, activity, service, broadcastreceiver, contentprovider, difficulty/medium]
 ---

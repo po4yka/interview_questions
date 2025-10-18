@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [languages, android, android/jetpack-compose, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-how-to-start-drawing-ui-in-android--android--easy, q-what-is-intent--android--easy, q-recyclerview-itemdecoration-advanced--recyclerview--medium]
 subtopics: [jetpack-compose]
 ---
 # Из каких более важных компонентов состоит Compose?

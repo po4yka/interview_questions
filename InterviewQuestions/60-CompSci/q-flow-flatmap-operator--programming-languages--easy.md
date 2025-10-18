@@ -4,6 +4,8 @@ title: "Flow Flatmap Operator / Оператор flatMap для Flow"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-what-is-flow--programming-languages--medium, q-singleton-pattern--design-patterns--easy, q-priorityqueue-vs-deque--programming-languages--easy]
 created: 2025-10-15
 tags:
   - coroutines
@@ -52,3 +54,8 @@ flow {
 
 Используйте оператор flatMap. Преобразует элементы из одного потока в другой поток Пример из потока URL в поток содержимого страниц
 
+## Related Questions
+
+- [[q-what-is-flow--programming-languages--medium]]
+- [[q-singleton-pattern--design-patterns--easy]]
+- [[q-priorityqueue-vs-deque--programming-languages--easy]]

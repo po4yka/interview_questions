@@ -4,6 +4,8 @@ title: "Kotlin Property Delegates / Делегаты свойств Kotlin"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-map-flatmap--kotlin--medium, q-coroutine-scope-basics--kotlin--easy, q-kotlin-channels--kotlin--medium]
 created: 2025-10-15
 tags:
   - delegates
@@ -31,3 +33,8 @@ Property delegates are a powerful feature that allows delegating property get/se
 
 Делегаты свойств — это мощная функциональность, позволяющая делегировать выполнение операций получения и установки значения свойства другому объекту. Основная идея заключается в том, что вместо того чтобы каждое свойство самостоятельно хранило данные или выполняло операции, оно может перенаправить эти задачи делегату. Это позволяет избежать дублирования кода и сделать более модульными и переиспользуемыми механизмы обработки свойств. Основные особенности и преимущества: Изоляция логики, Повторное использование кода, Расширяемость и Встроенная поддержка в языке.
 
+## Related Questions
+
+- [[q-kotlin-map-flatmap--kotlin--medium]]
+- [[q-coroutine-scope-basics--kotlin--easy]]
+- [[q-kotlin-channels--kotlin--medium]]

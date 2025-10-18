@@ -4,8 +4,11 @@ title: "Launch Vs Async Error Handling / Launch против Async Error Обр�
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-concurrency-fundamentals--computer-science--hard, q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-job-object--programming-languages--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # Error Handling Differences: Launch vs Async
 
@@ -362,3 +365,9 @@ class ErrorHandlingBestPractices {
 ## Ответ (RU)
 
 Да, ошибки (Exceptions) обрабатываются по-разному в launch и async! Ошибки в `launch` – падают сразу. Launch сразу выбрасывает исключение, и если нет try-catch, корутина завершает родительский CoroutineScope. В `async` ошибка не выбрасывается сразу, а сохраняется в Deferred<T>. Она появится только при вызове await().
+
+## Related Questions
+
+- [[q-concurrency-fundamentals--computer-science--hard]]
+- [[q-suspend-function-suspension-mechanism--programming-languages--hard]]
+- [[q-what-is-job-object--programming-languages--medium]]

@@ -4,8 +4,11 @@ title: "Sam Conversions / SAM конверсии"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-flow-exception-handling--kotlin--medium, q-kotlin-inline-functions--kotlin--medium, q-object-companion-object--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - sam
   - lambda
   - functional-interface
@@ -473,3 +476,8 @@ val result = processString("hello") { it.uppercase() }
 
 SAM конструктор явно создает экземпляр: `Runnable { code }`. Работает только с одним абстрактным методом - default методы не считаются.
 
+## Related Questions
+
+- [[q-flow-exception-handling--kotlin--medium]]
+- [[q-kotlin-inline-functions--kotlin--medium]]
+- [[q-object-companion-object--kotlin--medium]]

@@ -4,8 +4,11 @@ title: "Template Method Pattern / Template Method Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-nothing-class-purpose--programming-languages--medium, q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-inheritance-vs-composition--oop--medium]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - behavioral-patterns
   - template-method
   - gof-patterns
@@ -427,60 +430,54 @@ abstract class AuthenticationFlow {
 
 ### Определение
 
+Шаблонный метод (Template Method) — это метод в суперклассе (обычно абстрактном), который **определяет скелет операции в терминах нескольких высокоуровневых шагов**. Эти шаги сами по себе реализуются дополнительными *вспомогательными методами* в том же классе, что и шаблонный метод.
 
-The template method is a method in a superclass (usually an abstract superclass) that **defines the skeleton of an operation in terms of a number of high-level steps**. These steps are themselves implemented by additional *helper methods* in the same class as the template method.
+*Вспомогательные методы* могут быть:
+- **Абстрактными методами** - подклассы обязаны предоставить конкретные реализации
+- **Hook-методами** - имеют пустые тела в суперклассе, подклассы могут опционально их переопределить
 
-The *helper methods* may be either:
-- **Abstract methods** - Subclasses are required to provide concrete implementations
-- **Hook methods** - Have empty bodies in the superclass, subclasses can optionally override them
-
-The intent is to define the overall structure of the operation, while allowing subclasses to refine or redefine certain steps.
+Цель состоит в том, чтобы определить общую структуру операции, позволяя подклассам уточнять или переопределять определенные шаги.
 
 ### Основные компоненты
 
+Этот паттерн состоит из двух основных частей:
 
-This pattern has two main parts:
-
-1. **Template method** - Implemented in a base class, contains code for invariant parts of the algorithm. Calls helper methods for variant parts
-2. **Subclasses** - Override empty or variant parts with specific algorithms. **Must not override the template method itself**
+1. **Template method (шаблонный метод)** - Реализуется в базовом классе, содержит код для инвариантных частей алгоритма. Вызывает вспомогательные методы для вариантных частей
+2. **Подклассы** - Переопределяют пустые или вариантные части специфичными алгоритмами. **Не должны переопределять сам шаблонный метод**
 
 ### Почему используется?
 
+Шаблонный метод используется во фреймворках по следующим причинам:
 
-The template method is used in frameworks for the following reasons:
-
-1. **Lets subclasses implement varying behavior** - Through overriding of hook methods
-2. **Avoids duplication** - General workflow implemented once in abstract class, variations in subclasses
-3. **Controls specialization points** - If subclasses could override template method, they could make radical changes to workflow
+1. **Позволяет подклассам реализовывать различное поведение** - Через переопределение hook-методов
+2. **Избегает дублирования** - Общий workflow реализован один раз в абстрактном классе, вариации в подклассах
+3. **Контролирует точки специализации** - Если бы подклассы могли переопределить шаблонный метод, они могли бы радикально изменить workflow
 
 ### Объяснение
 
+**Пояснение к примерам**:
 
-**Explanation**:
-
-- **Template method** (`execute()`, `loadData()`, `generateReport()`) defines algorithm structure
-- **Abstract methods** must be implemented by subclasses
-- **Hook methods** can optionally be overridden
-- **Concrete methods** are the same for all subclasses
-- **Android**: Base ViewModels, Fragment lifecycles, data loading patterns
+- **Template method** (`execute()`, `loadData()`, `generateReport()`) определяет структуру алгоритма
+- **Абстрактные методы** должны быть реализованы подклассами
+- **Hook-методы** могут быть опционально переопределены
+- **Конкретные методы** одинаковы для всех подклассов
+- **В Android**: Базовые ViewModels, жизненные циклы Fragment, паттерны загрузки данных
 
 ### Pros (Преимущества)
 
-
-1. **Code reuse** - Common code in one place
-2. **Control over algorithm** - Subclasses can't change overall structure
-3. **Easy to extend** - Add new variations without changing algorithm
-4. **Inversion of Control** - Framework calls subclass methods, not vice versa
-5. **Open/Closed Principle** - Open for extension through subclasses
+1. **Повторное использование кода** - Общий код в одном месте
+2. **Контроль над алгоритмом** - Подклассы не могут изменить общую структуру
+3. **Легко расширять** - Добавление новых вариаций без изменения алгоритма
+4. **Инверсия управления** - Фреймворк вызывает методы подклассов, а не наоборот
+5. **Принцип открытости/закрытости** - Открыт для расширения через подклассы
 
 ### Cons (Недостатки)
 
-
-1. **Limited flexibility** - Clients can only change certain parts
-2. **Inheritance required** - Requires extending a class
-3. **Liskov Substitution** - Can violate if subclass changes behavior significantly
-4. **Maintenance** - More classes to maintain
-5. **Rigid structure** - Template method defines fixed sequence
+1. **Ограниченная гибкость** - Клиенты могут изменять только определенные части
+2. **Требуется наследование** - Необходимо расширять класс
+3. **Принцип подстановки Лисков** - Может нарушаться, если подкласс значительно меняет поведение
+4. **Поддержка** - Больше классов для поддержки
+5. **Жесткая структура** - Шаблонный метод определяет фиксированную последовательность
 
 
 ---

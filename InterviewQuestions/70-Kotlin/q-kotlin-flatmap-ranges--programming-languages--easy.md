@@ -4,6 +4,8 @@ title: "Kotlin Flatmap Ranges / flatMap и диапазоны в Kotlin"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-inline-function-limitations--kotlin--medium, q-interface-properties--programming-languages--medium, q-retry-exponential-backoff-flow--kotlin--medium]
 created: 2025-10-15
 tags:
   - collections
@@ -32,3 +34,8 @@ The result of executing the expression will be the list [1, 2, 2, 4, 3, 6].
 
 Результат выполнения выражения будет список [1, 2, 2, 4, 3, 6].
 
+## Related Questions
+
+- [[q-inline-function-limitations--kotlin--medium]]
+- [[q-interface-properties--programming-languages--medium]]
+- [[q-retry-exponential-backoff-flow--kotlin--medium]]

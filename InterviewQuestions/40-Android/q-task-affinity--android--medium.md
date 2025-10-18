@@ -12,9 +12,11 @@ category: android
 date_modified: 2025-10-05
 language_tags: [task-affinity, tasks, activity, navigation, manifest, difficulty/medium, android/ui-navigation, android/lifecycle]
 moc: moc-android
+related: [q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard, q-espresso-advanced-patterns--testing--medium, q-fix-slow-app-startup-legacy--android--hard]
 original_language: en
 source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20taskAffinity.md"
-subtopics:   - activity
+subtopics:
+  - activity
   - ui-navigation
   - lifecycle
 type: question
@@ -126,3 +128,9 @@ Common use cases for taskAffinity include:
 - Управление активностями, запускаемыми из уведомлений
 - Контроль поведения переноса активностей
 - Создание отдельных стеков задач для различных разделов приложения
+
+## Related Questions
+
+- [[q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard]]
+- [[q-espresso-advanced-patterns--testing--medium]]
+- [[q-fix-slow-app-startup-legacy--android--hard]]

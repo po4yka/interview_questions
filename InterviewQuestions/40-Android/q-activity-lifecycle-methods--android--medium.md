@@ -4,6 +4,8 @@ title: "Activity Lifecycle Methods / Методы жизненного цикл�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-stack-heap-memory-multiple-threads--android--medium, q-room-relations-embedded--room--medium, q-macrobenchmark-startup--performance--medium]
 created: 2025-10-15
 tags: [activity, lifecycle, difficulty/medium]
 ---

@@ -4,6 +4,8 @@ title: "Kotlin Let Function / Функция let в Kotlin"
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-conversion-functions--programming-languages--medium, q-kotlin-type-system--kotlin--medium, q-kotlin-higher-order-functions--kotlin--medium]
 created: 2025-10-15
 tags:
   - kotlin
@@ -105,3 +107,9 @@ user?.let {
     println(it.name)
 }
 ```
+
+## Related Questions
+
+- [[q-kotlin-conversion-functions--programming-languages--medium]]
+- [[q-kotlin-type-system--kotlin--medium]]
+- [[q-kotlin-higher-order-functions--kotlin--medium]]

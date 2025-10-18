@@ -4,6 +4,8 @@ title: "Stable Classes Compose / Stable Классы Compose"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard, q-compositionlocal-compose--android--hard, q-koin-vs-hilt-comparison--dependency-injection--medium]
 created: 2025-10-15
 tags: [android/jetpack-compose, android/performance, immutability, jetpack-compose, performance, recomposition, stability, stable-annotation, difficulty/hard]
 ---

@@ -4,10 +4,13 @@ title: "View Binding / Привязка View"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-reduce-apk-size-techniques--android--medium, q-what-is-viewmodel--android--medium, q-multiple-manifests-multimodule--android--medium]
 created: 2025-10-15
 tags: [view-binding, ui, type-safety, difficulty/medium, android/views, android/gradle, android/build-variants]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20View%20Binding.md
-subtopics:   - ui-views
+subtopics:
+  - ui-views
   - gradle
   - build-variants
 ---

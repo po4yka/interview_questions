@@ -7,7 +7,8 @@ status: draft
 created: 2025-10-13
 tags: [itemdecoration, custom-drawing, ui, difficulty/medium]
 moc: moc-android
-related:   - q-recyclerview-sethasfixedsize--android--easy
+related: [q-polling-implementation--android--medium, q-tasks-back-stack--android--medium, q-why-separate-ui-and-business-logic--android--easy]
+  - q-recyclerview-sethasfixedsize--android--easy
   - q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
   - q-rxjava-pagination-recyclerview--android--medium
   - q-how-to-create-list-like-recyclerview-in-compose--android--medium

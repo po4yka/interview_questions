@@ -5,15 +5,18 @@ topic: system-design
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - system-design
+tags:
+  - system-design
   - scalability
   - architecture
   - distributed-systems
 moc: moc-system-design
-related:   - q-load-balancing-strategies--system-design--medium
+related: [q-caching-strategies--system-design--medium, q-microservices-vs-monolith--system-design--hard, q-database-sharding-partitioning--system-design--hard]
+  - q-load-balancing-strategies--system-design--medium
   - q-database-sharding--system-design--hard
   - q-stateless-stateful-services--system-design--medium
-subtopics:   - scalability
+subtopics:
+  - scalability
   - scaling
   - distributed-systems
   - performance

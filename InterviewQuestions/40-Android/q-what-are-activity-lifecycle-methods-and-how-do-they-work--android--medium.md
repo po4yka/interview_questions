@@ -4,8 +4,11 @@ title: "What Are Activity Lifecycle Methods And How Do They Work / What Are Acti
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-is-hilt--android--medium, q-accessibility-text-scaling--accessibility--medium, q-test-doubles-dependency-injection--testing--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # What are Activity lifecycle methods and how do they work?
 

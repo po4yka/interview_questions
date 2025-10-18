@@ -4,6 +4,8 @@ title: "Mvvm Pattern / Паттерн MVVM"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-save-data-outside-fragment--android--medium, q-pass-large-data-between-activities--android--hard, q-transaction-too-large-exception--android--medium]
 created: 2025-10-15
 tags: [architecture-patterns, mvvm, model-view-viewmodel, viewmodel, data-binding, lifecycle, difficulty/medium]
 ---
@@ -206,25 +208,30 @@ fun loadUser(id: Int) {
 
 ## Ответ (RU)
 
--   Model and ViewModel work together to get and save the data
--   Represents domain logic (business rules, data validation)
--   Handles data sources (database, network, cache)
+**MVVM (Model-View-ViewModel)** - архитектурный паттерн, который разделяет разработку UI от бизнес-логики. Компоненты: (1) Model - данные и бизнес-логика, (2) View - UI компоненты, наблюдающие за ViewModel, (3) ViewModel - управляет состоянием UI, переживает изменения конфигурации.
+
+**Компоненты MVVM:**
+
+**1. Model**:
+- Абстракция источников данных
+- Бизнес-логика и данные приложения
+- Может быть локальным (Room) или удалённым (API)
 
 **2. View**:
-
--   The purpose of this layer is to inform the ViewModel about the user's action
--   This layer observes the ViewModel and does not contain any kind of application logic
--   Represents UI components (Activities, Fragments, Composables)
--   Displays data provided by ViewModel
--   Routes user interactions to ViewModel
+- UI слой (Activity, Fragment, Compose)
+- Отображает данные и обрабатывает пользовательские действия
+- Наблюдает за ViewModel для изменений данных
+- Содержит минимум логики
 
 **3. ViewModel**:
+- Мост между Model и View
+- Содержит презентационную логику
+- Переживает изменения конфигурации (поворот экрана)
+- Предоставляет данные через LiveData, StateFlow или Compose state
 
--   It exposes those data streams which are relevant to the View
--   Moreover, it serves as a link between the Model and the View
--   Manages UI-related data in a lifecycle-conscious way
--   Survives configuration changes
--   Provides data to the View via observable data holders (LiveData, StateFlow)
+**Преимущества:** разделение ответственности, тестируемость, lifecycle-aware, автоматическая очистка, нет утечек памяти.
+
+**Недостатки:** может быть избыточным для простых UI, требует понимания реактивного программирования.
 
 ### MVVM Diagram
 

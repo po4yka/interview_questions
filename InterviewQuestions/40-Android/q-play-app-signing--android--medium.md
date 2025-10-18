@@ -4,6 +4,8 @@ title: "Play App Signing / Подписание приложений Play"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-singleton-scope-binding--android--medium, q-shared-element-transitions--jetpack-compose--hard, q-compose-gesture-detection--jetpack-compose--medium]
 created: 2025-10-15
 tags: [play-app-signing, security, signing, keystore, google-play, app-bundle, difficulty/medium]
 ---
@@ -374,3 +376,9 @@ Play App Signing необходим для современного распро
 - **Спокойствие**: Инфраструктура Google защищает ключ подписи
 
 **Всегда используйте Play App Signing для новых приложений и мигрируйте существующие приложения, когда это возможно.**
+
+## Related Questions
+
+- [[q-singleton-scope-binding--android--medium]]
+- [[q-shared-element-transitions--jetpack-compose--hard]]
+- [[q-compose-gesture-detection--jetpack-compose--medium]]

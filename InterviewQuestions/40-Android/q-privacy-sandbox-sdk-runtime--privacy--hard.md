@@ -4,6 +4,8 @@ title: "Privacy Sandbox Sdk Runtime"
 topic: android
 difficulty: hard
 status: draft
+moc: moc-android
+related: [q-dagger-field-injection--android--medium, q-in-which-thread-does-a-regular-service-run--android--medium, q-glide-image-loading-internals--android--medium]
 created: 2025-10-15
 tags: [privacy-sandbox, sdk-runtime, privacy, sandboxing, security, difficulty/hard]
 ---
@@ -868,10 +870,7 @@ SDK Runtime provides process-isolated execution for third-party SDKs, protecting
 
 
 ## Ответ (RU)
-# Вопрос (RU)
-Что такое SDK Runtime в Privacy Sandbox? Как он изолирует сторонние SDK? Какие вызовы миграции SDK в runtime окружение и как обрабатывать cross-sandbox коммуникацию?
 
-## Ответ (RU)
 SDK Runtime — это компонент Privacy Sandbox, который запускает сторонние SDK в изолированных процессах, предотвращая их доступ к данным приложения и информации пользователя. Эта изоляция защищает приватность пользователя, позволяя приложениям использовать рекламные и аналитические SDK. Коммуникация между приложением и SDK происходит через чётко определённые API.
 
 #### Архитектура SDK Runtime
@@ -927,3 +926,9 @@ SDK Runtime — это компонент Privacy Sandbox, который зап
 ### Резюме
 
 SDK Runtime обеспечивает process-isolated выполнение для сторонних SDK, защищая приватность пользователя, предотвращая доступ SDK к данным приложения и информации пользователя. SDK запускаются в отдельных процессах с ограниченными возможностями, коммуницируя с приложениями через Binder IPC. Эта архитектура требует тщательного планирования миграции, эффективной cross-process коммуникации и обработки ограничений sandbox, но обеспечивает сильные гарантии приватности для пользователей.
+
+## Related Questions
+
+- [[q-dagger-field-injection--android--medium]]
+- [[q-in-which-thread-does-a-regular-service-run--android--medium]]
+- [[q-glide-image-loading-internals--android--medium]]

@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-fragments-history-and-purpose--android--hard, q-recomposition-choreographer--android--hard, q-which-event-is-called-when-user-touches-screen--android--medium]
 
 # Timestamps
 created: 2025-10-06
@@ -39,8 +39,7 @@ tags: [en, ru, android/notifications, android/alarmmanager, android/scheduling, 
 
 ## Ответ (RU)
 
-
-Содержимое ответа на русском языке. Перевод технической документации сохраняет Android API термины на английском.
+Для планирования локальных уведомлений на точное время используйте AlarmManager с PendingIntent для точной доставки уведомлений.
 
 
 ---

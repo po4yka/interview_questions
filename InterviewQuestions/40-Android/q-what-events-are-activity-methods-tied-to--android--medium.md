@@ -4,8 +4,11 @@ title: "What Events Are Activity Methods Tied To / С какими событи�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-animate-adding-removing-items-in-recyclerview--android--medium, q-kmm-ktor-networking--multiplatform--medium, q-how-does-the-main-thread-work--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # What events are Activity methods tied to?
 

@@ -4,6 +4,8 @@ title: "What Is Viewstub / Что такое ViewStub"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-room-relations-embedded--room--medium, q-api-rate-limiting-throttling--android--medium, q-what-navigation-methods-exist-in-kotlin--programming-languages--medium]
 created: 2025-10-15
 tags: [viewstub, ui, performance, lazy-loading, optimization, difficulty/medium]
 ---

@@ -4,6 +4,8 @@ title: "Kotlin Extensions Overview / Обзор расширений Kotlin"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-supervisor-scope-vs-coroutine-scope--kotlin--medium, q-testing-viewmodel-coroutines--kotlin--medium, q-channel-pipelines--kotlin--hard]
 created: 2025-10-15
 tags:
   - extension-functions
@@ -32,3 +34,8 @@ Extension functions and properties allow adding new functionality to existing cl
 
 Extension функции и свойства позволяют добавлять новую функциональность к существующим классам без их модификации или наследования. Расширения не изменяют класс, к которому они добавлены, а предоставляют способ расширить его функциональность. Extension функции позволяют добавлять новые методы к классу и объявляются с указанием типа, который они расширяют. Extension свойства позволяют добавлять новые свойства к существующим классам и объявляются аналогично функциям. Расширения не могут доступать к приватным или защищенным членам класса. Преимущества использования включают улучшение читаемости кода, удобную организацию кода и повышение гибкости.
 
+## Related Questions
+
+- [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]]
+- [[q-testing-viewmodel-coroutines--kotlin--medium]]
+- [[q-channel-pipelines--kotlin--hard]]

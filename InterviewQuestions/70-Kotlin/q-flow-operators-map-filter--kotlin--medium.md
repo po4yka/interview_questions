@@ -18,7 +18,7 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140018
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-testing-flow-operators--kotlin--hard, q-flow-operators--kotlin--medium, q-coroutinescope-vs-coroutinecontext--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12

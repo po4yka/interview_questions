@@ -4,8 +4,11 @@ title: "Inline Function Limitations / Ограничения inline функци
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-testing-stateflow-sharedflow--kotlin--medium, q-coroutine-context-elements--kotlin--hard, q-lambdas-java-kotlin-syntax--programming-languages--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - inline-functions
   - performance
   - limitations
@@ -387,3 +390,8 @@ inline fun transaction(
 
 Используйте `noinline` чтобы исключить конкретные параметры из inlining, и `crossinline` когда нельзя делать non-local return.
 
+## Related Questions
+
+- [[q-testing-stateflow-sharedflow--kotlin--medium]]
+- [[q-coroutine-context-elements--kotlin--hard]]
+- [[q-lambdas-java-kotlin-syntax--programming-languages--medium]]

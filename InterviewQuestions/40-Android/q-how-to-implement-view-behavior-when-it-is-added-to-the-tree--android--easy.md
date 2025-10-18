@@ -4,6 +4,8 @@ title: "How To Implement View Behavior When It Is Added To The Tree / Как р�
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-workmanager-chaining--background--hard, q-multiple-manifests-multimodule--android--medium, q-app-store-optimization--distribution--medium]
 created: 2025-10-15
 tags: [android/views, custom view, ui, view lifecycle, views, difficulty/easy]
 ---

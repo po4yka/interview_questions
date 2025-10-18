@@ -4,9 +4,11 @@ title: "Accessibility Compose / Доступность в Compose"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
 created: 2025-10-11
 tags: [accessibility, compose, talkback, inclusive-design, difficulty/medium]
-related:   - q-accessibility-talkback--accessibility--medium
+related: [q-single-activity-pros-cons--android--medium, q-view-composition-strategy-compose--android--medium, q-why-was-the-lifecycle-library-created--android--hard]
+  - q-accessibility-talkback--accessibility--medium
   - q-accessibility-testing--accessibility--medium
   - q-custom-view-accessibility--custom-views--medium
 ---

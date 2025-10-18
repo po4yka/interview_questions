@@ -5,14 +5,15 @@ topic: programming-languages
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - cloneable
+tags:
+  - cloneable
   - interfaces
   - java
   - marker-interface
   - programming-languages
   - serializable
 moc: moc-programming-languages
-related: []
+related: [q-delegates-java-compilation--programming-languages--hard, q-template-method-pattern--design-patterns--medium, q-java-all-classes-inherit-from-object--programming-languages--easy]
 subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
 # Перечислите маркерные интерфейсы

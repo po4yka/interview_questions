@@ -4,8 +4,11 @@ title: "Arraylist Linkedlist Vector Difference / Разница ArrayList Linked
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-enum-classes--kotlin--easy, q-coroutine-resource-cleanup--kotlin--medium, q-coroutine-exception-handler--kotlin--medium]
 created: 2025-10-15
-tags: - collections
+tags:
+  - collections
   - data structures
   - kotlin
   - programming-languages
@@ -171,3 +174,8 @@ ArrayList - динамический массив с быстрым доступ
 
 Используйте ArrayList по умолчанию, LinkedList для очередей и частых вставок/удалений, Vector не используйте (замените на Collections.synchronizedList() или CopyOnWriteArrayList).
 
+## Related Questions
+
+- [[q-kotlin-enum-classes--kotlin--easy]]
+- [[q-coroutine-resource-cleanup--kotlin--medium]]
+- [[q-coroutine-exception-handler--kotlin--medium]]

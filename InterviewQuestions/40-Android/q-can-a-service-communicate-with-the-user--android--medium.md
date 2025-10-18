@@ -4,8 +4,11 @@ title: "Can A Service Communicate With The User / Может ли Service общ
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-android-app-lag-analysis--android--medium, q-http-protocols-comparison--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # Can a service communicate with the user
 

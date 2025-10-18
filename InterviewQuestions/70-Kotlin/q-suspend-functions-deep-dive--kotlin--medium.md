@@ -4,8 +4,11 @@ title: "Suspend Functions Deep Dive"
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-reified-type-parameters--kotlin--medium, q-kotlin-delegation--programming-languages--easy, q-destructuring-declarations--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - suspend-functions
   - concurrency
@@ -781,3 +784,8 @@ Suspend функции можно вызывать только из:
 
 Сетевые запросы (Retrofit), операции с БД (Room), последовательные async операции, параллельные операции с `async`/`await`, timeout/retry логика, эмиссии Flow.
 
+## Related Questions
+
+- [[q-reified-type-parameters--kotlin--medium]]
+- [[q-kotlin-delegation--programming-languages--easy]]
+- [[q-destructuring-declarations--kotlin--medium]]

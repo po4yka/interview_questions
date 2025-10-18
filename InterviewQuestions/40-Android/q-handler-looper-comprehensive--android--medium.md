@@ -4,6 +4,8 @@ title: "Handler Looper Comprehensive / Handler и Looper подробно"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-glide-image-loading-internals--android--medium, q-cicd-multi-module--devops--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
 created: 2025-10-15
 tags: [handler, looper, threading, message-queue, concurrency, difficulty/medium]
 ---
@@ -14,6 +16,15 @@ tags: [handler, looper, threading, message-queue, concurrency, difficulty/medium
 **English**: Handler and Looper: Complete guide to Android message threading
 
 ## Answer (EN)
+
+Handler и Looper — фундаментальные компоненты Android для межпоточного взаимодействия через очередь сообщений.
+
+**Архитектура:** Handler отправляет сообщения → MessageQueue хранит → Looper обрабатывает в цикле. Looper привязывается к потоку через `Looper.prepare()` и `Looper.loop()`. Проверка наличия: `Looper.myLooper()`. Отправка в main thread: `Handler(Looper.getMainLooper()).post { }`.
+
+**Использование:** HandlerThread для фонового потока с Looper. Всегда очищать в `onDestroy()`: `handler.removeCallbacksAndMessages(null)`. Использовать `Message.obtain()` для переиспользования объектов. Избегать утечек памяти через WeakReference.
+
+## Ответ (RU)
+
 Handler и Looper — это фундаментальные компоненты Android для организации межпоточного взаимодействия и обработки сообщений в очереди.
 
 ### 1. Handler-Looper-MessageQueue Architecture
@@ -609,3 +620,9 @@ Looper.getMainLooper().setMessageLogging { log ->
    ```
 
 **English**: **Handler** sends messages, **Looper** processes them in a loop, **MessageQueue** stores them. Looper attaches to thread via `Looper.prepare()` and `Looper.loop()`. Check looper exists with `Looper.myLooper()`. Send messages to main thread: `Handler(Looper.getMainLooper()).post { }`. Use `HandlerThread` for background processing. Always clean up handlers in `onDestroy()` to prevent leaks. Use `Message.obtain()` for object reuse.
+
+## Related Questions
+
+- [[q-glide-image-loading-internals--android--medium]]
+- [[q-cicd-multi-module--devops--medium]]
+- [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]

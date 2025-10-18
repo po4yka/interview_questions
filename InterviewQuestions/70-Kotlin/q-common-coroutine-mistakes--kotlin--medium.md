@@ -5,7 +5,8 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - mistakes
   - anti-patterns
@@ -13,10 +14,12 @@ tags: - kotlin
   - gotchas
   - code-review
 moc: moc-kotlin
-related:   - q-coroutine-exception-handler--kotlin--medium
+related: [q-flow-backpressure--kotlin--hard, q-coroutine-virtual-time--kotlin--medium, q-kotlin-collections-overview--programming-languages--easy]
+  - q-coroutine-exception-handler--kotlin--medium
   - q-debugging-coroutines-techniques--kotlin--medium
   - q-mutex-synchronized-coroutines--kotlin--medium
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - mistakes
   - anti-patterns
   - best-practices

@@ -4,6 +4,8 @@ title: "Kotlin Non Inheritable Class / Не наследуемый класс в
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-generics--kotlin--hard, q-common-coroutine-mistakes--kotlin--medium, q-kotlin-coroutines-overview--programming-languages--medium]
 created: 2025-10-15
 tags:
   - class-design
@@ -100,3 +102,8 @@ class MoreDerived : Derived() {
 
 В Kotlin для определения класса, который не может быть унаследован, используется ключевое слово 'final'. По умолчанию все классы в Kotlin являются финальными и не могут быть унаследованы без явного указания 'open'. Таким образом, чтобы определить класс который не может быть унаследован достаточно просто объявить его без ключевого слова 'open'.
 
+## Related Questions
+
+- [[q-kotlin-generics--kotlin--hard]]
+- [[q-common-coroutine-mistakes--kotlin--medium]]
+- [[q-kotlin-coroutines-overview--programming-languages--medium]]

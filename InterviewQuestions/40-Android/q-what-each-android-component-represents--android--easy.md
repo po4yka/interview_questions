@@ -4,6 +4,8 @@ title: "What Each Android Component Represents / Что представляет
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-rss-feed-aggregator--android--medium, q-android-build-optimization--android--medium, q-how-does-activity-lifecycle-work--android--medium]
 created: 2025-10-15
 tags: [android, android-components, android/android-components, broadcast-receiver, components, content-provider, fragment, intent, service, view, difficulty/easy]
 ---
@@ -110,7 +112,106 @@ startActivity(intent)
 | Intent | Messaging | - No | Start Activity |
 
 ## Ответ (RU)
-В Android приложения строятся из нескольких основных компонентов, каждый из которых имеет свои специфические задачи и особенности. Эти компоненты взаимодействуют друг с другом и с операционной системой для создания функционального приложения.
 
-**Основные компоненты:** Activity (пользовательский интерфейс), Service (фоновые операции), Broadcast Receiver (системные события), Content Provider (обмен данными), Fragment (часть UI), View (строительный блок UI), Intent (связь между компонентами).
+Android-приложения создаются из нескольких **основных компонентов**, каждый из которых выполняет определённые задачи и имеет свои особенности. Эти компоненты **взаимодействуют друг с другом** и операционной системой для создания функционального приложения.
 
+**Основные компоненты:**
+
+**1. Activity** - Пользовательский интерфейс
+
+Предоставляет пользовательский интерфейс. Каждая Activity представляет **отдельный экран**.
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+}
+```
+
+**2. Service** - Фоновые операции
+
+Выполняет **длительные операции** в фоне без UI.
+
+```kotlin
+class MusicService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Воспроизведение музыки в фоне
+        return START_STICKY
+    }
+}
+```
+
+**3. BroadcastReceiver** - Системные события
+
+Принимает и обрабатывает **широковещательные сообщения** от других приложений или системы.
+
+```kotlin
+class NetworkReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        // Обработка изменения сети
+    }
+}
+```
+
+**4. ContentProvider** - Обмен данными
+
+Позволяет приложениям **обмениваться данными** с другими приложениями.
+
+```kotlin
+class MyContentProvider : ContentProvider() {
+    override fun query(...): Cursor? {
+        // Предоставление данных другим приложениям
+    }
+}
+```
+
+**5. Fragment** - Часть UI
+
+Представляет **часть пользовательского интерфейса** или поведения в Activity.
+
+```kotlin
+class ProfileFragment : Fragment() {
+    override fun onCreateView(...): View? {
+        return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
+}
+```
+
+**6. View** - Строительный блок UI
+
+Базовый **строительный блок** для компонентов пользовательского интерфейса.
+
+```kotlin
+class CustomButton : View(context) {
+    // Реализация пользовательского view
+}
+```
+
+**7. Intent** - Связь между компонентами
+
+Используется для **связи между компонентами**.
+
+```kotlin
+val intent = Intent(this, ProfileActivity::class.java)
+startActivity(intent)
+```
+
+**Итоговая таблица:**
+
+| Компонент | Назначение | Есть UI | Пример |
+|-----------|------------|---------|--------|
+| Activity | Экран | Да | Экран входа |
+| Service | Фоновая работа | Нет | Музыкальный плеер |
+| BroadcastReceiver | События | Нет | Изменение сети |
+| ContentProvider | Обмен данными | Нет | Контакты |
+| Fragment | Часть UI | Да | Содержимое вкладки |
+| View | Элемент UI | Да | Button, TextView |
+| Intent | Обмен сообщениями | Нет | Запуск Activity |
+
+## Related Questions
+
+- [[q-rss-feed-aggregator--android--medium]]
+- [[q-android-build-optimization--android--medium]]
+- [[q-how-does-activity-lifecycle-work--android--medium]]

@@ -4,8 +4,11 @@ title: "Lifecycle Scopes Viewmodelscope Lifecyclescope / Скоупы жизне
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-constants--programming-languages--easy, q-coroutine-context-detailed--kotlin--hard, q-race-conditions-coroutines--kotlin--hard]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - lifecycle
   - viewmodelscope
@@ -703,3 +706,9 @@ class BadViewModel : ViewModel() {
     }
 }
 ```
+
+## Related Questions
+
+- [[q-kotlin-constants--programming-languages--easy]]
+- [[q-coroutine-context-detailed--kotlin--hard]]
+- [[q-race-conditions-coroutines--kotlin--hard]]

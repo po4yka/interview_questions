@@ -4,8 +4,11 @@ title: "Switch Float Double / Switch с float и double"
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-compSci
+related: [q-solid-principles--software-design--medium, q-delegates-java-compilation--programming-languages--hard, q-hashmap-how-it-works--programming-languages--medium]
 created: 2025-10-15
-tags: - double
+tags:
+  - double
   - float
   - floating-point
   - java
@@ -210,3 +213,8 @@ System.out.println(sum == 100);  // Always true
 
 Нет, в Java switch не работает с float и double, так как они подвержены проблемам сравнения с плавающей точкой. switch работает с int, byte, short, char, enum, String, а также с их обёрточными типами.
 
+## Related Questions
+
+- [[q-solid-principles--software-design--medium]]
+- [[q-delegates-java-compilation--programming-languages--hard]]
+- [[q-hashmap-how-it-works--programming-languages--medium]]

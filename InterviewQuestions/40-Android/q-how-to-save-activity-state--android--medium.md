@@ -4,8 +4,11 @@ title: "How To Save Activity State / Как сохранить состояни�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-reduce-apk-size-techniques--android--medium, q-intent-filters-android--android--medium, q-in-which-thread-does-a-regular-service-run--android--medium]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # How to save Activity state?
 

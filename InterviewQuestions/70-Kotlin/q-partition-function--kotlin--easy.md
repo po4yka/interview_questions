@@ -4,8 +4,11 @@ title: "Partition Function / Функция partition"
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-lazy-initialization--programming-languages--easy, q-coroutine-job-lifecycle--kotlin--medium, q-testing-viewmodel-coroutines--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - collections
   - filtering
   - pair
@@ -381,3 +384,8 @@ val (matching, nonMatching) = list.partition { condition }
 - Если нужна только одна группа → используйте `filter`
 - Если нужно >2 групп → используйте `groupBy`
 
+## Related Questions
+
+- [[q-lazy-initialization--programming-languages--easy]]
+- [[q-coroutine-job-lifecycle--kotlin--medium]]
+- [[q-testing-viewmodel-coroutines--kotlin--medium]]

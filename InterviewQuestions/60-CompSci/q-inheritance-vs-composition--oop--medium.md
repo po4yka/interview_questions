@@ -5,7 +5,8 @@ topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: - composition
+tags:
+  - composition
   - coupling
   - dependency-injection
   - design-patterns
@@ -15,7 +16,7 @@ tags: - composition
   - is-a
   - oop
 moc: moc-architecture-patterns
-related: []
+related: [q-os-fundamentals-concepts--computer-science--hard, q-mediator-pattern--design-patterns--medium, q-java-object-comparison--programming-languages--easy]
 subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
 ---
 # Какие отличия наследования от композиции?

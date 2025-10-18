@@ -4,8 +4,11 @@ title: "Facade Pattern / Facade Паттерн"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-prototype-pattern--design-patterns--medium, q-builder-pattern--design-patterns--medium, q-observer-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: - design-patterns
+tags:
+  - design-patterns
   - structural-patterns
   - facade
   - gof-patterns

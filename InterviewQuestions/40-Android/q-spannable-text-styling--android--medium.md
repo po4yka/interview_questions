@@ -7,7 +7,7 @@ status: draft
 created: 2025-10-13
 tags: [spannable, text-styling, ui, textview, difficulty/medium]
 moc: moc-android
-related: []
+related: [q-how-to-add-custom-attributes-to-custom-view--android--medium, q-why-use-fragments-when-we-have-activities--android--medium, q-android-project-parts--android--easy]
 ---
 # Spannable Text in Android / Spannable текст в Android
 
@@ -593,3 +593,9 @@ val text = SpannableStringBuilder()
 **Резюме:**
 
 Spannable — это интерфейс для прикрепления разметки к тексту. Существует три основных класса: SpannedString (неизменяемый), SpannableString (spans изменяемые), SpannableStringBuilder (оба изменяемые). Spans делятся на три категории: влияющие на внешний вид, метрики и абзацы. Используется для форматированного текста, кликабельных ссылок, встроенных изображений и подсветки синтаксиса.
+
+## Related Questions
+
+- [[q-how-to-add-custom-attributes-to-custom-view--android--medium]]
+- [[q-why-use-fragments-when-we-have-activities--android--medium]]
+- [[q-android-project-parts--android--easy]]

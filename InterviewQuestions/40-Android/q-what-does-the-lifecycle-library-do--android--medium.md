@@ -4,8 +4,11 @@ title: "What Does The Lifecycle Library Do / Что делает библиот�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-runtime-permissions-best-practices--permissions--medium, q-privacy-sandbox-topics-api--privacy--medium, q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]
 created: 2025-10-15
-tags: - android
+tags:
+  - android
 ---
 # What does the Lifecycle library do?
 

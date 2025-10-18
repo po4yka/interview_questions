@@ -4,6 +4,8 @@ title: "Kotlin Safe Cast / Безопасное приведение типов 
 topic: computer-science
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-arraylist-linkedlist-vector-difference--programming-languages--medium, q-variance-type-projections--kotlin--hard, q-class-initialization-order--kotlin--medium]
 created: 2025-10-15
 tags:
   - as?
@@ -96,3 +98,8 @@ val result = any as? String ?: "default"
 - Когда вы хотите обработать неудачу изящно
 - Чтобы избежать блоков try-catch для приведения типов
 
+## Related Questions
+
+- [[q-arraylist-linkedlist-vector-difference--programming-languages--medium]]
+- [[q-variance-type-projections--kotlin--hard]]
+- [[q-class-initialization-order--kotlin--medium]]

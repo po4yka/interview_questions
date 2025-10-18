@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-fix-slow-app-startup-legacy--android--hard, q-looper-thread-connection--android--medium, q-macrobenchmark-startup--performance--medium]
 
 # Timestamps
 created: 2025-10-06

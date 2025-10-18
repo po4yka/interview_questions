@@ -4,6 +4,8 @@ title: "Vector Graphics Animations / Анимации векторной гра�
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-mvi-one-time-events--android--medium, q-what-is-layout-performance-measured-in--android--medium, q-mlkit-object-detection--ml--medium]
 created: 2025-10-15
 tags: [vector-graphics, animated-vector-drawable, svg, animations, graphics, difficulty/medium]
 ---
@@ -900,3 +902,9 @@ Vector graphics and AnimatedVectorDrawable provide scalable, animatable graphics
 ### Резюме
 
 Векторная графика и AnimatedVectorDrawable обеспечивают масштабируемую, анимируемую графику для Android. Ключевые возможности включают морфинг путей для переходов форм, программный контроль анимаций и возможности импорта SVG. Правильная оптимизация через кеширование, селективную растеризацию и аппаратное ускорение обеспечивает плавную производительность даже со сложной векторной графикой.
+
+## Related Questions
+
+- [[q-mvi-one-time-events--android--medium]]
+- [[q-what-is-layout-performance-measured-in--android--medium]]
+- [[q-mlkit-object-detection--ml--medium]]

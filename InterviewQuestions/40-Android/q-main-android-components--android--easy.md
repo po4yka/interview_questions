@@ -4,6 +4,8 @@ title: "Main Android Components / Основные компоненты Android"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-how-does-activity-lifecycle-work--android--medium, q-jit-vs-aot-compilation--android--medium, q-jank-detection-frame-metrics--performance--medium]
 created: 2025-10-15
 tags: [android, android/activity, android/broadcast-receiver, android/content-provider, android/service, broadcast-receiver, components, content-provider, service, difficulty/easy]
 ---

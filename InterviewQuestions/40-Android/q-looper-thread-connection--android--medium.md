@@ -4,6 +4,8 @@ title: "Looper Thread Connection / Связь Looper и потока"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-handler-looper-main-thread--android--medium, q-how-to-pass-photo-to-editor--android--medium, q-room-fts-full-text-search--room--hard]
 created: 2025-10-15
 tags: [android/concurrency, concurrency, handler, looper, message-queue, threading, difficulty/medium]
 ---
@@ -501,3 +503,8 @@ class LooperThread : Thread() {
 - Используйте **HandlerThread** вместо ручной настройки
 - Всегда вызывайте `quit()` или `quitSafely()` для остановки
 
+## Related Questions
+
+- [[q-handler-looper-main-thread--android--medium]]
+- [[q-how-to-pass-photo-to-editor--android--medium]]
+- [[q-room-fts-full-text-search--room--hard]]

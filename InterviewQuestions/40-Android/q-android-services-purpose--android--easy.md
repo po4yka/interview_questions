@@ -4,6 +4,8 @@ title: "Android Services Purpose / Назначение Service в Android"
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-recyclerview-itemdecoration-advanced--android--medium, q-factory-pattern-android--android--medium, q-retrofit-call-adapter-advanced--networking--medium]
 created: 2025-10-15
 tags: [services, background-operations, difficulty/easy]
 ---

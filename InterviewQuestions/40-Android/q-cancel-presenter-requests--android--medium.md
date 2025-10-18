@@ -4,6 +4,8 @@ title: "Cancel Presenter Requests / Отмена запросов Presenter"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-compose-draws-on-screen--android--hard, q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy, q-how-to-draw-ui-without-xml--android--easy]
 created: 2025-10-15
 tags: [android/architecture-mvi, android/lifecycle, architecture-mvi, lifecycle, mvp, platform/android, presenter-view-communication, difficulty/medium]
 ---
@@ -582,3 +584,8 @@ fun onDestroy() {
 
 **Рекомендация:** Используйте **Kotlin Coroutines** для нового кода или **RxJava** если он уже в проекте. Или перейдите на **MVVM с ViewModel**, который автоматически управляет жизненным циклом.
 
+## Related Questions
+
+- [[q-how-compose-draws-on-screen--android--hard]]
+- [[q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy]]
+- [[q-how-to-draw-ui-without-xml--android--easy]]

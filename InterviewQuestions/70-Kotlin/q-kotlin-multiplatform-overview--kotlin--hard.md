@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: []
+related: [q-type-aliases--kotlin--medium, q-enum-class-advanced--kotlin--medium, q-extensions-in-java--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-06

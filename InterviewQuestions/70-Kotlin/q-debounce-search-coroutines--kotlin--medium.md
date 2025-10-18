@@ -4,8 +4,11 @@ title: Debouncing Search with Coroutines / Отложенный Поиск с К
 topic: kotlin
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-advanced-coroutine-patterns--kotlin--hard, q-flowon-operator-context-switching--kotlin--hard, q-inline-value-classes-performance--kotlin--medium]
 created: 2025-10-15
-tags: - kotlin
+tags:
+  - kotlin
   - coroutines
   - debouncing
   - search
@@ -13,11 +16,13 @@ tags: - kotlin
   - cancellation
   - android
   - difficulty/medium
-language_tags:   - en
+language_tags:
+  - en
   - ru
 original_language: en
 source: Kotlin Coroutines Interview Questions PDF
-subtopics:   - coroutines
+subtopics:
+  - coroutines
   - debouncing
   - search
   - job-cancellation
@@ -622,3 +627,9 @@ searchQuery
 ---
 
 **Source**: Kotlin Coroutines Interview Questions for Android Developers PDF
+
+## Related Questions
+
+- [[q-advanced-coroutine-patterns--kotlin--hard]]
+- [[q-flowon-operator-context-switching--kotlin--hard]]
+- [[q-inline-value-classes-performance--kotlin--medium]]

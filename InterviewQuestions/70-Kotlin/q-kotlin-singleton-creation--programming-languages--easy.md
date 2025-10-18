@@ -4,8 +4,11 @@ title: "Kotlin Singleton Creation / Создание синглтона в Kotli
 topic: kotlin
 difficulty: easy
 status: draft
+moc: moc-kotlin
+related: [q-coroutine-job-lifecycle--kotlin--medium, q-suspend-functions-basics--kotlin--easy, q-statein-sharein-flow--kotlin--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # How to create a singleton in Kotlin?
 
@@ -299,3 +302,9 @@ class DatabaseConnection private constructor(val url: String) {
 ```
 
 Главное преимущество object-декларации — автоматическая потокобезопасность и простота использования.
+
+## Related Questions
+
+- [[q-coroutine-job-lifecycle--kotlin--medium]]
+- [[q-suspend-functions-basics--kotlin--easy]]
+- [[q-statein-sharein-flow--kotlin--medium]]

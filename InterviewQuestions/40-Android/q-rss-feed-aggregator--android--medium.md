@@ -4,6 +4,8 @@ title: "Rss Feed Aggregator / Агрегатор RSS лент"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-how-to-choose-layout-for-fragment--android--easy, q-webp-image-format-android--android--easy, q-databases-android--android--easy]
 created: 2025-10-15
 tags: [rss, xml-parsing, workmanager, room, difficulty/medium]
 ---
@@ -471,4 +473,8 @@ fun RssItemCard(
 **Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
 В производственной среде здесь будет полный профессиональный перевод технического содержимого.
 
+## Related Questions
 
+- [[q-how-to-choose-layout-for-fragment--android--easy]]
+- [[q-webp-image-format-android--android--easy]]
+- [[q-databases-android--android--easy]]

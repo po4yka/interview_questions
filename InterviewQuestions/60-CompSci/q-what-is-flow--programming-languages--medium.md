@@ -4,8 +4,11 @@ title: "What Is Flow / Что такое Flow"
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-compSci
+related: [q-priorityqueue-vs-deque--programming-languages--easy, q-flow-flatmap-operator--programming-languages--easy, q-where-to-call-suspend-functions--programming-languages--medium]
 created: 2025-10-15
-tags: - programming-languages
+tags:
+  - programming-languages
 ---
 # What is Flow in Kotlin?
 
@@ -502,3 +505,9 @@ class FlowBestPractices {
 ## Ответ (RU)
 
 Это асинхронный поток данных, который работает как List, но лениво. Особенности: выдает значения последовательно – одно за другим не блокирует поток – работает с suspend-функциями поддерживает cancel() – может быть остановлен в любой момент позволяет работать с бесконечными потоками – полезно для сетевых запросов БД UI-событий
+
+## Related Questions
+
+- [[q-priorityqueue-vs-deque--programming-languages--easy]]
+- [[q-flow-flatmap-operator--programming-languages--easy]]
+- [[q-where-to-call-suspend-functions--programming-languages--medium]]

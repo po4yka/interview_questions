@@ -4,6 +4,8 @@ title: "Custom View Lifecycle / Жизненный цикл кастомных V
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-app-startup-library--android--medium, q-what-are-the-most-important-components-of-compose--android--medium, q-how-to-show-svg-string-as-vector-file--programming-languages--medium]
 created: 2025-10-15
 tags: [views, android-framework, lifecycle, performance, difficulty/medium]
 ---

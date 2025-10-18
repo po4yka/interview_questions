@@ -4,8 +4,11 @@ title: "Kotlin Access Modifiers / Модификаторы доступа Kotlin
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-intrange--programming-languages--easy, q-suspend-functions-deep-dive--kotlin--medium, q-semaphore-rate-limiting--kotlin--medium]
 created: 2025-10-15
-tags: - access-modifiers
+tags:
+  - access-modifiers
   - encapsulation
   - internal
   - kotlin
@@ -125,3 +128,8 @@ internal fun internalFunction() {}  // Visible in same module
 
 Модификаторы доступа используются для управления доступом к классам, методам, интерфейсам и переменным в вашем коде. Это важные элементы языка, которые помогают управлять инкапсуляцией в программе, ограничивая видимость данных и методов. Существуют четыре основных модификатора доступа: public, private, protected, internal.
 
+## Related Questions
+
+- [[q-kotlin-intrange--programming-languages--easy]]
+- [[q-suspend-functions-deep-dive--kotlin--medium]]
+- [[q-semaphore-rate-limiting--kotlin--medium]]

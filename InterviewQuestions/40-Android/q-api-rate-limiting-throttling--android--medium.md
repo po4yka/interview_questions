@@ -4,6 +4,8 @@ title: "Api Rate Limiting Throttling"
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-real-time-updates-android--android--medium, q-dagger-scope-explained--android--medium, q-stable-classes-compose--android--hard]
 created: 2025-10-15
 tags: [networking, api, rate-limiting, throttling, retrofit, okhttp, difficulty/medium]
 ---
@@ -607,3 +609,9 @@ API rate limiting предотвращает превышение клиента
 - Отслеживание нарушений лимитов
 - Анализ паттернов запросов
 - Алерты на 429 ответы
+
+## Related Questions
+
+- [[q-real-time-updates-android--android--medium]]
+- [[q-dagger-scope-explained--android--medium]]
+- [[q-stable-classes-compose--android--hard]]

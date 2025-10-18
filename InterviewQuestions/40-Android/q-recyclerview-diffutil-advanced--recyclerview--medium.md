@@ -4,6 +4,8 @@ title: "Recyclerview Diffutil Advanced / Продвинутый DiffUtil для 
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-kmm-production-readiness--multiplatform--hard, q-koin-scope-management--dependency-injection--medium, q-android-project-parts--android--easy]
 created: 2025-10-15
 tags: [diffutil, performance, lists, difficulty/medium]
 ---

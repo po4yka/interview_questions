@@ -4,6 +4,8 @@ title: "How To Change The Number Of Columns In Recyclerview Depending On Orienta
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-play-store-publishing--distribution--medium, q-compose-ui-testing-advanced--testing--hard, q-broadcastreceiver-contentprovider--android--easy]
 created: 2025-10-15
 tags: [gridlayoutmanager, android, ui, layouts, difficulty/easy]
 ---

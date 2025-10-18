@@ -4,6 +4,8 @@ title: "Which Class To Catch Gestures / Какой класс для ловли 
 topic: android
 difficulty: easy
 status: draft
+moc: moc-android
+related: [q-how-does-jetpack-compose-work--android--medium, q-dagger-custom-scopes--di--hard, q-compose-side-effects-launchedeffect-disposableeffect--android--hard]
 created: 2025-10-15
 tags: [gesture-detector, gestures, ui, difficulty/easy]
 ---

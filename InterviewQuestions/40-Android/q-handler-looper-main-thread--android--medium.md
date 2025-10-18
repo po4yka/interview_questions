@@ -4,6 +4,8 @@ title: "Handler Looper Main Thread / Handler и Looper главного пото
 topic: android
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy, q-koin-vs-hilt-comparison--dependency-injection--medium, q-offline-first-architecture--android--hard]
 created: 2025-10-15
 tags: [android/concurrency, concurrency, handler, looper, main-thread, message-queue, threading, difficulty/medium]
 ---
@@ -532,3 +534,8 @@ Thread {
 - LiveData для реактивного обновления UI
 - Flow с `.flowOn(Dispatchers.Main)`
 
+## Related Questions
+
+- [[q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy]]
+- [[q-koin-vs-hilt-comparison--dependency-injection--medium]]
+- [[q-offline-first-architecture--android--hard]]

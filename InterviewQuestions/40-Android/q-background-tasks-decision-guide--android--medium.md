@@ -17,11 +17,11 @@ language_tags: [background-tasks, workmanager, coroutines, service, difficulty/m
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20background%20task%20and%20how%20it%20should%20be%20performed.md
 author: null
-related:
+related: [q-fakes-vs-mocks-testing--testing--medium, q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-workmanager-return-result--android--medium]
   - "[[moc-android]]"
   - "[[q-workmanager-basics--android--medium]]"
   - "[[q-foreground-services--android--medium]]"
-moc:
+moc: moc-android
   - "[[moc-android]]"
 connections: []
 ---

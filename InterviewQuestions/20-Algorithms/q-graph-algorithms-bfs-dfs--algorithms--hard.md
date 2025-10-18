@@ -5,15 +5,18 @@ topic: algorithms
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags: - algorithms
+tags:
+  - algorithms
   - graphs
   - bfs
   - dfs
   - traversal
 moc: moc-algorithms
-related:   - q-binary-search-variants--algorithms--medium
+related: [q-dynamic-programming-fundamentals--algorithms--hard, q-binary-search-variants--algorithms--medium, q-advanced-graph-algorithms--algorithms--hard]
+  - q-binary-search-variants--algorithms--medium
   - q-dynamic-programming-fundamentals--algorithms--hard
-subtopics:   - graphs
+subtopics:
+  - graphs
   - bfs
   - dfs
   - traversal

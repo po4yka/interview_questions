@@ -4,6 +4,8 @@ title: "Room Transactions Dao / Транзакции DAO в Room"
 topic: room
 difficulty: medium
 status: draft
+moc: moc-android
+related: [q-dagger-purpose--android--easy, q-navigation-methods-in-android--android--medium, q-biometric-authentication--android--medium]
 created: 2025-10-15
 tags: [database, transactions, dao, atomicity, consistency, acid, difficulty/medium]
 ---

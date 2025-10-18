@@ -7,10 +7,12 @@ status: draft
 created: 2025-10-12
 tags: [jetpack-compose, canvas, graphics, custom-drawing, android/compose, android/canvas, android/graphics, android/custom-drawing, android/animation, difficulty/hard]
 moc: moc-android
-related:   - q-compose-performance-optimization--android--hard
+related: [q-how-animations-work-in-recyclerview--android--medium, q-separate-ui-business-logic--android--easy, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
+  - q-compose-performance-optimization--android--hard
   - q-compose-custom-layout--jetpack-compose--hard
   - q-compose-custom-animations--jetpack-compose--medium
-subtopics:   - jetpack-compose
+subtopics:
+  - jetpack-compose
   - canvas
   - graphics
   - custom-drawing

@@ -4,6 +4,8 @@ title: "Kotlin Type System Features / Возможности системы ти
 topic: computer-science
 difficulty: medium
 status: draft
+moc: moc-kotlin
+related: [q-coroutines-vs-threads--programming-languages--medium, q-testing-viewmodels-coroutines--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
 created: 2025-10-15
 tags:
   - data-classes
@@ -83,3 +85,8 @@ These features make Kotlin code **safer, more concise, and more expressive**.
 
 Null Safety (Безопасность null), Коллекции разделение на изменяемые и неизменяемые коллекции, Data Classes автоматическое создание методов equals hashCode и toString, Smart Casts автоматическое приведение типа после проверки с помощью is, Sealed Classes упрощают обработку ограниченных иерархий классов, Выведение типов Kotlin автоматически определяет тип переменной
 
+## Related Questions
+
+- [[q-coroutines-vs-threads--programming-languages--medium]]
+- [[q-testing-viewmodels-coroutines--kotlin--medium]]
+- [[q-kotlin-coroutines-introduction--kotlin--medium]]

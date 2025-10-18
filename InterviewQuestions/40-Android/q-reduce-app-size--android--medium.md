@@ -18,7 +18,7 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium, q-what-do-you-know-about-modifiers--programming-languages--medium, q-memory-leak-vs-oom-android--android--medium]
 
 # Timestamps
 created: 2025-10-05
