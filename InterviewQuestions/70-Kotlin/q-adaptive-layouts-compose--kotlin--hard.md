@@ -350,14 +350,9 @@ fun Material3AdaptiveNav() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-compose-basics--kotlin--easy]] - Compose fundamentals
-- [[q-material3-components--kotlin--medium]] - Material 3 components
+- [[q-what-is-coroutine--kotlin--easy]] - Coroutine fundamentals
+- [[q-kotlin-flow-basics--kotlin--medium]] - Flow basics
 
 ### Related (Medium)
-- [[q-compose-navigation-advanced--kotlin--medium]] - Navigation patterns
-- [[q-compose-custom-layout--kotlin--hard]] - Custom layouts
-- [[q-compose-state-management--kotlin--medium]] - State management
-
-### Advanced (Harder)
-- [[q-compose-performance-optimization--kotlin--hard]] - Performance
-- [[q-compose-testing-advanced--kotlin--hard]] - Testing adaptive layouts
+- [[q-compose-side-effects-coroutines--kotlin--medium]] - Compose side effects
+- [[q-coroutine-builders-comparison--kotlin--medium]] - Coroutine patterns

@@ -340,13 +340,8 @@ class IapProviderFactory {
 
 ### Prerequisites (Easier)
 - [[q-android-app-bundles--android--easy]] - App bundles
-- [[q-play-store-publishing--android--medium]] - Play Store publishing
+- [[q-android-app-components--android--easy]] - App components
 
 ### Related (Medium)
-- [[q-app-store-optimization--android--medium]] - ASO
-- [[q-in-app-purchases--android--medium]] - IAP implementation
-- [[q-app-signing--android--medium]] - App signing
-
-### Advanced (Harder)
-- [[q-enterprise-app-distribution--android--hard]] - Enterprise distribution
-- [[q-multi-platform-architecture--android--hard]] - Multi-platform architecture
+- [[q-gradle-basics--android--easy]] - Build system
+- [[q-what-is-intent--android--easy]] - Intent system

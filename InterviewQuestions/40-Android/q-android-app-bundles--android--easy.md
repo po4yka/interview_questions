@@ -168,13 +168,8 @@ implementation("com.google.android.play:asset-delivery-ktx:2.2.0")
 
 ### Prerequisites (Easier)
 - [[q-gradle-basics--android--easy]] - Gradle build system
-- [[q-android-build-process--android--easy]] - Build process
+- [[q-android-app-components--android--easy]] - App components
 
 ### Related (Medium)
-- [[q-play-store-publishing--android--medium]] - Play Store publishing
 - [[q-play-feature-delivery--android--medium]] - Feature delivery
-- [[q-app-signing--android--medium]] - App signing
-
-### Advanced (Harder)
-- [[q-dynamic-delivery-advanced--android--hard]] - Advanced dynamic delivery
-- [[q-multi-module-architecture--android--hard]] - Multi-module architecture
+- [[q-what-is-intent--android--easy]] - Intent system

@@ -272,11 +272,5 @@ override fun onCreate(savedInstanceState: Bundle?) {
 - [[q-android-app-components--android--easy]] - Activity basics
 
 ### Related (Medium)
-- [[q-fragment-lifecycle--android--medium]] - Fragment lifecycle
-- [[q-lifecycle-aware-components--android--medium]] - Modern lifecycle approach
-- [[q-configuration-changes--android--medium]] - Handling configuration changes
-- [[q-memory-management-android--android--medium]] - Resource management
-
-### Advanced (Harder)
-- [[q-activity-task-stack--android--hard]] - Task management
-- [[q-process-lifecycle--android--hard]] - Process lifecycle
+- [[q-fragment-basics--android--easy]] - Fragment lifecycle
+- [[q-what-are-services-for--android--easy]] - Service lifecycle

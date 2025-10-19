@@ -266,11 +266,5 @@ override fun onCreate(savedInstanceState: Bundle?) {
 - [[q-android-app-components--android--easy]] - Activity basics
 
 ### Related (Medium)
-- [[q-intent-system--android--medium]] - Intent system
-- [[q-navigation-component--android--medium]] - Navigation Component
-- [[q-fragment-navigation--android--medium]] - Fragment navigation
-- [[q-deep-links--android--medium]] - Deep linking
-
-### Advanced (Harder)
-- [[q-task-management--android--hard]] - Task management
-- [[q-activity-launch-modes--android--hard]] - Launch modes
+- [[q-what-is-intent--android--easy]] - Intent system
+- [[q-fragment-basics--android--easy]] - Fragment navigation
