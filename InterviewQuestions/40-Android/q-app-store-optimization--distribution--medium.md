@@ -1,13 +1,19 @@
 ---
 id: 20251012-122783
-title: "App Store Optimization / App Store Оптимизация"
+title: App Store Optimization / Оптимизация App Store
+aliases: [App Store Optimization, Оптимизация App Store]
 topic: android
+subtopics: [distribution, marketing, aso]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-compose-draws-on-screen--android--hard, q-stable-classes-compose--android--hard, q-fragments-and-activity-relationship--android--hard]
+related: [q-alternative-distribution--distribution--medium, q-android-app-bundles--android--easy, q-android-app-components--android--easy]
 created: 2025-10-15
-tags: [Marketing, Distribution, ASO, PlayStore, difficulty/medium]
+updated: 2025-10-15
+tags: [android/distribution, android/marketing, android/aso, distribution, marketing, aso, playstore, difficulty/medium]
 ---
 # App Store Optimization (ASO) and Play Store Listing
 
