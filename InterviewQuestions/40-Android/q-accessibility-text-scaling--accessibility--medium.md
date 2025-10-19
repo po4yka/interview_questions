@@ -1,59 +1,70 @@
 ---
 id: 20251012-122755
-title: "Accessibility Text Scaling / Масштабирование текста для доступности"
+title: Accessibility Text Scaling / Масштабирование текста для доступности
+aliases: [Text Scaling Accessibility, Масштабирование текста]
 topic: android
+subtopics: [ui-accessibility, ui-theming]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-11
-tags: [accessibility, text-scaling, font-size, dynamic-type, android/ui-accessibility, difficulty/medium]
 moc: moc-android
-related: [q-mvi-architecture--android--hard, q-why-abandon-mvp--android--easy, q-how-to-reduce-the-number-of-recompositions-besides-side-effects--android--hard]
+related:
   - q-accessibility-compose--accessibility--medium
   - q-accessibility-testing--accessibility--medium
-subtopics: [ui-accessibility]
+created: 2025-10-11
+updated: 2025-10-15
+tags:
+  - android/ui-accessibility
+  - android/ui-theming
+  - accessibility
+  - text-scaling
+  - font-size
+  - dynamic-type
+  - difficulty/medium
 ---
 # Question (EN)
 How do you support dynamic text sizing and display scaling for accessibility? What are sp units, text scaling factors, and how do you test your UI with different text sizes?
 
+# Вопрос (RU)
+Как поддерживать динамический размер текста и масштабирование дисплея для доступности? Что такое sp-единицы, коэффициенты масштабирования текста, и как тестировать UI с различными размерами текста?
+
+---
+
 ## Answer (EN)
-### Overview
 
-**Text scaling** allows users with visual impairments to increase text size for better readability. Android provides:
-- **sp (scale-independent pixels)** - Scales with user's font size preference
-- **Text scaling factors** - 0.85x to 2.0x (or more)
-- **Display size** - Separate from text scaling, affects all UI elements
+Text scaling allows users with visual impairments to increase text size for better readability. Android provides sp (scale-independent pixels) that scale with user's font size preference, text scaling factors from 0.85x to 2.0x, and display size that affects all UI elements.
 
-### SP vs DP Units
+#### SP vs DP Units
 
 ```kotlin
-//  GOOD - Text size in sp (scales with user preference)
+// GOOD - Text size in sp (scales with user preference)
 Text(
     text = "Hello World",
     fontSize = 16.sp // Scales with accessibility settings
 )
 
-//  BAD - Text size in dp (does NOT scale)
+// BAD - Text size in dp (does NOT scale)
 Text(
     text = "Hello World",
     fontSize = 16.dp // Fixed size, ignores user preferences
 )
 
-//  GOOD - Non-text elements in dp
+// GOOD - Non-text elements in dp
 Box(
     modifier = Modifier.size(48.dp) // Touch target, doesn't scale
 )
 
-//  BAD - Touch targets in sp
+// BAD - Touch targets in sp
 Box(
     modifier = Modifier.size(48.sp) // Will become huge at large text sizes
 )
 ```
 
-**Rule of thumb:**
-- Text: Use **sp**
-- Layouts, icons, spacing: Use **dp**
+Rule of thumb: Text uses **sp**, layouts, icons, spacing use **dp**.
 
-### Text Scaling Levels
+#### Text Scaling Levels
 
 ```
 Scaling factors in Android:
@@ -66,12 +77,12 @@ Largest:  1.50x  (150%)
 Huge:     2.00x  (200%)  ← Target for testing
 ```
 
-### Adaptive Layouts for Text Scaling
+#### Adaptive Layouts for Text Scaling
 
 **Problem: Text overflow at large sizes**:
 
 ```kotlin
-//  BAD - Text gets cut off
+// BAD - Text gets cut off
 @Composable
 fun BadProfile() {
     Row(
@@ -101,10 +112,10 @@ fun BadProfile() {
 // At 200% text scaling, text gets truncated!
 ```
 
-**Solution 1: Remove fixed heights**:
+**Solution: Remove fixed heights**:
 
 ```kotlin
-//  GOOD - Height adapts to content
+// GOOD - Height adapts to content
 @Composable
 fun GoodProfile() {
     Row(
@@ -134,13 +145,12 @@ fun GoodProfile() {
 }
 ```
 
-**Solution 2: Use Column when needed**:
+**Solution: Use Column when needed**:
 
 ```kotlin
-//  GOOD - Switch to vertical layout at large scales
+// GOOD - Switch to vertical layout at large scales
 @Composable
 fun AdaptiveProfile() {
-    val configuration = LocalConfiguration.current
     val fontScale = LocalDensity.current.fontScale
 
     if (fontScale > 1.3f) {
@@ -182,7 +192,7 @@ fun AdaptiveProfile() {
 }
 ```
 
-### Detecting Font Scale
+#### Detecting Font Scale
 
 ```kotlin
 @Composable
@@ -215,7 +225,7 @@ class MyView(context: Context) : View(context) {
 }
 ```
 
-### Material 3 Typography with Scaling
+#### Material 3 Typography with Scaling
 
 ```kotlin
 @Composable
@@ -247,24 +257,9 @@ fun MaterialTypographyExample() {
         )
     }
 }
-
-// Custom theme with relative sizing
-val CustomTypography = Typography(
-    displayLarge = TextStyle(
-        fontSize = 57.sp,
-        lineHeight = 64.sp,
-        letterSpacing = (-0.25).sp
-    ),
-    // Scale down proportionally
-    bodyLarge = TextStyle(
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-)
 ```
 
-### Testing with Different Text Sizes
+#### Testing with Different Text Sizes
 
 **Manual testing**:
 
@@ -273,11 +268,11 @@ val CustomTypography = Typography(
 2. Set to "Largest" or "Huge"
 3. Open your app
 4. Verify:
-    All text is readable
-    No text is cut off
-    Touch targets still work
-    Layouts don't overlap
-    Scrolling works properly
+   All text is readable
+   No text is cut off
+   Touch targets still work
+   Layouts don't overlap
+   Scrolling works properly
 ```
 
 **Programmatic testing**:
@@ -319,9 +314,6 @@ fun testMultipleTextScales() {
             }
         }
 
-        // Take screenshot for visual comparison
-        composeTestRule.onRoot().captureToImage()
-
         // Verify key elements are still accessible
         composeTestRule
             .onNodeWithText("Submit")
@@ -331,50 +323,12 @@ fun testMultipleTextScales() {
 }
 ```
 
-**Robolectric testing**:
-
-```kotlin
-@RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.P])
-class TextScalingTest {
-
-    @Test
-    fun testViewWithLargeText() {
-        // Set font scale
-        val configuration = Configuration()
-        configuration.fontScale = 2.0f
-
-        val activity = Robolectric.buildActivity(MainActivity::class.java)
-            .create()
-            .get()
-
-        activity.resources.updateConfiguration(
-            configuration,
-            activity.resources.displayMetrics
-        )
-
-        // Measure views
-        val textView = activity.findViewById<TextView>(R.id.title)
-        textView.measure(
-            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.AT_MOST),
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        )
-
-        // Verify text is not cut off
-        assertTrue(
-            "Text height ${textView.measuredHeight} is too large",
-            textView.measuredHeight < 200
-        )
-    }
-}
-```
-
-### Common Text Scaling Issues
+#### Common Text Scaling Issues
 
 **1. Fixed heights cutting off text**:
 
 ```kotlin
-//  BAD
+// BAD
 Card(
     modifier = Modifier
         .fillMaxWidth()
@@ -383,7 +337,7 @@ Card(
     Text("This text might get cut off at large scaling")
 }
 
-//  GOOD
+// GOOD
 Card(
     modifier = Modifier
         .fillMaxWidth()
@@ -396,35 +350,24 @@ Card(
 **2. maxLines causing truncation**:
 
 ```kotlin
-//  BAD - Text truncated at large sizes
+// BAD - Text truncated at large sizes
 Text(
     text = "Important message that needs to be fully visible",
     maxLines = 1, // Only shows one line!
     overflow = TextOverflow.Ellipsis
 )
 
-//  GOOD - Allow wrapping
+// GOOD - Allow wrapping
 Text(
     text = "Important message that needs to be fully visible"
     // No maxLines - wraps naturally
-)
-
-//  ALSO GOOD - Use only when truncation is acceptable
-Text(
-    text = "Optional secondary info",
-    maxLines = 2,
-    overflow = TextOverflow.Ellipsis,
-    modifier = Modifier.semantics {
-        // Provide full text to accessibility
-        contentDescription = "Optional secondary info (full text)"
-    }
 )
 ```
 
 **3. Icons not scaling with text**:
 
 ```kotlin
-//  BAD - Icon doesn't scale
+// BAD - Icon doesn't scale
 Row {
     Icon(
         imageVector = Icons.Default.Info,
@@ -437,7 +380,7 @@ Row {
     )
 }
 
-//  GOOD - Icon scales with text
+// GOOD - Icon scales with text
 Row {
     Icon(
         imageVector = Icons.Default.Info,
@@ -451,39 +394,18 @@ Row {
         fontSize = 16.sp
     )
 }
-
-//  BETTER - Use LocalTextStyle
-@Composable
-fun ScalingIcon() {
-    val textStyle = LocalTextStyle.current
-    val iconSize = with(LocalDensity.current) {
-        textStyle.fontSize.toDp() * 1.5f
-    }
-
-    Row {
-        Icon(
-            imageVector = Icons.Default.Info,
-            contentDescription = null,
-            modifier = Modifier.size(iconSize)
-        )
-        Text(
-            text = "Information",
-            style = textStyle
-        )
-    }
-}
 ```
 
 **4. Touch targets too close together**:
 
 ```kotlin
-//  BAD - Touch targets overlap at large text
+// BAD - Touch targets overlap at large text
 Row {
     TextButton(onClick = {}) { Text("Cancel") }
     TextButton(onClick = {}) { Text("OK") }
 }
 
-//  GOOD - Add spacing
+// GOOD - Add spacing
 Row(
     horizontalArrangement = Arrangement.spacedBy(16.dp)
 ) {
@@ -491,7 +413,7 @@ Row(
     TextButton(onClick = {}) { Text("OK") }
 }
 
-//  BETTER - Switch to Column at large scales
+// BETTER - Switch to Column at large scales
 @Composable
 fun AdaptiveButtons() {
     val fontScale = LocalDensity.current.fontScale
@@ -518,9 +440,9 @@ fun AdaptiveButtons() {
 }
 ```
 
-### Display Size (Separate from Text Scaling)
+#### Display Size (Separate from Text Scaling)
 
-**Display size affects all UI elements**:
+Display size affects all UI elements:
 
 ```
 Settings → Display → Display size
@@ -562,104 +484,13 @@ fun testDisplaySize() {
 }
 ```
 
-### Window Size Classes for Text Scaling
+#### Best Practices
 
-```kotlin
-@Composable
-fun ResponsiveLayout() {
-    val windowSizeClass = calculateWindowSizeClass()
-    val fontScale = LocalDensity.current.fontScale
-
-    when {
-        // Compact width + large text = vertical layout
-        windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact && fontScale > 1.3f -> {
-            CompactVerticalLayout()
-        }
-        // Medium width = flexible layout
-        windowSizeClass.widthSizeClass == WindowWidthSizeClass.Medium -> {
-            FlexibleLayout()
-        }
-        // Expanded width = multi-column
-        else -> {
-            ExpandedLayout()
-        }
-    }
-}
-```
-
-### Best Practices
-
-1. **Always use sp for text**
-   ```kotlin
-   //  GOOD
-   fontSize = 16.sp
-
-   //  BAD
-   fontSize = 16.dp
-   ```
-
-2. **Avoid fixed heights**
-   ```kotlin
-   //  GOOD
-   modifier = Modifier.wrapContentHeight()
-
-   //  BAD
-   modifier = Modifier.height(80.dp)
-   ```
-
-3. **Test at 200% scaling**
-   ```
-    Test every screen at 200% text scaling
-    Verify no text is cut off
-    Verify touch targets still work
-    Verify layouts don't overlap
-   ```
-
-4. **Consider adaptive layouts**
-   ```kotlin
-   //  GOOD - Adapt to large text
-   if (fontScale > 1.3f) {
-       Column { /* Vertical layout */ }
-   } else {
-       Row { /* Horizontal layout */ }
-   }
-   ```
-
-5. **Use Material Typography**
-   ```kotlin
-   //  GOOD - Consistent scaling
-   Text(
-       text = "Title",
-       style = MaterialTheme.typography.titleLarge
-   )
-   ```
-
-### Summary
-
-**Key concepts:**
-- **sp units** - Scale with user font size preference (use for text)
-- **dp units** - Fixed size (use for layouts, icons, spacing)
-- **Font scale** - 0.85x to 2.0x (target 200% for testing)
-- **Display size** - Scales everything (separate from font scaling)
-
-**Common issues:**
-- Fixed heights cutting off text
-- maxLines causing truncation
-- Icons not scaling with text
-- Touch targets too close at large sizes
-
-**Solutions:**
-- Use wrapContentHeight() instead of fixed heights
-- Avoid maxLines for important text
-- Scale icons with text size
-- Add spacing or switch to vertical layouts
-- Test at 200% font scaling
-
-**Testing:**
-- Manual: Settings → Display → Font size → Largest
-- Automated: Set fontScale in tests
-- Screenshot testing at multiple scales
-- Verify accessibility in CI/CD
+1. Always use sp for text
+2. Avoid fixed heights
+3. Test at 200% scaling
+4. Consider adaptive layouts
+5. Use Material Typography
 
 ---
 
@@ -697,6 +528,21 @@ fun ResponsiveLayout() {
 - Проверять accessibility в CI/CD
 
 ---
+
+## Follow-ups
+
+- What's the difference between font scaling and display size scaling?
+- How do you handle text scaling in custom views?
+- What are the performance implications of adaptive layouts?
+- How do you test text scaling in different screen orientations?
+- What happens when text scaling exceeds 200%?
+
+## References
+
+- [Android Text Scaling Guide](https://developer.android.com/guide/topics/ui/accessibility/text-and-content)
+- [Material Design Typography](https://m3.material.io/styles/typography/overview)
+- [Compose Testing Documentation](https://developer.android.com/jetpack/compose/testing)
+- [Accessibility Testing Guide](https://developer.android.com/guide/topics/ui/accessibility/testing)
 
 ## Related Questions
 
