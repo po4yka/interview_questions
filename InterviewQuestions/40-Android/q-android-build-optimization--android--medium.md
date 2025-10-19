@@ -1,13 +1,19 @@
 ---
 id: 20251012-122763
-title: "Android Build Optimization / Android Build Оптимизация"
+title: "Android Build Optimization / Оптимизация сборки Android"
+aliases: [Android Build Optimization, Оптимизация сборки Android]
 topic: android
+subtopics: [build-optimization, gradle]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy, q-where-is-composition-created--android--medium, q-custom-view-animation--custom-views--medium]
+related: [q-gradle-basics--android--easy, q-android-app-bundles--android--easy, q-kotlin-compilation--kotlin--medium]
 created: 2025-10-15
-tags: [build-optimization, gradle, kotlin, ksp, performance, difficulty/medium]
+updated: 2025-10-15
+tags: [android/build-optimization, android/gradle, build-optimization, gradle, performance, difficulty/medium]
 ---
 # Android Build Optimization
 
