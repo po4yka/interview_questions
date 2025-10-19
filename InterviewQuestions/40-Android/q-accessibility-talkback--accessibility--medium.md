@@ -28,14 +28,17 @@ tags:
 # Question (EN)
 How does TalkBack work in Android? How do you optimize Views and Compose UIs for TalkBack navigation? What are focus order, traversal order, and accessibility focus?
 
+# Вопрос (RU)
+Как работает TalkBack в Android? Как оптимизировать View и Compose UI для навигации TalkBack? Что такое focus order, traversal order и accessibility focus?
+
+---
+
 ## Answer (EN)
-### Overview
 
-**TalkBack** is Android's built-in screen reader that provides spoken feedback for users who are blind or have low vision. Understanding TalkBack navigation is crucial for creating accessible apps.
+TalkBack is Android's built-in screen reader that provides spoken feedback for users who are blind or have low vision. Understanding TalkBack navigation is crucial for creating accessible apps.
 
-### How TalkBack Works
+#### Navigation Gestures
 
-**Navigation gestures:**
 ```
 Swipe right     → Move to next element
 Swipe left      → Move to previous element
@@ -46,19 +49,17 @@ Two-finger tap  → Pause/resume TalkBack
 TalkBack menu   → Swipe down then right (custom actions)
 ```
 
-**What TalkBack announces:**
-1. **Element type** - Button, text field, checkbox, etc.
-2. **Content** - Text, content description
-3. **State** - Checked, selected, expanded, etc.
-4. **Position** - "Item 1 of 10"
-5. **Hint** - What happens when activated
+#### What TalkBack Announces
 
-### Accessibility Focus Order
+1. Element type - Button, text field, checkbox, etc.
+2. Content - Text, content description
+3. State - Checked, selected, expanded, etc.
+4. Position - "Item 1 of 10"
+5. Hint - What happens when activated
 
-**Default focus order** (important!):
-- Left-to-right, top-to-bottom in LTR layouts
-- Right-to-left, top-to-bottom in RTL layouts
-- Based on layout hierarchy
+#### Focus Order
+
+Default focus order: left-to-right, top-to-bottom in LTR layouts; right-to-left, top-to-bottom in RTL layouts.
 
 ```kotlin
 // Default order (top-to-bottom, left-to-right)
@@ -75,32 +76,11 @@ Row {
 }
 ```
 
-### Custom Traversal Order
+#### Custom Traversal Order
 
 **XML Views - traversalBefore/After**:
 
 ```xml
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <!-- Default order: Title → Subtitle → Button -->
-    <TextView
-        android:id="@+id/title"
-        android:text="Title" />
-
-    <TextView
-        android:id="@+id/subtitle"
-        android:text="Subtitle" />
-
-    <Button
-        android:id="@+id/button"
-        android:text="Action" />
-
-</LinearLayout>
-
-<!-- Custom order: Title → Button → Subtitle -->
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -152,9 +132,7 @@ fun CustomTraversalOrder() {
 }
 ```
 
-### Focus Management
-
-**Requesting accessibility focus**:
+#### Focus Management
 
 ```kotlin
 // XML View
@@ -184,7 +162,6 @@ fun FocusManagementExample() {
             )
 
             LaunchedEffect(showError) {
-                // Request accessibility focus when error appears
                 focusRequester.requestFocus()
             }
         }
@@ -192,12 +169,12 @@ fun FocusManagementExample() {
 }
 ```
 
-### Grouping Related Content
+#### Grouping Related Content
 
 **Problem: Too many individual elements**:
 
 ```kotlin
-//  BAD - Each element announced separately
+// BAD - Each element announced separately
 @Composable
 fun ProductCard(product: Product) {
     Card(modifier = Modifier.clickable { /* view product */ }) {
@@ -221,7 +198,7 @@ fun ProductCard(product: Product) {
 **Solution: Merge semantics**:
 
 ```kotlin
-//  GOOD - Single announcement
+// GOOD - Single announcement
 @Composable
 fun ProductCard(product: Product) {
     Card(
@@ -250,7 +227,7 @@ fun ProductCard(product: Product) {
 // TalkBack announces: "iPhone 15, $999, 4.5 stars, In stock"
 ```
 
-### Handling Complex Lists
+#### Handling Complex Lists
 
 **RecyclerView with TalkBack**:
 
@@ -287,13 +264,6 @@ class AccessibleAdapter : RecyclerView.Adapter<ViewHolder>() {
                         "Delete"
                     )
                 )
-
-                info.addAction(
-                    AccessibilityNodeInfoCompat.AccessibilityActionCompat(
-                        R.id.action_share,
-                        "Share"
-                    )
-                )
             }
 
             override fun performAccessibilityAction(
@@ -304,10 +274,6 @@ class AccessibleAdapter : RecyclerView.Adapter<ViewHolder>() {
                 return when (action) {
                     R.id.action_delete -> {
                         deleteItem(position)
-                        true
-                    }
-                    R.id.action_share -> {
-                        shareItem(position)
                         true
                     }
                     else -> super.performAccessibilityAction(host, action, args)
@@ -331,7 +297,6 @@ fun AccessibleList(items: List<Item>) {
                     .padding(8.dp)
                     .clickable { /* open item */ }
                     .semantics {
-                        // Announce position in list
                         contentDescription = buildString {
                             append(item.title)
                             append(", ")
@@ -339,7 +304,6 @@ fun AccessibleList(items: List<Item>) {
                             append(". Item ${index + 1} of ${items.size}")
                         }
 
-                        // Custom actions
                         customActions = listOf(
                             CustomAccessibilityAction("Delete") {
                                 deleteItem(item)
@@ -362,20 +326,20 @@ fun AccessibleList(items: List<Item>) {
 }
 ```
 
-### Hiding Decorative Elements
+#### Hiding Decorative Elements
 
 ```kotlin
 @Composable
 fun DecorativeElementsExample() {
     Row {
-        //  BAD - Decorative image with description
+        // BAD - Decorative image with description
         Image(
             painter = painterResource(R.drawable.decorative_pattern),
             contentDescription = "Decorative pattern", // Wrong!
             modifier = Modifier.size(100.dp)
         )
 
-        //  GOOD - Decorative image without description
+        // GOOD - Decorative image without description
         Image(
             painter = painterResource(R.drawable.decorative_pattern),
             contentDescription = null, // Ignored by TalkBack
@@ -394,7 +358,7 @@ fun DecorativeElementsExample() {
     android:importantForAccessibility="no" />
 ```
 
-### Announcing Changes
+#### Announcing Changes
 
 **Live regions for dynamic content**:
 
@@ -421,8 +385,6 @@ fun SearchResults(
             },
             modifier = Modifier.semantics {
                 liveRegion = LiveRegionMode.Polite
-                // Polite: Wait for user to finish current action
-                // Assertive: Interrupt immediately
             }
         )
 
@@ -433,217 +395,25 @@ fun SearchResults(
         }
     }
 }
-
-@Composable
-fun Timer(seconds: Int) {
-    //  BAD - Announces every second
-    Text(
-        text = "$seconds seconds",
-        modifier = Modifier.semantics {
-            liveRegion = LiveRegionMode.Polite
-        }
-    )
-
-    //  GOOD - Only announce important milestones
-    Text(text = "$seconds seconds")
-
-    if (seconds in listOf(60, 30, 10, 5, 4, 3, 2, 1)) {
-        Text(
-            text = "$seconds seconds remaining",
-            modifier = Modifier.semantics {
-                liveRegion = LiveRegionMode.Polite
-            }
-        )
-    }
-}
 ```
 
-### Accessible Dialogs and Bottom Sheets
-
-```kotlin
-@Composable
-fun AccessibleDialog() {
-    var showDialog by remember { mutableStateOf(false) }
-
-    Button(onClick = { showDialog = true }) {
-        Text("Show Dialog")
-    }
-
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = {
-                Text(
-                    text = "Confirm Delete",
-                    modifier = Modifier.semantics {
-                        // Mark as dialog title for TalkBack
-                        heading()
-                    }
-                )
-            },
-            text = {
-                Text("Are you sure you want to delete this item?")
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        deleteItem()
-                        showDialog = false
-                    }
-                ) {
-                    Text("Delete")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text("Cancel")
-                }
-            },
-            modifier = Modifier.semantics {
-                // Trap focus inside dialog
-                isDialog = true
-            }
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AccessibleBottomSheet() {
-    val sheetState = rememberModalBottomSheetState()
-    var showSheet by remember { mutableStateOf(false) }
-
-    Button(onClick = { showSheet = true }) {
-        Text("Show Bottom Sheet")
-    }
-
-    if (showSheet) {
-        ModalBottomSheet(
-            onDismissRequest = { showSheet = false },
-            sheetState = sheetState,
-            modifier = Modifier.semantics {
-                // Announce when sheet appears
-                liveRegion = LiveRegionMode.Polite
-            }
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = "Actions",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.semantics {
-                        heading()
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = { /* action */ },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Edit")
-                }
-
-                Button(
-                    onClick = { /* action */ },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Delete")
-                }
-            }
-        }
-    }
-}
-```
-
-### Accessibility in Navigation
-
-```kotlin
-@Composable
-fun AccessibleNavigation() {
-    val navController = rememberNavController()
-
-    Scaffold(
-        bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    selected = true,
-                    onClick = { navController.navigate("home") },
-                    icon = {
-                        Icon(
-                            Icons.Default.Home,
-                            contentDescription = null // Handled by label
-                        )
-                    },
-                    label = { Text("Home") },
-                    modifier = Modifier.semantics {
-                        // Announce selection state
-                        stateDescription = if (true) "Selected" else "Not selected"
-                    }
-                )
-
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { navController.navigate("search") },
-                    icon = {
-                        Icon(
-                            Icons.Default.Search,
-                            contentDescription = null
-                        )
-                    },
-                    label = { Text("Search") }
-                )
-
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { navController.navigate("profile") },
-                    icon = {
-                        Icon(
-                            Icons.Default.Person,
-                            contentDescription = null
-                        )
-                    },
-                    label = { Text("Profile") }
-                )
-            }
-        }
-    ) { padding ->
-        NavHost(
-            navController = navController,
-            startDestination = "home",
-            modifier = Modifier.padding(padding)
-        ) {
-            composable("home") {
-                HomeScreen(
-                    modifier = Modifier.semantics {
-                        // Announce screen change
-                        liveRegion = LiveRegionMode.Polite
-                    }
-                )
-            }
-            // More destinations...
-        }
-    }
-}
-```
-
-### Testing with TalkBack
+#### Testing with TalkBack
 
 **Manual testing checklist**:
 
 ```
- Enable TalkBack (Settings → Accessibility → TalkBack)
- Navigate with swipe gestures
- Verify all interactive elements are reachable
- Check content descriptions are meaningful
- Test custom actions (swipe down then right)
- Verify focus order makes sense
- Check that state changes are announced
- Test forms and error messages
- Verify dialogs trap focus
- Test with different text sizes
- Test with different display sizes
- Test RTL layout (if supported)
+Enable TalkBack (Settings → Accessibility → TalkBack)
+Navigate with swipe gestures
+Verify all interactive elements are reachable
+Check content descriptions are meaningful
+Test custom actions (swipe down then right)
+Verify focus order makes sense
+Check that state changes are announced
+Test forms and error messages
+Verify dialogs trap focus
+Test with different text sizes
+Test with different display sizes
+Test RTL layout (if supported)
 ```
 
 **Automated testing**:
@@ -657,57 +427,34 @@ fun testTalkBackAnnouncement() {
         }
     }
 
-    // Verify semantics
     composeTestRule
         .onNodeWithText("Click me")
         .assertHasClickAction()
         .assert(hasContentDescription("Click me"))
 }
-
-@Test
-fun testFocusOrder() {
-    composeTestRule.setContent {
-        Column {
-            Button(onClick = {}, modifier = Modifier.testTag("first")) {
-                Text("First")
-            }
-            Button(onClick = {}, modifier = Modifier.testTag("second")) {
-                Text("Second")
-            }
-        }
-    }
-
-    // Navigate with semantics
-    composeTestRule
-        .onNodeWithTag("first")
-        .performSemanticsAction(SemanticsActions.RequestFocus)
-
-    // Verify second element is next in focus order
-    // Note: This is simplified; actual testing is more complex
-}
 ```
 
-### Common TalkBack Issues
+#### Common TalkBack Issues
 
 1. **Missing content descriptions**
    ```kotlin
-   //  BAD
+   // BAD
    Icon(Icons.Default.Delete, contentDescription = "")
 
-   //  GOOD
+   // GOOD
    Icon(Icons.Default.Delete, contentDescription = "Delete item")
    ```
 
 2. **Redundant descriptions**
    ```kotlin
-   //  BAD
+   // BAD
    Button(onClick = {}) {
        Text("Submit", modifier = Modifier.semantics {
            contentDescription = "Submit button" // Redundant!
        })
    }
 
-   //  GOOD
+   // GOOD
    Button(onClick = {}) {
        Text("Submit") // Button role is implicit
    }
@@ -715,7 +462,7 @@ fun testFocusOrder() {
 
 3. **Too many separate elements**
    ```kotlin
-   //  BAD - 5 separate announcements
+   // BAD - 5 separate announcements
    Row {
        Icon(Icons.Default.Star, "Star")
        Icon(Icons.Default.Star, "Star")
@@ -724,7 +471,7 @@ fun testFocusOrder() {
        Icon(Icons.Default.StarHalf, "Half star")
    }
 
-   //  GOOD - Single announcement
+   // GOOD - Single announcement
    Row(modifier = Modifier.semantics(mergeDescendants = true) {
        contentDescription = "4.5 stars"
    }) {
@@ -733,60 +480,16 @@ fun testFocusOrder() {
    }
    ```
 
-4. **Poor focus order**
-   ```kotlin
-   //  BAD - Illogical order
-   Column {
-       Text("Step 3")
-       Text("Step 1")
-       Text("Step 2")
-   }
+#### Best Practices
 
-   //  GOOD - Logical order
-   Column {
-       Text("Step 1")
-       Text("Step 2")
-       Text("Step 3")
-   }
-   ```
-
-### Best Practices
-
-1. **Test with TalkBack enabled** - Manual testing is crucial
-2. **Keep descriptions concise** - Users hear them repeatedly
-3. **Group related content** - Reduce navigation overhead
-4. **Announce dynamic changes** - Use live regions
-5. **Provide custom actions** - For complex interactions
-6. **Respect focus order** - Top-to-bottom, left-to-right
-7. **Hide decorative elements** - contentDescription = null
-8. **Test with users** - Get feedback from people who use TalkBack daily
-
-### Summary
-
-**TalkBack navigation:**
-- Swipe right/left to navigate
-- Double-tap to activate
-- Custom actions via TalkBack menu
-
-**Key concepts:**
-- **Focus order** - Default: top-to-bottom, left-to-right
-- **Traversal order** - Custom order with semantics
-- **Merge descendants** - Group related content
-- **Live regions** - Announce dynamic changes
-- **Custom actions** - Additional TalkBack menu items
-
-**Common patterns:**
-- Use `semantics(mergeDescendants = true)` for cards
-- Provide custom actions for complex items
-- Hide decorative images with `contentDescription = null`
-- Announce position in lists: "Item X of Y"
-- Use live regions for search results, errors
-
-**Testing:**
-- Enable TalkBack and test manually
-- Verify all elements are reachable
-- Check focus order is logical
-- Test custom actions work correctly
+1. Test with TalkBack enabled
+2. Keep descriptions concise
+3. Group related content
+4. Announce dynamic changes
+5. Provide custom actions
+6. Respect focus order
+7. Hide decorative elements
+8. Test with users
 
 ---
 
