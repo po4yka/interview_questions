@@ -2,7 +2,7 @@
 
 **Purpose**: Fast reference checklist for creating and validating vault notes.
 
-**For detailed instructions**: See AGENTS.md
+**For detailed instructions**: See 00-Administration/AGENTS.md
 **For controlled vocabularies**: See TAXONOMY.md
 
 **Last Updated**: 2025-10-18
@@ -487,7 +487,7 @@ tags: [android/ui-compose, android/ui-state, compose, difficulty/medium]
 2. **Check templates** in `_templates/` for correct structure
 3. **Set status: draft** and let human decide
 4. **Ask the user** if requirements are ambiguous
-5. **Review AGENTS.md** for detailed instructions
+5. **Review 00-Administration/AGENTS.md** for detailed instructions
 
 ---
 

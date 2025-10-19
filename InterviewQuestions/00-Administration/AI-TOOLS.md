@@ -10,7 +10,7 @@ Quick guide to using different AI tools with this vault.
 |------|------|-------------|
 | **Cursor AI** | `../.cursor/rules/` + `../.cursorrules` | Auto-loaded rules for Cursor editor |
 | **Claude Code** | `../.claude/` | Setup guide, commands, auto-loaded context |
-| **Gemini CLI** | `GEMINI.md` | Command-line workflow examples |
+| **Gemini CLI** | `../GEMINI.md` | Command-line workflow examples |
 | **ChatGPT / General** | `AGENTS.md` | General LLM agent instructions |
 | **Any Agent** | `AGENT-CHECKLIST.md` | Quick validation checklist |
 
@@ -71,7 +71,7 @@ claude-code
 **See**:
 - `.claude/README.md` for setup and quick start
 - `.claude/commands/README.md` for slash command documentation
-- `AGENTS.md` for full task list
+- `AGENTS.md` for full task list (this folder)
 
 ---
 
@@ -111,10 +111,10 @@ Rules:
 - Link to ≥1 MOC and concepts
 
 Files:
-- Rules: 00-Administration/README.md
-- Tasks: 00-Administration/AGENTS.md
-- Checklist: 00-Administration/AGENT-CHECKLIST.md
-- Topics: 00-Administration/TAXONOMY.md
+- Rules: README.md (this folder)
+- Tasks: AGENTS.md (this folder)
+- Checklist: AGENT-CHECKLIST.md (this folder)
+- Topics: TAXONOMY.md (this folder)
 ```
 
 **Usage**:
@@ -122,7 +122,7 @@ Files:
 - Paste content for translation/validation
 - Ask for outlines/summaries
 
-**See**: `AGENTS.md` for task workflows
+**See**: `AGENTS.md` for task workflows (this folder)
 
 ---
 
@@ -148,7 +148,7 @@ Files:
 1. New chat
 2. Paste context (see above)
 3. Upload files or paste content
-4. Use task patterns from AGENTS.md
+4. Use task patterns from AGENTS.md (this folder)
 
 ---
 
@@ -277,7 +277,7 @@ Regardless of which AI tool you use:
 - **Topic list**: `TAXONOMY.md` (this folder)
 - **Agent tasks**: `AGENTS.md` (this folder)
 - **Quick checklist**: `AGENT-CHECKLIST.md` (this folder)
-- **Gemini guide**: `GEMINI.md` (this folder)
+- **Gemini guide**: `../GEMINI.md` (vault root)
 - **Cursor rules**: `../.cursor/rules/` (modern) and `../.cursorrules` (legacy)
 - **Claude Code config**: `../.claude/` (README, commands, settings)
 - **Templates**: `../_templates/` (vault root)

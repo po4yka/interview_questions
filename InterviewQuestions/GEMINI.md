@@ -183,8 +183,8 @@ gemini "List all notes in 40-Android/ with status=draft."
 ### 0. No Emoji in Content
 ```yaml
 # FORBIDDEN: Do not use emoji in vault notes
-# Use text equivalents: "CORRECT", "WRONG", "NOTE", "WARNING"
-# Exception: Emoji may appear in Russian content sections where culturally appropriate
+# Use text equivalents: REQUIRED, FORBIDDEN, WARNING, NOTE
+# This applies to ALL content - English, Russian, and code comments
 ```
 
 ### 1. Bilingual = Same File
@@ -255,7 +255,7 @@ moc: [[moc-algorithms]]  # Don't use brackets in YAML
 ### 7. No Emoji
 ```yaml
 # FORBIDDEN: Do not use emoji in notes
-# Use text: "CORRECT", "WRONG", "NOTE", "WARNING"
+# Use text equivalents: REQUIRED, FORBIDDEN, WARNING, NOTE
 ```
 
 ---
@@ -514,8 +514,8 @@ gemini "Find notes with Russian in tags (should be English only)"
 -  Valid `topic` from TAXONOMY.md
 -  `status: draft`
 -  English-only tags
--  `moc: [[moc-<topic>]]`
--  `related: [[c-...], ...]`
+-  `moc: moc-<topic>` (WITHOUT brackets)
+-  `related: [c-..., ...]` (array WITHOUT double brackets)
 -  For Android: `android/<subtopic>` tags matching `subtopics`
 -  File in correct folder matching `topic`
 
@@ -562,4 +562,6 @@ All should have EN/RU, proper YAML, status=draft."
 
 ---
 
-**Remember**: When uncertain, check TAXONOMY.md, set `status: draft`, and ask the user. Do not use emoji in vault notes.
+**Remember**: When uncertain, check TAXONOMY.md, set `status: draft`, and ask the user.
+
+**Emoji Rule**: Do not use emoji anywhere in vault notes. Use text equivalents: REQUIRED, FORBIDDEN, WARNING, NOTE.

@@ -115,6 +115,21 @@ Create a new concept note.
 3. Creates c-mvvm-pattern.md
 4. Includes EN/RU summary sections
 
+### /create-moc
+Create a new MOC (Map of Content) to organize related Q&As.
+
+**Usage**:
+```
+/create-moc Create MOC for Kotlin topic
+```
+
+**What it does**:
+1. Places in `90-MOCs/`
+2. Uses template from `_templates/_tpl-moc.md`
+3. Creates moc-kotlin.md
+4. Includes study paths and Dataview queries
+5. Organizes content by difficulty and subtopic
+
 ### /translate
 Add missing language to an existing note.
 
@@ -809,7 +824,7 @@ Similar Kotlin note: 70-Kotlin/q-coroutine-basics--kotlin--easy.md
 ### Claude Code Configuration
 - **Setup guide**: `.claude/README.md`
 - **Auto-loaded context**: `.claude/custom_instructions.md`
-- **Slash commands**: `.claude/commands/` (5 commands available)
+- **Slash commands**: `.claude/commands/` (6 commands available)
 - **Permissions**: `.claude/settings.local.json`
 
 ### Other AI Tools
@@ -890,7 +905,7 @@ Summary: Ready for review with minor improvements recommended.
 Claude Code is configured to work seamlessly with this vault:
 
 **Auto-loaded**: Custom instructions from `.claude/custom_instructions.md`
-**Slash commands**: 5 specialized commands for common tasks
+**Slash commands**: 6 specialized commands for common tasks
 **Validation**: Built-in quality checks and checklists
 **Documentation**: Complete reference in `.claude/README.md`
 
