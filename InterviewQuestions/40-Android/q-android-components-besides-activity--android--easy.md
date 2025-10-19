@@ -1,16 +1,20 @@
 ---
 id: 20251012-122764
 title: "Android Components Besides Activity / Компоненты Android кроме Activity"
+aliases: [Android Components Besides Activity, Компоненты Android кроме Activity]
 topic: android
+subtopics: [app-components, architecture]
+question_kind: android
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-room-library-definition--android--easy, q-kotlin-dsl-builders--kotlin--hard, q-glide-image-loading-internals--android--medium]
+related: [q-android-app-components--android--easy, q-service-types--android--medium, q-fragment-lifecycle--android--medium]
 created: 2025-10-15
-tags: [android-components, android/android-components, broadcast-receiver, components, content-provider, fragment, service, view, viewmodel, difficulty/easy]
+updated: 2025-10-15
+tags: [android/app-components, android/architecture, app-components, architecture, service, broadcast-receiver, content-provider, fragment, viewmodel, difficulty/easy]
 ---
-# Какие компоненты используются помимо activity?
-
 # Question (EN)
 > What components are used in Android besides Activity?
 
@@ -21,62 +25,40 @@ tags: [android-components, android/android-components, broadcast-receiver, compo
 
 ## Answer (EN)
 
-Besides Activity, Android uses: **Service** (background tasks), **Broadcast Receiver** (system events), **Content Provider** (data sharing), **Fragment** (UI modularization), **ViewModel** (UI state management), **View** (UI building blocks), and **Application** (app-wide state).
-
----
-
-## Ответ (RU)
-
-Помимо Activity, Android использует несколько других **ключевых компонентов**, каждый из которых играет уникальную роль в создании функциональных мобильных приложений.
-
-**Main Components:**
-
-**1. Service** - Background Operations
-
-Performs long-running or background operations without UI.
-
+**Service** - Background operations without UI
+Long-running tasks that don't need user interaction. Runs independently of UI lifecycle.
 ```kotlin
 class DownloadService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Download files in background
+        // Background work
         return START_STICKY
     }
 }
 ```
 
-**2. BroadcastReceiver** - System Events
-
-Receives and responds to broadcast messages from other apps or system.
-
+**BroadcastReceiver** - System event handling
+Responds to system-wide announcements like battery low, network changes, SMS received.
 ```kotlin
 class BatteryReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
-        // Handle battery level change
+        // Handle system events
     }
 }
 ```
 
-**3. ContentProvider** - Data Sharing
-
-Provides a way for apps to **share data** with other apps.
-
+**ContentProvider** - Data sharing between apps
+Provides structured data access to other applications. Acts as data layer abstraction.
 ```kotlin
 class NotesProvider : ContentProvider() {
     override fun query(...): Cursor? {
-        // Provide notes data to other apps
-    }
-
-    override fun insert(...): Uri? {
-        // Allow other apps to insert data
+        // Share data with other apps
     }
 }
 ```
 
-**4. Fragment** - UI Modules
-
-Modular sections of UI that can be inserted into an Activity.
-
+**Fragment** - Reusable UI modules
+Modular UI components that can be combined in Activities. Supports back stack and lifecycle.
 ```kotlin
 class ListFragment : Fragment() {
     override fun onCreateView(...): View? {
@@ -85,10 +67,17 @@ class ListFragment : Fragment() {
 }
 ```
 
-**5. View** - UI Building Block
+**ViewModel** - UI state management
+Stores and manages UI-related data. Survives configuration changes like screen rotation.
+```kotlin
+class ProfileViewModel : ViewModel() {
+    private val _userData = MutableLiveData<User>()
+    val userData: LiveData<User> = _userData
+}
+```
 
-Basic building block for user interfaces.
-
+**View** - Custom UI components
+Basic building blocks for user interfaces. Can be customized for specific drawing needs.
 ```kotlin
 class CustomChart : View(context) {
     override fun onDraw(canvas: Canvas) {
@@ -97,53 +86,115 @@ class CustomChart : View(context) {
 }
 ```
 
-**6. ViewModel** - UI Data Management
+| Component | Purpose | Lifecycle |
+|-----------|---------|-----------|
+| Service | Background work | Independent |
+| BroadcastReceiver | System events | Short-lived |
+| ContentProvider | Data sharing | Singleton |
+| Fragment | UI modules | Tied to Activity |
+| ViewModel | State management | Survives config changes |
+| View | UI elements | Tied to parent |
 
-Manages UI-related data.
+## Ответ (RU)
 
+**Service** - Фоновые операции без UI
+Длительные задачи, не требующие взаимодействия с пользователем. Работает независимо от жизненного цикла UI.
 ```kotlin
-class ProfileViewModel : ViewModel() {
-    private val _userData = MutableLiveData<User>()
-    val userData: LiveData<User> = _userData
-
-    fun loadUser() {
-        // Load user data
+class DownloadService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Фоновая работа
+        return START_STICKY
     }
 }
 ```
 
-**Comparison:**
+**BroadcastReceiver** - Обработка системных событий
+Реагирует на системные объявления: низкий заряд батареи, изменения сети, получение SMS.
+```kotlin
+class BatteryReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+        // Обработка системных событий
+    }
+}
+```
 
-| Component | Purpose | Lifecycle | Example Use |
-|-----------|---------|-----------|-------------|
-| Service | Background work | Independent | Music playback |
-| BroadcastReceiver | Events | Short-lived | Network change |
-| ContentProvider | Data access | Singleton | Contacts API |
-| Fragment | UI portion | Tied to Activity | Tab content |
-| View | UI element | Tied to parent | Custom button |
-| ViewModel | Data management | Survives config changes | User profile |
+**ContentProvider** - Обмен данными между приложениями
+Предоставляет структурированный доступ к данным другим приложениям. Выступает как абстракция слоя данных.
+```kotlin
+class NotesProvider : ContentProvider() {
+    override fun query(...): Cursor? {
+        // Обмен данными с другими приложениями
+    }
+}
+```
 
-**Summary:**
+**Fragment** - Переиспользуемые UI модули
+Модульные UI компоненты, которые можно комбинировать в Activities. Поддерживает back stack и жизненный цикл.
+```kotlin
+class ListFragment : Fragment() {
+    override fun onCreateView(...): View? {
+        return inflater.inflate(R.layout.fragment_list, container, false)
+    }
+}
+```
 
-- **Service**: Long-running background tasks
-- **BroadcastReceiver**: System event handling
-- **ContentProvider**: Inter-app data sharing
-- **Fragment**: Reusable UI portions
-- **View**: Custom UI components
-- **ViewModel**: UI data lifecycle management
+**ViewModel** - Управление состоянием UI
+Хранит и управляет данными, связанными с UI. Переживает изменения конфигурации как поворот экрана.
+```kotlin
+class ProfileViewModel : ViewModel() {
+    private val _userData = MutableLiveData<User>()
+    val userData: LiveData<User> = _userData
+}
+```
 
-## Ответ (RU)
-Помимо Activity используется ряд других ключевых компонентов: Service (фоновые операции), Broadcast Receiver (широковещательные сообщения), Content Provider (обмен данными), Fragment (модульные секции UI), View (строительный блок UI), ViewModel (управление данными UI).
+**View** - Пользовательские UI компоненты
+Базовые строительные блоки пользовательских интерфейсов. Можно настраивать для специфических потребностей отрисовки.
+```kotlin
+class CustomChart : View(context) {
+    override fun onDraw(canvas: Canvas) {
+        // Пользовательская отрисовка
+    }
+}
+```
 
+| Компонент | Назначение | Жизненный цикл |
+|-----------|------------|----------------|
+| Service | Фоновая работа | Независимый |
+| BroadcastReceiver | Системные события | Кратковременный |
+| ContentProvider | Обмен данными | Singleton |
+| Fragment | UI модули | Привязан к Activity |
+| ViewModel | Управление состоянием | Переживает изменения конфигурации |
+| View | UI элементы | Привязан к родителю |
 
 ---
 
+## Follow-ups
+
+- What's the difference between Service and IntentService?
+- When should you use Fragment vs Activity?
+- How does ContentProvider differ from SharedPreferences?
+- What's the purpose of Application class?
+
+## References
+
+- https://developer.android.com/guide/components/fundamentals
+- https://developer.android.com/guide/components/services
+- https://developer.android.com/guide/components/broadcasts
+
 ## Related Questions
 
+### Prerequisites (Easier)
+- [[q-android-app-components--android--easy]] - App components overview
+- [[q-what-are-services-for--android--easy]] - Service purpose
+- [[q-fragment-basics--android--easy]] - Fragment basics
+
 ### Related (Medium)
-- [[q-architecture-components-libraries--android--easy]] - Fundamentals
+- [[q-android-service-types--android--easy]] - Service types
+- [[q-what-is-broadcastreceiver--android--easy]] - Broadcast receiver basics
+- [[q-broadcastreceiver-contentprovider--android--easy]] - Broadcast receiver and content provider
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment lifecycle
 
 ### Advanced (Harder)
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Fragment callbacks
+- [[q-fragments-and-activity-relationship--android--hard]] - Fragment-activity relationship
