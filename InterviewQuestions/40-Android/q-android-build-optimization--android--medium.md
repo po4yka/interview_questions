@@ -513,17 +513,6 @@ Version catalog                      // Faster resolution - centralized version 
 - **Workflow changes**: Daily habits that compound over time for significant productivity gains
 - **Dependency management**: Reduces compilation scope and resolution time
 
-**Build Time Comparison:**
-
-| Scenario | Clean Build | Incremental Build |
-|----------|-------------|-------------------|
-| Unoptimized | 180s | 45s |
-| gradle.properties optimized | 120s | 30s |
-| + Modularization | 90s | 15s |
-| + Build cache | 60s | 5s |
-| + All optimizations | 40s | 3s |
-| **Improvement** | **78%** | **93%** |
-
 **Common Issues:**
 
 1. **Configuration time too long:**
@@ -969,17 +958,6 @@ ksp вместо kapt                      // 2x быстрее annotation proce
 Используйте implementation вместо api // Меньший scope перекомпиляции
 Version catalog                      // Быстрее разрешение
 ```
-
-**Сравнение времени сборки:**
-
-| Сценарий | Clean Build | Incremental Build |
-|----------|-------------|-------------------|
-| Без оптимизаций | 180s | 45s |
-| gradle.properties оптимизировано | 120s | 30s |
-| + Модуляризация | 90s | 15s |
-| + Build cache | 60s | 5s |
-| + Все оптимизации | 40s | 3s |
-| **Улучшение** | **78%** | **93%** |
 
 **Частые проблемы:**
 
