@@ -1,32 +1,20 @@
 ---
 id: 20251012-140600
-title: "Annotation Processing in Android / Обработка аннотаций в Android"
-aliases: []
-
-# Classification
+title: Annotation Processing in Android / Обработка аннотаций в Android
+aliases: [Annotation Processing in Android, Обработка аннотаций в Android]
 topic: android
 subtopics: [annotation-processing, kapt, ksp, codegen, build-tools]
-question_kind: theory
+question_kind: android
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru, android/annotation-processing, android/kapt, android/ksp, android/codegen, android/build-tools, difficulty/medium]
-source: internal
-source_note: Created for vault completeness
-
-# Workflow & relations
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-kapt-vs-ksp--android--medium, q-gradle-build-system--android--medium, q-android-build-optimization--android--medium]
-
-# Timestamps
+related: [q-android-build-optimization--android--medium, q-android-modularization--android--medium, q-android-project-parts--android--easy]
 created: 2025-10-12
-updated: 2025-10-18
-
-tags: [en, ru, android/annotation-processing, android/kapt, android/ksp, android/codegen, android/build-tools, difficulty/medium]
+updated: 2025-10-15
+tags: [android/annotation-processing, android/kapt, android/ksp, android/codegen, android/build-tools, annotation-processing, kapt, ksp, codegen, build-tools, difficulty/medium]
 ---
-
 # Question (EN)
 > What is annotation processing in Android? How does it work, what are the main tools (kapt, KSP), and what popular libraries use it?
 
@@ -37,9 +25,12 @@ tags: [en, ru, android/annotation-processing, android/kapt, android/ksp, android
 
 ## Answer (EN)
 
-**Annotation Processing** is a compile-time code generation technique where processors analyze annotations in your source code and automatically generate additional classes, reducing boilerplate and enabling powerful frameworks.
+**Annotation Processing** is a compile-time code generation technique where processors analyze annotations and automatically generate additional classes, reducing boilerplate and enabling powerful frameworks.
 
-### How Annotation Processing Works
+**Annotation Processing Theory:**
+Annotation processing occurs during compilation when processors analyze source code annotations and generate additional code. This enables frameworks like Room, Hilt, and Moshi to create boilerplate-free implementations automatically.
+
+**How Annotation Processing Works:**
 
 ```
 Source Code (.kt/.java)
@@ -55,74 +46,28 @@ All code compiled together
 APK/AAR
 ```
 
-### Basic Example
-
-**1. Define annotation:**
+**1. Basic Example:**
 
 ```kotlin
+// Define annotation
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 annotation class AutoViewModel
-```
 
-**2. Annotate class:**
-
-```kotlin
+// Annotate class
 @AutoViewModel
-class UserRepository(
-    private val api: UserApi,
-    private val database: UserDatabase
-)
-```
+class UserRepository(private val api: UserApi)
 
-**3. Processor generates code:**
-
-```kotlin
-// Generated at compile time
+// Processor generates code
 class UserRepositoryFactory {
-    fun create(api: UserApi, database: UserDatabase): UserRepository {
-        return UserRepository(api, database)
+    fun create(api: UserApi): UserRepository {
+        return UserRepository(api)
     }
 }
 ```
 
-**4. Use generated code:**
-
-```kotlin
-val repository = UserRepositoryFactory().create(api, database)
-```
-
-### Annotation Processing Tools
-
-#### 1. APT (Java Annotation Processing Tool)
-
-**History:** Original Java tool, deprecated in favor of newer solutions.
-
-```java
-// Java annotation processor
-@SupportedAnnotationTypes("com.example.MyAnnotation")
-public class MyProcessor extends AbstractProcessor {
-    @Override
-    public boolean process(
-        Set<? extends TypeElement> annotations,
-        RoundEnvironment env
-    ) {
-        // Generate code
-        return true;
-    }
-}
-```
-
-#### 2. kapt (Kotlin Annotation Processing Tool)
-
-**Purpose:** Bridges Java annotation processors with Kotlin code.
-
-**How kapt works:**
-1. Generates Java stubs from Kotlin code
-2. Runs Java annotation processors on stubs
-3. Converts generated Java back to Kotlin-compatible bytecode
-
-**Setup:**
+**2. kapt (Kotlin Annotation Processing Tool):**
+Bridges Java annotation processors with Kotlin code by generating Java stubs.
 
 ```kotlin
 // build.gradle.kts
@@ -131,157 +76,53 @@ plugins {
 }
 
 dependencies {
-    implementation("androidx.room:room-runtime:2.6.0")
-    kapt("androidx.room:room-compiler:2.6.0")
+    implementation("androidx.room:room-runtime")
+    kapt("androidx.room:room-compiler")
 }
 
-kapt {
-    correctErrorTypes = true
-    useBuildCache = true
-}
-```
-
-**Example with Room:**
-
-```kotlin
+// Room example
 @Entity(tableName = "users")
-data class User(
-    @PrimaryKey val id: String,
-    @ColumnInfo(name = "user_name") val name: String,
-    val email: String
-)
+data class User(@PrimaryKey val id: String, val name: String)
 
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users")
     suspend fun getAllUsers(): List<User>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: User)
 }
 
-// kapt generates implementation:
-// UserDao_Impl, User_Table, etc.
+// kapt generates UserDao_Impl, User_Table, etc.
 ```
 
-**Generated by kapt:**
-
-```java
-// UserDao_Impl.java (simplified)
-public final class UserDao_Impl implements UserDao {
-    private final RoomDatabase database;
-
-    public UserDao_Impl(RoomDatabase database) {
-        this.database = database;
-    }
-
-    @Override
-    public Object getAllUsers(Continuation<? super List<User>> continuation) {
-        final String sql = "SELECT * FROM users";
-        // ... generated query execution code
-    }
-}
-```
-
-#### 3. KSP (Kotlin Symbol Processing)
-
-**Purpose:** Kotlin-first annotation processing, 2x faster than kapt.
-
-**Why KSP is faster:**
-- No Java stub generation
-- Direct access to Kotlin symbols
-- Better incremental compilation
-- Smaller memory footprint
-
-**Setup:**
+**3. KSP (Kotlin Symbol Processing):**
+Kotlin-first annotation processing, 2x faster than kapt.
 
 ```kotlin
 // build.gradle.kts
 plugins {
-    id("com.google.devtools.ksp") version "1.9.20-1.0.14"
+    id("com.google.devtools.ksp")
 }
 
 dependencies {
-    implementation("androidx.room:room-runtime:2.6.0")
-    ksp("androidx.room:room-compiler:2.6.0")
+    implementation("androidx.room:room-runtime")
+    ksp("androidx.room:room-compiler")
 }
 
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
-}
+// Same Room code works with KSP
+// Generates same output but faster
 ```
 
-**KSP API Example:**
+**4. Popular Libraries Using Annotation Processing:**
 
+**Room (Database ORM):**
 ```kotlin
-class MySymbolProcessor(
-    private val codeGenerator: CodeGenerator,
-    private val logger: KSPLogger
-) : SymbolProcessor {
-
-    override fun process(resolver: Resolver): List<KSAnnotated> {
-        val symbols = resolver
-            .getSymbolsWithAnnotation("com.example.AutoViewModel")
-            .filterIsInstance<KSClassDeclaration>()
-
-        symbols.forEach { classDeclaration ->
-            generateFactory(classDeclaration)
-        }
-
-        return emptyList()
-    }
-
-    private fun generateFactory(classDecl: KSClassDeclaration) {
-        val packageName = classDecl.packageName.asString()
-        val className = "${classDecl.simpleName.asString()}Factory"
-
-        val file = codeGenerator.createNewFile(
-            Dependencies(false),
-            packageName,
-            className
-        )
-
-        file.bufferedWriter().use { writer ->
-            writer.write("""
-                package $packageName
-
-                class $className {
-                    fun create(): ${classDecl.simpleName.asString()} {
-                        return ${classDecl.simpleName.asString()}()
-                    }
-                }
-            """.trimIndent())
-        }
-    }
-}
-```
-
-### Real-World Libraries Using Annotation Processing
-
-#### 1. Room (Database ORM)
-
-```kotlin
-@Database(entities = [User::class, Post::class], version = 1)
+@Database(entities = [User::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
-    abstract fun postDao(): PostDao
 }
-
-// Generates:
-// - AppDatabase_Impl (implementation)
-// - User_Table (table definition)
-// - UserDao_Impl (DAO implementation)
-// - Migration helpers
+// Generates: AppDatabase_Impl, User_Table, UserDao_Impl
 ```
 
-**Generated code handles:**
-- SQL query generation
-- Type converters
-- Cursor mapping
-- Transaction management
-
-#### 2. Hilt/Dagger (Dependency Injection)
-
+**Hilt/Dagger (Dependency Injection):**
 ```kotlin
 @HiltAndroidApp
 class MyApplication : Application()
@@ -293,473 +134,90 @@ class MainActivity : AppCompatActivity()
 class UserViewModel @Inject constructor(
     private val repository: UserRepository
 ) : ViewModel()
-
-// Generates:
-// - Hilt_MyApplication
-// - MainActivity_GeneratedInjector
-// - UserViewModel_HiltModules
-// - Component implementations
-// - Provider factories
+// Generates DI components
 ```
 
-#### 3. Moshi (JSON parsing)
-
+**Moshi (JSON Parsing):**
 ```kotlin
 @JsonClass(generateAdapter = true)
 data class User(
     @Json(name = "user_id") val id: String,
-    val name: String,
-    @Json(name = "email_address") val email: String
+    val name: String
 )
-
-// Generates:
-// UserJsonAdapter with optimized parsing/serialization
+// Generates optimized UserJsonAdapter
 ```
 
-**Generated adapter:**
-
-```kotlin
-// UserJsonAdapter.kt
-class UserJsonAdapter(moshi: Moshi) : JsonAdapter<User>() {
-    private val options = JsonReader.Options.of("user_id", "name", "email_address")
-
-    override fun fromJson(reader: JsonReader): User {
-        var id: String? = null
-        var name: String? = null
-        var email: String? = null
-
-        reader.beginObject()
-        while (reader.hasNext()) {
-            when (reader.selectName(options)) {
-                0 -> id = reader.nextString()
-                1 -> name = reader.nextString()
-                2 -> email = reader.nextString()
-            }
-        }
-        reader.endObject()
-
-        return User(
-            id = id ?: throw JsonDataException("id required"),
-            name = name ?: throw JsonDataException("name required"),
-            email = email ?: throw JsonDataException("email required")
-        )
-    }
-}
-```
-
-#### 4. Parcelize (Android Parcelable)
-
-```kotlin
-@Parcelize
-data class User(
-    val id: String,
-    val name: String,
-    val age: Int
-) : Parcelable
-
-// Generates:
-// - writeToParcel() method
-// - CREATOR object
-// - describeContents()
-```
-
-**What it replaces:**
-
-```kotlin
-// Before Parcelize - manual implementation
-data class User(val id: String, val name: String, val age: Int) : Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readInt()
-    )
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(id)
-        parcel.writeString(name)
-        parcel.writeInt(age)
-    }
-
-    override fun describeContents(): Int = 0
-
-    companion object CREATOR : Parcelable.Creator<User> {
-        override fun createFromParcel(parcel: Parcel) = User(parcel)
-        override fun newArray(size: Int) = arrayOfNulls<User?>(size)
-    }
-}
-```
-
-#### 5. Retrofit (HTTP Client)
-
-```kotlin
-interface ApiService {
-    @GET("users/{id}")
-    suspend fun getUser(@Path("id") userId: String): User
-
-    @POST("users")
-    suspend fun createUser(@Body user: User): User
-}
-
-// Retrofit generates implementation at runtime,
-// but KSP can generate compile-time implementations
-```
-
-### Creating Custom Annotation Processor
-
-#### Step 1: Define Annotations
-
-```kotlin
-// annotations/src/main/kotlin/Annotations.kt
-@Target(AnnotationTarget.CLASS)
-@Retention(AnnotationRetention.SOURCE)
-annotation class BindingAdapter(val layoutRes: Int)
-
-@Target(AnnotationTarget.PROPERTY)
-@Retention(AnnotationRetention.SOURCE)
-annotation class BindView(val viewId: Int)
-```
-
-#### Step 2: Create KSP Processor
-
-```kotlin
-// processor/src/main/kotlin/BindingProcessor.kt
-class BindingProcessorProvider : SymbolProcessorProvider {
-    override fun create(environment: SymbolProcessorEnvironment) = BindingProcessor(
-        codeGenerator = environment.codeGenerator,
-        logger = environment.logger
-    )
-}
-
-class BindingProcessor(
-    private val codeGenerator: CodeGenerator,
-    private val logger: KSPLogger
-) : SymbolProcessor {
-
-    override fun process(resolver: Resolver): List<KSAnnotated> {
-        val symbols = resolver
-            .getSymbolsWithAnnotation("com.example.BindingAdapter")
-            .filterIsInstance<KSClassDeclaration>()
-
-        symbols.forEach { generateBinding(it) }
-
-        return emptyList()
-    }
-
-    private fun generateBinding(classDecl: KSClassDeclaration) {
-        val packageName = classDecl.packageName.asString()
-        val className = classDecl.simpleName.asString()
-        val generatedClassName = "${className}Binding"
-
-        // Get layout resource from annotation
-        val annotation = classDecl.annotations.first {
-            it.shortName.asString() == "BindingAdapter"
-        }
-        val layoutRes = annotation.arguments
-            .first { it.name?.asString() == "layoutRes" }
-            .value as Int
-
-        // Get all @BindView properties
-        val bindings = classDecl.getAllProperties()
-            .filter { property ->
-                property.annotations.any {
-                    it.shortName.asString() == "BindView"
-                }
-            }
-            .map { property ->
-                val viewId = property.annotations
-                    .first { it.shortName.asString() == "BindView" }
-                    .arguments
-                    .first { it.name?.asString() == "viewId" }
-                    .value as Int
-
-                property.simpleName.asString() to viewId
-            }
-
-        // Generate code
-        val file = codeGenerator.createNewFile(
-            Dependencies(false, classDecl.containingFile!!),
-            packageName,
-            generatedClassName
-        )
-
-        file.bufferedWriter().use { writer ->
-            writer.write("""
-                package $packageName
-
-                import android.view.LayoutInflater
-                import android.view.View
-                import android.view.ViewGroup
-
-                class $generatedClassName(
-                    inflater: LayoutInflater,
-                    parent: ViewGroup?,
-                    attachToParent: Boolean = false
-                ) {
-                    val root: View = inflater.inflate($layoutRes, parent, attachToParent)
-
-                    ${bindings.joinToString("\n    ") { (name, id) ->
-                        "val $name: View = root.findViewById($id)"
-                    }}
-
-                    fun bind(activity: $className) {
-                        ${bindings.joinToString("\n        ") { (name, _) ->
-                            "activity.$name = this.$name"
-                        }}
-                    }
-                }
-            """.trimIndent())
-        }
-    }
-}
-```
-
-#### Step 3: Register Processor
-
-```kotlin
-// processor/src/main/resources/META-INF/services/
-//   com.google.devtools.ksp.processing.SymbolProcessorProvider
-com.example.processor.BindingProcessorProvider
-```
-
-#### Step 4: Use in Application
-
-```kotlin
-@BindingAdapter(layoutRes = R.layout.activity_main)
-class MainActivity : AppCompatActivity() {
-    @BindView(viewId = R.id.text_title)
-    lateinit var titleView: TextView
-
-    @BindView(viewId = R.id.button_submit)
-    lateinit var submitButton: Button
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Use generated binding
-        val binding = MainActivityBinding(
-            layoutInflater,
-            parent = null,
-            attachToParent = false
-        )
-        binding.bind(this)
-        setContentView(binding.root)
-
-        // Now titleView and submitButton are bound
-        titleView.text = "Hello"
-        submitButton.setOnClickListener { /* ... */ }
-    }
-}
-```
-
-### kapt vs KSP Comparison
+**kapt vs KSP Comparison:**
 
 | Feature | kapt | KSP |
 |---------|------|-----|
 | **Speed** | Baseline | 2x faster |
 | **Language** | Java-based | Kotlin-first |
 | **API** | Java Annotation Processing | Kotlin Symbol Processing |
-| **Stub generation** | Yes (slow) | No (fast) |
-| **Kotlin support** | Limited | Full |
-| **Incremental** | Limited | Better |
-| **Memory** | Higher | Lower |
+| **Stub Generation** | Yes (slow) | No (fast) |
+| **Kotlin Support** | Limited | Full |
 
-**Build time example:**
-
+**Build Time Example:**
 ```
 Project with Room + Hilt:
-
 kapt:  45 seconds
-KSP:   23 seconds  (↓48% faster!)
+KSP:   23 seconds  (48% faster)
 ```
 
-### Debugging Generated Code
-
-#### 1. View Generated Files
-
-**kapt:**
-```
-build/generated/source/kapt/debug/
-```
-
-**KSP:**
-```
-build/generated/ksp/debug/kotlin/
-```
-
-#### 2. Enable Verbose Logging
-
-```kotlin
-// build.gradle.kts
-kapt {
-    verbose = true
-    showProcessorStats = true
-}
-
-ksp {
-    arg("option1", "value1")
-    arg("verbose", "true")
-}
-```
-
-#### 3. Debug in Android Studio
-
-- Set breakpoints in processor code
-- Run Gradle task with debug flag:
-
-```bash
-./gradlew compileDebugKotlin --no-daemon -Dorg.gradle.debug=true
-```
-
-- Attach debugger to port 5005
-
-### Common Pitfalls
-
-#### 1. Incremental Compilation Issues
-
-```kotlin
-// BAD: Processor doesn't declare dependencies
-class MyProcessor : SymbolProcessor {
-    override fun process(resolver: Resolver): List<KSAnnotated> {
-        // Accessing files without declaring dependencies
-        val file = File("config.json").readText()
-        return emptyList()
-    }
-}
-
-// GOOD: Declare dependencies
-class MyProcessor : SymbolProcessor {
-    override fun process(resolver: Resolver): List<KSAnnotated> {
-        val configFile = resolver.getAllFiles()
-            .first { it.fileName == "config.json" }
-
-        val deps = Dependencies(false, configFile)
-        codeGenerator.createNewFile(deps, "com.example", "Generated")
-
-        return emptyList()
-    }
-}
-```
-
-#### 2. Missing Generated Sources
-
-```kotlin
-// build.gradle.kts
-// NEEDED for IDE to see generated code
-kotlin {
-    sourceSets.debug {
-        kotlin.srcDir("build/generated/ksp/debug/kotlin")
-    }
-    sourceSets.release {
-        kotlin.srcDir("build/generated/ksp/release/kotlin")
-    }
-}
-```
-
-#### 3. Circular Dependencies
-
-```kotlin
-// BAD: Generates code that references itself
-@AutoViewModel
-class UserViewModel  // Tries to inject UserViewModel into UserViewModel
-
-// GOOD: Clear dependency graph
-@AutoViewModel
-class UserViewModel(
-    private val repository: UserRepository  // Separate dependency
-)
-```
-
-### Best Practices
-
-1. **Use KSP over kapt** for new projects (2x faster)
-2. **Isolate processors** in separate Gradle modules
-3. **Declare dependencies properly** for incremental compilation
-4. **Test generated code** - treat it like any other code
-5. **Document annotations** - developers need to know what's generated
-6. **Version carefully** - processor and annotation versions must match
-7. **Monitor build time** - use `--profile` to identify slow processors
-
-### Performance Tips
-
-```kotlin
-// build.gradle.kts
-kapt {
-    useBuildCache = true  // Cache results
-    correctErrorTypes = true  // Better error reporting
-    mapDiagnosticLocations = true  // Map errors to source
-}
-
-ksp {
-    arg("room.incremental", "true")
-    arg("room.schemaLocation", "$projectDir/schemas")
-}
-
-// Parallel processing
-tasks.withType<KspTask> {
-    maxParallelForks = Runtime.getRuntime().availableProcessors() / 2
-}
-```
-
----
+**Best Practices:**
+- Use KSP instead of kapt for new projects (2x faster)
+- Isolate processors in separate Gradle modules
+- Declare dependencies correctly for incremental compilation
+- Test generated code like regular code
+- Document annotations for developers
+- Match processor and annotation versions
+- Monitor build times with `--profile`
 
 ## Ответ (RU)
 
-**Annotation Processing (Обработка аннотаций)** - это техника генерации кода во время компиляции, где процессоры анализируют аннотации в исходном коде и автоматически генерируют дополнительные классы.
+**Обработка аннотаций** — это техника генерации кода во время компиляции, когда процессоры анализируют аннотации и автоматически генерируют дополнительные классы, уменьшая шаблонный код и обеспечивая мощные фреймворки.
 
-### Как работает обработка аннотаций
+**Теория обработки аннотаций:**
+Обработка аннотаций происходит во время компиляции, когда процессоры анализируют аннотации исходного кода и генерируют дополнительный код. Это позволяет фреймворкам как Room, Hilt и Moshi автоматически создавать реализации без шаблонного кода.
+
+**Как работает обработка аннотаций:**
 
 ```
 Исходный код (.kt/.java)
     ↓
 Компилятор читает аннотации
     ↓
-Процессоры аннотаций выполняются
+Выполняются процессоры аннотаций
     ↓
-Сгенерированный код (.kt/.java)
+Генерируется код (.kt/.java)
     ↓
 Весь код компилируется вместе
     ↓
 APK/AAR
 ```
 
-### Базовый пример
-
-**1. Определяем аннотацию:**
+**1. Базовый пример:**
 
 ```kotlin
+// Определить аннотацию
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 annotation class AutoViewModel
-```
 
-**2. Аннотируем класс:**
-
-```kotlin
+// Аннотировать класс
 @AutoViewModel
-class UserRepository(
-    private val api: UserApi,
-    private val database: UserDatabase
-)
-```
+class UserRepository(private val api: UserApi)
 
-**3. Процессор генерирует код:**
-
-```kotlin
-// Сгенерировано во время компиляции
+// Процессор генерирует код
 class UserRepositoryFactory {
-    fun create(api: UserApi, database: UserDatabase): UserRepository {
-        return UserRepository(api, database)
+    fun create(api: UserApi): UserRepository {
+        return UserRepository(api)
     }
 }
 ```
 
-### Инструменты обработки аннотаций
-
-#### 1. kapt (Kotlin Annotation Processing Tool)
-
-**Назначение:** Связывает Java annotation processors с Kotlin кодом.
-
-**Настройка:**
+**2. kapt (Kotlin Annotation Processing Tool):**
+Связывает Java процессоры аннотаций с Kotlin кодом через генерацию Java stubs.
 
 ```kotlin
 // build.gradle.kts
@@ -768,20 +226,13 @@ plugins {
 }
 
 dependencies {
-    implementation("androidx.room:room-runtime:2.6.0")
-    kapt("androidx.room:room-compiler:2.6.0")
+    implementation("androidx.room:room-runtime")
+    kapt("androidx.room:room-compiler")
 }
-```
 
-**Пример с Room:**
-
-```kotlin
+// Пример Room
 @Entity(tableName = "users")
-data class User(
-    @PrimaryKey val id: String,
-    @ColumnInfo(name = "user_name") val name: String,
-    val email: String
-)
+data class User(@PrimaryKey val id: String, val name: String)
 
 @Dao
 interface UserDao {
@@ -789,53 +240,39 @@ interface UserDao {
     suspend fun getAllUsers(): List<User>
 }
 
-// kapt генерирует реализацию:
-// UserDao_Impl, User_Table и т.д.
+// kapt генерирует UserDao_Impl, User_Table и т.д.
 ```
 
-#### 2. KSP (Kotlin Symbol Processing)
-
-**Назначение:** Kotlin-first обработка аннотаций, в 2 раза быстрее чем kapt.
-
-**Почему KSP быстрее:**
-- Нет генерации Java stubs
-- Прямой доступ к Kotlin symbols
-- Лучшая инкрементальная компиляция
-- Меньший memory footprint
-
-**Настройка:**
+**3. KSP (Kotlin Symbol Processing):**
+Обработка аннотаций, ориентированная на Kotlin, в 2 раза быстрее kapt.
 
 ```kotlin
 // build.gradle.kts
 plugins {
-    id("com.google.devtools.ksp") version "1.9.20-1.0.14"
+    id("com.google.devtools.ksp")
 }
 
 dependencies {
-    implementation("androidx.room:room-runtime:2.6.0")
-    ksp("androidx.room:room-compiler:2.6.0")
+    implementation("androidx.room:room-runtime")
+    ksp("androidx.room:room-compiler")
 }
+
+// Тот же код Room работает с KSP
+// Генерирует тот же результат, но быстрее
 ```
 
-### Популярные библиотеки использующие annotation processing
+**4. Популярные библиотеки использующие обработку аннотаций:**
 
-#### 1. Room (Database ORM)
-
+**Room (Database ORM):**
 ```kotlin
-@Database(entities = [User::class, Post::class], version = 1)
+@Database(entities = [User::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
-    abstract fun postDao(): PostDao
 }
-
-// Генерирует:
-// - AppDatabase_Impl (реализация)
-// - User_Table (определение таблицы)
-// - UserDao_Impl (реализация DAO)
+// Генерирует: AppDatabase_Impl, User_Table, UserDao_Impl
 ```
 
-#### 2. Hilt/Dagger (Dependency Injection)
-
+**Hilt/Dagger (Dependency Injection):**
 ```kotlin
 @HiltAndroidApp
 class MyApplication : Application()
@@ -847,66 +284,70 @@ class MainActivity : AppCompatActivity()
 class UserViewModel @Inject constructor(
     private val repository: UserRepository
 ) : ViewModel()
-
 // Генерирует компоненты DI
 ```
 
-#### 3. Moshi (JSON parsing)
-
+**Moshi (JSON Parsing):**
 ```kotlin
 @JsonClass(generateAdapter = true)
 data class User(
     @Json(name = "user_id") val id: String,
-    val name: String,
-    @Json(name = "email_address") val email: String
+    val name: String
 )
-
 // Генерирует оптимизированный UserJsonAdapter
 ```
 
-### Сравнение kapt vs KSP
+**Сравнение kapt vs KSP:**
 
 | Функция | kapt | KSP |
 |---------|------|-----|
-| **Скорость** | Базовая | 2x быстрее |
+| **Скорость** | Базовая | В 2 раза быстрее |
 | **Язык** | На основе Java | Ориентирован на Kotlin |
 | **API** | Java Annotation Processing | Kotlin Symbol Processing |
 | **Генерация stubs** | Да (медленно) | Нет (быстро) |
 | **Поддержка Kotlin** | Ограниченная | Полная |
 
 **Пример времени сборки:**
-
 ```
 Проект с Room + Hilt:
-
 kapt:  45 секунд
-KSP:   23 секунды  (↓48% быстрее!)
+KSP:   23 секунды  (на 48% быстрее)
 ```
 
-### Best Practices (Лучшие практики)
-
-1. **Используйте KSP вместо kapt** для новых проектов (в 2 раза быстрее)
-2. **Изолируйте процессоры** в отдельных Gradle модулях
-3. **Правильно объявляйте зависимости** для инкрементальной компиляции
-4. **Тестируйте сгенерированный код** - относитесь к нему как к обычному коду
-5. **Документируйте аннотации** - разработчики должны знать что генерируется
-6. **Аккуратно с версиями** - версии процессора и аннотаций должны совпадать
-7. **Мониторьте время сборки** - используйте `--profile` для выявления медленных процессоров
+**Лучшие практики:**
+- Используйте KSP вместо kapt для новых проектов (в 2 раза быстрее)
+- Изолируйте процессоры в отдельных Gradle модулях
+- Правильно объявляйте зависимости для инкрементальной компиляции
+- Тестируйте сгенерированный код как обычный код
+- Документируйте аннотации для разработчиков
+- Совпадайте версии процессора и аннотаций
+- Мониторьте время сборки с `--profile`
 
 ---
 
-## Related Questions
+## Follow-ups
 
-- [[q-kapt-vs-ksp--android--medium]]
-- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]]
+- How do you debug annotation processing issues?
+- What's the difference between compile-time and runtime code generation?
+- How do you migrate from kapt to KSP?
+- What are the performance implications of annotation processing?
 
 ## References
 
+- [[c-annotation-processing]]
 - [KSP Documentation](https://kotlinlang.org/docs/ksp-overview.html)
 - [kapt Documentation](https://kotlinlang.org/docs/kapt.html)
-- [Writing an Annotation Processor](https://medium.com/@cafonsomota/writing-your-first-kotlin-symbol-processor-ksp-4a1db4c2aa1a)
-- [Room with KSP](https://developer.android.com/jetpack/androidx/releases/room#ksp)
 
-## MOC Links
+## Related Questions
 
-- [[moc-android]]
+### Prerequisites (Easier)
+- [[q-android-project-parts--android--easy]]
+- [[q-android-app-components--android--easy]]
+
+### Related (Same Level)
+- [[q-android-build-optimization--android--medium]]
+- [[q-android-modularization--android--medium]]
+- [[q-android-testing-strategies--android--medium]]
+
+### Advanced (Harder)
+- [[q-android-runtime-internals--android--hard]]
