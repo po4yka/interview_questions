@@ -1,45 +1,37 @@
 ---
 id: 20251012-122759
 title: "Android App Components / Компоненты Android приложения"
+aliases: [Android App Components, Компоненты Android приложения]
 topic: android
+subtopics: [app-components, architecture]
+question_kind: android
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-baseline-profiles-optimization--performance--medium, q-compose-testing--android--medium, q-architecture-components-libraries--android--easy]
+related: [q-activity-lifecycle-methods--android--medium, q-service-types--android--medium, q-broadcast-receivers--android--medium]
 created: 2025-10-15
-tags: [app-architecture, components, difficulty/easy]
+updated: 2025-10-15
+tags: [android/app-components, android/architecture, app-components, architecture, difficulty/easy]
 ---
 
-# Какие основные компоненты Android-приложения?
-
 # Question (EN)
-
 > What are the main components of an Android application?
 
 # Вопрос (RU)
-
 > Какие основные компоненты Android-приложения?
 
 ---
 
 ## Answer (EN)
 
-The four fundamental building blocks of Android applications:
+Android applications have four fundamental components:
 
-1. **Activity** - UI component representing a single screen
-2. **Service** - Background component for long-running operations
-3. **Broadcast Receiver** - Responds to system-wide broadcast announcements
-4. **Content Provider** - Manages shared app data and provides data access interface
-
----
-
-## Ответ (RU)
-
-Основные компоненты Android-приложения включают:
-
-### 1. Activity
-
-Представляет собой один экран с пользовательским интерфейсом. Каждая активность предназначена для выполнения одной конкретной задачи (например, выбора фотографии из галереи или отправки сообщения).
+**1. Activity:**
+- UI component representing a single screen
+- Handles user interactions
+- Manages lifecycle states
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -50,73 +42,146 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 2. Services
-
-Компоненты, которые выполняют длительные или фоновые операции без предоставления пользовательского интерфейса. Например, сервис может воспроизводить музыку в фоне, когда пользователь находится в другом приложении, или синхронизировать данные в фоновом режиме.
+**2. Service:**
+- Background component for long-running operations
+- No UI, runs independently
+- Types: Started, Bound, Foreground
 
 ```kotlin
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Воспроизведение музыки
+        // Background music playback
         return START_STICKY
     }
 }
 ```
 
-### 3. Broadcast Receivers
-
-Предназначены для прослушивания и реагирования на широковещательные сообщения от других приложений или системы. Например, приложение может запускать определенные действия или уведомления в ответ на сообщения о низком заряде батареи или загрузке новой фотографии.
+**3. Broadcast Receiver:**
+- Responds to system-wide broadcast announcements
+- Receives and reacts to events
+- Can be registered statically or dynamically
 
 ```kotlin
 class BatteryReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        // Обработка события
+        // Handle battery low event
     }
 }
 ```
 
-### 4. Content Providers
-
-Позволяют приложениям хранить и делиться данными. Через них можно осуществлять доступ к данным внутри одного приложения из других приложений, а также управлять доступом к этим данным. Примером может служить доступ к контактам или медиафайлам на устройстве.
+**4. Content Provider:**
+- Manages shared app data
+- Provides data access interface
+- Enables data sharing between apps
 
 ```kotlin
 class MyContentProvider : ContentProvider() {
-    override fun query(...): Cursor? {
-        // Предоставление данных
+    override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
+        // Provide data to other apps
+        return null
     }
 }
 ```
 
-**English**: The main Android app components are: **Activity** (UI screen), **Services** (background operations), **Broadcast Receivers** (system event listeners), and **Content Providers** (data sharing between apps).
+**Component Communication:**
+- **Intents**: Used to communicate between components
+- **Intent Filters**: Declare component capabilities
+- **Manifest**: Registers all components
+
+## Ответ (RU)
+
+Android-приложения имеют четыре основных компонента:
+
+**1. Activity:**
+- UI компонент, представляющий один экран
+- Обрабатывает взаимодействие с пользователем
+- Управляет состояниями жизненного цикла
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+}
+```
+
+**2. Service:**
+- Фоновый компонент для длительных операций
+- Без UI, работает независимо
+- Типы: Started, Bound, Foreground
+
+```kotlin
+class MusicService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Фоновое воспроизведение музыки
+        return START_STICKY
+    }
+}
+```
+
+**3. Broadcast Receiver:**
+- Реагирует на системные широковещательные сообщения
+- Получает и обрабатывает события
+- Может быть зарегистрирован статически или динамически
+
+```kotlin
+class BatteryReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        // Обработка события низкого заряда батареи
+    }
+}
+```
+
+**4. Content Provider:**
+- Управляет общими данными приложения
+- Предоставляет интерфейс доступа к данным
+- Обеспечивает обмен данными между приложениями
+
+```kotlin
+class MyContentProvider : ContentProvider() {
+    override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
+        // Предоставление данных другим приложениям
+        return null
+    }
+}
+```
+
+**Связь между компонентами:**
+- **Intents**: Используются для связи между компонентами
+- **Intent Filters**: Объявляют возможности компонентов
+- **Manifest**: Регистрирует все компоненты
 
 ---
 
 ## Follow-ups
 
--   What is the role of Intent Filters with these components?
--   How do foreground services differ from background services post Android 8.0?
--   When to expose data via ContentProvider vs in-app repository?
+- How do Intents enable communication between components?
+- What are the differences between started and bound services?
+- When should you use static vs dynamic Broadcast Receiver registration?
+- How do Content Providers enable data sharing between apps?
+- What role does the AndroidManifest.xml play in component registration?
 
 ## References
 
--   `https://developer.android.com/guide/components/fundamentals` — App components
--   `https://developer.android.com/guide/components/activities/intro-activities` — Activities
--   `https://developer.android.com/guide/components/services` — Services
--   `https://developer.android.com/guide/components/broadcasts` — Broadcasts
--   `https://developer.android.com/guide/topics/providers/content-providers` — Content providers
+- [Android App Components](https://developer.android.com/guide/components/fundamentals)
+- [Activities](https://developer.android.com/guide/components/activities/intro-activities)
+- [Services](https://developer.android.com/guide/components/services)
+- [Broadcast Receivers](https://developer.android.com/guide/components/broadcasts)
+- [Content Providers](https://developer.android.com/guide/topics/providers/content-providers)
 
 ## Related Questions
 
-### Related (Easy)
+### Prerequisites (Easier)
+- [[q-android-basics--android--easy]] - Android fundamentals
+- [[q-manifest-file--android--easy]] - Manifest configuration
 
--   [[q-architecture-components-libraries--android--easy]] - Fundamentals
--   [[q-what-unifies-android-components--android--easy]] - Fundamentals
--   [[q-android-components-besides-activity--android--easy]] - Fundamentals
--   [[q-main-android-components--android--easy]] - Fundamentals
--   [[q-material3-components--material-design--easy]] - Fundamentals
+### Related (Medium)
+- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle
+- [[q-service-types--android--medium]] - Service types
+- [[q-broadcast-receivers--android--medium]] - Broadcast receivers
+- [[q-content-providers--android--medium]] - Content providers
 
 ### Advanced (Harder)
-
--   [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
--   [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
--   [[q-hilt-components-scope--android--medium]] - Fundamentals
+- [[q-component-communication--android--hard]] - Advanced communication
+- [[q-custom-content-providers--android--hard]] - Custom providers
