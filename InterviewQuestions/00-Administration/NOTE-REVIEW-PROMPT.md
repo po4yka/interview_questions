@@ -92,6 +92,12 @@ Check code quality:
 - Complexity claims match implementation
 - No off-by-one errors
 - Variable names clear
+- Code examples must be concise and essential only
+- Remove verbose function declarations and comments
+- Eliminate redundant examples and explanations
+- Keep only essential code patterns (BAD/GOOD)
+- No full function implementations unless absolutely necessary
+- Focus on key concepts, not complete working code
 
 Validate complexity analysis:
 
@@ -110,6 +116,9 @@ Compare EN and RU content:
 - Code examples identical
 - No information loss in translation
 - No additional content in one language only
+- Both sections must have identical structure and content
+- Russian and English sections must be mirror images
+- No extra sections in one language (e.g., no "Резюме" section)
 
 ## Formatting
 
@@ -134,6 +143,11 @@ Verify compact, factual approach:
 - Bullets only for enumeration
 - Code snippets only if truly useful
 - Direct statements without hedging
+- Code examples must be concise and essential only
+- Remove verbose function declarations and comments
+- Eliminate redundant examples and explanations
+- Keep only essential code patterns (BAD/GOOD)
+- Both language sections must be identical in structure and content
 
 ## Factual Verification
 
