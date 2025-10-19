@@ -548,7 +548,6 @@ class SecureRandomGenerator {
 
 ## References
 
-- [[c-security]]
 - [OWASP Mobile Top 10](https://owasp.org/www-project-mobile-top-10/)
 - [Android Security Best Practices](https://developer.android.com/topic/security/best-practices)
 
