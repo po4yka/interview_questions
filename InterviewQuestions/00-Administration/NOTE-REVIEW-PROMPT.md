@@ -159,6 +159,9 @@ Verify compact, factual approach:
 - Eliminate redundant examples and explanations
 - Keep only essential code patterns (BAD/GOOD)
 - Both language sections must be identical in structure and content
+- **Add more theory and use code snippets only to directly demonstrate what is described**
+- **Each code example should have corresponding theoretical explanation**
+- **Theory sections should explain the "why" behind implementations**
 
 ## Factual Verification
 
