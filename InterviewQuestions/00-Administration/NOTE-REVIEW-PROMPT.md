@@ -78,6 +78,9 @@ Validate cross-linking and link integrity:
 - YAML `related` contains 2–5 items, no double brackets; items correspond to existing notes
 - "Related Questions" section contains internal links that resolve
 - All internal links in the note resolve to existing files (no broken links)
+- **CRITICAL**: Never reference non-existing notes in Related Questions section
+- **CRITICAL**: Only include links to notes that actually exist in the vault
+- **CRITICAL**: Verify all `[[note-name]]` links correspond to real files before adding
 - The referenced MOC includes (or is updated to include) a link back to this note
 - Use Obsidian link health: see `00-Administration/LINK-HEALTH-DASHBOARD.md`
 
