@@ -1,16 +1,20 @@
 ---
 id: 20251012-122756
 title: "Activity Lifecycle Methods / Методы жизненного цикла Activity"
+aliases: [Activity Lifecycle Methods, Методы жизненного цикла Activity]
 topic: android
+subtopics: [lifecycle, activity]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-stack-heap-memory-multiple-threads--android--medium, q-room-relations-embedded--room--medium, q-macrobenchmark-startup--performance--medium]
+related: [q-viewmodel-pattern--android--easy, q-fragment-lifecycle--android--medium, q-lifecycle-aware-components--android--medium]
 created: 2025-10-15
-tags: [activity, lifecycle, difficulty/medium]
+updated: 2025-10-15
+tags: [android/lifecycle, android/activity, lifecycle, activity, difficulty/medium]
 ---
-# Какие есть методы жизненного цикла Activity и как они отрабатывают?
-
 # Question (EN)
 > What Activity lifecycle methods exist and how do they work?
 
@@ -21,358 +25,258 @@ tags: [activity, lifecycle, difficulty/medium]
 
 ## Answer (EN)
 
-Activity lifecycle methods are a set of callbacks called by Android when Activity state changes. They provide control over app behavior during creation, stopping, resuming, or destruction.
+Activity lifecycle methods are callbacks invoked by Android system during state changes.
 
 **Main lifecycle methods:**
+
 - `onCreate()`: Initialize Activity (create UI, bind data) - called ONCE
 - `onStart()`: Activity becomes visible - called MULTIPLE times
 - `onResume()`: Activity in foreground, user can interact
-- `onPause()`: Activity losing focus, user leaving
-- `onStop()`: Activity no longer visible
-- `onDestroy()`: Activity being destroyed
+- `onPause()`: Activity losing focus, user leaving - save data quickly
+- `onStop()`: Activity no longer visible - release resources
 - `onRestart()`: Activity restarting from stopped state
+- `onDestroy()`: Activity being destroyed - final cleanup
 
----
-
-## Ответ (RU)
-
-Методы жизненного цикла Activity представляют собой набор коллбэков, которые вызываются системой Android при изменении состояния Activity. Эти методы предоставляют возможность управлять поведением приложения при создании, остановке, восстановлении или уничтожении.
-
-### Основные методы жизненного цикла
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        // Инициализация Activity: создание UI, привязка данных
-        // Вызывается ОДИН раз при создании
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // Activity становится видимой пользователю
-        // Может вызываться МНОГО раз
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Activity на переднем плане, пользователь может взаимодействовать
-        // Начать анимации, получить фокус
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // Activity теряет фокус (например, открылся диалог)
-        // Сохранить важные данные, остановить анимации
-        // БЫСТРО! Не более 1-2 секунд
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // Activity больше не видна
-        // Освободить ресурсы, остановить обновления
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        // Activity возобновляется после onStop()
-        // Далее вызывается onStart()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // Activity уничтожается
-        // Финальная очистка ресурсов
-    }
-}
-```
-
-### Диаграмма жизненного цикла
+**Lifecycle flow:**
 
 ```
-
-   Created   
-
-       
-       ↓
-   onCreate()
-       
-       ↓
-   onStart() ←
-                       
-       ↓                
-   onResume()      onRestart()
-                       
-       ↓                
-            
-    RUNNING          
-            
-                      
-        ↓              
-   onPause()           
-                      
-        ↓              
-   onStop() 
-        
-        ↓
-   onDestroy()
-        
-        ↓
-   
-   Destroyed
-   
+onCreate() → onStart() → onResume() → RUNNING
+                ↑           ↓
+            onRestart() ← onPause() → onStop() → onDestroy()
 ```
 
-### Сценарии использования
+**Common scenarios:**
 
-#### Сценарий 1: Первый запуск приложения
-
+**First launch:**
 ```
 onCreate() → onStart() → onResume()
 ```
 
-```kotlin
-class MyActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my)
-        Log.d("Lifecycle", "onCreate called")
-
-        // Инициализация
-        initViews()
-        loadInitialData()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("Lifecycle", "onStart called")
-        // Activity становится видимой
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("Lifecycle", "onResume called")
-        // Начать обновления UI
-        startLocationUpdates()
-    }
-}
-```
-
-#### Сценарий 2: Нажатие кнопки Home
-
+**Press Home button:**
 ```
 onPause() → onStop()
 ```
 
-```kotlin
-override fun onPause() {
-    super.onPause()
-    // Сохранить черновик
-    saveDraft()
-}
-
-override fun onStop() {
-    super.onStop()
-    // Остановить фоновые обновления
-    stopLocationUpdates()
-}
-```
-
-#### Сценарий 3: Возврат в приложение
-
+**Return to app:**
 ```
 onRestart() → onStart() → onResume()
 ```
 
-```kotlin
-override fun onRestart() {
-    super.onRestart()
-    Log.d("Lifecycle", "Activity restarting")
-    // Подготовка к возобновлению
-}
-
-override fun onStart() {
-    super.onStart()
-    // Обновить данные, если нужно
-    refreshData()
-}
-```
-
-#### Сценарий 4: Поворот экрана
-
+**Screen rotation:**
 ```
 onPause() → onStop() → onDestroy() → onCreate() → onStart() → onResume()
 ```
 
+**Key rules:**
+
+- `onCreate()`: Initialize UI, create objects, bind data
+- `onPause()`: Save critical data, stop animations - must be FAST
+- `onStop()`: Release resources, unregister listeners
+- `onDestroy()`: Final cleanup - may not be called (system kill)
+
+**Modern approach:**
+
 ```kotlin
+// Use DefaultLifecycleObserver (not deprecated @OnLifecycleEvent)
+class MyLifecycleObserver : DefaultLifecycleObserver {
+    override fun onResume(owner: LifecycleOwner) {
+        // Start updates
+    }
+
+    override fun onPause(owner: LifecycleOwner) {
+        // Stop updates
+    }
+}
+
+// Register observer
+lifecycle.addObserver(MyLifecycleObserver())
+```
+
+**Resource management:**
+
+```kotlin
+// BAD - Resource leak
+override fun onResume() {
+    super.onResume()
+    mediaPlayer = MediaPlayer.create(this, R.raw.video)
+    mediaPlayer.start()
+}
+
+// GOOD - Proper lifecycle management
+override fun onResume() {
+    super.onResume()
+    mediaPlayer.start()
+}
+
+override fun onPause() {
+    super.onPause()
+    mediaPlayer.pause()
+}
+
+override fun onDestroy() {
+    super.onDestroy()
+    mediaPlayer.release()
+}
+```
+
+**State saving:**
+
+```kotlin
+override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    outState.putString("user_input", editText.text.toString())
+}
+
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
-    // Восстановление состояния после поворота
     if (savedInstanceState != null) {
         val savedText = savedInstanceState.getString("user_input")
         editText.setText(savedText)
     }
 }
-
-override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    // Сохранить состояние перед уничтожением
-    outState.putString("user_input", editText.text.toString())
-}
 ```
 
-### Практические примеры
+## Ответ (RU)
 
-#### Управление ресурсами
+Методы жизненного цикла Activity представляют собой коллбэки, вызываемые системой Android при изменении состояния.
 
-```kotlin
-class VideoPlayerActivity : AppCompatActivity() {
-    private lateinit var player: MediaPlayer
+**Основные методы жизненного цикла:**
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_video)
-        player = MediaPlayer.create(this, R.raw.video)
-    }
+- `onCreate()`: Инициализация Activity (создание UI, привязка данных) - вызывается ОДИН раз
+- `onStart()`: Activity становится видимой - может вызываться МНОГО раз
+- `onResume()`: Activity на переднем плане, пользователь может взаимодействовать
+- `onPause()`: Activity теряет фокус, пользователь уходит - сохранить данные быстро
+- `onStop()`: Activity больше не видна - освободить ресурсы
+- `onRestart()`: Activity возобновляется после остановки
+- `onDestroy()`: Activity уничтожается - финальная очистка
 
-    override fun onResume() {
-        super.onResume()
-        player.start()  // Начать воспроизведение
-    }
+**Поток жизненного цикла:**
 
-    override fun onPause() {
-        super.onPause()
-        player.pause()  // Приостановить при потере фокуса
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        player.release()  // Освободить ресурсы
-    }
-}
+```
+onCreate() → onStart() → onResume() → RUNNING
+                ↑           ↓
+            onRestart() ← onPause() → onStop() → onDestroy()
 ```
 
-#### Регистрация/отмена слушателей
+**Распространённые сценарии:**
 
-```kotlin
-class LocationActivity : AppCompatActivity() {
-    private lateinit var locationManager: LocationManager
-    private val locationListener = object : LocationListener {
-        override fun onLocationChanged(location: Location) {
-            updateUI(location)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // Начать получать обновления локации
-        locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            1000L,
-            10f,
-            locationListener
-        )
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // Остановить обновления при невидимости
-        locationManager.removeUpdates(locationListener)
-    }
-}
+**Первый запуск:**
+```
+onCreate() → onStart() → onResume()
 ```
 
-#### Сохранение состояния
-
-```kotlin
-class FormActivity : AppCompatActivity() {
-    private lateinit var nameInput: EditText
-    private lateinit var emailInput: EditText
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("name", nameInput.text.toString())
-        outState.putString("email", emailInput.text.toString())
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        nameInput.setText(savedInstanceState.getString("name"))
-        emailInput.setText(savedInstanceState.getString("email"))
-    }
-}
+**Нажатие кнопки Home:**
+```
+onPause() → onStop()
 ```
 
-### Важные правила
+**Возврат в приложение:**
+```
+onRestart() → onStart() → onResume()
+```
 
-**onCreate():**
--  Инициализация UI (setContentView)
--  Создание объектов
--  Привязка данных
--  Длительные операции (использовать фоновые потоки)
+**Поворот экрана:**
+```
+onPause() → onStop() → onDestroy() → onCreate() → onStart() → onResume()
+```
 
-**onPause():**
--  Сохранение критичных данных
--  Остановка анимаций
--  Длительные операции (метод должен выполниться быстро!)
+**Ключевые правила:**
 
-**onStop():**
--  Освобождение ресурсов
--  Отмена регистрации слушателей
--  Остановка фоновых задач
+- `onCreate()`: Инициализировать UI, создать объекты, привязать данные
+- `onPause()`: Сохранить критичные данные, остановить анимации - должно быть БЫСТРО
+- `onStop()`: Освободить ресурсы, отменить регистрацию слушателей
+- `onDestroy()`: Финальная очистка - может не вызваться (убийство системой)
 
-**onDestroy():**
--  Финальная очистка
--  Освобождение всех ресурсов
--  Может не вызваться (system kill)
-
-### Современный подход с Lifecycle
+**Современный подход:**
 
 ```kotlin
-class ModernActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Lifecycle-aware компоненты
-        lifecycle.addObserver(MyLifecycleObserver())
-
-        // ViewModel переживает изменения конфигурации
-        val viewModel: MyViewModel by viewModels()
-    }
-}
-
-// Modern approach: Use DefaultLifecycleObserver instead of deprecated @OnLifecycleEvent
+// Использовать DefaultLifecycleObserver (не устаревший @OnLifecycleEvent)
 class MyLifecycleObserver : DefaultLifecycleObserver {
     override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
-        // Автоматически вызывается при onResume()
+        // Начать обновления
     }
 
     override fun onPause(owner: LifecycleOwner) {
-        super.onPause(owner)
-        // Автоматически вызывается при onPause()
+        // Остановить обновления
     }
 }
 
-// Note: @OnLifecycleEvent annotation is deprecated since Lifecycle 2.4.0
-// Use DefaultLifecycleObserver interface for better type safety
+// Зарегистрировать наблюдатель
+lifecycle.addObserver(MyLifecycleObserver())
 ```
 
-**English**: Activity lifecycle methods are callbacks invoked by Android system during state changes: `onCreate()` (initialization, called once), `onStart()` (becomes visible), `onResume()` (foreground, interactive), `onPause()` (loses focus, save data quickly), `onStop()` (no longer visible, release resources), `onRestart()` (resuming after stop), `onDestroy()` (final cleanup). Proper management prevents resource leaks and ensures smooth UX. **Important:** `onDestroy()` may not be called if system kills process - use `onSaveInstanceState()` for critical data. Modern approach: use `DefaultLifecycleObserver` (not deprecated `@OnLifecycleEvent`).
+**Управление ресурсами:**
+
+```kotlin
+// ПЛОХО - Утечка ресурсов
+override fun onResume() {
+    super.onResume()
+    mediaPlayer = MediaPlayer.create(this, R.raw.video)
+    mediaPlayer.start()
+}
+
+// ХОРОШО - Правильное управление жизненным циклом
+override fun onResume() {
+    super.onResume()
+    mediaPlayer.start()
+}
+
+override fun onPause() {
+    super.onPause()
+    mediaPlayer.pause()
+}
+
+override fun onDestroy() {
+    super.onDestroy()
+    mediaPlayer.release()
+}
+```
+
+**Сохранение состояния:**
+
+```kotlin
+override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    outState.putString("user_input", editText.text.toString())
+}
+
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    if (savedInstanceState != null) {
+        val savedText = savedInstanceState.getString("user_input")
+        editText.setText(savedText)
+    }
+}
+```
 
 ---
+
+## Follow-ups
+
+- How does Fragment lifecycle relate to Activity lifecycle?
+- What happens during configuration changes?
+- How do you handle memory pressure in lifecycle methods?
+- What's the difference between onPause() and onStop()?
+- How do you test lifecycle methods?
+
+## References
+
+- [Android Activity Lifecycle Guide](https://developer.android.com/guide/components/activities/activity-lifecycle)
+- [Lifecycle-Aware Components](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [Saving and Restoring Activity State](https://developer.android.com/guide/components/activities/activity-lifecycle#saras)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-viewmodel-pattern--android--easy]] - Lifecycle
+- [[q-viewmodel-pattern--android--easy]] - Lifecycle management
+- [[q-android-app-components--android--easy]] - Activity basics
 
 ### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
-- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
-- [[q-how-does-activity-lifecycle-work--android--medium]] - Lifecycle, Activity
+- [[q-fragment-lifecycle--android--medium]] - Fragment lifecycle
+- [[q-lifecycle-aware-components--android--medium]] - Modern lifecycle approach
+- [[q-configuration-changes--android--medium]] - Handling configuration changes
+- [[q-memory-management-android--android--medium]] - Resource management
+
+### Advanced (Harder)
+- [[q-activity-task-stack--android--hard]] - Task management
+- [[q-process-lifecycle--android--hard]] - Process lifecycle
