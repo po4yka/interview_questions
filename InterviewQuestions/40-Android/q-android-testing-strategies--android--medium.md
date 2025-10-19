@@ -1,13 +1,19 @@
 ---
 id: 20251012-122775
-title: "Android Testing Strategies / Android Тестирование Strategies"
+title: Android Testing Strategies / Стратегии тестирования Android
+aliases: [Android Testing Strategies, Стратегии тестирования Android]
 topic: android
+subtopics: [testing-unit, testing-instrumented, testing-ui]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-pass-parameters-to-fragment--android--easy, q-how-does-jetpack-compose-work--android--medium, q-how-animations-work-in-recyclerview--android--medium]
+related: [q-android-performance-measurement-tools--android--medium, q-android-architectural-patterns--android--medium, q-android-security-best-practices--android--medium]
 created: 2025-10-15
-tags: [testing, junit, espresso, mockito, quality-assurance, difficulty/medium]
+updated: 2025-10-15
+tags: [android/testing-unit, android/testing-instrumented, android/testing-ui, testing, junit, espresso, mockito, quality-assurance, difficulty/medium]
 ---
 # Методы тестирования Android приложений
 
