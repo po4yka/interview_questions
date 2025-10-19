@@ -28,6 +28,10 @@ Verify Android-specific requirements if `topic: android`:
 - Tags include `android/<subtopic>` for each subtopic
 - `moc: moc-android`
 
+Additionally validate MOC mapping by topic:
+
+- `moc` matches the note's topic MOC (e.g., `moc-algorithms`, `moc-system-design`, `moc-android`, `moc-kotlin`, `moc-backend`, `moc-cs`, `moc-tools`)
+
 Check forbidden patterns:
 
 - No brackets in `moc` field
@@ -56,6 +60,18 @@ Confirm sections exist:
 - `## Follow-ups`
 - `## References`
 - `## Related Questions`
+
+## Links and Connections
+
+Validate cross-linking and link integrity:
+
+- At least one Concept link present in the content body: `[[c-*]]` (e.g., `[[c-hash-map]]`)
+- YAML `moc` present, a single value, no brackets, and correct for the topic (see mapping in YAML Validation)
+- YAML `related` contains 2–5 items, no double brackets; items correspond to existing notes
+- "Related Questions" section contains internal links that resolve
+- All internal links in the note resolve to existing files (no broken links)
+- The referenced MOC includes (or is updated to include) a link back to this note
+- Use Obsidian link health: see `00-Administration/LINK-HEALTH-DASHBOARD.md`
 
 ## Technical Accuracy
 
