@@ -1,13 +1,19 @@
 ---
 id: 20251012-122761
-title: "Android Architectural Patterns / Android Architectural Паттерны"
+title: "Android Architectural Patterns / Архитектурные паттерны Android"
+aliases: [Android Architectural Patterns, Архитектурные паттерны Android]
 topic: android
+subtopics: [architecture-patterns, clean-architecture]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-privacy-sandbox-fledge--privacy--hard, q-material3-dynamic-color-theming--material-design--medium, q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium]
+related: [q-mvvm-pattern--android--medium, q-clean-architecture--android--hard, q-viewmodel-pattern--android--easy]
 created: 2025-10-15
-tags: [architecture-patterns, clean-architecture, component-based, mvc, mvp, mvvm, difficulty/medium]
+updated: 2025-10-15
+tags: [android/architecture-patterns, android/clean-architecture, architecture-patterns, clean-architecture, mvc, mvp, mvvm, mvi, difficulty/medium]
 ---
 # Какие архитектурные паттерны используются в Android-фреймворке?
 
