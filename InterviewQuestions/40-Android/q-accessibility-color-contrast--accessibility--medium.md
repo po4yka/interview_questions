@@ -1,243 +1,108 @@
 ---
 id: 20251012-122751
-title: "Accessibility Color Contrast / Контрастность цветов для доступности"
+title: Accessibility Color Contrast / Контрастность цветов для доступности
+aliases: [Color Contrast, Контрастность цветов]
 topic: android
+subtopics: [ui-accessibility, ui-theming]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-created: 2025-10-11
-tags: [accessibility, color-contrast, wcag, visual-accessibility, difficulty/medium]
-related: [q-recyclerview-viewtypes-delegation--recyclerview--medium, q-kmm-sqldelight--multiplatform--medium, q-android-app-lag-analysis--android--medium]
+related:
   - q-accessibility-compose--accessibility--medium
   - q-material3-dynamic-color-theming--material-design--medium
+created: 2025-10-11
+updated: 2025-10-15
+tags:
+  - android/ui-accessibility
+  - android/ui-theming
+  - accessibility
+  - color-contrast
+  - wcag
+  - visual-accessibility
+  - difficulty/medium
 ---
 # Question (EN)
 How do you ensure sufficient color contrast for accessibility? What are WCAG contrast requirements, and how do you test and fix contrast issues in Android apps?
 
+# Вопрос (RU)
+Как обеспечить достаточный контраст цвета для доступности? Что такое требования WCAG к контрасту, и как тестировать и исправлять проблемы контраста в Android-приложениях?
+
+---
+
 ## Answer (EN)
-### Overview
 
-**Color contrast** is the difference in luminance between text and background colors. Proper contrast ensures content is readable for users with:
-- Low vision
-- Color blindness (deuteranopia, protanopia, tritanopia)
-- Age-related vision changes
-- Outdoor viewing (bright sunlight)
+Color contrast is the difference in luminance between text and background colors. Proper contrast ensures readability for users with low vision, color blindness, age-related vision changes, and outdoor viewing.
 
-### WCAG Contrast Requirements
+#### WCAG Requirements
 
 ```
-WCAG 2.1 Contrast Ratios:
-
 Level AA (Minimum):
-  - Normal text (< 18pt):      4.5:1
-  - Large text (≥ 18pt/14pt bold): 3:1
+  Normal text (< 18pt):      4.5:1
+  Large text (≥ 18pt):       3:1
 
 Level AAA (Enhanced):
-  - Normal text:               7:1
-  - Large text:                4.5:1
+  Normal text:               7:1
+  Large text:                4.5:1
 
 Examples:
   Black on White:     21:1   (Excellent)
   #757575 on White:    4.6:1   (Passes AA)
   #959595 on White:    2.8:1   (Fails AA)
-  Blue (#007AFF) on White: 4.5:1   (Passes AA)
 ```
 
-### Calculating Contrast Ratio
+#### Material 3 Color Roles
 
-**Formula:**
-```
-(Lighter luminance + 0.05) / (Darker luminance + 0.05)
-
-Where luminance = 0.2126 * R + 0.7152 * G + 0.0722 * B
-(after gamma correction)
-```
-
-**Kotlin implementation**:
-
-```kotlin
-object ContrastChecker {
-
-    /**
-     * Calculate contrast ratio between two colors
-     * Returns value between 1:1 (no contrast) and 21:1 (maximum)
-     */
-    fun contrastRatio(color1: Color, color2: Color): Double {
-        val lum1 = luminance(color1)
-        val lum2 = luminance(color2)
-
-        val lighter = maxOf(lum1, lum2)
-        val darker = minOf(lum1, lum2)
-
-        return (lighter + 0.05) / (darker + 0.05)
-    }
-
-    /**
-     * Calculate relative luminance of a color
-     */
-    private fun luminance(color: Color): Double {
-        val r = gammaCorrect(color.red)
-        val g = gammaCorrect(color.green)
-        val b = gammaCorrect(color.blue)
-
-        return 0.2126 * r + 0.7152 * g + 0.0722 * b
-    }
-
-    /**
-     * Apply gamma correction
-     */
-    private fun gammaCorrect(value: Float): Double {
-        return if (value <= 0.03928) {
-            value / 12.92
-        } else {
-            Math.pow(((value + 0.055) / 1.055), 2.4)
-        }
-    }
-
-    /**
-     * Check if contrast meets WCAG AA for normal text
-     */
-    fun meetsWCAG_AA_Normal(foreground: Color, background: Color): Boolean {
-        return contrastRatio(foreground, background) >= 4.5
-    }
-
-    /**
-     * Check if contrast meets WCAG AA for large text
-     */
-    fun meetsWCAG_AA_Large(foreground: Color, background: Color): Boolean {
-        return contrastRatio(foreground, background) >= 3.0
-    }
-
-    /**
-     * Check if contrast meets WCAG AAA
-     */
-    fun meetsWCAG_AAA(foreground: Color, background: Color): Boolean {
-        return contrastRatio(foreground, background) >= 7.0
-    }
-}
-
-// Usage
-val foreground = Color.Gray
-val background = Color.White
-val ratio = ContrastChecker.contrastRatio(foreground, background)
-val passes = ContrastChecker.meetsWCAG_AA_Normal(foreground, background)
-
-println("Contrast ratio: ${String.format("%.2f", ratio)}:1")
-println("Passes WCAG AA: $passes")
-```
-
-### Material 3 Color Roles (Built-in Contrast)
+Use Material color pairs for guaranteed contrast:
 
 ```kotlin
 @Composable
 fun MaterialColorExample() {
     MaterialTheme {
-        //  GOOD - Material 3 automatically ensures contrast
-        Surface(
-            color = MaterialTheme.colorScheme.primary
-        ) {
+        Surface(color = MaterialTheme.colorScheme.primary) {
             Text(
                 text = "Primary button",
                 color = MaterialTheme.colorScheme.onPrimary // Guaranteed contrast
             )
         }
-
-        Surface(
-            color = MaterialTheme.colorScheme.error
-        ) {
-            Text(
-                text = "Error message",
-                color = MaterialTheme.colorScheme.onError // Guaranteed contrast
-            )
-        }
-
-        //  BAD - Manual colors without contrast check
-        Surface(color = Color(0xFFCCCCCC)) {
-            Text(
-                text = "Button",
-                color = Color.White // Might not have sufficient contrast!
-            )
-        }
     }
 }
 ```
 
-**Material 3 color pairs:**
-```
-primary / onPrimary
-secondary / onSecondary
-tertiary / onTertiary
-error / onError
-surface / onSurface
-background / onBackground
-surfaceVariant / onSurfaceVariant
+Material color pairs:
+- primary / onPrimary
+- secondary / onSecondary
+- error / onError
+- surface / onSurface
+- background / onBackground
 
-Each pair guarantees WCAG AA contrast (4.5:1)
-```
+Each pair guarantees WCAG AA contrast (4.5:1).
 
-### Testing Contrast
+#### Testing
 
-**Manual testing with online tools**:
-```
-1. WebAIM Contrast Checker: https://webaim.org/resources/contrastchecker/
-2. Contrast Ratio: https://contrast-ratio.com/
-3. Who Can Use: https://whocanuse.com/
+Manual testing:
+- WebAIM Contrast Checker
+- Contrast Ratio
+- Who Can Use
 
-Take screenshot → Pick colors → Get ratio
-```
-
-**Automated testing**:
-
+Automated testing:
 ```kotlin
 @Test
 fun testColorContrast() {
-    composeTestRule.setContent {
-        Text(
-            text = "Important message",
-            color = Color(0xFF757575), // Gray
-            modifier = Modifier.background(Color.White)
-        )
-    }
-
-    // Verify contrast
     val foreground = Color(0xFF757575)
     val background = Color.White
     val ratio = ContrastChecker.contrastRatio(foreground, background)
 
-    assertTrue(
-        "Contrast ratio ${String.format("%.2f", ratio)}:1 does not meet WCAG AA (4.5:1)",
-        ratio >= 4.5
-    )
-}
-
-@Test
-fun testMaterialThemeContrast() {
-    composeTestRule.setContent {
-        MaterialTheme {
-            val colorScheme = MaterialTheme.colorScheme
-
-            // Verify all Material color pairs meet WCAG AA
-            listOf(
-                colorScheme.primary to colorScheme.onPrimary,
-                colorScheme.secondary to colorScheme.onSecondary,
-                colorScheme.error to colorScheme.onError,
-                colorScheme.surface to colorScheme.onSurface,
-                colorScheme.background to colorScheme.onBackground
-            ).forEach { (bg, fg) ->
-                val ratio = ContrastChecker.contrastRatio(fg, bg)
-                assertTrue(
-                    "Insufficient contrast: ${String.format("%.2f", ratio)}:1",
-                    ratio >= 4.5
-                )
-            }
-        }
-    }
+    assertTrue("Contrast ratio ${String.format("%.2f", ratio)}:1 does not meet WCAG AA (4.5:1)",
+        ratio >= 4.5)
 }
 ```
 
-### Common Contrast Violations
+#### Common Violations
 
-**1. Gray text on light background**:
+Gray text on light background:
 
 ```kotlin
 //  BAD - Insufficient contrast
@@ -246,7 +111,7 @@ Text(
     color = Color(0xFFCCCCCC), // Light gray
     modifier = Modifier.background(Color.White)
 )
-// Contrast: 1.6:1 
+// Contrast: 1.6:1
 
 //  GOOD - Sufficient contrast
 Text(
@@ -254,7 +119,7 @@ Text(
     color = Color(0xFF757575), // Medium gray
     modifier = Modifier.background(Color.White)
 )
-// Contrast: 4.6:1 
+// Contrast: 4.6:1
 
 //  BETTER - Use Material colors
 Text(
@@ -275,7 +140,7 @@ Text(
         .clickable { }
         .background(Color.White)
 )
-// Contrast: 2.9:1 
+// Contrast: 2.9:1
 
 //  GOOD - Darker blue
 Text(
@@ -285,7 +150,7 @@ Text(
         .clickable { }
         .background(Color.White)
 )
-// Contrast: 4.5:1 
+// Contrast: 4.5:1
 
 //  BETTER - Use Material colors
 Text(
@@ -698,40 +563,165 @@ fun FocusableButton() {
 
 ---
 
-# Вопрос (RU)
-Как обеспечить достаточный контраст цвета для доступности? Что такое требования WCAG к контрасту, и как тестировать и исправлять проблемы контраста в Android-приложениях?
-
 ## Ответ (RU)
-[Перевод с примерами из английской версии...]
 
-### Резюме
+Контрастность цвета — это разница в яркости между цветами текста и фона. Правильный контраст обеспечивает читаемость для пользователей с нарушениями зрения, дальтонизмом, возрастными изменениями зрения и при просмотре на улице.
 
-**Требования WCAG:**
-- Обычный текст (< 18pt): 4.5:1 (AA), 7:1 (AAA)
-- Крупный текст (≥ 18pt): 3:1 (AA), 4.5:1 (AAA)
-- Focus индикаторы: 3:1
+#### Требования WCAG
 
-**Ключевые принципы:**
-- Используйте Material color roles (автоматический контраст)
-- Тестируйте с Accessibility Scanner
-- Не полагайтесь только на цвет
-- Тестируйте в dark mode
-- Учитывайте дальтонизм
-- Автоматизируйте проверки контраста в CI
+```
+Уровень AA (Минимальный):
+  Обычный текст (< 18pt):      4.5:1
+  Крупный текст (≥ 18pt):       3:1
 
-**Распространённые нарушения:**
-- Светло-серый на белом
-- Светло-синие ссылки
-- Статус только цветом (без иконок)
-- Одинаковые цвета в обеих темах
+Уровень AAA (Расширенный):
+  Обычный текст:               7:1
+  Крупный текст:                4.5:1
+```
 
-**Решения:**
-- Использовать Material `colorScheme.onPrimary`, `onSurface`, и т.д.
-- Добавлять иконки к цветным индикаторам
-- Тестировать с симуляторами дальтонизма
-- Проверять соотношение 4.5:1 для всего текста
+#### Material 3 Color Roles
+
+Используйте пары цветов Material для гарантированного контраста:
+
+```kotlin
+@Composable
+fun MaterialColorExample() {
+    MaterialTheme {
+        Surface(color = MaterialTheme.colorScheme.primary) {
+            Text(
+                text = "Primary button",
+                color = MaterialTheme.colorScheme.onPrimary // Гарантированный контраст
+            )
+        }
+    }
+}
+```
+
+Пары цветов Material:
+- primary / onPrimary
+- secondary / onSecondary
+- error / onError
+- surface / onSurface
+- background / onBackground
+
+Каждая пара гарантирует контраст WCAG AA (4.5:1).
+
+#### Тестирование
+
+Ручное тестирование:
+- WebAIM Contrast Checker
+- Contrast Ratio
+- Who Can Use
+
+Автоматизированное тестирование:
+```kotlin
+@Test
+fun testColorContrast() {
+    val foreground = Color(0xFF757575)
+    val background = Color.White
+    val ratio = ContrastChecker.contrastRatio(foreground, background)
+
+    assertTrue("Contrast ratio ${String.format("%.2f", ratio)}:1 does not meet WCAG AA (4.5:1)",
+        ratio >= 4.5)
+}
+```
+
+#### Распространённые нарушения
+
+Серый текст на светлом фоне:
+```kotlin
+// ПЛОХО - Недостаточный контраст
+Text(color = Color(0xFFCCCCCC), modifier = Modifier.background(Color.White))
+// Контраст: 1.6:1
+
+// ХОРОШО - Достаточный контраст
+Text(color = Color(0xFF757575), modifier = Modifier.background(Color.White))
+// Контраст: 4.6:1
+
+// ЛУЧШЕ - Используйте Material цвета
+Text(color = MaterialTheme.colorScheme.onSurfaceVariant,
+     modifier = Modifier.background(MaterialTheme.colorScheme.surface))
+```
+
+Синие ссылки на белом фоне:
+```kotlin
+// ПЛОХО - Светло-синий, недостаточный контраст
+Text(color = Color(0xFF4FC3F7), modifier = Modifier.background(Color.White))
+// Контраст: 2.9:1
+
+// ХОРОШО - Темно-синий
+Text(color = Color(0xFF0277BD), modifier = Modifier.background(Color.White))
+// Контраст: 4.5:1
+
+// ЛУЧШЕ - Используйте Material цвета
+Text(color = MaterialTheme.colorScheme.primary,
+     modifier = Modifier.background(MaterialTheme.colorScheme.background))
+```
+
+Статусные индикаторы только цветом:
+```kotlin
+// ПЛОХО - Только цветовое различие
+Row {
+    Text("Success", color = Color.Green)
+    Text("Error", color = Color.Red)
+}
+
+// ХОРОШО - Добавьте иконки + достаточный контраст
+Row {
+    Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF2E7D32))
+    Text("Success", color = Color(0xFF2E7D32))
+}
+Row {
+    Icon(Icons.Default.Error, null, tint = Color(0xFFC62828))
+    Text("Error", color = Color(0xFFC62828))
+}
+```
+
+#### Темная тема
+
+Используйте разные цвета для каждой темы:
+```kotlin
+@Composable
+fun DarkThemeContrast() {
+    Text(
+        text = "Content",
+        color = MaterialTheme.colorScheme.onBackground,
+        modifier = Modifier.background(MaterialTheme.colorScheme.background)
+    )
+}
+```
+
+#### Лучшие практики
+
+1. Используйте Material Color Roles
+2. Тестируйте с Accessibility Scanner
+3. Не полагайтесь только на цвет
+4. Тестируйте в темной теме
+5. Автоматизируйте проверки контраста в CI
+
+#### Инструменты
+
+- Цветовая палитра Android Studio
+- Приложение Accessibility Scanner
+- WebAIM Contrast Checker
+- Онлайн-инструмент Contrast Ratio
 
 ---
+
+## Follow-ups
+
+- What happens if you use custom colors without checking contrast?
+- How does this issue affect users with different types of color blindness?
+- What's the difference between WCAG AA and AAA requirements?
+- How do you test contrast in automated UI tests?
+- What tools can help detect contrast issues in CI/CD?
+
+## References
+
+- [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
+- [Material Design Color System](https://m3.material.io/foundations/color)
+- [Android Accessibility Guidelines](https://developer.android.com/guide/topics/ui/accessibility)
+- [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
 
 ## Related Questions
 
