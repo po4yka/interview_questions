@@ -1,17 +1,20 @@
 ---
 id: 20251012-122777
-title: "Animated Visibility Vs Content"
+title: AnimatedVisibility vs AnimatedContent vs Crossfade / AnimatedVisibility против AnimatedContent против Crossfade
+aliases: [AnimatedVisibility vs AnimatedContent vs Crossfade, AnimatedVisibility против AnimatedContent против Crossfade]
 topic: android
-difficulty: medium
-status: draft
-created: 2025-10-13
-tags: [compose, animations, transitions, animated-visibility, ui, android/ui-animation, android/jetpack-compose, difficulty/medium]
-moc: moc-android
-related: [q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard, q-android-components-besides-activity--android--easy, q-recomposition-compose--android--medium]
 subtopics: [ui-animation, jetpack-compose]
+question_kind: android
+difficulty: medium
+original_language: en
+language_tags: [en, ru]
+status: draft
+moc: moc-android
+related: [q-android-testing-strategies--android--medium, q-android-architectural-patterns--android--medium, q-android-performance-measurement-tools--android--medium]
+created: 2025-10-13
+updated: 2025-10-15
+tags: [android/ui-animation, android/jetpack-compose, compose, animations, transitions, animated-visibility, ui, difficulty/medium]
 ---
-# AnimatedVisibility vs AnimatedContent vs Crossfade
-
 # Question (EN)
 > Compare AnimatedVisibility, AnimatedContent, and Crossfade. When should you use each?
 
@@ -22,27 +25,16 @@ subtopics: [ui-animation, jetpack-compose]
 
 ## Answer (EN)
 
-Compose provides three main APIs for content transitions: **AnimatedVisibility**, **AnimatedContent**, and **Crossfade**. Each serves different use cases and provides different animation capabilities.
+**Compose Animation APIs** provide three main approaches for content transitions: AnimatedVisibility, AnimatedContent, and Crossfade, each optimized for different use cases.
 
----
+**Animation APIs Theory:**
+Jetpack Compose offers specialized animation APIs for different scenarios. AnimatedVisibility handles show/hide transitions, AnimatedContent manages state-based content changes, and Crossfade provides simple fade transitions between content.
 
-### AnimatedVisibility
-
-**Purpose:** Show/hide content with enter/exit animations.
-
-**When to use:**
-- Toggle visibility on/off
-- Show/hide optional UI elements
-- Expand/collapse sections
-- Show modals, tooltips, etc.
-
-**Key features:**
-- Enter transitions (fade in, slide in, scale in, expand)
-- Exit transitions (fade out, slide out, scale out, shrink)
-- Simultaneous enter/exit animations
-- Children can animate independently
+**1. AnimatedVisibility:**
+Show/hide content with enter/exit animations for visibility toggles.
 
 ```kotlin
+// Basic AnimatedVisibility
 @Composable
 fun AnimatedVisibilityExample() {
     var visible by remember { mutableStateOf(false) }
@@ -57,688 +49,301 @@ fun AnimatedVisibilityExample() {
             enter = fadeIn() + slideInVertically(),
             exit = fadeOut() + slideOutVertically()
         ) {
-            Text(
-                "Hello, I'm animated!",
-                modifier = Modifier
-                    .padding(16.dp)
-                    .background(Color.Blue, RoundedCornerShape(8.dp))
-                    .padding(16.dp)
-            )
+            Text("Hello, I'm animated!")
         }
     }
 }
-```
 
----
-
-**Advanced AnimatedVisibility:**
-
-```kotlin
+// Expandable Card
 @Composable
 fun ExpandableCard() {
     var expanded by remember { mutableStateOf(false) }
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { expanded = !expanded }
-    ) {
+    Card(modifier = Modifier.clickable { expanded = !expanded }) {
         Column {
-            Text(
-                "Card Header",
-                modifier = Modifier.padding(16.dp)
-            )
-
+            Text("Card Header")
             AnimatedVisibility(
                 visible = expanded,
-                enter = expandVertically(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioLowBouncy,
-                        stiffness = Spring.StiffnessLow
-                    )
-                ) + fadeIn(),
+                enter = expandVertically() + fadeIn(),
                 exit = shrinkVertically() + fadeOut()
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Expanded content line 1")
-                    Text("Expanded content line 2")
-                    Text("Expanded content line 3")
-                }
+                Text("Expanded content")
             }
         }
     }
 }
 ```
 
----
-
-**Individual child animations:**
-
-```kotlin
-@Composable
-fun StaggeredAnimation() {
-    var visible by remember { mutableStateOf(false) }
-
-    Column {
-        Button(onClick = { visible = !visible }) {
-            Text("Toggle")
-        }
-
-        AnimatedVisibility(visible = visible) {
-            Column {
-                // Each child can have different animations
-                Text(
-                    "First",
-                    modifier = Modifier.animateEnterExit(
-                        enter = slideInHorizontally { -it },
-                        exit = slideOutHorizontally { -it }
-                    )
-                )
-
-                Text(
-                    "Second",
-                    modifier = Modifier.animateEnterExit(
-                        enter = slideInHorizontally { it },
-                        exit = slideOutHorizontally { it }
-                    )
-                )
-
-                Text(
-                    "Third",
-                    modifier = Modifier.animateEnterExit(
-                        enter = fadeIn(animationSpec = tween(1000)),
-                        exit = fadeOut(animationSpec = tween(1000))
-                    )
-                )
-            }
-        }
-    }
-}
-```
-
----
-
-### AnimatedContent
-
-**Purpose:** Animate between different content based on a target state.
-
-**When to use:**
-- Switching between different screens/views
-- Updating content based on state (loading → success → error)
-- Carousel/pager-like transitions
-- Form wizard steps
-
-**Key features:**
-- Content changes based on `targetState`
-- Sophisticated transition animations
-- Content size changes animate automatically
-- Supports custom transitions per state change
+**2. AnimatedContent:**
+Animate between different content based on target state changes.
 
 ```kotlin
+// State-based Content Animation
 @Composable
 fun AnimatedContentExample() {
     var count by remember { mutableStateOf(0) }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        AnimatedContent(
-            targetState = count,
-            transitionSpec = {
-                // Define how to transition from initialState to targetState
-                if (targetState > initialState) {
-                    // Increment: slide up
-                    slideInVertically { it } + fadeIn() togetherWith
-                        slideOutVertically { -it } + fadeOut()
-                } else {
-                    // Decrement: slide down
-                    slideInVertically { -it } + fadeIn() togetherWith
-                        slideOutVertically { it } + fadeOut()
-                }.using(
-                    SizeTransform(clip = false)
-                )
-            },
-            label = "count"
-        ) { targetCount ->
-            // Content changes based on targetCount
-            Text(
-                text = "$targetCount",
-                style = MaterialTheme.typography.displayLarge
-            )
-        }
-
-        Row {
-            Button(onClick = { count-- }) {
-                Text("−")
-            }
-            Spacer(Modifier.width(16.dp))
-            Button(onClick = { count++ }) {
-                Text("+")
-            }
-        }
-    }
-}
-```
-
----
-
-**State machine example:**
-
-```kotlin
-sealed class UiState {
-    object Loading : UiState()
-    data class Success(val data: String) : UiState()
-    data class Error(val message: String) : UiState()
-}
-
-@Composable
-fun LoadingStateMachine() {
-    var state by remember { mutableStateOf<UiState>(UiState.Loading) }
-
-    Column {
-        AnimatedContent(
-            targetState = state,
-            transitionSpec = {
-                fadeIn(animationSpec = tween(300)) togetherWith
-                    fadeOut(animationSpec = tween(300))
-            },
-            label = "state_machine"
-        ) { targetState ->
-            when (targetState) {
-                is UiState.Loading -> {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        CircularProgressIndicator()
-                        Text("Loading...")
-                    }
-                }
-
-                is UiState.Success -> {
-                    Column {
-                        Icon(Icons.Default.CheckCircle, "Success")
-                        Text("Success: ${targetState.data}")
-                    }
-                }
-
-                is UiState.Error -> {
-                    Column {
-                        Icon(Icons.Default.Error, "Error")
-                        Text(
-                            "Error: ${targetState.message}",
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
-                }
-            }
-        }
-
-        Row {
-            Button(onClick = { state = UiState.Loading }) {
-                Text("Loading")
-            }
-            Button(onClick = { state = UiState.Success("Data loaded!") }) {
-                Text("Success")
-            }
-            Button(onClick = { state = UiState.Error("Failed!") }) {
-                Text("Error")
-            }
-        }
-    }
-}
-```
-
----
-
-**Custom transitions per state pair:**
-
-```kotlin
-@Composable
-fun CustomTransitions() {
-    var step by remember { mutableStateOf(1) }
-
     AnimatedContent(
-        targetState = step,
+        targetState = count,
         transitionSpec = {
-            when {
-                // Step 1 → 2: Slide left
-                initialState == 1 && targetState == 2 -> {
-                    slideInHorizontally { it } togetherWith
-                        slideOutHorizontally { -it }
-                }
-                // Step 2 → 3: Slide up
-                initialState == 2 && targetState == 3 -> {
-                    slideInVertically { it } togetherWith
-                        slideOutVertically { -it }
-                }
-                // Any backward: Fade
-                targetState < initialState -> {
-                    fadeIn() togetherWith fadeOut()
-                }
-                // Default: Scale
-                else -> {
-                    scaleIn() togetherWith scaleOut()
-                }
-            }.using(SizeTransform(clip = false))
-        },
-        label = "steps"
-    ) { currentStep ->
-        when (currentStep) {
-            1 -> StepOneContent()
-            2 -> StepTwoContent()
-            3 -> StepThreeContent()
-            else -> Text("Unknown step")
+            if (targetState > initialState) {
+                slideInVertically { it } + fadeIn() togetherWith
+                    slideOutVertically { -it } + fadeOut()
+            } else {
+                slideInVertically { -it } + fadeIn() togetherWith
+                    slideOutVertically { it } + fadeOut()
+            }
+        }
+    ) { targetCount ->
+        Text("Count: $targetCount")
+    }
+}
+
+// Loading States
+@Composable
+fun LoadingStates() {
+    var state by remember { mutableStateOf(LoadingState.Loading) }
+
+    AnimatedContent(targetState = state) { currentState ->
+        when (currentState) {
+            LoadingState.Loading -> CircularProgressIndicator()
+            LoadingState.Success -> Text("Success!")
+            LoadingState.Error -> Text("Error occurred")
         }
     }
 }
 ```
 
----
-
-### Crossfade
-
-**Purpose:** Simple crossfade transition between content.
-
-**When to use:**
-- Simple content switching
-- No directional animation needed
-- Want smooth, simple fade transition
-- Tab content switching
-
-**Key features:**
-- Simplest API
-- Only fade animation
-- No enter/exit control
-- No size animation
+**3. Crossfade:**
+Simple fade transition between different content states.
 
 ```kotlin
+// Simple Crossfade
 @Composable
 fun CrossfadeExample() {
-    var screen by remember { mutableStateOf("home") }
+    var currentScreen by remember { mutableStateOf("Home") }
 
-    Column {
-        Row {
-            Button(onClick = { screen = "home" }) {
-                Text("Home")
-            }
-            Button(onClick = { screen = "profile" }) {
-                Text("Profile")
-            }
-            Button(onClick = { screen = "settings" }) {
-                Text("Settings")
-            }
+    Crossfade(targetState = currentScreen) { screen ->
+        when (screen) {
+            "Home" -> HomeScreen()
+            "Profile" -> ProfileScreen()
+            "Settings" -> SettingsScreen()
         }
-
-        Crossfade(
-            targetState = screen,
-            animationSpec = tween(300),
-            label = "screen"
-        ) { currentScreen ->
-            when (currentScreen) {
-                "home" -> HomeScreen()
-                "profile" -> ProfileScreen()
-                "settings" -> SettingsScreen()
-            }
-        }
-    }
-}
-
-@Composable
-fun HomeScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.LightGray),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("Home Screen")
-    }
-}
-
-@Composable
-fun ProfileScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Cyan),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("Profile Screen")
-    }
-}
-
-@Composable
-fun SettingsScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Yellow),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("Settings Screen")
     }
 }
 ```
 
----
-
-### Comparison Table
+**API Comparison:**
 
 | Feature | AnimatedVisibility | AnimatedContent | Crossfade |
 |---------|-------------------|-----------------|-----------|
-| **Primary use** | Show/hide | State-based content | Simple switching |
-| **Animations** | Enter/Exit | Custom per transition | Fade only |
-| **Direction control** |  Yes |  Yes |  No |
-| **Size animation** |  Yes |  Yes |  No |
-| **Child animations** |  Yes |  No |  No |
-| **API complexity** | Medium | High | Low |
+| **Primary Use** | Show/hide content | State-based content | Simple switching |
+| **Animations** | Enter/exit transitions | Custom transitions | Fade only |
+| **Direction Control** | Yes | Yes | No |
+| **Size Animation** | Yes | Yes | No |
+| **API Complexity** | Medium | High | Low |
 | **Flexibility** | High | Highest | Low |
-| **Common use case** | Collapsible sections | Screen transitions | Tab content |
 
----
+**When to Use Each:**
 
-### When to Use What
+**AnimatedVisibility:**
+- Toggle visibility on/off
+- Show/hide optional UI elements
+- Expand/collapse sections
+- Modal dialogs, tooltips
 
-**Use AnimatedVisibility when:**
-```kotlin
-//  Toggling visibility
-var showMenu by remember { mutableStateOf(false) }
-AnimatedVisibility(visible = showMenu) {
-    DropdownMenu()
-}
+**AnimatedContent:**
+- Switching between screens/views
+- State changes (loading → success → error)
+- Carousel/pager transitions
+- Form wizard steps
 
-//  Expand/collapse
-var expanded by remember { mutableStateOf(false) }
-AnimatedVisibility(visible = expanded) {
-    DetailedContent()
-}
+**Crossfade:**
+- Simple content switching
+- Minimal animation needs
+- Quick prototyping
+- Basic state transitions
 
-//  Conditional UI elements
-AnimatedVisibility(visible = hasError) {
-    ErrorMessage()
-}
-```
-
----
-
-**Use AnimatedContent when:**
-```kotlin
-//  Multiple states with different content
-AnimatedContent(targetState = loadingState) { state ->
-    when (state) {
-        Loading -> LoadingSpinner()
-        Success -> SuccessView()
-        Error -> ErrorView()
-    }
-}
-
-//  Directional transitions
-AnimatedContent(
-    targetState = currentPage,
-    transitionSpec = {
-        if (targetState > initialState) {
-            slideInHorizontally { it } togetherWith slideOutHorizontally { -it }
-        } else {
-            slideInHorizontally { -it } togetherWith slideOutHorizontally { it }
-        }
-    }
-) { page ->
-    PageContent(page)
-}
-
-//  Form wizards
-AnimatedContent(targetState = step) { currentStep ->
-    when (currentStep) {
-        1 -> PersonalInfoForm()
-        2 -> AddressForm()
-        3 -> ConfirmationForm()
-    }
-}
-```
-
----
-
-**Use Crossfade when:**
-```kotlin
-//  Simple tab switching
-Crossfade(targetState = selectedTab) { tab ->
-    when (tab) {
-        Tab.Home -> HomeContent()
-        Tab.Search -> SearchContent()
-        Tab.Profile -> ProfileContent()
-    }
-}
-
-//  Image switching
-Crossfade(targetState = currentImageUrl) { imageUrl ->
-    AsyncImage(model = imageUrl, contentDescription = null)
-}
-
-//  Simple content swap
-Crossfade(targetState = isLoggedIn) { loggedIn ->
-    if (loggedIn) {
-        MainApp()
-    } else {
-        LoginScreen()
-    }
-}
-```
-
----
-
-### Real-World Example: Complete UI
-
-```kotlin
-@Composable
-fun CompleteAnimationExample() {
-    var selectedTab by remember { mutableStateOf(0) }
-    var showFilters by remember { mutableStateOf(false) }
-    var loadingState by remember { mutableStateOf<LoadState>(LoadState.Success) }
-
-    Column {
-        // Tab bar
-        TabRow(selectedTab) {
-            Tab(
-                selected = selectedTab == 0,
-                onClick = { selectedTab = 0 }
-            ) {
-                Text("List")
-            }
-            Tab(
-                selected = selectedTab == 1,
-                onClick = { selectedTab = 1 }
-            ) {
-                Text("Grid")
-            }
-        }
-
-        // Filter toggle
-        Row {
-            Button(onClick = { showFilters = !showFilters }) {
-                Text("Filters")
-            }
-        }
-
-        // ANIMATED VISIBILITY: Filter section
-        AnimatedVisibility(
-            visible = showFilters,
-            enter = expandVertically() + fadeIn(),
-            exit = shrinkVertically() + fadeOut()
-        ) {
-            FilterSection()
-        }
-
-        // ANIMATED CONTENT: Loading state
-        AnimatedContent(
-            targetState = loadingState,
-            transitionSpec = {
-                fadeIn(tween(300)) togetherWith fadeOut(tween(300))
-            }
-        ) { state ->
-            when (state) {
-                is LoadState.Loading -> LoadingView()
-                is LoadState.Success -> {
-                    // CROSSFADE: Tab content
-                    Crossfade(targetState = selectedTab) { tab ->
-                        when (tab) {
-                            0 -> ListViewContent()
-                            1 -> GridViewContent()
-                        }
-                    }
-                }
-                is LoadState.Error -> ErrorView(state.message)
-            }
-        }
-    }
-}
-
-sealed class LoadState {
-    object Loading : LoadState()
-    object Success : LoadState()
-    data class Error(val message: String) : LoadState()
-}
-```
-
----
-
-### Best Practices
-
-**1. Choose based on use case:**
-
-```kotlin
-//  DO: Match animation to intent
-AnimatedVisibility(visible = expanded) // Reveal/hide
-AnimatedContent(targetState = step)    // State changes
-Crossfade(targetState = tab)          // Simple switch
-```
-
-**2. Consider performance:**
-
-```kotlin
-//  AnimatedVisibility: Most efficient
-// Only one content tree, show/hide
-
-//  AnimatedContent: Creates new content
-// Old and new content exist during transition
-
-//  Crossfade: Lightweight
-// Simple fade, minimal overhead
-```
-
-**3. Use appropriate animation specs:**
-
-```kotlin
-// Quick UI feedback
-enter = fadeIn(tween(150))
-
-// Smooth natural motion
-enter = slideInVertically(spring())
-
-// Attention-grabbing
-enter = scaleIn(spring(dampingRatio = Spring.DampingRatioHighBouncy))
-```
-
-**4. Consider content size:**
-
-```kotlin
-// For size-changing content
-AnimatedContent(
-    targetState = state,
-    transitionSpec = {
-        fadeIn() togetherWith fadeOut() using
-            SizeTransform(clip = false) // Animate size
-    }
-) { /* content */ }
-```
-
----
+**Best Practices:**
+- Choose based on use case requirements
+- Consider performance implications
+- Use appropriate animation specifications
+- Account for content size changes
+- Test on different screen sizes
 
 ## Ответ (RU)
 
-Compose предоставляет три основных API для переходов контента: **AnimatedVisibility**, **AnimatedContent** и **Crossfade**. Каждый служит разным целям и предоставляет разные возможности анимации.
+**API анимации Compose** предоставляют три основных подхода для переходов контента: AnimatedVisibility, AnimatedContent и Crossfade, каждый оптимизирован для разных случаев использования.
 
-### AnimatedVisibility
+**Теория API анимации:**
+Jetpack Compose предлагает специализированные API анимации для разных сценариев. AnimatedVisibility обрабатывает переходы показа/скрытия, AnimatedContent управляет изменениями контента на основе состояния, а Crossfade обеспечивает простые переходы затухания между контентом.
 
-**Назначение:** Показать/скрыть контент с анимацией появления/исчезновения.
+**1. AnimatedVisibility:**
+Показ/скрытие контента с анимациями входа/выхода для переключения видимости.
 
-**Когда использовать:**
-- Переключение видимости вкл/выкл
-- Показ/скрытие опциональных UI элементов
-- Раскрытие/сворачивание секций
+```kotlin
+// Базовый AnimatedVisibility
+@Composable
+fun AnimatedVisibilityExample() {
+    var visible by remember { mutableStateOf(false) }
 
-**Ключевые возможности:**
-- Переходы появления (fade in, slide in, scale in, expand)
-- Переходы исчезновения (fade out, slide out, scale out, shrink)
-- Одновременные анимации появления/исчезновения
-- Дочерние элементы могут анимироваться независимо
+    Column {
+        Button(onClick = { visible = !visible }) {
+            Text(if (visible) "Скрыть" else "Показать")
+        }
 
-### AnimatedContent
+        AnimatedVisibility(
+            visible = visible,
+            enter = fadeIn() + slideInVertically(),
+            exit = fadeOut() + slideOutVertically()
+        ) {
+            Text("Привет, я анимированный!")
+        }
+    }
+}
 
-**Назначение:** Анимация между разным контентом на основе целевого состояния.
+// Раскрывающаяся карточка
+@Composable
+fun ExpandableCard() {
+    var expanded by remember { mutableStateOf(false) }
 
-**Когда использовать:**
-- Переключение между разными экранами/представлениями
-- Обновление контента на основе состояния (загрузка → успех → ошибка)
-- Переходы карусели/пейджера
-- Шаги мастера форм
+    Card(modifier = Modifier.clickable { expanded = !expanded }) {
+        Column {
+            Text("Заголовок карточки")
+            AnimatedVisibility(
+                visible = expanded,
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut()
+            ) {
+                Text("Раскрытое содержимое")
+            }
+        }
+    }
+}
+```
 
-**Ключевые возможности:**
-- Контент меняется на основе `targetState`
-- Сложные переходные анимации
-- Изменения размера контента анимируются автоматически
-- Поддержка пользовательских переходов для каждого изменения состояния
+**2. AnimatedContent:**
+Анимация между разным контентом на основе изменений целевого состояния.
 
-### Crossfade
+```kotlin
+// Анимация контента на основе состояния
+@Composable
+fun AnimatedContentExample() {
+    var count by remember { mutableStateOf(0) }
 
-**Назначение:** Простой переход с перекрестным затуханием между контентом.
+    AnimatedContent(
+        targetState = count,
+        transitionSpec = {
+            if (targetState > initialState) {
+                slideInVertically { it } + fadeIn() togetherWith
+                    slideOutVertically { -it } + fadeOut()
+            } else {
+                slideInVertically { -it } + fadeIn() togetherWith
+                    slideOutVertically { it } + fadeOut()
+            }
+        }
+    ) { targetCount ->
+        Text("Счетчик: $targetCount")
+    }
+}
 
-**Когда использовать:**
-- Простое переключение контента
-- Не нужна направленная анимация
-- Нужен плавный, простой переход
-- Переключение контента вкладок
+// Состояния загрузки
+@Composable
+fun LoadingStates() {
+    var state by remember { mutableStateOf(LoadingState.Loading) }
 
-**Ключевые возможности:**
-- Простейший API
-- Только анимация затухания
-- Нет контроля появления/исчезновения
-- Нет анимации размера
+    AnimatedContent(targetState = state) { currentState ->
+        when (currentState) {
+            LoadingState.Loading -> CircularProgressIndicator()
+            LoadingState.Success -> Text("Успех!")
+            LoadingState.Error -> Text("Произошла ошибка")
+        }
+    }
+}
+```
 
-### Таблица сравнения
+**3. Crossfade:**
+Простой переход затухания между разными состояниями контента.
+
+```kotlin
+// Простой Crossfade
+@Composable
+fun CrossfadeExample() {
+    var currentScreen by remember { mutableStateOf("Home") }
+
+    Crossfade(targetState = currentScreen) { screen ->
+        when (screen) {
+            "Home" -> HomeScreen()
+            "Profile" -> ProfileScreen()
+            "Settings" -> SettingsScreen()
+        }
+    }
+}
+```
+
+**Сравнение API:**
 
 | Функция | AnimatedVisibility | AnimatedContent | Crossfade |
 |---------|-------------------|-----------------|-----------|
-| **Основное использование** | Показ/скрытие | Контент на основе состояния | Простое переключение |
-| **Анимации** | Появление/Исчезновение | Пользовательские для перехода | Только затухание |
-| **Контроль направления** |  Да |  Да |  Нет |
-| **Анимация размера** |  Да |  Да |  Нет |
+| **Основное использование** | Показ/скрытие контента | Контент на основе состояния | Простое переключение |
+| **Анимации** | Переходы входа/выхода | Пользовательские переходы | Только затухание |
+| **Контроль направления** | Да | Да | Нет |
+| **Анимация размера** | Да | Да | Нет |
 | **Сложность API** | Средняя | Высокая | Низкая |
 | **Гибкость** | Высокая | Наивысшая | Низкая |
 
-### Лучшие практики
+**Когда использовать каждый:**
 
-1. Выбирайте на основе использования
-2. Учитывайте производительность
-3. Используйте подходящие спецификации анимации
-4. Учитывайте размер контента
+**AnimatedVisibility:**
+- Переключение видимости вкл/выкл
+- Показ/скрытие опциональных элементов UI
+- Раскрытие/сворачивание секций
+- Модальные диалоги, подсказки
 
-Правильный выбор API анимации делает UI более отзывчивым и приятным для пользователей.
+**AnimatedContent:**
+- Переключение между экранами/представлениями
+- Изменения состояния (загрузка → успех → ошибка)
+- Переходы карусели/пейджера
+- Шаги мастера форм
 
+**Crossfade:**
+- Простое переключение контента
+- Минимальные потребности в анимации
+- Быстрое прототипирование
+- Базовые переходы состояния
+
+**Лучшие практики:**
+- Выбирайте на основе требований случая использования
+- Учитывайте влияние на производительность
+- Используйте подходящие спецификации анимации
+- Учитывайте изменения размера контента
+- Тестируйте на разных размерах экрана
 
 ---
 
+## Follow-ups
+
+- How do you handle performance with complex animations?
+- What's the difference between animateEnterExit and AnimatedVisibility?
+- How do you create custom transition specifications?
+- When should you avoid animations in Compose?
+
+## References
+
+- [[c-animations]]
+- [Compose Animation Guide](https://developer.android.com/jetpack/compose/animation)
+- [Animation Best Practices](https://developer.android.com/jetpack/compose/animation/best-practices)
+
 ## Related Questions
 
-### Hub
-- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+### Prerequisites (Easier)
+- [[q-android-app-components--android--easy]]
+- [[q-android-project-parts--android--easy]]
 
-### Related (Medium)
-- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
-- [[q-mutable-state-compose--android--medium]] - MutableState basics
-- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
+### Related (Same Level)
+- [[q-android-testing-strategies--android--medium]]
+- [[q-android-architectural-patterns--android--medium]]
+- [[q-android-performance-measurement-tools--android--medium]]
 
 ### Advanced (Harder)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
-- [[q-stable-classes-compose--android--hard]] - @Stable annotation
-- [[q-stable-annotation-compose--android--hard]] - Stability annotations
-
+- [[q-android-runtime-internals--android--hard]]
