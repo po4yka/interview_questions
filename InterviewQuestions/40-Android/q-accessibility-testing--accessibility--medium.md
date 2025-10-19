@@ -1,32 +1,45 @@
 ---
 id: 20251012-122754
-title: "Accessibility Testing / Accessibility Тестирование"
+title: Accessibility Testing / Тестирование доступности
+aliases: [Accessibility Testing, Тестирование доступности]
 topic: android
+subtopics: [ui-accessibility, testing-automation]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-created: 2025-10-11
-tags: [accessibility, testing, automated-testing, talkback, difficulty/medium]
-related: [q-tasks-back-stack--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard, q-kmm-dependency-injection--multiplatform--medium]
+related:
   - q-accessibility-compose--accessibility--medium
   - q-accessibility-talkback--accessibility--medium
   - q-cicd-automated-testing--devops--medium
+created: 2025-10-11
+updated: 2025-10-15
+tags:
+  - android/ui-accessibility
+  - android/testing-automation
+  - accessibility
+  - testing
+  - automated-testing
+  - talkback
+  - difficulty/medium
 ---
 # Question (EN)
 How do you test accessibility in Android apps? What tools and techniques are available for automated accessibility testing? How do you write accessibility tests with Espresso and Compose Test?
 
+# Вопрос (RU)
+Как тестировать доступность в Android-приложениях? Какие инструменты и техники доступны для автоматизированного тестирования доступности? Как писать accessibility-тесты с Espresso и Compose Test?
+
+---
+
 ## Answer (EN)
-### Overview
 
-**Accessibility testing** ensures your app is usable by everyone. Testing approaches:
-1. **Manual testing** - Test with TalkBack, Switch Access
-2. **Automated testing** - Espresso, Compose Test, Robolectric
-3. **Scanner tools** - Accessibility Scanner, Lint checks
-4. **User testing** - Feedback from users with disabilities
+Accessibility testing ensures your app is usable by everyone. Testing approaches: manual testing (TalkBack, Switch Access), automated testing (Espresso, Compose Test, Robolectric), scanner tools (Accessibility Scanner, Lint checks), and user testing.
 
-### 1. Accessibility Scanner
+#### Accessibility Scanner
 
-**Google's Accessibility Scanner** - Visual UI analysis tool:
+Google's Accessibility Scanner - visual UI analysis tool:
 
 ```
 Installation:
@@ -35,34 +48,33 @@ Installation:
 3. Tap floating action button to scan screen
 
 What it checks:
- Touch target sizes (minimum 48dp)
- Content descriptions
- Text contrast ratios
- Clickable items
- Content labeling
- Implementation suggestions
+- Touch target sizes (minimum 48dp)
+- Content descriptions
+- Text contrast ratios
+- Clickable items
+- Content labeling
 ```
 
-**Scanner findings example**:
+Scanner findings example:
 ```
- Item 1: "Touch target too small"
-   - Current: 32dp x 32dp
-   - Minimum: 48dp x 48dp
-   - Suggestion: Increase button size or add padding
+Item 1: "Touch target too small"
+  - Current: 32dp x 32dp
+  - Minimum: 48dp x 48dp
+  - Suggestion: Increase button size or add padding
 
- Item 2: "Missing contentDescription"
-   - Element: ImageButton
-   - Suggestion: Add contentDescription
+Item 2: "Missing contentDescription"
+  - Element: ImageButton
+  - Suggestion: Add contentDescription
 
- Item 3: "Low contrast ratio"
-   - Current: 2.1:1
-   - Minimum: 4.5:1 (WCAG AA)
-   - Suggestion: Increase contrast or use different colors
+Item 3: "Low contrast ratio"
+  - Current: 2.1:1
+  - Minimum: 4.5:1 (WCAG AA)
+  - Suggestion: Increase contrast or use different colors
 ```
 
-### 2. Lint Checks for Accessibility
+#### Lint Checks
 
-**Enable accessibility lint checks**:
+Enable accessibility lint checks:
 
 ```kotlin
 // build.gradle.kts
@@ -74,47 +86,39 @@ android {
             "LabelFor",
             "TouchTargetSizeCheck"
         )
-
-        // Fail build on accessibility errors
         abortOnError = true
     }
 }
 ```
 
-**Common lint warnings**:
+Common lint warnings:
 
 ```xml
-<!--  Missing contentDescription -->
+<!-- Missing contentDescription -->
 <ImageView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/icon" />
 <!-- Warning: [ContentDescription] Missing contentDescription attribute on image -->
 
-<!--  GOOD -->
+<!-- GOOD -->
 <ImageView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/icon"
     android:contentDescription="@string/icon_description" />
 
-<!--  Touch target too small -->
+<!-- Touch target too small -->
 <ImageButton
     android:layout_width="24dp"
     android:layout_height="24dp"
     android:src="@drawable/icon" />
 <!-- Warning: [TouchTargetSizeCheck] Touch target is 24x24dp, should be at least 48x48dp -->
-
-<!--  GOOD -->
-<ImageButton
-    android:layout_width="48dp"
-    android:layout_height="48dp"
-    android:src="@drawable/icon" />
 ```
 
-### 3. Espresso Accessibility Tests
+#### Espresso Accessibility Tests
 
-**dependencies**:
+Dependencies:
 
 ```kotlin
 androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -122,7 +126,7 @@ androidTestImplementation("androidx.test.espresso:espresso-accessibility:3.5.1")
 androidTestImplementation("com.google.android.apps.common.testing.accessibility.framework:accessibility-test-framework:4.0.0")
 ```
 
-**Basic Espresso accessibility test**:
+Basic Espresso accessibility test:
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
@@ -139,33 +143,6 @@ class AccessibilityTest {
         // Perform actions - accessibility is checked automatically
         onView(withId(R.id.button)).perform(click())
         onView(withId(R.id.textField)).perform(typeText("Hello"))
-
-        // Accessibility violations will fail the test
-    }
-
-    @Test
-    fun testAccessibility_specificView() {
-        // Check specific view
-        onView(withId(R.id.profileImage))
-            .check(matches(withContentDescription(not(isEmptyOrNullString()))))
-    }
-
-    @Test
-    fun testAccessibility_touchTargetSize() {
-        // Verify minimum touch target size
-        onView(withId(R.id.deleteButton))
-            .check { view, exception ->
-                val width = view.width
-                val height = view.height
-                val minSize = (48 * view.context.resources.displayMetrics.density).toInt()
-
-                if (width < minSize || height < minSize) {
-                    throw AssertionError(
-                        "Touch target too small: ${width}x${height}dp, " +
-                        "minimum is ${minSize}x${minSize}dp"
-                    )
-                }
-            }
     }
 
     @Test
@@ -207,7 +184,7 @@ class AccessibilityTest {
 }
 ```
 
-**Configure accessibility checks**:
+Configure accessibility checks:
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
@@ -215,18 +192,14 @@ class ConfiguredAccessibilityTest {
 
     @Before
     fun setup() {
-        // Configure which checks to run
         AccessibilityChecks.enable()
             .setRunChecksFromRootView(true)
             .setSuppressingResultMatcher(
-                // Suppress known issues
                 anyOf(
-                    // Suppress contrast issues for specific views
                     allOf(
                         matchesViews(withId(R.id.logo)),
                         matchesCheck(is(TextContrastCheck::class.java))
                     ),
-                    // Suppress touch target issues for readonly text
                     allOf(
                         matchesViews(withClassName(containsString("TextView"))),
                         matchesCheck(is(TouchTargetSizeCheck::class.java))
@@ -242,9 +215,9 @@ class ConfiguredAccessibilityTest {
 }
 ```
 
-### 4. Compose Accessibility Tests
+#### Compose Accessibility Tests
 
-**Basic Compose accessibility test**:
+Basic Compose accessibility test:
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
@@ -264,7 +237,6 @@ class ComposeAccessibilityTest {
             }
         }
 
-        // Verify content description exists
         composeTestRule
             .onNodeWithContentDescription("Delete item")
             .assertExists()
@@ -282,7 +254,6 @@ class ComposeAccessibilityTest {
             )
         }
 
-        // Verify toggleable state
         composeTestRule
             .onNode(hasToggleableState(ToggleableState.Off))
             .assertExists()
@@ -311,7 +282,6 @@ class ComposeAccessibilityTest {
             }
         }
 
-        // Verify merged semantics
         composeTestRule
             .onNodeWithContentDescription("iPhone 15, $999, 4.5 stars")
             .assertExists()
@@ -321,7 +291,6 @@ class ComposeAccessibilityTest {
     @Test
     fun testAccessibility_customActions() {
         var deleteClicked = false
-        var shareClicked = false
 
         composeTestRule.setContent {
             Card(
@@ -332,10 +301,6 @@ class ComposeAccessibilityTest {
                             CustomAccessibilityAction("Delete") {
                                 deleteClicked = true
                                 true
-                            },
-                            CustomAccessibilityAction("Share") {
-                                shareClicked = true
-                                true
                             }
                         )
                     }
@@ -344,13 +309,9 @@ class ComposeAccessibilityTest {
             }
         }
 
-        // Perform custom action
         composeTestRule
             .onNode(hasCustomAction("Delete"))
             .assertExists()
-
-        // Note: Actually triggering custom actions in tests is complex
-        // Typically verified through manual TalkBack testing
     }
 
     @Test
@@ -368,94 +329,17 @@ class ComposeAccessibilityTest {
             }
         }
 
-        // Verify role
         composeTestRule
             .onNode(hasRole(Role.Button))
             .assertExists()
             .assertHasClickAction()
     }
-
-    @Test
-    fun testAccessibility_stateDescription() {
-        var isLoading by mutableStateOf(false)
-
-        composeTestRule.setContent {
-            Button(
-                onClick = { isLoading = true },
-                modifier = Modifier.semantics {
-                    stateDescription = if (isLoading) "Loading" else "Ready"
-                }
-            ) {
-                if (isLoading) {
-                    CircularProgressIndicator()
-                } else {
-                    Text("Submit")
-                }
-            }
-        }
-
-        // Verify state description
-        composeTestRule
-            .onNode(hasStateDescription("Ready"))
-            .assertExists()
-
-        composeTestRule
-            .onNode(hasStateDescription("Ready"))
-            .performClick()
-
-        composeTestRule
-            .onNode(hasStateDescription("Loading"))
-            .assertExists()
-    }
-
-    @Test
-    fun testAccessibility_heading() {
-        composeTestRule.setContent {
-            Column {
-                Text(
-                    text = "Settings",
-                    modifier = Modifier.semantics { heading() }
-                )
-                Text("Content")
-            }
-        }
-
-        // Verify heading exists
-        composeTestRule
-            .onNode(isHeading())
-            .assertExists()
-            .assertTextEquals("Settings")
-    }
-
-    @Test
-    fun testAccessibility_traversalIndex() {
-        composeTestRule.setContent {
-            Column {
-                Text("First", modifier = Modifier.testTag("first"))
-                Text("Second", modifier = Modifier.testTag("second"))
-                Text("Third", modifier = Modifier.testTag("third"))
-            }
-        }
-
-        // Verify traversal order (simplified example)
-        composeTestRule
-            .onNodeWithTag("first")
-            .assertExists()
-
-        composeTestRule
-            .onNodeWithTag("second")
-            .assertExists()
-
-        composeTestRule
-            .onNodeWithTag("third")
-            .assertExists()
-    }
 }
 ```
 
-### 5. Robolectric Accessibility Tests
+#### Robolectric Accessibility Tests
 
-**Unit tests with Robolectric**:
+Unit tests with Robolectric:
 
 ```kotlin
 @RunWith(RobolectricTestRunner::class)
@@ -472,7 +356,6 @@ class RobolectricAccessibilityTest {
 
         val imageButton = activity.findViewById<ImageButton>(R.id.deleteButton)
 
-        // Verify content description
         assertNotNull(imageButton.contentDescription)
         assertEquals("Delete", imageButton.contentDescription)
     }
@@ -487,134 +370,24 @@ class RobolectricAccessibilityTest {
 
         val button = activity.findViewById<Button>(R.id.submitButton)
 
-        // Measure view
         val widthSpec = View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.AT_MOST)
         val heightSpec = View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.AT_MOST)
         button.measure(widthSpec, heightSpec)
 
         val minSize = (48 * activity.resources.displayMetrics.density).toInt()
 
-        // Verify size
         assertTrue(
             "Touch target too small: ${button.measuredWidth}x${button.measuredHeight}, " +
             "minimum is ${minSize}x${minSize}",
             button.measuredWidth >= minSize && button.measuredHeight >= minSize
         )
     }
-
-    @Test
-    fun testAccessibility_announcements() {
-        val activity = Robolectric.buildActivity(MainActivity::class.java)
-            .create()
-            .start()
-            .resume()
-            .get()
-
-        val shadowActivity = shadowOf(activity)
-
-        // Trigger action that should announce
-        activity.findViewById<Button>(R.id.deleteButton).performClick()
-
-        // Verify accessibility event was sent
-        val events = shadowActivity.lastSentAccessibilityEvents
-        assertTrue(events.any { it.eventType == AccessibilityEvent.TYPE_ANNOUNCEMENT })
-    }
 }
 ```
 
-### 6. Screenshot Testing for Accessibility
+#### CI/CD Integration
 
-**Visual regression for contrast ratios**:
-
-```kotlin
-@RunWith(AndroidJUnit4::class)
-class AccessibilityScreenshotTest {
-
-    @get:Rule
-    val composeTestRule = createComposeRule()
-
-    @Test
-    fun testAccessibility_contrastRatios() {
-        composeTestRule.setContent {
-            Column {
-                // Test various text/background combinations
-                Text(
-                    text = "Black on White",
-                    color = Color.Black,
-                    modifier = Modifier.background(Color.White)
-                )
-
-                Text(
-                    text = "White on Black",
-                    color = Color.White,
-                    modifier = Modifier.background(Color.Black)
-                )
-
-                // This should fail WCAG AA (4.5:1)
-                Text(
-                    text = "Gray on Light Gray",
-                    color = Color.Gray,
-                    modifier = Modifier.background(Color.LightGray)
-                )
-            }
-        }
-
-        // Capture screenshot and analyze contrast
-        // (Using a tool like Paparazzi or custom screenshot testing)
-        composeTestRule.onRoot().captureToImage()
-
-        // Analyze contrast ratios programmatically
-        // This is a simplified example; actual implementation would be more complex
-    }
-}
-```
-
-### 7. Custom Accessibility Test Rules
-
-**Reusable test rules**:
-
-```kotlin
-class AccessibilityTestRule : TestRule {
-
-    override fun apply(base: Statement, description: Description): Statement {
-        return object : Statement() {
-            override fun evaluate() {
-                // Enable accessibility checks
-                AccessibilityChecks.enable()
-                    .setRunChecksFromRootView(true)
-
-                try {
-                    base.evaluate()
-                } finally {
-                    // Cleanup
-                    AccessibilityChecks.disable()
-                }
-            }
-        }
-    }
-}
-
-// Usage
-@RunWith(AndroidJUnit4::class)
-class MyAccessibilityTest {
-
-    @get:Rule
-    val accessibilityRule = AccessibilityTestRule()
-
-    @get:Rule
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
-
-    @Test
-    fun testFeature() {
-        // Accessibility automatically checked
-        onView(withId(R.id.button)).perform(click())
-    }
-}
-```
-
-### 8. CI/CD Integration
-
-**GitHub Actions with accessibility tests**:
+GitHub Actions with accessibility tests:
 
 ```yaml
 name: Accessibility Tests
@@ -648,103 +421,15 @@ jobs:
         with:
           name: lint-results
           path: app/build/reports/lint-results-debug.html
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: test-results
-          path: |
-            app/build/reports/tests/
-            app/build/reports/androidTests/
-
-      - name: Comment on PR
-        if: failure()
-        uses: actions/github-script@v6
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: ' Accessibility tests failed. Please review the results.'
-            })
 ```
 
-### Best Practices
+#### Best Practices
 
-1. **Run accessibility tests in CI**
-   ```kotlin
-   //  GOOD - Catch issues early
-   ./gradlew testDebugUnitTest connectedDebugAndroidTest
-
-   //  BAD - Only manual testing
-   ```
-
-2. **Test with real assistive technologies**
-   ```
-    Test with TalkBack enabled
-    Test with large text sizes
-    Test with high contrast mode
-    Test with display scaling
-    Test with Switch Access
-   ```
-
-3. **Automate repetitive checks**
-   ```kotlin
-   //  GOOD - Automated checks
-   @Test
-   fun testAllImagesHaveContentDescriptions() {
-       // Automated check for all ImageViews
-   }
-
-   //  BAD - Manual only
-   ```
-
-4. **Test early and often**
-   ```
-    Add accessibility tests from the start
-    Run tests on every commit
-    Include in PR reviews
-   ```
-
-5. **Get user feedback**
-   ```
-    Test with users who rely on assistive technology
-    Conduct usability studies
-    Gather feedback through support channels
-   ```
-
-### Summary
-
-**Testing approaches:**
-1.  **Manual testing** - TalkBack, Scanner, real devices
-2.  **Automated testing** - Espresso, Compose Test, Robolectric
-3.  **Lint checks** - Catch issues at build time
-4.  **CI/CD integration** - Run tests automatically
-5.  **User testing** - Feedback from real users
-
-**Key tools:**
-- **Accessibility Scanner** - Visual UI analysis
-- **Lint** - Static analysis
-- **Espresso** - Instrumented tests
-- **Compose Test** - Compose UI tests
-- **Robolectric** - Fast unit tests
-
-**What to test:**
-- Content descriptions exist and are meaningful
-- Touch targets are at least 48dp
-- Text contrast meets WCAG AA (4.5:1)
-- Focus order is logical
-- Custom actions work correctly
-- State changes are announced
-- Forms have proper labels and error messages
-
-**CI/CD:**
-- Run accessibility tests on every PR
-- Fail builds on accessibility violations
-- Upload reports for review
-- Comment on PRs with failures
+1. Run accessibility tests in CI
+2. Test with real assistive technologies
+3. Automate repetitive checks
+4. Test early and often
+5. Get user feedback
 
 ---
 
