@@ -343,6 +343,12 @@ SORT updated DESC
 
 ---
 
-**Emoji Rule**: Do not use emoji in vault notes or agent-created content. Use text equivalents: "CORRECT", "WRONG", "NOTE", "WARNING". Exception: Emoji may appear in Russian content sections where culturally appropriate.
+## Emoji Rule
+
+**FORBIDDEN**: Do not use emoji in vault notes or agent-created content. Use text equivalents instead: REQUIRED, FORBIDDEN, WARNING, NOTE.
+
+This rule applies to all content - English, Russian, code comments, and documentation. Keep the vault clean and professional.
+
+---
 
 **Summary**: Always use controlled vocabularies, validate YAML, keep both languages in one note, set `status: draft`, and link to concepts + MOCs. When in doubt, ask the user or check TAXONOMY.md.
