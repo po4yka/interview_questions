@@ -15,7 +15,6 @@ created: 2025-10-15
 updated: 2025-10-15
 tags: [android/app-components, android/architecture, app-components, architecture, difficulty/easy]
 ---
-
 # Question (EN)
 > What are the main components of an Android application?
 
@@ -173,15 +172,11 @@ class MyContentProvider : ContentProvider() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-basics--android--easy]] - Android fundamentals
-- [[q-manifest-file--android--easy]] - Manifest configuration
+- [[q-gradle-basics--android--easy]] - Build system
+- [[q-what-is-intent--android--easy]] - Intent system
 
 ### Related (Medium)
 - [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle
-- [[q-service-types--android--medium]] - Service types
-- [[q-broadcast-receivers--android--medium]] - Broadcast receivers
-- [[q-content-providers--android--medium]] - Content providers
-
-### Advanced (Harder)
-- [[q-component-communication--android--hard]] - Advanced communication
-- [[q-custom-content-providers--android--hard]] - Custom providers
+- [[q-what-are-services-for--android--easy]] - Service purpose
+- [[q-what-is-broadcastreceiver--android--easy]] - Broadcast receivers
+- [[q-broadcastreceiver-contentprovider--android--easy]] - Content providers
