@@ -1,159 +1,94 @@
 ---
 id: 20251012-122779
-title: "Api File Upload Server / Загрузка файлов на сервер через API"
+title: API File Upload Server / Загрузка файлов на сервер через API
+aliases: [API File Upload Server, Загрузка файлов на сервер через API]
 topic: android
+subtopics: [networking, file-upload, http]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-why-multithreading-tools--android--easy, q-notification-channels-android--android--medium, q-how-jetpack-compose-works--programming-languages--medium]
+related: [q-android-testing-strategies--android--medium, q-android-build-optimization--android--medium, q-android-performance-measurement-tools--android--medium]
 created: 2025-10-15
-tags: [android/networking, file-upload, http, multipart, networking, okhttp, retrofit, difficulty/medium]
+updated: 2025-10-15
+tags: [android/networking, android/file-upload, android/http, file-upload, http, multipart, networking, okhttp, retrofit, difficulty/medium]
 ---
-# Какое API или другие инструменты будешь использовать для отправления файлов на сервер?
-
 # Question (EN)
-> What API or tools would you use for uploading files to a server?
+> What API or tools would you use for uploading files to a server in Android Application?
 
 # Вопрос (RU)
-> Какое API или другие инструменты будешь использовать для отправления файлов на сервер?
+> Какое API или другие инструменты будешь использовать для отправления файлов на сервер в Android приложении?
 
 ---
 
 ## Answer (EN)
 
-For uploading files to a server in Android, you can use several APIs and libraries:
+**File Upload APIs** in Android include Retrofit (recommended), OkHttp, and HttpURLConnection for uploading files to servers via HTTP multipart requests.
 
-1. **Retrofit** (with Multipart) - Most popular, type-safe, easy to use
-2. **OkHttp** - Lower-level, more control, direct HTTP client
-3. **HttpURLConnection** - Standard Java API, no external dependencies
+**File Upload Theory:**
+File uploads use HTTP multipart/form-data encoding to send binary data with metadata. The client creates multipart requests containing file content, headers, and form fields, which the server processes to store or process the uploaded files.
 
-**Recommended:** **Retrofit** for most cases (simple, powerful, well-supported).
+**1. Retrofit (Recommended):**
 
----
-
-## Option 1: Retrofit (Recommended)
-
-### Why Retrofit?
-
-**Advantages:**
-- Type-safe API declarations
-- Automatic JSON/XML conversion
-- Built on top of OkHttp (powerful)
-- Easy multipart file upload
-- Coroutines support
-- Extensive documentation
-
----
-
-### Implementation
-
-#### 1. Define API Interface
+**API Interface Definition:**
+Defines a type-safe interface for file upload endpoints using Retrofit annotations. The `@Multipart` annotation indicates multipart form data, `@POST` specifies the HTTP method, and `@Part` marks parameters for the multipart request.
 
 ```kotlin
+// API Interface
 interface FileUploadApi {
-
     @Multipart
     @POST("upload")
     suspend fun uploadFile(
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody
     ): Response<UploadResponse>
-
-    @Multipart
-    @POST("upload/multiple")
-    suspend fun uploadMultipleFiles(
-        @Part files: List<MultipartBody.Part>,
-        @Part("userId") userId: RequestBody
-    ): Response<UploadResponse>
 }
 
-data class UploadResponse(
-    val success: Boolean,
-    val fileUrl: String,
-    val message: String
-)
-```
+// Upload Implementation
+suspend fun uploadFile(file: File, description: String): Result<UploadResponse> {
+    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+    val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
+    val descriptionBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
 
----
-
-#### 3. Create Retrofit Instance
-
-```kotlin
-object RetrofitClient {
-
-    private const val BASE_URL = "https://api.example.com/"
-
-    private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
+    val response = api.uploadFile(filePart, descriptionBody)
+    return if (response.isSuccessful) {
+        Result.success(response.body()!!)
+    } else {
+        Result.failure(IOException("Upload failed: ${response.code()}"))
     }
-
-    private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(30, TimeUnit.SECONDS)
-        .build()
-
-    val api: FileUploadApi = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-        .create(FileUploadApi::class.java)
 }
 ```
 
----
+**Upload Implementation:**
+Converts the file to a RequestBody with proper MIME type, creates a MultipartBody.Part for the file data, converts the description string to RequestBody, and makes the API call. Returns a Result wrapper for success/failure handling.
 
-#### 4. Upload File
+**2. OkHttp (Direct HTTP):**
+
+**Direct HTTP Implementation:**
+Uses OkHttp directly without Retrofit for more control over the HTTP request. Builds a multipart request body manually, creates the HTTP request, and executes it on a background thread. Provides direct access to response handling and error management.
 
 ```kotlin
-class FileUploadRepository {
+// Direct OkHttp Implementation
+suspend fun uploadFile(file: File): Result<String> {
+    val requestBody = MultipartBody.Builder()
+        .setType(MultipartBody.FORM)
+        .addFormDataPart("file", file.name, file.asRequestBody("image/*".toMediaTypeOrNull()))
+        .build()
 
-    suspend fun uploadFile(file: File, description: String): Result<UploadResponse> {
-        return try {
-            // Create RequestBody from file
-            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+    val request = Request.Builder()
+        .url("https://api.example.com/upload")
+        .post(requestBody)
+        .build()
 
-            // Create MultipartBody.Part
-            val filePart = MultipartBody.Part.createFormData(
-                "file",           // Parameter name on server
-                file.name,        // Original filename
-                requestFile       // File content
-            )
-
-            // Create RequestBody for description
-            val descriptionBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
-
-            // Upload
-            val response = RetrofitClient.api.uploadFile(filePart, descriptionBody)
-
-            if (response.isSuccessful && response.body() != null) {
-                Result.success(response.body()!!)
+    return withContext(Dispatchers.IO) {
+        try {
+            val response = okHttpClient.newCall(request).execute()
+            if (response.isSuccessful) {
+                Result.success(response.body?.string() ?: "")
             } else {
-                Result.failure(IOException("Upload failed: ${response.code()}"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    suspend fun uploadMultipleFiles(files: List<File>, userId: String): Result<UploadResponse> {
-        return try {
-            // Create MultipartBody.Part for each file
-            val fileParts = files.map { file ->
-                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-                MultipartBody.Part.createFormData("files", file.name, requestFile)
-            }
-
-            val userIdBody = userId.toRequestBody("text/plain".toMediaTypeOrNull())
-
-            val response = RetrofitClient.api.uploadMultipleFiles(fileParts, userIdBody)
-
-            if (response.isSuccessful && response.body() != null) {
-                Result.success(response.body()!!)
-            } else {
-                Result.failure(IOException("Upload failed: ${response.code()}"))
+                Result.failure(IOException("Upload failed: ${response.code}"))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -162,515 +97,336 @@ class FileUploadRepository {
 }
 ```
 
----
+**3. Progress Tracking:**
 
-#### 5. Use in ViewModel
-
-```kotlin
-class FileUploadViewModel(
-    private val repository: FileUploadRepository
-) : ViewModel() {
-
-    private val _uploadState = MutableStateFlow<UploadState>(UploadState.Idle)
-    val uploadState: StateFlow<UploadState> = _uploadState
-
-    fun uploadFile(file: File, description: String) {
-        viewModelScope.launch {
-            _uploadState.value = UploadState.Loading
-
-            repository.uploadFile(file, description)
-                .onSuccess { response ->
-                    _uploadState.value = UploadState.Success(response.fileUrl)
-                }
-                .onFailure { error ->
-                    _uploadState.value = UploadState.Error(error.message ?: "Unknown error")
-                }
-        }
-    }
-}
-
-sealed class UploadState {
-    object Idle : UploadState()
-    object Loading : UploadState()
-    data class Success(val fileUrl: String) : UploadState()
-    data class Error(val message: String) : UploadState()
-}
-```
-
----
-
-#### 6. UI Integration
+**Custom RequestBody for Progress:**
+Creates a custom RequestBody that wraps file uploads to track progress. Reads the file in chunks and calls a progress callback with current and total bytes. This allows UI updates during upload without blocking the main thread.
 
 ```kotlin
-@Composable
-fun FileUploadScreen(viewModel: FileUploadViewModel = viewModel()) {
-    val uploadState by viewModel.uploadState.collectAsState()
-    var selectedFile by remember { mutableStateOf<File?>(null) }
-
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri ->
-        uri?.let {
-            selectedFile = uriToFile(it)
-        }
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Button(onClick = { launcher.launch("image/*") }) {
-            Text("Select File")
-        }
-
-        selectedFile?.let { file ->
-            Text("Selected: ${file.name}")
-
-            Button(
-                onClick = { viewModel.uploadFile(file, "My photo") },
-                enabled = uploadState !is UploadState.Loading
-            ) {
-                Text("Upload")
-            }
-        }
-
-        when (val state = uploadState) {
-            is UploadState.Loading -> CircularProgressIndicator()
-            is UploadState.Success -> Text("Uploaded: ${state.fileUrl}")
-            is UploadState.Error -> Text("Error: ${state.message}", color = Color.Red)
-            else -> {}
-        }
-    }
-}
-```
-
----
-
-## Option 2: OkHttp (Direct)
-
-### When to Use OkHttp Directly?
-
-- Need fine-grained control over requests
-- Don't want Retrofit abstraction
-- Building custom upload logic
-
----
-
-### Implementation
-
-```kotlin
-class OkHttpFileUploader {
-
-    private val client = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(30, TimeUnit.SECONDS)
-        .build()
-
-    suspend fun uploadFile(file: File, url: String): String = withContext(Dispatchers.IO) {
-        // Create multipart body
-        val requestBody = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart(
-                "file",
-                file.name,
-                file.asRequestBody("image/*".toMediaTypeOrNull())
-            )
-            .addFormDataPart("description", "Uploaded from Android")
-            .build()
-
-        // Create request
-        val request = Request.Builder()
-            .url(url)
-            .post(requestBody)
-            .addHeader("Authorization", "Bearer YOUR_TOKEN")
-            .build()
-
-        // Execute
-        client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) {
-                throw IOException("Upload failed: ${response.code}")
-            }
-            response.body?.string() ?: throw IOException("Empty response")
-        }
-    }
-
-    suspend fun uploadFileWithProgress(
-        file: File,
-        url: String,
-        onProgress: (Int) -> Unit
-    ): String = withContext(Dispatchers.IO) {
-        val requestBody = ProgressRequestBody(
-            file.asRequestBody("image/*".toMediaTypeOrNull()),
-            onProgress
-        )
-
-        val multipartBody = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart("file", file.name, requestBody)
-            .build()
-
-        val request = Request.Builder()
-            .url(url)
-            .post(multipartBody)
-            .build()
-
-        client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) {
-                throw IOException("Upload failed: ${response.code}")
-            }
-            response.body?.string() ?: throw IOException("Empty response")
-        }
-    }
-}
-
-// Progress tracking
+// Progress Tracking with OkHttp
 class ProgressRequestBody(
-    private val requestBody: RequestBody,
-    private val onProgress: (Int) -> Unit
+    private val file: File,
+    private val contentType: MediaType?,
+    private val onProgress: (Long, Long) -> Unit
 ) : RequestBody() {
 
-    override fun contentType(): MediaType? = requestBody.contentType()
+    override fun contentLength(): Long = file.length()
 
-    override fun contentLength(): Long = requestBody.contentLength()
+    override fun contentType(): MediaType? = contentType
 
     override fun writeTo(sink: BufferedSink) {
-        val totalLength = contentLength()
-        val progressSink = object : ForwardingSink(sink) {
-            var bytesWritten = 0L
+        val source = file.source()
+        var totalBytesRead = 0L
+        val totalBytes = file.length()
 
-            override fun write(source: Buffer, byteCount: Long) {
-                super.write(source, byteCount)
-                bytesWritten += byteCount
-                val progress = (100 * bytesWritten / totalLength).toInt()
-                onProgress(progress)
+        source.use { fileSource ->
+            var bytesRead: Long
+            while (fileSource.read(sink.buffer, 8192).also { bytesRead = it } != -1L) {
+                totalBytesRead += bytesRead
+                onProgress(totalBytesRead, totalBytes)
             }
         }
-
-        val bufferedSink = progressSink.buffer()
-        requestBody.writeTo(bufferedSink)
-        bufferedSink.flush()
     }
 }
 ```
 
----
+**4. Multiple File Upload:**
 
-## Option 3: HttpURLConnection (Standard Java API)
-
-### When to Use?
-
-- No external dependencies allowed
-- Legacy codebases
-- Very simple upload requirements
-
----
-
-### Implementation
+**Batch File Upload Implementation:**
+Handles uploading multiple files in a single request by converting each file to a MultipartBody.Part and sending them as a list. This is more efficient than individual uploads and reduces server round trips.
 
 ```kotlin
-class HttpURLConnectionUploader {
+// Multiple Files Upload
+suspend fun uploadMultipleFiles(files: List<File>): Result<UploadResponse> {
+    val fileParts = files.map { file ->
+        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+        MultipartBody.Part.createFormData("files", file.name, requestFile)
+    }
 
-    suspend fun uploadFile(file: File, uploadUrl: String): String = withContext(Dispatchers.IO) {
-        val boundary = "===" + System.currentTimeMillis() + "==="
-        val lineEnd = "\r\n"
-        val twoHyphens = "--"
+    val response = api.uploadMultipleFiles(fileParts)
+    return if (response.isSuccessful) {
+        Result.success(response.body()!!)
+    } else {
+        Result.failure(IOException("Upload failed: ${response.code()}"))
+    }
+}
+```
 
-        val url = URL(uploadUrl)
-        val connection = url.openConnection() as HttpURLConnection
+**5. Error Handling and Retry:**
 
+**Exponential Backoff Retry Logic:**
+Implements automatic retry with exponential backoff for failed uploads. Attempts the upload multiple times with increasing delays between attempts. This handles temporary network issues and improves upload reliability.
+
+```kotlin
+// Retry Logic
+suspend fun uploadWithRetry(file: File, maxRetries: Int = 3): Result<UploadResponse> {
+    repeat(maxRetries) { attempt ->
         try {
-            // Configure connection
-            connection.apply {
-                doInput = true
-                doOutput = true
-                useCaches = false
-                requestMethod = "POST"
-                setRequestProperty("Connection", "Keep-Alive")
-                setRequestProperty("Content-Type", "multipart/form-data;boundary=$boundary")
-            }
-
-            // Write multipart data
-            DataOutputStream(connection.outputStream).use { dos ->
-                // File part
-                dos.writeBytes(twoHyphens + boundary + lineEnd)
-                dos.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\"${file.name}\"$lineEnd")
-                dos.writeBytes("Content-Type: image/*$lineEnd")
-                dos.writeBytes(lineEnd)
-
-                // Write file content
-                FileInputStream(file).use { fis ->
-                    fis.copyTo(dos)
-                }
-
-                dos.writeBytes(lineEnd)
-                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd)
-
-                dos.flush()
-            }
-
-            // Read response
-            val responseCode = connection.responseCode
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                connection.inputStream.bufferedReader().use { it.readText() }
-            } else {
-                throw IOException("Upload failed: $responseCode")
-            }
-        } finally {
-            connection.disconnect()
-        }
-    }
-}
-```
-
----
-
-## Comparison
-
-| Aspect | Retrofit | OkHttp | HttpURLConnection |
-|--------|----------|--------|-------------------|
-| **Ease of use** |  |  |  |
-| **Type safety** | Yes | No | No |
-| **Coroutines** | Built-in | Manual | Manual |
-| **Progress tracking** | Via OkHttp |  Easy |  Manual |
-| **Dependencies** | Retrofit + OkHttp | OkHttp | None |
-| **Flexibility** | Medium | High | High |
-| **Boilerplate** | Low | Medium | High |
-| **Best for** | REST APIs | Custom uploads | No dependencies |
-
----
-
-## Complete Example: Image Upload with Progress
-
-```kotlin
-// Repository
-class ImageUploadRepository {
-
-    private val api = RetrofitClient.api
-
-    suspend fun uploadImage(
-        imageFile: File,
-        onProgress: (Int) -> Unit
-    ): Result<String> {
-        return try {
-            // Create progress tracking request body
-            val requestFile = imageFile.asRequestBody("image/*".toMediaTypeOrNull())
-            val progressBody = ProgressRequestBody(requestFile, onProgress)
-
-            val filePart = MultipartBody.Part.createFormData(
-                "image",
-                imageFile.name,
-                progressBody
-            )
-
-            val response = api.uploadFile(
-                file = filePart,
-                description = "Image upload".toRequestBody()
-            )
-
-            if (response.isSuccessful) {
-                Result.success(response.body()!!.fileUrl)
-            } else {
-                Result.failure(IOException("Upload failed: ${response.code()}"))
-            }
+            val result = uploadFile(file)
+            if (result.isSuccess) return result
         } catch (e: Exception) {
-            Result.failure(e)
+            if (attempt == maxRetries - 1) return Result.failure(e)
+            delay(1000 * (attempt + 1)) // Exponential backoff
         }
     }
-}
-
-// ViewModel
-class ImageUploadViewModel(
-    private val repository: ImageUploadRepository
-) : ViewModel() {
-
-    private val _uploadProgress = MutableStateFlow(0)
-    val uploadProgress: StateFlow<Int> = _uploadProgress
-
-    private val _uploadState = MutableStateFlow<UploadState>(UploadState.Idle)
-    val uploadState: StateFlow<UploadState> = _uploadState
-
-    fun uploadImage(file: File) {
-        viewModelScope.launch {
-            _uploadState.value = UploadState.Loading
-            _uploadProgress.value = 0
-
-            repository.uploadImage(file) { progress ->
-                _uploadProgress.value = progress
-            }
-                .onSuccess { url ->
-                    _uploadState.value = UploadState.Success(url)
-                    _uploadProgress.value = 100
-                }
-                .onFailure { error ->
-                    _uploadState.value = UploadState.Error(error.message ?: "Unknown error")
-                    _uploadProgress.value = 0
-                }
-        }
-    }
-}
-
-// UI
-@Composable
-fun ImageUploadScreen(viewModel: ImageUploadViewModel = viewModel()) {
-    val uploadState by viewModel.uploadState.collectAsState()
-    val uploadProgress by viewModel.uploadProgress.collectAsState()
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        when (val state = uploadState) {
-            is UploadState.Loading -> {
-                CircularProgressIndicator(progress = uploadProgress / 100f)
-                Text("Uploading: $uploadProgress%")
-            }
-            is UploadState.Success -> {
-                Text("Uploaded successfully!")
-                AsyncImage(
-                    model = state.fileUrl,
-                    contentDescription = "Uploaded image"
-                )
-            }
-            is UploadState.Error -> {
-                Text("Error: ${state.message}", color = Color.Red)
-            }
-            else -> {
-                Button(onClick = { /* Launch file picker */ }) {
-                    Text("Select Image")
-                }
-            }
-        }
-    }
+    return Result.failure(IOException("Upload failed after $maxRetries attempts"))
 }
 ```
 
----
+**6. WorkManager Integration:**
 
-## Best Practices
-
-### 1. Use WorkManager for Reliability
+**Background Upload Worker:**
+Uses WorkManager to handle file uploads in the background with automatic retry and system constraints. This ensures uploads continue even if the app is killed and provides reliable background processing for file uploads.
 
 ```kotlin
+// WorkManager for Reliable Uploads
 class FileUploadWorker(
     context: Context,
     params: WorkerParameters
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
-        val fileUri = inputData.getString("file_uri") ?: return Result.failure()
-        val file = File(fileUri)
+        val filePath = inputData.getString("file_path") ?: return Result.failure()
+        val file = File(filePath)
 
         return try {
-            val repository = ImageUploadRepository()
-            repository.uploadImage(file) { }.getOrThrow()
-            Result.success()
+            val result = uploadFile(file)
+            if (result.isSuccess) {
+                Result.success()
+            } else {
+                Result.retry()
+            }
         } catch (e: Exception) {
             Result.retry()
         }
     }
 }
-
-// Schedule upload
-val uploadRequest = OneTimeWorkRequestBuilder<FileUploadWorker>()
-    .setInputData(workDataOf("file_uri" to file.path))
-    .setConstraints(
-        Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-    )
-    .build()
-
-WorkManager.getInstance(context).enqueue(uploadRequest)
 ```
 
-### 2. Compress Images Before Upload
-
-```kotlin
-suspend fun compressImage(file: File): File = withContext(Dispatchers.IO) {
-    val bitmap = BitmapFactory.decodeFile(file.path)
-    val compressedFile = File(context.cacheDir, "compressed_${file.name}")
-
-    FileOutputStream(compressedFile).use { out ->
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out)
-    }
-
-    compressedFile
-}
-```
-
-### 3. Handle Permissions
-
-```xml
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-```
-
----
-
-## Summary
-
-**For uploading files to server in Android:**
-
-1. **Retrofit (Recommended)**
-   - Type-safe, easy to use
-   - Built-in multipart support
-   - Coroutines integration
-   - Use for REST APIs
-
-2. **OkHttp**
-   - More control, lower-level
-   - Easy progress tracking
-   - Use for custom upload logic
-
-3. **HttpURLConnection**
-   - Standard Java API
-   - No dependencies
-   - Use when dependencies not allowed
-
-**Best practices:**
-- Use WorkManager for reliable uploads
-- Compress images before uploading
-- Track upload progress
-- Handle errors gracefully
-- Add retry logic
-
----
+**Best Practices:**
+- Use Retrofit for REST APIs (type-safe, easy to use)
+- Use OkHttp for custom upload logic and progress tracking
+- Compress images before uploading to reduce bandwidth
+- Implement retry logic for network failures
+- Use WorkManager for reliable background uploads
+- Handle permissions properly (READ_EXTERNAL_STORAGE, READ_MEDIA_IMAGES)
+- Validate file types and sizes on client side
+- Show upload progress to users
 
 ## Ответ (RU)
 
-Для отправки файлов на сервер в Android можно использовать:
+**API для загрузки файлов** в Android включают Retrofit (рекомендуется), OkHttp и HttpURLConnection для загрузки файлов на серверы через HTTP multipart запросы.
 
-1. **Retrofit** (с Multipart) - самый популярный, типобезопасный, простой в использовании
-2. **OkHttp** - более низкоуровневый, больше контроля
-3. **HttpURLConnection** - стандартный Java API, без внешних зависимостей
+**Теория загрузки файлов:**
+Загрузка файлов использует HTTP multipart/form-data кодировку для отправки бинарных данных с метаданными. Клиент создает multipart запросы, содержащие содержимое файла, заголовки и поля формы, которые сервер обрабатывает для хранения или обработки загруженных файлов.
 
-**Рекомендуется:** **Retrofit** для большинства случаев.
+**1. Retrofit (Рекомендуется):**
 
-**Ключевые шаги:**
-- Добавить зависимости Retrofit
-- Создать API интерфейс с `@Multipart` и `@POST`
-- Использовать `MultipartBody.Part` для файлов
-- Обрабатывать прогресс загрузки через OkHttp Interceptor
+**Определение API Интерфейса:**
+Определяет типобезопасный интерфейс для эндпоинтов загрузки файлов с использованием аннотаций Retrofit. Аннотация `@Multipart` указывает на multipart form data, `@POST` определяет HTTP метод, а `@Part` помечает параметры для multipart запроса.
 
+```kotlin
+// API Интерфейс
+interface FileUploadApi {
+    @Multipart
+    @POST("upload")
+    suspend fun uploadFile(
+        @Part file: MultipartBody.Part,
+        @Part("description") description: RequestBody
+    ): Response<UploadResponse>
+}
+
+// Реализация загрузки
+suspend fun uploadFile(file: File, description: String): Result<UploadResponse> {
+    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+    val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
+    val descriptionBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
+
+    val response = api.uploadFile(filePart, descriptionBody)
+    return if (response.isSuccessful) {
+        Result.success(response.body()!!)
+    } else {
+        Result.failure(IOException("Upload failed: ${response.code()}"))
+    }
+}
+```
+
+**Реализация загрузки:**
+Преобразует файл в RequestBody с правильным MIME типом, создает MultipartBody.Part для данных файла, преобразует строку описания в RequestBody и выполняет API вызов. Возвращает обертку Result для обработки успеха/неудачи.
+
+**2. OkHttp (Прямой HTTP):**
+
+**Прямая HTTP реализация:**
+Использует OkHttp напрямую без Retrofit для большего контроля над HTTP запросом. Вручную создает multipart тело запроса, создает HTTP запрос и выполняет его в фоновом потоке. Обеспечивает прямой доступ к обработке ответов и управлению ошибками.
+
+```kotlin
+// Прямая реализация OkHttp
+suspend fun uploadFile(file: File): Result<String> {
+    val requestBody = MultipartBody.Builder()
+        .setType(MultipartBody.FORM)
+        .addFormDataPart("file", file.name, file.asRequestBody("image/*".toMediaTypeOrNull()))
+        .build()
+
+    val request = Request.Builder()
+        .url("https://api.example.com/upload")
+        .post(requestBody)
+        .build()
+
+    return withContext(Dispatchers.IO) {
+        try {
+            val response = okHttpClient.newCall(request).execute()
+            if (response.isSuccessful) {
+                Result.success(response.body?.string() ?: "")
+            } else {
+                Result.failure(IOException("Upload failed: ${response.code}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+}
+```
+
+**3. Отслеживание прогресса:**
+
+**Пользовательский RequestBody для прогресса:**
+Создает пользовательский RequestBody, который оборачивает загрузку файлов для отслеживания прогресса. Читает файл частями и вызывает callback прогресса с текущими и общими байтами. Это позволяет обновлять UI во время загрузки без блокировки главного потока.
+
+```kotlin
+// Отслеживание прогресса с OkHttp
+class ProgressRequestBody(
+    private val file: File,
+    private val contentType: MediaType?,
+    private val onProgress: (Long, Long) -> Unit
+) : RequestBody() {
+
+    override fun contentLength(): Long = file.length()
+
+    override fun contentType(): MediaType? = contentType
+
+    override fun writeTo(sink: BufferedSink) {
+        val source = file.source()
+        var totalBytesRead = 0L
+        val totalBytes = file.length()
+
+        source.use { fileSource ->
+            var bytesRead: Long
+            while (fileSource.read(sink.buffer, 8192).also { bytesRead = it } != -1L) {
+                totalBytesRead += bytesRead
+                onProgress(totalBytesRead, totalBytes)
+            }
+        }
+    }
+}
+```
+
+**4. Загрузка нескольких файлов:**
+
+**Реализация пакетной загрузки файлов:**
+Обрабатывает загрузку нескольких файлов в одном запросе, преобразуя каждый файл в MultipartBody.Part и отправляя их как список. Это более эффективно, чем индивидуальные загрузки, и уменьшает количество обращений к серверу.
+
+```kotlin
+// Загрузка нескольких файлов
+suspend fun uploadMultipleFiles(files: List<File>): Result<UploadResponse> {
+    val fileParts = files.map { file ->
+        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+        MultipartBody.Part.createFormData("files", file.name, requestFile)
+    }
+
+    val response = api.uploadMultipleFiles(fileParts)
+    return if (response.isSuccessful) {
+        Result.success(response.body()!!)
+    } else {
+        Result.failure(IOException("Upload failed: ${response.code()}"))
+    }
+}
+```
+
+**5. Обработка ошибок и повторные попытки:**
+
+**Логика повторных попыток с экспоненциальной задержкой:**
+Реализует автоматические повторные попытки с экспоненциальной задержкой для неудачных загрузок. Пытается загрузить файл несколько раз с увеличивающимися задержками между попытками. Это обрабатывает временные сетевые проблемы и улучшает надежность загрузки.
+
+```kotlin
+// Логика повторных попыток
+suspend fun uploadWithRetry(file: File, maxRetries: Int = 3): Result<UploadResponse> {
+    repeat(maxRetries) { attempt ->
+        try {
+            val result = uploadFile(file)
+            if (result.isSuccess) return result
+        } catch (e: Exception) {
+            if (attempt == maxRetries - 1) return Result.failure(e)
+            delay(1000 * (attempt + 1)) // Экспоненциальная задержка
+        }
+    }
+    return Result.failure(IOException("Upload failed after $maxRetries attempts"))
+}
+```
+
+**6. Интеграция с WorkManager:**
+
+**Фоновый воркер для загрузки:**
+Использует WorkManager для обработки загрузки файлов в фоне с автоматическими повторными попытками и системными ограничениями. Это гарантирует, что загрузки продолжаются даже если приложение закрыто, и обеспечивает надежную фоновую обработку загрузки файлов.
+
+```kotlin
+// WorkManager для надежной загрузки
+class FileUploadWorker(
+    context: Context,
+    params: WorkerParameters
+) : CoroutineWorker(context, params) {
+
+    override suspend fun doWork(): Result {
+        val filePath = inputData.getString("file_path") ?: return Result.failure()
+        val file = File(filePath)
+
+        return try {
+            val result = uploadFile(file)
+            if (result.isSuccess) {
+                Result.success()
+            } else {
+                Result.retry()
+            }
+        } catch (e: Exception) {
+            Result.retry()
+        }
+    }
+}
+```
+
+**Лучшие практики:**
+- Используйте Retrofit для REST API (типобезопасность, простота использования)
+- Используйте OkHttp для пользовательской логики загрузки и отслеживания прогресса
+- Сжимайте изображения перед загрузкой для уменьшения трафика
+- Реализуйте логику повторных попыток для сетевых сбоев
+- Используйте WorkManager для надежной фоновой загрузки
+- Правильно обрабатывайте разрешения (READ_EXTERNAL_STORAGE, READ_MEDIA_IMAGES)
+- Валидируйте типы и размеры файлов на стороне клиента
+- Показывайте прогресс загрузки пользователям
 
 ---
+
+## Follow-ups
+
+- How do you handle large file uploads without blocking the UI?
+- What's the difference between multipart and binary upload?
+- How do you implement resumable file uploads?
+- What security considerations are important for file uploads?
+
+## References
+
+- [Retrofit Documentation](https://square.github.io/retrofit/)
+- [OkHttp Documentation](https://square.github.io/okhttp/)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-graphql-vs-rest--networking--easy]] - Networking
+- [[q-android-app-components--android--easy]]
+- [[q-android-project-parts--android--easy]]
 
-### Related (Medium)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-splash-screen-api-android12--android--medium]] - Networking
-- [[q-server-sent-events-sse--networking--medium]] - Networking
-- [[q-privacy-sandbox-topics-api--privacy--medium]] - Networking
-- [[q-api-rate-limiting-throttling--android--medium]] - Networking
+### Related (Same Level)
+- [[q-android-testing-strategies--android--medium]]
+- [[q-android-build-optimization--android--medium]]
+- [[q-android-performance-measurement-tools--android--medium]]
 
 ### Advanced (Harder)
-- [[q-data-sync-unstable-network--android--hard]] - Networking
+- [[q-android-runtime-internals--android--hard]]
