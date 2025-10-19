@@ -25,7 +25,18 @@ related: [q-android-security-practices-checklist--android--medium, q-encrypted-f
 
 ## Answer (EN)
 
-**Android Keystore** - Hardware-backed security module for secure key generation, storage, and usage. Keys are protected from extraction even on rooted devices.
+**Android Keystore** is a hardware-backed security module that provides secure key generation, storage, and usage. Keys are protected from extraction even on rooted devices, making it the most secure way to handle cryptographic keys on Android.
+
+**Security Architecture:**
+- **Hardware Security Module (HSM)**: Keys stored in dedicated secure hardware (TEE/StrongBox)
+- **Key Isolation**: Private keys never leave the secure environment
+- **Attestation**: Cryptographic proof of key properties and device integrity
+- **User Authentication**: Keys can be tied to biometric or lock screen authentication
+
+**Security Levels (in order of security):**
+1. **StrongBox**: Dedicated hardware security module (highest security)
+2. **TEE**: Trusted Execution Environment (secure)
+3. **Software**: Fallback when hardware unavailable (least secure)
 
 **Key Features:**
 - Hardware-backed security (TEE/StrongBox)
@@ -61,7 +72,10 @@ class KeystoreManager {
 }
 ```
 
-**AES Encryption:**
+**AES-GCM Encryption Theory:**
+AES-GCM provides both confidentiality and authenticity. The Galois/Counter Mode (GCM) is an authenticated encryption mode that produces a ciphertext and an authentication tag. The Initialization Vector (IV) must be unique for each encryption operation.
+
+**AES Encryption Implementation:**
 ```kotlin
 class AesEncryption(private val keystoreManager: KeystoreManager) {
     fun encrypt(alias: String, plaintext: String): String {
@@ -91,7 +105,10 @@ class AesEncryption(private val keystoreManager: KeystoreManager) {
 }
 ```
 
-**Biometric Authentication:**
+**Biometric Authentication Theory:**
+Biometric authentication provides strong user verification without requiring password input. The Android Keystore can tie key usage to successful biometric authentication, ensuring only authenticated users can access encrypted data.
+
+**Biometric Authentication Implementation:**
 ```kotlin
 class BiometricAuthenticator(private val activity: FragmentActivity) {
     fun authenticateForEncryption(
@@ -120,7 +137,10 @@ class BiometricAuthenticator(private val activity: FragmentActivity) {
 }
 ```
 
-**Secure Storage:**
+**Secure Storage Theory:**
+Secure storage combines Android Keystore with SharedPreferences to create an encrypted storage solution. Data is encrypted using Keystore keys before being stored in SharedPreferences, providing protection against common attack vectors.
+
+**Secure Storage Implementation:**
 ```kotlin
 class SecureStorage(
     context: Context,
@@ -145,7 +165,10 @@ class SecureStorage(
 }
 ```
 
-**Key Attestation:**
+**Key Attestation Theory:**
+Key attestation provides cryptographic proof that a key was generated in a secure environment with specific properties. This is crucial for applications that need to verify the security level of the device and key before trusting sensitive operations.
+
+**Key Attestation Implementation:**
 ```kotlin
 fun generateKeyWithAttestation(alias: String, challenge: ByteArray): Array<X509Certificate> {
     val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
@@ -174,7 +197,18 @@ fun generateKeyWithAttestation(alias: String, challenge: ByteArray): Array<X509C
 
 ## Ответ (RU)
 
-**Android Keystore** - Аппаратно-защищённый модуль безопасности для безопасной генерации, хранения и использования ключей. Ключи защищены от извлечения даже на устройствах с root.
+**Android Keystore** - это аппаратно-защищённый модуль безопасности для безопасной генерации, хранения и использования ключей. Ключи защищены от извлечения даже на устройствах с root, что делает его самым безопасным способом обработки криптографических ключей на Android.
+
+**Архитектура безопасности:**
+- **Модуль аппаратной безопасности (HSM)**: Ключи хранятся в выделенном защищённом оборудовании (TEE/StrongBox)
+- **Изоляция ключей**: Приватные ключи никогда не покидают защищённую среду
+- **Аттестация**: Криптографическое доказательство свойств ключей и целостности устройства
+- **Аутентификация пользователя**: Ключи могут быть привязаны к биометрической аутентификации или блокировке экрана
+
+**Уровни безопасности (по возрастанию):**
+1. **StrongBox**: Выделенный модуль аппаратной безопасности (наивысшая безопасность)
+2. **TEE**: Доверенная среда выполнения (безопасно)
+3. **Программное обеспечение**: Резервный вариант при недоступности оборудования (наименьшая безопасность)
 
 **Основные функции:**
 - Аппаратная безопасность (TEE/StrongBox)
@@ -210,7 +244,10 @@ class KeystoreManager {
 }
 ```
 
-**AES шифрование:**
+**Теория AES-GCM шифрования:**
+AES-GCM обеспечивает как конфиденциальность, так и аутентичность. Режим Galois/Counter Mode (GCM) - это аутентифицированное шифрование, которое создаёт зашифрованный текст и тег аутентификации. Вектор инициализации (IV) должен быть уникальным для каждой операции шифрования.
+
+**Реализация AES шифрования:**
 ```kotlin
 class AesEncryption(private val keystoreManager: KeystoreManager) {
     fun encrypt(alias: String, plaintext: String): String {
@@ -240,7 +277,10 @@ class AesEncryption(private val keystoreManager: KeystoreManager) {
 }
 ```
 
-**Биометрическая аутентификация:**
+**Теория биометрической аутентификации:**
+Биометрическая аутентификация обеспечивает сильную верификацию пользователя без ввода пароля. Android Keystore может привязать использование ключей к успешной биометрической аутентификации, гарантируя доступ к зашифрованным данным только аутентифицированным пользователям.
+
+**Реализация биометрической аутентификации:**
 ```kotlin
 class BiometricAuthenticator(private val activity: FragmentActivity) {
     fun authenticateForEncryption(
@@ -269,7 +309,10 @@ class BiometricAuthenticator(private val activity: FragmentActivity) {
 }
 ```
 
-**Безопасное хранилище:**
+**Теория безопасного хранилища:**
+Безопасное хранилище объединяет Android Keystore с SharedPreferences для создания зашифрованного решения хранения. Данные шифруются с помощью ключей Keystore перед сохранением в SharedPreferences, обеспечивая защиту от распространённых векторов атак.
+
+**Реализация безопасного хранилища:**
 ```kotlin
 class SecureStorage(
     context: Context,
@@ -294,7 +337,10 @@ class SecureStorage(
 }
 ```
 
-**Аттестация ключей:**
+**Теория аттестации ключей:**
+Аттестация ключей предоставляет криптографическое доказательство того, что ключ был сгенерирован в защищённой среде с определёнными свойствами. Это критично для приложений, которым необходимо проверить уровень безопасности устройства и ключа перед доверием к чувствительным операциям.
+
+**Реализация аттестации ключей:**
 ```kotlin
 fun generateKeyWithAttestation(alias: String, challenge: ByteArray): Array<X509Certificate> {
     val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
@@ -345,7 +391,3 @@ fun generateKeyWithAttestation(alias: String, challenge: ByteArray): Array<X509C
 - [[q-database-encryption-android--android--medium]] - Database encryption
 - [[q-app-security-best-practices--security--medium]] - App security
 - [[q-data-encryption-at-rest--security--medium]] - Data encryption
-
-### Advanced (Harder)
-- [[q-key-attestation-verification--security--hard]] - Key attestation
-- [[q-hardware-security-module--security--hard]] - HSM integration
