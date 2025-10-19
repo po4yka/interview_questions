@@ -61,6 +61,14 @@ Confirm sections exist:
 - `## References`
 - `## Related Questions`
 
+Verify Related Questions section:
+
+- Section must not be empty
+- Must contain 3-8 relevant questions organized by difficulty
+- Include Prerequisites (Easier), Related (Same Level), Advanced (Harder)
+- Questions must be properly linked with `[[note-name]]` format
+- Links should correspond to existing notes in the vault
+
 ## Links and Connections
 
 Validate cross-linking and link integrity:
