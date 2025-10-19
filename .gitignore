@@ -1,4 +1,65 @@
+# Obsidian vault files
 InterviewQuestions/.obsidian/
 InterviewQuestions/.smart-env/
 
+# macOS system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.cursor/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.cache
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# OS generated files
 .trash/
+.fuse_hidden*
+.nfs*
+
+# Node.js (if any scripts are added)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (if any scripts are added)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Archive and compressed files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Personal notes and drafts (if any)
+personal/
+private/
+drafts/
