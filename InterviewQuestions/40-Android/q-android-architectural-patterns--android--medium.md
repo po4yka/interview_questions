@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-15
 tags: [android/architecture-patterns, android/clean-architecture, architecture-patterns, clean-architecture, mvc, mvp, mvvm, mvi, difficulty/medium]
 ---
-# Какие архитектурные паттерны используются в Android-фреймворке?
-
 # Question (EN)
 > What architectural patterns are used in Android framework?
 
@@ -31,36 +29,13 @@ Android development uses several architectural patterns: MVC (early, rarely used
 
 **Modern recommendation**: MVVM with Clean Architecture and Android Architecture Components (ViewModel, LiveData/StateFlow, Repository pattern).
 
----
-
-## Ответ (RU)
-
-Android development uses several architectural patterns to organize code, separate concerns, and improve testability. Each pattern has evolved to address specific challenges in Android development.
-
-### 1. MVC (Model-View-Controller)
-
-**Early Android pattern** - rarely used today.
-
-**Components:**
-- **Model**: Business logic and data
-- **View**: UI display (XML layouts)
-- **Controller**: Manages flow (Activity/Fragment)
+**1. MVC (Model-View-Controller)**
+- **Early Android pattern** - rarely used today
+- **Components**: Model (business logic), View (XML layouts), Controller (Activity/Fragment)
+- **Problems**: Activity is both View and Controller, tight coupling, difficult to test
 
 ```kotlin
-// Model
-data class User(val id: Int, val name: String, val email: String)
-
-class UserRepository {
-    fun getUser(id: Int): User {
-        // Fetch from database or API
-        return User(id, "John Doe", "john@example.com")
-    }
-}
-
-// View (XML)
-// activity_main.xml with TextView to display user data
-
-// Controller (Activity)
+// BAD: MVC - Activity does everything
 class MainActivity : AppCompatActivity() {
     private val repository = UserRepository()
 
@@ -68,160 +43,51 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Controller manages both UI and logic
-        val user = repository.getUser(1)
+        val user = repository.getUser(1) // Blocking call
         findViewById<TextView>(R.id.userName).text = user.name
-        findViewById<TextView>(R.id.userEmail).text = user.email
     }
 }
 ```
 
-**Problems:**
-- Activity is both View and Controller
-- Tight coupling between UI and logic
-- Difficult to test
-- Activity becomes massive (God Object)
-
-### 2. MVP (Model-View-Presenter)
-
-**Improved separation** - popular before MVVM.
-
-**Components:**
-- **Model**: Data and business logic
-- **View**: Passive UI (Activity/Fragment implements interface)
-- **Presenter**: Presentation logic, no Android dependencies
+**2. MVP (Model-View-Presenter)**
+- **Improved separation** - popular before MVVM
+- **Components**: Model (data), View (passive UI), Presenter (presentation logic)
+- **Advantages**: Clear separation, testable presenter, swappable view
+- **Disadvantages**: Lots of boilerplate, memory leaks, no lifecycle awareness
 
 ```kotlin
-// Model
-data class User(val id: Int, val name: String, val email: String)
-
-class UserRepository {
-    suspend fun getUser(id: Int): User {
-        delay(1000) // Simulate network call
-        return User(id, "John Doe", "john@example.com")
-    }
-}
-
-// View Contract
+// MVP - Better separation
 interface UserContract {
     interface View {
         fun showUser(user: User)
         fun showLoading()
-        fun hideLoading()
-        fun showError(message: String)
     }
 
     interface Presenter {
         fun loadUser(id: Int)
-        fun onDestroy()
     }
 }
 
-// Presenter
 class UserPresenter(
     private val view: UserContract.View,
     private val repository: UserRepository
 ) : UserContract.Presenter {
 
-    private val scope = CoroutineScope(Dispatchers.Main + Job())
-
     override fun loadUser(id: Int) {
         view.showLoading()
-
-        scope.launch {
-            try {
-                val user = withContext(Dispatchers.IO) {
-                    repository.getUser(id)
-                }
-                view.hideLoading()
+        // Load user asynchronously
                 view.showUser(user)
-            } catch (e: Exception) {
-                view.hideLoading()
-                view.showError(e.message ?: "Unknown error")
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        scope.cancel()
-    }
-}
-
-// View Implementation (Activity)
-class UserActivity : AppCompatActivity(), UserContract.View {
-
-    private lateinit var presenter: UserContract.Presenter
-    private lateinit var nameTextView: TextView
-    private lateinit var emailTextView: TextView
-    private lateinit var progressBar: ProgressBar
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user)
-
-        nameTextView = findViewById(R.id.userName)
-        emailTextView = findViewById(R.id.userEmail)
-        progressBar = findViewById(R.id.progressBar)
-
-        presenter = UserPresenter(this, UserRepository())
-        presenter.loadUser(1)
-    }
-
-    override fun showUser(user: User) {
-        nameTextView.text = user.name
-        emailTextView.text = user.email
-    }
-
-    override fun showLoading() {
-        progressBar.visibility = View.VISIBLE
-    }
-
-    override fun hideLoading() {
-        progressBar.visibility = View.GONE
-    }
-
-    override fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    }
-
-    override fun onDestroy() {
-        presenter.onDestroy()
-        super.onDestroy()
     }
 }
 ```
 
-**Advantages:**
-- Clear separation of concerns
-- Presenter is testable (no Android dependencies)
-- View is passive (easy to swap)
-
-**Disadvantages:**
-- Lots of boilerplate (interfaces for every screen)
-- Memory leaks if Presenter holds View reference
-- No lifecycle awareness
-
-### 3. MVVM (Model-View-ViewModel)
-
-**Current Android standard** with Jetpack support.
-
-**Components:**
-- **Model**: Data structures and repositories
-- **View**: UI elements (Activity/Fragment/Compose)
-- **ViewModel**: Presentation logic with observable data
+**3. MVVM (Model-View-ViewModel)**
+- **Current Android standard** with Jetpack support
+- **Components**: Model (data), View (UI), ViewModel (presentation logic with observable data)
+- **Advantages**: Lifecycle-aware, two-way data binding, automatic UI updates, official Google support
 
 ```kotlin
-// Model
-data class User(val id: Int, val name: String, val email: String)
-
-class UserRepository {
-    suspend fun getUser(id: Int): User {
-        delay(1000)
-        return User(id, "John Doe", "john@example.com")
-    }
-}
-
-// ViewModel
+// MVVM - Modern approach
 class UserViewModel(
     private val repository: UserRepository
 ) : ViewModel() {
@@ -229,16 +95,9 @@ class UserViewModel(
     private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    sealed class UiState {
-        object Loading : UiState()
-        data class Success(val user: User) : UiState()
-        data class Error(val message: String) : UiState()
-    }
-
     fun loadUser(id: Int) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-
             try {
                 val user = repository.getUser(id)
                 _uiState.value = UiState.Success(user)
@@ -249,184 +108,57 @@ class UserViewModel(
     }
 }
 
-// View (Activity with View Binding)
-class UserActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityUserBinding
-    private val viewModel: UserViewModel by viewModels {
-        UserViewModelFactory(UserRepository())
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityUserBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        observeUiState()
-        viewModel.loadUser(1)
-    }
-
-    private fun observeUiState() {
+// View observes ViewModel
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
                 when (state) {
-                    is UserViewModel.UiState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.userInfo.visibility = View.GONE
-                    }
-                    is UserViewModel.UiState.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.userInfo.visibility = View.VISIBLE
-                        binding.userName.text = state.user.name
-                        binding.userEmail.text = state.user.email
-                    }
-                    is UserViewModel.UiState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        Toast.makeText(this@UserActivity, state.message, Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-        }
-    }
-}
-
-// Jetpack Compose View
-@Composable
-fun UserScreen(viewModel: UserViewModel = viewModel()) {
-    val uiState by viewModel.uiState.collectAsState()
-
-    when (val state = uiState) {
-        is UserViewModel.UiState.Loading -> {
-            CircularProgressIndicator()
-        }
-        is UserViewModel.UiState.Success -> {
-            Column {
-                Text(text = "Name: ${state.user.name}")
-                Text(text = "Email: ${state.user.email}")
-            }
-        }
-        is UserViewModel.UiState.Error -> {
-            Text(text = "Error: ${state.message}")
+            is UiState.Loading -> showLoading()
+            is UiState.Success -> showUser(state.user)
+            is UiState.Error -> showError(state.message)
         }
     }
 }
 ```
 
-**Advantages:**
-- Lifecycle-aware (ViewModel survives configuration changes)
-- Two-way data binding support
-- Automatic UI updates with LiveData/Flow
-- Official Google support
-- No memory leaks
-- Testable
-
-**Disadvantages:**
-- Learning curve for reactive programming
-- Can lead to complex ViewModels if not structured well
-
-### 4. MVI (Model-View-Intent)
-
-**Unidirectional data flow** - gaining popularity.
+**4. MVI (Model-View-Intent)**
+- **Unidirectional data flow** - gaining popularity
+- **Components**: State (single source of truth), Intent (user actions), View (renders state)
+- **Advantages**: Predictable state management, easy to debug, great for complex UIs
 
 ```kotlin
-// State
+// MVI - Unidirectional flow
 data class UserState(
     val isLoading: Boolean = false,
     val user: User? = null,
     val error: String? = null
 )
 
-// Intent (User actions)
 sealed class UserIntent {
     data class LoadUser(val id: Int) : UserIntent()
     object RetryLoading : UserIntent()
 }
 
-// ViewModel
-class UserViewModel(
-    private val repository: UserRepository
-) : ViewModel() {
-
+class UserViewModel : ViewModel() {
     private val _state = MutableStateFlow(UserState())
     val state: StateFlow<UserState> = _state.asStateFlow()
 
     fun handleIntent(intent: UserIntent) {
         when (intent) {
             is UserIntent.LoadUser -> loadUser(intent.id)
-            is UserIntent.RetryLoading -> state.value.user?.let { loadUser(it.id) }
-        }
-    }
-
-    private fun loadUser(id: Int) {
-        viewModelScope.launch {
-            _state.value = state.value.copy(isLoading = true, error = null)
-
-            try {
-                val user = repository.getUser(id)
-                _state.value = state.value.copy(
-                    isLoading = false,
-                    user = user,
-                    error = null
-                )
-            } catch (e: Exception) {
-                _state.value = state.value.copy(
-                    isLoading = false,
-                    error = e.message
-                )
-            }
-        }
-    }
-}
-
-// View (Compose)
-@Composable
-fun UserScreen(viewModel: UserViewModel = viewModel()) {
-    val state by viewModel.state.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.handleIntent(UserIntent.LoadUser(1))
-    }
-
-    Column {
-        if (state.isLoading) {
-            CircularProgressIndicator()
-        }
-
-        state.user?.let { user ->
-            Text("Name: ${user.name}")
-            Text("Email: ${user.email}")
-        }
-
-        state.error?.let { error ->
-            Text("Error: $error")
-            Button(onClick = { viewModel.handleIntent(UserIntent.RetryLoading) }) {
-                Text("Retry")
-            }
+            is UserIntent.RetryLoading -> retry()
         }
     }
 }
 ```
 
-**Advantages:**
-- Predictable state management
-- Single source of truth
-- Easy to debug (state changes are traceable)
-- Great for complex UIs
-
-### 5. Clean Architecture
-
-**Multi-layer architecture** for complex apps.
+**5. Clean Architecture**
+- **Multi-layer architecture** for complex apps
+- **Layers**: Domain (entities, use cases), Data (repositories, data sources), Presentation (UI, ViewModels)
+- **Advantages**: Highly testable, scalable, clear separation, framework-independent business logic
 
 ```kotlin
-// Domain Layer - Core business logic
-// Entities
-data class User(
-    val id: Int,
-    val name: String,
-    val email: String
-)
-
-// Use Cases
+// Clean Architecture - Layered approach
+// Domain Layer
 class GetUserUseCase(private val repository: UserRepository) {
     suspend operator fun invoke(id: Int): Result<User> {
         return try {
@@ -438,13 +170,7 @@ class GetUserUseCase(private val repository: UserRepository) {
     }
 }
 
-// Domain Repository Interface
-interface UserRepository {
-    suspend fun getUser(id: Int): User
-}
-
-// Data Layer - Data sources and implementation
-// Repository Implementation
+// Data Layer
 class UserRepositoryImpl(
     private val remoteDataSource: UserRemoteDataSource,
     private val localDataSource: UserLocalDataSource
@@ -452,38 +178,16 @@ class UserRepositoryImpl(
 
     override suspend fun getUser(id: Int): User {
         return try {
-            // Try remote first
             val user = remoteDataSource.getUser(id)
-            // Cache locally
             localDataSource.saveUser(user)
             user
         } catch (e: Exception) {
-            // Fallback to local cache
             localDataSource.getUser(id)
         }
     }
 }
 
-// Remote Data Source
-class UserRemoteDataSource(private val api: ApiService) {
-    suspend fun getUser(id: Int): User {
-        val response = api.getUser(id)
-        return response.toDomain()
-    }
-}
-
-// Local Data Source
-class UserLocalDataSource(private val dao: UserDao) {
-    suspend fun getUser(id: Int): User {
-        return dao.getUserById(id).toDomain()
-    }
-
-    suspend fun saveUser(user: User) {
-        dao.insert(user.toEntity())
-    }
-}
-
-// Presentation Layer - UI and ViewModels
+// Presentation Layer
 class UserViewModel(
     private val getUserUseCase: GetUserUseCase
 ) : ViewModel() {
@@ -493,61 +197,16 @@ class UserViewModel(
 
     fun loadUser(id: Int) {
         viewModelScope.launch {
-            _uiState.value = UiState.Loading
-
             getUserUseCase(id).fold(
-                onSuccess = { user ->
-                    _uiState.value = UiState.Success(user)
-                },
-                onFailure = { exception ->
-                    _uiState.value = UiState.Error(exception.message ?: "Unknown error")
-                }
+                onSuccess = { user -> _uiState.value = UiState.Success(user) },
+                onFailure = { error -> _uiState.value = UiState.Error(error.message) }
             )
         }
-    }
-
-    sealed class UiState {
-        object Loading : UiState()
-        data class Success(val user: User) : UiState()
-        data class Error(val message: String) : UiState()
-    }
-}
-
-// Dependency Injection
-@Module
-class UserModule {
-    @Provides
-    fun provideGetUserUseCase(repository: UserRepository): GetUserUseCase {
-        return GetUserUseCase(repository)
-    }
-
-    @Provides
-    fun provideUserRepository(
-        remoteDataSource: UserRemoteDataSource,
-        localDataSource: UserLocalDataSource
-    ): UserRepository {
-        return UserRepositoryImpl(remoteDataSource, localDataSource)
     }
 }
 ```
 
-**Layers:**
-1. **Domain**: Entities, Use Cases, Repository Interfaces
-2. **Data**: Repository Implementations, Data Sources, DTOs
-3. **Presentation**: ViewModels, UI (Activities/Fragments/Compose)
-
-**Advantages:**
-- Highly testable (each layer independently)
-- Scalable for large apps
-- Clear separation of concerns
-- Framework-independent business logic
-
-**Disadvantages:**
-- More complex
-- More files and boilerplate
-- Overkill for small apps
-
-### Comparison Table
+**Comparison:**
 
 | Pattern | Complexity | Testability | Boilerplate | Lifecycle-Aware | Use Case |
 |---------|------------|-------------|-------------|-----------------|----------|
@@ -557,64 +216,235 @@ class UserModule {
 | **MVI** | Medium-High | Very High | Medium | Yes | Complex UIs with state |
 | **Clean Architecture** | High | Very High | High | Yes (with MVVM) | Large enterprise apps |
 
-### Modern Android Recommendation
-
-**For most apps:**
-```
-MVVM + Repository Pattern + Dependency Injection
-```
-
-**For complex apps:**
-```
-Clean Architecture + MVVM/MVI + Jetpack Compose + Hilt
-```
-
-**Architecture Example:**
-
-```
-app/
- di/                  (Dependency Injection - Hilt modules)
- data/
-    local/          (Room, SharedPreferences)
-    remote/         (Retrofit, APIs)
-    repository/     (Repository implementations)
- domain/
-    model/          (Domain entities)
-    usecase/        (Business logic)
- presentation/
-     ui/             (Compose screens or Fragments)
-     viewmodel/      (ViewModels)
-```
-
-### Summary
-
-**Evolution:**
-- MVC (2008-2012): Too coupled
-- MVP (2012-2017): Better separation, but boilerplate
-- MVVM (2017-present): Official Google recommendation
-- MVI (2019-present): Better state management
-- Clean Architecture (ongoing): Enterprise-grade apps
-
-**Current Best Practice:** MVVM + Clean Architecture (when needed) + Jetpack Compose
+**Modern Android Recommendation:**
+- **For most apps**: MVVM + Repository Pattern + Dependency Injection
+- **For complex apps**: Clean Architecture + MVVM/MVI + Jetpack Compose + Hilt
 
 ## Ответ (RU)
 
 В разработке Android используются архитектурные паттерны: **MVC** (ранний, редко используется), **MVP** (Model-View-Presenter), **MVVM** (Model-View-ViewModel с data binding), **MVI** (Model-View-Intent для однонаправленного потока данных), **Clean Architecture** (слоистая архитектура с инверсией зависимостей).
 
-**Современная рекомендация:** MVVM + Clean Architecture + Android Architecture Components (ViewModel, LiveData/StateFlow, Repository pattern).
+**Современная рекомендация**: MVVM + Clean Architecture + Android Architecture Components (ViewModel, LiveData/StateFlow, Repository pattern).
 
-**Основные паттерны:**
+**1. MVC (Model-View-Controller)**
+- **Ранний паттерн Android** - редко используется сегодня
+- **Компоненты**: Model (бизнес-логика), View (XML layouts), Controller (Activity/Fragment)
+- **Проблемы**: Activity является и View, и Controller, тесная связанность, сложно тестировать
 
-**1. MVC** - устаревший, Activity является и View, и Controller.
-**2. MVP** - чёткое разделение через Contract интерфейсы, Presenter тестируется независимо.
-**3. MVVM** - текущий стандарт с Jetpack, ViewModel переживает configuration changes, реактивный подход.
-**4. MVI** - unidirectional data flow, предсказуемое управление состоянием.
-**5. Clean Architecture** - многоуровневая архитектура для сложных приложений.
+```kotlin
+// ПЛОХО: MVC - Activity делает всё
+class MainActivity : AppCompatActivity() {
+    private val repository = UserRepository()
 
-**Сравнение:** MVC (слишком связанный) → MVP (больше boilerplate) → MVVM (официальная рекомендация Google) → MVI (лучшее управление состоянием) → Clean Architecture (enterprise-уровень).
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val user = repository.getUser(1) // Блокирующий вызов
+        findViewById<TextView>(R.id.userName).text = user.name
+    }
+}
+```
+
+**2. MVP (Model-View-Presenter)**
+- **Улучшенное разделение** - популярен до MVVM
+- **Компоненты**: Model (данные), View (пассивный UI), Presenter (логика представления)
+- **Преимущества**: Чёткое разделение, тестируемый presenter, заменяемый view
+- **Недостатки**: Много boilerplate, утечки памяти, нет осведомленности о жизненном цикле
+
+```kotlin
+// MVP - Лучшее разделение
+interface UserContract {
+    interface View {
+        fun showUser(user: User)
+        fun showLoading()
+    }
+
+    interface Presenter {
+        fun loadUser(id: Int)
+    }
+}
+
+class UserPresenter(
+    private val view: UserContract.View,
+    private val repository: UserRepository
+) : UserContract.Presenter {
+
+    override fun loadUser(id: Int) {
+        view.showLoading()
+        // Загружаем пользователя асинхронно
+        view.showUser(user)
+    }
+}
+```
+
+**3. MVVM (Model-View-ViewModel)**
+- **Текущий стандарт Android** с поддержкой Jetpack
+- **Компоненты**: Model (данные), View (UI), ViewModel (логика представления с наблюдаемыми данными)
+- **Преимущества**: Осведомленность о жизненном цикле, двусторонняя привязка данных, автоматические обновления UI, официальная поддержка Google
+
+```kotlin
+// MVVM - Современный подход
+class UserViewModel(
+    private val repository: UserRepository
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    fun loadUser(id: Int) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            try {
+                val user = repository.getUser(id)
+                _uiState.value = UiState.Success(user)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message ?: "Неизвестная ошибка")
+            }
+        }
+    }
+}
+
+// View наблюдает за ViewModel
+lifecycleScope.launch {
+    viewModel.uiState.collect { state ->
+        when (state) {
+            is UiState.Loading -> showLoading()
+            is UiState.Success -> showUser(state.user)
+            is UiState.Error -> showError(state.message)
+        }
+    }
+}
+```
+
+**4. MVI (Model-View-Intent)**
+- **Однонаправленный поток данных** - набирает популярность
+- **Компоненты**: State (единственный источник истины), Intent (действия пользователя), View (отображает состояние)
+- **Преимущества**: Предсказуемое управление состоянием, легко отлаживать, отлично для сложных UI
+
+```kotlin
+// MVI - Однонаправленный поток
+data class UserState(
+    val isLoading: Boolean = false,
+    val user: User? = null,
+    val error: String? = null
+)
+
+sealed class UserIntent {
+    data class LoadUser(val id: Int) : UserIntent()
+    object RetryLoading : UserIntent()
+}
+
+class UserViewModel : ViewModel() {
+    private val _state = MutableStateFlow(UserState())
+    val state: StateFlow<UserState> = _state.asStateFlow()
+
+    fun handleIntent(intent: UserIntent) {
+        when (intent) {
+            is UserIntent.LoadUser -> loadUser(intent.id)
+            is UserIntent.RetryLoading -> retry()
+        }
+    }
+}
+```
+
+**5. Clean Architecture**
+- **Многоуровневая архитектура** для сложных приложений
+- **Уровни**: Domain (сущности, use cases), Data (репозитории, источники данных), Presentation (UI, ViewModels)
+- **Преимущества**: Высокая тестируемость, масштабируемость, чёткое разделение, бизнес-логика независима от фреймворка
+
+```kotlin
+// Clean Architecture - Слоистый подход
+// Domain Layer
+class GetUserUseCase(private val repository: UserRepository) {
+    suspend operator fun invoke(id: Int): Result<User> {
+        return try {
+            val user = repository.getUser(id)
+            Result.success(user)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+}
+
+// Data Layer
+class UserRepositoryImpl(
+    private val remoteDataSource: UserRemoteDataSource,
+    private val localDataSource: UserLocalDataSource
+) : UserRepository {
+
+    override suspend fun getUser(id: Int): User {
+        return try {
+            val user = remoteDataSource.getUser(id)
+            localDataSource.saveUser(user)
+            user
+        } catch (e: Exception) {
+            localDataSource.getUser(id)
+        }
+    }
+}
+
+// Presentation Layer
+class UserViewModel(
+    private val getUserUseCase: GetUserUseCase
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    fun loadUser(id: Int) {
+        viewModelScope.launch {
+            getUserUseCase(id).fold(
+                onSuccess = { user -> _uiState.value = UiState.Success(user) },
+                onFailure = { error -> _uiState.value = UiState.Error(error.message) }
+            )
+        }
+    }
+}
+```
+
+**Сравнение:**
+
+| Паттерн | Сложность | Тестируемость | Boilerplate | Осведомленность о жизненном цикле | Случай использования |
+|---------|-----------|---------------|-------------|-----------------------------------|---------------------|
+| **MVC** | Низкая | Низкая | Низкий | Нет | Простые приложения (legacy) |
+| **MVP** | Средняя | Высокая | Высокий | Нет | Средние приложения |
+| **MVVM** | Средняя | Высокая | Средний | Да | Современные Android приложения |
+| **MVI** | Средне-высокая | Очень высокая | Средний | Да | Сложные UI с состоянием |
+| **Clean Architecture** | Высокая | Очень высокая | Высокий | Да (с MVVM) | Крупные enterprise приложения |
+
+**Современная рекомендация Android:**
+- **Для большинства приложений**: MVVM + Repository Pattern + Dependency Injection
+- **Для сложных приложений**: Clean Architecture + MVVM/MVI + Jetpack Compose + Hilt
+
+---
+
+## Follow-ups
+
+- How do you choose between MVVM and MVI for a new project?
+- What are the key differences between MVP and MVVM?
+- How do you implement Clean Architecture in a small Android app?
+- What are the benefits of using Repository pattern with MVVM?
+- How do you handle state management in complex UIs with MVI?
+
+## References
+
+- [Android Architecture Guide](https://developer.android.com/topic/architecture)
+- [MVVM Pattern](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [MVI Pattern](https://proandroiddev.com/mvi-architecture-in-android-using-kotlin-coroutines-and-flow-2b4b0b0b0b0b)
 
 ## Related Questions
 
-- [[q-privacy-sandbox-fledge--privacy--hard]]
-- [[q-material3-dynamic-color-theming--material-design--medium]]
-- [[q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium]]
+### Prerequisites (Easier)
+- [[q-viewmodel-pattern--android--easy]] - ViewModel basics
+- [[q-android-app-components--android--easy]] - App components
+
+### Related (Medium)
+- [[q-mvvm-pattern--android--medium]] - MVVM implementation
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture
+- [[q-architecture-components-libraries--android--easy]] - Architecture Components
+
+### Advanced (Harder)
+- [[q-mvi-architecture--android--hard]] - MVI implementation
+- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
