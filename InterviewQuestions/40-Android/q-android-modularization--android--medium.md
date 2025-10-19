@@ -1,16 +1,20 @@
 ---
 id: 20251012-122767
-title: "Android Modularization / Модуляризация Android"
+title: Android Modularization / Модуляризация Android
+aliases: [Android Modularization, Модуляризация Android]
 topic: android
+subtopics: [architecture, gradle, build-variants]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-custom-view-accessibility--custom-views--medium, q-room-relations-embedded--room--medium, q-compose-side-effects-launchedeffect-disposableeffect--android--hard]
 created: 2025-10-15
-tags: [modularization, architecture, multi-module, gradle, difficulty/medium]
+updated: 2025-10-15
+tags: [android/architecture, android/gradle, android/build-variants, modularization, architecture, multi-module, gradle, difficulty/medium]
+related: [q-android-architectural-patterns--android--medium, q-gradle-build-system--android--medium, q-android-build-optimization--android--medium]
 ---
-# Android Modularization / Модуляризация Android
-
 # Question (EN)
 > Describe Android modularization in general
 
@@ -21,105 +25,220 @@ tags: [modularization, architecture, multi-module, gradle, difficulty/medium]
 
 ## Answer (EN)
 
-**Android modularization** is a practice of organizing a codebase into **loosely coupled and self-contained parts** where each part is a module. A project with multiple Gradle modules is known as a **multi-module project**.
+**Android Modularization** is the practice of organizing codebases into loosely coupled, self-contained modules. Each module serves a specific purpose and can be developed, tested, and maintained independently.
 
-In an ever-growing codebase, scalability, readability, and overall code quality often decrease through time. This comes as a result of the codebase increasing in size without its maintainers taking active measures to enforce a structure that is easily maintainable. Modularization is a means of structuring your codebase in a way that improves maintainability and helps avoid these problems.
+**Modularization Theory:**
+Modularization follows the principle of separation of concerns, breaking complex systems into manageable components. Each module encapsulates related functionality and exposes a well-defined interface, reducing coupling and improving maintainability.
 
-**What is modularization?**
+**Core Benefits:**
+- **Reusability**: Modules can be shared across multiple apps or features
+- **Strict Visibility Control**: Internal implementation details are hidden from other modules
+- **Customizable Delivery**: Play Feature Delivery enables on-demand feature loading
+- **Scalability**: Changes in one module don't cascade to others
+- **Ownership**: Each module can have dedicated maintainers
+- **Testability**: Modules can be tested in isolation
 
-Modularization is a practice of organizing a codebase into loosely coupled and self-contained parts. Each part is a module. Each module is independent and serves a clear purpose. By dividing a problem into smaller and easier to solve subproblems, you reduce the complexity of designing and maintaining a large system.
+**Module Types:**
+- **App Module**: Main application entry point
+- **Feature Modules**: Self-contained features (news, profile, settings)
+- **Core Modules**: Shared functionality (data, network, UI)
+- **Library Modules**: Reusable components
 
-**Benefits of modularization:**
-
-**Primary benefits (only achievable with modularization):**
-
-| Benefit | Summary |
-|---|---|
-| **Reusability** | Modularization enables opportunities for code sharing and building multiple apps from the same foundation. Modules are effectively building blocks. Apps should be a sum of their features where the features are organized as separate modules. The functionality that a certain module provides may or may not be enabled in a particular app. For example, a `:feature:news` can be a part of the full version flavor and wear app but not part of the demo version flavor. |
-| **Strict visibility control** | Modules enable you to easily control what you expose to other parts of your codebase. You can mark everything but your public interface as `internal` or `private` to prevent it from being used outside the module. |
-| **Customizable delivery** | Play Feature Delivery uses the advanced capabilities of app bundles, allowing you to deliver certain features of your app conditionally or on demand. |
-
-**Additional benefits (enhanced by modularization):**
-
-| Benefit | Summary |
-|---|---|
-| **Scalability** | In a tightly coupled codebase a single change can trigger a cascade of alterations in seemingly unrelated parts of code. A properly modularized project will embrace the separation of concerns principle and therefore limit the coupling. This empowers the contributors through greater autonomy. |
-| **Ownership** | In addition to enabling autonomy, modules can also be used to enforce accountability. A module can have a dedicated owner who is responsible for maintaining the code, fixing bugs, adding tests, and reviewing changes. |
-| **Encapsulation** | Encapsulation means that each part of your code should have the smallest possible amount of knowledge about other parts. Isolated code is easier to read and understand. |
-| **Testability** | Testability characterizes how easy it is to test your code. A testable code is one where components can be easily tested in isolation. |
-| **Build time** | Some Gradle functionalities such as incremental build, build cache or parallel build, can leverage modularity to improve build performance. |
-
-**Common pitfalls:**
-
-The granularity of your codebase is the extent to which it is composed of modules. A more granular codebase has more, smaller modules. When designing a modularized codebase, you should decide on a level of granularity. To do so, take into account the size of your codebase and its relative complexity.
-
-Some common pitfalls are as follows:
-
-- **Too fine-grained**: Every module brings a certain amount of overhead in the form of increased build complexity and boilerplate code. A complex build configuration makes it difficult to keep configurations consistent across modules. Too much boilerplate code results in a cumbersome codebase that is difficult to maintain. If overhead counteracts scalability improvements, you should consider consolidating some modules.
-
-- **Too coarse-grained**: Conversely, if your modules are growing too large you might end up with yet another monolith and miss the benefits that modularity has to offer. For example, in a small project it's ok to put the data layer inside a single module. But as it grows, it might be necessary to separate repositories and data sources into standalone modules.
-
-- **Too complex**: It doesn't always make sense to modularize your project. A dominating factor is the size of the codebase. If you don't expect your project to grow beyond a certain threshold, the scalability and build time gains won't apply.
-
-**Example structure:**
-
+**Basic Module Structure:**
 ```
 app/
- :app (app module)
- :feature:news
- :feature:profile
- :feature:settings
- :core:data
- :core:network
- :core:database
- :core:ui
+├── app/                    # Main app module
+├── feature:news/          # News feature module
+├── feature:profile/       # Profile feature module
+├── core:data/            # Data layer
+├── core:network/         # Network layer
+├── core:ui/              # UI components
+└── shared:utils/         # Shared utilities
 ```
 
-**Summary:**
+**Module Dependencies:**
+```gradle
+// app/build.gradle
+dependencies {
+    implementation project(':feature:news')
+    implementation project(':feature:profile')
+    implementation project(':core:data')
+    implementation project(':core:network')
+}
 
-- **Modularization**: Organizing codebase into loosely coupled modules
-- **Benefits**: Reusability, strict visibility, customizable delivery, scalability, ownership
-- **Challenges**: Finding the right granularity
-- **Use cases**: Large projects, multiple apps from same codebase, feature delivery
-- **Best practices**: Separation of concerns, proper dependency management, clear module boundaries
+// feature:news/build.gradle
+dependencies {
+    implementation project(':core:data')
+    implementation project(':core:ui')
+    // No direct dependency on other features
+}
+```
 
-**Source**: [Guide to Android app modularization](https://developer.android.com/topic/modularization)
+**Visibility Control:**
+```kotlin
+// In core:data module
+internal class DatabaseHelper {
+    // Internal - only accessible within this module
+}
 
----
+public class UserRepository {
+    // Public - accessible from other modules
+    fun getUser(id: String): User = // ...
+}
+
+// In feature:news module
+class NewsViewModel {
+    private val userRepo = UserRepository() // Can access public API
+    // Cannot access DatabaseHelper directly
+}
+```
+
+**Play Feature Delivery:**
+```gradle
+// feature:news/build.gradle
+android {
+    dynamicFeatures = [':feature:news']
+}
+
+// app/build.gradle
+dependencies {
+    implementation 'com.google.android.play:core:1.10.3'
+}
+```
+
+**Common Pitfalls:**
+- **Too Fine-grained**: Excessive modules increase build complexity
+- **Too Coarse-grained**: Large modules become monoliths
+- **Circular Dependencies**: Modules depending on each other
+- **Inconsistent Naming**: Unclear module purposes
+
+**Best Practices:**
+- Start with app and core modules
+- Add feature modules as they grow
+- Use clear dependency hierarchy
+- Avoid circular dependencies
+- Keep modules focused and cohesive
 
 ## Ответ (RU)
 
-**Модуляризация Android** — это практика организации кодовой базы на слабо связанные и самодостаточные части, где каждая часть является модулем. Проект с несколькими модулями Gradle называется многомодульным проектом.
+**Модуляризация Android** - это практика организации кодовых баз в слабо связанные, самодостаточные модули. Каждый модуль служит конкретной цели и может разрабатываться, тестироваться и поддерживаться независимо.
 
-В постоянно растущей кодовой базе масштабируемость, читаемость и общее качество кода часто снижаются со временем. Это происходит в результате увеличения размера кодовой базы без активных мер со стороны её поддерживающих для обеспечения легко поддерживаемой структуры. Модуляризация — это способ структурирования кодовой базы, который улучшает её поддерживаемость и помогает избежать этих проблем.
+**Теория модуляризации:**
+Модуляризация следует принципу разделения ответственности, разбивая сложные системы на управляемые компоненты. Каждый модуль инкапсулирует связанную функциональность и предоставляет чётко определённый интерфейс, уменьшая связанность и улучшая поддерживаемость.
 
-**Что такое модуляризация?**
+**Основные преимущества:**
+- **Переиспользуемость**: Модули могут использоваться в нескольких приложениях или функциях
+- **Строгий контроль видимости**: Внутренние детали реализации скрыты от других модулей
+- **Настраиваемая доставка**: Play Feature Delivery позволяет загружать функции по требованию
+- **Масштабируемость**: Изменения в одном модуле не каскадируются на другие
+- **Владение**: Каждый модуль может иметь выделенных поддерживающих
+- **Тестируемость**: Модули можно тестировать изолированно
 
-Модуляризация — это практика организации кодовой базы на слабо связанные и самодостаточные части. Каждая часть — это модуль. Каждый модуль независим и служит чёткой цели. Разделяя проблему на более мелкие и легко решаемые подзадачи, вы снижаете сложность проектирования и поддержки большой системы.
+**Типы модулей:**
+- **App Module**: Главная точка входа приложения
+- **Feature Modules**: Самодостаточные функции (новости, профиль, настройки)
+- **Core Modules**: Общая функциональность (данные, сеть, UI)
+- **Library Modules**: Переиспользуемые компоненты
 
-**Преимущества модуляризации:**
+**Базовая структура модулей:**
+```
+app/
+├── app/                    # Главный модуль приложения
+├── feature:news/          # Модуль функции новостей
+├── feature:profile/       # Модуль функции профиля
+├── core:data/            # Слой данных
+├── core:network/         # Слой сети
+├── core:ui/              # UI компоненты
+└── shared:utils/         # Общие утилиты
+```
 
-- **Переиспользуемость** — возможность совместного использования кода и создания нескольких приложений на одной основе
-- **Строгий контроль видимости** — возможность контролировать, что вы предоставляете другим частям кодовой базы
-- **Настраиваемая доставка** — Play Feature Delivery позволяет доставлять определённые функции приложения условно или по требованию
-- **Масштабируемость** — правильно модуляризованный проект следует принципу разделения ответственности
-- **Владение** — модули могут иметь выделенных владельцев, ответственных за поддержку кода
-- **Инкапсуляция** — изолированный код легче читать и понимать
-- **Тестируемость** — компоненты можно легко тестировать изолированно
-- **Время сборки** — функциональность Gradle может использовать модульность для улучшения производительности сборки
+**Зависимости модулей:**
+```gradle
+// app/build.gradle
+dependencies {
+    implementation project(':feature:news')
+    implementation project(':feature:profile')
+    implementation project(':core:data')
+    implementation project(':core:network')
+}
+
+// feature:news/build.gradle
+dependencies {
+    implementation project(':core:data')
+    implementation project(':core:ui')
+    // Нет прямой зависимости от других функций
+}
+```
+
+**Контроль видимости:**
+```kotlin
+// В модуле core:data
+internal class DatabaseHelper {
+    // Internal - доступно только в этом модуле
+}
+
+public class UserRepository {
+    // Public - доступно из других модулей
+    fun getUser(id: String): User = // ...
+}
+
+// В модуле feature:news
+class NewsViewModel {
+    private val userRepo = UserRepository() // Может получить доступ к публичному API
+    // Не может получить прямой доступ к DatabaseHelper
+}
+```
+
+**Play Feature Delivery:**
+```gradle
+// feature:news/build.gradle
+android {
+    dynamicFeatures = [':feature:news']
+}
+
+// app/build.gradle
+dependencies {
+    implementation 'com.google.android.play:core:1.10.3'
+}
+```
 
 **Распространённые ошибки:**
+- **Слишком детальная**: Избыточные модули увеличивают сложность сборки
+- **Слишком грубая**: Большие модули становятся монолитами
+- **Циклические зависимости**: Модули зависят друг от друга
+- **Непоследовательное именование**: Неясные цели модулей
 
-- **Слишком детальная модуляризация** — каждый модуль добавляет накладные расходы в виде повышенной сложности сборки
-- **Слишком грубая модуляризация** — если модули становятся слишком большими, вы получаете ещё один монолит
-- **Слишком сложная** — не всегда имеет смысл модуляризировать проект, особенно если он небольшой
+**Лучшие практики:**
+- Начните с app и core модулей
+- Добавляйте feature модули по мере роста
+- Используйте чёткую иерархию зависимостей
+- Избегайте циклических зависимостей
+- Держите модули сфокусированными и сплочёнными
 
-**Резюме:**
+---
 
-Модуляризация — это организация кодовой базы на слабо связанные модули для улучшения переиспользуемости, масштабируемости, тестируемости и времени сборки. Ключевые преимущества включают строгий контроль видимости, настраиваемую доставку функций и лучшее разделение ответственности. Важно найти правильный баланс детализации модулей.
+## Follow-ups
+
+- How to handle shared dependencies between modules?
+- What are the best practices for module communication?
+- How to implement feature flags in modularized apps?
+
+## References
+
+- https://developer.android.com/topic/modularization
+- https://developer.android.com/guide/playcore/feature-delivery
 
 ## Related Questions
 
-- [[q-custom-view-accessibility--custom-views--medium]]
-- [[q-room-relations-embedded--room--medium]]
-- [[q-compose-side-effects-launchedeffect-disposableeffect--android--hard]]
+### Prerequisites (Easier)
+- [[q-android-architectural-patterns--android--medium]] - Architecture patterns
+- [[q-gradle-build-system--android--medium]] - Build system basics
+
+### Related (Medium)
+- [[q-android-build-optimization--android--medium]] - Build optimization
+- [[q-android-app-components--android--easy]] - App components
+- [[q-android-jetpack-overview--android--easy]] - Jetpack libraries
+
+### Advanced (Harder)
+- [[q-android-dependency-injection--android--hard]] - Dependency injection
+- [[q-android-testing-strategies--android--medium]] - Testing approaches
