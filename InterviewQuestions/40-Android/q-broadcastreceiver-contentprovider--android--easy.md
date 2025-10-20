@@ -1,251 +1,116 @@
 ---
 id: 20251016-162753
-title: "Broadcastreceiver Contentprovider / BroadcastReceiver и ContentProvider"
+title: BroadcastReceiver and ContentProvider / BroadcastReceiver и ContentProvider
+aliases: [BroadcastReceiver and ContentProvider, BroadcastReceiver и ContentProvider]
 topic: android
+subtopics: [broadcast-receiver, content-provider]
+question_kind: android
 difficulty: easy
+original_language: ru
+language_tags: [ru, en]
 status: draft
 moc: moc-android
-related: [q-keep-service-running-background--android--medium, q-accessibility-text-scaling--accessibility--medium, q-mlkit-face-detection--ml--medium]
+related: [q-android-manifest-file--android--easy, q-android-app-components--android--easy, q-android-service-types--android--easy]
 created: 2025-10-15
-tags: [android/broadcast-receiver, android/content-provider, broadcast-receiver, content-provider, data-sharing, intent, system-events, difficulty/easy]
+updated: 2025-10-20
+tags: [android/broadcast-receiver, android/content-provider, intent, data-sharing, difficulty/easy]
 ---
-# Что известно про ресиверы и контент-провайдеры?
-
-# Question (EN)
-> What are BroadcastReceiver and ContentProvider?
 
 # Вопрос (RU)
-> Что известно про ресиверы и контент-провайдеры?
+> Что такое BroadcastReceiver и ContentProvider? В чем их назначение и ключевые отличия?
 
----
-
-## Answer (EN)
-
-Two important Android components for **system events** and **data sharing**.
-
-**BroadcastReceiver** - System Event Listener
-
-Receives **Intent messages** from system or apps.
-
-**Common Use Cases:**
-
-```kotlin
-// Network connectivity change
-class NetworkReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-
-        if (networkInfo?.isConnected == true) {
-            // Network available
-        } else {
-            // Network unavailable
-        }
-    }
-}
-
-// Register in AndroidManifest.xml
-<receiver android:name=".NetworkReceiver">
-    <intent-filter>
-        <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-    </intent-filter>
-</receiver>
-```
-
-**System Events Examples:**
-- Network change
-- SMS received
-- Battery low
-- Airplane mode change
-- WiFi state change
-
-**ContentProvider** - Data Sharing Interface
-
-Provides **structured data access** for sharing data between apps.
-
-**Common Use Cases:**
-
-```kotlin
-class ContactsProvider : ContentProvider() {
-    override fun query(
-        uri: Uri,
-        projection: Array<String>?,
-        selection: String?,
-        selectionArgs: Array<String>?,
-        sortOrder: String?
-    ): Cursor? {
-        // Return contacts data
-        return database.query(...)
-    }
-
-    override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        // Insert new contact
-        return Uri.parse("content://contacts/${newId}")
-    }
-}
-
-// Declare in AndroidManifest.xml
-<provider
-    android:name=".ContactsProvider"
-    android:authorities="com.example.contacts"
-    android:exported="true" />
-```
-
-**Built-in ContentProviders:**
-- **Contacts**: Contact list
-- **MediaStore**: Gallery images/videos
-- **Calendar**: Calendar events
-- **CallLog**: Call history
-- **Settings**: System settings
-
-**Accessing ContentProvider:**
-
-```kotlin
-// Read contacts
-val cursor = contentResolver.query(
-    ContactsContract.Contacts.CONTENT_URI,
-    null, null, null, null
-)
-
-cursor?.use {
-    while (it.moveToNext()) {
-        val name = it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-        // Use contact data
-    }
-}
-```
-
-**Comparison:**
-
-| Component | Purpose | Input | Output | Example |
-|-----------|---------|-------|--------|---------|
-| BroadcastReceiver | Event listener | Intent | Action | Network change |
-| ContentProvider | Data access | Query | Cursor | Contacts API |
-
-**Summary:**
-
-- **BroadcastReceiver**: Listens to system/app broadcasts via Intent
-- **ContentProvider**: Provides structured data access for inter-app communication
+# Question (EN)
+> What are BroadcastReceiver and ContentProvider? What are their purposes and key differences?
 
 ---
 
 ## Ответ (RU)
 
-Два важных компонента Android для **системных событий** и **обмена данными**.
-
-**BroadcastReceiver** - Слушатель системных событий
-
-Принимает **Intent сообщения** от системы или приложений.
-
-**Основные случаи использования:**
-
-```kotlin
-// Изменение сетевого подключения
-class NetworkReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-
-        if (networkInfo?.isConnected == true) {
-            // Сеть доступна
-        } else {
-            // Сеть недоступна
-        }
-    }
-}
-
-// Регистрация в AndroidManifest.xml
-<receiver android:name=".NetworkReceiver">
+- **BroadcastReceiver**: компонент для реакции на широковещательные события (интенты) системы/приложений.
+  - **Назначение**: подписка на события без UI; запуск логики по факту события.
+  - **Регистрация**: манифест (статически) или в коде (динамически).
+  - **Особенности**: очень короткая работа в onReceive; для долгих задач — Service/WorkManager.
+  - **Применение**: сеть/питание/BOOT_COMPLETED/пользовательские broadcast’ы.
+  - **Сниппет**:
+```xml
+<receiver android:name=".NetworkReceiver" android:exported="false">
     <intent-filter>
         <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
     </intent-filter>
 </receiver>
 ```
 
-**Примеры системных событий:**
-- Изменение сети
-- Получение SMS
-- Низкий заряд батареи
-- Изменение режима полета
-- Изменение состояния WiFi
-
-**ContentProvider** - Интерфейс обмена данными
-
-Предоставляет **структурированный доступ к данным** для обмена данными между приложениями.
-
-**Основные случаи использования:**
-
-```kotlin
-class ContactsProvider : ContentProvider() {
-    override fun query(
-        uri: Uri,
-        projection: Array<String>?,
-        selection: String?,
-        selectionArgs: Array<String>?,
-        sortOrder: String?
-    ): Cursor? {
-        // Возвращаем данные контактов
-        return database.query(...)
-    }
-
-    override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        // Вставляем новый контакт
-        return Uri.parse("content://contacts/${newId}")
-    }
-}
-
-// Объявление в AndroidManifest.xml
+- **ContentProvider**: стандартный интерфейс доступа к структурированным данным между приложениями.
+  - **Назначение**: CRUD-операции через Uri/ContentResolver; граница процесса/приложения.
+  - **Безопасность**: права/пермишены на уровне провайдера и Uri; контракт через authority.
+  - **Применение**: контакты, медиа, настройки, собственные данные для шаринга.
+  - **Сниппет**:
+```xml
 <provider
     android:name=".ContactsProvider"
     android:authorities="com.example.contacts"
     android:exported="true" />
 ```
 
-**Встроенные ContentProviders:**
-- **Contacts**: Список контактов
-- **MediaStore**: Изображения/видео из галереи
-- **Calendar**: События календаря
-- **CallLog**: История звонков
-- **Settings**: Системные настройки
+- **Сравнение**:
+  - BroadcastReceiver: реакция на события → триггер логики; вход: Intent; нет данных.
+  - ContentProvider: доступ к данным → query/insert/update/delete; вход: Uri; выход: Cursor/число/Uri.
 
-**Доступ к ContentProvider:**
+## Answer (EN)
 
-```kotlin
-// Чтение контактов
-val cursor = contentResolver.query(
-    ContactsContract.Contacts.CONTENT_URI,
-    null, null, null, null
-)
-
-cursor?.use {
-    while (it.moveToNext()) {
-        val name = it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-        // Используем данные контакта
-    }
-}
+- **BroadcastReceiver**: component for reacting to system/app broadcast events (intents).
+  - **Purpose**: subscribe to events without UI; trigger logic on event.
+  - **Registration**: manifest (static) or code (dynamic).
+  - **Notes**: keep onReceive short; use Service/WorkManager for long work.
+  - **Use cases**: connectivity/power/BOOT_COMPLETED/custom broadcasts.
+  - **Snippet**:
+```xml
+<receiver android:name=".NetworkReceiver" android:exported="false">
+    <intent-filter>
+        <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+    </intent-filter>
+</receiver>
 ```
 
-**Сравнение:**
+- **ContentProvider**: standard interface for structured data access across apps.
+  - **Purpose**: CRUD via Uri/ContentResolver; process/app boundary.
+  - **Security**: permissions at provider and Uri levels; authority defines contract.
+  - **Use cases**: contacts, media, settings, your own shared data.
+  - **Snippet**:
+```xml
+<provider
+    android:name=".ContactsProvider"
+    android:authorities="com.example.contacts"
+    android:exported="true" />
+```
 
-| Компонент | Назначение | Вход | Выход | Пример |
-|-----------|-----------|------|-------|--------|
-| BroadcastReceiver | Слушатель событий | Intent | Действие | Изменение сети |
-| ContentProvider | Доступ к данным | Запрос | Cursor | API контактов |
-
-**Резюме:**
-
-- **BroadcastReceiver**: Слушает широковещательные сообщения системы/приложений через Intent
-- **ContentProvider**: Предоставляет структурированный доступ к данным для межприложенного взаимодействия
-
+- **Comparison**:
+  - BroadcastReceiver: event reaction → trigger logic; input: Intent; no data payload returned.
+  - ContentProvider: data access → query/insert/update/delete; input: Uri; output: Cursor/count/Uri.
 
 ---
 
+## Follow-ups
+
+- How to avoid ANR in onReceive and delegate longer work safely?
+- How to secure a ContentProvider (read/write permissions, Uri permissions)?
+- When to use WorkManager vs BroadcastReceiver for deferred work?
+
+## References
+
+- https://developer.android.com/guide/components/broadcasts
+- https://developer.android.com/guide/topics/providers/content-provider-basics
+
 ## Related Questions
 
-### Related (Medium)
-- [[q-what-is-broadcastreceiver--android--easy]] - Broadcast
+### Prerequisites (Easier)
+- [[q-android-manifest-file--android--easy]]
+- [[q-android-app-components--android--easy]]
+
+### Related (Same Level)
+- [[q-android-service-types--android--easy]]
+- [[q-android-services-purpose--android--easy]]
 
 ### Advanced (Harder)
-- [[q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]] - Broadcast
-- [[q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium]] - Broadcast
-- [[q-kotlin-context-receivers--kotlin--hard]] - Broadcast
+- [[q-android-modularization--android--medium]]
+- [[q-android-performance-measurement-tools--android--medium]]
