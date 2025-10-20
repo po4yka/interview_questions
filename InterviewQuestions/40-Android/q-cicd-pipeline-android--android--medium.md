@@ -11,9 +11,6 @@ tags: [cicd, github-actions, automation, testing, deployment, gradle, difficulty
 ---
 # CI/CD Pipeline for Android
 
-**Сложность**: Medium
-**Источник**: Amit Shekhar Android Interview Questions
-
 # Question (EN)
 > How do you set up a CI/CD (Continuous Integration/Continuous Deployment) pipeline for Android? What are the key stages and best practices?
 

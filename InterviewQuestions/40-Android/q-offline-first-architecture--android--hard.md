@@ -11,14 +11,11 @@ related: [q-how-to-create-dynamic-screens-at-runtime--android--hard, q-workmanag
 ---
 # How to Implement Offline-First Architecture in Android
 
-**Сложность**:  Hard
-**Источник**: Amit Shekhar Android Interview Questions
-
 # Question (EN)
-> 
+>
 
 # Вопрос (RU)
-> 
+>
 
 ---
 
@@ -33,26 +30,26 @@ Offline-first architecture ensures apps work seamlessly without network connecti
 
 ```
 
-                   Presentation Layer                 
-              (ViewModel + UI State)                  
+                   Presentation Layer
+              (ViewModel + UI State)
 
-                     
 
-                 Repository Layer                     
-        (Single Source of Truth Pattern)             
 
-                                 
-       
-  Local Storage          Remote API       
-  (Room DB)              (Retrofit)       
-       
-                                 
-       
-                  
-       
-          Sync Manager         
-          (WorkManager)        
-       
+                 Repository Layer
+        (Single Source of Truth Pattern)
+
+
+
+  Local Storage          Remote API
+  (Room DB)              (Retrofit)
+
+
+
+
+
+          Sync Manager
+          (WorkManager)
+
 ```
 
 #### 2. **Core Components Implementation**

@@ -11,14 +11,11 @@ related: [q-what-is-the-main-application-execution-thread--android--easy, q-how-
 ---
 # Memory Leak vs OutOfMemoryError in Android
 
-**Сложность**: 🟡 Medium
-**Источник**: Amit Shekhar Android Interview Questions
-
 # Question (EN)
-> 
+>
 
 # Вопрос (RU)
-> 
+>
 
 ---
 

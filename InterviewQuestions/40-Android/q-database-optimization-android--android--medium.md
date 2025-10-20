@@ -11,14 +11,11 @@ tags: [database, room, performance, optimization, sql, indexing, difficulty/medi
 ---
 # Database Optimization Techniques in Android
 
-**Сложность**: 🟡 Medium
-**Источник**: Amit Shekhar Android Interview Questions
-
 # Question (EN)
-> 
+>
 
 # Вопрос (RU)
-> 
+>
 
 ---
 

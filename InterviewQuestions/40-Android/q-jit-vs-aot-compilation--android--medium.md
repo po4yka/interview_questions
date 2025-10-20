@@ -11,14 +11,11 @@ tags: [jit, aot, compilation, art, performance, baseline-profiles, difficulty/me
 ---
 # JIT vs AOT Compilation in Android
 
-**Сложность**: 🟡 Medium
-**Источник**: Amit Shekhar Android Interview Questions
-
 # Question (EN)
-> 
+>
 
 # Вопрос (RU)
-> 
+>
 
 ---
 

@@ -11,14 +11,11 @@ tags: [networking, websockets, sse, firebase, fcm, real-time, difficulty/medium]
 ---
 # How to Implement Real-Time Updates in Android
 
-**Сложность**: 🟡 Medium
-**Источник**: Amit Shekhar Android Interview Questions
-
 # Question (EN)
-> 
+>
 
 # Вопрос (RU)
-> 
+>
 
 ---
 

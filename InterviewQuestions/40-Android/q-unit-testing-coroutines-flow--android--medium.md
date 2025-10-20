@@ -11,14 +11,11 @@ tags: [testing, coroutines, flow, unit-testing, turbine, mockk, difficulty/mediu
 ---
 # Unit Testing with Coroutines and Flow
 
-**Сложность**: 🟡 Medium
-**Источник**: Amit Shekhar Android Interview Questions
-
 # Question (EN)
-> 
+>
 
 # Вопрос (RU)
-> 
+>
 
 ---
 
