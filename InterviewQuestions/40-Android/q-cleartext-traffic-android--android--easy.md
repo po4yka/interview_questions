@@ -1,33 +1,31 @@
 ---
 id: 20251006-100011
-title: "What is cleartext traffic in Android? / Что такое cleartext traffic в Android?"
-aliases: []
-
+title: What is cleartext traffic in Android? / Что такое cleartext traffic в Android?
+aliases: [Cleartext traffic, Незашифрованный трафик]
 # Classification
 topic: android
-subtopics: [security, network, https, cleartext]
-question_kind: explanation
+subtopics: [security, networking]
+question_kind: android
 difficulty: easy
-
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/security, android/network, android/https, android/cleartext, difficulty/easy]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
-source_note: Amit Shekhar Android Interview Questions repository
-
+language_tags: [en, ru]
+source: https://developer.android.com/training/articles/security-config#CleartextTrafficPermitted
+source_note: Android docs
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-how-does-jetpackcompose-work--android--medium, q-derived-state-snapshot-system--jetpack-compose--hard, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]
-
+related: [q-certificate-pinning--security--medium, q-android-security-practices-checklist--android--medium, q-android-keystore-system--security--medium]
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-06
-
-tags: [en, ru, android/security, android/network, android/https, android/cleartext, difficulty/easy]
+updated: 2025-10-20
+# Tags (English only)
+tags: [android/security, android/networking, https, cleartext, difficulty/easy]
 ---
+
 # Question (EN)
 > What is cleartext traffic in Android?
+
 # Вопрос (RU)
 > Что такое cleartext traffic в Android?
 
@@ -35,457 +33,100 @@ tags: [en, ru, android/security, android/network, android/https, android/clearte
 
 ## Answer (EN)
 
-**Cleartext traffic** refers to unencrypted network communication sent over HTTP instead of HTTPS. Starting with Android 9 (API 28), cleartext traffic is disabled by default for security.
+### Definition
+- Cleartext traffic = unencrypted HTTP communication (no TLS). Anyone on path can read/modify.
 
-### What is Cleartext Traffic?
+### Android policy
+- Android 9+ (API 28): cleartext is blocked by default
+- Older versions: allowed by default
 
-**Cleartext (HTTP):** Data sent without encryption
-```
-Client  HTTP (plaintext) > Server
-Request: GET /api/user HTTP/1.1
-         Host: example.com
-         Authorization: Bearer secret_token  ← Visible to attackers!
-```
-
-**Encrypted (HTTPS):** Data encrypted with TLS/SSL
-```
-Client  HTTPS (encrypted) > Server
-Request: [encrypted data]  ← Protected from eavesdropping
-```
-
-### Android Cleartext Policy
-
-**Android 9+** - Cleartext disabled by default
-**Android 8.1 and below** - Cleartext allowed by default
-
-### Allowing Cleartext Traffic (Development Only)
-
-#### Method 1: Network Security Configuration (Recommended)
-
+### Allow only for development (per‑domain)
 ```xml
 <!-- res/xml/network_security_config.xml -->
-<?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <!-- Allow cleartext for specific domains (development only) -->
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">localhost</domain>
-        <domain includeSubdomains="true">10.0.2.2</domain>  <!-- Android Emulator -->
-        <domain includeSubdomains="true">192.168.1.100</domain>  <!-- Local dev server -->
-    </domain-config>
-
-    <!-- Enforce HTTPS for production -->
-    <base-config cleartextTrafficPermitted="false">
-        <trust-anchors>
-            <certificates src="system" />
-        </trust-anchors>
-    </base-config>
+  <domain-config cleartextTrafficPermitted="true">
+    <domain includeSubdomains="true">localhost</domain>
+    <domain includeSubdomains="true">10.0.2.2</domain>
+  </domain-config>
+  <base-config cleartextTrafficPermitted="false" />
 </network-security-config>
 ```
-
-**AndroidManifest.xml:**
-```xml
-<application
-    android:networkSecurityConfig="@xml/network_security_config"
-    ...>
-</application>
-```
-
-#### Method 2: Allow All Cleartext (NOT Recommended for Production)
-
 ```xml
 <!-- AndroidManifest.xml -->
-<application
-    android:usesCleartextTraffic="true"
-    ...>
-</application>
+<application android:networkSecurityConfig="@xml/network_security_config" />
 ```
 
-** Warning:** This allows cleartext for ALL domains - insecure!
-
-### Production Best Practices
-
+### Do NOT enable globally
 ```xml
-<!-- res/xml/network_security_config.xml (Production) -->
-<?xml version="1.0" encoding="utf-8"?>
-<network-security-config>
-    <!-- Enforce HTTPS everywhere -->
-    <base-config cleartextTrafficPermitted="false">
-        <trust-anchors>
-            <certificates src="system" />
-        </trust-anchors>
-    </base-config>
-
-    <!-- Certificate pinning for extra security -->
-    <domain-config>
-        <domain includeSubdomains="true">api.example.com</domain>
-        <pin-set expiration="2026-01-01">
-            <pin digest="SHA-256">base64encodedpin==</pin>
-            <pin digest="SHA-256">backuppin==</pin>
-        </pin-set>
-    </domain-config>
-</network-security-config>
+<!-- Not recommended (enables cleartext for ALL domains) -->
+<application android:usesCleartextTraffic="true" />
 ```
 
-### Build Variant Configuration
+### Production best practice
+- Enforce HTTPS everywhere; optionally add certificate pinning for sensitive APIs
 
-```kotlin
-// build.gradle.kts
-android {
-    buildTypes {
-        debug {
-            // Allow cleartext for debug builds only
-            manifestPlaceholders["usesCleartextTraffic"] = "true"
-        }
-        release {
-            // Enforce HTTPS for release builds
-            manifestPlaceholders["usesCleartextTraffic"] = "false"
-        }
-    }
-}
+### Error you’ll see
 ```
-
-```xml
-<!-- AndroidManifest.xml -->
-<application
-    android:usesCleartextTraffic="${usesCleartextTraffic}"
-    ...>
-</application>
+java.net.UnknownServiceException: CLEARTEXT communication ... not permitted by network security policy
 ```
-
-### Detecting Cleartext Issues
-
-**Error message:**
-```
-java.net.UnknownServiceException: CLEARTEXT communication to example.com not permitted by network security policy
-```
-
-**Solution:** Either use HTTPS or explicitly allow cleartext for that domain (development only).
-
-### Security Recommendations
-
-** DO:**
-- Use HTTPS everywhere in production
-- Implement certificate pinning for sensitive APIs
-- Use Network Security Configuration for granular control
-- Allow cleartext only for localhost/development servers
-
-** DON'T:**
-- Use `android:usesCleartextTraffic="true"` in production
-- Send sensitive data over HTTP
-- Allow cleartext for production APIs
-- Ignore cleartext warnings
-
-### Summary
-
-**Cleartext traffic** = unencrypted HTTP communication (insecure)
-**Android 9+** disables it by default for security
-**Development:** Use Network Security Configuration to allow specific domains
-**Production:** Always use HTTPS with certificate pinning
 
 ## Ответ (RU)
 
-**Cleartext traffic** - это незашифрованное сетевое соединение через HTTP вместо HTTPS. Начиная с Android 9 (API 28), cleartext traffic отключен по умолчанию для безопасности.
+### Определение
+- Cleartext traffic = незашифрованный HTTP (без TLS). Любой посредник может читать/менять.
 
-### Что такое Cleartext Traffic?
+### Политика Android
+- Android 9+ (API 28): cleartext по умолчанию запрещён
+- Старые версии: по умолчанию разрешён
 
-**Cleartext (HTTP):** Данные без шифрования
-```
-Клиент  HTTP (открытый текст) > Сервер
-Запрос: GET /api/user HTTP/1.1
-        Host: example.com
-        Authorization: Bearer secret_token  ← Видно атакующим!
-```
-
-**Зашифрованный (HTTPS):** Данные зашифрованы TLS/SSL
-```
-Клиент  HTTPS (зашифрованные данные) > Сервер
-Запрос: [зашифрованные данные]  ← Защищено от прослушивания
-```
-
-### Политика Cleartext в Android
-
-**Android 9+** - Cleartext отключен по умолчанию
-**Android 8.1 и ниже** - Cleartext разрешен по умолчанию
-
-### Разрешение Cleartext Traffic (Только для разработки)
-
-#### Метод 1: Network Security Configuration (Рекомендуется)
-
+### Разрешать только для разработки (по доменам)
 ```xml
 <!-- res/xml/network_security_config.xml -->
-<?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <!-- Разрешить cleartext для конкретных доменов (только разработка) -->
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">localhost</domain>
-        <domain includeSubdomains="true">10.0.2.2</domain>  <!-- Эмулятор Android -->
-        <domain includeSubdomains="true">192.168.1.100</domain>  <!-- Локальный dev сервер -->
-    </domain-config>
-
-    <!-- Принудительный HTTPS для продакшена -->
-    <base-config cleartextTrafficPermitted="false">
-        <trust-anchors>
-            <certificates src="system" />
-        </trust-anchors>
-    </base-config>
+  <domain-config cleartextTrafficPermitted="true">
+    <domain includeSubdomains="true">localhost</domain>
+    <domain includeSubdomains="true">10.0.2.2</domain>
+  </domain-config>
+  <base-config cleartextTrafficPermitted="false" />
 </network-security-config>
 ```
-
-**AndroidManifest.xml:**
-```xml
-<application
-    android:networkSecurityConfig="@xml/network_security_config"
-    ...>
-</application>
-```
-
-#### Метод 2: Разрешить весь Cleartext (НЕ рекомендуется для продакшена)
-
 ```xml
 <!-- AndroidManifest.xml -->
-<application
-    android:usesCleartextTraffic="true"
-    ...>
-</application>
+<application android:networkSecurityConfig="@xml/network_security_config" />
 ```
 
-** Предупреждение:** Это разрешает cleartext для ВСЕХ доменов - небезопасно!
-
-### Лучшие практики для продакшена
-
+### Не включайте глобально
 ```xml
-<!-- res/xml/network_security_config.xml (Продакшен) -->
-<?xml version="1.0" encoding="utf-8"?>
-<network-security-config>
-    <!-- Принудительный HTTPS везде -->
-    <base-config cleartextTrafficPermitted="false">
-        <trust-anchors>
-            <certificates src="system" />
-        </trust-anchors>
-    </base-config>
-
-    <!-- Certificate pinning для дополнительной безопасности -->
-    <domain-config>
-        <domain includeSubdomains="true">api.example.com</domain>
-        <pin-set expiration="2026-01-01">
-            <pin digest="SHA-256">base64encodedpin==</pin>
-            <pin digest="SHA-256">backuppin==</pin>
-        </pin-set>
-    </domain-config>
-</network-security-config>
+<!-- Не рекомендуется (включает cleartext для ВСЕХ доменов) -->
+<application android:usesCleartextTraffic="true" />
 ```
 
-### Конфигурация Build Variant
+### Практика для продакшена
+- Принудительно HTTPS везде; при необходимости — certificate pinning для чувствительных API
 
-```kotlin
-// build.gradle.kts
-android {
-    buildTypes {
-        debug {
-            // Разрешить cleartext только для debug сборок
-            manifestPlaceholders["usesCleartextTraffic"] = "true"
-        }
-        release {
-            // Принудительный HTTPS для release сборок
-            manifestPlaceholders["usesCleartextTraffic"] = "false"
-        }
-    }
-}
+### Типичная ошибка
 ```
-
-```xml
-<!-- AndroidManifest.xml -->
-<application
-    android:usesCleartextTraffic="${usesCleartextTraffic}"
-    ...>
-</application>
+java.net.UnknownServiceException: CLEARTEXT communication ... not permitted by network security policy
 ```
-
-### Обнаружение проблем с Cleartext
-
-**Сообщение об ошибке:**
-```
-java.net.UnknownServiceException: CLEARTEXT communication to example.com not permitted by network security policy
-```
-
-**Решение:** Используйте HTTPS или явно разрешите cleartext для этого домена (только для разработки).
-
-### Рекомендации по безопасности
-
-** ДЕЛАТЬ:**
-- Использовать HTTPS везде в продакшене
-- Реализовать certificate pinning для чувствительных API
-- Использовать Network Security Configuration для детального контроля
-- Разрешать cleartext только для localhost/серверов разработки
-
-** НЕ ДЕЛАТЬ:**
-- Использовать `android:usesCleartextTraffic="true"` в продакшене
-- Отправлять чувствительные данные через HTTP
-- Разрешать cleartext для production API
-- Игнорировать предупреждения о cleartext
-
-### Резюме
-
-**Cleartext traffic** = незашифрованное HTTP соединение (небезопасно)
-**Android 9+** отключает его по умолчанию для безопасности
-**Разработка:** Используйте Network Security Configuration для конкретных доменов
-**Продакшен:** Всегда используйте HTTPS с certificate pinning
-
-## Ответ (RU)
-
-**Cleartext traffic** - это незашифрованное сетевое соединение через HTTP вместо HTTPS. Начиная с Android 9 (API 28), cleartext traffic отключен по умолчанию для безопасности.
-
-### Что такое Cleartext Traffic?
-
-**Cleartext (HTTP):** Данные без шифрования
-```
-Клиент  HTTP (открытый текст) > Сервер
-Запрос: GET /api/user HTTP/1.1
-        Host: example.com
-        Authorization: Bearer secret_token  ← Видно атакующим!
-```
-
-**Зашифрованный (HTTPS):** Данные зашифрованы TLS/SSL
-```
-Клиент  HTTPS (зашифрованные данные) > Сервер
-Запрос: [зашифрованные данные]  ← Защищено от прослушивания
-```
-
-### Политика Cleartext в Android
-
-**Android 9+** - Cleartext отключен по умолчанию
-**Android 8.1 и ниже** - Cleartext разрешен по умолчанию
-
-### Разрешение Cleartext Traffic (Только для разработки)
-
-#### Метод 1: Network Security Configuration (Рекомендуется)
-
-```xml
-<!-- res/xml/network_security_config.xml -->
-<?xml version="1.0" encoding="utf-8"?>
-<network-security-config>
-    <!-- Разрешить cleartext для конкретных доменов (только разработка) -->
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">localhost</domain>
-        <domain includeSubdomains="true">10.0.2.2</domain>  <!-- Эмулятор Android -->
-        <domain includeSubdomains="true">192.168.1.100</domain>  <!-- Локальный dev сервер -->
-    </domain-config>
-
-    <!-- Принудительный HTTPS для продакшена -->
-    <base-config cleartextTrafficPermitted="false">
-        <trust-anchors>
-            <certificates src="system" />
-        </trust-anchors>
-    </base-config>
-</network-security-config>
-```
-
-**AndroidManifest.xml:**
-```xml
-<application
-    android:networkSecurityConfig="@xml/network_security_config"
-    ...>
-</application>
-```
-
-#### Метод 2: Разрешить весь Cleartext (НЕ рекомендуется для продакшена)
-
-```xml
-<!-- AndroidManifest.xml -->
-<application
-    android:usesCleartextTraffic="true"
-    ...>
-</application>
-```
-
-** Предупреждение:** Это разрешает cleartext для ВСЕХ доменов - небезопасно!
-
-### Лучшие практики для продакшена
-
-```xml
-<!-- res/xml/network_security_config.xml (Продакшен) -->
-<?xml version="1.0" encoding="utf-8"?>
-<network-security-config>
-    <!-- Принудительный HTTPS везде -->
-    <base-config cleartextTrafficPermitted="false">
-        <trust-anchors>
-            <certificates src="system" />
-        </trust-anchors>
-    </base-config>
-
-    <!-- Certificate pinning для дополнительной безопасности -->
-    <domain-config>
-        <domain includeSubdomains="true">api.example.com</domain>
-        <pin-set expiration="2026-01-01">
-            <pin digest="SHA-256">base64encodedpin==</pin>
-            <pin digest="SHA-256">backuppin==</pin>
-        </pin-set>
-    </domain-config>
-</network-security-config>
-```
-
-### Конфигурация Build Variant
-
-```kotlin
-// build.gradle.kts
-android {
-    buildTypes {
-        debug {
-            // Разрешить cleartext только для debug сборок
-            manifestPlaceholders["usesCleartextTraffic"] = "true"
-        }
-        release {
-            // Принудительный HTTPS для release сборок
-            manifestPlaceholders["usesCleartextTraffic"] = "false"
-        }
-    }
-}
-```
-
-```xml
-<!-- AndroidManifest.xml -->
-<application
-    android:usesCleartextTraffic="${usesCleartextTraffic}"
-    ...>
-</application>
-```
-
-### Обнаружение проблем с Cleartext
-
-**Сообщение об ошибке:**
-```
-java.net.UnknownServiceException: CLEARTEXT communication to example.com not permitted by network security policy
-```
-
-**Решение:** Используйте HTTPS или явно разрешите cleartext для этого домена (только для разработки).
-
-### Рекомендации по безопасности
-
-** ДЕЛАТЬ:**
-- Использовать HTTPS везде в продакшене
-- Реализовать certificate pinning для чувствительных API
-- Использовать Network Security Configuration для детального контроля
-- Разрешать cleartext только для localhost/серверов разработки
-
-** НЕ ДЕЛАТЬ:**
-- Использовать `android:usesCleartextTraffic="true"` в продакшене
-- Отправлять чувствительные данные через HTTP
-- Разрешать cleartext для production API
-- Игнорировать предупреждения о cleartext
-
-### Резюме
-
-**Cleartext traffic** = незашифрованное HTTP соединение (небезопасно)
-**Android 9+** отключает его по умолчанию для безопасности
-**Разработка:** Используйте Network Security Configuration для конкретных доменов
-**Продакшен:** Всегда используйте HTTPS с certificate pinning
 
 ---
 
-## Related Questions
-
-### Advanced (Harder)
-- [[q-android-security-practices-checklist--android--medium]] - Security
+## Follow-ups
+- When should certificate pinning be added on top of HTTPS?
+- How to enable cleartext only for internal dev environments?
+- How to detect accidental cleartext usage in CI?
 
 ## References
-- [Android Documentation](https://developer.android.com)
+- https://developer.android.com/training/articles/security-config#CleartextTrafficPermitted
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-android-security-practices-checklist--android--medium]]
+
+### Related (Same Level)
+- [[q-certificate-pinning--security--medium]]
+- [[q-android-keystore-system--security--medium]]
+
+### Advanced (Harder)
+- [[q-android-runtime-art--android--medium]]
