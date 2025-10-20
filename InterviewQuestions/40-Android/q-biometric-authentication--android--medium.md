@@ -36,64 +36,17 @@ tags: [android/security, android/biometric, android/authentication, security, bi
 
 ### Basic Implementation
 
-**Setup**:
+**Minimal Snippet**:
 ```kotlin
-// Theory: Add biometric dependency for unified API
-dependencies {
-    implementation("androidx.biometric:biometric:1.2.0")
-}
-```
-
-**Basic BiometricPrompt**:
-```kotlin
-// Theory: Create biometric prompt with authentication callback
-class BiometricActivity : ComponentActivity() {
-    private lateinit var biometricPrompt: BiometricPrompt
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setupBiometricPrompt()
-    }
-
-    private fun setupBiometricPrompt() {
-        val executor = ContextCompat.getMainExecutor(this)
-
-        biometricPrompt = BiometricPrompt(
-            this,
-            executor,
-            object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    // Handle successful authentication
-                    proceedToMainScreen()
-                }
-
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                    // Handle authentication errors
-                    showError(errString.toString())
-                }
-
-                override fun onAuthenticationFailed() {
-                    // Handle failed authentication
-                    showError("Authentication failed")
-                }
-            }
-        )
-    }
-}
-```
-
-**Prompt Configuration**:
-```kotlin
-// Theory: Configure prompt with title, subtitle, and fallback options
-private fun showBiometricPrompt() {
-    val promptInfo = BiometricPrompt.PromptInfo.Builder()
-        .setTitle("Biometric Authentication")
-        .setSubtitle("Use your biometric to authenticate")
-        .setNegativeButtonText("Use Password")
-        .build()
-
-    biometricPrompt.authenticate(promptInfo)
-}
+val prompt = BiometricPrompt(this, ContextCompat.getMainExecutor(this), callback)
+val info = BiometricPrompt.PromptInfo.Builder()
+    .setTitle("Sign in")
+    .setAllowedAuthenticators(
+        BiometricManager.Authenticators.BIOMETRIC_STRONG or
+        BiometricManager.Authenticators.DEVICE_CREDENTIAL
+    )
+    .build()
+prompt.authenticate(info)
 ```
 
 ### Authenticator Types
@@ -299,64 +252,17 @@ private fun generateSecureKey(): SecretKey {
 
 ### Базовая реализация
 
-**Настройка**:
+**Минимальный сниппет**:
 ```kotlin
-// Теория: Добавить зависимость биометрии для унифицированного API
-dependencies {
-    implementation("androidx.biometric:biometric:1.2.0")
-}
-```
-
-**Базовый BiometricPrompt**:
-```kotlin
-// Теория: Создать биометрический запрос с callback аутентификации
-class BiometricActivity : ComponentActivity() {
-    private lateinit var biometricPrompt: BiometricPrompt
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setupBiometricPrompt()
-    }
-
-    private fun setupBiometricPrompt() {
-        val executor = ContextCompat.getMainExecutor(this)
-
-        biometricPrompt = BiometricPrompt(
-            this,
-            executor,
-            object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    // Обработать успешную аутентификацию
-                    proceedToMainScreen()
-                }
-
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                    // Обработать ошибки аутентификации
-                    showError(errString.toString())
-                }
-
-                override fun onAuthenticationFailed() {
-                    // Обработать неудачную аутентификацию
-                    showError("Аутентификация не удалась")
-                }
-            }
-        )
-    }
-}
-```
-
-**Конфигурация запроса**:
-```kotlin
-// Теория: Настроить запрос с заголовком, подзаголовком и резервными опциями
-private fun showBiometricPrompt() {
-    val promptInfo = BiometricPrompt.PromptInfo.Builder()
-        .setTitle("Биометрическая аутентификация")
-        .setSubtitle("Используйте биометрию для аутентификации")
-        .setNegativeButtonText("Использовать пароль")
-        .build()
-
-    biometricPrompt.authenticate(promptInfo)
-}
+val prompt = BiometricPrompt(this, ContextCompat.getMainExecutor(this), callback)
+val info = BiometricPrompt.PromptInfo.Builder()
+    .setTitle("Вход")
+    .setAllowedAuthenticators(
+        BiometricManager.Authenticators.BIOMETRIC_STRONG or
+        BiometricManager.Authenticators.DEVICE_CREDENTIAL
+    )
+    .build()
+prompt.authenticate(info)
 ```
 
 ### Типы аутентификаторов
