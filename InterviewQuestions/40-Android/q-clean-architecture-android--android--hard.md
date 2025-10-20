@@ -1,517 +1,171 @@
 ---
-id: 20251017-114436
-title: "Clean Architecture in Android"
-aliases: []
-
-# Classification
+id: 20251012-122801
+title: Clean Architecture on Android / Clean Architecture в Android
+aliases: [Clean Architecture on Android, Clean Architecture в Android]
 topic: android
-subtopics: [architecture, clean-architecture, layers, separation-of-concerns]
-question_kind: theory
+subtopics: [architecture-clean, modularization]
+question_kind: android
 difficulty: hard
-
-# Language & provenance
-original_language: en
-language_tags: [en, ru, android/architecture, android/clean-architecture, android/layers, android/separation-of-concerns, difficulty/hard]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
-source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-android-services-purpose--android--easy, q-main-thread-android--android--medium, q-reduce-app-size--android--medium]
-
-# Timestamps
-created: 2025-10-06
-updated: 2025-10-06
-
-tags: [en, ru, android/architecture, android/clean-architecture, android/layers, android/separation-of-concerns, difficulty/hard]
+related: [q-android-architectural-patterns--android--medium, q-android-modularization--android--medium, q-architecture-components-libraries--android--easy]
+created: 2025-10-11
+updated: 2025-10-20
+original_language: en
+language_tags: [en, ru]
+tags: [android/architecture-clean, android/modularization, testing, di, difficulty/hard]
 ---
 # Question (EN)
-> What is Clean Architecture in Android? How to implement it with layers?
+> How do you apply Clean Architecture on Android (layers, dependency rule, boundaries, DI, and testing) with minimal coupling?
+
 # Вопрос (RU)
-> Что такое Clean Architecture в Android? Как реализовать её со слоями?
+> Как применить Clean Architecture в Android (слои, правило зависимостей, границы, DI и тестирование) с минимальной связностью?
 
 ---
 
 ## Answer (EN)
 
-**Clean Architecture** separates app into independent layers with dependency rule: **outer layers depend on inner layers, never reverse.**
+### Principles
+- Dependency Rule: source code dependencies point inward (UI → domain; data implements domain interfaces)
+- Separation of concerns: domain pure Kotlin; frameworks at the edges
+- Testable: business rules independent of Android SDK
 
-### Layers (from inner to outer)
+### Layers (typical)
+- Domain: entities + use cases (pure Kotlin, no Android)
+- Data: repositories (implement domain ports), mappers, data sources (network/db)
+- Presentation: ViewModel/UI (Android), maps to domain models
 
-**1. Domain** - Business logic (entities, use cases)
-**2. Data** - Data sources (repositories, API, DB)
-**3. Presentation** - UI (ViewModel, Compose)
+### Boundaries and contracts
+- Define domain interfaces (ports); implement in data (adapters)
+- Map DTO/DB models at boundaries; keep domain models stable
 
+### Minimal module layout
+```text
+app/                 # presentation wiring only
+feature-*/           # feature presentation
+core-domain/         # entities, use cases, ports (pure Kotlin)
+core-data/           # repo impls, mappers, sources
 ```
 
-     Presentation Layer            ← UI, ViewModel
-
-       Data Layer                  ← Repository, API, DB
-
-      Domain Layer                 ← Use Cases, Entities
-
-
-Dependencies flow: Presentation → Data → Domain
+### Minimal code (ports and use case)
+```kotlin
+// core-domain
+interface UserRepository { suspend fun getUser(id: String): User }
+class GetUser(private val repo: UserRepository) {
+  suspend operator fun invoke(id: String): User = repo.getUser(id)
+}
 ```
-
-### Domain Layer (Core business logic)
 
 ```kotlin
-// domain/model/User.kt
-data class User(
-    val id: String,
-    val name: String,
-    val email: String
-)
-
-// domain/repository/UserRepository.kt (interface)
-interface UserRepository {
-    suspend fun getUser(id: String): Result<User>
-    suspend fun updateUser(user: User): Result<Unit>
-}
-
-// domain/usecase/GetUserUseCase.kt
-class GetUserUseCase(
-    private val repository: UserRepository
-) {
-    suspend operator fun invoke(userId: String): Result<User> {
-        return repository.getUser(userId)
-    }
+// core-data (depends on core-domain)
+class UserRepositoryImpl(private val api: Api, private val dao: UserDao) : UserRepository {
+  override suspend fun getUser(id: String): User =
+    dao.get(id)?.toDomain() ?: api.fetch(id).also { dao.insert(it.toEntity()) }.toDomain()
 }
 ```
-
-### Data Layer (Implementation)
 
 ```kotlin
-// data/remote/dto/UserDto.kt
-@Serializable
-data class UserDto(
-    val id: String,
-    val name: String,
-    val email: String
-)
-
-// data/remote/api/UserApi.kt
-interface UserApi {
-    @GET("users/{id}")
-    suspend fun getUser(@Path("id") id: String): UserDto
-}
-
-// data/repository/UserRepositoryImpl.kt
-class UserRepositoryImpl(
-    private val api: UserApi,
-    private val mapper: UserMapper
-) : UserRepository {
-    override suspend fun getUser(id: String): Result<User> {
-        return try {
-            val dto = api.getUser(id)
-            val user = mapper.toDomain(dto)
-            Result.success(user)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
+// app/feature presentation (depends on core-domain)
+class UserViewModel(private val getUser: GetUser) : ViewModel() {
+  val state = MutableStateFlow<UiState>(UiState.Loading)
+  fun load(id: String) = viewModelScope.launch { state.value = UiState.Data(getUser(id)) }
 }
 ```
 
-### Presentation Layer
+### DI and wiring
+- Provide use cases in presentation module via constructor injection (Hilt/Koin/plain DI)
+- Bind domain ports to data adapters in DI graph; UI never sees data details
 
-```kotlin
-// presentation/UserViewModel.kt
-@HiltViewModel
-class UserViewModel @Inject constructor(
-    private val getUserUseCase: GetUserUseCase
-) : ViewModel() {
+### Testing
+- Domain: fast unit tests with fake repositories
+- Data: contract tests against domain ports; instrumented for DB if needed
+- Presentation: ViewModel tests with TestDispatcher; fake use cases
 
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    fun loadUser(userId: String) {
-        viewModelScope.launch {
-            _uiState.value = UiState.Loading
-
-            getUserUseCase(userId)
-                .onSuccess { user ->
-                    _uiState.value = UiState.Success(user)
-                }
-                .onFailure { error ->
-                    _uiState.value = UiState.Error(error.message ?: "Unknown")
-                }
-        }
-    }
-}
-
-sealed class UiState {
-    object Loading : UiState()
-    data class Success(val user: User) : UiState()
-    data class Error(val message: String) : UiState()
-}
-```
-
-### Dependency Injection
-
-```kotlin
-// di/DataModule.kt
-@Module
-@InstallIn(SingletonComponent::class)
-object DataModule {
-
-    @Provides
-    @Singleton
-    fun provideUserApi(retrofit: Retrofit): UserApi {
-        return retrofit.create(UserApi::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserRepository(
-        api: UserApi,
-        mapper: UserMapper
-    ): UserRepository {
-        return UserRepositoryImpl(api, mapper)
-    }
-}
-
-// di/DomainModule.kt
-@Module
-@InstallIn(ViewModelComponent::class)
-object DomainModule {
-
-    @Provides
-    fun provideGetUserUseCase(
-        repository: UserRepository
-    ): GetUserUseCase {
-        return GetUserUseCase(repository)
-    }
-}
-```
-
-### Benefits
-
-**1. Testability** - Mock dependencies easily
-**2. Separation of concerns** - Clear responsibilities
-**3. Independence** - Business logic independent of frameworks
-**4. Maintainability** - Changes isolated to layers
-
-**English Summary**: Clean Architecture: Domain (entities, use cases), Data (repository impl, API, DB), Presentation (ViewModel, UI). Dependency rule: outer depends on inner. Domain has interfaces, Data implements them. Use cases encapsulate business logic. Benefits: testability, separation of concerns, maintainability.
+### Concurrency and errors
+- Keep domain synchronous/pure when possible; wrap suspending at boundaries
+- Convert infra exceptions to domain failures; handle mapping in presentation
 
 ## Ответ (RU)
 
-**Clean Architecture** разделяет приложение на независимые слои с правилом зависимости: **внешние слои зависят от внутренних, никогда наоборот.**
+### Принципы
+- Правило зависимостей: зависимости направлены внутрь (UI → domain; data реализует интерфейсы domain)
+- Разделение ответственностей: domain — чистый Kotlin; фреймворки на границах
+- Тестируемость: бизнес‑логика независима от Android SDK
 
-### Слои (от внутреннего к внешнему)
+### Слои (типично)
+- Domain: сущности и use case’ы (чистый Kotlin)
+- Data: репозитории (реализации портов), мапперы, источники данных (сеть/БД)
+- Presentation: ViewModel/UI (Android), маппинг в модели domain
 
-**1. Domain** - Бизнес-логика (entities, use cases)
-**2. Data** - Источники данных (repositories, API, DB)
-**3. Presentation** - UI (ViewModel, Compose)
+### Границы и контракты
+- Определять интерфейсы domain (порты); реализовывать в data (адаптеры)
+- Маппить DTO/DB модели на границах; доменные модели стабильны
 
+### Минимальная структура модулей
+```text
+app/                 # только связывание презентации
+feature-*/           # презентация фич
+core-domain/         # сущности, use case’ы, порты (чистый Kotlin)
+core-data/           # реализации репозиториев, мапперы, источники
 ```
 
-     Слой Presentation            ← UI, ViewModel
-
-       Слой Data                  ← Repository, API, DB
-
-      Слой Domain                 ← Use Cases, Entities
-
-
-Зависимости: Presentation → Data → Domain
+### Минимальный код (порты и use case)
+```kotlin
+// core-domain
+interface UserRepository { suspend fun getUser(id: String): User }
+class GetUser(private val repo: UserRepository) {
+  suspend operator fun invoke(id: String): User = repo.getUser(id)
+}
 ```
-
-### Слой Domain (Основная бизнес-логика)
-
-Слой Domain содержит основную бизнес-логику и не зависит от внешних фреймворков:
 
 ```kotlin
-// domain/model/User.kt
-data class User(
-    val id: String,
-    val name: String,
-    val email: String
-)
-
-// domain/repository/UserRepository.kt (интерфейс)
-interface UserRepository {
-    suspend fun getUser(id: String): Result<User>
-    suspend fun updateUser(user: User): Result<Unit>
-}
-
-// domain/usecase/GetUserUseCase.kt
-class GetUserUseCase(
-    private val repository: UserRepository
-) {
-    suspend operator fun invoke(userId: String): Result<User> {
-        return repository.getUser(userId)
-    }
+// core-data (зависит от core-domain)
+class UserRepositoryImpl(private val api: Api, private val dao: UserDao) : UserRepository {
+  override suspend fun getUser(id: String): User =
+    dao.get(id)?.toDomain() ?: api.fetch(id).also { dao.insert(it.toEntity()) }.toDomain()
 }
 ```
-
-**Ключевые характеристики Domain слоя:**
-- Чистый Kotlin/Java код (без Android фреймворков)
-- Содержит бизнес-правила
-- Определяет интерфейсы репозиториев
-- Содержит use cases (варианты использования)
-- Независим от UI и источников данных
-
-### Слой Data (Реализация)
-
-Слой Data предоставляет реализацию интерфейсов, определённых в Domain:
 
 ```kotlin
-// data/remote/dto/UserDto.kt
-@Serializable
-data class UserDto(
-    val id: String,
-    val name: String,
-    val email: String
-)
-
-// data/remote/api/UserApi.kt
-interface UserApi {
-    @GET("users/{id}")
-    suspend fun getUser(@Path("id") id: String): UserDto
-}
-
-// data/repository/UserRepositoryImpl.kt
-class UserRepositoryImpl(
-    private val api: UserApi,
-    private val mapper: UserMapper
-) : UserRepository {
-    override suspend fun getUser(id: String): Result<User> {
-        return try {
-            val dto = api.getUser(id)
-            val user = mapper.toDomain(dto)
-            Result.success(user)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
+// app/feature презентация (зависит от core-domain)
+class UserViewModel(private val getUser: GetUser) : ViewModel() {
+  val state = MutableStateFlow<UiState>(UiState.Loading)
+  fun load(id: String) = viewModelScope.launch { state.value = UiState.Data(getUser(id)) }
 }
 ```
 
-**Ключевые характеристики Data слоя:**
-- Реализует интерфейсы из Domain
-- Работает с API, базами данных, файлами
-- Преобразует DTO в domain модели
-- Обрабатывает источники данных
-- Может использовать Room, Retrofit, DataStore
+### DI и связывание
+- Поставлять use case’ы в презентации через конструктор (Hilt/Koin/ручной DI)
+- Биндить порты domain к адаптерам data в графе DI; UI не знает деталей data
 
-### Слой Presentation
+### Тестирование
+- Domain: быстрые unit‑тесты с фейковыми репозиториями
+- Data: контрактные тесты портов; инструментальные для БД при необходимости
+- Presentation: тесты ViewModel с TestDispatcher; фейковые use case’ы
 
-Слой Presentation управляет UI и взаимодействует с Domain через use cases:
-
-```kotlin
-// presentation/UserViewModel.kt
-@HiltViewModel
-class UserViewModel @Inject constructor(
-    private val getUserUseCase: GetUserUseCase
-) : ViewModel() {
-
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    fun loadUser(userId: String) {
-        viewModelScope.launch {
-            _uiState.value = UiState.Loading
-
-            getUserUseCase(userId)
-                .onSuccess { user ->
-                    _uiState.value = UiState.Success(user)
-                }
-                .onFailure { error ->
-                    _uiState.value = UiState.Error(error.message ?: "Unknown")
-                }
-        }
-    }
-}
-
-sealed class UiState {
-    object Loading : UiState()
-    data class Success(val user: User) : UiState()
-    data class Error(val message: String) : UiState()
-}
-```
-
-**Ключевые характеристики Presentation слоя:**
-- Содержит ViewModel, UI компоненты
-- Зависит от Domain (use cases)
-- Управляет UI состоянием
-- Не содержит бизнес-логику
-- Использует Compose/Views для отображения
-
-### Внедрение зависимостей
-
-Dagger Hilt используется для связывания слоёв:
-
-```kotlin
-// di/DataModule.kt
-@Module
-@InstallIn(SingletonComponent::class)
-object DataModule {
-
-    @Provides
-    @Singleton
-    fun provideUserApi(retrofit: Retrofit): UserApi {
-        return retrofit.create(UserApi::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserRepository(
-        api: UserApi,
-        mapper: UserMapper
-    ): UserRepository {
-        return UserRepositoryImpl(api, mapper)
-    }
-}
-
-// di/DomainModule.kt
-@Module
-@InstallIn(ViewModelComponent::class)
-object DomainModule {
-
-    @Provides
-    fun provideGetUserUseCase(
-        repository: UserRepository
-    ): GetUserUseCase {
-        return GetUserUseCase(repository)
-    }
-}
-```
-
-### Правило зависимостей
-
-**Правило:** Зависимости всегда указывают внутрь (к Domain)
-
-```kotlin
-// ✅ ПРАВИЛЬНО: Presentation → Domain
-class UserViewModel(
-    private val getUserUseCase: GetUserUseCase  // Domain use case
-)
-
-// ✅ ПРАВИЛЬНО: Data → Domain
-class UserRepositoryImpl(
-    private val api: UserApi
-) : UserRepository  // Domain interface
-
-// ❌ НЕПРАВИЛЬНО: Domain → Data
-// Domain НЕ должен зависеть от Data или Presentation!
-```
-
-### Преимущества
-
-**1. Тестируемость**
-```kotlin
-// Легко мокать зависимости в тестах
-@Test
-fun `test getUserUseCase returns user`() = runTest {
-    val mockRepository = mockk<UserRepository>()
-    coEvery { mockRepository.getUser("1") } returns Result.success(testUser)
-
-    val useCase = GetUserUseCase(mockRepository)
-    val result = useCase("1")
-
-    assertTrue(result.isSuccess)
-    assertEquals(testUser, result.getOrNull())
-}
-```
-
-**2. Разделение обязанностей**
-- Domain: Бизнес-логика
-- Data: Работа с данными
-- Presentation: UI логика
-
-**3. Независимость**
-- Бизнес-логика не зависит от фреймворков
-- Можно заменить UI без изменения бизнес-логики
-- Можно заменить источник данных без изменения Domain
-
-**4. Поддерживаемость**
-- Изменения изолированы в слоях
-- Легко добавлять новые функции
-- Код проще понимать и модифицировать
-
-### Пример структуры проекта
-
-```
-app/
-  ├── domain/
-  │   ├── model/
-  │   │   └── User.kt
-  │   ├── repository/
-  │   │   └── UserRepository.kt
-  │   └── usecase/
-  │       └── GetUserUseCase.kt
-  ├── data/
-  │   ├── remote/
-  │   │   ├── api/
-  │   │   │   └── UserApi.kt
-  │   │   └── dto/
-  │   │       └── UserDto.kt
-  │   ├── mapper/
-  │   │   └── UserMapper.kt
-  │   └── repository/
-  │       └── UserRepositoryImpl.kt
-  └── presentation/
-      ├── viewmodel/
-      │   └── UserViewModel.kt
-      └── ui/
-          └── UserScreen.kt
-```
-
-### Когда использовать Clean Architecture
-
-**Используйте когда:**
-- Большое приложение с множеством features
-- Команда из нескольких разработчиков
-- Долгосрочная поддержка кода
-- Необходима высокая тестируемость
-- Сложная бизнес-логика
-
-**Не обязательно для:**
-- Простых приложений
-- Прототипов
-- MVP (минимально жизнеспособного продукта)
-
-**Краткое содержание**: Clean Architecture: Domain (entities, use cases), Data (реализация repository, API, DB), Presentation (ViewModel, UI). Правило зависимости: внешние зависят от внутренних. Domain имеет интерфейсы, Data реализует их. Use cases инкапсулируют бизнес-логику. Преимущества: тестируемость, разделение обязанностей, независимость, поддерживаемость.
+### Конкурентность и ошибки
+- Domain по возможности синхронный/чистый; suspend на границах
+- Инфраструктурные исключения в доменные сбои; маппинг обрабатывать в презентации
 
 ---
 
+## Follow-ups
+- How to split features into modules without over‑fragmentation?
+- Where to place navigation and analytics within Clean Architecture?
+- How to manage domain events across features?
+
 ## References
-- [Guide to app architecture](https://developer.android.com/topic/architecture)
+- https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html
+- https://developer.android.com/topic/architecture
 
 ## Related Questions
 
-### MVVM & ViewModel (Medium)
-- [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
-- [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
-- [[q-what-is-viewmodel--android--medium]] - What is ViewModel
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
-- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation
-- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - ViewModel vs onSavedInstanceState
-
-### Patterns & Layers (Medium)
-- [[q-repository-pattern--android--medium]] - Repository pattern
-- [[q-repository-multiple-sources--android--medium]] - Repository with multiple sources
-- [[q-usecase-pattern-android--android--medium]] - Use Case pattern
-- [[q-mvi-one-time-events--android--medium]] - MVI one-time events
-- [[q-testing-viewmodels-turbine--testing--medium]] - Testing ViewModels with Turbine
-
-### Related (Hard)
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-- [[q-modularization-patterns--android--hard]] - Architecture
-- [[q-design-instagram-stories--android--hard]] - Media
-
-### Advanced Architecture (Harder)
-- [[q-mvi-architecture--android--hard]] - MVI architecture pattern
-- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
-- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
-- [[q-kmm-architecture--multiplatform--hard]] - KMM architecture patterns
-
 ### Prerequisites (Easier)
-- [[q-usecase-pattern-android--android--medium]] - Architecture
-- [[q-repository-pattern--android--medium]] - Architecture
-- [[q-repository-multiple-sources--android--medium]] - Architecture
-- [[q-architecture-components-libraries--android--easy]] - Architecture Components overview
-- [[q-viewmodel-pattern--android--easy]] - ViewModel pattern basics
+- [[q-architecture-components-libraries--android--easy]]
+
+### Related (Same Level)
+- [[q-android-architectural-patterns--android--medium]]
+- [[q-android-modularization--android--medium]]
+
+### Advanced (Harder)
+- [[q-android-performance-measurement-tools--android--medium]]
