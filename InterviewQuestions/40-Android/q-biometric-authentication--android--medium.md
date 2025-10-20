@@ -559,8 +559,6 @@ private fun generateSecureKey(): SecretKey {
 
 ## References
 
-- [[c-android-security]]
-- [[c-biometric-authentication]]
 - https://developer.android.com/training/sign-in/biometric-auth
 
 ## Related Questions
