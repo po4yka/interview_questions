@@ -1,235 +1,150 @@
 ---
 id: 20251012-1227108
-title: "Semantics in Jetpack Compose"
-aliases: []
-
-# Classification
+title: Semantics in Jetpack Compose / Семантика в Jetpack Compose
+aliases: [Semantics in Jetpack Compose, Семантика в Jetpack Compose]
 topic: android
-subtopics: [jetpack-compose, semantics, accessibility, testing]
-question_kind: theory
+subtopics: [ui-compose, accessibility, testing]
+question_kind: android
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru, android/jetpack-compose, android/semantics, android/accessibility, android/testing, difficulty/medium]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
-source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
-
-# Workflow & relations
+language_tags: [en, ru]
+source: https://developer.android.com/jetpack/compose/semantics
+source_note: Official Compose Semantics docs
 status: draft
 moc: moc-android
-related: [q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-testing-compose-ui--android--medium, q-cicd-multi-module--devops--medium]
-
-# Timestamps
+related: [q-compose-testing--android--medium, q-compose-performance-optimization--android--hard, q-compose-modifier-system--android--medium]
 created: 2025-10-06
-updated: 2025-10-06
-
-tags: [en, ru, android/jetpack-compose, android/semantics, android/accessibility, android/testing, difficulty/medium]
+updated: 2025-10-20
+tags: [android/ui-compose, android/accessibility, android/testing, compose/semantics, difficulty/medium]
 ---
 # Question (EN)
-> What are Semantics in Jetpack Compose? How are they used for accessibility and testing?
+> What are Semantics in Jetpack Compose and how do they support accessibility and testing? Show minimal patterns.
+
 # Вопрос (RU)
-> Что такое Semantics в Jetpack Compose? Как они используются для доступности и тестирования?
+> Что такое Semantics в Jetpack Compose и как они помогают в доступности и тестировании? Приведите минимальные паттерны.
 
 ---
 
 ## Answer (EN)
 
-**Semantics** describe the UI structure and meaning for accessibility services and testing frameworks.
+### Concept
+- Semantics expose UI meaning/structure to accessibility services and test APIs.
+- Key properties: contentDescription, role, stateDescription, progressBarRangeInfo, selected/disabled.
 
-### Basic Usage
+### Minimal patterns
 
+Accessible button semantics
 ```kotlin
-@Composable
-fun CustomButton(onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .clickable(onClick = onClick)
-            .semantics {
-                contentDescription = "Submit button"
-                role = Role.Button
-            }
-    ) {
-        Text("Submit")
-    }
+Box(Modifier.clickable(onClick)
+    .semantics { contentDescription = "Submit"; role = Role.Button }) {
+  Text("Submit")
 }
 ```
 
-### Accessibility Properties
-
+Image with alt text
 ```kotlin
-@Composable
-fun ProfileImage(imageUrl: String) {
-    Image(
-        painter = rememberImagePainter(imageUrl),
-        contentDescription = "User profile picture",  // For screen readers
-        modifier = Modifier
-            .semantics {
-                // Additional semantic properties
-                role = Role.Image
-                contentDescription = "Profile photo of John Doe"
-            }
-    )
-}
+Image(painter = painter, contentDescription = "User profile photo")
 ```
 
-### Testing with Semantics
-
+Custom state (progress)
 ```kotlin
-@Test
-fun testButton() {
-    composeTestRule.setContent {
-        Button(
-            onClick = {},
-            modifier = Modifier.testTag("submit_button")  // Test tag
-        ) {
-            Text("Submit")
-        }
-    }
-
-    // Find by test tag
-    composeTestRule
-        .onNodeWithTag("submit_button")
-        .assertIsEnabled()
-        .performClick()
-
-    // Find by text
-    composeTestRule
-        .onNodeWithText("Submit")
-        .assertExists()
-
-    // Find by content description
-    composeTestRule
-        .onNodeWithContentDescription("Submit button")
-        .assertIsDisplayed()
-}
+Box(Modifier.semantics {
+  progressBarRangeInfo = ProgressBarRangeInfo(current = progress, range = 0f..1f)
+  stateDescription = "${(progress*100).toInt()}%"
+}) { /* UI */ }
 ```
 
-### Custom Semantics
-
+Merging child semantics
 ```kotlin
-@Composable
-fun ProgressBar(progress: Float) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(8.dp)
-            .semantics {
-                // Custom semantic property
-                progressBarRangeInfo = ProgressBarRangeInfo(
-                    current = progress,
-                    range = 0f..1f
-                )
-                stateDescription = "${(progress * 100).toInt()}% complete"
-            }
-    ) {
-        // Progress bar UI
-    }
-}
+Row(Modifier.semantics(mergeDescendants = true) {
+  contentDescription = "$firstName $lastName"
+}) { Text(firstName); Text(lastName) }
 ```
 
-### Merge Semantics
-
+Testing selectors
 ```kotlin
-// BAD - Each text has separate semantics
-@Composable
-fun UserInfo(user: User) {
-    Row {
-        Text(user.firstName)
-        Text(user.lastName)
-    }
-    // Screen reader announces separately: "John" "Doe"
-}
-
-// GOOD - Merged semantics
-@Composable
-fun UserInfo(user: User) {
-    Row(
-        modifier = Modifier.semantics(mergeDescendants = true) {
-            contentDescription = "${user.firstName} ${user.lastName}"
-        }
-    ) {
-        Text(user.firstName)
-        Text(user.lastName)
-    }
-    // Screen reader announces once: "John Doe"
-}
+// In UI
+Button(Modifier.testTag("submit"), onClick = onSubmit) { Text("Submit") }
+// In test
+rule.onNodeWithTag("submit").assertIsEnabled().performClick()
+rule.onNodeWithText("Submit").assertExists()
 ```
 
-**English Summary**: Semantics describe UI for accessibility and testing. Properties: `contentDescription` (screen readers), `role` (Button/Image/etc), `stateDescription` (current state). Use `testTag` for testing, `mergeDescendants` for combining child semantics. Essential for accessibility and UI testing.
+Guidelines
+- Always set contentDescription for non‑decorative images/icons.
+- Prefer mergeDescendants for compound labels; avoid duplicate announcements.
+- Use testTag for stable, language‑agnostic test selectors.
 
 ## Ответ (RU)
 
-**Semantics** описывают структуру и значение UI для сервисов специальных возможностей и фреймворков тестирования.
+### Концепция
+- Semantics раскрывают смысл/структуру UI для сервисов доступности и тест‑API.
+- Важные свойства: contentDescription, role, stateDescription, progressBarRangeInfo, selected/disabled.
 
+### Минимальные паттерны
 
-### Базовое использование
-
+Кнопка с семантикой
 ```kotlin
-@Composable
-fun CustomButton(onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .clickable(onClick = onClick)
-            .semantics {
-                contentDescription = "Submit button"
-                role = Role.Button
-            }
-    ) {
-        Text("Submit")
-    }
+Box(Modifier.clickable(onClick)
+    .semantics { contentDescription = "Submit"; role = Role.Button }) {
+  Text("Submit")
 }
 ```
 
-### Свойства доступности
-
+Изображение с alt‑текстом
 ```kotlin
-@Composable
-fun ProfileImage(imageUrl: String) {
-    Image(
-        painter = rememberImagePainter(imageUrl),
-        contentDescription = "User profile picture",  // Для screen readers
-        modifier = Modifier.semantics {
-            role = Role.Image
-        }
-    )
-}
+Image(painter = painter, contentDescription = "User profile photo")
 ```
 
-### Тестирование с Semantics
-
+Пользовательское состояние (progress)
 ```kotlin
-@Test
-fun testButton() {
-    composeTestRule
-        .onNodeWithTag("submit_button")
-        .assertIsEnabled()
-        .performClick()
-
-    composeTestRule
-        .onNodeWithText("Submit")
-        .assertExists()
-}
+Box(Modifier.semantics {
+  progressBarRangeInfo = ProgressBarRangeInfo(current = progress, range = 0f..1f)
+  stateDescription = "${(progress*100).toInt()}%"
+}) { /* UI */ }
 ```
 
-**Краткое содержание**: Semantics описывают UI для доступности и тестирования. Свойства: `contentDescription` (screen readers), `role` (Button/Image/etc), `stateDescription` (текущее состояние). Используйте `testTag` для тестирования, `mergeDescendants` для объединения семантики детей. Важно для доступности и UI тестирования.
+Слияние семантики детей
+```kotlin
+Row(Modifier.semantics(mergeDescendants = true) {
+  contentDescription = "$firstName $lastName"
+}) { Text(firstName); Text(lastName) }
+```
+
+Селекторы в тестах
+```kotlin
+// В UI
+Button(Modifier.testTag("submit"), onClick = onSubmit) { Text("Submit") }
+// В тесте
+rule.onNodeWithTag("submit").assertIsEnabled().performClick()
+rule.onNodeWithText("Submit").assertExists()
+```
+
+Рекомендации
+- Всегда указывайте contentDescription для недекоративных изображений/иконок.
+- Используйте mergeDescendants для составных подписей; избегайте повторов.
+- Применяйте testTag как стабильный, независимый от языка селектор.
 
 ---
 
+## Follow-ups
+- How to handle live region announcements for dynamic content?
+- When to expose vs hide semantics for performance or redundancy?
+- How to structure semantics for custom controls (slider, chips)?
+
 ## References
-- [Compose Semantics](https://developer.android.com/jetpack/compose/semantics)
+- https://developer.android.com/jetpack/compose/semantics
+- https://developer.android.com/guide/topics/ui/accessibility
 
 ## Related Questions
 
-### Related (Medium)
-- [[q-compose-testing--android--medium]] - Jetpack Compose
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
-- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
-- [[q-jetpack-compose-basics--android--medium]] - Jetpack Compose
+### Prerequisites (Easier)
+- [[q-android-jetpack-overview--android--easy]]
+
+### Related (Same Level)
+- [[q-compose-testing--android--medium]]
+- [[q-compose-modifier-system--android--medium]]
 
 ### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Jetpack Compose
-
-### Hub
-- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+- [[q-compose-performance-optimization--android--hard]]
 
