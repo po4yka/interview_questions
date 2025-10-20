@@ -1,497 +1,170 @@
 ---
-id: 20251012-1227102
-title: "Compose Gesture Detection / Обнаружение жестов Compose"
+id: 20251012-122805
+title: Compose Gesture Detection / Обработка жестов в Compose
+aliases: [Compose Gesture Detection, Обработка жестов в Compose]
 topic: android
+subtopics: [ui-compose, gestures]
+question_kind: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-what-unites-the-main-components-of-an-android-application--android--medium, q-main-causes-ui-lag--android--medium, q-which-class-to-use-for-detecting-gestures--android--medium]
-created: 2025-10-15
-tags: [compose, gestures, pointer-input, drag-swipe, touch-events, difficulty/medium]
+related: [q-animated-visibility-vs-content--jetpack-compose--medium, q-compose-canvas-graphics--jetpack-compose--hard, q-android-performance-measurement-tools--android--medium]
+created: 2025-10-11
+updated: 2025-10-20
+original_language: en
+language_tags: [en, ru]
+tags: [android/ui-compose, android/gestures, compose, performance, difficulty/medium]
 ---
-# Gesture Detection and PointerInput
 
 # Question (EN)
-> Implement a custom draggable component with velocity tracking. How does Modifier.pointerInput work?
+> How do you implement robust gesture detection in Compose (tap/long‑press, drag/scroll, nested scroll, touch slop) with good performance and UX?
 
 # Вопрос (RU)
-> Реализуйте пользовательский перетаскиваемый компонент с отслеживанием скорости. Как работает Modifier.pointerInput?
+> Как реализовать надёжную обработку жестов в Compose (tap/long‑press, drag/scroll, вложенный скролл, touch slop) с хорошей производительностью и UX?
 
 ---
 
 ## Answer (EN)
 
-**Modifier.pointerInput** is Compose's low-level API for handling touch events and gestures. It provides access to raw pointer events and includes higher-level gesture detectors.
+### Core concepts
+- pointerInput: low‑level suspend handlers (detect* helpers)
+- Modifiers: `clickable`, `combinedClickable`, `draggable`, `scrollable` for high‑level UX
+- Nested scroll: coordinate scroll between parents/children
+- Touch slop: thresholds to avoid accidental gesture starts
 
----
+### Minimal patterns
 
-### Basic Gesture Detection
-
-Compose provides built-in gesture detectors:
-
+Taps and long‑press:
 ```kotlin
-@Composable
-fun BasicGestures() {
-    var tapCount by remember { mutableStateOf(0) }
-    var longPressCount by remember { mutableStateOf(0) }
-    var doubleTapCount by remember { mutableStateOf(0) }
-
-    Box(
-        modifier = Modifier
-            .size(200.dp)
-            .background(Color.Blue)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = { tapCount++ },
-                    onLongPress = { longPressCount++ },
-                    onDoubleTap = { doubleTapCount++ },
-                    onPress = { /* press down */ }
-                )
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Taps: $tapCount", color = Color.White)
-            Text("Long: $longPressCount", color = Color.White)
-            Text("Double: $doubleTapCount", color = Color.White)
-        }
-    }
-}
+Box(Modifier.pointerInput(Unit) {
+  detectTapGestures(
+    onLongPress = { /* show menu */ },
+    onTap = { /* select */ }
+  )
+})
 ```
 
----
+High‑level clickable (ripple, semantics):
+```kotlin
+Text("Open", Modifier.clickable(onClick = onOpen))
+```
 
-### Custom Draggable Component with Velocity
-
+Drag with state:
 ```kotlin
 @Composable
 fun DraggableBox() {
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
-    val velocityTracker = remember { VelocityTracker() }
+  var offset by remember { mutableStateOf(Offset.Zero) }
+  Box(Modifier.size(80.dp).offset { IntOffset(offset.x.toInt(), offset.y.toInt()) }
+    .draggable(orientation = Orientation.Horizontal,
+      state = rememberDraggableState { delta -> offset += Offset(delta, 0f) }))
+}
+```
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectDragGestures(
-                    onDragStart = { offset ->
-                        Log.d("Drag", "Started at $offset")
-                    },
-                    onDragEnd = {
-                        val velocity = velocityTracker.calculateVelocity()
-                        Log.d(
-                            "Drag",
-                            "Ended with velocity: ${velocity.x}, ${velocity.y}"
-                        )
-                    },
-                    onDragCancel = {
-                        Log.d("Drag", "Cancelled")
-                    },
-                    onDrag = { change, dragAmount ->
-                        change.consume()
-                        offsetX += dragAmount.x
-                        offsetY += dragAmount.y
+Scrollable content:
+```kotlin
+val state = rememberScrollState()
+Column(Modifier.verticalScroll(state)) { /* items */ }
+```
 
-                        // Track velocity
-                        velocityTracker.addPosition(
-                            change.uptimeMillis,
-                            change.position
-                        )
-                    }
-                )
-            }
-    ) {
-        Box(
-            modifier = Modifier
-                .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
-                .size(100.dp)
-                .background(Color.Red, CircleShape)
-        )
+Nested scroll (parent intercept sample):
+```kotlin
+val parent = remember {
+  object : NestedScrollConnection {
+    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+      // consume horizontal first; let child handle vertical
+      return Offset(x = available.x, y = 0f)
     }
+  }
 }
+Row(Modifier.nestedScroll(parent)) { /* child scrollables */ }
 ```
 
----
-
-### Advanced: Draggable with Fling
-
-```kotlin
-@Composable
-fun DraggableWithFling() {
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
-    val animatable = remember { Animatable(Offset(0f, 0f), Offset.VectorConverter) }
-
-    LaunchedEffect(offsetX, offsetY) {
-        animatable.snapTo(Offset(offsetX, offsetY))
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                var velocity = Velocity.Zero
-
-                detectDragGestures(
-                    onDragEnd = {
-                        // Fling animation with decay
-                        launch {
-                            val decay = exponentialDecay<Offset>(
-                                frictionMultiplier = 1f
-                            )
-
-                            animatable.animateDecay(
-                                initialVelocity = Offset(velocity.x, velocity.y),
-                                animationSpec = decay
-                            ) {
-                                // Update position during animation
-                                offsetX = value.x
-                                offsetY = value.y
-                            }
-                        }
-                    },
-                    onDrag = { change, dragAmount ->
-                        change.consume()
-
-                        // Update velocity
-                        velocity = change.velocity
-
-                        // Update position
-                        offsetX += dragAmount.x
-                        offsetY += dragAmount.y
-                    }
-                )
-            }
-    ) {
-        Box(
-            modifier = Modifier
-                .offset {
-                    IntOffset(
-                        animatable.value.x.roundToInt(),
-                        animatable.value.y.roundToInt()
-                    )
-                }
-                .size(80.dp)
-                .background(Color.Green, CircleShape)
-        )
-    }
-}
-```
-
----
-
-### Swipe to Dismiss
-
-```kotlin
-@Composable
-fun SwipeToDissmissItem(
-    onDismiss: () -> Unit,
-    content: @Composable () -> Unit
-) {
-    var offsetX by remember { mutableStateOf(0f) }
-    val density = LocalDensity.current
-    val dismissThreshold = with(density) { 200.dp.toPx() }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .offset { IntOffset(offsetX.roundToInt(), 0) }
-            .pointerInput(Unit) {
-                detectHorizontalDragGestures(
-                    onDragEnd = {
-                        if (abs(offsetX) > dismissThreshold) {
-                            onDismiss()
-                        } else {
-                            // Snap back
-                            offsetX = 0f
-                        }
-                    },
-                    onHorizontalDrag = { change, dragAmount ->
-                        change.consume()
-                        offsetX += dragAmount
-                    }
-                )
-            }
-    ) {
-        // Background (revealed when swiping)
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .background(Color.Red),
-            contentAlignment = Alignment.CenterEnd
-        ) {
-            Icon(
-                Icons.Default.Delete,
-                "Delete",
-                modifier = Modifier.padding(16.dp),
-                tint = Color.White
-            )
-        }
-
-        // Content
-        Box(modifier = Modifier.background(Color.White)) {
-            content()
-        }
-    }
-}
-```
-
----
-
-### Multi-Touch: Zoom and Pan
-
-```kotlin
-@Composable
-fun ZoomableImage(imageUrl: String) {
-    var scale by remember { mutableStateOf(1f) }
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTransformGestures { _, pan, zoom, _ ->
-                    scale = (scale * zoom).coerceIn(1f, 5f)
-                    offsetX += pan.x
-                    offsetY += pan.y
-                }
-            }
-    ) {
-        AsyncImage(
-            model = imageUrl,
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize()
-                .graphicsLayer {
-                    scaleX = scale
-                    scaleY = scale
-                    translationX = offsetX
-                    translationY = offsetY
-                }
-        )
-    }
-}
-```
-
----
-
-### Custom Gesture: Long Press Drag
-
-```kotlin
-@Composable
-fun LongPressDraggable() {
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
-    var isDragging by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectDragGesturesAfterLongPress(
-                    onDragStart = { offset ->
-                        isDragging = true
-                    },
-                    onDragEnd = {
-                        isDragging = false
-                    },
-                    onDragCancel = {
-                        isDragging = false
-                    },
-                    onDrag = { change, dragAmount ->
-                        change.consume()
-                        offsetX += dragAmount.x
-                        offsetY += dragAmount.y
-                    }
-                )
-            }
-    ) {
-        Box(
-            modifier = Modifier
-                .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
-                .size(100.dp)
-                .background(
-                    if (isDragging) Color.Green else Color.Blue,
-                    CircleShape
-                )
-        )
-    }
-}
-```
-
----
-
-### Raw PointerInput Events
-
-For complete control, handle raw pointer events:
-
-```kotlin
-@Composable
-fun RawPointerInput() {
-    val pointers = remember { mutableStateListOf<Offset>() }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.LightGray)
-            .pointerInput(Unit) {
-                awaitPointerEventScope {
-                    while (true) {
-                        val event = awaitPointerEvent()
-
-                        event.changes.forEach { change ->
-                            when (change.type) {
-                                PointerType.Touch -> {
-                                    if (change.pressed) {
-                                        pointers.add(change.position)
-                                    }
-                                }
-                            }
-                            change.consume()
-                        }
-
-                        // Keep only last 100 points
-                        if (pointers.size > 100) {
-                            pointers.removeAt(0)
-                        }
-                    }
-                }
-            }
-    ) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            pointers.forEachIndexed { index, offset ->
-                if (index > 0) {
-                    val prev = pointers[index - 1]
-                    drawLine(
-                        color = Color.Black,
-                        start = prev,
-                        end = offset,
-                        strokeWidth = 5f,
-                        cap = StrokeCap.Round
-                    )
-                }
-            }
-        }
-    }
-}
-```
-
----
-
-### Gesture Propagation and Consumption
-
-```kotlin
-@Composable
-fun GesturePropagation() {
-    Box(
-        modifier = Modifier
-            .size(300.dp)
-            .background(Color.Red)
-            .pointerInput(Unit) {
-                detectTapGestures {
-                    Log.d("Gesture", "Outer box tapped")
-                }
-            }
-    ) {
-        Box(
-            modifier = Modifier
-                .size(150.dp)
-                .align(Alignment.Center)
-                .background(Color.Blue)
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onTap = { offset ->
-                            Log.d("Gesture", "Inner box tapped at $offset")
-                            // Event is consumed, won't reach outer box
-                        }
-                    )
-                }
-        )
-    }
-}
-```
-
----
-
-### Best Practices
-
-**1. Use appropriate gesture detectors:**
-
-```kotlin
-//  DO: Use built-in detectors
-.pointerInput(Unit) {
-    detectTapGestures { /* ... */ }
-    detectDragGestures { /* ... */ }
-}
-
-//  DON'T: Roll your own unless necessary
-```
-
-**2. Remember to consume events:**
-
-```kotlin
-//  DO: Consume to prevent propagation
-onDrag = { change, dragAmount ->
-    change.consume()
-    // handle drag
-}
-```
-
-**3. Use keys for pointer input:**
-
-```kotlin
-//  DO: Reset gesture when key changes
-.pointerInput(itemId) {
-    detectTapGestures { /* ... */ }
-}
-```
-
----
+### Performance/UX tips
+- Prefer high‑level modifiers (`clickable`, `scrollable`) for built‑in semantics/feedback
+- Debounce heavy work; handle gesture callbacks on background when possible
+- Avoid allocations inside gesture lambdas; hoist state via remember
+- Respect touch slop; don’t block main thread; provide visual feedback (ripple)
 
 ## Ответ (RU)
 
-**Modifier.pointerInput** — это низкоуровневый API Compose для обработки событий касания и жестов. Он предоставляет доступ к сырым событиям указателя и включает детекторы жестов высокого уровня.
+### Базовые понятия
+- pointerInput: низкоуровневые suspend‑обработчики (detect* помощники)
+- Модификаторы: `clickable`, `combinedClickable`, `draggable`, `scrollable` — высокий уровень
+- Nested scroll: координация скролла родителя/детей
+- Touch slop: пороги, исключающие случайные жесты
 
-### Основное обнаружение жестов
+### Минимальные паттерны
 
-Compose предоставляет встроенные детекторы жестов: `detectTapGestures`, `detectDragGestures`, `detectTransformGestures`.
+Tap и long‑press:
+```kotlin
+Box(Modifier.pointerInput(Unit) {
+  detectTapGestures(
+    onLongPress = { /* меню */ },
+    onTap = { /* выбор */ }
+  )
+})
+```
 
-### Пользовательский перетаскиваемый компонент
+Высокоуровневый clickable (ripple, семантика):
+```kotlin
+Text("Open", Modifier.clickable(onClick = onOpen))
+```
 
-Можно создать кастомный компонент с отслеживанием скорости используя `VelocityTracker` и обработку событий перетаскивания.
+Drag с состоянием:
+```kotlin
+@Composable
+fun DraggableBox() {
+  var offset by remember { mutableStateOf(Offset.Zero) }
+  Box(Modifier.size(80.dp).offset { IntOffset(offset.x.toInt(), offset.y.toInt()) }
+    .draggable(orientation = Orientation.Horizontal,
+      state = rememberDraggableState { delta -> offset += Offset(delta, 0f) }))
+}
+```
 
-### Мультитач: Масштабирование и панорамирование
+Scrollable:
+```kotlin
+val state = rememberScrollState()
+Column(Modifier.verticalScroll(state)) { /* items */ }
+```
 
-Используйте `detectTransformGestures` для обработки жестов масштабирования, поворота и панорамирования одновременно.
+Nested scroll (пример перехвата родителем):
+```kotlin
+val parent = remember {
+  object : NestedScrollConnection {
+    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+      return Offset(x = available.x, y = 0f)
+    }
+  }
+}
+Row(Modifier.nestedScroll(parent)) { /* дети */ }
+```
 
-### Лучшие практики
-
-1. Используйте подходящие детекторы жестов
-2. Не забывайте потреблять события
-3. Используйте ключи для pointer input
-4. Учитывайте производительность при сложных жестах
-
-Правильное использование pointerInput позволяет создавать отзывчивые интерактивные UI компоненты.
-
+### Производительность/UX
+- Предпочитать высокоуровневые модификаторы для семантики/отклика
+- Дебаунс тяжёлой логики; выносить в фоновые потоки
+- Не аллоцировать в лямбдах; состояние через remember
+- Уважать touch slop; не блокировать main; давать визуальный отклик (ripple)
 
 ---
 
+## Follow-ups
+- How to combine multiple gestures without conflict (e.g., tap vs drag)?
+- When to use low‑level pointerInput vs high‑level modifiers?
+- How to implement custom nested scroll behaviors?
+
+## References
+- https://developer.android.com/develop/ui/compose/gestures
+- https://developer.android.com/develop/ui/compose/performance
+
 ## Related Questions
 
-### Hub
-- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+### Prerequisites (Easier)
+- [[q-animated-visibility-vs-content--jetpack-compose--medium]]
 
-### Related (Medium)
-- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
-- [[q-mutable-state-compose--android--medium]] - MutableState basics
-- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
+### Related (Same Level)
+- [[q-compose-canvas-graphics--jetpack-compose--hard]]
+- [[q-compose-compiler-plugin--jetpack-compose--hard]]
 
 ### Advanced (Harder)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
-- [[q-stable-classes-compose--android--hard]] - @Stable annotation
-- [[q-stable-annotation-compose--android--hard]] - Stability annotations
+- [[q-android-performance-measurement-tools--android--medium]]
 
