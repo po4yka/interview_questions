@@ -1,536 +1,185 @@
 ---
 id: 20251017-114333
-title: "Compose Performance Optimization / Оптимизация производительности Compose"
-aliases: []
-
-# Classification
+title: Compose Performance Optimization / Оптимизация производительности Compose
+aliases: [Compose Performance Optimization, Оптимизация производительности Compose]
 topic: android
-subtopics: [jetpack-compose, performance, optimization, recomposition]
-question_kind: theory
+subtopics: [ui-compose, performance]
+question_kind: android
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru, android/jetpack-compose, android/performance, android/optimization, android/recomposition, difficulty/hard]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
-source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
-
-# Workflow & relations
+language_tags: [en, ru]
+source: https://developer.android.com/jetpack/compose/performance
+source_note: Official Compose performance guide
 status: draft
 moc: moc-android
-related: [q-what-do-you-know-about-modifications--android--medium, q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy, q-how-to-pass-data-from-one-activity-to-another--android--medium, q-recomposition-compose--android--medium]
-
-# Timestamps
+related: [q-compose-compiler-plugin--jetpack-compose--hard, q-compose-lazy-layout-optimization--jetpack-compose--hard, q-android-performance-measurement-tools--android--medium]
 created: 2025-10-06
-updated: 2025-10-18
-
-tags: [en, ru, android/jetpack-compose, android/performance, android/optimization, android/recomposition, difficulty/hard]
+updated: 2025-10-20
+tags: [android/ui-compose, performance, recomposition, stability, difficulty/hard]
 ---
 # Question (EN)
-> How to optimize performance in Jetpack Compose? What causes unnecessary recomposition and how to avoid it?
+> How do you optimize Jetpack Compose performance and avoid unnecessary recompositions? Provide minimal patterns and when to use them.
+
 # Вопрос (RU)
-> Как оптимизировать производительность в Jetpack Compose? Что вызывает ненужную рекомпозицию и как её избежать?
+> Как оптимизировать производительность Jetpack Compose и избегать лишних рекомпозиций? Приведите минимальные паттерны и когда их применять.
 
 ---
 
 ## Answer (EN)
 
-Performance optimization in Compose focuses on minimizing unnecessary recompositions.
+### Principles
+- Minimize recomposition scope (observe granular state, split UI).
+- Prefer stable inputs (immutable/@Stable) and stable callbacks.
+- Precompute/derive values with `remember`/`derivedStateOf`.
+- Use keys and content types in lazy lists for reuse and diffing.
+- Avoid allocations in hot paths; reuse shapes/brushes/painters.
+- Measure and verify with tools; optimize only confirmed hotspots.
 
-### Causes of Recomposition
+### Minimal patterns
 
-**1. State changes**
-
+Granular state observation
 ```kotlin
-// BAD - Recomposes entire screen on any change
-@Composable
-fun Screen(viewModel: ViewModel) {
-    val uiState by viewModel.uiState.collectAsState()
-
-    // Entire screen recomposes when ANY field in uiState changes
-    Column {
-        Header(uiState.title)
-        Content(uiState.content)
-        Footer(uiState.footer)
-    }
-}
-
-// GOOD - Split state
-@Composable
-fun Screen(viewModel: ViewModel) {
-    val title by viewModel.title.collectAsState()
-    val content by viewModel.content.collectAsState()
-    val footer by viewModel.footer.collectAsState()
-
-    // Only changed part recomposes
-    Column {
-        Header(title)
-        Content(content)
-        Footer(footer)
-    }
-}
+// Observe fields separately to limit recomposition
+val title by vm.title.collectAsState()
+val body by vm.body.collectAsState()
+Header(title); Body(body)
 ```
 
-**2. Unstable parameters**
-
+Stable callbacks
 ```kotlin
-// BAD - List is unstable
-@Composable
-fun ItemList(items: List<Item>) {  // Recomposes even if list didn't change
-    LazyColumn {
-        items(items) { item -> ItemCard(item) }
-    }
-}
-
-// GOOD - Use @Stable or immutable collections
-@Stable
-data class ItemListState(val items: List<Item>)
-
-@Composable
-fun ItemList(state: ItemListState) {  // Skips recomposition if same
-    LazyColumn {
-        items(state.items) { item -> ItemCard(item) }
-    }
-}
+// Avoid capturing changing state in lambdas
+val onClick = remember { { vm.onClick() } }
+Button(onClick) { Text("Go") }
+// or method reference
+Button(onClick = vm::onClick) { Text("Go") }
 ```
 
-### Optimization Techniques
-
-**1. Use keys in lists**
-
+Immutable/@Stable models
 ```kotlin
-// GOOD - Reuses compositions
+@Immutable data class Product(val id: String, val name: String)
+@Stable class UiState { var selected by mutableStateOf<String?>(null) }
+```
+
+Derived values
+```kotlin
+val listState = rememberLazyListState()
+val showFab by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
+```
+
+Lazy reuse (keys, contentType)
+```kotlin
 LazyColumn {
-    items(
-        items = products,
-        key = { it.id }  // Compose knows which items changed
-    ) { product ->
-        ProductCard(product)
-    }
+  items(items = data, key = { it.id }, contentType = { it.type }) { item ->
+    Row { Text(item.title) }
+  }
 }
 ```
 
-**2. derivedStateOf for computed values**
-
+Avoid recomposition propagation
 ```kotlin
-// BAD - Recomputes on every scroll
-@Composable
-fun MessageList(messages: List<Message>) {
-    val listState = rememberLazyListState()
-    val showButton = listState.firstVisibleItemIndex > 0  // Recomputes constantly
-
-    LazyColumn(state = listState) {
-        items(messages) { MessageItem(it) }
-    }
-}
-
-// GOOD - Only recomputes when threshold crossed
-@Composable
-fun MessageList(messages: List<Message>) {
-    val listState = rememberLazyListState()
-    val showButton by remember {
-        derivedStateOf {
-            listState.firstVisibleItemIndex > 0
-        }
-    }
-
-    LazyColumn(state = listState) {
-        items(messages) { MessageItem(it) }
-    }
-}
+// Do not pass frequently changing primitives down if not needed
+var counter by remember { mutableStateOf(0) }
+Button({ counter++ }) { Text("$counter") }
+ExpensiveChild() // independent of counter
 ```
 
-**3. Lambda stability**
-
+Remember expensive work
 ```kotlin
-// BAD - New lambda on every recomposition
-@Composable
-fun Screen() {
-    Button(onClick = { viewModel.action() }) {  // New lambda each time
-        Text("Click")
-    }
-}
-
-// GOOD - Remember lambda
-@Composable
-fun Screen() {
-    val onClick = remember { { viewModel.action() } }
-    Button(onClick = onClick) {
-        Text("Click")
-    }
-}
-
-// BETTER - Extract to separate function
-@Composable
-fun Screen() {
-    Button(onClick = viewModel::action) {  // Stable reference
-        Text("Click")
-    }
-}
+val formatted = remember(price) { priceFormatter.format(price) }
+Text(formatted)
 ```
 
-**4. Mark classes as @Stable/@Immutable**
-
-```kotlin
-@Immutable  // All properties are val and immutable
-data class Product(
-    val id: String,
-    val name: String,
-    val price: Double
-)
-
-@Stable  // Properties may be var but notify on change
-class ProductViewModel : ViewModel() {
-    var selectedProduct by mutableStateOf<Product?>(null)
-}
-```
-
-**5. Avoid recomposition propagation**
-
-```kotlin
-// BAD - Parent passes unstable state
-@Composable
-fun Parent() {
-    var counter by remember { mutableStateOf(0) }
-
-    Column {
-        Button(onClick = { counter++ }) { Text("$counter") }
-        ExpensiveChild(counter)  // Recomposes unnecessarily
-    }
-}
-
-// GOOD - Hoist state, pass only when needed
-@Composable
-fun Parent() {
-    var counter by remember { mutableStateOf(0) }
-
-    Column {
-        Button(onClick = { counter++ }) { Text("$counter") }
-        ExpensiveChild()  // Doesn't recompose
-    }
-}
-```
-
-**English Summary**: Optimize Compose by: 1) Split state to minimize recomposition scope. 2) Use `derivedStateOf` for computed values. 3) Mark data classes as `@Immutable/@Stable`. 4) Use `key` in LazyColumn. 5) Remember lambdas or use method references. 6) Avoid unstable parameters. Tools: Layout Inspector, Recomposition Counter.
+### Measurement and tooling
+- Use Layout Inspector (Recomposition counts), Perfetto, tracing.
+- Track jank and long frames; correlate with recomposition spikes.
+- Verify skips with compiler metrics (Compose compiler reports).
 
 ## Ответ (RU)
 
-Оптимизация производительности в Compose фокусируется на минимизации ненужных рекомпозиций.
+### Принципы
+- Минимизируйте область рекомпозиции (наблюдайте поля отдельно, делите UI).
+- Используйте стабильные входы (immutable/@Stable) и стабильные колбэки.
+- Предвычисляйте/выводите значения через `remember`/`derivedStateOf`.
+- В списках используйте keys и contentType для переиспользования и диффинга.
+- Избегайте аллокаций в горячих участках; переиспользуйте shape/brush/painter.
+- Измеряйте перед оптимизацией; подтверждайте узкие места.
 
+### Минимальные паттерны
 
-### Причины рекомпозиции
-
-**1. Изменения состояния**
-
+Гранулярное наблюдение состояния
 ```kotlin
-// ПЛОХО - Рекомпозиция всего экрана при любом изменении
-@Composable
-fun Screen(viewModel: ViewModel) {
-    val uiState by viewModel.uiState.collectAsState()
-
-    // Весь экран перекомпонуется при изменении ЛЮБОГО поля в uiState
-    Column {
-        Header(uiState.title)
-        Content(uiState.content)
-        Footer(uiState.footer)
-    }
-}
-
-// ХОРОШО - Разделить состояние
-@Composable
-fun Screen(viewModel: ViewModel) {
-    val title by viewModel.title.collectAsState()
-    val content by viewModel.content.collectAsState()
-    val footer by viewModel.footer.collectAsState()
-
-    // Только измененная часть перекомпонуется
-    Column {
-        Header(title)
-        Content(content)
-        Footer(footer)
-    }
-}
+val title by vm.title.collectAsState()
+val body by vm.body.collectAsState()
+Header(title); Body(body)
 ```
 
-**2. Нестабильные параметры**
-
+Стабильные колбэки
 ```kotlin
-// ПЛОХО - List нестабильный
-@Composable
-fun ItemList(items: List<Item>) {  // Перекомпонуется даже если список не изменился
-    LazyColumn {
-        items(items) { item -> ItemCard(item) }
-    }
-}
-
-// ХОРОШО - Используйте @Stable или immutable коллекции
-@Stable
-data class ItemListState(val items: List<Item>)
-
-@Composable
-fun ItemList(state: ItemListState) {  // Пропускает рекомпозицию если одинаковый
-    LazyColumn {
-        items(state.items) { item -> ItemCard(item) }
-    }
-}
+val onClick = remember { { vm.onClick() } }
+Button(onClick) { Text("Go") }
+// или ссылка на метод
+Button(onClick = vm::onClick) { Text("Go") }
 ```
 
-### Техники оптимизации
-
-**1. Используйте ключи в списках**
-
+Immutable/@Stable модели
 ```kotlin
-// ХОРОШО - Переиспользует композиции
+@Immutable data class Product(val id: String, val name: String)
+@Stable class UiState { var selected by mutableStateOf<String?>(null) }
+```
+
+Производные значения
+```kotlin
+val listState = rememberLazyListState()
+val showFab by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
+```
+
+Переиспользование в списках (keys, contentType)
+```kotlin
 LazyColumn {
-    items(
-        items = products,
-        key = { it.id }  // Compose знает какие элементы изменились
-    ) { product ->
-        ProductCard(product)
-    }
+  items(items = data, key = { it.id }, contentType = { it.type }) { item ->
+    Row { Text(item.title) }
+  }
 }
 ```
 
-**Почему ключи важны:**
+Избегание распространения рекомпозиции
 ```kotlin
-// Без ключей:
-// Исходно: [A, B, C]
-// После вставки в 0: [D, A, B, C]
-// Compose видит: позиция 0 изменилась A→D, позиция 1 изменилась B→A, и т.д.
-// Результат: ВСЕ элементы перекомпонуются!
-
-// С ключами:
-// Исходно: [A(key:1), B(key:2), C(key:3)]
-// После вставки: [D(key:4), A(key:1), B(key:2), C(key:3)]
-// Compose видит: добавлен элемент D, элементы A,B,C не изменились
-// Результат: Только новый элемент D компонуется!
+var counter by remember { mutableStateOf(0) }
+Button({ counter++ }) { Text("$counter") }
+ExpensiveChild()
 ```
 
-**2. derivedStateOf для вычисляемых значений**
-
+Кэширование дорогих вычислений
 ```kotlin
-// ПЛОХО - Пересчитывает при каждом скролле
-@Composable
-fun MessageList(messages: List<Message>) {
-    val listState = rememberLazyListState()
-    val showButton = listState.firstVisibleItemIndex > 0  // Пересчитывает постоянно
-
-    LazyColumn(state = listState) {
-        items(messages) { MessageItem(it) }
-    }
-}
-
-// ХОРОШО - Пересчитывает только при пересечении порога
-@Composable
-fun MessageList(messages: List<Message>) {
-    val listState = rememberLazyListState()
-    val showButton by remember {
-        derivedStateOf {
-            listState.firstVisibleItemIndex > 0
-        }
-    }
-
-    LazyColumn(state = listState) {
-        items(messages) { MessageItem(it) }
-    }
-}
+val formatted = remember(price) { priceFormatter.format(price) }
+Text(formatted)
 ```
 
-**3. Стабильность лямбд**
-
-```kotlin
-// ПЛОХО - Новая лямбда при каждой рекомпозиции
-@Composable
-fun Screen() {
-    Button(onClick = { viewModel.action() }) {  // Новая лямбда каждый раз
-        Text("Нажать")
-    }
-}
-
-// ХОРОШО - Запомнить лямбду
-@Composable
-fun Screen() {
-    val onClick = remember { { viewModel.action() } }
-    Button(onClick = onClick) {
-        Text("Нажать")
-    }
-}
-
-// ЛУЧШЕ - Ссылка на метод
-@Composable
-fun Screen() {
-    Button(onClick = viewModel::action) {  // Стабильная ссылка
-        Text("Нажать")
-    }
-}
-```
-
-**4. Пометить классы как @Stable/@Immutable**
-
-```kotlin
-@Immutable  // Все свойства val и неизменяемы
-data class Product(
-    val id: String,
-    val name: String,
-    val price: Double
-)
-
-@Stable  // Свойства могут быть var, но уведомляют об изменении
-class ProductViewModel : ViewModel() {
-    var selectedProduct by mutableStateOf<Product?>(null)
-}
-```
-
-**5. Избегайте распространения рекомпозиции**
-
-```kotlin
-// ПЛОХО - Родитель передает нестабильное состояние
-@Composable
-fun Parent() {
-    var counter by remember { mutableStateOf(0) }
-
-    Column {
-        Button(onClick = { counter++ }) { Text("$counter") }
-        ExpensiveChild(counter)  // Перекомпонуется без необходимости
-    }
-}
-
-// ХОРОШО - Поднять состояние, передавать только при необходимости
-@Composable
-fun Parent() {
-    var counter by remember { mutableStateOf(0) }
-
-    Column {
-        Button(onClick = { counter++ }) { Text("$counter") }
-        ExpensiveChild()  // Не перекомпонуется
-    }
-}
-```
-
-**6. Используйте remember для дорогих вычислений**
-
-```kotlin
-// ПЛОХО - Вычисляется при каждой рекомпозиции
-@Composable
-fun UserList(users: List<User>) {
-    val sortedUsers = users.sortedBy { it.name }  // Сортируется каждый раз!
-
-    LazyColumn {
-        items(sortedUsers) { user ->
-            UserRow(user)
-        }
-    }
-}
-
-// ХОРОШО - Кэширование с remember
-@Composable
-fun UserList(users: List<User>) {
-    val sortedUsers = remember(users) {
-        users.sortedBy { it.name }  // Сортируется только при изменении users
-    }
-
-    LazyColumn {
-        items(sortedUsers) { user ->
-            UserRow(user)
-        }
-    }
-}
-```
-
-**7. Разделите большие composables**
-
-```kotlin
-// ПЛОХО - Монолитный composable
-@Composable
-fun Screen(viewModel: ViewModel) {
-    val uiState by viewModel.uiState.collectAsState()
-
-    Column {
-        // 100+ строк кода
-        // Всё перекомпонуется при любом изменении
-    }
-}
-
-// ХОРОШО - Разделить на маленькие composables
-@Composable
-fun Screen(viewModel: ViewModel) {
-    val uiState by viewModel.uiState.collectAsState()
-
-    Column {
-        Header(uiState.header)
-        Body(uiState.body)
-        Footer(uiState.footer)
-    }
-}
-```
-
-**8. Используйте contentType в LazyColumn**
-
-```kotlin
-@Composable
-fun MixedList(items: List<ListItem>) {
-    LazyColumn {
-        items(
-            items = items,
-            key = { it.id },
-            contentType = { item ->
-                when (item) {
-                    is TextItem -> "text"
-                    is ImageItem -> "image"
-                    is VideoItem -> "video"
-                }
-            }
-        ) { item ->
-            when (item) {
-                is TextItem -> TextRow(item)
-                is ImageItem -> ImageRow(item)
-                is VideoItem -> VideoRow(item)
-            }
-        }
-    }
-}
-```
-
-### Инструменты профилирования
-
-**Layout Inspector для отслеживания рекомпозиций:**
-```
-Android Studio > View > Tool Windows > Layout Inspector
-Включить "Show Recomposition Counts"
-```
-
-**Recomposition Highlighter:**
-```kotlin
-// Для отладки
-@Composable
-fun RecompositionCounter() {
-    val count = remember { mutableStateOf(0) }
-    LaunchedEffect(Unit) {
-        count.value++
-    }
-    Log.d("Recomposition", "Count: ${count.value}")
-}
-```
-
-**Краткое содержание**: Оптимизация Compose: 1) Разделить состояние для минимизации scope рекомпозиции. 2) Использовать `derivedStateOf` для вычисляемых значений. 3) Пометить data классы как `@Immutable/@Stable`. 4) Использовать `key` в LazyColumn. 5) Запоминать лямбды или использовать ссылки на методы. 6) Избегать нестабильных параметров. 7) Использовать инструменты: Layout Inspector, Recomposition Counter.
+### Измерение и инструменты
+- Layout Inspector (Recomposition counts), Perfetto, трассировка.
+- Отслеживайте jank/длинные кадры и соотносите со всплесками рекомпозиций.
+- Проверяйте пропуски фаз отчётами компилятора Compose.
 
 ---
 
+## Follow-ups
+- When to use `derivedStateOf` vs memoizing with `remember`?
+- How to validate stability/skippability using compiler metrics?
+- Strategies for large lazy lists (paging, prefetch, snapshots)?
+
 ## References
-- [Compose Performance](https://developer.android.com/jetpack/compose/performance)
+- https://developer.android.com/jetpack/compose/performance
+- https://developer.android.com/develop/ui/compose/mental-model
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
-- [[q-app-size-optimization--performance--medium]] - Performance
-### Hub
-- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+- [[q-android-performance-measurement-tools--android--medium]]
 
-### Related (Hard)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
-- [[q-stable-classes-compose--android--hard]] - @Stable annotation
-- [[q-stable-annotation-compose--android--hard]] - Stability annotations
-- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts
+### Related (Same Level)
+- [[q-compose-compiler-plugin--jetpack-compose--hard]]
+- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]]
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]]
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]]
