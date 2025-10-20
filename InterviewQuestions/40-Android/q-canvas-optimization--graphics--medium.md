@@ -35,14 +35,14 @@ tags: [android/custom-views, android/graphics, performance, canvas, difficulty/m
 ```kotlin
 class OptimizedView : View {
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-  private val rect = RectF()
-  private val path = Path()
+    private val rect = RectF()
+    private val path = Path()
 
-  override fun onDraw(canvas: Canvas) {
+    override fun onDraw(canvas: Canvas) {
     rect.set(0f, 0f, width.toFloat(), height.toFloat())
     path.reset(); path.addCircle(width/2f, height/2f, radius, Path.Direction.CW)
-    canvas.drawPath(path, paint)
-  }
+        canvas.drawPath(path, paint)
+    }
 }
 ```
 
@@ -80,11 +80,11 @@ class OptimizedView : View {
   private val rect = RectF()
   private val path = Path()
 
-  override fun onDraw(canvas: Canvas) {
+    override fun onDraw(canvas: Canvas) {
     rect.set(0f, 0f, width.toFloat(), height.toFloat())
     path.reset(); path.addCircle(width/2f, height/2f, radius, Path.Direction.CW)
     canvas.drawPath(path, paint)
-  }
+    }
 }
 ```
 
