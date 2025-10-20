@@ -7,7 +7,7 @@ Review the provided note for correctness, completeness, and compliance.
 Check presence and format:
 
 - `id`: YYYYMMDD-HHmmss format
-- `title`: Contains "EN / RU" format
+- `title`: Contains "EN / RU" format; QUOTE if contains `:`
 - `aliases`: Array with both languages
 - `topic`: Exactly one value from TAXONOMY.md
 - `subtopics`: 1-3 values, controlled list if Android
@@ -51,12 +51,12 @@ Verify:
 
 ## Content Structure
 
-Confirm sections exist:
+Confirm sections exist (RU-first order):
 
-- `# Question (EN)`
 - `# Вопрос (RU)`
-- `## Answer (EN)`
+- `# Question (EN)`
 - `## Ответ (RU)`
+- `## Answer (EN)`
 - `## Follow-ups`
 - `## References`
 - `## Related Questions`
