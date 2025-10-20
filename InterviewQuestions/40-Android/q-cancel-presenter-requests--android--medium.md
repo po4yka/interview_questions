@@ -1,591 +1,148 @@
 ---
 id: 20251012-122792
-title: "Cancel Presenter Requests / Отмена запросов Presenter"
+title: Cancel Presenter Requests / Отмена запросов презентера
+aliases: [Cancel Presenter Requests, Отмена запросов презентера]
 topic: android
+subtopics: [architecture-mvp, lifecycle, coroutines]
+question_kind: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-how-compose-draws-on-screen--android--hard, q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy, q-how-to-draw-ui-without-xml--android--easy]
+related: [q-activity-lifecycle-methods--android--medium, q-android-async-operations-android--android--medium, q-android-testing-strategies--android--medium]
 created: 2025-10-15
-tags: [android/architecture-mvi, android/lifecycle, architecture-mvi, lifecycle, mvp, platform/android, presenter-view-communication, difficulty/medium]
+updated: 2025-10-20
+original_language: en
+language_tags: [en, ru]
+tags: [android/architecture-mvp, android/lifecycle, coroutines, rxjava, cancellation, difficulty/medium]
 ---
-# Какие есть механизмы для отмены запросов presenter у view?
 
 # Question (EN)
-> What mechanisms exist for canceling Presenter requests to View?
+> What mechanisms can a Presenter use to cancel in-flight work and avoid updating a dead View?
 
 # Вопрос (RU)
-> Какие есть механизмы для отмены запросов presenter у view?
+> Какие механизмы презентер может использовать для отмены выполняемой работы и предотвращения обновления уничтоженного View?
 
 ---
 
 ## Answer (EN)
 
-In MVP (Model-View-Presenter) architecture, when the Presenter sends requests to the View, it's crucial to cancel these requests when the View is destroyed or becomes inactive to prevent crashes, memory leaks, and unnecessary work.
+### Goals
+- Avoid UI updates after View is destroyed/paused
+- Prevent leaks and wasted work
+- Centralize cancellation on lifecycle events
 
-### The Problem
+### Core strategies (theory first)
+- **Ownership**: Presenter owns a cancellation handle (Job/CompositeDisposable) and clears it on `onStop/onDestroy`.
+- **Lifecycle-aware**: Observe lifecycle to start/stop work; never hold hard reference to View without checks.
+- **One source of truth**: All async work must register with the cancellation handle.
 
+### Minimal implementations
+
+- Coroutines (preferred):
 ```kotlin
-// BAD - Memory leak and potential crash
-class UserPresenter(private val view: UserView) {
+class Presenter {
+  private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    fun loadUser(userId: String) {
-        // Long-running operation
-        Thread {
-            val user = repository.getUser(userId)
-
-            // View might be destroyed by now!
-            view.showUser(user) // CRASH if Activity is destroyed!
-        }.start()
-    }
-}
-
-class UserActivity : AppCompatActivity(), UserView {
-    private val presenter = UserPresenter(this)
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // How to cancel presenter's ongoing operations?
-    }
+  fun load() = scope.launch { view?.show(dataRepo.fetch()) }
+  fun onStop() { scope.coroutineContext.cancelChildren() }
+  fun onDestroy() { scope.cancel() }
 }
 ```
 
-### Solution 1: Weak References
-
-Use `WeakReference` to avoid holding strong reference to View:
-
+- RxJava:
 ```kotlin
-class UserPresenter(view: UserView) {
-    private val viewRef = WeakReference(view)
-
-    fun loadUser(userId: String) {
-        Thread {
-            val user = repository.getUser(userId)
-
-            // Check if view still exists
-            viewRef.get()?.showUser(user)
-        }.start()
-    }
-
-    fun onDestroy() {
-        viewRef.clear()
-    }
-}
-
-class UserActivity : AppCompatActivity(), UserView {
-    private val presenter = UserPresenter(this)
-
-    override fun onDestroy() {
-        presenter.onDestroy()
-        super.onDestroy()
-    }
+class Presenter {
+  private val bag = CompositeDisposable()
+  fun load() { bag += repo.get().subscribe(view::show, view::error) }
+  fun onStop() { bag.clear() } // cancel in-flight, keep bag
+  fun onDestroy() { bag.dispose() }
 }
 ```
 
-**Pros:**
-- Prevents memory leaks
-- Simple to implement
-
-**Cons:**
-- Doesn't actually cancel ongoing work
-- Work continues even if not needed
-
-### Solution 2: Lifecycle-Aware Components
-
-Use Android's Lifecycle library:
-
+- Callback/Executor:
 ```kotlin
-class UserPresenter(
-    private val view: UserView,
-    private val lifecycle: Lifecycle
-) : DefaultLifecycleObserver {
-
-    private var isViewActive = false
-
-    init {
-        lifecycle.addObserver(this)
-    }
-
-    override fun onStart(owner: LifecycleOwner) {
-        isViewActive = true
-    }
-
-    override fun onStop(owner: LifecycleOwner) {
-        isViewActive = false
-    }
-
-    override fun onDestroy(owner: LifecycleOwner) {
-        lifecycle.removeObserver(this)
-    }
-
-    fun loadUser(userId: String) {
-        Thread {
-            val user = repository.getUser(userId)
-
-            if (isViewActive) {
-                view.showUser(user)
-            }
-        }.start()
-    }
-}
-
-class UserActivity : AppCompatActivity(), UserView {
-    private lateinit var presenter: UserPresenter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        presenter = UserPresenter(this, lifecycle)
-    }
+class Presenter {
+  private var future: Future<*>? = null
+  fun load() { future = executor.submit { /* work */ } }
+  fun onStop() { future?.cancel(true) }
 }
 ```
 
-**Pros:**
-- Automatic lifecycle management
-- No manual cleanup needed
-
-**Cons:**
-- Still doesn't cancel work
-- Work runs unnecessarily
-
-### Solution 3: RxJava with Disposables
-
-Use RxJava for proper cancellation:
-
-```kotlin
-class UserPresenter(private val view: UserView) {
-
-    private val compositeDisposable = CompositeDisposable()
-
-    fun loadUser(userId: String) {
-        val disposable = Observable.fromCallable {
-            repository.getUser(userId)
-        }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { user -> view.showUser(user) },
-                { error -> view.showError(error) }
-            )
-
-        compositeDisposable.add(disposable)
-    }
-
-    fun loadUsers() {
-        val disposable = repository.getUsers()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { users -> view.showUsers(users) },
-                { error -> view.showError(error) }
-            )
-
-        compositeDisposable.add(disposable)
-    }
-
-    fun onDestroy() {
-        // Cancel all ongoing requests
-        compositeDisposable.clear()
-    }
-}
-
-class UserActivity : AppCompatActivity(), UserView {
-    private val presenter = UserPresenter(this)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user)
-
-        presenter.loadUser("123")
-    }
-
-    override fun onDestroy() {
-        presenter.onDestroy()
-        super.onDestroy()
-    }
-
-    override fun showUser(user: User) {
-        // Update UI
-    }
-
-    override fun showError(error: Throwable) {
-        Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
-    }
-}
-```
-
-**Pros:**
-- Actually cancels ongoing work
-- Prevents memory leaks
-- Clean API
-
-**Cons:**
-- Requires RxJava dependency
-- Learning curve
-
-### Solution 4: Kotlin Coroutines with Job (Recommended)
-
-Modern approach using Coroutines:
-
-```kotlin
-class UserPresenter(private val view: UserView) {
-
-    private val presenterScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-
-    fun loadUser(userId: String) {
-        presenterScope.launch {
-            try {
-                val user = withContext(Dispatchers.IO) {
-                    repository.getUser(userId)
-                }
-                view.showUser(user)
-            } catch (e: CancellationException) {
-                // Job was cancelled - ignore
-            } catch (e: Exception) {
-                view.showError(e)
-            }
-        }
-    }
-
-    fun loadUsers() {
-        presenterScope.launch {
-            try {
-                val users = withContext(Dispatchers.IO) {
-                    repository.getUsers()
-                }
-                view.showUsers(users)
-            } catch (e: CancellationException) {
-                // Cancelled
-            } catch (e: Exception) {
-                view.showError(e)
-            }
-        }
-    }
-
-    fun onDestroy() {
-        // Cancel all coroutines
-        presenterScope.cancel()
-    }
-}
-
-class UserActivity : AppCompatActivity(), UserView {
-    private val presenter = UserPresenter(this)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user)
-
-        presenter.loadUser("123")
-        presenter.loadUsers()
-    }
-
-    override fun onDestroy() {
-        presenter.onDestroy()
-        super.onDestroy()
-    }
-
-    override fun showUser(user: User) {
-        textView.text = user.name
-    }
-
-    override fun showUsers(users: List<User>) {
-        adapter.submitList(users)
-    }
-
-    override fun showError(error: Throwable) {
-        Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
-    }
-}
-```
-
-**Pros:**
-- Cancels ongoing work efficiently
-- Modern Kotlin approach
-- Built-in to Kotlin
-- Clean, readable code
-
-**Cons:**
-- Requires understanding coroutines
-
-### Solution 5: Manual Cancellation Flags
-
-Simple boolean flag approach:
-
-```kotlin
-class UserPresenter(private val view: UserView) {
-
-    private var isCancelled = false
-
-    fun loadUser(userId: String) {
-        isCancelled = false
-
-        Thread {
-            // Long operation
-            val user = repository.getUser(userId)
-
-            // Check before updating view
-            if (!isCancelled) {
-                Handler(Looper.getMainLooper()).post {
-                    if (!isCancelled) {
-                        view.showUser(user)
-                    }
-                }
-            }
-        }.start()
-    }
-
-    fun onDestroy() {
-        isCancelled = true
-    }
-}
-```
-
-**Pros:**
-- Simple implementation
-- No dependencies
-
-**Cons:**
-- Doesn't actually cancel work
-- Error-prone
-- Requires manual thread management
-
-### Solution 6: Callback Management Pattern
-
-Track and remove callbacks:
-
-```kotlin
-class UserPresenter(private val view: UserView) {
-
-    private val handler = Handler(Looper.getMainLooper())
-    private val pendingCallbacks = mutableListOf<Runnable>()
-
-    fun loadUser(userId: String) {
-        thread {
-            val user = repository.getUser(userId)
-
-            val callback = Runnable {
-                view.showUser(user)
-                pendingCallbacks.remove(this)
-            }
-
-            pendingCallbacks.add(callback)
-            handler.post(callback)
-        }
-    }
-
-    fun onDestroy() {
-        // Remove all pending callbacks
-        pendingCallbacks.forEach { handler.removeCallbacks(it) }
-        pendingCallbacks.clear()
-    }
-}
-```
-
-### Complete Example: MVP with Coroutines
-
-```kotlin
-// Contract
-interface UserContract {
-    interface View {
-        fun showLoading()
-        fun hideLoading()
-        fun showUser(user: User)
-        fun showUsers(users: List<User>)
-        fun showError(message: String)
-    }
-
-    interface Presenter {
-        fun loadUser(userId: String)
-        fun loadUsers()
-        fun onDestroy()
-    }
-}
-
-// Presenter
-class UserPresenter(
-    private val view: UserContract.View,
-    private val repository: UserRepository
-) : UserContract.Presenter {
-
-    private val presenterScope = CoroutineScope(
-        Dispatchers.Main + SupervisorJob()
-    )
-
-    override fun loadUser(userId: String) {
-        presenterScope.launch {
-            view.showLoading()
-            try {
-                val user = withContext(Dispatchers.IO) {
-                    repository.getUser(userId)
-                }
-                view.showUser(user)
-            } catch (e: CancellationException) {
-                // Request cancelled - do nothing
-            } catch (e: Exception) {
-                view.showError(e.message ?: "Unknown error")
-            } finally {
-                view.hideLoading()
-            }
-        }
-    }
-
-    override fun loadUsers() {
-        presenterScope.launch {
-            view.showLoading()
-            try {
-                val users = withContext(Dispatchers.IO) {
-                    repository.getUsers()
-                }
-                view.showUsers(users)
-            } catch (e: CancellationException) {
-                // Cancelled
-            } catch (e: Exception) {
-                view.showError(e.message ?: "Unknown error")
-            } finally {
-                view.hideLoading()
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        presenterScope.cancel()
-    }
-}
-
-// Activity
-class UserActivity : AppCompatActivity(), UserContract.View {
-
-    private lateinit var presenter: UserContract.Presenter
-    private lateinit var binding: ActivityUserBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityUserBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        val repository = UserRepository()
-        presenter = UserPresenter(this, repository)
-
-        presenter.loadUsers()
-    }
-
-    override fun onDestroy() {
-        presenter.onDestroy() // Cancel all requests
-        super.onDestroy()
-    }
-
-    override fun showLoading() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
-
-    override fun hideLoading() {
-        binding.progressBar.visibility = View.GONE
-    }
-
-    override fun showUser(user: User) {
-        binding.userName.text = user.name
-        binding.userEmail.text = user.email
-    }
-
-    override fun showUsers(users: List<User>) {
-        // Update RecyclerView
-    }
-
-    override fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-}
-```
-
-### Comparison Table
-
-| Mechanism | Cancels Work | Memory Safe | Complexity | Recommended |
-|-----------|--------------|-------------|------------|-------------|
-| Weak References | No | Yes | Low | No |
-| Lifecycle-Aware | No | Yes | Medium | No |
-| RxJava Disposables | Yes | Yes | High | Legacy code |
-| Coroutines + Job | Yes | Yes | Medium | Yes |
-| Boolean Flags | No | Partial | Low | No |
-| Callback Management | Partial | Yes | Medium | No |
-
-### Best Practices
-
-1. **Always cancel requests** in `onDestroy()`
-2. **Use Coroutines** for new code
-3. **Use RxJava** if already in project
-4. **Avoid WeakReferences** - they don't cancel work
-5. **Handle CancellationException** properly
-6. **Test with configuration changes** (screen rotation)
-
-### Modern Alternative: MVVM with ViewModel
-
-Instead of MVP, consider MVVM with ViewModel which handles lifecycle automatically:
-
-```kotlin
-class UserViewModel : ViewModel() {
-
-    private val _users = MutableLiveData<List<User>>()
-    val users: LiveData<List<User>> = _users
-
-    fun loadUsers() {
-        viewModelScope.launch {
-            // Automatically cancelled when ViewModel is cleared
-            val users = repository.getUsers()
-            _users.value = users
-        }
-    }
-}
-
-class UserActivity : AppCompatActivity() {
-    private val viewModel: UserViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel.users.observe(this) { users ->
-            // Update UI
-        }
-
-        viewModel.loadUsers()
-    }
-
-    // No manual cleanup needed!
-}
-```
-
----
+### Best practices
+- Null-check/weak reference View before rendering; better: pass render via interface that is swapped to a no-op when detached.
+- Prefer main-safe dispatch (Main.immediate) to avoid stale posts.
+- Split `onStop` (cancel children) vs `onDestroy` (cancel scope) to allow reuse on resume.
+- In tests, assert no emissions after detach.
 
 ## Ответ (RU)
 
-В архитектуре MVP (Model-View-Presenter), когда Presenter отправляет запросы к View, важно иметь возможность отменять эти запросы. Основные механизмы:
+### Цели
+- Не обновлять UI после уничтожения/паузы View
+- Избежать утечек и лишней работы
+- Централизовать отмену по событиям жизненного цикла
 
-**1. Weak References** - используйте `WeakReference` для избежания утечек памяти, но это не отменяет работу.
+### Базовые стратегии (сначала теория)
+- **Владение**: Презентер владеет дескриптором отмены (Job/CompositeDisposable) и очищает его в `onStop/onDestroy`.
+- **Осведомлён о жизненном цикле**: Реагирует на lifecycle; не держит жёсткую ссылку на View без проверок.
+- **Единая точка учета**: Вся асинхронщина регистрируется в дескрипторе отмены.
 
-**2. Lifecycle-Aware Components** - автоматическое управление жизненным циклом через Android Lifecycle library.
+### Минимальные реализации
 
-**3. RxJava Disposables** - используйте `CompositeDisposable` для отмены всех подписок:
+- Coroutines (предпочтительно):
 ```kotlin
-private val compositeDisposable = CompositeDisposable()
-fun onDestroy() {
-    compositeDisposable.clear()
+class Presenter {
+  private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
+  fun load() = scope.launch { view?.show(dataRepo.fetch()) }
+  fun onStop() { scope.coroutineContext.cancelChildren() }
+  fun onDestroy() { scope.cancel() }
 }
 ```
 
-**4. Kotlin Coroutines (рекомендуется)** - используйте `CoroutineScope` с `Job`:
+- RxJava:
 ```kotlin
-private val presenterScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-fun onDestroy() {
-    presenterScope.cancel()
+class Presenter {
+  private val bag = CompositeDisposable()
+  fun load() { bag += repo.get().subscribe(view::show, view::error) }
+  fun onStop() { bag.clear() } // отмена текущих, сохраняем bag
+  fun onDestroy() { bag.dispose() }
 }
 ```
 
-**5. Boolean Flags** - простой подход с флагом отмены.
+- Callback/Executor:
+```kotlin
+class Presenter {
+  private var future: Future<*>? = null
+  fun load() { future = executor.submit { /* work */ } }
+  fun onStop() { future?.cancel(true) }
+}
+```
 
-**6. Callback Management** - отслеживание и удаление коллбэков.
+### Рекомендации
+- Проверяйте/ослабляйте ссылку на View перед рендером; лучше: интерфейс-«заглушка» после detach.
+- Используйте main‑safe диспетчер (Main.immediate), чтобы не рендерить устаревшие post’ы.
+- Разделяйте `onStop` (cancel children) и `onDestroy` (cancel scope) для переиспользования при resume.
+- В тестах утверждайте отсутствие эмиссий после detach.
 
-**Рекомендация:** Используйте **Kotlin Coroutines** для нового кода или **RxJava** если он уже в проекте. Или перейдите на **MVVM с ViewModel**, который автоматически управляет жизненным циклом.
+---
+
+## Follow-ups
+- How to model Presenter scope as DI-provided tied to screen lifecycle?
+- Coroutines vs Rx cancellation trade-offs in mixed codebases?
+- How to verify cancellation in unit/instrumented tests?
+
+## References
+- https://developer.android.com/kotlin/coroutines
+- https://reactivex.io/documentation/disposable.html
 
 ## Related Questions
 
-- [[q-how-compose-draws-on-screen--android--hard]]
-- [[q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy]]
-- [[q-how-to-draw-ui-without-xml--android--easy]]
+### Prerequisites (Easier)
+- [[q-activity-lifecycle-methods--android--medium]]
+
+### Related (Same Level)
+- [[q-android-async-operations-android--android--medium]]
+- [[q-android-testing-strategies--android--medium]]
+
+### Advanced (Harder)
+- [[q-android-performance-measurement-tools--android--medium]]
