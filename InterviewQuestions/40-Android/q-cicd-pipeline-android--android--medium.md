@@ -1,654 +1,120 @@
 ---
 id: 20251012-122799
-title: "Cicd Pipeline Android"
+title: CI/CD Pipeline for Android / CI/CD пайплайн для Android
+aliases: [CI/CD Pipeline for Android, CI/CD пайплайн для Android]
 topic: android
+subtopics: [gradle, pipeline]
+question_kind: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-performance-monitoring-jank-compose--android--medium, q-android-build-optimization--android--medium, q-context-types-android--android--medium]
-created: 2025-10-15
-tags: [cicd, github-actions, automation, testing, deployment, gradle, difficulty/medium]
+related: [q-cicd-automated-testing--devops--medium, q-cicd-deployment-automation--devops--medium, q-build-optimization-gradle--gradle--medium]
+created: 2025-10-11
+updated: 2025-10-20
+original_language: en
+language_tags: [en, ru]
+tags: [android/gradle, ci-cd, pipeline, testing, release, difficulty/medium]
 ---
-# CI/CD Pipeline for Android
-
 # Question (EN)
-> How do you set up a CI/CD (Continuous Integration/Continuous Deployment) pipeline for Android? What are the key stages and best practices?
+
+> What does a robust Android CI/CD pipeline look like (stages, caching, parallelism, quality gates, artifacts, release)?
 
 # Вопрос (RU)
-> Как настроить CI/CD пайплайн для Android?
+
+> Как выглядит надёжный CI/CD пайплайн для Android (этапы, кеширование, параллелизм, quality‑gates, артефакты, релиз)?
 
 ---
 
 ## Answer (EN)
 
-A robust CI/CD pipeline automates building, testing, and deploying Android apps, ensuring code quality and faster releases. Modern pipelines use GitHub Actions, GitLab CI, Jenkins, or Bitrise.
+### Goals
 
-#### 1. **GitHub Actions Pipeline**
+* Fast and reliable PR checks (target ≤10 min on mid‑size repo); hermetic & reproducible builds (Gradle wrapper, locked SDK/build‑tools); traceability (links to run/build scans); secure secrets (OIDC to Play, no long‑lived JSON keys); low flakiness & deterministic releases.
 
-```yaml
-# .github/workflows/android-ci.yml
-name: Android CI
+### Stages (typical)
 
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main, develop ]
+* Setup: checkout; JDK 17/21 (Temurin); Android SDK cmdline‑tools + platform‑tools + required platforms/build‑tools; Gradle configuration cache on; remote build cache (e.g., Develocity) read‑only on PRs; pre‑warm dependencies.
+* Static checks: ktlint, detekt, Android Lint (XML + SARIF for PR annotations); optional API surface check (metalava); dependency & security review (dependency‑review/OWASP); version drift check (Gradle versions plugin).
+* Unit tests: JVM tests by module (JUnit 5) with `--parallel`; Kover/Jacoco XML + HTML; test retry plugin (1 rerun max) to contain flakes; fail on new flaky in changed modules.
+* Build: assemble/bundle (AAB) using configuration/build cache; reproducible versioning (CI‑provided code/name); R8 full mode; produce mapping.txt and ABI/resource splits as needed.
+* Instrumented tests: Gradle Managed Devices (GMD) or device farm; headless emulator (GPU swiftshader, cold boot disabled); shard via `numShards`/`shardIndex` or Marathon/Flank; capture logcat, screenshots, and videos; retry failed shards once.
+* Artifact/report upload: JUnit XML; Lint SARIF; Kover/Jacoco XML + HTML; detekt/ktlint reports; APK(s)/AAB; mapping.txt; dependency graph/SBOM (CycloneDX) for supply‑chain visibility.
+* Release (manual gate): upload to Play internal via Gradle Play Publisher using OIDC; promote by track with staged rollout; upload ProGuard mapping & native symbols (Crashlytics/Play); tag commit & attach changelog; rollback plan (halt rollout on bad vitals).
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+### Caching/parallel
 
-    steps:
-      # 1. Checkout code
-      - name: Checkout code
-        uses: actions/checkout@v4
+* Enable configuration cache + local/remote build cache; cache Gradle wrapper, downloaded deps, KMP artifacts; key caches by hash of Gradle wrapper + `gradle.properties` + settings/version catalogs to avoid stale reuse; PRs use read‑only remote cache to prevent pollution.
+* Run with `--parallel` and tune `org.gradle.workers.max` to available cores; split workflow into independent jobs (checks/tests/build) to unlock CI‑level concurrency.
+* Matrix runs (API levels/ABIs, debug/release where needed); shard UI tests by package/class count; cache AVD images (`~/.android/avd`) to cut emulator startup time.
 
-      # 2. Set up JDK
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
+### Quality gates
 
-      # 3. Grant execute permission for gradlew
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+* Lint: fail on new issues vs baseline; treat `Fatal` as blocking; update baseline only via separate maintenance PR.
+* Coverage: enforce with Kover `verify` (e.g., per‑module line ≥70%, branch ≥50%); fail on coverage regressions for touched modules.
+* Style & static analysis: detekt/ktlint must have zero new violations; detekt severity thresholds tuned to block `Error`.
+* Security: dependency‑review/OWASP block High/Critical; secret scanning required; SAST on `buildSrc`/scripts where applicable.
+* Tests: pass rate SLO (e.g., ≥99% last N runs); quarantine list allowed but must be empty for changed modules; any failed test blocks merge.
+* Release guardrails: staged rollout (e.g., 5%→20%→50%→100%); auto‑halt on crash‑free user drop/ANR rise; size budget (max delta MB/percentage) and startup perf budget for release candidates.
 
-      # 4. Validate Gradle wrapper
-      - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
+### Releases (separate workflow)
 
-      # 5. Run unit tests
-      - name: Run unit tests
-        run: ./gradlew testDebugUnitTest
+* Build signed AAB with release config; use Play App Signing + Gradle Play Publisher (OIDC) to upload to internal track; attach release notes & changelog; upload mapping & native symbols; staged rollout with environment protection rules; auto‑promote on healthy vitals; rollback strategy documented & tested.
 
-      # 6. Upload test results
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: '**/build/test-results/**/*.xml'
+## Ответ (RU):
 
-      # 7. Run lint
-      - name: Run Android Lint
-        run: ./gradlew lintDebug
+### Цели
 
-      # 8. Upload lint reports
-      - name: Upload lint reports
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: lint-reports
-          path: '**/build/reports/lint-results-*.html'
+* Быстрые и надёжные проверки PR (цель ≤10 мин на средний репозиторий); герметичные и воспроизводимые сборки (Gradle wrapper, зафиксированные SDK/build‑tools); трассировка (ссылки на ран/сканы сборки); безопасные секреты (OIDC к Play, без долгоживущих JSON‑ключей); низкая флаки и детерминированные релизы.
 
-      # 9. Build debug APK
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
+### Этапы (типовые)
 
-      # 10. Upload APK
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+* Setup: checkout; JDK 17/21 (Temurin); Android SDK cmdline‑tools + platform‑tools + нужные platforms/build‑tools; включён configuration cache; удалённый build cache (напр., Develocity) read‑only на PR; прогрев зависимостей.
+* Статпроверки: ktlint, detekt, Android Lint (XML + SARIF для аннотаций в PR); опционально проверка API‑контракта (metalava); аудит зависимостей/безопасности (dependency‑review/OWASP); контроль дрейфа версий (Gradle versions plugin).
+* Unit‑тесты: JVM‑тесты по модулям (JUnit 5) с `--parallel`; отчёты Kover/Jacoco (XML + HTML); плагин retry (макс. 1 перезапуск) для локализации флаки; падения новых флаки в изменённых модулях — блокер.
+* Сборка: assemble/bundle (AAB) с configuration/build cache; воспроизводимое версионирование (code/name с CI); R8 в полном режиме; артефакты: mapping.txt, сплиты по ABI/ресурсам при необходимости.
+* Инструментальные тесты: Gradle Managed Devices (GMD) или ферма девайсов; эмулятор headless (GPU swiftshader, отключён cold boot); шардинг через `numShards`/`shardIndex` или Marathon/Flank; логкат, скриншоты, видео; один retry на упавшие шарды.
+* Артефакты/отчёты: JUnit XML; Lint SARIF; Kover/Jacoco XML + HTML; отчёты detekt/ktlint; APK/AAB; mapping.txt; граф зависимостей/SBOM (CycloneDX) для прозрачности цепочки поставок.
+* Релиз (ручной gate): загрузка во внутренний трек Google Play через Gradle Play Publisher по OIDC; промоут по трекам с постепенным раскатом; выгрузка ProGuard mapping и нативных символов (Crashlytics/Play); тег коммита и changelog; план отката (авто‑стоп по деградации vitals).
 
-  # Instrumented tests job
-  instrumented-tests:
-    runs-on: macos-latest
-    timeout-minutes: 45
+### Кеш/параллель
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+* Включить configuration cache + локальный/удалённый build cache; кешировать wrapper, загруженные зависимости, KMP‑артефакты; ключи кешей — по хешу wrapper + `gradle.properties` + settings/version catalogs; для PR удалённый кеш только на чтение.
+* Запускать с `--parallel` и настроить `org.gradle.workers.max` под доступные ядра; разнести workflow на независимые job‑ы (checks/tests/build) ради максимального параллелизма на уровне CI.
+* Матрица запусков (API‑уровни/ABI, где нужно debug/release); шардинг UI‑тестов по пакетам/классам; кеш AVD (`~/.android/avd`) для ускорения старта эмулятора.
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+### Quality‑gates
 
-      - name: Run instrumented tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 33
-          arch: x86_64
-          profile: Nexus 6
-          script: ./gradlew connectedDebugAndroidTest
+* Lint: падение на новых проблемах относительно baseline; `Fatal` — блокер; baseline обновляется только отдельным maintenance‑PR.
+* Покрытие: `kover` с правилом `verify` (например, по модулю строки ≥70%, ветви ≥50%); регресс покрытия в затронутых модулях — fail.
+* Стиль/статанализ: detekt/ktlint — ноль новых нарушений; пороги detekt настроены так, чтобы `Error` блокировал.
+* Безопасность: dependency‑review/OWASP блокируют High/Critical; обязательное secret‑сканирование; SAST на `buildSrc`/скрипты по мере необходимости.
+* Тесты: SLO на pass‑rate (например, ≥99% за N последних прогонов); допускается quarantine‑лист, но он пуст для изменённых модулей; любые падения — блокер.
+* Релиз‑предохранители: ступенчатый раскат (например, 5%→20%→50%→100%); авто‑стоп при падении crash‑free/росте ANR; бюджет на размер APK/AAB и бюджет на деградацию старта приложения.
 
-      - name: Upload instrumented test results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: instrumented-test-results
-          path: '**/build/reports/androidTests/**'
-```
+### Релизы (отдельный workflow)
 
-#### 2. **Complete Multi-Stage Pipeline**
-
-```yaml
-# .github/workflows/android-cd.yml
-name: Android CD
-
-on:
-  push:
-    tags:
-      - 'v*'
-
-jobs:
-  # Stage 1: Validate
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
-
-      - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
-
-      - name: Check code formatting
-        run: ./gradlew ktlintCheck
-
-      - name: Static code analysis
-        run: ./gradlew detekt
-
-  # Stage 2: Test
-  test:
-    needs: validate
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
-
-      - name: Run unit tests
-        run: ./gradlew testDebugUnitTest --continue
-
-      - name: Generate coverage report
-        run: ./gradlew jacocoTestReport
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
-
-  # Stage 3: Build
-  build:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
-
-      # Decode signing key
-      - name: Decode keystore
-        env:
-          ENCODED_STRING: ${{ secrets.KEYSTORE_BASE64 }}
-        run: |
-          echo $ENCODED_STRING | base64 -di > keystore.jks
-
-      # Build release APK/AAB
-      - name: Build release AAB
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew bundleRelease
-
-      - name: Build release APK
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew assembleRelease
-
-      # Upload artifacts
-      - name: Upload AAB
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-release-bundle
-          path: app/build/outputs/bundle/release/app-release.aab
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-release
-          path: app/build/outputs/apk/release/app-release.apk
-
-  # Stage 4: Deploy to Play Store
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download AAB
-        uses: actions/download-artifact@v3
-        with:
-          name: app-release-bundle
-          path: .
-
-      - name: Deploy to Play Store Internal Track
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
-          packageName: com.example.app
-          releaseFiles: app-release.aab
-          track: internal
-          status: completed
-          whatsNewDirectory: distribution/whatsnew
-
-  # Stage 5: Create GitHub Release
-  release:
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download APK
-        uses: actions/download-artifact@v3
-        with:
-          name: app-release
-          path: .
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: app-release.apk
-          generate_release_notes: true
-```
-
-#### 3. **Gradle Configuration for CI/CD**
-
-```kotlin
-// build.gradle.kts (app module)
-
-android {
-    signingConfigs {
-        create("release") {
-            // Use environment variables from CI
-            storeFile = file(System.getenv("KEYSTORE_FILE") ?: "keystore.jks")
-            storePassword = System.getenv("KEYSTORE_PASSWORD")
-            keyAlias = System.getenv("KEY_ALIAS")
-            keyPassword = System.getenv("KEY_PASSWORD")
-        }
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            signingConfig = signingConfigs.getByName("release")
-
-            // Build configuration from environment
-            buildConfigField(
-                "String",
-                "API_KEY",
-                "\"${System.getenv("API_KEY") ?: ""}\""
-            )
-        }
-
-        debug {
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-debug"
-        }
-    }
-
-    // Version code from CI
-    defaultConfig {
-        versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 1
-        versionName = System.getenv("VERSION_NAME") ?: "1.0.0"
-    }
-
-    // Test options for CI
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-            isReturnDefaultValues = true
-        }
-
-        // Generate XML reports
-        unitTests.all {
-            it.useJUnitPlatform()
-            it.testLogging {
-                events("passed", "skipped", "failed")
-            }
-        }
-    }
-}
-
-// Task for generating version info
-tasks.register("generateVersionInfo") {
-    doLast {
-        val versionFile = file("$buildDir/version.txt")
-        versionFile.writeText("""
-            Version Code: ${android.defaultConfig.versionCode}
-            Version Name: ${android.defaultConfig.versionName}
-            Build Time: ${System.currentTimeMillis()}
-            Git Commit: ${getGitCommitHash()}
-        """.trimIndent())
-    }
-}
-
-fun getGitCommitHash(): String {
-    return try {
-        val stdout = ByteArrayOutputStream()
-        exec {
-            commandLine("git", "rev-parse", "--short", "HEAD")
-            standardOutput = stdout
-        }
-        stdout.toString().trim()
-    } catch (e: Exception) {
-        "unknown"
-    }
-}
-```
-
-#### 4. **Quality Checks Integration**
-
-```kotlin
-// build.gradle.kts (app module)
-
-plugins {
-    id("io.gitlab.arturbosch.detekt") version "1.23.7"
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
-    jacoco
-}
-
-// Detekt (static code analysis)
-detekt {
-    config = files("$projectDir/config/detekt/detekt.yml")
-    buildUponDefaultConfig = true
-    reports {
-        html.required.set(true)
-        xml.required.set(true)
-        txt.required.set(false)
-    }
-}
-
-// Ktlint (code formatting)
-ktlint {
-    android.set(true)
-    outputColorName.set("RED")
-    reporters {
-        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML)
-        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
-    }
-}
-
-// JaCoCo (code coverage)
-tasks.register<JacocoReport>("jacocoTestReport") {
-    dependsOn("testDebugUnitTest")
-
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-    }
-
-    sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
-    classDirectories.setFrom(files("build/intermediates/javac/debug"))
-    executionData.setFrom(files("build/jacoco/testDebugUnitTest.exec"))
-}
-
-// Task to enforce minimum coverage
-tasks.register<JacocoCoverageVerification>("jacocoCoverageVerification") {
-    dependsOn("jacocoTestReport")
-
-    violationRules {
-        rule {
-            limit {
-                minimum = "0.80".toBigDecimal() // 80% coverage required
-            }
-        }
-    }
-}
-```
-
-#### 5. **Firebase App Distribution**
-
-```yaml
-# .github/workflows/firebase-distribution.yml
-name: Firebase Distribution
-
-on:
-  push:
-    branches: [ develop ]
-
-jobs:
-  distribute:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
-
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
-
-      - name: Upload to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: ${{ secrets.FIREBASE_APP_ID }}
-          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          groups: testers
-          file: app/build/outputs/apk/debug/app-debug.apk
-          releaseNotes: |
-            Branch: ${{ github.ref_name }}
-            Commit: ${{ github.sha }}
-            Author: ${{ github.actor }}
-```
-
-#### 6. **Docker for Consistent Builds**
-
-```dockerfile
-# Dockerfile for Android builds
-FROM ubuntu:22.04
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    openjdk-17-jdk \
-    wget \
-    unzip \
-    git \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Android SDK
-ENV ANDROID_SDK_ROOT=/opt/android-sdk
-RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools && \
-    cd ${ANDROID_SDK_ROOT}/cmdline-tools && \
-    wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip && \
-    unzip commandlinetools-linux-9477386_latest.zip && \
-    rm commandlinetools-linux-9477386_latest.zip
-
-ENV PATH=${PATH}:${ANDROID_SDK_ROOT}/cmdline-tools/cmdline-tools/bin
-
-# Accept licenses
-RUN yes | sdkmanager --licenses
-
-# Install SDK packages
-RUN sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.1"
-
-WORKDIR /app
-
-# Copy project
-COPY . .
-
-# Build
-RUN ./gradlew assembleDebug
-```
-
-```yaml
-# Use Docker in GitHub Actions
-- name: Build in Docker
-  run: |
-    docker build -t android-builder .
-    docker run --rm -v $(pwd):/app android-builder
-```
-
-#### 7. **Monitoring and Notifications**
-
-```yaml
-# Send Slack notification on build status
-- name: Slack Notification
-  if: always()
-  uses: rtCamp/action-slack-notify@v2
-  env:
-    SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-    SLACK_CHANNEL: android-builds
-    SLACK_COLOR: ${{ job.status }}
-    SLACK_TITLE: Build ${{ job.status }}
-    SLACK_MESSAGE: |
-      Branch: ${{ github.ref_name }}
-      Commit: ${{ github.sha }}
-      Author: ${{ github.actor }}
-```
-
-#### 8. **Best Practices Checklist**
-
-**Setup:**
-- [ ] Use caching for Gradle dependencies
-- [ ] Set appropriate timeout limits
-- [ ] Use matrix builds for multiple API levels
-- [ ] Validate Gradle wrapper
-- [ ] Use secrets for sensitive data
-
-**Testing:**
-- [ ] Run unit tests on every PR
-- [ ] Run instrumented tests on critical paths
-- [ ] Generate and upload test reports
-- [ ] Track code coverage (target 80%+)
-- [ ] Run lint and static analysis
-
-**Building:**
-- [ ] Build both debug and release variants
-- [ ] Sign release builds securely
-- [ ] Generate version info from git
-- [ ] Upload build artifacts
-- [ ] Create build reports
-
-**Deployment:**
-- [ ] Deploy to internal track first
-- [ ] Automated rollout to production
-- [ ] Firebase App Distribution for beta
-- [ ] Create GitHub releases
-- [ ] Generate changelog automatically
-
-**Monitoring:**
-- [ ] Send build notifications (Slack/Email)
-- [ ] Track build times
-- [ ] Monitor test flakiness
-- [ ] Set up crash reporting
-- [ ] Analytics for releases
-
-**Security:**
-- [ ] Never commit secrets
-- [ ] Use GitHub Secrets/environment variables
-- [ ] Rotate signing keys regularly
-- [ ] Enable dependency scanning
-- [ ] Use signed commits
-
-### Common Pipeline Stages
-
-```
-1. Checkout → 2. Setup → 3. Validate → 4. Test → 5. Build → 6. Deploy
-    ↓           ↓           ↓           ↓         ↓          ↓
-  Git SCM     Java/SDK   Lint/Format  Unit/UI   APK/AAB   Play Store
-                                      Tests      Signed    Firebase
-                                      Coverage             Beta
-```
+* Сборка подписанного AAB с release‑конфигом; Play App Signing + Gradle Play Publisher (OIDC) для загрузки во внутренний трек; прикрепить релиз‑ноты и changelog; выгрузить mapping и нативные символы; ступенчатый раскат с правилами защиты окружения; авто‑промоут при здоровых vitals; документированный и протестированный план отката.
 
 ---
 
-## Ответ (RU)
+## Follow-ups
+- How to shard/emulate instrumented tests efficiently?
+- How to enforce coverage gates and trend reports?
+- How to secure signing keys and service accounts in CI?
 
-Надежный CI/CD pipeline автоматизирует сборку, тестирование и развертывание Android-приложений, обеспечивая качество кода и ускоренные релизы. Современные pipeline используют GitHub Actions, GitLab CI, Jenkins или Bitrise.
-
-
-#### Основные этапы:
-
-**1. Validate (Валидация):**
-- Проверка Gradle wrapper
-- Форматирование кода (ktlint)
-- Статический анализ (detekt)
-
-**2. Test (Тестирование):**
-- Unit тесты
-- Instrumented тесты
-- Code coverage (Jacoco)
-- Минимальное покрытие 80%
-
-**3. Build (Сборка):**
-- Debug и Release варианты
-- Подписание release сборок
-- Генерация APK/AAB
-- Upload артефактов
-
-**4. Deploy (Развертывание):**
-- Internal track → Beta → Production
-- Firebase App Distribution
-- GitHub Releases
-
-**5. Monitor (Мониторинг):**
-- Уведомления (Slack/Email)
-- Отслеживание метрик сборки
-- Crash reporting
-
-#### Популярные платформы:
-
-- **GitHub Actions** - встроен в GitHub, бесплатный для public repos
-- **GitLab CI/CD** - встроен в GitLab
-- **Jenkins** - самостоятельный хостинг, гибкий
-- **Bitrise** - специализирован для mobile
-- **CircleCI** - облачный, быстрый
-
-#### Ключевые практики:
-
-**Безопасность:**
-- Никогда не коммитить секреты
-- Использовать GitHub Secrets
-- Ротация ключей подписи
-
-**Оптимизация:**
-- Кэширование Gradle dependencies
-- Параллельные jobs
-- Matrix builds для разных API levels
-
-**Качество:**
-- Автоматические тесты на каждый PR
-- Code coverage tracking
-- Автоматический changelog
-
-**Развертывание:**
-- Поэтапный rollout
-- Beta тестирование через Firebase
-- Автоматизация релизов
-
-Хорошо настроенный CI/CD pipeline экономит время, улучшает качество и ускоряет релизы.
+## References
+- https://docs.github.com/actions
+- https://developer.android.com/studio/test
+- https://docs.gradle.org/current/userguide/build_cache.html
 
 ## Related Questions
 
-- [[q-performance-monitoring-jank-compose--android--medium]]
-- [[q-android-build-optimization--android--medium]]
-- [[q-context-types-android--android--medium]]
+### Prerequisites (Easier)
+- [[q-cicd-automated-testing--devops--medium]]
+
+### Related (Same Level)
+- [[q-cicd-deployment-automation--devops--medium]]
+- [[q-build-optimization-gradle--gradle--medium]]
+
+### Advanced (Harder)
+- [[q-android-performance-measurement-tools--android--medium]]
