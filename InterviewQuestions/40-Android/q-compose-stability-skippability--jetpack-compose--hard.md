@@ -1,31 +1,27 @@
 ---
 id: 20251012-1227110
 title: Compose Stability Skippability / Стабильность и пропускаемость Compose
+aliases: [Compose Stability Skippability, Стабильность и пропускаемость Compose]
 topic: android
+subtopics: [ui-compose, performance]
+question_kind: android
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
+source: https://developer.android.com/jetpack/compose/performance
+source_note: Official Compose performance docs
 status: draft
 moc: moc-android
-related:
-  - q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy
-  - q-rxjava-pagination-recyclerview--android--medium
+related: [q-compose-slot-table-recomposition--jetpack-compose--hard, q-compose-performance-optimization--android--hard]
 created: 2025-10-15
-tags:
-  - compose
-  - performance
-  - compiler
-  - stability
-  - optimization
-  - difficulty/hard
+updated: 2025-10-20
+tags: [android/ui-compose, android/performance, compose, stability, optimization, difficulty/hard]
 ---
 
-# Compose Stability & Skippability
-
 # Question (EN)
-
 > Explain how Compose determines if a composable is skippable. What makes a class stable? How does the @Stable annotation work?
 
 # Вопрос (RU)
-
 > Объясните, как Compose определяет, можно ли пропустить перекомпозицию composable-функции. Что делает класс стабильным? Как работает аннотация @Stable?
 
 ---
@@ -436,8 +432,6 @@ interface Repository {
 
 ## Ответ (RU)
 
-**Возможность пропуска (Skippability)** — это механизм оптимизации Compose, который позволяет компилятору пропускать перекомпозицию composable-функции, когда её входные параметры не изменились. Это критично для производительности в больших Compose UI.
-
 ### Как Compose определяет возможность пропуска
 
 Composable-функция **может быть пропущена**, если выполнены все следующие условия:
@@ -448,7 +442,7 @@ Composable-функция **может быть пропущена**, если �
 4. **Возвращает Unit** (или является неперезапускаемой composable)
 
 ```kotlin
-//  ПРОПУСКАЕТСЯ - все параметры примитивы (стабильны)
+// ПРОПУСКАЕТСЯ - все параметры примитивы (стабильны)
 @Composable
 fun Counter(count: Int, onIncrement: () -> Unit) {
     Button(onClick = onIncrement) {
@@ -456,7 +450,7 @@ fun Counter(count: Int, onIncrement: () -> Unit) {
     }
 }
 
-//  НЕ ПРОПУСКАЕТСЯ - нестабильный параметр
+// НЕ ПРОПУСКАЕТСЯ - нестабильный параметр
 data class User(var name: String) // var делает его нестабильным
 
 @Composable
@@ -475,22 +469,22 @@ fun UserProfile(user: User) { // Будет всегда перекомпоно�
 
 **Автоматически стабильные типы:**
 
--   Все примитивные типы (`Int`, `Long`, `Float`, `Boolean` и т.д.)
--   `String`
--   Все функциональные типы (лямбды)
--   Неизменяемые коллекции из `kotlinx.collections.immutable`
+- Все примитивные типы (`Int`, `Long`, `Float`, `Boolean` и т.д.)
+- `String`
+- Все функциональные типы (лямбды)
+- Неизменяемые коллекции из `kotlinx.collections.immutable`
 
 **Условно стабильные:**
 
--   Data классы, где все свойства `val` и стабильных типов
--   Sealed классы со стабильными подтипами
+- Data классы, где все свойства `val` и стабильных типов
+- Sealed классы со стабильными подтипами
 
 **Нестабильные:**
 
--   Классы со свойствами `var`
--   Изменяемые коллекции (`MutableList`, `MutableMap` и т.д.)
--   Интерфейсы (Compose не может доказать стабильность)
--   Абстрактные классы
+- Классы со свойствами `var`
+- Изменяемые коллекции (`MutableList`, `MutableMap` и т.д.)
+- Интерфейсы (Compose не может доказать стабильность)
+- Абстрактные классы
 
 ### Аннотация @Stable
 
@@ -498,11 +492,12 @@ fun UserProfile(user: User) { // Будет всегда перекомпоно�
 
 **Используйте @Stable когда:**
 
--   У вас есть интерфейс или абстрактный класс, о котором вы знаете, что он стабилен
--   У вас есть класс с приватным изменяемым состоянием, которое никогда не раскрывается
--   Вы используете observable паттерны (StateFlow, LiveData), которые уведомляют Compose
+- У вас есть интерфейс или абстрактный класс, о котором вы знаете, что он стабилен
+- У вас есть класс с приватным изменяемым состоянием, которое никогда не раскрывается
+- Вы используете observable паттерны (StateFlow, LiveData), которые уведомляют Compose
 
 ```kotlin
+// Скажите Compose, что этот интерфейс стабилен
 @Stable
 interface StableUserData {
     val name: String
@@ -518,10 +513,60 @@ fun UserDisplay(user: StableUserData) { // Теперь пропускается
 }
 ```
 
-**Влияние на производительность:**
+### Реальные примеры
 
-Без пропуска: 10,000 composables, изменение 1 состояния = все 10,000 перекомпонуются (~100ms)
-С правильным пропуском: только 1 перекомпонуется (~0.1ms)
+**Проблема: ViewModel параметры нестабильны**
+
+```kotlin
+// НЕСТАБИЛЬНО - ViewModel это класс, не гарантированно стабильный
+class UserViewModel : ViewModel() {
+    val userState = mutableStateOf(User())
+}
+
+@Composable
+fun UserScreen(viewModel: UserViewModel) { // НЕ пропускается
+    val user by viewModel.userState
+    Text(user.name)
+}
+```
+
+**Решение: Используйте @Stable**
+
+```kotlin
+@Stable
+class UserViewModel : ViewModel() {
+    private val _userState = mutableStateOf(User())
+    val userState: State<User> = _userState
+}
+
+@Composable
+fun UserScreen(viewModel: UserViewModel) { // Теперь пропускается!
+    val user by viewModel.userState
+    Text(user.name)
+}
+```
+
+### Лучшие практики
+
+1. **Используйте неизменяемые data классы** для параметров Compose
+2. **Используйте kotlinx-collections-immutable** для списков
+3. **Добавляйте @Stable к интерфейсам**, которые вы контролируете
+4. **Проверяйте отчеты компилятора** регулярно
+5. **Не злоупотребляйте @Stable** - только когда уверены в стабильности
+
+### Влияние на производительность
+
+**Без пропуска:**
+- 10,000 composables на экране
+- Изменение состояния затрагивает 1 composable
+- Результат: все 10,000 перекомпонуются
+- Время: ~100ms
+
+**С правильным пропуском:**
+- 10,000 composables на экране
+- Изменение состояния затрагивает 1 composable
+- Результат: только 1 перекомпонуется
+- Время: ~0.1ms
 
 **Улучшение производительности в 1000 раз!**
 
@@ -529,26 +574,26 @@ fun UserDisplay(user: StableUserData) { // Теперь пропускается
 
 ## Follow-ups
 
--   How does Compose's stability analysis compare to React's memo optimization?
--   What are the performance implications of using @Immutable vs @Stable annotations?
--   How can you debug and profile Compose recomposition to identify stability issues?
+- How does Compose's stability analysis compare to React's memo optimization?
+- What are the performance implications of using @Immutable vs @Stable annotations?
+- How can you debug and profile Compose recomposition to identify stability issues?
 
 ## References
 
--   `https://developer.android.com/jetpack/compose/mental-model` — Compose mental model
--   `https://developer.android.com/jetpack/compose/performance` — Compose performance
--   `https://developer.android.com/jetpack/compose/state` — State management in Compose
+- https://developer.android.com/jetpack/compose/mental-model
+- https://developer.android.com/jetpack/compose/performance
 
 ## Related Questions
 
-### Hub
+### Prerequisites (Easier)
 
--   [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+- [[q-android-jetpack-overview--android--easy]]
 
-### Related (Hard)
+### Related (Same Level)
 
--   [[q-stable-classes-compose--android--hard]] - @Stable annotation
--   [[q-stable-annotation-compose--android--hard]] - Stability annotations
--   [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
--   [[q-compose-performance-optimization--android--hard]] - Performance optimization
--   [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts
+- [[q-compose-slot-table-recomposition--jetpack-compose--hard]]
+- [[q-compose-performance-optimization--android--hard]]
+
+### Advanced (Harder)
+
+- [[q-compose-compiler-plugin--jetpack-compose--hard]]
