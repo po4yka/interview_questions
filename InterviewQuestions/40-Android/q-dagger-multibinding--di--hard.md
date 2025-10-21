@@ -1,39 +1,274 @@
 ---
-id: 20251012-1227121
-title: "Dagger Multibinding / Multibinding в Dagger"
+id: 20251020-200000
+title: Dagger Multibinding / Multibinding в Dagger
+aliases:
+  - Dagger Multibinding
+  - Multibinding в Dagger
 topic: android
+subtopics:
+  - dependency-injection
+  - architecture-patterns
+question_kind: android
 difficulty: hard
-status: draft
+original_language: en
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-created: 2025-10-11
-tags: [dependency-injection, dagger, hilt, advanced, difficulty/hard]
-related: [q-compose-remember-derived-state--jetpack-compose--medium, q-which-event-is-triggered-when-user-presses-screen--android--medium, q-what-can-be-done-through-composer--android--medium]
-  - q-hilt-entry-points--di--medium
-  - q-hilt-assisted-injection--di--medium
+related:
+  - q-dagger-framework-overview--android--hard
   - q-dagger-custom-scopes--di--hard
+  - q-dagger-component-dependencies--di--hard
+created: 2025-10-20
+updated: 2025-10-20
+tags:
+  - android/dependency-injection
+  - android/architecture-patterns
+  - dagger
+  - hilt
+  - multibinding
+  - plugin-architecture
+  - difficulty/hard
+source: https://dagger.dev/api/latest/dagger/Multibinds.html
+source_note: Dagger Multibinds API documentation
 ---
-# Question (EN)
-Explain Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). How would you use it to implement a plugin architecture or feature module system?
-
 # Вопрос (RU)
-Объясните Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). Как бы вы использовали это для реализации плагинной архитектуры или системы feature-модулей?
+> Объясните Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). Как бы вы использовали это для реализации плагинной архитектуры или системы feature-модулей?
 
-## Answer (EN)
-### Overview
+# Question (EN)
+> Explain Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). How would you use it to implement a plugin architecture or feature module system?
 
-**Multibinding** in Dagger/Hilt allows you to bind multiple values into a collection (Set or Map) that can be injected as a single dependency. This is incredibly useful for plugin architectures, feature modules, and extensible systems where you want to add functionality without modifying existing code.
+## Ответ (RU)
 
-### Types of Multibinding
+Multibinding в Dagger/Hilt позволяет связывать множественные значения в коллекцию (Set или Map), которая может быть внедрена как единая зависимость. Это критически важно для плагинных архитектур, feature-модулей и расширяемых систем.
 
-1. **@IntoSet** - Contributes a single element to a Set
-2. **@ElementsIntoSet** - Contributes multiple elements to a Set
-3. **@IntoMap** - Contributes a single entry to a Map
-4. **@Multibinds** - Declares an empty collection that can be injected
+### Теория: Принципы Multibinding
 
-### Basic @IntoSet Example
+**Основные концепции:**
+- **Коллективная инъекция** - множественные реализации как единая зависимость
+- **Модульная архитектура** - добавление функций без изменения существующего кода
+- **Плагинная система** - динамическое расширение функциональности
+- **Feature-модули** - изолированные компоненты приложения
+
+**Типы Multibinding:**
+- `@IntoSet` - добавляет элемент в Set
+- `@ElementsIntoSet` - добавляет несколько элементов в Set
+- `@IntoMap` - добавляет запись в Map с ключом
+- `@Multibinds` - объявляет пустую коллекцию для инъекции
+
+### 1. @IntoSet - Коллекция плагинов
+
+**Создание коллекции плагинов:**
 
 ```kotlin
-// Interface for plugins
+// Интерфейс плагина
+interface Plugin {
+    val name: String
+    fun initialize(context: Context)
+}
+
+// Реализации плагинов
+class AnalyticsPlugin @Inject constructor() : Plugin {
+    override val name = "Analytics"
+    override fun initialize(context: Context) {
+        // Инициализация аналитики
+    }
+}
+
+class CrashReportingPlugin @Inject constructor() : Plugin {
+    override val name = "CrashReporting"
+    override fun initialize(context: Context) {
+        // Инициализация crash reporting
+    }
+}
+```
+
+**Модуль с @IntoSet:**
+
+```kotlin
+@Module
+abstract class PluginModule {
+    @Binds
+    @IntoSet
+    abstract fun bindAnalyticsPlugin(plugin: AnalyticsPlugin): Plugin
+
+    @Binds
+    @IntoSet
+    abstract fun bindCrashReportingPlugin(plugin: CrashReportingPlugin): Plugin
+}
+```
+
+**Использование коллекции:**
+
+```kotlin
+class PluginManager @Inject constructor(
+    private val plugins: Set<Plugin>
+) {
+    fun initializeAll(context: Context) {
+        plugins.forEach { plugin ->
+            plugin.initialize(context)
+        }
+    }
+}
+```
+
+### 2. @IntoMap - Ключевые коллекции
+
+**Создание Map с ключами:**
+
+```kotlin
+// Тип ключа для Map
+@MapKey
+annotation class FeatureKey(val value: String)
+
+// Интерфейс feature
+interface Feature {
+    fun execute()
+}
+
+// Реализации features
+class LoginFeature @Inject constructor() : Feature {
+    override fun execute() {
+        // Логика входа
+    }
+}
+
+class PaymentFeature @Inject constructor() : Feature {
+    override fun execute() {
+        // Логика платежей
+    }
+}
+```
+
+**Модуль с @IntoMap:**
+
+```kotlin
+@Module
+abstract class FeatureModule {
+    @Binds
+    @IntoMap
+    @FeatureKey("login")
+    abstract fun bindLoginFeature(feature: LoginFeature): Feature
+
+    @Binds
+    @IntoMap
+    @FeatureKey("payment")
+    abstract fun bindPaymentFeature(feature: PaymentFeature): Feature
+}
+```
+
+**Использование Map:**
+
+```kotlin
+class FeatureRouter @Inject constructor(
+    private val features: Map<String, @JvmSuppressWildcards Feature>
+) {
+    fun executeFeature(key: String) {
+        features[key]?.execute()
+    }
+}
+```
+
+### 3. @ElementsIntoSet - Множественные элементы
+
+**Добавление нескольких элементов:**
+
+```kotlin
+@Module
+object NotificationModule {
+    @Provides
+    @ElementsIntoSet
+    fun provideNotificationChannels(): Set<NotificationChannel> {
+        return setOf(
+            NotificationChannel("general", "General", NotificationManager.IMPORTANCE_DEFAULT),
+            NotificationChannel("urgent", "Urgent", NotificationManager.IMPORTANCE_HIGH)
+        )
+    }
+}
+```
+
+### 4. @Multibinds - Пустые коллекции
+
+**Объявление пустых коллекций:**
+
+```kotlin
+@Module
+abstract class EmptyCollectionModule {
+    @Multibinds
+    abstract fun emptyPluginSet(): Set<Plugin>
+
+    @Multibinds
+    abstract fun emptyFeatureMap(): Map<String, @JvmSuppressWildcards Feature>
+}
+```
+
+### Плагинная архитектура
+
+**Полная реализация плагинной системы:**
+
+```kotlin
+// Plugin Registry
+class PluginRegistry @Inject constructor(
+    private val plugins: Set<Plugin>
+) {
+    private val pluginMap = plugins.associateBy { it.name }
+
+    fun getPlugin(name: String): Plugin? = pluginMap[name]
+    fun getAllPlugins(): Set<Plugin> = plugins
+}
+
+// Feature Module System
+class FeatureModuleManager @Inject constructor(
+    private val features: Map<String, @JvmSuppressWildcards Feature>
+) {
+    fun executeFeature(featureName: String) {
+        features[featureName]?.execute()
+    }
+
+    fun getAvailableFeatures(): Set<String> = features.keys
+}
+```
+
+### Hilt интеграция
+
+**Автоматическое создание компонентов:**
+
+```kotlin
+@HiltAndroidApp
+class MyApplication : Application() {
+    @Inject
+    lateinit var pluginRegistry: PluginRegistry
+
+    @Inject
+    lateinit var featureManager: FeatureModuleManager
+}
+```
+
+## Answer (EN)
+
+Multibinding in Dagger/Hilt allows you to bind multiple values into a collection (Set or Map) that can be injected as a single dependency. This is critically important for plugin architectures, feature modules, and extensible systems.
+
+### Theory: Multibinding Principles
+
+**Core Concepts:**
+- **Collective Injection** - multiple implementations as single dependency
+- **Modular Architecture** - adding functionality without modifying existing code
+- **Plugin System** - dynamic functional extension
+- **Feature Modules** - isolated application components
+
+**Multibinding Types:**
+- `@IntoSet` - adds element to Set
+- `@ElementsIntoSet` - adds multiple elements to Set
+- `@IntoMap` - adds entry to Map with key
+- `@Multibinds` - declares empty collection for injection
+
+### 1. @IntoSet - Plugin Collections
+
+**Creating plugin collections:**
+
+```kotlin
+// Plugin interface
 interface Plugin {
     val name: String
     fun initialize(context: Context)
@@ -43,29 +278,23 @@ interface Plugin {
 class AnalyticsPlugin @Inject constructor() : Plugin {
     override val name = "Analytics"
     override fun initialize(context: Context) {
-        println("Initializing Analytics Plugin")
+        // Initialize analytics
     }
 }
 
 class CrashReportingPlugin @Inject constructor() : Plugin {
     override val name = "CrashReporting"
     override fun initialize(context: Context) {
-        println("Initializing Crash Reporting Plugin")
+        // Initialize crash reporting
     }
 }
+```
 
-class PerformancePlugin @Inject constructor() : Plugin {
-    override val name = "Performance"
-    override fun initialize(context: Context) {
-        println("Initializing Performance Plugin")
-    }
-}
+**Module with @IntoSet:**
 
-// Module providing plugins
+```kotlin
 @Module
-@InstallIn(SingletonComponent::class)
 abstract class PluginModule {
-
     @Binds
     @IntoSet
     abstract fun bindAnalyticsPlugin(plugin: AnalyticsPlugin): Plugin
@@ -73,1314 +302,170 @@ abstract class PluginModule {
     @Binds
     @IntoSet
     abstract fun bindCrashReportingPlugin(plugin: CrashReportingPlugin): Plugin
-
-    @Binds
-    @IntoSet
-    abstract fun bindPerformancePlugin(plugin: PerformancePlugin): Plugin
 }
+```
 
-// Usage - inject the entire set
-@Singleton
+**Using collections:**
+
+```kotlin
 class PluginManager @Inject constructor(
-    private val plugins: Set<@JvmSuppressWildcards Plugin>
+    private val plugins: Set<Plugin>
 ) {
-
     fun initializeAll(context: Context) {
         plugins.forEach { plugin ->
-            println("Initializing plugin: ${plugin.name}")
             plugin.initialize(context)
         }
     }
-
-    fun getPlugin(name: String): Plugin? {
-        return plugins.find { it.name == name }
-    }
 }
 ```
 
-**Output:**
-```
-Initializing plugin: Analytics
-Initializing Analytics Plugin
-Initializing plugin: CrashReporting
-Initializing Crash Reporting Plugin
-Initializing plugin: Performance
-Initializing Performance Plugin
-```
+### 2. @IntoMap - Keyed Collections
 
-### @IntoMap with Custom Keys
-
-Maps require a key annotation. Dagger provides built-in keys, or you can create custom ones:
+**Creating Map with keys:**
 
 ```kotlin
-// Built-in key annotations:
-// @StringKey, @IntKey, @LongKey, @ClassKey
-
-// Custom key annotation
+// Key type for Map
 @MapKey
 annotation class FeatureKey(val value: String)
 
 // Feature interface
 interface Feature {
-    val id: String
-    val displayName: String
-    fun isEnabled(): Boolean
-    fun open(context: Context)
+    fun execute()
 }
 
 // Feature implementations
-class ProfileFeature @Inject constructor() : Feature {
-    override val id = "profile"
-    override val displayName = "User Profile"
-    override fun isEnabled() = true
-    override fun open(context: Context) {
-        println("Opening Profile")
+class LoginFeature @Inject constructor() : Feature {
+    override fun execute() {
+        // Login logic
     }
 }
 
-class SettingsFeature @Inject constructor() : Feature {
-    override val id = "settings"
-    override val displayName = "Settings"
-    override fun isEnabled() = true
-    override fun open(context: Context) {
-        println("Opening Settings")
+class PaymentFeature @Inject constructor() : Feature {
+    override fun execute() {
+        // Payment logic
     }
 }
+```
 
-class PremiumFeature @Inject constructor(
-    private val premiumManager: PremiumManager
-) : Feature {
-    override val id = "premium"
-    override val displayName = "Premium Features"
-    override fun isEnabled() = premiumManager.isPremiumUser()
-    override fun open(context: Context) {
-        println("Opening Premium Features")
-    }
-}
+**Module with @IntoMap:**
 
-// Module providing features
+```kotlin
 @Module
-@InstallIn(SingletonComponent::class)
 abstract class FeatureModule {
+    @Binds
+    @IntoMap
+    @FeatureKey("login")
+    abstract fun bindLoginFeature(feature: LoginFeature): Feature
 
     @Binds
     @IntoMap
-    @FeatureKey("profile")
-    abstract fun bindProfileFeature(feature: ProfileFeature): Feature
-
-    @Binds
-    @IntoMap
-    @FeatureKey("settings")
-    abstract fun bindSettingsFeature(feature: SettingsFeature): Feature
-
-    @Binds
-    @IntoMap
-    @FeatureKey("premium")
-    abstract fun bindPremiumFeature(feature: PremiumFeature): Feature
+    @FeatureKey("payment")
+    abstract fun bindPaymentFeature(feature: PaymentFeature): Feature
 }
+```
 
-// Usage
-@Singleton
-class FeatureRegistry @Inject constructor(
+**Using Map:**
+
+```kotlin
+class FeatureRouter @Inject constructor(
     private val features: Map<String, @JvmSuppressWildcards Feature>
 ) {
-
-    fun getFeature(id: String): Feature? {
-        return features[id]
-    }
-
-    fun getAllFeatures(): List<Feature> {
-        return features.values.toList()
-    }
-
-    fun getEnabledFeatures(): List<Feature> {
-        return features.values.filter { it.isEnabled() }
-    }
-
-    fun openFeature(id: String, context: Context) {
-        features[id]?.let { feature ->
-            if (feature.isEnabled()) {
-                feature.open(context)
-            } else {
-                println("Feature $id is not enabled")
-            }
-        } ?: println("Feature $id not found")
-    }
-}
-
-// In Activity
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var featureRegistry: FeatureRegistry
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Get all enabled features
-        val enabledFeatures = featureRegistry.getEnabledFeatures()
-        enabledFeatures.forEach { feature ->
-            println("Available: ${feature.displayName}")
-        }
-
-        // Open a specific feature
-        featureRegistry.openFeature("profile", this)
+    fun executeFeature(key: String) {
+        features[key]?.execute()
     }
 }
 ```
 
-### @Multibinds for Optional Dependencies
+### 3. @ElementsIntoSet - Multiple Elements
 
-Sometimes you want to inject an empty collection if no bindings are provided:
+**Adding multiple elements:**
 
 ```kotlin
 @Module
-@InstallIn(SingletonComponent::class)
-abstract class InterceptorModule {
+object NotificationModule {
+    @Provides
+    @ElementsIntoSet
+    fun provideNotificationChannels(): Set<NotificationChannel> {
+        return setOf(
+            NotificationChannel("general", "General", NotificationManager.IMPORTANCE_DEFAULT),
+            NotificationChannel("urgent", "Urgent", NotificationManager.IMPORTANCE_HIGH)
+        )
+    }
+}
+```
 
-    // Declares an empty set that can be injected even if no interceptors are bound
+### 4. @Multibinds - Empty Collections
+
+**Declaring empty collections:**
+
+```kotlin
+@Module
+abstract class EmptyCollectionModule {
     @Multibinds
-    abstract fun bindInterceptors(): Set<Interceptor>
-
-    // If you add interceptors later, they'll be added to this set
-    @Binds
-    @IntoSet
-    abstract fun bindLoggingInterceptor(interceptor: LoggingInterceptor): Interceptor
-}
-
-// Usage
-@Singleton
-class ApiClient @Inject constructor(
-    private val interceptors: Set<@JvmSuppressWildcards Interceptor>
-) {
-    // interceptors will be an empty set if no bindings exist
-    // or contain all bound interceptors
-}
-```
-
-### Real-World Example: Navigation Plugin System
-
-```kotlin
-// Navigation destination
-data class Destination(
-    val route: String,
-    val label: String,
-    val icon: ImageVector
-)
-
-// Screen provider interface
-interface ScreenProvider {
-    fun getDestinations(): List<Destination>
-    fun getScreen(route: String): (@Composable () -> Unit)?
-}
-
-// Home module screen provider
-class HomeScreenProvider @Inject constructor() : ScreenProvider {
-
-    override fun getDestinations(): List<Destination> = listOf(
-        Destination("home", "Home", Icons.Default.Home),
-        Destination("feed", "Feed", Icons.Default.List)
-    )
-
-    override fun getScreen(route: String): (@Composable () -> Unit)? {
-        return when (route) {
-            "home" -> { { HomeScreen() } }
-            "feed" -> { { FeedScreen() } }
-            else -> null
-        }
-    }
-}
-
-// Profile module screen provider
-class ProfileScreenProvider @Inject constructor() : ScreenProvider {
-
-    override fun getDestinations(): List<Destination> = listOf(
-        Destination("profile", "Profile", Icons.Default.Person),
-        Destination("settings", "Settings", Icons.Default.Settings)
-    )
-
-    override fun getScreen(route: String): (@Composable () -> Unit)? {
-        return when (route) {
-            "profile" -> { { ProfileScreen() } }
-            "settings" -> { { SettingsScreen() } }
-            else -> null
-        }
-    }
-}
-
-// Premium module screen provider (optional feature)
-class PremiumScreenProvider @Inject constructor() : ScreenProvider {
-
-    override fun getDestinations(): List<Destination> = listOf(
-        Destination("premium", "Premium", Icons.Default.Star)
-    )
-
-    override fun getScreen(route: String): (@Composable () -> Unit)? {
-        return when (route) {
-            "premium" -> { { PremiumScreen() } }
-            else -> null
-        }
-    }
-}
-
-// Module
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class NavigationModule {
-
-    @Binds
-    @IntoSet
-    abstract fun bindHomeScreenProvider(provider: HomeScreenProvider): ScreenProvider
-
-    @Binds
-    @IntoSet
-    abstract fun bindProfileScreenProvider(provider: ProfileScreenProvider): ScreenProvider
-
-    // Optional - only included if premium feature is enabled
-    @Binds
-    @IntoSet
-    abstract fun bindPremiumScreenProvider(provider: PremiumScreenProvider): ScreenProvider
-}
-
-// Navigation registry
-@Singleton
-class NavigationRegistry @Inject constructor(
-    private val screenProviders: Set<@JvmSuppressWildcards ScreenProvider>
-) {
-
-    private val destinationMap: Map<String, @Composable () -> Unit> by lazy {
-        screenProviders.flatMap { provider ->
-            provider.getDestinations().mapNotNull { destination ->
-                provider.getScreen(destination.route)?.let { screen ->
-                    destination.route to screen
-                }
-            }
-        }.toMap()
-    }
-
-    fun getAllDestinations(): List<Destination> {
-        return screenProviders.flatMap { it.getDestinations() }
-    }
-
-    fun getScreen(route: String): (@Composable () -> Unit)? {
-        return destinationMap[route]
-    }
-}
-
-// Usage in Compose NavHost
-@Composable
-fun AppNavigation(
-    navigationRegistry: NavigationRegistry,
-    navController: NavHostController
-) {
-    NavHost(
-        navController = navController,
-        startDestination = "home"
-    ) {
-        // Dynamically add all registered screens
-        navigationRegistry.getAllDestinations().forEach { destination ->
-            composable(destination.route) {
-                navigationRegistry.getScreen(destination.route)?.invoke()
-                    ?: ErrorScreen("Screen not found")
-            }
-        }
-    }
-}
-
-// Bottom navigation
-@Composable
-fun BottomNavigation(
-    navigationRegistry: NavigationRegistry,
-    navController: NavHostController
-) {
-    NavigationBar {
-        navigationRegistry.getAllDestinations().forEach { destination ->
-            NavigationBarItem(
-                icon = { Icon(destination.icon, contentDescription = null) },
-                label = { Text(destination.label) },
-                selected = false,
-                onClick = { navController.navigate(destination.route) }
-            )
-        }
-    }
-}
-```
-
-### Advanced: Multi-Module Feature System
-
-```kotlin
-// Feature module interface
-interface FeatureModule {
-    val id: String
-    val priority: Int // For ordering
-    fun initialize(context: Context)
-    fun isEnabled(): Boolean
-}
-
-// Analytics feature module
-class AnalyticsFeatureModule @Inject constructor(
-    private val analytics: Analytics
-) : FeatureModule {
-    override val id = "analytics"
-    override val priority = 100
-    override fun initialize(context: Context) {
-        analytics.init(context)
-    }
-    override fun isEnabled() = true
-}
-
-// Crash reporting feature module
-class CrashReportingFeatureModule @Inject constructor(
-    private val crashReporter: CrashReporter
-) : FeatureModule {
-    override val id = "crash_reporting"
-    override val priority = 90
-    override fun initialize(context: Context) {
-        crashReporter.init(context)
-    }
-    override fun isEnabled() = true
-}
-
-// A/B testing feature module
-class ABTestingFeatureModule @Inject constructor(
-    private val abTesting: ABTesting,
-    private val remoteConfig: RemoteConfig
-) : FeatureModule {
-    override val id = "ab_testing"
-    override val priority = 80
-    override fun initialize(context: Context) {
-        abTesting.init(context)
-    }
-    override fun isEnabled() = remoteConfig.getBoolean("ab_testing_enabled")
-}
-
-// Module
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class AppFeatureModule {
+    abstract fun emptyPluginSet(): Set<Plugin>
 
     @Multibinds
-    abstract fun bindFeatureModules(): Set<FeatureModule>
-
-    @Binds
-    @IntoSet
-    abstract fun bindAnalyticsModule(module: AnalyticsFeatureModule): FeatureModule
-
-    @Binds
-    @IntoSet
-    abstract fun bindCrashReportingModule(module: CrashReportingFeatureModule): FeatureModule
-
-    @Binds
-    @IntoSet
-    abstract fun bindABTestingModule(module: ABTestingFeatureModule): FeatureModule
+    abstract fun emptyFeatureMap(): Map<String, @JvmSuppressWildcards Feature>
 }
+```
 
-// Application startup initializer
-@Singleton
-class AppInitializer @Inject constructor(
-    private val featureModules: Set<@JvmSuppressWildcards FeatureModule>
+### Plugin Architecture
+
+**Complete plugin system implementation:**
+
+```kotlin
+// Plugin Registry
+class PluginRegistry @Inject constructor(
+    private val plugins: Set<Plugin>
 ) {
+    private val pluginMap = plugins.associateBy { it.name }
 
-    fun initialize(context: Context) {
-        // Initialize modules in priority order
-        featureModules
-            .filter { it.isEnabled() }
-            .sortedByDescending { it.priority }
-            .forEach { module ->
-                try {
-                    println("Initializing feature module: ${module.id}")
-                    module.initialize(context)
-                    println(" ${module.id} initialized successfully")
-                } catch (e: Exception) {
-                    println(" Failed to initialize ${module.id}: ${e.message}")
-                }
-            }
-    }
+    fun getPlugin(name: String): Plugin? = pluginMap[name]
+    fun getAllPlugins(): Set<Plugin> = plugins
 }
 
-// In Application
+// Feature Module System
+class FeatureModuleManager @Inject constructor(
+    private val features: Map<String, @JvmSuppressWildcards Feature>
+) {
+    fun executeFeature(featureName: String) {
+        features[featureName]?.execute()
+    }
+
+    fun getAvailableFeatures(): Set<String> = features.keys
+}
+```
+
+### Hilt Integration
+
+**Automatic component creation:**
+
+```kotlin
 @HiltAndroidApp
 class MyApplication : Application() {
+    @Inject
+    lateinit var pluginRegistry: PluginRegistry
 
     @Inject
-    lateinit var appInitializer: AppInitializer
-
-    override fun onCreate() {
-        super.onCreate()
-        appInitializer.initialize(this)
-    }
+    lateinit var featureManager: FeatureModuleManager
 }
 ```
 
-### Map Multibinding with ClassKey
-
-Using `@ClassKey` for type-based lookups:
-
-```kotlin
-// ViewHolder factory pattern with multibinding
-sealed class ListItem {
-    data class TextItem(val text: String) : ListItem()
-    data class ImageItem(val imageUrl: String) : ListItem()
-    data class VideoItem(val videoUrl: String) : ListItem()
-}
-
-interface ViewHolderFactory {
-    fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
-    fun bindViewHolder(holder: RecyclerView.ViewHolder, item: ListItem)
-}
-
-class TextViewHolderFactory @Inject constructor() : ViewHolderFactory {
-    override fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        // Create text ViewHolder
-        return TextViewHolder(parent)
-    }
-
-    override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: ListItem) {
-        (holder as TextViewHolder).bind((item as ListItem.TextItem).text)
-    }
-}
-
-class ImageViewHolderFactory @Inject constructor(
-    private val imageLoader: ImageLoader
-) : ViewHolderFactory {
-    override fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return ImageViewHolder(parent, imageLoader)
-    }
-
-    override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: ListItem) {
-        (holder as ImageViewHolder).bind((item as ListItem.ImageItem).imageUrl)
-    }
-}
-
-class VideoViewHolderFactory @Inject constructor(
-    private val videoPlayer: VideoPlayer
-) : ViewHolderFactory {
-    override fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return VideoViewHolder(parent, videoPlayer)
-    }
-
-    override fun bindViewHolder(holder: RecyclerView.ViewHolder, item: ListItem) {
-        (holder as VideoViewHolder).bind((item as ListItem.VideoItem).videoUrl)
-    }
-}
-
-// Module
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class ViewHolderModule {
-
-    @Binds
-    @IntoMap
-    @ClassKey(ListItem.TextItem::class)
-    abstract fun bindTextViewHolderFactory(factory: TextViewHolderFactory): ViewHolderFactory
-
-    @Binds
-    @IntoMap
-    @ClassKey(ListItem.ImageItem::class)
-    abstract fun bindImageViewHolderFactory(factory: ImageViewHolderFactory): ViewHolderFactory
-
-    @Binds
-    @IntoMap
-    @ClassKey(ListItem.VideoItem::class)
-    abstract fun bindVideoViewHolderFactory(factory: VideoViewHolderFactory): ViewHolderFactory
-}
-
-// Adapter
-class MultiTypeAdapter @Inject constructor(
-    private val factories: Map<Class<out ListItem>, @JvmSuppressWildcards ViewHolderFactory>
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private val items = mutableListOf<ListItem>()
-
-    override fun getItemViewType(position: Int): Int {
-        return items[position]::class.java.hashCode()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val itemClass = items.find { it::class.java.hashCode() == viewType }!!::class.java
-        val factory = factories[itemClass]
-            ?: throw IllegalArgumentException("No factory for $itemClass")
-        return factory.createViewHolder(parent)
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = items[position]
-        val factory = factories[item::class.java]
-            ?: throw IllegalArgumentException("No factory for ${item::class.java}")
-        factory.bindViewHolder(holder, item)
-    }
-
-    override fun getItemCount() = items.size
-
-    fun submitList(newItems: List<ListItem>) {
-        items.clear()
-        items.addAll(newItems)
-        notifyDataSetChanged()
-    }
-}
-```
-
-### Multibinding with Qualifiers
-
-Different sets/maps with qualifiers:
-
-```kotlin
-// Qualifiers
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class NetworkInterceptors
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class LoggingInterceptors
-
-// Module
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class InterceptorModule {
-
-    // Network interceptors set
-    @Binds
-    @IntoSet
-    @NetworkInterceptors
-    abstract fun bindAuthInterceptor(interceptor: AuthInterceptor): Interceptor
-
-    @Binds
-    @IntoSet
-    @NetworkInterceptors
-    abstract fun bindRetryInterceptor(interceptor: RetryInterceptor): Interceptor
-
-    // Logging interceptors set
-    @Binds
-    @IntoSet
-    @LoggingInterceptors
-    abstract fun bindHttpLoggingInterceptor(interceptor: HttpLoggingInterceptor): Interceptor
-
-    @Binds
-    @IntoSet
-    @LoggingInterceptors
-    abstract fun bindCurlLoggingInterceptor(interceptor: CurlLoggingInterceptor): Interceptor
-}
-
-// Usage
-@Singleton
-class ApiClientFactory @Inject constructor(
-    @NetworkInterceptors private val networkInterceptors: Set<@JvmSuppressWildcards Interceptor>,
-    @LoggingInterceptors private val loggingInterceptors: Set<@JvmSuppressWildcards Interceptor>
-) {
-
-    fun create(): OkHttpClient {
-        return OkHttpClient.Builder().apply {
-            // Add network interceptors
-            networkInterceptors.forEach { addInterceptor(it) }
-            // Add logging interceptors
-            loggingInterceptors.forEach { addInterceptor(it) }
-        }.build()
-    }
-}
-```
-
-### Production Example: Event Bus with Subscribers
-
-```kotlin
-// Event interface
-interface Event
-
-data class UserLoggedInEvent(val userId: String) : Event
-data class PurchaseCompletedEvent(val productId: String, val amount: Double) : Event
-data class ScreenViewedEvent(val screenName: String) : Event
-
-// Subscriber interface
-interface EventSubscriber {
-    fun onEvent(event: Event)
-}
-
-// Analytics subscriber
-@Singleton
-class AnalyticsEventSubscriber @Inject constructor(
-    private val analytics: Analytics
-) : EventSubscriber {
-
-    override fun onEvent(event: Event) {
-        when (event) {
-            is UserLoggedInEvent -> {
-                analytics.setUserId(event.userId)
-                analytics.track("user_logged_in")
-            }
-            is PurchaseCompletedEvent -> {
-                analytics.track("purchase_completed", mapOf(
-                    "product_id" to event.productId,
-                    "amount" to event.amount
-                ))
-            }
-            is ScreenViewedEvent -> {
-                analytics.track("screen_viewed", mapOf("screen" to event.screenName))
-            }
-        }
-    }
-}
-
-// Crash reporting subscriber
-@Singleton
-class CrashReportingEventSubscriber @Inject constructor(
-    private val crashReporter: CrashReporter
-) : EventSubscriber {
-
-    override fun onEvent(event: Event) {
-        when (event) {
-            is UserLoggedInEvent -> {
-                crashReporter.setUserId(event.userId)
-            }
-            is ScreenViewedEvent -> {
-                crashReporter.log("Screen viewed: ${event.screenName}")
-            }
-            else -> {} // Ignore other events
-        }
-    }
-}
-
-// Database logger subscriber
-@Singleton
-class DatabaseEventSubscriber @Inject constructor(
-    private val database: AppDatabase
-) : EventSubscriber {
-
-    override fun onEvent(event: Event) {
-        when (event) {
-            is UserLoggedInEvent -> {
-                database.eventDao().insert(EventEntity("user_logged_in", event.userId))
-            }
-            is PurchaseCompletedEvent -> {
-                database.eventDao().insert(EventEntity("purchase", event.productId))
-            }
-            else -> {}
-        }
-    }
-}
-
-// Module
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class EventSubscriberModule {
-
-    @Multibinds
-    abstract fun bindEventSubscribers(): Set<EventSubscriber>
-
-    @Binds
-    @IntoSet
-    abstract fun bindAnalyticsSubscriber(subscriber: AnalyticsEventSubscriber): EventSubscriber
-
-    @Binds
-    @IntoSet
-    abstract fun bindCrashReportingSubscriber(subscriber: CrashReportingEventSubscriber): EventSubscriber
-
-    @Binds
-    @IntoSet
-    abstract fun bindDatabaseSubscriber(subscriber: DatabaseEventSubscriber): EventSubscriber
-}
-
-// Event bus
-@Singleton
-class EventBus @Inject constructor(
-    private val subscribers: Set<@JvmSuppressWildcards EventSubscriber>,
-    @ApplicationScope private val scope: CoroutineScope
-) {
-
-    private val _events = MutableSharedFlow<Event>(
-        replay = 0,
-        extraBufferCapacity = 64,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-
-    init {
-        // Start collecting events and distributing to subscribers
-        scope.launch {
-            _events.collect { event ->
-                subscribers.forEach { subscriber ->
-                    try {
-                        subscriber.onEvent(event)
-                    } catch (e: Exception) {
-                        println("Subscriber error: ${e.message}")
-                    }
-                }
-            }
-        }
-    }
-
-    fun post(event: Event) {
-        _events.tryEmit(event)
-    }
-}
-
-// Usage
-@AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var eventBus: EventBus
-
-    private fun onLoginSuccess(userId: String) {
-        // This event will be automatically distributed to all subscribers
-        eventBus.post(UserLoggedInEvent(userId))
-    }
-}
-```
-
-### Best Practices
-
-1. **Use @JvmSuppressWildcards for Kotlin**
-   ```kotlin
-   //  GOOD - Suppresses wildcards for Kotlin
-   @Inject
-   constructor(private val plugins: Set<@JvmSuppressWildcards Plugin>)
-
-   //  BAD - May cause issues with Kotlin generics
-   @Inject
-   constructor(private val plugins: Set<Plugin>)
-   ```
-
-2. **Prefer Abstract Binds over Provides**
-   ```kotlin
-   //  GOOD - More efficient
-   @Binds
-   @IntoSet
-   abstract fun bindPlugin(plugin: MyPlugin): Plugin
-
-   //  BAD - Less efficient (creates extra method)
-   @Provides
-   @IntoSet
-   fun providePlugin(plugin: MyPlugin): Plugin = plugin
-   ```
-
-3. **Use @Multibinds for Optional Collections**
-   ```kotlin
-   //  GOOD - Can inject even if empty
-   @Module
-   @InstallIn(SingletonComponent::class)
-   abstract class PluginModule {
-       @Multibinds
-       abstract fun bindPlugins(): Set<Plugin>
-   }
-
-   // Now you can inject Set<Plugin> even if no plugins are bound
-   ```
-
-4. **Order with Priority When Needed**
-   ```kotlin
-   //  GOOD - Sort by priority if order matters
-   @Singleton
-   class PluginManager @Inject constructor(
-       private val plugins: Set<@JvmSuppressWildcards Plugin>
-   ) {
-       fun initialize() {
-           plugins.sortedByDescending { it.priority }
-               .forEach { it.initialize() }
-       }
-   }
-   ```
-
-5. **Error Handling in Multibinding Consumers**
-   ```kotlin
-   //  GOOD - Handle individual failures gracefully
-   fun initializeAll() {
-       plugins.forEach { plugin ->
-           try {
-               plugin.initialize()
-           } catch (e: Exception) {
-               println("Failed to initialize ${plugin.name}: ${e.message}")
-           }
-       }
-   }
-
-   //  BAD - One failure breaks all
-   fun initializeAll() {
-       plugins.forEach { it.initialize() } // Will stop at first failure
-   }
-   ```
-
-### Performance Considerations
-
-1. **Set vs List**: Multibinding always produces `Set<T>` or `Map<K, V>`, never `List<T>`
-2. **Lazy initialization**: Elements are created eagerly unless you use `Lazy<T>` or `Provider<T>`
-3. **Memory**: All bound instances are kept in memory (consider using weak references if needed)
-
-```kotlin
-// Lazy multibinding
-@Singleton
-class PluginManager @Inject constructor(
-    private val pluginProviders: Set<@JvmSuppressWildcards Provider<Plugin>>
-) {
-    fun initializeAll() {
-        // Plugins are only created when .get() is called
-        pluginProviders.forEach { provider ->
-            val plugin = provider.get()
-            plugin.initialize()
-        }
-    }
-}
-```
-
-### Summary
-
-**Dagger/Hilt Multibinding** allows binding multiple values into collections:
-
-**Types**:
-- `@IntoSet` - Single element into Set
-- `@ElementsIntoSet` - Multiple elements into Set
-- `@IntoMap` - Single entry into Map (requires key annotation)
-- `@Multibinds` - Declares empty collection
-
-**Use cases**:
--  Plugin architectures
--  Feature module systems
--  Event subscriber patterns
--  Interceptor chains
--  Dynamic navigation
--  Multi-type RecyclerView adapters
-
-**Benefits**:
-- Open/Closed Principle (open for extension, closed for modification)
-- No need to modify existing code to add features
-- Easy to enable/disable features
-- Testable (can provide different sets in tests)
-
-**Best practices**:
-1. Use `@JvmSuppressWildcards` in Kotlin
-2. Prefer `@Binds` over `@Provides`
-3. Use `@Multibinds` for optional collections
-4. Handle individual element failures gracefully
-5. Consider lazy initialization for performance
-
-## Ответ (RU)
-
-Multibinding в Dagger - это механизм, позволяющий собирать множество зависимостей одного типа в коллекцию (Set или Map) из разных модулей без необходимости знать все источники заранее.
-
-**Типы Multibinding:**
-
-1. **Set Multibinding** - собирает зависимости в Set
-2. **Map Multibinding** - собирает зависимости в Map с ключами
-
-**Set Multibinding:**
-
-```kotlin
-// Определение элементов
-@Module
-abstract class NetworkModule {
-    @Binds
-    @IntoSet
-    abstract fun provideOkHttpInterceptor(
-        loggingInterceptor: LoggingInterceptor
-    ): Interceptor
-
-    @Binds
-    @IntoSet
-    abstract fun provideAuthInterceptor(
-        authInterceptor: AuthInterceptor
-    ): Interceptor
-}
-
-@Module
-class AnalyticsModule {
-    @Provides
-    @IntoSet
-    fun provideAnalyticsInterceptor(): Interceptor {
-        return AnalyticsInterceptor()
-    }
-}
-
-// Использование Set
-class OkHttpClientFactory @Inject constructor(
-    private val interceptors: Set<@JvmSuppressWildcards Interceptor>
-) {
-    fun create(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .apply {
-                interceptors.forEach { addInterceptor(it) }
-            }
-            .build()
-    }
-}
-```
-
-**Map Multibinding с ключами:**
-
-```kotlin
-// Определяем ключи для Map
-@MapKey
-annotation class ViewModelKey(val value: KClass<out ViewModel>)
-
-// Предоставляем ViewModels в Map
-@Module
-abstract class ViewModelModule {
-    @Binds
-    @IntoMap
-    @ViewModelKey(UserViewModel::class)
-    abstract fun bindUserViewModel(viewModel: UserViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(ProfileViewModel::class)
-    abstract fun bindProfileViewModel(viewModel: ProfileViewModel): ViewModel
-}
-
-// ViewModelFactory использует Map
-class ViewModelFactory @Inject constructor(
-    private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        val creator = creators[modelClass]
-            ?: creators.entries.firstOrNull { modelClass.isAssignableFrom(it.key) }?.value
-            ?: throw IllegalArgumentException("Unknown model class $modelClass")
-
-        try {
-            @Suppress("UNCHECKED_CAST")
-            return creator.get() as T
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
-    }
-}
-```
-
-**Multibinding для плагинов/модулей:**
-
-```kotlin
-// Интерфейс плагина
-interface FeaturePlugin {
-    fun initialize()
-    val name: String
-}
-
-// MapKey для плагинов
-@MapKey
-annotation class FeatureKey(val value: String)
-
-// Модули предоставляют плагины
-@Module
-class PaymentModule {
-    @Provides
-    @IntoMap
-    @FeatureKey("payment")
-    fun providePaymentPlugin(): FeaturePlugin {
-        return PaymentPlugin()
-    }
-}
-
-@Module
-class SocialModule {
-    @Provides
-    @IntoMap
-    @FeatureKey("social")
-    fun provideSocialPlugin(): FeaturePlugin {
-        return SocialPlugin()
-    }
-}
-
-// Менеджер инициализирует все плагины
-class FeatureManager @Inject constructor(
-    private val features: Map<String, @JvmSuppressWildcards FeaturePlugin>
-) {
-    fun initializeAll() {
-        features.values.forEach { it.initialize() }
-    }
-
-    fun getFeature(name: String): FeaturePlugin? {
-        return features[name]
-    }
-}
-```
-
-**@ElementsIntoSet для наборов:**
-
-```kotlin
-@Module
-class ConfigModule {
-    @Provides
-    @ElementsIntoSet
-    fun provideDefaultHeaders(): Set<Header> {
-        return setOf(
-            Header("Accept", "application/json"),
-            Header("Content-Type", "application/json")
-        )
-    }
-
-    @Provides
-    @ElementsIntoSet
-    fun provideAuthHeaders(token: AuthToken): Set<Header> {
-        return setOf(
-            Header("Authorization", "Bearer \${token.value}")
-        )
-    }
-}
-```
-
-**Встроенные MapKey аннотации:**
-
-- `@StringKey` - для String ключей
-- `@IntKey` - для Int ключей
-- `@LongKey` - для Long ключей
-- `@ClassKey` - для Class<?> ключей
-
-**Пример с @StringKey:**
-
-```kotlin
-@Module
-abstract class NavigationModule {
-    @Binds
-    @IntoMap
-    @StringKey("home")
-    abstract fun bindHomeScreen(screen: HomeScreen): Screen
-
-    @Binds
-    @IntoMap
-    @StringKey("profile")
-    abstract fun bindProfileScreen(screen: ProfileScreen): Screen
-}
-
-class Navigator @Inject constructor(
-    private val screens: Map<String, @JvmSuppressWildcards Provider<Screen>>
-) {
-    fun navigateTo(route: String) {
-        val screen = screens[route]?.get()
-            ?: throw IllegalArgumentException("Unknown route: $route")
-        screen.show()
-    }
-}
-```
-
-**Преимущества Multibinding:**
-
-1. **Модульность:** Модули могут независимо добавлять элементы в коллекцию
-2. **Расширяемость:** Легко добавить новые элементы без изменения существующего кода
-3. **Декларативность:** Явное объявление всех зависимостей
-4. **Безопасность типов:** Компилятор проверяет типы
-5. **Plugin-архитектура:** Идеально для систем плагинов
-
-**Частые use cases:**
-
-- Interceptors для OkHttp
-- ViewModels для Factory
-- Feature modules/plugins
-- Navigation destinations
-- Event handlers
-- Validators
-## Ответ (RU)
-
-Multibinding в Dagger - это механизм, позволяющий собирать множество зависимостей одного типа в коллекцию (Set или Map) из разных модулей без необходимости знать все источники заранее.
-
-**Типы Multibinding:**
-
-1. **Set Multibinding** - собирает зависимости в Set
-2. **Map Multibinding** - собирает зависимости в Map с ключами
-
-**Set Multibinding:**
-
-```kotlin
-// Определение элементов
-@Module
-abstract class NetworkModule {
-    @Binds
-    @IntoSet
-    abstract fun provideOkHttpInterceptor(
-        loggingInterceptor: LoggingInterceptor
-    ): Interceptor
-
-    @Binds
-    @IntoSet
-    abstract fun provideAuthInterceptor(
-        authInterceptor: AuthInterceptor
-    ): Interceptor
-}
-
-@Module
-class AnalyticsModule {
-    @Provides
-    @IntoSet
-    fun provideAnalyticsInterceptor(): Interceptor {
-        return AnalyticsInterceptor()
-    }
-}
-
-// Использование Set
-class OkHttpClientFactory @Inject constructor(
-    private val interceptors: Set<@JvmSuppressWildcards Interceptor>
-) {
-    fun create(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .apply {
-                interceptors.forEach { addInterceptor(it) }
-            }
-            .build()
-    }
-}
-```
-
-**Map Multibinding с ключами:**
-
-```kotlin
-// Определяем ключи для Map
-@MapKey
-annotation class ViewModelKey(val value: KClass<out ViewModel>)
-
-// Предоставляем ViewModels в Map
-@Module
-abstract class ViewModelModule {
-    @Binds
-    @IntoMap
-    @ViewModelKey(UserViewModel::class)
-    abstract fun bindUserViewModel(viewModel: UserViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(ProfileViewModel::class)
-    abstract fun bindProfileViewModel(viewModel: ProfileViewModel): ViewModel
-}
-
-// ViewModelFactory использует Map
-class ViewModelFactory @Inject constructor(
-    private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        val creator = creators[modelClass]
-            ?: creators.entries.firstOrNull { modelClass.isAssignableFrom(it.key) }?.value
-            ?: throw IllegalArgumentException("Unknown model class $modelClass")
-
-        try {
-            @Suppress("UNCHECKED_CAST")
-            return creator.get() as T
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
-    }
-}
-```
-
-**Multibinding для плагинов/модулей:**
-
-```kotlin
-// Интерфейс плагина
-interface FeaturePlugin {
-    fun initialize()
-    val name: String
-}
-
-// MapKey для плагинов
-@MapKey
-annotation class FeatureKey(val value: String)
-
-// Модули предоставляют плагины
-@Module
-class PaymentModule {
-    @Provides
-    @IntoMap
-    @FeatureKey("payment")
-    fun providePaymentPlugin(): FeaturePlugin {
-        return PaymentPlugin()
-    }
-}
-
-@Module
-class SocialModule {
-    @Provides
-    @IntoMap
-    @FeatureKey("social")
-    fun provideSocialPlugin(): FeaturePlugin {
-        return SocialPlugin()
-    }
-}
-
-// Менеджер инициализирует все плагины
-class FeatureManager @Inject constructor(
-    private val features: Map<String, @JvmSuppressWildcards FeaturePlugin>
-) {
-    fun initializeAll() {
-        features.values.forEach { it.initialize() }
-    }
-
-    fun getFeature(name: String): FeaturePlugin? {
-        return features[name]
-    }
-}
-```
-
-**@ElementsIntoSet для наборов:**
-
-```kotlin
-@Module
-class ConfigModule {
-    @Provides
-    @ElementsIntoSet
-    fun provideDefaultHeaders(): Set<Header> {
-        return setOf(
-            Header("Accept", "application/json"),
-            Header("Content-Type", "application/json")
-        )
-    }
-
-    @Provides
-    @ElementsIntoSet
-    fun provideAuthHeaders(token: AuthToken): Set<Header> {
-        return setOf(
-            Header("Authorization", "Bearer \${token.value}")
-        )
-    }
-}
-```
-
-**Встроенные MapKey аннотации:**
-
-- `@StringKey` - для String ключей
-- `@IntKey` - для Int ключей
-- `@LongKey` - для Long ключей
-- `@ClassKey` - для Class<?> ключей
-
-**Пример с @StringKey:**
-
-```kotlin
-@Module
-abstract class NavigationModule {
-    @Binds
-    @IntoMap
-    @StringKey("home")
-    abstract fun bindHomeScreen(screen: HomeScreen): Screen
-
-    @Binds
-    @IntoMap
-    @StringKey("profile")
-    abstract fun bindProfileScreen(screen: ProfileScreen): Screen
-}
-
-class Navigator @Inject constructor(
-    private val screens: Map<String, @JvmSuppressWildcards Provider<Screen>>
-) {
-    fun navigateTo(route: String) {
-        val screen = screens[route]?.get()
-            ?: throw IllegalArgumentException("Unknown route: $route")
-        screen.show()
-    }
-}
-```
-
-**Преимущества Multibinding:**
-
-1. **Модульность:** Модули могут независимо добавлять элементы в коллекцию
-2. **Расширяемость:** Легко добавить новые элементы без изменения существующего кода
-3. **Декларативность:** Явное объявление всех зависимостей
-4. **Безопасность типов:** Компилятор проверяет типы
-5. **Plugin-архитектура:** Идеально для систем плагинов
-
-**Частые use cases:**
-
-- Interceptors для OkHttp
-- ViewModels для Factory
-- Feature modules/plugins
-- Navigation destinations
-- Event handlers
-- Validators
+## Follow-ups
+
+- How do you handle plugin lifecycle management with multibinding?
+- What are the performance implications of large multibinding collections?
+- How can you implement conditional plugin loading with multibinding?
 
 ## Related Questions
 
-- [[q-compose-remember-derived-state--jetpack-compose--medium]]
-- [[q-which-event-is-triggered-when-user-presses-screen--android--medium]]
-- [[q-what-can-be-done-through-composer--android--medium]]
+### Prerequisites (Easier)
+- [[q-dagger-inject-annotation--android--easy]]
+
+### Related (Same Level)
+- [[q-dagger-field-injection--android--medium]]
+
+### Advanced (Harder)
+- [[q-dagger-framework-overview--android--hard]]
+- [[q-dagger-custom-scopes--di--hard]]
+- [[q-dagger-component-dependencies--di--hard]]
