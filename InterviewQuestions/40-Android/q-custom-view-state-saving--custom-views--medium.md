@@ -1,48 +1,72 @@
 ---
-id: 20251012-1227116
-title: "Custom View State Saving / Сохранение состояния кастомных View"
+id: 20251021-190000
+title: Custom View State Saving / Сохранение состояния Custom View
+aliases:
+  - Custom View State Saving
+  - Сохранение состояния Custom View
 topic: android
+subtopics:
+  - ui-views
+  - lifecycle
+question_kind: android
 difficulty: medium
-status: draft
-created: 2025-10-13
-tags: [views, state-management, lifecycle, android-framework, android/ui-views, android/lifecycle, difficulty/medium]
+original_language: ru
+language_tags:
+  - ru
+  - en
+status: reviewed
 moc: moc-android
-related: [q-workmanager-return-result--android--medium, q-play-app-signing--android--medium, q-fileprovider-secure-sharing--android--medium]
-subtopics: [ui-views, lifecycle]
+related:
+  - q-custom-view-implementation--android--medium
+  - q-view-lifecycle-android--android--medium
+  - q-android-configuration-changes--android--medium
+created: 2025-10-21
+updated: 2025-10-21
+tags:
+  - android/ui-views
+  - android/lifecycle
+  - custom-views
+  - state-management
+  - parcelable
+  - difficulty/medium
+source: https://developer.android.com/guide/components/activities/activity-lifecycle
+source_note: Official activity lifecycle guide
 ---
-# Custom View State Saving
+# Вопрос (RU)
+> Как сохранять и восстанавливать состояние в кастомных view? Объясните механизм сохранения состояния, обработку изменений конфигурации и правильную реализацию Parcelable классов состояния.
 
 # Question (EN)
 > How do you save and restore state in custom views? Explain the state saving mechanism, handling configuration changes, and implementing Parcelable state classes properly.
 
-# Вопрос (RU)
-> Как сохранять и восстанавливать состояние в пользовательских view? Объясните механизм сохранения состояния, обработку изменений конфигурации и правильную реализацию Parcelable классов состояния.
-
 ---
 
-## Answer (EN)
+## Ответ (RU)
 
-**State saving** in custom views ensures your UI survives configuration changes (rotation, language change, etc.) and process death. Implementing this correctly is essential for a seamless user experience.
+### Теория сохранения состояния
 
-### When State Saving Happens
+**State saving** в custom views обеспечивает выживание UI при изменениях конфигурации (поворот экрана, смена языка) и смерти процесса. Система Android автоматически вызывает методы сохранения состояния при определенных событиях.
 
-**Triggered by:**
-- Screen rotation
-- Language change
-- Multi-window mode
-- Theme change
-- Process death (low memory)
+**Ключевые принципы**:
+- **Автоматический вызов** - система вызывает onSaveInstanceState() при необходимости
+- **Parcelable интерфейс** - состояние должно быть сериализуемым
+- **BaseSavedState наследование** - правильная реализация для View
+- **Конфигурационные изменения** - поворот экрана, смена языка, темы
 
-**Not triggered by:**
-- Back navigation
-- Finish activity
-- App killed by user
+### Когда происходит сохранение состояния
 
----
+**Вызывается при:**
+- Повороте экрана
+- Смене языка
+- Режиме multi-window
+- Смене темы
+- Смерти процесса (нехватка памяти)
 
-### 1. Basic State Saving
+**НЕ вызывается при:**
+- Навигации назад
+- Завершении Activity
+- Убийстве приложения пользователем
 
-Override `onSaveInstanceState()` and `onRestoreInstanceState()`.
+### Базовая реализация сохранения состояния
 
 ```kotlin
 class CounterView @JvmOverloads constructor(
@@ -50,25 +74,20 @@ class CounterView @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    private var count: Int = 0
+    private var count = 0
 
     fun increment() {
         count++
         invalidate()
     }
 
-    //  Save state
     override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
-
-        val savedState = SavedState(superState).apply {
+        return SavedState(superState).apply {
             this.count = this@CounterView.count
         }
-
-        return savedState
     }
 
-    //  Restore state
     override fun onRestoreInstanceState(state: Parcelable?) {
         if (state is SavedState) {
             super.onRestoreInstanceState(state.superState)
@@ -79,9 +98,8 @@ class CounterView @JvmOverloads constructor(
         }
     }
 
-    //  Custom SavedState class
     private class SavedState : BaseSavedState {
-        var count: Int = 0
+        var count = 0
 
         constructor(superState: Parcelable?) : super(superState)
 
@@ -107,76 +125,32 @@ class CounterView @JvmOverloads constructor(
 }
 ```
 
-**Important:** Always call `super.onSaveInstanceState()` and wrap it in your custom state!
+### Сложные типы данных
 
----
-
-### 2. Requiring Unique ID
-
-State saving requires a unique view ID.
+**Теория**: Для сложных типов данных (списки, объекты, enum) необходимо правильно реализовать сериализацию. Используйте writeTypedList/readTypedList для списков объектов, writeSerializable/readSerializable для Serializable объектов.
 
 ```kotlin
-init {
-    //  Check if ID is set
-    if (id == View.NO_ID) {
-        Log.w("CounterView", "View must have an ID to save state")
-        // Optionally assign a default ID
-        id = View.generateViewId()
-    }
-}
-```
+class ComplexView : View {
 
-**XML:**
-```xml
-<!--  With ID - state will be saved -->
-<com.example.ui.CounterView
-    android:id="@+id/counter"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
-
-<!--  Without ID - state will be lost! -->
-<com.example.ui.CounterView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
-```
-
----
-
-### 3. Complex State with Multiple Properties
-
-```kotlin
-class ProgressView : View {
-
-    private var progress: Float = 0f
-    private var progressColor: Int = Color.BLUE
-    private var label: String = ""
-    private var isAnimating: Boolean = false
+    private var items = mutableListOf<Item>()
+    private var selectedItem: Item? = null
+    private var viewMode = ViewMode.LIST
 
     override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
-
         return SavedState(superState).apply {
-            this.progress = this@ProgressView.progress
-            this.progressColor = this@ProgressView.progressColor
-            this.label = this@ProgressView.label
-            this.isAnimating = this@ProgressView.isAnimating
+            this.items = this@ComplexView.items
+            this.selectedItem = this@ComplexView.selectedItem
+            this.viewMode = this@ComplexView.viewMode.name
         }
     }
 
     override fun onRestoreInstanceState(state: Parcelable?) {
         if (state is SavedState) {
             super.onRestoreInstanceState(state.superState)
-
-            progress = state.progress
-            progressColor = state.progressColor
-            label = state.label
-            isAnimating = state.isAnimating
-
-            // Resume animation if needed
-            if (isAnimating) {
-                startAnimation()
-            }
-
+            items = state.items
+            selectedItem = state.selectedItem
+            viewMode = ViewMode.valueOf(state.viewMode)
             invalidate()
         } else {
             super.onRestoreInstanceState(state)
@@ -184,525 +158,199 @@ class ProgressView : View {
     }
 
     private class SavedState : BaseSavedState {
-        var progress: Float = 0f
-        var progressColor: Int = 0
-        var label: String = ""
-        var isAnimating: Boolean = false
+        var items = mutableListOf<Item>()
+        var selectedItem: Item? = null
+        var viewMode = ""
 
         constructor(superState: Parcelable?) : super(superState)
 
         private constructor(parcel: Parcel) : super(parcel) {
-            progress = parcel.readFloat()
-            progressColor = parcel.readInt()
-            label = parcel.readString() ?: ""
-            isAnimating = parcel.readByte() != 0.toByte()
+            parcel.readTypedList(items, Item.CREATOR)
+            selectedItem = parcel.readTypedObject(Item.CREATOR)
+            viewMode = parcel.readString() ?: ""
         }
 
         override fun writeToParcel(out: Parcel, flags: Int) {
             super.writeToParcel(out, flags)
-            out.writeFloat(progress)
-            out.writeInt(progressColor)
-            out.writeString(label)
-            out.writeByte(if (isAnimating) 1 else 0)
+            out.writeTypedList(items)
+            out.writeTypedObject(selectedItem, flags)
+            out.writeString(viewMode)
         }
 
         companion object CREATOR : Parcelable.Creator<SavedState> {
-            override fun createFromParcel(parcel: Parcel) = SavedState(parcel)
-            override fun newArray(size: Int) = arrayOfNulls<SavedState>(size)
-        }
-    }
-}
-```
-
----
-
-### 4. Using @Parcelize (Kotlin)
-
-Simplify Parcelable implementation with Kotlin Android Extensions.
-
-```kotlin
-import kotlinx.parcelize.Parcelize
-import android.os.Parcelable
-
-class ModernView : View {
-
-    private var progress: Float = 0f
-    private var label: String = ""
-
-    override fun onSaveInstanceState(): Parcelable {
-        val superState = super.onSaveInstanceState()
-        return SavedState(superState, progress, label)
-    }
-
-    override fun onRestoreInstanceState(state: Parcelable?) {
-        if (state is SavedState) {
-            super.onRestoreInstanceState(state.superState)
-            progress = state.progress
-            label = state.label
-            invalidate()
-        } else {
-            super.onRestoreInstanceState(state)
-        }
-    }
-
-    //  Much simpler with @Parcelize!
-    @Parcelize
-    data class SavedState(
-        val superState: Parcelable?,
-        val progress: Float,
-        val label: String
-    ) : BaseSavedState(superState), Parcelable
-}
-```
-
-**Add to build.gradle:**
-```gradle
-plugins {
-    id 'kotlin-parcelize'
-}
-```
-
----
-
-### 5. Saving Collections
-
-```kotlin
-class ChartView : View {
-
-    private val dataPoints = mutableListOf<DataPoint>()
-
-    override fun onSaveInstanceState(): Parcelable {
-        val superState = super.onSaveInstanceState()
-        return SavedState(superState, ArrayList(dataPoints))
-    }
-
-    override fun onRestoreInstanceState(state: Parcelable?) {
-        if (state is SavedState) {
-            super.onRestoreInstanceState(state.superState)
-            dataPoints.clear()
-            dataPoints.addAll(state.dataPoints)
-            invalidate()
-        } else {
-            super.onRestoreInstanceState(state)
-        }
-    }
-
-    @Parcelize
-    data class DataPoint(
-        val x: Float,
-        val y: Float,
-        val label: String
-    ) : Parcelable
-
-    @Parcelize
-    data class SavedState(
-        val superState: Parcelable?,
-        val dataPoints: ArrayList<DataPoint>
-    ) : BaseSavedState(superState), Parcelable
-}
-```
-
----
-
-### 6. State Saving in ViewGroups
-
-ViewGroups must handle their own state AND children's state.
-
-```kotlin
-class CustomLayout : ViewGroup {
-
-    private var layoutMode: LayoutMode = LayoutMode.GRID
-
-    override fun onSaveInstanceState(): Parcelable {
-        val superState = super.onSaveInstanceState()
-        return SavedState(superState, layoutMode)
-    }
-
-    override fun onRestoreInstanceState(state: Parcelable?) {
-        if (state is SavedState) {
-            super.onRestoreInstanceState(state.superState)
-            layoutMode = state.layoutMode
-            requestLayout()
-        } else {
-            super.onRestoreInstanceState(state)
-        }
-    }
-
-    // Enable state saving for children
-    override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {
-        // Save children's state
-        dispatchFreezeSelfOnly(container)
-    }
-
-    override fun dispatchRestoreInstanceState(container: SparseArray<Parcelable>) {
-        // Restore children's state
-        dispatchThawSelfOnly(container)
-    }
-
-    @Parcelize
-    data class SavedState(
-        val superState: Parcelable?,
-        val layoutMode: LayoutMode
-    ) : BaseSavedState(superState), Parcelable
-
-    enum class LayoutMode {
-        GRID, LIST
-    }
-}
-```
-
----
-
-### 7. Handling Large State
-
-For large data, don't save in view state—use ViewModel instead.
-
-```kotlin
-class LargeDataView : View {
-
-    //  DON'T save large data in view state
-    // private val largeList = List(10000) { /* ... */ }
-
-    //  DO save reference/ID only
-    private var dataSetId: String? = null
-
-    override fun onSaveInstanceState(): Parcelable {
-        val superState = super.onSaveInstanceState()
-        // Only save ID, not actual data
-        return SavedState(superState, dataSetId)
-    }
-
-    override fun onRestoreInstanceState(state: Parcelable?) {
-        if (state is SavedState) {
-            super.onRestoreInstanceState(state.superState)
-            dataSetId = state.dataSetId
-
-            // Reload data from ViewModel/Repository
-            dataSetId?.let { id ->
-                loadDataSet(id)
-            }
-        } else {
-            super.onRestoreInstanceState(state)
-        }
-    }
-
-    @Parcelize
-    data class SavedState(
-        val superState: Parcelable?,
-        val dataSetId: String?
-    ) : BaseSavedState(superState), Parcelable
-
-    private fun loadDataSet(id: String) {
-        // Load from ViewModel or Repository
-    }
-}
-```
-
----
-
-### 8. State Saving with Animations
-
-Handle animation state properly.
-
-```kotlin
-class AnimatedView : View {
-
-    private var animator: ValueAnimator? = null
-    private var animatedValue: Float = 0f
-    private var targetValue: Float = 100f
-    private var isAnimating: Boolean = false
-
-    override fun onSaveInstanceState(): Parcelable {
-        val superState = super.onSaveInstanceState()
-
-        // Save current animated value, not target
-        val currentValue = if (isAnimating) {
-            animator?.animatedValue as? Float ?: animatedValue
-        } else {
-            animatedValue
-        }
-
-        return SavedState(superState, currentValue, targetValue, isAnimating)
-    }
-
-    override fun onRestoreInstanceState(state: Parcelable?) {
-        if (state is SavedState) {
-            super.onRestoreInstanceState(state.superState)
-
-            animatedValue = state.currentValue
-            targetValue = state.targetValue
-
-            if (state.isAnimating) {
-                // Resume animation from saved position
-                animateTo(targetValue, startValue = animatedValue)
+            override fun createFromParcel(parcel: Parcel): SavedState {
+                return SavedState(parcel)
             }
 
-            invalidate()
+            override fun newArray(size: Int): Array<SavedState?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
+
+    data class Item(val id: Int, val name: String) : Parcelable {
+        override fun writeToParcel(out: Parcel, flags: Int) {
+            out.writeInt(id)
+            out.writeString(name)
+        }
+
+        override fun describeContents(): Int = 0
+
+        companion object CREATOR : Parcelable.Creator<Item> {
+            override fun createFromParcel(parcel: Parcel): Item {
+                return Item(parcel.readInt(), parcel.readString() ?: "")
+            }
+
+            override fun newArray(size: Int): Array<Item?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
+
+    enum class ViewMode { LIST, GRID }
+}
+```
+
+### Обработка изменений конфигурации
+
+**Теория**: Изменения конфигурации (configChanges) могут быть обработаны на уровне Activity или View. View может сохранить состояние автоматически, но для сложных случаев нужна дополнительная логика.
+
+```kotlin
+class ConfigAwareView : View {
+
+    private var isLandscape = false
+    private var savedScrollPosition = 0
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        val wasLandscape = isLandscape
+        isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+        if (wasLandscape != isLandscape) {
+            // Ориентация изменилась - адаптируем UI
+            adaptToOrientation()
+        }
+    }
+
+    override fun onSaveInstanceState(): Parcelable {
+        val superState = super.onSaveInstanceState()
+        return SavedState(superState).apply {
+            this.isLandscape = this@ConfigAwareView.isLandscape
+            this.scrollPosition = this@ConfigAwareView.savedScrollPosition
+        }
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        if (state is SavedState) {
+            super.onRestoreInstanceState(state.superState)
+            isLandscape = state.isLandscape
+            savedScrollPosition = state.scrollPosition
+            restoreScrollPosition()
         } else {
             super.onRestoreInstanceState(state)
         }
     }
 
-    private fun animateTo(target: Float, startValue: Float = animatedValue) {
-        animator?.cancel()
+    private fun adaptToOrientation() {
+        // Адаптация UI к новой ориентации
+        requestLayout()
+    }
 
-        animator = ValueAnimator.ofFloat(startValue, target).apply {
-            duration = 500
-            addUpdateListener { animation ->
-                animatedValue = animation.animatedValue as Float
-                invalidate()
+    private fun restoreScrollPosition() {
+        // Восстановление позиции прокрутки
+    }
+
+    private class SavedState : BaseSavedState {
+        var isLandscape = false
+        var scrollPosition = 0
+
+        constructor(superState: Parcelable?) : super(superState)
+
+        private constructor(parcel: Parcel) : super(parcel) {
+            isLandscape = parcel.readByte() != 0.toByte()
+            scrollPosition = parcel.readInt()
+        }
+
+        override fun writeToParcel(out: Parcel, flags: Int) {
+            super.writeToParcel(out, flags)
+            out.writeByte(if (isLandscape) 1 else 0)
+            out.writeInt(scrollPosition)
+        }
+
+        companion object CREATOR : Parcelable.Creator<SavedState> {
+            override fun createFromParcel(parcel: Parcel): SavedState {
+                return SavedState(parcel)
             }
-            start()
+
+            override fun newArray(size: Int): Array<SavedState?> {
+                return arrayOfNulls(size)
+            }
         }
-
-        isAnimating = true
-    }
-
-    @Parcelize
-    data class SavedState(
-        val superState: Parcelable?,
-        val currentValue: Float,
-        val targetValue: Float,
-        val isAnimating: Boolean
-    ) : BaseSavedState(superState), Parcelable
-}
-```
-
----
-
-### 9. Testing State Saving
-
-```kotlin
-@RunWith(AndroidJUnit4::class)
-class StateRestorationTest {
-
-    @Test
-    fun testStateSaving() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val view = CounterView(context).apply {
-            id = View.generateViewId() // Required!
-        }
-
-        // Set state
-        view.increment()
-        view.increment()
-        view.increment()
-
-        // Save state
-        val state = view.onSaveInstanceState()
-
-        // Create new view and restore
-        val newView = CounterView(context).apply {
-            id = view.id // Must have same ID
-        }
-        newView.onRestoreInstanceState(state)
-
-        // Verify state was restored
-        // (You'd need to expose count or verify visually)
-    }
-
-    @Test
-    fun testRotation() {
-        val scenario = ActivityScenario.launch(MainActivity::class.java)
-
-        // Interact with view
-        onView(withId(R.id.counter))
-            .perform(click())
-            .perform(click())
-
-        // Rotate device
-        scenario.onActivity { activity ->
-            activity.requestedOrientation =
-                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        }
-
-        // Verify state survived
-        onView(withId(R.id.counter))
-            .check(matches(withText("Count: 2")))
     }
 }
 ```
 
----
+### Лучшие практики
 
-### 10. Common Mistakes
+1. **Всегда вызывайте super.onSaveInstanceState()** - сохраняет базовое состояние View
+2. **Используйте BaseSavedState** - правильная реализация для View
+3. **Реализуйте Parcelable.Creator** - обязательный для Parcelable
+4. **Обрабатывайте null состояния** - проверяйте типы в onRestoreInstanceState()
+5. **Сохраняйте только необходимое** - не сохраняйте временные данные
+6. **Тестируйте на изменениях конфигурации** - поворот экрана, смена языка
+7. **Используйте правильные типы данных** - примитивы, Parcelable, Serializable
 
-** Not calling super:**
-```kotlin
-override fun onSaveInstanceState(): Parcelable {
-    // Missing super call!
-    return SavedState(null, progress)
-}
-```
+### Подводные камни
 
-** Always call super:**
-```kotlin
-override fun onSaveInstanceState(): Parcelable {
-    val superState = super.onSaveInstanceState() // 
-    return SavedState(superState, progress)
-}
-```
-
-** No view ID:**
-```xml
-<!-- State won't be saved! -->
-<com.example.ui.CounterView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
-```
-
-** With ID:**
-```xml
-<com.example.ui.CounterView
-    android:id="@+id/counter"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
-```
-
-** Saving too much data:**
-```kotlin
-data class SavedState(
-    val superState: Parcelable?,
-    val hugeList: List<LargeObject> //  TransactionTooLargeException!
-) : BaseSavedState(superState), Parcelable
-```
-
-** Save references only:**
-```kotlin
-data class SavedState(
-    val superState: Parcelable?,
-    val dataId: String //  Just the ID
-) : BaseSavedState(superState), Parcelable
-```
+- **Не забывайте super вызовы** - могут сломать базовую функциональность
+- **Правильно реализуйте Parcelable** - ошибки в CREATOR могут вызвать краши
+- **Не сохраняйте Context ссылки** - могут вызвать memory leaks
+- **Проверяйте типы при восстановлении** - state может быть null или другого типа
+- **Тестируйте edge cases** - быстрые повороты экрана, низкая память
 
 ---
 
-### 11. Best Practices
+## Answer (EN)
 
-**1. Always save critical UI state**
+### State Saving Theory
+
+**State saving** in custom views ensures UI survival during configuration changes (screen rotation, language change) and process death. Android system automatically calls state saving methods during specific events.
+
+**Key principles**:
+- **Automatic invocation** - system calls onSaveInstanceState() when needed
+- **Parcelable interface** - state must be serializable
+- **BaseSavedState inheritance** - proper implementation for View
+- **Configuration changes** - screen rotation, language change, themes
+
+### When State Saving Happens
+
+**Triggered by:**
+- Screen rotation
+- Language change
+- Multi-window mode
+- Theme change
+- Process death (low memory)
+
+**Not triggered by:**
+- Back navigation
+- Activity finish
+- App killed by user
+
+### Basic State Saving Implementation
+
 ```kotlin
-//  Save user input, selections, scroll position
-override fun onSaveInstanceState(): Parcelable {
-    val superState = super.onSaveInstanceState()
-    return SavedState(superState, selectedIndex, scrollY, inputText)
-}
-```
+class CounterView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
 
-**2. Don't save transient state**
-```kotlin
-//  Don't save temporary UI states
-// - Loading indicators
-// - Error messages (should be recomputed)
-// - Temporary animations
-```
+    private var count = 0
 
-**3. Use ViewModel for complex state**
-```kotlin
-// ViewModel survives configuration changes automatically
-class MyViewModel : ViewModel() {
-    val largeDataSet = MutableLiveData<List<Data>>()
-}
-
-// View only saves minimal state
-class MyView : View {
-    override fun onSaveInstanceState(): Parcelable {
-        // Just save scroll position, selection, etc.
-        // Large data lives in ViewModel
+    fun increment() {
+        count++
+        invalidate()
     }
-}
-```
-
-**4. Test with "Don't keep activities"**
-```
-Developer Options → Don't keep activities → ON
-```
-This simulates process death on every background.
-
-**5. Size limits**
-```kotlin
-// Parcelable transaction size limit: ~1MB total
-// Keep individual view state < 50KB
-// For larger data, use:
-// - ViewModel (config changes)
-// - Saved State Handle (process death)
-// - Persistent storage (database, files)
-```
-
----
-
-### 12. State Saving Checklist
-
-**Required:**
--  Override `onSaveInstanceState()`
--  Override `onRestoreInstanceState()`
--  Call `super.onSaveInstanceState()`
--  Wrap super state in custom state
--  View must have unique ID
--  Implement Parcelable correctly
-
-**Recommended:**
--  Use `@Parcelize` for simplicity
--  Keep state size small (< 50KB)
--  Test with "Don't keep activities"
--  Test rotation in all screens
--  Use ViewModel for large/complex data
-
-**Avoid:**
--  Saving transient UI state
--  Saving data available from other sources
--  Exceeding size limits
--  Forgetting to call super
--  Views without IDs
-
----
-
-### Summary
-
-**State saving basics:**
-1. Override `onSaveInstanceState()` and `onRestoreInstanceState()`
-2. Wrap super state in custom BaseSavedState subclass
-3. Implement Parcelable (use @Parcelize for simplicity)
-4. Ensure view has unique ID
-
-**What to save:**
-- User input and selections
-- Scroll positions
-- Expanded/collapsed states
-- Custom view state (progress, colors, etc.)
-
-**What NOT to save:**
-- Transient states (loading indicators)
-- Large data sets (use ViewModel)
-- Data available from other sources
-- Non-user-facing state
-
-**Testing:**
-- Enable "Don't keep activities"
-- Test all configuration changes
-- Verify state on process death
-- Check for TransactionTooLargeException
-
----
-
-## Ответ (RU)
-
-**Сохранение состояния** в пользовательских view гарантирует, что ваш UI переживает изменения конфигурации (поворот, смена языка и т.д.) и смерть процесса.
-
-### Когда происходит сохранение состояния
-
-**Триггеры:**
-- Поворот экрана
-- Смена языка
-- Режим многозадачности
-- Смена темы
-- Смерть процесса (мало памяти)
-
-### Базовое сохранение состояния
-
-```kotlin
-class CounterView : View {
-
-    private var count: Int = 0
 
     override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
@@ -721,56 +369,239 @@ class CounterView : View {
         }
     }
 
-    @Parcelize
-    data class SavedState(
-        val superState: Parcelable?,
-        val count: Int = 0
-    ) : BaseSavedState(superState), Parcelable
+    private class SavedState : BaseSavedState {
+        var count = 0
+
+        constructor(superState: Parcelable?) : super(superState)
+
+        private constructor(parcel: Parcel) : super(parcel) {
+            count = parcel.readInt()
+        }
+
+        override fun writeToParcel(out: Parcel, flags: Int) {
+            super.writeToParcel(out, flags)
+            out.writeInt(count)
+        }
+
+        companion object CREATOR : Parcelable.Creator<SavedState> {
+            override fun createFromParcel(parcel: Parcel): SavedState {
+                return SavedState(parcel)
+            }
+
+            override fun newArray(size: Int): Array<SavedState?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
 }
 ```
 
-### Требования
+### Complex Data Types
 
-**View должен иметь уникальный ID:**
-```xml
-<!--  С ID - состояние сохранится -->
-<com.example.ui.CounterView
-    android:id="@+id/counter"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+**Theory**: For complex data types (lists, objects, enums) proper serialization must be implemented. Use writeTypedList/readTypedList for object lists, writeSerializable/readSerializable for Serializable objects.
 
-<!--  Без ID - состояние потеряется! -->
-<com.example.ui.CounterView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+```kotlin
+class ComplexView : View {
+
+    private var items = mutableListOf<Item>()
+    private var selectedItem: Item? = null
+    private var viewMode = ViewMode.LIST
+
+    override fun onSaveInstanceState(): Parcelable {
+        val superState = super.onSaveInstanceState()
+        return SavedState(superState).apply {
+            this.items = this@ComplexView.items
+            this.selectedItem = this@ComplexView.selectedItem
+            this.viewMode = this@ComplexView.viewMode.name
+        }
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        if (state is SavedState) {
+            super.onRestoreInstanceState(state.superState)
+            items = state.items
+            selectedItem = state.selectedItem
+            viewMode = ViewMode.valueOf(state.viewMode)
+            invalidate()
+        } else {
+            super.onRestoreInstanceState(state)
+        }
+    }
+
+    private class SavedState : BaseSavedState {
+        var items = mutableListOf<Item>()
+        var selectedItem: Item? = null
+        var viewMode = ""
+
+        constructor(superState: Parcelable?) : super(superState)
+
+        private constructor(parcel: Parcel) : super(parcel) {
+            parcel.readTypedList(items, Item.CREATOR)
+            selectedItem = parcel.readTypedObject(Item.CREATOR)
+            viewMode = parcel.readString() ?: ""
+        }
+
+        override fun writeToParcel(out: Parcel, flags: Int) {
+            super.writeToParcel(out, flags)
+            out.writeTypedList(items)
+            out.writeTypedObject(selectedItem, flags)
+            out.writeString(viewMode)
+        }
+
+        companion object CREATOR : Parcelable.Creator<SavedState> {
+            override fun createFromParcel(parcel: Parcel): SavedState {
+                return SavedState(parcel)
+            }
+
+            override fun newArray(size: Int): Array<SavedState?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
+
+    data class Item(val id: Int, val name: String) : Parcelable {
+        override fun writeToParcel(out: Parcel, flags: Int) {
+            out.writeInt(id)
+            out.writeString(name)
+        }
+
+        override fun describeContents(): Int = 0
+
+        companion object CREATOR : Parcelable.Creator<Item> {
+            override fun createFromParcel(parcel: Parcel): Item {
+                return Item(parcel.readInt(), parcel.readString() ?: "")
+            }
+
+            override fun newArray(size: Int): Array<Item?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
+
+    enum class ViewMode { LIST, GRID }
+}
 ```
 
-### Что сохранять
+### Handling Configuration Changes
 
- **Сохранять:**
-- Пользовательский ввод и выборы
-- Позиции прокрутки
-- Раскрытые/свёрнутые состояния
-- Состояние custom view (прогресс, цвета и т.д.)
+**Theory**: Configuration changes (configChanges) can be handled at Activity or View level. View can save state automatically, but for complex cases additional logic is needed.
 
- **НЕ сохранять:**
-- Временные состояния (индикаторы загрузки)
-- Большие наборы данных (использовать ViewModel)
-- Данные, доступные из других источников
+```kotlin
+class ConfigAwareView : View {
 
-### Checklist
+    private var isLandscape = false
+    private var savedScrollPosition = 0
 
--  Переопределить `onSaveInstanceState()`
--  Переопределить `onRestoreInstanceState()`
--  Вызвать `super.onSaveInstanceState()`
--  Обернуть super state в custom state
--  View должен иметь уникальный ID
--  Корректно реализовать Parcelable
--  Использовать `@Parcelize` для упрощения
--  Держать размер состояния малым (< 50KB)
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        val wasLandscape = isLandscape
+        isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+        if (wasLandscape != isLandscape) {
+            // Orientation changed - adapt UI
+            adaptToOrientation()
+        }
+    }
+
+    override fun onSaveInstanceState(): Parcelable {
+        val superState = super.onSaveInstanceState()
+        return SavedState(superState).apply {
+            this.isLandscape = this@ConfigAwareView.isLandscape
+            this.scrollPosition = this@ConfigAwareView.savedScrollPosition
+        }
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        if (state is SavedState) {
+            super.onRestoreInstanceState(state.superState)
+            isLandscape = state.isLandscape
+            savedScrollPosition = state.scrollPosition
+            restoreScrollPosition()
+        } else {
+            super.onRestoreInstanceState(state)
+        }
+    }
+
+    private fun adaptToOrientation() {
+        // Adapt UI to new orientation
+        requestLayout()
+    }
+
+    private fun restoreScrollPosition() {
+        // Restore scroll position
+    }
+
+    private class SavedState : BaseSavedState {
+        var isLandscape = false
+        var scrollPosition = 0
+
+        constructor(superState: Parcelable?) : super(superState)
+
+        private constructor(parcel: Parcel) : super(parcel) {
+            isLandscape = parcel.readByte() != 0.toByte()
+            scrollPosition = parcel.readInt()
+        }
+
+        override fun writeToParcel(out: Parcel, flags: Int) {
+            super.writeToParcel(out, flags)
+            out.writeByte(if (isLandscape) 1 else 0)
+            out.writeInt(scrollPosition)
+        }
+
+        companion object CREATOR : Parcelable.Creator<SavedState> {
+            override fun createFromParcel(parcel: Parcel): SavedState {
+                return SavedState(parcel)
+            }
+
+            override fun newArray(size: Int): Array<SavedState?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
+}
+```
+
+### Best Practices
+
+1. **Always call super.onSaveInstanceState()** - saves base View state
+2. **Use BaseSavedState** - proper implementation for View
+3. **Implement Parcelable.Creator** - mandatory for Parcelable
+4. **Handle null states** - check types in onRestoreInstanceState()
+5. **Save only necessary data** - don't save temporary data
+6. **Test on configuration changes** - screen rotation, language change
+7. **Use correct data types** - primitives, Parcelable, Serializable
+
+### Pitfalls
+
+- **Don't forget super calls** - can break base functionality
+- **Implement Parcelable correctly** - errors in CREATOR can cause crashes
+- **Don't save Context references** - can cause memory leaks
+- **Check types when restoring** - state can be null or different type
+- **Test edge cases** - rapid screen rotations, low memory
+
+---
+
+## Follow-ups
+
+- How to handle state saving in ViewGroups?
+- What are the performance implications of state saving?
+- How to implement custom Parcelable for complex objects?
+- When to use Serializable vs Parcelable?
+
+## References
+
+- [Activity Lifecycle Guide](https://developer.android.com/guide/components/activities/activity-lifecycle)
+- [Parcelable Documentation](https://developer.android.com/reference/android/os/Parcelable)
 
 ## Related Questions
 
-- [[q-workmanager-return-result--android--medium]]
-- [[q-play-app-signing--android--medium]]
-- [[q-fileprovider-secure-sharing--android--medium]]
+### Prerequisites (Easier)
+- [[q-custom-drawable-implementation--custom-views--medium]]
+
+### Related (Same Level)
+- [[q-custom-view-lifecycle--custom-views--medium]]
+- [[q-activity-lifecycle-methods--android--medium]]
+
+### Advanced (Harder)
+- [[q-android-performance-measurement-tools--android--medium]]
