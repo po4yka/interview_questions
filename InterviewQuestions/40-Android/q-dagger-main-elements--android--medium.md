@@ -1,469 +1,360 @@
 ---
-id: 20251012-1227120
-title: "Dagger Main Elements / Основные элементы Dagger"
+id: 20251020-200000
+title: Dagger Main Elements / Основные элементы Dagger
+aliases:
+  - Dagger Main Elements
+  - Основные элементы Dagger
 topic: android
+subtopics:
+  - dependency-injection
+  - architecture-patterns
+question_kind: android
 difficulty: medium
-status: draft
+original_language: en
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-how-vsync-and-recomposition-events-are-related--android--hard, q-android-manifest-file--android--easy, q-material3-motion-transitions--material-design--medium]
-created: 2025-10-15
-tags: [android/di-hilt, dagger, dependency-injection, di-hilt, platform/android, difficulty/medium]
+related:
+  - q-dagger-inject-annotation--android--easy
+  - q-dagger-field-injection--android--medium
+  - q-dagger-framework-overview--android--hard
+created: 2025-10-20
+updated: 2025-10-20
+tags:
+  - android/dependency-injection
+  - android/architecture-patterns
+  - dagger
+  - hilt
+  - dependency-injection
+  - components
+  - modules
+  - difficulty/medium
+source: https://dagger.dev/api/latest/dagger/Component.html
+source_note: Dagger Component API documentation
 ---
-# Из каких основных элементов состоит Dagger?
+# Вопрос (RU)
+> Из каких основных элементов состоит Dagger?
 
-**English**: What are the main elements of Dagger?
+# Question (EN)
+> What are the main elements of Dagger?
 
-## Answer (EN)
-Dagger is built around several core elements that work together to provide dependency injection. The main components are:
+## Ответ (RU)
+
+Dagger построен вокруг нескольких ключевых элементов, которые работают вместе для обеспечения внедрения зависимостей. Основные компоненты образуют архитектуру DI системы.
+
+### Теория: Архитектура Dagger
+
+**Основные элементы:**
+- **Component** - связывает модули и цели инъекции
+- **Module** - предоставляет зависимости через провайдеры
+- **@Inject** - маркирует места для внедрения зависимостей
+- **@Provides** - создает зависимости в модулях
+
+**Принципы работы:**
+- Компиляционная генерация кода
+- Статическая типизация зависимостей
+- Автоматическое разрешение графа зависимостей
+- Проверка на этапе компиляции
 
 ### 1. Component (@Component)
 
-**Component** is an interface that connects modules and injection targets. It defines:
-- Which dependencies can be provided
-- Which classes can receive injections
-- How to access specific dependencies
-
-**Example:**
+**Component** - интерфейс, связывающий модули и цели инъекции:
 
 ```kotlin
 @Component(modules = [NetworkModule::class, DatabaseModule::class])
 interface AppComponent {
-    // Provision methods - expose dependencies
+    // Методы предоставления - экспорт зависимостей
     fun provideRepository(): UserRepository
 
-    // Injection methods - inject dependencies into targets
+    // Методы инъекции - внедрение в цели
     fun inject(activity: MainActivity)
     fun inject(fragment: ProfileFragment)
-
-    @Component.Builder
-    interface Builder {
-        @BindsInstance
-        fun application(app: Application): Builder
-        fun build(): AppComponent
-    }
 }
 ```
 
-**Usage:**
-
+**Использование:**
 ```kotlin
 class MyApplication : Application() {
-    lateinit var appComponent: AppComponent
-
-    override fun onCreate() {
-        super.onCreate()
-        appComponent = DaggerAppComponent.builder()
-            .application(this)
-            .build()
-    }
-}
-
-class MainActivity : AppCompatActivity() {
-    @Inject lateinit var repository: UserRepository
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (application as MyApplication).appComponent.inject(this)
-        // repository is now injected
-    }
+    val appComponent = DaggerAppComponent.builder().build()
 }
 ```
 
 ### 2. Module (@Module)
 
-**Module** is a class that provides dependencies. It contains methods annotated with `@Provides` or `@Binds` that tell Dagger how to create specific objects.
-
-**Example with @Provides:**
+**Module** - класс, предоставляющий зависимости:
 
 ```kotlin
 @Module
-class NetworkModule {
-
+object NetworkModule {
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideApiService(): ApiService {
         return Retrofit.Builder()
             .baseUrl("https://api.example.com/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
+            .create(ApiService::class.java)
     }
 }
 ```
 
-**Example with @Binds (for interfaces):**
+**Особенности модулей:**
+- Содержат `@Provides` методы
+- Могут быть `object` или `class`
+- Поддерживают зависимости между провайдерами
+
+### 3. @Inject Annotation
+
+**@Inject** маркирует места для инъекции:
 
 ```kotlin
-@Module
-abstract class RepositoryModule {
-
-    @Binds
-    @Singleton
-    abstract fun bindUserRepository(
-        impl: UserRepositoryImpl
-    ): UserRepository
-
-    @Binds
-    abstract fun bindDataSource(
-        impl: RemoteDataSource
-    ): DataSource
-}
-```
-
-### 3. Scope (@Scope)
-
-**Scope** annotations manage the lifetime of dependencies. They ensure that within a scope, the same instance is reused.
-
-**Common scopes:**
-
-```kotlin
-// Built-in scope
-@Singleton  // One instance for entire app
-
-// Custom scopes
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class ActivityScope
-
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class FragmentScope
-
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class PerUser
-```
-
-**Usage:**
-
-```kotlin
-@Module
-class AppModule {
-    @Provides
-    @Singleton  // Single instance app-wide
-    fun provideDatabase(app: Application): AppDatabase {
-        return Room.databaseBuilder(
-            app,
-            AppDatabase::class.java,
-            "app-database"
-        ).build()
-    }
-}
-
-@Component(modules = [ActivityModule::class])
-@ActivityScope
-interface ActivityComponent {
-    fun inject(activity: MainActivity)
-}
-
-@Module
-class ActivityModule {
-    @Provides
-    @ActivityScope  // Single instance per activity
-    fun provideViewModel(repository: Repository): MainViewModel {
-        return MainViewModel(repository)
-    }
-}
-```
-
-### 4. @Inject
-
-**@Inject** marks where dependencies should be injected. It can be used on:
-- Constructor (preferred)
-- Field
-- Method
-
-**Constructor injection (recommended):**
-
-```kotlin
+// Constructor injection
 class UserRepository @Inject constructor(
     private val apiService: ApiService,
-    private val database: UserDao,
-    private val preferences: SharedPreferences
-) {
-    suspend fun getUser(id: String): User {
-        return apiService.getUser(id)
-    }
-}
-```
-
-**Field injection:**
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    @Inject lateinit var repository: UserRepository
-    @Inject lateinit var viewModelFactory: ViewModelFactory
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (application as MyApplication).appComponent.inject(this)
-    }
-}
-```
-
-### 5. Qualifier (@Qualifier)
-
-**Qualifier** annotations distinguish between different instances of the same type.
-
-**Example:**
-
-```kotlin
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class AuthInterceptor
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class LoggingInterceptor
-
-@Module
-class NetworkModule {
-    @Provides
-    @AuthInterceptor
-    fun provideAuthInterceptor(tokenManager: TokenManager): Interceptor {
-        return Interceptor { chain ->
-            val request = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer ${tokenManager.getToken()}")
-                .build()
-            chain.proceed(request)
-        }
-    }
-
-    @Provides
-    @LoggingInterceptor
-    fun provideLoggingInterceptor(): Interceptor {
-        return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-    }
-
-    @Provides
-    fun provideOkHttpClient(
-        @AuthInterceptor authInterceptor: Interceptor,
-        @LoggingInterceptor loggingInterceptor: Interceptor
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
-            .addInterceptor(loggingInterceptor)
-            .build()
-    }
-}
-```
-
-**Using @Named (built-in qualifier):**
-
-```kotlin
-@Module
-class AppModule {
-    @Provides
-    @Named("app_name")
-    fun provideAppName(): String = "My App"
-
-    @Provides
-    @Named("api_key")
-    fun provideApiKey(): String = BuildConfig.API_KEY
-}
-
-class SomeClass @Inject constructor(
-    @Named("app_name") private val appName: String,
-    @Named("api_key") private val apiKey: String
+    private val database: UserDatabase
 )
+
+// Field injection
+class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var repository: UserRepository
+}
 ```
 
-### Complete Example
+### 4. @Provides Methods
+
+**@Provides** создает зависимости в модулях:
 
 ```kotlin
-// 1. Define scopes
-@Singleton
-@Component(modules = [AppModule::class, NetworkModule::class])
+@Module
+object DatabaseModule {
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
+            .build()
+    }
+}
+```
+
+### Взаимодействие элементов
+
+**Поток работы:**
+1. Dagger анализирует `@Component` и связанные модули
+2. Строит граф зависимостей на основе `@Inject` и `@Provides`
+3. Генерирует код для создания и внедрения зависимостей
+4. Проверяет корректность на этапе компиляции
+
+**Пример полной интеграции:**
+```kotlin
+// Module
+@Module
+object AppModule {
+    @Provides
+    @Singleton
+    fun provideUserRepository(api: ApiService): UserRepository {
+        return UserRepositoryImpl(api)
+    }
+}
+
+// Component
+@Component(modules = [AppModule::class])
 interface AppComponent {
-    fun activityComponent(): ActivityComponent.Factory
-}
-
-@Module
-class AppModule(private val app: Application) {
-    @Provides
-    @Singleton
-    fun provideApplication(): Application = app
-
-    @Provides
-    @Singleton
-    fun provideSharedPreferences(app: Application): SharedPreferences {
-        return app.getSharedPreferences("prefs", Context.MODE_PRIVATE)
-    }
-}
-
-@Module
-class NetworkModule {
-    @Provides
-    @Singleton
-    fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://api.example.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
-    }
-}
-
-// 2. Activity scope component
-@ActivityScope
-@Subcomponent(modules = [ActivityModule::class])
-interface ActivityComponent {
     fun inject(activity: MainActivity)
-
-    @Subcomponent.Factory
-    interface Factory {
-        fun create(): ActivityComponent
-    }
 }
 
-@Module
-class ActivityModule {
-    @Provides
-    @ActivityScope
-    fun provideAdapter(): UserAdapter {
-        return UserAdapter()
-    }
-}
-
-// 3. Application
-class MyApplication : Application() {
-    lateinit var appComponent: AppComponent
-
-    override fun onCreate() {
-        super.onCreate()
-        appComponent = DaggerAppComponent.builder()
-            .appModule(AppModule(this))
-            .build()
-    }
-}
-
-// 4. Usage
+// Usage
 class MainActivity : AppCompatActivity() {
-    @Inject lateinit var apiService: ApiService
-    @Inject lateinit var adapter: UserAdapter
+    @Inject
+    lateinit var repository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        (application as MyApplication)
-            .appComponent
-            .activityComponent()
-            .create()
-            .inject(this)
-
-        // Dependencies are now injected
+        (application as MyApp).appComponent.inject(this)
     }
 }
 ```
 
-### Summary
+### Hilt упрощение
 
-| Element | Purpose | Example |
-|---------|---------|---------|
-| **@Component** | Connects modules and injection targets | `@Component(modules = [AppModule::class])` |
-| **@Module** | Provides dependencies | `@Module class NetworkModule` |
-| **@Provides** | Method that creates dependency | `@Provides fun provideRetrofit()` |
-| **@Binds** | Binds interface to implementation | `@Binds abstract fun bindRepo(impl: RepoImpl): Repo` |
-| **@Inject** | Marks injection points | `@Inject lateinit var repo: Repository` |
-| **@Scope** | Controls instance lifetime | `@Singleton`, `@ActivityScope` |
-| **@Qualifier** | Distinguishes same-type dependencies | `@Named("api_key")` |
+Hilt автоматизирует создание компонентов:
 
-**Key concepts:**
-- **Component** = bridge between modules and injection targets
-- **Module** = provides dependencies
-- **Scope** = controls lifetime
-- **@Inject** = marks what to inject
-- **Qualifier** = differentiates same types
+```kotlin
+@HiltAndroidApp
+class MyApplication : Application()
 
-## Ответ (RU)
-Dagger состоит из нескольких основных элементов:
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var repository: UserRepository
+}
+```
+
+## Answer (EN)
+
+Dagger is built around several key elements that work together to provide dependency injection. The main components form the DI system architecture.
+
+### Theory: Dagger Architecture
+
+**Core Elements:**
+- **Component** - connects modules and injection targets
+- **Module** - provides dependencies through providers
+- **@Inject** - marks places for dependency injection
+- **@Provides** - creates dependencies in modules
+
+**Working Principles:**
+- Compile-time code generation
+- Static typing of dependencies
+- Automatic dependency graph resolution
+- Compile-time validation
 
 ### 1. Component (@Component)
 
-**Component** - интерфейс, связывающий модули и цели инъекции. Определяет, какие зависимости могут быть предоставлены.
+**Component** - interface connecting modules and injection targets:
 
 ```kotlin
-@Component(modules = [NetworkModule::class])
+@Component(modules = [NetworkModule::class, DatabaseModule::class])
 interface AppComponent {
+    // Provision methods - export dependencies
+    fun provideRepository(): UserRepository
+
+    // Injection methods - inject into targets
     fun inject(activity: MainActivity)
+    fun inject(fragment: ProfileFragment)
+}
+```
+
+**Usage:**
+```kotlin
+class MyApplication : Application() {
+    val appComponent = DaggerAppComponent.builder().build()
 }
 ```
 
 ### 2. Module (@Module)
 
-**Module** - класс, предоставляющий зависимости через методы с аннотацией `@Provides` или `@Binds`.
+**Module** - class providing dependencies:
 
 ```kotlin
 @Module
-class NetworkModule {
+object NetworkModule {
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    fun provideApiService(): ApiService {
         return Retrofit.Builder()
             .baseUrl("https://api.example.com/")
+            .build()
+            .create(ApiService::class.java)
+    }
+}
+```
+
+**Module features:**
+- Contains `@Provides` methods
+- Can be `object` or `class`
+- Supports dependencies between providers
+
+### 3. @Inject Annotation
+
+**@Inject** marks places for injection:
+
+```kotlin
+// Constructor injection
+class UserRepository @Inject constructor(
+    private val apiService: ApiService,
+    private val database: UserDatabase
+)
+
+// Field injection
+class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var repository: UserRepository
+}
+```
+
+### 4. @Provides Methods
+
+**@Provides** creates dependencies in modules:
+
+```kotlin
+@Module
+object DatabaseModule {
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
             .build()
     }
 }
 ```
 
-### 3. Scope (@Scope)
+### Element Interaction
 
-**Scope** - аннотации для управления временем жизни объектов.
+**Workflow:**
+1. Dagger analyzes `@Component` and related modules
+2. Builds dependency graph based on `@Inject` and `@Provides`
+3. Generates code for creating and injecting dependencies
+4. Validates correctness at compile time
 
+**Complete integration example:**
 ```kotlin
-@Singleton  // Один экземпляр на всё приложение
-@ActivityScope  // Один экземпляр на Activity
+// Module
+@Module
+object AppModule {
+    @Provides
+    @Singleton
+    fun provideUserRepository(api: ApiService): UserRepository {
+        return UserRepositoryImpl(api)
+    }
+}
+
+// Component
+@Component(modules = [AppModule::class])
+interface AppComponent {
+    fun inject(activity: MainActivity)
+}
+
+// Usage
+class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var repository: UserRepository
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (application as MyApp).appComponent.inject(this)
+    }
+}
 ```
 
-### 4. @Inject
+### Hilt Simplification
 
-Отмечает места, куда нужно внедрить зависимости.
-
-```kotlin
-class UserRepository @Inject constructor(
-    private val apiService: ApiService
-)
-```
-
-### 5. Qualifier (@Qualifier)
-
-Различает разные экземпляры одного типа.
+Hilt automates component creation:
 
 ```kotlin
-@Named("auth_interceptor")
-@Provides
-fun provideAuthInterceptor(): Interceptor
+@HiltAndroidApp
+class MyApplication : Application()
+
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var repository: UserRepository
+}
 ```
 
-**Резюме:** Component соединяет модули и цели инъекции, Module предоставляет зависимости, Scope контролирует время жизни, @Inject отмечает точки инъекции, Qualifier различает одинаковые типы.
+## Follow-ups
+
+- How do Dagger components resolve circular dependencies?
+- What's the difference between @Provides and @Binds methods?
+- How does Hilt automatically create components?
 
 ## Related Questions
 
-- [[q-how-vsync-and-recomposition-events-are-related--android--hard]]
-- [[q-android-manifest-file--android--easy]]
-- [[q-material3-motion-transitions--material-design--medium]]
+### Prerequisites (Easier)
+- [[q-dagger-inject-annotation--android--easy]]
+
+### Related (Same Level)
+- [[q-dagger-field-injection--android--medium]]
+
+### Advanced (Harder)
+- [[q-dagger-framework-overview--android--hard]]
