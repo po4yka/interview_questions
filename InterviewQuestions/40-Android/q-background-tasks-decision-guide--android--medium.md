@@ -8,7 +8,7 @@ question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-async-operations-android--android--medium, q-workmanager-basics--android--medium, q-foreground-services--android--medium]
 created: 2025-10-05

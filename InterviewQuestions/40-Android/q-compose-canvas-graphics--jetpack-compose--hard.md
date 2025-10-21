@@ -6,7 +6,7 @@ topic: android
 subtopics: [ui-compose, graphics]
 question_kind: android
 difficulty: hard
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-canvas-drawing-optimization--custom-views--hard, q-android-performance-measurement-tools--android--medium, q-animated-visibility-vs-content--jetpack-compose--medium]
 created: 2025-10-11

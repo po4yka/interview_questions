@@ -6,7 +6,7 @@ topic: android
 subtopics: [ui-compose, performance]
 question_kind: android
 difficulty: medium
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-compose-gesture-detection--jetpack-compose--medium, q-compose-compiler-plugin--jetpack-compose--hard, q-compose-custom-layout--jetpack-compose--hard]
 created: 2025-10-15

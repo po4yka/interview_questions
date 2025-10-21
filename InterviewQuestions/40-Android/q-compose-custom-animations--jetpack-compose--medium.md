@@ -6,7 +6,7 @@ topic: android
 subtopics: [ui-compose, animations]
 question_kind: android
 difficulty: medium
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-animated-visibility-vs-content--jetpack-compose--medium, q-compose-compiler-plugin--jetpack-compose--hard, q-android-performance-measurement-tools--android--medium]
 created: 2025-10-13

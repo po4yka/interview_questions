@@ -8,7 +8,7 @@ question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-viewmodel-pattern--android--easy, q-fragment-lifecycle--android--medium, q-lifecycle-aware-components--android--medium]
 created: 2025-10-15

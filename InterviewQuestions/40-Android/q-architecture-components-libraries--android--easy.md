@@ -8,7 +8,7 @@ question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-android-architectural-patterns--android--medium, q-android-jetpack-overview--android--easy, q-android-manifest-file--android--easy]
 created: 2025-10-15

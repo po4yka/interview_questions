@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 source: https://developer.android.com/jetpack/compose/performance
 source_note: Official Compose performance docs
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-compose-slot-table-recomposition--jetpack-compose--hard, q-compose-performance-optimization--android--hard]
 created: 2025-10-15

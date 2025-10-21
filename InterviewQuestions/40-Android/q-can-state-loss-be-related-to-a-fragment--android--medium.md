@@ -6,7 +6,7 @@ topic: android
 subtopics: [fragment, lifecycle]
 question_kind: android
 difficulty: medium
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-activity-lifecycle-methods--android--medium, q-android-app-components--android--easy, q-android-manifest-file--android--easy]
 created: 2025-10-15

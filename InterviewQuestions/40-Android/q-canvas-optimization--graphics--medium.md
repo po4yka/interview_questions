@@ -6,7 +6,7 @@ topic: android
 subtopics: [custom-views, graphics]
 question_kind: android
 difficulty: medium
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-android-performance-measurement-tools--android--medium, q-canvas-drawing-optimization--custom-views--hard, q-android-app-lag-analysis--android--medium]
 created: 2025-10-13

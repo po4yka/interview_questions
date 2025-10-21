@@ -14,7 +14,7 @@ original_language: en
 language_tags: [en, ru]
 
 # Workflow & relations
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-compose-compiler-plugin--jetpack-compose--hard, q-compose-custom-layout--jetpack-compose--hard, q-compose-lazy-layout-optimization--jetpack-compose--hard]
 

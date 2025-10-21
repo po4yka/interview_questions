@@ -8,7 +8,7 @@ question_kind: android
 difficulty: hard
 original_language: ru
 language_tags: [ru, en]
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-compositionlocal-advanced--jetpack-compose--medium, q-compose-remember-derived-state--jetpack-compose--medium, q-compose-performance-optimization--android--hard]
 created: 2025-10-15

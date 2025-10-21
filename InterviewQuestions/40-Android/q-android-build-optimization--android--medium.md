@@ -8,7 +8,7 @@ question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-gradle-basics--android--easy, q-android-app-bundles--android--easy, q-kotlin-compilation--kotlin--medium]
 created: 2025-10-15

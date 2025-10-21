@@ -8,7 +8,7 @@ question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-android-build-optimization--android--medium, q-android-modularization--android--medium, q-android-project-parts--android--easy]
 created: 2025-10-06

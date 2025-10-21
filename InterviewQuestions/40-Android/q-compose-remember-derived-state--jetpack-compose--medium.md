@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 source: https://developer.android.com/develop/ui/compose/state
 source_note: Official Compose state docs
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-remember-vs-remembersaveable-compose--android--medium, q-compose-performance-optimization--android--hard, q-compose-compiler-plugin--jetpack-compose--hard]
 created: 2025-10-15

@@ -6,7 +6,7 @@ topic: android
 subtopics: [architecture-mvp, lifecycle, coroutines]
 question_kind: android
 difficulty: medium
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-activity-lifecycle-methods--android--medium, q-android-async-operations-android--android--medium, q-android-testing-strategies--android--medium]
 created: 2025-10-15

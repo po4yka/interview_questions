@@ -6,7 +6,7 @@ topic: security
 subtopics: [networking, tls]
 question_kind: android
 difficulty: medium
-status: draft
+status: reviewed
 moc: moc-security
 related: [q-app-security-best-practices--security--medium, q-android-keystore-system--security--medium, q-android-security-practices-checklist--android--medium]
 created: 2025-10-15

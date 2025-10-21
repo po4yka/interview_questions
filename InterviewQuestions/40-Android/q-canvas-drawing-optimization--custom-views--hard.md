@@ -6,7 +6,7 @@ topic: android
 subtopics: [custom-views, ui-performance]
 question_kind: android
 difficulty: hard
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-android-performance-measurement-tools--android--medium, q-android-runtime-art--android--medium, q-android-app-lag-analysis--android--medium]
 created: 2025-10-15

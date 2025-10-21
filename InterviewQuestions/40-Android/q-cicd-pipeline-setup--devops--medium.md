@@ -6,7 +6,7 @@ topic: android
 subtopics: [gradle, pipeline]
 question_kind: android
 difficulty: medium
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-cicd-pipeline-android--android--medium, q-cicd-automated-testing--devops--medium, q-cicd-deployment-automation--devops--medium]
 created: 2025-10-11

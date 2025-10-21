@@ -8,7 +8,7 @@ question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-activity-lifecycle-methods--android--medium, q-intent-system--android--medium, q-navigation-component--android--medium]
 created: 2025-10-15

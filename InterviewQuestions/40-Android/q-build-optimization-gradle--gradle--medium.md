@@ -13,7 +13,7 @@ language_tags: [en, ru]
 source: Original
 source_note: Gradle build performance best practices
 # Workflow & relations
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-android-build-optimization--android--medium, q-baseline-profiles-optimization--performance--medium, q-android-modularization--android--medium]
 # Timestamps

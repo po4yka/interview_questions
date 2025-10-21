@@ -8,7 +8,7 @@ question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-android-performance-measurement-tools--android--medium, q-android-architectural-patterns--android--medium, q-android-security-best-practices--android--medium]
 created: 2025-10-15

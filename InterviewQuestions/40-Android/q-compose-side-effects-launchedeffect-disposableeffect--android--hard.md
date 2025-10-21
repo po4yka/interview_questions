@@ -15,7 +15,7 @@ language_tags:
   - ru
 source: https://developer.android.com/jetpack/compose/side-effects
 source_note: Official Compose side‑effects docs
-status: draft
+status: reviewed
 moc: moc-android
 related:
   - q-compose-side-effects-advanced--jetpack-compose--hard

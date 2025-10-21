@@ -10,6 +10,7 @@ original_language: en
 language_tags: [en, ru]
 source: https://developer.android.com/jetpack/compose/performance
 source_note: Official Compose performance guide
+status: reviewed
 related: [q-compose-compiler-plugin--jetpack-compose--hard, q-compose-lazy-layout-optimization--jetpack-compose--hard, q-android-performance-measurement-tools--android--medium]
 created: 2025-10-20
 updated: 2025-10-20

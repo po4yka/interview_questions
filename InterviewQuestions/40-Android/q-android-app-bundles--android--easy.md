@@ -8,7 +8,7 @@ question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-play-store-publishing--android--medium, q-gradle-basics--android--easy, q-play-feature-delivery--android--medium]
 created: 2025-10-05

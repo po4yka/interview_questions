@@ -6,7 +6,7 @@ topic: android
 subtopics: [gradle, modularization]
 question_kind: android
 difficulty: medium
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-android-modularization--android--medium, q-build-optimization-gradle--gradle--medium, q-cicd-automated-testing--devops--medium]
 created: 2025-10-11

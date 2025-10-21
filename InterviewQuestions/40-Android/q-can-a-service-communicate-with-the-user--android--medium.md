@@ -6,7 +6,7 @@ topic: android
 subtopics: [service, notifications]
 question_kind: android
 difficulty: medium
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-android-service-types--android--easy, q-android-services-purpose--android--easy, q-background-vs-foreground-service--android--medium]
 created: 2025-10-15

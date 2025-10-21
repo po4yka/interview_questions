@@ -8,7 +8,7 @@ question_kind: android
 difficulty: easy
 original_language: ru
 language_tags: [ru, en]
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-android-manifest-file--android--easy, q-android-app-components--android--easy, q-android-service-types--android--easy]
 created: 2025-10-15

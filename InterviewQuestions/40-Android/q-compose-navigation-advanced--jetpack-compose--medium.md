@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 source: https://developer.android.com/jetpack/compose/navigation
 source_note: Official Compose Navigation docs
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-compose-navigation-advanced--android--medium, q-animated-visibility-vs-content--jetpack-compose--medium, q-compose-gesture-detection--jetpack-compose--medium]
 created: 2025-10-15

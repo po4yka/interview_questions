@@ -6,7 +6,7 @@ topic: android
 subtopics: [room, datastore, networking]
 question_kind: android
 difficulty: medium
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-android-storage-types--android--medium, q-android-performance-measurement-tools--android--medium, q-database-optimization-android--android--medium]
 created: 2025-10-13

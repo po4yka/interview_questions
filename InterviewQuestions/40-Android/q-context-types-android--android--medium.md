@@ -8,7 +8,7 @@ question_kind: android
 difficulty: medium
 original_language: ru
 language_tags: [ru, en]
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-activity-lifecycle-methods--android--medium, q-memory-leaks-android--android--medium, q-usecase-pattern-android--android--medium]
 created: 2025-10-21

@@ -13,7 +13,7 @@ language_tags: [en, ru]
 source: https://developer.android.com/training/articles/security-config#CleartextTrafficPermitted
 source_note: Android docs
 # Workflow & relations
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-certificate-pinning--security--medium, q-android-security-practices-checklist--android--medium, q-android-keystore-system--security--medium]
 # Timestamps

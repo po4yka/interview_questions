@@ -6,7 +6,7 @@ topic: android
 subtopics: [architecture-clean, modularization]
 question_kind: android
 difficulty: hard
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-android-architectural-patterns--android--medium, q-android-modularization--android--medium, q-architecture-components-libraries--android--easy]
 created: 2025-10-11

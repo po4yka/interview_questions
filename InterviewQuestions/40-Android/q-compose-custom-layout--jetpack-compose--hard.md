@@ -6,7 +6,7 @@ topic: android
 subtopics: [ui-compose, layout]
 question_kind: android
 difficulty: hard
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-compose-compiler-plugin--jetpack-compose--hard, q-compose-canvas-graphics--jetpack-compose--hard, q-android-performance-measurement-tools--android--medium]
 created: 2025-10-11

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 source: https://developer.android.com/jetpack/compose/mental-model
 source_note: Official Compose mental model
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-compose-compiler-plugin--jetpack-compose--hard, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--jetpack-compose--hard]
 created: 2025-10-15

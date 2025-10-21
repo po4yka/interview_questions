@@ -6,7 +6,7 @@ topic: android
 subtopics: [gradle, testing-unit, testing-instrumented]
 question_kind: android
 difficulty: medium
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-android-testing-strategies--android--medium, q-android-lint-tool--android--medium, q-build-optimization-gradle--gradle--medium]
 created: 2025-10-15

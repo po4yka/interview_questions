@@ -10,6 +10,7 @@ original_language: en
 language_tags: [en, ru]
 source: https://developer.android.com/jetpack/compose/testing
 source_note: Official Compose testing documentation
+status: reviewed
 related: [q-compose-testing--android--medium, q-compose-semantics--android--medium, q-compose-performance-optimization--android--hard]
 created: 2025-10-20
 updated: 2025-10-20

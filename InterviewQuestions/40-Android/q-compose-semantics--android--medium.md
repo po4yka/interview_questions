@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 source: https://developer.android.com/jetpack/compose/semantics
 source_note: Official Compose Semantics docs
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-compose-testing--android--medium, q-compose-performance-optimization--android--hard, q-compose-modifier-system--android--medium]
 created: 2025-10-06

@@ -8,7 +8,7 @@ question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-android-app-components--android--easy, q-service-types--android--medium, q-fragment-lifecycle--android--medium]
 created: 2025-10-15

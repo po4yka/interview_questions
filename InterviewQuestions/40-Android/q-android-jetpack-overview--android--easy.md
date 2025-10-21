@@ -8,7 +8,7 @@ question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
-status: draft
+status: reviewed
 created: 2025-10-13
 updated: 2025-10-15
 tags: [android/architecture-components, android/jetpack-compose, jetpack, androidx, libraries, difficulty/easy]

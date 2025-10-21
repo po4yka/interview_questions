@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 source: https://developer.android.com/jetpack/compose/side-effects
 source_note: Official Compose side‑effects docs
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-compose-performance-optimization--android--hard, q-compose-compiler-plugin--jetpack-compose--hard, q-compose-remember-derived-state--jetpack-compose--medium]
 created: 2025-10-15

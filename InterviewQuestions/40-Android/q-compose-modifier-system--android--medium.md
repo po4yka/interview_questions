@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 source: https://developer.android.com/jetpack/compose/modifiers
 source_note: Official Compose modifier docs
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-animated-visibility-vs-content--jetpack-compose--medium, q-compose-gesture-detection--jetpack-compose--medium, q-compose-compiler-plugin--jetpack-compose--hard]
 created: 2025-10-06

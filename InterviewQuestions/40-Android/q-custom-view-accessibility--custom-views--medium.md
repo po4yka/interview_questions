@@ -8,7 +8,7 @@ question_kind: android
 difficulty: medium
 original_language: ru
 language_tags: [ru, en]
-status: draft
+status: reviewed
 moc: moc-android
 related: [q-custom-view-implementation--android--medium, q-compose-semantics--android--medium, q-android-accessibility-testing--android--medium]
 created: 2025-10-21
