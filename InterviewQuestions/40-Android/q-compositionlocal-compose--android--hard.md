@@ -1,267 +1,198 @@
 ---
-id: 20251012-1227112
-title: "Compositionlocal Compose / CompositionLocal в Compose"
+id: 20251021-120500
+title: "CompositionLocal in Compose / CompositionLocal в Compose"
+aliases: [CompositionLocal in Compose, CompositionLocal в Compose]
 topic: android
+subtopics: [ui-compose, ui-state]
+question_kind: android
 difficulty: hard
+original_language: ru
+language_tags: [ru, en]
 status: draft
 moc: moc-android
-related: [q-retrofit-modify-all-requests--android--hard, q-kmm-sqldelight--multiplatform--medium, q-dagger-build-time-optimization--android--medium]
+related: [q-compositionlocal-advanced--jetpack-compose--medium, q-compose-remember-derived-state--jetpack-compose--medium, q-compose-performance-optimization--android--hard]
 created: 2025-10-15
-tags: [compose, compositionlocal, state-management, implicit-data, difficulty/hard, android/compose, android/ui-state]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20CompositionLocal.md
-subtopics:
-  - ui-compose
-  - ui-state
+updated: 2025-10-21
+tags: [android/ui-compose, android/ui-state, compose, compositionlocal, ui-context, best-practices, difficulty/hard]
+source: https://developer.android.com/jetpack/compose/compositionlocal
+source_note: Official docs on CompositionLocal
 ---
-# CompositionLocal in Jetpack Compose / CompositionLocal в Jetpack Compose
+# Вопрос (RU)
+> Что такое CompositionLocal в Jetpack Compose, когда использовать его вместо параметров, и чем отличаются `compositionLocalOf` и `staticCompositionLocalOf` с точки зрения рекомпозиции и производительности?
 
-**English**: What do you know about CompositionLocal?
+# Question (EN)
+> What is CompositionLocal in Jetpack Compose, when should you use it instead of parameters, and what are the differences between `compositionLocalOf` and `staticCompositionLocalOf` in terms of recomposition and performance?
 
-**Russian**: Что вы знаете о CompositionLocal?
-
-## Answer (EN)
-Usually in Compose, data flows down through the UI tree as parameters to each composable function. This makes a composable's dependencies explicit. This can however be cumbersome for data that is very frequently and widely used such as colors or type styles. See the following example:
-
-```kotlin
-@Composable
-fun MyApp() {
-    // Theme information tends to be defined near the root of the application
-    val colors = colors()
-}
-
-// Some composable deep in the hierarchy
-@Composable
-fun SomeTextLabel(labelText: String) {
-    Text(
-        text = labelText,
-        color = colors.onPrimary // ← need to access colors here
-    )
-}
-```
-
-To support not needing to pass the colors as an explicit parameter dependency to most composables, **Compose offers** `CompositionLocal` **which allows you to create tree-scoped named objects that can be used as an implicit way to have data flow through the UI tree**.
-
-`CompositionLocal` elements are usually provided with a value in a certain node of the UI tree. That value can be used by its composable descendants without declaring the `CompositionLocal` as a parameter in the composable function.
-
-## Example of usage
-
-```kotlin
-data class UserPreferences(val isDarkModeEnabled: Boolean, val fontSize: Float)
-
-// Define a dynamic Composition Local with default preferences
-val LocalUserPreferences = compositionLocalOf {
-    UserPreferences(isDarkModeEnabled = false, fontSize = 14f)
-}
-
-@Composable
-fun PreferencesProvider(content: @Composable () -> Unit) {
-    var isDarkMode by remember { mutableStateOf(false) }
-    val preferences = UserPreferences(isDarkMode, 16f)
-    CompositionLocalProvider(LocalUserPreferences provides preferences) {
-        content()
-    }
-}
-
-@Composable
-fun SettingsScreen() {
-    val preferences = LocalUserPreferences.current
-    Text("Dark Mode: ${if (preferences.isDarkModeEnabled) "Enabled" else "Disabled"}")
-}
-```
-
-### Explanation
-
-- **Definition**: The `UserPreferences` data class holds dynamic user settings;
-- **Provision**: The `PreferencesProvider` dynamically updates and provides the preferences based on the user's actions;
-- **Consumption**: The `SettingsScreen` consumes and displays the preferences, updating reactively when changes occur.
-
-## Key Concepts and Benefits of CompositionLocal
-
-### Implicit Sharing
-
-`CompositionLocal` enables data to be shared across composables without explicitly passing it as a parameter. This allows easier management of globally relevant data, such as theme styles, user settings, or app-wide configurations.
-
-### Localized Context
-
-`CompositionLocal` allows for different parts of the UI to have their own context, which can vary depending on the scope in which the `CompositionLocal` is provided. This is useful for customizing different sections of the UI while maintaining overall consistency.
-
-### Reactivity
-
-For dynamic values, `CompositionLocal` can trigger recompositions when its value changes. This means that when a value is updated, only the parts of the UI that depend on this value will be recomposed, keeping the UI efficient and responsive.
-
-### Decoupled Components
-
-`CompositionLocal` decouples UI components from their direct dependencies. This enhances the modularity and reusability of composables, as they don't need to be aware of the specific data provided higher in the composition tree. This makes testing and reusing components easier.
-
-## Why Are Composition Locals Important?
-
-### Reduced Boilerplate
-
-Provide data once at a higher level, consume it wherever necessary.
-
-### Better Encapsulation
-
-Intermediate composables don't need to manage data they don't directly use.
-
-### Easier Testing
-
-You can override Composition Locals in tests without changing public APIs.
-
-### Scoped Values
-
-Data is only available to composables within the specific composition scope.
-
-## Types of CompositionLocal Providers
-
-Jetpack Compose offers two APIs to create a `CompositionLocal`, each suited to different scenarios:
-
-### compositionLocalOf
-
-**Fine-grained Control**: This API allows fine control over recompositions. When the value changes, only the parts of the UI that read this value are recomposed. This makes it ideal for frequently changing data like dynamic themes or user preferences.
-
-**Use Case**: Situations where data changes regularly, such as dynamic UI themes, localization settings, or user-specific configurations.
-
-```kotlin
-val LocalTheme = compositionLocalOf { LightTheme }
-```
-
-### staticCompositionLocalOf
-
-**Static Data Handling**: In contrast to `compositionLocalOf`, Compose does not track the places where `staticCompositionLocalOf` is read. When the value changes, the entire content block where the `CompositionLocal` is provided gets recomposed, instead of just the places where the `current` value is read in the Composition. It is best used for data that rarely changes.
-
-**Use Case**: Suitable for stable configurations like API endpoints, debug flags, or static UI themes that remain constant during the app lifecycle.
-
-```kotlin
-val LocalApiEndpoint = staticCompositionLocalOf { "https://api.example.com" }
-```
-
-If the value provided to the `CompositionLocal` is highly unlikely to change or will never change, use `staticCompositionLocalOf` to get performance benefits.
-
-## What Composition Locals Are (and Aren't)
-
-### Are For:
-
-- Design system tokens (themes, spacing, typography);
-- UI infrastructure (keyboard controller, focus management);
-- Cross-cutting UI concerns that follow the visual hierarchy;
-- Values that need different overrides at different levels of your UI tree.
-
-### Aren't For:
-
-- Business logic or application state;
-- Data that should be managed by state management solutions;
-- Values that affect application behavior;
-- Database connections, repositories, or other non-UI dependencies;
-- Avoiding proper dependency injection.
-
-Think of Composition Locals as part of your UI toolkit, not as a general dependency injection mechanism. They shine when dealing with UI-related values that naturally follow your component hierarchy, but shouldn't be used to bypass proper architecture patterns or hide important dependencies.
+---
 
 ## Ответ (RU)
-Обычно в Compose данные передаются вниз по дереву UI в качестве параметров каждой composable функции. Это делает зависимости composable явными. Однако это может быть неудобно для данных, которые используются очень часто и широко, таких как цвета или стили типографики.
 
-Чтобы не передавать эти данные в качестве явной зависимости параметра большинству composables, **Compose предлагает** `CompositionLocal`, **который позволяет создавать именованные объекты с областью видимости дерева, которые могут использоваться как неявный способ передачи данных через дерево UI**.
+### Назначение
+- Локальный «контекст» для поддерева: тема, локаль, плотность, хаптика, DI‑объекты UI‑уровня
+- Избавляет от «прокидывания» параметров через много уровней, когда зависимость действительно относится к окружению
+- Не замена параметрам: бизнес‑данные и состояние не прячьте в Local
 
-Элементы `CompositionLocal` обычно предоставляются со значением в определенном узле дерева UI. Это значение может использоваться его composable потомками без объявления `CompositionLocal` в качестве параметра в composable функции.
+### Параметры vs CompositionLocal
+- Параметры: локальная зависимость, часто меняется, важна явность API
+- Local: кросс‑каттинговая зависимость, редко меняется, относится к среде (theme, locale, hаптика, imageLoader)
 
-## Пример использования
+### dynamic vs static
+- `compositionLocalOf` (динамический)
+  - Трекинг чтений: рекомпозируются только реальные читатели `.current`
+  - Подходит для часто меняющихся значений (позиция скролла, runtime‑флаги)
+  - Небольшой накладной расход на чтение
+- `staticCompositionLocalOf` (статический)
+  - Без трекинга чтений: апдейт инвалидирует всё поддерево провайдера
+  - Подходит для редко меняющихся, широко читаемых значений (тема, локаль)
+  - Чтение дешевле, обновление дороже (широкая инвалидация)
 
+Практика: часто меняется и нужна узкая область рекомпозиции → `compositionLocalOf`; редко меняется и читается везде → `staticCompositionLocalOf`.
+
+### Границы инвалидации
+- Граница — блок `CompositionLocalProvider`
+- Динамический Local инвалидирует только читателей; статический — всё поддерево
+- Размещайте провайдер ближе к потребителям, если обновления частые и «широкие»
+
+### Безопасные значения по умолчанию
+- Избегайте «валидного» silent‑default: может скрыть отсутствие провайдера
+- Предпочтительно бросать ошибку в фабрике Local или давать явный noop со строгой семантикой
+
+### Иммутабельность и стабильность
+- Значения должны быть неизменяемыми или явно стабильными
+- Меняйте ссылку целиком (copy), а не внутренние `var` без уведомления Compose
+
+### Подводные камни
+- Чтение Local вне композиции (в долгоживущих лямбдах)
+- Использование Local для бизнес‑логики/репозиториев вместо DI
+- Провайдер слишком высоко для часто меняющегося значения → лишняя рекомпозиция
+
+### Паттерны
+- Тонкий провайдер: оборачивайте только нужное поддерево
+- Комбинация статических значений в один провайдер для редких обновлений
+- Тестируемость: переопределяйте Local локально в тестах
+
+### Минимальные примеры
+
+Создание и провайдинг (статический контекст):
 ```kotlin
-data class UserPreferences(val isDarkModeEnabled: Boolean, val fontSize: Float)
-
-// Определяем динамический Composition Local с настройками по умолчанию
-val LocalUserPreferences = compositionLocalOf {
-    UserPreferences(isDarkModeEnabled = false, fontSize = 14f)
-}
+// Глобальный редко меняющийся контекст
+data class AppEnv(val locale: Locale, val haptics: Haptics)
+val LocalAppEnv = staticCompositionLocalOf<AppEnv> { error("No AppEnv provided") }
 
 @Composable
-fun PreferencesProvider(content: @Composable () -> Unit) {
-    var isDarkMode by remember { mutableStateOf(false) }
-    val preferences = UserPreferences(isDarkMode, 16f)
-    CompositionLocalProvider(LocalUserPreferences provides preferences) {
-        content()
-    }
-}
-
-@Composable
-fun SettingsScreen() {
-    val preferences = LocalUserPreferences.current
-    Text("Темная тема: ${if (preferences.isDarkModeEnabled) "Включена" else "Выключена"}")
+fun App(env: AppEnv, content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalAppEnv provides env) { content() }
 }
 ```
 
-## Ключевые концепции и преимущества CompositionLocal
+Динамический Local с узкой рекомпозицией:
+```kotlin
+val LocalScrollY = compositionLocalOf { 0 }
 
-### Неявное совместное использование
-
-`CompositionLocal` позволяет данным совместно использоваться между composables без явной передачи их в качестве параметра. Это упрощает управление глобально важными данными, такими как стили темы, пользовательские настройки или конфигурации приложения.
-
-### Локализованный контекст
-
-`CompositionLocal` позволяет различным частям UI иметь свой собственный контекст, который может варьироваться в зависимости от области, в которой предоставляется `CompositionLocal`. Это полезно для настройки различных разделов UI при сохранении общей согласованности.
-
-### Реактивность
-
-Для динамических значений `CompositionLocal` может запускать перекомпозицию при изменении его значения. Это означает, что при обновлении значения будут перекомпонованы только те части UI, которые зависят от этого значения, сохраняя эффективность и отзывчивость UI.
-
-### Разделенные компоненты
-
-`CompositionLocal` отделяет UI компоненты от их прямых зависимостей. Это повышает модульность и повторное использование composables, так как им не нужно знать о конкретных данных, предоставляемых выше в дереве композиции. Это упрощает тестирование и повторное использование компонентов.
-
-## Типы провайдеров CompositionLocal
-
-### compositionLocalOf
-
-Позволяет точно контролировать перекомпозиции. Когда значение изменяется, перекомпонуются только те части UI, которые читают это значение. Идеально подходит для часто меняющихся данных, таких как динамические темы или пользовательские настройки.
-
-**Применение**: Ситуации, когда данные регулярно изменяются, такие как динамические темы UI, настройки локализации или пользовательские конфигурации.
-
-### staticCompositionLocalOf
-
-В отличие от `compositionLocalOf`, Compose не отслеживает места, где читается `staticCompositionLocalOf`. Когда значение изменяется, перекомпонуется весь блок контента, где предоставляется `CompositionLocal`, а не только места, где читается значение `current` в Composition. Лучше всего использовать для редко меняющихся данных.
-
-**Применение**: Подходит для стабильных конфигураций, таких как конечные точки API, флаги отладки или статические темы UI, которые остаются постоянными в течение жизненного цикла приложения.
-
-Если значение, предоставляемое `CompositionLocal`, крайне маловероятно изменится или никогда не изменится, используйте `staticCompositionLocalOf` для получения преимуществ в производительности.
-
-## Для чего предназначены (и не предназначены) Composition Locals
-
-### Предназначены для:
-
-- Токены системы дизайна (темы, отступы, типографика);
-- UI инфраструктура (контроллер клавиатуры, управление фокусом);
-- Сквозные UI задачи, следующие визуальной иерархии;
-- Значения, требующие различных переопределений на разных уровнях дерева UI.
-
-### Не предназначены для:
-
-- Бизнес-логики или состояния приложения;
-- Данных, которые должны управляться решениями для управления состоянием;
-- Значений, влияющих на поведение приложения;
-- Подключений к базе данных, репозиториев или других не-UI зависимостей;
-- Избежания правильной инъекции зависимостей.
-
-Думайте о Composition Locals как о части вашего UI инструментария, а не как об общем механизме инъекции зависимостей. Они отлично работают при работе с UI-связанными значениями, которые естественно следуют иерархии ваших компонентов, но не должны использоваться для обхода правильных архитектурных паттернов или скрытия важных зависимостей.
-
-## Links
-
-- [Locally scoped data with CompositionLocal](https://developer.android.com/develop/ui/compose/compositionlocal)
-- [Composition Local in Jetpack Compose](https://medium.com/@ramadan123sayed/composition-local-in-jetpack-compose-4d0a54afa67c)
-- [Composition Locals in Jetpack Compose: A Beginner-to-Advanced Guide](https://proandroiddev.com/composition-locals-in-jetpack-compose-a-beginner-to-advanced-guide-e6a812ca7620)
-- [Jetpack Compose CompositionLocal - What You Need to Know](https://medium.com/geekculture/jetpack-compose-compositionlocal-what-you-need-to-know-979a4aef6412)
-- [A Jetpack Compose Composition Local Tutorial](https://www.answertopia.com/jetpack-compose/a-jetpack-compose-composition-local-tutorial/)
-
+@Composable
+fun Screen(scrollY: Int) {
+    CompositionLocalProvider(LocalScrollY provides scrollY) {
+        Header()              // не читает Local → не рекомпозируется
+        StickyToolbar()       // читает Local → рекомпозируется на изменение
+    }
+}
+```
 
 ---
+
+## Answer (EN)
+
+### Purpose
+- Local "context" for a subtree: theme, locale, density, haptics, UI‑level DI objects
+- Avoids over‑plumbing parameters when the dependency is environmental
+- Not a replacement for parameters: do not hide business data/state in Locals
+
+### Parameters vs CompositionLocal
+- Parameters: local dependency, changes frequently, API clarity
+- Local: cross‑cutting, rarely changing, environmental (theme, locale, imageLoader)
+
+### dynamic vs static
+- `compositionLocalOf` (dynamic)
+  - Read tracking: only actual `.current` readers recompose
+  - Fits frequently changing values (scroll position, runtime flags)
+  - Small per‑read overhead
+- `staticCompositionLocalOf` (static)
+  - No read tracking: update invalidates entire provider subtree
+  - Fits rarely changing, widely read values (theme, locale)
+  - Cheaper reads, more expensive updates (wide invalidation)
+
+Rule of thumb: changes often + narrow recomposition → `compositionLocalOf`; rarely changes + wide readership → `staticCompositionLocalOf`.
+
+### Invalidation boundaries
+- Boundary is `CompositionLocalProvider`
+- Dynamic: invalidates only readers; static: whole subtree
+- Place providers close to consumers if updates are wide/frequent
+
+### Safe defaults
+- Avoid silent valid defaults; prefer throwing in factory or explicit noop
+
+### Immutability & stability
+- Prefer immutable or explicitly stable values
+- Update the reference (copy) vs mutating internals invisibly to Compose
+
+### Pitfalls
+- Reading Local outside composition (long‑lived lambdas)
+- Using Local for business logic/repos instead of DI
+- Provider too high for frequently changing value → extra recomposition
+
+### Patterns
+- Thin provider over only the necessary subtree
+- Combine rare static values under one provider
+- Override Locals in tests within the scene
+
+### Minimal examples
+
+Create & provide (static context):
+```kotlin
+// Rarely changing global context
+data class AppEnv(val locale: Locale, val haptics: Haptics)
+val LocalAppEnv = staticCompositionLocalOf<AppEnv> { error("No AppEnv provided") }
+
+@Composable
+fun App(env: AppEnv, content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalAppEnv provides env) { content() }
+}
+```
+
+Dynamic Local with narrow recomposition:
+```kotlin
+val LocalScrollY = compositionLocalOf { 0 }
+
+@Composable
+fun Screen(scrollY: Int) {
+    CompositionLocalProvider(LocalScrollY provides scrollY) {
+        Header()              // does not read → no recomposition
+        StickyToolbar()       // reads Local → recomposes on change
+    }
+}
+```
+
+---
+
+## Follow-ups
+- How to scope providers across feature modules?
+- When are parameters still preferable despite deep trees?
+- How to profile invalidation caused by Local updates?
+- Strategies for testing and overriding chains of providers?
+
+## References
+- [CompositionLocal (Docs)](https://developer.android.com/jetpack/compose/compositionlocal)
+- [Compose Mental Model](https://developer.android.com/develop/ui/compose/mental-model)
 
 ## Related Questions
 
-### Hub
-- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+### Prerequisites (Easier)
+- [[q-compose-semantics--android--medium]]
 
-### Related (Hard)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
-- [[q-stable-classes-compose--android--hard]] - @Stable annotation
-- [[q-stable-annotation-compose--android--hard]] - Stability annotations
-- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
-- [[q-compose-performance-optimization--android--hard]] - Performance optimization
+### Related (Same Level)
+- [[q-compositionlocal-advanced--jetpack-compose--medium]]
+- [[q-compose-remember-derived-state--jetpack-compose--medium]]
+
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]]
 
