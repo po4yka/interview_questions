@@ -1,23 +1,37 @@
 ---
 id: 20251021-170000
-title: "Custom View Attributes / Атрибуты Custom View"
-aliases: [Custom View Attributes, Атрибуты Custom View]
+title: Custom View Attributes / Атрибуты Custom View
+aliases:
+  - Custom View Attributes
+  - Атрибуты Custom View
 topic: android
-subtopics: [ui-views, ui-theming]
+subtopics:
+  - ui-views
+  - ui-theming
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [ru, en]
-status: draft
+language_tags:
+  - ru
+  - en
+status: reviewed
 moc: moc-android
-related: [q-custom-view-implementation--android--medium, q-android-theming-styles--android--medium, q-view-lifecycle-android--android--medium]
+related:
+  - q-custom-view-implementation--android--medium
+  - q-android-theming-styles--android--medium
+  - q-view-lifecycle-android--android--medium
 created: 2025-10-21
 updated: 2025-10-21
-tags: [android/ui-views, android/ui-theming, custom-views, xml-attributes, theming, difficulty/medium]
+tags:
+  - android/ui-views
+  - android/ui-theming
+  - custom-views
+  - xml-attributes
+  - theming
+  - difficulty/medium
 source: https://developer.android.com/guide/topics/ui/themes
 source_note: Official theming guide
 ---
-
 # Вопрос (RU)
 > Как добавить пользовательские XML атрибуты к пользовательскому view? Объясните объявление атрибутов в attrs.xml, чтение атрибутов в конструкторе и поддержку стилей и тем.
 
