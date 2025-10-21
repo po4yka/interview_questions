@@ -1,1085 +1,366 @@
 ---
-id: 20251017-114336
-title: "Dagger Custom Scopes / Кастомные скоупы Dagger"
+id: 20251020-200000
+title: Dagger Custom Scopes / Кастомные скоупы Dagger
+aliases:
+  - Dagger Custom Scopes
+  - Кастомные скоупы Dagger
 topic: android
+subtopics:
+  - dependency-injection
+  - architecture-patterns
+question_kind: android
 difficulty: hard
-status: draft
-created: 2025-10-11
-tags: [dependency-injection, dagger, hilt, scopes, architecture, android/di-hilt, android/architecture-patterns, difficulty/hard]
+original_language: en
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-compose-gesture-detection--jetpack-compose--medium, q-workmanager-return-result--android--medium, q-cancel-presenter-requests--android--medium]
-  - q-hilt-entry-points--di--medium
-  - q-dagger-multibinding--di--hard
-  - q-hilt-viewmodel-injection--jetpack--medium
-subtopics: [di-hilt, architecture-patterns]
+related:
+  - q-dagger-component-dependencies--di--hard
+  - q-hilt-components-scope--android--medium
+  - q-dagger-build-time-optimization--android--medium
+created: 2025-10-20
+updated: 2025-10-20
+tags:
+  - android/dependency-injection
+  - android/architecture-patterns
+  - dagger
+  - hilt
+  - custom-scopes
+  - lifecycle-management
+  - difficulty/hard
+source: https://dagger.dev/hilt/components.html
+source_note: Hilt components and scopes documentation
 ---
+# Вопрос (RU)
+> Как создать и использовать кастомные скоупы в Dagger/Hilt? Объясните разницу между Singleton, кастомными скоупами и unscoped зависимостями. Приведите примеры когда и зачем создавать кастомный скоуп.
+
 # Question (EN)
-How do you create and use custom scopes in Dagger/Hilt? Explain the difference between Singleton, custom scopes, and unscoped dependencies. Provide examples of when and why you'd create a custom scope.
+> How do you create and use custom scopes in Dagger/Hilt? Explain the difference between Singleton, custom scopes, and unscoped dependencies. Provide examples of when and why you'd create a custom scope.
+
+## Ответ (RU)
+
+Скоупы в Dagger/Hilt контролируют жизненный цикл и совместное использование зависимостей. Кастомные скоупы позволяют создавать зависимости с определенным жизненным циклом для конкретной функциональности или бизнес-процесса.
+
+### Теория: Управление жизненным циклом
+
+**Принципы скоупов:**
+- Скоуп определяет область видимости и время жизни зависимости
+- Один экземпляр на экземпляр скоупа
+- Скоупы создают границы изоляции между компонентами
+- Кастомные скоупы расширяют стандартные возможности
+
+**Жизненный цикл зависимостей:**
+- **@Singleton** - один экземпляр на всё приложение
+- **@ActivityScoped** - один экземпляр на Activity
+- **@FragmentScoped** - один экземпляр на Fragment
+- **Unscoped** - новый экземпляр при каждом запросе
+
+### Стандартные скоупы Hilt
+
+| Компонент | Скоуп | Создается | Уничтожается | Использование |
+|-----------|-------|-----------|--------------|---------------|
+| SingletonComponent | @Singleton | Application.onCreate() | App destroyed | Глобальные синглтоны |
+| ActivityRetainedComponent | @ActivityRetainedScoped | Activity created | Activity destroyed | ViewModels |
+| ActivityComponent | @ActivityScoped | Activity created | Activity destroyed | Activity зависимости |
+| FragmentComponent | @FragmentScoped | Fragment created | Fragment destroyed | Fragment зависимости |
+
+### Создание кастомного скоупа
+
+**1. Определение скоупа:**
+```kotlin
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class UserSessionScope
+```
+
+**2. Создание компонента:**
+```kotlin
+@UserSessionScope
+@Component(
+    dependencies = [SingletonComponent::class],
+    modules = [UserSessionModule::class]
+)
+interface UserSessionComponent {
+    fun inject(activity: UserActivity)
+
+    @Component.Factory
+    interface Factory {
+        fun create(@BindsInstance userSession: UserSession): UserSessionComponent
+    }
+}
+```
+
+**3. Использование скоупа:**
+```kotlin
+@UserSessionScope
+class UserSessionManager @Inject constructor(
+    private val apiService: ApiService,
+    private val userSession: UserSession
+) {
+    fun logout() {
+        // Логика выхода из системы
+    }
+}
+```
+
+### Примеры использования кастомных скоупов
+
+**User Session Scope:**
+```kotlin
+// Зависимости живут пока пользователь авторизован
+@UserSessionScope
+class UserPreferences @Inject constructor() {
+    var currentTheme: String = "light"
+}
+
+@UserSessionScope
+class UserApiClient @Inject constructor(
+    private val userToken: String
+) {
+    // API клиент с токеном пользователя
+}
+```
+
+**Feature Scope:**
+```kotlin
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class FeatureScope
+
+@FeatureScope
+class FeatureStateManager @Inject constructor() {
+    var currentStep: Int = 0
+    var isCompleted: Boolean = false
+}
+```
+
+### Когда создавать кастомные скоупы
+
+**Создавайте кастомный скоуп когда:**
+- Нужен жизненный цикл отличный от стандартных
+- Требуется изоляция состояния между пользователями
+- Необходимо управление ресурсами по бизнес-логике
+- Нужно кэширование на уровне функциональности
+
+**Не создавайте кастомный скоуп когда:**
+- Стандартные скоупы покрывают потребности
+- Нет необходимости в изоляции состояния
+- Простые зависимости без сложного жизненного цикла
+
+### Управление жизненным циклом
+
+**Создание скоупа:**
+```kotlin
+class UserActivity : AppCompatActivity() {
+    private lateinit var userSessionComponent: UserSessionComponent
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        userSessionComponent = DaggerUserSessionComponent.factory()
+            .create(userSession)
+    }
+}
+```
+
+**Уничтожение скоупа:**
+```kotlin
+override fun onDestroy() {
+    super.onDestroy()
+    // Компонент автоматически уничтожается
+    // Все @UserSessionScope зависимости освобождаются
+}
+```
+
+### Лучшие практики
+
+**Архитектурные принципы:**
+- Используйте минимально необходимый скоуп
+- Избегайте глубоких иерархий скоупов
+- Документируйте жизненный цикл скоупа
+
+**Производительность:**
+- Кастомные скоупы увеличивают сложность
+- Правильное управление памятью
+- Избегайте утечек памяти
+
+**Тестирование:**
+- Создавайте тестовые компоненты
+- Используйте моки для скоупов
+- Тестируйте жизненные циклы
 
 ## Answer (EN)
-### Overview
 
-**Scopes** in Dagger/Hilt control the lifecycle and sharing of dependencies. A scope annotation tells Dagger to create only one instance of a dependency per scope instance. Custom scopes allow you to create dependencies that live as long as a specific feature, user session, or business flow.
+Scopes in Dagger/Hilt control the lifecycle and sharing of dependencies. Custom scopes allow you to create dependencies with specific lifecycles for particular functionality or business processes.
 
-### Built-in Hilt Scopes
+### Theory: Lifecycle Management
 
-Hilt provides these standard scopes:
+**Scope Principles:**
+- Scope defines dependency visibility and lifetime
+- One instance per scope instance
+- Scopes create isolation boundaries between components
+- Custom scopes extend standard capabilities
 
-| Component | Scope | Created at | Destroyed at | Use for |
-|-----------|-------|------------|--------------|---------|
-| SingletonComponent | @Singleton | Application.onCreate() | App destroyed | App-wide singletons |
-| ActivityRetainedComponent | @ActivityRetainedScoped | Activity created | Activity destroyed (survives config changes) | ViewModels, survives rotation |
+**Dependency Lifecycle:**
+- **@Singleton** - one instance for entire application
+- **@ActivityScoped** - one instance per Activity
+- **@FragmentScoped** - one instance per Fragment
+- **Unscoped** - new instance on each request
+
+### Standard Hilt Scopes
+
+| Component | Scope | Created | Destroyed | Usage |
+|-----------|-------|---------|-----------|-------|
+| SingletonComponent | @Singleton | Application.onCreate() | App destroyed | Global singletons |
+| ActivityRetainedComponent | @ActivityRetainedScoped | Activity created | Activity destroyed | ViewModels |
 | ActivityComponent | @ActivityScoped | Activity created | Activity destroyed | Activity dependencies |
 | FragmentComponent | @FragmentScoped | Fragment created | Fragment destroyed | Fragment dependencies |
-| ViewComponent | @ViewScoped | View created | View destroyed | View dependencies |
-| ViewWithFragmentComponent | @ViewWithFragmentScoped | View created in Fragment | View destroyed | View in Fragment dependencies |
-| ServiceComponent | @ServiceScoped | Service created | Service destroyed | Service dependencies |
 
-### Understanding Scopes
+### Creating Custom Scope
 
+**1. Define scope:**
 ```kotlin
-// @Singleton - ONE instance for entire app lifecycle
-@Singleton
-class AppDatabase @Inject constructor() {
-    // Created once, shared everywhere
-}
-
-// @ActivityScoped - ONE instance per Activity
-@ActivityScoped
-class ActivityTracker @Inject constructor() {
-    // New instance for each Activity
-    // Shared within that Activity
-}
-
-// Unscoped - NEW instance every time
-class RequestHelper @Inject constructor() {
-    // New instance every injection
-}
-```
-
-### The Problem: Need Custom Lifecycles
-
-Sometimes Hilt's built-in scopes don't match your app's architecture:
-
-```kotlin
-//  Problem: User session doesn't match any built-in scope
-// - Not @Singleton (user can log out)
-// - Not @ActivityScoped (survives Activity recreation)
-// - Not @ActivityRetainedScoped (survives app restart with saved state)
-
-// Need a scope that:
-// - Lives from login to logout
-// - Survives Activity/Fragment recreation
-// - Survives app restart (if user stays logged in)
-// - Dies when user logs out
-```
-
-### Creating Custom Scopes
-
-A custom scope is just an annotation:
-
-```kotlin
-// 1. Define the scope annotation
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
-annotation class UserScope
+annotation class UserSessionScope
+```
 
-// 2. Create a component for this scope
-@UserScope
-@DefineComponent(parent = SingletonComponent::class)
-interface UserComponent {
-    // Define what can be injected in this scope
-}
+**2. Create component:**
+```kotlin
+@UserSessionScope
+@Component(
+    dependencies = [SingletonComponent::class],
+    modules = [UserSessionModule::class]
+)
+interface UserSessionComponent {
+    fun inject(activity: UserActivity)
 
-// 3. Define builder for the component
-@DefineComponent.Builder
-interface UserComponentBuilder {
-    fun build(): UserComponent
-}
-
-// 4. Mark dependencies with the scope
-@UserScope
-class UserSessionManager @Inject constructor(
-    private val apiService: ApiService
-) {
-    var currentUser: User? = null
-}
-
-@UserScope
-class UserPreferences @Inject constructor(
-    @ApplicationContext private val context: Context
-) {
-    // User-specific preferences
-}
-
-// 5. Install modules in the component
-@Module
-@InstallIn(UserComponent::class)
-object UserModule {
-    // Provide user-scoped dependencies
-}
-
-// 6. Manage component lifecycle
-@Singleton
-class UserComponentManager @Inject constructor(
-    private val userComponentBuilder: Provider<UserComponentBuilder>
-) {
-    private var userComponent: UserComponent? = null
-
-    fun createUserScope(): UserComponent {
-        if (userComponent == null) {
-            userComponent = userComponentBuilder.get().build()
-        }
-        return userComponent!!
+    @Component.Factory
+    interface Factory {
+        fun create(@BindsInstance userSession: UserSession): UserSessionComponent
     }
-
-    fun destroyUserScope() {
-        userComponent = null
-    }
-
-    fun getUserComponent(): UserComponent? = userComponent
 }
 ```
 
-### Real-World Example: User Session Scope
-
+**3. Use scope:**
 ```kotlin
-// Step 1: Define the scope
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class UserScope
-
-// Step 2: Define the component
-@UserScope
-@DefineComponent(parent = SingletonComponent::class)
-interface UserComponent
-
-@DefineComponent.Builder
-interface UserComponentBuilder {
-    fun build(): UserComponent
-}
-
-// Step 3: User-scoped dependencies
-@UserScope
+@UserSessionScope
 class UserSessionManager @Inject constructor(
     private val apiService: ApiService,
-    private val sharedPreferences: SharedPreferences
+    private val userSession: UserSession
 ) {
-    private var _currentUser: User? = null
-    val currentUser: User? get() = _currentUser
-
-    suspend fun login(email: String, password: String): Result<User> {
-        return try {
-            val user = apiService.login(email, password)
-            _currentUser = user
-            saveUserSession(user)
-            Result.success(user)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
     fun logout() {
-        _currentUser = null
-        clearUserSession()
-    }
-
-    private fun saveUserSession(user: User) {
-        sharedPreferences.edit()
-            .putString("user_id", user.id)
-            .putString("user_token", user.token)
-            .apply()
-    }
-
-    private fun clearUserSession() {
-        sharedPreferences.edit()
-            .remove("user_id")
-            .remove("user_token")
-            .apply()
-    }
-}
-
-@UserScope
-class UserAnalytics @Inject constructor(
-    private val analytics: Analytics,
-    private val userSessionManager: UserSessionManager
-) {
-    init {
-        // Set user properties for all events in this session
-        userSessionManager.currentUser?.let { user ->
-            analytics.setUserId(user.id)
-            analytics.setUserProperty("subscription_type", user.subscriptionType)
-        }
-    }
-
-    fun track(event: String, properties: Map<String, Any> = emptyMap()) {
-        val enrichedProperties = properties + mapOf(
-            "user_id" to (userSessionManager.currentUser?.id ?: "unknown")
-        )
-        analytics.track(event, enrichedProperties)
-    }
-}
-
-@UserScope
-class UserNotificationManager @Inject constructor(
-    private val fcmService: FcmService,
-    private val userSessionManager: UserSessionManager
-) {
-    suspend fun registerForNotifications() {
-        val user = userSessionManager.currentUser ?: return
-        val token = fcmService.getToken()
-        fcmService.registerToken(user.id, token)
-    }
-
-    suspend fun unregisterFromNotifications() {
-        val user = userSessionManager.currentUser ?: return
-        fcmService.unregisterToken(user.id)
-    }
-}
-
-// Step 4: Module for user-scoped dependencies
-@Module
-@InstallIn(UserComponent::class)
-object UserModule {
-    // Can provide additional user-scoped dependencies here
-}
-
-// Step 5: Entry Point for accessing user-scoped dependencies
-@EntryPoint
-@InstallIn(UserComponent::class)
-interface UserComponentEntryPoint {
-    fun userSessionManager(): UserSessionManager
-    fun userAnalytics(): UserAnalytics
-    fun userNotificationManager(): UserNotificationManager
-}
-
-// Step 6: Component manager
-@Singleton
-class UserComponentManager @Inject constructor(
-    private val userComponentBuilder: Provider<UserComponentBuilder>
-) {
-    private var userComponent: UserComponent? = null
-
-    fun createUserSession(): UserComponent {
-        if (userComponent != null) {
-            throw IllegalStateException("User session already exists")
-        }
-        userComponent = userComponentBuilder.get().build()
-        return userComponent!!
-    }
-
-    fun destroyUserSession() {
-        userComponent = null
-    }
-
-    fun getUserComponent(): UserComponent? = userComponent
-
-    fun requireUserComponent(): UserComponent {
-        return userComponent ?: throw IllegalStateException("No active user session")
-    }
-}
-
-// Step 7: Usage in Application
-@HiltAndroidApp
-class MyApplication : Application() {
-
-    @Inject
-    lateinit var userComponentManager: UserComponentManager
-
-    fun onUserLogin(user: User) {
-        // Create user scope
-        val userComponent = userComponentManager.createUserSession()
-
-        // Access user-scoped dependencies
-        val entryPoint = EntryPointAccessors.fromComponent(
-            userComponent,
-            UserComponentEntryPoint::class.java
-        )
-
-        val sessionManager = entryPoint.userSessionManager()
-        val analytics = entryPoint.userAnalytics()
-        val notificationManager = entryPoint.userNotificationManager()
-
-        // Initialize user session
-        GlobalScope.launch {
-            notificationManager.registerForNotifications()
-        }
-
-        analytics.track("user_logged_in")
-    }
-
-    fun onUserLogout() {
-        // Access before destroying
-        val userComponent = userComponentManager.getUserComponent()
-        if (userComponent != null) {
-            val entryPoint = EntryPointAccessors.fromComponent(
-                userComponent,
-                UserComponentEntryPoint::class.java
-            )
-
-            val analytics = entryPoint.userAnalytics()
-            val notificationManager = entryPoint.userNotificationManager()
-
-            GlobalScope.launch {
-                notificationManager.unregisterFromNotifications()
-            }
-
-            analytics.track("user_logged_out")
-        }
-
-        // Destroy user scope
-        userComponentManager.destroyUserSession()
+        // Logout logic
     }
 }
 ```
 
-### Custom Scope: Feature Scope
+### Custom Scope Examples
 
-Another common use case is feature-level scopes:
-
+**User Session Scope:**
 ```kotlin
-// Feature scope for multi-step flows
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class CheckoutScope
-
-@CheckoutScope
-@DefineComponent(parent = SingletonComponent::class)
-interface CheckoutComponent
-
-@DefineComponent.Builder
-interface CheckoutComponentBuilder {
-    fun build(): CheckoutComponent
-}
-
-// Checkout-scoped state
-@CheckoutScope
-class CheckoutState @Inject constructor() {
-    var selectedItems: List<CartItem> = emptyList()
-    var shippingAddress: Address? = null
-    var paymentMethod: PaymentMethod? = null
-    var appliedPromoCode: String? = null
-    var calculatedTotal: Double = 0.0
-
-    fun reset() {
-        selectedItems = emptyList()
-        shippingAddress = null
-        paymentMethod = null
-        appliedPromoCode = null
-        calculatedTotal = 0.0
-    }
-}
-
-@CheckoutScope
-class CheckoutManager @Inject constructor(
-    private val checkoutState: CheckoutState,
-    private val apiService: ApiService,
-    private val analytics: Analytics
-) {
-
-    suspend fun selectItems(items: List<CartItem>) {
-        checkoutState.selectedItems = items
-        analytics.track("checkout_items_selected", mapOf("count" to items.size))
-    }
-
-    suspend fun setShippingAddress(address: Address) {
-        checkoutState.shippingAddress = address
-        recalculateTotal()
-        analytics.track("checkout_address_set")
-    }
-
-    suspend fun setPaymentMethod(method: PaymentMethod) {
-        checkoutState.paymentMethod = method
-        analytics.track("checkout_payment_set")
-    }
-
-    suspend fun applyPromoCode(code: String): Result<Double> {
-        return try {
-            val discount = apiService.validatePromoCode(code)
-            checkoutState.appliedPromoCode = code
-            recalculateTotal()
-            analytics.track("checkout_promo_applied", mapOf("code" to code))
-            Result.success(discount)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    suspend fun completeCheckout(): Result<Order> {
-        val items = checkoutState.selectedItems
-        val address = checkoutState.shippingAddress
-            ?: return Result.failure(IllegalStateException("Missing shipping address"))
-        val payment = checkoutState.paymentMethod
-            ?: return Result.failure(IllegalStateException("Missing payment method"))
-
-        return try {
-            val order = apiService.createOrder(
-                items = items,
-                shippingAddress = address,
-                paymentMethod = payment,
-                promoCode = checkoutState.appliedPromoCode
-            )
-
-            analytics.track("checkout_completed", mapOf(
-                "order_id" to order.id,
-                "total" to order.total
-            ))
-
-            Result.success(order)
-        } catch (e: Exception) {
-            analytics.track("checkout_failed", mapOf("error" to e.message))
-            Result.failure(e)
-        }
-    }
-
-    private suspend fun recalculateTotal() {
-        val itemsTotal = checkoutState.selectedItems.sumOf { it.price * it.quantity }
-        val shippingCost = calculateShipping()
-        val discount = if (checkoutState.appliedPromoCode != null) {
-            apiService.getPromoDiscount(checkoutState.appliedPromoCode!!)
-        } else 0.0
-
-        checkoutState.calculatedTotal = itemsTotal + shippingCost - discount
-    }
-
-    private fun calculateShipping(): Double {
-        // Shipping calculation logic
-        return 9.99
-    }
-}
-
-@Module
-@InstallIn(CheckoutComponent::class)
-object CheckoutModule {
-    // Checkout-specific dependencies
-}
-
-@EntryPoint
-@InstallIn(CheckoutComponent::class)
-interface CheckoutComponentEntryPoint {
-    fun checkoutManager(): CheckoutManager
-    fun checkoutState(): CheckoutState
-}
-
-// Component manager
-@Singleton
-class CheckoutComponentManager @Inject constructor(
-    private val checkoutComponentBuilder: Provider<CheckoutComponentBuilder>
-) {
-    private var checkoutComponent: CheckoutComponent? = null
-
-    fun startCheckout(): CheckoutComponent {
-        if (checkoutComponent != null) {
-            // Clear existing checkout
-            endCheckout()
-        }
-        checkoutComponent = checkoutComponentBuilder.get().build()
-        return checkoutComponent!!
-    }
-
-    fun endCheckout() {
-        checkoutComponent?.let { component ->
-            val entryPoint = EntryPointAccessors.fromComponent(
-                component,
-                CheckoutComponentEntryPoint::class.java
-            )
-            entryPoint.checkoutState().reset()
-        }
-        checkoutComponent = null
-    }
-
-    fun getCheckoutComponent(): CheckoutComponent? = checkoutComponent
-}
-
-// Usage in navigation
-@Composable
-fun CheckoutFlow(
-    checkoutComponentManager: CheckoutComponentManager
-) {
-    val navController = rememberNavController()
-
-    // Start checkout scope
-    LaunchedEffect(Unit) {
-        checkoutComponentManager.startCheckout()
-    }
-
-    // Clean up when leaving checkout
-    DisposableEffect(Unit) {
-        onDispose {
-            checkoutComponentManager.endCheckout()
-        }
-    }
-
-    val component = checkoutComponentManager.getCheckoutComponent()!!
-    val entryPoint = remember {
-        EntryPointAccessors.fromComponent(
-            component,
-            CheckoutComponentEntryPoint::class.java
-        )
-    }
-    val checkoutManager = remember { entryPoint.checkoutManager() }
-
-    NavHost(navController, startDestination = "items") {
-        composable("items") {
-            SelectItemsScreen(checkoutManager) {
-                navController.navigate("address")
-            }
-        }
-        composable("address") {
-            AddressScreen(checkoutManager) {
-                navController.navigate("payment")
-            }
-        }
-        composable("payment") {
-            PaymentScreen(checkoutManager) {
-                navController.navigate("review")
-            }
-        }
-        composable("review") {
-            ReviewScreen(checkoutManager)
-        }
-    }
-}
-```
-
-### Scope Comparison
-
-```kotlin
-// Singleton - App lifetime
-@Singleton
-class AppDatabase @Inject constructor() {
-    // Lives entire app lifetime
-    // Shared by all users, sessions, activities
-}
-
-// Custom UserScope - User session lifetime
-@UserScope
+// Dependencies live while user is authenticated
+@UserSessionScope
 class UserPreferences @Inject constructor() {
-    // Lives from login to logout
-    // New instance for each user session
-    // Survives Activity recreation
+    var currentTheme: String = "light"
 }
 
-// ActivityScoped - Activity lifetime
-@ActivityScoped
-class ActivityAnalytics @Inject constructor() {
-    // Lives for one Activity
-    // New instance for each Activity
-    // Dies on Activity destruction
-}
-
-// Unscoped - No sharing
-class RequestHandler @Inject constructor() {
-    // New instance every time injected
-    // Not shared
-}
-```
-
-### Performance: Scoped vs Unscoped
-
-```kotlin
-// Scenario 1: Heavy object that should be reused
-@Singleton //  GOOD - Created once, reused
-class HeavyImageProcessor @Inject constructor() {
-    private val cache = LruCache<String, Bitmap>(100)
-    // Expensive to create, should be singleton
-}
-
-// Scenario 2: Lightweight, stateless helper
-class UrlFormatter @Inject constructor() { //  GOOD - Unscoped, cheap to create
-    fun format(url: String): String = url.trim().lowercase()
-}
-
-// Scenario 3: Stateful per-activity tracker
-@ActivityScoped //  GOOD - One per activity
-class ActivityLifecycleTracker @Inject constructor(
-    private val analytics: Analytics
+@UserSessionScope
+class UserApiClient @Inject constructor(
+    private val userToken: String
 ) {
-    private var startTime: Long = 0
-}
-
-//  BAD - Singleton for stateful per-activity data
-@Singleton // BAD - Will leak Activity data across activities!
-class ActivityLifecycleTracker @Inject constructor() {
-    private var startTime: Long = 0 // Shared across all activities!
+    // API client with user token
 }
 ```
 
-### Advanced: Scopes with Parameters
-
-Sometimes you need parameterized scopes:
-
+**Feature Scope:**
 ```kotlin
-// Custom scope with data
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ConversationScope
+annotation class FeatureScope
 
-@ConversationScope
-@DefineComponent(parent = SingletonComponent::class)
-interface ConversationComponent
-
-@DefineComponent.Builder
-interface ConversationComponentBuilder {
-    // Can't add parameters directly to builder in Hilt
-    fun build(): ConversationComponent
-}
-
-// Instead, use a holder
-@ConversationScope
-class ConversationContext @Inject constructor() {
-    lateinit var conversationId: String
-    lateinit var participants: List<User>
-}
-
-@ConversationScope
-class ConversationMessageLoader @Inject constructor(
-    private val context: ConversationContext,
-    private val apiService: ApiService
-) {
-    suspend fun loadMessages(): List<Message> {
-        return apiService.getMessages(context.conversationId)
-    }
-}
-
-@Singleton
-class ConversationComponentManager @Inject constructor(
-    private val builder: Provider<ConversationComponentBuilder>
-) {
-    private val conversations = mutableMapOf<String, ConversationComponent>()
-
-    fun startConversation(conversationId: String, participants: List<User>): ConversationComponent {
-        if (conversations.containsKey(conversationId)) {
-            return conversations[conversationId]!!
-        }
-
-        val component = builder.get().build()
-
-        // Initialize context
-        val entryPoint = EntryPointAccessors.fromComponent(
-            component,
-            ConversationEntryPoint::class.java
-        )
-        val context = entryPoint.conversationContext()
-        context.conversationId = conversationId
-        context.participants = participants
-
-        conversations[conversationId] = component
-        return component
-    }
-
-    fun endConversation(conversationId: String) {
-        conversations.remove(conversationId)
-    }
-
-    fun getConversation(conversationId: String): ConversationComponent? {
-        return conversations[conversationId]
-    }
-}
-
-@EntryPoint
-@InstallIn(ConversationComponent::class)
-interface ConversationEntryPoint {
-    fun conversationContext(): ConversationContext
-    fun messageLoader(): ConversationMessageLoader
+@FeatureScope
+class FeatureStateManager @Inject constructor() {
+    var currentStep: Int = 0
+    var isCompleted: Boolean = false
 }
 ```
 
-### Testing Custom Scopes
+### When to Create Custom Scopes
 
+**Create custom scope when:**
+- Need lifecycle different from standard scopes
+- Require state isolation between users
+- Need resource management by business logic
+- Need feature-level caching
+
+**Don't create custom scope when:**
+- Standard scopes cover requirements
+- No need for state isolation
+- Simple dependencies without complex lifecycle
+
+### Lifecycle Management
+
+**Creating scope:**
 ```kotlin
-// Test with custom scope
-@HiltAndroidTest
-class UserScopeTest {
+class UserActivity : AppCompatActivity() {
+    private lateinit var userSessionComponent: UserSessionComponent
 
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    @Inject
-    lateinit var userComponentManager: UserComponentManager
-
-    @Before
-    fun setup() {
-        hiltRule.inject()
+        userSessionComponent = DaggerUserSessionComponent.factory()
+            .create(userSession)
     }
+}
+```
 
-    @Test
-    fun testUserScope_instancesAreShared() {
-        // Create user scope
-        val component = userComponentManager.createUserSession()
-
-        val entryPoint = EntryPointAccessors.fromComponent(
-            component,
-            UserComponentEntryPoint::class.java
-        )
-
-        // Get same dependency twice
-        val manager1 = entryPoint.userSessionManager()
-        val manager2 = entryPoint.userSessionManager()
-
-        // Should be same instance
-        assertSame(manager1, manager2)
-    }
-
-    @Test
-    fun testUserScope_newScopeCreatesNewInstances() {
-        // First scope
-        val component1 = userComponentManager.createUserSession()
-        val entryPoint1 = EntryPointAccessors.fromComponent(
-            component1,
-            UserComponentEntryPoint::class.java
-        )
-        val manager1 = entryPoint1.userSessionManager()
-
-        // Destroy and recreate
-        userComponentManager.destroyUserSession()
-        val component2 = userComponentManager.createUserSession()
-        val entryPoint2 = EntryPointAccessors.fromComponent(
-            component2,
-            UserComponentEntryPoint::class.java
-        )
-        val manager2 = entryPoint2.userSessionManager()
-
-        // Should be different instances
-        assertNotSame(manager1, manager2)
-    }
-
-    @Test
-    fun testUserScope_isolationBetweenScopes() = runTest {
-        // Create scope and set user
-        val component = userComponentManager.createUserSession()
-        val entryPoint = EntryPointAccessors.fromComponent(
-            component,
-            UserComponentEntryPoint::class.java
-        )
-        val manager = entryPoint.userSessionManager()
-
-        manager.login("test@example.com", "password")
-        assertEquals("test@example.com", manager.currentUser?.email)
-
-        // Destroy scope
-        userComponentManager.destroyUserSession()
-
-        // Create new scope
-        val component2 = userComponentManager.createUserSession()
-        val entryPoint2 = EntryPointAccessors.fromComponent(
-            component2,
-            UserComponentEntryPoint::class.java
-        )
-        val manager2 = entryPoint2.userSessionManager()
-
-        // Should be fresh state
-        assertNull(manager2.currentUser)
-    }
+**Destroying scope:**
+```kotlin
+override fun onDestroy() {
+    super.onDestroy()
+    // Component automatically destroyed
+    // All @UserSessionScope dependencies released
 }
 ```
 
 ### Best Practices
 
-1. **Use Built-in Scopes First**
-   ```kotlin
-   //  GOOD - Use built-in scope if it matches
-   @Singleton
-   class AppConfig @Inject constructor()
+**Architectural Principles:**
+- Use minimal necessary scope
+- Avoid deep scope hierarchies
+- Document scope lifecycle
 
-   //  BAD - Don't create custom scope unnecessarily
-   @CustomAppScope
-   class AppConfig @Inject constructor()
-   ```
+**Performance:**
+- Custom scopes increase complexity
+- Proper memory management
+- Avoid memory leaks
 
-2. **Scope Should Match Lifecycle**
-   ```kotlin
-   //  GOOD - UserScope matches user session lifecycle
-   @UserScope
-   class UserSettings @Inject constructor()
+**Testing:**
+- Create test components
+- Use mocks for scopes
+- Test lifecycles
 
-   //  BAD - Singleton for per-user data will leak
-   @Singleton
-   class UserSettings @Inject constructor()
-   ```
+## Follow-ups
 
-3. **Manage Scope Lifecycle Explicitly**
-   ```kotlin
-   //  GOOD - Explicit create/destroy
-   fun onLogin() {
-       userComponentManager.createUserSession()
-   }
+- How do you handle scope lifecycle in multi-user applications?
+- What are the performance implications of custom scopes?
+- How do you test custom scope dependencies?
 
-   fun onLogout() {
-       userComponentManager.destroyUserSession()
-   }
+## References
 
-   //  BAD - Forgetting to destroy causes memory leaks
-   fun onLogin() {
-       userComponentManager.createUserSession()
-       // Never destroyed!
-   }
-   ```
-
-4. **Don't Over-scope**
-   ```kotlin
-   //  GOOD - Unscoped for lightweight, stateless
-   class JsonParser @Inject constructor()
-
-   //  BAD - Unnecessary scope
-   @Singleton
-   class JsonParser @Inject constructor()
-   ```
-
-5. **Document Custom Scopes**
-   ```kotlin
-   /**
-    * UserScope - Lives from user login to logout.
-    * - Created: After successful login
-    * - Destroyed: On logout or session expiration
-    * - Use for: User-specific data, preferences, session state
-    */
-   @Scope
-   @Retention(AnnotationRetention.RUNTIME)
-   annotation class UserScope
-   ```
-
-### Common Pitfalls
-
-1. **Memory Leaks from Not Destroying Scope**
-   ```kotlin
-   //  BAD - Scope never destroyed
-   fun onCreate() {
-       featureComponentManager.create() // Created
-       // Never destroyed - memory leak!
-   }
-
-   //  GOOD - Scope destroyed
-   fun onCreate() {
-       featureComponentManager.create()
-   }
-
-   fun onDestroy() {
-       featureComponentManager.destroy() // Cleaned up
-   }
-   ```
-
-2. **Wrong Scope for Data**
-   ```kotlin
-   //  BAD - Activity-scoped data in Singleton
-   @Singleton
-   class CurrentScreenTracker @Inject constructor() {
-       var currentScreen: String = "" // Wrong scope!
-   }
-
-   //  GOOD - Activity-scoped
-   @ActivityScoped
-   class CurrentScreenTracker @Inject constructor() {
-       var currentScreen: String = ""
-   }
-   ```
-
-3. **Forgetting @Scope Annotation**
-   ```kotlin
-   //  BAD - Missing @UserScope
-   class UserSettings @Inject constructor() {
-       // Will be unscoped even though you want UserScope!
-   }
-
-   //  GOOD
-   @UserScope
-   class UserSettings @Inject constructor()
-   ```
-
-### Summary
-
-**Custom scopes** in Dagger/Hilt allow you to create dependencies with custom lifetimes:
-
-**When to use custom scopes:**
--  User session (login to logout)
--  Multi-step flows (checkout, onboarding)
--  Feature modules with state
--  Conversation/chat scopes
--  Any custom lifecycle not covered by built-in scopes
-
-**Key concepts:**
-- `@Scope` annotation - Marks scope
-- `@DefineComponent` - Creates component
-- Component manager - Manages lifecycle
-- `@EntryPoint` - Access scoped dependencies
-
-**Benefits:**
-- Control dependency lifetime
-- Prevent memory leaks
-- Isolate feature state
-- Match business logic lifecycle
-
-**Best practices:**
-1. Use built-in scopes when possible
-2. Match scope to actual lifecycle
-3. Explicitly manage create/destroy
-4. Document custom scope purpose
-5. Test scope isolation
-
----
-
-# Вопрос (RU)
-Как создавать и использовать кастомные scopes в Dagger/Hilt? Объясните разницу между Singleton, кастомными scopes и unscoped зависимостями. Приведите примеры, когда и зачем создавать кастомный scope.
-
-## Ответ (RU)
-
-Custom Scopes в Dagger - это пользовательские аннотации областей видимости, которые позволяют управлять временем жизни зависимостей за пределами стандартных `@Singleton` и `@Reusable`.
-
-**Создание Custom Scope:**
-
-```kotlin
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class ActivityScope
-
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class UserScope
-
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class FeatureScope
-```
-
-**Применение в компонентах и модулях:**
-
-```kotlin
-// Компонент с кастомной областью видимости
-@ActivityScope
-@Component(
-    dependencies = [AppComponent::class],
-    modules = [ActivityModule::class]
-)
-interface ActivityComponent {
-    fun inject(activity: MainActivity)
-}
-
-// Модуль с scoped зависимостями
-@Module
-class ActivityModule {
-    @Provides
-    @ActivityScope  // Живет столько же, сколько ActivityComponent
-    fun provideActivityPresenter(apiService: ApiService): ActivityPresenter {
-        return ActivityPresenter(apiService)
-    }
-
-    @Provides  // Без scope - создается каждый раз
-    fun provideClickListener(): ClickListener {
-        return ClickListener()
-    }
-}
-```
-
-**Практический пример с несколькими уровнями:**
-
-```kotlin
-// Application scope
-@Singleton
-@Component(modules = [AppModule::class])
-interface AppComponent {
-    fun userComponentFactory(): UserComponent.Factory
-}
-
-// User session scope
-@UserScope
-@Subcomponent(modules = [UserModule::class])
-interface UserComponent {
-    @Subcomponent.Factory
-    interface Factory {
-        fun create(): UserComponent
-    }
-
-    fun activityComponentFactory(): ActivityComponent.Factory
-}
-
-@Module
-class UserModule {
-    @Provides
-    @UserScope  // Живет на протяжении сессии пользователя
-    fun provideUserSession(): UserSession {
-        return UserSession()
-    }
-}
-
-// Activity scope
-@ActivityScope
-@Subcomponent(modules = [ActivityModule::class])
-interface ActivityComponent {
-    @Subcomponent.Factory
-    interface Factory {
-        fun create(): ActivityComponent
-    }
-
-    fun inject(activity: MainActivity)
-}
-```
-
-**Управление жизненным циклом:**
-
-```kotlin
-class MyApplication : Application() {
-    lateinit var appComponent: AppComponent
-    var userComponent: UserComponent? = null
-
-    override fun onCreate() {
-        super.onCreate()
-        appComponent = DaggerAppComponent.create()
-    }
-
-    fun loginUser() {
-        // Создаем UserComponent при входе
-        userComponent = appComponent.userComponentFactory().create()
-    }
-
-    fun logoutUser() {
-        // Уничтожаем UserComponent при выходе
-        userComponent = null  // GC очистит все @UserScope зависимости
-    }
-}
-
-class MainActivity : AppCompatActivity() {
-    private var activityComponent: ActivityComponent? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val userComp = (application as MyApplication).userComponent
-            ?: throw IllegalStateException("User not logged in")
-
-        activityComponent = userComp.activityComponentFactory().create()
-        activityComponent?.inject(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        activityComponent = null  // Очищаем @ActivityScope зависимости
-    }
-}
-```
-
-**Правила использования Custom Scopes:**
-
-1. **Один scope на компонент:** Компонент может иметь только одну аннотацию scope (или не иметь вообще)
-2. **Соответствие scope:** Метод в модуле с scope может использоваться только в компоненте с таким же scope
-3. **Иерархия scope:** Дочерний компонент не может иметь тот же scope, что и родительский
-4. **Без scope = новый экземпляр:** Зависимости без scope создаются каждый раз при запросе
-
-**Распространенные паттерны:**
-
-- `@ActivityScope` - для зависимостей на время жизни Activity
-- `@FragmentScope` - для зависимостей на время жизни Fragment
-- `@UserScope` / `@SessionScope` - для зависимостей на время пользовательской сессии
-- `@FeatureScope` - для зависимостей конкретной фичи
-
-**Ключевые преимущества:**
-
-- Явное управление временем жизни объектов
-- Оптимизация памяти через автоматическую очистку
-- Лучшая организация архитектуры приложения
-- Предотвращение утечек памяти через правильное управление ссылками
+- [Hilt Components and Scopes](https://dagger.dev/hilt/components.html)
+- [Dagger Scopes Documentation](https://dagger.dev/api/latest/dagger/Scope.html)
 
 ## Related Questions
 
-- [[q-compose-gesture-detection--jetpack-compose--medium]]
-- [[q-workmanager-return-result--android--medium]]
-- [[q-cancel-presenter-requests--android--medium]]
+### Prerequisites (Easier)
+- [[q-dagger-build-time-optimization--android--medium]]
+
+### Related (Same Level)
+- [[q-hilt-components-scope--android--medium]]
+
+### Advanced (Harder)
+- [[q-dagger-component-dependencies--di--hard]]
