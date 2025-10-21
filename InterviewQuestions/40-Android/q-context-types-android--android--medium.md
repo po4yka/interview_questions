@@ -1,357 +1,261 @@
 ---
-id: 20251012-1227113
-title: "Context in Android / Context в Android"
+id: 20251021-130000
+title: "Context Types in Android / Типы Context в Android"
+aliases: [Context Types in Android, Типы Context в Android]
 topic: android
-status: draft
-created: 2025-10-05
-updated: 2025-10-13
+subtopics: [lifecycle, activity, app-startup]
+question_kind: android
 difficulty: medium
-subtopics:
-  - lifecycle
-  - activity
-  - app-startup
-tags: [context, application-context, activity-context, difficulty/medium, android/activity, android/app-startup]
-language_tags: [context, application-context, activity-context, difficulty/medium, android/activity, android/app-startup]
-original_language: en
-source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Context.md
-author: null
-related: [q-usecase-pattern-android--android--medium, q-large-file-upload-app--android--hard, q-broadcastreceiver-contentprovider--android--easy]
-  - "[[moc-android]]"
-  - "[[q-activity-lifecycle--android--easy]]"
-  - "[[q-memory-leaks-android--android--medium]]"
+original_language: ru
+language_tags: [ru, en]
+status: draft
 moc: moc-android
-  - "[[moc-android]]"
-connections: []
+related: [q-activity-lifecycle-methods--android--medium, q-memory-leaks-android--android--medium, q-usecase-pattern-android--android--medium]
+created: 2025-10-21
+updated: 2025-10-21
+tags: [android/lifecycle, android/activity, android/app-startup, context, application-context, activity-context, difficulty/medium]
+source: https://developer.android.com/reference/android/content/Context
+source_note: Official Context documentation
 ---
 
-# Context in Android / Context в Android
+# Вопрос (RU)
+> Какие типы Context существуют в Android? В чём разница между Application Context и Activity Context? Когда какой использовать и какие подводные камни есть?
 
 # Question (EN)
-> 
+> What types of Context exist in Android? What's the difference between Application Context and Activity Context? When to use which and what are the pitfalls?
 
-# Вопрос (RU)
-> 
+---
+
+## Ответ (RU)
+
+### Что такое Context
+- Интерфейс к глобальной информации о среде приложения
+- Абстрактный класс, реализация предоставляется системой Android
+- Доступ к ресурсам, классам, операциям уровня приложения
+
+### Иерархия Context
+```
+Context (абстрактный класс)
+├── ContextWrapper
+│   ├── Application
+│   ├── Service
+│   └── ContextThemeWrapper
+│       └── Activity
+└── ... другие реализации
+```
+
+### Основные типы Context
+
+**Application Context:**
+- Глобальный контекст приложения
+- Живёт весь жизненный цикл приложения
+- Используется для: запуск сервисов, отправка broadcast, загрузка ресурсов
+- НЕ используется для: показ диалогов, запуск Activity, inflate layout
+
+**Activity Context:**
+- Контекст конкретной Activity
+- Связан с жизненным циклом Activity
+- Используется для: показ диалогов, запуск Activity, inflate layout, UI операции
+- Может вызывать memory leaks при неправильном использовании
+
+**Service Context:**
+- Контекст сервиса
+- Связан с жизненным циклом сервиса
+- Используется для фоновых операций
+
+### Возможности по типам Context
+
+| Действие | Application | Activity | Service |
+|----------|-------------|----------|---------|
+| Показать Dialog | ❌ | ✅ | ❌ |
+| Запустить Activity | ❌¹ | ✅ | ❌¹ |
+| Inflate Layout | ❌² | ✅ | ❌² |
+| Запустить Service | ✅ | ✅ | ✅ |
+| Bind к Service | ✅ | ✅ | ✅ |
+| Отправить Broadcast | ✅ | ✅ | ✅ |
+| Загрузить ресурсы | ✅ | ✅ | ✅ |
+
+¹ Можно, но требует создания новой задачи
+² Можно, но без theme information
+
+### Когда использовать какой Context
+
+**Application Context:**
+- Запуск сервисов и broadcast
+- Доступ к ресурсам без UI
+- Singleton объекты
+- Database, network operations
+
+**Activity Context:**
+- UI операции (диалоги, layout inflation)
+- Запуск других Activity
+- ContextMenu, Toast с UI
+- Операции, связанные с Activity lifecycle
+
+### Подводные камни
+
+**Memory Leaks:**
+- Долгоживущие ссылки на Activity Context
+- Static поля с Activity Context
+- Асинхронные операции, удерживающие Activity Context
+
+**Неправильный выбор:**
+- Использование Activity Context для долгоживущих объектов
+- Application Context для UI операций
+- Context в неподходящем scope
+
+### Лучшие практики
+
+1. **Используйте Application Context** для долгоживущих операций
+2. **Используйте Activity Context** только для UI операций
+3. **Избегайте static ссылок** на Context
+4. **Проверяйте lifecycle** перед использованием Context
+5. **Используйте WeakReference** при необходимости долгоживущих ссылок
+
+### Получение Context
+
+```kotlin
+// В Activity
+val context = this // Activity Context
+
+// В Fragment
+val context = requireContext() // Activity Context
+
+// В Application
+val context = this // Application Context
+
+// В Service
+val context = this // Service Context
+
+// Глобальный доступ (осторожно!)
+val context = MyApplication.getInstance()
+```
 
 ---
 
 ## Answer (EN)
-### Definition
 
-`Context` is the interface to global information about an application environment. This is an abstract class whose implementation is provided by the Android system. It allows access to application-specific resources and classes, as well as up-calls for application-level operations such as launching activities, broadcasting and receiving intents, etc.
+### What is Context
+- Interface to global information about application environment
+- Abstract class, implementation provided by Android system
+- Access to resources, classes, application-level operations
 
 ### Context Hierarchy
-
-In Android's class hierarchy, `Context` is the root class. Notably, `Activity` is a descendant of `Context`:
-
 ```
 Context (abstract class)
-     ContextWrapper
-        Application
-        Service
-        ContextThemeWrapper
-            Activity
-     ... other implementations
+├── ContextWrapper
+│   ├── Application
+│   ├── Service
+│   └── ContextThemeWrapper
+│       └── Activity
+└── ... other implementations
 ```
 
-### Primary Context Implementations
+### Main Context Types
 
-The primary classes that implement `Context` (through inheritance) are:
+**Application Context:**
+- Global application context
+- Lives for entire app lifecycle
+- Used for: starting services, sending broadcasts, loading resources
+- NOT used for: showing dialogs, starting Activity, inflating layout
 
-1. **Application**
-   - Provides access to application-wide resources and services
-   - Used for global settings or shared data
-   - Lives for the entire lifetime of the app
+**Activity Context:**
+- Context of specific Activity
+- Tied to Activity lifecycle
+- Used for: showing dialogs, starting Activity, inflating layout, UI operations
+- Can cause memory leaks if used incorrectly
 
-2. **Activity**
-   - Typically used for UI-related tasks
-   - Used for starting new activities (`startActivity()`)
-   - Used for accessing resources and managing events
-   - Tied to the activity lifecycle
+**Service Context:**
+- Service context
+- Tied to service lifecycle
+- Used for background operations
 
-3. **Service**
-   - A context tied to the lifecycle of a service
-   - Used for background operations
+### Capabilities by Context Type
 
-4. **ContextWrapper**
-   - A base class for other context implementations that wrap an existing `Context`
-   - Allows extending and customizing the behavior of an existing context
+| Action | Application | Activity | Service |
+|--------|-------------|----------|---------|
+| Show Dialog | ❌ | ✅ | ❌ |
+| Start Activity | ❌¹ | ✅ | ❌¹ |
+| Inflate Layout | ❌² | ✅ | ❌² |
+| Start Service | ✅ | ✅ | ✅ |
+| Bind to Service | ✅ | ✅ | ✅ |
+| Send Broadcast | ✅ | ✅ | ✅ |
+| Load Resources | ✅ | ✅ | ✅ |
 
-5. **ContextThemeWrapper**
-   - Inherits from `ContextWrapper`
-   - Provides a context with a specific theme
-   - Often used in activities to apply UI themes with `setTheme()`
+¹ Possible but requires creating new task
+² Possible but without theme information
 
-### What Context Can Do
+### When to Use Which Context
 
-Different types of Context have different capabilities:
+**Application Context:**
+- Starting services and broadcasts
+- Accessing resources without UI
+- Singleton objects
+- Database, network operations
 
-| Action | Application | Activity | Service | ContentProvider | BroadcastReceiver |
-|--------|------------|----------|---------|-----------------|-------------------|
-| Show a Dialog | NO | YES | NO | NO | NO |
-| Start an Activity | NO¹ | YES | NO¹ | NO¹ | NO¹ |
-| Layout Inflation | NO² | YES | NO² | NO² | NO² |
-| Start a Service | YES | YES | YES | YES | YES |
-| Bind to a Service | YES | YES | YES | YES | NO |
-| Send a Broadcast | YES | YES | YES | YES | YES |
-| Register BroadcastReceiver | YES | YES | YES | YES | NO³ |
-| Load Resource Values | YES | YES | YES | YES | YES |
+**Activity Context:**
+- UI operations (dialogs, layout inflation)
+- Starting other Activities
+- ContextMenu, Toast with UI
+- Operations tied to Activity lifecycle
 
-**Notes:**
-1. An application CAN start an Activity from here, but it requires that a new task be created. This may fit specific use cases, but can create non-standard back stack behaviors in your application and is generally not recommended or considered good practice
-2. This is legal, but inflation will be done with the default theme for the system on which you are running, not what's defined in your application
-3. Allowed if the receiver is null, which is used for obtaining the current value of a sticky broadcast, on Android 4.2 and above
+### Pitfalls
 
-### getApplication() vs getApplicationContext()
+**Memory Leaks:**
+- Long-lived references to Activity Context
+- Static fields with Activity Context
+- Async operations holding Activity Context
 
-```kotlin
-@Override
-fun getApplicationContext(): Context {
-    return if (mPackageInfo != null)
-        mPackageInfo.getApplication()
-    else
-        mMainThread.getApplication()
-}
-```
-
-Both functions return the application object since the application itself is a context. However, Android provides two functions because:
-
-- **`getApplication()`** is only available in `Activity` and `Service`
-- **`getApplicationContext()`** can be used in other components like `BroadcastReceiver` to get the application object
+**Wrong Choice:**
+- Using Activity Context for long-lived objects
+- Application Context for UI operations
+- Context in inappropriate scope
 
 ### Best Practices
 
-#### When to use Application Context:
-- For long-lived objects that need a context
-- For singleton instances
-- When you don't need UI-related functionality
-- To avoid memory leaks
+1. **Use Application Context** for long-lived operations
+2. **Use Activity Context** only for UI operations
+3. **Avoid static references** to Context
+4. **Check lifecycle** before using Context
+5. **Use WeakReference** when long-lived references needed
 
-#### When to use Activity Context:
-- When you need to show dialogs
-- When inflating layouts with custom themes
-- When starting activities
-- For UI-related operations
+### Getting Context
 
-#### Common Pitfalls:
-- **Memory Leaks**: Using Activity context in long-lived objects can cause memory leaks
-- **Theme Issues**: Using Application context for layout inflation won't apply your app's theme
-- **Dialog Crashes**: Trying to show a dialog with Application context will crash
-
-### Code Examples
-
-#### Correct Usage - Application Context:
 ```kotlin
-class MyRepository(private val context: Context) {
-    // Use application context to avoid memory leaks
-    private val appContext = context.applicationContext
+// In Activity
+val context = this // Activity Context
 
-    fun saveData(data: String) {
-        val sharedPrefs = appContext.getSharedPreferences("prefs", Context.MODE_PRIVATE)
-        sharedPrefs.edit().putString("data", data).apply()
-    }
-}
-```
+// In Fragment
+val context = requireContext() // Activity Context
 
-#### Correct Usage - Activity Context:
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+// In Application
+val context = this // Application Context
 
-        // Use activity context for dialogs
-        AlertDialog.Builder(this)
-            .setTitle("Welcome")
-            .setMessage("Hello, Android!")
-            .show()
-    }
-}
-```
+// In Service
+val context = this // Service Context
 
-#### Incorrect Usage - Memory Leak:
-```kotlin
-// DON'T DO THIS - causes memory leak
-class MyRepository(private val activityContext: Activity) {
-    // This keeps a reference to the activity even after it's destroyed
-}
+// Global access (careful!)
+val context = MyApplication.getInstance()
 ```
 
 ---
 
+## Follow-ups
 
-
-## Ответ (RU)
-### Определение
-
-`Context` - это интерфейс к глобальной информации о среде приложения. Это абстрактный класс, реализация которого предоставляется системой Android. Он позволяет получить доступ к ресурсам и классам, специфичным для приложения, а также к операциям уровня приложения, таким как запуск активностей, отправка и получение интентов и т.д.
-
-### Иерархия Context
-
-В иерархии классов Android `Context` является корневым классом. Примечательно, что `Activity` является потомком `Context`:
-
-```
-Context (абстрактный класс)
-     ContextWrapper
-        Application
-        Service
-        ContextThemeWrapper
-            Activity
-     ... другие реализации
-```
-
-### Основные реализации Context
-
-Основные классы, которые реализуют `Context` (через наследование):
-
-1. **Application**
-   - Предоставляет доступ к ресурсам и сервисам на уровне приложения
-   - Используется для глобальных настроек или общих данных
-   - Живет в течение всего времени работы приложения
-
-2. **Activity**
-   - Обычно используется для задач, связанных с UI
-   - Используется для запуска новых активностей (`startActivity()`)
-   - Используется для доступа к ресурсам и управления событиями
-   - Связан с жизненным циклом активности
-
-3. **Service**
-   - Контекст, связанный с жизненным циклом сервиса
-   - Используется для фоновых операций
-
-4. **ContextWrapper**
-   - Базовый класс для других реализаций контекста, которые оборачивают существующий `Context`
-   - Позволяет расширять и настраивать поведение существующего контекста
-
-5. **ContextThemeWrapper**
-   - Наследуется от `ContextWrapper`
-   - Предоставляет контекст с определенной темой
-   - Часто используется в активностях для применения UI-тем с помощью `setTheme()`
-
-### Возможности Context
-
-Разные типы Context имеют разные возможности:
-
-| Действие | Application | Activity | Service | ContentProvider | BroadcastReceiver |
-|---------|------------|----------|---------|-----------------|-------------------|
-| Показать диалог | НЕТ | ДА | НЕТ | НЕТ | НЕТ |
-| Запустить Activity | НЕТ¹ | ДА | НЕТ¹ | НЕТ¹ | НЕТ¹ |
-| Инфлейт макета | НЕТ² | ДА | НЕТ² | НЕТ² | НЕТ² |
-| Запустить Service | ДА | ДА | ДА | ДА | ДА |
-| Привязаться к Service | ДА | ДА | ДА | ДА | НЕТ |
-| Отправить Broadcast | ДА | ДА | ДА | ДА | ДА |
-| Зарегистрировать BroadcastReceiver | ДА | ДА | ДА | ДА | НЕТ³ |
-| Загрузить значения ресурсов | ДА | ДА | ДА | ДА | ДА |
-
-**Примечания:**
-1. Приложение МОЖЕТ запустить Activity отсюда, но это требует создания новой задачи. Это может соответствовать конкретным случаям использования, но может создать нестандартное поведение стека возврата в вашем приложении и обычно не рекомендуется или не считается хорошей практикой
-2. Это допустимо, но инфлейт будет выполнен с темой по умолчанию для системы, на которой вы работаете, а не с темой, определенной в вашем приложении
-3. Разрешено, если приемник равен null, что используется для получения текущего значения sticky broadcast, на Android 4.2 и выше
-
-### getApplication() против getApplicationContext()
-
-```kotlin
-@Override
-fun getApplicationContext(): Context {
-    return if (mPackageInfo != null)
-        mPackageInfo.getApplication()
-    else
-        mMainThread.getApplication()
-}
-```
-
-Обе функции возвращают объект приложения, поскольку само приложение является контекстом. Однако Android предоставляет две функции, потому что:
-
-- **`getApplication()`** доступен только в `Activity` и `Service`
-- **`getApplicationContext()`** можно использовать в других компонентах, таких как `BroadcastReceiver`, для получения объекта приложения
-
-### Лучшие практики
-
-#### Когда использовать Application Context:
-- Для долгоживущих объектов, которым нужен контекст
-- Для экземпляров синглтонов
-- Когда вам не нужна функциональность, связанная с UI
-- Чтобы избежать утечек памяти
-
-#### Когда использовать Activity Context:
-- Когда нужно показывать диалоги
-- При инфлейте макетов с пользовательскими темами
-- При запуске активностей
-- Для операций, связанных с UI
-
-#### Распространенные ошибки:
-- **Утечки памяти**: Использование контекста Activity в долгоживущих объектах может вызвать утечки памяти
-- **Проблемы с темами**: Использование контекста Application для инфлейта макета не применит тему вашего приложения
-- **Краши диалогов**: Попытка показать диалог с контекстом Application приведет к крашу
-
-### Примеры кода
-
-#### Правильное использование - Application Context:
-```kotlin
-class MyRepository(private val context: Context) {
-    // Используем application context, чтобы избежать утечек памяти
-    private val appContext = context.applicationContext
-
-    fun saveData(data: String) {
-        val sharedPrefs = appContext.getSharedPreferences("prefs", Context.MODE_PRIVATE)
-        sharedPrefs.edit().putString("data", data).apply()
-    }
-}
-```
-
-#### Правильное использование - Activity Context:
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Используем activity context для диалогов
-        AlertDialog.Builder(this)
-            .setTitle("Добро пожаловать")
-            .setMessage("Привет, Android!")
-            .show()
-    }
-}
-```
-
-#### Неправильное использование - Утечка памяти:
-```kotlin
-// НЕ ДЕЛАЙТЕ ТАК - вызывает утечку памяти
-class MyRepository(private val activityContext: Activity) {
-    // Это сохраняет ссылку на активность даже после её уничтожения
-}
-```
-
----
+- How to avoid memory leaks with Context?
+- What happens when using wrong Context type?
+- How to properly manage Context in background threads?
+- What are the differences between ContextWrapper and ContextThemeWrapper?
 
 ## References
 
-- [Android Developer Docs: Context](https://developer.android.com/reference/android/content/Context)
-- [Fully understand Context in Android](https://ericyang505.github.io/android/Context.html)
-- [StackOverflow: Difference between Activity Context and Application Context](https://stackoverflow.com/questions/4128589/difference-between-activity-context-and-application-context)
-- [StackOverflow: What is Context on Android?](https://stackoverflow.com/questions/3572463/what-is-context-on-android)
-- [Medium: Context and memory leaks in Android](https://medium.com/swlh/context-and-memory-leaks-in-android-82a39ed33002)
-- [Medium: Which Context should I use in Android?](https://medium.com/@ali.muzaffar/which-context-should-i-use-in-android-e3133d00772c)
-- [Android Context Needs Isolation](https://www.techyourchance.com/android-context-needs-isolation/)
-- [Using Context Theme Wrapper on Android](https://ataulm.com/2019/11/20/using-context-theme-wrapper.html)
-- [Medium: Activity Context vs Application Context: A Deep Dive](https://medium.com/@mahmoud.alkateb22/activity-context-vs-application-context-a-deep-dive-into-android-development-94fc41233de7)
-
----
+- [Context Documentation](https://developer.android.com/reference/android/content/Context)
+- [Application Context vs Activity Context](https://developer.android.com/guide/components/activities/activity-lifecycle)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-architecture-components-libraries--android--easy]] - Fundamentals
-- [[q-what-is-the-main-application-execution-thread--android--easy]] - Fundamentals
-- [[q-what-unifies-android-components--android--easy]] - Fundamentals
+- [[q-activity-lifecycle-methods--android--medium]]
 
-### Related (Medium)
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
-- [[q-intent-filters-android--android--medium]] - Fundamentals
-- [[q-anr-application-not-responding--android--medium]] - Fundamentals
-- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
-- [[q-what-are-intents-for--android--medium]] - Fundamentals
-
-### Advanced (Harder)
-- [[q-kotlin-context-receivers--kotlin--hard]] - Fundamentals
-- [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Fundamentals
+### Related (Same Level)
+- [[q-usecase-pattern-android--android--medium]]
