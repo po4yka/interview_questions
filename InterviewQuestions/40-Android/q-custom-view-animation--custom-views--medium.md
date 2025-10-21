@@ -17,7 +17,6 @@ tags: [android/ui-views, android/ui-animation, animation, custom-views, valueani
 source: https://developer.android.com/guide/topics/graphics/prop-animation
 source_note: Official property animation guide
 ---
-
 # Вопрос (RU)
 > Как анимировать пользовательские view? Сравните различные подходы к анимации (ValueAnimator, Property Animation, Canvas animation). Реализуйте плавные анимированные переходы и правильно управляйте жизненным циклом анимации.
 
