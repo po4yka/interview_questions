@@ -2,28 +2,19 @@
 id: 20251012-1227111195
 title: Access Modifiers in Kotlin / Модификаторы доступа в Kotlin
 aliases: []
-
-# Classification
 topic: kotlin
 subtopics: [access-modifiers, visibility, encapsulation, oop]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 source: ""
 source_note: ""
-
-# Workflow & relations
 status: draft
 moc: moc-kotlin
 related: [q-channel-closing-completion--kotlin--medium, q-kotlin-java-data-types--programming-languages--medium, q-ranges--kotlin--easy]
-
-# Timestamps
 created: 2025-10-06
 updated: 2025-10-06
-
 tags: [kotlin, access-modifiers, visibility, encapsulation, oop, difficulty/medium]
 ---
 # Question (EN)
