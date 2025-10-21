@@ -1,30 +1,176 @@
 ---
-id: 20251012-1227119
-title: "Dagger Inject Annotation / Аннотация Inject Dagger"
+id: 20251020-200000
+title: Dagger Inject Annotation / Аннотация Inject Dagger
+aliases:
+  - Dagger Inject Annotation
+  - Аннотация Inject Dagger
 topic: android
+subtopics:
+  - dependency-injection
+  - architecture-patterns
+question_kind: android
 difficulty: easy
-status: draft
+original_language: en
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-cancel-presenter-requests--android--medium, q-viewgroup-vs-view-differences--android--easy, q-testing-coroutines-flow--testing--hard]
-created: 2025-10-15
-tags: [android/dependency-injection, dagger, dependency-injection, hilt, inject, difficulty/easy]
+related:
+  - q-dagger-field-injection--android--medium
+  - q-dagger-framework-overview--android--hard
+  - q-hilt-components-scope--android--medium
+created: 2025-10-20
+updated: 2025-10-20
+tags:
+  - android/dependency-injection
+  - android/architecture-patterns
+  - dagger
+  - hilt
+  - inject-annotation
+  - dependency-injection
+  - difficulty/easy
+source: https://dagger.dev/api/latest/dagger/Inject.html
+source_note: Dagger Inject annotation documentation
 ---
-# Как сообщить Dagger, что мы собираемся что-то инжектить?
+# Вопрос (RU)
+> Как сообщить Dagger, что мы собираемся что-то инжектить?
 
-**English**: How to tell Dagger we're going to inject something?
+# Question (EN)
+> How to tell Dagger we're going to inject something?
+
+## Ответ (RU)
+
+Для сообщения Dagger о необходимости инъекции зависимостей используется аннотация **`@Inject`** в трех основных местах: конструктор, поля и методы.
+
+### Теория: Принципы @Inject
+
+**Основные принципы:**
+- `@Inject` маркирует места для внедрения зависимостей
+- Dagger анализирует аннотации на этапе компиляции
+- Автоматическое разрешение зависимостей через граф
+- Статическая типизация и проверка на этапе компиляции
+
+**Типы инъекции:**
+- **Constructor injection** - рекомендуется для большинства случаев
+- **Field injection** - для Android компонентов
+- **Method injection** - для специальных случаев
+
+### @Inject на конструкторе (Рекомендуется)
+
+```kotlin
+class UserRepository @Inject constructor(
+    private val api: ApiService,
+    private val database: UserDatabase
+) {
+    fun getUser(id: String): User {
+        return database.getUser(id) ?: api.fetchUser(id)
+    }
+}
+```
+
+**Dagger автоматически:**
+- Создает экземпляры `UserRepository`
+- Разрешает зависимости `ApiService` и `UserDatabase`
+- Внедряет их в конструктор
+
+### @Inject на полях
+
+**В Activity/Fragment:**
+```kotlin
+class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var repository: UserRepository
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Обязательно вызвать inject перед использованием
+        (application as MyApp).appComponent.inject(this)
+
+        repository.getUser("123")
+    }
+}
+```
+
+**Особенности field injection:**
+- Поля должны быть `lateinit var`
+- Требует явного вызова `inject()` метода
+- Используется для Android компонентов
+
+### @Inject на методах
+
+```kotlin
+class UserService {
+    @Inject
+    fun setDependencies(
+        repository: UserRepository,
+        analytics: Analytics
+    ) {
+        this.repository = repository
+        this.analytics = analytics
+    }
+}
+```
+
+**Method injection используется для:**
+- Специальных случаев инициализации
+- Когда нужен доступ к инжектируемым параметрам
+- Callback методов
+
+### Когда использовать каждый тип
+
+**Constructor injection:**
+- Обычные классы и бизнес-логика
+- Когда возможно модифицировать конструктор
+- Рекомендуемый подход для большинства случаев
+
+**Field injection:**
+- Android компоненты (Activity, Fragment, Service)
+- Когда конструктор недоступен для модификации
+- Framework-управляемые объекты
+
+**Method injection:**
+- Специальные случаи инициализации
+- Когда нужен доступ к параметрам инъекции
+- Callback методы
+
+### Hilt автоматизация
+
+Hilt упрощает использование `@Inject`:
+
+```kotlin
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var repository: UserRepository
+    // Hilt автоматически вызывает inject()
+}
+```
+
+**Hilt автоматически:**
+- Создает компоненты
+- Управляет жизненными циклами
+- Вызывает методы инъекции
 
 ## Answer (EN)
-Use **`@Inject`** annotation on:
 
-1. **Constructor** - For class creation
-2. **Fields** - For property injection
-3. **Methods** - For setter injection
+To tell Dagger about dependency injection, use the **`@Inject`** annotation in three main places: constructor, fields, and methods.
 
-If custom creation logic is needed, use **`@Provides`** in a `@Module`.
+### Theory: @Inject Principles
 
----
+**Core Principles:**
+- `@Inject` marks places for dependency injection
+- Dagger analyzes annotations at compile time
+- Automatic dependency resolution through graph
+- Static typing and compile-time validation
 
-## @Inject on Constructor (Recommended)
+**Injection Types:**
+- **Constructor injection** - recommended for most cases
+- **Field injection** - for Android components
+- **Method injection** - for special cases
+
+### @Inject on Constructor (Recommended)
 
 ```kotlin
 class UserRepository @Inject constructor(
@@ -42,332 +188,98 @@ class UserRepository @Inject constructor(
 - Resolves `ApiService` and `UserDatabase` dependencies
 - Injects them into constructor
 
----
+### @Inject on Fields
 
-## @Inject on Fields
-
-### In Activity/Fragment
-
+**In Activity/Fragment:**
 ```kotlin
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     @Inject
     lateinit var repository: UserRepository
 
-    @Inject
-    lateinit var analytics: AnalyticsService
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Fields injected automatically by Hilt
+
+        // Must call inject before using
+        (application as MyApp).appComponent.inject(this)
 
         repository.getUser("123")
     }
 }
 ```
 
-### In ViewModel
+**Field injection features:**
+- Fields must be `lateinit var`
+- Requires explicit `inject()` method call
+- Used for Android components
+
+### @Inject on Methods
 
 ```kotlin
-@HiltViewModel
-class UserViewModel @Inject constructor(
-    private val repository: UserRepository,
-    private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
-    // Constructor injection preferred for ViewModels
-}
-```
-
----
-
-## @Inject on Methods
-
-```kotlin
-class Presenter @Inject constructor() {
-
-    private lateinit var repository: UserRepository
-
+class UserService {
     @Inject
-    fun setRepository(repository: UserRepository) {
+    fun setDependencies(
+        repository: UserRepository,
+        analytics: Analytics
+    ) {
         this.repository = repository
+        this.analytics = analytics
     }
 }
 ```
 
-**Note:** Method injection happens AFTER constructor injection.
+**Method injection used for:**
+- Special initialization cases
+- When access to injected parameters is needed
+- Callback methods
 
----
+### When to Use Each Type
 
-## When to Use @Provides (Module)
+**Constructor injection:**
+- Regular classes and business logic
+- When constructor can be modified
+- Recommended approach for most cases
 
-When you **can't modify** the class or need **custom creation logic**:
+**Field injection:**
+- Android components (Activity, Fragment, Service)
+- When constructor is not available for modification
+- Framework-managed objects
 
-```kotlin
-@Module
-@InstallIn(SingletonComponent::class)
-object NetworkModule {
+**Method injection:**
+- Special initialization cases
+- When access to injection parameters is needed
+- Callback methods
 
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .addInterceptor(HttpLoggingInterceptor())
-            .build()
-    }
+### Hilt Automation
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://api.example.com/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
-    }
-}
-```
-
-**Use @Provides when:**
-- Third-party library (Retrofit, Room, OkHttp)
-- Interface binding
-- Complex initialization logic
-- Multiple configurations of same type
-
----
-
-## Complete Example
-
-### 1. Constructor Injection
-
-```kotlin
-// Simple class
-class Logger @Inject constructor() {
-    fun log(message: String) {
-        println(message)
-    }
-}
-
-// With dependencies
-class UserRepository @Inject constructor(
-    private val api: ApiService,
-    private val database: UserDatabase,
-    private val logger: Logger
-) {
-    fun getUser(id: String): User {
-        logger.log("Fetching user $id")
-        return database.getUser(id) ?: api.fetchUser(id)
-    }
-}
-```
-
-### 2. Field Injection in Activity
+Hilt simplifies `@Inject` usage:
 
 ```kotlin
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     @Inject
     lateinit var repository: UserRepository
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Use injected dependency
-        lifecycleScope.launch {
-            val user = repository.getUser("123")
-            textView.text = user.name
-        }
-    }
+    // Hilt automatically calls inject()
 }
 ```
 
-### 3. Module for Third-Party
+**Hilt automatically:**
+- Creates components
+- Manages lifecycles
+- Calls injection methods
 
-```kotlin
-@Module
-@InstallIn(SingletonComponent::class)
-object DatabaseModule {
+## Follow-ups
 
-    @Provides
-    @Singleton
-    fun provideDatabase(
-        @ApplicationContext context: Context
-    ): AppDatabase {
-        return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            "app_database"
-        ).build()
-    }
-
-    @Provides
-    fun provideUserDao(database: AppDatabase): UserDao {
-        return database.userDao()
-    }
-}
-```
-
----
-
-## Comparison
-
-| Method | Use Case | Example |
-|--------|----------|---------|
-| **@Inject constructor** | Your own classes | `class Repository @Inject constructor()` |
-| **@Inject field** | Android components (Activity, Fragment) | `@Inject lateinit var repository: Repository` |
-| **@Inject method** | Optional dependencies | `@Inject fun setLogger(logger: Logger)` |
-| **@Provides** | Third-party or complex logic | `@Provides fun provideRetrofit(): Retrofit` |
-
----
-
-## Hilt Entry Points
-
-For non-Android classes that need injection:
-
-```kotlin
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface RepositoryProvider {
-    fun repository(): UserRepository
-}
-
-class MyWorker(
-    context: Context,
-    params: WorkerParameters
-) : Worker(context, params) {
-
-    override fun doWork(): Result {
-        val appContext = applicationContext.applicationContext
-        val entryPoint = EntryPointAccessors.fromApplication(
-            appContext,
-            RepositoryProvider::class.java
-        )
-
-        val repository = entryPoint.repository()
-
-        repository.syncData()
-
-        return Result.success()
-    }
-}
-```
-
----
-
-## Best Practices
-
-### DO: Constructor Injection
-
-```kotlin
-class UserRepository @Inject constructor(
-    private val api: ApiService
-) {
-    // Dependencies clear and testable
-}
-```
-
-### DON'T: Field Injection for Regular Classes
-
-```kotlin
-// BAD
-class UserRepository {
-    @Inject lateinit var api: ApiService // Hard to test
-}
-
-// GOOD
-class UserRepository @Inject constructor(
-    private val api: ApiService
-)
-```
-
-### DO: Use @Provides for Interfaces
-
-```kotlin
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-
-    @Binds
-    abstract fun bindUserRepository(
-        impl: UserRepositoryImpl
-    ): UserRepository
-}
-```
-
----
-
-## Summary
-
-**How to tell Dagger to inject:**
-
-1. **@Inject on constructor** (preferred)
-   ```kotlin
-   class Repository @Inject constructor(private val api: ApiService)
-   ```
-
-2. **@Inject on fields** (for Android components)
-   ```kotlin
-   @AndroidEntryPoint
-   class MainActivity : AppCompatActivity() {
-       @Inject lateinit var repository: Repository
-   }
-   ```
-
-3. **@Provides in @Module** (for third-party or custom logic)
-   ```kotlin
-   @Provides
-   fun provideRetrofit(): Retrofit { ... }
-   ```
-
-**Best practice:** Prefer constructor injection for testability and clarity.
-
----
-
-## Ответ (RU)
-Используйте аннотацию **`@Inject`** на:
-
-1. **Конструкторе** - для создания класса
-2. **Полях** - для инъекции свойств
-3. **Методах** - для setter-инъекции
-
-Если нужна кастомная логика создания, используйте **`@Provides`** в `@Module`.
-
-**Примеры:**
-
-```kotlin
-// 1. Конструктор (рекомендуется)
-class Repository @Inject constructor(
-    private val api: ApiService
-)
-
-// 2. Поля (для Activity/Fragment)
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-    @Inject lateinit var repository: Repository
-}
-
-// 3. Module (для сторонних библиотек)
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
-    @Provides
-    fun provideRetrofit(): Retrofit { ... }
-}
-```
-
-**Лучшая практика:** Используйте constructor injection для тестируемости.
+- What's the difference between constructor injection and field injection?
+- How does Dagger resolve dependencies marked with @Inject?
+- When should you avoid using @Inject annotation?
 
 ## Related Questions
 
-- [[q-cancel-presenter-requests--android--medium]]
-- [[q-viewgroup-vs-view-differences--android--easy]]
-- [[q-testing-coroutines-flow--testing--hard]]
+### Prerequisites (Easier)
+- [[q-android-project-parts--android--easy]]
+
+### Related (Same Level)
+- [[q-dagger-field-injection--android--medium]]
+
+### Advanced (Harder)
+- [[q-dagger-framework-overview--android--hard]]
