@@ -1,661 +1,318 @@
 ---
-id: 20251006-000001
-title: "How to design a WhatsApp-like app? / Как спроектировать приложение подобное WhatsApp?"
-aliases: []
-
-# Classification
-topic: system-design
-subtopics: [messaging, real-time, architecture, scalability, mobile-app-design]
-question_kind: design
+id: 20251020-200000
+title: Design WhatsApp App / Проектирование приложения WhatsApp
+aliases:
+  - Design WhatsApp App
+  - Проектирование приложения WhatsApp
+topic: android
+subtopics:
+  - networking-http
+  - files-media
+  - service
+question_kind: android
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru, difficulty/hard]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
-source_note: Amit Shekhar Android Interview Questions repository
-
-# Workflow & relations
-status: draft
+language_tags:
+  - en
+  - ru
+source: https://developer.android.com/training/sync-adapters
+source_note: Android sync and messaging patterns
+status: reviewed
 moc: moc-android
-related: [real-time-updates, websocket, database-design, offline-first]
-
-# Timestamps
-created: 2025-10-06
-updated: 2025-10-06
-
-tags: [en, ru, difficulty/hard]
+related:
+  - q-data-sync-unstable-network--android--hard
+  - q-database-encryption-android--android--medium
+  - q-deep-link-vs-app-link--android--medium
+created: 2025-10-20
+updated: 2025-10-20
+tags:
+  - android/networking-http
+  - android/files-media
+  - android/service
+  - messaging
+  - realtime
+  - e2ee
+  - difficulty/hard
 ---
-# Question (EN)
-> How would you design a WhatsApp-like messaging application for Android?
 # Вопрос (RU)
-> Как бы вы спроектировали мессенджер, подобный WhatsApp, для Android?
+> Как спроектировать мессенджер WhatsApp для Android?
+
+# Question (EN)
+> How to design WhatsApp for Android?
 
 ---
-
-## Answer (EN)
-
-Designing a WhatsApp-like messaging application involves multiple components working together to provide real-time, reliable, and scalable messaging capabilities. Here's a comprehensive breakdown:
-
-### 1. Core Requirements
-
-**Functional Requirements:**
-- One-to-one messaging
-- Group messaging
-- Media sharing (images, videos, documents)
-- Message delivery status (sent, delivered, read)
-- End-to-end encryption
-- Online/offline status
-- Last seen timestamp
-- Push notifications
-- Voice and video calls
-- Message persistence (offline mode)
-
-**Non-Functional Requirements:**
-- Low latency for message delivery
-- High availability (99.9%+)
-- Scalability to millions of users
-- Data privacy and security
-- Efficient bandwidth usage
-- Battery optimization
-
-### 2. High-Level Architecture
-
-```
-
-  Android Client 
-
-         
-          WebSocket (Real-time messaging)
-          REST API (User profile, media upload)
-          Push Notifications (FCM)
-         
-
-  Load Balancer  
-
-         
-
-  Application    
-  Servers         ← Message Queue (Kafka/RabbitMQ)
-
-         
-          User Database (PostgreSQL/MySQL)
-          Message Database (Cassandra/MongoDB)
-          Cache Layer (Redis)
-          File Storage (S3/CDN)
-```
-
-### 3. Android App Architecture
-
-#### Layer Structure
-
-```kotlin
-// Domain Layer - Use Cases
-class SendMessageUseCase @Inject constructor(
-    private val messageRepository: MessageRepository,
-    private val encryptionService: EncryptionService
-) {
-    suspend operator fun invoke(
-        chatId: String,
-        content: String,
-        recipientId: String
-    ): Result<Message> {
-        return try {
-            // Encrypt message
-            val encryptedContent = encryptionService.encrypt(content, recipientId)
-
-            // Create message entity
-            val message = Message(
-                id = UUID.randomUUID().toString(),
-                chatId = chatId,
-                senderId = getCurrentUserId(),
-                content = encryptedContent,
-                timestamp = System.currentTimeMillis(),
-                status = MessageStatus.SENDING
-            )
-
-            // Save to local DB first (offline-first)
-            messageRepository.saveMessageLocally(message)
-
-            // Send to server
-            messageRepository.sendMessage(message)
-
-            Result.Success(message)
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
-    }
-}
-
-// Data Layer - Repository
-class MessageRepositoryImpl @Inject constructor(
-    private val localDataSource: MessageLocalDataSource,
-    private val remoteDataSource: MessageRemoteDataSource,
-    private val websocketManager: WebSocketManager
-) : MessageRepository {
-
-    override suspend fun sendMessage(message: Message): Result<Message> {
-        return try {
-            // Try to send via WebSocket for real-time delivery
-            if (websocketManager.isConnected()) {
-                websocketManager.sendMessage(message)
-            } else {
-                // Fallback to REST API
-                remoteDataSource.sendMessage(message)
-            }
-
-            // Update local status
-            localDataSource.updateMessageStatus(message.id, MessageStatus.SENT)
-
-            Result.Success(message)
-        } catch (e: Exception) {
-            // Mark for retry
-            localDataSource.updateMessageStatus(message.id, MessageStatus.FAILED)
-            Result.Error(e)
-        }
-    }
-
-    override fun observeMessages(chatId: String): Flow<List<Message>> {
-        return localDataSource.observeMessages(chatId)
-            .map { messages ->
-                messages.map { decryptMessage(it) }
-            }
-    }
-}
-```
-
-#### WebSocket Implementation
-
-```kotlin
-class WebSocketManager @Inject constructor(
-    private val okHttpClient: OkHttpClient,
-    private val messageHandler: MessageHandler
-) {
-    private var webSocket: WebSocket? = null
-    private val reconnectDelay = 5000L
-
-    fun connect(userId: String) {
-        val request = Request.Builder()
-            .url("wss://api.example.com/ws?userId=$userId")
-            .build()
-
-        webSocket = okHttpClient.newWebSocket(request, object : WebSocketListener() {
-            override fun onOpen(webSocket: WebSocket, response: Response) {
-                Log.d("WebSocket", "Connection opened")
-                // Send authentication
-                authenticate(userId)
-            }
-
-            override fun onMessage(webSocket: WebSocket, text: String) {
-                // Handle incoming message
-                val message = Json.decodeFromString<Message>(text)
-                messageHandler.handleIncomingMessage(message)
-            }
-
-            override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-                Log.e("WebSocket", "Connection failed", t)
-                // Implement exponential backoff
-                scheduleReconnect()
-            }
-
-            override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-                Log.d("WebSocket", "Connection closed: $reason")
-                scheduleReconnect()
-            }
-        })
-    }
-
-    fun sendMessage(message: Message) {
-        val json = Json.encodeToString(message)
-        webSocket?.send(json) ?: run {
-            // Queue message for sending when connection is restored
-            messageHandler.queueMessage(message)
-        }
-    }
-
-    private fun scheduleReconnect() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            connect(getCurrentUserId())
-        }, reconnectDelay)
-    }
-}
-```
-
-#### Local Database (Room)
-
-```kotlin
-@Entity(tableName = "messages")
-data class MessageEntity(
-    @PrimaryKey val id: String,
-    val chatId: String,
-    val senderId: String,
-    val content: String,
-    val timestamp: Long,
-    val status: MessageStatus,
-    val mediaUrl: String? = null,
-    val mediaType: MediaType? = null,
-    val isEncrypted: Boolean = true
-)
-
-@Dao
-interface MessageDao {
-    @Query("SELECT * FROM messages WHERE chatId = :chatId ORDER BY timestamp ASC")
-    fun observeMessages(chatId: String): Flow<List<MessageEntity>>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMessage(message: MessageEntity)
-
-    @Query("UPDATE messages SET status = :status WHERE id = :messageId")
-    suspend fun updateMessageStatus(messageId: String, status: MessageStatus)
-
-    @Query("SELECT * FROM messages WHERE status = :status")
-    suspend fun getPendingMessages(status: MessageStatus = MessageStatus.FAILED): List<MessageEntity>
-}
-
-@Database(
-    entities = [MessageEntity::class, ChatEntity::class, UserEntity::class],
-    version = 1
-)
-abstract class MessagingDatabase : RoomDatabase() {
-    abstract fun messageDao(): MessageDao
-    abstract fun chatDao(): ChatDao
-    abstract fun userDao(): UserDao
-}
-```
-
-### 4. Key Features Implementation
-
-#### End-to-End Encryption
-
-```kotlin
-class E2EEncryptionService @Inject constructor(
-    private val keyStore: KeyStoreManager
-) {
-    // Signal Protocol or similar
-    fun encrypt(message: String, recipientPublicKey: String): String {
-        val cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
-        val publicKey = keyStore.getPublicKey(recipientPublicKey)
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey)
-        val encryptedBytes = cipher.doFinal(message.toByteArray())
-        return Base64.encodeToString(encryptedBytes, Base64.DEFAULT)
-    }
-
-    fun decrypt(encryptedMessage: String): String {
-        val cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
-        val privateKey = keyStore.getPrivateKey()
-        cipher.init(Cipher.DECRYPT_MODE, privateKey)
-        val decryptedBytes = cipher.doFinal(
-            Base64.decode(encryptedMessage, Base64.DEFAULT)
-        )
-        return String(decryptedBytes)
-    }
-}
-```
-
-#### Message Status Tracking
-
-```kotlin
-class MessageStatusTracker @Inject constructor(
-    private val messageRepository: MessageRepository
-) {
-    fun trackDeliveryStatus(messageId: String) {
-        viewModelScope.launch {
-            messageRepository.observeMessageStatus(messageId)
-                .collect { status ->
-                    when (status) {
-                        MessageStatus.SENDING -> updateUI(messageId, "Sending...")
-                        MessageStatus.SENT -> updateUI(messageId, "")
-                        MessageStatus.DELIVERED -> updateUI(messageId, "")
-                        MessageStatus.READ -> updateUI(messageId, " (blue)")
-                        MessageStatus.FAILED -> updateUI(messageId, "")
-                    }
-                }
-        }
-    }
-}
-```
-
-#### Offline Support
-
-```kotlin
-class OfflineMessageSync @Inject constructor(
-    private val messageDao: MessageDao,
-    private val networkMonitor: NetworkMonitor,
-    private val messageRepository: MessageRepository
-) {
-    init {
-        observeNetworkChanges()
-    }
-
-    private fun observeNetworkChanges() {
-        viewModelScope.launch {
-            networkMonitor.isOnline.collect { isOnline ->
-                if (isOnline) {
-                    syncPendingMessages()
-                }
-            }
-        }
-    }
-
-    private suspend fun syncPendingMessages() {
-        val pendingMessages = messageDao.getPendingMessages()
-        pendingMessages.forEach { message ->
-            try {
-                messageRepository.sendMessage(message.toDomainModel())
-            } catch (e: Exception) {
-                Log.e("Sync", "Failed to sync message ${message.id}", e)
-            }
-        }
-    }
-}
-```
-
-#### Push Notifications
-
-```kotlin
-class MessagingFirebaseService : FirebaseMessagingService() {
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        val data = remoteMessage.data
-        val messageId = data["messageId"] ?: return
-        val senderId = data["senderId"] ?: return
-        val content = data["content"] ?: return
-
-        // Decrypt message
-        val decryptedContent = encryptionService.decrypt(content)
-
-        // Save to local DB
-        saveMessageToDb(messageId, senderId, decryptedContent)
-
-        // Show notification if app is in background
-        if (!isAppInForeground()) {
-            showNotification(senderId, decryptedContent)
-        }
-    }
-
-    private fun showNotification(senderId: String, content: String) {
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_message)
-            .setContentTitle(getUserName(senderId))
-            .setContentText(content)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
-            .build()
-
-        notificationManager.notify(messageId.hashCode(), notification)
-    }
-}
-```
-
-### 5. Scalability Considerations
-
-#### Message Pagination
-
-```kotlin
-class MessagePagingSource(
-    private val chatId: String,
-    private val messageDao: MessageDao,
-    private val apiService: ApiService
-) : PagingSource<Int, Message>() {
-
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Message> {
-        return try {
-            val page = params.key ?: 0
-            val pageSize = params.loadSize
-
-            // Try local first
-            val localMessages = messageDao.getMessagesPaged(chatId, page, pageSize)
-
-            if (localMessages.isEmpty() && networkMonitor.isOnline()) {
-                // Fetch from server
-                val response = apiService.getMessages(chatId, page, pageSize)
-                messageDao.insertAll(response.messages)
-
-                LoadResult.Page(
-                    data = response.messages,
-                    prevKey = if (page == 0) null else page - 1,
-                    nextKey = if (response.messages.isEmpty()) null else page + 1
-                )
-            } else {
-                LoadResult.Page(
-                    data = localMessages,
-                    prevKey = if (page == 0) null else page - 1,
-                    nextKey = if (localMessages.size < pageSize) null else page + 1
-                )
-            }
-        } catch (e: Exception) {
-            LoadResult.Error(e)
-        }
-    }
-}
-```
-
-### 6. Performance Optimizations
-
-**Battery Optimization:**
-- Use WorkManager for background sync instead of continuous services
-- Implement doze mode handling
-- Batch network requests
-- Use FCM for push notifications instead of polling
-
-**Network Optimization:**
-- Compress media before upload
-- Use Protocol Buffers instead of JSON for WebSocket
-- Implement message batching for sending multiple messages
-- Cache media files locally
-
-**Memory Optimization:**
-- Paginate message lists
-- Use Glide/Coil for image loading with caching
-- Implement proper message recycling in RecyclerView
-- Clear old messages from memory
-
-### 7. Security Best Practices
-
-- Use SSL/TLS for all network communication
-- Implement certificate pinning
-- Store encryption keys in Android Keystore
-- Use Signal Protocol for E2E encryption
-- Implement secure file deletion
-- Add tamper detection
-- Use biometric authentication for app access
-
-### Best Practices
-
-1. **Offline-First Architecture**: Always save to local DB first, then sync
-2. **Optimistic UI Updates**: Show messages immediately, update status asynchronously
-3. **Message Queue**: Implement retry mechanism for failed messages
-4. **Connection Management**: Handle reconnection with exponential backoff
-5. **Data Consistency**: Use idempotent message IDs to prevent duplicates
-6. **Testing**: Unit test business logic, integration test WebSocket, UI test messaging flow
-
-### Common Pitfalls
-
-1. Not handling network failures gracefully
-2. Ignoring battery optimization
-3. Poor database indexing leading to slow queries
-4. Not implementing proper encryption
-5. Hardcoding server URLs
-6. Not handling edge cases (airplane mode, force quit, etc.)
 
 ## Ответ (RU)
 
-Проектирование приложения для обмена сообщениями, подобного WhatsApp, включает несколько компонентов, работающих вместе для обеспечения обмена сообщениями в реальном времени с высокой надежностью и масштабируемостью.
+WhatsApp включает: обмен сообщениями 1-to-1/группы, медиа, статусы доставки/прочтения, E2EE (Signal Protocol), голос/видео-звонки, офлайн-персистентность, синхронизацию и масштабирование.
 
-### 1. Основные требования
+### Требования
+**Функциональные:**
+- Сообщения: текст, медиа (фото/видео/док), голосовые сообщения. Группы.
+- Статусы: sent/delivered/read (двойная/синяя галочка), typing indicator.
+- Безопасность: E2EE (Signal Protocol), device verification.
+- Присутствие: online/offline, last seen, статусы.
+- Push: FCM для оффлайн-доставки, silent push для синхронизации.
+- Звонки: WebRTC для голоса/видео, STUN/TURN для NAT traversal.
 
-**Функциональные требования:**
-- Личные сообщения (один на один)
-- Групповые сообщения
-- Обмен медиафайлами (изображения, видео, документы)
-- Статус доставки сообщений (отправлено, доставлено, прочитано)
-- Сквозное шифрование
-- Статус онлайн/офлайн
-- Временная метка последнего посещения
-- Push-уведомления
-- Голосовые и видеозвонки
-- Сохранение сообщений (офлайн режим)
+**Нефункциональные:** низкая латентность (<200ms P95), высокая доступность, масштабируемость (миллиарды сообщений/день), конфиденциальность (zero-knowledge server), бережная батарея/трафик, офлайн.
 
-**Нефункциональные требования:**
-- Низкая задержка доставки сообщений
-- Высокая доступность (99.9%+)
-- Масштабируемость для миллионов пользователей
-- Конфиденциальность и безопасность данных
-- Эффективное использование пропускной способности
-- Оптимизация батареи
+### Архитектура (высокоуровнево)
+Клиент Android (локальная БД, E2EE engine, WebSocket, media cache) → Load Balancer → микросервисы (Chat/Presence/Media/Call Signaling/Push) → очереди (Kafka), БД (Cassandra для messages, PostgreSQL для users), хранилище медиа (S3+CDN), кэш (Redis для presence), Signal Server для звонков.
 
-### 2. Архитектура высокого уровня
+### Клиент Android: ключевые потоки
+1) Отправка сообщения: шифрование Signal Protocol (ratchet), локальная запись (pending), WebSocket send, ack от сервера → delivered, receipt от получателя → read.
+2) Получение: WebSocket → расшифровка → локальная БД → UI update, отправка read receipt.
+3) Медиа: сжатие (JPEG для фото, H.264/HEVC для видео), загрузка на CDN, отправка URL+thumbnail+decryption key в сообщении, ленивая подгрузка медиа.
+4) Офлайн: очередь неотправленных, хранение до 30 дней, ресенд при онлайне, backoff при сетевых ошибках.
+5) Группы: каждый участник имеет sender key (pairwise sessions → group sessions), рэтчет при изменении состава, forward secrecy.
+6) Звонки: WebRTC SDP negotiation через Signal Server, ICE candidates, STUN/TURN fallback, адаптивный bitrate.
 
-Система состоит из:
-- Android-клиента
-- WebSocket для обмена сообщениями в реальном времени
-- REST API для профилей пользователей и загрузки медиа
-- Push-уведомлений (FCM)
-- Балансировщика нагрузки
-- Серверов приложений
-- Очереди сообщений (Kafka/RabbitMQ)
-- Базы данных пользователей (PostgreSQL/MySQL)
-- Базы данных сообщений (Cassandra/MongoDB)
-- Слоя кэширования (Redis)
-- Файлового хранилища (S3/CDN)
+```kotlin
+// Minimal Signal Protocol usage (conceptual)
+val session = SessionBuilder(recipientAddress).buildSenderSession()
+val ciphertext = SessionCipher(session).encrypt(plaintext.toByteArray())
+```
 
-### 3. Архитектура Android-приложения
+```kotlin
+// WebSocket send with ack
+ws.send(MessageProto(id, encrypted, timestamp))
+ackFlow.first { it.msgId == id } // wait for ack
+```
 
-#### Структура слоев
+```kotlin
+// Offline queue
+if (!networkAvailable) {
+  db.insertPending(msg)
+            } else {
+  sendAndRetry(msg)
+}
+```
 
-Приложение использует Clean Architecture с тремя основными слоями:
+### Сервер: маршрутизация и персистентность
+- Chat Service: маршрутизация сообщений по userId, хранение зашифрованных сообщений (server не видит plaintext), доставка через WebSocket или push если offline, удаление после доставки (or TTL 30 дней).
+- Presence Service: heartbeat каждые 30s, кэш в Redis, pub/sub для обновлений контактов.
+- Media Service: multipart upload, генерация thumbnails (без расшифровки), CDN для доставки, E2EE ключ в metadata.
+- Call Signaling: relay SDP/ICE candidates, не участвует в медиа-потоке (P2P через WebRTC).
+- Push Service: FCM integration, приоритизация (high priority для звонков, normal для сообщений).
 
-**Domain Layer (Слой бизнес-логики)**: Содержит use cases и бизнес-правила. Пример - `SendMessageUseCase`, который обрабатывает отправку сообщения с шифрованием.
+### Архитектурный анализ
 
-**Data Layer (Слой данных)**: Управляет источниками данных (локальными и удаленными). `MessageRepository` координирует сохранение в локальной БД и отправку на сервер.
+**Границы сервисов:**
+- **Chat Service**: принимает сообщения от отправителя, проверяет rate limits, сохраняет в БД (Cassandra: partition key userId+timestamp), маршрутизирует получателю через WebSocket (если онлайн) или ставит в очередь доставки. Публикует события в Kafka для аналитики.
+- **Presence Service**: обрабатывает heartbeat от клиентов (WS ping/pong), обновляет статус в Redis (TTL 45s), публикует изменения статуса подписчикам (contacts list), управляет typing indicators (ephemeral, TTL 10s).
+- **Media Service**: принимает multipart uploads (chunks), генерирует thumbnails через Image Processing Pipeline (без доступа к plaintext: thumbnail создаётся клиентом или из encrypted preview), хранит в S3 с lifecycle policies (холодное хранилище через Glacier после 30 дней, удаление через 1 год). Поддерживает resumable uploads.
+- **Call Signaling Service**: relay SDP offers/answers и ICE candidates между peers, не участвует в RTP/SRTP потоке (P2P). Fallback TURN server для NAT traversal (relay медиа, ~5-10% звонков). Поддерживает call queueing и call waiting.
+- **Push Service**: интеграция с FCM/APNS, поддерживает message collapsing (последнее сообщение при multiple pending), priority channels, device token management, retry с backoff.
+- **Group Service**: управляет членством в группах, генерирует invite links с TTL, обрабатывает admin actions, синхронизирует group keys при изменениях состава.
 
-**Presentation Layer (Слой представления)**: ViewModel и UI компоненты.
+**Доменные модели:**
+- **Message**: id (UUID), senderId, recipientId/groupId, encryptedContent (blob), timestamp, status (PENDING/SENT/DELIVERED/READ), mediaUrl (если медиа), thumbnailUrl, mediaKey (для E2EE), expiresAt (для disappearing messages).
+- **Chat**: id, participants (userId[]), lastMessage, unreadCount, muteUntil, isPinned, createdAt, updatedAt.
+- **User**: id, phoneNumber, publicKey (Signal Protocol identity key), deviceId[], lastSeen, status (online/offline), profilePhoto.
+- **Group**: id, name, adminIds[], memberIds[], createdAt, inviteLink (UUID+TTL), settings (allowMemberInvite, onlyAdminSend).
+- **Receipt**: messageId, userId, type (DELIVERED/READ), timestamp.
 
-#### Реализация WebSocket
+**Хранение данных:**
+- **Cassandra (Messages)**: partition key: (userId, YYYYMM), clustering key: timestamp DESC. Хранение зашифрованных сообщений, TTL 30 дней для доставленных, индекс на messageId для receipts. Replication factor 3, eventual consistency (допустимо для messaging).
+- **PostgreSQL (Users, Groups)**: strong consistency для user metadata, group membership. Индексы на phoneNumber, userId. Репликация master-slave для чтения.
+- **Redis (Presence, Typing)**: keys: `presence:{userId}` (TTL 45s), `typing:{chatId}:{userId}` (TTL 10s), `online:{userId}` (set). Pub/Sub каналы для real-time updates.
+- **S3 (Media)**: bucket per region, lifecycle rules (Standard → Glacier → Delete), pre-signed URLs (TTL 1h) для скачивания. CDN (CloudFront) для кэширования популярного контента.
 
-WebSocket Manager управляет постоянным подключением к серверу для обмена сообщениями в реальном времени:
-- Автоматическое переподключение при разрыве соединения
-- Экспоненциальная задержка для повторных попыток
-- Очередь сообщений при отсутствии подключения
+**E2EE и Signal Protocol:**
+- **Identity Keys**: долгосрочные ed25519 ключи для аутентификации устройств. Публикуются на сервер при регистрации, валидируются через QR-код safety numbers.
+- **Pre-Keys**: одноразовые ECDH ключи (пачка из 100), используются для инициации сессии с оффлайн-пользователем. Пополняются при истощении.
+- **Session Ratchet (Double Ratchet)**: DH ratchet для обновления session key при каждом обмене, symmetric ratchet для forward secrecy. Поддерживает out-of-order доставку.
+- **Group Sessions**: каждый участник имеет sender key, распределяется через pairwise sessions. При добавлении/удалении участника — полный re-key группы.
+- **Device Verification**: QR-код safety number = hash(identityKey_A || identityKey_B), сравнение для защиты от MITM. Уведомления при смене ключей устройства.
 
-#### Локальная база данных (Room)
+**Согласованность и доставка:**
+- **At-least-once delivery**: клиент ресендит сообщение до получения ack, сервер дедуплицирует по messageId. Idempotency tokens для предотвращения двойной доставки.
+- **Ordered delivery**: сервер добавляет server-side timestamp, клиент сортирует по timestamp + messageId для устранения неоднозначности. Для групп: vector clocks для causal ordering.
+- **Offline queueing**: сервер хранит сообщения до 30 дней, клиент синхронизирует при онлайне через batch fetch (last_sync_timestamp). Push notification для пробуждения клиента.
+- **Read receipts**: optional (пользователь может отключить), отправляется только после рендера сообщения на экране. Batch receipts для групп (не отправлять receipt на каждое сообщение).
 
-Room Database хранит:
-- Сообщения с метаданными
-- Чаты и их участники
-- Информацию о пользователях
-- Статусы доставки
+**Медиа-пайплайн:**
+- **Сжатие (клиент)**: JPEG quality 85% для фото (resize ≤1600px), H.264/HEVC для видео (~1Mbps для мобильных сетей), Opus для голосовых сообщений.
+- **Chunked upload**: multipart upload (5MB chunks), resumable на уровне chunk, параллельная загрузка chunks для скорости.
+- **Thumbnail generation**: клиент генерирует encrypted thumbnail (100x100), отправляется вместе с сообщением для мгновенного превью. Сервер не имеет доступа к plaintext.
+- **CDN caching**: популярные медиа кэшируются в CloudFront, снижение нагрузки на S3, pre-signed URLs с ограниченным TTL (1h).
+- **Progressive download**: клиент начинает воспроизведение видео до полной загрузки (streaming), range requests для seek.
 
-Используется паттерн "offline-first" - все данные сначала сохраняются локально, затем синхронизируются с сервером.
+**Голосовые/видео звонки:**
+- **Signaling**: SDP negotiation через Chat Service (offer/answer/candidates). ICE gathering для P2P connectivity.
+- **Media transport**: WebRTC с SRTP (encrypted RTP), P2P при возможности (80-90% звонков), TURN relay для NAT traversal (5-10%).
+- **Adaptive bitrate**: динамическая регулировка качества на основе RTT/packet loss. Переключение с видео на голос при плохом канале.
+- **Group calls**: SFU (Selective Forwarding Unit) для групповых звонков, каждый участник отправляет один поток в SFU, получает N-1 потоков. Scalable Video Coding (SVC) для адаптации quality per participant.
+- **Call queueing**: missed call notification, call history persistence, callback button.
 
-### 4. Реализация ключевых функций
+**Отказоустойчивость:**
+- **WebSocket → Long polling fallback**: при disconnect клиент переключается на HTTP long polling (30s timeout), возврат к WS при восстановлении. Health check через ping/pong.
+- **Multi-region deployment**: primary region для пользователя по geo (low latency), cross-region replication для DR. Automatic failover при региональном outage.
+- **Message retry**: экспоненциальный backoff (1s, 2s, 4s, 8s, 16s, max 5 min), jitter для избежания sync storms. Пометка failed после 24h.
+- **Circuit breaker**: к внешним сервисам (FCM, CDN), состояния CLOSED/OPEN/HALF_OPEN, timeout 30-60s в OPEN.
+- **Graceful degradation**: при отказе presence service — скрыть online статусы, сообщения продолжают доставляться. При отказе media upload — показать retry UI.
 
-#### Сквозное шифрование (E2E)
+**Безопасность и приватность:**
+- **Zero-knowledge server**: сервер не имеет доступа к plaintext сообщений/медиа, хранит только зашифрованные blobs.
+- **Sealed Sender**: скрытие метаданных отправителя от сервера через onion encryption, сервер знает только получателя.
+- **Forward secrecy**: ratchet механизм обновляет session keys, compromise старого ключа не раскрывает прошлые сообщения.
+- **Device attestation**: SafetyNet/Play Integrity API для валидации integrity клиента, блокировка rooted/modded устройств для защиты от tampering.
+- **Rate limiting**: per user/device (100 msg/min, 50 media/min), per IP (1000 connections), distributed counter в Redis. Ban на abuse (spam/flood).
 
-Используется асимметричное шифрование (RSA) или Signal Protocol:
-- Каждый пользователь имеет пару ключей (публичный/приватный)
-- Сообщения шифруются публичным ключом получателя
-- Только получатель может расшифровать своим приватным ключом
-- Ключи хранятся в Android Keystore
+**Наблюдаемость и SLO:**
+- **Метрики**: P50/P95/P99 message latency (отправка → доставка, цель <200ms P95), delivery success rate (>99.9%), WebSocket uptime (>99.95%), media upload time (<5s P95), call connection rate (>95%).
+- **Distributed tracing**: OpenTelemetry для сквозной трассировки message journey: client → LB → Chat → Kafka → recipient. Span tags: userId, messageId, chatId.
+- **SLO alerting**: PagerDuty/Opsgenie. Alert if message_delivery_p95 > 500ms for 5min OR delivery_success_rate < 99.5% for 10min OR websocket_uptime < 99.9%.
+- **Logging**: structured JSON logs, PII masking (phone numbers → hash), retention 30 days hot, 1 year cold (Splunk/ELK).
 
-#### Отслеживание статуса сообщений
+**Масштабирование:**
+- **Sharding**: Chat Service шардируется по userId hash (consistent hashing), каждый shard независимо масштабируется. Cassandra partition по userId.
+- **Connection pooling**: WebSocket gateways (stateful), горизонтальное масштабирование с sticky sessions (L4/L7 LB).
+- **Read replicas**: PostgreSQL master-slave для user queries, Cassandra RF=3 для чтения из ближайшего datacenter.
+- **Message queue**: Kafka для асинхронной обработки (push delivery, analytics), партиции по userId, retention 7 дней.
+- **CDN для медиа**: CloudFront/Cloudflare, edge caching, снижение нагрузки на origin на 90%+.
+- **Auto-scaling**: Kubernetes HPA на базе connection count (WS gateways), message queue depth (Chat workers), CPU/memory для stateless services.
 
-Система отслеживает пять состояний:
-- SENDING (отправка)
-- SENT (отправлено на сервер)
-- DELIVERED (доставлено получателю)
-- READ (прочитано)
-- FAILED (ошибка отправки)
+### Оптимизация
+- Батарея: heartbeat каждые 30s, coalesce push notifications, WebSocket keep-alive с увеличенным интервалом в фоне.
+- Сеть: protobuf для сжатия, batch receipts, delta sync (только новые сообщения с last_sync), предзагрузка частых контактов.
+- Память: message pagination (20-50 сообщений), lazy load медиа, LRU cache для декодированных изображений.
 
-#### Офлайн-поддержка
+### Офлайн
+- Локальная БД (Room/SQLite) для сообщений/контактов, очередь pending sends, синхронизация при онлайне, conflict resolution (server wins для metadata, merge для messages).
 
-Приложение полностью функционально в офлайн режиме:
-- Сообщения сохраняются локально
-- При восстановлении подключения происходит автоматическая синхронизация
-- Мониторинг состояния сети через NetworkMonitor
-- Повторная отправка неудачных сообщений
+## Answer (EN)
 
-#### Push-уведомления
+WhatsApp involves 1-to-1/group messaging, media, delivery/read statuses, E2EE (Signal Protocol), voice/video calls, offline persistence, sync, and scale.
 
-Firebase Cloud Messaging (FCM) доставляет уведомления:
-- Получение сообщений в фоновом режиме
-- Дешифрование контента
-- Отображение уведомлений
-- Обновление локальной БД
+### Requirements
+**Functional:**
+- Messaging: text, media (photo/video/doc), voice messages. Groups.
+- Statuses: sent/delivered/read (double/blue check), typing indicator.
+- Security: E2EE (Signal Protocol), device verification.
+- Presence: online/offline, last seen, statuses.
+- Push: FCM for offline delivery, silent push for sync.
+- Calls: WebRTC for voice/video, STUN/TURN for NAT traversal.
 
-### 5. Масштабируемость
+**Non-functional:** low latency (<200ms P95), high availability, scale (billions msg/day), privacy (zero-knowledge server), battery/bandwidth efficiency, offline support.
 
-#### Пагинация сообщений
+### Architecture (high-level)
+Android client (local DB, E2EE engine, WebSocket, media cache) → Load Balancer → microservices (Chat/Presence/Media/Call Signaling/Push) → queues (Kafka), DB (Cassandra for messages, PostgreSQL for users), media storage (S3+CDN), cache (Redis for presence), Signal Server for calls.
 
-Используется Paging 3 библиотека:
-- Загрузка сообщений порциями
-- Сначала из локальной БД, затем с сервера
-- Эффективное использование памяти
+### Android client key flows
+1) Send: encrypt (Signal Protocol ratchet), local store (pending), WS send, server ack → delivered, recipient receipt → read.
+2) Receive: WS → decrypt → local DB → UI update, send read receipt.
+3) Media: compress (JPEG, H.264/HEVC), upload to CDN, send URL+thumbnail+decryption key in message, lazy load media.
+4) Offline: queue unsent, store 30 days, resend on online, backoff on network errors.
+5) Groups: sender keys (pairwise → group sessions), ratchet on membership changes, forward secrecy.
+6) Calls: WebRTC SDP via Signal Server, ICE candidates, STUN/TURN fallback, adaptive bitrate.
 
-### 6. Оптимизация производительности
+### Server routing and persistence
+- Chat: route by userId, store encrypted (server blind to plaintext), deliver via WS or push if offline, delete after delivery (or TTL 30d).
+- Presence: heartbeat 30s, Redis cache, pub/sub for contact updates.
+- Media: multipart upload, thumbnail gen (no decryption), CDN delivery, E2EE key in metadata.
+- Call Signaling: relay SDP/ICE, no media (P2P WebRTC).
+- Push: FCM integration, prioritization (high for calls, normal for messages).
 
-**Батарея:**
-- WorkManager для фоновой синхронизации
-- Обработка Doze режима
-- Пакетная отправка запросов
-- FCM вместо polling
+### Architecture analysis
 
-**Сеть:**
-- Сжатие медиафайлов перед загрузкой
-- Protocol Buffers вместо JSON для WebSocket
-- Пакетная отправка сообщений
-- Кэширование медиафайлов
+**Service boundaries:**
+- **Chat Service**: accepts messages, rate limit checks, stores in Cassandra (partition userId+timestamp), routes to recipient via WS (online) or queue. Publishes to Kafka for analytics.
+- **Presence Service**: heartbeat from clients (WS ping/pong), updates Redis (TTL 45s), publishes status changes to subscribers (contacts), manages typing indicators (ephemeral, TTL 10s).
+- **Media Service**: multipart upload (chunks), thumbnail generation via pipeline (client-created or encrypted preview), S3 storage with lifecycle (Glacier after 30d, delete after 1y). Resumable uploads.
+- **Call Signaling Service**: relay SDP/ICE between peers, no RTP/SRTP (P2P). TURN fallback (relay media, ~5-10%). Call queueing/waiting support.
+- **Push Service**: FCM/APNS integration, message collapsing (last msg when multiple pending), priority channels, device token management, retry with backoff.
+- **Group Service**: membership management, invite links (UUID+TTL), admin actions, group key sync on membership changes.
 
-**Память:**
-- Пагинация списков сообщений
-- Glide/Coil для загрузки изображений с кэшированием
-- Переработка элементов в RecyclerView
-- Очистка старых сообщений
+**Domain models:**
+- **Message**: id (UUID), senderId, recipientId/groupId, encryptedContent, timestamp, status (PENDING/SENT/DELIVERED/READ), mediaUrl, thumbnailUrl, mediaKey, expiresAt (disappearing).
+- **Chat**: id, participants[], lastMessage, unreadCount, muteUntil, isPinned, createdAt, updatedAt.
+- **User**: id, phoneNumber, publicKey (Signal identity), deviceId[], lastSeen, status, profilePhoto.
+- **Group**: id, name, adminIds[], memberIds[], createdAt, inviteLink (UUID+TTL), settings.
+- **Receipt**: messageId, userId, type (DELIVERED/READ), timestamp.
 
-### 7. Безопасность
+**Data storage:**
+- **Cassandra (Messages)**: partition (userId, YYYYMM), clustering timestamp DESC. Encrypted messages, TTL 30d for delivered, messageId index for receipts. RF=3, eventual consistency.
+- **PostgreSQL (Users, Groups)**: strong consistency for metadata. Indexes on phoneNumber, userId. Master-slave replication.
+- **Redis (Presence, Typing)**: keys: `presence:{userId}` (TTL 45s), `typing:{chatId}:{userId}` (TTL 10s). Pub/Sub for real-time.
+- **S3 (Media)**: per-region buckets, lifecycle (Standard → Glacier → Delete), pre-signed URLs (TTL 1h). CDN (CloudFront) caching.
 
-- SSL/TLS для всех сетевых соединений
-- Certificate pinning
-- Хранение ключей шифрования в Android Keystore
-- Signal Protocol для E2E шифрования
-- Безопасное удаление файлов
-- Детектирование взлома
-- Биометрическая аутентификация
+**E2EE and Signal Protocol:**
+- **Identity Keys**: long-term ed25519 for device auth. Published on registration, validated via QR safety numbers.
+- **Pre-Keys**: one-time ECDH keys (batch of 100), used for offline user session init. Replenished on exhaustion.
+- **Session Ratchet (Double Ratchet)**: DH ratchet for session key update per exchange, symmetric ratchet for forward secrecy. Supports out-of-order delivery.
+- **Group Sessions**: sender key per participant, distributed via pairwise sessions. Full re-key on membership changes.
+- **Device Verification**: QR safety number = hash(identityKey_A || identityKey_B), compare for MITM protection. Notifications on key changes.
 
-### Лучшие практики
+**Consistency and delivery:**
+- **At-least-once**: client resends until ack, server deduplicates by messageId. Idempotency tokens.
+- **Ordered delivery**: server-side timestamp, client sorts by timestamp+messageId. For groups: vector clocks for causal ordering.
+- **Offline queueing**: server stores 30d, client syncs via batch fetch (last_sync_timestamp). Push to wake client.
+- **Read receipts**: optional (user can disable), sent only after screen render. Batch receipts for groups.
 
-1. **Offline-First архитектура**: Всегда сохранять локально, затем синхронизировать
-2. **Оптимистичные UI обновления**: Показывать сообщения немедленно, обновлять статус асинхронно
-3. **Очередь сообщений**: Механизм повторных попыток для неудачных сообщений
-4. **Управление подключением**: Переподключение с экспоненциальной задержкой
-5. **Согласованность данных**: Идемпотентные ID сообщений для предотвращения дубликатов
+**Media pipeline:**
+- **Compression (client)**: JPEG 85% (resize ≤1600px), H.264/HEVC (~1Mbps), Opus for voice.
+- **Chunked upload**: multipart (5MB chunks), resumable, parallel chunks.
+- **Thumbnail generation**: client-encrypted thumbnail (100x100), instant preview. Server blind to plaintext.
+- **CDN caching**: popular media in CloudFront, reduced S3 load, pre-signed URLs (TTL 1h).
+- **Progressive download**: streaming video before full download, range requests for seek.
 
-### Частые ошибки
+**Voice/video calls:**
+- **Signaling**: SDP via Chat Service (offer/answer/candidates). ICE gathering for P2P.
+- **Media transport**: WebRTC with SRTP, P2P (80-90%), TURN relay (5-10%).
+- **Adaptive bitrate**: dynamic quality based on RTT/packet loss. Video → voice on poor network.
+- **Group calls**: SFU (Selective Forwarding Unit), each sends one stream, receives N-1. SVC for per-participant quality.
+- **Call queueing**: missed call notification, history, callback.
 
-1. Некорректная обработка сетевых сбоев
-2. Игнорирование оптимизации батареи
-3. Плохая индексация БД, приводящая к медленным запросам
-4. Отсутствие правильного шифрования
-5. Жестко заданные URL серверов
-6. Необработка граничных случаев (режим полета, принудительное закрытие и т.д.)
+**Resilience:**
+- **WS → Long polling fallback**: 30s timeout, return to WS on recovery. Ping/pong health check.
+- **Multi-region**: primary by geo (low latency), cross-region replication for DR. Auto-failover.
+- **Message retry**: exponential backoff (1s-5min), jitter. Mark failed after 24h.
+- **Circuit breaker**: to FCM/CDN, states CLOSED/OPEN/HALF_OPEN, timeout 30-60s.
+- **Graceful degradation**: presence failure → hide online status, messages continue. Media failure → retry UI.
 
----
+**Security and privacy:**
+- **Zero-knowledge server**: blind to plaintext messages/media, stores only encrypted blobs.
+- **Sealed Sender**: hide sender metadata from server via onion encryption, server knows only recipient.
+- **Forward secrecy**: ratchet updates session keys, old key compromise doesn't reveal past messages.
+- **Device attestation**: SafetyNet/Play Integrity for client integrity, block rooted/modded devices.
+- **Rate limiting**: per user (100 msg/min, 50 media/min), per IP (1000 conn), Redis distributed counter. Ban on abuse.
+
+**Observability and SLOs:**
+- **Metrics**: P50/P95/P99 message latency (send → delivered, target <200ms P95), delivery success (>99.9%), WS uptime (>99.95%), media upload (<5s P95), call connection (>95%).
+- **Distributed tracing**: OpenTelemetry for message journey: client → LB → Chat → Kafka → recipient. Span tags: userId, messageId, chatId.
+- **SLO alerting**: PagerDuty/Opsgenie. Alert if latency_p95 > 500ms for 5min OR success < 99.5% for 10min OR uptime < 99.9%.
+- **Logging**: structured JSON, PII masking, retention 30d hot, 1y cold (Splunk/ELK).
+
+**Scalability:**
+- **Sharding**: Chat Service by userId hash (consistent hashing), independent scaling. Cassandra partition by userId.
+- **Connection pooling**: WS gateways (stateful), horizontal scale with sticky sessions (L4/L7 LB).
+- **Read replicas**: PostgreSQL master-slave, Cassandra RF=3 for nearest datacenter reads.
+- **Message queue**: Kafka for async (push, analytics), partition by userId, retention 7d.
+- **CDN for media**: CloudFront/Cloudflare, edge caching, 90%+ origin load reduction.
+- **Auto-scaling**: Kubernetes HPA on connection count (WS gateways), queue depth (Chat workers), CPU/memory (stateless).
+
+### Optimization
+- Battery: 30s heartbeat, coalesce push, increased WS keep-alive interval in background.
+- Network: protobuf compression, batch receipts, delta sync (only new since last_sync), preload frequent contacts.
+- Memory: message pagination (20-50), lazy load media, LRU cache for decoded images.
+
+### Offline
+- Local DB (Room/SQLite) for messages/contacts, pending sends queue, sync on online, conflict resolution (server wins metadata, merge messages).
+
+## Follow-ups
+- How to implement disappearing messages with E2EE?
+- How to handle group key distribution at scale (1000+ members)?
+- How to design multi-device sync while preserving E2EE?
 
 ## References
-- [Building a Messaging App](https://www.scalablepath.com/back-end/messaging-app-architecture)
-- [Signal Protocol Documentation](https://signal.org/docs/)
-- [Android Offline-First Architecture](https://developer.android.com/topic/architecture/data-layer/offline-first)
-- [WebSocket with OkHttp](https://square.github.io/okhttp/features/websockets/)
-- [Room Database Guide](https://developer.android.com/training/data-storage/room)
+- https://signal.org/docs/specifications/doubleratchet/
+- https://developer.android.com/training/sync-adapters
+- https://webrtc.org/
+- https://cassandra.apache.org/doc/latest/
 
 ## Related Questions
-
-### Related (Hard)
-- [[q-design-uber-app--android--hard]] - Location
-- [[q-design-instagram-stories--android--hard]] - Media
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-
-### Prerequisites (Easier)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-usecase-pattern-android--android--medium]] - Architecture
-- [[q-repository-multiple-sources--android--medium]] - Architecture
+- [[q-design-instagram-stories--android--hard]]
+- [[q-data-sync-unstable-network--android--hard]]
+- [[q-database-encryption-android--android--medium]]
