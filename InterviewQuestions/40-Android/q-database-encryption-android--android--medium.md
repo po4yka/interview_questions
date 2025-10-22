@@ -1,588 +1,367 @@
 ---
-id: 20251012-1227127
-title: "Database Encryption Android / Шифрование базы данных Android"
+id: 20251020-200000
+title: Database Encryption Android / Шифрование базы данных Android
+aliases:
+  - Database Encryption Android
+  - Шифрование базы данных Android
 topic: android
+subtopics:
+  - security
+  - files-media
+question_kind: android
 difficulty: medium
-status: draft
+original_language: en
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-android-storage-types--android--medium, q-app-start-types-android--android--medium, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
-created: 2025-10-15
-tags: [database, encryption, security, sqlcipher, room, keystore, difficulty/medium]
+related:
+  - q-data-encryption-at-rest--security--medium
+  - q-android-keystore--security--hard
+  - q-android-security-basics--android--medium
+created: 2025-10-20
+updated: 2025-10-20
+tags:
+  - android/security
+  - android/files-media
+  - database
+  - encryption
+  - security
+  - sqlcipher
+  - room
+  - keystore
+  - difficulty/medium
+source: https://developer.android.com/topic/security/data
+source_note: Android Data Security documentation
 ---
-# Database Encryption in Android
-
-**Difficulty**: Medium
-**Source**: Amit Shekhar Android Interview Questions
-
-# Question (EN)
-> 
-
 # Вопрос (RU)
-> 
+> Как реализовать шифрование базы данных в Android? Какие лучшие практики и доступные библиотеки?
 
----
-
-## Answer (EN)
 # Question (EN)
-How do you implement database encryption in Android? What are the best practices and available libraries?
-
-## Answer (EN)
-Database encryption is essential for protecting sensitive user data at rest. Android provides several options for encrypting databases, each with different trade-offs.
-
-#### 1. **SQLCipher for Room**
-
-SQLCipher is the most popular solution for Room database encryption. It provides transparent 256-bit AES encryption.
-
-**Implementation:**
-
-```kotlin
-import net.sqlcipher.database.SupportFactory
-
-@Database(entities = [User::class, Message::class], version = 1)
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): UserDao
-    abstract fun messageDao(): MessageDao
-
-    companion object {
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
-
-        fun getInstance(context: Context): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
-            }
-        }
-
-        private fun buildDatabase(context: Context): AppDatabase {
-            // Generate or retrieve encryption key
-            val passphrase = getEncryptionKey(context)
-            val factory = SupportFactory(passphrase)
-
-            return Room.databaseBuilder(
-                context.applicationContext,
-                AppDatabase::class.java,
-                "encrypted-database"
-            )
-                .openHelperFactory(factory)
-                .build()
-        }
-
-        private fun getEncryptionKey(context: Context): ByteArray {
-            // Use Android Keystore for secure key storage
-            return KeystoreManager.getOrCreateDatabaseKey(context)
-        }
-    }
-}
-```
-
-#### 2. **Secure Key Management with Android Keystore**
-
-```kotlin
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties
-import java.security.KeyStore
-import javax.crypto.KeyGenerator
-import javax.crypto.SecretKey
-
-object KeystoreManager {
-    private const val ANDROID_KEYSTORE = "AndroidKeyStore"
-    private const val DATABASE_KEY_ALIAS = "database_encryption_key"
-
-    fun getOrCreateDatabaseKey(context: Context): ByteArray {
-        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
-
-        // Check if key already exists
-        if (keyStore.containsAlias(DATABASE_KEY_ALIAS)) {
-            return getExistingKey(keyStore)
-        }
-
-        // Generate new key
-        return generateNewKey(keyStore)
-    }
-
-    private fun generateNewKey(keyStore: KeyStore): ByteArray {
-        val keyGenerator = KeyGenerator.getInstance(
-            KeyProperties.KEY_ALGORITHM_AES,
-            ANDROID_KEYSTORE
-        )
-
-        val keyGenParameterSpec = KeyGenParameterSpec.Builder(
-            DATABASE_KEY_ALIAS,
-            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-        )
-            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-            .setKeySize(256)
-            .setUserAuthenticationRequired(false)
-            .build()
-
-        keyGenerator.init(keyGenParameterSpec)
-        val secretKey = keyGenerator.generateKey()
-
-        return secretKey.encoded
-    }
-
-    private fun getExistingKey(keyStore: KeyStore): ByteArray {
-        val secretKeyEntry = keyStore.getEntry(
-            DATABASE_KEY_ALIAS,
-            null
-        ) as KeyStore.SecretKeyEntry
-
-        return secretKeyEntry.secretKey.encoded
-    }
-
-    fun deleteKey() {
-        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
-        keyStore.deleteEntry(DATABASE_KEY_ALIAS)
-    }
-}
-```
-
-#### 3. **Alternative: Encrypted Shared Preferences for Key Storage**
-
-```kotlin
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
-
-object SecureKeyStorage {
-    private const val PREFS_NAME = "encrypted_prefs"
-    private const val KEY_DATABASE_PASSPHRASE = "database_passphrase"
-
-    fun getOrCreatePassphrase(context: Context): ByteArray {
-        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-
-        val sharedPreferences = EncryptedSharedPreferences.create(
-            PREFS_NAME,
-            masterKeyAlias,
-            context,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-
-        // Check if passphrase exists
-        val existingPassphrase = sharedPreferences.getString(KEY_DATABASE_PASSPHRASE, null)
-        if (existingPassphrase != null) {
-            return existingPassphrase.toByteArray(Charsets.UTF_8)
-        }
-
-        // Generate new passphrase
-        val newPassphrase = generateSecurePassphrase()
-        sharedPreferences.edit()
-            .putString(KEY_DATABASE_PASSPHRASE, newPassphrase.toString(Charsets.UTF_8))
-            .apply()
-
-        return newPassphrase
-    }
-
-    private fun generateSecurePassphrase(): ByteArray {
-        val random = SecureRandom()
-        return ByteArray(32).apply { random.nextBytes(this) }
-    }
-}
-```
-
-#### 4. **Migration from Unencrypted to Encrypted Database**
-
-```kotlin
-object DatabaseMigrationHelper {
-    suspend fun migrateToEncrypted(
-        context: Context,
-        unencryptedDbName: String,
-        encryptedDbName: String,
-        passphrase: ByteArray
-    ) = withContext(Dispatchers.IO) {
-        try {
-            val unencryptedDb = context.getDatabasePath(unencryptedDbName)
-            val encryptedDb = context.getDatabasePath(encryptedDbName)
-
-            if (!unencryptedDb.exists()) {
-                throw IllegalStateException("Unencrypted database does not exist")
-            }
-
-            // Create encrypted database from unencrypted
-            val database = SQLiteDatabase.openDatabase(
-                unencryptedDb.absolutePath,
-                "",
-                null,
-                SQLiteDatabase.OPEN_READWRITE
-            )
-
-            val passphraseString = String(passphrase, Charsets.UTF_8)
-            database.rawExecSQL("ATTACH DATABASE '${encryptedDb.absolutePath}' AS encrypted KEY '$passphraseString'")
-            database.rawExecSQL("SELECT sqlcipher_export('encrypted')")
-            database.rawExecSQL("DETACH DATABASE encrypted")
-            database.close()
-
-            // Verify encrypted database
-            val verifiedDb = SQLiteDatabase.openDatabase(
-                encryptedDb.absolutePath,
-                passphraseString,
-                null,
-                SQLiteDatabase.OPEN_READONLY
-            )
-            verifiedDb.close()
-
-            // Delete unencrypted database
-            unencryptedDb.delete()
-        } catch (e: Exception) {
-            Log.e("Migration", "Failed to migrate database", e)
-            throw e
-        }
-    }
-}
-```
-
-#### 5. **Performance Considerations**
-
-```kotlin
-@Database(entities = [User::class], version = 1)
-abstract class AppDatabase : RoomDatabase() {
-
-    companion object {
-        fun create(context: Context): AppDatabase {
-            val passphrase = KeystoreManager.getOrCreateDatabaseKey(context)
-            val factory = SupportFactory(passphrase)
-
-            return Room.databaseBuilder(
-                context.applicationContext,
-                AppDatabase::class.java,
-                "app-database"
-            )
-                .openHelperFactory(factory)
-                // Enable WAL mode for better concurrent access
-                .setJournalMode(JournalMode.WRITE_AHEAD_LOGGING)
-                // Set query executor for background operations
-                .setQueryExecutor(Executors.newFixedThreadPool(4))
-                .build()
-        }
-    }
-}
-
-// Benchmark encryption overhead
-class DatabaseBenchmark {
-    suspend fun benchmarkOperations(
-        encryptedDb: AppDatabase,
-        unencryptedDb: AppDatabase
-    ) {
-        val testData = generateTestUsers(10000)
-
-        // Measure encrypted database
-        val encryptedTime = measureTimeMillis {
-            encryptedDb.userDao().insertAll(testData)
-        }
-
-        // Measure unencrypted database
-        val unencryptedTime = measureTimeMillis {
-            unencryptedDb.userDao().insertAll(testData)
-        }
-
-        Log.d("Benchmark", "Encrypted: ${encryptedTime}ms, Unencrypted: ${unencryptedTime}ms")
-        Log.d("Benchmark", "Overhead: ${((encryptedTime - unencryptedTime).toFloat() / unencryptedTime * 100)}%")
-    }
-}
-```
-
-#### 6. **Handling Key Rotation**
-
-```kotlin
-object DatabaseKeyRotation {
-    suspend fun rotateEncryptionKey(
-        context: Context,
-        database: AppDatabase,
-        newPassphrase: ByteArray
-    ) = withContext(Dispatchers.IO) {
-        try {
-            database.close()
-
-            val dbPath = context.getDatabasePath("app-database")
-            val db = SQLiteDatabase.openDatabase(
-                dbPath.absolutePath,
-                KeystoreManager.getOrCreateDatabaseKey(context),
-                null,
-                SQLiteDatabase.OPEN_READWRITE
-            )
-
-            // Change encryption key
-            val newPassphraseString = String(newPassphrase, Charsets.UTF_8)
-            db.rawExecSQL("PRAGMA rekey = '$newPassphraseString'")
-            db.close()
-
-            // Update stored key
-            KeystoreManager.updateDatabaseKey(context, newPassphrase)
-        } catch (e: Exception) {
-            Log.e("KeyRotation", "Failed to rotate key", e)
-            throw e
-        }
-    }
-}
-```
-
-#### 7. **Backup and Restore Encrypted Database**
-
-```kotlin
-class EncryptedDatabaseBackup(
-    private val context: Context,
-    private val database: AppDatabase
-) {
-    suspend fun createBackup(backupFile: File) = withContext(Dispatchers.IO) {
-        try {
-            // Close database before backup
-            database.close()
-
-            val dbFile = context.getDatabasePath("app-database")
-            dbFile.copyTo(backupFile, overwrite = true)
-
-            // Reopen database
-            AppDatabase.getInstance(context)
-        } catch (e: Exception) {
-            Log.e("Backup", "Failed to create backup", e)
-            throw e
-        }
-    }
-
-    suspend fun restoreBackup(backupFile: File) = withContext(Dispatchers.IO) {
-        try {
-            // Close database
-            database.close()
-
-            val dbFile = context.getDatabasePath("app-database")
-            backupFile.copyTo(dbFile, overwrite = true)
-
-            // Verify restored database can be opened
-            val passphrase = KeystoreManager.getOrCreateDatabaseKey(context)
-            val verifyDb = SQLiteDatabase.openDatabase(
-                dbFile.absolutePath,
-                String(passphrase, Charsets.UTF_8),
-                null,
-                SQLiteDatabase.OPEN_READONLY
-            )
-            verifyDb.close()
-
-            // Reopen database
-            AppDatabase.getInstance(context)
-        } catch (e: Exception) {
-            Log.e("Restore", "Failed to restore backup", e)
-            throw e
-        }
-    }
-}
-```
-
-#### 8. **Testing Encrypted Database**
-
-```kotlin
-@RunWith(AndroidJUnit4::class)
-class EncryptedDatabaseTest {
-    private lateinit var database: AppDatabase
-    private lateinit var userDao: UserDao
-
-    @Before
-    fun setup() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val passphrase = "test_passphrase_32_characters!!".toByteArray()
-        val factory = SupportFactory(passphrase)
-
-        database = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
-            .openHelperFactory(factory)
-            .allowMainThreadQueries()
-            .build()
-
-        userDao = database.userDao()
-    }
-
-    @After
-    fun teardown() {
-        database.close()
-    }
-
-    @Test
-    fun testEncryptedInsertAndRetrieve() = runBlocking {
-        val user = User(id = 1, name = "John Doe", email = "john@example.com")
-        userDao.insert(user)
-
-        val retrieved = userDao.getUserById(1)
-        assertEquals(user, retrieved)
-    }
-
-    @Test
-    fun testWrongPassphraseFails() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val wrongPassphrase = "wrong_passphrase".toByteArray()
-        val factory = SupportFactory(wrongPassphrase)
-
-        // This should fail to open
-        assertThrows<SQLiteException> {
-            Room.databaseBuilder(context, AppDatabase::class.java, "test-db")
-                .openHelperFactory(factory)
-                .build()
-                .userDao()
-                .getAllUsers()
-        }
-    }
-}
-```
-
-### Best Practices
-
-**Security:**
-- [ ] Use Android Keystore for key management
-- [ ] Never hardcode encryption keys
-- [ ] Implement key rotation strategy
-- [ ] Use strong passphrases (256-bit)
-- [ ] Clear sensitive data from memory
-- [ ] Implement certificate pinning for sync
-
-**Performance:**
-- [ ] Enable WAL mode
-- [ ] Use connection pooling
-- [ ] Monitor encryption overhead
-- [ ] Optimize query patterns
-- [ ] Consider partial encryption (encrypt only sensitive tables)
-
-**Implementation:**
-- [ ] Test migration thoroughly
-- [ ] Implement proper error handling
-- [ ] Provide backup/restore functionality
-- [ ] Document key management process
-- [ ] Plan for key loss scenarios
-
-**Compliance:**
-- [ ] Understand regulatory requirements (GDPR, HIPAA)
-- [ ] Implement data retention policies
-- [ ] Provide data export functionality
-- [ ] Document encryption methods
-
----
-
-
+> How do you implement database encryption in Android? What are the best practices and available libraries?
 
 ## Ответ (RU)
 
-Шифрование базы данных критически важно для защиты чувствительных пользовательских данных в состоянии покоя. Android предоставляет несколько опций для шифрования баз данных, каждая с разными компромиссами.
+Шифрование базы данных критически важно для защиты конфиденциальных пользовательских данных в покое. Android предоставляет несколько вариантов для шифрования баз данных с различными компромиссами.
 
-#### 1. **SQLCipher для Room**
+### Теория: Принципы шифрования базы данных
 
-SQLCipher - самое популярное решение для шифрования Room-баз данных. Обеспечивает прозрачное 256-битное AES шифрование.
+**Основные концепции:**
+- **Шифрование на уровне базы данных** - защита данных на диске
+- **Прозрачное шифрование** - автоматическое шифрование/расшифровка
+- **Управление ключами** - безопасное хранение ключей шифрования
+- **Производительность** - влияние шифрования на скорость операций
+- **Совместимость** - интеграция с существующими решениями
 
-**Реализация:**
+**Принципы работы:**
+- Данные шифруются перед записью на диск
+- Ключи шифрования хранятся в Android Keystore
+- Расшифровка происходит при чтении данных
+- Автоматическое управление жизненным циклом ключей
+
+### 1. SQLCipher для Room
+
+**Теоретические основы:**
+SQLCipher предоставляет прозрачное 256-битное AES шифрование для SQLite баз данных. Он полностью совместим с Room и обеспечивает высокий уровень безопасности.
+
+**Преимущества:**
+- Прозрачное шифрование без изменения кода
+- Высокий уровень безопасности (AES-256)
+- Полная совместимость с Room
+- Активная поддержка и обновления
+
+**Компактная реализация:**
 ```kotlin
-import net.sqlcipher.database.SupportFactory
+@Database(entities = [User::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
 
-val passphrase = getEncryptionKey(context)
-val factory = SupportFactory(passphrase)
-
-val database = Room.databaseBuilder(
-    context.applicationContext,
-    AppDatabase::class.java,
-    "encrypted-database"
-)
-    .openHelperFactory(factory)
-    .build()
+    companion object {
+        fun create(context: Context, passphrase: String): AppDatabase {
+            val factory = SupportFactory(SQLiteDatabase.getBytes(passphrase.toCharArray()))
+            return Room.databaseBuilder(context, AppDatabase::class.java, "encrypted.db")
+                .openHelperFactory(factory)
+                .build()
+        }
+    }
+}
 ```
 
-#### 2. **Безопасное управление ключами с Android Keystore**
+### 2. Управление ключами
 
-Android Keystore System - наиболее безопасный способ хранения ключей шифрования. Ключи хранятся в аппаратном защищенном хранилище (если доступно) и никогда не покидают его.
+**Теоретические основы:**
+Безопасное хранение ключей шифрования критически важно. Android Keystore предоставляет аппаратную защиту ключей и предотвращает их извлечение из устройства.
 
-**Основные преимущества:**
-- Ключи недоступны приложению напрямую
-- Защита на аппаратном уровне
-- Интеграция с биометрией
-- Автоматическое удаление при удалении приложения
+**Принципы безопасности:**
+- Ключи никогда не покидают устройство
+- Аппаратная защита на поддерживаемых устройствах
+- Автоматическая очистка при компрометации устройства
+- Защита от root-доступа
 
-#### 3. **Альтернатива: Encrypted Shared Preferences**
-
-Для простых случаев можно использовать EncryptedSharedPreferences для хранения парольной фразы базы данных.
-
+**Компактная реализация:**
 ```kotlin
-val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+class KeystoreManager {
+    companion object {
+        private const val KEY_ALIAS = "db_encryption_key"
 
-val sharedPreferences = EncryptedSharedPreferences.create(
-    "encrypted_prefs",
-    masterKeyAlias,
-    context,
-    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-)
+        fun getDatabasePassphrase(context: Context): String {
+            val keyStore = KeyStore.getInstance("AndroidKeyStore")
+            keyStore.load(null)
+
+            if (!keyStore.containsAlias(KEY_ALIAS)) {
+                generateKey()
+            }
+
+            val key = keyStore.getKey(KEY_ALIAS, null) as SecretKey
+            return Base64.encodeToString(key.encoded, Base64.DEFAULT)
+        }
+
+        private fun generateKey() {
+            val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+            val keyGenParameterSpec = KeyGenParameterSpec.Builder(KEY_ALIAS,
+                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                .build()
+
+            keyGenerator.init(keyGenParameterSpec)
+            keyGenerator.generateKey()
+        }
+    }
+}
 ```
 
-#### 4. **Миграция с незашифрованной БД**
+### 3. Интеграция с Room
 
-Процесс миграции включает:
-1. Создание зашифрованной копии базы данных
-2. Экспорт данных с помощью `sqlcipher_export`
-3. Верификацию зашифрованной базы
-4. Удаление исходной незашифрованной базы
+**Теоретические основы:**
+Room предоставляет абстракцию над SQLite, а SQLCipher добавляет слой шифрования. Интеграция требует минимальных изменений в существующем коде.
 
-#### 5. **Производительность**
+**Принципы интеграции:**
+- Использование SupportFactory для создания зашифрованной базы
+- Автоматическое шифрование всех операций
+- Прозрачная работа с DAO и Entity
+- Совместимость с миграциями
 
-Шифрование добавляет накладные расходы (обычно 5-15%). Для минимизации влияния:
-- Используйте WAL (Write-Ahead Logging) режим
-- Настройте пул соединений
-- Оптимизируйте паттерны запросов
-- Рассмотрите частичное шифрование (только чувствительные таблицы)
+**Компактная реализация:**
+```kotlin
+class DatabaseManager @Inject constructor(private val context: Context) {
+    private val database: AppDatabase by lazy {
+        val passphrase = KeystoreManager.getDatabasePassphrase(context)
+        AppDatabase.create(context, passphrase)
+    }
 
-#### 6. **Ротация ключей**
+    fun saveUser(user: User) {
+        database.userDao().insertUser(user)
+    }
 
-Регулярная ротация ключей повышает безопасность. SQLCipher поддерживает команду `PRAGMA rekey` для изменения ключа шифрования без пересоздания базы данных.
+    fun getUser(id: Long): User? {
+        return database.userDao().getUserById(id)
+    }
+}
+```
 
-#### 7. **Резервное копирование**
+### 4. Производительность и оптимизация
 
-Зашифрованные базы данных остаются зашифрованными в резервных копиях. Важно:
-- Хранить ключи отдельно от резервных копий
-- Обеспечить возможность восстановления ключей
-- Тестировать процесс восстановления
+**Теоретические основы:**
+Шифрование добавляет накладные расходы на производительность. Понимание этих затрат критически важно для оптимизации приложения.
 
-#### 8. **Тестирование**
+**Факторы производительности:**
+- Накладные расходы на шифрование/расшифровку
+- Размер базы данных влияет на время инициализации
+- Частота операций записи/чтения
+- Использование индексов и запросов
 
-Обязательно тестируйте:
-- Миграцию с незашифрованной базы
-- Ротацию ключей
-- Сценарии восстановления
-- Производительность на разных устройствах
-- Открытие базы с неправильным ключом
+**Оптимизация:**
+- Используйте асинхронные операции для больших данных
+- Кэшируйте часто используемые данные
+- Оптимизируйте запросы и индексы
+- Рассмотрите частичное шифрование критических данных
 
-### Лучшие практики
+### 5. Лучшие практики
 
 **Безопасность:**
-- Используйте Android Keystore для управления ключами
-- Никогда не хардкодьте ключи шифрования
-- Реализуйте стратегию ротации ключей
-- Используйте сильные парольные фразы (256-бит)
-- Очищайте чувствительные данные из памяти
-- Реализуйте certificate pinning для синхронизации
+- Всегда используйте Android Keystore для хранения ключей
+- Регулярно ротируйте ключи шифрования
+- Не храните ключи в коде приложения
+- Используйте сильные пароли и алгоритмы
 
 **Производительность:**
-- Включайте WAL режим для лучшего concurrent-доступа
-- Используйте пул соединений
-- Мониторьте накладные расходы шифрования
-- Оптимизируйте паттерны запросов
-- Рассмотрите частичное шифрование
+- Тестируйте производительность на реальных устройствах
+- Оптимизируйте размер базы данных
+- Используйте асинхронные операции
+- Мониторьте использование памяти
 
-**Реализация:**
-- Тщательно тестируйте миграцию
-- Реализуйте правильную обработку ошибок
-- Предоставьте функциональность backup/restore
-- Документируйте процесс управления ключами
-- Планируйте сценарии потери ключей
+**Совместимость:**
+- Тестируйте на разных версиях Android
+- Обеспечивайте миграцию данных при обновлениях
+- Документируйте используемые алгоритмы шифрования
+- Планируйте обратную совместимость
 
-**Соответствие требованиям:**
-- Изучите регуляторные требования (GDPR, HIPAA)
-- Реализуйте политики хранения данных
-- Предоставьте функциональность экспорта данных
-- Документируйте методы шифрования
+## Answer (EN)
 
----
+Database encryption is critical for protecting sensitive user data at rest. Android provides several options for encrypting databases with different trade-offs.
+
+### Theory: Database Encryption Principles
+
+**Core Concepts:**
+- **Database-level encryption** - protecting data on disk
+- **Transparent encryption** - automatic encryption/decryption
+- **Key management** - secure storage of encryption keys
+- **Performance** - impact of encryption on operation speed
+- **Compatibility** - integration with existing solutions
+
+**Working Principles:**
+- Data is encrypted before writing to disk
+- Encryption keys are stored in Android Keystore
+- Decryption occurs when reading data
+- Automatic key lifecycle management
+
+### 1. SQLCipher for Room
+
+**Theoretical Foundations:**
+SQLCipher provides transparent 256-bit AES encryption for SQLite databases. It's fully compatible with Room and provides high security level.
+
+**Benefits:**
+- Transparent encryption without code changes
+- High security level (AES-256)
+- Full compatibility with Room
+- Active support and updates
+
+**Compact Implementation:**
+```kotlin
+@Database(entities = [User::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
+
+    companion object {
+        fun create(context: Context, passphrase: String): AppDatabase {
+            val factory = SupportFactory(SQLiteDatabase.getBytes(passphrase.toCharArray()))
+            return Room.databaseBuilder(context, AppDatabase::class.java, "encrypted.db")
+                .openHelperFactory(factory)
+                .build()
+        }
+    }
+}
+```
+
+### 2. Key Management
+
+**Theoretical Foundations:**
+Secure storage of encryption keys is critical. Android Keystore provides hardware protection for keys and prevents their extraction from the device.
+
+**Security Principles:**
+- Keys never leave the device
+- Hardware protection on supported devices
+- Automatic cleanup on device compromise
+- Protection against root access
+
+**Compact Implementation:**
+```kotlin
+class KeystoreManager {
+    companion object {
+        private const val KEY_ALIAS = "db_encryption_key"
+
+        fun getDatabasePassphrase(context: Context): String {
+            val keyStore = KeyStore.getInstance("AndroidKeyStore")
+            keyStore.load(null)
+
+            if (!keyStore.containsAlias(KEY_ALIAS)) {
+                generateKey()
+            }
+
+            val key = keyStore.getKey(KEY_ALIAS, null) as SecretKey
+            return Base64.encodeToString(key.encoded, Base64.DEFAULT)
+        }
+
+        private fun generateKey() {
+            val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+            val keyGenParameterSpec = KeyGenParameterSpec.Builder(KEY_ALIAS,
+                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                .build()
+
+            keyGenerator.init(keyGenParameterSpec)
+            keyGenerator.generateKey()
+        }
+    }
+}
+```
+
+### 3. Room Integration
+
+**Theoretical Foundations:**
+Room provides abstraction over SQLite, while SQLCipher adds encryption layer. Integration requires minimal changes to existing code.
+
+**Integration Principles:**
+- Using SupportFactory to create encrypted database
+- Automatic encryption of all operations
+- Transparent work with DAO and Entity
+- Compatibility with migrations
+
+**Compact Implementation:**
+```kotlin
+class DatabaseManager @Inject constructor(private val context: Context) {
+    private val database: AppDatabase by lazy {
+        val passphrase = KeystoreManager.getDatabasePassphrase(context)
+        AppDatabase.create(context, passphrase)
+    }
+
+    fun saveUser(user: User) {
+        database.userDao().insertUser(user)
+    }
+
+    fun getUser(id: Long): User? {
+        return database.userDao().getUserById(id)
+    }
+}
+```
+
+### 4. Performance and Optimization
+
+**Theoretical Foundations:**
+Encryption adds performance overhead. Understanding these costs is critical for application optimization.
+
+**Performance Factors:**
+- Encryption/decryption overhead
+- Database size affects initialization time
+- Frequency of write/read operations
+- Use of indexes and queries
+
+**Optimization:**
+- Use asynchronous operations for large data
+- Cache frequently used data
+- Optimize queries and indexes
+- Consider partial encryption of critical data
+
+### 5. Best Practices
+
+**Security:**
+- Always use Android Keystore for key storage
+- Regularly rotate encryption keys
+- Never store keys in application code
+- Use strong passwords and algorithms
+
+**Performance:**
+- Test performance on real devices
+- Optimize database size
+- Use asynchronous operations
+- Monitor memory usage
+
+**Compatibility:**
+- Test on different Android versions
+- Ensure data migration on updates
+- Document used encryption algorithms
+- Plan backward compatibility
+
+## Follow-ups
+
+- How do you handle database migration with encryption?
+- What are the performance implications of different encryption algorithms?
+- How do you implement key rotation for encrypted databases?
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
-- [[q-sharedpreferences-definition--android--easy]] - Storage
-
-### Related (Medium)
-- [[q-encrypted-file-storage--security--medium]] - Storage, Security
-- [[q-android-security-practices-checklist--android--medium]] - Security
-- [[q-save-markdown-structure-database--android--medium]] - Storage
-- [[q-database-optimization-android--android--medium]] - Storage
-- [[q-room-database-migrations--room--medium]] - Storage
+### Related (Same Level)
+- [[q-data-encryption-at-rest--security--medium]]
