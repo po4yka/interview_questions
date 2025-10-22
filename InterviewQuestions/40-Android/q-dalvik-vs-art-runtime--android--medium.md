@@ -1,33 +1,68 @@
 ---
-id: 20251012-1227125
-title: "Dalvik Vs Art Runtime"
+id: 20251020-200000
+title: Dalvik vs ART Runtime / Dalvik против ART Runtime
+aliases:
+  - Dalvik vs ART Runtime
+  - Dalvik против ART Runtime
 topic: android
+subtopics:
+  - performance
+  - app-startup
+question_kind: android
 difficulty: medium
-status: draft
+original_language: en
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-how-is-navigation-implemented--android--medium, q-mvi-one-time-events--android--medium, q-singleton-scope-binding--android--medium]
-created: 2025-10-15
-tags: [dalvik, art, runtime, jit, aot, compilation, performance, difficulty/medium]
+related:
+  - q-android-performance-optimization--android--medium
+  - q-app-startup-time--android--medium
+  - q-android-memory-management--android--hard
+created: 2025-10-20
+updated: 2025-10-20
+tags:
+  - android/performance
+  - android/app-startup
+  - dalvik
+  - art
+  - runtime
+  - jit
+  - aot
+  - compilation
+  - difficulty/medium
+source: https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime
+source_note: Android Runtime documentation
 ---
-
-# Question (EN)
-
-> What are the differences between Dalvik and ART runtimes in Android? Why did Android migrate from Dalvik to ART?
-
 # Вопрос (RU)
-
 > В чем различия между рантаймами Dalvik и ART в Android? Почему Android перешел с Dalvik на ART?
 
----
+# Question (EN)
+> What are the differences between Dalvik and ART runtimes in Android? Why did Android migrate from Dalvik to ART?
 
-## Answer (EN)
+## Ответ (RU)
 
-Dalvik and ART (Android Runtime) are execution environments for running Android applications. ART replaced Dalvik starting from Android 5.0 (Lollipop) to improve performance, battery life, and developer experience.
+Dalvik и ART (Android Runtime) - это среды выполнения для запуска Android приложений. ART заменил Dalvik начиная с Android 5.0 (Lollipop) для улучшения производительности, времени работы батареи и опыта разработчиков.
 
-#### 1. **Dalvik Virtual Machine (Legacy)**
+### Теория: Архитектурные различия
 
-**Architecture:**
+**Основные концепции:**
+- **Dalvik** - интерпретируемая виртуальная машина с JIT компиляцией
+- **ART** - Ahead-of-Time (AOT) компиляция с оптимизациями
+- **JIT vs AOT** - время компиляции и оптимизации
+- **Производительность** - скорость выполнения и потребление ресурсов
+- **Память** - использование RAM и место на диске
 
+**Принципы работы:**
+- Dalvik интерпретирует байт-код во время выполнения
+- ART компилирует байт-код в машинный код при установке
+- AOT компиляция позволяет более агрессивные оптимизации
+- JIT компиляция адаптируется к паттернам использования
+
+### 1. Dalvik Virtual Machine (Legacy)
+
+**Архитектура Dalvik:**
 ```
 APK Installation:
   .apk file → Extract .dex files → Store on device
@@ -38,516 +73,200 @@ App Execution:
               (Just-In-Time)  (at runtime)
 ```
 
-**Characteristics:**
+**Характеристики Dalvik:**
+- **JIT компиляция** - компиляция во время выполнения
+- **Интерпретация** - выполнение байт-кода через интерпретатор
+- **Медленный старт** - компиляция при каждом запуске
+- **Адаптивная оптимизация** - оптимизация на основе использования
 
-```kotlin
-// Dalvik execution model
-App Start
-  ↓
-Load .dex bytecode
-  ↓
-Interpret bytecode (SLOW)
-  ↓
-Profile hot code paths
-  ↓
-JIT compile hot methods → Cache compiled code
-  ↓
-Execute compiled code (FAST)
-  ↓
-Repeat for each app launch
+**Проблемы Dalvik:**
+- Низкая производительность из-за интерпретации
+- Высокое потребление батареи
+- Медленный старт приложений
+- Ограниченные возможности оптимизации
+
+### 2. ART Runtime (Current)
+
+**Архитектура ART:**
 ```
-
-**Advantages:**
-
--   Fast installation (no compilation needed)
--   Small storage footprint
--   Immediate app updates
-
-**Disadvantages:**
-
--   Slower app startup (JIT compilation overhead)
--   Runtime performance overhead (interpretation + JIT)
--   Higher battery consumption (repeated JIT compilation)
--   More GC pressure (frequent object allocation)
-
-#### 2. **ART (Android Runtime)**
-
-**Architecture:**
-
-```
-APK Installation (Android 5.0-6.0):
-  .apk file → Extract .dex → AOT Compile → Store OAT files
-                             (Ahead-Of-Time)  (native code)
-
-APK Installation (Android 7.0+):
-  .apk file → Extract .dex → Profile-Guided → Store OAT files
-                             AOT + JIT        (optimized code)
+APK Installation:
+  .apk file → Extract .dex files → AOT Compiler → Native code
+                                   (Ahead-of-Time)   (stored on device)
 
 App Execution:
-  Launch app → Load compiled code → Execute
-              (Already compiled)    (FAST)
+  Launch app → Load native code → Execute (FAST)
 ```
 
-**Evolution:**
+**Характеристики ART:**
+- **AOT компиляция** - компиляция при установке
+- **Нативный код** - выполнение скомпилированного машинного кода
+- **Быстрый старт** - готовый к выполнению код
+- **Агрессивные оптимизации** - оптимизация на этапе компиляции
 
-```kotlin
-// Android 5.0-6.0: Full AOT
-Install time:
-  dex2oat → Compile all code → OAT file
-  (slow install, fast runtime)
+**Преимущества ART:**
+- Высокая производительность выполнения
+- Низкое потребление батареи
+- Быстрый старт приложений
+- Улучшенная сборка мусора
 
-// Android 7.0+: Hybrid AOT + JIT
-Install time:
-  Quick install → JIT interpreter
+### 3. Сравнение производительности
 
-Background:
-  Profile hot code → AOT compile hot paths
-  (fast install, progressive optimization)
+**Время выполнения:**
+- **Dalvik**: Медленное из-за интерпретации
+- **ART**: Быстрое из-за нативного кода
 
-// Android 9.0+: Cloud profiles
-Install time:
-  Quick install + Download baseline profile
+**Время запуска:**
+- **Dalvik**: Медленный старт, JIT компиляция
+- **ART**: Быстрый старт, готовый код
 
-Background:
-  AOT compile profiled code → Optimal performance
+**Потребление памяти:**
+- **Dalvik**: Меньше места на диске, больше RAM
+- **ART**: Больше места на диске, меньше RAM
+
+**Потребление батареи:**
+- **Dalvik**: Высокое из-за постоянной компиляции
+- **ART**: Низкое из-за предварительной компиляции
+
+### 4. Технические детали
+
+**Dalvik особенности:**
+- Регистровая виртуальная машина
+- 16 регистров для локальных переменных
+- JIT компиляция с профилированием
+- Адаптивная оптимизация
+
+**ART особенности:**
+- AOT компиляция при установке
+- Оптимизация на основе статического анализа
+- Улучшенная сборка мусора
+- Поддержка 64-битных архитектур
+
+### 5. Миграция и совместимость
+
+**Переход на ART:**
+- Android 4.4 (KitKat) - опциональный ART
+- Android 5.0 (Lollipop) - ART по умолчанию
+- Обратная совместимость с Dalvik байт-кодом
+
+**Совместимость:**
+- Тот же DEX байт-код
+- Те же API и библиотеки
+- Прозрачная миграция для разработчиков
+
+## Answer (EN)
+
+Dalvik and ART (Android Runtime) are execution environments for running Android applications. ART replaced Dalvik starting from Android 5.0 (Lollipop) to improve performance, battery life, and developer experience.
+
+### Theory: Architectural Differences
+
+**Core Concepts:**
+- **Dalvik** - interpreted virtual machine with JIT compilation
+- **ART** - Ahead-of-Time (AOT) compilation with optimizations
+- **JIT vs AOT** - compilation timing and optimizations
+- **Performance** - execution speed and resource consumption
+- **Memory** - RAM usage and disk space
+
+**Working Principles:**
+- Dalvik interprets bytecode at runtime
+- ART compiles bytecode to machine code at installation
+- AOT compilation allows more aggressive optimizations
+- JIT compilation adapts to usage patterns
+
+### 1. Dalvik Virtual Machine (Legacy)
+
+**Dalvik Architecture:**
+```
+APK Installation:
+  .apk file → Extract .dex files → Store on device
+                                   (Dalvik bytecode)
+
+App Execution:
+  Launch app → JIT Compiler → Machine code → Execute
+              (Just-In-Time)  (at runtime)
 ```
 
-#### 3. **Detailed Comparison**
+**Dalvik Characteristics:**
+- **JIT compilation** - compilation at runtime
+- **Interpretation** - bytecode execution through interpreter
+- **Slow startup** - compilation on every launch
+- **Adaptive optimization** - optimization based on usage
 
-**3.1 Compilation Strategy**
+**Dalvik Problems:**
+- Low performance due to interpretation
+- High battery consumption
+- Slow app startup
+- Limited optimization opportunities
 
-```kotlin
-// Dalvik: JIT (Just-In-Time)
-class MyClass {
-    fun heavyMethod() {
-        // First call: Interpreted (SLOW)
-        // After threshold: JIT compiled (FAST)
-        // Next app start: Interpreted again
-    }
-}
+### 2. ART Runtime (Current)
 
-// ART (Android 5.0-6.0): Full AOT
-class MyClass {
-    fun heavyMethod() {
-        // Install: Fully compiled
-        // All calls: Fast (native code)
-        // Trade-off: Long installation
-    }
-}
+**ART Architecture:**
+```
+APK Installation:
+  .apk file → Extract .dex files → AOT Compiler → Native code
+                                   (Ahead-of-Time)   (stored on device)
 
-// ART (Android 7.0+): Profile-Guided
-class MyClass {
-    fun heavyMethod() {
-        // First run: JIT compiled
-        // Profile saved
-        // Background: AOT compile hot paths
-        // Subsequent runs: Optimized AOT code
-    }
-
-    fun rareMethod() {
-        // Called rarely: Remains interpreted
-        // Not worth compiling
-    }
-}
+App Execution:
+  Launch app → Load native code → Execute (FAST)
 ```
 
-**3.2 Garbage Collection**
-
-```kotlin
-// Dalvik GC
-// - Mark and Sweep
-// - Stop-the-world pauses
-// - Fragmenting heap
-// - Frequent pauses causing jank
-
-Timeline:
-  App running → GC pause (50-200ms) → Resume
-               (UI freezes)
-
-// ART GC (Android 5.0+)
-// - Concurrent copying collector
-// - Reduced pause times
-// - Compacting heap (less fragmentation)
-// - Background compaction
-
-Timeline:
-  App running → Brief pause (2-10ms) → Resume
-  Background compaction (concurrent)
-
-// ART GC (Android 8.0+)
-// - Generational GC
-// - Region-based memory
-// - Even shorter pauses (<5ms)
-```
-
-**3.3 Performance Comparison**
-
-```kotlin
-object BenchmarkResults {
-    // App Startup Time
-    val dalvik = Benchmark(
-        coldStart = 1200, // ms
-        warmStart = 800,
-        hotStart = 200
-    )
-
-    val artAOT = Benchmark(
-        coldStart = 800,  // 33% faster
-        warmStart = 500,  // 38% faster
-        hotStart = 100    // 50% faster
-    )
-
-    val artHybrid = Benchmark(
-        coldStart = 900,  // First run (JIT)
-        warmStart = 600,
-        hotStart = 120,
-        optimizedStart = 750 // After profile-guided AOT
-    )
-
-    // Runtime Performance
-    val runtimePerformance = mapOf(
-        "Dalvik" to Performance(
-            cpuUsage = 100, // baseline
-            batteryDrain = 100,
-            frameRate = 55 // avg FPS
-        ),
-        "ART (AOT)" to Performance(
-            cpuUsage = 70,  // 30% less
-            batteryDrain = 75,
-            frameRate = 60
-        ),
-        "ART (Hybrid)" to Performance(
-            cpuUsage = 65,  // 35% less
-            batteryDrain = 70,
-            frameRate = 60
-        )
-    )
-}
-```
-
-**3.4 Storage Impact**
-
-```kotlin
-// Application footprint comparison
-data class AppSize(
-    val apk: Int,      // MB
-    val installed: Int, // MB
-    val cache: Int     // MB
-)
-
-val dalvikApp = AppSize(
-    apk = 50,
-    installed = 120,  // .dex + data
-    cache = 30        // JIT cache (lost on reboot)
-)
-
-val artAOTApp = AppSize(
-    apk = 50,
-    installed = 180,  // .dex + .oat (50% larger)
-    cache = 5         // Minimal cache
-)
-
-val artHybridApp = AppSize(
-    apk = 50,
-    installed = 140,  // .dex + partial .oat
-    cache = 10        // Profile + partial JIT
-)
-```
-
-#### 4. **Debugging Improvements in ART**
-
-```kotlin
-// Dalvik: Limited debugging
-// - Basic stack traces
-// - Limited introspection
-
-// ART: Enhanced debugging
-class DebuggingFeatures {
-    fun demonstrateARTFeatures() {
-        // Better stack traces
-        try {
-            problematicMethod()
-        } catch (e: Exception) {
-            // ART provides more detailed traces
-            // Including inlined methods
-            e.printStackTrace()
-        }
-
-        // Improved sampling profiler
-        Debug.startMethodTracing("trace")
-        performOperation()
-        Debug.stopMethodTracing()
-
-        // Better memory profiling
-        Debug.dumpHprofData("heap.hprof")
-    }
-}
-
-// Native crash reporting
-// Dalvik: Minimal info
-// ART: Detailed native stack traces, register states
-```
-
-#### 5. **Developer Impact**
-
-```kotlin
-// Dalvik considerations
-class DalvikOptimization {
-    // Avoid method proliferation (64K method limit)
-    // Each method JIT compiled separately
-
-    // Minimize object allocations
-    // GC pauses impact UX
-
-    // Be careful with reflection
-    // Slow in interpreted mode
-}
-
-// ART benefits
-class ARTOptimization {
-    // Less concern about method count (before MultiDex)
-    // AOT compilation handles better
-
-    // More efficient GC
-    // Can allocate more freely
-
-    // Better reflection performance
-    // Optimized at compile time
-
-    // Inline optimizations
-    inline fun performOperation() {
-        // Inlined at compile time
-        // Zero overhead
-    }
-}
-```
-
-#### 6. **Migration Timeline**
-
-```kotlin
-data class AndroidVersion(
-    val version: String,
-    val apiLevel: Int,
-    val runtime: String,
-    val features: List<String>
-)
-
-val runtimeHistory = listOf(
-    AndroidVersion(
-        version = "4.4 KitKat",
-        apiLevel = 19,
-        runtime = "Dalvik (default) + ART (experimental)",
-        features = listOf("ART opt-in in developer options")
-    ),
-    AndroidVersion(
-        version = "5.0 Lollipop",
-        apiLevel = 21,
-        runtime = "ART (default)",
-        features = listOf("Full AOT compilation", "64-bit support", "Improved GC")
-    ),
-    AndroidVersion(
-        version = "6.0 Marshmallow",
-        apiLevel = 23,
-        runtime = "ART",
-        features = listOf("Runtime permissions", "Doze mode")
-    ),
-    AndroidVersion(
-        version = "7.0 Nougat",
-        apiLevel = 24,
-        runtime = "ART (Hybrid JIT+AOT)",
-        features = listOf(
-            "Profile-guided compilation",
-            "Faster installation",
-            "Code cache on disk",
-            "Background optimization"
-        )
-    ),
-    AndroidVersion(
-        version = "9.0 Pie",
-        apiLevel = 28,
-        runtime = "ART (Cloud profiles)",
-        features = listOf("Baseline profiles from cloud")
-    ),
-    AndroidVersion(
-        version = "12.0",
-        apiLevel = 31,
-        runtime = "ART (Enhanced)",
-        features = listOf(
-            "Improved baseline profiles",
-            "Better GC",
-            "Faster compilation"
-        )
-    )
-)
-```
-
-#### 7. **Checking Runtime**
-
-```kotlin
-class RuntimeDetector {
-    fun getCurrentRuntime(): String {
-        return System.getProperty("java.vm.name") ?: "Unknown"
-    }
-
-    fun getVMVersion(): String {
-        return System.getProperty("java.vm.version") ?: "Unknown"
-    }
-
-    fun isART(): Boolean {
-        val runtime = getCurrentRuntime()
-        return runtime.contains("ART", ignoreCase = true)
-    }
-
-    fun logRuntimeInfo() {
-        Log.d("Runtime", """
-            VM Name: ${getCurrentRuntime()}
-            VM Version: ${getVMVersion()}
-            VM Vendor: ${System.getProperty("java.vm.vendor")}
-            Is ART: ${isART()}
-        """.trimIndent())
-    }
-}
-
-// Output on modern Android:
-// VM Name: Android Runtime
-// VM Version: 2.1.0
-// VM Vendor: The Android Project
-// Is ART: true
-```
-
-#### 8. **Compilation Commands**
-
-```bash
-# Force compilation (testing/debugging)
-
-# Full compilation (like Android 5.0-6.0)
-adb shell cmd package compile -m speed -f com.example.app
-
-# Profile-guided compilation (like Android 7.0+)
-adb shell cmd package compile -m speed-profile -f com.example.app
-
-# Quick compilation (minimal)
-adb shell cmd package compile -m quicken -f com.example.app
-
-# Verify compilation status
-adb shell dumpsys package dexopt | grep com.example.app
-
-# Clear profiles and compiled code
-adb shell cmd package compile --reset com.example.app
-
-# Check compilation reason
-adb shell dumpsys package com.example.app | grep -A 1 "Dexopt state"
-```
-
-### Comparison Summary
-
-| Feature       | Dalvik          | ART (5.0-6.0)  | ART (7.0+)        |
-| ------------- | --------------- | -------------- | ----------------- |
-| Compilation   | JIT             | Full AOT       | Hybrid JIT+AOT    |
-| Install Time  | Fast            | Slow           | Fast              |
-| First Run     | Slow            | Fast           | Medium            |
-| Optimized Run | Medium          | Fast           | Very Fast         |
-| Storage       | Small           | Large          | Medium            |
-| Battery       | Higher          | Lower          | Lowest            |
-| GC Pauses     | Long (50-200ms) | Short (2-10ms) | Very Short (<5ms) |
-| Updates       | Instant         | Slow           | Fast              |
-
-### Why ART?
-
-**Performance:**
-
--   2x faster execution
--   70% less CPU usage
--   Better battery life
-
-**User Experience:**
-
--   Faster app launches
--   Smoother scrolling
--   Fewer jank/stutters
-
-**Developer Benefits:**
-
--   Better debugging tools
--   Improved profiling
--   Native crash reporting
-
----
-
-## Ответ (RU)
-
-Dalvik и ART (Android Runtime) — это среды выполнения для запуска Android-приложений. ART заменил Dalvik начиная с Android 5.0 (Lollipop) для улучшения производительности, времени работы батареи и опыта разработчиков.
-
-
-## Ответ (RU)
-
-Dalvik и ART (Android Runtime) — это среды выполнения для запуска Android-приложений. ART заменил Dalvik начиная с Android 5.0 (Lollipop) для улучшения производительности, времени работы батареи и опыта разработчиков.
-
-
-#### Dalvik (Legacy):
-
-**Компиляция:** JIT (Just-In-Time)
-
--   Байткод интерпретируется при запуске
--   Горячий код JIT-компилируется
--   Компиляция повторяется при каждом запуске
-
-**Преимущества:**
-
--   Быстрая установка
--   Малый размер
--   Мгновенные обновления
-
-**Недостатки:**
-
--   Медленный запуск
--   Overhead интерпретации
--   Высокий расход батареи
--   Длинные паузы GC (50-200ms)
-
-#### ART:
-
-**Android 5.0-6.0: Полная AOT**
-
--   Компиляция всего кода при установке
--   Быстрое выполнение
--   Медленная установка
--   Большой размер
-
-**Android 7.0+: Гибридная JIT+AOT**
-
--   Быстрая установка
--   JIT при первом запуске
--   Profile-guided AOT в фоне
--   Оптимальная производительность
-
-**Преимущества:**
-
--   2x быстрее выполнение
--   70% меньше использование CPU
--   Лучше батарея
--   Короткие паузы GC (2-10ms)
--   Улучшенная отладка
-
-### Сравнение производительности:
-
-| Метрика         | Dalvik   | ART          |
-| --------------- | -------- | ------------ |
-| Холодный запуск | 1200ms   | 800ms (-33%) |
-| Тёплый запуск   | 800ms    | 500ms (-38%) |
-| CPU             | 100%     | 65% (-35%)   |
-| Батарея         | 100%     | 70% (-30%)   |
-| GC паузы        | 50-200ms | <5ms         |
-
-#### Почему ART?
-
--   Значительное улучшение производительности
--   Лучший UX (плавность, отзывчивость)
--   Экономия батареи
--   Улучшенные инструменты для разработчиков
-
-## Related Questions
-
-- [[q-how-is-navigation-implemented--android--medium]]
-- [[q-mvi-one-time-events--android--medium]]
-- [[q-singleton-scope-binding--android--medium]]
+**ART Characteristics:**
+- **AOT compilation** - compilation at installation
+- **Native code** - execution of compiled machine code
+- **Fast startup** - ready-to-execute code
+- **Aggressive optimizations** - optimization at compilation time
+
+**ART Benefits:**
+- High execution performance
+- Low battery consumption
+- Fast app startup
+- Improved garbage collection
+
+### 3. Performance Comparison
+
+**Execution Time:**
+- **Dalvik**: Slow due to interpretation
+- **ART**: Fast due to native code
+
+**Startup Time:**
+- **Dalvik**: Slow startup, JIT compilation
+- **ART**: Fast startup, ready code
+
+**Memory Usage:**
+- **Dalvik**: Less disk space, more RAM
+- **ART**: More disk space, less RAM
+
+**Battery Consumption:**
+- **Dalvik**: High due to constant compilation
+- **ART**: Low due to pre-compilation
+
+### 4. Technical Details
+
+**Dalvik Features:**
+- Register-based virtual machine
+- 16 registers for local variables
+- JIT compilation with profiling
+- Adaptive optimization
+
+**ART Features:**
+- AOT compilation at installation
+- Optimization based on static analysis
+- Improved garbage collection
+- 64-bit architecture support
+
+### 5. Migration and Compatibility
+
+**Transition to ART:**
+- Android 4.4 (KitKat) - optional ART
+- Android 5.0 (Lollipop) - ART by default
+- Backward compatibility with Dalvik bytecode
+
+**Compatibility:**
+- Same DEX bytecode
+- Same APIs and libraries
+- Transparent migration for developers
+
+## Follow-ups
+
+- How does ART's garbage collection differ from Dalvik's?
+- What are the memory implications of AOT compilation?
+- How does ART handle app updates and recompilation?
