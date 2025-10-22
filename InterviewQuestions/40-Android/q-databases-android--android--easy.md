@@ -1,375 +1,79 @@
 ---
-id: 20251016-162557
-title: "Databases Android / Базы данных в Android"
+id: 20251020-200000
+title: Databases Android / Базы данных в Android
+aliases:
+  - Databases Android
+  - Базы данных в Android
 topic: android
+subtopics:
+  - files-media
+  - architecture-patterns
+question_kind: android
 difficulty: easy
-status: draft
-created: 2025-10-13
-tags: [android/data-storage, data-storage, database, realm, room, sqlite, difficulty/easy]
+original_language: en
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-how-to-add-custom-attributes-to-custom-view--programming-languages--medium, q-play-app-signing--android--medium, q-recomposition-choreographer--android--hard]
+related:
+  - q-room-database-basics--android--easy
+  - q-database-optimization-android--android--medium
+  - q-database-encryption-android--android--medium
+created: 2025-10-20
+updated: 2025-10-20
+tags:
+  - android/files-media
+  - android/architecture-patterns
+  - database
+  - realm
+  - room
+  - sqlite
+  - difficulty/easy
+source: https://developer.android.com/training/data-storage
+source_note: Android Data Storage documentation
 ---
-# Какие базы данных можно использовать в Android?
-
-**English**: What databases can be used in Android?
-
-## Answer (EN)
-Android applications can use **three main database options**: **SQLite**, **Room**, and **Realm**.
-
-## 1. SQLite
-
-**Built-in relational database** for Android. Lightweight, serverless, self-contained.
-
-**Characteristics:**
--  Built into Android
--  Requires manual SQL queries
--  Low-level API
--  More boilerplate code
-
-**Example:**
-
-```kotlin
-class DatabaseHelper(context: Context) : SQLiteOpenHelper(
-    context,
-    "app_database.db",
-    null,
-    1
-) {
-    override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("""
-            CREATE TABLE users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                email TEXT NOT NULL
-            )
-        """)
-    }
-
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS users")
-        onCreate(db)
-    }
-}
-
-// Insert
-fun insertUser(name: String, email: String) {
-    val db = dbHelper.writableDatabase
-    val values = ContentValues().apply {
-        put("name", name)
-        put("email", email)
-    }
-    db.insert("users", null, values)
-}
-
-// Query
-fun getUsers(): List<User> {
-    val db = dbHelper.readableDatabase
-    val cursor = db.rawQuery("SELECT * FROM users", null)
-    val users = mutableListOf<User>()
-
-    with(cursor) {
-        while (moveToNext()) {
-            val id = getInt(getColumnIndexOrThrow("id"))
-            val name = getString(getColumnIndexOrThrow("name"))
-            val email = getString(getColumnIndexOrThrow("email"))
-            users.add(User(id, name, email))
-        }
-    }
-    cursor.close()
-    return users
-}
-```
-
-**Pros:**
--  Built-in, no dependencies
--  Full SQL power
--  Lightweight
-
-**Cons:**
--  Lots of boilerplate
--  No compile-time SQL validation
--  Manual cursor handling
--  No type safety
-
----
-
-## 2. Room
-
-**Abstraction layer over SQLite** from Android Jetpack. Recommended by Google.
-
-**Characteristics:**
--  Type-safe database access
--  Compile-time SQL validation
--  LiveData/Flow support
--  Annotation-based
-
-**Example:**
-
-```kotlin
-// Entity
-@Entity(tableName = "users")
-data class User(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val name: String,
-    val email: String
-)
-
-// DAO
-@Dao
-interface UserDao {
-    @Query("SELECT * FROM users")
-    fun getAllUsers(): Flow<List<User>>
-
-    @Query("SELECT * FROM users WHERE id = :userId")
-    suspend fun getUserById(userId: Int): User?
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: User)
-
-    @Update
-    suspend fun updateUser(user: User)
-
-    @Delete
-    suspend fun deleteUser(user: User)
-}
-
-// Database
-@Database(entities = [User::class], version = 1)
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): UserDao
-}
-
-// Setup
-val db = Room.databaseBuilder(
-    context,
-    AppDatabase::class.java,
-    "app_database"
-).build()
-
-// Usage
-val userDao = db.userDao()
-
-// Insert
-viewModelScope.launch {
-    userDao.insertUser(User(name = "John", email = "john@example.com"))
-}
-
-// Observe data
-viewLifecycleOwner.lifecycleScope.launch {
-    userDao.getAllUsers().collect { users ->
-        // Update UI
-    }
-}
-```
-
-**Pros:**
--  Type-safe API
--  Compile-time SQL validation
--  Less boilerplate
--  LiveData/Flow integration
--  Automatic migrations
--  Coroutines support
-
-**Cons:**
--  Annotation processing overhead
--  Learning curve
--  Still uses SQLite under the hood
-
----
-
-## 3. Realm
-
-**Modern mobile database** - object-oriented, fast, reactive.
-
-**Characteristics:**
--  Fast performance
--  Reactive queries
--  Mobile-first design
--  Cloud sync support
-
-**Example:**
-
-```kotlin
-// Model
-open class User : RealmObject() {
-    @PrimaryKey
-    var id: Int = 0
-    var name: String = ""
-    var email: String = ""
-}
-
-// Setup
-Realm.init(context)
-val config = RealmConfiguration.Builder()
-    .name("app.realm")
-    .schemaVersion(1)
-    .build()
-
-Realm.setDefaultConfiguration(config)
-
-// Insert
-val realm = Realm.getDefaultInstance()
-realm.executeTransaction {
-    val user = it.createObject(User::class.java, 1)
-    user.name = "John"
-    user.email = "john@example.com"
-}
-
-// Query
-val users = realm.where(User::class.java).findAll()
-
-// Reactive queries
-realm.where(User::class.java)
-    .findAllAsync()
-    .addChangeListener { results ->
-        // Auto-updates when data changes
-    }
-
-// Close
-realm.close()
-```
-
-**Pros:**
--  Very fast (faster than SQLite for some operations)
--  Object-oriented (no SQL)
--  Reactive queries
--  Cross-platform (iOS, Android, etc.)
--  Built-in encryption
--  Cloud sync (Realm Sync)
-
-**Cons:**
--  External dependency
--  Larger library size
--  Proprietary format
--  Migration can be complex
-
-**Dependencies:**
-
-```kotlin
-// build.gradle (project)
-buildscript {
-    dependencies {
-        classpath "io.realm:realm-gradle-plugin:10.15.1"
-    }
-}
-
-// build.gradle (app)
-apply plugin: 'realm-android'
-```
-
----
-
-## Comparison Table
-
-| Feature | SQLite | Room | Realm |
-|---------|--------|------|-------|
-| **Type** | Relational | Relational (ORM) | Object DB |
-| **Boilerplate** | High | Low | Low |
-| **Type Safety** |  No |  Yes |  Yes |
-| **SQL Knowledge** | Required | Required | Not required |
-| **Reactive** |  No |  Flow/LiveData |  Yes |
-| **Performance** | Good | Good | Excellent |
-| **Size** | Built-in | Small | Large |
-| **Learning Curve** | Medium | Medium | Medium |
-| **Cloud Sync** |  No |  No |  Yes |
-
-## Which to Choose?
-
-**Use SQLite if:**
-- You need full control
-- No external dependencies
-- Simple use case
-
-**Use Room if:**  **Recommended**
-- Building modern Android app
-- Want type safety and less boilerplate
-- Using Jetpack components
-- Need LiveData/Flow integration
-
-**Use Realm if:**
-- Need maximum performance
-- Want reactive queries
-- Cross-platform project
-- Need cloud sync
-
-## Migration Comparison
-
-**SQLite:**
-```kotlin
-override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-    db.execSQL("ALTER TABLE users ADD COLUMN age INTEGER")
-}
-```
-
-**Room:**
-```kotlin
-val MIGRATION_1_2 = object : Migration(1, 2) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE users ADD COLUMN age INTEGER NOT NULL DEFAULT 0")
-    }
-}
-
-Room.databaseBuilder(context, AppDatabase::class.java, "db")
-    .addMigrations(MIGRATION_1_2)
-    .build()
-```
-
-**Realm:**
-```kotlin
-val config = RealmConfiguration.Builder()
-    .schemaVersion(2)
-    .migration { realm, oldVersion, newVersion ->
-        if (oldVersion == 1L) {
-            realm.schema.get("User")?.addField("age", Int::class.java)
-        }
-    }
-    .build()
-```
-
-## Summary
-
-**Three main databases for Android:**
-
-1. **SQLite** - Built-in relational database, manual SQL
-2. **Room** - Abstraction over SQLite, type-safe, recommended 
-3. **Realm** - Modern object database, fast, reactive
-
-**Recommendation:** Use **Room** for most Android projects. It provides the best balance of ease of use, performance, and integration with Android architecture components.
+# Вопрос (RU)
+> Какие базы данных можно использовать в Android?
+
+# Question (EN)
+> What databases can be used in Android?
 
 ## Ответ (RU)
 
+Android приложения могут использовать **три основных варианта баз данных**: **SQLite**, **Room**, и **Realm**.
 
-Android-приложения могут использовать **три основных варианта баз данных**: **SQLite**, **Room** и **Realm**.
+### Теория: Типы баз данных в Android
 
+**Основные концепции:**
+- **SQLite** - встроенная реляционная база данных
+- **Room** - абстракция над SQLite с компиляционной проверкой
+- **Realm** - объектно-ориентированная база данных
+- **Выбор базы данных** - зависит от требований проекта
+- **Производительность** - различные характеристики для разных типов данных
 
-## 1. SQLite
+**Принципы работы:**
+- SQLite встроена в Android и не требует дополнительных зависимостей
+- Room предоставляет типизированный API над SQLite
+- Realm использует собственный движок базы данных
+- Все варианты поддерживают локальное хранение данных
 
-**Встроенная реляционная база данных** для Android. Легковесная, безсерверная, самодостаточная.
+### 1. SQLite
+
+**Теоретические основы:**
+SQLite - это встроенная реляционная база данных, которая поставляется с Android. Она легковесная, не требует сервера и полностью автономна.
 
 **Характеристики:**
 - Встроена в Android
-- Требует ручных SQL-запросов
+- Требует ручных SQL запросов
 - Низкоуровневый API
-- Больше шаблонного кода
+- Больше boilerplate кода
 
-**Пример:**
-
+**Компактная реализация:**
 ```kotlin
-class DatabaseHelper(context: Context) : SQLiteOpenHelper(
-    context,
-    "app_database.db",
-    null,
-    1
-) {
+class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "app_database.db", null, 1) {
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("""
-            CREATE TABLE users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                email TEXT NOT NULL
-            )
-        """)
+        db.execSQL("CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL)")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -377,81 +81,35 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
         onCreate(db)
     }
 }
-
-// Вставка
-fun insertUser(name: String, email: String) {
-    val db = dbHelper.writableDatabase
-    val values = ContentValues().apply {
-        put("name", name)
-        put("email", email)
-    }
-    db.insert("users", null, values)
-}
-
-// Запрос
-fun getUsers(): List<User> {
-    val db = dbHelper.readableDatabase
-    val cursor = db.rawQuery("SELECT * FROM users", null)
-    val users = mutableListOf<User>()
-
-    with(cursor) {
-        while (moveToNext()) {
-            val id = getInt(getColumnIndexOrThrow("id"))
-            val name = getString(getColumnIndexOrThrow("name"))
-            val email = getString(getColumnIndexOrThrow("email"))
-            users.add(User(id, name, email))
-        }
-    }
-    cursor.close()
-    return users
-}
 ```
 
+### 2. Room
+
+**Теоретические основы:**
+Room - это библиотека персистентности, которая предоставляет абстракцию над SQLite. Она обеспечивает компиляционную проверку SQL запросов и упрощает работу с базой данных.
+
 **Преимущества:**
-- Встроена, без зависимостей
-- Полная мощь SQL
-- Легковесная
+- Компиляционная проверка SQL запросов
+- Типизированный API
+- Автоматическая генерация кода
+- Поддержка RxJava и корутин
+- Миграции базы данных
 
-**Недостатки:**
-- Много шаблонного кода
-- Нет проверки SQL на этапе компиляции
-- Ручное управление курсорами
-- Нет типобезопасности
-
----
-
-## 2. Room
-
-**Слой абстракции поверх SQLite** из Android Jetpack. Рекомендуется Google.
-
-**Характеристики:**
-- Типобезопасный доступ к БД
-- Проверка SQL на этапе компиляции
-- Поддержка LiveData/Flow
-- Основан на аннотациях
-
-**Пример:**
-
+**Компактная реализация:**
 ```kotlin
-// Entity
 @Entity(tableName = "users")
 data class User(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val email: String
 )
 
-// DAO
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users")
-    fun getAllUsers(): Flow<List<User>>
+    suspend fun getAllUsers(): List<User>
 
-    @Query("SELECT * FROM users WHERE id = :userId")
-    suspend fun getUserById(userId: Int): User?
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insertUser(user: User)
 
     @Update
@@ -461,220 +119,228 @@ interface UserDao {
     suspend fun deleteUser(user: User)
 }
 
-// Database
 @Database(entities = [User::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 }
-
-// Настройка
-val db = Room.databaseBuilder(
-    context,
-    AppDatabase::class.java,
-    "app_database"
-).build()
-
-// Использование
-val userDao = db.userDao()
-
-// Вставка
-viewModelScope.launch {
-    userDao.insertUser(User(name = "John", email = "john@example.com"))
-}
-
-// Наблюдение за данными
-viewLifecycleOwner.lifecycleScope.launch {
-    userDao.getAllUsers().collect { users ->
-        // Обновление UI
-    }
-}
 ```
 
+### 3. Realm
+
+**Теоретические основы:**
+Realm - это объектно-ориентированная база данных, которая использует собственный движок. Она предоставляет простой API для работы с объектами без необходимости в SQL.
+
 **Преимущества:**
-- Типобезопасный API
-- Проверка SQL на этапе компиляции
-- Меньше шаблонного кода
-- Интеграция с LiveData/Flow
-- Автоматические миграции
-- Поддержка корутин
-
-**Недостатки:**
-- Накладные расходы на обработку аннотаций
-- Кривая обучения
-- Использует SQLite под капотом
-
----
-
-## 3. Realm
-
-**Современная мобильная база данных** - объектно-ориентированная, быстрая, реактивная.
-
-**Характеристики:**
+- Простой объектно-ориентированный API
 - Высокая производительность
-- Реактивные запросы
-- Дизайн для мобильных устройств
-- Поддержка облачной синхронизации
+- Автоматические обновления UI
+- Поддержка сложных типов данных
+- Кроссплатформенность
 
-**Пример:**
-
+**Компактная реализация:**
 ```kotlin
-// Модель
 open class User : RealmObject() {
     @PrimaryKey
-    var id: Int = 0
+    var id: Long = 0
     var name: String = ""
     var email: String = ""
 }
 
-// Настройка
-Realm.init(context)
-val config = RealmConfiguration.Builder()
-    .name("app.realm")
-    .schemaVersion(1)
-    .build()
+class RealmManager {
+    private val realm: Realm by lazy { Realm.getDefaultInstance() }
 
-Realm.setDefaultConfiguration(config)
-
-// Вставка
-val realm = Realm.getDefaultInstance()
-realm.executeTransaction {
-    val user = it.createObject(User::class.java, 1)
-    user.name = "John"
-    user.email = "john@example.com"
-}
-
-// Запрос
-val users = realm.where(User::class.java).findAll()
-
-// Реактивные запросы
-realm.where(User::class.java)
-    .findAllAsync()
-    .addChangeListener { results ->
-        // Автообновление при изменении данных
+    fun saveUser(user: User) {
+        realm.executeTransaction { realm.copyToRealmOrUpdate(user) }
     }
 
-// Закрытие
-realm.close()
-```
-
-**Преимущества:**
-- Очень быстрая (быстрее SQLite для некоторых операций)
-- Объектно-ориентированная (без SQL)
-- Реактивные запросы
-- Кроссплатформенная (iOS, Android и др.)
-- Встроенное шифрование
-- Облачная синхронизация (Realm Sync)
-
-**Недостатки:**
-- Внешняя зависимость
-- Больший размер библиотеки
-- Проприетарный формат
-- Миграции могут быть сложными
-
-**Зависимости:**
-
-```kotlin
-// build.gradle (project)
-buildscript {
-    dependencies {
-        classpath "io.realm:realm-gradle-plugin:10.15.1"
+    fun getUsers(): RealmResults<User> {
+        return realm.where(User::class.java).findAll()
     }
 }
-
-// build.gradle (app)
-apply plugin: 'realm-android'
 ```
 
----
+### Сравнение баз данных
 
-## Таблица сравнения
+| Критерий | SQLite | Room | Realm |
+|----------|--------|------|-------|
+| Сложность | Высокая | Средняя | Низкая |
+| Производительность | Хорошая | Хорошая | Отличная |
+| Размер APK | Минимальный | Средний | Большой |
+| Поддержка | Встроенная | Google | Realm |
+| Типизация | Ручная | Автоматическая | Автоматическая |
 
-| Функция | SQLite | Room | Realm |
-|---------|--------|------|-------|
-| **Тип** | Реляционная | Реляционная (ORM) | Объектная БД |
-| **Шаблонный код** | Много | Мало | Мало |
-| **Типобезопасность** | Нет | Да | Да |
-| **Знание SQL** | Требуется | Требуется | Не требуется |
-| **Реактивность** | Нет | Flow/LiveData | Да |
-| **Производительность** | Хорошая | Хорошая | Отличная |
-| **Размер** | Встроена | Малый | Большой |
-| **Кривая обучения** | Средняя | Средняя | Средняя |
-| **Облачная синхронизация** | Нет | Нет | Да |
+### Выбор базы данных
 
-## Какую выбрать?
+**SQLite подходит для:**
+- Простых приложений с минимальными требованиями
+- Когда размер APK критически важен
+- Опытных разработчиков, знакомых с SQL
 
-**Используйте SQLite если:**
-- Нужен полный контроль
-- Без внешних зависимостей
-- Простой случай использования
+**Room подходит для:**
+- Большинства Android приложений
+- Когда нужна типизация и безопасность типов
+- Проектов с командной разработкой
 
-**Используйте Room если:** **Рекомендуется**
-- Создаёте современное Android приложение
-- Хотите типобезопасность и меньше шаблонного кода
-- Используете компоненты Jetpack
-- Нужна интеграция с LiveData/Flow
+**Realm подходит для:**
+- Приложений с высокой производительностью
+- Сложных объектных моделей
+- Кроссплатформенных проектов
 
-**Используйте Realm если:**
-- Нужна максимальная производительность
-- Хотите реактивные запросы
-- Кроссплатформенный проект
-- Нужна облачная синхронизация
+## Answer (EN)
 
-## Сравнение миграций
+Android applications can use **three main database options**: **SQLite**, **Room**, and **Realm**.
 
-**SQLite:**
+### Theory: Database Types in Android
+
+**Core Concepts:**
+- **SQLite** - built-in relational database
+- **Room** - abstraction over SQLite with compile-time checking
+- **Realm** - object-oriented database
+- **Database Selection** - depends on project requirements
+- **Performance** - different characteristics for different data types
+
+**Working Principles:**
+- SQLite is built into Android and requires no additional dependencies
+- Room provides typed API over SQLite
+- Realm uses its own database engine
+- All options support local data storage
+
+### 1. SQLite
+
+**Theoretical Foundations:**
+SQLite is a built-in relational database that comes with Android. It's lightweight, serverless, and completely self-contained.
+
+**Characteristics:**
+- Built into Android
+- Requires manual SQL queries
+- Low-level API
+- More boilerplate code
+
+**Compact Implementation:**
 ```kotlin
-override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-    db.execSQL("ALTER TABLE users ADD COLUMN age INTEGER")
+class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "app_database.db", null, 1) {
+    override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL("CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL)")
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        db.execSQL("DROP TABLE IF EXISTS users")
+        onCreate(db)
+    }
+}
+```
+
+### 2. Room
+
+**Theoretical Foundations:**
+Room is a persistence library that provides an abstraction over SQLite. It ensures compile-time verification of SQL queries and simplifies database work.
+
+**Benefits:**
+- Compile-time verification of SQL queries
+- Typed API
+- Automatic code generation
+- RxJava and coroutine support
+- Database migrations
+
+**Compact Implementation:**
+```kotlin
+@Entity(tableName = "users")
+data class User(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val name: String,
+    val email: String
+)
+
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users")
+    suspend fun getAllUsers(): List<User>
+
+    @Insert
+    suspend fun insertUser(user: User)
+
+    @Update
+    suspend fun updateUser(user: User)
+
+    @Delete
+    suspend fun deleteUser(user: User)
+}
+
+@Database(entities = [User::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
 }
 ```
 
-**Room:**
+### 3. Realm
+
+**Theoretical Foundations:**
+Realm is an object-oriented database that uses its own engine. It provides a simple API for working with objects without the need for SQL.
+
+**Benefits:**
+- Simple object-oriented API
+- High performance
+- Automatic UI updates
+- Complex data type support
+- Cross-platform compatibility
+
+**Compact Implementation:**
 ```kotlin
-val MIGRATION_1_2 = object : Migration(1, 2) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE users ADD COLUMN age INTEGER NOT NULL DEFAULT 0")
-    }
+open class User : RealmObject() {
+    @PrimaryKey
+    var id: Long = 0
+    var name: String = ""
+    var email: String = ""
 }
 
-Room.databaseBuilder(context, AppDatabase::class.java, "db")
-    .addMigrations(MIGRATION_1_2)
-    .build()
-```
+class RealmManager {
+    private val realm: Realm by lazy { Realm.getDefaultInstance() }
 
-**Realm:**
-```kotlin
-val config = RealmConfiguration.Builder()
-    .schemaVersion(2)
-    .migration { realm, oldVersion, newVersion ->
-        if (oldVersion == 1L) {
-            realm.schema.get("User")?.addField("age", Int::class.java)
-        }
+    fun saveUser(user: User) {
+        realm.executeTransaction { realm.copyToRealmOrUpdate(user) }
     }
-    .build()
+
+    fun getUsers(): RealmResults<User> {
+        return realm.where(User::class.java).findAll()
+    }
+}
 ```
 
-## Итог
+### Database Comparison
 
-**Три основные базы данных для Android:**
+| Criterion | SQLite | Room | Realm |
+|-----------|--------|------|-------|
+| Complexity | High | Medium | Low |
+| Performance | Good | Good | Excellent |
+| APK Size | Minimal | Medium | Large |
+| Support | Built-in | Google | Realm |
+| Typing | Manual | Automatic | Automatic |
 
-1. **SQLite** - Встроенная реляционная БД, ручные SQL-запросы
-2. **Room** - Абстракция поверх SQLite, типобезопасная, рекомендуется
-3. **Realm** - Современная объектная БД, быстрая, реактивная
+### Database Selection
 
-**Рекомендация:** Используйте **Room** для большинства Android проектов. Она обеспечивает лучший баланс между простотой использования, производительностью и интеграцией с компонентами архитектуры Android.
+**SQLite is suitable for:**
+- Simple applications with minimal requirements
+- When APK size is critical
+- Experienced developers familiar with SQL
 
+**Room is suitable for:**
+- Most Android applications
+- When typing and type safety are needed
+- Team development projects
 
----
+**Realm is suitable for:**
+- High-performance applications
+- Complex object models
+- Cross-platform projects
+
+## Follow-ups
+
+- How do you choose between different database options?
+- What are the performance implications of each database type?
+- How do you handle database migrations?
 
 ## Related Questions
 
-### Related (Easy)
-- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
-- [[q-sharedpreferences-definition--android--easy]] - Storage
-- [[q-room-library-definition--android--easy]] - Storage
-
 ### Advanced (Harder)
-- [[q-room-code-generation-timing--android--medium]] - Storage
-- [[q-room-transactions-dao--room--medium]] - Storage
-- [[q-room-paging3-integration--room--medium]] - Storage
+- [[q-database-optimization-android--android--medium]]
+- [[q-database-encryption-android--android--medium]]
