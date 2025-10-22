@@ -1,389 +1,459 @@
 ---
-id: 20251006-000007
-title: "How to handle data sync on unstable network? / Как обрабатывать синхронизацию данных при нестабильной сети?"
-aliases: []
-
-# Classification
+id: 20251020-200000
+title: Data Sync Unstable Network / Синхронизация данных при нестабильной сети
+aliases:
+  - Data Sync Unstable Network
+  - Синхронизация данных при нестабильной сети
 topic: android
-subtopics: [networking, offline-first, sync, architecture]
-question_kind: design
+subtopics:
+  - networking
+  - architecture-patterns
+question_kind: android
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru, android/networking, android/offline-first, android/sync, android/architecture, difficulty/hard]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
-source_note: Amit Shekhar Android Interview Questions repository
-
-# Workflow & relations
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [offline-first, workmanager, networking, data-persistence]
-
-# Timestamps
-created: 2025-10-06
-updated: 2025-10-06
-
-tags: [en, ru, android/networking, android/offline-first, android/sync, android/architecture, difficulty/hard]
+related:
+  - q-android-networking-basics--android--medium
+  - q-offline-first-architecture--android--hard
+  - q-android-workmanager--android--medium
+created: 2025-10-20
+updated: 2025-10-20
+tags:
+  - android/networking
+  - android/architecture-patterns
+  - data-sync
+  - offline-first
+  - networking
+  - workmanager
+  - difficulty/hard
+source: https://developer.android.com/guide/background/processing-data/sync
+source_note: Android Data Sync documentation
 ---
-
-# Question (EN)
-
-> How would you handle data synchronization in an Android app with an unstable network connection?
-
 # Вопрос (RU)
-
 > Как бы вы обрабатывали синхронизацию данных в Android приложении при нестабильном сетевом соединении?
 
----
-
-## Answer (EN)
-
-Handling data synchronization on unstable networks requires offline-first architecture, retry mechanisms, and conflict resolution strategies.
-
-### 1. Offline-First Architecture
-
-**Core Principle:** Local database is the single source of truth.
-
-```kotlin
-class OfflineFirstRepository @Inject constructor(
-    private val localDataSource: LocalDataSource,
-    private val remoteDataSource: RemoteDataSource,
-    private val syncQueue: SyncQueue,
-    private val networkMonitor: NetworkMonitor
-) {
-    // Always read from local database
-    fun getData(): Flow<List<Data>> {
-        return localDataSource.observeData()
-    }
-
-    // Write locally first, sync when possible
-    suspend fun saveData(data: Data) {
-        // 1. Save to local database immediately
-        localDataSource.insert(data)
-
-        // 2. Queue for sync
-        syncQueue.enqueue(SyncOperation.Create(data))
-
-        // 3. Sync if online
-        if (networkMonitor.isOnline()) {
-            syncData()
-        }
-    }
-
-    private suspend fun syncData() {
-        syncQueue.getPendingOperations().forEach { operation ->
-            try {
-                when (operation) {
-                    is SyncOperation.Create -> {
-                        remoteDataSource.create(operation.data)
-                        syncQueue.markAsCompleted(operation.id)
-                    }
-                    is SyncOperation.Update -> {
-                        remoteDataSource.update(operation.data)
-                        syncQueue.markAsCompleted(operation.id)
-                    }
-                    is SyncOperation.Delete -> {
-                        remoteDataSource.delete(operation.id)
-                        syncQueue.markAsCompleted(operation.id)
-                    }
-                }
-            } catch (e: Exception) {
-                handleSyncError(operation, e)
-            }
-        }
-    }
-}
-```
-
-### 2. Sync Queue with WorkManager
-
-```kotlin
-@Entity(tableName = "sync_queue")
-data class SyncQueueItem(
-    @PrimaryKey val id: String,
-    val operation: OperationType,
-    val data: String,  // JSON serialized
-    val timestamp: Long,
-    val retryCount: Int = 0,
-    val status: SyncStatus
-)
-
-enum class OperationType { CREATE, UPDATE, DELETE }
-enum class SyncStatus { PENDING, IN_PROGRESS, COMPLETED, FAILED }
-
-class SyncWorker(
-    context: Context,
-    params: WorkerParameters,
-    private val repository: Repository
-) : CoroutineWorker(context, params) {
-
-    override suspend fun doWork(): Result {
-        return try {
-            repository.syncPendingChanges()
-            Result.success()
-        } catch (e: Exception) {
-            if (runAttemptCount < 3) {
-                Result.retry()  // Exponential backoff
-            } else {
-                Result.failure()
-            }
-        }
-    }
-
-    companion object {
-        fun schedule(workManager: WorkManager) {
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
-
-            val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(
-                15, TimeUnit.MINUTES
-            )
-                .setConstraints(constraints)
-                .setBackoffCriteria(
-                    BackoffPolicy.EXPONENTIAL,
-                    WorkRequest.MIN_BACKOFF_MILLIS,
-                    TimeUnit.MILLISECONDS
-                )
-                .build()
-
-            workManager.enqueueUniquePeriodicWork(
-                "data_sync",
-                ExistingPeriodicWorkPolicy.KEEP,
-                syncWork
-            )
-        }
-    }
-}
-```
-
-### 3. Network Monitoring
-
-```kotlin
-class NetworkMonitor @Inject constructor(
-    private val context: Context
-) {
-    private val connectivityManager = context.getSystemService<ConnectivityManager>()
-
-    private val _isOnline = MutableStateFlow(false)
-    val isOnline: StateFlow<Boolean> = _isOnline.asStateFlow()
-
-    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
-        override fun onAvailable(network: Network) {
-            _isOnline.value = true
-            triggerSync()
-        }
-
-        override fun onLost(network: Network) {
-            _isOnline.value = false
-        }
-    }
-
-    fun startMonitoring() {
-        val request = NetworkRequest.Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .build()
-
-        connectivityManager?.registerNetworkCallback(request, networkCallback)
-    }
-
-    private fun triggerSync() {
-        // Trigger sync when network becomes available
-        SyncWorker.schedule(WorkManager.getInstance(context))
-    }
-}
-```
-
-### 4. Conflict Resolution
-
-```kotlin
-class ConflictResolver {
-    fun resolve(
-        local: Data,
-        remote: Data
-    ): Data {
-        return when {
-            // Last write wins
-            local.timestamp > remote.timestamp -> local
-
-            // Server always wins
-            else -> remote
-
-            // Custom merge logic
-            // mergeChanges(local, remote)
-        }
-    }
-
-    private fun mergeChanges(local: Data, remote: Data): Data {
-        // Implement field-level merge
-        return local.copy(
-            field1 = if (local.field1Timestamp > remote.field1Timestamp)
-                local.field1 else remote.field1,
-            field2 = if (local.field2Timestamp > remote.field2Timestamp)
-                local.field2 else remote.field2
-        )
-    }
-}
-```
-
-### 5. Retry Mechanism
-
-```kotlin
-class RetryInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        var response = chain.proceed(request)
-        var tryCount = 0
-        val maxRetries = 3
-
-        while (!response.isSuccessful && tryCount < maxRetries) {
-            tryCount++
-
-            // Exponential backoff
-            val delay = (2.0.pow(tryCount) * 1000).toLong()
-            Thread.sleep(delay)
-
-            response.close()
-            response = chain.proceed(request)
-        }
-
-        return response
-    }
-}
-```
-
-### 6. Pagination for Large Datasets
-
-```kotlin
-class PaginatedSyncManager {
-    suspend fun syncAllData() {
-        var page = 0
-        var hasMore = true
-
-        while (hasMore) {
-            try {
-                val response = apiService.getData(page, PAGE_SIZE)
-                localDatabase.insertAll(response.items)
-
-                hasMore = response.hasMore
-                page++
-
-                // Save sync state
-                preferences.edit {
-                    putInt("last_synced_page", page)
-                }
-            } catch (e: Exception) {
-                // Resume from last page on next sync
-                break
-            }
-        }
-    }
-
-    companion object {
-        const val PAGE_SIZE = 50
-    }
-}
-```
-
-### Best Practices
-
-1. **Local-First**: Always save to local DB first
-2. **Queue Operations**: Store failed syncs for retry
-3. **Exponential Backoff**: Don't hammer the server
-4. **Conflict Resolution**: Have clear rules
-5. **Network Monitoring**: Sync when network returns
-6. **WorkManager**: For reliable background sync
-7. **Partial Sync**: Use pagination for large datasets
-8. **Timestamp Everything**: For conflict resolution
-9. **Optimistic UI**: Show changes immediately
-10. **Sync Indicators**: Show user sync status
-
-### Common Pitfalls
-
-1. Not handling partial syncs
-2. Missing conflict resolution strategy
-3. Blocking UI during sync
-4. Not queuing failed operations
-5. Infinite retry loops
-6. Not using WorkManager for background work
-7. Poor error messaging to users
+# Question (EN)
+> How would you handle data synchronization in an Android app with an unstable network connection?
 
 ## Ответ (RU)
 
 Обработка синхронизации данных при нестабильной сети требует offline-first архитектуры, механизмов повторных попыток и стратегий разрешения конфликтов.
 
+### Теория: Принципы синхронизации при нестабильной сети
+
+**Основные концепции:**
+- **Offline-First архитектура** - локальная база данных как единственный источник истины
+- **Механизмы повторных попыток** - автоматические retry с экспоненциальной задержкой
+- **Разрешение конфликтов** - стратегии для обработки конфликтующих изменений
+- **Очереди синхронизации** - отложенная синхронизация при восстановлении сети
+- **Мониторинг состояния сети** - отслеживание доступности сети
+
+**Принципы работы:**
+- Все операции выполняются локально в первую очередь
+- Синхронизация происходит в фоновом режиме
+- Конфликты разрешаются на основе бизнес-логики
+- Пользователь всегда видит актуальные локальные данные
+
+**Архитектурные паттерны:**
+- **Repository Pattern** - абстракция над источниками данных
+- **Observer Pattern** - уведомления о изменениях состояния сети
+- **Strategy Pattern** - выбор стратегии синхронизации
+- **Queue Pattern** - отложенное выполнение операций
+
 ### 1. Offline-First архитектура
 
-**Принцип:** Локальная база данных - единственный источник истины.
+**Теоретические основы:**
+Offline-First архитектура основана на принципе "локальная база данных как источник истины". Это означает, что все операции чтения и записи выполняются против локальной базы данных, а синхронизация с сервером происходит асинхронно в фоновом режиме.
 
--   Всегда читать из локальной БД
--   Сначала сохранять локально, затем синхронизировать
--   Ставить операции в очередь при отсутствии сети
+**Преимущества:**
+- Мгновенная отзывчивость интерфейса
+- Работа без интернета
+- Снижение нагрузки на сервер
+- Лучший пользовательский опыт
 
-### 2. Очередь синхронизации с WorkManager
+**Компактная реализация:**
+```kotlin
+class OfflineFirstRepository @Inject constructor(
+    private val localDataSource: LocalDataSource,
+    private val syncManager: SyncManager
+) {
+    suspend fun saveUser(user: User): Result<User> {
+        val savedUser = localDataSource.saveUser(user)
+        syncManager.scheduleSync(user.id)
+        return Result.success(savedUser)
+    }
 
--   Хранение неотправленных изменений
--   Автоматическая синхронизация при появлении сети
--   Экспоненциальная задержка между попытками
--   Максимум 3 попытки
+    suspend fun getUser(id: String): Result<User> {
+        return Result.success(localDataSource.getUser(id))
+    }
+}
+```
 
-### 3. Мониторинг сети
+### 2. Механизмы повторных попыток
 
--   ConnectivityManager для отслеживания состояния сети
--   Автоматический запуск синхронизации при появлении соединения
--   StateFlow для реактивного обновления UI
+**Теоретические основы:**
+Экспоненциальная задержка с jitter предотвращает "thundering herd" проблему, когда множество клиентов одновременно пытаются переподключиться к серверу. Jitter добавляет случайность к задержке, распределяя нагрузку во времени.
 
-### 4. Разрешение конфликтов
+**Алгоритм задержки:**
+- Базовая задержка: 1 секунда
+- Экспоненциальное увеличение: delay = baseDelay * (2^attempt)
+- Jitter: добавление случайной задержки 0-1000ms
+- Максимальное количество попыток: 3
 
-**Стратегии:**
+**Компактная реализация:**
+```kotlin
+class RetryManager {
+    suspend fun <T> executeWithRetry(operation: suspend () -> T): Result<T> {
+        repeat(3) { attempt ->
+            try {
+                return Result.success(operation())
+            } catch (e: Exception) {
+                if (attempt < 2) delay(1000L * (1L shl attempt) + (0..1000).random())
+            }
+        }
+        return Result.failure(Exception("Max retries exceeded"))
+    }
+}
+```
 
--   Last Write Wins (побеждает последняя запись)
--   Server Always Wins (всегда побеждает сервер)
--   Custom Merge (пользовательское слияние)
--   Field-level merge (слияние на уровне полей)
+### 3. Разрешение конфликтов
 
-### 5. Механизм повторных попыток
+**Теоретические основы:**
+Конфликты возникают когда одни и те же данные изменяются локально и на сервере. Стратегии разрешения конфликтов определяют, какая версия данных должна быть сохранена.
 
--   Retry Interceptor для OkHttp
--   Экспоненциальная задержка
--   Максимальное количество попыток
+**Стратегии разрешения:**
+- **Last Write Wins** - побеждает последняя запись по времени
+- **Local Wins** - локальные изменения имеют приоритет
+- **Remote Wins** - серверные изменения имеют приоритет
+- **Merge** - объединение изменений по полям
 
-### 6. Пагинация для больших данных
+**Компактная реализация:**
+```kotlin
+class ConflictResolver {
+    fun resolveConflict(local: User, remote: User, strategy: Strategy): User {
+        return when (strategy) {
+            Strategy.LAST_WRITE_WINS -> if (remote.lastModified > local.lastModified) remote else local
+            Strategy.LOCAL_WINS -> local
+            Strategy.REMOTE_WINS -> remote
+            Strategy.MERGE -> User(local.id, remote.name, local.email, maxOf(local.lastModified, remote.lastModified))
+        }
+    }
+}
+```
 
--   Синхронизация частями
--   Сохранение прогресса
--   Возобновление с последней страницы
+### 4. Очереди синхронизации
 
-### Лучшие практики:
+**Теоретические основы:**
+WorkManager обеспечивает надежное выполнение фоновых задач с учетом системных ограничений. Он автоматически обрабатывает перезапуск приложения, оптимизирует батарею и соблюдает ограничения Doze Mode.
 
-1. **Local-First**: Всегда сохранять в локальную БД первым делом
-2. **Очередь операций**: Хранить неудавшиеся синхронизации
-3. **Экспоненциальная задержка**: Не перегружать сервер
-4. **Разрешение конфликтов**: Иметь четкие правила
-5. **Мониторинг сети**: Синхронизировать при возврате сети
-6. **WorkManager**: Для надежной фоновой синхронизации
-7. **Частичная синхронизация**: Использовать пагинацию
-8. **Временные метки**: Для разрешения конфликтов
-9. **Оптимистичный UI**: Показывать изменения сразу
-10. **Индикаторы синхронизации**: Показывать пользователю статус
+**Принципы работы:**
+- Очереди задач сохраняются между перезапусками приложения
+- Автоматический retry с экспоненциальной задержкой
+- Ограничения по типу сети и состоянию батареи
+- Гарантированное выполнение при восстановлении сети
 
-### Частые ошибки:
+**Компактная реализация:**
+```kotlin
+class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+    override suspend fun doWork(): Result {
+        return try {
+            SyncManager(applicationContext).performSync()
+            Result.success()
+        } catch (e: Exception) {
+            if (runAttemptCount < 3) Result.retry() else Result.failure()
+        }
+    }
+}
 
-1. Необработка частичных синхронизаций
-2. Отсутствие стратегии разрешения конфликтов
-3. Блокировка UI во время синхронизации
-4. Неочереживание неудавшихся операций
-5. Бесконечные циклы повторов
-6. Неиспользование WorkManager для фоновой работы
+class SyncManager @Inject constructor(private val context: Context) {
+    fun scheduleSync(userId: String) {
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val request = OneTimeWorkRequestBuilder<SyncWorker>().setConstraints(constraints).build()
+        WorkManager.getInstance(context).enqueue(request)
+    }
+}
+```
 
----
+### 5. Мониторинг состояния сети
 
-## References
+**Теоретические основы:**
+NetworkCallback API позволяет отслеживать изменения состояния сети в реальном времени. Это критически важно для адаптации стратегии синхронизации к текущим условиям сети.
 
--   [Offline-First Architecture](https://developer.android.com/topic/architecture/data-layer/offline-first)
--   [WorkManager Guide](https://developer.android.com/topic/libraries/architecture/workmanager)
--   [Network Connectivity](https://developer.android.com/training/monitoring-device-state/connectivity-status-type)
--   [Room Database](https://developer.android.com/training/data-storage/room)
+**Типы сетевых состояний:**
+- **Connected** - стабильное соединение
+- **Unstable** - нестабильное соединение
+- **Disconnected** - отсутствие соединения
+- **Metered** - ограниченный трафик
+
+**Компактная реализация:**
+```kotlin
+class NetworkMonitor @Inject constructor(private val context: Context) {
+    private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    fun isNetworkAvailable(): Boolean {
+        val network = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
+    fun observeNetworkState(): Flow<Boolean> = callbackFlow {
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) = trySend(true)
+            override fun onLost(network: Network) = trySend(false)
+        }
+        connectivityManager.registerDefaultNetworkCallback(callback)
+        awaitClose { connectivityManager.unregisterNetworkCallback(callback) }
+    }
+}
+```
+
+### CPU-интенсивные операции
+
+**Теоретические основы:**
+Нестабильная сеть требует адаптивной стратегии синхронизации. CPU-интенсивные операции включают анализ стабильности сети, определение оптимального размера батча и выбор алгоритма сжатия данных.
+
+**Оптимизация производительности:**
+- Анализ задержки сети для определения стабильности
+- Динамическое изменение размера батча в зависимости от пропускной способности
+- Сжатие данных для снижения трафика
+- Кэширование результатов анализа сети
+
+**Компактная реализация:**
+```kotlin
+class SyncStrategy @Inject constructor(private val networkMonitor: NetworkMonitor) {
+    suspend fun determineSyncStrategy(): SyncStrategyType {
+        return when {
+            !networkMonitor.isNetworkAvailable() -> SyncStrategyType.OFFLINE
+            isNetworkStable() -> SyncStrategyType.IMMEDIATE
+            else -> SyncStrategyType.BATCHED
+        }
+    }
+
+    private suspend fun isNetworkStable(): Boolean {
+        return try {
+            val startTime = System.currentTimeMillis()
+            delay(100) // Ping simulation
+            (System.currentTimeMillis() - startTime) < 1000
+        } catch (e: Exception) { false }
+    }
+}
+```
+
+## Answer (EN)
+
+Handling data synchronization on unstable networks requires offline-first architecture, retry mechanisms, and conflict resolution strategies.
+
+### Theory: Unstable Network Sync Principles
+
+**Core Concepts:**
+- **Offline-First Architecture** - local database as single source of truth
+- **Retry Mechanisms** - automatic retry with exponential backoff
+- **Conflict Resolution** - strategies for handling conflicting changes
+- **Sync Queues** - deferred synchronization on network recovery
+- **Network State Monitoring** - tracking network availability
+
+**Working Principles:**
+- All operations are performed locally first
+- Synchronization happens in background
+- Conflicts are resolved based on business logic
+- User always sees current local data
+
+**Architectural Patterns:**
+- **Repository Pattern** - abstraction over data sources
+- **Observer Pattern** - notifications about network state changes
+- **Strategy Pattern** - sync strategy selection
+- **Queue Pattern** - deferred operation execution
+
+### 1. Offline-First Architecture
+
+**Theoretical Foundations:**
+Offline-First architecture is based on the principle of "local database as source of truth". This means all read and write operations are performed against the local database, while synchronization with the server happens asynchronously in the background.
+
+**Benefits:**
+- Instant UI responsiveness
+- Offline functionality
+- Reduced server load
+- Better user experience
+
+**Compact Implementation:**
+```kotlin
+class OfflineFirstRepository @Inject constructor(
+    private val localDataSource: LocalDataSource,
+    private val syncManager: SyncManager
+) {
+    suspend fun saveUser(user: User): Result<User> {
+        val savedUser = localDataSource.saveUser(user)
+        syncManager.scheduleSync(user.id)
+        return Result.success(savedUser)
+    }
+
+    suspend fun getUser(id: String): Result<User> {
+        return Result.success(localDataSource.getUser(id))
+    }
+}
+```
+
+### 2. Retry Mechanisms
+
+**Theoretical Foundations:**
+Exponential backoff with jitter prevents the "thundering herd" problem when multiple clients simultaneously try to reconnect to the server. Jitter adds randomness to the delay, distributing load over time.
+
+**Delay Algorithm:**
+- Base delay: 1 second
+- Exponential increase: delay = baseDelay * (2^attempt)
+- Jitter: add random delay 0-1000ms
+- Maximum retry attempts: 3
+
+**Compact Implementation:**
+```kotlin
+class RetryManager {
+    suspend fun <T> executeWithRetry(operation: suspend () -> T): Result<T> {
+        repeat(3) { attempt ->
+            try {
+                return Result.success(operation())
+            } catch (e: Exception) {
+                if (attempt < 2) delay(1000L * (1L shl attempt) + (0..1000).random())
+            }
+        }
+        return Result.failure(Exception("Max retries exceeded"))
+    }
+}
+```
+
+### 3. Conflict Resolution
+
+**Theoretical Foundations:**
+Conflicts occur when the same data is modified both locally and on the server. Conflict resolution strategies determine which version of data should be saved.
+
+**Resolution Strategies:**
+- **Last Write Wins** - last write by timestamp wins
+- **Local Wins** - local changes have priority
+- **Remote Wins** - server changes have priority
+- **Merge** - combine changes by fields
+
+**Compact Implementation:**
+```kotlin
+class ConflictResolver {
+    fun resolveConflict(local: User, remote: User, strategy: Strategy): User {
+        return when (strategy) {
+            Strategy.LAST_WRITE_WINS -> if (remote.lastModified > local.lastModified) remote else local
+            Strategy.LOCAL_WINS -> local
+            Strategy.REMOTE_WINS -> remote
+            Strategy.MERGE -> User(local.id, remote.name, local.email, maxOf(local.lastModified, remote.lastModified))
+        }
+    }
+}
+```
+
+### 4. Sync Queues
+
+**Theoretical Foundations:**
+WorkManager provides reliable execution of background tasks considering system constraints. It automatically handles app restarts, optimizes battery usage, and respects Doze Mode limitations.
+
+**Working Principles:**
+- Task queues persist across app restarts
+- Automatic retry with exponential backoff
+- Constraints by network type and battery state
+- Guaranteed execution on network recovery
+
+**Compact Implementation:**
+```kotlin
+class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+    override suspend fun doWork(): Result {
+        return try {
+            SyncManager(applicationContext).performSync()
+            Result.success()
+        } catch (e: Exception) {
+            if (runAttemptCount < 3) Result.retry() else Result.failure()
+        }
+    }
+}
+
+class SyncManager @Inject constructor(private val context: Context) {
+    fun scheduleSync(userId: String) {
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+        val request = OneTimeWorkRequestBuilder<SyncWorker>().setConstraints(constraints).build()
+        WorkManager.getInstance(context).enqueue(request)
+    }
+}
+```
+
+### 5. Network State Monitoring
+
+**Theoretical Foundations:**
+NetworkCallback API allows real-time tracking of network state changes. This is critical for adapting sync strategy to current network conditions.
+
+**Network State Types:**
+- **Connected** - stable connection
+- **Unstable** - unstable connection
+- **Disconnected** - no connection
+- **Metered** - limited traffic
+
+**Compact Implementation:**
+```kotlin
+class NetworkMonitor @Inject constructor(private val context: Context) {
+    private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    fun isNetworkAvailable(): Boolean {
+        val network = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
+    fun observeNetworkState(): Flow<Boolean> = callbackFlow {
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) = trySend(true)
+            override fun onLost(network: Network) = trySend(false)
+        }
+        connectivityManager.registerDefaultNetworkCallback(callback)
+        awaitClose { connectivityManager.unregisterNetworkCallback(callback) }
+    }
+}
+```
+
+### CPU-Intensive Operations
+
+**Theoretical Foundations:**
+Unstable networks require adaptive sync strategy. CPU-intensive operations include network stability analysis, optimal batch size determination, and data compression algorithm selection.
+
+**Performance Optimization:**
+- Network latency analysis for stability determination
+- Dynamic batch size adjustment based on throughput
+- Data compression to reduce traffic
+- Network analysis result caching
+
+**Compact Implementation:**
+```kotlin
+class SyncStrategy @Inject constructor(private val networkMonitor: NetworkMonitor) {
+    suspend fun determineSyncStrategy(): SyncStrategyType {
+        return when {
+            !networkMonitor.isNetworkAvailable() -> SyncStrategyType.OFFLINE
+            isNetworkStable() -> SyncStrategyType.IMMEDIATE
+            else -> SyncStrategyType.BATCHED
+        }
+    }
+
+    private suspend fun isNetworkStable(): Boolean {
+        return try {
+            val startTime = System.currentTimeMillis()
+            delay(100) // Ping simulation
+            (System.currentTimeMillis() - startTime) < 1000
+        } catch (e: Exception) { false }
+    }
+}
+```
+
+## Follow-ups
+
+- How do you handle data conflicts in offline-first architecture?
+- What are the performance implications of different sync strategies?
+- How do you implement efficient network state monitoring?
 
 ## Related Questions
+
+### Advanced (Harder)
+- [[q-offline-first-architecture--android--hard]]
