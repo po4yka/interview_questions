@@ -238,9 +238,9 @@ fun accessibilityContentDescription() {
 **Test semantic roles:**
 
 ```kotlin
-@Test
+    @Test
 fun accessibilityRoles() {
-    composeTestRule.setContent {
+        composeTestRule.setContent {
         Button(onClick = {}) { Text("Submit") }
         Checkbox(checked = false, onCheckedChange = {})
     }
