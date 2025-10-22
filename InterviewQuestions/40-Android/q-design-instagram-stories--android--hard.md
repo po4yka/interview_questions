@@ -1,820 +1,173 @@
 ---
-id: 20251006-000002
-title: "How to design Instagram Stories feature? / Как спроектировать функцию Instagram Stories?"
-aliases: []
-
-# Classification
-topic: system-design
-subtopics: [media, real-time, video-streaming, architecture, mobile-app-design]
-question_kind: design
+id: 20251020-200000
+title: Design Instagram Stories / Проектирование Instagram Stories
+aliases:
+  - Design Instagram Stories
+  - Проектирование Instagram Stories
+topic: android
+subtopics:
+  - files-media
+  - architecture-clean
+  - service
+question_kind: android
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru, difficulty/hard]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
-source_note: Amit Shekhar Android Interview Questions repository
-
-# Workflow & relations
-status: draft
+language_tags:
+  - en
+  - ru
+source: https://developer.android.com/guide/topics/media
+source_note: Android media stack overview
+status: reviewed
 moc: moc-android
-related: [video-streaming, image-processing, caching, offline-first]
-
-# Timestamps
-created: 2025-10-06
-updated: 2025-10-06
-
-tags: [en, ru, difficulty/hard]
+related:
+  - q-data-sync-unstable-network--android--hard
+  - q-deep-link-vs-app-link--android--medium
+  - q-database-optimization-android--android--medium
+created: 2025-10-20
+updated: 2025-10-20
+tags:
+  - android/files-media
+  - android/architecture-clean
+  - android/service
+  - stories
+  - media
+  - cdn
+  - difficulty/hard
 ---
+# Вопрос (RU)
+> Как спроектировать Instagram Stories для Android?
 
 # Question (EN)
-
-> How would you design the Instagram Stories feature for Android?
-
-# Вопрос (RU)
-
-> Как бы вы спроектировали функцию Instagram Stories для Android?
+> How to design Instagram Stories for Android?
 
 ---
-
-## Answer (EN)
-
-Instagram Stories is a complex feature involving media capture, processing, storage, real-time viewing, and expiration. Here's a comprehensive system design:
-
-### 1. Core Requirements
-
-**Functional Requirements:**
-
--   Create stories (photo/video up to 15 seconds)
--   Add filters, stickers, text, drawings
--   View stories from followed users
--   Story ring indicator (seen/unseen)
--   Story expiration after 24 hours
--   View count and viewer list
--   Reply to stories via DM
--   Share stories to close friends
--   Story highlights (permanent stories)
--   Swipe navigation between stories
-
-**Non-Functional Requirements:**
-
--   Fast story upload (< 5 seconds)
--   Smooth playback (no buffering)
--   Minimal storage usage
--   Low battery consumption
--   Efficient media compression
--   Handle poor network conditions
-
-### 2. High-Level Architecture
-
-```
-
-   Android Client
-
-   Camera
-   Media Editor
-   Story Viewer
-
-
-
-            REST API (Upload/Download)
-            CDN (Media Delivery)
-            WebSocket (Real-time updates)
-
-
-   Backend Services
-
-   Media
-   Processing
-   Service
-
-
-   Story
-   Expiration
-   Worker
-
-
-
-            Object Storage (S3)
-            Database (Stories metadata)
-            Cache (Redis)
-```
-
-### 3. Android App Architecture
-
-#### Data Models
-
-```kotlin
-@Entity(tableName = "stories")
-data class Story(
-    @PrimaryKey val id: String,
-    val userId: String,
-    val mediaUrl: String,
-    val thumbnailUrl: String,
-    val mediaType: MediaType, // IMAGE, VIDEO
-    val createdAt: Long,
-    val expiresAt: Long,
-    val viewCount: Int = 0,
-    val isSeen: Boolean = false,
-    val duration: Int = 5000 // milliseconds for images, actual for videos
-)
-
-data class StoryBucket(
-    val userId: String,
-    val userName: String,
-    val userAvatar: String,
-    val stories: List<Story>,
-    val hasUnseenStories: Boolean,
-    val lastUpdated: Long
-)
-
-enum class MediaType {
-    IMAGE, VIDEO
-}
-```
-
-#### Story Creation Flow
-
-```kotlin
-class CreateStoryUseCase @Inject constructor(
-    private val mediaProcessor: MediaProcessor,
-    private val storyRepository: StoryRepository,
-    private val uploadManager: UploadManager
-) {
-    suspend operator fun invoke(
-        mediaUri: Uri,
-        filters: List<Filter>,
-        stickers: List<Sticker>
-    ): Result<Story> {
-        return withContext(Dispatchers.IO) {
-            try {
-                // 1. Process media (compress, apply filters)
-                val processedMedia = mediaProcessor.process(
-                    uri = mediaUri,
-                    filters = filters,
-                    stickers = stickers,
-                    maxDuration = 15_000 // 15 seconds
-                )
-
-                // 2. Generate thumbnail
-                val thumbnail = mediaProcessor.generateThumbnail(processedMedia)
-
-                // 3. Upload to server
-                val uploadResult = uploadManager.uploadStory(
-                    media = processedMedia,
-                    thumbnail = thumbnail
-                )
-
-                // 4. Save metadata
-                val story = Story(
-                    id = uploadResult.storyId,
-                    userId = getCurrentUserId(),
-                    mediaUrl = uploadResult.mediaUrl,
-                    thumbnailUrl = uploadResult.thumbnailUrl,
-                    mediaType = getMediaType(mediaUri),
-                    createdAt = System.currentTimeMillis(),
-                    expiresAt = System.currentTimeMillis() + 24.hours.inWholeMilliseconds
-                )
-
-                storyRepository.saveStory(story)
-
-                Result.Success(story)
-            } catch (e: Exception) {
-                Result.Error(e)
-            }
-        }
-    }
-}
-```
-
-#### Media Processing
-
-```kotlin
-class MediaProcessor @Inject constructor(
-    private val context: Context
-) {
-    suspend fun process(
-        uri: Uri,
-        filters: List<Filter>,
-        stickers: List<Sticker>,
-        maxDuration: Long
-    ): File {
-        return when (getMediaType(uri)) {
-            MediaType.IMAGE -> processImage(uri, filters, stickers)
-            MediaType.VIDEO -> processVideo(uri, filters, stickers, maxDuration)
-        }
-    }
-
-    private suspend fun processImage(
-        uri: Uri,
-        filters: List<Filter>,
-        stickers: List<Sticker>
-    ): File = withContext(Dispatchers.Default) {
-        // Load bitmap
-        val bitmap = BitmapFactory.decodeStream(
-            context.contentResolver.openInputStream(uri)
-        )
-
-        // Apply filters
-        var processedBitmap = bitmap
-        filters.forEach { filter ->
-            processedBitmap = filter.apply(processedBitmap)
-        }
-
-        // Add stickers
-        val canvas = Canvas(processedBitmap)
-        stickers.forEach { sticker ->
-            canvas.drawBitmap(sticker.bitmap, sticker.x, sticker.y, null)
-        }
-
-        // Compress (max 1080x1920, JPEG quality 85%)
-        val compressed = compressImage(
-            processedBitmap,
-            maxWidth = 1080,
-            maxHeight = 1920,
-            quality = 85
-        )
-
-        // Save to temp file
-        val outputFile = File(context.cacheDir, "story_${UUID.randomUUID()}.jpg")
-        FileOutputStream(outputFile).use { out ->
-            compressed.compress(Bitmap.CompressFormat.JPEG, 85, out)
-        }
-
-        outputFile
-    }
-
-    private suspend fun processVideo(
-        uri: Uri,
-        filters: List<Filter>,
-        stickers: List<Sticker>,
-        maxDuration: Long
-    ): File = withContext(Dispatchers.IO) {
-        // Use MediaCodec or FFmpeg for video processing
-        val outputFile = File(context.cacheDir, "story_${UUID.randomUUID()}.mp4")
-
-        // Trim video to max 15 seconds
-        val trimCommand = "-i $uri -t ${maxDuration / 1000} -c:v libx264 " +
-                "-preset ultrafast -crf 28 -c:a aac -b:a 128k $outputFile"
-
-        // Execute FFmpeg command
-        FFmpegKit.execute(trimCommand)
-
-        // Compress video (max 1080x1920, 2Mbps bitrate)
-        compressVideo(
-            inputFile = outputFile,
-            maxWidth = 1080,
-            maxHeight = 1920,
-            bitrate = 2_000_000 // 2 Mbps
-        )
-
-        outputFile
-    }
-
-    fun generateThumbnail(mediaFile: File): File {
-        val thumbnail = if (isVideo(mediaFile)) {
-            extractVideoThumbnail(mediaFile)
-        } else {
-            // For images, create smaller version
-            val bitmap = BitmapFactory.decodeFile(mediaFile.absolutePath)
-            Bitmap.createScaledBitmap(bitmap, 200, 355, true)
-        }
-
-        val thumbnailFile = File(context.cacheDir, "thumb_${UUID.randomUUID()}.jpg")
-        FileOutputStream(thumbnailFile).use { out ->
-            thumbnail.compress(Bitmap.CompressFormat.JPEG, 80, out)
-        }
-
-        return thumbnailFile
-    }
-}
-```
-
-#### Story Upload
-
-```kotlin
-class UploadManager @Inject constructor(
-    private val apiService: ApiService,
-    private val workManager: WorkManager
-) {
-    suspend fun uploadStory(
-        media: File,
-        thumbnail: File
-    ): UploadResult {
-        // Create multipart request
-        val mediaBody = media.asRequestBody("video/mp4".toMediaTypeOrNull())
-        val mediaPart = MultipartBody.Part.createFormData(
-            "media",
-            media.name,
-            mediaBody
-        )
-
-        val thumbnailBody = thumbnail.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        val thumbnailPart = MultipartBody.Part.createFormData(
-            "thumbnail",
-            thumbnail.name,
-            thumbnailBody
-        )
-
-        // Upload with progress tracking
-        return apiService.uploadStory(mediaPart, thumbnailPart)
-    }
-
-    // Background upload using WorkManager
-    fun enqueueUpload(media: File, thumbnail: File) {
-        val data = Data.Builder()
-            .putString("media_path", media.absolutePath)
-            .putString("thumbnail_path", thumbnail.absolutePath)
-            .build()
-
-        val uploadWork = OneTimeWorkRequestBuilder<StoryUploadWorker>()
-            .setInputData(data)
-            .setConstraints(
-                Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build()
-            )
-            .build()
-
-        workManager.enqueue(uploadWork)
-    }
-}
-```
-
-#### Story Viewer
-
-```kotlin
-class StoryViewerViewModel @Inject constructor(
-    private val storyRepository: StoryRepository,
-    private val analyticsTracker: AnalyticsTracker
-) : ViewModel() {
-
-    private val _currentStoryBucket = MutableStateFlow<StoryBucket?>(null)
-    val currentStoryBucket = _currentStoryBucket.asStateFlow()
-
-    private val _currentStoryIndex = MutableStateFlow(0)
-    val currentStoryIndex = _currentStoryIndex.asStateFlow()
-
-    fun loadStories(userId: String) {
-        viewModelScope.launch {
-            storyRepository.getStoriesByUser(userId)
-                .collect { bucket ->
-                    _currentStoryBucket.value = bucket
-                    _currentStoryIndex.value = bucket.stories.indexOfFirst { !it.isSeen }
-                        .takeIf { it >= 0 } ?: 0
-                }
-        }
-    }
-
-    fun onStoryViewed(storyId: String) {
-        viewModelScope.launch {
-            // Mark as seen
-            storyRepository.markAsSeen(storyId)
-
-            // Track analytics
-            analyticsTracker.trackStoryView(storyId)
-
-            // Move to next story
-            moveToNextStory()
-        }
-    }
-
-    private fun moveToNextStory() {
-        val bucket = _currentStoryBucket.value ?: return
-        val currentIndex = _currentStoryIndex.value
-
-        if (currentIndex < bucket.stories.size - 1) {
-            _currentStoryIndex.value = currentIndex + 1
-        } else {
-            // Move to next user's stories
-            loadNextUserStories()
-        }
-    }
-}
-```
-
-#### Story Viewer UI (Jetpack Compose)
-
-```kotlin
-@Composable
-fun StoryViewer(
-    bucket: StoryBucket,
-    currentIndex: Int,
-    onStoryComplete: () -> Unit,
-    onClose: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val story = bucket.stories[currentIndex]
-    var isPaused by remember { mutableStateOf(false) }
-
-    Box(modifier = modifier.fillMaxSize()) {
-        // Story content
-        when (story.mediaType) {
-            MediaType.IMAGE -> {
-                AsyncImage(
-                    model = story.mediaUrl,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            }
-            MediaType.VIDEO -> {
-                VideoPlayer(
-                    url = story.mediaUrl,
-                    isPaused = isPaused,
-                    onVideoEnd = onStoryComplete,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        }
-
-        // Progress indicators
-        StoryProgressIndicators(
-            storyCount = bucket.stories.size,
-            currentIndex = currentIndex,
-            duration = story.duration,
-            isPaused = isPaused,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .align(Alignment.TopCenter)
-        )
-
-        // User info
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .align(Alignment.TopStart),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AsyncImage(
-                model = bucket.userAvatar,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(32.dp)
-                    .clip(CircleShape)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = bucket.userName,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        // Tap zones for navigation
-        Row(modifier = Modifier.fillMaxSize()) {
-            // Previous story
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .clickable { /* Go to previous story */ }
-            )
-            // Next story
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .clickable { onStoryComplete() }
-            )
-        }
-
-        // Long press to pause
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onPress = {
-                            isPaused = true
-                            tryAwaitRelease()
-                            isPaused = false
-                        }
-                    )
-                }
-        )
-    }
-}
-
-@Composable
-fun StoryProgressIndicators(
-    storyCount: Int,
-    currentIndex: Int,
-    duration: Int,
-    isPaused: Boolean,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        repeat(storyCount) { index ->
-            val progress = when {
-                index < currentIndex -> 1f
-                index == currentIndex -> {
-                    var currentProgress by remember { mutableStateOf(0f) }
-
-                    LaunchedEffect(isPaused) {
-                        if (!isPaused) {
-                            animate(
-                                initialValue = currentProgress,
-                                targetValue = 1f,
-                                animationSpec = tween(
-                                    durationMillis = ((1f - currentProgress) * duration).toInt(),
-                                    easing = LinearEasing
-                                )
-                            ) { value, _ ->
-                                currentProgress = value
-                            }
-                        }
-                    }
-
-                    currentProgress
-                }
-                else -> 0f
-            }
-
-            LinearProgressIndicator(
-                progress = progress,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(2.dp),
-                color = Color.White,
-                backgroundColor = Color.White.copy(alpha = 0.3f)
-            )
-        }
-    }
-}
-```
-
-### 4. Caching Strategy
-
-```kotlin
-class StoryCacheManager @Inject constructor(
-    private val context: Context,
-    private val diskCache: DiskCache
-) {
-    private val memoryCache = LruCache<String, Bitmap>(
-        (Runtime.getRuntime().maxMemory() / 8).toInt()
-    )
-
-    // Preload next stories for smooth experience
-    fun preloadStories(stories: List<Story>) {
-        stories.take(3).forEach { story ->
-            viewModelScope.launch(Dispatchers.IO) {
-                when (story.mediaType) {
-                    MediaType.IMAGE -> preloadImage(story.mediaUrl)
-                    MediaType.VIDEO -> preloadVideo(story.mediaUrl)
-                }
-            }
-        }
-    }
-
-    private suspend fun preloadImage(url: String) {
-        val bitmap = Glide.with(context)
-            .asBitmap()
-            .load(url)
-            .submit()
-            .get()
-
-        memoryCache.put(url, bitmap)
-    }
-
-    private suspend fun preloadVideo(url: String) {
-        // Download first few segments for immediate playback
-        diskCache.download(url, prefetchSize = 1_000_000) // 1MB
-    }
-}
-```
-
-### 5. Story Expiration
-
-```kotlin
-class StoryExpirationWorker(
-    context: Context,
-    params: WorkerParameters
-) : CoroutineWorker(context, params) {
-
-    override suspend fun doWork(): Result {
-        val storyDao = getDatabase().storyDao()
-
-        // Delete expired stories
-        val expiredStories = storyDao.getExpiredStories(System.currentTimeMillis())
-        expiredStories.forEach { story ->
-            // Delete from local storage
-            deleteMediaFile(story.mediaUrl)
-            deleteMediaFile(story.thumbnailUrl)
-
-            // Delete from database
-            storyDao.deleteStory(story.id)
-        }
-
-        return Result.success()
-    }
-
-    companion object {
-        fun schedule(workManager: WorkManager) {
-            val work = PeriodicWorkRequestBuilder<StoryExpirationWorker>(
-                repeatInterval = 1,
-                repeatIntervalTimeUnit = TimeUnit.HOURS
-            ).build()
-
-            workManager.enqueueUniquePeriodicWork(
-                "story_expiration",
-                ExistingPeriodicWorkPolicy.KEEP,
-                work
-            )
-        }
-    }
-}
-```
-
-### Best Practices
-
-1. **Media Compression**: Compress images to max 1080x1920, videos to 2Mbps bitrate
-2. **Preloading**: Preload next 2-3 stories for smooth navigation
-3. **Caching**: Use multi-level cache (Memory → Disk → Network)
-4. **Background Upload**: Use WorkManager for reliable uploads
-5. **Battery Optimization**: Stop video playback when app goes to background
-6. **Network Optimization**: Use adaptive streaming for videos
-7. **Storage Management**: Auto-delete expired stories, limit cache size
-
-### Common Pitfalls
-
-1. Not compressing media leading to large files and slow uploads
-2. Loading all stories at once causing memory issues
-3. Poor video playback performance
-4. Not handling story expiration
-5. Inefficient caching strategy
-6. Not optimizing for poor network conditions
-7. Battery drain from continuous video processing
 
 ## Ответ (RU)
 
-Instagram Stories - это сложная функция, включающая захват, обработку, хранение медиа, просмотр в реальном времени и автоматическое удаление. Вот комплексный системный дизайн:
+Instagram Stories включает захват и обработку медиа, загрузку, доставку через CDN, просмотр, счетчики/реакции в реальном времени и автоматическое истечение через 24 часа.
 
-### 1. Основные требования
+### Требования
+- Функциональные: создание фото/видео ≤15s, редактор (фильтры/стикеры/текст), просмотр, индикаторы seen/unseen, ответы в DM, близкие друзья, highlights, свайп-навигация, счетчики просмотров.
+- Нефункциональные: быстрая загрузка (<5s при хорошем канале), плавное воспроизведение, устойчивость к плохой сети, экономия батареи/памяти, безопасность и приватность.
 
-**Функциональные требования:**
+### Архитектура (высокий уровень)
+- Клиент Android: камера, редактор, загрузчик, просмотрщик, кеш/предзагрузка, офлайн-очередь, фоновые задачи (WorkManager).
+- Backend API: прием загрузок, транскодирование, генерация превью, TTL/истечение, ACL, счетчики/аналитика.
+- Хранилище: объектное (S3/GCS) + CDN для доставки; БД для метаданных; кэш (Redis) для фидов/счетчиков.
+- Реал-тайм: Pub/Sub/WebSocket для обновлений просмотров/реакций и инвалидации кеша.
 
--   Создание stories (фото/видео до 15 секунд)
--   Добавление фильтров, стикеров, текста, рисунков
--   Просмотр stories от отслеживаемых пользователей
--   Индикатор кольца (просмотрено/не просмотрено)
--   Автоматическое удаление через 24 часа
--   Счетчик просмотров и список зрителей
--   Ответ на stories через личные сообщения
--   Публикация для близких друзей
--   Highlights (постоянные stories)
--   Навигация свайпом между stories
+### Клиент Android: потоки
+1) Создание → обработка → загрузка:
+   - Изображение: ресайз ≤1080x1920, JPEG/WEBP, генерация thumbnail.
+   - Видео: обрезка ≤15s, H.264/HEVC, bitrate ~2Mbps, thumbnail первого кадра.
+   - Мета-данные: userId, expiresAt=now+24h, mediaType, размеры.
+   - Надежная отправка: WorkManager, повтор с backoff, возобновление.
+2) Просмотр:
+   - ExoPlayer (видео) + Coil (картинки), прогресс-индикаторы.
+   - Предзагрузка: текущая + следующие 2–3 stories; многоуровневое кеширование (Memory→Disk→Network).
+   - Управление энергией: пауза в фоне, остановка при сворачивании.
+3) Офлайн:
+   - Очередь загрузки, локальные метаданные, синхронизация при онлайне.
 
-**Нефункциональные требования:**
+### Медиа-пайплайн (сервер)
+- Транскодирование видео в HLS/DASH профили (мобильные битрейты), хранение мастер-файла и адаптивных слоев.
+- Генерация preview/thumbnail; оптимизация изображений под viewport.
+- Подписи URL (signed URLs) для защищенной доставки, короткий TTL на ссылки.
 
--   Быстрая загрузка stories (< 5 секунд)
--   Плавное воспроизведение (без буферизации)
--   Минимальное использование хранилища
--   Низкое потребление батареи
--   Эффективное сжатие медиа
--   Работа в условиях плохой сети
+### Истечение (TTL 24h)
+- На сервере: периодическая джоб/streaming TTL (delete marker) + асинхронное удаление объектов, инвалидация CDN.
+- На клиенте: периодическая очистка локальных файлов/кеша и метаданных.
 
-### 2. Архитектура приложения
+```kotlin
+// WorkManager: периодическая чистка локально
+class StoryTtlWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
+  override suspend fun doWork(): Result { /* delete expired local media + DB */ return Result.success() }
+}
+```
 
-Приложение использует многослойную архитектуру с компонентами:
+### Приватность, доступ, безопасность
+- ACL уровней: автор, близкие друзья, все подписчики.
+- Подписанные ссылки (CDN), проверка токенов, ограничение скорости, защита от горячих ссылок.
+- Валидация входящих параметров deep/app links.
 
--   Camera и Media Editor для создания контента
--   Story Viewer для просмотра
--   REST API для загрузки/скачивания
--   CDN для доставки медиа
--   WebSocket для обновлений в реальном времени
+### Масштабирование и производительность
+- CDN для медиа; кэш фидов и списков сторис; денормализация «кольца» seen/unseen.
+- Партиционирование по userId/time; очередь фона для транскодирования/TTL.
+- Backpressure на загрузки; лимиты размера/длительности; сжатие на клиенте.
 
-### 3. Процесс создания Story
+### Метрики и тестирование
+- Время загрузки, время к первому кадру, процент буферизации, ошибки загрузки/воспроизведения.
+- Нагрузочное тестирование CDN/транскодера; тесты на плохой сети; battery profile.
 
-**Обработка медиа:**
+## Answer (EN)
 
-1. Захват фото/видео с камеры
-2. Применение фильтров и эффектов
-3. Сжатие (изображения до 1080x1920, видео до 2Mbps)
-4. Генерация превью
-5. Загрузка на сервер
-6. Сохранение метаданных
+Instagram Stories spans capture/processing, upload, CDN delivery, viewing, realtime counters/reactions, and 24h expiration.
 
-**Сжатие изображений:**
+### Requirements
+- Functional: photo/video ≤15s, editor (filters/stickers/text), viewing, seen/unseen, DM replies, close friends, highlights, swipe nav, view counters.
+- Non-functional: fast upload (<5s on good network), smooth playback, network resilience, battery/memory efficiency, security/privacy.
 
--   Максимальное разрешение: 1080x1920
--   Формат: JPEG с качеством 85%
--   Применение фильтров через Canvas API
--   Наложение стикеров
+### Architecture (high-level)
+- Android client: camera, editor, uploader, viewer, cache/preload, offline queue, background jobs (WorkManager).
+- Backend API: ingest, transcode, previews, TTL/expiration, ACL, counters/analytics.
+- Storage: object store (S3/GCS) + CDN; DB for metadata; cache (Redis) for feeds/counters.
+- Realtime: Pub/Sub/WebSocket for view/reaction updates and cache invalidation.
 
-**Обработка видео:**
+### Android client flows
+1) Create → process → upload:
+   - Image: resize ≤1080x1920, JPEG/WEBP, thumbnail.
+   - Video: trim ≤15s, H.264/HEVC ~2Mbps, first-frame thumbnail.
+   - Metadata: userId, expiresAt=now+24h, mediaType, dimensions.
+   - Reliability: WorkManager, retry with backoff, resume uploads.
+2) Playback:
+   - ExoPlayer for video, Coil for images, progress indicators.
+   - Preload current + next 2–3; multi-level caching (Memory→Disk→Network).
+   - Power: pause in background, stop on app background.
+3) Offline:
+   - Upload queue, local metadata, sync on reconnect.
 
--   Обрезка до 15 секунд максимум
--   Сжатие с использованием H.264 кодека
--   Bitrate: 2 Mbps
--   Использование FFmpeg или MediaCodec
--   Генерация превью из первого кадра
+### Media pipeline (server)
+- Transcode video to HLS/DASH mobile renditions; keep master and adaptive layers.
+- Generate previews/thumbnails; optimize images for viewport.
+- Signed URLs with short TTL; secure delivery via CDN.
 
-### 4. Просмотр Stories
+### Expiration (24h TTL)
+- Server: periodic job/streaming TTL marker + async object deletion; CDN invalidation.
+- Client: periodic local cleanup of files/cache and metadata.
 
-**Архитектура просмотра:**
+```kotlin
+// WorkManager: periodic local cleanup
+class StoryTtlWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
+  override suspend fun doWork(): Result { /* delete expired local media + DB */ return Result.success() }
+}
+```
 
--   ViewPager2 для навигации между пользователями
--   ExoPlayer для воспроизведения видео
--   Coil/Glide для загрузки изображений
--   Индикаторы прогресса для каждой story
--   Зоны нажатий для навигации
+### Privacy, access, security
+- ACL tiers: author, close friends, all followers.
+- Signed URLs (CDN), token checks, rate limits, hotlink protection.
+- Validate deep/app link parameters.
 
-**Механизм прогресса:**
+### Scalability & performance
+- CDN for media; cache rings/feeds; denormalize seen/unseen ring.
+- Partition by userId/time; background queues for transcode/TTL.
+- Client-side compression; enforce size/duration limits; backpressure uploads.
 
--   Автоматический переход каждые 5 секунд для изображений
--   Продолжительность видео определяет время показа
--   Пауза при долгом нажатии
--   Анимация прогресс-баров
+### Metrics & testing
+- Upload time, time-to-first-frame, rebuffer ratio, upload/playback errors.
+- Load test CDN/transcoder; poor-network tests; battery profiling.
 
-**Навигация:**
-
--   Нажатие слева - предыдущая story
--   Нажатие справа - следующая story
--   Свайп вниз - закрыть просмотр
--   Свайп влево/вправо - переход между пользователями
-
-### 5. Стратегия кэширования
-
-**Многоуровневое кэширование:**
-
--   Memory Cache (LruCache) для недавно просмотренных
--   Disk Cache для офлайн доступа
--   Предзагрузка следующих 2-3 stories
--   Удаление кэша просроченных stories
-
-**Оптимизация загрузки:**
-
--   Приоритет загрузки текущей и следующей story
--   Adaptive streaming для видео
--   Прогрессивная загрузка медиа
--   Использование CDN для быстрой доставки
-
-### 6. Автоматическое удаление
-
-**Механизм истечения:**
-
--   WorkManager для периодической проверки (каждый час)
--   Удаление stories старше 24 часов
--   Очистка локальных файлов
--   Удаление из базы данных
--   Уведомление сервера об удалении
-
-### 7. Оптимизация производительности
-
-**Батарея:**
-
--   Остановка воспроизведения при сворачивании
--   Ленивая загрузка stories
--   Эффективное использование ExoPlayer
--   Отмена предзагрузки при низком заряде
-
-**Память:**
-
--   Пагинация списка stories
--   Освобождение ресурсов после просмотра
--   Ограничение размера кэша
--   Bitmap pooling
-
-**Сеть:**
-
--   Адаптивное качество в зависимости от скорости
--   Пакетная загрузка метаданных
--   Сжатие медиа перед отправкой
--   Возобновление прерванных загрузок
-
-### Лучшие практики
-
-1. **Сжатие медиа**: Всегда сжимать перед загрузкой
-2. **Предзагрузка**: Загружать следующие stories заранее
-3. **Кэширование**: Использовать многоуровневый кэш
-4. **Фоновая загрузка**: WorkManager для надежной загрузки
-5. **Оптимизация батареи**: Останавливать воспроизведение в фоне
-6. **Управление хранилищем**: Автоудаление просроченных stories
-
-### Частые ошибки
-
-1. Отсутствие сжатия медиа → большие файлы и медленная загрузка
-2. Загрузка всех stories сразу → проблемы с памятью
-3. Плохая производительность видео
-4. Необработка истечения stories
-5. Неэффективная стратегия кэширования
-6. Отсутствие оптимизации для плохой сети
-7. Разряд батареи от постоянной обработки видео
-
----
+## Follow-ups
+- How to order story buckets efficiently (ranking, freshness, edges)?
+- How to handle abusive content detection at scale?
+- How to minimize rebuffering on low bandwidth?
 
 ## References
-
--   [ExoPlayer Documentation](https://exoplayer.dev/)
--   [FFmpeg Android](https://github.com/tanersener/ffmpeg-kit)
--   [Android Camera2 API](https://developer.android.com/training/camera2)
--   [Glide Caching](https://bumptech.github.io/glide/doc/caching.html)
--   [Video Compression Techniques](https://developer.android.com/guide/topics/media/mediacodec)
+- https://exoplayer.dev/
+- https://developer.android.com/guide/background
+- https://developer.android.com/guide/topics/media/mediaplayer
+- https://cloud.google.com/cdn
 
 ## Related Questions
+- [[q-deep-link-vs-app-link--android--medium]]
+- [[q-data-sync-unstable-network--android--hard]]
+- [[q-database-optimization-android--android--medium]]
