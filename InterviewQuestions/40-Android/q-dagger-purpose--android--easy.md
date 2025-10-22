@@ -1,6 +1,6 @@
 ---
 id: 20251020-200000
-title: "Dagger Purpose / Назначение Dagger"
+title: Dagger Purpose / Назначение Dagger
 aliases:
   - Dagger Purpose
   - Назначение Dagger
@@ -14,7 +14,7 @@ original_language: en
 language_tags:
   - en
   - ru
-status: draft
+status: reviewed
 moc: moc-android
 related:
   - q-dagger-inject-annotation--android--easy
@@ -33,7 +33,6 @@ tags:
 source: https://dagger.dev/
 source_note: Dagger official documentation
 ---
-
 # Вопрос (RU)
 > Для чего нужен Dagger?
 
@@ -289,9 +288,6 @@ class MainActivity : AppCompatActivity() {
 - What are the main benefits of dependency injection?
 
 ## Related Questions
-
-### Prerequisites (Easier)
-- None (this is a basic concept)
 
 ### Related (Same Level)
 - [[q-dagger-inject-annotation--android--easy]]
