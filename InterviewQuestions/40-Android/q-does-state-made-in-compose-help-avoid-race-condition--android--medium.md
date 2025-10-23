@@ -56,7 +56,7 @@ tags:
 @Composable
 fun UnsafeCounter() {
     var count by remember { mutableStateOf(0) }
-    
+
     Button(onClick = {
         Thread {
             count++ // ОПАСНО! Не thread-safe
@@ -68,7 +68,7 @@ fun UnsafeCounter() {
 @Composable
 fun SafeCounter() {
     var count by remember { mutableStateOf(0) }
-    
+
     Button(onClick = {
         count++ // Безопасно - Main thread
     }) { Text("Increment") }
@@ -85,7 +85,7 @@ fun SafeCounter() {
 @Composable
 fun UnsafeAsyncCounter() {
     var count by remember { mutableStateOf(0) }
-    
+
     Button(onClick = {
         CoroutineScope(Dispatchers.IO).launch {
             count = heavyCalculation() // ОПАСНО!
@@ -98,7 +98,7 @@ fun UnsafeAsyncCounter() {
 fun SafeAsyncCounter() {
     var count by remember { mutableStateOf(0) }
     val scope = rememberCoroutineScope()
-    
+
     Button(onClick = {
         scope.launch {
             val result = withContext(Dispatchers.IO) {
@@ -120,7 +120,7 @@ fun SafeAsyncCounter() {
 @Composable
 fun ParentComponent() {
     var sharedState by remember { mutableStateOf(0) }
-    
+
     ChildComponent1(state = sharedState) { sharedState++ }
     ChildComponent2(state = sharedState) { sharedState++ }
 }
@@ -129,7 +129,7 @@ fun ParentComponent() {
 @Composable
 fun ParentComponent(viewModel: SharedViewModel) {
     val state by viewModel.state.collectAsState()
-    
+
     ChildComponent1(state = state) { viewModel.increment() }
     ChildComponent2(state = state) { viewModel.increment() }
 }
@@ -145,7 +145,7 @@ fun ParentComponent(viewModel: SharedViewModel) {
 @Composable
 fun UnsafeSnapshotUsage() {
     var data by remember { mutableStateOf(emptyList<String>()) }
-    
+
     LaunchedEffect(Unit) {
         // Поток 1
         data = data + "item1"
@@ -158,7 +158,7 @@ fun UnsafeSnapshotUsage() {
 @Composable
 fun SafeSnapshotUsage() {
     var data by remember { mutableStateOf(emptyList<String>()) }
-    
+
     LaunchedEffect(Unit) {
         data = data + "item1" + "item2" // Atomic update
     }
@@ -197,7 +197,7 @@ fun SafeSnapshotUsage() {
 fun SafeAsyncComponent() {
     var state by remember { mutableStateOf(initialValue) }
     val scope = rememberCoroutineScope()
-    
+
     scope.launch {
         val result = withContext(Dispatchers.IO) {
             performBackgroundWork()
@@ -221,7 +221,7 @@ fun FlowBasedComponent(viewModel: MyViewModel) {
 class MyViewModel : ViewModel() {
     private val _state = MutableStateFlow(initialValue)
     val state = _state.asStateFlow()
-    
+
     fun updateState(newValue: T) {
         _state.value = newValue // Thread-safe
     }
@@ -244,7 +244,7 @@ class MyViewModel : ViewModel() {
 @Composable
 fun UnsafeCounter() {
     var count by remember { mutableStateOf(0) }
-    
+
     Button(onClick = {
         Thread {
             count++ // DANGEROUS! Not thread-safe
@@ -256,7 +256,7 @@ fun UnsafeCounter() {
 @Composable
 fun SafeCounter() {
     var count by remember { mutableStateOf(0) }
-    
+
     Button(onClick = {
         count++ // Safe - Main thread
     }) { Text("Increment") }
@@ -273,7 +273,7 @@ fun SafeCounter() {
 @Composable
 fun UnsafeAsyncCounter() {
     var count by remember { mutableStateOf(0) }
-    
+
     Button(onClick = {
         CoroutineScope(Dispatchers.IO).launch {
             count = heavyCalculation() // DANGEROUS!
@@ -286,7 +286,7 @@ fun UnsafeAsyncCounter() {
 fun SafeAsyncCounter() {
     var count by remember { mutableStateOf(0) }
     val scope = rememberCoroutineScope()
-    
+
     Button(onClick = {
         scope.launch {
             val result = withContext(Dispatchers.IO) {
@@ -308,7 +308,7 @@ fun SafeAsyncCounter() {
 @Composable
 fun ParentComponent() {
     var sharedState by remember { mutableStateOf(0) }
-    
+
     ChildComponent1(state = sharedState) { sharedState++ }
     ChildComponent2(state = sharedState) { sharedState++ }
 }
@@ -317,7 +317,7 @@ fun ParentComponent() {
 @Composable
 fun ParentComponent(viewModel: SharedViewModel) {
     val state by viewModel.state.collectAsState()
-    
+
     ChildComponent1(state = state) { viewModel.increment() }
     ChildComponent2(state = state) { viewModel.increment() }
 }
@@ -333,7 +333,7 @@ fun ParentComponent(viewModel: SharedViewModel) {
 @Composable
 fun UnsafeSnapshotUsage() {
     var data by remember { mutableStateOf(emptyList<String>()) }
-    
+
     LaunchedEffect(Unit) {
         // Thread 1
         data = data + "item1"
@@ -346,7 +346,7 @@ fun UnsafeSnapshotUsage() {
 @Composable
 fun SafeSnapshotUsage() {
     var data by remember { mutableStateOf(emptyList<String>()) }
-    
+
     LaunchedEffect(Unit) {
         data = data + "item1" + "item2" // Atomic update
     }
@@ -385,7 +385,7 @@ fun SafeSnapshotUsage() {
 fun SafeAsyncComponent() {
     var state by remember { mutableStateOf(initialValue) }
     val scope = rememberCoroutineScope()
-    
+
     scope.launch {
         val result = withContext(Dispatchers.IO) {
             performBackgroundWork()
@@ -409,7 +409,7 @@ fun FlowBasedComponent(viewModel: MyViewModel) {
 class MyViewModel : ViewModel() {
     private val _state = MutableStateFlow(initialValue)
     val state = _state.asStateFlow()
-    
+
     fun updateState(newValue: T) {
         _state.value = newValue // Thread-safe
     }
