@@ -34,7 +34,7 @@ tags:
 **Android App Security** requires a multi-layered defense-in-depth approach covering network security, data protection, code security, and runtime protection. Following OWASP Mobile Top 10 guidelines ensures comprehensive application security.
 
 **Security Architecture Theory:**
-Defense-in-depth implements multiple security layers where each layer provides protection even if others fail. This includes network encryption, data encryption at rest, code obfuscation, runtime protection, and input validation to create overlapping security controls.
+Defense-in-depth implements multiple security layers where each layer provides protection even if others fail. This includes network [[c-encryption]], data encryption at rest, code obfuscation, runtime protection, and input validation to create overlapping security controls.
 
 **1. Network Security with Certificate Pinning:**
 

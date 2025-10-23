@@ -29,7 +29,7 @@ tags:
 ---
 
 ## Answer (EN)
-Android Architecture Components help build robust, testable, maintainable apps. Core libraries: ViewModel, LiveData, Room, WorkManager, Data Binding (or ViewBinding), Paging, Navigation, Lifecycle.
+Android Architecture Components help build robust, testable, maintainable apps. Core libraries: [[c-viewmodel]], [[c-livedata]], [[c-room]], [[c-workmanager]], Data Binding (or ViewBinding), Paging, Navigation, [[c-lifecycle]].
 
 **Design principles**
 - Single-responsibility modules; separation of concerns (UI, domain, data)

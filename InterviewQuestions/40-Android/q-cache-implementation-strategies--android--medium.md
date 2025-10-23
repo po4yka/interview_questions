@@ -57,6 +57,8 @@ tags:
 - Write-Back (behind): write to cache, flush to source later; needs durability queue.
 - Refresh-Ahead: proactively refresh near-expiry keys.
 
+All strategies benefit from proper memory management to avoid [[c-memory-leaks]].
+
 ### Keys, TTL, Eviction
 - Keys: stable, include parameters (locale/userId/version).
 - TTL: per type (e.g., news=5m, profile=1h); store timestamps alongside values.
@@ -93,8 +95,8 @@ class Lru<K, V>(max: Int) : LruCache<K, V>(max)
 - Log cache layers and decisions at debug level; sample in production.
 
 ### Components
-- Preferences/DataStore: small KV (flags, timestamps).
-- Room: structured cached entities (with cachedAt, origin ETag/Last-Modified).
+- Preferences/DataStore: small KV (flags, timestamps) using [[c-datastore]] or [[c-shared-preferences]].
+- Room: structured cached entities (with cachedAt, origin ETag/Last-Modified) using [[c-room]].
 - HTTP: OkHttp cache + Cache-Control; ETag/If-None-Match; stale-if-error for resiliency.
 - Images: Glide/Picasso built-in caches; prefer library defaults + sizing.
 

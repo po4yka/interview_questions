@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
 
 ## Answer (EN)
 
-To tell Dagger about dependency injection, use the **`@Inject`** annotation in three main places: constructor, fields, and methods.
+To tell [[c-dagger]] about [[c-dependency-injection]], use the **`@Inject`** annotation in three main places: constructor, fields, and methods.
 
 ### Theory: @Inject Principles
 
@@ -245,7 +245,7 @@ class UserService {
 
 ### Hilt Automation
 
-Hilt simplifies `@Inject` usage:
+[[c-hilt]] simplifies `@Inject` usage:
 
 ```kotlin
 @AndroidEntryPoint

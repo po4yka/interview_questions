@@ -88,7 +88,7 @@ buildCache {
 
 ### KSP over KAPT
 - KSP avoids Java stub generation; typically ~2x faster annotation processing.
-- Migrate processors when supported (Room, Hilt, Moshi, etc.).
+- Migrate processors when supported ([[c-room]], [[c-hilt]], Moshi, etc.).
 ```kotlin
 plugins { id("com.google.devtools.ksp") }
 dependencies { ksp(libs.room.compiler); ksp(libs.hilt.compiler) }

@@ -29,10 +29,10 @@ tags:
 ---
 
 ## Answer (EN)
-**Android Services Purpose** enables long-running background operations without user interface, providing essential functionality for tasks that must continue beyond the app's lifecycle.
+**Android Services Purpose** enables long-running background operations without user interface, providing essential functionality for tasks that must continue beyond the app's [[c-lifecycle]].
 
 **Services Purpose Theory:**
-Services run independently of the UI and can continue executing when the user switches apps or the app is closed. They are essential for background tasks that require system resources and persistent execution.
+[[c-service]] components run independently of the UI and can continue executing when the user switches apps or the app is closed. They are essential for background tasks that require system resources and persistent execution.
 
 **Primary Use Cases:**
 

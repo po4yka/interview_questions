@@ -58,8 +58,8 @@ jobs: null
 - Post-merge/nightly: full suite, long‑running, device lab, performance checks
 
 ### Tests and scope
-- Unit: JVM, fast, mock Android deps
-- Instrumented: Espresso/UI, real/emulated devices, sharding
+- Unit: JVM, fast, mock Android deps using [[c-unit-testing]] and [[c-mockito]]
+- Instrumented: [[c-espresso]]/UI, real/emulated devices, sharding
 - Lint/Detekt: style and correctness
 - Coverage: merge unit + instrumented; fail on drop threshold
 

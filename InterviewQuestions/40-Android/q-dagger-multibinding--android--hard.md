@@ -241,7 +241,7 @@ class MyApplication : Application() {
 
 ## Answer (EN)
 
-Multibinding in Dagger/Hilt allows you to bind multiple values into a collection (Set or Map) that can be injected as a single dependency. This is critically important for plugin architectures, feature modules, and extensible systems.
+Multibinding in [[c-dagger]]/[[c-hilt]] allows you to bind multiple values into a collection (Set or Map) using [[c-dependency-injection]] that can be injected as a single dependency. This is critically important for plugin architectures, feature modules, and extensible systems.
 
 ### Theory: Multibinding Principles
 

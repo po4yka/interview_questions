@@ -29,10 +29,202 @@ tags:
 - android/network-security-config
 - difficulty/medium
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20security%20best%20practices%20you%20know.md
+# Вопрос (RU)
+> Какие лучшие практики безопасности Android вы знаете?
+
+---
+
+# Question (EN)
+> What Android security best practices do you know?
+
+---
+
+## Ответ (RU)
+**Лучшие практики безопасности Android** включают внедрение нескольких уровней защиты для сохранения пользовательских данных с помощью [[c-encryption|шифрования]], предотвращения несанкционированного доступа через [[c-permissions|разрешения]] и обеспечения безопасной связи с использованием [[c-https|HTTPS]] и [[c-certificate-pinning|certificate pinning]].
+
+**Теория архитектуры безопасности:**
+Безопасность Android следует стратегии глубокой защиты с несколькими уровнями: изоляция приложений (sandboxing), система разрешений, безопасное хранилище, зашифрованная связь и защита во время выполнения. Каждый уровень обеспечивает специфическую защиту от различных векторов атак.
+
+**Безопасность разрешений:**
+```kotlin
+// Показать выбор приложения для чувствительных интентов
+val intent = Intent(ACTION_SEND)
+val possibleActivities = queryIntentActivities(intent, PackageManager.MATCH_ALL)
+
+if (possibleActivities.size > 1) {
+    val chooser = Intent.createChooser(intent, "Share with")
+    startActivity(chooser)
+} else if (intent.resolveActivity(packageManager) != null) {
+    startActivity(intent)
+}
+```
+
+**Теория разрешений:**
+App choosers предотвращают перехват чувствительных интентов вредоносными приложениями, позволяя пользователям явно выбирать доверенные приложения. Это предотвращает утечку данных через перехват интентов.
+
+**Разрешения на основе подписи:**
+```xml
+<!-- Пользовательское разрешение на основе подписи -->
+<permission android:name="my_custom_permission_name"
+            android:protectionLevel="signature" />
+```
+
+**Теория signature-разрешений:**
+Разрешения на основе подписи позволяют только приложениям, подписанным тем же сертификатом, получать доступ к защищенным ресурсам. Это обеспечивает безопасность без взаимодействия с пользователем для доверенных приложений.
+
+**Безопасность Content Provider:**
+```xml
+<!-- Отключить внешний доступ к ContentProvider -->
+<provider
+    android:name="android.support.v4.content.FileProvider"
+    android:authorities="com.example.myapp.fileprovider"
+    android:exported="false" />
+```
+
+**Теория Content Provider:**
+Content providers с `android:exported="false"` предотвращают доступ внешних приложений к внутренним данным. Это критично для предотвращения утечки данных через атаки на content provider.
+
+**Сетевая безопасность:**
+```kotlin
+// HTTPS коммуникация
+val url = URL("https://api.example.com")
+val connection = url.openConnection() as HttpsURLConnection
+connection.connect()
+```
+
+**Конфигурация сетевой безопасности:**
+```xml
+<!-- Объявление в Manifest -->
+<application
+    android:networkSecurityConfig="@xml/network_security_config">
+</application>
+```
+
+```xml
+<!-- res/xml/network_security_config.xml -->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">api.example.com</domain>
+    </domain-config>
+</network-security-config>
+```
+
+**Теория сетевой безопасности:**
+Конфигурация сетевой безопасности обеспечивает коммуникацию только через HTTPS и предотвращает незашифрованный трафик. Это защищает от атак man-in-the-middle и перехвата данных.
+
+**Безопасность WebView:**
+```kotlin
+val webView: WebView = findViewById(R.id.webview)
+
+// Безопасные каналы сообщений (Android 6.0+)
+val channel = webView.createWebMessageChannel()
+channel[0].setWebMessageCallback(object : WebMessagePort.WebMessageCallback() {
+    override fun onMessage(port: WebMessagePort, message: WebMessage) {
+        // Обработка безопасного сообщения
+    }
+})
+channel[1].postMessage(WebMessage("Secure data"))
+```
+
+**Теория безопасности WebView:**
+Безопасность WebView включает ограничение контента до списка разрешенных источников и использование безопасных каналов связи. JavaScript-интерфейсы следует избегать, если они не полностью доверенные.
+
+**Безопасность хранения данных:**
+```kotlin
+// Внутреннее хранилище (безопасное)
+val file = File(filesDir, "sensitive_data.txt")
+file.writeText("Private data")
+
+// Внешнее хранилище (публичное)
+val externalFile = File(getExternalFilesDir(null), "public_data.txt")
+
+// SharedPreferences (приватный режим)
+val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+prefs.edit().putString("key", "value").apply()
+```
+
+**Теория хранения данных:**
+Внутреннее хранилище изолировано для каждого приложения и автоматически удаляется при деинсталляции. Внешнее хранилище доступно другим приложениям и должно использоваться только для нечувствительных данных.
+
+**Современные практики безопасности:**
+```kotlin
+// Обфускация кода (build.gradle.kts)
+android {
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
+        }
+    }
+}
+```
+
+**Зашифрованное хранилище:**
+```kotlin
+// Jetpack Security
+val masterKey = MasterKey.Builder(context)
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    .build()
+
+val encryptedPrefs = EncryptedSharedPreferences.create(
+    context,
+    "secure_prefs",
+    masterKey,
+    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+)
+
+encryptedPrefs.edit()
+    .putString("api_key", "secret_value")
+    .apply()
+```
+
+**Теория шифрования:**
+Jetpack Security обеспечивает шифрование с аппаратной поддержкой с использованием Android Keystore. Мастер-ключи защищены функциями безопасности устройства и не могут быть извлечены.
+
+**Биометрическая аутентификация:**
+```kotlin
+val biometricPrompt = BiometricPrompt(
+    this,
+    executor,
+    object : BiometricPrompt.AuthenticationCallback() {
+        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+            // Пользователь аутентифицирован
+        }
+    }
+)
+
+val promptInfo = BiometricPrompt.PromptInfo.Builder()
+    .setTitle("Biometric Authentication")
+    .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+    .build()
+
+biometricPrompt.authenticate(promptInfo)
+```
+
+**Certificate Pinning:**
+```kotlin
+val certificatePinner = CertificatePinner.Builder()
+    .add("api.example.com", "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+    .build()
+
+val client = OkHttpClient.Builder()
+    .certificatePinner(certificatePinner)
+    .build()
+```
+
+**Мониторинг безопасности:**
+- Поддерживать зависимости обновленными
+- Нацеливаться на последнюю Android SDK
+- Проводить тестирование на проникновение
+- Использовать инструменты статического анализа
+- Отслеживать предупреждения безопасности
+
 ---
 
 ## Answer (EN)
-**Android Security Best Practices** involve implementing multiple layers of protection to safeguard user data, prevent unauthorized access, and ensure secure communication between app components and external services.
+**Android Security Best Practices** involve implementing multiple layers of protection to safeguard user data through [[c-encryption|encryption]], prevent unauthorized access via [[c-permissions|permissions]], and ensure secure communication using [[c-https|HTTPS]] and [[c-certificate-pinning|certificate pinning]].
 
 **Security Architecture Theory:**
 Android security follows a defense-in-depth strategy with multiple security layers: application sandboxing, permission system, secure storage, encrypted communication, and runtime protection. Each layer provides specific protection against different attack vectors.

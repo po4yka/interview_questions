@@ -172,7 +172,7 @@ class MainActivity : AppCompatActivity() {
 
 ## Answer (EN)
 
-Field injection in Dagger allows automatic dependency injection into class fields using the `@Inject` annotation. This approach has specific characteristics, advantages, and limitations compared to constructor and method injection.
+Field injection in [[c-dagger]] allows automatic [[c-dependency-injection]] into class fields using the `@Inject` annotation. This approach has specific characteristics, advantages, and limitations compared to constructor and method injection.
 
 ### Theory: Field Injection Principles
 
@@ -260,7 +260,7 @@ fun makeRequest() {
 
 ### Hilt Approach
 
-Hilt automates field injection:
+[[c-hilt]] automates field injection:
 
 ```kotlin
 @AndroidEntryPoint

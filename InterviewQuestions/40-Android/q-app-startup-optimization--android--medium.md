@@ -36,7 +36,7 @@ Startup time directly impacts user retention. Each ContentProvider adds 20-50ms,
 
 **1. ContentProvider Consolidation**
 
-**Theory**: Each ContentProvider triggers separate IPC calls during app startup, adding 20-50ms overhead. Multiple providers create sequential initialization bottlenecks. App Startup consolidates all initialization into a single provider with dependency resolution, reducing IPC overhead and enabling parallel initialization of independent components.
+**Theory**: Each [[c-content-provider]] triggers separate IPC calls during app startup, adding 20-50ms overhead. Multiple providers create sequential initialization bottlenecks. App Startup consolidates all initialization into a single provider with dependency resolution, reducing IPC overhead and enabling parallel initialization of independent components.
 
 ```kotlin
 // Before: Multiple ContentProviders

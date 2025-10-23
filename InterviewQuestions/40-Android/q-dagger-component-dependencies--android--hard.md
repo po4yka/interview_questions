@@ -178,10 +178,10 @@ Component Dependencies and Subcomponents are two ways to compose Dagger componen
 ### Theory: Architectural Patterns
 
 **Component Dependencies (Has-a relationship)**
-- Component aggregation through explicit dependencies
+- Component aggregation through explicit dependencies using [[c-dependency-injection]]
 - Parent component must export dependencies
 - Isolated scopes and lifecycles
-- Strict dependency encapsulation
+- Strict dependency encapsulation with [[c-dagger]]
 
 **Subcomponents (Is-a relationship)**
 - Component inheritance in hierarchical structure
@@ -274,7 +274,7 @@ activityComponent.inject(this)
 
 ### Hilt Approach
 
-Hilt automates component management:
+[[c-hilt]] automates component management:
 
 ```kotlin
 @AndroidEntryPoint

@@ -49,8 +49,8 @@ tags:
 ### Key ideas
 - Affected graph: map modules → dependencies; compute impacted set from changed files
 - Task filtering: run Gradle tasks only for impacted modules (and dependents)
-- Caching: configuration cache + build cache + dependency cache
-- Parallelism: matrix by module group, `--parallel`, test sharding
+- Caching: configuration cache + build cache + dependency cache to optimize build performance
+- Parallelism: matrix by module group, `--parallel`, test sharding using [[c-unit-testing]]
 
 ### Minimal strategy (pseudo)
 ```bash

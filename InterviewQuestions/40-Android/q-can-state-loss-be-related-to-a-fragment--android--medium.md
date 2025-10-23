@@ -54,8 +54,8 @@ tags:
 
 ### Prevention
 - Only mutate FragmentManager when state is not saved.
-- Persist what must survive (ViewModel for data; `onSaveInstanceState` for UI state).
-- Observe with `viewLifecycleOwner` and clear view references in `onDestroyView`.
+- Persist what must survive ([[c-viewmodel]] for data; `onSaveInstanceState` for UI state).
+- Observe with `viewLifecycleOwner` and clear view references in `onDestroyView` to avoid [[c-memory-leaks]].
 
 ### Minimal snippet (guarding transactions)
 ```kotlin
@@ -69,7 +69,7 @@ lifecycleScope.launchWhenResumed {
 ```
 
 ### Best practices
-- Use ViewModel for durable data across config changes.
+- Use [[c-viewmodel]] for durable data across config changes.
 - Use `onSaveInstanceState` for transient UI (scroll, selections).
 - Prefer `commitNow()` only in safe points (e.g., initial `onCreate` when `savedInstanceState == null`).
 - Avoid `commitAllowingStateLoss()` except for non-critical UI where loss is acceptable (e.g., transient dialogs).

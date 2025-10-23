@@ -43,7 +43,7 @@ tags:
 ## Answer (EN)
 
 - **Direct UI**: No. `Service` has no UI; it runs in background.
-- **Primary channel**: **Notifications** (incl. foreground services) for user-visible events and controls.
+- **Primary channel**: **Notifications** (incl. foreground services) for user-visible events and controls. Android [[c-lifecycle]] rules enforce foreground service notifications for long-running work.
 - **Other patterns (indirect)**:
   - **Start Activity**: only for critical, user-initiated flows (use flags; avoid disruption).
   - **Bound Service callbacks**: UI binds and receives callbacks; the UI renders, not the service.

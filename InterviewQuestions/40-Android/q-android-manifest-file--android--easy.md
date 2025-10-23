@@ -32,7 +32,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 ---
 
 ## Answer (EN)
-**AndroidManifest.xml** is the central configuration file that declares app components, permissions, and metadata. It serves as the entry point for the Android system to understand and launch your application.
+**AndroidManifest.xml** is the central configuration file that declares [[c-app-components|app components]], [[c-permissions|permissions]], and metadata. It serves as the entry point for the Android system to understand and launch your application through [[c-intent-filter|intent filters]].
 
 **Manifest Theory:**
 The manifest acts as a contract between your app and the Android system. It declares what components exist, what permissions are needed, and how the app should behave. The system reads this file before launching any component to understand the app's structure and requirements.

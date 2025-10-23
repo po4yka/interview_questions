@@ -32,7 +32,7 @@ source: https://github.com/Kirchhoff-Android-Interview-Questions
 ---
 
 ## Answer (EN)
-**Android Security Practices Checklist** provides a systematic approach to implementing security measures throughout the Android development lifecycle, ensuring comprehensive protection against common vulnerabilities and attack vectors.
+**Android Security Practices Checklist** provides a systematic approach to implementing security measures throughout the Android development lifecycle using [[c-encryption|encryption]], [[c-android-keystore|Android Keystore]], and [[c-proguard|ProGuard]], ensuring comprehensive protection against common vulnerabilities and attack vectors.
 
 **Security Checklist Theory:**
 A security checklist serves as a systematic verification tool to ensure all critical security measures are implemented. It covers multiple security domains: data protection, network security, authentication, code protection, and runtime security.

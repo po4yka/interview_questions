@@ -31,12 +31,12 @@ tags:
 ---
 
 ## Answer (EN)
-Use the right tool per use case: Coroutines (default), WorkManager (deferrable background), Executor/HandlerThread (interop/legacy), RxJava (reactive), and avoid deprecated AsyncTask. Threads are low-level and rarely needed directly.
+Use the right tool per use case: [[c-coroutines]] (default), [[c-workmanager]] (deferrable background), Executor/HandlerThread (interop/legacy), RxJava (reactive), and avoid deprecated AsyncTask. Threads are low-level and rarely needed directly.
 
 **Theory (core principles)**
 - Main thread for UI only; offload I/O/CPU-bound work
 - Structured concurrency (scopes, cancellation) to avoid leaks
-- Lifecycle awareness for safe UI updates
+- [[c-lifecycle]] awareness for safe UI updates
 - Deferrable jobs must survive process death (WorkManager)
 
 ### 1) Kotlin Coroutines — default choice

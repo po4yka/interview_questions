@@ -77,7 +77,7 @@ tags:
 
 ### What Are Baseline Profiles
 
-**Theory**: Baseline Profiles tell Android Runtime (ART) which code paths to pre-compile (AOT) at install time, reducing startup time and jank during critical user journeys.
+**Theory**: Baseline Profiles tell Android Runtime (ART) which code paths to pre-compile (AOT) at install time, reducing startup time and jank during critical user journeys. Understanding [[c-jit-aot-compilation]] helps grasp the performance benefits.
 
 **How It Works**:
 - Traditional: App start → Interpret bytecode → Profile → JIT compile → Fast execution

@@ -49,8 +49,8 @@ tags:
 ### Stages (typical)
 
 * Setup: checkout; JDK 17/21 (Temurin); Android SDK cmdline‑tools + platform‑tools + required platforms/build‑tools; Gradle configuration cache on; remote build cache (e.g., Develocity) read‑only on PRs; pre‑warm dependencies.
-* Static checks: ktlint, detekt, Android Lint (XML + SARIF for PR annotations); optional API surface check (metalava); dependency & security review (dependency‑review/OWASP); version drift check (Gradle versions plugin).
-* Unit tests: JVM tests by module (JUnit 5) with `--parallel`; Kover/Jacoco XML + HTML; test retry plugin (1 rerun max) to contain flakes; fail on new flaky in changed modules.
+* Static checks: ktlint, detekt, Android Lint (XML + SARIF for PR annotations); optional API surface check (metalava); dependency & security review (dependency‑review/OWASP) with [[c-encryption]]; version drift check (Gradle versions plugin).
+* Unit tests: JVM tests by module ([[c-junit]]) with `--parallel` using [[c-unit-testing]]; Kover/Jacoco XML + HTML; test retry plugin (1 rerun max) to contain flakes; fail on new flaky in changed modules.
 * Build: assemble/bundle (AAB) using configuration/build cache; reproducible versioning (CI‑provided code/name); R8 full mode; produce mapping.txt and ABI/resource splits as needed.
 * Instrumented tests: Gradle Managed Devices (GMD) or device farm; headless emulator (GPU swiftshader, cold boot disabled); shard via `numShards`/`shardIndex` or Marathon/Flank; capture logcat, screenshots, and videos; retry failed shards once.
 * Artifact/report upload: JUnit XML; Lint SARIF; Kover/Jacoco XML + HTML; detekt/ktlint reports; APK(s)/AAB; mapping.txt; dependency graph/SBOM (CycloneDX) for supply‑chain visibility.

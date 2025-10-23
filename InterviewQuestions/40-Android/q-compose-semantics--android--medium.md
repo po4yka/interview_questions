@@ -47,8 +47,8 @@ source_note: Official Compose Semantics docs
 ## Answer (EN)
 
 ### Concept
-- Semantics expose UI meaning/structure to accessibility services and test APIs.
-- Key properties: contentDescription, role, stateDescription, progressBarRangeInfo, selected/disabled.
+- Semantics expose UI meaning/structure to accessibility services and test APIs in [[c-jetpack-compose]].
+- Key properties: contentDescription, role, stateDescription, progressBarRangeInfo, selected/disabled for testing with [[c-espresso]].
 
 ### Minimal patterns
 

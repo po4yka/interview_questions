@@ -34,7 +34,7 @@ tags:
 **ANR (Application Not Responding)** occurs when the UI thread of an Android app is blocked for too long, causing the system to display a dialog allowing users to force quit the app.
 
 **ANR Theory:**
-ANRs happen when the main thread, responsible for UI updates and user input processing, becomes unresponsive. The system monitors main thread responsiveness and triggers ANR dialogs when timeouts are exceeded.
+ANRs happen when the main thread, responsible for UI updates and user input processing, becomes unresponsive. The system monitors main thread responsiveness and triggers ANR dialogs when timeouts are exceeded. Understanding [[c-coroutines]] helps avoid ANRs by moving work off the main thread.
 
 **ANR Triggers:**
 - **Input dispatching timeout**: No response to input events within 5 seconds

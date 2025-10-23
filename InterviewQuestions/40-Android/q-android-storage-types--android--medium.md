@@ -32,7 +32,7 @@ tags:
 **Android Storage Types** provide different mechanisms for persisting data based on size, privacy, and sharing requirements.
 
 **Storage Types Theory:**
-Android offers multiple storage options, each optimized for specific use cases. The choice depends on data size, privacy needs, sharing requirements, and query complexity.
+Android offers multiple storage options, each optimized for specific use cases. The choice depends on data size, privacy needs, sharing requirements, and query complexity. For structured data, [[c-room]] provides a robust database solution, while [[c-datastore]] offers modern key-value storage.
 
 **1. SharedPreferences:**
 Key-value storage for small data like settings and preferences.

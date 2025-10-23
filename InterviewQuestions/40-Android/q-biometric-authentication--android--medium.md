@@ -51,11 +51,11 @@ tags:
 
 ### Biometric Authentication Overview
 
-**Theory**: Biometric authentication provides secure, convenient user authentication using fingerprint, face, or iris recognition. AndroidX Biometric library offers unified API across Android versions.
+**Theory**: Biometric authentication provides secure, convenient user authentication using fingerprint, face, or iris recognition. AndroidX Biometric library offers unified API across Android versions. [[c-biometric-auth]] leverages hardware-backed security.
 
 **Key Components**:
 - BiometricPrompt: Unified API for all biometric types
-- CryptoObject: Ties authentication to cryptographic operations
+- CryptoObject: Ties authentication to [[c-encryption]] operations
 - Authenticator Types: BIOMETRIC_STRONG, BIOMETRIC_WEAK, DEVICE_CREDENTIAL
 
 ### Basic Implementation

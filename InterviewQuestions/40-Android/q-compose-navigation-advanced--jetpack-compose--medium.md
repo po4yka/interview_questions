@@ -45,8 +45,8 @@ source_note: Official Compose Navigation docs
 ## Answer (EN)
 
 ### Minimal setup
-- NavController owns back stack and current destination; NavHost maps route patterns to destinations.
-- startDestination initializes the first back stack entry; each composable adds a destination node.
+- NavController owns back stack and current destination; NavHost maps route patterns to destinations using [[c-navigation-component]].
+- startDestination initializes the first back stack entry; each composable adds a destination node in [[c-jetpack-compose]].
 ```kotlin
 @Composable
 fun AppNav() {

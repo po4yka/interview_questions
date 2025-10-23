@@ -43,8 +43,8 @@ tags:
 ## Answer (EN)
 
 ### Core Principles
-- **Target**: 60 FPS (16.67ms/frame); onDraw() < 5ms; zero allocations/frame.
-- **Pre-allocate**: Paint/Path/Rect/Matrix as fields; reuse with reset()/set().
+- **Target**: 60 FPS (16.67ms/frame); onDraw() < 5ms; zero allocations/frame. Use [[c-profiling]] to measure.
+- **Pre-allocate**: Paint/Path/Rect/Matrix as fields; reuse with reset()/set() to avoid [[c-memory-leaks]].
 - **Cache**: bitmap cache for static content; clip to visible regions.
 - **Hardware**: enable for complex/animated views; disable for compatibility.
 

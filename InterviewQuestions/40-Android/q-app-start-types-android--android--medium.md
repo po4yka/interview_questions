@@ -31,7 +31,7 @@ tags:
 ---
 
 ## Answer (EN)
-**App Start Types** categorize launches by memory/process state: cold (no process), warm (process alive, Activity recreated), hot (Activity resumed). Optimize per type with measurable budgets and strict main-thread discipline.
+**App Start Types** categorize launches by memory/process state: cold (no process), warm (process alive, Activity recreated), hot (Activity resumed). Optimize per type with measurable budgets and strict main-thread discipline. Understanding [[c-lifecycle]] and [[c-viewmodel]] helps optimize each start type.
 
 ### Terminology and Metrics
 - **TTID (Time To Initial Display)**: first frame drawn; user sees UI.

@@ -29,6 +29,9 @@ tags:
 
 ## Answer (EN)
 **Architecture Components** - Modern app architecture
+
+[[c-viewmodel|ViewModel]], [[c-livedata|LiveData]], and [[c-room|Room]] are core [[c-jetpack|Android Jetpack]] components for modern app architecture.
+
 ```kotlin
 // ViewModel - survives configuration changes
 class UserViewModel : ViewModel() {

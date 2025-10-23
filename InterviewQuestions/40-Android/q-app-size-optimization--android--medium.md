@@ -32,7 +32,7 @@ tags:
 **App Size Optimization** reduces APK/AAB size through resource shrinking, code minification, native library filtering, and Android App Bundle configuration. Smaller apps improve download conversion rates and user experience.
 
 **Size Optimization Theory:**
-App size directly impacts user acquisition - download conversion rates drop 1% per 6MB. Optimization strategies include removing unused code/resources, compressing assets, filtering languages/architectures, and using dynamic delivery to reduce initial install size.
+App size directly impacts user acquisition - download conversion rates drop 1% per 6MB. Optimization strategies include removing unused code/resources with [[c-proguard]], compressing assets, filtering languages/architectures, and using dynamic delivery to reduce initial install size.
 
 **1. R8 Code Minification:**
 

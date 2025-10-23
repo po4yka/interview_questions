@@ -68,14 +68,14 @@ val age = bundle.getInt("key_age")
 
 ## Answer (EN)
 
-Bundle is used to pass data between Android components (Activity, Fragment, Service). Supports a limited set of data types.
+Bundle is used to pass data between Android components (Activity, Fragment, [[c-service]]). Supports a limited set of data types.
 
 **Supported types**:
 - Primitives: Int, Long, Float, Double, Boolean, Byte, Char, Short
 - Strings: String, CharSequence
 - Primitive arrays: IntArray, LongArray, FloatArray, etc.
 - Lists: ArrayList<String>, ArrayList<Int>, etc.
-- Parcelable/Serializable objects
+- [[c-parcelable]]/Serializable objects
 - Bundle (nested)
 
 **Example**:

@@ -26,6 +26,212 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Какие архитектурные паттерны используются в Android разработке, и чем они отличаются друг от друга?
+
+---
+
+# Question (EN)
+> What architectural patterns are commonly used in Android development, and how do they differ from each other?
+
+---
+
+## Ответ (RU)
+Android разработка использует несколько [[c-architectural-patterns|архитектурных паттернов]]: [[c-mvc|MVC]] (ранний, редко используется), [[c-mvp|MVP]] (Model-View-Presenter), [[c-mvvm|MVVM]] (Model-View-ViewModel с data binding), [[c-mvi|MVI]] (Model-View-Intent для однонаправленного потока данных) и [[c-clean-architecture|Clean Architecture]] (слоистый подход с инверсией зависимостей).
+
+**Современная рекомендация**: MVVM с Clean Architecture и Android Architecture Components (ViewModel, LiveData/StateFlow, Repository pattern).
+
+**1. MVC (Model-View-Controller)**
+- **Ранний Android паттерн** - сегодня редко используется
+- **Компоненты**: Model (бизнес-логика), View (XML layouts), Controller (Activity/Fragment)
+- **Проблемы**: Activity одновременно View и Controller, сильная связанность, сложно тестировать
+
+```kotlin
+// ПЛОХО: MVC - Activity делает всё
+class MainActivity : AppCompatActivity() {
+    private val repository = UserRepository()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val user = repository.getUser(1) // Блокирующий вызов
+        findViewById<TextView>(R.id.userName).text = user.name
+    }
+}
+```
+
+**2. MVP (Model-View-Presenter)**
+- **Улучшенное разделение** - популярен до MVVM
+- **Компоненты**: Model (данные), View (пассивный UI), Presenter (логика представления)
+- **Преимущества**: Чёткое разделение, тестируемый presenter, заменяемая view
+- **Недостатки**: Много boilerplate, утечки памяти, нет lifecycle awareness
+
+```kotlin
+// MVP - Лучшее разделение
+interface UserContract {
+    interface View {
+        fun showUser(user: User)
+        fun showLoading()
+    }
+
+    interface Presenter {
+        fun loadUser(id: Int)
+    }
+}
+
+class UserPresenter(
+    private val view: UserContract.View,
+    private val repository: UserRepository
+) : UserContract.Presenter {
+
+    override fun loadUser(id: Int) {
+        view.showLoading()
+        // Загрузка пользователя асинхронно
+                view.showUser(user)
+    }
+}
+```
+
+**3. MVVM (Model-View-ViewModel)**
+- **Текущий стандарт Android** с поддержкой Jetpack
+- **Компоненты**: Model (данные), View (UI), ViewModel (логика представления с наблюдаемыми данными)
+- **Преимущества**: Учитывает lifecycle, двусторонний data binding, автоматические обновления UI, официальная поддержка Google
+
+```kotlin
+// MVVM - Современный подход
+class UserViewModel(
+    private val repository: UserRepository
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    fun loadUser(id: Int) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            try {
+                val user = repository.getUser(id)
+                _uiState.value = UiState.Success(user)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+}
+
+// View наблюдает за ViewModel
+        lifecycleScope.launch {
+            viewModel.uiState.collect { state ->
+                when (state) {
+            is UiState.Loading -> showLoading()
+            is UiState.Success -> showUser(state.user)
+            is UiState.Error -> showError(state.message)
+        }
+    }
+}
+```
+
+**4. MVI (Model-View-Intent)**
+- **Однонаправленный поток данных** - набирает популярность
+- **Компоненты**: State (единственный источник истины), Intent (действия пользователя), View (отрисовка state)
+- **Преимущества**: Предсказуемое управление состоянием, легко отлаживать, отлично для сложных UI
+
+```kotlin
+// MVI - Однонаправленный поток
+data class UserState(
+    val isLoading: Boolean = false,
+    val user: User? = null,
+    val error: String? = null
+)
+
+sealed class UserIntent {
+    data class LoadUser(val id: Int) : UserIntent()
+    object RetryLoading : UserIntent()
+}
+
+class UserViewModel : ViewModel() {
+    private val _state = MutableStateFlow(UserState())
+    val state: StateFlow<UserState> = _state.asStateFlow()
+
+    fun handleIntent(intent: UserIntent) {
+        when (intent) {
+            is UserIntent.LoadUser -> loadUser(intent.id)
+            is UserIntent.RetryLoading -> retry()
+        }
+    }
+}
+```
+
+**5. Clean Architecture**
+- **Многослойная архитектура** для сложных приложений
+- **Слои**: Domain (entity, use cases), Data (repositories, data sources), Presentation (UI, ViewModels)
+- **Преимущества**: Высокая тестируемость, масштабируемость, чёткое разделение, бизнес-логика независима от фреймворка
+
+```kotlin
+// Clean Architecture - Слоистый подход
+// Domain Layer
+class GetUserUseCase(private val repository: UserRepository) {
+    suspend operator fun invoke(id: Int): Result<User> {
+        return try {
+            val user = repository.getUser(id)
+            Result.success(user)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+}
+
+// Data Layer
+class UserRepositoryImpl(
+    private val remoteDataSource: UserRemoteDataSource,
+    private val localDataSource: UserLocalDataSource
+) : UserRepository {
+
+    override suspend fun getUser(id: Int): User {
+        return try {
+            val user = remoteDataSource.getUser(id)
+            localDataSource.saveUser(user)
+            user
+        } catch (e: Exception) {
+            localDataSource.getUser(id)
+        }
+    }
+}
+
+// Presentation Layer
+class UserViewModel(
+    private val getUserUseCase: GetUserUseCase
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    fun loadUser(id: Int) {
+        viewModelScope.launch {
+            getUserUseCase(id).fold(
+                onSuccess = { user -> _uiState.value = UiState.Success(user) },
+                onFailure = { error -> _uiState.value = UiState.Error(error.message) }
+            )
+        }
+    }
+}
+```
+
+**Сравнение:**
+
+| Паттерн | Сложность | Тестируемость | Boilerplate | Lifecycle-Aware | Применение |
+|---------|------------|-------------|-------------|-----------------|----------|
+| **MVC** | Низкая | Низкая | Низкий | Нет | Простые приложения (legacy) |
+| **MVP** | Средняя | Высокая | Высокий | Нет | Средние приложения |
+| **MVVM** | Средняя | Высокая | Средний | Да | Современные Android приложения |
+| **MVI** | Средне-высокая | Очень высокая | Средний | Да | Сложные UI с состояниями |
+| **Clean Architecture** | Высокая | Очень высокая | Высокий | Да (с MVVM) | Большие enterprise приложения |
+
+**Современная рекомендация для Android:**
+- **Для большинства приложений**: MVVM + Repository Pattern + Dependency Injection
+- **Для сложных приложений**: Clean Architecture + MVVM/MVI + Jetpack Compose + Hilt
+
 ## Answer (EN)
 Android development uses several [[c-architectural-patterns|architectural patterns]]: [[c-mvc|MVC]] (early, rarely used), [[c-mvp|MVP]] (Model-View-Presenter), [[c-mvvm|MVVM]] (Model-View-ViewModel with data binding), [[c-mvi|MVI]] (Model-View-Intent for unidirectional data flow), and [[c-clean-architecture|Clean Architecture]] (layered approach with dependency inversion).
 

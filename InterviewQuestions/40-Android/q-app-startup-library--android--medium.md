@@ -29,7 +29,7 @@ tags:
 ---
 
 ## Answer (EN)
-**App Startup Library** centralizes component initialization through a single ContentProvider, replacing multiple SDK ContentProviders that slow cold start. Provides dependency management, lazy initialization, and controlled execution order.
+**App Startup Library** centralizes component initialization through a single [[c-content-provider]], replacing multiple SDK ContentProviders that slow cold start. Provides dependency management, lazy initialization, and controlled execution order.
 
 **Initialization Theory:**
 Each SDK ContentProvider adds 50-100ms to cold start. App Startup consolidates initialization into one provider with dependency graph resolution. Critical for apps with 5+ SDKs.

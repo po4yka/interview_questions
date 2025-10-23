@@ -32,7 +32,7 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 ---
 
 ## Answer (EN)
-**Android Lint** is a static code analysis tool that identifies structural problems in Android projects without executing the app. It checks for bugs, performance issues, security vulnerabilities, and code quality problems.
+**Android Lint** is a [[c-static-analysis|static code analysis]] tool that identifies structural problems in Android projects without executing the app. It checks for bugs, performance issues, security vulnerabilities, and code quality problems through [[c-code-inspection|code inspection]].
 
 **Static Analysis Theory:**
 Static analysis examines code without execution, analyzing syntax, structure, and patterns to detect potential issues. Lint performs this analysis on Android-specific files (Java, Kotlin, XML, resources) to catch problems early in development.

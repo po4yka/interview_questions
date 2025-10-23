@@ -186,7 +186,7 @@ class MainActivity : AppCompatActivity() {
 
 ## Answer (EN)
 
-Dagger is built around several key elements that work together to provide dependency injection. The main components form the DI system architecture.
+[[c-dagger]] is built around several key elements that work together to provide [[c-dependency-injection]]. The main components form the DI system architecture.
 
 ### Theory: Dagger Architecture
 
@@ -322,7 +322,7 @@ class MainActivity : AppCompatActivity() {
 
 ### Hilt Simplification
 
-Hilt automates component creation:
+[[c-hilt]] automates component creation:
 
 ```kotlin
 @HiltAndroidApp

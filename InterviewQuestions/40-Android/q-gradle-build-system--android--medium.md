@@ -6,23 +6,15 @@ status: draft
 created: 2025-10-05
 updated: 2025-10-05
 difficulty: medium
-topics:
-  - android
 subtopics:
   - gradle
   - build-variants
   - dependency-management
 tags: [gradle, build-system, dependency-management, groovy, kotlin-dsl, difficulty/medium, android/build-variants, android/dependency-management]
-language_tags: [gradle, build-system, dependency-management, groovy, kotlin-dsl, difficulty/medium, android/build-variants, android/dependency-management]
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Gradle.md
-author: null
 related: [q-what-unites-the-main-components-of-an-android-application--android--medium, q-kapt-vs-ksp--android--medium, q-cache-implementation-strategies--android--medium]
-  - "[[moc-android]]"
-  - "[[q-build-variants-android--android--medium]]"
-  - "[[q-proguard-r8--android--medium]]"
 moc: moc-android
-  - "[[moc-android]]"
 connections: []
 ---
 

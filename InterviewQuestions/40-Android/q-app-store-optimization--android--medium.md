@@ -34,7 +34,7 @@ tags:
 **App Store Optimization (ASO)** improves app discoverability and conversion rates through metadata optimization, visual assets, and data-driven testing.
 
 **ASO Theory:**
-Play Store algorithm ranks apps based on relevance, quality, and user engagement. Optimized metadata increases organic visibility, while compelling visuals improve conversion rates. Localization expands market reach, A/B testing validates optimization strategies.
+Play Store algorithm ranks apps based on relevance, quality, and user engagement. Optimized metadata increases organic visibility, while compelling visuals improve conversion rates. [[c-localization]] expands market reach, A/B testing validates optimization strategies.
 
 **1. Metadata Optimization**
 

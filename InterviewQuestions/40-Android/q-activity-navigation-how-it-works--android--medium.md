@@ -28,7 +28,7 @@ tags:
 ---
 
 ## Answer (EN)
-[[c-activity-navigation|Activity navigation]] in Android is managed through [[c-intent|Intents]], [[c-back-stack|back stack]], and [[c-task-management|task management]].
+[[c-activity-navigation|Activity navigation]] in Android is managed through [[c-intent|Intents]], [[c-back-stack|back stack]], and [[c-task-management|task management]]. The [[c-navigation-component|Navigation Component]] provides a modern alternative.
 
 **Main mechanisms:**
 

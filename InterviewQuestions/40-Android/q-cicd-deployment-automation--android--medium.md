@@ -59,8 +59,8 @@ jobs: null
 - Semantic or monotonic `versionCode`; auto‑generate `versionName`.
 
 ### Signing
-- Use Play App Signing; keep upload keystore in CI secrets (OIDC/secret store).
-- Sign via Gradle `signingConfig` with injected env secrets; never commit keystores.
+- Use Play App Signing; keep upload keystore in CI secrets (OIDC/secret store) with [[c-encryption]].
+- Sign via Gradle `signingConfig` with injected env secrets; never commit keystores to maintain [[c-secure-storage]].
 
 ### Artifacts
 - Produce AAB (primary) and APK (for internal testing) + mapping.txt + ProGuard/R8 reports.

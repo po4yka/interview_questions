@@ -187,7 +187,7 @@ override fun onDestroy() {
 
 ## Answer (EN)
 
-Scopes in Dagger/Hilt control the lifecycle and sharing of dependencies. Custom scopes allow you to create dependencies with specific lifecycles for particular functionality or business processes.
+Scopes in [[c-dagger]]/[[c-hilt]] control the lifecycle and sharing of dependencies using [[c-dependency-injection]]. Custom scopes allow you to create dependencies with specific lifecycles for particular functionality or business processes.
 
 ### Theory: Lifecycle Management
 

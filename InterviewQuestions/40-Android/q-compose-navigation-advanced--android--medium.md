@@ -45,8 +45,8 @@ source_note: Official Compose Navigation docs
 ## Answer (EN)
 
 ### Core pieces
-- NavController: holds navigation state
-- NavHost: maps routes to destinations
+- NavController: holds navigation state in [[c-jetpack-compose]]
+- NavHost: maps routes to destinations using [[c-navigation-component]]
 - Route: string with path/query; prefer sealed API wrappers
 
 ### Minimal setup

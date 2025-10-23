@@ -37,7 +37,7 @@ File uploads use HTTP multipart/form-data encoding to send binary data with meta
 **1. Retrofit (Recommended):**
 
 **API Interface Definition:**
-Defines a type-safe interface for file upload endpoints using Retrofit annotations. The `@Multipart` annotation indicates multipart form data, `@POST` specifies the HTTP method, and `@Part` marks parameters for the multipart request.
+Defines a type-safe interface for file upload endpoints using Retrofit annotations. The `@Multipart` annotation indicates multipart form data, `@POST` specifies the HTTP method, and `@Part` marks parameters for the multipart request. [[c-retrofit]] provides a powerful, type-safe HTTP client for Android.
 
 ```kotlin
 // API Interface

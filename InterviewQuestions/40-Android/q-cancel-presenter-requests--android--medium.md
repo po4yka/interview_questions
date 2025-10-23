@@ -51,8 +51,8 @@ tags:
 
 ### Core strategies (theory first)
 - **Ownership**: Presenter owns a cancellation handle (Job/CompositeDisposable) and clears it on `onStop/onDestroy`.
-- **Lifecycle-aware**: Observe lifecycle to start/stop work; never hold hard reference to View without checks.
-- **One source of truth**: All async work must register with the cancellation handle.
+- **Lifecycle-aware**: Observe [[c-lifecycle]] to start/stop work; never hold hard reference to View without checks.
+- **One source of truth**: All async work must register with the cancellation handle using [[c-coroutines]].
 
 ### Minimal implementations
 

@@ -23,8 +23,6 @@ created: 2025-10-20
 updated: 2025-10-20
 tags:
 - android/ui-views
-- - null
-- - null
 - difficulty/hard
 source: https://developer.android.com/reference/android/view/ViewGroup
 source_note: Official ViewGroup documentation

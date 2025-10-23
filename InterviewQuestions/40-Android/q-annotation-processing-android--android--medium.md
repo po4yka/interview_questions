@@ -30,7 +30,7 @@ tags:
 **Annotation Processing** is a compile-time code generation technique that reads annotations in source code and generates new code based on them, reducing boilerplate and enabling powerful frameworks.
 
 **Annotation Processing Theory:**
-Annotation processing occurs during compilation when processors analyze source code annotations and generate additional code. This enables frameworks like Room, Dagger, and Retrofit to create boilerplate-free implementations automatically.
+Annotation processing occurs during compilation when processors analyze source code annotations and generate additional code. This enables frameworks like [[c-room]], [[c-hilt]], and Retrofit to create boilerplate-free implementations automatically.
 
 **How Annotation Processing Works:**
 

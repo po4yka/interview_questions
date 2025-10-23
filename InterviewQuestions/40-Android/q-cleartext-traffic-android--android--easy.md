@@ -45,10 +45,10 @@ source_note: Android docs
 ## Answer (EN)
 
 ### Definition
-- Cleartext traffic = unencrypted HTTP communication (no TLS). Anyone on path can read/modify.
+- Cleartext traffic = unencrypted HTTP communication (no TLS). Anyone on path can read/modify. Use [[c-encryption]] for all sensitive data.
 
 ### Android policy
-- Android 9+ (API 28): cleartext is blocked by default
+- Android 9+ (API 28): cleartext is blocked by default to enforce [[c-secure-storage]]
 - Older versions: allowed by default
 
 ### Allow only for development (per‑domain)

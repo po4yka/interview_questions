@@ -34,12 +34,12 @@ tags:
 **Background Service**
 - Theory: Runs without user awareness; low priority; can be killed by system
 - Characteristics: No notification required; Service Process priority; Android 8.0+ severely restricted
-- Use cases: Legacy apps only; modern apps should use WorkManager
+- Use cases: Legacy apps only; modern apps should use [[c-workmanager]]
 
 **Foreground Service**
 - Theory: User-visible with persistent notification; high priority; protected from termination
 - Characteristics: Required notification; Foreground Process priority; survives system pressure
-- Use cases: Music playback, navigation, file downloads, user-initiated long tasks
+- Use cases: Music playback, navigation, file downloads, user-initiated long tasks. [[c-service]] components must follow strict lifecycle rules.
 
 ### Implementation Comparison
 

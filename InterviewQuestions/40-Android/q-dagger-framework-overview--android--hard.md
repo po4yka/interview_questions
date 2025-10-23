@@ -147,7 +147,7 @@ class MyApplication : Application()
 
 ## Answer (EN)
 
-Dagger is a powerful dependency injection framework designed to automate and simplify dependency management in applications.
+[[c-dagger]] is a powerful [[c-dependency-injection]] framework designed to automate and simplify dependency management in applications.
 
 ### Theory: Dagger Principles
 
@@ -218,7 +218,7 @@ interface AppComponent {
 
 ### Hilt — Modern Approach
 
-Hilt simplifies Dagger usage in Android:
+[[c-hilt]] simplifies Dagger usage in Android:
 
 ```kotlin
 @AndroidEntryPoint

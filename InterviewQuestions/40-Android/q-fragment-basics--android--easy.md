@@ -6,23 +6,15 @@ status: draft
 created: 2025-10-05
 updated: 2025-10-05
 difficulty: easy
-topics:
-  - android
 subtopics:
   - fragment
   - lifecycle
   - ui-navigation
 tags: [fragment, ui-component, lifecycle, difficulty/easy, android/lifecycle, android/ui-navigation]
-language_tags: [fragment, ui-component, lifecycle, difficulty/easy, android/lifecycle, android/ui-navigation]
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Fragment.md
-author: null
 related: [q-compose-modifier-order-performance--jetpack-compose--medium, q-what-each-android-component-represents--android--easy, q-android-build-optimization--android--medium]
-  - "[[moc-android]]"
-  - "[[q-fragment-lifecycle--android--medium]]"
-  - "[[q-activity-lifecycle--android--easy]]"
 moc: moc-android
-  - "[[moc-android]]"
 connections: []
 ---
 

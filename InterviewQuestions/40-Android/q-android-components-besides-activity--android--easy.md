@@ -30,7 +30,7 @@ tags:
 
 ## Answer (EN)
 **Service** - Background operations without UI
-Long-running tasks that don't need user interaction. Runs independently of UI lifecycle.
+Long-running tasks that don't need user interaction. Runs independently of UI lifecycle. [[c-service|Services]] handle background work without a user interface.
 ```kotlin
 class DownloadService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -41,7 +41,7 @@ class DownloadService : Service() {
 ```
 
 **BroadcastReceiver** - System event handling
-Responds to system-wide announcements like battery low, network changes, SMS received.
+Responds to system-wide announcements like battery low, network changes, SMS received. [[c-broadcast-receiver|BroadcastReceivers]] handle system events.
 ```kotlin
 class BatteryReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -62,7 +62,7 @@ class NotesProvider : ContentProvider() {
 ```
 
 **Fragment** - Reusable UI modules
-Modular UI components that can be combined in Activities. Supports back stack and lifecycle.
+Modular UI components that can be combined in Activities. Supports back stack and lifecycle. [[c-fragment|Fragments]] provide modular UI components.
 ```kotlin
 class ListFragment : Fragment() {
     override fun onCreateView(...): View? {

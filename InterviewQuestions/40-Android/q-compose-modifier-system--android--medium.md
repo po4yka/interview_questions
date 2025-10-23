@@ -45,7 +45,7 @@ source_note: Official Compose modifier docs
 ## Answer (EN)
 
 ### What is Modifier
-- Ordered, immutable chain that decorates or adds behavior to composables
+- Ordered, immutable chain that decorates or adds behavior to composables in [[c-jetpack-compose]]
 - Affects measure, layout, and draw phases
 
 ### Execution model

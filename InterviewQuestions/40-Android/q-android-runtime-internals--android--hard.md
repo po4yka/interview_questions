@@ -29,7 +29,7 @@ tags:
 ---
 
 ## Answer (EN)
-**Android Runtime (ART) Internals** involves the deep understanding of how Android executes application code, manages memory, and optimizes performance through various compilation strategies and garbage collection mechanisms.
+**Android Runtime (ART) Internals** involves the deep understanding of how Android executes application code, manages [[c-memory-management|memory]], and optimizes performance through various [[c-jit-compiler|JIT compilation]] strategies and [[c-garbage-collection|garbage collection]] mechanisms.
 
 **Runtime Architecture Theory:**
 ART provides a managed execution environment that abstracts hardware differences through multiple execution tiers: interpreter for initial execution, JIT compiler for hot code paths, and AOT compiler for pre-compiled optimization. This multi-tier approach balances installation time, memory usage, and runtime performance.

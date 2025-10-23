@@ -32,7 +32,7 @@ tags:
 **Android Service Types** provide background execution capabilities for long-running operations without user interface.
 
 **Service Types Theory:**
-Services run in the background and can continue executing even when the user switches to another app. They are essential for tasks that need to persist beyond the app's lifecycle.
+[[c-service]] components run in the background and can continue executing even when the user switches to another app. They are essential for tasks that need to persist beyond the app's [[c-lifecycle]].
 
 **1. Started Service:**
 Runs independently in the background without user interaction. Continues until explicitly stopped or system kills it.
