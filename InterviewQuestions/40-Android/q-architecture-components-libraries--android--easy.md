@@ -28,6 +28,22 @@ tags:
 - difficulty/easy
 ---
 
+# Вопрос (RU)
+> Что такое Библиотеки Architecture Components?
+
+---
+
+# Вопрос (RU)
+> Что такое Библиотеки Architecture Components?
+
+---
+
+# Question (EN)
+> What are Architecture Components Libraries?
+
+# Question (EN)
+> What are Architecture Components Libraries?
+
 ## Answer (EN)
 Android Architecture Components help build robust, testable, maintainable apps. Core libraries: [[c-viewmodel]], [[c-livedata]], [[c-room]], [[c-workmanager]], Data Binding (or ViewBinding), Paging, Navigation, [[c-lifecycle]].
 

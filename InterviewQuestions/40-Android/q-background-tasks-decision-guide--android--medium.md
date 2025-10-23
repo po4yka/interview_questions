@@ -30,6 +30,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Руководство по фоновым задачам?
+
+---
+
+# Вопрос (RU)
+> Что такое Руководство по фоновым задачам?
+
+---
+
+# Question (EN)
+> What is Background Tasks Decision Guide?
+
+# Question (EN)
+> What is Background Tasks Decision Guide?
+
 ## Answer (EN)
 ### Background Task Types
 

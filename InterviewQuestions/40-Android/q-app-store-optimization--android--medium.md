@@ -30,6 +30,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Оптимизация App Store?
+
+---
+
+# Вопрос (RU)
+> Что такое Оптимизация App Store?
+
+---
+
+# Question (EN)
+> What is App Store Optimization?
+
+# Question (EN)
+> What is App Store Optimization?
+
 ## Answer (EN)
 **App Store Optimization (ASO)** improves app discoverability and conversion rates through metadata optimization, visual assets, and data-driven testing.
 

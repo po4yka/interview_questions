@@ -28,6 +28,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Размер страницы DEX 16KB?
+
+---
+
+# Вопрос (RU)
+> Что такое Размер страницы DEX 16KB?
+
+---
+
+# Question (EN)
+> What is 16kb Dex Page Size?
+
+# Question (EN)
+> What is 16kb Dex Page Size?
+
 ## Answer (EN)
 The 16 KB DEX page size issue is a [[c-memory-alignment|memory alignment]] problem affecting Android 6.0+ that causes significant app bloat when apps are optimized with [[c-r8-proguard|R8/ProGuard]]. This affects [[c-gradle|Gradle]] builds and [[c-apk|APK]] sizes.
 

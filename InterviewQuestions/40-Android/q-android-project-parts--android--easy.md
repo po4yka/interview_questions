@@ -30,6 +30,22 @@ tags:
 - difficulty/easy
 ---
 
+# Вопрос (RU)
+> Что такое Части Android проекта?
+
+---
+
+# Вопрос (RU)
+> Что такое Части Android проекта?
+
+---
+
+# Question (EN)
+> What are Android Project Parts?
+
+# Question (EN)
+> What are Android Project Parts?
+
 ## Answer (EN)
 **Android Project Structure** consists of organized directories and files that serve specific purposes in app development. Each part has a clear responsibility for code organization, resource management, and build configuration.
 

@@ -28,6 +28,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Библиотека App Startup?
+
+---
+
+# Вопрос (RU)
+> Что такое Библиотека App Startup?
+
+---
+
+# Question (EN)
+> What is App Startup Library?
+
+# Question (EN)
+> What is App Startup Library?
+
 ## Answer (EN)
 **App Startup Library** centralizes component initialization through a single [[c-content-provider]], replacing multiple SDK ContentProviders that slow cold start. Provides dependency management, lazy initialization, and controlled execution order.
 

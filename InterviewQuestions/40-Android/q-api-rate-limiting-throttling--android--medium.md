@@ -26,6 +26,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Ограничение скорости API и троттлинг?
+
+---
+
+# Вопрос (RU)
+> Что такое Ограничение скорости API и троттлинг?
+
+---
+
+# Question (EN)
+> What is API Rate Limiting and Throttling?
+
+# Question (EN)
+> What is API Rate Limiting and Throttling?
+
 ## Answer (EN)
 **API Rate Limiting and Throttling** prevents clients from exceeding server request quotas, protecting servers from overload and ensuring fair resource distribution through client-side request management.
 

@@ -34,6 +34,16 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/An
 
 ---
 
+# Вопрос (RU)
+> Что такое Лучшие практики безопасности Android?
+
+---
+
+# Вопрос (RU)
+> Что такое Лучшие практики безопасности Android?
+
+---
+
 # Question (EN)
 > What Android security best practices do you know?
 
@@ -222,6 +232,12 @@ val client = OkHttpClient.Builder()
 - Отслеживать предупреждения безопасности
 
 ---
+
+# Question (EN)
+> What are Android Security Best Practices?
+
+# Question (EN)
+> What are Android Security Best Practices?
 
 ## Answer (EN)
 **Android Security Best Practices** involve implementing multiple layers of protection to safeguard user data through [[c-encryption|encryption]], prevent unauthorized access via [[c-permissions|permissions]], and ensure secure communication using [[c-https|HTTPS]] and [[c-certificate-pinning|certificate pinning]].

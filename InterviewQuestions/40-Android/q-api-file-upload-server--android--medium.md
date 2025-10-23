@@ -28,6 +28,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Загрузка файлов на сервер через API?
+
+---
+
+# Вопрос (RU)
+> Что такое Загрузка файлов на сервер через API?
+
+---
+
+# Question (EN)
+> What is API File Upload Server?
+
+# Question (EN)
+> What is API File Upload Server?
+
 ## Answer (EN)
 **File Upload APIs** in Android include Retrofit (recommended), OkHttp, and HttpURLConnection for uploading files to servers via HTTP multipart requests.
 

@@ -30,6 +30,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Лучшие практики безопасности приложения?
+
+---
+
+# Вопрос (RU)
+> Что такое Лучшие практики безопасности приложения?
+
+---
+
+# Question (EN)
+> What are App Security Best Practices?
+
+# Question (EN)
+> What are App Security Best Practices?
+
 ## Answer (EN)
 **Android App Security** requires a multi-layered defense-in-depth approach covering network security, data protection, code security, and runtime protection. Following OWASP Mobile Top 10 guidelines ensures comprehensive application security.
 

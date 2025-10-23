@@ -31,6 +31,22 @@ tags:
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
 ---
 
+# Вопрос (RU)
+> Что такое Файл манифеста Android?
+
+---
+
+# Вопрос (RU)
+> Что такое Файл манифеста Android?
+
+---
+
+# Question (EN)
+> What is AndroidManifest.xml?
+
+# Question (EN)
+> What is AndroidManifest.xml?
+
 ## Answer (EN)
 **AndroidManifest.xml** is the central configuration file that declares [[c-app-components|app components]], [[c-permissions|permissions]], and metadata. It serves as the entry point for the Android system to understand and launch your application through [[c-intent-filter|intent filters]].
 

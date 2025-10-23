@@ -28,6 +28,22 @@ tags:
 - difficulty/easy
 ---
 
+# Вопрос (RU)
+> Что такое Компоненты Android приложения?
+
+---
+
+# Вопрос (RU)
+> Что такое Компоненты Android приложения?
+
+---
+
+# Question (EN)
+> What are Android App Components?
+
+# Question (EN)
+> What are Android App Components?
+
 ## Answer (EN)
 Android applications have four fundamental [[c-app-components|components]]: [[c-activity|Activity]], [[c-service|Service]], [[c-broadcast-receiver|Broadcast Receiver]], and [[c-content-provider|Content Provider]].
 

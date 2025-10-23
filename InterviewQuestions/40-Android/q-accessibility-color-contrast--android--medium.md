@@ -27,6 +27,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Контрастность цветов для доступности?
+
+---
+
+# Вопрос (RU)
+> Что такое Контрастность цветов для доступности?
+
+---
+
+# Question (EN)
+> What is Accessibility Color Contrast?
+
+# Question (EN)
+> What is Accessibility Color Contrast?
+
 ## Answer (EN)
 Color contrast is the difference in luminance between text and background colors. Proper [[c-accessibility|accessibility]] contrast ensures readability for users with low vision, color blindness, age-related vision changes, and outdoor viewing. [[c-wcag|WCAG]] provides standardized contrast requirements.
 

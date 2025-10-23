@@ -30,6 +30,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Инструменты измерения производительности?
+
+---
+
+# Вопрос (RU)
+> Что такое Инструменты измерения производительности?
+
+---
+
+# Question (EN)
+> What are Android Performance Measurement Tools?
+
+# Question (EN)
+> What are Android Performance Measurement Tools?
+
 ## Answer (EN)
 **Android Performance Measurement** involves using specialized tools to quantify and analyze app performance before and after optimizations. The key is establishing baseline metrics and measuring improvements systematically.
 

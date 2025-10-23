@@ -28,6 +28,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Типы хранилища Android?
+
+---
+
+# Вопрос (RU)
+> Что такое Типы хранилища Android?
+
+---
+
+# Question (EN)
+> What are Android Storage Types?
+
+# Question (EN)
+> What are Android Storage Types?
+
 ## Answer (EN)
 **Android Storage Types** provide different mechanisms for persisting data based on size, privacy, and sharing requirements.
 

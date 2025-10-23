@@ -30,6 +30,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Модуляризация Android?
+
+---
+
+# Вопрос (RU)
+> Что такое Модуляризация Android?
+
+---
+
+# Question (EN)
+> What is Android Modularization?
+
+# Question (EN)
+> What is Android Modularization?
+
 ## Answer (EN)
 **Android Modularization** is the practice of organizing codebases into loosely coupled, self-contained modules. Each module serves a specific purpose and can be developed, tested, and maintained independently.
 

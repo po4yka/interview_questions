@@ -27,6 +27,16 @@ tags:
 ---
 
 # Вопрос (RU)
+> Что такое Архитектурные паттерны Android?
+
+---
+
+# Вопрос (RU)
+> Что такое Архитектурные паттерны Android?
+
+---
+
+# Вопрос (RU)
 > Какие архитектурные паттерны используются в Android разработке, и чем они отличаются друг от друга?
 
 ---
@@ -231,6 +241,12 @@ class UserViewModel(
 **Современная рекомендация для Android:**
 - **Для большинства приложений**: MVVM + Repository Pattern + Dependency Injection
 - **Для сложных приложений**: Clean Architecture + MVVM/MVI + Jetpack Compose + Hilt
+
+# Question (EN)
+> What are Android Architectural Patterns?
+
+# Question (EN)
+> What are Android Architectural Patterns?
 
 ## Answer (EN)
 Android development uses several [[c-architectural-patterns|architectural patterns]]: [[c-mvc|MVC]] (early, rarely used), [[c-mvp|MVP]] (Model-View-Presenter), [[c-mvvm|MVVM]] (Model-View-ViewModel with data binding), [[c-mvi|MVI]] (Model-View-Intent for unidirectional data flow), and [[c-clean-architecture|Clean Architecture]] (layered approach with dependency inversion).

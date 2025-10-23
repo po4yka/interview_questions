@@ -27,6 +27,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Методы жизненного цикла Activity?
+
+---
+
+# Вопрос (RU)
+> Что такое Методы жизненного цикла Activity?
+
+---
+
+# Question (EN)
+> What are Activity Lifecycle Methods?
+
+# Question (EN)
+> What are Activity Lifecycle Methods?
+
 ## Answer (EN)
 [[c-activity-lifecycle|Activity lifecycle]] methods are callbacks invoked by Android system during state changes. The [[c-lifecycle-owner|LifecycleOwner]] interface provides lifecycle-aware components.
 

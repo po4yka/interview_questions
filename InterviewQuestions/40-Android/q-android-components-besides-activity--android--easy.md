@@ -28,6 +28,22 @@ tags:
 - difficulty/easy
 ---
 
+# Вопрос (RU)
+> Что такое Компоненты Android кроме Activity?
+
+---
+
+# Вопрос (RU)
+> Что такое Компоненты Android кроме Activity?
+
+---
+
+# Question (EN)
+> What is Android Components Besides Activity?
+
+# Question (EN)
+> What is Android Components Besides Activity?
+
 ## Answer (EN)
 **Service** - Background operations without UI
 Long-running tasks that don't need user interaction. Runs independently of UI lifecycle. [[c-service|Services]] handle background work without a user interface.

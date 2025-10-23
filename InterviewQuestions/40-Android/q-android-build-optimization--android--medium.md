@@ -30,6 +30,22 @@ true:
 jobs: null
 ---
 
+# Вопрос (RU)
+> Что такое Оптимизация сборки Android?
+
+---
+
+# Вопрос (RU)
+> Что такое Оптимизация сборки Android?
+
+---
+
+# Question (EN)
+> What is Android Build Optimization?
+
+# Question (EN)
+> What is Android Build Optimization?
+
 ## Answer (EN)
 **1. Gradle Configuration Optimization**
 

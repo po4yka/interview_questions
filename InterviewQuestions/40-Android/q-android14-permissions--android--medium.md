@@ -28,6 +28,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Разрешения Android 14?
+
+---
+
+# Вопрос (RU)
+> Что такое Разрешения Android 14?
+
+---
+
+# Question (EN)
+> What are Android 14 Permissions?
+
+# Question (EN)
+> What are Android 14 Permissions?
+
 ## Answer (EN)
 **Android 14 Permission Changes** introduce privacy-focused updates requiring careful implementation and backward compatibility handling.
 

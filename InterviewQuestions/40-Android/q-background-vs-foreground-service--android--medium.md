@@ -28,6 +28,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Background vs Foreground Service?
+
+---
+
+# Вопрос (RU)
+> Что такое Background vs Foreground Service?
+
+---
+
+# Question (EN)
+> What is the difference between background vs foreground service?
+
+# Question (EN)
+> What is the difference between background vs foreground service?
+
 ## Answer (EN)
 ### Core Differences
 

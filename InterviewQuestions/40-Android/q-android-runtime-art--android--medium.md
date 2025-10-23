@@ -28,6 +28,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Android Runtime ART?
+
+---
+
+# Вопрос (RU)
+> Что такое Android Runtime ART?
+
+---
+
+# Question (EN)
+> What is Android Runtime ART?
+
+# Question (EN)
+> What is Android Runtime ART?
+
 ## Answer (EN)
 **Android Runtime (ART)** is the execution environment for Android applications, responsible for running code, managing memory, and interacting with the operating system. ART replaced Dalvik VM from Android 5.0 and uses **AOT (Ahead-of-Time) compilation** for improved performance.
 

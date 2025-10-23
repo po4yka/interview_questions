@@ -30,6 +30,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое ANR (Приложение не отвечает)?
+
+---
+
+# Вопрос (RU)
+> Что такое ANR (Приложение не отвечает)?
+
+---
+
+# Question (EN)
+> What is ANR (Application Not Responding)?
+
+# Question (EN)
+> What is ANR (Application Not Responding)?
+
 ## Answer (EN)
 **ANR (Application Not Responding)** occurs when the UI thread of an Android app is blocked for too long, causing the system to display a dialog allowing users to force quit the app.
 

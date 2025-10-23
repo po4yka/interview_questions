@@ -28,6 +28,22 @@ tags:
 - difficulty/easy
 ---
 
+# Вопрос (RU)
+> Что такое Типы Service в Android?
+
+---
+
+# Вопрос (RU)
+> Что такое Типы Service в Android?
+
+---
+
+# Question (EN)
+> What are Android Service Types?
+
+# Question (EN)
+> What are Android Service Types?
+
 ## Answer (EN)
 **Android Service Types** provide background execution capabilities for long-running operations without user interface.
 

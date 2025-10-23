@@ -28,6 +28,22 @@ tags:
 - difficulty/hard
 ---
 
+# Вопрос (RU)
+> Что такое Внутреннее устройство Android Runtime?
+
+---
+
+# Вопрос (RU)
+> Что такое Внутреннее устройство Android Runtime?
+
+---
+
+# Question (EN)
+> What are Android Runtime Internals?
+
+# Question (EN)
+> What are Android Runtime Internals?
+
 ## Answer (EN)
 **Android Runtime (ART) Internals** involves the deep understanding of how Android executes application code, manages [[c-memory-management|memory]], and optimizes performance through various [[c-jit-compiler|JIT compilation]] strategies and [[c-garbage-collection|garbage collection]] mechanisms.
 

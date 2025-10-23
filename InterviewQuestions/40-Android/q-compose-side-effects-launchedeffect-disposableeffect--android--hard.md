@@ -27,6 +27,12 @@ tags:
 source: https://developer.android.com/jetpack/compose/side-effects
 source_note: Official Compose side‑effects docs---
 ---
+# Question (EN)
+> What is the difference between compose side effects: launchedeffect vs disposableeffect?
+
+# Question (EN)
+> What is the difference between compose side effects: launchedeffect vs disposableeffect?
+
 ## Answer (EN)
 
 ### Quick comparison

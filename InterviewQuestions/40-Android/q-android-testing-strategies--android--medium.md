@@ -30,6 +30,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Стратегии тестирования Android?
+
+---
+
+# Вопрос (RU)
+> Что такое Стратегии тестирования Android?
+
+---
+
+# Question (EN)
+> What are Android Testing Strategies?
+
+# Question (EN)
+> What are Android Testing Strategies?
+
 ## Answer (EN)
 **Android Testing Strategies** provide comprehensive quality assurance through multiple testing layers and automated validation tools.
 

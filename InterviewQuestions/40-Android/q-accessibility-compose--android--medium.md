@@ -28,6 +28,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Доступность в Compose?
+
+---
+
+# Вопрос (RU)
+> Что такое Доступность в Compose?
+
+---
+
+# Question (EN)
+> What is Accessibility Compose?
+
+# Question (EN)
+> What is Accessibility Compose?
+
 ## Answer (EN)
 [[c-accessibility|Accessibility]] in [[c-jetpack-compose|Jetpack Compose]] ensures your app is usable by people with disabilities. Key aspects: screen reader support ([[c-talkback|TalkBack]]), content descriptions, semantic properties, touch target sizes (minimum 48dp), sufficient color contrast, and custom accessibility actions.
 

@@ -28,6 +28,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Оптимизация запуска приложения?
+
+---
+
+# Вопрос (RU)
+> Что такое Оптимизация запуска приложения?
+
+---
+
+# Question (EN)
+> What is App Startup Optimization?
+
+# Question (EN)
+> What is App Startup Optimization?
+
 ## Answer (EN)
 **Startup Optimization** reduces cold/warm/hot start times through ContentProvider consolidation, lazy initialization, deferred execution, and measurement-driven optimization.
 

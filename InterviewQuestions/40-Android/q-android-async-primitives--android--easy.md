@@ -27,6 +27,22 @@ tags:
 - difficulty/easy
 ---
 
+# Вопрос (RU)
+> Что такое Примитивы асинхронности Android?
+
+---
+
+# Вопрос (RU)
+> Что такое Примитивы асинхронности Android?
+
+---
+
+# Question (EN)
+> What are Android Async Primitives?
+
+# Question (EN)
+> What are Android Async Primitives?
+
 ## Answer (EN)
 Android provides several async primitives: [[c-thread|Thread]] (basic), [[c-handler-looper|Handler/Looper]] (message passing), AsyncTask (deprecated), [[c-executor-service|ExecutorService]] (thread pools), [[c-coroutines|Coroutines]] (modern, recommended), [[c-rxjava|RxJava]] (reactive streams), and [[c-workmanager|WorkManager]] (background tasks).
 

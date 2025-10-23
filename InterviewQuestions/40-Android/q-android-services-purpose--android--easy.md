@@ -28,6 +28,22 @@ tags:
 - difficulty/easy
 ---
 
+# Вопрос (RU)
+> Что такое Назначение Service в Android?
+
+---
+
+# Вопрос (RU)
+> Что такое Назначение Service в Android?
+
+---
+
+# Question (EN)
+> What is Android Services Purpose?
+
+# Question (EN)
+> What is Android Services Purpose?
+
 ## Answer (EN)
 **Android Services Purpose** enables long-running background operations without user interface, providing essential functionality for tasks that must continue beyond the app's [[c-lifecycle]].
 

@@ -27,6 +27,22 @@ tags:
 kapt: 45 секунд
 ---
 
+# Вопрос (RU)
+> Что такое Обработка аннотаций в Android?
+
+---
+
+# Вопрос (RU)
+> Что такое Обработка аннотаций в Android?
+
+---
+
+# Question (EN)
+> What is Annotation Processing in Android?
+
+# Question (EN)
+> What is Annotation Processing in Android?
+
 ## Answer (EN)
 **Annotation Processing** is a compile-time code generation technique where processors analyze annotations and automatically generate additional classes, reducing boilerplate and enabling powerful frameworks.
 

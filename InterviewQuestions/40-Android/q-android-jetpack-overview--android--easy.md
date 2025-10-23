@@ -27,6 +27,22 @@ tags:
 - difficulty/easy
 ---
 
+# Вопрос (RU)
+> Что такое Обзор Android Jetpack?
+
+---
+
+# Вопрос (RU)
+> Что такое Обзор Android Jetpack?
+
+---
+
+# Question (EN)
+> What is Android Jetpack Overview?
+
+# Question (EN)
+> What is Android Jetpack Overview?
+
 ## Answer (EN)
 **Architecture Components** - Modern app architecture
 

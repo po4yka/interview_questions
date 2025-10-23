@@ -31,6 +31,22 @@ tags:
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 ---
 
+# Вопрос (RU)
+> Что такое Чек-лист практик безопасности Android?
+
+---
+
+# Вопрос (RU)
+> Что такое Чек-лист практик безопасности Android?
+
+---
+
+# Question (EN)
+> What is Android Security Practices Checklist?
+
+# Question (EN)
+> What is Android Security Practices Checklist?
+
 ## Answer (EN)
 **Android Security Practices Checklist** provides a systematic approach to implementing security measures throughout the Android development lifecycle using [[c-encryption|encryption]], [[c-android-keystore|Android Keystore]], and [[c-proguard|ProGuard]], ensuring comprehensive protection against common vulnerabilities and attack vectors.
 

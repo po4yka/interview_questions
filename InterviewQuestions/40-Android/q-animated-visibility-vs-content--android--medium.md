@@ -28,6 +28,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое AnimatedVisibility против?
+
+---
+
+# Вопрос (RU)
+> Что такое AnimatedVisibility против?
+
+---
+
+# Question (EN)
+> What is the difference between animatedvisibility vs animatedcontent vs crossfade?
+
+# Question (EN)
+> What is the difference between animatedvisibility vs animatedcontent vs crossfade?
+
 ## Answer (EN)
 **Compose Animation APIs** provide three main approaches for content transitions: AnimatedVisibility, AnimatedContent, and Crossfade, each optimized for different use cases.
 

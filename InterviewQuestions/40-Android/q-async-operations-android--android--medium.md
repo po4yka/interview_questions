@@ -30,6 +30,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Асинхронные операции в Android?
+
+---
+
+# Вопрос (RU)
+> Что такое Асинхронные операции в Android?
+
+---
+
+# Question (EN)
+> What is Async Operations in Android?
+
+# Question (EN)
+> What is Async Operations in Android?
+
 ## Answer (EN)
 Use the right tool per use case: [[c-coroutines]] (default), [[c-workmanager]] (deferrable background), Executor/HandlerThread (interop/legacy), RxJava (reactive), and avoid deprecated AsyncTask. Threads are low-level and rarely needed directly.
 

@@ -28,6 +28,22 @@ tags:
 - difficulty/medium
 ---
 
+# Вопрос (RU)
+> Что такое Оптимизация размера приложения?
+
+---
+
+# Вопрос (RU)
+> Что такое Оптимизация размера приложения?
+
+---
+
+# Question (EN)
+> What is App Size Optimization?
+
+# Question (EN)
+> What is App Size Optimization?
+
 ## Answer (EN)
 **App Size Optimization** reduces APK/AAB size through resource shrinking, code minification, native library filtering, and Android App Bundle configuration. Smaller apps improve download conversion rates and user experience.
 
