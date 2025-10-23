@@ -7,90 +7,38 @@ aliases:
 topic: android
 subtopics:
 - ui-compose
-- animations
+- ui-animation
 question_kind: android
 difficulty: medium
-status: reviewed
-moc: moc-android
-related:
-- q-animated-visibility-vs-content--jetpack-compose--medium
-- q-compose-compiler-plugin--jetpack-compose--hard
-- q-android-performance-measurement-tools--android--medium
-created: 2025-10-13
-updated: 2025-10-20
 original_language: en
 language_tags:
 - en
 - ru
+status: reviewed
+moc: moc-android
+related:
+- q-animated-visibility-vs-content--android--medium
+- q-compose-compiler-plugin--android--hard
+- q-android-performance-measurement-tools--android--medium
+created: 2025-10-13
+updated: 2025-10-20
 tags:
 - android/ui-compose
-- android/animations
-- compose
-- animatable
+- android/ui-animation
 - difficulty/medium
----# Вопрос (RU)
-> Как строить кастомные анимации в Compose с `animate*AsState` и `Animatable` (state, спецификации, прерывание, производительность)?
-
 ---
 
+# Вопрос (RU)
+> Кастомные анимации Compose?
+
 # Question (EN)
-> How do you build custom animations in Compose using `animate*AsState` and `Animatable` (state, specs, interruption, and performance)?
+> Compose Custom Animations?
+
+---
 
 ## Ответ (RU)
 
-### Выбор API
-- `animate*AsState`: декларативный, простые цели, авто‑отмена при смене состояния
-- `Animatable`: императивный контроль, последовательности, прерывание, ручной выбор spring/tween
-
-### Минимальные паттерны
-
-animate*AsState (декларативно):
-```kotlin
-@Composable
-fun Pulse(expanded: Boolean) {
-  val scale by animateFloatAsState(if (expanded) 1.2f else 1f, animationSpec = spring())
-  Box(Modifier.size(48.dp).graphicsLayer(scaleX = scale, scaleY = scale))
-}
-```
-
-Animatable (императивно):
-```kotlin
-@Composable
-fun SwipeProgress(target: Float) {
-  val progress = remember { Animatable(0f) }
-  LaunchedEffect(target) { progress.animateTo(target, spring(dampingRatio = Spring.DampingRatioNoBouncy)) }
-  LinearProgressIndicator(progress.value)
-}
-```
-
-Последовательности и прерывание:
-```kotlin
-LaunchedEffect(Unit) {
-  progress.snapTo(0f)
-  progress.animateTo(0.5f, tween())
-  if (!isActive) return@LaunchedEffect
-  progress.animateTo(1f, spring())
-}
-```
-
-Transition API для нескольких значений:
-```kotlin
-@Composable
-fun CardTransition(expanded: Boolean) {
-  val t = updateTransition(expanded, label = "expansion")
-  val alpha by t.animateFloat(label = "alpha") { if (it) 1f else 0.6f }
-  val corner by t.animateDp(label = "radius") { if (it) 24.dp else 8.dp }
-  Card(Modifier.alpha(alpha), shape = RoundedCornerShape(corner)) { /* ... */ }
-}
-```
-
-### Спеки и производительность
-- Спеки: `spring` (естественно), `tween` (по времени), `keyframes`, `snap`
-- Весенние (spring) лучше для прерываемых сценариев; эйзинги для Material‑ощущения
-- Не аллоцировать в лямбдах анимации; поднимать состояние; ограничивать рекомпозицию анимируемым поддеревом
-- Профилировать Layout Inspector/Perfetto; измерять jank
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -152,6 +100,7 @@ fun CardTransition(expanded: Boolean) {
 - How to benchmark animation jank in CI (Macrobenchmark)?
 
 ## References
+- [[c-algorithms]] - Animation interpolation and timing algorithms
 - https://developer.android.com/develop/ui/compose/animation
 - https://developer.android.com/develop/ui/compose/performance
 
@@ -166,4 +115,3 @@ fun CardTransition(expanded: Boolean) {
 
 ### Advanced (Harder)
 - [[q-android-performance-measurement-tools--android--medium]]
-

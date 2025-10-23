@@ -6,8 +6,7 @@ aliases:
 - Зависимости компонентов Dagger
 topic: android
 subtopics:
-- dependency-injection
-- architecture-patterns
+- di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
@@ -23,16 +22,12 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/dependency-injection
-- android/architecture-patterns
-- dagger
-- hilt
-- component-dependencies
-- subcomponents
+- android/di-hilt
 - difficulty/hard
 source: https://dagger.dev/api/latest/dagger/Component.html
 source_note: Dagger Component API documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > В чем разница между Component Dependencies и Subcomponents в Dagger? Когда использовать один подход вместо другого? Как Hilt обрабатывает это?
 
 # Question (EN)

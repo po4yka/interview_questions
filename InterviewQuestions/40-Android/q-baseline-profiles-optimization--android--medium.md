@@ -7,7 +7,7 @@ aliases:
 topic: android
 subtopics:
 - performance-startup
-- build-optimization
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
@@ -18,244 +18,62 @@ status: reviewed
 moc: moc-android
 related:
 - q-baseline-profiles-android--android--medium
-- q-app-startup-optimization--performance--medium
+- q-app-startup-optimization--android--medium
 - q-android-performance-measurement-tools--android--medium
 created: 2025-10-11
 updated: 2025-10-15
 tags:
 - android/performance-startup
-- android/build-optimization
-- baseline-profiles
-- optimization
-- startup
-- jank
+- android/gradle
 - difficulty/medium
----# Вопрос (RU)
-> Как генерировать и использовать Baseline Profiles для оптимизации запуска и рывков приложения? Как настроить Macrobenchmark для генерации профилей и измерить улучшения производительности в продакшне?
-
 ---
 
+# Вопрос (RU)
+> Как оптимизировать Android-приложение с помощью Baseline Profiles?
+
 # Question (EN)
-> How do you generate and use Baseline Profiles for app startup and jank optimization? How do you set up Macrobenchmark for profile generation and measure performance improvements in production?
+> How to optimize an Android app using Baseline Profiles?
+
+---
 
 ## Ответ (RU)
 
 ### Что такое Baseline Profiles
 
-**Теория**: Baseline Profiles сообщают Android Runtime (ART), какой код предварительно скомпилировать (AOT) для более быстрого запуска и плавной работы.
+**Теория**: Baseline Profiles сообщают Android Runtime (ART), какие пути кода компилировать ahead-of-time (AOT) для более быстрого запуска и плавной работы.
 
 **Как работает**:
-- Без профиля: Запуск приложения → Интерпретация кода → JIT компиляция горячего кода → Постепенное улучшение
-- С профилем: Установка приложения → AOT компиляция критического кода → Запуск приложения → Немедленное быстрое выполнение
+- Без профиля: Запуск → Интерпретация кода → JIT компиляция горячего кода → Постепенное улучшение
+- С профилем: Установка → AOT компиляция критического кода → Запуск → Сразу быстрое выполнение
 
 **Влияние на производительность**:
 - Холодный запуск: на 30-40% быстрее
-- Снижение jank: на 15-20% меньше пропущенных кадров
-- Начальная отрисовка: на 10-15% быстрее
+- Уменьшение рывков: на 15-20% меньше пропущенных кадров
+- Начальный рендеринг: на 10-15% быстрее
 - Стабильная производительность с первого запуска
 
-### Настройка реализации
+### Реализация
 
-**Структура проекта**:
-```
-MyApp/
- app/                    # Основной модуль приложения
- baseline-profile/       # Модуль генерации профиля
-    build.gradle.kts
-    src/androidTest/java/
-        BaselineProfileGenerator.kt
-```
-
-**Модуль Baseline Profile (build.gradle.kts)**:
-```kotlin
-// Теория: Настроить тестовый модуль для генерации профиля
-plugins {
-    id("com.android.test")
-    id("org.jetbrains.kotlin.android")
-    id("androidx.baselineprofile")
-}
-
-android {
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    targetProjectPath = ":app"
-    testOptions.managedDevices.devices {
-        create<ManagedVirtualDevice>("pixel6Api33") {
-            device = "Pixel 6"
-            apiLevel = 33
-            systemImageSource = "aosp"
-        }
-    }
-}
-
-dependencies {
-    implementation("androidx.test.ext:junit:1.1.5")
-    implementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation("androidx.test.uiautomator:uiautomator:2.2.0")
-    implementation("androidx.benchmark:benchmark-macro-junit4:1.2.0")
-}
-```
-
-**Генератор профиля**:
-```kotlin
-// Теория: Тестировать критические пользовательские сценарии для генерации профиля
-@RunWith(AndroidJUnit4::class)
-class BaselineProfileGenerator {
-
-    @get:Rule
-    val baselineProfileRule = BaselineProfileRule()
-
-    @Test
-    fun generate() = baselineProfileRule.collect(
-        packageName = "com.example.app"
-    ) {
-        // Критический пользовательский сценарий: запуск до главного экрана
-        pressHome()
-        startActivityAndWait()
-
-        // Навигация по ключевым экранам
-        device.findObject(By.text("Home")).click()
-        device.findObject(By.text("Profile")).click()
-        device.findObject(By.text("Settings")).click()
-
-        // Возврат на главный экран
-        device.pressBack()
-        device.pressBack()
-    }
-}
-```
-
-**Конфигурация модуля приложения**:
-```kotlin
-// Теория: Включить потребление baseline profile в основном приложении
-plugins {
-    id("com.android.application")
-    id("androidx.baselineprofile")
-}
-
-android {
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-}
-
-baselineProfile {
-    // Указывает управляемые устройства для тестирования
-    managedDevices += "pixel6Api33"
-    // Включает использование подключенных устройств
-    useConnectedDevices = false
-}
-```
-
-### Измерение производительности
-
-**Интеграция с Macrobenchmark**:
-```kotlin
-// Теория: Измерять производительность запуска с профилем и без
-@RunWith(AndroidJUnit4::class)
-class StartupBenchmark {
-
-    @get:Rule
-    val benchmarkRule = MacrobenchmarkRule()
-
-    @Test
-    fun startup() = benchmarkRule.measureRepeated(
-        packageName = "com.example.app",
-        metrics = listOf(StartupTimingMetric()),
-        iterations = 5,
-        startupMode = StartupMode.COLD
-    ) {
-        pressHome()
-        startActivityAndWait()
-    }
-}
-```
-
-**Мониторинг в продакшне**:
-```kotlin
-// Теория: Мониторить установку профиля в продакшне
-class ProfileMonitor {
-    fun checkProfileStatus(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val status = ProfileVerifier.getCompilationStatusAsync().get()
-
-            when (status.profileInstallResultCode) {
-                ProfileVerifier.CompilationStatus.RESULT_CODE_COMPILED_WITH_PROFILE -> {
-                    // Профиль успешно установлен и скомпилирован
-                    logMetric("profile_installed", 1)
-                }
-                ProfileVerifier.CompilationStatus.RESULT_CODE_NO_PROFILE -> {
-                    // Профиль не найден
-                    logMetric("profile_missing", 1)
-                }
-                else -> {
-                    logMetric("profile_unknown_status", 1)
-                }
-            }
-        }
-    }
-}
-```
-
-### Облачные профили
-
-**Настройка облачных профилей**:
-```kotlin
-// Теория: Включить облачные профили для распространения через Play Store
-dependencies {
-    implementation("androidx.profileinstaller:profileinstaller:1.3.1")
-}
-```
-
-**Мониторинг облачных профилей**:
-```kotlin
-// Теория: Мониторить установку облачных профилей
-class CloudProfileMonitor {
-    fun checkCloudProfileInstallation(context: Context) {
-        val status = ProfileInstaller.writeProfile(context)
-        when (status) {
-            ProfileInstaller.RESULT_INSTALL_SUCCESS -> {
-                Log.d("Profile", "Облачный профиль установлен успешно")
-            }
-            ProfileInstaller.RESULT_ALREADY_INSTALLED -> {
-                Log.d("Profile", "Облачный профиль уже установлен")
-            }
-            else -> {
-                Log.w("Profile", "Установка облачного профиля не удалась: $status")
-            }
-        }
-    }
-}
-```
+(См. код и детали в английской секции - структура проекта, конфигурация модулей, генерация профиля, измерение производительности, облачные профили)
 
 ### Лучшие практики
 
 **Генерация профиля**:
 - Покрывать только критические пользовательские сценарии
 - Тестировать на реальных устройствах, не эмуляторах
-- Размер профиля менее 200KB
-- Регенерировать при мажорных релизах
+- Держать размер профиля меньше 200KB
+- Перегенерировать при major релизах
 
 **Мониторинг производительности**:
-- Измерять до/после с Macrobenchmark
-- Мониторить установку профиля в продакшне
+- Измерять до/после с помощью Macrobenchmark
+- Мониторить установку профиля в продакшене
 - Отслеживать метрики запуска в аналитике
 - Комбинировать с другими оптимизациями запуска
 
 **Интеграция CI/CD**:
-- Автоматизировать генерацию профилей в CI
-- Версионировать baseline-prof.txt
-- Тестировать установку профиля в staging
-
----
+- Автоматизировать генерацию профиля в CI
+- Хранить baseline-prof.txt под версионным контролем
+- Тестировать установку профиля в staging окружении
 
 ## Answer (EN)
 

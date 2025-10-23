@@ -17,113 +17,21 @@ language_tags:
 - ru
 status: reviewed
 moc: moc-android
+related:
+- q-parcelable-implementation--android--medium
+- q-room-vs-sqlite--android--medium
+- q-gradle-build-system--android--medium
 created: 2025-10-15
 updated: 2025-10-15
 tags:
 - android/static-analysis
 - android/gradle
 - android/build-variants
-- lint
-- static-analysis
-- code-quality
-- gradle
 - difficulty/medium
-related:
-- q-parcelable-implementation--android--medium
-- q-room-vs-sqlite--android--medium
-- q-gradle-build-system--android--medium
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
----# Вопрос (RU)
-> Что вы знаете о Lint в Android?
-
----
-
-# Question (EN)
-> What do you know about Android Lint?
-
-## Ответ (RU)
-
-**Android Lint** - это инструмент статического анализа кода, который выявляет структурные проблемы в Android-проектах без выполнения приложения. Проверяет ошибки, проблемы производительности, уязвимости безопасности и качество кода.
-
-**Теория статического анализа:**
-Статический анализ исследует код без выполнения, анализируя синтаксис, структуру и паттерны для обнаружения потенциальных проблем. Lint выполняет этот анализ для Android-специфичных файлов (Java, Kotlin, XML, ресурсы) для раннего обнаружения проблем в разработке.
-
-**Архитектура Lint:**
-- **Анализ исходного кода**: Сканирует Java/Kotlin/XML файлы на структурные проблемы
-- **Валидация ресурсов**: Проверяет drawable, layout, строки на консистентность
-- **Конфигурация**: Использует `lint.xml` и настройки Gradle для кастомизации проверок
-- **Отчётность**: Генерирует предупреждения с уровнями серьёзности и описаниями
-
-**Базовая конфигурация Lint:**
-```xml
-<!-- lint.xml - Конфигурация уровня проекта -->
-<?xml version="1.0" encoding="UTF-8"?>
-<lint>
-    <!-- Отключить конкретные проверки -->
-    <issue id="IconMissingDensityFolder" severity="ignore" />
-
-    <!-- Игнорировать проблемы в конкретных файлах -->
-    <issue id="ObsoleteLayoutParam">
-        <ignore path="res/layout/activation.xml" />
-    </issue>
-
-    <!-- Изменить уровни серьёзности -->
-    <issue id="HardcodedText" severity="error" />
-</lint>
-```
-
-**Конфигурация Lint в Gradle:**
-```gradle
-android {
-    lintOptions {
-        // Отключить конкретные проверки
-        disable 'TypographyFractions', 'TypographyQuotes'
-
-        // Включить конкретные проверки
-        enable 'RtlHardcoded', 'RtlCompat', 'RtlEnabled'
-
-        // Управление отчётностью
-        quiet true
-        abortOnError false
-        ignoreWarnings true
-
-        // Генерировать отчёты
-        htmlReport true
-        xmlReport true
-        textReport true
-    }
-}
-```
-
-**Общие категории Lint:**
-- **Корректность**: Логические ошибки, исключения null pointer
-- **Безопасность**: Жёстко закодированные секреты, небезопасные практики
-- **Производительность**: Утечки памяти, неэффективные операции
-- **Удобство использования**: Проблемы доступности, UI проблемы
-- **Интернационализация**: Отсутствующие переводы, проблемы локали
-
-**Уровни проверок Lint:**
-- **Error**: Критические проблемы, которые должны быть исправлены
-- **Warning**: Проблемы, которые должны быть решены
-- **Information**: Предложения по улучшению
-- **Ignore**: Отключённые проверки
-
-**Использование из командной строки:**
-```bash
-# Запустить lint на весь проект
-./gradlew lint
-
-# Запустить lint на конкретный вариант
-./gradlew lintDebug
-
-# Генерировать HTML отчёт
-./gradlew lintDebug -Dlint.output=lint-results.html
-```
-
 ---
 
 ## Answer (EN)
-
 **Android Lint** is a static code analysis tool that identifies structural problems in Android projects without executing the app. It checks for bugs, performance issues, security vulnerabilities, and code quality problems.
 
 **Static Analysis Theory:**
@@ -220,4 +128,3 @@ android {
 - [[q-parcelable-implementation--android--medium]] - Code quality
 - [[q-room-vs-sqlite--android--medium]] - Database implementation
 - [[q-android-testing-strategies--android--medium]] - Testing approaches
-

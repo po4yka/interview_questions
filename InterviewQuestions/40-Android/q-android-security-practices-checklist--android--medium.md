@@ -6,9 +6,9 @@ aliases:
 - Чек-лист практик безопасности Android
 topic: android
 subtopics:
-- security
-- best-practices
-- data-protection
+- permissions
+- architecture-clean
+- keystore-crypto
 question_kind: android
 difficulty: medium
 original_language: en
@@ -17,222 +17,21 @@ language_tags:
 - ru
 status: reviewed
 moc: moc-android
-created: 2025-10-05
-updated: 2025-10-15
-tags:
-- android/security
-- android/best-practices
-- android/data-protection
-- security
-- checklist
-- data-protection
-- difficulty/medium
-source: https://github.com/Kirchhoff-Android-Interview-Questions
 related:
 - q-android-security-best-practices--android--medium
 - q-android-keystore-system--security--medium
 - q-android-manifest-file--android--easy
----# Вопрос (RU)
-> Какой чек-лист практик безопасности вы используете для разработки Android?
-
----
-
-# Question (EN)
-> What security practices checklist do you follow for Android development?
-
-## Ответ (RU)
-
-**Чек-лист практик безопасности Android** предоставляет систематический подход к реализации мер безопасности на протяжении всего жизненного цикла разработки Android, обеспечивая комплексную защиту от распространенных уязвимостей и векторов атак.
-
-**Теория чек-листа безопасности:**
-Чек-лист безопасности служит систематическим инструментом проверки для обеспечения реализации всех критических мер безопасности. Он охватывает несколько доменов безопасности: защита данных, сетевая безопасность, аутентификация, защита кода и безопасность во время выполнения.
-
-**Безопасность интентов:**
-```kotlin
-// Показать выбор приложения для чувствительных интентов
-val intent = Intent(ACTION_SEND)
-val possibleActivities = queryIntentActivities(intent, PackageManager.MATCH_ALL)
-
-if (possibleActivities.size > 1) {
-    val chooser = Intent.createChooser(intent, "Поделиться с")
-    startActivity(chooser)
-} else if (intent.resolveActivity(packageManager) != null) {
-    startActivity(intent)
-}
-```
-
-**Теория безопасности интентов:**
-Селекторы приложений предотвращают перехват чувствительных интентов вредоносными приложениями, позволяя пользователям явно выбирать доверенные приложения. Это предотвращает утечку данных через атаки перехвата интентов.
-
-**Безопасность разрешений:**
-Разрешения на основе подписи обеспечивают безопасную связь между приложениями, подписанными одним сертификатом, обходя диалоги разрешений пользователя для доверенных внутренних компонентов.
-
-```xml
-<!-- Разрешения на основе подписи -->
-    <permission android:name="my_custom_permission_name"
-                android:protectionLevel="signature" />
-```
-
-**Безопасность Content Provider:**
-Content Provider предоставляют данные другим приложениям. Отключение внешнего доступа предотвращает доступ неавторизованных приложений к чувствительным внутренним данным через атаки на content provider.
-
-```xml
-<!-- Отключить внешний доступ -->
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.example.myapp.fileprovider"
-    android:exported="false" />
-```
-
-**Сетевая безопасность:**
-HTTPS шифрование защищает данные в пути от перехвата и атак "человек посередине", обеспечивая безопасную связь между приложением и серверами.
-
-```kotlin
-// HTTPS связь
-val url = URL("https://api.example.com")
-val connection = url.openConnection() as HttpsURLConnection
-connection.connect()
-```
-
-**Конфигурация сетевой безопасности:**
-Network Security Config принудительно использует только HTTPS связь и предотвращает передачу открытого текста, обеспечивая централизованный контроль над политиками сетевой безопасности.
-
-```xml
-<!-- Объявление в манифесте -->
-    <application
-    android:networkSecurityConfig="@xml/network_security_config">
-    </application>
-```
-
-```xml
-<!-- res/xml/network_security_config.xml -->
-<network-security-config>
-    <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">api.example.com</domain>
-    </domain-config>
-</network-security-config>
-```
-
-**Безопасность WebView:**
-Компоненты WebView могут выполнять вредоносный JavaScript и получать доступ к ресурсам устройства. Безопасные каналы сообщений обеспечивают контролируемую связь между нативным кодом и веб-контентом.
-
-```kotlin
-val webView: WebView = findViewById(R.id.webview)
-
-// Безопасные каналы сообщений (Android 6.0+)
-val channel = webView.createWebMessageChannel()
-channel[0].setWebMessageCallback(object : WebMessagePort.WebMessageCallback() {
-    override fun onMessage(port: WebMessagePort, message: WebMessage) {
-        // Обработка безопасного сообщения
-    }
-})
-channel[1].postMessage(WebMessage("Безопасные данные"))
-```
-
-**Безопасность хранения данных:**
-Разные места хранения обеспечивают различные уровни безопасности. Внутреннее хранилище изолировано для каждого приложения, а внешнее хранилище доступно другим приложениям и пользователям.
-
-```kotlin
-// Внутреннее хранилище (безопасно)
-val file = File(filesDir, "sensitive_data.txt")
-file.writeText("Приватные данные")
-
-// Внешнее хранилище (публично)
-val externalFile = File(getExternalFilesDir(null), "public_data.txt")
-
-// SharedPreferences (приватный режим)
-val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-prefs.edit().putString("key", "value").apply()
-```
-
-**Современные практики безопасности:**
-Обфускация и минификация кода усложняют обратную инженерию и уменьшают размер приложения, защищая интеллектуальную собственность и чувствительную логику.
-
-```kotlin
-// Обфускация кода (build.gradle.kts)
-android {
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
-        }
-    }
-}
-```
-
-**Зашифрованное хранение:**
-Jetpack Security обеспечивает аппаратное шифрование с использованием Android Keystore, гарантируя защиту чувствительных данных даже при компрометации устройства.
-
-```kotlin
-// Jetpack Security
-val masterKey = MasterKey.Builder(context)
-    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-    .build()
-
-val encryptedPrefs = EncryptedSharedPreferences.create(
-    context,
-    "secure_prefs",
-    masterKey,
-    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-)
-```
-
-**Биометрическая аутентификация:**
-Биометрическая аутентификация обеспечивает безопасную верификацию пользователя с использованием биометрических датчиков устройства, предлагая более сильную безопасность по сравнению с традиционными паролями.
-
-```kotlin
-val biometricPrompt = BiometricPrompt(
-    this,
-    executor,
-    object : BiometricPrompt.AuthenticationCallback() {
-        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-            // Пользователь аутентифицирован
-        }
-    }
-)
-
-val promptInfo = BiometricPrompt.PromptInfo.Builder()
-    .setTitle("Биометрическая аутентификация")
-    .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
-    .build()
-
-biometricPrompt.authenticate(promptInfo)
-```
-
-**Закрепление сертификатов:**
-Закрепление сертификатов обеспечивает связь только с доверенными серверами путем проверки конкретных сертификатов, предотвращая атаки "человек посередине" даже при компрометации центров сертификации.
-
-```kotlin
-val certificatePinner = CertificatePinner.Builder()
-    .add("api.example.com", "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
-    .build()
-
-val client = OkHttpClient.Builder()
-    .certificatePinner(certificatePinner)
-    .build()
-```
-
-**Пункты чек-листа безопасности:**
-- **Безопасность интентов**: Использовать селекторы приложений для чувствительных интентов. Предотвращает перехват чувствительных данных вредоносными приложениями, позволяя пользователям явно выбирать доверенные приложения.
-- **Безопасность разрешений**: Применять разрешения на основе подписи для доверенных приложений. Обеспечивает бесшовный обмен данными между приложениями, подписанными одним сертификатом, без взаимодействия с пользователем.
-- **Безопасность Content Provider**: Отключать внешний доступ с `android:exported="false"`. Предотвращает доступ неавторизованных приложений к внутренним данным через атаки на content provider.
-- **Сетевая безопасность**: Принудительно использовать только HTTPS связь. Защищает данные в пути от перехвата и атак "человек посередине".
-- **Безопасность WebView**: Ограничивать контент только разрешенными источниками. Предотвращает выполнение кода или доступ к ресурсам устройства вредоносными веб-сайтами.
-- **Хранение данных**: Использовать внутреннее хранилище для чувствительных данных. Обеспечивает изоляцию данных для каждого приложения и автоматическое удаление при деинсталляции.
-- **Защита кода**: Включать обфускацию и минификацию R8. Усложняет обратную инженерию и уменьшает размер приложения.
-- **Шифрование**: Использовать Jetpack Security для чувствительных данных. Обеспечивает аппаратное шифрование с использованием Android Keystore для максимальной безопасности.
-- **Аутентификация**: Реализовать биометрическую аутентификацию. Обеспечивает безопасную верификацию пользователя с использованием биометрических датчиков устройства.
-- **Закрепление сертификатов**: Предотвращать атаки MITM. Обеспечивает связь только с доверенными серверами путем закрепления конкретных сертификатов.
-- **Управление зависимостями**: Поддерживать зависимости в актуальном состоянии. Предотвращает эксплуатацию известных уязвимостей в сторонних библиотеках.
-- **Статический анализ**: Использовать Android Lint и Detekt. Выявляет уязвимости безопасности и проблемы качества кода во время разработки.
-- **Тестирование на проникновение**: Регулярные аудиты безопасности. Проверяет меры безопасности через имитацию атак и оценку уязвимостей.
-
+created: 2025-10-05
+updated: 2025-10-15
+tags:
+- android/permissions
+- android/architecture-clean
+- android/keystore-crypto
+- difficulty/medium
+source: https://github.com/Kirchhoff-Android-Interview-Questions
 ---
 
 ## Answer (EN)
-
 **Android Security Practices Checklist** provides a systematic approach to implementing security measures throughout the Android development lifecycle, ensuring comprehensive protection against common vulnerabilities and attack vectors.
 
 **Security Checklist Theory:**
@@ -445,4 +244,3 @@ val client = OkHttpClient.Builder()
 ### Advanced (Harder)
 - [[q-android-architectural-patterns--android--medium]] - Security patterns
 - [[q-android-runtime-internals--android--hard]] - Runtime security
-

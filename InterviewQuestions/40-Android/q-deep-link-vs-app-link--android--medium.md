@@ -7,7 +7,6 @@ aliases:
 topic: android
 subtopics:
 - ui-navigation
-- app-startup
 question_kind: android
 difficulty: medium
 original_language: en
@@ -24,7 +23,6 @@ created: 2025-10-20
 updated: 2025-10-20
 tags:
 - android/ui-navigation
-- android/app-startup
 - app-linking
 - app-links
 - deep-linking
@@ -35,7 +33,8 @@ tags:
 - difficulty/medium
 source: https://developer.android.com/training/app-links
 source_note: Android App Links documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Какие особенности отличия deep link от app link?
 
 # Question (EN)
@@ -360,6 +359,9 @@ The choice between Deep Link and App Link depends on security requirements, user
 - Handle cases where app is not installed
 - Provide fallback for web version
 - Test App Links verification
+
+**See also:** [[c-uri]], [[c-url-routing]]
+
 
 ## Follow-ups
 

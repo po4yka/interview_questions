@@ -6,8 +6,7 @@ aliases:
 - DataStore Preferences Proto
 topic: android
 subtopics:
-- files-media
-- ui-state
+- datastore
 question_kind: android
 difficulty: medium
 original_language: en
@@ -23,8 +22,7 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/files-media
-- android/ui-state
+- android/datastore
 - datastore
 - preferences
 - proto-datastore
@@ -32,7 +30,8 @@ tags:
 - difficulty/medium
 source: https://developer.android.com/topic/libraries/architecture/datastore
 source_note: Android DataStore documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Что вы знаете о DataStore?
 
 # Question (EN)
@@ -373,6 +372,9 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 - Handle errors gracefully
 - Test data migrations
 - Document protobuf schemas
+
+**See also:** [[c-protocol-buffers]], [[c-data-serialization]]
+
 
 ## Follow-ups
 

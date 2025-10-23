@@ -16,7 +16,8 @@ created: 2025-10-20
 updated: 2025-10-20
 tags: [testing, compose-testing, ui-testing, semantics, accessibility, difficulty/hard]
 moc: moc-testing
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Как тестировать сложные UI сценарии в Compose включая анимации, жесты, semantic matchers и доступность? Как обрабатывать async операции в тестах Compose?
 
 ---
@@ -26,7 +27,7 @@ moc: moc-testing
 
 ## Ответ (RU)
 
-**Продвинутое тестирование Compose** расширяет базовое тестирование сложными сценариями, пользовательскими matchers и обработкой асинхронности. Использует semantic tree для надежной идентификации элементов.
+**Продвинутое тестирование Compose** расширяет базовое тестирование сложными сценариями, пользовательскими matchers и обработкой асинхронности. Использует semantic tree для надежной идентификации элементов. См. также [[c-testing-pyramid]], [[c-ui-testing]] и [[c-accessibility]].
 
 ### ComposeTestRule
 
@@ -265,7 +266,7 @@ fun accessibilityRoles() {
 
 ## Answer (EN)
 
-**Advanced Compose Testing** extends basic testing with complex scenarios, custom matchers, and async handling. Uses semantic tree for robust element identification.
+**Advanced Compose Testing** extends basic testing with complex scenarios, custom matchers, and async handling. Uses semantic tree for robust element identification. See also [[c-testing-pyramid]], [[c-ui-testing]], and [[c-accessibility]].
 
 ### ComposeTestRule
 

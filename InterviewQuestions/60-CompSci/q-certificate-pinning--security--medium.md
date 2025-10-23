@@ -13,7 +13,7 @@ difficulty: medium
 status: reviewed
 moc: moc-security
 related:
-- q-app-security-best-practices--security--medium
+- q-app-security-best-practices--android--medium
 - q-android-keystore-system--security--medium
 - q-android-security-practices-checklist--android--medium
 created: 2025-10-15
@@ -28,7 +28,8 @@ tags:
 - tls
 - okhttp
 - difficulty/medium
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Что такое закрепление сертификатов, зачем оно нужно и как безопасно реализовать его в Android (OkHttp и Network Security Config)?
 
 ---

@@ -7,7 +7,8 @@ aliases:
 topic: android
 subtopics:
 - files-media
-- security
+- permissions
+
 question_kind: android
 difficulty: medium
 original_language: en
@@ -19,26 +20,26 @@ source_note: Android encrypted file storage documentation
 status: reviewed
 moc: moc-android
 related:
-- q-data-encryption-at-rest--security--medium
-- q-android-keystore--security--medium
-- q-android-security-best-practices--security--medium
+- q-data-encryption-at-rest--android--medium
+- q-android-keystore-system--security--medium
+- q-android-security-best-practices--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
+- en
+- ru
+
 - android/files-media
 - android/security
 - encryption
 - file-storage
 - keystore
-- difficulty/medium
----# Вопрос (RU)
+- difficulty/medium---
+# Вопрос (RU)
 > Как реализовать зашифрованное хранение файлов с использованием EncryptedFile API?
 
 # Question (EN)
-> How to implement encrypted file storage using EncryptedFile API?
-
----
-
+> How to implement encrypted file storage using EncryptedFile API?---
 ## Ответ (RU)
 
 EncryptedFile API из Android Security Crypto библиотеки обеспечивает безопасное шифрование файлов с автоматическим управлением ключами через Android Keystore. Использует AES-256-GCM с поддержкой streaming для больших файлов.
@@ -342,6 +343,9 @@ fun safeWriteText(fileName: String, content: String): Result<String> {
 - Server-side encryption
 - Provider dependency
 - Less control over keys
+
+**See also:** [[c-encryption]], [[c-aes]]
+
 
 ## Follow-ups
 - How to implement biometric authentication for encrypted files?

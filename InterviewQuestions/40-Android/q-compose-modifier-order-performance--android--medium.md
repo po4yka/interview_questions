@@ -1,110 +1,44 @@
 ---
 id: 20251012-122710
 title: Compose Modifier Order Performance / Порядок модификаторов и производительность
-  Compose
 aliases:
 - Compose Modifier Order Performance
 - Порядок модификаторов и производительность Compose
 topic: android
 subtopics:
 - ui-compose
-- performance
+- performance-memory
 question_kind: android
 difficulty: medium
-status: reviewed
-moc: moc-android
-related:
-- q-compose-gesture-detection--jetpack-compose--medium
-- q-compose-compiler-plugin--jetpack-compose--hard
-- q-compose-custom-layout--jetpack-compose--hard
-created: 2025-10-15
-updated: 2025-10-20
 original_language: en
 language_tags:
 - en
 - ru
+status: reviewed
+moc: moc-android
+related:
+- q-compose-gesture-detection--android--medium
+- q-compose-compiler-plugin--android--hard
+- q-compose-custom-layout--android--hard
+created: 2025-10-15
+updated: 2025-10-20
 tags:
 - android/ui-compose
-- compose/modifiers
-- performance
+- android/performance-memory
 - difficulty/medium
-- android/performance
----# Вопрос (RU)
-> Как порядок модификаторов влияет на производительность и поведение в Jetpack Compose? Покажите минимальные паттерны для оптимизации measure/layout/draw.
-
 ---
 
+# Вопрос (RU)
+> Порядок модификаторов и производительность?
+
 # Question (EN)
-> How does modifier order affect performance and behavior in Jetpack Compose? Show minimal patterns to optimize measure/layout/draw.
+> Compose Modifier Order Performance?
+
+---
 
 ## Ответ (RU)
 
-### Базовые правила
-- Порядок меняет ограничения и отрисовку: size/padding/layout идут сверху вниз; draw снизу вверх.
-- Применяйте size/constraints раньше; снижайте работу далее в цепочке.
-- Padding vs background: порядок меняет область заливки/отступа.
-- Область клика/скролла зависит от позиции интерактивных модификаторов.
-- Переиспользуйте цепочки; избегайте ветвления; используйте `.then(...)`.
-- Предпочитайте draw‑модификаторы изменению layout; кешируйте дорогие объекты.
-
-### Минимальные паттерны
-
-Padding vs background
-```kotlin
-// Background покрывает внутреннюю область (padding снаружи)
-Modifier.padding(16.dp).background(Color.Blue).size(100.dp)
-
-// Background на всю область (padding внутри)
-Modifier.background(Color.Blue).padding(16.dp).size(100.dp)
-```
-
-Ранние ограничения
-```kotlin
-// Лучше: size раньше уменьшает работу ниже по цепочке
-Modifier.size(100.dp).background(Color.Blue).padding(8.dp)
-```
-
-Семантика области клика
-```kotlin
-// Маленькая зона: 48×48
-Modifier.size(48.dp).clickable { }.padding(12.dp)
-
-// Большая зона (включает padding)
-Modifier.padding(12.dp).clickable { }.size(48.dp)
-```
-
-Единая цепочка через .then
-```kotlin
-val base = Modifier.size(100.dp)
-val modifier = base
-  .then(if (isClickable) Modifier.clickable { onClick() } else Modifier)
-  .then(if (isSelected) Modifier.border(2.dp, Color.Blue) else Modifier)
-Box(modifier)
-```
-
-Draw против layout
-```kotlin
-// Только draw: избегает лишнего layout
-fun Modifier.debugBorder() = drawWithContent {
-  drawContent(); drawRect(Color.Red, style = Stroke(2.dp.toPx()))
-}
-```
-
-Избежание работы при рекомпозиции
-```kotlin
-@Composable
-fun PriceTag(amount: BigDecimal) {
-  val formatted = remember(amount) { priceFormatter.format(amount) }
-  Text(formatted)
-}
-```
-
-### Измерение и профилирование
-- Предпочитайте фиксированные размеры intrinsic‑мерам; избегайте глубоких цепочек.
-- Переиспользуйте `Brush/Shape/Painter`; не выделяйте каждый кадр/элемент.
-- Анализируйте Layout Inspector; записывайте Perfetto; следите за рекомпозициями.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -179,6 +113,7 @@ fun PriceTag(amount: BigDecimal) {
 - How to profile modifier chains’ impact on jank?
 
 ## References
+- [[c-data-structures]] - Chain structure for modifier composition
 - https://developer.android.com/develop/ui/compose/performance
 - https://developer.android.com/develop/ui/compose/modifiers
 
@@ -196,4 +131,3 @@ fun PriceTag(amount: BigDecimal) {
 - [[q-compose-compiler-plugin--android--hard]]
 - [[q-compose-custom-layout--android--hard]]
 - [[q-compose-lazy-layout-optimization--android--hard]]
-

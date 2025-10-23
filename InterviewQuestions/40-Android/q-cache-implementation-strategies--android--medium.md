@@ -8,9 +8,13 @@ topic: android
 subtopics:
 - room
 - datastore
-- networking
+- networking-http
 question_kind: android
 difficulty: medium
+original_language: en
+language_tags:
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
@@ -19,82 +23,24 @@ related:
 - q-database-optimization-android--android--medium
 created: 2025-10-13
 updated: 2025-10-20
-original_language: en
-language_tags:
-- en
-- ru
 tags:
 - android/room
 - android/datastore
-- android/networking
-- caching
-- performance
+- android/networking-http
 - difficulty/medium
----# Вопрос (RU)
-> Как спроектировать и реализовать кэширование в Android (уровни, политики, инвалидация и инструменты) с минимально достаточным кодом?
-
 ---
 
+# Вопрос (RU)
+> Стратегии реализации кэша?
+
 # Question (EN)
-> How do you design and implement caching in Android (layers, policies, invalidation, and tooling) with minimal essential code?
+> Cache Implementation Strategies?
+
+---
 
 ## Ответ (RU)
 
-### Цели и уровни
-- Цели: меньшая задержка, меньше сетевых вызовов, офлайн‑устойчивость, предсказуемая память.
-- Уровни (лучше многоуровневость): Память → Диск → Сеть.
-  - Память: самая быстрая, малая, LRU.
-  - Диск (Room/файлы): больше, TTL/индексация.
-  - Сеть: последний вариант; уважать HTTP‑кеш.
-
-### Базовые стратегии
-- Cache‑Aside (ленивая): чтение через кэш + явное заполнение; самая простая.
-- Write‑Through: запись в кэш и источник синхронно.
-- Write‑Back (behind): запись в кэш, поздняя запись в источник; нужен надежный буфер.
-- Refresh‑Ahead: проактивное обновление ключей перед истечением.
-
-### Ключи, TTL, выталкивание
-- Ключи: стабильные, включают параметры (locale/userId/version).
-- TTL: по типам (news=5m, profile=1h); храните метки времени рядом со значениями.
-- Выталкивание: LRU для памяти; по размеру/времени для диска; сегментируйте по типу.
-
-### Инвалидация
-- При изменении данных (write‑through), смене версии/схемы, смене пользователя, явной политике (pull‑to‑refresh).
-- Предусмотрите invalidate(key), invalidateType(type), invalidateAll(), очистку по возрасту.
-
-### Минимальный код (иллюстрация)
-```kotlin
-// Cache‑aside чтение (память → диск → сеть)
-suspend fun <K, V> get(key: K): V {
-  memory[key]?.let { return it }
-  disk[key]?.let { if (!stale(it)) return memory.putAndReturn(key, it) }
-  return network.load(key).also { memory.put(key, it); disk.put(key, it.withTimestamp()) }
-}
-```
-
-```kotlin
-// HTTP‑кеш OkHttp (уважать заголовки сервера)
-val client = OkHttpClient.Builder()
-  .cache(Cache(File(cacheDir, "http"), 10L * 1024 * 1024))
-  .build()
-```
-
-```kotlin
-// Небольшой LRU в памяти
-class Lru<K, V>(max: Int) : LruCache<K, V>(max)
-```
-
-### Инструменты и метрики
-- Perfetto/Build Scans/метрики: hit rate, miss rate, stale, размер, эвикции, снижение сети.
-- Логируйте слои и решения на debug; в проде — сэмплирование.
-
-### Компоненты
-- Preferences/DataStore: маленький KV (флаги, timestamps).
-- Room: структурированные сущности кэша (cachedAt, ETag/Last‑Modified источника).
-- HTTP: OkHttp + Cache‑Control; ETag/If‑None‑Match; stale‑if‑error для устойчивости.
-- Изображения: Glide/Picasso из коробки; придерживайтесь дефолтов + правильных размеров.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -173,4 +119,3 @@ class Lru<K, V>(max: Int) : LruCache<K, V>(max)
 
 ### Advanced (Harder)
 - [[q-offline-first-architecture--android--hard]]
-

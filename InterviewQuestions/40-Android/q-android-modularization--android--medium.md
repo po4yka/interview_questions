@@ -6,7 +6,7 @@ aliases:
 - Модуляризация Android
 topic: android
 subtopics:
-- architecture
+- architecture-clean
 - gradle
 - build-variants
 question_kind: android
@@ -17,133 +17,24 @@ language_tags:
 - ru
 status: reviewed
 moc: moc-android
-created: 2025-10-15
-updated: 2025-10-15
-tags:
-- android/architecture
-- android/gradle
-- android/build-variants
-- modularization
-- architecture
-- multi-module
-- gradle
-- difficulty/medium
 related:
 - q-android-architectural-patterns--android--medium
 - q-gradle-build-system--android--medium
 - q-android-build-optimization--android--medium
----# Вопрос (RU)
-> Опишите модуляризацию Android в целом
-
----
-
-# Question (EN)
-> Describe Android modularization in general
-
-## Ответ (RU)
-
-**Модуляризация Android** - это практика организации кодовых баз в слабо связанные, самодостаточные модули. Каждый модуль служит конкретной цели и может разрабатываться, тестироваться и поддерживаться независимо.
-
-**Теория модуляризации:**
-Модуляризация следует принципу разделения ответственности, разбивая сложные системы на управляемые компоненты. Каждый модуль инкапсулирует связанную функциональность и предоставляет чётко определённый интерфейс, уменьшая связанность и улучшая поддерживаемость.
-
-**Основные преимущества:**
-- **Переиспользуемость**: Модули могут использоваться в нескольких приложениях или функциях
-- **Строгий контроль видимости**: Внутренние детали реализации скрыты от других модулей
-- **Настраиваемая доставка**: Play Feature Delivery позволяет загружать функции по требованию
-- **Масштабируемость**: Изменения в одном модуле не каскадируются на другие
-- **Владение**: Каждый модуль может иметь выделенных поддерживающих
-- **Тестируемость**: Модули можно тестировать изолированно
-
-**Типы модулей:**
-- **App Module**: Главная точка входа приложения
-- **Feature Modules**: Самодостаточные функции (новости, профиль, настройки)
-- **Core Modules**: Общая функциональность (данные, сеть, UI)
-- **Library Modules**: Переиспользуемые компоненты
-
-**Базовая структура модулей:**
-```
-app/
-├── app/                    # Главный модуль приложения
-├── feature:news/          # Модуль функции новостей
-├── feature:profile/       # Модуль функции профиля
-├── core:data/            # Слой данных
-├── core:network/         # Слой сети
-├── core:ui/              # UI компоненты
-└── shared:utils/         # Общие утилиты
-```
-
-**Зависимости модулей:**
-```gradle
-// app/build.gradle
-dependencies {
-    implementation project(':feature:news')
-    implementation project(':feature:profile')
-    implementation project(':core:data')
-    implementation project(':core:network')
-}
-
-// feature:news/build.gradle
-dependencies {
-    implementation project(':core:data')
-    implementation project(':core:ui')
-    // Нет прямой зависимости от других функций
-}
-```
-
-**Контроль видимости:**
-```kotlin
-// В модуле core:data
-internal class DatabaseHelper {
-    // Internal - доступно только в этом модуле
-}
-
-public class UserRepository {
-    // Public - доступно из других модулей
-    fun getUser(id: String): User = // ...
-}
-
-// В модуле feature:news
-class NewsViewModel {
-    private val userRepo = UserRepository() // Может получить доступ к публичному API
-    // Не может получить прямой доступ к DatabaseHelper
-}
-```
-
-**Play Feature Delivery:**
-```gradle
-// feature:news/build.gradle
-android {
-    dynamicFeatures = [':feature:news']
-}
-
-// app/build.gradle
-dependencies {
-    implementation 'com.google.android.play:core:1.10.3'
-}
-```
-
-**Распространённые ошибки:**
-- **Слишком детальная**: Избыточные модули увеличивают сложность сборки
-- **Слишком грубая**: Большие модули становятся монолитами
-- **Циклические зависимости**: Модули зависят друг от друга
-- **Непоследовательное именование**: Неясные цели модулей
-
-**Лучшие практики:**
-- Начните с app и core модулей
-- Добавляйте feature модули по мере роста
-- Используйте чёткую иерархию зависимостей
-- Избегайте циклических зависимостей
-- Держите модули сфокусированными и сплочёнными
-
+created: 2025-10-15
+updated: 2025-10-15
+tags:
+- android/architecture-clean
+- android/gradle
+- android/build-variants
+- difficulty/medium
 ---
 
 ## Answer (EN)
-
 **Android Modularization** is the practice of organizing codebases into loosely coupled, self-contained modules. Each module serves a specific purpose and can be developed, tested, and maintained independently.
 
 **Modularization Theory:**
-Modularization follows the principle of separation of concerns, breaking complex systems into manageable components. Each module encapsulates related functionality and exposes a well-defined interface, reducing coupling and improving maintainability.
+Modularization follows the principle of [[c-separation-of-concerns]], breaking complex systems into manageable components. Each module encapsulates related functionality and exposes a well-defined interface, reducing coupling and improving maintainability through [[c-dependency-injection]].
 
 **Core Benefits:**
 - **Reusability**: Modules can be shared across multiple apps or features
@@ -259,4 +150,3 @@ dependencies {
 ### Advanced (Harder)
 - [[q-android-dependency-injection--android--hard]] - Dependency injection
 - [[q-android-testing-strategies--android--medium]] - Testing approaches
-

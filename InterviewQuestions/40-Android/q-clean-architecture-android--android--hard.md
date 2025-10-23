@@ -7,9 +7,13 @@ aliases:
 topic: android
 subtopics:
 - architecture-clean
-- modularization
+- architecture-modularization
 question_kind: android
 difficulty: hard
+original_language: en
+language_tags:
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
@@ -18,87 +22,23 @@ related:
 - q-architecture-components-libraries--android--easy
 created: 2025-10-11
 updated: 2025-10-20
-original_language: en
-language_tags:
-- en
-- ru
 tags:
 - android/architecture-clean
-- android/modularization
-- testing
-- di
+- android/architecture-modularization
 - difficulty/hard
----# Вопрос (RU)
-> Как применить Clean Architecture в Android (слои, правило зависимостей, границы, DI и тестирование) с минимальной связностью?
-
 ---
 
+# Вопрос (RU)
+> Clean Architecture в Android?
+
 # Question (EN)
-> How do you apply Clean Architecture on Android (layers, dependency rule, boundaries, DI, and testing) with minimal coupling?
+> Clean Architecture on Android?
+
+---
 
 ## Ответ (RU)
 
-### Принципы
-- Правило зависимостей: зависимости направлены внутрь (UI → domain; data реализует интерфейсы domain)
-- Разделение ответственностей: domain — чистый Kotlin; фреймворки на границах
-- Тестируемость: бизнес‑логика независима от Android SDK
-
-### Слои (типично)
-- Domain: сущности и use case’ы (чистый Kotlin)
-- Data: репозитории (реализации портов), мапперы, источники данных (сеть/БД)
-- Presentation: ViewModel/UI (Android), маппинг в модели domain
-
-### Границы и контракты
-- Определять интерфейсы domain (порты); реализовывать в data (адаптеры)
-- Маппить DTO/DB модели на границах; доменные модели стабильны
-
-### Минимальная структура модулей
-```text
-app/                 # только связывание презентации
-feature-*/           # презентация фич
-core-domain/         # сущности, use case’ы, порты (чистый Kotlin)
-core-data/           # реализации репозиториев, мапперы, источники
-```
-
-### Минимальный код (порты и use case)
-```kotlin
-// core-domain
-interface UserRepository { suspend fun getUser(id: String): User }
-class GetUser(private val repo: UserRepository) {
-  suspend operator fun invoke(id: String): User = repo.getUser(id)
-}
-```
-
-```kotlin
-// core-data (зависит от core-domain)
-class UserRepositoryImpl(private val api: Api, private val dao: UserDao) : UserRepository {
-  override suspend fun getUser(id: String): User =
-    dao.get(id)?.toDomain() ?: api.fetch(id).also { dao.insert(it.toEntity()) }.toDomain()
-}
-```
-
-```kotlin
-// app/feature презентация (зависит от core-domain)
-class UserViewModel(private val getUser: GetUser) : ViewModel() {
-  val state = MutableStateFlow<UiState>(UiState.Loading)
-  fun load(id: String) = viewModelScope.launch { state.value = UiState.Data(getUser(id)) }
-}
-```
-
-### DI и связывание
-- Поставлять use case’ы в презентации через конструктор (Hilt/Koin/ручной DI)
-- Биндить порты domain к адаптерам data в графе DI; UI не знает деталей data
-
-### Тестирование
-- Domain: быстрые unit‑тесты с фейковыми репозиториями
-- Data: контрактные тесты портов; инструментальные для БД при необходимости
-- Presentation: тесты ViewModel с TestDispatcher; фейковые use case’ы
-
-### Конкурентность и ошибки
-- Domain по возможности синхронный/чистый; suspend на границах
-- Инфраструктурные исключения в доменные сбои; маппинг обрабатывать в презентации
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -115,6 +55,7 @@ class UserViewModel(private val getUser: GetUser) : ViewModel() {
 ### Boundaries and contracts
 - Define domain interfaces (ports); implement in data (adapters)
 - Map DTO/DB models at boundaries; keep domain models stable
+- See [[c-database-design]] for data layer modeling best practices
 
 ### Minimal module layout
 ```text
@@ -182,4 +123,3 @@ class UserViewModel(private val getUser: GetUser) : ViewModel() {
 
 ### Advanced (Harder)
 - [[q-android-performance-measurement-tools--android--medium]]
-

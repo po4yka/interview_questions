@@ -6,8 +6,7 @@ aliases:
 - Базы данных в Android
 topic: android
 subtopics:
-- files-media
-- architecture-patterns
+- room
 question_kind: android
 difficulty: easy
 original_language: en
@@ -23,8 +22,7 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/files-media
-- android/architecture-patterns
+- android/room
 - database
 - realm
 - room
@@ -32,7 +30,8 @@ tags:
 - difficulty/easy
 source: https://developer.android.com/training/data-storage
 source_note: Android Data Storage documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Какие базы данных можно использовать в Android?
 
 # Question (EN)
@@ -331,6 +330,9 @@ class RealmManager {
 - High-performance applications
 - Complex object models
 - Cross-platform projects
+
+**See also:** [[c-sqlite]], [[c-database-basics]]
+
 
 ## Follow-ups
 

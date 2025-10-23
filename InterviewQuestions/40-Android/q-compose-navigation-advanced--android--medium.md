@@ -7,105 +7,40 @@ aliases:
 topic: android
 subtopics:
 - ui-compose
-- navigation
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
 - en
 - ru
-source: https://developer.android.com/jetpack/compose/navigation
-source_note: Official Compose Navigation docs
 status: reviewed
 moc: moc-android
 related:
-- q-animated-visibility-vs-content--jetpack-compose--medium
-- q-compose-gesture-detection--jetpack-compose--medium
-- q-compose-compiler-plugin--jetpack-compose--hard
+- q-animated-visibility-vs-content--android--medium
+- q-compose-gesture-detection--android--medium
+- q-compose-compiler-plugin--android--hard
 created: 2025-10-06
 updated: 2025-10-20
 tags:
 - android/ui-compose
-- android/navigation
-- compose/navigation
+- android/ui-navigation
 - difficulty/medium
----# Вопрос (RU)
-> Как работает Navigation в Jetpack Compose? Покажите минимальные паттерны для NavHost, аргументов, типобезопасных роутов и управления back stack.
-
+source: https://developer.android.com/jetpack/compose/navigation
+source_note: Official Compose Navigation docs
 ---
 
+# Вопрос (RU)
+> Навигация в Compose — детально?
+
 # Question (EN)
-> How does Navigation work in Jetpack Compose? Show minimal patterns for NavHost, arguments, type‑safe routes, and back stack control.
+> Compose Navigation Deep Dive?
+
+---
 
 ## Ответ (RU)
 
-### Основные элементы
-- NavController: хранит состояние навигации
-- NavHost: сопоставляет маршруты и экраны
-- Route: строка с path/query; предпочтительно обёртки через sealed API
-
-### Минимальная настройка
-```kotlin
-@Composable
-fun AppNav() {
-  val nav = rememberNavController()
-  NavHost(navController = nav, startDestination = "home") {
-    composable("home") { Home(onOpen = { id -> nav.navigate("details/$id") }) }
-    composable("details/{id}", arguments = listOf(navArgument("id") { type = NavType.StringType })) {
-      val id = it.arguments?.getString("id")!!
-      Details(id)
-    }
-  }
-}
-```
-
-### Обязательные и опциональные аргументы
-```kotlin
-// Обязательный path
-nav.navigate("profile/123")
-composable("profile/{userId}", listOf(navArgument("userId") { type = NavType.StringType })) { /*...*/ }
-
-// Опциональный query
-composable("search?query={query}", listOf(navArgument("query") { nullable = true })) { /*...*/ }
-nav.navigate("search?query=kotlin")
-```
-
-### Типобезопасные роуты
-```kotlin
-sealed class Screen(val route: String) {
-  data object Home: Screen("home")
-  data object Profile: Screen("profile/{userId}") { fun route(userId: String) = "profile/$userId" }
-}
-NavHost(nav, Screen.Home.route) {
-  composable(Screen.Home.route) { /*...*/ }
-  composable(Screen.Profile.route) { val id = it.arguments!!.getString("userId")!! /*...*/ }
-}
-```
-
-### Управление back stack
-```kotlin
-nav.navigate("home") { launchSingleTop = true }
-nav.popBackStack()
-nav.navigate("login") { popUpTo("home") { inclusive = true } }
-```
-
-### Bottom navigation (минимум)
-```kotlin
-Scaffold(bottomBar = {
-  BottomNavigation {
-    val current = nav.currentBackStackEntryAsState().value?.destination?.route
-    BottomNavigationItem(selected = current=="home", onClick = {
-      nav.navigate("home") { popUpTo(nav.graph.startDestinationId); launchSingleTop = true }
-    }, icon = { Icon(Icons.Default.Home, null) })
-  }
-}) { padding ->
-  NavHost(nav, "home", Modifier.padding(padding)) { composable("home") { Home() } }
-}
-```
-
-Передача сложных объектов: предпочтительнее общий ViewModel, а не большие полезные нагрузки в роуте.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -198,4 +133,3 @@ Passing complex objects: prefer shared ViewModel over large route payloads.
 - [[q-compose-compiler-plugin--android--hard]]
 - [[q-compose-custom-layout--android--hard]]
 - [[q-compose-lazy-layout-optimization--android--hard]]
-

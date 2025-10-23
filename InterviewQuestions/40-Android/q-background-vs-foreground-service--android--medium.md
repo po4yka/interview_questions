@@ -18,114 +18,17 @@ status: reviewed
 moc: moc-android
 related:
 - q-android-service-types--android--easy
-- q-foreground-services--android--medium
+- q-foreground-service-types--background--medium
 - q-background-tasks-decision-guide--android--medium
 created: 2025-10-15
 updated: 2025-10-15
 tags:
 - android/service
 - android/background-execution
-- service
-- foreground-service
-- background-service
 - difficulty/medium
----# Вопрос (RU)
-> Чем background service отличается от foreground service?
-
----
-
-# Question (EN)
-> How does background service differ from foreground service?
-
-## Ответ (RU)
-
-### Основные различия
-
-**Background Service**
-- Теория: Работает без ведома пользователя; низкий приоритет; может быть убит системой
-- Характеристики: Уведомление не требуется; приоритет Service Process; Android 8.0+ сильно ограничен
-- Случаи использования: Только legacy приложения; современные приложения должны использовать WorkManager
-
-**Foreground Service**
-- Теория: Видим пользователю с постоянным уведомлением; высокий приоритет; защищен от завершения
-- Характеристики: Обязательное уведомление; приоритет Foreground Process; выживает при системном давлении
-- Случаи использования: Воспроизведение музыки, навигация, загрузка файлов, длительные задачи по инициативе пользователя
-
-### Сравнение реализации
-
-**Background Service (Устарел)**
-```kotlin
-// Теория: Без уведомления, низкий приоритет, может быть убит
-class BackgroundService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Работа без уведомления - рискованно на Android 8.0+
-        doWork()
-        return START_NOT_STICKY
-    }
-}
-```
-
-**Foreground Service**
-```kotlin
-// Теория: Уведомление обязательно, высокий приоритет, защищен
-class ForegroundService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Должен вызвать startForeground в течение 5 секунд
-        startForeground(NOTIFICATION_ID, createNotification())
-        doWork()
-        return START_STICKY
-    }
-
-    private fun createNotification(): Notification {
-        return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Сервис работает")
-            .setSmallIcon(R.drawable.ic_service)
-            .setOngoing(true)
-            .build()
-    }
-}
-```
-
-### Ограничения Android 8.0+
-
-**Ограничения Background Service**
-- Теория: Система предотвращает запуск background service когда приложение в фоне
-- Исключение: `IllegalStateException: Not allowed to start service`
-- Решение: Использовать `startForegroundService()` или WorkManager
-
-**Требования Foreground Service**
-- Теория: Должен вызвать `startForeground()` в течение 5 секунд после `onStartCommand()`
-- Неудача: Система убивает сервис с ANR
-- Уведомление: Должно быть постоянным и ongoing
-
-### Иерархия приоритетов процессов
-
-```
-1. Foreground Process (Foreground Service) - Высший приоритет
-2. Visible Process
-3. Service Process (Background Service) - Может быть убит
-4. Cached Process
-5. Empty Process
-```
-
-### Фреймворк принятия решений
-
-**Используйте Foreground Service когда:**
-- Задача видима пользователю и чувствительна ко времени
-- Пользователь инициировал операцию
-- Задача требует немедленного выполнения
-- Примеры: Воспроизведение музыки, навигация, загрузка файлов
-
-**Используйте WorkManager вместо Background Service когда:**
-- Задачу можно отложить
-- Нужно периодическое выполнение
-- Следует учитывать системные ограничения
-- Примеры: Синхронизация данных, периодические обновления, очистка
-
 ---
 
 ## Answer (EN)
-
 ### Core Differences
 
 **Background Service**
@@ -234,4 +137,3 @@ class ForegroundService : Service() {
 - [[q-android-runtime-internals--android--hard]]
 - [[q-android-build-optimization--android--medium]]
 - [[q-android-modularization--android--medium]]
-

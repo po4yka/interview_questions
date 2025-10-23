@@ -6,8 +6,7 @@ aliases:
 - Основные элементы Dagger
 topic: android
 subtopics:
-- dependency-injection
-- architecture-patterns
+- di-hilt
 question_kind: android
 difficulty: medium
 original_language: en
@@ -23,17 +22,12 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/dependency-injection
-- android/architecture-patterns
-- dagger
-- hilt
-- dependency-injection
-- components
-- modules
+- android/di-hilt
 - difficulty/medium
 source: https://dagger.dev/api/latest/dagger/Component.html
 source_note: Dagger Component API documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Из каких основных элементов состоит Dagger?
 
 # Question (EN)

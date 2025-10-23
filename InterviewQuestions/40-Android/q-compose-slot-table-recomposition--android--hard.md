@@ -7,79 +7,40 @@ aliases:
 topic: android
 subtopics:
 - ui-compose
-- internals
+- processes
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
 - en
 - ru
-source: https://developer.android.com/jetpack/compose/mental-model
-source_note: Official Compose mental model
 status: reviewed
 moc: moc-android
 related:
-- q-compose-compiler-plugin--jetpack-compose--hard
+- q-compose-compiler-plugin--android--hard
 - q-compose-performance-optimization--android--hard
-- q-compose-stability-skippability--jetpack-compose--hard
+- q-compose-stability-skippability--android--hard
 created: 2025-10-15
 updated: 2025-10-20
 tags:
 - android/ui-compose
-- compose/internals
-- recomposition
-- slot-table
-- performance
+- android/processes
 - difficulty/hard
-- android/internals
----# Вопрос (RU)
-> Что такое Slot Table в Compose и как она обеспечивает эффективную рекомпозицию?
-
+source: https://developer.android.com/jetpack/compose/mental-model
+source_note: Official Compose mental model
 ---
 
+# Вопрос (RU)
+> Slot Table и рекомпозиция Compose?
+
 # Question (EN)
-> What is the Slot Table in Compose and how does it enable efficient recomposition?
+> Compose Slot Table & Recomposition?
+
+---
 
 ## Ответ (RU)
 
-### Идея
-- Slot Table — компактная линейная структура (похожа на gap‑buffer), фиксирующая группы и слоты compositon.
-- Группы кодируют дерево (enter/exit), слоты хранят значения remember и ссылки на узлы.
-- Рекомпозиция находит инвалидированные группы и исполняет только затронутые лямбды.
-
-### Ключевые элементы
-- Group: заголовок узла (key, arity, флаги), ограничивающий поддерево.
-- Slot: хранилище для `remember`, состояния, узлов (layout/text и др.).
-- Key/Anchor: позиционная идентичность для переживания перемещений (напр., keyed items).
-
-### Минимальные паттерны (влияние на Slot Table)
-Стабильные ключи в списках
-```kotlin
-LazyColumn { items(items = data, key = { it.id }) { item -> Row { Text(item.title) } } }
-```
-- Стабильные ключи сохраняют идентичность группы; предотвращают массовую инвалидацию при вставках.
-
-remember пишет в слот
-```kotlin
-val formatter = remember(locale) { NumberFormat.getInstance(locale) }
-```
-- Запись один раз на ключ; слот переиспользуется, пока не изменится ключ/позиция.
-
-derivedStateOf снижает инвалидации
-```kotlin
-val showFab by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
-```
-- Инвалидирует только при изменении результата.
-
-Skippability и stability
-- Стабильные параметры и модели `@Stable/@Immutable` позволяют помечать группы как skippable; компилятор разрешает пропуски.
-
-### Процесс рекомпозиции (упрощённо)
-1) Инвалидации ставятся в очередь (запись state, snapshot).
-2) Composer обходит группы; если группа не инвалидирована → пропуск.
-3) Если инвалидирована → выполняет лямбду; обновляет группы/слоты; фиксирует anchors.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -87,6 +48,7 @@ Skippability и stability
 - Slot Table is a compact linear structure (gap‑buffer–like) recording composition groups and slots.
 - Groups encode the tree (enter/exit group ops); slots store remembered values and node refs.
 - Recomposition finds invalidated groups and re‑executes only affected lambdas.
+- Built using [[c-data-structures]] (similar to gap buffers and tree structures) for efficient storage and traversal.
 
 ### Key components
 - Group: node header (key, arity, flags) delimiting a subtree.
@@ -140,4 +102,3 @@ Skippability and stability
 
 ### Advanced (Harder)
 - [[q-compose-stability-skippability--android--hard]]
-

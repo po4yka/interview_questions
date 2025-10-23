@@ -7,16 +7,14 @@ aliases:
 topic: android
 subtopics:
 - ui-compose
-- accessibility
-- testing
+- a11y
+- testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
 - en
 - ru
-source: https://developer.android.com/jetpack/compose/semantics
-source_note: Official Compose Semantics docs
 status: reviewed
 moc: moc-android
 related:
@@ -27,69 +25,24 @@ created: 2025-10-06
 updated: 2025-10-20
 tags:
 - android/ui-compose
-- android/accessibility
-- android/testing
-- compose/semantics
+- android/a11y
+- android/testing-unit
 - difficulty/medium
----# Вопрос (RU)
-> Что такое Semantics в Jetpack Compose и как они помогают в доступности и тестировании? Приведите минимальные паттерны.
-
+source: https://developer.android.com/jetpack/compose/semantics
+source_note: Official Compose Semantics docs
 ---
 
+# Вопрос (RU)
+> Семантика в Jetpack Compose?
+
 # Question (EN)
-> What are Semantics in Jetpack Compose and how do they support accessibility and testing? Show minimal patterns.
+> Semantics in Jetpack Compose?
+
+---
 
 ## Ответ (RU)
 
-### Концепция
-- Semantics раскрывают смысл/структуру UI для сервисов доступности и тест‑API.
-- Важные свойства: contentDescription, role, stateDescription, progressBarRangeInfo, selected/disabled.
-
-### Минимальные паттерны
-
-Кнопка с семантикой
-```kotlin
-Box(Modifier.clickable(onClick)
-    .semantics { contentDescription = "Submit"; role = Role.Button }) {
-  Text("Submit")
-}
-```
-
-Изображение с alt‑текстом
-```kotlin
-Image(painter = painter, contentDescription = "User profile photo")
-```
-
-Пользовательское состояние (progress)
-```kotlin
-Box(Modifier.semantics {
-  progressBarRangeInfo = ProgressBarRangeInfo(current = progress, range = 0f..1f)
-  stateDescription = "${(progress*100).toInt()}%"
-}) { /* UI */ }
-```
-
-Слияние семантики детей
-```kotlin
-Row(Modifier.semantics(mergeDescendants = true) {
-  contentDescription = "$firstName $lastName"
-}) { Text(firstName); Text(lastName) }
-```
-
-Селекторы в тестах
-```kotlin
-// В UI
-Button(Modifier.testTag("submit"), onClick = onSubmit) { Text("Submit") }
-// В тесте
-rule.onNodeWithTag("submit").assertIsEnabled().performClick()
-rule.onNodeWithText("Submit").assertExists()
-```
-
-Рекомендации
-- Всегда указывайте contentDescription для недекоративных изображений/иконок.
-- Используйте mergeDescendants для составных подписей; избегайте повторов.
-- Применяйте testTag как стабильный, независимый от языка селектор.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -161,4 +114,3 @@ Guidelines
 
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]]
-

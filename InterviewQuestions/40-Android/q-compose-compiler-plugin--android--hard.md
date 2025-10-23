@@ -7,92 +7,38 @@ aliases:
 topic: android
 subtopics:
 - ui-compose
-- performance
+- performance-memory
 question_kind: android
 difficulty: hard
-status: reviewed
-moc: moc-android
-related:
-- q-animated-visibility-vs-content--jetpack-compose--medium
-- q-compose-canvas-graphics--jetpack-compose--hard
-- q-android-performance-measurement-tools--android--medium
-created: 2025-10-11
-updated: 2025-10-20
 original_language: en
 language_tags:
 - en
 - ru
+status: reviewed
+moc: moc-android
+related:
+- q-animated-visibility-vs-content--android--medium
+- q-compose-canvas-graphics--android--hard
+- q-android-performance-measurement-tools--android--medium
+created: 2025-10-11
+updated: 2025-10-20
 tags:
 - android/ui-compose
-- compiler
-- performance
-- recomposition
+- android/performance-memory
 - difficulty/hard
-- android/performance
----# Вопрос (RU)
-> Как работает плагин компилятора Compose (lowering, вывод стабильности, skipping) и как использовать его для повышения производительности и диагностики?
-
 ---
 
+# Вопрос (RU)
+> Плагин компилятора Compose?
+
 # Question (EN)
-> How does the Compose Compiler plugin work (lowering, stability inference, skipping), and how do you use it to improve performance and diagnostics?
+> Compose Compiler Plugin?
+
+---
 
 ## Ответ (RU)
 
-### Что делает плагин (в общих чертах)
-- Трансформирует `@Composable` в машины состояний; вставляет composer/keys/groups
-- Выводит стабильность параметров (Stable/Unstable) для решения о пропуске
-- Помечает вызовы restartable/skippable; генерирует операции со slot‑таблицей
-
-### Стабильность и пропуски
-- Стабильные параметры без изменений → вызов можно пропустить
-- Нестабильные параметры или изменение идентичности/содержимого → выполняем рекомпозицию
-- Коллекции/MutableState влияют на стабильность; предпочитать стабильные неизменяемые модели
-
-### Минимальные примеры
-Стабильная модель → меньше рекомпозиций:
-```kotlin
-@Immutable data class User(val id: String, val name: String)
-@Composable fun UserRow(user: User) { /* рисуем stable поля */ }
-```
-
-Избегать нестабильных mutable‑параметров:
-```kotlin
-// ПЛОХО: mutable list в параметрах часто триггерит рекомпозицию
-@Composable fun ListScreen(items: MutableList<Item>) { /* ... */ }
-
-// ХОРОШО: SnapshotStateList через стабильную фасадную API или неизменяемый List
-@Composable fun ListScreen(items: List<Item>) { /* ... */ }
-```
-
-Поднимать состояние и держать параметры стабильными:
-```kotlin
-@Composable fun Counter() {
-  var count by remember { mutableStateOf(0) }
-  Button(onClick = { count++ }) { Text("$count") } // меняется только Text
-}
-```
-
-### Диагностика (отчёты)
-- Включайте метрики/отчёты компилятора, чтобы видеть стабильность/skip и граф вызовов
-- Анализ: какие вызовы restartable/skippable; какие типы нестабильны; большие group‑counts
-
-Минимальные флаги Gradle (без версий):
-```bash
-# gradle.properties или флаги CI
-compose.compiler.report=true
-compose.compiler.metrics=true
-compose.compiler.reportDestination=build/compose-reports
-compose.compiler.metricsDestination=build/compose-metrics
-```
-
-### Практики производительности
-- Предпочитать @Immutable/@Stable для доменных моделей по смыслу
-- Не передавать большие объекты в параметры; передавать id/keys
-- Убирать тяжёлую работу из композиции; использовать remember + derivedStateOf
-- Избегать каскадных рекомпозиций: разбивать на подкомпоновки, использовать remember
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -100,6 +46,7 @@ compose.compiler.metricsDestination=build/compose-metrics
 - Lowers `@Composable` functions to state machines; inserts composer parameters, keys, groups
 - Infers parameter stability (Stable/Unstable) to decide if recomposition can be skipped
 - Marks calls restartable/skippable; generates slot table read/write operations
+- Transforms code using compiler plugin and [[c-algorithms]] for optimization decisions
 
 ### Stability & skipping (theory)
 - Stable params that are referentially equal → call is skippable
@@ -169,4 +116,3 @@ compose.compiler.metricsDestination=build/compose-metrics
 
 ### Advanced (Harder)
 - [[q-android-runtime-art--android--medium]]
-

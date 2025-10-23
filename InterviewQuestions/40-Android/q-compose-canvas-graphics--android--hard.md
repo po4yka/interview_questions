@@ -7,92 +7,38 @@ aliases:
 topic: android
 subtopics:
 - ui-compose
-- graphics
+- ui-graphics
 question_kind: android
 difficulty: hard
-status: reviewed
-moc: moc-android
-related:
-- q-canvas-drawing-optimization--custom-views--hard
-- q-android-performance-measurement-tools--android--medium
-- q-animated-visibility-vs-content--jetpack-compose--medium
-created: 2025-10-11
-updated: 2025-10-20
 original_language: en
 language_tags:
 - en
 - ru
+status: reviewed
+moc: moc-android
+related:
+- q-canvas-drawing-optimization--android--hard
+- q-android-performance-measurement-tools--android--medium
+- q-animated-visibility-vs-content--android--medium
+created: 2025-10-11
+updated: 2025-10-20
 tags:
 - android/ui-compose
-- android/graphics
-- compose
-- canvas
-- performance
+- android/ui-graphics
 - difficulty/hard
----# Вопрос (RU)
-> Как рендерить высокопроизводительную пользовательскую графику в Compose Canvas (state/remember, кеширование, клиппинг, draw scope и профилирование производительности)?
-
 ---
 
+# Вопрос (RU)
+> Canvas и графика в Compose?
+
 # Question (EN)
-> How do you render high‑performance custom graphics with Compose Canvas (state/remember, caching, clipping, draw scope, and performance profiling)?
+> Compose Canvas & Graphics?
+
+---
 
 ## Ответ (RU)
 
-### Базовые концепции
-- DrawScope: immediate‑рендер в `Canvas(modifier) { ... }`
-- Состояние: рекомпозиция вызывает перерисовку; минимизировать записи state в горячих путях
-- Remember/кеш: предвычислять path/bitmap; избегать аллокаций в draw‑лямбдах
-- Клиппинг/альфа/слои: применять точечно (дорого); предпочитать геометрические проверки
-
-### Минимальные паттерны
-
-Кеширование дорогих фигур:
-```kotlin
-@Composable
-fun Star(modifier: Modifier = Modifier, points: Int, size: Size) {
-  val path = remember(points, size) { buildStarPath(points, size) } // precompute
-  Canvas(modifier) { drawPath(path, color = Color.Yellow) }
-}
-```
-
-Без аллокаций в draw:
-```kotlin
-@Composable
-fun Lines(modifier: Modifier = Modifier, data: List<Offset>) {
-  val path = remember { Path() }
-  Canvas(modifier) {
-    path.reset()
-    if (data.isNotEmpty()) {
-      path.moveTo(data[0].x, data[0].y)
-      for (i in 1 until data.size) path.lineTo(data[i].x, data[i].y)
-      drawPath(path, Color.Cyan, style = Stroke(3f))
-    }
-  }
-}
-```
-
-Клиппинг по видимым границам:
-```kotlin
-Canvas(Modifier.fillMaxSize()) {
-  val clip = clipBounds
-  items.forEach { item -> if (item.bounds.overlaps(clip)) drawItem(item) }
-}
-```
-
-Слой для анимаций (умеренно):
-```kotlin
-Canvas(Modifier.graphicsLayer(alpha = 0.9f)) { /* draw */ }
-```
-
-### Чек‑лист производительности
-- Предвычислять path/bitmap в `remember`; не создавать объекты в draw
-- Аккуратно с `Stroke`/`Brush`; избегать лишнего alpha‑смешения
-- Клиппинг только при необходимости; геометрическое отсечение быстрее
-- Профилировать Perfetto + `Trace.beginSection` (в своей логике)
-- Бенчмарк Macrobenchmark (jank, время кадра)
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -155,6 +101,7 @@ Canvas(Modifier.graphicsLayer(alpha = 0.9f)) { /* draw */ }
 - How to share drawing caches across recompositions/screens?
 
 ## References
+- [[c-algorithms]] - Drawing and rendering optimization algorithms
 - https://developer.android.com/develop/ui/compose/graphics/draw/overview
 - https://perfetto.dev
 
@@ -169,4 +116,3 @@ Canvas(Modifier.graphicsLayer(alpha = 0.9f)) { /* draw */ }
 
 ### Advanced (Harder)
 - [[q-android-runtime-art--android--medium]]
-

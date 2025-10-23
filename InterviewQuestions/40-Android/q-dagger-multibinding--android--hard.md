@@ -6,8 +6,7 @@ aliases:
 - Multibinding в Dagger
 topic: android
 subtopics:
-- dependency-injection
-- architecture-patterns
+- di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
@@ -18,21 +17,17 @@ status: reviewed
 moc: moc-android
 related:
 - q-dagger-framework-overview--android--hard
-- q-dagger-custom-scopes--di--hard
-- q-dagger-component-dependencies--di--hard
+- q-dagger-custom-scopes--android--hard
+- q-dagger-component-dependencies--android--hard
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/dependency-injection
-- android/architecture-patterns
-- dagger
-- hilt
-- multibinding
-- plugin-architecture
+- android/di-hilt
 - difficulty/hard
 source: https://dagger.dev/api/latest/dagger/Multibinds.html
 source_note: Dagger Multibinds API documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Объясните Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). Как бы вы использовали это для реализации плагинной архитектуры или системы feature-модулей?
 
 # Question (EN)

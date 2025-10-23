@@ -7,7 +7,7 @@ aliases:
 topic: android
 subtopics:
 - coroutines
-- threading
+- threads-sync
 question_kind: android
 difficulty: easy
 original_language: en
@@ -17,218 +17,18 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-- q-coroutines-basics--kotlin--easy
+- q-coroutine-builders-basics--kotlin--easy
 - q-viewmodel-pattern--android--easy
-- q-lifecycle-aware-components--android--medium
 created: 2025-10-15
 updated: 2025-10-15
 tags:
 - android/coroutines
-- android/threading
-- async
-- coroutines
-- threading
+- android/threads-sync
 - difficulty/easy
----# Вопрос (RU)
-> Какие асинхронные примитивы используют для обработки данных в Android?
-
----
-
-# Question (EN)
-> What async primitives are used for data processing in Android?
-
-## Ответ (RU)
-
-Android предоставляет несколько асинхронных примитивов: **Thread** (базовый), **Handler/Looper** (передача сообщений), **AsyncTask** (устарел), **ExecutorService** (пулы потоков), **Coroutines** (современный, рекомендуется), **RxJava** (реактивные потоки) и **WorkManager** (фоновые задачи).
-
-**Современная рекомендация**: Используйте Kotlin Coroutines с Flow для большинства асинхронных операций.
-
-**1. Kotlin Coroutines (Рекомендуется)**
-- **Легковесный framework** для конкурентности
-- **Структурированная конкурентность** с автоматическим управлением жизненным циклом
-- **Читаемый, последовательный код**, который выглядит синхронным
-
-```kotlin
-// Базовое использование корутин
-class DataViewModel : ViewModel() {
-    fun loadData() {
-        viewModelScope.launch {
-            val data = withContext(Dispatchers.IO) {
-                repository.fetchData()
-            }
-            _uiState.value = UiState.Success(data)
-        }
-    }
-
-    // Параллельные операции
-    fun loadMultiple() {
-        viewModelScope.launch {
-            val result1 = async { fetchFromApi1() }
-            val result2 = async { fetchFromApi2() }
-            val combined = result1.await() + result2.await()
-            _data.value = combined
-        }
-    }
-}
-```
-
-**2. Flow (Реактивные потоки)**
-- **Cold flow**: Начинает работу при подписке
-- **Hot flow**: Всегда активен (StateFlow, SharedFlow)
-- **Операторы**: map, filter, combine и др.
-
-```kotlin
-// Cold flow
-fun getUsers(): Flow<List<User>> = flow {
-    val users = api.fetchUsers()
-    emit(users)
-}.flowOn(Dispatchers.IO)
-
-// Hot flow
-private val _userUpdates = MutableStateFlow<User?>(null)
-val userUpdates: StateFlow<User?> = _userUpdates.asStateFlow()
-
-// Использование
-lifecycleScope.launch {
-    repository.getUsers().collect { users ->
-        adapter.submitList(users)
-    }
-}
-```
-
-**3. WorkManager**
-- **Гарантированное выполнение**, которое переживает перезапуск приложения
-- **Ограничения**: WiFi, зарядка, низкий заряд батареи
-- **Периодическая работа** и **одноразовая работа**
-
-```kotlin
-class DataSyncWorker(
-    context: Context,
-    params: WorkerParameters
-) : CoroutineWorker(context, params) {
-
-    override suspend fun doWork(): Result {
-        return try {
-            syncData()
-            Result.success()
-        } catch (e: Exception) {
-            Result.retry()
-        }
-    }
-}
-
-// Планирование работы
-val workRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
-    repeatInterval = 15,
-    repeatIntervalTimeUnit = TimeUnit.MINUTES
-).build()
-
-WorkManager.getInstance(context).enqueue(workRequest)
-```
-
-**4. Handler/Looper (Устаревший)**
-- **Передача сообщений** между потоками
-- **Отложенное выполнение** с postDelayed
-- **Низкоуровневый** примитив потоков
-
-```kotlin
-class MyActivity : AppCompatActivity() {
-    private val handler = Handler(Looper.getMainLooper())
-
-    fun performBackgroundWork() {
-        Thread {
-            val result = processData()
-            handler.post {
-                textView.text = result
-            }
-        }.start()
-    }
-
-    fun scheduleTask() {
-        handler.postDelayed({
-            updateUI()
-        }, 1000)
-    }
-}
-```
-
-**5. ExecutorService (Устаревший)**
-- **Управление пулом потоков**
-- **Future** для получения результатов
-- **Ручное управление** жизненным циклом
-
-```kotlin
-class DataProcessor {
-    private val executor = Executors.newFixedThreadPool(4)
-
-    fun processInBackground() {
-        executor.execute {
-            val result = heavyComputation()
-            runOnUiThread {
-                updateUI(result)
-            }
-        }
-    }
-
-    fun processWithResult(): Future<String> {
-        return executor.submit<String> {
-            performOperation()
-        }
-    }
-}
-```
-
-**6. RxJava (Устаревший)**
-- **Реактивная библиотека** программирования
-- **Сложные операторы** для трансформации данных
-- **Крутая кривая** обучения
-
-```kotlin
-fun loadData(): Observable<List<Item>> {
-    return Observable.create { emitter ->
-        try {
-            val data = api.fetchData()
-            emitter.onNext(data)
-            emitter.onComplete()
-        } catch (e: Exception) {
-            emitter.onError(e)
-        }
-    }
-    .subscribeOn(Schedulers.io())
-    .observeOn(AndroidSchedulers.mainThread())
-}
-```
-
-**7. AsyncTask (Устарел)**
-- **Устарел с API 30**
-- **Утечки памяти** при ссылках на Activity/Fragment
-- **Нет механизма** отмены
-- **Не используйте** в новом коде
-
-**Сравнение:**
-
-| Примитив | Сложность | Осведомленность о жизненном цикле | Отмена | Современный | Случай использования |
-|----------|-----------|-----------------------------------|--------|-------------|---------------------|
-| **Coroutines** | Низкая | Да | Да | Да | Общие асинхронные операции |
-| **Flow** | Средняя | Да | Да | Да | Реактивные потоки |
-| **WorkManager** | Низкая | Да | Да | Да | Гарантированная фоновая работа |
-| **Handler** | Средняя | Нет | Вручную | Да | Передача сообщений |
-| **ExecutorService** | Средняя | Нет | Вручную | Да | Управление пулом потоков |
-| **RxJava** | Высокая | Нет | Да | Да | Сложные реактивные потоки |
-| **AsyncTask** | Низкая | Нет | Нет | Нет | Устарел |
-
-**Лучшие практики:**
-- **Используйте Coroutines** для большинства асинхронных операций
-- **Используйте Flow** для реактивных потоков данных
-- **Используйте WorkManager** для гарантированной фоновой работы
-- **Избегайте AsyncTask** - используйте Coroutines вместо этого
-- **Используйте Handler** только для специфических нужд передачи сообщений
-
 ---
 
 ## Answer (EN)
-
-Android provides several async primitives: **Thread** (basic), **Handler/Looper** (message passing), **AsyncTask** (deprecated), **ExecutorService** (thread pools), **Coroutines** (modern, recommended), **RxJava** (reactive streams), and **WorkManager** (background tasks).
+Android provides several async primitives: [[c-thread|Thread]] (basic), [[c-handler-looper|Handler/Looper]] (message passing), AsyncTask (deprecated), [[c-executor-service|ExecutorService]] (thread pools), [[c-coroutines|Coroutines]] (modern, recommended), [[c-rxjava|RxJava]] (reactive streams), and [[c-workmanager|WorkManager]] (background tasks).
 
 **Modern recommendation**: Use Kotlin Coroutines with Flow for most async operations.
 
@@ -442,4 +242,3 @@ fun loadData(): Observable<List<Item>> {
 ### Advanced (Harder)
 - [[q-advanced-coroutine-patterns--kotlin--hard]] - Advanced coroutines
 - [[q-workmanager-execution-guarantee--android--medium]] - WorkManager guarantees
-

@@ -7,7 +7,6 @@ aliases:
 topic: android
 subtopics:
 - ui-theming
-- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
@@ -24,7 +23,6 @@ created: 2025-10-20
 updated: 2025-10-20
 tags:
 - android/ui-theming
-- android/ui-views
 - dark-theme
 - theming
 - daynight
@@ -32,7 +30,8 @@ tags:
 - difficulty/medium
 source: https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
 source_note: Android Dark Theme documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Что такое темная тема в Android?
 
 # Question (EN)
@@ -297,6 +296,9 @@ fun toggleTheme() {
 - Test on both themes
 - Check text readability
 - Ensure proper image display
+
+**See also:** [[c-material-design]]
+
 
 ## Follow-ups
 

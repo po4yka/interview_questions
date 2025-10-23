@@ -6,9 +6,8 @@ aliases:
 - Оптимизация времени сборки Dagger
 topic: android
 subtopics:
-- dependency-injection
-- build-optimization
-- performance
+- di-hilt
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
@@ -24,16 +23,13 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/dependency-injection
-- android/build-optimization
-- android/performance
-- dagger
-- hilt
-- build-optimization
+- android/di-hilt
+- android/gradle
 - difficulty/medium
 source: https://dagger.dev/hilt/
 source_note: Hilt documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Как минимизировать влияние Dagger на время сборки?
 
 # Question (EN)
@@ -42,6 +38,8 @@ source_note: Hilt documentation
 ## Ответ (RU)
 
 Минимизация влияния Dagger на время сборки требует комплексного подхода, включающего оптимизацию архитектуры, конфигурации и инструментов сборки.
+
+Связано с концепциями [[c-dependency-injection]], [[c-gradle-optimization]] и [[c-annotation-processing]].
 
 ### Теория: Источники замедления сборки
 
@@ -144,6 +142,8 @@ kapt {
 ## Answer (EN)
 
 Minimizing Dagger's impact on build time requires a comprehensive approach including architecture optimization, build configuration, and tooling improvements.
+
+Related to concepts [[c-dependency-injection]], [[c-gradle-optimization]], and [[c-annotation-processing]].
 
 ### Theory: Sources of Build Slowdown
 

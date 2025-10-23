@@ -7,86 +7,40 @@ aliases:
 topic: android
 subtopics:
 - ui-compose
-- side-effects
+- ui-state
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
 - en
 - ru
-source: https://developer.android.com/jetpack/compose/side-effects
-source_note: Official Compose side‑effects docs
 status: reviewed
 moc: moc-android
 related:
 - q-compose-performance-optimization--android--hard
-- q-compose-compiler-plugin--jetpack-compose--hard
-- q-compose-remember-derived-state--jetpack-compose--medium
+- q-compose-compiler-plugin--android--hard
+- q-compose-remember-derived-state--android--medium
 created: 2025-10-15
 updated: 2025-10-20
 tags:
 - android/ui-compose
-- compose/side-effects
-- lifecycle
+- android/ui-state
 - difficulty/hard
-- android/side-effects
----# Вопрос (RU)
-> Сравните `LaunchedEffect`, `DisposableEffect`, `SideEffect` и `produceState` в Compose. Когда использовать каждый? Покажите минимальные паттерны.
-
+source: https://developer.android.com/jetpack/compose/side-effects
+source_note: Official Compose side‑effects docs
 ---
 
+# Вопрос (RU)
+> Побочные эффекты Compose (продвинуто)?
+
 # Question (EN)
-> Compare `LaunchedEffect`, `DisposableEffect`, `SideEffect`, and `produceState` in Compose. When to use each? Show minimal patterns.
+> Compose Side Effects (Advanced)?
+
+---
 
 ## Ответ (RU)
 
-### Назначение API
-- LaunchedEffect: запуск корутин с привязкой к composition; отмена при смене ключей/удалении.
-- DisposableEffect: регистрация внешних ресурсов; обязательная очистка в onDispose.
-- SideEffect: синхронизация состояния Compose наружу после каждой успешной рекомпозиции; без очистки.
-- produceState: конвертация async/Flow в `State<T>`; корутина авто‑отменяется при dispose.
-
-### Минимальные паттерны
-
-LaunchedEffect (async с ключами)
-```kotlin
-LaunchedEffect(userId) {
-  try { vm.load(userId) } finally { /* флаги UI */ }
-}
-```
-
-DisposableEffect (жизненный цикл слушателя)
-```kotlin
-DisposableEffect(sensorType) {
-  val mgr = context.getSystemService<SensorManager>()
-  val listener = object: SensorEventListener { /* обновлять state */ }
-  mgr?.registerListener(listener, mgr.getDefaultSensor(sensorType), SensorManager.SENSOR_DELAY_NORMAL)
-  onDispose { mgr?.unregisterListener(listener) }
-}
-```
-
-SideEffect (публикация состояния)
-```kotlin
-SideEffect { analytics.logScreen(screenName) }
-```
-
-produceState (async→State)
-```kotlin
-val image by produceState<ImageBitmap?>(initialValue = null, key1 = url) {
-  value = loader.load(url)
-}
-```
-
-### Как выбирать API
-- Нужны корутины? LaunchedEffect; нужно `State`? produceState.
-- Без корутин: нужна очистка? DisposableEffect; просто синхронизация? SideEffect.
-- Указывайте корректные ключи; избегайте тяжёлой логики в SideEffect.
-
-### Типичные ошибки
-- Нет onDispose → утечки; неверные ключи → лишние перезапуски; тяжёлая работа в SideEffect.
-- Для меняющихся колбэков, не требующих рестарта эффекта, используйте `rememberUpdatedState`.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -95,6 +49,7 @@ val image by produceState<ImageBitmap?>(initialValue = null, key1 = url) {
 - DisposableEffect: register external resources; must clean up in onDispose on key change/dispose.
 - SideEffect: sync Compose state to non‑Compose after every successful recomposition; no cleanup.
 - produceState: convert async work/Flow into `State<T>`; coroutine auto‑cancelled on dispose.
+- Relies on [[c-coroutines]] for async operations and lifecycle management.
 
 ### Minimal patterns
 
@@ -157,4 +112,3 @@ val image by produceState<ImageBitmap?>(initialValue = null, key1 = url) {
 ### Advanced (Harder)
 - [[q-compose-compiler-plugin--android--hard]]
 - [[q-compose-slot-table-recomposition--android--hard]]
-

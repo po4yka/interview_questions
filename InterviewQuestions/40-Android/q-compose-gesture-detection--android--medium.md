@@ -7,96 +7,38 @@ aliases:
 topic: android
 subtopics:
 - ui-compose
-- gestures
+- ui-views
 question_kind: android
 difficulty: medium
-status: reviewed
-moc: moc-android
-related:
-- q-animated-visibility-vs-content--jetpack-compose--medium
-- q-compose-canvas-graphics--jetpack-compose--hard
-- q-android-performance-measurement-tools--android--medium
-created: 2025-10-11
-updated: 2025-10-20
 original_language: en
 language_tags:
 - en
 - ru
+status: reviewed
+moc: moc-android
+related:
+- q-animated-visibility-vs-content--android--medium
+- q-compose-canvas-graphics--android--hard
+- q-android-performance-measurement-tools--android--medium
+created: 2025-10-11
+updated: 2025-10-20
 tags:
 - android/ui-compose
-- android/gestures
-- compose
-- performance
+- android/ui-views
 - difficulty/medium
----# Вопрос (RU)
-> Как реализовать надёжную обработку жестов в Compose (tap/long‑press, drag/scroll, вложенный скролл, touch slop) с хорошей производительностью и UX?
-
 ---
 
+# Вопрос (RU)
+> Обработка жестов в Compose?
+
 # Question (EN)
-> How do you implement robust gesture detection in Compose (tap/long‑press, drag/scroll, nested scroll, touch slop) with good performance and UX?
+> Compose Gesture Detection?
+
+---
 
 ## Ответ (RU)
 
-### Базовые понятия
-- pointerInput: низкоуровневые suspend‑обработчики (detect* помощники)
-- Модификаторы: `clickable`, `combinedClickable`, `draggable`, `scrollable` — высокий уровень
-- Nested scroll: координация скролла родителя/детей
-- Touch slop: пороги, исключающие случайные жесты
-
-### Минимальные паттерны
-
-Tap и long‑press:
-```kotlin
-Box(Modifier.pointerInput(Unit) {
-  detectTapGestures(
-    onLongPress = { /* меню */ },
-    onTap = { /* выбор */ }
-  )
-})
-```
-
-Высокоуровневый clickable (ripple, семантика):
-```kotlin
-Text("Open", Modifier.clickable(onClick = onOpen))
-```
-
-Drag с состоянием:
-```kotlin
-@Composable
-fun DraggableBox() {
-  var offset by remember { mutableStateOf(Offset.Zero) }
-  Box(Modifier.size(80.dp).offset { IntOffset(offset.x.toInt(), offset.y.toInt()) }
-    .draggable(orientation = Orientation.Horizontal,
-      state = rememberDraggableState { delta -> offset += Offset(delta, 0f) }))
-}
-```
-
-Scrollable:
-```kotlin
-val state = rememberScrollState()
-Column(Modifier.verticalScroll(state)) { /* items */ }
-```
-
-Nested scroll (пример перехвата родителем):
-```kotlin
-val parent = remember {
-  object : NestedScrollConnection {
-    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-      return Offset(x = available.x, y = 0f)
-    }
-  }
-}
-Row(Modifier.nestedScroll(parent)) { /* дети */ }
-```
-
-### Производительность/UX
-- Предпочитать высокоуровневые модификаторы для семантики/отклика
-- Дебаунс тяжёлой логики; выносить в фоновые потоки
-- Не аллоцировать в лямбдах; состояние через remember
-- Уважать touch slop; не блокировать main; давать визуальный отклик (ripple)
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -165,6 +107,7 @@ Row(Modifier.nestedScroll(parent)) { /* child scrollables */ }
 - How to implement custom nested scroll behaviors?
 
 ## References
+- [[c-algorithms]] - Gesture recognition and touch event processing
 - https://developer.android.com/develop/ui/compose/gestures
 - https://developer.android.com/develop/ui/compose/performance
 
@@ -179,4 +122,3 @@ Row(Modifier.nestedScroll(parent)) { /* child scrollables */ }
 
 ### Advanced (Harder)
 - [[q-android-performance-measurement-tools--android--medium]]
-

@@ -17,7 +17,7 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-- q-compose-remember-derived-state--jetpack-compose--medium
+- q-compose-remember-derived-state--android--medium
 - q-compose-semantics--android--medium
 - q-compose-performance-optimization--android--hard
 created: 2025-10-20
@@ -25,100 +25,20 @@ updated: 2025-10-20
 tags:
 - android/ui-compose
 - android/architecture-mvvm
-- compose
-- compositionlocal
-- dependency-injection
-- best-practices
 - difficulty/medium
 ---
 
 # Вопрос (RU)
-> Когда использовать CompositionLocal вместо передачи параметров? В чём разница между `staticCompositionLocalOf` и `compositionLocalOf`, как это влияет на рекомпозицию и производительность? Какие подводные камни и лучшие практики?
+> CompositionLocal — продвинутый уровень?
 
 # Question (EN)
-> When should you use CompositionLocal vs passing parameters? What’s the difference between `staticCompositionLocalOf` and `compositionLocalOf`, and how does it affect recomposition and performance? What are pitfalls and best practices?
+> CompositionLocal Advanced?
 
 ---
 
 ## Ответ (RU)
 
-### Зачем CompositionLocal
-- "Контекст" для поддерева: тема, локаль, плотность, DI-объекты
-- Избавляет от «прокидывания через 10 уровней», где явные параметры мешают чтению
-- Не замена параметрам: используйте там, где зависимость действительно «среда», а не бизнес‑данные
-
-### Когда параметры, а когда Local
-- Параметры — когда зависимость локальна, часто меняется, важна явность API
-- CompositionLocal — когда зависимость кросс‑каттинговая, редко меняется, относится к окружению (theme, haptics, logger, imageLoader)
-
-### staticCompositionLocalOf vs compositionLocalOf
-- `compositionLocalOf` (динамический)
-  - Трекинг чтений: рекомпозируются только те потребители, которые читают `.current`
-  - Хорош для часто меняющихся значений (скролл‑позиция, динамические флаги)
-  - Небольшой накладной расход на каждое чтение
-- `staticCompositionLocalOf` (статический)
-  - Нет трекинга чтений: изменение значения приводит к рекомпозиции всего поддерева провайдера
-  - Хорош для редко меняющихся «глобальных» параметров (тема, локаль)
-  - Чтение дешевле, зато апдейт дороже (широкая инвалидация)
-
-Практика: если значение меняется часто и важно сузить область рекомпозиции — используйте `compositionLocalOf`; если почти не меняется и читается много где — `staticCompositionLocalOf`.
-
-### Границы инвалидации и производительность
-- Граница — блок `CompositionLocalProvider`
-- Для динамического Local инвалидация идёт до конкретных читателей
-- Для статического — всё под деревом провайдера
-- Дробите дерево провайдеров ближе к потребителям, если обновление широкое
-
-### Безопасные значения по умолчанию
-- Опасно: давать «валидный» silent‑default → маскирует отсутствие провайдера
-- Рекомендация: `error("No Foo provided")` в фабрике Local, либо безопасный noop‑объект с явной семантикой
-
-### Иммутабельность и стабильность
-- Значения в Local должны быть неизменяемыми или явно стабильными
-- Изменяйте целиком ссылку (copy), а не внутренние `var` без уведомления Compose
-- Это повышает предсказуемость и шансы на пропуск рекомпозиций
-
-### Типичные ошибки
-- Чтение Local вне композиции (в лямбдах, сохраняемых дольше жизни кадра)
-- Использование Local как «глобальной» скрытой зависимости бизнес‑логики
-- Слишком «высокий» провайдер для часто меняющегося значения (лишняя рекомпозиция)
-- Слишком много маленьких провайдеров в горячих ветках (накладные расходы)
-
-### Паттерны
-- "Тонкий провайдер": оборачивайте лишь ту часть поддерева, которая реально использует значение
-- "Комбинированный провайдер": группируйте редко меняющиеся значения в один статический Local
-- "Тестируемость": в тестах переопределяйте Local внутри сцены — просто и надёжно
-
-### Минимальные примеры
-
-Создание и провайдинг:
-```kotlin
-// Rarely changing global context
-data class AppEnv(val locale: Locale, val haptics: Haptics)
-val LocalAppEnv = staticCompositionLocalOf<AppEnv> { error("No AppEnv provided") }
-
-@Composable
-fun App(env: AppEnv, content: @Composable () -> Unit) {
-    CompositionLocalProvider(LocalAppEnv provides env) {
-        content()
-    }
-}
-```
-
-Динамический Local с узкой рекомпозицией:
-```kotlin
-val LocalScrollInfo = compositionLocalOf { 0 }
-
-@Composable
-fun Screen(scrollY: Int) {
-    CompositionLocalProvider(LocalScrollInfo provides scrollY) {
-        Header()              // does not read Local → no recomposition
-        StickyToolbar()       // reads Local → recomposes on change
-    }
-}
-```
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -126,6 +46,8 @@ fun Screen(scrollY: Int) {
 - Context for a subtree: theme, locale, density, DI objects
 - Removes over‑plumbing through many layers when explicit params hurt readability
 - Not a replacement for parameters: use when the dependency is truly environmental
+
+See also [[c-dependency-injection]] and [[c-compose-state]] for understanding dependency management in Compose.
 
 ### Parameters vs Local
 - Parameters — when the dependency is local, frequently changing, and API clarity matters

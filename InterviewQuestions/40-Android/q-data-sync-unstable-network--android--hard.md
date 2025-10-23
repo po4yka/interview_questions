@@ -6,8 +6,8 @@ aliases:
 - Синхронизация данных при нестабильной сети
 topic: android
 subtopics:
-- networking
-- architecture-patterns
+- networking-http
+- architecture-clean
 question_kind: android
 difficulty: hard
 original_language: en
@@ -23,8 +23,8 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/networking
-- android/architecture-patterns
+- android/networking-http
+- android/architecture-clean
 - data-sync
 - offline-first
 - networking
@@ -32,7 +32,8 @@ tags:
 - difficulty/hard
 source: https://developer.android.com/guide/background/processing-data/sync
 source_note: Android Data Sync documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Как бы вы обрабатывали синхронизацию данных в Android приложении при нестабильном сетевом соединении?
 
 # Question (EN)
@@ -445,6 +446,9 @@ class SyncStrategy @Inject constructor(private val networkMonitor: NetworkMonito
     }
 }
 ```
+
+**See also:** [[c-network-protocols]], [[c-rest-api]]
+
 
 ## Follow-ups
 

@@ -6,8 +6,7 @@ aliases:
 - Аннотация Inject Dagger
 topic: android
 subtopics:
-- dependency-injection
-- architecture-patterns
+- di-hilt
 question_kind: android
 difficulty: easy
 original_language: en
@@ -23,16 +22,12 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/dependency-injection
-- android/architecture-patterns
-- dagger
-- hilt
-- inject-annotation
-- dependency-injection
+- android/di-hilt
 - difficulty/easy
 source: https://dagger.dev/api/latest/dagger/Inject.html
 source_note: Dagger Inject annotation documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Как сообщить Dagger, что мы собираемся что-то инжектить?
 
 # Question (EN)

@@ -11,90 +11,40 @@ subtopics:
 - testing-instrumented
 question_kind: android
 difficulty: medium
+original_language: en
+language_tags:
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
 - q-android-testing-strategies--android--medium
 - q-android-lint-tool--android--medium
-- q-build-optimization-gradle--gradle--medium
+- q-build-optimization-gradle--android--medium
 created: 2025-10-15
 updated: 2025-10-20
-original_language: en
-language_tags:
-- en
-- ru
 tags:
 - android/gradle
 - android/testing-unit
 - android/testing-instrumented
-- ci-cd
-- testing
 - difficulty/medium
----# Вопрос (RU)
-> Как спроектировать быстрые и надёжные автоматизированные тесты в CI/CD для Android (этапы, кеширование, параллелизм, флаки‑тесты и отчёты)?
-
+name: Android CI
+true:
+- pull_request
+jobs: null
 ---
 
+# Вопрос (RU)
+> Автоматизированное тестирование в CI/CD?
+
 # Question (EN)
-> How do you design fast and reliable CI/CD automated testing for Android (stages, caching, parallelism, flakiness, and reports)?
+> CI/CD Automated Testing?
+
+---
 
 ## Ответ (RU)
 
-### Цели
-- Быстрая обратная связь (PR < 10 мин)
-- Детерминизм и герметичность сборок
-- Понятные отчёты (тесты, линт, покрытие)
-
-### Конвейер (типовой)
-- Перед мерджем: статпроверки → unit → инструментальные (шардинг) → артефакты + отчёты
-- После мержа/ночью: полный набор, длительные, девайс‑лаб, перф‑проверки
-
-### Тесты и охват
-- Unit: JVM, быстро, заглушки Android
-- Инструментальные: Espresso/UI, реальные/эмуляторы, шардинг
-- Lint/Detekt: стиль и корректность
-- Покрытие: объединять unit + instrumented; падать при падении порога
-
-### Скорость и стабильность
-- Кеши: Gradle build + зависимости; включить configuration cache
-- Параллелизм: `--parallel`, матрица (API/ABI), шардинг тестов
-- Разделение модулей: независимые сборки/тесты
-- Флаки: карантин, ретраи, бэклог дефлейка
-- Герметичность: фиксированные SDK/toolchain, сеть в тестах запрещена (MockWebServer)
-
-### Минимальный шаг CI (GitHub Actions)
-```yaml
-name: Android CI
-on: [pull_request]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: '17' }
-      - uses: gradle/gradle-build-action@v2
-      - name: Unit tests (config + build cache)
-        run: ./gradlew testDebugUnitTest --configuration-cache --build-cache --parallel
-      - name: Lint
-        run: ./gradlew lintDebug --configuration-cache --build-cache
-      - name: Upload reports
-        uses: actions/upload-artifact@v4
-        with: { name: reports, path: '**/build/reports/**' }
-```
-
-### Отчёты и артефакты
-- Сохранять JUnit XML, lint HTML, покрытие (Jacoco) по джобам
-- Показывать ошибки аннотациями; ссылка на список флаки
-
-### Девайс‑тесты
-- Матрица эмуляторов для критичных PR; шире — ночью
-- Шардить по пакетам/классам; ретраить только упавшие шары
-
-### Безопасность
-- Подписывать/AAB в защищённой джобе; секреты через OIDC; проверять цепочку поставки
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -173,4 +123,3 @@ jobs:
 
 ### Advanced (Harder)
 - [[q-android-performance-measurement-tools--android--medium]]
-

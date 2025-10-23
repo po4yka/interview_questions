@@ -16,85 +16,27 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-- q-compose-compiler-plugin--jetpack-compose--hard
-- q-compose-custom-layout--jetpack-compose--hard
-- q-compose-lazy-layout-optimization--jetpack-compose--hard
+- q-compose-compiler-plugin--android--hard
+- q-compose-custom-layout--android--hard
+- q-compose-lazy-layout-optimization--android--hard
 created: 2025-10-15
 updated: 2025-10-20
 tags:
 - android/ui-compose
-- compose/multiplatform
-- kmp
 - difficulty/hard
----# Вопрос (RU)
-> Что такое Compose Multiplatform, чем он отличается от KMM, как строить общий UI с платформенными адаптациями (Android, iOS, Desktop, Web)? Каковы ключевые ограничения и лучшие практики?
-
 ---
 
+# Вопрос (RU)
+> Compose Multiplatform (обзор)?
+
 # Question (EN)
-> What is Compose Multiplatform, how is it different from KMM, and how do you structure shared UI with platform adaptations (Android, iOS, Desktop, Web)? What are key limitations and best practices?
+> Compose Multiplatform?
+
+---
 
 ## Ответ (RU)
 
-### Определение и охват
-- Compose Multiplatform (CMP) переносит Compose UI на Android, iOS, Desktop, Web через KMP.
-- Делим UI, состояние, навигацию, темы; точки входа и interop остаются платформенными.
-
-### CMP vs KMM
-- KMM: шарим домен/данные; UI нативный (Android Compose, iOS SwiftUI).
-- CMP: шарим UI + домен; один UI‑фреймворк, платформенные адаптации тонким слоем.
-
-### Структура проекта (минимум)
-- Модули: `shared` (commonMain + платформенные), приложения: android/ios/desktop/js.
-- Таргеты: `androidTarget()`, `ios*()`, `jvm("desktop")`, `js(IR)`.
-
-Минимальная настройка Gradle (без версий):
-```kotlin
-plugins { kotlin("multiplatform"); id("org.jetbrains.compose"); id("com.android.library") }
-
-kotlin {
-  androidTarget(); jvm("desktop"); js(IR) { browser() }
-  listOf(iosX64(), iosArm64(), iosSimulatorArm64())
-  sourceSets { val commonMain by getting; val androidMain by getting; val iosMain by creating { dependsOn(commonMain) } }
-}
-```
-
-### Общий UI + платформенные адаптации
-- Шарим composable/экраны/навигацию/темы в `commonMain`.
-- `expect/actual` для платформенных API (лог, ресурсы, размер окна, haptics).
-
-Минимальный expect/actual:
-```kotlin
-// commonMain
-expect fun platformName(): String
-// androidMain
-actual fun platformName() = "Android"
-```
-
-Точки входа (общий App + обёртка):
-```kotlin
-@Composable fun App() { /* Навигация + экраны */ }
-// Android
-class MainActivity: ComponentActivity() { override fun onCreate(b: Bundle?) { super.onCreate(b); setContent { App() } } }
-```
-
-### Адаптивные интерфейсы
-- Классы окна (compact/medium/expanded) и разветвление UI.
-- Избегайте глубоких деревьев; учитывайте desktop/web особенности.
-
-### Лучшие практики
-- Делите: state, экраны, темы, навигацию; interop держите тонким.
-- Адаптируйте: жесты, окна, типографику, отступы под платформу.
-- Производительность: стабильные ключи, `remember`, профилирование на каждой платформе.
-- Ресурсы: compose resources, централизованные строки.
-- Тесты: скриншоты/«golden» на всех таргетах; навигация и состояние.
-
-### Ограничения
-- iOS: обёртка UIViewController; ограниченная interop со SwiftUI.
-- Web: Canvas, размер бандла, доступность.
-- Desktop: окна/ввод, сочетания клавиш, hover‑паттерны.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -195,4 +137,3 @@ class MainActivity: ComponentActivity() {
 ### Advanced (Harder)
 - [[q-compose-modifier-order-performance--android--medium]]
 - [[q-compose-gesture-detection--android--medium]]
-

@@ -6,8 +6,7 @@ aliases:
 - Кастомные скоупы Dagger
 topic: android
 subtopics:
-- dependency-injection
-- architecture-patterns
+- di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
@@ -17,22 +16,18 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-- q-dagger-component-dependencies--di--hard
+- q-dagger-component-dependencies--android--hard
 - q-hilt-components-scope--android--medium
 - q-dagger-build-time-optimization--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/dependency-injection
-- android/architecture-patterns
-- dagger
-- hilt
-- custom-scopes
-- lifecycle-management
+- android/di-hilt
 - difficulty/hard
 source: https://dagger.dev/hilt/components.html
 source_note: Hilt components and scopes documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Как создать и использовать кастомные скоупы в Dagger/Hilt? Объясните разницу между Singleton, кастомными скоупами и unscoped зависимостями. Приведите примеры когда и зачем создавать кастомный скоуп.
 
 # Question (EN)

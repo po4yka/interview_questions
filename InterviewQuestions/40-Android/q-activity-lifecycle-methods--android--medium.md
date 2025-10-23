@@ -18,142 +18,17 @@ status: reviewed
 moc: moc-android
 related:
 - q-viewmodel-pattern--android--easy
-- q-fragment-lifecycle--android--medium
-- q-lifecycle-aware-components--android--medium
+- q-fragment-vs-activity-lifecycle--android--medium
 created: 2025-10-15
 updated: 2025-10-15
 tags:
 - android/lifecycle
 - android/activity
-- lifecycle
-- activity
 - difficulty/medium
----# Вопрос (RU)
-> Какие есть методы жизненного цикла Activity и как они отрабатывают?
-
----
-
-# Question (EN)
-> What Activity lifecycle methods exist and how do they work?
-
-## Ответ (RU)
-
-Методы жизненного цикла Activity представляют собой коллбэки, вызываемые системой Android при изменении состояния.
-
-**Основные методы жизненного цикла:**
-
-- `onCreate()`: Инициализация Activity (создание UI, привязка данных) - вызывается ОДИН раз
-- `onStart()`: Activity становится видимой - может вызываться МНОГО раз
-- `onResume()`: Activity на переднем плане, пользователь может взаимодействовать
-- `onPause()`: Activity теряет фокус, пользователь уходит - сохранить данные быстро
-- `onStop()`: Activity больше не видна - освободить ресурсы
-- `onRestart()`: Activity возобновляется после остановки
-- `onDestroy()`: Activity уничтожается - финальная очистка
-
-**Поток жизненного цикла:**
-
-```
-onCreate() → onStart() → onResume() → RUNNING
-                ↑           ↓
-            onRestart() ← onPause() → onStop() → onDestroy()
-```
-
-**Распространённые сценарии:**
-
-**Первый запуск:**
-```
-onCreate() → onStart() → onResume()
-```
-
-**Нажатие кнопки Home:**
-```
-onPause() → onStop()
-```
-
-**Возврат в приложение:**
-```
-onRestart() → onStart() → onResume()
-```
-
-**Поворот экрана:**
-```
-onPause() → onStop() → onDestroy() → onCreate() → onStart() → onResume()
-```
-
-**Ключевые правила:**
-
-- `onCreate()`: Инициализировать UI, создать объекты, привязать данные
-- `onPause()`: Сохранить критичные данные, остановить анимации - должно быть БЫСТРО
-- `onStop()`: Освободить ресурсы, отменить регистрацию слушателей
-- `onDestroy()`: Финальная очистка - может не вызваться (убийство системой)
-
-**Современный подход:**
-
-```kotlin
-// Использовать DefaultLifecycleObserver (не устаревший @OnLifecycleEvent)
-class MyLifecycleObserver : DefaultLifecycleObserver {
-    override fun onResume(owner: LifecycleOwner) {
-        // Начать обновления
-    }
-
-    override fun onPause(owner: LifecycleOwner) {
-        // Остановить обновления
-    }
-}
-
-// Зарегистрировать наблюдатель
-lifecycle.addObserver(MyLifecycleObserver())
-```
-
-**Управление ресурсами:**
-
-```kotlin
-// ПЛОХО - Утечка ресурсов
-override fun onResume() {
-    super.onResume()
-    mediaPlayer = MediaPlayer.create(this, R.raw.video)
-    mediaPlayer.start()
-}
-
-// ХОРОШО - Правильное управление жизненным циклом
-override fun onResume() {
-    super.onResume()
-    mediaPlayer.start()
-}
-
-override fun onPause() {
-    super.onPause()
-    mediaPlayer.pause()
-}
-
-override fun onDestroy() {
-    super.onDestroy()
-    mediaPlayer.release()
-}
-```
-
-**Сохранение состояния:**
-
-```kotlin
-override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    outState.putString("user_input", editText.text.toString())
-}
-
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    if (savedInstanceState != null) {
-        val savedText = savedInstanceState.getString("user_input")
-        editText.setText(savedText)
-    }
-}
-```
-
 ---
 
 ## Answer (EN)
-
-Activity lifecycle methods are callbacks invoked by Android system during state changes.
+[[c-activity-lifecycle|Activity lifecycle]] methods are callbacks invoked by Android system during state changes. The [[c-lifecycle-owner|LifecycleOwner]] interface provides lifecycle-aware components.
 
 **Main lifecycle methods:**
 
@@ -287,4 +162,3 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ### Related (Medium)
 - [[q-fragment-basics--android--easy]] - Fragment lifecycle
 - [[q-what-are-services-for--android--easy]] - Service lifecycle
-

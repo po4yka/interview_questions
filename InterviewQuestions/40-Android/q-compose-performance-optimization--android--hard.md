@@ -1,105 +1,46 @@
 ---
 id: 20251020-200000
-title: "Compose Performance Optimization / Оптимизация производительности Compose"
-aliases: [Compose Performance Optimization, Оптимизация производительности Compose]
+title: Compose Performance Optimization / Оптимизация производительности Compose
+aliases:
+- Compose Performance Optimization
+- Оптимизация производительности Compose
 topic: android
-subtopics: [ui-compose, performance]
+subtopics:
+- ui-compose
+- performance-memory
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-source: https://developer.android.com/jetpack/compose/performance
-source_note: Official Compose performance guide
+language_tags:
+- en
+- ru
 status: reviewed
-related: [q-compose-compiler-plugin--jetpack-compose--hard, q-compose-lazy-layout-optimization--jetpack-compose--hard, q-android-performance-measurement-tools--android--medium]
+moc: moc-android
+related:
+- q-compose-compiler-plugin--android--hard
+- q-compose-lazy-layout-optimization--android--hard
+- q-android-performance-measurement-tools--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags: [android/ui-compose, android/performance, performance, recomposition, stability, difficulty/hard]
-moc: moc-android
----# Вопрос (RU)
-> Как оптимизировать производительность Jetpack Compose и избегать лишних рекомпозиций? Приведите минимальные паттерны и когда их применять.
-
+tags:
+- android/ui-compose
+- android/performance-memory
+- difficulty/hard
+source: https://developer.android.com/jetpack/compose/performance
+source_note: Official Compose performance guide
 ---
 
+# Вопрос (RU)
+> Оптимизация производительности Compose?
+
 # Question (EN)
-> How do you optimize Jetpack Compose performance and avoid unnecessary recompositions? Provide minimal patterns and when to use them.
+> Compose Performance Optimization?
+
+---
 
 ## Ответ (RU)
 
-### Принципы
-
-- Минимизируйте область рекомпозиции (наблюдайте поля отдельно, делите UI).
-- Используйте стабильные входы (immutable/@Stable) и стабильные колбэки.
-- Предвычисляйте/выводите значения через `remember`/`derivedStateOf`.
-- В списках используйте keys и contentType для переиспользования и диффинга.
-- Избегайте аллокаций в горячих участках; переиспользуйте shape/brush/painter.
-- Измеряйте перед оптимизацией; подтверждайте узкие места.
-
-### Минимальные паттерны
-
-Гранулярное наблюдение состояния
-
-```kotlin
-val title by vm.title.collectAsState()
-val body by vm.body.collectAsState()
-Header(title); Body(body)
-```
-
-Стабильные колбэки
-
-```kotlin
-val onClick = remember { { vm.onClick() } }
-Button(onClick) { Text("Go") }
-// или ссылка на метод
-Button(onClick = vm::onClick) { Text("Go") }
-```
-
-Immutable/@Stable модели
-
-```kotlin
-@Immutable data class Product(val id: String, val name: String)
-@Stable class UiState { var selected by mutableStateOf<String?>(null) }
-```
-
-Производные значения
-
-```kotlin
-val listState = rememberLazyListState()
-val showFab by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
-```
-
-Переиспользование в списках (keys, contentType)
-
-```kotlin
-LazyColumn {
-  items(items = data, key = { it.id }, contentType = { it.type }) { item ->
-    Row { Text(item.title) }
-  }
-}
-```
-
-Избегание распространения рекомпозиции
-
-```kotlin
-var counter by remember { mutableStateOf(0) }
-Button({ counter++ }) { Text("$counter") }
-ExpensiveChild()
-```
-
-Кэширование дорогих вычислений
-
-```kotlin
-val formatted = remember(price) { priceFormatter.format(price) }
-Text(formatted)
-```
-
-### Измерение и инструменты
-
-- Layout Inspector (Recomposition counts), Perfetto, трассировка.
-- Отслеживайте jank/длинные кадры и соотносите со всплесками рекомпозиций.
-- Проверяйте пропуски фаз отчётами компилятора Compose.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -111,6 +52,7 @@ Text(formatted)
 - Use keys and content types in lazy lists for reuse and diffing.
 - Avoid allocations in hot paths; reuse shapes/brushes/painters.
 - Measure and verify with tools; optimize only confirmed hotspots.
+- Apply [[c-algorithms]] for efficient state management and [[c-data-structures]] for optimal data organization.
 
 ### Minimal patterns
 
@@ -205,4 +147,3 @@ Text(formatted)
 
 - [[q-compose-custom-layout--android--hard]]
 - [[q-compose-slot-table-recomposition--android--hard]]
-

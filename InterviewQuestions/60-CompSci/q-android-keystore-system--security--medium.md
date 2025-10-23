@@ -29,9 +29,10 @@ tags:
 - difficulty/medium
 related:
 - q-android-security-practices-checklist--android--medium
-- q-encrypted-file-storage--security--medium
+- q-encrypted-file-storage--android--medium
 - q-database-encryption-android--android--medium
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Как реализовать безопасное хранение ключей с помощью Android Keystore?
 
 ---

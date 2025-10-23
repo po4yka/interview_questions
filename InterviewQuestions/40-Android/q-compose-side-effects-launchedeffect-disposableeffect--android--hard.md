@@ -1,102 +1,38 @@
 ---
 id: 20251017-145045
 title: 'Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочные эффекты:
-  LaunchedEffect vs DisposableEffect'
 aliases:
 - Compose LaunchedEffect vs DisposableEffect
 topic: android
 subtopics:
 - ui-compose
-- side-effects
+- ui-state
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
 - en
 - ru
-source: https://developer.android.com/jetpack/compose/side-effects
-source_note: Official Compose side‑effects docs
 status: reviewed
 moc: moc-android
 related:
-- q-compose-side-effects-advanced--jetpack-compose--hard
+- q-compose-side-effects-advanced--android--hard
 - q-compose-performance-optimization--android--hard
-- q-compose-remember-derived-state--jetpack-compose--medium
+- q-compose-remember-derived-state--android--medium
 created: 2025-10-13
 updated: 2025-10-20
 tags:
 - android/ui-compose
-- compose/side-effects
-- coroutines
-- lifecycle
-- difficulty/hard
-- android/side-effects
----# Вопрос (RU)
-> В чём разница между `LaunchedEffect` и `DisposableEffect` в Compose? Когда использовать каждый? Приведите минимальные паттерны.
-
+- android/ui-state
+source: https://developer.android.com/jetpack/compose/side-effects
+source_note: Official Compose side‑effects docs---
 ---
-
-# Question (EN)
-> What is the difference between `LaunchedEffect` and `DisposableEffect` in Compose? When should each be used? Show minimal patterns.
-
-## Ответ (RU)
-
-### Краткое сравнение
-- LaunchedEffect: запуск корутин с привязкой к composition; авто‑отмена при смене ключей/удалении.
-- DisposableEffect: регистрация внешних ресурсов (listener/observer); обязательная очистка в onDispose.
-
-### Минимальные паттерны
-
-LaunchedEffect (async по ключам)
-```kotlin
-LaunchedEffect(userId) { // отменит предыдущую при смене userId
-  runCatching { vm.load(userId) }.onFailure { /* обработка */ }
-}
-```
-
-LaunchedEffect + Flow
-```kotlin
-LaunchedEffect(orderId) {
-  repo.observeOrder(orderId).collect { state -> vm.update(state) }
-}
-```
-
-DisposableEffect (жизненный цикл listener)
-```kotlin
-DisposableEffect(sensorType) {
-  val mgr = context.getSystemService<SensorManager>()
-  val listener = object: SensorEventListener { override fun onSensorChanged(e: SensorEvent){ /* state */ } }
-  mgr?.registerListener(listener, mgr?.getDefaultSensor(sensorType), SensorManager.SENSOR_DELAY_NORMAL)
-  onDispose { mgr?.unregisterListener(listener) }
-}
-```
-
-DisposableEffect (наблюдатель lifecycle)
-```kotlin
-DisposableEffect(lifecycleOwner) {
-  val observer = LifecycleEventObserver { _, e -> if (e==ON_START) start(); if (e==ON_STOP) stop() }
-  lifecycleOwner.lifecycle.addObserver(observer)
-  onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
-}
-```
-
-### Как выбирать
-- LaunchedEffect для suspend/Flow, требующих рестарт по ключам и отмену при dispose.
-- DisposableEffect для ресурсов, требующих явной очистки (сенсоры, приёмники, плееры, обратные вызовы).
-- Для событий (onClick) — `rememberCoroutineScope`.
-- Для синхронизации после рекомпозиции — `SideEffect` (не для тяжёлой работы).
-
-### Типичные ошибки
-- Неверные ключи → лишние перезапуски; нет onDispose → утечки; тяжёлая работа в SideEffect.
-- Меняющиеся callbacks перезапускают эффекты: используйте `rememberUpdatedState`, чтобы иметь актуальный колбэк без рестарта эффекта.
-
----
-
 ## Answer (EN)
 
 ### Quick comparison
 - LaunchedEffect: start coroutine work tied to composition; auto‑cancels on key change or dispose.
 - DisposableEffect: register external resources (listeners, observers); must clean up in onDispose.
+- Both leverage [[c-coroutines]] for managing asynchronous operations and lifecycle.
 
 ### Minimal patterns
 

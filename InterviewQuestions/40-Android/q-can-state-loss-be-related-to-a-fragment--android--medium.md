@@ -1,63 +1,44 @@
 ---
 id: 20251012-122791
 title: Can Fragment State Loss Occur? / Бывает ли потеря состояния у Fragment
-aliases: [Can Fragment State Loss Occur, Бывает ли потеря состояния у Fragment]
+aliases:
+- Can Fragment State Loss Occur
+- Бывает ли потеря состояния у Fragment
 topic: android
-subtopics: [fragment, lifecycle]
+subtopics:
+- fragment
+- lifecycle
 question_kind: android
 difficulty: medium
+original_language: en
+language_tags:
+- en
+- ru
 status: reviewed
 moc: moc-android
-related: [q-activity-lifecycle-methods--android--medium, q-android-app-components--android--easy, q-android-manifest-file--android--easy]
+related:
+- q-activity-lifecycle-methods--android--medium
+- q-android-app-components--android--easy
+- q-android-manifest-file--android--easy
 created: 2025-10-15
 updated: 2025-10-20
-original_language: en
-language_tags: [en, ru]
-tags: [android/fragment, android/lifecycle, state-management, difficulty/medium]
----# Вопрос (RU)
-> Может ли потеря состояния быть связана с Fragment? Когда это происходит и как предотвратить?
-
+tags:
+- android/fragment
+- android/lifecycle
+- difficulty/medium
 ---
 
+# Вопрос (RU)
+> Бывает ли потеря состояния у Fragment?
+
 # Question (EN)
-> Can state loss be related to a Fragment? When and how does it happen, and how to prevent it?
+> Can Fragment State Loss Occur??
+
+---
 
 ## Ответ (RU)
 
-### Что такое «потеря состояния»
-- Выполнение FragmentTransaction после сохранения состояния `Activity` (после `onSaveInstanceState`) может быть проигнорировано при восстановлении процесса → изменение UI теряется.
-- Состояние View vs состояние экземпляра фрагмента: View может быть уничтожена, пока фрагмент живет (back stack).
-
-### Частые причины
-- Транзакции после сохранения состояния (асинхронные колбэки, фоновые результаты).
-- Смерть процесса без сохранения нужного состояния.
-- Возврат из back stack создает фрагменты заново (эфемерные поля не восстанавливаются).
-- Пересоздание `Activity` (смена конфигурации) без сохранения/восстановления UI.
-
-### Профилактика
-- Меняйте FragmentManager только когда состояние не сохранено.
-- Сохраняйте важное: ViewModel для долговечных данных; `onSaveInstanceState` для UI‑состояния.
-- Наблюдайте через `viewLifecycleOwner` и обнуляйте binding в `onDestroyView`.
-
-### Минимальный сниппет (проверка перед транзакцией)
-```kotlin
-lifecycleScope.launchWhenResumed {
-  if (!supportFragmentManager.isStateSaved) {
-    supportFragmentManager.beginTransaction()
-      .replace(R.id.container, MyFragment())
-      .commit()
-  }
-}
-```
-
-### Рекомендации
-- ViewModel для данных, переживающих смену конфигурации.
-- `onSaveInstanceState` для временного UI (скролл, выделения).
-- `commitNow()` только в безопасных точках (например, первый `onCreate` при `savedInstanceState == null`).
-- `commitAllowingStateLoss()` — только для некритичного UI (например, диалоги).
-- Используйте `viewLifecycleOwner` и очищайте binding в `onDestroyView`.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -114,4 +95,3 @@ lifecycleScope.launchWhenResumed {
 
 ### Advanced (Harder)
 - [[q-android-performance-measurement-tools--android--medium]]
-

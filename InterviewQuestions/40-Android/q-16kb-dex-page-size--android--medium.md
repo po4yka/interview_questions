@@ -6,8 +6,8 @@ aliases:
 - 16 КБ страница DEX
 topic: android
 subtopics:
-- build-optimization
-- performance
+- gradle
+- performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
@@ -23,79 +23,13 @@ related:
 created: 2025-10-15
 updated: 2025-10-15
 tags:
-- android/build-optimization
-- android/performance
-- dex
-- build-optimization
-- apk-size
-- performance
-- r8
-- proguard
+- android/gradle
+- android/performance-memory
 - difficulty/medium
----# Вопрос (RU)
-> Что такое проблема 16 КБ страниц DEX в Android? Как это влияет на производительность приложения и что могут сделать разработчики?
-
----
-
-# Question (EN)
-> What is the 16 KB DEX page size issue in Android? How does it affect app performance and what can developers do about it?
-
-## Ответ (RU)
-
-Проблема размера страницы DEX в 16 КБ — это проблема выравнивания памяти, влияющая на Android 6.0+, которая вызывает значительное раздувание приложения при оптимизации с помощью R8/ProGuard.
-
-#### Проблема
-
-Android использует 16 КБ страницы для DEX файлов. Method IDs должны быть выровнены по границе страницы, создавая потраченное место для отступов.
-
-```
-Без выравнивания: [Header][Strings][Methods][Code]
-С выравниванием:  [Header][Strings][Padding][Methods][Code]
-                                    ^^^^^^^^ Потеря места!
-```
-
-Влияние:
-- Маленькие приложения (< 5 MB): увеличение на 20-40%
-- Большие приложения (> 50 MB): увеличение на 5-15%
-- Multi-DEX приложения: умноженный эффект
-
-#### Решения
-
-Обновите до последней версии AGP:
-```kotlin
-plugins {
-    id("com.android.application")
-}
-```
-
-Настройте R8 (старые версии AGP):
-```properties
-android.enableR8.fullMode=true
-```
-
-Используйте App Bundle для автоматической оптимизации.
-
-#### Лучшие практики
-
-Включите R8 оптимизацию:
-```kotlin
-android {
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-        }
-    }
-}
-```
-
-Мониторьте размер APK в CI/CD. Используйте App Bundle вместо APK.
-
 ---
 
 ## Answer (EN)
-
-The 16 KB DEX page size issue is a memory alignment problem affecting Android 6.0+ that causes significant app bloat when apps are optimized with R8/ProGuard.
+The 16 KB DEX page size issue is a [[c-memory-alignment|memory alignment]] problem affecting Android 6.0+ that causes significant app bloat when apps are optimized with [[c-r8-proguard|R8/ProGuard]].
 
 #### Problem
 
@@ -189,4 +123,3 @@ Monitor APK size in CI/CD. Use App Bundle instead of APK.
 
 ### Advanced (Harder)
 - [[q-kotlin-dsl-builders--kotlin--hard]] - Build
-

@@ -8,6 +8,7 @@ topic: android
 subtopics:
 - architecture-clean
 - ui-views
+
 question_kind: android
 difficulty: medium
 original_language: en
@@ -25,20 +26,47 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
+- en
+- ru
+-
+- a
+- n
+- d
+- r
+- o
+- i
+- d
+- /
+- a
+- r
+- c
+- h
+- i
+- t
+- e
+- c
+- t
+- u
+- r
+- e
+- -
+- c
+- l
+- e
+- a
+- n
+
 - android/architecture-clean
 - android/ui-views
 - factory-pattern
 - design-patterns
 - layout-inflater
-- difficulty/medium
----# Вопрос (RU)
+- difficulty/medium---
+# Вопрос (RU)
 > Можешь привести пример когда Android фреймворк использует паттерн Factory?
 
 # Question (EN)
-> Can you give an example of when the Android framework uses the Factory pattern?
-
----
-
+> Can you give an example of when the Android framework uses the Factory pattern?---
 ## Ответ (RU)
 
 Android фреймворк широко использует Factory паттерн в своих API. Основные примеры: LayoutInflater, Fragment.instantiate(), Intent.createChooser(), MediaPlayer.create().
@@ -364,6 +392,9 @@ class FragmentFactory {
     }
 }
 ```
+
+**See also:** [[c-factory-pattern]], [[c-software-design-patterns]]
+
 
 ## Follow-ups
 - What's the difference between Factory Method and Abstract Factory patterns?

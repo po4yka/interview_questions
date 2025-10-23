@@ -17,139 +17,21 @@ language_tags:
 - ru
 status: reviewed
 moc: moc-android
+related:
+- q-android-app-components--android--easy
+- q-activity-lifecycle-methods--android--medium
+- q-intent-filters-android--android--medium
 created: 2025-10-15
 updated: 2025-10-15
 tags:
 - android/app-startup
 - android/permissions
 - android/activity
-- manifest
-- androidmanifest
-- configuration
-- app-structure
 - difficulty/easy
-related:
-- q-android-app-components--android--easy
-- q-android-permissions--android--easy
-- q-activity-lifecycle-methods--android--medium
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
----# Вопрос (RU)
-> Что такое AndroidManifest.xml?
-
----
-
-# Question (EN)
-> What is AndroidManifest.xml?
-
-## Ответ (RU)
-
-**AndroidManifest.xml** - это центральный файл конфигурации, который объявляет компоненты приложения, разрешения и метаданные. Служит точкой входа для системы Android для понимания и запуска вашего приложения.
-
-**Теория манифеста:**
-Манифест действует как контракт между вашим приложением и системой Android. Он объявляет, какие компоненты существуют, какие разрешения нужны, и как должно вести себя приложение. Система читает этот файл перед запуском любого компонента для понимания структуры и требований приложения.
-
-**Основные обязанности:**
-- **Объявление компонентов**: Регистрирует Activities, Services, BroadcastReceivers, ContentProviders
-- **Управление разрешениями**: Объявляет необходимые разрешения и пользовательские разрешения
-- **Метаданные приложения**: Определяет название, иконку, тему и информацию о версии
-- **Фильтрация Intent**: Указывает, как компоненты могут быть запущены через intent
-
-**Базовая структура манифеста:**
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.app">
-
-    <!-- Разрешения -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <!-- Конфигурация приложения -->
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme">
-
-        <!-- Главная Activity -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-    </application>
-</manifest>
-```
-
-**Конфигурация версии SDK:**
-```xml
-<uses-sdk
-    android:minSdkVersion="21"
-    android:targetSdkVersion="33" />
-```
-
-**Требования к аппаратным функциям:**
-```xml
-<uses-feature
-    android:name="android.hardware.camera"
-    android:required="true" />
-
-<uses-feature
-    android:name="android.hardware.location"
-    android:required="false" />
-```
-
-**Конфигурация поддержки экранов:**
-```xml
-<supports-screens
-    android:smallScreens="true"
-    android:normalScreens="true"
-    android:largeScreens="true"
-    android:xlargeScreens="true" />
-```
-
-**Пользовательские разрешения:**
-```xml
-<permission
-    android:name="com.example.app.CUSTOM_PERMISSION"
-    android:protectionLevel="signature" />
-
-<uses-permission android:name="com.example.app.CUSTOM_PERMISSION" />
-```
-
-**Объявление Service и Receiver:**
-```xml
-<service android:name=".MyService" />
-
-<receiver android:name=".MyBroadcastReceiver">
-    <intent-filter>
-        <action android:name="android.intent.action.BOOT_COMPLETED" />
-    </intent-filter>
-</receiver>
-
-<provider
-    android:name=".MyContentProvider"
-    android:authorities="com.example.app.provider"
-    android:exported="false" />
-```
-
-**Теория Intent Filter:**
-Intent фильтры объявляют, как компоненты могут быть запущены. Они указывают действия, категории и типы данных, которые компонент может обрабатывать, позволяя системе направлять intent к соответствующему компоненту.
-
-**Общие Intent действия:**
-- `MAIN`: Точка входа приложения
-- `VIEW`: Отображение данных пользователю
-- `EDIT`: Редактирование данных
-- `SEND`: Отправка данных другим приложениям
-
 ---
 
 ## Answer (EN)
-
 **AndroidManifest.xml** is the central configuration file that declares app components, permissions, and metadata. It serves as the entry point for the Android system to understand and launch your application.
 
 **Manifest Theory:**
@@ -277,4 +159,3 @@ Intent filters declare how components can be launched. They specify actions, cat
 ### Advanced (Harder)
 - [[q-android-security-practices-checklist--android--medium]] - Security practices
 - [[q-android-build-optimization--android--medium]] - Build configuration
-

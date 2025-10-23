@@ -7,8 +7,7 @@ aliases:
 topic: android
 subtopics:
 - permissions
-- privacy
-- security
+- privacy-sdks
 question_kind: android
 difficulty: medium
 original_language: en
@@ -25,145 +24,11 @@ created: 2025-10-15
 updated: 2025-10-15
 tags:
 - android/permissions
-- android/privacy
-- android/security
-- android14
-- android13
-- privacy
-- photos
-- notifications
-- compatibility
+- android/privacy-sdks
 - difficulty/medium
----# Вопрос (RU)
-> Какие ключевые изменения разрешений в Android 14 и как их реализовать?
-
----
-
-# Question (EN)
-> What are the key permission changes in Android 14 and how do you implement them?
-
-## Ответ (RU)
-
-**Изменения разрешений Android 14** вводят обновления, ориентированные на приватность, требующие тщательной реализации и обратной совместимости.
-
-**Теория изменений разрешений:**
-Android 14 (API 34) и Android 13 (API 33) ввели детализированный доступ к медиа, обязательные разрешения на уведомления и более строгие требования к фоновой геолокации. Эти изменения приоритизируют приватность пользователя при сохранении функциональности приложения.
-
-**1. Photo Picker (Android 13+):**
-Современный подход для выбора медиа без требования разрешений на хранилище.
-
-```kotlin
-// Реализация Photo Picker
-class PhotoPickerManager(private val activity: AppCompatActivity) {
-    private val photoPickerLauncher = activity.registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
-        uri?.let { handlePhoto(it) }
-    }
-
-    fun pickPhoto() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // Разрешение не требуется
-            photoPickerLauncher.launch(
-                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-            )
-        } else {
-            requestLegacyPermission()
-        }
-    }
-}
-```
-
-**2. Детализированные разрешения медиа (Android 13+):**
-Отдельные разрешения для изображений, видео и аудио вместо единого разрешения на хранилище.
-
-```kotlin
-// Детализированные разрешения медиа
-fun getMediaPermissions(needsImages: Boolean, needsVideos: Boolean): Array<String> {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        buildList {
-            if (needsImages) add(Manifest.permission.READ_MEDIA_IMAGES)
-            if (needsVideos) add(Manifest.permission.READ_MEDIA_VIDEO)
-        }.toTypedArray()
-    } else {
-        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-    }
-}
-```
-
-**3. Разрешение на уведомления (Android 13+):**
-Обязательное разрешение POST_NOTIFICATIONS для отправки уведомлений.
-
-```kotlin
-// Разрешение на уведомления
-class NotificationPermissionManager {
-    fun requestNotificationPermission(onResult: (Boolean) -> Unit) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        } else {
-            onResult(true) // Не требуется на старых версиях
-        }
-    }
-}
-```
-
-**4. Фоновая геолокация (Android 11+):**
-Двухэтапный процесс, требующий сначала разрешение на передний план, затем фоновое разрешение.
-
-```kotlin
-// Фоновая геолокация
-class BackgroundLocationManager {
-    fun requestBackgroundLocation(onResult: (Boolean) -> Unit) {
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
-                // Двухэтапный процесс
-                showEducationUI()
-                requestSeparately()
-            }
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
-                // Можно запросить вместе
-                requestWithForeground()
-            }
-        }
-    }
-}
-```
-
-**5. Конфигурация AndroidManifest.xml:**
-
-```xml
-<!-- Уведомления (Android 13+) -->
-<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
-<!-- Детализированные медиа (Android 13+) -->
-<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-
-<!-- Legacy медиа (Android 12 и ниже) -->
-<uses-permission
-    android:name="android.permission.READ_EXTERNAL_STORAGE"
-    android:maxSdkVersion="32" />
-
-<!-- Фоновая геолокация (Android 10+) -->
-<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-```
-
-**Ключевые изменения по версиям:**
-- **Android 14**: Частичный доступ к фото/видео, разрешения Health Connect
-- **Android 13**: Разрешение на уведомления, детализированные разрешения медиа
-- **Android 12**: Приблизительная геолокация, разрешения Bluetooth
-
-**Лучшие практики:**
-- Используйте Photo Picker вместо разрешений на хранилище
-- Запрашивайте уведомления в подходящие моменты
-- Реализуйте двухэтапный процесс фоновой геолокации
-- Обрабатывайте различия версий корректно
-- Тестируйте на нескольких версиях Android
-
 ---
 
 ## Answer (EN)
-
 **Android 14 Permission Changes** introduce privacy-focused updates requiring careful implementation and backward compatibility handling.
 
 **Permission Changes Theory:**
@@ -305,4 +170,3 @@ class BackgroundLocationManager {
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]]
-

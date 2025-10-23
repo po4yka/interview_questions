@@ -1,58 +1,44 @@
 ---
 id: 20251012-122790
 title: Can a Service Communicate With the User / Может ли сервис общаться с пользователем
-aliases: [Can a Service Communicate With the User, Может ли сервис общаться с пользователем]
+aliases:
+- Can a Service Communicate With the User
+- Может ли сервис общаться с пользователем
 topic: android
-subtopics: [service, notifications]
+subtopics:
+- service
+- notifications
 question_kind: android
 difficulty: medium
+original_language: en
+language_tags:
+- en
+- ru
 status: reviewed
 moc: moc-android
-related: [q-android-service-types--android--easy, q-android-services-purpose--android--easy, q-background-vs-foreground-service--android--medium]
+related:
+- q-android-service-types--android--easy
+- q-android-services-purpose--android--easy
+- q-background-vs-foreground-service--android--medium
 created: 2025-10-15
 updated: 2025-10-20
-original_language: en
-language_tags: [en, ru]
-tags: [android/service, android/notifications, foreground-service, difficulty/medium]
----# Вопрос (RU)
-> Может ли сервис взаимодействовать с пользователем? Как корректно показывать информацию?
-
+tags:
+- android/service
+- android/notifications
+- difficulty/medium
 ---
 
+# Вопрос (RU)
+> Может ли сервис общаться с пользователем?
+
 # Question (EN)
-> Can a Service communicate with the user? How should it surface information?
+> Can a Service Communicate With the User?
+
+---
 
 ## Ответ (RU)
 
-- **Прямого UI**: Нет. `Service` не имеет UI; работает в фоне.
-- **Основной канал**: **Уведомления** (в т.ч. foreground service) для событий и контролов.
-- **Другие варианты (косвенно)**:
-  - **Запуск Activity**: только для критичных, инициированных пользователем сценариев (флаги; не мешать UX).
-  - **Bound Service + callbacks**: UI привязывается и получает колбэки; рендерит UI не сервис.
-  - **Broadcast → UI**: сервис шлет broadcast; Activity/Fragment обновляет UI.
-  - **Toast**: избегать для важной информации; лучше уведомления.
-
-### Минимальный сниппет (foreground‑уведомление)
-```kotlin
-class PlayerService : Service() {
-  override fun onCreate() {
-    startForeground(ID, NotificationCompat.Builder(this, CHANNEL)
-      .setContentTitle("Воспроизведение")
-      .setSmallIcon(R.drawable.ic_stat)
-      .build())
-  }
-  override fun onBind(i: Intent?) = null
-  companion object { const val CHANNEL = "player"; const val ID = 1 }
-}
-```
-
-### Лучшие практики
-- Длительная/фоновая работа → foreground service с постоянным уведомлением.
-- Не запускайте Activity внезапно; уважайте контекст пользователя.
-- Обновление UI выполняет слой UI (Activity/Fragment), даже если данные из сервиса.
-- Очищайте биндинги/колбэки, чтобы избежать утечек.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -104,4 +90,3 @@ class PlayerService : Service() {
 
 ### Advanced (Harder)
 - [[q-android-performance-measurement-tools--android--medium]]
-

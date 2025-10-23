@@ -6,8 +6,7 @@ aliases:
 - Назначение Dagger
 topic: android
 subtopics:
-- dependency-injection
-- architecture-patterns
+- di-hilt
 question_kind: android
 difficulty: easy
 original_language: en
@@ -23,8 +22,7 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/dependency-injection
-- android/architecture-patterns
+- android/di-hilt
 - dagger
 - hilt
 - dependency-injection
@@ -32,7 +30,8 @@ tags:
 - difficulty/easy
 source: https://dagger.dev/
 source_note: Dagger official documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Для чего нужен Dagger?
 
 # Question (EN)
@@ -147,6 +146,8 @@ class MainActivity : AppCompatActivity() {
 - Создание компонентов
 - Управление скоупами
 - Интеграцию с Android жизненным циклом
+
+См. также: [[c-dependency-injection]], [[c-software-design-patterns]]
 
 ```kotlin
 @HiltAndroidApp

@@ -18,7 +18,7 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-- q-play-store-publishing--android--medium
+- q-play-store-publishing--distribution--medium
 - q-gradle-basics--android--easy
 - q-play-feature-delivery--android--medium
 created: 2025-10-05
@@ -26,86 +26,12 @@ updated: 2025-10-15
 tags:
 - android/app-bundle
 - android/play-console
-- app-bundle
-- play-store
-- distribution
 - difficulty/easy
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
----# Вопрос (RU)
-> Что вы знаете об App Bundles?
-
----
-
-# Question (EN)
-> What do you know about App Bundles?
-
-## Ответ (RU)
-
-Android App Bundle (AAB) - это формат публикации, который включает скомпилированный код и ресурсы, с делегированием генерации APK в Google Play.
-
-**Ключевые преимущества:**
-
-- **Меньшие загрузки**: Загружаются только код и ресурсы для конкретного устройства
-- **Динамическая доставка**: Функции можно загружать по требованию
-- **Лимит 150MB**: Увеличен с 100MB для сжатых загрузок
-- **Подпись Google**: Автоматическое подписание APK через Google Play
-
-**AAB vs APK:**
-
-| Функция | APK | AAB |
-|---------|-----|-----|
-| Установка | Прямая установка | Должен быть обработан в APK |
-| Оптимизация размера | Нет | Да |
-| Динамическая доставка | Нет | Да |
-| Подпись | Разработчик или Google | Только Google |
-
-**Конфигурация Bundle:**
-
-```kotlin
-// build.gradle.kts
-android {
-    bundle {
-        language { enableSplit = true }
-        density { enableSplit = true }
-        abi { enableSplit = true }
-    }
-}
-```
-
-**Тестирование AAB локально:**
-
-```bash
-# Генерация универсального APK для тестирования
-bundletool build-apks --bundle=app-release.aab --output=app.apks --mode=universal
-
-# Установка на устройство
-bundletool install-apks --apks=app.apks
-```
-
-**Современные зависимости:**
-
-```kotlin
-// Доставка функций (Play Core устарел)
-implementation("com.google.android.play:feature-delivery:2.1.0")
-implementation("com.google.android.play:feature-delivery-ktx:2.1.0")
-
-// Доставка ресурсов
-implementation("com.google.android.play:asset-delivery:2.2.0")
-implementation("com.google.android.play:asset-delivery-ktx:2.2.0")
-```
-
-**Требования:**
-
-- **Обязательно**: AAB требуется для новых приложений с августа 2021
-- **Поддержка APK**: Только для существующих приложений и тестовых треков
-- **Asset packs**: Не учитываются в лимите 150MB
-- **Модули функций**: Опционально, загружаются по требованию
-
 ---
 
 ## Answer (EN)
-
-Android App Bundle (AAB) is a publishing format that includes compiled code and resources, with APK generation deferred to Google Play.
+[[c-app-bundle|Android App Bundle]] (AAB) is a publishing format that includes compiled code and resources, with [[c-apk-generation|APK generation]] deferred to Google Play. [[c-app-distribution|App distribution]] is optimized through dynamic delivery.
 
 **Key Benefits:**
 
@@ -188,4 +114,3 @@ implementation("com.google.android.play:asset-delivery-ktx:2.2.0")
 ### Related (Medium)
 - [[q-play-feature-delivery--android--medium]] - Feature delivery
 - [[q-what-is-intent--android--easy]] - Intent system
-

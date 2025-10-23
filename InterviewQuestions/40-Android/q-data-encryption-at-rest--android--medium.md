@@ -6,7 +6,7 @@ aliases:
 - Шифрование данных в покое
 topic: android
 subtopics:
-- security
+- permissions
 - files-media
 question_kind: android
 difficulty: medium
@@ -23,7 +23,7 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/security
+- android/permissions
 - android/files-media
 - encryption
 - security
@@ -33,7 +33,8 @@ tags:
 - difficulty/medium
 source: https://developer.android.com/guide/topics/security/encryption
 source_note: Android Encryption documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Как реализовать шифрование данных в покое с помощью EncryptedSharedPreferences и SQLCipher для Room? Сравните подходы, влияние на производительность и стратегии управления ключами.
 
 # Question (EN)
@@ -436,6 +437,9 @@ class KeystoreManager {
 - Test on different Android versions
 - Ensure data migration on updates
 - Document used encryption algorithms
+
+**See also:** [[c-encryption]], [[c-aes]]
+
 
 ## Follow-ups
 

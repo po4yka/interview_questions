@@ -9,6 +9,7 @@ subtopics:
 - location
 - networking-http
 - service
+
 question_kind: android
 difficulty: hard
 original_language: en
@@ -26,13 +27,33 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
+- en
+- ru
+-
+- a
+- n
+- d
+- r
+- o
+- i
+- d
+- /
+- l
+- o
+- c
+- a
+- t
+- i
+- o
+- n
+
 - android/location
 - android/networking-http
 - android/service
 - maps
 - realtime
-- difficulty/hard
----# Вопрос (RU)
+- difficulty/hard---
+# Вопрос (RU)
 > Как спроектировать приложение Uber для Android?
 
 # Question (EN)
@@ -171,7 +192,7 @@ rideRepo.observe(rideId).combine(locRepo.observe(driverId)) { r, d -> r to d }
 ### Офлайн
 - Кэширование незавершенных действий; очередь синхронизации; авто-ресенд.
 
-## Ответ (EN)
+## Answer (EN)
 
 Uber involves realtime location, driver matching, pricing, routing, payments, scale, and offline resilience.
 
@@ -264,6 +285,9 @@ Uber involves realtime location, driver matching, pricing, routing, payments, sc
 
 ### Offline
 - Queue + local cache + auto-resend.
+
+**See also:** [[c-microservices]], [[c-real-time-systems]]
+
 
 ## Follow-ups
 - How to implement surge pricing fairly and at scale?

@@ -6,8 +6,8 @@ aliases:
 - Альтернативное распространение
 topic: android
 subtopics:
-- distribution
-- app-store
+- app-bundle
+- play-console
 question_kind: android
 difficulty: medium
 original_language: en
@@ -18,181 +18,18 @@ status: reviewed
 moc: moc-android
 related:
 - q-app-store-optimization--android--medium
-- q-play-store-publishing--android--medium
+- q-play-store-publishing--distribution--medium
 - q-android-app-bundles--android--easy
 created: 2025-10-15
 updated: 2025-10-15
 tags:
-- android/distribution
-- android/app-store
-- distribution
-- app-store
-- apk
-- samsung
-- amazon
-- huawei
+- android/app-bundle
+- android/play-console
 - difficulty/medium
----# Вопрос (RU)
-> Объясните альтернативные каналы распространения приложений помимо Google Play Store. Как распространять приложения через Samsung Galaxy Store, Amazon Appstore, Huawei AppGallery и прямую раздачу APK?
-
----
-
-# Question (EN)
-> Explain alternative app distribution channels beyond Google Play Store. How do you distribute apps through Samsung Galaxy Store, Amazon Appstore, Huawei AppGallery, and direct APK distribution?
-
-## Ответ (RU)
-
-Альтернативные каналы распространения обеспечивают доступ к миллионам пользователей вне экосистемы Google Play, каждый со своими уникальными требованиями и техническими особенностями.
-
-**Samsung Galaxy Store:**
-
-- **Аудитория**: 300M+ пользователей
-- **Функции**: Samsung IAP, интеграция с OneUI, поддержка больших APK
-- **Настройка**: Build variant с Samsung SDK
-
-```kotlin
-// Build variant
-create("samsung") {
-    initWith(getByName("release"))
-    versionNameSuffix = "-samsung"
-    buildConfigField("String", "STORE_NAME", "\"Samsung Galaxy Store\"")
-}
-
-// Samsung IAP
-class SamsungIapManager {
-    fun initialize(onReady: () -> Unit) {
-        iapHelper = IapHelper.getInstance(context)
-        iapHelper?.startSetup { result ->
-            if (result.errorCode == IapHelper.IAP_ERROR_NONE) {
-                onReady()
-            }
-        }
-    }
-}
-```
-
-**Amazon Appstore:**
-
-- **Аудитория**: Fire устройства, некоторые Android устройства
-- **Функции**: Amazon IAP, поддержка Fire TV, Amazon Coins
-- **Настройка**: Интеграция Amazon SDK
-
-```kotlin
-// Amazon IAP
-class AmazonIapManager {
-    fun initialize() {
-        PurchasingService.registerListener(context, object : PurchasingListener {
-            override fun onPurchaseResponse(response: PurchaseResponse) {
-                when (response.requestStatus) {
-                    PurchaseResponse.RequestStatus.SUCCESSFUL -> handlePurchase(response.receipt)
-                }
-            }
-        })
-    }
-}
-```
-
-**Huawei AppGallery:**
-
-- **Аудитория**: 580M+ пользователей (Китай, Европа)
-- **Функции**: Экосистема HMS, устройства без GMS
-- **Настройка**: Интеграция HMS Core
-
-```kotlin
-// Проверка доступности HMS
-class HmsAvailabilityChecker {
-    fun isHmsAvailable(): Boolean {
-        val result = HuaweiApiAvailability.getInstance()
-            .isHuaweiMobileServicesAvailable(context)
-        return result == ConnectionResult.SUCCESS
-    }
-}
-
-// HMS IAP
-class HuaweiIapManager {
-    suspend fun initialize(): Result<Unit> = suspendCancellableCoroutine { continuation ->
-        iapClient.isEnvironmentReady
-            .addOnSuccessListener { continuation.resume(Result.success(Unit)) }
-            .addOnFailureListener { continuation.resume(Result.failure(it)) }
-    }
-}
-```
-
-**Прямое распространение APK:**
-
-- **Случаи использования**: Корпоративные приложения, бета-тестирование, региональные ограничения
-- **Функции**: Механизм самообновления, полный контроль
-- **Настройка**: Подпись APK, разрешения на установку
-
-```kotlin
-// Механизм самообновления
-class AppUpdateManager {
-    suspend fun downloadAndInstallUpdate(updateInfo: UpdateInfo) {
-        val apkFile = File(context.getExternalFilesDir(null), "update.apk")
-        downloadApk(updateInfo.downloadUrl, apkFile)
-        installApk(apkFile)
-    }
-
-    private fun installApk(apkFile: File) {
-        val apkUri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", apkFile)
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(apkUri, "application/vnd.android.package-archive")
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
-        }
-        context.startActivity(intent)
-    }
-}
-```
-
-**Стратегия мульти-магазинов:**
-
-```kotlin
-// Build variants
-productFlavors {
-    googleplay { }
-    samsung { }
-    amazon { }
-    huawei { }
-}
-
-// Унифицированный интерфейс IAP
-interface IapProvider {
-    suspend fun initialize(): Result<Unit>
-    suspend fun purchase(productId: String): Result<Purchase>
-}
-
-// Паттерн фабрики
-class IapProviderFactory {
-    fun getProvider(): IapProvider = when (BuildConfig.FLAVOR) {
-        "samsung" -> SamsungIapProvider()
-        "amazon" -> AmazonIapProvider()
-        "huawei" -> HuaweiIapProvider()
-        else -> GooglePlayIapProvider()
-    }
-}
-```
-
-**Требования по платформам:**
-
-- **Samsung**: Samsung IAP SDK, функции OneUI
-- **Amazon**: Amazon IAP SDK, тестирование на Fire устройствах
-- **Huawei**: HMS Core, проверка доступности в runtime
-- **Прямое**: Подпись APK, разрешения на установку
-
-**Лучшие практики:**
-
-- Используйте build variants для сборок под конкретные магазины
-- Абстрагируйте платформо-специфичные API
-- Тестируйте на каждой платформе перед релизом
-- Реализуйте самообновление для прямого распространения
-- Проверяйте чеки покупок на сервере
-- Обрабатывайте недоступность сервисов gracefully
-
 ---
 
 ## Answer (EN)
-
-Alternative distribution channels provide access to millions of users outside Google Play ecosystem, each with unique requirements and technical considerations.
+Alternative [[c-app-distribution|distribution channels]] provide access to millions of users outside Google Play ecosystem, each with unique requirements and technical considerations. [[c-app-bundle|App bundles]] and [[c-apk-signing|APK signing]] are critical for multi-store distribution.
 
 **Samsung Galaxy Store:**
 
@@ -362,4 +199,3 @@ class IapProviderFactory {
 ### Related (Medium)
 - [[q-gradle-basics--android--easy]] - Build system
 - [[q-what-is-intent--android--easy]] - Intent system
-

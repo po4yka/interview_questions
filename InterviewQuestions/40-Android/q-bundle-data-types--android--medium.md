@@ -1,102 +1,100 @@
 ---
 id: 20251012-122788
 title: Bundle Data Types / Типы данных Bundle
-aliases: [Bundle Data Types, Типы данных Bundle]
+aliases:
+- Bundle Data Types
+- Типы данных Bundle
 topic: android
-subtopics: [activity, fragment]
+subtopics:
+- activity
+- fragment
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: reviewed
 moc: moc-android
-related: [q-android-manifest-file--android--easy, q-android-app-components--android--easy, q-android-project-parts--android--easy]
+related:
+- q-android-manifest-file--android--easy
+- q-android-app-components--android--easy
+- q-android-project-parts--android--easy
 created: 2025-10-15
 updated: 2025-10-20
-tags: [android/activity, android/fragment, data-passing, intent, bundle, difficulty/medium]
+tags:
+- android/activity
+- android/fragment
+- difficulty/medium
 ---
 
 # Вопрос (RU)
-> Что можно класть в `Bundle` и какие есть ограничения/лучшие практики?
+> Типы данных Bundle?
 
 # Question (EN)
-> What can you put into a `Bundle`, and what are the limits/best practices?
+> Bundle Data Types?
 
 ---
 
 ## Ответ (RU)
 
-### Что такое `Bundle`
-- Контейнер «ключ → значение» для передачи данных между `Activity`/`Fragment`/`Service`.
-- Используется в `Intent` (`putExtras`) и `Fragment.arguments`.
+Bundle используется для передачи данных между компонентами Android (Activity, Fragment, Service). Поддерживает ограниченный набор типов данных.
 
-### Поддерживаемые типы (основное)
-- Примитивы и их массивы: `int/long/short/byte/boolean/char/float/double` + соответствующие `*Array`.
-- Строки: `String`, `CharSequence`, массивы/`ArrayList<String|CharSequence>`.
-- `Parcelable` (рекомендуется) и `Serializable` (медленнее).
-- Вложенные `Bundle`, `Binder`, `Size/SizeF`, и др. типы платформы.
+**Поддерживаемые типы**:
+- Примитивы: Int, Long, Float, Double, Boolean, Byte, Char, Short
+- Строки: String, CharSequence
+- Массивы примитивов: IntArray, LongArray, FloatArray, etc.
+- Списки: ArrayList<String>, ArrayList<Int>, etc.
+- Parcelable/Serializable объекты
+- Bundle (вложенные)
 
-### Минимальные примеры
+**Пример**:
 ```kotlin
-val b = Bundle()
-b.putString("name", "Alice")
-b.putInt("age", 25)
-val name = b.getString("name")
-val age = b.getInt("age")
+val bundle = Bundle().apply {
+    putString("key_name", "John")
+    putInt("key_age", 25)
+    putStringArray("key_tags", arrayOf("kotlin", "android"))
+}
+
+// Чтение
+val name = bundle.getString("key_name")
+val age = bundle.getInt("key_age")
 ```
 
-```kotlin
-@Parcelize
-data class User(val id: String, val name: String) : Parcelable
-
-val b = Bundle().apply { putParcelable("user", User("1", "Alice")) }
-// Android 13+ (type‑safe)
-val u = b.getParcelable("user", User::class.java)
-```
-
-### Ограничения и рекомендации
-- Лимит размера транзакции ~1MB: не кладите большие объекты (битмапы/файлы) → передавайте `Uri`/путь/ID.
-- Предпочитайте `Parcelable` вместо `Serializable` (быстрее/меньше аллокаций).
-- Не кладите сложные/тяжелые объекты: `Context`, `ViewModel`, соединения БД.
-- Для общих данных между фрагментами используйте `ViewModel`/хранилище, а в `Bundle` передавайте только ключ/ID.
+**Ограничения**:
+- Максимальный размер: ~1MB (TransactionTooLargeException)
+- Нельзя передавать: функции, активные объекты (Thread, Socket), некоторые системные объекты
+- Для больших данных использовать: URI, файлы, ContentProvider, ViewModel
 
 ## Answer (EN)
 
-### What is a `Bundle`
-- Key–value container for passing data across `Activity`/`Fragment`/`Service`.
-- Used in `Intent` (`putExtras`) and `Fragment.arguments`.
+Bundle is used to pass data between Android components (Activity, Fragment, Service). Supports a limited set of data types.
 
-### Supported types (essentials)
-- Primitives and arrays: `int/long/short/byte/boolean/char/float/double` + matching `*Array`.
-- Strings: `String`, `CharSequence`, arrays/`ArrayList<String|CharSequence>`.
-- `Parcelable` (recommended) and `Serializable` (slower).
-- Nested `Bundle`, `Binder`, `Size/SizeF`, and other platform types.
+**Supported types**:
+- Primitives: Int, Long, Float, Double, Boolean, Byte, Char, Short
+- Strings: String, CharSequence
+- Primitive arrays: IntArray, LongArray, FloatArray, etc.
+- Lists: ArrayList<String>, ArrayList<Int>, etc.
+- Parcelable/Serializable objects
+- Bundle (nested)
 
-### Minimal examples
+**Example**:
 ```kotlin
-val b = Bundle()
-b.putString("name", "Alice")
-b.putInt("age", 25)
-val name = b.getString("name")
-val age = b.getInt("age")
+val bundle = Bundle().apply {
+    putString("key_name", "John")
+    putInt("key_age", 25)
+    putStringArray("key_tags", arrayOf("kotlin", "android"))
+}
+
+// Reading
+val name = bundle.getString("key_name")
+val age = bundle.getInt("key_age")
 ```
 
-```kotlin
-@Parcelize
-data class User(val id: String, val name: String) : Parcelable
-
-val b = Bundle().apply { putParcelable("user", User("1", "Alice")) }
-// Android 13+ (type‑safe)
-val u = b.getParcelable("user", User::class.java)
-```
-
-### Limits and best practices
-- Transaction size ~1MB: avoid large objects (bitmaps/files) → pass `Uri`/path/ID instead.
-- Prefer `Parcelable` over `Serializable` (faster/less memory).
-- Do not put heavy/complex objects: `Context`, `ViewModel`, DB connections.
-- For shared state between Fragments use `ViewModel`/store; put only keys/IDs into `Bundle`.
-
----
+**Limitations**:
+- Max size: ~1MB (TransactionTooLargeException)
+- Cannot pass: functions, live objects (Thread, Socket), some system objects
+- For large data use: URI, files, ContentProvider, ViewModel
 
 ## Follow-ups
 - How to pass large images/files safely (URIs, cache files, ContentProvider)?

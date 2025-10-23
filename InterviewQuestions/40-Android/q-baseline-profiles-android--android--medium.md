@@ -7,7 +7,7 @@ aliases:
 topic: android
 subtopics:
 - performance-startup
-- build-optimization
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
@@ -17,36 +17,34 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-- q-app-startup-optimization--performance--medium
-- q-app-size-optimization--performance--medium
+- q-app-startup-optimization--android--medium
+- q-app-size-optimization--android--medium
 - q-android-build-optimization--android--medium
 created: 2025-10-15
 updated: 2025-10-15
 tags:
 - android/performance-startup
-- android/build-optimization
-- baseline-profiles
-- aot
-- optimization
-- app-startup
+- android/gradle
 - difficulty/medium
----# Вопрос (RU)
-> Что такое Baseline Profiles в Android? Как они улучшают производительность приложения и как их генерировать?
-
 ---
 
+# Вопрос (RU)
+> Что такое Baseline Profiles в Android и как они работают?
+
 # Question (EN)
-> What are Baseline Profiles in Android? How do they improve app performance and how do you generate them?
+> What are Baseline Profiles in Android and how do they work?
+
+---
 
 ## Ответ (RU)
 
 ### Что такое Baseline Profiles
 
-**Теория**: Baseline Profiles сообщают Android Runtime (ART), какой код предварительно скомпилировать (AOT) при установке, сокращая время запуска и jank во время критических пользовательских сценариев.
+**Теория**: Baseline Profiles сообщают Android Runtime (ART), какие пути кода нужно предварительно скомпилировать (AOT) во время установки, сокращая время запуска и устраняя рывки во время критических пользовательских сценариев.
 
-**Как работает**:
+**Как это работает**:
 - Традиционно: Запуск приложения → Интерпретация байткода → Профилирование → JIT компиляция → Быстрое выполнение
-- С профилем: Установка приложения → AOT компиляция профилированного кода → Запуск приложения → Немедленное быстрое выполнение
+- С профилем: Установка приложения → AOT компиляция профилированного кода → Запуск приложения → Сразу быстрое выполнение
 
 ### Влияние на производительность
 
@@ -54,88 +52,26 @@ tags:
 - Холодный запуск: на 20-40% быстрее
 - Тёплый запуск: на 15-30% быстрее
 - Первое взаимодействие: на 30-50% быстрее
-- Снижение jank: на 40-60% меньше пропущенных кадров
+- Уменьшение рывков: на 40-60% меньше пропущенных кадров
 
 ### Реализация
 
-**Настройка (build.gradle.kts)**:
-```kotlin
-// Теория: Включить плагин baseline profile для AOT компиляции
-plugins {
-    id("androidx.baselineprofile")
-}
-
-android {
-    buildTypes {
-        create("benchmark") {
-            initWith(getByName("release"))
-            matchingFallbacks += listOf("release")
-        }
-    }
-}
-```
-
-**Генерация профиля**:
-```kotlin
-// Теория: Тестировать критические пользовательские сценарии для генерации профиля
-@RunWith(AndroidJUnit4::class)
-class BaselineProfileGenerator {
-
-    @get:Rule
-    val baselineProfileRule = BaselineProfileRule()
-
-    @Test
-    fun generate() = baselineProfileRule.collect(
-        packageName = "com.example.app"
-    ) {
-        // Критический пользовательский сценарий
-        pressHome()
-        startActivityAndWait()
-        device.findObject(By.text("Home")).click()
-        device.findObject(By.text("Profile")).click()
-    }
-}
-```
-
-**Формат профиля**:
-```
-# Сгенерированный baseline-prof.txt
-HSPLcom/example/app/MainActivity;->onCreate(Landroid/os/Bundle;)V
-HSPLcom/example/app/viewmodel/HomeViewModel;-><init>()V
-Lcom/example/app/repository/ArticleRepository;->getArticles()Ljava/util/List;
-
-# Флаги: H=Hot, S=Startup, P=Post-startup, L=Ссылка на класс
-```
-
-**Верификация**:
-```kotlin
-// Теория: Проверить установлен ли профиль и скомпилирован ли
-class ProfileVerifier {
-    fun checkProfileInstallation(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val status = ProfileVerifier.getCompilationStatusAsync().get()
-            Log.d("Profile", "Скомпилирован с профилем: ${status.isCompiledWithProfile}")
-        }
-    }
-}
-```
+(См. код в английской секции)
 
 ### Требования и лучшие практики
 
 **Требования**:
-- Android 9+ (API 28) для полной поддержки
+- Android 9+ (API 28) для полных преимуществ
 - Android 7+ (API 24) минимальная поддержка
-- Release сборка с включенным R8/ProGuard
+- Release сборка с включённым R8/ProGuard
 
 **Лучшие практики**:
 - Профилировать только критические пользовательские сценарии
-- Размер профиля менее 200KB
-- Регенерировать при мажорных релизах
+- Держать размер профиля меньше 200KB
+- Перегенерировать при major релизах
 - Тестировать на реальных устройствах, не эмуляторах
-- Верифицировать установку в production
+- Проверять установку в продакшене
 - Комбинировать с другими оптимизациями запуска
-
----
 
 ## Answer (EN)
 

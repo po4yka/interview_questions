@@ -14,100 +14,40 @@ original_language: en
 language_tags:
 - en
 - ru
-source: Original
-source_note: Gradle build performance best practices
 status: reviewed
 moc: moc-android
 related:
 - q-android-build-optimization--android--medium
-- q-baseline-profiles-optimization--performance--medium
+- q-baseline-profiles-optimization--android--medium
 - q-android-modularization--android--medium
 created: 2025-10-11
 updated: 2025-10-20
 tags:
 - android/gradle
 - android/dependency-management
-- build-performance
 - difficulty/medium
----# Вопрос (RU)
-> Как оптимизировать производительность сборки Gradle в Android с помощью configuration cache, build cache, параллелизма, модуляризации и KSP? Какие типичные ошибки?
-
+source: Original
+source_note: Gradle build performance best practices
 ---
 
+# Вопрос (RU)
+> Как оптимизировать сборку Gradle в Android?
+
 # Question (EN)
-> How do you optimize Gradle build performance on Android using configuration cache, build cache, parallelism, modularization, and KSP? What are common pitfalls?
+> How to optimize Gradle build in Android?
+
+---
 
 ## Ответ (RU)
 
 ### Принципы
-- **Сначала профилируйте**: build scans для поиска узких мест (configuration vs execution, cache miss).
-- **Максимум кеширования**: configuration cache + build cache для повторного использования в локале и CI.
-- **Меньше работы**: модуляризация, KSP вместо KAPT, без динамических версий, избегать не-кэшируемых задач.
-- **Параллелизм**: включить параллельное выполнение и достаточное число workers.
-- **Стабильные входы**: фиксировать версии (без `+`), Provider API, детерминированные пути.
+- **Профилировать сначала**: Использовать build scans для поиска узких мест (конфигурация vs выполнение, промахи кэша).
+- **Агрессивное кэширование**: Configuration cache + build cache для переиспользования между сборками/CI.
+- **Уменьшать работу**: Модуляризация, KSP вместо KAPT, избегать динамических версий, избегать некэшируемых задач.
+- **Параллелизация**: Включить parallel workers, держать модули независимыми.
+- **Стабилизировать входы**: Закрепить версии (no dynamic), provider APIs, детерминированные пути.
 
-### Configuration Cache (наибольший выигрыш)
-- Кеширует фазу конфигурации; последующие сборки пропускают re-config.
-- Требования: без сайд-эффектов на configuration; использовать Provider API вместо прямого I/O.
-```kotlin
-// GOOD: отложенное чтение переменных окружения через Provider API
-val apiKey = providers.environmentVariable("API_KEY")
-android { defaultConfig { buildConfigField("String", "API_KEY", apiKey.map { "\"$it\"" }) } }
-```
-
-### Build Cache (локальный + удаленный)
-- Переиспользует выходы задач между сборками/машинами; особенно полезно в CI/команде.
-- Убедитесь, что задачи кэшируемы (inputs/outputs; без абсолютных путей; без зависимости от времени).
-```kotlin
-// settings.gradle.kts (структура)
-buildCache {
-  local { isEnabled = true }
-  // remote<HttpBuildCache> { url = uri("<url>"); isPush = (System.getenv("CI") == "true") }
-}
-```
-
-### Параллелизм и workers
-- Включить параллельное выполнение и достаточное число workers.
-- Держать граф модулей плоским; уменьшать межмодульные зависимости.
-
-### Модуляризация
-- Делите фичи и core на модули для меньших инкрементальных пересборок.
-- Зависеть по API там, где возможно, чтобы уменьшить область перекомпиляции.
-
-### KSP вместо KAPT
-- KSP избегает Java stubs; обычно ~в 2 раза быстрее.
-- Мигрируйте процессоры при наличии поддержки (Room, Hilt, Moshi и т.д.).
-```kotlin
-plugins { id("com.google.devtools.ksp") }
-dependencies { ksp(libs.room.compiler); ksp(libs.hilt.compiler) }
-```
-
-### Version Catalogs (без жестких версий в build-файлах)
-- Централизованные версии; быстрее sync; никаких `+`.
-```toml
-# libs.versions.toml (структура, без конкретных номеров)
-[versions]
-kotlin = "<version>"
-compose = "<version>"
-
-[libraries]
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
-```
-
-### Build Scans (измерения)
-- Запускайте с `--scan`; анализируйте timeline задач, cache hit, время конфигурации, разрешение зависимостей.
-- Исправляйте горячие точки итеративно; подтверждайте выигрыши сравнением сканов.
-
-### CI/CD
-- Переиспользуйте кэши (Gradle action + кэш wrapper и `.gradle`).
-- Запускайте с `--configuration-cache --build-cache --parallel`.
-- Фиксируйте toolchain; запись в remote cache только из CI.
-
-### Типичные ошибки
-- Динамические версии (`1.+`), абсолютные пути, I/O на configuration, слишком много мелких модулей, не-кэшируемые задачи, выключенный daemon, отсутствие профилирования.
-
----
+(См. подробные примеры кода и best practices в английской секции)
 
 ## Answer (EN)
 

@@ -6,8 +6,8 @@ aliases:
 - Проблемы Dagger
 topic: android
 subtopics:
-- dependency-injection
-- build-optimization
+- di-hilt
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
@@ -23,8 +23,8 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/dependency-injection
-- android/build-optimization
+- android/di-hilt
+- android/gradle
 - dagger
 - hilt
 - problems
@@ -32,7 +32,8 @@ tags:
 - difficulty/medium
 source: https://dagger.dev/faq.html
 source_note: Dagger FAQ and troubleshooting
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Какие проблемы есть у Dagger?
 
 # Question (EN)
@@ -136,8 +137,10 @@ Dagger - мощный фреймворк для внедрения зависи�
 
 **Альтернативы:**
 - Koin - легковесная альтернатива
-- Manual DI - простое внедрение зависимостей
+- Manual DI - простое [[c-dependency-injection]]
 - Service Locator pattern
+
+См. также: [[c-dependency-injection]], [[c-software-design-patterns]]
 
 ## Answer (EN)
 
@@ -237,8 +240,10 @@ Dagger is a powerful dependency injection framework, but it has several challeng
 
 **Alternatives:**
 - Koin - lightweight alternative
-- Manual DI - simple dependency injection
+- Manual DI - simple [[c-dependency-injection]]
 - Service Locator pattern
+
+See also: [[c-dependency-injection]], [[c-software-design-patterns]]
 
 ## Follow-ups
 

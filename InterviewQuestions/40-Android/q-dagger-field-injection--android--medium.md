@@ -6,8 +6,7 @@ aliases:
 - Инъекция полей Dagger
 topic: android
 subtopics:
-- dependency-injection
-- architecture-patterns
+- di-hilt
 question_kind: android
 difficulty: medium
 original_language: en
@@ -19,20 +18,16 @@ moc: moc-android
 related:
 - q-dagger-build-time-optimization--android--medium
 - q-hilt-components-scope--android--medium
-- q-dagger-custom-scopes--di--hard
+- q-dagger-custom-scopes--android--hard
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/dependency-injection
-- android/architecture-patterns
-- dagger
-- hilt
-- field-injection
-- dependency-injection
+- android/di-hilt
 - difficulty/medium
 source: https://dagger.dev/api/latest/dagger/Inject.html
 source_note: Dagger Inject annotation documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Какие особенности инъекции в поле при помощи Dagger?
 
 # Question (EN)

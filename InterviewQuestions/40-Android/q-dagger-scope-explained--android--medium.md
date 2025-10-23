@@ -6,7 +6,7 @@ aliases:
 - Объяснение скоупов Dagger
 topic: android
 subtopics:
-- dependency-injection
+- di-hilt
 - lifecycle
 question_kind: android
 difficulty: medium
@@ -17,13 +17,13 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-- q-dagger-custom-scopes--di--hard
+- q-dagger-custom-scopes--android--hard
 - q-dagger-framework-overview--android--hard
 - q-dagger-main-elements--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/dependency-injection
+- android/di-hilt
 - android/lifecycle
 - dagger
 - hilt
@@ -32,7 +32,8 @@ tags:
 - difficulty/medium
 source: https://dagger.dev/api/latest/dagger/Scope.html
 source_note: Dagger Scope API documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Что такое scope в Dagger и как они работают?
 
 # Question (EN)
@@ -391,6 +392,8 @@ class Database @Inject constructor() // Should be @Singleton
 @Singleton
 class UserAdapter @Inject constructor() // Should be @FragmentScoped
 ```
+
+**See also:** [[c-dependency-injection]], [[c-singleton-pattern]]
 
 ## Follow-ups
 

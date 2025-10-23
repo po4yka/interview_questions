@@ -7,7 +7,7 @@ aliases:
 topic: android
 subtopics:
 - ui-compose
-- performance
+- performance-memory
 question_kind: android
 difficulty: hard
 original_language: en
@@ -17,14 +17,14 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-- q-compose-stability-skippability--jetpack-compose--hard
+- q-compose-stability-skippability--android--hard
 - q-compose-performance-optimization--android--hard
-- q-compose-slot-table-recomposition--jetpack-compose--hard
+- q-compose-slot-table-recomposition--android--hard
 created: 2025-10-20
 updated: 2025-10-20
 tags:
 - android/ui-compose
-- android/performance
+- android/performance-memory
 - compose
 - state
 - snapshot
@@ -34,7 +34,8 @@ tags:
 - difficulty/hard
 source: https://developer.android.com/jetpack/compose/state
 source_note: Android Compose State documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Объясните систему снимков (snapshot system) Compose. Как derivedStateOf оптимизирует перекомпозиции?
 
 # Question (EN)
@@ -325,6 +326,9 @@ fun OptimizedList(items: List<String>) {
 - Apply for computing aggregated values
 - Avoid side effects in derivedStateOf
 - Document complex computations
+
+**See also:** [[c-immutability]], [[c-snapshot-isolation]]
+
 
 ## Follow-ups
 

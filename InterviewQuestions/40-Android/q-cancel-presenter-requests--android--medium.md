@@ -6,90 +6,41 @@ aliases:
 - Отмена запросов презентера
 topic: android
 subtopics:
-- architecture-mvp
+- architecture-clean
 - lifecycle
 - coroutines
 question_kind: android
 difficulty: medium
-status: reviewed
-moc: moc-android
-related:
-- q-activity-lifecycle-methods--android--medium
-- q-android-async-operations-android--android--medium
-- q-android-testing-strategies--android--medium
-created: 2025-10-15
-updated: 2025-10-20
 original_language: en
 language_tags:
 - en
 - ru
+status: reviewed
+moc: moc-android
+related:
+- q-activity-lifecycle-methods--android--medium
+- q-async-operations-android--android--medium
+- q-android-testing-strategies--android--medium
+created: 2025-10-15
+updated: 2025-10-20
 tags:
-- android/architecture-mvp
+- android/architecture-clean
 - android/lifecycle
-- coroutines
-- rxjava
-- cancellation
-- difficulty/medium
 - android/coroutines
----# Вопрос (RU)
-> Какие механизмы презентер может использовать для отмены выполняемой работы и предотвращения обновления уничтоженного View?
-
+- difficulty/medium
 ---
 
+# Вопрос (RU)
+> Отмена запросов презентера?
+
 # Question (EN)
-> What mechanisms can a Presenter use to cancel in-flight work and avoid updating a dead View?
+> Cancel Presenter Requests?
+
+---
 
 ## Ответ (RU)
 
-### Цели
-- Не обновлять UI после уничтожения/паузы View
-- Избежать утечек и лишней работы
-- Централизовать отмену по событиям жизненного цикла
-
-### Базовые стратегии (сначала теория)
-- **Владение**: Презентер владеет дескриптором отмены (Job/CompositeDisposable) и очищает его в `onStop/onDestroy`.
-- **Осведомлён о жизненном цикле**: Реагирует на lifecycle; не держит жёсткую ссылку на View без проверок.
-- **Единая точка учета**: Вся асинхронщина регистрируется в дескрипторе отмены.
-
-### Минимальные реализации
-
-- Coroutines (предпочтительно):
-```kotlin
-class Presenter {
-  private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-
-  fun load() = scope.launch { view?.show(dataRepo.fetch()) }
-  fun onStop() { scope.coroutineContext.cancelChildren() }
-  fun onDestroy() { scope.cancel() }
-}
-```
-
-- RxJava:
-```kotlin
-class Presenter {
-  private val bag = CompositeDisposable()
-  fun load() { bag += repo.get().subscribe(view::show, view::error) }
-  fun onStop() { bag.clear() } // отмена текущих, сохраняем bag
-  fun onDestroy() { bag.dispose() }
-}
-```
-
-- Callback/Executor:
-```kotlin
-class Presenter {
-  private var future: Future<*>? = null
-  fun load() { future = executor.submit { /* work */ } }
-  fun onStop() { future?.cancel(true) }
-}
-```
-
-### Рекомендации
-- Проверяйте/ослабляйте ссылку на View перед рендером; лучше: интерфейс-«заглушка» после detach.
-- Используйте main‑safe диспетчер (Main.immediate), чтобы не рендерить устаревшие post’ы.
-- Разделяйте `onStop` (cancel children) и `onDestroy` (cancel scope) для переиспользования при resume.
-- В тестах утверждайте отсутствие эмиссий после detach.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -161,4 +112,3 @@ class Presenter {
 
 ### Advanced (Harder)
 - [[q-android-performance-measurement-tools--android--medium]]
-

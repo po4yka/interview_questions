@@ -6,7 +6,7 @@ aliases:
 - Типы запуска приложения Android
 topic: android
 subtopics:
-- performance
+- performance-memory
 - app-startup
 - lifecycle
 question_kind: android
@@ -24,163 +24,13 @@ related:
 created: 2025-10-15
 updated: 2025-10-15
 tags:
-- android/performance
+- android/performance-memory
 - android/app-startup
 - android/lifecycle
-- performance
-- app-startup
-- cold-start
-- warm-start
-- hot-start
-- optimization
 - difficulty/medium
----# Вопрос (RU)
-> В чем разница между горячим, теплым и холодным запуском приложения в Android? Как оптимизировать каждый тип?
-
----
-
-# Question (EN)
-> What are the differences between hot, warm, and cold app starts in Android? How do you optimize each type?
-
-## Ответ (RU)
-
-**Типы запуска** различают состояния по памяти/процессу: холодный (нет процесса), тёплый (процесс жив, Activity пересоздаётся), горячий (возобновление Activity). Оптимизируйте под тип с измеримыми бюджетами и жёсткой дисциплиной главного потока.
-
-### Термины и метрики
-- **TTID (Time To Initial Display)**: первый кадр; пользователь видит UI.
-- **TTFD (Time To Full Display)**: UI полностью интерактивен; сигнал — `reportFullyDrawn()`.
-- **Источники правды**: Android Vitals (прод), Perfetto/Startup Profiler (dev), Macrobenchmark (CI).
-
-```kotlin
-// Маркер полного отображения (TTFD)
-class MainActivity : AppCompatActivity() {
-    override fun onResume() {
-        super.onResume()
-        window.decorView.post { reportFullyDrawn() }
-    }
-}
-```
-
-```kotlin
-// Сбор метрик кадров (jank, длинные кадры)
-class MainActivity : AppCompatActivity() {
-    private val aggregator = FrameMetricsAggregator()
-    override fun onStart() { super.onStart(); aggregator.add(this) }
-    override fun onStop() {
-        val metrics = aggregator.remove(this)
-        super.onStop()
-    }
-}
-```
-
-### Холодный старт (нет процесса)
-- **Цель**: минимизировать работу на критическом пути (старт процесса → первый кадр).
-- **Тактики**:
-  - Откладывать не критичные SDK; отключать авто-инициализации (`androidx.startup`).
-  - Удалять/объединять лишние `ContentProvider`; каждый добавляет IPC на старте.
-  - Держать `Application.onCreate` быстрым; IO не на главном; предрасчёты не на главном.
-  - Поставлять и устанавливать **baseline profiles** против холодного JIT-прогрева.
-
-```kotlin
-// Политики главного потока на старте
-class App : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
-            .detectAll().penaltyLog().build())
-        initCrashReporting()
-        Handler(Looper.getMainLooper()).post { initAnalytics(); initAds() }
-    }
-}
-```
-
-```kotlin
-// Трассировка критических секций для Perfetto
-object StartupTrace {
-    inline fun <T> section(name: String, block: () -> T): T {
-        Trace.beginSection(name); return try { block() } finally { Trace.endSection() }
-    }
-}
-```
-
-### Тёплый старт (процесс жив, Activity пересоздаётся)
-- **Цель**: восстановить UI/состояние с минимумом работы.
-- **Тактики**:
-  - `ViewModel` + `SavedStateHandle`, чтобы избегать пересчётов.
-  - Класть в `savedInstanceState` только необходимое (бережём байты).
-  - Избегать глубоких иерархий; ViewBinding/Compose.
-
-```kotlin
-class MainVm(state: SavedStateHandle) : ViewModel() {
-    val uiState = state.getLiveData("ui", defaultState())
-}
-
-class MainActivity : AppCompatActivity() {
-    private val vm by viewModels<MainVm>()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        savedInstanceState?.getString("q")?.let { restoreQuery(it) }
-    }
-}
-```
-
-### Горячий старт (возобновление Activity)
-- **Цель**: держать `onResume` почти пустым; коалесцировать обновления.
-- **Тактики**:
-  - `repeatOnLifecycle` для возобновления потоков.
-  - Дебаунс тяжёлой работы UI; батчить обновления модели.
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onResume() {
-        super.onResume()
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) { refreshIfStale() }
-        }
-    }
-}
-```
-
-### Baseline Profiles (критично для холодного старта)
-- Предкомпиляция «горячих» путей (загрузка классов, DI, первый экран) снижает холодный JIT.
-- Генерируйте Macrobenchmark; ставьте через `profileinstaller`, чтобы Store ставил профили.
-
-```kotlin
-// Пример Macrobenchmark (измерение и генерация профилей)
-class StartupBench {
-    @get:Rule val rule = MacrobenchmarkRule()
-    @Test fun cold() = rule.measureRepeated(
-        packageName = "com.example.app",
-        metrics = listOf(StartupTimingMetric()),
-        startupMode = StartupMode.COLD,
-        iterations = 5
-    ) { startActivityAndWait() }
-}
-```
-
-### Паттерны старта для Compose
-- Ленивая композиция; избегать тяжёлых `LaunchedEffect` в корне.
-- `remember/rememberSaveable` для переживания тёплых стартов.
-
-```kotlin
-@Composable
-fun MainScreen(vm: MainVm) {
-    val state by vm.uiState.observeAsState()
-    LazyColumn { items(state.items) { ItemRow(it) } }
-}
-```
-
-### Ограничения и бюджеты
-- **Бюджеты**: Холодный < 500мс, Тёплый < 300мс, Горячий < 100мс (зависят от девайса).
-- **Ни одного дискового/сетевого IO** на пути старта главного потока.
-- **≤ 1 ContentProvider** на критическом пути; ревью новых SDK.
-- **CI**: порог macrobench + алерт на регрессии (провал сборки при дрейфе).
-
 ---
 
 ## Answer (EN)
-
 **App Start Types** categorize launches by memory/process state: cold (no process), warm (process alive, Activity recreated), hot (Activity resumed). Optimize per type with measurable budgets and strict main-thread discipline.
 
 ### Terminology and Metrics
@@ -343,4 +193,3 @@ fun MainScreen(vm: MainVm) {
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]]
-

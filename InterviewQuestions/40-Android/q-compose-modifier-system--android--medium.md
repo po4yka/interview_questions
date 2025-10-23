@@ -7,96 +7,40 @@ aliases:
 topic: android
 subtopics:
 - ui-compose
-- performance
+- performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
 - en
 - ru
-source: https://developer.android.com/jetpack/compose/modifiers
-source_note: Official Compose modifier docs
 status: reviewed
 moc: moc-android
 related:
-- q-animated-visibility-vs-content--jetpack-compose--medium
-- q-compose-gesture-detection--jetpack-compose--medium
-- q-compose-compiler-plugin--jetpack-compose--hard
+- q-animated-visibility-vs-content--android--medium
+- q-compose-gesture-detection--android--medium
+- q-compose-compiler-plugin--android--hard
 created: 2025-10-06
 updated: 2025-10-20
 tags:
 - android/ui-compose
-- compose/modifiers
-- performance
+- android/performance-memory
 - difficulty/medium
-- android/performance
----# Вопрос (RU)
-> Как работает система Modifier в Jetpack Compose и почему порядок влияет на поведение и производительность?
-
+source: https://developer.android.com/jetpack/compose/modifiers
+source_note: Official Compose modifier docs
 ---
 
+# Вопрос (RU)
+> Система Modifier в Compose?
+
 # Question (EN)
-> How does the Modifier system work in Jetpack Compose, and why does order matter for performance and behavior?
+> Modifier System in Compose?
+
+---
 
 ## Ответ (RU)
 
-### Что такое Modifier
-- Упорядоченная, неизменяемая цепочка, декорирующая/добавляющая поведение
-- Влияет на фазы measure, layout и draw
-
-### Модель выполнения
-- Measure/layout: сверху вниз
-- Draw: снизу вверх
-
-### Эффекты порядка (минимальные паттерны)
-Padding vs background
-```kotlin
-// Фон покрывает внутреннюю область (padding снаружи)
-Modifier.padding(16.dp).background(Color.Red).size(100.dp)
-// Фон на всю область (padding внутри)
-Modifier.background(Color.Red).padding(16.dp).size(100.dp)
-```
-Область клика
-```kotlin
-// Маленькая зона (48×48)
-Modifier.size(48.dp).clickable { }.padding(12.dp)
-// Большая зона (включает padding)
-Modifier.padding(12.dp).clickable { }.size(48.dp)
-```
-Clip перед background
-```kotlin
-Modifier.clip(CircleShape).background(Color.Red) // Скруглённый фон
-```
-Ранние ограничения
-```kotlin
-Modifier.size(100.dp).background(Color.Blue).padding(8.dp)
-```
-
-### Лучшие практики
-- `modifier: Modifier = Modifier` — первым параметром; применять модификатор пользователя первым в цепочке
-- Переиспользовать цепочки; избегать ветвления; использовать `.then(...)`
-- Предпочитать draw‑модификаторы для эффектов; кешировать дорогие объекты
-- Избегать глубоких цепочек и лишних intrinsic‑мер
-
-### Минимальные примеры
-Единая цепочка с условиями
-```kotlin
-val base = Modifier.size(100.dp)
-val mod = base
-  .then(if (isClickable) Modifier.clickable { onClick() } else Modifier)
-  .then(if (isSelected) Modifier.border(2.dp, Color.Blue) else Modifier)
-Box(mod)
-```
-Избежать перерасчёта при рекомпозиции
-```kotlin
-@Composable
-fun PriceTag(amount: BigDecimal) {
-  val text = remember(amount) { formatter.format(amount) }
-  Text(text)
-}
-```
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -179,4 +123,3 @@ fun PriceTag(amount: BigDecimal) {
 - [[q-compose-compiler-plugin--android--hard]]
 - [[q-compose-custom-layout--android--hard]]
 - [[q-compose-lazy-layout-optimization--android--hard]]
-

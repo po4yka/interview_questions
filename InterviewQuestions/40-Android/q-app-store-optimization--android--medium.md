@@ -6,9 +6,9 @@ aliases:
 - Оптимизация App Store
 topic: android
 subtopics:
-- distribution
-- marketing
-- aso
+- app-bundle
+- engagement-retention
+- play-console
 question_kind: android
 difficulty: medium
 original_language: en
@@ -18,206 +18,19 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-- q-alternative-distribution--distribution--medium
+- q-alternative-distribution--android--medium
 - q-android-app-bundles--android--easy
 - q-android-app-components--android--easy
 created: 2025-10-15
 updated: 2025-10-15
 tags:
-- android/distribution
-- android/marketing
-- android/aso
-- distribution
-- marketing
-- aso
-- playstore
+- android/app-bundle
+- android/engagement-retention
+- android/play-console
 - difficulty/medium
----# Вопрос (RU)
-> Как оптимизировать страницы Android приложений в Google Play?
-
----
-
-# Question (EN)
-> How do you optimize Android app store listings for Google Play?
-
-## Ответ (RU)
-
-**Оптимизация App Store (ASO)** улучшает обнаруживаемость приложений и конверсию через оптимизацию метаданных, визуальных материалов и тестирование на основе данных.
-
-**Теория ASO:**
-Алгоритм Play Store ранжирует приложения по релевантности, качеству и вовлеченности пользователей. Оптимизированные метаданные увеличивают органическую видимость, а убедительные визуалы улучшают конверсию. Локализация расширяет охват рынка, A/B тестирование валидирует стратегии оптимизации.
-
-**1. Оптимизация метаданных**
-
-**Теория**: Название и описание приложения напрямую влияют на ранжирование в поиске и конверсию пользователей. Название должно включать основной ключевой запрос, описание должно подчеркивать преимущества над функциями, ключевые слова должны соответствовать поисковым намерениям.
-
-```xml
-<!-- strings.xml - метаданные Play Store -->
-<resources>
-    <!-- Название: Основной ключевой запрос + бренд (макс 50 символов) -->
-    <string name="play_store_title">TaskFlow - Список дел и менеджер задач</string>
-
-    <!-- Краткое описание: Зацепка + польза (макс 80 символов) -->
-    <string name="play_store_short_desc">Организуйте задачи, повысьте продуктивность</string>
-
-    <!-- Полное описание: Структура для конверсии -->
-    <string name="play_store_description">
-        TaskFlow - Ультимативное приложение продуктивности
-
-        ОСНОВНЫЕ ФУНКЦИИ:
-        • Умное управление задачами с приоритетами
-        • Командная работа и обмен
-        • Аналитика продуктивности и отчеты
-        • Офлайн режим и синхронизация
-
-        ПОЧЕМУ TASKFLOW:
-        • Интерфейс Material Design 3
-        • Молниеносная производительность
-        • Фокус на приватности (без рекламы)
-        • Регулярные обновления
-
-        Скачайте сейчас и повысьте продуктивность!
-    </string>
-</resources>
-```
-
-**2. Визуальные материалы**
-
-**Теория**: Скриншоты и видео - основные драйверы конверсии. Первый скриншот определяет первое впечатление, последующие скриншоты демонстрируют ключевые функции, видео показывает функциональность приложения. Визуальная иерархия направляет внимание пользователя к ключевым преимуществам.
-
-```kotlin
-// Реализация стратегии скриншотов
-class ScreenshotGenerator {
-    fun generateStoreAssets(context: Context) {
-        // 1. Главный скриншот - основное ценностное предложение
-        generateHeroScreenshot(context, "main_screen")
-
-        // 2. Скриншоты функций - ключевая функциональность
-        generateFeatureScreenshots(context, listOf(
-            "task_creation", "team_collaboration", "analytics"
-        ))
-
-        // 3. Видео превью - приложение в действии
-        generateVideoPreview(context, "app_demo")
-    }
-}
-
-// Спецификации материалов
-object StoreAssets {
-    const val SCREENSHOT_COUNT = 8
-    const val SCREENSHOT_WIDTH = 1080
-    const val SCREENSHOT_HEIGHT = 1920
-    const val VIDEO_DURATION_SECONDS = 30
-}
-```
-
-**3. Стратегия локализации**
-
-**Теория**: Локализованные страницы улучшают обнаруживаемость на целевых рынках и увеличивают конверсию. Культурная адаптация выходит за рамки перевода - учитывайте местные предпочтения, способы оплаты и культурные ссылки.
-
-```kotlin
-// Реализация локализации
-class LocalizationManager {
-    fun localizeStoreListing(locale: Locale): StoreListing {
-        return StoreListing(
-            title = getLocalizedTitle(locale),
-            description = getLocalizedDescription(locale),
-            keywords = getLocalizedKeywords(locale),
-            screenshots = getLocalizedScreenshots(locale),
-            pricing = getLocalizedPricing(locale)
-        )
-    }
-
-    private fun getLocalizedTitle(locale: Locale): String {
-        return when (locale.language) {
-            "es" -> "TaskFlow - Lista de Tareas"
-            "fr" -> "TaskFlow - Gestionnaire de Tâches"
-            "de" -> "TaskFlow - Aufgabenmanager"
-            else -> "TaskFlow - Task Manager"
-        }
-    }
-}
-```
-
-**4. A/B тестирование**
-
-**Теория**: Оптимизация страницы приложения требует решений на основе данных. A/B тестирование валидирует гипотезы о названии, описании, скриншотах и ценообразовании. Тестируйте одну переменную за раз, проводите тесты достаточное время, измеряйте метрики конверсии.
-
-```kotlin
-// Реализация A/B тестирования
-class StoreListingTester {
-    fun runABTest(testConfig: ABTestConfig): TestResult {
-        val variantA = createVariantA(testConfig)
-        val variantB = createVariantB(testConfig)
-
-        return TestResult(
-            variantA = trackMetrics(variantA),
-            variantB = trackMetrics(variantB),
-            duration = testConfig.duration,
-            significance = calculateSignificance()
-        )
-    }
-
-    private fun trackMetrics(variant: StoreVariant): Metrics {
-        return Metrics(
-            impressions = variant.impressions,
-            installs = variant.installs,
-            conversionRate = variant.installs / variant.impressions,
-            retention = variant.day1Retention
-        )
-    }
-}
-```
-
-**5. Отслеживание метрик**
-
-**Теория**: Успех ASO требует непрерывного мониторинга ключевых метрик. Органический трафик указывает на обнаруживаемость, конверсия показывает эффективность страницы, метрики удержания валидируют качество приложения. Отслеживайте метрики Play Console и стороннюю аналитику.
-
-```kotlin
-// Отслеживание метрик
-class ASOMetricsTracker {
-    fun trackStoreMetrics(): StoreMetrics {
-        return StoreMetrics(
-            // Метрики обнаружения
-            organicInstalls = getOrganicInstalls(),
-            searchRankings = getSearchRankings(),
-            keywordVisibility = getKeywordVisibility(),
-
-            // Метрики конверсии
-            storeListingViews = getStoreViews(),
-            installConversionRate = getInstallRate(),
-            screenshotViews = getScreenshotViews(),
-
-            // Метрики качества
-            day1Retention = getRetentionRate(1),
-            day7Retention = getRetentionRate(7),
-            averageRating = getAverageRating(),
-            reviewCount = getReviewCount()
-        )
-    }
-}
-```
-
-**6. Результаты оптимизации**
-
-- **Раньше**: Общее название, описание с фокусом на функции, базовые скриншоты
-- **После**: Название с оптимизацией ключевых слов, описание с фокусом на преимущества, убедительные визуалы
-- **Улучшения**: +40% органического трафика, +25% конверсии, +15% удержания
-
-**7. Лучшие практики**
-
-- Включайте основной ключевой запрос в название
-- Начинайте с преимуществ, не с функций
-- Используйте качественные, релевантные скриншоты
-- Тестируйте разные визуальные подходы
-- Локализируйте для целевых рынков
-- Мониторьте стратегии конкурентов
-- Непрерывно отслеживайте ключевые метрики
-
 ---
 
 ## Answer (EN)
-
 **App Store Optimization (ASO)** improves app discoverability and conversion rates through metadata optimization, visual assets, and data-driven testing.
 
 **ASO Theory:**
@@ -415,4 +228,3 @@ class ASOMetricsTracker {
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]]
-

@@ -9,6 +9,7 @@ topic: android
 subtopics:
 - files-media
 - permissions
+
 question_kind: android
 difficulty: medium
 original_language: en
@@ -26,21 +27,41 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
+- en
+- ru
+-
+- a
+- n
+- d
+- r
+- o
+- i
+- d
+- /
+- f
+- i
+- l
+- e
+- s
+- -
+- m
+- e
+- d
+- i
+- a
+
 - android/files-media
 - android/permissions
 - fileprovider
 - content-provider
 - file-sharing
 - security
-- difficulty/medium
----# Вопрос (RU)
+- difficulty/medium---
+# Вопрос (RU)
 > Что вы знаете о FileProvider?
 
 # Question (EN)
-> What do you know about FileProvider?
-
----
-
+> What do you know about FileProvider?---
 ## Ответ (RU)
 
 FileProvider - специальный подкласс ContentProvider для безопасного обмена файлами через content:// URI вместо file:// URI. Обеспечивает временные разрешения доступа и безопасность.
@@ -302,6 +323,9 @@ fun handleReceivedUri(context: Context, uri: Uri) {
 - Check permissions before file access
 - Use temporary permissions instead of permanent
 - Validate received URIs
+
+**See also:** [[c-content-provider]], [[c-uri]]
+
 
 ## Follow-ups
 - How to handle FileProvider with different Android versions?

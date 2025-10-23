@@ -7,75 +7,38 @@ aliases:
 topic: android
 subtopics:
 - gradle
-- pipeline
+- ci-cd
 question_kind: android
 difficulty: medium
-status: reviewed
-moc: moc-android
-related:
-- q-cicd-automated-testing--devops--medium
-- q-cicd-deployment-automation--devops--medium
-- q-build-optimization-gradle--gradle--medium
-created: 2025-10-11
-updated: 2025-10-20
 original_language: en
 language_tags:
 - en
 - ru
+status: reviewed
+moc: moc-android
+related:
+- q-cicd-automated-testing--android--medium
+- q-cicd-deployment-automation--android--medium
+- q-build-optimization-gradle--android--medium
+created: 2025-10-11
+updated: 2025-10-20
 tags:
 - android/gradle
-- ci-cd
-- pipeline
-- testing
-- release
+- android/ci-cd
 - difficulty/medium
-- android/pipeline
----# Вопрос (RU)
-
-> Как выглядит надёжный CI/CD пайплайн для Android (этапы, кеширование, параллелизм, quality‑gates, артефакты, релиз)?
-
 ---
+
+# Вопрос (RU)
+> CI/CD пайплайн для Android?
 
 # Question (EN)
-
-> What does a robust Android CI/CD pipeline look like (stages, caching, parallelism, quality gates, artifacts, release)?
-
-## Ответ (RU):
-
-### Цели
-
-* Быстрые и надёжные проверки PR (цель ≤10 мин на средний репозиторий); герметичные и воспроизводимые сборки (Gradle wrapper, зафиксированные SDK/build‑tools); трассировка (ссылки на ран/сканы сборки); безопасные секреты (OIDC к Play, без долгоживущих JSON‑ключей); низкая флаки и детерминированные релизы.
-
-### Этапы (типовые)
-
-* Setup: checkout; JDK 17/21 (Temurin); Android SDK cmdline‑tools + platform‑tools + нужные platforms/build‑tools; включён configuration cache; удалённый build cache (напр., Develocity) read‑only на PR; прогрев зависимостей.
-* Статпроверки: ktlint, detekt, Android Lint (XML + SARIF для аннотаций в PR); опционально проверка API‑контракта (metalava); аудит зависимостей/безопасности (dependency‑review/OWASP); контроль дрейфа версий (Gradle versions plugin).
-* Unit‑тесты: JVM‑тесты по модулям (JUnit 5) с `--parallel`; отчёты Kover/Jacoco (XML + HTML); плагин retry (макс. 1 перезапуск) для локализации флаки; падения новых флаки в изменённых модулях — блокер.
-* Сборка: assemble/bundle (AAB) с configuration/build cache; воспроизводимое версионирование (code/name с CI); R8 в полном режиме; артефакты: mapping.txt, сплиты по ABI/ресурсам при необходимости.
-* Инструментальные тесты: Gradle Managed Devices (GMD) или ферма девайсов; эмулятор headless (GPU swiftshader, отключён cold boot); шардинг через `numShards`/`shardIndex` или Marathon/Flank; логкат, скриншоты, видео; один retry на упавшие шарды.
-* Артефакты/отчёты: JUnit XML; Lint SARIF; Kover/Jacoco XML + HTML; отчёты detekt/ktlint; APK/AAB; mapping.txt; граф зависимостей/SBOM (CycloneDX) для прозрачности цепочки поставок.
-* Релиз (ручной gate): загрузка во внутренний трек Google Play через Gradle Play Publisher по OIDC; промоут по трекам с постепенным раскатом; выгрузка ProGuard mapping и нативных символов (Crashlytics/Play); тег коммита и changelog; план отката (авто‑стоп по деградации vitals).
-
-### Кеш/параллель
-
-* Включить configuration cache + локальный/удалённый build cache; кешировать wrapper, загруженные зависимости, KMP‑артефакты; ключи кешей — по хешу wrapper + `gradle.properties` + settings/version catalogs; для PR удалённый кеш только на чтение.
-* Запускать с `--parallel` и настроить `org.gradle.workers.max` под доступные ядра; разнести workflow на независимые job‑ы (checks/tests/build) ради максимального параллелизма на уровне CI.
-* Матрица запусков (API‑уровни/ABI, где нужно debug/release); шардинг UI‑тестов по пакетам/классам; кеш AVD (`~/.android/avd`) для ускорения старта эмулятора.
-
-### Quality‑gates
-
-* Lint: падение на новых проблемах относительно baseline; `Fatal` — блокер; baseline обновляется только отдельным maintenance‑PR.
-* Покрытие: `kover` с правилом `verify` (например, по модулю строки ≥70%, ветви ≥50%); регресс покрытия в затронутых модулях — fail.
-* Стиль/статанализ: detekt/ktlint — ноль новых нарушений; пороги detekt настроены так, чтобы `Error` блокировал.
-* Безопасность: dependency‑review/OWASP блокируют High/Critical; обязательное secret‑сканирование; SAST на `buildSrc`/скрипты по мере необходимости.
-* Тесты: SLO на pass‑rate (например, ≥99% за N последних прогонов); допускается quarantine‑лист, но он пуст для изменённых модулей; любые падения — блокер.
-* Релиз‑предохранители: ступенчатый раскат (например, 5%→20%→50%→100%); авто‑стоп при падении crash‑free/росте ANR; бюджет на размер APK/AAB и бюджет на деградацию старта приложения.
-
-### Релизы (отдельный workflow)
-
-* Сборка подписанного AAB с release‑конфигом; Play App Signing + Gradle Play Publisher (OIDC) для загрузки во внутренний трек; прикрепить релиз‑ноты и changelog; выгрузить mapping и нативные символы; ступенчатый раскат с правилами защиты окружения; авто‑промоут при здоровых vitals; документированный и протестированный план отката.
+> CI/CD Pipeline for Android?
 
 ---
+
+## Ответ (RU)
+
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -133,4 +96,3 @@ tags:
 
 ### Advanced (Harder)
 - [[q-android-performance-measurement-tools--android--medium]]
-

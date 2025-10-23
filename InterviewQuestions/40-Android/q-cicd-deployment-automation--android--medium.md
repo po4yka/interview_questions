@@ -7,102 +7,42 @@ aliases:
 topic: android
 subtopics:
 - gradle
-- release-management
+- play-console
 question_kind: android
 difficulty: medium
-status: reviewed
-moc: moc-android
-related:
-- q-build-optimization-gradle--gradle--medium
-- q-android-lint-tool--android--medium
-- q-app-store-optimization--distribution--medium
-created: 2025-10-15
-updated: 2025-10-20
 original_language: en
 language_tags:
 - en
 - ru
+status: reviewed
+moc: moc-android
+related:
+- q-build-optimization-gradle--android--medium
+- q-android-lint-tool--android--medium
+- q-app-store-optimization--android--medium
+created: 2025-10-15
+updated: 2025-10-20
 tags:
 - android/gradle
-- release
-- ci-cd
-- deployment
-- play
-- fastlane
+- android/play-console
 - difficulty/medium
-- android/release-management
----# Вопрос (RU)
-> Как автоматизировать деплой Android‑приложения в CI/CD (подпись, версионирование, артефакты, дистрибуция, release‑ворота и откат)?
-
+name: Deploy
+true:
+- workflow_dispatch
+jobs: null
 ---
 
+# Вопрос (RU)
+> Автоматизация деплоя в CI/CD?
+
 # Question (EN)
-> How do you automate Android app deployment in CI/CD (build signing, versioning, artifacts, distribution, release gates, and rollback)?
+> CI/CD Deployment Automation?
+
+---
 
 ## Ответ (RU)
 
-### Цели
-- Воспроизводимые подписанные сборки; отслеживаемые версии
-- Безопасный поэтапный rollout с быстрым откатом
-- Аудит артефактов и заметок релиза
-
-### Конвейер релиза (высокоуровнево)
-- Сборка → Подпись → Проверки (lint/tests) → Загрузка (internal) → Ворота → Промоут (alpha/beta/prod) → Мониторинг → Откат
-
-### Версионирование
-- Единый источник правды (Gradle): авто‑bump на main; встраивать git SHA/дату.
-- Семантика или монотонный `versionCode`; авто‑`versionName`.
-
-### Подпись
-- Play App Signing; upload‑keystore хранить в секретах CI (OIDC/secret store).
-- Подписывать через Gradle `signingConfig` с инъекцией секретов; не коммитить keystore.
-
-### Артефакты
-- Генерировать AAB (основной) и APK (внутреннее тестирование) + mapping.txt + отчёты R8.
-- Загружать в артефакты CI и Play internal track.
-
-### Дистрибуция
-- Internal для мерджей; alpha/beta для этапного раската; промоут по SLO/метрикам.
-- Release notes из CHANGELOG/conv. commits автоматически.
-
-### Минимальный шаг деплоя (GitHub Actions)
-```yaml
-name: Deploy
-on: [workflow_dispatch]
-jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: '17' }
-      - uses: gradle/gradle-build-action@v2
-      - name: Build release AAB
-        run: ./gradlew :app:bundleRelease --configuration-cache --build-cache
-      - name: Upload to Play (internal)
-        env:
-          JSON_KEY: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
-        run: |
-          echo "$JSON_KEY" > sa.json
-          ./gradlew publishBundle --no-daemon -Pandroid.injected.signing.store.file=$SIGN_STORE \
-            -Pandroid.injected.signing.store.password=$SIGN_PASS \
-            -Pandroid.injected.signing.key.alias=$SIGN_ALIAS \
-            -Pandroid.injected.signing.key.password=$KEY_PASS \
-            -Pplay.service.account.json=sa.json -Pplay.track=internal
-```
-
-### Ворота и раскат
-- Ворота: тесты, линт, min покрытие, crash‑free порог на internal.
-- Этапный rollout (5% → 20% → 50% → 100%); авто‑промоут при норме метрик.
-
-### Откат
-- Хранить последний стабильный артефакт + mapping; в Play можно остановить и откатить до предыдущего.
-- Автоматизировать “halt + promote previous build”.
-
-### Наблюдаемость
-- Дашборд релиза: SHA, версия, трек, %, crash, ANR, KPI.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -188,4 +128,3 @@ jobs:
 
 ### Advanced (Harder)
 - [[q-app-store-optimization--android--medium]]
-

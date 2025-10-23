@@ -7,7 +7,8 @@ aliases:
 topic: android
 subtopics:
 - ui-views
-- performance
+- performance-memory
+
 question_kind: android
 difficulty: medium
 original_language: en
@@ -25,20 +26,37 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
+- en
+- ru
+-
+- a
+- n
+- d
+- r
+- o
+- i
+- d
+- /
+- u
+- i
+- -
+- v
+- i
+- e
+- w
+- s
+
 - android/ui-views
 - android/performance
 - recyclerview
 - diffutil
 - multithreading
-- difficulty/medium
----# Вопрос (RU)
+- difficulty/medium---
+# Вопрос (RU)
 > Когда фоновое вычисление DiffUtil работает плохо?
 
 # Question (EN)
-> When does DiffUtil background calculation work poorly?
-
----
-
+> When does DiffUtil background calculation work poorly?---
 ## Ответ (RU)
 
 DiffUtil в фоне плохо работает при изменении данных во время расчета, тяжелых вычислениях в callback, больших списках (>1000 элементов), неправильной обработке ошибок, race conditions между потоками.
@@ -372,6 +390,9 @@ fun updateUsers(newUsers: List<User>) {
 - Pre-compute comparable values
 - Cancel previous operations on new updates
 - Handle errors with fallback strategies
+
+**See also:** [[c-diff-algorithm]], [[c-concurrency]]
+
 
 ## Follow-ups
 - How to optimize DiffUtil for lists with >10,000 items?

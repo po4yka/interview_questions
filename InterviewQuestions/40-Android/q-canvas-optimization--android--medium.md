@@ -6,79 +6,39 @@ aliases:
 - Оптимизация Canvas
 topic: android
 subtopics:
-- custom-views
-- graphics
+- ui-views
+- ui-graphics
 question_kind: android
 difficulty: medium
-status: reviewed
-moc: moc-android
-related:
-- q-android-performance-measurement-tools--android--medium
-- q-canvas-drawing-optimization--custom-views--hard
-- q-android-app-lag-analysis--android--medium
-created: 2025-10-13
-updated: 2025-10-20
 original_language: en
 language_tags:
 - en
 - ru
+status: reviewed
+moc: moc-android
+related:
+- q-android-performance-measurement-tools--android--medium
+- q-canvas-drawing-optimization--android--hard
+- q-android-app-lag-analysis--android--medium
+created: 2025-10-13
+updated: 2025-10-20
 tags:
-- android/custom-views
-- android/graphics
-- performance
-- canvas
+- android/ui-views
+- android/ui-graphics
 - difficulty/medium
----# Вопрос (RU)
-> Как оптимизировать отрисовку Canvas для плавной производительности в пользовательских view и анимациях Android?
-
 ---
 
+# Вопрос (RU)
+> Оптимизация Canvas?
+
 # Question (EN)
-> How do you optimize Canvas drawing for smooth performance in Android custom views and animations?
+> Canvas Optimization?
+
+---
 
 ## Ответ (RU)
 
-### Базовые принципы
-- **Цель**: 60 FPS (16.67ms/кадр); onDraw() < 5ms; ноль аллокаций/кадр.
-- **Предаллокация**: Paint/Path/Rect/Matrix как поля; переиспользовать через reset()/set().
-- **Кэширование**: bitmap cache для статичного контента; клиппинг видимых областей.
-- **Аппаратное ускорение**: включить для сложных view; отключить для совместимости.
-
-### Паттерн без аллокаций
-```kotlin
-class OptimizedView : View {
-  private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-  private val rect = RectF()
-  private val path = Path()
-
-    override fun onDraw(canvas: Canvas) {
-    rect.set(0f, 0f, width.toFloat(), height.toFloat())
-    path.reset(); path.addCircle(width/2f, height/2f, radius, Path.Direction.CW)
-    canvas.drawPath(path, paint)
-    }
-}
-```
-
-### Аппаратное ускорение
-- Включить для сложных view: `setLayerType(LAYER_TYPE_HARDWARE, null)`.
-- GPU кэширует отрисовку; в 10 раз быстрее для статичного/сложного контента.
-
-### Кэширование Bitmap
-- Кэшировать дорогую отрисовку в Bitmap; перерисовывать только при необходимости.
-- Использовать для статичного контента или медленно меняющихся визуалов.
-
-### Оптимизация клиппинга
-- Получить `canvas.clipBounds`; пропускать невидимые элементы.
-- Для скроллируемого контента отрисовывать только видимую область (ускорение в 20 раз).
-
-### Оптимизация Paint
-- Переиспользовать Paint; отключать антиалиасинг для прямых линий; использовать непрозрачные цвета.
-
-### Профилирование
-- Использовать `Trace.beginSection("section")`; анализировать через Android Profiler/Systrace.
-- Искать аллокации, долгие draw времена, GC события.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -142,4 +102,3 @@ class OptimizedView : View {
 
 ### Advanced (Harder)
 - [[q-android-runtime-art--android--medium]]
-

@@ -6,7 +6,7 @@ aliases:
 - Навигация Activity
 topic: android
 subtopics:
-- navigation
+- ui-navigation
 - activity
 question_kind: android
 difficulty: medium
@@ -18,141 +18,17 @@ status: reviewed
 moc: moc-android
 related:
 - q-activity-lifecycle-methods--android--medium
-- q-intent-system--android--medium
-- q-navigation-component--android--medium
+- q-intent-filters-android--android--medium
 created: 2025-10-15
 updated: 2025-10-15
 tags:
-- android/navigation
+- android/ui-navigation
 - android/activity
-- navigation
-- activity
-- intent
-- back-stack
 - difficulty/medium
----# Вопрос (RU)
-> Как работает навигация по Activity в Android?
-
----
-
-# Question (EN)
-> How does Activity navigation work in Android?
-
-## Ответ (RU)
-
-Навигация между Activity в Android управляется через Intent, стек возврата (back stack) и управление задачами (task management).
-
-**Основные механизмы:**
-
-- **Явные Intent**: Запускают конкретную Activity по имени класса
-- **Неявные Intent**: Объявляют общую операцию, система выбирает подходящий компонент
-- **Back Stack**: Управляет историей Activity (LIFO - последним пришел, первым вышел)
-- **Task Management**: Группирует связанные Activity вместе
-- **Launch Modes**: Контролируют создание экземпляров Activity (standard, singleTop, singleTask, singleInstance)
-
-**Типы Intent:**
-
-```kotlin
-// Явный Intent - конкретная Activity
-val intent = Intent(this, SecondActivity::class.java)
-intent.putExtra("USER_ID", userId)
-startActivity(intent)
-
-// Неявный Intent - система выбирает
-val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com"))
-startActivity(intent)
-```
-
-**Жизненный цикл Activity при навигации:**
-
-```
-Activity A → Activity B
-
-Activity A: onPause() → onStop()
-Activity B: onCreate() → onStart() → onResume()
-
-Пользователь нажимает Назад:
-Activity B: onPause() → onStop() → onDestroy()
-Activity A: onRestart() → onStart() → onResume()
-```
-
-**Закрытие Activity:**
-
-```kotlin
-// Закрыть текущую Activity
-finish()
-
-// Вернуть результат
-val resultIntent = Intent()
-resultIntent.putExtra("RESULT_DATA", resultValue)
-setResult(RESULT_OK, resultIntent)
-finish()
-```
-
-**Флаги Intent для контроля back stack:**
-
-```kotlin
-// Очистить верх и поднять наверх
-val intent = Intent(this, MainActivity::class.java)
-intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-startActivity(intent)
-
-// Single top - не создавать новый экземпляр
-intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-
-// Новая задача
-intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-
-// Очистить всю задачу
-intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-```
-
-**Управление back stack:**
-
-```
-Поток пользователя: A → B → C → D
-Back stack: [A, B, C, D] ← D наверху
-
-Пользователь нажимает Назад:
-Back stack: [A, B, C] ← C видна, D уничтожена
-```
-
-**Современный подход - Navigation Component:**
-
-```kotlin
-// Навигация между Fragment
-findNavController().navigate(R.id.action_home_to_detail)
-
-// С аргументами
-val bundle = bundleOf("userId" to userId)
-findNavController().navigate(R.id.action_home_to_detail, bundle)
-
-// Навигация назад
-findNavController().navigateUp()
-```
-
-**Сохранение состояния:**
-
-```kotlin
-override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    outState.putString("user_input", editText.text.toString())
-}
-
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    if (savedInstanceState != null) {
-        val savedText = savedInstanceState.getString("user_input")
-        editText.setText(savedText)
-    }
-}
-```
-
 ---
 
 ## Answer (EN)
-
-Activity navigation in Android is managed through Intents, back stack, and task management.
+[[c-activity-navigation|Activity navigation]] in Android is managed through [[c-intent|Intents]], [[c-back-stack|back stack]], and [[c-task-management|task management]].
 
 **Main mechanisms:**
 
@@ -283,4 +159,3 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ### Related (Medium)
 - [[q-what-is-intent--android--easy]] - Intent system
 - [[q-fragment-basics--android--easy]] - Fragment navigation
-

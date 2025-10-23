@@ -6,8 +6,7 @@ aliases:
 - Обзор фреймворка Dagger
 topic: android
 subtopics:
-- dependency-injection
-- architecture-patterns
+- di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
@@ -19,12 +18,11 @@ moc: moc-android
 related:
 - q-dagger-field-injection--android--medium
 - q-dagger-build-time-optimization--android--medium
-- q-dagger-custom-scopes--di--hard
+- q-dagger-custom-scopes--android--hard
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/dependency-injection
-- android/architecture-patterns
+- android/di-hilt
 - dagger
 - hilt
 - dependency-injection
@@ -32,7 +30,8 @@ tags:
 - difficulty/hard
 source: https://dagger.dev/
 source_note: Dagger official documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Что известно про фреймворк Dagger?
 
 # Question (EN)

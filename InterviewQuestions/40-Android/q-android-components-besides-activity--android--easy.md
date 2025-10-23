@@ -6,8 +6,8 @@ aliases:
 - Компоненты Android кроме Activity
 topic: android
 subtopics:
-- app-components
-- architecture
+- activity
+- architecture-clean
 question_kind: android
 difficulty: easy
 original_language: en
@@ -18,105 +18,17 @@ status: reviewed
 moc: moc-android
 related:
 - q-android-app-components--android--easy
-- q-service-types--android--medium
-- q-fragment-lifecycle--android--medium
+- q-service-types-android--android--easy
+- q-fragment-vs-activity-lifecycle--android--medium
 created: 2025-10-15
 updated: 2025-10-15
 tags:
-- android/app-components
-- android/architecture
-- app-components
-- architecture
-- service
-- broadcast-receiver
-- content-provider
-- fragment
-- viewmodel
+- android/activity
+- android/architecture-clean
 - difficulty/easy
----# Вопрос (RU)
-> Какие компоненты используются в Android помимо Activity?
-
----
-
-# Question (EN)
-> What components are used in Android besides Activity?
-
-## Ответ (RU)
-
-**Service** - Фоновые операции без UI
-Длительные задачи, не требующие взаимодействия с пользователем. Работает независимо от жизненного цикла UI.
-```kotlin
-class DownloadService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Фоновая работа
-        return START_STICKY
-    }
-}
-```
-
-**BroadcastReceiver** - Обработка системных событий
-Реагирует на системные объявления: низкий заряд батареи, изменения сети, получение SMS.
-```kotlin
-class BatteryReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
-        // Обработка системных событий
-    }
-}
-```
-
-**ContentProvider** - Обмен данными между приложениями
-Предоставляет структурированный доступ к данным другим приложениям. Выступает как абстракция слоя данных.
-```kotlin
-class NotesProvider : ContentProvider() {
-    override fun query(...): Cursor? {
-        // Обмен данными с другими приложениями
-    }
-}
-```
-
-**Fragment** - Переиспользуемые UI модули
-Модульные UI компоненты, которые можно комбинировать в Activities. Поддерживает back stack и жизненный цикл.
-```kotlin
-class ListFragment : Fragment() {
-    override fun onCreateView(...): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
-    }
-}
-```
-
-**ViewModel** - Управление состоянием UI
-Хранит и управляет данными, связанными с UI. Переживает изменения конфигурации как поворот экрана.
-```kotlin
-class ProfileViewModel : ViewModel() {
-    private val _userData = MutableLiveData<User>()
-    val userData: LiveData<User> = _userData
-}
-```
-
-**View** - Пользовательские UI компоненты
-Базовые строительные блоки пользовательских интерфейсов. Можно настраивать для специфических потребностей отрисовки.
-```kotlin
-class CustomChart : View(context) {
-    override fun onDraw(canvas: Canvas) {
-        // Пользовательская отрисовка
-    }
-}
-```
-
-| Компонент | Назначение | Жизненный цикл |
-|-----------|------------|----------------|
-| Service | Фоновая работа | Независимый |
-| BroadcastReceiver | Системные события | Кратковременный |
-| ContentProvider | Обмен данными | Singleton |
-| Fragment | UI модули | Привязан к Activity |
-| ViewModel | Управление состоянием | Переживает изменения конфигурации |
-| View | UI элементы | Привязан к родителю |
-
 ---
 
 ## Answer (EN)
-
 **Service** - Background operations without UI
 Long-running tasks that don't need user interaction. Runs independently of UI lifecycle.
 ```kotlin
@@ -216,4 +128,3 @@ class CustomChart : View(context) {
 ### Advanced (Harder)
 - [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Fragment callbacks
 - [[q-fragments-and-activity-relationship--android--hard]] - Fragment-activity relationship
-

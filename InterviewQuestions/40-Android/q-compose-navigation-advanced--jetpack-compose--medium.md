@@ -7,108 +7,40 @@ aliases:
 topic: android
 subtopics:
 - ui-compose
-- navigation
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
 - en
 - ru
-source: https://developer.android.com/jetpack/compose/navigation
-source_note: Official Compose Navigation docs
 status: reviewed
 moc: moc-android
 related:
 - q-compose-navigation-advanced--android--medium
-- q-animated-visibility-vs-content--jetpack-compose--medium
-- q-compose-gesture-detection--jetpack-compose--medium
+- q-animated-visibility-vs-content--android--medium
+- q-compose-gesture-detection--android--medium
 created: 2025-10-15
 updated: 2025-10-20
 tags:
 - android/ui-compose
-- android/navigation
-- compose/navigation
+- android/ui-navigation
 - difficulty/medium
----# Вопрос (RU)
-> Как реализовать type‑safe навигацию в Compose с аргументами, deep links и управлением back‑stack? Приведите минимальные паттерны.
-
+source: https://developer.android.com/jetpack/compose/navigation
+source_note: Official Compose Navigation docs
 ---
 
+# Вопрос (RU)
+> Продвинутая навигация Compose?
+
 # Question (EN)
-> How to implement type‑safe navigation in Compose with arguments, deep links, and back‑stack control? Show minimal patterns.
+> Compose Navigation Advanced?
+
+---
 
 ## Ответ (RU)
 
-### Минимальная настройка
-- NavController владеет back stack и текущей destination; NavHost сопоставляет паттерны роутов с экранами.
-- startDestination инициализирует первый элемент стека; каждый composable добавляет узел назначения.
-```kotlin
-@Composable
-fun AppNav() {
-  val nav = rememberNavController()
-  NavHost(nav, startDestination = "home") {
-    composable("home") { Home(onOpen = { id -> nav.navigate("details/$id") }) }
-    composable("details/{id}", listOf(navArgument("id") { type = NavType.StringType })) {
-      Details(it.arguments!!.getString("id")!!)
-    }
-  }
-}
-```
-
-### Обязательные и опциональные аргументы
-- Параметры в path позиционные и обязательные; query именованные и могут быть null с значениями по умолчанию.
-- NavType обеспечивает проверку типов; кодируйте query при наличии спецсимволов.
-```kotlin
-// Обязательный path
-composable("profile/{userId}", listOf(navArgument("userId") { type = NavType.StringType })) { /*...*/ }
-nav.navigate("profile/123")
-
-// Опциональный query
-composable("search?query={q}", listOf(navArgument("q") { nullable = true })) { /*...*/ }
-nav.navigate("search?query=kotlin")
-```
-
-### Типобезопасные маршруты (sealed API)
-- Централизуйте паттерны и билдеры маршрутов, чтобы избежать опечаток в строках.
-- Держите паттерн (с плейсхолдерами) отдельно от фабрики конкретного маршрута.
-```kotlin
-sealed class Screen(val route: String) {
-  data object Home: Screen("home")
-  data object Profile: Screen("profile/{userId}") { fun route(id: String) = "profile/$id" }
-}
-NavHost(nav, Screen.Home.route) {
-  composable(Screen.Home.route) { /*...*/ }
-  composable(Screen.Profile.route) { val id = it.arguments!!.getString("userId")!! }
-}
-```
-
-### Deep links
-- Deep links сопоставляют входящие URI с маршрутами; плейсхолдеры должны соответствовать аргументам.
-- В Android нужны intent‑фильтры в манифесте для app/https; deep links могут создавать back stack.
-```kotlin
-composable(
-  route = "profile/{userId}",
-  arguments = listOf(navArgument("userId") { type = NavType.StringType }),
-  deepLinks = listOf(
-    navDeepLink { uriPattern = "myapp://profile/{userId}" },
-    navDeepLink { uriPattern = "https://example.com/profile/{userId}" }
-  )
-) { /*...*/ }
-```
-
-### Управление back‑stack
-- launchSingleTop избегает дублей сверху; popUpTo обрезает стек до цели (inclusive удаляет её).
-- Для bottom navigation используйте saveState/restoreState для сохранения состояния экранов.
-```kotlin
-nav.navigate("home") { launchSingleTop = true }
-nav.navigate("login") { popUpTo("home") { inclusive = true } }
-nav.popBackStack()
-```
-
-Передача сложных объектов
-- Предпочтительнее общий ViewModel/SavedStateHandle вместо больших payload в роуте (лимиты URL и кодирование).
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -204,4 +136,3 @@ Passing complex objects
 - [[q-compose-compiler-plugin--android--hard]]
 - [[q-compose-custom-layout--android--hard]]
 - [[q-compose-lazy-layout-optimization--android--hard]]
-

@@ -17,215 +17,29 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-- q-custom-view-implementation--android--medium
-- q-canvas-drawing-android--android--medium
-- q-view-lifecycle-android--android--medium
+- q-canvas-drawing-optimization--android--hard
+- q-custom-viewgroup-layout--android--hard
 created: 2025-10-21
 updated: 2025-10-21
 tags:
 - android/ui-views
 - android/ui-graphics
-- drawable
-- custom-views
-- graphics
 - difficulty/medium
 source: https://developer.android.com/reference/android/graphics/drawable/Drawable
 source_note: Official Drawable documentation
 ---
 
 # Вопрос (RU)
-> Как создать пользовательские Drawables? Объясните жизненный цикл Drawable, реализацию draw(), управление границами, обработку состояния и когда использовать Drawable вместо custom View.
+> Реализация Custom Drawable?
 
 # Question (EN)
-> How do you create custom Drawables? Explain the Drawable lifecycle, implementing draw(), bounds management, state handling, and when to use Drawable vs custom View.
+> Custom Drawable Implementation?
 
 ---
 
 ## Ответ (RU)
 
-### Что такое Custom Drawable
-- Легковесная, переиспользуемая графика для множественных views
-- Более эффективен чем custom View для простой графики без взаимодействия
-- Управляется системой Android, не требует сложного lifecycle
-
-### Drawable vs Custom View
-
-| Особенность | Drawable | Custom View |
-|-------------|----------|-------------|
-| **Использование** | Простая графика, иконки | Интерактивные UI элементы |
-| **Производительность** | Легковесный | Тяжелее (полный View) |
-| **Взаимодействие** | Без обработки касаний | Полная поддержка касаний |
-| **Lifecycle** | Простой | Сложный (attach/detach) |
-| **Переиспользование** | Высокое | Ниже |
-| **Состояние** | Ограниченное | Полное управление состоянием |
-
-**Используйте Drawable когда:**
-- Неинтерактивная графика
-- Переиспользование между views
-- Простые фигуры/анимации
-- Фоновые/передние графические элементы
-
-**Используйте Custom View когда:**
-- Нужно взаимодействие с касаниями
-- Сложный lifecycle
-- Требования доступности
-- Координация анимаций
-
-### Жизненный цикл Drawable
-1. **Создание** - конструктор или фабричные методы
-2. **Установка bounds** - `setBounds()` определяет область рисования
-3. **Рисование** - `draw()` вызывается системой
-4. **Изменение состояния** - `setState()` для обновления внешнего вида
-5. **Освобождение** - автоматическое управление памятью
-
-### Основные методы для переопределения
-
-**draw(canvas: Canvas)**
-- Главный метод рисования
-- Вызывается системой для отрисовки
-
-**setBounds()**
-- Устанавливает границы области рисования
-- Определяет где и какого размера рисовать
-
-**getOpacity()**
-- Возвращает прозрачность drawable
-- PixelFormat.OPAQUE, TRANSLUCENT, TRANSPARENT
-
-**setAlpha(alpha: Int)**
-- Устанавливает альфа-канал
-- Влияет на прозрачность
-
-**setColorFilter(colorFilter: ColorFilter?)**
-- Применяет цветовой фильтр
-- Для tinting и цветовых эффектов
-
-### Минимальная реализация
-
-```kotlin
-class CircleDrawable : Drawable() {
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.FILL
-        color = Color.BLUE
-    }
-
-    var color: Int
-        get() = paint.color
-        set(value) {
-            paint.color = value
-            invalidateSelf() // Запрос перерисовки
-        }
-
-    override fun draw(canvas: Canvas) {
-        val bounds = bounds
-        val centerX = bounds.centerX().toFloat()
-        val centerY = bounds.centerY().toFloat()
-        val radius = min(bounds.width(), bounds.height()) / 2f
-
-        canvas.drawCircle(centerX, centerY, radius, paint)
-    }
-
-    override fun setAlpha(alpha: Int) {
-        paint.alpha = alpha
-        invalidateSelf()
-    }
-
-    override fun setColorFilter(colorFilter: ColorFilter?) {
-        paint.colorFilter = colorFilter
-        invalidateSelf()
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
-
-    override fun getIntrinsicWidth(): Int = 48
-    override fun getIntrinsicHeight(): Int = 48
-}
-```
-
-### Управление состоянием
-
-```kotlin
-class StatefulDrawable : Drawable() {
-    private val paint = Paint()
-    private var isPressed = false
-
-    override fun draw(canvas: Canvas) {
-        paint.color = if (isPressed) Color.RED else Color.BLUE
-        canvas.drawRect(bounds, paint)
-    }
-
-    override fun setState(stateSet: IntArray): Boolean {
-        val wasPressed = isPressed
-        isPressed = stateSet.contains(android.R.attr.state_pressed)
-
-        if (wasPressed != isPressed) {
-            invalidateSelf()
-            return true
-        }
-        return false
-    }
-
-    override fun isStateful(): Boolean = true
-
-    // ... остальные методы
-}
-```
-
-### Анимированные Drawable
-
-```kotlin
-class AnimatedDrawable : Drawable() {
-    private val paint = Paint()
-    private var animationProgress = 0f
-
-    override fun draw(canvas: Canvas) {
-        val bounds = bounds
-        val animatedRadius = bounds.width() * animationProgress / 2
-
-        canvas.drawCircle(
-            bounds.centerX().toFloat(),
-            bounds.centerY().toFloat(),
-            animatedRadius,
-            paint
-        )
-    }
-
-    fun startAnimation() {
-        // Используйте ValueAnimator для анимации
-        ValueAnimator.ofFloat(0f, 1f).apply {
-            duration = 1000
-            addUpdateListener { animator ->
-                animationProgress = animator.animatedValue as Float
-                invalidateSelf()
-            }
-            start()
-        }
-    }
-
-    // ... остальные методы
-}
-```
-
-### Лучшие практики
-
-1. **Используйте Paint.ANTI_ALIAS_FLAG** для сглаживания
-2. **Кэшируйте Paint объекты** - не создавайте в draw()
-3. **Вызывайте invalidateSelf()** при изменении внешнего вида
-4. **Реализуйте intrinsic размеры** для правильного layout
-5. **Обрабатывайте состояния** через setState() для интерактивности
-6. **Избегайте сложных вычислений** в draw() - предвычисляйте
-7. **Используйте правильные границы** через bounds
-
-### Подводные камни
-
-- **Не создавайте объекты в draw()** - влияет на производительность
-- **Правильно обрабатывайте bounds** - система может изменить их
-- **Помните о прозрачности** - реализуйте getOpacity() корректно
-- **Не забывайте invalidateSelf()** при изменениях
-- **Тестируйте на разных размерах** - intrinsic размеры важны
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -233,6 +47,8 @@ class AnimatedDrawable : Drawable() {
 - Lightweight, reusable graphics for multiple views
 - More efficient than custom View for simple graphics without interaction
 - Managed by Android system, no complex lifecycle needed
+
+Related to concepts [[c-custom-views]], [[c-canvas-drawing]], and [[c-lifecycle]].
 
 ### Drawable vs Custom View
 

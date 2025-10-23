@@ -6,8 +6,8 @@ aliases:
 - Шифрование базы данных Android
 topic: android
 subtopics:
-- security
-- files-media
+- permissions
+- room
 question_kind: android
 difficulty: medium
 original_language: en
@@ -17,14 +17,14 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-- q-data-encryption-at-rest--security--medium
+- q-data-encryption-at-rest--android--medium
 - q-android-keystore--security--hard
 - q-android-security-basics--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/security
-- android/files-media
+- android/permissions
+- android/room
 - database
 - encryption
 - security
@@ -34,7 +34,8 @@ tags:
 - difficulty/medium
 source: https://developer.android.com/topic/security/data
 source_note: Android Data Security documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Как реализовать шифрование базы данных в Android? Какие лучшие практики и доступные библиотеки?
 
 # Question (EN)
@@ -353,6 +354,9 @@ Encryption adds performance overhead. Understanding these costs is critical for 
 - Ensure data migration on updates
 - Document used encryption algorithms
 - Plan backward compatibility
+
+**See also:** [[c-encryption]], [[c-sqlite]]
+
 
 ## Follow-ups
 

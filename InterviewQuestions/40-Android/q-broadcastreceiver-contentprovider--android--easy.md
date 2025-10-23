@@ -1,94 +1,134 @@
 ---
 id: 20251016-162753
 title: BroadcastReceiver and ContentProvider / BroadcastReceiver и ContentProvider
-aliases: [BroadcastReceiver and ContentProvider, BroadcastReceiver и ContentProvider]
+aliases:
+- BroadcastReceiver and ContentProvider
+- BroadcastReceiver и ContentProvider
 topic: android
-subtopics: [broadcast-receiver, content-provider]
+subtopics:
+- broadcast-receiver
+- content-provider
 question_kind: android
 difficulty: easy
 original_language: ru
-language_tags: [ru, en]
+language_tags:
+- ru
+- en
 status: reviewed
 moc: moc-android
-related: [q-android-manifest-file--android--easy, q-android-app-components--android--easy, q-android-service-types--android--easy]
+related:
+- q-android-manifest-file--android--easy
+- q-android-app-components--android--easy
+- q-android-service-types--android--easy
 created: 2025-10-15
 updated: 2025-10-20
-tags: [android/broadcast-receiver, android/content-provider, intent, data-sharing, difficulty/easy]
+tags:
+- android/broadcast-receiver
+- android/content-provider
+- difficulty/easy
 ---
 
 # Вопрос (RU)
-> Что такое BroadcastReceiver и ContentProvider? В чем их назначение и ключевые отличия?
+> Что такое BroadcastReceiver и ContentProvider в Android?
 
 # Question (EN)
-> What are BroadcastReceiver and ContentProvider? What are their purposes and key differences?
+> What are BroadcastReceiver and ContentProvider in Android?
 
 ---
 
 ## Ответ (RU)
 
-- **BroadcastReceiver**: компонент для реакции на широковещательные события (интенты) системы/приложений.
-  - **Назначение**: подписка на события без UI; запуск логики по факту события.
-  - **Регистрация**: манифест (статически) или в коде (динамически).
-  - **Особенности**: очень короткая работа в onReceive; для долгих задач — Service/WorkManager.
-  - **Применение**: сеть/питание/BOOT_COMPLETED/пользовательские broadcast’ы.
-  - **Сниппет**:
-```xml
-<receiver android:name=".NetworkReceiver" android:exported="false">
-    <intent-filter>
-        <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-    </intent-filter>
-</receiver>
+### BroadcastReceiver
+
+**Определение**: Компонент Android, который получает и обрабатывает широковещательные сообщения (broadcasts) от системы или других приложений.
+
+**Основные виды**:
+- System broadcasts (батарея, сеть, загрузка и т.д.)
+- Custom broadcasts (между компонентами приложения)
+
+**Использование**:
+```kotlin
+class MyReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        // Обработка события (макс. 10 сек)
+    }
+}
 ```
 
-- **ContentProvider**: стандартный интерфейс доступа к структурированным данным между приложениями.
-  - **Назначение**: CRUD-операции через Uri/ContentResolver; граница процесса/приложения.
-  - **Безопасность**: права/пермишены на уровне провайдера и Uri; контракт через authority.
-  - **Применение**: контакты, медиа, настройки, собственные данные для шаринга.
-  - **Сниппет**:
-```xml
-<provider
-    android:name=".ContactsProvider"
-    android:authorities="com.example.contacts"
-    android:exported="true" />
+**Регистрация**:
+- В Manifest (статическая) - ограничена с Android 8+
+- В коде (динамическая) - работает только пока компонент жив
+
+### ContentProvider
+
+**Определение**: Компонент для структурированного доступа к данным приложения. Предоставляет единый интерфейс для чтения/записи данных между приложениями.
+
+**Основные методы**:
+- `query()` - чтение данных
+- `insert()` - добавление
+- `update()` - обновление
+- `delete()` - удаление
+
+**Использование**:
+```kotlin
+class MyProvider : ContentProvider() {
+    override fun query(uri: Uri, ...): Cursor? { ... }
+    override fun insert(uri: Uri, values: ContentValues?): Uri? { ... }
+    // и т.д.
+}
 ```
 
-- **Сравнение**:
-  - BroadcastReceiver: реакция на события → триггер логики; вход: Intent; нет данных.
-  - ContentProvider: доступ к данным → query/insert/update/delete; вход: Uri; выход: Cursor/число/Uri.
+**Когда использовать**:
+- Sharing data between apps
+- Централизованное управление данными
+- Интеграция с Contacts, Calendar и т.д.
 
 ## Answer (EN)
 
-- **BroadcastReceiver**: component for reacting to system/app broadcast events (intents).
-  - **Purpose**: subscribe to events without UI; trigger logic on event.
-  - **Registration**: manifest (static) or code (dynamic).
-  - **Notes**: keep onReceive short; use Service/WorkManager for long work.
-  - **Use cases**: connectivity/power/BOOT_COMPLETED/custom broadcasts.
-  - **Snippet**:
-```xml
-<receiver android:name=".NetworkReceiver" android:exported="false">
-    <intent-filter>
-        <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-    </intent-filter>
-</receiver>
+### BroadcastReceiver
+
+**Definition**: An Android component that receives and handles broadcast messages from the system or other applications.
+
+**Types**:
+- System broadcasts (battery, network, boot, etc.)
+- Custom broadcasts (between app components)
+
+**Usage**:
+```kotlin
+class MyReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        // Handle event (max 10 sec)
+    }
+}
 ```
 
-- **ContentProvider**: standard interface for structured data access across apps.
-  - **Purpose**: CRUD via Uri/ContentResolver; process/app boundary.
-  - **Security**: permissions at provider and Uri levels; authority defines contract.
-  - **Use cases**: contacts, media, settings, your own shared data.
-  - **Snippet**:
-```xml
-<provider
-    android:name=".ContactsProvider"
-    android:authorities="com.example.contacts"
-    android:exported="true" />
+**Registration**:
+- In Manifest (static) - restricted since Android 8+
+- In code (dynamic) - works only while component is alive
+
+### ContentProvider
+
+**Definition**: A component for structured access to app data. Provides a unified interface for reading/writing data between applications.
+
+**Core methods**:
+- `query()` - read data
+- `insert()` - add
+- `update()` - update
+- `delete()` - delete
+
+**Usage**:
+```kotlin
+class MyProvider : ContentProvider() {
+    override fun query(uri: Uri, ...): Cursor? { ... }
+    override fun insert(uri: Uri, values: ContentValues?): Uri? { ... }
+    // etc.
+}
 ```
 
-- **Comparison**:
-  - BroadcastReceiver: event reaction → trigger logic; input: Intent; no data payload returned.
-  - ContentProvider: data access → query/insert/update/delete; input: Uri; output: Cursor/count/Uri.
-
----
+**When to use**:
+- Sharing data between apps
+- Centralized data management
+- Integration with Contacts, Calendar, etc.
 
 ## Follow-ups
 

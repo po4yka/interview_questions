@@ -7,178 +7,39 @@ aliases:
 topic: android
 subtopics:
 - ui-compose
-- performance
+- performance-memory
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
 - en
 - ru
-source: https://developer.android.com/jetpack/compose/performance
-source_note: Official Compose performance docs
 status: reviewed
 moc: moc-android
 related:
-- q-compose-slot-table-recomposition--jetpack-compose--hard
+- q-compose-slot-table-recomposition--android--hard
 - q-compose-performance-optimization--android--hard
 created: 2025-10-15
 updated: 2025-10-20
 tags:
 - android/ui-compose
-- android/performance
-- compose
-- stability
-- optimization
+- android/performance-memory
 - difficulty/hard
----# Вопрос (RU)
-> Объясните, как Compose определяет, можно ли пропустить перекомпозицию composable-функции. Что делает класс стабильным? Как работает аннотация @Stable?
-
+source: https://developer.android.com/jetpack/compose/performance
+source_note: Official Compose performance docs
 ---
 
+# Вопрос (RU)
+> Стабильность и пропускаемость Compose?
+
 # Question (EN)
-> Explain how Compose determines if a composable is skippable. What makes a class stable? How does the @Stable annotation work?
+> Compose Stability Skippability?
+
+---
 
 ## Ответ (RU)
 
-### Как Compose определяет возможность пропуска
-
-Composable-функция **может быть пропущена**, если выполнены все следующие условия:
-
-1. **Все параметры стабильны** - каждый параметр должен быть стабильного типа
-2. **Нет выражений параметров по умолчанию**, которые захватывают нестабильные значения
-3. **Не помечена @NonSkippableComposable**
-4. **Возвращает Unit** (или является неперезапускаемой composable)
-
-```kotlin
-// ПРОПУСКАЕТСЯ - все параметры примитивы (стабильны)
-@Composable
-fun Counter(count: Int, onIncrement: () -> Unit) {
-    Button(onClick = onIncrement) {
-        Text("Count: $count")
-    }
-}
-
-// НЕ ПРОПУСКАЕТСЯ - нестабильный параметр
-data class User(var name: String) // var делает его нестабильным
-
-@Composable
-fun UserProfile(user: User) { // Будет всегда перекомпоноваться
-    Text(user.name)
-}
-```
-
-### Что делает класс стабильным?
-
-Тип является **стабильным**, если компилятор Compose может гарантировать:
-
-1. **Результат equals() всегда возвращает одинаковый результат для одних и тех же экземпляров**
-2. **Если публичное свойство изменяется, Composition получит уведомление**
-3. **Все публичные свойства также являются стабильными типами**
-
-**Автоматически стабильные типы:**
-
-- Все примитивные типы (`Int`, `Long`, `Float`, `Boolean` и т.д.)
-- `String`
-- Все функциональные типы (лямбды)
-- Неизменяемые коллекции из `kotlinx.collections.immutable`
-
-**Условно стабильные:**
-
-- Data классы, где все свойства `val` и стабильных типов
-- Sealed классы со стабильными подтипами
-
-**Нестабильные:**
-
-- Классы со свойствами `var`
-- Изменяемые коллекции (`MutableList`, `MutableMap` и т.д.)
-- Интерфейсы (Compose не может доказать стабильность)
-- Абстрактные классы
-
-### Аннотация @Stable
-
-Аннотация **@Stable** — это **обещание** компилятору Compose, что тип следует контракту стабильности, даже если компилятор не может это доказать автоматически.
-
-**Используйте @Stable когда:**
-
-- У вас есть интерфейс или абстрактный класс, о котором вы знаете, что он стабилен
-- У вас есть класс с приватным изменяемым состоянием, которое никогда не раскрывается
-- Вы используете observable паттерны (StateFlow, LiveData), которые уведомляют Compose
-
-```kotlin
-// Скажите Compose, что этот интерфейс стабилен
-@Stable
-interface StableUserData {
-    val name: String
-    val email: String
-}
-
-@Composable
-fun UserDisplay(user: StableUserData) { // Теперь пропускается!
-    Column {
-        Text(user.name)
-        Text(user.email)
-    }
-}
-```
-
-### Реальные примеры
-
-**Проблема: ViewModel параметры нестабильны**
-
-```kotlin
-// НЕСТАБИЛЬНО - ViewModel это класс, не гарантированно стабильный
-class UserViewModel : ViewModel() {
-    val userState = mutableStateOf(User())
-}
-
-@Composable
-fun UserScreen(viewModel: UserViewModel) { // НЕ пропускается
-    val user by viewModel.userState
-    Text(user.name)
-}
-```
-
-**Решение: Используйте @Stable**
-
-```kotlin
-@Stable
-class UserViewModel : ViewModel() {
-    private val _userState = mutableStateOf(User())
-    val userState: State<User> = _userState
-}
-
-@Composable
-fun UserScreen(viewModel: UserViewModel) { // Теперь пропускается!
-    val user by viewModel.userState
-    Text(user.name)
-}
-```
-
-### Лучшие практики
-
-1. **Используйте неизменяемые data классы** для параметров Compose
-2. **Используйте kotlinx-collections-immutable** для списков
-3. **Добавляйте @Stable к интерфейсам**, которые вы контролируете
-4. **Проверяйте отчеты компилятора** регулярно
-5. **Не злоупотребляйте @Stable** - только когда уверены в стабильности
-
-### Влияние на производительность
-
-**Без пропуска:**
-- 10,000 composables на экране
-- Изменение состояния затрагивает 1 composable
-- Результат: все 10,000 перекомпонуются
-- Время: ~100ms
-
-**С правильным пропуском:**
-- 10,000 composables на экране
-- Изменение состояния затрагивает 1 composable
-- Результат: только 1 перекомпонуется
-- Время: ~0.1ms
-
-**Улучшение производительности в 1000 раз!**
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -228,6 +89,8 @@ A type is **stable** if the Compose compiler can guarantee that:
 1. **Result of equals() will always return the same result for the same two instances**
 2. **If a public property changes, Composition will be notified**
 3. **All public properties are also stable types**
+
+The stability analysis uses concepts from [[c-algorithms]] to determine equality and [[c-data-structures]] for tracking property changes efficiently.
 
 **Automatically stable types:**
 
@@ -609,4 +472,3 @@ interface Repository {
 ### Advanced (Harder)
 
 - [[q-compose-compiler-plugin--android--hard]]
-

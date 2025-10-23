@@ -7,71 +7,38 @@ aliases:
 topic: android
 subtopics:
 - gradle
-- modularization
+- architecture-modularization
 question_kind: android
 difficulty: medium
-status: reviewed
-moc: moc-android
-related:
-- q-android-modularization--android--medium
-- q-build-optimization-gradle--gradle--medium
-- q-cicd-automated-testing--devops--medium
-created: 2025-10-11
-updated: 2025-10-20
 original_language: en
 language_tags:
 - en
 - ru
+status: reviewed
+moc: moc-android
+related:
+- q-android-modularization--android--medium
+- q-build-optimization-gradle--android--medium
+- q-cicd-automated-testing--android--medium
+created: 2025-10-11
+updated: 2025-10-20
 tags:
 - android/gradle
-- modularization
-- ci-cd
-- affected-targets
+- android/architecture-modularization
 - difficulty/medium
-- android/modularization
----# Вопрос (RU)
-> Как спроектировать CI/CD для мультимодульного Android‑проекта, чтобы быстро и надёжно собирать и тестировать только затронутые модули?
-
 ---
 
+# Вопрос (RU)
+> CI/CD для мультимодульных Android‑проектов?
+
 # Question (EN)
-> How do you design CI/CD for multi‑module Android to build and test only affected modules fast and reliably?
+> CI/CD for Multi‑Module Android?
+
+---
 
 ## Ответ (RU)
 
-### Цели
-- Проверки PR < 10 минут; масштабирование по модулям
-- Собирать/тестировать только затронутые; детерминированные кеши
-
-### Ключевые идеи
-- Граф влияния: модули → зависимости; вычислять затронутые по изменённым файлам
-- Фильтрация задач: запускать Gradle‑таски лишь для затронутых модулей (и зависимых)
-- Кеширование: configuration cache + build cache + кеш зависимостей
-- Параллелизм: матрица по группам модулей, `--parallel`, шардинг тестов
-
-### Минимальная стратегия (псевдо)
-```bash
-# 1) Изменённые файлы к main
-CHANGED=$(git diff --name-only origin/main...HEAD)
-# 2) Файлы → модули
-AFFECTED=$(scripts/resolve-modules.sh "$CHANGED")
-# 3) Добавить зависящие модули
-AFFECTED=$(scripts/expand-dependents.sh "$AFFECTED")
-# 4) Запускать только нужные таски
-./gradlew $(echo $AFFECTED | xargs -n1 -I{} echo {}:assemble {}:testDebugUnitTest) \
-  --configuration-cache --build-cache --parallel
-```
-
-### Помощь Gradle
-- Included/composite builds для изолированных кешей
-- Конвеншн‑плагины в `build-logic/` для единообразных задач/отчётов
-- Настройка test/lint на модуль; агрегация отчётов на корне
-
-### Флаки/стабильность
-- Карантин флаков по модулям; перезапуск только упавших шардов
-- Герметичные тесты: без сети, фиксированные toolchains/SDK
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -127,4 +94,3 @@ AFFECTED=$(scripts/expand-dependents.sh "$AFFECTED")
 
 ### Advanced (Harder)
 - [[q-android-performance-measurement-tools--android--medium]]
-

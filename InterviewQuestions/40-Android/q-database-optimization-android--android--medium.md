@@ -6,8 +6,8 @@ aliases:
 - Оптимизация базы данных Android
 topic: android
 subtopics:
-- performance
-- files-media
+- performance-memory
+- room
 question_kind: android
 difficulty: medium
 original_language: en
@@ -23,8 +23,8 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- android/performance
-- android/files-media
+- android/performance-memory
+- android/room
 - database
 - room
 - performance
@@ -34,7 +34,8 @@ tags:
 - difficulty/medium
 source: https://developer.android.com/training/data-storage/room
 source_note: Android Room documentation
----# Вопрос (RU)
+---
+# Вопрос (RU)
 > Какие лучшие практики и техники для оптимизации базы данных в Android приложениях?
 
 # Question (EN)
@@ -399,6 +400,9 @@ Database performance monitoring is critical for identifying bottlenecks and opti
 - Room Inspector
 - SQLite Performance Analysis
 - Custom logging
+
+**See also:** [[c-database-optimization]], [[c-indexing]]
+
 
 ## Follow-ups
 

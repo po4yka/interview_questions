@@ -17,103 +17,30 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-- q-compositionlocal-advanced--jetpack-compose--medium
-- q-compose-remember-derived-state--jetpack-compose--medium
+- q-compositionlocal-advanced--android--medium
+- q-compose-remember-derived-state--android--medium
 - q-compose-performance-optimization--android--hard
 created: 2025-10-15
 updated: 2025-10-21
 tags:
 - android/ui-compose
 - android/ui-state
-- compose
-- compositionlocal
-- ui-context
-- best-practices
 - difficulty/hard
 source: https://developer.android.com/jetpack/compose/compositionlocal
 source_note: Official docs on CompositionLocal
----# Вопрос (RU)
-> Что такое CompositionLocal в Jetpack Compose, когда использовать его вместо параметров, и чем отличаются `compositionLocalOf` и `staticCompositionLocalOf` с точки зрения рекомпозиции и производительности?
+---
+
+# Вопрос (RU)
+> CompositionLocal в Compose?
 
 # Question (EN)
-> What is CompositionLocal in Jetpack Compose, when should you use it instead of parameters, and what are the differences between `compositionLocalOf` and `staticCompositionLocalOf` in terms of recomposition and performance?
+> CompositionLocal in Compose?
 
 ---
 
 ## Ответ (RU)
 
-### Назначение
-- Локальный «контекст» для поддерева: тема, локаль, плотность, хаптика, DI‑объекты UI‑уровня
-- Избавляет от «прокидывания» параметров через много уровней, когда зависимость действительно относится к окружению
-- Не замена параметрам: бизнес‑данные и состояние не прячьте в Local
-
-### Параметры vs CompositionLocal
-- Параметры: локальная зависимость, часто меняется, важна явность API
-- Local: кросс‑каттинговая зависимость, редко меняется, относится к среде (theme, locale, hаптика, imageLoader)
-
-### dynamic vs static
-- `compositionLocalOf` (динамический)
-  - Трекинг чтений: рекомпозируются только реальные читатели `.current`
-  - Подходит для часто меняющихся значений (позиция скролла, runtime‑флаги)
-  - Небольшой накладной расход на чтение
-- `staticCompositionLocalOf` (статический)
-  - Без трекинга чтений: апдейт инвалидирует всё поддерево провайдера
-  - Подходит для редко меняющихся, широко читаемых значений (тема, локаль)
-  - Чтение дешевле, обновление дороже (широкая инвалидация)
-
-Практика: часто меняется и нужна узкая область рекомпозиции → `compositionLocalOf`; редко меняется и читается везде → `staticCompositionLocalOf`.
-
-### Границы инвалидации
-- Граница — блок `CompositionLocalProvider`
-- Динамический Local инвалидирует только читателей; статический — всё поддерево
-- Размещайте провайдер ближе к потребителям, если обновления частые и «широкие»
-
-### Безопасные значения по умолчанию
-- Избегайте «валидного» silent‑default: может скрыть отсутствие провайдера
-- Предпочтительно бросать ошибку в фабрике Local или давать явный noop со строгой семантикой
-
-### Иммутабельность и стабильность
-- Значения должны быть неизменяемыми или явно стабильными
-- Меняйте ссылку целиком (copy), а не внутренние `var` без уведомления Compose
-
-### Подводные камни
-- Чтение Local вне композиции (в долгоживущих лямбдах)
-- Использование Local для бизнес‑логики/репозиториев вместо DI
-- Провайдер слишком высоко для часто меняющегося значения → лишняя рекомпозиция
-
-### Паттерны
-- Тонкий провайдер: оборачивайте только нужное поддерево
-- Комбинация статических значений в один провайдер для редких обновлений
-- Тестируемость: переопределяйте Local локально в тестах
-
-### Минимальные примеры
-
-Создание и провайдинг (статический контекст):
-```kotlin
-// Глобальный редко меняющийся контекст
-data class AppEnv(val locale: Locale, val haptics: Haptics)
-val LocalAppEnv = staticCompositionLocalOf<AppEnv> { error("No AppEnv provided") }
-
-@Composable
-fun App(env: AppEnv, content: @Composable () -> Unit) {
-    CompositionLocalProvider(LocalAppEnv provides env) { content() }
-}
-```
-
-Динамический Local с узкой рекомпозицией:
-```kotlin
-val LocalScrollY = compositionLocalOf { 0 }
-
-@Composable
-fun Screen(scrollY: Int) {
-    CompositionLocalProvider(LocalScrollY provides scrollY) {
-        Header()              // не читает Local → не рекомпозируется
-        StickyToolbar()       // читает Local → рекомпозируется на изменение
-    }
-}
-```
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -121,6 +48,8 @@ fun Screen(scrollY: Int) {
 - Local "context" for a subtree: theme, locale, density, haptics, UI‑level DI objects
 - Avoids over‑plumbing parameters when the dependency is environmental
 - Not a replacement for parameters: do not hide business data/state in Locals
+
+Based on concepts from [[c-dependency-injection]] and [[c-compose-state]].
 
 ### Parameters vs CompositionLocal
 - Parameters: local dependency, changes frequently, API clarity
@@ -210,4 +139,3 @@ fun Screen(scrollY: Int) {
 
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]]
-

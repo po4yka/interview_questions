@@ -6,10 +6,14 @@ aliases:
 - Оптимизация отрисовки Canvas
 topic: android
 subtopics:
-- custom-views
-- ui-performance
+- ui-views
+- performance-rendering
 question_kind: android
 difficulty: hard
+original_language: en
+language_tags:
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
@@ -18,71 +22,23 @@ related:
 - q-android-app-lag-analysis--android--medium
 created: 2025-10-15
 updated: 2025-10-20
-original_language: en
-language_tags:
-- en
-- ru
 tags:
-- android/custom-views
-- android/ui-performance
-- canvas
-- graphics
-- performance
+- android/ui-views
+- android/performance-rendering
 - difficulty/hard
----# Вопрос (RU)
-> Как оптимизировать отрисовку Canvas в пользовательских view (избегание аллокаций, аппаратное ускорение, кэширование, клиппинг)?
-
 ---
 
+# Вопрос (RU)
+> Оптимизация отрисовки Canvas?
+
 # Question (EN)
-> How do you optimize Canvas drawing in custom views (avoiding allocations, hardware acceleration, caching, clipping)?
+> Canvas Drawing Optimization?
+
+---
 
 ## Ответ (RU)
 
-### Базовая теория
-- **Цель**: 60 FPS (16.67ms/кадр); onDraw() < 5ms; ноль аллокаций/кадр.
-- **Избегать**: создание объектов в onDraw() → GC → пропущенные кадры.
-- **Оптимизировать**: предаллокация, кэширование, клиппинг, аппаратное ускорение.
-
-### Ноль аллокаций
-- Предаллоцировать Paint/Path/Rect как поля; переиспользовать через reset()/set().
-- Никогда не создавать объекты в onDraw(); перенести в init/onSizeChanged.
-
-### Минимальный сниппет (без аллокаций)
-```kotlin
-class OptimizedView : View {
-  private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-  private val rect = Rect()
-  private val path = Path()
-
-  override fun onDraw(canvas: Canvas) {
-    rect.set(0, 0, width, height) // Переиспользование, без аллокации
-    path.reset(); path.moveTo(0f, 0f); path.lineTo(width.toFloat(), height.toFloat())
-    canvas.drawPath(path, paint)
-  }
-}
-```
-
-### Аппаратное ускорение
-- Включить hardware слои для сложных/анимированных view (LAYER_TYPE_HARDWARE).
-- GPU кэширует отрисовку; в 10 раз быстрее для статичного/сложного контента.
-
-### Кэширование Bitmap
-- Кэшировать дорогую отрисовку в Bitmap; перерисовывать только при необходимости.
-- Использовать для статичного контента или медленно меняющихся визуалов.
-
-### Клиппинг
-- Получить canvas.clipBounds; пропускать отрисовку невидимых элементов.
-- Для скроллируемого контента отрисовывать только видимую область (ускорение в 20 раз).
-
-### Оптимизация Paint
-- Переиспользовать Paint; отключать антиалиасинг для прямых линий; использовать непрозрачные цвета.
-
-### Профилирование
-- Использовать Trace.beginSection("section"); анализировать через Android Profiler/Systrace.
-- Искать аллокации, долгие draw времена, GC события.
-
----
+(Требуется перевод из английской секции)
 
 ## Answer (EN)
 
@@ -149,4 +105,3 @@ class OptimizedView : View {
 
 ### Advanced (Harder)
 - [[q-android-performance-measurement-tools--android--medium]]
-

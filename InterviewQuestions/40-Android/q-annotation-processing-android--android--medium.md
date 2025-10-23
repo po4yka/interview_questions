@@ -6,10 +6,7 @@ aliases:
 - Обработка аннотаций в Android
 topic: android
 subtopics:
-- annotations
-- kapt
-- ksp
-- code-generation
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
@@ -25,170 +22,11 @@ related:
 created: 2025-10-06
 updated: 2025-10-15
 tags:
-- android/annotations
-- android/kapt
-- android/ksp
-- android/code-generation
-- annotations
-- kapt
-- ksp
-- code-generation
+- android/gradle
 - difficulty/medium
----# Вопрос (RU)
-> Что такое annotation processing в Android?
-
----
-
-# Question (EN)
-> What is annotation processing in Android?
-
-## Ответ (RU)
-
-**Обработка аннотаций** — это техника генерации кода во время компиляции, которая читает аннотации в исходном коде и генерирует новый код на их основе, уменьшая шаблонный код и обеспечивая мощные фреймворки.
-
-**Теория обработки аннотаций:**
-Обработка аннотаций происходит во время компиляции, когда процессоры анализируют аннотации исходного кода и генерируют дополнительный код. Это позволяет фреймворкам как Room, Dagger и Retrofit автоматически создавать реализации без шаблонного кода.
-
-**Как работает обработка аннотаций:**
-
-```
-Исходный код с аннотациями
-         ↓
-Процессор аннотаций (время компиляции)
-         ↓
-Сгенерированный код
-         ↓
-Финальное скомпилированное приложение
-```
-
-**1. Базовый пример:**
-
-```kotlin
-// Определить аннотацию
-@Target(AnnotationTarget.CLASS)
-@Retention(AnnotationRetention.SOURCE)
-annotation class AutoToString
-
-// Использовать аннотацию
-@AutoToString
-data class User(val id: String, val name: String, val email: String)
-
-// Процессор генерирует код
-fun User.toDetailedString(): String {
-    return """
-        User {
-            id=$id,
-            name=$name,
-            email=$email
-        }
-    """.trimIndent()
-}
-```
-
-**2. Пример Room Database:**
-
-```kotlin
-// Пользователь определяет аннотацию
-@Entity(tableName = "users")
-data class User(
-    @PrimaryKey val id: String,
-    @ColumnInfo(name = "user_name") val name: String,
-    val email: String
-)
-
-@Dao
-interface UserDao {
-    @Query("SELECT * FROM users WHERE id = :userId")
-    suspend fun getUserById(userId: String): User?
-
-    @Insert
-    suspend fun insertUser(user: User)
-}
-
-// Процессор аннотаций Room генерирует:
-// UserDao_Impl.kt - реализация DAO
-// User_Table.kt - SQL создания таблицы
-// Файлы схемы базы данных
-```
-
-**3. Сравнение KAPT vs KSP:**
-
-**KAPT (Kotlin Annotation Processing Tool):**
-```kotlin
-// build.gradle.kts
-plugins {
-    id("kotlin-kapt")
-}
-```
-
-**KSP (Kotlin Symbol Processing):**
-```kotlin
-// build.gradle.kts
-plugins {
-    id("com.google.devtools.ksp")
-}
-```
-
-**Сравнение производительности:**
-
-| Функция | KAPT | KSP | Улучшение |
-|---------|------|-----|-----------|
-| **Скорость** | Базовая | В 2 раза быстрее | В 2 раза быстрее |
-| **Память** | Высокая | Низкая | На 50% меньше |
-| **Поддержка Kotlin** | Ограниченная | Нативная | Полная поддержка |
-| **Поддержка библиотек** | Широкая | Растущая | Расширяется |
-
-**4. Популярные библиотеки использующие обработку аннотаций:**
-
-**Room (Database ORM):**
-```kotlin
-@Database(entities = [User::class], version = 1)
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): UserDao
-}
-// Генерирует: AppDatabase_Impl, User_Table, UserDao_Impl
-```
-
-**Hilt/Dagger (Dependency Injection):**
-```kotlin
-@HiltAndroidApp
-class MyApplication : Application()
-
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity()
-
-@HiltViewModel
-class UserViewModel @Inject constructor(
-    private val repository: UserRepository
-) : ViewModel()
-// Генерирует компоненты DI
-```
-
-**Moshi (JSON Parsing):**
-```kotlin
-@JsonClass(generateAdapter = true)
-data class User(val id: String, val name: String)
-// Генерирует оптимизированный UserJsonAdapter
-```
-
-**Ключевые преимущества:**
-- Генерация кода во время компиляции
-- Типобезопасность
-- Уменьшение шаблонного кода
-- Лучшая производительность чем рефлексия
-- Обеспечение фреймворков
-
-**Лучшие практики:**
-- Используйте KSP вместо KAPT для новых проектов (в 2 раза быстрее)
-- Изолируйте процессоры в отдельных Gradle модулях
-- Правильно объявляйте зависимости для инкрементальной компиляции
-- Тестируйте сгенерированный код как обычный код
-- Документируйте аннотации для разработчиков
-
 ---
 
 ## Answer (EN)
-
 **Annotation Processing** is a compile-time code generation technique that reads annotations in source code and generates new code based on them, reducing boilerplate and enabling powerful frameworks.
 
 **Annotation Processing Theory:**
@@ -355,4 +193,3 @@ data class User(val id: String, val name: String)
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]]
-
