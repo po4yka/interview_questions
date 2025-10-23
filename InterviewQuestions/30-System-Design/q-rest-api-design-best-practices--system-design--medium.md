@@ -764,7 +764,7 @@ DELETE /users/123      # Удалить пользователя
 - [[q-graphql-vs-rest--networking--easy]] - Networking
 - [[q-api-file-upload-server--android--medium]] - Networking
 - [[q-splash-screen-api-android12--android--medium]] - Networking
-- [[q-data-encryption-at-rest--security--medium]] - Networking
+- [[q-data-encryption-at-rest--android--medium]] - Networking
 - [[q-privacy-sandbox-topics-api--privacy--medium]] - Networking
 
 ### Kotlin Language Features

@@ -555,7 +555,7 @@ Robolectric симулирует Android framework на JVM. Быстрые, р�
 -   [[q-testing-compose-ui--android--medium]] - Testing
 -   [[q-compose-testing--android--medium]] - Testing
 -   [[q-screenshot-snapshot-testing--testing--medium]] - Testing
--   [[q-fakes-vs-mocks-testing--testing--medium]] - Testing
+-   [[q-fakes-vs-mocks-testing--android--medium]] - Testing
 
 ### Advanced (Harder)
 

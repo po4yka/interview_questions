@@ -132,5 +132,5 @@ Common use cases for taskAffinity include:
 ## Related Questions
 
 - [[q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard]]
-- [[q-espresso-advanced-patterns--testing--medium]]
+- [[q-espresso-advanced-patterns--android--medium]]
 - [[q-fix-slow-app-startup-legacy--android--hard]]

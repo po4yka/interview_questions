@@ -2,39 +2,38 @@
 id: 20251020-200000
 title: Dagger Build Time Optimization / Оптимизация времени сборки Dagger
 aliases:
-  - Dagger Build Time Optimization
-  - Оптимизация времени сборки Dagger
+- Dagger Build Time Optimization
+- Оптимизация времени сборки Dagger
 topic: android
 subtopics:
-  - dependency-injection
-  - build-optimization
-  - performance
+- dependency-injection
+- build-optimization
+- performance
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-android-build-optimization--android--medium
-  - q-dependency-injection-basics--android--medium
-  - q-hilt-android--android--medium
+- q-android-build-optimization--android--medium
+- q-dependency-injection-basics--android--medium
+- q-hilt-android--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/dependency-injection
-  - android/build-optimization
-  - android/performance
-  - dagger
-  - hilt
-  - build-optimization
-  - difficulty/medium
+- android/dependency-injection
+- android/build-optimization
+- android/performance
+- dagger
+- hilt
+- build-optimization
+- difficulty/medium
 source: https://dagger.dev/hilt/
 source_note: Hilt documentation
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Как минимизировать влияние Dagger на время сборки?
 
 # Question (EN)

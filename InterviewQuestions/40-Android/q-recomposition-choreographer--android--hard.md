@@ -769,10 +769,10 @@ fun Counter() {
 ### Prerequisites (Easier)
 - [[q-recomposition-compose--android--medium]] - Compose
 - [[q-how-does-jetpackcompose-work--android--medium]] - Compose
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose
+- [[q-compose-modifier-order-performance--android--medium]] - Compose
 
 ### Related (Hard)
-- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose
+- [[q-compose-slot-table-recomposition--android--hard]] - Compose
+- [[q-compose-stability-skippability--android--hard]] - Compose
+- [[q-compose-custom-layout--android--hard]] - Compose
 - [[q-compose-performance-optimization--android--hard]] - Compose

@@ -2,40 +2,39 @@
 id: 20251020-200000
 title: Database Optimization Android / Оптимизация базы данных Android
 aliases:
-  - Database Optimization Android
-  - Оптимизация базы данных Android
+- Database Optimization Android
+- Оптимизация базы данных Android
 topic: android
 subtopics:
-  - performance
-  - files-media
+- performance
+- files-media
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-database-encryption-android--android--medium
-  - q-android-performance-optimization--android--medium
-  - q-room-database-basics--android--easy
+- q-database-encryption-android--android--medium
+- q-android-performance-optimization--android--medium
+- q-room-database-basics--android--easy
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/performance
-  - android/files-media
-  - database
-  - room
-  - performance
-  - optimization
-  - sql
-  - indexing
-  - difficulty/medium
+- android/performance
+- android/files-media
+- database
+- room
+- performance
+- optimization
+- sql
+- indexing
+- difficulty/medium
 source: https://developer.android.com/training/data-storage/room
 source_note: Android Room documentation
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Какие лучшие практики и техники для оптимизации базы данных в Android приложениях?
 
 # Question (EN)

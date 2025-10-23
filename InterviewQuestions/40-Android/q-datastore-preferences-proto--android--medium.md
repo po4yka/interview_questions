@@ -2,38 +2,37 @@
 id: 20251020-200000
 title: Datastore Preferences Proto / DataStore Preferences Proto
 aliases:
-  - Datastore Preferences Proto
-  - DataStore Preferences Proto
+- Datastore Preferences Proto
+- DataStore Preferences Proto
 topic: android
 subtopics:
-  - files-media
-  - ui-state
+- files-media
+- ui-state
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-shared-preferences-android--android--easy
-  - q-room-database-basics--android--easy
-  - q-android-storage-types--android--medium
+- q-shared-preferences-android--android--easy
+- q-room-database-basics--android--easy
+- q-android-storage-types--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/files-media
-  - android/ui-state
-  - datastore
-  - preferences
-  - proto-datastore
-  - storage
-  - difficulty/medium
+- android/files-media
+- android/ui-state
+- datastore
+- preferences
+- proto-datastore
+- storage
+- difficulty/medium
 source: https://developer.android.com/topic/libraries/architecture/datastore
 source_note: Android DataStore documentation
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Что вы знаете о DataStore?
 
 # Question (EN)

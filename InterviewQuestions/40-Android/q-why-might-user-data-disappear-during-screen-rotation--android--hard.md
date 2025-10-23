@@ -484,4 +484,4 @@ Data disappears on rotation because:
 
 - [[q-how-to-display-svg-string-as-a-vector-file--android--medium]]
 - [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]]
-- [[q-compose-gesture-detection--jetpack-compose--medium]]
+- [[q-compose-gesture-detection--android--medium]]

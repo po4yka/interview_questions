@@ -14,115 +14,13 @@ updated: 2025-10-15
 tags: [android/architecture-components, android/jetpack-compose, jetpack, androidx, libraries, difficulty/easy]
 moc: moc-android
 related: [q-viewmodel-pattern--android--easy, q-room-library-definition--android--easy, q-compose-basics--kotlin--easy]
----
-
-# Question (EN)
-> What is Android Jetpack?
-
-# Вопрос (RU)
+---# Вопрос (RU)
 > Что такое Android Jetpack?
 
 ---
 
-## Answer (EN)
-
-**Architecture Components** - Modern app architecture
-```kotlin
-// ViewModel - survives configuration changes
-class UserViewModel : ViewModel() {
-    private val _users = MutableLiveData<List<User>>()
-    val users: LiveData<List<User>> = _users
-}
-
-// Room - SQLite ORM
-@Entity(tableName = "users")
-data class User(@PrimaryKey val id: Int, val name: String)
-
-@Dao
-interface UserDao {
-    @Query("SELECT * FROM users")
-    suspend fun getAllUsers(): List<User>
-}
-```
-
-**Navigation Component** - Screen navigation
-```kotlin
-// Navigation graph
-findNavController().navigate(R.id.action_home_to_details)
-
-// With arguments
-val action = HomeFragmentDirections.actionHomeToDetails(userId = 123)
-findNavController().navigate(action)
-```
-
-**WorkManager** - Background tasks
-```kotlin
-class UploadWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
-    override suspend fun doWork(): Result {
-        return try {
-            uploadFile()
-            Result.success()
-        } catch (e: Exception) {
-            Result.retry()
-        }
-    }
-}
-```
-
-**DataStore** - Modern SharedPreferences
-```kotlin
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
-suspend fun savePreference(key: String, value: String) {
-    context.dataStore.edit { preferences ->
-        preferences[stringPreferencesKey(key)] = value
-    }
-}
-```
-
-**Paging** - Large dataset loading
-```kotlin
-class UserPagingSource(private val apiService: ApiService) : PagingSource<Int, User>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, User> {
-        val page = params.key ?: 1
-        val response = apiService.getUsers(page, params.loadSize)
-        return LoadResult.Page(data = response.users, prevKey = null, nextKey = page + 1)
-    }
-}
-```
-
-**Hilt** - Dependency injection
-```kotlin
-@HiltAndroidApp
-class MyApplication : Application()
-
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-    @Inject lateinit var repository: UserRepository
-}
-```
-
-**Compose** - Declarative UI
-```kotlin
-@Composable
-fun UserListScreen(viewModel: UserViewModel = hiltViewModel()) {
-    val users by viewModel.users.collectAsState()
-
-    LazyColumn {
-        items(users) { user ->
-            UserItem(user = user)
-        }
-    }
-}
-```
-
-| Category | Libraries | Purpose |
-|----------|-----------|---------|
-| Foundation | AppCompat, KTX | Basic compatibility |
-| Architecture | ViewModel, Room, Navigation | App architecture |
-| UI | Compose, Fragment | User interface |
-| Behavior | WorkManager, Permissions | App behavior |
-| Data | DataStore, Paging | Data management |
+# Question (EN)
+> What is Android Jetpack?
 
 ## Ответ (RU)
 
@@ -226,6 +124,106 @@ fun UserListScreen(viewModel: UserViewModel = hiltViewModel()) {
 
 ---
 
+## Answer (EN)
+
+**Architecture Components** - Modern app architecture
+```kotlin
+// ViewModel - survives configuration changes
+class UserViewModel : ViewModel() {
+    private val _users = MutableLiveData<List<User>>()
+    val users: LiveData<List<User>> = _users
+}
+
+// Room - SQLite ORM
+@Entity(tableName = "users")
+data class User(@PrimaryKey val id: Int, val name: String)
+
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users")
+    suspend fun getAllUsers(): List<User>
+}
+```
+
+**Navigation Component** - Screen navigation
+```kotlin
+// Navigation graph
+findNavController().navigate(R.id.action_home_to_details)
+
+// With arguments
+val action = HomeFragmentDirections.actionHomeToDetails(userId = 123)
+findNavController().navigate(action)
+```
+
+**WorkManager** - Background tasks
+```kotlin
+class UploadWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+    override suspend fun doWork(): Result {
+        return try {
+            uploadFile()
+            Result.success()
+        } catch (e: Exception) {
+            Result.retry()
+        }
+    }
+}
+```
+
+**DataStore** - Modern SharedPreferences
+```kotlin
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
+suspend fun savePreference(key: String, value: String) {
+    context.dataStore.edit { preferences ->
+        preferences[stringPreferencesKey(key)] = value
+    }
+}
+```
+
+**Paging** - Large dataset loading
+```kotlin
+class UserPagingSource(private val apiService: ApiService) : PagingSource<Int, User>() {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, User> {
+        val page = params.key ?: 1
+        val response = apiService.getUsers(page, params.loadSize)
+        return LoadResult.Page(data = response.users, prevKey = null, nextKey = page + 1)
+    }
+}
+```
+
+**Hilt** - Dependency injection
+```kotlin
+@HiltAndroidApp
+class MyApplication : Application()
+
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+    @Inject lateinit var repository: UserRepository
+}
+```
+
+**Compose** - Declarative UI
+```kotlin
+@Composable
+fun UserListScreen(viewModel: UserViewModel = hiltViewModel()) {
+    val users by viewModel.users.collectAsState()
+
+    LazyColumn {
+        items(users) { user ->
+            UserItem(user = user)
+        }
+    }
+}
+```
+
+| Category | Libraries | Purpose |
+|----------|-----------|---------|
+| Foundation | AppCompat, KTX | Basic compatibility |
+| Architecture | ViewModel, Room, Navigation | App architecture |
+| UI | Compose, Fragment | User interface |
+| Behavior | WorkManager, Permissions | App behavior |
+| Data | DataStore, Paging | Data management |
+
 ## Follow-ups
 
 - When to migrate from SharedPreferences to DataStore?
@@ -252,3 +250,4 @@ fun UserListScreen(viewModel: UserViewModel = hiltViewModel()) {
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Compose performance
 - [[q-offline-first-architecture--android--hard]] - Offline-first architecture
+

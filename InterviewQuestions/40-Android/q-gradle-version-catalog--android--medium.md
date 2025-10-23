@@ -557,7 +557,7 @@ dependencies {
 - [[q-gradle-basics--android--easy]] - Build
 
 ### Related (Medium)
-- [[q-build-optimization-gradle--gradle--medium]] - Build
+- [[q-build-optimization-gradle--android--medium]] - Build
 - [[q-kapt-ksp-migration--gradle--medium]] - Build
 - [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Build
 - [[q-gradle-build-system--android--medium]] - Build

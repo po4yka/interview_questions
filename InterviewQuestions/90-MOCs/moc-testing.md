@@ -28,7 +28,7 @@ Start with testing fundamentals and basic unit testing:
    - Writing your first unit test with JUnit
    - Assertions and test structure
    - Test isolation and independence
-   - [[q-fakes-vs-mocks-testing--testing--medium]] - Understanding test doubles
+   - [[q-fakes-vs-mocks-testing--android--medium]] - Understanding test doubles
 
 3. **Test Doubles Introduction**
    - Stubs vs Mocks vs Fakes
@@ -79,7 +79,7 @@ Master complex testing scenarios and strategies:
    - Advanced Compose testing patterns
    - Custom matchers and assertions
    - [[q-compose-ui-testing-advanced--testing--hard]] - Advanced Compose UI testing
-   - [[q-espresso-advanced-patterns--testing--medium]] - Advanced Espresso patterns
+   - [[q-espresso-advanced-patterns--android--medium]] - Advanced Espresso patterns
    - [[q-screenshot-snapshot-testing--testing--medium]] - Snapshot testing
 
 3. **Test Quality & Maintenance**
@@ -91,13 +91,13 @@ Master complex testing scenarios and strategies:
 4. **Performance & Specialized Testing**
    - Performance testing techniques
    - Accessibility testing
-   - [[q-accessibility-testing--accessibility--medium]] - Accessibility testing
+   - [[q-accessibility-testing--android--medium]] - Accessibility testing
    - [[q-testing-coroutines-flow--testing--hard]] - Advanced coroutines/Flow testing
 
 5. **CI/CD Integration**
    - Automated testing in pipelines
    - Test reporting and analytics
-   - [[q-cicd-automated-testing--devops--medium]] - CI/CD testing strategies
+   - [[q-cicd-automated-testing--android--medium]] - CI/CD testing strategies
 
 ## The Testing Pyramid
 
@@ -214,7 +214,7 @@ This leads to:
 - Better Kotlin support than Mockito (suspend functions, extension functions)
 - Relaxed mocks, spies, object mocks
 - [[q-mockk-advanced-features--testing--medium]] - Advanced MockK patterns
-- [[q-fakes-vs-mocks-testing--testing--medium]] - Mocks vs Fakes vs Stubs
+- [[q-fakes-vs-mocks-testing--android--medium]] - Mocks vs Fakes vs Stubs
 
 **Mockito**
 - Classic Java mocking framework
@@ -243,7 +243,7 @@ This leads to:
 - Android UI testing framework
 - onView(), perform(), check() API
 - ViewMatchers, ViewActions, ViewAssertions
-- [[q-espresso-advanced-patterns--testing--medium]] - Advanced Espresso patterns
+- [[q-espresso-advanced-patterns--android--medium]] - Advanced Espresso patterns
 
 **Compose Testing**
 - Jetpack Compose UI testing
@@ -387,7 +387,7 @@ fun tearDown() {
 
 **Use Fakes for Complex Dependencies**
 - Stateful components (repositories, databases)
-- [[q-fakes-vs-mocks-testing--testing--medium]] - Detailed comparison
+- [[q-fakes-vs-mocks-testing--android--medium]] - Detailed comparison
 
 **Use Mocks for Verification**
 - Verify specific interactions
@@ -499,7 +499,7 @@ fun goodTest() = runTest {
 **Run Tests in CI/CD**
 - Every pull request
 - Before merging to main
-- [[q-cicd-automated-testing--devops--medium]] - CI/CD testing strategies
+- [[q-cicd-automated-testing--android--medium]] - CI/CD testing strategies
 
 **Test Different Configurations**
 - Multiple API levels
@@ -579,7 +579,7 @@ SORT difficulty ASC, file.name ASC
 **Key Questions**:
 
 #### Unit Testing Fundamentals
-- [[q-fakes-vs-mocks-testing--testing--medium]] - Fakes vs Mocks
+- [[q-fakes-vs-mocks-testing--android--medium]] - Fakes vs Mocks
 - [[q-test-doubles-dependency-injection--testing--medium]] - Test doubles and dependency injection
 - [[q-mockk-advanced-features--testing--medium]] - MockK advanced features
 
@@ -604,12 +604,12 @@ SORT difficulty ASC, file.name ASC
 - [[q-compose-testing--android--medium]] - Compose UI testing basics
 - [[q-compose-ui-testing-advanced--testing--hard]] - Advanced Compose UI testing
 - [[q-testing-compose-ui--android--medium]] - Compose UI testing strategies
-- [[q-espresso-advanced-patterns--testing--medium]] - Advanced Espresso patterns
+- [[q-espresso-advanced-patterns--android--medium]] - Advanced Espresso patterns
 
 #### Testing Approaches
 - [[q-robolectric-vs-instrumented--testing--medium]] - Robolectric vs Instrumented tests
 - [[q-screenshot-snapshot-testing--testing--medium]] - Screenshot/snapshot testing
-- [[q-accessibility-testing--accessibility--medium]] - Accessibility testing
+- [[q-accessibility-testing--android--medium]] - Accessibility testing
 
 **All UI Testing Questions:**
 ```dataview
@@ -656,7 +656,7 @@ SORT difficulty ASC, file.name ASC
 **Key Questions**:
 
 #### Continuous Integration
-- [[q-cicd-automated-testing--devops--medium]] - CI/CD automated testing
+- [[q-cicd-automated-testing--android--medium]] - CI/CD automated testing
 
 **All CI/CD Testing Questions:**
 ```dataview

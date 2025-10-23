@@ -431,6 +431,6 @@ override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 
 ## Related Questions
 
-- [[q-derived-state-snapshot-system--jetpack-compose--hard]]
-- [[q-compose-canvas-graphics--jetpack-compose--hard]]
+- [[q-derived-state-snapshot-system--android--hard]]
+- [[q-compose-canvas-graphics--android--hard]]
 - [[q-how-to-organize-work-with-text-and-images-in-a-delegate--android--easy]]

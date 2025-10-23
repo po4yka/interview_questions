@@ -681,7 +681,7 @@ Screenshot тестирование предотвращает визуальн�
 -   [[q-testing-compose-ui--android--medium]] - Testing
 -   [[q-compose-testing--android--medium]] - Testing
 -   [[q-robolectric-vs-instrumented--testing--medium]] - Testing
--   [[q-fakes-vs-mocks-testing--testing--medium]] - Testing
+-   [[q-fakes-vs-mocks-testing--android--medium]] - Testing
 
 ### Advanced (Harder)
 

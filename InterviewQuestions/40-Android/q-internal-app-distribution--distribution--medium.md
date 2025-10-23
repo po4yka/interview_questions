@@ -951,7 +951,7 @@ Key considerations: automation, segmented test groups, meaningful release notes,
 
 ### Related (Medium)
 
--   [[q-app-store-optimization--distribution--medium]] - Distribution
--   [[q-alternative-distribution--distribution--medium]] - Distribution
+-   [[q-app-store-optimization--android--medium]] - Distribution
+-   [[q-alternative-distribution--android--medium]] - Distribution
 -   [[q-play-store-publishing--distribution--medium]] - Distribution
 -   [[q-android-app-bundles--android--easy]] - Distribution

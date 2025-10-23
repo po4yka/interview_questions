@@ -983,7 +983,7 @@ class MemoryLeakException(leakTrace: String) : Exception("Memory leak detected:\
 ### Related (Medium)
 - [[q-jank-detection-frame-metrics--performance--medium]] - Performance
 - [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-app-startup-optimization--android--medium]] - Performance
+- [[q-baseline-profiles-optimization--android--medium]] - Performance
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

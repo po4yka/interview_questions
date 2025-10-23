@@ -673,6 +673,6 @@ fun ComposeTouchEvents() {
 
 ## Related Questions
 
-- [[q-espresso-advanced-patterns--testing--medium]]
+- [[q-espresso-advanced-patterns--android--medium]]
 - [[q-how-to-create-dynamic-screens-at-runtime--android--hard]]
 - [[q-how-to-create-chat-lists-from-a-ui-perspective--android--hard]]

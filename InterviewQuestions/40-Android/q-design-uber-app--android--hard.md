@@ -2,38 +2,37 @@
 id: 20251020-200000
 title: Design Uber App / Проектирование приложения Uber
 aliases:
-  - Design Uber App
-  - Проектирование приложения Uber
+- Design Uber App
+- Проектирование приложения Uber
 topic: android
 subtopics:
-  - location
-  - networking-http
-  - service
+- location
+- networking-http
+- service
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: https://developers.google.com/location-context/fused-location-provider
 source_note: Android Fused Location Provider overview
 status: reviewed
 moc: moc-android
 related:
-  - q-data-sync-unstable-network--android--hard
-  - q-deep-link-vs-app-link--android--medium
-  - q-android-performance-optimization--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-deep-link-vs-app-link--android--medium
+- q-android-performance-optimization--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/location
-  - android/networking-http
-  - android/service
-  - maps
-  - realtime
-  - difficulty/hard
----
-# Вопрос (RU)
+- android/location
+- android/networking-http
+- android/service
+- maps
+- realtime
+- difficulty/hard
+---# Вопрос (RU)
 > Как спроектировать приложение Uber для Android?
 
 # Question (EN)

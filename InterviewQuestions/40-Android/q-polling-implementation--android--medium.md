@@ -591,5 +591,5 @@ fun pollWhenOnline(context: Context): Flow<Data> = flow {
 ## Related Questions
 
 - [[q-dagger-build-time-optimization--android--medium]]
-- [[q-baseline-profiles-optimization--performance--medium]]
+- [[q-baseline-profiles-optimization--android--medium]]
 - [[q-save-data-outside-fragment--android--medium]]

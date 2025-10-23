@@ -21,54 +21,13 @@ created: 2025-10-06
 updated: 2025-10-20
 # Tags (English only)
 tags: [android/security, android/networking, https, cleartext, difficulty/easy]
----
-
-# Question (EN)
-> What is cleartext traffic in Android?
-
-# Вопрос (RU)
+---# Вопрос (RU)
 > Что такое cleartext traffic в Android?
 
 ---
 
-## Answer (EN)
-
-### Definition
-- Cleartext traffic = unencrypted HTTP communication (no TLS). Anyone on path can read/modify.
-
-### Android policy
-- Android 9+ (API 28): cleartext is blocked by default
-- Older versions: allowed by default
-
-### Allow only for development (per‑domain)
-```xml
-<!-- res/xml/network_security_config.xml -->
-<network-security-config>
-  <domain-config cleartextTrafficPermitted="true">
-    <domain includeSubdomains="true">localhost</domain>
-    <domain includeSubdomains="true">10.0.2.2</domain>
-  </domain-config>
-  <base-config cleartextTrafficPermitted="false" />
-</network-security-config>
-```
-```xml
-<!-- AndroidManifest.xml -->
-<application android:networkSecurityConfig="@xml/network_security_config" />
-```
-
-### Do NOT enable globally
-```xml
-<!-- Not recommended (enables cleartext for ALL domains) -->
-<application android:usesCleartextTraffic="true" />
-```
-
-### Production best practice
-- Enforce HTTPS everywhere; optionally add certificate pinning for sensitive APIs
-
-### Error you’ll see
-```
-java.net.UnknownServiceException: CLEARTEXT communication ... not permitted by network security policy
-```
+# Question (EN)
+> What is cleartext traffic in Android?
 
 ## Ответ (RU)
 
@@ -111,6 +70,45 @@ java.net.UnknownServiceException: CLEARTEXT communication ... not permitted by n
 
 ---
 
+## Answer (EN)
+
+### Definition
+- Cleartext traffic = unencrypted HTTP communication (no TLS). Anyone on path can read/modify.
+
+### Android policy
+- Android 9+ (API 28): cleartext is blocked by default
+- Older versions: allowed by default
+
+### Allow only for development (per‑domain)
+```xml
+<!-- res/xml/network_security_config.xml -->
+<network-security-config>
+  <domain-config cleartextTrafficPermitted="true">
+    <domain includeSubdomains="true">localhost</domain>
+    <domain includeSubdomains="true">10.0.2.2</domain>
+  </domain-config>
+  <base-config cleartextTrafficPermitted="false" />
+</network-security-config>
+```
+```xml
+<!-- AndroidManifest.xml -->
+<application android:networkSecurityConfig="@xml/network_security_config" />
+```
+
+### Do NOT enable globally
+```xml
+<!-- Not recommended (enables cleartext for ALL domains) -->
+<application android:usesCleartextTraffic="true" />
+```
+
+### Production best practice
+- Enforce HTTPS everywhere; optionally add certificate pinning for sensitive APIs
+
+### Error you’ll see
+```
+java.net.UnknownServiceException: CLEARTEXT communication ... not permitted by network security policy
+```
+
 ## Follow-ups
 - When should certificate pinning be added on top of HTTPS?
 - How to enable cleartext only for internal dev environments?
@@ -130,3 +128,4 @@ java.net.UnknownServiceException: CLEARTEXT communication ... not permitted by n
 
 ### Advanced (Harder)
 - [[q-android-runtime-art--android--medium]]
+

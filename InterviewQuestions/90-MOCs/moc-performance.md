@@ -72,9 +72,9 @@ SORT difficulty ASC, file.name ASC
 **Key Questions**:
 
 #### Startup Performance
-- [[q-app-startup-optimization--performance--medium]] - App startup optimization strategies
+- [[q-app-startup-optimization--android--medium]] - App startup optimization strategies
 - [[q-macrobenchmark-startup--performance--medium]] - Macrobenchmark for startup testing
-- [[q-baseline-profiles-optimization--performance--medium]] - Baseline profiles for AOT compilation
+- [[q-baseline-profiles-optimization--android--medium]] - Baseline profiles for AOT compilation
 - [[q-baseline-profiles-android--android--medium]] - Baseline profiles implementation
 - [[q-app-start-types-android--android--medium]] - Cold/warm/hot startup types
 - [[q-fix-slow-app-startup-legacy--android--hard]] - Fixing slow startup in legacy apps
@@ -118,17 +118,17 @@ SORT difficulty ASC, file.name ASC
 
 #### Compose Optimization
 - [[q-compose-performance-optimization--android--hard]] - Comprehensive Compose performance
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Modifier order impact
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability and skippability
+- [[q-compose-modifier-order-performance--android--medium]] - Modifier order impact
+- [[q-compose-stability-skippability--android--hard]] - Stability and skippability
 - [[q-stable-classes-compose--android--hard]] - Stable annotation usage
 - [[q-stable-annotation-compose--android--hard]] - @Stable in depth
-- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - Lazy layout optimization
+- [[q-compose-lazy-layout-optimization--android--hard]] - Lazy layout optimization
 - [[q-recomposition-compose--android--medium]] - Understanding recomposition
 - [[q-recomposition-choreographer--android--hard]] - Recomposition and Choreographer
 - [[q-how-to-reduce-the-number-of-recompositions-besides-side-effects--android--hard]] - Reducing recompositions
 
 #### Compose Compiler
-- [[q-compose-compiler-plugin--jetpack-compose--hard]] - Compose compiler plugin internals
+- [[q-compose-compiler-plugin--android--hard]] - Compose compiler plugin internals
 
 **All Compose Performance Questions:**
 ```dataview
@@ -159,9 +159,9 @@ SORT difficulty ASC, file.name ASC
 - [[q-recyclerview-async-list-differ--recyclerview--medium]] - AsyncListDiffer for background diffing
 
 #### Custom Views
-- [[q-custom-view-lifecycle--custom-views--medium]] - Custom view lifecycle
+- [[q-custom-view-lifecycle--android--medium]] - Custom view lifecycle
 - [[q-canvas-optimization--graphics--medium]] - Canvas drawing optimization
-- [[q-canvas-drawing-optimization--custom-views--hard]] - Advanced canvas optimization
+- [[q-canvas-drawing-optimization--android--hard]] - Advanced canvas optimization
 
 **All Rendering Questions:**
 ```dataview
@@ -177,7 +177,7 @@ SORT difficulty ASC, file.name ASC
 
 #### Build Optimization
 - [[q-android-build-optimization--android--medium]] - Build time optimization
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle build optimization
+- [[q-build-optimization-gradle--android--medium]] - Gradle build optimization
 - [[q-dagger-build-time-optimization--android--medium]] - Dagger build performance
 
 #### Compilation Strategies
@@ -262,7 +262,7 @@ SORT difficulty ASC, file.name ASC
 **Key Questions**:
 
 #### App Size Optimization
-- [[q-app-size-optimization--performance--medium]] - Reducing APK/AAB size
+- [[q-app-size-optimization--android--medium]] - Reducing APK/AAB size
 - [[q-reduce-apk-size-techniques--android--medium]] - APK size reduction techniques
 
 #### Resource Optimization

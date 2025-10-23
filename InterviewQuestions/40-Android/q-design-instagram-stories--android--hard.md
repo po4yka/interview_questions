@@ -2,39 +2,38 @@
 id: 20251020-200000
 title: Design Instagram Stories / Проектирование Instagram Stories
 aliases:
-  - Design Instagram Stories
-  - Проектирование Instagram Stories
+- Design Instagram Stories
+- Проектирование Instagram Stories
 topic: android
 subtopics:
-  - files-media
-  - architecture-clean
-  - service
+- files-media
+- architecture-clean
+- service
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: https://developer.android.com/guide/topics/media
 source_note: Android media stack overview
 status: reviewed
 moc: moc-android
 related:
-  - q-data-sync-unstable-network--android--hard
-  - q-deep-link-vs-app-link--android--medium
-  - q-database-optimization-android--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-deep-link-vs-app-link--android--medium
+- q-database-optimization-android--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/files-media
-  - android/architecture-clean
-  - android/service
-  - stories
-  - media
-  - cdn
-  - difficulty/hard
----
-# Вопрос (RU)
+- android/files-media
+- android/architecture-clean
+- android/service
+- stories
+- media
+- cdn
+- difficulty/hard
+---# Вопрос (RU)
 > Как спроектировать Instagram Stories для Android?
 
 # Question (EN)

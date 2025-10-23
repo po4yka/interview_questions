@@ -965,4 +965,4 @@ KMM DI стратегии:
 
 - [[q-how-to-choose-layout-for-fragment--android--easy]]
 - [[q-android-security-practices-checklist--android--medium]]
-- [[q-custom-view-attributes--custom-views--medium]]
+- [[q-custom-view-attributes--android--medium]]

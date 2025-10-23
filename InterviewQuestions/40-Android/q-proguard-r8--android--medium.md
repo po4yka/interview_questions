@@ -178,7 +178,7 @@ ProGuard (или компилятор R8) обфусцирует ваш код, 
 ### Related (Medium)
 - [[q-macrobenchmark-startup--performance--medium]] - Performance
 - [[q-reduce-app-size--android--medium]] - Optimization
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
-- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-build-optimization-gradle--android--medium]] - Gradle
+- [[q-app-startup-optimization--android--medium]] - Performance
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

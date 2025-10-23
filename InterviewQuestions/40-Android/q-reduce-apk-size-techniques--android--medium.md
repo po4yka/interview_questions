@@ -432,7 +432,7 @@ class APKSizeOptimization {
 ### Related (Medium)
 
 -   [[q-reduce-app-size--android--medium]] - Optimization
--   [[q-app-size-optimization--performance--medium]] - Performance
+-   [[q-app-size-optimization--android--medium]] - Performance
 -   [[q-macrobenchmark-startup--performance--medium]] - Performance
 -   [[q-recomposition-compose--android--medium]] - Jetpack Compose
 

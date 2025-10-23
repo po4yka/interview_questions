@@ -849,6 +849,6 @@ Key considerations: security, staged rollouts, monitoring, and automation.
 
 ### Related (Medium)
 - [[q-internal-app-distribution--distribution--medium]] - Distribution
-- [[q-app-store-optimization--distribution--medium]] - Distribution
-- [[q-alternative-distribution--distribution--medium]] - Distribution
+- [[q-app-store-optimization--android--medium]] - Distribution
+- [[q-alternative-distribution--android--medium]] - Distribution
 - [[q-android-app-bundles--android--easy]] - Distribution

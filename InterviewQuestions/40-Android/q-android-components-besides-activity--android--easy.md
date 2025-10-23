@@ -1,99 +1,45 @@
 ---
 id: 20251012-122764
-title: "Android Components Besides Activity / Компоненты Android кроме Activity"
-aliases: [Android Components Besides Activity, Компоненты Android кроме Activity]
+title: Android Components Besides Activity / Компоненты Android кроме Activity
+aliases:
+- Android Components Besides Activity
+- Компоненты Android кроме Activity
 topic: android
-subtopics: [app-components, architecture]
+subtopics:
+- app-components
+- architecture
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: reviewed
 moc: moc-android
-related: [q-android-app-components--android--easy, q-service-types--android--medium, q-fragment-lifecycle--android--medium]
+related:
+- q-android-app-components--android--easy
+- q-service-types--android--medium
+- q-fragment-lifecycle--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags: [android/app-components, android/architecture, app-components, architecture, service, broadcast-receiver, content-provider, fragment, viewmodel, difficulty/easy]
----
-# Question (EN)
-> What components are used in Android besides Activity?
-
-# Вопрос (RU)
+tags:
+- android/app-components
+- android/architecture
+- app-components
+- architecture
+- service
+- broadcast-receiver
+- content-provider
+- fragment
+- viewmodel
+- difficulty/easy
+---# Вопрос (RU)
 > Какие компоненты используются в Android помимо Activity?
 
 ---
 
-## Answer (EN)
-
-**Service** - Background operations without UI
-Long-running tasks that don't need user interaction. Runs independently of UI lifecycle.
-```kotlin
-class DownloadService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Background work
-        return START_STICKY
-    }
-}
-```
-
-**BroadcastReceiver** - System event handling
-Responds to system-wide announcements like battery low, network changes, SMS received.
-```kotlin
-class BatteryReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
-        // Handle system events
-    }
-}
-```
-
-**ContentProvider** - Data sharing between apps
-Provides structured data access to other applications. Acts as data layer abstraction.
-```kotlin
-class NotesProvider : ContentProvider() {
-    override fun query(...): Cursor? {
-        // Share data with other apps
-    }
-}
-```
-
-**Fragment** - Reusable UI modules
-Modular UI components that can be combined in Activities. Supports back stack and lifecycle.
-```kotlin
-class ListFragment : Fragment() {
-    override fun onCreateView(...): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
-    }
-}
-```
-
-**ViewModel** - UI state management
-Stores and manages UI-related data. Survives configuration changes like screen rotation.
-```kotlin
-class ProfileViewModel : ViewModel() {
-    private val _userData = MutableLiveData<User>()
-    val userData: LiveData<User> = _userData
-}
-```
-
-**View** - Custom UI components
-Basic building blocks for user interfaces. Can be customized for specific drawing needs.
-```kotlin
-class CustomChart : View(context) {
-    override fun onDraw(canvas: Canvas) {
-        // Custom drawing
-    }
-}
-```
-
-| Component | Purpose | Lifecycle |
-|-----------|---------|-----------|
-| Service | Background work | Independent |
-| BroadcastReceiver | System events | Short-lived |
-| ContentProvider | Data sharing | Singleton |
-| Fragment | UI modules | Tied to Activity |
-| ViewModel | State management | Survives config changes |
-| View | UI elements | Tied to parent |
+# Question (EN)
+> What components are used in Android besides Activity?
 
 ## Ответ (RU)
 
@@ -169,6 +115,78 @@ class CustomChart : View(context) {
 
 ---
 
+## Answer (EN)
+
+**Service** - Background operations without UI
+Long-running tasks that don't need user interaction. Runs independently of UI lifecycle.
+```kotlin
+class DownloadService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Background work
+        return START_STICKY
+    }
+}
+```
+
+**BroadcastReceiver** - System event handling
+Responds to system-wide announcements like battery low, network changes, SMS received.
+```kotlin
+class BatteryReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+        // Handle system events
+    }
+}
+```
+
+**ContentProvider** - Data sharing between apps
+Provides structured data access to other applications. Acts as data layer abstraction.
+```kotlin
+class NotesProvider : ContentProvider() {
+    override fun query(...): Cursor? {
+        // Share data with other apps
+    }
+}
+```
+
+**Fragment** - Reusable UI modules
+Modular UI components that can be combined in Activities. Supports back stack and lifecycle.
+```kotlin
+class ListFragment : Fragment() {
+    override fun onCreateView(...): View? {
+        return inflater.inflate(R.layout.fragment_list, container, false)
+    }
+}
+```
+
+**ViewModel** - UI state management
+Stores and manages UI-related data. Survives configuration changes like screen rotation.
+```kotlin
+class ProfileViewModel : ViewModel() {
+    private val _userData = MutableLiveData<User>()
+    val userData: LiveData<User> = _userData
+}
+```
+
+**View** - Custom UI components
+Basic building blocks for user interfaces. Can be customized for specific drawing needs.
+```kotlin
+class CustomChart : View(context) {
+    override fun onDraw(canvas: Canvas) {
+        // Custom drawing
+    }
+}
+```
+
+| Component | Purpose | Lifecycle |
+|-----------|---------|-----------|
+| Service | Background work | Independent |
+| BroadcastReceiver | System events | Short-lived |
+| ContentProvider | Data sharing | Singleton |
+| Fragment | UI modules | Tied to Activity |
+| ViewModel | State management | Survives config changes |
+| View | UI elements | Tied to parent |
+
 ## Follow-ups
 
 - What's the difference between Service and IntentService?
@@ -198,3 +216,4 @@ class CustomChart : View(context) {
 ### Advanced (Harder)
 - [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Fragment callbacks
 - [[q-fragments-and-activity-relationship--android--hard]] - Fragment-activity relationship
+

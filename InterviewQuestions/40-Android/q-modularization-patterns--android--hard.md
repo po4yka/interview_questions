@@ -164,5 +164,5 @@ Since Android modules come with overhead, preferably, you'd want to use the Kotl
 
 ### Prerequisites (Easier)
 - [[q-android-security-practices-checklist--android--medium]] - Security
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+- [[q-build-optimization-gradle--android--medium]] - Gradle
 - [[q-usecase-pattern-android--android--medium]] - Architecture

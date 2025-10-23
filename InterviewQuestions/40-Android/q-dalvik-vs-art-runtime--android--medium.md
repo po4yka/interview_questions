@@ -2,40 +2,39 @@
 id: 20251020-200000
 title: Dalvik vs ART Runtime / Dalvik против ART Runtime
 aliases:
-  - Dalvik vs ART Runtime
-  - Dalvik против ART Runtime
+- Dalvik vs ART Runtime
+- Dalvik против ART Runtime
 topic: android
 subtopics:
-  - performance
-  - app-startup
+- performance
+- app-startup
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-android-performance-optimization--android--medium
-  - q-app-startup-time--android--medium
-  - q-android-memory-management--android--hard
+- q-android-performance-optimization--android--medium
+- q-app-startup-time--android--medium
+- q-android-memory-management--android--hard
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/performance
-  - android/app-startup
-  - dalvik
-  - art
-  - runtime
-  - jit
-  - aot
-  - compilation
-  - difficulty/medium
+- android/performance
+- android/app-startup
+- dalvik
+- art
+- runtime
+- jit
+- aot
+- compilation
+- difficulty/medium
 source: https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime
 source_note: Android Runtime documentation
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > В чем различия между рантаймами Dalvik и ART в Android? Почему Android перешел с Dalvik на ART?
 
 # Question (EN)

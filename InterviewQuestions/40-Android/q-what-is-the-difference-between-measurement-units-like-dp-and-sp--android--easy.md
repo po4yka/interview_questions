@@ -118,6 +118,6 @@ dp (density-independent pixels) используется для размеров
 
 ## Related Questions
 
-- [[q-accessibility-color-contrast--accessibility--medium]]
+- [[q-accessibility-color-contrast--android--medium]]
 - [[q-internal-app-distribution--distribution--medium]]
-- [[q-compose-navigation-advanced--jetpack-compose--medium]]
+- [[q-compose-navigation-advanced--android--medium]]

@@ -2,38 +2,37 @@
 id: 20251020-200000
 title: Databases Android / Базы данных в Android
 aliases:
-  - Databases Android
-  - Базы данных в Android
+- Databases Android
+- Базы данных в Android
 topic: android
 subtopics:
-  - files-media
-  - architecture-patterns
+- files-media
+- architecture-patterns
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-room-database-basics--android--easy
-  - q-database-optimization-android--android--medium
-  - q-database-encryption-android--android--medium
+- q-room-database-basics--android--easy
+- q-database-optimization-android--android--medium
+- q-database-encryption-android--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/files-media
-  - android/architecture-patterns
-  - database
-  - realm
-  - room
-  - sqlite
-  - difficulty/easy
+- android/files-media
+- android/architecture-patterns
+- database
+- realm
+- room
+- sqlite
+- difficulty/easy
 source: https://developer.android.com/training/data-storage
 source_note: Android Data Storage documentation
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Какие базы данных можно использовать в Android?
 
 # Question (EN)

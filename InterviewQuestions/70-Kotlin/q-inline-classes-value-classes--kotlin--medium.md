@@ -262,6 +262,6 @@ Value классы имеют **нулевой runtime overhead** в больш�
 - [[q-kotlin-inline-functions--kotlin--medium]] - Inline Functions
 - [[q-anonymous-class-in-inline-function--programming-languages--medium]] - Inline
 - [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-app-startup-optimization--android--medium]] - Performance
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

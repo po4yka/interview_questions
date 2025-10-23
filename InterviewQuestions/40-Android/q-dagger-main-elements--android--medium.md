@@ -2,39 +2,38 @@
 id: 20251020-200000
 title: Dagger Main Elements / Основные элементы Dagger
 aliases:
-  - Dagger Main Elements
-  - Основные элементы Dagger
+- Dagger Main Elements
+- Основные элементы Dagger
 topic: android
 subtopics:
-  - dependency-injection
-  - architecture-patterns
+- dependency-injection
+- architecture-patterns
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-dagger-inject-annotation--android--easy
-  - q-dagger-field-injection--android--medium
-  - q-dagger-framework-overview--android--hard
+- q-dagger-inject-annotation--android--easy
+- q-dagger-field-injection--android--medium
+- q-dagger-framework-overview--android--hard
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/dependency-injection
-  - android/architecture-patterns
-  - dagger
-  - hilt
-  - dependency-injection
-  - components
-  - modules
-  - difficulty/medium
+- android/dependency-injection
+- android/architecture-patterns
+- dagger
+- hilt
+- dependency-injection
+- components
+- modules
+- difficulty/medium
 source: https://dagger.dev/api/latest/dagger/Component.html
 source_note: Dagger Component API documentation
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Из каких основных элементов состоит Dagger?
 
 # Question (EN)

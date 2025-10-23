@@ -217,5 +217,5 @@ fun CompositionLifecycle() {
 ## Related Questions
 
 - [[q-is-layoutinflater-a-singleton-and-why--android--medium]]
-- [[q-canvas-drawing-optimization--custom-views--hard]]
+- [[q-canvas-drawing-optimization--android--hard]]
 - [[q-network-error-handling-strategies--networking--medium]]

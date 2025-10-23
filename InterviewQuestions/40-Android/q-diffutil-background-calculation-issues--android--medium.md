@@ -2,37 +2,36 @@
 id: 20251020-200100
 title: DiffUtil Background Calculation Issues / Проблемы фонового вычисления DiffUtil
 aliases:
-  - DiffUtil Background Calculation Issues
-  - Проблемы фонового вычисления DiffUtil
+- DiffUtil Background Calculation Issues
+- Проблемы фонового вычисления DiffUtil
 topic: android
 subtopics:
-  - ui-views
-  - performance
+- ui-views
+- performance
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
 source_note: Android DiffUtil documentation
 status: reviewed
 moc: moc-android
 related:
-  - q-main-causes-ui-lag--android--medium
-  - q-recyclerview-optimization--android--medium
-  - q-android-performance-optimization--android--medium
+- q-main-causes-ui-lag--android--medium
+- q-recyclerview-optimization--android--medium
+- q-android-performance-optimization--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/ui-views
-  - android/performance
-  - recyclerview
-  - diffutil
-  - multithreading
-  - difficulty/medium
----
-# Вопрос (RU)
+- android/ui-views
+- android/performance
+- recyclerview
+- diffutil
+- multithreading
+- difficulty/medium
+---# Вопрос (RU)
 > Когда фоновое вычисление DiffUtil работает плохо?
 
 # Question (EN)

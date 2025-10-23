@@ -209,4 +209,4 @@ view.setOnTouchListener { v, event ->
 
 - [[q-list-elements-problems--android--medium]]
 - [[q-what-is-workmanager--android--medium]]
-- [[q-cicd-multi-module--devops--medium]]
+- [[q-cicd-multi-module--android--medium]]

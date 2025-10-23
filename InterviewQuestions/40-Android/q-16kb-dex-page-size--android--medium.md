@@ -1,39 +1,95 @@
 ---
 id: 20251012-122750
 title: 16kb Dex Page Size / Размер страницы DEX 16KB
-aliases: [16KB DEX Page Size, 16 КБ страница DEX]
+aliases:
+- 16KB DEX Page Size
+- 16 КБ страница DEX
 topic: android
-subtopics: [build-optimization, performance]
+subtopics:
+- build-optimization
+- performance
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-background-tasks-decision-guide--android--medium
-  - q-why-fragment-needs-separate-callback-for-ui-creation--android--hard
-  - q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard
+- q-background-tasks-decision-guide--android--medium
+- q-why-fragment-needs-separate-callback-for-ui-creation--android--hard
+- q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard
 created: 2025-10-15
 updated: 2025-10-15
 tags:
-  - android/build-optimization
-  - android/performance
-  - dex
-  - build-optimization
-  - apk-size
-  - performance
-  - r8
-  - proguard
-  - difficulty/medium
+- android/build-optimization
+- android/performance
+- dex
+- build-optimization
+- apk-size
+- performance
+- r8
+- proguard
+- difficulty/medium
+---# Вопрос (RU)
+> Что такое проблема 16 КБ страниц DEX в Android? Как это влияет на производительность приложения и что могут сделать разработчики?
+
 ---
-# 16 KB DEX Page Size Issue in Android
 
 # Question (EN)
 > What is the 16 KB DEX page size issue in Android? How does it affect app performance and what can developers do about it?
 
-# Вопрос (RU)
-> Что такое проблема 16 КБ страниц DEX в Android? Как это влияет на производительность приложения и что могут сделать разработчики?
+## Ответ (RU)
+
+Проблема размера страницы DEX в 16 КБ — это проблема выравнивания памяти, влияющая на Android 6.0+, которая вызывает значительное раздувание приложения при оптимизации с помощью R8/ProGuard.
+
+#### Проблема
+
+Android использует 16 КБ страницы для DEX файлов. Method IDs должны быть выровнены по границе страницы, создавая потраченное место для отступов.
+
+```
+Без выравнивания: [Header][Strings][Methods][Code]
+С выравниванием:  [Header][Strings][Padding][Methods][Code]
+                                    ^^^^^^^^ Потеря места!
+```
+
+Влияние:
+- Маленькие приложения (< 5 MB): увеличение на 20-40%
+- Большие приложения (> 50 MB): увеличение на 5-15%
+- Multi-DEX приложения: умноженный эффект
+
+#### Решения
+
+Обновите до последней версии AGP:
+```kotlin
+plugins {
+    id("com.android.application")
+}
+```
+
+Настройте R8 (старые версии AGP):
+```properties
+android.enableR8.fullMode=true
+```
+
+Используйте App Bundle для автоматической оптимизации.
+
+#### Лучшие практики
+
+Включите R8 оптимизацию:
+```kotlin
+android {
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+        }
+    }
+}
+```
+
+Мониторьте размер APK в CI/CD. Используйте App Bundle вместо APK.
 
 ---
 
@@ -104,59 +160,6 @@ Monitor APK size in CI/CD. Use App Bundle instead of APK.
 
 ---
 
-## Ответ (RU)
-
-Проблема размера страницы DEX в 16 КБ — это проблема выравнивания памяти, влияющая на Android 6.0+, которая вызывает значительное раздувание приложения при оптимизации с помощью R8/ProGuard.
-
-#### Проблема
-
-Android использует 16 КБ страницы для DEX файлов. Method IDs должны быть выровнены по границе страницы, создавая потраченное место для отступов.
-
-```
-Без выравнивания: [Header][Strings][Methods][Code]
-С выравниванием:  [Header][Strings][Padding][Methods][Code]
-                                    ^^^^^^^^ Потеря места!
-```
-
-Влияние:
-- Маленькие приложения (< 5 MB): увеличение на 20-40%
-- Большие приложения (> 50 MB): увеличение на 5-15%
-- Multi-DEX приложения: умноженный эффект
-
-#### Решения
-
-Обновите до последней версии AGP:
-```kotlin
-plugins {
-    id("com.android.application")
-}
-```
-
-Настройте R8 (старые версии AGP):
-```properties
-android.enableR8.fullMode=true
-```
-
-Используйте App Bundle для автоматической оптимизации.
-
-#### Лучшие практики
-
-Включите R8 оптимизацию:
-```kotlin
-android {
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-        }
-    }
-}
-```
-
-Мониторьте размер APK в CI/CD. Используйте App Bundle вместо APK.
-
----
-
 ## Follow-ups
 
 - What happens if you use AGP versions older than 8.2?
@@ -181,8 +184,9 @@ android {
 - [[q-dagger-build-time-optimization--android--medium]] - Build
 - [[q-android-build-optimization--android--medium]] - Build
 - [[q-proguard-r8--android--medium]] - Build
-- [[q-build-optimization-gradle--gradle--medium]] - Build
+- [[q-build-optimization-gradle--android--medium]] - Build
 - [[q-kapt-ksp-migration--gradle--medium]] - Build
 
 ### Advanced (Harder)
 - [[q-kotlin-dsl-builders--kotlin--hard]] - Build
+

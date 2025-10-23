@@ -287,7 +287,7 @@ class MyActivity : AppCompatActivity() {
 ## Related Questions
 
 ### Related (Medium)
-- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Navigation
+- [[q-compose-navigation-advanced--android--medium]] - Navigation
 - [[q-compose-navigation-advanced--android--medium]] - Navigation
 - [[q-activity-navigation-how-it-works--android--medium]] - Navigation
 - [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation

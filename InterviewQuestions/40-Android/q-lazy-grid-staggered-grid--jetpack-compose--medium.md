@@ -942,13 +942,13 @@ LazyVerticalGrid, LazyHorizontalGrid и LazyStaggeredGrid - важные composa
 ## Related Questions
 
 ### Related (Medium)
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose, Jetpack
-- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose, Jetpack
-- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compose-modifier-order-performance--android--medium]] - Compose, Jetpack
+- [[q-compositionlocal-advanced--android--medium]] - Compose, Jetpack
+- [[q-compose-navigation-advanced--android--medium]] - Compose, Jetpack
 - [[q-jetpack-compose-basics--android--medium]] - Compose, Jetpack
-- [[q-compose-gesture-detection--jetpack-compose--medium]] - Compose, Jetpack
+- [[q-compose-gesture-detection--android--medium]] - Compose, Jetpack
 
 ### Advanced (Harder)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Compose, Jetpack
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, Jetpack
-- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Compose, Jetpack
+- [[q-compose-stability-skippability--android--hard]] - Compose, Jetpack
+- [[q-compose-custom-layout--android--hard]] - Compose, Jetpack
+- [[q-compose-slot-table-recomposition--android--hard]] - Compose, Jetpack

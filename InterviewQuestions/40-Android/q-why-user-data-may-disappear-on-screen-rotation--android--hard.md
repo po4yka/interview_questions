@@ -709,6 +709,6 @@ override fun onSaveInstanceState(outState: Bundle) {
 
 ## Related Questions
 
-- [[q-compose-side-effects-advanced--jetpack-compose--hard]]
+- [[q-compose-side-effects-advanced--android--hard]]
 - [[q-16kb-dex-page-size--android--medium]]
 - [[q-keep-service-running-background--android--medium]]

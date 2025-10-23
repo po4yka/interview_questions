@@ -2,38 +2,37 @@
 id: 20251020-200000
 title: Dagger Inject Annotation / Аннотация Inject Dagger
 aliases:
-  - Dagger Inject Annotation
-  - Аннотация Inject Dagger
+- Dagger Inject Annotation
+- Аннотация Inject Dagger
 topic: android
 subtopics:
-  - dependency-injection
-  - architecture-patterns
+- dependency-injection
+- architecture-patterns
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-dagger-field-injection--android--medium
-  - q-dagger-framework-overview--android--hard
-  - q-hilt-components-scope--android--medium
+- q-dagger-field-injection--android--medium
+- q-dagger-framework-overview--android--hard
+- q-hilt-components-scope--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/dependency-injection
-  - android/architecture-patterns
-  - dagger
-  - hilt
-  - inject-annotation
-  - dependency-injection
-  - difficulty/easy
+- android/dependency-injection
+- android/architecture-patterns
+- dagger
+- hilt
+- inject-annotation
+- dependency-injection
+- difficulty/easy
 source: https://dagger.dev/api/latest/dagger/Inject.html
 source_note: Dagger Inject annotation documentation
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Как сообщить Dagger, что мы собираемся что-то инжектить?
 
 # Question (EN)

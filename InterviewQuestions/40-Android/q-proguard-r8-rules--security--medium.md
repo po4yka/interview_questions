@@ -1045,7 +1045,7 @@ ProGuard/R8 обеспечивает:
 
 ### Related (Medium)
 - [[q-android-security-practices-checklist--android--medium]] - Security
-- [[q-encrypted-file-storage--security--medium]] - Security
+- [[q-encrypted-file-storage--android--medium]] - Security
 - [[q-proguard-r8--android--medium]] - Build
 - [[q-database-encryption-android--android--medium]] - Security
 - [[q-dagger-build-time-optimization--android--medium]] - Build

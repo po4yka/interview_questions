@@ -14,45 +14,13 @@ updated: 2025-10-20
 original_language: en
 language_tags: [en, ru]
 tags: [android/service, android/notifications, foreground-service, difficulty/medium]
----
-
-# Question (EN)
-> Can a Service communicate with the user? How should it surface information?
-
-# Вопрос (RU)
+---# Вопрос (RU)
 > Может ли сервис взаимодействовать с пользователем? Как корректно показывать информацию?
 
 ---
 
-## Answer (EN)
-
-- **Direct UI**: No. `Service` has no UI; it runs in background.
-- **Primary channel**: **Notifications** (incl. foreground services) for user-visible events and controls.
-- **Other patterns (indirect)**:
-  - **Start Activity**: only for critical, user-initiated flows (use flags; avoid disruption).
-  - **Bound Service callbacks**: UI binds and receives callbacks; the UI renders, not the service.
-  - **Broadcast → UI**: service broadcasts; Activity/Fragment receives and updates UI.
-  - **Toasts**: avoid for important info; prefer notifications.
-
-### Minimal snippet (foreground notification)
-```kotlin
-class PlayerService : Service() {
-  override fun onCreate() {
-    startForeground(ID, NotificationCompat.Builder(this, CHANNEL)
-      .setContentTitle("Playing")
-      .setSmallIcon(R.drawable.ic_stat)
-      .build())
-  }
-  override fun onBind(i: Intent?) = null
-  companion object { const val CHANNEL = "player"; const val ID = 1 }
-}
-```
-
-### Best practices
-- Long-running/background work → foreground service with persistent notification.
-- Don’t push Activities unexpectedly; respect user context.
-- UI updates must occur in UI layer (Activity/Fragment) even if data originates from a service.
-- Clean up bindings/callbacks to prevent leaks.
+# Question (EN)
+> Can a Service communicate with the user? How should it surface information?
 
 ## Ответ (RU)
 
@@ -86,6 +54,36 @@ class PlayerService : Service() {
 
 ---
 
+## Answer (EN)
+
+- **Direct UI**: No. `Service` has no UI; it runs in background.
+- **Primary channel**: **Notifications** (incl. foreground services) for user-visible events and controls.
+- **Other patterns (indirect)**:
+  - **Start Activity**: only for critical, user-initiated flows (use flags; avoid disruption).
+  - **Bound Service callbacks**: UI binds and receives callbacks; the UI renders, not the service.
+  - **Broadcast → UI**: service broadcasts; Activity/Fragment receives and updates UI.
+  - **Toasts**: avoid for important info; prefer notifications.
+
+### Minimal snippet (foreground notification)
+```kotlin
+class PlayerService : Service() {
+  override fun onCreate() {
+    startForeground(ID, NotificationCompat.Builder(this, CHANNEL)
+      .setContentTitle("Playing")
+      .setSmallIcon(R.drawable.ic_stat)
+      .build())
+  }
+  override fun onBind(i: Intent?) = null
+  companion object { const val CHANNEL = "player"; const val ID = 1 }
+}
+```
+
+### Best practices
+- Long-running/background work → foreground service with persistent notification.
+- Don’t push Activities unexpectedly; respect user context.
+- UI updates must occur in UI layer (Activity/Fragment) even if data originates from a service.
+- Clean up bindings/callbacks to prevent leaks.
+
 ## Follow-ups
 - When must a background task be promoted to a foreground service?
 - How to design notification actions for service controls (Play/Pause/Stop)?
@@ -106,3 +104,4 @@ class PlayerService : Service() {
 
 ### Advanced (Harder)
 - [[q-android-performance-measurement-tools--android--medium]]
+

@@ -814,10 +814,10 @@ Compose Runtime (Среда выполнения)
 -   [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
 -   [[q-mutable-state-compose--android--medium]] - MutableState basics
 -   [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
--   [[q-compose-remember-derived-state--jetpack-compose--medium]] - Derived state patterns
+-   [[q-compose-remember-derived-state--android--medium]] - Derived state patterns
 
 ### Advanced (Harder)
 
--   [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+-   [[q-compose-stability-skippability--android--hard]] - Stability & skippability
 -   [[q-stable-classes-compose--android--hard]] - @Stable annotation
 -   [[q-stable-annotation-compose--android--hard]] - Stability annotations

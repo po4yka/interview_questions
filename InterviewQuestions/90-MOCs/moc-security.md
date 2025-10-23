@@ -48,7 +48,7 @@ LIMIT 100
 - [[q-cleartext-traffic-android--android--easy]] - What is cleartext traffic?
 - [[q-android-security-best-practices--android--medium]] - Android security overview
 - [[q-android-security-practices-checklist--android--medium]] - Security practices checklist
-- [[q-app-security-best-practices--security--medium]] - App security best practices
+- [[q-app-security-best-practices--android--medium]] - App security best practices
 
 **All Android Security Questions:**
 ```dataview
@@ -63,10 +63,10 @@ SORT difficulty ASC, file.name ASC
 
 #### Keystore & Key Management
 - [[q-android-keystore-system--security--medium]] - Android Keystore system
-- [[q-data-encryption-at-rest--security--medium]] - Data encryption at rest
+- [[q-data-encryption-at-rest--android--medium]] - Data encryption at rest
 
 #### File & Database Encryption
-- [[q-encrypted-file-storage--security--medium]] - Encrypted file storage
+- [[q-encrypted-file-storage--android--medium]] - Encrypted file storage
 - [[q-database-encryption-android--android--medium]] - Database encryption
 
 **All Encryption Questions:**

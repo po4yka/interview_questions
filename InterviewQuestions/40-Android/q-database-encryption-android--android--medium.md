@@ -2,40 +2,39 @@
 id: 20251020-200000
 title: Database Encryption Android / Шифрование базы данных Android
 aliases:
-  - Database Encryption Android
-  - Шифрование базы данных Android
+- Database Encryption Android
+- Шифрование базы данных Android
 topic: android
 subtopics:
-  - security
-  - files-media
+- security
+- files-media
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-data-encryption-at-rest--security--medium
-  - q-android-keystore--security--hard
-  - q-android-security-basics--android--medium
+- q-data-encryption-at-rest--security--medium
+- q-android-keystore--security--hard
+- q-android-security-basics--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/security
-  - android/files-media
-  - database
-  - encryption
-  - security
-  - sqlcipher
-  - room
-  - keystore
-  - difficulty/medium
+- android/security
+- android/files-media
+- database
+- encryption
+- security
+- sqlcipher
+- room
+- keystore
+- difficulty/medium
 source: https://developer.android.com/topic/security/data
 source_note: Android Data Security documentation
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Как реализовать шифрование базы данных в Android? Какие лучшие практики и доступные библиотеки?
 
 # Question (EN)
@@ -364,4 +363,4 @@ Encryption adds performance overhead. Understanding these costs is critical for 
 ## Related Questions
 
 ### Related (Same Level)
-- [[q-data-encryption-at-rest--security--medium]]
+- [[q-data-encryption-at-rest--android--medium]]

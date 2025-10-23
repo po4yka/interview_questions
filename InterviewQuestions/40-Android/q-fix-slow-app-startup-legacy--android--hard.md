@@ -243,4 +243,4 @@ class MyApp : Application() {
 
 - [[q-what-are-services-used-for--android--medium]]
 - [[q-what-to-put-in-state-for-initial-list--android--easy]]
-- [[q-fakes-vs-mocks-testing--testing--medium]]
+- [[q-fakes-vs-mocks-testing--android--medium]]

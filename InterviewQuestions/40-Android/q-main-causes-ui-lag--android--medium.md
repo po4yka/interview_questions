@@ -416,9 +416,9 @@ if (BuildConfig.DEBUG) {
 
 ### Related (Medium)
 - [[q-dagger-build-time-optimization--android--medium]] - Performance, Ui
-- [[q-build-optimization-gradle--gradle--medium]] - Performance, Ui
+- [[q-build-optimization-gradle--android--medium]] - Performance, Ui
 - [[q-android-build-optimization--android--medium]] - Performance, Ui
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Performance
+- [[q-compose-modifier-order-performance--android--medium]] - Performance
 - [[q-macrobenchmark-startup--performance--medium]] - Performance
 
 ### Advanced (Harder)

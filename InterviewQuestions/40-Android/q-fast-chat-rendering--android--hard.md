@@ -2,38 +2,37 @@
 id: 20251020-200700
 title: Fast Chat Rendering / Быстрый рендеринг чата
 aliases:
-  - Fast Chat Rendering
-  - Быстрый рендеринг чата
+- Fast Chat Rendering
+- Быстрый рендеринг чата
 topic: android
 subtopics:
-  - ui-views
-  - performance
+- ui-views
+- performance
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: https://developer.android.com/topic/performance/rendering
 source_note: Android rendering performance documentation
 status: reviewed
 moc: moc-android
 related:
-  - q-diffutil-background-calculation-issues--android--medium
-  - q-recyclerview-optimization--android--medium
-  - q-android-performance-optimization--android--medium
+- q-diffutil-background-calculation-issues--android--medium
+- q-recyclerview-optimization--android--medium
+- q-android-performance-optimization--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/ui-views
-  - android/performance
-  - chat
-  - recyclerview
-  - diffutil
-  - performance
-  - difficulty/hard
----
-# Вопрос (RU)
+- android/ui-views
+- android/performance
+- chat
+- recyclerview
+- diffutil
+- performance
+- difficulty/hard
+---# Вопрос (RU)
 > Как можно гарантировать быструю отрисовку чатов?
 
 # Question (EN)

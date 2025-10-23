@@ -48,17 +48,17 @@ LIMIT 50
 **Key Questions**:
 
 #### Pipeline Setup & Configuration
-- [[q-cicd-pipeline-setup--devops--medium]] - Setting up CI/CD pipeline for Android (GitHub Actions, GitLab CI, Jenkins)
+- [[q-cicd-pipeline-setup--android--medium]] - Setting up CI/CD pipeline for Android (GitHub Actions, GitLab CI, Jenkins)
 - [[q-cicd-pipeline-android--android--medium]] - Android CI/CD pipeline overview
 
 #### Testing Automation
-- [[q-cicd-automated-testing--devops--medium]] - Running automated tests in CI/CD (unit, instrumented, UI)
+- [[q-cicd-automated-testing--android--medium]] - Running automated tests in CI/CD (unit, instrumented, UI)
 
 #### Deployment Automation
-- [[q-cicd-deployment-automation--devops--medium]] - Automating deployment to Play Store (signing, versioning, release tracks)
+- [[q-cicd-deployment-automation--android--medium]] - Automating deployment to Play Store (signing, versioning, release tracks)
 
 #### Multi-Module Optimization
-- [[q-cicd-multi-module--devops--medium]] - Optimizing CI/CD for multi-module projects (affected module detection)
+- [[q-cicd-multi-module--android--medium]] - Optimizing CI/CD for multi-module projects (affected module detection)
 
 **All CI/CD Pipeline Questions:**
 ```dataview
@@ -76,7 +76,7 @@ SORT difficulty ASC, file.name ASC
 - [[q-gradle-build-optimization--build--medium]] - Gradle build optimization techniques
 
 #### Deployment Strategies
-- [[q-cicd-deployment-automation--devops--medium]] - Deployment to Play Store
+- [[q-cicd-deployment-automation--android--medium]] - Deployment to Play Store
 - [[q-app-bundle-optimization--distribution--medium]] - App bundle optimization
 
 **All Build & Deployment Questions:**
@@ -151,7 +151,7 @@ SORT difficulty ASC, file.name ASC
 **Key Questions**:
 
 #### Test Automation in CI
-- [[q-cicd-automated-testing--devops--medium]] - Automated testing in CI/CD
+- [[q-cicd-automated-testing--android--medium]] - Automated testing in CI/CD
 - [[q-screenshot-snapshot-testing--testing--medium]] - Screenshot testing in pipelines
 
 #### Test Optimization
@@ -174,7 +174,7 @@ Start with basic CI/CD concepts and pipeline setup:
 
 1. **CI/CD Fundamentals**
    - [[q-cicd-pipeline-android--android--medium]] - Understand CI/CD basics
-   - [[q-cicd-pipeline-setup--devops--medium]] - Learn pipeline setup
+   - [[q-cicd-pipeline-setup--android--medium]] - Learn pipeline setup
 
 2. **Basic Automation**
    - Unit test automation
@@ -188,11 +188,11 @@ Start with basic CI/CD concepts and pipeline setup:
 Build on fundamentals with advanced pipeline features:
 
 1. **Advanced Pipelines**
-   - [[q-cicd-automated-testing--devops--medium]] - Automated testing strategies
-   - [[q-cicd-multi-module--devops--medium]] - Multi-module optimization
+   - [[q-cicd-automated-testing--android--medium]] - Automated testing strategies
+   - [[q-cicd-multi-module--android--medium]] - Multi-module optimization
 
 2. **Deployment Automation**
-   - [[q-cicd-deployment-automation--devops--medium]] - Deployment strategies
+   - [[q-cicd-deployment-automation--android--medium]] - Deployment strategies
    - Release management
 
 3. **Build Optimization**

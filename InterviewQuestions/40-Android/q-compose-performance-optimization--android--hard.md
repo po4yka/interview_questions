@@ -16,13 +16,88 @@ created: 2025-10-20
 updated: 2025-10-20
 tags: [android/ui-compose, android/performance, performance, recomposition, stability, difficulty/hard]
 moc: moc-android
+---# Вопрос (RU)
+> Как оптимизировать производительность Jetpack Compose и избегать лишних рекомпозиций? Приведите минимальные паттерны и когда их применять.
+
 ---
 
 # Question (EN)
 > How do you optimize Jetpack Compose performance and avoid unnecessary recompositions? Provide minimal patterns and when to use them.
 
-# Вопрос (RU)
-> Как оптимизировать производительность Jetpack Compose и избегать лишних рекомпозиций? Приведите минимальные паттерны и когда их применять.
+## Ответ (RU)
+
+### Принципы
+
+- Минимизируйте область рекомпозиции (наблюдайте поля отдельно, делите UI).
+- Используйте стабильные входы (immutable/@Stable) и стабильные колбэки.
+- Предвычисляйте/выводите значения через `remember`/`derivedStateOf`.
+- В списках используйте keys и contentType для переиспользования и диффинга.
+- Избегайте аллокаций в горячих участках; переиспользуйте shape/brush/painter.
+- Измеряйте перед оптимизацией; подтверждайте узкие места.
+
+### Минимальные паттерны
+
+Гранулярное наблюдение состояния
+
+```kotlin
+val title by vm.title.collectAsState()
+val body by vm.body.collectAsState()
+Header(title); Body(body)
+```
+
+Стабильные колбэки
+
+```kotlin
+val onClick = remember { { vm.onClick() } }
+Button(onClick) { Text("Go") }
+// или ссылка на метод
+Button(onClick = vm::onClick) { Text("Go") }
+```
+
+Immutable/@Stable модели
+
+```kotlin
+@Immutable data class Product(val id: String, val name: String)
+@Stable class UiState { var selected by mutableStateOf<String?>(null) }
+```
+
+Производные значения
+
+```kotlin
+val listState = rememberLazyListState()
+val showFab by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
+```
+
+Переиспользование в списках (keys, contentType)
+
+```kotlin
+LazyColumn {
+  items(items = data, key = { it.id }, contentType = { it.type }) { item ->
+    Row { Text(item.title) }
+  }
+}
+```
+
+Избегание распространения рекомпозиции
+
+```kotlin
+var counter by remember { mutableStateOf(0) }
+Button({ counter++ }) { Text("$counter") }
+ExpensiveChild()
+```
+
+Кэширование дорогих вычислений
+
+```kotlin
+val formatted = remember(price) { priceFormatter.format(price) }
+Text(formatted)
+```
+
+### Измерение и инструменты
+
+- Layout Inspector (Recomposition counts), Perfetto, трассировка.
+- Отслеживайте jank/длинные кадры и соотносите со всплесками рекомпозиций.
+- Проверяйте пропуски фаз отчётами компилятора Compose.
 
 ---
 
@@ -104,83 +179,6 @@ Text(formatted)
 - Track jank and long frames; correlate with recomposition spikes.
 - Verify skips with compiler metrics (Compose compiler reports).
 
-## Ответ (RU)
-
-### Принципы
-
-- Минимизируйте область рекомпозиции (наблюдайте поля отдельно, делите UI).
-- Используйте стабильные входы (immutable/@Stable) и стабильные колбэки.
-- Предвычисляйте/выводите значения через `remember`/`derivedStateOf`.
-- В списках используйте keys и contentType для переиспользования и диффинга.
-- Избегайте аллокаций в горячих участках; переиспользуйте shape/brush/painter.
-- Измеряйте перед оптимизацией; подтверждайте узкие места.
-
-### Минимальные паттерны
-
-Гранулярное наблюдение состояния
-
-```kotlin
-val title by vm.title.collectAsState()
-val body by vm.body.collectAsState()
-Header(title); Body(body)
-```
-
-Стабильные колбэки
-
-```kotlin
-val onClick = remember { { vm.onClick() } }
-Button(onClick) { Text("Go") }
-// или ссылка на метод
-Button(onClick = vm::onClick) { Text("Go") }
-```
-
-Immutable/@Stable модели
-
-```kotlin
-@Immutable data class Product(val id: String, val name: String)
-@Stable class UiState { var selected by mutableStateOf<String?>(null) }
-```
-
-Производные значения
-
-```kotlin
-val listState = rememberLazyListState()
-val showFab by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
-```
-
-Переиспользование в списках (keys, contentType)
-
-```kotlin
-LazyColumn {
-  items(items = data, key = { it.id }, contentType = { it.type }) { item ->
-    Row { Text(item.title) }
-  }
-}
-```
-
-Избегание распространения рекомпозиции
-
-```kotlin
-var counter by remember { mutableStateOf(0) }
-Button({ counter++ }) { Text("$counter") }
-ExpensiveChild()
-```
-
-Кэширование дорогих вычислений
-
-```kotlin
-val formatted = remember(price) { priceFormatter.format(price) }
-Text(formatted)
-```
-
-### Измерение и инструменты
-
-- Layout Inspector (Recomposition counts), Perfetto, трассировка.
-- Отслеживайте jank/длинные кадры и соотносите со всплесками рекомпозиций.
-- Проверяйте пропуски фаз отчётами компилятора Compose.
-
----
-
 ## Follow-ups
 
 - When to use `derivedStateOf` vs memoizing with `remember`?
@@ -200,10 +198,11 @@ Text(formatted)
 
 ### Related (Same Level)
 
-- [[q-compose-compiler-plugin--jetpack-compose--hard]]
-- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]]
+- [[q-compose-compiler-plugin--android--hard]]
+- [[q-compose-lazy-layout-optimization--android--hard]]
 
 ### Advanced (Harder)
 
-- [[q-compose-custom-layout--jetpack-compose--hard]]
-- [[q-compose-slot-table-recomposition--jetpack-compose--hard]]
+- [[q-compose-custom-layout--android--hard]]
+- [[q-compose-slot-table-recomposition--android--hard]]
+

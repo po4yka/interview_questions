@@ -2,38 +2,37 @@
 id: 20251020-200000
 title: Data Sync Unstable Network / Синхронизация данных при нестабильной сети
 aliases:
-  - Data Sync Unstable Network
-  - Синхронизация данных при нестабильной сети
+- Data Sync Unstable Network
+- Синхронизация данных при нестабильной сети
 topic: android
 subtopics:
-  - networking
-  - architecture-patterns
+- networking
+- architecture-patterns
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-android-networking-basics--android--medium
-  - q-offline-first-architecture--android--hard
-  - q-android-workmanager--android--medium
+- q-android-networking-basics--android--medium
+- q-offline-first-architecture--android--hard
+- q-android-workmanager--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/networking
-  - android/architecture-patterns
-  - data-sync
-  - offline-first
-  - networking
-  - workmanager
-  - difficulty/hard
+- android/networking
+- android/architecture-patterns
+- data-sync
+- offline-first
+- networking
+- workmanager
+- difficulty/hard
 source: https://developer.android.com/guide/background/processing-data/sync
 source_note: Android Data Sync documentation
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Как бы вы обрабатывали синхронизацию данных в Android приложении при нестабильном сетевом соединении?
 
 # Question (EN)

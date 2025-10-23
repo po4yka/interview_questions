@@ -688,4 +688,4 @@ ViewModel переживает изменения конфигурации (по
 ### Advanced (Harder)
 - [[q-dagger-build-time-optimization--android--medium]] - Ui
 - [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
-- [[q-build-optimization-gradle--gradle--medium]] - Ui
+- [[q-build-optimization-gradle--android--medium]] - Ui

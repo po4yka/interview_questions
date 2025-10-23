@@ -381,4 +381,4 @@ Play App Signing необходим для современного распро
 
 - [[q-singleton-scope-binding--android--medium]]
 - [[q-shared-element-transitions--jetpack-compose--hard]]
-- [[q-compose-gesture-detection--jetpack-compose--medium]]
+- [[q-compose-gesture-detection--android--medium]]

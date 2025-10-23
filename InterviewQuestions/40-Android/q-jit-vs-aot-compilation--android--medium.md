@@ -582,6 +582,6 @@ object CompilationStrategy {
 
 ## Related Questions
 
-- [[q-espresso-advanced-patterns--testing--medium]]
-- [[q-fakes-vs-mocks-testing--testing--medium]]
+- [[q-espresso-advanced-patterns--android--medium]]
+- [[q-fakes-vs-mocks-testing--android--medium]]
 - [[q-kapt-vs-ksp--android--medium]]

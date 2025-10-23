@@ -2,38 +2,37 @@
 id: 20251020-200000
 title: Dagger Problems / Проблемы Dagger
 aliases:
-  - Dagger Problems
-  - Проблемы Dagger
+- Dagger Problems
+- Проблемы Dagger
 topic: android
 subtopics:
-  - dependency-injection
-  - build-optimization
+- dependency-injection
+- build-optimization
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-dagger-build-time-optimization--android--medium
-  - q-dagger-framework-overview--android--hard
-  - q-dagger-field-injection--android--medium
+- q-dagger-build-time-optimization--android--medium
+- q-dagger-framework-overview--android--hard
+- q-dagger-field-injection--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/dependency-injection
-  - android/build-optimization
-  - dagger
-  - hilt
-  - problems
-  - challenges
-  - difficulty/medium
+- android/dependency-injection
+- android/build-optimization
+- dagger
+- hilt
+- problems
+- challenges
+- difficulty/medium
 source: https://dagger.dev/faq.html
 source_note: Dagger FAQ and troubleshooting
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Какие проблемы есть у Dagger?
 
 # Question (EN)

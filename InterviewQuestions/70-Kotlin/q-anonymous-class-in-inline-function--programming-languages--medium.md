@@ -528,7 +528,7 @@ inline fun process(
 - [[q-inline-classes-value-classes--kotlin--medium]] - Inline Class
 - [[q-kotlin-inline-functions--kotlin--medium]] - Inline Functions
 - [[q-macrobenchmark-startup--performance--medium]] - Performance
-- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-app-startup-optimization--android--medium]] - Performance
 
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

@@ -1050,5 +1050,5 @@ sealed class Status {
 ## Related Questions
 
 - [[q-which-layout-allows-views-to-overlap--android--easy]]
-- [[q-android14-permissions--permissions--medium]]
+- [[q-android14-permissions--android--medium]]
 - [[q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]]

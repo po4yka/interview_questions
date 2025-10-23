@@ -1,25 +1,170 @@
 ---
 id: 20251012-122785
 title: Async Operations in Android / Асинхронные операции в Android
-aliases: [Async Operations in Android, Асинхронные операции в Android]
+aliases:
+- Async Operations in Android
+- Асинхронные операции в Android
 topic: android
-subtopics: [threads-sync, coroutines, workmanager]
+subtopics:
+- threads-sync
+- coroutines
+- workmanager
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: reviewed
 moc: moc-android
-related: [q-android-async-primitives--android--easy, q-anr-application-not-responding--android--medium, q-android-performance-measurement-tools--android--medium]
+related:
+- q-android-async-primitives--android--easy
+- q-anr-application-not-responding--android--medium
+- q-android-performance-measurement-tools--android--medium
 created: 2025-10-15
 updated: 2025-10-20
-tags: [android/threads-sync, android/coroutines, android/workmanager, concurrency, async, threading, difficulty/medium]
+tags:
+- android/threads-sync
+- android/coroutines
+- android/workmanager
+- concurrency
+- async
+- threading
+- difficulty/medium
+---# Вопрос (RU)
+> Как запускать асинхронные операции в Android?
+
 ---
+
 # Question (EN)
 > How to run asynchronous operations in Android?
 
-# Вопрос (RU)
-> Как запускать асинхронные операции в Android?
+## Ответ (RU)
+
+Выбирайте инструмент по задаче: Coroutines (по умолчанию), WorkManager (отложенная фоновая работа), Executor/HandlerThread (интероп/наследие), RxJava (реактивный подход), избегайте устаревшего AsyncTask. Threads — низкоуровневый вариант, редко нужен напрямую.
+
+**Теория (базовые принципы)**
+- Главный поток — только UI; выносите I/O/CPU работу на фон
+- Структурная конкуррентность (scopes, cancellation) во избежание утечек
+- Учет жизненного цикла для безопасных обновлений UI
+- Отложенные задачи должны переживать смерть процесса (WorkManager)
+
+### 1) Kotlin Coroutines — выбор по умолчанию
+
+- Теория: Структурная конкуррентность; lifecycle scope; простая отмена; диспетчеры (Main/IO/Default).
+- Ключевые моменты:
+  - Родительский/дочерний подход: отмена и исключения распространяются по умолчанию
+  - Используйте `coroutineScope` для быстрой отмены; `supervisorScope` для изоляции отказов
+  - Переключайте потоки с `withContext(Dispatchers.IO/Default)` (CPU/I/O изоляция)
+  - Предпочитайте `lifecycleScope`/`viewModelScope` вместо `GlobalScope`
+  - `async/await` только когда вам действительно нужно параллелизм; иначе используйте `withContext`
+  - Обрабатывайте исключения с `CoroutineExceptionHandler` на верхнем уровне
+  - Сотрудничество с отменой: проверяйте отмену в длинных циклах или I/O
+```kotlin
+lifecycleScope.launch {
+  val data = withContext(Dispatchers.IO) { repo.fetch() }
+  render(data) // Main thread
+}
+```
+
+### 2) ExecutorService — совместимость с Java
+
+- Теория: Пулы потоков; ручной lifecycle/cancel; для библиотек/наследия.
+- Ключевые моменты:
+  - Типы пулов: `newFixedThreadPool`, `newCachedThreadPool`, `newSingleThreadExecutor`, `newScheduledThreadPool`
+  - Очередь и политика отклонения влияют на задержку и backpressure
+  - Предоставьте пользовательский `ThreadFactory` для установки имен и приоритетов
+  - Всегда вызывайте `shutdown()`/`shutdownNow()` для избегания утечек
+  - Видимость памяти: публикуйте результаты на основной поток через `Handler`/`Executor`
+  - Предпочитайте корутины, если интероп требует экзекьюторов
+```kotlin
+val executor = Executors.newFixedThreadPool(2)
+val main = Handler(Looper.getMainLooper())
+executor.execute {
+  val result = doWork()
+  main.post { render(result) }
+}
+```
+
+### 3) HandlerThread — поток с очередью сообщений
+
+- Теория: Фоновый Looper + Handler; подходит для последовательных задач и message-based обработки.
+- Ключевые моменты:
+  - Компоненты: `Looper` + `MessageQueue` + `Handler`
+  - Аффинитет потока: код в `HandlerThread` не должен касаться UI; отправляйте обратно на основной
+  - Избегайте длительной блокирующей работы внутри looper; он блокирует очередь
+  - Используйте для пайплайнов сенсоров/IO, где важен порядок
+  - Чистый запуск с `quitSafely()` для опорожнения ожидающих сообщений
+```kotlin
+val ht = HandlerThread("bg").apply { start() }
+val bg = Handler(ht.looper)
+val ui = Handler(Looper.getMainLooper())
+bg.post { val r = compute(); ui.post { render(r) } }
+```
+
+### 4) WorkManager — отложенная гарантированная работа
+
+- Теория: Переживает перезапуски; учитывает ограничения (сеть, батарея); чейнинг и ретраи.
+- Ключевые моменты:
+  - Используйте ограничения (сеть, зарядка, бездействующий) и критерии отступа (линейный/экспоненциальный)
+  - Уникальная работа (`enqueueUniqueWork`) для слияния дубликатов; цепочка работ с входными/выходными `Data`
+  - Требуется идемпотентность: ваш работник может запуститься более одного раза
+  - Используйте ForegroundService, а не WorkManager, для длительных пользовательских задач
+  - Периодическая работа имеет минимальные интервальные ограничения и неточное планирование
+  - Рассмотрите ускоренную работу для высокоприоритетных коротких задач
+```kotlin
+class UploadWorker(ctx: Context, p: WorkerParameters): CoroutineWorker(ctx,p){
+  override suspend fun doWork() = Result.success()
+}
+val req = OneTimeWorkRequestBuilder<UploadWorker>()
+  .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
+  .build()
+WorkManager.getInstance(context).enqueue(req)
+```
+
+### 5) RxJava — реактивные потоки
+
+- Теория: Потоки с планировщиками; выбирайте, если проект стандартизирован на Rx; иначе корутины проще.
+- Ключевые моменты:
+  - Холодные vs горячие наблюдаемые; примените правильную стратегию backpressure (Flowable) для быстрых производителей
+  - Многопоточность через `subscribeOn` (upstream) и `observeOn` (downstream)
+  - Управление жизненным циклом с `CompositeDisposable` (dispose в `onDestroy`/`onCleared`)
+  - Предпочитайте операторы отображения над побочными эффектами; сократите цепочки и сделайте их читаемыми
+  - Интероп с корутинами через `kotlinx-coroutines-rx2/rx3` при миграции
+```kotlin
+repo.getUser()
+  .subscribeOn(Schedulers.io())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe({ render(it) }, { showError(it) })
+```
+
+### 6) Потоки (Thread) — низкий уровень
+
+- Теория: Ручное управление; нет lifecycle/cancel; используйте только при необходимости.
+- Ключевые моменты:
+  - Сотрудничество с `interrupt()`/`isInterrupted` для отмены
+  - Синхронизация примитивов (замки, атомарные) являются источником ошибок; предпочитайте более высокие уровни API
+  - Всегда переходите на основной поток для обновлений UI (`runOnUiThread`, `Handler`)
+  - Риск утечек, если потоки живут дольше Activity/Fragment; обеспечьте правильное завершение
+```kotlin
+Thread { val r = compute(); runOnUiThread { render(r) } }.start()
+```
+
+**Сравнения**
+- Coroutines vs Rx: корутины — интеграция с Kotlin/Jetpack; Rx — мощные операторы, выше сложность
+- WorkManager vs корутины: WorkManager — гарантированные отложенные задачи; корутины — в рамках процесса
+- Executor/HandlerThread vs корутины: интероп/очереди сообщений; иначе — корутины
+
+**Типичные ошибки**
+- Обновление UI не на главном потоке → Main dispatcher/Handler
+- Нет отмены при завершении lifecycle → lifecycleScope/viewModelScope
+- WorkManager для точного времени/foreground → ForegroundService/AlarmManager
+- Утечки потоков/экзекьюторов → shutdown в onDestroy/onCleared
+
+**Тестирование**
+- Корутины: TestDispatcher/TestScope, Turbine для Flow
+- WorkManager: WorkManagerTestInitHelper, тестовые конфигурации
+- Executors/HandlerThread: Robolectric/LooperMode или инструментальные
 
 ---
 
@@ -152,135 +297,6 @@ Thread { val r = compute(); runOnUiThread { render(r) } }.start()
 
 ---
 
-## Ответ (RU)
-
-Выбирайте инструмент по задаче: Coroutines (по умолчанию), WorkManager (отложенная фоновая работа), Executor/HandlerThread (интероп/наследие), RxJava (реактивный подход), избегайте устаревшего AsyncTask. Threads — низкоуровневый вариант, редко нужен напрямую.
-
-**Теория (базовые принципы)**
-- Главный поток — только UI; выносите I/O/CPU работу на фон
-- Структурная конкуррентность (scopes, cancellation) во избежание утечек
-- Учет жизненного цикла для безопасных обновлений UI
-- Отложенные задачи должны переживать смерть процесса (WorkManager)
-
-### 1) Kotlin Coroutines — выбор по умолчанию
-
-- Теория: Структурная конкуррентность; lifecycle scope; простая отмена; диспетчеры (Main/IO/Default).
-- Ключевые моменты:
-  - Родительский/дочерний подход: отмена и исключения распространяются по умолчанию
-  - Используйте `coroutineScope` для быстрой отмены; `supervisorScope` для изоляции отказов
-  - Переключайте потоки с `withContext(Dispatchers.IO/Default)` (CPU/I/O изоляция)
-  - Предпочитайте `lifecycleScope`/`viewModelScope` вместо `GlobalScope`
-  - `async/await` только когда вам действительно нужно параллелизм; иначе используйте `withContext`
-  - Обрабатывайте исключения с `CoroutineExceptionHandler` на верхнем уровне
-  - Сотрудничество с отменой: проверяйте отмену в длинных циклах или I/O
-```kotlin
-lifecycleScope.launch {
-  val data = withContext(Dispatchers.IO) { repo.fetch() }
-  render(data) // Main thread
-}
-```
-
-### 2) ExecutorService — совместимость с Java
-
-- Теория: Пулы потоков; ручной lifecycle/cancel; для библиотек/наследия.
-- Ключевые моменты:
-  - Типы пулов: `newFixedThreadPool`, `newCachedThreadPool`, `newSingleThreadExecutor`, `newScheduledThreadPool`
-  - Очередь и политика отклонения влияют на задержку и backpressure
-  - Предоставьте пользовательский `ThreadFactory` для установки имен и приоритетов
-  - Всегда вызывайте `shutdown()`/`shutdownNow()` для избегания утечек
-  - Видимость памяти: публикуйте результаты на основной поток через `Handler`/`Executor`
-  - Предпочитайте корутины, если интероп требует экзекьюторов
-```kotlin
-val executor = Executors.newFixedThreadPool(2)
-val main = Handler(Looper.getMainLooper())
-executor.execute {
-  val result = doWork()
-  main.post { render(result) }
-}
-```
-
-### 3) HandlerThread — поток с очередью сообщений
-
-- Теория: Фоновый Looper + Handler; подходит для последовательных задач и message-based обработки.
-- Ключевые моменты:
-  - Компоненты: `Looper` + `MessageQueue` + `Handler`
-  - Аффинитет потока: код в `HandlerThread` не должен касаться UI; отправляйте обратно на основной
-  - Избегайте длительной блокирующей работы внутри looper; он блокирует очередь
-  - Используйте для пайплайнов сенсоров/IO, где важен порядок
-  - Чистый запуск с `quitSafely()` для опорожнения ожидающих сообщений
-```kotlin
-val ht = HandlerThread("bg").apply { start() }
-val bg = Handler(ht.looper)
-val ui = Handler(Looper.getMainLooper())
-bg.post { val r = compute(); ui.post { render(r) } }
-```
-
-### 4) WorkManager — отложенная гарантированная работа
-
-- Теория: Переживает перезапуски; учитывает ограничения (сеть, батарея); чейнинг и ретраи.
-- Ключевые моменты:
-  - Используйте ограничения (сеть, зарядка, бездействующий) и критерии отступа (линейный/экспоненциальный)
-  - Уникальная работа (`enqueueUniqueWork`) для слияния дубликатов; цепочка работ с входными/выходными `Data`
-  - Требуется идемпотентность: ваш работник может запуститься более одного раза
-  - Используйте ForegroundService, а не WorkManager, для длительных пользовательских задач
-  - Периодическая работа имеет минимальные интервальные ограничения и неточное планирование
-  - Рассмотрите ускоренную работу для высокоприоритетных коротких задач
-```kotlin
-class UploadWorker(ctx: Context, p: WorkerParameters): CoroutineWorker(ctx,p){
-  override suspend fun doWork() = Result.success()
-}
-val req = OneTimeWorkRequestBuilder<UploadWorker>()
-  .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
-  .build()
-WorkManager.getInstance(context).enqueue(req)
-```
-
-### 5) RxJava — реактивные потоки
-
-- Теория: Потоки с планировщиками; выбирайте, если проект стандартизирован на Rx; иначе корутины проще.
-- Ключевые моменты:
-  - Холодные vs горячие наблюдаемые; примените правильную стратегию backpressure (Flowable) для быстрых производителей
-  - Многопоточность через `subscribeOn` (upstream) и `observeOn` (downstream)
-  - Управление жизненным циклом с `CompositeDisposable` (dispose в `onDestroy`/`onCleared`)
-  - Предпочитайте операторы отображения над побочными эффектами; сократите цепочки и сделайте их читаемыми
-  - Интероп с корутинами через `kotlinx-coroutines-rx2/rx3` при миграции
-```kotlin
-repo.getUser()
-  .subscribeOn(Schedulers.io())
-  .observeOn(AndroidSchedulers.mainThread())
-  .subscribe({ render(it) }, { showError(it) })
-```
-
-### 6) Потоки (Thread) — низкий уровень
-
-- Теория: Ручное управление; нет lifecycle/cancel; используйте только при необходимости.
-- Ключевые моменты:
-  - Сотрудничество с `interrupt()`/`isInterrupted` для отмены
-  - Синхронизация примитивов (замки, атомарные) являются источником ошибок; предпочитайте более высокие уровни API
-  - Всегда переходите на основной поток для обновлений UI (`runOnUiThread`, `Handler`)
-  - Риск утечек, если потоки живут дольше Activity/Fragment; обеспечьте правильное завершение
-```kotlin
-Thread { val r = compute(); runOnUiThread { render(r) } }.start()
-```
-
-**Сравнения**
-- Coroutines vs Rx: корутины — интеграция с Kotlin/Jetpack; Rx — мощные операторы, выше сложность
-- WorkManager vs корутины: WorkManager — гарантированные отложенные задачи; корутины — в рамках процесса
-- Executor/HandlerThread vs корутины: интероп/очереди сообщений; иначе — корутины
-
-**Типичные ошибки**
-- Обновление UI не на главном потоке → Main dispatcher/Handler
-- Нет отмены при завершении lifecycle → lifecycleScope/viewModelScope
-- WorkManager для точного времени/foreground → ForegroundService/AlarmManager
-- Утечки потоков/экзекьюторов → shutdown в onDestroy/onCleared
-
-**Тестирование**
-- Корутины: TestDispatcher/TestScope, Turbine для Flow
-- WorkManager: WorkManagerTestInitHelper, тестовые конфигурации
-- Executors/HandlerThread: Robolectric/LooperMode или инструментальные
-
----
-
 ## Follow-ups
 
 - How do you choose between WorkManager and ForegroundService?
@@ -303,3 +319,4 @@ Thread { val r = compute(); runOnUiThread { render(r) } }.start()
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]]
+

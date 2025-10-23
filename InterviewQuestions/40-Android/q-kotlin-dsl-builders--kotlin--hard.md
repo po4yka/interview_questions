@@ -1604,5 +1604,5 @@ fun layout(init: LayoutBuilder.() -> Unit) { }
 
 ### Prerequisites (Easier)
 - [[q-dagger-build-time-optimization--android--medium]] - Build, Ui
-- [[q-build-optimization-gradle--gradle--medium]] - Build, Ui
+- [[q-build-optimization-gradle--android--medium]] - Build, Ui
 - [[q-android-build-optimization--android--medium]] - Build, Ui

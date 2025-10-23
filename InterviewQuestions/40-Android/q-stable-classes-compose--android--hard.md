@@ -506,9 +506,9 @@ CounterDisplay(counter)  // Updates correctly
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
 
 ### Related (Hard)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-compose-stability-skippability--android--hard]] - Stability & skippability
 - [[q-stable-annotation-compose--android--hard]] - Stability annotations
-- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table internals
+- [[q-compose-slot-table-recomposition--android--hard]] - Slot table internals
 - [[q-compose-performance-optimization--android--hard]] - Performance optimization
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts
+- [[q-compose-custom-layout--android--hard]] - Custom layouts
 

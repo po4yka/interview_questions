@@ -977,13 +977,13 @@ class OverdrawAnalyzer {
 ## Related Questions
 
 ### Related (Medium)
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Performance
+- [[q-compose-modifier-order-performance--android--medium]] - Performance
 - [[q-macrobenchmark-startup--performance--medium]] - Performance
 - [[q-performance-optimization-android--android--medium]] - Performance
-- [[q-app-startup-optimization--performance--medium]] - Performance
-- [[q-baseline-profiles-optimization--performance--medium]] - Performance
+- [[q-app-startup-optimization--android--medium]] - Performance
+- [[q-baseline-profiles-optimization--android--medium]] - Performance
 
 ### Advanced (Harder)
-- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - Performance, View
-- [[q-canvas-drawing-optimization--custom-views--hard]] - Performance, View
-- [[q-compose-custom-layout--jetpack-compose--hard]] - View
+- [[q-compose-lazy-layout-optimization--android--hard]] - Performance, View
+- [[q-canvas-drawing-optimization--android--hard]] - Performance, View
+- [[q-compose-custom-layout--android--hard]] - View

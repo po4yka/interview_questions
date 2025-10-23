@@ -1093,5 +1093,5 @@ With RenderScript deprecated, Vulkan and OpenGL ES compute shaders are modern al
 ## Related Questions
 
 - [[q-dagger-field-injection--android--medium]]
-- [[q-accessibility-compose--accessibility--medium]]
-- [[q-compose-compiler-plugin--jetpack-compose--hard]]
+- [[q-accessibility-compose--android--medium]]
+- [[q-compose-compiler-plugin--android--hard]]

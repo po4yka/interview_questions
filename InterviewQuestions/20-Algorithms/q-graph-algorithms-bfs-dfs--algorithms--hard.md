@@ -630,7 +630,7 @@ class SocialNetwork {
 ## Related Questions
 
 ### Android Implementation
-- [[q-compose-canvas-graphics--jetpack-compose--hard]] - Data Structures
+- [[q-compose-canvas-graphics--android--hard]] - Data Structures
 - [[q-cache-implementation-strategies--android--medium]] - Data Structures
 - [[q-recomposition-choreographer--android--hard]] - Data Structures
 - [[q-android-security-practices-checklist--android--medium]] - Data Structures

@@ -2,38 +2,37 @@
 id: 20251020-200000
 title: Dagger Purpose / Назначение Dagger
 aliases:
-  - Dagger Purpose
-  - Назначение Dagger
+- Dagger Purpose
+- Назначение Dagger
 topic: android
 subtopics:
-  - dependency-injection
-  - architecture-patterns
+- dependency-injection
+- architecture-patterns
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-dagger-inject-annotation--android--easy
-  - q-dagger-framework-overview--android--hard
-  - q-dagger-main-elements--android--medium
+- q-dagger-inject-annotation--android--easy
+- q-dagger-framework-overview--android--hard
+- q-dagger-main-elements--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/dependency-injection
-  - android/architecture-patterns
-  - dagger
-  - hilt
-  - dependency-injection
-  - di-framework
-  - difficulty/easy
+- android/dependency-injection
+- android/architecture-patterns
+- dagger
+- hilt
+- dependency-injection
+- di-framework
+- difficulty/easy
 source: https://dagger.dev/
 source_note: Dagger official documentation
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Для чего нужен Dagger?
 
 # Question (EN)

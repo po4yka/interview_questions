@@ -1166,7 +1166,7 @@ fun main() {
 - [[q-recyclerview-diffutil-advanced--recyclerview--medium]] - Data Structures
 - [[q-opengl-advanced-rendering--graphics--medium]] - Data Structures
 - [[q-recyclerview-itemdecoration-advanced--recyclerview--medium]] - Data Structures
-- [[q-compose-canvas-graphics--jetpack-compose--hard]] - Data Structures
+- [[q-compose-canvas-graphics--android--hard]] - Data Structures
 
 ### Kotlin Language Features
 - [[q-kotlin-collections--kotlin--medium]] - Data Structures

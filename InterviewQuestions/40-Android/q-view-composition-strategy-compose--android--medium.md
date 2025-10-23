@@ -167,12 +167,12 @@ composeView.setViewCompositionStrategy(
 
 ### Related (Medium)
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose, View
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Compose
+- [[q-compose-modifier-order-performance--android--medium]] - Compose
 - [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose
-- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Compose
-- [[q-accessibility-compose--accessibility--medium]] - Compose
+- [[q-compositionlocal-advanced--android--medium]] - Compose
+- [[q-accessibility-compose--android--medium]] - Compose
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Compose, View
+- [[q-compose-custom-layout--android--hard]] - Compose, View
 - [[q-adaptive-layouts-compose--jetpack-compose--hard]] - Compose, View
-- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - Compose, View
+- [[q-compose-lazy-layout-optimization--android--hard]] - Compose, View

@@ -1,38 +1,38 @@
 ---
 id: 20251020-200200
-title: Does State Made In Compose Help Avoid Race Condition / Помогает ли State в Compose избежать состояния гонки
+title: Does State Made In Compose Help Avoid Race Condition / Помогает ли State в
+  Compose избежать состояния гонки
 aliases:
-  - Does State Made In Compose Help Avoid Race Condition
-  - Помогает ли State в Compose избежать состояния гонки
+- Does State Made In Compose Help Avoid Race Condition
+- Помогает ли State в Compose избежать состояния гонки
 topic: android
 subtopics:
-  - ui-compose
-  - ui-state
+- ui-compose
+- ui-state
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: https://developer.android.com/jetpack/compose/state
 source_note: Android Compose state management documentation
 status: reviewed
 moc: moc-android
 related:
-  - q-derived-state-snapshot-system--jetpack-compose--hard
-  - q-compose-state-management--android--medium
-  - q-android-performance-optimization--android--medium
+- q-derived-state-snapshot-system--jetpack-compose--hard
+- q-compose-state-management--android--medium
+- q-android-performance-optimization--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/ui-compose
-  - android/ui-state
-  - compose
-  - state
-  - concurrency
-  - difficulty/medium
----
-# Вопрос (RU)
+- android/ui-compose
+- android/ui-state
+- compose
+- state
+- concurrency
+- difficulty/medium
+---# Вопрос (RU)
 > Помогает ли State в Compose избежать состояния гонки?
 
 # Question (EN)
@@ -422,4 +422,4 @@ class MyViewModel : ViewModel() {
 - How to handle state updates in Compose with coroutines?
 
 ## Related Questions
-- [[q-derived-state-snapshot-system--jetpack-compose--hard]]
+- [[q-derived-state-snapshot-system--android--hard]]

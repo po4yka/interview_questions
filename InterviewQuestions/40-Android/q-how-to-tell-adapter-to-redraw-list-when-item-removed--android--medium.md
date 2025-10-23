@@ -788,5 +788,5 @@ adapter.submitList(newList)
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
 - [[q-dagger-build-time-optimization--android--medium]] - Ui
 - [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
-- [[q-build-optimization-gradle--gradle--medium]] - Ui
+- [[q-build-optimization-gradle--android--medium]] - Ui
 - [[q-testing-compose-ui--android--medium]] - Ui

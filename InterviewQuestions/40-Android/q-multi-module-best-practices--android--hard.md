@@ -448,6 +448,6 @@ feature:   feature:   feature:
 - [[q-modularization-patterns--android--hard]] - Architecture
 
 ### Prerequisites (Easier)
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+- [[q-build-optimization-gradle--android--medium]] - Gradle
 - [[q-usecase-pattern-android--android--medium]] - Architecture
 - [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Gradle

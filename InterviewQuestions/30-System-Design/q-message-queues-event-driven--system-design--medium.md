@@ -732,7 +732,7 @@ class NotificationEventConsumer {
 ## Related Questions
 
 ### Android Implementation
-- [[q-compose-canvas-graphics--jetpack-compose--hard]] - Data Structures
+- [[q-compose-canvas-graphics--android--hard]] - Data Structures
 - [[q-cache-implementation-strategies--android--medium]] - Data Structures
 
 ### Kotlin Language Features

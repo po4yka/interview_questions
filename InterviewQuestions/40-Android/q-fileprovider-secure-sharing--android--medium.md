@@ -1,39 +1,39 @@
 ---
 id: 20251020-200800
-title: FileProvider for Secure File Sharing / FileProvider для безопасного обмена файлами
+title: FileProvider for Secure File Sharing / FileProvider для безопасного обмена
+  файлами
 aliases:
-  - FileProvider for Secure File Sharing
-  - FileProvider для безопасного обмена файлами
+- FileProvider for Secure File Sharing
+- FileProvider для безопасного обмена файлами
 topic: android
 subtopics:
-  - files-media
-  - permissions
+- files-media
+- permissions
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: https://developer.android.com/reference/androidx/core/content/FileProvider
 source_note: Android FileProvider documentation
 status: reviewed
 moc: moc-android
 related:
-  - q-android-permissions--android--medium
-  - q-content-providers--android--medium
-  - q-file-storage-android--android--medium
+- q-android-permissions--android--medium
+- q-content-providers--android--medium
+- q-file-storage-android--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/files-media
-  - android/permissions
-  - fileprovider
-  - content-provider
-  - file-sharing
-  - security
-  - difficulty/medium
----
-# Вопрос (RU)
+- android/files-media
+- android/permissions
+- fileprovider
+- content-provider
+- file-sharing
+- security
+- difficulty/medium
+---# Вопрос (RU)
 > Что вы знаете о FileProvider?
 
 # Question (EN)

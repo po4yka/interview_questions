@@ -811,7 +811,7 @@ sdk.dir=/Users/username/Library/Android/sdk
 
 ### Related (Medium)
 - [[q-dagger-build-time-optimization--android--medium]] - Build, Ui
-- [[q-build-optimization-gradle--gradle--medium]] - Build, Ui
+- [[q-build-optimization-gradle--android--medium]] - Build, Ui
 - [[q-android-build-optimization--android--medium]] - Build, Ui
 - [[q-kapt-ksp-migration--gradle--medium]] - Build
 - [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Build

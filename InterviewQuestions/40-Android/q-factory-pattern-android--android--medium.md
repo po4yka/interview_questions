@@ -2,37 +2,36 @@
 id: 20251020-200500
 title: Factory Pattern Android / Паттерн Factory в Android
 aliases:
-  - Factory Pattern Android
-  - Паттерн Factory в Android
+- Factory Pattern Android
+- Паттерн Factory в Android
 topic: android
 subtopics:
-  - architecture-clean
-  - ui-views
+- architecture-clean
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: https://developer.android.com/guide/topics/ui/declaring-layout
 source_note: Android layout inflation documentation
 status: reviewed
 moc: moc-android
 related:
-  - q-android-architecture-patterns--architecture-patterns--medium
-  - q-view-lifecycle--android--medium
-  - q-fragment-lifecycle--android--medium
+- q-android-architecture-patterns--architecture-patterns--medium
+- q-view-lifecycle--android--medium
+- q-fragment-lifecycle--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/architecture-clean
-  - android/ui-views
-  - factory-pattern
-  - design-patterns
-  - layout-inflater
-  - difficulty/medium
----
-# Вопрос (RU)
+- android/architecture-clean
+- android/ui-views
+- factory-pattern
+- design-patterns
+- layout-inflater
+- difficulty/medium
+---# Вопрос (RU)
 > Можешь привести пример когда Android фреймворк использует паттерн Factory?
 
 # Question (EN)

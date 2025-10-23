@@ -555,7 +555,7 @@ fun CustomChart(data: List<DataPoint>) {
 - [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
 
 ### Advanced (Harder)
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability & skippability
+- [[q-compose-stability-skippability--android--hard]] - Stability & skippability
 - [[q-stable-classes-compose--android--hard]] - @Stable annotation
 - [[q-stable-annotation-compose--android--hard]] - Stability annotations
 

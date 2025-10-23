@@ -695,6 +695,6 @@ fun ChatScreen(viewModel: ChatViewModel = hiltViewModel()) {
 
 ## Related Questions
 
-- [[q-alternative-distribution--distribution--medium]]
+- [[q-alternative-distribution--android--medium]]
 - [[q-mlkit-face-detection--ml--medium]]
 - [[q-what-navigation-methods-exist-in-kotlin--programming-languages--medium]]

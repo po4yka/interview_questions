@@ -1071,5 +1071,5 @@ ML Kit поддерживает пользовательские модели ч
 ## Related Questions
 
 - [[q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy]]
-- [[q-compose-canvas-graphics--jetpack-compose--hard]]
+- [[q-compose-canvas-graphics--android--hard]]
 - [[q-material3-motion-transitions--material-design--medium]]

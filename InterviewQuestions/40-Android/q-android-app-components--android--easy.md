@@ -1,91 +1,40 @@
 ---
 id: 20251012-122759
-title: "Android App Components / Компоненты Android приложения"
-aliases: [Android App Components, Компоненты Android приложения]
+title: Android App Components / Компоненты Android приложения
+aliases:
+- Android App Components
+- Компоненты Android приложения
 topic: android
-subtopics: [app-components, architecture]
+subtopics:
+- app-components
+- architecture
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: reviewed
 moc: moc-android
-related: [q-activity-lifecycle-methods--android--medium, q-service-types--android--medium, q-broadcast-receivers--android--medium]
+related:
+- q-activity-lifecycle-methods--android--medium
+- q-service-types--android--medium
+- q-broadcast-receivers--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags: [android/app-components, android/architecture, app-components, architecture, difficulty/easy]
----
-# Question (EN)
-> What are the main components of an Android application?
-
-# Вопрос (RU)
+tags:
+- android/app-components
+- android/architecture
+- app-components
+- architecture
+- difficulty/easy
+---# Вопрос (RU)
 > Какие основные компоненты Android-приложения?
 
 ---
 
-## Answer (EN)
-
-Android applications have four fundamental components:
-
-**1. Activity:**
-- UI component representing a single screen
-- Handles user interactions
-- Manages lifecycle states
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
-}
-```
-
-**2. Service:**
-- Background component for long-running operations
-- No UI, runs independently
-- Types: Started, Bound, Foreground
-
-```kotlin
-class MusicService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Background music playback
-        return START_STICKY
-    }
-}
-```
-
-**3. Broadcast Receiver:**
-- Responds to system-wide broadcast announcements
-- Receives and reacts to events
-- Can be registered statically or dynamically
-
-```kotlin
-class BatteryReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        // Handle battery low event
-    }
-}
-```
-
-**4. Content Provider:**
-- Manages shared app data
-- Provides data access interface
-- Enables data sharing between apps
-
-```kotlin
-class MyContentProvider : ContentProvider() {
-    override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
-        // Provide data to other apps
-        return null
-    }
-}
-```
-
-**Component Communication:**
-- **Intents**: Used to communicate between components
-- **Intent Filters**: Declare component capabilities
-- **Manifest**: Registers all components
+# Question (EN)
+> What are the main components of an Android application?
 
 ## Ответ (RU)
 
@@ -153,6 +102,70 @@ class MyContentProvider : ContentProvider() {
 
 ---
 
+## Answer (EN)
+
+Android applications have four fundamental components:
+
+**1. Activity:**
+- UI component representing a single screen
+- Handles user interactions
+- Manages lifecycle states
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+}
+```
+
+**2. Service:**
+- Background component for long-running operations
+- No UI, runs independently
+- Types: Started, Bound, Foreground
+
+```kotlin
+class MusicService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Background music playback
+        return START_STICKY
+    }
+}
+```
+
+**3. Broadcast Receiver:**
+- Responds to system-wide broadcast announcements
+- Receives and reacts to events
+- Can be registered statically or dynamically
+
+```kotlin
+class BatteryReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        // Handle battery low event
+    }
+}
+```
+
+**4. Content Provider:**
+- Manages shared app data
+- Provides data access interface
+- Enables data sharing between apps
+
+```kotlin
+class MyContentProvider : ContentProvider() {
+    override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
+        // Provide data to other apps
+        return null
+    }
+}
+```
+
+**Component Communication:**
+- **Intents**: Used to communicate between components
+- **Intent Filters**: Declare component capabilities
+- **Manifest**: Registers all components
+
 ## Follow-ups
 
 - How do Intents enable communication between components?
@@ -180,3 +193,4 @@ class MyContentProvider : ContentProvider() {
 - [[q-what-are-services-for--android--easy]] - Service purpose
 - [[q-what-is-broadcastreceiver--android--easy]] - Broadcast receivers
 - [[q-broadcastreceiver-contentprovider--android--easy]] - Content providers
+

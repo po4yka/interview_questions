@@ -366,8 +366,8 @@ android {
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
 ### Related (Medium)
 - [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
-- [[q-app-size-optimization--performance--medium]] - Performance
-- [[q-app-startup-optimization--performance--medium]] - Performance
+- [[q-app-size-optimization--android--medium]] - Performance
+- [[q-app-startup-optimization--android--medium]] - Performance
 - [[q-macrobenchmark-startup--performance--medium]] - Performance
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

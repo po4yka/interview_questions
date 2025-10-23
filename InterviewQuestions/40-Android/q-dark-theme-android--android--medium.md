@@ -2,38 +2,37 @@
 id: 20251020-200000
 title: Dark Theme Android / Темная тема Android
 aliases:
-  - Dark Theme Android
-  - Темная тема Android
+- Dark Theme Android
+- Темная тема Android
 topic: android
 subtopics:
-  - ui-theming
-  - ui-views
+- ui-theming
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-android-theming-basics--android--medium
-  - q-material-design-theming--android--medium
-  - q-android-ui-optimization--android--medium
+- q-android-theming-basics--android--medium
+- q-material-design-theming--android--medium
+- q-android-ui-optimization--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/ui-theming
-  - android/ui-views
-  - dark-theme
-  - theming
-  - daynight
-  - material-design
-  - difficulty/medium
+- android/ui-theming
+- android/ui-views
+- dark-theme
+- theming
+- daynight
+- material-design
+- difficulty/medium
 source: https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
 source_note: Android Dark Theme documentation
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Что такое темная тема в Android?
 
 # Question (EN)

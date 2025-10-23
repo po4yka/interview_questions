@@ -1151,4 +1151,4 @@ GPS навигация
 
 - [[q-how-to-show-svg-string-as-vector-file--programming-languages--medium]]
 - [[q-does-state-made-in-compose-help-avoid-race-condition--android--medium]]
-- [[q-compose-remember-derived-state--jetpack-compose--medium]]
+- [[q-compose-remember-derived-state--android--medium]]

@@ -501,4 +501,4 @@ override fun surfaceDestroyed(holder: SurfaceHolder) {
 
 - [[q-what-is-the-main-application-execution-thread--android--easy]]
 - [[q-room-relations-embedded--room--medium]]
-- [[q-alternative-distribution--distribution--medium]]
+- [[q-alternative-distribution--android--medium]]

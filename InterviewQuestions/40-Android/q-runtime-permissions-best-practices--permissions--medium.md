@@ -1038,7 +1038,7 @@ Runtime разрешения требуют:
 ### Related (Medium)
 
 -   [[q-android-security-practices-checklist--android--medium]] - Security
--   [[q-encrypted-file-storage--security--medium]] - Security
+-   [[q-encrypted-file-storage--android--medium]] - Security
 -   [[q-database-encryption-android--android--medium]] - Security
--   [[q-app-security-best-practices--security--medium]] - Security
--   [[q-android14-permissions--permissions--medium]] - Security
+-   [[q-app-security-best-practices--android--medium]] - Security
+-   [[q-android14-permissions--android--medium]] - Security

@@ -14,113 +14,13 @@ related: [q-async-operations-android--android--medium, q-workmanager-basics--and
 created: 2025-10-05
 updated: 2025-10-15
 tags: [android/background-execution, android/coroutines, android/service, workmanager, coroutines, service, difficulty/medium]
----
-
-# Question (EN)
-> What is a background task and how should it be performed?
-
-# Вопрос (RU)
+---# Вопрос (RU)
 > Что такое фоновая задача и как она должна выполняться?
 
 ---
 
-## Answer (EN)
-
-### Background Task Types
-
-**Asynchronous Work**
-- Theory: Concurrent operations while app is foreground; prevents ANR; stops when app backgrounded
-- Use cases: UI calculations, data processing, API calls
-- Options: Kotlin coroutines, Java threads
-
-**Task Scheduling APIs**
-- Theory: Deferred execution; survives app termination; respects system constraints
-- Use cases: Periodic sync, sensor data collection, content uploads
-- Options: WorkManager (recommended), JobScheduler
-
-**Foreground Services**
-- Theory: Immediate execution; user-visible; high resource usage; strict restrictions
-- Use cases: Media playback, location tracking, file downloads
-- Types: Regular service, shortService (< 3 minutes)
-
-### Decision Framework
-
-**User-Initiated Tasks**
-
-1. **Continue in background?**
-   - No → Asynchronous work
-   - Yes → Next question
-
-2. **Can be deferred?**
-   - Yes → Task scheduling APIs
-   - No → Next question
-
-3. **Short and critical?**
-   - Yes → Foreground service (shortService)
-   - No → Check for specialized APIs
-
-4. **Specialized API available?**
-   - Yes → Use specialized API (geofence, media session)
-   - No → Foreground service
-
-**Event-Triggered Tasks**
-
-1. **Duration < few seconds?**
-   - Yes → Asynchronous work
-   - No → Check foreground service eligibility
-
-2. **Can start foreground service?**
-   - Yes → Foreground service
-   - No → Task scheduling APIs
-
-### Implementation Examples
-
-**Asynchronous Work**
-```kotlin
-// Coroutines - structured concurrency
-lifecycleScope.launch {
-    val data = withContext(Dispatchers.IO) { fetchData() }
-    updateUI(data)
-}
-
-// Threads - manual management
-Thread {
-    val result = compute()
-    runOnUiThread { render(result) }
-}.start()
-```
-
-**WorkManager**
-```kotlin
-// Periodic work with constraints
-val constraints = Constraints.Builder()
-    .setRequiredNetworkType(NetworkType.CONNECTED)
-    .setRequiresBatteryNotLow(true)
-    .build()
-
-val workRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
-    .setConstraints(constraints)
-    .build()
-
-WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-    "sync", ExistingPeriodicWorkPolicy.KEEP, workRequest
-)
-```
-
-**Foreground Service**
-```kotlin
-// Short service for quick tasks
-class QuickTaskService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = createNotification()
-        startForeground(1, notification)
-
-        // Do work
-        stopSelf()
-        return START_NOT_STICKY
-    }
-}
-```
+# Question (EN)
+> What is a background task and how should it be performed?
 
 ## Ответ (RU)
 
@@ -222,6 +122,104 @@ class QuickTaskService : Service() {
 
 ---
 
+## Answer (EN)
+
+### Background Task Types
+
+**Asynchronous Work**
+- Theory: Concurrent operations while app is foreground; prevents ANR; stops when app backgrounded
+- Use cases: UI calculations, data processing, API calls
+- Options: Kotlin coroutines, Java threads
+
+**Task Scheduling APIs**
+- Theory: Deferred execution; survives app termination; respects system constraints
+- Use cases: Periodic sync, sensor data collection, content uploads
+- Options: WorkManager (recommended), JobScheduler
+
+**Foreground Services**
+- Theory: Immediate execution; user-visible; high resource usage; strict restrictions
+- Use cases: Media playback, location tracking, file downloads
+- Types: Regular service, shortService (< 3 minutes)
+
+### Decision Framework
+
+**User-Initiated Tasks**
+
+1. **Continue in background?**
+   - No → Asynchronous work
+   - Yes → Next question
+
+2. **Can be deferred?**
+   - Yes → Task scheduling APIs
+   - No → Next question
+
+3. **Short and critical?**
+   - Yes → Foreground service (shortService)
+   - No → Check for specialized APIs
+
+4. **Specialized API available?**
+   - Yes → Use specialized API (geofence, media session)
+   - No → Foreground service
+
+**Event-Triggered Tasks**
+
+1. **Duration < few seconds?**
+   - Yes → Asynchronous work
+   - No → Check foreground service eligibility
+
+2. **Can start foreground service?**
+   - Yes → Foreground service
+   - No → Task scheduling APIs
+
+### Implementation Examples
+
+**Asynchronous Work**
+```kotlin
+// Coroutines - structured concurrency
+lifecycleScope.launch {
+    val data = withContext(Dispatchers.IO) { fetchData() }
+    updateUI(data)
+}
+
+// Threads - manual management
+Thread {
+    val result = compute()
+    runOnUiThread { render(result) }
+}.start()
+```
+
+**WorkManager**
+```kotlin
+// Periodic work with constraints
+val constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.CONNECTED)
+    .setRequiresBatteryNotLow(true)
+    .build()
+
+val workRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
+    .setConstraints(constraints)
+    .build()
+
+WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+    "sync", ExistingPeriodicWorkPolicy.KEEP, workRequest
+)
+```
+
+**Foreground Service**
+```kotlin
+// Short service for quick tasks
+class QuickTaskService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val notification = createNotification()
+        startForeground(1, notification)
+
+        // Do work
+        stopSelf()
+        return START_NOT_STICKY
+    }
+}
+```
+
 ## Follow-ups
 
 - What are the battery optimization implications of each approach?
@@ -247,3 +245,4 @@ class QuickTaskService : Service() {
 - [[q-android-runtime-internals--android--hard]]
 - [[q-android-build-optimization--android--medium]]
 - [[q-android-modularization--android--medium]]
+

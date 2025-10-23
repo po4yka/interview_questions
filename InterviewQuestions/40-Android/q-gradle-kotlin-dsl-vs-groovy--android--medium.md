@@ -235,7 +235,7 @@ android {
 ## Related Questions
 
 ### Related (Medium)
-- [[q-build-optimization-gradle--gradle--medium]] - Gradle
+- [[q-build-optimization-gradle--android--medium]] - Gradle
 - [[q-proguard-r8--android--medium]] - Build Tools
 - [[q-annotation-processing--android--medium]] - Annotation Processing
 

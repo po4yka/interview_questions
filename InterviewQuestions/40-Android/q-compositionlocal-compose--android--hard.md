@@ -1,23 +1,38 @@
 ---
 id: 20251021-120500
-title: "CompositionLocal in Compose / CompositionLocal в Compose"
-aliases: [CompositionLocal in Compose, CompositionLocal в Compose]
+title: CompositionLocal in Compose / CompositionLocal в Compose
+aliases:
+- CompositionLocal in Compose
+- CompositionLocal в Compose
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+- ui-compose
+- ui-state
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [ru, en]
+language_tags:
+- ru
+- en
 status: reviewed
 moc: moc-android
-related: [q-compositionlocal-advanced--jetpack-compose--medium, q-compose-remember-derived-state--jetpack-compose--medium, q-compose-performance-optimization--android--hard]
+related:
+- q-compositionlocal-advanced--jetpack-compose--medium
+- q-compose-remember-derived-state--jetpack-compose--medium
+- q-compose-performance-optimization--android--hard
 created: 2025-10-15
 updated: 2025-10-21
-tags: [android/ui-compose, android/ui-state, compose, compositionlocal, ui-context, best-practices, difficulty/hard]
+tags:
+- android/ui-compose
+- android/ui-state
+- compose
+- compositionlocal
+- ui-context
+- best-practices
+- difficulty/hard
 source: https://developer.android.com/jetpack/compose/compositionlocal
 source_note: Official docs on CompositionLocal
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Что такое CompositionLocal в Jetpack Compose, когда использовать его вместо параметров, и чем отличаются `compositionLocalOf` и `staticCompositionLocalOf` с точки зрения рекомпозиции и производительности?
 
 # Question (EN)
@@ -190,8 +205,8 @@ fun Screen(scrollY: Int) {
 - [[q-compose-semantics--android--medium]]
 
 ### Related (Same Level)
-- [[q-compositionlocal-advanced--jetpack-compose--medium]]
-- [[q-compose-remember-derived-state--jetpack-compose--medium]]
+- [[q-compositionlocal-advanced--android--medium]]
+- [[q-compose-remember-derived-state--android--medium]]
 
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]]

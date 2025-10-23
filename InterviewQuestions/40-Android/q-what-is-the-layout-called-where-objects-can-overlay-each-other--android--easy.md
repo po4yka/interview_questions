@@ -866,4 +866,4 @@ fun AdvancedBoxExample() {
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--jetpack-compose--hard]] - View
+- [[q-compose-custom-layout--android--hard]] - View

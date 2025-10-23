@@ -2,39 +2,38 @@
 id: 20251020-200000
 title: Design WhatsApp App / Проектирование приложения WhatsApp
 aliases:
-  - Design WhatsApp App
-  - Проектирование приложения WhatsApp
+- Design WhatsApp App
+- Проектирование приложения WhatsApp
 topic: android
 subtopics:
-  - networking-http
-  - files-media
-  - service
+- networking-http
+- files-media
+- service
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 source: https://developer.android.com/training/sync-adapters
 source_note: Android sync and messaging patterns
 status: reviewed
 moc: moc-android
 related:
-  - q-data-sync-unstable-network--android--hard
-  - q-database-encryption-android--android--medium
-  - q-deep-link-vs-app-link--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-database-encryption-android--android--medium
+- q-deep-link-vs-app-link--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/networking-http
-  - android/files-media
-  - android/service
-  - messaging
-  - realtime
-  - e2ee
-  - difficulty/hard
----
-# Вопрос (RU)
+- android/networking-http
+- android/files-media
+- android/service
+- messaging
+- realtime
+- e2ee
+- difficulty/hard
+---# Вопрос (RU)
 > Как спроектировать мессенджер WhatsApp для Android?
 
 # Question (EN)

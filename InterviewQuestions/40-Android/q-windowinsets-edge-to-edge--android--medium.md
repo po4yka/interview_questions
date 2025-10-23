@@ -905,4 +905,4 @@ Edge-to-edge дизайн позволяет приложениям рисова
 
 - [[q-sharedpreferences-definition--android--easy]]
 - [[q-diffutil-background-calculation-issues--android--medium]]
-- [[q-build-optimization-gradle--gradle--medium]]
+- [[q-build-optimization-gradle--android--medium]]

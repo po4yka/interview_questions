@@ -2,38 +2,37 @@
 id: 20251020-200000
 title: Dagger Scope Explained / Объяснение скоупов Dagger
 aliases:
-  - Dagger Scope Explained
-  - Объяснение скоупов Dagger
+- Dagger Scope Explained
+- Объяснение скоупов Dagger
 topic: android
 subtopics:
-  - dependency-injection
-  - lifecycle
+- dependency-injection
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-dagger-custom-scopes--di--hard
-  - q-dagger-framework-overview--android--hard
-  - q-dagger-main-elements--android--medium
+- q-dagger-custom-scopes--di--hard
+- q-dagger-framework-overview--android--hard
+- q-dagger-main-elements--android--medium
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/dependency-injection
-  - android/lifecycle
-  - dagger
-  - hilt
-  - scope
-  - lifecycle
-  - difficulty/medium
+- android/dependency-injection
+- android/lifecycle
+- dagger
+- hilt
+- scope
+- lifecycle
+- difficulty/medium
 source: https://dagger.dev/api/latest/dagger/Scope.html
 source_note: Dagger Scope API documentation
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Что такое scope в Dagger и как они работают?
 
 # Question (EN)
@@ -408,5 +407,5 @@ class UserAdapter @Inject constructor() // Should be @FragmentScoped
 - [[q-dagger-main-elements--android--medium]]
 
 ### Advanced (Harder)
-- [[q-dagger-custom-scopes--di--hard]]
+- [[q-dagger-custom-scopes--android--hard]]
 - [[q-dagger-framework-overview--android--hard]]

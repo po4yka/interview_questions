@@ -57,42 +57,42 @@ LIMIT 100
 #### State Management
 - [[q-mutable-state-compose--android--medium]] - MutableState and state management
 - [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
-- [[q-compose-remember-derived-state--jetpack-compose--medium]] - Derived state patterns
+- [[q-compose-remember-derived-state--android--medium]] - Derived state patterns
 - [[q-state-hoisting-compose--android--medium]] - State hoisting principles
 - [[q-pomogaet-li-state-sdelannyy-v-compose-izbezhat-sostoyaniya-gonki--android--medium]] - State and race conditions
 
 #### Recomposition & Performance
 - [[q-recomposition-compose--android--medium]] - Understanding recomposition
-- [[q-compose-stability-skippability--jetpack-compose--hard]] - Stability and skippability
+- [[q-compose-stability-skippability--android--hard]] - Stability and skippability
 - [[q-stable-classes-compose--android--hard]] - @Stable annotation
 - [[q-stable-annotation-compose--android--hard]] - Stability annotations in depth
-- [[q-compose-slot-table-recomposition--jetpack-compose--hard]] - Slot table and recomposition
+- [[q-compose-slot-table-recomposition--android--hard]] - Slot table and recomposition
 - [[q-compose-performance-optimization--android--hard]] - Performance optimization strategies
-- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - Lazy layout optimization
+- [[q-compose-lazy-layout-optimization--android--hard]] - Lazy layout optimization
 
 #### Side Effects
 - [[q-compose-side-effects-launchedeffect-disposableeffect--android--hard]] - LaunchedEffect & DisposableEffect
-- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - Advanced side effect patterns
+- [[q-compose-side-effects-advanced--android--hard]] - Advanced side effect patterns
 
 #### UI & Layouts
 - [[q-compose-modifier-system--android--medium]] - Modifier system
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Modifier order and performance
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts
+- [[q-compose-modifier-order-performance--android--medium]] - Modifier order and performance
+- [[q-compose-custom-layout--android--hard]] - Custom layouts
 - [[q-kak-risuet-compose-na-ekrane--android--hard]] - How Compose draws on screen
 
 #### Animations & Gestures
-- [[q-compose-custom-animations--jetpack-compose--medium]] - Custom animations
-- [[q-animated-visibility-vs-content--jetpack-compose--medium]] - AnimatedVisibility vs AnimatedContent
+- [[q-compose-custom-animations--android--medium]] - Custom animations
+- [[q-animated-visibility-vs-content--android--medium]] - AnimatedVisibility vs AnimatedContent
 - [[q-shared-element-transitions--jetpack-compose--hard]] - Shared element transitions
-- [[q-compose-gesture-detection--jetpack-compose--medium]] - Gesture detection
+- [[q-compose-gesture-detection--android--medium]] - Gesture detection
 
 #### Advanced Topics
 - [[q-compositionlocal-compose--android--hard]] - CompositionLocal basics
-- [[q-compositionlocal-advanced--jetpack-compose--medium]] - Advanced CompositionLocal patterns
-- [[q-compose-compiler-plugin--jetpack-compose--hard]] - Compose compiler plugin
+- [[q-compositionlocal-advanced--android--medium]] - Advanced CompositionLocal patterns
+- [[q-compose-compiler-plugin--android--hard]] - Compose compiler plugin
 - [[q-view-composition-strategy-compose--android--medium]] - View composition strategies
 - [[q-compose-semantics--android--medium]] - Semantics for accessibility
-- [[q-compose-navigation-advanced--jetpack-compose--medium]] - Advanced navigation patterns
+- [[q-compose-navigation-advanced--android--medium]] - Advanced navigation patterns
 
 #### Testing & Migration
 - [[q-compose-testing--android--medium]] - Testing Compose UI
@@ -137,20 +137,20 @@ SORT difficulty ASC, file.name ASC
 - [[q-unit-testing-coroutines-flow--android--medium]] - Testing coroutines and Flow
 - [[q-testing-coroutines-flow--testing--hard]] - Advanced coroutines/Flow testing
 - [[q-testing-viewmodels-turbine--testing--medium]] - Testing ViewModels with Turbine
-- [[q-fakes-vs-mocks-testing--testing--medium]] - Fakes vs Mocks
+- [[q-fakes-vs-mocks-testing--android--medium]] - Fakes vs Mocks
 - [[q-test-doubles-dependency-injection--testing--medium]] - Test doubles and DI
 
 #### UI Testing
 - [[q-compose-testing--android--medium]] - Compose UI testing
 - [[q-compose-ui-testing-advanced--testing--hard]] - Advanced Compose testing
-- [[q-espresso-advanced-patterns--testing--medium]] - Advanced Espresso patterns
+- [[q-espresso-advanced-patterns--android--medium]] - Advanced Espresso patterns
 - [[q-screenshot-snapshot-testing--testing--medium]] - Screenshot/snapshot testing
 
 #### Testing Tools
 - [[q-mockk-advanced-features--testing--medium]] - MockK advanced features
 - [[q-flaky-test-prevention--testing--medium]] - Preventing flaky tests
 - [[q-test-coverage-quality-metrics--testing--medium]] - Test coverage metrics
-- [[q-accessibility-testing--accessibility--medium]] - Accessibility testing
+- [[q-accessibility-testing--android--medium]] - Accessibility testing
 
 **All Testing Questions:**
 ```dataview
@@ -189,7 +189,7 @@ SORT difficulty ASC, file.name ASC
 #### KMM Fundamentals
 - [[q-kmm-architecture--multiplatform--hard]] - KMM architecture patterns
 - [[q-kmm-production-readiness--multiplatform--hard]] - Production readiness considerations
-- [[q-compose-multiplatform--multiplatform--hard]] - Compose Multiplatform
+- [[q-compose-multiplatform--android--hard]] - Compose Multiplatform
 
 #### KMM Development
 - [[q-kmm-ktor-networking--multiplatform--medium]] - Networking with Ktor
@@ -220,14 +220,14 @@ SORT difficulty ASC, file.name ASC
 - [[q-memory-leak-detection--performance--medium]] - Memory leak detection
 
 #### App Optimization
-- [[q-app-startup-optimization--performance--medium]] - App startup optimization
-- [[q-app-size-optimization--performance--medium]] - App size reduction
-- [[q-baseline-profiles-optimization--performance--medium]] - Baseline profiles
+- [[q-app-startup-optimization--android--medium]] - App startup optimization
+- [[q-app-size-optimization--android--medium]] - App size reduction
+- [[q-baseline-profiles-optimization--android--medium]] - Baseline profiles
 - [[q-macrobenchmark-startup--performance--medium]] - Macrobenchmark for startup
 
 #### Compose Performance
 - [[q-compose-performance-optimization--android--hard]] - Compose performance optimization
-- [[q-compose-modifier-order-performance--jetpack-compose--medium]] - Modifier order impact
+- [[q-compose-modifier-order-performance--android--medium]] - Modifier order impact
 - [[q-performance-monitoring-jank-compose--android--medium]] - Monitoring jank in Compose
 
 **All Performance Questions:**
@@ -245,13 +245,13 @@ SORT difficulty ASC, file.name ASC
 #### Security Best Practices
 - [[q-android-security-best-practices--android--medium]] - Android security overview
 - [[q-android-security-practices-checklist--android--medium]] - Security practices checklist
-- [[q-app-security-best-practices--security--medium]] - App security best practices
+- [[q-app-security-best-practices--android--medium]] - App security best practices
 
 #### Data Protection
 - [[q-android-keystore-system--security--medium]] - Android Keystore system
-- [[q-data-encryption-at-rest--security--medium]] - Data encryption at rest
+- [[q-data-encryption-at-rest--android--medium]] - Data encryption at rest
 - [[q-database-encryption-android--android--medium]] - Database encryption
-- [[q-encrypted-file-storage--security--medium]] - Encrypted file storage
+- [[q-encrypted-file-storage--android--medium]] - Encrypted file storage
 
 #### Network Security
 - [[q-certificate-pinning--security--medium]] - Certificate pinning

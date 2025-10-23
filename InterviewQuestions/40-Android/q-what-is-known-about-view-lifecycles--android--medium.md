@@ -589,4 +589,4 @@ override fun onDetachedFromWindow() {
 - [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - Lifecycle, View
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--jetpack-compose--hard]] - View
+- [[q-compose-custom-layout--android--hard]] - View

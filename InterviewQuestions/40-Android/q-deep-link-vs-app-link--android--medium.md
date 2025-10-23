@@ -2,41 +2,40 @@
 id: 20251020-200000
 title: Deep Link Vs App Link / Deep Link против App Link
 aliases:
-  - Deep Link Vs App Link
-  - Deep Link против App Link
+- Deep Link Vs App Link
+- Deep Link против App Link
 topic: android
 subtopics:
-  - ui-navigation
-  - app-startup
+- ui-navigation
+- app-startup
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-android-intent-system--android--medium
-  - q-android-navigation-component--android--medium
-  - q-android-webview-basics--android--easy
+- q-android-intent-system--android--medium
+- q-android-navigation-component--android--medium
+- q-android-webview-basics--android--easy
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-  - android/ui-navigation
-  - android/app-startup
-  - app-linking
-  - app-links
-  - deep-linking
-  - https
-  - navigation
-  - uri
-  - verification
-  - difficulty/medium
+- android/ui-navigation
+- android/app-startup
+- app-linking
+- app-links
+- deep-linking
+- https
+- navigation
+- uri
+- verification
+- difficulty/medium
 source: https://developer.android.com/training/app-links
 source_note: Android App Links documentation
----
-# Вопрос (RU)
+---# Вопрос (RU)
 > Какие особенности отличия deep link от app link?
 
 # Question (EN)

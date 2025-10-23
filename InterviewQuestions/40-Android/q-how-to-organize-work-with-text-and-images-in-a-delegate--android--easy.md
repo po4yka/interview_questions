@@ -285,4 +285,4 @@ class TextImageViewHolder(
 
 - [[q-which-layout-for-large-list--android--easy]]
 - [[q-room-code-generation-timing--android--medium]]
-- [[q-fakes-vs-mocks-testing--testing--medium]]
+- [[q-fakes-vs-mocks-testing--android--medium]]
