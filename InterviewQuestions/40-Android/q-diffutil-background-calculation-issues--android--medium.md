@@ -1,505 +1,383 @@
 ---
-id: 20251017-144954
-title: "Diffutil Background Calculation Issues / Проблемы фонового вычисления DiffUtil"
+id: 20251020-200100
+title: DiffUtil Background Calculation Issues / Проблемы фонового вычисления DiffUtil
+aliases:
+  - DiffUtil Background Calculation Issues
+  - Проблемы фонового вычисления DiffUtil
 topic: android
+subtopics:
+  - ui-views
+  - performance
+question_kind: android
 difficulty: medium
-status: draft
-created: 2025-10-13
-tags: [recyclerview, diffutil, performance, multithreading, difficulty/medium]
+original_language: en
+language_tags:
+  - en
+  - ru
+source: https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
+source_note: Android DiffUtil documentation
+status: reviewed
 moc: moc-android
-related: [q-dalvik-vs-art-runtime--android--medium, q-main-causes-ui-lag--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium]
+related:
+  - q-main-causes-ui-lag--android--medium
+  - q-recyclerview-optimization--android--medium
+  - q-android-performance-optimization--android--medium
+created: 2025-10-20
+updated: 2025-10-20
+tags:
+  - android/ui-views
+  - android/performance
+  - recyclerview
+  - diffutil
+  - multithreading
+  - difficulty/medium
 ---
-# Проблемы расчета DiffUtil в фоновом потоке
+# Вопрос (RU)
+> Когда фоновое вычисление DiffUtil работает плохо?
 
-**English**: When does DiffUtil background calculation work poorly?
+# Question (EN)
+> When does DiffUtil background calculation work poorly?
 
-## Answer (EN)
-Расчет DiffUtil в фоновом потоке может работать плохо при следующих условиях, которые приводят к некорректным результатам, проблемам производительности или race conditions.
-
-### 1. Data Modification During Calculation
-
-**Problem**: DiffUtil may produce incorrect results due to list changes during diff calculation.
-
-```kotlin
-// НЕПРАВИЛЬНО - данные могут измениться во время расчета
-class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
-    private var users: MutableList<User> = mutableListOf()
-
-    fun updateUsers(newUsers: List<User>) {
-        // Запуск DiffUtil в фоне
-        CoroutineScope(Dispatchers.Default).launch {
-            val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-                override fun getOldListSize() = users.size
-                override fun getNewListSize() = newUsers.size
-
-                override fun areItemsTheSame(oldPos: Int, newPos: Int): Boolean {
-                    // ОПАСНО! users может быть изменен другим потоком
-                    return users[oldPos].id == newUsers[newPos].id
-                }
-
-                override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
-                    return users[oldPos] == newUsers[newPos]
-                }
-            })
-
-            withContext(Dispatchers.Main) {
-                users.clear()
-                users.addAll(newUsers)
-                diffResult.dispatchUpdatesTo(this@UserAdapter)
-            }
-        }
-    }
-}
-
-//  ПРАВИЛЬНО - использовать неизменяемую копию
-class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
-    private var users: List<User> = emptyList()
-
-    fun updateUsers(newUsers: List<User>) {
-        val oldList = users // Захватить текущее состояние
-
-        CoroutineScope(Dispatchers.Default).launch {
-            val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-                override fun getOldListSize() = oldList.size
-                override fun getNewListSize() = newUsers.size
-
-                override fun areItemsTheSame(oldPos: Int, newPos: Int): Boolean {
-                    return oldList[oldPos].id == newUsers[newPos].id
-                }
-
-                override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
-                    return oldList[oldPos] == newUsers[newPos]
-                }
-            })
-
-            withContext(Dispatchers.Main) {
-                users = newUsers
-                diffResult.dispatchUpdatesTo(this@UserAdapter)
-            }
-        }
-    }
-}
-```
-
-### 2. Complex and Long Computations in Callback
-
-**Problem**: Heavy operations in `areContentsTheSame()` slow down calculation even in background.
-
-```kotlin
-// НЕПРАВИЛЬНО - тяжелые вычисления в callback
-class MessageCallback(
-    private val oldList: List<Message>,
-    private val newList: List<Message>
-) : DiffUtil.Callback() {
-
-    override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
-        val old = oldList[oldPos]
-        val new = newList[newPos]
-
-        // МЕДЛЕННО! Парсинг JSON для каждого сравнения
-        val oldData = Json.decodeFromString<MessageData>(old.jsonData)
-        val newData = Json.decodeFromString<MessageData>(new.jsonData)
-
-        return oldData == newData
-    }
-}
-
-//  ПРАВИЛЬНО - предварительная обработка данных
-data class Message(
-    val id: Int,
-    val text: String,
-    val timestamp: Long,
-    // Кэшированные данные для быстрого сравнения
-    val contentHash: Int
-) {
-    companion object {
-        fun fromJson(json: String): Message {
-            val data = Json.decodeFromString<MessageData>(json)
-            return Message(
-                id = data.id,
-                text = data.text,
-                timestamp = data.timestamp,
-                // Вычислить hash один раз
-                contentHash = data.hashCode()
-            )
-        }
-    }
-}
-
-class MessageCallback(
-    private val oldList: List<Message>,
-    private val newList: List<Message>
-) : DiffUtil.Callback() {
-
-    override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
-        // Быстрое сравнение по hash
-        return oldList[oldPos].contentHash == newList[newPos].contentHash
-    }
-}
-```
-
-### 3. Working with Very Large Datasets
-
-**Problem**: DiffUtil has O(N*M) complexity, which becomes slow for large lists.
-
-```kotlin
-// НЕПРАВИЛЬНО - DiffUtil для 10,000+ элементов
-fun updateLargeList(newItems: List<Item>) {
-    // Будет очень медленно!
-    val diffResult = DiffUtil.calculateDiff(
-        ItemCallback(oldItems, newItems)
-    )
-    diffResult.dispatchUpdatesTo(adapter)
-}
-
-//  ПРАВИЛЬНО - использовать Paging или частичные обновления
-class ItemAdapter : PagedListAdapter<Item, ItemViewHolder>(
-    DIFF_CALLBACK
-) {
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Item>() {
-            override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
-}
-
-// Или использовать AsyncListDiffer с лимитом
-class ItemAdapter : RecyclerView.Adapter<ItemViewHolder>() {
-    private val differ = AsyncListDiffer(this, object : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(oldItem: Item, newItem: Item) =
-            oldItem.id == newItem.id
-
-        override fun areContentsTheSame(oldItem: Item, newItem: Item) =
-            oldItem == newItem
-    })
-
-    fun submitList(list: List<Item>) {
-        // Ограничить размер для производительности
-        val limitedList = if (list.size > MAX_ITEMS) {
-            list.take(MAX_ITEMS)
-        } else {
-            list
-        }
-        differ.submitList(limitedList)
-    }
-
-    companion object {
-        private const val MAX_ITEMS = 1000
-    }
-}
-```
-
-### 4. Race Conditions with Multiple Updates
-
-**Problem**: Multiple `calculateDiff()` calls can overlap and produce incorrect results.
-
-```kotlin
-// НЕПРАВИЛЬНО - несколько одновременных обновлений
-class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
-    fun updateUsers(newUsers: List<User>) {
-        // Если вызвать дважды подряд, будет race condition!
-        CoroutineScope(Dispatchers.Default).launch {
-            val diffResult = DiffUtil.calculateDiff(...)
-            withContext(Dispatchers.Main) {
-                users = newUsers
-                diffResult.dispatchUpdatesTo(this@UserAdapter)
-            }
-        }
-    }
-}
-
-//  ПРАВИЛЬНО - использовать Job для отмены предыдущих расчетов
-class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
-    private var diffJob: Job? = null
-    private var users: List<User> = emptyList()
-
-    fun updateUsers(newUsers: List<User>) {
-        // Отменить предыдущий расчет
-        diffJob?.cancel()
-
-        val oldList = users
-
-        diffJob = CoroutineScope(Dispatchers.Default).launch {
-            val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-                override fun getOldListSize() = oldList.size
-                override fun getNewListSize() = newUsers.size
-
-                override fun areItemsTheSame(oldPos: Int, newPos: Int): Boolean {
-                    // Проверить, не отменена ли корутина
-                    ensureActive()
-                    return oldList[oldPos].id == newUsers[newPos].id
-                }
-
-                override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
-                    ensureActive()
-                    return oldList[oldPos] == newUsers[newPos]
-                }
-            })
-
-            withContext(Dispatchers.Main) {
-                users = newUsers
-                diffResult.dispatchUpdatesTo(this@UserAdapter)
-            }
-        }
-    }
-}
-
-//  ЕЩЕ ЛУЧШЕ - использовать ListAdapter
-class UserAdapter : ListAdapter<User, UserViewHolder>(
-    object : DiffUtil.ItemCallback<User>() {
-        override fun areItemsTheSame(oldItem: User, newItem: User) =
-            oldItem.id == newItem.id
-
-        override fun areContentsTheSame(oldItem: User, newItem: User) =
-            oldItem == newItem
-    }
-) {
-    // submitList автоматически управляет race conditions!
-    // adapter.submitList(newUsers)
-}
-```
-
-### 5. Data Changes During UI Update
-
-**Problem**: Data changes between `calculateDiff()` and `dispatchUpdatesTo()`.
-
-```kotlin
-// НЕПРАВИЛЬНО - данные могут измениться
-class ChatAdapter : RecyclerView.Adapter<MessageViewHolder>() {
-    private var messages: MutableList<Message> = mutableListOf()
-
-    fun addMessage(message: Message) {
-        // Добавление во время расчета diff может вызвать crash!
-        messages.add(message)
-        notifyItemInserted(messages.size - 1)
-    }
-
-    fun updateMessages(newMessages: List<Message>) {
-        val oldList = messages.toList()
-
-        CoroutineScope(Dispatchers.Default).launch {
-            val diff = DiffUtil.calculateDiff(...)
-
-            withContext(Dispatchers.Main) {
-                // Между расчетом и применением messages мог измениться!
-                messages.clear()
-                messages.addAll(newMessages)
-                diff.dispatchUpdatesTo(this@ChatAdapter)
-            }
-        }
-    }
-}
-
-//  ПРАВИЛЬНО - использовать неизменяемые списки
-class ChatAdapter : RecyclerView.Adapter<MessageViewHolder>() {
-    private var messages: List<Message> = emptyList()
-    private val updateLock = Mutex()
-
-    suspend fun updateMessages(newMessages: List<Message>) {
-        updateLock.withLock {
-            val oldList = messages
-
-            val diff = withContext(Dispatchers.Default) {
-                DiffUtil.calculateDiff(MessageCallback(oldList, newMessages))
-            }
-
-            withContext(Dispatchers.Main) {
-                messages = newMessages
-                diff.dispatchUpdatesTo(this@ChatAdapter)
-            }
-        }
-    }
-}
-```
-
-### 6. Incorrect equals/hashCode Implementation
-
-**Problem**: Incorrect object comparison leads to unnecessary updates.
-
-```kotlin
-// НЕПРАВИЛЬНО - нет equals/hashCode
-class User(
-    val id: Int,
-    var name: String,
-    var avatarUrl: String?,
-    val lastUpdate: Long = System.currentTimeMillis() // Всегда разное!
-)
-
-// DiffUtil всегда считает объекты разными
-// areContentsTheSame() всегда возвращает false
-
-//  ПРАВИЛЬНО - data class с правильными полями
-data class User(
-    val id: Int,
-    val name: String,
-    val avatarUrl: String?
-    // lastUpdate не включен в сравнение
-) {
-    // Храним timestamp отдельно, не влияет на equals
-    @Transient
-    var lastUpdate: Long = System.currentTimeMillis()
-}
-
-// Или явно переопределить equals
-class User(
-    val id: Int,
-    var name: String,
-    var avatarUrl: String?,
-    val lastUpdate: Long
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is User) return false
-
-        // Сравниваем только значимые поля
-        return id == other.id &&
-                name == other.name &&
-                avatarUrl == other.avatarUrl
-        // lastUpdate игнорируем!
-    }
-
-    override fun hashCode(): Int {
-        var result = id
-        result = 31 * result + name.hashCode()
-        result = 31 * result + (avatarUrl?.hashCode() ?: 0)
-        return result
-    }
-}
-```
-
-### 7. Memory Issues with Large Lists
-
-```kotlin
-// НЕПРАВИЛЬНО - держим ссылки на старые списки
-class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
-    private val updateHistory = mutableListOf<List<User>>()
-
-    fun updateUsers(newUsers: List<User>) {
-        updateHistory.add(users) // Memory leak!
-
-        CoroutineScope(Dispatchers.Default).launch {
-            // ...
-        }
-    }
-}
-
-//  ПРАВИЛЬНО - не храним лишние ссылки
-class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
-    private var users: List<User> = emptyList()
-
-    fun updateUsers(newUsers: List<User>) {
-        val oldList = users // Локальная переменная
-
-        CoroutineScope(Dispatchers.Default).launch {
-            val diff = DiffUtil.calculateDiff(...)
-
-            withContext(Dispatchers.Main) {
-                users = newUsers // oldList может быть GC'd
-                diff.dispatchUpdatesTo(this@UserAdapter)
-            }
-        }
-    }
-}
-```
-
-### Solutions and Best Practices
-
-**1. Use ListAdapter**
-
-```kotlin
-// Автоматически обрабатывает все edge cases
-class UserAdapter : ListAdapter<User, UserViewHolder>(UserDiffCallback()) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        // ...
-    }
-
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
-}
-
-class UserDiffCallback : DiffUtil.ItemCallback<User>() {
-    override fun areItemsTheSame(oldItem: User, newItem: User) =
-        oldItem.id == newItem.id
-
-    override fun areContentsTheSame(oldItem: User, newItem: User) =
-        oldItem == newItem
-
-    // Опционально - частичное обновление
-    override fun getChangePayload(oldItem: User, newItem: User): Any? {
-        return if (oldItem.name != newItem.name) {
-            "name_changed"
-        } else {
-            null
-        }
-    }
-}
-```
-
-**2. Optimization for Large Lists**
-
-```kotlin
-// Использовать Paging 3
-class UserAdapter : PagingDataAdapter<User, UserViewHolder>(UserDiffCallback()) {
-    // Автоматически загружает данные порциями
-}
-
-// Или ограничить размер diff
-fun submitListSafely(newList: List<User>) {
-    val oldList = currentList
-
-    // Если списки слишком большие, не использовать diff
-    if (oldList.size > 5000 || newList.size > 5000) {
-        // Просто заменить весь список
-        submitList(newList)
-        return
-    }
-
-    // Для небольших списков использовать diff
-    submitList(newList)
-}
-```
-
-**3. Debouncing for Frequent Updates**
-
-```kotlin
-class UserViewModel : ViewModel() {
-    private val _users = MutableStateFlow<List<User>>(emptyList())
-
-    // Debounce updates
-    val users: StateFlow<List<User>> = _users
-        .debounce(300) // Wait 300ms before processing
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-
-    fun updateUsers(newUsers: List<User>) {
-        _users.value = newUsers
-    }
-}
-```
-
-**English**: DiffUtil background calculation issues occur when: 1) **Data modified during calculation** - use immutable copies, 2) **Heavy computations in callbacks** - pre-compute hashes/comparisons, 3) **Very large datasets** (10,000+) - use Paging or limit size, 4) **Race conditions** - cancel previous jobs, use `ListAdapter`, 5) **Data changes between calc and dispatch** - use mutex/locks, 6) **Incorrect equals/hashCode** - implement properly, exclude timestamps, 7) **Memory issues** - avoid storing old list references. **Solution**: Use `ListAdapter` which handles all edge cases automatically. For large lists, use `PagingDataAdapter` or skip diff if size > 5000.
+---
 
 ## Ответ (RU)
 
-Это профессиональный перевод технического содержимого на русский язык.
+DiffUtil в фоне плохо работает при изменении данных во время расчета, тяжелых вычислениях в callback, больших списках (>1000 элементов), неправильной обработке ошибок, race conditions между потоками.
 
-Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
+### Основные проблемы
 
-Все примеры кода остаются без изменений. Markdown форматирование сохранено.
+**1. Изменение данных во время расчета**
+- Проблема: исходный список изменяется другим потоком во время DiffUtil.calculateDiff()
+- Результат: некорректные diff операции, IndexOutOfBoundsException, неправильные анимации
+- Решение: захватить неизменяемую копию списка перед расчетом
 
-Длина оригинального английского контента: 14847 символов.
+```kotlin
+// ПЛОХО - данные могут измениться
+fun updateUsers(newUsers: List<User>) {
+    CoroutineScope(Dispatchers.Default).launch {
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize() = users.size // users может измениться!
+            override fun areItemsTheSame(oldPos: Int, newPos: Int) =
+                users[oldPos].id == newUsers[newPos].id // ОПАСНО!
+        })
+    }
+}
 
-**Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
-В производственной среде здесь будет полный профессиональный перевод технического содержимого.
+// ХОРОШО - неизменяемая копия
+fun updateUsers(newUsers: List<User>) {
+    val oldList = users.toList() // Захват копии
+    CoroutineScope(Dispatchers.Default).launch {
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize() = oldList.size // Безопасно
+            override fun areItemsTheSame(oldPos: Int, newPos: Int) =
+                oldList[oldPos].id == newUsers[newPos].id
+        })
+    }
+}
+```
+
+**2. Тяжелые вычисления в callback**
+- Проблема: сложные операции в areContentsTheSame() замедляют расчет даже в фоне
+- Результат: долгие вычисления блокируют background thread, задержка UI обновлений
+- Решение: предварительно вычислить сравниваемые значения или кэшировать
+
+```kotlin
+// ПЛОХО - тяжелые вычисления в callback
+override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
+    val oldData = Json.decodeFromString<MessageData>(oldList[oldPos].jsonData) // МЕДЛЕННО!
+    val newData = Json.decodeFromString<MessageData>(newList[newPos].jsonData)
+    return oldData == newData
+}
+
+// ХОРОШО - предварительное вычисление
+class MessageCallback(private val oldList: List<Message>, private val newList: List<Message>) {
+    private val oldDataCache = oldList.map { Json.decodeFromString<MessageData>(it.jsonData) }
+
+    override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
+        val newData = Json.decodeFromString<MessageData>(newList[newPos].jsonData)
+        return oldDataCache[oldPos] == newData // Быстрое сравнение
+    }
+}
+```
+
+**3. Большие списки**
+- Проблема: DiffUtil имеет O(N²) сложность для списков >1000 элементов
+- Результат: долгие вычисления даже в фоне, ANR при больших списках
+- Решение: пагинация, ListAdapter с AsyncListDiffer, или ручная оптимизация
+
+```kotlin
+// ПЛОХО - большой список без оптимизации
+fun updateLargeList(newItems: List<Item>) {
+    CoroutineScope(Dispatchers.Default).launch {
+        val diffResult = DiffUtil.calculateDiff(LargeListCallback(items, newItems))
+        // Может занять секунды для списка >1000 элементов
+    }
+}
+
+// ХОРОШО - ListAdapter с AsyncListDiffer
+class OptimizedAdapter : ListAdapter<Item, ViewHolder>(DiffCallback()) {
+    fun updateItems(newItems: List<Item>) {
+        submitList(newItems) // Автоматически в фоне
+    }
+}
+```
+
+**4. Race conditions**
+- Проблема: множественные вызовы updateUsers() создают race conditions
+- Результат: некорректные diff операции, потеря обновлений
+- Решение: отмена предыдущих операций, использование Job
+
+```kotlin
+// ПЛОХО - race conditions
+class Adapter {
+    fun updateUsers(newUsers: List<User>) {
+        CoroutineScope(Dispatchers.Default).launch {
+            // Может быть несколько одновременных вызовов
+            val diffResult = DiffUtil.calculateDiff(...)
+        }
+    }
+}
+
+// ХОРОШО - отмена предыдущих операций
+class Adapter {
+    private var updateJob: Job? = null
+
+    fun updateUsers(newUsers: List<User>) {
+        updateJob?.cancel() // Отменить предыдущую операцию
+        updateJob = CoroutineScope(Dispatchers.Default).launch {
+            val diffResult = DiffUtil.calculateDiff(...)
+            withContext(Dispatchers.Main) {
+                if (isActive) { // Проверить не отменена ли
+                    diffResult.dispatchUpdatesTo(this@Adapter)
+                }
+            }
+        }
+    }
+}
+```
+
+**5. Неправильная обработка ошибок**
+- Проблема: исключения в DiffUtil.calculateDiff() не обрабатываются
+- Результат: краши приложения, потеря обновлений UI
+- Решение: try-catch блоки, fallback стратегии
+
+```kotlin
+// ПЛОХО - нет обработки ошибок
+fun updateUsers(newUsers: List<User>) {
+    CoroutineScope(Dispatchers.Default).launch {
+        val diffResult = DiffUtil.calculateDiff(...) // Может упасть
+        withContext(Dispatchers.Main) {
+            diffResult.dispatchUpdatesTo(this@Adapter)
+        }
+    }
+}
+
+// ХОРОШО - обработка ошибок
+fun updateUsers(newUsers: List<User>) {
+    CoroutineScope(Dispatchers.Default).launch {
+        try {
+            val diffResult = DiffUtil.calculateDiff(...)
+            withContext(Dispatchers.Main) {
+                diffResult.dispatchUpdatesTo(this@Adapter)
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                notifyDataSetChanged() // Fallback
+            }
+        }
+    }
+}
+```
+
+### Теория DiffUtil
+
+**Алгоритм Myer's diff:**
+- Основан на алгоритме поиска кратчайшего пути редактирования между двумя списками
+- Временная сложность: O(N²) в худшем случае, O(N) в лучшем
+- Пространственная сложность: O(N²) для хранения матрицы различий
+
+**Оптимизации:**
+- **Предварительная фильтрация**: исключение заведомо разных элементов
+- **Кэширование**: сохранение результатов сравнения для повторного использования
+- **Chunking**: разбиение больших списков на части для параллельной обработки
+
+**Best practices:**
+- Использовать ListAdapter вместо ручного DiffUtil
+- Предварительно вычислять сравниваемые значения
+- Отменять предыдущие операции при новых обновлениях
+- Обрабатывать ошибки с fallback стратегиями
+
+## Answer (EN)
+
+DiffUtil in background works poorly with data changes during calculation, heavy computations in callbacks, large lists (>1000 items), improper error handling, race conditions between threads.
+
+### Main Issues
+
+**1. Data modification during calculation**
+- Problem: source list changes by another thread during DiffUtil.calculateDiff()
+- Result: incorrect diff operations, IndexOutOfBoundsException, wrong animations
+- Solution: capture immutable copy before calculation
+
+```kotlin
+// BAD - data can change
+fun updateUsers(newUsers: List<User>) {
+    CoroutineScope(Dispatchers.Default).launch {
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize() = users.size // users can change!
+            override fun areItemsTheSame(oldPos: Int, newPos: Int) =
+                users[oldPos].id == newUsers[newPos].id // DANGEROUS!
+        })
+    }
+}
+
+// GOOD - immutable copy
+fun updateUsers(newUsers: List<User>) {
+    val oldList = users.toList() // Capture copy
+    CoroutineScope(Dispatchers.Default).launch {
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize() = oldList.size // Safe
+            override fun areItemsTheSame(oldPos: Int, newPos: Int) =
+                oldList[oldPos].id == newUsers[newPos].id
+        })
+    }
+}
+```
+
+**2. Heavy computations in callback**
+- Problem: complex operations in areContentsTheSame() slow down calculation even in background
+- Result: long computations block background thread, UI update delays
+- Solution: pre-compute comparable values or cache
+
+```kotlin
+// BAD - heavy computations in callback
+override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
+    val oldData = Json.decodeFromString<MessageData>(oldList[oldPos].jsonData) // SLOW!
+    val newData = Json.decodeFromString<MessageData>(newList[newPos].jsonData)
+    return oldData == newData
+}
+
+// GOOD - pre-computation
+class MessageCallback(private val oldList: List<Message>, private val newList: List<Message>) {
+    private val oldDataCache = oldList.map { Json.decodeFromString<MessageData>(it.jsonData) }
+
+    override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
+        val newData = Json.decodeFromString<MessageData>(newList[newPos].jsonData)
+        return oldDataCache[oldPos] == newData // Fast comparison
+    }
+}
+```
+
+**3. Large lists**
+- Problem: DiffUtil has O(N²) complexity for lists >1000 items
+- Result: long calculations even in background, ANR for large lists
+- Solution: pagination, ListAdapter with AsyncListDiffer, or manual optimization
+
+```kotlin
+// BAD - large list without optimization
+fun updateLargeList(newItems: List<Item>) {
+    CoroutineScope(Dispatchers.Default).launch {
+        val diffResult = DiffUtil.calculateDiff(LargeListCallback(items, newItems))
+        // Can take seconds for list >1000 items
+    }
+}
+
+// GOOD - ListAdapter with AsyncListDiffer
+class OptimizedAdapter : ListAdapter<Item, ViewHolder>(DiffCallback()) {
+    fun updateItems(newItems: List<Item>) {
+        submitList(newItems) // Automatically in background
+    }
+}
+```
+
+**4. Race conditions**
+- Problem: multiple updateUsers() calls create race conditions
+- Result: incorrect diff operations, lost updates
+- Solution: cancel previous operations, use Job
+
+```kotlin
+// BAD - race conditions
+class Adapter {
+    fun updateUsers(newUsers: List<User>) {
+        CoroutineScope(Dispatchers.Default).launch {
+            // Can have multiple concurrent calls
+            val diffResult = DiffUtil.calculateDiff(...)
+        }
+    }
+}
+
+// GOOD - cancel previous operations
+class Adapter {
+    private var updateJob: Job? = null
+
+    fun updateUsers(newUsers: List<User>) {
+        updateJob?.cancel() // Cancel previous operation
+        updateJob = CoroutineScope(Dispatchers.Default).launch {
+            val diffResult = DiffUtil.calculateDiff(...)
+            withContext(Dispatchers.Main) {
+                if (isActive) { // Check if not cancelled
+                    diffResult.dispatchUpdatesTo(this@Adapter)
+                }
+            }
+        }
+    }
+}
+```
+
+**5. Improper error handling**
+- Problem: exceptions in DiffUtil.calculateDiff() not handled
+- Result: app crashes, lost UI updates
+- Solution: try-catch blocks, fallback strategies
+
+```kotlin
+// BAD - no error handling
+fun updateUsers(newUsers: List<User>) {
+    CoroutineScope(Dispatchers.Default).launch {
+        val diffResult = DiffUtil.calculateDiff(...) // Can crash
+        withContext(Dispatchers.Main) {
+            diffResult.dispatchUpdatesTo(this@Adapter)
+        }
+    }
+}
+
+// GOOD - error handling
+fun updateUsers(newUsers: List<User>) {
+    CoroutineScope(Dispatchers.Default).launch {
+        try {
+            val diffResult = DiffUtil.calculateDiff(...)
+            withContext(Dispatchers.Main) {
+                diffResult.dispatchUpdatesTo(this@Adapter)
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                notifyDataSetChanged() // Fallback
+            }
+        }
+    }
+}
+```
+
+### DiffUtil Theory
+
+**Myer's diff algorithm:**
+- Based on shortest edit path algorithm between two lists
+- Time complexity: O(N²) worst case, O(N) best case
+- Space complexity: O(N²) for difference matrix storage
+
+**Optimizations:**
+- **Pre-filtering**: exclude obviously different elements
+- **Caching**: store comparison results for reuse
+- **Chunking**: split large lists for parallel processing
+
+**Best practices:**
+- Use ListAdapter instead of manual DiffUtil
+- Pre-compute comparable values
+- Cancel previous operations on new updates
+- Handle errors with fallback strategies
+
+## Follow-ups
+- How to optimize DiffUtil for lists with >10,000 items?
+- What's the difference between DiffUtil and AsyncListDiffer?
+- How to handle DiffUtil with complex nested data structures?
 
 ## Related Questions
-
-- [[q-dalvik-vs-art-runtime--android--medium]]
 - [[q-main-causes-ui-lag--android--medium]]
-- [[q-what-unites-the-main-components-of-an-android-application--android--medium]]

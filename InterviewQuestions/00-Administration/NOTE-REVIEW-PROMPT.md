@@ -2,6 +2,41 @@
 
 Review the provided note for correctness, completeness, and compliance.
 
+## Automated Validation (Use First)
+
+**REQUIRED**: Before manual review, run automated validation:
+
+```bash
+# Activate virtual environment
+source .venv/bin/activate
+
+# Validate single file
+python validate_note.py <path-to-file>
+
+# Validate directory
+python validate_note.py <directory>/
+
+# Validate entire vault
+python validate_note.py --all --report validation-report.md
+```
+
+**Automation Coverage**: ~70% of checks are fully automated.
+
+**What automation validates**:
+- YAML frontmatter (all fields, formats, enums)
+- Content structure (sections, order, formatting)
+- Links and wikilinks (resolution, broken links)
+- Filename and folder placement
+- Android-specific rules (subtopics, tag mirroring)
+- Formatting rules (emoji, trailing whitespace, code blocks)
+
+**What requires manual review**:
+- Technical accuracy (algorithm correctness, code logic)
+- Content quality (explanations, completeness)
+- Translation quality (EN ↔ RU semantic equivalence)
+
+See `VALIDATION-README.md` for complete automation documentation.
+
 ## YAML Validation
 
 Check presence and format:
