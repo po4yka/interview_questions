@@ -16,7 +16,7 @@ language_tags:
   - ru
 source: https://developer.android.com/jetpack/compose/state
 source_note: Android Compose state management documentation
-status: draft
+status: reviewed
 moc: moc-android
 related:
   - q-derived-state-snapshot-system--jetpack-compose--hard
@@ -423,5 +423,3 @@ class MyViewModel : ViewModel() {
 
 ## Related Questions
 - [[q-derived-state-snapshot-system--jetpack-compose--hard]]
-- [[q-compose-state-management--android--medium]]
-- [[q-android-performance-optimization--android--medium]]

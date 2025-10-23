@@ -1,329 +1,143 @@
 ---
-id: 20251012-1227136
-title: "Fast Chat Rendering / Быстрый рендеринг чата"
+id: 20251020-200700
+title: Fast Chat Rendering / Быстрый рендеринг чата
+aliases:
+  - Fast Chat Rendering
+  - Быстрый рендеринг чата
 topic: android
+subtopics:
+  - ui-views
+  - performance
+question_kind: android
 difficulty: hard
-status: draft
+original_language: en
+language_tags:
+  - en
+  - ru
+source: https://developer.android.com/topic/performance/rendering
+source_note: Android rendering performance documentation
+status: reviewed
 moc: moc-android
-related: [q-baseline-profiles-optimization--performance--medium, q-16kb-dex-page-size--android--medium, q-how-compose-draws-on-screen--android--hard]
-created: 2025-10-15
-tags: [android/performance, android/recyclerview, chat, diffutil, flow, optimization, paging, performance, recyclerview, room, difficulty/hard]
+related:
+  - q-diffutil-background-calculation-issues--android--medium
+  - q-recyclerview-optimization--android--medium
+  - q-android-performance-optimization--android--medium
+created: 2025-10-20
+updated: 2025-10-20
+tags:
+  - android/ui-views
+  - android/performance
+  - chat
+  - recyclerview
+  - diffutil
+  - performance
+  - difficulty/hard
 ---
-# Как можно гарантировать быструю отрисовку чатов?
+# Вопрос (RU)
+> Как можно гарантировать быструю отрисовку чатов?
 
-**English**: How can you guarantee fast chat rendering?
+# Question (EN)
+> How can you guarantee fast chat rendering?
 
-## Answer (EN)
-To ensure **fast chat rendering without lags**, you need to optimize:
+---
 
-1. **RecyclerView** (ViewHolder, DiffUtil, Payloads)
-2. **UI Thread** management (Coroutines, Paging 3)
-3. **Image loading** (Glide, Coil)
-4. **Offline cache** (Room + Flow/LiveData)
+## Ответ (RU)
 
-## Comprehensive Chat Optimization Strategy
+Для быстрого рендеринга чатов без лагов нужно оптимизировать UI (XML Views или Compose), загрузку данных (Paging), изображения (Glide/Coil), офлайн кэш (Room).
 
-### 1. RecyclerView Optimization
+### Подходы: XML Views vs Compose
 
-#### A. Proper ViewHolder Implementation
+**XML Views с RecyclerView:**
+- ViewHolder Pattern для переиспользования View
+- DiffUtil для эффективных обновлений
+- Payloads для частичных обновлений
+- Требует ручного управления состоянием
+
+**Compose с LazyColumn:**
+- Автоматическая композиция и recomposition
+- Встроенная оптимизация с key()
+- Декларативный UI без ViewHolder
+- State управление через remember/rememberSaveable
+
+### Оптимизации для XML Views
+
+**1. RecyclerView оптимизация**
+- Проблема: медленный рендеринг списков сообщений
+- Результат: лаги при скролле, долгая загрузка
+- Решение: оптимизированные ViewHolder, DiffUtil, Payloads
 
 ```kotlin
-class ChatAdapter : ListAdapter<ChatMessage, ChatAdapter.ViewHolder>(ChatDiffCallback()) {
-
-    // Multiple view types for different message types
-    companion object {
-        const val VIEW_TYPE_TEXT_SENT = 0
-        const val VIEW_TYPE_TEXT_RECEIVED = 1
-        const val VIEW_TYPE_IMAGE_SENT = 2
-        const val VIEW_TYPE_IMAGE_RECEIVED = 3
-    }
-
-    sealed class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-        class TextSentViewHolder(val binding: ItemChatTextSentBinding) :
-            ViewHolder(binding.root) {
-            fun bind(message: ChatMessage) {
-                binding.messageText.text = message.text
-                binding.timestamp.text = message.formattedTime
-                binding.statusIcon.setImageResource(
-                    when (message.status) {
-                        MessageStatus.SENT -> R.drawable.ic_check
-                        MessageStatus.DELIVERED -> R.drawable.ic_check_double
-                        MessageStatus.READ -> R.drawable.ic_check_double_blue
-                        else -> 0
-                    }
-                )
-            }
-        }
-
-        class TextReceivedViewHolder(val binding: ItemChatTextReceivedBinding) :
-            ViewHolder(binding.root) {
-            fun bind(message: ChatMessage) {
-                binding.messageText.text = message.text
-                binding.timestamp.text = message.formattedTime
-                binding.senderName.text = message.senderName
-            }
-        }
-
-        class ImageSentViewHolder(val binding: ItemChatImageSentBinding) :
-            ViewHolder(binding.root) {
-            fun bind(message: ChatMessage) {
-                // Optimized image loading
-                Glide.with(binding.root.context)
-                    .load(message.imageUrl)
-                    .override(400, 400)  // Limit size
-                    .centerCrop()
-                    .thumbnail(0.1f)  // Show low-res thumbnail first
-                    .into(binding.imageView)
-
-                binding.timestamp.text = message.formattedTime
+// Оптимизированный ViewHolder
+class ChatViewHolder(private val binding: ItemChatBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(message: ChatMessage, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            // Полная привязка
+            binding.messageText.text = message.text
+            binding.timestamp.text = message.formattedTime
+        } else {
+            // Частичное обновление
+            payloads.forEach { payload ->
+                when (payload) {
+                    is MessageStatus -> updateStatus(payload)
+                    is String -> updateText(payload)
+                }
             }
         }
     }
 
-    override fun getItemViewType(position: Int): Int {
-        val message = getItem(position)
-        return when {
-            message.isSent && message.type == MessageType.TEXT -> VIEW_TYPE_TEXT_SENT
-            !message.isSent && message.type == MessageType.TEXT -> VIEW_TYPE_TEXT_RECEIVED
-            message.isSent && message.type == MessageType.IMAGE -> VIEW_TYPE_IMAGE_SENT
-            else -> VIEW_TYPE_IMAGE_RECEIVED
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return when (viewType) {
-            VIEW_TYPE_TEXT_SENT -> ViewHolder.TextSentViewHolder(
-                ItemChatTextSentBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
-                )
-            )
-            VIEW_TYPE_TEXT_RECEIVED -> ViewHolder.TextReceivedViewHolder(
-                ItemChatTextReceivedBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
-                )
-            )
-            VIEW_TYPE_IMAGE_SENT -> ViewHolder.ImageSentViewHolder(
-                ItemChatImageSentBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
-                )
-            )
-            else -> throw IllegalArgumentException("Unknown view type: $viewType")
-        }
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val message = getItem(position)
-        when (holder) {
-            is ViewHolder.TextSentViewHolder -> holder.bind(message)
-            is ViewHolder.TextReceivedViewHolder -> holder.bind(message)
-            is ViewHolder.ImageSentViewHolder -> holder.bind(message)
-        }
-    }
-
-    // Stable IDs for better animations
-    init {
-        setHasStableIds(true)
-    }
-
-    override fun getItemId(position: Int): Long {
-        return getItem(position).id.toLong()
+    private fun updateStatus(status: MessageStatus) {
+        binding.statusIcon.setImageResource(getStatusIcon(status))
     }
 }
 ```
 
----
-
-#### B. DiffUtil with Payloads
+**2. DiffUtil с Payloads**
+- Проблема: полное обновление ViewHolder при изменении статуса
+- Результат: мерцание, потеря фокуса
+- Решение: частичные обновления через Payloads
 
 ```kotlin
 class ChatDiffCallback : DiffUtil.ItemCallback<ChatMessage>() {
-
     override fun areItemsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
-        return oldItem.id == newItem.id  // Same message
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
-        return oldItem == newItem  // Same content
+        return oldItem == newItem
     }
 
-    // Payloads for partial updates
     override fun getChangePayload(oldItem: ChatMessage, newItem: ChatMessage): Any? {
-        val changes = mutableListOf<String>()
-
-        if (oldItem.status != newItem.status) {
-            changes.add(PAYLOAD_STATUS)
-        }
-        if (oldItem.text != newItem.text) {
-            changes.add(PAYLOAD_TEXT)
-        }
-
-        return if (changes.isNotEmpty()) changes else null
-    }
-
-    companion object {
-        const val PAYLOAD_STATUS = "STATUS"
-        const val PAYLOAD_TEXT = "TEXT"
-    }
-}
-
-// Handle payloads in adapter
-override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: List<Any>) {
-    if (payloads.isEmpty()) {
-        super.onBindViewHolder(holder, position, payloads)
-        return
-    }
-
-    val message = getItem(position)
-
-    payloads.forEach { payload ->
-        if (payload is List<*>) {
-            payload.forEach { change ->
-                when (change) {
-                    ChatDiffCallback.PAYLOAD_STATUS -> {
-                        // Update only status icon
-                        if (holder is ViewHolder.TextSentViewHolder) {
-                            holder.binding.statusIcon.setImageResource(
-                                getStatusIcon(message.status)
-                            )
-                        }
-                    }
-                    ChatDiffCallback.PAYLOAD_TEXT -> {
-                        // Update only text
-                        if (holder is ViewHolder.TextSentViewHolder) {
-                            holder.binding.messageText.text = message.text
-                        }
-                    }
-                }
-            }
+        return when {
+            oldItem.status != newItem.status -> newItem.status
+            oldItem.text != newItem.text -> newItem.text
+            else -> null
         }
     }
 }
 ```
 
-**Benefit:** Only changed parts updated, not entire item.
-
----
-
-### 2. UI Thread Optimization
-
-#### A. Coroutines for Background Work
+**3. Paging 3 для больших списков**
+- Проблема: загрузка всех сообщений в память
+- Результат: OOM, медленная инициализация
+- Решение: ленивая загрузка с Paging 3
 
 ```kotlin
-class ChatViewModel(
-    private val repository: ChatRepository
-) : ViewModel() {
-
-    private val _messages = MutableStateFlow<List<ChatMessage>>(emptyList())
-    val messages: StateFlow<List<ChatMessage>> = _messages.asStateFlow()
-
-    init {
-        loadMessages()
-    }
-
-    private fun loadMessages() {
-        viewModelScope.launch {
-            repository.getMessagesFlow(chatId)
-                .flowOn(Dispatchers.IO)  // Background thread
-                .collect { messages ->
-                    _messages.value = messages  // Main thread
-                }
-        }
-    }
-
-    fun sendMessage(text: String) {
-        viewModelScope.launch {
-            val message = ChatMessage(
-                id = generateId(),
-                chatId = chatId,
-                text = text,
-                timestamp = System.currentTimeMillis(),
-                isSent = true,
-                status = MessageStatus.SENDING
-            )
-
-            // Optimistic update (instant UI)
-            _messages.value = _messages.value + message
-
-            // Send in background
-            withContext(Dispatchers.IO) {
-                repository.sendMessage(message)
-            }
-        }
-    }
-}
-```
-
----
-
-#### B. Paging 3 for Large Chat History
-
-```kotlin
-// DAO with PagingSource
-@Dao
-interface ChatMessageDao {
-
-    @Query("""
-        SELECT * FROM chat_messages
-        WHERE chat_id = :chatId
-        ORDER BY timestamp DESC
-    """)
-    fun getMessagesPagingSource(chatId: String): PagingSource<Int, ChatMessage>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMessages(messages: List<ChatMessage>)
-}
-
-// Repository
-class ChatRepository(
-    private val dao: ChatMessageDao,
-    private val api: ChatApiService
-) {
-    fun getMessagesPager(chatId: String): Flow<PagingData<ChatMessage>> {
+class ChatRepository {
+    fun getMessages(): Flow<PagingData<ChatMessage>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = 50,  // Load 50 messages at a time
-                prefetchDistance = 10,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = { dao.getMessagesPagingSource(chatId) }
+            config = PagingConfig(pageSize = 50, prefetchDistance = 10),
+            pagingSourceFactory = { ChatPagingSource(roomDatabase) }
         ).flow
     }
 }
 
-// ViewModel
-class ChatViewModel(private val repository: ChatRepository) : ViewModel() {
-
-    val messages: Flow<PagingData<ChatMessage>> =
-        repository.getMessagesPager(chatId)
-            .cachedIn(viewModelScope)  // Cache data
-}
-
-// Adapter
-class ChatPagingAdapter : PagingDataAdapter<ChatMessage, ChatAdapter.ViewHolder>(
-    ChatDiffCallback()
-) {
-    // Same ViewHolder implementation as before
-}
-
-// Fragment
-class ChatFragment : Fragment() {
-    private val viewModel: ChatViewModel by viewModels()
+// Использование с RecyclerView
+class ChatActivity : AppCompatActivity() {
     private val adapter = ChatPagingAdapter()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(context).apply {
-                reverseLayout = true  // Start from bottom (newest messages)
-            }
-            adapter = this@ChatFragment.adapter
-            setHasFixedSize(true)
-        }
-
-        // Collect paging data
-        viewLifecycleOwner.lifecycleScope.launch {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
             viewModel.messages.collectLatest { pagingData ->
                 adapter.submitData(pagingData)
             }
@@ -332,295 +146,595 @@ class ChatFragment : Fragment() {
 }
 ```
 
-**Benefits:**
-- **Memory efficient**: Only loads visible + prefetch messages
-- **Smooth scrolling**: Loads more as user scrolls
-- **Automatic loading states**: Loading, error, retry
+### Оптимизации для Compose
 
----
-
-### 3. Image Loading Optimization
+**1. LazyColumn оптимизация**
+- Проблема: ненужные recomposition при изменении данных
+- Результат: лаги, потеря производительности
+- Решение: key(), derivedStateOf, remember
 
 ```kotlin
-// Configure Glide globally
-@GlideModule
-class ChatGlideModule : AppGlideModule() {
+@Composable
+fun ChatScreen(viewModel: ChatViewModel) {
+    val messages by viewModel.messages.collectAsState()
 
-    override fun applyOptions(context: Context, builder: GlideBuilder) {
-        // Larger memory cache for chat images
-        val memoryCacheSizeBytes = 1024 * 1024 * 50  // 50MB
-        builder.setMemoryCache(LruResourceCache(memoryCacheSizeBytes.toLong()))
-
-        // Disk cache
-        val diskCacheSizeBytes = 1024 * 1024 * 250  // 250MB
-        builder.setDiskCache(InternalCacheDiskCacheFactory(context, diskCacheSizeBytes.toLong()))
-
-        // Bitmap pool
-        builder.setBitmapPool(LruBitmapPool(memoryCacheSizeBytes.toLong()))
-    }
-
-    override fun isManifestParsingEnabled(): Boolean {
-        return false  // Disable manifest parsing for performance
+    LazyColumn(
+        reverseLayout = true,
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        items(
+            items = messages,
+            key = { message -> message.id } // Стабильные ключи
+        ) { message ->
+            ChatMessageItem(message = message)
+        }
     }
 }
 
-// In ViewHolder
-fun bind(message: ChatMessage) {
-    GlideApp.with(binding.root.context)
-        .load(message.imageUrl)
-        .override(400, 400)  // Resize
-        .centerCrop()
-        .thumbnail(0.1f)  // Show low-res placeholder
-        .diskCacheStrategy(DiskCacheStrategy.ALL)  // Cache original + resized
-        .transition(DrawableTransitionOptions.withCrossFade(200))
-        .into(binding.imageView)
-}
+@Composable
+fun ChatMessageItem(message: ChatMessage) {
+    // Кэширование вычислений
+    val formattedTime = remember(message.timestamp) {
+        formatTimestamp(message.timestamp)
+    }
 
-// Or use Coil (Kotlin-first, coroutine-based)
-fun bind(message: ChatMessage) {
-    binding.imageView.load(message.imageUrl) {
-        size(400, 400)
-        crossfade(200)
-        placeholder(R.drawable.placeholder)
-        memoryCachePolicy(CachePolicy.ENABLED)
-        diskCachePolicy(CachePolicy.ENABLED)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Text(text = message.text)
+        Text(text = formattedTime)
     }
 }
 ```
 
----
-
-### 4. Offline Cache with Room + Flow
+**2. Compose Paging 3**
+- Проблема: загрузка всех сообщений в Compose
+- Результат: медленный UI, высокое потребление памяти
+- Решение: Paging Compose integration
 
 ```kotlin
-// Entity
-@Entity(tableName = "chat_messages")
+@Composable
+fun ChatScreen(viewModel: ChatViewModel) {
+    val messages = viewModel.messages.collectAsLazyPagingItems()
+
+    LazyColumn(
+        reverseLayout = true,
+        contentPadding = PaddingValues(8.dp)
+    ) {
+        items(
+            count = messages.itemCount,
+            key = messages.itemKey { it.id }
+        ) { index ->
+            val message = messages[index]
+            message?.let {
+                ChatMessageItem(message = it)
+            }
+        }
+
+        // Индикатор загрузки
+        when (messages.loadState.append) {
+            is LoadState.Loading -> item { LoadingIndicator() }
+            is LoadState.Error -> item { ErrorMessage() }
+            else -> {}
+        }
+    }
+}
+```
+
+**3. Compose State оптимизация**
+- Проблема: лишние recomposition при обновлении статуса
+- Результат: мерцание, потеря производительности
+- Решение: derivedStateOf, Immutable data classes
+
+```kotlin
+@Composable
+fun ChatScreen(viewModel: ChatViewModel) {
+    val messagesState by viewModel.messages.collectAsState()
+
+    // Оптимизация: вычисление только при изменении
+    val sortedMessages by remember {
+        derivedStateOf {
+            messagesState.sortedByDescending { it.timestamp }
+        }
+    }
+
+    LazyColumn {
+        items(
+            items = sortedMessages,
+            key = { it.id }
+        ) { message ->
+            ChatMessageItem(message = message)
+        }
+    }
+}
+
+@Immutable // Помечаем как неизменяемый для Compose
+data class ChatMessage(
+    val id: String,
+    val text: String,
+    val timestamp: Long,
+    val status: MessageStatus
+)
+```
+
+**4. Compose изображения**
+- Проблема: медленная загрузка изображений в Compose
+- Результат: лаги, высокое потребление памяти
+- Решение: Coil с оптимизациями
+
+```kotlin
+@Composable
+fun ChatImageMessage(imageUrl: String) {
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(imageUrl)
+            .size(400, 400) // Ограничение размера
+            .crossfade(true)
+            .memoryCacheKey(imageUrl)
+            .diskCacheKey(imageUrl)
+            .build(),
+        contentDescription = "Chat image",
+        modifier = Modifier.size(200.dp),
+        contentScale = ContentScale.Crop
+    )
+}
+```
+
+**4. Оптимизация изображений**
+- Проблема: медленная загрузка и декодирование изображений
+- Результат: лаги при скролле, высокое потребление памяти
+- Решение: кэширование, сжатие, lazy loading
+
+```kotlin
+// Оптимизированная загрузка изображений
+fun loadChatImage(imageView: ImageView, url: String) {
+    Glide.with(imageView.context)
+        .load(url)
+        .override(400, 400) // Ограничение размера
+        .centerCrop()
+        .thumbnail(0.1f) // Низкое разрешение сначала
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(imageView)
+}
+```
+
+**5. Офлайн кэширование**
+- Проблема: зависимость от сети, медленная синхронизация
+- Результат: пустой экран при отсутствии сети
+- Решение: Room + Flow для локального кэша
+
+```kotlin
+@Entity
 data class ChatMessage(
     @PrimaryKey val id: String,
-    val chatId: String,
     val text: String,
-    val imageUrl: String? = null,
     val timestamp: Long,
-    val senderId: String,
-    val isSent: Boolean,
-    @ColumnInfo(name = "status")
     val status: MessageStatus,
-    @ColumnInfo(name = "is_synced")
-    val isSynced: Boolean = false
+    val senderId: String
 )
 
-// DAO
 @Dao
-interface ChatMessageDao {
-
-    @Query("""
-        SELECT * FROM chat_messages
-        WHERE chat_id = :chatId
-        ORDER BY timestamp DESC
-    """)
-    fun getMessagesFlow(chatId: String): Flow<List<ChatMessage>>
+interface ChatDao {
+    @Query("SELECT * FROM ChatMessage ORDER BY timestamp DESC")
+    fun getMessages(): Flow<List<ChatMessage>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMessages(messages: List<ChatMessage>)
-
-    @Query("SELECT * FROM chat_messages WHERE is_synced = 0")
-    suspend fun getUnsyncedMessages(): List<ChatMessage>
+    suspend fun insertMessage(message: ChatMessage)
 
     @Update
     suspend fun updateMessage(message: ChatMessage)
 }
+```
 
-// Repository with offline-first approach
-class ChatRepository(
-    private val dao: ChatMessageDao,
-    private val api: ChatApiService
-) {
-    // Offline-first: Room is source of truth
-    fun getMessagesFlow(chatId: String): Flow<List<ChatMessage>> {
-        return dao.getMessagesFlow(chatId)
-            .onStart {
-                // Sync from network in background
-                syncMessagesFromNetwork(chatId)
+### Теория производительности
+
+**XML Views vs Compose сравнение:**
+
+| Аспект | XML Views + RecyclerView | Compose + LazyColumn |
+|--------|--------------------------|----------------------|
+| View переиспользование | ViewHolder Pattern (ручное) | Автоматическое |
+| Обновления | DiffUtil + Payloads | Recomposition + key() |
+| State management | ручное (LiveData/Flow) | декларативное (remember) |
+| Производительность | оптимизировано годами | оптимизируется автоматически |
+| Сложность кода | больше boilerplate | меньше кода |
+| Контроль | полный контроль | абстракция Compose |
+
+**Rendering Pipeline:**
+- **Measure**: вычисление размеров View
+- **Layout**: позиционирование View
+- **Draw**: отрисовка на Canvas
+- **Display**: передача в GPU
+
+**RecyclerView оптимизации (XML Views):**
+- **ViewHolder Pattern**: переиспользование View объектов
+- **ViewType**: разные типы View для разных сообщений
+- **DiffUtil**: эффективные обновления списка
+- **Payloads**: частичные обновления без полной перерисовки
+
+**Compose оптимизации:**
+- **Smart Recomposition**: перерисовка только изменённых частей
+- **Stable keys**: key() для идентификации элементов
+- **derivedStateOf**: кэширование вычисляемых значений
+- **@Immutable/@Stable**: оптимизация recomposition
+- **remember**: кэширование объектов между recomposition
+
+**Memory Management:**
+- **Lazy Loading**: загрузка только видимых элементов
+- **Image Caching**: кэширование декодированных изображений
+- **Weak References**: предотвращение memory leaks
+- **Paging**: ограничение количества элементов в памяти
+
+**Threading Strategy:**
+- **Main Thread**: только UI операции
+- **Background Thread**: загрузка данных, обработка изображений
+- **Coroutines**: управление асинхронными операциями
+- **Flow**: реактивные потоки данных
+
+**Performance Metrics:**
+- **Frame Rate**: 60 FPS для плавного скролла
+- **Memory Usage**: <100MB для чата с 1000 сообщений
+- **Scroll Performance**: <16ms на frame
+- **Image Load Time**: <200ms для изображений
+
+**Best Practices:**
+- Использовать DiffUtil для всех обновлений списка
+- Применять Payloads для частичных обновлений
+- Кэшировать изображения с ограничением размера
+- Использовать Paging для больших списков
+- Обеспечить офлайн работу с локальным кэшем
+
+## Answer (EN)
+
+For fast chat rendering without lags, optimize UI (XML Views or Compose), data loading (Paging), images (Glide/Coil), offline cache (Room).
+
+### Approaches: XML Views vs Compose
+
+**XML Views with RecyclerView:**
+- ViewHolder Pattern for View reuse
+- DiffUtil for efficient updates
+- Payloads for partial updates
+- Requires manual state management
+
+**Compose with LazyColumn:**
+- Automatic composition and recomposition
+- Built-in optimization with key()
+- Declarative UI without ViewHolder
+- State management via remember/rememberSaveable
+
+### Optimizations for XML Views
+
+**1. RecyclerView optimization**
+- Problem: slow message list rendering
+- Result: scroll lags, slow loading
+- Solution: optimized ViewHolder, DiffUtil, Payloads
+
+```kotlin
+// Optimized ViewHolder
+class ChatViewHolder(private val binding: ItemChatBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(message: ChatMessage, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            // Full binding
+            binding.messageText.text = message.text
+            binding.timestamp.text = message.formattedTime
+        } else {
+            // Partial update
+            payloads.forEach { payload ->
+                when (payload) {
+                    is MessageStatus -> updateStatus(payload)
+                    is String -> updateText(payload)
+                }
             }
-    }
-
-    private suspend fun syncMessagesFromNetwork(chatId: String) {
-        try {
-            val messages = api.getMessages(chatId)
-            dao.insertMessages(messages.map { it.copy(isSynced = true) })
-        } catch (e: Exception) {
-            // Use cached data if network fails
-            Log.e("Chat", "Failed to sync: ${e.message}")
         }
     }
 
-    suspend fun sendMessage(message: ChatMessage) {
-        // Insert locally first (optimistic update)
-        dao.insertMessages(listOf(message.copy(isSynced = false)))
+    private fun updateStatus(status: MessageStatus) {
+        binding.statusIcon.setImageResource(getStatusIcon(status))
+    }
+}
+```
 
-        try {
-            // Send to server
-            val sentMessage = api.sendMessage(message)
-            dao.updateMessage(sentMessage.copy(isSynced = true))
-        } catch (e: Exception) {
-            // Mark as failed, retry later
-            dao.updateMessage(message.copy(status = MessageStatus.FAILED))
-        }
+**2. DiffUtil with Payloads**
+- Problem: full ViewHolder update on status change
+- Result: flickering, focus loss
+- Solution: partial updates via Payloads
+
+```kotlin
+class ChatDiffCallback : DiffUtil.ItemCallback<ChatMessage>() {
+    override fun areItemsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
+        return oldItem.id == newItem.id
     }
 
-    // Background sync worker
-    suspend fun syncUnsyncedMessages() {
-        val unsynced = dao.getUnsyncedMessages()
-        unsynced.forEach { message ->
-            try {
-                val sentMessage = api.sendMessage(message)
-                dao.updateMessage(sentMessage.copy(isSynced = true))
-            } catch (e: Exception) {
-                // Retry later
+    override fun areContentsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun getChangePayload(oldItem: ChatMessage, newItem: ChatMessage): Any? {
+        return when {
+            oldItem.status != newItem.status -> newItem.status
+            oldItem.text != newItem.text -> newItem.text
+            else -> null
+        }
+    }
+}
+```
+
+**3. Paging 3 for large lists**
+- Problem: loading all messages into memory
+- Result: OOM, slow initialization
+- Solution: lazy loading with Paging 3
+
+```kotlin
+class ChatRepository {
+    fun getMessages(): Flow<PagingData<ChatMessage>> {
+        return Pager(
+            config = PagingConfig(pageSize = 50, prefetchDistance = 10),
+            pagingSourceFactory = { ChatPagingSource(roomDatabase) }
+        ).flow
+    }
+}
+
+// Usage with RecyclerView
+class ChatActivity : AppCompatActivity() {
+    private val adapter = ChatPagingAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            viewModel.messages.collectLatest { pagingData ->
+                adapter.submitData(pagingData)
             }
         }
     }
 }
 ```
 
----
+### Optimizations for Compose
 
-## Additional Optimizations
-
-### 5. RecyclerView Configuration
+**1. LazyColumn optimization**
+- Problem: unnecessary recomposition on data changes
+- Result: lags, performance loss
+- Solution: key(), derivedStateOf, remember
 
 ```kotlin
-binding.recyclerView.apply {
-    layoutManager = LinearLayoutManager(context).apply {
-        reverseLayout = true  // Newest at bottom
-        stackFromEnd = true  // Start from bottom
+@Composable
+fun ChatScreen(viewModel: ChatViewModel) {
+    val messages by viewModel.messages.collectAsState()
+
+    LazyColumn(
+        reverseLayout = true,
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        items(
+            items = messages,
+            key = { message -> message.id } // Stable keys
+        ) { message ->
+            ChatMessageItem(message = message)
+        }
+    }
+}
+
+@Composable
+fun ChatMessageItem(message: ChatMessage) {
+    // Cache calculations
+    val formattedTime = remember(message.timestamp) {
+        formatTimestamp(message.timestamp)
     }
 
-    // Fixed size improves performance
-    setHasFixedSize(true)
-
-    // Item animator optimization
-    itemAnimator = DefaultItemAnimator().apply {
-        supportsChangeAnimations = false  // Disable change animations
-    }
-
-    // Nested scrolling
-    isNestedScrollingEnabled = true
-
-    // Prefetch optimization
-    (layoutManager as? LinearLayoutManager)?.apply {
-        isItemPrefetchEnabled = true
-        initialPrefetchItemCount = 4
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Text(text = message.text)
+        Text(text = formattedTime)
     }
 }
 ```
 
----
-
-### 6. Text Processing Optimization
+**2. Compose Paging 3**
+- Problem: loading all messages in Compose
+- Result: slow UI, high memory usage
+- Solution: Paging Compose integration
 
 ```kotlin
-// Pre-process in ViewModel
-class ChatViewModel : ViewModel() {
+@Composable
+fun ChatScreen(viewModel: ChatViewModel) {
+    val messages = viewModel.messages.collectAsLazyPagingItems()
 
-    fun processMessage(rawMessage: RawMessage): ChatMessage {
-        return ChatMessage(
-            id = rawMessage.id,
-            text = rawMessage.text,
-            // Pre-format timestamp
-            formattedTime = formatTimestamp(rawMessage.timestamp),
-            // Pre-parse links
-            links = extractLinks(rawMessage.text),
-            // Pre-detect emojis
-            hasEmojis = containsEmojis(rawMessage.text)
-        )
-    }
-
-    private fun formatTimestamp(timestamp: Long): String {
-        val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
-        return formatter.format(Date(timestamp))
-    }
-
-    private fun extractLinks(text: String): List<String> {
-        val urlPattern = Patterns.WEB_URL
-        val matcher = urlPattern.matcher(text)
-        val links = mutableListOf<String>()
-        while (matcher.find()) {
-            matcher.group()?.let { links.add(it) }
+    LazyColumn(
+        reverseLayout = true,
+        contentPadding = PaddingValues(8.dp)
+    ) {
+        items(
+            count = messages.itemCount,
+            key = messages.itemKey { it.id }
+        ) { index ->
+            val message = messages[index]
+            message?.let {
+                ChatMessageItem(message = it)
+            }
         }
-        return links
+
+        // Loading indicator
+        when (messages.loadState.append) {
+            is LoadState.Loading -> item { LoadingIndicator() }
+            is LoadState.Error -> item { ErrorMessage() }
+            else -> {}
+        }
     }
 }
 ```
 
----
-
-### 7. Scroll Performance
+**3. Compose State optimization**
+- Problem: excess recomposition on status updates
+- Result: flickering, performance loss
+- Solution: derivedStateOf, Immutable data classes
 
 ```kotlin
-// Detect scroll state to pause image loading
-binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+@Composable
+fun ChatScreen(viewModel: ChatViewModel) {
+    val messagesState by viewModel.messages.collectAsState()
 
-    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-        when (newState) {
-            RecyclerView.SCROLL_STATE_IDLE -> {
-                // Resume image loading
-                Glide.with(recyclerView.context).resumeRequests()
-            }
-            RecyclerView.SCROLL_STATE_DRAGGING,
-            RecyclerView.SCROLL_STATE_SETTLING -> {
-                // Pause image loading during scroll
-                Glide.with(recyclerView.context).pauseRequests()
-            }
+    // Optimization: compute only on change
+    val sortedMessages by remember {
+        derivedStateOf {
+            messagesState.sortedByDescending { it.timestamp }
         }
     }
-})
+
+    LazyColumn {
+        items(
+            items = sortedMessages,
+            key = { it.id }
+        ) { message ->
+            ChatMessageItem(message = message)
+        }
+    }
+}
+
+@Immutable // Mark as immutable for Compose
+data class ChatMessage(
+    val id: String,
+    val text: String,
+    val timestamp: Long,
+    val status: MessageStatus
+)
 ```
 
----
+**4. Compose images**
+- Problem: slow image loading in Compose
+- Result: lags, high memory usage
+- Solution: Coil with optimizations
 
-## Summary Checklist
+```kotlin
+@Composable
+fun ChatImageMessage(imageUrl: String) {
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(imageUrl)
+            .size(400, 400) // Size limit
+            .crossfade(true)
+            .memoryCacheKey(imageUrl)
+            .diskCacheKey(imageUrl)
+            .build(),
+        contentDescription = "Chat image",
+        modifier = Modifier.size(200.dp),
+        contentScale = ContentScale.Crop
+    )
+}
+```
 
-### RecyclerView
--  Use **ViewHolder** with ViewBinding
--  Implement **DiffUtil** with ListAdapter
--  Use **payloads** for partial updates
--  Enable **stable IDs**
--  Set **hasFixedSize** if applicable
--  Use **multiple view types** for different messages
+**4. Image optimization**
+- Problem: slow image loading and decoding
+- Result: scroll lags, high memory usage
+- Solution: caching, compression, lazy loading
 
-### Threading
--  Use **Kotlin Coroutines** for background work
--  Use **Dispatchers.IO** for database/network
--  Use **Paging 3** for large message history
--  **Never block UI thread**
+```kotlin
+// Optimized image loading
+fun loadChatImage(imageView: ImageView, url: String) {
+    Glide.with(imageView.context)
+        .load(url)
+        .override(400, 400) // Size limit
+        .centerCrop()
+        .thumbnail(0.1f) // Low-res thumbnail first
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(imageView)
+}
+```
 
-### Image Loading
--  Use **Glide** or **Coil**
--  Set **override()** to limit image size
--  Use **thumbnail()** for progressive loading
--  Configure **memory/disk cache**
--  **Pause requests** during scroll
+**5. Offline caching**
+- Problem: network dependency, slow sync
+- Result: empty screen without network
+- Solution: Room + Flow for local cache
 
-### Offline Cache
--  Use **Room** as single source of truth
--  Use **Flow** for reactive updates
--  Implement **offline-first** pattern
--  Sync **unsynced messages** in background
--  Use **WorkManager** for reliable sync
+```kotlin
+@Entity
+data class ChatMessage(
+    @PrimaryKey val id: String,
+    val text: String,
+    val timestamp: Long,
+    val status: MessageStatus,
+    val senderId: String
+)
 
----
+@Dao
+interface ChatDao {
+    @Query("SELECT * FROM ChatMessage ORDER BY timestamp DESC")
+    fun getMessages(): Flow<List<ChatMessage>>
 
-## Ответ (RU)
-Чтобы чат работал быстро и без лагов, нужно:
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMessage(message: ChatMessage)
 
-1. **Оптимизировать RecyclerView** - ViewHolder, DiffUtil, Payloads для частичных обновлений
-2. **Минимизировать работу в UI Thread** - использовать Coroutines и Paging 3
-3. **Оптимизировать загрузку изображений** - Glide или Coil с кэшированием
-4. **Использовать офлайн-кэш** - Room + Flow/LiveData для offline-first подхода
+    @Update
+    suspend fun updateMessage(message: ChatMessage)
+}
+```
+
+### Performance Theory
+
+**XML Views vs Compose comparison:**
+
+| Aspect | XML Views + RecyclerView | Compose + LazyColumn |
+|--------|--------------------------|----------------------|
+| View reuse | ViewHolder Pattern (manual) | Automatic |
+| Updates | DiffUtil + Payloads | Recomposition + key() |
+| State management | manual (LiveData/Flow) | declarative (remember) |
+| Performance | optimized over years | auto-optimized |
+| Code complexity | more boilerplate | less code |
+| Control | full control | Compose abstraction |
+
+**Rendering Pipeline:**
+- **Measure**: View size calculation
+- **Layout**: View positioning
+- **Draw**: Canvas rendering
+- **Display**: GPU transfer
+
+**RecyclerView optimizations (XML Views):**
+- **ViewHolder Pattern**: View object reuse
+- **ViewType**: different View types for different messages
+- **DiffUtil**: efficient list updates
+- **Payloads**: partial updates without full redraw
+
+**Compose optimizations:**
+- **Smart Recomposition**: redraw only changed parts
+- **Stable keys**: key() for element identification
+- **derivedStateOf**: cache computed values
+- **@Immutable/@Stable**: recomposition optimization
+- **remember**: cache objects between recomposition
+
+**Memory Management:**
+- **Lazy Loading**: load only visible elements
+- **Image Caching**: cache decoded images
+- **Weak References**: prevent memory leaks
+- **Paging**: limit elements in memory
+
+**Threading Strategy:**
+- **Main Thread**: UI operations only
+- **Background Thread**: data loading, image processing
+- **Coroutines**: async operation management
+- **Flow**: reactive data streams
+
+**Performance Metrics:**
+- **Frame Rate**: 60 FPS for smooth scrolling
+- **Memory Usage**: <100MB for chat with 1000 messages
+- **Scroll Performance**: <16ms per frame
+- **Image Load Time**: <200ms for images
+
+**Best Practices:**
+- Use DiffUtil for all list updates
+- Apply Payloads for partial updates
+- Cache images with size limits
+- Use Paging for large lists
+- Ensure offline work with local cache
+
+## Follow-ups
+- How to optimize chat with thousands of messages?
+- What's the difference between DiffUtil and AsyncListDiffer?
+- How to handle real-time updates in chat?
 
 ## Related Questions
-
-- [[q-baseline-profiles-optimization--performance--medium]]
-- [[q-16kb-dex-page-size--android--medium]]
-- [[q-how-compose-draws-on-screen--android--hard]]
+- [[q-diffutil-background-calculation-issues--android--medium]]

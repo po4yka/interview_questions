@@ -90,25 +90,25 @@ python validate_note.py 70-Kotlin/ --quiet
 Validation Report: q-compose-state--android--medium.md
 ================================================================================
 
-Overall Status: ⚠️ WARNINGS (2 total issues)
+Overall Status: WARNINGS (2 total issues)
 
-⚠️ WARNINGS
+WARNINGS
 --------------------------------------------------------------------------------
-  • [Line 12] Missing required tag: 'difficulty/medium'
-  • [Section: Related Questions] Empty section - add 3-8 items
+  - [Line 12] Missing required tag: 'difficulty/medium'
+  - [Section: Related Questions] Empty section - add 3-8 items
 
-✅ PASSED CHECKS
+PASSED CHECKS
 --------------------------------------------------------------------------------
-  ✓ All required YAML fields present
-  ✓ ID format valid
-  ✓ Title has bilingual format
-  ✓ Topic 'android' is valid
-  ✓ Subtopics count valid (2 values)
-  ✓ Question kind 'android' is valid
-  ✓ Difficulty 'medium' is valid
-  ✓ Original language is valid
-  ✓ Language tags are valid
-  ✓ Status 'draft' is valid
+  + All required YAML fields present
+  + ID format valid
+  + Title has bilingual format
+  + Topic 'android' is valid
+  + Subtopics count valid (2 values)
+  + Question kind 'android' is valid
+  + Difficulty 'medium' is valid
+  + Original language is valid
+  + Language tags are valid
+  + Status 'draft' is valid
   ... and 18 more
 
 ================================================================================
@@ -116,10 +116,10 @@ Overall Status: ⚠️ WARNINGS (2 total issues)
 
 ### Issue Severity Levels
 
-- **🚨 CRITICAL**: Must fix - breaks required rules (blocks status promotion)
-- **❌ ERROR**: Factual issues - broken links, invalid references
-- **⚠️ WARNING**: Should fix - missing recommended elements
-- **ℹ️ INFO**: Style suggestions - optional improvements
+- **CRITICAL**: Must fix - breaks required rules (blocks status promotion)
+- **ERROR**: Factual issues - broken links, invalid references
+- **WARNING**: Should fix - missing recommended elements
+- **INFO**: Style suggestions - optional improvements
 
 ## Markdown Report
 
@@ -251,9 +251,9 @@ If validation incorrectly flags an issue:
 
 **Automation Coverage**: ~70% of validation checks
 
-- ✅ **Fully automated**: YAML validation, structure, formatting, links
-- ⚠️ **Partially automated**: Code syntax, complexity notation
-- ❌ **Manual review needed**: Technical accuracy, translation quality
+- **Fully automated**: YAML validation, structure, formatting, links
+- **Partially automated**: Code syntax, complexity notation
+- **Manual review needed**: Technical accuracy, translation quality
 
 ## Exit Codes
 

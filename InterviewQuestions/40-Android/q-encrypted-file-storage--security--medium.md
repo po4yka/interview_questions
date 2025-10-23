@@ -1,1025 +1,69 @@
 ---
-id: 20251012-1227132
-title: "Encrypted File Storage / Зашифрованное хранение файлов"
-topic: security
+id: 20251020-200300
+title: Encrypted File Storage / Зашифрованное хранение файлов
+aliases:
+  - Encrypted File Storage
+  - Зашифрованное хранение файлов
+topic: android
+subtopics:
+  - files-media
+  - security
+question_kind: android
 difficulty: medium
-status: draft
+original_language: en
+language_tags:
+  - en
+  - ru
+source: https://developer.android.com/topic/security/data
+source_note: Android encrypted file storage documentation
+status: reviewed
 moc: moc-android
-related: [q-play-feature-delivery-dynamic-modules--android--medium, q-what-is-broadcastreceiver--android--easy, q-room-type-converters--android--medium]
-created: 2025-10-15
-tags: [encryption, file-storage, streaming, encrypted-file, difficulty/medium]
+related:
+  - q-data-encryption-at-rest--security--medium
+  - q-android-keystore--security--medium
+  - q-android-security-best-practices--security--medium
+created: 2025-10-20
+updated: 2025-10-20
+tags:
+  - android/files-media
+  - android/security
+  - encryption
+  - file-storage
+  - keystore
+  - difficulty/medium
 ---
-# Encrypted File Storage / Шифрование файлов
-
-**English**: Implement encrypted file storage using EncryptedFile API. Handle large files with streaming encryption/decryption.
-
-## Answer (EN)
-The **EncryptedFile API** from the Android Security Crypto library provides secure file encryption with automatic key management using Android Keystore. It uses AES-256-GCM encryption with streaming support for large files, ensuring both confidentiality and integrity.
-
-### Key Concepts
-
-#### EncryptedFile Features
-
-1. **Automatic Key Management**: Keys stored in Android Keystore
-2. **Streaming Encryption**: Efficient for large files
-3. **AES-256-GCM**: Strong encryption with authentication
-4. **File Integrity**: Detects tampering automatically
-5. **Simple API**: Easy to implement and maintain
-
-#### Security Guarantees
-
-```kotlin
-// EncryptedFile provides:
-// - Confidentiality: Data encrypted with AES-256
-// - Integrity: GCM authentication tag
-// - Key security: Keys in Android Keystore
-// - Forward secrecy: Unique encryption per file operation
-```
-
-### Complete EncryptedFile Implementation
-
-#### 1. Basic Setup and Configuration
-
-```kotlin
-import androidx.security.crypto.EncryptedFile
-import androidx.security.crypto.MasterKey
-import android.content.Context
-import java.io.File
-
-/**
- * Manager for encrypted file operations
- */
-class EncryptedFileManager(private val context: Context) {
-
-    companion object {
-        private const val ENCRYPTED_DIR = "encrypted_files"
-    }
-
-    // Create or get MasterKey for encryption
-    private val masterKey: MasterKey by lazy {
-        MasterKey.Builder(context)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
-    }
-
-    /**
-     * Get encrypted file directory
-     */
-    private fun getEncryptedDir(): File {
-        val dir = File(context.filesDir, ENCRYPTED_DIR)
-        if (!dir.exists()) {
-            dir.mkdirs()
-        }
-        return dir
-    }
-
-    /**
-     * Create EncryptedFile instance
-     */
-    fun getEncryptedFile(fileName: String): EncryptedFile {
-        val file = File(getEncryptedDir(), fileName)
-
-        return EncryptedFile.Builder(
-            context,
-            file,
-            masterKey,
-            EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
-        ).build()
-    }
-
-    /**
-     * Write text to encrypted file
-     */
-    fun writeText(fileName: String, content: String) {
-        val encryptedFile = getEncryptedFile(fileName)
-
-        encryptedFile.openFileOutput().use { outputStream ->
-            outputStream.write(content.toByteArray(Charsets.UTF_8))
-        }
-    }
-
-    /**
-     * Read text from encrypted file
-     */
-    fun readText(fileName: String): String? {
-        val encryptedFile = getEncryptedFile(fileName)
-        val file = File(getEncryptedDir(), fileName)
-
-        if (!file.exists()) {
-            return null
-        }
-
-        return encryptedFile.openFileInput().use { inputStream ->
-            inputStream.readBytes().toString(Charsets.UTF_8)
-        }
-    }
-
-    /**
-     * Write bytes to encrypted file
-     */
-    fun writeBytes(fileName: String, data: ByteArray) {
-        val encryptedFile = getEncryptedFile(fileName)
-
-        encryptedFile.openFileOutput().use { outputStream ->
-            outputStream.write(data)
-        }
-    }
-
-    /**
-     * Read bytes from encrypted file
-     */
-    fun readBytes(fileName: String): ByteArray? {
-        val encryptedFile = getEncryptedFile(fileName)
-        val file = File(getEncryptedDir(), fileName)
-
-        if (!file.exists()) {
-            return null
-        }
-
-        return encryptedFile.openFileInput().use { inputStream ->
-            inputStream.readBytes()
-        }
-    }
-
-    /**
-     * Delete encrypted file
-     */
-    fun deleteFile(fileName: String): Boolean {
-        val file = File(getEncryptedDir(), fileName)
-        return file.delete()
-    }
-
-    /**
-     * Check if encrypted file exists
-     */
-    fun fileExists(fileName: String): Boolean {
-        val file = File(getEncryptedDir(), fileName)
-        return file.exists()
-    }
-
-    /**
-     * Get file size
-     */
-    fun getFileSize(fileName: String): Long {
-        val file = File(getEncryptedDir(), fileName)
-        return if (file.exists()) file.length() else 0L
-    }
-
-    /**
-     * List all encrypted files
-     */
-    fun listFiles(): List<String> {
-        val dir = getEncryptedDir()
-        return dir.listFiles()?.map { it.name } ?: emptyList()
-    }
-}
-```
-
-#### 2. Streaming Encryption for Large Files
-
-```kotlin
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import java.io.InputStream
-import java.io.OutputStream
-
-/**
- * Streaming file encryption for large files
- */
-class StreamingEncryptedFileManager(private val context: Context) {
-
-    companion object {
-        private const val BUFFER_SIZE = 8192 // 8KB buffer
-    }
-
-    private val encryptedFileManager = EncryptedFileManager(context)
-
-    /**
-     * Encrypt large file with progress tracking
-     */
-    suspend fun encryptFileWithProgress(
-        sourceFile: File,
-        encryptedFileName: String
-    ): Flow<EncryptionProgress> = flow {
-        val totalBytes = sourceFile.length()
-        var bytesProcessed = 0L
-
-        emit(EncryptionProgress.Started(totalBytes))
-
-        withContext(Dispatchers.IO) {
-            val encryptedFile = encryptedFileManager.getEncryptedFile(encryptedFileName)
-
-            sourceFile.inputStream().use { input ->
-                encryptedFile.openFileOutput().use { output ->
-                    val buffer = ByteArray(BUFFER_SIZE)
-                    var bytesRead: Int
-
-                    while (input.read(buffer).also { bytesRead = it } != -1) {
-                        output.write(buffer, 0, bytesRead)
-                        bytesProcessed += bytesRead
-
-                        val progress = (bytesProcessed * 100 / totalBytes).toInt()
-                        emit(EncryptionProgress.InProgress(bytesProcessed, totalBytes, progress))
-                    }
-                }
-            }
-        }
-
-        emit(EncryptionProgress.Completed(totalBytes))
-    }.flowOn(Dispatchers.IO)
-
-    /**
-     * Decrypt large file with progress tracking
-     */
-    suspend fun decryptFileWithProgress(
-        encryptedFileName: String,
-        destinationFile: File
-    ): Flow<DecryptionProgress> = flow {
-        val encryptedFile = encryptedFileManager.getEncryptedFile(encryptedFileName)
-        val encryptedFileObj = File(context.filesDir, "encrypted_files/$encryptedFileName")
-
-        if (!encryptedFileObj.exists()) {
-            emit(DecryptionProgress.Error("Encrypted file not found"))
-            return@flow
-        }
-
-        val totalBytes = encryptedFileObj.length()
-        var bytesProcessed = 0L
-
-        emit(DecryptionProgress.Started(totalBytes))
-
-        withContext(Dispatchers.IO) {
-            encryptedFile.openFileInput().use { input ->
-                destinationFile.outputStream().use { output ->
-                    val buffer = ByteArray(BUFFER_SIZE)
-                    var bytesRead: Int
-
-                    while (input.read(buffer).also { bytesRead = it } != -1) {
-                        output.write(buffer, 0, bytesRead)
-                        bytesProcessed += bytesRead
-
-                        val progress = (bytesProcessed * 100 / totalBytes).toInt()
-                        emit(DecryptionProgress.InProgress(bytesProcessed, totalBytes, progress))
-                    }
-                }
-            }
-        }
-
-        emit(DecryptionProgress.Completed(totalBytes))
-    }.flowOn(Dispatchers.IO)
-
-    /**
-     * Copy and encrypt file from URI (e.g., from file picker)
-     */
-    suspend fun encryptFromUri(
-        uri: android.net.Uri,
-        encryptedFileName: String
-    ): Flow<EncryptionProgress> = flow {
-        withContext(Dispatchers.IO) {
-            context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                val totalBytes = context.contentResolver.query(
-                    uri,
-                    arrayOf(android.provider.OpenableColumns.SIZE),
-                    null,
-                    null,
-                    null
-                )?.use { cursor ->
-                    cursor.moveToFirst()
-                    cursor.getLong(0)
-                } ?: -1L
-
-                if (totalBytes > 0) {
-                    emit(EncryptionProgress.Started(totalBytes))
-                }
-
-                val encryptedFile = encryptedFileManager.getEncryptedFile(encryptedFileName)
-                var bytesProcessed = 0L
-
-                encryptedFile.openFileOutput().use { output ->
-                    val buffer = ByteArray(BUFFER_SIZE)
-                    var bytesRead: Int
-
-                    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
-                        output.write(buffer, 0, bytesRead)
-                        bytesProcessed += bytesRead
-
-                        if (totalBytes > 0) {
-                            val progress = (bytesProcessed * 100 / totalBytes).toInt()
-                            emit(EncryptionProgress.InProgress(bytesProcessed, totalBytes, progress))
-                        }
-                    }
-                }
-
-                emit(EncryptionProgress.Completed(bytesProcessed))
-            } ?: emit(EncryptionProgress.Error("Failed to open URI"))
-        }
-    }.flowOn(Dispatchers.IO)
-
-    sealed class EncryptionProgress {
-        data class Started(val totalBytes: Long) : EncryptionProgress()
-        data class InProgress(
-            val bytesProcessed: Long,
-            val totalBytes: Long,
-            val percentage: Int
-        ) : EncryptionProgress()
-        data class Completed(val totalBytes: Long) : EncryptionProgress()
-        data class Error(val message: String) : EncryptionProgress()
-    }
-
-    sealed class DecryptionProgress {
-        data class Started(val totalBytes: Long) : DecryptionProgress()
-        data class InProgress(
-            val bytesProcessed: Long,
-            val totalBytes: Long,
-            val percentage: Int
-        ) : DecryptionProgress()
-        data class Completed(val totalBytes: Long) : DecryptionProgress()
-        data class Error(val message: String) : DecryptionProgress()
-    }
-}
-```
-
-#### 3. EncryptedSharedPreferences Integration
-
-```kotlin
-import androidx.security.crypto.EncryptedSharedPreferences
-
-/**
- * Secure settings storage using EncryptedSharedPreferences
- */
-class SecurePreferences(context: Context) {
-
-    companion object {
-        private const val PREFS_FILE_NAME = "secure_prefs"
-    }
-
-    private val masterKey = MasterKey.Builder(context)
-        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-        .build()
-
-    private val sharedPreferences = EncryptedSharedPreferences.create(
-        context,
-        PREFS_FILE_NAME,
-        masterKey,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
-
-    fun putString(key: String, value: String) {
-        sharedPreferences.edit().putString(key, value).apply()
-    }
-
-    fun getString(key: String, defaultValue: String? = null): String? {
-        return sharedPreferences.getString(key, defaultValue)
-    }
-
-    fun putInt(key: String, value: Int) {
-        sharedPreferences.edit().putInt(key, value).apply()
-    }
-
-    fun getInt(key: String, defaultValue: Int = 0): Int {
-        return sharedPreferences.getInt(key, defaultValue)
-    }
-
-    fun putBoolean(key: String, value: Boolean) {
-        sharedPreferences.edit().putBoolean(key, value).apply()
-    }
-
-    fun getBoolean(key: String, defaultValue: Boolean = false): Boolean {
-        return sharedPreferences.getBoolean(key, defaultValue)
-    }
-
-    fun remove(key: String) {
-        sharedPreferences.edit().remove(key).apply()
-    }
-
-    fun clear() {
-        sharedPreferences.edit().clear().apply()
-    }
-
-    fun contains(key: String): Boolean {
-        return sharedPreferences.contains(key)
-    }
-}
-```
-
-#### 4. Migration from Unencrypted to Encrypted Storage
-
-```kotlin
-/**
- * Migrate files from unencrypted to encrypted storage
- */
-class EncryptionMigration(
-    private val context: Context,
-    private val encryptedFileManager: EncryptedFileManager
-) {
-
-    /**
-     * Migrate all files from a directory to encrypted storage
-     */
-    suspend fun migrateDirectory(
-        sourceDir: File,
-        deleteOriginals: Boolean = true
-    ): MigrationResult = withContext(Dispatchers.IO) {
-        val results = mutableListOf<FileMigrationResult>()
-        var successCount = 0
-        var failureCount = 0
-
-        sourceDir.listFiles()?.forEach { file ->
-            if (file.isFile) {
-                val result = migrateFile(file, deleteOriginals)
-                results.add(result)
-
-                when (result) {
-                    is FileMigrationResult.Success -> successCount++
-                    is FileMigrationResult.Failure -> failureCount++
-                }
-            }
-        }
-
-        MigrationResult(
-            totalFiles = results.size,
-            successCount = successCount,
-            failureCount = failureCount,
-            fileResults = results
-        )
-    }
-
-    /**
-     * Migrate single file to encrypted storage
-     */
-    private suspend fun migrateFile(
-        sourceFile: File,
-        deleteOriginal: Boolean
-    ): FileMigrationResult = withContext(Dispatchers.IO) {
-        try {
-            val encryptedFileName = "${sourceFile.name}.encrypted"
-
-            // Read original file
-            val data = sourceFile.readBytes()
-
-            // Write to encrypted storage
-            encryptedFileManager.writeBytes(encryptedFileName, data)
-
-            // Verify encrypted file
-            val decrypted = encryptedFileManager.readBytes(encryptedFileName)
-            if (!data.contentEquals(decrypted)) {
-                throw Exception("Verification failed: decrypted data doesn't match")
-            }
-
-            // Delete original if requested
-            if (deleteOriginal) {
-                sourceFile.delete()
-            }
-
-            FileMigrationResult.Success(
-                originalName = sourceFile.name,
-                encryptedName = encryptedFileName,
-                sizeBytes = data.size.toLong()
-            )
-        } catch (e: Exception) {
-            FileMigrationResult.Failure(
-                fileName = sourceFile.name,
-                error = e.message ?: "Unknown error"
-            )
-        }
-    }
-
-    /**
-     * Migrate SharedPreferences to EncryptedSharedPreferences
-     */
-    suspend fun migrateSharedPreferences(
-        oldPrefsName: String,
-        deleteOld: Boolean = true
-    ): SharedPrefsMigrationResult = withContext(Dispatchers.IO) {
-        try {
-            val oldPrefs = context.getSharedPreferences(oldPrefsName, Context.MODE_PRIVATE)
-            val securePrefs = SecurePreferences(context)
-
-            val allEntries = oldPrefs.all
-            var migratedCount = 0
-
-            allEntries.forEach { (key, value) ->
-                when (value) {
-                    is String -> securePrefs.putString(key, value)
-                    is Int -> securePrefs.putInt(key, value)
-                    is Boolean -> securePrefs.putBoolean(key, value)
-                    // Add other types as needed
-                }
-                migratedCount++
-            }
-
-            if (deleteOld) {
-                oldPrefs.edit().clear().apply()
-            }
-
-            SharedPrefsMigrationResult.Success(
-                prefsName = oldPrefsName,
-                entriesMigrated = migratedCount
-            )
-        } catch (e: Exception) {
-            SharedPrefsMigrationResult.Failure(
-                prefsName = oldPrefsName,
-                error = e.message ?: "Unknown error"
-            )
-        }
-    }
-
-    data class MigrationResult(
-        val totalFiles: Int,
-        val successCount: Int,
-        val failureCount: Int,
-        val fileResults: List<FileMigrationResult>
-    )
-
-    sealed class FileMigrationResult {
-        data class Success(
-            val originalName: String,
-            val encryptedName: String,
-            val sizeBytes: Long
-        ) : FileMigrationResult()
-
-        data class Failure(
-            val fileName: String,
-            val error: String
-        ) : FileMigrationResult()
-    }
-
-    sealed class SharedPrefsMigrationResult {
-        data class Success(
-            val prefsName: String,
-            val entriesMigrated: Int
-        ) : SharedPrefsMigrationResult()
-
-        data class Failure(
-            val prefsName: String,
-            val error: String
-        ) : SharedPrefsMigrationResult()
-    }
-}
-```
-
-### Performance Comparison
-
-```kotlin
-import kotlin.system.measureTimeMillis
-
-/**
- * Benchmark encrypted vs unencrypted file operations
- */
-class EncryptionBenchmark(
-    private val context: Context,
-    private val encryptedFileManager: EncryptedFileManager
-) {
-
-    data class BenchmarkResult(
-        val operation: String,
-        val fileSize: Long,
-        val encryptedTimeMs: Long,
-        val unencryptedTimeMs: Long,
-        val overhead: Double
-    ) {
-        override fun toString(): String {
-            return """
-                Operation: $operation
-                File Size: ${fileSize / 1024} KB
-                Encrypted: ${encryptedTimeMs}ms
-                Unencrypted: ${unencryptedTimeMs}ms
-                Overhead: ${"%.2f".format(overhead)}%
-            """.trimIndent()
-        }
-    }
-
-    suspend fun benchmarkWrite(sizeKB: Int): BenchmarkResult = withContext(Dispatchers.IO) {
-        val data = ByteArray(sizeKB * 1024) { it.toByte() }
-
-        val encryptedTime = measureTimeMillis {
-            encryptedFileManager.writeBytes("benchmark_encrypted.dat", data)
-        }
-
-        val unencryptedFile = File(context.cacheDir, "benchmark_unencrypted.dat")
-        val unencryptedTime = measureTimeMillis {
-            unencryptedFile.writeBytes(data)
-        }
-
-        val overhead = ((encryptedTime - unencryptedTime).toDouble() / unencryptedTime) * 100
-
-        BenchmarkResult(
-            operation = "Write",
-            fileSize = data.size.toLong(),
-            encryptedTimeMs = encryptedTime,
-            unencryptedTimeMs = unencryptedTime,
-            overhead = overhead
-        )
-    }
-
-    suspend fun benchmarkRead(sizeKB: Int): BenchmarkResult = withContext(Dispatchers.IO) {
-        val data = ByteArray(sizeKB * 1024) { it.toByte() }
-
-        // Setup
-        encryptedFileManager.writeBytes("benchmark_encrypted.dat", data)
-        val unencryptedFile = File(context.cacheDir, "benchmark_unencrypted.dat")
-        unencryptedFile.writeBytes(data)
-
-        val encryptedTime = measureTimeMillis {
-            encryptedFileManager.readBytes("benchmark_encrypted.dat")
-        }
-
-        val unencryptedTime = measureTimeMillis {
-            unencryptedFile.readBytes()
-        }
-
-        val overhead = ((encryptedTime - unencryptedTime).toDouble() / unencryptedTime) * 100
-
-        BenchmarkResult(
-            operation = "Read",
-            fileSize = data.size.toLong(),
-            encryptedTimeMs = encryptedTime,
-            unencryptedTimeMs = unencryptedTime,
-            overhead = overhead
-        )
-    }
-
-    suspend fun runFullBenchmark(): List<BenchmarkResult> = withContext(Dispatchers.IO) {
-        listOf(
-            benchmarkWrite(100),   // 100KB
-            benchmarkWrite(1024),  // 1MB
-            benchmarkWrite(10240), // 10MB
-            benchmarkRead(100),
-            benchmarkRead(1024),
-            benchmarkRead(10240)
-        )
-    }
-}
-```
-
-### Error Handling and Recovery
-
-```kotlin
-/**
- * Robust error handling for encrypted file operations
- */
-class RobustEncryptedFileManager(
-    context: Context
-) {
-    private val encryptedFileManager = EncryptedFileManager(context)
-
-    /**
-     * Write with automatic retry and backup
-     */
-    suspend fun safeWrite(
-        fileName: String,
-        data: ByteArray,
-        maxRetries: Int = 3
-    ): WriteResult = withContext(Dispatchers.IO) {
-        var lastException: Exception? = null
-
-        repeat(maxRetries) { attempt ->
-            try {
-                // Create backup if file exists
-                if (encryptedFileManager.fileExists(fileName)) {
-                    val backupName = "$fileName.backup"
-                    val existing = encryptedFileManager.readBytes(fileName)
-                    existing?.let {
-                        encryptedFileManager.writeBytes(backupName, it)
-                    }
-                }
-
-                // Write new data
-                encryptedFileManager.writeBytes(fileName, data)
-
-                // Verify write
-                val written = encryptedFileManager.readBytes(fileName)
-                if (!data.contentEquals(written)) {
-                    throw Exception("Write verification failed")
-                }
-
-                return@withContext WriteResult.Success(fileName)
-            } catch (e: Exception) {
-                lastException = e
-                if (attempt < maxRetries - 1) {
-                    delay(100 * (attempt + 1)) // Exponential backoff
-                }
-            }
-        }
-
-        WriteResult.Failure(fileName, lastException?.message ?: "Unknown error")
-    }
-
-    /**
-     * Read with fallback to backup
-     */
-    suspend fun safeRead(fileName: String): ReadResult = withContext(Dispatchers.IO) {
-        try {
-            val data = encryptedFileManager.readBytes(fileName)
-            if (data != null) {
-                return@withContext ReadResult.Success(data)
-            }
-
-            // Try backup
-            val backupName = "$fileName.backup"
-            val backupData = encryptedFileManager.readBytes(backupName)
-            if (backupData != null) {
-                return@withContext ReadResult.SuccessFromBackup(backupData)
-            }
-
-            ReadResult.Failure("File not found")
-        } catch (e: Exception) {
-            // Try backup on error
-            try {
-                val backupName = "$fileName.backup"
-                val backupData = encryptedFileManager.readBytes(backupName)
-                if (backupData != null) {
-                    return@withContext ReadResult.SuccessFromBackup(backupData)
-                }
-            } catch (backupException: Exception) {
-                // Ignore backup exception
-            }
-
-            ReadResult.Failure(e.message ?: "Unknown error")
-        }
-    }
-
-    sealed class WriteResult {
-        data class Success(val fileName: String) : WriteResult()
-        data class Failure(val fileName: String, val error: String) : WriteResult()
-    }
-
-    sealed class ReadResult {
-        data class Success(val data: ByteArray) : ReadResult()
-        data class SuccessFromBackup(val data: ByteArray) : ReadResult()
-        data class Failure(val error: String) : ReadResult()
-    }
-}
-```
-
-### Complete File Manager Example
-
-```kotlin
-/**
- * Complete encrypted file manager with all features
- */
-class ComprehensiveFileManager(private val context: Context) {
-
-    private val encryptedFileManager = EncryptedFileManager(context)
-    private val streamingManager = StreamingEncryptedFileManager(context)
-    private val robustManager = RobustEncryptedFileManager(context)
-
-    /**
-     * Save document with encryption
-     */
-    suspend fun saveDocument(
-        name: String,
-        content: String,
-        metadata: DocumentMetadata
-    ): SaveResult = withContext(Dispatchers.IO) {
-        try {
-            // Save metadata
-            val metadataJson = Json.encodeToString(metadata)
-            encryptedFileManager.writeText("$name.meta", metadataJson)
-
-            // Save content
-            encryptedFileManager.writeText(name, content)
-
-            SaveResult.Success(name)
-        } catch (e: Exception) {
-            SaveResult.Failure(e.message ?: "Unknown error")
-        }
-    }
-
-    /**
-     * Load document with decryption
-     */
-    suspend fun loadDocument(name: String): LoadResult = withContext(Dispatchers.IO) {
-        try {
-            val content = encryptedFileManager.readText(name)
-                ?: return@withContext LoadResult.NotFound
-
-            val metadataJson = encryptedFileManager.readText("$name.meta")
-            val metadata = metadataJson?.let {
-                Json.decodeFromString<DocumentMetadata>(it)
-            }
-
-            LoadResult.Success(
-                Document(
-                    name = name,
-                    content = content,
-                    metadata = metadata
-                )
-            )
-        } catch (e: Exception) {
-            LoadResult.Failure(e.message ?: "Unknown error")
-        }
-    }
-
-    /**
-     * Save large file with progress
-     */
-    fun saveLargeFile(
-        sourceFile: File,
-        encryptedName: String
-    ): Flow<StreamingEncryptedFileManager.EncryptionProgress> {
-        return streamingManager.encryptFileWithProgress(sourceFile, encryptedName)
-    }
-
-    /**
-     * Export encrypted file to external storage
-     */
-    suspend fun exportFile(
-        encryptedName: String,
-        destinationUri: android.net.Uri
-    ): ExportResult = withContext(Dispatchers.IO) {
-        try {
-            val data = encryptedFileManager.readBytes(encryptedName)
-                ?: return@withContext ExportResult.NotFound
-
-            context.contentResolver.openOutputStream(destinationUri)?.use { output ->
-                output.write(data)
-            } ?: return@withContext ExportResult.Failure("Failed to open output stream")
-
-            ExportResult.Success(data.size.toLong())
-        } catch (e: Exception) {
-            ExportResult.Failure(e.message ?: "Unknown error")
-        }
-    }
-
-    @Serializable
-    data class DocumentMetadata(
-        val createdAt: Long = System.currentTimeMillis(),
-        val modifiedAt: Long = System.currentTimeMillis(),
-        val author: String? = null,
-        val tags: List<String> = emptyList()
-    )
-
-    data class Document(
-        val name: String,
-        val content: String,
-        val metadata: DocumentMetadata?
-    )
-
-    sealed class SaveResult {
-        data class Success(val name: String) : SaveResult()
-        data class Failure(val error: String) : SaveResult()
-    }
-
-    sealed class LoadResult {
-        data class Success(val document: Document) : LoadResult()
-        object NotFound : LoadResult()
-        data class Failure(val error: String) : LoadResult()
-    }
-
-    sealed class ExportResult {
-        data class Success(val bytesWritten: Long) : ExportResult()
-        object NotFound : ExportResult()
-        data class Failure(val error: String) : ExportResult()
-    }
-}
-```
-
-### Best Practices
-
-1. **Use MasterKey with Android Keystore**
-   ```kotlin
-   val masterKey = MasterKey.Builder(context)
-       .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-       .build()
-   ```
-
-2. **Stream Large Files**
-   ```kotlin
-   // Don't load entire file into memory
-   encryptedFile.openFileInput().use { input ->
-       input.copyTo(output, bufferSize = 8192)
-   }
-   ```
-
-3. **Always Use Try-Catch**
-   ```kotlin
-   try {
-       encryptedFileManager.writeText(name, content)
-   } catch (e: Exception) {
-       // Handle encryption failures
-   }
-   ```
-
-4. **Verify Data After Write**
-   ```kotlin
-   encryptedFileManager.writeBytes(name, data)
-   val verified = encryptedFileManager.readBytes(name)
-   require(data.contentEquals(verified))
-   ```
-
-5. **Keep Backups During Migration**
-   ```kotlin
-   // Create backup before deleting originals
-   migrateDirectory(sourceDir, deleteOriginals = false)
-   ```
-
-6. **Use EncryptedSharedPreferences for Settings**
-   ```kotlin
-   // Not EncryptedFile for simple key-value pairs
-   val securePrefs = SecurePreferences(context)
-   ```
-
-7. **Handle Key Invalidation**
-   ```kotlin
-   try {
-       decrypt(file)
-   } catch (e: KeyPermanentlyInvalidatedException) {
-       // User changed lockscreen - keys invalidated
-       recreateKeys()
-   }
-   ```
-
-8. **Monitor File Sizes**
-   ```kotlin
-   // Encrypted files are larger due to metadata
-   val overhead = encryptedSize - originalSize
-   ```
-
-9. **Use Appropriate Buffer Sizes**
-   ```kotlin
-   // 8KB is optimal for most cases
-   private const val BUFFER_SIZE = 8192
-   ```
-
-10. **Implement Progress Tracking**
-    ```kotlin
-    encryptFileWithProgress(file, name).collect { progress ->
-        when (progress) {
-            is InProgress -> updateUI(progress.percentage)
-            // ...
-        }
-    }
-    ```
-
-### Common Pitfalls
-
-1. **Loading Large Files into Memory**
-   ```kotlin
-   // BAD
-   val allData = file.readBytes()
-
-   // GOOD
-   file.inputStream().use { input ->
-       input.copyTo(output, bufferSize = 8192)
-   }
-   ```
-
-2. **Not Handling Key Invalidation**
-   ```kotlin
-   // Keys invalidated when user changes lockscreen
-   // Always catch KeyPermanentlyInvalidatedException
-   ```
-
-3. **Forgetting File Extensions**
-   ```kotlin
-   // Track which files are encrypted
-   val encryptedName = "$originalName.encrypted"
-   ```
-
-4. **Synchronous Operations on Main Thread**
-   ```kotlin
-   // Always use coroutines or background threads
-   withContext(Dispatchers.IO) { /* encrypt */ }
-   ```
-
-### Summary
-
-EncryptedFile API provides:
-
-- **Secure Storage**: AES-256-GCM encryption
-- **Easy Integration**: Simple API with automatic key management
-- **Streaming Support**: Efficient for large files
-- **Android Keystore**: Hardware-backed key security
-- **Integrity Protection**: Automatic tampering detection
-
-Use for: sensitive documents, user data, downloaded files, cached credentials, private photos/videos, and any confidential information.
-
-**Typical overhead**: 5-15% for encryption/decryption, negligible for most use cases.
+# Вопрос (RU)
+> Как реализовать зашифрованное хранение файлов с использованием EncryptedFile API?
+
+# Question (EN)
+> How to implement encrypted file storage using EncryptedFile API?
 
 ---
 
 ## Ответ (RU)
-**EncryptedFile API** из библиотеки Android Security Crypto обеспечивает безопасное шифрование файлов с автоматическим управлением ключами через Android Keystore. Использует шифрование AES-256-GCM с поддержкой потоковой обработки для больших файлов.
+
+EncryptedFile API из Android Security Crypto библиотеки обеспечивает безопасное шифрование файлов с автоматическим управлением ключами через Android Keystore. Использует AES-256-GCM с поддержкой streaming для больших файлов.
 
 ### Основные концепции
 
-**Возможности EncryptedFile:**
-- Автоматическое управление ключами в Android Keystore
-- Потоковое шифрование для больших файлов
-- Сильное шифрование AES-256-GCM
-- Автоматическая проверка целостности файлов
-- Простой API для внедрения
+**EncryptedFile возможности:**
+- Автоматическое управление ключами (Android Keystore)
+- Streaming шифрование для больших файлов
+- AES-256-GCM с аутентификацией
+- Обнаружение изменений файлов
+- Простой API
 
-### Полная реализация
+**Гарантии безопасности:**
+- Конфиденциальность: AES-256 шифрование
+- Целостность: GCM authentication tag
+- Безопасность ключей: Android Keystore
+- Forward secrecy: уникальное шифрование для каждой операции
 
+### Реализация
+
+**1. Базовая настройка**
 ```kotlin
 class EncryptedFileManager(private val context: Context) {
-
     private val masterKey: MasterKey by lazy {
         MasterKey.Builder(context)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -1027,147 +71,283 @@ class EncryptedFileManager(private val context: Context) {
     }
 
     fun getEncryptedFile(fileName: String): EncryptedFile {
-        val file = File(context.filesDir, "encrypted/$fileName")
-
-        return EncryptedFile.Builder(
-            context,
-            file,
-            masterKey,
-            EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
-        ).build()
-    }
-
-    fun writeText(fileName: String, content: String) {
-        val encryptedFile = getEncryptedFile(fileName)
-        encryptedFile.openFileOutput().use { output ->
-            output.write(content.toByteArray(Charsets.UTF_8))
-        }
-    }
-
-    fun readText(fileName: String): String? {
-        val encryptedFile = getEncryptedFile(fileName)
-        return encryptedFile.openFileInput().use { input ->
-            input.readBytes().toString(Charsets.UTF_8)
-        }
+        val file = File(context.filesDir, fileName)
+        return EncryptedFile.Builder(context, file, masterKey,
+            EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB)
+            .build()
     }
 }
 ```
 
-### Потоковое шифрование
-
+**2. Запись и чтение**
 ```kotlin
-class StreamingEncryptedFileManager(private val context: Context) {
-
-    suspend fun encryptFileWithProgress(
-        sourceFile: File,
-        encryptedFileName: String
-    ): Flow<EncryptionProgress> = flow {
-        val totalBytes = sourceFile.length()
-        var bytesProcessed = 0L
-
-        sourceFile.inputStream().use { input ->
-            encryptedFile.openFileOutput().use { output ->
-                val buffer = ByteArray(8192)
-                var bytesRead: Int
-
-                while (input.read(buffer).also { bytesRead = it } != -1) {
-                    output.write(buffer, 0, bytesRead)
-                    bytesProcessed += bytesRead
-
-                    val progress = (bytesProcessed * 100 / totalBytes).toInt()
-                    emit(EncryptionProgress.InProgress(bytesProcessed, totalBytes, progress))
-                }
-            }
-        }
-
-        emit(EncryptionProgress.Completed(totalBytes))
-    }.flowOn(Dispatchers.IO)
-}
-```
-
-### EncryptedSharedPreferences
-
-```kotlin
-class SecurePreferences(context: Context) {
-
-    private val sharedPreferences = EncryptedSharedPreferences.create(
-        context,
-        "secure_prefs",
-        masterKey,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
-
-    fun putString(key: String, value: String) {
-        sharedPreferences.edit().putString(key, value).apply()
+// Запись текста
+fun writeText(fileName: String, content: String) {
+    val encryptedFile = getEncryptedFile(fileName)
+    encryptedFile.openFileOutput().use { outputStream ->
+        outputStream.write(content.toByteArray(Charsets.UTF_8))
     }
+}
 
-    fun getString(key: String, defaultValue: String? = null): String? {
-        return sharedPreferences.getString(key, defaultValue)
+// Чтение текста
+fun readText(fileName: String): String {
+    val encryptedFile = getEncryptedFile(fileName)
+    return encryptedFile.openFileInput().use { inputStream ->
+        inputStream.readBytes().toString(Charsets.UTF_8)
     }
 }
 ```
 
-### Миграция данных
-
+**3. Streaming для больших файлов**
 ```kotlin
-suspend fun migrateFile(
-    sourceFile: File,
-    deleteOriginal: Boolean
-): FileMigrationResult = withContext(Dispatchers.IO) {
-    try {
-        val data = sourceFile.readBytes()
-        encryptedFileManager.writeBytes("${sourceFile.name}.encrypted", data)
+// Запись больших файлов
+fun writeLargeFile(fileName: String, inputStream: InputStream) {
+    val encryptedFile = getEncryptedFile(fileName)
+    encryptedFile.openFileOutput().use { output ->
+        inputStream.copyTo(output, bufferSize = 8192)
+    }
+}
 
-        // Проверка
-        val decrypted = encryptedFileManager.readBytes("${sourceFile.name}.encrypted")
-        require(data.contentEquals(decrypted))
+// Чтение больших файлов
+fun readLargeFile(fileName: String, outputStream: OutputStream) {
+    val encryptedFile = getEncryptedFile(fileName)
+    encryptedFile.openFileInput().use { input ->
+        input.copyTo(outputStream, bufferSize = 8192)
+    }
+}
+```
 
-        if (deleteOriginal) {
-            sourceFile.delete()
-        }
-
-        FileMigrationResult.Success(sourceFile.name)
+**4. Обработка ошибок**
+```kotlin
+fun safeWriteText(fileName: String, content: String): Result<String> {
+    return try {
+        writeText(fileName, content)
+        Result.success("File written successfully")
     } catch (e: Exception) {
-        FileMigrationResult.Failure(sourceFile.name, e.message ?: "Unknown error")
+        Result.failure(e)
     }
 }
 ```
+
+### Теория шифрования
+
+**AES-256-GCM:**
+- Advanced Encryption Standard с 256-битным ключом
+- Galois/Counter Mode для аутентификации
+- Обеспечивает конфиденциальность и целостность
+- Поддерживает streaming операции
+
+**HKDF (HMAC-based Key Derivation Function):**
+- Производство ключей из master key
+- Уникальные ключи для каждого файла
+- Forward secrecy при компрометации master key
+
+**Android Keystore:**
+- Аппаратная защита ключей (TEE/SE)
+- Ключи не покидают устройство
+- Защита от root и side-channel атак
+- Биометрическая аутентификация для доступа
+
+**File Encryption Scheme:**
+- `AES256_GCM_HKDF_4KB`: 4KB блоки для streaming
+- `AES256_GCM_HKDF_1MB`: 1MB блоки для больших файлов
+- Автоматическое управление IV (Initialization Vector)
 
 ### Best Practices
 
-1. **Используйте MasterKey с Android Keystore**
-2. **Потоковая обработка для больших файлов**
-3. **Всегда обрабатывайте исключения**
-4. **Проверяйте данные после записи**
-5. **Создавайте резервные копии при миграции**
-6. **EncryptedSharedPreferences для настроек**
-7. **Обрабатывайте инвалидацию ключей**
-8. **Используйте оптимальные размеры буфера (8KB)**
+**1. Управление ключами**
+- Использовать один MasterKey для приложения
+- Не хранить ключи в SharedPreferences
+- Использовать биометрическую аутентификацию для чувствительных данных
 
-### Резюме
+**2. Производительность**
+- Использовать streaming для файлов >1MB
+- Буферизация для оптимизации I/O
+- Асинхронные операции для UI
 
-EncryptedFile API обеспечивает:
+**3. Безопасность**
+- Валидация входных данных
+- Обработка исключений
+- Логирование без чувствительных данных
 
-- **Безопасное хранение**: Шифрование AES-256-GCM
-- **Простую интеграцию**: Автоматическое управление ключами
-- **Потоковую обработку**: Эффективно для больших файлов
-- **Защиту целостности**: Автоматическое обнаружение подделки
+**4. Тестирование**
+- Unit тесты для криптографических операций
+- Интеграционные тесты с реальными файлами
+- Тестирование на разных версиях Android
 
-Используйте для: конфиденциальных документов, пользовательских данных, загруженных файлов, кэшированных учетных данных, приватных фото/видео.
+### Альтернативы
 
-**Накладные расходы**: 5-15% на шифрование/дешифрование, незначительны для большинства случаев.
+**SQLCipher:**
+- Шифрование SQLite баз данных
+- Прозрачное шифрование
+- Хорошо для структурированных данных
 
----
+**Custom encryption:**
+- Больше контроля над процессом
+- Сложнее в реализации
+- Выше риск ошибок
+
+**Cloud encryption:**
+- Шифрование на стороне сервера
+- Зависимость от провайдера
+- Меньше контроля над ключами
+
+## Answer (EN)
+
+EncryptedFile API from Android Security Crypto library provides secure file encryption with automatic key management via Android Keystore. Uses AES-256-GCM with streaming support for large files.
+
+### Key Concepts
+
+**EncryptedFile features:**
+- Automatic key management (Android Keystore)
+- Streaming encryption for large files
+- AES-256-GCM with authentication
+- File tampering detection
+- Simple API
+
+**Security guarantees:**
+- Confidentiality: AES-256 encryption
+- Integrity: GCM authentication tag
+- Key security: Android Keystore
+- Forward secrecy: unique encryption per operation
+
+### Implementation
+
+**1. Basic setup**
+```kotlin
+class EncryptedFileManager(private val context: Context) {
+    private val masterKey: MasterKey by lazy {
+        MasterKey.Builder(context)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
+    }
+
+    fun getEncryptedFile(fileName: String): EncryptedFile {
+        val file = File(context.filesDir, fileName)
+        return EncryptedFile.Builder(context, file, masterKey,
+            EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB)
+            .build()
+    }
+}
+```
+
+**2. Read and write**
+```kotlin
+// Write text
+fun writeText(fileName: String, content: String) {
+    val encryptedFile = getEncryptedFile(fileName)
+    encryptedFile.openFileOutput().use { outputStream ->
+        outputStream.write(content.toByteArray(Charsets.UTF_8))
+    }
+}
+
+// Read text
+fun readText(fileName: String): String {
+    val encryptedFile = getEncryptedFile(fileName)
+    return encryptedFile.openFileInput().use { inputStream ->
+        inputStream.readBytes().toString(Charsets.UTF_8)
+    }
+}
+```
+
+**3. Streaming for large files**
+```kotlin
+// Write large files
+fun writeLargeFile(fileName: String, inputStream: InputStream) {
+    val encryptedFile = getEncryptedFile(fileName)
+    encryptedFile.openFileOutput().use { output ->
+        inputStream.copyTo(output, bufferSize = 8192)
+    }
+}
+
+// Read large files
+fun readLargeFile(fileName: String, outputStream: OutputStream) {
+    val encryptedFile = getEncryptedFile(fileName)
+    encryptedFile.openFileInput().use { input ->
+        input.copyTo(outputStream, bufferSize = 8192)
+    }
+}
+```
+
+**4. Error handling**
+```kotlin
+fun safeWriteText(fileName: String, content: String): Result<String> {
+    return try {
+        writeText(fileName, content)
+        Result.success("File written successfully")
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+}
+```
+
+### Encryption Theory
+
+**AES-256-GCM:**
+- Advanced Encryption Standard with 256-bit key
+- Galois/Counter Mode for authentication
+- Provides confidentiality and integrity
+- Supports streaming operations
+
+**HKDF (HMAC-based Key Derivation Function):**
+- Key derivation from master key
+- Unique keys per file
+- Forward secrecy on master key compromise
+
+**Android Keystore:**
+- Hardware-backed key protection (TEE/SE)
+- Keys never leave device
+- Protection against root and side-channel attacks
+- Biometric authentication for access
+
+**File Encryption Scheme:**
+- `AES256_GCM_HKDF_4KB`: 4KB blocks for streaming
+- `AES256_GCM_HKDF_1MB`: 1MB blocks for large files
+- Automatic IV (Initialization Vector) management
+
+### Best Practices
+
+**1. Key management**
+- Use single MasterKey per application
+- Don't store keys in SharedPreferences
+- Use biometric authentication for sensitive data
+
+**2. Performance**
+- Use streaming for files >1MB
+- Buffering for I/O optimization
+- Async operations for UI
+
+**3. Security**
+- Validate input data
+- Handle exceptions properly
+- Log without sensitive data
+
+**4. Testing**
+- Unit tests for cryptographic operations
+- Integration tests with real files
+- Testing on different Android versions
+
+### Alternatives
+
+**SQLCipher:**
+- SQLite database encryption
+- Transparent encryption
+- Good for structured data
+
+**Custom encryption:**
+- More control over process
+- Harder to implement
+- Higher risk of errors
+
+**Cloud encryption:**
+- Server-side encryption
+- Provider dependency
+- Less control over keys
+
+## Follow-ups
+- How to implement biometric authentication for encrypted files?
+- What's the difference between EncryptedFile and SQLCipher?
+- How to handle key rotation in encrypted file storage?
 
 ## Related Questions
-
-### Prerequisites (Easier)
-- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
-
-### Related (Medium)
-- [[q-database-encryption-android--android--medium]] - Storage, Security
-- [[q-android-security-practices-checklist--android--medium]] - Security
-- [[q-android-storage-types--android--medium]] - Storage
-- [[q-app-security-best-practices--security--medium]] - Security
-- [[q-data-encryption-at-rest--security--medium]] - Security
+- [[q-data-encryption-at-rest--security--medium]]
