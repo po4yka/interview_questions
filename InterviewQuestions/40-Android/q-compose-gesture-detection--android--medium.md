@@ -1,31 +1,28 @@
 ---
 id: 20251012-122805
 title: Compose Gesture Detection / Обработка жестов в Compose
-aliases:
-- Compose Gesture Detection
-- Обработка жестов в Compose
+aliases: [Compose Gesture Detection, Обработка жестов в Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-views
+  - ui-compose
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-animated-visibility-vs-content--android--medium
-- q-compose-canvas-graphics--android--hard
-- q-android-performance-measurement-tools--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-animated-visibility-vs-content--android--medium
+  - q-compose-canvas-graphics--android--hard
 created: 2025-10-11
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/ui-views
-- difficulty/medium
+tags: [android/ui-compose, android/ui-views, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:40 pm
 ---
 
 # Вопрос (RU)
@@ -42,13 +39,13 @@ tags:
 
 ## Answer (EN)
 
-### Core concepts
+### Core Concepts
 - pointerInput: low‑level suspend handlers (detect* helpers)
 - Modifiers: `clickable`, `combinedClickable`, `draggable`, `scrollable` for high‑level UX
 - Nested scroll: coordinate scroll between parents/children
 - Touch slop: thresholds to avoid accidental gesture starts
 
-### Minimal patterns
+### Minimal Patterns
 
 Taps and long‑press:
 ```kotlin
@@ -95,7 +92,7 @@ val parent = remember {
 Row(Modifier.nestedScroll(parent)) { /* child scrollables */ }
 ```
 
-### Performance/UX tips
+### Performance/UX Tips
 - Prefer high‑level modifiers (`clickable`, `scrollable`) for built‑in semantics/feedback
 - Debounce heavy work; handle gesture callbacks on background when possible
 - Avoid allocations inside gesture lambdas; hoist state via remember

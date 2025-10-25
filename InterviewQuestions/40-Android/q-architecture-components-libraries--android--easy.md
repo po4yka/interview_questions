@@ -1,31 +1,28 @@
 ---
 id: 20251012-122784
 title: Architecture Components Libraries / Библиотеки Architecture Components
-aliases:
-- Architecture Components Libraries
-- Библиотеки Architecture Components
+aliases: [Architecture Components Libraries, Библиотеки Architecture Components]
 topic: android
 subtopics:
-- architecture-clean
-- lifecycle
+  - architecture-clean
+  - lifecycle
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-architectural-patterns--android--medium
-- q-android-jetpack-overview--android--easy
-- q-android-manifest-file--android--easy
+  - q-android-architectural-patterns--android--medium
+  - q-android-jetpack-overview--android--easy
+  - q-android-manifest-file--android--easy
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/architecture-clean
-- android/lifecycle
-- difficulty/easy
+tags: [android/architecture-clean, android/lifecycle, difficulty/easy]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:53:00 pm
 ---
 
 # Вопрос (RU)
@@ -50,7 +47,7 @@ Android Architecture Components help build robust, testable, maintainable apps. 
 - WorkManager for deferrable jobs triggered from repositories/UseCases
 - Navigation drives screens and argument passing; ViewModel scoped to destinations
 
-### 1) ViewModel — UI state holder
+### 1) ViewModel — UI State Holder
 
 - Theory: Survives configuration changes; exposes UI state and events; no Android UI references; use ViewModelScope for coroutines.
 ```kotlin
@@ -63,7 +60,7 @@ private val vm: UserViewModel by viewModels()
 vm.user.observe(viewLifecycleOwner) { render(it) }
 ```
 
-### 2) LiveData (or StateFlow) — observable state
+### 2) LiveData (or StateFlow) — Observable State
 
 - Theory: LiveData delivers only when STARTED/RESUMED; StateFlow is hot, conflated, needs lifecycle-aware collection; prefer Flow for streams, LiveData for XML binding.
 ```kotlin
@@ -73,7 +70,7 @@ vm.user.observe(viewLifecycleOwner) { render(it) }
 lifecycleScope.launchWhenStarted { vm.userFlow.collect { render(it) } }
 ```
 
-### 3) Room — SQLite with type safety
+### 3) Room — SQLite with Type Safety
 
 - Theory: DAOs with compile-time SQL checks; flows emit on table invalidation; off-main-thread by default; migrations enforce schema evolution.
 ```kotlin
@@ -82,7 +79,7 @@ lifecycleScope.launchWhenStarted { vm.userFlow.collect { render(it) } }
 @Database(entities=[User::class], version=1) abstract class DB: RoomDatabase(){ abstract fun userDao(): UserDao }
 ```
 
-### 4) WorkManager — deferrable guaranteed work
+### 4) WorkManager — Deferrable Guaranteed Work
 
 - Theory: Executes with constraints (network, charging), persists across reboots; idempotent jobs + backoff policies; not for exact-time tasks.
 ```kotlin
@@ -92,7 +89,7 @@ class SyncWorker(ctx: Context, p: WorkerParameters): CoroutineWorker(ctx,p){
 WorkManager.getInstance(ctx).enqueue(OneTimeWorkRequestBuilder<SyncWorker>().build())
 ```
 
-### 5) Data Binding / ViewBinding — bind views
+### 5) Data Binding / ViewBinding — Bind Views
 
 - Theory: ViewBinding for type-safe view refs; Data Binding enables expressions but can hide logic in XML—use sparingly.
 ```kotlin
@@ -102,7 +99,7 @@ setContentView(binding.root)
 binding.text.text = "Hi"
 ```
 
-### 6) Paging — large data lists
+### 6) Paging — Large Data Lists
 
 - Theory: Paged loading reduces memory/latency; works with Room (invalidations) and network (RemoteMediator); immutable paging data.
 ```kotlin
@@ -110,7 +107,7 @@ val flow: Flow<PagingData<User>> = Pager(PagingConfig(pageSize=20)) { UserPaging
 lifecycleScope.launch { flow.collectLatest(adapter::submitData) }
 ```
 
-### 7) Navigation — type-safe navigation
+### 7) Navigation — Type-safe Navigation
 
 - Theory: Central graph, Safe Args for compile-time args, deep links and back stack control; scope ViewModels to graph.
 ```kotlin
@@ -118,7 +115,7 @@ val action = HomeFragmentDirections.actionHomeToProfile(userId)
 findNavController().navigate(action)
 ```
 
-### 8) Lifecycle — lifecycle-aware components
+### 8) Lifecycle — Lifecycle-aware Components
 
 - Theory: Observe lifecycle to start/stop resources; prefer DefaultLifecycleObserver; ProcessLifecycleOwner for app-wide state.
 ```kotlin

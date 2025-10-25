@@ -9,6 +9,7 @@ related: [q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-tim
 created: 2025-10-15
 tags: [languages, android, difficulty/easy]
 ---
+
 # От кого наследуются ViewGroup
 
 ## Answer (EN)

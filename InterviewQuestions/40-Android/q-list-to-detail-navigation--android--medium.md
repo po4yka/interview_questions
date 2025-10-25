@@ -9,6 +9,7 @@ related: [q-memory-leak-detection--performance--medium, q-measure-project-size--
 created: 2025-10-15
 tags: [android/navigation, bundle, data-passing, intent, master-detail, navigation, navigation-component, ui-patterns, viewmodel, difficulty/medium]
 ---
+
 # С помощью чего делается переход со списков на деталки?
 
 **English**: How do you implement navigation from a list to detail screens?

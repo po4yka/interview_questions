@@ -9,6 +9,7 @@ related: [q-migration-to-compose--android--medium, q-how-does-activity-lifecycle
 created: 2025-10-15
 tags: [room, typeconverter, database, custom-types, difficulty/medium]
 ---
+
 # Room TypeConverters / TypeConverters в Room
 
 **English**: What do you know about Converters in Room?

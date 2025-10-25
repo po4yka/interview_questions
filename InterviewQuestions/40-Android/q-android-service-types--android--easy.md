@@ -1,31 +1,28 @@
 ---
 id: 20251012-122773
 title: Android Service Types / Типы Service в Android
-aliases:
-- Android Service Types
-- Типы Service в Android
+aliases: [Android Service Types, Типы Service в Android]
 topic: android
 subtopics:
-- service
-- background-execution
+  - background-execution
+  - service
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-app-components--android--easy
-- q-android-async-primitives--android--easy
-- q-android-architectural-patterns--android--medium
+  - q-android-app-components--android--easy
+  - q-android-architectural-patterns--android--medium
+  - q-android-async-primitives--android--easy
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/service
-- android/background-execution
-- difficulty/easy
+tags: [android/background-execution, android/service, difficulty/easy]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:09 pm
 ---
 
 # Вопрос (RU)

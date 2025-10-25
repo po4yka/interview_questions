@@ -9,6 +9,7 @@ related: [q-how-mutablestate-notifies--android--medium, q-api-rate-limiting-thro
 created: 2025-10-15
 tags: [Kotlin, MLKit, MachineLearning, TextRecognition, difficulty/medium]
 ---
+
 # ML Kit Text Recognition and OCR
 
 # Question (EN)

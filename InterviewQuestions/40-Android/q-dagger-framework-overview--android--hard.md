@@ -1,35 +1,29 @@
 ---
 id: 20251020-200000
 title: Dagger Framework Overview / Обзор фреймворка Dagger
-aliases:
-- Dagger Framework Overview
-- Обзор фреймворка Dagger
+aliases: [Dagger Framework Overview, Обзор фреймворка Dagger]
 topic: android
 subtopics:
-- di-hilt
+  - di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-dagger-field-injection--android--medium
-- q-dagger-build-time-optimization--android--medium
-- q-dagger-custom-scopes--android--hard
+  - q-dagger-build-time-optimization--android--medium
+  - q-dagger-custom-scopes--android--hard
+  - q-dagger-field-injection--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/di-hilt
-- dagger
-- hilt
-- dependency-injection
-- framework-overview
-- difficulty/hard
+tags: [android/di-hilt, dagger, dependency-injection, difficulty/hard, framework-overview, hilt]
 source: https://dagger.dev/
 source_note: Dagger official documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:18 pm
 ---
 
 # Вопрос (RU)
@@ -56,7 +50,7 @@ Dagger — это мощный фреймворк для внедрения за
 - Повышение масштабируемости кода
 - Снижение связанности между компонентами
 
-### Ключевые компоненты
+### Ключевые Компоненты
 
 **1. @Inject аннотация**
 ```kotlin
@@ -92,7 +86,7 @@ interface AppComponent {
 }
 ```
 
-### Преимущества над другими DI решениями
+### Преимущества Над Другими DI Решениями
 
 **Статическая генерация кода:**
 - Нет runtime overhead от рефлексии
@@ -109,7 +103,7 @@ interface AppComponent {
 - Проверка доступности зависимостей
 - Валидация scope'ов
 
-### Hilt — современный подход
+### Hilt — Современный Подход
 
 Hilt упрощает использование Dagger в Android:
 
@@ -129,7 +123,7 @@ class MyApplication : Application()
 - Управление жизненными циклами
 - Интеграцию с Android компонентами
 
-### Архитектурные паттерны
+### Архитектурные Паттерны
 
 **Dependency Graph:**
 - Граф зависимостей строится на этапе компиляции

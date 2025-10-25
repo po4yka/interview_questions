@@ -6,31 +6,34 @@ aliases: []
 # Classification
 topic: android
 subtopics:
-  - performance
-  - jank
   - frames
-  - rendering
+  - jank
+  - performance
   - profiling
+  - rendering
 question_kind: practical
 difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/performance, android/jank, android/frames, android/rendering, android/profiling, android/optimization, difficulty/medium]
+language_tags: [android/frames, android/jank, android/optimization, android/performance, android/profiling, android/rendering, difficulty/medium, en, ru]
 source: Original
 source_note: Frame rendering performance best practices
 
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [macrobenchmark-startup, app-startup-optimization, baseline-profiles-optimization]
+related: [app-startup-optimization, baseline-profiles-optimization, macrobenchmark-startup]
 
 # Timestamps
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [en, ru, android/performance, android/jank, android/frames, android/rendering, android/profiling, android/optimization, difficulty/medium]
+tags: [android/frames, android/jank, android/optimization, android/performance, android/profiling, android/rendering, difficulty/medium, en, ru]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:10:59 pm
 ---
+
 # Question (EN)
 > Implement frame metrics monitoring to detect and fix jank. Use FrameMetricsAggregator, OnFrameMetricsAvailableListener, and systrace to identify rendering issues.
 
@@ -649,7 +652,7 @@ dependencies {
 }
 ```
 
-#### 1. Базовый мониторинг метрик кадров
+#### 1. Базовый Мониторинг Метрик Кадров
 
 ```kotlin
 class PerformanceMonitoringActivity : AppCompatActivity() {
@@ -740,7 +743,7 @@ class PerformanceMonitoringActivity : AppCompatActivity() {
 }
 ```
 
-#### 2. Мониторинг кадров в реальном времени с OnFrameMetricsAvailableListener
+#### 2. Мониторинг Кадров В Реальном Времени С OnFrameMetricsAvailableListener
 
 ```kotlin
 class RealTimeFrameMonitor : AppCompatActivity() {
@@ -872,7 +875,7 @@ class ModernJankMonitor : AppCompatActivity() {
 }
 ```
 
-### Распространенные причины и исправления рывков
+### Распространенные Причины И Исправления Рывков
 
 #### 1. Overdraw
 
@@ -880,22 +883,22 @@ class ModernJankMonitor : AppCompatActivity() {
 **Решение:** Убрать ненужные фоны
 **Обнаружение:** Developer Options → Debug GPU Overdraw
 
-#### 2. Сложность макета
+#### 2. Сложность Макета
 
 **Проблема:** Глубоко вложенные макеты
 **Решение:** Упростить с помощью ConstraintLayout
 
-#### 3. Рывки в RecyclerView
+#### 3. Рывки В RecyclerView
 
 **Проблема:** Дорогие операции в onBindViewHolder
 **Решение:** Асинхронные операции и кэширование
 
-#### 4. Рывки при инфляции View
+#### 4. Рывки При Инфляции View
 
 **Проблема:** Инфляция сложных view по требованию
 **Решение:** ViewStub для ленивой инфляции
 
-### Анализ с помощью Systrace
+### Анализ С Помощью Systrace
 
 #### 1. Захват Systrace
 
@@ -903,7 +906,7 @@ class ModernJankMonitor : AppCompatActivity() {
 python $ANDROID_HOME/platform-tools/systrace/systrace.py ...
 ```
 
-#### 2. Определение рывков в трейсе
+#### 2. Определение Рывков В Трейсе
 
 **Искать:**
 1.  **Пропуски дедлайнов кадров**: Красные/желтые полосы
@@ -912,7 +915,7 @@ python $ANDROID_HOME/platform-tools/systrace/systrace.py ...
 4.  **Паузы GC**: События "GC"
 5.  **Блокировка главного потока**: Долгие операции
 
-### Мониторинг в продакшене
+### Мониторинг В Продакшене
 
 #### 1. Firebase Performance Monitoring
 
@@ -952,7 +955,7 @@ class FrameMetricsMonitor {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1.  **Цель - минимум 60 FPS**
 2.  **Измеряйте на реальных устройствах**
@@ -967,7 +970,7 @@ class FrameMetricsMonitor {
 11. **Избегайте работы в главном потоке**
 12. **Используйте Jetpack Compose**
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 1.  **Синхронная загрузка изображений**
 2.  **Сложный onDraw()**

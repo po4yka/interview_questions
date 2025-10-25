@@ -1,29 +1,27 @@
 ---
 id: 20251015-100154
 title: Compose Multiplatform / Compose Multiplatform (обзор)
-aliases:
-- Compose Multiplatform
-- Compose Multiplatform overview
+aliases: [Compose Multiplatform, Compose Multiplatform overview]
 topic: android
 subtopics:
-- ui-compose
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compose-compiler-plugin--android--hard
-- q-compose-custom-layout--android--hard
-- q-compose-lazy-layout-optimization--android--hard
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-custom-layout--android--hard
+  - q-compose-lazy-layout-optimization--android--hard
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- difficulty/hard
+tags: [android/ui-compose, difficulty/hard]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:38 pm
 ---
 
 # Вопрос (RU)
@@ -40,15 +38,15 @@ tags:
 
 ## Answer (EN)
 
-### Definition and scope
+### Definition and Scope
 - Compose Multiplatform (CMP) brings Compose UI to multiple targets with Kotlin Multiplatform (KMP): Android, iOS, Desktop, Web.
 - You share UI, state, navigation, theming; platform entry points and interop remain platform‑specific.
 
-### CMP vs KMM
+### CMP Vs KMM
 - KMM: share domain/data; UI is native per platform (Android Compose, iOS SwiftUI).
 - CMP: share UI + domain; one UI framework across targets, with platform shims when needed.
 
-### Project structure (minimal)
+### Project Structure (minimal)
 - Modules: `shared` (commonMain + platform source sets), platform apps (androidApp, iosApp, desktopApp, jsApp).
 - Targets: `androidTarget()`, `ios*()`, `jvm("desktop")`, `js(IR)`.
 
@@ -74,7 +72,7 @@ kotlin {
 }
 ```
 
-### Shared UI + platform adaptations
+### Shared UI + Platform Adaptations
 - Share composables/screens/navigation/theme in `commonMain`.
 - Use `expect/actual` for platform APIs (logging, resources, window size, haptics).
 
@@ -98,11 +96,11 @@ class MainActivity: ComponentActivity() {
 }
 ```
 
-### Responsive layouts
+### Responsive Layouts
 - Derive window classes (compact/medium/expanded) and branch UI.
 - Keep measurement simple; avoid deep trees in shared UI for desktop/web.
 
-### Best practices
+### Best Practices
 - Share: state holders, screens, theming, navigation; keep interop thin.
 - Adapt: gestures, windowing, typography, spacing per platform.
 - Performance: stable keys in lists, precompute with `remember`, profile on each target.

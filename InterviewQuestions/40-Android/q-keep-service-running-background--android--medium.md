@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-compose-side-effects-launchedeffect-disposableeffect--android--hard, q-cicd-automated-testing--devops--medium, q-how-to-display-snackbar-or-toast-based-on-results--android--medium]
+related: [q-cicd-automated-testing--devops--medium, q-compose-side-effects-launchedeffect-disposableeffect--android--hard, q-how-to-display-snackbar-or-toast-based-on-results--android--medium]
 created: 2025-10-15
-tags: [android/background-processing, android/services, android/workmanager, background-processing, foreground-service, jobscheduler, services, workmanager, difficulty/medium]
+tags: [android/background-processing, android/services, android/workmanager, background-processing, difficulty/medium, foreground-service, jobscheduler, services, workmanager]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:08:02 pm
 ---
-# How to keep service running in background?
+
+# How to Keep Service Running in Background?
 
 **Russian**: Что делать если нужно чтобы сервис продолжал работу в фоне?
 
@@ -628,7 +631,7 @@ Is task user-initiated and time-sensitive?
 - camera - использование камеры
 - microphone - запись аудио
 
-### Вариант 2: WorkManager (Рекомендуется для большинства случаев)
+### Вариант 2: WorkManager (Рекомендуется Для Большинства случаев)
 
 **Используйте WorkManager когда**:
 - Задача может быть отложена (подождать оптимальных условий)
@@ -673,7 +676,7 @@ Is task user-initiated and time-sensitive?
 - Может переживать перезагрузку устройства (с setPersisted(true))
 - Гибкие constraints (network, charging, idle)
 
-### Сравнение: Что выбрать?
+### Сравнение: Что Выбрать?
 
 | Критерий | Foreground Service | WorkManager | JobScheduler |
 |----------|-------------------|-------------|--------------|
@@ -685,7 +688,7 @@ Is task user-initiated and time-sensitive?
 | **Мин. версия Android** | Все | 4.0+ (API 14+) | 5.0+ (API 21+) |
 | **Случай использования** | Музыка, навигация, загрузка | Фоновая синхронизация, uploads | Периодическая синхронизация, очистка |
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Выбирайте правильный инструмент**:
 - Используйте Foreground Service только когда пользователь должен знать о задаче
@@ -712,7 +715,7 @@ Is task user-initiated and time-sensitive?
 - App Standby может задерживать работы
 - Разные производители имеют разную агрессивность battery optimization
 
-### Когда что использовать:
+### Когда Что Использовать:
 
 **Foreground Service**: музыка, навигация, срочная загрузка, фитнес-трекинг, видеозвонки
 

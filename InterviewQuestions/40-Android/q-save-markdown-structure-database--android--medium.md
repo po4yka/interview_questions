@@ -9,6 +9,7 @@ related: [q-database-encryption-android--android--medium, q-mvi-handle-one-time-
 created: 2025-10-15
 tags: [android/data-storage, data-storage, database, markdown, room, serialization, storage, difficulty/medium]
 ---
+
 # Как бы ты сохранил структуру Markdown в базу данных/на диск?
 
 **English**: How would you save Markdown structure to a database/disk?

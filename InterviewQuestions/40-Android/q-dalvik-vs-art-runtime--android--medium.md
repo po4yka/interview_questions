@@ -1,37 +1,29 @@
 ---
 id: 20251020-200000
 title: Dalvik vs ART Runtime / Dalvik против ART Runtime
-aliases:
-- Dalvik vs ART Runtime
-- Dalvik против ART Runtime
+aliases: [Dalvik vs ART Runtime, Dalvik против ART Runtime]
 topic: android
 subtopics:
-- performance-memory
+  - performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-performance-optimization--android--medium
-- q-app-startup-time--android--medium
-- q-android-memory-management--android--hard
+  - q-android-memory-management--android--hard
+  - q-android-performance-optimization--android--medium
+  - q-app-startup-time--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/performance-memory
-- dalvik
-- art
-- runtime
-- jit
-- aot
-- compilation
-- difficulty/medium
+tags: [android/performance-memory, aot, art, compilation, dalvik, difficulty/medium, jit, runtime]
 source: https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime
 source_note: Android Runtime documentation
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:15 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +36,7 @@ source_note: Android Runtime documentation
 
 Dalvik и ART (Android Runtime) - это среды выполнения для запуска Android приложений. ART заменил Dalvik начиная с Android 5.0 (Lollipop) для улучшения производительности, времени работы батареи и опыта разработчиков.
 
-### Теория: Архитектурные различия
+### Теория: Архитектурные Различия
 
 **Основные концепции:**
 - **Dalvik** - интерпретируемая виртуальная машина с JIT компиляцией
@@ -108,7 +100,7 @@ App Execution:
 - Быстрый старт приложений
 - Улучшенная сборка мусора
 
-### 3. Сравнение производительности
+### 3. Сравнение Производительности
 
 **Время выполнения:**
 - **Dalvik**: Медленное из-за интерпретации
@@ -126,7 +118,7 @@ App Execution:
 - **Dalvik**: Высокое из-за постоянной компиляции
 - **ART**: Низкое из-за предварительной компиляции
 
-### 4. Технические детали
+### 4. Технические Детали
 
 **Dalvik особенности:**
 - Регистровая виртуальная машина
@@ -140,7 +132,7 @@ App Execution:
 - Улучшенная сборка мусора
 - Поддержка 64-битных архитектур
 
-### 5. Миграция и совместимость
+### 5. Миграция И Совместимость
 
 **Переход на ART:**
 - Android 4.4 (KitKat) - опциональный ART

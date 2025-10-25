@@ -1,37 +1,31 @@
 ---
 id: 20251020-200500
 title: Factory Pattern Android / Паттерн Factory в Android
-aliases:
-- Factory Pattern Android
-- Паттерн Factory в Android
+aliases: [Factory Pattern Android, Паттерн Factory в Android]
 topic: android
 subtopics:
-- architecture-clean
-- ui-views
+  - architecture-clean
+  - ui-views
 
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: https://developer.android.com/guide/topics/ui/declaring-layout
 source_note: Android layout inflation documentation
 status: draft
 moc: moc-android
 related:
-- q-android-architecture-patterns--architecture-patterns--medium
-- q-view-lifecycle--android--medium
-- q-fragment-lifecycle--android--medium
+  - q-android-architecture-patterns--architecture-patterns--medium
+  - q-fragment-lifecycle--android--medium
+  - q-view-lifecycle--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-  - android/architecture-clean
-  - android/ui-views
-  - factory-pattern
-  - design-patterns
-  - layout-inflater
-  - difficulty/medium
+tags: [android/architecture-clean, android/ui-views, design-patterns, difficulty/medium, factory-pattern, layout-inflater]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:03 pm
 ---
 
 # Вопрос (RU)
@@ -45,7 +39,7 @@ tags:
 
 Android фреймворк широко использует Factory паттерн в своих API. Основные примеры: LayoutInflater, Fragment.instantiate(), Intent.createChooser(), MediaPlayer.create().
 
-### Основные примеры
+### Основные Примеры
 
 **1. LayoutInflater (Factory Method Pattern)**
 - Проблема: создание View объектов из XML без прямого вызова конструкторов

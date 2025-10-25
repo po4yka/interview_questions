@@ -9,6 +9,7 @@ related: [q-privacy-sandbox-attribution--privacy--medium, q-why-diffutil-needed-
 created: 2025-10-15
 tags: [Kotlin, Distribution, PlayStore, Publishing, difficulty/medium]
 ---
+
 # Google Play Store Publishing and Release Management
 
 # Question (EN)

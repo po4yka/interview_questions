@@ -5,18 +5,21 @@ topic: android
 difficulty: easy
 status: draft
 moc: moc-android
-related: [q-which-layout-for-large-list--android--easy, q-room-code-generation-timing--android--medium, q-fakes-vs-mocks-testing--testing--medium]
+related: [q-fakes-vs-mocks-testing--testing--medium, q-room-code-generation-timing--android--medium, q-which-layout-for-large-list--android--easy]
 created: 2025-10-15
-tags: [android/recyclerview, delegates, recyclerview, ui, difficulty/easy]
+tags: [android/recyclerview, delegates, difficulty/easy, recyclerview, ui]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:24 pm
 ---
-# Как организовать работу с текстом и картинками в делегате?
+
+# Как Организовать Работу С Текстом И Картинками В Делегате?
 
 **English**: How to organize work with text and images in a delegate?
 
 ## Answer (EN)
 For managing text and images in RecyclerView, use **delegates** (also known as Adapter Delegates) which separate display logic for different data types. This simplifies code and improves maintainability.
 
-### What are Adapter Delegates?
+### What Are Adapter Delegates?
 
 Adapter Delegates is a pattern that allows you to split complex RecyclerView adapters into smaller, reusable pieces. Each delegate handles a specific item type (e.g., text items, image items, mixed items).
 

@@ -5,9 +5,11 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-which-layout-for-large-list--android--easy, q-why-are-fragments-needed-if-there-is-activity--android--hard, q-is-layoutinflater-a-singleton-and-why--android--medium]
+related: [q-is-layoutinflater-a-singleton-and-why--android--medium, q-which-layout-for-large-list--android--easy, q-why-are-fragments-needed-if-there-is-activity--android--hard]
 created: 2025-10-15
-tags: [Kotlin, KMM, Ktor, Networking, difficulty/medium]
+tags: [difficulty/medium, KMM, Kotlin, Ktor, Networking]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:08:00 pm
 ---
 
 # Ktor Client for Multiplatform Networking
@@ -976,7 +978,7 @@ Key considerations: proper error handling, retry strategies, authentication mana
 
 Ktor — рекомендуемый HTTP client для Kotlin Multiplatform, предоставляющий единый API с platform-optimized engines (OkHttp для Android, NSURLSession для iOS) и comprehensive plugin support.
 
-#### Ключевые возможности
+#### Ключевые Возможности
 
 **Platform Engines**:
 

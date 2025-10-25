@@ -1,31 +1,28 @@
 ---
 id: 20251011-220008
 title: Baseline Profiles Optimization / Оптимизация с Baseline Profiles
-aliases:
-- Baseline Profiles Optimization
-- Оптимизация с Baseline Profiles
+aliases: [Baseline Profiles Optimization, Оптимизация с Baseline Profiles]
 topic: android
 subtopics:
-- performance-startup
-- gradle
+  - gradle
+  - performance-startup
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-baseline-profiles-android--android--medium
-- q-app-startup-optimization--android--medium
-- q-android-performance-measurement-tools--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-app-startup-optimization--android--medium
+  - q-baseline-profiles-android--android--medium
 created: 2025-10-11
 updated: 2025-10-15
-tags:
-- android/performance-startup
-- android/gradle
-- difficulty/medium
+tags: [android/gradle, android/performance-startup, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:54 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +35,7 @@ tags:
 
 ## Ответ (RU)
 
-### Что такое Baseline Profiles
+### Что Такое Baseline Profiles
 
 **Теория**: Baseline Profiles сообщают Android Runtime (ART), какие пути кода компилировать ahead-of-time (AOT) для более быстрого запуска и плавной работы.
 
@@ -56,7 +53,7 @@ tags:
 
 (См. код и детали в английской секции - структура проекта, конфигурация модулей, генерация профиля, измерение производительности, облачные профили)
 
-### Лучшие практики
+### Лучшие Практики
 
 **Генерация профиля**:
 - Покрывать только критические пользовательские сценарии

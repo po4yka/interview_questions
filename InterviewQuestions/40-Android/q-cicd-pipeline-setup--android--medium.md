@@ -1,31 +1,28 @@
 ---
 id: 20251012-122800
 title: CI/CD Pipeline Setup for Android / Настройка CI/CD пайплайна для Android
-aliases:
-- CI/CD Pipeline Setup for Android
-- Настройка CI/CD пайплайна для Android
+aliases: [CI/CD Pipeline Setup for Android, Настройка CI/CD пайплайна для Android]
 topic: android
 subtopics:
-- gradle
-- ci-cd
+  - ci-cd
+  - gradle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-cicd-pipeline-android--android--medium
-- q-cicd-automated-testing--android--medium
-- q-cicd-deployment-automation--android--medium
+  - q-cicd-automated-testing--android--medium
+  - q-cicd-deployment-automation--android--medium
+  - q-cicd-pipeline-android--android--medium
 created: 2025-10-11
 updated: 2025-10-20
-tags:
-- android/gradle
-- android/ci-cd
-- difficulty/medium
+tags: [android/ci-cd, android/gradle, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:45 pm
 ---
 
 # Вопрос (RU)
@@ -42,12 +39,12 @@ tags:
 
 ## Answer (EN)
 
-### Baseline choices
+### Baseline Choices
 - Platform: GitHub Actions / GitLab CI / Jenkins
 - Runners: hosted Linux; self‑hosted for device labs/heavy caching
 - JDK 17; Android SDK + cmdline‑tools; Gradle wrapper
 
-### Secrets and security
+### Secrets and Security
 - Store Play service account JSON, signing keys, API tokens in CI secret store (OIDC where possible)
 - Principle of least privilege; rotate regularly; no secrets in repo
 
@@ -55,10 +52,10 @@ tags:
 - Gradle wrapper and dependencies; Gradle build cache; emulator system images (if self‑hosted)
 - Enable configuration cache to speed configuration phase
 
-### Baseline stages
+### Baseline Stages
 - Setup → Static checks (lint/detekt) → Unit tests → Build (AAB/APK) → Instrumented tests (matrix/shards) → Artifacts/Reports → (optional) Deploy
 
-### Minimal setup (GitHub Actions)
+### Minimal Setup (GitHub Actions)
 ```yaml
 name: Android CI
 on: [pull_request]

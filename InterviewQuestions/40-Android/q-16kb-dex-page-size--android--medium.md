@@ -1,31 +1,28 @@
 ---
 id: 20251012-122750
 title: 16kb Dex Page Size / Размер страницы DEX 16KB
-aliases:
-- 16KB DEX Page Size
-- 16 КБ страница DEX
+aliases: [16 КБ страница DEX, 16KB DEX Page Size]
 topic: android
 subtopics:
-- gradle
-- performance-memory
+  - gradle
+  - performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-background-tasks-decision-guide--android--medium
-- q-why-fragment-needs-separate-callback-for-ui-creation--android--hard
-- q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard
+  - q-background-tasks-decision-guide--android--medium
+  - q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard
+  - q-why-fragment-needs-separate-callback-for-ui-creation--android--hard
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/gradle
-- android/performance-memory
-- difficulty/medium
+tags: [android/gradle, android/performance-memory, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:36 pm
 ---
 
 # Вопрос (RU)

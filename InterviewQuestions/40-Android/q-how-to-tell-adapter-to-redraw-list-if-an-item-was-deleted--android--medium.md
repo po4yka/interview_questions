@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-tasks-back-stack--android--medium, q-mvi-handle-one-time-events--android--hard, q-view-fundamentals--android--easy]
+related: [q-mvi-handle-one-time-events--android--hard, q-tasks-back-stack--android--medium, q-view-fundamentals--android--easy]
 created: 2025-10-15
-tags: [recyclerview, android, ui, difficulty/medium]
+tags: [android, difficulty/medium, recyclerview, ui]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:14 pm
 ---
-# How to tell adapter to redraw list if an item was deleted?
+
+# How to Tell Adapter to Redraw List if an Item Was Deleted?
 
 # Вопрос (RU)
 
@@ -267,7 +270,7 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 Если удалился элемент из списка, нужно: (1) Удалить его из списка данных, (2) Сообщить Adapter, чтобы он перерисовал только изменённые элементы, используя специфичные notify методы.
 
-### 1. Базовые подходы
+### 1. Базовые Подходы
 
 ```kotlin
 class MyAdapter(private val items: MutableList<Item>) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
@@ -332,7 +335,7 @@ class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(ItemDiffCallback()) {
 }
 ```
 
-### 3. Все методы Notify
+### 3. Все Методы Notify
 
 ```kotlin
 class AdvancedAdapter(private val items: MutableList<Item>) : RecyclerView.Adapter<ViewHolder>() {
@@ -389,7 +392,7 @@ class AdvancedAdapter(private val items: MutableList<Item>) : RecyclerView.Adapt
 }
 ```
 
-### 4. С функцией Swipe to Delete
+### 4. С Функцией Swipe to Delete
 
 ```kotlin
 class SwipeToDeleteActivity : AppCompatActivity() {
@@ -428,7 +431,7 @@ class SwipeToDeleteActivity : AppCompatActivity() {
 }
 ```
 
-### 5. С функциональностью Undo
+### 5. С Функциональностью Undo
 
 ```kotlin
 class UndoDeleteAdapter(private val items: MutableList<Item>) : RecyclerView.Adapter<ViewHolder>() {
@@ -466,7 +469,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 6. AsyncListDiffer для фонового Diff
+### 6. AsyncListDiffer Для Фонового Diff
 
 ```kotlin
 class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -493,7 +496,7 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-### Сравнение методов
+### Сравнение Методов
 
 | Метод | Анимация | Производительность | Случай использования |
 |--------|-----------|-------------|----------|
@@ -503,7 +506,7 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 | `DiffUtil` | - Да | - Лучшая | Сложные изменения |
 | `ListAdapter` | - Да | - Лучшая | Рекомендуется |
 
-### Лучшие практики
+### Лучшие Практики
 
 1. - Используйте `notifyItemRemoved()` для одиночных удалений
 2. - Используйте `ListAdapter` с DiffUtil для современных приложений

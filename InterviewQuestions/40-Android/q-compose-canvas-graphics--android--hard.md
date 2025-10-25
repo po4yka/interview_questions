@@ -1,31 +1,28 @@
 ---
 id: 20251012-122802
 title: Compose Canvas & Graphics / Canvas и графика в Compose
-aliases:
-- Compose Canvas & Graphics
-- Canvas и графика в Compose
+aliases: [Canvas и графика в Compose, Compose Canvas & Graphics]
 topic: android
 subtopics:
-- ui-compose
-- ui-graphics
+  - ui-compose
+  - ui-graphics
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-canvas-drawing-optimization--android--hard
-- q-android-performance-measurement-tools--android--medium
-- q-animated-visibility-vs-content--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-animated-visibility-vs-content--android--medium
+  - q-canvas-drawing-optimization--android--hard
 created: 2025-10-11
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/ui-graphics
-- difficulty/hard
+tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:42 pm
 ---
 
 # Вопрос (RU)
@@ -42,13 +39,13 @@ tags:
 
 ## Answer (EN)
 
-### Core concepts
+### Core Concepts
 - DrawScope: immediate mode drawing inside `Canvas(modifier) { ... }`
 - State: recomposition drives re‑draw; minimize state writes in hot paths
 - Remember/caching: precompute paths/bitmaps; avoid allocations in draw lambdas
 - Clipping/alpha/layers: apply only where needed (costly); prefer geometry tests
 
-### Minimal patterns
+### Minimal Patterns
 
 Caching expensive shapes:
 ```kotlin
@@ -88,7 +85,7 @@ Layer for animations (use sparingly):
 Canvas(Modifier.graphicsLayer(alpha = 0.9f)) { /* draw */ }
 ```
 
-### Performance checklist
+### Performance Checklist
 - Precompute paths/bitmaps in `remember`; no new objects in draw
 - Use `Stroke`/`Brush` judiciously; avoid unnecessary alpha blending
 - Clip only when needed; prefer geometric culling

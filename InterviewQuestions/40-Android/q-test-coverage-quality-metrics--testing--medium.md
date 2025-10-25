@@ -9,6 +9,7 @@ tags: [coverage, jacoco, metrics, quality, difficulty/medium]
 moc: moc-testing
 related: [q-jetpack-compose-lazy-column--android--easy, q-cicd-pipeline-setup--devops--medium, q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy]
 ---
+
 # Test Coverage and Quality Metrics
 
 **English**: Measure and improve test coverage. Configure JaCoCo, analyze coverage reports, identify gaps. Balance coverage vs quality.

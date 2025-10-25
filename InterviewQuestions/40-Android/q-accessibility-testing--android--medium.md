@@ -1,31 +1,28 @@
 ---
 id: 20251012-122754
 title: Accessibility Testing / Тестирование доступности
-aliases:
-- Accessibility Testing
-- Тестирование доступности
+aliases: [Accessibility Testing, Тестирование доступности]
 topic: android
 subtopics:
-- ui-accessibility
-- testing-ui
+  - testing-ui
+  - ui-accessibility
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-accessibility-compose--android--medium
-- q-accessibility-talkback--android--medium
-- q-cicd-automated-testing--android--medium
+  - q-accessibility-compose--android--medium
+  - q-accessibility-talkback--android--medium
+  - q-cicd-automated-testing--android--medium
 created: 2025-10-11
 updated: 2025-10-15
-tags:
-- android/ui-accessibility
-- android/testing-ui
-- difficulty/medium
+tags: [android/testing-ui, android/ui-accessibility, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:53:23 pm
 ---
 
 # Question (EN)

@@ -5,9 +5,11 @@ topic: networking
 difficulty: easy
 status: draft
 moc: moc-android
-related: [q-repository-multiple-sources--android--medium, q-what-are-services-used-for--android--medium, q-large-file-upload-app--android--hard]
+related: [q-large-file-upload-app--android--hard, q-repository-multiple-sources--android--medium, q-what-are-services-used-for--android--medium]
 created: 2025-10-15
-tags: [graphql, rest, api-design, comparison, architecture, difficulty/easy]
+tags: [api-design, architecture, comparison, difficulty/easy, graphql, rest]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:47:02 pm
 ---
 
 # Question (EN)
@@ -1036,7 +1038,7 @@ class ApiClient(
 
 **GraphQL** и **REST** - это два разных подхода к построению API. В то время как REST был стандартом в течение десятилетий, GraphQL предлагает современную альтернативу, которая решает многие распространённые проблемы REST. Понимание, когда использовать каждый из них, критически важно для создания эффективных и поддерживаемых API.
 
-### Фундаментальные различия
+### Фундаментальные Различия
 
 #### REST (Representational State Transfer)
 
@@ -1082,9 +1084,9 @@ query {
 -   Строго типизированная схема
 -   Вложенная выборка данных в одном запросе
 
-### Сравнение: одна и та же функциональность
+### Сравнение: Одна И Та Же Функциональность
 
-#### REST реализация
+#### REST Реализация
 
 ```kotlin
 // REST API сервис
@@ -1123,7 +1125,7 @@ class RestUserRepository(private val api: RestApiService) {
 }
 ```
 
-#### GraphQL реализация
+#### GraphQL Реализация
 
 ```graphql
 # GraphQL запрос - Запросить точно то, что нужно
@@ -1169,7 +1171,7 @@ class GraphQLUserRepository(private val apolloClient: ApolloClient) {
 
 **Over-fetching** возникает, когда API возвращает больше данных, чем нужно клиенту.
 
-#### REST пример
+#### REST Пример
 
 ```kotlin
 // REST эндпоинт возвращает всё
@@ -1197,7 +1199,7 @@ suspend fun getUser(@Path("id") userId: String): UserResponse
 // - Передаются ненужные данные
 ```
 
-#### GraphQL решение
+#### GraphQL Решение
 
 ```graphql
 # Запросить только то, что нужно
@@ -1231,7 +1233,7 @@ query GetUserBasicInfo($id: ID!) {
 
 **Under-fetching** возникает, когда один вызов API не предоставляет достаточно данных, требуя множественных запросов.
 
-#### REST пример
+#### REST Пример
 
 ```kotlin
 // Проблема: Нужно множество запросов
@@ -1257,7 +1259,7 @@ suspend fun getPostWithDetails(postId: String): PostDetails {
 }
 ```
 
-#### GraphQL решение
+#### GraphQL Решение
 
 ```graphql
 # Единый запрос получает все вложенные данные
@@ -1288,9 +1290,9 @@ query GetPostDetails($id: ID!) {
 # - Минимальная задержка
 ```
 
-### Сравнение версионирования
+### Сравнение Версионирования
 
-#### REST версионирование
+#### REST Версионирование
 
 ```kotlin
 // Подход 1: Версионирование в URL
@@ -1307,7 +1309,7 @@ Header: Accept: application/vnd.myapi.v1+json
 // - Критические изменения требуют новую версию
 ```
 
-#### GraphQL версионирование
+#### GraphQL Версионирование
 
 ```graphql
 # GraphQL: Версионирование не нужно
@@ -1344,9 +1346,9 @@ query NewClient {
 # - Старые клиенты продолжают работать
 ```
 
-### Сравнение кеширования
+### Сравнение Кеширования
 
-#### REST кеширование
+#### REST Кеширование
 
 ```kotlin
 // REST: HTTP кеширование с заголовками
@@ -1364,7 +1366,7 @@ Cache-Control: max-age=3600
 // - Разные эндпоинты = разные кеши
 ```
 
-#### GraphQL нормализованный кеш
+#### GraphQL Нормализованный Кеш
 
 ```kotlin
 // GraphQL: Нормализованный кеш по ID
@@ -1387,7 +1389,7 @@ Cache-Control: max-age=3600
 // - Консистентные данные между запросами
 ```
 
-### Матрица решений
+### Матрица Решений
 
 | Фактор                               | REST                   | GraphQL             | Победитель |
 | ------------------------------------ | ---------------------- | ------------------- | ---------- |
@@ -1400,7 +1402,7 @@ Cache-Control: max-age=3600
 | **Типобезопасность**                 | Ручная                 | Встроенная схема    | GraphQL    |
 | **Версионирование**                  | Явные версии           | Эволюция схемы      | GraphQL    |
 
-### Когда использовать REST
+### Когда Использовать REST
 
 **Простые API**
 
@@ -1425,7 +1427,7 @@ Cache-Control: max-age=3600
 -   Команда опытна в REST
 -   Ограниченные знания GraphQL
 
-### Когда использовать GraphQL
+### Когда Использовать GraphQL
 
 **Сложные требования к данным**
 

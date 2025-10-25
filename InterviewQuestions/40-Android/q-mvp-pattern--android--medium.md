@@ -9,6 +9,7 @@ related: [q-save-markdown-structure-database--android--medium, q-android-archite
 created: 2025-10-15
 tags: [architecture-patterns, mvp, model-view-presenter, presenter, contract, difficulty/medium]
 ---
+
 # MVP Pattern
 
 **English**: What is the MVP (Model-View-Presenter) architectural pattern? Explain its components and how it differs from other patterns.

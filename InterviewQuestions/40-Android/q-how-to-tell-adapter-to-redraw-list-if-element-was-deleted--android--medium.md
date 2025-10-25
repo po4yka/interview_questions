@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-compose-modifier-system--android--medium, q-splash-screen-api-android12--android--medium, q-recyclerview-itemdecoration-advanced--recyclerview--medium]
+related: [q-compose-modifier-system--android--medium, q-recyclerview-itemdecoration-advanced--recyclerview--medium, q-splash-screen-api-android12--android--medium]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:13 pm
 ---
-# How to tell adapter to redraw list if an element was deleted?
+
+# How to Tell Adapter to Redraw List if an Element Was Deleted?
 
 ## EN (expanded)
 
@@ -347,7 +349,7 @@ notifyDataSetChanged()
 
 ### Традиционный RecyclerView.Adapter
 
-#### Метод 1: Уведомление о конкретном элементе (Лучший подход)
+#### Метод 1: Уведомление О Конкретном Элементе (Лучший подход)
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
@@ -414,7 +416,7 @@ class SmartAdapter : RecyclerView.Adapter<SmartAdapter.ViewHolder>() {
 }
 ```
 
-### ListAdapter (Современный подход - Рекомендуется)
+### ListAdapter (Современный Подход - Рекомендуется)
 
 ```kotlin
 class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator) {
@@ -466,7 +468,7 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator
 }
 ```
 
-### Полный пример со Swipe to Delete
+### Полный Пример Со Swipe to Delete
 
 ```kotlin
 class SwipeToDeleteActivity : AppCompatActivity() {
@@ -606,7 +608,7 @@ fun ItemRow(item: Item, onDelete: () -> Unit) {
 }
 ```
 
-### Compose с анимацией
+### Compose С Анимацией
 
 ```kotlin
 @Composable
@@ -634,7 +636,7 @@ fun AnimatedItemList() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте ListAdapter** для нового кода - он обрабатывает DiffUtil автоматически
 2. **Всегда используйте стабильные ключи** - помогает с анимациями и производительностью
@@ -643,7 +645,7 @@ fun AnimatedItemList() {
 5. **Рассмотрите функциональность отмены** - улучшает UX с помощью Snackbar
 6. **Анимируйте удаления** - лучшая визуальная обратная связь
 
-### Распространенные методы уведомления
+### Распространенные Методы Уведомления
 
 ```kotlin
 // Элемент удален
@@ -668,7 +670,7 @@ notifyItemMoved(fromPosition, toPosition)
 notifyDataSetChanged()
 ```
 
-### Сравнение методов уведомлений
+### Сравнение Методов Уведомлений
 
 | Метод | Использование | Анимация | Производительность |
 |-------|---------------|----------|-------------------|
@@ -679,7 +681,7 @@ notifyDataSetChanged()
 | `notifyDataSetChanged()` | Все изменилось | Нет | Плохо |
 | `submitList()` (ListAdapter) | Любые изменения | Да | Отлично |
 
-### Обработка позиций после удаления
+### Обработка Позиций После Удаления
 
 ```kotlin
 // Проблема: позиции могут измениться после удаления
@@ -713,7 +715,7 @@ class GoodAdapter : RecyclerView.Adapter<GoodAdapter.ViewHolder>() {
 }
 ```
 
-### Продвинутый пример: Множественное удаление
+### Продвинутый Пример: Множественное Удаление
 
 ```kotlin
 class MultiSelectAdapter : ListAdapter<Item, MultiSelectAdapter.ViewHolder>(ItemComparator) {
@@ -758,7 +760,7 @@ class MultiSelectAdapter : ListAdapter<Item, MultiSelectAdapter.ViewHolder>(Item
 }
 ```
 
-### Обработка анимаций
+### Обработка Анимаций
 
 ```kotlin
 // Настройка кастомной анимации для RecyclerView

@@ -1,31 +1,29 @@
 ---
 id: 20251020-200000
 title: Dagger Custom Scopes / Кастомные скоупы Dagger
-aliases:
-- Dagger Custom Scopes
-- Кастомные скоупы Dagger
+aliases: [Dagger Custom Scopes, Кастомные скоупы Dagger]
 topic: android
 subtopics:
-- di-hilt
+  - di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-dagger-component-dependencies--android--hard
-- q-hilt-components-scope--android--medium
-- q-dagger-build-time-optimization--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-dagger-component-dependencies--android--hard
+  - q-hilt-components-scope--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/di-hilt
-- difficulty/hard
+tags: [android/di-hilt, difficulty/hard]
 source: https://dagger.dev/hilt/components.html
 source_note: Hilt components and scopes documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:20 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +36,7 @@ source_note: Hilt components and scopes documentation
 
 Скоупы в Dagger/Hilt контролируют жизненный цикл и совместное использование зависимостей. Кастомные скоупы позволяют создавать зависимости с определенным жизненным циклом для конкретной функциональности или бизнес-процесса.
 
-### Теория: Управление жизненным циклом
+### Теория: Управление Жизненным Циклом
 
 **Принципы скоупов:**
 - Скоуп определяет область видимости и время жизни зависимости
@@ -52,7 +50,7 @@ source_note: Hilt components and scopes documentation
 - **@FragmentScoped** - один экземпляр на Fragment
 - **Unscoped** - новый экземпляр при каждом запросе
 
-### Стандартные скоупы Hilt
+### Стандартные Скоупы Hilt
 
 | Компонент | Скоуп | Создается | Уничтожается | Использование |
 |-----------|-------|-----------|--------------|---------------|
@@ -61,7 +59,7 @@ source_note: Hilt components and scopes documentation
 | ActivityComponent | @ActivityScoped | Activity created | Activity destroyed | Activity зависимости |
 | FragmentComponent | @FragmentScoped | Fragment created | Fragment destroyed | Fragment зависимости |
 
-### Создание кастомного скоупа
+### Создание Кастомного Скоупа
 
 **1. Определение скоупа:**
 ```kotlin
@@ -100,7 +98,7 @@ class UserSessionManager @Inject constructor(
 }
 ```
 
-### Примеры использования кастомных скоупов
+### Примеры Использования Кастомных Скоупов
 
 **User Session Scope:**
 ```kotlin
@@ -131,7 +129,7 @@ class FeatureStateManager @Inject constructor() {
 }
 ```
 
-### Когда создавать кастомные скоупы
+### Когда Создавать Кастомные Скоупы
 
 **Создавайте кастомный скоуп когда:**
 - Нужен жизненный цикл отличный от стандартных
@@ -144,7 +142,7 @@ class FeatureStateManager @Inject constructor() {
 - Нет необходимости в изоляции состояния
 - Простые зависимости без сложного жизненного цикла
 
-### Управление жизненным циклом
+### Управление Жизненным Циклом
 
 **Создание скоупа:**
 ```kotlin
@@ -169,7 +167,7 @@ override fun onDestroy() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **Архитектурные принципы:**
 - Используйте минимально необходимый скоуп

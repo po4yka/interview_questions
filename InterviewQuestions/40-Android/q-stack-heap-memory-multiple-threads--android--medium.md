@@ -9,6 +9,7 @@ tags: [android/memory-management, heap, memory-management, multithreading, stack
 moc: moc-android
 related: [q-accessibility-testing--accessibility--medium, q-compose-modifier-system--android--medium, q-background-tasks-decision-guide--android--medium]
 ---
+
 # Изменится ли объём памяти стека/кучи, если в приложении создано несколько потоков?
 
 **English**: Will stack/heap memory size change if multiple threads are created in the app?

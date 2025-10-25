@@ -1,31 +1,28 @@
 ---
 id: 20251012-122801
 title: Clean Architecture on Android / Clean Architecture в Android
-aliases:
-- Clean Architecture on Android
-- Clean Architecture в Android
+aliases: [Clean Architecture on Android, Clean Architecture в Android]
 topic: android
 subtopics:
-- architecture-clean
-- architecture-modularization
+  - architecture-clean
+  - architecture-modularization
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-architectural-patterns--android--medium
-- q-android-modularization--android--medium
-- q-architecture-components-libraries--android--easy
+  - q-android-architectural-patterns--android--medium
+  - q-android-modularization--android--medium
+  - q-architecture-components-libraries--android--easy
 created: 2025-10-11
 updated: 2025-10-20
-tags:
-- android/architecture-clean
-- android/architecture-modularization
-- difficulty/hard
+tags: [android/architecture-clean, android/architecture-modularization, difficulty/hard]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:43 pm
 ---
 
 # Вопрос (RU)
@@ -52,12 +49,12 @@ tags:
 - Data: repositories (implement domain ports), mappers, data sources (network/db)
 - Presentation: ViewModel/UI (Android), maps to domain models
 
-### Boundaries and contracts
+### Boundaries and Contracts
 - Define domain interfaces (ports); implement in data (adapters)
 - Map DTO/DB models at boundaries; keep domain models stable
 - See [[c-database-design]] for data layer modeling best practices
 
-### Minimal module layout
+### Minimal Module Layout
 ```text
 app/                 # presentation wiring only
 feature-*/           # feature presentation
@@ -65,7 +62,7 @@ core-domain/         # entities, use cases, ports (pure Kotlin)
 core-data/           # repo impls, mappers, sources
 ```
 
-### Minimal code (ports and use case)
+### Minimal Code (ports and Use case)
 ```kotlin
 // core-domain
 interface UserRepository { suspend fun getUser(id: String): User }
@@ -90,7 +87,7 @@ class UserViewModel(private val getUser: GetUser) : ViewModel() {
 }
 ```
 
-### DI and wiring
+### DI and Wiring
 - Provide use cases in presentation module via constructor injection (Hilt/Koin/plain DI)
 - Bind domain ports to data adapters in DI graph; UI never sees data details
 
@@ -99,7 +96,7 @@ class UserViewModel(private val getUser: GetUser) : ViewModel() {
 - Data: contract tests against domain ports; instrumented for DB if needed
 - Presentation: ViewModel tests with TestDispatcher; fake use cases
 
-### Concurrency and errors
+### Concurrency and Errors
 - Keep domain synchronous/pure when possible; wrap suspending at boundaries
 - Convert infra exceptions to domain failures; handle mapping in presentation
 

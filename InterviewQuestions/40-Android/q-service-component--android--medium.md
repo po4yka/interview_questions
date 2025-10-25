@@ -26,6 +26,7 @@ updated: 2025-10-05
 
 tags: [android/service, android/background-execution, android/lifecycle, en, ru, difficulty/medium]
 ---
+
 # Question (EN)
 > What's Service?
 # Вопрос (RU)

@@ -1,31 +1,28 @@
 ---
 id: 20251012-122710
 title: Compose Custom Animations / Кастомные анимации Compose
-aliases:
-- Compose Custom Animations
-- Кастомные анимации Compose
+aliases: [Compose Custom Animations, Кастомные анимации Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-animation
+  - ui-animation
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-animated-visibility-vs-content--android--medium
-- q-compose-compiler-plugin--android--hard
-- q-android-performance-measurement-tools--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-animated-visibility-vs-content--android--medium
+  - q-compose-compiler-plugin--android--hard
 created: 2025-10-13
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/ui-animation
-- difficulty/medium
+tags: [android/ui-animation, android/ui-compose, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:41 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +43,7 @@ tags:
 - `animate*AsState`: declarative, simple target‑based, auto‑cancellable on state change
 - `Animatable`: imperative control, sequences, interruption, springs/tweens manually
 
-### Minimal patterns
+### Minimal Patterns
 
 animate*AsState (declarative):
 ```kotlin
@@ -88,7 +85,7 @@ fun CardTransition(expanded: Boolean) {
 }
 ```
 
-### Specs and performance
+### Specs and Performance
 - Specs: `spring` (natural), `tween` (time‑based), `keyframes`, `snap`
 - Prefer springs for interruptible UX; use `FastOutSlowInEasing` etc. for material feel
 - Avoid allocations in animation lambdas; hoist state; limit recomposition to animated subtree

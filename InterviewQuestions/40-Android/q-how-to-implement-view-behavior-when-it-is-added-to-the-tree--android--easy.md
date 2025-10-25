@@ -5,11 +5,14 @@ topic: android
 difficulty: easy
 status: draft
 moc: moc-android
-related: [q-workmanager-chaining--background--hard, q-multiple-manifests-multimodule--android--medium, q-app-store-optimization--distribution--medium]
+related: [q-app-store-optimization--distribution--medium, q-multiple-manifests-multimodule--android--medium, q-workmanager-chaining--background--hard]
 created: 2025-10-15
-tags: [android/views, custom view, ui, view lifecycle, views, difficulty/easy]
+tags: [android/views, custom view, difficulty/easy, ui, view lifecycle, views]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:25 pm
 ---
-# Как можно реализовать поведение view при ее добавлении в дерево?
+
+# Как Можно Реализовать Поведение view При Ее Добавлении В Дерево?
 
 **English**: How to implement view behavior when it is added to the tree?
 
@@ -345,9 +348,9 @@ fun doSomethingIfAttached() {
 }
 ```
 
-4. **Avoid memory leaks** - Always clean up in `onDetachedFromWindow()`
+1. **Avoid memory leaks** - Always clean up in `onDetachedFromWindow()`
 
-5. **Use ViewTreeLifecycleOwner** - For lifecycle-aware operations
+2. **Use ViewTreeLifecycleOwner** - For lifecycle-aware operations
 
 ```kotlin
 override fun onAttachedToWindow() {

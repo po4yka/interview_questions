@@ -1,31 +1,28 @@
 ---
 id: 20251012-122760
 title: Android App Lag Analysis / Анализ тормозов приложения Android
-aliases:
-- Android App Lag Analysis
-- Анализ тормозов приложения Android
+aliases: [Android App Lag Analysis, Анализ тормозов приложения Android]
 topic: android
 subtopics:
-- performance-memory
-- performance-rendering
+  - performance-memory
+  - performance-rendering
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-performance-measurement-tools--android--medium
-- q-compose-performance-optimization--android--hard
-- q-strictmode-debugging--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-compose-performance-optimization--android--hard
+  - q-strictmode-debugging--android--medium
 created: 2025-10-13
 updated: 2025-10-15
-tags:
-- android/performance-memory
-- android/performance-rendering
-- difficulty/medium
+tags: [android/performance-memory, android/performance-rendering, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:19 pm
 ---
 
 # Вопрос (RU)

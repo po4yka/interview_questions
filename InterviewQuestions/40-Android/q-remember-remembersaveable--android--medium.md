@@ -26,6 +26,7 @@ updated: 2025-10-06
 
 tags: [android/ui-compose, android/ui-state, en, ru, difficulty/medium]
 ---
+
 # Question (EN)
 > What is the difference between remember and rememberSaveable in Jetpack Compose?
 # Вопрос (RU)

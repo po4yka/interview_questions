@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-spannable-text-styling--android--medium, q-broadcastreceiver-contentprovider--android--easy, q-save-data-outside-fragment--android--medium]
+related: [q-broadcastreceiver-contentprovider--android--easy, q-save-data-outside-fragment--android--medium, q-spannable-text-styling--android--medium]
 created: 2025-10-15
-tags: [android/animations, android/recyclerview, android/ui, animations, recyclerview, ui, difficulty/medium]
+tags: [android/animations, android/recyclerview, android/ui, animations, difficulty/medium, recyclerview, ui]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:40:18 pm
 ---
-# How are animations done in RecyclerView?
+
+# How Are Animations Done in RecyclerView?
 
 **Russian**: Как в RecyclerView делаются анимации?
 
@@ -390,7 +393,7 @@ class CustomItemAnimator : DefaultItemAnimator() {
 recyclerView.itemAnimator = CustomItemAnimator()
 ```
 
-### 3. Анимации в адаптере (onBindViewHolder)
+### 3. Анимации В Адаптере (onBindViewHolder)
 
 Анимируйте элементы непосредственно в адаптере при привязке:
 
@@ -418,7 +421,7 @@ class MyAdapter(private val items: List<String>) :
 }
 ```
 
-### 4. Анимация масштабирования
+### 4. Анимация Масштабирования
 
 ```kotlin
 class ScaleItemAnimator : DefaultItemAnimator() {
@@ -447,7 +450,7 @@ class ScaleItemAnimator : DefaultItemAnimator() {
 }
 ```
 
-### 5. Анимация скольжения
+### 5. Анимация Скольжения
 
 ```kotlin
 class SlideInLeftAnimator : DefaultItemAnimator() {
@@ -491,7 +494,7 @@ class SlideInLeftAnimator : DefaultItemAnimator() {
 }
 ```
 
-### 6. Специфичные анимации элементов в адаптере
+### 6. Специфичные Анимации Элементов В Адаптере
 
 ```kotlin
 class AnimatedAdapter(private val items: MutableList<String>) :
@@ -536,7 +539,7 @@ class AnimatedAdapter(private val items: MutableList<String>) :
 }
 ```
 
-### 7. Анимация свайпа
+### 7. Анимация Свайпа
 
 ```kotlin
 val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
@@ -574,7 +577,7 @@ val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
 itemTouchHelper.attachToRecyclerView(recyclerView)
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Избегайте анимации при прокрутке**: Может вызвать проблемы с производительностью
 2. **Сбрасывайте состояние анимации**: Очищайте анимации в onViewRecycled

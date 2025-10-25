@@ -5,11 +5,14 @@ topic: android
 difficulty: hard
 status: draft
 moc: moc-android
-related: [q-what-are-px-dp-sp--android--easy, q-what-is-known-about-recyclerview--android--easy, q-network-error-handling-strategies--networking--medium]
+related: [q-network-error-handling-strategies--networking--medium, q-what-are-px-dp-sp--android--easy, q-what-is-known-about-recyclerview--android--easy]
 created: 2025-10-15
-tags: [android/recyclerview, recyclerview, ui, ui design, difficulty/hard]
+tags: [android/recyclerview, difficulty/hard, recyclerview, ui, ui design]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:39:54 pm
 ---
-# Как делать списки чатов с точки зрения UI?
+
+# Как Делать Списки Чатов С Точки Зрения UI?
 
 **English**: How to create chat lists from a UI perspective?
 

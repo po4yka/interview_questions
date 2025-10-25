@@ -5,27 +5,30 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [websockets, media, networking-http]
+subtopics: [media, networking-http, websockets]
 question_kind: implementation
 difficulty: hard
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/webrtc, android/real-time, android/media, android/networking, android/peer-to-peer, difficulty/hard]
+language_tags: [android/media, android/networking, android/peer-to-peer, android/real-time, android/webrtc, difficulty/hard, en, ru]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [webrtc, real-time-communication, websocket, media-streaming]
+related: [media-streaming, real-time-communication, webrtc, websocket]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android/websockets, android/media, android/networking-http, en, ru, difficulty/hard]
+tags: [android/media, android/networking-http, android/websockets, difficulty/hard, en, ru]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:11:07 pm
 ---
+
 # Question (EN)
 > How would you implement voice and video calling features in an Android application?
 # Вопрос (RU)
@@ -676,7 +679,7 @@ fun VideoCallScreen(
 
 Реализация голосовых и видеозвонков в Android обычно использует **WebRTC (Web Real-Time Communication)**, который обеспечивает peer-to-peer аудио и видео связь с низкой задержкой.
 
-### Ключевые компоненты WebRTC:
+### Ключевые Компоненты WebRTC:
 
 - **PeerConnection**: Управляет peer-to-peer соединением
 - **MediaStream**: Обрабатывает аудио/видео потоки
@@ -685,7 +688,7 @@ fun VideoCallScreen(
 - **SDP**: Описывает медиа сессии
 - **Signaling Server**: Обмен информацией о соединении
 
-### Процесс установки соединения:
+### Процесс Установки Соединения:
 
 1. Caller создает PeerConnection и MediaStream
 2. Caller создает offer (SDP) и отправляет через signaling server
@@ -694,7 +697,7 @@ fun VideoCallScreen(
 5. Установка прямого P2P соединения
 6. Начало передачи аудио/видео
 
-### Основные функции:
+### Основные Функции:
 
 - Переключение мут/размут микрофона
 - Включение/выключение видео
@@ -702,7 +705,7 @@ fun VideoCallScreen(
 - Завершение звонка
 - Отображение локального и удаленного видео
 
-### Лучшие практики:
+### Лучшие Практики:
 
 1. Использовать STUN и TURN серверы для надежности
 2. Запрашивать разрешения камеры/микрофона

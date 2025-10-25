@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-what-is-known-about-view-lifecycles--android--medium, q-vector-graphics-animations--graphics--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
+related: [q-vector-graphics-animations--graphics--medium, q-what-is-known-about-view-lifecycles--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
 created: 2025-10-15
-tags: [languages, difficulty/medium]
+tags: [difficulty/medium, languages]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:15 pm
 ---
-# Как SVG-строку показать в виде векторного файла?
+
+# Как SVG-строку Показать В Виде Векторного Файла?
 
 ## Answer (EN)
 There are several approaches to display an SVG string as a vector image in Android. The methods range from using specialized libraries to converting the SVG to native Android vector drawables.
@@ -454,13 +457,13 @@ class SvgNetworkActivity : AppCompatActivity() {
 
 ---
 
-# Как SVG-строку показать в виде векторного файла
+# Как SVG-строку Показать В Виде Векторного Файла
 
 ## Ответ (RU)
 
 Существует несколько способов отображения SVG-строки как векторного изображения в Android, от использования специализированных библиотек до конвертации в нативные Android vector drawable.
 
-### Основные подходы
+### Основные Подходы
 
 1. **AndroidSVG библиотека** - прямая работа с SVG строками
 2. **Coil с SVG декодером** - современная загрузка изображений
@@ -470,7 +473,7 @@ class SvgNetworkActivity : AppCompatActivity() {
 6. **Custom Drawable** - полный контроль
 7. **Jetpack Compose** - декларативный UI
 
-### 1. AndroidSVG библиотека
+### 1. AndroidSVG Библиотека
 
 Самый прямой подход для работы с SVG строками.
 
@@ -533,7 +536,7 @@ class SvgActivity : AppCompatActivity() {
 - Дополнительная библиотека
 - Ручное управление
 
-### 2. Coil с SVG декодером
+### 2. Coil С SVG Декодером
 
 Современная библиотека загрузки изображений с поддержкой SVG.
 
@@ -598,7 +601,7 @@ class CoilSvgActivity : AppCompatActivity() {
 - Кэширование из коробки
 - Coroutines поддержка
 
-### 3. Конвертация в Bitmap
+### 3. Конвертация В Bitmap
 
 Универсальный подход для совместимости.
 
@@ -630,7 +633,7 @@ class SvgToBitmapConverter {
 }
 ```
 
-### 4. Custom Drawable из SVG строки
+### 4. Custom Drawable Из SVG Строки
 
 Полный контроль над отрисовкой.
 
@@ -684,7 +687,7 @@ class CustomDrawableActivity : AppCompatActivity() {
 }
 ```
 
-### 5. Jetpack Compose реализация
+### 5. Jetpack Compose Реализация
 
 Для современного декларативного UI.
 
@@ -764,7 +767,7 @@ fun SvgScreen() {
 }
 ```
 
-### 6. Загрузка SVG из сети
+### 6. Загрузка SVG Из Сети
 
 Работа с удаленными SVG файлами.
 
@@ -817,7 +820,7 @@ class SvgNetworkActivity : AppCompatActivity() {
 }
 ```
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Подход | Плюсы | Минусы | Лучше для |
 |----------|------|------|----------|
@@ -829,7 +832,7 @@ class SvgNetworkActivity : AppCompatActivity() {
 | Custom Drawable | Полный контроль | Больше кода | Специфичные требования |
 | Compose | Декларативный | Требует Compose | Современные UI |
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Выбор библиотеки:**
 ```kotlin

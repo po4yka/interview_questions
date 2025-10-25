@@ -5,10 +5,13 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium, q-what-is-layout-performance-measured-in--android--medium, q-gradle-version-catalog--android--medium]
+related: [q-gradle-version-catalog--android--medium, q-what-is-layout-performance-measured-in--android--medium, q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium]
 created: 2025-10-15
-tags: [Kotlin, KMM, Testing, Multiplatform, difficulty/medium]
+tags: [difficulty/medium, KMM, Kotlin, Multiplatform, Testing]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:07:57 pm
 ---
+
 # Testing in Kotlin Multiplatform Mobile
 
 # Question (EN)
@@ -815,7 +818,7 @@ Key considerations: maximize shared test code, use proper test doubles, test cor
 ## Ответ (RU)
 Тестирование в KMM использует общий тестовый код в `commonTest`, позволяя при этом писать платформо-специфичные тесты. Для унифицированных утверждений используется `kotlin.test`, а для платформо-специфичных реализаций тестов — `expect/actual`.
 
-#### Структура и настройка тестов
+#### Структура И Настройка Тестов
 
 **1. Конфигурация исходных наборов тестов**
 ```kotlin
@@ -884,7 +887,7 @@ shared/src/
          TaskDatabaseTest.kt
 ```
 
-#### Модульное тестирование в commonTest
+#### Модульное Тестирование В commonTest
 
 **1. Тесты репозитория**
 ```kotlin
@@ -951,7 +954,7 @@ class TaskFlowTest {
 }
 ```
 
-#### Мокирование платформо-специфичного кода
+#### Мокирование Платформо-специфичного Кода
 
 **1. Expect/Actual для тестовых двойников**
 ```kotlin
@@ -998,7 +1001,7 @@ class FakeLogger : PlatformLogger() {
 }
 ```
 
-#### Тестирование корутин
+#### Тестирование Корутин
 
 **1. TestDispatchers**
 ```kotlin
@@ -1010,7 +1013,7 @@ object TestDispatchers : CoroutineDispatchers {
 }
 ```
 
-#### Платформо-специфичные тесты
+#### Платформо-специфичные Тесты
 
 **1. Специфичные для Android тесты**
 ```kotlin
@@ -1029,7 +1032,7 @@ class TaskDatabaseIOSTest {
 }
 ```
 
-#### Интеграционное тестирование
+#### Интеграционное Тестирование
 
 **1. Сквозные тесты репозитория**
 ```kotlin
@@ -1039,7 +1042,7 @@ class TaskRepositoryIntegrationTest {
 }
 ```
 
-#### Утилиты для тестов
+#### Утилиты Для Тестов
 
 **1. Строители тестовых данных**
 ```kotlin
@@ -1057,7 +1060,7 @@ fun assertTaskEquals(expected: Task, actual: Task, message: String = "") {
 }
 ```
 
-#### Лучшие практики
+#### Лучшие Практики
 
 1.  **Организация тестов**:
     *   Общие тесты в `commonTest`.

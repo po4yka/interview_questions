@@ -26,6 +26,7 @@ updated: 2025-10-05
 
 tags: [android/architecture-clean, android/architecture-modularization, en, ru, difficulty/hard]
 ---
+
 # Question (EN)
 > What modularization patterns do you know?
 # Вопрос (RU)

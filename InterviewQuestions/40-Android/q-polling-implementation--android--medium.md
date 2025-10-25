@@ -9,6 +9,7 @@ related: [q-dagger-build-time-optimization--android--medium, q-baseline-profiles
 created: 2025-10-15
 tags: [polling, background-tasks, coroutines, workmanager, difficulty/medium]
 ---
+
 # Как реализовать polling в Android?
 
 **English**: How to implement polling in Android?

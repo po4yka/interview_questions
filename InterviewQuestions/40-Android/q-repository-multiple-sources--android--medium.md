@@ -26,6 +26,7 @@ updated: 2025-10-06
 
 tags: [android/architecture-clean, android/cache-offline, en, ru, difficulty/medium]
 ---
+
 # Question (EN)
 > How to implement Repository pattern with multiple data sources (network, database, cache)?
 # Вопрос (RU)

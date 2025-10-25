@@ -1,31 +1,28 @@
 ---
 id: 20251012-122776
 title: Android 14 Permissions / Разрешения Android 14
-aliases:
-- Android 14 Permissions
-- Разрешения Android 14
+aliases: [Android 14 Permissions, Разрешения Android 14]
 topic: android
 subtopics:
-- permissions
-- privacy-sdks
+  - permissions
+  - privacy-sdks
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-security-best-practices--android--medium
-- q-android-security-practices-checklist--android--medium
-- q-android-manifest-file--android--easy
+  - q-android-manifest-file--android--easy
+  - q-android-security-best-practices--android--medium
+  - q-android-security-practices-checklist--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/permissions
-- android/privacy-sdks
-- difficulty/medium
+tags: [android/permissions, android/privacy-sdks, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:07 pm
 ---
 
 # Вопрос (RU)

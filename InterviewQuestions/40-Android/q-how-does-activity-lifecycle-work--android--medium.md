@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags:
-  - android
+tags: [android]
 moc: moc-android
-related: [q-view-composition-strategy-compose--android--medium, q-compose-side-effects-advanced--jetpack-compose--hard, q-android-runtime-art--android--medium]
+related: [q-android-runtime-art--android--medium, q-compose-side-effects-advanced--jetpack-compose--hard, q-view-composition-strategy-compose--android--medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:40:13 pm
 ---
-# How is Fragment lifecycle connected with Activity?
+
+# How is Fragment Lifecycle Connected with Activity?
 
 # Вопрос (RU)
 Как жизненный цикл фрагмента связан с активностью?
@@ -490,7 +492,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 ## Ответ (RU)
 Жизненный цикл фрагмента **тесно связан** с жизненным циклом активности. Когда изменяется жизненный цикл активности, это вызывает соответствующие обратные вызовы жизненного цикла фрагмента. Однако у фрагмента есть **дополнительные состояния жизненного цикла**, которых нет у активности.
 
-### Ключевые правила жизненного цикла
+### Ключевые Правила Жизненного Цикла
 
 **1. Жизненный цикл фрагмента никогда не превышает жизненный цикл активности:**
 ```kotlin
@@ -512,7 +514,7 @@ Fragment.onStop() → Activity.onStop()
 Fragment.onDestroy() → Activity.onDestroy()
 ```
 
-### Раздельный жизненный цикл View
+### Раздельный Жизненный Цикл View
 
 У фрагмента есть **отдельный жизненный цикл для его View**:
 
@@ -539,7 +541,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Используйте `viewLifecycleOwner` для операций, связанных с View.**
 **2. Обнуляйте ссылки на View в `onDestroyView()`.**

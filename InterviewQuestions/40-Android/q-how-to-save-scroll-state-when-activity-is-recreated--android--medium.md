@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-touch-event-handling-custom-views--custom-views--medium, q-diffutil-background-calculation-issues--android--medium, q-spannable-text-styling--android--medium]
+related: [q-diffutil-background-calculation-issues--android--medium, q-spannable-text-styling--android--medium, q-touch-event-handling-custom-views--custom-views--medium]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:16 pm
 ---
-# How to save scroll state when Activity is recreated?
+
+# How to save Scroll State when Activity is Recreated?
 
 ## Answer (EN)
 When an Activity is recreated due to configuration changes or process death, scroll position in ScrollView or RecyclerView is reset. This can be prevented by saving and restoring scroll state.

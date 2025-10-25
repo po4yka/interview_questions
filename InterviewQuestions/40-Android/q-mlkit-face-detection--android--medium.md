@@ -9,6 +9,7 @@ related: [q-until-what-point-does-viewmodel-guarantee-state-preservation--androi
 created: 2025-10-15
 tags: [Kotlin, MLKit, MachineLearning, FaceDetection, difficulty/medium]
 ---
+
 # ML Kit Face Detection and Analysis
 
 # Question (EN)

@@ -5,13 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-what-is-layout-performance-measured-in--android--medium, q-main-thread-android--android--medium, q-kmm-dependency-injection--multiplatform--medium]
+related: [q-kmm-dependency-injection--multiplatform--medium, q-main-thread-android--android--medium, q-what-is-layout-performance-measured-in--android--medium]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:40:15 pm
 ---
 
-# How does dialog differ from other navigation?
+# How Does Dialog Differ from other Navigation?
 
 # Question (EN)
 
@@ -25,7 +26,7 @@ tags:
 
 ## Answer (EN)
 
-### Dialog vs Navigation
+### Dialog Vs Navigation
 
 A dialog is a distinct UI pattern that differs fundamentally from standard navigation:
 
@@ -128,7 +129,7 @@ fun MyScreen() {
 
 ## Ответ (RU)
 
-### Dialog vs Навигация
+### Dialog Vs Навигация
 
 Dialog - это особый UI-паттерн, который фундаментально отличается от стандартной навигации:
 
@@ -148,7 +149,7 @@ Dialog - это особый UI-паттерн, который фундамен�
 4. **Долговременное взаимодействие**: Предназначена для продолжительного взаимодействия пользователя
 5. **Полный экран**: Занимает все экранное пространство
 
-### Случаи использования Dialog
+### Случаи Использования Dialog
 
 - Запросы подтверждения ("Вы уверены?")
 - Простые формы (логин, ввод пароля)
@@ -156,7 +157,7 @@ Dialog - это особый UI-паттерн, который фундамен�
 - Быстрый выбор (выбор даты, времени)
 - Индикаторы прогресса
 
-### Dialog в Jetpack Compose
+### Dialog В Jetpack Compose
 
 ```kotlin
 @Composable
@@ -190,7 +191,7 @@ fun MyScreen() {
 }
 ```
 
-### Ключевые преимущества Dialog
+### Ключевые Преимущества Dialog
 
 1. **Сохранение контекста**: Пользователь остается в текущем контексте
 2. **Быстрое взаимодействие**: Быстрее, чем переход на новый экран

@@ -1,33 +1,29 @@
 ---
 id: 20251012-122781
 title: App Security Best Practices / Лучшие практики безопасности приложения
-aliases:
-- App Security Best Practices
-- Лучшие практики безопасности приложения
+aliases: [App Security Best Practices, Лучшие практики безопасности приложения]
 topic: android
 subtopics:
-- permissions
-- architecture-clean
-- keystore-crypto
+  - architecture-clean
+  - keystore-crypto
+  - permissions
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-security-best-practices--android--medium
-- q-android-keystore-system--security--medium
-- q-android-security-practices-checklist--android--medium
+  - q-android-keystore-system--security--medium
+  - q-android-security-best-practices--android--medium
+  - q-android-security-practices-checklist--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/permissions
-- android/architecture-clean
-- android/keystore-crypto
-- difficulty/medium
+tags: [android/architecture-clean, android/keystore-crypto, android/permissions, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:04 pm
 ---
 
 # Вопрос (RU)

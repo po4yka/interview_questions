@@ -1,33 +1,29 @@
 ---
 id: 20251012-122792
 title: Cancel Presenter Requests / Отмена запросов презентера
-aliases:
-- Cancel Presenter Requests
-- Отмена запросов презентера
+aliases: [Cancel Presenter Requests, Отмена запросов презентера]
 topic: android
 subtopics:
-- architecture-clean
-- lifecycle
-- coroutines
+  - architecture-clean
+  - coroutines
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-activity-lifecycle-methods--android--medium
-- q-async-operations-android--android--medium
-- q-android-testing-strategies--android--medium
+  - q-activity-lifecycle-methods--android--medium
+  - q-android-testing-strategies--android--medium
+  - q-async-operations-android--android--medium
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/architecture-clean
-- android/lifecycle
-- android/coroutines
-- difficulty/medium
+tags: [android/architecture-clean, android/coroutines, android/lifecycle, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:50 pm
 ---
 
 # Вопрос (RU)
@@ -49,12 +45,12 @@ tags:
 - Prevent leaks and wasted work
 - Centralize cancellation on lifecycle events
 
-### Core strategies (theory first)
+### Core Strategies (theory first)
 - **Ownership**: Presenter owns a cancellation handle (Job/CompositeDisposable) and clears it on `onStop/onDestroy`.
 - **Lifecycle-aware**: Observe [[c-lifecycle]] to start/stop work; never hold hard reference to View without checks.
 - **One source of truth**: All async work must register with the cancellation handle using [[c-coroutines]].
 
-### Minimal implementations
+### Minimal Implementations
 
 - Coroutines (preferred):
 ```kotlin
@@ -86,7 +82,7 @@ class Presenter {
 }
 ```
 
-### Best practices
+### Best Practices
 - Null-check/weak reference View before rendering; better: pass render via interface that is swapped to a no-op when detached.
 - Prefer main-safe dispatch (Main.immediate) to avoid stale posts.
 - Split `onStop` (cancel children) vs `onDestroy` (cancel scope) to allow reuse on resume.

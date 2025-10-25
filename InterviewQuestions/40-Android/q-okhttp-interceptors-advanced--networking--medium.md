@@ -9,6 +9,7 @@ related: [q-dagger-purpose--android--easy, q-when-can-the-system-restart-a-servi
 created: 2025-10-15
 tags: [okhttp, interceptors, authentication, caching, retry, difficulty/medium]
 ---
+
 # OkHttp Interceptors Advanced / Продвинутые интерцепторы OkHttp
 
 **English**: Implement custom OkHttp interceptors for authentication refresh, request retry, and response caching. Explain application vs network interceptor chain order.

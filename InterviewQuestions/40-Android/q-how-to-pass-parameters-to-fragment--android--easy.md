@@ -5,11 +5,14 @@ topic: android
 difficulty: easy
 status: draft
 moc: moc-android
-related: [q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-retrofit-library--android--medium, q-cicd-deployment-automation--devops--medium]
+related: [q-cicd-deployment-automation--devops--medium, q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-retrofit-library--android--medium]
 created: 2025-10-15
-tags: [fragment, bundle, arguments, difficulty/easy]
+tags: [arguments, bundle, difficulty/easy, fragment]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:22 pm
 ---
-# Как передать параметры во фрагмент?
+
+# Как Передать Параметры Во Фрагмент?
 
 ## Answer (EN)
 The recommended and safe way to pass parameters to a Fragment in Android is using **Bundle** with the fragment's `arguments` property. This approach is supported by the Android system and survives configuration changes.
@@ -422,7 +425,7 @@ class CorrectFragment : Fragment() {
 
 ---
 
-# Как передать параметры во фрагмент
+# Как Передать Параметры Во Фрагмент
 
 ## Ответ (RU)
 Рекомендуемый способ: создать Bundle, положить туда параметры через putString или putInt и установить arguments фрагменту. В onCreate() извлечь через requireArguments(). Это безопасный способ, поддерживаемый Android-системой

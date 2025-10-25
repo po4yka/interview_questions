@@ -1,38 +1,31 @@
 ---
 id: 20251020-200700
 title: Fast Chat Rendering / Быстрый рендеринг чата
-aliases:
-- Fast Chat Rendering
-- Быстрый рендеринг чата
+aliases: [Fast Chat Rendering, Быстрый рендеринг чата]
 topic: android
 subtopics:
-- ui-views
-- performance-memory
+  - performance-memory
+  - ui-views
 
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: https://developer.android.com/topic/performance/rendering
 source_note: Android rendering performance documentation
 status: draft
 moc: moc-android
 related:
-- q-diffutil-background-calculation-issues--android--medium
-- q-recyclerview-optimization--android--medium
-- q-android-performance-optimization--android--medium
+  - q-android-performance-optimization--android--medium
+  - q-diffutil-background-calculation-issues--android--medium
+  - q-recyclerview-optimization--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-  - android/ui-views
-  - android/performance-memory
-  - chat
-  - recyclerview
-  - diffutil
-  - performance
-  - difficulty/hard
+tags: [android/performance-memory, android/ui-views, chat, difficulty/hard, diffutil, performance, recyclerview]
+date created: Saturday, October 25th 2025, 1:26:31 pm
+date modified: Saturday, October 25th 2025, 4:52:01 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +39,7 @@ tags:
 
 Для быстрого рендеринга чатов без лагов нужно оптимизировать UI (XML Views или Compose), загрузку данных (Paging), изображения (Glide/Coil), офлайн кэш (Room).
 
-### Подходы: XML Views vs Compose
+### Подходы: XML Views Vs Compose
 
 **XML Views с RecyclerView:**
 - ViewHolder Pattern для переиспользования View
@@ -60,7 +53,7 @@ tags:
 - Декларативный UI без ViewHolder
 - State управление через remember/rememberSaveable
 
-### Оптимизации для XML Views
+### Оптимизации Для XML Views
 
 **1. RecyclerView оптимизация**
 - Проблема: медленный рендеринг списков сообщений
@@ -147,7 +140,7 @@ class ChatActivity : AppCompatActivity() {
 }
 ```
 
-### Оптимизации для Compose
+### Оптимизации Для Compose
 
 **1. LazyColumn оптимизация**
 - Проблема: ненужные recomposition при изменении данных
@@ -330,7 +323,7 @@ interface ChatDao {
 }
 ```
 
-### Теория производительности
+### Теория Производительности
 
 **XML Views vs Compose сравнение:**
 
@@ -391,7 +384,7 @@ interface ChatDao {
 
 For fast chat rendering without lags, optimize UI (XML Views or Compose), data loading (Paging), images (Glide/Coil), offline cache (Room).
 
-### Approaches: XML Views vs Compose
+### Approaches: XML Views Vs Compose
 
 **XML Views with RecyclerView:**
 - ViewHolder Pattern for View reuse

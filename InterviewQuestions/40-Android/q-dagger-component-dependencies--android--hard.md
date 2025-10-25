@@ -1,31 +1,29 @@
 ---
 id: 20251020-200000
 title: Dagger Component Dependencies / Зависимости компонентов Dagger
-aliases:
-- Dagger Component Dependencies
-- Зависимости компонентов Dagger
+aliases: [Dagger Component Dependencies, Зависимости компонентов Dagger]
 topic: android
 subtopics:
-- di-hilt
+  - di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-dagger-build-time-optimization--android--medium
-- q-dagger-framework-overview--android--hard
-- q-hilt-components-scope--android--medium
+  - q-dagger-build-time-optimization--android--medium
+  - q-dagger-framework-overview--android--hard
+  - q-hilt-components-scope--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/di-hilt
-- difficulty/hard
+tags: [android/di-hilt, difficulty/hard]
 source: https://dagger.dev/api/latest/dagger/Component.html
 source_note: Dagger Component API documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:20 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +36,7 @@ source_note: Dagger Component API documentation
 
 Component Dependencies и Subcomponents — два способа композиции Dagger компонентов с различными характеристиками и областями применения.
 
-### Теория: Архитектурные паттерны
+### Теория: Архитектурные Паттерны
 
 **Component Dependencies (Has-a relationship)**
 - Агрегация компонентов через явные зависимости
@@ -52,7 +50,7 @@ Component Dependencies и Subcomponents — два способа компози
 - Общий scope с родительским компонентом
 - Возможность переопределения bindings
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Аспект | Component Dependencies | Subcomponents |
 |--------|----------------------|---------------|
@@ -121,7 +119,7 @@ val activityComponent = appComponent.activityComponentFactory().create()
 activityComponent.inject(this)
 ```
 
-### Когда использовать
+### Когда Использовать
 
 **Component Dependencies подходят для:**
 - Строгой инкапсуляции зависимостей
@@ -135,7 +133,7 @@ activityComponent.inject(this)
 - Feature-based архитектуры
 - Когда scope должен быть общим
 
-### Hilt подход
+### Hilt Подход
 
 Hilt автоматизирует управление компонентами:
 
@@ -160,7 +158,7 @@ object AppModule {
 - Обрабатывает жизненные циклы
 - Предотвращает циклические зависимости
 
-### Лучшие практики
+### Лучшие Практики
 
 **Для Component Dependencies:**
 - Экспортируйте только необходимые зависимости

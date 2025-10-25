@@ -1,31 +1,28 @@
 ---
 id: 20251012-122771
 title: Android Runtime Internals / Внутреннее устройство Android Runtime
-aliases:
-- Android Runtime Internals
-- Внутреннее устройство Android Runtime
+aliases: [Android Runtime Internals, Внутреннее устройство Android Runtime]
 topic: android
 subtopics:
-- performance-memory
-- processes
+  - performance-memory
+  - processes
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-runtime-art--android--medium
-- q-android-app-lag-analysis--android--medium
-- q-android-performance-measurement-tools--android--medium
+  - q-android-app-lag-analysis--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-android-runtime-art--android--medium
 created: 2025-10-13
 updated: 2025-10-15
-tags:
-- android/performance-memory
-- android/processes
-- difficulty/hard
+tags: [android/performance-memory, android/processes, difficulty/hard]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:11 pm
 ---
 
 # Вопрос (RU)

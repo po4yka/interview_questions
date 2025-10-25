@@ -26,6 +26,7 @@ updated: 2025-10-05
 
 tags: [android/performance-memory, android/app-bundle, android/gradle, en, ru, difficulty/medium]
 ---
+
 # Question (EN)
 > What ways do you know to reduce the size of an application?
 # Вопрос (RU)

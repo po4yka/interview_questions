@@ -1,31 +1,28 @@
 ---
 id: 20251012-122777
 title: AnimatedVisibility vs AnimatedContent vs Crossfade / AnimatedVisibility против
-aliases:
-- AnimatedVisibility vs AnimatedContent vs Crossfade
-- AnimatedVisibility против AnimatedContent против Crossfade
+aliases: [AnimatedVisibility vs AnimatedContent vs Crossfade, AnimatedVisibility против AnimatedContent против Crossfade]
 topic: android
 subtopics:
-- ui-animation
-- ui-compose
+  - ui-animation
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-testing-strategies--android--medium
-- q-android-architectural-patterns--android--medium
-- q-android-performance-measurement-tools--android--medium
+  - q-android-architectural-patterns--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-android-testing-strategies--android--medium
 created: 2025-10-13
 updated: 2025-10-15
-tags:
-- android/ui-animation
-- android/ui-compose
-- difficulty/medium
+tags: [android/ui-animation, android/ui-compose, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:53:07 pm
 ---
 
 # Вопрос (RU)

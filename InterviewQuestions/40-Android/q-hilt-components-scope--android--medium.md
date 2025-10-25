@@ -7,9 +7,12 @@ status: draft
 moc: moc-android
 related: [q-android-security-best-practices--android--medium, q-cicd-pipeline-setup--devops--medium, q-room-library-definition--android--easy]
 created: 2025-10-15
-tags: [android/dependency-injection, components, dagger, dependency-injection, hilt, scope, difficulty/medium]
+tags: [android/dependency-injection, components, dagger, dependency-injection, difficulty/medium, hilt, scope]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:43:45 pm
 ---
-# Какие готовые компоненты с готовым скоупом есть в Dagger Hilt и как модуль добавить к этой компоненте?
+
+# Какие Готовые Компоненты С Готовым Скоупом Есть В Dagger Hilt И Как Модуль Добавить К Этой Компоненте?
 
 **English**: What ready-made components with scopes are in Dagger Hilt, and how to add a module to a component?
 

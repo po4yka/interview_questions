@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-parsing-optimization-android--android--medium, q-kotlin-context-receivers--kotlin--hard, q-what-navigation-methods-exist-in-kotlin--programming-languages--medium]
+related: [q-kotlin-context-receivers--kotlin--hard, q-parsing-optimization-android--android--medium, q-what-navigation-methods-exist-in-kotlin--programming-languages--medium]
 created: 2025-10-15
-tags: [recyclerview, adapter, difficulty/medium]
+tags: [adapter, difficulty/medium, recyclerview]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:12 pm
 ---
-# How to tell adapter to redraw list when item removed?
+
+# How to Tell Adapter to Redraw List when Item Removed?
 
 ## Answer (EN)
 If an item was deleted from the list, you need to: (1) Remove it from the data list, (2) Tell Adapter to redraw only changed items using specific notify methods.
@@ -261,13 +264,13 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 ---
 
-# Как сказать адаптеру перерисовать список, если какой-то элемент удалился
+# Как Сказать Адаптеру Перерисовать Список, Если Какой-то Элемент Удалился
 
 ## Ответ (RU)
 
 Если элемент был удален из списка, нужно: (1) Удалить его из списка данных, (2) Сообщить Adapter перерисовать только измененные элементы используя специфичные notify методы.
 
-### Правильный подход
+### Правильный Подход
 
 ```kotlin
 class MyAdapter(private val items: MutableList<Item>) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
@@ -318,7 +321,7 @@ class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(ItemDiffCallback()) {
 }
 ```
 
-### Все notify методы
+### Все Notify Методы
 
 ```kotlin
 // Удалить один элемент
@@ -355,7 +358,7 @@ fun moveItem(fromPosition: Int, toPosition: Int) {
 }
 ```
 
-### Свайп для удаления
+### Свайп Для Удаления
 
 Реализация swipe-to-delete с ItemTouchHelper:
 
@@ -430,7 +433,7 @@ fun deleteItemWithUndo(position: Int) {
 }
 ```
 
-### Сравнение методов
+### Сравнение Методов
 
 | Метод | Анимация | Производительность | Случай использования |
 |-------|----------|---------------------|----------------------|
@@ -440,7 +443,7 @@ fun deleteItemWithUndo(position: Int) {
 | `DiffUtil` | Да | Лучшая | Сложные изменения |
 | `ListAdapter` | Да | Лучшая | Рекомендуется |
 
-### AsyncListDiffer для фоновых вычислений
+### AsyncListDiffer Для Фоновых Вычислений
 
 AsyncListDiffer вычисляет разницу между списками в фоновом потоке:
 
@@ -490,7 +493,7 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-### Продвинутые сценарии
+### Продвинутые Сценарии
 
 **Сценарий 1: Множественное удаление с подтверждением**
 ```kotlin
@@ -721,7 +724,7 @@ class OptimizedAdapter(private val items: MutableList<Item>) :
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте `notifyItemRemoved()`** для удаления одного элемента с анимацией
 2. **Используйте `ListAdapter` с DiffUtil** для современных приложений
@@ -734,7 +737,7 @@ class OptimizedAdapter(private val items: MutableList<Item>) :
 9. **Используйте payload** для частичных обновлений ViewHolder
 10. **Сортируйте позиции в обратном порядке** при множественном удалении
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 **Ошибка 1: Вызов notify до обновления данных**
 ```kotlin

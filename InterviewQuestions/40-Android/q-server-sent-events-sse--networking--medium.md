@@ -9,6 +9,7 @@ related: [q-recyclerview-explained--android--medium, q-recyclerview-viewtypes-de
 created: 2025-10-15
 tags: [sse, server-sent-events, real-time, streaming, comparison, difficulty/medium]
 ---
+
 # Server-Sent Events (SSE) / Server-Sent Events (SSE)
 
 **English**: Implement Server-Sent Events (SSE) for real-time updates. Compare with WebSockets for different use cases with decision matrix.

@@ -9,6 +9,7 @@ related: [q-design-whatsapp-app--android--hard, q-retrofit-modify-all-requests--
 created: 2025-10-15
 tags: [privacy-sandbox, fledge, protected-audience, remarketing, privacy, advertising, difficulty/hard]
 ---
+
 # Privacy Sandbox: FLEDGE (Protected Audience API) and On-Device Auctions
 
 # Вопрос (RU)

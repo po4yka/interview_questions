@@ -1,33 +1,30 @@
 ---
 id: 20251021-150000
 title: Custom View Accessibility / Доступность Custom View
-aliases:
-- Custom View Accessibility
-- Доступность Custom View
+aliases: [Custom View Accessibility, Доступность Custom View]
 topic: android
 subtopics:
-- ui-views
-- ui-accessibility
+  - ui-accessibility
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compose-semantics--android--medium
-- q-accessibility-talkback--android--medium
-- q-accessibility-compose--android--medium
+  - q-accessibility-compose--android--medium
+  - q-accessibility-talkback--android--medium
+  - q-compose-semantics--android--medium
 created: 2025-10-21
 updated: 2025-10-21
-tags:
-- android/ui-views
-- android/ui-accessibility
-- difficulty/medium
+tags: [android/ui-accessibility, android/ui-views, difficulty/medium]
 source: https://developer.android.com/guide/topics/ui/accessibility
 source_note: Official accessibility guide
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:26 pm
 ---
 
 # Вопрос (RU)

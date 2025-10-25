@@ -1,31 +1,28 @@
 ---
 id: 20251017-115547
 title: Compose Lazy Layout Optimization / Оптимизация Lazy‑layout в Compose
-aliases:
-- Compose Lazy Layout Optimization
-- Оптимизация Lazy‑layout в Compose
+aliases: [Compose Lazy Layout Optimization, Оптимизация Lazy‑layout в Compose]
 topic: android
 subtopics:
-- ui-compose
-- performance-memory
+  - performance-memory
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-performance-measurement-tools--android--medium
-- q-compose-compiler-plugin--android--hard
-- q-compose-custom-layout--android--hard
+  - q-android-performance-measurement-tools--android--medium
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-custom-layout--android--hard
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/performance-memory
-- difficulty/hard
+tags: [android/performance-memory, android/ui-compose, difficulty/hard]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:39 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +39,7 @@ tags:
 
 ## Answer (EN)
 
-### Core principles
+### Core Principles
 - Stable keys: ensure identity across updates (`key = item.id`)
 - Hoist state: keep per‑item state outside items or keyed by stable id
 - Avoid capturing changing lambdas/state in item scope; use `rememberUpdatedState`
@@ -50,7 +47,7 @@ tags:
 - Avoid nested scroll/layout thrash; constrain measure work; reuse shapes/brushes
 - Leverages [[c-data-structures]] like hash maps for efficient item lookup and [[c-algorithms]] for scroll optimization
 
-### Minimal patterns
+### Minimal Patterns
 
 Stable keys and no recomposition captures:
 ```kotlin
@@ -95,7 +92,7 @@ fun PriceTag(price: BigDecimal) {
 }
 ```
 
-### Measurement/perf tips
+### Measurement/perf Tips
 - Avoid costly intrinsics; provide fixed sizes where possible
 - Reuse `Brush`, `Shape`, `Painter`; avoid recreating per item
 - Use `mutableStateListOf`/snapshot state collections with stable keys

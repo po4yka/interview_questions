@@ -9,6 +9,7 @@ tags: [android/memory-management, debugging, leakcanary, memory-leaks, memory-ma
 moc: moc-android
 related: [q-recyclerview-itemdecoration-advanced--android--medium, q-kmm-ktor-networking--multiplatform--medium, q-koin-scope-management--dependency-injection--medium]
 ---
+
 # Как LeakCanary понимает что произошла утечка памяти?
 
 **English**: How does LeakCanary understand that a memory leak occurred?

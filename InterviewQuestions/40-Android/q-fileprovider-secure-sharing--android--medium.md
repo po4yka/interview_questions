@@ -1,9 +1,7 @@
 ---
 id: 20251020-200800
 title: FileProvider for Secure File Sharing / FileProvider для безопасного обмена файлами
-aliases:
-  - FileProvider for Secure File Sharing
-  - FileProvider для безопасного обмена файлами
+aliases: [FileProvider for Secure File Sharing, FileProvider для безопасного обмена файлами]
 topic: android
 subtopics:
   - files-media
@@ -24,14 +22,9 @@ related:
   - q-file-storage-android--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-  - android/files-media
-  - android/permissions
-  - fileprovider
-  - content-provider
-  - file-sharing
-  - security
-  - difficulty/medium
+tags: [android/files-media, android/permissions, content-provider, difficulty/medium, file-sharing, fileprovider, security]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:00 pm
 ---
 
 # Вопрос (RU)
@@ -45,7 +38,7 @@ tags:
 
 FileProvider - специальный подкласс ContentProvider для безопасного обмена файлами через content:// URI вместо file:// URI. Обеспечивает временные разрешения доступа и безопасность.
 
-### Основные концепции
+### Основные Концепции
 
 **1. Проблема file:// URI**
 - Проблема: file:// URI требует изменения системных разрешений файлов

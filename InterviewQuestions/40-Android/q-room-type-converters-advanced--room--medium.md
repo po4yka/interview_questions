@@ -9,6 +9,7 @@ related: [q-how-to-animate-adding-removing-items-in-recyclerview--android--mediu
 created: 2025-10-15
 tags: [database, type-converters, serialization, json, performance, difficulty/medium]
 ---
+
 # Room Advanced Type Converters / Продвинутые Type Converters в Room
 
 **English**: Implement complex type converters for custom types, enums, and collections. Handle JSON serialization with performance considerations.

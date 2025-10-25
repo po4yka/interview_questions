@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-retrofit-modify-all-requests--android--hard, q-jetpack-compose-lazy-column--android--easy, q-privacy-sandbox-sdk-runtime--privacy--hard]
+related: [q-jetpack-compose-lazy-column--android--easy, q-privacy-sandbox-sdk-runtime--privacy--hard, q-retrofit-modify-all-requests--android--hard]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:40:01 pm
 ---
-# How to catch the earliest entry point into the application?
+
+# How to Catch the Earliest Entry point into the Application?
 
 ## Answer (EN)
 The earliest entry point in an Android application is the `Application.onCreate()` method, which is called before any Activity, Service, or other application components are created. However, ContentProvider initialization happens even earlier.

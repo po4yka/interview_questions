@@ -5,27 +5,30 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [networking-http, websockets, performance-memory]
+subtopics: [networking-http, performance-memory, websockets]
 question_kind: comparison
 difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/networking, android/real-time, android/protocols, android/performance, difficulty/medium]
+language_tags: [android/networking, android/performance, android/protocols, android/real-time, difficulty/medium, en, ru]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [websocket, real-time-updates, networking]
+related: [networking, real-time-updates, websocket]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android/networking-http, android/websockets, android/performance-memory, en, ru, difficulty/medium]
+tags: [android/networking-http, android/performance-memory, android/websockets, difficulty/medium, en, ru]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:09 pm
 ---
+
 # Question (EN)
 > What are the differences between HTTP, Long-Polling, WebSocket, and Server-Sent Events (SSE)? When should each be used?
 # Вопрос (RU)
@@ -608,7 +611,7 @@ SSE позволяет серверам отправлять данные кли
 
 **Когда использовать:** Живые новостные ленты, обновления цен акций, уведомления социальных сетей, панели мониторинга сервера.
 
-### Таблица сравнения
+### Таблица Сравнения
 
 | Характеристика | HTTP | Long-Polling | WebSocket | SSE |
 |----------------|------|--------------|-----------|-----|
@@ -620,7 +623,7 @@ SSE позволяет серверам отправлять данные кли
 | **Бинарные данные** | Да | Да | Да | Нет |
 | **Сложность** | Низкая | Средняя | Высокая | Низкая |
 
-### Матрица решений
+### Матрица Решений
 
 **Используйте HTTP когда:**
 - Простые CRUD операции
@@ -646,7 +649,7 @@ SSE позволяет серверам отправлять данные кли
 - Нужна простота
 - Требуется автоматическое переподключение
 
-### Лучшие практики
+### Лучшие Практики
 
 **Для WebSocket:**
 1. Реализовать экспоненциальную задержку для переподключения
@@ -659,7 +662,7 @@ SSE позволяет серверам отправлять данные кли
 2. Обрабатывать автоматическое переподключение
 3. Реализовать timeout для зависших соединений
 
-### Частые ошибки
+### Частые Ошибки
 
 1. Использование HTTP polling когда лучше WebSocket/SSE
 2. Отсутствие логики переподключения для WebSocket

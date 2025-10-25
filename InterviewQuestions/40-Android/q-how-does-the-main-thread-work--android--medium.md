@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-which-layout-allows-views-to-overlap--android--easy, q-how-does-jetpack-compose-work--android--medium, q-what-is-known-about-view-lifecycles--android--medium]
+related: [q-how-does-jetpack-compose-work--android--medium, q-what-is-known-about-view-lifecycles--android--medium, q-which-layout-allows-views-to-overlap--android--easy]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:40:10 pm
 ---
-# How does the main thread work?
+
+# How Does the Main Thread Work?
 
 ## Answer (EN)
 The main thread (also called UI thread) is the central thread in Android that handles UI rendering, user input events, and component lifecycle callbacks. Understanding how it works is crucial for building responsive applications.
@@ -95,13 +97,13 @@ class MainActivity : AppCompatActivity() {
 
 ### Main Thread Rules
 
-####  Allowed Operations
+#### Allowed Operations
 - UI updates (setText, setVisibility, etc.)
 - View inflation (should be optimized)
 - Short computations (<16ms for 60fps)
 - Lifecycle callbacks
 
-####  Prohibited Operations
+#### Prohibited Operations
 - Network requests
 - Database queries (large datasets)
 - File I/O operations
@@ -214,7 +216,7 @@ class DownloadTask : AsyncTask<String, Int, String>() {
    }
    ```
 
-### Main Thread vs UI Thread
+### Main Thread Vs UI Thread
 
 **They are the same!**
 - Main thread = UI thread

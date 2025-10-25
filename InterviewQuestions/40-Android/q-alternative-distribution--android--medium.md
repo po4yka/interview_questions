@@ -1,31 +1,28 @@
 ---
 id: 20251012-122758
 title: Alternative Distribution / Альтернативное распространение
-aliases:
-- Alternative Distribution
-- Альтернативное распространение
+aliases: [Alternative Distribution, Альтернативное распространение]
 topic: android
 subtopics:
-- app-bundle
-- play-console
+  - app-bundle
+  - play-console
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-app-store-optimization--android--medium
-- q-play-store-publishing--distribution--medium
-- q-android-app-bundles--android--easy
+  - q-android-app-bundles--android--easy
+  - q-app-store-optimization--android--medium
+  - q-play-store-publishing--distribution--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/app-bundle
-- android/play-console
-- difficulty/medium
+tags: [android/app-bundle, android/play-console, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:20 pm
 ---
 
 # Вопрос (RU)

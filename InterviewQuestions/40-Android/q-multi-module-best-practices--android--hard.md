@@ -26,6 +26,7 @@ updated: 2025-10-06
 
 tags: [android/architecture-clean, android/architecture-modularization, android/gradle, en, ru, difficulty/hard]
 ---
+
 # Question (EN)
 > What are best practices for multi-module architecture in Android? When and why to use it?
 # Вопрос (RU)

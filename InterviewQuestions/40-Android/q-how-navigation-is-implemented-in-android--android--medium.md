@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-workmanager-data-passing--android--medium, q-graphql-vs-rest--networking--easy, q-strictmode-debugging--android--medium]
+related: [q-graphql-vs-rest--networking--easy, q-strictmode-debugging--android--medium, q-workmanager-data-passing--android--medium]
 created: 2025-10-15
-tags: [android/navigation, android/ui, gestures, navigation, ui, difficulty/medium]
+tags: [android/navigation, android/ui, difficulty/medium, gestures, navigation, ui]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:40:06 pm
 ---
-# Каким образом осуществляется навигация в Android?
+
+# Каким Образом Осуществляется Навигация В Android?
 
 **English**: How is navigation implemented in Android?
 

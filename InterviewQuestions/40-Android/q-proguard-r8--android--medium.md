@@ -26,6 +26,7 @@ updated: 2025-10-05
 
 tags: [android/gradle, android/performance-memory, android/obfuscation, en, ru, difficulty/medium]
 ---
+
 # Question (EN)
 > What's ProGuard?
 # Вопрос (RU)

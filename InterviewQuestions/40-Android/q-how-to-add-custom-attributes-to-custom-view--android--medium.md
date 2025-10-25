@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-performance-optimization-android--android--medium, q-app-security-best-practices--security--medium, q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy]
+related: [q-app-security-best-practices--security--medium, q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-performance-optimization-android--android--medium]
 created: 2025-10-15
-tags: [languages, difficulty/medium]
+tags: [difficulty/medium, languages]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:40:05 pm
 ---
-# Как добавить кастомные атрибуты у кастомного view?
+
+# Как Добавить Кастомные Атрибуты У Кастомного View?
 
 ## Answer (EN)
 To add custom attributes to a Custom View, you need to: (1) create `attrs.xml` and describe attributes, (2) add them to styleable, (3) retrieve values in Custom View constructor, (4) use attributes in XML or Kotlin.
@@ -407,12 +410,12 @@ class CustomButton @JvmOverloads constructor(
 
 ---
 
-# Как добавить кастомные атрибуты у кастомного view
+# Как Добавить Кастомные Атрибуты У Кастомного view
 
 ## Ответ (RU)
 Чтобы добавить кастомные атрибуты к Custom View, нужно: (1) создать `attrs.xml` и описать атрибуты, (2) добавить их в styleable, (3) получить значения в конструкторе Custom View, (4) использовать атрибуты в XML или Kotlin.
 
-### 1. Определение атрибутов в attrs.xml
+### 1. Определение Атрибутов В attrs.xml
 
 ```xml
 <!-- res/values/attrs.xml -->
@@ -446,7 +449,7 @@ class CustomButton @JvmOverloads constructor(
 </resources>
 ```
 
-### 2. Создание Custom View с атрибутами
+### 2. Создание Custom View С Атрибутами
 
 ```kotlin
 class CircularProgressView @JvmOverloads constructor(
@@ -572,7 +575,7 @@ class CircularProgressView @JvmOverloads constructor(
 }
 ```
 
-### 3. Использование в XML Layout
+### 3. Использование В XML Layout
 
 ```xml
 <LinearLayout
@@ -599,7 +602,7 @@ class CircularProgressView @JvmOverloads constructor(
 </LinearLayout>
 ```
 
-### 4. Различные форматы атрибутов
+### 4. Различные Форматы Атрибутов
 
 ```xml
 <!-- res/values/attrs.xml -->
@@ -647,7 +650,7 @@ class CircularProgressView @JvmOverloads constructor(
 </resources>
 ```
 
-### 5. Чтение различных типов атрибутов
+### 5. Чтение Различных Типов Атрибутов
 
 ```kotlin
 class AdvancedCustomView @JvmOverloads constructor(
@@ -701,7 +704,7 @@ class AdvancedCustomView @JvmOverloads constructor(
 }
 ```
 
-### 6. Программное использование
+### 6. Программное Использование
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -726,7 +729,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 7. Использование атрибутов темы
+### 7. Использование Атрибутов Темы
 
 ```xml
 <!-- Определение в themes.xml -->
@@ -749,7 +752,7 @@ class MainActivity : AppCompatActivity() {
     app:backgroundColor="?attr/colorSurface" />
 ```
 
-### 8. Переиспользование системных атрибутов
+### 8. Переиспользование Системных Атрибутов
 
 ```xml
 <!-- Переиспользование встроенных атрибутов Android -->
@@ -793,7 +796,7 @@ class CustomButton @JvmOverloads constructor(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. - **Всегда переработайте TypedArray** с помощью `typedArray.recycle()`
 2. - **Предоставляйте значения по умолчанию** для всех атрибутов

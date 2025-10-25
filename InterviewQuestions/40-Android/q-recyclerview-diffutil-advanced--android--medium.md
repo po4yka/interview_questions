@@ -9,6 +9,7 @@ related: [q-kmm-production-readiness--multiplatform--hard, q-koin-scope-manageme
 created: 2025-10-15
 tags: [diffutil, performance, lists, difficulty/medium]
 ---
+
 # RecyclerView DiffUtil Advanced
 
 # Question (EN)

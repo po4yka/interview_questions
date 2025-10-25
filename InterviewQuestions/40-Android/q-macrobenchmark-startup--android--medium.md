@@ -31,6 +31,7 @@ updated: 2025-10-11
 
 tags: [en, ru, android/performance, android/macrobenchmark, android/startup, android/optimization, android/profiling, android/perfetto, difficulty/medium]
 ---
+
 # Question (EN)
 > Implement macrobenchmark for app startup. Measure cold, warm, and hot startup times. Use Perfetto traces to identify bottlenecks and optimize based on results.
 

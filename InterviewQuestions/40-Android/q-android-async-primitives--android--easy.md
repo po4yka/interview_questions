@@ -1,30 +1,27 @@
 ---
 id: 20251012-122762
 title: Android Async Primitives / Примитивы асинхронности Android
-aliases:
-- Android Async Primitives
-- Примитивы асинхронности Android
+aliases: [Android Async Primitives, Примитивы асинхронности Android]
 topic: android
 subtopics:
-- coroutines
-- threads-sync
+  - coroutines
+  - threads-sync
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-coroutine-builders-basics--kotlin--easy
-- q-viewmodel-pattern--android--easy
+  - q-coroutine-builders-basics--kotlin--easy
+  - q-viewmodel-pattern--android--easy
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/coroutines
-- android/threads-sync
-- difficulty/easy
+tags: [android/coroutines, android/threads-sync, difficulty/easy]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:53:17 pm
 ---
 
 # Вопрос (RU)

@@ -1,32 +1,29 @@
 ---
 id: 20251020-190000
 title: Compose Testing / Тестирование Compose
-aliases:
-- Compose Testing
-- Тестирование Compose
+aliases: [Compose Testing, Тестирование Compose]
 topic: android
 subtopics:
-- ui-compose
-- testing-unit
+  - testing-unit
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compose-performance-optimization--android--hard
-- q-compose-semantics--android--medium
+  - q-compose-performance-optimization--android--hard
+  - q-compose-semantics--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/testing-unit
-- difficulty/medium
+tags: [android/testing-unit, android/ui-compose, difficulty/medium]
 source: https://developer.android.com/jetpack/compose/testing
 source_note: Official Compose testing documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:29 pm
 ---
 
 # Вопрос (RU)

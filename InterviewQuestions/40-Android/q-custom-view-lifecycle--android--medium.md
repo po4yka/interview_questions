@@ -1,32 +1,29 @@
 ---
 id: 20251021-180000
 title: Custom View Lifecycle / Жизненный цикл Custom View
-aliases:
-- Custom View Lifecycle
-- Жизненный цикл Custom View
+aliases: [Custom View Lifecycle, Жизненный цикл Custom View]
 topic: android
 subtopics:
-- ui-views
-- lifecycle
+  - lifecycle
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-activity-lifecycle-methods--android--medium
-- q-performance-optimization-android--android--medium
+  - q-activity-lifecycle-methods--android--medium
+  - q-performance-optimization-android--android--medium
 created: 2025-10-21
 updated: 2025-10-21
-tags:
-- android/ui-views
-- android/lifecycle
-- difficulty/medium
+tags: [android/lifecycle, android/ui-views, difficulty/medium]
 source: https://developer.android.com/guide/topics/ui/custom-components
 source_note: Official custom components guide
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:22 pm
 ---
 
 # Вопрос (RU)

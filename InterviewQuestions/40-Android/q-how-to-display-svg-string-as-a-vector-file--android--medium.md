@@ -7,9 +7,12 @@ status: draft
 moc: moc-android
 related: [q-in-what-cases-might-you-need-to-call-commitallowingstateloss--android--hard, q-repository-multiple-sources--android--medium, q-what-does-the-lifecycle-library-do--android--medium]
 created: 2025-10-15
-tags: [image loading, file handling, android, ui, image-loading, difficulty/medium]
+tags: [android, difficulty/medium, file handling, image loading, image-loading, ui]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:39:50 pm
 ---
-# How to display SVG string as a vector file?
+
+# How to Display SVG String as a Vector File?
 
 # Вопрос (RU)
 
@@ -460,7 +463,7 @@ class SvgNetworkActivity : AppCompatActivity() {
 
 Существует несколько подходов к отображению SVG-строки как векторного изображения в Android. Методы варьируются от использования специализированных библиотек до преобразования SVG в нативные Android vector drawables.
 
-### 1. Использование библиотеки AndroidSVG
+### 1. Использование Библиотеки AndroidSVG
 
 Наиболее прямой подход для работы с SVG-строками.
 
@@ -497,7 +500,7 @@ class SvgActivity : AppCompatActivity() {
 }
 ```
 
-### 2. Использование Coil с SVG декодером
+### 2. Использование Coil С SVG Декодером
 
 Современная библиотека загрузки изображений с поддержкой SVG.
 
@@ -539,7 +542,7 @@ class CoilSvgActivity : AppCompatActivity() {
 }
 ```
 
-### 3. Использование Glide с SVG модулем
+### 3. Использование Glide С SVG Модулем
 
 ```kotlin
 // Добавить зависимости
@@ -579,7 +582,7 @@ class GlideSvgActivity : AppCompatActivity() {
 }
 ```
 
-### 4. Сохранение в файл и загрузка
+### 4. Сохранение В Файл И Загрузка
 
 ```kotlin
 class SvgFileActivity : AppCompatActivity() {
@@ -609,7 +612,7 @@ class SvgFileActivity : AppCompatActivity() {
 }
 ```
 
-### 5. Преобразование SVG в Bitmap
+### 5. Преобразование SVG В Bitmap
 
 ```kotlin
 class SvgToBitmapConverter {
@@ -639,7 +642,7 @@ class SvgToBitmapConverter {
 }
 ```
 
-### 6. Пользовательский Drawable из SVG строки
+### 6. Пользовательский Drawable Из SVG Строки
 
 ```kotlin
 class SvgDrawable(private val svgString: String) : Drawable() {
@@ -670,7 +673,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 }
 ```
 
-### 7. Jetpack Compose реализация
+### 7. Jetpack Compose Реализация
 
 ```kotlin
 // Использование Coil в Compose
@@ -724,7 +727,7 @@ fun SvgFromString(svgString: String, modifier: Modifier = Modifier) {
 }
 ```
 
-### 8. Загрузка SVG из сети
+### 8. Загрузка SVG Из Сети
 
 ```kotlin
 class NetworkSvgLoader(private val context: Context) {
@@ -756,7 +759,7 @@ class NetworkSvgLoader(private val context: Context) {
 }
 ```
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Подход | Преимущества | Недостатки | Лучше всего для |
 |--------|--------------|------------|-----------------|
@@ -766,7 +769,7 @@ class NetworkSvgLoader(private val context: Context) {
 | Файловый подход | Стандартный подход | Накладные расходы на I/O | Большие SVG |
 | Преобразование в Bitmap | Совместимо везде | Интенсивное использование памяти | Статические изображения |
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте AndroidSVG** для простого отображения SVG строк
 2. **Используйте Coil** для современных приложений с сетевыми SVG

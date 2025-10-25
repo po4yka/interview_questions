@@ -9,6 +9,7 @@ related: [q-reduce-apk-size-techniques--android--medium, q-mvvm-pattern--android
 created: 2025-10-15
 tags: [android/performance, android/ui, animations, images, layouts, main-thread, optimization, performance, threading, ui, difficulty/medium]
 ---
+
 # Какие основные причины торможения UI?
 
 **English**: What are the main causes of UI lag?

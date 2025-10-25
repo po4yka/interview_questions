@@ -5,27 +5,30 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [files-media, cache-offline, performance-memory]
+subtopics: [cache-offline, files-media, performance-memory]
 question_kind: explanation
 difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/glide, android/image-loading, android/caching, android/memory-management, difficulty/medium]
+language_tags: [android/caching, android/glide, android/image-loading, android/memory-management, difficulty/medium, en, ru]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
 
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [bitmap-handling, caching, memory-optimization, glide]
+related: [bitmap-handling, caching, glide, memory-optimization]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android/files-media, android/cache-offline, android/performance-memory, en, ru, difficulty/medium]
+tags: [android/cache-offline, android/files-media, android/performance-memory, difficulty/medium, en, ru]
+date created: Saturday, October 25th 2025, 1:26:31 pm
+date modified: Saturday, October 25th 2025, 4:47:06 pm
 ---
+
 # Question (EN)
 > How do image loading libraries like Glide/Fresco work internally?
 # Вопрос (RU)
@@ -333,7 +336,7 @@ Glide.with(context) // Lifecycle-aware
 Библиотеки загрузки изображений, такие как Glide, Fresco и Coil, решают сложные задачи, связанные с эффективной загрузкой, кэшированием и отображением изображений в Android-приложениях.
 
 
-### Основные компоненты
+### Основные Компоненты
 
 1. **Memory Cache** - LruCache для быстрого доступа
 2. **Disk Cache** - Кэш на диске
@@ -341,7 +344,7 @@ Glide.with(context) // Lifecycle-aware
 4. **Request Manager** - Управление жизненным циклом
 5. **Transformation Engine** - Преобразование изображений
 
-### Pipeline загрузки
+### Pipeline Загрузки
 
 1. Проверка memory cache
 2. Проверка active resources
@@ -350,7 +353,7 @@ Glide.with(context) // Lifecycle-aware
 5. Сохранение в кэши
 6. Отображение
 
-### Лучшие практики
+### Лучшие Практики
 
 - Автоматическое управление жизненным циклом
 - Дедупликация запросов

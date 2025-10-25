@@ -9,6 +9,7 @@ related: [q-how-does-jetpackcompose-work--android--medium, q-play-app-signing--a
 created: 2025-10-15
 tags: [Kotlin, ReactNative, Multiplatform, JavaScript, difficulty/medium]
 ---
+
 # KMM vs React Native - Technical Comparison
 
 # Question (EN)

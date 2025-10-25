@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-multi-module-best-practices--android--hard, q-android-storage-types--android--medium, q-which-event-is-triggered-when-user-presses-screen--android--medium]
+related: [q-android-storage-types--android--medium, q-multi-module-best-practices--android--hard, q-which-event-is-triggered-when-user-presses-screen--android--medium]
 created: 2025-10-15
-tags: [intent, fileprovider, bitmap, image-processing, difficulty/medium]
+tags: [bitmap, difficulty/medium, fileprovider, image-processing, intent]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:21 pm
 ---
-# How to pass a photo to an editor?
+
+# How to Pass a Photo to an Editor?
 
 **Russian**: Как бы передавал фотографию в редактор
 
@@ -456,7 +459,7 @@ intent.putExtra("uri", uri.toString())
 
 Передача фото в редактор зависит от того, является ли он внешним приложением или встроенным редактором.
 
-### 1. Внешний редактор (Другое приложение)
+### 1. Внешний Редактор (Другое приложение)
 
 Используйте Intent с `ACTION_EDIT`:
 
@@ -476,7 +479,7 @@ fun openPhotoInExternalEditor(context: Context, photoUri: Uri) {
 }
 ```
 
-### 2. Внутренний редактор (Ваше приложение)
+### 2. Внутренний Редактор (Ваше приложение)
 
 **Метод A: Передача URI через Intent**
 
@@ -490,7 +493,7 @@ fun openPhotoInExternalEditor(context: Context, photoUri: Uri) {
 
 Сохраните bitmap во временный файл в cache директории, затем передайте URI файла через Intent.
 
-### 3. Полный пример с FileProvider
+### 3. Полный Пример С FileProvider
 
 Для безопасной передачи файлов между компонентами используйте FileProvider:
 
@@ -516,7 +519,7 @@ fun openPhotoInExternalEditor(context: Context, photoUri: Uri) {
 </paths>
 ```
 
-### 4. PhotoManager класс
+### 4. PhotoManager Класс
 
 Создайте централизованный класс для управления фотографиями:
 
@@ -592,7 +595,7 @@ class PhotoEditorActivity : AppCompatActivity() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте FileProvider** для Android 7.0+ (API 24+)
 2. **Предоставляйте разрешения URI** при обмене с внешними приложениями
@@ -602,7 +605,7 @@ class PhotoEditorActivity : AppCompatActivity() {
 6. **Обрабатывайте ошибки корректно** - проверяйте существование редактора
 7. **Сохраняйте в подходящее место** - cache для временных, files для постоянных
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 ```kotlin
 // ✗ ПЛОХО: Большой bitmap через Intent

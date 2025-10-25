@@ -9,6 +9,7 @@ tags: [android, android/navigation, architecture, compose, fragment, jetpack, na
 moc: moc-android
 related: [q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium, q-how-to-draw-ui-without-xml--android--easy, q-app-startup-optimization--performance--medium]
 ---
+
 # Какие способы навигации знаешь?
 
 **English**: What navigation methods do you know?

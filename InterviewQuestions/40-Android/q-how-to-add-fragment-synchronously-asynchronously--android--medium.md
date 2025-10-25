@@ -7,9 +7,12 @@ status: draft
 moc: moc-android
 related: [q-how-does-jetpackcompose-work--android--medium, q-play-app-signing--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium]
 created: 2025-10-15
-tags: [fragment, fragment-transaction, difficulty/medium]
+tags: [difficulty/medium, fragment, fragment-transaction]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:40:04 pm
 ---
-# How to add fragment synchronously/asynchronously?
+
+# How to Add Fragment synchronously/asynchronously?
 
 ## EN (expanded)
 

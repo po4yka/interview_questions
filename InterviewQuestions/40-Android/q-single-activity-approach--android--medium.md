@@ -9,6 +9,7 @@ related: [q-service-restrictions-why--android--medium, q-fakes-vs-mocks-testing-
 created: 2025-10-15
 tags: [android, android/activity, android/fragment, android/ui-navigation, fragment, jetpack-navigation-component, platform/android, ui-navigation, difficulty/medium]
 ---
+
 # Что означает в Android-разработке подход Single Activity?
 
 **English**: What does the Single Activity approach mean in Android development?

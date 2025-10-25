@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-multi-module-best-practices--android--hard, q-retrofit-library--android--medium, q-react-native-comparison--multiplatform--medium]
+related: [q-multi-module-best-practices--android--hard, q-react-native-comparison--multiplatform--medium, q-retrofit-library--android--medium]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:05 pm
 ---
-# In which thread does a regular service run
+
+# In Which Thread Does a Regular Service Run
 
 ## Answer (EN)
 **A regular Service runs in the main thread (UI thread) by default**, not in a separate background thread. This is a common misconception. Services do not automatically run on background threads.

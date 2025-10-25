@@ -5,10 +5,13 @@ topic: android
 difficulty: easy
 status: draft
 moc: moc-android
-related: [q-room-transactions-dao--room--medium, q-android-runtime-art--android--medium, q-large-file-upload--android--medium]
+related: [q-android-runtime-art--android--medium, q-large-file-upload--android--medium, q-room-transactions-dao--room--medium]
 created: 2025-10-15
-tags: [gradle, build-system, dependencies, difficulty/easy]
+tags: [build-system, dependencies, difficulty/easy, gradle]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:47:05 pm
 ---
+
 # Gradle Basics
 
 **English**: What is Gradle? Explain project vs module build.gradle files, dependencies, build variants, and common Gradle tasks.
@@ -154,7 +157,7 @@ productFlavors {
 
 **Gradle** — это инструмент автоматизации сборки для Android, который компилирует код, управляет зависимостями и создает APK/AAB файлы.
 
-### Структура проекта
+### Структура Проекта
 
 ```
 MyApp/
@@ -228,7 +231,7 @@ testImplementation("junit:junit:4.13.2")
 androidTestImplementation("androidx.test:core:1.5.0")
 ```
 
-### Варианты сборки
+### Варианты Сборки
 
 ```kotlin
 buildTypes {
@@ -264,7 +267,7 @@ productFlavors {
 // Генерирует: freeDebug, freeRelease, paidDebug, paidRelease
 ```
 
-### Основные задачи Gradle
+### Основные Задачи Gradle
 
 ```bash
 # Собрать APK
@@ -295,7 +298,7 @@ dependencies {
 }
 ```
 
-### Варианты сборки
+### Варианты Сборки
 
 ```kotlin
 buildTypes {

@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-how-application-priority-is-determined-by-the-system--android--hard, q-compose-custom-animations--jetpack-compose--medium, q-clean-architecture-android--android--hard]
+related: [q-clean-architecture-android--android--hard, q-compose-custom-animations--jetpack-compose--medium, q-how-application-priority-is-determined-by-the-system--android--hard]
 created: 2025-10-15
-tags: [UI Optimization, android, ui, jetpack-compose, performance, difficulty/medium]
+tags: [android, difficulty/medium, jetpack-compose, performance, ui, UI Optimization]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:20 pm
 ---
-# How to reduce the number of recompositions besides side-effects?
+
+# How to Reduce the Number of Recompositions besides Side-effects?
 
 # Вопрос (RU)
 
@@ -18,7 +21,7 @@ tags: [UI Optimization, android, ui, jetpack-compose, performance, difficulty/me
 ## Answer (EN)
 Reducing recompositions in Jetpack Compose improves performance. Besides side effects, use `remember`, `derivedStateOf`, `key`, stable data classes, immutable collections, and proper state management.
 
-### 1. Use remember for Expensive Calculations
+### 1. Use Remember for Expensive Calculations
 
 ```kotlin
 @Composable
@@ -340,7 +343,7 @@ fun RecompositionCounter() {
 
 Уменьшение количества рекомпозиций в Jetpack Compose улучшает производительность. Помимо side effects, используйте `remember`, `derivedStateOf`, `key`, стабильные data классы, immutable коллекции и правильное управление состоянием.
 
-### Основные техники оптимизации
+### Основные Техники Оптимизации
 
 **1. remember для дорогих вычислений** - кэширует результаты и пересчитывает только при изменении зависимостей.
 
@@ -358,7 +361,7 @@ fun RecompositionCounter() {
 
 **8. Минимизация чтений состояния** - читайте состояние только в тех composable, которые действительно должны реагировать на изменения.
 
-### Практические рекомендации
+### Практические Рекомендации
 
 - Используйте `rememberSaveable` для состояния, которое должно пережить конфигурационные изменения
 - Применяйте ленивую инициализацию с `remember` для дорогих объектов

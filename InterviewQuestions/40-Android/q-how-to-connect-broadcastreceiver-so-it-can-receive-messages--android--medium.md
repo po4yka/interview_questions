@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-state-hoisting-compose--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium, q-memory-leak-vs-oom-android--android--medium]
+related: [q-memory-leak-vs-oom-android--android--medium, q-state-hoisting-compose--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:39:57 pm
 ---
-# How to connect BroadcastReceiver so it can receive messages?
+
+# How to Connect BroadcastReceiver so it Can Receive Messages?
 
 ## Answer (EN)
 BroadcastReceiver can be registered in two ways: statically in AndroidManifest.xml or dynamically in code. Each method has different use cases and lifecycle behaviors.
@@ -323,7 +325,7 @@ fun sendOrderedBroadcast() {
 }
 ```
 
-### Exported vs Not Exported
+### Exported Vs Not Exported
 
 ```xml
 <!-- Receives broadcasts from other apps -->

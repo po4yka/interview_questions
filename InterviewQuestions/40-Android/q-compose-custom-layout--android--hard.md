@@ -1,31 +1,28 @@
 ---
 id: 20251012-122804
 title: Compose Custom Layout / Кастомный layout в Compose
-aliases:
-- Compose Custom Layout
-- Кастомный layout в Compose
+aliases: [Compose Custom Layout, Кастомный layout в Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-views
+  - ui-compose
+  - ui-views
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compose-compiler-plugin--android--hard
-- q-compose-canvas-graphics--android--hard
-- q-android-performance-measurement-tools--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-compose-canvas-graphics--android--hard
+  - q-compose-compiler-plugin--android--hard
 created: 2025-10-11
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/ui-views
-- difficulty/hard
+tags: [android/ui-compose, android/ui-views, difficulty/hard]
+date created: Saturday, October 25th 2025, 1:26:31 pm
+date modified: Saturday, October 25th 2025, 4:52:40 pm
 ---
 
 # Вопрос (RU)
@@ -42,14 +39,14 @@ tags:
 
 ## Answer (EN)
 
-### Core concepts
+### Core Concepts
 - Constraints: min/max width/height from parent; all measuring/placement must respect them
 - MeasurePolicy: measure children → compute layout size → place children
 - Intrinsics: optional size hints for pre‑measurement (text wrap, etc.)
 - Performance: no allocation in measure/place; reuse arrays/positions; stable params
 - Uses [[c-algorithms]] for layout calculations and [[c-data-structures]] for efficient measurement
 
-### Minimal custom Layout
+### Minimal Custom Layout
 ```kotlin
 @Composable
 fun TwoColumn(modifier: Modifier = Modifier, gap: Int = 8, content: @Composable () -> Unit) {

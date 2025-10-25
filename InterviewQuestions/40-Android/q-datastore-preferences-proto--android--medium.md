@@ -1,35 +1,29 @@
 ---
 id: 20251020-200000
 title: Datastore Preferences Proto / DataStore Preferences Proto
-aliases:
-- Datastore Preferences Proto
-- DataStore Preferences Proto
+aliases: [Datastore Preferences Proto, DataStore Preferences Proto]
 topic: android
 subtopics:
-- datastore
+  - datastore
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-shared-preferences-android--android--easy
-- q-room-database-basics--android--easy
-- q-android-storage-types--android--medium
+  - q-android-storage-types--android--medium
+  - q-room-database-basics--android--easy
+  - q-shared-preferences-android--android--easy
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/datastore
-- datastore
-- preferences
-- proto-datastore
-- storage
-- difficulty/medium
+tags: [android/datastore, datastore, difficulty/medium, preferences, proto-datastore, storage]
 source: https://developer.android.com/topic/libraries/architecture/datastore
 source_note: Android DataStore documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:10 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +36,7 @@ source_note: Android DataStore documentation
 
 Jetpack DataStore - это решение для хранения данных, которое позволяет хранить пары ключ-значение или типизированные объекты с протокольными буферами. DataStore использует Kotlin корутины и Flow для асинхронного, последовательного и транзакционного хранения данных.
 
-### Теория: DataStore в Android
+### Теория: DataStore В Android
 
 **Основные концепции:**
 - **DataStore** - современная замена SharedPreferences
@@ -58,7 +52,7 @@ Jetpack DataStore - это решение для хранения данных, 
 - Типизация обеспечивает безопасность типов
 - Миграция данных из SharedPreferences
 
-### Preferences DataStore vs Proto DataStore
+### Preferences DataStore Vs Proto DataStore
 
 **Сравнение реализаций:**
 
@@ -159,7 +153,7 @@ suspend fun updateUserName(newName: String) {
 }
 ```
 
-### Миграция из SharedPreferences
+### Миграция Из SharedPreferences
 
 **Теоретические основы:**
 DataStore предоставляет инструменты для миграции данных из SharedPreferences. Это обеспечивает плавный переход без потери пользовательских данных.
@@ -190,7 +184,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 - Поддержка миграций
 - Интеграция с архитектурными компонентами
 
-### Лучшие практики
+### Лучшие Практики
 
 **Теоретические принципы:**
 - Используйте Preferences DataStore для простых настроек
@@ -226,7 +220,7 @@ Jetpack DataStore is a data storage solution that allows you to store key-value 
 - Typing provides type safety
 - Data migration from SharedPreferences
 
-### Preferences DataStore vs Proto DataStore
+### Preferences DataStore Vs Proto DataStore
 
 **Implementation Comparison:**
 

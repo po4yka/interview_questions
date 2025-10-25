@@ -7,10 +7,12 @@ status: draft
 moc: moc-android
 related: [q-cicd-deployment-automation--devops--medium, q-how-is-navigation-implemented--android--medium, q-mlkit-text-recognition--ml--medium]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:24 pm
 ---
-# How to pass data from one Activity to another?
+
+# How to Pass Data from One Activity to Another?
 
 ## Answer (EN)
 Data can be passed between Activities in Android using several methods, with Intent extras being the most common approach.

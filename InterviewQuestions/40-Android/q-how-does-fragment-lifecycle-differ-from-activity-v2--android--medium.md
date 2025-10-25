@@ -7,10 +7,12 @@ status: draft
 moc: moc-android
 related: [q-android-project-parts--android--easy, q-how-to-add-custom-attributes-to-custom-view--android--medium, q-workmanager-return-result--android--medium]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:40:12 pm
 ---
-# How does Fragment lifecycle differ from Activity?
+
+# How Does Fragment Lifecycle Differ from Activity?
 
 ## Answer (EN)
 Fragment lifecycle is more complex than Activity lifecycle because **Fragments have additional lifecycle states related to their View and their attachment to an Activity**. Fragments have 11 lifecycle callbacks compared to Activity's 7.

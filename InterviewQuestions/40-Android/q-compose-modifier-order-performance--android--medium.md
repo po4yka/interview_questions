@@ -1,31 +1,28 @@
 ---
 id: 20251012-122710
 title: Compose Modifier Order Performance / Порядок модификаторов и производительность
-aliases:
-- Compose Modifier Order Performance
-- Порядок модификаторов и производительность Compose
+aliases: [Compose Modifier Order Performance, Порядок модификаторов и производительность Compose]
 topic: android
 subtopics:
-- ui-compose
-- performance-memory
+  - performance-memory
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compose-gesture-detection--android--medium
-- q-compose-compiler-plugin--android--hard
-- q-compose-custom-layout--android--hard
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-custom-layout--android--hard
+  - q-compose-gesture-detection--android--medium
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/performance-memory
-- difficulty/medium
+tags: [android/performance-memory, android/ui-compose, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:39 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +39,7 @@ tags:
 
 ## Answer (EN)
 
-### Core rules
+### Core Rules
 - Order changes constraints and draw: size/padding/layout run top→bottom; draw runs bottom→top.
 - Apply size/constraints early; avoid re‑measuring work later in the chain.
 - Padding vs background: order changes what area is drawn/padded.
@@ -50,7 +47,7 @@ tags:
 - Reuse modifier chains; avoid building different chains conditionally; prefer `.then(...)`.
 - Prefer draw‑only modifiers over layout when possible; remember expensive objects.
 
-### Minimal patterns
+### Minimal Patterns
 
 Padding vs background
 ```kotlin
@@ -102,7 +99,7 @@ fun PriceTag(amount: BigDecimal) {
 }
 ```
 
-### Measurement and profiling
+### Measurement and Profiling
 - Prefer fixed sizes over intrinsics; avoid deep nested modifiers.
 - Reuse `Brush/Shape/Painter`; do not allocate per frame/item.
 - Inspect with Layout Inspector; record with Perfetto; watch recomposition counts.

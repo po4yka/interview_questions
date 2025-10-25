@@ -9,6 +9,7 @@ related: [q-what-does-viewgroup-inherit-from--android--easy, q-what-is-known-abo
 created: 2025-10-15
 tags: [jetpack-compose, migration, xml-to-compose, architecture, difficulty/medium]
 ---
+
 # Стратегия миграции большого проекта на Jetpack Compose
 
 **English**: Migration strategy for large project to Jetpack Compose

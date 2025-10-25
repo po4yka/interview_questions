@@ -7,10 +7,12 @@ status: draft
 moc: moc-android
 related: [q-custom-view-lifecycle--custom-views--medium, q-lazy-grid-staggered-grid--jetpack-compose--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
 created: 2025-10-15
-tags: [Kotlin, Flutter, Multiplatform, Comparison, difficulty/medium]
+tags: [Comparison, difficulty/medium, Flutter, Kotlin, Multiplatform]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:48:42 pm
 ---
 
-# KMM vs Flutter - Trade-offs and Decision Making
+# KMM Vs Flutter - Trade-offs and Decision Making
 
 # Question (EN)
 
@@ -538,7 +540,7 @@ KMM Advantage:
  Familiar to platform users
 ```
 
-2. **Existing Native Apps**
+1. **Existing Native Apps**
 
 ```kotlin
 // Gradual migration scenario
@@ -562,7 +564,7 @@ KMM Advantage:
  No UI rewrite needed
 ```
 
-3. **Performance-Critical Apps**
+1. **Performance-Critical Apps**
 
 ```kotlin
 // Games, media processing, AR/VR
@@ -602,7 +604,7 @@ Flutter Advantage:
  Smaller team needed
 ```
 
-2. **Consistent Brand Experience**
+1. **Consistent Brand Experience**
 
 ```dart
 // Custom-designed apps
@@ -621,7 +623,7 @@ Flutter Advantage:
  No platform UI constraints
 ```
 
-3. **Multi-Platform Beyond Mobile**
+1. **Multi-Platform Beyond Mobile**
 
 ```dart
 // Web, Desktop, Mobile
@@ -816,7 +818,7 @@ Flutter:
 
 KMM и Flutter представляют фундаментально разные подходы к кросс-платформенной разработке, каждый с уникальными преимуществами, компромиссами и идеальными use cases.
 
-#### Архитектурное сравнение
+#### Архитектурное Сравнение
 
 **KMM**:
 

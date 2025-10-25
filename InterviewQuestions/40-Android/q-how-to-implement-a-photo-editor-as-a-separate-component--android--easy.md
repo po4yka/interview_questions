@@ -5,11 +5,14 @@ topic: android
 difficulty: easy
 status: draft
 moc: moc-android
-related: [q-workmanager-vs-alternatives--background--medium, q-compose-custom-layout--jetpack-compose--hard, q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium]
+related: [q-compose-custom-layout--jetpack-compose--hard, q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium, q-workmanager-vs-alternatives--background--medium]
 created: 2025-10-15
-tags: [android, android/fragments, android/views, bitmap, canvas, fragment, fragments, imageview, ui, views, difficulty/easy]
+tags: [android, android/fragments, android/views, bitmap, canvas, difficulty/easy, fragment, fragments, imageview, ui, views]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:26 pm
 ---
-# Как реализовать редактор фотографий в качестве отдельного компонента?
+
+# Как Реализовать Редактор Фотографий В Качестве Отдельного Компонента?
 
 **English**: How to implement a photo editor as a separate component?
 

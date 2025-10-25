@@ -2,37 +2,31 @@
 id: 20251020-200200
 title: Does State Made In Compose Help Avoid Race Condition / Помогает ли State в
   Compose избежать состояния гонки
-aliases:
-- Does State Made In Compose Help Avoid Race Condition
-- Помогает ли State в Compose избежать состояния гонки
+aliases: [Does State Made In Compose Help Avoid Race Condition, Помогает ли State в Compose избежать состояния гонки]
 topic: android
 subtopics:
-- ui-compose
-- ui-state
+  - ui-compose
+  - ui-state
 
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: https://developer.android.com/jetpack/compose/state
 source_note: Android Compose state management documentation
 status: draft
 moc: moc-android
 related:
-- q-derived-state-snapshot-system--android--hard
-- q-compose-state-management--android--medium
-- q-android-performance-optimization--android--medium
+  - q-android-performance-optimization--android--medium
+  - q-compose-state-management--android--medium
+  - q-derived-state-snapshot-system--android--hard
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-  - android/ui-compose
-  - android/ui-state
-  - compose
-  - state
-  - concurrency
-  - difficulty/medium
+tags: [android/ui-compose, android/ui-state, compose, concurrency, difficulty/medium, state]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:06 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +40,7 @@ tags:
 
 **Нет**, `MutableState` в Compose не гарантирует thread safety. При одновременном изменении состояния несколькими потоками возникают race conditions.
 
-### Основные проблемы
+### Основные Проблемы
 
 **1. MutableState не thread-safe**
 - Проблема: одновременные изменения из разных потоков
@@ -191,7 +185,7 @@ fun SafeSnapshotUsage() {
 - Использовать ViewModel для shared state
 - Избегать прямых изменений state из background threads
 
-### Решения для thread safety
+### Решения Для Thread Safety
 
 **1. Coroutines с Main Dispatcher**
 ```kotlin

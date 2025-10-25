@@ -9,6 +9,7 @@ related: [q-multithreading-tools-android--android--medium, q-push-notification-n
 created: 2025-10-15
 tags: [android/jetpack-compose, android/performance, annotations, jetpack-compose, optimization, performance, recomposition, stability, stable-annotation, difficulty/hard]
 ---
+
 # Что известно про stable?
 
 **English**: What is known about @Stable?

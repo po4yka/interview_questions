@@ -9,6 +9,7 @@ related: [q-room-transactions-dao--room--medium, q-android-runtime-art--android-
 created: 2025-10-15
 tags: [android/data-storage, comparison, database, orm, room, sqlite, difficulty/medium]
 ---
+
 # В чем разница между Room & SQLite?
 
 **English**: What is the difference between Room and SQLite?

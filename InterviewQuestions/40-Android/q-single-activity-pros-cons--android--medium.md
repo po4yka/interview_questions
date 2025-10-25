@@ -9,6 +9,7 @@ related: [q-hilt-assisted-injection--di--medium, q-cicd-pipeline-android--androi
 created: 2025-10-15
 tags: [android, android/activity, android/fragment, android/performance-startup, fragment, fragments, performance, performance-startup, platform/android, single-activity, difficulty/medium]
 ---
+
 # Какие у подхода Single Activity этого подхода + и - ?
 
 **English**: What are the pros and cons of the Single Activity approach?

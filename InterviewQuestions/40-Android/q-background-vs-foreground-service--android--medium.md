@@ -1,31 +1,28 @@
 ---
 id: 20251016-161808
 title: Background vs Foreground Service / Background vs Foreground Service
-aliases:
-- Background vs Foreground Service
-- Background vs Foreground Service
+aliases: [Background vs Foreground Service]
 topic: android
 subtopics:
-- service
-- background-execution
+  - background-execution
+  - service
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-service-types--android--easy
-- q-foreground-service-types--background--medium
-- q-background-tasks-decision-guide--android--medium
+  - q-android-service-types--android--easy
+  - q-background-tasks-decision-guide--android--medium
+  - q-foreground-service-types--background--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/service
-- android/background-execution
-- difficulty/medium
+tags: [android/background-execution, android/service, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:55 pm
 ---
 
 # Вопрос (RU)

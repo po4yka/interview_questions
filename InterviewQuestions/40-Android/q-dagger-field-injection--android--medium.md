@@ -1,31 +1,29 @@
 ---
 id: 20251020-200000
 title: Dagger Field Injection / Инъекция полей Dagger
-aliases:
-- Dagger Field Injection
-- Инъекция полей Dagger
+aliases: [Dagger Field Injection, Инъекция полей Dagger]
 topic: android
 subtopics:
-- di-hilt
+  - di-hilt
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-dagger-build-time-optimization--android--medium
-- q-hilt-components-scope--android--medium
-- q-dagger-custom-scopes--android--hard
+  - q-dagger-build-time-optimization--android--medium
+  - q-dagger-custom-scopes--android--hard
+  - q-hilt-components-scope--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/di-hilt
-- difficulty/medium
+tags: [android/di-hilt, difficulty/medium]
 source: https://dagger.dev/api/latest/dagger/Inject.html
 source_note: Dagger Inject annotation documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:19 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +36,7 @@ source_note: Dagger Inject annotation documentation
 
 Field injection в Dagger позволяет автоматически внедрять зависимости в поля класса с помощью аннотации `@Inject`. Этот подход имеет специфические характеристики, преимущества и ограничения по сравнению с constructor и method injection.
 
-### Теория: Принципы field injection
+### Теория: Принципы Field Injection
 
 **Основные принципы:**
 - Field injection происходит после создания объекта
@@ -52,7 +50,7 @@ Field injection в Dagger позволяет автоматически внед
 3. Заполнение полей зависимостями
 4. Использование зависимостей
 
-### Базовое использование
+### Базовое Использование
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -75,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Ключевые особенности
+### Ключевые Особенности
 
 **1. Требует ручного вызова inject()**
 ```kotlin
@@ -110,7 +108,7 @@ fun makeRequest() {
 }
 ```
 
-### Когда использовать field injection
+### Когда Использовать Field Injection
 
 **Подходит для:**
 - Android компонентов (Activity, Fragment, Service)
@@ -122,7 +120,7 @@ fun makeRequest() {
 - Тестируемых классов
 - Когда нужна immutable инициализация
 
-### Hilt подход
+### Hilt Подход
 
 Hilt автоматизирует field injection:
 
@@ -141,7 +139,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **Архитектурные принципы:**
 - Используйте constructor injection когда возможно
@@ -158,7 +156,7 @@ class MainActivity : AppCompatActivity() {
 - Reflection используется для доступа к полям
 - Кэширование reflection для оптимизации
 
-### Ограничения и недостатки
+### Ограничения И Недостатки
 
 **Проблемы field injection:**
 - Не работает с final полями

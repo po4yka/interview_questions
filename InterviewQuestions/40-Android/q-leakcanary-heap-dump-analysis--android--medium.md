@@ -9,6 +9,7 @@ tags: [android/memory-management, heap-dump, leakcanary, memory-analysis, memory
 moc: moc-android
 related: [q-privacy-sandbox-fledge--privacy--hard, q-main-thread-android--android--medium, q-canvas-optimization--graphics--medium]
 ---
+
 # Как понять что в дампе есть утечка?
 
 **English**: How to find a leak in a heap dump?

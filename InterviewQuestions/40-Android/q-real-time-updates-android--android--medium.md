@@ -9,6 +9,7 @@ related: [q-alternative-distribution--distribution--medium, q-mlkit-face-detecti
 created: 2025-10-15
 tags: [networking, websockets, sse, firebase, fcm, real-time, difficulty/medium]
 ---
+
 # How to Implement Real-Time Updates in Android
 
 # Вопрос (RU)

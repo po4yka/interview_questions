@@ -9,6 +9,7 @@ related: [q-what-are-fragments-for-if-there-is-activity--android--medium, q-kapt
 created: 2025-10-15
 tags: [android/architecture-mvi, android/lifecycle, architecture-mvi, callback, lifecycle, livedata, platform/android, presenter, view, difficulty/medium]
 ---
+
 # После получения результата внутри Presenter как сообщить об этом View
 
 **English**: After getting a result inside Presenter, how to notify the View

@@ -1,33 +1,29 @@
 ---
 id: 20251012-122775
 title: Android Testing Strategies / Стратегии тестирования Android
-aliases:
-- Android Testing Strategies
-- Стратегии тестирования Android
+aliases: [Android Testing Strategies, Стратегии тестирования Android]
 topic: android
 subtopics:
-- testing-unit
-- testing-instrumented
-- testing-ui
+  - testing-instrumented
+  - testing-ui
+  - testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-performance-measurement-tools--android--medium
-- q-android-architectural-patterns--android--medium
-- q-android-security-best-practices--android--medium
+  - q-android-architectural-patterns--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-android-security-best-practices--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/testing-unit
-- android/testing-instrumented
-- android/testing-ui
-- difficulty/medium
+tags: [android/testing-instrumented, android/testing-ui, android/testing-unit, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:53:08 pm
 ---
 
 # Вопрос (RU)

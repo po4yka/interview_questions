@@ -7,9 +7,12 @@ status: draft
 moc: moc-android
 related: [q-espresso-advanced-patterns--testing--medium, q-fakes-vs-mocks-testing--testing--medium, q-kapt-vs-ksp--android--medium]
 created: 2025-10-15
-tags: [jit, aot, compilation, art, performance, baseline-profiles, difficulty/medium]
+tags: [aot, art, baseline-profiles, compilation, difficulty/medium, jit, performance]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:10:57 pm
 ---
-# JIT vs AOT Compilation in Android
+
+# JIT Vs AOT Compilation in Android
 
 ---
 
@@ -543,7 +546,7 @@ object CompilationStrategy {
 - Большой размер (2x)
 - Компилирует неиспользуемый код
 
-#### Гибридный подход (Android 7+):
+#### Гибридный Подход (Android 7+):
 
 **Profile-Guided Optimization:**
 1. Быстрая установка (только DEX)

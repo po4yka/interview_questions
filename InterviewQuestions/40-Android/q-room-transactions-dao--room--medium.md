@@ -9,6 +9,7 @@ related: [q-dagger-purpose--android--easy, q-navigation-methods-in-android--andr
 created: 2025-10-15
 tags: [database, transactions, dao, atomicity, consistency, acid, difficulty/medium]
 ---
+
 # Room Transactions and DAO / Транзакции и DAO в Room
 
 **English**: Implement Room transactions with @Transaction annotation. Handle complex multi-table operations atomically.

@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-stable-classes-compose--android--hard, q-app-start-types-android--android--medium, q-data-sync-unstable-network--android--hard]
+related: [q-app-start-types-android--android--medium, q-data-sync-unstable-network--android--hard, q-stable-classes-compose--android--hard]
 created: 2025-10-15
-tags: [MotionLayout, Property Animations, View Animations, android, android/animations, android/ui, animations, ui, difficulty/medium]
+tags: [android, android/animations, android/ui, animations, difficulty/medium, MotionLayout, Property Animations, ui, View Animations]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:39:55 pm
 ---
-# Как в Android можно сделать анимацию?
+
+# Как В Android Можно Сделать Анимацию?
 
 **English**: How to create animations in Android?
 

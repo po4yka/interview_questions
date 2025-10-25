@@ -7,9 +7,12 @@ status: draft
 moc: moc-android
 related: [q-android-components-besides-activity--android--easy, q-design-whatsapp-app--android--hard, q-workmanager-advanced--background--medium]
 created: 2025-10-15
-tags: [service, binding, ipc, difficulty/medium]
+tags: [binding, difficulty/medium, ipc, service]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:11:08 pm
 ---
-# If Activity starts after a service, can you connect to this service
+
+# If Activity Starts after a Service, Can You Connect to This Service
 
 ## Answer (EN)
 Yes, an Activity can bind to a running service using the binding mechanism, regardless of when the service was started. This allows the Activity to interact with the service, receive data, and send commands.
@@ -80,7 +83,7 @@ class MyActivity : AppCompatActivity() {
    - `BIND_DEBUG_UNBIND`: Enables debugging
    - `BIND_NOT_FOREGROUND`: Service won't be foreground priority
 
-### Binding vs Starting Services
+### Binding Vs Starting Services
 
 | Aspect | Started Service | Bound Service |
 |--------|----------------|---------------|

@@ -1,33 +1,29 @@
 ---
 id: 20251012-122782
 title: App Start Types Android / Типы запуска приложения Android
-aliases:
-- App Start Types Android
-- Типы запуска приложения Android
+aliases: [App Start Types Android, Типы запуска приложения Android]
 topic: android
 subtopics:
-- performance-memory
-- app-startup
-- lifecycle
+  - app-startup
+  - lifecycle
+  - performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-performance-measurement-tools--android--medium
-- q-android-build-optimization--android--medium
-- q-android-app-lag-analysis--android--medium
+  - q-android-app-lag-analysis--android--medium
+  - q-android-build-optimization--android--medium
+  - q-android-performance-measurement-tools--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/performance-memory
-- android/app-startup
-- android/lifecycle
-- difficulty/medium
+tags: [android/app-startup, android/lifecycle, android/performance-memory, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:03 pm
 ---
 
 # Вопрос (RU)
@@ -100,7 +96,7 @@ object StartupTrace {
 }
 ```
 
-### Warm Start (process alive, Activity recreated)
+### Warm Start (process Alive, Activity recreated)
 - **Goal**: reconstruct UI/state with minimal work.
 - **Tactics**:
   - Use `ViewModel` + `SavedStateHandle` to avoid recomputation.
@@ -139,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Baseline Profiles (critical for cold start)
+### Baseline Profiles (critical for Cold start)
 - Precompile hot paths (class loading, DI graph, first screen) to reduce cold-start JIT.
 - Generate with Macrobenchmark; ship with `profileinstaller` so Play can install profiles.
 
@@ -156,7 +152,7 @@ class StartupBench {
 }
 ```
 
-### Compose-specific startup patterns
+### Compose-specific Startup Patterns
 - Prefer lazy composition; avoid heavy `LaunchedEffect` in root.
 - Use `remember/rememberSaveable` for state survival across warm starts.
 

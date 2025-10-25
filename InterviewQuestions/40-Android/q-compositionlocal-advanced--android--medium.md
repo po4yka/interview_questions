@@ -1,31 +1,28 @@
 ---
 id: 20251020-211200
 title: CompositionLocal Advanced / CompositionLocal — продвинутый уровень
-aliases:
-- CompositionLocal Advanced
-- CompositionLocal — продвинутый уровень
+aliases: [CompositionLocal — продвинутый уровень, CompositionLocal Advanced]
 topic: android
 subtopics:
-- ui-compose
-- architecture-mvvm
+  - architecture-mvvm
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compose-remember-derived-state--android--medium
-- q-compose-semantics--android--medium
-- q-compose-performance-optimization--android--hard
+  - q-compose-performance-optimization--android--hard
+  - q-compose-remember-derived-state--android--medium
+  - q-compose-semantics--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/architecture-mvvm
-- difficulty/medium
+tags: [android/architecture-mvvm, android/ui-compose, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:28 pm
 ---
 
 # Вопрос (RU)
@@ -49,11 +46,11 @@ tags:
 
 See also [[c-dependency-injection]] and c-compose-state for understanding dependency management in Compose.
 
-### Parameters vs Local
+### Parameters Vs Local
 - Parameters — when the dependency is local, frequently changing, and API clarity matters
 - CompositionLocal — when the dependency is cross‑cutting, rarely changing, and environmental (theme, haptics, logger, imageLoader)
 
-### staticCompositionLocalOf vs compositionLocalOf
+### staticCompositionLocalOf Vs compositionLocalOf
 - `compositionLocalOf` (dynamic)
   - Read tracking: only readers of `.current` recompose
   - Fits frequently changing values (scroll position, dynamic flags)
@@ -65,22 +62,22 @@ See also [[c-dependency-injection]] and c-compose-state for understanding depend
 
 Guideline: if it changes often and you need narrow recomposition — use `compositionLocalOf`; if it rarely changes and is read widely — use `staticCompositionLocalOf`.
 
-### Invalidation boundaries & performance
+### Invalidation Boundaries & Performance
 - Boundary is the `CompositionLocalProvider` block
 - Dynamic Local: invalidation propagates only to actual readers
 - Static Local: the entire provider subtree is invalidated
 - Place providers close to consumers if updates are wide
 
-### Safe defaults
+### Safe Defaults
 - Risk: silent valid default hides missing provider
 - Prefer `error("No Foo provided")` or an explicit noop with clear semantics
 
-### Immutability & stability
+### Immutability & Stability
 - Values should be immutable or explicitly stable
 - Update the reference (copy) rather than mutating internals invisibly to Compose
 - Improves predictability and skippability
 
-### Common pitfalls
+### Common Pitfalls
 - Reading Local outside composition (in lambdas outliving a frame)
 - Using Local as hidden global for business logic
 - Provider too high for frequently changing values (excess recomposition)
@@ -91,7 +88,7 @@ Guideline: if it changes often and you need narrow recomposition — use `compos
 - Combined provider: group rarely changing values into a single static Local
 - Testability: override Local in tests inside the scene
 
-### Minimal examples
+### Minimal Examples
 
 Create and provide:
 ```kotlin

@@ -1,33 +1,30 @@
 ---
 id: 20251021-120500
 title: CompositionLocal in Compose / CompositionLocal в Compose
-aliases:
-- CompositionLocal in Compose
-- CompositionLocal в Compose
+aliases: [CompositionLocal in Compose, CompositionLocal в Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-state
+  - ui-compose
+  - ui-state
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compositionlocal-advanced--android--medium
-- q-compose-remember-derived-state--android--medium
-- q-compose-performance-optimization--android--hard
+  - q-compose-performance-optimization--android--hard
+  - q-compose-remember-derived-state--android--medium
+  - q-compositionlocal-advanced--android--medium
 created: 2025-10-15
 updated: 2025-10-21
-tags:
-- android/ui-compose
-- android/ui-state
-- difficulty/hard
+tags: [android/ui-compose, android/ui-state, difficulty/hard]
 source: https://developer.android.com/jetpack/compose/compositionlocal
 source_note: Official docs on CompositionLocal
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:27 pm
 ---
 
 # Вопрос (RU)
@@ -51,11 +48,11 @@ source_note: Official docs on CompositionLocal
 
 Based on concepts from [[c-dependency-injection]] and c-compose-state.
 
-### Parameters vs CompositionLocal
+### Parameters Vs CompositionLocal
 - Parameters: local dependency, changes frequently, API clarity
 - Local: cross‑cutting, rarely changing, environmental (theme, locale, imageLoader)
 
-### dynamic vs static
+### Dynamic Vs Static
 - `compositionLocalOf` (dynamic)
   - Read tracking: only actual `.current` readers recompose
   - Fits frequently changing values (scroll position, runtime flags)
@@ -67,15 +64,15 @@ Based on concepts from [[c-dependency-injection]] and c-compose-state.
 
 Rule of thumb: changes often + narrow recomposition → `compositionLocalOf`; rarely changes + wide readership → `staticCompositionLocalOf`.
 
-### Invalidation boundaries
+### Invalidation Boundaries
 - Boundary is `CompositionLocalProvider`
 - Dynamic: invalidates only readers; static: whole subtree
 - Place providers close to consumers if updates are wide/frequent
 
-### Safe defaults
+### Safe Defaults
 - Avoid silent valid defaults; prefer throwing in factory or explicit noop
 
-### Immutability & stability
+### Immutability & Stability
 - Prefer immutable or explicitly stable values
 - Update the reference (copy) vs mutating internals invisibly to Compose
 
@@ -89,7 +86,7 @@ Rule of thumb: changes often + narrow recomposition → `compositionLocalOf`; ra
 - Combine rare static values under one provider
 - Override Locals in tests within the scene
 
-### Minimal examples
+### Minimal Examples
 
 Create & provide (static context):
 ```kotlin

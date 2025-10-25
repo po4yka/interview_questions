@@ -1,33 +1,29 @@
 ---
 id: 20251012-122786
 title: Background Tasks Decision Guide / Руководство по фоновым задачам
-aliases:
-- Background Tasks Decision Guide
-- Руководство по фоновым задачам
+aliases: [Background Tasks Decision Guide, Руководство по фоновым задачам]
 topic: android
 subtopics:
-- background-execution
-- coroutines
-- service
+  - background-execution
+  - coroutines
+  - service
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-async-operations-android--android--medium
-- q-what-is-workmanager--android--medium
-- q-foreground-service-types--background--medium
+  - q-async-operations-android--android--medium
+  - q-foreground-service-types--background--medium
+  - q-what-is-workmanager--android--medium
 created: 2025-10-05
 updated: 2025-10-15
-tags:
-- android/background-execution
-- android/coroutines
-- android/service
-- difficulty/medium
+tags: [android/background-execution, android/coroutines, android/service, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:56 pm
 ---
 
 # Вопрос (RU)

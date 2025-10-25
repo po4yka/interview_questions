@@ -5,11 +5,14 @@ topic: android
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags: [android/performance, fps, frame-rate, performance, rendering, ui-performance, difficulty/easy]
+tags: [android/performance, difficulty/easy, fps, frame-rate, performance, rendering, ui-performance]
 moc: moc-android
-related: [q-what-is-pendingintent--android--medium, q-why-use-fragments-when-we-have-activities--android--medium, q-how-to-pass-parameters-to-a-fragment--android--easy]
+related: [q-how-to-pass-parameters-to-a-fragment--android--easy, q-what-is-pendingintent--android--medium, q-why-use-fragments-when-we-have-activities--android--medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:47:07 pm
 ---
-# Если профайлер показывает тебе что какой-нибудь фрейм занял 120 миллисекунд, что это значит?
+
+# Если Профайлер Показывает Тебе Что Какой-нибудь Фрейм Занял 120 Миллисекунд, Что Это Значит?
 
 **English**: If profiler shows that a frame took 120 milliseconds, what does it mean?
 

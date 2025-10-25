@@ -26,6 +26,7 @@ updated: 2025-10-06
 
 tags: [android/datastore, android/performance-memory, en, ru, difficulty/easy]
 ---
+
 # Question (EN)
 > What is the difference between commit() and apply() in SharedPreferences?
 # Вопрос (RU)

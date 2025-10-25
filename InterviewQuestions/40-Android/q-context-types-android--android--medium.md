@@ -1,35 +1,31 @@
 ---
 id: 20251021-130000
 title: Context Types in Android / Типы Context в Android
-aliases:
-- Context Types in Android
-- Типы Context в Android
+aliases: [Context Types in Android, Типы Context в Android]
 topic: android
 subtopics:
-- lifecycle
-- activity
-- app-startup
+  - activity
+  - app-startup
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-activity-lifecycle-methods--android--medium
-- q-memory-leaks-definition--android--easy
-- q-usecase-pattern-android--android--medium
+  - q-activity-lifecycle-methods--android--medium
+  - q-memory-leaks-definition--android--easy
+  - q-usecase-pattern-android--android--medium
 created: 2025-10-21
 updated: 2025-10-21
-tags:
-- android/lifecycle
-- android/activity
-- android/app-startup
-- difficulty/medium
+tags: [android/activity, android/app-startup, android/lifecycle, difficulty/medium]
 source: https://developer.android.com/reference/android/content/Context
 source_note: Official Context documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:27 pm
 ---
 
 # Вопрос (RU)

@@ -9,6 +9,7 @@ related: [q-async-operations-android--android--medium, q-derived-state-snapshot-
 created: 2025-10-15
 tags: [android/services, bound-service, service-lifecycle, services, started-service, difficulty/medium]
 ---
+
 # Как остановить сервис?
 
 **English**: How to stop a service?

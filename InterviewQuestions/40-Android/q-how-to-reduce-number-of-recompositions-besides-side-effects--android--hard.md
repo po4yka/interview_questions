@@ -5,16 +5,19 @@ topic: android
 difficulty: hard
 status: draft
 moc: moc-android
-related: [q-what-is-hilt--android--medium, q-compose-ui-testing-advanced--testing--hard, q-architecture-components-libraries--android--easy]
+related: [q-architecture-components-libraries--android--easy, q-compose-ui-testing-advanced--testing--hard, q-what-is-hilt--android--medium]
 created: 2025-10-15
-tags: [languages, android, difficulty/hard]
+tags: [android, difficulty/hard, languages]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:20 pm
 ---
-# Как можно уменьшить количество рекомпозиций помимо side-эффектов?
+
+# Как Можно Уменьшить Количество Рекомпозиций Помимо Side-эффектов?
 
 ## Answer (EN)
 Reducing recompositions in Jetpack Compose improves performance. Besides side effects, use `remember`, `derivedStateOf`, `key`, stable data classes, immutable collections, and proper state management.
 
-### 1. Use remember for Expensive Calculations
+### 1. Use Remember for Expensive Calculations
 
 ```kotlin
 @Composable
@@ -334,13 +337,13 @@ fun RecompositionCounter() {
 
 ---
 
-# Как можно уменьшить количество рекомпозиций помимо side-эффектов
+# Как Можно Уменьшить Количество Рекомпозиций Помимо Side-эффектов
 
 ## Ответ (RU)
 
 Уменьшение количества рекомпозиций в Jetpack Compose улучшает производительность. Помимо side effects, используйте `remember`, `derivedStateOf`, `key`, стабильные data классы, immutable коллекции и правильное управление состоянием.
 
-### 1. Использование remember для дорогих вычислений
+### 1. Использование Remember Для Дорогих Вычислений
 
 ```kotlin
 @Composable
@@ -357,7 +360,7 @@ fun ExpensiveCalculation(items: List<Item>) {
 }
 ```
 
-### 2. Использование derivedStateOf для производного состояния
+### 2. Использование derivedStateOf Для Производного Состояния
 
 ```kotlin
 @Composable
@@ -383,7 +386,7 @@ fun SearchScreen() {
 }
 ```
 
-### 3. Использование key() для контроля рекомпозиции
+### 3. Использование key() Для Контроля Рекомпозиции
 
 ```kotlin
 @Composable
@@ -399,7 +402,7 @@ fun UserList(users: List<User>) {
 }
 ```
 
-### 4. Стабильные data классы
+### 4. Стабильные Data Классы
 
 ```kotlin
 // - НЕСТАБИЛЬНЫЙ: Compose не может определить изменения
@@ -423,7 +426,7 @@ data class User(
 )
 ```
 
-### 5. Избегайте лямбд в параметрах Composable
+### 5. Избегайте Лямбд В Параметрах Composable
 
 ```kotlin
 // - ПЛОХО: Создает новую лямбду при каждой рекомпозиции
@@ -453,7 +456,7 @@ fun ParentScreen(count: Int, onComplete: () -> Unit) {
 }
 ```
 
-### 6. Правильное поднятие состояния
+### 6. Правильное Поднятие Состояния
 
 ```kotlin
 // - ПЛОХО: Слишком много состояния в родителе вызывает много рекомпозиций
@@ -486,7 +489,7 @@ fun TextFieldWithState() {
 }
 ```
 
-### 7. Использование immutable коллекций
+### 7. Использование Immutable Коллекций
 
 ```kotlin
 // Добавьте зависимость: implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
@@ -516,7 +519,7 @@ val items = persistentListOf("A", "B", "C")
 val newItems = items.add("D") // Возвращает новый список, оригинал неизменен
 ```
 
-### 8. Пропуск рекомпозиции с стабильными параметрами
+### 8. Пропуск Рекомпозиции С Стабильными Параметрами
 
 ```kotlin
 // Отмечайте функции как стабильные
@@ -542,7 +545,7 @@ data class Config(
 )
 ```
 
-### 9. Избегайте ненужных чтений состояния
+### 9. Избегайте Ненужных Чтений Состояния
 
 ```kotlin
 // - ПЛОХО: Читает состояние в композиции
@@ -577,7 +580,7 @@ fun CountDisplay(count: Int) {
 }
 ```
 
-### 10. Использование rememberSaveable для состояния
+### 10. Использование rememberSaveable Для Состояния
 
 ```kotlin
 @Composable
@@ -592,7 +595,7 @@ fun PersistentState() {
 }
 ```
 
-### 11. Ленивая инициализация состояния
+### 11. Ленивая Инициализация Состояния
 
 ```kotlin
 @Composable
@@ -609,7 +612,7 @@ fun LazyInit() {
 }
 ```
 
-### 12. Мемоизация Composable с помощью key()
+### 12. Мемоизация Composable С Помощью key()
 
 ```kotlin
 @Composable
@@ -630,7 +633,7 @@ fun DynamicList(items: List<Item>, selectedId: String) {
 }
 ```
 
-### Чеклист производительности
+### Чеклист Производительности
 
 1. - Используйте `remember` для дорогих вычислений
 2. - Используйте `derivedStateOf` для производного состояния
@@ -643,7 +646,7 @@ fun DynamicList(items: List<Item>, selectedId: String) {
 9. - Используйте `rememberSaveable` для персистентности
 10. - Минимизируйте зависимости состояния
 
-### Отладка рекомпозиций
+### Отладка Рекомпозиций
 
 ```kotlin
 @Composable

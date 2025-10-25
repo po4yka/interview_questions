@@ -7,9 +7,12 @@ status: draft
 moc: moc-android
 related: [q-how-to-display-snackbar-or-toast-based-on-results--android--medium, q-stable-classes-compose--android--hard, q-what-methods-redraw-views--android--medium]
 created: 2025-10-15
-tags: [injection, koin, scopes, lifecycle, difficulty/medium]
+tags: [difficulty/medium, injection, koin, lifecycle, scopes]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:07:51 pm
 ---
-# Koin Scope Management / Управление Scope в Koin
+
+# Koin Scope Management / Управление Scope В Koin
 
 **English**: How do you manage scopes in Koin? Implement Activity and Fragment scoped dependencies with proper lifecycle handling.
 
@@ -561,7 +564,7 @@ Use scopes to match dependency lifetime with component lifecycle, prevent memory
 ## Ответ (RU)
 **Scope в Koin** предоставляют способ создания зависимостей с ограниченным временем жизни, привязанных к конкретным компонентам (Activity, Fragment) или пользовательским логическим границам. Scope помогают управлять памятью и обеспечивают правильную обработку жизненного цикла зависимостей.
 
-### Что такое Scope?
+### Что Такое Scope?
 
 **Scope** в Koin — это контейнер для определений, который:
 - Имеет определённый жизненный цикл (start и close)
@@ -702,7 +705,7 @@ class ProfileFragment : Fragment() {
 }
 ```
 
-### Разделение Scope между компонентами
+### Разделение Scope Между Компонентами
 
 ```kotlin
 // Activity создаёт и владеет scope

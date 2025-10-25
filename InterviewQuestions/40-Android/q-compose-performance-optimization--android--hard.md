@@ -1,33 +1,30 @@
 ---
 id: 20251020-200000
 title: Compose Performance Optimization / Оптимизация производительности Compose
-aliases:
-- Compose Performance Optimization
-- Оптимизация производительности Compose
+aliases: [Compose Performance Optimization, Оптимизация производительности Compose]
 topic: android
 subtopics:
-- ui-compose
-- performance-memory
+  - performance-memory
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compose-compiler-plugin--android--hard
-- q-compose-lazy-layout-optimization--android--hard
-- q-android-performance-measurement-tools--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-lazy-layout-optimization--android--hard
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/performance-memory
-- difficulty/hard
+tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 source: https://developer.android.com/jetpack/compose/performance
 source_note: Official Compose performance guide
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:37 pm
 ---
 
 # Вопрос (RU)
@@ -54,7 +51,7 @@ source_note: Official Compose performance guide
 - Measure and verify with tools; optimize only confirmed hotspots.
 - Apply [[c-algorithms]] for efficient state management and [[c-data-structures]] for optimal data organization.
 
-### Minimal patterns
+### Minimal Patterns
 
 Granular state observation
 
@@ -115,7 +112,7 @@ val formatted = remember(price) { priceFormatter.format(price) }
 Text(formatted)
 ```
 
-### Measurement and tooling
+### Measurement and Tooling
 
 - Use Layout Inspector (Recomposition counts), Perfetto, tracing.
 - Track jank and long frames; correlate with recomposition spikes.

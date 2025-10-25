@@ -9,6 +9,7 @@ related: [q-cache-implementation-strategies--android--medium, q-how-to-implement
 created: 2025-10-15
 tags: [Intent, Jetpack Navigation Component, NavController, NavHostFragment, android, android/navigation, android/ui, navigation, ui, difficulty/medium]
 ---
+
 # Какие есть способы навигации в Kotlin?
 
 **English**: What navigation methods exist in Kotlin?

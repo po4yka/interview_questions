@@ -1,33 +1,30 @@
 ---
 id: 20251017-104815
 title: Compose Side Effects (Advanced) / Побочные эффекты Compose (продвинуто)
-aliases:
-- Compose Side Effects Advanced
-- Побочные эффекты Compose
+aliases: [Compose Side Effects Advanced, Побочные эффекты Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-state
+  - ui-compose
+  - ui-state
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compose-performance-optimization--android--hard
-- q-compose-compiler-plugin--android--hard
-- q-compose-remember-derived-state--android--medium
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-performance-optimization--android--hard
+  - q-compose-remember-derived-state--android--medium
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/ui-state
-- difficulty/hard
+tags: [android/ui-compose, android/ui-state, difficulty/hard]
 source: https://developer.android.com/jetpack/compose/side-effects
 source_note: Official Compose side‑effects docs
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:35 pm
 ---
 
 # Вопрос (RU)
@@ -44,14 +41,14 @@ source_note: Official Compose side‑effects docs
 
 ## Answer (EN)
 
-### What each API does
+### What Each API Does
 - LaunchedEffect: run coroutine side‑effects tied to composition; cancels on key change/dispose.
 - DisposableEffect: register external resources; must clean up in onDispose on key change/dispose.
 - SideEffect: sync Compose state to non‑Compose after every successful recomposition; no cleanup.
 - produceState: convert async work/Flow into `State<T>`; coroutine auto‑cancelled on dispose.
 - Relies on [[c-coroutines]] for async operations and lifecycle management.
 
-### Minimal patterns
+### Minimal Patterns
 
 LaunchedEffect (async work with keys)
 ```kotlin
@@ -82,12 +79,12 @@ val image by produceState<ImageBitmap?>(initialValue = null, key1 = url) {
 }
 ```
 
-### Choosing the right API
+### Choosing the Right API
 - Need coroutine? use LaunchedEffect; converting to State? use produceState.
 - No coroutine: need cleanup? DisposableEffect; just sync state? SideEffect.
 - Use correct keys to control restart semantics; avoid heavy work in SideEffect.
 
-### Common pitfalls
+### Common Pitfalls
 - Missing onDispose → leaks listeners; wrong keys → unnecessary restarts; heavy logic in SideEffect.
 - For callbacks that change but shouldn’t restart effect, wrap with `rememberUpdatedState`.
 

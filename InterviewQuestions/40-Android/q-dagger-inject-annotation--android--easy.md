@@ -1,31 +1,29 @@
 ---
 id: 20251020-200000
 title: Dagger Inject Annotation / Аннотация Inject Dagger
-aliases:
-- Dagger Inject Annotation
-- Аннотация Inject Dagger
+aliases: [Dagger Inject Annotation, Аннотация Inject Dagger]
 topic: android
 subtopics:
-- di-hilt
+  - di-hilt
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-dagger-field-injection--android--medium
-- q-dagger-framework-overview--android--hard
-- q-hilt-components-scope--android--medium
+  - q-dagger-field-injection--android--medium
+  - q-dagger-framework-overview--android--hard
+  - q-hilt-components-scope--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/di-hilt
-- difficulty/easy
+tags: [android/di-hilt, difficulty/easy]
 source: https://dagger.dev/api/latest/dagger/Inject.html
 source_note: Dagger Inject annotation documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:18 pm
 ---
 
 # Вопрос (RU)
@@ -51,7 +49,7 @@ source_note: Dagger Inject annotation documentation
 - **Field injection** - для Android компонентов
 - **Method injection** - для специальных случаев
 
-### @Inject на конструкторе (Рекомендуется)
+### @Inject На Конструкторе (Рекомендуется)
 
 ```kotlin
 class UserRepository @Inject constructor(
@@ -69,7 +67,7 @@ class UserRepository @Inject constructor(
 - Разрешает зависимости `ApiService` и `UserDatabase`
 - Внедряет их в конструктор
 
-### @Inject на полях
+### @Inject На Полях
 
 **В Activity/Fragment:**
 ```kotlin
@@ -93,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 - Требует явного вызова `inject()` метода
 - Используется для Android компонентов
 
-### @Inject на методах
+### @Inject На Методах
 
 ```kotlin
 class UserService {
@@ -113,7 +111,7 @@ class UserService {
 - Когда нужен доступ к инжектируемым параметрам
 - Callback методов
 
-### Когда использовать каждый тип
+### Когда Использовать Каждый Тип
 
 **Constructor injection:**
 - Обычные классы и бизнес-логика
@@ -130,7 +128,7 @@ class UserService {
 - Когда нужен доступ к параметрам инъекции
 - Callback методы
 
-### Hilt автоматизация
+### Hilt Автоматизация
 
 Hilt упрощает использование `@Inject`:
 
@@ -165,7 +163,7 @@ To tell [[c-dagger]] about [[c-dependency-injection]], use the **`@Inject`** ann
 - **Field injection** - for Android components
 - **Method injection** - for special cases
 
-### @Inject on Constructor (Recommended)
+### @Inject On Constructor (Recommended)
 
 ```kotlin
 class UserRepository @Inject constructor(
@@ -183,7 +181,7 @@ class UserRepository @Inject constructor(
 - Resolves `ApiService` and `UserDatabase` dependencies
 - Injects them into constructor
 
-### @Inject on Fields
+### @Inject On Fields
 
 **In Activity/Fragment:**
 ```kotlin
@@ -207,7 +205,7 @@ class MainActivity : AppCompatActivity() {
 - Requires explicit `inject()` method call
 - Used for Android components
 
-### @Inject on Methods
+### @Inject On Methods
 
 ```kotlin
 class UserService {

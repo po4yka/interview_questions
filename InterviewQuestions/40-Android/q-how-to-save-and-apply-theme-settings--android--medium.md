@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-how-to-save-scroll-state-when-activity-is-recreated--android--medium, q-server-sent-events-sse--networking--medium, q-kmm-sqldelight--multiplatform--medium]
+related: [q-how-to-save-scroll-state-when-activity-is-recreated--android--medium, q-kmm-sqldelight--multiplatform--medium, q-server-sent-events-sse--networking--medium]
 created: 2025-10-15
-tags: [themes, dark-mode, sharedpreferences, datastore, ui, difficulty/medium]
+tags: [dark-mode, datastore, difficulty/medium, sharedpreferences, themes, ui]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:11:17 pm
 ---
-# How to save and apply theme settings?
+
+# How to save and Apply Theme Settings?
 
 **Russian**: Как сохранять и применять настройки темы?
 
@@ -505,7 +508,7 @@ class ThemeDialog : DialogFragment() {
 
 ---
 
-# Как сохранять и применять настройки темы
+# Как Сохранять И Применять Настройки Темы
 
 ## Ответ (RU)
 Хранить выбранную тему в SharedPreferences. При старте приложения или Activity применять тему до setContentView. В случае использования DayNight можно использовать AppCompatDelegate.setDefaultNightMode.

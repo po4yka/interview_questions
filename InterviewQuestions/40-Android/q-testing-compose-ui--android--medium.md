@@ -9,6 +9,7 @@ related: [q-android-modularization--android--medium, q-compose-compiler-plugin--
 created: 2025-10-15
 tags: [jetpack-compose, testing, ui-testing, compose-test, difficulty/medium]
 ---
+
 # Testing Compose UI
 
 **English**: How do you test Jetpack Compose UI? What are the key APIs and best practices?

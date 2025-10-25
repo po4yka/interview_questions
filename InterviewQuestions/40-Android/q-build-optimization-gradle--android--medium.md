@@ -1,33 +1,30 @@
 ---
 id: 20251011-220005
 title: Gradle Build Optimization / Оптимизация сборки Gradle
-aliases:
-- Gradle Build Optimization
-- Оптимизация сборки Gradle
+aliases: [Gradle Build Optimization, Оптимизация сборки Gradle]
 topic: android
 subtopics:
-- gradle
-- dependency-management
+  - dependency-management
+  - gradle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-build-optimization--android--medium
-- q-baseline-profiles-optimization--android--medium
-- q-android-modularization--android--medium
+  - q-android-build-optimization--android--medium
+  - q-android-modularization--android--medium
+  - q-baseline-profiles-optimization--android--medium
 created: 2025-10-11
 updated: 2025-10-20
-tags:
-- android/gradle
-- android/dependency-management
-- difficulty/medium
+tags: [android/dependency-management, android/gradle, difficulty/medium]
 source: Original
 source_note: Gradle build performance best practices
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:52 pm
 ---
 
 # Вопрос (RU)
@@ -58,7 +55,7 @@ source_note: Gradle build performance best practices
 - **Parallelize**: Enable parallel workers, keep modules independent.
 - **Stabilize inputs**: Pin versions (no dynamic), provider APIs, deterministic paths.
 
-### Configuration Cache (largest single win)
+### Configuration Cache (largest Single win)
 - Caches the configuration phase; subsequent builds skip re-config.
 - Requirements: no side effects at configuration time; use Provider API instead of reading env/files directly.
 ```kotlin
@@ -94,7 +91,7 @@ plugins { id("com.google.devtools.ksp") }
 dependencies { ksp(libs.room.compiler); ksp(libs.hilt.compiler) }
 ```
 
-### Version Catalogs (no hardcoded versions in build files)
+### Version Catalogs (no Hardcoded Versions in Build files)
 - Centralize versions; speed up sync; avoid dynamic `+`.
 ```toml
 # libs.versions.toml (structure only, no specific numbers)

@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-what-design-systems-in-android-have-you-worked-with--android--medium, q-home-screen-widgets--android--medium, q-accessibility-testing--accessibility--medium]
+related: [q-accessibility-testing--accessibility--medium, q-home-screen-widgets--android--medium, q-what-design-systems-in-android-have-you-worked-with--android--medium]
 created: 2025-10-15
-tags: [languages, android, difficulty/medium]
+tags: [android, difficulty/medium, languages]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:11:00 pm
 ---
-# Является ли LayoutInflater синглтоном и почему?
+
+# Является Ли LayoutInflater Синглтоном И Почему?
 
 ## Answer (EN)
 No, **LayoutInflater is not a singleton**, but can be obtained as a scope-dependent object (`getSystemService`) in Context. However, it can be reused as it doesn't store state between calls.
@@ -131,13 +134,13 @@ class BadAdapter(private val items: List<Item>) : RecyclerView.Adapter<ViewHolde
 
 ---
 
-# Является ли LayoutInflater синглтоном и почему
+# Является Ли LayoutInflater Синглтоном И Почему
 
 ## Ответ (RU)
 
 Нет, **LayoutInflater не является синглтоном**, но может быть получен как объект, привязанный к области видимости (`getSystemService`) в Context. Однако его можно переиспользовать, так как он не хранит состояние между вызовами.
 
-### Как работает LayoutInflater
+### Как Работает LayoutInflater
 
 ```kotlin
 class InflaterExample : AppCompatActivity() {
@@ -157,7 +160,7 @@ class InflaterExample : AppCompatActivity() {
 }
 ```
 
-### Не глобальный синглтон
+### Не Глобальный Синглтон
 
 Разные контексты имеют разные экземпляры LayoutInflater:
 
@@ -180,7 +183,7 @@ class ContextInflaters : AppCompatActivity() {
 }
 ```
 
-### Почему можно переиспользовать
+### Почему Можно Переиспользовать
 
 LayoutInflater не имеет состояния между вызовами:
 
@@ -206,7 +209,7 @@ class StatelessInflater : AppCompatActivity() {
 }
 ```
 
-### Внутреннее кэширование
+### Внутреннее Кэширование
 
 ```kotlin
 // Внутри реализации Context
@@ -223,7 +226,7 @@ fun getSystemService(name: String): Any? {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 ```kotlin
 // - ХОРОШО: Переиспользовать в адаптере

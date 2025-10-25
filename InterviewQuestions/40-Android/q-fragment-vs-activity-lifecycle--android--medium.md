@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-is-layoutinflater-a-singleton-and-why--programming-languages--medium, q-how-to-write-recyclerview-cache-ahead--android--medium, q-privacy-sandbox-fledge--privacy--hard]
+related: [q-how-to-write-recyclerview-cache-ahead--android--medium, q-is-layoutinflater-a-singleton-and-why--programming-languages--medium, q-privacy-sandbox-fledge--privacy--hard]
 created: 2025-10-15
-tags: [fragments, lifecycle, difficulty/medium]
+tags: [difficulty/medium, fragments, lifecycle]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:47:11 pm
 ---
-# Чем жизненный цикл фрагмента отличается от Activity
+
+# Чем Жизненный Цикл Фрагмента Отличается От Activity
 
 **English**: How does Fragment lifecycle differ from Activity lifecycle?
 

@@ -7,7 +7,9 @@ status: draft
 moc: moc-android
 related: [q-memory-leaks-definition--android--easy, q-recyclerview-viewtypes-delegation--recyclerview--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
 created: 2025-10-15
-tags: [Kotlin, Distribution, Testing, Firebase, difficulty/medium]
+tags: [difficulty/medium, Distribution, Firebase, Kotlin, Testing]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:02 pm
 ---
 
 # Question (EN)

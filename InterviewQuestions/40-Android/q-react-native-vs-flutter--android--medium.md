@@ -26,6 +26,7 @@ updated: 2025-10-06
 
 tags: [android/kmp, en, ru, difficulty/medium]
 ---
+
 # Question (EN)
 > React Native vs Flutter comparison
 # Вопрос (RU)

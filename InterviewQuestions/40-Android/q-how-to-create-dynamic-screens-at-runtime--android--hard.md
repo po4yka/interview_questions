@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-fragments-history-and-purpose--android--hard, q-how-to-add-fragment-synchronously-asynchronously--android--medium, q-how-is-navigation-implemented--android--medium]
+related: [q-fragments-history-and-purpose--android--hard, q-how-is-navigation-implemented--android--medium, q-how-to-add-fragment-synchronously-asynchronously--android--medium]
 created: 2025-10-15
-tags: [Fragment, RecyclerView, dynamic UI, android, ui, dynamic-ui, jetpack-compose, difficulty/medium]
+tags: [android, difficulty/medium, dynamic UI, dynamic-ui, Fragment, jetpack-compose, RecyclerView, ui]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:39:53 pm
 ---
-# How to create dynamic screens at runtime?
+
+# How to Create Dynamic Screens at Runtime?
 
 # Вопрос (RU)
 
@@ -368,7 +371,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 Для создания динамических экранов в runtime в Android: загружать конфигурацию с сервера (JSON/XML), использовать фабрики Fragment/View, генерировать UI из описания, или использовать Jetpack Compose/RecyclerView с разными ViewType.
 
 
-### 1. Server-Driven UI с JSON конфигурацией
+### 1. Server-Driven UI С JSON Конфигурацией
 
 Наиболее популярный подход - загрузка конфигурации экрана с сервера:
 
@@ -415,7 +418,7 @@ class DynamicScreenBuilder {
 }
 ```
 
-### 2. Jetpack Compose для динамического UI
+### 2. Jetpack Compose Для Динамического UI
 
 Compose идеально подходит для создания динамических экранов:
 
@@ -457,7 +460,7 @@ fun DynamicComponent(component: Component) {
 }
 ```
 
-### 3. RecyclerView с множественными ViewType
+### 3. RecyclerView С Множественными ViewType
 
 Для сложных списков с разными типами компонентов:
 
@@ -526,7 +529,7 @@ class DynamicFragmentFactory(
 supportFragmentManager.fragmentFactory = DynamicFragmentFactory(serverConfig)
 ```
 
-### 5. DSL для построения UI
+### 5. DSL Для Построения UI
 
 Kotlin DSL для декларативного создания UI:
 
@@ -569,7 +572,7 @@ val view = UiBuilder(context).build {
 }
 ```
 
-### 6. Пример JSON ответа от сервера
+### 6. Пример JSON Ответа От Сервера
 
 ```json
 {
@@ -604,7 +607,7 @@ val view = UiBuilder(context).build {
 }
 ```
 
-### 7. Полный пример с загрузкой из сети
+### 7. Полный Пример С Загрузкой Из Сети
 
 ```kotlin
 class DynamicScreenActivity : AppCompatActivity() {
@@ -647,7 +650,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 }
 ```
 
-### Преимущества динамических экранов
+### Преимущества Динамических Экранов
 
 1. **Гибкость** - изменение UI без обновления приложения
 2. **A/B тестирование** - разные варианты экранов для разных пользователей
@@ -671,7 +674,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 4. **Валидация** - проверять конфигурацию перед применением
 5. **Типобезопасность** - использовать sealed classes для компонентов
 
-### Использование в продакшене
+### Использование В Продакшене
 
 Многие крупные приложения используют Server-Driven UI:
 

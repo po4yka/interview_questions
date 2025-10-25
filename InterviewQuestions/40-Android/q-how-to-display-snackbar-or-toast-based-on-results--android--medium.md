@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-navigation-methods-in-kotlin--android--medium, q-how-animations-work-in-recyclerview--android--medium, q-android-architectural-patterns--android--medium]
+related: [q-android-architectural-patterns--android--medium, q-how-animations-work-in-recyclerview--android--medium, q-navigation-methods-in-kotlin--android--medium]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:31 pm
+date modified: Saturday, October 25th 2025, 4:39:51 pm
 ---
-# How to display Snackbar or Toast based on results?
+
+# How to Display Snackbar or Toast Based on Results?
 
 ## EN (expanded)
 

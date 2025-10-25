@@ -1,31 +1,28 @@
 ---
 id: 20251016-162753
 title: BroadcastReceiver and ContentProvider / BroadcastReceiver и ContentProvider
-aliases:
-- BroadcastReceiver and ContentProvider
-- BroadcastReceiver и ContentProvider
+aliases: [BroadcastReceiver and ContentProvider, BroadcastReceiver и ContentProvider]
 topic: android
 subtopics:
-- broadcast-receiver
-- content-provider
+  - broadcast-receiver
+  - content-provider
 question_kind: android
 difficulty: easy
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-manifest-file--android--easy
-- q-android-app-components--android--easy
-- q-android-service-types--android--easy
+  - q-android-app-components--android--easy
+  - q-android-manifest-file--android--easy
+  - q-android-service-types--android--easy
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/broadcast-receiver
-- android/content-provider
-- difficulty/easy
+tags: [android/broadcast-receiver, android/content-provider, difficulty/easy]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:53 pm
 ---
 
 # Вопрос (RU)

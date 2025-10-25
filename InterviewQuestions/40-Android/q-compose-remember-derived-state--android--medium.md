@@ -1,33 +1,30 @@
 ---
 id: 20251012-122710
 title: Compose remember/derivedStateOf / remember и derivedStateOf в Compose
-aliases:
-- Compose remember and derivedStateOf
-- remember и derivedStateOf
+aliases: [Compose remember and derivedStateOf, remember и derivedStateOf]
 topic: android
 subtopics:
-- ui-compose
-- ui-state
+  - ui-compose
+  - ui-state
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-remember-vs-remembersaveable-compose--android--medium
-- q-compose-performance-optimization--android--hard
-- q-compose-compiler-plugin--android--hard
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-performance-optimization--android--hard
+  - q-remember-vs-remembersaveable-compose--android--medium
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/ui-state
-- difficulty/medium
+tags: [android/ui-compose, android/ui-state, difficulty/medium]
 source: https://developer.android.com/develop/ui/compose/state
 source_note: Official Compose state docs
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:37 pm
 ---
 
 # Вопрос (RU)
@@ -50,7 +47,7 @@ source_note: Official Compose state docs
 - derivedStateOf: computes a value that only invalidates when RESULT changes.
 - Builds on [[c-data-structures]] for efficient state caching and [[c-algorithms]] for change detection.
 
-### Minimal patterns
+### Minimal Patterns
 
 remember (composition‑scoped)
 - Use for temporary UI state or cached computations tied to parameters.

@@ -1,31 +1,29 @@
 ---
 id: 20251020-200000
 title: Custom ViewGroup Layout / Layout кастомных ViewGroup
-aliases:
-- Custom ViewGroup Layout
-- Layout кастомных ViewGroup
+aliases: [Custom ViewGroup Layout, Layout кастомных ViewGroup]
 topic: android
 subtopics:
-- ui-views
+  - ui-views
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-custom-view-lifecycle--android--medium
-- q-custom-view-attributes--android--medium
-- q-custom-drawable-implementation--android--medium
+  - q-custom-drawable-implementation--android--medium
+  - q-custom-view-attributes--android--medium
+  - q-custom-view-lifecycle--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/ui-views
-- difficulty/hard
+tags: [android/ui-views, difficulty/hard]
 source: https://developer.android.com/reference/android/view/ViewGroup
 source_note: Official ViewGroup documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:21 pm
 ---
 
 # Вопрос (RU)
@@ -40,7 +38,7 @@ source_note: Official ViewGroup documentation
 
 Требует понимания [[c-custom-views]], c-view-measurement и c-layout-algorithms.
 
-### Теория: Двухпроходный алгоритм компоновки
+### Теория: Двухпроходный Алгоритм Компоновки
 
 **1. Проход измерения (onMeasure)**
 - Родитель измеряет каждый дочерний элемент через `child.measure()`
@@ -51,7 +49,7 @@ source_note: Official ViewGroup documentation
 - Родитель позиционирует каждый дочерний элемент через `child.layout()`
 - Дочерние элементы получают свои координаты в системе родителя
 
-### Ключевые концепции
+### Ключевые Концепции
 
 **MeasureSpec** определяет требования к размеру:
 - `EXACTLY` - точный размер (match_parent, конкретное значение)
@@ -62,7 +60,7 @@ source_note: Official ViewGroup documentation
 - `MarginLayoutParams` - поддерживает margins
 - Кастомные LayoutParams - для специфичных требований
 
-### Базовая реализация FlowLayout
+### Базовая Реализация FlowLayout
 
 ```kotlin
 class FlowLayout @JvmOverloads constructor(
@@ -178,7 +176,7 @@ class FlowLayout @JvmOverloads constructor(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **Измерение:**
 - Всегда измеряйте дочерние элементы перед родительским
@@ -195,7 +193,7 @@ class FlowLayout @JvmOverloads constructor(
 - Кэшируйте вычисления между `onMeasure()` и `onLayout()`
 - Избегайте создания объектов в циклах измерения/компоновки
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 **Забыли `setMeasuredDimension()`** - приводит к краху
 **Не измерили дочерние элементы** - `measuredWidth/Height` будут равны 0

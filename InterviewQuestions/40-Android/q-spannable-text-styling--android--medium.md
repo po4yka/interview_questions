@@ -9,6 +9,7 @@ tags: [spannable, text-styling, ui, textview, difficulty/medium]
 moc: moc-android
 related: [q-how-to-add-custom-attributes-to-custom-view--android--medium, q-why-use-fragments-when-we-have-activities--android--medium, q-android-project-parts--android--easy]
 ---
+
 # Spannable Text in Android / Spannable текст в Android
 
 **English**: What is Spannable?

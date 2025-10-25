@@ -9,6 +9,7 @@ related: [q-what-navigation-methods-exist-in-kotlin--programming-languages--medi
 created: 2025-10-15
 tags: [database, fts, search, performance, optimization, difficulty/hard]
 ---
+
 # Room Full-Text Search (FTS) / Полнотекстовый поиск в Room
 
 **English**: Implement full-text search in Room using FTS4/FTS5. Optimize search performance for large datasets.

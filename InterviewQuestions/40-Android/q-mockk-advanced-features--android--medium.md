@@ -9,6 +9,7 @@ related: [q-mvp-pattern--android--medium, q-why-use-diffutil--android--medium, q
 created: 2025-10-15
 tags: [mockk, mocking, kotlin, unit-testing, coroutines, difficulty/medium]
 ---
+
 # MockK Advanced Features
 
 # Question (EN)

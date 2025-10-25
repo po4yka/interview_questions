@@ -9,6 +9,7 @@ related: [q-single-activity-approach--android--medium, q-compose-semantics--andr
 created: 2025-10-15
 tags: [design, material3, theming, dynamic-color, difficulty/medium]
 ---
+
 # Material 3 Dynamic Color and Theming
 
 # Question (EN)

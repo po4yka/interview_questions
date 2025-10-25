@@ -1,33 +1,29 @@
 ---
 id: 20251012-122785
 title: Async Operations in Android / Асинхронные операции в Android
-aliases:
-- Async Operations in Android
-- Асинхронные операции в Android
+aliases: [Async Operations in Android, Асинхронные операции в Android]
 topic: android
 subtopics:
-- threads-sync
-- coroutines
-- background-execution
+  - background-execution
+  - coroutines
+  - threads-sync
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-async-primitives--android--easy
-- q-anr-application-not-responding--android--medium
-- q-android-performance-measurement-tools--android--medium
+  - q-android-async-primitives--android--easy
+  - q-android-performance-measurement-tools--android--medium
+  - q-anr-application-not-responding--android--medium
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/threads-sync
-- android/coroutines
-- android/background-execution
-- difficulty/medium
+tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:53:00 pm
 ---
 
 # Вопрос (RU)
@@ -47,7 +43,7 @@ Use the right tool per use case: [[c-coroutines]] (default), [[c-workmanager]] (
 - [[c-lifecycle]] awareness for safe UI updates
 - Deferrable jobs must survive process death (WorkManager)
 
-### 1) Kotlin Coroutines — default choice
+### 1) Kotlin Coroutines — Default Choice
 
 - Theory: Structured concurrency; lifecycle scopes; easy cancellation; fine-grained dispatchers (Main/IO/Default).
 - Key points:
@@ -65,7 +61,7 @@ lifecycleScope.launch {
 }
 ```
 
-### 2) ExecutorService — Java interop
+### 2) ExecutorService — Java Interop
 
 - Theory: Thread pools; manual lifecycle/cancellation; use for libraries/legacy APIs.
 - Key points:
@@ -84,7 +80,7 @@ executor.execute {
 }
 ```
 
-### 3) HandlerThread — message queue thread
+### 3) HandlerThread — Message Queue Thread
 
 - Theory: Single background Looper + Handler; good for sequential tasks and message-based processing.
 - Key points:
@@ -100,7 +96,7 @@ val ui = Handler(Looper.getMainLooper())
 bg.post { val r = compute(); ui.post { render(r) } }
 ```
 
-### 4) WorkManager — deferrable, guaranteed work
+### 4) WorkManager — Deferrable, Guaranteed Work
 
 - Theory: Persists across app restarts; respects constraints (network, battery); chaining and retries.
 - Key points:
@@ -120,7 +116,7 @@ val req = OneTimeWorkRequestBuilder<UploadWorker>()
 WorkManager.getInstance(context).enqueue(req)
 ```
 
-### 5) RxJava — reactive streams
+### 5) RxJava — Reactive Streams
 
 - Theory: Pull/push streams with schedulers; prefer coroutines unless project standardizes on Rx.
 - Key points:
@@ -136,7 +132,7 @@ repo.getUser()
   .subscribe({ render(it) }, { showError(it) })
 ```
 
-### 6) Threads — low-level
+### 6) Threads — Low-level
 
 - Theory: Manual thread mgmt; no lifecycle/cancellation; use only for minimal cases.
 - Key points:

@@ -1,39 +1,30 @@
 ---
 id: 20251020-200000
 title: Database Optimization Android / Оптимизация базы данных Android
-aliases:
-- Database Optimization Android
-- Оптимизация базы данных Android
+aliases: [Database Optimization Android, Оптимизация базы данных Android]
 topic: android
 subtopics:
-- performance-memory
-- room
+  - performance-memory
+  - room
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-database-encryption-android--android--medium
-- q-android-performance-optimization--android--medium
-- q-room-database-basics--android--easy
+  - q-android-performance-optimization--android--medium
+  - q-database-encryption-android--android--medium
+  - q-room-database-basics--android--easy
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/performance-memory
-- android/room
-- database
-- room
-- performance
-- optimization
-- sql
-- indexing
-- difficulty/medium
+tags: [android/performance-memory, android/room, database, difficulty/medium, indexing, optimization, performance, room, sql]
 source: https://developer.android.com/training/data-storage/room
 source_note: Android Room documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:11 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +37,7 @@ source_note: Android Room documentation
 
 Оптимизация базы данных критически важна для производительности Android приложений, особенно при работе с большими наборами данных или частыми операциями с базой данных.
 
-### Теория: Принципы оптимизации базы данных
+### Теория: Принципы Оптимизации Базы Данных
 
 **Основные концепции:**
 - **Индексация** - ускорение поиска и сортировки данных
@@ -61,7 +52,7 @@ source_note: Android Room documentation
 - Асинхронные операции предотвращают ANR
 - Кэширование снижает количество обращений к базе данных
 
-### 1. Стратегия индексации
+### 1. Стратегия Индексации
 
 **Теоретические основы:**
 Индексы создают дополнительные структуры данных для ускорения поиска. Они работают как указатели на данные, позволяя быстро находить записи без полного сканирования таблицы.
@@ -90,7 +81,7 @@ data class User(
 )
 ```
 
-### 2. Пакетные операции
+### 2. Пакетные Операции
 
 **Теоретические основы:**
 Пакетные операции группируют множественные операции в одну транзакцию, снижая накладные расходы на открытие/закрытие соединений и коммит транзакций.
@@ -122,7 +113,7 @@ interface UserDao {
 }
 ```
 
-### 3. Асинхронные операции
+### 3. Асинхронные Операции
 
 **Теоретические основы:**
 Асинхронные операции предотвращают блокировку UI потока и ANR (Application Not Responding) ошибки. Room предоставляет встроенную поддержку корутин для асинхронных операций.
@@ -150,7 +141,7 @@ class UserRepository @Inject constructor(private val userDao: UserDao) {
 }
 ```
 
-### 4. Кэширование данных
+### 4. Кэширование Данных
 
 **Теоретические основы:**
 Кэширование хранит часто используемые данные в памяти для быстрого доступа. Это снижает количество обращений к базе данных и улучшает производительность.
@@ -179,7 +170,7 @@ class CachedUserRepository @Inject constructor(
 }
 ```
 
-### 5. Оптимизация запросов
+### 5. Оптимизация Запросов
 
 **Теоретические основы:**
 Оптимизация SQL запросов включает использование эффективных операторов, минимизацию количества записей и правильное использование JOIN операций.
@@ -205,7 +196,7 @@ interface OptimizedUserDao {
 }
 ```
 
-### 6. Производительность и мониторинг
+### 6. Производительность И Мониторинг
 
 **Теоретические основы:**
 Мониторинг производительности базы данных критически важен для выявления узких мест и оптимизации. Android предоставляет инструменты для профилирования и анализа.

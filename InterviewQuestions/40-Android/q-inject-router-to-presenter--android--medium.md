@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-play-feature-delivery--android--medium, q-how-to-reduce-number-of-recompositions-besides-side-effects--programming-languages--hard, q-state-hoisting-compose--android--medium]
+related: [q-how-to-reduce-number-of-recompositions-besides-side-effects--programming-languages--hard, q-play-feature-delivery--android--medium, q-state-hoisting-compose--android--medium]
 created: 2025-10-15
-tags: [android/architecture-mvi, android/di-hilt, architecture-mvi, dagger/hilt, dependency-injection, di-hilt, koin, platform/android, difficulty/medium]
+tags: [android/architecture-mvi, android/di-hilt, architecture-mvi, dagger/hilt, dependency-injection, di-hilt, difficulty/medium, koin, platform/android]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:11:04 pm
 ---
-# How to inject Router directly into Presenter?
+
+# How to Inject Router Directly into Presenter?
 
 **Russian**: Что использовать для того чтобы роутер инжектился напрямую в презентер?
 
@@ -561,7 +564,7 @@ class FakeRouter : Router {
 
 ---
 
-## Comparison: Hilt vs Dagger vs Koin
+## Comparison: Hilt Vs Dagger Vs Koin
 
 | Feature | Hilt | Dagger 2 | Koin |
 |---------|------|----------|------|
@@ -667,7 +670,7 @@ class Presenter @Inject constructor(
 2. **Dagger 2** - compile-time DI
 3. **Koin** - Kotlin-first, runtime DI
 
-### Пример с Hilt
+### Пример С Hilt
 
 ```kotlin
 // Интерфейс роутера
@@ -715,7 +718,7 @@ class ProductListFragment : Fragment() {
 }
 ```
 
-### Пример с Koin
+### Пример С Koin
 
 ```kotlin
 // Модуль Koin
@@ -750,7 +753,7 @@ class ProductListFragment : Fragment() {
 }
 ```
 
-### Преимущества DI для роутеров:
+### Преимущества DI Для Роутеров:
 
 1. **Слабая связанность** - презентер не зависит от реализации навигации
 2. **Легкое тестирование** - можно подменить роутер на mock
@@ -758,7 +761,7 @@ class ProductListFragment : Fragment() {
 4. **Переиспользование** - один роутер для многих презентеров
 5. **Изоляция модулей** - feature модули не зависят от основного модуля
 
-### Тестирование с mock роутером
+### Тестирование С Mock Роутером
 
 ```kotlin
 class ProductPresenterTest {

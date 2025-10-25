@@ -9,6 +9,7 @@ tags: [architecture, offline-first, networking, sync, room, workmanager, difficu
 moc: moc-android
 related: [q-how-to-create-dynamic-screens-at-runtime--android--hard, q-workmanager-chaining--background--hard, q-navigation-methods-in-android--android--medium]
 ---
+
 # How to Implement Offline-First Architecture in Android
 
 # Вопрос (RU)

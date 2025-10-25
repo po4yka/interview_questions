@@ -1,33 +1,29 @@
 ---
 id: 20251012-122783
 title: App Store Optimization / Оптимизация App Store
-aliases:
-- App Store Optimization
-- Оптимизация App Store
+aliases: [App Store Optimization, Оптимизация App Store]
 topic: android
 subtopics:
-- app-bundle
-- engagement-retention
-- play-console
+  - app-bundle
+  - engagement-retention
+  - play-console
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-alternative-distribution--android--medium
-- q-android-app-bundles--android--easy
-- q-android-app-components--android--easy
+  - q-alternative-distribution--android--medium
+  - q-android-app-bundles--android--easy
+  - q-android-app-components--android--easy
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/app-bundle
-- android/engagement-retention
-- android/play-console
-- difficulty/medium
+tags: [android/app-bundle, android/engagement-retention, android/play-console, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:00 pm
 ---
 
 # Вопрос (RU)

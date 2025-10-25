@@ -1,31 +1,28 @@
 ---
 id: 20251011-220007
 title: App Size Optimization / Оптимизация размера приложения
-aliases:
-- App Size Optimization
-- Оптимизация размера приложения
+aliases: [App Size Optimization, Оптимизация размера приложения]
 topic: android
 subtopics:
-- performance-memory
-- gradle
+  - gradle
+  - performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-build-optimization--android--medium
-- q-android-performance-measurement-tools--android--medium
-- q-android-app-bundles--android--easy
+  - q-android-app-bundles--android--easy
+  - q-android-build-optimization--android--medium
+  - q-android-performance-measurement-tools--android--medium
 created: 2025-10-11
 updated: 2025-10-15
-tags:
-- android/performance-memory
-- android/gradle
-- difficulty/medium
+tags: [android/gradle, android/performance-memory, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:03 pm
 ---
 
 # Вопрос (RU)

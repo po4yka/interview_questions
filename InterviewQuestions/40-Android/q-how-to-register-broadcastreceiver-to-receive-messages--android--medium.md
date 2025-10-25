@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-what-does-the-lifecycle-library-do--android--medium, q-how-animations-work-in-recyclerview--android--medium, q-why-was-the-lifecycle-library-created--android--hard]
+related: [q-how-animations-work-in-recyclerview--android--medium, q-what-does-the-lifecycle-library-do--android--medium, q-why-was-the-lifecycle-library-created--android--hard]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:11:18 pm
 ---
-# How to register BroadcastReceiver to receive messages?
+
+# How to Register BroadcastReceiver to Receive Messages?
 
 ## Answer (EN)
 There are **two ways** to register a BroadcastReceiver in Android:
@@ -149,7 +151,7 @@ class ReceiverActivity : AppCompatActivity() {
 }
 ```
 
-#### Local Broadcasts (Deprecated but shown for reference)
+#### Local Broadcasts (Deprecated but Shown for reference)
 
 ```kotlin
 // Old way - LocalBroadcastManager (Deprecated in AndroidX)
@@ -271,7 +273,7 @@ class SmsReceiver : BroadcastReceiver() {
 }
 ```
 
-### Dynamic vs Static Registration
+### Dynamic Vs Static Registration
 
 | Aspect | Dynamic Registration | Static Registration |
 |--------|---------------------|---------------------|
@@ -304,7 +306,7 @@ Some broadcasts require permissions:
 
 ### Modern Alternatives to BroadcastReceiver
 
-#### 1. WorkManager (for background work)
+#### 1. WorkManager (for Background work)
 
 ```kotlin
 // Instead of listening for BOOT_COMPLETED or network changes
@@ -320,7 +322,7 @@ val workRequest = PeriodicWorkRequestBuilder<MyWorker>(
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
-#### 2. Flow/LiveData (for in-app events)
+#### 2. Flow/LiveData (for In-app events)
 
 ```kotlin
 // Instead of LocalBroadcastManager
@@ -345,7 +347,7 @@ class MyViewModel(private val eventBus: EventBus) : ViewModel() {
 }
 ```
 
-#### 3. NetworkCallback (for network changes)
+#### 3. NetworkCallback (for Network changes)
 
 ```kotlin
 val networkCallback = object : ConnectivityManager.NetworkCallback() {
@@ -479,11 +481,11 @@ unregisterReceiver(receiver)
 1. **Динамическая регистрация в коде** (Runtime registration) - Рекомендуется для большинства случаев
 2. **Статическая регистрация в AndroidManifest.xml** - Ограниченное использование из-за ограничений фоновой работы
 
-### 1. Динамическая регистрация (Рекомендуется)
+### 1. Динамическая Регистрация (Рекомендуется)
 
 Регистрация BroadcastReceiver программно в Activity, Fragment или Service.
 
-#### Базовая динамическая регистрация
+#### Базовая Динамическая Регистрация
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -522,7 +524,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### Множественные Broadcast действия
+#### Множественные Broadcast Действия
 
 ```kotlin
 class BatteryActivity : AppCompatActivity() {
@@ -610,7 +612,7 @@ class ReceiverActivity : AppCompatActivity() {
 }
 ```
 
-#### Локальные Broadcasts (Устаревшее, но показано для справки)
+#### Локальные Broadcasts (Устаревшее, Но Показано Для справки)
 
 ```kotlin
 // Старый способ - LocalBroadcastManager (Устарел в AndroidX)
@@ -658,7 +660,7 @@ class ModernLocalEventExample : AppCompatActivity() {
 }
 ```
 
-### 2. Статическая регистрация (Manifest)
+### 2. Статическая Регистрация (Manifest)
 
 Регистрация в AndroidManifest.xml - receiver существует даже когда приложение не запущено.
 
@@ -732,7 +734,7 @@ class SmsReceiver : BroadcastReceiver() {
 }
 ```
 
-### Динамическая vs Статическая регистрация
+### Динамическая Vs Статическая Регистрация
 
 | Аспект | Динамическая регистрация | Статическая регистрация |
 |--------|-------------------------|------------------------|
@@ -743,7 +745,7 @@ class SmsReceiver : BroadcastReceiver() {
 | **Ограничения Android 8+** | Нет ограничений | Много неявных broadcasts заблокировано |
 | **Случаи использования** | Обновления UI, временные слушатели | BOOT_COMPLETED, SMS, будильники |
 
-### Разрешения для BroadcastReceivers
+### Разрешения Для BroadcastReceivers
 
 Некоторые broadcasts требуют разрешений:
 
@@ -763,9 +765,9 @@ class SmsReceiver : BroadcastReceiver() {
 <!-- Разрешение не требуется - публичный broadcast -->
 ```
 
-### Современные альтернативы BroadcastReceiver
+### Современные Альтернативы BroadcastReceiver
 
-#### 1. WorkManager (для фоновой работы)
+#### 1. WorkManager (для Фоновой работы)
 
 ```kotlin
 // Вместо прослушивания BOOT_COMPLETED или изменений сети
@@ -781,7 +783,7 @@ val workRequest = PeriodicWorkRequestBuilder<MyWorker>(
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
-#### 2. Flow/LiveData (для событий внутри приложения)
+#### 2. Flow/LiveData (для Событий Внутри приложения)
 
 ```kotlin
 // Вместо LocalBroadcastManager
@@ -806,7 +808,7 @@ class MyViewModel(private val eventBus: EventBus) : ViewModel() {
 }
 ```
 
-#### 3. NetworkCallback (для изменений сети)
+#### 3. NetworkCallback (для Изменений сети)
 
 ```kotlin
 val networkCallback = object : ConnectivityManager.NetworkCallback() {
@@ -830,7 +832,7 @@ connectivityManager.registerNetworkCallback(request, networkCallback)
 connectivityManager.unregisterNetworkCallback(networkCallback)
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Всегда отменяйте регистрацию динамических receivers**
 

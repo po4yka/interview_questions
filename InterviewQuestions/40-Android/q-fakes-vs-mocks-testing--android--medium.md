@@ -1,38 +1,31 @@
 ---
 id: 20251020-200600
 title: Fakes Vs Mocks Testing / Fakes против Mocks Тестирование
-aliases:
-- Fakes Vs Mocks Testing
-- Fakes против Mocks Тестирование
+aliases: [Fakes Vs Mocks Testing, Fakes против Mocks Тестирование]
 topic: android
 subtopics:
-- testing-unit
-- testing-instrumented
+  - testing-instrumented
+  - testing-unit
 
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: https://developer.android.com/training/testing/unit-testing/local-unit-tests
 source_note: Android unit testing documentation
 status: draft
 moc: moc-android
 related:
-- q-android-testing-strategies--android--medium
-- q-mockito-vs-mockk--testing--medium
-- q-testing-best-practices--testing--medium
+  - q-android-testing-strategies--android--medium
+  - q-mockito-vs-mockk--testing--medium
+  - q-testing-best-practices--testing--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-  - android/testing-unit
-  - android/testing-instrumented
-  - fakes
-  - mocks
-  - test-doubles
-  - testing-strategy
-  - difficulty/medium
+tags: [android/testing-instrumented, android/testing-unit, difficulty/medium, fakes, mocks, test-doubles, testing-strategy]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:02 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +39,7 @@ tags:
 
 **Test doubles** - объекты, заменяющие реальные зависимости в тестах. Типы: **Fakes**, **Mocks**, **Stubs**, **Spies**, **Dummies** - каждый для конкретных целей.
 
-### Основные типы
+### Основные Типы
 
 **1. Stub**
 - Назначение: возвращает предопределенные ответы

@@ -1,32 +1,29 @@
 ---
 id: 20251012-122711
 title: Compose Stability Skippability / Стабильность и пропускаемость Compose
-aliases:
-- Compose Stability Skippability
-- Стабильность и пропускаемость Compose
+aliases: [Compose Stability Skippability, Стабильность и пропускаемость Compose]
 topic: android
 subtopics:
-- ui-compose
-- performance-memory
+  - performance-memory
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compose-slot-table-recomposition--android--hard
-- q-compose-performance-optimization--android--hard
+  - q-compose-performance-optimization--android--hard
+  - q-compose-slot-table-recomposition--android--hard
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/performance-memory
-- difficulty/hard
+tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 source: https://developer.android.com/jetpack/compose/performance
 source_note: Official Compose performance docs
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:30 pm
 ---
 
 # Вопрос (RU)
@@ -400,7 +397,7 @@ data class User(val name: String, val age: Int)
 data class User(var name: String, var age: Int)
 ```
 
-2. **Use kotlinx-collections-immutable** for lists
+1. **Use kotlinx-collections-immutable** for lists
 
 ```kotlin
 //  DO
@@ -410,7 +407,7 @@ fun getUsers(): ImmutableList<User> = persistentListOf(...)
 fun getUsers(): List<User> = mutableListOf(...) // Still unstable!
 ```
 
-3. **Add @Stable to interfaces you control**
+1. **Add @Stable to interfaces you control**
 
 ```kotlin
 @Stable
@@ -419,11 +416,11 @@ interface Repository {
 }
 ```
 
-4. **Check compiler reports** regularly
+1. **Check compiler reports** regularly
 
-5. **Don't overuse @Stable** - only when you're certain about stability
+2. **Don't overuse @Stable** - only when you're certain about stability
 
-6. **Consider strong skipping mode** for better default behavior
+3. **Consider strong skipping mode** for better default behavior
 
 ---
 

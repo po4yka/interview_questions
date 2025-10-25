@@ -9,6 +9,7 @@ related: [q-what-is-the-difference-between-fragmentmanager-and-fragmenttransacti
 created: 2025-10-15
 tags: [privacy-sandbox, topics-api, privacy, advertising, user-privacy, difficulty/medium]
 ---
+
 # Privacy Sandbox: Topics API and Privacy-Preserving Advertising
 
 ---

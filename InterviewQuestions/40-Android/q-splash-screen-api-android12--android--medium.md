@@ -16,6 +16,7 @@ subtopics:
   - app-startup
   - ui-animation
 ---
+
 # Splash Screen API (Android 12+) / API Splash Screen (Android 12+)
 
 **English**: What do you know about Splash Screen API?

@@ -1,32 +1,29 @@
 ---
 id: 20251021-170000
 title: Custom View Attributes / Атрибуты Custom View
-aliases:
-- Custom View Attributes
-- Атрибуты Custom View
+aliases: [Custom View Attributes, Атрибуты Custom View]
 topic: android
 subtopics:
-- ui-views
-- ui-theming
+  - ui-theming
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-how-to-add-custom-attributes-to-custom-view--android--medium
-- q-custom-view-lifecycle--android--medium
+  - q-custom-view-lifecycle--android--medium
+  - q-how-to-add-custom-attributes-to-custom-view--android--medium
 created: 2025-10-21
 updated: 2025-10-21
-tags:
-- android/ui-views
-- android/ui-theming
-- difficulty/medium
+tags: [android/ui-theming, android/ui-views, difficulty/medium]
 source: https://developer.android.com/guide/topics/ui/themes
 source_note: Official theming guide
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:23 pm
 ---
 
 # Вопрос (RU)

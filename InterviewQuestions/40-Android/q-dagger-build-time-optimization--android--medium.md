@@ -1,33 +1,30 @@
 ---
 id: 20251020-200000
 title: Dagger Build Time Optimization / Оптимизация времени сборки Dagger
-aliases:
-- Dagger Build Time Optimization
-- Оптимизация времени сборки Dagger
+aliases: [Dagger Build Time Optimization, Оптимизация времени сборки Dagger]
 topic: android
 subtopics:
-- di-hilt
-- gradle
+  - di-hilt
+  - gradle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-build-optimization--android--medium
-- q-dependency-injection-basics--android--medium
-- q-hilt-android--android--medium
+  - q-android-build-optimization--android--medium
+  - q-dependency-injection-basics--android--medium
+  - q-hilt-android--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/di-hilt
-- android/gradle
-- difficulty/medium
+tags: [android/di-hilt, android/gradle, difficulty/medium]
 source: https://dagger.dev/hilt/
 source_note: Hilt documentation
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:21 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +39,7 @@ source_note: Hilt documentation
 
 Связано с концепциями [[c-dependency-injection]], c-gradle-optimization и c-annotation-processing.
 
-### Теория: Источники замедления сборки
+### Теория: Источники Замедления Сборки
 
 **Annotation Processing Overhead**
 - Dagger генерирует код на этапе компиляции
@@ -55,7 +52,7 @@ source_note: Hilt documentation
 - Отсутствие инкрементальности в kapt
 - Неоптимальная модульная структура
 
-### Ключевые стратегии оптимизации
+### Ключевые Стратегии Оптимизации
 
 **1. Миграция на Hilt**
 Hilt автоматизирует создание компонентов и упрощает архитектуру:
@@ -106,7 +103,7 @@ object ActivityModule {
 }
 ```
 
-### Конфигурация сборки
+### Конфигурация Сборки
 
 **Gradle настройки:**
 ```properties

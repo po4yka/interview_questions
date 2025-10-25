@@ -9,6 +9,7 @@ related: [q-in-what-cases-might-you-need-to-call-commitallowingstateloss--androi
 created: 2025-10-15
 tags: [android/navigation, android/ui, bottomnavigationview, fragmentmanager, intent, jetpack navigation, navhost, navigation, tablayout, ui, difficulty/medium]
 ---
+
 # Какие способы навигации в Android знаешь?
 
 **English**: What navigation methods in Android do you know?

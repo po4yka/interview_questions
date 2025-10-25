@@ -9,6 +9,7 @@ related: [q-room-type-converters-advanced--room--medium, q-what-is-known-about-r
 created: 2025-10-15
 tags: [hilt, dependency-injection, test-doubles, difficulty/medium]
 ---
+
 # Test Doubles with Hilt
 
 **English**: Implement test doubles with Hilt. Use @TestInstallIn to replace production modules. Test with different configurations.

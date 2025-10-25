@@ -1,29 +1,27 @@
 ---
 id: 20251012-400003
 title: Biometric Authentication / Биометрическая аутентификация
-aliases:
-- Biometric Authentication
-- Биометрическая аутентификация
+aliases: [Biometric Authentication, Биометрическая аутентификация]
 topic: android
 subtopics:
-- permissions
+  - permissions
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-keystore-system--security--medium
-- q-android-security-best-practices--android--medium
-- q-app-security-best-practices--android--medium
+  - q-android-keystore-system--security--medium
+  - q-android-security-best-practices--android--medium
+  - q-app-security-best-practices--android--medium
 created: 2025-10-12
 updated: 2025-10-15
-tags:
-- android/permissions
-- difficulty/medium
+tags: [android/permissions, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:53 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +34,7 @@ tags:
 
 ## Ответ (RU)
 
-### Обзор биометрической аутентификации
+### Обзор Биометрической Аутентификации
 
 **Теория**: Биометрическая аутентификация обеспечивает безопасную и удобную аутентификацию пользователей с использованием отпечатка пальца, распознавания лица или радужной оболочки глаза. Библиотека AndroidX Biometric предоставляет единый API для всех версий Android.
 

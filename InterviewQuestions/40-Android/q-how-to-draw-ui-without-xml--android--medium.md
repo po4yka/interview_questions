@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-accessibility-color-contrast--accessibility--medium, q-which-event-is-triggered-when-user-presses-screen--android--medium, q-database-encryption-android--android--medium]
+related: [q-accessibility-color-contrast--accessibility--medium, q-database-encryption-android--android--medium, q-which-event-is-triggered-when-user-presses-screen--android--medium]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:39:46 pm
 ---
-# How to draw UI without XML?
+
+# How to Draw UI without XML?
 
 ## EN (expanded)
 

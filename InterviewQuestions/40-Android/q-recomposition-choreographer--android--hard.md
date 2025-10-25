@@ -9,6 +9,7 @@ related: [q-list-to-detail-navigation--android--medium, q-memory-leak-detection-
 created: 2025-10-15
 tags: [android/jetpack-compose, android/performance, choreographer, frame-scheduling, jetpack-compose, performance, recomposition, vsync, difficulty/hard]
 ---
+
 # Рекомпозиция происходит в рандомное время или по команде хореографера?
 
 **English**: Does recomposition happen at random times or on command from Choreographer?

@@ -9,6 +9,7 @@ related: [q-material3-motion-transitions--material-design--medium, q-what-does-i
 created: 2025-10-15
 tags: [views, touch-events, gestures, android-framework, difficulty/medium]
 ---
+
 # Touch Event Handling in Custom Views
 
 # Question (EN)

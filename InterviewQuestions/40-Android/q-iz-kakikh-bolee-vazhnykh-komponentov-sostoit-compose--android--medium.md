@@ -5,12 +5,15 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: [android/ui-compose, languages, android, difficulty/medium]
+tags: [android, android/ui-compose, difficulty/medium, languages]
 moc: moc-android
-related: [q-how-to-start-drawing-ui-in-android--android--easy, q-what-is-intent--android--easy, q-recyclerview-itemdecoration-advanced--recyclerview--medium]
+related: [q-how-to-start-drawing-ui-in-android--android--easy, q-recyclerview-itemdecoration-advanced--recyclerview--medium, q-what-is-intent--android--easy]
 subtopics: [ui-compose]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:10:59 pm
 ---
-# Из каких более важных компонентов состоит Compose?
+
+# Из Каких Более Важных Компонентов Состоит Compose?
 
 ## Answer (EN)
 Jetpack Compose consists of several core components that work together to create a declarative UI framework. Understanding these components is essential for effective Compose development.
@@ -586,7 +589,7 @@ The most important Compose components:
 
 ---
 
-# Из каких более важных компонентов состоит Compose
+# Из Каких Более Важных Компонентов Состоит Compose
 
 ## Ответ (RU)
 Compose состоит из следующих более важных компонентов: Composable функции, которые описывают UI; State управляет состоянием компонентов; Modifiers применяются для настройки внешнего вида и поведения; Layouts определяют структуру расположения элементов на экране и Recomposition механизм обновления интерфейса при изменении состояния

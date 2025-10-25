@@ -9,6 +9,7 @@ related: [q-canvas-drawing-optimization--custom-views--hard, q-what-is-data-bind
 created: 2025-10-15
 tags: [android/background-processing, background-processing, battery-optimization, doze-mode, services, workmanager, difficulty/medium]
 ---
+
 # Why are there restrictions on starting services?
 
 **Russian**: С чем связаны ограничения на запуск сервисов?

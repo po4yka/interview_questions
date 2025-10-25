@@ -5,11 +5,14 @@ topic: android
 difficulty: easy
 status: draft
 moc: moc-android
-related: [q-looper-empty-queue-behavior--android--medium, q-where-does-the-repeated-call-of-composable-function-come-from--android--medium, q-cicd-automated-testing--devops--medium]
+related: [q-cicd-automated-testing--devops--medium, q-looper-empty-queue-behavior--android--medium, q-where-does-the-repeated-call-of-composable-function-come-from--android--medium]
 created: 2025-10-15
-tags: [languages, android, difficulty/easy]
+tags: [android, difficulty/easy, languages]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:40:00 pm
 ---
-# Как изменить количество колонок в RecyclerView в зависимости от ориентации?
+
+# Как Изменить Количество Колонок В RecyclerView В Зависимости От Ориентации?
 
 ## Answer (EN)
 You can use **GridLayoutManager** and set the number of columns dynamically based on screen orientation.
@@ -132,13 +135,13 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 
 ---
 
-# Как изменить количество колонок в RecyclerView в зависимости от ориентации
+# Как Изменить Количество Колонок В RecyclerView В Зависимости От Ориентации
 
 ## Ответ (RU)
 
 Ты можешь использовать **GridLayoutManager** и задать количество колонок динамически в зависимости от ориентации экрана.
 
-### Базовая реализация
+### Базовая Реализация
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -213,7 +216,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Динамическое количество колонок на основе ширины экрана
+### Динамическое Количество Колонок На Основе Ширины Экрана
 
 ```kotlin
 class AdaptiveGridLayoutManager(

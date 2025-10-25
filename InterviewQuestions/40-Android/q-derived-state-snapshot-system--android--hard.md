@@ -1,39 +1,30 @@
 ---
 id: 20251020-200000
 title: Derived State Snapshot System / Derived State и система Snapshot
-aliases:
-- Derived State Snapshot System
-- Derived State и система Snapshot
+aliases: [Derived State Snapshot System, Derived State и система Snapshot]
 topic: android
 subtopics:
-- ui-compose
-- performance-memory
+  - performance-memory
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compose-stability-skippability--android--hard
-- q-compose-performance-optimization--android--hard
-- q-compose-slot-table-recomposition--android--hard
+  - q-compose-performance-optimization--android--hard
+  - q-compose-slot-table-recomposition--android--hard
+  - q-compose-stability-skippability--android--hard
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/performance-memory
-- compose
-- state
-- snapshot
-- optimization
-- derived-state
-- performance
-- difficulty/hard
+tags: [android/performance-memory, android/ui-compose, compose, derived-state, difficulty/hard, optimization, performance, snapshot, state]
 source: https://developer.android.com/jetpack/compose/state
 source_note: Android Compose State documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:09 pm
 ---
 
 # Вопрос (RU)
@@ -48,7 +39,7 @@ source_note: Android Compose State documentation
 
 **derivedStateOf** строится на этой системе для создания вычисляемого состояния, которое запускает перекомпозицию только тогда, когда вычисляемый результат действительно изменяется, а не когда изменяются промежуточные значения.
 
-### Теория: Система Snapshot в Compose
+### Теория: Система Snapshot В Compose
 
 **Основные концепции:**
 - **Snapshot** - изолированное представление состояния
@@ -123,7 +114,7 @@ fun Counter() {
 }
 ```
 
-### Оптимизация перекомпозиции
+### Оптимизация Перекомпозиции
 
 **Теоретические принципы:**
 derivedStateOf оптимизирует перекомпозицию путем отслеживания изменений результата вычисления, а не промежуточных значений.
@@ -152,7 +143,7 @@ fun OptimizedList(items: List<String>) {
 }
 ```
 
-### Сравнение с другими подходами
+### Сравнение С Другими Подходами
 
 **Теоретическое сравнение:**
 
@@ -169,7 +160,7 @@ fun OptimizedList(items: List<String>) {
 - **derivedStateOf** - для оптимизированных вычислений
 - **LaunchedEffect** - для побочных эффектов
 
-### Лучшие практики
+### Лучшие Практики
 
 **Теоретические принципы:**
 - Используйте derivedStateOf для дорогих вычислений

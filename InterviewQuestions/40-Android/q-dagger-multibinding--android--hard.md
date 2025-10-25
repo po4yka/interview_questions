@@ -1,31 +1,29 @@
 ---
 id: 20251020-200000
 title: Dagger Multibinding / Multibinding в Dagger
-aliases:
-- Dagger Multibinding
-- Multibinding в Dagger
+aliases: [Dagger Multibinding, Multibinding в Dagger]
 topic: android
 subtopics:
-- di-hilt
+  - di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-dagger-framework-overview--android--hard
-- q-dagger-custom-scopes--android--hard
-- q-dagger-component-dependencies--android--hard
+  - q-dagger-component-dependencies--android--hard
+  - q-dagger-custom-scopes--android--hard
+  - q-dagger-framework-overview--android--hard
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/di-hilt
-- difficulty/hard
+tags: [android/di-hilt, difficulty/hard]
 source: https://dagger.dev/api/latest/dagger/Multibinds.html
 source_note: Dagger Multibinds API documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:17 pm
 ---
 
 # Вопрос (RU)
@@ -52,7 +50,7 @@ Multibinding в Dagger/Hilt позволяет связывать множест
 - `@IntoMap` - добавляет запись в Map с ключом
 - `@Multibinds` - объявляет пустую коллекцию для инъекции
 
-### 1. @IntoSet - Коллекция плагинов
+### 1. @IntoSet - Коллекция Плагинов
 
 **Создание коллекции плагинов:**
 
@@ -108,7 +106,7 @@ class PluginManager @Inject constructor(
 }
 ```
 
-### 2. @IntoMap - Ключевые коллекции
+### 2. @IntoMap - Ключевые Коллекции
 
 **Создание Map с ключами:**
 
@@ -165,7 +163,7 @@ class FeatureRouter @Inject constructor(
 }
 ```
 
-### 3. @ElementsIntoSet - Множественные элементы
+### 3. @ElementsIntoSet - Множественные Элементы
 
 **Добавление нескольких элементов:**
 
@@ -183,7 +181,7 @@ object NotificationModule {
 }
 ```
 
-### 4. @Multibinds - Пустые коллекции
+### 4. @Multibinds - Пустые Коллекции
 
 **Объявление пустых коллекций:**
 
@@ -198,7 +196,7 @@ abstract class EmptyCollectionModule {
 }
 ```
 
-### Плагинная архитектура
+### Плагинная Архитектура
 
 **Полная реализация плагинной системы:**
 
@@ -225,7 +223,7 @@ class FeatureModuleManager @Inject constructor(
 }
 ```
 
-### Hilt интеграция
+### Hilt Интеграция
 
 **Автоматическое создание компонентов:**
 

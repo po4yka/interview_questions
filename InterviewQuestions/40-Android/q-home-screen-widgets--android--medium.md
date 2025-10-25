@@ -7,9 +7,12 @@ status: draft
 moc: moc-android
 related: [q-recyclerview-viewtypes-delegation--recyclerview--medium, q-what-is-broadcastreceiver--android--easy, q-what-is-known-about-recyclerview--android--easy]
 created: 2025-10-15
-tags: [widgets, appwidget, home-screen, difficulty/medium]
+tags: [appwidget, difficulty/medium, home-screen, widgets]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:40:20 pm
 ---
-# Android Home Screen Widgets / Виджеты главного экрана Android
+
+# Android Home Screen Widgets / Виджеты Главного Экрана Android
 
 **English**: What's a Widget?
 

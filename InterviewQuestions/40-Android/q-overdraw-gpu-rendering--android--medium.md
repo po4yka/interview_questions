@@ -9,6 +9,7 @@ related: [q-how-to-pass-parameters-to-a-fragment--android--easy, q-room-vs-sqlit
 created: 2025-10-15
 tags: [performance, gpu, rendering, overdraw, optimization, difficulty/medium]
 ---
+
 # What is Overdraw? / Что такое Overdraw?
 
 **English**: What is Overdraw?

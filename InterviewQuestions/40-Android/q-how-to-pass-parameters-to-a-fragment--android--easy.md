@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-what-is-broadcastreceiver--android--easy, q-internal-app-distribution--distribution--medium, q-proguard-r8--android--medium]
+related: [q-internal-app-distribution--distribution--medium, q-proguard-r8--android--medium, q-what-is-broadcastreceiver--android--easy]
 created: 2025-10-15
-tags: [bundle, android, ui, data-passing, difficulty/medium]
+tags: [android, bundle, data-passing, difficulty/medium, ui]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:23 pm
 ---
-# How to pass parameters to a fragment?
+
+# How to Pass Parameters to a Fragment?
 
 # Вопрос (RU)
 

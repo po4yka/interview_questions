@@ -1,33 +1,30 @@
 ---
 id: 20251012-122710
 title: Modifier System in Compose / Система Modifier в Compose
-aliases:
-- Modifier System in Compose
-- Система Modifier в Compose
+aliases: [Modifier System in Compose, Система Modifier в Compose]
 topic: android
 subtopics:
-- ui-compose
-- performance-memory
+  - performance-memory
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-animated-visibility-vs-content--android--medium
-- q-compose-gesture-detection--android--medium
-- q-compose-compiler-plugin--android--hard
+  - q-animated-visibility-vs-content--android--medium
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-gesture-detection--android--medium
 created: 2025-10-06
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/performance-memory
-- difficulty/medium
+tags: [android/performance-memory, android/ui-compose, difficulty/medium]
 source: https://developer.android.com/jetpack/compose/modifiers
 source_note: Official Compose modifier docs
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:39 pm
 ---
 
 # Вопрос (RU)
@@ -48,11 +45,11 @@ source_note: Official Compose modifier docs
 - Ordered, immutable chain that decorates or adds behavior to composables in [[c-jetpack-compose]]
 - Affects measure, layout, and draw phases
 
-### Execution model
+### Execution Model
 - Measure/layout: top → bottom
 - Draw: bottom → top
 
-### Order effects (minimal patterns)
+### Order Effects (minimal patterns)
 Padding vs background
 ```kotlin
 // Background covers inner area (padding outside)
@@ -76,13 +73,13 @@ Constrain early
 Modifier.size(100.dp).background(Color.Blue).padding(8.dp)
 ```
 
-### Best practices
+### Best Practices
 - Put `modifier: Modifier = Modifier` first in parameters; apply user modifier first in chain
 - Reuse chains; avoid branching with separate chains; prefer `.then(...)`
 - Prefer draw‑only modifiers for effects; remember expensive objects
 - Avoid deep modifier stacks and unnecessary intrinsics
 
-### Minimal examples
+### Minimal Examples
 Single chain with conditions
 ```kotlin
 val base = Modifier.size(100.dp)

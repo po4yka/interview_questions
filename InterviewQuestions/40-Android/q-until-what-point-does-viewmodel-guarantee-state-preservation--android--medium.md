@@ -10,6 +10,7 @@ created: 2025-10-15
 tags:
   - android
 ---
+
 # Until what point does ViewModel guarantee state preservation
 
 ## Answer (EN)

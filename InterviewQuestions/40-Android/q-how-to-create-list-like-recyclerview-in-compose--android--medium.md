@@ -7,9 +7,12 @@ status: draft
 moc: moc-android
 related: [q-animated-visibility-vs-content--jetpack-compose--medium, q-compose-testing--android--medium, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]
 created: 2025-10-15
-tags: [jetpack-compose, lazycolumn, lazyrow, recyclerview, difficulty/medium]
+tags: [difficulty/medium, jetpack-compose, lazycolumn, lazyrow, recyclerview]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:39:52 pm
 ---
-# How to create a list like RecyclerView in Jetpack Compose?
+
+# How to Create a List like RecyclerView in Jetpack Compose?
 
 **Russian**: Как в Jetpack Compose создать список аналогичный RecyclerView?
 
@@ -461,7 +464,7 @@ fun ItemRow(item: Item) {
 }
 ```
 
-### Comparison: RecyclerView vs LazyColumn
+### Comparison: RecyclerView Vs LazyColumn
 
 | Feature | RecyclerView | LazyColumn |
 |---------|-------------|------------|

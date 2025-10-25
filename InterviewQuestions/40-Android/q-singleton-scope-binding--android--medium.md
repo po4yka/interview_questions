@@ -9,6 +9,7 @@ related: [q-how-jetpack-compose-works--programming-languages--medium, q-what-nav
 created: 2025-10-15
 tags: [android/dependency-injection, dagger, dependency-injection, hilt, scope, singleton, difficulty/medium]
 ---
+
 # К какому scope привязан Singleton?
 
 **English**: What scope is @Singleton bound to?

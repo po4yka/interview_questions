@@ -1,33 +1,29 @@
 ---
 id: 20251012-122789
 title: Cache Implementation Strategies / Стратегии реализации кэша
-aliases:
-- Cache Implementation Strategies
-- Стратегии реализации кэша
+aliases: [Cache Implementation Strategies, Стратегии реализации кэша]
 topic: android
 subtopics:
-- room
-- datastore
-- networking-http
+  - datastore
+  - networking-http
+  - room
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-storage-types--android--medium
-- q-android-performance-measurement-tools--android--medium
-- q-database-optimization-android--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-android-storage-types--android--medium
+  - q-database-optimization-android--android--medium
 created: 2025-10-13
 updated: 2025-10-20
-tags:
-- android/room
-- android/datastore
-- android/networking-http
-- difficulty/medium
+tags: [android/datastore, android/networking-http, android/room, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:51 pm
 ---
 
 # Вопрос (RU)

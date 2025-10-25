@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-service-lifecycle-binding--background--hard, q-navigation-methods-in-kotlin--android--medium, q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy]
+related: [q-navigation-methods-in-kotlin--android--medium, q-service-lifecycle-binding--background--hard, q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy]
 created: 2025-10-15
-tags: [android/navigation, navigation, ui, difficulty/medium]
+tags: [android/navigation, difficulty/medium, navigation, ui]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:40:09 pm
 ---
-# Каким образом осуществляется навигация?
+
+# Каким Образом Осуществляется Навигация?
 
 **English**: How is navigation implemented?
 

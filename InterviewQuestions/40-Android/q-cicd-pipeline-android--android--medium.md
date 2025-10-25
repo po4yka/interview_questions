@@ -1,31 +1,28 @@
 ---
 id: 20251012-122799
 title: CI/CD Pipeline for Android / CI/CD пайплайн для Android
-aliases:
-- CI/CD Pipeline for Android
-- CI/CD пайплайн для Android
+aliases: [CI/CD Pipeline for Android, CI/CD пайплайн для Android]
 topic: android
 subtopics:
-- gradle
-- ci-cd
+  - ci-cd
+  - gradle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-cicd-automated-testing--android--medium
-- q-cicd-deployment-automation--android--medium
-- q-build-optimization-gradle--android--medium
+  - q-build-optimization-gradle--android--medium
+  - q-cicd-automated-testing--android--medium
+  - q-cicd-deployment-automation--android--medium
 created: 2025-10-11
 updated: 2025-10-20
-tags:
-- android/gradle
-- android/ci-cd
-- difficulty/medium
+tags: [android/ci-cd, android/gradle, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:46 pm
 ---
 
 # Вопрос (RU)
@@ -62,7 +59,7 @@ tags:
 * Run with `--parallel` and tune `org.gradle.workers.max` to available cores; split workflow into independent jobs (checks/tests/build) to unlock CI‑level concurrency.
 * Matrix runs (API levels/ABIs, debug/release where needed); shard UI tests by package/class count; cache AVD images (`~/.android/avd`) to cut emulator startup time.
 
-### Quality gates
+### Quality Gates
 
 * Lint: fail on new issues vs baseline; treat `Fatal` as blocking; update baseline only via separate maintenance PR.
 * Coverage: enforce with Kover `verify` (e.g., per‑module line ≥70%, branch ≥50%); fail on coverage regressions for touched modules.

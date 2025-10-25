@@ -9,6 +9,7 @@ related: [q-how-to-show-svg-string-as-vector-file--programming-languages--medium
 created: 2025-10-15
 tags: [retrofit, networking, rest-api, difficulty/medium]
 ---
+
 # Что из себя представляет Retrofit?
 
 **English**: What is Retrofit?

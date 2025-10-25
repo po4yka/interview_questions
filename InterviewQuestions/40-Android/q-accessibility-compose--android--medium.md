@@ -1,31 +1,28 @@
 ---
 id: 20251012-122749
 title: Accessibility Compose / Доступность в Compose
-aliases:
-- Compose Accessibility
-- Доступность Compose
+aliases: [Compose Accessibility, Доступность Compose]
 topic: android
 subtopics:
-- ui-accessibility
-- ui-compose
+  - ui-accessibility
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-accessibility-talkback--android--medium
-- q-accessibility-testing--android--medium
-- q-custom-view-accessibility--android--medium
+  - q-accessibility-talkback--android--medium
+  - q-accessibility-testing--android--medium
+  - q-custom-view-accessibility--android--medium
 created: 2025-10-11
 updated: 2025-10-15
-tags:
-- android/ui-accessibility
-- android/ui-compose
-- difficulty/medium
+tags: [android/ui-accessibility, android/ui-compose, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:25 pm
 ---
 
 # Вопрос (RU)

@@ -5,11 +5,14 @@ topic: android
 difficulty: hard
 status: draft
 moc: moc-android
-related: [q-certificate-pinning--security--medium, q-server-sent-events-sse--networking--medium, q-android-manifest-file--android--easy]
+related: [q-android-manifest-file--android--easy, q-certificate-pinning--security--medium, q-server-sent-events-sse--networking--medium]
 created: 2025-10-15
-tags: [android-ui, android/fragments, fragments, ui, difficulty/hard]
+tags: [android-ui, android/fragments, difficulty/hard, fragments, ui]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:40:14 pm
 ---
-# Как появились фрагменты и для чего их начали использовать?
+
+# Как Появились Фрагменты И Для Чего Их Начали Использовать?
 
 **English**: How did fragments appear and why were they started to be used?
 

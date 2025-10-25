@@ -5,11 +5,14 @@ topic: android
 difficulty: hard
 status: draft
 moc: moc-android
-related: [q-why-diffutil-needed--android--medium, q-fragments-and-activity-relationship--android--hard, q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium]
+related: [q-fragments-and-activity-relationship--android--hard, q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium, q-why-diffutil-needed--android--medium]
 created: 2025-10-15
-tags: [android/fragments, fragments, lifecycle, ui, difficulty/hard]
+tags: [android/fragments, difficulty/hard, fragments, lifecycle, ui]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:06 pm
 ---
-# В каких случаях может понадобиться вызывать commitAllowingStateLoss
+
+# В Каких Случаях Может Понадобиться Вызывать commitAllowingStateLoss
 
 **English**: In what cases might you need to call commitAllowingStateLoss
 
@@ -30,7 +33,7 @@ This happens because:
 3. Any fragment transactions after this point won't be saved
 4. This could lead to state inconsistency on activity recreation
 
-### commit() vs commitAllowingStateLoss()
+### commit() Vs commitAllowingStateLoss()
 
 ```kotlin
 // Regular commit - throws exception if state is saved

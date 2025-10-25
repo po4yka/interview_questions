@@ -9,6 +9,7 @@ related: [q-how-to-write-recyclerview-cache-ahead--android--medium, q-flow-testi
 created: 2025-10-15
 tags: [android/project-structure, apk-size, codebase-analysis, codebase-size, metrics, modules, project-metrics, project-structure, difficulty/easy]
 ---
+
 # Как можно измерить размер проекта?
 
 **English**: How can you measure project size?

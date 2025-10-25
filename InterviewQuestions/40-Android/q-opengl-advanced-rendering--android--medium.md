@@ -9,6 +9,7 @@ related: [q-room-vs-sqlite--android--medium, q-why-fragment-needs-separate-callb
 created: 2025-10-15
 tags: [opengl-es, 3d-graphics, shaders, rendering, textures, difficulty/medium]
 ---
+
 # Advanced OpenGL ES Rendering Techniques
 
 ---

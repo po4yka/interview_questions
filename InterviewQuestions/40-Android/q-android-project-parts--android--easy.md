@@ -1,33 +1,29 @@
 ---
 id: 20251012-122769
 title: Android Project Parts / Части Android проекта
-aliases:
-- Android Project Parts
-- Части Android проекта
+aliases: [Android Project Parts, Части Android проекта]
 topic: android
 subtopics:
-- architecture-modularization
-- gradle
-- ui-theming
+  - architecture-modularization
+  - gradle
+  - ui-theming
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-manifest-file--android--easy
-- q-gradle-build-system--android--medium
-- q-android-modularization--android--medium
+  - q-android-manifest-file--android--easy
+  - q-android-modularization--android--medium
+  - q-gradle-build-system--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/architecture-modularization
-- android/gradle
-- android/ui-theming
-- difficulty/easy
+tags: [android/architecture-modularization, android/gradle, android/ui-theming, difficulty/easy]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:53:12 pm
 ---
 
 # Вопрос (RU)

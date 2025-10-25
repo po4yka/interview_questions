@@ -1,37 +1,30 @@
 ---
 id: 20251020-200000
 title: Dagger Scope Explained / Объяснение скоупов Dagger
-aliases:
-- Dagger Scope Explained
-- Объяснение скоупов Dagger
+aliases: [Dagger Scope Explained, Объяснение скоупов Dagger]
 topic: android
 subtopics:
-- di-hilt
-- lifecycle
+  - di-hilt
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-dagger-custom-scopes--android--hard
-- q-dagger-framework-overview--android--hard
-- q-dagger-main-elements--android--medium
+  - q-dagger-custom-scopes--android--hard
+  - q-dagger-framework-overview--android--hard
+  - q-dagger-main-elements--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/di-hilt
-- android/lifecycle
-- dagger
-- hilt
-- scope
-- lifecycle
-- difficulty/medium
+tags: [android/di-hilt, android/lifecycle, dagger, difficulty/medium, hilt, lifecycle, scope]
 source: https://dagger.dev/api/latest/dagger/Scope.html
 source_note: Dagger Scope API documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:16 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +37,7 @@ source_note: Dagger Scope API documentation
 
 **Scopes** в Dagger контролируют **время жизни** зависимостей. Они обеспечивают повторное использование объектов в рамках определенного жизненного цикла, предотвращая ненужное создание объектов.
 
-### Теория: Принципы работы Scopes
+### Теория: Принципы Работы Scopes
 
 **Основные концепции:**
 - **Время жизни объекта** - как долго существует экземпляр зависимости
@@ -58,7 +51,7 @@ source_note: Dagger Scope API documentation
 - Автоматическое управление жизненным циклом
 - Проверка на этапе компиляции
 
-### 1. @Singleton - Глобальный скоуп
+### 1. @Singleton - Глобальный Скоуп
 
 **@Singleton** живет в течение всего жизненного цикла приложения:
 
@@ -170,7 +163,7 @@ class MyService : Service() {
 }
 ```
 
-### Сравнение скоупов
+### Сравнение Скоупов
 
 **Иерархия скоупов:**
 - `@Singleton` - самый долгий, живет с приложением
@@ -184,7 +177,7 @@ class MyService : Service() {
 - Родительские скоупы не могут использовать объекты из дочерних скоупов
 - Объекты создаются в самом узком скоупе, где они нужны
 
-### Практические примеры
+### Практические Примеры
 
 **Правильное использование скоупов:**
 ```kotlin

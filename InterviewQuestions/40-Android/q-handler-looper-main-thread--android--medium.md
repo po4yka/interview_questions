@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy, q-koin-vs-hilt-comparison--dependency-injection--medium, q-offline-first-architecture--android--hard]
+related: [q-koin-vs-hilt-comparison--dependency-injection--medium, q-offline-first-architecture--android--hard, q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy]
 created: 2025-10-15
-tags: [android/concurrency, concurrency, handler, looper, main-thread, message-queue, threading, difficulty/medium]
+tags: [android/concurrency, concurrency, difficulty/medium, handler, looper, main-thread, message-queue, threading]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:47:00 pm
 ---
-# Как можно получить сообщения на главном потоке с помощью Handler и Looper?
+
+# Как Можно Получить Сообщения На Главном Потоке С Помощью Handler И Looper?
 
 **English**: How can you receive messages on the main thread using Handler and Looper?
 
@@ -346,7 +349,7 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
-## Handler vs Coroutines (Modern Approach)
+## Handler Vs Coroutines (Modern Approach)
 
 ### Handler Approach (Traditional)
 

@@ -1,30 +1,27 @@
 ---
 id: 20251012-122751
 title: Accessibility Color Contrast / Контрастность цветов для доступности
-aliases:
-- Color Contrast
-- Контрастность цветов
+aliases: [Color Contrast, Контрастность цветов]
 topic: android
 subtopics:
-- ui-accessibility
-- ui-theming
+  - ui-accessibility
+  - ui-theming
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-accessibility-compose--android--medium
-- q-material3-dynamic-color-theming--material-design--medium
+  - q-accessibility-compose--android--medium
+  - q-material3-dynamic-color-theming--material-design--medium
 created: 2025-10-11
 updated: 2025-10-15
-tags:
-- android/ui-accessibility
-- android/ui-theming
-- difficulty/medium
+tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:53:25 pm
 ---
 
 # Вопрос (RU)

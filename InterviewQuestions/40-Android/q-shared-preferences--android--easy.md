@@ -9,6 +9,7 @@ related: [q-room-relations-embedded--room--medium, q-how-is-navigation-implement
 created: 2025-10-15
 tags: [data-storage, shared-preferences, difficulty/easy]
 ---
+
 # Что такое SharedPreferences?
 
 **English**: What is SharedPreferences?

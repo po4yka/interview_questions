@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-reduce-apk-size-techniques--android--medium, q-intent-filters-android--android--medium, q-in-which-thread-does-a-regular-service-run--android--medium]
+related: [q-in-which-thread-does-a-regular-service-run--android--medium, q-intent-filters-android--android--medium, q-reduce-apk-size-techniques--android--medium]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:18 pm
 ---
-# How to save Activity state?
+
+# How to save Activity State?
 
 **English**: How to save Activity state?
 
@@ -476,7 +478,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-### 2. ViewModel с SavedStateHandle (рекомендуется)
+### 2. ViewModel С SavedStateHandle (рекомендуется)
 
 ```kotlin
 class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -486,7 +488,7 @@ class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() 
 }
 ```
 
-### 3. Постоянное хранилище
+### 3. Постоянное Хранилище
 
 - **SharedPreferences** - для настроек
 - **DataStore** - современная альтернатива SharedPreferences

@@ -5,12 +5,14 @@ topic: android
 difficulty: hard
 status: draft
 moc: moc-android
-related: [q-what-are-services-used-for--android--medium, q-what-to-put-in-state-for-initial-list--android--easy, q-fakes-vs-mocks-testing--testing--medium]
+related: [q-fakes-vs-mocks-testing--testing--medium, q-what-are-services-used-for--android--medium, q-what-to-put-in-state-for-initial-list--android--easy]
 created: 2025-10-15
-tags: [android/performance, app-startup, lazy-init, legacy-code, optimization, performance, difficulty/hard]
+tags: [android/performance, app-startup, difficulty/hard, lazy-init, legacy-code, optimization, performance]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:51:59 pm
 ---
 
-# Что делать если надо исправить долгий запуск приложения в legacy проекте?
+# Что Делать Если Надо Исправить Долгий Запуск Приложения В Legacy Проекте?
 
 **English**: What to do if you need to fix slow app startup in a legacy project?
 

@@ -9,6 +9,7 @@ related: [q-how-does-activity-lifecycle-work--android--medium, q-jit-vs-aot-comp
 created: 2025-10-15
 tags: [android, android/activity, android/broadcast-receiver, android/content-provider, android/service, broadcast-receiver, components, content-provider, service, difficulty/easy]
 ---
+
 # Какие основные компоненты Android-приложения?
 
 **English**: What are the main Android application components?

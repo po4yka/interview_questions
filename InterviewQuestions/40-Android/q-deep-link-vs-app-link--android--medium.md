@@ -1,38 +1,29 @@
 ---
 id: 20251020-200000
 title: Deep Link Vs App Link / Deep Link против App Link
-aliases:
-- Deep Link Vs App Link
-- Deep Link против App Link
+aliases: [Deep Link Vs App Link, Deep Link против App Link]
 topic: android
 subtopics:
-- ui-navigation
+  - ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-intent-system--android--medium
-- q-android-navigation-component--android--medium
-- q-android-webview-basics--android--easy
+  - q-android-intent-system--android--medium
+  - q-android-navigation-component--android--medium
+  - q-android-webview-basics--android--easy
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/ui-navigation
-- app-linking
-- app-links
-- deep-linking
-- https
-- navigation
-- uri
-- verification
-- difficulty/medium
+tags: [android/ui-navigation, app-linking, app-links, deep-linking, difficulty/medium, https, navigation, uri, verification]
 source: https://developer.android.com/training/app-links
 source_note: Android App Links documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:10 pm
 ---
 
 # Вопрос (RU)
@@ -47,7 +38,7 @@ source_note: Android App Links documentation
 
 **App Link** использует **HTTP/HTTPS URLs** и требует **верификации владения доменом** через файл `assetlinks.json`.
 
-### Теория: Deep Link vs App Link
+### Теория: Deep Link Vs App Link
 
 **Основные концепции:**
 - **Deep Link** - пользовательская URI схема для внутренней навигации
@@ -63,7 +54,7 @@ source_note: Android App Links documentation
 - App Links обеспечивают лучшую безопасность
 - Deep Links проще в настройке
 
-### Сравнение Deep Link и App Link
+### Сравнение Deep Link И App Link
 
 | Критерий | Deep Link | App Link |
 |----------|-----------|----------|
@@ -168,7 +159,7 @@ val domainVerificationState = packageManager.getDomainVerificationUserState(pack
 val verifiedDomains = domainVerificationState?.verifiedDomains ?: emptySet()
 ```
 
-### Выбор между Deep Link и App Link
+### Выбор Между Deep Link И App Link
 
 **Теоретические принципы:**
 Выбор между Deep Link и App Link зависит от требований безопасности, пользовательского опыта и сложности настройки.
@@ -185,7 +176,7 @@ val verifiedDomains = domainVerificationState?.verifiedDomains ?: emptySet()
 - Публичных ссылок для пользователей
 - Когда важен прямой доступ к приложению
 
-### Лучшие практики
+### Лучшие Практики
 
 **Теоретические принципы:**
 - Используйте App Links для публичного контента
@@ -207,7 +198,7 @@ val verifiedDomains = domainVerificationState?.verifiedDomains ?: emptySet()
 
 **App Link** uses **HTTP/HTTPS URLs** and requires **domain ownership verification** through the `assetlinks.json` file.
 
-### Theory: Deep Link vs App Link
+### Theory: Deep Link Vs App Link
 
 **Core Concepts:**
 - **Deep Link** - custom URI scheme for internal navigation
@@ -223,7 +214,7 @@ val verifiedDomains = domainVerificationState?.verifiedDomains ?: emptySet()
 - App Links provide better security
 - Deep Links are simpler to set up
 
-### Deep Link vs App Link Comparison
+### Deep Link Vs App Link Comparison
 
 | Criterion | Deep Link | App Link |
 |-----------|-----------|----------|

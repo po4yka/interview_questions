@@ -1,38 +1,30 @@
 ---
 id: 20251020-200000
 title: Data Encryption At Rest / Шифрование данных в покое
-aliases:
-- Data Encryption At Rest
-- Шифрование данных в покое
+aliases: [Data Encryption At Rest, Шифрование данных в покое]
 topic: android
 subtopics:
-- permissions
-- files-media
+  - files-media
+  - permissions
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-security-basics--android--medium
-- q-android-keystore--security--hard
-- q-android-biometric-authentication--security--medium
+  - q-android-biometric-authentication--security--medium
+  - q-android-keystore--security--hard
+  - q-android-security-basics--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/permissions
-- android/files-media
-- encryption
-- security
-- database
-- shared-preferences
-- sqlcipher
-- difficulty/medium
+tags: [android/files-media, android/permissions, database, difficulty/medium, encryption, security, shared-preferences, sqlcipher]
 source: https://developer.android.com/guide/topics/security/encryption
 source_note: Android Encryption documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:14 pm
 ---
 
 # Вопрос (RU)
@@ -45,7 +37,7 @@ source_note: Android Encryption documentation
 
 **Шифрование в покое** защищает конфиденциальные данные, хранящиеся на устройстве, от несанкционированного доступа. Android предоставляет несколько вариантов шифрования: EncryptedSharedPreferences для простого хранения ключ-значение и SQLCipher для шифрования базы данных.
 
-### Теория: Принципы шифрования в покое
+### Теория: Принципы Шифрования В Покое
 
 **Основные концепции:**
 - **Защита данных** - предотвращение несанкционированного доступа к хранимым данным
@@ -60,7 +52,7 @@ source_note: Android Encryption documentation
 - Расшифровка происходит при чтении данных
 - Автоматическое управление жизненным циклом ключей
 
-### Сравнение подходов к шифрованию
+### Сравнение Подходов К Шифрованию
 
 | Функция | EncryptedSharedPreferences | SQLCipher | Шифрование файлов |
 |---------|---------------------------|-----------|-------------------|
@@ -122,7 +114,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 2. SQLCipher для Room
+### 2. SQLCipher Для Room
 
 **Настройка SQLCipher с Room:**
 ```kotlin
@@ -175,7 +167,7 @@ class DatabaseManager(private val context: Context) {
 }
 ```
 
-### 3. Управление ключами
+### 3. Управление Ключами
 
 **Android Keystore для безопасного хранения ключей:**
 ```kotlin
@@ -211,7 +203,7 @@ class KeystoreManager {
 }
 ```
 
-### 4. Производительность и оптимизация
+### 4. Производительность И Оптимизация
 
 **Влияние на производительность:**
 - **EncryptedSharedPreferences**: Минимальная нагрузка, подходит для небольших данных
@@ -223,7 +215,7 @@ class KeystoreManager {
 - Кэшируйте расшифрованные данные в памяти
 - Избегайте частого шифрования/расшифровки
 
-### 5. Лучшие практики
+### 5. Лучшие Практики
 
 **Безопасность:**
 - Всегда используйте Android Keystore для хранения ключей

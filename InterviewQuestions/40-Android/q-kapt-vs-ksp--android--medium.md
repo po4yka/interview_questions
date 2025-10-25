@@ -11,7 +11,7 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/annotation-processing, android/kapt, android/ksp, android/build-performance, difficulty/medium]
+language_tags: [android/annotation-processing, android/build-performance, android/kapt, android/ksp, difficulty/medium, en, ru]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
@@ -24,8 +24,11 @@ related: [q-fix-slow-app-startup-legacy--android--hard, q-looper-thread-connecti
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android/gradle, en, ru, difficulty/medium]
+tags: [android/gradle, difficulty/medium, en, ru]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:08:03 pm
 ---
+
 # Question (EN)
 > What is the difference between kapt and KSP? Which one to use?
 # Вопрос (RU)
@@ -47,7 +50,7 @@ tags: [android/gradle, en, ru, difficulty/medium]
 | **Libraries support** | All (Room, Dagger, Glide) | Growing (Room, Moshi, Hilt) |
 | **Incremental** | Limited | Better |
 
-### kapt Usage
+### Kapt Usage
 
 ```kotlin
 // build.gradle.kts
@@ -94,7 +97,7 @@ Build with KSP:     23 seconds  (2x faster!)
 - Glide
 - Some legacy libraries
 
-### Migration from kapt to KSP
+### Migration from Kapt to KSP
 
 ```kotlin
 // Before (kapt)
@@ -168,14 +171,14 @@ dependencies {
 }
 ```
 
-### Разница в производительности
+### Разница В Производительности
 
 ```
 Сборка с kapt:    45 секунд
 Сборка с KSP:     23 секунды  (2x быстрее!)
 ```
 
-### Поддержка библиотек
+### Поддержка Библиотек
 
 **KSP поддерживается:**
 - Room
@@ -187,7 +190,7 @@ dependencies {
 - Glide
 - Некоторые legacy библиотеки
 
-### Когда использовать каждый
+### Когда Использовать Каждый
 
 **Используйте KSP когда:**
 - Библиотека поддерживает (Room, Hilt, Moshi)

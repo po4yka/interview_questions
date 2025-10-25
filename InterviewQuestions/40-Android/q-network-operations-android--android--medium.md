@@ -9,6 +9,7 @@ related: [q-what-does-the-lifecycle-library-do--android--medium, q-android-app-c
 created: 2025-10-15
 tags: [networking, http, difficulty/medium]
 ---
+
 # Что используется для работы с сетью в Android?
 
 **English**: What is used for network operations in Android?

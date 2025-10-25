@@ -1,34 +1,30 @@
 ---
 id: 20251015-094722
 title: AndroidManifest.xml / Файл манифеста Android
-aliases:
-- AndroidManifest.xml
-- Файл манифеста Android
+aliases: [AndroidManifest.xml, Файл манифеста Android]
 topic: android
 subtopics:
-- app-startup
-- permissions
-- activity
+  - activity
+  - app-startup
+  - permissions
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-app-components--android--easy
-- q-activity-lifecycle-methods--android--medium
-- q-intent-filters-android--android--medium
+  - q-activity-lifecycle-methods--android--medium
+  - q-android-app-components--android--easy
+  - q-intent-filters-android--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/app-startup
-- android/permissions
-- android/activity
-- difficulty/easy
+tags: [android/activity, android/app-startup, android/permissions, difficulty/easy]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:13 pm
 ---
 
 # Вопрос (RU)

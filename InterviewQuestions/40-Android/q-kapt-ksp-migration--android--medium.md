@@ -6,31 +6,34 @@ aliases: []
 # Classification
 topic: android
 subtopics:
-  - kapt
-  - ksp
   - annotation-processing
   - build
+  - kapt
+  - ksp
   - performance
 question_kind: practical
 difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/kapt, android/ksp, android/annotation-processing, android/build, android/performance, android/migration, difficulty/medium]
+language_tags: [android/annotation-processing, android/build, android/kapt, android/ksp, android/migration, android/performance, difficulty/medium, en, ru]
 source: Original
 source_note: Annotation processing migration best practices
 
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [build-optimization-gradle, app-startup-optimization]
+related: [app-startup-optimization, build-optimization-gradle]
 
 # Timestamps
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [en, ru, android/kapt, android/ksp, android/annotation-processing, android/build, android/performance, android/migration, difficulty/medium]
+tags: [android/annotation-processing, android/build, android/kapt, android/ksp, android/migration, android/performance, difficulty/medium, en, ru]
+date created: Saturday, October 25th 2025, 1:26:31 pm
+date modified: Saturday, October 25th 2025, 4:08:04 pm
 ---
+
 # Question (EN)
 > Compare KAPT and KSP for annotation processing in depth. Migrate library dependencies from KAPT to KSP. Measure and document build time improvements.
 
@@ -41,7 +44,7 @@ tags: [en, ru, android/kapt, android/ksp, android/annotation-processing, android
 
 ## Answer (EN)
 
-### KAPT vs KSP Architecture
+### KAPT Vs KSP Architecture
 
 #### KAPT (Kotlin Annotation Processing Tool)
 
@@ -527,7 +530,7 @@ tasks.withType<KspTask> {
 
 ## Ответ (RU)
 
-### Архитектура KAPT vs KSP
+### Архитектура KAPT Vs KSP
 
 #### KAPT (Kotlin Annotation Processing Tool)
 
@@ -592,7 +595,7 @@ Kotlin Source (.kt)
 - Нативный Kotlin API (лучшая типобезопасность)
 - Меньшее использование памяти
 
-### Сравнение производительности
+### Сравнение Производительности
 
 **Тестовый проект:**
 - 50 исходных файлов
@@ -623,9 +626,9 @@ KSP обработка: 22.1с
 Улучшение: на 47.7% быстрее (89.5с → 46.8с)
 ```
 
-### Полное руководство по миграции
+### Полное Руководство По Миграции
 
-#### Шаг 1: Проверка поддержки библиотек
+#### Шаг 1: Проверка Поддержки Библиотек
 
 **Библиотеки с полной поддержкой KSP (2024):**
 ```kotlin
@@ -641,7 +644,7 @@ KSP обработка: 22.1с
 - Устаревшие annotation processors
 ```
 
-#### Шаг 2: Обновление файлов сборки
+#### Шаг 2: Обновление Файлов Сборки
 
 **До: Конфигурация KAPT**
 
@@ -722,7 +725,7 @@ dependencies {
 }
 ```
 
-#### Шаг 3: Обновление путей к исходникам
+#### Шаг 3: Обновление Путей К Исходникам
 
 **До: KAPT сгенерированные исходники**
 ```kotlin
@@ -749,7 +752,7 @@ kotlin.sourceSets {
 }
 ```
 
-#### Шаг 4: Очистка и пересборка
+#### Шаг 4: Очистка И Пересборка
 
 ```bash
 # Очистка старых KAPT файлов
@@ -765,7 +768,7 @@ rm -rf build/generated/source/kapt/
 # Сравнение времени сборки
 ```
 
-### Чек-лист миграции
+### Чек-лист Миграции
 
 ```
 [ ] Обновить project-level build.gradle (добавить KSP плагин)
@@ -782,7 +785,7 @@ rm -rf build/generated/source/kapt/
 [ ] Обновить документацию
 ```
 
-### Тестирование миграции
+### Тестирование Миграции
 
 **Проверка сгенерированного кода:**
 
@@ -818,7 +821,7 @@ app/build/generated/ksp/debug/kotlin/
     MainActivity_GeneratedInjector.kt
 ```
 
-### Смешанные KAPT/KSP проекты
+### Смешанные KAPT/KSP Проекты
 
 Некоторые библиотеки могут еще не поддерживать KSP. Можно использовать оба временно:
 
@@ -842,7 +845,7 @@ dependencies {
 }
 ```
 
-### Измерение времени сборки
+### Измерение Времени Сборки
 
 **Скрипт измерения:**
 
@@ -907,7 +910,7 @@ echo "  Улучшение: ${IMPROVEMENT}%"
 Среднее улучшение: на 40-50% быстрее сборки
 ```
 
-### Решение проблем
+### Решение Проблем
 
 **Проблема 1: Сгенерированные файлы не найдены**
 
@@ -955,7 +958,7 @@ tasks.withType<KspTask> {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Мигрировать инкрементально**: Начать с одного модуля, проверить, затем расширить
 2. **Тщательно тестировать**: Запускать полный набор тестов после миграции
@@ -968,7 +971,7 @@ tasks.withType<KspTask> {
 9. **Включить инкрементальную обработку**: Настроить для максимальной скорости
 10. **Документировать изменения**: Обновить командную документацию и README
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 1. **Не обновление путей к исходникам**: IDE не может найти сгенерированные файлы
 2. **Забывание очистки**: Старые KAPT файлы мешают KSP

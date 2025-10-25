@@ -7,9 +7,12 @@ status: draft
 moc: moc-android
 related: [q-certificate-pinning--security--medium, q-how-to-create-animations-in-android--android--medium, q-singleton-scope-binding--android--medium]
 created: 2025-10-15
-tags: [jetpack-compose, compose, declarative-ui, recomposition, difficulty/medium]
+tags: [compose, declarative-ui, difficulty/medium, jetpack-compose, recomposition]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:40:12 pm
 ---
-# How does Jetpack Compose work?
+
+# How Does Jetpack Compose Work?
 
 ## EN (expanded)
 
@@ -253,13 +256,13 @@ fun StyledComponent() {
 
 ## RU (original)
 
-### Что такое Jetpack Compose?
+### Что Такое Jetpack Compose?
 
 Jetpack Compose — это современный декларативный UI-фреймворк от Google для создания нативных интерфейсов Android. Он фундаментально меняет способ создания UI в Android, заменяя XML-макеты функциями на Kotlin.
 
-### Основные принципы
+### Основные Принципы
 
-#### 1. Декларативный подход
+#### 1. Декларативный Подход
 
 Вместо императивного описания того, как изменить UI, вы декларируете, как UI должен выглядеть:
 
@@ -305,7 +308,7 @@ fun Counter() {
 }
 ```
 
-#### 3. Компонентная архитектура
+#### 3. Компонентная Архитектура
 
 UI строится из небольших переиспользуемых composable-функций:
 
@@ -348,11 +351,11 @@ fun MyComponent() {
 - Может поддерживать состояние с помощью `remember`
 - Может запускать рекомпозицию при изменении состояния
 
-### Как Compose отрисовывает UI
+### Как Compose Отрисовывает UI
 
 Процесс отрисовки состоит из трех фаз:
 
-#### 1. Фаза композиции
+#### 1. Фаза Композиции
 ```kotlin
 @Composable
 fun Example() {
@@ -364,7 +367,7 @@ fun Example() {
 }
 ```
 
-#### 2. Фаза компоновки
+#### 2. Фаза Компоновки
 ```kotlin
 // Compose измеряет и позиционирует элементы
 Box(
@@ -379,7 +382,7 @@ Box(
 }
 ```
 
-#### 3. Фаза отрисовки
+#### 3. Фаза Отрисовки
 ```kotlin
 // Compose рендерит на Canvas
 Canvas(modifier = Modifier.size(100.dp)) {
@@ -387,7 +390,7 @@ Canvas(modifier = Modifier.size(100.dp)) {
 }
 ```
 
-### Управление состоянием
+### Управление Состоянием
 
 Состояние управляет рекомпозицией:
 
@@ -446,7 +449,7 @@ fun StaticHeader() {
 }
 ```
 
-### Побочные эффекты
+### Побочные Эффекты
 
 Управление побочными эффектами с помощью специальных API:
 

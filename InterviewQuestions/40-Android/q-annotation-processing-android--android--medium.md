@@ -1,29 +1,27 @@
 ---
 id: 20251006-100012
 title: Annotation Processing in Android / Обработка аннотаций в Android
-aliases:
-- Annotation Processing in Android
-- Обработка аннотаций в Android
+aliases: [Annotation Processing in Android, Обработка аннотаций в Android]
 topic: android
 subtopics:
-- gradle
+  - gradle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-build-optimization--android--medium
-- q-android-modularization--android--medium
-- q-android-project-parts--android--easy
+  - q-android-build-optimization--android--medium
+  - q-android-modularization--android--medium
+  - q-android-project-parts--android--easy
 created: 2025-10-06
 updated: 2025-10-15
-tags:
-- android/gradle
-- difficulty/medium
+tags: [android/gradle, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:06 pm
 ---
 
 # Вопрос (RU)

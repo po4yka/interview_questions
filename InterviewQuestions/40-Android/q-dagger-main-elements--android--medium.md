@@ -1,31 +1,29 @@
 ---
 id: 20251020-200000
 title: Dagger Main Elements / Основные элементы Dagger
-aliases:
-- Dagger Main Elements
-- Основные элементы Dagger
+aliases: [Dagger Main Elements, Основные элементы Dagger]
 topic: android
 subtopics:
-- di-hilt
+  - di-hilt
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-dagger-inject-annotation--android--easy
-- q-dagger-field-injection--android--medium
-- q-dagger-framework-overview--android--hard
+  - q-dagger-field-injection--android--medium
+  - q-dagger-framework-overview--android--hard
+  - q-dagger-inject-annotation--android--easy
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/di-hilt
-- difficulty/medium
+tags: [android/di-hilt, difficulty/medium]
 source: https://dagger.dev/api/latest/dagger/Component.html
 source_note: Dagger Component API documentation
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:17 pm
 ---
 
 # Вопрос (RU)
@@ -132,7 +130,7 @@ object DatabaseModule {
 }
 ```
 
-### Взаимодействие элементов
+### Взаимодействие Элементов
 
 **Поток работы:**
 1. Dagger анализирует `@Component` и связанные модули
@@ -170,7 +168,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Hilt упрощение
+### Hilt Упрощение
 
 Hilt автоматизирует создание компонентов:
 

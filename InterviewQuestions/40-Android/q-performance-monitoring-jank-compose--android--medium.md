@@ -9,6 +9,7 @@ related: [q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-scre
 created: 2025-10-15
 tags: [jetpack-compose, performance, jank, profiling, optimization, difficulty/medium]
 ---
+
 # Performance Monitoring and Jank Detection in Compose
 
 **English**: How do you detect and fix performance issues (jank) in Jetpack Compose apps?

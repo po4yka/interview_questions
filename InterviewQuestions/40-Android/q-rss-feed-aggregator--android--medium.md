@@ -9,6 +9,7 @@ related: [q-how-to-choose-layout-for-fragment--android--easy, q-webp-image-forma
 created: 2025-10-15
 tags: [rss, xml-parsing, workmanager, room, difficulty/medium]
 ---
+
 # Реализация RSS-агрегатора на Android
 
 **English**: How to implement RSS feed aggregator on Android?

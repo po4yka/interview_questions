@@ -1,30 +1,27 @@
 ---
 id: 20251012-122765
 title: Android Jetpack Overview / Обзор Android Jetpack
-aliases:
-- Android Jetpack Overview
-- Обзор Android Jetpack
+aliases: [Android Jetpack Overview, Обзор Android Jetpack]
 topic: android
 subtopics:
-- architecture-clean
-- ui-compose
+  - architecture-clean
+  - ui-compose
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-viewmodel-pattern--android--easy
-- q-room-library-definition--android--easy
+  - q-room-library-definition--android--easy
+  - q-viewmodel-pattern--android--easy
 created: 2025-10-13
 updated: 2025-10-15
-tags:
-- android/architecture-clean
-- android/ui-compose
-- difficulty/easy
+tags: [android/architecture-clean, android/ui-compose, difficulty/easy]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:15 pm
 ---
 
 # Вопрос (RU)

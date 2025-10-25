@@ -9,6 +9,7 @@ related: [q-kmm-dependency-injection--multiplatform--medium, q-why-are-fragments
 created: 2025-10-15
 tags: [recyclerview, ui-components, difficulty/medium]
 ---
+
 # Что известно про RecyclerView?
 
 **English**: What do you know about RecyclerView?

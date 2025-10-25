@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: [android/jetpack-compose, jetpack-compose, mutablestate, observer-pattern, recomposition, snapshot-system, state, state-management, difficulty/medium]
+tags: [android/jetpack-compose, difficulty/medium, jetpack-compose, mutablestate, observer-pattern, recomposition, snapshot-system, state, state-management]
 moc: moc-android
-related: [q-mlkit-face-detection--ml--medium, q-recomposition-choreographer--android--hard, q-baseline-profiles-optimization--performance--medium]
+related: [q-baseline-profiles-optimization--performance--medium, q-mlkit-face-detection--ml--medium, q-recomposition-choreographer--android--hard]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:40:07 pm
 ---
-# Как mutableState сообщает о том, что он изменился?
+
+# Как mutableState Сообщает О Том, Что Он Изменился?
 
 **English**: How does MutableState notify that it has changed?
 

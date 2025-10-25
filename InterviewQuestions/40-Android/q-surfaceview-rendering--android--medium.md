@@ -9,6 +9,7 @@ related: [q-remember-vs-remembersaveable-compose--android--medium, q-how-to-add-
 created: 2025-10-15
 tags: [surfaceview, rendering, views, performance, threading, difficulty/medium]
 ---
+
 # What is SurfaceView? / Что такое SurfaceView?
 
 **English**: What is SurfaceView?

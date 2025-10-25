@@ -9,6 +9,7 @@ related: [q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--a
 created: 2025-10-15
 tags: [android/jetpack-compose, android/performance, immutability, jetpack-compose, performance, recomposition, stability, stable-annotation, difficulty/hard]
 ---
+
 # Какие классы будут автоматически выводиться как stable?
 
 **English**: Which classes are automatically inferred as stable in Jetpack Compose?

@@ -1,32 +1,29 @@
 ---
 id: 20251021-160000
 title: Custom View Animation / Анимация Custom View
-aliases:
-- Custom View Animation
-- Анимация Custom View
+aliases: [Custom View Animation, Анимация Custom View]
 topic: android
 subtopics:
-- ui-views
-- ui-animation
+  - ui-animation
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-- ru
-- en
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-canvas-drawing-optimization--android--hard
-- q-custom-view-lifecycle--android--medium
+  - q-canvas-drawing-optimization--android--hard
+  - q-custom-view-lifecycle--android--medium
 created: 2025-10-21
 updated: 2025-10-21
-tags:
-- android/ui-views
-- android/ui-animation
-- difficulty/medium
+tags: [android/ui-animation, android/ui-views, difficulty/medium]
 source: https://developer.android.com/guide/topics/graphics/prop-animation
 source_note: Official property animation guide
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:24 pm
 ---
 
 # Вопрос (RU)

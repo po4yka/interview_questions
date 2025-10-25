@@ -1,31 +1,28 @@
 ---
 id: 20251012-122793
 title: Canvas Drawing Optimization / Оптимизация отрисовки Canvas
-aliases:
-- Canvas Drawing Optimization
-- Оптимизация отрисовки Canvas
+aliases: [Canvas Drawing Optimization, Оптимизация отрисовки Canvas]
 topic: android
 subtopics:
-- ui-views
-- performance-rendering
+  - performance-rendering
+  - ui-views
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-performance-measurement-tools--android--medium
-- q-android-runtime-art--android--medium
-- q-android-app-lag-analysis--android--medium
+  - q-android-app-lag-analysis--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-android-runtime-art--android--medium
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/ui-views
-- android/performance-rendering
-- difficulty/hard
+tags: [android/performance-rendering, android/ui-views, difficulty/hard]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:49 pm
 ---
 
 # Вопрос (RU)
@@ -51,7 +48,7 @@ tags:
 - Pre-allocate Paint/Path/Rect objects as fields; reuse with reset()/set().
 - Never create objects inside onDraw(); move to init/onSizeChanged.
 
-### Minimal snippet (no allocations)
+### Minimal Snippet (no allocations)
 ```kotlin
 class OptimizedView : View {
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG)

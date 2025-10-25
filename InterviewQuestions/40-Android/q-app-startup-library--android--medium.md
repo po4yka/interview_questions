@@ -1,31 +1,28 @@
 ---
 id: 20251006-100006
 title: App Startup Library / Библиотека App Startup
-aliases:
-- App Startup Library
-- Библиотека App Startup
+aliases: [App Startup Library, Библиотека App Startup]
 topic: android
 subtopics:
-- app-startup
-- performance-memory
+  - app-startup
+  - performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-app-start-types-android--android--medium
-- q-android-build-optimization--android--medium
-- q-android-performance-measurement-tools--android--medium
+  - q-android-build-optimization--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-app-start-types-android--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/app-startup
-- android/performance-memory
-- difficulty/medium
+tags: [android/app-startup, android/performance-memory, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:01 pm
 ---
 
 # Вопрос (RU)

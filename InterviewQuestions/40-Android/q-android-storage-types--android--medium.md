@@ -1,31 +1,28 @@
 ---
 id: 20251016-163010
 title: Android Storage Types / Типы хранилища Android
-aliases:
-- Android Storage Types
-- Типы хранилища Android
+aliases: [Android Storage Types, Типы хранилища Android]
 topic: android
 subtopics:
-- datastore
-- files-media
+  - datastore
+  - files-media
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-manifest-file--android--easy
-- q-android-security-best-practices--android--medium
-- q-android-architectural-patterns--android--medium
+  - q-android-architectural-patterns--android--medium
+  - q-android-manifest-file--android--easy
+  - q-android-security-best-practices--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/datastore
-- android/files-media
-- difficulty/medium
+tags: [android/datastore, android/files-media, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:53:08 pm
 ---
 
 # Вопрос (RU)

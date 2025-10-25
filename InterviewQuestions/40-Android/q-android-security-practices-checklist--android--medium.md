@@ -1,34 +1,30 @@
 ---
 id: 20251005-215456
 title: Android Security Practices Checklist / Чек-лист практик безопасности Android
-aliases:
-- Android Security Practices Checklist
-- Чек-лист практик безопасности Android
+aliases: [Android Security Practices Checklist, Чек-лист практик безопасности Android]
 topic: android
 subtopics:
-- permissions
-- architecture-clean
-- keystore-crypto
+  - architecture-clean
+  - keystore-crypto
+  - permissions
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-security-best-practices--android--medium
-- q-android-keystore-system--security--medium
-- q-android-manifest-file--android--easy
+  - q-android-keystore-system--security--medium
+  - q-android-manifest-file--android--easy
+  - q-android-security-best-practices--android--medium
 created: 2025-10-05
 updated: 2025-10-15
-tags:
-- android/permissions
-- android/architecture-clean
-- android/keystore-crypto
-- difficulty/medium
+tags: [android/architecture-clean, android/keystore-crypto, android/permissions, difficulty/medium]
 source: https://github.com/Kirchhoff-Android-Interview-Questions
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:53:10 pm
 ---
 
 # Вопрос (RU)

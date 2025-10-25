@@ -1,33 +1,29 @@
 ---
 id: 20251012-122767
 title: Android Modularization / Модуляризация Android
-aliases:
-- Android Modularization
-- Модуляризация Android
+aliases: [Android Modularization, Модуляризация Android]
 topic: android
 subtopics:
-- architecture-clean
-- gradle
-- build-variants
+  - architecture-clean
+  - build-variants
+  - gradle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-architectural-patterns--android--medium
-- q-gradle-build-system--android--medium
-- q-android-build-optimization--android--medium
+  - q-android-architectural-patterns--android--medium
+  - q-android-build-optimization--android--medium
+  - q-gradle-build-system--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/architecture-clean
-- android/gradle
-- android/build-variants
-- difficulty/medium
+tags: [android/architecture-clean, android/build-variants, android/gradle, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:13 pm
 ---
 
 # Вопрос (RU)

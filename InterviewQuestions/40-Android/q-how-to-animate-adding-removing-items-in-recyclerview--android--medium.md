@@ -7,9 +7,12 @@ status: draft
 moc: moc-android
 related: [q-bundle-data-types--android--medium, q-compositionlocal-advanced--jetpack-compose--medium, q-stack-heap-memory-multiple-threads--android--medium]
 created: 2025-10-15
-tags: [recyclerview, animations, itemanimator, difficulty/medium]
+tags: [animations, difficulty/medium, itemanimator, recyclerview]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:40:03 pm
 ---
-# What needs to be used to animate adding/removing items in RecyclerView?
+
+# What Needs to Be Used to Animate adding/removing Items in RecyclerView?
 
 ## EN (expanded)
 
@@ -503,7 +506,7 @@ recyclerView.itemAnimator = DefaultItemAnimator()
 // Это фактически значение по умолчанию, поэтому явно устанавливать не обязательно
 ```
 
-### 2. Базовые уведомления элементов
+### 2. Базовые Уведомления Элементов
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
@@ -541,7 +544,7 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 }
 ```
 
-### 3. DiffUtil для автоматических анимаций
+### 3. DiffUtil Для Автоматических Анимаций
 
 DiffUtil вычисляет различия и запускает соответствующие анимации:
 
@@ -663,7 +666,7 @@ class CustomItemAnimator : DefaultItemAnimator() {
 recyclerView.itemAnimator = CustomItemAnimator()
 ```
 
-### 6. Продвинутый кастомный аниматор
+### 6. Продвинутый Кастомный Аниматор
 
 ```kotlin
 class SlideInItemAnimator : SimpleItemAnimator() {
@@ -777,7 +780,7 @@ class SlideInItemAnimator : SimpleItemAnimator() {
 recyclerView.itemAnimator = SlideInItemAnimator()
 ```
 
-### 7. Настройка длительности анимации
+### 7. Настройка Длительности Анимации
 
 ```kotlin
 // Конфигурация стандартного аниматора
@@ -790,7 +793,7 @@ animator.changeDuration = 300
 recyclerView.itemAnimator = animator
 ```
 
-### 8. Отключение определённых анимаций
+### 8. Отключение Определённых Анимаций
 
 ```kotlin
 // Отключение анимаций изменения (полезно при проблемах с мерцанием)
@@ -804,7 +807,7 @@ class NoChangeItemAnimator : DefaultItemAnimator() {
 }
 ```
 
-### 9. Лучшие практики
+### 9. Лучшие Практики
 
 ```kotlin
 class BestPracticeAdapter : ListAdapter<Item, BestPracticeAdapter.ViewHolder>(ItemComparator) {

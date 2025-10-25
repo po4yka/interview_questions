@@ -5,10 +5,13 @@ topic: dependency-injection
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-how-to-register-broadcastreceiver-to-receive-messages--android--medium, q-compositionlocal-compose--android--hard, q-recomposition-choreographer--android--hard]
+related: [q-compositionlocal-compose--android--hard, q-how-to-register-broadcastreceiver-to-receive-messages--android--medium, q-recomposition-choreographer--android--hard]
 created: 2025-10-15
-tags: [injection, koin, architecture, service-locator, difficulty/medium]
+tags: [architecture, difficulty/medium, injection, koin, service-locator]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:07:57 pm
 ---
+
 # Koin Fundamentals / Основы Koin
 
 **English**: How does Koin differ from Dagger/Hilt? Implement a complete Koin module with factory, single, and viewModel definitions.
@@ -16,7 +19,7 @@ tags: [injection, koin, architecture, service-locator, difficulty/medium]
 ## Answer (EN)
 **Koin** is a pragmatic lightweight dependency injection framework for Kotlin that uses a **service locator pattern** rather than code generation. It provides a simple DSL for declaring dependencies and resolving them at runtime.
 
-### Key Differences: Koin vs Dagger/Hilt
+### Key Differences: Koin Vs Dagger/Hilt
 
 | Aspect | Koin | Dagger/Hilt |
 |--------|------|-------------|
@@ -373,7 +376,7 @@ fun UserScreen(userId: String) {
 }
 ```
 
-### Factory vs Single vs ViewModel
+### Factory Vs Single Vs ViewModel
 
 **Factory** - Creates new instance every time:
 ```kotlin
@@ -542,7 +545,7 @@ Trade-offs: Runtime errors vs compile-time safety, slightly slower performance, 
 ## Ответ (RU)
 **Koin** — это прагматичный легковесный фреймворк внедрения зависимостей для Kotlin, использующий **паттерн Service Locator** вместо генерации кода. Предоставляет простой DSL для объявления и разрешения зависимостей во время выполнения.
 
-### Ключевые различия: Koin vs Dagger/Hilt
+### Ключевые Различия: Koin Vs Dagger/Hilt
 
 | Аспект | Koin | Dagger/Hilt |
 |--------|------|-------------|
@@ -557,7 +560,7 @@ Trade-offs: Runtime errors vs compile-time safety, slightly slower performance, 
 | **Тестирование** | Простое | Требует test компонентов |
 | **Multiplatform** | Полная поддержка KMM | Только Android |
 
-### Основные концепции Koin
+### Основные Концепции Koin
 
 **1. Module** - Контейнер для определений
 **2. Factory** - Новый экземпляр каждый раз
@@ -565,7 +568,7 @@ Trade-offs: Runtime errors vs compile-time safety, slightly slower performance, 
 **4. ViewModel** - Интеграция с Android ViewModel
 **5. Scope** - Определения с ограниченным временем жизни
 
-### Полная настройка Koin
+### Полная Настройка Koin
 
 ```kotlin
 // Зависимости
@@ -644,7 +647,7 @@ fun UserScreen() {
 }
 ```
 
-### Factory vs Single vs ViewModel
+### Factory Vs Single Vs ViewModel
 
 **Factory** - новый экземпляр каждый раз:
 ```kotlin
@@ -667,7 +670,7 @@ module {
 }
 ```
 
-### Именованные зависимости
+### Именованные Зависимости
 
 ```kotlin
 module {
@@ -704,7 +707,7 @@ class UserRepositoryTest : KoinTest {
 }
 ```
 
-### Когда выбирать Koin
+### Когда Выбирать Koin
 
 **Выбирайте Koin когда:**
 - Разрабатываете Kotlin Multiplatform проекты
@@ -730,7 +733,7 @@ class UserRepositoryTest : KoinTest {
 6. **Проверка модулей** - использовать `checkModules()` для верификации
 7. **Избегать избыточной инъекции** - не инжектить простые значения
 
-### Определение классов для примера
+### Определение Классов Для Примера
 
 ```kotlin
 // Доменный слой
@@ -830,7 +833,7 @@ sealed class UiState<out T> {
 }
 ```
 
-### Создание модулей Koin
+### Создание Модулей Koin
 
 ```kotlin
 // networkModule.kt
@@ -938,7 +941,7 @@ val appModules = listOf(
 )
 ```
 
-### Использование в Fragment
+### Использование В Fragment
 
 ```kotlin
 class UserFragment : Fragment() {
@@ -976,7 +979,7 @@ class UserFragment : Fragment() {
 }
 ```
 
-### Использование в Jetpack Compose
+### Использование В Jetpack Compose
 
 ```kotlin
 @Composable
@@ -1056,7 +1059,7 @@ module {
 }
 ```
 
-### Общие ошибки
+### Общие Ошибки
 
 **1. Циклические зависимости** - Koin не обнаружит их во время компиляции:
 ```kotlin

@@ -1,34 +1,30 @@
 ---
 id: 20251012-122748
 title: Android Lint Tool / Инструмент Android Lint
-aliases:
-- Android Lint Tool
-- Инструмент Android Lint
+aliases: [Android Lint Tool, Инструмент Android Lint]
 topic: android
 subtopics:
-- static-analysis
-- gradle
-- build-variants
+  - build-variants
+  - gradle
+  - static-analysis
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-parcelable-implementation--android--medium
-- q-room-vs-sqlite--android--medium
-- q-gradle-build-system--android--medium
+  - q-gradle-build-system--android--medium
+  - q-parcelable-implementation--android--medium
+  - q-room-vs-sqlite--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/static-analysis
-- android/gradle
-- android/build-variants
-- difficulty/medium
+tags: [android/build-variants, android/gradle, android/static-analysis, difficulty/medium]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:53:15 pm
 ---
 
 # Вопрос (RU)

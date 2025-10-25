@@ -5,11 +5,14 @@ topic: android
 difficulty: easy
 status: draft
 moc: moc-android
-related: [q-what-each-android-component-represents--android--easy, q-how-to-draw-ui-without-xml--android--easy, q-flaky-test-prevention--testing--medium]
+related: [q-flaky-test-prevention--testing--medium, q-how-to-draw-ui-without-xml--android--easy, q-what-each-android-component-represents--android--easy]
 created: 2025-10-15
-tags: [languages, android, difficulty/easy]
+tags: [android, difficulty/easy, languages]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:39:47 pm
 ---
-# Как рисовать UI без xml?
+
+# Как Рисовать UI Без Xml?
 
 ## Answer (EN)
 In Android, you can create UI without XML using **Jetpack Compose** (modern, declarative approach) or **programmatic View creation** (traditional approach).
@@ -190,7 +193,7 @@ class ProgrammaticLayoutActivity : AppCompatActivity() {
 }
 ```
 
-### 4. Compose vs Programmatic Views
+### 4. Compose Vs Programmatic Views
 
 | Aspect | Jetpack Compose | Programmatic Views |
 |--------|-----------------|-------------------|
@@ -234,7 +237,7 @@ class HybridActivity : AppCompatActivity() {
 
 ---
 
-# Как рисовать UI без xml
+# Как Рисовать UI Без Xml
 
 ## Ответ (RU)
 В Android можно создавать интерфейс без XML с помощью Jetpack Compose или программного кода (View в Kotlin/Java).

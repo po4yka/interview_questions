@@ -5,13 +5,13 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [ui-compose, ui-views, ui-state]
+subtopics: [ui-compose, ui-state, ui-views]
 question_kind: theory
 difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/jetpack-compose, android/ui, android/declarative-ui, android/state, android/recomposition, difficulty/medium]
+language_tags: [android/declarative-ui, android/jetpack-compose, android/recomposition, android/state, android/ui, difficulty/medium, en, ru]
 source: internal
 source_note: Created for vault completeness
 
@@ -24,7 +24,9 @@ related: [q-compose-remember-derived-state--jetpack-compose--medium, q-compose-s
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [android/ui-compose, android/ui-views, android/ui-state, en, ru, difficulty/medium]
+tags: [android/ui-compose, android/ui-state, android/ui-views, difficulty/medium, en, ru]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:10:58 pm
 ---
 
 # Question (EN)
@@ -1031,14 +1033,14 @@ fun Greeting(name: String) {
 }
 ```
 
-### Основные принципы
+### Основные Принципы
 
 1. **Декларативность**: Описываете состояние UI, а не как его достичь
 2. **Компонуемость**: Строите UI из маленьких переиспользуемых функций
 3. **Реактивность**: UI автоматически обновляется при изменении состояния
 4. **Управление данными**: UI = f(состояние)
 
-### Composable функции
+### Composable Функции
 
 Composable функции аннотируются `@Composable` и могут вызывать другие composable:
 
@@ -1071,7 +1073,7 @@ fun MessageCard(message: Message) {
 }
 ```
 
-### Состояние и Recomposition
+### Состояние И Recomposition
 
 **Состояние** - это любое значение, которое может измениться. При изменении состояния Compose выполняет **recomposition** (переисполнение) composable функций, читающих это состояние.
 
@@ -1113,7 +1115,7 @@ fun ModifierExamples() {
 
 ### Макеты
 
-#### Column - Вертикальный макет
+#### Column - Вертикальный Макет
 
 ```kotlin
 @Composable
@@ -1132,7 +1134,7 @@ fun ColumnExample() {
 }
 ```
 
-#### Row - Горизонтальный макет
+#### Row - Горизонтальный Макет
 
 ```kotlin
 @Composable
@@ -1149,7 +1151,7 @@ fun RowExample() {
 }
 ```
 
-#### Box - Стековый макет
+#### Box - Стековый Макет
 
 ```kotlin
 @Composable
@@ -1173,7 +1175,7 @@ fun BoxExample() {
 }
 ```
 
-#### LazyColumn - Эффективные списки
+#### LazyColumn - Эффективные Списки
 
 ```kotlin
 @Composable
@@ -1190,9 +1192,9 @@ fun LazyListExample(items: List<String>) {
 }
 ```
 
-### Полные примеры UI
+### Полные Примеры UI
 
-#### Пример 1: Экран входа
+#### Пример 1: Экран Входа
 
 ```kotlin
 @Composable
@@ -1249,7 +1251,7 @@ fun LoginScreen(
 }
 ```
 
-#### Пример 2: Список задач
+#### Пример 2: Список Задач
 
 ```kotlin
 data class TodoItem(
@@ -1296,7 +1298,7 @@ fun TodoListScreen() {
 }
 ```
 
-### Жизненный цикл Composable
+### Жизненный Цикл Composable
 
 Composable имеют три стадии жизненного цикла:
 
@@ -1304,7 +1306,7 @@ Composable имеют три стадии жизненного цикла:
 2. **Recomposition**: Переисполняется при изменении состояния
 3. **Выход из Composition**: Удаляется из UI
 
-### Побочные эффекты
+### Побочные Эффекты
 
 ```kotlin
 // LaunchedEffect - запуск корутины привязанной к композиции
@@ -1320,7 +1322,7 @@ fun LoadDataExample(userId: String) {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Держите composable маленькими и сфокусированными**
 2. **Поднимайте состояние когда нужно**

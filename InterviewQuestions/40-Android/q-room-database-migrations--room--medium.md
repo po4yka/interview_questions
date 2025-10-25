@@ -9,6 +9,7 @@ related: [q-is-layoutinflater-a-singleton-and-why--programming-languages--medium
 created: 2025-10-15
 tags: [database, migrations, persistence, testing, difficulty/medium]
 ---
+
 # Room Database Migrations / Миграции базы данных Room
 
 **English**: Implement complex Room database migrations from version 1 to 3. Handle destructive and non-destructive migrations with testing.

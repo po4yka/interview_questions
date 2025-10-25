@@ -1,136 +1,135 @@
 ---
 id: 20251012-122711115
-title: "Task Affinity in Android"
+title: "Task Affinity in Android / Task Affinity в Android"
+aliases:
+  - "Task Affinity in Android"
+  - "Task Affinity в Android"
 topic: android
+subtopics: [activity, ui-navigation]
+question_kind: android
 difficulty: medium
-status: draft
-created: 2025-10-05
-tags: [task-affinity, tasks, activity, navigation, manifest, difficulty/medium, android/ui-navigation, android/lifecycle]
-aliases:   - Task Affinity in Android
-  - Task Affinity в Android
-category: android
-date_modified: 2025-10-05
-language_tags: [task-affinity, tasks, activity, navigation, manifest, difficulty/medium, android/ui-navigation, android/lifecycle]
-moc: moc-android
-related: [q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard, q-espresso-advanced-patterns--testing--medium, q-fix-slow-app-startup-legacy--android--hard]
 original_language: en
-source: "https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20taskAffinity.md"
-subtopics:
-  - activity
-  - ui-navigation
-  - lifecycle
-type: question
----
-# Task Affinity in Android / Task Affinity в Android
-
-# Question (EN)
-> 
-
-What do you know about taskAffinity?
-
-## Answer (EN)
-The `taskAffinity` is the attribute that is declared in the AndroidManifest file.
-
-An *affinity* indicates which task an activity "prefers" to belong to. By default, all the activities from the same app have an affinity for each other: they "prefer" to be in the same task.
-
-However, you can modify the default affinity for an activity. Activities defined in different apps can share an affinity, and activities defined in the same app can be assigned different task affinities.
-
-You can modify an activity's affinity using the `taskAffinity` attribute of the `<activity>` element.
-
-The `taskAffinity` attribute takes a string value that must be different than the default package name declared in the `<manifest>` element, because the system uses that name to identify the default task affinity for the app.
-
-### When Affinity Comes Into Play
-
-The affinity comes into play in two circumstances:
-
-#### 1. When the intent contains the FLAG_ACTIVITY_NEW_TASK flag
-
-A new activity, by default, is launched into the task of the activity that called `startActivity()`. It's pushed onto the same back stack as the caller.
-
-However, if the intent passed to `startActivity()` contains the `FLAG_ACTIVITY_NEW_TASK` flag, the system looks for a different task to house the new activity. Often, this is a new task. However, it doesn't have to be. If there's an existing task with the same affinity as the new activity, the activity is launched into that task. If not, it begins a new task.
-
-If this flag causes an activity to begin a new task and the user uses the Home button or gesture to leave it, there must be some way for the user to navigate back to the task. Some entities, such as the notification manager, always start activities in an external task, never as part of their own, so they always put `FLAG_ACTIVITY_NEW_TASK` in the intents they pass to `startActivity()`.
-
-If an external entity that might use this flag can invoke your activity, take care that the user has an independent way to get back to the task that's started, such as with a launcher icon, where the root activity of the task has a `CATEGORY_LAUNCHER` intent filter.
-
-#### 2. When an activity has its allowTaskReparenting attribute set to "true"
-
-In this case, the activity can move from the task it starts in to the task it has an affinity for when that task comes to the foreground.
-
-For example, suppose an activity that reports weather conditions in selected cities is defined as part of a travel app. It has the same affinity as other activities in the same app, the default app affinity, and it can be re-parented with this attribute.
-
-When one of your activities starts the weather reporter activity, it initially belongs to the same task as your activity. However, when the travel app's task comes to the foreground, the weather reporter activity is reassigned to that task and displayed within it.
-
-### Important Note
-
-**Note**: If an APK file contains more than one "app" from the user's point of view, you probably want to use the taskAffinity attribute to assign different affinities to the activities associated with each "app".
-
-### Use Cases
-
-Common use cases for taskAffinity include:
-
-- Grouping related activities from different apps together
-- Separating different workflows within the same app
-- Managing activities launched from notifications
-- Controlling activity reparenting behavior
-- Creating separate task stacks for different app sections
-
+language_tags: [en, ru]
+status: draft
+moc: moc-android
+related: [c-task-affinity, q-activity-lifecycle--android--medium, q-android-navigation--android--medium]
+created: 2025-10-05
+updated: 2025-01-25
+tags: [android/activity, android/ui-navigation, task-affinity, tasks, activity, navigation, difficulty/medium]
+sources: [https://developer.android.com/guide/components/activities/tasks-and-back-stack]
 ---
 
 # Вопрос (RU)
-> 
+> Что такое taskAffinity и как она работает?
 
-Что вы знаете о taskAffinity?
+# Question (EN)
+> What is taskAffinity and how does it work?
+
+---
 
 ## Ответ (RU)
-`taskAffinity` - это атрибут, который объявляется в файле AndroidManifest.
 
-*Affinity* (сродство) указывает, к какой задаче активность "предпочитает" принадлежать. По умолчанию все активности из одного приложения имеют сродство друг к другу: они "предпочитают" находиться в одной задаче.
+**Теория Task Affinity:**
+TaskAffinity определяет, к какой задаче активность "предпочитает" принадлежать. По умолчанию все активности одного приложения имеют одинаковое сродство, но можно изменить это поведение для группировки активностей из разных приложений или разделения активностей внутри одного приложения.
 
-Однако вы можете изменить сродство по умолчанию для активности. Активности, определенные в разных приложениях, могут иметь общее сродство, а активности, определенные в одном приложении, могут иметь разные сродства задач.
+**Объявление в AndroidManifest:**
+```xml
+<activity
+    android:name=".WeatherActivity"
+    android:taskAffinity="com.example.weather"
+    android:allowTaskReparenting="true" />
+```
 
-Вы можете изменить сродство активности, используя атрибут `taskAffinity` элемента `<activity>`.
+**Когда сродство вступает в силу:**
+TaskAffinity влияет на поведение активностей в двух случаях.
 
-Атрибут `taskAffinity` принимает строковое значение, которое должно отличаться от имени пакета по умолчанию, объявленного в элементе `<manifest>`, поскольку система использует это имя для идентификации сродства задачи по умолчанию для приложения.
+**1. FLAG_ACTIVITY_NEW_TASK:**
+При использовании флага NEW_TASK система ищет задачу с тем же сродством.
 
-### Когда сродство вступает в силу
+```kotlin
+// Запуск активности в новой задаче или существующей с тем же сродством
+val intent = Intent(this, WeatherActivity::class.java)
+intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+startActivity(intent)
+```
 
-Сродство вступает в силу в двух обстоятельствах:
+**2. allowTaskReparenting:**
+Активность может переместиться в задачу с тем же сродством при выходе на передний план.
 
-#### 1. Когда intent содержит флаг FLAG_ACTIVITY_NEW_TASK
+```xml
+<!-- Активность может переместиться в задачу с тем же сродством -->
+<activity
+    android:name=".WeatherActivity"
+    android:taskAffinity="com.example.weather"
+    android:allowTaskReparenting="true" />
+```
 
-Новая активность по умолчанию запускается в задаче активности, которая вызвала `startActivity()`. Она помещается в тот же стек возврата, что и вызывающий.
+**Практические примеры:**
+- Группировка связанных активностей из разных приложений
+- Разделение рабочих процессов внутри одного приложения
+- Управление активностями из уведомлений
 
-Однако, если intent, переданный в `startActivity()`, содержит флаг `FLAG_ACTIVITY_NEW_TASK`, система ищет другую задачу для размещения новой активности. Часто это новая задача. Однако это не обязательно. Если существует задача с тем же сродством, что и новая активность, активность запускается в этой задаче. Если нет, начинается новая задача.
+## Answer (EN)
 
-Если этот флаг заставляет активность начать новую задачу, и пользователь использует кнопку или жест Home, чтобы покинуть ее, должен быть какой-то способ для пользователя вернуться к задаче. Некоторые сущности, такие как менеджер уведомлений, всегда запускают активности во внешней задаче, никогда как часть своей собственной, поэтому они всегда помещают `FLAG_ACTIVITY_NEW_TASK` в intents, которые они передают в `startActivity()`.
+**Task Affinity Theory:**
+TaskAffinity defines which task an activity "prefers" to belong to. By default, all activities from the same app have the same affinity, but you can change this behavior to group activities from different apps or separate activities within one app.
 
-Если внешняя сущность, которая может использовать этот флаг, может вызвать вашу активность, позаботьтесь о том, чтобы у пользователя был независимый способ вернуться к запущенной задаче, например, с помощью значка лаунчера, где корневая активность задачи имеет фильтр intent `CATEGORY_LAUNCHER`.
+**Declaration in AndroidManifest:**
+```xml
+<activity
+    android:name=".WeatherActivity"
+    android:taskAffinity="com.example.weather"
+    android:allowTaskReparenting="true" />
+```
 
-#### 2. Когда активность имеет атрибут allowTaskReparenting, установленный в "true"
+**When affinity comes into play:**
+TaskAffinity affects activity behavior in two cases.
 
-В этом случае активность может переместиться из задачи, в которой она запускается, в задачу, к которой она имеет сродство, когда эта задача выходит на передний план.
+**1. FLAG_ACTIVITY_NEW_TASK:**
+When using NEW_TASK flag, system looks for a task with the same affinity.
 
-Например, предположим, что активность, которая сообщает о погодных условиях в выбранных городах, определена как часть туристического приложения. Она имеет то же сродство, что и другие активности в том же приложении, сродство приложения по умолчанию, и она может быть перенесена с этим атрибутом.
+```kotlin
+// Launch activity in new task or existing one with same affinity
+val intent = Intent(this, WeatherActivity::class.java)
+intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+startActivity(intent)
+```
 
-Когда одна из ваших активностей запускает активность отчета о погоде, она изначально принадлежит той же задаче, что и ваша активность. Однако, когда задача туристического приложения выходит на передний план, активность отчета о погоде переназначается этой задаче и отображается в ней.
+**2. allowTaskReparenting:**
+Activity can move to a task with the same affinity when it comes to foreground.
 
-### Важное замечание
+```xml
+<!-- Activity can move to task with same affinity -->
+<activity
+    android:name=".WeatherActivity"
+    android:taskAffinity="com.example.weather"
+    android:allowTaskReparenting="true" />
+```
 
-**Примечание**: Если APK-файл содержит более одного "приложения" с точки зрения пользователя, вы, вероятно, захотите использовать атрибут taskAffinity для назначения различных сродств активностям, связанным с каждым "приложением".
+**Practical examples:**
+- Grouping related activities from different apps
+- Separating workflows within one app
+- Managing activities launched from notifications
 
-### Варианты использования
+---
 
-Распространенные варианты использования taskAffinity включают:
+## Follow-ups
 
-- Группировка связанных активностей из разных приложений вместе
-- Разделение различных рабочих процессов в одном приложении
-- Управление активностями, запускаемыми из уведомлений
-- Контроль поведения переноса активностей
-- Создание отдельных стеков задач для различных разделов приложения
+- How does taskAffinity affect the back stack?
+- What happens when you don't specify taskAffinity?
+- How do you handle taskAffinity with notifications?
 
 ## Related Questions
 
-- [[q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard]]
-- [[q-espresso-advanced-patterns--android--medium]]
-- [[q-fix-slow-app-startup-legacy--android--hard]]
+### Prerequisites (Easier)
+- [[q-android-app-components--android--easy]] - App components
+- [[q-activity-basics--android--easy]] - Activity basics
+
+### Related (Same Level)
+- [[q-activity-lifecycle--android--medium]] - Activity lifecycle
+- [[q-android-navigation--android--medium]] - Android navigation
+- [[q-task-back-stack--android--medium]] - Task back stack
+
+### Advanced (Harder)
+- [[q-android-runtime-internals--android--hard]] - Runtime internals
+- [[q-activity-launch-modes--android--hard]] - Launch modes

@@ -1,35 +1,29 @@
 ---
 id: 20251020-200000
 title: Dagger Purpose / Назначение Dagger
-aliases:
-- Dagger Purpose
-- Назначение Dagger
+aliases: [Dagger Purpose, Назначение Dagger]
 topic: android
 subtopics:
-- di-hilt
+  - di-hilt
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-dagger-inject-annotation--android--easy
-- q-dagger-framework-overview--android--hard
-- q-dagger-main-elements--android--medium
+  - q-dagger-framework-overview--android--hard
+  - q-dagger-inject-annotation--android--easy
+  - q-dagger-main-elements--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/di-hilt
-- dagger
-- hilt
-- dependency-injection
-- di-framework
-- difficulty/easy
+tags: [android/di-hilt, dagger, dependency-injection, di-framework, difficulty/easy, hilt]
 source: https://dagger.dev/
 source_note: Dagger official documentation
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:16 pm
 ---
 
 # Вопрос (RU)
@@ -57,7 +51,7 @@ Dagger - это популярный фреймворк для внедрени�
 - Автоматическое разрешение графа зависимостей
 - Проверка корректности зависимостей на этапе компиляции
 
-### Проблемы без Dagger
+### Проблемы Без Dagger
 
 **Традиционный подход (плохо):**
 ```kotlin
@@ -86,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 - Дублирование кода создания объектов
 - Невозможность замены реализаций
 
-### Решение с Dagger
+### Решение С Dagger
 
 **Dagger подход (хорошо):**
 ```kotlin
@@ -114,7 +108,7 @@ class MainActivity : AppCompatActivity() {
 - Централизованное управление зависимостями
 - Возможность замены реализаций
 
-### Основные причины использования
+### Основные Причины Использования
 
 **1. Уменьшение связанности кода**
 - Объекты не знают, как создавать свои зависимости
@@ -141,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 - Модульная архитектура
 - Управление сложными графами зависимостей
 
-### Hilt - упрощенная версия Dagger
+### Hilt - Упрощенная Версия Dagger
 
 **Hilt автоматизирует:**
 - Создание компонентов
@@ -237,7 +231,7 @@ class MainActivity : AppCompatActivity() {
 - Centralized dependency management
 - Ability to replace implementations
 
-### Main reasons for using
+### Main Reasons for Using
 
 **1. Reduce code coupling**
 - Objects don't know how to create their dependencies
@@ -264,7 +258,7 @@ class MainActivity : AppCompatActivity() {
 - Modular architecture
 - Management of complex dependency graphs
 
-### Hilt - simplified Dagger
+### Hilt - Simplified Dagger
 
 **Hilt automates:**
 - Component creation

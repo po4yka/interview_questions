@@ -7,10 +7,12 @@ status: draft
 moc: moc-android
 related: [q-flow-testing-turbine--testing--medium, q-fragment-basics--android--easy, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
 created: 2025-10-15
-tags: [android/fragments, android/layouts, android/ui, fragment, fragments, layoutinflater, layouts, ui, difficulty/easy]
+tags: [android/fragments, android/layouts, android/ui, difficulty/easy, fragment, fragments, layoutinflater, layouts, ui]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:39:58 pm
 ---
 
-# Каким образом ты выбираешь layout?
+# Каким Образом Ты Выбираешь Layout?
 
 **English**: How do you choose a layout?
 
@@ -206,7 +208,7 @@ override fun onDestroyView() {
 
 В Android фрагментах выбор макета выполняется в методе **onCreateView()** с использованием **LayoutInflater**. Это стандартный подход для преобразования XML макетов в объекты View.
 
-### Базовое преобразование макета
+### Базовое Преобразование Макета
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -221,13 +223,13 @@ class MyFragment : Fragment() {
 }
 ```
 
-### Объяснение ключевых параметров
+### Объяснение Ключевых Параметров
 
 1. **inflater**: LayoutInflater предоставленный системой
 2. **container**: Родительский ViewGroup к которому UI фрагмента будет присоединен
 3. **attachToRoot**: Должен быть **false** для фрагментов (FragmentManager управляет присоединением)
 
-### Современный подход с View Binding
+### Современный Подход С View Binding
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -259,7 +261,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### Альтернатива: Программное создание макета
+### Альтернатива: Программное Создание Макета
 
 Для динамических или кастомных макетов можно создавать view программно:
 
@@ -294,7 +296,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### Условный выбор макета
+### Условный Выбор Макета
 
 Выбор различных макетов на основе характеристик устройства:
 
@@ -316,7 +318,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### Использование разных макетов для ориентации
+### Использование Разных Макетов Для Ориентации
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -362,7 +364,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Всегда возвращайте non-null View** из onCreateView (если не используете старые паттерны)
 2. **Используйте View Binding** вместо findViewById для безопасности типов
@@ -371,7 +373,7 @@ class MyFragment : Fragment() {
 5. **Рассмотрите Compose** для новых проектов
 6. **Используйте resource qualifiers** (layout-land, layout-sw600dp) вместо runtime проверок
 
-### Частые ошибки, которых следует избегать
+### Частые Ошибки, Которых Следует Избегать
 
 ```kotlin
 // НЕПРАВИЛЬНО - attachToRoot = true

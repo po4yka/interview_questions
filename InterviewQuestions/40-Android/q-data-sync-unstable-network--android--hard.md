@@ -1,37 +1,30 @@
 ---
 id: 20251020-200000
 title: Data Sync Unstable Network / Синхронизация данных при нестабильной сети
-aliases:
-- Data Sync Unstable Network
-- Синхронизация данных при нестабильной сети
+aliases: [Data Sync Unstable Network, Синхронизация данных при нестабильной сети]
 topic: android
 subtopics:
-- networking-http
-- architecture-clean
+  - architecture-clean
+  - networking-http
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-networking-basics--android--medium
-- q-offline-first-architecture--android--hard
-- q-android-workmanager--android--medium
+  - q-android-networking-basics--android--medium
+  - q-android-workmanager--android--medium
+  - q-offline-first-architecture--android--hard
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/networking-http
-- android/architecture-clean
-- data-sync
-- offline-first
-- networking
-- workmanager
-- difficulty/hard
+tags: [android/architecture-clean, android/networking-http, data-sync, difficulty/hard, networking, offline-first, workmanager]
 source: https://developer.android.com/guide/background/processing-data/sync
 source_note: Android Data Sync documentation
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:13 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +37,7 @@ source_note: Android Data Sync documentation
 
 Обработка синхронизации данных при нестабильной сети требует offline-first архитектуры, механизмов повторных попыток и стратегий разрешения конфликтов.
 
-### Теория: Принципы синхронизации при нестабильной сети
+### Теория: Принципы Синхронизации При Нестабильной Сети
 
 **Основные концепции:**
 - **Offline-First архитектура** - локальная база данных как единственный источник истины
@@ -65,7 +58,7 @@ source_note: Android Data Sync documentation
 - **Strategy Pattern** - выбор стратегии синхронизации
 - **Queue Pattern** - отложенное выполнение операций
 
-### 1. Offline-First архитектура
+### 1. Offline-First Архитектура
 
 **Теоретические основы:**
 Offline-First архитектура основана на принципе "локальная база данных как источник истины". Это означает, что все операции чтения и записи выполняются против локальной базы данных, а синхронизация с сервером происходит асинхронно в фоновом режиме.
@@ -94,7 +87,7 @@ class OfflineFirstRepository @Inject constructor(
 }
 ```
 
-### 2. Механизмы повторных попыток
+### 2. Механизмы Повторных Попыток
 
 **Теоретические основы:**
 Экспоненциальная задержка с jitter предотвращает "thundering herd" проблему, когда множество клиентов одновременно пытаются переподключиться к серверу. Jitter добавляет случайность к задержке, распределяя нагрузку во времени.
@@ -121,7 +114,7 @@ class RetryManager {
 }
 ```
 
-### 3. Разрешение конфликтов
+### 3. Разрешение Конфликтов
 
 **Теоретические основы:**
 Конфликты возникают когда одни и те же данные изменяются локально и на сервере. Стратегии разрешения конфликтов определяют, какая версия данных должна быть сохранена.
@@ -146,7 +139,7 @@ class ConflictResolver {
 }
 ```
 
-### 4. Очереди синхронизации
+### 4. Очереди Синхронизации
 
 **Теоретические основы:**
 WorkManager обеспечивает надежное выполнение фоновых задач с учетом системных ограничений. Он автоматически обрабатывает перезапуск приложения, оптимизирует батарею и соблюдает ограничения Doze Mode.
@@ -179,7 +172,7 @@ class SyncManager @Inject constructor(private val context: Context) {
 }
 ```
 
-### 5. Мониторинг состояния сети
+### 5. Мониторинг Состояния Сети
 
 **Теоретические основы:**
 NetworkCallback API позволяет отслеживать изменения состояния сети в реальном времени. Это критически важно для адаптации стратегии синхронизации к текущим условиям сети.
@@ -212,7 +205,7 @@ class NetworkMonitor @Inject constructor(private val context: Context) {
 }
 ```
 
-### CPU-интенсивные операции
+### CPU-интенсивные Операции
 
 **Теоретические основы:**
 Нестабильная сеть требует адаптивной стратегии синхронизации. CPU-интенсивные операции включают анализ стабильности сети, определение оптимального размера батча и выбор алгоритма сжатия данных.

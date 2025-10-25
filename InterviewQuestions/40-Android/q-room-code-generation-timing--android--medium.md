@@ -9,6 +9,7 @@ related: [q-dagger-framework-overview--android--hard, q-koin-fundamentals--depen
 created: 2025-10-15
 tags: [android/data-storage, annotation-processing, code-generation, compile-time, kapt, ksp, room, difficulty/medium]
 ---
+
 # В какой момент генерируется код при использовании SQLite?
 
 **English**: When is code generated when using SQLite/Room?

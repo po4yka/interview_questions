@@ -9,6 +9,7 @@ related: [q-singleton-scope-binding--android--medium, q-shared-element-transitio
 created: 2025-10-15
 tags: [play-app-signing, security, signing, keystore, google-play, app-bundle, difficulty/medium]
 ---
+
 # What is Play App Signing? / Что такое Play App Signing?
 
 **English**: What's Play App Signing?

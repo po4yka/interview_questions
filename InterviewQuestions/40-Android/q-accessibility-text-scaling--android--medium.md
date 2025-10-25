@@ -1,30 +1,27 @@
 ---
 id: 20251012-122755
 title: Accessibility Text Scaling / Масштабирование текста для доступности
-aliases:
-- Text Scaling Accessibility
-- Масштабирование текста
+aliases: [Text Scaling Accessibility, Масштабирование текста]
 topic: android
 subtopics:
-- ui-accessibility
-- ui-theming
+  - ui-accessibility
+  - ui-theming
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-accessibility-compose--android--medium
-- q-accessibility-testing--android--medium
+  - q-accessibility-compose--android--medium
+  - q-accessibility-testing--android--medium
 created: 2025-10-11
 updated: 2025-10-15
-tags:
-- android/ui-accessibility
-- android/ui-theming
-- difficulty/medium
+tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:21 pm
 ---
 
 # Question (EN)

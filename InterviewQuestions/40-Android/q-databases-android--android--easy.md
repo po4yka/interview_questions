@@ -1,35 +1,29 @@
 ---
 id: 20251020-200000
 title: Databases Android / Базы данных в Android
-aliases:
-- Databases Android
-- Базы данных в Android
+aliases: [Databases Android, Базы данных в Android]
 topic: android
 subtopics:
-- room
+  - room
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-room-database-basics--android--easy
-- q-database-optimization-android--android--medium
-- q-database-encryption-android--android--medium
+  - q-database-encryption-android--android--medium
+  - q-database-optimization-android--android--medium
+  - q-room-database-basics--android--easy
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/room
-- database
-- realm
-- room
-- sqlite
-- difficulty/easy
+tags: [android/room, database, difficulty/easy, realm, room, sqlite]
 source: https://developer.android.com/training/data-storage
 source_note: Android Data Storage documentation
+date created: Saturday, October 25th 2025, 1:26:31 pm
+date modified: Saturday, October 25th 2025, 4:52:10 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +36,7 @@ source_note: Android Data Storage documentation
 
 Android приложения могут использовать **три основных варианта баз данных**: **SQLite**, **Room**, и **Realm**.
 
-### Теория: Типы баз данных в Android
+### Теория: Типы Баз Данных В Android
 
 **Основные концепции:**
 - **SQLite** - встроенная реляционная база данных
@@ -158,7 +152,7 @@ class RealmManager {
 }
 ```
 
-### Сравнение баз данных
+### Сравнение Баз Данных
 
 | Критерий | SQLite | Room | Realm |
 |----------|--------|------|-------|
@@ -168,7 +162,7 @@ class RealmManager {
 | Поддержка | Встроенная | Google | Realm |
 | Типизация | Ручная | Автоматическая | Автоматическая |
 
-### Выбор базы данных
+### Выбор Базы Данных
 
 **SQLite подходит для:**
 - Простых приложений с минимальными требованиями

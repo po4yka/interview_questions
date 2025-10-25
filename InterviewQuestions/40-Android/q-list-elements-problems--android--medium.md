@@ -9,6 +9,7 @@ tags: [android/performance, android/recyclerview, concurrency, diffutil, livedat
 moc: moc-android
 related: [q-view-methods-and-their-purpose--android--medium, q-multithreading-tools-android--android--medium, q-test-doubles-dependency-injection--testing--medium]
 ---
+
 # Какие могут быть проблемы с элементами списка?
 
 **English**: What problems can occur with list elements?

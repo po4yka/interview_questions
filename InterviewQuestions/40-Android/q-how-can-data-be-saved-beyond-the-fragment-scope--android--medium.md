@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-dagger-custom-scopes--di--hard, q-memory-leak-detection--performance--medium, q-alternative-distribution--distribution--medium]
+related: [q-alternative-distribution--distribution--medium, q-dagger-custom-scopes--di--hard, q-memory-leak-detection--performance--medium]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:40:16 pm
 ---
-# How can data be saved beyond the fragment scope?
+
+# How Can Data Be Saved beyond the Fragment Scope?
 
 ## Answer (EN)
 Data can be saved beyond Fragment scope using several approaches, each with different lifetime characteristics and use cases.
@@ -291,7 +293,7 @@ class MyFragment : Fragment() {
 
 ### Реальные Примеры
 
-#### Пример 1: Комбинирование ViewModel и SavedState
+#### Пример 1: Комбинирование ViewModel И SavedState
 
 ```kotlin
 class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -320,7 +322,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-#### Пример 2: Shared ViewModel между Fragments
+#### Пример 2: Shared ViewModel Между Fragments
 
 ```kotlin
 class SharedViewModel : ViewModel() {
@@ -355,7 +357,7 @@ class FragmentB : Fragment() {
 }
 ```
 
-#### Пример 3: Постоянное Хранение с Repository
+#### Пример 3: Постоянное Хранение С Repository
 
 ```kotlin
 class NoteRepository(private val noteDao: NoteDao, private val preferences: DataStore<Preferences>) {

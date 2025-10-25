@@ -9,6 +9,7 @@ related: [q-reduce-app-size--android--medium, q-dagger-purpose--android--easy, q
 created: 2025-10-15
 tags: [database, relations, embedded, modeling, junction-table, difficulty/medium]
 ---
+
 # Room Relations and Embedded / Отношения и Embedded в Room
 
 **English**: Implement @Relation for one-to-many and many-to-many relationships. Use @Embedded for flattening data classes.

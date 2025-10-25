@@ -5,11 +5,14 @@ topic: android
 difficulty: easy
 status: draft
 moc: moc-android
-related: [q-which-class-to-catch-gestures--android--easy, q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy, q-graphql-vs-rest--networking--easy]
+related: [q-graphql-vs-rest--networking--easy, q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy, q-which-class-to-catch-gestures--android--easy]
 created: 2025-10-15
-tags: [android/fragments, fragments, ui, difficulty/easy]
+tags: [android/fragments, difficulty/easy, fragments, ui]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:39:48 pm
 ---
-# Как на экране одновременно отобразить два одинаковых фрагмента?
+
+# Как На Экране Одновременно Отобразить Два Одинаковых Фрагмента?
 
 **English**: How to display two identical fragments on the screen at the same time?
 

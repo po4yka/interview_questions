@@ -1,35 +1,31 @@
 ---
 id: 20251012-122710
 title: Semantics in Jetpack Compose / Семантика в Jetpack Compose
-aliases:
-- Semantics in Jetpack Compose
-- Семантика в Jetpack Compose
+aliases: [Semantics in Jetpack Compose, Семантика в Jetpack Compose]
 topic: android
 subtopics:
-- ui-compose
-- a11y
-- testing-unit
+  - a11y
+  - testing-unit
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compose-testing--android--medium
-- q-compose-performance-optimization--android--hard
-- q-compose-modifier-system--android--medium
+  - q-compose-modifier-system--android--medium
+  - q-compose-performance-optimization--android--hard
+  - q-compose-testing--android--medium
 created: 2025-10-06
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/a11y
-- android/testing-unit
-- difficulty/medium
+tags: [android/a11y, android/testing-unit, android/ui-compose, difficulty/medium]
 source: https://developer.android.com/jetpack/compose/semantics
 source_note: Official Compose Semantics docs
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:36 pm
 ---
 
 # Вопрос (RU)
@@ -50,7 +46,7 @@ source_note: Official Compose Semantics docs
 - Semantics expose UI meaning/structure to accessibility services and test APIs in [[c-jetpack-compose]].
 - Key properties: contentDescription, role, stateDescription, progressBarRangeInfo, selected/disabled for testing with c-espresso.
 
-### Minimal patterns
+### Minimal Patterns
 
 Accessible button semantics
 ```kotlin

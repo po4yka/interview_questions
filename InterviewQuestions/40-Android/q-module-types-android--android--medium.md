@@ -9,6 +9,7 @@ tags: [modules, app-module, library-module, feature-module, difficulty/medium]
 moc: moc-android
 related: [q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-workmanager-execution-guarantee--android--medium, q-task-affinity--android--medium]
 ---
+
 # Types of Android Modules / Типы модулей Android
 
 **English**: What types of modules do you know?

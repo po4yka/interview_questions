@@ -1,31 +1,28 @@
 ---
 id: 20251012-122764
 title: Android Components Besides Activity / Компоненты Android кроме Activity
-aliases:
-- Android Components Besides Activity
-- Компоненты Android кроме Activity
+aliases: [Android Components Besides Activity, Компоненты Android кроме Activity]
 topic: android
 subtopics:
-- activity
-- architecture-clean
+  - activity
+  - architecture-clean
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-app-components--android--easy
-- q-service-types-android--android--easy
-- q-fragment-vs-activity-lifecycle--android--medium
+  - q-android-app-components--android--easy
+  - q-fragment-vs-activity-lifecycle--android--medium
+  - q-service-types-android--android--easy
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/activity
-- android/architecture-clean
-- difficulty/easy
+tags: [android/activity, android/architecture-clean, difficulty/easy]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:16 pm
 ---
 
 # Вопрос (RU)

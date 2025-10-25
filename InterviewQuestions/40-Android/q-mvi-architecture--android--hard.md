@@ -9,6 +9,7 @@ related: [q-app-startup-optimization--performance--medium, q-how-can-data-be-sav
 created: 2025-10-15
 tags: [architecture, mvi, state-management, unidirectional-data-flow, difficulty/hard]
 ---
+
 # MVI Architecture
 
 **English**: Explain the MVI (Model-View-Intent) architecture pattern. How does it differ from MVVM?

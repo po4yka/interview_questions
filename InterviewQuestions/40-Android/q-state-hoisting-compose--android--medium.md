@@ -9,6 +9,7 @@ related: [q-until-what-point-does-viewmodel-guarantee-state-preservation--androi
 created: 2025-10-15
 tags: [jetpack-compose, state-management, architecture, best-practices, difficulty/medium]
 ---
+
 # State Hoisting в Jetpack Compose
 
 **English**: What is state hoisting in Jetpack Compose and why is it considered a best practice for building reusable components?

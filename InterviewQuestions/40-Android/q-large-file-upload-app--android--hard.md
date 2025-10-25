@@ -9,6 +9,7 @@ related: [q-launch-modes-android--android--medium, q-what-is-the-layout-called-w
 created: 2025-10-15
 tags: [android/background-processing, background-processing, file-upload, networking, retrofit, workmanager, difficulty/hard]
 ---
+
 # Как бы реализовал приложение, которое может загружать большие файлы на сервер?
 
 **English**: How would you implement an app that can upload large files to a server?

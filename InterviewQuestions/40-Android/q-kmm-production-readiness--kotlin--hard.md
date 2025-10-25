@@ -5,11 +5,14 @@ topic: kotlin
 difficulty: hard
 status: draft
 created: 2025-10-13
-tags: [Kotlin, KMM, Production, BestPractices, difficulty/hard]
+tags: [BestPractices, difficulty/hard, KMM, Kotlin, Production]
 moc: moc-kotlin
-related: [q-intent-filters-android--android--medium, q-handler-looper-comprehensive--android--medium, q-what-is-layout-types-and-when-to-use--android--easy]
+related: [q-handler-looper-comprehensive--android--medium, q-intent-filters-android--android--medium, q-what-is-layout-types-and-when-to-use--android--easy]
 subtopics: [kmp]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:07:59 pm
 ---
+
 # KMM Production Readiness and Best Practices
 
 # Question (EN)
@@ -651,7 +654,7 @@ fun processItems(items: List<Item>) {
 }
 ```
 
-#### CI/CD for Production
+#### CI/CD For Production
 
 **1. Automated Testing**
 ```yaml
@@ -804,7 +807,7 @@ Key considerations: stability, observability, proper error handling, memory mana
 ## Ответ (RU)
 Production-ready KMM требует тщательного внимания к stability, monitoring, versioning и platform-specific concerns при сохранении преимуществ code sharing.
 
-#### Ключевые аспекты
+#### Ключевые Аспекты
 
 **Versioning**:
 - Semantic versioning (1.2.3)
@@ -843,7 +846,7 @@ Production-ready KMM требует тщательного внимания к s
 - CoroutineDispatcher isolation
 - Proper scope management
 
-#### Частые ошибки
+#### Частые Ошибки
 
 1. **Shared Mutable State**:
    -  var в object

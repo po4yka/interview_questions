@@ -14,6 +14,7 @@ subtopics:
   - performance-rendering
   - debugging
 ---
+
 # StrictMode in Android / StrictMode в Android
 
 **English**: What is StrictMode?

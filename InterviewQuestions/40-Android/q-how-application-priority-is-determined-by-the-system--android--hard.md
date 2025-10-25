@@ -5,9 +5,11 @@ topic: android
 difficulty: hard
 status: draft
 moc: moc-android
-related: [q-what-navigation-methods-do-you-know--android--medium, q-network-operations-android--android--medium, q-mvp-pattern--android--medium]
+related: [q-mvp-pattern--android--medium, q-network-operations-android--android--medium, q-what-navigation-methods-do-you-know--android--medium]
 created: 2025-10-15
-tags: [process-management, memory-management, lifecycle, difficulty/hard]
+tags: [difficulty/hard, lifecycle, memory-management, process-management]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:40:17 pm
 ---
 
 # Question (EN)
@@ -467,7 +469,7 @@ EMPTY (1000)         → No components, killed first
 
 Android определяет приоритет приложения на основе **иерархии важности процессов**, что влияет на решения **Low Memory Killer (LMK)** и распределение ресурсов.
 
-### Иерархия приоритетов (от высшего к низшему)
+### Иерархия Приоритетов (от Высшего К низшему)
 
 1. **Foreground Process** - пользователь взаимодействует (Activity в onResume, foreground service)
 2. **Visible Process** - частично виден (Activity в onPause, диалог сверху)
@@ -487,7 +489,7 @@ Cached         900-999    Первыми (LRU порядок)
 Empty          1000       Немедленно
 ```
 
-### Ключевые факторы
+### Ключевые Факторы
 
 -   Состояние Activity (resumed > paused > stopped)
 -   Тип сервиса (foreground > background)

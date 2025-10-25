@@ -31,6 +31,7 @@ updated: 2025-10-11
 
 tags: [en, ru, android/performance, android/memory-leaks, android/profiling, android/leakcanary, android/optimization, android/lifecycle, difficulty/medium]
 ---
+
 # Question (EN)
 > Identify and fix common memory leaks in Android. Use LeakCanary, Memory Profiler, and heap dumps for systematic analysis. Fix Activity/Fragment/ViewModel leaks.
 

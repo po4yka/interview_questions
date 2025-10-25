@@ -1,31 +1,28 @@
 ---
 id: 20251012-122794
 title: Canvas Optimization / Оптимизация Canvas
-aliases:
-- Canvas Optimization
-- Оптимизация Canvas
+aliases: [Canvas Optimization, Оптимизация Canvas]
 topic: android
 subtopics:
-- ui-views
-- ui-graphics
+  - ui-graphics
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-performance-measurement-tools--android--medium
-- q-canvas-drawing-optimization--android--hard
-- q-android-app-lag-analysis--android--medium
+  - q-android-app-lag-analysis--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - q-canvas-drawing-optimization--android--hard
 created: 2025-10-13
 updated: 2025-10-20
-tags:
-- android/ui-views
-- android/ui-graphics
-- difficulty/medium
+tags: [android/ui-graphics, android/ui-views, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:49 pm
 ---
 
 # Вопрос (RU)

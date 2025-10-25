@@ -1,37 +1,31 @@
 ---
 id: 20251020-200100
 title: DiffUtil Background Calculation Issues / Проблемы фонового вычисления DiffUtil
-aliases:
-- DiffUtil Background Calculation Issues
-- Проблемы фонового вычисления DiffUtil
+aliases: [DiffUtil Background Calculation Issues, Проблемы фонового вычисления DiffUtil]
 topic: android
 subtopics:
-- ui-views
-- performance-memory
+  - performance-memory
+  - ui-views
 
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
 source_note: Android DiffUtil documentation
 status: draft
 moc: moc-android
 related:
-- q-main-causes-ui-lag--android--medium
-- q-recyclerview-optimization--android--medium
-- q-android-performance-optimization--android--medium
+  - q-android-performance-optimization--android--medium
+  - q-main-causes-ui-lag--android--medium
+  - q-recyclerview-optimization--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-  - android/ui-views
-  - android/performance
-  - recyclerview
-  - diffutil
-  - multithreading
-  - difficulty/medium
+tags: [android/performance, android/ui-views, difficulty/medium, diffutil, multithreading, recyclerview]
+date created: Saturday, October 25th 2025, 1:26:31 pm
+date modified: Saturday, October 25th 2025, 4:52:06 pm
 ---
 
 # Вопрос (RU)
@@ -45,7 +39,7 @@ tags:
 
 DiffUtil в фоне плохо работает при изменении данных во время расчета, тяжелых вычислениях в callback, больших списках (>1000 элементов), неправильной обработке ошибок, race conditions между потоками.
 
-### Основные проблемы
+### Основные Проблемы
 
 **1. Изменение данных во время расчета**
 - Проблема: исходный список изменяется другим потоком во время DiffUtil.calculateDiff()

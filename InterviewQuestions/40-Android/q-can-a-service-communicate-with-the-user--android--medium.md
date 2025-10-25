@@ -1,31 +1,28 @@
 ---
 id: 20251012-122790
 title: Can a Service Communicate With the User / Может ли сервис общаться с пользователем
-aliases:
-- Can a Service Communicate With the User
-- Может ли сервис общаться с пользователем
+aliases: [Can a Service Communicate With the User, Может ли сервис общаться с пользователем]
 topic: android
 subtopics:
-- service
-- notifications
+  - notifications
+  - service
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-service-types--android--easy
-- q-android-services-purpose--android--easy
-- q-background-vs-foreground-service--android--medium
+  - q-android-service-types--android--easy
+  - q-android-services-purpose--android--easy
+  - q-background-vs-foreground-service--android--medium
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/service
-- android/notifications
-- difficulty/medium
+tags: [android/notifications, android/service, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:51 pm
 ---
 
 # Вопрос (RU)
@@ -50,7 +47,7 @@ tags:
   - **Broadcast → UI**: service broadcasts; Activity/Fragment receives and updates UI.
   - **Toasts**: avoid for important info; prefer notifications.
 
-### Minimal snippet (foreground notification)
+### Minimal Snippet (foreground notification)
 ```kotlin
 class PlayerService : Service() {
   override fun onCreate() {
@@ -64,7 +61,7 @@ class PlayerService : Service() {
 }
 ```
 
-### Best practices
+### Best Practices
 - Long-running/background work → foreground service with persistent notification.
 - Don’t push Activities unexpectedly; respect user context.
 - UI updates must occur in UI layer (Activity/Fragment) even if data originates from a service.

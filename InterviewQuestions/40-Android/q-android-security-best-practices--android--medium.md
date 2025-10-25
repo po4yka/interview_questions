@@ -3,7 +3,7 @@ id: 20251012-122772
 title: "Android Security Best Practices / Лучшие практики безопасности Android"
 aliases: [Android Security Best Practices, Лучшие практики безопасности Android]
 topic: android
-subtopics: [permissions, keystore-crypto, network-security-config]
+subtopics: [keystore-crypto, network-security-config, permissions]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -13,8 +13,10 @@ moc: moc-android
 related: [c-encryption, c-permissions, q-certificate-pinning--security--medium]
 created: 2025-10-15
 updated: 2025-01-25
-tags: [android/permissions, android/keystore-crypto, android/network-security-config, difficulty/medium]
+tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium]
 sources: [https://developer.android.com/topic/security/best-practices]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:10 pm
 ---
 
 # Вопрос (RU)

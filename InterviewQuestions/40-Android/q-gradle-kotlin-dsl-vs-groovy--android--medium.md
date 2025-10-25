@@ -11,21 +11,24 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/gradle, android/kotlin-dsl, android/groovy, android/build-tools, difficulty/medium]
+language_tags: [android/build-tools, android/gradle, android/groovy, android/kotlin-dsl, difficulty/medium, en, ru]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-what-is-workmanager--android--medium, q-how-does-jetpackcompose-work--android--medium, q-compose-custom-animations--jetpack-compose--medium]
+related: [q-compose-custom-animations--jetpack-compose--medium, q-how-does-jetpackcompose-work--android--medium, q-what-is-workmanager--android--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android/gradle, en, ru, difficulty/medium]
+tags: [android/gradle, difficulty/medium, en, ru]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:47:04 pm
 ---
+
 # Question (EN)
 > What are the differences between Gradle Kotlin DSL and Groovy? When to use each?
 # Вопрос (RU)
@@ -189,7 +192,7 @@ dependencies {
 
 **Gradle Kotlin DSL** (.gradle.kts) предоставляет типобезопасные build скрипты с поддержкой IDE. **Groovy** (.gradle) более лаконичен но не имеет типобезопасности.
 
-### Ключевые различия
+### Ключевые Различия
 
 | Функция | Kotlin DSL | Groovy |
 |---------|-----------|--------|
@@ -213,7 +216,7 @@ android {
 **2. Автодополнение IDE**
 **3. Поддержка рефакторинга**
 
-### Когда использовать каждый
+### Когда Использовать Каждый
 
 **Используйте Kotlin DSL когда:**
 - Новые проекты

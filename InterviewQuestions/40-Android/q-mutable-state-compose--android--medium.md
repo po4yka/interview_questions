@@ -9,6 +9,7 @@ related: [q-compose-ui-testing-advanced--testing--hard, q-what-is-data-binding--
 created: 2025-10-15
 tags: [android/jetpack-compose, jetpack-compose, mutablestate, observable, recomposition, state, state-management, difficulty/medium]
 ---
+
 # What is MutableState in Compose?
 
 **Russian**: Что такое mutable state в Compose?

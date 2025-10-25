@@ -1,35 +1,29 @@
 ---
 id: 20251020-200000
 title: Dark Theme Android / Темная тема Android
-aliases:
-- Dark Theme Android
-- Темная тема Android
+aliases: [Dark Theme Android, Темная тема Android]
 topic: android
 subtopics:
-- ui-theming
+  - ui-theming
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-theming-basics--android--medium
-- q-material-design-theming--android--medium
-- q-android-ui-optimization--android--medium
+  - q-android-theming-basics--android--medium
+  - q-android-ui-optimization--android--medium
+  - q-material-design-theming--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/ui-theming
-- dark-theme
-- theming
-- daynight
-- material-design
-- difficulty/medium
+tags: [android/ui-theming, dark-theme, daynight, difficulty/medium, material-design, theming]
 source: https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
 source_note: Android Dark Theme documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:14 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +36,7 @@ source_note: Android Dark Theme documentation
 
 Темная тема доступна в Android 10 (API level 29) и выше. Она предоставляет альтернативную цветовую схему с темными фонами вместо светлых, предлагая несколько важных преимуществ.
 
-### Теория: Принципы темной темы
+### Теория: Принципы Темной Темы
 
 **Основные концепции:**
 - **Альтернативная цветовая схема** - темные фоны вместо светлых
@@ -57,7 +51,7 @@ source_note: Android Dark Theme documentation
 - Поддержка DayNight тем
 - Интеграция с Material Design
 
-### Преимущества темной темы
+### Преимущества Темной Темы
 
 **1. Снижение потребления энергии**
 - Значительное снижение на OLED/AMOLED экранах
@@ -79,7 +73,7 @@ source_note: Android Dark Theme documentation
 - Соответствие современным трендам
 - Предпочтения пользователей
 
-### Реализация темной темы
+### Реализация Темной Темы
 
 **1. Наследование от DayNight темы**
 ```xml
@@ -118,7 +112,7 @@ source_note: Android Dark Theme documentation
 <color name="background_color">#121212</color>
 ```
 
-### Программное управление темой
+### Программное Управление Темой
 
 **Принудительное переключение темы:**
 ```kotlin
@@ -151,7 +145,7 @@ fun toggleTheme() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Использование атрибутов темы**
 - Всегда используйте `?android:attr/` или `?attr/`

@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-koin-scope-management--dependency-injection--medium, q-why-separate-ui-and-business-logic--android--easy, q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy]
+related: [q-koin-scope-management--dependency-injection--medium, q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy, q-why-separate-ui-and-business-logic--android--easy]
 created: 2025-10-15
-tags: [fragments, ui-architecture, difficulty/medium]
+tags: [difficulty/medium, fragments, ui-architecture]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:47:08 pm
 ---
-# Для чего нужны фрагменты если есть Activity?
+
+# Для Чего Нужны Фрагменты Если Есть Activity?
 
 **English**: Why use Fragments if we have Activities?
 

@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-dagger-component-dependencies--di--hard, q-biometric-authentication--android--medium, q-how-mutablestate-notifies--android--medium]
+related: [q-biometric-authentication--android--medium, q-dagger-component-dependencies--di--hard, q-how-mutablestate-notifies--android--medium]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:27 pm
 ---
-# How to handle the situation where Activity can open multiple times due to deeplink?
+
+# How to Handle the Situation where Activity Can Open Multiple times due to Deeplink?
 
 ## Answer (EN)
 When using deeplinks, an Activity can be launched multiple times creating duplicate instances in the back stack. This can be prevented using launch modes, Intent flags, and proper deeplink configuration.

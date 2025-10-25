@@ -9,6 +9,7 @@ related: [q-mvi-architecture--android--hard, q-how-to-implement-a-photo-editor-a
 created: 2025-10-15
 tags: [notifications, fcm, navigation, deeplink, difficulty/medium]
 ---
+
 # Как открыть Activity или Fragment из push уведомления?
 
 **English**: How to open a specific Activity or Fragment from a push notification?

@@ -9,6 +9,7 @@ tags: [android/memory-management, garbage-collection, memory-leaks, memory-manag
 moc: moc-android
 related: [q-canvas-optimization--graphics--medium, q-recyclerview-viewtypes-delegation--recyclerview--medium, q-custom-view-accessibility--custom-views--medium]
 ---
+
 # Что такое утечки памяти?
 
 **English**: What are memory leaks?

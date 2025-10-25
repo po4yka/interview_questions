@@ -5,12 +5,14 @@ topic: android
 difficulty: easy
 status: draft
 moc: moc-android
-related: [q-mlkit-face-detection--ml--medium, q-retrofit-library--android--medium, q-fragment-vs-activity-lifecycle--android--medium]
+related: [q-fragment-vs-activity-lifecycle--android--medium, q-mlkit-face-detection--ml--medium, q-retrofit-library--android--medium]
 created: 2025-10-15
-tags: [UI, XML, android, android/basics, android/ui, basics, ui, difficulty/easy]
+tags: [android, android/basics, android/ui, basics, difficulty/easy, ui, UI, XML]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:11:15 pm
 ---
 
-# Что нужно сделать в Android-проекте чтобы начать рисовать UI на экране?
+# Что Нужно Сделать В Android-проекте Чтобы Начать Рисовать UI На Экране?
 
 **English**: What needs to be done in an Android project to start drawing UI on screen?
 
@@ -67,7 +69,7 @@ class CustomView(context: Context) : View(context) {
 
 Чтобы начать рисовать UI в Android, необходимо: (1) Создать Activity, (2) Определить XML-файл разметки, (3) Подключить разметку к Activity с помощью `setContentView()`.
 
-### Основные шаги
+### Основные Шаги
 
 ```kotlin
 // 1. Создать Activity
@@ -100,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 </LinearLayout>
 ```
 
-### Пользовательская отрисовка
+### Пользовательская Отрисовка
 
 ```kotlin
 class CustomView(context: Context) : View(context) {

@@ -1,33 +1,30 @@
 ---
 id: 20251012-122710
 title: Compose Navigation Advanced / Продвинутая навигация Compose
-aliases:
-- Compose Navigation Advanced
-- Продвинутая навигация Compose
+aliases: [Compose Navigation Advanced, Продвинутая навигация Compose]
 topic: android
 subtopics:
-- ui-compose
-- ui-navigation
+  - ui-compose
+  - ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-compose-navigation-advanced--android--medium
-- q-animated-visibility-vs-content--android--medium
-- q-compose-gesture-detection--android--medium
+  - q-animated-visibility-vs-content--android--medium
+  - q-compose-gesture-detection--android--medium
+  - q-compose-navigation-advanced--android--medium
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/ui-compose
-- android/ui-navigation
-- difficulty/medium
+tags: [android/ui-compose, android/ui-navigation, difficulty/medium]
 source: https://developer.android.com/jetpack/compose/navigation
 source_note: Official Compose Navigation docs
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:38 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +41,7 @@ source_note: Official Compose Navigation docs
 
 ## Answer (EN)
 
-### Minimal setup
+### Minimal Setup
 - NavController owns back stack and current destination; NavHost maps route patterns to destinations using c-navigation-component.
 - startDestination initializes the first back stack entry; each composable adds a destination node in [[c-jetpack-compose]].
 ```kotlin
@@ -60,7 +57,7 @@ fun AppNav() {
 }
 ```
 
-### Required vs optional args
+### Required Vs Optional Args
 - Path args are positional and required; query args are named and can be nullable with defaults.
 - NavType enforces runtime type safety; encode query values if they contain reserved characters.
 ```kotlin
@@ -73,7 +70,7 @@ composable("search?query={q}", listOf(navArgument("q") { nullable = true })) { /
 nav.navigate("search?query=kotlin")
 ```
 
-### Type‑safe routes (sealed API)
+### Type‑safe Routes (sealed API)
 - Centralize route patterns and builders to avoid string typos in UI code.
 - Keep pattern (with placeholders) separate from factory that produces concrete routes.
 ```kotlin
@@ -87,7 +84,7 @@ NavHost(nav, Screen.Home.route) {
 }
 ```
 
-### Deep links
+### Deep Links
 - Deep links match incoming URIs to routes; placeholders must correspond to arguments.
 - Android requires manifest intent filters for app/https links; deep links can create back stack.
 ```kotlin
@@ -101,7 +98,7 @@ composable(
 ) { /*...*/ }
 ```
 
-### Back‑stack control
+### Back‑stack Control
 - launchSingleTop avoids duplicate top entries; popUpTo truncates the stack to a target (inclusive removes it).
 - Use saveState/restoreState with bottom navigation to preserve screen state across tabs.
 ```kotlin

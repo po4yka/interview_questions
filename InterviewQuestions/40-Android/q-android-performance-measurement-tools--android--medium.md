@@ -1,33 +1,29 @@
 ---
 id: 20251012-122768
 title: Android Performance Measurement Tools / Инструменты измерения производительности
-aliases:
-- Android Performance Measurement Tools
-- Инструменты измерения производительности Android
+aliases: [Android Performance Measurement Tools, Инструменты измерения производительности Android]
 topic: android
 subtopics:
-- performance-memory
-- profiling
-- testing-unit
+  - performance-memory
+  - profiling
+  - testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-app-lag-analysis--android--medium
-- q-android-build-optimization--android--medium
-- q-android-architectural-patterns--android--medium
+  - q-android-app-lag-analysis--android--medium
+  - q-android-architectural-patterns--android--medium
+  - q-android-build-optimization--android--medium
 created: 2025-10-13
 updated: 2025-10-15
-tags:
-- android/performance-memory
-- android/profiling
-- android/testing-unit
-- difficulty/medium
+tags: [android/performance-memory, android/profiling, android/testing-unit, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:12 pm
 ---
 
 # Вопрос (RU)

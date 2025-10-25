@@ -9,6 +9,7 @@ related: [q-compose-stability-skippability--jetpack-compose--hard, q-alternative
 created: 2025-10-15
 tags: [services, background-tasks, difficulty/easy]
 ---
+
 # Какие есть виды сервисов?
 
 **English**: What types of services exist in Android?

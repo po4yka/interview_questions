@@ -1,37 +1,31 @@
 ---
 id: 20251020-200300
 title: Encrypted File Storage / Зашифрованное хранение файлов
-aliases:
-- Encrypted File Storage
-- Зашифрованное хранение файлов
+aliases: [Encrypted File Storage, Зашифрованное хранение файлов]
 topic: android
 subtopics:
-- files-media
-- permissions
+  - files-media
+  - permissions
 
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: https://developer.android.com/topic/security/data
 source_note: Android encrypted file storage documentation
 status: draft
 moc: moc-android
 related:
-- q-data-encryption-at-rest--android--medium
-- q-android-keystore-system--security--medium
-- q-android-security-best-practices--android--medium
+  - q-android-keystore-system--security--medium
+  - q-android-security-best-practices--android--medium
+  - q-data-encryption-at-rest--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-  - android/files-media
-  - android/security
-  - encryption
-  - file-storage
-  - keystore
-  - difficulty/medium
+tags: [android/files-media, android/security, difficulty/medium, encryption, file-storage, keystore]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:03 pm
 ---
 
 # Вопрос (RU)
@@ -45,7 +39,7 @@ tags:
 
 EncryptedFile API из Android Security Crypto библиотеки обеспечивает безопасное шифрование файлов с автоматическим управлением ключами через Android Keystore. Использует AES-256-GCM с поддержкой streaming для больших файлов.
 
-### Основные концепции
+### Основные Концепции
 
 **EncryptedFile возможности:**
 - Автоматическое управление ключами (Android Keystore)
@@ -130,7 +124,7 @@ fun safeWriteText(fileName: String, content: String): Result<String> {
 }
 ```
 
-### Теория шифрования
+### Теория Шифрования
 
 **AES-256-GCM:**
 - Advanced Encryption Standard с 256-битным ключом

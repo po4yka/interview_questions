@@ -1,31 +1,28 @@
 ---
 id: 20251012-122787
 title: Baseline Profiles Android / Baseline Profiles Android
-aliases:
-- Baseline Profiles Android
-- Baseline Profiles Android
+aliases: [Baseline Profiles Android]
 topic: android
 subtopics:
-- performance-startup
-- gradle
+  - gradle
+  - performance-startup
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-app-startup-optimization--android--medium
-- q-app-size-optimization--android--medium
-- q-android-build-optimization--android--medium
+  - q-android-build-optimization--android--medium
+  - q-app-size-optimization--android--medium
+  - q-app-startup-optimization--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/performance-startup
-- android/gradle
-- difficulty/medium
+tags: [android/gradle, android/performance-startup, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:55 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +35,7 @@ tags:
 
 ## Ответ (RU)
 
-### Что такое Baseline Profiles
+### Что Такое Baseline Profiles
 
 **Теория**: Baseline Profiles сообщают Android Runtime (ART), какие пути кода нужно предварительно скомпилировать (AOT) во время установки, сокращая время запуска и устраняя рывки во время критических пользовательских сценариев.
 
@@ -46,7 +43,7 @@ tags:
 - Традиционно: Запуск приложения → Интерпретация байткода → Профилирование → JIT компиляция → Быстрое выполнение
 - С профилем: Установка приложения → AOT компиляция профилированного кода → Запуск приложения → Сразу быстрое выполнение
 
-### Влияние на производительность
+### Влияние На Производительность
 
 **Типичные улучшения**:
 - Холодный запуск: на 20-40% быстрее
@@ -58,7 +55,7 @@ tags:
 
 (См. код в английской секции)
 
-### Требования и лучшие практики
+### Требования И Лучшие Практики
 
 **Требования**:
 - Android 9+ (API 28) для полных преимуществ

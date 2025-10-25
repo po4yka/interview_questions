@@ -7,9 +7,12 @@ status: draft
 moc: moc-android
 related: [q-cache-implementation-strategies--android--medium, q-custom-view-lifecycle--custom-views--medium, q-custom-view-state-saving--custom-views--medium]
 created: 2025-10-15
-tags: [ui framework, android, ui, jetpack-compose, difficulty/medium]
+tags: [android, difficulty/medium, jetpack-compose, ui, ui framework]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:40:11 pm
 ---
-# How does jetpackCompose work?
+
+# How Does jetpackCompose Work?
 
 # Вопрос (RU)
 
@@ -477,7 +480,7 @@ The magic is in the **smart recomposition** - Compose only re-executes functions
 
 **Jetpack Compose** - это современный декларативный UI-фреймворк от Google для создания нативных интерфейсов Android. Вместо традиционных XML-layout и императивного манипулирования View, Compose использует composable функции для описания UI.
 
-### Основные принципы
+### Основные Принципы
 
 **1. Декларативный UI**
 Описываете что должно быть, а не как это построить.
@@ -491,7 +494,7 @@ UI строится из небольших, переиспользуемых ф
 **4. Kotlin-first**
 Полная интеграция с Kotlin, coroutines и Flow.
 
-### Основные компоненты
+### Основные Компоненты
 
 **Composable функции**
 
@@ -515,7 +518,7 @@ fun UserProfile(user: User) {
 }
 ```
 
-### Как работает композиция
+### Как Работает Композиция
 
 Compose создаёт дерево composable функций, называемое **Composition**.
 
@@ -538,7 +541,7 @@ fun MyApp() {
 - Их позицию в дереве
 - Их состояние и параметры
 
-### Recomposition - сердце Compose
+### Recomposition - Сердце Compose
 
 Когда данные меняются, Compose интеллектуально перекомпонует только затронутые части:
 
@@ -565,7 +568,7 @@ fun Counter() {
 3. Выполняются только невалидные composable
 4. UI обновляется новыми значениями
 
-### Управление состоянием
+### Управление Состоянием
 
 Состояние - это данные, которые могут меняться со временем. Compose наблюдает за состоянием и перекомпонуется при изменениях:
 
@@ -630,7 +633,7 @@ fun CounterScreen() {
 }
 ```
 
-### Жизненный цикл Composable
+### Жизненный Цикл Composable
 
 Composable проходят через lifecycle: **Enter → Recompose → Leave**
 
@@ -659,7 +662,7 @@ fun LifecycleExample() {
 }
 ```
 
-### Effect handlers
+### Effect Handlers
 
 Специальные composable для побочных эффектов:
 
@@ -700,7 +703,7 @@ fun EffectsExample(userId: String) {
 }
 ```
 
-### Modifiers - стилизация и поведение
+### Modifiers - Стилизация И Поведение
 
 Modifiers настраивают внешний вид и поведение composable:
 
@@ -735,7 +738,7 @@ Box(
 }
 ```
 
-### Layouts в Compose
+### Layouts В Compose
 
 Compose предоставляет базовые layout composable:
 
@@ -776,7 +779,7 @@ fun LayoutsExample() {
 }
 ```
 
-### Оптимизация производительности
+### Оптимизация Производительности
 
 Compose оптимизирован, но можно помочь:
 
@@ -812,7 +815,7 @@ fun ItemRow(item: Item) {
 }
 ```
 
-### Интеграция с View системой
+### Интеграция С View Системой
 
 Compose может взаимодействовать с существующей View системой:
 
@@ -843,7 +846,7 @@ fun ViewInCompose() {
 }
 ```
 
-### Навигация в Compose
+### Навигация В Compose
 
 ```kotlin
 @Composable
@@ -867,7 +870,7 @@ fun AppNavigation() {
 }
 ```
 
-### Архитектура с Compose
+### Архитектура С Compose
 
 ```kotlin
 // ViewModel
@@ -895,7 +898,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 }
 ```
 
-### Как работает Compose внутри
+### Как Работает Compose Внутри
 
 1. **Composition**: Построение UI дерева из @Composable функций
 2. **Layout**: Измерение и позиционирование элементов
@@ -922,7 +925,7 @@ fun composable() {
 - Значений remember
 - Группировочных ключей для перекомпозиции
 
-### Ключевые отличия от View системы
+### Ключевые Отличия От View Системы
 
 | View система | Jetpack Compose |
 |--------------|-----------------|

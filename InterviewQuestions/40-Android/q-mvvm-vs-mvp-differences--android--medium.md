@@ -9,6 +9,7 @@ related: [q-what-do-you-know-about-modifications--android--medium, q-dagger-fram
 created: 2025-10-15
 tags: [android/architecture-mvp, android/architecture-mvvm, architecture-mvp, architecture-mvvm, architecture-patterns, data-binding, lifecycle, mvp, mvvm, presenter, viewmodel, difficulty/medium]
 ---
+
 # Чем MVVM отличается от MVP?
 
 **English**: What is the difference between MVVM and MVP?

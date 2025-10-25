@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-how-animations-work-in-recyclerview--android--medium, q-server-sent-events-sse--networking--medium, q-cicd-deployment-automation--devops--medium]
+related: [q-cicd-deployment-automation--devops--medium, q-how-animations-work-in-recyclerview--android--medium, q-server-sent-events-sse--networking--medium]
 created: 2025-10-15
-tags: [caching, android, ui, performance, difficulty/medium]
+tags: [android, caching, difficulty/medium, performance, ui]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:11 pm
 ---
-# How to write RecyclerView so that it caches ahead?
+
+# How to Write RecyclerView so that it Caches Ahead?
 
 # Вопрос (RU)
 
@@ -122,7 +125,7 @@ class CustomPrefetchLayoutManager(
 recyclerView.layoutManager = CustomPrefetchLayoutManager(this)
 ```
 
-### 3. RecyclerView.OnScrollListener for Data Prefetching
+### 3. RecyclerView.OnScrollListener For Data Prefetching
 
 Implement custom logic to load data ahead of time.
 

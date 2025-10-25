@@ -1,33 +1,29 @@
 ---
 id: 20251012-122796
 title: CI/CD Automated Testing / Автоматизированное тестирование в CI/CD
-aliases:
-- CI/CD Automated Testing
-- Автоматизированное тестирование в CI/CD
+aliases: [CI/CD Automated Testing, Автоматизированное тестирование в CI/CD]
 topic: android
 subtopics:
-- gradle
-- testing-unit
-- testing-instrumented
+  - gradle
+  - testing-instrumented
+  - testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-testing-strategies--android--medium
-- q-android-lint-tool--android--medium
-- q-build-optimization-gradle--android--medium
+  - q-android-lint-tool--android--medium
+  - q-android-testing-strategies--android--medium
+  - q-build-optimization-gradle--android--medium
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/gradle
-- android/testing-unit
-- android/testing-instrumented
-- difficulty/medium
+tags: [android/gradle, android/testing-instrumented, android/testing-unit, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:49 pm
 ---
 
 # Вопрос (RU)
@@ -53,13 +49,13 @@ tags:
 - Pre-merge: static checks → unit tests → instrumented tests (shards) → artifacts + reports
 - Post-merge/nightly: full suite, long‑running, device lab, performance checks
 
-### Tests and scope
+### Tests and Scope
 - Unit: JVM, fast, mock Android deps using [[c-unit-testing]] and c-mockito
 - Instrumented: c-espresso/UI, real/emulated devices, sharding
 - Lint/Detekt: style and correctness
 - Coverage: merge unit + instrumented; fail on drop threshold
 
-### Speed and stability
+### Speed and Stability
 - Caching: Gradle build cache + dependency cache; enable configuration cache
 - Parallelism: `--parallel`, matrix (API levels/ABIs), test sharding
 - Split modules: independent builds/tests, avoid rebuilding the world
@@ -87,11 +83,11 @@ jobs:
         with: { name: reports, path: '**/build/reports/**' }
 ```
 
-### Reports and artifacts
+### Reports and Artifacts
 - Store JUnit XML, lint HTML, coverage (Jacoco) per job
 - Surface failures with inline annotations; link to flaky quarantine list
 
-### Device tests
+### Device Tests
 - Emulator matrix for critical PRs; broader device farm nightly
 - Shard by package/class; retry failed shards only
 

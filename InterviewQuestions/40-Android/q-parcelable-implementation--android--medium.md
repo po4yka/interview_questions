@@ -9,6 +9,7 @@ tags: [parcelable, serialization, intent, bundle, difficulty/medium]
 moc: moc-android
 related: [q-kakaya-raznitsa-mezhdu-dialogom-i-fragmentom--android--medium, q-what-is-workmanager--android--medium, q-android-architectural-patterns--android--medium]
 ---
+
 # Parcelable in Android / Parcelable в Android
 
 **English**: What do you know about Parcelable?

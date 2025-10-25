@@ -9,6 +9,7 @@ related: [q-compose-side-effects-advanced--jetpack-compose--hard, q-what-are-ser
 created: 2025-10-15
 tags: [async, diffutil, performance, threading, difficulty/medium]
 ---
+
 # RecyclerView Async List Diffing
 
 # Question (EN)

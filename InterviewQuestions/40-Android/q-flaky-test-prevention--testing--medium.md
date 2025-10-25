@@ -5,9 +5,11 @@ topic: testing
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-how-to-create-animations-in-android--android--medium, q-16kb-dex-page-size--android--medium, q-compose-navigation-advanced--jetpack-compose--medium]
+related: [q-16kb-dex-page-size--android--medium, q-compose-navigation-advanced--jetpack-compose--medium, q-how-to-create-animations-in-android--android--medium]
 created: 2025-10-15
-tags: [flaky-tests, stability, best-practices, difficulty/medium]
+tags: [best-practices, difficulty/medium, flaky-tests, stability]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:51:58 pm
 ---
 
 # Question (EN)
@@ -505,7 +507,7 @@ When you encounter a flaky test, check:
 Flaky тесты — это тесты, которые иногда проходят, а иногда падают без изменений в коде. Они снижают доверие к тестовым наборам и тратят время разработчиков.
 
 
-### Основные причины
+### Основные Причины
 
 1. **Проблемы с таймингом**: race conditions, async операции
 2. **Общее состояние между тестами**: статические переменные
@@ -515,7 +517,7 @@ Flaky тесты — это тесты, которые иногда проход
 
 [Полные примеры исправлений, стратегий retry и обнаружения flaky тестов приведены в английском разделе]
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте правильную async обработку**
 2. **Очищайте состояние между тестами**

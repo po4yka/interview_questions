@@ -1,30 +1,27 @@
 ---
 id: 20251012-122757
 title: Activity Navigation How It Works / Как работает навигация Activity
-aliases:
-- Activity Navigation
-- Навигация Activity
+aliases: [Activity Navigation, Навигация Activity]
 topic: android
 subtopics:
-- ui-navigation
-- activity
+  - activity
+  - ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-activity-lifecycle-methods--android--medium
-- q-intent-filters-android--android--medium
+  - q-activity-lifecycle-methods--android--medium
+  - q-intent-filters-android--android--medium
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/ui-navigation
-- android/activity
-- difficulty/medium
+tags: [android/activity, android/ui-navigation, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:53:20 pm
 ---
 
 # Вопрос (RU)

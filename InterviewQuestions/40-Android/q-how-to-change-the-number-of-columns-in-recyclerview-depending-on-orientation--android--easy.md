@@ -5,11 +5,14 @@ topic: android
 difficulty: easy
 status: draft
 moc: moc-android
-related: [q-play-store-publishing--distribution--medium, q-compose-ui-testing-advanced--testing--hard, q-broadcastreceiver-contentprovider--android--easy]
+related: [q-broadcastreceiver-contentprovider--android--easy, q-compose-ui-testing-advanced--testing--hard, q-play-store-publishing--distribution--medium]
 created: 2025-10-15
-tags: [gridlayoutmanager, android, ui, layouts, difficulty/easy]
+tags: [android, difficulty/easy, gridlayoutmanager, layouts, ui]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:39:59 pm
 ---
-# How to change the number of columns in RecyclerView depending on orientation?
+
+# How to Change the Number of Columns in RecyclerView Depending on Orientation?
 
 # Вопрос (RU)
 

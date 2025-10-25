@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-what-layout-allows-overlapping-objects--android--easy, q-opengl-advanced-rendering--graphics--medium, q-primitive-maps-android--android--medium]
+related: [q-opengl-advanced-rendering--graphics--medium, q-primitive-maps-android--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
-tags: [android/fragments, android/views, communication, fragments, ui, viewmodel, views, difficulty/medium]
+tags: [android/fragments, android/views, communication, difficulty/medium, fragments, ui, viewmodel, views]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:23 pm
 ---
-# Как передавать данные из одного фрагмента в другой?
+
+# Как Передавать Данные Из Одного Фрагмента В Другой?
 
 **English**: How to pass data from one fragment to another?
 

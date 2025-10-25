@@ -9,6 +9,7 @@ related: [q-graphql-vs-rest--networking--easy, q-test-coverage-quality-metrics--
 created: 2025-10-15
 tags: [mvi, architecture, state-management, events, difficulty/medium]
 ---
+
 # MVI: Обработка одноразовых событий (One-time Events)
 
 **English**: How to handle one-time events in MVI architecture?

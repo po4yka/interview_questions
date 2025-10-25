@@ -5,10 +5,11 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-koin-scope-management--dependency-injection--medium, q-how-to-add-fragment-synchronously-asynchronously--android--medium, q-reduce-apk-size-techniques--android--medium]
+related: [q-how-to-add-fragment-synchronously-asynchronously--android--medium, q-koin-scope-management--dependency-injection--medium, q-reduce-apk-size-techniques--android--medium]
 created: 2025-10-15
-tags:
-  - android
+tags: [android]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:11:01 pm
 ---
 
 # Question (EN)
@@ -429,13 +430,13 @@ class DependentFragment : Fragment() {
 
 Жизненный цикл Fragment **связан и зависит от** жизненного цикла Activity-хоста, но Fragment также имеет свои дополнительные состояния и коллбэки.
 
-### Связь: Зависимый, не независимый
+### Связь: Зависимый, Не Независимый
 
 Fragment **не может существовать без Activity**. Их жизненный цикл тесно связан, но Fragment имеет дополнительные детализированные состояния.
 
 **Правило:** Fragment никогда не может быть в более активном состоянии, чем его Activity.
 
-### Состояния жизненного цикла Fragment
+### Состояния Жизненного Цикла Fragment
 
 ```
 Activity.onCreate()
@@ -447,7 +448,7 @@ Activity.onCreate()
                         > Fragment.onResume()
 ```
 
-### Как Activity влияет на Fragment
+### Как Activity Влияет На Fragment
 
 **Когда Activity приостанавливается:**
 
@@ -477,7 +478,7 @@ Fragment.onDestroy()
 Fragment.onDetach()
 ```
 
-### Уникальные коллбэки Fragment
+### Уникальные Коллбэки Fragment
 
 Fragment имеет дополнительные коллбэки, которых нет у Activity:
 
@@ -487,7 +488,7 @@ Fragment имеет дополнительные коллбэки, которы�
 4. **onDestroyView()** - View уничтожена (Fragment может остаться)
 5. **onDetach()** - Fragment отсоединён от Activity
 
-### Два жизненных цикла
+### Два Жизненных Цикла
 
 Современные Fragment имеют ДВА lifecycle:
 

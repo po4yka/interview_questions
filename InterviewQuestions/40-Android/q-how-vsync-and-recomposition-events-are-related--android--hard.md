@@ -5,12 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags:
-  - android
+tags: [android]
 moc: moc-android
-related: [q-network-error-handling-strategies--networking--medium, q-privacy-sandbox-fledge--privacy--hard, q-how-to-create-list-like-recyclerview-in-compose--android--medium]
+related: [q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-network-error-handling-strategies--networking--medium, q-privacy-sandbox-fledge--privacy--hard]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:10 pm
 ---
-# How are VSYNC and recomposition events related?
+
+# How Are VSYNC and Recomposition Events Related?
 
 ## EN (expanded)
 
@@ -348,7 +350,7 @@ fun HighRefreshRateAnimation() {
 
 ## Ответ (RU)
 
-### Что такое VSYNC?
+### Что Такое VSYNC?
 
 **VSYNC (Vertical Synchronization)** — это механизм, который синхронизирует отрисовку UI с частотой обновления экрана.
 
@@ -358,7 +360,7 @@ fun HighRefreshRateAnimation() {
 - Сигнализирует, когда дисплей готов принять новый кадр
 - Предотвращает разрывы изображения (screen tearing)
 
-### Как Compose использует VSYNC
+### Как Compose Использует VSYNC
 
 Jetpack Compose привязывает рекомпозицию к VSYNC для обеспечения плавной и эффективной отрисовки:
 
@@ -384,7 +386,7 @@ fun VSyncExample() {
 }
 ```
 
-### Конвейер кадров
+### Конвейер Кадров
 
 ```
 Действие пользователя
@@ -406,7 +408,7 @@ Layout и Drawing
 Кадр отображается на экране
 ```
 
-### Пример временной шкалы (дисплей 60Hz)
+### Пример Временной Шкалы (дисплей 60Hz)
 
 ```
 Время (мс):  0    16.6   33.2   49.8   66.4
@@ -418,7 +420,7 @@ VSYNC:
 Кадр 3:                 [Отрисовка--------------]
 ```
 
-### Почему это важно
+### Почему Это Важно
 
 **Без синхронизации с VSYNC:**
 ```kotlin
@@ -454,7 +456,7 @@ fun WithVSyncSync() {
 }
 ```
 
-### Планирование рекомпозиции
+### Планирование Рекомпозиции
 
 Compose группирует изменения состояния и планирует рекомпозицию эффективно:
 
@@ -481,7 +483,7 @@ fun BatchedUpdates() {
 }
 ```
 
-### Бюджет кадра
+### Бюджет Кадра
 
 При 60Hz каждый кадр имеет бюджет 16.6мс:
 
@@ -513,7 +515,7 @@ fun EfficientList() {
 }
 ```
 
-### Когда происходит рекомпозиция
+### Когда Происходит Рекомпозиция
 
 ```kotlin
 @Composable
@@ -541,7 +543,7 @@ fun RecompositionTiming() {
 }
 ```
 
-### Множественные изменения состояния
+### Множественные Изменения Состояния
 
 ```kotlin
 @Composable
@@ -564,7 +566,7 @@ fun MultipleChanges() {
 }
 ```
 
-### Мониторинг производительности кадров
+### Мониторинг Производительности Кадров
 
 ```kotlin
 @Composable
@@ -591,7 +593,7 @@ fun FrameMonitoring() {
 }
 ```
 
-### Оптимизация для VSYNC
+### Оптимизация Для VSYNC
 
 **1. Избегайте дорогих операций в композиции:**
 ```kotlin
@@ -639,7 +641,7 @@ fun DeferredRead() {
 }
 ```
 
-### Поддержка высокой частоты обновления
+### Поддержка Высокой Частоты Обновления
 
 ```kotlin
 @Composable
@@ -669,7 +671,7 @@ fun HighRefreshRateAnimation() {
 }
 ```
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. **VSYNC** — это сердцебиение отрисовки UI
 2. **Рекомпозиция** планируется, но ожидает VSYNC

@@ -1,37 +1,31 @@
 ---
 id: 20251020-200400
 title: Espresso Advanced Patterns / Продвинутые паттерны Espresso
-aliases:
-- Espresso Advanced Patterns
-- Продвинутые паттерны Espresso
+aliases: [Espresso Advanced Patterns, Продвинутые паттерны Espresso]
 topic: android
 subtopics:
-- testing-ui
-- testing-instrumented
+  - testing-instrumented
+  - testing-ui
 
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: https://developer.android.com/training/testing/espresso
 source_note: Android Espresso testing documentation
 status: draft
 moc: moc-android
 related:
-- q-android-testing-strategies--android--medium
-- q-ui-testing-best-practices--testing--medium
-- q-android-testing-tools--testing--medium
+  - q-android-testing-strategies--android--medium
+  - q-android-testing-tools--testing--medium
+  - q-ui-testing-best-practices--testing--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-  - android/testing-ui
-  - android/testing-instrumented
-  - espresso
-  - ui-testing
-  - idling-resource
-  - difficulty/medium
+tags: [android/testing-instrumented, android/testing-ui, difficulty/medium, espresso, idling-resource, ui-testing]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:04 pm
 ---
 
 # Вопрос (RU)
@@ -45,7 +39,7 @@ tags:
 
 Espresso - фреймворк UI тестирования для View-based интерфейсов. Продвинутое использование требует понимания IdlingResource, custom matchers и сложных паттернов взаимодействия.
 
-### Основные паттерны
+### Основные Паттерны
 
 **1. IdlingResource для асинхронных операций**
 - Проблема: Espresso не ждет завершения async операций

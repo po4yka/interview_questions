@@ -5,11 +5,14 @@ topic: android
 difficulty: hard
 status: draft
 moc: moc-android
-related: [q-can-a-service-communicate-with-the-user--android--medium, q-sharedpreferences-commit-vs-apply--android--easy, q-how-did-fragments-appear-and-why-were-they-started-to-be-used--android--hard]
+related: [q-can-a-service-communicate-with-the-user--android--medium, q-how-did-fragments-appear-and-why-were-they-started-to-be-used--android--hard, q-sharedpreferences-commit-vs-apply--android--easy]
 created: 2025-10-15
-tags: [android, android/fragments, android/ui, fragments, ui, difficulty/hard]
+tags: [android, android/fragments, android/ui, difficulty/hard, fragments, ui]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:47:09 pm
 ---
-# Как существуют и к чему привязаны фрагменты в Activity?
+
+# Как Существуют И К Чему Привязаны Фрагменты В Activity?
 
 **English**: How do fragments exist and what are they attached to in Activity?
 
@@ -252,7 +255,7 @@ class MyFragment : Fragment() {
 
 Фрагменты в Android существуют как отдельные, модульные компоненты, которые привязаны к Activity и управляются ею. Они представляют переиспользуемые части UI с собственным жизненным циклом, который синхронизирован с, но независим от жизненного цикла хост-Activity.
 
-### Механизм привязки фрагмента
+### Механизм Привязки Фрагмента
 
 Фрагменты привязываются к Activity через **FragmentManager** и размещаются внутри **ViewGroup контейнеров** в layout Activity.
 
@@ -272,7 +275,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Зависимость жизненного цикла фрагмента
+### Зависимость Жизненного Цикла Фрагмента
 
 Фрагменты зависят от Activity для:
 
@@ -310,7 +313,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### Динамическое управление фрагментами
+### Динамическое Управление Фрагментами
 
 Фрагменты могут добавляться, удаляться или заменяться во время выполнения:
 
@@ -335,7 +338,7 @@ fragment?.let {
 }
 ```
 
-### Переиспользование фрагментов в разных Activity
+### Переиспользование Фрагментов В Разных Activity
 
 Один и тот же фрагмент можно переиспользовать в различных activities:
 
@@ -365,7 +368,7 @@ class DetailActivity : AppCompatActivity() {
 }
 ```
 
-### Back Stack фрагментов
+### Back Stack Фрагментов
 
 Фрагменты поддерживают собственный стек навигации внутри Activity:
 
@@ -391,7 +394,7 @@ override fun onBackPressed() {
 }
 ```
 
-### Множественные фрагменты в Activity
+### Множественные Фрагменты В Activity
 
 Activity может размещать несколько фрагментов одновременно:
 
@@ -410,7 +413,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Коммуникация фрагментов через Activity
+### Коммуникация Фрагментов Через Activity
 
 Фрагменты взаимодействуют через родительскую Activity:
 
@@ -444,7 +447,7 @@ class MainActivity : AppCompatActivity(), FragmentInteractionListener {
 }
 ```
 
-### Зависимость фрагмента от Context
+### Зависимость Фрагмента От Context
 
 Фрагменты зависят от контекста Activity для системных ресурсов:
 
@@ -475,7 +478,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### Ключевые характеристики
+### Ключевые Характеристики
 
 1. **Модульность**: Переиспользуются в множестве activities и экранов
 2. **Зависимость от жизненного цикла**: Синхронизированы с жизненным циклом Activity

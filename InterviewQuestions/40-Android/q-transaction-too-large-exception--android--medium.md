@@ -9,6 +9,7 @@ related: [q-derived-state-snapshot-system--jetpack-compose--hard, q-compose-canv
 created: 2025-10-15
 tags: [android/memory-management, binder, exceptions, intent, ipc, savedinstancestate, difficulty/medium]
 ---
+
 # Что такое TransactionTooLargeException?
 
 **English**: What is TransactionTooLargeException?

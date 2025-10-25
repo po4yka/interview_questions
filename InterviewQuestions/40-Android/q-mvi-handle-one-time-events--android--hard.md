@@ -9,6 +9,7 @@ related: [q-view-methods-and-their-purpose--android--medium, q-annotation-proces
 created: 2025-10-15
 tags: [android/architecture-mvi, android/lifecycle, architecture-mvi, lifecycle, livedata, mvi, platform/android, sharedflow, stateflow, viewmodel, difficulty/hard]
 ---
+
 # Как с MVI обрабатывать события, которые не нужно хранить?
 
 **English**: How to handle events in MVI that don't need to be stored?

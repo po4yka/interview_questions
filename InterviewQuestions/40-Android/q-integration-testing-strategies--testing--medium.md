@@ -5,10 +5,13 @@ topic: testing
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-android-manifest-file--android--easy, q-react-native-comparison--multiplatform--medium, q-koin-vs-hilt-comparison--dependency-injection--medium]
+related: [q-android-manifest-file--android--easy, q-koin-vs-hilt-comparison--dependency-injection--medium, q-react-native-comparison--multiplatform--medium]
 created: 2025-10-15
-tags: [integration-testing, architecture, strategy, difficulty/medium]
+tags: [architecture, difficulty/medium, integration-testing, strategy]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:03 pm
 ---
+
 # Integration Testing Strategies
 
 **English**: Design integration testing strategy. Test ViewModel + Repository + Database layers. Mock external dependencies.
@@ -260,7 +263,7 @@ class FullStackIntegrationTest {
 Интеграционные тесты проверяют, что несколько компонентов корректно работают вместе. Они тестируют взаимодействие между слоями, используя моки для внешних зависимостей, таких как сеть и системные сервисы.
 
 
-### Стратегия тестирования
+### Стратегия Тестирования
 
 1. **ViewModel + Repository + Local Database**: мокируем только сеть
 2. **Repository + Network + Cache**: мокируем минимум
@@ -268,7 +271,7 @@ class FullStackIntegrationTest {
 
 [Полные примеры приведены в английском разделе]
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте in-memory database**
 2. **Мокируйте только внешние зависимости**

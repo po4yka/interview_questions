@@ -7,9 +7,12 @@ status: draft
 moc: moc-android
 related: [q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-play-app-signing--android--medium, q-sharedpreferences-definition--android--easy]
 created: 2025-10-15
-tags: [graphql, apollo, api, caching, subscriptions, difficulty/medium]
+tags: [api, apollo, caching, difficulty/medium, graphql, subscriptions]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:47:03 pm
 ---
-# GraphQL with Apollo Android / GraphQL с Apollo Android
+
+# GraphQL with Apollo Android / GraphQL С Apollo Android
 
 **English**: Implement a GraphQL client with Apollo Android. Explain queries, mutations, fragments, and subscriptions. Handle normalized caching.
 
@@ -1294,9 +1297,9 @@ GraphQL + Apollo is excellent for complex data requirements, real-time features,
 ## Ответ (RU)
 **Apollo Android** - это строго типизированный, кеширующий GraphQL клиент для Android, написанный на Kotlin. Он обеспечивает отличный опыт разработчика с типобезопасностью на этапе компиляции, автоматической генерацией кода из GraphQL схем и сложной системой нормализованного кеширования.
 
-### Основные концепции GraphQL
+### Основные Концепции GraphQL
 
-#### Ключевые отличия от REST
+#### Ключевые Отличия От REST
 
 1. **Единая точка входа**: Все запросы идут на один URL
 2. **Запрашивайте только то, что нужно**: Нет избыточной или недостаточной выборки данных
@@ -1304,7 +1307,7 @@ GraphQL + Apollo is excellent for complex data requirements, real-time features,
 4. **Интроспекция**: Запрос самой схемы
 5. **Реальное время**: Встроенная поддержка подписок
 
-### Полная настройка Apollo Android
+### Полная Настройка Apollo Android
 
 ```kotlin
 // build.gradle.kts (уровень приложения)
@@ -1326,7 +1329,7 @@ apollo {
 }
 ```
 
-### Настройка клиента Apollo
+### Настройка Клиента Apollo
 
 ```kotlin
 class ApolloClientProvider(
@@ -1356,7 +1359,7 @@ class ApolloClientProvider(
 }
 ```
 
-### GraphQL запросы (Queries)
+### GraphQL Запросы (Queries)
 
 ```graphql
 # Базовый запрос
@@ -1379,7 +1382,7 @@ suspend fun getUser(userId: String): GetUserQuery.User? {
 }
 ```
 
-### GraphQL мутации (Mutations)
+### GraphQL Мутации (Mutations)
 
 ```graphql
 mutation CreatePost($input: CreatePostInput!) {
@@ -1403,7 +1406,7 @@ suspend fun createPost(title: String, content: String) {
 }
 ```
 
-### Оптимистичные обновления
+### Оптимистичные Обновления
 
 ```kotlin
 suspend fun likePost(postId: String) {
@@ -1423,7 +1426,7 @@ suspend fun likePost(postId: String) {
 }
 ```
 
-### GraphQL подписки (Subscriptions)
+### GraphQL Подписки (Subscriptions)
 
 ```graphql
 subscription OnPostCreated {
@@ -1446,11 +1449,11 @@ fun subscribeToNewPosts(): Flow<OnPostCreatedSubscription.PostCreated?> {
 }
 ```
 
-### Нормализованный кеш
+### Нормализованный Кеш
 
 Apollo Android использует **нормализованный кеш**, который хранит результаты GraphQL в плоской таблице поиска по ID, избегая дублирования данных и обеспечивая консистентность.
 
-#### Политики кеша
+#### Политики Кеша
 
 ```kotlin
 enum class FetchPolicy {
@@ -1470,7 +1473,7 @@ suspend fun getUserCacheFirst(userId: String) {
 }
 ```
 
-#### Реактивный кеш (Watch)
+#### Реактивный Кеш (Watch)
 
 ```kotlin
 fun watchUser(userId: String): Flow<GetUserQuery.User?> {
@@ -1505,7 +1508,7 @@ query GetUser($id: ID!) {
 }
 ```
 
-### Обработка ошибок
+### Обработка Ошибок
 
 ```kotlin
 sealed class GraphQLResult<out T> {
@@ -1536,7 +1539,7 @@ suspend fun getUser(userId: String): GraphQLResult<GetUserQuery.User> {
 }
 ```
 
-### Полная реализация Repository
+### Полная Реализация Repository
 
 ```kotlin
 class PostRepository(
@@ -1611,7 +1614,7 @@ class PostRepository(
 6. **Наблюдайте за запросами для реактивного UI**
 7. **Используйте подписки для real-time**
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 1. **Не обработка GraphQL ошибок**
 2. **Забывание __typename для кеша**

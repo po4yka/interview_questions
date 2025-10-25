@@ -5,17 +5,20 @@ topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags: [injection, koin, hilt, comparison, architecture, difficulty/medium]
+tags: [architecture, comparison, difficulty/medium, hilt, injection, koin]
 moc: moc-architecture-patterns
-related: [q-mlkit-object-detection--ml--medium, q-network-request-deduplication--networking--hard, q-app-start-types-android--android--medium]
+related: [q-app-start-types-android--android--medium, q-mlkit-object-detection--ml--medium, q-network-request-deduplication--networking--hard]
 subtopics: [di-hilt, di-koin]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:07:49 pm
 ---
-# Koin vs Hilt Comparison / Сравнение Koin и Hilt
+
+# Koin Vs Hilt Comparison / Сравнение Koin И Hilt
 
 **English**: Compare Koin and Hilt in detail. When would you choose one over the other? Discuss compile-time vs runtime DI.
 
 ## Answer (EN)
-### Deep Dive: Koin vs Hilt
+### Deep Dive: Koin Vs Hilt
 
 Koin and Hilt are both popular dependency injection solutions for Android, but they take fundamentally different approaches to solving the same problem.
 
@@ -40,7 +43,7 @@ Koin and Hilt are both popular dependency injection solutions for Android, but t
 | **IDE Support** | Basic | Excellent (navigation, warnings) |
 | **Community Size** | Medium (~8K GitHub stars) | Large (~15K GitHub stars) |
 
-### Compile-Time vs Runtime Dependency Injection
+### Compile-Time Vs Runtime Dependency Injection
 
 #### Compile-Time DI (Hilt/Dagger)
 
@@ -549,11 +552,11 @@ Both are excellent choices. The decision depends on your specific constraints: t
 ---
 
 ## Ответ (RU)
-### Глубокое сравнение: Koin vs Hilt
+### Глубокое Сравнение: Koin Vs Hilt
 
 Koin и Hilt — популярные решения для внедрения зависимостей в Android, но они используют фундаментально разные подходы к решению одной и той же проблемы.
 
-### Архитектурное сравнение
+### Архитектурное Сравнение
 
 | Аспект | Koin | Hilt |
 |--------|------|------|
@@ -574,7 +577,7 @@ Koin и Hilt — популярные решения для внедрения �
 | **Поддержка IDE** | Базовая | Отличная (навигация, предупреждения) |
 | **Размер сообщества** | Средний (~8K звезд на GitHub) | Большой (~15K звезд на GitHub) |
 
-### Compile-Time vs Runtime Dependency Injection
+### Compile-Time Vs Runtime Dependency Injection
 
 #### Compile-Time DI (Hilt/Dagger)
 
@@ -619,11 +622,11 @@ Koin и Hilt — популярные решения для внедрения �
 - **Время старта** - Валидация модулей занимает время
 - **Нет навигации** - Невозможно перейти к инъекциям в IDE
 
-### Параллельная реализация
+### Параллельная Реализация
 
 Давайте реализуем одну и ту же функцию с обеими фреймворками:
 
-#### Сценарий: Система аутентификации пользователя
+#### Сценарий: Система Аутентификации Пользователя
 
 **Реализация на Koin:**
 
@@ -900,9 +903,9 @@ class AuthRepositoryTest {
 }
 ```
 
-### Матрица решений
+### Матрица Решений
 
-#### Выбирайте Koin когда:
+#### Выбирайте Koin Когда:
 
 ✅ **Kotlin Multiplatform** - Нужен общий код для iOS/Android/Web
 ✅ **Быстрая итерация** - Разработка прототипа или MVP
@@ -920,7 +923,7 @@ class AuthRepositoryTest {
 - Циклы быстрой разработки
 - Обучающие/образовательные проекты
 
-#### Выбирайте Hilt когда:
+#### Выбирайте Hilt Когда:
 
 ✅ **Только Android** - Нет multiplatform требований
 ✅ **Большой масштаб** - > 50 модулей, > 500K строк
@@ -938,7 +941,7 @@ class AuthRepositoryTest {
 - Долгосрочные продукты
 - Проекты больших команд (10+ разработчиков)
 
-### Бенчмарки производительности
+### Бенчмарки Производительности
 
 **Время старта приложения (холодный старт):**
 ```
@@ -964,9 +967,9 @@ Koin:  8с
 Hilt:  22с (+175% медленнее)
 ```
 
-### Стратегия миграции
+### Стратегия Миграции
 
-#### С Koin на Hilt:
+#### С Koin На Hilt:
 
 ```kotlin
 // Шаг 1: Добавить Hilt рядом с Koin
@@ -993,7 +996,7 @@ object DataModule {
 }
 ```
 
-#### С Hilt на Koin:
+#### С Hilt На Koin:
 
 ```kotlin
 // До (Hilt)
@@ -1010,7 +1013,7 @@ val dataModule = module {
 }
 ```
 
-### Гибридный подход
+### Гибридный Подход
 
 Вы можете использовать оба в одном проекте:
 
@@ -1030,7 +1033,7 @@ val experimentModule = module {
 @Inject lateinit var koin: Koin
 ```
 
-### Лучшие практики для каждого
+### Лучшие Практики Для Каждого
 
 **Лучшие практики Koin:**
 1. Используйте `checkModules()` в тестах для проверки графа
@@ -1048,7 +1051,7 @@ val experimentModule = module {
 5. Используйте scope соответствующим образом
 6. Рассмотрите KSP вместо kapt для более быстрых сборок
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 **Ошибки Koin:**
 - Не вызов `startKoin()` перед первой инъекцией

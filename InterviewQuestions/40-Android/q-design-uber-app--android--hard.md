@@ -1,38 +1,32 @@
 ---
 id: 20251020-200000
 title: Design Uber App / Проектирование приложения Uber
-aliases:
-- Design Uber App
-- Проектирование приложения Uber
+aliases: [Design Uber App, Проектирование приложения Uber]
 topic: android
 subtopics:
-- location
-- networking-http
-- service
+  - location
+  - networking-http
+  - service
 
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: https://developers.google.com/location-context/fused-location-provider
 source_note: Android Fused Location Provider overview
 status: draft
 moc: moc-android
 related:
-- q-data-sync-unstable-network--android--hard
-- q-deep-link-vs-app-link--android--medium
-- q-android-performance-optimization--android--medium
+  - q-android-performance-optimization--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-deep-link-vs-app-link--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-  - android/location
-  - android/networking-http
-  - android/service
-  - maps
-  - realtime
-  - difficulty/hard
+tags: [android/location, android/networking-http, android/service, difficulty/hard, maps, realtime]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:52:08 pm
 ---
 
 # Вопрос (RU)
@@ -57,12 +51,12 @@ Uber включает: отслеживание местоположения в 
 ### Архитектура (высокоуровнево)
 Клиент Android (локация, WebSocket, карты, офлайн очередь) → API Gateway → микросервисы (Location/Matching/Ride/Payment/Notification/Pricing) → DB (метаданные), кэш, геопространственная БД, платежи, Maps, очереди.
 
-### Клиент Android: ключевые потоки
-1) Локация: FusedLocationProvider, адаптивные интервалы/точность, backoff при батарее.
-2) Синхронизация: дебаунс/батчинг, фон через WorkManager, восстановление при онлайне.
-3) Поиск водителей: начальный REST + подписка WebSocket, фильтры по типу авто, кластеризация маркеров.
-4) Запрос поездки: оценка тарифа → создание ride → матчинг → подтверждение → трекинг.
-5) Трекинг поездки: состояния (REQUESTED→COMPLETED), маршрут и ETA, обновления по WebSocket.
+### Клиент Android: Ключевые Потоки
+1. Локация: FusedLocationProvider, адаптивные интервалы/точность, backoff при батарее.
+2. Синхронизация: дебаунс/батчинг, фон через WorkManager, восстановление при онлайне.
+3. Поиск водителей: начальный REST + подписка WebSocket, фильтры по типу авто, кластеризация маркеров.
+4. Запрос поездки: оценка тарифа → создание ride → матчинг → подтверждение → трекинг.
+5. Трекинг поездки: состояния (REQUESTED→COMPLETED), маршрут и ETA, обновления по WebSocket.
 
 ```kotlin
 // Location updates (essential)
@@ -95,12 +89,12 @@ rideRepo.observe(rideId).combine(locRepo.observe(driverId)) { r, d -> r to d }
 // Minimal map usage hints: markers + polylines; cluster when zoomed out
 ```
 
-### Сервер: геопоиск и матчинг
+### Сервер: Геопоиск И Матчинг
 - Геопоиск: Redis Geo / PostGIS; индекс по координатам; query по радиусу.
 - Матчинг: score по рейтингу/дистанции/ETA, SLA <2s, идемпотентность.
 - Очереди: Kafka для событий; outbox для согласованности.
 
-### Архитектурный анализ
+### Архитектурный Анализ
 
 **Границы сервисов:**
 - **Location Service**: принимает координаты от водителей (stream или batch), валидирует физику движения (скорость/ускорение), обновляет геоиндекс, публикует события в Kafka. Хранит только горячие данные (последние N минут).
@@ -186,17 +180,17 @@ Uber involves realtime location, driver matching, pricing, routing, payments, sc
 ### Architecture (high-level)
 - Android client → API → microservices (Location/Matching/Ride/Payment/Pricing/Notification) → DB/cache/geo/queues/CDN/Maps.
 
-### Android client key flows
-1) Location: Fused provider, adaptive intervals/accuracy.
-2) Sync: debounce/batching, background, resume on reconnect.
-3) Nearby: REST seed + WebSocket stream.
-4) Request: fare estimate → create → match → confirm → track.
-5) Tracking: ride FSM, route + ETA via Maps, WebSocket updates.
+### Android Client Key Flows
+1. Location: Fused provider, adaptive intervals/accuracy.
+2. Sync: debounce/batching, background, resume on reconnect.
+3. Nearby: REST seed + WebSocket stream.
+4. Request: fare estimate → create → match → confirm → track.
+5. Tracking: ride FSM, route + ETA via Maps, WebSocket updates.
 
-### Server geo & matching
+### Server Geo & Matching
 - Geo index (Redis Geo/PostGIS); radius queries; score by rating/distance/ETA.
 
-### Architecture analysis
+### Architecture Analysis
 
 **Service boundaries:**
 - **Location Service**: accepts driver coordinates (stream/batch), validates movement physics (speed/acceleration), updates geo-index, publishes events to Kafka. Stores only hot data (last N minutes).

@@ -9,6 +9,7 @@ related: [q-android-runtime-internals--android--hard, q-how-to-tell-adapter-to-r
 created: 2025-10-15
 tags: [android/networking, get-request, networking, path-parameter, path-parameters, rest-api, retrofit, difficulty/medium]
 ---
+
 # Как в Ретрофите в гет методе поставить атрибут в путь в конкретном месте?
 
 **English**: How to put a parameter in a specific place in the path for a GET method in Retrofit?

@@ -26,6 +26,7 @@ updated: 2025-10-06
 
 tags: [android/notifications, android/background-execution, en, ru, difficulty/medium]
 ---
+
 # Question (EN)
 > How to schedule local notifications at exact time?
 # Вопрос (RU)

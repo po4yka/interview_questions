@@ -9,6 +9,7 @@ related: [q-viewmodel-vs-onsavedinstancestate--android--medium, q-raise-process-
 created: 2025-10-15
 tags: [file-upload, workmanager, retrofit, background-processing, multipart, difficulty/medium]
 ---
+
 # Загрузка больших файлов на сервер в Android
 
 **English**: How to upload large files to server in Android?

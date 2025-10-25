@@ -9,6 +9,7 @@ related: [q-kotlin-context-receivers--kotlin--hard, q-lazy-grid-staggered-grid--
 created: 2025-10-15
 tags: [proguard, r8, obfuscation, optimization, library, difficulty/medium]
 ---
+
 # ProGuard/R8 Rules / Правила ProGuard/R8
 
 **English**: Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection, serialization, native methods, and APIs. Optimize for production while maintaining functionality.

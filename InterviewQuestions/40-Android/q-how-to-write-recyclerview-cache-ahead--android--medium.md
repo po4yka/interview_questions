@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-looper-thread-connection--android--medium, q-compose-navigation-advanced--android--medium, q-home-screen-widgets--android--medium]
+related: [q-compose-navigation-advanced--android--medium, q-home-screen-widgets--android--medium, q-looper-thread-connection--android--medium]
 created: 2025-10-15
-tags: [recyclerview, caching, prefetching, performance, optimization, difficulty/medium]
+tags: [caching, difficulty/medium, optimization, performance, prefetching, recyclerview]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:11 pm
 ---
-# How to write RecyclerView to cache ahead?
+
+# How to Write RecyclerView to Cache Ahead?
 
 ## Answer (EN)
 RecyclerView provides several mechanisms for caching items ahead to improve scrolling performance and user experience. Here are the main approaches:
@@ -118,7 +121,7 @@ class CustomPrefetchLayoutManager(
 recyclerView.layoutManager = CustomPrefetchLayoutManager(this)
 ```
 
-### 3. RecyclerView.OnScrollListener for Data Prefetching
+### 3. RecyclerView.OnScrollListener For Data Prefetching
 
 Implement custom logic to load data ahead of time.
 
@@ -418,7 +421,7 @@ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
 ---
 
-# Как можно писать RecyclerView, чтобы он кэшировал наперёд
+# Как Можно Писать RecyclerView, Чтобы Он Кэшировал Наперёд
 
 ## Ответ (RU)
 1. Использовать setItemViewCacheSize для кэширования определённого количества элементов. 2. Включить предзагрузку данных с помощью RecyclerView.OnScrollListener. 3. Реализовать Prefetching через LinearLayoutManager или RecyclerView.LayoutManager.

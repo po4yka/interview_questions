@@ -5,9 +5,11 @@ topic: android
 difficulty: easy
 status: draft
 moc: moc-android
-related: [q-task-affinity--android--medium, q-fix-slow-app-startup-legacy--android--hard, q-android-runtime-art--android--medium]
+related: [q-android-runtime-art--android--medium, q-fix-slow-app-startup-legacy--android--hard, q-task-affinity--android--medium]
 created: 2025-10-15
-tags: [android, android/text-rendering, android/ui, breakText, text-rendering, ui, difficulty/easy]
+tags: [android, android/text-rendering, android/ui, breakText, difficulty/easy, text-rendering, ui]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:40:02 pm
 ---
 
 # Question (EN)

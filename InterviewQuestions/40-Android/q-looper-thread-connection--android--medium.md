@@ -9,6 +9,7 @@ related: [q-handler-looper-main-thread--android--medium, q-how-to-pass-photo-to-
 created: 2025-10-15
 tags: [android/concurrency, concurrency, handler, looper, message-queue, threading, difficulty/medium]
 ---
+
 # Как Looper связывается с потоком?
 
 **English**: How does Looper connect to a thread?

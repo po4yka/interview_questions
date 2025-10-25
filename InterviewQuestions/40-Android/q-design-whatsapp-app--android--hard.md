@@ -1,39 +1,32 @@
 ---
 id: 20251020-200000
 title: Design WhatsApp App / Проектирование приложения WhatsApp
-aliases:
-- Design WhatsApp App
-- Проектирование приложения WhatsApp
+aliases: [Design WhatsApp App, Проектирование приложения WhatsApp]
 topic: android
 subtopics:
-- networking-http
-- files-media
-- service
+  - files-media
+  - networking-http
+  - service
 
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 source: https://developer.android.com/training/sync-adapters
 source_note: Android sync and messaging patterns
 status: draft
 moc: moc-android
 related:
-- q-data-sync-unstable-network--android--hard
-- q-database-encryption-android--android--medium
-- q-deep-link-vs-app-link--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-database-encryption-android--android--medium
+  - q-deep-link-vs-app-link--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-  - android/networking-http
-  - android/files-media
-  - android/service
-  - messaging
-  - realtime
-  - e2ee
-  - difficulty/hard
+tags: [android/files-media, android/networking-http, android/service, difficulty/hard, e2ee, messaging, realtime]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:07 pm
 ---
 
 # Вопрос (RU)
@@ -61,13 +54,13 @@ WhatsApp включает: обмен сообщениями 1-to-1/группы
 ### Архитектура (высокоуровнево)
 Клиент Android (локальная БД, E2EE engine, WebSocket, media cache) → Load Balancer → микросервисы (Chat/Presence/Media/Call Signaling/Push) → очереди (Kafka), БД (Cassandra для messages, PostgreSQL для users), хранилище медиа (S3+CDN), кэш (Redis для presence), Signal Server для звонков.
 
-### Клиент Android: ключевые потоки
-1) Отправка сообщения: шифрование Signal Protocol (ratchet), локальная запись (pending), WebSocket send, ack от сервера → delivered, receipt от получателя → read.
-2) Получение: WebSocket → расшифровка → локальная БД → UI update, отправка read receipt.
-3) Медиа: сжатие (JPEG для фото, H.264/HEVC для видео), загрузка на CDN, отправка URL+thumbnail+decryption key в сообщении, ленивая подгрузка медиа.
-4) Офлайн: очередь неотправленных, хранение до 30 дней, ресенд при онлайне, backoff при сетевых ошибках.
-5) Группы: каждый участник имеет sender key (pairwise sessions → group sessions), рэтчет при изменении состава, forward secrecy.
-6) Звонки: WebRTC SDP negotiation через Signal Server, ICE candidates, STUN/TURN fallback, адаптивный bitrate.
+### Клиент Android: Ключевые Потоки
+1. Отправка сообщения: шифрование Signal Protocol (ratchet), локальная запись (pending), WebSocket send, ack от сервера → delivered, receipt от получателя → read.
+2. Получение: WebSocket → расшифровка → локальная БД → UI update, отправка read receipt.
+3. Медиа: сжатие (JPEG для фото, H.264/HEVC для видео), загрузка на CDN, отправка URL+thumbnail+decryption key в сообщении, ленивая подгрузка медиа.
+4. Офлайн: очередь неотправленных, хранение до 30 дней, ресенд при онлайне, backoff при сетевых ошибках.
+5. Группы: каждый участник имеет sender key (pairwise sessions → group sessions), рэтчет при изменении состава, forward secrecy.
+6. Звонки: WebRTC SDP negotiation через Signal Server, ICE candidates, STUN/TURN fallback, адаптивный bitrate.
 
 ```kotlin
 // Minimal Signal Protocol usage (conceptual)
@@ -90,14 +83,14 @@ if (!networkAvailable) {
 }
 ```
 
-### Сервер: маршрутизация и персистентность
+### Сервер: Маршрутизация И Персистентность
 - Chat Service: маршрутизация сообщений по userId, хранение зашифрованных сообщений (server не видит plaintext), доставка через WebSocket или push если offline, удаление после доставки (or TTL 30 дней).
 - Presence Service: heartbeat каждые 30s, кэш в Redis, pub/sub для обновлений контактов.
 - Media Service: multipart upload, генерация thumbnails (без расшифровки), CDN для доставки, E2EE ключ в metadata.
 - Call Signaling: relay SDP/ICE candidates, не участвует в медиа-потоке (P2P через WebRTC).
 - Push Service: FCM integration, приоритизация (high priority для звонков, normal для сообщений).
 
-### Архитектурный анализ
+### Архитектурный Анализ
 
 **Границы сервисов:**
 - **Chat Service**: принимает сообщения от отправителя, проверяет rate limits, сохраняет в БД (Cassandra: partition key userId+timestamp), маршрутизирует получателю через WebSocket (если онлайн) или ставит в очередь доставки. Публикует события в Kafka для аналитики.
@@ -201,22 +194,22 @@ WhatsApp involves 1-to-1/group messaging, media, delivery/read statuses, E2EE (S
 ### Architecture (high-level)
 Android client (local DB, E2EE engine, WebSocket, media cache) → Load Balancer → microservices (Chat/Presence/Media/Call Signaling/Push) → queues (Kafka), DB (Cassandra for messages, PostgreSQL for users), media storage (S3+CDN), cache (Redis for presence), Signal Server for calls.
 
-### Android client key flows
-1) Send: encrypt (Signal Protocol ratchet), local store (pending), WS send, server ack → delivered, recipient receipt → read.
-2) Receive: WS → decrypt → local DB → UI update, send read receipt.
-3) Media: compress (JPEG, H.264/HEVC), upload to CDN, send URL+thumbnail+decryption key in message, lazy load media.
-4) Offline: queue unsent, store 30 days, resend on online, backoff on network errors.
-5) Groups: sender keys (pairwise → group sessions), ratchet on membership changes, forward secrecy.
-6) Calls: WebRTC SDP via Signal Server, ICE candidates, STUN/TURN fallback, adaptive bitrate.
+### Android Client Key Flows
+1. Send: encrypt (Signal Protocol ratchet), local store (pending), WS send, server ack → delivered, recipient receipt → read.
+2. Receive: WS → decrypt → local DB → UI update, send read receipt.
+3. Media: compress (JPEG, H.264/HEVC), upload to CDN, send URL+thumbnail+decryption key in message, lazy load media.
+4. Offline: queue unsent, store 30 days, resend on online, backoff on network errors.
+5. Groups: sender keys (pairwise → group sessions), ratchet on membership changes, forward secrecy.
+6. Calls: WebRTC SDP via Signal Server, ICE candidates, STUN/TURN fallback, adaptive bitrate.
 
-### Server routing and persistence
+### Server Routing and Persistence
 - Chat: route by userId, store encrypted (server blind to plaintext), deliver via WS or push if offline, delete after delivery (or TTL 30d).
 - Presence: heartbeat 30s, Redis cache, pub/sub for contact updates.
 - Media: multipart upload, thumbnail gen (no decryption), CDN delivery, E2EE key in metadata.
 - Call Signaling: relay SDP/ICE, no media (P2P WebRTC).
 - Push: FCM integration, prioritization (high for calls, normal for messages).
 
-### Architecture analysis
+### Architecture Analysis
 
 **Service boundaries:**
 - **Chat Service**: accepts messages, rate limit checks, stores in Cassandra (partition userId+timestamp), routes to recipient via WS (online) or queue. Publishes to Kafka for analytics.

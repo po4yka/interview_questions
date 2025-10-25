@@ -9,6 +9,7 @@ related: [q-what-is-data-binding--android--easy, q-flow-testing-turbine--testing
 created: 2025-10-15
 tags: [retrofit, networking, tutorial, difficulty/medium]
 ---
+
 # Как делать сетевые запросы с помощью Retrofit?
 
 **English**: How to make network requests with Retrofit?

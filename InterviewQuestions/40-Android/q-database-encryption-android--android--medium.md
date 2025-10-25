@@ -1,39 +1,30 @@
 ---
 id: 20251020-200000
 title: Database Encryption Android / Шифрование базы данных Android
-aliases:
-- Database Encryption Android
-- Шифрование базы данных Android
+aliases: [Database Encryption Android, Шифрование базы данных Android]
 topic: android
 subtopics:
-- permissions
-- room
+  - permissions
+  - room
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-data-encryption-at-rest--android--medium
-- q-android-keystore--security--hard
-- q-android-security-basics--android--medium
+  - q-android-keystore--security--hard
+  - q-android-security-basics--android--medium
+  - q-data-encryption-at-rest--android--medium
 created: 2025-10-20
 updated: 2025-10-20
-tags:
-- android/permissions
-- android/room
-- database
-- encryption
-- security
-- sqlcipher
-- room
-- keystore
-- difficulty/medium
+tags: [android/permissions, android/room, database, difficulty/medium, encryption, keystore, room, security, sqlcipher]
 source: https://developer.android.com/topic/security/data
 source_note: Android Data Security documentation
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:11 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +37,7 @@ source_note: Android Data Security documentation
 
 Шифрование базы данных критически важно для защиты конфиденциальных пользовательских данных в покое. Android предоставляет несколько вариантов для шифрования баз данных с различными компромиссами.
 
-### Теория: Принципы шифрования базы данных
+### Теория: Принципы Шифрования Базы Данных
 
 **Основные концепции:**
 - **Шифрование на уровне базы данных** - защита данных на диске
@@ -61,7 +52,7 @@ source_note: Android Data Security documentation
 - Расшифровка происходит при чтении данных
 - Автоматическое управление жизненным циклом ключей
 
-### 1. SQLCipher для Room
+### 1. SQLCipher Для Room
 
 **Теоретические основы:**
 SQLCipher предоставляет прозрачное 256-битное AES шифрование для SQLite баз данных. Он полностью совместим с Room и обеспечивает высокий уровень безопасности.
@@ -89,7 +80,7 @@ abstract class AppDatabase : RoomDatabase() {
 }
 ```
 
-### 2. Управление ключами
+### 2. Управление Ключами
 
 **Теоретические основы:**
 Безопасное хранение ключей шифрования критически важно. Android Keystore предоставляет аппаратную защиту ключей и предотвращает их извлечение из устройства.
@@ -133,7 +124,7 @@ class KeystoreManager {
 }
 ```
 
-### 3. Интеграция с Room
+### 3. Интеграция С Room
 
 **Теоретические основы:**
 Room предоставляет абстракцию над SQLite, а SQLCipher добавляет слой шифрования. Интеграция требует минимальных изменений в существующем коде.
@@ -162,7 +153,7 @@ class DatabaseManager @Inject constructor(private val context: Context) {
 }
 ```
 
-### 4. Производительность и оптимизация
+### 4. Производительность И Оптимизация
 
 **Теоретические основы:**
 Шифрование добавляет накладные расходы на производительность. Понимание этих затрат критически важно для оптимизации приложения.
@@ -179,7 +170,7 @@ class DatabaseManager @Inject constructor(private val context: Context) {
 - Оптимизируйте запросы и индексы
 - Рассмотрите частичное шифрование критических данных
 
-### 5. Лучшие практики
+### 5. Лучшие Практики
 
 **Безопасность:**
 - Всегда используйте Android Keystore для хранения ключей

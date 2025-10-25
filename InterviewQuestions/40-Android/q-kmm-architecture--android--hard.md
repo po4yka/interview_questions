@@ -5,10 +5,13 @@ topic: android
 difficulty: hard
 status: draft
 moc: moc-android
-related: [q-which-class-to-use-for-rendering-view-in-background-thread--android--hard, q-app-size-optimization--performance--medium, q-how-mutablestate-notifies--android--medium]
+related: [q-app-size-optimization--performance--medium, q-how-mutablestate-notifies--android--medium, q-which-class-to-use-for-rendering-view-in-background-thread--android--hard]
 created: 2025-10-15
-tags: [Kotlin, KMM, Multiplatform, Architecture, difficulty/hard]
+tags: [Architecture, difficulty/hard, KMM, Kotlin, Multiplatform]
+date created: Saturday, October 25th 2025, 1:26:31 pm
+date modified: Saturday, October 25th 2025, 4:08:01 pm
 ---
+
 # Kotlin Multiplatform Mobile (KMM) Architecture
 
 # Question (EN)
@@ -1023,7 +1026,7 @@ Key considerations: appropriate boundaries, Swift-friendly APIs, proper lifecycl
 ## Ответ (RU)
 Kotlin Multiplatform Mobile (KMM) позволяет делиться бизнес-логикой, сетью и data слоями между Android и iOS, сохраняя UI platform-specific, достигая значительного переиспользования кода без ущерба нативному опыту.
 
-#### Структура проекта
+#### Структура Проекта
 
 **Модули**:
 - `shared/` - общий Kotlin код
@@ -1059,7 +1062,7 @@ actual fun generateUUID() = UUID.randomUUID().toString()
 actual fun generateUUID() = NSUUID().UUIDString
 ```
 
-#### Shared код
+#### Shared Код
 
 **Что делить**:
 -  Domain models

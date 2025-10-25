@@ -5,11 +5,14 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-glide-image-loading-internals--android--medium, q-cicd-multi-module--devops--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
+related: [q-cicd-multi-module--devops--medium, q-glide-image-loading-internals--android--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
 created: 2025-10-15
-tags: [handler, looper, threading, message-queue, concurrency, difficulty/medium]
+tags: [concurrency, difficulty/medium, handler, looper, message-queue, threading]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:47:01 pm
 ---
-# Handler and Looper: Complete guide
+
+# Handler and Looper: Complete Guide
 
 **Russian**: Handler и Looper: Полное руководство
 

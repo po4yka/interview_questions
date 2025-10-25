@@ -1,33 +1,29 @@
 ---
 id: 20251005-143000
 title: Android App Bundles / Android App Bundle (AAB)
-aliases:
-- Android App Bundles
-- Android App Bundle
-- AAB
+aliases: [AAB, Android App Bundle, Android App Bundles]
 topic: android
 subtopics:
-- app-bundle
-- play-console
+  - app-bundle
+  - play-console
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-play-store-publishing--distribution--medium
-- q-gradle-basics--android--easy
-- q-play-feature-delivery--android--medium
+  - q-gradle-basics--android--easy
+  - q-play-feature-delivery--android--medium
+  - q-play-store-publishing--distribution--medium
 created: 2025-10-05
 updated: 2025-10-15
-tags:
-- android/app-bundle
-- android/play-console
-- difficulty/easy
+tags: [android/app-bundle, android/play-console, difficulty/easy]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions
+date created: Saturday, October 25th 2025, 1:26:31 pm
+date modified: Saturday, October 25th 2025, 4:53:20 pm
 ---
 
 # Вопрос (RU)

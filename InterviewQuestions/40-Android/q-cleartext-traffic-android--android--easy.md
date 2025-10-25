@@ -1,33 +1,30 @@
 ---
 id: 20251006-100011
 title: What is cleartext traffic in Android? / Что такое cleartext traffic в Android?
-aliases:
-- Cleartext traffic
-- Незашифрованный трафик
+aliases: [Cleartext traffic, Незашифрованный трафик]
 topic: android
 subtopics:
-- permissions
-- networking-http
+  - networking-http
+  - permissions
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-certificate-pinning--security--medium
-- q-android-security-practices-checklist--android--medium
-- q-android-keystore-system--security--medium
+  - q-android-keystore-system--security--medium
+  - q-android-security-practices-checklist--android--medium
+  - q-certificate-pinning--security--medium
 created: 2025-10-06
 updated: 2025-10-20
-tags:
-- android/permissions
-- android/networking-http
-- difficulty/easy
+tags: [android/networking-http, android/permissions, difficulty/easy]
 source: https://developer.android.com/training/articles/security-config#CleartextTrafficPermitted
 source_note: Android docs
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:42 pm
 ---
 
 # Вопрос (RU)
@@ -47,11 +44,11 @@ source_note: Android docs
 ### Definition
 - Cleartext traffic = unencrypted HTTP communication (no TLS). Anyone on path can read/modify. Use [[c-encryption]] for all sensitive data.
 
-### Android policy
+### Android Policy
 - Android 9+ (API 28): cleartext is blocked by default to enforce c-secure-storage
 - Older versions: allowed by default
 
-### Allow only for development (per‑domain)
+### Allow only for Development (per‑domain)
 ```xml
 <!-- res/xml/network_security_config.xml -->
 <network-security-config>
@@ -67,16 +64,16 @@ source_note: Android docs
 <application android:networkSecurityConfig="@xml/network_security_config" />
 ```
 
-### Do NOT enable globally
+### Do NOT Enable Globally
 ```xml
 <!-- Not recommended (enables cleartext for ALL domains) -->
 <application android:usesCleartextTraffic="true" />
 ```
 
-### Production best practice
+### Production Best Practice
 - Enforce HTTPS everywhere; optionally add certificate pinning for sensitive APIs
 
-### Error you’ll see
+### Error you’ll See
 ```
 java.net.UnknownServiceException: CLEARTEXT communication ... not permitted by network security policy
 ```

@@ -5,15 +5,18 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-mlkit-face-detection--ml--medium, q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-retrofit-modify-all-requests--android--hard]
+related: [q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-mlkit-face-detection--ml--medium, q-retrofit-modify-all-requests--android--hard]
 created: 2025-10-15
-tags: [gradle, version-catalog, dependency-management, toml, android/dependency-management, android/build-variants, difficulty/medium]
+tags: [android/build-variants, android/dependency-management, dependency-management, difficulty/medium, gradle, toml, version-catalog]
 source: Kirchhoff repo
 subtopics:
-  - gradle
-  - dependency-management
   - build-variants
+  - dependency-management
+  - gradle
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:47:03 pm
 ---
+
 # Gradle Version Catalog / Gradle Version Catalog
 
 **English**: What do you know about Gradle Version Catalog?
@@ -322,9 +325,9 @@ When migrating to version catalogs:
 
 4. **Ссылки на версии**: Каталоги могут разделять группу и имя зависимости от фактической версии, позволяя делиться объявлением версии между несколькими зависимостями
 
-## Создание файла каталога версий
+## Создание Файла Каталога Версий
 
-### Базовая настройка
+### Базовая Настройка
 
 В папке `gradle` корневого проекта создайте файл `libs.versions.toml`. Gradle по умолчанию ищет каталог в файле `libs.versions.toml`.
 
@@ -340,7 +343,7 @@ When migrating to version catalogs:
 [bundles]       # Группы зависимостей
 ```
 
-### Пример каталога
+### Пример Каталога
 
 ```toml
 [versions]
@@ -359,9 +362,9 @@ groovy = ["groovy-core", "groovy-json", "groovy-nio"]
 versions = { id = "com.github.ben-manes.versions", version = "0.45.0" }
 ```
 
-## Алиасы и типобезопасные аксессоры
+## Алиасы И Типобезопасные Аксессоры
 
-### Правила именования
+### Правила Именования
 
 Алиасы должны состоять из идентификаторов, разделенных:
 - Дефисом (`-`) - **рекомендуется**
@@ -374,7 +377,7 @@ versions = { id = "com.github.ben-manes.versions", version = "0.45.0" }
 - `commons-lang3`
 - `androidx.awesome.lib`
 
-### Генерация аксессоров
+### Генерация Аксессоров
 
 Для алиасов: `guava`, `groovy-core`, `groovy-xml`, `groovy-json`, `androidx.awesome.lib`
 
@@ -388,7 +391,7 @@ libs.groovy.json
 libs.androidx.awesome.lib
 ```
 
-### Использование в build-файлах
+### Использование В Build-файлах
 
 ```kotlin
 dependencies {
@@ -398,11 +401,11 @@ dependencies {
 }
 ```
 
-## Бандлы зависимостей
+## Бандлы Зависимостей
 
 Бандл - это алиас для нескольких зависимостей, которые обычно используются вместе.
 
-### Без бандла
+### Без Бандла
 
 ```kotlin
 dependencies {
@@ -412,7 +415,7 @@ dependencies {
 }
 ```
 
-### С бандлом
+### С Бандлом
 
 ```kotlin
 dependencies {
@@ -426,14 +429,14 @@ dependencies {
 
 Помимо библиотек, каталог версий поддерживает объявление версий плагинов.
 
-### Объявление в TOML
+### Объявление В TOML
 
 ```toml
 [plugins]
 versions = { id = "com.github.ben-manes.versions", version = "0.45.0" }
 ```
 
-### Использование плагинов
+### Использование Плагинов
 
 ```kotlin
 plugins {
@@ -443,7 +446,7 @@ plugins {
 }
 ```
 
-## Практический пример для Android
+## Практический Пример Для Android
 
 ### libs.versions.toml
 
@@ -493,7 +496,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "1.9.20-1.0.14" }
 ```
 
-### Использование в build.gradle.kts
+### Использование В build.gradle.kts
 
 ```kotlin
 plugins {
@@ -516,7 +519,7 @@ dependencies {
 }
 ```
 
-## Основные преимущества
+## Основные Преимущества
 
 1. **Типобезопасность**: Автодополнение в IDE и проверка на этапе компиляции
 2. **Централизация**: Единый источник истины для всех зависимостей
@@ -527,7 +530,7 @@ dependencies {
 7. **Бандлы**: Группировка связанных зависимостей
 8. **Управление плагинами**: Централизованный контроль версий плагинов
 
-## Стратегия миграции
+## Стратегия Миграции
 
 При миграции на Version Catalog:
 

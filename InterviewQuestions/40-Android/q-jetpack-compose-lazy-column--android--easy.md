@@ -7,9 +7,12 @@ status: draft
 moc: moc-android
 related: [q-privacy-sandbox-fledge--privacy--hard, q-sharedpreferences-commit-vs-apply--android--easy, q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium]
 created: 2025-10-15
-tags: [android/ui-compose, jetpack-compose, lazy-column, platform/android, ui-compose, difficulty/easy]
+tags: [android/ui-compose, difficulty/easy, jetpack-compose, lazy-column, platform/android, ui-compose]
+date created: Saturday, October 25th 2025, 1:26:31 pm
+date modified: Saturday, October 25th 2025, 4:10:57 pm
 ---
-# Как в Jetpack Compose создать список, аналогичный RecyclerView?
+
+# Как В Jetpack Compose Создать Список, Аналогичный RecyclerView?
 
 **English**: How to create a RecyclerView-like list in Jetpack Compose?
 

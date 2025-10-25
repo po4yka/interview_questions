@@ -9,6 +9,7 @@ related: [q-anr-application-not-responding--android--medium, q-which-class-to-us
 created: 2025-10-15
 tags: [play-feature-delivery, dynamic-modules, app-bundle, difficulty/medium]
 ---
+
 # Play Feature Delivery / Play Feature Delivery
 
 **English**: What do you know about Play Feature Delivery?

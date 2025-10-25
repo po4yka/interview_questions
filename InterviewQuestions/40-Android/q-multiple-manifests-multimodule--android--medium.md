@@ -9,6 +9,7 @@ related: [q-what-is-diffutil-for--android--medium, q-android-jetpack-overview--a
 created: 2025-10-15
 tags: [android-manifest, android/multi-module, android/project-structure, build-system, manifest-merging, modularization, multi-module, project-structure, difficulty/medium]
 ---
+
 # Для проектов в которых есть несколько модулей, там может быть много Android Manifest'ов, для чего это делается?
 
 **English**: In multi-module projects, there can be many AndroidManifest files. Why is this done?

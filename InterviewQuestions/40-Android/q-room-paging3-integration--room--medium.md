@@ -9,6 +9,7 @@ related: [q-view-binding--android--medium, q-dagger-scope-explained--android--me
 created: 2025-10-15
 tags: [paging3, database, pagination, architecture, offline-first, difficulty/medium]
 ---
+
 # Room Paging 3 Integration / Интеграция Room с Paging 3
 
 **English**: Implement Room database source for Paging 3. Handle remote mediator for network + database paging.

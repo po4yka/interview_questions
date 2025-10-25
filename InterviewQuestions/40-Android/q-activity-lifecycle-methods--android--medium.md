@@ -1,30 +1,27 @@
 ---
 id: 20251012-122756
 title: Activity Lifecycle Methods / Методы жизненного цикла Activity
-aliases:
-- Activity Lifecycle Methods
-- Методы жизненного цикла Activity
+aliases: [Activity Lifecycle Methods, Методы жизненного цикла Activity]
 topic: android
 subtopics:
-- lifecycle
-- activity
+  - activity
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-viewmodel-pattern--android--easy
-- q-fragment-vs-activity-lifecycle--android--medium
+  - q-fragment-vs-activity-lifecycle--android--medium
+  - q-viewmodel-pattern--android--easy
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- android/lifecycle
-- android/activity
-- difficulty/medium
+tags: [android/activity, android/lifecycle, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:53:21 pm
 ---
 
 # Вопрос (RU)

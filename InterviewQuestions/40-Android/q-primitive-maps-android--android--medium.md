@@ -9,6 +9,7 @@ related: [q-where-is-composition-created--android--medium, q-reduce-apk-size-tec
 created: 2025-10-15
 tags: [performance, collections, memory-optimization, difficulty/medium]
 ---
+
 # Примитивные коллекции Map в Android
 
 **English**: Primitive Map Collections in Android (SparseArray, SparseIntArray, SparseBooleanArray, LongSparseArray)

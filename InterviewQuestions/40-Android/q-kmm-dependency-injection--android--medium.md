@@ -5,10 +5,13 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-how-to-choose-layout-for-fragment--android--easy, q-android-security-practices-checklist--android--medium, q-custom-view-attributes--custom-views--medium]
+related: [q-android-security-practices-checklist--android--medium, q-custom-view-attributes--custom-views--medium, q-how-to-choose-layout-for-fragment--android--easy]
 created: 2025-10-15
-tags: [Kotlin, KMM, DI, Koin, difficulty/medium]
+tags: [DI, difficulty/medium, KMM, Koin, Kotlin]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Saturday, October 25th 2025, 4:08:00 pm
 ---
+
 # Dependency Injection in Kotlin Multiplatform Mobile
 
 # Question (EN)
@@ -643,7 +646,7 @@ val platformModule = module {
 }
 ```
 
-#### Comparison: Koin vs Dagger/Hilt
+#### Comparison: Koin Vs Dagger/Hilt
 
 **1. Koin Advantages**
 ```kotlin
@@ -868,7 +871,7 @@ Key considerations: platform-specific dependencies via expect/actual, proper sco
 ## Ответ (RU)
 KMM dependency injection требует унифицированного подхода, работающего на всех платформах с поддержкой platform-specific реализаций. Koin обеспечивает наиболее seamless multiplatform DI решение.
 
-#### Koin для KMM
+#### Koin Для KMM
 
 **Преимущества**:
 -  Работает на всех платформах

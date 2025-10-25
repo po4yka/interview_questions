@@ -1,31 +1,28 @@
 ---
 id: 20251012-122788
 title: Bundle Data Types / Типы данных Bundle
-aliases:
-- Bundle Data Types
-- Типы данных Bundle
+aliases: [Bundle Data Types, Типы данных Bundle]
 topic: android
 subtopics:
-- activity
-- fragment
+  - activity
+  - fragment
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: draft
 moc: moc-android
 related:
-- q-android-manifest-file--android--easy
-- q-android-app-components--android--easy
-- q-android-project-parts--android--easy
+  - q-android-app-components--android--easy
+  - q-android-manifest-file--android--easy
+  - q-android-project-parts--android--easy
 created: 2025-10-15
 updated: 2025-10-20
-tags:
-- android/activity
-- android/fragment
-- difficulty/medium
+tags: [android/activity, android/fragment, difficulty/medium]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:52 pm
 ---
 
 # Вопрос (RU)

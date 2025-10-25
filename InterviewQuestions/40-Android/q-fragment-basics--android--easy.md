@@ -10,12 +10,14 @@ subtopics:
   - fragment
   - lifecycle
   - ui-navigation
-tags: [fragment, ui-component, lifecycle, difficulty/easy, android/lifecycle, android/ui-navigation]
+tags: [android/lifecycle, android/ui-navigation, difficulty/easy, fragment, lifecycle, ui-component]
 original_language: en
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Fragment.md
-related: [q-compose-modifier-order-performance--jetpack-compose--medium, q-what-each-android-component-represents--android--easy, q-android-build-optimization--android--medium]
+related: [q-android-build-optimization--android--medium, q-compose-modifier-order-performance--jetpack-compose--medium, q-what-each-android-component-represents--android--easy]
 moc: moc-android
 connections: []
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:47:11 pm
 ---
 
 # Fragment Basics / Основы Fragment
@@ -201,7 +203,7 @@ Fragment вносят модульность и возможность повт�
 - На планшетах: Два UI-модуля, определенных Fragment, могут быть объединены в одну Activity
 - На телефонах: Те же Fragment могут быть разделены на разные Activity
 
-### Динамическое управление UI
+### Динамическое Управление UI
 
 Разделение вашего UI на Fragment облегчает изменение внешнего вида вашей Activity во время выполнения:
 
@@ -245,11 +247,11 @@ Fragment вносят модульность и возможность повт�
    - Портретная версия Activity часто имеет существенно отличающийся макет от альбомной версии
    - Fragment позволяют обеим ориентациям повторно использовать общие элементы, имея при этом различия
 
-### Как использовать Fragment
+### Как Использовать Fragment
 
 Существует три основных способа использования Fragment:
 
-#### 1. Добавить Fragment статически
+#### 1. Добавить Fragment Статически
 
 Добавьте тег fragment в макет Activity и укажите имя Fragment:
 
@@ -263,7 +265,7 @@ Fragment вносят модульность и возможность повт�
     app:layout_constraintEnd_toEndOf="parent" />
 ```
 
-#### 2. Добавить Fragment динамически
+#### 2. Добавить Fragment Динамически
 
 Динамическое добавление Fragment означает настройку `FragmentManager` для начала транзакции с использованием таких методов, как `add()` или `replace()`, а затем вызов метода `commit()`:
 
@@ -295,7 +297,7 @@ replace(): [Fragment A] → [Fragment B] → [Fragment C]
 
 Настройте граф Fragment с помощью Navigation Component, который предоставляет фреймворк для обработки транзакций Fragment и навигации.
 
-### Пример кода: Создание простого Fragment
+### Пример Кода: Создание Простого Fragment
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -319,7 +321,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте конструкторы Fragment осторожно**: Всегда предоставляйте конструктор без аргументов
 2. **Общайтесь через интерфейсы**: Не ссылайтесь напрямую на Activity; используйте интерфейсы или ViewModel

@@ -9,6 +9,7 @@ related: [q-handler-looper-main-thread--android--medium, q-iz-kakikh-bolee-vazhn
 created: 2025-10-15
 tags: [jetpack-compose, state-management, configuration-changes, difficulty/medium]
 ---
+
 # Remember vs RememberSaveable в Compose
 
 **English**: What's the difference between remember and rememberSaveable in Compose for preserving state across configuration changes?

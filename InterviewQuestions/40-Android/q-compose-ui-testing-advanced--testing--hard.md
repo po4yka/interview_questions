@@ -3,7 +3,7 @@ id: 20251020-210000
 title: "Advanced Compose UI Testing / Продвинутое тестирование Compose UI"
 aliases: [Advanced Compose UI Testing, Продвинутое тестирование Compose UI]
 topic: testing
-subtopics: [testing-ui, accessibility]
+subtopics: [accessibility, testing-ui]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -11,11 +11,13 @@ language_tags: [en, ru]
 source: https://developer.android.com/jetpack/compose/testing
 source_note: Official Compose testing documentation
 status: draft
-related: [q-compose-testing--android--medium, q-compose-semantics--android--medium, q-compose-performance-optimization--android--hard]
+related: [q-compose-performance-optimization--android--hard, q-compose-semantics--android--medium, q-compose-testing--android--medium]
 created: 2025-10-20
 updated: 2025-10-20
-tags: [testing, compose-testing, ui-testing, semantics, accessibility, difficulty/hard]
+tags: [accessibility, compose-testing, difficulty/hard, semantics, testing, ui-testing]
 moc: moc-testing
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:52:28 pm
 ---
 
 # Вопрос (RU)
@@ -39,7 +41,7 @@ moc: moc-testing
 - `waitForIdle()` - Ждать рекомпозицию
 - `mainClock` - Контролировать время для анимаций
 
-### Теория и подходы
+### Теория И Подходы
 
 - Тестируйте через семантику, а не дерево layout: роли, contentDescription, testTag
 - Утверждайте поведение, а не структуру: текст, состояние и действия, без деталей реализации
@@ -76,7 +78,7 @@ composeTestRule.onNodeWithRole(Role.Checkbox).assertExists()
 composeTestRule.onNodeWithRole(Role.Switch).assertExists()
 ```
 
-### Тестирование анимаций
+### Тестирование Анимаций
 
 **Контроль времени анимации:**
 
@@ -127,7 +129,7 @@ fun animationStates() {
 }
 ```
 
-### Тестирование жестов
+### Тестирование Жестов
 
 **Жесты свайпа:**
 
@@ -167,7 +169,7 @@ fun dragAndDrop() {
 }
 ```
 
-### Тестирование async операций
+### Тестирование Async Операций
 
 **Ждать async данные:**
 
@@ -216,7 +218,7 @@ fun errorStateHandling() {
 }
 ```
 
-### Тестирование доступности
+### Тестирование Доступности
 
 **Тестирование content descriptions:**
 
@@ -253,7 +255,7 @@ fun accessibilityRoles() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте testTag** для стабильной идентификации элементов
 2. **Тестируйте взаимодействия пользователя**, не детали реализации

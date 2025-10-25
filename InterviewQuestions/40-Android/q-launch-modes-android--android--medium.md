@@ -26,6 +26,7 @@ updated: 2025-10-05
 
 tags: [android/activity, android/ui-navigation, en, ru, difficulty/medium]
 ---
+
 # Question (EN)
 > What launch modes do you know?
 # Вопрос (RU)

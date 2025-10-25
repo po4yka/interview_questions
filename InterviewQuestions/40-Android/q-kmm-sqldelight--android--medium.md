@@ -5,10 +5,13 @@ topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-annotation-processing-android--android--medium, q-play-feature-delivery--android--medium, q-gradle-kotlin-dsl-vs-groovy--android--medium]
+related: [q-annotation-processing-android--android--medium, q-gradle-kotlin-dsl-vs-groovy--android--medium, q-play-feature-delivery--android--medium]
 created: 2025-10-15
-tags: [Kotlin, KMM, SQLDelight, Database, difficulty/medium]
+tags: [Database, difficulty/medium, KMM, Kotlin, SQLDelight]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:07:58 pm
 ---
+
 # SQLDelight for Multiplatform Database
 
 # Question (EN)
@@ -915,7 +918,7 @@ Key considerations: proper schema design, migration strategy, transaction manage
 ## Ответ (RU)
 SQLDelight генерирует type-safe Kotlin APIs из SQL statements, обеспечивая compile-time верификацию и platform-specific драйверы (SQLite на Android, SQLite.swift на iOS) при sharing database логики.
 
-#### Ключевые возможности
+#### Ключевые Возможности
 
 **Type Safety**:
 - Compile-time SQL verification

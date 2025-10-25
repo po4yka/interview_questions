@@ -5,11 +5,14 @@ topic: android
 difficulty: easy
 status: draft
 moc: moc-android
-related: [q-performance-optimization-android--android--medium, q-flow-testing-turbine--testing--medium, q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]
+related: [q-flow-testing-turbine--testing--medium, q-how-to-register-broadcastreceiver-to-receive-messages--android--medium, q-performance-optimization-android--android--medium]
 created: 2025-10-15
-tags: [android/layouts, layout, layouts, performance, ui, difficulty/easy]
+tags: [android/layouts, difficulty/easy, layout, layouts, performance, ui]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Saturday, October 25th 2025, 4:11:28 pm
 ---
-# Как можно исправить плохой layout элемента?
+
+# Как Можно Исправить Плохой Layout Элемента?
 
 **English**: How to fix a bad element layout?
 
@@ -218,7 +221,7 @@ The `<merge>` tag eliminates redundant ViewGroups when using `<include>`.
 // Analyze view hierarchy depth
 ```
 
-#### Hierarchy Viewer (Deprecated, use Layout Inspector)
+#### Hierarchy Viewer (Deprecated, Use Layout Inspector)
 
 #### Systrace
 
