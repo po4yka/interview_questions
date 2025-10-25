@@ -3,7 +3,7 @@ id: 20251012-200008
 title: "Backtracking Algorithms (N-Queens, Sudoku, Subsets) / Алгоритмы с откатом"
 aliases: ["Backtracking Algorithms", "Алгоритмы с откатом"]
 topic: algorithms
-subtopics: [backtracking, recursion, combinatorics]
+subtopics: [backtracking, combinatorics, recursion]
 question_kind: coding
 difficulty: hard
 original_language: en
@@ -13,8 +13,10 @@ moc: moc-algorithms
 related: [c-backtracking-algorithm, q-dynamic-programming-fundamentals--algorithms--hard, q-graph-algorithms-bfs-dfs--algorithms--hard]
 created: 2025-10-12
 updated: 2025-01-25
-tags: [algorithms, backtracking, recursion, n-queens, sudoku, permutations, combinations, difficulty/hard]
+tags: [algorithms, backtracking, combinations, difficulty/hard, n-queens, permutations, recursion, sudoku]
 sources: [https://en.wikipedia.org/wiki/Backtracking]
+date created: Sunday, October 12th 2025, 10:35:02 pm
+date modified: Saturday, October 25th 2025, 5:10:49 pm
 ---
 
 # Вопрос (RU)

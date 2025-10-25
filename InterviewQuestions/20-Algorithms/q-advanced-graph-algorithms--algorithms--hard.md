@@ -3,7 +3,7 @@ id: 20251012-200007
 title: "Advanced Graph Algorithms (Dijkstra, MST, Floyd-Warshall) / Продвинутые алгоритмы на графах"
 aliases: ["Advanced Graph Algorithms", "Продвинутые алгоритмы на графах"]
 topic: algorithms
-subtopics: [graph, shortest-path, minimum-spanning-tree]
+subtopics: [graph, minimum-spanning-tree, shortest-path]
 question_kind: coding
 difficulty: hard
 original_language: en
@@ -13,8 +13,10 @@ moc: moc-algorithms
 related: [c-dijkstra-algorithm, c-mst-algorithms, q-graph-algorithms-bfs-dfs--algorithms--hard]
 created: 2025-10-12
 updated: 2025-01-25
-tags: [algorithms, graph, dijkstra, mst, shortest-path, floyd-warshall, bellman-ford, difficulty/hard]
+tags: [algorithms, bellman-ford, difficulty/hard, dijkstra, floyd-warshall, graph, mst, shortest-path]
 sources: [https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm, https://en.wikipedia.org/wiki/Minimum_spanning_tree]
+date created: Sunday, October 12th 2025, 10:33:05 pm
+date modified: Saturday, October 25th 2025, 5:07:35 pm
 ---
 
 # Вопрос (RU)

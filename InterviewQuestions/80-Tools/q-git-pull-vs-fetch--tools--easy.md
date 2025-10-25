@@ -12,7 +12,6 @@ difficulty: easy
 # Language & provenance
 original_language: ru
 language_tags: [en, ru]
-source: https://t.me/easy_kotlin/1399
 source_note: easy_kotlin Telegram channel
 
 # Workflow & relations

@@ -1,105 +1,236 @@
 ---
 id: 20251012-200002
 title: "Binary Search and Variants / Бинарный поиск и варианты"
+aliases: ["Binary Search", "Бинарный поиск"]
 topic: algorithms
+subtopics: [binary-search, divide-and-conquer, searching]
+question_kind: coding
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-12
-tags:
-  - algorithms
-  - binary-search
-  - searching
-  - log-n
 moc: moc-algorithms
-related: [q-binary-search-trees-bst--algorithms--hard, q-two-pointers-sliding-window--algorithms--medium, q-backtracking-algorithms--algorithms--hard]
-  - q-sorting-algorithms-comparison--algorithms--medium
-  - q-two-pointers-technique--algorithms--medium
-subtopics:
-  - binary-search
-  - searching
-  - divide-and-conquer
-  - logarithmic
+related: [c-binary-search, q-binary-search-trees-bst--algorithms--hard, q-two-pointers-sliding-window--algorithms--medium]
+created: 2025-10-12
+updated: 2025-01-25
+tags: [algorithms, binary-search, difficulty/medium, log-n, searching]
+sources: [https://en.wikipedia.org/wiki/Binary_search_algorithm]
+date created: Sunday, October 12th 2025, 8:53:58 pm
+date modified: Saturday, October 25th 2025, 5:14:20 pm
 ---
-# Question (EN)
-> How does binary search work? What are common variants and edge cases?
 
 # Вопрос (RU)
 > Как работает бинарный поиск? Каковы распространённые варианты и граничные случаи?
 
+# Question (EN)
+> How does binary search work? What are common variants and edge cases?
+
 ---
 
-## Answer (EN)
+## Ответ (RU)
 
-Binary search is one of the most important algorithms with O(log n) time complexity. Understanding binary search and its variants is crucial for solving many interview problems efficiently.
+**Теория бинарного поиска:**
+Бинарный поиск - алгоритм поиска в отсортированном массиве со сложностью O(log n). Он работает путём деления поискового пространства пополам на каждой итерации, исключая половину элементов.
 
+**Основные принципы:**
+- Требует отсортированный массив
+- Время: O(log n) - очень быстро
+- Память: O(1) - константная
+- Ключевая формула: `mid = left + (right - left) / 2` (избегает overflow)
 
-
-### 1. Classic Binary Search
-
-**Find target in sorted array.**
-
+**Классический бинарный поиск:**
 ```kotlin
+// Найти target в отсортированном массиве
 fun binarySearch(arr: IntArray, target: Int): Int {
     var left = 0
     var right = arr.size - 1
-    
+
     while (left <= right) {
-        val mid = left + (right - left) / 2  // Avoid overflow
-        
+        val mid = left + (right - left) / 2  // Избегаем overflow
+
         when {
             arr[mid] == target -> return mid
             arr[mid] < target -> left = mid + 1
             else -> right = mid - 1
         }
     }
-    
-    return -1  // Not found
+
+    return -1  // Не найдено
 }
-
-// Example:
-val arr = intArrayOf(1, 3, 5, 7, 9, 11, 13)
-println(binarySearch(arr, 7))   // 3
-println(binarySearch(arr, 6))   // -1
 ```
 
-**How it works:**
-```
-Array: [1, 3, 5, 7, 9, 11, 13]  Target: 7
-
-Step 1: left=0, right=6, mid=3
-        arr[3]=7 == target   Found!
-
-Array: [1, 3, 5, 7, 9, 11, 13]  Target: 6
-
-Step 1: left=0, right=6, mid=3
-        arr[3]=7 > 6, search left
-Step 2: left=0, right=2, mid=1
-        arr[1]=3 < 6, search right
-Step 3: left=2, right=2, mid=2
-        arr[2]=5 < 6, search right
-Step 4: left=3, right=2
-        left > right, not found!
-```
-
-**Complexity:**
-- **Time:** O(log n)
-- **Space:** O(1)
-
----
-
-### 2. Find First Occurrence
-
-**Find leftmost occurrence of target.**
-
+**Найти первое вхождение:**
 ```kotlin
+// Найти левое вхождение target (для массивов с дубликатами)
 fun findFirst(arr: IntArray, target: Int): Int {
     var left = 0
     var right = arr.size - 1
     var result = -1
-    
+
     while (left <= right) {
         val mid = left + (right - left) / 2
-        
+
+        when {
+            arr[mid] == target -> {
+                result = mid         // Найдено, но продолжаем искать влево
+                right = mid - 1
+            }
+            arr[mid] < target -> left = mid + 1
+            else -> right = mid - 1
+        }
+    }
+
+    return result
+}
+```
+
+**Найти последнее вхождение:**
+```kotlin
+// Найти правое вхождение target
+fun findLast(arr: IntArray, target: Int): Int {
+    var left = 0
+    var right = arr.size - 1
+    var result = -1
+
+    while (left <= right) {
+        val mid = left + (right - left) / 2
+
+        when {
+            arr[mid] == target -> {
+                result = mid         // Найдено, но продолжаем искать вправо
+                left = mid + 1
+            }
+            arr[mid] < target -> left = mid + 1
+            else -> right = mid - 1
+        }
+    }
+
+    return result
+}
+```
+
+**Поиск в повёрнутом массиве:**
+```kotlin
+// Массив повёрнут в точке: [4,5,6,7,0,1,2]
+fun searchRotated(nums: IntArray, target: Int): Int {
+    var left = 0
+    var right = nums.size - 1
+
+    while (left <= right) {
+        val mid = left + (right - left) / 2
+
+        if (nums[mid] == target) return mid
+
+        // Определяем какая половина отсортирована
+        if (nums[left] <= nums[mid]) {
+            // Левая половина отсортирована
+            if (target >= nums[left] && target < nums[mid]) {
+                right = mid - 1  // Target в левой половине
+            } else {
+                left = mid + 1   // Target в правой половине
+            }
+        } else {
+            // Правая половина отсортирована
+            if (target > nums[mid] && target <= nums[right]) {
+                left = mid + 1   // Target в правой половине
+            } else {
+                right = mid - 1  // Target в левой половине
+            }
+        }
+    }
+
+    return -1
+}
+```
+
+**Найти пиковый элемент:**
+```kotlin
+// Найти любой пик (элемент больше соседей)
+fun findPeakElement(nums: IntArray): Int {
+    var left = 0
+    var right = nums.size - 1
+
+    while (left < right) {
+        val mid = left + (right - left) / 2
+
+        if (nums[mid] < nums[mid + 1]) {
+            // Пик справа
+            left = mid + 1
+        } else {
+            // Пик слева или в mid
+            right = mid
+        }
+    }
+
+    return left
+}
+```
+
+**Бинарный поиск по ответу:**
+```kotlin
+// Найти минимальную скорость поедания бананов за h часов
+fun minEatingSpeed(piles: IntArray, h: Int): Int {
+    var left = 1
+    var right = piles.maxOrNull()!!
+
+    while (left < right) {
+        val mid = left + (right - left) / 2
+        val hoursNeeded = piles.sumOf { (it + mid - 1) / mid }
+
+        if (hoursNeeded <= h) {
+            right = mid  // Можем есть медленнее
+        } else {
+            left = mid + 1  // Нужно есть быстрее
+        }
+    }
+
+    return left
+}
+```
+
+## Answer (EN)
+
+**Binary Search Theory:**
+Binary search is a search algorithm for sorted arrays with O(log n) complexity. It works by dividing the search space in half on each iteration, eliminating half the elements.
+
+**Main principles:**
+- Requires sorted array
+- Time: O(log n) - extremely fast
+- Space: O(1) - constant
+- Key formula: `mid = left + (right - left) / 2` (avoids overflow)
+
+**Classic Binary Search:**
+```kotlin
+// Find target in sorted array
+fun binarySearch(arr: IntArray, target: Int): Int {
+    var left = 0
+    var right = arr.size - 1
+
+    while (left <= right) {
+        val mid = left + (right - left) / 2  // Avoid overflow
+
+        when {
+            arr[mid] == target -> return mid
+            arr[mid] < target -> left = mid + 1
+            else -> right = mid - 1
+        }
+    }
+
+    return -1  // Not found
+}
+```
+
+**Find First Occurrence:**
+```kotlin
+// Find leftmost occurrence of target (for arrays with duplicates)
+fun findFirst(arr: IntArray, target: Int): Int {
+    var left = 0
+    var right = arr.size - 1
+    var result = -1
+
+    while (left <= right) {
+        val mid = left + (right - left) / 2
+
         when {
             arr[mid] == target -> {
                 result = mid         // Found, but keep searching left
@@ -109,30 +240,22 @@ fun findFirst(arr: IntArray, target: Int): Int {
             else -> right = mid - 1
         }
     }
-    
+
     return result
 }
-
-// Example:
-val arr = intArrayOf(1, 2, 2, 2, 3, 4, 5)
-println(findFirst(arr, 2))  // 1 (first occurrence)
 ```
 
----
-
-### 3. Find Last Occurrence
-
-**Find rightmost occurrence of target.**
-
+**Find Last Occurrence:**
 ```kotlin
+// Find rightmost occurrence of target
 fun findLast(arr: IntArray, target: Int): Int {
     var left = 0
     var right = arr.size - 1
     var result = -1
-    
+
     while (left <= right) {
         val mid = left + (right - left) / 2
-        
+
         when {
             arr[mid] == target -> {
                 result = mid         // Found, but keep searching right
@@ -142,62 +265,23 @@ fun findLast(arr: IntArray, target: Int): Int {
             else -> right = mid - 1
         }
     }
-    
+
     return result
 }
-
-// Example:
-val arr = intArrayOf(1, 2, 2, 2, 3, 4, 5)
-println(findLast(arr, 2))  // 3 (last occurrence)
 ```
 
----
-
-### 4. Find Insertion Position
-
-**Find where to insert target to maintain sorted order.**
-
+**Search in Rotated Array:**
 ```kotlin
-fun searchInsert(arr: IntArray, target: Int): Int {
-    var left = 0
-    var right = arr.size - 1
-    
-    while (left <= right) {
-        val mid = left + (right - left) / 2
-        
-        when {
-            arr[mid] == target -> return mid
-            arr[mid] < target -> left = mid + 1
-            else -> right = mid - 1
-        }
-    }
-    
-    return left  // Insertion position
-}
-
-// Example:
-val arr = intArrayOf(1, 3, 5, 6)
-println(searchInsert(arr, 5))  // 2
-println(searchInsert(arr, 2))  // 1
-println(searchInsert(arr, 7))  // 4
-```
-
----
-
-### 5. Search in Rotated Sorted Array
-
-**Array rotated at pivot: [4,5,6,7,0,1,2]**
-
-```kotlin
+// Array rotated at pivot: [4,5,6,7,0,1,2]
 fun searchRotated(nums: IntArray, target: Int): Int {
     var left = 0
     var right = nums.size - 1
-    
+
     while (left <= right) {
         val mid = left + (right - left) / 2
-        
+
         if (nums[mid] == target) return mid
-        
+
         // Determine which half is sorted
         if (nums[left] <= nums[mid]) {
             // Left half is sorted
@@ -215,30 +299,21 @@ fun searchRotated(nums: IntArray, target: Int): Int {
             }
         }
     }
-    
+
     return -1
 }
-
-// Example:
-val arr = intArrayOf(4, 5, 6, 7, 0, 1, 2)
-println(searchRotated(arr, 0))  // 4
-println(searchRotated(arr, 3))  // -1
 ```
 
----
-
-### 6. Find Peak Element
-
-**Find any peak (element greater than neighbors).**
-
+**Find Peak Element:**
 ```kotlin
+// Find any peak (element greater than neighbors)
 fun findPeakElement(nums: IntArray): Int {
     var left = 0
     var right = nums.size - 1
-    
+
     while (left < right) {
         val mid = left + (right - left) / 2
-        
+
         if (nums[mid] < nums[mid + 1]) {
             // Peak is on the right
             left = mid + 1
@@ -247,301 +322,51 @@ fun findPeakElement(nums: IntArray): Int {
             right = mid
         }
     }
-    
+
     return left
 }
-
-// Example:
-val arr = intArrayOf(1, 2, 3, 1)
-println(findPeakElement(arr))  // 2 (value 3 is peak)
 ```
 
----
-
-### 7. Square Root (Integer)
-
-**Find floor(sqrt(x)) using binary search.**
-
+**Binary Search on Answer:**
 ```kotlin
-fun mySqrt(x: Int): Int {
-    if (x < 2) return x
-    
-    var left = 2
-    var right = x / 2
-    
-    while (left <= right) {
-        val mid = left + (right - left) / 2
-        val squared = mid.toLong() * mid
-        
-        when {
-            squared == x.toLong() -> return mid
-            squared < x -> left = mid + 1
-            else -> right = mid - 1
-        }
-    }
-    
-    return right
-}
-
-// Example:
-println(mySqrt(8))   // 2
-println(mySqrt(16))  // 4
-```
-
----
-
-### 8. Search in 2D Matrix
-
-**Matrix: rows and columns sorted.**
-
-```kotlin
-fun searchMatrix(matrix: Array<IntArray>, target: Int): Boolean {
-    if (matrix.isEmpty() || matrix[0].isEmpty()) return false
-    
-    val m = matrix.size
-    val n = matrix[0].size
-    var left = 0
-    var right = m * n - 1
-    
-    while (left <= right) {
-        val mid = left + (right - left) / 2
-        val row = mid / n
-        val col = mid % n
-        val value = matrix[row][col]
-        
-        when {
-            value == target -> return true
-            value < target -> left = mid + 1
-            else -> right = mid - 1
-        }
-    }
-    
-    return false
-}
-
-// Example:
-val matrix = arrayOf(
-    intArrayOf(1, 3, 5, 7),
-    intArrayOf(10, 11, 16, 20),
-    intArrayOf(23, 30, 34, 60)
-)
-println(searchMatrix(matrix, 3))   // true
-println(searchMatrix(matrix, 13))  // false
-```
-
----
-
-### 9. Find Minimum in Rotated Sorted Array
-
-```kotlin
-fun findMin(nums: IntArray): Int {
-    var left = 0
-    var right = nums.size - 1
-    
-    while (left < right) {
-        val mid = left + (right - left) / 2
-        
-        if (nums[mid] > nums[right]) {
-            // Minimum is in right half
-            left = mid + 1
-        } else {
-            // Minimum is in left half or at mid
-            right = mid
-        }
-    }
-    
-    return nums[left]
-}
-
-// Example:
-val arr = intArrayOf(4, 5, 6, 7, 0, 1, 2)
-println(findMin(arr))  // 0
-```
-
----
-
-### 10. Koko Eating Bananas (Binary Search on Answer)
-
-**Find minimum eating speed to finish all bananas in h hours.**
-
-```kotlin
+// Find minimum eating speed to finish all bananas in h hours
 fun minEatingSpeed(piles: IntArray, h: Int): Int {
     var left = 1
     var right = piles.maxOrNull()!!
-    
+
     while (left < right) {
         val mid = left + (right - left) / 2
         val hoursNeeded = piles.sumOf { (it + mid - 1) / mid }
-        
+
         if (hoursNeeded <= h) {
             right = mid  // Can eat slower
         } else {
             left = mid + 1  // Must eat faster
         }
     }
-    
+
     return left
 }
-
-// Example:
-val piles = intArrayOf(3, 6, 7, 11)
-val h = 8
-println(minEatingSpeed(piles, h))  // 4
 ```
 
 ---
-
-### Common Binary Search Patterns
-
-### Pattern 1: Exact Match
-```kotlin
-while (left <= right) {
-    // ... find exact target
-}
-return -1  // Not found
-```
-
-### Pattern 2: Find Boundary (First/Last occurrence)
-```kotlin
-while (left <= right) {
-    if (condition) {
-        result = mid
-        // Keep searching (left or right)
-    }
-}
-return result
-```
-
-### Pattern 3: Minimize/Maximize
-```kotlin
-while (left < right) {
-    if (canAchieve(mid)) {
-        right = mid  // Try smaller
-    } else {
-        left = mid + 1  // Need larger
-    }
-}
-return left
-```
-
----
-
-### Edge Cases to Consider
-
-```kotlin
-// 1. Empty array
-if (arr.isEmpty()) return -1
-
-// 2. Single element
-if (arr.size == 1) return if (arr[0] == target) 0 else -1
-
-// 3. Overflow in mid calculation
-//  Bad: val mid = (left + right) / 2  // Overflow possible
-//  Good: val mid = left + (right - left) / 2
-
-// 4. Off-by-one errors
-// Use left <= right (not left < right) for exact match
-// Use left < right for boundary problems
-
-// 5. Integer overflow in calculations
-val squared = mid.toLong() * mid  // Use Long for intermediate
-```
-
----
-
-### Real-World Android Example
-
-```kotlin
-// Find user in sorted list
-data class User(val id: Int, val name: String)
-
-fun findUserById(users: List<User>, targetId: Int): User? {
-    var left = 0
-    var right = users.size - 1
-    
-    while (left <= right) {
-        val mid = left + (right - left) / 2
-        
-        when {
-            users[mid].id == targetId -> return users[mid]
-            users[mid].id < targetId -> left = mid + 1
-            else -> right = mid - 1
-        }
-    }
-    
-    return null
-}
-
-// Usage
-val users = listOf(
-    User(1, "Alice"),
-    User(3, "Bob"),
-    User(5, "Charlie"),
-    User(7, "Dave")
-)
-val found = findUserById(users, 5)  // User(5, "Charlie")
-```
-
----
-
-### Key Takeaways
-
-1. **Binary search** requires **sorted** array
-2. **Time:** O(log n) - extremely fast
-3. **Mid calculation:** `left + (right - left) / 2` to avoid overflow
-4. **While condition:** `left <= right` for exact match, `left < right` for boundaries
-5. **Find first:** Keep searching left after finding
-6. **Find last:** Keep searching right after finding
-7. **Rotated array:** Determine which half is sorted
-8. **Binary search on answer:** Apply to optimization problems
-9. **Edge cases:** Empty array, single element, overflow
-10. **Applications:** Searching, finding boundaries, optimization
-
----
-
-## Ответ (RU)
-
-Бинарный поиск - один из важнейших алгоритмов со сложностью O(log n). Понимание бинарного поиска и его вариантов критично для эффективного решения многих задач на интервью.
-
-
-
-### Классический бинарный поиск
-
-**Найти target в отсортированном массиве.**
-
-**Сложность:**
-- **Время:** O(log n)
-- **Память:** O(1)
-
-### Ключевые выводы
-
-1. **Бинарный поиск** требует **отсортированный** массив
-2. **Время:** O(log n) - чрезвычайно быстро
-3. **Вычисление mid:** `left + (right - left) / 2` для избежания overflow
-4. **Условие while:** `left <= right` для точного совпадения
-5. **Найти первый:** Продолжать искать влево после нахождения
-6. **Найти последний:** Продолжать искать вправо после нахождения
-7. **Повёрнутый массив:** Определить какая половина отсортирована
-8. **Бинарный поиск по ответу:** Применить к задачам оптимизации
-9. **Граничные случаи:** Пустой массив, один элемент, overflow
 
 ## Follow-ups
 
-1. How do you implement binary search recursively?
-2. What is exponential search and when is it useful?
-3. How do you find the square root with decimal precision?
-4. What is ternary search and when is it better than binary?
-5. How do you search in a matrix with sorted rows and columns?
-6. What is the difference between lower_bound and upper_bound?
-7. How do you find the median of two sorted arrays?
-8. How do you implement binary search on a linked list?
-9. What is interpolation search and its complexity?
-10. How do you find the kth smallest element in sorted matrix?
-
----
+- How do you implement binary search recursively?
+- What is the difference between lower_bound and upper_bound?
+- How do you find the median of two sorted arrays?
 
 ## Related Questions
 
-### Advanced (Harder)
-- [[q-binary-search-trees-bst--algorithms--hard]] - binary search trees bst
+### Prerequisites (Easier)
+- [[q-data-structures-overview--algorithms--easy]] - Data structures basics
+- [[q-sorting-algorithms-comparison--algorithms--medium]] - Sorting concepts
 
+### Related (Same Level)
+- [[q-two-pointers-sliding-window--algorithms--medium]] - Two pointers technique
+- [[q-backtracking-algorithms--algorithms--hard]] - Backtracking algorithms
+
+### Advanced (Harder)
+- [[q-binary-search-trees-bst--algorithms--hard]] - BST implementation
+- [[q-median-two-sorted-arrays--algorithms--hard]] - Advanced binary search
