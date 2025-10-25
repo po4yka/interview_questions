@@ -9,6 +9,7 @@ related: [q-how-navigation-is-implemented-in-android--android--medium, q-archite
 created: 2025-10-15
 tags: [android-components, android/android-components, android/context, android/manifest, components, context, intent, manifest, difficulty/easy]
 ---
+
 # What unifies Android components?
 
 **Russian**: Что объединяет основные компоненты Android-приложения?

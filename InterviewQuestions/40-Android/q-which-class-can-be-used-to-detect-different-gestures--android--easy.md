@@ -9,6 +9,7 @@ related: [q-which-class-to-catch-gestures--android--easy, q-fragments-vs-activit
 created: 2025-10-15
 tags: [languages, android, difficulty/easy]
 ---
+
 # Какой класс можно использовать что бы ловить разные жесты?
 
 ## Answer (EN)

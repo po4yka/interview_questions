@@ -9,6 +9,7 @@ tags: [XML layout, AndroidManifest.xml, android, ui, activity, lifecycle, diffic
 moc: moc-android
 related: [q-android-security-practices-checklist--android--medium, q-app-startup-library--android--medium, q-view-composition-strategy-compose--android--medium]
 ---
+
 # What needs to be done in Android project to start drawing UI on screen?
 
 # Вопрос (RU)

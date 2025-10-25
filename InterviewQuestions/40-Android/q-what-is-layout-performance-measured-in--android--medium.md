@@ -9,6 +9,7 @@ related: [q-separate-ui-business-logic--android--easy, q-koin-fundamentals--depe
 created: 2025-10-15
 tags: [performance, android, ui, layouts, difficulty/medium]
 ---
+
 # What is layout performance measured in?
 
 # Вопрос (RU)

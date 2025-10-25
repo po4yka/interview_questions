@@ -1,123 +1,165 @@
 ---
 id: 20251012-122711166
-title: "What Is The Difference Between Measurement Units Like Dp And Sp / What Is The Difference Between Measurement Units Like Dp и Sp"
+title: "Measurement Units: dp vs sp / Единицы измерения: dp vs sp"
+aliases:
+  - "Measurement Units: dp vs sp"
+  - "Единицы измерения: dp vs sp"
 topic: android
+subtopics: [ui-units]
+question_kind: android
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-accessibility-color-contrast--accessibility--medium, q-internal-app-distribution--distribution--medium, q-compose-navigation-advanced--jetpack-compose--medium]
+related: [c-dp-sp-units, q-accessibility-color-contrast--android--medium, q-compose-navigation-advanced--android--medium]
 created: 2025-10-15
-tags: [android ui, dp, sp, ui, difficulty/easy]
+updated: 2025-01-25
+tags: [android/ui-units, dp, sp, ui, accessibility, difficulty/easy]
+sources: [https://developer.android.com/guide/topics/resources/more-resources#Dimension]
 ---
-# Чем отличаются единицы измерения например dp от sp
 
-**English**: What is the difference between measurement units like dp and sp?
+# Вопрос (RU)
+> В чем разница между единицами измерения dp и sp?
 
-## Answer (EN)
-### dp (Density-Independent Pixels)
+# Question (EN)
+> What is the difference between measurement units dp and sp?
 
-**dp** is used for layout and UI element sizes, providing the same physical size on all devices regardless of screen density.
+---
+
+## Ответ (RU)
+
+**Теория единиц измерения:**
+Android использует две основные единицы измерения: dp для размеров UI элементов и sp для размеров текста. Обе масштабируются с плотностью экрана, но sp дополнительно учитывает пользовательские настройки масштабирования текста.
+
+**dp (Density-Independent Pixels):**
+Используется для размеров макета и UI элементов, обеспечивая одинаковый физический размер на всех устройствах.
 
 ```xml
-<!-- Using dp for layout dimensions -->
+<!-- dp для размеров элементов -->
 <Button
     android:layout_width="100dp"
     android:layout_height="48dp"
-    android:padding="16dp"
-    android:text="Click Me" />
+    android:padding="16dp" />
 
 <ImageView
     android:layout_width="64dp"
-    android:layout_height="64dp"
-    android:src="@drawable/icon" />
+    android:layout_height="64dp" />
 ```
 
-**Characteristics:**
-- Independent of screen pixel density
-- 1dp ≈ 1/160 inch on any screen
-- Ensures consistent physical size across devices
-- Used for margins, padding, dimensions, and all non-text UI elements
-
-### sp (Scale-Independent Pixels)
-
-**sp** is used for text font sizes and scales with both screen density changes and user text scaling preferences.
+**sp (Scale-Independent Pixels):**
+Используется для размеров текста и масштабируется с пользовательскими настройками доступности.
 
 ```xml
-<!-- Using sp for text sizes -->
+<!-- sp для размеров текста -->
 <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:textSize="16sp"
+    android:text="Обычный текст" />
+
+<TextView
+    android:textSize="24sp"
+    android:text="Заголовок"
+    android:textStyle="bold" />
+```
+
+**Ключевые различия:**
+- dp: масштабируется только с плотностью экрана
+- sp: масштабируется с плотностью экрана + настройки пользователя
+- dp: для всех UI элементов кроме текста
+- sp: только для размеров текста
+
+**Правильное использование:**
+```xml
+<LinearLayout
+    android:padding="16dp"> <!-- dp для отступов -->
+
+    <TextView
+        android:textSize="14sp" <!-- sp для текста -->
+        android:text="Текст" />
+
+    <Button
+        android:layout_width="120dp" <!-- dp для размеров -->
+        android:layout_height="48dp"
+        android:textSize="16sp" /> <!-- sp для текста кнопки -->
+</LinearLayout>
+```
+
+## Answer (EN)
+
+**Measurement Units Theory:**
+Android uses two main measurement units: dp for UI element sizes and sp for text sizes. Both scale with screen density, but sp additionally respects user text scaling preferences.
+
+**dp (Density-Independent Pixels):**
+Used for layout and UI element sizes, ensuring consistent physical size across all devices.
+
+```xml
+<!-- dp for element dimensions -->
+<Button
+    android:layout_width="100dp"
+    android:layout_height="48dp"
+    android:padding="16dp" />
+
+<ImageView
+    android:layout_width="64dp"
+    android:layout_height="64dp" />
+```
+
+**sp (Scale-Independent Pixels):**
+Used for text sizes and scales with user accessibility settings.
+
+```xml
+<!-- sp for text sizes -->
+<TextView
     android:textSize="16sp"
     android:text="Normal text" />
 
 <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
     android:textSize="24sp"
-    android:text="Large heading"
+    android:text="Heading"
     android:textStyle="bold" />
 ```
 
-**Characteristics:**
-- Scales with screen density (like dp)
-- Additionally scales with user's font size preferences in system settings
-- Respects accessibility settings
-- Used exclusively for text sizes
+**Key Differences:**
+- dp: scales only with screen density
+- sp: scales with screen density + user settings
+- dp: for all UI elements except text
+- sp: only for text sizes
 
-### Main Difference
-
-The **main difference** is that **sp respects user's text scale preferences** set in system accessibility settings, while **dp does not**.
-
-| Feature | dp | sp |
-|---------|----|----|
-| Screen density scaling | Yes | Yes |
-| User text size preference | No | Yes |
-| Primary use case | UI elements, layouts | Text sizes |
-| Accessibility support | No | Yes |
-
-### Best Practices
-
+**Correct Usage:**
 ```xml
-<!-- Good practice -->
 <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp">  <!-- dp for spacing -->
+    android:padding="16dp"> <!-- dp for spacing -->
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"  <!-- sp for text -->
-        android:text="@string/label" />
+        android:textSize="14sp" <!-- sp for text -->
+        android:text="Text" />
 
     <Button
-        android:layout_width="120dp"  <!-- dp for dimensions -->
+        android:layout_width="120dp" <!-- dp for dimensions -->
         android:layout_height="48dp"
-        android:textSize="16sp"  <!-- sp for button text -->
-        android:text="@string/button_text" />
+        android:textSize="16sp" /> <!-- sp for button text -->
 </LinearLayout>
-
-<!-- Bad practice - don't do this -->
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textSize="14dp"  <!-- Wrong: using dp for text -->
-    android:text="Text" />
 ```
 
-### Why This Matters
+---
 
-Using **dp** for all UI sizes except text and **sp** for text sizes allows your application to:
-1. Look consistent across devices with different screen densities
-2. Respect user accessibility preferences for larger text
-3. Provide better user experience for users with visual impairments
-4. Follow Android design guidelines and best practices
+## Follow-ups
 
-## Ответ (RU)
-dp (density-independent pixels) используется для размеров макета и элементов интерфейса, обеспечивая одинаковый физический размер на всех устройствах независимо от плотности экрана. sp (scale-independent pixels) используется для размеров шрифтов текста и масштабируется не только с изменением плотности экрана но и в зависимости от пользовательских настроек масштабирования текста. Основное различие в том что sp учитывает предпочтения пользователя по масштабу текста. dp рекомендуется использовать для всех размеров в пользовательском интерфейсе кроме текста. В XML-разметке Android размер текста указывается в sp а другие размеры в dp. Это позволяет оптимизировать приложение для различных устройств и настроек доступности
+- How do dp and sp behave on different screen densities?
+- What happens when users change system font size settings?
+- How do you handle measurement units in Compose?
 
 ## Related Questions
 
-- [[q-accessibility-color-contrast--android--medium]]
-- q-internal-app-distribution--distribution--medium
-- [[q-compose-navigation-advanced--android--medium]]
+### Prerequisites (Easier)
+- [[q-android-app-components--android--easy]] - App components
+- [[q-compose-basics--android--easy]] - Compose basics
+
+### Related (Same Level)
+- [[q-accessibility-color-contrast--android--medium]] - Accessibility
+- [[q-compose-navigation-advanced--android--medium]] - Compose navigation
+- [[q-android-ui-fundamentals--android--easy]] - UI fundamentals
+
+### Advanced (Harder)
+- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts
+- [[q-android-runtime-internals--android--hard]] - Runtime internals

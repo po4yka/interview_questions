@@ -9,6 +9,7 @@ related: [q-accessibility-text-scaling--accessibility--medium, q-react-native-co
 created: 2025-10-15
 tags: [android/fragments, android/architecture, fragments, activity, difficulty/medium]
 ---
+
 # Why use Fragments when we have Activities?
 
 ## Answer (EN)

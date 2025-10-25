@@ -9,6 +9,7 @@ related: [q-how-to-write-recyclerview-so-that-it-caches-ahead--android--medium, 
 created: 2025-10-15
 tags: [android/fragments, android/lifecycle, fragments, lifecycle, difficulty/hard]
 ---
+
 # Why Fragment needs separate callback for UI creation?
 
 **Russian**: Почему у Fragment отдельный callback для создания UI?

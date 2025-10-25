@@ -10,6 +10,7 @@ created: 2025-10-15
 tags:
   - android
 ---
+
 # Why do we need DiffUtil?
 
 ## EN (expanded)

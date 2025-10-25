@@ -9,6 +9,7 @@ related: [q-compose-ui-testing-advanced--testing--hard, q-compose-canvas-graphic
 created: 2025-10-15
 tags: [android/views, custom-views, view-rendering, invalidate, requestLayout, difficulty/medium]
 ---
+
 # What methods are used to redraw Views?
 
 ## Answer (EN)

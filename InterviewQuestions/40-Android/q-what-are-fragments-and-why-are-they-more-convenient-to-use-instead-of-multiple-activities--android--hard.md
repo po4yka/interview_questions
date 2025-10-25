@@ -9,6 +9,7 @@ related: [q-background-vs-foreground-service--android--medium, q-fragments-and-a
 created: 2025-10-15
 tags: [android, android/fragments, fragments, ui, difficulty/hard]
 ---
+
 # Что такое фрагменты и почему их удобнее использовать вместо множества activity?
 
 **English**: What are fragments and why are they more convenient to use instead of multiple activities?

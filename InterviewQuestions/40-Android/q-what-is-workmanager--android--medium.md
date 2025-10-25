@@ -9,6 +9,7 @@ related: [q-which-event-is-called-when-user-touches-screen--android--medium, q-m
 created: 2025-10-15
 tags: [workmanager, background-work, jetpack, architecture, scheduled-tasks, difficulty/medium]
 ---
+
 # What is WorkManager?
 
 **Russian**: Что такое WorkManager?

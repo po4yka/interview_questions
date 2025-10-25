@@ -9,6 +9,7 @@ related: [q-how-application-priority-is-determined-by-the-system--android--hard,
 created: 2025-10-15
 tags: [inheritance, android, ui, views, difficulty/medium]
 ---
+
 # What does ViewGroup inherit from?
 
 # Вопрос (RU)

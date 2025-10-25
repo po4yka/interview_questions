@@ -9,6 +9,7 @@ related: [q-workmanager-decision-guide--android--medium, q-kapt-ksp-migration--g
 created: 2025-10-15
 tags: [viewmodel, lifecycle, mvvm, architecture, difficulty/medium]
 ---
+
 # Why is ViewModel needed and what happens in it?
 
 ## EN (expanded)

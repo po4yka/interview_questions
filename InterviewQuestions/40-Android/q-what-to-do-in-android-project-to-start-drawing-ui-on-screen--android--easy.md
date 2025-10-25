@@ -9,6 +9,7 @@ related: [q-sparsearray-optimization--android--medium, q-compose-performance-opt
 created: 2025-10-15
 tags: [languages, difficulty/easy]
 ---
+
 # Что нужно сделать в Android-проекте чтобы начать рисовать UI на экране?
 
 # Question (EN)

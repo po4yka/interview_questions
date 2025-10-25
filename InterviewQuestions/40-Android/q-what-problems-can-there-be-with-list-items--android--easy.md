@@ -9,6 +9,7 @@ tags: [android/recyclerview, android/views, diffutil, listview, memory-managemen
 moc: moc-android
 related: [q-cicd-pipeline-android--android--medium, q-usecase-pattern-android--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
 ---
+
 # Какие могут быть проблемы с элементами списка?
 
 **English**: What problems can there be with list items?

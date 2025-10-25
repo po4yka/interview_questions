@@ -9,6 +9,7 @@ related: [q-what-is-viewstub--android--medium, q-jank-detection-frame-metrics--p
 created: 2025-10-15
 tags: [android/architecture-mvp, architecture-mvp, architecture-patterns, lifecycle, mvi, mvp, mvvm, difficulty/easy]
 ---
+
 # Почему многие отказываются от MVP?
 
 **English**: Why do many developers abandon MVP?

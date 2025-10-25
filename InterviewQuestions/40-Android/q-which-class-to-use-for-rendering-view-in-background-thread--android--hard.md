@@ -10,6 +10,7 @@ tags:
 moc: moc-android
 related: [q-what-is-the-main-application-execution-thread--android--easy, q-room-relations-embedded--room--medium, q-alternative-distribution--distribution--medium]
 ---
+
 # Which class should be used to render View in background thread?
 
 ## EN (expanded)

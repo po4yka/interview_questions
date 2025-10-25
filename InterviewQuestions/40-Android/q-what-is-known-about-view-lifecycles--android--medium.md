@@ -9,6 +9,7 @@ related: [q-spannable-text-styling--android--medium, q-how-to-tell-adapter-to-re
 created: 2025-10-15
 tags: [view, lifecycle, ui, difficulty/medium]
 ---
+
 # What is known about View lifecycles?
 
 **Russian**: Что известно о жизненном цикле View?

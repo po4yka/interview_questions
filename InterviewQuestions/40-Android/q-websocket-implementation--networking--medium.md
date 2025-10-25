@@ -9,6 +9,7 @@ tags: [websocket, okhttp, real-time, resilience, reconnection, difficulty/medium
 moc: moc-networking
 related: [q-parcelable-implementation--android--medium, q-what-problems-can-there-be-with-list-items--android--easy, q-leakcanary-heap-dump-analysis--android--medium]
 ---
+
 # WebSocket Implementation / Реализация WebSocket
 
 **English**: Implement WebSocket connection with OkHttp. Handle reconnection with exponential backoff, heartbeat/ping-pong, and message queue for offline messages.

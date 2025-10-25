@@ -9,6 +9,7 @@ related: [q-workmanager-vs-alternatives--background--medium, q-how-to-display-sn
 created: 2025-10-15
 tags: [fragmentmanager, fragmenttransaction, android, ui, fragments, difficulty/medium]
 ---
+
 # What is the difference between FragmentManager and FragmentTransaction?
 
 # Вопрос (RU)

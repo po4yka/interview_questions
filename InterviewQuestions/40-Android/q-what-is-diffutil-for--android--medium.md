@@ -9,6 +9,7 @@ related: [q-how-animations-work-in-recyclerview--android--medium, q-is-layoutinf
 created: 2025-10-15
 tags: [diffutil, android, ui, difficulty/medium]
 ---
+
 # What is DiffUtil for?
 
 # Вопрос (RU)

@@ -9,6 +9,7 @@ tags: [android/performance, android/recyclerview, diffutil, optimization, perfor
 moc: moc-android
 related: [q-dagger-purpose--android--easy, q-retrofit-modify-all-requests--android--hard, q-baseline-profiles-optimization--performance--medium]
 ---
+
 # Почему при скролле может тормозить список?
 
 **English**: Why might list scrolling lag?

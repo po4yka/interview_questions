@@ -9,6 +9,7 @@ related: [q-android-lint-tool--android--medium, q-app-security-best-practices--s
 created: 2025-10-15
 tags: [components, activity, service, broadcastreceiver, contentprovider, difficulty/medium]
 ---
+
 # What unites the main components of an Android application?
 
 ## Answer (EN)

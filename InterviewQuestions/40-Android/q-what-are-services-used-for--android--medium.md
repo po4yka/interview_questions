@@ -9,6 +9,7 @@ related: [q-mvvm-pattern--android--medium, q-memory-leaks-definition--android--e
 created: 2025-10-15
 tags: [android/services, android/background-processing, services, background-work, foreground-service, difficulty/medium]
 ---
+
 # What are services used for?
 
 **Russian**: Для чего используются сервисы?

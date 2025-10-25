@@ -9,6 +9,7 @@ related: [q-save-markdown-structure-database--android--medium, q-what-are-activi
 created: 2025-10-15
 tags: [Kotlin, Background, WorkManager, Coroutines, difficulty/hard]
 ---
+
 # WorkManager Work Chaining - Advanced Patterns
 
 # Question (EN)

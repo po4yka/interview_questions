@@ -9,6 +9,7 @@ related: [q-where-is-composition-created--android--medium, q-build-optimization-
 created: 2025-10-15
 tags: [android, android/fragments, fragments, ui, difficulty/hard]
 ---
+
 # Для чего нужны фрагменты если есть Activity?
 
 **English**: Why are fragments needed if there is Activity?

@@ -10,6 +10,7 @@ created: 2025-10-15
 tags:
   - android
 ---
+
 # Why user data may disappear on screen rotation?
 
 **Russian**: Почему пользовательские данные могут исчезнуть при повороте экрана?

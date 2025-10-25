@@ -9,6 +9,7 @@ related: [q-v-chyom-izmeryaetsya-proizvoditelnost-layout--programming-languages-
 created: 2025-10-15
 tags: [android, android/layouts, android/recyclerview, android/views, layoutmanager, layouts, recyclerview, ui, viewholder, views, difficulty/easy]
 ---
+
 # Что известно про RecyclerView?
 
 **English**: What is known about RecyclerView?

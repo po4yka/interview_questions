@@ -9,6 +9,7 @@ related: [q-what-layout-allows-overlapping-objects--android--easy, q-how-to-redu
 created: 2025-10-15
 tags: [android/background-processing, background-processing, coroutines, livedata, workmanager, difficulty/medium]
 ---
+
 # Как вернуть результат работы WorkManager в приложение?
 
 **English**: How to return a result from WorkManager to the app?

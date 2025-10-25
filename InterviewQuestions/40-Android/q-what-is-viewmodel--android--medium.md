@@ -9,6 +9,7 @@ related: [q-factory-pattern-android--android--medium, q-view-methods-and-their-p
 created: 2025-10-15
 tags: [viewmodel, architecture, lifecycle, mvvm, state-management, difficulty/medium]
 ---
+
 # What is ViewModel?
 
 **Russian**: Что такое ViewModel?

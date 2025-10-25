@@ -10,6 +10,7 @@ created: 2025-10-15
 tags:
   - android
 ---
+
 # What needs to be done in Android project to start drawing UI on screen?
 
 # Question (EN)

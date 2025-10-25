@@ -9,6 +9,7 @@ related: [q-what-navigation-methods-do-you-know--android--medium, q-how-to-add-f
 created: 2025-10-15
 tags: [threading, main-thread, ui-thread, looper, difficulty/easy]
 ---
+
 # What is the main application execution thread?
 
 ## Answer (EN)

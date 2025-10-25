@@ -9,6 +9,7 @@ related: [q-looper-thread-connection--android--medium, q-what-happens-when-a-new
 created: 2025-10-15
 tags: [activity, lifecycle, ui, difficulty/medium]
 ---
+
 # What is Activity and what is it used for?
 
 ## Answer (EN)

@@ -9,6 +9,7 @@ tags: [android/recyclerview, android/views, recyclerview, ui, viewholder, views,
 moc: moc-android
 related: [q-where-does-the-repeated-call-of-composable-function-come-from--android--medium, q-how-to-choose-layout-for-fragment--android--easy, q-anr-application-not-responding--android--medium]
 ---
+
 # На что следует обращать внимание, чтобы оптимизировать большой список?
 
 **English**: What should you pay attention to in order to optimize a large list?

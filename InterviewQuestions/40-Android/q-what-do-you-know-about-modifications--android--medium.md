@@ -9,6 +9,7 @@ related: [q-where-is-composition-created-for-calling-composable-function--androi
 created: 2025-10-15
 tags: [UI elements, Jetpack Compose, android, ui, jetpack-compose, modifiers, difficulty/medium]
 ---
+
 # What do you know about modifications?
 
 # Вопрос (RU)

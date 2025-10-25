@@ -1,6 +1,6 @@
 ---
 id: 20251017-145045
-title: Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочные эффекты Compose: LaunchedEffect vs DisposableEffect
+title: "Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочные эффекты Compose: LaunchedEffect vs DisposableEffect"
 aliases:
   - Compose LaunchedEffect vs DisposableEffect
   - Compose Side Effects
@@ -34,6 +34,7 @@ tags:
 source: https://developer.android.com/jetpack/compose/side-effects
 source_note: Official Compose side-effects docs
 ---
+
 # Вопрос (RU)
 > В чем разница между побочными эффектами Compose: LaunchedEffect vs DisposableEffect?
 

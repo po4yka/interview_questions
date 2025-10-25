@@ -9,6 +9,7 @@ related: [q-what-are-services-for--android--easy, q-view-fundamentals--android--
 created: 2025-10-15
 tags: [webp, optimization, images, performance, difficulty/easy]
 ---
+
 # WebP - самый экономичный формат изображений
 
 **English**: WebP - most efficient image format for Android

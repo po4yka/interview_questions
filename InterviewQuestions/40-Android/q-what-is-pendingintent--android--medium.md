@@ -9,6 +9,7 @@ related: [q-mvvm-pattern--android--medium, q-api-file-upload-server--android--me
 created: 2025-10-15
 tags: [languages, android, difficulty/medium]
 ---
+
 # Что такое PendingIntent?
 
 # Question (EN)

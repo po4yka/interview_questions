@@ -9,6 +9,7 @@ related: [q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--
 created: 2025-10-15
 tags: [recyclerview, diffutil, performance, difficulty/medium]
 ---
+
 # Why use DiffUtil?
 
 **Russian**: Зачем нужен DiffUtil?

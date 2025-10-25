@@ -9,6 +9,7 @@ related: [q-opengl-advanced-rendering--graphics--medium, q-retrofit-path-paramet
 created: 2025-10-15
 tags: [android/recyclerview, android/ui, itemdecoration, recyclerview, ui, difficulty/medium]
 ---
+
 # Что позволяет делать ItemDecoration?
 
 **English**: What does ItemDecoration allow you to do?

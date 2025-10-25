@@ -10,6 +10,7 @@ tags:
 moc: moc-android
 related: [q-how-to-display-svg-string-as-a-vector-file--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard, q-compose-gesture-detection--jetpack-compose--medium]
 ---
+
 # Why might user data disappear during screen rotation?
 
 ## Answer (EN)

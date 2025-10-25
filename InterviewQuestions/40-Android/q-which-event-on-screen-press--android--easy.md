@@ -9,6 +9,7 @@ related: [q-list-elements-problems--android--medium, q-what-is-workmanager--andr
 created: 2025-10-15
 tags: [android/touch-events, android/ui, event handling, touch events, touch-events, ui, difficulty/easy]
 ---
+
 # Какое событие вызывается при нажатии юзера по экрану?
 
 **English**: Which event is triggered when user presses on screen?

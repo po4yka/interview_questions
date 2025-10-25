@@ -9,6 +9,7 @@ related: [q-gradle-build-system--android--medium, q-what-does-viewgroup-inherit-
 created: 2025-10-15
 tags: [workmanager, background-tasks, reliability, difficulty/medium]
 ---
+
 # How does WorkManager guarantee task execution?
 
 **Russian**: Как WorkManager гарантирует выполнение задач?

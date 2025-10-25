@@ -9,6 +9,7 @@ related: [q-how-to-implement-a-photo-editor-as-a-separate-component--android--ea
 created: 2025-10-15
 tags: [recomposition, android, ui, jetpack-compose, difficulty/medium]
 ---
+
 # Where does the repeated call of composable function come from?
 
 # Вопрос (RU)

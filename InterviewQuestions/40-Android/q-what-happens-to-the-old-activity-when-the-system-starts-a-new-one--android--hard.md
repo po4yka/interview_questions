@@ -10,6 +10,7 @@ created: 2025-10-15
 tags:
   - android
 ---
+
 # What happens to the old Activity when the system starts a new one?
 
 ## Answer (EN)

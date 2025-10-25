@@ -9,6 +9,7 @@ related: [q-what-is-layout-types-and-when-to-use--android--easy, q-background-ta
 created: 2025-10-15
 tags: [setContent, android, ui, jetpack-compose, difficulty/medium]
 ---
+
 # Where is composition created for calling composable function?
 
 # Вопрос (RU)

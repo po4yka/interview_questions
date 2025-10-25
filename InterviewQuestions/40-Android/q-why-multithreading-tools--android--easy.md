@@ -9,6 +9,7 @@ related: [q-repository-multiple-sources--android--medium, q-how-to-reduce-the-nu
 created: 2025-10-15
 tags: [android/concurrency, concurrency, multithreading, performance, threading, difficulty/easy]
 ---
+
 # Для чего нужна многопоточность, какие инструменты использовать?
 
 **English**: Why is multithreading needed and which tools should be used?

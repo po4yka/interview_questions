@@ -9,6 +9,7 @@ related: [q-api-rate-limiting-throttling--android--medium, q-compose-modifier-sy
 created: 2025-10-15
 tags: [workmanager, background-work, coroutines, service, difficulty/medium]
 ---
+
 # WorkManager vs Coroutines vs Service - Decision Guide
 
 **English**: When should you use WorkManager vs Coroutines vs Service for background work?

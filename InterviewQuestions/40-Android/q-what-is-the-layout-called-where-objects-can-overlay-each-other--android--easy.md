@@ -9,6 +9,7 @@ related: [q-compose-gesture-detection--jetpack-compose--medium, q-16kb-dex-page-
 created: 2025-10-15
 tags: [Jetpack Compose, android, ui, layouts, framelayout, difficulty/medium]
 ---
+
 # What is the layout called where objects can overlay each other?
 
 # Вопрос (RU)

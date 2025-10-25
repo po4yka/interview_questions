@@ -9,6 +9,7 @@ related: [q-main-android-components--android--easy, q-server-sent-events-sse--ne
 created: 2025-10-15
 tags: [languages, android, difficulty/medium]
 ---
+
 # Откуда происходит повторный вызов composable функции
 
 ## Answer (EN)

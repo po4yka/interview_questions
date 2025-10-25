@@ -10,6 +10,7 @@ created: 2025-10-15
 tags:
   - android
 ---
+
 # What are Intents for?
 
 ## Answer (EN)

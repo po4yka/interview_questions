@@ -10,6 +10,7 @@ created: 2025-10-15
 tags:
   - android
 ---
+
 # Why Fragment callbacks differ from Activity callbacks?
 
 ## Answer (EN)

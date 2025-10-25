@@ -9,6 +9,7 @@ related: [q-inject-router-to-presenter--android--medium, q-android-modularizatio
 created: 2025-10-15
 tags: [FragmentTransaction, Intent, NavHostFragment, NavController, android, ui, navigation, fragments, difficulty/medium]
 ---
+
 # What are the navigation methods in Kotlin?
 
 # Вопрос (RU)

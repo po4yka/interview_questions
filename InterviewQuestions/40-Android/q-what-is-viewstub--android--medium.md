@@ -9,6 +9,7 @@ related: [q-room-relations-embedded--room--medium, q-api-rate-limiting-throttlin
 created: 2025-10-15
 tags: [viewstub, ui, performance, lazy-loading, optimization, difficulty/medium]
 ---
+
 # What is ViewStub?
 
 **Russian**: Что такое ViewStub?

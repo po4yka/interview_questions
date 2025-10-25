@@ -9,6 +9,7 @@ related: [q-websocket-implementation--networking--medium, q-what-happens-when-a-
 created: 2025-10-15
 tags: [activity, android, ui, difficulty/medium]
 ---
+
 # What are fragments for if there is Activity?
 
 # Вопрос (RU)

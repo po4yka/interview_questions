@@ -10,6 +10,7 @@ created: 2025-10-15
 tags:
   - android
 ---
+
 # Which event is triggered when user presses the screen?
 
 ## EN (expanded)

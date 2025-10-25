@@ -9,6 +9,7 @@ related: [q-webp-image-format-android--android--easy, q-how-to-create-list-like-
 created: 2025-10-15
 tags: [languages, android, difficulty/medium]
 ---
+
 # Что знаешь о модификациях?
 
 # Question (EN)

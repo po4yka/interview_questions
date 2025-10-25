@@ -9,6 +9,7 @@ related: [q-is-layoutinflater-a-singleton-and-why--android--medium, q-canvas-dra
 created: 2025-10-15
 tags: [jetpack-compose, compose, composition, difficulty/medium]
 ---
+
 # Where is composition created for calling composable functions?
 
 ## Answer (EN)

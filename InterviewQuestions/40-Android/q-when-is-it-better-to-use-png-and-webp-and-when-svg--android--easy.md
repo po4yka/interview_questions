@@ -9,6 +9,7 @@ related: [q-dagger-purpose--android--easy, q-compose-ui-testing-advanced--testin
 created: 2025-10-15
 tags: [image-formats, ui, difficulty/easy]
 ---
+
 # Когда лучше использовать png и webp, а когда svg?
 
 **English**: When is it better to use png and webp, and when svg?

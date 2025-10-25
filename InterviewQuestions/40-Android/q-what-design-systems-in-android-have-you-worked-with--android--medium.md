@@ -9,6 +9,7 @@ related: [q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-on
 created: 2025-10-15
 tags: [fluent design system, human interface guidelines, material design, ui, difficulty/medium]
 ---
+
 # С какими вариантами систем проектирования в Android работал
 
 **English**: What design systems in Android have you worked with?

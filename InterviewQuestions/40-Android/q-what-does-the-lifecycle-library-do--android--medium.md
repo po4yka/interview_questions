@@ -10,6 +10,7 @@ created: 2025-10-15
 tags:
   - android
 ---
+
 # What does the Lifecycle library do?
 
 ## Answer (EN)

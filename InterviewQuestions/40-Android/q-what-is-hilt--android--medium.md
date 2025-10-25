@@ -9,6 +9,7 @@ related: [q-android-app-components--android--easy, q-what-can-be-done-through-co
 created: 2025-10-15
 tags: [android/architecture-clean, android/di-hilt, architecture-clean, dependency-injection, di-hilt, hilt, platform/android, difficulty/medium]
 ---
+
 # What is Hilt?
 
 **Russian**: Что такое Hilt и для чего он используется?

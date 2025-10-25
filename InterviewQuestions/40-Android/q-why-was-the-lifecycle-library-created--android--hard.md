@@ -9,6 +9,7 @@ related: [q-how-to-handle-the-situation-where-activity-can-open-multiple-times-d
 created: 2025-10-15
 tags: [android/architecture, android/lifecycle, lifecycle, architecture-components, memory-leaks, difficulty/hard]
 ---
+
 # Why was the Lifecycle library created?
 
 **Russian**: Почему была создана библиотека Lifecycle?

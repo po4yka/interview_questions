@@ -10,6 +10,7 @@ created: 2025-10-15
 tags:
   - android
 ---
+
 # What events are Activity methods tied to?
 
 # Вопрос (RU)

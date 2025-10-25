@@ -9,6 +9,7 @@ related: [q-play-store-publishing--distribution--medium, q-what-is-known-about-r
 created: 2025-10-15
 tags: [android/data-binding, android/ui, data binding, data-binding, ui, difficulty/easy]
 ---
+
 # Использовал Data Binding
 
 **English**: Have you used Data Binding

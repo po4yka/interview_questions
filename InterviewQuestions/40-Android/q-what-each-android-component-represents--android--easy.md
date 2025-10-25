@@ -9,6 +9,7 @@ related: [q-rss-feed-aggregator--android--medium, q-android-build-optimization--
 created: 2025-10-15
 tags: [android, android-components, android/android-components, broadcast-receiver, components, content-provider, fragment, intent, service, view, difficulty/easy]
 ---
+
 # Что из себя представляет каждый компонент Android-приложения?
 
 **English**: What does each Android application component represent?

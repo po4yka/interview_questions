@@ -9,6 +9,7 @@ related: [q-compositionlocal-advanced--jetpack-compose--medium, q-android-build-
 created: 2025-10-15
 tags: [layouts, framelayout, ui, difficulty/easy]
 ---
+
 # Which layout allows views to overlap?
 
 ## Answer (EN)

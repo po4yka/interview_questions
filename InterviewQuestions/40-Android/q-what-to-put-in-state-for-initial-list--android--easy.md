@@ -9,6 +9,7 @@ tags: [android/state-management, android/ui, data-loading, state, state-manageme
 moc: moc-android
 related: [q-mvi-architecture--android--hard, q-intent-filters-android--android--medium, q-unit-testing-coroutines-flow--android--medium]
 ---
+
 # What to put in state for initial list?
 
 **Russian**: Что положить в state для отображения первоначального списка?

@@ -10,6 +10,7 @@ created: 2025-10-15
 tags:
   - android
 ---
+
 # What is the layout called where objects can overlap each other?
 
 ## EN (expanded)

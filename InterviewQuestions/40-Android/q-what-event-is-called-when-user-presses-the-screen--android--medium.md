@@ -9,6 +9,7 @@ related: [q-cicd-pipeline-android--android--medium, q-kotlin-context-receivers--
 created: 2025-10-15
 tags: [event handling, android, ui, touch-events, difficulty/medium]
 ---
+
 # What event is called when user presses the screen?
 
 # Вопрос (RU)

@@ -9,6 +9,7 @@ related: [q-what-are-px-dp-sp--android--easy, q-how-to-tell-adapter-to-redraw-li
 created: 2025-10-15
 tags: [android/background-processing, background-processing, data-passing, workmanager, difficulty/medium]
 ---
+
 # How to pass and receive data from WorkManager?
 
 **Russian**: Как передать и как получить данные из WorkManager?

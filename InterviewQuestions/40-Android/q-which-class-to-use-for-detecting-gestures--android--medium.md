@@ -9,6 +9,7 @@ related: [q-how-to-write-recyclerview-cache-ahead--android--medium, q-dagger-fie
 created: 2025-10-15
 tags: [gestures, ui, touch-events, difficulty/medium]
 ---
+
 # Which class can be used to catch different gestures?
 
 ## EN (expanded)
