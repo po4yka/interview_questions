@@ -3,18 +3,20 @@ id: 20251012-600002
 title: "Clean Code Principles / Принципы чистого кода"
 aliases: ["Clean Code Principles", "Принципы чистого кода"]
 topic: cs
-subtopics: [clean-code, software-engineering, best-practices, code-quality]
+subtopics: [best-practices, clean-code, code-quality, software-engineering]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-clean-code, q-solid-principles--software-design--medium, q-design-patterns-types--design-patterns--medium]
+related: [c-clean-code, q-design-patterns-types--design-patterns--medium, q-solid-principles--software-design--medium]
 created: 2025-10-12
 updated: 2025-01-25
-tags: [clean-code, best-practices, refactoring, code-quality, difficulty/medium]
+tags: [best-practices, clean-code, code-quality, difficulty/medium, refactoring]
 sources: [https://en.wikipedia.org/wiki/Clean_code]
+date created: Monday, October 13th 2025, 7:50:49 am
+date modified: Saturday, October 25th 2025, 8:55:02 pm
 ---
 
 # Вопрос (RU)
@@ -42,21 +44,21 @@ Clean Code - код, который легко понять, поддержив�
 - Избегайте дезинформации
 
 ```kotlin
-// ❌ Плохо: непонятное намерение
+// BAD: непонятное намерение
 val d = 5
 val list1 = listOf<Account>()
 
-// ✅ Хорошо: ясное намерение
+// GOOD: ясное намерение
 val elapsedTimeInDays = 5
 val activeAccounts = listOf<Account>()
 
-// ❌ Плохо: непроизносимо
+// BAD: непроизносимо
 data class DtaRcrd102(val genymdhms: Long)
 
-// ✅ Хорошо: произносимо
+// GOOD: произносимо
 data class Customer(val generationTimestamp: Long)
 
-// ✅ Классы = существительные, методы = глаголы
+// GOOD: Классы = существительные, методы = глаголы
 class UserRepository {
     fun findById(id: Long): User
     fun save(user: User)
@@ -76,7 +78,7 @@ class UserRepository {
 - Command-Query Separation
 
 ```kotlin
-// ❌ Плохо: делает много, длинная, много аргументов
+// BAD: делает много, длинная, много аргументов
 fun processUserData(name: String, email: String, age: Int, address: String, phone: String) {
     validateEmail(email)
     saveToDatabase(name, email, age)
@@ -84,7 +86,7 @@ fun processUserData(name: String, email: String, age: Int, address: String, phon
     logActivity(name)
 }
 
-// ✅ Хорошо: маленькие функции, одно дело
+// GOOD: маленькие функции, одно дело
 fun registerUser(user: User) {
     validateUser(user)
     saveUser(user)
@@ -99,7 +101,7 @@ fun saveUser(user: User) {
     userRepository.save(user)
 }
 
-// ✅ Command-Query Separation
+// GOOD: Command-Query Separation
 fun getUser(id: Long): User  // Query - только читает
 fun updateUser(user: User)   // Command - только изменяет
 ```
@@ -116,23 +118,23 @@ fun updateUser(user: User)   // Command - только изменяет
 - Избегайте избыточных комментариев
 
 ```kotlin
-// ❌ Плохо: избыточный комментарий (что)
+// BAD: избыточный комментарий (что)
 // Увеличить счетчик на 1
 counter++
 
-// ✅ Хорошо: объясняет "почему"
+// GOOD: объясняет "почему"
 // Используем exponential backoff для retry, чтобы не перегружать сервер
 val delay = baseDelay * (2.0.pow(retryCount))
 
-// ✅ Хорошо: TODO для отложенной работы
+// GOOD: TODO для отложенной работы
 // TODO: Добавить кеширование после оптимизации БД
 fun getUserData(id: Long): User
 
-// ❌ Плохо: закомментированный код
+// BAD: закомментированный код
 // val oldResult = calculateOldWay(data)
 val result = calculateNewWay(data)
 
-// ✅ Хорошо: удалите, используйте git history
+// GOOD: удалите, используйте git history
 val result = calculateNewWay(data)
 ```
 
@@ -147,7 +149,7 @@ val result = calculateNewWay(data)
 - Пустые строки разделяют концепции
 
 ```kotlin
-// ✅ Хорошо: вертикальное форматирование
+// GOOD: вертикальное форматирование
 class UserService(
     private val userRepository: UserRepository,
     private val emailService: EmailService
@@ -181,20 +183,20 @@ class UserService(
 - Exceptions для исключительных ситуаций
 
 ```kotlin
-// ❌ Плохо: error codes
+// BAD: error codes
 fun saveUser(user: User): Int {
     if (!isValid(user)) return -1
     if (!database.save(user)) return -2
     return 0
 }
 
-// ✅ Хорошо: exceptions
+// GOOD: exceptions
 fun saveUser(user: User) {
     require(isValid(user)) { "Invalid user" }
     database.save(user)
 }
 
-// ✅ Извлечение try/catch
+// GOOD: Извлечение try/catch
 fun deleteUser(id: Long) {
     try {
         deleteUserInternal(id)
@@ -204,7 +206,7 @@ fun deleteUser(id: Long) {
     }
 }
 
-// ✅ Не возвращайте null
+// GOOD: Не возвращайте null
 fun findUser(id: Long): User?  // Явно nullable
 fun getUser(id: Long): User    // Бросает exception если не найден
 ```
@@ -223,7 +225,7 @@ fun getUser(id: Long): User    // Бросает exception если не най�
 6. **Data Clumps** - группы данных, которые всегда вместе
 
 ```kotlin
-// ❌ Code Smell: Feature Envy
+// BAD: Code Smell - Feature Envy
 class Order {
     fun calculateTotal(customer: Customer): BigDecimal {
         // Метод Order больше интересуется Customer
@@ -232,7 +234,7 @@ class Order {
     }
 }
 
-// ✅ Рефакторинг: переместить логику в Customer
+// GOOD: Рефакторинг - переместить логику в Customer
 class Customer {
     fun calculateDiscount(): BigDecimal {
         return loyaltyLevel * discountRate
@@ -245,10 +247,10 @@ class Order {
     }
 }
 
-// ❌ Code Smell: Primitive Obsession
+// BAD: Code Smell - Primitive Obsession
 fun createUser(email: String, age: Int)
 
-// ✅ Рефакторинг: использовать value objects
+// GOOD: Рефакторинг - использовать value objects
 data class Email(val value: String) {
     init { require(value.contains("@")) }
 }
@@ -283,21 +285,21 @@ Clean Code - code that is easy to understand, maintain, and extend. Based on Rob
 - Avoid disinformation
 
 ```kotlin
-// ❌ Bad: unclear intent
+// BAD: unclear intent
 val d = 5
 val list1 = listOf<Account>()
 
-// ✅ Good: clear intent
+// GOOD: clear intent
 val elapsedTimeInDays = 5
 val activeAccounts = listOf<Account>()
 
-// ❌ Bad: unpronounceable
+// BAD: unpronounceable
 data class DtaRcrd102(val genymdhms: Long)
 
-// ✅ Good: pronounceable
+// GOOD: pronounceable
 data class Customer(val generationTimestamp: Long)
 
-// ✅ Classes = nouns, methods = verbs
+// GOOD: Classes = nouns, methods = verbs
 class UserRepository {
     fun findById(id: Long): User
     fun save(user: User)
@@ -317,7 +319,7 @@ class UserRepository {
 - Command-Query Separation
 
 ```kotlin
-// ❌ Bad: does many things, long, many arguments
+// BAD: does many things, long, many arguments
 fun processUserData(name: String, email: String, age: Int, address: String, phone: String) {
     validateEmail(email)
     saveToDatabase(name, email, age)
@@ -325,7 +327,7 @@ fun processUserData(name: String, email: String, age: Int, address: String, phon
     logActivity(name)
 }
 
-// ✅ Good: small functions, one thing
+// GOOD: small functions, one thing
 fun registerUser(user: User) {
     validateUser(user)
     saveUser(user)
@@ -340,7 +342,7 @@ fun saveUser(user: User) {
     userRepository.save(user)
 }
 
-// ✅ Command-Query Separation
+// GOOD: Command-Query Separation
 fun getUser(id: Long): User  // Query - only reads
 fun updateUser(user: User)   // Command - only changes
 ```
@@ -357,23 +359,23 @@ fun updateUser(user: User)   // Command - only changes
 - Avoid redundant comments
 
 ```kotlin
-// ❌ Bad: redundant comment (what)
+// BAD: redundant comment (what)
 // Increment counter by 1
 counter++
 
-// ✅ Good: explains "why"
+// GOOD: explains "why"
 // Use exponential backoff for retry to avoid overloading server
 val delay = baseDelay * (2.0.pow(retryCount))
 
-// ✅ Good: TODO for deferred work
+// GOOD: TODO for deferred work
 // TODO: Add caching after DB optimization
 fun getUserData(id: Long): User
 
-// ❌ Bad: commented code
+// BAD: commented code
 // val oldResult = calculateOldWay(data)
 val result = calculateNewWay(data)
 
-// ✅ Good: delete, use git history
+// GOOD: delete, use git history
 val result = calculateNewWay(data)
 ```
 
@@ -388,7 +390,7 @@ val result = calculateNewWay(data)
 - Blank lines separate concepts
 
 ```kotlin
-// ✅ Good: vertical formatting
+// GOOD: vertical formatting
 class UserService(
     private val userRepository: UserRepository,
     private val emailService: EmailService
@@ -422,20 +424,20 @@ class UserService(
 - Exceptions for exceptional situations
 
 ```kotlin
-// ❌ Bad: error codes
+// BAD: error codes
 fun saveUser(user: User): Int {
     if (!isValid(user)) return -1
     if (!database.save(user)) return -2
     return 0
 }
 
-// ✅ Good: exceptions
+// GOOD: exceptions
 fun saveUser(user: User) {
     require(isValid(user)) { "Invalid user" }
     database.save(user)
 }
 
-// ✅ Extract try/catch
+// GOOD: Extract try/catch
 fun deleteUser(id: Long) {
     try {
         deleteUserInternal(id)
@@ -445,7 +447,7 @@ fun deleteUser(id: Long) {
     }
 }
 
-// ✅ Don't return null
+// GOOD: Don't return null
 fun findUser(id: Long): User?  // Explicitly nullable
 fun getUser(id: Long): User    // Throws exception if not found
 ```
@@ -464,7 +466,7 @@ fun getUser(id: Long): User    // Throws exception if not found
 6. **Data Clumps** - groups of data always together
 
 ```kotlin
-// ❌ Code Smell: Feature Envy
+// BAD: Code Smell - Feature Envy
 class Order {
     fun calculateTotal(customer: Customer): BigDecimal {
         // Order method more interested in Customer
@@ -473,7 +475,7 @@ class Order {
     }
 }
 
-// ✅ Refactoring: move logic to Customer
+// GOOD: Refactoring - move logic to Customer
 class Customer {
     fun calculateDiscount(): BigDecimal {
         return loyaltyLevel * discountRate
@@ -486,10 +488,10 @@ class Order {
     }
 }
 
-// ❌ Code Smell: Primitive Obsession
+// BAD: Code Smell - Primitive Obsession
 fun createUser(email: String, age: Int)
 
-// ✅ Refactoring: use value objects
+// GOOD: Refactoring - use value objects
 data class Email(val value: String) {
     init { require(value.contains("@")) }
 }

@@ -7,13 +7,11 @@ status: draft
 moc: moc-cs
 related: [q-coroutine-dispatchers--programming-languages--medium, q-data-class-special-features--programming-languages--easy, q-design-patterns-fundamentals--software-engineering--hard]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - structural-patterns
-  - composite
-  - gof-patterns
-  - tree-structure
+tags: [composite, design-patterns, gof-patterns, structural-patterns, tree-structure]
+date created: Monday, October 6th 2025, 7:27:23 am
+date modified: Saturday, October 25th 2025, 8:55:04 pm
 ---
+
 # Composite Pattern
 
 # Question (EN)
@@ -258,7 +256,7 @@ fun main() {
 - Composite forwards operations to children, aggregating results
 - **Android**: View hierarchy (ViewGroup/View), menu structures, drawable layers
 
-## Когда использовать?
+## Когда Использовать?
 
 When to use:
 
@@ -267,7 +265,7 @@ When to use:
 3. **Simplifying client code** - Want to treat individual and composite objects uniformly
 4. **Part-whole hierarchies** - Need to represent part-whole relationships
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Pros (Преимущества)
 
@@ -349,7 +347,7 @@ sealed class MenuItem {
 
 Паттерн проектирования Composite — это структурный паттерн проектирования, который **позволяет компоновать объекты в древовидные структуры для представления иерархий часть-целое**. Он позволяет клиентам обращаться с отдельными объектами и композициями объектов единообразно.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Паттерн проектирования Composite решает такие проблемы как:
 

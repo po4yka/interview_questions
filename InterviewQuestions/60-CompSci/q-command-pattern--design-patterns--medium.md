@@ -5,15 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-primitive-vs-reference-types--programming-languages--easy, q-iterator-pattern--design-patterns--medium, q-reference-types-protect-from-deletion--programming-languages--easy]
+related: [q-iterator-pattern--design-patterns--medium, q-primitive-vs-reference-types--programming-languages--easy, q-reference-types-protect-from-deletion--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - behavioral-patterns
-  - command
-  - gof-patterns
-  - action-pattern
+tags: [action-pattern, behavioral-patterns, command, design-patterns, gof-patterns]
+date created: Monday, October 6th 2025, 7:22:55 am
+date modified: Saturday, October 25th 2025, 8:55:02 pm
 ---
+
 # Command Pattern
 
 # Question (EN)
@@ -53,7 +51,7 @@ Using the command design pattern describes the following solution:
 
 This enables one to configure a class with a command object that is used to perform a request. The class is no longer coupled to a particular request and has no knowledge of how the request is carried out.
 
-### When is it especially useful?
+### When is it Especially Useful?
 
 
 The Command Pattern is especially useful for:
@@ -302,7 +300,7 @@ class UserViewModel(
 - **Receiver** (Light, TextEditor) performs the actual work
 - **Android**: Useful for undo/redo, action queuing, transaction management
 
-## Применение в реальных системах
+## Применение В Реальных Системах
 
 Real Life Examples:
 
@@ -312,7 +310,7 @@ Real Life Examples:
 4. **Job scheduling** - Commands queued and executed
 5. **Transaction management** - Database operations as commands
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Pros (Преимущества)
 
@@ -395,7 +393,7 @@ class MacroCommand(private val commands: List<Command>) : Command {
 
 Паттерн Command — это поведенческий паттерн проектирования, который **превращает запрос в самостоятельный объект, содержащий всю информацию о запросе**. Эта трансформация позволяет параметризовать методы различными запросами, ставить запросы в очередь, логировать их выполнение и поддерживать операции отмены. Паттерн отделяет объект, который вызывает действие, от объекта, который его выполняет.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Использование паттерна проектирования Command может решить следующие проблемы:
 
@@ -412,7 +410,7 @@ class MacroCommand(private val commands: List<Command>) : Command {
 
 Это позволяет конфигурировать класс объектом-командой, который используется для выполнения запроса. Класс больше не связан с конкретным запросом и не знает, как запрос выполняется.
 
-### Когда особенно полезен?
+### Когда Особенно Полезен?
 
 Паттерн Command особенно полезен для:
 
