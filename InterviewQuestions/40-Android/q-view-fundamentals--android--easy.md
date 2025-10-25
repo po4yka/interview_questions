@@ -9,6 +9,7 @@ related: [q-what-is-the-main-application-execution-thread--android--easy, q-frag
 created: 2025-10-15
 tags: [view, ui, basics, widget, view-hierarchy, difficulty/easy]
 ---
+
 # What is a View in Android? / Что такое View в Android?
 
 **English**: What's View?

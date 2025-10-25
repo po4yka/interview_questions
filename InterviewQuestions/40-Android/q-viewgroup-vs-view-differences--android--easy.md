@@ -9,6 +9,7 @@ related: [q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium
 created: 2025-10-15
 tags: [viewgroup, view, ui, view-hierarchy, difficulty/easy]
 ---
+
 # What's ViewGroup? How are they different from Views?
 
 **Russian**: Что такое ViewGroup? Чем они отличаются от View?

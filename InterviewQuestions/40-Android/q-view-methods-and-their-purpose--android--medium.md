@@ -9,6 +9,7 @@ related: [q-implement-voice-video-call--android--hard, q-what-is-viewmodel--andr
 created: 2025-10-15
 tags: [android/ui, android/view, ui, ui components, view, view lifecycle, difficulty/medium]
 ---
+
 # Какие методы есть у view и что каждый из них делает?
 
 **English**: What methods does View have and what does each do?

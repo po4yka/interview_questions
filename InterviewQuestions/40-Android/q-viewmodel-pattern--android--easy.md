@@ -9,6 +9,7 @@ related: [q-what-navigation-methods-exist-in-kotlin--programming-languages--medi
 created: 2025-10-15
 tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, lifecycle, mvvm, platform/android, viewmodel, difficulty/easy]
 ---
+
 # Какой архитектурный паттерн реализуется благодаря ViewModel?
 
 **English**: What architectural pattern is implemented using ViewModel?
