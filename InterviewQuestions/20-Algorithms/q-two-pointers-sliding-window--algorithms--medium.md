@@ -1,20 +1,22 @@
 ---
 id: 20251012-200006
 title: "Two Pointers and Sliding Window Patterns / Паттерны двух указателей и скользящего окна"
-aliases: ["Two Pointers", "Sliding Window", "Два указателя", "Скользящее окно"]
+aliases: ["Sliding Window", "Two Pointers", "Два указателя", "Скользящее окно"]
 topic: algorithms
-subtopics: [two-pointers, sliding-window, array, string]
+subtopics: [array, sliding-window, string, two-pointers]
 question_kind: coding
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-two-pointers, c-sliding-window, q-sorting-algorithms-comparison--algorithms--medium]
+related: [c-sliding-window, c-two-pointers, q-sorting-algorithms-comparison--algorithms--medium]
 created: 2025-10-12
 updated: 2025-01-25
-tags: [algorithms, two-pointers, sliding-window, array, optimization, difficulty/medium]
+tags: [algorithms, array, difficulty/medium, optimization, sliding-window, two-pointers]
 sources: [https://en.wikipedia.org/wiki/Two_pointer_technique]
+date created: Sunday, October 12th 2025, 10:29:05 pm
+date modified: Saturday, October 25th 2025, 5:50:29 pm
 ---
 
 # Вопрос (RU)

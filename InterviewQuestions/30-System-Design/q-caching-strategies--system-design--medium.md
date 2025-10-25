@@ -3,18 +3,20 @@ id: 20251012-300003
 title: "Caching Strategies and Patterns / Стратегии и паттерны кеширования"
 aliases: ["Caching Strategies", "Стратегии кеширования"]
 topic: system-design
-subtopics: [caching, performance, redis, memcached]
+subtopics: [caching, memcached, performance, redis]
 question_kind: system-design
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-system-design
-related: [c-caching-strategies, q-load-balancing-strategies--system-design--medium, q-horizontal-vertical-scaling--system-design--medium]
+related: [c-caching-strategies, q-horizontal-vertical-scaling--system-design--medium, q-load-balancing-strategies--system-design--medium]
 created: 2025-10-12
 updated: 2025-01-25
-tags: [system-design, caching, performance, scalability, difficulty/medium]
+tags: [caching, difficulty/medium, performance, scalability, system-design]
 sources: [https://en.wikipedia.org/wiki/Cache_(computing)]
+date created: Sunday, October 12th 2025, 8:25:32 pm
+date modified: Saturday, October 25th 2025, 5:52:17 pm
 ---
 
 # Вопрос (RU)
