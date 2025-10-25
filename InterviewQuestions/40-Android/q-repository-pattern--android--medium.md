@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [architecture, repository, data-layer, clean-architecture, mvvm]
+subtopics: [architecture-clean, architecture-mvvm]
 question_kind: pattern
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [q-repository-multiple-sources--android--medium, q-clean-architecture-a
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [en, ru, android/architecture, android/repository, android/data-layer, android/clean-architecture, android/mvvm, difficulty/medium]
+tags: [android/architecture-clean, android/architecture-mvvm, en, ru, difficulty/medium]
 ---
 
 # Question (EN)

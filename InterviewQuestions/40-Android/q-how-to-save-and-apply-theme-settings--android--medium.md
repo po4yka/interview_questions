@@ -514,4 +514,4 @@ class ThemeDialog : DialogFragment() {
 
 - [[q-how-to-save-scroll-state-when-activity-is-recreated--android--medium]]
 - [[q-server-sent-events-sse--networking--medium]]
-- [[q-kmm-sqldelight--multiplatform--medium]]
+- [[q-kmm-sqldelight--android--medium]]

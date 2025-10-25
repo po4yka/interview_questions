@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-networking-basics--android--medium
@@ -33,6 +33,7 @@ tags:
 source: https://developer.android.com/guide/background/processing-data/sync
 source_note: Android Data Sync documentation
 ---
+
 # Вопрос (RU)
 > Как бы вы обрабатывали синхронизацию данных в Android приложении при нестабильном сетевом соединении?
 
@@ -447,7 +448,7 @@ class SyncStrategy @Inject constructor(private val networkMonitor: NetworkMonito
 }
 ```
 
-**See also:** [[c-network-protocols]], [[c-rest-api]]
+**See also:** c-network-protocols, c-rest-api
 
 
 ## Follow-ups

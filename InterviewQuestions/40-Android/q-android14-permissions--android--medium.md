@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-security-best-practices--android--medium
@@ -33,14 +33,6 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Разрешения Android 14?
-
----
-
-# Question (EN)
-> What are Android 14 Permissions?
-
 # Question (EN)
 > What are Android 14 Permissions?
 
@@ -48,7 +40,7 @@ tags:
 **Android 14 Permission Changes** introduce privacy-focused updates requiring careful implementation and backward compatibility handling.
 
 **Permission Changes Theory:**
-Android 14 (API 34) and Android 13 (API 33) introduced granular media access, mandatory notification permissions, and stricter background location requirements. These changes prioritize user privacy while maintaining app functionality. Understanding [[c-runtime-permissions]] is essential for handling these updates.
+Android 14 (API 34) and Android 13 (API 33) introduced granular media access, mandatory notification permissions, and stricter background location requirements. These changes prioritize user privacy while maintaining app functionality. Understanding c-runtime-permissions is essential for handling these updates.
 
 **1. Photo Picker (Android 13+):**
 Modern approach for media selection without requiring storage permissions.

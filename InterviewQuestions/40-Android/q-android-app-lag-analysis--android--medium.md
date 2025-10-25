@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-performance-measurement-tools--android--medium
@@ -33,19 +33,11 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Анализ тормозов приложения Android?
-
----
-
-# Question (EN)
-> What are Android App Lag Analysis?
-
 # Question (EN)
 > What are Android App Lag Analysis?
 
 ## Answer (EN)
-App lag occurs when [[c-main-thread|UI thread]] is blocked or [[c-frame-rendering|frame rendering]] exceeds 16ms (60 FPS target). Understanding root causes and using proper diagnostic tools like [[c-android-profiler|Android Profiler]] is essential for smooth user experience.
+App lag occurs when UI thread is blocked or frame rendering exceeds 16ms (60 FPS target). Understanding root causes and using proper diagnostic tools like Android Profiler is essential for smooth user experience.
 
 **Common Causes:**
 

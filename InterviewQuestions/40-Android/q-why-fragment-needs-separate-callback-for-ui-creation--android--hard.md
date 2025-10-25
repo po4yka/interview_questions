@@ -696,4 +696,4 @@ class MyFragment : Fragment() {
 ### Prerequisites (Easier)
 - [[q-save-data-outside-fragment--android--medium]] - Fragment
 - [[q-dagger-build-time-optimization--android--medium]] - Ui
-- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
+- q-rxjava-pagination-recyclerview--android--medium - Ui

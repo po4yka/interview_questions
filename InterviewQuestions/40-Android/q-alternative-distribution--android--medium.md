@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-app-store-optimization--android--medium
@@ -33,19 +33,11 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Альтернативное распространение?
-
----
-
-# Question (EN)
-> What is Alternative Distribution?
-
 # Question (EN)
 > What is Alternative Distribution?
 
 ## Answer (EN)
-Alternative [[c-app-distribution|distribution channels]] provide access to millions of users outside Google Play ecosystem, each with unique requirements and technical considerations. [[c-app-bundle|App bundles]] and [[c-apk-signing|APK signing]] are critical for multi-store distribution.
+Alternative distribution channels provide access to millions of users outside Google Play ecosystem, each with unique requirements and technical considerations. App bundles and APK signing are critical for multi-store distribution.
 
 **Samsung Galaxy Store:**
 

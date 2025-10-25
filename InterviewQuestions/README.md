@@ -1,3 +1,8 @@
+---
+date created: Sunday, October 12th 2025, 1:01:34 pm
+date modified: Saturday, October 25th 2025, 1:01:41 pm
+---
+
 # Obsidian Interview Vault — Full README
 
 A complete, **bilingual (EN/RU)**, personal Obsidian vault for technical interview preparation across **Android**, **Kotlin**, **CompSci** (design patterns, architecture), **Algorithms**, **System Design**, **Backend**, and **Tools**. This README describes the **normative rules**, folder layout, metadata schema, templates, tagging and linking conventions, MOCs, Dataview queries, LLM-assisted workflows, and maintenance practices.

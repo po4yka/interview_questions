@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-dagger-inject-annotation--android--easy
@@ -31,6 +31,7 @@ tags:
 source: https://dagger.dev/
 source_note: Dagger official documentation
 ---
+
 # Вопрос (RU)
 > Для чего нужен Dagger?
 

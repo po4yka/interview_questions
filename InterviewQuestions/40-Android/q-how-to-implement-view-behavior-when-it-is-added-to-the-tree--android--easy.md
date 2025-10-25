@@ -383,5 +383,5 @@ override fun onAttachedToWindow() {
 
 ### Advanced (Harder)
 - [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- [[q-testing-viewmodels-turbine--testing--medium]] - View
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- [[q-testing-viewmodels-turbine--android--medium]] - View
+- q-rxjava-pagination-recyclerview--android--medium - View

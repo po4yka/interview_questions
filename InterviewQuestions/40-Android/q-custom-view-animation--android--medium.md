@@ -14,7 +14,7 @@ original_language: ru
 language_tags:
 - ru
 - en
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-canvas-drawing-optimization--android--hard
@@ -56,7 +56,7 @@ source_note: Official property animation guide
 
 **Theory**: ValueAnimator works on the principle of interpolating values between start and end points over a given time. Uses Choreographer for VSYNC synchronization, ensuring smooth 60 FPS performance. Internally manages temporal curves through Interpolator.
 
-See [[c-android-animations]] and [[c-custom-views]] for in-depth understanding.
+See c-android-animations and [[c-custom-views]] for in-depth understanding.
 
 **Key principles**:
 - **Interpolation**: Computing intermediate values between start and end
@@ -315,11 +315,11 @@ animator.interpolator = object : Interpolator {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-custom-view-implementation--android--medium]]
+- q-custom-view-implementation--android--medium
 
 ### Related (Same Level)
-- [[q-canvas-drawing-android--android--medium]]
-- [[q-view-lifecycle-android--android--medium]]
+- q-canvas-drawing-android--android--medium
+- q-view-lifecycle-android--android--medium
 
 ### Advanced (Harder)
-- [[q-android-performance-optimization--android--hard]]
+- q-android-performance-optimization--android--hard

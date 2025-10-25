@@ -482,4 +482,4 @@ class EventBus {
 - [[q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]] - Broadcast
 
 ### Advanced (Harder)
-- [[q-kotlin-context-receivers--kotlin--hard]] - Broadcast
+- [[q-kotlin-context-receivers--android--hard]] - Broadcast

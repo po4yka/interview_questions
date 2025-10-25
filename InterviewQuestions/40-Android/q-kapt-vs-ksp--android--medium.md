@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [annotation-processing, kapt, ksp, build-performance]
+subtopics: [gradle]
 question_kind: theory
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [q-fix-slow-app-startup-legacy--android--hard, q-looper-thread-connecti
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/annotation-processing, android/kapt, android/ksp, android/build-performance, difficulty/medium]
+tags: [android/gradle, en, ru, difficulty/medium]
 ---
 # Question (EN)
 > What is the difference between kapt and KSP? Which one to use?
@@ -208,7 +208,7 @@ dependencies {
 ## Related Questions
 
 ### Related (Medium)
-- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
+- [[q-kapt-ksp-migration--android--medium]] - Kapt
 - [[q-annotation-processing-android--android--medium]] - Annotations
 - [[q-annotation-processing--android--medium]] - Annotation Processing
 - [[q-build-optimization-gradle--android--medium]] - Gradle

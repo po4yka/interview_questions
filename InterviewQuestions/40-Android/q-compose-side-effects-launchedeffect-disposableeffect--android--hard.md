@@ -1,37 +1,67 @@
 ---
 id: 20251017-145045
-title: 'Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочные эффекты:
+title: Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочные эффекты Compose: LaunchedEffect vs DisposableEffect
 aliases:
-- Compose LaunchedEffect vs DisposableEffect
+  - Compose LaunchedEffect vs DisposableEffect
+  - Compose Side Effects
+  - Побочные эффекты Compose
 topic: android
 subtopics:
-- ui-compose
-- ui-state
+  - ui-compose
+  - ui-state
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-- en
-- ru
-status: reviewed
+  - en
+  - ru
+status: draft
 moc: moc-android
 related:
-- q-compose-side-effects-advanced--android--hard
-- q-compose-performance-optimization--android--hard
-- q-compose-remember-derived-state--android--medium
+  - q-compose-side-effects-advanced--android--hard
+  - q-compose-performance-optimization--android--hard
+  - q-compose-remember-derived-state--android--medium
 created: 2025-10-13
 updated: 2025-10-20
 tags:
-- android/ui-compose
-- android/ui-state
+  - android/ui-compose
+  - android/ui-state
+  - compose
+  - side-effects
+  - launched-effect
+  - disposable-effect
+  - difficulty/hard
 source: https://developer.android.com/jetpack/compose/side-effects
-source_note: Official Compose side‑effects docs---
+source_note: Official Compose side-effects docs
 ---
-# Question (EN)
-> What is the difference between compose side effects: launchedeffect vs disposableeffect?
+# Вопрос (RU)
+> В чем разница между побочными эффектами Compose: LaunchedEffect vs DisposableEffect?
 
 # Question (EN)
 > What is the difference between compose side effects: launchedeffect vs disposableeffect?
+
+---
+
+## Ответ (RU)
+
+LaunchedEffect и DisposableEffect - основные API для побочных эффектов в Compose. LaunchedEffect запускает корутины, DisposableEffect управляет ресурсами с cleanup.
+
+### Различия
+
+**LaunchedEffect:**
+- Запускает корутину при composition
+- Автоматически отменяется при изменении ключей
+- Используется для suspend-функций и Flow
+
+**DisposableEffect:**
+- Регистрирует внешние ресурсы (слушатели, обсерверы)
+- Требует cleanup в onDispose
+- Используется для lifecycle-aware ресурсов
+
+### Когда использовать
+
+- **LaunchedEffect**: для асинхронных операций, которые должны перезапускаться при изменении ключей
+- **DisposableEffect**: для ресурсов, требующих явной очистки (сенсоры, ресиверы, плейеры)
 
 ## Answer (EN)
 
@@ -84,6 +114,8 @@ DisposableEffect(lifecycleOwner) {
 ### Common pitfalls
 - Wrong keys → unnecessary restarts; missing onDispose → leaks; heavy work in SideEffect.
 - Changing callbacks restarting effects: wrap with `rememberUpdatedState` to keep latest without restart.
+
+---
 
 ## Follow-ups
 - How to avoid restarting effects when only callbacks change? (`rememberUpdatedState`)

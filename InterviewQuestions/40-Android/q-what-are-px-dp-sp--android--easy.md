@@ -420,4 +420,4 @@ px (пиксели) – физические точки экрана. dp (densit
 
 - [[q-transaction-too-large-exception--android--medium]]
 - [[q-fragment-basics--android--easy]]
-- [[q-how-to-add-custom-attributes-to-custom-view--programming-languages--medium]]
+- [[q-how-to-add-custom-attributes-to-custom-view--android--medium]]

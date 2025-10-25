@@ -789,5 +789,5 @@ class ProductPresenterTest {
 ## Related Questions
 
 - [[q-play-feature-delivery--android--medium]]
-- [[q-how-to-reduce-number-of-recompositions-besides-side-effects--programming-languages--hard]]
+- [[q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard]]
 - [[q-state-hoisting-compose--android--medium]]

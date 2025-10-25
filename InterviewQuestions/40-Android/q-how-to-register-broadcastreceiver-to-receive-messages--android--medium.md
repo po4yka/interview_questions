@@ -946,4 +946,4 @@ unregisterReceiver(receiver)
 - [[q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium]] - Broadcast
 
 ### Advanced (Harder)
-- [[q-kotlin-context-receivers--kotlin--hard]] - Broadcast
+- [[q-kotlin-context-receivers--android--hard]] - Broadcast

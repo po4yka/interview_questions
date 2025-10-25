@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [activity, task-management, navigation]
+subtopics: [activity, ui-navigation]
 question_kind: theory
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [q-viewmodel-vs-onsavedinstancestate--android--medium, q-which-event-is
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [en, ru, android/activity, android/task-management, android/navigation, difficulty/medium]
+tags: [android/activity, android/ui-navigation, en, ru, difficulty/medium]
 ---
 # Question (EN)
 > What launch modes do you know?

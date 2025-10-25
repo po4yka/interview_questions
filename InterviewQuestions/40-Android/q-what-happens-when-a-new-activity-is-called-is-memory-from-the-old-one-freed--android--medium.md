@@ -657,10 +657,10 @@ class BestPracticeActivity : AppCompatActivity() {
 
 ### Related (Medium)
 
--   [[q-memory-leak-detection--performance--medium]] - Performance
+-   [[q-memory-leak-detection--android--medium]] - Performance
 -   [[q-dagger-build-time-optimization--android--medium]] - Performance
 -   [[q-compose-modifier-order-performance--android--medium]] - Performance
--   [[q-macrobenchmark-startup--performance--medium]] - Performance
+-   [[q-macrobenchmark-startup--android--medium]] - Performance
 -   [[q-performance-optimization-android--android--medium]] - Performance
 
 ### Advanced (Harder)

@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-play-store-publishing--distribution--medium
@@ -35,19 +35,11 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 
 ---
 
-# Вопрос (RU)
-> Что такое Android App Bundle (AAB)?
-
----
-
-# Question (EN)
-> What are Android App Bundles?
-
 # Question (EN)
 > What are Android App Bundles?
 
 ## Answer (EN)
-[[c-app-bundle|Android App Bundle]] (AAB) is a publishing format that includes compiled code and resources, with [[c-apk-generation|APK generation]] deferred to Google Play. [[c-app-distribution|App distribution]] is optimized through dynamic delivery.
+Android App Bundle (AAB) is a publishing format that includes compiled code and resources, with APK generation deferred to Google Play. App distribution is optimized through dynamic delivery.
 
 **Key Benefits:**
 

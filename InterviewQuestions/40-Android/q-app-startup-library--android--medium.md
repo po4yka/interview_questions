@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-app-start-types-android--android--medium
@@ -32,14 +32,6 @@ tags:
 > Что такое Библиотека App Startup?
 
 ---
-
-# Вопрос (RU)
-> Что такое Библиотека App Startup?
-
----
-
-# Question (EN)
-> What is App Startup Library?
 
 # Question (EN)
 > What is App Startup Library?

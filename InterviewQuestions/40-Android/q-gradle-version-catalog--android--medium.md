@@ -558,10 +558,10 @@ dependencies {
 
 ### Related (Medium)
 - [[q-build-optimization-gradle--android--medium]] - Build
-- [[q-kapt-ksp-migration--gradle--medium]] - Build
+- [[q-kapt-ksp-migration--android--medium]] - Build
 - [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Build
 - [[q-gradle-build-system--android--medium]] - Build
 - [[q-dagger-build-time-optimization--android--medium]] - Build
 
 ### Advanced (Harder)
-- [[q-kotlin-dsl-builders--kotlin--hard]] - Build
+- [[q-kotlin-dsl-builders--android--hard]] - Build

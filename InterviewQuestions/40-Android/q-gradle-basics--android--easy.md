@@ -319,5 +319,5 @@ buildTypes {
 
 ### Advanced (Harder)
 - [[q-build-optimization-gradle--android--medium]] - Build
-- [[q-kapt-ksp-migration--gradle--medium]] - Build
+- [[q-kapt-ksp-migration--android--medium]] - Build
 - [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Build

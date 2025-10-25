@@ -1155,7 +1155,7 @@ class OptimizedUserRepository(
 
 ### Prerequisites (Easier)
 - [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+- [[q-kmm-ktor-networking--android--medium]] - Networking
 - [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
 
 ### Related (Hard)

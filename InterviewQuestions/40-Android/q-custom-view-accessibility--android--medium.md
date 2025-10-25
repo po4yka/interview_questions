@@ -14,7 +14,7 @@ original_language: ru
 language_tags:
 - ru
 - en
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-compose-semantics--android--medium
@@ -50,7 +50,7 @@ source_note: Official accessibility guide
 - Improves usability for everyone
 - Better SEO and discoverability
 
-Based on principles from [[c-accessibility]] and [[c-inclusive-design]].
+Based on principles from [[c-accessibility]] and c-inclusive-design.
 
 ### Accessibility Basics
 

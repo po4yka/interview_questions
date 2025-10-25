@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [optimization, app-bundles, resources]
+subtopics: [performance-memory, app-bundle, gradle]
 question_kind: theory
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [q-how-to-catch-the-earliest-entry-point-into-the-application--android-
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [en, ru, android/optimization, android/app-bundles, android/resources, difficulty/medium]
+tags: [android/performance-memory, android/app-bundle, android/gradle, en, ru, difficulty/medium]
 ---
 # Question (EN)
 > What ways do you know to reduce the size of an application?
@@ -368,6 +368,6 @@ android {
 - [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
 - [[q-app-size-optimization--android--medium]] - Performance
 - [[q-app-startup-optimization--android--medium]] - Performance
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--android--medium]] - Performance
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

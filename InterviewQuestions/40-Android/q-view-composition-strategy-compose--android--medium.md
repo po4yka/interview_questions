@@ -174,5 +174,5 @@ composeView.setViewCompositionStrategy(
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--android--hard]] - Compose, View
-- [[q-adaptive-layouts-compose--jetpack-compose--hard]] - Compose, View
+- q-adaptive-layouts-compose--jetpack-compose--hard - Compose, View
 - [[q-compose-lazy-layout-optimization--android--hard]] - Compose, View

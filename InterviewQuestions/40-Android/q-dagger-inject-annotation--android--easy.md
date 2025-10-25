@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-dagger-field-injection--android--medium
@@ -27,6 +27,7 @@ tags:
 source: https://dagger.dev/api/latest/dagger/Inject.html
 source_note: Dagger Inject annotation documentation
 ---
+
 # Вопрос (RU)
 > Как сообщить Dagger, что мы собираемся что-то инжектить?
 

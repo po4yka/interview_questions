@@ -239,4 +239,4 @@ encryptedPrefs.edit {
 
 - [[q-room-relations-embedded--room--medium]]
 - [[q-how-is-navigation-implemented--android--medium]]
-- [[q-service-lifecycle-binding--background--hard]]
+- [[q-service-lifecycle-binding--android--hard]]

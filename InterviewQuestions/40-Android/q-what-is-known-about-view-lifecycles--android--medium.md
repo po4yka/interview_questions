@@ -582,7 +582,7 @@ override fun onDetachedFromWindow() {
 - [[q-viewmodel-pattern--android--easy]] - Lifecycle, View
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--testing--medium]] - Lifecycle, View
+- [[q-testing-viewmodels-turbine--android--medium]] - Lifecycle, View
 - [[q-what-is-viewmodel--android--medium]] - Lifecycle, View
 - [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - Lifecycle, View
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - Lifecycle, View

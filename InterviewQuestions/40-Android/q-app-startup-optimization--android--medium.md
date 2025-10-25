@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-app-startup-library--android--medium
@@ -32,14 +32,6 @@ tags:
 > Что такое Оптимизация запуска приложения?
 
 ---
-
-# Вопрос (RU)
-> Что такое Оптимизация запуска приложения?
-
----
-
-# Question (EN)
-> What is App Startup Optimization?
 
 # Question (EN)
 > What is App Startup Optimization?

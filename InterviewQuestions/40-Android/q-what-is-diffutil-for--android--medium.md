@@ -923,5 +923,5 @@ class UsersFragment : Fragment() {
 ## Related Questions
 
 - [[q-how-animations-work-in-recyclerview--android--medium]]
-- [[q-is-layoutinflater-a-singleton-and-why--programming-languages--medium]]
+- [[q-is-layoutinflater-a-singleton-and-why--android--medium]]
 - [[q-single-activity-pros-cons--android--medium]]

@@ -512,4 +512,4 @@ BroadcastReceiver работает по принципу publish-subscribe (из
 
 -   [[q-how-to-register-broadcastreceiver-to-receive-messages--android--medium]] - Broadcast
 -   [[q-how-to-connect-broadcastreceiver-so-it-can-receive-messages--android--medium]] - Broadcast
--   [[q-kotlin-context-receivers--kotlin--hard]] - Broadcast
+-   [[q-kotlin-context-receivers--android--hard]] - Broadcast

@@ -11,9 +11,6 @@ tags: [networking, websockets, sse, firebase, fcm, real-time, difficulty/medium]
 ---
 # How to Implement Real-Time Updates in Android
 
-# Question (EN)
->
-
 # Вопрос (RU)
 >
 
@@ -696,5 +693,5 @@ fun ChatScreen(viewModel: ChatViewModel = hiltViewModel()) {
 ## Related Questions
 
 - [[q-alternative-distribution--android--medium]]
-- [[q-mlkit-face-detection--ml--medium]]
-- [[q-what-navigation-methods-exist-in-kotlin--programming-languages--medium]]
+- q-mlkit-face-detection--ml--medium
+- [[q-what-navigation-methods-exist-in-kotlin--android--medium]]

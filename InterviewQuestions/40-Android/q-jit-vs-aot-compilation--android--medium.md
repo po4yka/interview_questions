@@ -11,12 +11,6 @@ tags: [jit, aot, compilation, art, performance, baseline-profiles, difficulty/me
 ---
 # JIT vs AOT Compilation in Android
 
-# Question (EN)
->
-
-# Вопрос (RU)
->
-
 ---
 
 ## Answer (EN)
@@ -510,16 +504,10 @@ object CompilationStrategy {
 
 
 
-## Ответ (RU)
-
 # Вопрос (RU)
-В чём разница между JIT и AOT компиляцией в Android? Как Android использует обе стратегии?
-
+> В чём разница между JIT и AOT компиляцией в Android? Как Android использует обе стратегии?
 
 ## Ответ (RU)
-# Вопрос (RU)
-В чём разница между JIT и AOT компиляцией в Android? Как Android использует обе стратегии?
-
 
 #### JIT (Just-In-Time):
 

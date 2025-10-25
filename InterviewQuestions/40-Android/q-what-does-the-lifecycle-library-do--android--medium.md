@@ -425,12 +425,12 @@ class MyApplication : Application() {
 - [[q-viewmodel-pattern--android--easy]] - Lifecycle
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--testing--medium]] - Lifecycle
+- [[q-testing-viewmodels-turbine--android--medium]] - Lifecycle
 - [[q-what-is-viewmodel--android--medium]] - Lifecycle
 - [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - Lifecycle
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - Lifecycle
 - [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - Lifecycle
 
 ### Advanced (Harder)
-- [[q-service-lifecycle-binding--background--hard]] - Lifecycle
+- [[q-service-lifecycle-binding--android--hard]] - Lifecycle
 - [[q-why-was-the-lifecycle-library-created--android--hard]] - Lifecycle

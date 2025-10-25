@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [architecture, multi-module, gradle, scalability]
+subtopics: [architecture-clean, architecture-modularization, gradle]
 question_kind: theory
 difficulty: hard
 
@@ -24,7 +24,7 @@ related: [q-android-jetpack-overview--android--easy, q-shared-element-transition
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/architecture, android/multi-module, android/gradle, android/scalability, difficulty/hard]
+tags: [android/architecture-clean, android/architecture-modularization, android/gradle, en, ru, difficulty/hard]
 ---
 # Question (EN)
 > What are best practices for multi-module architecture in Android? When and why to use it?

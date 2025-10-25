@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-dagger-build-time-optimization--android--medium
@@ -27,6 +27,7 @@ tags:
 source: https://dagger.dev/api/latest/dagger/Component.html
 source_note: Dagger Component API documentation
 ---
+
 # Вопрос (RU)
 > В чем разница между Component Dependencies и Subcomponents в Dagger? Когда использовать один подход вместо другого? Как Hilt обрабатывает это?
 

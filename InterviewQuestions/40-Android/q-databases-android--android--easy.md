@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-room-database-basics--android--easy
@@ -31,6 +31,7 @@ tags:
 source: https://developer.android.com/training/data-storage
 source_note: Android Data Storage documentation
 ---
+
 # Вопрос (RU)
 > Какие базы данных можно использовать в Android?
 
@@ -331,7 +332,7 @@ class RealmManager {
 - Complex object models
 - Cross-platform projects
 
-**See also:** [[c-sqlite]], [[c-database-basics]]
+**See also:** c-sqlite, c-database-basics
 
 
 ## Follow-ups

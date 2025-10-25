@@ -175,4 +175,4 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 -   [[q-service-component--android--medium]] - Service
 -   [[q-what-are-services-used-for--android--medium]] - Service
--   [[q-foreground-service-types--background--medium]] - Service
+-   [[q-foreground-service-types--android--medium]] - Service

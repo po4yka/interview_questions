@@ -146,6 +146,6 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
 
 ### Advanced (Harder)
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- q-rxjava-pagination-recyclerview--android--medium - View, Ui
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
 - [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui

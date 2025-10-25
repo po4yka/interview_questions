@@ -228,9 +228,9 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 - [[q-viewmodel-pattern--android--easy]] - View
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-testing-viewmodels-turbine--android--medium]] - View
 - [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- q-rxjava-pagination-recyclerview--android--medium - View
 - [[q-what-is-viewmodel--android--medium]] - View
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
 

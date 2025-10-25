@@ -1,19 +1,15 @@
 ---
-id: 20251012-1227180
+id: 20251012-1227182
 title: "How To Draw Ui Without Xml / Как рисовать UI без XML"
 topic: android
-difficulty: medium
+difficulty: easy
 status: draft
 moc: moc-android
-related: [q-screenshot-snapshot-testing--testing--medium, q-app-start-types-android--android--medium, q-jit-vs-aot-compilation--android--medium]
+related: [q-what-each-android-component-represents--android--easy, q-how-to-draw-ui-without-xml--android--easy, q-flaky-test-prevention--testing--medium]
 created: 2025-10-15
-tags: [View, android, ui, jetpack-compose, views, difficulty/medium]
+tags: [languages, android, difficulty/easy]
 ---
-# How to draw UI without xml?
-
-# Вопрос (RU)
-
-Как рисовать UI без xml
+# Как рисовать UI без xml?
 
 ## Answer (EN)
 In Android, you can create UI without XML using **Jetpack Compose** (modern, declarative approach) or **programmatic View creation** (traditional approach).
@@ -236,22 +232,23 @@ class HybridActivity : AppCompatActivity() {
 }
 ```
 
-## Ответ (RU)
+---
 
+# Как рисовать UI без xml
+
+## Ответ (RU)
 В Android можно создавать интерфейс без XML с помощью Jetpack Compose или программного кода (View в Kotlin/Java).
 
 ---
 
 ## Related Questions
 
-### Prerequisites (Easier)
+### Related (Easy)
 - [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
 - [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
 
-### Related (Medium)
+### Advanced (Harder)
 - [[q-dagger-build-time-optimization--android--medium]] - Ui
-- [[q-rxjava-pagination-recyclerview--android--medium]] - Ui
+- q-rxjava-pagination-recyclerview--android--medium - Ui
 - [[q-build-optimization-gradle--android--medium]] - Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
-- [[q-testing-compose-ui--android--medium]] - Ui

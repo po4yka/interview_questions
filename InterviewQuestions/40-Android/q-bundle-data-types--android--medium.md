@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-manifest-file--android--easy
@@ -75,7 +75,7 @@ Bundle is used to pass data between Android components (Activity, Fragment, [[c-
 - Strings: String, CharSequence
 - Primitive arrays: IntArray, LongArray, FloatArray, etc.
 - Lists: ArrayList<String>, ArrayList<Int>, etc.
-- [[c-parcelable]]/Serializable objects
+- c-parcelable/Serializable objects
 - Bundle (nested)
 
 **Example**:

@@ -14,7 +14,7 @@ original_language: ru
 language_tags:
 - ru
 - en
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-manifest-file--android--easy

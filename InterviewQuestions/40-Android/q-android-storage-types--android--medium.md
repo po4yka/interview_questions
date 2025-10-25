@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-manifest-file--android--easy
@@ -33,14 +33,6 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Типы хранилища Android?
-
----
-
-# Question (EN)
-> What are Android Storage Types?
-
 # Question (EN)
 > What are Android Storage Types?
 
@@ -48,7 +40,7 @@ tags:
 **Android Storage Types** provide different mechanisms for persisting data based on size, privacy, and sharing requirements.
 
 **Storage Types Theory:**
-Android offers multiple storage options, each optimized for specific use cases. The choice depends on data size, privacy needs, sharing requirements, and query complexity. For structured data, [[c-room]] provides a robust database solution, while [[c-datastore]] offers modern key-value storage.
+Android offers multiple storage options, each optimized for specific use cases. The choice depends on data size, privacy needs, sharing requirements, and query complexity. For structured data, [[c-room]] provides a robust database solution, while c-datastore offers modern key-value storage.
 
 **1. SharedPreferences:**
 Key-value storage for small data like settings and preferences.

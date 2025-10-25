@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-security-best-practices--android--medium
@@ -34,14 +34,6 @@ tags:
 > Что такое Лучшие практики безопасности приложения?
 
 ---
-
-# Вопрос (RU)
-> Что такое Лучшие практики безопасности приложения?
-
----
-
-# Question (EN)
-> What are App Security Best Practices?
 
 # Question (EN)
 > What are App Security Best Practices?

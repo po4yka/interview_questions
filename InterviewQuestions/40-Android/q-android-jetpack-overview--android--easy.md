@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-viewmodel-pattern--android--easy
@@ -32,21 +32,13 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Обзор Android Jetpack?
-
----
-
-# Question (EN)
-> What is Android Jetpack Overview?
-
 # Question (EN)
 > What is Android Jetpack Overview?
 
 ## Answer (EN)
 **Architecture Components** - Modern app architecture
 
-[[c-viewmodel|ViewModel]], [[c-livedata|LiveData]], and [[c-room|Room]] are core [[c-jetpack|Android Jetpack]] components for modern app architecture.
+[[c-viewmodel|ViewModel]], LiveData, and [[c-room|Room]] are core Android Jetpack components for modern app architecture.
 
 ```kotlin
 // ViewModel - survives configuration changes
@@ -165,7 +157,7 @@ fun UserListScreen(viewModel: UserViewModel = hiltViewModel()) {
 
 ### Related (Medium)
 - [[q-room-library-definition--android--easy]] - Room database
-- [[q-compose-basics--kotlin--easy]] - Compose fundamentals
+- q-compose-basics--kotlin--easy - Compose fundamentals
 - [[q-workmanager-decision-guide--android--medium]] - WorkManager usage
 
 ### Advanced (Harder)

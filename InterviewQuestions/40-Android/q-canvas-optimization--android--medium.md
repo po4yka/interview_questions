@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-performance-measurement-tools--android--medium
@@ -43,7 +43,7 @@ tags:
 ## Answer (EN)
 
 ### Core Principles
-- **Target**: 60 FPS (16.67ms/frame); onDraw() < 5ms; zero allocations/frame. Use [[c-profiling]] to measure.
+- **Target**: 60 FPS (16.67ms/frame); onDraw() < 5ms; zero allocations/frame. Use c-profiling to measure.
 - **Pre-allocate**: Paint/Path/Rect/Matrix as fields; reuse with reset()/set() to avoid [[c-memory-leaks]].
 - **Cache**: bitmap cache for static content; clip to visible regions.
 - **Hardware**: enable for complex/animated views; disable for compatibility.

@@ -695,5 +695,5 @@ _state.value = _state.value.copy(
 ### Related (Hard)
 - [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
 - [[q-offline-first-architecture--android--hard]] - Offline-first architecture
-- [[q-kmm-architecture--multiplatform--hard]] - KMM architecture patterns
+- [[q-kmm-architecture--android--hard]] - KMM architecture patterns
 

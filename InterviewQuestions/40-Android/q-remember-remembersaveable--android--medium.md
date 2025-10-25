@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [jetpack-compose, state, remember, remembersaveable]
+subtopics: [ui-compose, ui-state]
 question_kind: theory
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [q-how-animations-work-in-recyclerview--android--medium, q-transaction-
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/jetpack-compose, android/state, android/remember, android/remembersaveable, difficulty/medium]
+tags: [android/ui-compose, android/ui-state, en, ru, difficulty/medium]
 ---
 # Question (EN)
 > What is the difference between remember and rememberSaveable in Jetpack Compose?

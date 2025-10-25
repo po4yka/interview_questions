@@ -437,6 +437,6 @@ To implement a photo editor as a separate component:
 
 ## Related Questions
 
-- [[q-workmanager-vs-alternatives--background--medium]]
+- [[q-workmanager-vs-alternatives--android--medium]]
 - [[q-compose-custom-layout--android--hard]]
 - [[q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium]]

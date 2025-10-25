@@ -1,3 +1,8 @@
+---
+date created: Sunday, October 19th 2025, 11:19:33 am
+date modified: Saturday, October 25th 2025, 1:02:39 pm
+---
+
 # Gemini CLI Agent Guide
 
 **Quick reference for using `gemini-cli` with this Obsidian Interview Vault.**

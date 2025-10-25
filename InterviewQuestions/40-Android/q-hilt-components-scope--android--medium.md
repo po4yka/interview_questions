@@ -539,6 +539,6 @@ object AppModule {
 ### Related (Medium)
 - [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
 - [[q-dagger-build-time-optimization--android--medium]] - Dependency Injection
-- [[q-hilt-entry-points--di--medium]] - Dependency Injection
-- [[q-hilt-assisted-injection--di--medium]] - Dependency Injection
+- q-hilt-entry-points--di--medium - Dependency Injection
+- q-hilt-assisted-injection--di--medium - Dependency Injection
 - [[q-what-is-hilt--android--medium]] - Dependency Injection

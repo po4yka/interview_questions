@@ -375,5 +375,5 @@ Key points:
 ## Related Questions
 
 - [[q-cicd-pipeline-android--android--medium]]
-- [[q-kotlin-context-receivers--kotlin--hard]]
+- [[q-kotlin-context-receivers--android--hard]]
 - [[q-what-is-activity-and-what-is-it-used-for--android--medium]]

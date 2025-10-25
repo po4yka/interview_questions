@@ -367,9 +367,9 @@ class RoutingActivity : Activity() {
 ### Related (Medium)
 - [[q-http-protocols-comparison--android--medium]] - Networking
 - [[q-api-file-upload-server--android--medium]] - Networking
-- [[q-privacy-sandbox-topics-api--privacy--medium]] - Networking
+- q-privacy-sandbox-topics-api--privacy--medium - Networking
 - [[q-api-rate-limiting-throttling--android--medium]] - Networking
-- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+- [[q-kmm-ktor-networking--android--medium]] - Networking
 
 ### Advanced (Harder)
 - [[q-data-sync-unstable-network--android--hard]] - Networking

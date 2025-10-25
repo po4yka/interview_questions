@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-testing-strategies--android--medium
@@ -32,14 +32,6 @@ tags:
 > Что такое AnimatedVisibility против?
 
 ---
-
-# Вопрос (RU)
-> Что такое AnimatedVisibility против?
-
----
-
-# Question (EN)
-> What is the difference between animatedvisibility vs animatedcontent vs crossfade?
 
 # Question (EN)
 > What is the difference between animatedvisibility vs animatedcontent vs crossfade?
@@ -200,7 +192,7 @@ fun CrossfadeExample() {
 
 ## References
 
-- [[c-animations]]
+- c-animations
 - [Compose Animation Guide](https://developer.android.com/jetpack/compose/animation)
 - [Animation Best Practices](https://developer.android.com/jetpack/compose/animation/best-practices)
 

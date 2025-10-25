@@ -17,7 +17,7 @@ language_tags:
 - ru
 source: https://developer.android.com/topic/performance/rendering
 source_note: Android rendering performance documentation
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-diffutil-background-calculation-issues--android--medium
@@ -26,38 +26,22 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- en
-- ru
--
-- a
-- n
-- d
-- r
-- o
-- i
-- d
-- /
-- u
-- i
-- -
-- v
-- i
-- e
-- w
-- s
+  - android/ui-views
+  - android/performance-memory
+  - chat
+  - recyclerview
+  - diffutil
+  - performance
+  - difficulty/hard
+---
 
-- android/ui-views
-- android/performance
-- chat
-- recyclerview
-- diffutil
-- performance
-- difficulty/hard---
 # Вопрос (RU)
 > Как можно гарантировать быструю отрисовку чатов?
 
 # Question (EN)
-> How can you guarantee fast chat rendering?---
+> How can you guarantee fast chat rendering?
+
+---
 ## Ответ (RU)
 
 Для быстрого рендеринга чатов без лагов нужно оптимизировать UI (XML Views или Compose), загрузку данных (Paging), изображения (Glide/Coil), офлайн кэш (Room).
@@ -748,7 +732,7 @@ interface ChatDao {
 - Use Paging for large lists
 - Ensure offline work with local cache
 
-**See also:** [[c-performance-optimization]], [[c-recyclerview]]
+**See also:** c-performance-optimization, c-recyclerview
 
 
 ## Follow-ups

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [architecture, usecase, clean-architecture, domain-layer]
+subtopics: [architecture-clean]
 question_kind: theory
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [q-baseline-profiles-optimization--performance--medium, q-what-to-do-in
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/architecture, android/usecase, android/clean-architecture, android/domain-layer, difficulty/medium]
+tags: [android/architecture-clean, en, ru, difficulty/medium]
 ---
 # Question (EN)
 > What is the UseCase pattern in Android? When and how to implement it?

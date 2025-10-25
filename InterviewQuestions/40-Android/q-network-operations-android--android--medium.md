@@ -330,7 +330,7 @@ fun isNetworkAvailable(context: Context): Boolean {
 ### Related (Medium)
 - [[q-http-protocols-comparison--android--medium]] - Networking
 - [[q-network-error-handling-strategies--networking--medium]] - Networking
-- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+- [[q-kmm-ktor-networking--android--medium]] - Networking
 - [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
 - [[q-api-file-upload-server--android--medium]] - Networking
 

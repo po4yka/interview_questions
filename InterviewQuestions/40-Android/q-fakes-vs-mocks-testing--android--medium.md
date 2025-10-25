@@ -17,7 +17,7 @@ language_tags:
 - ru
 source: https://developer.android.com/training/testing/unit-testing/local-unit-tests
 source_note: Android unit testing documentation
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-testing-strategies--android--medium
@@ -26,42 +26,22 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- en
-- ru
--
-- a
-- n
-- d
-- r
-- o
-- i
-- d
-- /
-- t
-- e
-- s
-- t
-- i
-- n
-- g
-- -
-- u
-- n
-- i
-- t
+  - android/testing-unit
+  - android/testing-instrumented
+  - fakes
+  - mocks
+  - test-doubles
+  - testing-strategy
+  - difficulty/medium
+---
 
-- android/testing-unit
-- android/testing-instrumented
-- fakes
-- mocks
-- test-doubles
-- testing-strategy
-- difficulty/medium---
 # Вопрос (RU)
 > Объясните разницу между fakes, mocks и stubs. Когда следует использовать каждый?
 
 # Question (EN)
-> Explain the difference between fakes, mocks, and stubs. When should you use each?---
+> Explain the difference between fakes, mocks, and stubs. When should you use each?
+
+---
 ## Ответ (RU)
 
 **Test doubles** - объекты, заменяющие реальные зависимости в тестах. Типы: **Fakes**, **Mocks**, **Stubs**, **Spies**, **Dummies** - каждый для конкретных целей.
@@ -560,7 +540,7 @@ class UserRepositoryFake : UserRepository {
 }
 ```
 
-**See also:** [[c-test-doubles]], [[c-unit-testing]]
+**See also:** c-test-doubles, [[c-unit-testing]]
 
 
 ## Follow-ups

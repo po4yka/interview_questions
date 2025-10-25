@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-service-types--android--easy
@@ -32,14 +32,6 @@ tags:
 > Что такое Background vs Foreground Service?
 
 ---
-
-# Вопрос (RU)
-> Что такое Background vs Foreground Service?
-
----
-
-# Question (EN)
-> What is the difference between background vs foreground service?
 
 # Question (EN)
 > What is the difference between background vs foreground service?

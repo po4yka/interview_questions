@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [glide, image-loading, caching, memory-management]
+subtopics: [files-media, cache-offline, performance-memory]
 question_kind: explanation
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [bitmap-handling, caching, memory-optimization, glide]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/glide, android/image-loading, android/caching, android/memory-management, difficulty/medium]
+tags: [android/files-media, android/cache-offline, android/performance-memory, en, ru, difficulty/medium]
 ---
 # Question (EN)
 > How do image loading libraries like Glide/Fresco work internally?

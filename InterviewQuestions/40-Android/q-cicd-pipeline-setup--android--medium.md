@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-cicd-pipeline-android--android--medium
@@ -26,10 +26,6 @@ tags:
 - android/gradle
 - android/ci-cd
 - difficulty/medium
-name: Android CI
-true:
-- pull_request
-jobs: null
 ---
 
 # Вопрос (RU)

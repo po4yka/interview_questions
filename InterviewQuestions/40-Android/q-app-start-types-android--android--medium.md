@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-performance-measurement-tools--android--medium
@@ -34,14 +34,6 @@ tags:
 > Что такое Типы запуска приложения Android?
 
 ---
-
-# Вопрос (RU)
-> Что такое Типы запуска приложения Android?
-
----
-
-# Question (EN)
-> What is App Start Types Android?
 
 # Question (EN)
 > What is App Start Types Android?

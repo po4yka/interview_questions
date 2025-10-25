@@ -635,7 +635,7 @@ api.getPost("123", "456")
 - [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
 - [[q-retrofit-usage-tutorial--android--medium]] - Networking
 - [[q-retrofit-library--android--medium]] - Networking
-- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+- [[q-kmm-ktor-networking--android--medium]] - Networking
 
 ### Advanced (Harder)
 - [[q-data-sync-unstable-network--android--hard]] - Networking

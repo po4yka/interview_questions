@@ -1642,7 +1642,7 @@ GraphQL + Apollo отлично подходит для сложных треб�
 
 ### Related (Medium)
 - [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-kmm-ktor-networking--multiplatform--medium]] - Networking
+- [[q-kmm-ktor-networking--android--medium]] - Networking
 - [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
 - [[q-network-error-handling-strategies--networking--medium]] - Networking
 - [[q-okhttp-interceptors-advanced--networking--medium]] - Networking

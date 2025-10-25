@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-build-optimization--android--medium
@@ -31,14 +31,6 @@ kapt: 45 секунд
 > Что такое Обработка аннотаций в Android?
 
 ---
-
-# Вопрос (RU)
-> Что такое Обработка аннотаций в Android?
-
----
-
-# Question (EN)
-> What is Annotation Processing in Android?
 
 # Question (EN)
 > What is Annotation Processing in Android?
@@ -201,7 +193,7 @@ KSP:   23 seconds  (48% faster)
 
 ## References
 
-- [[c-annotation-processing]]
+- c-annotation-processing
 - [KSP Documentation](https://kotlinlang.org/docs/ksp-overview.html)
 - [kapt Documentation](https://kotlinlang.org/docs/kapt.html)
 

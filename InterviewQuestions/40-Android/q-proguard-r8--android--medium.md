@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [build-tools, optimization, obfuscation]
+subtopics: [gradle, performance-memory, obfuscation]
 question_kind: theory
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [q-why-user-data-may-disappear-on-screen-rotation--android--hard, q-kak
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [en, ru, android/build-tools, android/optimization, android/obfuscation, difficulty/medium]
+tags: [android/gradle, android/performance-memory, android/obfuscation, en, ru, difficulty/medium]
 ---
 # Question (EN)
 > What's ProGuard?
@@ -176,7 +176,7 @@ ProGuard (или компилятор R8) обфусцирует ваш код, 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
 ### Related (Medium)
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--android--medium]] - Performance
 - [[q-reduce-app-size--android--medium]] - Optimization
 - [[q-build-optimization-gradle--android--medium]] - Gradle
 - [[q-app-startup-optimization--android--medium]] - Performance

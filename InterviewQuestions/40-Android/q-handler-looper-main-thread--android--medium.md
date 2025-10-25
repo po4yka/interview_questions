@@ -537,5 +537,5 @@ Thread {
 ## Related Questions
 
 - [[q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy]]
-- [[q-koin-vs-hilt-comparison--dependency-injection--medium]]
+- q-koin-vs-hilt-comparison--dependency-injection--medium
 - [[q-offline-first-architecture--android--hard]]

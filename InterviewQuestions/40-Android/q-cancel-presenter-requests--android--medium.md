@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-activity-lifecycle-methods--android--medium
@@ -107,7 +107,7 @@ class Presenter {
 - [[q-activity-lifecycle-methods--android--medium]]
 
 ### Related (Same Level)
-- [[q-android-async-operations-android--android--medium]]
+- q-android-async-operations-android--android--medium
 - [[q-android-testing-strategies--android--medium]]
 
 ### Advanced (Harder)

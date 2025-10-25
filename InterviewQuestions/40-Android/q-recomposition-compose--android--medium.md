@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [jetpack-compose, recomposition, state, performance, remember]
+subtopics: [ui-compose, ui-state, performance-memory]
 question_kind: theory
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [q-compose-performance-optimization--android--hard, q-jetpack-compose-b
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [en, ru, android/jetpack-compose, android/recomposition, android/state, android/performance, android/remember, difficulty/medium]
+tags: [android/ui-compose, android/ui-state, android/performance-memory, en, ru, difficulty/medium]
 ---
 
 # Question (EN)

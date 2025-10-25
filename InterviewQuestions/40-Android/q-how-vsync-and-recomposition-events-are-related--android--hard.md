@@ -681,5 +681,5 @@ fun HighRefreshRateAnimation() {
 ## Related Questions
 
 - [[q-network-error-handling-strategies--networking--medium]]
-- [[q-privacy-sandbox-fledge--privacy--hard]]
+- q-privacy-sandbox-fledge--privacy--hard
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]]

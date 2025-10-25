@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-coroutine-builders-basics--kotlin--easy
@@ -32,19 +32,11 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Примитивы асинхронности Android?
-
----
-
-# Question (EN)
-> What are Android Async Primitives?
-
 # Question (EN)
 > What are Android Async Primitives?
 
 ## Answer (EN)
-Android provides several async primitives: [[c-thread|Thread]] (basic), [[c-handler-looper|Handler/Looper]] (message passing), AsyncTask (deprecated), [[c-executor-service|ExecutorService]] (thread pools), [[c-coroutines|Coroutines]] (modern, recommended), [[c-rxjava|RxJava]] (reactive streams), and [[c-workmanager|WorkManager]] (background tasks).
+Android provides several async primitives: Thread (basic), Handler/Looper (message passing), AsyncTask (deprecated), ExecutorService (thread pools), [[c-coroutines|Coroutines]] (modern, recommended), RxJava (reactive streams), and [[c-workmanager|WorkManager]] (background tasks).
 
 **Modern recommendation**: Use Kotlin Coroutines with Flow for most async operations.
 
@@ -247,11 +239,11 @@ fun loadData(): Observable<List<Item>> {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-coroutines-basics--kotlin--easy]] - Coroutines fundamentals
+- q-coroutines-basics--kotlin--easy - Coroutines fundamentals
 - [[q-viewmodel-pattern--android--easy]] - ViewModel pattern
 
 ### Related (Medium)
-- [[q-lifecycle-aware-components--android--medium]] - Lifecycle management
+- q-lifecycle-aware-components--android--medium - Lifecycle management
 - [[q-flow-operators--kotlin--medium]] - Flow operators
 - [[q-what-is-workmanager--android--medium]] - WorkManager basics
 

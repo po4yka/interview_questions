@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-testing-strategies--android--medium
@@ -28,10 +28,6 @@ tags:
 - android/testing-unit
 - android/testing-instrumented
 - difficulty/medium
-name: Android CI
-true:
-- pull_request
-jobs: null
 ---
 
 # Вопрос (RU)
@@ -58,8 +54,8 @@ jobs: null
 - Post-merge/nightly: full suite, long‑running, device lab, performance checks
 
 ### Tests and scope
-- Unit: JVM, fast, mock Android deps using [[c-unit-testing]] and [[c-mockito]]
-- Instrumented: [[c-espresso]]/UI, real/emulated devices, sharding
+- Unit: JVM, fast, mock Android deps using [[c-unit-testing]] and c-mockito
+- Instrumented: c-espresso/UI, real/emulated devices, sharding
 - Lint/Detekt: style and correctness
 - Coverage: merge unit + instrumented; fail on drop threshold
 

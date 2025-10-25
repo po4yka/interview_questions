@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-async-primitives--android--easy
@@ -34,14 +34,6 @@ tags:
 > Что такое Асинхронные операции в Android?
 
 ---
-
-# Вопрос (RU)
-> Что такое Асинхронные операции в Android?
-
----
-
-# Question (EN)
-> What is Async Operations in Android?
 
 # Question (EN)
 > What is Async Operations in Android?

@@ -1,3 +1,8 @@
+---
+date created: Sunday, October 19th 2025, 11:50:59 am
+date modified: Saturday, October 25th 2025, 1:02:26 pm
+---
+
 # Claude Code Agent Guide
 
 **Quick reference for using Claude Code with this Obsidian Interview Vault.**

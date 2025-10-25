@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [sharedpreferences, data-storage, performance]
+subtopics: [datastore, performance-memory]
 question_kind: comparison
 difficulty: easy
 
@@ -24,7 +24,7 @@ related: [datastore, shared-preferences, data-storage]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/sharedpreferences, android/data-storage, android/performance, difficulty/easy]
+tags: [android/datastore, android/performance-memory, en, ru, difficulty/easy]
 ---
 # Question (EN)
 > What is the difference between commit() and apply() in SharedPreferences?
@@ -278,7 +278,7 @@ suspend fun savePreference(value: String) {
 
 ### Advanced (Harder)
 - [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--android--medium]] - Performance
 - [[q-recomposition-compose--android--medium]] - Jetpack Compose
 
 ## References

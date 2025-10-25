@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [architecture, repository, data-layer, caching]
+subtopics: [architecture-clean, cache-offline]
 question_kind: theory
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [q-does-state-made-in-compose-help-avoid-race-condition--android--mediu
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/architecture, android/repository, android/data-layer, android/caching, difficulty/medium]
+tags: [android/architecture-clean, android/cache-offline, en, ru, difficulty/medium]
 ---
 # Question (EN)
 > How to implement Repository pattern with multiple data sources (network, database, cache)?

@@ -550,6 +550,6 @@ ItemDecoration предоставляет мощный механизм для �
 
 ## Related Questions
 
-- [[q-opengl-advanced-rendering--graphics--medium]]
+- [[q-opengl-advanced-rendering--android--medium]]
 - [[q-retrofit-path-parameter--android--medium]]
 - [[q-what-can-be-done-through-composer--android--medium]]

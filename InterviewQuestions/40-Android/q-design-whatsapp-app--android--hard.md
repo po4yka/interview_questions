@@ -18,7 +18,7 @@ language_tags:
 - ru
 source: https://developer.android.com/training/sync-adapters
 source_note: Android sync and messaging patterns
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-data-sync-unstable-network--android--hard
@@ -27,45 +27,22 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- en
-- ru
--
-- a
-- n
-- d
-- r
-- o
-- i
-- d
-- /
-- n
-- e
-- t
-- w
-- o
-- r
-- k
-- i
-- n
-- g
-- -
-- h
-- t
-- t
-- p
+  - android/networking-http
+  - android/files-media
+  - android/service
+  - messaging
+  - realtime
+  - e2ee
+  - difficulty/hard
+---
 
-- android/networking-http
-- android/files-media
-- android/service
-- messaging
-- realtime
-- e2ee
-- difficulty/hard---
 # Вопрос (RU)
 > Как спроектировать мессенджер WhatsApp для Android?
 
 # Question (EN)
-> How to design WhatsApp for Android?---
+> How to design WhatsApp for Android?
+
+---
 ## Ответ (RU)
 
 WhatsApp включает: обмен сообщениями 1-to-1/группы, медиа, статусы доставки/прочтения, E2EE (Signal Protocol), голос/видео-звонки, офлайн-персистентность, синхронизацию и масштабирование.
@@ -325,7 +302,7 @@ Android client (local DB, E2EE engine, WebSocket, media cache) → Load Balancer
 ### Offline
 - Local DB (Room/SQLite) for messages/contacts, pending sends queue, sync on online, conflict resolution (server wins metadata, merge messages).
 
-**See also:** [[c-websockets]], [[c-message-queue]]
+**See also:** c-websockets, c-message-queue
 
 
 ## Follow-ups

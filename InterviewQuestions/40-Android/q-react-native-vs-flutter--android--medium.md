@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [react-native, flutter, cross-platform, comparison]
+subtopics: [kmp]
 question_kind: explanation
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [q-leakcanary-heap-dump-analysis--android--medium, q-room-type-converte
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/react-native, android/flutter, android/cross-platform, android/comparison, difficulty/medium]
+tags: [android/kmp, en, ru, difficulty/medium]
 ---
 # Question (EN)
 > React Native vs Flutter comparison

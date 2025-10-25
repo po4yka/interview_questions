@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-activity-lifecycle-methods--android--medium
@@ -33,19 +33,11 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Компоненты Android приложения?
-
----
-
-# Question (EN)
-> What are Android App Components?
-
 # Question (EN)
 > What are Android App Components?
 
 ## Answer (EN)
-Android applications have four fundamental [[c-app-components|components]]: [[c-activity|Activity]], [[c-service|Service]], [[c-broadcast-receiver|Broadcast Receiver]], and [[c-content-provider|Content Provider]].
+Android applications have four fundamental components: Activity, [[c-service|Service]], [[c-broadcast-receiver|Broadcast Receiver]], and [[c-content-provider|Content Provider]].
 
 **1. Activity:**
 - UI component representing a single screen

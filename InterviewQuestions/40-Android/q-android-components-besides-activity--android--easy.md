@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-app-components--android--easy
@@ -32,14 +32,6 @@ tags:
 > Что такое Компоненты Android кроме Activity?
 
 ---
-
-# Вопрос (RU)
-> Что такое Компоненты Android кроме Activity?
-
----
-
-# Question (EN)
-> What is Android Components Besides Activity?
 
 # Question (EN)
 > What is Android Components Besides Activity?
@@ -78,7 +70,7 @@ class NotesProvider : ContentProvider() {
 ```
 
 **Fragment** - Reusable UI modules
-Modular UI components that can be combined in Activities. Supports back stack and lifecycle. [[c-fragment|Fragments]] provide modular UI components.
+Modular UI components that can be combined in Activities. Supports back stack and [[c-lifecycle|lifecycle]]. Fragments provide modular UI components.
 ```kotlin
 class ListFragment : Fragment() {
     override fun onCreateView(...): View? {
@@ -88,7 +80,7 @@ class ListFragment : Fragment() {
 ```
 
 **ViewModel** - UI state management
-Stores and manages UI-related data. Survives configuration changes like screen rotation.
+Stores and manages UI-related data. Survives configuration changes like screen rotation. [[c-viewmodel|ViewModel]] manages UI state independently of the activity lifecycle.
 ```kotlin
 class ProfileViewModel : ViewModel() {
     private val _userData = MutableLiveData<User>()

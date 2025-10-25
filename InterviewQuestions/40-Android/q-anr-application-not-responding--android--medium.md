@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-performance-measurement-tools--android--medium
@@ -34,14 +34,6 @@ tags:
 > Что такое ANR (Приложение не отвечает)?
 
 ---
-
-# Вопрос (RU)
-> Что такое ANR (Приложение не отвечает)?
-
----
-
-# Question (EN)
-> What is ANR (Application Not Responding)?
 
 # Question (EN)
 > What is ANR (Application Not Responding)?

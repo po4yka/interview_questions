@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-performance-optimization--android--medium
@@ -33,6 +33,7 @@ tags:
 source: https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime
 source_note: Android Runtime documentation
 ---
+
 # Вопрос (RU)
 > В чем различия между рантаймами Dalvik и ART в Android? Почему Android перешел с Dalvik на ART?
 
@@ -263,7 +264,7 @@ App Execution:
 - Same APIs and libraries
 - Transparent migration for developers
 
-**See also:** [[c-jvm]], [[c-virtual-machine]]
+**See also:** c-jvm, c-virtual-machine
 
 
 ## Follow-ups

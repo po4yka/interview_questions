@@ -210,5 +210,5 @@ dependencies {
 ## Related Questions
 
 - [[q-cicd-automated-testing--android--medium]]
-- [[q-material3-components--material-design--easy]]
+- [[q-material3-components--ui-ux-accessibility--easy]]
 - [[q-how-to-display-svg-string-as-a-vector-file--android--medium]]

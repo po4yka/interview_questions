@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-dagger-build-time-optimization--android--medium
@@ -33,6 +33,7 @@ tags:
 source: https://dagger.dev/faq.html
 source_note: Dagger FAQ and troubleshooting
 ---
+
 # Вопрос (RU)
 > Какие проблемы есть у Dagger?
 

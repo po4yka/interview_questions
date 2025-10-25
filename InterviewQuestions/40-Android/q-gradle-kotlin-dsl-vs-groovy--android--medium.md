@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [gradle, kotlin-dsl, groovy, build-tools]
+subtopics: [gradle]
 question_kind: theory
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [q-what-is-workmanager--android--medium, q-how-does-jetpackcompose-work
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/gradle, android/kotlin-dsl, android/groovy, android/build-tools, difficulty/medium]
+tags: [android/gradle, en, ru, difficulty/medium]
 ---
 # Question (EN)
 > What are the differences between Gradle Kotlin DSL and Groovy? When to use each?

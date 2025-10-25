@@ -219,6 +219,6 @@ Dialog отображается поверх текущего экрана бе�
 
 ### Related (Medium)
 
--   [[q-navigation-component--android--medium]] - Navigation component
--   [[q-compose-navigation--android--medium]] - Compose navigation
--   [[q-bottom-sheet-vs-dialog--android--medium]] - Bottom sheet vs dialog
+-   q-navigation-component--android--medium - Navigation component
+-   q-compose-navigation--android--medium - Compose navigation
+-   q-bottom-sheet-vs-dialog--android--medium - Bottom sheet vs dialog

@@ -419,7 +419,7 @@ if (BuildConfig.DEBUG) {
 - [[q-build-optimization-gradle--android--medium]] - Performance, Ui
 - [[q-android-build-optimization--android--medium]] - Performance, Ui
 - [[q-compose-modifier-order-performance--android--medium]] - Performance
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--android--medium]] - Performance
 
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Performance

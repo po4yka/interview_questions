@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-app-lag-analysis--android--medium
@@ -35,14 +35,6 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Инструменты измерения производительности?
-
----
-
-# Question (EN)
-> What are Android Performance Measurement Tools?
-
 # Question (EN)
 > What are Android Performance Measurement Tools?
 
@@ -50,7 +42,7 @@ tags:
 **Android Performance Measurement** involves using specialized tools to quantify and analyze app performance before and after optimizations. The key is establishing baseline metrics and measuring improvements systematically.
 
 **Performance Measurement Theory:**
-Performance measurement requires establishing baseline metrics, identifying bottlenecks, and quantifying improvements. Different tools target different performance aspects: [[c-rendering]] (UI rendering), CPU usage, [[c-memory-management]] (memory allocation), network operations, and system-level interactions.
+Performance measurement requires establishing baseline metrics, identifying bottlenecks, and quantifying improvements. Different tools target different performance aspects: c-rendering (UI rendering), CPU usage, [[c-memory-management]] (memory allocation), network operations, and system-level interactions.
 
 **Core Measurement Tools:**
 - **Android Profiler**: Real-time CPU, memory, network, and energy analysis

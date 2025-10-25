@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [recyclerview, performance, optimization]
+subtopics: [ui-views, performance-memory]
 question_kind: explanation
 difficulty: easy
 
@@ -24,7 +24,7 @@ related: [q-what-events-are-activity-methods-tied-to--android--medium, q-handler
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/recyclerview, android/performance, android/optimization, difficulty/easy]
+tags: [android/ui-views, android/performance-memory, en, ru, difficulty/easy]
 ---
 
 # Question (EN)
@@ -424,7 +424,7 @@ adapter.removeItem()  // Still works fine
 ## Related Questions
 
 ### Advanced (Harder)
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--android--medium]] - Performance
 - [[q-app-startup-optimization--android--medium]] - Performance
 - [[q-baseline-profiles-optimization--android--medium]] - Performance
 

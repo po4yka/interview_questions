@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-runtime-art--android--medium
@@ -33,25 +33,17 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Внутреннее устройство Android Runtime?
-
----
-
-# Question (EN)
-> What are Android Runtime Internals?
-
 # Question (EN)
 > What are Android Runtime Internals?
 
 ## Answer (EN)
-**Android Runtime (ART) Internals** involves the deep understanding of how Android executes application code, manages [[c-memory-management|memory]], and optimizes performance through various [[c-jit-compiler|JIT compilation]] strategies and [[c-garbage-collection|garbage collection]] mechanisms.
+**Android Runtime (ART) Internals** involves the deep understanding of how Android executes application code, manages [[c-memory-management|memory]], and optimizes performance through various JIT compilation strategies and garbage collection mechanisms.
 
 **Runtime Architecture Theory:**
 ART provides a managed execution environment that abstracts hardware differences through multiple execution tiers: interpreter for initial execution, JIT compiler for hot code paths, and AOT compiler for pre-compiled optimization. This multi-tier approach balances installation time, memory usage, and runtime performance.
 
 **DEX Bytecode Theory:**
-DEX (Dalvik Executable) format uses a compact, register-based instruction set optimized for mobile devices. It reduces file size compared to Java bytecode while maintaining execution efficiency through specialized opcodes and data structures.
+DEX (Dalvik Executable) format uses a compact, register-based instruction set optimized for mobile devices. It reduces file size compared to Java bytecode while maintaining execution efficiency through specialized opcodes and data structures. DEX format is Android's optimized bytecode format.
 
 **ART Architecture:**
 ```

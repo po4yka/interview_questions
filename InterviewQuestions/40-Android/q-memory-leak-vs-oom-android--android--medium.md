@@ -11,12 +11,6 @@ related: [q-what-is-the-main-application-execution-thread--android--easy, q-how-
 ---
 # Memory Leak vs OutOfMemoryError in Android
 
-# Question (EN)
->
-
-# Вопрос (RU)
->
-
 ---
 
 ## Answer (EN)
@@ -541,16 +535,10 @@ class ManualObserver : AppCompatActivity() {
 
 
 
-## Ответ (RU)
-
 # Вопрос (RU)
-В чём разница между утечкой памяти и OutOfMemoryError в Android? Как их обнаружить и исправить?
-
+> В чём разница между утечкой памяти и OutOfMemoryError в Android? Как их обнаружить и исправить?
 
 ## Ответ (RU)
-# Вопрос (RU)
-В чём разница между утечкой памяти и OutOfMemoryError в Android? Как их обнаружить и исправить?
-
 
 #### Утечка памяти:
 

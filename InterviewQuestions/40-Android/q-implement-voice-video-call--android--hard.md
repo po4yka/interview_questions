@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [webrtc, real-time, media, networking, peer-to-peer]
+subtopics: [websockets, media, networking-http]
 question_kind: implementation
 difficulty: hard
 
@@ -24,7 +24,7 @@ related: [webrtc, real-time-communication, websocket, media-streaming]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/webrtc, android/real-time, android/media, android/networking, android/peer-to-peer, difficulty/hard]
+tags: [android/websockets, android/media, android/networking-http, en, ru, difficulty/hard]
 ---
 # Question (EN)
 > How would you implement voice and video calling features in an Android application?

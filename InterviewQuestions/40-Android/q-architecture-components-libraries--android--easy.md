@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-architectural-patterns--android--medium
@@ -33,19 +33,11 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Библиотеки Architecture Components?
-
----
-
-# Question (EN)
-> What are Architecture Components Libraries?
-
 # Question (EN)
 > What are Architecture Components Libraries?
 
 ## Answer (EN)
-Android Architecture Components help build robust, testable, maintainable apps. Core libraries: [[c-viewmodel]], [[c-livedata]], [[c-room]], [[c-workmanager]], Data Binding (or ViewBinding), Paging, Navigation, [[c-lifecycle]].
+Android Architecture Components help build robust, testable, maintainable apps. Core libraries: [[c-viewmodel]], c-livedata, [[c-room]], [[c-workmanager]], Data Binding (or ViewBinding), Paging, Navigation, [[c-lifecycle]].
 
 **Design principles**
 - Single-responsibility modules; separation of concerns (UI, domain, data)

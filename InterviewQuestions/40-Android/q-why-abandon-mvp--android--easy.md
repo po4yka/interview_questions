@@ -197,5 +197,5 @@ MVP отходит на второй план потому что:
 ## Related Questions
 
 - [[q-what-is-viewstub--android--medium]]
-- [[q-jank-detection-frame-metrics--performance--medium]]
+- [[q-jank-detection-frame-metrics--android--medium]]
 - [[q-module-types-android--android--medium]]

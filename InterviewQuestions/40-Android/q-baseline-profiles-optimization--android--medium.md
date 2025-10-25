@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-baseline-profiles-android--android--medium
@@ -79,7 +79,7 @@ tags:
 
 ### What Are Baseline Profiles
 
-**Theory**: Baseline Profiles tell Android Runtime (ART) which code paths to ahead-of-time (AOT) compile for faster startup and smoother runtime performance. Understanding [[c-jit-aot-compilation]] is essential for optimization.
+**Theory**: Baseline Profiles tell Android Runtime (ART) which code paths to ahead-of-time (AOT) compile for faster startup and smoother runtime performance. Understanding c-jit-aot-compilation is essential for optimization.
 
 **How It Works**:
 - Without Profile: App starts → Interpret code → JIT compile hot code → Gradual improvement

@@ -11,9 +11,6 @@ related: [q-how-to-create-dynamic-screens-at-runtime--android--hard, q-workmanag
 ---
 # How to Implement Offline-First Architecture in Android
 
-# Question (EN)
->
-
 # Вопрос (RU)
 >
 
@@ -772,5 +769,5 @@ val articles = repository.getArticlesFlow()
 ### Related (Hard)
 - [[q-mvi-architecture--android--hard]] - MVI architecture pattern
 - [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
-- [[q-kmm-architecture--multiplatform--hard]] - KMM architecture patterns
+- [[q-kmm-architecture--android--hard]] - KMM architecture patterns
 

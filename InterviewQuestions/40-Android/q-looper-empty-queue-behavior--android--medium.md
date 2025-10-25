@@ -488,4 +488,4 @@ looper.quitSafely()  // Обработать pending, затем выйти
 
 - [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]]
 - [[q-main-thread-android--android--medium]]
-- [[q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]]
+- [[q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--android--medium]]

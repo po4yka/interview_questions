@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-viewmodel-pattern--android--easy
@@ -32,19 +32,11 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Методы жизненного цикла Activity?
-
----
-
-# Question (EN)
-> What are Activity Lifecycle Methods?
-
 # Question (EN)
 > What are Activity Lifecycle Methods?
 
 ## Answer (EN)
-[[c-activity-lifecycle|Activity lifecycle]] methods are callbacks invoked by Android system during state changes. The [[c-lifecycle-owner|LifecycleOwner]] interface provides lifecycle-aware components.
+Activity lifecycle methods are callbacks invoked by Android system during state changes. The LifecycleOwner interface provides lifecycle-aware components. Understanding the lifecycle is critical for proper resource management and avoiding [[c-memory-leaks|memory leaks]].
 
 **Main lifecycle methods:**
 

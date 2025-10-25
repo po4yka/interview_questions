@@ -14,7 +14,7 @@ original_language: ru
 language_tags:
 - ru
 - en
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-compositionlocal-advanced--android--medium
@@ -49,7 +49,7 @@ source_note: Official docs on CompositionLocal
 - Avoids over‑plumbing parameters when the dependency is environmental
 - Not a replacement for parameters: do not hide business data/state in Locals
 
-Based on concepts from [[c-dependency-injection]] and [[c-compose-state]].
+Based on concepts from [[c-dependency-injection]] and c-compose-state.
 
 ### Parameters vs CompositionLocal
 - Parameters: local dependency, changes frequently, API clarity

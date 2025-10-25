@@ -31,5 +31,5 @@ In MVI (Model-View-Intent), to handle events that don't need to be stored in Sta
 ### Related (Hard)
 - [[q-mvi-architecture--android--hard]] - MVI architecture pattern
 - [[q-offline-first-architecture--android--hard]] - Offline-first architecture
-- [[q-kmm-architecture--multiplatform--hard]] - KMM architecture patterns
+- [[q-kmm-architecture--android--hard]] - KMM architecture patterns
 

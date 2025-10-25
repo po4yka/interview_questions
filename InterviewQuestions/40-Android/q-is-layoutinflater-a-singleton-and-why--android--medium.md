@@ -1,19 +1,15 @@
 ---
-id: 20251012-12271111
+id: 20251012-12271112
 title: "Is Layoutinflater A Singleton And Why / Is Layoutinflater A Singleton и Why"
 topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-android-architectural-patterns--android--medium, q-what-does-the-lifecycle-library-do--android--medium, q-main-causes-ui-lag--android--medium]
+related: [q-what-design-systems-in-android-have-you-worked-with--android--medium, q-home-screen-widgets--android--medium, q-accessibility-testing--accessibility--medium]
 created: 2025-10-15
-tags: [Context, Singleton, android, ui, layoutinflater, difficulty/medium]
+tags: [languages, android, difficulty/medium]
 ---
-# Is LayoutInflater a singleton and why
-
-# Вопрос (RU)
-
-Является ли LayoutInflater синглтоном и почему
+# Является ли LayoutInflater синглтоном и почему?
 
 ## Answer (EN)
 No, **LayoutInflater is not a singleton**, but can be obtained as a scope-dependent object (`getSystemService`) in Context. However, it can be reused as it doesn't store state between calls.
@@ -133,13 +129,15 @@ class BadAdapter(private val items: List<Item>) : RecyclerView.Adapter<ViewHolde
 }
 ```
 
+---
+
+# Является ли LayoutInflater синглтоном и почему
+
 ## Ответ (RU)
 
-**Нет, LayoutInflater не является синглтоном**, но он кэшируется на уровне каждого Context. Это означает, что разные Context'ы имеют свои собственные экземпляры LayoutInflater, но в рамках одного Context возвращается один и тот же экземпляр.
+Нет, **LayoutInflater не является синглтоном**, но может быть получен как объект, привязанный к области видимости (`getSystemService`) в Context. Однако его можно переиспользовать, так как он не хранит состояние между вызовами.
 
 ### Как работает LayoutInflater
-
-LayoutInflater получается через системный сервис и кэшируется Context'ом:
 
 ```kotlin
 class InflaterExample : AppCompatActivity() {
@@ -147,12 +145,12 @@ class InflaterExample : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Все три вызова возвращают один и тот же экземпляр для данного Context
+        // Каждый вызов возвращает одинаковый экземпляр для данного Context
         val inflater1 = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val inflater2 = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val inflater3 = LayoutInflater.from(this)
 
-        // Все ссылаются на один экземпляр в рамках этого Context
+        // Все ссылаются на один экземпляр для этого Context
         println(inflater1 === inflater2) // true
         println(inflater2 === inflater3) // true
     }
@@ -161,7 +159,7 @@ class InflaterExample : AppCompatActivity() {
 
 ### Не глобальный синглтон
 
-У разных Context есть свои экземпляры LayoutInflater:
+Разные контексты имеют разные экземпляры LayoutInflater:
 
 ```kotlin
 class ContextInflaters : AppCompatActivity() {
@@ -172,10 +170,10 @@ class ContextInflaters : AppCompatActivity() {
         val activityInflater = LayoutInflater.from(this)
         val appInflater = LayoutInflater.from(applicationContext)
 
-        // Разные экземпляры для разных Context
+        // Разные экземпляры для разных контекстов
         println(activityInflater === appInflater) // false
 
-        // Каждый связан со своим Context и темой
+        // Каждый имеет свою тему/контекст
         println(activityInflater.context === this) // true
         println(appInflater.context === applicationContext) // true
     }
@@ -184,7 +182,7 @@ class ContextInflaters : AppCompatActivity() {
 
 ### Почему можно переиспользовать
 
-LayoutInflater не хранит состояние между вызовами inflate() - он stateless:
+LayoutInflater не имеет состояния между вызовами:
 
 ```kotlin
 class StatelessInflater : AppCompatActivity() {
@@ -196,7 +194,7 @@ class StatelessInflater : AppCompatActivity() {
         val inflater = LayoutInflater.from(this)
         val container = findViewById<ViewGroup>(R.id.container)
 
-        // Можно переиспользовать для множества inflate операций
+        // Можно переиспользовать для нескольких инфляций
         val view1 = inflater.inflate(R.layout.item1, container, false)
         val view2 = inflater.inflate(R.layout.item2, container, false)
         val view3 = inflater.inflate(R.layout.item3, container, false)
@@ -210,16 +208,14 @@ class StatelessInflater : AppCompatActivity() {
 
 ### Внутреннее кэширование
 
-Концептуально Context кэширует LayoutInflater так:
-
 ```kotlin
-// Внутри реализации Context (упрощено)
-private var mLayoutInflater: LayoutInflater? = null
+// Внутри реализации Context
+private LayoutInflater mLayoutInflater
 
 fun getSystemService(name: String): Any? {
     if (LAYOUT_INFLATER_SERVICE == name) {
         if (mLayoutInflater == null) {
-            mLayoutInflater = PolicyManager.makeNewLayoutInflater(this)
+            mLayoutInflater = LayoutInflater.from(this)
         }
         return mLayoutInflater
     }
@@ -227,37 +223,10 @@ fun getSystemService(name: String): Any? {
 }
 ```
 
-### Почему важен Context
-
-LayoutInflater зависит от Context, потому что Context содержит:
-- **Тему приложения/Activity** - влияет на стили View
-- **Ресурсы** - доступ к layout файлам
-- **ClassLoader** - для создания экземпляров View классов
+### Лучшие практики
 
 ```kotlin
-class ThemeExample : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Activity inflater использует тему Activity
-        val activityInflater = LayoutInflater.from(this)
-
-        // Application inflater использует тему Application
-        val appInflater = LayoutInflater.from(applicationContext)
-
-        // Результаты могут визуально отличаться из-за разных тем!
-        val view1 = activityInflater.inflate(R.layout.themed_view, null, false)
-        val view2 = appInflater.inflate(R.layout.themed_view, null, false)
-    }
-}
-```
-
-### Лучшие практики использования
-
-**Правильно: Переиспользуйте в адаптере**
-
-```kotlin
+// - ХОРОШО: Переиспользовать в адаптере
 class MyAdapter(
     private val inflater: LayoutInflater,
     private val items: List<Item>
@@ -267,83 +236,29 @@ class MyAdapter(
         val view = inflater.inflate(R.layout.item_layout, parent, false)
         return ViewHolder(view)
     }
-
-    override fun getItemCount() = items.size
 }
 
 // Использование
 val adapter = MyAdapter(LayoutInflater.from(context), items)
-```
 
-**Неоптимально (но работает): Получение inflater каждый раз**
-
-```kotlin
+// - ПЛОХО: Создание нового inflater каждый раз
 class BadAdapter(private val items: List<Item>) : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // Вызывается каждый раз, но возвращает закэшированный экземпляр
-        val inflater = LayoutInflater.from(parent.context)
+        val inflater = LayoutInflater.from(parent.context) // Новый вызов каждый раз (но возвращается кэшированный)
         val view = inflater.inflate(R.layout.item_layout, parent, false)
         return ViewHolder(view)
     }
 }
 ```
 
-**Важно: Правильный parent при inflate**
-
-```kotlin
-// Правильно - передаем parent и false
-val view = inflater.inflate(R.layout.item, parent, false)
-
-// Неправильно - null parent игнорирует layout_* параметры
-val view = inflater.inflate(R.layout.item, null, false)
-
-// Неправильно - true добавляет view автоматически (не нужно для RecyclerView)
-val view = inflater.inflate(R.layout.item, parent, true)
-```
-
-### Производительность
-
-Хотя LayoutInflater кэшируется, сам процесс inflate дорогой:
-
-```kotlin
-class PerformanceExample {
-
-    // Правильно: Переиспользуйте View вместо повторного inflate
-    fun updateView(view: View, data: Data) {
-        view.findViewById<TextView>(R.id.title).text = data.title
-        view.findViewById<TextView>(R.id.subtitle).text = data.subtitle
-    }
-
-    // Неправильно: Избегайте inflate в циклах
-    fun badApproach(container: ViewGroup, items: List<Item>) {
-        val inflater = LayoutInflater.from(container.context)
-        items.forEach { item ->
-            val view = inflater.inflate(R.layout.item, container, true) // Медленно!
-            // setup view
-        }
-    }
-
-    // Правильно: Используйте RecyclerView для списков
-    fun goodApproach(recyclerView: RecyclerView, items: List<Item>) {
-        recyclerView.adapter = MyAdapter(items) // View переиспользуются автоматически
-    }
-}
-```
-
 ### Резюме
 
-**LayoutInflater не является глобальным синглтоном**, но:
-- Кэшируется на уровне каждого Context
-- Один экземпляр на один Context
-- Разные Context имеют разные экземпляры
-- Stateless - можно безопасно переиспользовать
-- Зависит от Context для темы и ресурсов
-
-**Практические выводы:**
-- Получайте через `LayoutInflater.from(context)` или `getSystemService()`
-- Передавайте в конструктор адаптера для переиспользования
-- Помните, что разные Context могут дать разные визуальные результаты из-за тем
+- **Не глобальный синглтон**: Каждый Context имеет свой экземпляр LayoutInflater
+- **Кэшируется в Context**: `getSystemService()` возвращает один и тот же экземпляр для данного Context
+- **Без состояния**: Можно безопасно переиспользовать для множественных инфляций
+- **Зависит от темы**: Разные Context (Activity vs Application) имеют разные темы, поэтому разные inflater
+- **Лучшая практика**: Получить один раз в конструкторе адаптера и переиспользовать
 
 ---
 
@@ -354,9 +269,9 @@ class PerformanceExample {
 - [[q-viewmodel-pattern--android--easy]] - View
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--testing--medium]] - View
+- [[q-testing-viewmodels-turbine--android--medium]] - View
 - [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- q-rxjava-pagination-recyclerview--android--medium - View
 - [[q-what-is-viewmodel--android--medium]] - View
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
 

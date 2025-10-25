@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-shared-preferences-android--android--easy
@@ -31,6 +31,7 @@ tags:
 source: https://developer.android.com/topic/libraries/architecture/datastore
 source_note: Android DataStore documentation
 ---
+
 # Вопрос (RU)
 > Что вы знаете о DataStore?
 
@@ -373,7 +374,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 - Test data migrations
 - Document protobuf schemas
 
-**See also:** [[c-protocol-buffers]], [[c-data-serialization]]
+**See also:** c-protocol-buffers, c-data-serialization
 
 
 ## Follow-ups

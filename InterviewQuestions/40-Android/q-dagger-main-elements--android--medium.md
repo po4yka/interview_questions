@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-dagger-inject-annotation--android--easy
@@ -27,6 +27,7 @@ tags:
 source: https://dagger.dev/api/latest/dagger/Component.html
 source_note: Dagger Component API documentation
 ---
+
 # Вопрос (RU)
 > Из каких основных элементов состоит Dagger?
 

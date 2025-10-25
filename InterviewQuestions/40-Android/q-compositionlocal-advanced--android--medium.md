@@ -14,7 +14,7 @@ original_language: ru
 language_tags:
 - ru
 - en
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-compose-remember-derived-state--android--medium
@@ -47,7 +47,7 @@ tags:
 - Removes over‑plumbing through many layers when explicit params hurt readability
 - Not a replacement for parameters: use when the dependency is truly environmental
 
-See also [[c-dependency-injection]] and [[c-compose-state]] for understanding dependency management in Compose.
+See also [[c-dependency-injection]] and c-compose-state for understanding dependency management in Compose.
 
 ### Parameters vs Local
 - Parameters — when the dependency is local, frequently changing, and API clarity matters

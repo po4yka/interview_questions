@@ -512,8 +512,8 @@ Empty          1000       Немедленно
 
 ### Related (Hard)
 -   [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Process management
--   [[q-android-memory-management--android--hard]] - Memory management
--   [[q-background-execution-limits--android--hard]] - Background execution
+-   q-android-memory-management--android--hard - Memory management
+-   q-background-execution-limits--android--hard - Background execution
 
 ### Prerequisites (Easier)
 -   [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals

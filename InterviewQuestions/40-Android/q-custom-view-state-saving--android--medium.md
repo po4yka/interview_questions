@@ -14,7 +14,7 @@ original_language: ru
 language_tags:
 - ru
 - en
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-custom-view-lifecycle--android--medium
@@ -47,7 +47,7 @@ source_note: Official activity lifecycle guide
 
 **State saving** in custom views ensures UI survival during configuration changes (screen rotation, language change) and process death. Android system automatically calls state saving methods during specific events.
 
-Based on [[c-lifecycle]], [[c-state-management]], and [[c-parcelable]].
+Based on [[c-lifecycle]], c-state-management, and c-parcelable.
 
 **Key principles**:
 - **Automatic invocation** - system calls onSaveInstanceState() when needed

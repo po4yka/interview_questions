@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-keystore-system--security--medium
@@ -30,27 +30,14 @@ tags:
 - difficulty/medium
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20security%20best%20practices%20you%20know.md
 # Вопрос (RU)
-> Какие лучшие практики безопасности Android вы знаете?
-
----
-
-# Вопрос (RU)
 > Что такое Лучшие практики безопасности Android?
 
 ---
-
-# Вопрос (RU)
-> Что такое Лучшие практики безопасности Android?
-
----
-
-# Question (EN)
-> What Android security best practices do you know?
 
 ---
 
 ## Ответ (RU)
-**Лучшие практики безопасности Android** включают внедрение нескольких уровней защиты для сохранения пользовательских данных с помощью [[c-encryption|шифрования]], предотвращения несанкционированного доступа через [[c-permissions|разрешения]] и обеспечения безопасной связи с использованием [[c-https|HTTPS]] и [[c-certificate-pinning|certificate pinning]].
+**Лучшие практики безопасности Android** включают внедрение нескольких уровней защиты для сохранения пользовательских данных с помощью [[c-encryption|шифрования]], предотвращения несанкционированного доступа через [[c-permissions|разрешения]] и обеспечения безопасной связи с использованием HTTPS и certificate pinning.
 
 **Теория архитектуры безопасности:**
 Безопасность Android следует стратегии глубокой защиты с несколькими уровнями: изоляция приложений (sandboxing), система разрешений, безопасное хранилище, зашифрованная связь и защита во время выполнения. Каждый уровень обеспечивает специфическую защиту от различных векторов атак.
@@ -236,11 +223,8 @@ val client = OkHttpClient.Builder()
 # Question (EN)
 > What are Android Security Best Practices?
 
-# Question (EN)
-> What are Android Security Best Practices?
-
 ## Answer (EN)
-**Android Security Best Practices** involve implementing multiple layers of protection to safeguard user data through [[c-encryption|encryption]], prevent unauthorized access via [[c-permissions|permissions]], and ensure secure communication using [[c-https|HTTPS]] and [[c-certificate-pinning|certificate pinning]].
+**Android Security Best Practices** involve implementing multiple layers of protection to safeguard user data through [[c-encryption|encryption]], prevent unauthorized access via [[c-permissions|permissions]], and ensure secure communication using HTTPS and certificate pinning.
 
 **Security Architecture Theory:**
 Android security follows a defense-in-depth strategy with multiple security layers: application sandboxing, permission system, secure storage, encrypted communication, and runtime protection. Each layer provides specific protection against different attack vectors.
@@ -361,6 +345,9 @@ android {
 ```
 
 **Encrypted Storage:**
+
+Jetpack Security provides encrypted storage using Android Keystore for secure data protection.
+
 ```kotlin
 // Jetpack Security
 val masterKey = MasterKey.Builder(context)
@@ -384,6 +371,9 @@ encryptedPrefs.edit()
 Jetpack Security provides hardware-backed encryption using Android Keystore. Master keys are protected by device security features and cannot be extracted.
 
 **Biometric Authentication:**
+
+Biometric authentication provides secure user authentication using fingerprint or face recognition.
+
 ```kotlin
 val biometricPrompt = BiometricPrompt(
     this,

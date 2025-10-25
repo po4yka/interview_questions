@@ -294,7 +294,7 @@ fun UserProfileScreen(
 
 ### Related (Medium)
 - [[q-save-data-outside-fragment--android--medium]] - Fragment
-- [[q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]] - Fragment
+- [[q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--android--medium]] - Fragment
 - [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment
 - [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - Fragment
 - [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment

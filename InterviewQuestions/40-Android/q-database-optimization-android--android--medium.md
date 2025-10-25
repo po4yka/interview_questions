@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-database-encryption-android--android--medium
@@ -35,6 +35,7 @@ tags:
 source: https://developer.android.com/training/data-storage/room
 source_note: Android Room documentation
 ---
+
 # Вопрос (RU)
 > Какие лучшие практики и техники для оптимизации базы данных в Android приложениях?
 
@@ -401,7 +402,7 @@ Database performance monitoring is critical for identifying bottlenecks and opti
 - SQLite Performance Analysis
 - Custom logging
 
-**See also:** [[c-database-optimization]], [[c-indexing]]
+**See also:** c-database-optimization, c-indexing
 
 
 ## Follow-ups

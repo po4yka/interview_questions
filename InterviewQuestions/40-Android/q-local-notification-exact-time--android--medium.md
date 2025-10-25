@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [notifications, alarmmanager, scheduling]
+subtopics: [notifications, background-execution]
 question_kind: explanation
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [q-fragments-history-and-purpose--android--hard, q-recomposition-choreo
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/notifications, android/alarmmanager, android/scheduling, difficulty/medium]
+tags: [android/notifications, android/background-execution, en, ru, difficulty/medium]
 ---
 # Question (EN)
 > How to schedule local notifications at exact time?

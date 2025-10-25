@@ -14,7 +14,7 @@ original_language: ru
 language_tags:
 - ru
 - en
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-canvas-drawing-optimization--android--hard
@@ -48,7 +48,7 @@ source_note: Official Drawable documentation
 - More efficient than custom View for simple graphics without interaction
 - Managed by Android system, no complex lifecycle needed
 
-Related to concepts [[c-custom-views]], [[c-canvas-drawing]], and [[c-lifecycle]].
+Related to concepts [[c-custom-views]], c-canvas-drawing, and [[c-lifecycle]].
 
 ### Drawable vs Custom View
 
@@ -244,4 +244,4 @@ class AnimatedDrawable : Drawable() {
 ## Related Questions
 
 ### Advanced (Harder)
-- [[q-android-performance-optimization--android--hard]]
+- q-android-performance-optimization--android--hard

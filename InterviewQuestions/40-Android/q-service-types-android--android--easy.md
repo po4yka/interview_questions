@@ -62,5 +62,5 @@ tags: [services, background-tasks, difficulty/easy]
 
 ### Advanced (Harder)
 - [[q-service-component--android--medium]] - Service
-- [[q-foreground-service-types--background--medium]] - Service
+- [[q-foreground-service-types--android--medium]] - Service
 - [[q-when-can-the-system-restart-a-service--android--medium]] - Service

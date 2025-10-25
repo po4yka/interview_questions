@@ -165,4 +165,4 @@ interface ConcertDao {
 
 - [[q-gradle-kotlin-dsl-vs-groovy--android--medium]]
 - [[q-how-to-add-fragment-synchronously-asynchronously--android--medium]]
-- [[q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--programming-languages--easy]]
+- [[q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy]]

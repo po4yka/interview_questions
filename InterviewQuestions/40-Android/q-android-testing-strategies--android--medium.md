@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-performance-measurement-tools--android--medium
@@ -34,14 +34,6 @@ tags:
 > Что такое Стратегии тестирования Android?
 
 ---
-
-# Вопрос (RU)
-> Что такое Стратегии тестирования Android?
-
----
-
-# Question (EN)
-> What are Android Testing Strategies?
 
 # Question (EN)
 > What are Android Testing Strategies?
@@ -186,7 +178,7 @@ Verify UI consistency using screenshot testing tools.
 
 ## References
 
-- [[c-testing]]
+- c-testing
 - [Android Testing Guide](https://developer.android.com/training/testing)
 - [Testing Pyramid](https://martinfowler.com/articles/practical-test-pyramid.html)
 

@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-performance-measurement-tools--android--medium
@@ -44,7 +44,7 @@ tags:
 
 ### Core Theory
 - **Target**: 60 FPS (16.67ms/frame); onDraw() < 5ms; zero allocations/frame.
-- **Avoid**: object creation in onDraw() → GC thrashing → dropped frames. Use [[c-profiling]] to identify bottlenecks.
+- **Avoid**: object creation in onDraw() → GC thrashing → dropped frames. Use c-profiling to identify bottlenecks.
 - **Optimize**: pre-allocate, cache, clip, hardware accelerate to prevent [[c-memory-leaks]].
 
 ### Zero Allocations
@@ -82,7 +82,7 @@ class OptimizedView : View {
 - Reuse Paint objects; disable anti-aliasing for straight lines; use opaque colors.
 
 ### Profiling
-- Use Trace.beginSection("section"); analyze with Android Profiler/Systrace and [[c-profiling]] tools.
+- Use Trace.beginSection("section"); analyze with Android Profiler/Systrace and c-profiling tools.
 - Look for allocations, long draw times, GC events.
 
 ## Follow-ups

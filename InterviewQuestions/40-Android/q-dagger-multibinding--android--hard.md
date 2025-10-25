@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-dagger-framework-overview--android--hard
@@ -27,6 +27,7 @@ tags:
 source: https://dagger.dev/api/latest/dagger/Multibinds.html
 source_note: Dagger Multibinds API documentation
 ---
+
 # Вопрос (RU)
 > Объясните Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). Как бы вы использовали это для реализации плагинной архитектуры или системы feature-модулей?
 

@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-custom-view-lifecycle--android--medium
@@ -27,6 +27,7 @@ tags:
 source: https://developer.android.com/reference/android/view/ViewGroup
 source_note: Official ViewGroup documentation
 ---
+
 # Вопрос (RU)
 > Как создать кастомный ViewGroup? Объясните процесс измерения и компоновки. Реализуйте кастомный FlowLayout, который располагает дочерние элементы в ряды, переносясь на следующий ряд при необходимости.
 
@@ -37,7 +38,7 @@ source_note: Official ViewGroup documentation
 
 Создание **кастомного ViewGroup** сложнее простого кастомного View, поскольку нужно управлять измерением и компоновкой как собственного элемента, так и всех дочерних элементов.
 
-Требует понимания [[c-custom-views]], [[c-view-measurement]] и [[c-layout-algorithms]].
+Требует понимания [[c-custom-views]], c-view-measurement и c-layout-algorithms.
 
 ### Теория: Двухпроходный алгоритм компоновки
 
@@ -205,7 +206,7 @@ class FlowLayout @JvmOverloads constructor(
 
 Creating a **custom ViewGroup** is more complex than a simple custom View because you need to handle measurement and layout for both your own element and all child elements.
 
-Requires understanding of [[c-custom-views]], [[c-view-measurement]], and [[c-layout-algorithms]].
+Requires understanding of [[c-custom-views]], c-view-measurement, and c-layout-algorithms.
 
 ### Theory: Two-Pass Layout Algorithm
 

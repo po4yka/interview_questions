@@ -1,3 +1,8 @@
+---
+date created: Saturday, October 18th 2025, 12:50:49 pm
+date modified: Saturday, October 25th 2025, 1:01:38 pm
+---
+
 # Interview Questions Knowledge Base
 
 > **Comprehensive bilingual collection** of interview questions for Android, Kotlin, Computer Science, and more. Perfect for interview preparation from Junior to Staff+ levels.

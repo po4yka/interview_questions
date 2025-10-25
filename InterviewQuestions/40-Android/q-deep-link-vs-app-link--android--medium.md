@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-intent-system--android--medium
@@ -34,6 +34,7 @@ tags:
 source: https://developer.android.com/training/app-links
 source_note: Android App Links documentation
 ---
+
 # Вопрос (RU)
 > Какие особенности отличия deep link от app link?
 
@@ -360,7 +361,7 @@ The choice between Deep Link and App Link depends on security requirements, user
 - Provide fallback for web version
 - Test App Links verification
 
-**See also:** [[c-uri]], [[c-url-routing]]
+**See also:** c-uri, c-url-routing
 
 
 ## Follow-ups

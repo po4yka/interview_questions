@@ -14,7 +14,7 @@ original_language: ru
 language_tags:
 - ru
 - en
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-how-to-add-custom-attributes-to-custom-view--android--medium
@@ -47,7 +47,7 @@ source_note: Official theming guide
 
 **Custom XML attributes** allow configuring custom views directly in XML files, making them reusable and customizable. Android system uses **TypedArray** for reading attributes with support for styles, themes, and default values.
 
-Based on [[c-custom-views]] and [[c-android-theming]].
+Based on [[c-custom-views]] and c-android-theming.
 
 **Key principles**:
 - **AttributeSet** contains all XML attributes

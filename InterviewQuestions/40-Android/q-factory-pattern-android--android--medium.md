@@ -17,7 +17,7 @@ language_tags:
 - ru
 source: https://developer.android.com/guide/topics/ui/declaring-layout
 source_note: Android layout inflation documentation
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-architecture-patterns--architecture-patterns--medium
@@ -26,47 +26,21 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- en
-- ru
--
-- a
-- n
-- d
-- r
-- o
-- i
-- d
-- /
-- a
-- r
-- c
-- h
-- i
-- t
-- e
-- c
-- t
-- u
-- r
-- e
-- -
-- c
-- l
-- e
-- a
-- n
+  - android/architecture-clean
+  - android/ui-views
+  - factory-pattern
+  - design-patterns
+  - layout-inflater
+  - difficulty/medium
+---
 
-- android/architecture-clean
-- android/ui-views
-- factory-pattern
-- design-patterns
-- layout-inflater
-- difficulty/medium---
 # Вопрос (RU)
 > Можешь привести пример когда Android фреймворк использует паттерн Factory?
 
 # Question (EN)
-> Can you give an example of when the Android framework uses the Factory pattern?---
+> Can you give an example of when the Android framework uses the Factory pattern?
+
+---
 ## Ответ (RU)
 
 Android фреймворк широко использует Factory паттерн в своих API. Основные примеры: LayoutInflater, Fragment.instantiate(), Intent.createChooser(), MediaPlayer.create().
@@ -393,7 +367,7 @@ class FragmentFactory {
 }
 ```
 
-**See also:** [[c-factory-pattern]], [[c-software-design-patterns]]
+**See also:** c-factory-pattern, [[c-software-design-patterns]]
 
 
 ## Follow-ups

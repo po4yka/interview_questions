@@ -9,6 +9,7 @@ related: [q-what-are-services-used-for--android--medium, q-what-to-put-in-state-
 created: 2025-10-15
 tags: [android/performance, app-startup, lazy-init, legacy-code, optimization, performance, difficulty/hard]
 ---
+
 # Что делать если надо исправить долгий запуск приложения в legacy проекте?
 
 **English**: What to do if you need to fix slow app startup in a legacy project?

@@ -244,6 +244,6 @@ suspend fun safeApiCall(): Result<User> {
 
 ## Related Questions
 
-- [[q-how-to-show-svg-string-as-vector-file--programming-languages--medium]]
+- [[q-how-to-show-svg-string-as-vector-file--android--medium]]
 - [[q-is-layoutinflater-a-singleton-and-why--android--medium]]
 - [[q-overdraw-gpu-rendering--android--medium]]

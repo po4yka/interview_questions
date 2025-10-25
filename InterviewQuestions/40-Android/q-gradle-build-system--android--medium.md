@@ -805,8 +805,8 @@ sdk.dir=/Users/username/Library/Android/sdk
 - [[q-dagger-build-time-optimization--android--medium]] - Build, Ui
 - [[q-build-optimization-gradle--android--medium]] - Build, Ui
 - [[q-android-build-optimization--android--medium]] - Build, Ui
-- [[q-kapt-ksp-migration--gradle--medium]] - Build
+- [[q-kapt-ksp-migration--android--medium]] - Build
 - [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Build
 
 ### Advanced (Harder)
-- [[q-kotlin-dsl-builders--kotlin--hard]] - Build, Ui
+- [[q-kotlin-dsl-builders--android--hard]] - Build, Ui

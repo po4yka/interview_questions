@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-build-optimization--android--medium
@@ -30,14 +30,6 @@ tags:
 > Что такое Обработка аннотаций в Android?
 
 ---
-
-# Вопрос (RU)
-> Что такое Обработка аннотаций в Android?
-
----
-
-# Question (EN)
-> What is Annotation Processing in Android?
 
 # Question (EN)
 > What is Annotation Processing in Android?

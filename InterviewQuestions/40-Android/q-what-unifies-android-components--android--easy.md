@@ -177,7 +177,7 @@ contentResolver.query(
 - [[q-architecture-components-libraries--android--easy]] - Fundamentals
 - [[q-android-components-besides-activity--android--easy]] - Fundamentals
 - [[q-main-android-components--android--easy]] - Fundamentals
-- [[q-material3-components--material-design--easy]] - Fundamentals
+- [[q-material3-components--ui-ux-accessibility--easy]] - Fundamentals
 - [[q-android-app-components--android--easy]] - Fundamentals
 
 ### Advanced (Harder)

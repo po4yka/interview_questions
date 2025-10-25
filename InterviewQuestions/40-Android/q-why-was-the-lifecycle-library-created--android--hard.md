@@ -779,9 +779,9 @@ lifecycle.addObserver(myObserver)
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-testing-viewmodels-turbine--testing--medium]] - Lifecycle
+- [[q-testing-viewmodels-turbine--android--medium]] - Lifecycle
 - [[q-what-is-viewmodel--android--medium]] - Lifecycle
 - [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - Lifecycle
 
 ### Related (Hard)
-- [[q-service-lifecycle-binding--background--hard]] - Lifecycle
+- [[q-service-lifecycle-binding--android--hard]] - Lifecycle

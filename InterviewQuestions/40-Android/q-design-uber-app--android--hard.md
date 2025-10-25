@@ -18,7 +18,7 @@ language_tags:
 - ru
 source: https://developers.google.com/location-context/fused-location-provider
 source_note: Android Fused Location Provider overview
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-data-sync-unstable-network--android--hard
@@ -27,32 +27,14 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- en
-- ru
--
-- a
-- n
-- d
-- r
-- o
-- i
-- d
-- /
-- l
-- o
-- c
-- a
-- t
-- i
-- o
-- n
+  - android/location
+  - android/networking-http
+  - android/service
+  - maps
+  - realtime
+  - difficulty/hard
+---
 
-- android/location
-- android/networking-http
-- android/service
-- maps
-- realtime
-- difficulty/hard---
 # Вопрос (RU)
 > Как спроектировать приложение Uber для Android?
 
@@ -286,7 +268,7 @@ Uber involves realtime location, driver matching, pricing, routing, payments, sc
 ### Offline
 - Queue + local cache + auto-resend.
 
-**See also:** [[c-microservices]], [[c-real-time-systems]]
+**See also:** c-microservices, c-real-time-systems
 
 
 ## Follow-ups

@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-compose-testing--android--medium
@@ -48,7 +48,7 @@ source_note: Official Compose Semantics docs
 
 ### Concept
 - Semantics expose UI meaning/structure to accessibility services and test APIs in [[c-jetpack-compose]].
-- Key properties: contentDescription, role, stateDescription, progressBarRangeInfo, selected/disabled for testing with [[c-espresso]].
+- Key properties: contentDescription, role, stateDescription, progressBarRangeInfo, selected/disabled for testing with c-espresso.
 
 ### Minimal patterns
 

@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-testing-strategies--android--medium
@@ -30,14 +30,6 @@ tags:
 > Что такое Ограничение скорости API и троттлинг?
 
 ---
-
-# Вопрос (RU)
-> Что такое Ограничение скорости API и троттлинг?
-
----
-
-# Question (EN)
-> What is API Rate Limiting and Throttling?
 
 # Question (EN)
 > What is API Rate Limiting and Throttling?
@@ -364,7 +356,7 @@ class CacheInterceptor : Interceptor {
 
 ## References
 
-- [[c-networking]]
+- c-networking
 - [OkHttp Interceptors](https://square.github.io/okhttp/interceptors/)
 - [Rate Limiting Patterns](https://cloud.google.com/architecture/rate-limiting-strategies-techniques)
 

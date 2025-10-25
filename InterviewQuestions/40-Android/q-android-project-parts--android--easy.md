@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-manifest-file--android--easy
@@ -34,14 +34,6 @@ tags:
 > Что такое Части Android проекта?
 
 ---
-
-# Вопрос (RU)
-> Что такое Части Android проекта?
-
----
-
-# Question (EN)
-> What are Android Project Parts?
 
 # Question (EN)
 > What are Android Project Parts?

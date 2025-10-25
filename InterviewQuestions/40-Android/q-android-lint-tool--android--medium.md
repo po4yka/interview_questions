@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-parcelable-implementation--android--medium
@@ -36,19 +36,11 @@ source: https://github.com/Kirchhoff-/Android-Interview-Questions
 
 ---
 
-# Вопрос (RU)
-> Что такое Инструмент Android Lint?
-
----
-
-# Question (EN)
-> What is Android Lint Tool?
-
 # Question (EN)
 > What is Android Lint Tool?
 
 ## Answer (EN)
-**Android Lint** is a [[c-static-analysis|static code analysis]] tool that identifies structural problems in Android projects without executing the app. It checks for bugs, performance issues, security vulnerabilities, and code quality problems through [[c-code-inspection|code inspection]].
+**Android Lint** is a static code analysis tool that identifies structural problems in Android projects without executing the app. It checks for bugs, performance issues, security vulnerabilities, and code quality problems through code inspection.
 
 **Static Analysis Theory:**
 Static analysis examines code without execution, analyzing syntax, structure, and patterns to detect potential issues. Lint performs this analysis on Android-specific files (Java, Kotlin, XML, resources) to catch problems early in development.
@@ -78,6 +70,9 @@ Static analysis examines code without execution, analyzing syntax, structure, an
 ```
 
 **Gradle Lint Configuration:**
+
+[[c-gradle|Gradle]] integrates Lint for automated code quality checks during builds.
+
 ```gradle
 android {
     lintOptions {

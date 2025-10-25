@@ -137,5 +137,5 @@ class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attr
 
 ### Related (Easy)
 
--   [[q-text-measurement-android--android--easy]] - Text measurement
--   [[q-custom-view-text-rendering--android--easy]] - Custom text rendering
+-   q-text-measurement-android--android--easy - Text measurement
+-   q-custom-view-text-rendering--android--easy - Custom text rendering

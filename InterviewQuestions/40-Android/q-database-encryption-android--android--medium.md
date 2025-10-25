@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-data-encryption-at-rest--android--medium
@@ -35,6 +35,7 @@ tags:
 source: https://developer.android.com/topic/security/data
 source_note: Android Data Security documentation
 ---
+
 # Вопрос (RU)
 > Как реализовать шифрование базы данных в Android? Какие лучшие практики и доступные библиотеки?
 
@@ -355,7 +356,7 @@ Encryption adds performance overhead. Understanding these costs is critical for 
 - Document used encryption algorithms
 - Plan backward compatibility
 
-**See also:** [[c-encryption]], [[c-sqlite]]
+**See also:** [[c-encryption]], c-sqlite
 
 
 ## Follow-ups

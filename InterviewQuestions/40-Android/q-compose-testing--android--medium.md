@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-compose-performance-optimization--android--hard
@@ -43,7 +43,7 @@ source_note: Official Compose testing documentation
 
 ## Answer (EN)
 
-**Compose Testing** uses semantic tree (not View hierarchy) to find and interact with UI elements. Tests run synchronously while Compose handles recomposition. See also [[c-compose-state]] and [[c-testing-pyramid]].
+**Compose Testing** uses semantic tree (not View hierarchy) to find and interact with UI elements. Tests run synchronously while Compose handles recomposition. See also c-compose-state and c-testing-pyramid.
 
 ### ComposeTestRule
 

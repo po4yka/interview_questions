@@ -769,6 +769,6 @@ class NewActivity : AppCompatActivity() {
 
 ## Related Questions
 
-- [[q-play-store-publishing--distribution--medium]]
+- q-play-store-publishing--distribution--medium
 - [[q-what-is-known-about-recyclerview--android--easy]]
 - [[q-which-event-is-called-when-user-touches-screen--android--medium]]

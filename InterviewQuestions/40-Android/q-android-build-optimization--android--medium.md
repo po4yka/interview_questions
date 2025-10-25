@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-gradle-basics--android--easy
@@ -23,31 +23,20 @@ updated: 2025-10-15
 tags:
 - android/gradle
 - difficulty/medium
-name: Android Optimized Build
-true:
-- push
-- pull_request
-jobs: null
 ---
 
 # Вопрос (RU)
 > Что такое Оптимизация сборки Android?
 
 ---
-
-# Вопрос (RU)
-> Что такое Оптимизация сборки Android?
-
----
-
-# Question (EN)
-> What is Android Build Optimization?
 
 # Question (EN)
 > What is Android Build Optimization?
 
 ## Answer (EN)
 **1. Gradle Configuration Optimization**
+
+[[c-gradle|Gradle]] is Android's build system that compiles code, manages dependencies, and packages applications.
 
 **gradle.properties:**
 ```properties
@@ -225,6 +214,8 @@ android {
 
 **3. Dependency Management**
 
+Dependency management ensures consistent library versions and reduces build conflicts.
+
 ```kotlin
 // Use version catalogs (libs.versions.toml) for centralized version management
 [versions]
@@ -353,6 +344,8 @@ buildCache {
 - **Push control**: Only CI pushes to remote cache to avoid conflicts from different local environments
 
 **6. Kotlin Compilation Optimization**
+
+Kotlin compiler optimizations significantly improve build performance through parallel compilation and incremental builds.
 
 ```kotlin
 // build.gradle.kts (app module)

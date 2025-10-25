@@ -978,7 +978,7 @@ class OverdrawAnalyzer {
 
 ### Related (Medium)
 - [[q-compose-modifier-order-performance--android--medium]] - Performance
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--android--medium]] - Performance
 - [[q-performance-optimization-android--android--medium]] - Performance
 - [[q-app-startup-optimization--android--medium]] - Performance
 - [[q-baseline-profiles-optimization--android--medium]] - Performance

@@ -17,7 +17,7 @@ language_tags:
 - ru
 source: https://developer.android.com/training/testing/espresso
 source_note: Android Espresso testing documentation
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-testing-strategies--android--medium
@@ -26,39 +26,21 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- en
-- ru
--
-- a
-- n
-- d
-- r
-- o
-- i
-- d
-- /
-- t
-- e
-- s
-- t
-- i
-- n
-- g
-- -
-- u
-- i
+  - android/testing-ui
+  - android/testing-instrumented
+  - espresso
+  - ui-testing
+  - idling-resource
+  - difficulty/medium
+---
 
-- android/testing-ui
-- android/testing-instrumented
-- espresso
-- ui-testing
-- idling-resource
-- difficulty/medium---
 # Вопрос (RU)
 > Как реализовать продвинутые паттерны Espresso с IdlingResource, custom matchers и ViewActions?
 
 # Question (EN)
-> How to implement Espresso advanced patterns with IdlingResource, custom matchers, and ViewActions?---
+> How to implement Espresso advanced patterns with IdlingResource, custom matchers, and ViewActions?
+
+---
 ## Ответ (RU)
 
 Espresso - фреймворк UI тестирования для View-based интерфейсов. Продвинутое использование требует понимания IdlingResource, custom matchers и сложных паттернов взаимодействия.
@@ -529,7 +511,7 @@ fun flakyTest() {
 - Proper cleanup in @After methods
 - Isolated tests without dependencies
 
-**See also:** [[c-ui-testing]], [[c-test-automation]]
+**See also:** c-ui-testing, c-test-automation
 
 
 ## Follow-ups

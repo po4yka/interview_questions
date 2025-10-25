@@ -18,7 +18,7 @@ language_tags:
 - ru
 source: https://developer.android.com/jetpack/compose/state
 source_note: Android Compose state management documentation
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-derived-state-snapshot-system--android--hard
@@ -27,39 +27,21 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- en
-- ru
--
-- a
-- n
-- d
-- r
-- o
-- i
-- d
-- /
-- u
-- i
-- -
-- c
-- o
-- m
-- p
-- o
-- s
-- e
+  - android/ui-compose
+  - android/ui-state
+  - compose
+  - state
+  - concurrency
+  - difficulty/medium
+---
 
-- android/ui-compose
-- android/ui-state
-- compose
-- state
-- concurrency
-- difficulty/medium---
 # Вопрос (RU)
 > Помогает ли State в Compose избежать состояния гонки?
 
 # Question (EN)
-> Does State Made In Compose Help Avoid Race Condition?---
+> Does State Made In Compose Help Avoid Race Condition?
+
+---
 ## Ответ (RU)
 
 **Нет**, `MutableState` в Compose не гарантирует thread safety. При одновременном изменении состояния несколькими потоками возникают race conditions.
@@ -436,7 +418,7 @@ class MyViewModel : ViewModel() {
 }
 ```
 
-**See also:** [[c-race-condition]], [[c-thread-safety]]
+**See also:** c-race-condition, c-thread-safety
 
 
 ## Follow-ups

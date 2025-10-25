@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-architectural-patterns--android--medium
@@ -35,14 +35,6 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Модуляризация Android?
-
----
-
-# Question (EN)
-> What is Android Modularization?
-
 # Question (EN)
 > What is Android Modularization?
 
@@ -50,7 +42,7 @@ tags:
 **Android Modularization** is the practice of organizing codebases into loosely coupled, self-contained modules. Each module serves a specific purpose and can be developed, tested, and maintained independently.
 
 **Modularization Theory:**
-Modularization follows the principle of [[c-separation-of-concerns]], breaking complex systems into manageable components. Each module encapsulates related functionality and exposes a well-defined interface, reducing coupling and improving maintainability through [[c-dependency-injection]].
+Modularization follows the principle of c-separation-of-concerns, breaking complex systems into manageable components. Each module encapsulates related functionality and exposes a well-defined interface, reducing coupling and improving maintainability through [[c-dependency-injection]].
 
 **Core Benefits:**
 - **Reusability**: Modules can be shared across multiple apps or features
@@ -164,5 +156,5 @@ dependencies {
 - [[q-android-jetpack-overview--android--easy]] - Jetpack libraries
 
 ### Advanced (Harder)
-- [[q-android-dependency-injection--android--hard]] - Dependency injection
+- q-android-dependency-injection--android--hard - Dependency injection
 - [[q-android-testing-strategies--android--medium]] - Testing approaches

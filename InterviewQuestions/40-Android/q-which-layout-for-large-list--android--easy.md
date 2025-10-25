@@ -267,5 +267,5 @@ fun MyList(items: List<String>) {
 ### Advanced (Harder)
 
 -   [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
--   [[q-testing-viewmodels-turbine--testing--medium]] - View
+-   [[q-testing-viewmodels-turbine--android--medium]] - View
 -   [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View

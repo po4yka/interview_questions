@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-mvvm-pattern--android--medium
@@ -27,27 +27,14 @@ tags:
 ---
 
 # Вопрос (RU)
-> Что такое Архитектурные паттерны Android?
-
----
-
-# Вопрос (RU)
-> Что такое Архитектурные паттерны Android?
-
----
-
-# Вопрос (RU)
 > Какие архитектурные паттерны используются в Android разработке, и чем они отличаются друг от друга?
 
 ---
 
-# Question (EN)
-> What architectural patterns are commonly used in Android development, and how do they differ from each other?
-
 ---
 
 ## Ответ (RU)
-Android разработка использует несколько [[c-architectural-patterns|архитектурных паттернов]]: [[c-mvc|MVC]] (ранний, редко используется), [[c-mvp|MVP]] (Model-View-Presenter), [[c-mvvm|MVVM]] (Model-View-ViewModel с data binding), [[c-mvi|MVI]] (Model-View-Intent для однонаправленного потока данных) и [[c-clean-architecture|Clean Architecture]] (слоистый подход с инверсией зависимостей).
+Android разработка использует несколько архитектурных паттернов: MVC (ранний, редко используется), MVP (Model-View-Presenter), MVVM (Model-View-ViewModel с data binding), MVI (Model-View-Intent для однонаправленного потока данных) и Clean Architecture (слоистый подход с инверсией зависимостей).
 
 **Современная рекомендация**: MVVM с Clean Architecture и Android Architecture Components (ViewModel, LiveData/StateFlow, Repository pattern).
 
@@ -245,11 +232,8 @@ class UserViewModel(
 # Question (EN)
 > What are Android Architectural Patterns?
 
-# Question (EN)
-> What are Android Architectural Patterns?
-
 ## Answer (EN)
-Android development uses several [[c-architectural-patterns|architectural patterns]]: [[c-mvc|MVC]] (early, rarely used), [[c-mvp|MVP]] (Model-View-Presenter), [[c-mvvm|MVVM]] (Model-View-ViewModel with data binding), [[c-mvi|MVI]] (Model-View-Intent for unidirectional data flow), and [[c-clean-architecture|Clean Architecture]] (layered approach with dependency inversion).
+Android development uses several architectural patterns: MVC (early, rarely used), MVP (Model-View-Presenter), MVVM (Model-View-ViewModel with data binding), MVI (Model-View-Intent for unidirectional data flow), and Clean Architecture (layered approach with dependency inversion).
 
 **Modern recommendation**: MVVM with Clean Architecture and Android Architecture Components (ViewModel, LiveData/StateFlow, Repository pattern).
 

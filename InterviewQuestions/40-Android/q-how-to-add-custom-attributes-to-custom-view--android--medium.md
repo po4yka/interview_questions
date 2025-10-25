@@ -1,563 +1,810 @@
 ---
-id: 20251012-1227165
+id: 20251012-1227166
 title: "How To Add Custom Attributes To Custom View / Как добавить кастомные атрибуты к кастомным View"
 topic: android
 difficulty: medium
 status: draft
-created: 2025-10-13
-tags:
-  - android
 moc: moc-android
-related: [q-service-restrictions-why--android--medium, q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium, q-presenter-notify-view--android--medium]
-  - q-recyclerview-sethasfixedsize--android--easy
-  - q-viewmodel-pattern--android--easy
-  - q-what-is-known-about-methods-that-redraw-view--android--medium
-  - q-testing-viewmodels-turbine--testing--medium
-  - q-rxjava-pagination-recyclerview--android--medium
-  - q-what-is-viewmodel--android--medium
-  - q-how-to-create-list-like-recyclerview-in-compose--android--medium
-  - q-compose-custom-layout--jetpack-compose--hard
+related: [q-performance-optimization-android--android--medium, q-app-security-best-practices--security--medium, q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy]
+created: 2025-10-15
+tags: [languages, difficulty/medium]
 ---
-# How to add custom attributes to custom view?
+# Как добавить кастомные атрибуты у кастомного view?
 
-## EN (expanded)
+## Answer (EN)
+To add custom attributes to a Custom View, you need to: (1) create `attrs.xml` and describe attributes, (2) add them to styleable, (3) retrieve values in Custom View constructor, (4) use attributes in XML or Kotlin.
 
-To add custom attributes to a Custom View, you need to:
-1. Define attributes in `attrs.xml`
-2. Read attributes in the custom view constructor
-3. Use attributes in XML layouts
-
-### Step 1: Define Attributes in attrs.xml
-
-Create or edit `res/values/attrs.xml`:
+### 1. Define Attributes in attrs.xml
 
 ```xml
+<!-- res/values/attrs.xml -->
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="CustomButton">
-        <!-- String attribute -->
-        <attr name="customText" format="string" />
+    <declare-styleable name="CircularProgressView">
+        <!-- Progress value (0-100) -->
+        <attr name="progress" format="integer" />
 
-        <!-- Color attribute -->
-        <attr name="customTextColor" format="color" />
+        <!-- Progress color -->
+        <attr name="progressColor" format="color" />
 
-        <!-- Dimension attribute -->
-        <attr name="customTextSize" format="dimension" />
+        <!-- Background color -->
+        <attr name="backgroundColor" format="color" />
 
-        <!-- Boolean attribute -->
-        <attr name="isRounded" format="boolean" />
+        <!-- Progress width -->
+        <attr name="progressWidth" format="dimension" />
 
-        <!-- Integer attribute -->
-        <attr name="cornerRadius" format="dimension" />
+        <!-- Text size -->
+        <attr name="textSize" format="dimension" />
 
-        <!-- Enum attribute -->
-        <attr name="buttonStyle" format="enum">
-            <enum name="primary" value="0" />
-            <enum name="secondary" value="1" />
-            <enum name="outlined" value="2" />
+        <!-- Show percentage text -->
+        <attr name="showPercentage" format="boolean" />
+
+        <!-- Enum example -->
+        <attr name="progressStyle" format="enum">
+            <enum name="filled" value="0" />
+            <enum name="outlined" value="1" />
         </attr>
-
-        <!-- Reference attribute (drawable, color, etc.) -->
-        <attr name="customIcon" format="reference" />
-
-        <!-- Multiple formats -->
-        <attr name="customSize" format="dimension|fraction" />
     </declare-styleable>
 </resources>
 ```
 
-### Step 2: Read Attributes in Custom View
+### 2. Create Custom View with Attributes
 
 ```kotlin
-class CustomButton @JvmOverloads constructor(
+class CircularProgressView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AppCompatButton(context, attrs, defStyleAttr) {
+) : View(context, attrs, defStyleAttr) {
 
-    private var customText: String = ""
-    private var customTextColor: Int = Color.BLACK
-    private var customTextSize: Float = 16f
-    private var isRounded: Boolean = false
-    private var cornerRadius: Float = 0f
-    private var buttonStyle: Int = 0
-    private var customIcon: Drawable? = null
+    // Default values
+    private var progress = 0
+    private var progressColor = Color.BLUE
+    private var bgColor = Color.LTGRAY
+    private var progressWidth = 10f
+    private var textSize = 14f
+    private var showPercentage = true
+    private var progressStyle = 0
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     init {
-        // Read attributes
-        context.theme.obtainStyledAttributes(
-            attrs,
-            R.styleable.CustomButton,
-            defStyleAttr,
-            0
-        ).apply {
+        // Retrieve custom attributes
+        attrs?.let {
+            val typedArray = context.obtainStyledAttributes(
+                it,
+                R.styleable.CircularProgressView,
+                defStyleAttr,
+                0
+            )
+
             try {
-                // Read string
-                customText = getString(R.styleable.CustomButton_customText) ?: ""
-
-                // Read color
-                customTextColor = getColor(
-                    R.styleable.CustomButton_customTextColor,
-                    Color.BLACK
-                )
-
-                // Read dimension
-                customTextSize = getDimension(
-                    R.styleable.CustomButton_customTextSize,
-                    16f
-                )
-
-                // Read boolean
-                isRounded = getBoolean(
-                    R.styleable.CustomButton_isRounded,
-                    false
-                )
-
-                // Read dimension (corner radius)
-                cornerRadius = getDimension(
-                    R.styleable.CustomButton_cornerRadius,
-                    0f
-                )
-
-                // Read enum
-                buttonStyle = getInt(
-                    R.styleable.CustomButton_buttonStyle,
+                progress = typedArray.getInt(
+                    R.styleable.CircularProgressView_progress,
                     0
                 )
 
-                // Read drawable reference
-                customIcon = getDrawable(R.styleable.CustomButton_customIcon)
+                progressColor = typedArray.getColor(
+                    R.styleable.CircularProgressView_progressColor,
+                    Color.BLUE
+                )
+
+                bgColor = typedArray.getColor(
+                    R.styleable.CircularProgressView_backgroundColor,
+                    Color.LTGRAY
+                )
+
+                progressWidth = typedArray.getDimension(
+                    R.styleable.CircularProgressView_progressWidth,
+                    10f
+                )
+
+                textSize = typedArray.getDimension(
+                    R.styleable.CircularProgressView_textSize,
+                    14f * resources.displayMetrics.scaledDensity
+                )
+
+                showPercentage = typedArray.getBoolean(
+                    R.styleable.CircularProgressView_showPercentage,
+                    true
+                )
+
+                progressStyle = typedArray.getInt(
+                    R.styleable.CircularProgressView_progressStyle,
+                    0
+                )
 
             } finally {
-                recycle() // Important: recycle the TypedArray
+                // Always recycle TypedArray
+                typedArray.recycle()
             }
         }
 
-        // Apply attributes
-        applyAttributes()
+        setupPaints()
     }
 
-    private fun applyAttributes() {
-        text = customText
-        setTextColor(customTextColor)
-        textSize = customTextSize
+    private fun setupPaints() {
+        paint.strokeWidth = progressWidth
+        paint.style = if (progressStyle == 0) Paint.Style.FILL else Paint.Style.STROKE
 
-        if (isRounded) {
-            background = createRoundedBackground()
+        textPaint.textSize = textSize
+        textPaint.textAlign = Paint.Align.CENTER
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        val centerX = width / 2f
+        val centerY = height / 2f
+        val radius = minOf(width, height) / 2f - progressWidth
+
+        // Draw background circle
+        paint.color = bgColor
+        canvas.drawCircle(centerX, centerY, radius, paint)
+
+        // Draw progress arc
+        paint.color = progressColor
+        val sweepAngle = (progress / 100f) * 360f
+        canvas.drawArc(
+            centerX - radius,
+            centerY - radius,
+            centerX + radius,
+            centerY + radius,
+            -90f,
+            sweepAngle,
+            progressStyle == 0,
+            paint
+        )
+
+        // Draw percentage text
+        if (showPercentage) {
+            textPaint.color = Color.BLACK
+            val text = "$progress%"
+            val yPos = centerY - (textPaint.descent() + textPaint.ascent()) / 2
+            canvas.drawText(text, centerX, yPos, textPaint)
         }
-
-        customIcon?.let {
-            setCompoundDrawablesWithIntrinsicBounds(it, null, null, null)
-        }
-
-        applyButtonStyle()
     }
 
-    private fun createRoundedBackground(): Drawable {
-        return GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            cornerRadii = floatArrayOf(
-                cornerRadius, cornerRadius,
-                cornerRadius, cornerRadius,
-                cornerRadius, cornerRadius,
-                cornerRadius, cornerRadius
-            )
-            setColor(Color.parseColor("#2196F3"))
-        }
-    }
-
-    private fun applyButtonStyle() {
-        when (buttonStyle) {
-            0 -> applyPrimaryStyle()
-            1 -> applySecondaryStyle()
-            2 -> applyOutlinedStyle()
-        }
-    }
-
-    private fun applyPrimaryStyle() {
-        setBackgroundColor(Color.parseColor("#2196F3"))
-        setTextColor(Color.WHITE)
-    }
-
-    private fun applySecondaryStyle() {
-        setBackgroundColor(Color.parseColor("#E0E0E0"))
-        setTextColor(Color.BLACK)
-    }
-
-    private fun applyOutlinedStyle() {
-        background = GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            setStroke(2, Color.parseColor("#2196F3"))
-            setColor(Color.TRANSPARENT)
-        }
-        setTextColor(Color.parseColor("#2196F3"))
+    // Public setters
+    fun setProgress(value: Int) {
+        progress = value.coerceIn(0, 100)
+        invalidate()
     }
 }
 ```
 
-### Step 3: Use in XML Layout
+### 3. Use in XML Layout
 
 ```xml
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:gravity="center">
 
     <!-- Using custom attributes -->
-    <com.example.app.CustomButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:customText="Click Me"
-        app:customTextColor="@color/white"
-        app:customTextSize="18sp"
-        app:isRounded="true"
-        app:cornerRadius="8dp"
-        app:buttonStyle="primary"
-        app:customIcon="@drawable/ic_star" />
-
-    <com.example.app.CustomButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:customText="Secondary"
-        app:buttonStyle="secondary"
-        app:isRounded="true"
-        app:cornerRadius="12dp" />
-
-    <com.example.app.CustomButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:customText="Outlined"
-        app:buttonStyle="outlined"
-        app:isRounded="true"
-        app:cornerRadius="16dp" />
+    <com.example.CircularProgressView
+        android:id="@+id/progressView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:progress="75"
+        app:progressColor="@color/purple_500"
+        app:backgroundColor="@color/gray_200"
+        app:progressWidth="12dp"
+        app:textSize="24sp"
+        app:showPercentage="true"
+        app:progressStyle="filled" />
 
 </LinearLayout>
 ```
 
-### Complete Example: Custom CircleImageView
-
-#### attrs.xml
-
-```xml
-<resources>
-    <declare-styleable name="CircleImageView">
-        <attr name="borderWidth" format="dimension" />
-        <attr name="borderColor" format="color" />
-        <attr name="imageSource" format="reference" />
-    </declare-styleable>
-</resources>
-```
-
-#### CircleImageView.kt
-
-```kotlin
-class CircleImageView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : AppCompatImageView(context, attrs, defStyleAttr) {
-
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var borderWidth: Float = 0f
-    private var borderColor: Int = Color.WHITE
-
-    init {
-        context.theme.obtainStyledAttributes(
-            attrs,
-            R.styleable.CircleImageView,
-            defStyleAttr,
-            0
-        ).apply {
-            try {
-                borderWidth = getDimension(
-                    R.styleable.CircleImageView_borderWidth,
-                    0f
-                )
-
-                borderColor = getColor(
-                    R.styleable.CircleImageView_borderColor,
-                    Color.WHITE
-                )
-
-                getResourceId(R.styleable.CircleImageView_imageSource, 0).let {
-                    if (it != 0) setImageResource(it)
-                }
-
-            } finally {
-                recycle()
-            }
-        }
-
-        borderPaint.apply {
-            style = Paint.Style.STROKE
-            strokeWidth = borderWidth
-            color = borderColor
-        }
-
-        scaleType = ScaleType.CENTER_CROP
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        val drawable = drawable ?: return
-
-        val bitmap = drawableToBitmap(drawable)
-        val circularBitmap = getCircularBitmap(bitmap)
-
-        canvas.drawBitmap(circularBitmap, 0f, 0f, paint)
-
-        // Draw border
-        if (borderWidth > 0) {
-            val radius = (width / 2f) - (borderWidth / 2f)
-            canvas.drawCircle(
-                width / 2f,
-                height / 2f,
-                radius,
-                borderPaint
-            )
-        }
-    }
-
-    private fun drawableToBitmap(drawable: Drawable): Bitmap {
-        if (drawable is BitmapDrawable) {
-            return drawable.bitmap
-        }
-
-        val bitmap = Bitmap.createBitmap(
-            width,
-            height,
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, width, height)
-        drawable.draw(canvas)
-        return bitmap
-    }
-
-    private fun getCircularBitmap(bitmap: Bitmap): Bitmap {
-        val size = Math.min(width, height)
-        val output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(output)
-
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        val rect = Rect(0, 0, size, size)
-
-        canvas.drawCircle(
-            size / 2f,
-            size / 2f,
-            size / 2f,
-            paint
-        )
-
-        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-        canvas.drawBitmap(bitmap, null, rect, paint)
-
-        return output
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val size = Math.min(measuredWidth, measuredHeight)
-        setMeasuredDimension(size, size)
-    }
-}
-```
-
-#### Usage in XML
-
-```xml
-<com.example.app.CircleImageView
-    android:layout_width="120dp"
-    android:layout_height="120dp"
-    app:imageSource="@drawable/profile_photo"
-    app:borderWidth="4dp"
-    app:borderColor="@color/primary" />
-```
-
-### Attribute Formats
-
-| Format | Description | Example |
-|--------|-------------|---------|
-| `string` | Text value | "Hello" |
-| `color` | Color value | #FF0000 |
-| `dimension` | Size value | 16dp, 24sp |
-| `boolean` | True/false | true |
-| `integer` | Whole number | 5 |
-| `float` | Decimal number | 1.5 |
-| `fraction` | Percentage | 50% |
-| `enum` | Enumeration | primary/secondary |
-| `flag` | Bit flags | left\|right |
-| `reference` | Resource reference | @drawable/icon |
-
-### Multiple Formats
-
-```xml
-<attr name="customSize" format="dimension|fraction" />
-<attr name="customBackground" format="color|reference" />
-```
-
-### Programmatic Access
-
-```kotlin
-// Get custom attribute value at runtime
-fun getCustomAttribute() {
-    val typedValue = TypedValue()
-    context.theme.resolveAttribute(
-        R.attr.customAttribute,
-        typedValue,
-        true
-    )
-    val value = typedValue.data
-}
-```
-
-### Setting Attributes Programmatically
-
-```kotlin
-// In custom view
-fun setCustomText(text: String) {
-    customText = text
-    this.text = text
-    invalidate() // Redraw if needed
-}
-
-fun setCustomTextColor(color: Int) {
-    customTextColor = color
-    setTextColor(color)
-}
-```
-
----
-
-## RU (original)
-Добавление кастомных атрибутов к custom view позволяет конфигурировать view через XML layout файлы.
-
-**Шаг 1: Объявить атрибуты в attrs.xml:**
+### 4. Different Attribute Formats
 
 ```xml
 <!-- res/values/attrs.xml -->
 <resources>
-    <declare-styleable name="CustomButton">
-        <attr name="buttonColor" format="color" />
-        <attr name="buttonText" format="string" />
-        <attr name="buttonSize" format="dimension" />
-        <attr name="buttonStyle" format="enum">
-            <enum name="normal" value="0" />
-            <enum name="rounded" value="1" />
-            <enum name="circular" value="2" />
-        </attr>
+    <declare-styleable name="CustomView">
+        <!-- String -->
+        <attr name="customText" format="string" />
+
+        <!-- Integer -->
+        <attr name="customCount" format="integer" />
+
+        <!-- Float -->
+        <attr name="customRatio" format="float" />
+
+        <!-- Boolean -->
         <attr name="isEnabled" format="boolean" />
+
+        <!-- Color -->
+        <attr name="customColor" format="color" />
+
+        <!-- Dimension (dp, sp, px) -->
+        <attr name="customSize" format="dimension" />
+
+        <!-- Reference (drawable, color, string resource) -->
+        <attr name="customIcon" format="reference" />
+
+        <!-- Enum -->
+        <attr name="alignment" format="enum">
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+
+        <!-- Flags (can combine multiple) -->
+        <attr name="gravity" format="flags">
+            <flag name="top" value="0x01" />
+            <flag name="bottom" value="0x02" />
+            <flag name="left" value="0x04" />
+            <flag name="right" value="0x08" />
+        </attr>
+
+        <!-- Multiple formats -->
+        <attr name="customValue" format="integer|reference" />
     </declare-styleable>
 </resources>
 ```
 
-**Шаг 2: Использовать в Custom View:**
+### 5. Reading Different Attribute Types
+
+```kotlin
+class AdvancedCustomView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    init {
+        val ta = context.obtainStyledAttributes(attrs, R.styleable.CustomView)
+
+        try {
+            // String
+            val text = ta.getString(R.styleable.CustomView_customText) ?: "Default"
+
+            // Integer
+            val count = ta.getInt(R.styleable.CustomView_customCount, 0)
+
+            // Float
+            val ratio = ta.getFloat(R.styleable.CustomView_customRatio, 1.0f)
+
+            // Boolean
+            val enabled = ta.getBoolean(R.styleable.CustomView_isEnabled, true)
+
+            // Color
+            val color = ta.getColor(R.styleable.CustomView_customColor, Color.BLACK)
+
+            // Dimension (returns pixels)
+            val size = ta.getDimension(R.styleable.CustomView_customSize, 0f)
+
+            // Dimension (returns pixel offset for integers)
+            val sizePixels = ta.getDimensionPixelSize(R.styleable.CustomView_customSize, 0)
+
+            // Reference (drawable)
+            val icon = ta.getDrawable(R.styleable.CustomView_customIcon)
+
+            // Reference (resource ID)
+            val iconResId = ta.getResourceId(R.styleable.CustomView_customIcon, 0)
+
+            // Enum
+            val alignment = ta.getInt(R.styleable.CustomView_alignment, 0)
+
+            // Flags
+            val gravity = ta.getInt(R.styleable.CustomView_gravity, 0)
+            val hasTop = (gravity and 0x01) != 0
+            val hasBottom = (gravity and 0x02) != 0
+
+        } finally {
+            ta.recycle()
+        }
+    }
+}
+```
+
+### 6. Programmatic Usage
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val progressView = findViewById<CircularProgressView>(R.id.progressView)
+
+        // Change attributes programmatically
+        progressView.setProgress(85)
+
+        // Animate progress
+        ValueAnimator.ofInt(0, 100).apply {
+            duration = 2000
+            addUpdateListener { animation ->
+                progressView.setProgress(animation.animatedValue as Int)
+            }
+            start()
+        }
+    }
+}
+```
+
+### 7. Using Theme Attributes
+
+```xml
+<!-- Define in themes.xml -->
+<style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+    <item name="progressColor">@color/primary</item>
+    <item name="backgroundColor">@color/surface</item>
+</style>
+
+<!-- Reference theme attribute in attrs.xml -->
+<declare-styleable name="CircularProgressView">
+    <attr name="progressColor" format="color" />
+    <attr name="backgroundColor" format="color" />
+</declare-styleable>
+
+<!-- Use in custom view -->
+<com.example.CircularProgressView
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    app:progressColor="?attr/colorPrimary"
+    app:backgroundColor="?attr/colorSurface" />
+```
+
+### 8. Reusing System Attributes
+
+```xml
+<!-- Reuse Android's built-in attributes -->
+<declare-styleable name="CustomButton">
+    <attr name="android:text" />
+    <attr name="android:textColor" />
+    <attr name="android:textSize" />
+    <attr name="customIcon" format="reference" />
+</declare-styleable>
+```
 
 ```kotlin
 class CustomButton @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : androidx.appcompat.widget.AppCompatButton(context, attrs) {
+
+    init {
+        val ta = context.obtainStyledAttributes(attrs, R.styleable.CustomButton)
+
+        try {
+            // Read Android's built-in attributes
+            val text = ta.getString(R.styleable.CustomButton_android_text)
+            val textColor = ta.getColor(
+                R.styleable.CustomButton_android_textColor,
+                Color.BLACK
+            )
+
+            // Read custom attribute
+            val icon = ta.getDrawable(R.styleable.CustomButton_customIcon)
+
+            // Apply
+            this.text = text
+            this.setTextColor(textColor)
+            setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null)
+
+        } finally {
+            ta.recycle()
+        }
+    }
+}
+```
+
+### Best Practices
+
+1. - **Always recycle TypedArray** with `typedArray.recycle()`
+2. - **Provide default values** for all attributes
+3. - **Use appropriate format** for each attribute type
+4. - **Document attributes** with comments in attrs.xml
+5. - **Group related attributes** in same styleable
+6. - **Support theme attributes** for consistency
+7. - **Validate attribute values** (e.g., progress 0-100)
+
+---
+
+# Как добавить кастомные атрибуты у кастомного view
+
+## Ответ (RU)
+Чтобы добавить кастомные атрибуты к Custom View, нужно: (1) создать `attrs.xml` и описать атрибуты, (2) добавить их в styleable, (3) получить значения в конструкторе Custom View, (4) использовать атрибуты в XML или Kotlin.
+
+### 1. Определение атрибутов в attrs.xml
+
+```xml
+<!-- res/values/attrs.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircularProgressView">
+        <!-- Значение прогресса (0-100) -->
+        <attr name="progress" format="integer" />
+
+        <!-- Цвет прогресса -->
+        <attr name="progressColor" format="color" />
+
+        <!-- Цвет фона -->
+        <attr name="backgroundColor" format="color" />
+
+        <!-- Ширина прогресса -->
+        <attr name="progressWidth" format="dimension" />
+
+        <!-- Размер текста -->
+        <attr name="textSize" format="dimension" />
+
+        <!-- Показывать процентный текст -->
+        <attr name="showPercentage" format="boolean" />
+
+        <!-- Пример enum -->
+        <attr name="progressStyle" format="enum">
+            <enum name="filled" value="0" />
+            <enum name="outlined" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>
+```
+
+### 2. Создание Custom View с атрибутами
+
+```kotlin
+class CircularProgressView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private var buttonColor: Int = Color.BLUE
-    private var buttonText: String = ""
-    private var buttonSize: Float = 50f
-    private var buttonStyle: Int = 0
-    private var isButtonEnabled: Boolean = true
+    // Значения по умолчанию
+    private var progress = 0
+    private var progressColor = Color.BLUE
+    private var bgColor = Color.LTGRAY
+    private var progressWidth = 10f
+    private var textSize = 14f
+    private var showPercentage = true
+    private var progressStyle = 0
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     init {
-        // Получить атрибуты
-        context.theme.obtainStyledAttributes(
-            attrs,
-            R.styleable.CustomButton,
-            0, 0
-        ).apply {
+        // Получение кастомных атрибутов
+        attrs?.let {
+            val typedArray = context.obtainStyledAttributes(
+                it,
+                R.styleable.CircularProgressView,
+                defStyleAttr,
+                0
+            )
+
             try {
-                buttonColor = getColor(
-                    R.styleable.CustomButton_buttonColor,
-                    Color.BLUE
-                )
-                buttonText = getString(
-                    R.styleable.CustomButton_buttonText
-                ) ?: ""
-                buttonSize = getDimension(
-                    R.styleable.CustomButton_buttonSize,
-                    50f
-                )
-                buttonStyle = getInt(
-                    R.styleable.CustomButton_buttonStyle,
+                progress = typedArray.getInt(
+                    R.styleable.CircularProgressView_progress,
                     0
                 )
-                isButtonEnabled = getBoolean(
-                    R.styleable.CustomButton_isEnabled,
+
+                progressColor = typedArray.getColor(
+                    R.styleable.CircularProgressView_progressColor,
+                    Color.BLUE
+                )
+
+                bgColor = typedArray.getColor(
+                    R.styleable.CircularProgressView_backgroundColor,
+                    Color.LTGRAY
+                )
+
+                progressWidth = typedArray.getDimension(
+                    R.styleable.CircularProgressView_progressWidth,
+                    10f
+                )
+
+                textSize = typedArray.getDimension(
+                    R.styleable.CircularProgressView_textSize,
+                    14f * resources.displayMetrics.scaledDensity
+                )
+
+                showPercentage = typedArray.getBoolean(
+                    R.styleable.CircularProgressView_showPercentage,
                     true
                 )
+
+                progressStyle = typedArray.getInt(
+                    R.styleable.CircularProgressView_progressStyle,
+                    0
+                )
+
             } finally {
-                recycle() // ВАЖНО: освободить ресурсы
+                // Всегда переработайте TypedArray
+                typedArray.recycle()
             }
         }
+
+        setupPaints()
+    }
+
+    private fun setupPaints() {
+        paint.strokeWidth = progressWidth
+        paint.style = if (progressStyle == 0) Paint.Style.FILL else Paint.Style.STROKE
+
+        textPaint.textSize = textSize
+        textPaint.textAlign = Paint.Align.CENTER
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        // Использовать атрибуты для рисования
-        paint.color = buttonColor
-        // ...
+
+        val centerX = width / 2f
+        val centerY = height / 2f
+        val radius = minOf(width, height) / 2f - progressWidth
+
+        // Рисуем фоновый круг
+        paint.color = bgColor
+        canvas.drawCircle(centerX, centerY, radius, paint)
+
+        // Рисуем дугу прогресса
+        paint.color = progressColor
+        val sweepAngle = (progress / 100f) * 360f
+        canvas.drawArc(
+            centerX - radius,
+            centerY - radius,
+            centerX + radius,
+            centerY + radius,
+            -90f,
+            sweepAngle,
+            progressStyle == 0,
+            paint
+        )
+
+        // Рисуем процентный текст
+        if (showPercentage) {
+            textPaint.color = Color.BLACK
+            val text = "$progress%"
+            val yPos = centerY - (textPaint.descent() + textPaint.ascent()) / 2
+            canvas.drawText(text, centerX, yPos, textPaint)
+        }
+    }
+
+    // Публичные сеттеры
+    fun setProgress(value: Int) {
+        progress = value.coerceIn(0, 100)
+        invalidate()
     }
 }
 ```
 
-**Шаг 3: Использовать в XML:**
+### 3. Использование в XML Layout
 
 ```xml
-<com.example.CustomButton
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:buttonColor="@color/red"
-    app:buttonText="Click Me"
-    app:buttonSize="24sp"
-    app:buttonStyle="rounded"
-    app:isEnabled="true" />
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <!-- Использование кастомных атрибутов -->
+    <com.example.CircularProgressView
+        android:id="@+id/progressView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:progress="75"
+        app:progressColor="@color/purple_500"
+        app:backgroundColor="@color/gray_200"
+        app:progressWidth="12dp"
+        app:textSize="24sp"
+        app:showPercentage="true"
+        app:progressStyle="filled" />
+
+</LinearLayout>
 ```
 
-**Форматы атрибутов:**
-
-- `color` - цвет
-- `string` - текст
-- `dimension` - размер (dp, sp, px)
-- `integer` - целое число
-- `float` - дробное число
-- `boolean` - true/false
-- `reference` - ссылка на ресурс (@drawable, @string и т.д.)
-- `enum` - перечисление
-- `flag` - флаги (можно комбинировать)
-
-**Пример с flags:**
+### 4. Различные форматы атрибутов
 
 ```xml
-<attr name="textStyle" format="flag">
-    <flag name="normal" value="0" />
-    <flag name="bold" value="1" />
-    <flag name="italic" value="2" />
-</attr>
+<!-- res/values/attrs.xml -->
+<resources>
+    <declare-styleable name="CustomView">
+        <!-- String -->
+        <attr name="customText" format="string" />
 
-<!-- Использование -->
-app:textStyle="bold|italic"
+        <!-- Integer -->
+        <attr name="customCount" format="integer" />
+
+        <!-- Float -->
+        <attr name="customRatio" format="float" />
+
+        <!-- Boolean -->
+        <attr name="isEnabled" format="boolean" />
+
+        <!-- Color -->
+        <attr name="customColor" format="color" />
+
+        <!-- Dimension (dp, sp, px) -->
+        <attr name="customSize" format="dimension" />
+
+        <!-- Reference (drawable, color, string resource) -->
+        <attr name="customIcon" format="reference" />
+
+        <!-- Enum -->
+        <attr name="alignment" format="enum">
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+
+        <!-- Flags (можно комбинировать несколько) -->
+        <attr name="gravity" format="flags">
+            <flag name="top" value="0x01" />
+            <flag name="bottom" value="0x02" />
+            <flag name="left" value="0x04" />
+            <flag name="right" value="0x08" />
+        </attr>
+
+        <!-- Множественные форматы -->
+        <attr name="customValue" format="integer|reference" />
+    </declare-styleable>
+</resources>
 ```
 
-**Best Practices:**
+### 5. Чтение различных типов атрибутов
 
-1. ✅ Всегда вызывайте `recycle()` на TypedArray
-2. ✅ Предоставляйте значения по умолчанию
-3. ✅ Используйте `@JvmOverloads` для всех конструкторов
-4. ✅ Группируйте связанные атрибуты в одном `declare-styleable`
+```kotlin
+class AdvancedCustomView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    init {
+        val ta = context.obtainStyledAttributes(attrs, R.styleable.CustomView)
+
+        try {
+            // String
+            val text = ta.getString(R.styleable.CustomView_customText) ?: "Default"
+
+            // Integer
+            val count = ta.getInt(R.styleable.CustomView_customCount, 0)
+
+            // Float
+            val ratio = ta.getFloat(R.styleable.CustomView_customRatio, 1.0f)
+
+            // Boolean
+            val enabled = ta.getBoolean(R.styleable.CustomView_isEnabled, true)
+
+            // Color
+            val color = ta.getColor(R.styleable.CustomView_customColor, Color.BLACK)
+
+            // Dimension (возвращает пиксели)
+            val size = ta.getDimension(R.styleable.CustomView_customSize, 0f)
+
+            // Dimension (возвращает смещение в пикселях для целых чисел)
+            val sizePixels = ta.getDimensionPixelSize(R.styleable.CustomView_customSize, 0)
+
+            // Reference (drawable)
+            val icon = ta.getDrawable(R.styleable.CustomView_customIcon)
+
+            // Reference (resource ID)
+            val iconResId = ta.getResourceId(R.styleable.CustomView_customIcon, 0)
+
+            // Enum
+            val alignment = ta.getInt(R.styleable.CustomView_alignment, 0)
+
+            // Flags
+            val gravity = ta.getInt(R.styleable.CustomView_gravity, 0)
+            val hasTop = (gravity and 0x01) != 0
+            val hasBottom = (gravity and 0x02) != 0
+
+        } finally {
+            ta.recycle()
+        }
+    }
+}
+```
+
+### 6. Программное использование
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val progressView = findViewById<CircularProgressView>(R.id.progressView)
+
+        // Изменение атрибутов программно
+        progressView.setProgress(85)
+
+        // Анимация прогресса
+        ValueAnimator.ofInt(0, 100).apply {
+            duration = 2000
+            addUpdateListener { animation ->
+                progressView.setProgress(animation.animatedValue as Int)
+            }
+            start()
+        }
+    }
+}
+```
+
+### 7. Использование атрибутов темы
+
+```xml
+<!-- Определение в themes.xml -->
+<style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+    <item name="progressColor">@color/primary</item>
+    <item name="backgroundColor">@color/surface</item>
+</style>
+
+<!-- Ссылка на атрибут темы в attrs.xml -->
+<declare-styleable name="CircularProgressView">
+    <attr name="progressColor" format="color" />
+    <attr name="backgroundColor" format="color" />
+</declare-styleable>
+
+<!-- Использование в custom view -->
+<com.example.CircularProgressView
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    app:progressColor="?attr/colorPrimary"
+    app:backgroundColor="?attr/colorSurface" />
+```
+
+### 8. Переиспользование системных атрибутов
+
+```xml
+<!-- Переиспользование встроенных атрибутов Android -->
+<declare-styleable name="CustomButton">
+    <attr name="android:text" />
+    <attr name="android:textColor" />
+    <attr name="android:textSize" />
+    <attr name="customIcon" format="reference" />
+</declare-styleable>
+```
+
+```kotlin
+class CustomButton @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : androidx.appcompat.widget.AppCompatButton(context, attrs) {
+
+    init {
+        val ta = context.obtainStyledAttributes(attrs, R.styleable.CustomButton)
+
+        try {
+            // Чтение встроенных атрибутов Android
+            val text = ta.getString(R.styleable.CustomButton_android_text)
+            val textColor = ta.getColor(
+                R.styleable.CustomButton_android_textColor,
+                Color.BLACK
+            )
+
+            // Чтение кастомного атрибута
+            val icon = ta.getDrawable(R.styleable.CustomButton_customIcon)
+
+            // Применение
+            this.text = text
+            this.setTextColor(textColor)
+            setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null)
+
+        } finally {
+            ta.recycle()
+        }
+    }
+}
+```
+
+### Лучшие практики
+
+1. - **Всегда переработайте TypedArray** с помощью `typedArray.recycle()`
+2. - **Предоставляйте значения по умолчанию** для всех атрибутов
+3. - **Используйте подходящий формат** для каждого типа атрибута
+4. - **Документируйте атрибуты** с помощью комментариев в attrs.xml
+5. - **Группируйте связанные атрибуты** в одном styleable
+6. - **Поддерживайте атрибуты темы** для согласованности
+7. - **Валидируйте значения атрибутов** (например, прогресс 0-100)
+
+---
+
 ## Related Questions
 
 ### Prerequisites (Easier)
@@ -566,8 +813,8 @@ app:textStyle="bold|italic"
 
 ### Related (Medium)
 - [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- [[q-testing-viewmodels-turbine--testing--medium]] - View
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View
+- [[q-testing-viewmodels-turbine--android--medium]] - View
+- q-rxjava-pagination-recyclerview--android--medium - View
 - [[q-what-is-viewmodel--android--medium]] - View
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
 

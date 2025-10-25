@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-accessibility-compose--android--medium
@@ -32,19 +32,11 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Контрастность цветов для доступности?
-
----
-
-# Question (EN)
-> What is Accessibility Color Contrast?
-
 # Question (EN)
 > What is Accessibility Color Contrast?
 
 ## Answer (EN)
-Color contrast is the difference in luminance between text and background colors. Proper [[c-accessibility|accessibility]] contrast ensures readability for users with low vision, color blindness, age-related vision changes, and outdoor viewing. [[c-wcag|WCAG]] provides standardized contrast requirements.
+Color contrast is the difference in luminance between text and background colors. Proper [[c-accessibility|accessibility]] contrast ensures readability for users with low vision, color blindness, age-related vision changes, and outdoor viewing. WCAG provides standardized contrast requirements. Material Design color system helps ensure accessible color combinations.
 
 #### WCAG Requirements
 

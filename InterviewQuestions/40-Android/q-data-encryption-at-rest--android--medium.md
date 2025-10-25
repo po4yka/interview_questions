@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-security-basics--android--medium
@@ -34,6 +34,7 @@ tags:
 source: https://developer.android.com/guide/topics/security/encryption
 source_note: Android Encryption documentation
 ---
+
 # Вопрос (RU)
 > Как реализовать шифрование данных в покое с помощью EncryptedSharedPreferences и SQLCipher для Room? Сравните подходы, влияние на производительность и стратегии управления ключами.
 
@@ -438,7 +439,7 @@ class KeystoreManager {
 - Ensure data migration on updates
 - Document used encryption algorithms
 
-**See also:** [[c-encryption]], [[c-aes]]
+**See also:** [[c-encryption]], c-aes
 
 
 ## Follow-ups

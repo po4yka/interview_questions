@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-storage-types--android--medium
@@ -95,7 +95,7 @@ class Lru<K, V>(max: Int) : LruCache<K, V>(max)
 - Log cache layers and decisions at debug level; sample in production.
 
 ### Components
-- Preferences/DataStore: small KV (flags, timestamps) using [[c-datastore]] or [[c-shared-preferences]].
+- Preferences/DataStore: small KV (flags, timestamps) using c-datastore or c-shared-preferences.
 - Room: structured cached entities (with cachedAt, origin ETag/Last-Modified) using [[c-room]].
 - HTTP: OkHttp cache + Cache-Control; ETag/If-None-Match; stale-if-error for resiliency.
 - Images: Glide/Picasso built-in caches; prefer library defaults + sizing.

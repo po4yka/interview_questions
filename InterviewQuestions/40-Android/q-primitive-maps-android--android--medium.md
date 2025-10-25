@@ -751,4 +751,4 @@ class AfterOptimization {
 
 - [[q-where-is-composition-created--android--medium]]
 - [[q-reduce-apk-size-techniques--android--medium]]
-- [[q-kmm-production-readiness--multiplatform--hard]]
+- [[q-kmm-production-readiness--kotlin--hard]]

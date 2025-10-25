@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [build-optimization, apk-size, performance, resources]
+subtopics: [gradle, app-bundle, performance-memory]
 question_kind: practical
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [proguard-r8, build-optimization, app-bundles]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/build-optimization, android/apk-size, android/performance, android/resources, difficulty/medium]
+tags: [android/gradle, android/app-bundle, android/performance-memory, en, ru, difficulty/medium]
 ---
 
 # Question (EN)
@@ -433,7 +433,7 @@ class APKSizeOptimization {
 
 -   [[q-reduce-app-size--android--medium]] - Optimization
 -   [[q-app-size-optimization--android--medium]] - Performance
--   [[q-macrobenchmark-startup--performance--medium]] - Performance
+-   [[q-macrobenchmark-startup--android--medium]] - Performance
 -   [[q-recomposition-compose--android--medium]] - Jetpack Compose
 
 ### Advanced (Harder)

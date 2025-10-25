@@ -361,6 +361,6 @@ class UserRepository @Inject constructor(
 
 ## Related Questions
 
-- [[q-how-jetpack-compose-works--programming-languages--medium]]
-- [[q-what-navigation-methods-exist-in-kotlin--programming-languages--medium]]
+- [[q-how-jetpack-compose-works--android--medium]]
+- [[q-what-navigation-methods-exist-in-kotlin--android--medium]]
 - [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]]

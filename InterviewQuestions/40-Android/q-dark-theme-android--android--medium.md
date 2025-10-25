@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-theming-basics--android--medium
@@ -31,6 +31,7 @@ tags:
 source: https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
 source_note: Android Dark Theme documentation
 ---
+
 # Вопрос (RU)
 > Что такое темная тема в Android?
 
@@ -297,7 +298,7 @@ fun toggleTheme() {
 - Check text readability
 - Ensure proper image display
 
-**See also:** [[c-material-design]]
+**See also:** c-material-design
 
 
 ## Follow-ups

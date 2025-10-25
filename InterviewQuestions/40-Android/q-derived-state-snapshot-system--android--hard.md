@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-compose-stability-skippability--android--hard
@@ -35,6 +35,7 @@ tags:
 source: https://developer.android.com/jetpack/compose/state
 source_note: Android Compose State documentation
 ---
+
 # Вопрос (RU)
 > Объясните систему снимков (snapshot system) Compose. Как derivedStateOf оптимизирует перекомпозиции?
 
@@ -327,7 +328,7 @@ fun OptimizedList(items: List<String>) {
 - Avoid side effects in derivedStateOf
 - Document complex computations
 
-**See also:** [[c-immutability]], [[c-snapshot-isolation]]
+**See also:** c-immutability, c-snapshot-isolation
 
 
 ## Follow-ups

@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-dagger-custom-scopes--android--hard
@@ -33,6 +33,7 @@ tags:
 source: https://dagger.dev/api/latest/dagger/Scope.html
 source_note: Dagger Scope API documentation
 ---
+
 # Вопрос (RU)
 > Что такое scope в Dagger и как они работают?
 
@@ -393,7 +394,7 @@ class Database @Inject constructor() // Should be @Singleton
 class UserAdapter @Inject constructor() // Should be @FragmentScoped
 ```
 
-**See also:** [[c-dependency-injection]], [[c-singleton-pattern]]
+**See also:** [[c-dependency-injection]], c-singleton-pattern
 
 ## Follow-ups
 

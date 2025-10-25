@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-service-types--android--easy
@@ -32,14 +32,6 @@ tags:
 > Что такое Назначение Service в Android?
 
 ---
-
-# Вопрос (RU)
-> Что такое Назначение Service в Android?
-
----
-
-# Question (EN)
-> What is Android Services Purpose?
 
 # Question (EN)
 > What is Android Services Purpose?

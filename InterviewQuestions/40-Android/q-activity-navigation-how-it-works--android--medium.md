@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-activity-lifecycle-methods--android--medium
@@ -32,19 +32,11 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Как работает навигация Activity?
-
----
-
-# Question (EN)
-> Activity Navigation How It Works?
-
 # Question (EN)
 > Activity Navigation How It Works?
 
 ## Answer (EN)
-[[c-activity-navigation|Activity navigation]] in Android is managed through [[c-intent|Intents]], [[c-back-stack|back stack]], and [[c-task-management|task management]]. The [[c-navigation-component|Navigation Component]] provides a modern alternative.
+Activity navigation in Android is managed through Intents, back stack, and task management. The Navigation Component provides a modern alternative.
 
 **Main mechanisms:**
 

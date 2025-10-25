@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-build-optimization-gradle--android--medium
@@ -26,10 +26,6 @@ tags:
 - android/gradle
 - android/play-console
 - difficulty/medium
-name: Deploy
-true:
-- workflow_dispatch
-jobs: null
 ---
 
 # Вопрос (RU)
@@ -60,7 +56,7 @@ jobs: null
 
 ### Signing
 - Use Play App Signing; keep upload keystore in CI secrets (OIDC/secret store) with [[c-encryption]].
-- Sign via Gradle `signingConfig` with injected env secrets; never commit keystores to maintain [[c-secure-storage]].
+- Sign via Gradle `signingConfig` with injected env secrets; never commit keystores to maintain c-secure-storage.
 
 ### Artifacts
 - Produce AAB (primary) and APK (for internal testing) + mapping.txt + ProGuard/R8 reports.

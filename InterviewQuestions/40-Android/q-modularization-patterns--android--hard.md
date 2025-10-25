@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [architecture, modularization, best-practices]
+subtopics: [architecture-clean, architecture-modularization]
 question_kind: theory
 difficulty: hard
 
@@ -24,7 +24,7 @@ related: [q-does-state-made-in-compose-help-avoid-race-condition--android--mediu
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [en, ru, android/architecture, android/modularization, android/best-practices, difficulty/hard]
+tags: [android/architecture-clean, android/architecture-modularization, en, ru, difficulty/hard]
 ---
 # Question (EN)
 > What modularization patterns do you know?

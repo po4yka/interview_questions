@@ -436,6 +436,6 @@ Recomposition (Action)
 
 ## Related Questions
 
-- [[q-mlkit-face-detection--ml--medium]]
+- q-mlkit-face-detection--ml--medium
 - [[q-recomposition-choreographer--android--hard]]
 - [[q-baseline-profiles-optimization--android--medium]]

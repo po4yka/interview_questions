@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-background-tasks-decision-guide--android--medium
@@ -33,19 +33,11 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Размер страницы DEX 16KB?
-
----
-
-# Question (EN)
-> What is 16kb Dex Page Size?
-
 # Question (EN)
 > What is 16kb Dex Page Size?
 
 ## Answer (EN)
-The 16 KB DEX page size issue is a [[c-memory-alignment|memory alignment]] problem affecting Android 6.0+ that causes significant app bloat when apps are optimized with [[c-r8-proguard|R8/ProGuard]]. This affects [[c-gradle|Gradle]] builds and [[c-apk|APK]] sizes.
+The 16 KB DEX page size issue is a memory alignment problem affecting Android 6.0+ that causes significant app bloat when apps are optimized with R8/ProGuard. This affects [[c-gradle|Gradle]] builds and APK sizes.
 
 #### Problem
 
@@ -135,7 +127,7 @@ Monitor APK size in CI/CD. Use App Bundle instead of APK.
 - [[q-android-build-optimization--android--medium]] - Build
 - [[q-proguard-r8--android--medium]] - Build
 - [[q-build-optimization-gradle--android--medium]] - Build
-- [[q-kapt-ksp-migration--gradle--medium]] - Build
+- [[q-kapt-ksp-migration--android--medium]] - Build
 
 ### Advanced (Harder)
-- [[q-kotlin-dsl-builders--kotlin--hard]] - Build
+- [[q-kotlin-dsl-builders--android--hard]] - Build

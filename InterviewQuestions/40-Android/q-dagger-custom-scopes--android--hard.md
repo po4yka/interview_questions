@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-dagger-component-dependencies--android--hard
@@ -27,6 +27,7 @@ tags:
 source: https://dagger.dev/hilt/components.html
 source_note: Hilt components and scopes documentation
 ---
+
 # Вопрос (RU)
 > Как создать и использовать кастомные скоупы в Dagger/Hilt? Объясните разницу между Singleton, кастомными скоупами и unscoped зависимостями. Приведите примеры когда и зачем создавать кастомный скоуп.
 

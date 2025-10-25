@@ -15,7 +15,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-async-operations-android--android--medium
@@ -34,14 +34,6 @@ tags:
 > Что такое Руководство по фоновым задачам?
 
 ---
-
-# Вопрос (RU)
-> Что такое Руководство по фоновым задачам?
-
----
-
-# Question (EN)
-> What is Background Tasks Decision Guide?
 
 # Question (EN)
 > What is Background Tasks Decision Guide?

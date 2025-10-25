@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [jetpack-compose, ui, declarative-ui, state, recomposition]
+subtopics: [ui-compose, ui-views, ui-state]
 question_kind: theory
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [q-compose-remember-derived-state--jetpack-compose--medium, q-compose-s
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [en, ru, android/jetpack-compose, android/ui, android/declarative-ui, android/state, android/recomposition, difficulty/medium]
+tags: [android/ui-compose, android/ui-views, android/ui-state, en, ru, difficulty/medium]
 ---
 
 # Question (EN)
@@ -1373,7 +1373,7 @@ fun LoadDataExample(userId: String) {
 - [[q-compose-side-effects-advanced--android--hard]] - Advanced side effects
 - [[q-compositionlocal-compose--android--hard]] - CompositionLocal deep dive
 - [[q-compose-compiler-plugin--android--hard]] - Compiler plugin internals
-- [[q-kak-risuet-compose-na-ekrane--android--hard]] - Compose drawing internals
+- q-kak-risuet-compose-na-ekrane--android--hard - Compose drawing internals
 
 ## References
 - [Jetpack Compose Documentation](https://developer.android.com/jetpack/compose)

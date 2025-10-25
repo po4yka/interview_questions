@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-app-lag-analysis--android--medium
@@ -33,14 +33,6 @@ tags:
 
 ---
 
-# Вопрос (RU)
-> Что такое Android Runtime ART?
-
----
-
-# Question (EN)
-> What is Android Runtime ART?
-
 # Question (EN)
 > What is Android Runtime ART?
 
@@ -48,7 +40,7 @@ tags:
 **Android Runtime (ART)** is the execution environment for Android applications, responsible for running code, managing memory, and interacting with the operating system. ART replaced Dalvik VM from Android 5.0 and uses **AOT (Ahead-of-Time) compilation** for improved performance.
 
 **Runtime Theory:**
-Android Runtime provides a managed execution environment that abstracts hardware differences and provides [[c-memory-management]], [[c-garbage-collection]], and security isolation. It converts DEX bytecode to native machine code for optimal performance while maintaining portability across different Android devices.
+Android Runtime provides a managed execution environment that abstracts hardware differences and provides [[c-memory-management]], c-garbage-collection, and security isolation. It converts DEX bytecode to native machine code for optimal performance while maintaining portability across different Android devices.
 
 **ART vs Dalvik:**
 - **Dalvik**: JIT (Just-In-Time) compilation during execution

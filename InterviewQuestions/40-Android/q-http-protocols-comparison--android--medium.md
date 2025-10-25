@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [networking, real-time, protocols, performance]
+subtopics: [networking-http, websockets, performance-memory]
 question_kind: comparison
 difficulty: medium
 
@@ -24,7 +24,7 @@ related: [websocket, real-time-updates, networking]
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [en, ru, android/networking, android/real-time, android/protocols, android/performance, difficulty/medium]
+tags: [android/networking-http, android/websockets, android/performance-memory, en, ru, difficulty/medium]
 ---
 # Question (EN)
 > What are the differences between HTTP, Long-Polling, WebSocket, and Server-Sent Events (SSE)? When should each be used?
@@ -679,9 +679,9 @@ SSE позволяет серверам отправлять данные кли
 
 ### Related (Medium)
 - [[q-reduce-apk-size-techniques--android--medium]] - Build Optimization
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--android--medium]] - Performance
 - [[q-recomposition-compose--android--medium]] - Jetpack Compose
-- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
+- [[q-kapt-ksp-migration--android--medium]] - Kapt
 
 ### Advanced (Harder)
 - [[q-implement-voice-video-call--android--hard]] - Webrtc

@@ -160,7 +160,7 @@ class MyContentProvider : ContentProvider() {
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Fundamentals
 - [[q-what-unifies-android-components--android--easy]] - Fundamentals
 - [[q-android-components-besides-activity--android--easy]] - Fundamentals
-- [[q-material3-components--material-design--easy]] - Fundamentals
+- [[q-material3-components--ui-ux-accessibility--easy]] - Fundamentals
 
 ### Advanced (Harder)
 - [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals

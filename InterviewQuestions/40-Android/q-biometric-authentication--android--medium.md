@@ -13,7 +13,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-android-keystore-system--security--medium
@@ -51,7 +51,7 @@ tags:
 
 ### Biometric Authentication Overview
 
-**Theory**: Biometric authentication provides secure, convenient user authentication using fingerprint, face, or iris recognition. AndroidX Biometric library offers unified API across Android versions. [[c-biometric-auth]] leverages hardware-backed security.
+**Theory**: Biometric authentication provides secure, convenient user authentication using fingerprint, face, or iris recognition. AndroidX Biometric library offers unified API across Android versions. c-biometric-auth leverages hardware-backed security.
 
 **Key Components**:
 - BiometricPrompt: Unified API for all biometric types

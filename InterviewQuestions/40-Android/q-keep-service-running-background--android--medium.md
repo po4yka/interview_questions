@@ -730,10 +730,10 @@ Is task user-initiated and time-sensitive?
 
 ### Related (Medium)
 - [[q-service-component--android--medium]] - Service
-- [[q-foreground-service-types--background--medium]] - Service
+- [[q-foreground-service-types--android--medium]] - Service
 - [[q-when-can-the-system-restart-a-service--android--medium]] - Service
 - [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Service
 - [[q-background-vs-foreground-service--android--medium]] - Service
 
 ### Advanced (Harder)
-- [[q-service-lifecycle-binding--background--hard]] - Service
+- [[q-service-lifecycle-binding--android--hard]] - Service

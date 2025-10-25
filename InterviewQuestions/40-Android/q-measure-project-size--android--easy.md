@@ -981,5 +981,5 @@ android {
 ## Related Questions
 
 - [[q-how-to-write-recyclerview-cache-ahead--android--medium]]
-- [[q-flow-testing-turbine--testing--medium]]
+- [[q-flow-testing-turbine--android--medium]]
 - [[q-how-navigation-is-implemented-in-android--android--medium]]

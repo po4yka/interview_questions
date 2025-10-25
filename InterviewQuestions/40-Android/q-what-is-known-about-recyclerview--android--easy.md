@@ -116,6 +116,6 @@ RecyclerView — это мощный компонент пользователь
 - [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
 
 ### Advanced (Harder)
-- [[q-rxjava-pagination-recyclerview--android--medium]] - View, Ui
+- q-rxjava-pagination-recyclerview--android--medium - View, Ui
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
 - [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui

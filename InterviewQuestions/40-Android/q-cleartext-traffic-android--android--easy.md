@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-certificate-pinning--security--medium
@@ -48,7 +48,7 @@ source_note: Android docs
 - Cleartext traffic = unencrypted HTTP communication (no TLS). Anyone on path can read/modify. Use [[c-encryption]] for all sensitive data.
 
 ### Android policy
-- Android 9+ (API 28): cleartext is blocked by default to enforce [[c-secure-storage]]
+- Android 9+ (API 28): cleartext is blocked by default to enforce c-secure-storage
 - Older versions: allowed by default
 
 ### Allow only for development (per‑domain)

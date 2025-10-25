@@ -670,4 +670,4 @@ from feature-profile conflicts with value=portrait from feature-login
 
 ### Advanced (Harder)
 - [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Fundamentals
-- [[q-kotlin-context-receivers--kotlin--hard]] - Fundamentals
+- [[q-kotlin-context-receivers--android--hard]] - Fundamentals

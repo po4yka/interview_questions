@@ -14,10 +14,6 @@ tags: [performance, optimization, performance-rendering, performance-memory, che
 
 > What is a comprehensive checklist for optimizing Android app performance? What are the key areas to focus on?
 
-# Вопрос (RU)
-
-> Какой комплексный чек-лист для оптимизации производительности Android приложения? На какие ключевые области обратить внимание?
-
 ---
 
 ## Answer (EN)

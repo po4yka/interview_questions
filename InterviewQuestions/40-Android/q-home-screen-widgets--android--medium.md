@@ -594,6 +594,6 @@ RemoteViews поддерживает только определённые layou
 
 ## Related Questions
 
-- [[q-recyclerview-viewtypes-delegation--recyclerview--medium]]
+- [[q-recyclerview-viewtypes-delegation--android--medium]]
 - [[q-what-is-broadcastreceiver--android--easy]]
 - [[q-what-is-known-about-recyclerview--android--easy]]

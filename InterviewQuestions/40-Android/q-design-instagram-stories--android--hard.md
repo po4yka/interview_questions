@@ -18,7 +18,7 @@ language_tags:
 - ru
 source: https://developer.android.com/guide/topics/media
 source_note: Android media stack overview
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - q-data-sync-unstable-network--android--hard
@@ -27,41 +27,22 @@ related:
 created: 2025-10-20
 updated: 2025-10-20
 tags:
-- en
-- ru
--
-- a
-- n
-- d
-- r
-- o
-- i
-- d
-- /
-- f
-- i
-- l
-- e
-- s
-- -
-- m
-- e
-- d
-- i
-- a
+  - android/files-media
+  - android/architecture-clean
+  - android/service
+  - stories
+  - media
+  - cdn
+  - difficulty/hard
+---
 
-- android/files-media
-- android/architecture-clean
-- android/service
-- stories
-- media
-- cdn
-- difficulty/hard---
 # Вопрос (RU)
 > Как спроектировать Instagram Stories для Android?
 
 # Question (EN)
-> How to design Instagram Stories for Android?---
+> How to design Instagram Stories for Android?
+
+---
 ## Ответ (RU)
 
 Instagram Stories включает захват и обработку медиа, загрузку, доставку через CDN, просмотр, счетчики/реакции в реальном времени и автоматическое истечение через 24 часа.
@@ -176,7 +157,7 @@ class StoryTtlWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(c
 - Upload time, time-to-first-frame, rebuffer ratio, upload/playback errors.
 - Load test CDN/transcoder; poor-network tests; battery profiling.
 
-**See also:** [[c-mvvm]], [[c-clean-architecture]]
+**See also:** c-mvvm, c-clean-architecture
 
 
 ## Follow-ups
