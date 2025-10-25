@@ -1,37 +1,30 @@
 ---
 id: 20251012-122766
 title: Android Keystore System / Система Android Keystore
-aliases:
-- Android Keystore System
-- Система Android Keystore
+aliases: [Android Keystore System, Система Android Keystore]
 topic: security
 subtopics:
-- encryption
-- biometric-authentication
+  - biometric-authentication
+  - encryption
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- en
-- ru
+  - en
+  - ru
 status: reviewed
 moc: moc-security
 created: 2025-10-15
 updated: 2025-10-15
-tags:
-- security/encryption
-- security/biometric-authentication
-- keystore
-- encryption
-- biometric
-- attestation
-- authentication
-- difficulty/medium
+tags: [attestation, authentication, biometric, difficulty/medium, encryption, keystore, security/biometric-authentication, security/encryption]
 related:
-- q-android-security-practices-checklist--android--medium
-- q-encrypted-file-storage--android--medium
-- q-database-encryption-android--android--medium
+  - q-android-security-practices-checklist--android--medium
+  - q-database-encryption-android--android--medium
+  - q-encrypted-file-storage--android--medium
+date created: Sunday, October 12th 2025, 12:27:50 pm
+date modified: Saturday, October 25th 2025, 8:32:50 pm
 ---
+
 # Вопрос (RU)
 > Как реализовать безопасное хранение ключей с помощью Android Keystore?
 

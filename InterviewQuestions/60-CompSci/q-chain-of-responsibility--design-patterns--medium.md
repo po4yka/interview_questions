@@ -5,15 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-equals-hashcode-purpose--programming-languages--hard, q-java-object-comparison--programming-languages--easy, q-java-all-classes-inherit-from-object--programming-languages--easy]
+related: [q-equals-hashcode-purpose--programming-languages--hard, q-java-all-classes-inherit-from-object--programming-languages--easy, q-java-object-comparison--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - behavioral-patterns
-  - chain-of-responsibility
-  - gof-patterns
-  - chain-pattern
+tags: [behavioral-patterns, chain-of-responsibility, chain-pattern, design-patterns, gof-patterns]
+date created: Monday, October 6th 2025, 7:25:39 am
+date modified: Saturday, October 25th 2025, 8:32:54 pm
 ---
+
 # Chain of Responsibility Pattern
 
 # Question (EN)
@@ -52,7 +50,7 @@ Define a **chain of receiver objects** having the responsibility, depending on r
 
 This enables us to send a request to a chain of receivers without having to know which one handles the request. The request gets passed along the chain until a receiver handles the request. The sender of a request is no longer coupled to a particular receiver.
 
-## Когда использовать?
+## Когда Использовать?
 
 You might consider using Chain of Responsibility when:
 
@@ -388,7 +386,7 @@ data class Response(val code: Int, val body: String)
 - **Android**: View event handling, OkHttp interceptors, validation chains
 - Each handler can **modify** the request or **stop** the chain
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Pros (Преимущества)
 
@@ -478,7 +476,7 @@ Chain of Responsibility (Цепочка обязанностей) - это па�
 
 Этот паттерн отделяет клиента от конкретного получателя, выполняющего действие, следуя принципу открытости/закрытости, позволяя добавлять новые обработчики без изменения существующего кода.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Какие проблемы решает паттерн Chain of Responsibility?
 

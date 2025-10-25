@@ -5,15 +5,13 @@ topic: computer-science
 difficulty: hard
 status: draft
 moc: moc-cs
-related: [q-throw-vs-throws--programming-languages--easy, q-extensions-concept--programming-languages--easy, q-priorityqueue-vs-deque--programming-languages--easy]
+related: [q-extensions-concept--programming-languages--easy, q-priorityqueue-vs-deque--programming-languages--easy, q-throw-vs-throws--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - structural-patterns
-  - bridge
-  - gof-patterns
-  - abstraction
+tags: [abstraction, bridge, design-patterns, gof-patterns, structural-patterns]
+date created: Monday, October 6th 2025, 7:28:58 am
+date modified: Saturday, October 25th 2025, 8:32:51 pm
 ---
+
 # Bridge Pattern
 
 # Question (EN)
@@ -53,7 +51,7 @@ When to Use Bridge Pattern:
 3. **Changes in implementation shouldn't impact clients**
 4. **Share implementation among multiple objects** and hide implementation details
 
-## Ключевые компоненты
+## Ключевые Компоненты
 
 Key Components:
 
@@ -303,7 +301,7 @@ fun main() {
 - **Refined abstractions** extend base abstraction with more features
 - **Decoupling** allows changing implementations without affecting abstractions
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Pros (Преимущества)
 
@@ -401,14 +399,14 @@ Bridge — это структурный паттерн проектирован
 
 Этот паттерн включает интерфейс, который действует как мост, делая функциональность конкретных классов независимой от классов-реализаторов интерфейса. Оба типа классов могут изменяться структурно, не влияя друг на друга.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Паттерн проектирования Bridge решает следующие проблемы:
 
 1. **Абстракция и её реализация должны определяться и расширяться независимо друг от друга**
 2. **Следует избегать привязки во время компиляции между абстракцией и её реализацией**, чтобы реализация могла выбираться во время выполнения
 
-### Когда использовать?
+### Когда Использовать?
 
 Когда использовать паттерн Bridge:
 

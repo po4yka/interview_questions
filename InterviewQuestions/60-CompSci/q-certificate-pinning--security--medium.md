@@ -1,34 +1,30 @@
 ---
 id: 20251012-122795
 title: Certificate Pinning / Закрепление сертификатов
-aliases:
-- Certificate Pinning
-- Закрепление сертификатов
+aliases: [Certificate Pinning, Закрепление сертификатов]
 topic: security
 subtopics:
-- networking
-- tls
+  - networking
+  - tls
 question_kind: android
 difficulty: medium
 status: reviewed
 moc: moc-security
 related:
-- q-app-security-best-practices--android--medium
-- q-android-keystore-system--security--medium
-- q-android-security-practices-checklist--android--medium
+  - q-android-keystore-system--security--medium
+  - q-android-security-practices-checklist--android--medium
+  - q-app-security-best-practices--android--medium
 created: 2025-10-15
 updated: 2025-10-20
 original_language: en
 language_tags:
-- en
-- ru
-tags:
-- security
-- networking
-- tls
-- okhttp
-- difficulty/medium
+  - en
+  - ru
+tags: [difficulty/medium, networking, okhttp, security, tls]
+date created: Sunday, October 12th 2025, 12:27:51 pm
+date modified: Saturday, October 25th 2025, 8:32:52 pm
 ---
+
 # Вопрос (RU)
 > Что такое закрепление сертификатов, зачем оно нужно и как безопасно реализовать его в Android (OkHttp и Network Security Config)?
 
@@ -44,7 +40,7 @@ tags:
 - Что пинить: предпочтительно публичный ключ (переживает продление), всегда добавлять резервные пины для ротации.
 - Область: пинить на хост; wildcard — только при чётком понимании рисков.
 
-### Минимальная настройка OkHttp
+### Минимальная Настройка OkHttp
 ```kotlin
 val pinner = CertificatePinner.Builder()
   .add("api.example.com", "sha256/BASE64_PIN_PRIMARY")
@@ -70,7 +66,7 @@ val client = OkHttpClient.Builder()
 </network-security-config>
 ```
 
-### Ротация и обработка сбоёв
+### Ротация И Обработка Сбоёв
 - Поставлять основной + резервные пины; добавлять новый пин до ротации; удалять старый после.
 - При сбое пиннинга: жёстко падать, логировать событие безопасности, показывать понятную ошибку; не обходить проверку.
 
@@ -82,12 +78,12 @@ val client = OkHttpClient.Builder()
 
 ## Answer (EN)
 
-### Core theory
+### Core Theory
 - Purpose: constrain TLS trust to known cert/public key to defeat MITM even if a rogue/root CA exists.
 - What to pin: prefer public key (survives cert renewal), include backup pins for rotation.
 - Scope: pin per host; add wildcards only if necessary and well understood.
 
-### Minimal OkHttp setup
+### Minimal OkHttp Setup
 ```kotlin
 val pinner = CertificatePinner.Builder()
   .add("api.example.com", "sha256/BASE64_PIN_PRIMARY")
@@ -99,7 +95,7 @@ val client = OkHttpClient.Builder()
   .build()
 ```
 
-### Network Security Config alternative
+### Network Security Config Alternative
 ```xml
 <!-- res/xml/network_security_config.xml -->
 <network-security-config>
@@ -113,7 +109,7 @@ val client = OkHttpClient.Builder()
 </network-security-config>
 ```
 
-### Rotation and failure handling
+### Rotation and Failure Handling
 - Ship primary + backup pins; add next pin before rotation; remove old after rollout.
 - On pin failure: fail closed, log security event, show clear error; never silently bypass.
 

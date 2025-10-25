@@ -7,15 +7,12 @@ status: draft
 moc: moc-cs
 related: [q-hot-vs-cold-flows--programming-languages--medium, q-launch-vs-async-error-handling--programming-languages--medium, q-priorityqueue-vs-deque--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - abstract-class
-  - inheritance
-  - kotlin
-  - oop
-  - programming-languages
-  - template-method
+tags: [abstract-class, inheritance, kotlin, oop, programming-languages, template-method]
+date created: Friday, October 3rd 2025, 6:25:42 pm
+date modified: Saturday, October 25th 2025, 8:32:47 pm
 ---
-# Что такое абстрактный класс и для чего он используется?
+
+# Что Такое Абстрактный Класс И Для Чего Он Используется?
 
 # Question (EN)
 > What is an abstract class and what is it used for?

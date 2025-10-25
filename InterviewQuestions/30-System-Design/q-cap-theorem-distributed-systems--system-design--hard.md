@@ -3,7 +3,7 @@ id: 20251012-300004
 title: "CAP Theorem and Distributed Systems / CAP теорема и распределённые системы"
 aliases: ["CAP Theorem", "CAP теорема"]
 topic: system-design
-subtopics: [distributed-systems, consistency, availability, partition-tolerance]
+subtopics: [availability, consistency, distributed-systems, partition-tolerance]
 question_kind: system-design
 difficulty: hard
 original_language: en
@@ -13,8 +13,10 @@ moc: moc-system-design
 related: [c-cap-theorem, q-caching-strategies--system-design--medium, q-microservices-vs-monolith--system-design--hard]
 created: 2025-10-12
 updated: 2025-01-25
-tags: [system-design, distributed-systems, cap-theorem, consistency, difficulty/hard]
+tags: [cap-theorem, consistency, difficulty/hard, distributed-systems, system-design]
 sources: [https://en.wikipedia.org/wiki/CAP_theorem]
+date created: Sunday, October 12th 2025, 8:27:12 pm
+date modified: Saturday, October 25th 2025, 7:58:41 pm
 ---
 
 # Вопрос (RU)

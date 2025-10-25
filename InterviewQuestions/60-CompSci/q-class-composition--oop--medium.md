@@ -5,19 +5,15 @@ topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags:
-  - code-reuse
-  - composition
-  - design-patterns
-  - encapsulation
-  - has-a
-  - oop
-  - relationships
+tags: [code-reuse, composition, design-patterns, encapsulation, has-a, oop, relationships]
 moc: moc-architecture-patterns
 related: [q-adapter-pattern--design-patterns--medium, q-reference-types-criteria--programming-languages--medium, q-what-is-job-object--programming-languages--medium]
-subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
+subtopics: ["abstraction", "classes", "encapsulation", "inheritance", "polymorphism"]
+date created: Saturday, October 4th 2025, 7:04:16 pm
+date modified: Saturday, October 25th 2025, 8:32:54 pm
 ---
-# Что известно о композиции классов?
+
+# Что Известно О Композиции Классов?
 
 # Question (EN)
 > What is known about class composition?
@@ -305,7 +301,7 @@ paypalOrder.placeOrder(200.0)
 
 ---
 
-## Composition vs Inheritance
+## Composition Vs Inheritance
 
 ### Inheritance Example
 

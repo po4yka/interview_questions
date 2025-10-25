@@ -5,15 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-proxy-pattern--design-patterns--medium, q-garbage-collector-definition--programming-languages--easy, q-extensions-concept--programming-languages--easy]
+related: [q-extensions-concept--programming-languages--easy, q-garbage-collector-definition--programming-languages--easy, q-proxy-pattern--design-patterns--medium]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - creational-patterns
-  - builder
-  - gof-patterns
-  - kotlin
+tags: [builder, creational-patterns, design-patterns, gof-patterns, kotlin]
+date created: Monday, October 6th 2025, 7:13:47 am
+date modified: Saturday, October 25th 2025, 8:32:52 pm
 ---
+
 # Builder Pattern
 
 # Question (EN)
@@ -166,7 +164,7 @@ This is often preferred in Kotlin for simple cases, but Builder is still useful 
 - Multiple build variants (like `randomBuild()`)
 - When you need to reuse builder state
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Advantages (Преимущества)
 
@@ -313,7 +311,7 @@ class Product {
 
 Builder (Строитель) - это порождающий паттерн проектирования, который позволяет конструировать сложные объекты шаг за шагом. Паттерн позволяет создавать различные типы и представления объекта, используя один и тот же код конструирования.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Паттерн Builder решает следующие проблемы:
 
@@ -331,7 +329,7 @@ Builder (Строитель) - это порождающий паттерн пр
 
 Класс (один и тот же процесс конструирования) может делегировать различным объектам `Builder` создание различных представлений сложного объекта.
 
-### Проблема телескопических конструкторов
+### Проблема Телескопических Конструкторов
 
 Builder также решает проблему **телескопических конструкторов**, когда создается множество вариантов конструктора с увеличивающимся числом аргументов:
 
@@ -389,7 +387,7 @@ val foodOrder = FoodOrder.Builder()
     .build()
 ```
 
-### Примеры в Android
+### Примеры В Android
 
 #### NotificationBuilder
 
@@ -415,7 +413,7 @@ val dialog = AlertDialog.Builder(this)
     }.show()
 ```
 
-### Альтернатива в Kotlin: именованные параметры
+### Альтернатива В Kotlin: Именованные Параметры
 
 Kotlin предоставляет **именованные параметры и параметры по умолчанию**, которые помогают минимизировать количество перегрузок и улучшить читаемость вызова функции.
 
@@ -458,7 +456,7 @@ val user = User(
 3. **Больше кода** - Требуется создание класса builder и методов
 4. **Избыточность для простых объектов** - Именованные параметры Kotlin часто лучше
 
-### Сложный пример Builder
+### Сложный Пример Builder
 
 ```kotlin
 // Сложный builder с валидацией
@@ -531,7 +529,7 @@ val request = HttpRequest.Builder("https://api.example.com/users")
     .build()
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 ```kotlin
 // DO: Используйте приватный конструктор
@@ -563,7 +561,7 @@ class Product {
 // Build должен валидировать перед созданием объекта
 ```
 
-### Когда использовать Builder
+### Когда Использовать Builder
 
 **Используйте Builder когда:**
 - Объект имеет много необязательных параметров
