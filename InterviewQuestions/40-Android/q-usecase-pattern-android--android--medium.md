@@ -26,6 +26,7 @@ updated: 2025-10-06
 
 tags: [android/architecture-clean, en, ru, difficulty/medium]
 ---
+
 # Question (EN)
 > What is the UseCase pattern in Android? When and how to implement it?
 # Вопрос (RU)

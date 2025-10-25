@@ -9,6 +9,7 @@ related: [q-mvi-one-time-events--android--medium, q-what-is-layout-performance-m
 created: 2025-10-15
 tags: [vector-graphics, animated-vector-drawable, svg, animations, graphics, difficulty/medium]
 ---
+
 # Vector Graphics and Animated Vector Drawables
 
 ---

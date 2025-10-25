@@ -9,6 +9,7 @@ related: [q-kmm-production-readiness--multiplatform--hard, q-testing-viewmodels-
 created: 2025-10-15
 tags: [languages, difficulty/medium]
 ---
+
 # В чём измеряется производительность layout
 
 ## Answer (EN)

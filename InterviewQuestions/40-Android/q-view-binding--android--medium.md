@@ -14,6 +14,7 @@ subtopics:
   - gradle
   - build-variants
 ---
+
 # View Binding in Android / View Binding в Android
 
 **English**: What do you know about View Binding?
