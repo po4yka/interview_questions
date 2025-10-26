@@ -44,7 +44,7 @@ data class Memento(val state: String)  // Immutable snapshot
 
 class Originator(var state: String) {
     fun createMemento(): Memento = Memento(state)
-    
+
     fun restore(memento: Memento) {
         state = memento.state
     }
@@ -52,11 +52,11 @@ class Originator(var state: String) {
 
 class Caretaker {
     private val history = mutableListOf<Memento>()
-    
+
     fun saveState(originator: Originator) {
         history.add(originator.createMemento())
     }
-    
+
     fun undo(originator: Originator) {
         if (history.isNotEmpty()) {
             val memento = history.removeLast()
@@ -69,13 +69,13 @@ class Caretaker {
 fun main() {
     val originator = Originator("Initial")
     val caretaker = Caretaker()
-    
+
     caretaker.saveState(originator)  // State 1
     originator.state = "Modified"
-    
+
     caretaker.saveState(originator)  // State 2
     originator.state = "Modified Again"
-    
+
     caretaker.undo(originator)  // Restores to "Modified"
     println(originator.state)
 }
@@ -108,33 +108,33 @@ class TextEditor {
     private var content: String = ""
     private val history = mutableListOf<DocumentState>()
     private var currentIndex = -1
-    
+
     fun type(text: String) {
         content += text
         saveState()
     }
-    
+
     fun undo() {
         if (currentIndex > 0) {
             currentIndex--
             content = history[currentIndex].content
         }
     }
-    
+
     fun redo() {
         if (currentIndex < history.size - 1) {
             currentIndex++
             content = history[currentIndex].content
         }
     }
-    
+
     private fun saveState() {
         // Удалить states после currentIndex
         history.subList(currentIndex + 1, history.size).clear()
         history.add(DocumentState(content))
         currentIndex = history.size - 1
     }
-    
+
     fun getContent() = content
 }
 
@@ -144,10 +144,10 @@ fun main() {
     editor.type("Hello")
     editor.type(" World")
     println(editor.getContent())  // "Hello World"
-    
+
     editor.undo()
     println(editor.getContent())  // "Hello"
-    
+
     editor.redo()
     println(editor.getContent())  // "Hello World"
 }
@@ -192,7 +192,7 @@ data class Memento(val state: String)  // Immutable snapshot
 
 class Originator(var state: String) {
     fun createMemento(): Memento = Memento(state)
-    
+
     fun restore(memento: Memento) {
         state = memento.state
     }
@@ -200,11 +200,11 @@ class Originator(var state: String) {
 
 class Caretaker {
     private val history = mutableListOf<Memento>()
-    
+
     fun saveState(originator: Originator) {
         history.add(originator.createMemento())
     }
-    
+
     fun undo(originator: Originator) {
         if (history.isNotEmpty()) {
             val memento = history.removeLast()
@@ -217,13 +217,13 @@ class Caretaker {
 fun main() {
     val originator = Originator("Initial")
     val caretaker = Caretaker()
-    
+
     caretaker.saveState(originator)  // State 1
     originator.state = "Modified"
-    
+
     caretaker.saveState(originator)  // State 2
     originator.state = "Modified Again"
-    
+
     caretaker.undo(originator)  // Restores to "Modified"
     println(originator.state)
 }
@@ -256,33 +256,33 @@ class TextEditor {
     private var content: String = ""
     private val history = mutableListOf<DocumentState>()
     private var currentIndex = -1
-    
+
     fun type(text: String) {
         content += text
         saveState()
     }
-    
+
     fun undo() {
         if (currentIndex > 0) {
             currentIndex--
             content = history[currentIndex].content
         }
     }
-    
+
     fun redo() {
         if (currentIndex < history.size - 1) {
             currentIndex++
             content = history[currentIndex].content
         }
     }
-    
+
     private fun saveState() {
         // Remove states after currentIndex
         history.subList(currentIndex + 1, history.size).clear()
         history.add(DocumentState(content))
         currentIndex = history.size - 1
     }
-    
+
     fun getContent() = content
 }
 
@@ -292,10 +292,10 @@ fun main() {
     editor.type("Hello")
     editor.type(" World")
     println(editor.getContent())  // "Hello World"
-    
+
     editor.undo()
     println(editor.getContent())  // "Hello"
-    
+
     editor.redo()
     println(editor.getContent())  // "Hello World"
 }
