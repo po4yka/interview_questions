@@ -8,7 +8,7 @@
 ### 1. Python Syntax Validation
 
 ```bash
-uv run --project utils python -m py_compile utils/validate_note.py        # PASSED
+uv run --project utils python -m py_compile utils/src/utils/validate_note.py        # PASSED
 uv run --project utils python -m py_compile validators/*.py              # PASSED
 uv run --project utils python -m py_compile utils/*.py                   # PASSED
 ```
@@ -287,11 +287,11 @@ validators/
   format_validator.py              ✓ Created, tested (12+ checks)
   android_validator.py             ✓ Created, tested (5+ checks)
 utils/
-  validate_note.py                 ✓ Created, tested
-  __init__.py                      ✓ Created, tested
-  taxonomy_loader.py               ✓ Created, tested
-  report_generator.py              ✓ Created, tested
-  yaml_loader.py                   ✓ Created, tested
+  src/utils/__init__.py            ✓ Created, tested
+  src/utils/validate_note.py       ✓ Created, tested
+  src/utils/taxonomy_loader.py     ✓ Created, tested
+  src/utils/report_generator.py    ✓ Created, tested
+  src/utils/yaml_loader.py         ✓ Created, tested
   pyproject.toml                   ✓ Created
 .venv/                             ✓ Created, activated (via uv)
 .gitignore                         ✓ Created

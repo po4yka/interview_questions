@@ -173,18 +173,20 @@ Add to CI pipeline:
 
 ```
 utils/
-├── validate_note.py         # Main script
-├── pyproject.toml           # uv project metadata
-├── report_generator.py      # Generate reports
-├── taxonomy_loader.py       # Load TAXONOMY.md
-└── yaml_loader.py           # Fallback YAML parser
+├── pyproject.toml              # uv project metadata
+└── src/utils/
+    ├── __init__.py             # Package marker
+    ├── validate_note.py        # Main script
+    ├── report_generator.py     # Generate reports
+    ├── taxonomy_loader.py      # Load TAXONOMY.md
+    └── yaml_loader.py          # Fallback YAML parser
 validators/
-├── android_validator.py     # Android-specific rules
-├── base.py                  # Shared classes
-├── content_validator.py     # Content structure validation
-├── format_validator.py      # Formatting rules
-├── link_validator.py        # Wikilink resolution
-└── yaml_validator.py        # YAML frontmatter validation
+├── android_validator.py        # Android-specific rules
+├── base.py                     # Shared classes
+├── content_validator.py        # Content structure validation
+├── format_validator.py         # Formatting rules
+├── link_validator.py           # Wikilink resolution
+└── yaml_validator.py           # YAML frontmatter validation
 ```
 
 ## Customization
@@ -206,7 +208,7 @@ class MyValidator(BaseValidator):
         return self.issues
 ```
 
-Register in `utils/validate_note.py`:
+Register in `utils/src/utils/validate_note.py`:
 
 ```python
 validators = [
