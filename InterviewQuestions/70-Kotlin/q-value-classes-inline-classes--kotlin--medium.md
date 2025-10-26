@@ -1,156 +1,288 @@
 ---
 id: "20251012-150017"
-title: "Value classes (inline classes) in Kotlin"
+title: "Value Classes (Inline Classes) in Kotlin / Value классы в Kotlin"
+aliases: ["Value Classes", "Встраиваемые классы"]
 topic: kotlin
+subtopics: [value-classes, inline-classes, performance]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: "2025-10-12"
-tags: ["classes", "difficulty/medium", "kotlin"]
-description: "Comprehensive guide to Value classes (inline classes) in Kotlin covering concepts, patterns, best practices, and real-world examples"
 moc: moc-kotlin
-related: [q-cold-vs-hot-flows--kotlin--medium, q-kotlin-java-abstract-differences--programming-languages--medium, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]
-subtopics: ["classes", "kotlin-features", "oop"]
-date created: Sunday, October 12th 2025, 1:58:08 pm
-date modified: Sunday, October 26th 2025, 7:54:13 pm
+related: [q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-object-singleton-companion--kotlin--medium]
+created: "2025-10-12"
+updated: 2025-01-25
+tags: [kotlin, value-classes, inline-classes, performance, kotlin-features, difficulty/medium]
+sources: [https://kotlinlang.org/docs/inline-classes.html]
 ---
 
-# Value Classes (inline classes) in Kotlin
+# Вопрос (RU)
+> Что такое value классы (inline классы) в Kotlin и зачем они нужны?
 
-## English
-
-### Problem Statement
-
-[Comprehensive 2-3 paragraph explanation introducing the topic with real-world context and why understanding this is important]
-
-### Solution
-
-[Extensive solution covering:
-- Basic concepts and syntax (200-300 lines)
-- Practical examples and patterns (200-300 lines)
-- Comparison with alternatives (100-200 lines)
-- Advanced use cases (200-300 lines)
-- Performance considerations (50-100 lines)
-- Testing approaches (50-100 lines)
-- Best practices (100-150 lines)
-- Common pitfalls (50-100 lines)]
-
-#### Basic Syntax
-
-```kotlin
-// Code examples demonstrating basic concepts
-// Multiple examples with different scenarios
-// Clear comments explaining each part
-```
-
-#### Practical Patterns
-
-```kotlin
-// Real-world implementation patterns
-// Common use cases in Android/Backend
-// Production-ready examples
-```
-
-#### Advanced Techniques
-
-```kotlin
-// Complex scenarios and edge cases
-// Performance optimization techniques
-// Integration with other Kotlin features
-```
-
-#### Comparison Examples
-
-```kotlin
-// Comparing different approaches
-// When to use each technique
-// Trade-offs and considerations
-```
-
-### Best Practices
-
-1. **Practice 1**: Detailed explanation with code example
-2. **Practice 2**: Detailed explanation with code example
-3. **Practice 3**: Detailed explanation with code example
-4. **Practice 4**: Detailed explanation with code example
-5. **Practice 5**: Detailed explanation with code example
-
-### Common Pitfalls
-
-1. **Pitfall 1**: What to avoid and why
-2. **Pitfall 2**: What to avoid and why
-3. **Pitfall 3**: What to avoid and why
+# Question (EN)
+> What are value classes (inline classes) in Kotlin and why are they needed?
 
 ---
 
-## Русский
+## Ответ (RU)
 
-### Описание Проблемы
+**Теория Value классов:**
+Value классы (inline классы) - экспериментальная фича Kotlin, созданная для обёртки одного значения без риска накладных расходов на allocation. Компилятор может встроить класс в базовый тип, избегая упаковки в runtime. Обеспечивает type-safety без overhead - zero-cost abstractions.
 
-[Full Russian translation of problem statement - 2-3 paragraphs explaining the topic, its importance, and real-world context]
+**Основные концепции:**
+- **Одно property**: Должен иметь ровно один val property
+- **Inlining**: Компилятор встраивает класс в базовый тип когда возможно
+- **Type safety**: Обеспечивает безопасность типов без накладных расходов
+- **No allocation**: Избегает создания wrapper объектов в большинстве случаев
 
-### Решение
-
-[Full Russian translation of solution including:
-- All code examples with Russian comments
-- Translated explanations of concepts
-- Russian versions of all section headers
-- Localized best practices and pitfalls]
-
-#### Базовый Синтаксис
-
+**Базовый синтаксис:**
 ```kotlin
-// Примеры кода с комментариями на русском
-// Демонстрация базовых концепций
-// Пошаговые объяснения
+@JvmInline
+value class Password(private val value: String)
+
+@JvmInline
+value class UserId(private val id: Long)
+
+// ✅ Использование
+val password = Password("secret123")
+val userId = UserId(12345L)
+
+// ❌ Нельзя создать без значения
+// val badPassword = Password() // Ошибка компиляции
 ```
 
-#### Практические Паттерны
-
+**Type safety без allocation:**
 ```kotlin
-// Реальные паттерны реализации
-// Распространённые случаи использования
-// Production-ready примеры
+@JvmInline
+value class Email(private val value: String) {
+    init {
+        require(value.contains("@")) { "Invalid email" }
+    }
+}
+
+@JvmInline
+value class Username(private val value: String) {
+    init {
+        require(value.length >= 3) { "Username too short" }
+    }
+}
+
+// ✅ Различные типы, нет путаницы
+fun signup(email: Email, username: Username) {
+    println("Email: $email, Username: $username")
+}
+
+// ❌ Компилятор не даст перепутать типы
+// signup(Username("test"), Email("test@example.com")) // Ошибка!
 ```
 
-### Лучшие Практики
+**Требования к value class:**
+```kotlin
+// ❌ ПЛОХО: больше одного property
+// value class Bad(private val a: String, private val b: String)
 
-1. **Практика 1**: Подробное объяснение с примером кода
-2. **Практика 2**: Подробное объяснение с примером кода
-3. **Практика 3**: Подробное объяснение с примером кода
-4. **Практика 4**: Подробное объяснение с примером кода
-5. **Практика 5**: Подробное объяснение с примером кода
+// ❌ ПЛОХО: var вместо val
+// value class Bad(private var value: String)
 
-### Распространённые Ошибки
+// ✅ ХОРОШО: ровно один val
+@JvmInline
+value class Good(private val value: String)
 
-1. **Ошибка 1**: Чего избегать и почему
-2. **Ошибка 2**: Чего избегать и почему
-3. **Ошибка 3**: Чего избегать и почему
+// ✅ ХОРОШО: может иметь methods
+@JvmInline
+value class Point(val x: Int, val y: Int) {
+    fun distance(): Double = Math.sqrt((x * x + y * y).toDouble())
+}
+```
+
+**Практическое применение:**
+```kotlin
+@JvmInline
+value class Price(val amount: Long) {
+    fun format(): String {
+        return "$${amount / 100.0}"
+    }
+}
+
+@JvmInline
+value class Minutes(val value: Int) {
+    fun toSeconds(): Int = value * 60
+}
+
+// ✅ Типобезопасная работа с единицами измерения
+fun calculateCost(price: Price, duration: Minutes): String {
+    val total = price.amount * duration.value
+    return "Total: ${total / 100.0}"
+}
+```
+
+**Boxing scenarios:**
+```kotlin
+@JvmInline
+value class Id(val value: Int)
+
+// ✅ Inlined: нет boxing
+fun processId(id: Id): Int {
+    return id.value
+}
+
+// ❌ Boxing происходит когда:
+interface Wrapper {
+    fun getValue(): Id
+}
+
+// ❌ Передача в Any
+fun boxId(id: Id): Any {
+    return id // Boxing здесь
+}
+
+// ❌ Использование как nullable
+fun nullableId(id: Id?): Id? {
+    return id // Boxing здесь
+}
+```
 
 ---
+
+## Answer (EN)
+
+**Value Class Theory:**
+Value classes (inline classes) are experimental Kotlin feature for wrapping single value without allocation overhead. Compiler can inline class into underlying type, avoiding wrapping at runtime. Provides type safety without overhead - zero-cost abstractions.
+
+**Core Concepts:**
+- **Single property**: Must have exactly one val property
+- **Inlining**: Compiler inlines class into underlying type when possible
+- **Type safety**: Provides type safety without overhead
+- **No allocation**: Avoids creating wrapper objects in most cases
+
+**Basic Syntax:**
+```kotlin
+@JvmInline
+value class Password(private val value: String)
+
+@JvmInline
+value class UserId(private val id: Long)
+
+// ✅ Usage
+val password = Password("secret123")
+val userId = UserId(12345L)
+
+// ❌ Cannot create without value
+// val badPassword = Password() // Compilation error
+```
+
+**Type Safety Without Allocation:**
+```kotlin
+@JvmInline
+value class Email(private val value: String) {
+    init {
+        require(value.contains("@")) { "Invalid email" }
+    }
+}
+
+@JvmInline
+value class Username(private val value: String) {
+    init {
+        require(value.length >= 3) { "Username too short" }
+    }
+}
+
+// ✅ Different types, no confusion
+fun signup(email: Email, username: Username) {
+    println("Email: $email, Username: $username")
+}
+
+// ❌ Compiler won't let types be confused
+// signup(Username("test"), Email("test@example.com")) // Error!
+```
+
+**Value Class Requirements:**
+```kotlin
+// ❌ BAD: more than one property
+// value class Bad(private val a: String, private val b: String)
+
+// ❌ BAD: var instead of val
+// value class Bad(private var value: String)
+
+// ✅ GOOD: exactly one val
+@JvmInline
+value class Good(private val value: String)
+
+// ✅ GOOD: can have methods
+@JvmInline
+value class Point(val x: Int, val y: Int) {
+    fun distance(): Double = Math.sqrt((x * x + y * y).toDouble())
+}
+```
+
+**Practical Application:**
+```kotlin
+@JvmInline
+value class Price(val amount: Long) {
+    fun format(): String {
+        return "$${amount / 100.0}"
+    }
+}
+
+@JvmInline
+value class Minutes(val value: Int) {
+    fun toSeconds(): Int = value * 60
+}
+
+// ✅ Type-safe work with measurement units
+fun calculateCost(price: Price, duration: Minutes): String {
+    val total = price.amount * duration.value
+    return "Total: ${total / 100.0}"
+}
+```
+
+**Boxing Scenarios:**
+```kotlin
+@JvmInline
+value class Id(val value: Int)
+
+// ✅ Inlined: no boxing
+fun processId(id: Id): Int {
+    return id.value
+}
+
+// ❌ Boxing occurs when:
+interface Wrapper {
+    fun getValue(): Id
+}
+
+// ❌ Passing to Any
+fun boxId(id: Id): Any {
+    return id // Boxing here
+}
+
+// ❌ Using as nullable
+fun nullableId(id: Id?): Id? {
+    return id // Boxing here
+}
+```
 
 ## Follow-ups
 
-1. [Technical follow-up question related to implementation details]
-2. [Question about edge cases and advanced scenarios]
-3. [Question comparing with alternative approaches]
-4. [Question about performance implications]
-5. [Question about integration with other Kotlin features]
-6. [Question about Java interop considerations]
-7. [Question about testing strategies]
-8. [Question about best practices in specific contexts]
+- When to use value class vs data class?
+- Performance implications of value classes?
+- Boxing scenarios to avoid?
 
 ## References
 
-- [Kotlin Official Documentation - Related Topic]
-- [Kotlin Language Specification - Relevant Section]
-- [Kotlin API Reference - Relevant Classes/Functions]
-- [Community Best Practices and Articles]
-- [Performance Guidelines and Benchmarks]
+- [[c-oop-fundamentals]]
+- https://kotlinlang.org/docs/inline-classes.html
 
 ## Related Questions
 
-- [[q-data-class-detailed--kotlin--medium]]
-- [[q-sealed-class-sealed-interface--kotlin--medium]]
-- [[q-inheritance-open-final--kotlin--medium]]
-- [[q-visibility-modifiers-kotlin--kotlin--medium]]
-- [[q-kotlin-enum-classes--kotlin--easy]]
+### Prerequisites (Easier)
+- [[q-kotlin-enum-classes--kotlin--easy]] - Basic classes
+
+### Related (Medium)
+- [[q-data-class-detailed--kotlin--medium]] - Data classes
+- [[q-inheritance-open-final--kotlin--medium]] - Inheritance
+- [[q-class-initialization-order--kotlin--medium]] - Class initialization
+
+### Advanced (Harder)
+- [[q-kotlin-reified-types--kotlin--hard]] - Reified types
