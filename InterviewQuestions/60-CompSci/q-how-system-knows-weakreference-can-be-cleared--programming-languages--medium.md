@@ -7,16 +7,12 @@ status: draft
 moc: moc-cs
 related: [q-data-class-special-features--programming-languages--easy, q-java-access-modifiers--programming-languages--medium, q-mvp-pattern--architecture-patterns--medium]
 created: 2025-10-15
-tags:
-  - garbage-collection
-  - jvm
-  - kotlin
-  - memory-management
-  - programming-languages
-  - weak-reference
-  - weak-references
+tags: [garbage-collection, jvm, kotlin, memory-management, programming-languages, weak-reference, weak-references]
+date created: Saturday, October 4th 2025, 1:23:33 pm
+date modified: Sunday, October 26th 2025, 11:57:54 am
 ---
-# Как система понимает, что WeakReference можно очистить?
+
+# Как Система Понимает, Что WeakReference Можно Очистить?
 
 # Question (EN)
 > How does the system know that WeakReference can be cleared?

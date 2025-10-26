@@ -5,16 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-what-is-coroutinescope--programming-languages--medium, q-how-suspend-function-detects-suspension--programming-languages--hard, q-error-handling-in-coroutines--programming-languages--medium]
+related: [q-error-handling-in-coroutines--programming-languages--medium, q-how-suspend-function-detects-suspension--programming-languages--hard, q-what-is-coroutinescope--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - extension-functions
-  - extensions
-  - kotlin
-  - programming-languages
-  - properties
+tags: [extension-functions, extensions, kotlin, programming-languages, properties]
+date created: Friday, October 3rd 2025, 4:39:28 pm
+date modified: Sunday, October 26th 2025, 11:57:39 am
 ---
-# Свойства какого вида можно добавить как расширение
+
+# Свойства Какого Вида Можно Добавить Как Расширение
 
 # Question (EN)
 > What kind of properties can be added as extensions?

@@ -5,18 +5,14 @@ topic: computer-science
 difficulty: easy
 status: draft
 moc: moc-cs
-related: [q-proxy-pattern--design-patterns--medium, q-abstract-factory-pattern--design-patterns--medium, q-command-pattern--design-patterns--medium]
+related: [q-abstract-factory-pattern--design-patterns--medium, q-command-pattern--design-patterns--medium, q-proxy-pattern--design-patterns--medium]
 created: 2025-10-15
-tags:
-  - garbage-collection
-  - kotlin
-  - leakcanary
-  - memory-management
-  - programming-languages
-  - weak-reference
-  - weak-references
+tags: [garbage-collection, kotlin, leakcanary, memory-management, programming-languages, weak-reference, weak-references]
+date created: Saturday, October 4th 2025, 1:21:00 pm
+date modified: Sunday, October 26th 2025, 11:57:33 am
 ---
-# Как по объекту понять что он не используется?
+
+# Как По Объекту Понять Что Он Не Используется?
 
 # Question (EN)
 > How to detect that an object is no longer used?

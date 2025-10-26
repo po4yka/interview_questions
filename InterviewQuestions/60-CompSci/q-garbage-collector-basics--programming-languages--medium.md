@@ -7,16 +7,12 @@ status: draft
 moc: moc-cs
 related: [q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium, q-reference-types-criteria--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - garbage-collector
-  - gc
-  - java
-  - kotlin
-  - memory-management
-  - performance
-  - programming-languages
+tags: [garbage-collector, gc, java, kotlin, memory-management, performance, programming-languages]
+date created: Friday, October 3rd 2025, 6:32:17 pm
+date modified: Sunday, October 26th 2025, 11:57:48 am
 ---
-# Что такое сборщик мусора?
+
+# Что Такое Сборщик Мусора?
 
 # Question (EN)
 > What is garbage collector?

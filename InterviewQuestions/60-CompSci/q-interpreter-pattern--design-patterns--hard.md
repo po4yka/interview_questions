@@ -1,187 +1,57 @@
 ---
 id: 20251012-1227111150
-title: Interpreter Pattern
-topic: design-patterns
+title: "Interpreter Pattern / Паттерн Интерпретатор"
+aliases: ["Interpreter Pattern", "Паттерн Интерпретатор"]
+topic: cs
+subtopics: [behavioral-patterns, language-processing, expression-evaluation, design-patterns]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-cs
+related: [q-composite-pattern--design-patterns--medium, q-visitor-pattern--design-patterns--hard, q-flyweight-pattern--design-patterns--hard]
 created: 2025-10-15
-tags: []
-related: [q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-what-is-coroutinescope--programming-languages--medium, q-data-sealed-classes-why--programming-languages--medium]
-  - composite-pattern
-  - visitor-pattern
-subtopics:
-  - behavioral-patterns
-  - language-processing
-  - expression-evaluation
+updated: 2025-01-25
+tags: [design-patterns, behavioral-patterns, interpreter, language-processing, expression-evaluation, difficulty/hard]
+sources: [https://refactoring.guru/design-patterns/interpreter]
 ---
-# Interpreter Pattern / Паттерн Интерпретатор
-
-# Question (EN)
-> What is the Interpreter pattern?
 
 # Вопрос (RU)
-> Что такое паттерн Интерпретатор?
+> Что такое паттерн Интерпретатор? Когда его использовать и как он работает?
+
+# Question (EN)
+> What is the Interpreter pattern? When to use it and how does it work?
 
 ---
-
-## Answer (EN)
-
-
-### Definition
-The Interpreter design pattern is a behavioral design pattern that defines a way to interpret and evaluate language grammar or expressions. It provides a mechanism to evaluate sentences in a language by representing their grammar as a set of classes. Each class represents a rule or expression in the grammar, and the pattern allows these classes to be composed hierarchically to interpret complex expressions.
-
-### Problems It Solves
-What problems can the Interpreter design pattern solve?
-- A grammar for a simple language should be defined
-- So that sentences in the language can be interpreted
-
-When a problem occurs very often, it could be considered to represent it as a sentence in a simple language (Domain Specific Languages) so that an interpreter can solve the problem by interpreting the sentence.
-
-For example, when many different or complex search expressions must be specified. Implementing (hard-wiring) them directly into a class is inflexible because it commits the class to particular expressions and makes it impossible to specify new expressions or change existing ones independently from (without having to change) the class.
-
-### Solution
-What solution does the Interpreter design pattern describe?
-- Define a grammar for a simple language by defining an `Expression` class hierarchy and implementing an `interpret()` operation
-- Represent a sentence in the language by an abstract syntax tree (AST) made up of `Expression` instances
-- Interpret a sentence by calling `interpret()` on the AST
-
-### When to Use
-The Interpreter pattern comes in handy when:
-- We need to evaluate a series of expressions that follow some grammar or rules
-- We're dealing with complex expressions that can be broken down into smaller components
-- The language we're working with is relatively simple but needs a structured approach
-
-### Implementation Steps
-1. Define an abstract expression that declares an interpret operation
-2. For every rule in the grammar, create a concrete expression class
-3. The client creates instances of these concrete expression classes to interpret the specific expressions
-
-### Example in Kotlin
-
-```kotlin
-// Step 1: Define the Abstract Expression
-interface Expression {
-    fun interpret(context: String): Boolean
-}
-
-// Step 2: Concrete Expressions
-class TerminalExpression(private val data: String) : Expression {
-    override fun interpret(context: String): Boolean {
-        return context.contains(data)
-    }
-}
-
-class OrExpression(
-    private val expr1: Expression,
-    private val expr2: Expression
-) : Expression {
-    override fun interpret(context: String): Boolean {
-        return expr1.interpret(context) || expr2.interpret(context)
-    }
-}
-
-class AndExpression(
-    private val expr1: Expression,
-    private val expr2: Expression
-) : Expression {
-    override fun interpret(context: String): Boolean {
-        return expr1.interpret(context) && expr2.interpret(context)
-    }
-}
-
-// Client code to interpret expressions
-fun getMaleExpression(): Expression {
-    val john = TerminalExpression("John")
-    val robert = TerminalExpression("Robert")
-    return OrExpression(john, robert)
-}
-
-fun getMarriedWomanExpression(): Expression {
-    val julie = TerminalExpression("Julie")
-    val married = TerminalExpression("Married")
-    return AndExpression(julie, married)
-}
-
-fun main() {
-    val isMale = getMaleExpression()
-    val isMarriedWoman = getMarriedWomanExpression()
-
-    println("John is male? ${isMale.interpret("John")}")
-    println("Julie is a married woman? ${isMarriedWoman.interpret("Married Julie")}")
-}
-```
-
-**Output:**
-```
-John is male? true
-Julie is a married woman? true
-```
-
-**Explanation:**
-- We define an `Expression` interface with the `interpret` method
-- `TerminalExpression`, `OrExpression`, and `AndExpression` are concrete implementations that interpret specific expressions
-- In the client code, we build up a more complex expression by combining the simple terminal expressions. For instance, the `getMarriedWomanExpression` checks if a woman is named "Julie" and is "Married"
-
-### Advantages
-- **Extensibility**. It's easy to add more expressions or operators without affecting the existing code
-- **Maintainability**. The expression logic is separated into individual components, making the code cleaner and easier to maintain
-- **Readability**. With the use of well-named classes (like AddExpression, NumberExpression), the code becomes more understandable and easier to extend
-
-### Disadvantages
-- **Complexity**. For simple scenarios, the Interpreter pattern might introduce unnecessary complexity. If the problem doesn't require a structured approach, a simpler solution might be more appropriate
-- **Performance**. In cases with large and complex expression trees, the recursive nature of the Interpreter pattern could lead to performance issues. It might not be the best choice for very large grammars
-
----
-
-
 
 ## Ответ (RU)
 
-### Определение
-Паттерн проектирования Интерпретатор - это поведенческий паттерн проектирования, который определяет способ интерпретации и оценки грамматики или выражений языка. Он предоставляет механизм для оценки предложений на языке путем представления их грамматики в виде набора классов. Каждый класс представляет правило или выражение в грамматике, и паттерн позволяет этим классам быть скомпонованными иерархически для интерпретации сложных выражений.
+**Теория Interpreter Pattern:**
+Interpreter - behavioral design pattern для интерпретации языка или выражения. Решает проблему: нужно определить grammar для простого языка, чтобы предложения могли быть интерпретированы. Решение: представлять grammar как набор classes, где каждый class - правило в grammar. Позволяет строить Abstract Syntax Tree (AST) для интерпретации сложных expressions.
 
-### Решаемые Проблемы
-Какие проблемы решает паттерн Интерпретатор?
-- Должна быть определена грамматика для простого языка
-- Чтобы предложения на языке могли быть интерпретированы
+**Определение:**
 
-Когда проблема возникает очень часто, можно рассмотреть возможность представления ее в виде предложения на простом языке (предметно-ориентированных языках), чтобы интерпретатор мог решить проблему, интерпретируя предложение.
+*Теория:* Interpreter pattern определяет способ интерпретации и evaluation language grammar или expressions. Представляет grammar как set of classes, где каждый class представляет rule или expression в grammar. Позволяет compose hierarchically для интерпретации complex expressions. Создаёт AST (Abstract Syntax Tree) для representation.
 
-Например, когда нужно указать много различных или сложных поисковых выражений. Реализация (жесткое кодирование) их непосредственно в классе негибка, потому что это привязывает класс к конкретным выражениям и делает невозможным указание новых выражений или изменение существующих независимо от (без необходимости изменения) класса.
+**Проблемы, которые решает:**
 
-### Решение
-Какое решение описывает паттерн Интерпретатор?
-- Определить грамматику для простого языка путем определения иерархии классов `Expression` и реализации операции `interpret()`
-- Представить предложение на языке в виде абстрактного синтаксического дерева (AST), состоящего из экземпляров `Expression`
-- Интерпретировать предложение путем вызова `interpret()` на AST
-
-### Когда Использовать
-Паттерн Интерпретатор пригодится, когда:
-- Нам нужно оценить серию выражений, которые следуют некоторой грамматике или правилам
-- Мы имеем дело со сложными выражениями, которые можно разбить на более мелкие компоненты
-- Язык, с которым мы работаем, относительно прост, но требует структурированного подхода
-
-### Шаги Реализации
-1. Определить абстрактное выражение, которое объявляет операцию интерпретации
-2. Для каждого правила в грамматике создать класс конкретного выражения
-3. Клиент создает экземпляры этих классов конкретных выражений для интерпретации конкретных выражений
-
-### Пример на Kotlin
+*Теория:* Когда нужно определить grammar для простого языка (Domain Specific Language). Когда есть часто возникающие problems, которые можно represent как sentences в simple language. Когда нужно flexible способ specify different expressions без hard-coding их в classes. Примеры: search expressions, query languages, regular expressions, calculators.
 
 ```kotlin
-// Шаг 1: Определить абстрактное выражение
+// ✅ Базовый пример: Expression интерпретация
 interface Expression {
     fun interpret(context: String): Boolean
 }
 
-// Шаг 2: Конкретные выражения
+// Terminal expression - базовое выражение
 class TerminalExpression(private val data: String) : Expression {
     override fun interpret(context: String): Boolean {
         return context.contains(data)
     }
 }
 
+// Non-terminal expressions - составные выражения
 class OrExpression(
     private val expr1: Expression,
     private val expr2: Expression
@@ -200,72 +70,259 @@ class AndExpression(
     }
 }
 
-// Клиентский код для интерпретации выражений
-fun getMaleExpression(): Expression {
-    val john = TerminalExpression("John")
-    val robert = TerminalExpression("Robert")
-    return OrExpression(john, robert)
-}
-
-fun getMarriedWomanExpression(): Expression {
-    val julie = TerminalExpression("Julie")
-    val married = TerminalExpression("Married")
-    return AndExpression(julie, married)
-}
-
+// Использование
 fun main() {
-    val isMale = getMaleExpression()
-    val isMarriedWoman = getMarriedWomanExpression()
-
-    println("John is male? ${isMale.interpret("John")}")
-    println("Julie is a married woman? ${isMarriedWoman.interpret("Married Julie")}")
+    val isMale = OrExpression(
+        TerminalExpression("John"),
+        TerminalExpression("Robert")
+    )
+    
+    val isMarriedWoman = AndExpression(
+        TerminalExpression("Julie"),
+        TerminalExpression("Married")
+    )
+    
+    println(isMale.interpret("John"))  // true
+    println(isMarriedWoman.interpret("Married Julie"))  // true
 }
 ```
 
-**Вывод:**
+**Реальный пример: Калькулятор выражений:**
+
+*Теория:* Interpreter используется для parsing и evaluation математических выражений. Строится AST для представления expression structure. Expression classes интерпретируют свои части и combine результаты. Позволяет динамически parse и evaluate expressions во время runtime.
+
+```kotlin
+// ✅ Калькулятор выражений
+abstract class Expression {
+    abstract fun evaluate(): Int
+}
+
+class NumberExpression(private val value: Int) : Expression() {
+    override fun evaluate() = value
+}
+
+class AddExpression(
+    private val left: Expression,
+    private val right: Expression
+) : Expression() {
+    override fun evaluate() = left.evaluate() + right.evaluate()
+}
+
+class MultiplyExpression(
+    private val left: Expression,
+    private val right: Expression
+) : Expression() {
+    override fun evaluate() = left.evaluate() * right.evaluate()
+}
+
+// Использование: "3 + 4 * 5"
+val expression = AddExpression(
+    NumberExpression(3),
+    MultiplyExpression(NumberExpression(4), NumberExpression(5))
+)
+println(expression.evaluate())  // 23
 ```
-John is male? true
-Julie is a married woman? true
+
+**Когда использовать:**
+
+*Теория:* Используйте Interpreter когда: нужно evaluate серию expressions, following некоторую grammar; работаете с complex expressions, которые можно разбить на smaller components; язык relatively simple но нужен structured approach. Не используйте для: very large grammars (performance issues), simple cases (over-engineering), frequently changing grammars (maintenance burden).
+
+✅ **Use Interpreter when:**
+- Нужно evaluate expressions, following grammar
+- Complex expressions можно разбить на smaller parts
+- Относительно simple grammar
+- Нужна flexibility в expressions
+
+❌ **Don't use Interpreter when:**
+- Very large grammar (performance issues)
+- Simple cases (over-engineering)
+- Frequently changing grammar (maintenance burden)
+- Нужна высокая performance для large expression trees
+
+**Реализация:**
+
+*Теория:* Шаги реализации: 1. Define abstract Expression, declares interpret operation. 2. Для каждого rule в grammar, create concrete Expression class. 3. Client создаёт instances этих classes для interpret specific expressions. AST строится compositionally из Expression objects.
+
+**Преимущества:**
+
+1. **Extensibility** - легко добавлять новые expressions без изменения existing code
+2. **Maintainability** - expression logic разделена на individual components
+3. **Readability** - код более understandable с well-named classes
+4. **Separation of Concerns** - parsing отделён от evaluation
+
+**Недостатки:**
+
+1. **Complexity** - может introduce unnecessary complexity для simple scenarios
+2. **Performance** - recursive nature может lead к performance issues для large trees
+3. **Grammar Changes** - изменения в grammar требуют changes во многих classes
+4. **Not for Large Grammars** - не лучший choice для very large grammars
+
+**Ключевые концепции:**
+
+1. **Abstract Syntax Tree** - AST для representation
+2. **Terminal vs Non-terminal** - базовые vs составные expressions
+3. **Recursive Evaluation** - expressions evaluate рекурсивно
+4. **Grammar as Classes** - grammar represented как classes
+5. **Compositional Structure** - expressions composed hierarchically
+
+## Answer (EN)
+
+**Interpreter Pattern Theory:**
+Interpreter - behavioral design pattern for interpreting language or expressions. Solves problem: need to define grammar for simple language so sentences can be interpreted. Solution: represent grammar as set of classes, where each class is rule in grammar. Allows building Abstract Syntax Tree (AST) for interpreting complex expressions.
+
+**Definition:**
+
+*Theory:* Interpreter pattern defines way to interpret and evaluate language grammar or expressions. Represents grammar as set of classes, where each class represents rule or expression in grammar. Allows composing hierarchically for interpreting complex expressions. Creates AST (Abstract Syntax Tree) for representation.
+
+**Problems Solved:**
+
+*Theory:* When need to define grammar for simple language (Domain Specific Language). When have frequently occurring problems that can be represented as sentences in simple language. When need flexible way to specify different expressions without hard-coding them in classes. Examples: search expressions, query languages, regular expressions, calculators.
+
+```kotlin
+// ✅ Basic example: Expression interpretation
+interface Expression {
+    fun interpret(context: String): Boolean
+}
+
+// Terminal expression - basic expression
+class TerminalExpression(private val data: String) : Expression {
+    override fun interpret(context: String): Boolean {
+        return context.contains(data)
+    }
+}
+
+// Non-terminal expressions - composite expressions
+class OrExpression(
+    private val expr1: Expression,
+    private val expr2: Expression
+) : Expression {
+    override fun interpret(context: String): Boolean {
+        return expr1.interpret(context) || expr2.interpret(context)
+    }
+}
+
+class AndExpression(
+    private val expr1: Expression,
+    private val expr2: Expression
+) : Expression {
+    override fun interpret(context: String): Boolean {
+        return expr1.interpret(context) && expr2.interpret(context)
+    }
+}
+
+// Usage
+fun main() {
+    val isMale = OrExpression(
+        TerminalExpression("John"),
+        TerminalExpression("Robert")
+    )
+    
+    val isMarriedWoman = AndExpression(
+        TerminalExpression("Julie"),
+        TerminalExpression("Married")
+    )
+    
+    println(isMale.interpret("John"))  // true
+    println(isMarriedWoman.interpret("Married Julie"))  // true
+}
 ```
 
-**Объяснение:**
-- Мы определяем интерфейс `Expression` с методом `interpret`
-- `TerminalExpression`, `OrExpression` и `AndExpression` - это конкретные реализации, которые интерпретируют конкретные выражения
-- В клиентском коде мы строим более сложное выражение путем комбинирования простых терминальных выражений. Например, `getMarriedWomanExpression` проверяет, названа ли женщина "Julie" и является ли она "Married"
+**Real Example: Expression Calculator:**
 
-### Преимущества
-- **Расширяемость**. Легко добавлять больше выражений или операторов без влияния на существующий код
-- **Поддерживаемость**. Логика выражений разделена на отдельные компоненты, что делает код чище и проще в поддержке
-- **Читаемость**. С использованием хорошо названных классов (таких как AddExpression, NumberExpression) код становится более понятным и легче расширяемым
+*Theory:* Interpreter used for parsing and evaluating mathematical expressions. Builds AST for representing expression structure. Expression classes interpret their parts and combine results. Allows dynamically parsing and evaluating expressions at runtime.
 
-### Недостатки
-- **Сложность**. Для простых сценариев паттерн Интерпретатор может внести ненужную сложность. Если проблема не требует структурированного подхода, более простое решение может быть более подходящим
-- **Производительность**. В случаях с большими и сложными деревьями выражений рекурсивная природа паттерна Интерпретатор может привести к проблемам с производительностью. Это может быть не лучшим выбором для очень больших грамматик
+```kotlin
+// ✅ Expression calculator
+abstract class Expression {
+    abstract fun evaluate(): Int
+}
+
+class NumberExpression(private val value: Int) : Expression() {
+    override fun evaluate() = value
+}
+
+class AddExpression(
+    private val left: Expression,
+    private val right: Expression
+) : Expression() {
+    override fun evaluate() = left.evaluate() + right.evaluate()
+}
+
+class MultiplyExpression(
+    private val left: Expression,
+    private val right: Expression
+) : Expression() {
+    override fun evaluate() = left.evaluate() * right.evaluate()
+}
+
+// Usage: "3 + 4 * 5"
+val expression = AddExpression(
+    NumberExpression(3),
+    MultiplyExpression(NumberExpression(4), NumberExpression(5))
+)
+println(expression.evaluate())  // 23
+```
+
+**When to Use:**
+
+*Theory:* Use Interpreter when: need to evaluate series of expressions following some grammar; dealing with complex expressions that can be broken into smaller components; language relatively simple but needs structured approach. Don't use for: very large grammars (performance issues), simple cases (over-engineering), frequently changing grammars (maintenance burden).
+
+✅ **Use Interpreter when:**
+- Need to evaluate expressions following grammar
+- Complex expressions can be broken into smaller parts
+- Relatively simple grammar
+- Need flexibility in expressions
+
+❌ **Don't use Interpreter when:**
+- Very large grammar (performance issues)
+- Simple cases (over-engineering)
+- Frequently changing grammar (maintenance burden)
+- Need high performance for large expression trees
+
+**Implementation:**
+
+*Theory:* Implementation steps: 1. Define abstract Expression, declares interpret operation. 2. For each rule in grammar, create concrete Expression class. 3. Client creates instances of these classes to interpret specific expressions. AST built compositionally from Expression objects.
+
+**Advantages:**
+
+1. **Extensibility** - easy to add new expressions without changing existing code
+2. **Maintainability** - expression logic separated into individual components
+3. **Readability** - code more understandable with well-named classes
+4. **Separation of Concerns** - parsing separated from evaluation
+
+**Disadvantages:**
+
+1. **Complexity** - may introduce unnecessary complexity for simple scenarios
+2. **Performance** - recursive nature may lead to performance issues for large trees
+3. **Grammar Changes** - grammar changes require changes in many classes
+4. **Not for Large Grammars** - not best choice for very large grammars
+
+**Key Concepts:**
+
+1. **Abstract Syntax Tree** - AST for representation
+2. **Terminal vs Non-terminal** - basic vs composite expressions
+3. **Recursive Evaluation** - expressions evaluate recursively
+4. **Grammar as Classes** - grammar represented as classes
+5. **Compositional Structure** - expressions composed hierarchically
 
 ---
 
-## References
-- [Interpreter Design Pattern in Java - GeeksforGeeks](https://www.geeksforgeeks.org/java/interpreter-design-pattern-in-java/)
-- [Interpreter pattern - Wikipedia](https://en.wikipedia.org/wiki/Interpreter_pattern)
-- [Understanding the Interpreter Design Pattern in Kotlin - Medium](https://medium.com/softaai-blogs/understanding-the-interpreter-design-pattern-in-kotlin-a-comprehensive-guide-28b8dba98bb9)
-- [Interpreter Design Pattern in Kotlin](https://www.javaguides.net/2023/10/interpreter-design-pattern-in-kotlin.html)
-- [Interpreter Design Pattern - SourceMaking](https://sourcemaking.com/design_patterns/interpreter)
+## Follow-ups
 
----
-
-**Source:** Kirchhoff-Android-Interview-Questions
-**Attribution:** Content adapted from the Kirchhoff repository
-
-
----
+- How does Interpreter pattern relate to Composite pattern?
+- What is the difference between Interpreter and Visitor pattern?
+- When would you use a parser generator instead of Interpreter?
 
 ## Related Questions
 
-### Hub
-- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+### Prerequisites (Easier)
+- Basic design patterns concepts
+- Tree structures understanding
 
-### Advanced Patterns
-- [[q-bridge-pattern--design-patterns--hard]] - Bridge pattern
-- [[q-visitor-pattern--design-patterns--hard]] - Visitor pattern
-- [[q-flyweight-pattern--design-patterns--hard]] - Flyweight pattern
+### Related (Same Level)
+- [[q-composite-pattern--design-patterns--medium]] - Composite pattern (similar structure)
+- [[q-visitor-pattern--design-patterns--hard]] - Visitor pattern (alternative approach)
 
+### Advanced (Hardder)
+- [[q-flyweight-pattern--design-patterns--hard]] - Optimization techniques
+- Parser generators vs Interpreter pattern

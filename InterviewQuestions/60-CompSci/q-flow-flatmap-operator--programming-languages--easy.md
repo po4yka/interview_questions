@@ -5,18 +5,14 @@ topic: computer-science
 difficulty: easy
 status: draft
 moc: moc-cs
-related: [q-what-is-flow--programming-languages--medium, q-singleton-pattern--design-patterns--easy, q-priorityqueue-vs-deque--programming-languages--easy]
+related: [q-priorityqueue-vs-deque--programming-languages--easy, q-singleton-pattern--design-patterns--easy, q-what-is-flow--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - coroutines
-  - flatmap
-  - flow
-  - kotlin
-  - operators
-  - programming-languages
-  - reactive
+tags: [coroutines, flatmap, flow, kotlin, operators, programming-languages, reactive]
+date created: Friday, October 3rd 2025, 5:52:48 pm
+date modified: Sunday, October 26th 2025, 11:57:44 am
 ---
-# Чем воспользоваться если нужно преобразовать один поток данных в другой поток данных
+
+# Чем Воспользоваться Если Нужно Преобразовать Один Поток Данных В Другой Поток Данных
 
 # Question (EN)
 > What to use if you need to transform one data stream into another data stream?

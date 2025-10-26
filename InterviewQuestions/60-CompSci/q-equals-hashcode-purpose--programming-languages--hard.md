@@ -7,10 +7,12 @@ status: draft
 moc: moc-cs
 related: [q-detect-unused-object--programming-languages--easy, q-java-object-comparison--programming-languages--easy, q-memento-pattern--design-patterns--medium]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 11:25:49 am
+date modified: Sunday, October 26th 2025, 11:57:36 am
 ---
-# Why are equals and hashcode methods needed?
+
+# Why Are Equals and Hashcode Methods Needed?
 
 # Question (EN)
 > Why are equals and hashcode methods needed in Kotlin and Java?

@@ -5,15 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-reference-types-criteria--programming-languages--medium, q-how-suspend-function-detects-suspension--programming-languages--hard, q-strategy-pattern--design-patterns--medium]
+related: [q-how-suspend-function-detects-suspension--programming-languages--hard, q-reference-types-criteria--programming-languages--medium, q-strategy-pattern--design-patterns--medium]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - creational-patterns
-  - factory-method
-  - factory
-  - gof-patterns
+tags: [creational-patterns, design-patterns, factory, factory-method, gof-patterns]
+date created: Monday, October 6th 2025, 7:14:43 am
+date modified: Sunday, October 26th 2025, 11:57:42 am
 ---
+
 # Factory Method Pattern
 
 # Question (EN)
@@ -203,7 +201,7 @@ fun main() {
 }
 ```
 
-## Factory Method vs Abstract Factory
+## Factory Method Vs Abstract Factory
 
 | Aspect | Factory Method | Abstract Factory |
 |--------|----------------|------------------|
@@ -229,7 +227,7 @@ interface UIFactory {
 }
 ```
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Pros (Преимущества)
 
@@ -332,7 +330,7 @@ sealed class Result<out T> {
 
 Паттерн Factory Method — это порождающий паттерн проектирования, который предоставляет интерфейс для создания объектов в суперклассе, но позволяет подклассам изменять тип создаваемых объектов. Он определяет метод для создания объектов, который подклассы затем могут переопределить, чтобы изменить тип создаваемых объектов.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Паттерн проектирования Factory Method решает такие проблемы как:
 
@@ -341,7 +339,7 @@ sealed class Result<out T> {
 
 Это позволяет создавать подклассы, которые могут изменить способ создания объекта (например, переопределив, какой класс создавать).
 
-### Когда использовать?
+### Когда Использовать?
 
 **Когда использовать паттерн Factory Method?**
 

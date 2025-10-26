@@ -5,17 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-extension-properties--programming-languages--medium, q-java-lambda-type--programming-languages--easy, q-inheritance-vs-composition--oop--medium]
+related: [q-extension-properties--programming-languages--medium, q-inheritance-vs-composition--oop--medium, q-java-lambda-type--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - garbage-collection
-  - gc-roots
-  - jvm
-  - kotlin
-  - memory-management
-  - programming-languages
+tags: [garbage-collection, gc-roots, jvm, kotlin, memory-management, programming-languages]
+date created: Saturday, October 4th 2025, 1:20:22 pm
+date modified: Sunday, October 26th 2025, 11:57:50 am
 ---
-# Что такое Garbage Collector Roots?
+
+# Что Такое Garbage Collector Roots?
 
 # Question (EN)
 > What are Garbage Collector Roots?

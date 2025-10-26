@@ -5,17 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-bridge-pattern--design-patterns--hard, q-runtime-generic-access--programming-languages--hard, q-java-access-modifiers--programming-languages--medium]
+related: [q-bridge-pattern--design-patterns--hard, q-java-access-modifiers--programming-languages--medium, q-runtime-generic-access--programming-languages--hard]
 created: 2025-10-15
-tags:
-  - compiler
-  - compiler-optimization
-  - inline
-  - inline-functions
-  - kotlin
-  - programming-languages
+tags: [compiler, compiler-optimization, inline, inline-functions, kotlin, programming-languages]
+date created: Friday, October 3rd 2025, 4:39:28 pm
+date modified: Sunday, October 26th 2025, 11:57:58 am
 ---
-# Можно ли на уровне компилятора сделать все функции inline?
+
+# Можно Ли На Уровне Компилятора Сделать Все Функции Inline?
 
 # Question (EN)
 > Can all functions be made inline at compiler level?

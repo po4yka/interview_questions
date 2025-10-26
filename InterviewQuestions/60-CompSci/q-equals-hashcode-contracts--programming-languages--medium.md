@@ -5,18 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-what-is-garbage-in-gc--programming-languages--easy, q-composite-pattern--design-patterns--medium, q-flyweight-pattern--design-patterns--hard]
+related: [q-composite-pattern--design-patterns--medium, q-flyweight-pattern--design-patterns--hard, q-what-is-garbage-in-gc--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - collections
-  - contract
-  - equals
-  - hashcode
-  - kotlin
-  - object-methods
-  - programming-languages
+tags: [collections, contract, equals, hashcode, kotlin, object-methods, programming-languages]
+date created: Friday, October 3rd 2025, 6:48:06 pm
+date modified: Sunday, October 26th 2025, 11:57:35 am
 ---
-# Расскажи о контрактах equals и hashCode
+
+# Расскажи О Контрактах Equals И hashCode
 
 # Question (EN)
 > Tell me about equals and hashCode contracts

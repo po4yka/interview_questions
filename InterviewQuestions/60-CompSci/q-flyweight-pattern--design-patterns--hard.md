@@ -5,15 +5,13 @@ topic: computer-science
 difficulty: hard
 status: draft
 moc: moc-cs
-related: [q-when-coroutine-cannot-be-cancelled--programming-languages--medium, q-decorator-pattern--design-patterns--medium, q-how-to-create-suspend-function--programming-languages--medium]
+related: [q-decorator-pattern--design-patterns--medium, q-how-to-create-suspend-function--programming-languages--medium, q-when-coroutine-cannot-be-cancelled--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - structural-patterns
-  - flyweight
-  - gof-patterns
-  - memory-optimization
+tags: [design-patterns, flyweight, gof-patterns, memory-optimization, structural-patterns]
+date created: Monday, October 6th 2025, 7:28:15 am
+date modified: Sunday, October 26th 2025, 11:57:48 am
 ---
+
 # Flyweight Pattern
 
 # Question (EN)
@@ -54,7 +52,7 @@ Define **`Flyweight`** objects that:
 
 This enables clients to (1) reuse (share) Flyweight objects and (2) pass in extrinsic state when they invoke a Flyweight operation. This greatly reduces the number of physically created objects.
 
-## Ключевые концепции
+## Ключевые Концепции
 
 **Intrinsic state**: Shared, stored in Flyweight (e.g., character glyph, icon bitmap)
 **Extrinsic state**: Context-dependent, passed by client (e.g., character position, color)
@@ -287,7 +285,7 @@ Use cases:
 - **String pools** - Shared string literals
 - **Android resources** - Drawable/Bitmap caching
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Pros (Преимущества)
 
@@ -374,7 +372,7 @@ object FontCache {
 
 **Flyweight (Легковес)** - это объект, который **минимизирует использование памяти путем совместного использования максимального количества данных с другими похожими объектами**. Это способ использования объектов в большом количестве, когда простое повторяющееся представление потребует неприемлемого объема памяти. Часто некоторые части состояния объекта могут быть разделены, и принято хранить их во внешних структурах данных и передавать временно при использовании.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Паттерн проектирования Flyweight решает такие проблемы:
 

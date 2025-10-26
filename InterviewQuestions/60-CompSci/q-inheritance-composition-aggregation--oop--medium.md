@@ -5,20 +5,15 @@ topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags:
-  - aggregation
-  - composition
-  - design-patterns
-  - has-a
-  - inheritance
-  - is-a
-  - oop
-  - relationships
+tags: [aggregation, composition, design-patterns, has-a, inheritance, is-a, oop, relationships]
 moc: moc-architecture-patterns
-related: [q-hot-vs-cold-flows--programming-languages--medium, q-state-pattern--design-patterns--medium, q-adapter-pattern--design-patterns--medium]
-subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
+related: [q-adapter-pattern--design-patterns--medium, q-hot-vs-cold-flows--programming-languages--medium, q-state-pattern--design-patterns--medium]
+subtopics: ["abstraction", "classes", "encapsulation", "inheritance", "polymorphism"]
+date created: Saturday, October 4th 2025, 7:03:09 pm
+date modified: Sunday, October 26th 2025, 11:57:55 am
 ---
-# В чём различия наследования, композиции, агрегации?
+
+# В Чём Различия Наследования, Композиции, Агрегации?
 
 # Question (EN)
 > What are the differences between inheritance, composition, and aggregation?
@@ -264,7 +259,7 @@ Animal (parent)
     Bird (child)
 ```
 
-### Composition (Car owns Engine)
+### Composition (Car Owns Engine)
 ```
 Car
   Engine     (owned, dies with Car)
@@ -272,7 +267,7 @@ Car
   Wheels     (owned, dies with Car)
 ```
 
-### Aggregation (Department uses Employees)
+### Aggregation (Department Uses Employees)
 ```
 Department
   Employee (independent, survives)

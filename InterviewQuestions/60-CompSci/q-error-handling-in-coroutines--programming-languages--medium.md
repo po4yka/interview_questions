@@ -7,9 +7,11 @@ status: draft
 moc: moc-cs
 related: [q-data-sealed-classes-why--programming-languages--medium, q-hashmap-how-it-works--programming-languages--medium, q-where-to-call-suspend-functions--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:56:46 am
+date modified: Sunday, October 26th 2025, 11:57:38 am
 ---
+
 # Error Handling Methods in Coroutines
 
 # Question (EN)

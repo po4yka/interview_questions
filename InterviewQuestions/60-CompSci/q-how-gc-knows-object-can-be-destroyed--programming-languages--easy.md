@@ -5,17 +5,14 @@ topic: computer-science
 difficulty: easy
 status: draft
 moc: moc-cs
-related: [q-what-is-job-object--programming-languages--medium, q-mediator-pattern--design-patterns--medium, q-zip-operator-parallel-requests--programming-languages--medium]
+related: [q-mediator-pattern--design-patterns--medium, q-what-is-job-object--programming-languages--medium, q-zip-operator-parallel-requests--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - garbage-collection
-  - gc-algorithm
-  - jvm
-  - kotlin
-  - programming-languages
-  - reachability
+tags: [garbage-collection, gc-algorithm, jvm, kotlin, programming-languages, reachability]
+date created: Saturday, October 4th 2025, 1:22:21 pm
+date modified: Sunday, October 26th 2025, 11:57:52 am
 ---
-# Как сборщик мусора понимает что объект можно уничтожить?
+
+# Как Сборщик Мусора Понимает Что Объект Можно Уничтожить?
 
 # Question (EN)
 > How does garbage collector know that an object can be destroyed?

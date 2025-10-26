@@ -5,14 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-prototype-pattern--design-patterns--medium, q-builder-pattern--design-patterns--medium, q-observer-pattern--design-patterns--medium]
+related: [q-builder-pattern--design-patterns--medium, q-observer-pattern--design-patterns--medium, q-prototype-pattern--design-patterns--medium]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - structural-patterns
-  - facade
-  - gof-patterns
+tags: [design-patterns, facade, gof-patterns, structural-patterns]
+date created: Monday, October 6th 2025, 7:22:08 am
+date modified: Sunday, October 26th 2025, 11:57:41 am
 ---
+
 # Facade Pattern
 
 # Question (EN)
@@ -294,7 +293,7 @@ Use Cases of Facade Pattern:
 3. **Providing Unified Interface** - Combine multiple APIs into single interface
 4. **Protecting Clients from Changes** - Stable facade interface shields clients from subsystem changes
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Pros (Преимущества)
 
@@ -371,14 +370,14 @@ class SystemFacade {
 
 Паттерн Facade — это структурный паттерн проектирования, целью которого является **сокрытие внутренней сложности за единым интерфейсом, который выглядит простым снаружи**. Он предоставляет упрощенный интерфейс к сложной подсистеме.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Какие проблемы может решить паттерн проектирования Facade?
 
 1. **Чтобы сделать сложную подсистему проще в использовании, должен быть предоставлен простой интерфейс для набора интерфейсов в подсистеме**
 2. **Зависимости от подсистемы должны быть минимизированы**
 
-### Ключевые моменты
+### Ключевые Моменты
 
 Ключевые моменты паттерна Facade:
 

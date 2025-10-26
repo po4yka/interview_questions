@@ -5,17 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-mvi-pattern--architecture-patterns--hard, q-garbage-collector-basics--programming-languages--medium, q-error-handling-in-coroutines--programming-languages--medium]
+related: [q-error-handling-in-coroutines--programming-languages--medium, q-garbage-collector-basics--programming-languages--medium, q-mvi-pattern--architecture-patterns--hard]
 created: 2025-10-15
-tags:
-  - abstract-class
-  - inheritance
-  - interface
-  - kotlin
-  - oop
-  - programming-languages
+tags: [abstract-class, inheritance, interface, kotlin, oop, programming-languages]
+date created: Friday, October 3rd 2025, 6:25:42 pm
+date modified: Sunday, October 26th 2025, 11:57:59 am
 ---
-# Что такое interface и чем он отличается от абстрактного класса?
+
+# Что Такое Interface И Чем Он Отличается От Абстрактного Класса?
 
 # Question (EN)
 > What is an interface and how does it differ from abstract class?
@@ -76,9 +73,9 @@ class Dog : Mammal(), Animal {
 | **Конструкторы** | Не может иметь конструкторы | Может иметь конструкторы |
 | **Когда использовать** | Определить контракт поведения | Разделить код между связанными классами |
 
-### Примеры использования
+### Примеры Использования
 
-#### Interface - Контракт поведения
+#### Interface - Контракт Поведения
 
 ```kotlin
 // Интерфейс определяет "что может делать"
@@ -112,7 +109,7 @@ class Button : Clickable, Focusable {
 }
 ```
 
-#### Abstract Class - Общий базовый код
+#### Abstract Class - Общий Базовый Код
 
 ```kotlin
 // Абстрактный класс определяет "что это такое" и содержит общий код
@@ -158,7 +155,7 @@ class Motorcycle : Vehicle(0) {
 }
 ```
 
-### Когда использовать что
+### Когда Использовать Что
 
 **Используйте Interface когда:**
 - Нужно определить контракт (что может делать объект)
@@ -253,7 +250,7 @@ class CustomButton : UIComponent(), Drawable, Resizable {
 }
 ```
 
-### Ключевое правило
+### Ключевое Правило
 
 **Interface = "can do" (может делать)**
 **Abstract Class = "is a" (является)**

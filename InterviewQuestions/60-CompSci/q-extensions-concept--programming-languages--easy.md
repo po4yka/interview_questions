@@ -5,15 +5,14 @@ topic: computer-science
 difficulty: easy
 status: draft
 moc: moc-cs
-related: [q-inheritance-composition-aggregation--oop--medium, q-sealed-classes-limitations--programming-languages--medium, q-reference-types-criteria--programming-languages--medium]
+related: [q-inheritance-composition-aggregation--oop--medium, q-reference-types-criteria--programming-languages--medium, q-sealed-classes-limitations--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - extension-functions
-  - extensions
-  - kotlin
-  - programming-languages
+tags: [extension-functions, extensions, kotlin, programming-languages]
+date created: Friday, October 3rd 2025, 7:03:57 pm
+date modified: Sunday, October 26th 2025, 11:57:40 am
 ---
-# Что такое Extensions?
+
+# Что Такое Extensions?
 
 # Question (EN)
 > What are Extensions?
@@ -164,7 +163,7 @@ val text2: String? = "Hello"
 println(text2.orDefault("N/A"))  // "Hello"
 ```
 
-### Member vs Extension
+### Member Vs Extension
 
 **Member functions take precedence:**
 

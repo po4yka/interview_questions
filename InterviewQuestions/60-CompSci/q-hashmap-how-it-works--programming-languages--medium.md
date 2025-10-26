@@ -5,16 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-switch-float-double--programming-languages--easy, q-how-suspend-function-detects-suspension--programming-languages--hard, q-data-sealed-classes-why--programming-languages--medium]
+related: [q-data-sealed-classes-why--programming-languages--medium, q-how-suspend-function-detects-suspension--programming-languages--hard, q-switch-float-double--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - collections
-  - data structures
-  - hashmap
-  - kotlin
-  - programming-languages
+tags: [collections, data structures, hashmap, kotlin, programming-languages]
+date created: Friday, October 3rd 2025, 4:14:01 pm
+date modified: Sunday, October 26th 2025, 11:57:51 am
 ---
-# Как работает HashMap?
+
+# Как Работает HashMap?
 
 # Question (EN)
 > How does HashMap work?

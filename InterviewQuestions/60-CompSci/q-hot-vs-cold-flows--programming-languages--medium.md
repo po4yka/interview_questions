@@ -7,10 +7,12 @@ status: draft
 moc: moc-cs
 related: [q-how-suspend-function-detects-suspension--programming-languages--hard, q-inheritance-vs-composition--oop--medium, q-iterator-concept--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:55:07 am
+date modified: Sunday, October 26th 2025, 11:57:51 am
 ---
-# Hot vs Cold Flows
+
+# Hot Vs Cold Flows
 
 # Question (EN)
 > What is the difference between Hot and Cold Flows?

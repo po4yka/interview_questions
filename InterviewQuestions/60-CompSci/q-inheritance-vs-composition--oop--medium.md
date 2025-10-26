@@ -5,21 +5,15 @@ topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags:
-  - composition
-  - coupling
-  - dependency-injection
-  - design-patterns
-  - flexibility
-  - has-a
-  - inheritance
-  - is-a
-  - oop
+tags: [composition, coupling, dependency-injection, design-patterns, flexibility, has-a, inheritance, is-a, oop]
 moc: moc-architecture-patterns
-related: [q-os-fundamentals-concepts--computer-science--hard, q-mediator-pattern--design-patterns--medium, q-java-object-comparison--programming-languages--easy]
-subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
+related: [q-java-object-comparison--programming-languages--easy, q-mediator-pattern--design-patterns--medium, q-os-fundamentals-concepts--computer-science--hard]
+subtopics: ["abstraction", "classes", "encapsulation", "inheritance", "polymorphism"]
+date created: Saturday, October 4th 2025, 7:06:29 pm
+date modified: Sunday, October 26th 2025, 11:57:58 am
 ---
-# Какие отличия наследования от композиции?
+
+# Какие Отличия Наследования От Композиции?
 
 # Question (EN)
 > What are the differences between inheritance and composition?
@@ -546,9 +540,9 @@ Composition is considered **more flexible and less coupled** than inheritance, m
 
 **Композиция считается более гибкой и менее связанной** по сравнению с наследованием.
 
-## Ключевые отличия
+## Ключевые Отличия
 
-### 1. Тип отношения
+### 1. Тип Отношения
 
 **Наследование: IS-A (ЯВЛЯЕТСЯ)**
 ```kotlin
@@ -749,7 +743,7 @@ val userService = UserService(MockDatabaseService())
 userService.createUser("Alice")  // Использует mock, реальной базы не нужно!
 ```
 
-### 5. Множественное поведение
+### 5. Множественное Поведение
 
 **Наследование: Нельзя наследоваться от нескольких классов**
 
@@ -781,7 +775,7 @@ class FlyingCar(
 }
 ```
 
-## Таблица сравнения
+## Таблица Сравнения
 
 | Аспект | Наследование | Композиция |
 |--------|-------------|------------|
@@ -794,7 +788,7 @@ class FlyingCar(
 | **Переиспользование** | Родитель → Потомки | Компоненты переиспользуются везде |
 | **Сложность** | Может привести к глубоким иерархиям | Плоский, простой дизайн |
 
-### Когда использовать каждый
+### Когда Использовать Каждый
 
 **Используйте Наследование:**
 - Чёткое отношение **IS-A (ЯВЛЯЕТСЯ)**
@@ -827,7 +821,7 @@ class OrderService(
 }
 ```
 
-## Лучшая практика: Предпочитайте композицию наследованию
+## Лучшая Практика: Предпочитайте Композицию Наследованию
 
 ```kotlin
 // Избегайте: Наследование для переиспользования кода

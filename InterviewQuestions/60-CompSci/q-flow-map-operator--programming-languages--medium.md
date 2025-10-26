@@ -5,11 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-how-gc-knows-object-can-be-destroyed--programming-languages--easy, q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-suspend-functions-under-the-hood--programming-languages--hard]
+related: [q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-how-gc-knows-object-can-be-destroyed--programming-languages--easy, q-suspend-functions-under-the-hood--programming-languages--hard]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:39:31 am
+date modified: Sunday, October 26th 2025, 11:57:46 am
 ---
+
 # Flow Map Operator for Type Transformation
 
 # Question (EN)
@@ -122,7 +124,7 @@ fetchData()
     }
 ```
 
-### Map vs MapLatest vs MapNotNull
+### Map Vs MapLatest Vs MapNotNull
 
 ```kotlin
 // map: Processes all elements
@@ -167,14 +169,14 @@ flowOf(1, 2, 3, 4)
 
 Оператор `map` — один из наиболее часто используемых операторов трансформации в Kotlin Flow. Он применяет функцию трансформации к каждому элементу, эмитируемому upstream Flow, и эмитирует трансформированный результат downstream.
 
-### Ключевые характеристики
+### Ключевые Характеристики
 
 1. **Трансформация типов**: Преобразует элементы из типа A в тип B
 2. **Последовательная обработка**: Обрабатывает элементы один за другим
 3. **Поддержка suspend**: Лямбда трансформации может быть suspend функцией
 4. **Cold Stream**: Сохраняет cold природу Flow
 
-### Базовый синтаксис
+### Базовый Синтаксис
 
 ```kotlin
 flow {
@@ -188,7 +190,7 @@ flow {
 }
 ```
 
-### Пример преобразования типа
+### Пример Преобразования Типа
 
 ```kotlin
 data class User(val id: Int, val name: String)
@@ -212,7 +214,7 @@ getUserFlow()
     }
 ```
 
-### Suspend функция в map
+### Suspend Функция В Map
 
 ```kotlin
 suspend fun fetchUserDetails(id: Int): UserDetails {
@@ -229,7 +231,7 @@ flowOf(1, 2, 3)
     }
 ```
 
-### Цепочка нескольких map
+### Цепочка Нескольких Map
 
 ```kotlin
 flowOf("1", "2", "3")
@@ -239,7 +241,7 @@ flowOf("1", "2", "3")
     .collect { println(it) }        // Выводит: Result: 2, Result: 4, Result: 6
 ```
 
-### Реальный пример: Трансформация ответа API
+### Реальный Пример: Трансформация Ответа API
 
 ```kotlin
 data class ApiResponse(val data: String, val timestamp: Long)
@@ -263,7 +265,7 @@ fetchData()
     }
 ```
 
-### Map vs MapLatest vs MapNotNull
+### Map Vs MapLatest Vs MapNotNull
 
 ```kotlin
 // map: Обрабатывает все элементы
@@ -285,7 +287,7 @@ flowOf(1, 2, 3, 4)
     .collect { println(it) }  // 4, 8
 ```
 
-### Распространенные случаи использования
+### Распространенные Случаи Использования
 
 1. **Преобразование DTO в Domain Model**
 2. **Форматирование данных** (например, timestamp в читаемые даты)
@@ -293,7 +295,7 @@ flowOf(1, 2, 3, 4)
 4. **Применение бизнес-логики** к каждому элементу
 5. **Преобразования типов** (String в Int, и т.д.)
 
-### Соображения производительности
+### Соображения Производительности
 
 - Map — это **легковесный** оператор
 - Каждый элемент обрабатывается **независимо**

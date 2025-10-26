@@ -5,11 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-nothing-class-purpose--programming-languages--medium, q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-observer-pattern--design-patterns--medium]
+related: [q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-nothing-class-purpose--programming-languages--medium, q-observer-pattern--design-patterns--medium]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:41:02 am
+date modified: Sunday, October 26th 2025, 11:57:47 am
 ---
+
 # Implementing Flow for Shopping Cart Management
 
 # Question (EN)

@@ -5,18 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-mvi-pattern--architecture-patterns--hard, q-interpreter-pattern--design-patterns--hard, q-xml-acronym--programming-languages--easy]
+related: [q-interpreter-pattern--design-patterns--hard, q-mvi-pattern--architecture-patterns--hard, q-xml-acronym--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - debugging
-  - heap-dump
-  - kotlin
-  - mat
-  - memory-management
-  - memory-profiler
-  - programming-languages
+tags: [debugging, heap-dump, kotlin, mat, memory-management, memory-profiler, programming-languages]
+date created: Saturday, October 4th 2025, 1:23:33 pm
+date modified: Sunday, October 26th 2025, 11:57:43 am
 ---
-# Как найти объект, если на него нет ссылок?
+
+# Как Найти Объект, Если На Него Нет Ссылок?
 
 # Question (EN)
 > How to find an object if there are no references to it?

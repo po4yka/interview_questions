@@ -5,11 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-java-access-modifiers--programming-languages--medium, q-mvp-pattern--architecture-patterns--medium, q-iterator-order-guarantee--programming-languages--medium]
+related: [q-iterator-order-guarantee--programming-languages--medium, q-java-access-modifiers--programming-languages--medium, q-mvp-pattern--architecture-patterns--medium]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:42:37 am
+date modified: Sunday, October 26th 2025, 11:57:54 am
 ---
+
 # How to Create a Suspend Function?
 
 # Question (EN)

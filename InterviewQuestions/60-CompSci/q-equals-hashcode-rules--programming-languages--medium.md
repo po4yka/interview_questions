@@ -5,19 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-interpreter-pattern--design-patterns--hard, q-coroutine-context-essence--programming-languages--medium, q-oop-principles-deep-dive--computer-science--medium]
+related: [q-coroutine-context-essence--programming-languages--medium, q-interpreter-pattern--design-patterns--hard, q-oop-principles-deep-dive--computer-science--medium]
 created: 2025-10-15
-tags:
-  - collections
-  - contracts
-  - equals
-  - hashcode
-  - java
-  - kotlin
-  - object-methods
-  - programming-languages
+tags: [collections, contracts, equals, hashcode, java, kotlin, object-methods, programming-languages]
+date created: Friday, October 3rd 2025, 6:25:42 pm
+date modified: Sunday, October 26th 2025, 11:57:37 am
 ---
-# Какие существуют правила для методов equals и hashcode?
+
+# Какие Существуют Правила Для Методов Equals И Hashcode?
 
 # Question (EN)
 > What rules exist for equals and hashCode methods?

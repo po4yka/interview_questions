@@ -1,753 +1,296 @@
 ---
 id: 20251016-175035
-title: "Default Vs Io Dispatcher"
-topic: programming-languages
+title: "Default vs IO Dispatcher / Разница между Default и IO Dispatcher"
+aliases: ["Default vs IO Dispatcher", "Разница между Default и IO Dispatcher"]
+topic: cs
+subtopics: [coroutines, dispatchers, kotlin, programming-languages]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
+moc: moc-cs
+related: [q-concurrency-fundamentals--computer-science--hard, q-coroutine-dispatchers--programming-languages--medium, q-coroutinescope-vs-supervisorscope--programming-languages--medium]
 created: 2025-10-13
-tags:
-  - programming-languages
-moc: moc-programming-languages
-related: [q-primitive-vs-reference-types--programming-languages--easy, q-launch-vs-async-await--programming-languages--medium, q-iterator-pattern--design-patterns--medium]
-subtopics: ["computer-science", "fundamentals"]
+updated: 2025-01-25
+tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, programming-languages]
+sources: [https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html]
+date created: Saturday, October 4th 2025, 10:45:30 am
+date modified: Sunday, October 26th 2025, 11:53:02 am
 ---
-# Default Dispatcher vs IO Dispatcher
-
-# Question (EN)
-> What is the difference between Default dispatcher and IO dispatcher?
 
 # Вопрос (RU)
-> В чем различие Default диспатчер и IO диспатчер?
+> В чем разница между Default и IO dispatcher? Когда использовать каждый из них?
 
----
-
-## Answer (EN)
-
-**Dispatchers.Default** is for heavy computations (CPU-intensive operations).
-**Dispatchers.IO** is for I/O operations (network requests, file operations, database queries).
-
-### Key Differences
-
-| Feature | Dispatchers.Default | Dispatchers.IO |
-|---------|---------------------|----------------|
-| **Purpose** | CPU-intensive work | I/O-bound operations |
-| **Thread Pool Size** | Number of CPU cores (min 2) | Up to 64 threads (configurable) |
-| **Use Cases** | Parsing, sorting, calculations | Network, files, database |
-| **Blocking Allowed** | Should avoid blocking | Designed for blocking operations |
-| **Thread Type** | Shared thread pool | Shared thread pool (larger) |
-
-### Dispatchers.Default - CPU Intensive
-
-```kotlin
-import kotlinx.coroutines.*
-
-// - Good use of Dispatchers.Default
-suspend fun parseJsonData(json: String): List<User> = withContext(Dispatchers.Default) {
-    // CPU-intensive parsing
-    val users = mutableListOf<User>()
-    // Complex parsing logic...
-    users
-}
-
-suspend fun sortLargeList(items: List<Int>): List<Int> = withContext(Dispatchers.Default) {
-    // CPU-intensive sorting
-    items.sorted()
-}
-
-suspend fun calculateStatistics(data: List<Double>): Statistics = withContext(Dispatchers.Default) {
-    // Heavy mathematical computations
-    Statistics(
-        mean = data.average(),
-        median = data.sorted()[data.size / 2],
-        stdDev = calculateStdDev(data)
-    )
-}
-
-suspend fun compressImage(image: Bitmap): ByteArray = withContext(Dispatchers.Default) {
-    // CPU-intensive image compression
-    val outputStream = ByteArrayOutputStream()
-    image.compress(Bitmap.CompressFormat.JPEG, 85, outputStream)
-    outputStream.toByteArray()
-}
-
-// Complex algorithm
-suspend fun findPrimes(n: Int): List<Int> = withContext(Dispatchers.Default) {
-    (2..n).filter { candidate ->
-        (2 until candidate).none { candidate % it == 0 }
-    }
-}
-```
-
-### Dispatchers.IO - I/O Bound Operations
-
-```kotlin
-import kotlinx.coroutines.*
-import java.io.File
-
-// - Good use of Dispatchers.IO
-suspend fun fetchUserFromNetwork(userId: Int): User = withContext(Dispatchers.IO) {
-    // Network request (blocking I/O)
-    api.getUser(userId)
-}
-
-suspend fun saveToDatabase(user: User) = withContext(Dispatchers.IO) {
-    // Database write (blocking I/O)
-    database.userDao().insert(user)
-}
-
-suspend fun readFileContents(path: String): String = withContext(Dispatchers.IO) {
-    // File reading (blocking I/O)
-    File(path).readText()
-}
-
-suspend fun downloadImage(url: String): Bitmap = withContext(Dispatchers.IO) {
-    // Network download (blocking I/O)
-    val connection = URL(url).openConnection()
-    BitmapFactory.decodeStream(connection.getInputStream())
-}
-
-suspend fun writeLogToFile(message: String) = withContext(Dispatchers.IO) {
-    // File writing (blocking I/O)
-    File("app.log").appendText("$message\n")
-}
-```
-
-### Thread Pool Sizes
-
-```kotlin
-fun main() = runBlocking {
-    println("CPU cores: ${Runtime.getRuntime().availableProcessors()}")
-
-    // Default pool size ≈ number of CPU cores
-    println("Default threads: ${Dispatchers.Default.toString()}")
-
-    // IO pool size: up to 64 threads
-    println("IO threads: ${Dispatchers.IO.toString()}")
-}
-
-// Example output on 8-core machine:
-// CPU cores: 8
-// Default threads: Dispatchers.Default[size=8]
-// IO threads: Dispatchers.IO[size=64]
-```
-
-### When to Use Each
-
-```kotlin
-// - WRONG: CPU-intensive on IO dispatcher
-suspend fun badExample1() = withContext(Dispatchers.IO) {
-    // This blocks an IO thread for CPU work
-    (1..1_000_000).sum()  // Should use Dispatchers.Default
-}
-
-// - WRONG: I/O operation on Default dispatcher
-suspend fun badExample2() = withContext(Dispatchers.Default) {
-    // This blocks a CPU thread for I/O
-    File("data.txt").readText()  // Should use Dispatchers.IO
-}
-
-// - CORRECT: Use appropriate dispatchers
-suspend fun goodExample() {
-    // I/O operation on IO dispatcher
-    val fileContent = withContext(Dispatchers.IO) {
-        File("data.txt").readText()
-    }
-
-    // CPU-intensive on Default dispatcher
-    val parsed = withContext(Dispatchers.Default) {
-        parseComplexData(fileContent)
-    }
-
-    // Save result back with IO
-    withContext(Dispatchers.IO) {
-        database.save(parsed)
-    }
-}
-```
-
-### Real-World Example
-
-```kotlin
-class DataProcessor {
-    // Fetch data from network (I/O)
-    suspend fun fetchData(url: String): String = withContext(Dispatchers.IO) {
-        URL(url).readText()
-    }
-
-    // Process data (CPU-intensive)
-    suspend fun processData(rawData: String): ProcessedData = withContext(Dispatchers.Default) {
-        // Complex parsing and transformation
-        val parsed = JsonParser.parse(rawData)
-        val transformed = parsed.map { transformItem(it) }
-        ProcessedData(transformed)
-    }
-
-    // Save to database (I/O)
-    suspend fun saveData(data: ProcessedData) = withContext(Dispatchers.IO) {
-        database.insert(data)
-    }
-
-    // Complete pipeline
-    suspend fun processAndSave(url: String) {
-        val rawData = fetchData(url)        // Dispatchers.IO
-        val processed = processData(rawData) // Dispatchers.Default
-        saveData(processed)                  // Dispatchers.IO
-    }
-}
-```
-
-### Parallel Execution
-
-```kotlin
-suspend fun parallelIOOperations() = coroutineScope {
-    // Can run many IO operations in parallel (up to 64 threads)
-    val results = (1..100).map { id ->
-        async(Dispatchers.IO) {
-            fetchUser(id)  // Each on separate IO thread
-        }
-    }.awaitAll()
-
-    println("Fetched ${results.size} users")
-}
-
-suspend fun parallelComputations() = coroutineScope {
-    // Limited by CPU cores (typically 4-16 threads)
-    val results = (1..100).map { data ->
-        async(Dispatchers.Default) {
-            processData(data)  // Shared among CPU cores
-        }
-    }.awaitAll()
-
-    println("Processed ${results.size} items")
-}
-```
-
-### Dispatcher Configuration
-
-```kotlin
-// Custom IO dispatcher with more threads
-val customIODispatcher = Dispatchers.IO.limitedParallelism(128)
-
-suspend fun useCustomDispatcher() = withContext(customIODispatcher) {
-    // Use expanded thread pool
-    fetchData()
-}
-
-// Custom Default-like dispatcher
-val customComputeDispatcher = Dispatchers.Default.limitedParallelism(4)
-
-suspend fun useCustomCompute() = withContext(customComputeDispatcher) {
-    // Limited to 4 threads regardless of CPU count
-    heavyComputation()
-}
-```
-
-### Blocking Operations
-
-```kotlin
-// IO dispatcher handles blocking calls well
-suspend fun multipleBlockingCalls() = coroutineScope {
-    // All can run concurrently on IO threads
-    val user = async(Dispatchers.IO) {
-        Thread.sleep(1000)  // Blocking call OK here
-        fetchUser()
-    }
-    val posts = async(Dispatchers.IO) {
-        Thread.sleep(1000)  // Blocking call OK here
-        fetchPosts()
-    }
-    val settings = async(Dispatchers.IO) {
-        Thread.sleep(1000)  // Blocking call OK here
-        fetchSettings()
-    }
-
-    CombinedData(user.await(), posts.await(), settings.await())
-}
-
-// - Default dispatcher should avoid blocking
-suspend fun badBlocking() = withContext(Dispatchers.Default) {
-    Thread.sleep(1000)  // BAD: Blocks precious CPU thread
-    // Use delay() or Dispatchers.IO instead
-}
-```
-
-### Mixed Workloads
-
-```kotlin
-suspend fun mixedWorkload() {
-    // Step 1: Fetch data (I/O)
-    val rawData = withContext(Dispatchers.IO) {
-        api.fetchData()
-    }
-
-    // Step 2: Transform data (CPU)
-    val transformed = withContext(Dispatchers.Default) {
-        rawData.map { item ->
-            complexTransform(item)
-        }
-    }
-
-    // Step 3: Save to DB (I/O)
-    withContext(Dispatchers.IO) {
-        database.save(transformed)
-    }
-
-    // Step 4: Generate report (CPU)
-    val report = withContext(Dispatchers.Default) {
-        generateReport(transformed)
-    }
-
-    // Step 5: Upload report (I/O)
-    withContext(Dispatchers.IO) {
-        api.uploadReport(report)
-    }
-}
-```
-
-### Performance Comparison
-
-```kotlin
-suspend fun compareDispatchers() {
-    // CPU-intensive task
-    val cpuTask = {
-        (1..10_000_000).sum()
-    }
-
-    // Correct: Default for CPU
-    val time1 = measureTimeMillis {
-        withContext(Dispatchers.Default) {
-            cpuTask()
-        }
-    }
-    println("CPU on Default: ${time1}ms")  // Fast
-
-    // Incorrect: IO for CPU
-    val time2 = measureTimeMillis {
-        withContext(Dispatchers.IO) {
-            cpuTask()
-        }
-    }
-    println("CPU on IO: ${time2}ms")  // Similar, but wastes IO thread
-
-    // I/O task
-    val ioTask = {
-        File("test.txt").readText()
-    }
-
-    // Correct: IO for I/O
-    val time3 = measureTimeMillis {
-        withContext(Dispatchers.IO) {
-            ioTask()
-        }
-    }
-    println("IO on IO: ${time3}ms")  // Appropriate
-
-    // Incorrect: Default for I/O
-    val time4 = measureTimeMillis {
-        withContext(Dispatchers.Default) {
-            ioTask()
-        }
-    }
-    println("IO on Default: ${time4}ms")  // Works but blocks CPU thread
-}
-```
-
-### Best Practices
-
-```kotlin
-class BestPractices {
-    // - DO: Use IO for network
-    suspend fun fetchFromNetwork() = withContext(Dispatchers.IO) {
-        api.getData()
-    }
-
-    // - DO: Use Default for computation
-    suspend fun calculateResult(data: List<Int>) = withContext(Dispatchers.Default) {
-        data.map { it * it }.sum()
-    }
-
-    // - DO: Switch dispatchers as needed
-    suspend fun pipeline() {
-        val data = withContext(Dispatchers.IO) { fetchData() }
-        val result = withContext(Dispatchers.Default) { process(data) }
-        withContext(Dispatchers.IO) { save(result) }
-    }
-
-    // - DON'T: Use Default for blocking I/O
-    suspend fun badPractice1() = withContext(Dispatchers.Default) {
-        File("data.txt").readText()  // BAD
-    }
-
-    // - DON'T: Use IO for CPU-heavy work unnecessarily
-    suspend fun badPractice2() = withContext(Dispatchers.IO) {
-        (1..1_000_000).map { it * it }  // BAD
-    }
-}
-```
-
-### Summary
-
-**Use Dispatchers.Default for:**
-- Parsing JSON/XML
-- Sorting/filtering large collections
-- Image/video processing
-- Compression/decompression
-- Mathematical calculations
-- Algorithm execution
-
-**Use Dispatchers.IO for:**
-- Network requests (HTTP, WebSocket)
-- Database queries (Room, SQL)
-- File operations (read/write)
-- SharedPreferences/DataStore
-- Blocking APIs
+# Question (EN)
+> What is the difference between Default dispatcher and IO dispatcher? When to use each?
 
 ---
 
 ## Ответ (RU)
 
-**Dispatchers.Default** предназначен для тяжелых вычислений (CPU-интенсивные операции).
-**Dispatchers.IO** предназначен для операций ввода-вывода (сетевые запросы, операции с файлами, запросы к БД).
+**Теория Dispatchers:**
+Dispatchers определяют, на каком потоке выполняется корутина. `Dispatchers.Default` - CPU-intensive задачи (computation-heavy), shared thread pool = CPU cores. `Dispatchers.IO` - blocking I/O операции (network, file, database), shared thread pool до 64 threads. Ключевое отличие: Default для heavy computation, IO для blocking I/O.
 
-### Ключевые различия
+**Различия:**
 
 | Характеристика | Dispatchers.Default | Dispatchers.IO |
 |----------------|---------------------|----------------|
-| **Назначение** | CPU-интенсивная работа | I/O-операции |
-| **Размер пула потоков** | Количество ядер CPU (минимум 2) | До 64 потоков (настраиваемо) |
-| **Примеры использования** | Парсинг, сортировка, вычисления | Сеть, файлы, база данных |
-| **Блокировки допустимы** | Следует избегать блокировок | Разработан для блокирующих операций |
-| **Тип потоков** | Общий пул потоков | Общий пул потоков (больший) |
+| **Цель** | CPU-intensive work | I/O-bound operations |
+| **Thread Pool Size** | CPU cores (min 2) | До 64 threads |
+| **Blocking** | Не допускается | Допускается |
+| **Use Cases** | Parsing, sorting, calculations | Network, files, database |
+| **Thread Type** | Shared computational pool | Shared I/O pool |
 
-### Dispatchers.Default - CPU-интенсивные операции
+**Dispatchers.Default - CPU-Интенсивные операции:**
+
+*Теория:* Default используется для CPU-intensive задач, которые максимизируют CPU usage. Thread pool размером = количество CPU cores (минимум 2). Threads не должны блокироваться. Используется для: computation-heavy operations, JSON/XML parsing, image processing, математические вычисления.
 
 ```kotlin
-import kotlinx.coroutines.*
-
-// Хорошее использование Dispatchers.Default
+// ✅ Dispatchers.Default для CPU-intensive задач
 suspend fun parseJsonData(json: String): List<User> = withContext(Dispatchers.Default) {
-    // CPU-интенсивный парсинг
-    val users = mutableListOf<User>()
-    // Сложная логика парсинга...
-    users
+    // CPU-intensive parsing
+    Json.decodeFromString<List<User>>(json)
 }
 
 suspend fun sortLargeList(items: List<Int>): List<Int> = withContext(Dispatchers.Default) {
-    // CPU-интенсивная сортировка
-    items.sorted()
+    items.sorted()  // CPU-intensive sorting
 }
 
 suspend fun calculateStatistics(data: List<Double>): Statistics = withContext(Dispatchers.Default) {
-    // Тяжелые математические вычисления
     Statistics(
         mean = data.average(),
-        median = data.sorted()[data.size / 2],
-        stdDev = calculateStdDev(data)
+        median = data.sorted()[data.size / 2]
     )
 }
 
+// ✅ Image processing
 suspend fun compressImage(image: Bitmap): ByteArray = withContext(Dispatchers.Default) {
-    // CPU-интенсивное сжатие изображения
     val outputStream = ByteArrayOutputStream()
     image.compress(Bitmap.CompressFormat.JPEG, 85, outputStream)
     outputStream.toByteArray()
 }
-
-// Сложный алгоритм
-suspend fun findPrimes(n: Int): List<Int> = withContext(Dispatchers.Default) {
-    (2..n).filter { candidate ->
-        (2 until candidate).none { candidate % it == 0 }
-    }
-}
 ```
 
-### Dispatchers.IO - I/O операции
+**Dispatchers.IO - I/O Операции:**
+
+*Теория:* IO используется для blocking I/O операций, где threads могут блокироваться (waiting for I/O). Thread pool больше (до 64), так как threads могут idle. Используется для: network requests, database queries, file operations, blocking API calls.
 
 ```kotlin
-import kotlinx.coroutines.*
-import java.io.File
-
-// Хорошее использование Dispatchers.IO
+// ✅ Dispatchers.IO для I/O операций
 suspend fun fetchUserFromNetwork(userId: Int): User = withContext(Dispatchers.IO) {
-    // Сетевой запрос (блокирующий I/O)
-    api.getUser(userId)
+    api.getUser(userId)  // Network request - блокирует thread
 }
 
 suspend fun saveToDatabase(user: User) = withContext(Dispatchers.IO) {
-    // Запись в БД (блокирующий I/O)
-    database.userDao().insert(user)
+    database.userDao().insert(user)  // Database write - блокирует thread
 }
 
 suspend fun readFileContents(path: String): String = withContext(Dispatchers.IO) {
-    // Чтение файла (блокирующий I/O)
-    File(path).readText()
+    File(path).readText()  // File I/O - блокирует thread
 }
 
-suspend fun downloadImage(url: String): Bitmap = withContext(Dispatchers.IO) {
-    // Загрузка из сети (блокирующий I/O)
-    val connection = URL(url).openConnection()
-    BitmapFactory.decodeStream(connection.getInputStream())
-}
-
-suspend fun writeLogToFile(message: String) = withContext(Dispatchers.IO) {
-    // Запись в файл (блокирующий I/O)
-    File("app.log").appendText("$message\n")
+// ✅ Room database
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users")
+    suspend fun getAllUsers(): List<User>  // Используется в Dispatchers.IO контексте
 }
 ```
 
-### Размеры пулов потоков
+**Правильный выбор dispatcher:**
+
+*Теория:* Критерий выбора - природа операции. CPU-intensive (вычисления, парсинг, сортировка) → Default. Blocking I/O (network, file, database) → IO. Если операция блокирует thread (waiting for I/O), используйте IO. Если операция использует CPU, используйте Default.
 
 ```kotlin
-fun main() = runBlocking {
-    println("Ядер CPU: ${Runtime.getRuntime().availableProcessors()}")
+// ✅ Правильное использование
+suspend fun dataProcessingPipeline() {
+    // I/O: fetch data
+    val data = withContext(Dispatchers.IO) { fetchData() }
 
-    // Размер пула Default ≈ количество ядер CPU
-    println("Потоков Default: ${Dispatchers.Default.toString()}")
+    // CPU: process data
+    val processed = withContext(Dispatchers.Default) { process(data) }
 
-    // Размер пула IO: до 64 потоков
-    println("Потоков IO: ${Dispatchers.IO.toString()}")
+    // I/O: save result
+    withContext(Dispatchers.IO) { save(processed) }
 }
 
-// Пример вывода на 8-ядерной машине:
-// Ядер CPU: 8
-// Потоков Default: Dispatchers.Default[size=8]
-// Потоков IO: Dispatchers.IO[size=64]
-```
-
-### Когда использовать каждый
-
-```kotlin
-// НЕПРАВИЛЬНО: CPU-интенсивная работа на IO dispatcher
-suspend fun badExample1() = withContext(Dispatchers.IO) {
-    // Блокирует поток IO для CPU работы
-    (1..1_000_000).sum()  // Следует использовать Dispatchers.Default
+// ❌ Неправильное использование
+suspend fun badPractice1() = withContext(Dispatchers.Default) {
+    File("data.txt").readText()  // ❌ I/O в Default - thread блокируется
 }
 
-// НЕПРАВИЛЬНО: I/O операция на Default dispatcher
-suspend fun badExample2() = withContext(Dispatchers.Default) {
-    // Блокирует поток CPU для I/O
-    File("data.txt").readText()  // Следует использовать Dispatchers.IO
-}
-
-// ПРАВИЛЬНО: Используйте подходящие dispatchers
-suspend fun goodExample() {
-    // I/O операция на IO dispatcher
-    val fileContent = withContext(Dispatchers.IO) {
-        File("data.txt").readText()
-    }
-
-    // CPU-интенсивная работа на Default dispatcher
-    val parsed = withContext(Dispatchers.Default) {
-        parseComplexData(fileContent)
-    }
-
-    // Сохранение результата с IO
-    withContext(Dispatchers.IO) {
-        database.save(parsed)
-    }
+suspend fun badPractice2() = withContext(Dispatchers.IO) {
+    (1..1_000_000).map { it * it }  // ❌ CPU work в IO - waste of threads
 }
 ```
 
-### Реальный пример
+**Когда использовать Default:**
 
-```kotlin
-class DataProcessor {
-    // Получить данные из сети (I/O)
-    suspend fun fetchData(url: String): String = withContext(Dispatchers.IO) {
-        URL(url).readText()
-    }
+- JSON/XML parsing
+- Image/video processing
+- Sorting/filtering large collections
+- Data compression/decompression
+- Mathematical computations
+- Algorithm execution
 
-    // Обработать данные (CPU-интенсивно)
-    suspend fun processData(rawData: String): ProcessedData = withContext(Dispatchers.Default) {
-        // Сложный парсинг и трансформация
-        val parsed = JsonParser.parse(rawData)
-        val transformed = parsed.map { transformItem(it) }
-        ProcessedData(transformed)
-    }
+**Когда использовать IO:**
 
-    // Сохранить в БД (I/O)
-    suspend fun saveData(data: ProcessedData) = withContext(Dispatchers.IO) {
-        database.insert(data)
-    }
-
-    // Полный пайплайн
-    suspend fun processAndSave(url: String) {
-        val rawData = fetchData(url)        // Dispatchers.IO
-        val processed = processData(rawData) // Dispatchers.Default
-        saveData(processed)                  // Dispatchers.IO
-    }
-}
-```
-
-### Параллельное выполнение
-
-```kotlin
-suspend fun parallelIOOperations() = coroutineScope {
-    // Можно выполнять много I/O операций параллельно (до 64 потоков)
-    val results = (1..100).map { id ->
-        async(Dispatchers.IO) {
-            fetchUser(id)  // Каждый в отдельном IO потоке
-        }
-    }.awaitAll()
-
-    println("Получено ${results.size} пользователей")
-}
-
-suspend fun parallelComputations() = coroutineScope {
-    // Ограничено ядрами CPU (обычно 4-16 потоков)
-    val results = (1..100).map { data ->
-        async(Dispatchers.Default) {
-            processData(data)  // Распределяется между ядрами CPU
-        }
-    }.awaitAll()
-
-    println("Обработано ${results.size} элементов")
-}
-```
-
-### Конфигурация Dispatcher
-
-```kotlin
-// Кастомный IO dispatcher с большим количеством потоков
-val customIODispatcher = Dispatchers.IO.limitedParallelism(128)
-
-suspend fun useCustomDispatcher() = withContext(customIODispatcher) {
-    // Использует расширенный пул потоков
-    fetchData()
-}
-
-// Кастомный Default-подобный dispatcher
-val customComputeDispatcher = Dispatchers.Default.limitedParallelism(4)
-
-suspend fun useCustomCompute() = withContext(customComputeDispatcher) {
-    // Ограничен 4 потоками независимо от количества CPU
-    heavyComputation()
-}
-```
-
-### Блокирующие операции
-
-```kotlin
-// IO dispatcher хорошо справляется с блокирующими вызовами
-suspend fun multipleBlockingCalls() = coroutineScope {
-    // Все могут выполняться параллельно на IO потоках
-    val user = async(Dispatchers.IO) {
-        Thread.sleep(1000)  // Блокирующий вызов OK здесь
-        fetchUser()
-    }
-    val posts = async(Dispatchers.IO) {
-        Thread.sleep(1000)  // Блокирующий вызов OK здесь
-        fetchPosts()
-    }
-    val settings = async(Dispatchers.IO) {
-        Thread.sleep(1000)  // Блокирующий вызов OK здесь
-        fetchSettings()
-    }
-
-    CombinedData(user.await(), posts.await(), settings.await())
-}
-
-// Default dispatcher должен избегать блокировок
-suspend fun badBlocking() = withContext(Dispatchers.Default) {
-    Thread.sleep(1000)  // ПЛОХО: Блокирует ценный CPU поток
-    // Используйте delay() или Dispatchers.IO вместо этого
-}
-```
-
-### Смешанные нагрузки
-
-```kotlin
-suspend fun mixedWorkload() {
-    // Шаг 1: Получить данные (I/O)
-    val rawData = withContext(Dispatchers.IO) {
-        api.fetchData()
-    }
-
-    // Шаг 2: Трансформировать данные (CPU)
-    val transformed = withContext(Dispatchers.Default) {
-        rawData.map { item ->
-            complexTransform(item)
-        }
-    }
-
-    // Шаг 3: Сохранить в БД (I/O)
-    withContext(Dispatchers.IO) {
-        database.save(transformed)
-    }
-
-    // Шаг 4: Сгенерировать отчет (CPU)
-    val report = withContext(Dispatchers.Default) {
-        generateReport(transformed)
-    }
-
-    // Шаг 5: Загрузить отчет (I/O)
-    withContext(Dispatchers.IO) {
-        api.uploadReport(report)
-    }
-}
-```
-
-### Лучшие практики
-
-```kotlin
-class BestPractices {
-    // ПРАВИЛЬНО: Используйте IO для сети
-    suspend fun fetchFromNetwork() = withContext(Dispatchers.IO) {
-        api.getData()
-    }
-
-    // ПРАВИЛЬНО: Используйте Default для вычислений
-    suspend fun calculateResult(data: List<Int>) = withContext(Dispatchers.Default) {
-        data.map { it * it }.sum()
-    }
-
-    // ПРАВИЛЬНО: Переключайте dispatchers по необходимости
-    suspend fun pipeline() {
-        val data = withContext(Dispatchers.IO) { fetchData() }
-        val result = withContext(Dispatchers.Default) { process(data) }
-        withContext(Dispatchers.IO) { save(result) }
-    }
-
-    // НЕ ДЕЛАЙТЕ: Default для блокирующего I/O
-    suspend fun badPractice1() = withContext(Dispatchers.Default) {
-        File("data.txt").readText()  // ПЛОХО
-    }
-
-    // НЕ ДЕЛАЙТЕ: IO для CPU-тяжелой работы без необходимости
-    suspend fun badPractice2() = withContext(Dispatchers.IO) {
-        (1..1_000_000).map { it * it }  // ПЛОХО
-    }
-}
-```
-
-### Резюме
-
-**Используйте Dispatchers.Default для:**
-- Парсинга JSON/XML
-- Сортировки/фильтрации больших коллекций
-- Обработки изображений/видео
-- Сжатия/распаковки
-- Математических вычислений
-- Выполнения алгоритмов
-
-**Используйте Dispatchers.IO для:**
-- Сетевых запросов (HTTP, WebSocket)
-- Запросов к БД (Room, SQL)
-- Операций с файлами (чтение/запись)
+- Network requests (HTTP, WebSocket)
+- Database queries (Room, SQLite)
+- File I/O operations
 - SharedPreferences/DataStore
-- Блокирующих API
+- Blocking API calls
+
+**Ключевые концепции:**
+
+1. **CPU vs I/O** - Default для CPU, IO для blocking I/O
+2. **Thread Pool Size** - Default = CPU cores, IO может быть больше
+3. **Blocking Allowed** - IO позволяет blocking, Default нет
+4. **Performance** - правильный dispatcher = лучше performance
+5. **Context Switching** - переключайте dispatchers при смене операции типа
+
+## Answer (EN)
+
+**Dispatchers Theory:**
+Dispatchers determine which thread coroutine executes on. `Dispatchers.Default` - CPU-intensive tasks (computation-heavy), shared thread pool = CPU cores. `Dispatchers.IO` - blocking I/O operations (network, file, database), shared thread pool up to 64 threads. Key difference: Default for heavy computation, IO for blocking I/O.
+
+**Differences:**
+
+| Feature | Dispatchers.Default | Dispatchers.IO |
+|---------|---------------------|----------------|
+| **Purpose** | CPU-intensive work | I/O-bound operations |
+| **Thread Pool Size** | CPU cores (min 2) | Up to 64 threads |
+| **Blocking** | Should avoid blocking | Designed for blocking |
+| **Use Cases** | Parsing, sorting, calculations | Network, files, database |
+| **Thread Type** | Shared computational pool | Shared I/O pool |
+
+**Dispatchers.Default - CPU-Intensive Operations:**
+
+*Theory:* Default used for CPU-intensive tasks that maximize CPU usage. Thread pool size = number of CPU cores (minimum 2). Threads shouldn't block. Used for: computation-heavy operations, JSON/XML parsing, image processing, mathematical computations.
+
+```kotlin
+// ✅ Dispatchers.Default for CPU-intensive tasks
+suspend fun parseJsonData(json: String): List<User> = withContext(Dispatchers.Default) {
+    // CPU-intensive parsing
+    Json.decodeFromString<List<User>>(json)
+}
+
+suspend fun sortLargeList(items: List<Int>): List<Int> = withContext(Dispatchers.Default) {
+    items.sorted()  // CPU-intensive sorting
+}
+
+suspend fun calculateStatistics(data: List<Double>): Statistics = withContext(Dispatchers.Default) {
+    Statistics(
+        mean = data.average(),
+        median = data.sorted()[data.size / 2]
+    )
+}
+
+// ✅ Image processing
+suspend fun compressImage(image: Bitmap): ByteArray = withContext(Dispatchers.Default) {
+    val outputStream = ByteArrayOutputStream()
+    image.compress(Bitmap.CompressFormat.JPEG, 85, outputStream)
+    outputStream.toByteArray()
+}
+```
+
+**Dispatchers.IO - I/O Operations:**
+
+*Theory:* IO used for blocking I/O operations, where threads can block (waiting for I/O). Thread pool larger (up to 64), because threads can idle. Used for: network requests, database queries, file operations, blocking API calls.
+
+```kotlin
+// ✅ Dispatchers.IO for I/O operations
+suspend fun fetchUserFromNetwork(userId: Int): User = withContext(Dispatchers.IO) {
+    api.getUser(userId)  // Network request - blocks thread
+}
+
+suspend fun saveToDatabase(user: User) = withContext(Dispatchers.IO) {
+    database.userDao().insert(user)  // Database write - blocks thread
+}
+
+suspend fun readFileContents(path: String): String = withContext(Dispatchers.IO) {
+    File(path).readText()  // File I/O - blocks thread
+}
+
+// ✅ Room database
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users")
+    suspend fun getAllUsers(): List<User>  // Used in Dispatchers.IO context
+}
+```
+
+**Choosing Right Dispatcher:**
+
+*Theory:* Selection criterion - operation nature. CPU-intensive (computations, parsing, sorting) → Default. Blocking I/O (network, file, database) → IO. If operation blocks thread (waiting for I/O), use IO. If operation uses CPU, use Default.
+
+```kotlin
+// ✅ Correct usage
+suspend fun dataProcessingPipeline() {
+    // I/O: fetch data
+    val data = withContext(Dispatchers.IO) { fetchData() }
+
+    // CPU: process data
+    val processed = withContext(Dispatchers.Default) { process(data) }
+
+    // I/O: save result
+    withContext(Dispatchers.IO) { save(processed) }
+}
+
+// ❌ Incorrect usage
+suspend fun badPractice1() = withContext(Dispatchers.Default) {
+    File("data.txt").readText()  // ❌ I/O in Default - thread blocks
+}
+
+suspend fun badPractice2() = withContext(Dispatchers.IO) {
+    (1..1_000_000).map { it * it }  // ❌ CPU work in IO - waste of threads
+}
+```
+
+**When to use Default:**
+
+- JSON/XML parsing
+- Image/video processing
+- Sorting/filtering large collections
+- Data compression/decompression
+- Mathematical computations
+- Algorithm execution
+
+**When to use IO:**
+
+- Network requests (HTTP, WebSocket)
+- Database queries (Room, SQLite)
+- File I/O operations
+- SharedPreferences/DataStore
+- Blocking API calls
+
+**Key Concepts:**
+
+1. **CPU vs I/O** - Default for CPU, IO for blocking I/O
+2. **Thread Pool Size** - Default = CPU cores, IO can be larger
+3. **Blocking Allowed** - IO allows blocking, Default does not
+4. **Performance** - right dispatcher = better performance
+5. **Context Switching** - switch dispatchers when operation type changes
 
 ---
+
+## Follow-ups
+
+- What happens if you use Default dispatcher for I/O operations?
+- Can you create custom dispatchers in Kotlin?
+- How does thread pool size affect performance?
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-xml-acronym--programming-languages--easy]] - Computer Science
-- [[q-data-structures-overview--algorithms--easy]] - Data Structures
+- Basic Kotlin coroutines
+- Threading fundamentals
 
-### Related (Medium)
-- [[q-clean-code-principles--software-engineering--medium]] - Computer Science
-- [[q-oop-principles-deep-dive--computer-science--medium]] - Computer Science
+### Related (Same Level)
+- [[q-coroutine-dispatchers--programming-languages--medium]] - All dispatchers overview
+- [[q-coroutinescope-vs-supervisorscope--programming-languages--medium]] - Scope builders
 
 ### Advanced (Harder)
-- [[q-os-fundamentals-concepts--computer-science--hard]] - Computer Science
+- [[q-concurrency-fundamentals--computer-science--hard]] - Concurrency concepts
+- Custom dispatcher implementation

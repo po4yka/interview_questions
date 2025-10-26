@@ -5,11 +5,13 @@ topic: computer-science
 difficulty: hard
 status: draft
 moc: moc-cs
-related: [q-visitor-pattern--design-patterns--hard, q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-chain-of-responsibility--design-patterns--medium]
+related: [q-chain-of-responsibility--design-patterns--medium, q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-visitor-pattern--design-patterns--hard]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:44:36 am
+date modified: Sunday, October 26th 2025, 11:57:53 am
 ---
+
 # How Suspend Function Detects Suspension?
 
 # Question (EN)

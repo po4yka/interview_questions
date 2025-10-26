@@ -3,7 +3,7 @@ id: "20251013-600007"
 title: "Database Fundamentals / Фундаментальные основы баз данных"
 aliases: ["Database Fundamentals", "Фундаментальные основы баз данных"]
 topic: cs
-subtopics: [databases, sql, nosql, transactions, indexing]
+subtopics: [databases, indexing, nosql, sql, transactions]
 question_kind: theory
 difficulty: hard
 original_language: en
@@ -13,8 +13,10 @@ moc: moc-cs
 related: [c-database-design, c-relational-databases, q-sql-nosql-databases--system-design--medium]
 created: "2025-10-13"
 updated: 2025-01-25
-tags: [database, sql, nosql, acid, transactions, indexing, normalization, difficulty/hard]
+tags: [acid, database, difficulty/hard, indexing, normalization, nosql, sql, transactions]
 sources: [https://en.wikipedia.org/wiki/Database]
+date created: Monday, October 13th 2025, 8:07:02 am
+date modified: Sunday, October 26th 2025, 11:45:29 am
 ---
 
 # Вопрос (RU)
@@ -48,7 +50,7 @@ data class User(
 interface UserDao {
     @Query("SELECT * FROM users WHERE age > :minAge")
     suspend fun getUsersOlderThan(minAge: Int): List<User>
-    
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: User)
 }
@@ -150,11 +152,11 @@ interface TaskDao {
     // ✅ Использование индекса
     @Query("SELECT * FROM Task WHERE userId = :userId")
     suspend fun getTasksByUser(userId: String): List<Task>
-    
+
     // ✅ Index order matters!
     @Query("SELECT * FROM Task WHERE userId = :userId AND status = :status")
     suspend fun getTasks(userId: String, status: String): List<Task>
-    
+
     // ❌ Неправильный порядок - индекс менее эффективен
     @Query("SELECT * FROM Task WHERE status = :status AND userId = :userId")
     suspend fun getTasksWrongOrder(userId: String, status: String): List<Task>
@@ -269,7 +271,7 @@ data class Order(
 @Database(entities = [User::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
-    
+
     companion object {
         fun create(context: Context): AppDatabase {
             return Room.databaseBuilder(
@@ -292,14 +294,14 @@ interface UserDao {
 @Database(entities = [User::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
-    
+
     companion object {
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE users ADD COLUMN avatar TEXT")
             }
         }
-        
+
         fun create(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
                 .addMigrations(MIGRATION_1_2)
@@ -340,7 +342,7 @@ data class User(
 interface UserDao {
     @Query("SELECT * FROM users WHERE age > :minAge")
     suspend fun getUsersOlderThan(minAge: Int): List<User>
-    
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: User)
 }
@@ -442,7 +444,7 @@ interface TaskDao {
     // ✅ Using index
     @Query("SELECT * FROM Task WHERE userId = :userId")
     suspend fun getTasksByUser(userId: String): List<Task>
-    
+
     // ✅ Index order matters!
     @Query("SELECT * FROM Task WHERE userId = :userId AND status = :status")
     suspend fun getTasks(userId: String, status: String): List<Task>
@@ -557,7 +559,7 @@ data class Order(
 @Database(entities = [User::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
-    
+
     companion object {
         fun create(context: Context): AppDatabase {
             return Room.databaseBuilder(
@@ -580,14 +582,14 @@ interface UserDao {
 @Database(entities = [User::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
-    
+
     companion object {
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE users ADD COLUMN avatar TEXT")
             }
         }
-        
+
         fun create(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
                 .addMigrations(MIGRATION_1_2)

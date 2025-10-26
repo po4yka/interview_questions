@@ -5,19 +5,14 @@ topic: computer-science
 difficulty: easy
 status: draft
 moc: moc-cs
-related: [q-iterator-order-guarantee--programming-languages--medium, q-service-locator-pattern--design-patterns--medium, q-abstract-class-purpose--programming-languages--medium]
+related: [q-abstract-class-purpose--programming-languages--medium, q-iterator-order-guarantee--programming-languages--medium, q-service-locator-pattern--design-patterns--medium]
 created: 2025-10-15
-tags:
-  - automatic-memory
-  - garbage-collection
-  - gc
-  - java
-  - jvm
-  - kotlin
-  - memory-management
-  - programming-languages
+tags: [automatic-memory, garbage-collection, gc, java, jvm, kotlin, memory-management, programming-languages]
+date created: Saturday, October 4th 2025, 6:30:16 pm
+date modified: Sunday, October 26th 2025, 11:57:49 am
 ---
-# Что такое сборщик мусора?
+
+# Что Такое Сборщик Мусора?
 
 # Question (EN)
 > What is a garbage collector?
@@ -428,7 +423,7 @@ val result = list.asSequence()
 
 Эта функция присутствует во многих современных языках программирования (Java, Kotlin, C#, Python, JavaScript, Go), где не требуется ручное управление памятью (как в C или C++).
 
-## Как он работает
+## Как Он Работает
 
 Сборщик мусора работает в **фоновом режиме**, периодически сканируя память программы на предмет объектов, которые больше не доступны для использования.
 
@@ -528,7 +523,7 @@ object Cache {
 
 Разделяет heap на два пространства, копирует живые объекты в одно пространство, затем меняет их местами.
 
-### Reference Counting (не в JVM)
+### Reference Counting (не В JVM)
 
 Считает ссылки на каждый объект, освобождает когда счётчик достигает нуля (используется в Python, Swift).
 
@@ -536,7 +531,7 @@ object Cache {
 
 ## Преимущества
 
-### 1. Уменьшение ошибок управления памятью
+### 1. Уменьшение Ошибок Управления Памятью
 
 Автоматическое управление памятью значительно снижает риски ошибок, таких как:
 
@@ -572,7 +567,7 @@ free(ptr);
 *ptr = 10;  // Use after free - undefined behavior!
 ```
 
-### 2. Простота разработки
+### 2. Простота Разработки
 
 Нет необходимости тратить время на явное управление памятью, что упрощает процесс разработки.
 
@@ -632,7 +627,7 @@ fun processFrame() {
      выполнение          остановлены!     выполнение
 ```
 
-### 2. Накладные расходы
+### 2. Накладные Расходы
 
 Сборка мусора потребляет **системные ресурсы**, такие как время CPU и память, что может снизить общую производительность приложения.
 
