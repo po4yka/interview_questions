@@ -3,18 +3,20 @@ id: 20251012-1227111164
 title: "Memento Pattern / Паттерн Хранитель"
 aliases: ["Memento Pattern", "Паттерн Хранитель"]
 topic: cs
-subtopics: [behavioral-patterns, state-management, undo-redo, design-patterns]
+subtopics: [behavioral-patterns, design-patterns, state-management, undo-redo]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-command-pattern--design-patterns--medium, q-state-pattern--design-patterns--medium, q-iterator-pattern--design-patterns--medium]
+related: [q-command-pattern--design-patterns--medium, q-iterator-pattern--design-patterns--medium, q-state-pattern--design-patterns--medium]
 created: 2025-10-15
 updated: 2025-01-25
-tags: [design-patterns, behavioral-patterns, memento, state-management, undo-redo, difficulty/medium]
+tags: [behavioral-patterns, design-patterns, difficulty/medium, memento, state-management, undo-redo]
 sources: [https://refactoring.guru/design-patterns/memento]
+date created: Monday, October 6th 2025, 7:34:37 am
+date modified: Sunday, October 26th 2025, 12:30:15 pm
 ---
 
 # Вопрос (RU)

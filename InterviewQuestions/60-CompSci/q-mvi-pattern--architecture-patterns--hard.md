@@ -3,18 +3,20 @@ id: 20251012-1227111165
 title: "MVI Pattern / Паттерн MVI (Model-View-Intent)"
 aliases: ["MVI Pattern", "Паттерн MVI"]
 topic: cs
-subtopics: [android-architecture, unidirectional-data-flow, state-management, architecture-patterns]
+subtopics: [android-architecture, architecture-patterns, state-management, unidirectional-data-flow]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-mvvm-pattern--architecture-patterns--medium, q-mvp-pattern--architecture-patterns--medium, q-clean-architecture--architecture-patterns--hard]
+related: [q-clean-architecture--architecture-patterns--hard, q-mvp-pattern--architecture-patterns--medium, q-mvvm-pattern--architecture-patterns--medium]
 created: 2025-10-15
 updated: 2025-01-25
-tags: [mvi, android-architecture, unidirectional-data-flow, state-management, mvvm, mvp, redux, difficulty/hard]
+tags: [android-architecture, difficulty/hard, mvi, mvp, mvvm, redux, state-management, unidirectional-data-flow]
 sources: [https://proandroiddev.com/mvi-a-new-member-of-the-mv-band-6f7f0d23bc8a]
+date created: Monday, October 6th 2025, 7:36:32 am
+date modified: Sunday, October 26th 2025, 12:35:54 pm
 ---
 
 # Вопрос (RU)
