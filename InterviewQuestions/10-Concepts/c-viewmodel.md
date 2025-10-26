@@ -4,7 +4,7 @@ title: "ViewModel / ViewModel"
 aliases: ["ViewModel", "Android ViewModel", "AAC ViewModel", "ViewModel компонент"]
 summary: "Lifecycle-aware component that stores and manages UI-related data, surviving configuration changes like screen rotations"
 topic: "android"
-subtopics: ["viewmodel", "lifecycle", "architecture-components", "jetpack", "mvvm"]
+subtopics: ["viewmodel", "lifecycle", "architecture-components"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "viewmodel", "lifecycle", "architecture-components", "jetpack", "mvvm"]
+tags: ["concept", "android", "viewmodel", "lifecycle", "architecture-components", "jetpack", "mvvm", "difficulty/medium"]
 ---
 
 # ViewModel / ViewModel

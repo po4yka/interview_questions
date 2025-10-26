@@ -2,8 +2,9 @@
 id: "20251012-000000"
 title: "Database Performance Optimization / Оптимизация производительности баз данных"
 aliases: []
+summary: ""
 topic: "performance"
-subtopics: ["database", "indexing", "optimization", "query-tuning"]
+subtopics: ["database", "indexing", "optimization"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -14,8 +15,7 @@ moc: "moc-performance"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "database", "performance", "indexing", "optimization", "query-tuning"]
-type: "concept"
+tags: ["concept", "database", "performance", "indexing", "optimization", "query-tuning", "difficulty/medium"]
 ---
 
 # Summary (EN)

@@ -15,7 +15,7 @@ moc: "moc-performance"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "memory", "performance", "jvm", "garbage-collection"]
+tags: ["concept", "memory", "performance", "jvm", "garbage-collection", "difficulty/medium"]
 ---
 
 # Memory Management / Управление Памятью

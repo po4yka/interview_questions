@@ -4,7 +4,7 @@ title: "Jetpack Compose / Jetpack Compose"
 aliases: ["Jetpack Compose", "Compose", "Declarative UI", "Jetpack Compose UI", "Декларативный UI", "Композ"]
 summary: "Modern declarative UI toolkit for building native Android interfaces"
 topic: "android"
-subtopics: ["jetpack-compose", "ui", "declarative-ui", "composables", "recomposition"]
+subtopics: ["jetpack-compose", "ui", "declarative-ui"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "jetpack-compose", "ui", "declarative-ui", "composables", "recomposition"]
+tags: ["concept", "android", "jetpack-compose", "ui", "declarative-ui", "composables", "recomposition", "difficulty/medium"]
 ---
 
 # Jetpack Compose / Jetpack Compose

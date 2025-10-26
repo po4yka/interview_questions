@@ -15,9 +15,7 @@ moc: "moc-security"
 related: []
 created: "2025-10-23"
 updated: "2025-10-23"
-tags: ["concept", "security", "encryption", "cryptography", "android"]
-kind: "concept"
-links: []
+tags: ["concept", "security", "encryption", "cryptography", "android", "difficulty/medium"]
 ---
 
 # Encryption / Шифрование

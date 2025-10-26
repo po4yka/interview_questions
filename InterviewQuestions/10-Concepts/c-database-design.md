@@ -2,8 +2,9 @@
 id: "20251012-000000"
 title: "Database Design Principles / Принципы проектирования баз данных"
 aliases: []
+summary: ""
 topic: "cs"
-subtopics: ["database", "design", "normalization", "schema", "relational"]
+subtopics: ["database", "design", "normalization"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -14,8 +15,7 @@ moc: "moc-cs"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "database", "design", "normalization", "schema", "relational"]
-type: "concept"
+tags: ["concept", "database", "design", "normalization", "schema", "relational", "difficulty/medium"]
 ---
 
 # Summary (EN)

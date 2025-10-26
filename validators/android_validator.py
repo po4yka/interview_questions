@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from .base import BaseValidator, Severity
 
 
@@ -10,6 +12,9 @@ class AndroidValidator(BaseValidator):
 
     def validate(self):
         if self.frontmatter.get("topic") != "android":
+            return self._summary
+        filename = Path(self.path).name
+        if filename.startswith("c-"):
             return self._summary
         self._check_subtopics()
         self._check_tag_mirroring()

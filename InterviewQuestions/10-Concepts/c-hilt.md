@@ -15,9 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-23"
 updated: "2025-10-23"
-tags: ["concept", "android", "dependency-injection", "hilt", "architecture"]
-kind: "concept"
-links: ["c-dependency-injection", "c-dagger"]
+tags: ["concept", "android", "dependency-injection", "hilt", "architecture", "difficulty/medium"]
 ---
 
 # Hilt / Hilt DI

@@ -2,8 +2,9 @@
 id: "20251012-000000"
 title: "Version Control Systems / Системы контроля версий"
 aliases: []
+summary: ""
 topic: "cs"
-subtopics: ["vcs", "git", "version-control", "collaboration"]
+subtopics: ["vcs", "git", "version-control"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -14,8 +15,7 @@ moc: "moc-cs"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "vcs", "git", "version-control", "collaboration"]
-type: "concept"
+tags: ["concept", "vcs", "git", "version-control", "collaboration", "difficulty/medium"]
 ---
 
 # Summary (EN)

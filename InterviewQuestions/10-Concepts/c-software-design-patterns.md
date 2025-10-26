@@ -15,7 +15,7 @@ moc: "moc-cs"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "design-patterns", "architecture", "software-engineering"]
+tags: ["concept", "design-patterns", "architecture", "software-engineering", "difficulty/medium"]
 ---
 
 # Software Design Patterns / Паттерны Проектирования

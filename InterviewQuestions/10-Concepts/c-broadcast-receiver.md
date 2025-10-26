@@ -15,7 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "components", "broadcast", "system-events"]
+tags: ["concept", "android", "components", "broadcast", "system-events", "difficulty/medium"]
 ---
 
 # Broadcast Receiver / Широковещательный Приемник

@@ -4,7 +4,7 @@ title: "Gradle / Gradle"
 aliases: ["Gradle", "Gradle Build System", "Build Automation", "Система сборки Gradle", "Автоматизация сборки"]
 summary: "Build automation tool for Android and JVM projects using Groovy or Kotlin DSL"
 topic: "android"
-subtopics: ["gradle", "build-system", "kotlin-dsl", "groovy", "automation"]
+subtopics: ["gradle", "build-system", "kotlin-dsl"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "gradle", "build-system", "android", "kotlin-dsl", "groovy", "automation"]
+tags: ["concept", "gradle", "build-system", "android", "kotlin-dsl", "groovy", "automation", "difficulty/medium"]
 ---
 
 # Gradle / Gradle

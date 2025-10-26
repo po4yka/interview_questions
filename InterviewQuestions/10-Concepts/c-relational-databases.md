@@ -2,8 +2,9 @@
 id: "20251012-000000"
 title: "Relational Databases / Реляционные базы данных"
 aliases: []
+summary: ""
 topic: "cs"
-subtopics: ["database", "relational", "rdbms", "acid", "transactions"]
+subtopics: ["database", "relational", "rdbms"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -14,8 +15,7 @@ moc: "moc-cs"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "database", "relational", "rdbms", "acid", "transactions"]
-type: "concept"
+tags: ["concept", "database", "relational", "rdbms", "acid", "transactions", "difficulty/medium"]
 ---
 
 # Summary (EN)

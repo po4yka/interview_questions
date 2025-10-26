@@ -15,7 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "permissions", "security", "privacy"]
+tags: ["concept", "android", "permissions", "security", "privacy", "difficulty/medium"]
 ---
 
 # Android Permissions / Разрешения Android

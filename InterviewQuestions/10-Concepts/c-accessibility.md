@@ -4,7 +4,7 @@ title: "Accessibility / Доступность"
 aliases: ["Accessibility", "Android Accessibility", "TalkBack", "Доступность", "Специальные возможности Android"]
 summary: "Features and APIs that make Android apps usable for people with disabilities"
 topic: "android"
-subtopics: ["accessibility", "ui-ux", "talkback", "a11y"]
+subtopics: ["accessibility", "ui-ux", "talkback"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "accessibility", "ui-ux", "talkback", "a11y"]
+tags: ["concept", "android", "accessibility", "ui-ux", "talkback", "a11y", "difficulty/medium"]
 ---
 
 # Accessibility / Доступность

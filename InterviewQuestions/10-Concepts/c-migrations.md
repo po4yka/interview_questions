@@ -2,8 +2,9 @@
 id: "20251012-000000"
 title: "Database Migrations / Миграции баз данных"
 aliases: []
+summary: ""
 topic: "cs"
-subtopics: ["database", "migrations", "schema", "versioning"]
+subtopics: ["database", "migrations", "schema"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -14,8 +15,7 @@ moc: "moc-cs"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "database", "migrations", "schema", "versioning"]
-type: "concept"
+tags: ["concept", "database", "migrations", "schema", "versioning", "difficulty/medium"]
 ---
 
 # Summary (EN)

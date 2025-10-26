@@ -4,7 +4,7 @@ title: "Kotlin Coroutines / Корутины Kotlin"
 aliases: ["Coroutines", "Корутины", "Сопрограммы", "Kotlin Coroutines"]
 summary: "Lightweight concurrency framework for asynchronous programming with structured concurrency and suspend functions"
 topic: "kotlin"
-subtopics: ["coroutines", "async", "concurrency", "structured-concurrency"]
+subtopics: ["coroutines", "async", "concurrency"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,9 +15,7 @@ moc: "moc-kotlin"
 related: []
 created: "2025-10-18"
 updated: "2025-10-18"
-tags: ["concept", "kotlin", "coroutines", "async", "concurrency", "structured-concurrency"]
-kind: "concept"
-links: []
+tags: ["concept", "kotlin", "coroutines", "async", "concurrency", "structured-concurrency", "difficulty/medium"]
 ---
 
 # Summary (EN)

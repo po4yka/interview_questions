@@ -4,7 +4,7 @@ title: "Clean Architecture / Чистая Архитектура"
 aliases: ["Clean Architecture", "Clean Code Architecture", "Чистая Архитектура", "Архитектура Роберта Мартина"]
 summary: "Software architecture pattern with layered structure promoting independence, testability, and maintainability by separating concerns into Domain, Data, and Presentation layers"
 topic: "android"
-subtopics: ["architecture-patterns", "clean-architecture", "domain-layer", "use-cases", "repository"]
+subtopics: ["architecture-patterns", "clean-architecture", "domain-layer"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "architecture-patterns", "clean-architecture", "domain-layer", "use-cases", "repository"]
+tags: ["concept", "android", "architecture-patterns", "clean-architecture", "domain-layer", "use-cases", "repository", "difficulty/medium"]
 ---
 
 # Clean Architecture / Чистая Архитектура

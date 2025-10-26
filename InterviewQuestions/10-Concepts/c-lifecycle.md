@@ -15,9 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-23"
 updated: "2025-10-23"
-tags: ["concept", "android", "lifecycle", "architecture-components"]
-kind: "concept"
-links: []
+tags: ["concept", "android", "lifecycle", "architecture-components", "difficulty/medium"]
 ---
 
 # Android Lifecycle / Жизненный цикл Android

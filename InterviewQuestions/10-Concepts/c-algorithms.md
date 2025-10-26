@@ -2,8 +2,9 @@
 id: "20251012-000000"
 title: "Algorithms / Алгоритмы"
 aliases: []
+summary: ""
 topic: "algorithms"
-subtopics: ["complexity", "sorting", "searching", "big-o"]
+subtopics: ["complexity", "sorting", "searching"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -14,8 +15,7 @@ moc: "moc-algorithms"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "algorithms", "complexity", "sorting", "searching", "big-o"]
-type: "concept"
+tags: ["concept", "algorithms", "complexity", "sorting", "searching", "big-o", "difficulty/medium"]
 ---
 
 # Summary (EN)

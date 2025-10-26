@@ -2,8 +2,9 @@
 id: "20251012-000000"
 title: "Git Fundamentals / Основы Git"
 aliases: []
+summary: ""
 topic: "cs"
-subtopics: ["git", "version-control", "branching", "merging", "rebasing"]
+subtopics: ["git", "version-control", "branching"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -14,8 +15,7 @@ moc: "moc-cs"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "git", "version-control", "branching", "merging", "rebasing"]
-type: "concept"
+tags: ["concept", "git", "version-control", "branching", "merging", "rebasing", "difficulty/medium"]
 ---
 
 # Summary (EN)

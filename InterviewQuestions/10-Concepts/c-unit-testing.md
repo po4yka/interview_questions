@@ -15,7 +15,7 @@ moc: "moc-testing"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "testing", "junit", "quality-assurance", "tdd"]
+tags: ["concept", "testing", "junit", "quality-assurance", "tdd", "difficulty/medium"]
 ---
 
 # Unit Testing / Модульное Тестирование

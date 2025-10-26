@@ -4,7 +4,7 @@ title: "Android App Bundle / Android App Bundle"
 aliases: ["App Bundle", "AAB", "Android App Bundle", "Формат App Bundle"]
 summary: "Publishing format for Android apps that enables Google Play to generate optimized APKs for each device configuration"
 topic: "android"
-subtopics: ["app-bundle", "publishing", "gradle", "build"]
+subtopics: ["app-bundle", "publishing", "gradle"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "app-bundle", "publishing", "gradle", "build"]
+tags: ["concept", "android", "app-bundle", "publishing", "gradle", "build", "difficulty/medium"]
 ---
 
 # Android App Bundle / Android App Bundle

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as _dt
 import json
 import re
 from pathlib import Path
@@ -8,11 +8,6 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "utils" / "src"))
-
-try:
-    import yaml  # type: ignore
-except Exception:  # pylint: disable=broad-except
-    yaml = None
 
 from utils.yaml_loader import load_yaml  # type: ignore
 
@@ -72,21 +67,65 @@ MOC_MAP = {
 ID_PATTERN = re.compile(r"^(\d{8}-\d{6})$")
 
 
-def normalize_date(value):
+def _listify(value) -> list[str]:
     if value is None:
-        return None
+        return []
+    if isinstance(value, list):
+        return [str(item) for item in value]
+    return [str(value)]
+
+
+def _normalize_date(value) -> str:
+    if value is None or value == "":
+        return "2025-01-01"
+    if isinstance(value, _dt.date):
+        return value.strftime("%Y-%m-%d")
     if isinstance(value, str):
         return value
-    if isinstance(value, datetime.date):
-        return value.strftime("%Y-%m-%d")
     return str(value)
 
 
-def main():
-    concept_files = sorted(CONCEPT_DIR.glob("c-*.md"))
-    changed = 0
+def _dump_yaml(data: dict) -> str:
+    def format_scalar(value):
+        if value is None:
+            return "null"
+        if isinstance(value, bool):
+            return "true" if value else "false"
+        if isinstance(value, (int, float)):
+            return str(value)
+        return json.dumps(str(value), ensure_ascii=False)
 
-    for path in concept_files:
+    lines = []
+    for key, value in data.items():
+        if isinstance(value, list):
+            if not value:
+                lines.append(f"{key}: []")
+            elif all(isinstance(item, (str, int, float, bool)) or item is None for item in value):
+                rendered = ", ".join(format_scalar(item) for item in value)
+                lines.append(f"{key}: [{rendered}]")
+            else:
+                lines.append(f"{key}:")
+                for item in value:
+                    if isinstance(item, dict):
+                        lines.append("  -")
+                        for subkey, subval in item.items():
+                            lines.append(f"    {subkey}: {format_scalar(subval)}")
+                    else:
+                        lines.append(f"  - {format_scalar(item)}")
+        elif isinstance(value, dict):
+            lines.append(f"{key}:")
+            for subkey, subval in value.items():
+                lines.append(f"  {subkey}: {format_scalar(subval)}")
+        else:
+            lines.append(f"{key}: {format_scalar(value)}")
+    return "\n".join(lines) + "\n"
+
+
+def normalize_concepts():
+    files = sorted(CONCEPT_DIR.glob("c-*.md"))
+    updated = 0
+
+    for path in files:
         text = path.read_text(encoding="utf-8")
         if not text.startswith("---"):
             continue
@@ -94,14 +133,12 @@ def main():
             header, body = text.split("\n---\n", 1)
         except ValueError:
             continue
-        yaml_raw = header[3:]
-        data = load_yaml(yaml_raw) or {}
+        frontmatter = load_yaml(header[3:]) or {}
 
-        tags = data.get("tags") or []
-        if isinstance(tags, str):
-            tags = [tags]
+        tags = _listify(frontmatter.get("tags"))
+        tags = [t for t in tags if t]
 
-        topic = data.get("topic")
+        topic = frontmatter.get("topic")
         if topic not in ALLOWED_TOPICS:
             topic = None
         if topic is None:
@@ -112,148 +149,106 @@ def main():
                     break
         if topic is None:
             topic = "cs"
-        data["topic"] = topic
 
-        subtopics = data.get("subtopics")
-        if not isinstance(subtopics, list) or not subtopics:
-            subtopics = []
+        subtopics = [s for s in _listify(frontmatter.get("subtopics")) if s]
+        if not subtopics:
             for tag in tags:
-                value = tag.split("/")[-1]
-                if value in {topic, "concept"}:
-                    continue
-                subtopics.append(value)
-            if not subtopics:
-                subtopics = ["fundamentals"]
-        data["subtopics"] = subtopics[:5]
+                candidate = tag.split("/")[-1]
+                if candidate not in {topic, "concept"}:
+                    subtopics.append(candidate)
+        if not subtopics:
+            subtopics = ["fundamentals"]
+        subtopics = list(dict.fromkeys(subtopics))[:3]
 
-        if data.get("question_kind") not in {"theory", "coding", "system-design", "android"}:
-            data["question_kind"] = "theory"
+        question_kind = frontmatter.get("question_kind")
+        if question_kind not in {"theory", "coding", "system-design", "android"}:
+            question_kind = "theory"
 
-        if data.get("difficulty") not in {"easy", "medium", "hard"}:
-            data["difficulty"] = "medium"
+        difficulty = frontmatter.get("difficulty")
+        if difficulty not in {"easy", "medium", "hard"}:
+            difficulty = "medium"
 
-        if data.get("original_language") not in {"en", "ru"}:
-            data["original_language"] = "en"
+        original_language = frontmatter.get("original_language")
+        if original_language not in {"en", "ru"}:
+            original_language = "en"
 
-        language_tags = data.get("language_tags")
-        if not isinstance(language_tags, list) or not language_tags:
-            data["language_tags"] = ["en", "ru"]
+        language_tags = _listify(frontmatter.get("language_tags")) or ["en", "ru"]
 
-        if data.get("status") not in {"draft", "reviewed", "ready", "retired"}:
-            data["status"] = "draft"
+        status = frontmatter.get("status")
+        if status not in {"draft", "reviewed", "ready", "retired"}:
+            status = "draft"
 
-        if data.get("sources") is None:
-            data["sources"] = []
-
-        if data.get("related") is None:
-            data["related"] = []
-
-        expected_moc = MOC_MAP.get(topic)
-        if expected_moc:
-            data["moc"] = expected_moc
-
-        raw_id = data.get("id")
-        if isinstance(raw_id, str):
-            cleaned = raw_id
-            if raw_id.startswith("ivc-"):
-                cleaned = raw_id[4:]
-            elif raw_id.startswith("iv-"):
-                cleaned = raw_id[3:]
-            if ID_PATTERN.match(cleaned):
-                data["id"] = cleaned
-        if not isinstance(data.get("id"), str) or not ID_PATTERN.match(data["id"]):
-            created = data.get("created")
-            if isinstance(created, str) and re.match(r"\d{4}-\d{2}-\d{2}", created):
-                data["id"] = created.replace("-", "") + "-000000"
-            else:
-                data["id"] = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-
-        data["created"] = normalize_date(data.get("created")) or "2025-01-01"
-        data["updated"] = normalize_date(data.get("updated")) or data["created"]
-
-        aliases = data.get("aliases")
-        if aliases is None:
-            data["aliases"] = []
-        elif isinstance(aliases, str):
-            data["aliases"] = [aliases]
-
-        data["tags"] = tags
-
-        order = [
-            "id",
-            "title",
-            "aliases",
-            "summary",
-            "topic",
-            "subtopics",
-            "question_kind",
-            "difficulty",
-            "original_language",
-            "language_tags",
-            "sources",
-            "status",
-            "moc",
-            "related",
-            "created",
-            "updated",
-            "tags",
-        ]
-
-        ordered_data = {}
-        for key in order:
-            if key in data:
-                ordered_data[key] = data[key]
-        for key in data:
-            if key not in ordered_data:
-                ordered_data[key] = data[key]
-
-        if yaml is not None:
-            yaml_text = yaml.safe_dump(ordered_data, sort_keys=False, allow_unicode=True)
+        sources = frontmatter.get("sources")
+        if isinstance(sources, list):
+            normalized_sources = sources
         else:
-            yaml_text = dump_yaml_manual(ordered_data)
+            normalized_sources = []
+
+        related = frontmatter.get("related")
+        if isinstance(related, list):
+            normalized_related = related
+        else:
+            normalized_related = []
+
+        moc = MOC_MAP.get(topic, "moc-cs")
+
+        raw_id = frontmatter.get("id")
+        note_id = None
+        if isinstance(raw_id, str):
+            candidate = raw_id
+            if raw_id.startswith("ivc-"):
+                candidate = raw_id[4:]
+            elif raw_id.startswith("iv-"):
+                candidate = raw_id[3:]
+            if ID_PATTERN.match(candidate):
+                note_id = candidate
+        if note_id is None:
+            created_raw = frontmatter.get("created")
+            if isinstance(created_raw, str) and re.match(r"\d{4}-\d{2}-\d{2}", created_raw):
+                note_id = created_raw.replace("-", "") + "-000000"
+            else:
+                note_id = _dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+
+        created = _normalize_date(frontmatter.get("created"))
+        updated_date = _normalize_date(frontmatter.get("updated")) or created
+
+        aliases = _listify(frontmatter.get("aliases"))
+
+        if "concept" not in tags:
+            tags.insert(0, "concept")
+        diff_tag = f"difficulty/{difficulty}"
+        if diff_tag not in tags:
+            tags.append(diff_tag)
+        tags = list(dict.fromkeys(tags))[:8]
+
+        ordered = {
+            "id": note_id,
+            "title": frontmatter.get("title", ""),
+            "aliases": aliases,
+            "summary": frontmatter.get("summary", ""),
+            "topic": topic,
+            "subtopics": subtopics,
+            "question_kind": question_kind,
+            "difficulty": difficulty,
+            "original_language": original_language,
+            "language_tags": language_tags,
+            "sources": normalized_sources,
+            "status": status,
+            "moc": moc,
+            "related": normalized_related,
+            "created": created,
+            "updated": updated_date,
+            "tags": tags,
+        }
+
+        yaml_text = _dump_yaml(ordered)
         new_text = "---\n" + yaml_text + "---\n" + body
         if new_text != text:
             path.write_text(new_text, encoding="utf-8")
-            changed += 1
+            updated += 1
 
-    print(f"Updated {changed} concept notes out of {len(concept_files)}")
-
-
-def dump_yaml_manual(data: dict) -> str:
-    def format_scalar(value):
-        if value is None:
-            return "null"
-        if isinstance(value, (int, float)):
-            return str(value)
-        if isinstance(value, bool):
-            return "true" if value else "false"
-        return json.dumps(str(value), ensure_ascii=False)
-
-    lines = []
-    for key, value in data.items():
-        if isinstance(value, list):
-            if not value:
-                lines.append(f"{key}: []")
-            elif all(isinstance(item, (str, int, float, bool)) or item is None for item in value):
-                items = ", ".join(format_scalar(item) for item in value)
-                lines.append(f"{key}: [{items}]")
-            elif all(isinstance(item, dict) for item in value):
-                lines.append(f"{key}:")
-                for item in value:
-                    lines.append("  -")
-                    for subkey, subval in item.items():
-                        lines.append(f"    {subkey}: {format_scalar(subval)}")
-            else:
-                items = ", ".join(format_scalar(item) for item in value)
-                lines.append(f"{key}: [{items}]")
-        elif isinstance(value, dict):
-            lines.append(f"{key}:")
-            for subkey, subval in value.items():
-                lines.append(f"  {subkey}: {format_scalar(subval)}")
-        else:
-            lines.append(f"{key}: {format_scalar(value)}")
-    return "\n".join(lines) + "\n"
+    print(f"Updated {updated} concept notes out of {len(files)}")
 
 
 if __name__ == "__main__":
-    main()
+    normalize_concepts()

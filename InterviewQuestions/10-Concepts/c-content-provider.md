@@ -4,7 +4,7 @@ title: "ContentProvider / ContentProvider"
 aliases: ["ContentProvider", "Content Provider", "Content Resolver", "Android Data Sharing", "Поставщик контента", "Провайдер контента"]
 summary: "Android component for managing and sharing structured data between applications"
 topic: "android"
-subtopics: ["content-provider", "data-sharing", "ipc", "uri", "crud"]
+subtopics: ["content-provider", "data-sharing", "ipc"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "content-provider", "data-sharing", "ipc", "uri", "crud"]
+tags: ["concept", "android", "content-provider", "data-sharing", "ipc", "uri", "crud", "difficulty/medium"]
 ---
 
 # ContentProvider / ContentProvider

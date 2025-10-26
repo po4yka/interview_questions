@@ -2,8 +2,9 @@
 id: "20251012-000000"
 title: "Database Views / Представления баз данных"
 aliases: []
+summary: ""
 topic: "cs"
-subtopics: ["database", "views", "virtual-tables", "materialized-views"]
+subtopics: ["database", "views", "virtual-tables"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -14,8 +15,7 @@ moc: "moc-cs"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "database", "views", "virtual-tables", "materialized-views"]
-type: "concept"
+tags: ["concept", "database", "views", "virtual-tables", "materialized-views", "difficulty/medium"]
 ---
 
 # Summary (EN)

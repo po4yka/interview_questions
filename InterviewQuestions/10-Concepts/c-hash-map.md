@@ -15,7 +15,7 @@ moc: "moc-algorithms"
 related: []
 created: "2025-10-18"
 updated: "2025-10-18"
-tags: ["concept", "data-structures", "hash-map", "algorithms", "collections"]
+tags: ["concept", "data-structures", "hash-map", "algorithms", "collections", "difficulty/medium"]
 ---
 
 # Summary (EN)

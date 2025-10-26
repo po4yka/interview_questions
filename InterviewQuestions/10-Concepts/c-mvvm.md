@@ -4,7 +4,7 @@ title: "MVVM Pattern / Паттерн MVVM"
 aliases: ["MVVM", "Model-View-ViewModel", "MVVM Pattern", "Паттерн MVVM", "Архитектура MVVM"]
 summary: "Architectural pattern that separates UI (View) from business logic (Model) using an intermediary ViewModel that exposes observable data and commands"
 topic: "android"
-subtopics: ["architecture-patterns", "mvvm", "viewmodel", "livedata", "databinding"]
+subtopics: ["architecture-patterns", "mvvm", "viewmodel"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "architecture-patterns", "mvvm", "viewmodel", "livedata", "databinding"]
+tags: ["concept", "android", "architecture-patterns", "mvvm", "viewmodel", "livedata", "databinding", "difficulty/medium"]
 ---
 
 # MVVM Pattern / Паттерн MVVM

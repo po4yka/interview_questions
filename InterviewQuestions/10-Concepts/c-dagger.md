@@ -15,9 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-23"
 updated: "2025-10-23"
-tags: ["concept", "dependency-injection", "dagger", "architecture", "android"]
-kind: "concept"
-links: ["c-dependency-injection", "c-hilt"]
+tags: ["concept", "dependency-injection", "dagger", "architecture", "android", "difficulty/medium"]
 ---
 
 # Dagger / Dagger DI

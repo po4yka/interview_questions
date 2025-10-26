@@ -4,7 +4,7 @@ title: "Room Database / База данных Room"
 aliases: ["Room", "Room Database", "Room Persistence Library", "База данных Room"]
 summary: "Android persistence library that provides an abstraction layer over SQLite for fluent database access"
 topic: "android"
-subtopics: ["room", "database", "sqlite", "persistence", "jetpack"]
+subtopics: ["room", "database", "sqlite"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "room", "database", "sqlite", "persistence", "jetpack"]
+tags: ["concept", "android", "room", "database", "sqlite", "persistence", "jetpack", "difficulty/medium"]
 ---
 
 # Room Database / База данных Room

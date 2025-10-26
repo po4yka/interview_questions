@@ -2,8 +2,9 @@
 id: "20251012-000000"
 title: "SQL Queries / SQL запросы"
 aliases: []
+summary: ""
 topic: "cs"
-subtopics: ["sql", "queries", "joins", "subqueries", "ctes"]
+subtopics: ["sql", "queries", "joins"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -14,8 +15,7 @@ moc: "moc-cs"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "sql", "queries", "joins", "subqueries", "ctes"]
-type: "concept"
+tags: ["concept", "sql", "queries", "joins", "subqueries", "ctes", "difficulty/medium"]
 ---
 
 # Summary (EN)

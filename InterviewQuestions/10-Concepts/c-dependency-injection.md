@@ -15,9 +15,7 @@ moc: "moc-architecture-patterns"
 related: []
 created: "2025-10-23"
 updated: "2025-10-23"
-tags: ["concept", "architecture-patterns", "dependency-injection", "android"]
-kind: "concept"
-links: ["c-dagger", "c-hilt"]
+tags: ["concept", "architecture-patterns", "dependency-injection", "android", "difficulty/medium"]
 ---
 
 # Dependency Injection / Внедрение зависимостей

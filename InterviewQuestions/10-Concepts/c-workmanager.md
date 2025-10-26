@@ -4,7 +4,7 @@ title: "WorkManager / WorkManager"
 aliases: ["WorkManager", "Background Work", "Deferrable Work", "Android WorkManager", "Фоновая работа", "Отложенная работа"]
 summary: "Android Jetpack library for deferrable, guaranteed background work"
 topic: "android"
-subtopics: ["workmanager", "background-tasks", "jetpack", "coroutines", "threading"]
+subtopics: ["workmanager", "background-tasks", "jetpack"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "workmanager", "background-tasks", "jetpack", "coroutines", "threading"]
+tags: ["concept", "android", "workmanager", "background-tasks", "jetpack", "coroutines", "threading", "difficulty/medium"]
 ---
 
 # WorkManager / WorkManager

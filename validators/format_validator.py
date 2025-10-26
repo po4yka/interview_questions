@@ -27,6 +27,12 @@ class FormatValidator(BaseValidator):
 
     def _check_filename_pattern(self) -> None:
         filename = Path(self.path).name
+        if filename.startswith("c-") and filename.endswith(".md"):
+            self.add_passed("Concept filename pattern accepted")
+            return
+        if filename.startswith("moc-") and filename.endswith(".md"):
+            self.add_passed("MOC filename pattern accepted")
+            return
         if not self.FILENAME_PATTERN.match(filename):
             self.add_issue(
                 Severity.ERROR,
@@ -41,6 +47,25 @@ class FormatValidator(BaseValidator):
             return
         expected_folder = self._expected_folder_for_topic(topic)
         actual = Path(self.path).parent
+        filename = Path(self.path).name
+        if filename.startswith("c-"):
+            if "10-Concepts" not in actual.parts:
+                self.add_issue(
+                    Severity.ERROR,
+                    "Concept notes must reside in 10-Concepts/",
+                )
+            else:
+                self.add_passed("Concept folder placement valid")
+            return
+        if filename.startswith("moc-"):
+            if "90-MOCs" not in actual.parts:
+                self.add_issue(
+                    Severity.ERROR,
+                    "MOCs must reside in 90-MOCs/",
+                )
+            else:
+                self.add_passed("MOC folder placement valid")
+            return
         if expected_folder and expected_folder not in actual.parts:
             self.add_issue(
                 Severity.ERROR,

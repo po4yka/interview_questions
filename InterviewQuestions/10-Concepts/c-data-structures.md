@@ -2,8 +2,9 @@
 id: "20251012-000000"
 title: "Data Structures / Структуры данных"
 aliases: []
+summary: ""
 topic: "data-structures"
-subtopics: ["arrays", "lists", "trees", "graphs", "hash-tables"]
+subtopics: ["arrays", "lists", "trees"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -14,8 +15,7 @@ moc: "moc-algorithms"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "data-structures", "arrays", "lists", "trees", "graphs", "hash-tables"]
-type: "concept"
+tags: ["concept", "data-structures", "arrays", "lists", "trees", "graphs", "hash-tables", "difficulty/medium"]
 ---
 
 # Summary (EN)

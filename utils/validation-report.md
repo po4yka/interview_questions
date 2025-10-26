@@ -2,30 +2,18 @@
 
 ## Summary
 
-- WARNING: 1321
+- WARNING: 1298
 - INFO: 12
-- ERROR: 5284
-- CRITICAL: 2839
+- ERROR: 5148
+- CRITICAL: 2640
 
 ## InterviewQuestions/10-Concepts/c-accessibility.md
 
 ### Issues
 
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
 - **ERROR**: Wikilink [[c-material-design]] does not match any note filename
 - **ERROR**: Wikilink [[c-testing]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: accessibility, ui-ux, talkback (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/accessibility, android/ui-ux, android/talkback, android/a11y (field: tags)
 
 ### Passed Checks
 
@@ -34,6 +22,7 @@
 - Bilingual title format valid
 - aliases list present
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -42,23 +31,17 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-algorithms.md
 
 ### Issues
 
 - **ERROR**: aliases must be a list (field: aliases)
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '20-Algorithms' for topic 'algorithms'
 
 ### Passed Checks
 
@@ -66,6 +49,7 @@
 - id format valid
 - Bilingual title format valid
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -74,30 +58,21 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-app-bundle.md
 
 ### Issues
 
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
 - **ERROR**: Wikilink [[c-build-variants]] does not match any note filename
 - **ERROR**: Wikilink [[c-apk-signing]] does not match any note filename
 - **ERROR**: Wikilink [[c-proguard-r8]] does not match any note filename
 - **ERROR**: Wikilink [[c-dependency-management]] does not match any note filename
 - **ERROR**: Wikilink [[c-continuous-delivery]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: publishing, build (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/app-bundle, android/publishing, android/gradle, android/build (field: tags)
 
 ### Passed Checks
 
@@ -106,6 +81,7 @@
 - Bilingual title format valid
 - aliases list present
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -114,7 +90,10 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-array.md
 
@@ -122,13 +101,6 @@
 
 - **WARNING**: moc should match topic: expected 'moc-data-structures' (field: moc)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
 
 ### Passed Checks
 
@@ -145,25 +117,16 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
-- Folder placement matches topic
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-broadcast-receiver.md
 
 ### Issues
 
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: components, broadcast, system-events (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/components, android/broadcast, android/system-events (field: tags)
 
 ### Passed Checks
 
@@ -181,30 +144,21 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-clean-architecture.md
 
 ### Issues
 
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
 - **ERROR**: Wikilink [[c-repository-pattern]] does not match any note filename
 - **ERROR**: Wikilink [[c-use-case-pattern]] does not match any note filename
 - **ERROR**: Wikilink [[c-multi-module-architecture]] does not match any note filename
 - **ERROR**: Wikilink [[c-domain-driven-design]] does not match any note filename
 - **ERROR**: Wikilink [[c-solid-principles]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: architecture-patterns, clean-architecture, domain-layer, use-cases, repository (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/architecture-patterns, android/clean-architecture, android/domain-layer, android/use-cases, android/repository (field: tags)
 
 ### Passed Checks
 
@@ -213,6 +167,7 @@
 - Bilingual title format valid
 - aliases list present
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -221,30 +176,21 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-content-provider.md
 
 ### Issues
 
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
 - **ERROR**: Wikilink [[c-sqlite]] does not match any note filename
 - **ERROR**: Wikilink [[c-ipc]] does not match any note filename
 - **ERROR**: Wikilink [[c-cursor]] does not match any note filename
 - **ERROR**: Wikilink [[c-repository-pattern]] does not match any note filename
 - **ERROR**: Wikilink [[c-file-storage]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: data-sharing, ipc, uri, crud (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/content-provider, android/data-sharing, android/ipc, android/uri, android/crud (field: tags)
 
 ### Passed Checks
 
@@ -253,6 +199,7 @@
 - Bilingual title format valid
 - aliases list present
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -261,24 +208,18 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-coroutines.md
 
 ### Issues
 
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
 - **ERROR**: Wikilink [[q-sharedflow-stateflow-android--kotlin--medium]] does not match any note filename
 - **WARNING**: Note should include at least one concept link ([[c-...]])
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '70-Kotlin' for topic 'kotlin'
 
 ### Passed Checks
 
@@ -287,6 +228,7 @@
 - Bilingual title format valid
 - aliases list present
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -295,21 +237,16 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-custom-views.md
 
 ### Issues
 
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
 - **ERROR**: Wikilink [[c-canvas]] does not match any note filename
 - **ERROR**: Wikilink [[c-paint]] does not match any note filename
 - **ERROR**: Wikilink [[c-view-lifecycle]] does not match any note filename
@@ -317,10 +254,6 @@
 - **ERROR**: Wikilink [[c-hardware-acceleration]] does not match any note filename
 - **ERROR**: Wikilink [[c-custom-viewgroup]] does not match any note filename
 - **ERROR**: Wikilink [[c-drawable]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: custom-views, ui, canvas, drawing, view-lifecycle (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/custom-views, android/ui, android/canvas, android/drawing, android/view-lifecycle (field: tags)
 
 ### Passed Checks
 
@@ -329,6 +262,7 @@
 - Bilingual title format valid
 - aliases list present
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -337,29 +271,22 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-dagger.md
 
 ### Issues
 
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
 - **ERROR**: Wikilink [[q-dagger-vs-hilt--android--medium]] does not match any note filename
 - **ERROR**: Wikilink [[q-dagger-components-modules--android--hard]] does not match any note filename
 - **ERROR**: Wikilink [[q-dependency-injection-benefits--android--medium]] does not match any note filename
 - **ERROR**: Wikilink [[q-dagger-scopes-subcomponents--android--hard]] does not match any note filename
 - **ERROR**: Wikilink [[c-architecture-patterns]] does not match any note filename
 - **ERROR**: Wikilink [[c-testing]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: dependency-injection, dagger, architecture (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/dependency-injection, android/dagger, android/architecture (field: tags)
 
 ### Passed Checks
 
@@ -377,23 +304,18 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-data-structures.md
 
 ### Issues
 
 - **ERROR**: aliases must be a list (field: aliases)
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: moc should match topic: expected 'moc-data-structures' (field: moc)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
 
 ### Passed Checks
 
@@ -401,6 +323,7 @@
 - id format valid
 - Bilingual title format valid
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -408,24 +331,17 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
-- Folder placement matches topic
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-database-design.md
 
 ### Issues
 
 - **ERROR**: aliases must be a list (field: aliases)
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '60-CompSci' for topic 'cs'
 
 ### Passed Checks
 
@@ -433,6 +349,7 @@
 - id format valid
 - Bilingual title format valid
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -441,22 +358,17 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-database-performance.md
 
 ### Issues
 
 - **ERROR**: aliases must be a list (field: aliases)
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
 
 ### Passed Checks
 
@@ -464,6 +376,7 @@
 - id format valid
 - Bilingual title format valid
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -472,27 +385,22 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
-- Folder placement matches topic
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-dependency-injection.md
 
 ### Issues
 
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
 - **ERROR**: Wikilink [[q-dependency-injection-benefits--android--medium]] does not match any note filename
 - **ERROR**: Wikilink [[q-dagger-vs-hilt--android--medium]] does not match any note filename
 - **ERROR**: Wikilink [[q-dependency-injection-types--android--easy]] does not match any note filename
 - **ERROR**: Wikilink [[q-singleton-pattern-issues--android--medium]] does not match any note filename
 - **ERROR**: Wikilink [[c-mvvm-pattern]] does not match any note filename
 - **ERROR**: Wikilink [[c-testing]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
 
 ### Passed Checks
 
@@ -510,20 +418,16 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
-- Folder placement matches topic
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-encryption.md
 
 ### Issues
 
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
 - **ERROR**: Wikilink [[q-encryption-types-android--android--medium]] does not match any note filename
 - **ERROR**: Wikilink [[q-android-keystore-system--android--hard]] does not match any note filename
 - **ERROR**: Wikilink [[q-encrypted-sharedpreferences--android--medium]] does not match any note filename
@@ -532,7 +436,6 @@
 - **ERROR**: Wikilink [[c-authentication]] does not match any note filename
 - **ERROR**: Wikilink [[c-networking]] does not match any note filename
 - **ERROR**: Wikilink [[c-data-storage]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
 
 ### Passed Checks
 
@@ -550,24 +453,17 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
-- Folder placement matches topic
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-git.md
 
 ### Issues
 
 - **ERROR**: aliases must be a list (field: aliases)
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '60-CompSci' for topic 'cs'
 
 ### Passed Checks
 
@@ -575,6 +471,7 @@
 - id format valid
 - Bilingual title format valid
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -583,31 +480,22 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-gradle.md
 
 ### Issues
 
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
 - **ERROR**: Wikilink [[c-kotlin]] does not match any note filename
 - **ERROR**: Wikilink [[c-build-variants]] does not match any note filename
 - **ERROR**: Wikilink [[c-proguard]] does not match any note filename
 - **ERROR**: Wikilink [[c-signing]] does not match any note filename
 - **ERROR**: Wikilink [[c-testing]] does not match any note filename
 - **ERROR**: Wikilink [[c-ci-cd]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: build-system, kotlin-dsl, groovy, automation (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/gradle, android/build-system, android/kotlin-dsl, android/groovy, android/automation (field: tags)
 
 ### Passed Checks
 
@@ -616,6 +504,7 @@
 - Bilingual title format valid
 - aliases list present
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -624,7 +513,10 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-hash-map.md
 
@@ -632,14 +524,7 @@
 
 - **WARNING**: moc should match topic: expected 'moc-data-structures' (field: moc)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
 - **WARNING**: Note should include at least one concept link ([[c-...]])
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
 
 ### Passed Checks
 
@@ -656,29 +541,21 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
-- Folder placement matches topic
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-hilt.md
 
 ### Issues
 
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
 - **ERROR**: Wikilink [[q-hilt-vs-dagger--android--medium]] does not match any note filename
 - **ERROR**: Wikilink [[q-hilt-viewmodel-injection--android--medium]] does not match any note filename
 - **ERROR**: Wikilink [[q-hilt-modules-scope--android--hard]] does not match any note filename
 - **ERROR**: Wikilink [[q-dependency-injection-benefits--android--medium]] does not match any note filename
 - **ERROR**: Wikilink [[c-testing]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: dependency-injection, hilt, architecture (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/dependency-injection, android/hilt, android/architecture (field: tags)
 
 ### Passed Checks
 
@@ -696,29 +573,20 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-jetpack-compose.md
 
 ### Issues
 
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
 - **ERROR**: Wikilink [[c-flow]] does not match any note filename
 - **ERROR**: Wikilink [[c-navigation]] does not match any note filename
 - **ERROR**: Wikilink [[c-material-design]] does not match any note filename
 - **ERROR**: Wikilink [[c-testing]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: jetpack-compose, ui, declarative-ui, composables, recomposition (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/jetpack-compose, android/ui, android/declarative-ui, android/composables, android/recomposition (field: tags)
 
 ### Passed Checks
 
@@ -727,6 +595,7 @@
 - Bilingual title format valid
 - aliases list present
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -735,19 +604,16 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-lifecycle.md
 
 ### Issues
 
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
 - **ERROR**: Wikilink [[q-activity-lifecycle-states--android--easy]] does not match any note filename
 - **ERROR**: Wikilink [[q-fragment-lifecycle-difference--android--medium]] does not match any note filename
 - **ERROR**: Wikilink [[q-lifecycle-aware-components--android--medium]] does not match any note filename
@@ -755,10 +621,6 @@
 - **ERROR**: Wikilink [[q-viewmodel-lifecycle--android--medium]] does not match any note filename
 - **ERROR**: Wikilink [[c-livedata]] does not match any note filename
 - **ERROR**: Wikilink [[c-fragment]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: architecture-components (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/lifecycle, android/architecture-components (field: tags)
 
 ### Passed Checks
 
@@ -776,31 +638,22 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-memory-leaks.md
 
 ### Issues
 
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
 - **ERROR**: Wikilink [[c-garbage-collection]] does not match any note filename
 - **ERROR**: Wikilink [[c-weak-reference]] does not match any note filename
 - **ERROR**: Wikilink [[c-lifecycle-aware-components]] does not match any note filename
 - **ERROR**: Wikilink [[c-profiling]] does not match any note filename
 - **ERROR**: Wikilink [[c-leakcanary]] does not match any note filename
 - **ERROR**: Wikilink [[c-context]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: memory-leaks, performance, memory-management, debugging (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/memory-leaks, android/performance, android/memory-management, android/debugging, android/profiling (field: tags)
 
 ### Passed Checks
 
@@ -809,6 +662,7 @@
 - Bilingual title format valid
 - aliases list present
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -817,21 +671,16 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-memory-management.md
 
 ### Issues
 
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
 
 ### Passed Checks
 
@@ -849,24 +698,17 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
-- Folder placement matches topic
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-migrations.md
 
 ### Issues
 
 - **ERROR**: aliases must be a list (field: aliases)
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '60-CompSci' for topic 'cs'
 
 ### Passed Checks
 
@@ -874,6 +716,7 @@
 - id format valid
 - Bilingual title format valid
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -882,64 +725,21 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-mvvm.md
 
 ### Issues
 
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
 - **ERROR**: Wikilink [[c-livedata]] does not match any note filename
 - **ERROR**: Wikilink [[c-stateflow]] does not match any note filename
 - **ERROR**: Wikilink [[c-repository-pattern]] does not match any note filename
 - **ERROR**: Wikilink [[c-mvi-pattern]] does not match any note filename
 - **ERROR**: Wikilink [[c-data-binding]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: architecture-patterns, mvvm, viewmodel, livedata, databinding (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/architecture-patterns, android/mvvm, android/viewmodel, android/livedata, android/databinding (field: tags)
-
-### Passed Checks
-
-- All required YAML fields present
-- id format valid
-- Bilingual title format valid
-- aliases list present
-- topic value valid
-- question_kind valid
-- difficulty value valid
-- language tags valid
-- status is draft
-- moc format valid
-- created date format valid
-- updated date format valid
-- tags contain only ASCII characters
-- moc link resolves
-
-## InterviewQuestions/10-Concepts/c-permissions.md
-
-### Issues
-
-- **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: security, privacy (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/permissions, android/security, android/privacy (field: tags)
 
 ### Passed Checks
 
@@ -957,31 +757,25 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
-## InterviewQuestions/10-Concepts/c-relational-databases.md
+## InterviewQuestions/10-Concepts/c-permissions.md
 
 ### Issues
 
-- **ERROR**: aliases must be a list (field: aliases)
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '60-CompSci' for topic 'cs'
 
 ### Passed Checks
 
 - All required YAML fields present
 - id format valid
 - Bilingual title format valid
+- aliases list present
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -990,21 +784,43 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
+
+## InterviewQuestions/10-Concepts/c-relational-databases.md
+
+### Issues
+
+- **ERROR**: aliases must be a list (field: aliases)
+- **WARNING**: related list is empty; add concept/question links (field: related)
+
+### Passed Checks
+
+- All required YAML fields present
+- id format valid
+- Bilingual title format valid
+- topic value valid
+- subtopics count valid
+- question_kind valid
+- difficulty value valid
+- language tags valid
+- status is draft
+- moc format valid
+- created date format valid
+- updated date format valid
+- tags contain only ASCII characters
+- difficulty tag present
+- moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-room.md
 
 ### Issues
 
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
 - **ERROR**: Wikilink [[c-sqlite]] does not match any note filename
 - **ERROR**: Wikilink [[c-datastore]] does not match any note filename
 - **ERROR**: Wikilink [[c-repository-pattern]] does not match any note filename
@@ -1012,10 +828,6 @@
 - **ERROR**: Wikilink [[c-flow]] does not match any note filename
 - **ERROR**: Wikilink [[c-dao-pattern]] does not match any note filename
 - **ERROR**: Wikilink [[c-database-migration]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: database, sqlite, persistence, jetpack (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/room, android/database, android/sqlite, android/persistence, android/jetpack (field: tags)
 
 ### Passed Checks
 
@@ -1024,6 +836,7 @@
 - Bilingual title format valid
 - aliases list present
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -1032,28 +845,20 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-service.md
 
 ### Issues
 
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
 - **ERROR**: Wikilink [[c-jobscheduler]] does not match any note filename
 - **ERROR**: Wikilink [[c-intentservice]] does not match any note filename
 - **ERROR**: Wikilink [[c-foreground-service]] does not match any note filename
 - **ERROR**: Wikilink [[c-bound-service]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: background-tasks (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/service, android/background-tasks, android/lifecycle (field: tags)
 
 ### Passed Checks
 
@@ -1071,22 +876,16 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-software-design-patterns.md
 
 ### Issues
 
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '60-CompSci' for topic 'cs'
 
 ### Passed Checks
 
@@ -1104,23 +903,17 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-sql-queries.md
 
 ### Issues
 
 - **ERROR**: aliases must be a list (field: aliases)
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '60-CompSci' for topic 'cs'
 
 ### Passed Checks
 
@@ -1128,6 +921,7 @@
 - id format valid
 - Bilingual title format valid
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -1136,21 +930,16 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-unit-testing.md
 
 ### Issues
 
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
 
 ### Passed Checks
 
@@ -1168,24 +957,17 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
-- Folder placement matches topic
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-version-control.md
 
 ### Issues
 
 - **ERROR**: aliases must be a list (field: aliases)
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '60-CompSci' for topic 'cs'
 
 ### Passed Checks
 
@@ -1193,6 +975,7 @@
 - id format valid
 - Bilingual title format valid
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -1201,31 +984,22 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-viewmodel.md
 
 ### Issues
 
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
 - **ERROR**: Wikilink [[c-livedata]] does not match any note filename
 - **ERROR**: Wikilink [[c-stateflow]] does not match any note filename
 - **ERROR**: Wikilink [[c-mvvm-pattern]] does not match any note filename
 - **ERROR**: Wikilink [[c-repository-pattern]] does not match any note filename
 - **ERROR**: Wikilink [[c-savedstatehandle]] does not match any note filename
 - **ERROR**: Wikilink [[c-viewmodelscope]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: viewmodel, architecture-components, jetpack, mvvm (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/viewmodel, android/lifecycle, android/architecture-components, android/jetpack, android/mvvm (field: tags)
 
 ### Passed Checks
 
@@ -1234,6 +1008,7 @@
 - Bilingual title format valid
 - aliases list present
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -1242,23 +1017,17 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-views.md
 
 ### Issues
 
 - **ERROR**: aliases must be a list (field: aliases)
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '60-CompSci' for topic 'cs'
 
 ### Passed Checks
 
@@ -1266,6 +1035,7 @@
 - id format valid
 - Bilingual title format valid
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -1274,29 +1044,20 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/10-Concepts/c-workmanager.md
 
 ### Issues
 
-- **WARNING**: subtopics should contain at most three values (field: subtopics)
 - **WARNING**: related list is empty; add concept/question links (field: related)
-- **ERROR**: tags must include 'difficulty/medium' (field: tags)
-- **CRITICAL**: Missing required heading '# Вопрос (RU)'
-- **CRITICAL**: Missing required heading '# Question (EN)'
-- **CRITICAL**: Missing required heading '## Ответ (RU)'
-- **CRITICAL**: Missing required heading '## Answer (EN)'
-- **CRITICAL**: Missing required heading '## Follow-ups'
-- **CRITICAL**: Missing required heading '## Related Questions'
 - **ERROR**: Wikilink [[c-foreground-service]] does not match any note filename
 - **ERROR**: Wikilink [[c-threading]] does not match any note filename
 - **ERROR**: Wikilink [[c-rxjava]] does not match any note filename
 - **ERROR**: Wikilink [[c-testing]] does not match any note filename
-- **ERROR**: Filename must follow q-<slug>--<topic>--<difficulty>.md
-- **ERROR**: File should be located in folder '40-Android' for topic 'android'
-- **ERROR**: Invalid Android subtopics: workmanager, background-tasks, jetpack, threading (field: subtopics)
-- **ERROR**: Android tags must mirror subtopics: missing android/workmanager, android/background-tasks, android/jetpack, android/coroutines, android/threading (field: tags)
 
 ### Passed Checks
 
@@ -1305,6 +1066,7 @@
 - Bilingual title format valid
 - aliases list present
 - topic value valid
+- subtopics count valid
 - question_kind valid
 - difficulty value valid
 - language tags valid
@@ -1313,7 +1075,10 @@
 - created date format valid
 - updated date format valid
 - tags contain only ASCII characters
+- difficulty tag present
 - moc link resolves
+- Concept filename pattern accepted
+- Concept folder placement valid
 
 ## InterviewQuestions/20-Algorithms/q-advanced-graph-algorithms--algorithms--hard.md
 

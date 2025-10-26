@@ -15,7 +15,7 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "service", "background-tasks", "lifecycle"]
+tags: ["concept", "android", "service", "background-tasks", "lifecycle", "difficulty/medium"]
 ---
 
 # Android Service / Сервис Android

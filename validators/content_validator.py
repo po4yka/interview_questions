@@ -3,11 +3,36 @@
 from __future__ import annotations
 
 import re
+from pathlib import Path
 
 from .base import BaseValidator, Severity
 
 
 class ContentValidator(BaseValidator):
+    STRUCTURED_REQUIRED_HEADINGS = {
+        "qna": [
+            "# Вопрос (RU)",
+            "# Question (EN)",
+            "## Ответ (RU)",
+            "## Answer (EN)",
+            "## Follow-ups",
+            "## References",
+            "## Related Questions",
+        ],
+        "concept": [
+            "# Summary (EN)",
+            "## Summary (RU)",
+        ],
+    }
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        topic = self.frontmatter.get("topic")
+        filename = Path(self.path).name
+        if filename.startswith("c-"):
+            self.required_headings = self.STRUCTURED_REQUIRED_HEADINGS["concept"]
+        else:
+            self.required_headings = self.STRUCTURED_REQUIRED_HEADINGS["qna"]
     """Ensure content follows the bilingual template."""
 
     REQUIRED_HEADINGS = [
@@ -21,6 +46,10 @@ class ContentValidator(BaseValidator):
     ]
 
     def validate(self):
+        filename = Path(self.path).name
+        if filename.startswith("c-"):
+            return self._summary
+
         content = self.content
         if content is None:
             self.add_issue(Severity.CRITICAL, "File body missing")
