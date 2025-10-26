@@ -1,153 +1,274 @@
 ---
 id: "20251012-150019"
-title: "Inheritance in Kotlin: open, final, abstract, override"
+title: "Inheritance in Kotlin: open, final, abstract, override / Наследование в Kotlin: open, final, abstract, override"
+aliases: ["Inheritance in Kotlin", "Наследование в Kotlin"]
 topic: kotlin
+subtopics: [inheritance, classes, kotlin-features]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: "2025-10-12"
-tags: ["kotlin", "classes", "difficulty/medium"]
-description: "Comprehensive guide to Inheritance in Kotlin: open, final, abstract, override covering concepts, patterns, best practices, and real-world examples"
 moc: moc-kotlin
-related: [q-flow-backpressure-strategies--kotlin--hard, q-kotlin-delegation-by-restriction--programming-languages--medium, q-kotlin-reflection--programming-languages--medium]
-subtopics: ["classes", "kotlin-features", "oop"]
+related: [q-data-class-detailed--kotlin--medium, q-class-initialization-order--kotlin--medium, q-delegation-by-keyword--kotlin--medium]
+created: "2025-10-12"
+updated: 2025-01-25
+tags: [kotlin, inheritance, classes, open-final, abstract, kotlin-features, difficulty/medium]
+sources: [https://kotlinlang.org/docs/inheritance.html]
 ---
-# Inheritance in Kotlin: open, final, abstract, override
 
-## English
+# Вопрос (RU)
+> Как работают ключевые слова open, final, abstract и override в наследовании Kotlin?
 
-### Problem Statement
-
-[Comprehensive 2-3 paragraph explanation introducing the topic with real-world context and why understanding this is important]
-
-### Solution
-
-[Extensive solution covering:
-- Basic concepts and syntax (200-300 lines)
-- Practical examples and patterns (200-300 lines)
-- Comparison with alternatives (100-200 lines)
-- Advanced use cases (200-300 lines)
-- Performance considerations (50-100 lines)
-- Testing approaches (50-100 lines)
-- Best practices (100-150 lines)
-- Common pitfalls (50-100 lines)]
-
-#### Basic Syntax
-
-```kotlin
-// Code examples demonstrating basic concepts
-// Multiple examples with different scenarios
-// Clear comments explaining each part
-```
-
-#### Practical Patterns
-
-```kotlin
-// Real-world implementation patterns
-// Common use cases in Android/Backend
-// Production-ready examples
-```
-
-#### Advanced Techniques
-
-```kotlin
-// Complex scenarios and edge cases
-// Performance optimization techniques
-// Integration with other Kotlin features
-```
-
-#### Comparison Examples
-
-```kotlin
-// Comparing different approaches
-// When to use each technique
-// Trade-offs and considerations
-```
-
-### Best Practices
-
-1. **Practice 1**: Detailed explanation with code example
-2. **Practice 2**: Detailed explanation with code example
-3. **Practice 3**: Detailed explanation with code example
-4. **Practice 4**: Detailed explanation with code example
-5. **Practice 5**: Detailed explanation with code example
-
-### Common Pitfalls
-
-1. **Pitfall 1**: What to avoid and why
-2. **Pitfall 2**: What to avoid and why
-3. **Pitfall 3**: What to avoid and why
+# Question (EN)
+> How do the open, final, abstract, and override keywords work in Kotlin inheritance?
 
 ---
 
-## Русский
+## Ответ (RU)
 
-### Описание проблемы
+**Теория наследования в Kotlin:**
+В Kotlin по умолчанию все классы `final` (закрыты для наследования) - противоположность Java, где всё открыто. Это обеспечивает безопасность по умолчанию: классы нельзя наследовать без явного `open`. Для наследования требуется `open`, для переопределения методов - `override`. Абстрактные классы и методы помечаются `abstract`.
 
-[Full Russian translation of problem statement - 2-3 paragraphs explaining the topic, its importance, and real-world context]
+**Основные правила:**
+- **final по умолчанию**: Все классы и методы закрыты для наследования
+- **open**: Явно открывает класс/метод для наследования/переопределения
+- **abstract**: Абстрактные классы/методы, которые должны быть реализованы
+- **override**: Обязательное ключевое слово для переопределения методов
 
-### Решение
-
-[Full Russian translation of solution including:
-- All code examples with Russian comments
-- Translated explanations of concepts
-- Russian versions of all section headers
-- Localized best practices and pitfalls]
-
-#### Базовый синтаксис
-
+**Открытый класс и методы:**
 ```kotlin
-// Примеры кода с комментариями на русском
-// Демонстрация базовых концепций
-// Пошаговые объяснения
+// ✅ open класс может быть наследован
+open class Vehicle(val brand: String) {
+    // ✅ open метод может быть переопределён
+    open fun start() {
+        println("$brand vehicle starting")
+    }
+
+    // ❌ final метод не может быть переопределён
+    fun stop() {
+        println("$brand vehicle stopped")
+    }
+}
+
+class Car(brand: String, val model: String) : Vehicle(brand) {
+    // ✅ override обязателен для переопределения
+    override fun start() {
+        println("$brand $model is starting")
+    }
+
+    // ❌ нельзя переопределить stop - он final
+}
 ```
 
-#### Практические паттерны
-
+**Абстрактные классы:**
 ```kotlin
-// Реальные паттерны реализации
-// Распространённые случаи использования
-// Production-ready примеры
+// ✅ abstract класс не может быть инстанцирован
+abstract class Shape {
+    // ✅ abstract метод должен быть реализован в подклассе
+    abstract fun area(): Double
+
+    // ✅ Обычный метод может иметь реализацию
+    fun describe() {
+        println("Area: ${area()}")
+    }
+}
+
+class Circle(val radius: Double) : Shape() {
+    // ✅ Должен реализовать abstract метод
+    override fun area(): Double = Math.PI * radius * radius
+}
 ```
 
-### Лучшие практики
+**final классы и методы:**
+```kotlin
+// ✅ final класс явно закрыт для наследования (по умолчанию все классы final)
+final class NetworkManager {
+    // ✅ final метод нельзя переопределить в подклассах
+    final fun connect() {
+        println("Connected")
+    }
+}
 
-1. **Практика 1**: Подробное объяснение с примером кода
-2. **Практика 2**: Подробное объяснение с примером кода
-3. **Практика 3**: Подробное объяснение с примером кода
-4. **Практика 4**: Подробное объяснение с примером кода
-5. **Практика 5**: Подробное объяснение с примером кода
+// ❌ Невозможно наследовать final класс
+// class CustomNetworkManager : NetworkManager() { } // Ошибка!
+```
 
-### Распространённые ошибки
+**Множественное наследование интерфейсов:**
+```kotlin
+interface Flyable {
+    fun fly()
+}
 
-1. **Ошибка 1**: Чего избегать и почему
-2. **Ошибка 2**: Чего избегать и почему
-3. **Ошибка 3**: Чего избегать и почему
+interface Swimable {
+    fun swim()
+}
+
+// ✅ Класс может реализовать несколько интерфейсов
+class Duck : Flyable, Swimable {
+    override fun fly() {
+        println("Flying")
+    }
+
+    override fun swim() {
+        println("Swimming")
+    }
+}
+```
+
+**Переопределение свойств:**
+```kotlin
+open class Base {
+    open val value: Int = 1
+    open var count: Int = 0
+}
+
+class Derived : Base() {
+    // ✅ Можно переопределить val в var, но не наоборот
+    override var value: Int = 10
+
+    // ✅ Можно переопределить var
+    override var count: Int = 5
+
+    init {
+        println("Value: $value, Count: $count")
+    }
+}
+```
 
 ---
+
+## Answer (EN)
+
+**Kotlin Inheritance Theory:**
+In Kotlin, all classes are `final` (closed for inheritance) by default - opposite of Java where everything is open. This provides safety by default: classes cannot be inherited without explicit `open`. Inheritance requires `open`, method overriding requires `override`. Abstract classes and methods are marked `abstract`.
+
+**Core Rules:**
+- **final by default**: All classes and methods are closed for inheritance
+- **open**: Explicitly opens class/method for inheritance/overriding
+- **abstract**: Abstract classes/methods that must be implemented
+- **override**: Required keyword for method overriding
+
+**Open Class and Methods:**
+```kotlin
+// ✅ open class can be inherited
+open class Vehicle(val brand: String) {
+    // ✅ open method can be overridden
+    open fun start() {
+        println("$brand vehicle starting")
+    }
+
+    // ❌ final method cannot be overridden
+    fun stop() {
+        println("$brand vehicle stopped")
+    }
+}
+
+class Car(brand: String, val model: String) : Vehicle(brand) {
+    // ✅ override required for overriding
+    override fun start() {
+        println("$brand $model is starting")
+    }
+
+    // ❌ cannot override stop - it's final
+}
+```
+
+**Abstract Classes:**
+```kotlin
+// ✅ abstract class cannot be instantiated
+abstract class Shape {
+    // ✅ abstract method must be implemented in subclass
+    abstract fun area(): Double
+
+    // ✅ Regular method can have implementation
+    fun describe() {
+        println("Area: ${area()}")
+    }
+}
+
+class Circle(val radius: Double) : Shape() {
+    // ✅ Must implement abstract method
+    override fun area(): Double = Math.PI * radius * radius
+}
+```
+
+**Final Classes and Methods:**
+```kotlin
+// ✅ final class explicitly closed for inheritance (all classes final by default)
+final class NetworkManager {
+    // ✅ final method cannot be overridden in subclasses
+    final fun connect() {
+        println("Connected")
+    }
+}
+
+// ❌ Cannot inherit final class
+// class CustomNetworkManager : NetworkManager() { } // Error!
+```
+
+**Multiple Interface Implementation:**
+```kotlin
+interface Flyable {
+    fun fly()
+}
+
+interface Swimable {
+    fun swim()
+}
+
+// ✅ Class can implement multiple interfaces
+class Duck : Flyable, Swimable {
+    override fun fly() {
+        println("Flying")
+    }
+
+    override fun swim() {
+        println("Swimming")
+    }
+}
+```
+
+**Overriding Properties:**
+```kotlin
+open class Base {
+    open val value: Int = 1
+    open var count: Int = 0
+}
+
+class Derived : Base() {
+    // ✅ Can override val to var, but not vice versa
+    override var value: Int = 10
+
+    // ✅ Can override var
+    override var count: Int = 5
+
+    init {
+        println("Value: $value, Count: $count")
+    }
+}
+```
 
 ## Follow-ups
 
-1. [Technical follow-up question related to implementation details]
-2. [Question about edge cases and advanced scenarios]
-3. [Question comparing with alternative approaches]
-4. [Question about performance implications]
-5. [Question about integration with other Kotlin features]
-6. [Question about Java interop considerations]
-7. [Question about testing strategies]
-8. [Question about best practices in specific contexts]
+- Why are classes final by default in Kotlin?
+- When to use abstract vs interface?
+- How does inheritance work with data classes?
 
 ## References
 
-- [Kotlin Official Documentation - Related Topic]
-- [Kotlin Language Specification - Relevant Section]
-- [Kotlin API Reference - Relevant Classes/Functions]
-- [Community Best Practices and Articles]
-- [Performance Guidelines and Benchmarks]
+- [[c-oop-fundamentals]]
+- https://kotlinlang.org/docs/inheritance.html
 
 ## Related Questions
 
-- [[q-data-class-detailed--kotlin--medium]]
-- [[q-sealed-class-sealed-interface--kotlin--medium]]
-- [[q-inheritance-open-final--kotlin--medium]]
-- [[q-visibility-modifiers-kotlin--kotlin--medium]]
-- [[q-kotlin-enum-classes--kotlin--easy]]
+### Prerequisites (Easier)
+- [[q-kotlin-enum-classes--kotlin--easy]] - Enum classes
+
+### Related (Medium)
+- [[q-data-class-detailed--kotlin--medium]] - Data classes
+- [[q-class-initialization-order--kotlin--medium]] - Class initialization
+- [[q-sealed-class-sealed-interface--kotlin--medium]] - Sealed classes
+
+### Advanced (Harder)
+- [[q-delegation-by-keyword--kotlin--medium]] - Class delegation

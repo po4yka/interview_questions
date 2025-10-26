@@ -1,153 +1,264 @@
 ---
 id: "20251012-150014"
-title: "Inner vs nested classes in Kotlin"
+title: "Inner vs Nested Classes in Kotlin / Внутренние и вложенные классы в Kotlin"
+aliases: ["Inner vs Nested Classes", "Внутренние vs вложенные классы"]
 topic: kotlin
+subtopics: [classes, kotlin-features, scoping]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: "2025-10-12"
-tags: ["kotlin", "classes", "difficulty/medium"]
-description: "Comprehensive guide to Inner vs nested classes in Kotlin covering concepts, patterns, best practices, and real-world examples"
 moc: moc-kotlin
-related: [q-dispatchers-main-immediate--kotlin--medium, q-cold-vs-hot-flows--kotlin--medium, q-kotlin-intrange--programming-languages--easy]
-subtopics: ["classes", "kotlin-features", "oop"]
+related: [q-class-initialization-order--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-data-class-detailed--kotlin--medium]
+created: "2025-10-12"
+updated: 2025-01-25
+tags: [kotlin, classes, nested-classes, inner-classes, kotlin-features, difficulty/medium]
+sources: [https://kotlinlang.org/docs/nested-classes.html]
 ---
-# Inner vs nested classes in Kotlin
 
-## English
+# Вопрос (RU)
+> В чём разница между внутренними (inner) и вложенными (nested) классами в Kotlin?
 
-### Problem Statement
-
-[Comprehensive 2-3 paragraph explanation introducing the topic with real-world context and why understanding this is important]
-
-### Solution
-
-[Extensive solution covering:
-- Basic concepts and syntax (200-300 lines)
-- Practical examples and patterns (200-300 lines)
-- Comparison with alternatives (100-200 lines)
-- Advanced use cases (200-300 lines)
-- Performance considerations (50-100 lines)
-- Testing approaches (50-100 lines)
-- Best practices (100-150 lines)
-- Common pitfalls (50-100 lines)]
-
-#### Basic Syntax
-
-```kotlin
-// Code examples demonstrating basic concepts
-// Multiple examples with different scenarios
-// Clear comments explaining each part
-```
-
-#### Practical Patterns
-
-```kotlin
-// Real-world implementation patterns
-// Common use cases in Android/Backend
-// Production-ready examples
-```
-
-#### Advanced Techniques
-
-```kotlin
-// Complex scenarios and edge cases
-// Performance optimization techniques
-// Integration with other Kotlin features
-```
-
-#### Comparison Examples
-
-```kotlin
-// Comparing different approaches
-// When to use each technique
-// Trade-offs and considerations
-```
-
-### Best Practices
-
-1. **Practice 1**: Detailed explanation with code example
-2. **Practice 2**: Detailed explanation with code example
-3. **Practice 3**: Detailed explanation with code example
-4. **Practice 4**: Detailed explanation with code example
-5. **Practice 5**: Detailed explanation with code example
-
-### Common Pitfalls
-
-1. **Pitfall 1**: What to avoid and why
-2. **Pitfall 2**: What to avoid and why
-3. **Pitfall 3**: What to avoid and why
+# Question (EN)
+> What's the difference between inner and nested classes in Kotlin?
 
 ---
 
-## Русский
+## Ответ (RU)
 
-### Описание проблемы
+**Теория вложенных и внутренних классов:**
+В Kotlin есть два типа классов внутри другого класса: вложенные (nested) и внутренние (inner). Nested класс не имеет доступа к членам внешнего класса. Inner класс имеет доступ к членам внешнего класса. Ключевое отличие: inner класс хранит ссылку на экземпляр внешнего класса.
 
-[Full Russian translation of problem statement - 2-3 paragraphs explaining the topic, its importance, and real-world context]
+**Основные различия:**
+- **Nested класс**: Как static внутренний класс в Java - без доступа к внешнему классу
+- **Inner класс**: Имеет доступ к членам внешнего класса, хранит ссылку на экземпляр
+- **Память**: Inner класс увеличивает размер объекта из-за хранения ссылки на внешний класс
 
-### Решение
-
-[Full Russian translation of solution including:
-- All code examples with Russian comments
-- Translated explanations of concepts
-- Russian versions of all section headers
-- Localized best practices and pitfalls]
-
-#### Базовый синтаксис
-
+**Nested классы:**
 ```kotlin
-// Примеры кода с комментариями на русском
-// Демонстрация базовых концепций
-// Пошаговые объяснения
+class Outer {
+    private val outerValue = "Outer"
+    
+    // ✅ Вложенный класс - не имеет доступа к Outer
+    class Nested {
+        fun describe() = "Nested class"
+        // ❌ нельзя получить outerValue здесь
+    }
+}
+
+// Usage
+val nested = Outer.Nested() // Можно создать без экземпляра Outer
 ```
 
-#### Практические паттерны
-
+**Inner классы:**
 ```kotlin
-// Реальные паттерны реализации
-// Распространённые случаи использования
-// Production-ready примеры
+class Outer {
+    private val outerValue = "Outer"
+    
+    // ✅ Внутренний класс - имеет доступ к Outer
+    inner class Inner {
+        fun describe() = "Inner class, outerValue: ${outerValue}"
+        // ✅ можно получить outerValue
+    }
+}
+
+// Usage
+val outer = Outer()
+val inner = outer.Inner() // Нужен экземпляр Outer
 ```
 
-### Лучшие практики
+**Явная ссылка на внешний класс:**
+```kotlin
+class Outer {
+    val value = "Outer"
+    
+    inner class Inner {
+        val value = "Inner"
+        
+        fun printValues() {
+            println(value) // Inner
+            println(this@Outer.value) // Outer
+        }
+    }
+}
+```
 
-1. **Практика 1**: Подробное объяснение с примером кода
-2. **Практика 2**: Подробное объяснение с примером кода
-3. **Практика 3**: Подробное объяснение с примером кода
-4. **Практика 4**: Подробное объяснение с примером кода
-5. **Практика 5**: Подробное объяснение с примером кода
+**Практическое применение:**
+```kotlin
+class ViewHolder(private val view: View) {
+    private val data = "ViewHolder Data"
+    
+    // ✅ Nested класс для вспомогательных типов
+    class Builder {
+        fun create(activity: Activity): ViewHolder {
+            return ViewHolder(activity.findViewById(R.id.view))
+        }
+    }
+    
+    // ✅ Inner класс для доступа к ViewHolder
+    inner class Loader {
+        fun loadContent() {
+            println(data) // ✅ Доступ к data из ViewHolder
+        }
+    }
+}
 
-### Распространённые ошибки
+// Usage
+val holder = ViewHolder.Builder().create(activity)
+val loader = holder.Loader() // Нужен экземпляр holder
+loader.loadContent()
+```
 
-1. **Ошибка 1**: Чего избегать и почему
-2. **Ошибка 2**: Чего избегать и почему
-3. **Ошибка 3**: Чего избегать и почему
+**Избегание утечек памяти:**
+```kotlin
+class Activity {
+    private val data = "Important data"
+    
+    // ❌ ПЛОХО: Inner класс держит ссылку на Activity
+    inner class Callback {
+        fun onComplete() {
+            println(data) // Ссылка на Activity
+        }
+    }
+    
+    // ✅ ХОРОШО: Nested класс не держит ссылку
+    class SafeCallback {
+        fun onComplete(data: String) {
+            println(data)
+        }
+    }
+}
+```
 
 ---
+
+## Answer (EN)
+
+**Nested vs Inner Class Theory:**
+Kotlin has two types of classes inside another class: nested and inner. Nested class has no access to outer class members. Inner class has access to outer class members. Key difference: inner class holds reference to outer class instance.
+
+**Key Differences:**
+- **Nested class**: Like static inner class in Java - no access to outer class
+- **Inner class**: Has access to outer class members, holds reference to instance
+- **Memory**: Inner class increases object size due to holding reference to outer class
+
+**Nested Classes:**
+```kotlin
+class Outer {
+    private val outerValue = "Outer"
+    
+    // ✅ Nested class - no access to Outer
+    class Nested {
+        fun describe() = "Nested class"
+        // ❌ cannot access outerValue here
+    }
+}
+
+// Usage
+val nested = Outer.Nested() // Can create without Outer instance
+```
+
+**Inner Classes:**
+```kotlin
+class Outer {
+    private val outerValue = "Outer"
+    
+    // ✅ Inner class - has access to Outer
+    inner class Inner {
+        fun describe() = "Inner class, outerValue: ${outerValue}"
+        // ✅ can access outerValue
+    }
+}
+
+// Usage
+val outer = Outer()
+val inner = outer.Inner() // Need Outer instance
+```
+
+**Explicit Reference to Outer Class:**
+```kotlin
+class Outer {
+    val value = "Outer"
+    
+    inner class Inner {
+        val value = "Inner"
+        
+        fun printValues() {
+            println(value) // Inner
+            println(this@Outer.value) // Outer
+        }
+    }
+}
+```
+
+**Practical Application:**
+```kotlin
+class ViewHolder(private val view: View) {
+    private val data = "ViewHolder Data"
+    
+    // ✅ Nested class for helper types
+    class Builder {
+        fun create(activity: Activity): ViewHolder {
+            return ViewHolder(activity.findViewById(R.id.view))
+        }
+    }
+    
+    // ✅ Inner class for access to ViewHolder
+    inner class Loader {
+        fun loadContent() {
+            println(data) // ✅ Access to data from ViewHolder
+        }
+    }
+}
+
+// Usage
+val holder = ViewHolder.Builder().create(activity)
+val loader = holder.Loader() // Need holder instance
+loader.loadContent()
+```
+
+**Avoiding Memory Leaks:**
+```kotlin
+class Activity {
+    private val data = "Important data"
+    
+    // ❌ BAD: Inner class holds reference to Activity
+    inner class Callback {
+        fun onComplete() {
+            println(data) // Reference to Activity
+        }
+    }
+    
+    // ✅ GOOD: Nested class doesn't hold reference
+    class SafeCallback {
+        fun onComplete(data: String) {
+            println(data)
+        }
+    }
+}
+```
 
 ## Follow-ups
 
-1. [Technical follow-up question related to implementation details]
-2. [Question about edge cases and advanced scenarios]
-3. [Question comparing with alternative approaches]
-4. [Question about performance implications]
-5. [Question about integration with other Kotlin features]
-6. [Question about Java interop considerations]
-7. [Question about testing strategies]
-8. [Question about best practices in specific contexts]
+- When to use nested vs inner classes?
+- How to avoid memory leaks with inner classes?
+- Performance implications of inner classes?
 
 ## References
 
-- [Kotlin Official Documentation - Related Topic]
-- [Kotlin Language Specification - Relevant Section]
-- [Kotlin API Reference - Relevant Classes/Functions]
-- [Community Best Practices and Articles]
-- [Performance Guidelines and Benchmarks]
+- [[c-oop-fundamentals]]
+- https://kotlinlang.org/docs/nested-classes.html
 
 ## Related Questions
 
-- [[q-data-class-detailed--kotlin--medium]]
-- [[q-sealed-class-sealed-interface--kotlin--medium]]
-- [[q-inheritance-open-final--kotlin--medium]]
-- [[q-visibility-modifiers-kotlin--kotlin--medium]]
-- [[q-kotlin-enum-classes--kotlin--easy]]
+### Prerequisites (Easier)
+- [[q-kotlin-enum-classes--kotlin--easy]] - Basic classes
+
+### Related (Medium)
+- [[q-class-initialization-order--kotlin--medium]] - Class initialization
+- [[q-inheritance-open-final--kotlin--medium]] - Inheritance
+- [[q-data-class-detailed--kotlin--medium]] - Data classes
+
+### Advanced (Harder)
+- [[q-delegation-by-keyword--kotlin--medium]] - Class delegation

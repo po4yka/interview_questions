@@ -1,153 +1,305 @@
 ---
 id: "20251012-150016"
-title: "Class delegation with 'by' keyword"
+title: "Class Delegation with 'by' Keyword / Делегирование класса с ключевым словом 'by'"
+aliases: ["Class Delegation", "Делегирование класса"]
 topic: kotlin
+subtopics: [classes, delegation, kotlin-features]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: "2025-10-12"
-tags: ["kotlin", "classes", "difficulty/medium"]
-description: "Comprehensive guide to Class delegation with 'by' keyword covering concepts, patterns, best practices, and real-world examples"
 moc: moc-kotlin
-related: [q-kotlin-nullable-string-declaration--programming-languages--easy, q-kotlin-constructor-keyword--programming-languages--easy, q-inheritance-open-final--kotlin--medium]
-subtopics: ["classes", "kotlin-features", "oop"]
+related: [q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-kotlin-lateinit--kotlin--medium]
+created: "2025-10-12"
+updated: 2025-01-25
+tags: [kotlin, classes, delegation, kotlin-features, by-keyword, difficulty/medium]
+sources: [https://kotlinlang.org/docs/delegation.html]
 ---
-# Class delegation with 'by' keyword
 
-## English
+# Вопрос (RU)
+> Что такое делегирование класса с ключевым словом 'by' в Kotlin?
 
-### Problem Statement
-
-[Comprehensive 2-3 paragraph explanation introducing the topic with real-world context and why understanding this is important]
-
-### Solution
-
-[Extensive solution covering:
-- Basic concepts and syntax (200-300 lines)
-- Practical examples and patterns (200-300 lines)
-- Comparison with alternatives (100-200 lines)
-- Advanced use cases (200-300 lines)
-- Performance considerations (50-100 lines)
-- Testing approaches (50-100 lines)
-- Best practices (100-150 lines)
-- Common pitfalls (50-100 lines)]
-
-#### Basic Syntax
-
-```kotlin
-// Code examples demonstrating basic concepts
-// Multiple examples with different scenarios
-// Clear comments explaining each part
-```
-
-#### Practical Patterns
-
-```kotlin
-// Real-world implementation patterns
-// Common use cases in Android/Backend
-// Production-ready examples
-```
-
-#### Advanced Techniques
-
-```kotlin
-// Complex scenarios and edge cases
-// Performance optimization techniques
-// Integration with other Kotlin features
-```
-
-#### Comparison Examples
-
-```kotlin
-// Comparing different approaches
-// When to use each technique
-// Trade-offs and considerations
-```
-
-### Best Practices
-
-1. **Practice 1**: Detailed explanation with code example
-2. **Practice 2**: Detailed explanation with code example
-3. **Practice 3**: Detailed explanation with code example
-4. **Practice 4**: Detailed explanation with code example
-5. **Practice 5**: Detailed explanation with code example
-
-### Common Pitfalls
-
-1. **Pitfall 1**: What to avoid and why
-2. **Pitfall 2**: What to avoid and why
-3. **Pitfall 3**: What to avoid and why
+# Question (EN)
+> What is class delegation with the 'by' keyword in Kotlin?
 
 ---
 
-## Русский
+## Ответ (RU)
 
-### Описание проблемы
+**Теория делегирования:**
+Ключевое слово `by` в Kotlin используется для реализации паттерна делегирования. Вместо наследования класс может реализовать интерфейс путём делегирования всех его публичных членов указанному объекту. Это позволяет использовать композицию вместо наследования и избежать проблем множественного наследования.
 
-[Full Russian translation of problem statement - 2-3 paragraphs explaining the topic, its importance, and real-world context]
+**Основные концепции:**
+- **Делегирование интерфейса**: Реализация интерфейса через делегирование всех его методов другому объекту
+- **Использование 'by'**: Автоматическая генерация делегированных методов
+- **Сокращение boilerplate**: Код для делегирования генерируется компилятором автоматически
 
-### Решение
-
-[Full Russian translation of solution including:
-- All code examples with Russian comments
-- Translated explanations of concepts
-- Russian versions of all section headers
-- Localized best practices and pitfalls]
-
-#### Базовый синтаксис
-
+**Базовое делегирование:**
 ```kotlin
-// Примеры кода с комментариями на русском
-// Демонстрация базовых концепций
-// Пошаговые объяснения
+interface Printer {
+    fun print(message: String)
+}
+
+class ConsolePrinter : Printer {
+    override fun print(message: String) {
+        println(message)
+    }
+}
+
+// ✅ Использование делегирования
+class Logger(private val printer: Printer) : Printer by printer {
+    fun log(message: String) {
+        printer.print("[LOG] $message")
+    }
+}
+
+// Usage: не нужно переопределять методы Printer
+val logger = Logger(ConsolePrinter())
+logger.print("Hello") // Делегируется в printer
+logger.log("Info") // Логирование через метод logger
 ```
 
-#### Практические паттерны
-
+**Делегирование нескольких интерфейсов:**
 ```kotlin
-// Реальные паттерны реализации
-// Распространённые случаи использования
-// Production-ready примеры
+interface A { fun a() }
+interface B { fun b() }
+
+class AImpl : A {
+    override fun a() = println("A")
+}
+
+class BImpl : B {
+    override fun b() = println("B")
+}
+
+// ✅ Делегирование нескольких интерфейсов
+class Composite(a: A, b: B) : A by a, B by b
+
+fun main() {
+    val composite = Composite(AImpl(), BImpl())
+    composite.a() // Делегируется в a
+    composite.b() // Делегируется в b
+}
 ```
 
-### Лучшие практики
+**Переопределение делегированных методов:**
+```kotlin
+interface Repository {
+    fun findById(id: String): String
+}
 
-1. **Практика 1**: Подробное объяснение с примером кода
-2. **Практика 2**: Подробное объяснение с примером кода
-3. **Практика 3**: Подробное объяснение с примером кода
-4. **Практика 4**: Подробное объяснение с примером кода
-5. **Практика 5**: Подробное объяснение с примером кода
+class DbRepository : Repository {
+    override fun findById(id: String): String = "DB result"
+}
 
-### Распространённые ошибки
+// ✅ Частичное переопределение
+class CachedRepository(private val dbRepo: Repository) : Repository by dbRepo {
+    private val cache = mutableMapOf<String, String>()
 
-1. **Ошибка 1**: Чего избегать и почему
-2. **Ошибка 2**: Чего избегать и почему
-3. **Ошибка 3**: Чего избегать и почему
+    override fun findById(id: String): String {
+        return cache.getOrPut(id) {
+            dbRepo.findById(id) // Вызываем оригинальный метод
+        }
+    }
+}
+```
+
+**Делегирование и наследование:**
+```kotlin
+open class Base(val name: String) {
+    open fun describe() = "Base: $name"
+}
+
+interface Greetable {
+    fun greet(): String
+}
+
+class GreetingImpl : Greetable {
+    override fun greet() = "Hello!"
+}
+
+// ✅ Комбинация наследования и делегирования
+class Derived(name: String, greeter: Greetable) :
+    Base(name), Greetable by greeter {
+
+    override fun describe() = super.describe() + " + " + greet()
+}
+
+fun main() {
+    val derived = Derived("Test", GreetingImpl())
+    println(derived.describe()) // Base: Test + Hello!
+}
+```
+
+**Классическое использование - отказ от интерфейса:**
+```kotlin
+interface ReadOnlyCollection {
+    fun size(): Int
+    fun isEmpty(): Boolean
+}
+
+class MutableCollection(private val items: MutableList<String>) : ReadOnlyCollection {
+    override fun size() = items.size
+    override fun isEmpty() = items.isEmpty()
+    fun add(item: String) = items.add(item)
+}
+
+// ✅ Делегирование упрощает код
+class ReadOnlyWrapper(private val collection: MutableCollection) :
+    ReadOnlyCollection by collection {
+    // Только методы ReadOnlyCollection доступны
+}
+```
 
 ---
+
+## Answer (EN)
+
+**Delegation Theory:**
+The `by` keyword in Kotlin implements the delegation pattern. Instead of inheritance, a class can implement an interface by delegating all its public members to a specified object. This enables composition over inheritance and avoids multiple inheritance problems.
+
+**Core Concepts:**
+- **Interface Delegation**: Implementing interface by delegating all its methods to another object
+- **Using 'by'**: Automatic generation of delegated methods
+- **Boilerplate Reduction**: Delegation code is generated automatically by compiler
+
+**Basic Delegation:**
+```kotlin
+interface Printer {
+    fun print(message: String)
+}
+
+class ConsolePrinter : Printer {
+    override fun print(message: String) {
+        println(message)
+    }
+}
+
+// ✅ Using delegation
+class Logger(private val printer: Printer) : Printer by printer {
+    fun log(message: String) {
+        printer.print("[LOG] $message")
+    }
+}
+
+// Usage: no need to override Printer methods
+val logger = Logger(ConsolePrinter())
+logger.print("Hello") // Delegated to printer
+logger.log("Info") // Logging through logger method
+```
+
+**Multiple Interface Delegation:**
+```kotlin
+interface A { fun a() }
+interface B { fun b() }
+
+class AImpl : A {
+    override fun a() = println("A")
+}
+
+class BImpl : B {
+    override fun b() = println("B")
+}
+
+// ✅ Delegating multiple interfaces
+class Composite(a: A, b: B) : A by a, B by b
+
+fun main() {
+    val composite = Composite(AImpl(), BImpl())
+    composite.a() // Delegated to a
+    composite.b() // Delegated to b
+}
+```
+
+**Overriding Delegated Methods:**
+```kotlin
+interface Repository {
+    fun findById(id: String): String
+}
+
+class DbRepository : Repository {
+    override fun findById(id: String): String = "DB result"
+}
+
+// ✅ Partial override
+class CachedRepository(private val dbRepo: Repository) : Repository by dbRepo {
+    private val cache = mutableMapOf<String, String>()
+
+    override fun findById(id: String): String {
+        return cache.getOrPut(id) {
+            dbRepo.findById(id) // Call original method
+        }
+    }
+}
+```
+
+**Delegation and Inheritance:**
+```kotlin
+open class Base(val name: String) {
+    open fun describe() = "Base: $name"
+}
+
+interface Greetable {
+    fun greet(): String
+}
+
+class GreetingImpl : Greetable {
+    override fun greet() = "Hello!"
+}
+
+// ✅ Combining inheritance and delegation
+class Derived(name: String, greeter: Greetable) :
+    Base(name), Greetable by greeter {
+
+    override fun describe() = super.describe() + " + " + greet()
+}
+
+fun main() {
+    val derived = Derived("Test", GreetingImpl())
+    println(derived.describe()) // Base: Test + Hello!
+}
+```
+
+**Classic Use Case - Interface Segregation:**
+```kotlin
+interface ReadOnlyCollection {
+    fun size(): Int
+    fun isEmpty(): Boolean
+}
+
+class MutableCollection(private val items: MutableList<String>) : ReadOnlyCollection {
+    override fun size() = items.size
+    override fun isEmpty() = items.isEmpty()
+    fun add(item: String) = items.add(item)
+}
+
+// ✅ Delegation simplifies code
+class ReadOnlyWrapper(private val collection: MutableCollection) :
+    ReadOnlyCollection by collection {
+    // Only ReadOnlyCollection methods accessible
+}
+```
 
 ## Follow-ups
 
-1. [Technical follow-up question related to implementation details]
-2. [Question about edge cases and advanced scenarios]
-3. [Question comparing with alternative approaches]
-4. [Question about performance implications]
-5. [Question about integration with other Kotlin features]
-6. [Question about Java interop considerations]
-7. [Question about testing strategies]
-8. [Question about best practices in specific contexts]
+- When to use delegation vs inheritance?
+- How does delegation help with composition over inheritance?
+- Performance implications of delegation?
 
 ## References
 
-- [Kotlin Official Documentation - Related Topic]
-- [Kotlin Language Specification - Relevant Section]
-- [Kotlin API Reference - Relevant Classes/Functions]
-- [Community Best Practices and Articles]
-- [Performance Guidelines and Benchmarks]
+- [[c-oop-fundamentals]]
+- https://kotlinlang.org/docs/delegation.html
 
 ## Related Questions
 
-- [[q-data-class-detailed--kotlin--medium]]
-- [[q-sealed-class-sealed-interface--kotlin--medium]]
-- [[q-inheritance-open-final--kotlin--medium]]
-- [[q-visibility-modifiers-kotlin--kotlin--medium]]
-- [[q-kotlin-enum-classes--kotlin--easy]]
+### Prerequisites (Easier)
+- [[q-inheritance-open-final--kotlin--medium]] - Inheritance basics
+
+### Related (Medium)
+- [[q-data-class-detailed--kotlin--medium]] - Data classes
+- [[q-class-initialization-order--kotlin--medium]] - Class initialization
+
+### Advanced (Harder)
+- [[q-lateinit-initialization--kotlin--medium]] - Lateinit properties

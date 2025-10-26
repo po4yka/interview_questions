@@ -5,13 +5,16 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: "2025-10-12"
-tags: ["kotlin", "classes", "difficulty/medium"]
+tags: ["classes", "difficulty/medium", "kotlin"]
 description: "Comprehensive guide to Value classes (inline classes) in Kotlin covering concepts, patterns, best practices, and real-world examples"
 moc: moc-kotlin
-related: [q-kotlin-java-abstract-differences--programming-languages--medium, q-cold-vs-hot-flows--kotlin--medium, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]
+related: [q-cold-vs-hot-flows--kotlin--medium, q-kotlin-java-abstract-differences--programming-languages--medium, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]
 subtopics: ["classes", "kotlin-features", "oop"]
+date created: Sunday, October 12th 2025, 1:58:08 pm
+date modified: Sunday, October 26th 2025, 7:54:13 pm
 ---
-# Value classes (inline classes) in Kotlin
+
+# Value Classes (inline classes) in Kotlin
 
 ## English
 
@@ -81,7 +84,7 @@ subtopics: ["classes", "kotlin-features", "oop"]
 
 ## Русский
 
-### Описание проблемы
+### Описание Проблемы
 
 [Full Russian translation of problem statement - 2-3 paragraphs explaining the topic, its importance, and real-world context]
 
@@ -93,7 +96,7 @@ subtopics: ["classes", "kotlin-features", "oop"]
 - Russian versions of all section headers
 - Localized best practices and pitfalls]
 
-#### Базовый синтаксис
+#### Базовый Синтаксис
 
 ```kotlin
 // Примеры кода с комментариями на русском
@@ -101,7 +104,7 @@ subtopics: ["classes", "kotlin-features", "oop"]
 // Пошаговые объяснения
 ```
 
-#### Практические паттерны
+#### Практические Паттерны
 
 ```kotlin
 // Реальные паттерны реализации
@@ -109,7 +112,7 @@ subtopics: ["classes", "kotlin-features", "oop"]
 // Production-ready примеры
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Практика 1**: Подробное объяснение с примером кода
 2. **Практика 2**: Подробное объяснение с примером кода
@@ -117,7 +120,7 @@ subtopics: ["classes", "kotlin-features", "oop"]
 4. **Практика 4**: Подробное объяснение с примером кода
 5. **Практика 5**: Подробное объяснение с примером кода
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 1. **Ошибка 1**: Чего избегать и почему
 2. **Ошибка 2**: Чего избегать и почему

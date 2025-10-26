@@ -1,153 +1,258 @@
 ---
 id: "20251012-150018"
-title: "Advanced enum class features in Kotlin"
+title: "Advanced Enum Class Features in Kotlin / Продвинутые возможности enum классов"
+aliases: ["Advanced Enum Features", "Продвинутые возможности enum"]
 topic: kotlin
+subtopics: [enums, classes, kotlin-features]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: "2025-10-12"
-tags: ["kotlin", "classes", "difficulty/medium"]
-description: "Comprehensive guide to Advanced enum class features in Kotlin covering concepts, patterns, best practices, and real-world examples"
 moc: moc-kotlin
-related: [q-flow-operators-deep-dive--kotlin--hard, q-kotlin-java-type-differences--programming-languages--medium, q-kotlin-reified-types--kotlin--hard]
-subtopics: ["classes", "kotlin-features", "oop"]
+related: [q-kotlin-enum-classes--kotlin--easy, q-sealed-class-sealed-interface--kotlin--medium, q-data-class-detailed--kotlin--medium]
+created: "2025-10-12"
+updated: 2025-01-25
+tags: [kotlin, enums, classes, kotlin-features, advanced-enums, difficulty/medium]
+sources: [https://kotlinlang.org/docs/enum-classes.html]
 ---
-# Advanced enum class features in Kotlin
 
-## English
+# Вопрос (RU)
+> Какие продвинутые возможности есть у enum классов в Kotlin?
 
-### Problem Statement
-
-[Comprehensive 2-3 paragraph explanation introducing the topic with real-world context and why understanding this is important]
-
-### Solution
-
-[Extensive solution covering:
-- Basic concepts and syntax (200-300 lines)
-- Practical examples and patterns (200-300 lines)
-- Comparison with alternatives (100-200 lines)
-- Advanced use cases (200-300 lines)
-- Performance considerations (50-100 lines)
-- Testing approaches (50-100 lines)
-- Best practices (100-150 lines)
-- Common pitfalls (50-100 lines)]
-
-#### Basic Syntax
-
-```kotlin
-// Code examples demonstrating basic concepts
-// Multiple examples with different scenarios
-// Clear comments explaining each part
-```
-
-#### Practical Patterns
-
-```kotlin
-// Real-world implementation patterns
-// Common use cases in Android/Backend
-// Production-ready examples
-```
-
-#### Advanced Techniques
-
-```kotlin
-// Complex scenarios and edge cases
-// Performance optimization techniques
-// Integration with other Kotlin features
-```
-
-#### Comparison Examples
-
-```kotlin
-// Comparing different approaches
-// When to use each technique
-// Trade-offs and considerations
-```
-
-### Best Practices
-
-1. **Practice 1**: Detailed explanation with code example
-2. **Practice 2**: Detailed explanation with code example
-3. **Practice 3**: Detailed explanation with code example
-4. **Practice 4**: Detailed explanation with code example
-5. **Practice 5**: Detailed explanation with code example
-
-### Common Pitfalls
-
-1. **Pitfall 1**: What to avoid and why
-2. **Pitfall 2**: What to avoid and why
-3. **Pitfall 3**: What to avoid and why
+# Question (EN)
+> What advanced features do enum classes have in Kotlin?
 
 ---
 
-## Русский
+## Ответ (RU)
 
-### Описание проблемы
+**Теория продвинутых enum:**
+Kotlin enum классы поддерживают множество продвинутых возможностей: параметры, методы, интерфейсы, абстрактные методы, companion object, property delegation. Enum может реализовывать интерфейсы, иметь абстрактные методы для разной реализации в каждом enum значении, предоставлять общие методы и свойства.
 
-[Full Russian translation of problem statement - 2-3 paragraphs explaining the topic, its importance, and real-world context]
-
-### Решение
-
-[Full Russian translation of solution including:
-- All code examples with Russian comments
-- Translated explanations of concepts
-- Russian versions of all section headers
-- Localized best practices and pitfalls]
-
-#### Базовый синтаксис
-
+**Параметры enum значений:**
 ```kotlin
-// Примеры кода с комментариями на русском
-// Демонстрация базовых концепций
-// Пошаговые объяснения
+enum class Planet(val mass: Double, val radius: Double) {
+    EARTH(5.97e24, 6371.0) {
+        override fun surfaceGravity() = G * mass / (radius * radius)
+    },
+    MARS(6.39e23, 3389.5) {
+        override fun surfaceGravity() = G * mass / (radius * radius)
+    },
+    JUPITER(1.898e27, 69911.0) {
+        override fun surfaceGravity() = G * mass / (radius * radius)
+    };
+
+    companion object {
+        private const val G = 6.67300e-11
+    }
+
+    abstract fun surfaceGravity(): Double
+}
 ```
 
-#### Практические паттерны
-
+**Реализация интерфейсов:**
 ```kotlin
-// Реальные паттерны реализации
-// Распространённые случаи использования
-// Production-ready примеры
+interface Clickable {
+    fun click(): String
+}
+
+enum class ButtonState : Clickable {
+    ENABLED {
+        override fun click() = "Button clicked"
+    },
+    DISABLED {
+        override fun click() = "Cannot click disabled button"
+    },
+    LOADING {
+        override fun click() = "Button is loading, please wait"
+    }
+}
 ```
 
-### Лучшие практики
+**Методы и свойства в enum:**
+```kotlin
+enum class HttpMethod(val requiresBody: Boolean = false) {
+    GET(false),
+    POST(true),
+    PUT(true),
+    DELETE(false);
 
-1. **Практика 1**: Подробное объяснение с примером кода
-2. **Практика 2**: Подробное объяснение с примером кода
-3. **Практика 3**: Подробное объяснение с примером кода
-4. **Практика 4**: Подробное объяснение с примером кода
-5. **Практика 5**: Подробное объяснение с примером кода
+    fun canHaveBody(): Boolean = requiresBody
 
-### Распространённые ошибки
+    fun makeRequest(url: String, body: Any? = null): String {
+        return if (requiresBody && body == null) {
+            "ERROR: $this requires body"
+        } else {
+            "Sending $this to $url"
+        }
+    }
+}
+```
 
-1. **Ошибка 1**: Чего избегать и почему
-2. **Ошибка 2**: Чего избегать и почему
-3. **Ошибка 3**: Чего избегать и почему
+**Использование when с enum:**
+```kotlin
+enum class Status {
+    LOADING, SUCCESS, ERROR
+}
+
+fun handleStatus(status: Status) {
+    when (status) {
+        Status.LOADING -> println("Loading...")
+        Status.SUCCESS -> println("Success!")
+        Status.ERROR -> println("Error occurred")
+    }
+}
+```
+
+**Companion object для утилитных функций:**
+```kotlin
+enum class Color(val rgb: Int) {
+    RED(0xFF0000),
+    GREEN(0x00FF00),
+    BLUE(0x0000FF);
+
+    companion object {
+        fun fromString(name: String): Color? {
+            return values().find { it.name.equals(name, ignoreCase = true) }
+        }
+
+        fun hasColor(name: String): Boolean {
+            return fromString(name) != null
+        }
+    }
+}
+
+// Usage
+val color = Color.fromString("red") // RED
+val exists = Color.hasColor("purple") // false
+```
 
 ---
+
+## Answer (EN)
+
+**Advanced Enum Theory:**
+Kotlin enum classes support many advanced features: parameters, methods, interfaces, abstract methods, companion object, property delegation. Enum can implement interfaces, have abstract methods for different implementations in each enum value, provide common methods and properties.
+
+**Enum Value Parameters:**
+```kotlin
+enum class Planet(val mass: Double, val radius: Double) {
+    EARTH(5.97e24, 6371.0) {
+        override fun surfaceGravity() = G * mass / (radius * radius)
+    },
+    MARS(6.39e23, 3389.5) {
+        override fun surfaceGravity() = G * mass / (radius * radius)
+    },
+    JUPITER(1.898e27, 69911.0) {
+        override fun surfaceGravity() = G * mass / (radius * radius)
+    };
+
+    companion object {
+        private const val G = 6.67300e-11
+    }
+
+    abstract fun surfaceGravity(): Double
+}
+```
+
+**Interface Implementation:**
+```kotlin
+interface Clickable {
+    fun click(): String
+}
+
+enum class ButtonState : Clickable {
+    ENABLED {
+        override fun click() = "Button clicked"
+    },
+    DISABLED {
+        override fun click() = "Cannot click disabled button"
+    },
+    LOADING {
+        override fun click() = "Button is loading, please wait"
+    }
+}
+```
+
+**Methods and Properties in Enum:**
+```kotlin
+enum class HttpMethod(val requiresBody: Boolean = false) {
+    GET(false),
+    POST(true),
+    PUT(true),
+    DELETE(false);
+
+    fun canHaveBody(): Boolean = requiresBody
+
+    fun makeRequest(url: String, body: Any? = null): String {
+        return if (requiresBody && body == null) {
+            "ERROR: $this requires body"
+        } else {
+            "Sending $this to $url"
+        }
+    }
+}
+```
+
+**Using when with Enum:**
+```kotlin
+enum class Status {
+    LOADING, SUCCESS, ERROR
+}
+
+fun handleStatus(status: Status) {
+    when (status) {
+        Status.LOADING -> println("Loading...")
+        Status.SUCCESS -> println("Success!")
+        Status.ERROR -> println("Error occurred")
+    }
+}
+```
+
+**Companion Object for Utility Functions:**
+```kotlin
+enum class Color(val rgb: Int) {
+    RED(0xFF0000),
+    GREEN(0x00FF00),
+    BLUE(0x0000FF);
+
+    companion object {
+        fun fromString(name: String): Color? {
+            return values().find { it.name.equals(name, ignoreCase = true) }
+        }
+
+        fun hasColor(name: String): Boolean {
+            return fromString(name) != null
+        }
+    }
+}
+
+// Usage
+val color = Color.fromString("red") // RED
+val exists = Color.hasColor("purple") // false
+```
 
 ## Follow-ups
 
-1. [Technical follow-up question related to implementation details]
-2. [Question about edge cases and advanced scenarios]
-3. [Question comparing with alternative approaches]
-4. [Question about performance implications]
-5. [Question about integration with other Kotlin features]
-6. [Question about Java interop considerations]
-7. [Question about testing strategies]
-8. [Question about best practices in specific contexts]
+- When to use enum vs sealed class?
+- How to use enums with type-safe serialization?
+- Enum performance considerations?
 
 ## References
 
-- [Kotlin Official Documentation - Related Topic]
-- [Kotlin Language Specification - Relevant Section]
-- [Kotlin API Reference - Relevant Classes/Functions]
-- [Community Best Practices and Articles]
-- [Performance Guidelines and Benchmarks]
+- [[c-oop-fundamentals]]
+- https://kotlinlang.org/docs/enum-classes.html
 
 ## Related Questions
 
-- [[q-data-class-detailed--kotlin--medium]]
-- [[q-sealed-class-sealed-interface--kotlin--medium]]
-- [[q-inheritance-open-final--kotlin--medium]]
-- [[q-visibility-modifiers-kotlin--kotlin--medium]]
-- [[q-kotlin-enum-classes--kotlin--easy]]
+### Prerequisites (Easier)
+- [[q-kotlin-enum-classes--kotlin--easy]] - Basic enum classes
+
+### Related (Medium)
+- [[q-sealed-class-sealed-interface--kotlin--medium]] - Sealed classes
+- [[q-data-class-detailed--kotlin--medium]] - Data classes
+- [[q-class-initialization-order--kotlin--medium]] - Class initialization
+
+### Advanced (Harder)
+- [[q-kotlin-reified-types--kotlin--hard]] - Reified types
