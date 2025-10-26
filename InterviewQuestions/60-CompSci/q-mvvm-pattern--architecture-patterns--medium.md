@@ -3,18 +3,20 @@ id: 20251012-1227111167
 title: "MVVM Pattern / Паттерн MVVM (Model-View-ViewModel)"
 aliases: ["MVVM Pattern", "Паттерн MVVM"]
 topic: cs
-subtopics: [android-architecture, data-binding, reactive-programming, architecture-patterns]
+subtopics: [android-architecture, architecture-patterns, data-binding, reactive-programming]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-mvp-pattern--architecture-patterns--medium, q-mvi-pattern--architecture-patterns--hard, q-clean-architecture--architecture-patterns--hard]
+related: [q-clean-architecture--architecture-patterns--hard, q-mvi-pattern--architecture-patterns--hard, q-mvp-pattern--architecture-patterns--medium]
 created: 2025-10-15
 updated: 2025-01-25
-tags: [mvvm, android-architecture, data-binding, reactive-programming, livedata, viewmodel, difficulty/medium]
+tags: [android-architecture, data-binding, difficulty/medium, livedata, mvvm, reactive-programming, viewmodel]
 sources: [https://developer.android.com/jetpack/guide]
+date created: Monday, October 6th 2025, 7:38:26 am
+date modified: Sunday, October 26th 2025, 12:52:52 pm
 ---
 
 # Вопрос (RU)

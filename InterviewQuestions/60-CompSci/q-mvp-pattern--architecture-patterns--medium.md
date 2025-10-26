@@ -3,18 +3,20 @@ id: 20251012-1227111166
 title: "MVP Pattern / Паттерн MVP (Model-View-Presenter)"
 aliases: ["MVP Pattern", "Паттерн MVP"]
 topic: cs
-subtopics: [android-architecture, separation-of-concerns, testability, architecture-patterns]
+subtopics: [android-architecture, architecture-patterns, separation-of-concerns, testability]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-mvvm-pattern--architecture-patterns--medium, q-mvi-pattern--architecture-patterns--hard, q-clean-architecture--architecture-patterns--hard]
+related: [q-clean-architecture--architecture-patterns--hard, q-mvi-pattern--architecture-patterns--hard, q-mvvm-pattern--architecture-patterns--medium]
 created: 2025-10-15
 updated: 2025-01-25
-tags: [mvp, android-architecture, separation-of-concerns, testability, mvvm, mvi, difficulty/medium]
+tags: [android-architecture, difficulty/medium, mvi, mvp, mvvm, separation-of-concerns, testability]
 sources: [https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter]
+date created: Monday, October 6th 2025, 7:37:30 am
+date modified: Sunday, October 26th 2025, 12:46:55 pm
 ---
 
 # Вопрос (RU)

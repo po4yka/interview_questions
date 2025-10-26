@@ -1,185 +1,80 @@
 ---
 id: 20251012-600004
 title: "OOP Principles Deep Dive / Глубокое погружение в принципы ООП"
+aliases: ["OOP Principles", "Принципы ООП"]
 topic: cs
+subtopics: [oop, encapsulation, inheritance, polymorphism, abstraction]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-12
-tags:
-  - oop
-  - encapsulation
-  - inheritance
-  - polymorphism
-  - abstraction
-  - composition
 moc: moc-cs
-related: [q-garbage-collector-roots--programming-languages--medium, q-concurrency-fundamentals--computer-science--hard, q-template-method-pattern--design-patterns--medium]
-  - q-solid-principles--software-design--medium
-  - q-clean-code-principles--software-engineering--medium
-  - q-design-patterns-types--design-patterns--medium
-subtopics:
-  - oop
-  - object-oriented-programming
-  - encapsulation
-  - inheritance
-  - polymorphism
-  - abstraction
+related: [q-solid-principles--software-design--medium, q-clean-code-principles--software-engineering--medium, q-design-patterns-fundamentals--software-engineering--hard]
+created: 2025-10-12
+updated: 2025-01-25
+tags: [oop, encapsulation, inheritance, polymorphism, abstraction, composition, difficulty/medium]
+sources: [https://en.wikipedia.org/wiki/Object-oriented_programming]
 ---
-# OOP Principles Deep Dive
 
-## English Version
+# Вопрос (RU)
+> Каковы четыре столпа ООП? Как работают инкапсуляция, наследование, полиморфизм и абстракция?
 
-### Problem Statement
-
-Object-Oriented Programming (OOP) is a paradigm based on objects containing data and behavior. The four pillars of OOP—Encapsulation, Inheritance, Polymorphism, and Abstraction—provide structure for building maintainable, reusable code.
-
-**The Question:** What are the four pillars of OOP? How do encapsulation, inheritance, polymorphism, and abstraction work? When to use composition over inheritance? What are common OOP pitfalls?
-
-### Detailed Answer
+# Question (EN)
+> What are the four pillars of OOP? How do encapsulation, inheritance, polymorphism, and abstraction work?
 
 ---
 
-### THE FOUR PILLARS OF OOP
+## Ответ (RU)
 
-```
-1. ENCAPSULATION
-   - Bundle data and methods
-   - Hide internal details
-   - Control access (private/public)
+**Теория ООП:**
+Object-Oriented Programming (ООП) - paradigm based on objects containing data and behavior. Four pillars: Encapsulation, Inheritance, Polymorphism, Abstraction. Provide structure для building maintainable, reusable code. Key concepts: IS-A vs HAS-A relationships, composition over inheritance, interfaces vs abstract classes, behavioral vs structural patterns.
 
-2. INHERITANCE
-   - Create new classes from existing
-   - "IS-A" relationship
-   - Code reuse
+**1. Инкапсуляция:**
 
-3. POLYMORPHISM
-   - Many forms
-   - Same interface, different implementations
-   - Method overriding/overloading
-
-4. ABSTRACTION
-   - Hide complexity
-   - Show only essential features
-   - Interfaces and abstract classes
-```
-
----
-
-### 1. ENCAPSULATION
-
-**Definition: Bundle data and methods that operate on that data**
+*Теория:* Инкапсуляция - bundle data и methods что work с этими data. Hide internal details, control access (private/public). Validate state changes, maintain invariants. Allows changing internals без affecting users.
 
 ```kotlin
-//  Bad: No encapsulation
-class BankAccountBad {
-    var balance: Double = 0.0  // Direct access
-
-    fun deposit(amount: Double) {
-        balance += amount
-    }
-}
-
-// Problem:
-val account = BankAccountBad()
-account.balance = -1000.0  //  Can set invalid state!
-
-//  Good: Encapsulation with validation
-class BankAccount(initialBalance: Double) {
-    private var _balance: Double = initialBalance  // Private
+// ✅ Инкапсуляция с валидацией
+class BankAccount(private val initialBalance: Double) {
+    private var _balance: Double = initialBalance
         set(value) {
             require(value >= 0) { "Balance cannot be negative" }
             field = value
         }
-
-    val balance: Double  // Read-only public access
-        get() = _balance
-
+    
+    val balance: Double get() = _balance
+    
     fun deposit(amount: Double) {
-        require(amount > 0) { "Deposit amount must be positive" }
+        require(amount > 0) { "Amount must be positive" }
         _balance += amount
     }
-
+    
     fun withdraw(amount: Double): Boolean {
-        if (amount <= 0) return false
-        if (amount > _balance) return false
-
+        if (amount <= 0 || amount > _balance) return false
         _balance -= amount
         return true
     }
 }
-
-// Usage:
-val account = BankAccount(1000.0)
-// account._balance = -100.0  //  Compilation error
-account.deposit(500.0)  //  Controlled access
-println(account.balance)  //  Read-only
 ```
 
-**Benefits of Encapsulation:**
-```
- Control access to data
- Validate state changes
- Hide implementation details
- Easy to change internals without affecting users
- Maintain invariants
-```
+**2. Наследование:**
 
-**Android Example:**
-```kotlin
-// ViewModel with encapsulation
-class UserViewModel : ViewModel() {
-    // Private mutable state
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-
-    // Public immutable state
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    // Private mutable list
-    private val _users = MutableLiveData<List<User>>()
-
-    // Public immutable list
-    val users: LiveData<List<User>> = _users
-
-    // Controlled modification
-    fun loadUsers() {
-        viewModelScope.launch {
-            _uiState.value = UiState.Loading
-            try {
-                val users = repository.getUsers()
-                _users.value = users
-                _uiState.value = UiState.Success
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error(e.message)
-            }
-        }
-    }
-}
-```
-
----
-
-### 2. INHERITANCE
-
-**Definition: Create new class from existing class**
+*Теория:* Inheritance - создание new class от existing class. IS-A relationship, code reuse. Types: single, multi-level, hierarchical. Benefits: reuse, polymorphism base, organized hierarchy. Pitfalls: deep hierarchies, tight coupling, rigidity.
 
 ```kotlin
-// Base class
+// ✅ Inheritance с Animal hierarchy
 open class Animal(val name: String) {
     open fun makeSound() {
         println("$name makes a sound")
     }
-
-    fun sleep() {
-        println("$name is sleeping")
-    }
 }
 
-// Derived classes
 class Dog(name: String) : Animal(name) {
     override fun makeSound() {
         println("$name barks: Woof!")
     }
-
+    
     fun fetch() {
         println("$name fetches the ball")
     }
@@ -189,304 +84,94 @@ class Cat(name: String) : Animal(name) {
     override fun makeSound() {
         println("$name meows: Meow!")
     }
-
+    
     fun climb() {
         println("$name climbs the tree")
     }
 }
 
-// Usage:
+// ✅ Polymorphism в действии
+fun processAnimal(animal: Animal) {
+    animal.makeSound()  // Calls override method
+}
+
 val dog = Dog("Rex")
-dog.makeSound()  // Rex barks: Woof!
-dog.sleep()      // Rex is sleeping (inherited)
-dog.fetch()      // Rex fetches the ball (specific to Dog)
-
 val cat = Cat("Whiskers")
-cat.makeSound()  // Whiskers meows: Meow!
-cat.sleep()      // Whiskers is sleeping (inherited)
-cat.climb()      // Whiskers climbs the tree (specific to Cat)
+processAnimal(dog)  // Dog barks
+processAnimal(cat)  // Cat meows
 ```
 
-**Inheritance Types:**
+**3. Полиморфизм:**
 
-**1. Single Inheritance:**
-```kotlin
-open class Vehicle
-class Car : Vehicle()  // Car inherits from Vehicle
-```
-
-**2. Multi-level Inheritance:**
-```kotlin
-open class Vehicle
-open class Car : Vehicle()
-class SportsCar : Car()  // SportsCar → Car → Vehicle
-```
-
-**3. Hierarchical Inheritance:**
-```kotlin
-open class Vehicle
-class Car : Vehicle()
-class Bike : Vehicle()
-class Truck : Vehicle()  // Multiple classes inherit from Vehicle
-```
-
-**Android Example:**
-```kotlin
-// Android Activity hierarchy
-abstract class BaseActivity : AppCompatActivity() {
-    protected lateinit var analytics: Analytics
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        analytics = Analytics.getInstance()
-        setupToolbar()
-    }
-
-    protected open fun setupToolbar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        analytics.trackScreenView(this::class.simpleName ?: "Unknown")
-    }
-}
-
-class MainActivity : BaseActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        // MainActivity specific logic
-    }
-
-    override fun setupToolbar() {
-        super.setupToolbar()
-        // MainActivity specific toolbar customization
-        supportActionBar?.setTitle("Home")
-    }
-}
-
-class ProfileActivity : BaseActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
-        // ProfileActivity specific logic
-    }
-}
-```
-
----
-
-### 3. POLYMORPHISM
-
-**Definition: Same interface, different implementations**
-
-**A. Method Overriding (Runtime Polymorphism)**
+*Теория:* Polymorphism - many forms. Same interface, different implementations. Types: runtime (method overriding), compile-time (method overloading). Позволяет treat different types uniformly, increases flexibility, simplifies code. Key для polymorphism: late binding, virtual methods, interface/abstract class contracts.
 
 ```kotlin
+// ✅ Polymorphism с Shape
 open class Shape {
-    open fun area(): Double {
-        return 0.0
-    }
-
-    open fun draw() {
-        println("Drawing shape")
-    }
+    open fun area(): Double = 0.0
+    open fun draw() = println("Drawing shape")
 }
 
 class Circle(val radius: Double) : Shape() {
-    override fun area(): Double {
-        return Math.PI * radius * radius
-    }
-
-    override fun draw() {
-        println("Drawing circle with radius $radius")
-    }
+    override fun area(): Double = Math.PI * radius * radius
+    override fun draw() = println("Drawing circle with radius $radius")
 }
 
 class Rectangle(val width: Double, val height: Double) : Shape() {
-    override fun area(): Double {
-        return width * height
-    }
-
-    override fun draw() {
-        println("Drawing rectangle ${width}x${height}")
-    }
+    override fun area(): Double = width * height
+    override fun draw() = println("Drawing rectangle ${width}x${height}")
 }
 
-// Polymorphism in action:
-fun printShapeInfo(shape: Shape) {  // Accepts any Shape
+// ✅ Uniform interface
+fun processShape(shape: Shape) {
     shape.draw()
     println("Area: ${shape.area()}")
 }
 
-// Usage:
-val shapes: List<Shape> = listOf(
-    Circle(5.0),
-    Rectangle(4.0, 6.0),
-    Circle(3.0)
-)
-
-shapes.forEach { shape ->
-    printShapeInfo(shape)  // Different behavior for each type
-}
-
-// Output:
-// Drawing circle with radius 5.0
-// Area: 78.53981633974483
-// Drawing rectangle 4.0x6.0
-// Area: 24.0
-// Drawing circle with radius 3.0
-// Area: 28.274333882308138
+val shapes = listOf(Circle(5.0), Rectangle(4.0, 6.0))
+shapes.forEach { processShape(it) }
 ```
 
-**B. Method Overloading (Compile-time Polymorphism)**
+**4. Абстракция:**
+
+*Теория:* Abstraction - hide complexity, show only essential features. Interfaces (CAN-DO), abstract classes (IS-A). Allows work с concepts без knowing implementation. Simplifies complex systems, reduces coupling, improves maintainability.
 
 ```kotlin
-class Calculator {
-    // Same name, different parameters
-    fun add(a: Int, b: Int): Int {
-        return a + b
-    }
-
-    fun add(a: Double, b: Double): Double {
-        return a + b
-    }
-
-    fun add(a: Int, b: Int, c: Int): Int {
-        return a + b + c
-    }
-
-    fun add(numbers: List<Int>): Int {
-        return numbers.sum()
-    }
-}
-
-// Usage:
-val calc = Calculator()
-println(calc.add(1, 2))              // Calls Int version → 3
-println(calc.add(1.5, 2.5))          // Calls Double version → 4.0
-println(calc.add(1, 2, 3))           // Calls 3-parameter version → 6
-println(calc.add(listOf(1, 2, 3, 4))) // Calls List version → 10
-```
-
-**Android Example:**
-```kotlin
-// Polymorphism with ViewHolder pattern
-abstract class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(item: Any)
-}
-
-class TextViewHolder(itemView: View) : ViewHolder(itemView) {
-    private val textView: TextView = itemView.findViewById(R.id.textView)
-
-    override fun bind(item: Any) {
-        if (item is String) {
-            textView.text = item
-        }
-    }
-}
-
-class ImageViewHolder(itemView: View) : ViewHolder(itemView) {
-    private val imageView: ImageView = itemView.findViewById(R.id.imageView)
-
-    override fun bind(item: Any) {
-        if (item is ImageData) {
-            imageView.load(item.url)
-        }
-    }
-}
-
-class MyAdapter(private val items: List<Any>) : RecyclerView.Adapter<ViewHolder>() {
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])  // Polymorphic call
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return when (items[position]) {
-            is String -> TYPE_TEXT
-            is ImageData -> TYPE_IMAGE
-            else -> TYPE_UNKNOWN
-        }
-    }
-
-    // ...
-}
-```
-
----
-
-### 4. ABSTRACTION
-
-**Definition: Hide complexity, show only essential features**
-
-**A. Abstract Classes**
-
-```kotlin
+// ✅ Abstract class для IS-A
 abstract class Employee(val name: String, val id: String) {
-    // Abstract method (must be implemented)
     abstract fun calculateSalary(): Double
-
-    // Abstract property
     abstract val department: String
-
-    // Concrete method (optional to override)
+    
     open fun clockIn() {
-        println("$name clocked in at ${System.currentTimeMillis()}")
+        println("$name clocked in")
     }
-
-    // Concrete method (cannot override - not open)
-    fun getId(): String = id
 }
 
 class FullTimeEmployee(
-    name: String,
-    id: String,
-    private val annualSalary: Double
+    name: String, id: String, private val annualSalary: Double
 ) : Employee(name, id) {
     override val department: String = "Engineering"
-
-    override fun calculateSalary(): Double {
-        return annualSalary / 12  // Monthly salary
-    }
+    override fun calculateSalary(): Double = annualSalary / 12
 }
 
 class Contractor(
-    name: String,
-    id: String,
-    private val hourlyRate: Double,
-    private val hoursWorked: Double
+    name: String, id: String, 
+    private val hourlyRate: Double, private val hoursWorked: Double
 ) : Employee(name, id) {
     override val department: String = "Contract"
-
-    override fun calculateSalary(): Double {
-        return hourlyRate * hoursWorked
-    }
-
-    override fun clockIn() {
-        super.clockIn()
-        println("$name is a contractor")
-    }
-}
-
-// Usage:
-val employees: List<Employee> = listOf(
-    FullTimeEmployee("Alice", "FT001", 120000.0),
-    Contractor("Bob", "CT001", 50.0, 160.0)
-)
-
-employees.forEach { employee ->
-    employee.clockIn()
-    println("${employee.name} salary: $${employee.calculateSalary()}")
+    override fun calculateSalary(): Double = hourlyRate * hoursWorked
 }
 ```
 
-**B. Interfaces**
+**Интерфейсы:**
+
+*Теория:* Interfaces - multiple inheritance, CAN-DO relationships. No state (abstract properties only), all methods abstract unless default implementation. Use для capabilities, contracts, decoupling.
 
 ```kotlin
+// ✅ Interface для CAN-DO
 interface Drawable {
     fun draw()
-    fun erase() {  // Default implementation
+    fun erase() {
         println("Erasing...")
     }
 }
@@ -494,278 +179,71 @@ interface Drawable {
 interface Clickable {
     fun onClick()
     fun onDoubleClick() {
-        println("Double clicked")  // Default implementation
+        println("Double clicked")
     }
 }
 
-// Class can implement multiple interfaces
 class Button : Drawable, Clickable {
-    override fun draw() {
-        println("Drawing button")
-    }
-
-    override fun onClick() {
-        println("Button clicked")
-    }
-
-    // Uses default implementation of erase() and onDoubleClick()
+    override fun draw() = println("Drawing button")
+    override fun onClick() = println("Button clicked")
 }
 
-// Usage:
+// ✅ Usage
 val button = Button()
 button.draw()
 button.onClick()
 button.erase()
-button.onDoubleClick()
 ```
 
-**Interface vs Abstract Class:**
-```
-Interface:
- Multiple inheritance
- No state (properties must be abstract)
- All methods abstract (unless default impl)
- Use for "CAN-DO" relationships
+**Композиция vs Наследование:**
 
-Abstract Class:
- Single inheritance only
- Can have state (properties with values)
- Can mix abstract and concrete methods
- Use for "IS-A" relationships with shared code
-
-Example:
-interface Flyable {  // CAN-DO
-    fun fly()
-}
-
-abstract class Bird {  // IS-A
-    abstract fun makeSound()
-    fun eat() { }  // Common to all birds
-}
-
-class Sparrow : Bird(), Flyable {
-    override fun makeSound() { }
-    override fun fly() { }
-}
-```
-
-**Android Example:**
-```kotlin
-// Repository interface (abstraction)
-interface UserRepository {
-    suspend fun getUser(id: String): User?
-    suspend fun saveUser(user: User)
-    suspend fun deleteUser(id: String)
-}
-
-// Local implementation
-class LocalUserRepository(
-    private val database: AppDatabase
-) : UserRepository {
-    override suspend fun getUser(id: String): User? {
-        return database.userDao().getUser(id)
-    }
-
-    override suspend fun saveUser(user: User) {
-        database.userDao().insert(user)
-    }
-
-    override suspend fun deleteUser(id: String) {
-        database.userDao().delete(id)
-    }
-}
-
-// Remote implementation
-class RemoteUserRepository(
-    private val apiService: ApiService
-) : UserRepository {
-    override suspend fun getUser(id: String): User? {
-        return apiService.getUser(id)
-    }
-
-    override suspend fun saveUser(user: User) {
-        apiService.createUser(user)
-    }
-
-    override suspend fun deleteUser(id: String) {
-        apiService.deleteUser(id)
-    }
-}
-
-// ViewModel depends on abstraction, not concrete implementation
-class UserViewModel(
-    private val repository: UserRepository  // Abstraction
-) : ViewModel() {
-    fun loadUser(id: String) {
-        viewModelScope.launch {
-            val user = repository.getUser(id)
-            // Update UI
-        }
-    }
-}
-
-// Dependency injection decides which implementation
-@Module
-class RepositoryModule {
-    @Provides
-    fun provideUserRepository(
-        localRepo: LocalUserRepository,
-        remoteRepo: RemoteUserRepository
-    ): UserRepository {
-        // Return based on configuration
-        return if (isOfflineMode) localRepo else remoteRepo
-    }
-}
-```
-
----
-
-### COMPOSITION OVER INHERITANCE
-
-**Prefer composition to inheritance for better flexibility**
+*Теория:* Composition - HAS-A relationship, more flexible than inheritance. Prefer composition для: behavior changes, flexibility, avoiding tight coupling. Inheritance для: IS-A relationships, code reuse, shared behavior.
 
 ```kotlin
-//  Inheritance approach (rigid)
+// ❌ Inheritance (rigid)
 open class Vehicle {
-    open fun start() { println("Starting vehicle") }
+    open fun start() = println("Starting vehicle")
 }
 
 class Car : Vehicle() {
-    override fun start() {
-        println("Starting car engine")
-    }
-
-    fun drive() { println("Driving car") }
+    override fun start() = println("Starting car engine")
 }
 
-class ElectricCar : Car() {  // Problem: ElectricCar is forced to inherit Car
-    override fun start() {
-        println("Starting electric motor")  // Different from car
-    }
-
-    // What if ElectricCar needs different behavior?
-    // Inheritance hierarchy becomes complex
+class ElectricCar : Car() {  // Forced inheritance
+    override fun start() = println("Starting electric motor")
 }
 
-//  Composition approach (flexible)
+// ✅ Composition (flexible)
 interface Engine {
     fun start()
 }
 
 class GasEngine : Engine {
-    override fun start() {
-        println("Starting gas engine")
-    }
+    override fun start() = println("Starting gas engine")
 }
 
 class ElectricMotor : Engine {
-    override fun start() {
-        println("Starting electric motor")
-    }
+    override fun start() = println("Starting electric motor")
 }
 
 class FlexibleCar(private val engine: Engine) {  // Composition
-    fun start() {
-        engine.start()
-    }
-
-    fun drive() {
-        println("Driving car")
-    }
+    fun start() = engine.start()
 }
 
-// Usage:
+// ✅ Usage
 val gasCar = FlexibleCar(GasEngine())
-gasCar.start()  // Starting gas engine
-
 val electricCar = FlexibleCar(ElectricMotor())
-electricCar.start()  // Starting electric motor
-
-// Easy to add new engine types without changing Car
-class HybridEngine : Engine {
-    override fun start() {
-        println("Starting hybrid engine")
-    }
-}
-
-val hybridCar = FlexibleCar(HybridEngine())
+gasCar.start()      // Gas engine
+electricCar.start()  // Electric motor
 ```
 
-**Real Android Example:**
+**Общие ошибки:**
+
+**1. God Objects:**
+*Теория:* God Object - class с too many responsibilities. Violates Single Responsibility Principle. Hard to maintain, test, reuse. Solution: split into focused classes, extract services, use composition.
+
 ```kotlin
-//  Inheritance (rigid)
-abstract class BaseFragment : Fragment() {
-    abstract fun setupUI()
-    abstract fun loadData()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupUI()
-        loadData()
-    }
-}
-
-// Problem: All fragments forced to inherit BaseFragment
-// Hard to reuse setupUI or loadData independently
-
-//  Composition (flexible)
-interface UISetup {
-    fun setupUI(fragment: Fragment)
-}
-
-interface DataLoader {
-    fun loadData(fragment: Fragment)
-}
-
-class StandardUISetup : UISetup {
-    override fun setupUI(fragment: Fragment) {
-        // Standard UI setup
-    }
-}
-
-class CustomUISetup : UISetup {
-    override fun setupUI(fragment: Fragment) {
-        // Custom UI setup
-    }
-}
-
-class NetworkDataLoader : DataLoader {
-    override fun loadData(fragment: Fragment) {
-        // Load from network
-    }
-}
-
-class MyFragment : Fragment() {
-    private val uiSetup: UISetup = StandardUISetup()
-    private val dataLoader: DataLoader = NetworkDataLoader()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        uiSetup.setupUI(this)
-        dataLoader.loadData(this)
-    }
-}
-
-// Easy to mix and match behaviors
-class AnotherFragment : Fragment() {
-    private val uiSetup: UISetup = CustomUISetup()  // Different UI
-    private val dataLoader: DataLoader = NetworkDataLoader()  // Same data
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        uiSetup.setupUI(this)
-        dataLoader.loadData(this)
-    }
-}
-```
-
----
-
-### COMMON OOP PITFALLS
-
-**1. God Objects**
-```kotlin
-//  Bad: Class does everything
+// ❌ God Object
 class UserManager {
     fun createUser() { }
     fun deleteUser() { }
@@ -773,40 +251,28 @@ class UserManager {
     fun authenticateUser() { }
     fun sendEmail() { }
     fun logActivity() { }
-    fun generateReport() { }
-    fun processPayment() { }
     // ... 50 more methods
 }
 
-//  Good: Single Responsibility
-class UserService {
-    fun createUser() { }
-    fun deleteUser() { }
-}
-
-class UserValidator {
-    fun validate(user: User): Boolean { }
-}
-
-class AuthenticationService {
-    fun authenticate(credentials: Credentials): Boolean { }
-}
-
-class EmailService {
-    fun sendEmail(to: String, subject: String, body: String) { }
-}
+// ✅ Single Responsibility
+class UserService { fun createUser() { } fun deleteUser() { } }
+class UserValidator { fun validate(user: User): Boolean { } }
+class AuthService { fun authenticate(creds: Credentials): Boolean { } }
+class EmailService { fun sendEmail(to: String, subject: String, body: String) { } }
 ```
 
-**2. Deep Inheritance Hierarchies**
+**2. Deep Inheritance:**
+*Теория:* Deep hierarchies - hard to understand, maintain, test. Multiple levels inheritance create coupling, fragile base class problem. Solution: shallow hierarchies, prefer composition, use interfaces.
+
 ```kotlin
-//  Bad: Too deep
+// ❌ Deep inheritance
 open class A
 open class B : A()
 open class C : B()
 open class D : C()
-open class E : D()  // Too deep, hard to understand
+open class E : D()  // Too deep
 
-//  Good: Shallow, use composition
+// ✅ Shallow + interfaces
 interface Behavior1
 interface Behavior2
 interface Behavior3
@@ -814,510 +280,254 @@ interface Behavior3
 class MyClass : Behavior1, Behavior2, Behavior3
 ```
 
-**3. Leaky Abstractions**
+**3. Leaky Abstractions:**
+*Теория:* Leaky abstraction - exposes implementation details. Interface references specific implementation concepts. Solution: pure abstractions, hide internals, dependency inversion.
+
 ```kotlin
-//  Bad: Abstraction leaks implementation details
+// ❌ Leaky abstraction
 interface DataStore {
     fun save(data: String)
-    fun getSQLConnection(): Connection  //  Leaks SQL implementation!
+    fun getSQLConnection(): Connection  // Exposes SQL!
 }
 
-//  Good: Pure abstraction
+// ✅ Pure abstraction
 interface DataStore {
     fun save(data: String)
     fun load(): String
 }
 ```
 
----
+**Ключевые выводы:**
+1. Encapsulation - bundle data + methods, control access
+2. Inheritance - IS-A relationship, code reuse
+3. Polymorphism - same interface, different implementations
+4. Abstraction - hide complexity, show essentials
+5. Composition > Inheritance для flexibility
+6. Interfaces для CAN-DO, Abstract classes для IS-A
+7. Single Responsibility - each class does one thing
+8. Avoid deep inheritance - shallow hierarchies
+9. Pure abstractions - no leaky details
+10. Program to interfaces - depend on abstractions
 
-### KEY TAKEAWAYS
+## Answer (EN)
 
-1. **Encapsulation** - bundle data + methods, control access
-2. **Inheritance** - IS-A relationship, code reuse
-3. **Polymorphism** - same interface, different implementations
-4. **Abstraction** - hide complexity, show essentials
-5. **Composition > Inheritance** - more flexible
-6. **Interfaces** for multiple inheritance, CAN-DO relationships
-7. **Abstract classes** for IS-A with shared code
-8. **Avoid deep inheritance** - prefer shallow hierarchies
-9. **Single Responsibility** - each class does one thing
-10. **Program to interfaces** - depend on abstractions
+**OOP Theory:**
+Object-Oriented Programming (OOP) - paradigm based on objects containing data and behavior. Four pillars: Encapsulation, Inheritance, Polymorphism, Abstraction. Provide structure for building maintainable, reusable code. Key concepts: IS-A vs HAS-A relationships, composition over inheritance, interfaces vs abstract classes, behavioral vs structural patterns.
 
----
+**1. Encapsulation:**
 
-## Russian Version
-
-### Постановка задачи
-
-Объектно-ориентированное программирование (ООП) - парадигма, основанная на объектах, содержащих данные и поведение. Четыре столпа ООП—Инкапсуляция, Наследование, Полиморфизм и Абстракция—обеспечивают структуру для создания поддерживаемого, переиспользуемого кода.
-
-**Вопрос:** Каковы четыре столпа ООП? Как работают инкапсуляция, наследование, полиморфизм и абстракция? Когда использовать композицию вместо наследования? Какие распространённые ошибки ООП?
-
-### Подробный ответ
-
----
-
-### ЧЕТЫРЕ СТОЛПА ООП
-
-```
-1. ИНКАПСУЛЯЦИЯ
-   - Связывание данных и методов
-   - Скрытие внутренних деталей
-   - Контроль доступа (private/public)
-
-2. НАСЛЕДОВАНИЕ
-   - Создание новых классов из существующих
-   - Отношение "IS-A" (ЯВЛЯЕТСЯ)
-   - Переиспользование кода
-
-3. ПОЛИМОРФИЗМ
-   - Множество форм
-   - Одинаковый интерфейс, разные реализации
-   - Переопределение/перегрузка методов
-
-4. АБСТРАКЦИЯ
-   - Скрытие сложности
-   - Показ только существенных характеристик
-   - Интерфейсы и абстрактные классы
-```
-
----
-
-### 1. ИНКАПСУЛЯЦИЯ
-
-**Определение: Связывание данных и методов, которые работают с этими данными**
+*Theory:* Encapsulation - bundle data and methods that work with that data. Hide internal details, control access (private/public). Validate state changes, maintain invariants. Allows changing internals without affecting users.
 
 ```kotlin
-// ❌ Плохо: Нет инкапсуляции
-class BankAccountBad {
-    var balance: Double = 0.0  // Прямой доступ
-
-    fun deposit(amount: Double) {
-        balance += amount
-    }
-}
-
-// Проблема:
-val account = BankAccountBad()
-account.balance = -1000.0  // ❌ Можно установить некорректное состояние!
-
-// ✅ Хорошо: Инкапсуляция с валидацией
-class BankAccount(initialBalance: Double) {
-    private var _balance: Double = initialBalance  // Приватное
+// ✅ Encapsulation with validation
+class BankAccount(private val initialBalance: Double) {
+    private var _balance: Double = initialBalance
         set(value) {
-            require(value >= 0) { "Баланс не может быть отрицательным" }
+            require(value >= 0) { "Balance cannot be negative" }
             field = value
         }
-
-    val balance: Double  // Публичный доступ только для чтения
-        get() = _balance
-
+    
+    val balance: Double get() = _balance
+    
     fun deposit(amount: Double) {
-        require(amount > 0) { "Сумма депозита должна быть положительной" }
+        require(amount > 0) { "Amount must be positive" }
         _balance += amount
     }
-
+    
     fun withdraw(amount: Double): Boolean {
-        if (amount <= 0) return false
-        if (amount > _balance) return false
-
+        if (amount <= 0 || amount > _balance) return false
         _balance -= amount
         return true
     }
 }
-
-// Использование:
-val account = BankAccount(1000.0)
-// account._balance = -100.0  // ❌ Ошибка компиляции
-account.deposit(500.0)  // ✅ Контролируемый доступ
-println(account.balance)  // ✅ Только чтение
 ```
 
-**Преимущества инкапсуляции:**
-```
-✓ Контроль доступа к данным
-✓ Валидация изменений состояния
-✓ Скрытие деталей реализации
-✓ Легко изменять внутреннюю реализацию без влияния на пользователей
-✓ Поддержка инвариантов
-```
+**2. Inheritance:**
 
-**Пример для Android:**
-```kotlin
-// ViewModel с инкапсуляцией
-class UserViewModel : ViewModel() {
-    // Приватное изменяемое состояние
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-
-    // Публичное неизменяемое состояние
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    // Приватный изменяемый список
-    private val _users = MutableLiveData<List<User>>()
-
-    // Публичный неизменяемый список
-    val users: LiveData<List<User>> = _users
-
-    // Контролируемая модификация
-    fun loadUsers() {
-        viewModelScope.launch {
-            _uiState.value = UiState.Loading
-            try {
-                val users = repository.getUsers()
-                _users.value = users
-                _uiState.value = UiState.Success
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error(e.message)
-            }
-        }
-    }
-}
-```
-
----
-
-### 2. НАСЛЕДОВАНИЕ
-
-**Определение: Создание нового класса из существующего класса**
+*Theory:* Inheritance - create new class from existing class. IS-A relationship, code reuse. Types: single, multi-level, hierarchical. Benefits: reuse, polymorphism base, organized hierarchy. Pitfalls: deep hierarchies, tight coupling, rigidity.
 
 ```kotlin
-// Базовый класс
+// ✅ Inheritance with Animal hierarchy
 open class Animal(val name: String) {
     open fun makeSound() {
-        println("$name издает звук")
-    }
-
-    fun sleep() {
-        println("$name спит")
+        println("$name makes a sound")
     }
 }
 
-// Производные классы
 class Dog(name: String) : Animal(name) {
     override fun makeSound() {
-        println("$name лает: Гав!")
+        println("$name barks: Woof!")
     }
-
+    
     fun fetch() {
-        println("$name приносит мяч")
+        println("$name fetches the ball")
     }
 }
 
 class Cat(name: String) : Animal(name) {
     override fun makeSound() {
-        println("$name мяукает: Мяу!")
+        println("$name meows: Meow!")
     }
-
+    
     fun climb() {
-        println("$name залезает на дерево")
+        println("$name climbs the tree")
     }
 }
 
-// Использование:
-val dog = Dog("Рекс")
-dog.makeSound()  // Рекс лает: Гав!
-dog.sleep()      // Рекс спит (унаследовано)
-dog.fetch()      // Рекс приносит мяч (специфично для Dog)
+// ✅ Polymorphism in action
+fun processAnimal(animal: Animal) {
+    animal.makeSound()  // Calls override method
+}
 
-val cat = Cat("Вискас")
-cat.makeSound()  // Вискас мяукает: Мяу!
-cat.sleep()      // Вискас спит (унаследовано)
-cat.climb()      // Вискас залезает на дерево (специфично для Cat)
+val dog = Dog("Rex")
+val cat = Cat("Whiskers")
+processAnimal(dog)  // Dog barks
+processAnimal(cat)  // Cat meows
 ```
 
-**Типы наследования:**
+**3. Polymorphism:**
 
-**1. Одиночное наследование:**
-```kotlin
-open class Vehicle
-class Car : Vehicle()  // Car наследует от Vehicle
-```
-
-**2. Многоуровневое наследование:**
-```kotlin
-open class Vehicle
-open class Car : Vehicle()
-class SportsCar : Car()  // SportsCar → Car → Vehicle
-```
-
-**3. Иерархическое наследование:**
-```kotlin
-open class Vehicle
-class Car : Vehicle()
-class Bike : Vehicle()
-class Truck : Vehicle()  // Множество классов наследуют от Vehicle
-```
-
----
-
-### 3. ПОЛИМОРФИЗМ
-
-**Определение: Одинаковый интерфейс, разные реализации**
-
-**A. Переопределение методов (Полиморфизм времени выполнения)**
+*Theory:* Polymorphism - many forms. Same interface, different implementations. Types: runtime (method overriding), compile-time (method overloading). Allows treating different types uniformly, increases flexibility, simplifies code. Key for polymorphism: late binding, virtual methods, interface/abstract class contracts.
 
 ```kotlin
+// ✅ Polymorphism with Shape
 open class Shape {
-    open fun area(): Double {
-        return 0.0
-    }
-
-    open fun draw() {
-        println("Рисование фигуры")
-    }
+    open fun area(): Double = 0.0
+    open fun draw() = println("Drawing shape")
 }
 
 class Circle(val radius: Double) : Shape() {
-    override fun area(): Double {
-        return Math.PI * radius * radius
-    }
-
-    override fun draw() {
-        println("Рисование круга с радиусом $radius")
-    }
+    override fun area(): Double = Math.PI * radius * radius
+    override fun draw() = println("Drawing circle with radius $radius")
 }
 
 class Rectangle(val width: Double, val height: Double) : Shape() {
-    override fun area(): Double {
-        return width * height
-    }
-
-    override fun draw() {
-        println("Рисование прямоугольника ${width}x${height}")
-    }
+    override fun area(): Double = width * height
+    override fun draw() = println("Drawing rectangle ${width}x${height}")
 }
 
-// Полиморфизм в действии:
-fun printShapeInfo(shape: Shape) {  // Принимает любую Shape
+// ✅ Uniform interface
+fun processShape(shape: Shape) {
     shape.draw()
-    println("Площадь: ${shape.area()}")
+    println("Area: ${shape.area()}")
 }
 
-// Использование:
-val shapes: List<Shape> = listOf(
-    Circle(5.0),
-    Rectangle(4.0, 6.0),
-    Circle(3.0)
-)
-
-shapes.forEach { shape ->
-    printShapeInfo(shape)  // Разное поведение для каждого типа
-}
+val shapes = listOf(Circle(5.0), Rectangle(4.0, 6.0))
+shapes.forEach { processShape(it) }
 ```
 
-**B. Перегрузка методов (Полиморфизм времени компиляции)**
+**4. Abstraction:**
+
+*Theory:* Abstraction - hide complexity, show only essential features. Interfaces (CAN-DO), abstract classes (IS-A). Allows working with concepts without knowing implementation. Simplifies complex systems, reduces coupling, improves maintainability.
 
 ```kotlin
-class Calculator {
-    // Одинаковое имя, разные параметры
-    fun add(a: Int, b: Int): Int {
-        return a + b
-    }
-
-    fun add(a: Double, b: Double): Double {
-        return a + b
-    }
-
-    fun add(a: Int, b: Int, c: Int): Int {
-        return a + b + c
-    }
-
-    fun add(numbers: List<Int>): Int {
-        return numbers.sum()
-    }
-}
-
-// Использование:
-val calc = Calculator()
-println(calc.add(1, 2))              // Вызывает Int версию → 3
-println(calc.add(1.5, 2.5))          // Вызывает Double версию → 4.0
-println(calc.add(1, 2, 3))           // Вызывает версию с 3 параметрами → 6
-println(calc.add(listOf(1, 2, 3, 4))) // Вызывает List версию → 10
-```
-
----
-
-### 4. АБСТРАКЦИЯ
-
-**Определение: Скрытие сложности, показ только существенных характеристик**
-
-**A. Абстрактные классы**
-
-```kotlin
+// ✅ Abstract class for IS-A
 abstract class Employee(val name: String, val id: String) {
-    // Абстрактный метод (должен быть реализован)
     abstract fun calculateSalary(): Double
-
-    // Абстрактное свойство
     abstract val department: String
-
-    // Конкретный метод (можно переопределить)
+    
     open fun clockIn() {
-        println("$name отметился в ${System.currentTimeMillis()}")
+        println("$name clocked in")
     }
-
-    // Конкретный метод (нельзя переопределить - не open)
-    fun getId(): String = id
 }
 
 class FullTimeEmployee(
-    name: String,
-    id: String,
-    private val annualSalary: Double
+    name: String, id: String, private val annualSalary: Double
 ) : Employee(name, id) {
-    override val department: String = "Инженерный"
-
-    override fun calculateSalary(): Double {
-        return annualSalary / 12  // Месячная зарплата
-    }
+    override val department: String = "Engineering"
+    override fun calculateSalary(): Double = annualSalary / 12
 }
 
 class Contractor(
-    name: String,
-    id: String,
-    private val hourlyRate: Double,
-    private val hoursWorked: Double
+    name: String, id: String, 
+    private val hourlyRate: Double, private val hoursWorked: Double
 ) : Employee(name, id) {
-    override val department: String = "Контракт"
-
-    override fun calculateSalary(): Double {
-        return hourlyRate * hoursWorked
-    }
-
-    override fun clockIn() {
-        super.clockIn()
-        println("$name - подрядчик")
-    }
+    override val department: String = "Contract"
+    override fun calculateSalary(): Double = hourlyRate * hoursWorked
 }
 ```
 
-**B. Интерфейсы**
+**Interfaces:**
+
+*Theory:* Interfaces - multiple inheritance, CAN-DO relationships. No state (abstract properties only), all methods abstract unless default implementation. Use for capabilities, contracts, decoupling.
 
 ```kotlin
+// ✅ Interface for CAN-DO
 interface Drawable {
     fun draw()
-    fun erase() {  // Реализация по умолчанию
-        println("Стирание...")
+    fun erase() {
+        println("Erasing...")
     }
 }
 
 interface Clickable {
     fun onClick()
     fun onDoubleClick() {
-        println("Двойной клик")  // Реализация по умолчанию
+        println("Double clicked")
     }
 }
 
-// Класс может реализовывать несколько интерфейсов
 class Button : Drawable, Clickable {
-    override fun draw() {
-        println("Рисование кнопки")
-    }
-
-    override fun onClick() {
-        println("Кнопка нажата")
-    }
-
-    // Использует реализацию по умолчанию для erase() и onDoubleClick()
+    override fun draw() = println("Drawing button")
+    override fun onClick() = println("Button clicked")
 }
+
+// ✅ Usage
+val button = Button()
+button.draw()
+button.onClick()
+button.erase()
 ```
 
-**Интерфейс vs Абстрактный класс:**
-```
-Интерфейс:
-✓ Множественное наследование
-✓ Нет состояния (свойства должны быть абстрактными)
-✓ Все методы абстрактные (если нет реализации по умолчанию)
-✓ Используется для отношений "CAN-DO" (МОЖЕТ ДЕЛАТЬ)
+**Composition vs Inheritance:**
 
-Абстрактный класс:
-✓ Только одиночное наследование
-✓ Может иметь состояние (свойства со значениями)
-✓ Может содержать абстрактные и конкретные методы
-✓ Используется для отношений "IS-A" (ЯВЛЯЕТСЯ) с общим кодом
-```
-
----
-
-### КОМПОЗИЦИЯ ВМЕСТО НАСЛЕДОВАНИЯ
-
-**Предпочитайте композицию наследованию для большей гибкости**
+*Theory:* Composition - HAS-A relationship, more flexible than inheritance. Prefer composition for: behavior changes, flexibility, avoiding tight coupling. Inheritance for: IS-A relationships, code reuse, shared behavior.
 
 ```kotlin
-// ❌ Подход с наследованием (жесткий)
+// ❌ Inheritance (rigid)
 open class Vehicle {
-    open fun start() { println("Запуск транспорта") }
+    open fun start() = println("Starting vehicle")
 }
 
 class Car : Vehicle() {
-    override fun start() {
-        println("Запуск автомобильного двигателя")
-    }
-
-    fun drive() { println("Езда на автомобиле") }
+    override fun start() = println("Starting car engine")
 }
 
-class ElectricCar : Car() {  // Проблема: ElectricCar вынужден наследовать Car
-    override fun start() {
-        println("Запуск электромотора")  // Отличается от car
-    }
-
-    // Что если ElectricCar нужно другое поведение?
-    // Иерархия наследования становится сложной
+class ElectricCar : Car() {  // Forced inheritance
+    override fun start() = println("Starting electric motor")
 }
 
-// ✅ Подход с композицией (гибкий)
+// ✅ Composition (flexible)
 interface Engine {
     fun start()
 }
 
 class GasEngine : Engine {
-    override fun start() {
-        println("Запуск бензинового двигателя")
-    }
+    override fun start() = println("Starting gas engine")
 }
 
 class ElectricMotor : Engine {
-    override fun start() {
-        println("Запуск электромотора")
-    }
+    override fun start() = println("Starting electric motor")
 }
 
-class FlexibleCar(private val engine: Engine) {  // Композиция
-    fun start() {
-        engine.start()
-    }
-
-    fun drive() {
-        println("Езда на автомобиле")
-    }
+class FlexibleCar(private val engine: Engine) {  // Composition
+    fun start() = engine.start()
 }
 
-// Использование:
+// ✅ Usage
 val gasCar = FlexibleCar(GasEngine())
-gasCar.start()  // Запуск бензинового двигателя
-
 val electricCar = FlexibleCar(ElectricMotor())
-electricCar.start()  // Запуск электромотора
-
-// Легко добавить новые типы двигателей без изменения Car
-class HybridEngine : Engine {
-    override fun start() {
-        println("Запуск гибридного двигателя")
-    }
-}
-
-val hybridCar = FlexibleCar(HybridEngine())
+gasCar.start()      // Gas engine
+electricCar.start()  // Electric motor
 ```
 
----
+**Common Pitfalls:**
 
-### РАСПРОСТРАНЕННЫЕ ОШИБКИ ООП
+**1. God Objects:**
+*Theory:* God Object - class with too many responsibilities. Violates Single Responsibility Principle. Hard to maintain, test, reuse. Solution: split into focused classes, extract services, use composition.
 
-**1. Божественные объекты (God Objects)**
 ```kotlin
-// ❌ Плохо: Класс делает все
+// ❌ God Object
 class UserManager {
     fun createUser() { }
     fun deleteUser() { }
@@ -1325,40 +535,28 @@ class UserManager {
     fun authenticateUser() { }
     fun sendEmail() { }
     fun logActivity() { }
-    fun generateReport() { }
-    fun processPayment() { }
-    // ... еще 50 методов
+    // ... 50 more methods
 }
 
-// ✅ Хорошо: Единственная ответственность
-class UserService {
-    fun createUser() { }
-    fun deleteUser() { }
-}
-
-class UserValidator {
-    fun validate(user: User): Boolean { }
-}
-
-class AuthenticationService {
-    fun authenticate(credentials: Credentials): Boolean { }
-}
-
-class EmailService {
-    fun sendEmail(to: String, subject: String, body: String) { }
-}
+// ✅ Single Responsibility
+class UserService { fun createUser() { } fun deleteUser() { } }
+class UserValidator { fun validate(user: User): Boolean { } }
+class AuthService { fun authenticate(creds: Credentials): Boolean { } }
+class EmailService { fun sendEmail(to: String, subject: String, body: String) { } }
 ```
 
-**2. Глубокие иерархии наследования**
+**2. Deep Inheritance:**
+*Theory:* Deep hierarchies - hard to understand, maintain, test. Multiple levels inheritance create coupling, fragile base class problem. Solution: shallow hierarchies, prefer composition, use interfaces.
+
 ```kotlin
-// ❌ Плохо: Слишком глубоко
+// ❌ Deep inheritance
 open class A
 open class B : A()
 open class C : B()
 open class D : C()
-open class E : D()  // Слишком глубоко, сложно понимать
+open class E : D()  // Too deep
 
-// ✅ Хорошо: Мелко, используйте композицию
+// ✅ Shallow + interfaces
 interface Behavior1
 interface Behavior2
 interface Behavior3
@@ -1366,60 +564,56 @@ interface Behavior3
 class MyClass : Behavior1, Behavior2, Behavior3
 ```
 
-**3. Протекающие абстракции**
+**3. Leaky Abstractions:**
+*Theory:* Leaky abstraction - exposes implementation details. Interface references specific implementation concepts. Solution: pure abstractions, hide internals, dependency inversion.
+
 ```kotlin
-// ❌ Плохо: Абстракция раскрывает детали реализации
+// ❌ Leaky abstraction
 interface DataStore {
     fun save(data: String)
-    fun getSQLConnection(): Connection  // ❌ Раскрывает SQL реализацию!
+    fun getSQLConnection(): Connection  // Exposes SQL!
 }
 
-// ✅ Хорошо: Чистая абстракция
+// ✅ Pure abstraction
 interface DataStore {
     fun save(data: String)
     fun load(): String
 }
 ```
 
+**Key Takeaways:**
+1. Encapsulation - bundle data + methods, control access
+2. Inheritance - IS-A relationship, code reuse
+3. Polymorphism - same interface, different implementations
+4. Abstraction - hide complexity, show essentials
+5. Composition > Inheritance for flexibility
+6. Interfaces for CAN-DO, Abstract classes for IS-A
+7. Single Responsibility - each class does one thing
+8. Avoid deep inheritance - shallow hierarchies
+9. Pure abstractions - no leaky details
+10. Program to interfaces - depend on abstractions
+
 ---
-
-### Ключевые выводы
-
-1. **Инкапсуляция** - связывание данных + методов, контроль доступа
-2. **Наследование** - отношение IS-A, переиспользование кода
-3. **Полиморфизм** - одинаковый интерфейс, разные реализации
-4. **Абстракция** - скрытие сложности, показ сущностей
-5. **Композиция > Наследование** - более гибкая
-6. **Интерфейсы** для множественного наследования, отношения CAN-DO
-7. **Абстрактные классы** для IS-A с общим кодом
-8. **Избегайте глубокого наследования** - предпочитайте плоские иерархии
-9. **Единственная ответственность** - каждый класс делает одно
-10. **Программируйте к интерфейсам** - зависьте от абстракций
 
 ## Follow-ups
 
-1. What is the Liskov Substitution Principle?
-2. How does Kotlin's delegation work (by keyword)?
-3. What are mixins and how do they relate to OOP?
-4. What is the difference between association, aggregation, and composition?
-5. How do you handle the diamond problem in multiple inheritance?
-6. What are the benefits of immutability in OOP?
-7. How does OOP relate to functional programming?
-8. What are data classes and when to use them?
-9. How do you design for testability in OOP?
-10. What is dependency inversion and how does it improve OOP design?
-
----
+- What is the Liskov Substitution Principle?
+- How does Kotlin's delegation work (by keyword)?
+- What is the difference between association, aggregation, and composition?
+- How do you design for testability in OOP?
+- What is dependency inversion?
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-xml-acronym--programming-languages--easy]] - Computer Science
-- [[q-data-structures-overview--algorithms--easy]] - Data Structures
+- Basic programming concepts
+- Understanding of classes and objects
 
-### Related (Medium)
-- [[q-clean-code-principles--software-engineering--medium]] - Computer Science
-- [[q-default-vs-io-dispatcher--programming-languages--medium]] - Computer Science
+### Related (Same Level)
+- [[q-solid-principles--software-design--medium]] - SOLID principles
+- [[q-clean-code-principles--software-engineering--medium]] - Clean code
 
 ### Advanced (Harder)
-- [[q-os-fundamentals-concepts--computer-science--hard]] - Computer Science
+- [[q-design-patterns-fundamentals--software-engineering--hard]] - Design patterns
+- Advanced OOP patterns
+- Functional vs OOP programming
