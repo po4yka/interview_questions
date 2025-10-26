@@ -41,15 +41,15 @@ sources: [https://kotlinlang.org/docs/inheritance.html]
 class Example {
     // ✅ 1. Свойство инициализируется первым
     private val prop1 = "init first"
-    
+
     // ✅ 2. Блок init выполняется после prop1
     init {
         println(prop1)
     }
-    
+
     // ✅ 3. Следующее свойство инициализируется после init
     private val prop2 = "init second"
-    
+
     // ✅ 4. Второй init выполняется после prop2
     init {
         println(prop2)
@@ -61,11 +61,11 @@ class Example {
 ```kotlin
 open class Parent {
     private val parentProp = "Parent".also { println("Parent property initialized") }
-    
+
     init {
         println("Parent init block")
     }
-    
+
     constructor() {
         println("Parent constructor")
     }
@@ -73,11 +73,11 @@ open class Parent {
 
 class Child : Parent() {
     private val childProp = "Child".also { println("Child property initialized") }
-    
+
     init {
         println("Child init block")
     }
-    
+
     constructor() : super() {
         println("Child constructor")
     }
@@ -98,7 +98,7 @@ class User {
     // ❌ ПЛОХО: обращение к size до инициализации
     private val value: String = "Initialized"
     private val size = value.length // Может обращаться
-    
+
     init {
         println("Size: $size") // ✅ ХОРОШО: value уже инициализирован
     }
@@ -119,7 +119,7 @@ class Heavy {
         println("Computing expensive property")
         "Computed value"
     }
-    
+
     fun useExpensive() {
         println(expensive) // Вычисляется только здесь
     }
@@ -144,15 +144,15 @@ Class initialization order in Kotlin is strictly defined. Properties are initial
 class Example {
     // ✅ 1. Property initialized first
     private val prop1 = "init first"
-    
+
     // ✅ 2. Init block executes after prop1
     init {
         println(prop1)
     }
-    
+
     // ✅ 3. Next property initialized after init
     private val prop2 = "init second"
-    
+
     // ✅ 4. Second init executes after prop2
     init {
         println(prop2)
@@ -164,11 +164,11 @@ class Example {
 ```kotlin
 open class Parent {
     private val parentProp = "Parent".also { println("Parent property initialized") }
-    
+
     init {
         println("Parent init block")
     }
-    
+
     constructor() {
         println("Parent constructor")
     }
@@ -176,11 +176,11 @@ open class Parent {
 
 class Child : Parent() {
     private val childProp = "Child".also { println("Child property initialized") }
-    
+
     init {
         println("Child init block")
     }
-    
+
     constructor() : super() {
         println("Child constructor")
     }
@@ -201,7 +201,7 @@ class User {
     // ❌ BAD: accessing size before initialization
     private val value: String = "Initialized"
     private val size = value.length // Can access
-    
+
     init {
         println("Size: $size") // ✅ GOOD: value already initialized
     }
@@ -222,7 +222,7 @@ class Heavy {
         println("Computing expensive property")
         "Computed value"
     }
-    
+
     fun useExpensive() {
         println(expensive) // Computed only here
     }
