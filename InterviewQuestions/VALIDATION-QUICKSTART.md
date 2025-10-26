@@ -3,27 +3,27 @@
 ## Setup (One Time)
 
 ```bash
-# Activate virtual environment
-source .venv/bin/activate
+# Sync uv environment (runs against utils/pyproject.toml)
+uv sync --project utils
 ```
 
 ## Common Commands
 
 ```bash
 # Single file
-python validate_note.py 40-Android/q-compose-state--android--medium.md
+uv run --project utils python -m utils.validate_note 40-Android/q-compose-state--android--medium.md
 
 # Directory
-python validate_note.py 40-Android/
+uv run --project utils python -m utils.validate_note 40-Android/
 
 # Entire vault
-python validate_note.py --all
+uv run --project utils python -m utils.validate_note --all
 
 # With report
-python validate_note.py --all --report validation-report.md
+uv run --project utils python -m utils.validate_note --all --report validation-report.md
 
 # Quiet mode (summary only)
-python validate_note.py 70-Kotlin/ --quiet
+uv run --project utils python -m utils.validate_note 70-Kotlin/ --quiet
 ```
 
 ## What Gets Validated

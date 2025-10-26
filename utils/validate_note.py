@@ -7,7 +7,12 @@ import argparse
 import sys
 from collections import Counter
 from pathlib import Path
-from typing import Iterable, List, Optional, Tuple
+from typing import Iterable, List, Tuple
+
+# Ensure repository root is importable even when executed as a script from utils/
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from validators.android_validator import AndroidValidator
 from validators.content_validator import ContentValidator
@@ -49,19 +54,19 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    root = Path(__file__).parent.resolve()
-    vault_dir = root / "InterviewQuestions"
+    repo_root = ROOT
+    vault_dir = repo_root / "InterviewQuestions"
 
     if not vault_dir.exists():
         print("InterviewQuestions directory not found. Run from repository root.", file=sys.stderr)
         return 1
 
-    targets = determine_targets(args, root, vault_dir)
+    targets = determine_targets(args, repo_root, vault_dir)
     if not targets:
         print("No Markdown notes found for validation.", file=sys.stderr)
         return 1
 
-    taxonomy = TaxonomyLoader(root).load()
+    taxonomy = TaxonomyLoader(repo_root).load()
     note_index = build_note_index(vault_dir)
 
     results: List[FileResult] = []
@@ -96,7 +101,7 @@ def main() -> int:
             passed.extend(summary.passed)
         results.append(
             FileResult(
-                path=str(file_path.relative_to(root)),
+                path=str(file_path.relative_to(repo_root)),
                 issues=issues,
                 passed=passed,
             )
@@ -116,7 +121,7 @@ def main() -> int:
     return exit_code
 
 
-def determine_targets(args: argparse.Namespace, root: Path, vault_dir: Path) -> List[Path]:
+def determine_targets(args: argparse.Namespace, repo_root: Path, vault_dir: Path) -> List[Path]:
     if args.all:
         return sorted(vault_dir.rglob("*.md"))
 
@@ -127,7 +132,7 @@ def determine_targets(args: argparse.Namespace, root: Path, vault_dir: Path) -> 
     explicit = Path(args.path)
     candidates = [
         explicit,
-        root / args.path,
+        repo_root / args.path,
         vault_dir / args.path,
     ]
     for candidate in candidates:

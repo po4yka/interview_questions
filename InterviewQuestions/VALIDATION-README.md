@@ -7,30 +7,30 @@ Automated validation for Obsidian Q&A notes in the Interview Questions vault.
 ### Setup (First Time Only)
 
 ```bash
-# Activate virtual environment
-source .venv/bin/activate
+# Sync uv environment (targets utils/pyproject.toml)
+uv sync --project utils
 
 # Verify installation
-python validate_note.py --help
+uv run --project utils python -m utils.validate_note --help
 ```
 
 ### Basic Usage
 
 ```bash
 # Validate a single file
-python validate_note.py 40-Android/q-compose-state--android--medium.md
+uv run --project utils python -m utils.validate_note 40-Android/q-compose-state--android--medium.md
 
 # Validate all files in a directory
-python validate_note.py 40-Android/
+uv run --project utils python -m utils.validate_note 40-Android/
 
 # Validate entire vault
-python validate_note.py --all
+uv run --project utils python -m utils.validate_note --all
 
 # Generate markdown report
-python validate_note.py --all --report validation-report.md
+uv run --project utils python -m utils.validate_note --all --report validation-report.md
 
 # Quiet mode (summary only)
-python validate_note.py 70-Kotlin/ --quiet
+uv run --project utils python -m utils.validate_note 70-Kotlin/ --quiet
 ```
 
 ## What Gets Validated
@@ -126,7 +126,7 @@ PASSED CHECKS
 Generate detailed reports for batch validation:
 
 ```bash
-python validate_note.py --all --report validation-report.md
+uv run --project utils python -m utils.validate_note --all --report validation-report.md
 ```
 
 **Report includes:**
@@ -145,8 +145,7 @@ Validate before committing changes:
 ```bash
 # In .git/hooks/pre-commit
 #!/bin/bash
-source .venv/bin/activate
-python validate_note.py $(git diff --cached --name-only | grep 'q-.*\.md$')
+uv run --project utils python -m utils.validate_note $(git diff --cached --name-only | grep 'q-.*\.md$')
 ```
 
 ### Continuous Integration
@@ -157,14 +156,14 @@ Add to CI pipeline:
 # .github/workflows/validate.yml
 - name: Validate notes
   run: |
-    source .venv/bin/activate
-    python validate_note.py --all --report validation-report.md
+    uv sync --project utils --frozen
+    uv run --project utils python -m utils.validate_note --all --report validation-report.md
 ```
 
 ### Manual Review Workflow
 
 1. **Create/Edit note** (human or AI)
-2. **Run validation**: `python validate_note.py <file>`
+2. **Run validation**: `uv run --project utils python -m utils.validate_note <file>`
 3. **Fix CRITICAL issues** (must fix)
 4. **Review WARNINGS** (should fix)
 5. **Check PASSED** (verify completeness)
@@ -173,18 +172,19 @@ Add to CI pipeline:
 ## Architecture
 
 ```
-validate_note.py              # Main script
-├── validators/
-│   ├── yaml_validator.py    # YAML frontmatter validation
-│   ├── content_validator.py # Content structure validation
-│   ├── link_validator.py    # Wikilink resolution
-│   ├── format_validator.py  # Formatting rules
-│   └── android_validator.py # Android-specific rules
-├── utils/
-│   ├── taxonomy_loader.py   # Load TAXONOMY.md
-│   └── report_generator.py  # Generate reports
-└── config/
-    └── validation_rules.yaml # (Future: configurable rules)
+utils/
+├── validate_note.py         # Main script
+├── pyproject.toml           # uv project metadata
+├── report_generator.py      # Generate reports
+├── taxonomy_loader.py       # Load TAXONOMY.md
+└── yaml_loader.py           # Fallback YAML parser
+validators/
+├── android_validator.py     # Android-specific rules
+├── base.py                  # Shared classes
+├── content_validator.py     # Content structure validation
+├── format_validator.py      # Formatting rules
+├── link_validator.py        # Wikilink resolution
+└── yaml_validator.py        # YAML frontmatter validation
 ```
 
 ## Customization
@@ -206,7 +206,7 @@ class MyValidator(BaseValidator):
         return self.issues
 ```
 
-Register in `validate_note.py`:
+Register in `utils/validate_note.py`:
 
 ```python
 validators = [
@@ -263,7 +263,7 @@ If validation incorrectly flags an issue:
 Use in scripts:
 
 ```bash
-if python validate_note.py 40-Android/; then
+if uv run --project utils python -m utils.validate_note 40-Android/; then
     echo "Validation passed"
 else
     echo "Critical issues found"

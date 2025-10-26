@@ -8,9 +8,9 @@
 ### 1. Python Syntax Validation
 
 ```bash
-python -m py_compile validate_note.py        # PASSED
-python -m py_compile validators/*.py         # PASSED
-python -m py_compile utils/*.py              # PASSED
+uv run --project utils python -m py_compile utils/validate_note.py        # PASSED
+uv run --project utils python -m py_compile validators/*.py              # PASSED
+uv run --project utils python -m py_compile utils/*.py                   # PASSED
 ```
 
 **Result**: All Python files compile without syntax errors.
@@ -33,19 +33,19 @@ from utils import TaxonomyLoader, ReportGenerator
 
 **Test 3.1: Help Output**
 ```bash
-python validate_note.py --help
+uv run --project utils python -m utils.validate_note --help
 ```
 **Result**: PASSED - Help text displays correctly with examples.
 
 **Test 3.2: Missing Arguments**
 ```bash
-python validate_note.py
+uv run --project utils python -m utils.validate_note
 ```
 **Result**: PASSED - Clear error message: "Either provide a path or use --all"
 
 **Test 3.3: Non-existent File**
 ```bash
-python validate_note.py nonexistent-file.md
+uv run --project utils python -m utils.validate_note nonexistent-file.md
 ```
 **Result**: PASSED - Clear error: "Path not found"
 
@@ -55,7 +55,7 @@ python validate_note.py nonexistent-file.md
 
 **Test 4.1: Kotlin File (Warnings)**
 ```bash
-python validate_note.py 70-Kotlin/q-flow-basics--kotlin--easy.md
+uv run --project utils python -m utils.validate_note 70-Kotlin/q-flow-basics--kotlin--easy.md
 ```
 **Result**: PASSED
 - Overall Status: WARNINGS (4 total issues)
@@ -65,7 +65,7 @@ python validate_note.py 70-Kotlin/q-flow-basics--kotlin--easy.md
 
 **Test 4.2: Android File (Critical Issues)**
 ```bash
-python validate_note.py 40-Android/q-jetpack-compose-basics--android--medium.md
+uv run --project utils python -m utils.validate_note 40-Android/q-jetpack-compose-basics--android--medium.md
 ```
 **Result**: PASSED
 - Overall Status: CRITICAL ISSUES (7 total issues)
@@ -79,7 +79,7 @@ python validate_note.py 40-Android/q-jetpack-compose-basics--android--medium.md
 
 **Test 5.1: System Design Directory (All Pass)**
 ```bash
-python validate_note.py 30-System-Design/ --quiet
+uv run --project utils python -m utils.validate_note 30-System-Design/ --quiet
 ```
 **Result**: PASSED
 - Validated 10 files: 10 passed, 0 with issues
@@ -87,7 +87,7 @@ python validate_note.py 30-System-Design/ --quiet
 
 **Test 5.2: Android Directory (Many Issues)**
 ```bash
-python validate_note.py 40-Android/ --quiet
+uv run --project utils python -m utils.validate_note 40-Android/ --quiet
 ```
 **Result**: PASSED
 - Validated 501 files: 26 passed, 475 with issues
@@ -100,7 +100,7 @@ python validate_note.py 40-Android/ --quiet
 
 **Test 6.1: Markdown Report**
 ```bash
-python validate_note.py 30-System-Design/ --report test-validation-report.md --quiet
+uv run --project utils python -m utils.validate_note 30-System-Design/ --report test-validation-report.md --quiet
 ```
 **Result**: PASSED
 - Report file created successfully
@@ -113,14 +113,14 @@ python validate_note.py 30-System-Design/ --report test-validation-report.md --q
 
 **Test 7.1: Success (No Critical Issues)**
 ```bash
-python validate_note.py 30-System-Design/ --quiet
+uv run --project utils python -m utils.validate_note 30-System-Design/ --quiet
 echo $?
 ```
 **Result**: PASSED - Exit code: 0
 
 **Test 7.2: Failure (Critical Issues)**
 ```bash
-python validate_note.py 40-Android/q-jetpack-compose-basics--android--medium.md --quiet
+uv run --project utils python -m utils.validate_note 40-Android/q-jetpack-compose-basics--android--medium.md --quiet
 echo $?
 ```
 **Result**: PASSED - Exit code: 1
@@ -167,19 +167,19 @@ echo $?
 
 **Test 9.1: Relative Paths**
 ```bash
-python validate_note.py 70-Kotlin/q-flow-basics--kotlin--easy.md
+uv run --project utils python -m utils.validate_note 70-Kotlin/q-flow-basics--kotlin--easy.md
 ```
 **Result**: PASSED - Correctly handles relative paths from vault root
 
 **Test 9.2: Absolute Paths**
 ```bash
-python validate_note.py /Users/.../70-Kotlin/q-flow-basics--kotlin--easy.md
+uv run --project utils python -m utils.validate_note /Users/.../70-Kotlin/q-flow-basics--kotlin--easy.md
 ```
 **Result**: PASSED - Correctly handles absolute paths
 
 **Test 9.3: Empty Directory**
 ```bash
-python validate_note.py empty-dir/
+uv run --project utils python -m utils.validate_note empty-dir/
 ```
 **Result**: PASSED - "No Q&A notes found to validate."
 
@@ -205,7 +205,7 @@ python validate_note.py empty-dir/
 
 **Test 11.1: No Emoji in Scripts**
 ```bash
-grep -r "[\U0001F600-\U0001F64F]" validators/ utils/ validate_note.py
+grep -r "[\U0001F600-\U0001F64F]" validators/ utils/
 ```
 **Result**: PASSED - No emoji found in Python code
 
@@ -270,10 +270,6 @@ grep -r "[\U0001F600-\U0001F64F]" validators/ utils/ validate_note.py
 **Package Manager**: uv 0.8.17
 **Dependencies**:
 - pyyaml==6.0.3
-- rich==14.2.0
-- markdown-it-py==4.0.0 (via rich)
-- mdurl==0.1.2 (via rich)
-- pygments==2.19.2 (via rich)
 
 **Status**: All dependencies installed and working correctly.
 
@@ -282,7 +278,6 @@ grep -r "[\U0001F600-\U0001F64F]" validators/ utils/ validate_note.py
 ## File Structure Verification
 
 ```
-validate_note.py                   ✓ Created, tested
 validators/
   __init__.py                      ✓ Created, tested
   base.py                          ✓ Created, tested
@@ -292,11 +287,13 @@ validators/
   format_validator.py              ✓ Created, tested (12+ checks)
   android_validator.py             ✓ Created, tested (5+ checks)
 utils/
+  validate_note.py                 ✓ Created, tested
   __init__.py                      ✓ Created, tested
   taxonomy_loader.py               ✓ Created, tested
   report_generator.py              ✓ Created, tested
-pyproject.toml                     ✓ Created
-.venv/                             ✓ Created, activated
+  yaml_loader.py                   ✓ Created, tested
+  pyproject.toml                   ✓ Created
+.venv/                             ✓ Created, activated (via uv)
 .gitignore                         ✓ Created
 VALIDATION-README.md               ✓ Created, updated (no emoji)
 VALIDATION-QUICKSTART.md           ✓ Created, updated (no emoji)

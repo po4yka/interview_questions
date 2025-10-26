@@ -7,17 +7,17 @@ Review the provided note for correctness, completeness, and compliance.
 **REQUIRED**: Before manual review, run automated validation:
 
 ```bash
-# Activate virtual environment
-source .venv/bin/activate
+# Sync environment (once)
+uv sync --project utils
 
 # Validate single file
-python validate_note.py <path-to-file>
+uv run --project utils python -m utils.validate_note <path-to-file>
 
 # Validate directory
-python validate_note.py <directory>/
+uv run --project utils python -m utils.validate_note <directory>/
 
 # Validate entire vault
-python validate_note.py --all --report validation-report.md
+uv run --project utils python -m utils.validate_note --all --report validation-report.md
 ```
 
 **Automation Coverage**: ~70% of checks are fully automated.
