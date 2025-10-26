@@ -1,153 +1,282 @@
 ---
 id: "20251012-150013"
-title: "object, companion object, and singleton pattern in Kotlin"
+title: "Object, Companion Object, and Singleton Pattern / object, companion object и паттерн Singleton"
+aliases: ["Object Singleton Companion", "Объект Singleton Companion"]
 topic: kotlin
+subtopics: [object-keyword, singleton-pattern, companion-object]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: "2025-10-12"
-tags: ["kotlin", "classes", "difficulty/medium"]
-description: "Comprehensive guide to object, companion object, and singleton pattern in Kotlin covering concepts, patterns, best practices, and real-world examples"
 moc: moc-kotlin
-related: [q-sealed-class-sealed-interface--kotlin--medium, q-channels-vs-flow--kotlin--medium, q-inheritance-open-final--kotlin--medium]
-subtopics: ["classes", "kotlin-features", "oop"]
+related: [q-inheritance-open-final--kotlin--medium, q-class-initialization-order--kotlin--medium, q-inner-nested-classes--kotlin--medium]
+created: "2025-10-12"
+updated: 2025-01-25
+tags: [kotlin, object-keyword, singleton-pattern, companion-object, kotlin-features, difficulty/medium]
+sources: [https://kotlinlang.org/docs/object-declarations.html]
 ---
-# object, companion object, and singleton pattern in Kotlin
 
-## English
+# Вопрос (RU)
+> Как работают object, companion object и паттерн singleton в Kotlin?
 
-### Problem Statement
-
-[Comprehensive 2-3 paragraph explanation introducing the topic with real-world context and why understanding this is important]
-
-### Solution
-
-[Extensive solution covering:
-- Basic concepts and syntax (200-300 lines)
-- Practical examples and patterns (200-300 lines)
-- Comparison with alternatives (100-200 lines)
-- Advanced use cases (200-300 lines)
-- Performance considerations (50-100 lines)
-- Testing approaches (50-100 lines)
-- Best practices (100-150 lines)
-- Common pitfalls (50-100 lines)]
-
-#### Basic Syntax
-
-```kotlin
-// Code examples demonstrating basic concepts
-// Multiple examples with different scenarios
-// Clear comments explaining each part
-```
-
-#### Practical Patterns
-
-```kotlin
-// Real-world implementation patterns
-// Common use cases in Android/Backend
-// Production-ready examples
-```
-
-#### Advanced Techniques
-
-```kotlin
-// Complex scenarios and edge cases
-// Performance optimization techniques
-// Integration with other Kotlin features
-```
-
-#### Comparison Examples
-
-```kotlin
-// Comparing different approaches
-// When to use each technique
-// Trade-offs and considerations
-```
-
-### Best Practices
-
-1. **Practice 1**: Detailed explanation with code example
-2. **Practice 2**: Detailed explanation with code example
-3. **Practice 3**: Detailed explanation with code example
-4. **Practice 4**: Detailed explanation with code example
-5. **Practice 5**: Detailed explanation with code example
-
-### Common Pitfalls
-
-1. **Pitfall 1**: What to avoid and why
-2. **Pitfall 2**: What to avoid and why
-3. **Pitfall 3**: What to avoid and why
+# Question (EN)
+> How do object, companion object, and singleton pattern work in Kotlin?
 
 ---
 
-## Русский
+## Ответ (RU)
 
-### Описание проблемы
+**Теория object и companion object:**
+В Kotlin `object` ключевое слово создаёт singleton - единственный экземпляр класса, инициализируемый лениво при первом доступе. `companion object` - специальный `object` внутри класса, доступ к которому идёт через имя класса. Используются для реализации singleton-паттерна, утилитных функций и factory методов.
 
-[Full Russian translation of problem statement - 2-3 paragraphs explaining the topic, its importance, and real-world context]
+**Основные концепции:**
+- **object**: Создаёт singleton объект
+- **companion object**: Объект внутри класса, доступный через имя класса
+- **Ленивая инициализация**: Инициализируется при первом доступе
+- **Thread-safe**: Автоматически потокобезопасный
 
-### Решение
-
-[Full Russian translation of solution including:
-- All code examples with Russian comments
-- Translated explanations of concepts
-- Russian versions of all section headers
-- Localized best practices and pitfalls]
-
-#### Базовый синтаксис
-
+**Object Singleton:**
 ```kotlin
-// Примеры кода с комментариями на русском
-// Демонстрация базовых концепций
-// Пошаговые объяснения
+// ✅ object создаёт singleton
+object DatabaseManager {
+    private val connection = "Connected"
+
+    fun connect() {
+        println(connection)
+    }
+
+    fun disconnect() {
+        println("Disconnected")
+    }
+}
+
+// Usage: обращение как к единственному экземпляру
+DatabaseManager.connect() // Connected
+DatabaseManager.disconnect() // Disconnected
+
+// ❌ не может создать экземпляр
+// val db = DatabaseManager() // Ошибка!
 ```
 
-#### Практические паттерны
-
+**Companion Object:**
 ```kotlin
-// Реальные паттерны реализации
-// Распространённые случаи использования
-// Production-ready примеры
+class MyClass {
+    private val instanceData = "Instance data"
+
+    // ✅ companion object доступен через имя класса
+    companion object {
+        private const val CONSTANT = "Constant value"
+
+        fun factory(): MyClass {
+            return MyClass()
+        }
+    }
+}
+
+// Usage
+val instance = MyClass.factory() // Доступ через имя класса
 ```
 
-### Лучшие практики
+**Companion с интерфейсами:**
+```kotlin
+interface Factory {
+    fun create(): Any
+}
 
-1. **Практика 1**: Подробное объяснение с примером кода
-2. **Практика 2**: Подробное объяснение с примером кода
-3. **Практика 3**: Подробное объяснение с примером кода
-4. **Практика 4**: Подробное объяснение с примером кода
-5. **Практика 5**: Подробное объяснение с примером кода
+class User {
+    companion object : Factory {
+        override fun create() = User()
+    }
+}
 
-### Распространённые ошибки
+// ✅ Можно использовать имя companion
+val user = User.create() // Через интерфейс Factory
+```
 
-1. **Ошибка 1**: Чего избегать и почему
-2. **Ошибка 2**: Чего избегать и почему
-3. **Ошибка 3**: Чего избегать и почему
+**Практическое применение:**
+```kotlin
+// ✅ Singleton для настроек
+object SettingsManager {
+    private var theme: String = "light"
+
+    fun setTheme(theme: String) {
+        this.theme = theme
+    }
+
+    fun getTheme(): String = theme
+}
+
+// ✅ Factory методы в companion
+class User private constructor(val name: String) {
+    companion object {
+        fun create(name: String): User {
+            return User(name)
+        }
+
+        fun createAdmin(): User {
+            return User("Admin")
+        }
+    }
+}
+```
+
+**Избегание проблем singleton:**
+```kotlin
+// ❌ ПЛОХО: Глобальное состояние
+object GlobalState {
+    var counter = 0
+}
+
+// ✅ ХОРОШО: Инкапсулированное состояние
+object Logger {
+    private val logs = mutableListOf<String>()
+
+    fun log(message: String) {
+        logs.add(message)
+    }
+
+    fun getLogs(): List<String> = logs.toList()
+}
+```
 
 ---
+
+## Answer (EN)
+
+**Object and Companion Object Theory:**
+In Kotlin, the `object` keyword creates a singleton - a single instance of a class, initialized lazily on first access. `companion object` is a special `object` inside a class, accessible through the class name. Used for implementing singleton pattern, utility functions, and factory methods.
+
+**Core Concepts:**
+- **object**: Creates a singleton object
+- **companion object**: Object inside class, accessible through class name
+- **Lazy initialization**: Initialized on first access
+- **Thread-safe**: Automatically thread-safe
+
+**Object Singleton:**
+```kotlin
+// ✅ object creates singleton
+object DatabaseManager {
+    private val connection = "Connected"
+
+    fun connect() {
+        println(connection)
+    }
+
+    fun disconnect() {
+        println("Disconnected")
+    }
+}
+
+// Usage: access as single instance
+DatabaseManager.connect() // Connected
+DatabaseManager.disconnect() // Disconnected
+
+// ❌ cannot create instance
+// val db = DatabaseManager() // Error!
+```
+
+**Companion Object:**
+```kotlin
+class MyClass {
+    private val instanceData = "Instance data"
+
+    // ✅ companion object accessible through class name
+    companion object {
+        private const val CONSTANT = "Constant value"
+
+        fun factory(): MyClass {
+            return MyClass()
+        }
+    }
+}
+
+// Usage
+val instance = MyClass.factory() // Access through class name
+```
+
+**Companion with Interfaces:**
+```kotlin
+interface Factory {
+    fun create(): Any
+}
+
+class User {
+    companion object : Factory {
+        override fun create() = User()
+    }
+}
+
+// ✅ Can use companion name
+val user = User.create() // Through Factory interface
+```
+
+**Practical Application:**
+```kotlin
+// ✅ Singleton for settings
+object SettingsManager {
+    private var theme: String = "light"
+
+    fun setTheme(theme: String) {
+        this.theme = theme
+    }
+
+    fun getTheme(): String = theme
+}
+
+// ✅ Factory methods in companion
+class User private constructor(val name: String) {
+    companion object {
+        fun create(name: String): User {
+            return User(name)
+        }
+
+        fun createAdmin(): User {
+            return User("Admin")
+        }
+    }
+}
+```
+
+**Avoiding Singleton Problems:**
+```kotlin
+// ❌ BAD: Global state
+object GlobalState {
+    var counter = 0
+}
+
+// ✅ GOOD: Encapsulated state
+object Logger {
+    private val logs = mutableListOf<String>()
+
+    fun log(message: String) {
+        logs.add(message)
+    }
+
+    fun getLogs(): List<String> = logs.toList()
+}
+```
 
 ## Follow-ups
 
-1. [Technical follow-up question related to implementation details]
-2. [Question about edge cases and advanced scenarios]
-3. [Question comparing with alternative approaches]
-4. [Question about performance implications]
-5. [Question about integration with other Kotlin features]
-6. [Question about Java interop considerations]
-7. [Question about testing strategies]
-8. [Question about best practices in specific contexts]
+- When to use object vs class with private constructor?
+- How to test code with object singletons?
+- Performance implications of lazy initialization?
 
 ## References
 
-- [Kotlin Official Documentation - Related Topic]
-- [Kotlin Language Specification - Relevant Section]
-- [Kotlin API Reference - Relevant Classes/Functions]
-- [Community Best Practices and Articles]
-- [Performance Guidelines and Benchmarks]
+- [[c-oop-fundamentals]]
+- https://kotlinlang.org/docs/object-declarations.html
 
 ## Related Questions
 
-- [[q-data-class-detailed--kotlin--medium]]
-- [[q-sealed-class-sealed-interface--kotlin--medium]]
-- [[q-inheritance-open-final--kotlin--medium]]
-- [[q-visibility-modifiers-kotlin--kotlin--medium]]
-- [[q-kotlin-enum-classes--kotlin--easy]]
+### Prerequisites (Easier)
+- [[q-kotlin-enum-classes--kotlin--easy]] - Basic classes
+
+### Related (Medium)
+- [[q-class-initialization-order--kotlin--medium]] - Class initialization
+- [[q-inheritance-open-final--kotlin--medium]] - Inheritance
+- [[q-inner-nested-classes--kotlin--medium]] - Inner/Nested classes
+
+### Advanced (Harder)
+- [[q-delegation-by-keyword--kotlin--medium]] - Class delegation
