@@ -5,17 +5,14 @@ topic: computer-science
 difficulty: easy
 status: draft
 moc: moc-cs
-related: [q-observer-pattern--design-patterns--medium, q-sealed-vs-enum-classes--programming-languages--medium, q-data-structures-algorithms--computer-science--hard]
+related: [q-data-structures-algorithms--computer-science--hard, q-observer-pattern--design-patterns--medium, q-sealed-vs-enum-classes--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - exceptions
-  - java
-  - kotlin
-  - programming-languages
-  - throw
-  - throws
+tags: [exceptions, java, kotlin, programming-languages, throw, throws]
+date created: Friday, October 3rd 2025, 7:03:56 pm
+date modified: Sunday, October 26th 2025, 1:39:54 pm
 ---
-# Разница между throw и throws
+
+# Разница Между Throw И Throws
 
 # Question (EN)
 > Difference between throw and throws
@@ -209,7 +206,7 @@ if (age < 0) {
 
 Разница между `throw` и `throws` фундаментальна в обработке исключений:
 
-### Ключевое слово `throw`
+### Ключевое Слово `throw`
 
 **Используется для фактического выбрасывания исключения** в конкретном месте кода:
 
@@ -235,7 +232,7 @@ fun checkAge(age: Int) {
 - Выполнение останавливается в этой точке
 - В Java используется с `new`, в Kotlin без `new`
 
-### Ключевое слово `throws`
+### Ключевое Слово `throws`
 
 **Используется в сигнатуре метода** для объявления что метод может выбросить исключения (только Java):
 
@@ -276,7 +273,7 @@ fun processFile() {
 }
 ```
 
-### Таблица сравнения
+### Таблица Сравнения
 
 | Аспект | `throw` | `throws` |
 |--------|---------|----------|
@@ -287,7 +284,7 @@ fun processFile() {
 | **Синтаксис** | `throw new Exception()` | `throws Exception` |
 | **Обязательность** | Когда нужно выбросить | Для checked exceptions (Java) |
 
-### Пример с обоими ключевыми словами (Java)
+### Пример С Обоими Ключевыми Словами (Java)
 
 ```java
 // Java - использование обоих throw и throws
@@ -322,7 +319,7 @@ class FileProcessor {
 }
 ```
 
-### Аннотация @Throws в Kotlin
+### Аннотация @Throws В Kotlin
 
 Для совместимости с Java, Kotlin имеет аннотацию `@Throws`:
 
@@ -342,7 +339,7 @@ fun readFile(path: String) {
 - Хотите чтобы Java вызывающие обрабатывали конкретные исключения
 - В противном случае, не нужно в чистом Kotlin
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 **1. Использование throws в Kotlin:**
 ```kotlin
@@ -385,7 +382,7 @@ if (age < 0) {
 
 **Ключевое различие**: `throw` - это действие (выбрасывает исключение), `throws` - это декларация (объявляет что метод может выбросить).
 
-### Практические примеры использования
+### Практические Примеры Использования
 
 **Пример 1: Валидация данных**
 ```kotlin
@@ -510,7 +507,7 @@ public void initDatabase() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте специфичные исключения** - не бросайте общий `Exception`
 2. **Добавляйте осмысленные сообщения** - помогите понять причину ошибки

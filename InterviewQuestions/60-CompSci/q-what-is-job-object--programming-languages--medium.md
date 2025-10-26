@@ -7,9 +7,11 @@ status: draft
 moc: moc-cs
 related: [q-concurrency-fundamentals--computer-science--hard, q-data-structures-algorithms--computer-science--hard, q-decorator-pattern--design-patterns--medium]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:55:52 am
+date modified: Sunday, October 26th 2025, 1:39:59 pm
 ---
+
 # What is the Job Object For?
 
 # Question (EN)

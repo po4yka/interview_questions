@@ -5,11 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-priorityqueue-vs-deque--programming-languages--easy, q-flow-flatmap-operator--programming-languages--easy, q-where-to-call-suspend-functions--programming-languages--medium]
+related: [q-flow-flatmap-operator--programming-languages--easy, q-priorityqueue-vs-deque--programming-languages--easy, q-where-to-call-suspend-functions--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:49:37 am
+date modified: Sunday, October 26th 2025, 1:39:58 pm
 ---
+
 # What is Flow in Kotlin?
 
 # Question (EN)
@@ -66,7 +68,7 @@ fun main() = runBlocking {
 // Received: 3
 ```
 
-### Flow vs List
+### Flow Vs List
 
 ```kotlin
 // List: Eager evaluation (all values computed immediately)
@@ -416,7 +418,7 @@ fun flowOnExample() = runBlocking {
 }
 ```
 
-### Flow vs Other Reactive Streams
+### Flow Vs Other Reactive Streams
 
 ```kotlin
 // Flow vs RxJava Observable

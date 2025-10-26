@@ -5,17 +5,14 @@ topic: computer-science
 difficulty: easy
 status: draft
 moc: moc-cs
-related: [q-xml-acronym--programming-languages--easy, q-suspend-function-return-type-after-compilation--programming-languages--hard, q-java-lambda-type--programming-languages--easy]
+related: [q-java-lambda-type--programming-languages--easy, q-suspend-function-return-type-after-compilation--programming-languages--hard, q-xml-acronym--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - automatic-memory
-  - garbage-collection
-  - jvm
-  - kotlin
-  - memory-management
-  - programming-languages
+tags: [automatic-memory, garbage-collection, jvm, kotlin, memory-management, programming-languages]
+date created: Saturday, October 4th 2025, 1:23:34 pm
+date modified: Sunday, October 26th 2025, 1:39:56 pm
 ---
-# Что происходит с объектами, которые больше не нужны?
+
+# Что Происходит С Объектами, Которые Больше Не Нужны?
 
 # Question (EN)
 > What happens to objects that are no longer needed?

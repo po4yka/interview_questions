@@ -5,15 +5,13 @@ topic: computer-science
 difficulty: hard
 status: draft
 moc: moc-cs
-related: [q-primitive-vs-reference-types--programming-languages--easy, q-decorator-pattern--design-patterns--medium, q-suspend-function-suspension-mechanism--programming-languages--hard]
+related: [q-decorator-pattern--design-patterns--medium, q-primitive-vs-reference-types--programming-languages--easy, q-suspend-function-suspension-mechanism--programming-languages--hard]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - behavioral-patterns
-  - visitor
-  - gof-patterns
-  - double-dispatch
+tags: [behavioral-patterns, design-patterns, double-dispatch, gof-patterns, visitor]
+date created: Monday, October 6th 2025, 7:30:41 am
+date modified: Sunday, October 26th 2025, 1:39:55 pm
 ---
+
 # Visitor Pattern
 
 # Question (EN)
@@ -337,7 +335,7 @@ fun main() {
 - **Double dispatch** - operation depends on both visitor and element type
 - **Android**: View traversal, validation, rendering, serialization
 
-## Когда использовать?
+## Когда Использовать?
 
 When to use:
 
@@ -345,7 +343,7 @@ When to use:
 2. **Structure contains many unrelated operations** - Grouping them in same class isn't feasible
 3. **Classes defining objects aren't likely to change** - But want to define new operations on them
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Pros (Преимущества)
 
@@ -437,7 +435,7 @@ class SpecificVisitor : BaseVisitor() {
 
 Паттерн проектирования Visitor (Посетитель) - это поведенческий паттерн, который **позволяет добавлять новые операции к группе связанных классов без изменения их структуры**. Он особенно полезен, когда у вас есть стабильный набор классов, но необходимо выполнять различные операции над ними, что делает расширение функциональности простым без изменения существующей кодовой базы.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Какие проблемы может решить паттерн проектирования Visitor?
 
@@ -453,7 +451,7 @@ class SpecificVisitor : BaseVisitor() {
 
 Это позволяет создавать новые операции независимо от классов структуры объектов путем добавления новых объектов-посетителей.
 
-### Мотивация использования
+### Мотивация Использования
 
 Мотивация использования паттерна Visitor:
 

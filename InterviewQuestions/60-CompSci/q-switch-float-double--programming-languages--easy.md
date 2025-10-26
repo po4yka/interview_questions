@@ -5,18 +5,14 @@ topic: computer-science
 difficulty: easy
 status: draft
 moc: moc-cs
-related: [q-solid-principles--software-design--medium, q-delegates-java-compilation--programming-languages--hard, q-hashmap-how-it-works--programming-languages--medium]
+related: [q-delegates-java-compilation--programming-languages--hard, q-hashmap-how-it-works--programming-languages--medium, q-solid-principles--software-design--medium]
 created: 2025-10-15
-tags:
-  - double
-  - float
-  - floating-point
-  - java
-  - kotlin
-  - programming-languages
-  - switch
+tags: [double, float, floating-point, java, kotlin, programming-languages, switch]
+date created: Friday, October 3rd 2025, 7:03:57 pm
+date modified: Sunday, October 26th 2025, 1:39:53 pm
 ---
-# Работает ли switch() с double/float?
+
+# Работает Ли switch() С double/float?
 
 # Question (EN)
 > Does switch() work with double/float?
@@ -175,7 +171,7 @@ when (value) {
 }
 ```
 
-### Why switch on Integers is Safe
+### Why Switch on Integers is Safe
 
 **Integer equality is exact:**
 

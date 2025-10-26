@@ -5,17 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-what-is-garbage-in-gc--programming-languages--easy, q-suspend-function-suspension-mechanism--programming-languages--hard, q-primitive-vs-reference-types--programming-languages--easy]
+related: [q-primitive-vs-reference-types--programming-languages--easy, q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-garbage-in-gc--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - comparison
-  - enum
-  - kotlin
-  - oop
-  - programming-languages
-  - sealed-class
+tags: [comparison, enum, kotlin, oop, programming-languages, sealed-class]
+date created: Friday, October 3rd 2025, 6:48:06 pm
+date modified: Sunday, October 26th 2025, 1:37:24 pm
 ---
-# Каковы отличия sealed и enum классов в Kotlin?
+
+# Каковы Отличия Sealed И Enum Классов В Kotlin?
 
 # Question (EN)
 > What are the differences between sealed and enum classes in Kotlin?
@@ -156,7 +153,7 @@ sealed class TaskResult {
 
 ## Ответ (RU)
 
-### Ключевые отличия
+### Ключевые Отличия
 
 | Характеристика | Enum Class | Sealed Class |
 |---------------|-----------|--------------|
@@ -231,7 +228,7 @@ val result2 = Result.Success("data2", 456L)
 - Могут быть data-классы, object'ы, обычные классы в качестве подклассов
 - Нельзя создать экземпляр самого sealed-класса
 
-### Когда использовать каждый
+### Когда Использовать Каждый
 
 **Используйте `enum class` когда:**
 - Фиксированный набор значений, который не изменится
@@ -268,7 +265,7 @@ sealed class UiState {
 }
 ```
 
-### Можно комбинировать оба подхода
+### Можно Комбинировать Оба Подхода
 
 ```kotlin
 // Enum для простого статуса

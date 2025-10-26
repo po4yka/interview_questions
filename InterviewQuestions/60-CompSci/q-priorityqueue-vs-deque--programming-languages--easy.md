@@ -5,18 +5,14 @@ topic: computer-science
 difficulty: easy
 status: draft
 moc: moc-cs
-related: [q-data-class-component-functions--programming-languages--easy, q-class-composition--oop--medium, q-what-is-coroutinescope--programming-languages--medium]
+related: [q-class-composition--oop--medium, q-data-class-component-functions--programming-languages--easy, q-what-is-coroutinescope--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - collections
-  - data-structures
-  - deque
-  - kotlin
-  - priority-queue
-  - programming-languages
-  - queue
+tags: [collections, data-structures, deque, kotlin, priority-queue, programming-languages, queue]
+date created: Friday, October 3rd 2025, 4:43:42 pm
+date modified: Sunday, October 26th 2025, 1:31:20 pm
 ---
-# Какова разница между PriorityQueue и Deque?
+
+# Какова Разница Между PriorityQueue И Deque?
 
 # Question (EN)
 > What is the difference between PriorityQueue and Deque?

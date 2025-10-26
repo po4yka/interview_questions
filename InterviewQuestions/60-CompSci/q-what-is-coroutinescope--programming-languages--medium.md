@@ -5,11 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-template-method-pattern--design-patterns--medium, q-memento-pattern--design-patterns--medium, q-hot-vs-cold-flows--programming-languages--medium]
+related: [q-hot-vs-cold-flows--programming-languages--medium, q-memento-pattern--design-patterns--medium, q-template-method-pattern--design-patterns--medium]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:52:06 am
+date modified: Sunday, October 26th 2025, 1:39:57 pm
 ---
+
 # What is CoroutineScope?
 
 # Question (EN)

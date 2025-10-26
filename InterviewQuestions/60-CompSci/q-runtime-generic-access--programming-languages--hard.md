@@ -5,16 +5,14 @@ topic: computer-science
 difficulty: hard
 status: draft
 moc: moc-cs
-related: [q-what-is-garbage-in-gc--programming-languages--easy, q-os-fundamentals-concepts--computer-science--hard, q-coroutine-dispatchers--programming-languages--medium]
+related: [q-coroutine-dispatchers--programming-languages--medium, q-os-fundamentals-concepts--computer-science--hard, q-what-is-garbage-in-gc--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - generics
-  - kotlin
-  - programming-languages
-  - reified
-  - type-erasure
+tags: [generics, kotlin, programming-languages, reified, type-erasure]
+date created: Friday, October 3rd 2025, 4:39:28 pm
+date modified: Sunday, October 26th 2025, 1:37:22 pm
 ---
-# Можно ли получить в runtime доступ к типу дженерика?
+
+# Можно Ли Получить В Runtime Доступ К Типу Дженерика?
 
 # Question (EN)
 > Can you access generic type at runtime?

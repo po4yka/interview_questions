@@ -5,11 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-java-lambda-type--programming-languages--easy, q-sealed-vs-enum-classes--programming-languages--medium, q-proxy-pattern--design-patterns--medium]
+related: [q-java-lambda-type--programming-languages--easy, q-proxy-pattern--design-patterns--medium, q-sealed-vs-enum-classes--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:53:02 am
+date modified: Sunday, October 26th 2025, 1:39:53 pm
 ---
+
 # Why Not Use Synchronized Blocks with Coroutines?
 
 # Question (EN)
@@ -28,7 +30,7 @@ There are three main reasons:
 2. **Thread blocking**: Blocking threads defeats the purpose of coroutines. Mutex works in async style without blocking threads
 3. **Cancellation ignorance**: `synchronized` blocks don't account for coroutine cancellation - if coroutine is cancelled, the lock isn't released properly
 
-### The Problem with synchronized
+### The Problem with Synchronized
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -128,7 +130,7 @@ class GoodExample {
 // 3. Respects cancellation
 ```
 
-### Mutex vs synchronized Comparison
+### Mutex Vs Synchronized Comparison
 
 ```kotlin
 import kotlinx.coroutines.sync.Mutex
@@ -322,7 +324,7 @@ class BankAccount {
 }
 ```
 
-### When synchronized Might Be Acceptable
+### When Synchronized Might Be Acceptable
 
 ```kotlin
 // WARNING: OK if: Protecting non-suspending code

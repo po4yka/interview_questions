@@ -5,14 +5,13 @@ topic: computer-science
 difficulty: easy
 status: draft
 moc: moc-cs
-related: [q-garbage-collector-definition--programming-languages--easy, q-error-handling-in-coroutines--programming-languages--medium, q-how-gc-knows-object-can-be-destroyed--programming-languages--easy]
+related: [q-error-handling-in-coroutines--programming-languages--medium, q-garbage-collector-definition--programming-languages--easy, q-how-gc-knows-object-can-be-destroyed--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - creational-patterns
-  - singleton
-  - gof-patterns
+tags: [creational-patterns, design-patterns, gof-patterns, singleton]
+date created: Monday, October 6th 2025, 7:18:19 am
+date modified: Sunday, October 26th 2025, 1:39:47 pm
 ---
+
 # Singleton Pattern
 
 # Question (EN)
@@ -138,7 +137,7 @@ class CacheManager private constructor() {
 - **`synchronized`** block ensures only one thread can create the instance
 - **`by lazy`** delegate provides built-in thread-safe lazy initialization
 
-## Типичные применения
+## Типичные Применения
 
 Common uses:
 
@@ -148,7 +147,7 @@ Common uses:
 - **Database connections, network managers, configuration managers** in Android
 - **Application-wide repositories, analytics trackers, logging utilities**
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Pros (Преимущества)
 
@@ -211,7 +210,7 @@ class MyRepository(private val api: ApiService) // Injected, not singleton
 
 Паттерн Singleton — это паттерн проектирования, который **ограничивает создание экземпляров класса одним единственным экземпляром**. Это полезно, когда требуется ровно один объект для координации действий в системе. Термин происходит от математической концепции одноэлементного множества.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Паттерн проектирования Singleton решает такие проблемы как:
 
@@ -272,7 +271,7 @@ object DatabaseHelper {
 val db = DatabaseHelper.getDatabase(context)
 ```
 
-### Пример Kotlin: Ленивая инициализация
+### Пример Kotlin: Ленивая Инициализация
 
 ```kotlin
 class NetworkManager private constructor() {
@@ -303,7 +302,7 @@ class CacheManager private constructor() {
 }
 ```
 
-### Объяснение примера
+### Объяснение Примера
 
 **Пояснение**:
 
@@ -313,7 +312,7 @@ class CacheManager private constructor() {
 - **`synchronized`** блок гарантирует, что только один поток может создать экземпляр
 - **`by lazy`** делегат предоставляет встроенную потокобезопасную ленивую инициализацию
 
-### Типичное применение
+### Типичное Применение
 
 Распространенное использование:
 
@@ -340,7 +339,7 @@ class CacheManager private constructor() {
 5. **Проблемы с конкурентностью** - Требует тщательной синхронизации в многопоточных средах
 6. **Нарушает Dependency Inversion** - Жесткая связь с конкретной реализацией
 
-### Лучшие практики
+### Лучшие Практики
 
 ```kotlin
 // DO: Используйте object declaration для простых singleton

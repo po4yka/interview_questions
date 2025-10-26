@@ -5,12 +5,14 @@ topic: computer-science
 difficulty: easy
 status: draft
 moc: moc-cs
-related: [q-launch-vs-async-error-handling--programming-languages--medium, q-class-composition--oop--medium, q-data-class-special-features--programming-languages--easy]
+related: [q-class-composition--oop--medium, q-data-class-special-features--programming-languages--easy, q-launch-vs-async-error-handling--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:40:14 am
+date modified: Sunday, October 26th 2025, 1:39:47 pm
 ---
-# SharedFlow vs StateFlow Differences
+
+# SharedFlow Vs StateFlow Differences
 
 # Question (EN)
 > What are the differences between SharedFlow and StateFlow?

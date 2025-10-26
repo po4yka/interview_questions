@@ -5,11 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-regular-vs-extension-method--programming-languages--easy, q-iterator-pattern--design-patterns--medium, q-interface-vs-abstract-class--programming-languages--medium]
+related: [q-interface-vs-abstract-class--programming-languages--medium, q-iterator-pattern--design-patterns--medium, q-regular-vs-extension-method--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:39:32 am
+date modified: Sunday, October 26th 2025, 1:40:05 pm
 ---
+
 # Zip Operator for Parallel Request Mapping
 
 # Question (EN)
@@ -77,7 +79,7 @@ runBlocking {
 }
 ```
 
-### Approach 2: Using Flow zip for Streaming Data
+### Approach 2: Using Flow Zip for Streaming Data
 
 ```kotlin
 import kotlinx.coroutines.flow.*
@@ -114,7 +116,7 @@ suspend fun combineFlows() {
 }
 ```
 
-### Approach 3: Using combine for Latest Values
+### Approach 3: Using Combine for Latest Values
 
 ```kotlin
 // combine emits whenever ANY source emits (different from zip)
@@ -151,7 +153,7 @@ runBlocking {
 }
 ```
 
-### Approach 4: RxJava Style zip
+### Approach 4: RxJava Style Zip
 
 ```kotlin
 // Using RxJava (for comparison)
@@ -223,7 +225,7 @@ class DashboardViewModel {
 }
 ```
 
-### zip vs combine vs merge
+### Zip Vs Combine Vs Merge
 
 ```kotlin
 // zip: Waits for ALL sources, pairs elements by index
@@ -287,7 +289,7 @@ suspend fun fetchWithErrorHandling(): Result<CombinedData> = coroutineScope {
 
 Оператор `zip` необходим, когда нужно объединить результаты из нескольких независимых асинхронных операций. В Kotlin корутинах это достигается с помощью `async`/`await` или операторов `zip` для Flow.
 
-### Подход 1: Использование async/await для параллельного выполнения
+### Подход 1: Использование async/await Для Параллельного Выполнения
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -338,7 +340,7 @@ runBlocking {
 }
 ```
 
-### Подход 2: Использование zip для Flow с потоковыми данными
+### Подход 2: Использование Zip Для Flow С Потоковыми Данными
 
 ```kotlin
 import kotlinx.coroutines.flow.*
@@ -375,7 +377,7 @@ suspend fun combineFlows() {
 }
 ```
 
-### Подход 3: Использование combine для последних значений
+### Подход 3: Использование Combine Для Последних Значений
 
 ```kotlin
 // combine испускает всякий раз, когда ЛЮБОЙ источник испускает (отличается от zip)
@@ -412,7 +414,7 @@ runBlocking {
 }
 ```
 
-### Подход 4: RxJava стиль zip
+### Подход 4: RxJava Стиль Zip
 
 ```kotlin
 // Использование RxJava (для сравнения)
@@ -436,7 +438,7 @@ fun rxZipExample() {
 }
 ```
 
-### Реальный пример: Загрузка данных панели управления
+### Реальный Пример: Загрузка Данных Панели Управления
 
 ```kotlin
 data class DashboardData(
@@ -484,7 +486,7 @@ class DashboardViewModel {
 }
 ```
 
-### zip vs combine vs merge
+### Zip Vs Combine Vs Merge
 
 ```kotlin
 // zip: Ждет ВСЕ источники, парирует элементы по индексу
@@ -508,7 +510,7 @@ merge(
 ).collect { println(it) }  // 1, 2, 3, 4, 5, 6 (или чередуясь)
 ```
 
-### Обработка ошибок с параллельными запросами
+### Обработка Ошибок С Параллельными Запросами
 
 ```kotlin
 suspend fun fetchWithErrorHandling(): Result<CombinedData> = coroutineScope {
@@ -530,7 +532,7 @@ suspend fun fetchWithErrorHandling(): Result<CombinedData> = coroutineScope {
 }
 ```
 
-### Ключевые различия
+### Ключевые Различия
 
 | Оператор | Поведение | Применение |
 |----------|----------|----------|

@@ -1,238 +1,336 @@
 ---
 id: 20251012-1227111171
-title: Prototype Pattern
-topic: design-patterns
+title: "Prototype Pattern / Паттерн Прототип"
+aliases: ["Prototype Pattern", "Паттерн Прототип"]
+topic: cs
+subtopics: [creational-patterns, design-patterns, object-cloning]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-cs
+related: [q-builder-pattern--design-patterns--medium, q-factory-method-pattern--design-patterns--medium, q-singleton-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: []
-related: [q-java-access-modifiers--programming-languages--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium, q-extension-properties--programming-languages--medium]
-  - factory-method-pattern
-  - builder-pattern
-subtopics:
-  - creational-patterns
-  - object-cloning
+updated: 2025-01-25
+tags: [creational-patterns, design-patterns, difficulty/medium, object-cloning, prototype]
+sources: [https://refactoring.guru/design-patterns/prototype]
+date created: Monday, October 6th 2025, 7:33:01 am
+date modified: Sunday, October 26th 2025, 1:37:11 pm
 ---
-# Prototype Pattern / Паттерн Прототип
-
-# Question (EN)
-> What is the Prototype pattern? When and why should it be used?
 
 # Вопрос (RU)
-> Что такое паттерн Прототип? Когда и зачем его следует использовать?
+> Что такое паттерн Prototype? Когда его использовать и как он работает?
+
+# Question (EN)
+> What is the Prototype pattern? When to use it and how does it work?
 
 ---
-
-## Answer (EN)
-
-
-### Definition
-The Prototype Design Pattern is a creational pattern that enables the creation of new objects by copying an existing object. Prototype allows us to hide the complexity of making new instances from the client. The existing object acts as a prototype and contains the state of the object.
-
-### Problems It Solves
-The prototype design pattern solves problems like:
-- How can objects be created so that the specific type of object can be determined at runtime?
-- How can dynamically loaded classes be instantiated?
-
-Creating objects directly within the class that requires (uses) the objects is inflexible because it commits the class to particular objects at compile-time and makes it impossible to specify which objects to create at run-time.
-
-### Solution
-The prototype design pattern describes how to solve such problems:
-- Define a `Prototype` object that returns a copy of itself
-- Create new objects by copying a `Prototype` object
-
-### When to Use
-Use the Prototype Pattern when:
-- The classes to instantiate are specified at run-time, for example, by dynamic loading
-- To avoid building a class hierarchy of factories that parallels the class hierarchy of products
-- When instances of a class can have one of only a few different combinations of state. It may be more convenient to install a corresponding number of prototypes and clone them rather than instantiating the class manually, each time with the appropriate state
-- When object creation is expensive compared to cloning
-- When the concrete classes to instantiate are unknown until runtime
-
-### Real-World Use Cases
-- Spawning new game characters with similar attributes
-- Creating consistent UI components in design software
-- Cloning data structures for parallel processing
-
-### Implementation Steps
-1. Create a prototype interface that declares a cloning method
-2. Implement the prototype in concrete classes
-3. Use the prototype to clone and produce new objects
-
-### Example in Kotlin
-
-```kotlin
-// Prototype interface
-interface GameCharacterPrototype {
-    fun clone(): GameCharacterPrototype
-}
-
-// Concrete class implementing the Prototype
-data class GameCharacter(
-    val name: String,
-    val weapon: String,
-    val level: Int
-) : GameCharacterPrototype {
-    override fun clone(): GameCharacterPrototype {
-        return copy()
-    }
-}
-
-fun main() {
-    // Original character
-    val originalCharacter = GameCharacter("Knight", "Sword", 5)
-
-    // Cloning the character
-    val clonedCharacter = originalCharacter.clone() as GameCharacter
-
-    println("Original Character: $originalCharacter")
-    println("Cloned Character: $clonedCharacter")
-}
-```
-
-**Output:**
-```
-Original Character: GameCharacter(name=Knight, weapon=Sword, level=5)
-Cloned Character: GameCharacter(name=Knight, weapon=Sword, level=5)
-```
-
-**Explanation:**
-- `GameCharacterPrototype` is the prototype interface that declares a `clone` method
-- `GameCharacter` is a concrete class implementing this interface. The data class in Kotlin has a built-in copy method that fits perfectly with the prototype pattern, making cloning easier
-- In the main function, an original game character is created. Later, the character is cloned using the `clone` method
-
-### Advantages
-- Hides the complexities of instantiating new objects
-- Reduces the number of classes
-- Allows adding and removing objects at runtime
-
-### Disadvantages
-- Requires implementing a cloning mechanism which might be complex
-- Deep cloning can be difficult to implement correctly, especially if the classes have complex object graphs with circular references
-
----
-
-
 
 ## Ответ (RU)
 
-### Определение
-Паттерн проектирования Прототип - это порождающий паттерн, который позволяет создавать новые объекты путем копирования существующего объекта. Прототип позволяет скрыть сложность создания новых экземпляров от клиента. Существующий объект действует как прототип и содержит состояние объекта.
+**Теория Prototype Pattern:**
+Prototype - creational pattern, creates objects by copying existing ones. Hidden complexity of instantiation from client. Existing object acts as prototype contains state. Solves: determining specific object type at runtime, instantiating dynamically loaded classes, avoiding factory hierarchy parallel to product hierarchy, expensive object creation vs cloning.
 
-### Решаемые Проблемы
-Паттерн прототип решает следующие проблемы:
-- Как можно создавать объекты так, чтобы конкретный тип объекта определялся во время выполнения?
-- Как можно инстанцировать динамически загружаемые классы?
+**Определение:**
 
-Создание объектов непосредственно в классе, который требует (использует) эти объекты, негибко, поскольку это привязывает класс к конкретным объектам во время компиляции и делает невозможным указание того, какие объекты создавать во время выполнения.
-
-### Решение
-Паттерн прототип описывает, как решить такие проблемы:
-- Определить объект `Prototype`, который возвращает копию самого себя
-- Создавать новые объекты путем копирования объекта `Prototype`
-
-### Когда Использовать
-Используйте паттерн Прототип, когда:
-- Классы для инстанцирования указываются во время выполнения, например, при динамической загрузке
-- Нужно избежать построения иерархии классов фабрик, которая параллельна иерархии классов продуктов
-- Экземпляры класса могут иметь только одну из нескольких различных комбинаций состояний. Может быть удобнее установить соответствующее количество прототипов и клонировать их, чем инстанцировать класс вручную каждый раз с соответствующим состоянием
-- Создание объекта дороже по сравнению с клонированием
-- Конкретные классы для инстанцирования неизвестны до времени выполнения
-
-### Примеры Использования в Реальном Мире
-- Создание новых игровых персонажей с похожими атрибутами
-- Создание согласованных UI-компонентов в дизайнерском ПО
-- Клонирование структур данных для параллельной обработки
-
-### Шаги Реализации
-1. Создать интерфейс прототипа, объявляющий метод клонирования
-2. Реализовать прототип в конкретных классах
-3. Использовать прототип для клонирования и создания новых объектов
-
-### Пример на Kotlin
+*Теория:* Prototype design pattern enables creating new objects by copying existing object. Allows hiding complexity of making new instances from client. Prototype object returns copy of itself. Client doesn't need to know concrete types, works with prototype interface. Solution для: runtime object creation, dynamic loading, avoiding tight coupling to concrete classes.
 
 ```kotlin
-// Интерфейс прототипа
+// ✅ Prototype interface
 interface GameCharacterPrototype {
     fun clone(): GameCharacterPrototype
 }
 
-// Конкретный класс, реализующий прототип
+// ✅ Concrete prototype
 data class GameCharacter(
     val name: String,
     val weapon: String,
     val level: Int
 ) : GameCharacterPrototype {
     override fun clone(): GameCharacterPrototype {
-        return copy()
+        return copy()  // Data class copy()
     }
 }
 
+// ✅ Usage
 fun main() {
-    // Оригинальный персонаж
-    val originalCharacter = GameCharacter("Knight", "Sword", 5)
-
-    // Клонирование персонажа
-    val clonedCharacter = originalCharacter.clone() as GameCharacter
-
-    println("Original Character: $originalCharacter")
-    println("Cloned Character: $clonedCharacter")
+    val original = GameCharacter("Knight", "Sword", 5)
+    val cloned = original.clone() as GameCharacter
 }
 ```
 
-**Вывод:**
+**Проблемы, которые решает:**
+
+**1. Dynamic Object Creation:**
+*Теория:* Creating objects directly within class commits to particular objects at compile-time. Impossible to specify which objects to create at run-time. Prototype pattern solves by: cloning existing objects, determining type at runtime, not compile-time.
+
+```kotlin
+// ❌ Compile-time commitment
+class GameManager {
+    fun createCharacter(type: String): Character {
+        return when(type) {
+            "warrior" -> Warrior("Default", 1)
+            "mage" -> Mage("Default", 1)
+            else -> throw IllegalArgumentException()
+        }
+    }
+}
+
+// ✅ Runtime flexibility with prototypes
+class GameManager {
+    private val prototypes = mutableMapOf<String, GameCharacterPrototype>()
+
+    fun registerPrototype(name: String, prototype: GameCharacterPrototype) {
+        prototypes[name] = prototype
+    }
+
+    fun createCharacter(type: String): GameCharacterPrototype {
+        return prototypes[type]?.clone() ?: throw IllegalArgumentException()
+    }
+}
 ```
-Original Character: GameCharacter(name=Knight, weapon=Sword, level=5)
-Cloned Character: GameCharacter(name=Knight, weapon=Sword, level=5)
+
+**2. Avoiding Factory Hierarchy:**
+*Теория:* Building factory hierarchy parallel to product hierarchy is verbose and complex. Prototype eliminates need for factory classes by using cloning. Reduces classes, simplifies design, allows adding/removing prototypes at runtime.
+
+**3. Expensive Object Creation:**
+*Теория:* When object creation expensive compared to cloning, use prototypes. Clone pre-instantiated objects instead creating new ones. Examples: database connections, complex configurations, initialized objects with heavy setup.
+
+```kotlin
+// ✅ Expensive object creation
+class ExpensiveObject {
+    init {
+        // Heavy initialization
+        Thread.sleep(1000)  // Simulate expensive operation
+    }
+}
+
+// ✅ Prototype avoids re-initialization
+val prototype = ExpensiveObject()
+val clone = prototype.clone()  // Fast copy, no initialization
 ```
 
-**Объяснение:**
-- `GameCharacterPrototype` - это интерфейс прототипа, который объявляет метод `clone`
-- `GameCharacter` - конкретный класс, реализующий этот интерфейс. Data-класс в Kotlin имеет встроенный метод copy, который идеально подходит для паттерна прототип, упрощая клонирование
-- В функции main создается оригинальный игровой персонаж. Затем персонаж клонируется с помощью метода `clone`
+**Когда использовать:**
 
-### Преимущества
-- Скрывает сложность создания новых объектов
-- Уменьшает количество классов
-- Позволяет добавлять и удалять объекты во время выполнения
+✅ **Use Prototype when:**
+- Classes to instantiate specified at runtime
+- Want avoid factory hierarchy parallel to product hierarchy
+- Instances have few different state combinations
+- Object creation expensive compared to cloning
+- Concrete classes unknown until runtime
+- Need configure and clone predefined objects
+- Creating similar objects with minor variations
 
-### Недостатки
-- Требует реализации механизма клонирования, который может быть сложным
-- Глубокое клонирование может быть сложно реализовать правильно, особенно если классы имеют сложные графы объектов с циклическими ссылками
+❌ **Don't use Prototype when:**
+- Classes have only few instances (no benefit)
+- Instances differ significantly (cloning wasteful)
+- Cloning more expensive than creating new
+- Complex object graphs with circular references
+
+**Глубокое vs Поверхностное клонирование:**
+
+*Теория:* Shallow clone - copies object but shares references to nested objects. Deep clone - creates new objects for all nested structures. Challenge: implementing deep clone correctly, handling circular references. Solution: clone all nested objects recursively, maintain visited objects map.
+
+```kotlin
+// ✅ Shallow clone (shared references)
+data class CharacterSettings(val config: Map<String, String>)
+data class GameCharacter(val settings: CharacterSettings)
+
+val original = GameCharacter(CharacterSettings(mapOf("level" to "5")))
+val shallowCopy = original.copy()
+shallowCopy.settings.config["level"] = "10"
+// ❌ original.settings now also "10" - shared reference!
+
+// ✅ Deep clone
+interface DeepCloneable<T> {
+    fun deepClone(): T
+}
+
+class DeepCloneableCharacter(val settings: CharacterSettings) : DeepCloneable<DeepCloneableCharacter> {
+    override fun deepClone(): DeepCloneableCharacter {
+        return DeepCloneableCharacter(
+            CharacterSettings(settings.config.toMap())  // New map
+        )
+    }
+}
+```
+
+**Преимущества:**
+1. Hides complexity of instantiating new objects
+2. Reduces number of classes
+3. Allows adding/removing objects at runtime
+4. Configures objects before cloning
+5. Reduces subclassing
+
+**Недостатки:**
+1. Requires implementing cloning mechanism
+2. Deep cloning can be complex
+3. Handles circular references carefully
+4. Can hide object dependencies
+
+## Answer (EN)
+
+**Prototype Pattern Theory:**
+Prototype - creational pattern that creates objects by copying existing ones. Hides complexity of instantiation from client. Existing object acts as prototype and contains state. Solves: determining specific object type at runtime, instantiating dynamically loaded classes, avoiding factory hierarchy parallel to product hierarchy, expensive object creation vs cloning.
+
+**Definition:**
+
+*Theory:* Prototype design pattern enables creating new objects by copying existing object. Allows hiding complexity of making new instances from client. Prototype object returns copy of itself. Client doesn't need to know concrete types, works with prototype interface. Solution for: runtime object creation, dynamic loading, avoiding tight coupling to concrete classes.
+
+```kotlin
+// ✅ Prototype interface
+interface GameCharacterPrototype {
+    fun clone(): GameCharacterPrototype
+}
+
+// ✅ Concrete prototype
+data class GameCharacter(
+    val name: String,
+    val weapon: String,
+    val level: Int
+) : GameCharacterPrototype {
+    override fun clone(): GameCharacterPrototype {
+        return copy()  // Data class copy()
+    }
+}
+
+// ✅ Usage
+fun main() {
+    val original = GameCharacter("Knight", "Sword", 5)
+    val cloned = original.clone() as GameCharacter
+}
+```
+
+**Problems Solved:**
+
+**1. Dynamic Object Creation:**
+*Theory:* Creating objects directly within class commits to particular objects at compile-time. Impossible to specify which objects to create at run-time. Prototype pattern solves by: cloning existing objects, determining type at runtime, not compile-time.
+
+```kotlin
+// ❌ Compile-time commitment
+class GameManager {
+    fun createCharacter(type: String): Character {
+        return when(type) {
+            "warrior" -> Warrior("Default", 1)
+            "mage" -> Mage("Default", 1)
+            else -> throw IllegalArgumentException()
+        }
+    }
+}
+
+// ✅ Runtime flexibility with prototypes
+class GameManager {
+    private val prototypes = mutableMapOf<String, GameCharacterPrototype>()
+
+    fun registerPrototype(name: String, prototype: GameCharacterPrototype) {
+        prototypes[name] = prototype
+    }
+
+    fun createCharacter(type: String): GameCharacterPrototype {
+        return prototypes[type]?.clone() ?: throw IllegalArgumentException()
+    }
+}
+```
+
+**2. Avoiding Factory Hierarchy:**
+*Theory:* Building factory hierarchy parallel to product hierarchy is verbose and complex. Prototype eliminates need for factory classes by using cloning. Reduces classes, simplifies design, allows adding/removing prototypes at runtime.
+
+**3. Expensive Object Creation:**
+*Theory:* When object creation expensive compared to cloning, use prototypes. Clone pre-instantiated objects instead of creating new ones. Examples: database connections, complex configurations, initialized objects with heavy setup.
+
+```kotlin
+// ✅ Expensive object creation
+class ExpensiveObject {
+    init {
+        // Heavy initialization
+        Thread.sleep(1000)  // Simulate expensive operation
+    }
+}
+
+// ✅ Prototype avoids re-initialization
+val prototype = ExpensiveObject()
+val clone = prototype.clone()  // Fast copy, no initialization
+```
+
+**When to Use:**
+
+✅ **Use Prototype when:**
+- Classes to instantiate specified at runtime
+- Want to avoid factory hierarchy parallel to product hierarchy
+- Instances have few different state combinations
+- Object creation expensive compared to cloning
+- Concrete classes unknown until runtime
+- Need to configure and clone predefined objects
+- Creating similar objects with minor variations
+
+❌ **Don't use Prototype when:**
+- Classes have only few instances (no benefit)
+- Instances differ significantly (cloning wasteful)
+- Cloning more expensive than creating new
+- Complex object graphs with circular references
+
+**Deep vs Shallow Cloning:**
+
+*Theory:* Shallow clone - copies object but shares references to nested objects. Deep clone - creates new objects for all nested structures. Challenge: implementing deep clone correctly, handling circular references. Solution: clone all nested objects recursively, maintain visited objects map.
+
+```kotlin
+// ✅ Shallow clone (shared references)
+data class CharacterSettings(val config: Map<String, String>)
+data class GameCharacter(val settings: CharacterSettings)
+
+val original = GameCharacter(CharacterSettings(mapOf("level" to "5")))
+val shallowCopy = original.copy()
+shallowCopy.settings.config["level"] = "10"
+// ❌ original.settings now also "10" - shared reference!
+
+// ✅ Deep clone
+interface DeepCloneable<T> {
+    fun deepClone(): T
+}
+
+class DeepCloneableCharacter(val settings: CharacterSettings) : DeepCloneable<DeepCloneableCharacter> {
+    override fun deepClone(): DeepCloneableCharacter {
+        return DeepCloneableCharacter(
+            CharacterSettings(settings.config.toMap())  // New map
+        )
+    }
+}
+```
+
+**Advantages:**
+1. Hides complexity of instantiating new objects
+2. Reduces number of classes
+3. Allows adding/removing objects at runtime
+4. Configures objects before cloning
+5. Reduces subclassing
+
+**Disadvantages:**
+1. Requires implementing cloning mechanism
+2. Deep cloning can be complex
+3. Needs careful handling of circular references
+4. Can hide object dependencies
 
 ---
 
-## References
-- [Prototype Design Pattern - GeeksforGeeks](https://www.geeksforgeeks.org/prototype-design-pattern/)
-- [Prototype pattern - Wikipedia](https://en.wikipedia.org/wiki/Prototype_pattern)
-- [Prototype Pattern in Java - Java Design Patterns](https://java-design-patterns.com/patterns/prototype/)
-- [Prototype Design Pattern in Kotlin](https://www.javaguides.net/2023/10/prototype-design-pattern-in-kotlin.html)
-- [Prototype Design Pattern - SourceMaking](https://sourcemaking.com/design_patterns/prototype)
-- [Prototype - Refactoring Guru](https://refactoring.guru/design-patterns/prototype)
-- [Prototype Software Pattern Kotlin Examples](https://softwarepatterns.com/kotlin/prototype-software-pattern-kotlin-example)
+## Follow-ups
 
----
-
-**Source:** Kirchhoff-Android-Interview-Questions
-**Attribution:** Content adapted from the Kirchhoff repository
-
-
----
+- What is the difference between Prototype and Factory patterns?
+- How to implement deep cloning in Kotlin?
+- When is shallow cloning acceptable vs deep cloning?
 
 ## Related Questions
 
-### Hub
-- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+### Prerequisites (Easier)
+- Basic design patterns concepts
+- Understanding of object creation
 
-### Creational Patterns
+### Related (Same Level)
 - [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
-- [[q-abstract-factory-pattern--design-patterns--medium]] - Abstract Factory pattern
 - [[q-builder-pattern--design-patterns--medium]] - Builder pattern
+- [[q-singleton-pattern--design-patterns--medium]] - Singleton pattern
 
-### Structural Patterns
-- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
-
-### Behavioral Patterns
-- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
-
+### Advanced (Harder)
+- Advanced cloning patterns
+- Object serialization and cloning
+- Registry pattern with prototypes

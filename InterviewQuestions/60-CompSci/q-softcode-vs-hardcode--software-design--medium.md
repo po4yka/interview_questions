@@ -5,19 +5,15 @@ topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags:
-  - best-practices
-  - configuration
-  - flexibility
-  - hardcoding
-  - maintainability
-  - softcoding
-  - software-design
+tags: [best-practices, configuration, flexibility, hardcoding, maintainability, softcoding, software-design]
 moc: moc-architecture-patterns
-related: [q-extensions-concept--programming-languages--easy, q-proxy-pattern--design-patterns--medium, q-flyweight-pattern--design-patterns--hard]
-subtopics: ["design-principles", "best-practices", "architecture"]
+related: [q-extensions-concept--programming-languages--easy, q-flyweight-pattern--design-patterns--hard, q-proxy-pattern--design-patterns--medium]
+subtopics: ["architecture", "best-practices", "design-principles"]
+date created: Saturday, October 4th 2025, 6:59:00 pm
+date modified: Sunday, October 26th 2025, 1:39:48 pm
 ---
-# Что такое софткод?
+
+# Что Такое Софткод?
 
 # Question (EN)
 > What is softcode?
@@ -31,7 +27,7 @@ subtopics: ["design-principles", "best-practices", "architecture"]
 
 **Softcode (Soft Coding)** is a programming approach where **program logic is stored in configuration files, databases, or other external sources** rather than being **hardcoded** (hard-coded) directly in the code.
 
-## Hardcode vs Softcode
+## Hardcode Vs Softcode
 
 ### Hardcode (Hard Coding)
 
@@ -262,7 +258,7 @@ class DatabaseConfigLoader(private val configDao: ConfigDao) {
 
 ---
 
-## When to Use Softcode vs Hardcode
+## When to Use Softcode Vs Hardcode
 
 ### - Use Softcode For:
 

@@ -5,11 +5,13 @@ topic: computer-science
 difficulty: hard
 status: draft
 moc: moc-cs
-related: [q-list-vs-sequence--programming-languages--medium, q-equals-hashcode-purpose--programming-languages--hard, q-extensions-concept--programming-languages--easy]
+related: [q-equals-hashcode-purpose--programming-languages--hard, q-extensions-concept--programming-languages--easy, q-list-vs-sequence--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:56:46 am
+date modified: Sunday, October 26th 2025, 1:39:51 pm
 ---
+
 # Suspend Function Suspension Mechanism
 
 # Question (EN)

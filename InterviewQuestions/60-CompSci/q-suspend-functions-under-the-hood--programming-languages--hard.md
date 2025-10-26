@@ -5,11 +5,13 @@ topic: computer-science
 difficulty: hard
 status: draft
 moc: moc-cs
-related: [q-suspend-function-return-type-after-compilation--programming-languages--hard, q-where-to-call-suspend-functions--programming-languages--medium, q-synchronized-blocks-with-coroutines--programming-languages--medium]
+related: [q-suspend-function-return-type-after-compilation--programming-languages--hard, q-synchronized-blocks-with-coroutines--programming-languages--medium, q-where-to-call-suspend-functions--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:46:31 am
+date modified: Sunday, October 26th 2025, 1:39:52 pm
 ---
+
 # Suspend Functions Under the Hood
 
 # Question (EN)
@@ -484,14 +486,14 @@ suspend fun example() {
 
 Suspend-функции в Kotlin приостанавливают выполнение без блокировки потока. Под капотом компилятор Kotlin преобразует suspend-функции в state machine (машину состояний), которая может приостанавливать и возобновлять выполнение.
 
-### Основные принципы работы
+### Основные Принципы Работы
 
 1. **Continuation-Passing Style (CPS)**: Suspend-функция разбивается на несколько частей (continuations)
 2. **State Machine**: Компилятор генерирует state machine с точками приостановки как состояниями
 3. **Suspension**: Происходит когда выполняется асинхронный код (например, delay, withContext)
 4. **Resumption**: Продолжает с точки остановки когда результат готов
 
-### Преобразование компилятором
+### Преобразование Компилятором
 
 ```kotlin
 // Исходный код:
@@ -529,7 +531,7 @@ fun fetchUserData(
 }
 ```
 
-### Простой пример преобразования
+### Простой Пример Преобразования
 
 ```kotlin
 // Оригинальный код
@@ -558,7 +560,7 @@ fun simple(continuation: Continuation<String>): Any? {
 }
 ```
 
-### State Machine с локальными переменными
+### State Machine С Локальными Переменными
 
 ```kotlin
 // Оригинал: Функция с локальными переменными
@@ -621,7 +623,7 @@ public inline fun <T> Continuation<T>.resumeWithException(exception: Throwable) 
 }
 ```
 
-### Как работает приостановка
+### Как Работает Приостановка
 
 ```kotlin
 // 1. Вызов функции начинается с label 0
@@ -644,7 +646,7 @@ continuation.resumeWith(Result.success(Unit))
 //    Возвращает "Done"
 ```
 
-### Вложенные suspend вызовы
+### Вложенные Suspend Вызовы
 
 ```kotlin
 // Оригинал: Вложенные suspend вызовы
@@ -668,7 +670,7 @@ suspend fun inner2(): String {
 // Continuations связаны в цепочку
 ```
 
-### Влияние на производительность
+### Влияние На Производительность
 
 ```kotlin
 // Каждая точка приостановки создает overhead state machine
@@ -690,7 +692,7 @@ suspend fun optimized(): Int {
 // Создает state machine с 2 состояниями
 ```
 
-### Inline suspend функции
+### Inline Suspend Функции
 
 ```kotlin
 // inline suspend функции оптимизируются
@@ -711,7 +713,7 @@ suspend fun example() {
 }
 ```
 
-### Ключевые концепции
+### Ключевые Концепции
 
 1. **CPS Transformation**: Каждая `suspend fun foo(): T` становится `fun foo(Continuation<T>): Any?`
 

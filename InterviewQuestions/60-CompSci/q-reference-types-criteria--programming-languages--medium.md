@@ -5,17 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-xml-acronym--programming-languages--easy, q-interface-vs-abstract-class--programming-languages--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium]
+related: [q-interface-vs-abstract-class--programming-languages--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium, q-xml-acronym--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - best-practices
-  - design
-  - immutability
-  - kotlin
-  - programming-languages
-  - reference-types
+tags: [best-practices, design, immutability, kotlin, programming-languages, reference-types]
+date created: Friday, October 3rd 2025, 6:48:06 pm
+date modified: Sunday, October 26th 2025, 1:37:19 pm
 ---
-# Каким критериям должны соответствовать ссылочные типы?
+
+# Каким Критериям Должны Соответствовать Ссылочные Типы?
 
 # Question (EN)
 > What criteria should reference types meet?

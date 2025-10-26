@@ -5,15 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-nothing-class-purpose--programming-languages--medium, q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-inheritance-vs-composition--oop--medium]
+related: [q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-inheritance-vs-composition--oop--medium, q-nothing-class-purpose--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - behavioral-patterns
-  - template-method
-  - gof-patterns
-  - hook-method
+tags: [behavioral-patterns, design-patterns, gof-patterns, hook-method, template-method]
+date created: Monday, October 6th 2025, 7:26:38 am
+date modified: Sunday, October 26th 2025, 1:39:54 pm
 ---
+
 # Template Method Pattern
 
 # Question (EN)
@@ -345,7 +343,7 @@ class UserListViewModel(
 - **Concrete methods** are the same for all subclasses
 - **Android**: Base ViewModels, Fragment lifecycles, data loading patterns
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Pros (Преимущества)
 
@@ -438,14 +436,14 @@ abstract class AuthenticationFlow {
 
 Цель состоит в том, чтобы определить общую структуру операции, позволяя подклассам уточнять или переопределять определенные шаги.
 
-### Основные компоненты
+### Основные Компоненты
 
 Этот паттерн состоит из двух основных частей:
 
 1. **Template method (шаблонный метод)** - Реализуется в базовом классе, содержит код для инвариантных частей алгоритма. Вызывает вспомогательные методы для вариантных частей
 2. **Подклассы** - Переопределяют пустые или вариантные части специфичными алгоритмами. **Не должны переопределять сам шаблонный метод**
 
-### Почему используется?
+### Почему Используется?
 
 Шаблонный метод используется во фреймворках по следующим причинам:
 

@@ -5,22 +5,15 @@ topic: architecture-patterns
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags:
-  - architecture
-  - design-principles
-  - dip
-  - isp
-  - lsp
-  - ocp
-  - oop
-  - software-design
-  - solid
-  - srp
+tags: [architecture, design-principles, dip, isp, lsp, ocp, oop, software-design, solid, srp]
 moc: moc-architecture-patterns
-related: [q-oop-principles-deep-dive--computer-science--medium, q-where-to-call-suspend-functions--programming-languages--medium, q-database-fundamentals--computer-science--hard]
-subtopics: ["design-principles", "best-practices", "architecture"]
+related: [q-database-fundamentals--computer-science--hard, q-oop-principles-deep-dive--computer-science--medium, q-where-to-call-suspend-functions--programming-languages--medium]
+subtopics: ["architecture", "best-practices", "design-principles"]
+date created: Saturday, October 4th 2025, 6:57:44 pm
+date modified: Sunday, October 26th 2025, 1:39:49 pm
 ---
-# Что такое принципы SOLID?
+
+# Что Такое Принципы SOLID?
 
 # Question (EN)
 > What are the SOLID principles?

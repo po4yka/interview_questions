@@ -7,19 +7,12 @@ status: draft
 moc: moc-cs
 related: [q-detect-unused-object--programming-languages--easy, q-java-marker-interfaces--programming-languages--medium, q-xml-acronym--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - garbage-collection
-  - jvm
-  - kotlin
-  - memory-management
-  - phantom-reference
-  - programming-languages
-  - references
-  - soft-reference
-  - strong-reference
-  - weak-reference
+tags: [garbage-collection, jvm, kotlin, memory-management, phantom-reference, programming-languages, references, soft-reference, strong-reference, weak-reference]
+date created: Saturday, October 4th 2025, 1:22:21 pm
+date modified: Sunday, October 26th 2025, 1:37:20 pm
 ---
-# Все ли виды ссылок защищают объект от удаления?
+
+# Все Ли Виды Ссылок Защищают Объект От Удаления?
 
 # Question (EN)
 > Do all types of references protect an object from deletion?

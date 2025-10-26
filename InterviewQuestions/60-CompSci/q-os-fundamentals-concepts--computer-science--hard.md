@@ -1,642 +1,186 @@
 ---
 id: 20251012-600001
 title: "Operating System Fundamentals / Основы операционных систем"
-topic: operating-systems
+aliases: ["OS Fundamentals", "Основы ОС"]
+topic: cs
+subtopics: [cpu-scheduling, memory-management, operating-systems, processes, threads]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
+moc: moc-cs
+related: [q-concurrency-fundamentals--computer-science--hard, q-oop-principles-deep-dive--computer-science--medium]
 created: 2025-10-12
-tags:
-  - os
-  - processes
-  - threads
-  - memory
-  - cpu-scheduling
-  - virtual-memory
-moc: moc-operating-systems
-related: [q-design-patterns-fundamentals--software-engineering--hard, q-garbage-collector-basics--programming-languages--medium, q-garbage-collector-roots--programming-languages--medium]
-  - q-concurrency-fundamentals--computer-science--hard
-  - q-solid-principles--software-design--medium
-  - q-data-structures-overview--algorithms--easy
-subtopics:
-  - operating-systems
-  - processes
-  - threads
-  - memory-management
-  - cpu-scheduling
+updated: 2025-01-25
+tags: [cpu-scheduling, difficulty/hard, memory, os, processes, threads, virtual-memory]
+sources: [https://en.wikipedia.org/wiki/Operating_system]
+date created: Monday, October 13th 2025, 7:49:07 am
+date modified: Sunday, October 26th 2025, 1:31:18 pm
 ---
-# Operating System Fundamentals
 
-## English Version
+# Вопрос (RU)
+> Что такое основные концепции операционных систем? Как работают процессы и потоки, виртуальная память и планирование CPU?
 
-### Problem Statement
-
-Operating Systems manage hardware resources, provide abstraction layers, and enable concurrent execution. Understanding OS concepts like processes, threads, memory management, and scheduling is crucial for building efficient applications and debugging performance issues.
-
-**The Question:** What are the core OS concepts? How do processes and threads work? What is virtual memory? How does CPU scheduling work? What are system calls?
-
-### Detailed Answer
+# Question (EN)
+> What are the core OS concepts? How do processes, threads, virtual memory, and CPU scheduling work?
 
 ---
 
-### PROCESSES VS THREADS
+## Ответ (RU)
 
-**Process:**
-```
-Process = Program in execution
+**Теория OS Fundamentals:**
+Operating Systems manage hardware resources, provide abstraction layers, enable concurrent execution. Core concepts: Processes (isolated execution units), Threads (lightweight processes), Virtual Memory (address space abstraction), CPU Scheduling (resource allocation), System Calls (kernel services), IPC (Inter-Process Communication), Deadlock (circular waiting).
 
-Components:
-- Program Code (text section)
-- Current Activity (program counter, registers)
-- Stack (temporary data: function parameters, local variables)
-- Heap (dynamically allocated memory)
-- Data Section (global variables)
+**Процессы vs Потоки:**
 
-Characteristics:
- Independent memory space
- Own resources (files, I/O)
- Heavyweight (expensive to create/switch)
- Inter-process communication (IPC) required
- Slow context switching
- High memory overhead
-```
+*Теория:* Process - program in execution, isolated memory space, own resources. Thread - lightweight process within process, shared memory. Process: independent, heavyweight, slow context switch, IPC required. Thread: shared memory, lightweight, fast context switch, no IPC needed. Key difference: isolation vs sharing.
 
-**Thread:**
-```
-Thread = Lightweight process, unit of execution within process
-
-Components:
-- Program Counter
-- Register Set
-- Stack
-- Thread ID
-
-Shares with other threads in same process:
-- Code Section
-- Data Section
-- Heap
-- Open Files
-
-Characteristics:
- Share memory space
- Lightweight (cheap to create/switch)
- Fast context switching
- Easy communication (shared memory)
- No memory protection between threads
- One thread crash can crash entire process
-```
-
-**Android Example:**
 ```kotlin
-// Process: Each Android app runs in separate process
-// Android creates new Linux process for each app
+// ✅ Process: Isolated memory space
+// Android app runs in separate Linux process
+// Each app has its own address space
+// Processes communicate via IPC (Binder)
 
+// ✅ Thread: Shared memory within process
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Main Thread (UI Thread)
-        // Only thread that can update UI
-        textView.text = "Hello"  //  Safe
+        textView.text = "Hello"  // ✅ Safe
 
         // Background Thread
         Thread {
-            // Perform long operation
-            val data = fetchDataFromNetwork()
-
-            //  CRASH: Can't update UI from background thread
-            // textView.text = data
-
-            //  Correct: Post to UI thread
+            val data = fetchData()  // Background work
             runOnUiThread {
-                textView.text = data
+                textView.text = data  // Post to UI thread
             }
         }.start()
 
-        // Modern approach: Coroutines
+        // ✅ Modern: Coroutines
         lifecycleScope.launch {
             val data = withContext(Dispatchers.IO) {
-                fetchDataFromNetwork()  // Background thread
+                fetchDataFromNetwork()
             }
-            textView.text = data  //  Back on Main thread
+            textView.text = data  // Main thread
         }
     }
 }
 ```
 
----
+**Состояния процесса:**
 
-### PROCESS STATES
+*Теория:* Process lifecycle: NEW → READY → RUNNING → WAITING → TERMINATED. State transitions: interrupt (RUNNING → READY), I/O wait (RUNNING → WAITING), scheduler dispatch (READY → RUNNING). Android process importance: FOREGROUND > VISIBLE > SERVICE > BACKGROUND > EMPTY.
 
-```
+**CPU Scheduling:**
 
-   NEW     Process being created
+*Теория:* Scheduling - decide which process runs next. Algorithms: FCFS (First-Come First-Served), SJF (Shortest Job First), RR (Round Robin). Goals: fairness, throughput, response time, waiting time. Trade-offs: convoy effect vs starvation vs overhead.
 
-     
-     
+**1. FCFS:**
+*Теория:* Non-preemptive, execute processes in arrival order. Simple but convoy effect - short processes wait for long ones. Example: P1(24ms) → P2(3ms) → P3(3ms). Average waiting: (0 + 24 + 27) / 3 = 17ms.
 
-  READY    Process waiting for CPU
+**2. SJF:**
+*Теория:* Execute shortest process first. Optimal average waiting time but starvation - long processes never execute. Example: P2(3ms) → P3(3ms) → P1(24ms). Average: (0 + 3 + 6) / 3 = 3ms.
 
-      scheduler dispatch
-     
+**3. Round Robin:**
+*Теория:* Each process gets time quantum, then preempted. Fair, no starvation, good response time. Higher waiting time due to context switches. Example: quantum=4ms, P1(24ms) requires 6 quanta, P2(3ms) 1 quantum.
 
- RUNNING   Process executing on CPU
+**Виртуальная память:**
 
-      
-       I/O or event wait
-      
-     
-      WAITING    Process waiting for I/O/event
-     
-           I/O complete
-          
-        READY
-    
-     interrupt
-     READY
-  
-   exit
-  
+*Теория:* Virtual Memory - abstraction providing large, contiguous address space. Benefits: process isolation (security), more processes than physical RAM, efficient memory use. Mechanism: Virtual Address → MMU → Physical Address. Paging - divide memory into pages (typically 4KB). Physical memory divided into frames (same size).
 
-TERMINATED Process finished
-
-```
-
-**Android Process States:**
 ```kotlin
-// Android process importance hierarchy
-enum class ProcessImportance {
-    FOREGROUND,          // Visible activity
-    VISIBLE,             // Visible but not foreground
-    SERVICE,             // Running service
-    BACKGROUND,          // Not visible
-    EMPTY                // No active components
-}
+// ✅ Virtual Memory Example
+// Virtual Address Space: 0x0000 - 0xFFFF (64KB)
+// Physical Memory: 32KB (8 frames of 4KB)
 
-// System kills processes from bottom up when memory needed
-```
+// Page Table:
+// Virtual Page → Physical Frame
+// 0 → 3
+// 1 → 7
+// 2 → 1
+// 3 → (not in memory, on disk)
 
----
-
-### CPU SCHEDULING
-
-**Scheduling Algorithms:**
-
-**1. First-Come, First-Served (FCFS)**
-```
-Non-preemptive, processes executed in arrival order
-
-Example:
-Process  Burst Time  Arrival Time
-P1       24          0
-P2       3           0
-P3       3           0
-
-Timeline: |--P1 (24ms)--|P2(3)|P3(3)|
-Waiting time:
-- P1: 0ms
-- P2: 24ms (waits for P1)
-- P3: 27ms (waits for P1, P2)
-Average: (0 + 24 + 27) / 3 = 17ms
-
- Convoy Effect: Short processes wait for long ones
-```
-
-**2. Shortest Job First (SJF)**
-```
-Execute shortest process first
-
-Example (same processes):
-Timeline: |P2(3)|P3(3)|--P1 (24ms)--|
-Waiting time:
-- P2: 0ms
-- P3: 3ms
-- P1: 6ms
-Average: (0 + 3 + 6) / 3 = 3ms
-
- Optimal average waiting time
- Starvation: Long processes may never execute
- Need to predict burst time
-```
-
-**3. Round Robin (RR)**
-```
-Each process gets time quantum (e.g., 4ms), then preempted
-
-Example (quantum = 4ms):
-Process  Burst Time
-P1       24
-P2       3
-P3       3
-
-Timeline: |P1(4)|P2(3)|P3(3)|P1(4)|P1(4)|P1(4)|P1(4)|P1(4)|
-
- Fair, good response time
- No starvation
- Higher average waiting time
- Context switch overhead
-```
-
-**Android Scheduling:**
-```kotlin
-// Android uses CFS (Completely Fair Scheduler)
-// + Priority-based scheduling
-
-// Thread priorities
-Thread.MIN_PRIORITY   // 1
-Thread.NORM_PRIORITY  // 5
-Thread.MAX_PRIORITY   // 10
-
-// Android Process priorities
-android:process="backgroundProcess"
-android:priority="background"
-
-// Handler priority
-val handler = Handler(HandlerThread("background").apply {
-    priority = Process.THREAD_PRIORITY_BACKGROUND
-}.looper)
-```
-
----
-
-### MEMORY MANAGEMENT
-
-**Virtual Memory:**
-```
-Virtual Memory = Abstraction that gives each process
-                 illusion of large, contiguous address space
-
-Benefits:
- Process isolation (security)
- More processes than physical RAM
- Efficient memory use
- Simplified programming
-
-How it works:
-Virtual Address → MMU (Memory Management Unit) → Physical Address
-
-Virtual Memory divided into:
-- Pages (typically 4KB)
-
-Physical Memory divided into:
-- Frames (same size as pages)
-
-Page Table: Maps virtual pages to physical frames
-```
-
-**Paging Example:**
-```
-Virtual Address Space: 0x0000 - 0xFFFF (64KB)
-Physical Memory: 32KB (8 frames of 4KB each)
-
-Page Table:
-Virtual Page  →  Physical Frame
-0             →  3
-1             →  7
-2             →  1
-3             →  (not in memory, on disk)
-4             →  5
-
-Process accesses address 0x1000:
-1. Extract page number: 0x1000 / 4KB = Page 0
-2. Look up in page table: Page 0 → Frame 3
-3. Calculate physical address: (Frame 3 × 4KB) + offset
-4. Access physical memory
+// Process accesses 0x1000:
+// 1. Page number: 0x1000 / 4KB = Page 0
+// 2. Look up: Page 0 → Frame 3
+// 3. Physical address: (Frame 3 × 4KB) + offset
+// 4. Access physical memory
 ```
 
 **Page Fault:**
-```
-Page Fault = Referenced page not in physical memory
 
-Steps:
-1. Process accesses virtual address
-2. MMU looks up page table
-3. Page not present → Page Fault exception
-4. OS:
-   - Save process state
-   - Find free frame (or evict page)
-   - Load page from disk
-   - Update page table
-   - Resume process
+*Теория:* Page Fault - referenced page not in physical memory. Steps: save state, find free frame, load from disk, update page table, resume process. Allows more processes than RAM but slow (disk I/O).
 
-Performance:
- Allows more processes than RAM
- Page faults are SLOW (disk I/O)
-```
+**System Calls:**
 
-**Android Memory:**
+*Теория:* System Call - request to OS kernel for service. Categories: Process Control (fork, exec, exit), File Management (open, read, write), Device Management (ioctl), Information Maintenance (getpid, alarm), Communication (pipe, socket), Protection (chmod). User mode → Kernel mode → User mode.
+
 ```kotlin
-// Android Low Memory Killer (LMK)
-// Kills processes when memory low
-
-class MyApplication : Application() {
-    override fun onLowMemory() {
-        // System is running low on memory
-        // Release caches, bitmaps, etc.
-        imageCache.clear()
-        memoryCache.evictAll()
-    }
-
-    override fun onTrimMemory(level: Int) {
-        when (level) {
-            TRIM_MEMORY_RUNNING_CRITICAL -> {
-                // App in foreground, memory critically low
-                releaseNonEssentialMemory()
-            }
-            TRIM_MEMORY_BACKGROUND -> {
-                // App in background, release more memory
-                releaseAllCaches()
-            }
-            TRIM_MEMORY_COMPLETE -> {
-                // App about to be killed
-                releaseEverything()
-            }
-        }
-    }
-}
-
-// Check available memory
-val activityManager = getSystemService(Context.ACTIVITY_MANAGER_SERVICE) as ActivityManager
-val memoryInfo = ActivityManager.MemoryInfo()
-activityManager.getMemoryInfo(memoryInfo)
-
-if (memoryInfo.lowMemory) {
-    // Memory is low
-    val availableMB = memoryInfo.availMem / (1024 * 1024)
-    Log.w("Memory", "Low memory: ${availableMB}MB available")
-}
-```
-
----
-
-### SYSTEM CALLS
-
-**System Call = Request to OS kernel for service**
-
-**Categories:**
-```
-1. Process Control
-   - fork(), exec(), exit(), wait()
-   - Android: Process.start(), Process.killProcess()
-
-2. File Management
-   - open(), read(), write(), close()
-   - Android: FileInputStream, FileOutputStream
-
-3. Device Management
-   - ioctl(), read(), write()
-   - Android: Camera API, Sensor API
-
-4. Information Maintenance
-   - getpid(), alarm(), sleep()
-   - Android: Process.myPid(), SystemClock.sleep()
-
-5. Communication
-   - pipe(), socket(), send(), receive()
-   - Android: Socket, LocalSocket
-
-6. Protection
-   - chmod(), umask(), chown()
-   - Android: File permissions, SELinux
-```
-
-**System Call Example:**
-```kotlin
-// High-level Android API
-val file = File("/data/data/com.example.app/file.txt")
+// ✅ System Call Flow
+// High-level: File API
+val file = File("data.txt")
 file.writeText("Hello")
 
-// Behind the scenes, translates to system calls:
-// 1. open("/data/data/com.example.app/file.txt", O_WRONLY|O_CREAT, 0644)
-// 2. write(fd, "Hello", 5)
-// 3. close(fd)
+// Behind scenes:
+// 1. open("data.txt", O_WRONLY|O_CREAT, 0644)  // System call
+// 2. write(fd, "Hello", 5)  // System call
+// 3. close(fd)  // System call
 
-// System call flow:
-// App (User Mode)
-//     ↓ syscall
-// Kernel (Kernel Mode)
-//     → Execute privileged operation
-//     → Return to user mode
-// App continues
+// User Mode → Kernel Mode → User Mode
 ```
 
----
+**IPC (Inter-Process Communication):**
 
-### INTER-PROCESS COMMUNICATION (IPC)
+*Теория:* IPC - communication between processes. Mechanisms: Shared Memory (fastest, direct access), Message Passing (Binder in Android), Pipes (unidirectional), Sockets (bidirectional, network). Android uses Binder for all inter-app communication.
 
-**IPC Mechanisms:**
-
-**1. Shared Memory:**
-```
-Fastest IPC, processes share memory region
-
-Android Example: Ashmem (Anonymous Shared Memory)
-Used for passing large data (e.g., Bitmaps)
-
-// Sender
-val ashmem = AshmemAllocator.createAshmem("mysharedmem", 1024)
-ashmem.writeBytes(data)
-
-// Receiver gets same memory region
-val ashmem = AshmemAllocator.getAshmem(fd)
-val data = ashmem.readBytes()
-```
-
-**2. Message Passing:**
-```
-Processes send/receive messages
-
-Android Example: Binder IPC
-All inter-app communication uses Binder
-
-// Service (receives messages)
+```kotlin
+// ✅ Binder IPC Example
 class MyService : Service() {
     private val binder = object : IMyService.Stub() {
         override fun doSomething(data: String): String {
             return "Processed: $data"
         }
     }
-
     override fun onBind(intent: Intent): IBinder = binder
 }
 
-// Client (sends messages)
+// Client
 class ClientActivity : AppCompatActivity() {
-    private var service: IMyService? = null
-
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, binder: IBinder) {
-            service = IMyService.Stub.asInterface(binder)
+            val service = IMyService.Stub.asInterface(binder)
             val result = service?.doSomething("Hello")
         }
-
-        override fun onServiceDisconnected(name: ComponentName) {
-            service = null
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        bindService(Intent(this, MyService::class.java), connection, BIND_AUTO_CREATE)
+        override fun onServiceDisconnected(name: ComponentName) { }
     }
 }
 ```
 
-**3. Pipes:**
-```
-Unidirectional communication channel
+**Context Switching:**
 
-Example: Process output piping
-ls | grep "file"
-     ↑ pipe connects ls output to grep input
-```
+*Теория:* Context Switch - save current process state, load another. Context includes: Program Counter, CPU Registers, Process State, Memory Management Info, I/O Status. Cost: save/restore registers, update memory mappings, cache/TLB invalidation (1-10 microseconds). Pure overhead but necessary for multitasking.
 
-**4. Sockets:**
-```
-Bidirectional, can work across network
+**Deadlock:**
 
-Android Example:
-val socket = Socket("localhost", 8080)
-val output = socket.getOutputStream()
-output.write("Hello".toByteArray())
+*Теория:* Deadlock - processes waiting for each other indefinitely. Four necessary conditions: Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait. Prevention: lock ordering (always acquire in same order), timeout, resource hierarchy.
 
-val input = socket.getInputStream()
-val response = input.readBytes()
-```
-
----
-
-### CONTEXT SWITCHING
-
-**Context Switch = Save current process state, load another**
-
-```
-Context of Process:
-- Program Counter (PC)
-- CPU Registers
-- Process State
-- Memory Management Info
-- I/O Status
-- Accounting Info
-
-Context Switch Steps:
-1. Interrupt or system call
-2. Save current process context (PCB - Process Control Block)
-3. Update process state
-4. Select next process (scheduler)
-5. Load new process context
-6. Resume execution
-
-Cost:
-- Save/restore registers
-- Update memory mappings
-- Cache/TLB invalidation
-- Time: 1-10 microseconds
-
- Pure overhead - no useful work done
- Necessary for multitasking
-```
-
-**Android Context Switching:**
 ```kotlin
-// Android minimizes context switches
-// Use thread pools instead of creating many threads
-
-//  Bad: Many threads, many context switches
-repeat(1000) {
-    Thread {
-        doWork()
-    }.start()
-}
-
-//  Good: Thread pool limits concurrent threads
-val executor = Executors.newFixedThreadPool(4)
-repeat(1000) {
-    executor.execute {
-        doWork()
-    }
-}
-
-//  Better: Coroutines (even lighter weight)
-runBlocking {
-    repeat(1000) {
-        launch {
-            doWork()
-        }
-    }
-}
-```
-
----
-
-### DEADLOCK
-
-**Deadlock = Processes waiting for each other indefinitely**
-
-**Necessary Conditions (all 4 must be true):**
-```
-1. Mutual Exclusion
-   - At least one resource must be non-shareable
-
-2. Hold and Wait
-   - Process holds resource while waiting for another
-
-3. No Preemption
-   - Resources cannot be forcibly taken
-
-4. Circular Wait
-   - P1 waits for P2, P2 waits for P3, ..., Pn waits for P1
-```
-
-**Example:**
-```kotlin
-// Deadlock example
+// ❌ Deadlock
 val lock1 = ReentrantLock()
 val lock2 = ReentrantLock()
 
-// Thread 1
+// Thread 1: lock1.lock(), wait lock2
+// Thread 2: lock2.lock(), wait lock1
+// → Circular wait → DEADLOCK
+
+// ✅ Prevention: Lock ordering
+// Always: lock1 first, then lock2
 thread {
     lock1.lock()
-    Thread.sleep(100)
-    lock2.lock()  //  Waits forever
-    // Do work
-    lock2.unlock()
-    lock1.unlock()
-}
-
-// Thread 2
-thread {
     lock2.lock()
-    Thread.sleep(100)
-    lock1.lock()  //  Waits forever
-    // Do work
-    lock1.unlock()
-    lock2.unlock()
-}
-
-// Thread 1: Holds lock1, waits for lock2
-// Thread 2: Holds lock2, waits for lock1
-// → DEADLOCK
-```
-
-**Prevention:**
-```kotlin
-//  Solution: Lock ordering
-// Always acquire locks in same order
-
-// Thread 1
-thread {
-    lock1.lock()  // Always lock1 first
-    lock2.lock()
-    // Do work
-    lock2.unlock()
-    lock1.unlock()
-}
-
-// Thread 2
-thread {
-    lock1.lock()  // Always lock1 first
-    lock2.lock()
-    // Do work
+    // Work
     lock2.unlock()
     lock1.unlock()
 }
@@ -644,442 +188,212 @@ thread {
 // No circular wait → No deadlock
 ```
 
-**Deadlock Detection in Android:**
-```kotlin
-// StrictMode can detect potential deadlocks
-StrictMode.setThreadPolicy(
-    StrictMode.ThreadPolicy.Builder()
-        .detectAll()
-        .penaltyLog()
-        .build()
-)
+**Ключевые выводы:**
+1. Process - isolated execution with own memory space
+2. Thread - lightweight process with shared memory
+3. Virtual Memory - address space abstraction for isolation
+4. CPU Scheduling - determine which process runs next
+5. System Call - request kernel service (user→kernel mode)
+6. Context Switch - save/load process state (overhead)
+7. IPC - communication between processes (Binder in Android)
+8. Deadlock - circular wait, prevent with lock ordering
+9. Page Fault - slow disk I/O for memory access
+10. Paging - divide memory into fixed-size pages
 
-// Use timeout with locks
-val acquired = lock.tryLock(1, TimeUnit.SECONDS)
-if (acquired) {
-    try {
-        // Do work
-    } finally {
-        lock.unlock()
+## Answer (EN)
+
+**OS Fundamentals Theory:**
+Operating Systems manage hardware resources, provide abstraction layers, enable concurrent execution. Core concepts: Processes (isolated execution units), Threads (lightweight processes), Virtual Memory (address space abstraction), CPU Scheduling (resource allocation), System Calls (kernel services), IPC (Inter-Process Communication), Deadlock (circular waiting).
+
+**Processes vs Threads:**
+
+*Theory:* Process - program in execution, isolated memory space, own resources. Thread - lightweight process within process, shared memory. Process: independent, heavyweight, slow context switch, IPC required. Thread: shared memory, lightweight, fast context switch, no IPC needed. Key difference: isolation vs sharing.
+
+```kotlin
+// ✅ Process: Isolated memory space
+// Android app runs in separate Linux process
+// Each app has its own address space
+// Processes communicate via IPC (Binder)
+
+// ✅ Thread: Shared memory within process
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Main Thread (UI Thread)
+        textView.text = "Hello"  // ✅ Safe
+
+        // Background Thread
+        Thread {
+            val data = fetchData()  // Background work
+            runOnUiThread {
+                textView.text = data  // Post to UI thread
+            }
+        }.start()
+
+        // ✅ Modern: Coroutines
+        lifecycleScope.launch {
+            val data = withContext(Dispatchers.IO) {
+                fetchDataFromNetwork()
+            }
+            textView.text = data  // Main thread
+        }
     }
-} else {
-    // Lock not acquired - avoid deadlock
-    Log.w("Deadlock", "Could not acquire lock")
 }
 ```
 
----
+**Process States:**
 
-### KEY TAKEAWAYS
+*Theory:* Process lifecycle: NEW → READY → RUNNING → WAITING → TERMINATED. State transitions: interrupt (RUNNING → READY), I/O wait (RUNNING → WAITING), scheduler dispatch (READY → RUNNING). Android process importance: FOREGROUND > VISIBLE > SERVICE > BACKGROUND > EMPTY.
 
-1. **Process** = program in execution with isolated memory
-2. **Thread** = lightweight unit within process, shared memory
-3. **Virtual Memory** = abstraction providing large address space
-4. **Paging** = divide memory into fixed-size pages
-5. **Page Fault** = referenced page not in RAM (slow!)
-6. **CPU Scheduling** = determine which process runs next
-7. **Context Switch** = save/load process state (overhead)
-8. **System Call** = request kernel service (user→kernel mode)
-9. **IPC** = communication between processes (Binder in Android)
-10. **Deadlock** = circular wait, prevent with lock ordering
+**CPU Scheduling:**
 
----
+*Theory:* Scheduling - decide which process runs next. Algorithms: FCFS (First-Come First-Served), SJF (Shortest Job First), RR (Round Robin). Goals: fairness, throughput, response time, waiting time. Trade-offs: convoy effect vs starvation vs overhead.
 
-## Russian Version
+**1. FCFS:**
+*Theory:* Non-preemptive, execute processes in arrival order. Simple but convoy effect - short processes wait for long ones. Example: P1(24ms) → P2(3ms) → P3(3ms). Average waiting: (0 + 24 + 27) / 3 = 17ms.
 
-### Постановка задачи
+**2. SJF:**
+*Theory:* Execute shortest process first. Optimal average waiting time but starvation - long processes never execute. Example: P2(3ms) → P3(3ms) → P1(24ms). Average: (0 + 3 + 6) / 3 = 3ms.
 
-Операционные системы управляют аппаратными ресурсами, предоставляют уровни абстракции и обеспечивают параллельное выполнение. Понимание концепций ОС, таких как процессы, потоки, управление памятью и планирование, критично для создания эффективных приложений и отладки проблем производительности.
+**3. Round Robin:**
+*Theory:* Each process gets time quantum, then preempted. Fair, no starvation, good response time. Higher waiting time due to context switches. Example: quantum=4ms, P1(24ms) requires 6 quanta, P2(3ms) 1 quantum.
 
-**Вопрос:** Каковы ключевые концепции ОС? Как работают процессы и потоки? Что такое виртуальная память? Как работает планирование CPU? Что такое системные вызовы?
+**Virtual Memory:**
 
-### Детальный ответ
+*Theory:* Virtual Memory - abstraction providing large, contiguous address space. Benefits: process isolation (security), more processes than physical RAM, efficient memory use. Mechanism: Virtual Address → MMU → Physical Address. Paging - divide memory into pages (typically 4KB). Physical memory divided into frames (same size).
 
----
-
-### ПРОЦЕССЫ VS ПОТОКИ
-
-**Процесс:**
-```
-Процесс = Программа в процессе выполнения
-
-Компоненты:
-- Код программы (текстовая секция)
-- Текущая активность (счетчик команд, регистры)
-- Стек (временные данные: параметры функций, локальные переменные)
-- Heap (динамически выделяемая память)
-- Секция данных (глобальные переменные)
-
-Характеристики:
-✓ Независимое адресное пространство памяти
-✓ Собственные ресурсы (файлы, I/O)
-✓ Тяжеловесный (дорогое создание/переключение)
-✓ Требуется межпроцессное взаимодействие (IPC)
-✓ Медленное переключение контекста
-✓ Высокие накладные расходы на память
-```
-
-**Поток:**
-```
-Поток = Легковесный процесс, единица выполнения внутри процесса
-
-Компоненты:
-- Счетчик команд
-- Набор регистров
-- Стек
-- ID потока
-
-Разделяет с другими потоками в том же процессе:
-- Секцию кода
-- Секцию данных
-- Heap
-- Открытые файлы
-
-Характеристики:
-✓ Разделяемое адресное пространство памяти
-✓ Легковесный (дешевое создание/переключение)
-✓ Быстрое переключение контекста
-✓ Простая коммуникация (разделяемая память)
-✗ Нет защиты памяти между потоками
-✗ Сбой одного потока может обрушить весь процесс
-```
-
----
-
-### СОСТОЯНИЯ ПРОЦЕССА
-
-```
-   NEW     Процесс создается
-     ↓
-  READY    Процесс ждет CPU
-     ↓ (scheduler dispatch)
- RUNNING   Процесс выполняется на CPU
-     ↓ (I/O or event wait)
-  WAITING  Процесс ждет I/O/события
-     ↓ (I/O complete)
-  READY
-
-TERMINATED Процесс завершен
-```
-
----
-
-### ПЛАНИРОВАНИЕ CPU
-
-**Алгоритмы планирования:**
-
-**1. First-Come, First-Served (FCFS)**
-```
-Невытесняющий, процессы выполняются в порядке прибытия
-
-Пример:
-Процесс  Время выполнения  Время прибытия
-P1       24                0
-P2       3                 0
-P3       3                 0
-
-Timeline: |--P1 (24ms)--|P2(3)|P3(3)|
-Время ожидания:
-- P1: 0ms
-- P2: 24ms (ждет P1)
-- P3: 27ms (ждет P1, P2)
-Среднее: (0 + 24 + 27) / 3 = 17ms
-
-✗ Convoy Effect: Короткие процессы ждут длинные
-```
-
-**2. Shortest Job First (SJF)**
-```
-Выполняет сначала самый короткий процесс
-
-Пример (те же процессы):
-Timeline: |P2(3)|P3(3)|--P1 (24ms)--|
-Время ожидания:
-- P2: 0ms
-- P3: 3ms
-- P1: 6ms
-Среднее: (0 + 3 + 6) / 3 = 3ms
-
-✓ Оптимальное среднее время ожидания
-✗ Голодание: Длинные процессы могут никогда не выполниться
-✗ Необходимо предсказать время выполнения
-```
-
-**3. Round Robin (RR)**
-```
-Каждый процесс получает квант времени (например, 4ms), затем вытесняется
-
-Пример (квант = 4ms):
-Процесс  Время выполнения
-P1       24
-P2       3
-P3       3
-
-Timeline: |P1(4)|P2(3)|P3(3)|P1(4)|P1(4)|P1(4)|P1(4)|P1(4)|
-
-✓ Справедливый, хорошее время отклика
-✓ Нет голодания
-✗ Более высокое среднее время ожидания
-✗ Накладные расходы на переключение контекста
-```
-
----
-
-### УПРАВЛЕНИЕ ПАМЯТЬЮ
-
-**Виртуальная память:**
-```
-Виртуальная память = Абстракция, дающая каждому процессу
-                     иллюзию большого непрерывного адресного пространства
-
-Преимущества:
-✓ Изоляция процессов (безопасность)
-✓ Больше процессов чем физической RAM
-✓ Эффективное использование памяти
-✓ Упрощенное программирование
-
-Как работает:
-Виртуальный адрес → MMU (Memory Management Unit) → Физический адрес
-
-Виртуальная память разделена на:
-- Страницы (обычно 4KB)
-
-Физическая память разделена на:
-- Фреймы (того же размера что и страницы)
-
-Таблица страниц: Отображает виртуальные страницы на физические фреймы
-```
-
-**Пример страничной организации:**
-```
-Виртуальное адресное пространство: 0x0000 - 0xFFFF (64KB)
-Физическая память: 32KB (8 фреймов по 4KB)
-
-Таблица страниц:
-Виртуальная страница  →  Физический фрейм
-0                     →  3
-1                     →  7
-2                     →  1
-3                     →  (не в памяти, на диске)
-4                     →  5
-
-Процесс обращается к адресу 0x1000:
-1. Извлекаем номер страницы: 0x1000 / 4KB = Страница 0
-2. Ищем в таблице страниц: Страница 0 → Фрейм 3
-3. Вычисляем физический адрес: (Фрейм 3 × 4KB) + смещение
-4. Обращаемся к физической памяти
-```
-
-**Page Fault (отказ страницы):**
-```
-Page Fault = Обращение к странице, которой нет в физической памяти
-
-Шаги:
-1. Процесс обращается к виртуальному адресу
-2. MMU ищет в таблице страниц
-3. Страница отсутствует → исключение Page Fault
-4. ОС:
-   - Сохраняет состояние процесса
-   - Находит свободный фрейм (или вытесняет страницу)
-   - Загружает страницу с диска
-   - Обновляет таблицу страниц
-   - Возобновляет процесс
-
-Производительность:
-✓ Позволяет больше процессов чем RAM
-✗ Page faults МЕДЛЕННЫЕ (дисковый I/O)
-```
-
----
-
-### СИСТЕМНЫЕ ВЫЗОВЫ
-
-**Системный вызов = Запрос к ядру ОС для получения сервиса**
-
-**Категории:**
-```
-1. Управление процессами
-   - fork(), exec(), exit(), wait()
-   - Android: Process.start(), Process.killProcess()
-
-2. Управление файлами
-   - open(), read(), write(), close()
-   - Android: FileInputStream, FileOutputStream
-
-3. Управление устройствами
-   - ioctl(), read(), write()
-   - Android: Camera API, Sensor API
-
-4. Информационное обслуживание
-   - getpid(), alarm(), sleep()
-   - Android: Process.myPid(), SystemClock.sleep()
-
-5. Коммуникация
-   - pipe(), socket(), send(), receive()
-   - Android: Socket, LocalSocket
-
-6. Защита
-   - chmod(), umask(), chown()
-   - Android: Права доступа к файлам, SELinux
-```
-
----
-
-### МЕЖПРОЦЕССНОЕ ВЗАИМОДЕЙСТВИЕ (IPC)
-
-**Механизмы IPC:**
-
-**1. Разделяемая память:**
-```
-Самый быстрый IPC, процессы разделяют область памяти
-
-Android пример: Ashmem (Anonymous Shared Memory)
-Используется для передачи больших данных (например, Bitmap)
-```
-
-**2. Передача сообщений:**
-```
-Процессы отправляют/получают сообщения
-
-Android пример: Binder IPC
-Вся межприложенческая коммуникация использует Binder
-```
-
-**3. Каналы (Pipes):**
-```
-Однонаправленный канал коммуникации
-
-Пример: Перенаправление вывода процесса
-ls | grep "file"
-   ↑ канал соединяет вывод ls с вводом grep
-```
-
-**4. Сокеты:**
-```
-Двунаправленные, могут работать через сеть
-
-Android пример:
-val socket = Socket("localhost", 8080)
-val output = socket.getOutputStream()
-output.write("Hello".toByteArray())
-```
-
----
-
-### ПЕРЕКЛЮЧЕНИЕ КОНТЕКСТА
-
-**Context Switch = Сохранение состояния текущего процесса, загрузка другого**
-
-```
-Контекст процесса:
-- Счетчик команд (Program Counter)
-- Регистры CPU
-- Состояние процесса
-- Информация об управлении памятью
-- Статус I/O
-- Учетная информация
-
-Шаги переключения контекста:
-1. Прерывание или системный вызов
-2. Сохранение контекста текущего процесса (PCB - Process Control Block)
-3. Обновление состояния процесса
-4. Выбор следующего процесса (планировщик)
-5. Загрузка контекста нового процесса
-6. Возобновление выполнения
-
-Стоимость:
-- Сохранение/восстановление регистров
-- Обновление отображений памяти
-- Инвалидация Cache/TLB
-- Время: 1-10 микросекунд
-
-✗ Чистые накладные расходы - полезной работы не выполняется
-✓ Необходимо для многозадачности
-```
-
----
-
-### DEADLOCK (ВЗАИМНАЯ БЛОКИРОВКА)
-
-**Deadlock = Циклическое ожидание, когда потоки блокируют друг друга**
-
-**Необходимые условия (все 4 должны быть истинны):**
-```
-1. Взаимное исключение
-   - Как минимум один ресурс должен быть неразделяемым
-
-2. Удержание и ожидание
-   - Процесс удерживает ресурс пока ждет другой
-
-3. Отсутствие вытеснения
-   - Ресурсы нельзя принудительно забрать
-
-4. Циклическое ожидание
-   - P1 ждет P2, P2 ждет P3, ..., Pn ждет P1
-```
-
-**Предотвращение:**
 ```kotlin
-// ✓ Решение: Упорядочение блокировок
-// Всегда захватывать блокировки в одном и том же порядке
+// ✅ Virtual Memory Example
+// Virtual Address Space: 0x0000 - 0xFFFF (64KB)
+// Physical Memory: 32KB (8 frames of 4KB)
 
-// Поток 1
-thread {
-    lock1.lock()  // Всегда сначала lock1
-    lock2.lock()
-    // Работа
-    lock2.unlock()
-    lock1.unlock()
-}
+// Page Table:
+// Virtual Page → Physical Frame
+// 0 → 3
+// 1 → 7
+// 2 → 1
+// 3 → (not in memory, on disk)
 
-// Поток 2
-thread {
-    lock1.lock()  // Всегда сначала lock1
-    lock2.lock()
-    // Работа
-    lock2.unlock()
-    lock1.unlock()
-}
-
-// Нет циклического ожидания → Нет deadlock
+// Process accesses 0x1000:
+// 1. Page number: 0x1000 / 4KB = Page 0
+// 2. Look up: Page 0 → Frame 3
+// 3. Physical address: (Frame 3 × 4KB) + offset
+// 4. Access physical memory
 ```
 
+**Page Fault:**
+
+*Theory:* Page Fault - referenced page not in physical memory. Steps: save state, find free frame, load from disk, update page table, resume process. Allows more processes than RAM but slow (disk I/O).
+
+**System Calls:**
+
+*Theory:* System Call - request to OS kernel for service. Categories: Process Control (fork, exec, exit), File Management (open, read, write), Device Management (ioctl), Information Maintenance (getpid, alarm), Communication (pipe, socket), Protection (chmod). User mode → Kernel mode → User mode.
+
+```kotlin
+// ✅ System Call Flow
+// High-level: File API
+val file = File("data.txt")
+file.writeText("Hello")
+
+// Behind scenes:
+// 1. open("data.txt", O_WRONLY|O_CREAT, 0644)  // System call
+// 2. write(fd, "Hello", 5)  // System call
+// 3. close(fd)  // System call
+
+// User Mode → Kernel Mode → User Mode
+```
+
+**IPC (Inter-Process Communication):**
+
+*Theory:* IPC - communication between processes. Mechanisms: Shared Memory (fastest, direct access), Message Passing (Binder in Android), Pipes (unidirectional), Sockets (bidirectional, network). Android uses Binder for all inter-app communication.
+
+```kotlin
+// ✅ Binder IPC Example
+class MyService : Service() {
+    private val binder = object : IMyService.Stub() {
+        override fun doSomething(data: String): String {
+            return "Processed: $data"
+        }
+    }
+    override fun onBind(intent: Intent): IBinder = binder
+}
+
+// Client
+class ClientActivity : AppCompatActivity() {
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName, binder: IBinder) {
+            val service = IMyService.Stub.asInterface(binder)
+            val result = service?.doSomething("Hello")
+        }
+        override fun onServiceDisconnected(name: ComponentName) { }
+    }
+}
+```
+
+**Context Switching:**
+
+*Theory:* Context Switch - save current process state, load another. Context includes: Program Counter, CPU Registers, Process State, Memory Management Info, I/O Status. Cost: save/restore registers, update memory mappings, cache/TLB invalidation (1-10 microseconds). Pure overhead but necessary for multitasking.
+
+**Deadlock:**
+
+*Theory:* Deadlock - processes waiting for each other indefinitely. Four necessary conditions: Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait. Prevention: lock ordering (always acquire in same order), timeout, resource hierarchy.
+
+```kotlin
+// ❌ Deadlock
+val lock1 = ReentrantLock()
+val lock2 = ReentrantLock()
+
+// Thread 1: lock1.lock(), wait lock2
+// Thread 2: lock2.lock(), wait lock1
+// → Circular wait → DEADLOCK
+
+// ✅ Prevention: Lock ordering
+// Always: lock1 first, then lock2
+thread {
+    lock1.lock()
+    lock2.lock()
+    // Work
+    lock2.unlock()
+    lock1.unlock()
+}
+
+// No circular wait → No deadlock
+```
+
+**Key Takeaways:**
+1. Process - isolated execution with own memory space
+2. Thread - lightweight process with shared memory
+3. Virtual Memory - address space abstraction for isolation
+4. CPU Scheduling - determine which process runs next
+5. System Call - request kernel service (user→kernel mode)
+6. Context Switch - save/load process state (overhead)
+7. IPC - communication between processes (Binder in Android)
+8. Deadlock - circular wait, prevent with lock ordering
+9. Page Fault - slow disk I/O for memory access
+10. Paging - divide memory into fixed-size pages
+
 ---
-
-### КЛЮЧЕВЫЕ ВЫВОДЫ
-
-1. **Процесс** = программа в исполнении с изолированной памятью
-2. **Поток** = легковесная единица внутри процесса, разделяемая память
-3. **Виртуальная память** = абстракция, предоставляющая большое адресное пространство
-4. **Paging** = разделение памяти на страницы фиксированного размера
-5. **Page Fault** = обращение к странице не в RAM (медленно!)
-6. **CPU Scheduling** = определение какой процесс выполняется следующим
-7. **Context Switch** = сохранение/загрузка состояния процесса (накладные расходы)
-8. **Системный вызов** = запрос сервиса ядра (user→kernel mode)
-9. **IPC** = коммуникация между процессами (Binder в Android)
-10. **Deadlock** = циклическое ожидание, предотвращается упорядочением блокировок
 
 ## Follow-ups
 
-1. What is the difference between preemptive and non-preemptive scheduling?
-2. How does the Android Low Memory Killer work?
-3. What is thrashing in virtual memory?
-4. How do semaphores differ from mutexes?
-5. What is the Producer-Consumer problem?
-6. How does copy-on-write (COW) work?
-7. What are Translation Lookaside Buffers (TLB)?
-8. How does Android's Binder IPC work internally?
-9. What is priority inversion and how to prevent it?
-10. How do modern CPUs implement multithreading (SMT/Hyperthreading)?
-
----
+- What is the difference between preemptive and non-preemptive scheduling?
+- How does the Android Low Memory Killer work?
+- What is thrashing in virtual memory?
+- How do semaphores differ from mutexes?
+- What is the Producer-Consumer problem?
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-oop-principles-deep-dive--computer-science--medium]] - Computer Science
-- [[q-clean-code-principles--software-engineering--medium]] - Computer Science
-- [[q-default-vs-io-dispatcher--programming-languages--medium]] - Computer Science
+- Basic computer science concepts
+- Understanding of system architecture
 
-### Related (Hard)
-- [[q-concurrency-fundamentals--computer-science--hard]] - concurrency fundamentals   computer science 
+### Related (Same Level)
+- [[q-concurrency-fundamentals--computer-science--hard]] - Concurrency fundamentals
+- [[q-oop-principles-deep-dive--computer-science--medium]] - OOP principles
+
+### Advanced (Harder)
+- Advanced OS concepts
+- Distributed systems
+- Performance optimization

@@ -5,16 +5,15 @@ topic: programming-languages
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags:
-  - xml
-  - markup-language
-  - acronym
-  - programming-languages
+tags: [acronym, markup-language, programming-languages, xml]
 moc: moc-programming-languages
 related: [q-data-class-component-functions--programming-languages--easy, q-decorator-pattern--design-patterns--medium, q-suspend-functions-under-the-hood--programming-languages--hard]
 subtopics: ["computer-science", "fundamentals"]
+date created: Friday, October 3rd 2025, 7:03:56 pm
+date modified: Sunday, October 26th 2025, 1:40:02 pm
 ---
-# Как расшифровывается xml?
+
+# Как Расшифровывается Xml?
 
 # Question (EN)
 > How is XML deciphered?
@@ -108,7 +107,7 @@ In Android development, XML is heavily used:
 </manifest>
 ```
 
-### XML vs JSON
+### XML Vs JSON
 
 | Feature | XML | JSON |
 |---------|-----|------|
@@ -143,7 +142,7 @@ In Android development, XML is heavily used:
 
 **XML** расшифровывается как **eXtensible Markup Language** (Расширяемый язык разметки).
 
-### Ключевые характеристики
+### Ключевые Характеристики
 
 **1. Расширяемый:**
 - Вы можете определять свои собственные теги
@@ -223,7 +222,7 @@ In Android development, XML is heavily used:
 </manifest>
 ```
 
-### XML vs JSON
+### XML Vs JSON
 
 | Характеристика | XML | JSON |
 |---------|-----|------|

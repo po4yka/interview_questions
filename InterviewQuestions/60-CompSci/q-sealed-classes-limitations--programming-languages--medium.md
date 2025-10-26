@@ -5,15 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-what-is-flow--programming-languages--medium, q-what-is-job-object--programming-languages--medium, q-clean-code-principles--software-engineering--medium]
+related: [q-clean-code-principles--software-engineering--medium, q-what-is-flow--programming-languages--medium, q-what-is-job-object--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - class-hierarchy
-  - kotlin
-  - programming-languages
-  - sealed-classes
+tags: [class-hierarchy, kotlin, programming-languages, sealed-classes]
+date created: Friday, October 3rd 2025, 4:39:28 pm
+date modified: Sunday, October 26th 2025, 1:37:23 pm
 ---
-# Какие есть ограничения у sealed классов?
+
+# Какие Есть Ограничения У Sealed Классов?
 
 # Question (EN)
 > What are the limitations of sealed classes?

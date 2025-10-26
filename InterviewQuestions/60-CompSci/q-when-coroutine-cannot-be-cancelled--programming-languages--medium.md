@@ -5,11 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-how-suspend-function-detects-suspension--programming-languages--hard, q-priorityqueue-vs-deque--programming-languages--easy, q-equals-hashcode-rules--programming-languages--medium]
+related: [q-equals-hashcode-rules--programming-languages--medium, q-how-suspend-function-detects-suspension--programming-languages--hard, q-priorityqueue-vs-deque--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:48:38 am
+date modified: Sunday, October 26th 2025, 1:40:00 pm
 ---
+
 # When Coroutine Cannot Be Cancelled?
 
 # Question (EN)
@@ -362,7 +364,7 @@ suspend fun processImageCooperative(image: Bitmap): Bitmap {
 }
 ```
 
-### try-finally with Cancellation
+### Try-finally with Cancellation
 
 ```kotlin
 // Cancellation throws CancellationException

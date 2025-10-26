@@ -5,11 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-java-access-modifiers--programming-languages--medium, q-equals-hashcode-purpose--programming-languages--hard, q-prototype-pattern--design-patterns--medium]
+related: [q-equals-hashcode-purpose--programming-languages--hard, q-java-access-modifiers--programming-languages--medium, q-prototype-pattern--design-patterns--medium]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:43:29 am
+date modified: Sunday, October 26th 2025, 1:40:02 pm
 ---
+
 # Where to Call Suspend Functions?
 
 # Question (EN)
@@ -48,7 +50,7 @@ suspend fun fetchUserSettings(userId: Int): UserSettings {
 }
 ```
 
-### 2. From launch {} Builder
+### 2. From Launch {} Builder
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -87,7 +89,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 3. From async {} Builder
+### 3. From Async {} Builder
 
 ```kotlin
 suspend fun loadParallelData(): CombinedData = coroutineScope {

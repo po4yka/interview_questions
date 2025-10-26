@@ -7,13 +7,11 @@ status: draft
 moc: moc-cs
 related: [q-bridge-pattern--design-patterns--hard, q-hot-vs-cold-flows--programming-languages--medium, q-sharedflow-vs-stateflow--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - behavioral-patterns
-  - state
-  - gof-patterns
-  - state-machine
+tags: [behavioral-patterns, design-patterns, gof-patterns, state, state-machine]
+date created: Monday, October 6th 2025, 7:23:49 am
+date modified: Sunday, October 26th 2025, 1:39:49 pm
 ---
+
 # State Pattern
 
 # Question (EN)
@@ -42,7 +40,7 @@ The state pattern is set to solve two main problems:
 1. **An object should change its behavior when its internal state changes**
 2. **State-specific behavior should be defined independently** - Adding new states should not affect the behavior of existing states
 
-### Why is this a problem?
+### Why is This a Problem?
 
 
 Implementing state-specific behavior directly within a class is inflexible because it commits the class to a particular behavior and makes it impossible to add a new state or change the behavior of an existing state later without changing the class.
@@ -57,7 +55,7 @@ The pattern describes two solutions:
 
 This makes a class independent of how state-specific behavior is implemented. New states can be added by defining new state classes. A class can change its behavior at run-time by changing its current state object.
 
-## Ключевые особенности
+## Ключевые Особенности
 
 Key Features:
 
@@ -370,7 +368,7 @@ Real World Examples:
 3. **Order processing** - Pending → Processing → Shipped → Delivered
 4. **Media players** - Playing, Paused, Stopped states
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Pros (Преимущества)
 
@@ -449,14 +447,14 @@ interface State {
 
 Паттерн State (Состояние) - это поведенческий паттерн проектирования, который **позволяет объекту изменять свое поведение при изменении внутреннего состояния**. Этот паттерн инкапсулирует различное поведение одного и того же объекта на основе его внутреннего состояния, предоставляя более чистый способ изменения поведения объекта во время выполнения без использования условных операторов.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Паттерн State решает две основные проблемы:
 
 1. **Объект должен изменять свое поведение при изменении внутреннего состояния**
 2. **Поведение, специфичное для состояния, должно быть определено независимо** - Добавление новых состояний не должно влиять на поведение существующих состояний
 
-### Почему это проблема?
+### Почему Это Проблема?
 
 Реализация поведения, специфичного для состояния, непосредственно в классе негибка, поскольку привязывает класс к конкретному поведению и делает невозможным добавление нового состояния или изменение поведения существующего состояния позже без изменения класса.
 

@@ -7,13 +7,11 @@ status: draft
 moc: moc-cs
 related: [q-builder-pattern--design-patterns--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium, q-observer-pattern--design-patterns--medium]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - structural-patterns
-  - proxy
-  - gof-patterns
-  - surrogate
+tags: [design-patterns, gof-patterns, proxy, structural-patterns, surrogate]
+date created: Monday, October 6th 2025, 7:24:42 am
+date modified: Sunday, October 26th 2025, 1:37:17 pm
 ---
+
 # Proxy Pattern
 
 # Question (EN)
@@ -54,7 +52,7 @@ This makes it possible to work through a Proxy object to perform additional func
 
 To act as a substitute for a subject, a proxy must implement the **`Subject`** interface. Clients can't tell whether they work with a subject or its proxy.
 
-## Типы прокси
+## Типы Прокси
 
 The main use cases are:
 
@@ -274,7 +272,7 @@ val retrofit = Retrofit.Builder()
 - **Android**: Lazy loading images, caching network responses, access control
 - **OkHttp Interceptors** are a perfect example of Proxy pattern
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Pros (Преимущества)
 
@@ -376,7 +374,7 @@ class AsyncCacheProxy(
 
 Паттерн проектирования Proxy (Заместитель) - это структурный паттерн, который использует **объект-заместитель для контроля доступа к другому объекту**. Вместо прямого взаимодействия с основным объектом, клиент обращается к прокси, который затем управляет взаимодействием. Это полезно для контроля доступа, ленивой инициализации, логирования или добавления проверок безопасности.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Какие проблемы решает паттерн Proxy:
 
@@ -394,7 +392,7 @@ class AsyncCacheProxy(
 
 Чтобы действовать как заместитель объекта, прокси должен реализовывать интерфейс **`Subject`**. Клиенты не могут определить, работают ли они с объектом или его прокси.
 
-### Типы прокси
+### Типы Прокси
 
 Основные варианты использования:
 
@@ -430,7 +428,7 @@ class AsyncCacheProxy(
 4. **Накладные расходы на тестирование** - Больше компонентов для тестирования
 5. **Проблемы с памятью** - Кэширующие прокси могут вызывать проблемы с памятью при неправильном управлении
 
-### Примеры в Android
+### Примеры В Android
 
 В Android паттерн Proxy активно используется:
 
@@ -439,7 +437,7 @@ class AsyncCacheProxy(
 - **Кэширование сетевых ответов** - CachingProxy сохраняет ответы для повторного использования
 - **Контроль доступа к базе данных** - ProxyDatabase ограничивает определенные операции
 
-### Когда использовать
+### Когда Использовать
 
 Используйте паттерн Proxy когда:
 

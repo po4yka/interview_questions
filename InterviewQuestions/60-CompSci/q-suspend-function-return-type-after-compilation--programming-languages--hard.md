@@ -7,9 +7,11 @@ status: draft
 moc: moc-cs
 related: [q-how-to-create-suspend-function--programming-languages--medium, q-java-all-classes-inherit-from-object--programming-languages--easy, q-what-is-garbage-in-gc--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:41:50 am
+date modified: Sunday, October 26th 2025, 1:39:51 pm
 ---
+
 # Suspend Function Return Type After Compilation
 
 # Question (EN)
@@ -240,7 +242,7 @@ suspend fun getName(): String
 fun getName(continuation: Continuation<String>): Any?
 ```
 
-### Example: Immediate Return vs Suspension
+### Example: Immediate Return Vs Suspension
 
 ```kotlin
 suspend fun smartFunction(needDelay: Boolean): String {
@@ -326,7 +328,7 @@ fun <T> func($completion: Continuation<T>): Any?
 
 Под капотом компилятор Kotlin преобразует suspend функции используя **трансформацию Continuation-Passing Style (CPS)**. Сигнатура функции значительно изменяется во время компиляции.
 
-### Исходный код
+### Исходный Код
 
 ```kotlin
 suspend fun fetchUserName(userId: Int): String {
@@ -335,7 +337,7 @@ suspend fun fetchUserName(userId: Int): String {
 }
 ```
 
-### После компиляции (концептуальная декомпилированная версия)
+### После Компиляции (концептуальная Декомпилированная версия)
 
 ```kotlin
 // Упрощенное представление того, что генерирует компилятор
@@ -364,7 +366,7 @@ fun fetchUserName(userId: Int, continuation: Continuation<String>): Any? {
 // 3. null (в некоторых случаях)
 ```
 
-### Понимание трансформации
+### Понимание Трансформации
 
 ```kotlin
 // Оригинальная suspend функция
@@ -404,7 +406,7 @@ fun example(cont: Continuation<String>): Any? {
 }
 ```
 
-### Реальный пример: Машина состояний
+### Реальный Пример: Машина Состояний
 
 ```kotlin
 // Оригинальный код
@@ -457,7 +459,7 @@ class MultiStepStateMachine(
 }
 ```
 
-### Проверка с декомпилированным кодом
+### Проверка С Декомпилированным Кодом
 
 ```kotlin
 // Оригинальный Kotlin код
@@ -504,7 +506,7 @@ public static final Object simpleFunction(Continuation $completion) {
 }
 ```
 
-### Почему Any?, а не String?
+### Почему Any?, А Не String?
 
 ```kotlin
 // Это не сработает с возвращаемым типом String:
@@ -540,7 +542,7 @@ suspend fun getName(): String
 fun getName(continuation: Continuation<String>): Any?
 ```
 
-### Пример: Немедленный возврат vs Приостановка
+### Пример: Немедленный Возврат Vs Приостановка
 
 ```kotlin
 suspend fun smartFunction(needDelay: Boolean): String {
@@ -562,7 +564,7 @@ fun smartFunction(needDelay: Boolean, cont: Continuation<String>): Any? {
 }
 ```
 
-### Тестирование возвращаемого типа
+### Тестирование Возвращаемого Типа
 
 ```kotlin
 // Вы не можете получить прямой доступ к скомпилированному возвращаемому типу,
@@ -590,7 +592,7 @@ when (internalResult) {
 }
 ```
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. **Оригинальная сигнатура**: `suspend fun foo(): String`
 2. **Скомпилированная сигнатура**: `fun foo(continuation: Continuation<String>): Any?`
@@ -598,7 +600,7 @@ when (internalResult) {
 4. **Иерархия типов**: `String` и `COROUTINE_SUSPENDED` имеют `Any?` как общий супертип
 5. **Машина состояний**: Функция преобразуется в машину состояний, которая сохраняет состояние между точками приостановки
 
-### Дополнительные детали трансформации
+### Дополнительные Детали Трансформации
 
 ```kotlin
 // Модификатор suspend добавляет:

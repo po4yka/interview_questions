@@ -5,16 +5,14 @@ topic: computer-science
 difficulty: easy
 status: draft
 moc: moc-cs
-related: [q-prototype-pattern--design-patterns--medium, q-interpreter-pattern--design-patterns--hard, q-mvvm-pattern--architecture-patterns--medium]
+related: [q-interpreter-pattern--design-patterns--hard, q-mvvm-pattern--architecture-patterns--medium, q-prototype-pattern--design-patterns--medium]
 created: 2025-10-15
-tags:
-  - garbage-collection
-  - jvm
-  - kotlin
-  - memory-management
-  - programming-languages
+tags: [garbage-collection, jvm, kotlin, memory-management, programming-languages]
+date created: Saturday, October 4th 2025, 1:21:00 pm
+date modified: Sunday, October 26th 2025, 1:39:58 pm
 ---
-# О каком мусоре идет речь в сборщике мусора?
+
+# О Каком Мусоре Идет Речь В Сборщике Мусора?
 
 # Question (EN)
 > What is "garbage" in garbage collector?

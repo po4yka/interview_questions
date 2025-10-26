@@ -5,17 +5,14 @@ topic: programming-languages
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags:
-  - java
-  - kotlin
-  - memory
-  - primitive-types
-  - programming-languages
-  - reference-types
+tags: [java, kotlin, memory, primitive-types, programming-languages, reference-types]
 moc: moc-programming-languages
-related: [q-adapter-pattern--design-patterns--medium, q-what-is-job-object--programming-languages--medium, q-os-fundamentals-concepts--computer-science--hard]
+related: [q-adapter-pattern--design-patterns--medium, q-os-fundamentals-concepts--computer-science--hard, q-what-is-job-object--programming-languages--medium]
+date created: Friday, October 3rd 2025, 7:03:57 pm
+date modified: Sunday, October 26th 2025, 1:31:20 pm
 ---
-# В чем разница примитивного и ссылочного типов
+
+# В Чем Разница Примитивного И Ссылочного Типов
 
 # Question (EN)
 > What is the difference between primitive and reference types?
@@ -293,7 +290,7 @@ text.toUpperCase();      // OK
 - Могут быть null
 - Имеют методы
 
-### Представление в Памяти
+### Представление В Памяти
 
 **Примитивный тип:**
 ```
@@ -342,7 +339,7 @@ val notNull: Int = 10      // int (примитив в байткоде)
 | **Примеры (Java)** | int, double, boolean | String, Integer, массивы, объекты |
 | **Примеры (Kotlin)** | Не раскрыты | Все типы (Int, String, классы) |
 
-### Boxing и Unboxing (Java)
+### Boxing И Unboxing (Java)
 
 **Конвертация между примитивными и ссылочными:**
 
