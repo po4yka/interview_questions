@@ -83,11 +83,11 @@ fun createRequest(method: String): NetworkRequest = when (method) {
 // ✅ Builder example
 class User private constructor(val name: String, val age: Int) {
     class Builder {
-        private var name: String = ""
+    private var name: String = ""
         private var age: Int = 0
 
-        fun name(name: String) = apply { this.name = name }
-        fun age(age: Int) = apply { this.age = age }
+    fun name(name: String) = apply { this.name = name }
+    fun age(age: Int) = apply { this.age = age }
         fun build() = User(name, age)
     }
 }

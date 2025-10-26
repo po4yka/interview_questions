@@ -1,850 +1,342 @@
 ---
 id: 20251016-164232
 title: "When Inheritance Useful / Когда полезно наследование"
-topic: architecture-patterns
+aliases: ["Inheritance Use Cases", "Когда использовать наследование"]
+topic: cs
+subtopics: [oop, inheritance, composition, polymorphism]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
+moc: moc-cs
+related: [q-inheritance-vs-composition--oop--medium, q-oop-principles-deep-dive--computer-science--medium, q-interface-vs-abstract-class--programming-languages--medium]
 created: 2025-10-13
-tags: [best-practices, composition, design-patterns, inheritance, is-a, oop, polymorphism]
-moc: moc-architecture-patterns
-related: [q-factory-method-pattern--design-patterns--medium, q-interface-vs-abstract-class--programming-languages--medium, q-iterator-pattern--design-patterns--medium]
-subtopics: ["abstraction", "classes", "encapsulation", "inheritance", "polymorphism"]
-date created: Saturday, October 4th 2025, 7:05:19 pm
-date modified: Sunday, October 26th 2025, 1:40:01 pm
+updated: 2025-01-25
+tags: [oop, inheritance, composition, polymorphism, is-a, has-a, difficulty/medium]
+sources: [https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)]
 ---
 
-# В Каких Случаях Наследование Полезно, А В Каких Нет?
+# Вопрос (RU)
+> Когда наследование полезно, а когда нет?
 
 # Question (EN)
 > When is inheritance useful, and when is it not?
-
-# Вопрос (RU)
-> В каких случаях наследование полезно, а в каких нет?
-
----
-
-## Answer (EN)
-
-**Inheritance** is a powerful OOP mechanism, but it should be used carefully. Understanding **when to use** and **when to avoid** inheritance is crucial for good software design.
-
-## When Inheritance IS Useful GOOD
-
-### 1. Code Reuse
-
-**Use inheritance when:** Multiple classes share common behavior and you want to avoid code duplication.
-
-```kotlin
-// - GOOD: Common behavior in base class
-abstract class Shape {
-    abstract fun area(): Double
-
-    // Common behavior for all shapes
-    fun describe() {
-        println("This is a shape with area: ${area()}")
-    }
-
-    fun isLargerThan(other: Shape): Boolean {
-        return this.area() > other.area()
-    }
-}
-
-class Circle(val radius: Double) : Shape() {
-    override fun area(): Double = Math.PI * radius * radius
-}
-
-class Rectangle(val width: Double, val height: Double) : Shape() {
-    override fun area(): Double = width * height
-}
-
-class Triangle(val base: Double, val height: Double) : Shape() {
-    override fun area(): Double = 0.5 * base * height
-}
-
-// Usage
-val circle = Circle(5.0)
-val rectangle = Rectangle(4.0, 6.0)
-
-circle.describe()  // Reused from Shape
-println(circle.isLargerThan(rectangle))  // Reused from Shape
-```
-
-**Benefit:** `describe()` and `isLargerThan()` are written once and reused by all shapes.
-
----
-
-### 2. Class Hierarchies / Taxonomy
-
-**Use inheritance when:** You have a clear **taxonomic hierarchy** with natural parent-child relationships.
-
-```kotlin
-// - GOOD: Clear taxonomy
-abstract class Animal(val name: String) {
-    abstract fun makeSound()
-
-    fun sleep() {
-        println("$name is sleeping")
-    }
-}
-
-abstract class Mammal(name: String) : Animal(name) {
-    fun giveBirth() {
-        println("$name gives birth to live young")
-    }
-}
-
-abstract class Bird(name: String) : Animal(name) {
-    fun layEgg() {
-        println("$name lays an egg")
-    }
-}
-
-class Dog(name: String) : Mammal(name) {
-    override fun makeSound() {
-        println("$name barks: Woof!")
-    }
-}
-
-class Cat(name: String) : Mammal(name) {
-    override fun makeSound() {
-        println("$name meows: Meow!")
-    }
-}
-
-class Eagle(name: String) : Bird(name) {
-    override fun makeSound() {
-        println("$name screeches")
-    }
-}
-
-// Clear hierarchy:
-// Animal → Mammal → Dog, Cat
-// Animal → Bird → Eagle
-```
-
----
-
-### 3. Polymorphism
-
-**Use inheritance when:** You need to **treat different objects uniformly** through a common interface.
-
-```kotlin
-// - GOOD: Polymorphism
-abstract class PaymentMethod {
-    abstract fun processPayment(amount: Double)
-}
-
-class CreditCard(val cardNumber: String) : PaymentMethod() {
-    override fun processPayment(amount: Double) {
-        println("Processing $$amount via Credit Card $cardNumber")
-    }
-}
-
-class PayPal(val email: String) : PaymentMethod() {
-    override fun processPayment(amount: Double) {
-        println("Processing $$amount via PayPal $email")
-    }
-}
-
-class Bitcoin(val walletAddress: String) : PaymentMethod() {
-    override fun processPayment(amount: Double) {
-        println("Processing $$amount via Bitcoin $walletAddress")
-    }
-}
-
-// Polymorphism: treat all payment methods uniformly
-fun processOrder(paymentMethod: PaymentMethod, amount: Double) {
-    println("Processing order...")
-    paymentMethod.processPayment(amount)  // Different behavior based on type
-    println("Order complete")
-}
-
-// Usage
-val payments = listOf(
-    CreditCard("1234-5678"),
-    PayPal("user@example.com"),
-    Bitcoin("1A2b3C4d5E6f")
-)
-
-payments.forEach { payment ->
-    processOrder(payment, 100.0)  // Same interface, different implementations
-}
-```
-
----
-
-### 4. IS-A Relationship
-
-**Use inheritance when:** There's a clear **"IS-A" relationship** conceptually.
-
-```kotlin
-// - GOOD: Clear IS-A relationship
-abstract class Vehicle(val brand: String) {
-    abstract fun startEngine()
-}
-
-class Car(brand: String, val doors: Int) : Vehicle(brand) {
-    override fun startEngine() {
-        println("$brand car engine started")
-    }
-}
-
-class Motorcycle(brand: String, val engineCC: Int) : Vehicle(brand) {
-    override fun startEngine() {
-        println("$brand motorcycle engine started")
-    }
-}
-
-// Car IS-A Vehicle GOOD
-// Motorcycle IS-A Vehicle GOOD
-```
-
-**Test:** If you can say "**X IS-A Y**" and it makes sense, inheritance is appropriate.
-
----
-
-## When Inheritance IS NOT Useful BAD
-
-### 1. No Clear IS-A Relationship
-
-**Avoid inheritance when:** The "IS-A" relationship doesn't exist conceptually.
-
-```kotlin
-// - BAD: No IS-A relationship
-class Employee(val name: String, val salary: Double)
-
-class Car(val model: String) : Employee("", 0.0) {
-    // Car IS-A Employee? No! BAD
-}
-
-// - GOOD: Use composition instead
-class Car(val model: String) {
-    private val owner: Employee? = null  // Car HAS-A Employee
-}
-```
-
----
-
-### 2. Mixing Many Different Behaviors
-
-**Avoid inheritance when:** You need to mix behaviors from multiple sources.
-
-```kotlin
-// - BAD: Can't inherit from multiple classes
-class FlyingCar : Car, Airplane {  // - Multiple inheritance not allowed!
-    // ...
-}
-
-// - GOOD: Use composition
-class FlyingCar {
-    private val carBehavior = Car()
-    private val airplaneBehavior = Airplane()
-
-    fun drive() = carBehavior.drive()
-    fun fly() = airplaneBehavior.fly()
-}
-
-// - BETTER: Use interfaces
-interface Drivable {
-    fun drive()
-}
-
-interface Flyable {
-    fun fly()
-}
-
-class FlyingCar : Drivable, Flyable {
-    override fun drive() {
-        println("Driving on road")
-    }
-
-    override fun fly() {
-        println("Flying in air")
-    }
-}
-```
-
----
-
-### 3. Complex Class Hierarchies
-
-**Avoid inheritance when:** The hierarchy becomes too deep or complex.
-
-```kotlin
-// - BAD: Deep, complex hierarchy
-open class Entity
-open class LivingEntity : Entity()
-open class Animal : LivingEntity()
-open class Mammal : Animal()
-open class Carnivore : Mammal()
-open class Feline : Carnivore()
-open class BigCat : Feline()
-class Lion : BigCat()  // 8 levels deep! BAD
-
-// - GOOD: Flat hierarchy with composition
-class Lion(
-    private val habitat: Habitat,
-    private val diet: Diet,
-    private val mobility: Mobility
-) {
-    fun hunt() = diet.hunt()
-    fun move() = mobility.move()
-    fun live() = habitat.getLivingArea()
-}
-```
-
-**Problems with deep hierarchies:**
-- Hard to understand
-- Difficult to modify
-- Fragile (changes in base affect all children)
-- Tight coupling
-
----
-
-### 4. Implementation Inheritance (Code Smell)
-
-**Avoid inheritance when:** You only want to reuse implementation, not establish a relationship.
-
-```kotlin
-// - BAD: Inheriting just for code reuse
-class Logger {
-    fun log(message: String) {
-        println("[LOG] $message")
-    }
-}
-
-class UserService : Logger() {  // - UserService IS-A Logger? No!
-    fun createUser(name: String) {
-        log("Creating user: $name")  // Just want to use log()
-        // ...
-    }
-}
-
-// - GOOD: Use composition
-class UserService(private val logger: Logger) {
-    fun createUser(name: String) {
-        logger.log("Creating user: $name")
-        // ...
-    }
-}
-```
-
----
-
-### 5. Rigid Design
-
-**Avoid inheritance when:** You need flexibility and runtime behavior changes.
-
-```kotlin
-// - BAD: Fixed behavior at compile time
-abstract class Weapon {
-    abstract fun attack()
-}
-
-class Sword : Weapon() {
-    override fun attack() {
-        println("Swing sword")
-    }
-}
-
-class Player(weapon: Weapon)  // Stuck with one weapon type
-
-// - GOOD: Strategy pattern with composition
-interface AttackStrategy {
-    fun attack()
-}
-
-class SwordAttack : AttackStrategy {
-    override fun attack() = println("Swing sword")
-}
-
-class BowAttack : AttackStrategy {
-    override fun attack() = println("Shoot arrow")
-}
-
-class MagicAttack : AttackStrategy {
-    override fun attack() = println("Cast spell")
-}
-
-class Player(private var attackStrategy: AttackStrategy) {
-    fun attack() = attackStrategy.attack()
-
-    // Can change strategy at runtime!
-    fun changeWeapon(newStrategy: AttackStrategy) {
-        attackStrategy = newStrategy
-    }
-}
-
-// Usage
-val player = Player(SwordAttack())
-player.attack()  // "Swing sword"
-
-player.changeWeapon(MagicAttack())
-player.attack()  // "Cast spell"
-```
-
----
-
-## Decision Guide
-
-### Use Inheritance When:
-
-| - Criterion | Example |
-|-------------|---------|
-| **Clear IS-A relationship** | Dog IS-A Animal |
-| **Shared behavior across similar classes** | All shapes can calculate area |
-| **Need polymorphism** | Process different payment methods uniformly |
-| **Stable, shallow hierarchy** | Animal → Mammal → Dog (3 levels) |
-| **Extending framework/library classes** | Activity, Fragment, ViewModel |
-
-### Use Composition/Interfaces When:
-
-| - Avoid Inheritance | - Use Instead |
-|---------------------|---------------|
-| No IS-A relationship | Composition (HAS-A) |
-| Need multiple behaviors | Interfaces + Composition |
-| Deep hierarchy (>3 levels) | Flat design with composition |
-| Need runtime flexibility | Strategy pattern |
-| Implementation reuse only | Dependency injection |
-
----
-
-## Android Examples
-
-### - Good Use of Inheritance
-
-```kotlin
-// Framework inheritance - appropriate
-class MainActivity : AppCompatActivity() {
-    // MainActivity IS-A AppCompatActivity GOOD
-}
-
-class UserViewModel : ViewModel() {
-    // UserViewModel IS-A ViewModel GOOD
-}
-
-class UserFragment : Fragment() {
-    // UserFragment IS-A Fragment GOOD
-}
-```
-
-### - Bad Use of Inheritance
-
-```kotlin
-// - BAD: No IS-A relationship
-class DatabaseHelper : Context() {
-    // DatabaseHelper IS-A Context? No! BAD
-}
-
-// - GOOD: Use composition
-class DatabaseHelper(private val context: Context) {
-    // DatabaseHelper HAS-A Context GOOD
-}
-```
-
----
-
-## Best Practices
-
-### - Favor Composition Over Inheritance
-
-```kotlin
-// Prefer this (composition)
-class Car(private val engine: Engine)
-
-// Over this (inheritance)
-class Car : Engine()
-```
-
-### - Keep Hierarchies Shallow
-
-```kotlin
-// - GOOD: Shallow (2-3 levels max)
-abstract class Animal
-class Dog : Animal()
-
-// - BAD: Too deep
-abstract class A
-abstract class B : A()
-abstract class C : B()
-abstract class D : C()
-class E : D()
-```
-
-### - Program to Interfaces
-
-```kotlin
-// - Prefer interfaces for contracts
-interface Drawable {
-    fun draw()
-}
-
-class Circle : Drawable {
-    override fun draw() { ... }
-}
-
-// Instead of abstract classes
-abstract class DrawableShape {
-    abstract fun draw()
-}
-```
-
----
-
-## Summary
-
-### When Inheritance IS Useful GOOD
-
-1. **Code reuse** - Shared behavior across related classes
-2. **Class hierarchies** - Clear taxonomic relationships
-3. **Polymorphism** - Treat different objects uniformly
-4. **IS-A relationship** - Conceptually makes sense
-
-### When Inheritance IS NOT Useful BAD
-
-1. **No IS-A relationship** - Use composition instead
-2. **Mixing behaviors** - Use interfaces + composition
-3. **Complex hierarchies** - Keep design flat
-4. **Implementation reuse only** - Use dependency injection
-5. **Need flexibility** - Use strategy/composition patterns
-
-### Golden Rule
-
-> **"Favor composition over inheritance"**
-
-Use inheritance **sparingly** and only when there's a **clear, stable IS-A relationship**. For most cases, **composition and interfaces** provide more flexibility and maintainability.
 
 ---
 
 ## Ответ (RU)
 
-**Наследование** — это мощный механизм ООП, но его следует использовать осторожно. Понимание **когда использовать** и **когда избегать** наследование критически важно для хорошего проектирования ПО.
+**Теория Inheritance:**
+Inheritance - powerful OOP mechanism для code reuse и polymorphism. Should be used carefully - only when clear **IS-A relationship**. Golden rule: "Favor composition over inheritance". Use inheritance для taxonomic hierarchies, shared behavior, polymorphism. Avoid inheritance для mixing behaviors, complex hierarchies, implementation reuse only.
 
-## Когда Наследование ПОЛЕЗНО
+**When inheritance IS useful:**
 
-### 1. Повторное Использование Кода
-
-**Используйте наследование когда:** Несколько классов имеют общее поведение и вы хотите избежать дублирования кода.
+**1. Code reuse:**
+*Теория:* Multiple classes share common behavior, want avoid code duplication. Base class defines common functionality, derived classes specialize or extend. DRY principle - Don't Repeat Yourself.
 
 ```kotlin
-// ХОРОШО: Общее поведение в базовом классе
+// ✅ Code reuse with inheritance
 abstract class Shape {
     abstract fun area(): Double
-
-    // Общее поведение для всех фигур
-    fun describe() {
-        println("Это фигура с площадью: ${area()}")
-    }
-
-    fun isLargerThan(other: Shape): Boolean {
-        return this.area() > other.area()
-    }
+    fun describe() = println("Area: ${area()}")
+    fun isLargerThan(other: Shape) = this.area() > other.area()
 }
 
 class Circle(val radius: Double) : Shape() {
-    override fun area(): Double = Math.PI * radius * radius
+    override fun area() = Math.PI * radius * radius
 }
 
-class Rectangle(val width: Double, val height: Double) : Shape() {
-    override fun area(): Double = width * height
+// Reused: describe(), isLargerThan()
+```
+
+**2. Class hierarchies (taxonomy):**
+*Теория:* Clear taxonomic hierarchy с natural parent-child relationships. IS-A relationship makes sense conceptually. Example: Animal → Mammal → Dog - Dog IS-A Mammal IS-A Animal.
+
+```kotlin
+// ✅ Clear taxonomy
+abstract class Animal { abstract fun makeSound() }
+abstract class Mammal : Animal()
+class Dog : Mammal() { override fun makeSound() = println("Bark") }
+```
+
+**3. Polymorphism:**
+*Теория:* Treat different objects uniformly через common interface. Same method call, different implementations based на type. Essential для extensible designs.
+
+```kotlin
+// ✅ Polymorphism
+abstract class PaymentMethod { abstract fun process(amount: Double) }
+class CreditCard : PaymentMethod() { override fun process(a) { /* ... */ } }
+class PayPal : PaymentMethod() { override fun process(a) { /* ... */ } }
+
+// Uniform treatment
+fun processOrder(pm: PaymentMethod, amount: Double) {
+    pm.process(amount)  // Different behavior based on type
 }
 ```
 
-**Преимущество:** `describe()` и `isLargerThan()` написаны один раз и переиспользуются всеми фигурами.
+**4. IS-A relationship:**
+*Теория:* Clear conceptual "IS-A" relationship. Dog IS-A Animal, Car IS-A Vehicle. Should pass "IS-A" test для validate inheritance usage.
 
-### 2. Иерархии Классов / Таксономия
+**When inheritance IS NOT useful:**
 
-**Используйте наследование когда:** У вас есть четкая **таксономическая иерархия** с естественными отношениями родитель-потомок.
+**1. No IS-A relationship:**
+*Теория:* No conceptual IS-A relationship. Car IS-A Employee? No! Use composition instead (Car HAS-A owner: Employee).
 
 ```kotlin
-// ХОРОШО: Четкая таксономия
-abstract class Animal(val name: String) {
-    abstract fun makeSound()
+// ❌ No IS-A relationship
+class Car : Employee("", 0.0)  // ❌ Wrong!
 
-    fun sleep() {
-        println("$name спит")
-    }
-}
-
-abstract class Mammal(name: String) : Animal(name) {
-    fun giveBirth() {
-        println("$name рождает живых детенышей")
-    }
-}
-
-class Dog(name: String) : Mammal(name) {
-    override fun makeSound() {
-        println("$name лает: Гав!")
-    }
-}
+// ✅ Use composition
+class Car { private val owner: Employee? }
 ```
 
-### 3. Полиморфизм
-
-**Используйте наследование когда:** Вам нужно **обрабатывать различные объекты единообразно** через общий интерфейс.
-
-```kotlin
-// ХОРОШО: Полиморфизм
-abstract class PaymentMethod {
-    abstract fun processPayment(amount: Double)
-}
-
-class CreditCard(val cardNumber: String) : PaymentMethod() {
-    override fun processPayment(amount: Double) {
-        println("Обработка $$amount через кредитную карту $cardNumber")
-    }
-}
-
-class PayPal(val email: String) : PaymentMethod() {
-    override fun processPayment(amount: Double) {
-        println("Обработка $$amount через PayPal $email")
-    }
-}
-
-// Полиморфизм: обработка всех методов оплаты единообразно
-fun processOrder(paymentMethod: PaymentMethod, amount: Double) {
-    println("Обработка заказа...")
-    paymentMethod.processPayment(amount)  // Разное поведение в зависимости от типа
-    println("Заказ завершен")
-}
-```
-
-### 4. Отношение IS-A
-
-**Используйте наследование когда:** Существует четкое **отношение "IS-A"** концептуально.
+**2. Mixing many behaviors:**
+*Теория:* Cannot inherit from multiple classes (no multiple inheritance). Need mixing behaviors - use interfaces + composition. Interfaces для contracts, composition для implementation.
 
 ```kotlin
-// ХОРОШО: Четкое отношение IS-A
-abstract class Vehicle(val brand: String) {
-    abstract fun startEngine()
-}
+// ❌ Multiple inheritance not allowed
+class FlyingCar : Car, Airplane  // ❌ Compilation error
 
-class Car(brand: String, val doors: Int) : Vehicle(brand) {
-    override fun startEngine() {
-        println("Двигатель автомобиля $brand запущен")
-    }
-}
-
-// Car IS-A Vehicle - ХОРОШО
-```
-
-**Тест:** Если вы можете сказать "**X IS-A Y**" и это имеет смысл, наследование уместно.
-
-## Когда Наследование НЕ ПОЛЕЗНО
-
-### 1. Нет Четкого Отношения IS-A
-
-**Избегайте наследование когда:** Отношение "IS-A" не существует концептуально.
-
-```kotlin
-// ПЛОХО: Нет отношения IS-A
-class Car(val model: String) : Employee("", 0.0) {
-    // Car IS-A Employee? Нет! ПЛОХО
-}
-
-// ХОРОШО: Используйте композицию
-class Car(val model: String) {
-    private val owner: Employee? = null  // Car HAS-A Employee
-}
-```
-
-### 2. Смешивание Многих Различных Поведений
-
-**Избегайте наследование когда:** Вам нужно смешать поведения из нескольких источников.
-
-```kotlin
-// ПЛОХО: Нельзя наследовать от нескольких классов
-class FlyingCar : Car, Airplane {  // Множественное наследование не разрешено!
-    // ...
-}
-
-// ХОРОШО: Используйте композицию
-class FlyingCar {
-    private val carBehavior = Car()
-    private val airplaneBehavior = Airplane()
-
-    fun drive() = carBehavior.drive()
-    fun fly() = airplaneBehavior.fly()
-}
-
-// ЛУЧШЕ: Используйте интерфейсы
-interface Drivable {
-    fun drive()
-}
-
-interface Flyable {
-    fun fly()
-}
-
+// ✅ Use interfaces + composition
+interface Drivable { fun drive() }
+interface Flyable { fun fly() }
 class FlyingCar : Drivable, Flyable {
-    override fun drive() {
-        println("Езда по дороге")
-    }
-
-    override fun fly() {
-        println("Полет в воздухе")
-    }
+    override fun drive() { /* ... */ }
+    override fun fly() { /* ... */ }
 }
 ```
 
-### 3. Сложные Иерархии Классов
-
-**Избегайте наследование когда:** Иерархия становится слишком глубокой или сложной.
+**3. Complex hierarchies:**
+*Теория:* Deep hierarchies (>3 levels) hard to understand, difficult to modify, fragile - changes in base affect all children. Favor flat design с composition.
 
 ```kotlin
-// ПЛОХО: Глубокая, сложная иерархия
+// ❌ Too deep (8 levels)
 open class Entity
 open class LivingEntity : Entity()
 open class Animal : LivingEntity()
-open class Mammal : Animal()
-open class Carnivore : Mammal()
-open class Feline : Carnivore()
-open class BigCat : Feline()
-class Lion : BigCat()  // 8 уровней глубины! ПЛОХО
+// ... 8 levels total
 
-// ХОРОШО: Плоская иерархия с композицией
-class Lion(
-    private val habitat: Habitat,
-    private val diet: Diet,
-    private val mobility: Mobility
-) {
-    fun hunt() = diet.hunt()
-    fun move() = mobility.move()
-    fun live() = habitat.getLivingArea()
-}
+// ✅ Flat hierarchy with composition
+class Lion(private val habitat: Habitat, private val diet: Diet)
 ```
 
-**Проблемы глубоких иерархий:**
-- Трудно понять
-- Сложно модифицировать
-- Хрупкие (изменения в базе влияют на всех потомков)
-- Тесная связанность
-
-### 4. Наследование Реализации (Code Smell)
-
-**Избегайте наследование когда:** Вы хотите только переиспользовать реализацию, а не устанавливать отношение.
+**4. Implementation reuse only:**
+*Теория:* Only want reuse implementation, not establish relationship. UserService IS-A Logger? No! Use composition или dependency injection.
 
 ```kotlin
-// ПЛОХО: Наследование только для переиспользования кода
-class UserService : Logger() {  // UserService IS-A Logger? Нет!
-    fun createUser(name: String) {
-        log("Создание пользователя: $name")  // Просто хочу использовать log()
-        // ...
-    }
+// ❌ Implementation reuse
+class UserService : Logger() {
+    fun createUser(name: String) = log("Creating user: $name")
 }
 
-// ХОРОШО: Используйте композицию
+// ✅ Use composition
 class UserService(private val logger: Logger) {
-    fun createUser(name: String) {
-        logger.log("Создание пользователя: $name")
-        // ...
-    }
+    fun createUser(name: String) = logger.log("Creating user: $name")
 }
 ```
 
-### 5. Жесткий Дизайн
-
-**Избегайте наследование когда:** Вам нужна гибкость и изменения поведения во время выполнения.
+**5. Need runtime flexibility:**
+*Теория:* Fixed behavior at compile time, cannot change at runtime. Need flexibility - use Strategy pattern с composition. Allows changing behavior dynamically.
 
 ```kotlin
-// ПЛОХО: Фиксированное поведение во время компиляции
-abstract class Weapon {
-    abstract fun attack()
-}
+// ❌ Fixed behavior
+abstract class Weapon { abstract fun attack() }
+class Player(weapon: Weapon)  // Stuck with one type
 
-class Sword : Weapon() {
-    override fun attack() {
-        println("Размах мечом")
-    }
-}
-
-class Player(weapon: Weapon)  // Застряли с одним типом оружия
-
-// ХОРОШО: Паттерн Strategy с композицией
-interface AttackStrategy {
-    fun attack()
-}
-
-class SwordAttack : AttackStrategy {
-    override fun attack() = println("Размах мечом")
-}
-
-class BowAttack : AttackStrategy {
-    override fun attack() = println("Выстрел стрелы")
-}
-
+// ✅ Strategy pattern
+interface AttackStrategy { fun attack() }
 class Player(private var attackStrategy: AttackStrategy) {
     fun attack() = attackStrategy.attack()
-
-    // Можно изменить стратегию во время выполнения!
     fun changeWeapon(newStrategy: AttackStrategy) {
-        attackStrategy = newStrategy
+        attackStrategy = newStrategy  // ✅ Runtime flexibility
     }
 }
-
-// Использование
-val player = Player(SwordAttack())
-player.attack()  // "Размах мечом"
-
-player.changeWeapon(BowAttack())
-player.attack()  // "Выстрел стрелы"
 ```
 
-## Руководство По Принятию Решений
+**Decision guide:**
 
-### Используйте Наследование Когда:
+**Use inheritance when:**
+- ✅ Clear IS-A relationship
+- ✅ Shared behavior across similar classes
+- ✅ Need polymorphism
+- ✅ Stable, shallow hierarchy (2-3 levels)
 
-| Критерий | Пример |
-|----------|--------|
-| **Четкое отношение IS-A** | Dog IS-A Animal |
-| **Общее поведение в похожих классах** | Все фигуры могут вычислять площадь |
-| **Нужен полиморфизм** | Обработка различных методов оплаты единообразно |
-| **Стабильная, неглубокая иерархия** | Animal → Mammal → Dog (3 уровня) |
-| **Расширение классов фреймворка/библиотеки** | Activity, Fragment, ViewModel |
+**Use composition/interfaces when:**
+- ✅ No IS-A relationship (HAS-A instead)
+- ✅ Need multiple behaviors
+- ✅ Deep hierarchy (>3 levels)
+- ✅ Need runtime flexibility
+- ✅ Implementation reuse only
 
-### Используйте композицию/интерфейсы Когда:
+**Golden Rule:** "Favor composition over inheritance"
 
-| Избегайте наследования | Используйте вместо него |
-|------------------------|------------------------|
-| Нет отношения IS-A | Композиция (HAS-A) |
-| Нужно несколько поведений | Интерфейсы + Композиция |
-| Глубокая иерархия (>3 уровней) | Плоский дизайн с композицией |
-| Нужна гибкость во время выполнения | Паттерн Strategy |
-| Только переиспользование реализации | Внедрение зависимостей |
+## Answer (EN)
 
-## Резюме
+**Inheritance Theory:**
+Inheritance - powerful OOP mechanism for code reuse and polymorphism. Should be used carefully - only when clear **IS-A relationship**. Golden rule: "Favor composition over inheritance". Use inheritance for taxonomic hierarchies, shared behavior, polymorphism. Avoid inheritance for mixing behaviors, complex hierarchies, implementation reuse only.
 
-### Когда Наследование ПОЛЕЗНО
+**When inheritance IS useful:**
 
-1. **Повторное использование кода** - Общее поведение в родственных классах
-2. **Иерархии классов** - Четкие таксономические отношения
-3. **Полиморфизм** - Обработка различных объектов единообразно
-4. **Отношение IS-A** - Концептуально имеет смысл
+**1. Code reuse:**
+*Theory:* Multiple classes share common behavior, want avoid code duplication. Base class defines common functionality, derived classes specialize or extend. DRY principle - Don't Repeat Yourself.
 
-### Когда Наследование НЕ ПОЛЕЗНО
+```kotlin
+// ✅ Code reuse with inheritance
+abstract class Shape {
+    abstract fun area(): Double
+    fun describe() = println("Area: ${area()}")
+    fun isLargerThan(other: Shape) = this.area() > other.area()
+}
 
-1. **Нет отношения IS-A** - Используйте композицию
-2. **Смешивание поведений** - Используйте интерфейсы + композиция
-3. **Сложные иерархии** - Держите дизайн плоским
-4. **Только переиспользование реализации** - Используйте внедрение зависимостей
-5. **Нужна гибкость** - Используйте strategy/composition паттерны
+class Circle(val radius: Double) : Shape() {
+    override fun area() = Math.PI * radius * radius
+}
 
-### Золотое Правило
+// Reused: describe(), isLargerThan()
+```
 
-> **"Предпочитайте композицию наследованию"**
+**2. Class hierarchies (taxonomy):**
+*Theory:* Clear taxonomic hierarchy with natural parent-child relationships. IS-A relationship makes sense conceptually. Example: Animal → Mammal → Dog - Dog IS-A Mammal IS-A Animal.
 
-Используйте наследование **экономно** и только когда есть **четкое, стабильное отношение IS-A**. Для большинства случаев **композиция и интерфейсы** обеспечивают больше гибкости и поддерживаемости.
+```kotlin
+// ✅ Clear taxonomy
+abstract class Animal { abstract fun makeSound() }
+abstract class Mammal : Animal()
+class Dog : Mammal() { override fun makeSound() = println("Bark") }
+```
 
+**3. Polymorphism:**
+*Theory:* Treat different objects uniformly through common interface. Same method call, different implementations based on type. Essential for extensible designs.
+
+```kotlin
+// ✅ Polymorphism
+abstract class PaymentMethod { abstract fun process(amount: Double) }
+class CreditCard : PaymentMethod() { override fun process(a) { /* ... */ } }
+class PayPal : PaymentMethod() { override fun process(a) { /* ... */ } }
+
+// Uniform treatment
+fun processOrder(pm: PaymentMethod, amount: Double) {
+    pm.process(amount)  // Different behavior based on type
+}
+```
+
+**4. IS-A relationship:**
+*Theory:* Clear conceptual "IS-A" relationship. Dog IS-A Animal, Car IS-A Vehicle. Should pass "IS-A" test to validate inheritance usage.
+
+**When inheritance IS NOT useful:**
+
+**1. No IS-A relationship:**
+*Theory:* No conceptual IS-A relationship. Car IS-A Employee? No! Use composition instead (Car HAS-A owner: Employee).
+
+```kotlin
+// ❌ No IS-A relationship
+class Car : Employee("", 0.0)  // ❌ Wrong!
+
+// ✅ Use composition
+class Car { private val owner: Employee? }
+```
+
+**2. Mixing many behaviors:**
+*Theory:* Cannot inherit from multiple classes (no multiple inheritance). Need mixing behaviors - use interfaces + composition. Interfaces for contracts, composition for implementation.
+
+```kotlin
+// ❌ Multiple inheritance not allowed
+class FlyingCar : Car, Airplane  // ❌ Compilation error
+
+// ✅ Use interfaces + composition
+interface Drivable { fun drive() }
+interface Flyable { fun fly() }
+class FlyingCar : Drivable, Flyable {
+    override fun drive() { /* ... */ }
+    override fun fly() { /* ... */ }
+}
+```
+
+**3. Complex hierarchies:**
+*Theory:* Deep hierarchies (>3 levels) hard to understand, difficult to modify, fragile - changes in base affect all children. Favor flat design with composition.
+
+```kotlin
+// ❌ Too deep (8 levels)
+open class Entity
+open class LivingEntity : Entity()
+open class Animal : LivingEntity()
+// ... 8 levels total
+
+// ✅ Flat hierarchy with composition
+class Lion(private val habitat: Habitat, private val diet: Diet)
+```
+
+**4. Implementation reuse only:**
+*Theory:* Only want reuse implementation, not establish relationship. UserService IS-A Logger? No! Use composition or dependency injection.
+
+```kotlin
+// ❌ Implementation reuse
+class UserService : Logger() {
+    fun createUser(name: String) = log("Creating user: $name")
+}
+
+// ✅ Use composition
+class UserService(private val logger: Logger) {
+    fun createUser(name: String) = logger.log("Creating user: $name")
+}
+```
+
+**5. Need runtime flexibility:**
+*Theory:* Fixed behavior at compile time, cannot change at runtime. Need flexibility - use Strategy pattern with composition. Allows changing behavior dynamically.
+
+```kotlin
+// ❌ Fixed behavior
+abstract class Weapon { abstract fun attack() }
+class Player(weapon: Weapon)  // Stuck with one type
+
+// ✅ Strategy pattern
+interface AttackStrategy { fun attack() }
+class Player(private var attackStrategy: AttackStrategy) {
+    fun attack() = attackStrategy.attack()
+    fun changeWeapon(newStrategy: AttackStrategy) {
+        attackStrategy = newStrategy  // ✅ Runtime flexibility
+    }
+}
+```
+
+**Decision guide:**
+
+**Use inheritance when:**
+- ✅ Clear IS-A relationship
+- ✅ Shared behavior across similar classes
+- ✅ Need polymorphism
+- ✅ Stable, shallow hierarchy (2-3 levels)
+
+**Use composition/interfaces when:**
+- ✅ No IS-A relationship (HAS-A instead)
+- ✅ Need multiple behaviors
+- ✅ Deep hierarchy (>3 levels)
+- ✅ Need runtime flexibility
+- ✅ Implementation reuse only
+
+**Golden Rule:** "Favor composition over inheritance"
 
 ---
+
+## Follow-ups
+
+- What is the Liskov Substitution Principle?
+- When should you use interfaces vs abstract classes?
+- How does composition provide more flexibility than inheritance?
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-java-all-classes-inherit-from-object--programming-languages--easy]] - Inheritance
-- [[q-kotlin-enum-classes--kotlin--easy]] - Enums
+- [[q-java-all-classes-inherit-from-object--programming-languages--easy]] - Inheritance basics
+- [[q-oop-principles-deep-dive--computer-science--medium]] - OOP principles
 
-### Related (Medium)
-- [[q-inheritance-vs-composition--oop--medium]] - Inheritance
-- [[q-inheritance-composition-aggregation--oop--medium]] - Inheritance
-- [[q-class-composition--oop--medium]] - Inheritance
-- [[q-java-marker-interfaces--programming-languages--medium]] - Inheritance
+### Related (Same Level)
+- [[q-inheritance-vs-composition--oop--medium]] - Inheritance vs Composition
+- [[q-interface-vs-abstract-class--programming-languages--medium]] - Interfaces
+- [[q-oop-principles-deep-dive--computer-science--medium]] - OOP principles
+
+### Advanced (Harder)
+- Design patterns (Strategy, Template Method)
+- SOLID principles application
+- Liskov Substitution Principle
