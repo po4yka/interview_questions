@@ -365,9 +365,19 @@ SORT updated DESC
 
 ## Emoji Rule
 
-**FORBIDDEN**: Do not use emoji in vault notes or agent-created content. Use text equivalents instead: REQUIRED, FORBIDDEN, WARNING, NOTE.
+**ALLOWED EXCEPTIONS**: Only ❌ (cross mark) and ✅ (check mark) emoji are permitted in code comments to clearly mark bad/good examples:
 
-This rule applies to all content - English, Russian, code comments, and documentation. Keep the vault clean and professional.
+```kotlin
+// ❌ Bad: unclear intent
+val d = 5
+
+// ✅ Good: clear intent
+val elapsedTimeInDays = 5
+```
+
+**FORBIDDEN**: All other emoji are not allowed in vault notes or agent-created content. Use text equivalents instead: REQUIRED, FORBIDDEN, WARNING, NOTE.
+
+This rule applies to all content - English, Russian, documentation, and YAML frontmatter. Keep the vault clean and professional.
 
 ---
 

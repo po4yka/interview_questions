@@ -1,76 +1,76 @@
 ---
 id: 20251012-1227111117
-title: "Command Pattern / Command Паттерн"
-topic: computer-science
+title: "Command Pattern / Паттерн Command"
+aliases: ["Command Pattern", "Паттерн Command"]
+topic: cs
+subtopics: [behavioral-patterns, design-patterns, gof-patterns]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-iterator-pattern--design-patterns--medium, q-primitive-vs-reference-types--programming-languages--easy, q-reference-types-protect-from-deletion--programming-languages--easy]
+related: [c-command-pattern, q-observer-pattern--design-patterns--medium, q-strategy-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: [action-pattern, behavioral-patterns, command, design-patterns, gof-patterns]
+updated: 2025-01-25
+tags: [behavioral-patterns, command, design-patterns, difficulty/medium, gof-patterns]
+sources: [https://en.wikipedia.org/wiki/Command_pattern]
 date created: Monday, October 6th 2025, 7:22:55 am
-date modified: Saturday, October 25th 2025, 8:55:02 pm
+date modified: Sunday, October 26th 2025, 10:35:06 am
 ---
-
-# Command Pattern
-
-# Question (EN)
-> What is the Command pattern? When and why should it be used?
 
 # Вопрос (RU)
 > Что такое паттерн Command? Когда и зачем его использовать?
 
+# Question (EN)
+> What is the Command pattern? When and why should it be used?
+
 ---
 
-## Answer (EN)
+## Ответ (RU)
 
+**Теория паттерна Command:**
+Command (Команда) - поведенческий паттерн проектирования, который инкапсулирует запрос как объект. Превращает запросы в stand-alone объекты, содержащие всю информацию о запросе. Позволяет параметризовать методы разными запросами, ставить запросы в очередь, логировать их и поддерживать отмену операций (undo/redo).
 
-**Command (Команда)** - это поведенческий паттерн проектирования, который превращает запросы в объекты, позволяя передавать их как аргументы при вызове методов, ставить запросы в очередь, логировать их, а также поддерживать отмену операций.
+**Проблемы, которые решает:**
 
-### Definition
+1. **Жёсткая связь** между invoker (вызывающим) и receiver (исполнителем)
+2. **Невозможность параметризации** объектов разными запросами
+3. **Отсутствие истории** выполненных операций
+4. **Невозможность отмены** операций (undo/redo)
+5. **Сложность логирования** и аудита операций
 
+**Решение:**
 
-The Command Pattern is a behavioral design pattern that **turns a request into a stand-alone object that contains all the information about the request**. This transformation allows you to parameterize methods with different requests, queue requests, log their execution, and support undo operations. It decouples the object that invokes an action from the object that performs the action.
+*Теория:* Инкапсулировать запрос в отдельный объект (command). Invoker вызывает метод `execute()` на command объекте, не зная деталей реализации. Receiver выполняет фактическую работу. Command хранит ссылку на receiver и параметры запроса.
 
-### Problems it Solves
+**Структура паттерна:**
 
+- **Command** (интерфейс) - объявляет метод `execute()` и опционально `undo()`
+- **ConcreteCommand** - реализует `execute()`, хранит receiver и параметры
+- **Receiver** - выполняет фактическую работу
+- **Invoker** - вызывает `execute()` на command, не зная деталей
+- **Client** - создаёт command и связывает с receiver
 
-Using the command design pattern can solve these problems:
+**Когда использовать:**
 
-1. **Coupling the invoker of a request to a particular request should be avoided** - Hard-wired requests should be avoided
-2. **It should be possible to configure an object (that invokes a request) with a request**
-3. **Implementing a request directly into a class is inflexible** - Couples the class to a particular request at compile-time
+✅ **Используйте Command:**
+- Нужна отмена операций (undo/redo)
+- Нужно логировать операции
+- Нужна очередь запросов (queue)
+- Нужна отложенная обработка (deferred execution)
+- Нужно параметризовать объекты операциями
+- Нужна транзакционная система (commit/rollback)
 
-### Solution
-
-
-Using the command design pattern describes the following solution:
-
-- Define separate **(command) objects that encapsulate a request**
-- A class **delegates a request to a command object** instead of implementing a particular request directly
-
-This enables one to configure a class with a command object that is used to perform a request. The class is no longer coupled to a particular request and has no knowledge of how the request is carried out.
-
-### When is it Especially Useful?
-
-
-The Command Pattern is especially useful for:
-
-1. **Decoupling** - Decouples the object that requests an operation (invoker) from the one that performs it (receiver)
-2. **Reusability** - Commands can be reused and combined in complex scenarios
-3. **History and Undo** - Allows for history and undo features (crucial in text editors, drawing apps)
-4. **Logging** - Commands can be logged for debugging and auditing purposes
-5. **Queueing** - Commands can be queued and executed later
-
-## Пример: Light Control
+**Пример 1: Управление светом (базовый):**
 
 ```kotlin
-// Step 1: Command Interface
+// ✅ Command интерфейс
 interface Command {
     fun execute()
 }
 
-// Step 2: Concrete Command Classes
+// ✅ Concrete Commands
 class LightOnCommand(private val light: Light) : Command {
     override fun execute() {
         light.turnOn()
@@ -83,104 +83,99 @@ class LightOffCommand(private val light: Light) : Command {
     }
 }
 
-// Receiver Class
+// ✅ Receiver
 class Light {
-    fun turnOn() {
-        println("Light is ON")
-    }
-
-    fun turnOff() {
-        println("Light is OFF")
-    }
+    fun turnOn() = println("Light is ON")
+    fun turnOff() = println("Light is OFF")
 }
 
-// Step 3: Invoker
-class RemoteControl(private val command: Command) {
+// ✅ Invoker
+class RemoteControl {
+    private var command: Command? = null
+
+    fun setCommand(command: Command) {
+        this.command = command
+    }
+
     fun pressButton() {
-        command.execute()
+        command?.execute()
     }
 }
 
-// Test the implementation
+// ✅ Client
 fun main() {
     val light = Light()
-    val lightOnCommand = LightOnCommand(light)
-    val lightOffCommand = LightOffCommand(light)
+    val remote = RemoteControl()
 
-    val remote = RemoteControl(lightOnCommand)
-    remote.pressButton()
+    remote.setCommand(LightOnCommand(light))
+    remote.pressButton()  // Light is ON
 
-    val remote2 = RemoteControl(lightOffCommand)
-    remote2.pressButton()
+    remote.setCommand(LightOffCommand(light))
+    remote.pressButton()  // Light is OFF
 }
 ```
 
-**Output**:
-```
-Light is ON
-Light is OFF
-```
+**Пример 2: Текстовый редактор с Undo/Redo:**
 
-## Android Example: Undo/Redo in Text Editor
+*Теория:* Для undo/redo нужно хранить историю команд. Каждая команда реализует метод `undo()`, который отменяет действие `execute()`. История хранится в стеке.
 
 ```kotlin
-// Command interface with undo support
+// ✅ Command с поддержкой undo
 interface TextCommand {
     fun execute()
     fun undo()
 }
 
-// Concrete commands
+// ✅ Команда вставки текста
 class InsertTextCommand(
-    private val textEditor: TextEditor,
+    private val editor: TextEditor,
     private val text: String,
     private val position: Int
 ) : TextCommand {
     override fun execute() {
-        textEditor.insertText(text, position)
+        editor.insertText(text, position)
     }
 
     override fun undo() {
-        textEditor.deleteText(position, text.length)
+        editor.deleteText(position, text.length)
     }
 }
 
+// ✅ Команда удаления текста
 class DeleteTextCommand(
-    private val textEditor: TextEditor,
+    private val editor: TextEditor,
     private val position: Int,
     private val length: Int
 ) : TextCommand {
     private lateinit var deletedText: String
 
     override fun execute() {
-        deletedText = textEditor.getText(position, length)
-        textEditor.deleteText(position, length)
+        deletedText = editor.getText(position, length)
+        editor.deleteText(position, length)
     }
 
     override fun undo() {
-        textEditor.insertText(deletedText, position)
+        editor.insertText(deletedText, position)
     }
 }
 
-// Receiver
+// ✅ Receiver
 class TextEditor {
     private val text = StringBuilder()
 
     fun insertText(newText: String, position: Int) {
         text.insert(position, newText)
-        println("Text inserted: $text")
     }
 
     fun deleteText(position: Int, length: Int) {
         text.delete(position, position + length)
-        println("Text deleted: $text")
     }
 
     fun getText(position: Int, length: Int) =
         text.substring(position, position + length)
 }
 
-// Invoker with history
+// ✅ Invoker с историей
 class CommandManager {
     private val history = ArrayDeque<TextCommand>()
     private val redoStack = ArrayDeque<TextCommand>()
@@ -188,7 +183,7 @@ class CommandManager {
     fun executeCommand(command: TextCommand) {
         command.execute()
         history.addLast(command)
-        redoStack.clear()
+        redoStack.clear()  // Очистить redo при новой команде
     }
 
     fun undo() {
@@ -207,263 +202,304 @@ class CommandManager {
         }
     }
 }
-
-// Usage
-fun main() {
-    val editor = TextEditor()
-    val manager = CommandManager()
-
-    manager.executeCommand(InsertTextCommand(editor, "Hello", 0))
-    manager.executeCommand(InsertTextCommand(editor, " World", 5))
-    manager.undo()  // Removes " World"
-    manager.redo()  // Re-adds " World"
-}
 ```
 
-## Android ViewModel Example: User Actions
+**Пример 3: Макрокоманды (Composite Command):**
+
+*Теория:* Макрокоманда - команда, содержащая несколько команд. Выполняет все команды последовательно. Используется для группировки операций в транзакцию.
 
 ```kotlin
-// Command interface
-interface UserAction {
-    suspend fun execute(): Result<Unit>
-}
-
-// Concrete commands
-class LoginCommand(
-    private val repository: UserRepository,
-    private val email: String,
-    private val password: String
-) : UserAction {
-    override suspend fun execute(): Result<Unit> {
-        return repository.login(email, password)
-    }
-}
-
-class LogoutCommand(
-    private val repository: UserRepository
-) : UserAction {
-    override suspend fun execute(): Result<Unit> {
-        return repository.logout()
-    }
-}
-
-class UpdateProfileCommand(
-    private val repository: UserRepository,
-    private val profile: UserProfile
-) : UserAction {
-    override suspend fun execute(): Result<Unit> {
-        return repository.updateProfile(profile)
-    }
-}
-
-// ViewModel as invoker
-class UserViewModel(
-    private val repository: UserRepository
-) : ViewModel() {
-
-    private val commandQueue = Channel<UserAction>(Channel.UNLIMITED)
-
-    init {
-        processCommands()
-    }
-
-    private fun processCommands() {
-        viewModelScope.launch {
-            commandQueue.consumeAsFlow().collect { command ->
-                command.execute()
-            }
-        }
-    }
-
-    fun login(email: String, password: String) {
-        viewModelScope.launch {
-            commandQueue.send(LoginCommand(repository, email, password))
-        }
-    }
-
-    fun logout() {
-        viewModelScope.launch {
-            commandQueue.send(LogoutCommand(repository))
-        }
-    }
-}
-```
-
-### Explanation
-
-
-**Explanation**:
-
-- **Command interface** declares `execute()` method
-- **Concrete commands** encapsulate action and receiver
-- **Invoker** (RemoteControl, CommandManager) executes commands
-- **Receiver** (Light, TextEditor) performs the actual work
-- **Android**: Useful for undo/redo, action queuing, transaction management
-
-## Применение В Реальных Системах
-
-Real Life Examples:
-
-1. **GUI applications** - Button clicks create command objects
-2. **Text editors** - Undo/redo functionality
-3. **Remote controls** - Each button is a command
-4. **Job scheduling** - Commands queued and executed
-5. **Transaction management** - Database operations as commands
-
-## Преимущества И Недостатки
-
-### Pros (Преимущества)
-
-
-1. **Decoupling** - Separates invoker from receiver
-2. **Reusability** - Commands can be reused and combined
-3. **Undo/Redo** - Easy to implement undo/redo
-4. **Logging** - Commands can be logged for auditing
-5. **Queueing** - Commands can be queued and executed later
-6. **Macro commands** - Combine multiple commands
-
-### Cons (Недостатки)
-
-
-1. **Increased classes** - Each command needs a class
-2. **Complexity** - More complex for simple operations
-3. **Memory overhead** - Storing command history uses memory
-4. **Indirection** - Extra layer of indirection
-
-## Best Practices
-
-```kotlin
-// - DO: Use for undo/redo functionality
-interface UndoableCommand {
-    fun execute()
-    fun undo()
-}
-
-// - DO: Queue commands for batch processing
-class BatchProcessor {
-    private val commands = mutableListOf<Command>()
-
-    fun addCommand(command: Command) {
-        commands.add(command)
-    }
-
-    fun executeBatch() {
-        commands.forEach { it.execute() }
-        commands.clear()
-    }
-}
-
-// - DO: Use coroutines for async commands
-interface AsyncCommand {
-    suspend fun execute(): Result<Unit>
-}
-
-// - DO: Macro commands for complex operations
+// ✅ Макрокоманда
 class MacroCommand(private val commands: List<Command>) : Command {
     override fun execute() {
         commands.forEach { it.execute() }
     }
 }
 
-// - DON'T: Use for simple method calls
-// - DON'T: Store large data in commands
-// - DON'T: Make commands stateful
+// ✅ Использование
+fun main() {
+    val light = Light()
+    val fan = Fan()
+
+    val macro = MacroCommand(listOf(
+        LightOnCommand(light),
+        FanOnCommand(fan)
+    ))
+
+    val remote = RemoteControl()
+    remote.setCommand(macro)
+    remote.pressButton()  // Включает свет и вентилятор
+}
 ```
 
-**English**: **Command** is a behavioral pattern that encapsulates requests as objects, allowing parameterization, queuing, logging, and undo operations. **Problem**: Need to decouple request sender from receiver. **Solution**: Encapsulate requests as command objects with execute() method. **Use when**: (1) Need undo/redo, (2) Queue/log operations, (3) Decouple invoker from receiver. **Android**: Undo/redo in editors, action queuing in ViewModels. **Pros**: decoupling, undo/redo support, command queuing. **Cons**: many classes, complexity. **Examples**: Text editor undo/redo, remote controls, transaction management.
+**Преимущества:**
 
-## Links
+1. **Decoupling** - invoker не зависит от receiver
+2. **Open/Closed Principle** - можно добавлять новые команды без изменения invoker
+3. **Single Responsibility** - команда инкапсулирует одну операцию
+4. **Undo/Redo** - легко реализовать отмену операций
+5. **Logging** - легко логировать все операции
+6. **Queueing** - можно ставить команды в очередь
+7. **Composite** - можно комбинировать команды (макрокоманды)
 
-- [Command Pattern in Kotlin](https://codesignal.com/learn/courses/behavioral-design-patterns-2/lessons/command-pattern-in-kotlin)
-- [Command pattern](https://en.wikipedia.org/wiki/Command_pattern)
-- [Command Design Pattern in Kotlin](https://www.javaguides.net/2023/10/command-design-pattern-in-kotlin.html)
+**Недостатки:**
 
-## Further Reading
+1. **Увеличение количества классов** - каждая операция = отдельный класс
+2. **Сложность** - для простых операций может быть избыточным
+3. **Memory overhead** - история команд занимает память
 
-- [Command](https://refactoring.guru/design-patterns/command)
-- [Command Pattern in Kotlin](https://swiderski.tech/kotlin-command-pattern/)
+**Связанные паттерны:**
+
+- **Memento** - для сохранения состояния для undo
+- **Composite** - для макрокоманд
+- **Chain of Responsibility** - для передачи команд по цепочке
+- **Strategy** - похожая структура, но разные цели
+
+## Answer (EN)
+
+**Command Pattern Theory:**
+Command (Action) - behavioral design pattern that encapsulates request as object. Turns requests into stand-alone objects containing all information about request. Allows parameterizing methods with different requests, queueing requests, logging them, and supporting undo operations (undo/redo).
+
+**Problems it Solves:**
+
+1. **Tight coupling** between invoker (caller) and receiver (executor)
+2. **Inability to parameterize** objects with different requests
+3. **No history** of executed operations
+4. **Inability to undo** operations (undo/redo)
+5. **Difficult logging** and auditing of operations
+
+**Solution:**
+
+*Theory:* Encapsulate request in separate object (command). Invoker calls `execute()` method on command object, not knowing implementation details. Receiver performs actual work. Command stores reference to receiver and request parameters.
+
+**Pattern Structure:**
+
+- **Command** (interface) - declares `execute()` method and optionally `undo()`
+- **ConcreteCommand** - implements `execute()`, stores receiver and parameters
+- **Receiver** - performs actual work
+- **Invoker** - calls `execute()` on command, not knowing details
+- **Client** - creates command and links with receiver
+
+**When to Use:**
+
+✅ **Use Command:**
+- Need operation undo (undo/redo)
+- Need to log operations
+- Need request queue
+- Need deferred execution
+- Need to parameterize objects with operations
+- Need transactional system (commit/rollback)
+
+**Example 1: Light Control (basic):**
+
+```kotlin
+// ✅ Command interface
+interface Command {
+    fun execute()
+}
+
+// ✅ Concrete Commands
+class LightOnCommand(private val light: Light) : Command {
+    override fun execute() {
+        light.turnOn()
+    }
+}
+
+class LightOffCommand(private val light: Light) : Command {
+    override fun execute() {
+        light.turnOff()
+    }
+}
+
+// ✅ Receiver
+class Light {
+    fun turnOn() = println("Light is ON")
+    fun turnOff() = println("Light is OFF")
+}
+
+// ✅ Invoker
+class RemoteControl {
+    private var command: Command? = null
+
+    fun setCommand(command: Command) {
+        this.command = command
+    }
+
+    fun pressButton() {
+        command?.execute()
+    }
+}
+
+// ✅ Client
+fun main() {
+    val light = Light()
+    val remote = RemoteControl()
+
+    remote.setCommand(LightOnCommand(light))
+    remote.pressButton()  // Light is ON
+
+    remote.setCommand(LightOffCommand(light))
+    remote.pressButton()  // Light is OFF
+}
+```
+
+**Example 2: Text Editor with Undo/Redo:**
+
+*Theory:* For undo/redo need to store command history. Each command implements `undo()` method that reverses `execute()` action. History stored in stack.
+
+```kotlin
+// ✅ Command with undo support
+interface TextCommand {
+    fun execute()
+    fun undo()
+}
+
+// ✅ Insert text command
+class InsertTextCommand(
+    private val editor: TextEditor,
+    private val text: String,
+    private val position: Int
+) : TextCommand {
+    override fun execute() {
+        editor.insertText(text, position)
+    }
+
+    override fun undo() {
+        editor.deleteText(position, text.length)
+    }
+}
+
+// ✅ Delete text command
+class DeleteTextCommand(
+    private val editor: TextEditor,
+    private val position: Int,
+    private val length: Int
+) : TextCommand {
+    private lateinit var deletedText: String
+
+    override fun execute() {
+        deletedText = editor.getText(position, length)
+        editor.deleteText(position, length)
+    }
+
+    override fun undo() {
+        editor.insertText(deletedText, position)
+    }
+}
+
+// ✅ Receiver
+class TextEditor {
+    private val text = StringBuilder()
+
+    fun insertText(newText: String, position: Int) {
+        text.insert(position, newText)
+    }
+
+    fun deleteText(position: Int, length: Int) {
+        text.delete(position, position + length)
+    }
+
+    fun getText(position: Int, length: Int) =
+        text.substring(position, position + length)
+}
+
+// ✅ Invoker with history
+class CommandManager {
+    private val history = ArrayDeque<TextCommand>()
+    private val redoStack = ArrayDeque<TextCommand>()
+
+    fun executeCommand(command: TextCommand) {
+        command.execute()
+        history.addLast(command)
+        redoStack.clear()  // Clear redo on new command
+    }
+
+    fun undo() {
+        if (history.isNotEmpty()) {
+            val command = history.removeLast()
+            command.undo()
+            redoStack.addLast(command)
+        }
+    }
+
+    fun redo() {
+        if (redoStack.isNotEmpty()) {
+            val command = redoStack.removeLast()
+            command.execute()
+            history.addLast(command)
+        }
+    }
+}
+```
+
+**Example 3: Macro Commands (Composite Command):**
+
+*Theory:* Macro command - command containing multiple commands. Executes all commands sequentially. Used for grouping operations into transaction.
+
+```kotlin
+// ✅ Macro command
+class MacroCommand(private val commands: List<Command>) : Command {
+    override fun execute() {
+        commands.forEach { it.execute() }
+    }
+}
+
+// ✅ Usage
+fun main() {
+    val light = Light()
+    val fan = Fan()
+
+    val macro = MacroCommand(listOf(
+        LightOnCommand(light),
+        FanOnCommand(fan)
+    ))
+
+    val remote = RemoteControl()
+    remote.setCommand(macro)
+    remote.pressButton()  // Turns on light and fan
+}
+```
+
+**Advantages:**
+
+1. **Decoupling** - invoker doesn't depend on receiver
+2. **Open/Closed Principle** - can add new commands without changing invoker
+3. **Single Responsibility** - command encapsulates one operation
+4. **Undo/Redo** - easy to implement operation undo
+5. **Logging** - easy to log all operations
+6. **Queueing** - can queue commands
+7. **Composite** - can combine commands (macro commands)
+
+**Disadvantages:**
+
+1. **Increased number of classes** - each operation = separate class
+2. **Complexity** - may be overkill for simple operations
+3. **Memory overhead** - command history takes memory
+
+**Related Patterns:**
+
+- **Memento** - for saving state for undo
+- **Composite** - for macro commands
+- **Chain of Responsibility** - for passing commands along chain
+- **Strategy** - similar structure, different goals
 
 ---
-*Source: Kirchhoff Android Interview Questions*
 
+## Follow-ups
 
-## Ответ (RU)
-
-### Определение
-
-Паттерн Command — это поведенческий паттерн проектирования, который **превращает запрос в самостоятельный объект, содержащий всю информацию о запросе**. Эта трансформация позволяет параметризовать методы различными запросами, ставить запросы в очередь, логировать их выполнение и поддерживать операции отмены. Паттерн отделяет объект, который вызывает действие, от объекта, который его выполняет.
-
-### Проблемы, Которые Решает
-
-Использование паттерна проектирования Command может решить следующие проблемы:
-
-1. **Следует избегать связывания инициатора запроса с конкретным запросом** - жестко закодированные запросы должны быть избегнуты
-2. **Должна быть возможность конфигурировать объект (который инициирует запрос) с помощью запроса**
-3. **Реализация запроса напрямую в классе негибка** - связывает класс с конкретным запросом на этапе компиляции
-
-### Решение
-
-Использование паттерна проектирования Command описывает следующее решение:
-
-- Определить отдельные **объекты-команды, которые инкапсулируют запрос**
-- Класс **делегирует запрос объекту-команде** вместо прямой реализации конкретного запроса
-
-Это позволяет конфигурировать класс объектом-командой, который используется для выполнения запроса. Класс больше не связан с конкретным запросом и не знает, как запрос выполняется.
-
-### Когда Особенно Полезен?
-
-Паттерн Command особенно полезен для:
-
-1. **Разделение ответственности (Decoupling)** - отделяет объект, который запрашивает операцию (invoker), от объекта, который её выполняет (receiver)
-2. **Переиспользуемость** - команды могут быть переиспользованы и скомбинированы в сложных сценариях
-3. **История и отмена** - позволяет реализовать функции истории и отмены (критично для текстовых редакторов, графических приложений)
-4. **Логирование** - команды могут быть залогированы для отладки и аудита
-5. **Очереди** - команды могут быть поставлены в очередь и выполнены позже
-
-### Объяснение
-
-**Пояснение**:
-
-- **Интерфейс Command** объявляет метод `execute()`
-- **Конкретные команды** инкапсулируют действие и получателя
-- **Инициатор (Invoker)** (RemoteControl, CommandManager) выполняет команды
-- **Получатель (Receiver)** (Light, TextEditor) выполняет фактическую работу
-- **Android**: Полезен для undo/redo, очередей действий, управления транзакциями
-
-### Преимущества
-
-1. **Разделение ответственности** - отделяет инициатора от получателя
-2. **Переиспользуемость** - команды могут быть переиспользованы и скомбинированы
-3. **Отмена/Повтор** - легко реализовать undo/redo
-4. **Логирование** - команды могут быть залогированы для аудита
-5. **Очереди** - команды могут быть поставлены в очередь и выполнены позже
-6. **Макрокоманды** - объединение нескольких команд
-
-### Недостатки
-
-1. **Увеличение количества классов** - каждая команда требует отдельного класса
-2. **Сложность** - более сложно для простых операций
-3. **Накладные расходы памяти** - хранение истории команд использует память
-4. **Косвенность** - дополнительный уровень косвенности
-
-
----
+- How do you implement undo/redo with Command pattern?
+- What is the difference between Command and Strategy patterns?
+- How do you handle command validation and error handling?
 
 ## Related Questions
 
-### Hub
-- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+### Prerequisites (Easier)
+- [[q-clean-code-principles--software-engineering--medium]] - Clean code principles
+- Basic OOP concepts
 
-### Behavioral Patterns
-- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
+### Related (Same Level)
 - [[q-observer-pattern--design-patterns--medium]] - Observer pattern
-- [[q-template-method-pattern--design-patterns--medium]] - Template Method pattern
-- [[q-iterator-pattern--design-patterns--medium]] - Iterator pattern
-- [[q-state-pattern--design-patterns--medium]] - State pattern
+- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
 
-### Creational Patterns
-- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
-
-### Structural Patterns
-- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
-
+### Advanced (Harder)
+- [[q-design-patterns-types--design-patterns--medium]] - Design patterns overview

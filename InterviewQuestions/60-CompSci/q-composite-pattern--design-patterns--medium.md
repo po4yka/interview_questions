@@ -1,118 +1,142 @@
 ---
 id: 20251012-1227111118
-title: "Composite Pattern / Composite Паттерн"
-topic: computer-science
+title: "Composite Pattern / Паттерн Composite"
+aliases: ["Composite Pattern", "Паттерн Composite"]
+topic: cs
+subtopics: [design-patterns, gof-patterns, structural-patterns]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-coroutine-dispatchers--programming-languages--medium, q-data-class-special-features--programming-languages--easy, q-design-patterns-fundamentals--software-engineering--hard]
+related: [c-composite-pattern, q-command-pattern--design-patterns--medium, q-decorator-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: [composite, design-patterns, gof-patterns, structural-patterns, tree-structure]
+updated: 2025-01-25
+tags: [composite, design-patterns, difficulty/medium, gof-patterns, structural-patterns, tree-structure]
+sources: [https://en.wikipedia.org/wiki/Composite_pattern]
 date created: Monday, October 6th 2025, 7:27:23 am
-date modified: Saturday, October 25th 2025, 8:55:04 pm
+date modified: Sunday, October 26th 2025, 10:41:13 am
 ---
-
-# Composite Pattern
-
-# Question (EN)
-> What is the Composite pattern? When and why should it be used?
 
 # Вопрос (RU)
 > Что такое паттерн Composite? Когда и зачем его использовать?
 
+# Question (EN)
+> What is the Composite pattern? When and why should it be used?
+
 ---
 
-## Answer (EN)
+## Ответ (RU)
 
+**Теория паттерна Composite:**
+Composite (Компоновщик) - структурный паттерн проектирования, который позволяет компоновать объекты в древовидные структуры для представления иерархий "часть-целое". Позволяет клиентам единообразно обрабатывать отдельные объекты (Leaf) и композиции объектов (Composite). Ключевая идея - рекурсивная композиция.
 
+**Проблемы, которые решает:**
 
-### Definition
+1. **Необходимость единообразной обработки** отдельных объектов и композиций
+2. **Представление иерархии "часть-целое"** в виде древовидной структуры
+3. **Избежание различной обработки** Leaf и Composite объектов (усложняет клиентский код)
 
+**Решение:**
 
-The Composite Design Pattern is a structural design pattern that **lets you compose objects into tree-like structures to represent part-whole hierarchies**. It allows clients to treat individual objects and compositions of objects uniformly.
+*Теория:* Определить единый интерфейс **Component** для Leaf (листья) и Composite (композиции). Leaf реализует интерфейс напрямую. Composite содержит коллекцию Component и делегирует запросы дочерним компонентам рекурсивно вниз по дереву.
 
-### Problems it Solves
+**Структура паттерна:**
 
+- **Component** (интерфейс) - объявляет общие операции для Leaf и Composite
+- **Leaf** - конечный элемент (не имеет детей), реализует Component
+- **Composite** - контейнер, содержит детей (Leaf или Composite), реализует Component, делегирует операции детям
+- **Client** - работает с Component, не различая Leaf и Composite
 
-The composite design pattern solves problems like:
+**Когда использовать:**
 
-1. **Represent a part-whole hierarchy so that clients can treat part and whole objects uniformly**
-2. **Represent a part-whole hierarchy as tree structure**
-3. **Avoid having to treat `Part` and `Whole` objects separately** - This complicates client code
+✅ **Используйте Composite:**
+- Нужно представить иерархию "часть-целое"
+- Клиенты должны единообразно обрабатывать отдельные объекты и композиции
+- Структура имеет древовидную форму (файловая система, UI компоненты, организационная структура)
+- Нужна рекурсивная обработка структуры
 
-### Solution
+**Пример 1: Файловая система:**
 
-
-Solutions the Composite design pattern describes:
-
-- Define a unified **`Component`** interface for part (`Leaf`) objects and whole (`Composite`) objects
-- Individual **`Leaf`** objects implement the Component interface directly
-- **`Composite`** objects forward requests to their child components
-
-This enables clients to work through the Component interface to treat Leaf and Composite objects uniformly. Composite objects forward requests recursively downwards the tree structure.
-
-## Пример: Employee Hierarchy
+*Теория:* Классический пример Composite. File (Leaf) и Directory (Composite) реализуют FileSystemComponent. Directory содержит список детей и рекурсивно вычисляет размер.
 
 ```kotlin
-// Component
-interface Employee {
-    fun showDetails(): String
+// ✅ Component интерфейс
+interface FileSystemComponent {
+    fun getSize(): Long
+    fun print(indent: String = "")
 }
 
-// Leaf
-class Developer(
+// ✅ Leaf - File
+class File(
     private val name: String,
-    private val position: String
-) : Employee {
-    override fun showDetails() = "Developer: $name, Position: $position"
-}
+    private val size: Long
+) : FileSystemComponent {
+    override fun getSize() = size
 
-// Composite
-class Manager(
-    private val name: String,
-    private val position: String
-) : Employee {
-    private val employees: MutableList<Employee> = mutableListOf()
-
-    fun addEmployee(employee: Employee) {
-        employees.add(employee)
-    }
-
-    fun removeEmployee(employee: Employee) {
-        employees.remove(employee)
-    }
-
-    override fun showDetails(): String {
-        val employeeDetails = employees.joinToString("\n") { "  " + it.showDetails() }
-        return "Manager: $name, Position: $position\n$employeeDetails"
+    override fun print(indent: String) {
+        println("$indent- $name ($size bytes)")
     }
 }
 
+// ✅ Composite - Directory
+class Directory(
+    private val name: String
+) : FileSystemComponent {
+    private val children = mutableListOf<FileSystemComponent>()
+
+    fun add(component: FileSystemComponent) {
+        children.add(component)
+    }
+
+    fun remove(component: FileSystemComponent) {
+        children.remove(component)
+    }
+
+    override fun getSize(): Long {
+        // Рекурсивно суммируем размеры детей
+        return children.sumOf { it.getSize() }
+    }
+
+    override fun print(indent: String) {
+        println("$indent+ $name/")
+        children.forEach { it.print("$indent  ") }
+    }
+}
+
+// ✅ Client - единообразная обработка
 fun main() {
-    val dev1 = Developer("John Doe", "Frontend Developer")
-    val dev2 = Developer("Jane Smith", "Backend Developer")
+    val root = Directory("root")
 
-    val manager = Manager("Ella White", "Tech Lead")
-    manager.addEmployee(dev1)
-    manager.addEmployee(dev2)
+    val docs = Directory("docs")
+    docs.add(File("readme.txt", 1024))
+    docs.add(File("guide.pdf", 5120))
 
-    val cto = Manager("Bob Johnson", "CTO")
-    cto.addEmployee(manager)
+    val images = Directory("images")
+    images.add(File("logo.png", 2048))
 
-    println(cto.showDetails())
+    root.add(docs)
+    root.add(images)
+    root.add(File("config.json", 512))
+
+    println("Total size: ${root.getSize()} bytes")
+    root.print()
 }
 ```
 
-## Android Example: View Hierarchy
+**Пример 2: UI компоненты (Android View Hierarchy):**
+
+*Теория:* Android View система - пример Composite. View (Leaf) и ViewGroup (Composite) реализуют общий интерфейс. ViewGroup содержит детей и рекурсивно вызывает measure/draw.
 
 ```kotlin
-// Component interface
+// ✅ Component интерфейс
 interface ViewComponent {
     fun draw()
     fun measure(widthSpec: Int, heightSpec: Int)
 }
 
-// Leaf - Simple view
+// ✅ Leaf - TextView
 class TextView(private val text: String) : ViewComponent {
     override fun draw() {
         println("Drawing TextView: $text")
@@ -123,17 +147,7 @@ class TextView(private val text: String) : ViewComponent {
     }
 }
 
-class ImageView(private val imageUrl: String) : ViewComponent {
-    override fun draw() {
-        println("Drawing ImageView: $imageUrl")
-    }
-
-    override fun measure(widthSpec: Int, heightSpec: Int) {
-        println("Measuring ImageView: $imageUrl")
-    }
-}
-
-// Composite - ViewGroup
+// ✅ Composite - LinearLayout
 class LinearLayout(
     private val orientation: String
 ) : ViewComponent {
@@ -143,56 +157,145 @@ class LinearLayout(
         children.add(view)
     }
 
-    fun removeView(view: ViewComponent) {
-        children.remove(view)
-    }
-
     override fun draw() {
         println("Drawing LinearLayout ($orientation)")
-        children.forEach { it.draw() }
+        children.forEach { it.draw() }  // Рекурсивно
     }
 
     override fun measure(widthSpec: Int, heightSpec: Int) {
         println("Measuring LinearLayout ($orientation)")
-        children.forEach { it.measure(widthSpec, heightSpec) }
+        children.forEach { it.measure(widthSpec, heightSpec) }  // Рекурсивно
     }
 }
 
-// Usage - Building view hierarchy
+// ✅ Client - строим иерархию
 fun buildUI(): ViewComponent {
-    val rootLayout = LinearLayout("vertical")
+    val root = LinearLayout("vertical")
 
-    val headerLayout = LinearLayout("horizontal")
-    headerLayout.addView(ImageView("logo.png"))
-    headerLayout.addView(TextView("My App"))
+    val header = LinearLayout("horizontal")
+    header.addView(TextView("Logo"))
+    header.addView(TextView("Title"))
 
-    val contentLayout = LinearLayout("vertical")
-    contentLayout.addView(TextView("Welcome"))
-    contentLayout.addView(ImageView("banner.jpg"))
+    root.addView(header)
+    root.addView(TextView("Content"))
 
-    rootLayout.addView(headerLayout)
-    rootLayout.addView(contentLayout)
-
-    return rootLayout
-}
-
-fun main() {
-    val ui = buildUI()
-    ui.measure(1080, 1920)
-    ui.draw()
+    return root
 }
 ```
 
-## Kotlin Example: File System
+**Пример 3: Организационная структура:**
+
+*Теория:* Сотрудники (Developer - Leaf) и менеджеры (Manager - Composite). Manager содержит подчинённых и рекурсивно показывает детали.
 
 ```kotlin
-// Component
+// ✅ Component интерфейс
+interface Employee {
+    fun showDetails(): String
+    fun getSalary(): Double
+}
+
+// ✅ Leaf - Developer
+class Developer(
+    private val name: String,
+    private val salary: Double
+) : Employee {
+    override fun showDetails() = "Developer: $name"
+    override fun getSalary() = salary
+}
+
+// ✅ Composite - Manager
+class Manager(
+    private val name: String,
+    private val salary: Double
+) : Employee {
+    private val team = mutableListOf<Employee>()
+
+    fun addEmployee(employee: Employee) {
+        team.add(employee)
+    }
+
+    override fun showDetails(): String {
+        val teamDetails = team.joinToString("\n") { "  ${it.showDetails()}" }
+        return "Manager: $name\n$teamDetails"
+    }
+
+    override fun getSalary(): Double {
+        // Рекурсивно суммируем зарплаты команды
+        return salary + team.sumOf { it.getSalary() }
+    }
+}
+```
+
+**Преимущества:**
+
+1. **Единообразная обработка** - клиент не различает Leaf и Composite
+2. **Упрощение клиентского кода** - нет необходимости проверять тип
+3. **Open/Closed Principle** - легко добавлять новые типы компонентов
+4. **Рекурсивная композиция** - можно строить сложные структуры
+5. **Гибкость** - легко добавлять/удалять компоненты в runtime
+
+**Недостатки:**
+
+1. **Сложность ограничений** - трудно ограничить типы компонентов в Composite
+2. **Overhead** - дополнительные объекты для простых структур
+3. **Нарушение Interface Segregation** - Leaf может иметь методы управления детьми (add/remove), которые не используются
+
+**Связанные паттерны:**
+
+- **Iterator** - для обхода Composite структуры
+- **Visitor** - для операций над Composite структурой
+- **Decorator** - похожая рекурсивная структура, но разные цели
+- **Chain of Responsibility** - может использовать Composite для цепочки
+
+**Ключевые моменты:**
+
+1. **Рекурсия** - Composite рекурсивно делегирует операции детям
+2. **Единообразие** - клиент работает через Component интерфейс
+3. **Древовидная структура** - естественная модель для иерархий
+4. **Прозрачность vs Безопасность** - trade-off между единым интерфейсом и type safety
+
+## Answer (EN)
+
+**Composite Pattern Theory:**
+Composite (Composer) - structural design pattern that allows composing objects into tree-like structures to represent part-whole hierarchies. Allows clients to treat individual objects (Leaf) and compositions of objects (Composite) uniformly. Key idea - recursive composition.
+
+**Problems it Solves:**
+
+1. **Need for uniform treatment** of individual objects and compositions
+2. **Representing part-whole hierarchy** as tree structure
+3. **Avoiding different treatment** of Leaf and Composite objects (complicates client code)
+
+**Solution:**
+
+*Theory:* Define unified **Component** interface for Leaf (leaves) and Composite (compositions). Leaf implements interface directly. Composite contains collection of Components and delegates requests to children recursively down the tree.
+
+**Pattern Structure:**
+
+- **Component** (interface) - declares common operations for Leaf and Composite
+- **Leaf** - end element (no children), implements Component
+- **Composite** - container, contains children (Leaf or Composite), implements Component, delegates operations to children
+- **Client** - works with Component, not distinguishing Leaf and Composite
+
+**When to Use:**
+
+✅ **Use Composite:**
+- Need to represent part-whole hierarchy
+- Clients should treat individual objects and compositions uniformly
+- Structure has tree-like form (file system, UI components, organizational structure)
+- Need recursive structure processing
+
+**Example 1: File System:**
+
+*Theory:* Classic Composite example. File (Leaf) and Directory (Composite) implement FileSystemComponent. Directory contains list of children and recursively calculates size.
+
+```kotlin
+// ✅ Component interface
 interface FileSystemComponent {
     fun getSize(): Long
     fun print(indent: String = "")
 }
 
-// Leaf - File
+// ✅ Leaf - File
 class File(
     private val name: String,
     private val size: Long
@@ -200,213 +303,201 @@ class File(
     override fun getSize() = size
 
     override fun print(indent: String) {
-        println("$indent $name ($size bytes)")
+        println("$indent- $name ($size bytes)")
     }
 }
 
-// Composite - Directory
-class Directory(private val name: String) : FileSystemComponent {
-    private val contents = mutableListOf<FileSystemComponent>()
+// ✅ Composite - Directory
+class Directory(
+    private val name: String
+) : FileSystemComponent {
+    private val children = mutableListOf<FileSystemComponent>()
 
     fun add(component: FileSystemComponent) {
-        contents.add(component)
+        children.add(component)
     }
 
     fun remove(component: FileSystemComponent) {
-        contents.remove(component)
+        children.remove(component)
     }
 
-    override fun getSize(): Long = contents.sumOf { it.getSize() }
+    override fun getSize(): Long {
+        // Recursively sum children sizes
+        return children.sumOf { it.getSize() }
+    }
 
     override fun print(indent: String) {
-        println("$indent $name/")
-        contents.forEach { it.print("$indent  ") }
+        println("$indent+ $name/")
+        children.forEach { it.print("$indent  ") }
     }
 }
 
-// Usage
+// ✅ Client - uniform treatment
 fun main() {
     val root = Directory("root")
 
-    val docs = Directory("documents")
-    docs.add(File("resume.pdf", 1024))
-    docs.add(File("cover_letter.docx", 512))
+    val docs = Directory("docs")
+    docs.add(File("readme.txt", 1024))
+    docs.add(File("guide.pdf", 5120))
 
-    val photos = Directory("photos")
-    photos.add(File("vacation.jpg", 2048))
-    photos.add(File("family.png", 1536))
+    val images = Directory("images")
+    images.add(File("logo.png", 2048))
 
     root.add(docs)
-    root.add(photos)
-    root.add(File("readme.txt", 256))
+    root.add(images)
+    root.add(File("config.json", 512))
 
+    println("Total size: ${root.getSize()} bytes")
     root.print()
-    println("\nTotal size: ${root.getSize()} bytes")
 }
 ```
 
-### Explanation
+**Example 2: UI Components (Android View Hierarchy):**
 
-
-**Explanation**:
-
-- **`Employee`/`ViewComponent`** is the component interface providing uniform methods
-- **`Developer`/`TextView`** is a leaf that implements the interface directly
-- **`Manager`/`LinearLayout`** is a composite containing list of components
-- Composite forwards operations to children, aggregating results
-- **Android**: View hierarchy (ViewGroup/View), menu structures, drawable layers
-
-## Когда Использовать?
-
-When to use:
-
-1. **Tree-like structures** - Natural hierarchies where objects compose other objects (file systems, UI components, organizational structures)
-2. **Recursive structures** - Objects made up of smaller objects of same type
-3. **Simplifying client code** - Want to treat individual and composite objects uniformly
-4. **Part-whole hierarchies** - Need to represent part-whole relationships
-
-## Преимущества И Недостатки
-
-### Pros (Преимущества)
-
-
-1. **Flexibility** - Easy to add new component types
-2. **Simplified client code** - Treat individual and composite objects the same
-3. **Improved scalability** - Build complex hierarchies easily
-4. **Reduced coupling** - Clients don't know if working with leaf or composite
-5. **Open/Closed Principle** - Add new components without changing existing code
-
-### Cons (Недостатки)
-
-
-1. **Increased complexity** - More complex for simple cases
-2. **Performance overhead** - Extra layers of abstraction
-3. **Limited functionality** - Best for similar objects in hierarchy
-4. **Overly general** - Component interface may be too general
-
-## Best Practices
+*Theory:* Android View system - Composite example. View (Leaf) and ViewGroup (Composite) implement common interface. ViewGroup contains children and recursively calls measure/draw.
 
 ```kotlin
-// - DO: Use for tree structures
-interface UIComponent {
-    fun render(): String
-    fun onClick()
+// ✅ Component interface
+interface ViewComponent {
+    fun draw()
+    fun measure(widthSpec: Int, heightSpec: Int)
 }
 
-class Button(private val text: String) : UIComponent {
-    override fun render() = "<button>$text</button>"
-    override fun onClick() = println("Button clicked: $text")
+// ✅ Leaf - TextView
+class TextView(private val text: String) : ViewComponent {
+    override fun draw() {
+        println("Drawing TextView: $text")
+    }
+
+    override fun measure(widthSpec: Int, heightSpec: Int) {
+        println("Measuring TextView: $text")
+    }
 }
 
-class Panel : UIComponent {
-    private val children = mutableListOf<UIComponent>()
-    fun add(component: UIComponent) { children.add(component) }
+// ✅ Composite - LinearLayout
+class LinearLayout(
+    private val orientation: String
+) : ViewComponent {
+    private val children = mutableListOf<ViewComponent>()
 
-    override fun render() = children.joinToString("") { it.render() }
-    override fun onClick() { children.forEach { it.onClick() } }
+    fun addView(view: ViewComponent) {
+        children.add(view)
+    }
+
+    override fun draw() {
+        println("Drawing LinearLayout ($orientation)")
+        children.forEach { it.draw() }  // Recursively
+    }
+
+    override fun measure(widthSpec: Int, heightSpec: Int) {
+        println("Measuring LinearLayout ($orientation)")
+        children.forEach { it.measure(widthSpec, heightSpec) }  // Recursively
+    }
 }
 
-// - DO: Use with Iterator pattern for traversal
-class CompositeIterator(root: FileSystemComponent) : Iterator<FileSystemComponent> {
-    // Implementation
+// ✅ Client - build hierarchy
+fun buildUI(): ViewComponent {
+    val root = LinearLayout("vertical")
+
+    val header = LinearLayout("horizontal")
+    header.addView(TextView("Logo"))
+    header.addView(TextView("Title"))
+
+    root.addView(header)
+    root.addView(TextView("Content"))
+
+    return root
 }
-
-// - DO: Consider using sealed classes in Kotlin
-sealed class MenuItem {
-    abstract val title: String
-
-    data class Item(override val title: String, val action: () -> Unit) : MenuItem()
-    data class SubMenu(override val title: String, val items: List<MenuItem>) : MenuItem()
-}
-
-// - DON'T: Use for fundamentally different types
-// - DON'T: Make all operations mandatory in component interface
-// - DON'T: Allow adding leafs to leafs
 ```
 
-**English**: **Composite** is a structural pattern that composes objects into tree structures to represent part-whole hierarchies, allowing uniform treatment of individual and composite objects. **Problem**: Need to represent tree structures and treat parts/wholes uniformly. **Solution**: Define component interface, implement with leaves (individual) and composites (containers). **Use when**: (1) Tree structures, (2) Part-whole hierarchies, (3) Want uniform treatment. **Android**: View hierarchy, menu structures, drawable layers. **Pros**: flexibility, simplified client code, scalability. **Cons**: complexity, performance overhead. **Examples**: View hierarchy, file system, organizational chart, menu structures.
+**Example 3: Organizational Structure:**
 
-## Links
+*Theory:* Employees (Developer - Leaf) and managers (Manager - Composite). Manager contains subordinates and recursively shows details.
 
-- [Composite Design Pattern in Java](https://www.geeksforgeeks.org/composite-design-pattern-in-java/)
-- [Composite pattern](https://en.wikipedia.org/wiki/Composite_pattern)
-- [Composite Design Pattern in Kotlin](https://www.javaguides.net/2023/10/composite-design-pattern-in-kotlin.html)
+```kotlin
+// ✅ Component interface
+interface Employee {
+    fun showDetails(): String
+    fun getSalary(): Double
+}
 
-## Further Reading
+// ✅ Leaf - Developer
+class Developer(
+    private val name: String,
+    private val salary: Double
+) : Employee {
+    override fun showDetails() = "Developer: $name"
+    override fun getSalary() = salary
+}
 
-- [Composite Design Pattern](https://sourcemaking.com/design_patterns/composite)
-- [Composite](https://refactoring.guru/design-patterns/composite)
+// ✅ Composite - Manager
+class Manager(
+    private val name: String,
+    private val salary: Double
+) : Employee {
+    private val team = mutableListOf<Employee>()
+
+    fun addEmployee(employee: Employee) {
+        team.add(employee)
+    }
+
+    override fun showDetails(): String {
+        val teamDetails = team.joinToString("\n") { "  ${it.showDetails()}" }
+        return "Manager: $name\n$teamDetails"
+    }
+
+    override fun getSalary(): Double {
+        // Recursively sum team salaries
+        return salary + team.sumOf { it.getSalary() }
+    }
+}
+```
+
+**Advantages:**
+
+1. **Uniform treatment** - client doesn't distinguish Leaf and Composite
+2. **Simplified client code** - no need to check type
+3. **Open/Closed Principle** - easy to add new component types
+4. **Recursive composition** - can build complex structures
+5. **Flexibility** - easy to add/remove components at runtime
+
+**Disadvantages:**
+
+1. **Constraint complexity** - hard to restrict component types in Composite
+2. **Overhead** - additional objects for simple structures
+3. **Interface Segregation violation** - Leaf may have child management methods (add/remove) that aren't used
+
+**Related Patterns:**
+
+- **Iterator** - for traversing Composite structure
+- **Visitor** - for operations on Composite structure
+- **Decorator** - similar recursive structure, different goals
+- **Chain of Responsibility** - can use Composite for chain
+
+**Key Points:**
+
+1. **Recursion** - Composite recursively delegates operations to children
+2. **Uniformity** - client works through Component interface
+3. **Tree structure** - natural model for hierarchies
+4. **Transparency vs Safety** - trade-off between unified interface and type safety
 
 ---
-*Source: Kirchhoff Android Interview Questions*
 
+## Follow-ups
 
-## Ответ (RU)
-
-### Определение
-
-Паттерн проектирования Composite — это структурный паттерн проектирования, который **позволяет компоновать объекты в древовидные структуры для представления иерархий часть-целое**. Он позволяет клиентам обращаться с отдельными объектами и композициями объектов единообразно.
-
-### Проблемы, Которые Решает
-
-Паттерн проектирования Composite решает такие проблемы как:
-
-1. **Представить иерархию часть-целое так, чтобы клиенты могли обращаться с частями и целыми объектами единообразно**
-2. **Представить иерархию часть-целое в виде древовидной структуры**
-3. **Избежать необходимости обрабатывать объекты `Part` и `Whole` отдельно** — это усложняет клиентский код
-
-### Решение
-
-Решения, которые описывает паттерн проектирования Composite:
-
-- Определить унифицированный интерфейс **`Component`** для объектов-частей (`Leaf`) и объектов-целых (`Composite`)
-- Отдельные объекты **`Leaf`** реализуют интерфейс Component напрямую
-- Объекты **`Composite`** перенаправляют запросы своим дочерним компонентам
-
-Это позволяет клиентам работать через интерфейс Component для единообразной обработки объектов Leaf и Composite. Объекты Composite рекурсивно перенаправляют запросы вниз по древовидной структуре.
-
-### Объяснение
-
-**Объяснение**:
-
-- **`Employee`/`ViewComponent`** — это интерфейс компонента, предоставляющий единообразные методы
-- **`Developer`/`TextView`** — это лист, который реализует интерфейс напрямую
-- **`Manager`/`LinearLayout`** — это композит, содержащий список компонентов
-- Композит перенаправляет операции дочерним элементам, агрегируя результаты
-- **Android**: иерархия View (ViewGroup/View), структуры меню, слои drawable
-
-### Pros (Преимущества)
-
-1. **Гибкость** — легко добавлять новые типы компонентов
-2. **Упрощенный клиентский код** — обращаться с отдельными и композитными объектами одинаково
-3. **Улучшенная масштабируемость** — легко строить сложные иерархии
-4. **Сниженная связанность** — клиенты не знают, работают ли они с листом или композитом
-5. **Принцип открытости/закрытости** — добавлять новые компоненты без изменения существующего кода
-
-### Cons (Недостатки)
-
-1. **Увеличенная сложность** — более сложно для простых случаев
-2. **Накладные расходы производительности** — дополнительные уровни абстракции
-3. **Ограниченная функциональность** — лучше всего для похожих объектов в иерархии
-4. **Слишком общий** — интерфейс компонента может быть слишком общим
-
-
----
+- What is the difference between Composite and Decorator patterns?
+- How do you implement tree traversal in Composite pattern?
+- What is the transparency vs safety trade-off?
 
 ## Related Questions
 
-### Hub
-- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+### Prerequisites (Easier)
+- [[q-clean-code-principles--software-engineering--medium]] - Clean code principles
+- Basic OOP and recursion concepts
 
-### Structural Patterns
-- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+### Related (Same Level)
+- [[q-command-pattern--design-patterns--medium]] - Command pattern
 - [[q-decorator-pattern--design-patterns--medium]] - Decorator pattern
-- [[q-facade-pattern--design-patterns--medium]] - Facade pattern
-- [[q-proxy-pattern--design-patterns--medium]] - Proxy pattern
 
-### Creational Patterns
-- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
-
-### Behavioral Patterns
-- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
-
+### Advanced (Harder)
+- [[q-design-patterns-types--design-patterns--medium]] - Design patterns overview
