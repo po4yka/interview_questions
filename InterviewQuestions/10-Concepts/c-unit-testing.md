@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-110311
-title: Unit Testing / Модульное Тестирование
-aliases: [Unit Testing, Unit Tests, Модульное Тестирование, Юнит-Тесты, JUnit]
-summary: Testing individual units of code in isolation to ensure correctness
-tags: [concept, testing, junit, quality-assurance, tdd]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-110311"
+title: "Unit Testing / Модульное Тестирование"
+aliases: ["Unit Testing", "Unit Tests", "Модульное Тестирование", "Юнит-Тесты", "JUnit"]
+summary: "Testing individual units of code in isolation to ensure correctness"
+topic: "testing"
+subtopics: ["junit", "quality-assurance", "tdd"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-testing"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "testing", "junit", "quality-assurance", "tdd"]
 ---
 
 # Unit Testing / Модульное Тестирование

@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-110314
-title: Android Permissions / Разрешения Android
-aliases: [Permissions, Android Permissions, Разрешения, Runtime Permissions, Разрешения Времени Выполнения]
-summary: System for controlling app access to sensitive user data and device features
-tags: [concept, android, permissions, security, privacy]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-110314"
+title: "Android Permissions / Разрешения Android"
+aliases: ["Permissions", "Android Permissions", "Разрешения", "Runtime Permissions", "Разрешения Времени Выполнения"]
+summary: "System for controlling app access to sensitive user data and device features"
+topic: "android"
+subtopics: ["permissions", "security", "privacy"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "android", "permissions", "security", "privacy"]
 ---
 
 # Android Permissions / Разрешения Android

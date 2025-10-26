@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-143000
-title: Android App Bundle / Android App Bundle
-aliases: [App Bundle, AAB, Android App Bundle, Формат App Bundle]
-summary: Publishing format for Android apps that enables Google Play to generate optimized APKs for each device configuration
-tags: [concept, android, app-bundle, publishing, gradle, build]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-143000"
+title: "Android App Bundle / Android App Bundle"
+aliases: ["App Bundle", "AAB", "Android App Bundle", "Формат App Bundle"]
+summary: "Publishing format for Android apps that enables Google Play to generate optimized APKs for each device configuration"
+topic: "android"
+subtopics: ["app-bundle", "publishing", "gradle", "build"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "android", "app-bundle", "publishing", "gradle", "build"]
 ---
 
 # Android App Bundle / Android App Bundle

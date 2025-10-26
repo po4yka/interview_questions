@@ -1,14 +1,23 @@
 ---
-id: ivc-20251023-120300
-title: Encryption / Шифрование
-aliases: [Encryption, Cryptography, Шифрование, Криптография]
-kind: concept
-summary: Process of encoding data to prevent unauthorized access using cryptographic algorithms
+id: "20251023-120300"
+title: "Encryption / Шифрование"
+aliases: ["Encryption", "Cryptography", "Шифрование", "Криптография"]
+summary: "Process of encoding data to prevent unauthorized access using cryptographic algorithms"
+topic: "security"
+subtopics: ["encryption", "cryptography", "android"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-security"
+related: []
+created: "2025-10-23"
+updated: "2025-10-23"
+tags: ["concept", "security", "encryption", "cryptography", "android"]
+kind: "concept"
 links: []
-created: 2025-10-23
-updated: 2025-10-23
-status: draft
-tags: [concept, security, encryption, cryptography, android]
 ---
 
 # Encryption / Шифрование

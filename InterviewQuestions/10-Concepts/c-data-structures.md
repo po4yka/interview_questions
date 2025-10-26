@@ -1,10 +1,21 @@
 ---
-id: concept-data-structures
+id: "20251012-000000"
 title: "Data Structures / Структуры данных"
-type: concept
-tags: [concept, data-structures, arrays, lists, trees, graphs, hash-tables]
-created: 2025-10-12
-updated: 2025-10-12
+aliases: []
+topic: "data-structures"
+subtopics: ["arrays", "lists", "trees", "graphs", "hash-tables"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-algorithms"
+related: []
+created: "2025-10-12"
+updated: "2025-10-12"
+tags: ["concept", "data-structures", "arrays", "lists", "trees", "graphs", "hash-tables"]
+type: "concept"
 ---
 
 # Summary (EN)

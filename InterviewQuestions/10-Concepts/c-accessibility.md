@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-140000
-title: Accessibility / Доступность
-aliases: [Accessibility, Android Accessibility, TalkBack, Доступность, Специальные возможности Android]
-summary: Features and APIs that make Android apps usable for people with disabilities
-tags: [concept, android, accessibility, ui-ux, talkback, a11y]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-140000"
+title: "Accessibility / Доступность"
+aliases: ["Accessibility", "Android Accessibility", "TalkBack", "Доступность", "Специальные возможности Android"]
+summary: "Features and APIs that make Android apps usable for people with disabilities"
+topic: "android"
+subtopics: ["accessibility", "ui-ux", "talkback", "a11y"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "android", "accessibility", "ui-ux", "talkback", "a11y"]
 ---
 
 # Accessibility / Доступность

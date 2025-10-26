@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-120000
-title: Android Service / Сервис Android
-aliases: [Service, Android Service, Сервис, Фоновый сервис]
-summary: Android component for executing long-running operations in the background without a user interface
-tags: [concept, android, service, background-tasks, lifecycle]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-120000"
+title: "Android Service / Сервис Android"
+aliases: ["Service", "Android Service", "Сервис", "Фоновый сервис"]
+summary: "Android component for executing long-running operations in the background without a user interface"
+topic: "android"
+subtopics: ["service", "background-tasks", "lifecycle"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "android", "service", "background-tasks", "lifecycle"]
 ---
 
 # Android Service / Сервис Android

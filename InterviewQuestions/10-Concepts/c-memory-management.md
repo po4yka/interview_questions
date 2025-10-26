@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-110312
-title: Memory Management / Управление Памятью
-aliases: [Memory Management, Управление Памятью, Garbage Collection, Heap, Stack, GC]
-summary: How applications allocate, use, and free memory resources
-tags: [concept, memory, performance, jvm, garbage-collection]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-110312"
+title: "Memory Management / Управление Памятью"
+aliases: ["Memory Management", "Управление Памятью", "Garbage Collection", "Heap", "Stack", "GC"]
+summary: "How applications allocate, use, and free memory resources"
+topic: "performance"
+subtopics: ["memory", "jvm", "garbage-collection"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-performance"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "memory", "performance", "jvm", "garbage-collection"]
 ---
 
 # Memory Management / Управление Памятью

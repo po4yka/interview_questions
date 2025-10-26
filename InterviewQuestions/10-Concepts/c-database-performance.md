@@ -1,10 +1,21 @@
 ---
-id: concept-database-performance
+id: "20251012-000000"
 title: "Database Performance Optimization / Оптимизация производительности баз данных"
-type: concept
-tags: [concept, database, performance, indexing, optimization, query-tuning]
-created: 2025-10-12
-updated: 2025-10-12
+aliases: []
+topic: "performance"
+subtopics: ["database", "indexing", "optimization", "query-tuning"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-performance"
+related: []
+created: "2025-10-12"
+updated: "2025-10-12"
+tags: ["concept", "database", "performance", "indexing", "optimization", "query-tuning"]
+type: "concept"
 ---
 
 # Summary (EN)

@@ -1,13 +1,23 @@
 ---
-id: ivc-20251018-140003
-title: Kotlin Coroutines / Корутины Kotlin
-aliases: [Coroutines, Корутины, Сопрограммы, Kotlin Coroutines]
-kind: concept
-summary: Lightweight concurrency framework for asynchronous programming with structured concurrency and suspend functions
+id: "20251018-140003"
+title: "Kotlin Coroutines / Корутины Kotlin"
+aliases: ["Coroutines", "Корутины", "Сопрограммы", "Kotlin Coroutines"]
+summary: "Lightweight concurrency framework for asynchronous programming with structured concurrency and suspend functions"
+topic: "kotlin"
+subtopics: ["coroutines", "async", "concurrency", "structured-concurrency"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-kotlin"
+related: []
+created: "2025-10-18"
+updated: "2025-10-18"
+tags: ["concept", "kotlin", "coroutines", "async", "concurrency", "structured-concurrency"]
+kind: "concept"
 links: []
-created: 2025-10-18
-updated: 2025-10-18
-tags: [concept, kotlin, coroutines, async, concurrency, structured-concurrency]
 ---
 
 # Summary (EN)

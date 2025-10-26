@@ -1,11 +1,21 @@
 ---
-id: ivc-20251018-140002
-title: Array / Массив
-aliases: [Array, Arrays, Массив, Массивы, Fixed-size Array, Фиксированный массив]
-summary: Fixed-size sequential collection with contiguous memory and O(1) random access
-tags: [concept, data-structures, arrays, algorithms, collections]
-created: 2025-10-18
-updated: 2025-10-18
+id: "20251018-140002"
+title: "Array / Массив"
+aliases: ["Array", "Arrays", "Массив", "Массивы", "Fixed-size Array", "Фиксированный массив"]
+summary: "Fixed-size sequential collection with contiguous memory and O(1) random access"
+topic: "data-structures"
+subtopics: ["arrays", "algorithms", "collections"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-algorithms"
+related: []
+created: "2025-10-18"
+updated: "2025-10-18"
+tags: ["concept", "data-structures", "arrays", "algorithms", "collections"]
 ---
 
 # Summary (EN)

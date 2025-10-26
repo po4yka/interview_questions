@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-120200
-title: Custom Views / Пользовательские View
-aliases: [Custom Views, Custom View, Android Custom Views, Пользовательские View, Кастомные View]
-summary: Creating custom UI components in Android by extending View or ViewGroup classes to implement unique visual elements and interactions
-tags: [concept, android, custom-views, ui, canvas, drawing, view-lifecycle]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-120200"
+title: "Custom Views / Пользовательские View"
+aliases: ["Custom Views", "Custom View", "Android Custom Views", "Пользовательские View", "Кастомные View"]
+summary: "Creating custom UI components in Android by extending View or ViewGroup classes to implement unique visual elements and interactions"
+topic: "android"
+subtopics: ["custom-views", "ui", "canvas", "drawing", "view-lifecycle"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "android", "custom-views", "ui", "canvas", "drawing", "view-lifecycle"]
 ---
 
 # Custom Views / Пользовательские View

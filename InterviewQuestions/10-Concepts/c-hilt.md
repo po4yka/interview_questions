@@ -1,14 +1,23 @@
 ---
-id: ivc-20251023-120200
-title: Hilt / Hilt DI
-aliases: [Hilt, Hilt DI, Dependency Injection with Hilt]
-kind: concept
-summary: Google's officially recommended dependency injection library for Android built on top of Dagger
-links: [c-dependency-injection, c-dagger]
-created: 2025-10-23
-updated: 2025-10-23
-status: draft
-tags: [concept, android, dependency-injection, hilt, architecture]
+id: "20251023-120200"
+title: "Hilt / Hilt DI"
+aliases: ["Hilt", "Hilt DI", "Dependency Injection with Hilt"]
+summary: "Google's officially recommended dependency injection library for Android built on top of Dagger"
+topic: "android"
+subtopics: ["dependency-injection", "hilt", "architecture"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-23"
+updated: "2025-10-23"
+tags: ["concept", "android", "dependency-injection", "hilt", "architecture"]
+kind: "concept"
+links: ["c-dependency-injection", "c-dagger"]
 ---
 
 # Hilt / Hilt DI

@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-110313
-title: Broadcast Receiver / Широковещательный Приемник
-aliases: [Broadcast Receiver, BroadcastReceiver, Широковещательный Приемник, Приемник Трансляций]
-summary: Android component that responds to system-wide or app-specific broadcast messages
-tags: [concept, android, components, broadcast, system-events]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-110313"
+title: "Broadcast Receiver / Широковещательный Приемник"
+aliases: ["Broadcast Receiver", "BroadcastReceiver", "Широковещательный Приемник", "Приемник Трансляций"]
+summary: "Android component that responds to system-wide or app-specific broadcast messages"
+topic: "android"
+subtopics: ["components", "broadcast", "system-events"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "android", "components", "broadcast", "system-events"]
 ---
 
 # Broadcast Receiver / Широковещательный Приемник

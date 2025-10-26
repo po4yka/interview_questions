@@ -1,11 +1,21 @@
 ---
-id: ivc-20251018-140001
-title: Hash Map / Хеш-таблица
-aliases: [Hash Map, HashMap, Hash Table, Хеш-таблица, Хеш-карта, Associative Array, Dictionary]
-summary: Data structure providing O(1) average-case lookup, insert, and delete operations using hash functions
-tags: [concept, data-structures, hash-map, algorithms, collections]
-created: 2025-10-18
-updated: 2025-10-18
+id: "20251018-140001"
+title: "Hash Map / Хеш-таблица"
+aliases: ["Hash Map", "HashMap", "Hash Table", "Хеш-таблица", "Хеш-карта", "Associative Array", "Dictionary"]
+summary: "Data structure providing O(1) average-case lookup, insert, and delete operations using hash functions"
+topic: "data-structures"
+subtopics: ["hash-map", "algorithms", "collections"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-algorithms"
+related: []
+created: "2025-10-18"
+updated: "2025-10-18"
+tags: ["concept", "data-structures", "hash-map", "algorithms", "collections"]
 ---
 
 # Summary (EN)

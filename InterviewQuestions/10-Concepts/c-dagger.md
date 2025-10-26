@@ -1,14 +1,23 @@
 ---
-id: ivc-20251023-120400
-title: Dagger / Dagger DI
-aliases: [Dagger, Dagger 2, Dependency Injection Framework, Dagger DI]
-kind: concept
-summary: Compile-time dependency injection framework for Java and Android using code generation
-links: [c-dependency-injection, c-hilt]
-created: 2025-10-23
-updated: 2025-10-23
-status: draft
-tags: [concept, dependency-injection, dagger, architecture, android]
+id: "20251023-120400"
+title: "Dagger / Dagger DI"
+aliases: ["Dagger", "Dagger 2", "Dependency Injection Framework", "Dagger DI"]
+summary: "Compile-time dependency injection framework for Java and Android using code generation"
+topic: "android"
+subtopics: ["dependency-injection", "dagger", "architecture"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-23"
+updated: "2025-10-23"
+tags: ["concept", "dependency-injection", "dagger", "architecture", "android"]
+kind: "concept"
+links: ["c-dependency-injection", "c-hilt"]
 ---
 
 # Dagger / Dagger DI

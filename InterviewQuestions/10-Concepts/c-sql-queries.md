@@ -1,10 +1,21 @@
 ---
-id: concept-sql-queries
+id: "20251012-000000"
 title: "SQL Queries / SQL запросы"
-type: concept
-tags: [concept, sql, queries, joins, subqueries, ctes]
-created: 2025-10-12
-updated: 2025-10-12
+aliases: []
+topic: "cs"
+subtopics: ["sql", "queries", "joins", "subqueries", "ctes"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-cs"
+related: []
+created: "2025-10-12"
+updated: "2025-10-12"
+tags: ["concept", "sql", "queries", "joins", "subqueries", "ctes"]
+type: "concept"
 ---
 
 # Summary (EN)

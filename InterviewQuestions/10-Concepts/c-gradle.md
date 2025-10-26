@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-140200
-title: Gradle / Gradle
-aliases: [Gradle, Gradle Build System, Build Automation, Система сборки Gradle, Автоматизация сборки]
-summary: Build automation tool for Android and JVM projects using Groovy or Kotlin DSL
-tags: [concept, gradle, build-system, android, kotlin-dsl, groovy, automation]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-140200"
+title: "Gradle / Gradle"
+aliases: ["Gradle", "Gradle Build System", "Build Automation", "Система сборки Gradle", "Автоматизация сборки"]
+summary: "Build automation tool for Android and JVM projects using Groovy or Kotlin DSL"
+topic: "android"
+subtopics: ["gradle", "build-system", "kotlin-dsl", "groovy", "automation"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "gradle", "build-system", "android", "kotlin-dsl", "groovy", "automation"]
 ---
 
 # Gradle / Gradle

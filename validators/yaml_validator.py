@@ -250,20 +250,30 @@ class YAMLValidator(BaseValidator):
         self._validate_date(created, "created")
         self._validate_date(updated, "updated")
 
-    def _validate_date(self, value: str | None, field: str) -> None:
+    def _validate_date(self, value, field: str) -> None:
         if not value:
             self.add_issue(Severity.ERROR, f"{field} missing", field=field)
             return
-        try:
-            datetime.strptime(value, "%Y-%m-%d")
-        except ValueError:
-            self.add_issue(
-                Severity.ERROR,
-                f"{field} must follow YYYY-MM-DD",
-                field=field,
-            )
-        else:
+        if isinstance(value, datetime):
             self.add_passed(f"{field} date format valid")
+            return
+        if isinstance(value, str):
+            try:
+                datetime.strptime(value, "%Y-%m-%d")
+            except ValueError:
+                self.add_issue(
+                    Severity.ERROR,
+                    f"{field} must follow YYYY-MM-DD",
+                    field=field,
+                )
+            else:
+                self.add_passed(f"{field} date format valid")
+            return
+        self.add_issue(
+            Severity.ERROR,
+            f"{field} must be a date string (YYYY-MM-DD)",
+            field=field,
+        )
 
     def _check_tags(self, tags, difficulty: str | None) -> None:
         if tags is None or not isinstance(tags, list) or not tags:

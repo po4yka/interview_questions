@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-120100
-title: Room Database / База данных Room
-aliases: [Room, Room Database, Room Persistence Library, База данных Room]
-summary: Android persistence library that provides an abstraction layer over SQLite for fluent database access
-tags: [concept, android, room, database, sqlite, persistence, jetpack]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-120100"
+title: "Room Database / База данных Room"
+aliases: ["Room", "Room Database", "Room Persistence Library", "База данных Room"]
+summary: "Android persistence library that provides an abstraction layer over SQLite for fluent database access"
+topic: "android"
+subtopics: ["room", "database", "sqlite", "persistence", "jetpack"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "android", "room", "database", "sqlite", "persistence", "jetpack"]
 ---
 
 # Room Database / База данных Room

@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-110310
-title: Software Design Patterns / Паттерны Проектирования
-aliases: [Design Patterns, Паттерны Проектирования, Software Patterns, Архитектурные Паттерны]
-summary: Reusable solutions to common software design problems
-tags: [concept, design-patterns, architecture, software-engineering]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-110310"
+title: "Software Design Patterns / Паттерны Проектирования"
+aliases: ["Design Patterns", "Паттерны Проектирования", "Software Patterns", "Архитектурные Паттерны"]
+summary: "Reusable solutions to common software design problems"
+topic: "cs"
+subtopics: ["design-patterns", "architecture", "software-engineering"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-cs"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "design-patterns", "architecture", "software-engineering"]
 ---
 
 # Software Design Patterns / Паттерны Проектирования

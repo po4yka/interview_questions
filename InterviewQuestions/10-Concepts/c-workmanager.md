@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-140300
-title: WorkManager / WorkManager
-aliases: [WorkManager, Background Work, Deferrable Work, Android WorkManager, Фоновая работа, Отложенная работа]
-summary: Android Jetpack library for deferrable, guaranteed background work
-tags: [concept, android, workmanager, background-tasks, jetpack, coroutines, threading]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-140300"
+title: "WorkManager / WorkManager"
+aliases: ["WorkManager", "Background Work", "Deferrable Work", "Android WorkManager", "Фоновая работа", "Отложенная работа"]
+summary: "Android Jetpack library for deferrable, guaranteed background work"
+topic: "android"
+subtopics: ["workmanager", "background-tasks", "jetpack", "coroutines", "threading"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "android", "workmanager", "background-tasks", "jetpack", "coroutines", "threading"]
 ---
 
 # WorkManager / WorkManager

@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-120300
-title: ViewModel / ViewModel
-aliases: [ViewModel, Android ViewModel, AAC ViewModel, ViewModel компонент]
-summary: Lifecycle-aware component that stores and manages UI-related data, surviving configuration changes like screen rotations
-tags: [concept, android, viewmodel, lifecycle, architecture-components, jetpack, mvvm]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-120300"
+title: "ViewModel / ViewModel"
+aliases: ["ViewModel", "Android ViewModel", "AAC ViewModel", "ViewModel компонент"]
+summary: "Lifecycle-aware component that stores and manages UI-related data, surviving configuration changes like screen rotations"
+topic: "android"
+subtopics: ["viewmodel", "lifecycle", "architecture-components", "jetpack", "mvvm"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "android", "viewmodel", "lifecycle", "architecture-components", "jetpack", "mvvm"]
 ---
 
 # ViewModel / ViewModel

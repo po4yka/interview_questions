@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-140400
-title: ContentProvider / ContentProvider
-aliases: [ContentProvider, Content Provider, Content Resolver, Android Data Sharing, Поставщик контента, Провайдер контента]
-summary: Android component for managing and sharing structured data between applications
-tags: [concept, android, content-provider, data-sharing, ipc, uri, crud]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-140400"
+title: "ContentProvider / ContentProvider"
+aliases: ["ContentProvider", "Content Provider", "Content Resolver", "Android Data Sharing", "Поставщик контента", "Провайдер контента"]
+summary: "Android component for managing and sharing structured data between applications"
+topic: "android"
+subtopics: ["content-provider", "data-sharing", "ipc", "uri", "crud"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "android", "content-provider", "data-sharing", "ipc", "uri", "crud"]
 ---
 
 # ContentProvider / ContentProvider

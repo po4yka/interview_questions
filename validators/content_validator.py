@@ -27,7 +27,7 @@ class ContentValidator(BaseValidator):
             return self._summary
 
         positions = self._check_required_headings(content)
-        if positions:
+        if positions is not None:
             self._check_heading_order(positions)
             self._check_section_body(content, "# Вопрос (RU)", "# Question (EN)")
             self._check_section_body(content, "# Question (EN)", "## Ответ (RU)")
@@ -49,7 +49,8 @@ class ContentValidator(BaseValidator):
                 positions[heading] = index
         if len(positions) == len(self.REQUIRED_HEADINGS):
             self.add_passed("All required headings present")
-        return positions
+            return positions
+        return None
 
     def _check_heading_order(self, positions: dict) -> None:
         ordered = [positions[h] for h in self.REQUIRED_HEADINGS]

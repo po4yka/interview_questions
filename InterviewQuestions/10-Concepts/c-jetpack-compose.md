@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-140100
-title: Jetpack Compose / Jetpack Compose
-aliases: [Jetpack Compose, Compose, Declarative UI, Jetpack Compose UI, Декларативный UI, Композ]
-summary: Modern declarative UI toolkit for building native Android interfaces
-tags: [concept, android, jetpack-compose, ui, declarative-ui, composables, recomposition]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-140100"
+title: "Jetpack Compose / Jetpack Compose"
+aliases: ["Jetpack Compose", "Compose", "Declarative UI", "Jetpack Compose UI", "Декларативный UI", "Композ"]
+summary: "Modern declarative UI toolkit for building native Android interfaces"
+topic: "android"
+subtopics: ["jetpack-compose", "ui", "declarative-ui", "composables", "recomposition"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "android", "jetpack-compose", "ui", "declarative-ui", "composables", "recomposition"]
 ---
 
 # Jetpack Compose / Jetpack Compose

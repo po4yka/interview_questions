@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-143100
-title: MVVM Pattern / Паттерн MVVM
-aliases: [MVVM, Model-View-ViewModel, MVVM Pattern, Паттерн MVVM, Архитектура MVVM]
-summary: Architectural pattern that separates UI (View) from business logic (Model) using an intermediary ViewModel that exposes observable data and commands
-tags: [concept, android, architecture-patterns, mvvm, viewmodel, livedata, databinding]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-143100"
+title: "MVVM Pattern / Паттерн MVVM"
+aliases: ["MVVM", "Model-View-ViewModel", "MVVM Pattern", "Паттерн MVVM", "Архитектура MVVM"]
+summary: "Architectural pattern that separates UI (View) from business logic (Model) using an intermediary ViewModel that exposes observable data and commands"
+topic: "android"
+subtopics: ["architecture-patterns", "mvvm", "viewmodel", "livedata", "databinding"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "android", "architecture-patterns", "mvvm", "viewmodel", "livedata", "databinding"]
 ---
 
 # MVVM Pattern / Паттерн MVVM

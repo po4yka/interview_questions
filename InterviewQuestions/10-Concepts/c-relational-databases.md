@@ -1,10 +1,21 @@
 ---
-id: concept-relational-databases
+id: "20251012-000000"
 title: "Relational Databases / Реляционные базы данных"
-type: concept
-tags: [concept, database, relational, rdbms, acid, transactions]
-created: 2025-10-12
-updated: 2025-10-12
+aliases: []
+topic: "cs"
+subtopics: ["database", "relational", "rdbms", "acid", "transactions"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-cs"
+related: []
+created: "2025-10-12"
+updated: "2025-10-12"
+tags: ["concept", "database", "relational", "rdbms", "acid", "transactions"]
+type: "concept"
 ---
 
 # Summary (EN)

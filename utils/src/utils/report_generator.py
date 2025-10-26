@@ -24,6 +24,8 @@ class ReportGenerator:
         self.results = list(results)
 
     def write_markdown(self, report_path: Path) -> None:
+        if report_path.parent:
+            report_path.parent.mkdir(parents=True, exist_ok=True)
         lines: List[str] = []
         lines.append("# Validation Report")
         lines.append("")

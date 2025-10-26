@@ -1,10 +1,21 @@
 ---
-id: concept-version-control
+id: "20251012-000000"
 title: "Version Control Systems / Системы контроля версий"
-type: concept
-tags: [concept, vcs, git, version-control, collaboration]
-created: 2025-10-12
-updated: 2025-10-12
+aliases: []
+topic: "cs"
+subtopics: ["vcs", "git", "version-control", "collaboration"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-cs"
+related: []
+created: "2025-10-12"
+updated: "2025-10-12"
+tags: ["concept", "vcs", "git", "version-control", "collaboration"]
+type: "concept"
 ---
 
 # Summary (EN)

@@ -1,14 +1,23 @@
 ---
-id: ivc-20251023-120100
-title: Android Lifecycle / Жизненный цикл Android
-aliases: [Lifecycle, Android Lifecycle, Жизненный цикл, Lifecycle Components]
-kind: concept
-summary: Framework for managing Android component states and lifecycle-aware behavior
+id: "20251023-120100"
+title: "Android Lifecycle / Жизненный цикл Android"
+aliases: ["Lifecycle", "Android Lifecycle", "Жизненный цикл", "Lifecycle Components"]
+summary: "Framework for managing Android component states and lifecycle-aware behavior"
+topic: "android"
+subtopics: ["lifecycle", "architecture-components"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-23"
+updated: "2025-10-23"
+tags: ["concept", "android", "lifecycle", "architecture-components"]
+kind: "concept"
 links: []
-created: 2025-10-23
-updated: 2025-10-23
-status: draft
-tags: [concept, android, lifecycle, architecture-components]
 ---
 
 # Android Lifecycle / Жизненный цикл Android

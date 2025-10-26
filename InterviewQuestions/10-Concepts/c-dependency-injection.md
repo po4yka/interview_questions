@@ -1,14 +1,23 @@
 ---
-id: ivc-20251023-120000
-title: Dependency Injection / Внедрение зависимостей
-aliases: [DI, Dependency Injection, Внедрение зависимостей, Инъекция зависимостей]
-kind: concept
-summary: Design pattern where object dependencies are provided externally rather than created internally
-links: [c-dagger, c-hilt]
-created: 2025-10-23
-updated: 2025-10-23
-status: draft
-tags: [concept, architecture-patterns, dependency-injection, android]
+id: "20251023-120000"
+title: "Dependency Injection / Внедрение зависимостей"
+aliases: ["DI", "Dependency Injection", "Внедрение зависимостей", "Инъекция зависимостей"]
+summary: "Design pattern where object dependencies are provided externally rather than created internally"
+topic: "architecture-patterns"
+subtopics: ["dependency-injection", "android"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-architecture-patterns"
+related: []
+created: "2025-10-23"
+updated: "2025-10-23"
+tags: ["concept", "architecture-patterns", "dependency-injection", "android"]
+kind: "concept"
+links: ["c-dagger", "c-hilt"]
 ---
 
 # Dependency Injection / Внедрение зависимостей

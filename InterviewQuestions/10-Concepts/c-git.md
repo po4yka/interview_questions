@@ -1,10 +1,21 @@
 ---
-id: concept-git
+id: "20251012-000000"
 title: "Git Fundamentals / Основы Git"
-type: concept
-tags: [concept, git, version-control, branching, merging, rebasing]
-created: 2025-10-12
-updated: 2025-10-12
+aliases: []
+topic: "cs"
+subtopics: ["git", "version-control", "branching", "merging", "rebasing"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-cs"
+related: []
+created: "2025-10-12"
+updated: "2025-10-12"
+tags: ["concept", "git", "version-control", "branching", "merging", "rebasing"]
+type: "concept"
 ---
 
 # Summary (EN)

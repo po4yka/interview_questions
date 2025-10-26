@@ -1,12 +1,21 @@
 ---
-id: ivc-20251025-120400
-title: Memory Leaks / Утечки памяти
-aliases: [Memory Leaks, Memory Leak, Android Memory Leaks, Утечки памяти, Утечка памяти]
-summary: Situations where objects remain in memory longer than necessary due to unintended references, preventing garbage collection and causing performance issues
-tags: [concept, android, memory-leaks, performance, memory-management, debugging, profiling]
-created: 2025-10-25
-updated: 2025-10-25
-status: draft
+id: "20251025-120400"
+title: "Memory Leaks / Утечки памяти"
+aliases: ["Memory Leaks", "Memory Leak", "Android Memory Leaks", "Утечки памяти", "Утечка памяти"]
+summary: "Situations where objects remain in memory longer than necessary due to unintended references, preventing garbage collection and causing performance issues"
+topic: "android"
+subtopics: ["memory-leaks", "performance", "memory-management", "debugging", "profiling"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+sources: []
+status: "draft"
+moc: "moc-android"
+related: []
+created: "2025-10-25"
+updated: "2025-10-25"
+tags: ["concept", "android", "memory-leaks", "performance", "memory-management", "debugging", "profiling"]
 ---
 
 # Memory Leaks / Утечки памяти

@@ -138,7 +138,7 @@ def main() -> int:
 
 def determine_targets(args: argparse.Namespace, repo_root: Path, vault_dir: Path) -> List[Path]:
     if args.all:
-        return sorted(vault_dir.rglob("*.md"))
+        return _collect_validatable_files(vault_dir)
 
     if not args.path:
         print("Either provide a path or use --all", file=sys.stderr)
@@ -162,8 +162,42 @@ def collect_markdown_files(path: Path) -> List[Path]:
     if path.is_file() and path.suffix.lower() == ".md":
         return [path.resolve()]
     if path.is_dir():
-        return sorted([p.resolve() for p in path.rglob("*.md")])
+        return sorted(_collect_validatable_files(path))
     return []
+
+
+def _collect_validatable_files(root: Path) -> List[Path]:
+    allowed_prefixes = {
+        "10-Concepts",
+        "20-Algorithms",
+        "30-System-Design",
+        "40-Android",
+        "50-Backend",
+        "60-CompSci",
+        "70-Kotlin",
+        "80-Tools",
+    }
+    excluded_prefixes = {
+        "_templates",
+        ".obsidian",
+        "validators",
+        "utils",
+    }
+    result: List[Path] = []
+    for candidate in root.rglob("*.md"):
+        relative_parts = candidate.relative_to(root).parts
+        if not relative_parts:
+            continue
+        first = relative_parts[0]
+        if len(relative_parts) == 1:
+            # Skip loose files at the root (e.g., overview docs)
+            continue
+        if first in excluded_prefixes:
+            continue
+        if allowed_prefixes and first not in allowed_prefixes:
+            continue
+        result.append(candidate.resolve())
+    return sorted(result)
 
 
 def parse_note(path: Path) -> Tuple[dict, str]:
