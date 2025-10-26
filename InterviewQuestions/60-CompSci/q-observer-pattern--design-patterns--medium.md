@@ -3,18 +3,20 @@ id: 20251012-1227111169
 title: "Observer Pattern / Паттерн Observer"
 aliases: ["Observer Pattern", "Паттерн Observer"]
 topic: cs
-subtopics: [design-patterns, behavioral-patterns, publish-subscribe]
+subtopics: [behavioral-patterns, design-patterns, publish-subscribe]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-strategy-pattern--design-patterns--medium, q-command-pattern--design-patterns--medium, q-state-pattern--design-patterns--medium]
+related: [q-command-pattern--design-patterns--medium, q-state-pattern--design-patterns--medium, q-strategy-pattern--design-patterns--medium]
 created: 2025-10-15
 updated: 2025-01-25
-tags: [observer, design-patterns, behavioral-patterns, publish-subscribe, gof-patterns, livedata, flow, difficulty/medium]
+tags: [behavioral-patterns, design-patterns, difficulty/medium, flow, gof-patterns, livedata, observer, publish-subscribe]
 sources: [https://refactoring.guru/design-patterns/observer]
+date created: Monday, October 6th 2025, 7:19:01 am
+date modified: Sunday, October 26th 2025, 1:17:42 pm
 ---
 
 # Вопрос (RU)

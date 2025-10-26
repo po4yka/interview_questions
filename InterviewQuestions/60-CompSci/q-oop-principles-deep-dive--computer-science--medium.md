@@ -3,18 +3,20 @@ id: 20251012-600004
 title: "OOP Principles Deep Dive / Глубокое погружение в принципы ООП"
 aliases: ["OOP Principles", "Принципы ООП"]
 topic: cs
-subtopics: [oop, encapsulation, inheritance, polymorphism, abstraction]
+subtopics: [abstraction, encapsulation, inheritance, oop, polymorphism]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-solid-principles--software-design--medium, q-clean-code-principles--software-engineering--medium, q-design-patterns-fundamentals--software-engineering--hard]
+related: [q-clean-code-principles--software-engineering--medium, q-design-patterns-fundamentals--software-engineering--hard, q-solid-principles--software-design--medium]
 created: 2025-10-12
 updated: 2025-01-25
-tags: [oop, encapsulation, inheritance, polymorphism, abstraction, composition, difficulty/medium]
+tags: [abstraction, composition, difficulty/medium, encapsulation, inheritance, oop, polymorphism]
 sources: [https://en.wikipedia.org/wiki/Object-oriented_programming]
+date created: Monday, October 13th 2025, 7:55:46 am
+date modified: Sunday, October 26th 2025, 1:18:54 pm
 ---
 
 # Вопрос (RU)
