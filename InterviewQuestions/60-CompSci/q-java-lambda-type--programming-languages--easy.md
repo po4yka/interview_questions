@@ -5,17 +5,15 @@ topic: programming-languages
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags:
-  - functional-interface
-  - functional-programming
-  - java
-  - lambda
-  - programming-languages
+tags: [functional-interface, functional-programming, java, lambda, programming-languages]
 moc: moc-programming-languages
-related: [q-data-class-special-features--programming-languages--easy, q-template-method-pattern--design-patterns--medium, q-mediator-pattern--design-patterns--medium]
+related: [q-data-class-special-features--programming-languages--easy, q-mediator-pattern--design-patterns--medium, q-template-method-pattern--design-patterns--medium]
 subtopics: ["java", "jvm", "language-features"]
+date created: Saturday, October 4th 2025, 3:02:36 pm
+date modified: Sunday, October 26th 2025, 12:08:03 pm
 ---
-# Какой тип у лямбды в Java?
+
+# Какой Тип У Лямбды В Java?
 
 # Question (EN)
 > What type does a lambda have in Java?

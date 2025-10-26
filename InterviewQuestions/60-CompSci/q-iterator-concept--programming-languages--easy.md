@@ -5,17 +5,14 @@ topic: computer-science
 difficulty: easy
 status: draft
 moc: moc-cs
-related: [q-what-happens-to-unneeded-objects--programming-languages--easy, q-interface-vs-abstract-class--programming-languages--medium, q-data-class-component-functions--programming-languages--easy]
+related: [q-data-class-component-functions--programming-languages--easy, q-interface-vs-abstract-class--programming-languages--medium, q-what-happens-to-unneeded-objects--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - collections
-  - design-patterns
-  - iterator
-  - kotlin
-  - programming-languages
-  - traversal
+tags: [collections, design-patterns, iterator, kotlin, programming-languages, traversal]
+date created: Friday, October 3rd 2025, 6:48:06 pm
+date modified: Sunday, October 26th 2025, 12:05:23 pm
 ---
-# Что такое итератор?
+
+# Что Такое Итератор?
 
 # Question (EN)
 > What is an iterator?
@@ -139,7 +136,7 @@ list.iterator().asSequence()
 4. **Flexibility**: Can implement custom iteration logic
 5. **Modification**: MutableIterator allows safe removal during iteration
 
-### Iterator vs Index-Based Loop
+### Iterator Vs Index-Based Loop
 
 **Iterator approach:**
 ```kotlin

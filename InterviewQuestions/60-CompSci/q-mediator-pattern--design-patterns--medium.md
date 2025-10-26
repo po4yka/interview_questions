@@ -5,15 +5,13 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-state-pattern--design-patterns--medium, q-composite-pattern--design-patterns--medium, q-coroutinescope-vs-supervisorscope--programming-languages--medium]
+related: [q-composite-pattern--design-patterns--medium, q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-state-pattern--design-patterns--medium]
 created: 2025-10-15
-tags:
-  - design-patterns
-  - behavioral-patterns
-  - mediator
-  - gof-patterns
-  - coupling
+tags: [behavioral-patterns, coupling, design-patterns, gof-patterns, mediator]
+date created: Monday, October 6th 2025, 7:29:48 am
+date modified: Sunday, October 26th 2025, 12:08:08 pm
 ---
+
 # Mediator Pattern
 
 # Question (EN)
@@ -333,7 +331,7 @@ Real-world example of mediator pattern:
 2. **Chat application** - Messages go through central hub, not peer-to-peer
 3. **UI frameworks** - Event dispatchers coordinate component interactions
 
-## Преимущества и недостатки
+## Преимущества И Недостатки
 
 ### Pros (Преимущества)
 
@@ -403,7 +401,7 @@ class EventBus : Mediator {
 
 Паттерн проектирования Mediator (Посредник) - это поведенческий паттерн, который **уменьшает связанность между компонентами программы, заставляя их взаимодействовать косвенно, через специальный объект-посредник**. Mediator облегчает модификацию, расширение и повторное использование отдельных компонентов, так как они больше не зависят от десятков других классов.
 
-### Проблемы, которые решает
+### Проблемы, Которые Решает
 
 Проблемы, которые решает паттерн Mediator:
 
@@ -445,7 +443,7 @@ class EventBus : Mediator {
 2. **Единая точка отказа** - Сбой посредника влияет на всю коммуникацию
 3. **Сложность обслуживания** - Добавление функций может требовать изменений посредника
 
-### Реальные примеры
+### Реальные Примеры
 
 Примеры паттерна Mediator в реальном мире:
 
@@ -453,7 +451,7 @@ class EventBus : Mediator {
 2. **Чат-приложение** - Сообщения проходят через центральный узел, а не peer-to-peer
 3. **UI фреймворки** - Диспетчеры событий координируют взаимодействия компонентов
 
-### Когда использовать
+### Когда Использовать
 
 Используйте паттерн Mediator когда:
 
@@ -462,7 +460,7 @@ class EventBus : Mediator {
 3. **Централизованный контроль** - Все взаимодействия должны проходить через одну точку
 4. **Переиспользуемость компонентов** - Компоненты должны быть независимыми и переиспользуемыми
 
-### Примеры в Android
+### Примеры В Android
 
 В Android паттерн Mediator используется в:
 

@@ -1,263 +1,346 @@
 ---
 id: 20251012-1227111164
-title: Memento Pattern
-topic: design-patterns
+title: "Memento Pattern / Паттерн Хранитель"
+aliases: ["Memento Pattern", "Паттерн Хранитель"]
+topic: cs
+subtopics: [behavioral-patterns, state-management, undo-redo, design-patterns]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-cs
+related: [q-command-pattern--design-patterns--medium, q-state-pattern--design-patterns--medium, q-iterator-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: []
-related: [q-extension-properties--programming-languages--medium, q-os-fundamentals-concepts--computer-science--hard, q-how-gc-knows-object-can-be-destroyed--programming-languages--easy]
-  - command-pattern
-  - state-pattern
-subtopics:
-  - behavioral-patterns
-  - state-management
-  - undo-redo
+updated: 2025-01-25
+tags: [design-patterns, behavioral-patterns, memento, state-management, undo-redo, difficulty/medium]
+sources: [https://refactoring.guru/design-patterns/memento]
 ---
-# Memento Pattern / Паттерн Хранитель
-
-# Question (EN)
-> What is the Memento pattern? When and why should it be used?
 
 # Вопрос (RU)
-> Что такое паттерн Хранитель? Когда и зачем его следует использовать?
+> Что такое паттерн Memento? Когда его использовать и как он работает?
+
+# Question (EN)
+> What is the Memento pattern? When to use it and how does it work?
 
 ---
-
-## Answer (EN)
-
-
-### Definition
-The Memento design pattern is a powerful behavioral pattern that provides a way to capture and restore an object's internal state. It allows objects to be saved and restored without violating encapsulation principles.
-
-### Components
-The pattern consists of three main components:
-- **Originator**. The Originator is the object whose state we want to capture and restore. It creates a Memento object containing a snapshot of its current state or can restore its state from a Memento object
-- **Memento**. The Memento is an object that stores the state of the Originator. It provides methods to retrieve the saved state and potentially modify it
-- **Caretaker**. The Caretaker is responsible for storing and managing the Memento objects. It interacts with the Originator to save and restore its state using Memento objects
-
-### When to Use
-Use the Memento Design Pattern when:
-- **Undo functionality**. When your application needs to include an undo function that lets users restore the state of an object after making modifications
-- **Snapshotting**. When you need to enable features like versioning or checkpoints by saving an object's state at different times
-- **Transaction rollback**. When there are failures or exceptions, like in database transactions, and you need to reverse changes made to an object's state
-- **Caching**. When you wish to reduce duplicate calculations or enhance efficiency by caching an object's state
-
-### Implementation Steps
-1. Create the `Memento` class to store the internal state of the `Originator`
-2. The `Originator` class should have methods to save its state to a memento and restore its state from a memento
-3. Implement a `Caretaker` class that maintains a list of mementos for the purpose of undo and redo
-
-### Example in Kotlin
-
-```kotlin
-// Step 1: Memento class
-data class Memento(val state: String)
-
-// Step 2: Originator class
-class Originator(var state: String) {
-    fun createMemento(): Memento {
-        return Memento(state)
-    }
-
-    fun restore(memento: Memento) {
-        state = memento.state
-    }
-}
-
-// Step 3: Caretaker class
-class Caretaker {
-    private val mementoList = mutableListOf<Memento>()
-
-    fun saveState(originator: Originator) {
-        mementoList.add(originator.createMemento())
-    }
-
-    fun undo(originator: Originator) {
-        if (mementoList.isNotEmpty()) {
-            val memento = mementoList.removeAt(mementoList.size - 1)
-            originator.restore(memento)
-        }
-    }
-
-    // More methods like redo can be added similarly
-}
-
-// Client Code
-fun main() {
-    val originator = Originator("Initial State")
-    val caretaker = Caretaker()
-
-    caretaker.saveState(originator)
-    originator.state = "State #1"
-
-    caretaker.saveState(originator)
-    originator.state = "State #2"
-
-    println("Current State: ${originator.state}")
-
-    caretaker.undo(originator)
-    println("After undo: ${originator.state}")
-}
-```
-
-**Output:**
-```
-Current State: State #2
-After undo: State #1
-```
-
-**Explanation:**
-- The `Memento` captures the internal state of the `Originator` without violating its encapsulation
-- The `Originator` can save and restore its state using the memento
-- The `Caretaker` provides a mechanism to keep track of multiple mementos, allowing for functionalities like undo and redo
-
-### Advantages
-- **Preserves Encapsulation**. Allows an object's internal state to be saved and restored without exposing its implementation details
-- **Simple Undo/Redo**. Facilitates the implementation of undo/redo functionality, making the system more robust and user-friendly
-- **State History**. Allows maintaining a history of previous states of the object, enabling navigation between different states
-
-### Disadvantages
-- **Memory Consumption**. Storing multiple mementos can consume significant memory, especially if the object's state is large
-- **Additional Complexity**. Introduces additional complexity to the code, with the need to manage the creation and restoration of mementos
-- **Caretaker Responsibility**. The caretaker needs to manage mementos efficiently, which can add responsibility and complexity to the system
-
----
-
-
 
 ## Ответ (RU)
 
-### Определение
-Паттерн проектирования Хранитель - это мощный поведенческий паттерн, который предоставляет способ захвата и восстановления внутреннего состояния объекта. Он позволяет сохранять и восстанавливать объекты без нарушения принципов инкапсуляции.
+**Теория Memento Pattern:**
+Memento - behavioral design pattern для capture и restore внутреннего state объекта. Решает проблему: нужно сохранять и восстанавливать object state без violation encapsulation. Используется для: undo/redo functionality, snapshotting, transaction rollback, caching. Pattern состоит из 3 components: Originator (объект с состоянием), Memento (хранит состояние), Caretaker (управляет mementos).
 
-### Компоненты
-Паттерн состоит из трех основных компонентов:
-- **Создатель (Originator)**. Создатель - это объект, состояние которого мы хотим захватить и восстановить. Он создает объект Memento, содержащий снимок его текущего состояния, или может восстановить свое состояние из объекта Memento
-- **Хранитель (Memento)**. Хранитель - это объект, который сохраняет состояние Создателя. Он предоставляет методы для извлечения сохраненного состояния и потенциальной его модификации
-- **Опекун (Caretaker)**. Опекун отвечает за хранение и управление объектами Memento. Он взаимодействует с Создателем для сохранения и восстановления его состояния с использованием объектов Memento
+**Определение:**
 
-### Когда Использовать
-Используйте паттерн Хранитель, когда:
-- **Функциональность отмены**. Когда вашему приложению нужна функция отмены, которая позволяет пользователям восстановить состояние объекта после внесения изменений
-- **Создание снимков состояния**. Когда вам нужно включить такие функции, как версионирование или контрольные точки, сохраняя состояние объекта в разные моменты времени
-- **Откат транзакций**. Когда есть сбои или исключения, например, в транзакциях базы данных, и вам нужно отменить изменения, внесенные в состояние объекта
-- **Кэширование**. Когда вы хотите уменьшить дублирующие вычисления или повысить эффективность путем кэширования состояния объекта
+*Теория:* Memento pattern предоставляет way to capture и restore внутреннего state объекта без violation encapsulation principles. Memento - snapshot state в момент времени. Originator создаёт memento и может восстановить state из memento. Caretaker manages mementos для undo/redo functionality.
 
-### Шаги Реализации
-1. Создать класс `Memento` для хранения внутреннего состояния `Originator`
-2. Класс `Originator` должен иметь методы для сохранения своего состояния в хранитель и восстановления состояния из хранителя
-3. Реализовать класс `Caretaker`, который поддерживает список хранителей для целей отмены и повтора
+**Компоненты:**
 
-### Пример на Kotlin
+*Теория:* Three key components: Originator (object с mutable state, создаёт/восстанавливает mementos), Memento (stores snapshot Originator state, может быть immutable), Caretaker (manages history mementos, обеспечивает undo/redo).
 
 ```kotlin
-// Шаг 1: Класс Memento
-data class Memento(val state: String)
+// ✅ Basic Memento implementation
+data class Memento(val state: String)  // Immutable snapshot
 
-// Шаг 2: Класс Originator
 class Originator(var state: String) {
-    fun createMemento(): Memento {
-        return Memento(state)
-    }
-
+    fun createMemento(): Memento = Memento(state)
+    
     fun restore(memento: Memento) {
         state = memento.state
     }
 }
 
-// Шаг 3: Класс Caretaker
 class Caretaker {
-    private val mementoList = mutableListOf<Memento>()
-
+    private val history = mutableListOf<Memento>()
+    
     fun saveState(originator: Originator) {
-        mementoList.add(originator.createMemento())
+        history.add(originator.createMemento())
     }
-
+    
     fun undo(originator: Originator) {
-        if (mementoList.isNotEmpty()) {
-            val memento = mementoList.removeAt(mementoList.size - 1)
+        if (history.isNotEmpty()) {
+            val memento = history.removeLast()
             originator.restore(memento)
         }
     }
-
-    // Дополнительные методы, такие как redo, могут быть добавлены аналогично
 }
 
-// Клиентский код
+// Использование
 fun main() {
-    val originator = Originator("Initial State")
+    val originator = Originator("Initial")
     val caretaker = Caretaker()
-
-    caretaker.saveState(originator)
-    originator.state = "State #1"
-
-    caretaker.saveState(originator)
-    originator.state = "State #2"
-
-    println("Current State: ${originator.state}")
-
-    caretaker.undo(originator)
-    println("After undo: ${originator.state}")
+    
+    caretaker.saveState(originator)  // State 1
+    originator.state = "Modified"
+    
+    caretaker.saveState(originator)  // State 2
+    originator.state = "Modified Again"
+    
+    caretaker.undo(originator)  // Restores to "Modified"
+    println(originator.state)
 }
 ```
 
-**Вывод:**
+**Когда использовать:**
+
+*Теория:* Используйте Memento когда: нужно undo/redo functionality (text editors, graphics tools); snapshotting для versioning или checkpoints; transaction rollback при failures; caching для reducing duplicate computations; нужно сохранять history состояний.
+
+✅ **Use Memento when:**
+- Нужна undo/redo functionality
+- Нужно snapshotting для versioning
+- Transaction rollback needed
+- Caching состояния объекта
+
+❌ **Don't use Memento when:**
+- State слишком large (memory issues)
+- Простые use cases (over-engineering)
+- Частые state changes (high memory usage)
+
+**Реальный пример: Text Editor с Undo/Redo:**
+
+*Теория:* Text editor использует Memento для сохранения states документа. Каждое изменение сохраняется как memento. Undo восстанавливает previous state, redo восстанавливает forward state. History поддерживается в list.
+
+```kotlin
+// ✅ Text Editor с undo/redo
+data class DocumentState(val content: String)
+
+class TextEditor {
+    private var content: String = ""
+    private val history = mutableListOf<DocumentState>()
+    private var currentIndex = -1
+    
+    fun type(text: String) {
+        content += text
+        saveState()
+    }
+    
+    fun undo() {
+        if (currentIndex > 0) {
+            currentIndex--
+            content = history[currentIndex].content
+        }
+    }
+    
+    fun redo() {
+        if (currentIndex < history.size - 1) {
+            currentIndex++
+            content = history[currentIndex].content
+        }
+    }
+    
+    private fun saveState() {
+        // Удалить states после currentIndex
+        history.subList(currentIndex + 1, history.size).clear()
+        history.add(DocumentState(content))
+        currentIndex = history.size - 1
+    }
+    
+    fun getContent() = content
+}
+
+// Использование
+fun main() {
+    val editor = TextEditor()
+    editor.type("Hello")
+    editor.type(" World")
+    println(editor.getContent())  // "Hello World"
+    
+    editor.undo()
+    println(editor.getContent())  // "Hello"
+    
+    editor.redo()
+    println(editor.getContent())  // "Hello World"
+}
 ```
-Current State: State #2
-After undo: State #1
+
+**Преимущества:**
+
+1. **Preserves Encapsulation** - сохраняет internal state без exposing implementation
+2. **Undo/Redo** - простой способ implement undo/redo
+3. **State History** - можно maintain history состояний
+
+**Недостатки:**
+
+1. **Memory Consumption** - хранение mementos может потреблять много памяти
+2. **Additional Complexity** - добавляет complexity для management mementos
+3. **Caretaker Responsibility** - caretaker должен управлять mementos эффективно
+
+**Ключевые концепции:**
+
+1. **Encapsulation** - state сохраняется без exposing internals
+2. **Snapshot Pattern** - memento - это snapshot state
+3. **State History** - history позволяет navigate между states
+4. **Memory Management** - нужно limit history для memory efficiency
+5. **Rollback Capability** - можно откатить к любому previous state
+
+## Answer (EN)
+
+**Memento Pattern Theory:**
+Memento - behavioral design pattern for capturing and restoring internal state of object. Solves problem: need to save and restore object state without violating encapsulation. Used for: undo/redo functionality, snapshotting, transaction rollback, caching. Pattern consists of 3 components: Originator (object with state), Memento (stores state), Caretaker (manages mementos).
+
+**Definition:**
+
+*Theory:* Memento pattern provides way to capture and restore internal state of object without violating encapsulation principles. Memento - snapshot of state at point in time. Originator creates memento and can restore state from memento. Caretaker manages mementos for undo/redo functionality.
+
+**Components:**
+
+*Theory:* Three key components: Originator (object with mutable state, creates/restores mementos), Memento (stores snapshot of Originator state, can be immutable), Caretaker (manages history of mementos, provides undo/redo).
+
+```kotlin
+// ✅ Basic Memento implementation
+data class Memento(val state: String)  // Immutable snapshot
+
+class Originator(var state: String) {
+    fun createMemento(): Memento = Memento(state)
+    
+    fun restore(memento: Memento) {
+        state = memento.state
+    }
+}
+
+class Caretaker {
+    private val history = mutableListOf<Memento>()
+    
+    fun saveState(originator: Originator) {
+        history.add(originator.createMemento())
+    }
+    
+    fun undo(originator: Originator) {
+        if (history.isNotEmpty()) {
+            val memento = history.removeLast()
+            originator.restore(memento)
+        }
+    }
+}
+
+// Usage
+fun main() {
+    val originator = Originator("Initial")
+    val caretaker = Caretaker()
+    
+    caretaker.saveState(originator)  // State 1
+    originator.state = "Modified"
+    
+    caretaker.saveState(originator)  // State 2
+    originator.state = "Modified Again"
+    
+    caretaker.undo(originator)  // Restores to "Modified"
+    println(originator.state)
+}
 ```
 
-**Объяснение:**
-- `Memento` захватывает внутреннее состояние `Originator` без нарушения его инкапсуляции
-- `Originator` может сохранять и восстанавливать свое состояние, используя хранитель
-- `Caretaker` предоставляет механизм для отслеживания множественных хранителей, позволяя реализовать функциональность отмены и повтора
+**When to Use:**
 
-### Преимущества
-- **Сохраняет инкапсуляцию**. Позволяет сохранять и восстанавливать внутреннее состояние объекта без раскрытия деталей его реализации
-- **Простая отмена/повтор**. Облегчает реализацию функциональности отмены/повтора, делая систему более надежной и удобной для пользователя
-- **История состояний**. Позволяет поддерживать историю предыдущих состояний объекта, обеспечивая навигацию между различными состояниями
+*Theory:* Use Memento when: need undo/redo functionality (text editors, graphics tools); snapshotting for versioning or checkpoints; transaction rollback on failures; caching to reduce duplicate computations; need to save state history.
 
-### Недостатки
-- **Потребление памяти**. Хранение множественных хранителей может потреблять значительную память, особенно если состояние объекта большое
-- **Дополнительная сложность**. Вносит дополнительную сложность в код, с необходимостью управления созданием и восстановлением хранителей
-- **Ответственность опекуна**. Опекун должен эффективно управлять хранителями, что может добавить ответственность и сложность системе
+✅ **Use Memento when:**
+- Need undo/redo functionality
+- Need snapshotting for versioning
+- Transaction rollback needed
+- Caching object state
+
+❌ **Don't use Memento when:**
+- State too large (memory issues)
+- Simple use cases (over-engineering)
+- Frequent state changes (high memory usage)
+
+**Real Example: Text Editor with Undo/Redo:**
+
+*Theory:* Text editor uses Memento to save states of document. Each change saved as memento. Undo restores previous state, redo restores forward state. History maintained in list.
+
+```kotlin
+// ✅ Text Editor with undo/redo
+data class DocumentState(val content: String)
+
+class TextEditor {
+    private var content: String = ""
+    private val history = mutableListOf<DocumentState>()
+    private var currentIndex = -1
+    
+    fun type(text: String) {
+        content += text
+        saveState()
+    }
+    
+    fun undo() {
+        if (currentIndex > 0) {
+            currentIndex--
+            content = history[currentIndex].content
+        }
+    }
+    
+    fun redo() {
+        if (currentIndex < history.size - 1) {
+            currentIndex++
+            content = history[currentIndex].content
+        }
+    }
+    
+    private fun saveState() {
+        // Remove states after currentIndex
+        history.subList(currentIndex + 1, history.size).clear()
+        history.add(DocumentState(content))
+        currentIndex = history.size - 1
+    }
+    
+    fun getContent() = content
+}
+
+// Usage
+fun main() {
+    val editor = TextEditor()
+    editor.type("Hello")
+    editor.type(" World")
+    println(editor.getContent())  // "Hello World"
+    
+    editor.undo()
+    println(editor.getContent())  // "Hello"
+    
+    editor.redo()
+    println(editor.getContent())  // "Hello World"
+}
+```
+
+**Advantages:**
+
+1. **Preserves Encapsulation** - saves internal state without exposing implementation
+2. **Undo/Redo** - simple way to implement undo/redo
+3. **State History** - can maintain history of states
+
+**Disadvantages:**
+
+1. **Memory Consumption** - storing mementos may consume significant memory
+2. **Additional Complexity** - adds complexity for managing mementos
+3. **Caretaker Responsibility** - caretaker must manage mementos efficiently
+
+**Key Concepts:**
+
+1. **Encapsulation** - state saved without exposing internals
+2. **Snapshot Pattern** - memento is snapshot of state
+3. **State History** - history allows navigating between states
+4. **Memory Management** - need to limit history for memory efficiency
+5. **Rollback Capability** - can rollback to any previous state
 
 ---
 
-## References
-- [Memento Design Pattern - NeatCode](https://neatcode.org/memento-pattern/)
-- [Memento Design Pattern - GeeksforGeeks](https://www.geeksforgeeks.org/memento-design-pattern/)
-- [Memento Design Pattern in Kotlin](https://www.javaguides.net/2023/10/memento-design-pattern-in-kotlin.html)
-- [Understanding the Memento Design Pattern in Java](https://dev.to/diegosilva13/understanding-the-memento-design-pattern-in-java-2c72)
-- [Memento Design Pattern - SourceMaking](https://sourcemaking.com/design_patterns/memento)
-- [Memento - Refactoring Guru](https://refactoring.guru/design-patterns/memento)
-- [Memento Software Pattern Kotlin Examples](https://softwarepatterns.com/kotlin/memento-software-pattern-kotlin-example)
+## Follow-ups
 
----
-
-**Source:** Kirchhoff-Android-Interview-Questions
-**Attribution:** Content adapted from the Kirchhoff repository
-
-
----
+- How does Memento pattern relate to Command pattern?
+- What is the difference between Memento and Prototype pattern?
+- How would you limit memory usage when using Memento for undo/redo?
 
 ## Related Questions
 
-### Hub
-- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+### Prerequisites (Easier)
+- Basic object-oriented programming
+- Understanding of state management
 
-### Behavioral Patterns
-- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
-- [[q-observer-pattern--design-patterns--medium]] - Observer pattern
-- [[q-command-pattern--design-patterns--medium]] - Command pattern
-- [[q-template-method-pattern--design-patterns--medium]] - Template Method pattern
+### Related (Same Level)
+- [[q-command-pattern--design-patterns--medium]] - Command pattern (undo/redo)
+- [[q-state-pattern--design-patterns--medium]] - State pattern
 - [[q-iterator-pattern--design-patterns--medium]] - Iterator pattern
 
-### Creational Patterns
-- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
-
-### Structural Patterns
-- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
-
+### Advanced (Harder)
+- Memory-optimized Memento implementations
+- Advanced undo/redo systems
+- Snapshot management strategies

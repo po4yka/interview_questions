@@ -5,16 +5,14 @@ topic: programming-languages
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags:
-  - collections
-  - kotlin
-  - list
-  - programming-languages
-  - sequence
+tags: [collections, kotlin, list, programming-languages, sequence]
 moc: moc-programming-languages
-related: [q-iterator-pattern--design-patterns--medium, q-data-class-component-functions--programming-languages--easy, q-iterator-order-guarantee--programming-languages--medium]
+related: [q-data-class-component-functions--programming-languages--easy, q-iterator-order-guarantee--programming-languages--medium, q-iterator-pattern--design-patterns--medium]
+date created: Friday, October 3rd 2025, 4:14:02 pm
+date modified: Sunday, October 26th 2025, 12:08:07 pm
 ---
-# В чем разница между работой с list и работой с sequence
+
+# В Чем Разница Между Работой С List И Работой С Sequence
 
 # Question (EN)
 > What is the difference between working with list and sequence?

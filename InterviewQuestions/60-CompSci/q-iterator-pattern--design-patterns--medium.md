@@ -1,203 +1,65 @@
 ---
 id: 20251012-1227111153
-title: Iterator Pattern
-topic: design-patterns
+title: "Iterator Pattern / Паттерн Итератор"
+aliases: ["Iterator Pattern", "Паттерн Итератор"]
+topic: cs
+subtopics: [behavioral-patterns, collection-traversal, design-patterns]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-cs
+related: [q-composite-pattern--design-patterns--medium, q-facade-pattern--design-patterns--medium, q-visitor-pattern--design-patterns--hard]
 created: 2025-10-15
-tags: []
-related: [q-java-all-classes-inherit-from-object--programming-languages--easy, q-how-to-create-suspend-function--programming-languages--medium, q-facade-pattern--design-patterns--medium]
-  - composite-pattern
-  - visitor-pattern
-subtopics:
-  - behavioral-patterns
-  - collection-traversal
+updated: 2025-01-25
+tags: [behavioral-patterns, collection-traversal, design-patterns, difficulty/medium, iterator, kotlin]
+sources: [https://refactoring.guru/design-patterns/iterator]
+date created: Monday, October 6th 2025, 7:33:52 am
+date modified: Sunday, October 26th 2025, 12:07:59 pm
 ---
-# Iterator Pattern / Паттерн Итератор
-
-# Question (EN)
-> What is the Iterator pattern?
 
 # Вопрос (RU)
-> Что такое паттерн Итератор?
+> Что такое паттерн Итератор? Когда его использовать и как он работает?
+
+# Question (EN)
+> What is the Iterator pattern? When to use it and how does it work?
 
 ---
-
-## Answer (EN)
-
-
-### Definition
-The Iterator design pattern is a behavioral design pattern that provides a way to access the elements of an aggregate object (like a list) sequentially without exposing its underlying representation. It defines a separate object, called an iterator, which encapsulates the details of traversing the elements of the aggregate, allowing the aggregate to change its internal structure without affecting the way its elements are accessed.
-
-### Problems It Solves
-What problems can the Iterator design pattern solve?
-- The elements of an aggregate object should be accessed and traversed without exposing its representation (data structures)
-- New traversal operations should be defined for an aggregate object without changing its interface
-
-Defining access and traversal operations in the aggregate interface is inflexible because it commits the aggregate to particular access and traversal operations and makes it impossible to add new operations later without having to change the aggregate interface.
-
-### Solution
-What solution does the Iterator design pattern describe?
-- Define a separate (iterator) object that encapsulates accessing and traversing an aggregate object
-- Clients use an iterator to access and traverse an aggregate without knowing its representation (data structures)
-
-Different iterators can be used to access and traverse an aggregate in different ways. New access and traversal operations can be defined independently by defining new iterators.
-
-### When to Use
-The Iterator design pattern is particularly useful in scenarios where:
-- **Collections need to be traversed in a controlled manner**. When iterating over a collection's elements in a specific order or with predefined conditions, the iterator pattern provides a structured and consistent way to manage the traversal
-- **Collection's implementation details are hidden**. When the internal representation of a collection is complex or may change, the iterator pattern abstracts away the implementation details and provides a uniform interface for iteration
-- **Different collections need to be traversed similarly**. When dealing with various types of collections, the iterator pattern allows for consistent iteration across different implementations, promoting code reuse and maintainability
-
-### Implementation Steps
-1. Create an `Iterator` interface that defines methods like `hasNext()` and `next()`
-2. Create a concrete iterator for each collection class
-3. The collection class should have a method to return its iterator
-
-### Example in Kotlin
-
-```kotlin
-// Step 1: Define the Iterator interface
-interface Iterator<T> {
-    fun hasNext(): Boolean
-    fun next(): T?
-}
-
-// Step 2: Concrete Iterator
-class BookShelfIterator(private val bookShelf: BookShelf) : Iterator<Book> {
-    private var index = 0
-
-    override fun hasNext(): Boolean {
-        return index < bookShelf.getLength()
-    }
-
-    override fun next(): Book? {
-        return bookShelf.getBookAt(index++)
-    }
-}
-
-// Aggregate class
-class BookShelf : Iterable<Book> {
-    private val books = mutableListOf<Book>()
-
-    fun addBook(book: Book) {
-        books.add(book)
-    }
-
-    fun getLength() = books.size
-
-    fun getBookAt(index: Int) = books[index]
-
-    override fun iterator(): Iterator<Book> = BookShelfIterator(this)
-}
-
-data class Book(val name: String)
-
-// Client Code
-fun main() {
-    val bookShelf = BookShelf()
-    bookShelf.addBook(Book("Design Patterns"))
-    bookShelf.addBook(Book("Effective Java"))
-    bookShelf.addBook(Book("Clean Code"))
-
-    val iterator = bookShelf.iterator()
-    while (iterator.hasNext()) {
-        val book = iterator.next()
-        println(book?.name)
-    }
-}
-```
-
-**Output:**
-```
-Design Patterns
-Effective Java
-Clean Code
-```
-
-**Explanation:**
-- We defined an `Iterator` interface with essential methods: `hasNext()` and `next()`
-- `BookShelfIterator` is a concrete implementation of this interface, tailored to work with the `BookShelf` class
-- The `BookShelf` class, representing our collection, implements the `Iterable` interface and returns its custom iterator
-- The client code demonstrates how to iterate over the `BookShelf` collection using the `BookShelfIterator`
-
-### Advantages
-- **Simplifies Collection Traversal**. It provides a standard way to iterate through different types of collections
-- **Decouples Algorithms from Collections**. You can use the same iteration logic with different types of collections
-- **Supports Multiple Traversals**. You can have multiple iterators on the same collection simultaneously
-- **Promotes Single Responsibility**. The iteration logic is separated from the collection, adhering to the Single Responsibility Principle
-
-### Disadvantages
-- **Increased Complexity**. For simple collections, using an iterator might be overkill
-- **Performance Overhead**. In some cases, using an iterator might be less efficient than accessing elements directly
-
----
-
-
 
 ## Ответ (RU)
 
-### Определение
-Паттерн проектирования Итератор - это поведенческий паттерн проектирования, который предоставляет способ последовательного доступа к элементам агрегатного объекта (например, списка) без раскрытия его внутреннего представления. Он определяет отдельный объект, называемый итератором, который инкапсулирует детали обхода элементов агрегата, позволяя агрегату изменять свою внутреннюю структуру, не влияя на способ доступа к его элементам.
+**Теория Iterator Pattern:**
+Iterator - behavioral design pattern для sequential доступа к elements aggregate object без exposing его internal representation. Решает проблему: элементы aggregate должны быть accessible и traversed без exposing representation. Решение: define separate iterator object, инкапсулирующий access и traversal. Clients используют iterator для доступа к aggregate, не зная его structure.
 
-### Решаемые Проблемы
-Какие проблемы решает паттерн Итератор?
-- К элементам агрегатного объекта должен быть обеспечен доступ и обход без раскрытия его представления (структур данных)
-- Новые операции обхода должны быть определены для агрегатного объекта без изменения его интерфейса
+**Определение:**
 
-Определение операций доступа и обхода в интерфейсе агрегата негибко, потому что это привязывает агрегат к конкретным операциям доступа и обхода и делает невозможным добавление новых операций позже без необходимости изменения интерфейса агрегата.
+*Теория:* Iterator pattern предоставляет way to access elements aggregate object sequentially без exposing underlying representation. Определяет separate object (iterator), который encapsulates details traversing elements aggregate. Позволяет aggregate изменять internal structure без affecting способ доступа к elements. Decouples algorithms от collections через единый iteration interface.
 
-### Решение
-Какое решение описывает паттерн Итератор?
-- Определить отдельный объект (итератор), который инкапсулирует доступ и обход агрегатного объекта
-- Клиенты используют итератор для доступа и обхода агрегата, не зная его представления (структур данных)
+**Проблемы, которые решает:**
 
-Различные итераторы могут использоваться для доступа и обхода агрегата различными способами. Новые операции доступа и обхода могут быть определены независимо путем определения новых итераторов.
-
-### Когда Использовать
-Паттерн проектирования Итератор особенно полезен в сценариях, где:
-- **Коллекции нужно обходить контролируемым образом**. При итерации по элементам коллекции в определенном порядке или с предопределенными условиями паттерн итератор предоставляет структурированный и последовательный способ управления обходом
-- **Детали реализации коллекции скрыты**. Когда внутреннее представление коллекции сложное или может измениться, паттерн итератор абстрагирует детали реализации и предоставляет единообразный интерфейс для итерации
-- **Различные коллекции нужно обходить одинаково**. При работе с различными типами коллекций паттерн итератор позволяет обеспечить последовательную итерацию по различным реализациям, способствуя повторному использованию кода и поддерживаемости
-
-### Шаги Реализации
-1. Создать интерфейс `Iterator`, который определяет методы типа `hasNext()` и `next()`
-2. Создать конкретный итератор для каждого класса коллекции
-3. Класс коллекции должен иметь метод для возврата своего итератора
-
-### Пример на Kotlin
+*Теория:* Основные проблемы: элементы aggregate должны быть accessible без exposing representation; новые traversal operations должны быть defined без changing interface aggregate; когда access operations defined в aggregate interface - это inflexible, commits aggregate к particular operations. Iterator позволяет иметь multiple traversals для одного aggregate, add new operations без changing aggregate.
 
 ```kotlin
-// Шаг 1: Определить интерфейс Iterator
+// ✅ Базовый Iterator пример
 interface Iterator<T> {
     fun hasNext(): Boolean
     fun next(): T?
 }
 
-// Шаг 2: Конкретный итератор
 class BookShelfIterator(private val bookShelf: BookShelf) : Iterator<Book> {
     private var index = 0
 
-    override fun hasNext(): Boolean {
-        return index < bookShelf.getLength()
-    }
+    override fun hasNext(): Boolean = index < bookShelf.getLength()
 
-    override fun next(): Book? {
-        return bookShelf.getBookAt(index++)
-    }
+    override fun next(): Book? = bookShelf.getBookAt(index++)
 }
 
-// Класс агрегата
 class BookShelf : Iterable<Book> {
     private val books = mutableListOf<Book>()
 
-    fun addBook(book: Book) {
-        books.add(book)
-    }
-
+    fun addBook(book: Book) = books.add(book)
     fun getLength() = books.size
-
     fun getBookAt(index: Int) = books[index]
 
     override fun iterator(): Iterator<Book> = BookShelfIterator(this)
@@ -205,80 +67,340 @@ class BookShelf : Iterable<Book> {
 
 data class Book(val name: String)
 
-// Клиентский код
+// Использование
 fun main() {
-    val bookShelf = BookShelf()
-    bookShelf.addBook(Book("Design Patterns"))
-    bookShelf.addBook(Book("Effective Java"))
-    bookShelf.addBook(Book("Clean Code"))
+    val bookShelf = BookShelf().apply {
+        addBook(Book("Design Patterns"))
+        addBook(Book("Effective Java"))
+        addBook(Book("Clean Code"))
+    }
 
-    val iterator = bookShelf.iterator()
-    while (iterator.hasNext()) {
-        val book = iterator.next()
-        println(book?.name)
+    for (book in bookShelf) {  // ✅ Итерация через for-in
+        println(book.name)
     }
 }
 ```
 
-**Вывод:**
+**Kotlin встроенная поддержка:**
+
+*Теория:* Kotlin имеет built-in поддержку Iterator через `Iterable<T>` interface и `Iterator<T>` interface. Collections автоматически implement эти interfaces. For-in loops используют iterators под капотом. Можно создавать custom iterators для custom collections. Можно использовать functional operators (map, filter, forEach).
+
+```kotlin
+// ✅ Kotlin Iterator поддержка
+class CustomCollection<T> : Iterable<T> {
+    private val items = mutableListOf<T>()
+
+    fun add(item: T) = items.add(item)
+
+    override fun iterator(): Iterator<T> = items.iterator()
+}
+
+// ✅ Использование
+val collection = CustomCollection<String>().apply {
+    add("A")
+    add("B")
+    add("C")
+}
+
+// For-in loop
+for (item in collection) {
+    println(item)
+}
+
+// Functional operations
+collection
+    .filter { it.length > 1 }
+    .map { it.uppercase() }
+    .forEach { println(it) }
 ```
-Design Patterns
-Effective Java
-Clean Code
+
+**Multiple Traversals:**
+
+*Теория:* Iterator поддерживает multiple iterators на одном aggregate одновременно. Каждый iterator поддерживает independent traversal state. Позволяет traverse same collection разными способами одновременно. Полезно для: nested loops, multi-pass algorithms, different traversal orders.
+
+```kotlin
+// ✅ Multiple iterators на одной коллекции
+class CustomList<T> : Iterable<T> {
+    private val items = mutableListOf<T>()
+
+    fun add(item: T) = items.add(item)
+    override fun iterator() = items.iterator()
+}
+
+fun processPairs(collection: CustomList<Int>) {
+    val iterator1 = collection.iterator()
+    val iterator2 = collection.iterator()
+
+    while (iterator1.hasNext()) {
+        val a = iterator1.next()
+        while (iterator2.hasNext()) {
+            val b = iterator2.next()
+            println("Pair: ($a, $b)")
+        }
+    }
+}
 ```
 
-**Объяснение:**
-- Мы определили интерфейс `Iterator` с основными методами: `hasNext()` и `next()`
-- `BookShelfIterator` - это конкретная реализация этого интерфейса, адаптированная для работы с классом `BookShelf`
-- Класс `BookShelf`, представляющий нашу коллекцию, реализует интерфейс `Iterable` и возвращает свой пользовательский итератор
-- Клиентский код демонстрирует, как перебирать коллекцию `BookShelf` с использованием `BookShelfIterator`
+**Custom Iterator Implementations:**
 
-### Преимущества
-- **Упрощает обход коллекций**. Предоставляет стандартный способ перебора различных типов коллекций
-- **Отделяет алгоритмы от коллекций**. Можно использовать одну и ту же логику итерации с разными типами коллекций
-- **Поддерживает множественные обходы**. Можно иметь несколько итераторов для одной и той же коллекции одновременно
-- **Способствует принципу единственной ответственности**. Логика итерации отделена от коллекции, соблюдая принцип единственной ответственности
+*Теория:* Можно создавать custom iterators для специальных traversal patterns. Примеры: reverse iteration, filtered iteration, zipped iteration, infinite iteration. Custom iterators инкапсулируют логику traversal. Позволяют иметь specialized iteration behavior для конкретных use cases.
 
-### Недостатки
-- **Увеличенная сложность**. Для простых коллекций использование итератора может быть излишним
-- **Накладные расходы производительности**. В некоторых случаях использование итератора может быть менее эффективным, чем прямой доступ к элементам
+```kotlin
+// ✅ Custom reverse iterator
+class ReverseIterator<T>(private val list: List<T>) : Iterator<T> {
+    private var index = list.size - 1
+
+    override fun hasNext() = index >= 0
+
+    override fun next() = list[index--]
+}
+
+class ReversibleList<T>(private val items: MutableList<T>) {
+    fun add(item: T) = items.add(item)
+    fun iterator() = items.iterator()
+    fun reverseIterator() = ReverseIterator(items)
+}
+
+// Использование
+val list = ReversibleList<Int>(mutableListOf(1, 2, 3, 4, 5))
+for (item in list.reverseIterator()) {
+    println(item)  // 5, 4, 3, 2, 1
+}
+```
+
+**Когда использовать:**
+
+*Теория:* Используйте Iterator когда: коллекции нужно обходить controlled manner; collection implementation details hidden и complex; разные коллекции нужно обходить similarly; нужна consistency iteration across different implementations. Не используйте для: simple collections где direct access более efficient; когда performance критичен и iterator overhead значим.
+
+✅ **Use Iterator when:**
+- Collections нужен controlled traversal
+- Implementation details должны быть hidden
+- Different collections нужно traverse similarly
+- Нужна consistency в iteration
+
+❌ **Don't use Iterator when:**
+- Simple collections с direct access более efficient
+- Performance критичен и iterator overhead значим
+- Random access более important, чем sequential
+
+**Преимущества:**
+
+1. **Simplifies Traversal** - standard way to iterate collections
+2. **Decouples Algorithms** - same iteration logic с different collections
+3. **Multiple Traversals** - multiple iterators на same collection
+4. **Single Responsibility** - iteration logic separated от collection
+
+**Недостатки:**
+
+1. **Increased Complexity** - для simple collections может быть overkill
+2. **Performance Overhead** - может быть less efficient чем direct access
+3. **Iterator State** - нужно maintain iterator state
+
+**Ключевые концепции:**
+
+1. **Encapsulation** - iterator encapsulates traversal logic
+2. **Abstraction** - hides collection implementation
+3. **Polymorphism** - iterators работают с different collections
+4. **State Management** - iterator maintains traversal state
+5. **Separation of Concerns** - iteration отделён от collection logic
+
+## Answer (EN)
+
+**Iterator Pattern Theory:**
+Iterator - behavioral design pattern for sequential access to elements of aggregate object without exposing its internal representation. Solves problem: elements of aggregate should be accessible and traversed without exposing representation. Solution: define separate iterator object encapsulating access and traversal. Clients use iterator to access aggregate without knowing its structure.
+
+**Definition:**
+
+*Theory:* Iterator pattern provides way to access elements of aggregate object sequentially without exposing underlying representation. Defines separate object (iterator), which encapsulates details of traversing elements of aggregate. Allows aggregate to change internal structure without affecting way to access elements. Decouples algorithms from collections through unified iteration interface.
+
+**Problems Solved:**
+
+*Theory:* Main problems: elements of aggregate should be accessible without exposing representation; new traversal operations should be defined without changing aggregate interface; when access operations defined in aggregate interface - inflexible, commits aggregate to particular operations. Iterator allows having multiple traversals for single aggregate, add new operations without changing aggregate.
+
+```kotlin
+// ✅ Basic Iterator example
+interface Iterator<T> {
+    fun hasNext(): Boolean
+    fun next(): T?
+}
+
+class BookShelfIterator(private val bookShelf: BookShelf) : Iterator<Book> {
+    private var index = 0
+
+    override fun hasNext(): Boolean = index < bookShelf.getLength()
+
+    override fun next(): Book? = bookShelf.getBookAt(index++)
+}
+
+class BookShelf : Iterable<Book> {
+    private val books = mutableListOf<Book>()
+
+    fun addBook(book: Book) = books.add(book)
+    fun getLength() = books.size
+    fun getBookAt(index: Int) = books[index]
+
+    override fun iterator(): Iterator<Book> = BookShelfIterator(this)
+}
+
+data class Book(val name: String)
+
+// Usage
+fun main() {
+    val bookShelf = BookShelf().apply {
+        addBook(Book("Design Patterns"))
+        addBook(Book("Effective Java"))
+        addBook(Book("Clean Code"))
+    }
+
+    for (book in bookShelf) {  // ✅ Iteration through for-in
+        println(book.name)
+    }
+}
+```
+
+**Kotlin Built-in Support:**
+
+*Theory:* Kotlin has built-in support for Iterator through `Iterable<T>` interface and `Iterator<T>` interface. Collections automatically implement these interfaces. For-in loops use iterators under hood. Can create custom iterators for custom collections. Can use functional operators (map, filter, forEach).
+
+```kotlin
+// ✅ Kotlin Iterator support
+class CustomCollection<T> : Iterable<T> {
+    private val items = mutableListOf<T>()
+
+    fun add(item: T) = items.add(item)
+
+    override fun iterator(): Iterator<T> = items.iterator()
+}
+
+// Usage
+val collection = CustomCollection<String>().apply {
+    add("A")
+    add("B")
+    add("C")
+}
+
+// For-in loop
+for (item in collection) {
+    println(item)
+}
+
+// Functional operations
+collection
+    .filter { it.length > 1 }
+    .map { it.uppercase() }
+    .forEach { println(it) }
+```
+
+**Multiple Traversals:**
+
+*Theory:* Iterator supports multiple iterators on one aggregate simultaneously. Each iterator maintains independent traversal state. Allows traversing same collection in different ways simultaneously. Useful for: nested loops, multi-pass algorithms, different traversal orders.
+
+```kotlin
+// ✅ Multiple iterators on same collection
+class CustomList<T> : Iterable<T> {
+    private val items = mutableListOf<T>()
+
+    fun add(item: T) = items.add(item)
+    override fun iterator() = items.iterator()
+}
+
+fun processPairs(collection: CustomList<Int>) {
+    val iterator1 = collection.iterator()
+    val iterator2 = collection.iterator()
+
+    while (iterator1.hasNext()) {
+        val a = iterator1.next()
+        while (iterator2.hasNext()) {
+            val b = iterator2.next()
+            println("Pair: ($a, $b)")
+        }
+    }
+}
+```
+
+**Custom Iterator Implementations:**
+
+*Theory:* Can create custom iterators for special traversal patterns. Examples: reverse iteration, filtered iteration, zipped iteration, infinite iteration. Custom iterators encapsulate traversal logic. Allow having specialized iteration behavior for specific use cases.
+
+```kotlin
+// ✅ Custom reverse iterator
+class ReverseIterator<T>(private val list: List<T>) : Iterator<T> {
+    private var index = list.size - 1
+
+    override fun hasNext() = index >= 0
+
+    override fun next() = list[index--]
+}
+
+class ReversibleList<T>(private val items: MutableList<T>) {
+    fun add(item: T) = items.add(item)
+    fun iterator() = items.iterator()
+    fun reverseIterator() = ReverseIterator(items)
+}
+
+// Usage
+val list = ReversibleList<Int>(mutableListOf(1, 2, 3, 4, 5))
+for (item in list.reverseIterator()) {
+    println(item)  // 5, 4, 3, 2, 1
+}
+```
+
+**When to Use:**
+
+*Theory:* Use Iterator when: collections need controlled traversal; collection implementation details hidden and complex; different collections need traversing similarly; need consistency in iteration across different implementations. Don't use for: simple collections where direct access more efficient; when performance critical and iterator overhead significant.
+
+✅ **Use Iterator when:**
+- Collections need controlled traversal
+- Implementation details must be hidden
+- Different collections need traversing similarly
+- Need consistency in iteration
+
+❌ **Don't use Iterator when:**
+- Simple collections with direct access more efficient
+- Performance critical and iterator overhead significant
+- Random access more important than sequential
+
+**Advantages:**
+
+1. **Simplifies Traversal** - standard way to iterate collections
+2. **Decouples Algorithms** - same iteration logic with different collections
+3. **Multiple Traversals** - multiple iterators on same collection
+4. **Single Responsibility** - iteration logic separated from collection
+
+**Disadvantages:**
+
+1. **Increased Complexity** - for simple collections may be overkill
+2. **Performance Overhead** - may be less efficient than direct access
+3. **Iterator State** - need to maintain iterator state
+
+**Key Concepts:**
+
+1. **Encapsulation** - iterator encapsulates traversal logic
+2. **Abstraction** - hides collection implementation
+3. **Polymorphism** - iterators work with different collections
+4. **State Management** - iterator maintains traversal state
+5. **Separation of Concerns** - iteration separated from collection logic
 
 ---
 
-## References
-- [Iterator Design Pattern - GeeksforGeeks](https://www.geeksforgeeks.org/iterator-pattern/)
-- [Iterator pattern - Wikipedia](https://en.wikipedia.org/wiki/Iterator_pattern)
-- [Iterator Design Pattern Use Case - Medium](https://medium.com/@mehar.chand.cloud/iterator-design-pattern-use-case-traverse-different-collections-bca646860c20)
-- [Iterator Design Pattern in Kotlin](https://www.javaguides.net/2023/10/iterator-design-pattern-in-kotlin.html)
-- [Iterator Design Pattern: A Comprehensive Guide - Medium](https://medium.com/system-design-by-harsh-khandelwal/iterator-design-pattern-a-comprehensive-guide-e8711ff48329)
-- [Iterator Design Pattern - SourceMaking](https://sourcemaking.com/design_patterns/memento)
-- [Iterator - Refactoring Guru](https://refactoring.guru/design-patterns/iterator)
-- [Iterator Software Pattern Kotlin Examples](https://softwarepatterns.com/kotlin/iterator-software-pattern-kotlin-example)
-- [The Iterator Design Pattern in Kotlin - Medium](https://medium.com/softaai-blogs/the-iterator-design-pattern-in-kotlin-simplified-and-explained-aac3d174a7aa)
+## Follow-ups
 
----
-
-**Source:** Kirchhoff-Android-Interview-Questions
-**Attribution:** Content adapted from the Kirchhoff repository
-
-
----
+- How does Iterator pattern relate to Composite pattern?
+- What is the difference between Iterator and Visitor pattern?
+- How does Kotlin's for-in loop work under the hood?
 
 ## Related Questions
 
-### Hub
-- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+### Prerequisites (Easier)
+- Basic Kotlin collections
+- Understanding of Iterable interface
 
-### Behavioral Patterns
-- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
-- [[q-observer-pattern--design-patterns--medium]] - Observer pattern
-- [[q-command-pattern--design-patterns--medium]] - Command pattern
-- [[q-template-method-pattern--design-patterns--medium]] - Template Method pattern
-- [[q-state-pattern--design-patterns--medium]] - State pattern
+### Related (Same Level)
+- [[q-facade-pattern--design-patterns--medium]] - Facade pattern
+- [[q-composite-pattern--design-patterns--medium]] - Composite pattern
+- [[q-visitor-pattern--design-patterns--hard]] - Visitor pattern
 
-### Creational Patterns
-- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
-
-### Structural Patterns
-- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
-
+### Advanced (Harder)
+- Custom iterator implementations
+- Iteration performance optimization
+- Reactive streams vs Iterators

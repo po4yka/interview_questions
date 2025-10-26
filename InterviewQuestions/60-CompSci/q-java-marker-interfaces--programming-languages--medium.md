@@ -5,18 +5,15 @@ topic: programming-languages
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags:
-  - cloneable
-  - interfaces
-  - java
-  - marker-interface
-  - programming-languages
-  - serializable
+tags: [cloneable, interfaces, java, marker-interface, programming-languages, serializable]
 moc: moc-programming-languages
-related: [q-delegates-java-compilation--programming-languages--hard, q-template-method-pattern--design-patterns--medium, q-java-all-classes-inherit-from-object--programming-languages--easy]
-subtopics: ["inheritance", "polymorphism", "encapsulation", "abstraction", "classes"]
+related: [q-delegates-java-compilation--programming-languages--hard, q-java-all-classes-inherit-from-object--programming-languages--easy, q-template-method-pattern--design-patterns--medium]
+subtopics: ["abstraction", "classes", "encapsulation", "inheritance", "polymorphism"]
+date created: Saturday, October 4th 2025, 3:02:36 pm
+date modified: Sunday, October 26th 2025, 12:08:03 pm
 ---
-# Перечислите маркерные интерфейсы
+
+# Перечислите Маркерные Интерфейсы
 
 # Question (EN)
 > List marker interfaces in Java

@@ -5,15 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-java-object-comparison--programming-languages--easy, q-inheritance-composition-aggregation--oop--medium, q-abstract-factory-pattern--design-patterns--medium]
+related: [q-abstract-factory-pattern--design-patterns--medium, q-inheritance-composition-aggregation--oop--medium, q-java-object-comparison--programming-languages--easy]
 created: 2025-10-15
-tags:
-  - collections
-  - iterators
-  - kotlin
-  - programming-languages
+tags: [collections, iterators, kotlin, programming-languages]
+date created: Friday, October 3rd 2025, 4:14:02 pm
+date modified: Sunday, October 26th 2025, 12:05:23 pm
 ---
-# После перебирания данных итератором, гарантируется ли очередность получения этих данных?
+
+# После Перебирания Данных Итератором, Гарантируется Ли Очередность Получения Этих Данных?
 
 # Question (EN)
 > After iterating data with an iterator, is the order of obtaining this data guaranteed?

@@ -3,18 +3,20 @@ id: 20251012-1227111150
 title: "Interpreter Pattern / Паттерн Интерпретатор"
 aliases: ["Interpreter Pattern", "Паттерн Интерпретатор"]
 topic: cs
-subtopics: [behavioral-patterns, language-processing, expression-evaluation, design-patterns]
+subtopics: [behavioral-patterns, design-patterns, expression-evaluation, language-processing]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-composite-pattern--design-patterns--medium, q-visitor-pattern--design-patterns--hard, q-flyweight-pattern--design-patterns--hard]
+related: [q-composite-pattern--design-patterns--medium, q-flyweight-pattern--design-patterns--hard, q-visitor-pattern--design-patterns--hard]
 created: 2025-10-15
 updated: 2025-01-25
-tags: [design-patterns, behavioral-patterns, interpreter, language-processing, expression-evaluation, difficulty/hard]
+tags: [behavioral-patterns, design-patterns, difficulty/hard, expression-evaluation, interpreter, language-processing]
 sources: [https://refactoring.guru/design-patterns/interpreter]
+date created: Monday, October 6th 2025, 7:35:27 am
+date modified: Sunday, October 26th 2025, 12:05:22 pm
 ---
 
 # Вопрос (RU)
@@ -76,12 +78,12 @@ fun main() {
         TerminalExpression("John"),
         TerminalExpression("Robert")
     )
-    
+
     val isMarriedWoman = AndExpression(
         TerminalExpression("Julie"),
         TerminalExpression("Married")
     )
-    
+
     println(isMale.interpret("John"))  // true
     println(isMarriedWoman.interpret("Married Julie"))  // true
 }
@@ -216,12 +218,12 @@ fun main() {
         TerminalExpression("John"),
         TerminalExpression("Robert")
     )
-    
+
     val isMarriedWoman = AndExpression(
         TerminalExpression("Julie"),
         TerminalExpression("Married")
     )
-    
+
     println(isMale.interpret("John"))  // true
     println(isMarriedWoman.interpret("Married Julie"))  // true
 }

@@ -5,15 +5,14 @@ topic: programming-languages
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags:
-  - collections
-  - data structures
-  - kotlin
-  - programming-languages
+tags: [collections, data structures, kotlin, programming-languages]
 moc: moc-programming-languages
-related: [q-what-is-flow--programming-languages--medium, q-flow-map-operator--programming-languages--medium, q-iterator-pattern--design-patterns--medium]
+related: [q-flow-map-operator--programming-languages--medium, q-iterator-pattern--design-patterns--medium, q-what-is-flow--programming-languages--medium]
+date created: Friday, October 3rd 2025, 4:14:01 pm
+date modified: Sunday, October 26th 2025, 12:08:07 pm
 ---
-# Как будут вести себя linked list и array list, если вставить в них элемент?
+
+# Как Будут Вести Себя Linked List И Array List, Если Вставить В Них Элемент?
 
 # Question (EN)
 > How will LinkedList and ArrayList behave when inserting an element?

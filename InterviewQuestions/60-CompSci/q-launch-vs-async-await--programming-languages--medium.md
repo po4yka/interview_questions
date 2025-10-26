@@ -5,17 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-cs
-related: [q-visitor-pattern--design-patterns--hard, q-iterator-concept--programming-languages--easy, q-hot-vs-cold-flows--programming-languages--medium]
+related: [q-hot-vs-cold-flows--programming-languages--medium, q-iterator-concept--programming-languages--easy, q-visitor-pattern--design-patterns--hard]
 created: 2025-10-15
-tags:
-  - async
-  - await
-  - coroutines
-  - kotlin
-  - launch
-  - programming-languages
+tags: [async, await, coroutines, kotlin, launch, programming-languages]
+date created: Friday, October 3rd 2025, 5:21:02 pm
+date modified: Sunday, October 26th 2025, 12:08:05 pm
 ---
-# Чем launch отличается от async/await ?
+
+# Чем Launch Отличается От async/await ?
 
 # Question (EN)
 > What is the difference between launch and async/await?

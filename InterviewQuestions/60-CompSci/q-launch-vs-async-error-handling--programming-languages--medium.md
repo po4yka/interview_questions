@@ -7,10 +7,12 @@ status: draft
 moc: moc-cs
 related: [q-concurrency-fundamentals--computer-science--hard, q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-job-object--programming-languages--medium]
 created: 2025-10-15
-tags:
-  - programming-languages
+tags: [programming-languages]
+date created: Saturday, October 4th 2025, 10:53:49 am
+date modified: Sunday, October 26th 2025, 12:08:06 pm
 ---
-# Error Handling Differences: Launch vs Async
+
+# Error Handling Differences: Launch Vs Async
 
 # Question (EN)
 > Are errors handled differently in launch and async?
@@ -36,7 +38,7 @@ Yes, **errors (Exceptions) are handled differently** in launch and async:
 - Can be caught with try-catch around await()
 - Allows selective error handling
 
-### launch - Immediate Exception Propagation
+### Launch - Immediate Exception Propagation
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -67,7 +69,7 @@ fun launchCrash() = runBlocking {
 }
 ```
 
-### async - Deferred Exception
+### Async - Deferred Exception
 
 ```kotlin
 // async stores exception in Deferred
@@ -130,7 +132,7 @@ fun compareErrorHandling() = runBlocking {
 }
 ```
 
-### launch with CoroutineExceptionHandler
+### Launch with CoroutineExceptionHandler
 
 ```kotlin
 // Proper error handling for launch

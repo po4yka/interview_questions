@@ -5,21 +5,15 @@ topic: programming-languages
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags:
-  - access-modifiers
-  - best-practices
-  - encapsulation
-  - java
-  - package-private
-  - private
-  - programming-languages
-  - protected
-  - public
+tags: [access-modifiers, best-practices, encapsulation, java, package-private, private, programming-languages, protected, public]
 moc: moc-programming-languages
-related: [q-factory-method-pattern--design-patterns--medium, q-mvi-pattern--architecture-patterns--hard, q-equals-hashcode-rules--programming-languages--medium]
+related: [q-equals-hashcode-rules--programming-languages--medium, q-factory-method-pattern--design-patterns--medium, q-mvi-pattern--architecture-patterns--hard]
 subtopics: ["java", "jvm", "language-features"]
+date created: Saturday, October 4th 2025, 3:02:37 pm
+date modified: Sunday, October 26th 2025, 12:08:00 pm
 ---
-# Как лучше всего использовать модификаторы доступа в Java?
+
+# Как Лучше Всего Использовать Модификаторы Доступа В Java?
 
 # Question (EN)
 > How to best use access modifiers in Java?
