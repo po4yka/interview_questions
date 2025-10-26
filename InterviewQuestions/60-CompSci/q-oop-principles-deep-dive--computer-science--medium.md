@@ -42,14 +42,14 @@ class BankAccount(private val initialBalance: Double) {
             require(value >= 0) { "Balance cannot be negative" }
             field = value
         }
-    
+
     val balance: Double get() = _balance
-    
+
     fun deposit(amount: Double) {
         require(amount > 0) { "Amount must be positive" }
         _balance += amount
     }
-    
+
     fun withdraw(amount: Double): Boolean {
         if (amount <= 0 || amount > _balance) return false
         _balance -= amount
@@ -74,7 +74,7 @@ class Dog(name: String) : Animal(name) {
     override fun makeSound() {
         println("$name barks: Woof!")
     }
-    
+
     fun fetch() {
         println("$name fetches the ball")
     }
@@ -84,7 +84,7 @@ class Cat(name: String) : Animal(name) {
     override fun makeSound() {
         println("$name meows: Meow!")
     }
-    
+
     fun climb() {
         println("$name climbs the tree")
     }
@@ -141,7 +141,7 @@ shapes.forEach { processShape(it) }
 abstract class Employee(val name: String, val id: String) {
     abstract fun calculateSalary(): Double
     abstract val department: String
-    
+
     open fun clockIn() {
         println("$name clocked in")
     }
@@ -155,7 +155,7 @@ class FullTimeEmployee(
 }
 
 class Contractor(
-    name: String, id: String, 
+    name: String, id: String,
     private val hourlyRate: Double, private val hoursWorked: Double
 ) : Employee(name, id) {
     override val department: String = "Contract"
@@ -326,14 +326,14 @@ class BankAccount(private val initialBalance: Double) {
             require(value >= 0) { "Balance cannot be negative" }
             field = value
         }
-    
+
     val balance: Double get() = _balance
-    
+
     fun deposit(amount: Double) {
         require(amount > 0) { "Amount must be positive" }
         _balance += amount
     }
-    
+
     fun withdraw(amount: Double): Boolean {
         if (amount <= 0 || amount > _balance) return false
         _balance -= amount
@@ -358,7 +358,7 @@ class Dog(name: String) : Animal(name) {
     override fun makeSound() {
         println("$name barks: Woof!")
     }
-    
+
     fun fetch() {
         println("$name fetches the ball")
     }
@@ -368,7 +368,7 @@ class Cat(name: String) : Animal(name) {
     override fun makeSound() {
         println("$name meows: Meow!")
     }
-    
+
     fun climb() {
         println("$name climbs the tree")
     }
@@ -425,7 +425,7 @@ shapes.forEach { processShape(it) }
 abstract class Employee(val name: String, val id: String) {
     abstract fun calculateSalary(): Double
     abstract val department: String
-    
+
     open fun clockIn() {
         println("$name clocked in")
     }
@@ -439,7 +439,7 @@ class FullTimeEmployee(
 }
 
 class Contractor(
-    name: String, id: String, 
+    name: String, id: String,
     private val hourlyRate: Double, private val hoursWorked: Double
 ) : Employee(name, id) {
     override val department: String = "Contract"
