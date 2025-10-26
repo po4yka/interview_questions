@@ -13,8 +13,10 @@ moc: moc-kotlin
 related: [q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-kotlin-lateinit--kotlin--medium]
 created: "2025-10-12"
 updated: 2025-01-25
-tags: [kotlin, classes, delegation, kotlin-features, by-keyword, difficulty/medium]
+tags: [by-keyword, classes, delegation, difficulty/medium, kotlin, kotlin-features]
 sources: [https://kotlinlang.org/docs/delegation.html]
+date created: Sunday, October 12th 2025, 1:58:08 pm
+date modified: Sunday, October 26th 2025, 8:53:19 pm
 ---
 
 # Вопрос (RU)
@@ -289,7 +291,6 @@ class ReadOnlyWrapper(private val collection: MutableCollection) :
 
 ## References
 
-- [[c-oop-fundamentals]]
 - https://kotlinlang.org/docs/delegation.html
 
 ## Related Questions
@@ -300,6 +301,3 @@ class ReadOnlyWrapper(private val collection: MutableCollection) :
 ### Related (Medium)
 - [[q-data-class-detailed--kotlin--medium]] - Data classes
 - [[q-class-initialization-order--kotlin--medium]] - Class initialization
-
-### Advanced (Harder)
-- [[q-lateinit-initialization--kotlin--medium]] - Lateinit properties

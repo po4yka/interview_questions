@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, coroutines, async, reactive-streams]
+subtopics: [async, coroutines, flow, reactive-streams]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-flatmap-ranges--programming-languages--easy, q-channels-vs-flow--kotlin--medium, q-kotlin-nullable-string-declaration--programming-languages--easy]
+related: [q-channels-vs-flow--kotlin--medium, q-kotlin-flatmap-ranges--programming-languages--easy, q-kotlin-nullable-string-declaration--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, flow, coroutines, async, reactive-streams, difficulty/medium]
+tags: [async, coroutines, difficulty/medium, flow, kotlin, reactive-streams]
+date created: Sunday, October 5th 2025, 10:32:28 pm
+date modified: Sunday, October 26th 2025, 8:52:52 pm
 ---
+
 # Question (EN)
 > What do you know about Flow in Kotlin?
 # Вопрос (RU)
@@ -80,7 +83,7 @@ There are three entities involved in streams of data:
 
 In Android, a *data source* or *repository* is typically a producer of UI data that has the `View` as the consumer that ultimately displays the data. Other times, the `View` layer is a producer of user input events and other layers of the hierarchy consume them. Layers in between the producer and consumer usually act as intermediaries that modify the stream of data to adjust it to the requirements of the following layer.
 
-### Flow builders
+### Flow Builders
 
 There are the following basic ways to create a flow:
 - [`flowOf(…)`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flow-of.html) functions to create a flow from a fixed set of values;
@@ -89,7 +92,7 @@ There are the following basic ways to create a flow:
 - [`channelFlow { … }`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/channel-flow.html) builder function to construct arbitrary flows from potentially concurrent calls to the `send` function.
 - [`MutableStateFlow`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-state-flow/index.html) and [`MutableSharedFlow()`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-shared-flow/index.html) define the corresponding constructor functions to create a *hot* flow that can be directly updated.
 
-### Flows are cold
+### Flows Are Cold
 
 Flows are *cold streams* similar to sequences — the code inside a flow builder does not run until the flow is collected. This becomes clear in the following example:
 
@@ -131,7 +134,7 @@ This is a key reason the `simple` function (which returns a flow) is not marked 
 
 *Intermediate operators* on the flow such as `map`, `filter`, `take`, `zip`, etc are functions that are applied to the *upstream* flow or flows and return a *downstream* flow where further operators can be applied to. Intermediate operations do not execute any code in the flow and are not suspending functions themselves. They only set up a chain of operations for future execution and quickly return. This is known as a *cold flow* property.
 
-### Collecting from a flow
+### Collecting from a Flow
 
 Use a *terminal operator* to trigger the flow to start listening for values. Terminal operators on the flow are either suspending functions such as `collect`, `single`, `reduce`, `toList`, etc. or `launchIn` operator that starts collection of the flow in the given scope. They are applied to the upstream flow and trigger execution of all operations. Execution of the flow is also called *collecting the flow* and is always performed in a suspending manner without actual blocking. Terminal operators complete normally or exceptionally depending on successful or failed execution of all the flow operations in the upstream. The most basic terminal operator is collect, for example:
 
@@ -203,7 +206,7 @@ Flow очень похож на `Iterator`, который производит 
 - Билдер-функция [`channelFlow { … }`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/channel-flow.html) для построения произвольных flow из потенциально параллельных вызовов функции `send`.
 - [`MutableStateFlow`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-state-flow/index.html) и [`MutableSharedFlow()`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-shared-flow/index.html) определяют соответствующие функции-конструкторы для создания *горячего* flow, который может быть непосредственно обновлен.
 
-### Flow являются холодными
+### Flow Являются Холодными
 
 Flow являются *холодными потоками*, похожими на последовательности — код внутри билдера flow не выполняется до тех пор, пока flow не будет собран. Это становится ясно из следующего примера:
 
@@ -245,7 +248,7 @@ Flow started
 
 *Промежуточные операторы* на flow, такие как `map`, `filter`, `take`, `zip` и т.д., являются функциями, которые применяются к *upstream* flow или flows и возвращают *downstream* flow, к которому могут быть применены дальнейшие операторы. Промежуточные операции не выполняют никакого кода в flow и не являются suspend функциями. Они только настраивают цепочку операций для будущего выполнения и быстро возвращаются. Это известно как свойство *холодного flow*.
 
-### Сбор из flow
+### Сбор Из Flow
 
 Используйте *терминальный оператор* для запуска flow и начала прослушивания значений. Терминальные операторы на flow являются либо suspend функциями, такими как `collect`, `single`, `reduce`, `toList` и т.д., либо оператором `launchIn`, который запускает сбор flow в заданной области видимости. Они применяются к upstream flow и запускают выполнение всех операций. Выполнение flow также называется *сбором flow* и всегда выполняется приостанавливающим образом без фактической блокировки. Терминальные операторы завершаются нормально или исключительно в зависимости от успешного или неудачного выполнения всех операций flow в upstream. Самым базовым терминальным оператором является collect, например:
 

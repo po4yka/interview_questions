@@ -3,7 +3,7 @@ id: 20251012-1227111195
 title: Access Modifiers in Kotlin / Модификаторы доступа в Kotlin
 aliases: []
 topic: kotlin
-subtopics: [access-modifiers, visibility, encapsulation, oop]
+subtopics: [access-modifiers, encapsulation, oop, visibility]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -15,8 +15,11 @@ moc: moc-kotlin
 related: [q-channel-closing-completion--kotlin--medium, q-kotlin-java-data-types--programming-languages--medium, q-ranges--kotlin--easy]
 created: 2025-10-06
 updated: 2025-10-06
-tags: [kotlin, access-modifiers, visibility, encapsulation, oop, difficulty/medium]
+tags: [access-modifiers, difficulty/medium, encapsulation, kotlin, oop, visibility]
+date created: Sunday, October 5th 2025, 6:51:27 pm
+date modified: Sunday, October 26th 2025, 8:53:30 pm
 ---
+
 # Question (EN)
 > What are access modifiers in Kotlin and how do they differ from Java?
 

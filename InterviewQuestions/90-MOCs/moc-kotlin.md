@@ -5,6 +5,8 @@ kind: moc
 created: 2025-10-12
 updated: 2025-10-12
 tags: [moc, topic/kotlin]
+date created: Sunday, October 12th 2025, 1:07:06 pm
+date modified: Sunday, October 26th 2025, 8:53:02 pm
 ---
 
 # Kotlin — Map of Content
@@ -102,7 +104,7 @@ SORT difficulty ASC, file.name ASC
 - [[q-flow-operators-map-filter--kotlin--medium]] - Basic operators: map, filter, transform
 - [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
 
-#### Hot vs Cold Flows
+#### Hot Vs Cold Flows
 - [[q-hot-cold-flows--kotlin--medium]] - Cold Flow, SharedFlow, StateFlow differences
 - [[q-stateflow-sharedflow-differences--kotlin--medium]] - StateFlow vs SharedFlow detailed
 - [[q-statein-sharein-flow--kotlin--medium]] - stateIn and shareIn operators

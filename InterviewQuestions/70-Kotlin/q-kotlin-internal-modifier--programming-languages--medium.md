@@ -5,17 +5,14 @@ topic: computer-science
 difficulty: medium
 status: draft
 moc: moc-kotlin
-related: [q-inheritance-open-final--kotlin--medium, q-flow-completion-oncompletion--kotlin--medium, q-flow-exception-handling--kotlin--medium]
+related: [q-flow-completion-oncompletion--kotlin--medium, q-flow-exception-handling--kotlin--medium, q-inheritance-open-final--kotlin--medium]
 created: 2025-10-15
-tags:
-  - access-modifiers
-  - internal
-  - kotlin
-  - module
-  - programming-languages
-  - visibility
+tags: [access-modifiers, internal, kotlin, module, programming-languages, visibility]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Sunday, October 26th 2025, 8:52:49 pm
 ---
-# Что известно про internal?
+
+# Что Известно Про Internal?
 
 # Question (EN)
 > What is known about internal?
