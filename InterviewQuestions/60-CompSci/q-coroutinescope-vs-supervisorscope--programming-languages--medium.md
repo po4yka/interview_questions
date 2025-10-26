@@ -3,18 +3,20 @@ id: 20251012-1227111121
 title: "CoroutineScope vs SupervisorScope / CoroutineScope против SupervisorScope"
 aliases: ["CoroutineScope vs SupervisorScope", "CoroutineScope против SupervisorScope"]
 topic: cs
-subtopics: [coroutines, kotlin, error-handling, programming-languages]
+subtopics: [coroutines, error-handling, kotlin, programming-languages]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-coroutine-context, q-coroutine-context-essence--programming-languages--medium, q-concurrency-fundamentals--computer-science--hard]
+related: [c-coroutine-context, q-concurrency-fundamentals--computer-science--hard, q-coroutine-context-essence--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-01-25
-tags: [coroutines, kotlin, coroutinescope, supervisorscope, error-handling, programming-languages, difficulty/medium]
+tags: [coroutines, coroutinescope, difficulty/medium, error-handling, kotlin, programming-languages, supervisorscope]
 sources: [https://kotlinlang.org/docs/exception-handling.html]
+date created: Saturday, October 4th 2025, 10:54:27 am
+date modified: Sunday, October 26th 2025, 11:21:01 am
 ---
 
 # Вопрос (RU)

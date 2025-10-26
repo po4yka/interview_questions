@@ -3,18 +3,20 @@ id: 20251012-1227111120
 title: "Coroutine Dispatchers / Диспетчеры корутин"
 aliases: ["Coroutine Dispatchers", "Диспетчеры корутин"]
 topic: cs
-subtopics: [coroutines, kotlin, threading, programming-languages]
+subtopics: [coroutines, kotlin, programming-languages, threading]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-coroutine-context, q-coroutine-context-essence--programming-languages--medium, q-concurrency-fundamentals--computer-science--hard]
+related: [c-coroutine-context, q-concurrency-fundamentals--computer-science--hard, q-coroutine-context-essence--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-01-25
-tags: [coroutines, dispatchers, kotlin, threading, programming-languages, difficulty/medium]
+tags: [coroutines, difficulty/medium, dispatchers, kotlin, programming-languages, threading]
 sources: [https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html]
+date created: Friday, October 3rd 2025, 5:21:02 pm
+date modified: Sunday, October 26th 2025, 11:18:08 am
 ---
 
 # Вопрос (RU)
