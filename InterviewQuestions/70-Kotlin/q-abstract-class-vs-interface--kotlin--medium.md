@@ -73,7 +73,7 @@ class MyCounter : Counter {
 // ✅ Abstract class может иметь состояние
 abstract class Repository {
     private val cache = mutableMapOf<String, Any>() // ✅ Backing field
-    
+
     protected fun getCached(key: String) = cache[key]
     abstract fun fetch(id: String): Any
 }
@@ -161,7 +161,7 @@ class MyCounter : Counter {
 // ✅ Abstract class can have state
 abstract class Repository {
     private val cache = mutableMapOf<String, Any>() // ✅ Backing field
-    
+
     protected fun getCached(key: String) = cache[key]
     abstract fun fetch(id: String): Any
 }
