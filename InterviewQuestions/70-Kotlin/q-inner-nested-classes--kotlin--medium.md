@@ -39,7 +39,7 @@ sources: [https://kotlinlang.org/docs/nested-classes.html]
 ```kotlin
 class Outer {
     private val outerValue = "Outer"
-    
+
     // ✅ Вложенный класс - не имеет доступа к Outer
     class Nested {
         fun describe() = "Nested class"
@@ -55,7 +55,7 @@ val nested = Outer.Nested() // Можно создать без экземпля
 ```kotlin
 class Outer {
     private val outerValue = "Outer"
-    
+
     // ✅ Внутренний класс - имеет доступ к Outer
     inner class Inner {
         fun describe() = "Inner class, outerValue: ${outerValue}"
@@ -72,10 +72,10 @@ val inner = outer.Inner() // Нужен экземпляр Outer
 ```kotlin
 class Outer {
     val value = "Outer"
-    
+
     inner class Inner {
         val value = "Inner"
-        
+
         fun printValues() {
             println(value) // Inner
             println(this@Outer.value) // Outer
@@ -88,14 +88,14 @@ class Outer {
 ```kotlin
 class ViewHolder(private val view: View) {
     private val data = "ViewHolder Data"
-    
+
     // ✅ Nested класс для вспомогательных типов
     class Builder {
         fun create(activity: Activity): ViewHolder {
             return ViewHolder(activity.findViewById(R.id.view))
         }
     }
-    
+
     // ✅ Inner класс для доступа к ViewHolder
     inner class Loader {
         fun loadContent() {
@@ -114,14 +114,14 @@ loader.loadContent()
 ```kotlin
 class Activity {
     private val data = "Important data"
-    
+
     // ❌ ПЛОХО: Inner класс держит ссылку на Activity
     inner class Callback {
         fun onComplete() {
             println(data) // Ссылка на Activity
         }
     }
-    
+
     // ✅ ХОРОШО: Nested класс не держит ссылку
     class SafeCallback {
         fun onComplete(data: String) {
@@ -147,7 +147,7 @@ Kotlin has two types of classes inside another class: nested and inner. Nested c
 ```kotlin
 class Outer {
     private val outerValue = "Outer"
-    
+
     // ✅ Nested class - no access to Outer
     class Nested {
         fun describe() = "Nested class"
@@ -163,7 +163,7 @@ val nested = Outer.Nested() // Can create without Outer instance
 ```kotlin
 class Outer {
     private val outerValue = "Outer"
-    
+
     // ✅ Inner class - has access to Outer
     inner class Inner {
         fun describe() = "Inner class, outerValue: ${outerValue}"
@@ -180,10 +180,10 @@ val inner = outer.Inner() // Need Outer instance
 ```kotlin
 class Outer {
     val value = "Outer"
-    
+
     inner class Inner {
         val value = "Inner"
-        
+
         fun printValues() {
             println(value) // Inner
             println(this@Outer.value) // Outer
@@ -196,14 +196,14 @@ class Outer {
 ```kotlin
 class ViewHolder(private val view: View) {
     private val data = "ViewHolder Data"
-    
+
     // ✅ Nested class for helper types
     class Builder {
         fun create(activity: Activity): ViewHolder {
             return ViewHolder(activity.findViewById(R.id.view))
         }
     }
-    
+
     // ✅ Inner class for access to ViewHolder
     inner class Loader {
         fun loadContent() {
@@ -222,14 +222,14 @@ loader.loadContent()
 ```kotlin
 class Activity {
     private val data = "Important data"
-    
+
     // ❌ BAD: Inner class holds reference to Activity
     inner class Callback {
         fun onComplete() {
             println(data) // Reference to Activity
         }
     }
-    
+
     // ✅ GOOD: Nested class doesn't hold reference
     class SafeCallback {
         fun onComplete(data: String) {
