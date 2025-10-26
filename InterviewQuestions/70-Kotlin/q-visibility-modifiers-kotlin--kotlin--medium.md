@@ -1,153 +1,348 @@
 ---
 id: "20251012-150020"
-title: "Visibility modifiers in Kotlin: private, protected, internal, public"
+title: "Visibility Modifiers in Kotlin / Модификаторы видимости в Kotlin"
+aliases: ["Visibility Modifiers", "Модификаторы видимости"]
 topic: kotlin
+subtopics: [visibility-modifiers, access-modifiers, encapsulation]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: "2025-10-12"
-tags: ["kotlin", "classes", "difficulty/medium"]
-description: "Comprehensive guide to Visibility modifiers in Kotlin: private, protected, internal, public covering concepts, patterns, best practices, and real-world examples"
 moc: moc-kotlin
-related: [q-kotlin-serialization--programming-languages--easy, q-parallel-network-calls-coroutines--kotlin--medium, q-coroutine-parent-child-relationship--kotlin--medium]
-subtopics: ["classes", "kotlin-features", "oop"]
+related: [q-kotlin-access-modifiers--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
+created: "2025-10-12"
+updated: 2025-01-25
+tags: [kotlin, visibility-modifiers, access-modifiers, encapsulation, kotlin-features, difficulty/medium]
+sources: [https://kotlinlang.org/docs/visibility-modifiers.html]
 ---
-# Visibility modifiers in Kotlin: private, protected, internal, public
 
-## English
+# Вопрос (RU)
+> Какие модификаторы видимости есть в Kotlin и чем они отличаются?
 
-### Problem Statement
-
-[Comprehensive 2-3 paragraph explanation introducing the topic with real-world context and why understanding this is important]
-
-### Solution
-
-[Extensive solution covering:
-- Basic concepts and syntax (200-300 lines)
-- Practical examples and patterns (200-300 lines)
-- Comparison with alternatives (100-200 lines)
-- Advanced use cases (200-300 lines)
-- Performance considerations (50-100 lines)
-- Testing approaches (50-100 lines)
-- Best practices (100-150 lines)
-- Common pitfalls (50-100 lines)]
-
-#### Basic Syntax
-
-```kotlin
-// Code examples demonstrating basic concepts
-// Multiple examples with different scenarios
-// Clear comments explaining each part
-```
-
-#### Practical Patterns
-
-```kotlin
-// Real-world implementation patterns
-// Common use cases in Android/Backend
-// Production-ready examples
-```
-
-#### Advanced Techniques
-
-```kotlin
-// Complex scenarios and edge cases
-// Performance optimization techniques
-// Integration with other Kotlin features
-```
-
-#### Comparison Examples
-
-```kotlin
-// Comparing different approaches
-// When to use each technique
-// Trade-offs and considerations
-```
-
-### Best Practices
-
-1. **Practice 1**: Detailed explanation with code example
-2. **Practice 2**: Detailed explanation with code example
-3. **Practice 3**: Detailed explanation with code example
-4. **Practice 4**: Detailed explanation with code example
-5. **Practice 5**: Detailed explanation with code example
-
-### Common Pitfalls
-
-1. **Pitfall 1**: What to avoid and why
-2. **Pitfall 2**: What to avoid and why
-3. **Pitfall 3**: What to avoid and why
+# Question (EN)
+> What visibility modifiers does Kotlin have and what's the difference?
 
 ---
 
-## Русский
+## Ответ (RU)
 
-### Описание проблемы
+**Теория модификаторов видимости:**
+Kotlin имеет 4 уровня видимости: `private`, `protected`, `internal`, `public`. В отличие от Java, default modifier - `public`, а не `package-private`. `internal` позволяет видеть элемент в пределах одного модуля - основная инкапсуляция для модульных проектов. В Kotlin нет package-private модификатора.
 
-[Full Russian translation of problem statement - 2-3 paragraphs explaining the topic, its importance, and real-world context]
+**Уровни видимости:**
+- **public**: Видим везде (default модификатор)
+- **internal**: Видим внутри модуля
+- **protected**: Видим в классе и наследниках (только для members класса)
+- **private**: Видим только в пределах объявления
 
-### Решение
-
-[Full Russian translation of solution including:
-- All code examples with Russian comments
-- Translated explanations of concepts
-- Russian versions of all section headers
-- Localized best practices and pitfalls]
-
-#### Базовый синтаксис
-
+**Базовые примеры:**
 ```kotlin
-// Примеры кода с комментариями на русском
-// Демонстрация базовых концепций
-// Пошаговые объяснения
+// ✅ public (по умолчанию)
+class PublicClass {
+    fun publicMethod() {} // public
+}
+
+// ✅ internal - видим только в модуле
+internal class InternalClass {
+    internal fun internalMethod() {}
+}
+
+// ✅ private - только внутри класса
+class Example {
+    private fun privateMethod() {}
+
+    fun publicMethod() {
+        privateMethod() // ✅ Доступно
+    }
+}
+
+// ❌ Ошибка - недоступен приватный метод
+// val ex = Example()
+// ex.privateMethod() // Ошибка!
 ```
 
-#### Практические паттерны
-
+**Protected visibility:**
 ```kotlin
-// Реальные паттерны реализации
-// Распространённые случаи использования
-// Production-ready примеры
+// ✅ protected - видим в классе и наследниках
+open class Base {
+    protected val value = 42
+    protected fun protectedMethod() {}
+}
+
+class Derived : Base() {
+    fun accessProtected() {
+        println(value) // ✅ Доступно в наследнике
+        protectedMethod() // ✅ Доступно в наследнике
+    }
+}
+
+// ❌ Недоступно снаружи
+fun test() {
+    val base = Base()
+    // base.protectedMethod() // Ошибка!
+}
 ```
 
-### Лучшие практики
+**Internal visibility:**
+```kotlin
+// ✅ internal - модульная инкапсуляция
+// Файл: utils/network.kt (модуль A)
+internal class NetworkHelper {
+    internal fun connect() {}
+}
 
-1. **Практика 1**: Подробное объяснение с примером кода
-2. **Практика 2**: Подробное объяснение с примером кода
-3. **Практика 3**: Подробное объяснение с примером кода
-4. **Практика 4**: Подробное объяснение с примером кода
-5. **Практика 5**: Подробное объяснение с примером кода
+// Файл: main.kt (модуль A)
+import utils.*
+fun main() {
+    val helper = NetworkHelper() // ✅ Доступно
+    helper.connect() // ✅ Доступно
+}
 
-### Распространённые ошибки
+// Файл: client/app.kt (модуль B)
+import utils.*
+fun usage() {
+    // val helper = NetworkHelper() // ❌ Недоступно - другой модуль
+}
+```
 
-1. **Ошибка 1**: Чего избегать и почему
-2. **Ошибка 2**: Чего избегать и почему
-3. **Ошибка 3**: Чего избегать и почему
+**Private visibility (вложенные классы):**
+```kotlin
+// ✅ private классы и функции
+class Outer {
+    private class Nested // Приватный вложенный класс
+
+    private fun outerMethod() {}
+
+    inner class Inner {
+        fun accessOuter() {
+            outerMethod() // ✅ Доступ к приватному методу внешнего класса
+        }
+    }
+}
+
+// ❌ Nested недоступен снаружи
+// val nested = Outer.Nested() // Ошибка!
+```
+
+**Конструкторы и properties:**
+```kotlin
+// ✅ Приватный конструктор (Singleton pattern)
+class Database private constructor() {
+    companion object {
+        private var instance: Database? = null
+
+        fun getInstance(): Database {
+            if (instance == null) {
+                instance = Database()
+            }
+            return instance!!
+        }
+    }
+}
+
+// ❌ Нельзя создать напрямую
+// val db = Database() // Ошибка!
+
+// ✅ Приватные setters
+class User(val name: String) {
+    private var password: String = ""
+
+    fun setPassword(newPassword: String) {
+        password = newPassword // ✅ Можно установить
+    }
+
+    fun getPassword(): String {
+        return "***" // ❌ Нельзя получить реальный пароль
+    }
+}
+```
+
+**Package-level visibility:**
+```kotlin
+// ✅ Файл: helpers.kt
+private fun privateHelper() {} // Приватная функция файла
+internal fun internalHelper() {} // Видна в модуле
+public fun publicHelper() {} // Видна везде
+
+// Файл: main.kt (тот же модуль)
+fun test() {
+    // privateHelper() // ❌ Недоступно - другой файл
+    internalHelper() // ✅ Доступно - тот же модуль
+    publicHelper() // ✅ Доступно
+}
+```
 
 ---
+
+## Answer (EN)
+
+**Visibility Modifiers Theory:**
+Kotlin has 4 visibility levels: `private`, `protected`, `internal`, `public`. Unlike Java, default modifier is `public`, not package-private. `internal` allows seeing element within one module - main encapsulation for modular projects. Kotlin has no package-private modifier.
+
+**Visibility Levels:**
+- **public**: Visible everywhere (default modifier)
+- **internal**: Visible within module
+- **protected**: Visible in class and inheritors (only for class members)
+- **private**: Visible only within declaring scope
+
+**Basic Examples:**
+```kotlin
+// ✅ public (default)
+class PublicClass {
+    fun publicMethod() {} // public
+}
+
+// ✅ internal - visible only in module
+internal class InternalClass {
+    internal fun internalMethod() {}
+}
+
+// ✅ private - only inside class
+class Example {
+    private fun privateMethod() {}
+
+    fun publicMethod() {
+        privateMethod() // ✅ Accessible
+    }
+}
+
+// ❌ Error - private method not accessible
+// val ex = Example()
+// ex.privateMethod() // Error!
+```
+
+**Protected Visibility:**
+```kotlin
+// ✅ protected - visible in class and inheritors
+open class Base {
+    protected val value = 42
+    protected fun protectedMethod() {}
+}
+
+class Derived : Base() {
+    fun accessProtected() {
+        println(value) // ✅ Accessible in inheritor
+        protectedMethod() // ✅ Accessible in inheritor
+    }
+}
+
+// ❌ Not accessible from outside
+fun test() {
+    val base = Base()
+    // base.protectedMethod() // Error!
+}
+```
+
+**Internal Visibility:**
+```kotlin
+// ✅ internal - module-level encapsulation
+// File: utils/network.kt (module A)
+internal class NetworkHelper {
+    internal fun connect() {}
+}
+
+// File: main.kt (module A)
+import utils.*
+fun main() {
+    val helper = NetworkHelper() // ✅ Accessible
+    helper.connect() // ✅ Accessible
+}
+
+// File: client/app.kt (module B)
+import utils.*
+fun usage() {
+    // val helper = NetworkHelper() // ❌ Not accessible - different module
+}
+```
+
+**Private Visibility (Nested Classes):**
+```kotlin
+// ✅ private classes and functions
+class Outer {
+    private class Nested // Private nested class
+
+    private fun outerMethod() {}
+
+    inner class Inner {
+        fun accessOuter() {
+            outerMethod() // ✅ Access to private method of outer class
+        }
+    }
+}
+
+// ❌ Nested not accessible from outside
+// val nested = Outer.Nested() // Error!
+```
+
+**Constructors and Properties:**
+```kotlin
+// ✅ Private constructor (Singleton pattern)
+class Database private constructor() {
+    companion object {
+        private var instance: Database? = null
+
+        fun getInstance(): Database {
+            if (instance == null) {
+                instance = Database()
+            }
+            return instance!!
+        }
+    }
+}
+
+// ❌ Cannot create directly
+// val db = Database() // Error!
+
+// ✅ Private setters
+class User(val name: String) {
+    private var password: String = ""
+
+    fun setPassword(newPassword: String) {
+        password = newPassword // ✅ Can set
+    }
+
+    fun getPassword(): String {
+        return "***" // ❌ Cannot get real password
+    }
+}
+```
+
+**Package-level Visibility:**
+```kotlin
+// ✅ File: helpers.kt
+private fun privateHelper() {} // Private file function
+internal fun internalHelper() {} // Visible in module
+public fun publicHelper() {} // Visible everywhere
+
+// File: main.kt (same module)
+fun test() {
+    // privateHelper() // ❌ Not accessible - different file
+    internalHelper() // ✅ Accessible - same module
+    publicHelper() // ✅ Accessible
+}
+```
 
 ## Follow-ups
 
-1. [Technical follow-up question related to implementation details]
-2. [Question about edge cases and advanced scenarios]
-3. [Question comparing with alternative approaches]
-4. [Question about performance implications]
-5. [Question about integration with other Kotlin features]
-6. [Question about Java interop considerations]
-7. [Question about testing strategies]
-8. [Question about best practices in specific contexts]
+- When to use internal vs private?
+- How does visibility work with sealed classes?
+- Visibility in multi-module projects?
 
 ## References
 
-- [Kotlin Official Documentation - Related Topic]
-- [Kotlin Language Specification - Relevant Section]
-- [Kotlin API Reference - Relevant Classes/Functions]
-- [Community Best Practices and Articles]
-- [Performance Guidelines and Benchmarks]
+- [[c-oop-fundamentals]]
+- https://kotlinlang.org/docs/visibility-modifiers.html
 
 ## Related Questions
 
-- [[q-data-class-detailed--kotlin--medium]]
-- [[q-sealed-class-sealed-interface--kotlin--medium]]
-- [[q-inheritance-open-final--kotlin--medium]]
-- [[q-visibility-modifiers-kotlin--kotlin--medium]]
-- [[q-kotlin-enum-classes--kotlin--easy]]
+### Prerequisites (Easier)
+- [[q-kotlin-enum-classes--kotlin--easy]] - Basic classes
+
+### Related (Medium)
+- [[q-kotlin-access-modifiers--kotlin--medium]] - Access modifiers
+- [[q-inheritance-open-final--kotlin--medium]] - Inheritance
+- [[q-inner-nested-classes--kotlin--medium]] - Nested classes
+
+### Advanced (Harder)
+- [[q-kotlin-reified-types--kotlin--hard]] - Reified types
