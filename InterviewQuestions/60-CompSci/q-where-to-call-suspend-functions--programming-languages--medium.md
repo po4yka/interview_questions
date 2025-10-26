@@ -85,7 +85,7 @@ suspend fun loadParallelData(): CombinedData = coroutineScope {
     val userData = async { fetchUserData(1) }  // ✅ OK
     val postsData = async { fetchPostsData(1) }  // ✅ OK
     val settingsData = async { fetchSettings() }  // ✅ OK
-    
+
     CombinedData(
         user = userData.await(),
         posts = postsData.await(),
@@ -139,7 +139,7 @@ suspend fun processOnMain(data: String) {
 fun getUserFlow(): Flow<User> = flow {
     val user = fetchUser(1)  // ✅ OK - suspend call
     emit(user)
-    
+
     delay(1000)  // ✅ OK - suspend call
     emit(fetchUser(2))
 }
@@ -241,7 +241,7 @@ suspend fun loadParallelData(): CombinedData = coroutineScope {
     val userData = async { fetchUserData(1) }  // ✅ OK
     val postsData = async { fetchPostsData(1) }  // ✅ OK
     val settingsData = async { fetchSettings() }  // ✅ OK
-    
+
     CombinedData(
         user = userData.await(),
         posts = postsData.await(),
@@ -295,7 +295,7 @@ suspend fun processOnMain(data: String) {
 fun getUserFlow(): Flow<User> = flow {
     val user = fetchUser(1)  // ✅ OK - suspend call
     emit(user)
-    
+
     delay(1000)  // ✅ OK - suspend call
     emit(fetchUser(2))
 }
