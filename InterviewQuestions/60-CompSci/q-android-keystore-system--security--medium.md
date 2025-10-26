@@ -21,8 +21,7 @@ related:
   - q-android-security-practices-checklist--android--medium
   - q-database-encryption-android--android--medium
   - q-encrypted-file-storage--android--medium
-date created: Sunday, October 12th 2025, 12:27:50 pm
-date modified: Saturday, October 25th 2025, 8:32:50 pm
+sources: [https://developer.android.com/training/articles/keystore]
 ---
 
 # Вопрос (RU)

@@ -1,69 +1,50 @@
 ---
 id: 20251012-1227111114
 title: "Bridge Pattern / Bridge Паттерн"
-topic: computer-science
+aliases: ["Bridge Pattern", "Паттерн Bridge"]
+topic: cs
+subtopics: [design-patterns, structural-patterns, bridge]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-extensions-concept--programming-languages--easy, q-priorityqueue-vs-deque--programming-languages--easy, q-throw-vs-throws--programming-languages--easy]
+related: [q-adapter-pattern--design-patterns--medium, q-decorator-pattern--design-patterns--medium, q-design-patterns-fundamentals--software-engineering--hard]
 created: 2025-10-15
-tags: [abstraction, bridge, design-patterns, gof-patterns, structural-patterns]
-date created: Monday, October 6th 2025, 7:28:58 am
-date modified: Saturday, October 25th 2025, 8:32:51 pm
+updated: 2025-01-25
+tags: [abstraction, bridge, design-patterns, gof-patterns, structural-patterns, difficulty/hard]
+sources: [https://refactoring.guru/design-patterns/bridge]
 ---
-
-# Bridge Pattern
-
-# Question (EN)
-> What is the Bridge pattern? When and why should it be used?
 
 # Вопрос (RU)
 > Что такое паттерн Bridge? Когда и зачем его использовать?
 
+# Question (EN)
+> What is the Bridge pattern? When and why should it be used?
+
 ---
 
-## Answer (EN)
+## Ответ (RU)
 
+**Теория Bridge:**
+Bridge - структурный паттерн, который разделяет большой класс или набор тесно связанных классов на две отдельные иерархии - абстракцию и реализацию, которые могут разрабатываться независимо друг от друга. Делает функциональность конкретных классов независимой от классов-реализаторов интерфейса.
 
+**Проблема:**
+Абстракция и её реализация должны определяться и расширяться независимо друг от друга. Следует избегать привязки во время компиляции между абстракцией и реализацией, чтобы реализация могла выбираться во время выполнения.
 
-### Definition
+**Решение:**
+Создать две иерархии, связанные композицией - абстракция содержит ссылку на реализатор. Это позволяет изменять реализацию во время выполнения без влияния на абстракцию.
 
+**Ключевые компоненты:**
+- **Abstraction** - высокоуровневый интерфейс, определяющий абстрактные методы
+- **Implementor** - интерфейс/абстрактный класс, определяющий методы для конкретных реализаторов
+- **Concrete Abstraction** - расширяет Abstraction, использует Implementor
+- **Concrete Implementor** - реализует интерфейс Implementor
 
-Bridge is a structural design pattern that **lets you split a large class or a set of closely related classes into two separate hierarchies—abstraction and implementation—which can be developed independently** of each other.
-
-This pattern involves an interface which acts as a bridge which makes the functionality of concrete classes independent from interface implementer classes. Both types of classes can be altered structurally without affecting each other.
-
-### Problems it Solves
-
-
-The Bridge design pattern solves problems like:
-
-1. **An abstraction and its implementation should be defined and extended independently from each other**
-2. **A compile-time binding between an abstraction and its implementation should be avoided** so that an implementation can be selected at run-time
-
-### When to Use?
-
-
-When to Use Bridge Pattern:
-
-1. **Avoid permanent binding** between abstraction and implementation
-2. **Both abstraction and implementation should be extensible** through subclassing
-3. **Changes in implementation shouldn't impact clients**
-4. **Share implementation among multiple objects** and hide implementation details
-
-## Ключевые Компоненты
-
-Key Components:
-
-1. **Abstraction** - High-level interface that defines abstract methods
-2. **Implementor** - Interface/abstract class defining methods for concrete implementors
-3. **Concrete Abstraction** - Extends Abstraction, uses Implementor
-4. **Concrete Implementor** - Implements the Implementor interface
-
-## Пример: Device Remote Control
-
+**Применение:**
 ```kotlin
-// Implementor
+// ✅ Implementor
 interface Device {
     fun turnOn()
     fun turnOff()
@@ -92,28 +73,7 @@ class TV : Device {
     }
 }
 
-class Radio : Device {
-    override var isEnabled = false
-        private set
-    private var volume = 50
-
-    override fun turnOn() {
-        isEnabled = true
-        println("Radio is ON")
-    }
-
-    override fun turnOff() {
-        isEnabled = false
-        println("Radio is OFF")
-    }
-
-    override fun setVolume(volume: Int) {
-        this.volume = volume
-        println("Radio volume set to $volume")
-    }
-}
-
-// Abstraction
+// ✅ Abstraction
 open class RemoteControl(protected val device: Device) {
     fun togglePower() {
         if (device.isEnabled) {
@@ -128,31 +88,18 @@ open class RemoteControl(protected val device: Device) {
     }
 }
 
-// Refined Abstraction
+// ✅ Refined Abstraction
 class AdvancedRemote(device: Device) : RemoteControl(device) {
     fun mute() {
         device.setVolume(0)
         println("Muted")
     }
 }
-
-fun main() {
-    val tv = TV()
-    val tvRemote = RemoteControl(tv)
-    tvRemote.togglePower()
-    tvRemote.volumeUp()
-
-    val radio = Radio()
-    val advancedRemote = AdvancedRemote(radio)
-    advancedRemote.togglePower()
-    advancedRemote.mute()
-}
 ```
 
-## Android Example: Drawing Shapes
-
+**Android применение:**
 ```kotlin
-// Implementor - Rendering API
+// ✅ Implementor - Rendering API
 interface Renderer {
     fun renderCircle(radius: Float)
     fun renderSquare(side: Float)
@@ -178,18 +125,14 @@ class RasterRenderer : Renderer {
     }
 }
 
-// Abstraction - Shape
+// ✅ Abstraction - Shape
 abstract class Shape(protected val renderer: Renderer) {
     abstract fun draw()
     abstract fun resize(factor: Float)
 }
 
-// Refined Abstractions
-class Circle(
-    renderer: Renderer,
-    private var radius: Float
-) : Shape(renderer) {
-
+// ✅ Refined Abstractions
+class Circle(renderer: Renderer, private var radius: Float) : Shape(renderer) {
     override fun draw() {
         renderer.renderCircle(radius)
     }
@@ -199,11 +142,7 @@ class Circle(
     }
 }
 
-class Square(
-    renderer: Renderer,
-    private var side: Float
-) : Shape(renderer) {
-
+class Square(renderer: Renderer, private var side: Float) : Shape(renderer) {
     override fun draw() {
         renderer.renderSquare(side)
     }
@@ -212,243 +151,182 @@ class Square(
         side *= factor
     }
 }
-
-// Usage
-fun main() {
-    val vectorCircle = Circle(VectorRenderer(), 5f)
-    vectorCircle.draw()
-
-    val rasterSquare = Square(RasterRenderer(), 10f)
-    rasterSquare.draw()
-
-    // Easy to combine different abstractions and implementations
-    val rasterCircle = Circle(RasterRenderer(), 7f)
-    rasterCircle.draw()
-}
 ```
 
-## Kotlin Example: Message Sender
+**Преимущества:**
+- Разделение абстракции и реализации
+- Улучшенная расширяемость - иерархии расширяются независимо
+- Повышенная гибкость - изменение реализации без влияния на абстракцию
+- Привязка во время выполнения - можно переключать реализации
+- Принцип открытости/закрытости
 
-```kotlin
-// Implementor - Sending mechanism
-interface MessageSender {
-    fun sendMessage(message: String, recipient: String)
-}
-
-class EmailSender : MessageSender {
-    override fun sendMessage(message: String, recipient: String) {
-        println("Sending email to $recipient: $message")
-    }
-}
-
-class SmsSender : MessageSender {
-    override fun sendMessage(message: String, recipient: String) {
-        println("Sending SMS to $recipient: $message")
-    }
-}
-
-class PushNotificationSender : MessageSender {
-    override fun sendMessage(message: String, recipient: String) {
-        println("Sending push notification to $recipient: $message")
-    }
-}
-
-// Abstraction - Message
-abstract class Message(protected val sender: MessageSender) {
-    abstract fun send(recipient: String)
-}
-
-// Refined Abstractions
-class TextMessage(
-    sender: MessageSender,
-    private val content: String
-) : Message(sender) {
-    override fun send(recipient: String) {
-        sender.sendMessage(content, recipient)
-    }
-}
-
-class EncryptedMessage(
-    sender: MessageSender,
-    private val content: String
-) : Message(sender) {
-    override fun send(recipient: String) {
-        val encrypted = encrypt(content)
-        sender.sendMessage(encrypted, recipient)
-    }
-
-    private fun encrypt(text: String) = "ENCRYPTED[$text]"
-}
-
-// Usage
-fun main() {
-    val emailMessage = TextMessage(EmailSender(), "Hello World")
-    emailMessage.send("user@example.com")
-
-    val encryptedSms = EncryptedMessage(SmsSender(), "Secret message")
-    encryptedSms.send("+1234567890")
-}
-```
-
-### Explanation
-
-
-**Explanation**:
-
-- **Implementor** (Device, Renderer, MessageSender) defines implementation interface
-- **Abstraction** (RemoteControl, Shape, Message) contains reference to implementor
-- **Concrete implementors** provide actual implementations
-- **Refined abstractions** extend base abstraction with more features
-- **Decoupling** allows changing implementations without affecting abstractions
-
-## Преимущества И Недостатки
-
-### Pros (Преимущества)
-
-
-1. **Decoupling** - Abstraction and implementation are independent
-2. **Improved Extensibility** - Extend hierarchies independently
-3. **Enhanced Flexibility** - Change implementation without modifying abstraction
-4. **Runtime binding** - Can switch implementations at runtime
-5. **Open/Closed Principle** - Open for extension, closed for modification
-
-### Cons (Недостатки)
-
-
-1. **Increased complexity** - More classes and interfaces
-2. **Indirection** - Extra layer of abstraction
-3. **Design overhead** - Requires careful design upfront
-
-## Best Practices
-
-```kotlin
-// - DO: Use when you have multiple dimensions of variation
-interface StorageBackend {
-    fun save(data: String)
-    fun load(): String
-}
-
-abstract class DataManager(protected val storage: StorageBackend) {
-    abstract fun process(data: String)
-}
-
-class UserDataManager(storage: StorageBackend) : DataManager(storage) {
-    override fun process(data: String) {
-        // Process user data
-        storage.save(data)
-    }
-}
-
-// - DO: Allow runtime selection of implementation
-class ConfigurableShape(renderer: Renderer) {
-    private var currentRenderer = renderer
-
-    fun setRenderer(renderer: Renderer) {
-        currentRenderer = renderer
-    }
-
-    fun draw() {
-        currentRenderer.renderCircle(10f)
-    }
-}
-
-// - DO: Use for platform-specific implementations
-interface Platform {
-    fun showNotification(message: String)
-}
-
-class AndroidPlatform : Platform {
-    override fun showNotification(message: String) {
-        // Android-specific notification
-    }
-}
-
-class IOSPlatform : Platform {
-    override fun showNotification(message: String) {
-        // iOS-specific notification
-    }
-}
-
-// - DON'T: Use for single implementation
-// - DON'T: Create unnecessary abstractions
-// - DON'T: Couple abstraction to concrete implementation
-```
-
-**English**: **Bridge** is a structural pattern that separates abstraction from implementation, allowing independent development. **Problem**: Want to avoid permanent binding between abstraction and implementation. **Solution**: Create two hierarchies connected by composition - abstraction holds reference to implementor. **Use when**: (1) Abstraction and implementation should vary independently, (2) Need runtime selection of implementation, (3) Avoid class explosion from multiple dimensions. **Android**: Rendering engines, platform-specific code, storage backends. **Pros**: decoupling, flexibility, extensibility. **Cons**: complexity, indirection. **Examples**: Remote controls, rendering APIs, message senders, storage backends.
-
-## Links
-
-- [Bridge pattern](https://en.wikipedia.org/wiki/Bridge_pattern)
-- [Bridge Design Pattern in Kotlin](https://www.javaguides.net/2023/10/bridge-design-pattern-in-kotlin.html)
-- [Bridge Method Design Pattern in Java](https://www.geeksforgeeks.org/bridge-method-design-pattern-in-java/)
-
-## Further Reading
-
-- [Bridge](https://refactoring.guru/design-patterns/bridge)
-- [Bridge Design Pattern](https://sourcemaking.com/design_patterns/bridge)
+**Недостатки:**
+- Увеличенная сложность - больше классов и интерфейсов
+- Косвенность - дополнительный уровень абстракции
+- Накладные расходы на проектирование
 
 ---
-*Source: Kirchhoff Android Interview Questions*
 
+## Answer (EN)
 
-## Ответ (RU)
+**Bridge Theory:**
+Bridge is a structural design pattern that lets you split a large class or a set of closely related classes into two separate hierarchies - abstraction and implementation - which can be developed independently of each other. Makes functionality of concrete classes independent from interface implementer classes.
 
-### Определение
+**Problem:**
+An abstraction and its implementation should be defined and extended independently from each other. A compile-time binding between an abstraction and its implementation should be avoided so that an implementation can be selected at runtime.
 
-Bridge — это структурный паттерн проектирования, который **позволяет разделить большой класс или набор тесно связанных классов на две отдельные иерархии — абстракцию и реализацию, которые могут разрабатываться независимо** друг от друга.
+**Solution:**
+Create two hierarchies connected by composition - abstraction holds reference to implementor. This allows changing implementation at runtime without affecting abstraction.
 
-Этот паттерн включает интерфейс, который действует как мост, делая функциональность конкретных классов независимой от классов-реализаторов интерфейса. Оба типа классов могут изменяться структурно, не влияя друг на друга.
+**Key Components:**
+- **Abstraction** - high-level interface that defines abstract methods
+- **Implementor** - interface/abstract class defining methods for concrete implementors
+- **Concrete Abstraction** - extends Abstraction, uses Implementor
+- **Concrete Implementor** - implements the Implementor interface
 
-### Проблемы, Которые Решает
+**Application:**
+```kotlin
+// ✅ Implementor
+interface Device {
+    fun turnOn()
+    fun turnOff()
+    fun setVolume(volume: Int)
+    val isEnabled: Boolean
+}
 
-Паттерн проектирования Bridge решает следующие проблемы:
+class TV : Device {
+    override var isEnabled = false
+        private set
+    private var volume = 30
 
-1. **Абстракция и её реализация должны определяться и расширяться независимо друг от друга**
-2. **Следует избегать привязки во время компиляции между абстракцией и её реализацией**, чтобы реализация могла выбираться во время выполнения
+    override fun turnOn() {
+        isEnabled = true
+        println("TV is ON")
+    }
 
-### Когда Использовать?
+    override fun turnOff() {
+        isEnabled = false
+        println("TV is OFF")
+    }
 
-Когда использовать паттерн Bridge:
+    override fun setVolume(volume: Int) {
+        this.volume = volume
+        println("TV volume set to $volume")
+    }
+}
 
-1. **Избежать постоянной привязки** между абстракцией и реализацией
-2. **Абстракция и реализация должны быть расширяемыми** через подклассы
-3. **Изменения в реализации не должны влиять на клиентов**
-4. **Разделять реализацию между несколькими объектами** и скрывать детали реализации
+// ✅ Abstraction
+open class RemoteControl(protected val device: Device) {
+    fun togglePower() {
+        if (device.isEnabled) {
+            device.turnOff()
+        } else {
+            device.turnOn()
+        }
+    }
 
-### Объяснение
+    fun volumeUp() {
+        device.setVolume(50)
+    }
+}
 
-**Объяснение**:
+// ✅ Refined Abstraction
+class AdvancedRemote(device: Device) : RemoteControl(device) {
+    fun mute() {
+        device.setVolume(0)
+        println("Muted")
+    }
+}
+```
 
-- **Implementor** (Device, Renderer, MessageSender) определяет интерфейс реализации
-- **Abstraction** (RemoteControl, Shape, Message) содержит ссылку на реализатора
-- **Concrete implementors** предоставляют фактические реализации
-- **Refined abstractions** расширяют базовую абстракцию дополнительными возможностями
-- **Разделение** позволяет изменять реализации без влияния на абстракции
+**Android Application:**
+```kotlin
+// ✅ Implementor - Rendering API
+interface Renderer {
+    fun renderCircle(radius: Float)
+    fun renderSquare(side: Float)
+}
 
-### Pros (Преимущества)
+class VectorRenderer : Renderer {
+    override fun renderCircle(radius: Float) {
+        println("Drawing circle with vector graphics, radius = $radius")
+    }
 
-1. **Разделение** — абстракция и реализация независимы
-2. **Улучшенная расширяемость** — иерархии расширяются независимо
-3. **Повышенная гибкость** — изменение реализации без модификации абстракции
-4. **Привязка во время выполнения** — можно переключать реализации во время выполнения
-5. **Принцип открытости/закрытости** — открыт для расширения, закрыт для модификации
+    override fun renderSquare(side: Float) {
+        println("Drawing square with vector graphics, side = $side")
+    }
+}
 
-### Cons (Недостатки)
+class RasterRenderer : Renderer {
+    override fun renderCircle(radius: Float) {
+        println("Drawing circle with raster graphics, radius = $radius pixels")
+    }
 
-1. **Увеличенная сложность** — больше классов и интерфейсов
-2. **Косвенность** — дополнительный уровень абстракции
-3. **Накладные расходы на проектирование** — требует тщательного проектирования заранее
+    override fun renderSquare(side: Float) {
+        println("Drawing square with raster graphics, side = $side pixels")
+    }
+}
 
+// ✅ Abstraction - Shape
+abstract class Shape(protected val renderer: Renderer) {
+    abstract fun draw()
+    abstract fun resize(factor: Float)
+}
 
----
+// ✅ Refined Abstractions
+class Circle(renderer: Renderer, private var radius: Float) : Shape(renderer) {
+    override fun draw() {
+        renderer.renderCircle(radius)
+    }
+
+    override fun resize(factor: Float) {
+        radius *= factor
+    }
+}
+
+class Square(renderer: Renderer, private var side: Float) : Shape(renderer) {
+    override fun draw() {
+        renderer.renderSquare(side)
+    }
+
+    override fun resize(factor: Float) {
+        side *= factor
+    }
+}
+```
+
+**Advantages:**
+- Decoupling abstraction from implementation
+- Improved extensibility - hierarchies extend independently
+- Enhanced flexibility - change implementation without affecting abstraction
+- Runtime binding - can switch implementations
+- Open/Closed Principle
+
+**Disadvantages:**
+- Increased complexity - more classes and interfaces
+- Indirection - extra layer of abstraction
+- Design overhead
+
+## Follow-ups
+
+- Bridge vs Adapter pattern differences?
+- When to use composition vs inheritance?
+- Platform-specific implementations with Bridge?
+
+## References
+
+- [[c-design-patterns]]
+- https://refactoring.guru/design-patterns/bridge
 
 ## Related Questions
 
-### Hub
-- [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
+### Prerequisites (Easier)
+- [[q-design-patterns-fundamentals--software-engineering--hard]] - Design patterns overview
 
-### Advanced Patterns
+### Related (Medium)
+- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
+- [[q-decorator-pattern--design-patterns--medium]] - Decorator pattern
+
+### Advanced (Harder)
 - [[q-interpreter-pattern--design-patterns--hard]] - Interpreter pattern
 - [[q-visitor-pattern--design-patterns--hard]] - Visitor pattern
-- [[q-flyweight-pattern--design-patterns--hard]] - Flyweight pattern
-

@@ -1,82 +1,49 @@
 ---
 id: 20251012-122747
 title: "Abstract Class Purpose / Назначение абстрактных классов"
-topic: computer-science
+aliases: ["Abstract Class Purpose", "Назначение абстрактных классов"]
+topic: cs
+subtopics: [oop, inheritance, abstraction]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-hot-vs-cold-flows--programming-languages--medium, q-launch-vs-async-error-handling--programming-languages--medium, q-priorityqueue-vs-deque--programming-languages--easy]
+related: [q-interface-vs-abstract-class--programming-languages--medium, q-oop-principles-deep-dive--computer-science--medium, q-inheritance-vs-composition--oop--medium]
 created: 2025-10-15
-tags: [abstract-class, inheritance, kotlin, oop, programming-languages, template-method]
-date created: Friday, October 3rd 2025, 6:25:42 pm
-date modified: Saturday, October 25th 2025, 8:32:47 pm
+updated: 2025-01-25
+tags: [abstract-class, inheritance, kotlin, oop, template-method, difficulty/medium]
+sources: [https://kotlinlang.org/docs/inheritance.html]
 ---
-
-# Что Такое Абстрактный Класс И Для Чего Он Используется?
-
-# Question (EN)
-> What is an abstract class and what is it used for?
 
 # Вопрос (RU)
 > Что такое абстрактный класс и для чего он используется?
 
----
-
-## Answer (EN)
-
-Abstract class represents a class that cannot be instantiated directly. It's intended for use as a base class from which other classes will inherit.
-
-**Why it's needed:**
-
-1. **Defining common template**: Allows defining common template for a group of subclasses. Can provide default implementation for some methods and leave others abstract for subclasses to implement
-
-2. **Encapsulating common properties and methods**: Used to encapsulate attributes and methods that should be common to all subclasses. Reduces code duplication and improves modularity
-
-3. **Enforcing method implementation**: Can require that all derived classes implement certain methods, guaranteeing consistent interface regardless of subclass implementation
-
-**Features:**
-- **Non-instantiability**: Cannot create instances directly
-- **Abstract methods**: Have no implementation, must be implemented in subclasses
-- **Can contain implementation**: Can also have fully implemented methods
-- **Can have state**: Can contain fields and properties
-
-**Example:**
-```kotlin
-abstract class Shape {
-    abstract fun area(): Double
-
-    fun describe() {
-        println("Area: ${area()}")
-    }
-}
-
-class Circle(val radius: Double) : Shape() {
-    override fun area() = Math.PI * radius * radius
-}
-```
+# Question (EN)
+> What is an abstract class and what is it used for?
 
 ---
 
 ## Ответ (RU)
 
-Абстрактный класс представляет собой класс, который не может быть инстанцирован напрямую. Он предназначен для использования в качестве базового класса, от которого будут наследоваться другие классы.
+**Теория абстрактных классов:**
+Abstract class - класс, который не может быть инстанцирован напрямую. Предназначен для использования как базовый класс, от которого будут наследоваться другие классы. Позволяет определить общий шаблон для группы подклассов, предоставляя реализацию по умолчанию для одних методов и оставляя другие абстрактными.
 
-**Зачем он нужен:**
+**Ключевые особенности:**
+- Неинстанцируемость - нельзя создавать экземпляры напрямую
+- Абстрактные методы - не имеют реализации, должны быть реализованы в подклассах
+- Может содержать реализацию - может иметь полностью реализованные методы
+- Может иметь состояние - может содержать поля и свойства
 
-1. **Определение общего шаблона**: Позволяет определить общий шаблон для группы подклассов. Может предоставлять реализацию по умолчанию для некоторых методов и оставлять другие абстрактными для реализации в подклассах
+**Почему нужен:**
+1. **Определение общего шаблона**: Общий шаблон для группы подклассов
+2. **Инкапсуляция общих свойств**: Инкапсулирует атрибуты и методы, общие для всех подклассов
+3. **Принуждение к реализации**: Требует реализации определённых методов, гарантируя согласованный интерфейс
 
-2. **Инкапсуляция общих свойств и методов**: Используется для инкапсуляции атрибутов и методов, которые должны быть общими для всех подклассов. Уменьшает дублирование кода и улучшает модульность
-
-3. **Принуждение к реализации методов**: Может требовать, чтобы все производные классы реализовали определенные методы, гарантируя согласованный интерфейс независимо от реализации подкласса
-
-**Особенности:**
-- **Неинстанцируемость**: Нельзя создавать экземпляры напрямую
-- **Абстрактные методы**: Не имеют реализации, должны быть реализованы в подклассах
-- **Может содержать реализацию**: Может также иметь полностью реализованные методы
-- **Может иметь состояние**: Может содержать поля и свойства
-
-**Пример:**
+**Применение:**
 ```kotlin
+// ✅ Абстрактный класс для геометрических фигур
 abstract class Shape {
     abstract fun area(): Double
 
@@ -88,10 +55,69 @@ abstract class Shape {
 class Circle(val radius: Double) : Shape() {
     override fun area() = Math.PI * radius * radius
 }
+
+class Rectangle(val width: Double, val height: Double) : Shape() {
+    override fun area() = width * height
+}
 ```
+
+---
+
+## Answer (EN)
+
+**Abstract Class Theory:**
+Abstract class is a class that cannot be instantiated directly. It's intended for use as a base class from which other classes will inherit. Allows defining common template for a group of subclasses, providing default implementation for some methods and leaving others abstract.
+
+**Key Features:**
+- Non-instantiability - Cannot create instances directly
+- Abstract methods - Have no implementation, must be implemented in subclasses
+- Can contain implementation - Can also have fully implemented methods
+- Can have state - Can contain fields and properties
+
+**Why it's needed:**
+1. **Defining common template**: Common template for a group of subclasses
+2. **Encapsulating common properties**: Encapsulates attributes and methods common to all subclasses
+3. **Enforcing method implementation**: Requires certain methods to be implemented, guaranteeing consistent interface
+
+**Application:**
+```kotlin
+// ✅ Abstract class for geometric shapes
+abstract class Shape {
+    abstract fun area(): Double
+
+    fun describe() {
+        println("Area: ${area()}")
+    }
+}
+
+class Circle(val radius: Double) : Shape() {
+    override fun area() = Math.PI * radius * radius
+}
+
+class Rectangle(val width: Double, val height: Double) : Shape() {
+    override fun area() = width * height
+}
+```
+
+## Follow-ups
+
+- When to use abstract class vs interface?
+- Template Method Pattern with abstract classes?
+- Abstract class state vs interface stateless design?
+
+## References
+
+- [[c-data-structures]]
+- [[c-oop-fundamentals]]
 
 ## Related Questions
 
-- [[q-hot-vs-cold-flows--programming-languages--medium]]
-- [[q-launch-vs-async-error-handling--programming-languages--medium]]
-- [[q-priorityqueue-vs-deque--programming-languages--easy]]
+### Prerequisites (Easier)
+- [[q-inheritance-vs-composition--oop--medium]] - Inheritance concepts
+- [[q-oop-principles-deep-dive--computer-science--medium]] - OOP fundamentals
+
+### Related (Medium)
+- [[q-interface-vs-abstract-class--programming-languages--medium]] - When to use interface vs abstract class
+
+### Advanced (Harder)
+- [[q-template-method-pattern--design-patterns--medium]] - Template Method pattern
