@@ -16,390 +16,147 @@ status: draft
 moc: moc-android
 related:
   - q-accessibility-compose--android--medium
-  - q-material3-dynamic-color-theming--material-design--medium
+  - q-accessibility-testing--android--medium
+  - q-custom-view-accessibility--android--medium
 created: 2025-10-11
-updated: 2025-10-15
+updated: 2025-01-27
 tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:53:25 pm
+sources: []
 ---
-
 # Вопрос (RU)
-> Что такое Контрастность цветов для доступности?
+> Как обеспечить доступную контрастность цветов в Android-приложении согласно WCAG?
 
 ---
 
 # Question (EN)
-> What is Accessibility Color Contrast?
+> How to ensure accessible color contrast in Android apps according to WCAG?
 
-## Answer (EN)
-Color contrast is the difference in luminance between text and background colors. Proper [[c-accessibility|accessibility]] contrast ensures readability for users with low vision, color blindness, age-related vision changes, and outdoor viewing. WCAG provides standardized contrast requirements. Material Design color system helps ensure accessible color combinations.
+## Ответ (RU)
 
-#### WCAG Requirements
+[[c-accessibility|Контрастность цвета]] — это отношение яркости между текстом и фоном. WCAG устанавливает минимальные требования: **4.5:1** для обычного текста (уровень AA) и **7:1** для AAA. Material Design автоматически обеспечивает достаточную контрастность через систему цветовых ролей.
 
+### Требования WCAG
+
+```kotlin
+// WCAG AA (минимум):
+// Обычный текст (< 18pt):  4.5:1
+// Крупный текст (≥ 18pt):  3:1
+
+// WCAG AAA (расширенный):
+// Обычный текст:  7:1
+// Крупный текст:  4.5:1
+
+// Примеры:
+// Черный на белом:    21:1  (отлично)
+// #757575 на белом:   4.6:1 (проходит AA)
+// #959595 на белом:   2.8:1 (не проходит)
 ```
-Level AA (Minimum):
-  Normal text (< 18pt):      4.5:1
-  Large text (≥ 18pt):       3:1
 
-Level AAA (Enhanced):
-  Normal text:               7:1
-  Large text:                4.5:1
-
-Examples:
-  Black on White:     21:1   (Excellent)
-  #757575 on White:    4.6:1   (Passes AA)
-  #959595 on White:    2.8:1   (Fails AA)
-```
-
-#### Material 3 Color Roles
-
-Use Material color pairs for guaranteed contrast:
+### Material цветовые роли
 
 ```kotlin
 @Composable
 fun MaterialColorExample() {
-    MaterialTheme {
-        Surface(color = MaterialTheme.colorScheme.primary) {
-            Text(
-                text = "Primary button",
-                color = MaterialTheme.colorScheme.onPrimary // Guaranteed contrast
-            )
-        }
+    // ✅ Material автоматически гарантирует контраст
+    Surface(color = MaterialTheme.colorScheme.primary) {
+        Text(
+            text = "Button",
+            color = MaterialTheme.colorScheme.onPrimary // Гарантия 4.5:1
+        )
     }
+}
+
+// Основные пары:
+// primary / onPrimary
+// surface / onSurface
+// background / onBackground
+// error / onError
+```
+
+### Типичные ошибки
+
+**1. Светлый текст на светлом фоне:**
+
+```kotlin
+// ❌ Недостаточная контрастность (1.6:1)
+Text(
+    text = "Secondary",
+    color = Color(0xFFCCCCCC),
+    modifier = Modifier.background(Color.White)
+)
+
+// ✅ Достаточная контрастность (4.6:1)
+Text(
+    text = "Secondary",
+    color = MaterialTheme.colorScheme.onSurfaceVariant,
+    modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+)
+```
+
+**2. Использование только цвета для передачи информации:**
+
+```kotlin
+// ❌ Цветослепые пользователи не различат
+Row {
+    Text("Success", color = Color.Green)
+    Text("Error", color = Color.Red)
+}
+
+// ✅ Иконки + цвет + текст
+Row {
+    Icon(Icons.Default.CheckCircle, null, tint = MaterialTheme.colorScheme.tertiary)
+    Text("Success", color = MaterialTheme.colorScheme.tertiary)
+}
+Row {
+    Icon(Icons.Default.Error, null, tint = MaterialTheme.colorScheme.error)
+    Text("Error", color = MaterialTheme.colorScheme.error)
 }
 ```
 
-Material color pairs:
-- primary / onPrimary
-- secondary / onSecondary
-- error / onError
-- surface / onSurface
-- background / onBackground
+**3. Одинаковые цвета для светлой и темной темы:**
 
-Each pair guarantees WCAG AA contrast (4.5:1).
-
-#### Testing
-
-Manual testing:
-- WebAIM Contrast Checker
-- Contrast Ratio
-- Who Can Use
-
-Automated testing:
 ```kotlin
+// ❌ В темной теме контраст нарушится
+val textColor = Color(0xFF212121) // Темный текст
+
+// ✅ Material адаптирует цвета под тему
+Text(
+    text = "Content",
+    color = MaterialTheme.colorScheme.onBackground,
+    modifier = Modifier.background(MaterialTheme.colorScheme.background)
+)
+```
+
+### Тестирование
+
+```kotlin
+// Автоматическая проверка контраста
 @Test
 fun testColorContrast() {
     val foreground = Color(0xFF757575)
     val background = Color.White
     val ratio = ContrastChecker.contrastRatio(foreground, background)
 
-    assertTrue("Contrast ratio ${String.format("%.2f", ratio)}:1 does not meet WCAG AA (4.5:1)",
-        ratio >= 4.5)
+    assertTrue("Контраст $ratio:1 не соответствует AA (4.5:1)", ratio >= 4.5)
 }
 ```
 
-#### Common Violations
+**Инструменты:**
+- **Accessibility Scanner** (Android app) — сканирует запущенное приложение
+- **Android Studio** — цветовой пикер показывает контраст
+- **WebAIM Contrast Checker** — онлайн-проверка
 
-Gray text on light background:
+### Цветовая слепота
 
-```kotlin
-//  BAD - Insufficient contrast
-Text(
-    text = "Secondary info",
-    color = Color(0xFFCCCCCC), // Light gray
-    modifier = Modifier.background(Color.White)
-)
-// Contrast: 1.6:1
-
-//  GOOD - Sufficient contrast
-Text(
-    text = "Secondary info",
-    color = Color(0xFF757575), // Medium gray
-    modifier = Modifier.background(Color.White)
-)
-// Contrast: 4.6:1
-
-//  BETTER - Use Material colors
-Text(
-    text = "Secondary info",
-    color = MaterialTheme.colorScheme.onSurfaceVariant,
-    modifier = Modifier.background(MaterialTheme.colorScheme.surface)
-)
-```
-
-**2. Blue links on white background**:
+Около 8% мужчин и 0.5% женщин имеют дефицит цветового зрения. Не полагайтесь только на цвет:
 
 ```kotlin
-//  BAD - Light blue, insufficient contrast
-Text(
-    text = "Click here",
-    color = Color(0xFF4FC3F7), // Light blue
-    modifier = Modifier
-        .clickable { }
-        .background(Color.White)
-)
-// Contrast: 2.9:1
-
-//  GOOD - Darker blue
-Text(
-    text = "Click here",
-    color = Color(0xFF0277BD), // Dark blue
-    modifier = Modifier
-        .clickable { }
-        .background(Color.White)
-)
-// Contrast: 4.5:1
-
-//  BETTER - Use Material colors
-Text(
-    text = "Click here",
-    color = MaterialTheme.colorScheme.primary,
-    modifier = Modifier
-        .clickable { }
-        .background(MaterialTheme.colorScheme.background)
-)
-```
-
-**3. Status indicators relying only on color**:
-
-```kotlin
-//  BAD - Only color differentiation
-Row {
-    Text("Success", color = Color.Green)
-    Text("Warning", color = Color.Yellow)
-    Text("Error", color = Color.Red)
-}
-// Problems:
-// 1. Color blind users can't distinguish
-// 2. May not have sufficient contrast
-
-//  GOOD - Add icons + sufficient contrast
-Row {
-    Row {
-        Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF2E7D32)) // Dark green
-        Text("Success", color = Color(0xFF2E7D32))
-    }
-    Row {
-        Icon(Icons.Default.Warning, null, tint = Color(0xFFF57C00)) // Dark orange
-        Text("Warning", color = Color(0xFFF57C00))
-    }
-    Row {
-        Icon(Icons.Default.Error, null, tint = Color(0xFFC62828)) // Dark red
-        Text("Error", color = Color(0xFFC62828))
-    }
-}
-
-//  BETTER - Use Material semantic colors
-Row {
-    Row {
-        Icon(Icons.Default.CheckCircle, null, tint = MaterialTheme.colorScheme.tertiary)
-        Text("Success", color = MaterialTheme.colorScheme.tertiary)
-    }
-    Row {
-        Icon(Icons.Default.Error, null, tint = MaterialTheme.colorScheme.error)
-        Text("Error", color = MaterialTheme.colorScheme.error)
-    }
-}
-```
-
-**4. Disabled states**:
-
-```kotlin
-//  BAD - Disabled text might not have contrast
-Button(
-    onClick = {},
-    enabled = false,
-    colors = ButtonDefaults.buttonColors(
-        disabledContainerColor = Color.LightGray,
-        disabledContentColor = Color.Gray
-    )
-) {
-    Text("Disabled")
-}
-// May not meet 4.5:1 ratio
-
-//  GOOD - Material provides accessible disabled states
-Button(
-    onClick = {},
-    enabled = false
-    // Material colors automatically ensure contrast
-) {
-    Text("Disabled")
-}
-
-// Note: WCAG allows lower contrast for disabled elements (no requirement)
-// But best practice is to maintain readability
-```
-
-### Dark Theme Considerations
-
-```kotlin
+// ✅ Форма + иконка + цвет
 @Composable
-fun DarkThemeContrast() {
-    //  BAD - Same colors in both themes
-    val textColor = Color.Black
-    val backgroundColor = Color.White
-    // Inverted in dark theme = poor contrast!
-
-    //  GOOD - Different colors per theme
-    val textColor = if (isSystemInDarkTheme()) {
-        Color(0xFFE0E0E0) // Light gray for dark theme
-    } else {
-        Color(0xFF212121) // Dark gray for light theme
-    }
-
-    //  BETTER - Use Material dynamic colors
-    Text(
-        text = "Content",
-        color = MaterialTheme.colorScheme.onBackground,
-        modifier = Modifier.background(MaterialTheme.colorScheme.background)
-    )
-}
-
-// Custom color scheme
-val LightColorScheme = lightColorScheme(
-    primary = Color(0xFF6200EE),
-    onPrimary = Color.White, // Ensures contrast
-    // ...
-)
-
-val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFFBB86FC),
-    onPrimary = Color.Black, // Ensures contrast
-    // ...
-)
-
-@Composable
-fun AppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
-) {
-    MaterialTheme(
-        colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
-        content = content
-    )
-}
-```
-
-### Color Blindness Simulation
-
-**Types of color blindness:**
-```
-Deuteranopia (red-green, most common):
-  - Can't distinguish red from green
-  - Affects ~5% of males, ~0.5% of females
-
-Protanopia (red-green):
-  - Similar to deuteranopia
-  - Affects ~1% of males
-
-Tritanopia (blue-yellow, rare):
-  - Can't distinguish blue from yellow
-  - Affects ~0.01% of population
-
-Achromatopsia (complete):
-  - No color vision (grayscale only)
-  - Very rare (~0.003%)
-```
-
-**Testing for color blindness**:
-
-```kotlin
-// Simulator function (simplified)
-object ColorBlindnessSimulator {
-
-    fun simulateDeuteranopia(color: Color): Color {
-        // Simplified deuteranopia simulation
-        // Real implementation would use matrices
-        return Color(
-            red = 0.625f * color.red + 0.375f * color.green,
-            green = 0.7f * color.red + 0.3f * color.green,
-            blue = color.blue,
-            alpha = color.alpha
-        )
-    }
-
-    fun simulateProtanopia(color: Color): Color {
-        return Color(
-            red = 0.567f * color.red + 0.433f * color.green,
-            green = 0.558f * color.red + 0.442f * color.green,
-            blue = color.blue,
-            alpha = color.alpha
-        )
-    }
-
-    fun simulateTritanopia(color: Color): Color {
-        return Color(
-            red = color.red,
-            green = 0.95f * color.green + 0.05f * color.blue,
-            blue = 0.433f * color.green + 0.567f * color.blue,
-            alpha = color.alpha
-        )
-    }
-
-    fun simulateAchromatopsia(color: Color): Color {
-        val gray = 0.299f * color.red + 0.587f * color.green + 0.114f * color.blue
-        return Color(gray, gray, gray, color.alpha)
-    }
-}
-
-@Preview
-@Composable
-fun ColorBlindnessPreview() {
-    Column {
-        // Original
-        ColorSwatch(Color.Red, "Original Red")
-
-        // Simulations
-        ColorSwatch(
-            ColorBlindnessSimulator.simulateDeuteranopia(Color.Red),
-            "Deuteranopia"
-        )
-        ColorSwatch(
-            ColorBlindnessSimulator.simulateProtanopia(Color.Red),
-            "Protanopia"
-        )
-    }
-}
-```
-
-**Design for color blindness:**
-
-```kotlin
-//  BAD - Only color to convey meaning
-@Composable
-fun BadStatus() {
-    Row {
-        Box(Modifier.size(16.dp).background(Color.Green))
-        Text("Available")
-    }
-    Row {
-        Box(Modifier.size(16.dp).background(Color.Red))
-        Text("Offline")
-    }
-}
-// Red and green look the same to color blind users!
-
-//  GOOD - Use icons + color
-@Composable
-fun GoodStatus() {
-    Row {
-        Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF2E7D32))
-        Text("Available")
-    }
-    Row {
-        Icon(Icons.Default.Cancel, null, tint = Color(0xFFC62828))
-        Text("Offline")
-    }
-}
-
-//  BETTER - Use patterns + icons + color
-@Composable
-fun BestStatus(isOnline: Boolean) {
+fun StatusIndicator(isOnline: Boolean) {
     Row {
         Box(
-            modifier = Modifier
+            Modifier
                 .size(16.dp)
                 .background(
                     color = if (isOnline) Color(0xFF2E7D32) else Color(0xFFC62828),
@@ -408,180 +165,197 @@ fun BestStatus(isOnline: Boolean) {
         )
         Icon(
             imageVector = if (isOnline) Icons.Default.CheckCircle else Icons.Default.Cancel,
-            contentDescription = null,
-            tint = if (isOnline) Color(0xFF2E7D32) else Color(0xFFC62828)
+            contentDescription = null
         )
-        Text(if (isOnline) "Available" else "Offline")
+        Text(if (isOnline) "Online" else "Offline")
     }
 }
-```
-
-### Focus Indicators
-
-```kotlin
-//  GOOD - Visible focus indicator with sufficient contrast
-@Composable
-fun FocusableButton() {
-    var isFocused by remember { mutableStateOf(false) }
-
-    Button(
-        onClick = {},
-        modifier = Modifier
-            .onFocusChanged { isFocused = it.isFocused }
-            .border(
-                width = if (isFocused) 3.dp else 0.dp,
-                color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(8.dp)
-            )
-    ) {
-        Text("Focusable Button")
-    }
-}
-
-// Focus indicator contrast must be at least 3:1 against adjacent colors
 ```
 
 ### Best Practices
 
-1. **Use Material Color Roles**
-   ```kotlin
-   //  GOOD - Guaranteed contrast
-   Text(
-       text = "Content",
-       color = MaterialTheme.colorScheme.onPrimary,
-       modifier = Modifier.background(MaterialTheme.colorScheme.primary)
-   )
+1. **Используйте Material цветовые роли** — они гарантируют контраст
+2. **Не полагайтесь только на цвет** — добавляйте иконки, формы, текст
+3. **Тестируйте в темной теме** — используйте `@Preview(uiMode = UI_MODE_NIGHT_YES)`
+4. **Автоматизируйте проверки** — добавьте тесты контраста в CI
+5. **Проверяйте Accessibility Scanner** — регулярно сканируйте экраны
 
-   //  BAD - Manual colors without checking
-   Text(
-       text = "Content",
-       color = Color.White,
-       modifier = Modifier.background(Color(0xFFCCCCCC))
-   )
-   ```
+---
 
-2. **Test with Accessibility Scanner**
-   ```
-    Run Accessibility Scanner on every screen
-    Fix all contrast violations
-    Re-test after fixes
-   ```
+## Answer (EN)
 
-3. **Don't Rely on Color Alone**
-   ```kotlin
-   //  GOOD - Icons + text + color
-   Row {
-       Icon(Icons.Default.Error, null)
-       Text("Error message", color = Color.Red)
-   }
+[[c-accessibility|Color contrast]] is the luminance ratio between text and background. WCAG requires minimum **4.5:1** for normal text (level AA) and **7:1** for AAA. Material Design automatically ensures sufficient contrast through its color role system.
 
-   //  BAD - Only color
-   Text("Error message", color = Color.Red)
-   ```
+### WCAG Requirements
 
-4. **Test in Dark Mode**
-   ```kotlin
-   //  GOOD - Test both themes
-   @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-   @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-   @Composable
-   fun MyScreenPreview() {
-       AppTheme {
-           MyScreen()
-       }
-   }
-   ```
+```kotlin
+// WCAG AA (minimum):
+// Normal text (< 18pt):  4.5:1
+// Large text (≥ 18pt):   3:1
 
-5. **Automate Contrast Checks**
-   ```kotlin
-   //  GOOD - Test contrast in CI
-   @Test
-   fun testAllColorPairsHaveSufficientContrast() {
-       val colorPairs = listOf(
-           Color.Black to Color.White,
-           Color(0xFF757575) to Color.White,
-           // ... all color pairs used in app
-       )
+// WCAG AAA (enhanced):
+// Normal text:  7:1
+// Large text:   4.5:1
 
-       colorPairs.forEach { (fg, bg) ->
-           val ratio = ContrastChecker.contrastRatio(fg, bg)
-           assertTrue(
-               "Insufficient contrast: $fg on $bg = ${String.format("%.2f", ratio)}:1",
-               ratio >= 4.5
-           )
-       }
-   }
-   ```
+// Examples:
+// Black on white:    21:1  (excellent)
+// #757575 on white:  4.6:1 (passes AA)
+// #959595 on white:  2.8:1 (fails)
+```
 
-### Tools for Checking Contrast
+### Material Color Roles
 
-1. **Android Studio**:
-   - Color picker shows contrast ratio
-   - Warning for insufficient contrast
+```kotlin
+@Composable
+fun MaterialColorExample() {
+    // ✅ Material automatically guarantees contrast
+    Surface(color = MaterialTheme.colorScheme.primary) {
+        Text(
+            text = "Button",
+            color = MaterialTheme.colorScheme.onPrimary // Guaranteed 4.5:1
+        )
+    }
+}
 
-2. **Accessibility Scanner** (Android app):
-   - Scans running app
-   - Identifies contrast issues
-   - Provides suggestions
+// Key pairs:
+// primary / onPrimary
+// surface / onSurface
+// background / onBackground
+// error / onError
+```
 
-3. **Online tools**:
-   - WebAIM Contrast Checker
-   - Contrast Ratio
-   - Who Can Use
+### Common Violations
 
-4. **Browser extensions**:
-   - Axe DevTools
-   - WAVE
+**1. Light text on light background:**
 
-### Summary
+```kotlin
+// ❌ Insufficient contrast (1.6:1)
+Text(
+    text = "Secondary",
+    color = Color(0xFFCCCCCC),
+    modifier = Modifier.background(Color.White)
+)
 
-**WCAG requirements:**
-- Normal text (< 18pt): 4.5:1 (AA), 7:1 (AAA)
-- Large text (≥ 18pt): 3:1 (AA), 4.5:1 (AAA)
-- Focus indicators: 3:1
+// ✅ Sufficient contrast (4.6:1)
+Text(
+    text = "Secondary",
+    color = MaterialTheme.colorScheme.onSurfaceVariant,
+    modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+)
+```
 
-**Key principles:**
-- Use Material color roles (automatic contrast)
-- Test with Accessibility Scanner
-- Don't rely on color alone
-- Test in dark mode
-- Consider color blindness
-- Automate contrast checks in CI
+**2. Using color alone to convey information:**
 
-**Common violations:**
-- Light gray on white
-- Light blue links
-- Status colors only (no icons)
-- Same colors in both themes
+```kotlin
+// ❌ Color blind users cannot distinguish
+Row {
+    Text("Success", color = Color.Green)
+    Text("Error", color = Color.Red)
+}
 
-**Solutions:**
-- Use Material `colorScheme.onPrimary`, `onSurface`, etc.
-- Add icons to color indicators
-- Test with color blindness simulators
-- Verify 4.5:1 ratio for all text
+// ✅ Icons + color + text
+Row {
+    Icon(Icons.Default.CheckCircle, null, tint = MaterialTheme.colorScheme.tertiary)
+    Text("Success", color = MaterialTheme.colorScheme.tertiary)
+}
+Row {
+    Icon(Icons.Default.Error, null, tint = MaterialTheme.colorScheme.error)
+    Text("Error", color = MaterialTheme.colorScheme.error)
+}
+```
+
+**3. Same colors for light and dark theme:**
+
+```kotlin
+// ❌ Dark theme will break contrast
+val textColor = Color(0xFF212121) // Dark text
+
+// ✅ Material adapts colors to theme
+Text(
+    text = "Content",
+    color = MaterialTheme.colorScheme.onBackground,
+    modifier = Modifier.background(MaterialTheme.colorScheme.background)
+)
+```
+
+### Testing
+
+```kotlin
+// Automated contrast check
+@Test
+fun testColorContrast() {
+    val foreground = Color(0xFF757575)
+    val background = Color.White
+    val ratio = ContrastChecker.contrastRatio(foreground, background)
+
+    assertTrue("Contrast $ratio:1 does not meet AA (4.5:1)", ratio >= 4.5)
+}
+```
+
+**Tools:**
+- **Accessibility Scanner** (Android app) — scans running app
+- **Android Studio** — color picker shows contrast ratio
+- **WebAIM Contrast Checker** — online validation
+
+### Color Blindness
+
+About 8% of men and 0.5% of women have color vision deficiency. Don't rely on color alone:
+
+```kotlin
+// ✅ Shape + icon + color
+@Composable
+fun StatusIndicator(isOnline: Boolean) {
+    Row {
+        Box(
+            Modifier
+                .size(16.dp)
+                .background(
+                    color = if (isOnline) Color(0xFF2E7D32) else Color(0xFFC62828),
+                    shape = if (isOnline) CircleShape else RoundedCornerShape(2.dp)
+                )
+        )
+        Icon(
+            imageVector = if (isOnline) Icons.Default.CheckCircle else Icons.Default.Cancel,
+            contentDescription = null
+        )
+        Text(if (isOnline) "Online" else "Offline")
+    }
+}
+```
+
+### Best Practices
+
+1. **Use Material color roles** — they guarantee contrast
+2. **Don't rely on color alone** — add icons, shapes, text
+3. **Test in dark theme** — use `@Preview(uiMode = UI_MODE_NIGHT_YES)`
+4. **Automate checks** — add contrast tests to CI
+5. **Run Accessibility Scanner** — regularly scan screens
 
 ---
 
 ## Follow-ups
 
-- What happens if you use custom colors without checking contrast?
-- How does this issue affect users with different types of color blindness?
-- What's the difference between WCAG AA and AAA requirements?
-- How do you test contrast in automated UI tests?
-- What tools can help detect contrast issues in CI/CD?
+- How do you implement automated contrast testing in CI/CD pipeline?
+- What's the performance impact of color contrast calculations at runtime?
+- How to handle contrast requirements for custom dynamic themes?
+- What are the trade-offs between WCAG AA and AAA compliance?
+- How to test color contrast with color blindness simulators?
 
 ## References
 
-- [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
+- [[c-accessibility]]
+- [WCAG 2.1 Contrast Guidelines](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html)
 - [Material Design Color System](https://m3.material.io/foundations/color)
-- [Android Accessibility Guidelines](https://developer.android.com/guide/topics/ui/accessibility)
-- [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
+- [Android Accessibility](https://developer.android.com/guide/topics/ui/accessibility)
 
 ## Related Questions
 
+### Prerequisites (Easier)
+- [[q-accessibility-compose--android--medium]] - Basic accessibility in Compose
+
 ### Related (Medium)
-- [[q-accessibility-compose--android--medium]] - Accessibility
-- [[q-accessibility-testing--android--medium]] - Accessibility
-- [[q-custom-view-accessibility--android--medium]] - Accessibility
-- [[q-accessibility-talkback--android--medium]] - Accessibility
-- [[q-accessibility-text-scaling--android--medium]] - Accessibility
+- [[q-accessibility-testing--android--medium]] - Accessibility testing approaches
+- [[q-custom-view-accessibility--android--medium]] - Custom view accessibility
+
+### Advanced (Harder)
+- [[q-accessibility-talkback--android--medium]] - TalkBack implementation details

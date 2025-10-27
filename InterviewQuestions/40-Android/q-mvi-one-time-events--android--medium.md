@@ -1,86 +1,79 @@
 ---
 id: 20251017-144924
-title: "Mvi One Time Events / Одноразовые события в MVI"
+title: "MVI One-Time Events / Одноразовые события в MVI"
+aliases: ["MVI One-Time Events", "Одноразовые события в MVI", "One-time events in MVI", "SharedFlow для событий"]
 topic: android
+subtopics: [architecture-mvi]
+question_kind: android
 difficulty: medium
+original_language: ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-graphql-vs-rest--networking--easy, q-test-coverage-quality-metrics--testing--medium, q-how-to-display-svg-string-as-a-vector-file--android--medium]
+related: [c-viewmodel, c-lifecycle, q-mvi-architecture--android--hard]
 created: 2025-10-15
-tags: [mvi, architecture, state-management, events, difficulty/medium]
+updated: 2025-01-27
+sources: []
+tags: [android/architecture-mvi, mvi, architecture, events, difficulty/medium]
+---
+# Вопрос (RU)
+
+> Как обработать одноразовые события (one-time events) в MVI архитектуре?
+
+# Question (EN)
+
+> How to handle one-time events in MVI architecture?
+
 ---
 
-# MVI: Обработка одноразовых событий (One-time Events)
+## Ответ (RU)
 
-**English**: How to handle one-time events in MVI architecture?
+В MVI State должен быть immutable и содержать только постоянные UI данные. Одноразовые события (navigation, toasts, snackbars) обрабатываются отдельно через **SharedFlow** с `replay = 0` или **Channel**.
 
-## Answer (EN)
-В MVI (Model-View-Intent) State должен быть immutable и содержать только UI состояние. Но некоторые события (navigation, toasts, snackbars) не должны сохраняться в State и повторяться при пересоздании экрана. Существует несколько паттернов для их обработки.
-
-### The Problem
+**Проблема**: хранение событий в State приводит к их повторному срабатыванию при пересоздании экрана.
 
 ```kotlin
-// - НЕПРАВИЛЬНО - событие в State
+// ❌ Неправильно - событие в State
 data class UiState(
     val isLoading: Boolean = false,
-    val data: List<Item> = emptyList(),
-    val showSuccessToast: Boolean = false  // Проблема!
+    val showSuccessToast: Boolean = false  // При повороте toast покажется снова
 )
-
-// При пересоздании Activity toast покажется снова
 ```
 
-### Solution 1: SharedFlow with replay = 0
-
-Рекомендуемый подход для Kotlin Coroutines.
+**Решение 1: SharedFlow (рекомендуется для Compose)**
 
 ```kotlin
 sealed class UiEvent {
     data class ShowToast(val message: String) : UiEvent()
     data class Navigate(val route: String) : UiEvent()
-    data class ShowError(val error: String) : UiEvent()
 }
 
 data class UiState(
     val isLoading: Boolean = false,
     val data: List<Item> = emptyList()
-    // Никаких одноразовых событий здесь!
+    // ✅ Никаких одноразовых событий
 )
 
-@HiltViewModel
-class UserViewModel @Inject constructor(
-    private val repository: UserRepository
-) : ViewModel() {
-
+class UserViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    // SharedFlow для одноразовых событий
+    // ✅ SharedFlow для событий с replay = 0
     private val _events = MutableSharedFlow<UiEvent>()
     val events: SharedFlow<UiEvent> = _events.asSharedFlow()
 
     fun loadUsers() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-
             repository.getUsers()
                 .onSuccess { users ->
-                    _uiState.update {
-                        it.copy(isLoading = false, data = users)
-                    }
-                    // Одноразовое событие
+                    _uiState.update { it.copy(isLoading = false, data = users) }
                     _events.emit(UiEvent.ShowToast("Loaded ${users.size} users"))
                 }
                 .onFailure { error ->
                     _uiState.update { it.copy(isLoading = false) }
-                    _events.emit(UiEvent.ShowError(error.message ?: "Unknown error"))
+                    _events.emit(UiEvent.ShowError(error.message ?: "Error"))
                 }
-        }
-    }
-
-    fun navigateToDetails(itemId: Int) {
-        viewModelScope.launch {
-            _events.emit(UiEvent.Navigate("details/$itemId"))
         }
     }
 }
@@ -94,78 +87,38 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    // Подписка на события
+    // ✅ LaunchedEffect для событий
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 is UiEvent.ShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
-                is UiEvent.ShowError -> {
-                    // Показать error dialog
-                }
-                is UiEvent.Navigate -> {
-                    // Навигация
-                }
+                is UiEvent.Navigate -> { /* Навигация */ }
             }
         }
     }
 
-    // UI на основе state
-    when {
-        uiState.isLoading -> LoadingScreen()
-        else -> UserList(users = uiState.data)
-    }
+    if (uiState.isLoading) LoadingScreen() else UserList(uiState.data)
 }
 ```
 
-**В UI (Fragment/Activity)**:
+**В UI (Views)**:
 
 ```kotlin
 class UserFragment : Fragment() {
-    private val viewModel: UserViewModel by viewModels()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Подписка на state
+        // ✅ repeatOnLifecycle для событий
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    updateUI(state)
-                }
-            }
-        }
-
-        // Подписка на события
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.events.collect { event ->
-                    handleEvent(event)
-                }
-            }
-        }
-    }
-
-    private fun handleEvent(event: UiEvent) {
-        when (event) {
-            is UiEvent.ShowToast -> {
-                Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
-            }
-            is UiEvent.Navigate -> {
-                findNavController().navigate(event.route)
-            }
-            is UiEvent.ShowError -> {
-                Snackbar.make(requireView(), event.error, Snackbar.LENGTH_LONG).show()
+                viewModel.events.collect { event -> handleEvent(event) }
             }
         }
     }
 }
 ```
 
-### Solution 2: Channel
-
-Альтернатива SharedFlow - более простой API.
+**Решение 2: Channel (проще для single subscriber)**
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -174,334 +127,205 @@ class UserViewModel : ViewModel() {
 
     fun loadUsers() {
         viewModelScope.launch {
-            try {
-                val users = repository.getUsers()
-                _events.send(UiEvent.ShowToast("Success"))
-            } catch (e: Exception) {
-                _events.send(UiEvent.ShowError(e.message ?: "Error"))
-            }
+            _events.send(UiEvent.ShowToast("Success"))
         }
-    }
-}
-
-// В UI - то же самое
-LaunchedEffect(Unit) {
-    viewModel.events.collect { event ->
-        // Handle event
     }
 }
 ```
 
-### Solution 3: SingleLiveEvent (LiveData)
+**Сравнение подходов**:
 
-Для проектов на LiveData.
+| Подход | Плюсы | Минусы | Use Case |
+|--------|-------|--------|----------|
+| **SharedFlow** | Множественные подписчики, контроль replay | Чуть сложнее API | Compose, современные проекты |
+| **Channel** | Простой API, FIFO гарантия | Только один подписчик | Простые случаи |
 
-```kotlin
-class SingleLiveEvent<T> : MutableLiveData<T>() {
-    private val pending = AtomicBoolean(false)
+**Best Practices**:
 
-    override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
-        super.observe(owner) { t ->
-            if (pending.compareAndSet(true, false)) {
-                observer.onChanged(t)
-            }
-        }
-    }
-
-    override fun setValue(value: T?) {
-        pending.set(true)
-        super.setValue(value)
-    }
-}
-
-// ViewModel
-class UserViewModel : ViewModel() {
-    private val _toastEvent = SingleLiveEvent<String>()
-    val toastEvent: LiveData<String> = _toastEvent
-
-    fun loadUsers() {
-        viewModelScope.launch {
-            try {
-                val users = repository.getUsers()
-                _toastEvent.value = "Loaded ${users.size} users"
-            } catch (e: Exception) {
-                _toastEvent.value = "Error: ${e.message}"
-            }
-        }
-    }
-}
-
-// В Activity/Fragment
-viewModel.toastEvent.observe(viewLifecycleOwner) { message ->
-    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-}
-```
-
-### Solution 4: Consumed Event Wrapper
-
-Для StateFlow - обертка с флагом "consumed".
-
-```kotlin
-data class Event<out T>(
-    private val content: T,
-    private val id: String = UUID.randomUUID().toString()
-) {
-    private var hasBeenHandled = false
-
-    fun getContentIfNotHandled(): T? {
-        return if (hasBeenHandled) {
-            null
-        } else {
-            hasBeenHandled = true
-            content
-        }
-    }
-
-    fun peekContent(): T = content
-}
-
-// ViewModel
-data class UiState(
-    val isLoading: Boolean = false,
-    val data: List<Item> = emptyList(),
-    val toastEvent: Event<String>? = null
-)
-
-class UserViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    fun loadUsers() {
-        viewModelScope.launch {
-            try {
-                val users = repository.getUsers()
-                _uiState.update {
-                    it.copy(
-                        data = users,
-                        toastEvent = Event("Loaded ${users.size} users")
-                    )
-                }
-            } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(toastEvent = Event("Error: ${e.message}"))
-                }
-            }
-        }
-    }
-}
-
-// В UI
-LaunchedEffect(uiState.toastEvent) {
-    uiState.toastEvent?.getContentIfNotHandled()?.let { message ->
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-    }
-}
-```
-
-### Comparison of Approaches
-
-| Подход | Pros | Cons | Use Case |
-|--------|------|------|----------|
-| **SharedFlow** | - Идиоматично для Flow<br>- Replay control<br>- Multiple subscribers | WARNING: Чуть сложнее API | - Рекомендуется для Compose |
-| **Channel** | - Простой API<br>- FIFO гарантия | WARNING: Только один subscriber | - Простые случаи |
-| **SingleLiveEvent** | - Работает с LiveData<br>- Lifecycle-aware | - Устаревший подход<br>- Thread-safety issues | WARNING: Legacy проекты |
-| **Event Wrapper** | - Все в одном State | - Boilerplate код<br>- Мутабельный hasBeenHandled | WARNING: Простые приложения |
-
-### Best Practices
-
-**1. Разделяйте State и Events**
-
-```kotlin
-// - ПРАВИЛЬНО
-data class UiState(
-    val data: List<Item>,        // Состояние
-    val isLoading: Boolean        // Состояние
-)
-
-sealed class UiEvent {
-    data class ShowToast(val msg: String) : UiEvent()  // Событие
-    object NavigateBack : UiEvent()                     // Событие
-}
-
-// - НЕПРАВИЛЬНО - смешивание
-data class UiState(
-    val data: List<Item>,
-    val isLoading: Boolean,
-    val showToast: Boolean,        // Событие в State!
-    val navigationRoute: String?   // Событие в State!
-)
-```
-
-**2. Используйте правильный scope для подписки**
-
-```kotlin
-// - ПРАВИЛЬНО - repeatOnLifecycle
-viewLifecycleOwner.lifecycleScope.launch {
-    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-        viewModel.events.collect { event ->
-            handleEvent(event)
-        }
-    }
-}
-
-// - НЕПРАВИЛЬНО - события могут потеряться
-lifecycleScope.launch {
-    viewModel.events.collect { event ->
-        handleEvent(event)  // Не вызовется если Fragment в background
-    }
-}
-```
-
-**3. Тестируйте события**
+1. **Разделяйте State и Events**: State - постоянные данные, Events - одноразовые действия
+2. **Правильный scope**: `LaunchedEffect(Unit)` в Compose, `repeatOnLifecycle` в Views
+3. **Тестируйте события**: собирайте в список, проверяйте наличие ожидаемых событий
 
 ```kotlin
 @Test
-fun `when load fails should emit error event`() = runTest {
-    // Given
-    val errorMessage = "Network error"
-    coEvery { repository.getUsers() } throws Exception(errorMessage)
+fun `loadUsers failure emits error event`() = runTest {
+    coEvery { repository.getUsers() } throws Exception("Error")
 
     val events = mutableListOf<UiEvent>()
-    val job = launch {
-        viewModel.events.collect { events.add(it) }
-    }
+    val job = launch { viewModel.events.collect { events.add(it) } }
 
-    // When
     viewModel.loadUsers()
-
-    // Then
     advanceUntilIdle()
-    assertTrue(events.any { it is UiEvent.ShowError })
 
+    assertTrue(events.any { it is UiEvent.ShowError })
     job.cancel()
 }
 ```
 
-**English**: In MVI, handle one-time events (toasts, navigation) separately from State. Use **SharedFlow** with `replay = 0` (recommended for Compose), **Channel** for simpler cases, **SingleLiveEvent** for LiveData legacy projects, or **Event wrapper** with consumed flag. State should only contain persistent UI data. Events are ephemeral and consumed once. Collect events in `LaunchedEffect` (Compose) or `repeatOnLifecycle` (Views). Test events with `turbine` or manual collection.
+## Answer (EN)
 
----
+In MVI, State should be immutable and contain only persistent UI data. One-time events (navigation, toasts, snackbars) are handled separately via **SharedFlow** with `replay = 0` or **Channel**.
 
-## Ответ (RU)
+**Problem**: storing events in State causes them to re-trigger on screen recreation.
 
-В MVI (Model-View-Intent) одноразовые события (navigation, toasts, snackbars) обрабатываются отдельно от State. **Рекомендуемое решение:** использовать **SharedFlow** с `replay = 0` для Compose или **Channel** для простых случаев. State содержит только постоянные UI данные, события - эфемерные и обрабатываются один раз.
-
-**Основные подходы:**
-1. **SharedFlow (replay = 0)** - рекомендуется для Compose, поддержка множественных подписчиков
-2. **Channel** - простой API, FIFO гарантия, только один подписчик
-3. **SingleLiveEvent** - для legacy LiveData проектов (устарел)
-4. **Event Wrapper** - обёртка с consumed флагом (больше boilerplate)
-
-**Лучшие практики:** разделяйте State и Events, собирайте события в `LaunchedEffect` (Compose) или `repeatOnLifecycle` (Views), тестируйте события независимо.
-
-### Проблема
-
-В MVI (Model-View-Intent) State должен быть immutable и содержать только UI состояние, которое может быть восстановлено. Однако некоторые события (navigation, toasts, snackbars, dialogs) не должны сохраняться в State и повторяться при пересоздании экрана (например, при повороте).
-
-**Неправильный подход** - хранение событий в State:
 ```kotlin
+// ❌ Wrong - event in State
 data class UiState(
     val isLoading: Boolean = false,
-    val data: List<Item> = emptyList(),
-    val showSuccessToast: Boolean = false  // Проблема!
+    val showSuccessToast: Boolean = false  // Toast shows again on rotation
 )
-// При пересоздании Activity toast покажется снова
 ```
 
-### Решение 1: SharedFlow с replay = 0 (Рекомендуется)
+**Solution 1: SharedFlow (recommended for Compose)**
 
-Наиболее идиоматичный подход для Kotlin Coroutines и Jetpack Compose.
+```kotlin
+sealed class UiEvent {
+    data class ShowToast(val message: String) : UiEvent()
+    data class Navigate(val route: String) : UiEvent()
+}
 
-**Преимущества:**
-- Поддержка нескольких подписчиков
-- Контроль над replay (кэшированием)
-- Интеграция с Flow экосистемой
+data class UiState(
+    val isLoading: Boolean = false,
+    val data: List<Item> = emptyList()
+    // ✅ No one-time events
+)
 
-**Реализация:**
-- Создайте sealed class для событий
-- Используйте MutableSharedFlow<UiEvent> с replay = 0
-- Подписывайтесь через LaunchedEffect в Compose или repeatOnLifecycle в Views
+class UserViewModel @Inject constructor() : ViewModel() {
+    private val _uiState = MutableStateFlow(UiState())
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-### Решение 2: Channel
+    // ✅ SharedFlow for events with replay = 0
+    private val _events = MutableSharedFlow<UiEvent>()
+    val events: SharedFlow<UiEvent> = _events.asSharedFlow()
 
-Более простой API для случаев с одним подписчиком.
+    fun loadUsers() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            repository.getUsers()
+                .onSuccess { users ->
+                    _uiState.update { it.copy(isLoading = false, data = users) }
+                    _events.emit(UiEvent.ShowToast("Loaded ${users.size} users"))
+                }
+                .onFailure { error ->
+                    _uiState.update { it.copy(isLoading = false) }
+                    _events.emit(UiEvent.ShowError(error.message ?: "Error"))
+                }
+        }
+    }
+}
+```
 
-**Преимущества:**
-- Простота использования
-- FIFO гарантия доставки
-- Меньше boilerplate
+**In UI (Compose)**:
 
-**Недостатки:**
-- Только один подписчик (suspend функция receive())
-- Меньше гибкости чем SharedFlow
+```kotlin
+@Composable
+fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
-### Решение 3: SingleLiveEvent
+    // ✅ LaunchedEffect for events
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is UiEvent.ShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+                is UiEvent.Navigate -> { /* Navigation */ }
+            }
+        }
+    }
 
-Для legacy проектов на LiveData.
+    if (uiState.isLoading) LoadingScreen() else UserList(uiState.data)
+}
+```
 
-**Предупреждение:** Устаревший подход, не рекомендуется для новых проектов. Имеет проблемы с thread-safety и может терять события при множественных обсерверах.
+**In UI (Views)**:
 
-### Решение 4: Event Wrapper с consumed flag
+```kotlin
+class UserFragment : Fragment() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // ✅ repeatOnLifecycle for events
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.events.collect { event -> handleEvent(event) }
+            }
+        }
+    }
+}
+```
 
-Оборачивание событий в State с флагом "consumed".
+**Solution 2: Channel (simpler for single subscriber)**
 
-**Недостатки:**
-- Больше boilerplate кода
-- Мутабельное состояние (hasBeenHandled)
-- Сложнее тестировать
+```kotlin
+class UserViewModel : ViewModel() {
+    private val _events = Channel<UiEvent>()
+    val events = _events.receiveAsFlow()
 
-### Сравнение подходов
+    fun loadUsers() {
+        viewModelScope.launch {
+            _events.send(UiEvent.ShowToast("Success"))
+        }
+    }
+}
+```
 
-| Подход | Когда использовать | Плюсы | Минусы |
-|--------|-------------------|-------|--------|
-| **SharedFlow** | Compose, современные проекты | Множественные подписчики, контроль replay | Чуть сложнее API |
-| **Channel** | Простые случаи, один подписчик | Простой API, FIFO | Только один подписчик |
-| **SingleLiveEvent** | Legacy LiveData проекты | Lifecycle-aware | Устаревший, thread-safety issues |
-| **Event Wrapper** | Простые приложения | Всё в одном State | Boilerplate, мутабельность |
+**Comparison**:
 
-### Лучшие практики
+| Approach | Pros | Cons | Use Case |
+|----------|------|------|----------|
+| **SharedFlow** | Multiple subscribers, replay control | Slightly complex API | Compose, modern projects |
+| **Channel** | Simple API, FIFO guarantee | Single subscriber only | Simple cases |
 
-**1. Чёткое разделение State и Events:**
-- **State** - данные, которые нужно восстановить (данные списка, флаги загрузки)
-- **Events** - одноразовые действия (навигация, toasts, dialogs)
+**Best Practices**:
 
-**2. Правильный scope для подписки:**
-- В Compose: `LaunchedEffect(Unit)` для collect событий
-- В Views: `repeatOnLifecycle(Lifecycle.State.STARTED)` для избежания утечек
+1. **Separate State and Events**: State - persistent data, Events - one-time actions
+2. **Correct scope**: `LaunchedEffect(Unit)` in Compose, `repeatOnLifecycle` in Views
+3. **Test events**: collect to list, verify expected events
 
-**3. Тестирование событий:**
-- Собирайте события в список во время теста
-- Проверяйте наличие ожидаемых событий
-- Используйте `advanceUntilIdle()` для завершения корутин
+```kotlin
+@Test
+fun `loadUsers failure emits error event`() = runTest {
+    coEvery { repository.getUsers() } throws Exception("Error")
 
-**4. Избегайте:**
-- Хранения одноразовых событий в State
-- Использования lifecycleScope напрямую (может терять события)
-- Множественных обсерверов для Channel
+    val events = mutableListOf<UiEvent>()
+    val job = launch { viewModel.events.collect { events.add(it) } }
 
-### Типичные use cases
+    viewModel.loadUsers()
+    advanceUntilIdle()
 
-- **Navigation**: Переходы между экранами
-- **Toasts/Snackbars**: Кратковременные уведомления
-- **Dialogs**: Показ модальных окон
-- **Permissions**: Запрос разрешений
-- **Analytics**: Логирование событий
+    assertTrue(events.any { it is UiEvent.ShowError })
+    job.cancel()
+}
+```
 
 ---
+
+## Follow-ups
+
+- How to handle events when multiple subscribers are needed?
+- What happens to events emitted before UI subscribes?
+- How to test SharedFlow vs Channel in ViewModels?
+- When to use `extraBufferCapacity` in SharedFlow?
+- How to prevent event loss during configuration changes?
+
+## References
+
+- [[c-viewmodel]] - ViewModel fundamentals
+- [[c-lifecycle]] - Android Lifecycle
 
 ## Related Questions
 
-### Hub
-- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+### Prerequisites
 
-### Related (Medium)
-- [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
+- [[q-what-is-viewmodel--android--medium]] - ViewModel basics
+- [[q-channel-flow-comparison--kotlin--medium]] - Channel vs Flow comparison
+
+### Related
+
 - [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
-- [[q-what-is-viewmodel--android--medium]] - What is ViewModel
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
-- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation
+- [[q-stateflow-flow-sharedflow-livedata--android--medium]] - StateFlow vs SharedFlow vs LiveData
 
-### Advanced (Harder)
-- [[q-mvi-architecture--android--hard]] - MVI architecture pattern
-- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
+### Advanced
+
+- [[q-mvi-architecture--android--hard]] - Full MVI architecture
 - [[q-offline-first-architecture--android--hard]] - Offline-first architecture
-

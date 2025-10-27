@@ -19,76 +19,79 @@ related:
   - q-compose-compiler-plugin--android--hard
   - q-compose-lazy-layout-optimization--android--hard
 created: 2025-10-20
-updated: 2025-10-20
+updated: 2025-01-27
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
-source: https://developer.android.com/jetpack/compose/performance
-source_note: Official Compose performance guide
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:52:37 pm
+sources: [https://developer.android.com/jetpack/compose/performance]
 ---
-
 # Вопрос (RU)
-> Оптимизация производительности Compose?
+> Как оптимизировать производительность Jetpack Compose?
 
 # Question (EN)
-> Compose Performance Optimization?
+> How to optimize Jetpack Compose performance?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+### Принципы
 
-## Answer (EN)
+- Минимизировать область рекомпозиции (наблюдать за гранулярным состоянием, разделять UI)
+- Использовать стабильные входные данные (immutable/@Stable) и стабильные колбэки
+- Вычислять значения заранее с помощью `remember`/`derivedStateOf`
+- Применять ключи и типы контента в lazy-списках для переиспользования
+- Избегать аллокаций в горячих путях; переиспользовать shapes/brushes/painters
+- Измерять и верифицировать инструментами; оптимизировать только подтвержденные узкие места
 
-### Principles
+### Ключевые паттерны
 
-- Minimize recomposition scope (observe granular state, split UI).
-- Prefer stable inputs (immutable/@Stable) and stable callbacks.
-- Precompute/derive values with `remember`/`derivedStateOf`.
-- Use keys and content types in lazy lists for reuse and diffing.
-- Avoid allocations in hot paths; reuse shapes/brushes/painters.
-- Measure and verify with tools; optimize only confirmed hotspots.
-- Apply [[c-algorithms]] for efficient state management and [[c-data-structures]] for optimal data organization.
-
-### Minimal Patterns
-
-Granular state observation
+**Гранулярное наблюдение состояния**
 
 ```kotlin
-// Observe fields separately to limit recomposition
+// ✅ Наблюдаем за полями раздельно — ограничивает рекомпозицию
 val title by vm.title.collectAsState()
 val body by vm.body.collectAsState()
 Header(title); Body(body)
+
+// ❌ Не наблюдаем за всем объектом сразу
+val state by vm.uiState.collectAsState()
+Screen(state)  // рекомпозирует весь экран при любом изменении
 ```
 
-Stable callbacks
+**Стабильные колбэки**
 
 ```kotlin
-// Avoid capturing changing state in lambdas
+// ✅ Избегаем захвата изменяемого состояния в лямбдах
 val onClick = remember { { vm.onClick() } }
 Button(onClick) { Text("Go") }
-// or method reference
+
+// ✅ Используем method reference
 Button(onClick = vm::onClick) { Text("Go") }
+
+// ❌ Захватываем переменную состояние — колбэк нестабилен
+var count by mutableStateOf(0)
+Button({ vm.onClick(count) }) { Text("Go") }
 ```
 
-Immutable/@Stable models
+**Immutable/@Stable модели**
 
 ```kotlin
+// ✅ Компилятор пропускает рекомпозицию при неизмененных данных
 @Immutable data class Product(val id: String, val name: String)
 @Stable class UiState { var selected by mutableStateOf<String?>(null) }
 ```
 
-Derived values
+**Вычисляемые значения**
 
 ```kotlin
+// ✅ derivedStateOf вычисляется только при изменении зависимости
 val listState = rememberLazyListState()
 val showFab by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
 ```
 
-Lazy reuse (keys, contentType)
+**Переиспользование в Lazy-списках**
 
 ```kotlin
+// ✅ Ключи и contentType ускоряют диффинг и переиспользование элементов
 LazyColumn {
   items(items = data, key = { it.id }, contentType = { it.type }) { item ->
     Row { Text(item.title) }
@@ -96,33 +99,92 @@ LazyColumn {
 }
 ```
 
-Avoid recomposition propagation
+### Инструменты измерения
+
+- Layout Inspector (счетчики рекомпозиции), Perfetto, tracing
+- Отслеживание jank и long frames; корреляция со всплесками рекомпозиций
+- Проверка пропуска рекомпозиций через compiler metrics
+
+## Answer (EN)
+
+### Principles
+
+- Minimize recomposition scope (observe granular state, split UI)
+- Prefer stable inputs (immutable/@Stable) and stable callbacks
+- Precompute/derive values with `remember`/`derivedStateOf`
+- Use keys and content types in lazy lists for reuse and diffing
+- Avoid allocations in hot paths; reuse shapes/brushes/painters
+- Measure and verify with tools; optimize only confirmed hotspots
+
+### Key Patterns
+
+**Granular state observation**
 
 ```kotlin
-// Do not pass frequently changing primitives down if not needed
-var counter by remember { mutableStateOf(0) }
-Button({ counter++ }) { Text("$counter") }
-ExpensiveChild() // independent of counter
+// ✅ Observe fields separately — limits recomposition
+val title by vm.title.collectAsState()
+val body by vm.body.collectAsState()
+Header(title); Body(body)
+
+// ❌ Don't observe entire object
+val state by vm.uiState.collectAsState()
+Screen(state)  // recomposes entire screen on any change
 ```
 
-Remember expensive work
+**Stable callbacks**
 
 ```kotlin
-val formatted = remember(price) { priceFormatter.format(price) }
-Text(formatted)
+// ✅ Avoid capturing changing state in lambdas
+val onClick = remember { { vm.onClick() } }
+Button(onClick) { Text("Go") }
+
+// ✅ Use method reference
+Button(onClick = vm::onClick) { Text("Go") }
+
+// ❌ Capturing state variable — callback is unstable
+var count by mutableStateOf(0)
+Button({ vm.onClick(count) }) { Text("Go") }
 ```
 
-### Measurement and Tooling
+**Immutable/@Stable models**
 
-- Use Layout Inspector (Recomposition counts), Perfetto, tracing.
-- Track jank and long frames; correlate with recomposition spikes.
-- Verify skips with compiler metrics (Compose compiler reports).
+```kotlin
+// ✅ Compiler skips recomposition when data unchanged
+@Immutable data class Product(val id: String, val name: String)
+@Stable class UiState { var selected by mutableStateOf<String?>(null) }
+```
+
+**Derived values**
+
+```kotlin
+// ✅ derivedStateOf recomputes only when dependency changes
+val listState = rememberLazyListState()
+val showFab by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
+```
+
+**Lazy list reuse**
+
+```kotlin
+// ✅ Keys and contentType accelerate diffing and item reuse
+LazyColumn {
+  items(items = data, key = { it.id }, contentType = { it.type }) { item ->
+    Row { Text(item.title) }
+  }
+}
+```
+
+### Measurement Tools
+
+- Layout Inspector (recomposition counts), Perfetto, tracing
+- Track jank and long frames; correlate with recomposition spikes
+- Verify skipping via compiler metrics
 
 ## Follow-ups
 
 - When to use `derivedStateOf` vs memoizing with `remember`?
 - How to validate stability/skippability using compiler metrics?
-- Strategies for large lazy lists (paging, prefetch, snapshots)?
+- Strategies for large lazy lists (paging, prefetch, item prefetch)?
+- How to prevent unnecessary recompositions in deeply nested hierarchies?
 
 ## References
 

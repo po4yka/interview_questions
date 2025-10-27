@@ -1,51 +1,34 @@
 ---
 id: 20251012-122779
 title: API File Upload Server / Загрузка файлов на сервер через API
-aliases: [API File Upload Server, Загрузка файлов на сервер через API]
+aliases: ["API File Upload Server", "Загрузка файлов на сервер через API"]
 topic: android
-subtopics:
-  - files-media
-  - networking-http
+subtopics: [files-media, networking-http]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-build-optimization--android--medium
-  - q-android-performance-measurement-tools--android--medium
-  - q-android-testing-strategies--android--medium
+related: [q-retrofit-library--android--medium, q-okhttp-interceptors-advanced--networking--medium, q-network-error-handling-strategies--networking--medium]
+sources: []
 created: 2025-10-15
-updated: 2025-10-15
+updated: 2025-01-27
 tags: [android/files-media, android/networking-http, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:53:05 pm
 ---
-
 # Вопрос (RU)
-> Что такое Загрузка файлов на сервер через API?
-
----
+> Как реализовать загрузку файлов на сервер через API в Android?
 
 # Question (EN)
-> What is API File Upload Server?
+> How to implement file upload to a server via API in Android?
 
-## Answer (EN)
-**File Upload APIs** in Android include Retrofit (recommended), OkHttp, and HttpURLConnection for uploading files to servers via HTTP multipart requests.
+## Ответ (RU)
 
-**File Upload Theory:**
-File uploads use HTTP multipart/form-data encoding to send binary data with metadata. The client creates multipart requests containing file content, headers, and form fields, which the server processes to store or process the uploaded files.
+Для загрузки файлов используются HTTP multipart/form-data запросы. Основные подходы: Retrofit (рекомендуется), OkHttp, или прямой HTTP. Ключевые аспекты — multipart кодирование, обработка прогресса, фоновая загрузка через WorkManager.
 
-**1. Retrofit (Recommended):**
-
-**API Interface Definition:**
-Defines a type-safe interface for file upload endpoints using Retrofit annotations. The `@Multipart` annotation indicates multipart form data, `@POST` specifies the HTTP method, and `@Part` marks parameters for the multipart request. c-retrofit provides a powerful, type-safe HTTP client for Android.
+**Retrofit (рекомендуется):**
 
 ```kotlin
-// API Interface
 interface FileUploadApi {
     @Multipart
     @POST("upload")
@@ -55,11 +38,10 @@ interface FileUploadApi {
     ): Response<UploadResponse>
 }
 
-// Upload Implementation
-suspend fun uploadFile(file: File, description: String): Result<UploadResponse> {
+suspend fun uploadFile(file: File): Result<UploadResponse> {
+    // ✅ Используем suspend функцию
     val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
     val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
-    val descriptionBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
 
     val response = api.uploadFile(filePart, descriptionBody)
     return if (response.isSuccessful) {
@@ -70,89 +52,81 @@ suspend fun uploadFile(file: File, description: String): Result<UploadResponse> 
 }
 ```
 
-**Upload Implementation:**
-Converts the file to a RequestBody with proper MIME type, creates a MultipartBody.Part for the file data, converts the description string to RequestBody, and makes the API call. Returns a Result wrapper for success/failure handling.
-
-**2. OkHttp (Direct HTTP):**
-
-**Direct HTTP Implementation:**
-Uses OkHttp directly without Retrofit for more control over the HTTP request. Builds a multipart request body manually, creates the HTTP request, and executes it on a background thread. Provides direct access to response handling and error management.
+**Отслеживание прогресса:**
 
 ```kotlin
-// Direct OkHttp Implementation
-suspend fun uploadFile(file: File): Result<String> {
-    val requestBody = MultipartBody.Builder()
-        .setType(MultipartBody.FORM)
-        .addFormDataPart("file", file.name, file.asRequestBody("image/*".toMediaTypeOrNull()))
-        .build()
-
-    val request = Request.Builder()
-        .url("https://api.example.com/upload")
-        .post(requestBody)
-        .build()
-
-    return withContext(Dispatchers.IO) {
-        try {
-            val response = okHttpClient.newCall(request).execute()
-            if (response.isSuccessful) {
-                Result.success(response.body?.string() ?: "")
-            } else {
-                Result.failure(IOException("Upload failed: ${response.code}"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-}
-```
-
-**3. Progress Tracking:**
-
-**Custom RequestBody for Progress:**
-Creates a custom RequestBody that wraps file uploads to track progress. Reads the file in chunks and calls a progress callback with current and total bytes. This allows UI updates during upload without blocking the main thread.
-
-```kotlin
-// Progress Tracking with OkHttp
 class ProgressRequestBody(
     private val file: File,
-    private val contentType: MediaType?,
     private val onProgress: (Long, Long) -> Unit
 ) : RequestBody() {
-
-    override fun contentLength(): Long = file.length()
-
-    override fun contentType(): MediaType? = contentType
-
     override fun writeTo(sink: BufferedSink) {
         val source = file.source()
         var totalBytesRead = 0L
-        val totalBytes = file.length()
 
         source.use { fileSource ->
             var bytesRead: Long
+            // ✅ Читаем чанками 8KB
             while (fileSource.read(sink.buffer, 8192).also { bytesRead = it } != -1L) {
                 totalBytesRead += bytesRead
-                onProgress(totalBytesRead, totalBytes)
+                onProgress(totalBytesRead, file.length())
             }
         }
     }
 }
 ```
 
-**4. Multiple File Upload:**
-
-**Batch File Upload Implementation:**
-Handles uploading multiple files in a single request by converting each file to a MultipartBody.Part and sending them as a list. This is more efficient than individual uploads and reduces server round trips.
+**Фоновая загрузка через WorkManager:**
 
 ```kotlin
-// Multiple Files Upload
-suspend fun uploadMultipleFiles(files: List<File>): Result<UploadResponse> {
-    val fileParts = files.map { file ->
-        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-        MultipartBody.Part.createFormData("files", file.name, requestFile)
-    }
+class FileUploadWorker(
+    context: Context,
+    params: WorkerParameters
+) : CoroutineWorker(context, params) {
+    override suspend fun doWork(): Result {
+        val filePath = inputData.getString("file_path") ?: return Result.failure()
+        val file = File(filePath)
 
-    val response = api.uploadMultipleFiles(fileParts)
+        return try {
+            // ✅ WorkManager автоматически переживает перезапуск
+            val result = uploadFile(file)
+            if (result.isSuccess) Result.success() else Result.retry()
+        } catch (e: Exception) {
+            Result.retry() // ✅ Автоматический retry при ошибке
+        }
+    }
+}
+```
+
+**Ключевые практики:**
+- Используйте Retrofit для REST API (type-safe)
+- Сжимайте изображения перед загрузкой
+- Реализуйте retry логику с экспоненциальной задержкой
+- Используйте WorkManager для надёжной фоновой загрузки
+- Проверяйте разрешения (READ_MEDIA_IMAGES для Android 13+)
+- Валидируйте размер и тип файла на клиенте
+
+## Answer (EN)
+
+File uploads use HTTP multipart/form-data encoding. Main approaches: Retrofit (recommended), OkHttp, or direct HTTP. Key aspects include multipart encoding, progress tracking, and background uploads via WorkManager.
+
+**Retrofit (recommended):**
+
+```kotlin
+interface FileUploadApi {
+    @Multipart
+    @POST("upload")
+    suspend fun uploadFile(
+        @Part file: MultipartBody.Part,
+        @Part("description") description: RequestBody
+    ): Response<UploadResponse>
+}
+
+suspend fun uploadFile(file: File): Result<UploadResponse> {
+    // ✅ Use suspend function for coroutine support
+    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+    val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
+
+    val response = api.uploadFile(filePart, descriptionBody)
     return if (response.isSuccessful) {
         Result.success(response.body()!!)
     } else {
@@ -161,89 +135,82 @@ suspend fun uploadMultipleFiles(files: List<File>): Result<UploadResponse> {
 }
 ```
 
-**5. Error Handling and Retry:**
-
-**Exponential Backoff Retry Logic:**
-Implements automatic retry with exponential backoff for failed uploads. Attempts the upload multiple times with increasing delays between attempts. This handles temporary network issues and improves upload reliability.
+**Progress tracking:**
 
 ```kotlin
-// Retry Logic
-suspend fun uploadWithRetry(file: File, maxRetries: Int = 3): Result<UploadResponse> {
-    repeat(maxRetries) { attempt ->
-        try {
-            val result = uploadFile(file)
-            if (result.isSuccess) return result
-        } catch (e: Exception) {
-            if (attempt == maxRetries - 1) return Result.failure(e)
-            delay(1000 * (attempt + 1)) // Exponential backoff
+class ProgressRequestBody(
+    private val file: File,
+    private val onProgress: (Long, Long) -> Unit
+) : RequestBody() {
+    override fun writeTo(sink: BufferedSink) {
+        val source = file.source()
+        var totalBytesRead = 0L
+
+        source.use { fileSource ->
+            var bytesRead: Long
+            // ✅ Read in 8KB chunks
+            while (fileSource.read(sink.buffer, 8192).also { bytesRead = it } != -1L) {
+                totalBytesRead += bytesRead
+                onProgress(totalBytesRead, file.length())
+            }
         }
     }
-    return Result.failure(IOException("Upload failed after $maxRetries attempts"))
 }
 ```
 
-**6. WorkManager Integration:**
-
-**Background Upload Worker:**
-Uses WorkManager to handle file uploads in the background with automatic retry and system constraints. This ensures uploads continue even if the app is killed and provides reliable background processing for file uploads.
+**Background upload with WorkManager:**
 
 ```kotlin
-// WorkManager for Reliable Uploads
 class FileUploadWorker(
     context: Context,
     params: WorkerParameters
 ) : CoroutineWorker(context, params) {
-
     override suspend fun doWork(): Result {
         val filePath = inputData.getString("file_path") ?: return Result.failure()
         val file = File(filePath)
 
         return try {
+            // ✅ WorkManager survives app restart automatically
             val result = uploadFile(file)
-            if (result.isSuccess) {
-                Result.success()
-            } else {
-                Result.retry()
-            }
+            if (result.isSuccess) Result.success() else Result.retry()
         } catch (e: Exception) {
-            Result.retry()
+            Result.retry() // ✅ Automatic retry on failure
         }
     }
 }
 ```
 
-**Best Practices:**
-- Use Retrofit for REST APIs (type-safe, easy to use)
-- Use OkHttp for custom upload logic and progress tracking
-- Compress images before uploading to reduce bandwidth
-- Implement retry logic for network failures
+**Key practices:**
+- Use Retrofit for REST APIs (type-safe)
+- Compress images before upload
+- Implement retry logic with exponential backoff
 - Use WorkManager for reliable background uploads
-- Handle permissions properly (READ_EXTERNAL_STORAGE, READ_MEDIA_IMAGES)
-- Validate file types and sizes on client side
-- Show upload progress to users
+- Handle permissions (READ_MEDIA_IMAGES for Android 13+)
+- Validate file type and size on client
 
 ## Follow-ups
 
-- How do you handle large file uploads without blocking the UI?
-- What's the difference between multipart and binary upload?
-- How do you implement resumable file uploads?
-- What security considerations are important for file uploads?
+- How to implement chunked file upload for large files?
+- What are the differences between multipart/form-data and application/octet-stream?
+- How to implement resumable uploads using HTTP range headers?
+- What security validations should be performed before file upload?
 
 ## References
 
-- [Retrofit Documentation](https://square.github.io/retrofit/)
-- [OkHttp Documentation](https://square.github.io/okhttp/)
+- [[q-retrofit-library--android--medium]]
+- [[q-okhttp-interceptors-advanced--networking--medium]]
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]]
-- [[q-android-project-parts--android--easy]]
+- [[q-retrofit-library--android--medium]]
+- [[q-graphql-vs-rest--networking--easy]]
 
 ### Related (Same Level)
-- [[q-android-testing-strategies--android--medium]]
-- [[q-android-build-optimization--android--medium]]
-- [[q-android-performance-measurement-tools--android--medium]]
+- [[q-okhttp-interceptors-advanced--networking--medium]]
+- [[q-network-error-handling-strategies--networking--medium]]
+- [[q-retrofit-usage-tutorial--android--medium]]
 
 ### Advanced (Harder)
-- [[q-android-runtime-internals--android--hard]]
+- [[q-retrofit-modify-all-requests--android--hard]]
+- [[q-network-request-deduplication--networking--hard]]

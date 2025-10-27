@@ -1,7 +1,7 @@
 ---
 id: 20251017-114546
 title: "Multi-module Architecture Best Practices / Лучшие практики мульти-модульной архитектуры"
-aliases: []
+aliases: ["Multi-module Architecture", "Мульти-модульная архитектура"]
 
 # Classification
 topic: android
@@ -11,238 +11,69 @@ difficulty: hard
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/architecture, android/multi-module, android/gradle, android/scalability, difficulty/hard]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
-source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
+language_tags: [en, ru]
+sources: [https://github.com/amitshekhariitbhu/android-interview-questions]
 
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-android-jetpack-overview--android--easy, q-shared-element-transitions--jetpack-compose--hard, q-how-compose-draws-on-screen--android--hard]
+related: [q-android-jetpack-overview--android--easy, q-how-compose-draws-on-screen--android--hard]
 
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-01-27
 
-tags: [android/architecture-clean, android/architecture-modularization, android/gradle, en, ru, difficulty/hard]
+tags: [android/architecture-clean, android/architecture-modularization, android/gradle, difficulty/hard]
 ---
-
-# Question (EN)
-> What are best practices for multi-module architecture in Android? When and why to use it?
 # Вопрос (RU)
 > Какие лучшие практики для мульти-модульной архитектуры в Android? Когда и зачем её использовать?
 
+# Question (EN)
+> What are best practices for multi-module architecture in Android? When and why to use it?
+
 ---
-
-## Answer (EN)
-
-**Multi-module architecture** splits app into independent modules for better scalability, build times, and team collaboration.
-
-### Module Types
-
-**1. app** - Main application module
-**2. feature modules** - Independent features
-**3. core modules** - Shared utilities
-**4. data modules** - Data layer
-
-```
-app/
- app/                    # Main app module
- feature/
-    auth/              # Authentication feature
-    profile/           # Profile feature
-    settings/          # Settings feature
- core/
-    ui/                # Shared UI components
-    network/           # Network layer
-    database/          # Database layer
- data/
-     user/              # User data
-     products/          # Products data
-```
-
-### Module Structure
-
-```kotlin
-// feature/auth/build.gradle.kts
-plugins {
-    id("com.android.library")
-    id("kotlin-android")
-}
-
-dependencies {
-    // Core modules
-    implementation(project(":core:ui"))
-    implementation(project(":core:network"))
-
-    // Data modules
-    implementation(project(":data:user"))
-
-    // External dependencies
-    implementation(libs.androidx.compose)
-    implementation(libs.hilt)
-}
-```
-
-### Dependency Rules
-
-**1. Feature modules should NOT depend on each other**
-
-```kotlin
-// - BAD - Feature depends on feature
-// :feature:auth -> :feature:profile  // NO!
-
-// - GOOD - Features depend on core/data only
-// :feature:auth -> :core:ui
-// :feature:auth -> :data:user
-// :feature:profile -> :core:ui
-// :feature:profile -> :data:user
-```
-
-**2. Use dependency inversion for feature communication**
-
-```kotlin
-// core/navigation
-interface Navigator {
-    fun navigateToProfile(userId: String)
-}
-
-// feature/auth - uses interface
-class LoginViewModel(private val navigator: Navigator) {
-    fun onLoginSuccess(userId: String) {
-        navigator.navigateToProfile(userId)
-    }
-}
-
-// app module - implements interface
-class AppNavigator(private val navController: NavController) : Navigator {
-    override fun navigateToProfile(userId: String) {
-        navController.navigate("profile/$userId")
-    }
-}
-```
-
-### Benefits
-
-**1. Faster build times** - Only modified modules rebuild
-**2. Better encapsulation** - Clear boundaries
-**3. Parallel development** - Teams work independently
-**4. Code reusability** - Share modules across apps
-**5. Dynamic delivery** - On-demand features
-
-### Best Practices
-
-**1. Convention plugins for shared config:**
-
-```kotlin
-// buildSrc/src/main/kotlin/AndroidFeatureConventionPlugin.kt
-class AndroidFeatureConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            pluginManager.apply("com.android.library")
-            pluginManager.apply("org.jetbrains.kotlin.android")
-
-            extensions.configure<LibraryExtension> {
-                compileSdk = 34
-                defaultConfig.minSdk = 24
-            }
-        }
-    }
-}
-
-// feature/auth/build.gradle.kts
-plugins {
-    id("android.feature")  // Applies all common config
-}
-```
-
-**2. Version catalog for dependencies:**
-
-```toml
-# gradle/libs.versions.toml
-[versions]
-compose = "1.5.4"
-hilt = "2.48"
-
-[libraries]
-androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
-
-# build.gradle.kts
-dependencies {
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.hilt.android)
-}
-```
-
-**English Summary**: Multi-module: split app into feature/core/data modules. Benefits: faster builds, better encapsulation, parallel development. Rules: features don't depend on features, use dependency inversion for communication. Best practices: convention plugins, version catalogs, clear module boundaries. When to use: large teams, 50k+ lines of code, multiple apps sharing code.
 
 ## Ответ (RU)
 
-**Мульти-модульная архитектура** разделяет приложение на независимые модули для лучшей масштабируемости, времени сборки и командной работы.
+[[c-modularization|Мульти-модульная архитектура]] разделяет приложение на независимые модули для масштабируемости, быстрой сборки и параллельной разработки.
 
 ### Типы модулей
 
-**1. app** - Основной модуль приложения
-**2. feature модули** - Независимые функции
-**3. core модули** - Общие утилиты
-**4. data модули** - Слой данных
+**1. app** - Главный модуль приложения, связывает feature модули
+**2. feature** - Изолированные функции (auth, profile, settings)
+**3. core** - Переиспользуемые утилиты (ui, network, database)
+**4. data** - Слой данных с [[c-repository-pattern|repository pattern]]
 
-```
+```text
 app/
- app/                    # Основной модуль приложения
- feature/
-    auth/              # Модуль аутентификации
-    profile/           # Модуль профиля
-    settings/          # Модуль настроек
- core/
-    ui/                # Общие UI компоненты
-    network/           # Сетевой слой
-    database/          # Слой базы данных
- data/
-     user/              # Данные пользователя
-     products/          # Данные продуктов
-```
-
-### Структура модуля
-
-```kotlin
-// feature/auth/build.gradle.kts
-plugins {
-    id("com.android.library")
-    id("kotlin-android")
-}
-
-dependencies {
-    // Core модули
-    implementation(project(":core:ui"))
-    implementation(project(":core:network"))
-
-    // Data модули
-    implementation(project(":data:user"))
-
-    // Внешние зависимости
-    implementation(libs.androidx.compose)
-    implementation(libs.hilt)
-}
+ ├── app/                # Главный модуль
+ ├── feature/
+ │   ├── auth/          # ✅ Независимый feature
+ │   ├── profile/       # ✅ Независимый feature
+ │   └── settings/
+ ├── core/
+ │   ├── ui/            # Общие UI компоненты
+ │   ├── network/       # Сетевой слой
+ │   └── database/
+ └── data/
+     ├── user/          # Данные пользователя
+     └── products/
 ```
 
 ### Правила зависимостей
 
-**1. Feature модули НЕ должны зависеть друг от друга**
+**Критическое правило**: Feature модули НЕ зависят друг от друга
 
 ```kotlin
 // ❌ ПЛОХО - Feature зависит от feature
-// :feature:auth -> :feature:profile  // НЕТ!
+// :feature:auth -> :feature:profile
 
 // ✅ ХОРОШО - Features зависят только от core/data
-// :feature:auth -> :core:ui
-// :feature:auth -> :data:user
-// :feature:profile -> :core:ui
-// :feature:profile -> :data:user
+// :feature:auth -> :core:ui, :data:user
+// :feature:profile -> :core:ui, :data:user
 ```
 
-**2. Используйте инверсию зависимостей для коммуникации между features**
+**Коммуникация через [[c-dependency-inversion|инверсию зависимостей]]**:
 
 ```kotlin
 // core/navigation
@@ -253,38 +84,31 @@ interface Navigator {
 // feature/auth - использует интерфейс
 class LoginViewModel(private val navigator: Navigator) {
     fun onLoginSuccess(userId: String) {
+        // ✅ Не знает о feature:profile
         navigator.navigateToProfile(userId)
     }
 }
 
-// app модуль - реализует интерфейс
-class AppNavigator(private val navController: NavController) : Navigator {
+// app - реализует интерфейс
+class AppNavigator : Navigator {
     override fun navigateToProfile(userId: String) {
+        // Связывает features
         navController.navigate("profile/$userId")
     }
 }
 ```
 
-### Преимущества
-
-**1. Быстрее сборка** - Только измененные модули пересобираются
-**2. Лучшая инкапсуляция** - Четкие границы между модулями
-**3. Параллельная разработка** - Команды работают независимо
-**4. Переиспользование кода** - Модули можно использовать в разных приложениях
-**5. Dynamic delivery** - Функции по требованию
-
 ### Лучшие практики
 
-**1. Convention plugins для общей конфигурации:**
+**1. Convention plugins** для стандартизации [[c-gradle|Gradle]] конфигурации:
 
 ```kotlin
-// buildSrc/src/main/kotlin/AndroidFeatureConventionPlugin.kt
+// buildSrc/.../AndroidFeatureConventionPlugin.kt
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
+            // ✅ Единая конфигурация для всех features
             pluginManager.apply("com.android.library")
-            pluginManager.apply("org.jetbrains.kotlin.android")
-
             extensions.configure<LibraryExtension> {
                 compileSdk = 34
                 defaultConfig.minSdk = 24
@@ -292,163 +116,241 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
         }
     }
 }
-
-// feature/auth/build.gradle.kts
-plugins {
-    id("android.feature")  // Применяет всю общую конфигурацию
-}
 ```
 
-**2. Version catalog для зависимостей:**
+**2. Version catalogs** для управления зависимостями:
 
 ```toml
 # gradle/libs.versions.toml
-[versions]
-compose = "1.5.4"
-hilt = "2.48"
-
 [libraries]
-androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+androidx-compose-ui = "androidx.compose.ui:ui"
+hilt-android = "com.google.dagger:hilt-android"
 
 # build.gradle.kts
 dependencies {
+    // ✅ Централизованные версии
     implementation(libs.androidx.compose.ui)
-    implementation(libs.hilt.android)
 }
 ```
 
-**3. Чёткие границы модулей:**
-
-Каждый модуль должен иметь четкую ответственность:
-- Feature модули: Специфичная функциональность
-- Core модули: Переиспользуемые утилиты
-- Data модули: Работа с данными
-
-**4. Минимизация зависимостей:**
+**3. API vs Implementation**:
 
 ```kotlin
-// ✅ ХОРОШО - Минимальные зависимости
-// :feature:auth -> :core:ui, :data:user
-
-// ❌ ПЛОХО - Слишком много зависимостей
-// :feature:auth -> :core:ui, :core:network, :core:database, :data:user, :data:products
-```
-
-**5. API vs Implementation:**
-
-```kotlin
-// Используйте implementation для скрытия транзитивных зависимостей
 dependencies {
-    implementation(project(":core:ui"))  // ✅ Скрыто
-    api(project(":core:network"))        // ❌ Экспонировано всем потребителям
+    // ✅ implementation - скрывает зависимости
+    implementation(project(":core:ui"))
+
+    // ❌ api - экспонирует всем потребителям
+    api(project(":core:network"))
 }
 ```
 
-### Когда использовать мульти-модульную архитектуру
+### Когда использовать
 
-**Используйте когда:**
-- Большая команда разработчиков
+**Используйте для:**
+- Команды 5+ разработчиков
 - 50,000+ строк кода
-- Несколько приложений, использующих общий код
-- Необходимы быстрые сборки
-- Dynamic feature delivery
+- Несколько приложений с общим кодом
+- Долгие сборки (>5 минут)
 
-**Не обязательно для:**
+**Не нужно для:**
 - Маленькие приложения (<10,000 строк)
+- Прототипы и MVP
 - Единственный разработчик
-- Прототипы
-
-### Граф зависимостей
-
-```
-        app
-         |
-    +---------+---------+
-    |         |         |
-feature:   feature:   feature:
-  auth     profile   settings
-    |         |         |
-    +----+----+----+----+
-         |         |
-      core:ui  core:network
-         |
-      data:user
-```
-
-**Правила:**
-- Зависимости только вниз (нет циклов)
-- Feature модули не зависят друг от друга
-- Core модули переиспользуемые
-- Data модули изолированные
 
 ### Типичные ошибки
 
-**1. Циклические зависимости**
+**1. Циклические зависимости**:
 ```kotlin
-// ❌ ПЛОХО
-// :feature:auth -> :core:ui -> :feature:auth  // Цикл!
+// ❌ ПЛОХО - цикл
+// :feature:auth -> :core:ui -> :feature:auth
 ```
 
-**2. Слишком много мелких модулей**
+**2. Слишком мелкая гранулярность**:
 ```kotlin
-// ❌ ПЛОХО - Слишком детализировано
+// ❌ ПЛОХО - избыточное разделение
 :feature:auth:login
 :feature:auth:register
-:feature:auth:password-reset
-:feature:auth:verification
 
-// ✅ ХОРОШО - Один модуль для всей feature
+// ✅ ХОРОШО - логичная группировка
 :feature:auth
 ```
 
-**3. Неправильная гранулярность**
+## Answer (EN)
+
+[[c-modularization|Multi-module architecture]] splits app into independent modules for scalability, faster builds, and parallel development.
+
+### Module Types
+
+**1. app** - Main application module, wires feature modules together
+**2. feature** - Isolated features (auth, profile, settings)
+**3. core** - Reusable utilities (ui, network, database)
+**4. data** - Data layer with [[c-repository-pattern|repository pattern]]
+
+```text
+app/
+ ├── app/                # Main module
+ ├── feature/
+ │   ├── auth/          # ✅ Independent feature
+ │   ├── profile/       # ✅ Independent feature
+ │   └── settings/
+ ├── core/
+ │   ├── ui/            # Shared UI components
+ │   ├── network/       # Network layer
+ │   └── database/
+ └── data/
+     ├── user/          # User data
+     └── products/
+```
+
+### Dependency Rules
+
+**Critical rule**: Feature modules do NOT depend on each other
+
 ```kotlin
-// ❌ ПЛОХО - Слишком крупные модули
-:feature:everything  // Весь функционал в одном модуле
+// ❌ BAD - Feature depends on feature
+// :feature:auth -> :feature:profile
 
-// ✅ ХОРОШО - Логическое разделение
-:feature:auth
-:feature:profile
-:feature:settings
+// ✅ GOOD - Features depend only on core/data
+// :feature:auth -> :core:ui, :data:user
+// :feature:profile -> :core:ui, :data:user
 ```
 
-### Миграция на мульти-модульную архитектуру
+**Communication via [[c-dependency-inversion|dependency inversion]]**:
 
-**Шаги:**
+```kotlin
+// core/navigation
+interface Navigator {
+    fun navigateToProfile(userId: String)
+}
 
-1. **Начните с core модулей**
-   - Выделите общие утилиты в :core:utils
-   - Выделите UI компоненты в :core:ui
+// feature/auth - uses interface
+class LoginViewModel(private val navigator: Navigator) {
+    fun onLoginSuccess(userId: String) {
+        // ✅ Doesn't know about feature:profile
+        navigator.navigateToProfile(userId)
+    }
+}
 
-2. **Создайте data модули**
-   - Изолируйте доступ к данным
-   - Используйте repository pattern
+// app - implements interface
+class AppNavigator : Navigator {
+    override fun navigateToProfile(userId: String) {
+        // Wires features together
+        navController.navigate("profile/$userId")
+    }
+}
+```
 
-3. **Разделите features**
-   - Начните с самых независимых features
-   - Постепенно мигрируйте остальные
+### Best Practices
 
-4. **Настройте convention plugins**
-   - Стандартизируйте конфигурацию
-   - Уменьшите дублирование
+**1. Convention plugins** for standardized [[c-gradle|Gradle]] configuration:
 
-**Краткое содержание**: Мульти-модуль: разделить app на feature/core/data модули. Преимущества: быстрее сборки, лучшая инкапсуляция, параллельная разработка. Правила: features не зависят от features, использовать инверсию зависимостей для коммуникации. Лучшие практики: convention plugins, version catalogs, четкие границы модулей. Когда использовать: большие команды, 50k+ строк кода, несколько приложений.
+```kotlin
+// buildSrc/.../AndroidFeatureConventionPlugin.kt
+class AndroidFeatureConventionPlugin : Plugin<Project> {
+    override fun apply(target: Project) {
+        with(target) {
+            // ✅ Single configuration for all features
+            pluginManager.apply("com.android.library")
+            extensions.configure<LibraryExtension> {
+                compileSdk = 34
+                defaultConfig.minSdk = 24
+            }
+        }
+    }
+}
+```
+
+**2. Version catalogs** for dependency management:
+
+```toml
+# gradle/libs.versions.toml
+[libraries]
+androidx-compose-ui = "androidx.compose.ui:ui"
+hilt-android = "com.google.dagger:hilt-android"
+
+# build.gradle.kts
+dependencies {
+    // ✅ Centralized versions
+    implementation(libs.androidx.compose.ui)
+}
+```
+
+**3. API vs Implementation**:
+
+```kotlin
+dependencies {
+    // ✅ implementation - hides transitive deps
+    implementation(project(":core:ui"))
+
+    // ❌ api - exposes to all consumers
+    api(project(":core:network"))
+}
+```
+
+### When to Use
+
+**Use for:**
+- Teams of 5+ developers
+- 50,000+ lines of code
+- Multiple apps sharing code
+- Long builds (>5 minutes)
+
+**Not needed for:**
+- Small apps (<10,000 lines)
+- Prototypes and MVPs
+- Solo developers
+
+### Common Mistakes
+
+**1. Circular dependencies**:
+```kotlin
+// ❌ BAD - circular
+// :feature:auth -> :core:ui -> :feature:auth
+```
+
+**2. Over-granular modules**:
+```kotlin
+// ❌ BAD - excessive splitting
+:feature:auth:login
+:feature:auth:register
+
+// ✅ GOOD - logical grouping
+:feature:auth
+```
 
 ---
 
+## Follow-ups
+
+- How to handle shared UI themes across feature modules?
+- What strategies prevent circular dependencies in large module graphs?
+- How to test inter-module communication with dependency inversion?
+- When to split a feature module into smaller modules?
+- How to implement dynamic feature modules for on-demand delivery?
+
 ## References
+
+- [[c-modularization]] - Modularization concepts
+- [[c-dependency-inversion]] - Dependency inversion principle
+- [[c-repository-pattern]] - Repository pattern
+- [[c-gradle]] - Gradle build system
 - [Guide to Android app modularization](https://developer.android.com/topic/modularization)
 
 ## Related Questions
 
-### Related (Hard)
-- [[q-design-uber-app--android--hard]] - Location
-- [[q-design-whatsapp-app--android--hard]] - Messaging
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-modularization-patterns--android--hard]] - Architecture
+### Prerequisites
+- [[q-build-optimization-gradle--android--medium]] - Gradle optimization basics
+- Understanding Clean Architecture principles
+- Gradle Kotlin DSL fundamentals
 
-### Prerequisites (Easier)
-- [[q-build-optimization-gradle--android--medium]] - Gradle
-- [[q-usecase-pattern-android--android--medium]] - Architecture
-- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Gradle
+### Related
+- [[q-android-jetpack-overview--android--easy]] - Jetpack components in modules
+- [[q-how-compose-draws-on-screen--android--hard]] - Compose in feature modules
+- Build configuration and convention plugins
+- Dynamic feature modules implementation
+
+### Advanced
+- Large-scale multi-module architecture (100+ modules)
+- Automated module dependency validation
+- Module-level performance optimization

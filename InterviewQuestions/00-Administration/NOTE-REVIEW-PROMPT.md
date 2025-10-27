@@ -1,3 +1,8 @@
+---
+date created: Thursday, October 23rd 2025, 10:12:04 am
+date modified: Monday, October 27th 2025, 4:51:29 pm
+---
+
 # Note Review Prompt (Automation + Senior Review)
 
 Use this playbook when an automation agent must iterate through notes, apply fixes, and hand them back for a senior-level verification.
